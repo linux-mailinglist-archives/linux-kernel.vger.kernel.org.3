@@ -2,116 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933F05296DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382045296DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237114AbiEQBmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 21:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        id S237409AbiEQBnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 21:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbiEQBlv (ORCPT
+        with ESMTP id S230212AbiEQBnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 21:41:51 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2106.outbound.protection.outlook.com [40.107.215.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF6C3A5C5;
-        Mon, 16 May 2022 18:41:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cDe4lMP7XSJQcsekrTaMf/j80C4KPsWDmcG12lPGxHp0bS6mtpAFLihzjy2O1DAi0lWhmAJQxLtIGBuh926XxD+zV0OGXTIw5n9e7Z5f7+KrwI0vWa6vz1HuDl7ewvdmq1FRKPQIrB2y6GjmHi45ghV7xcbSK0ZhkBp7/lwO0nituSRfHhJSSSdl02jc3qc9btfOULHg2BLDmy5TLkAhJpoGmdsMCroLLcBHctVas9A8qyR51mbyinKJ9+WTGGExXWkZeFZEnnsbRjgU3rk+9snWYPwa5mWms+HXCmgN/SGr4GcNDiiKLHwiOTMMtY9PZeDQM5v41RY+/KKw5nGrWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AObHoiBij1efeldOrZmwrrRrewwMjCsskswTDFEPoPY=;
- b=Fh1M7+LST1nsds8EM3AodaaVYuhz0VF+Lq4vh2L5VHJdk5e+iRmgImgBghdD9QM8qSXzZVeWVqrUW/tU37+kfugFgZd1ku69pRdC8pejrjbAGb5vX4Zgq55aevOQd3o74SO+LDQxYYu8nUUeYVEv3kRx6AUjpx2sXTDN7gPUL2BrnvDxd4Ey4e5lXL3GIEIhQFs4+HQ+S7hxxxdwk+4UW730PIY38VFZqC1YcsG94hpT/Ij3rlOvN5BWLGdFXD2EqF+DoT45bP//pBSNlz9Jr3cb7mGT+Cw4/rr4+Li7Zo0QY9kUIIC8tU8Ef3QDIMRoZd5Gd459Og37cRd2rjJmbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AObHoiBij1efeldOrZmwrrRrewwMjCsskswTDFEPoPY=;
- b=WhBpecQ1SYrTGQ6CncqGhbwl15xo0pEqapttPntDr4tFp7fCPpT8hs8HgGs1j2ebFIPPgJ8wdzc3p12pQjJpsVg0JyyqqgjSGELk+M1s1GnOA/crL9YaGrfw1uhAWGx48EV4sN18EAfq2mmPi/Q1MkRldFHrSezS4M6w5SXcU9U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PSAPR06MB4021.apcprd06.prod.outlook.com (2603:1096:301:37::11)
- by TYZPR06MB5226.apcprd06.prod.outlook.com (2603:1096:400:1fb::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Tue, 17 May
- 2022 01:41:46 +0000
-Received: from PSAPR06MB4021.apcprd06.prod.outlook.com
- ([fe80::4dea:1528:e16a:bad4]) by PSAPR06MB4021.apcprd06.prod.outlook.com
- ([fe80::4dea:1528:e16a:bad4%7]) with mapi id 15.20.5250.018; Tue, 17 May 2022
- 01:41:46 +0000
-From:   Bernard Zhao <bernard@vivo.com>
-To:     Solomon Peachy <pizza@shaftnet.org>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhaojunkui2008@126.com, Bernard Zhao <bernard@vivo.com>
-Subject: [PATCH] st/cw1200: cleanup the code a bit
-Date:   Mon, 16 May 2022 18:41:36 -0700
-Message-Id: <20220517014136.410450-1-bernard@vivo.com>
-X-Mailer: git-send-email 2.33.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR06CA0009.apcprd06.prod.outlook.com
- (2603:1096:202:2e::21) To PSAPR06MB4021.apcprd06.prod.outlook.com
- (2603:1096:301:37::11)
+        Mon, 16 May 2022 21:43:08 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DC145ACA
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 18:43:07 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so542987wme.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 18:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hi9XAMIUva8PYVoM4ASCm/WWoKNxiCR5dujAiZRLNMg=;
+        b=cwaldFagj0bYiI4V6pIbONuNs1XGR5aGLxIKtTfxOiEY2Cx6JjEd84CdiBuwuzNE4c
+         vftNt5iTn5vOS9+NvhUnZG0Yk0gZagcbvEg1EUpPFbPuXW7Id5wqNQ2WUGzJl314SovB
+         iZ01f/Oxh0GRbgj0+5PQfnqVUbXNiLfz3GEJSUiH6fjfef5qLs9++I6K/WzXwVZCKk9e
+         o3PhgAEtT7Sqs2J2YKiHG/p+Vv377z23OCKx+EGUpOWNJ86+EwiyTwvrwT9azDP1OudF
+         DatRUYWSK2yHzM8+oF18sQm44s16pNPD8/kRM73G5shblRh6MedU108/KTVqXiYAd0+u
+         Pd5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hi9XAMIUva8PYVoM4ASCm/WWoKNxiCR5dujAiZRLNMg=;
+        b=29Z90GG8++agdPSBvq0Vuvmi4TC8Lo4GXQ3QLoGnqcqt1n4ZbShptQFS8T+JIhpksy
+         zX/rL1qz/NhbrokrJPHoL86KqyHiJCsB8uov6roqOEtiR0EuZg4BRvxo8s559hYi6USW
+         zz39tPHKz9HAyWYQ7iimh44zeo6t6aqUYknJQ/Z166FgEpCUaCu9poZSk9ezPZhIq924
+         KxqKtUhwIZRBLeAxNRjSSp8t/d13DnmrUIhgTk9OdBDmLHWiPZwWkbfXYHnt+UWmavMh
+         CB/p5IJuqsly+Uv0pmSMoPbopyuRznpcUrxdSJp+aObtzKRMPLK8w9J6bKStY857EnO+
+         m/zw==
+X-Gm-Message-State: AOAM531e77fd+c58mXypC7Vyqq6lYRr+JA0y5bmhny38bHktQjoPttCD
+        C+pB9L5Ng9nMrbTxgYyHkBtiAGZ7usz90ECLRwND
+X-Google-Smtp-Source: ABdhPJy5yfG2djBmHYBye+k28zX32hoDwji6J+Y1t09CcsDkJQe0j0gI/s/aaLtSInbN2dJvYDJTcu7tsJfUT8sBq4w=
+X-Received: by 2002:a7b:cf02:0:b0:393:fbb0:7189 with SMTP id
+ l2-20020a7bcf02000000b00393fbb07189mr18520107wmg.197.1652751786116; Mon, 16
+ May 2022 18:43:06 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 14b9c852-b497-4dce-2e23-08da37a666e8
-X-MS-TrafficTypeDiagnostic: TYZPR06MB5226:EE_
-X-Microsoft-Antispam-PRVS: <TYZPR06MB522635700247820EB812AFC7DFCE9@TYZPR06MB5226.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: djVGK34mXYfLsuxNGjTCeSuTdT/A0AbhZzQJ6xOy0WHl2cuIOtEFXpy+o7QgBrG2PE+S7kTZQAl0SJSftzReULcTBUGPE7X+vihcP+11HbaSTOh+ooAoyvw0n9a6DtaO9L4Vtjbvf/isFTXVq91TC1jnHS8eii8JunFE4LXjhJ99WCjkBSl2jjvdJaiMGxScPoXedwjfzpCZjUdIdg6wo9gUbIoRwmCBi+c30nH2mX5fhoYXhwPcP9sG3FY574sZYv37PmtedWCIb1carkxlTujnP4c/c2/Vrb56rfcOSYucmEyfh8fcgL81nmCn0+Ql0Vpobv1AQHi1Qm2ilHn8ub9XjoXwdvbEVNt9Y7tntLfILdqoUdcRhxe1a/w503rxKvh1NWVx2oez+VgfrLBPmIobiV3K1nX2TjCF1CndIqWRP/6X7OMoryhRvxPFypKNHjh/PE+iFPBUP3k1/WMgpPQmPdAmWHvSpU6E6rlxxGIfM5af8nKNvNn/FyeALcwK2NXFXr7H6OInf6F6eA3okOLjqcpYXAlqAbqpg2FkS87Wq88iuU/Ugo9cB3PypcaFeassa1rKgX18oBoHkmRt62YQGoLJQ8U7rjlrUfWZnCw4W/XfNR/5Xkr7+qKOZoLlKrf5lBJRoIEs3GBUE8EfWhJqxpghzkZocVXLhrJzAZe4/h3D5frwtegm+yqGQqpX/4QcnuDJ+FubgNPyrt9gJg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PSAPR06MB4021.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(8936002)(2616005)(83380400001)(6486002)(52116002)(5660300002)(36756003)(26005)(2906002)(107886003)(1076003)(86362001)(4744005)(6666004)(6512007)(186003)(110136005)(316002)(38350700002)(6506007)(38100700002)(66946007)(66476007)(66556008)(8676002)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6FUS4uM49XV23j2es93ACtc5JVrdEx2euEvVitnSHQEcy8l2b36axCWpHQiD?=
- =?us-ascii?Q?u8epFk6JmB/bctD8zbnW+SBKsgJcECjqF/zdLbYv5Kkh2h1rxPFx+9Y9NwjL?=
- =?us-ascii?Q?KXP1e1WgArywv3aL5RFQ0U1oLDPdULi6ilVI/uoCky0q0E4kRMG+LqqLCJE8?=
- =?us-ascii?Q?3X81QoYLR7zQV1lgRyPaAyIIeHlbnoFogvKprU5jIW0G9UM9G5jN3FxwSt6p?=
- =?us-ascii?Q?WcSMNttpFJnZEvY115OhmRVr4IDcT/BRa6vido2ZeIN1/GhadErRwAwQaOwz?=
- =?us-ascii?Q?vw49/PO/Tb7yVb+ZADC4zS3JngLf1OPtbh13Wa3+DjcIhRkyaTC9mN7I0cW7?=
- =?us-ascii?Q?j1PepTbnkkC0N99MwDfaiKK/EmhzpwajU9ofML0FjXNZEjkMwngBrXjXqyAm?=
- =?us-ascii?Q?VLQ3bpqhXdjkDKQ+BU2ZP6QuBPRRXqqaqrJ2SQi7O/unw4hcZ/BZEgHlOrcz?=
- =?us-ascii?Q?iU+jP5FQazEL5R5q9fT8wJN3E+1Ed0i3UwNPQrYCpa1+ZCoRequfTGDy82lD?=
- =?us-ascii?Q?TWamBeEOcDia7rtqOS6fj9RWZ6CS/ET7aoKS1P6Rkuz334XZTEw6fvJnMLQz?=
- =?us-ascii?Q?5ojQ994DEOjDxrS7K8NfMyJLGjqc0jpEHO8/a9rEgigny0kN1c9yQ/ClRiQB?=
- =?us-ascii?Q?9QSEB3QHe3wsBCnbqU7qFaOYZWM/2uDL2m/bHxAr5sM4KyOgMvlDAXBhgD0D?=
- =?us-ascii?Q?JgJhw9fitmFfmwHojt9oUlbkj9N1kmJUYKHIzjUUg17dWOmbwR+YQR4wrQPB?=
- =?us-ascii?Q?X4EVnNHsnb3C5Zw9SOdiK3rXTq6tRsUpVyH/XdnVQzRggtLu7YLjvrGzmOq+?=
- =?us-ascii?Q?FRKm8QxsBaGYSZi4tY3XXpK7TEnByWgdGujd3xm0hUnRzSykn0+JpEeALfsd?=
- =?us-ascii?Q?oPYJMz32CB67dHJUV7o+ZgMYz0mid3mR+RdAgQddKPkqWu3XQPrWSFPzXrp2?=
- =?us-ascii?Q?zNOAFwWnsn9I32COsrNTvQboZ+bc9sySaKANh4tgP3PcvfFwLDm9QsQVlyiJ?=
- =?us-ascii?Q?Ai0Qo8eEoWlEdIN+JKeDs4pxzYcrS1C9vjgVc9KhJ1ewZJZ6rGuOp/NqWScS?=
- =?us-ascii?Q?+/ac/jTVy+hp/CI76UxJQHhRmFddqwYQ1UHx6RZD4Z1sv9W8cw11WLwf32Rp?=
- =?us-ascii?Q?/o5fsfICAFGNgCaLJr1/uH8wLSGzXFKHpPWRk70h6orQTttoES2Zn8s2nVlk?=
- =?us-ascii?Q?N/50qSJRCDI+kL6xWOqSg9fXe5GHgRLqKMpvKD5l9KSzksZoC2eVte6hHfej?=
- =?us-ascii?Q?JjVnstH2OsytPaz901ebzYLDNI6E51xsiF+jCPYEg9Y8iadAiWuCW5nkZrCk?=
- =?us-ascii?Q?69Wy7R4AgbGmP0FvXS0oZOwISlGEi5Iva0ZUBM+uqAPfi1P1zHlRrASCGNML?=
- =?us-ascii?Q?qp/NRedeDV6oVyRuTAwb8FcF2EslHpPcwWonTp916gCB/LNb+LS3ZKtWFGDq?=
- =?us-ascii?Q?UJHF2VQyBxnABkOUY8EVHfRYEX9wWm07vdqF+/HQa2Cxv0+XzcC29DrcVdj3?=
- =?us-ascii?Q?Bu0miLG/lCGfsBU9o8WfXF0j0ppIHTiF0W7/m/3DaRyLomNlZZhMB0HbHXmJ?=
- =?us-ascii?Q?3vYd471t3HAg5Kf5RdtWYkSJWwrkmjzrxs3fM3bF/SjzqhND97MnyGYwWsNC?=
- =?us-ascii?Q?uv/vrbDpptwrKaEhooceXVqh5svT8JlMkJY//dnh1vi2ixtuv20WmEyFEqaD?=
- =?us-ascii?Q?ly1pSuJaS2XfaNo7rn5TbfpFpkxBCV9fMxzy/yg4/Kj6EL7t+Riwc1cCIorj?=
- =?us-ascii?Q?3wiAk3rZyw=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14b9c852-b497-4dce-2e23-08da37a666e8
-X-MS-Exchange-CrossTenant-AuthSource: PSAPR06MB4021.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 01:41:45.9749
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /Zwet0jFGlftd8v9LMCtgZMbprxJbAVNdJq2PeKbjKiFAeRqK6uSmfUgXCpmjSSMiJRcNsNFsIKfSHCqMggjVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5226
+References: <cover.1652730821.git.rgb@redhat.com> <81264e038b7b1e0d8fd8bafb25452fb777cd664a.1652730821.git.rgb@redhat.com>
+In-Reply-To: <81264e038b7b1e0d8fd8bafb25452fb777cd664a.1652730821.git.rgb@redhat.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 16 May 2022 21:42:55 -0400
+Message-ID: <CAHC9VhSZNbQoFfStWp96G18_pdEtV1orKRvQ0reXfD7L4TiUHA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] fanotify: Allow audit to use the full permission
+ event response
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,39 +69,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete if NULL check before dev_kfree_skb call.
-This change is to cleanup the code a bit.
+On Mon, May 16, 2022 at 4:22 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+>
+> This patch passes the full value so that the audit function can use all
+> of it. The audit function was updated to log the additional information in
+> the AUDIT_FANOTIFY record. The following is an example of the new record
+> format:
+>
+> type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_ctx=17
+>
+> Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> ---
+>  fs/notify/fanotify/fanotify.c |  4 +++-
+>  include/linux/audit.h         |  9 +++++----
+>  kernel/auditsc.c              | 18 +++++++++++++++---
+>  3 files changed, 23 insertions(+), 8 deletions(-)
 
-Signed-off-by: Bernard Zhao <bernard@vivo.com>
----
- drivers/net/wireless/st/cw1200/bh.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+...
 
-diff --git a/drivers/net/wireless/st/cw1200/bh.c b/drivers/net/wireless/st/cw1200/bh.c
-index 10e019cddcc6..3b4ded2ac801 100644
---- a/drivers/net/wireless/st/cw1200/bh.c
-+++ b/drivers/net/wireless/st/cw1200/bh.c
-@@ -327,18 +327,12 @@ static int cw1200_bh_rx_helper(struct cw1200_common *priv,
- 	if (WARN_ON(wsm_handle_rx(priv, wsm_id, wsm, &skb_rx)))
- 		goto err;
- 
--	if (skb_rx) {
--		dev_kfree_skb(skb_rx);
--		skb_rx = NULL;
--	}
-+	dev_kfree_skb(skb_rx);
- 
- 	return 0;
- 
- err:
--	if (skb_rx) {
--		dev_kfree_skb(skb_rx);
--		skb_rx = NULL;
--	}
-+	dev_kfree_skb(skb_rx);
- 	return -1;
- }
- 
--- 
-2.33.1
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index 6973be0bf6c9..cb93c6ed07cd 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -2893,10 +2894,21 @@ void __audit_log_kern_module(char *name)
+>         context->type = AUDIT_KERN_MODULE;
+>  }
+>
+> -void __audit_fanotify(u32 response)
+> +void __audit_fanotify(u32 response, u32 type, union fanotify_response_extra *info)
+>  {
+> -       audit_log(audit_context(), GFP_KERNEL,
+> -               AUDIT_FANOTIFY, "resp=%u", response);
+> +       switch (type) {
+> +       case FAN_RESPONSE_INFO_AUDIT_RULE:
+> +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> +                         "resp=%u fan_type=%u fan_ctx=%u",
+> +                         response, type, info->audit_rule);
+> +               break;
+> +       case FAN_RESPONSE_INFO_NONE:
+> +       default:
+> +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> +                         "resp=%u fan_type=%u fan_ctx=?",
+> +                         response, type);
+> +               break;
+> +       }
+>  }
 
+Two things:
+
+* Instead of "fan_ctx=", would it make sense to call it "fan_extra="
+to better match the UAPI struct?  I don't feel strongly either way,
+but it did occur to me just now while looking at the code so I thought
+I would mention it.
+* I'm also wondering if there is a way to be a bit proactive about
+future proofing this field.  Since we already hex encode some fields
+with "bad" characters, would it make sense to hex encode this field
+too?  Not for the "bad" character reason, but more as a way of
+marshalling the fanotify_response_extra union into an audit record.  I
+can't see far enough into the future to know if this would be a good
+idea or not, but like the other point above, it popped into my head
+while looking at the code so I thought I would put it in the email :)
+
+--
+paul-moore.com

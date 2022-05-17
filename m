@@ -2,80 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFEC529723
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 04:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D83529727
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 04:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbiEQCIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 22:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S236091AbiEQCIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 22:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiEQCI3 (ORCPT
+        with ESMTP id S229479AbiEQCIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 22:08:29 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C1744A0C;
-        Mon, 16 May 2022 19:08:26 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id e7so8408194vkh.2;
-        Mon, 16 May 2022 19:08:26 -0700 (PDT)
+        Mon, 16 May 2022 22:08:46 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743C244A0C;
+        Mon, 16 May 2022 19:08:45 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id m12so16119933plb.4;
+        Mon, 16 May 2022 19:08:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YNIVHyUn80V86PKxp2T+1SDr/HwkAtaW1gqkh7u+Rw8=;
-        b=YuGeokCVKMdqtN5SO4Fl2AQYzmNzAb7kLE1K4NoFiQ/ZrqzXdJn9lbiFBLL0Xafc+y
-         D9fH1HB6olFgX9O6FcEbeFpm4WaHnckt4OH0tVg07rj7c8M5Q35ANEYVa3dpCP3qQe9/
-         1ZfoCUm2UPdXcykKHjjNaBU26t5Znm3b4vLBlgAWp1NXVSOBga76hUML7Iygx3WOfRUf
-         ToTPuW167m6vHBHB3q12cIoAOaDwYit8u8vhUV5YYa1NyIj6OZMZiGK5laweZ4FKC84y
-         778rHm0pzSU0MiEUrM/ZXF4g0dssjKeRHwb4DTNq29xsXaNBRZlEnCNevH1nq9MdlV/A
-         VRZw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EhSJRAeClIxsH0n9sFab63mgbLc++zW1P8KwkkDOW2c=;
+        b=TyMBoeYxS5mFRDLo8Oqj9XZaCSAOh9T7N8WhHeJjjYmS+6pnKVHlvu84MWs1TsRPip
+         VvubkItsCpn7YWwlPtPkWHs8WHI0UEhjulAhirwEZSuJP6tIFq/FSm5jiVxxr9XVT7zu
+         sm0/2HJwRdtB6VIhHhINbgQXtEq4tI//dA4LG3MXuDJMmx05BAoRrX3uWhNKp7WKfr4d
+         3JytCUziPR25LtgqezGXEyxdO/mca2I8ZjQ0huht40T4ryXHrHEgW3NRy44jIimGW74Q
+         eKby9VSV7wUBO317XM2yhQZCBcE+WuHTeQElAzIvhXBNAyMthtgjz+HNyUtf57q5Kpwl
+         dBAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YNIVHyUn80V86PKxp2T+1SDr/HwkAtaW1gqkh7u+Rw8=;
-        b=vsSILfFX7//WAc9gUhy3EPyUPbwY0fXpL2S8RNNx6NZ5J1lj8OB5EuiX/Y/jORqgff
-         gmjZCdlFfe8qBlGwmDKUNKsLUggugtbCBaT8rZpzNBbTduPM/2WduH6xN9SxBM5aCmVv
-         q5eUoCqeN/Ea35Y8OL4fX3VrveVvi1rXkyXlsurkmK0FexPspPOLNde5aB9Ea3jRmWzL
-         T74CjpZKMYCscrhc7AGkujkeCQbsaVNunXjYKnX2EAjOmHj6sPw66nu2C47SLKIcbg08
-         xvw+rqTBiL8pPJhI4e/L/xMjLYx+H8DufR2fvQjZO5+xCqa1tr9Qi5HE9MTs+m+K4cUX
-         h8Sg==
-X-Gm-Message-State: AOAM531/4kKCRUP2X1p64mazYC4Zq3/KzxcGCCO0Jh6Bg6QTj4gtBS10
-        kZgIiIrbaOXnLVhy4SjhLbQ0OcCDRoMrPu9xo2GwT6mu9i8MBg==
-X-Google-Smtp-Source: ABdhPJzfFeRRqLLynezVgoDZ1gxVXAYywowXiF9oscS6RvP76ClWqSOk4LcUUkcFbXvhl1q/Xozg6Oi3scblxgJbPD4=
-X-Received: by 2002:a1f:1609:0:b0:34d:ff24:30ef with SMTP id
- 9-20020a1f1609000000b0034dff2430efmr7800818vkw.14.1652753305507; Mon, 16 May
- 2022 19:08:25 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EhSJRAeClIxsH0n9sFab63mgbLc++zW1P8KwkkDOW2c=;
+        b=7hfERhYro72eRAwsl+XPWxGLVmiK1IifUZzqVIKbnGKGKnedZPwpa+bp/5xoDqtkQA
+         K4WflhTB5qapAwSdbIV8COrYtnPMzlcJYj0Qb3c3+M5MCJDgCof+aP99PzpISyNmUV5z
+         VTfcrJ4OjFYUMXRcXIlYalXNVlgWI65gHs7xw0HlyPKEtZetPdDmzVV0Yt3kqVLmvBZC
+         G36kmHjN+9GnEp/weBQ13Cz0Y1qrSP+0hS2f2uHmr1/pRRLbnI4SnvVCY68CV0H7o+Br
+         DVSLhdaQnCKgrZnfghkP3AMpCYsA5xQOS1kK1narcO2gUJpUgZXknS0keVcdirZMbJbR
+         KdGA==
+X-Gm-Message-State: AOAM531nzDpbRtSB2fXAPBKFcPx7rSqmXWAn0zJU0k5WINyQSI32MKgW
+        ft5OvibXMHWQ3yjmGQny4ds=
+X-Google-Smtp-Source: ABdhPJyrc+oFv/EwBb85McDxLMi6hEHL2xbFFvBBRH5ktEgydFh2ArPos/rB5Sj0wlK9orlbf4ocyw==
+X-Received: by 2002:a17:902:7798:b0:158:ee95:f45b with SMTP id o24-20020a170902779800b00158ee95f45bmr19992724pll.97.1652753324903;
+        Mon, 16 May 2022 19:08:44 -0700 (PDT)
+Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:400::4:3651])
+        by smtp.gmail.com with ESMTPSA id n9-20020a17090a928900b001d92e2e5694sm378289pjo.1.2022.05.16.19.08.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 19:08:44 -0700 (PDT)
+Date:   Mon, 16 May 2022 19:08:40 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, cgroups@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next v2 2/7] cgroup: bpf: flush bpf stats on
+ rstat flush
+Message-ID: <20220517020840.vyfp5cit66fs2k2o@MBP-98dd607d3435.dhcp.thefacebook.com>
+References: <20220515023504.1823463-1-yosryahmed@google.com>
+ <20220515023504.1823463-3-yosryahmed@google.com>
 MIME-Version: 1.0
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-15-chenhuacai@loongson.cn> <ef37e578-d843-6a2f-2108-2a26dc54bece@xen0n.name>
- <CAAhV-H7UwLJLiMtjkW0xxfsBBaCPXqkQ-d+ZW4rm+=igvVP6ew@mail.gmail.com>
- <b30e5b28-2a3a-f3a6-1bb1-592323f6eadd@xen0n.name> <87bkvxd12b.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87bkvxd12b.fsf@email.froward.int.ebiederm.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Tue, 17 May 2022 10:08:18 +0800
-Message-ID: <CAAhV-H7R4hioE-dHVxAnPmeJJ-eqiWkdmZWxNDfLesuvURCLcw@mail.gmail.com>
-Subject: Re: [PATCH V10 14/22] LoongArch: Add signal handling support
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "<linux-arch@vger.kernel.org>" <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220515023504.1823463-3-yosryahmed@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -86,140 +88,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Eric,
+On Sun, May 15, 2022 at 02:34:59AM +0000, Yosry Ahmed wrote:
+> +
+> +void bpf_rstat_flush(struct cgroup *cgrp, int cpu)
+> +{
+> +	struct bpf_rstat_flusher *flusher;
+> +	struct bpf_rstat_flush_ctx ctx = {
+> +		.cgrp = cgrp,
+> +		.parent = cgroup_parent(cgrp),
+> +		.cpu = cpu,
+> +	};
+> +
+> +	rcu_read_lock();
+> +	migrate_disable();
+> +	spin_lock(&bpf_rstat_flushers_lock);
+> +
+> +	list_for_each_entry(flusher, &bpf_rstat_flushers, list)
+> +		(void) bpf_prog_run(flusher->prog, &ctx);
+> +
+> +	spin_unlock(&bpf_rstat_flushers_lock);
+> +	migrate_enable();
+> +	rcu_read_unlock();
+> +}
+> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+> index 24b5c2ab5598..0285d496e807 100644
+> --- a/kernel/cgroup/rstat.c
+> +++ b/kernel/cgroup/rstat.c
+> @@ -2,6 +2,7 @@
+>  #include "cgroup-internal.h"
+>  
+>  #include <linux/sched/cputime.h>
+> +#include <linux/bpf-rstat.h>
+>  
+>  static DEFINE_SPINLOCK(cgroup_rstat_lock);
+>  static DEFINE_PER_CPU(raw_spinlock_t, cgroup_rstat_cpu_lock);
+> @@ -168,6 +169,7 @@ static void cgroup_rstat_flush_locked(struct cgroup *cgrp, bool may_sleep)
+>  			struct cgroup_subsys_state *css;
+>  
+>  			cgroup_base_stat_flush(pos, cpu);
+> +			bpf_rstat_flush(pos, cpu);
 
-On Mon, May 16, 2022 at 10:07 PM Eric W. Biederman
-<ebiederm@xmission.com> wrote:
->
-> WANG Xuerui <kernel@xen0n.name> writes:
->
-> > Hi,
-> >
-> > On 5/15/22 21:48, Huacai Chen wrote:
-> >> diff --git a/arch/loongarch/include/uapi/asm/sigcontext.h b/arch/loongarch/include/uapi/asm/sigcontext.h
-> >> new file mode 100644
-> >> index 000000000000..efeb8b3f8236
-> >> --- /dev/null
-> >> +++ b/arch/loongarch/include/uapi/asm/sigcontext.h
-> >> @@ -0,0 +1,63 @@
-> >> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-> >> +/*
-> >> + * Author: Hanlu Li <lihanlu@loongson.cn>
-> >> + *         Huacai Chen <chenhuacai@loongson.cn>
-> >> + *
-> >> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> >> + */
-> >> +#ifndef _UAPI_ASM_SIGCONTEXT_H
-> >> +#define _UAPI_ASM_SIGCONTEXT_H
-> >> +
-> >> +#include <linux/types.h>
-> >> +#include <linux/posix_types.h>
-> >> +
-> >> +/* FP context was used */
-> >> +#define USED_FP                      (1 << 0)
-> >> +/* Load/Store access flags for address error */
-> >> +#define ADRERR_RD            (1 << 30)
-> >> +#define ADRERR_WR            (1 << 31)
-> >>> I've searched GitHub globally, and my local glibc checkout, for usages
-> >>> of these 3 constants, and there seems to be none; please consider
-> >>> removing these if doable. We don't want cruft in uapi right from the
-> >>> beginning.
-> >> They will be used in our glibc, I promise.
-> > Okay then. Seems simple enough, and from my quick grepping these appear to be
-> > original creations -- not carried over from somewhere else, so it's already
-> > highly likely that some of the userland tools need these anyway, just not
-> > released yet.
->
-> I can understand exporting these values but the names aren't very
-> well namespaced at all.  Which means they could accidentially
-> conflict with things.
->
-> It would probably be better to do:
-> SC_USED_FP
-> SC_ADDRERR_RD
-> SC_ADDRERR_WR
-SC_ prefix is good, but ADRERR_RD/ADRERR_WR is used together with
-SIGSEGV/SIGBUS, so I want to keep the same as BUS_ADRERR (a single D)
-if possible.
+Please use the following approach instead:
 
->
-> And with two D's please.  It breaks my fingers to have to
-> make a typo like that on purpose.
->
-> This is very much a bikeshed comment, but I think the
-> bikeshed should be painted.
->
-> >>>> +
-> >>>> +struct sigcontext {
-> >>>> +     __u64   sc_pc;
-> >>>> +     __u64   sc_regs[32];
-> >>>> +     __u32   sc_flags;
-> >>>> +     __u64   sc_extcontext[0] __attribute__((__aligned__(16)));
-> >>>> +};
-> >>>> +
-> >>>> +#define CONTEXT_INFO_ALIGN   16
-> >>>> +struct _ctxinfo {
-> >>>> +     __u32   magic;
-> >>>> +     __u32   size;
-> >>>> +     __u64   padding;        /* padding to 16 bytes */
-> >>>> +};
-> >>>> +
-> >>>> +/* FPU context */
-> >>>> +#define FPU_CTX_MAGIC                0x46505501
-> >>>> +#define FPU_CTX_ALIGN                8
-> >>>> +struct fpu_context {
-> >>>> +     __u64   regs[32];
-> >>>> +     __u64   fcc;
-> >>>> +     __u32   fcsr;
-> >>>> +};
-> >>> The 3 structs above should already see usage downstream (glibc and other
-> >>> low-level friends), so they probably shouldn't be touched by now. At
-> >>> least I can't see problems.
-> >>>> +
-> >>>> +/* LSX context */
-> >>>> +#define LSX_CTX_MAGIC                0x53580001
-> >>>> +#define LSX_CTX_ALIGN                16
-> >>>> +struct lsx_context {
-> >>>> +     __u64   regs[2*32];
-> >>>> +     __u64   fcc;
-> >>>> +     __u32   fcsr;
-> >>>> +     __u32   vcsr;
-> >>>> +};
-> >>>> +
-> >>>> +/* LASX context */
-> >>>> +#define LASX_CTX_MAGIC               0x41535801
-> >>>> +#define LASX_CTX_ALIGN               32
-> >>>> +struct lasx_context {
-> >>>> +     __u64   regs[4*32];
-> >>>> +     __u64   fcc;
-> >>>> +     __u32   fcsr;
-> >>>> +     __u32   vcsr;
-> >>>> +};
-> >>> Do we want to freeze the LSX/LASX layout this early, before any detail
-> >>> of said extension are published? We'll need to update kernel later
-> >>> anyway, so I'd recommend leaving them out for the initial bring-up.
-> >> Yes, they are freezed.
-> > Okay too, I remember these are the same values as in the old world, so it should
-> > be easy to support both worlds at least in this regard.
->
-> You know.  I really don't like this including code for hardware that may
-> be frozen but is not publicly documented yet.  Especially when the plan
-> is to publicly document the hardware.  It has the real problem that no
-> one else can review the code.
->
-> In ever design I have worked with there have been places where the
-> people putting it together have had blind spots.  The only way I know to
-> get past blind spots is to get as many people as possible looking,
-> and to listen to the feedback.
->
-> Given that neither lsx_context nor lasx_context are used in the kernel
-> code yet I would very much prefer that their inclusion wait until there
-> is actual code that needs them.
->
-> If nothing else that will put the definitions in context so people can
-> more easily see the big picture and understand how the pieces fit.
-OK, I will remove lsx_context/lasx_context in the next version.
+__weak noinline void bpf_rstat_flush(struct cgroup *cgrp, struct cgroup *parent, int cpu)
+{
+}
 
-Huacai
->
-> Eric
+and change above line to:
+  bpf_rstat_flush(pos, cgroup_parent(pos), cpu);
+
+Then tracing bpf fentry progs will be able to attach to bpf_rstat_flush.
+Pretty much the patches 1, 2, 3 are not necessary.
+In patch 4 add bpf_cgroup_rstat_updated/flush as two kfuncs instead of stable helpers.
+
+This way patches 1,2,3,4 will become 2 trivial patches and we will be
+able to extend the interface between cgroup rstat and bpf whenever we need
+without worrying about uapi stability.
+
+We had similar discusison with HID subsystem that plans to use bpf in HID
+with the same approach.
+See this patch set:
+https://lore.kernel.org/bpf/20220421140740.459558-2-benjamin.tissoires@redhat.com/
+You'd need patch 1 from it to enable kfuncs for tracing.
+
+Your patch 5 is needed as-is.
+Yonghong,
+please review it.
+Different approach for patch 1-4 won't affect patch 5.
+Patches 6 and 7 look good.
+
+With this approach that patch 7 will mostly stay as-is. Instead of:
++SEC("rstat/flush")
++int vmscan_flush(struct bpf_rstat_flush_ctx *ctx)
++{
++       struct vmscan_percpu *pcpu_stat;
++       struct vmscan *total_stat, *parent_stat;
++       struct cgroup *cgrp = ctx->cgrp, *parent = ctx->parent;
+
+it will become
+
+SEC("fentry/bpf_rstat_flush")
+int BPF_PROG(vmscan_flush, struct cgroup *cgrp, struct cgroup *parent, int cpu)

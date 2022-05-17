@@ -2,97 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBD65297BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F49F5297BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239201AbiEQDNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 23:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
+        id S239699AbiEQDNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 23:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiEQDNH (ORCPT
+        with ESMTP id S239648AbiEQDNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 23:13:07 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401611E3C5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:13:07 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id o16so3321161ilq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:13:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=niDVomHWwkj1X3m8uRV45HIt1hqCr2KxXgjlHwPIKZw=;
-        b=KxLOcxyT1YZOFWo202Qc637ttcdVK7B5an5XESVLniA4Ab/jI52SQicfzWoGA9QNlC
-         OhJgpaVbdEV8KiFIhxZWepcVWAKfF4WsdUMNkZGQLXyByOXy90RATcUOe7uWgJypH379
-         z4WGQjjO3WFR0SmtoXYCCIOD1gEf/sL1j83hE=
+        Mon, 16 May 2022 23:13:21 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5E440A13;
+        Mon, 16 May 2022 20:13:20 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id e189so20910737oia.8;
+        Mon, 16 May 2022 20:13:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=niDVomHWwkj1X3m8uRV45HIt1hqCr2KxXgjlHwPIKZw=;
-        b=FGN0KHfuQiBQgcDTqVmnUH0v2VzsInt7VsKRarmmNIoKp9QVpCFE8G0qN/8r9yudHQ
-         NWrq0M/HP9el5/njl72KnAcdiIYG+TFtod/jECa6CMaarBzrNqB57/3mLLRqYgRRBwsH
-         HLTYFdMEnPjlfFfIvrx6AsLKn+/d5N8F4TzdNE4Z4Y1nPfE/ekcmtY511dQFJ0EKh8JA
-         beEzYDPRV+7PV3b4AvfMpuxOCxtC+PEAUBF9+5hwi2NFgx3qzPfWSjX96q5HGfk13zKR
-         5SsuEcZZXiAPPhtdAezWWJXkFer9WofTJ98+u7HCx3yGRZs9V3IbsrKgilVOJfaXBnZW
-         q+Jw==
-X-Gm-Message-State: AOAM533KPQWslMI3W3XO27RRwbqJLPDEisbZQHVdgkMv1U9b6pJBEPi4
-        TZpA5ZgZVA2sTptVGWlIE2eiZg==
-X-Google-Smtp-Source: ABdhPJxaK8Ju413pdWokrmfK3dJZx0P/woREOdnS5matvmYa13VHk5GOklWBYzlSw0FXutwEgGzDKQ==
-X-Received: by 2002:a05:6e02:12ee:b0:2d1:36d2:5de9 with SMTP id l14-20020a056e0212ee00b002d136d25de9mr1059489iln.200.1652757186684;
-        Mon, 16 May 2022 20:13:06 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id n5-20020a6b4105000000b0065a47e16f5esm301697ioa.48.2022.05.16.20.13.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 20:13:06 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
-        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
-        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
-        hch@infradead.org, oleg@redhat.com, david@redhat.com,
-        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
-        jhubbard@nvidia.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kernel-team@android.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220516075619.1277152-1-surenb@google.com>
- <20220516075619.1277152-2-surenb@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fae23c69-18fa-a86f-f35a-e3c4d646a53c@linuxfoundation.org>
-Date:   Mon, 16 May 2022 21:13:05 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PWhv8SUJ7Zi/KQsr7OOR1d8BfvT5pK75grSbAtZ3mLs=;
+        b=l0nfXAAVQbga+lEfnM7gmAl2xbS58DEieZl9riWRs02jOjfjdZ9/o3t+JCx//KnStW
+         DmG73SRzvvxnmvh4oBZ48nxHeCHQEFUUVsU7mqWQgial8ELwN+41LsqbXQxLl8o5ekyt
+         jI9yF4999oThvsWikeEEY+3H3C81hMDtXjOSbsTnR3h7feSB11ERI6pKS7P2UmnbdBcn
+         VgqBxoLPcgRW15cFtDnvY9Yt3j8MwPdxdwi2Bqw9ynyNBLqyTDCMLwtMunZ5SxhilMsu
+         ziThsoytp7G7LQdaLKtIfXxrrgVPcFKDQ5ljFi8cnj2dyPNVwTaIEya+sDJUgsyCXV7u
+         sSPQ==
+X-Gm-Message-State: AOAM5304WRnHaz+yLl/CTaGMarLq/LTWwx18S1BvIs/D22dTgEK56fEC
+        hkvxPA9lcFjZ2FDwYYxuCviQJQW9ACERv83Pt8U=
+X-Google-Smtp-Source: ABdhPJw/s9VGkv+VwVcVjajwVKXNJB//UKWE7QSo6EgoadpgYV01Q+mpv6cZ6Ihl1BzegtnGy0ujzQO2o8Qcz0bYTjc=
+X-Received: by 2002:a05:6808:2218:b0:326:bd8c:d044 with SMTP id
+ bd24-20020a056808221800b00326bd8cd044mr9426742oib.92.1652757199897; Mon, 16
+ May 2022 20:13:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220516075619.1277152-2-surenb@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220513090237.10444-1-adrian.hunter@intel.com> <20220513090237.10444-4-adrian.hunter@intel.com>
+In-Reply-To: <20220513090237.10444-4-adrian.hunter@intel.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 16 May 2022 20:13:08 -0700
+Message-ID: <CAM9d7chFeVZNm_WTqrLzv74U13RPQtTvezxbP41GLte+ir6P_A@mail.gmail.com>
+Subject: Re: [PATCH 3/6] perf tools: Add guest_code support
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        KVM <kvm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 1:56 AM, Suren Baghdasaryan wrote:
-> With the last usage of MMF_OOM_VICTIM in exit_mmap gone, this flag is
-> now unused and can be removed.
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Acked-by: Michal Hocko <mhocko@suse.com>
+Hi Adrian,
+
+On Fri, May 13, 2022 at 2:03 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> A common case for KVM test programs is that the guest object code can be
+> found in the hypervisor process (i.e. the test program running on the
+> host). To support that, copy the host thread's maps to the guest thread's
+> maps. Note, we do not discover the guest until we encounter a guest event,
+> which works well because it is not until then that we know that the host
+> thread's maps have been set up.
+>
+> Typically the main function for the guest object code is called
+> "guest_code", hence the name chosen for this feature.
+
+Ok, so that's just a convention and there's no hard-coded
+support for the "guest_code" function in this code, right?
+
+>
+> This is primarily aimed at supporting Intel PT, or similar, where trace
+> data can be recorded for a guest. Refer to the final patch in this series
+> "perf intel-pt: Add guest_code support" for an example.
+>
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 > ---
->   include/linux/oom.h            | 9 ---------
->   include/linux/sched/coredump.h | 7 +++----
->   mm/oom_kill.c                  | 4 +---
->   3 files changed, 4 insertions(+), 16 deletions(-)
-> 
-Looks good to me.
+>  tools/perf/util/event.c       |  7 +++-
+>  tools/perf/util/machine.c     | 70 +++++++++++++++++++++++++++++++++++
+>  tools/perf/util/machine.h     |  2 +
+>  tools/perf/util/session.c     |  7 ++++
+>  tools/perf/util/symbol_conf.h |  3 +-
+>  5 files changed, 86 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+> index 6439c888ae38..0476bb3a4188 100644
+> --- a/tools/perf/util/event.c
+> +++ b/tools/perf/util/event.c
+> @@ -683,9 +683,12 @@ static bool check_address_range(struct intlist *addr_list, int addr_range,
+>  int machine__resolve(struct machine *machine, struct addr_location *al,
+>                      struct perf_sample *sample)
+>  {
+> -       struct thread *thread = machine__findnew_thread(machine, sample->pid,
+> -                                                       sample->tid);
+> +       struct thread *thread;
+>
+> +       if (symbol_conf.guest_code && !machine__is_host(machine))
+> +               thread = machine__findnew_guest_code(machine, sample->pid);
+> +       else
+> +               thread = machine__findnew_thread(machine, sample->pid, sample->tid);
+>         if (thread == NULL)
+>                 return -1;
+>
+> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> index e67b5a7670f3..ae2e1fb422e2 100644
+> --- a/tools/perf/util/machine.c
+> +++ b/tools/perf/util/machine.c
+> @@ -392,6 +392,76 @@ struct machine *machines__find_guest(struct machines *machines, pid_t pid)
+>         return machine;
+>  }
+>
+> +/*
+> + * A common case for KVM test programs is that the guest object code can be
+> + * found in the hypervisor process (i.e. the test program running on the host).
+> + * To support that, copy the host thread's maps to the guest thread's maps.
+> + * Note, we do not discover the guest until we encounter a guest event,
+> + * which works well because it is not until then that we know that the host
+> + * thread's maps have been set up.
+> + */
+> +static struct thread *findnew_guest_code(struct machine *machine,
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+But this function returns a thread and IIUC that's the task which
+does the host to guest transition.  Then why not calling it just
+findnew__hypervisor() ?
 
-thanks,
--- Shuah
+Thanks,
+Namhyung
+
+
+> +                                        struct machine *host_machine,
+> +                                        pid_t pid)
+> +{
+> +       struct thread *host_thread;
+> +       struct thread *thread;
+> +       int err;
+> +
+> +       if (!machine)
+> +               return NULL;
+> +
+> +       thread = machine__findnew_thread(machine, -1, pid);
+> +       if (!thread)
+> +               return NULL;
+> +
+> +       /* Assume maps are set up if there are any */
+> +       if (thread->maps->nr_maps)
+> +               return thread;
+> +
+> +       host_thread = machine__find_thread(host_machine, -1, pid);
+> +       if (!host_thread)
+> +               goto out_err;
+> +
+> +       thread__set_guest_comm(thread, pid);
+> +
+> +       /*
+> +        * Guest code can be found in hypervisor process at the same address
+> +        * so copy host maps.
+> +        */
+> +       err = maps__clone(thread, host_thread->maps);
+> +       thread__put(host_thread);
+> +       if (err)
+> +               goto out_err;
+> +
+> +       return thread;
+> +
+> +out_err:
+> +       thread__zput(thread);
+> +       return NULL;
+> +}
+> +

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E42529AFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0832B529AD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241617AbiEQHhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S236176AbiEQHcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241504AbiEQHfp (ORCPT
+        with ESMTP id S229894AbiEQHcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:35:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A8649C87
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:34:14 -0700 (PDT)
+        Tue, 17 May 2022 03:32:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00416186DC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:32:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7BFFBB8173F
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:34:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3387C34100;
-        Tue, 17 May 2022 07:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652772852;
-        bh=mWtRFK07XdthxAyT5dCny+PVTYE0BwB4uEKr/xRO3zk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bLdytL7ALgmmfQn81ZRSqUooLSS+0Z05fX0kdO1KvKOt+ZhdAe9cGuYMEdjYKwb8y
-         psJQtyxYjhQOCNdu6eeHOJp8uCb0Ux8uB7GmdNAKZuoaSE66j4BDbzR0ddIbU2zHtv
-         uSzzXAuRMn0CBCXipi/Vq1CFe7y5w789X77Q7CGAmdkXs8M0izbRA1FW2eGPP2K/rf
-         sPly7nBMPbAAMGDp35FKAFE4ERIp3cHynAMVPtQGbRXQJInxT5VbBjDZFwhh4KGiHo
-         Z6tKa6zAXSojS7+KAV5LYek0hfg9hfvZDOVu0cCQlWL2WO22quFLa5qeI0uPKmpvV5
-         z92QWzj3wOxWA==
-From:   Chao Yu <chao@kernel.org>
-To:     xiang@kernel.org
-Cc:     chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH] erofs: support idmapped mounts
-Date:   Tue, 17 May 2022 15:32:10 +0800
-Message-Id: <20220517073210.3569589-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D55460B49
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:32:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A38C34100;
+        Tue, 17 May 2022 07:32:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652772762;
+        bh=oYBMRWypwUlY+I18dy7jJamOgc3MRE83oGpSjY67/Pc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1hSa10/16k78Z+PxemJ+EjyDgvmoRwDlDW7/zPt2BNrO5KGxfEWRgBwcjiwgq+GEr
+         +tQWvIplSMKfCT7nRBmH3SqDHhbePoNkxzeYjAwVRuv+Y1bFlwmCIoH6HrIT04+EO+
+         gLsqKEcEFkYZT/kQxMeLPSd2r22i4Jx6h7A6K6Zc=
+Date:   Tue, 17 May 2022 09:32:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Guixin Liu <kanie@linux.alibaba.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] uio: Replace mutex info_lock with percpu_ref
+Message-ID: <YoNPlgoUIzduNXih@kroah.com>
+References: <1652161831-77791-1-git-send-email-kanie@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652161831-77791-1-git-send-email-kanie@linux.alibaba.com>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,59 +50,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables idmapped mounts for erofs, since all dedicated helpers
-for this functionality existsm, so, in this patch we just pass down the
-user_namespace argument from the VFS methods to the relevant helpers.
+On Tue, May 10, 2022 at 01:50:31PM +0800, Guixin Liu wrote:
+> If the underlying driver works in parallel, the mutex info_lock in uio 
+> will force driver to work sequentially, so that become performance 
+> bottleneck. Lets replace it with percpu_ref for better performance. 
+> 
+> Use tcm_loop and tcmu(backstore is file, and I did some work to make tcmu
+> work in parallel at uio_write() path) to evaluate performance,
+> fio job: fio -filename=/dev/sdb  -direct=1 -size=2G -name=1 -thread
+> -runtime=60 -time_based  -rw=randread -numjobs=16 -iodepth=16 -bs=128k
+> 
+> Without this patch:
+> 	READ: bw=2828MiB/s (2965MB/s), 176MiB/s-177MiB/s (185MB/s-186MB/s), 
+> io=166GiB (178GB), run=60000-60001msec
+> 
+> With this patch:
+> 	READ: bw=3382MiB/s (3546MB/s), 211MiB/s-212MiB/s (221MB/s-222MB/s), 
+> io=198GiB (213GB), run=60001-60001msec
+> 
+> Reviewed-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+> Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
 
-Simple idmap example on erofs image:
+Why is UIO being used for a block device?  Why not use a real block
+driver instead that can properly handle the locking issues involved
+here?
 
-1. mkdir dir
-2. touch dir/file
-3. mkfs.erofs erofs.img dir
-4. mount -t erofs -o loop erofs.img  /mnt/erofs/
 
-5. ls -ln /mnt/erofs/
-total 0
--rw-rw-r-- 1 1000 1000 0 May 17 15:26 file
 
-6. mount-idmapped --map-mount b:0:1001:1 /mnt/erofs/ /mnt/scratch_erofs/
+> ---
+>  drivers/uio/uio.c          | 95 ++++++++++++++++++++++++++++++++++------------
+>  include/linux/uio_driver.h |  5 ++-
+>  2 files changed, 75 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
+> index 43afbb7..72c16ba 100644
+> --- a/drivers/uio/uio.c
+> +++ b/drivers/uio/uio.c
+> @@ -24,6 +24,8 @@
+>  #include <linux/kobject.h>
+>  #include <linux/cdev.h>
+>  #include <linux/uio_driver.h>
+> +#include <linux/completion.h>
+> +#include <linux/percpu-refcount.h>
+>  
+>  #define UIO_MAX_DEVICES		(1U << MINORBITS)
+>  
+> @@ -218,7 +220,9 @@ static ssize_t name_show(struct device *dev,
+>  	struct uio_device *idev = dev_get_drvdata(dev);
+>  	int ret;
+>  
+> -	mutex_lock(&idev->info_lock);
+> +	if (!percpu_ref_tryget_live(&idev->info_ref))
+> +		return -EINVAL;
+> +
 
-7. ls -ln /mnt/scratch_erofs/
-total 0
--rw-rw-r-- 1 65534 65534 0 May 17 15:26 file
+You are now just putting the contention to a per-cpu lock, so any
+single-cpu load will have the same issue, right?  And your example above
+is a single-cpu load, so how is this any faster?  Is the mutex going
+across all cpus to sync such a load that moving this to a percpu thing
+that much better?
 
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
- fs/erofs/inode.c | 2 +-
- fs/erofs/super.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+And as you have now split this into one-lock-per-cpu instead of
+one-lock-per-device, you just broke the situation where multiple threads
+are accessing the same device at the same time, right?
 
-diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
-index e8b37ba5e9ad..5320bf52c1ce 100644
---- a/fs/erofs/inode.c
-+++ b/fs/erofs/inode.c
-@@ -370,7 +370,7 @@ int erofs_getattr(struct user_namespace *mnt_userns, const struct path *path,
- 	stat->attributes_mask |= (STATX_ATTR_COMPRESSED |
- 				  STATX_ATTR_IMMUTABLE);
- 
--	generic_fillattr(&init_user_ns, inode, stat);
-+	generic_fillattr(mnt_userns, inode, stat);
- 	return 0;
- }
- 
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index 0c4b41130c2f..7dc5f2e8ddee 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -781,7 +781,7 @@ static struct file_system_type erofs_fs_type = {
- 	.name           = "erofs",
- 	.init_fs_context = erofs_init_fs_context,
- 	.kill_sb        = erofs_kill_sb,
--	.fs_flags       = FS_REQUIRES_DEV,
-+	.fs_flags       = FS_REQUIRES_DEV | FS_ALLOW_IDMAP,
- };
- MODULE_ALIAS_FS("erofs");
- 
--- 
-2.25.1
+You have also changed the functionality of the driver to force userspace
+to handle when the lock can not be taken as previously it would always
+work and just delay until it did happen.  What workflow does that now
+affect that always assumed that these code paths would succeed?
 
+Also the kernel test bot found problems with the patch :(
+
+thanks,
+
+greg k-h

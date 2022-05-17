@@ -2,283 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B057452AD4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 255E252AD50
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353148AbiEQVDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S240415AbiEQVHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235046AbiEQVDs (ORCPT
+        with ESMTP id S233568AbiEQVHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:03:48 -0400
-Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88782532C5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:03:46 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id r4M1nkfskEhCQr4M1ndeLA; Tue, 17 May 2022 23:03:44 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 17 May 2022 23:03:44 +0200
-X-ME-IP: 86.243.180.246
-Message-ID: <ad895690-b611-05d6-3950-601e99c7fa25@wanadoo.fr>
-Date:   Tue, 17 May 2022 23:03:41 +0200
+        Tue, 17 May 2022 17:07:02 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 May 2022 14:07:00 PDT
+Received: from xppmailspam12.itap.purdue.edu (xppmailspam12.itap.purdue.edu [128.210.1.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E31532CE
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:07:00 -0700 (PDT)
+IronPort-SDR: EcolU3GOREYZm/yLvCkxnMomZ4P2+F8XKSTXJZwD7ykZzATvIXRq0ND6JFHoTju0qgPOocEOFw
+ 3izNZ5cAw4zGVlFzAY/yqXE6hfboe8ZhQ=
+X-Ironport-AuthID: liu3101@purdue.edu
+IronPort-Data: =?us-ascii?q?A9a23=3A4FZru6rMG9kMKZqXIALiJi0rfWleBmIbZRIvg?=
+ =?us-ascii?q?KrLsJaIsI4StFCztgarIBnUPf+PZDb8eownadnj90MD7Z7UytRgTwo6qSsxQ?=
+ =?us-ascii?q?SwRouPIVI+TRqvS04J+DSFhoHqKZ6zyU/GYRCztZnOD9BqrLJb7qnxwifOBS?=
+ =?us-ascii?q?rbmUbaWIj1rSRJpDiotlEs7yeI+h4dph/m/Ah+M5YOp+pGPaAf91m4mKH8Q5?=
+ =?us-ascii?q?oKCtAhr4Kb4tgQeswFsfvtMplLfyyQYActHd6G8Jnf1WKdOGeu+S7qRxb215?=
+ =?us-ascii?q?DqBrQ8wEN+4n/D2flBTGuzeOg2Hi3x3Xam+g0QS/XVugvZjbPdFMBVZkTSEm?=
+ =?us-ascii?q?dx12e5hj53oRFd7JLDIlcQcTwJcT3N0M5pA9eKVOnO4q8GSkxDLfnawkfVjC?=
+ =?us-ascii?q?EY6Yd8R9uptWzkc9PoUOWhQKBuYwfqr2r6mR69hitl6dJvnO4YWu3dByzDFD?=
+ =?us-ascii?q?Kp2GsmfE/WSvdIIji0tgs1uHOrFY5ZLYzRYahmdMQZEPU0aCc5jker01GPzd?=
+ =?us-ascii?q?SZU9ACcqaYtuTCBzQp9weCwdtHOPMSXX8lIkwCVqn+fpzb1BRQTNdq+zzuZ8?=
+ =?us-ascii?q?y783baTzXOjAI9CRqel8vNKgUGIwjBBAhMhU1bm8+KyjVSzWo4CJkEZksb0Q?=
+ =?us-ascii?q?XPez2T2CIikN/GEiCTc5EREBoMPS7dSBDylk8I43S7IXgDocRYeMLTKhOduL?=
+ =?us-ascii?q?dAb/gfhc+HBXFSDg5XJIZ6pzYp4mBvpUcQjBTJYOXVUHVNtD+7L++nfhjqXJ?=
+ =?us-ascii?q?jpq/TXcYtfdQVkcyBjSxMQyail6YWfmCsyGEV77bzKE/vAlTyY04AnGBj/j5?=
+ =?us-ascii?q?Rg/fJO/a5Glr1XX8J6sLq7AFAnH5SBCwpPGqrlQUvlhlwTUKAkJNLWo+q3ca?=
+ =?us-ascii?q?GT0mUN1E4QssTmh5hZPeKgMvmgvex41bJpslTjBJRW7VRlqzJNNLWaparFfb?=
+ =?us-ascii?q?IW2BMAni6PnELzNX/bYdNdfYZ5vcCeI+ShvYQib2GWFuEsliqg5fJuWb+6jC?=
+ =?us-ascii?q?nEVDalo1j2rX/xb2rgurgg6xGXOVdX4wg6h3L62enGYU/EGPUGIY+R/67mLy?=
+ =?us-ascii?q?C3R8ssEbpPT4w1CSuHjb2/a/ZN7ELygBRDXHrj3rcBGLrPFKREgAHw7B+Lch?=
+ =?us-ascii?q?74tZuRYc21uvr+g1hmAtoVwkTITXUH6FDg=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AkbjXja00TIewCBBEiw4LAAqjBAokLtp133?=
+ =?us-ascii?q?Aq2lEZdPU1SKOlfq+V7Y0mPHPP+U4ssTQb9+xoW5PtfZqjz+8S3WB5B97LNz?=
+ =?us-ascii?q?UO01HEEGgN1+Hf6gylPCHi++ZB3eNJdqRkFZnWBVx35Pyb3CCIV/Et3dSO7a?=
+ =?us-ascii?q?jtr+bX1GoFd3AIV4hQqyB0FwuSD0UzbgxPH4A4G5qX7tdGoT3IQwVzUu2LQl?=
+ =?us-ascii?q?4IQuXKutWOu5rjYRsXbiRXijWmvHeO5KP2GwWRmjYZSS4n+8ZHzUH11yv0+6?=
+ =?us-ascii?q?iqrvn+8RnY2wbonvNrseqk7ddfCcSQgowuJirhkQa0dO1aOoG/gA=3D=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.91,233,1647316800"; 
+   d="scan'208";a="461971464"
+Received: from indy05.cs.purdue.edu ([128.10.130.167])
+  by xppmailspam12.itap.purdue.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 May 2022 17:05:54 -0400
+From:   Congyu Liu <liu3101@purdue.edu>
+To:     dvyukov@google.com, andreyknvl@gmail.com
+Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Congyu Liu <liu3101@purdue.edu>
+Subject: [PATCH] kcov: fix race caused by unblocked interrupt
+Date:   Tue, 17 May 2022 21:05:32 +0000
+Message-Id: <20220517210532.1506591-1-liu3101@purdue.edu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH net-next v2 1/5] net: ipqess: introduce the Qualcomm
- IPQESS driver
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-References: <20220514150656.122108-1-maxime.chevallier@bootlin.com>
- <20220514150656.122108-2-maxime.chevallier@bootlin.com>
-X-Mozilla-News-Host: news://news.gmane.org
-Content-Language: fr
-In-Reply-To: <20220514150656.122108-2-maxime.chevallier@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 14/05/2022 à 17:06, Maxime Chevallier a écrit :
-> The Qualcomm IPQESS controller is a simple 1G Ethernet controller found
-> on the IPQ4019 chip. This controller has some specificities, in that the
-> IPQ4019 platform that includes that controller also has an internal
-> switch, based on the QCA8K IP.
-> 
-> It is connected to that switch through an internal link, and doesn't
-> expose directly any external interface, hence it only supports the
-> PHY_INTERFACE_MODE_INTERNAL for now.
-> 
-> It has 16 RX and TX queues, with a very basic RSS fanout configured at
-> init time.
-> 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> ---
-> V1->V2 :
->   - Reworked the init sequence, following Andrew's comments
->   - Added clock and reset support
->   - Reworked the error paths
->   - Added extra endianness wrappers to fix sparse warnings
-> 
->   MAINTAINERS                                   |    6 +
->   drivers/net/ethernet/qualcomm/Kconfig         |   11 +
->   drivers/net/ethernet/qualcomm/Makefile        |    2 +
->   drivers/net/ethernet/qualcomm/ipqess/Makefile |    8 +
->   drivers/net/ethernet/qualcomm/ipqess/ipqess.c | 1269 +++++++++++++++++
->   drivers/net/ethernet/qualcomm/ipqess/ipqess.h |  518 +++++++
->   .../ethernet/qualcomm/ipqess/ipqess_ethtool.c |  168 +++
->   7 files changed, 1982 insertions(+)
->   create mode 100644 drivers/net/ethernet/qualcomm/ipqess/Makefile
->   create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess.c
->   create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess.h
->   create mode 100644 drivers/net/ethernet/qualcomm/ipqess/ipqess_ethtool.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9b0480f1b153..29e6ec4f975a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16308,6 +16308,12 @@ L:	netdev@vger.kernel.org
->   S:	Maintained
->   F:	drivers/net/ethernet/qualcomm/emac/
->   
-> +QUALCOMM IPQESS ETHERNET DRIVER
-> +M:	Maxime Chevallier <maxime.chevallier@bootlin.com>
-> +L:	netdev@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/net/ethernet/qualcomm/ipqess/
-> +
->   QUALCOMM ETHQOS ETHERNET DRIVER
->   M:	Vinod Koul <vkoul@kernel.org>
->   L:	netdev@vger.kernel.org
-> diff --git a/drivers/net/ethernet/qualcomm/Kconfig b/drivers/net/ethernet/qualcomm/Kconfig
-> index a4434eb38950..a723ddbea248 100644
-> --- a/drivers/net/ethernet/qualcomm/Kconfig
-> +++ b/drivers/net/ethernet/qualcomm/Kconfig
-> @@ -60,6 +60,17 @@ config QCOM_EMAC
->   	  low power, Receive-Side Scaling (RSS), and IEEE 1588-2008
->   	  Precision Clock Synchronization Protocol.
->   
-> +config QCOM_IPQ4019_ESS_EDMA
-> +	tristate "Qualcomm Atheros IPQ4019 ESS EDMA support"
-> +	depends on OF
-> +	select PHYLINK
-> +	help
-> +	  This driver supports the Qualcomm Atheros IPQ40xx built-in
-> +	  ESS EDMA ethernet controller.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called ipqess.
-> +
->   source "drivers/net/ethernet/qualcomm/rmnet/Kconfig"
->   
->   endif # NET_VENDOR_QUALCOMM
-> diff --git a/drivers/net/ethernet/qualcomm/Makefile b/drivers/net/ethernet/qualcomm/Makefile
-> index 9250976dd884..db463c9ea1f9 100644
-> --- a/drivers/net/ethernet/qualcomm/Makefile
-> +++ b/drivers/net/ethernet/qualcomm/Makefile
-> @@ -11,4 +11,6 @@ qcauart-objs := qca_uart.o
->   
->   obj-y += emac/
->   
-> +obj-$(CONFIG_QCOM_IPQ4019_ESS_EDMA) += ipqess/
-> +
->   obj-$(CONFIG_RMNET) += rmnet/
-> diff --git a/drivers/net/ethernet/qualcomm/ipqess/Makefile b/drivers/net/ethernet/qualcomm/ipqess/Makefile
-> new file mode 100644
-> index 000000000000..4f2db7283ebf
-> --- /dev/null
-> +++ b/drivers/net/ethernet/qualcomm/ipqess/Makefile
-> @@ -0,0 +1,8 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# Makefile for the IPQ ESS driver
-> +#
-> +
-> +obj-$(CONFIG_QCOM_IPQ4019_ESS_EDMA) += ipq_ess.o
-> +
-> +ipq_ess-objs := ipqess.o ipqess_ethtool.o
-> diff --git a/drivers/net/ethernet/qualcomm/ipqess/ipqess.c b/drivers/net/ethernet/qualcomm/ipqess/ipqess.c
-> new file mode 100644
-> index 000000000000..b11f11f23c11
-> --- /dev/null
-> +++ b/drivers/net/ethernet/qualcomm/ipqess/ipqess.c
-> @@ -0,0 +1,1269 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR ISC
-> +/* Copyright (c) 2014 - 2017, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2017 - 2018, John Crispin <john@phrozen.org>
-> + * Copyright (c) 2018 - 2019, Christian Lamparter <chunkeey@gmail.com>
-> + * Copyright (c) 2020 - 2021, Gabor Juhos <j4g8y7@gmail.com>
-> + * Copyright (c) 2021 - 2022, Maxime Chevallier <maxime.chevallier@bootlin.com>
-> + *
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/clk.h>
-> +#include <linux/if_vlan.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_mdio.h>
-> +#include <linux/of_net.h>
-> +#include <linux/phylink.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +#include <linux/skbuff.h>
-> +#include <linux/vmalloc.h>
-> +#include <net/checksum.h>
-> +#include <net/ip6_checksum.h>
-> +
-> +#include "ipqess.h"
-> +
-> +#define IPQESS_RRD_SIZE		16
-> +#define IPQESS_NEXT_IDX(X, Y)  (((X) + 1) & ((Y) - 1))
-> +#define IPQESS_TX_DMA_BUF_LEN	0x3fff
-> +
-> +static void ipqess_w32(struct ipqess *ess, u32 reg, u32 val)
-> +{
-> +	writel(val, ess->hw_addr + reg);
-> +}
-> +
-> +static u32 ipqess_r32(struct ipqess *ess, u16 reg)
-> +{
-> +	return readl(ess->hw_addr + reg);
-> +}
-> +
-> +static void ipqess_m32(struct ipqess *ess, u32 mask, u32 val, u16 reg)
-> +{
-> +	u32 _val = ipqess_r32(ess, reg);
-> +
-> +	_val &= ~mask;
-> +	_val |= val;
-> +
-> +	ipqess_w32(ess, reg, _val);
-> +}
-> +
-> +void ipqess_update_hw_stats(struct ipqess *ess)
-> +{
-> +	u32 *p;
-> +	u32 stat;
-> +	int i;
-> +
-> +	lockdep_assert_held(&ess->stats_lock);
-> +
-> +	p = (u32 *)&ess->ipqess_stats;
-> +	for (i = 0; i < IPQESS_MAX_TX_QUEUE; i++) {
-> +		stat = ipqess_r32(ess, IPQESS_REG_TX_STAT_PKT_Q(i));
-> +		*p += stat;
-> +		p++;
-> +	}
-> +
-> +	for (i = 0; i < IPQESS_MAX_TX_QUEUE; i++) {
-> +		stat = ipqess_r32(ess, IPQESS_REG_TX_STAT_BYTE_Q(i));
-> +		*p += stat;
-> +		p++;
-> +	}
-> +
-> +	for (i = 0; i < IPQESS_MAX_RX_QUEUE; i++) {
-> +		stat = ipqess_r32(ess, IPQESS_REG_RX_STAT_PKT_Q(i));
-> +		*p += stat;
-> +		p++;
-> +	}
-> +
-> +	for (i = 0; i < IPQESS_MAX_RX_QUEUE; i++) {
-> +		stat = ipqess_r32(ess, IPQESS_REG_RX_STAT_BYTE_Q(i));
-> +		*p += stat;
-> +		p++;
-> +	}
-> +}
-> +
-> +static int ipqess_tx_ring_alloc(struct ipqess *ess)
-> +{
-> +	struct device *dev = &ess->pdev->dev;
-> +	int i;
-> +
-> +	for (i = 0; i < IPQESS_NETDEV_QUEUES; i++) {
-> +		struct ipqess_tx_ring *tx_ring = &ess->tx_ring[i];
-> +		size_t size;
-> +		u32 idx;
-> +
-> +		tx_ring->ess = ess;
-> +		tx_ring->ring_id = i;
-> +		tx_ring->idx = i * 4;
-> +		tx_ring->count = IPQESS_TX_RING_SIZE;
-> +		tx_ring->nq = netdev_get_tx_queue(ess->netdev, i);
-> +
-> +		size = sizeof(struct ipqess_buf) * IPQESS_TX_RING_SIZE;
-> +		tx_ring->buf = devm_kzalloc(dev, size, GFP_KERNEL);
-> +		if (!tx_ring->buf) {
-> +			netdev_err(ess->netdev, "buffer alloc of tx ring failed");
-> +			return -ENOMEM;
-> +		}
-> +
-> +		size = sizeof(struct ipqess_tx_desc) * IPQESS_TX_RING_SIZE;
-> +		tx_ring->hw_desc = dmam_alloc_coherent(dev, size, &tx_ring->dma,
-> +						       GFP_KERNEL | __GFP_ZERO);
+Some code runs in interrupts cannot be blocked by `in_task()` check.
+In some unfortunate interleavings, such interrupt is raised during
+serializing trace data and the incoming nested trace functionn could
+lead to loss of previous trace data. For instance, in
+`__sanitizer_cov_trace_pc`, if such interrupt is raised between
+`area[pos] = ip;` and `WRITE_ONCE(area[0], pos);`, then trace data in
+`area[pos]` could be replaced.
 
-Hi,
+The fix is done by adding a flag indicating if the trace buffer is being
+updated. No modification to trace buffer is allowed when the flag is set.
 
-Nitpicking: I think that __GFP_ZERO is useless (and harmless) because 
-dma_alloc_coherent() always zeroes the memory that is allocated.
+Signed-off-by: Congyu Liu <liu3101@purdue.edu>
+---
+ include/linux/sched.h |  3 +++
+ kernel/kcov.c         | 16 ++++++++++++++++
+ 2 files changed, 19 insertions(+)
 
-CJ
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index a8911b1f35aa..d06cedd9595f 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1408,6 +1408,9 @@ struct task_struct {
+ 
+ 	/* Collect coverage from softirq context: */
+ 	unsigned int			kcov_softirq;
++
++	/* Flag of if KCOV area is being written: */
++	bool				kcov_writing;
+ #endif
+ 
+ #ifdef CONFIG_MEMCG
+diff --git a/kernel/kcov.c b/kernel/kcov.c
+index b3732b210593..a595a8ad5d8a 100644
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -165,6 +165,8 @@ static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_stru
+ 	 */
+ 	if (!in_task() && !(in_serving_softirq() && t->kcov_softirq))
+ 		return false;
++	if (READ_ONCE(t->kcov_writing))
++		return false;
+ 	mode = READ_ONCE(t->kcov_mode);
+ 	/*
+ 	 * There is some code that runs in interrupts but for which
+@@ -201,12 +203,19 @@ void notrace __sanitizer_cov_trace_pc(void)
+ 		return;
+ 
+ 	area = t->kcov_area;
++
++	/* Prevent race from unblocked interrupt. */
++	WRITE_ONCE(t->kcov_writing, true);
++	barrier();
++
+ 	/* The first 64-bit word is the number of subsequent PCs. */
+ 	pos = READ_ONCE(area[0]) + 1;
+ 	if (likely(pos < t->kcov_size)) {
+ 		area[pos] = ip;
+ 		WRITE_ONCE(area[0], pos);
+ 	}
++	barrier();
++	WRITE_ONCE(t->kcov_writing, false);
+ }
+ EXPORT_SYMBOL(__sanitizer_cov_trace_pc);
+ 
+@@ -230,6 +239,10 @@ static void notrace write_comp_data(u64 type, u64 arg1, u64 arg2, u64 ip)
+ 	area = (u64 *)t->kcov_area;
+ 	max_pos = t->kcov_size * sizeof(unsigned long);
+ 
++	/* Prevent race from unblocked interrupt. */
++	WRITE_ONCE(t->kcov_writing, true);
++	barrier();
++
+ 	count = READ_ONCE(area[0]);
+ 
+ 	/* Every record is KCOV_WORDS_PER_CMP 64-bit words. */
+@@ -242,6 +255,8 @@ static void notrace write_comp_data(u64 type, u64 arg1, u64 arg2, u64 ip)
+ 		area[start_index + 3] = ip;
+ 		WRITE_ONCE(area[0], count + 1);
+ 	}
++	barrier();
++	WRITE_ONCE(t->kcov_writing, false);
+ }
+ 
+ void notrace __sanitizer_cov_trace_cmp1(u8 arg1, u8 arg2)
+@@ -335,6 +350,7 @@ static void kcov_start(struct task_struct *t, struct kcov *kcov,
+ 	t->kcov_size = size;
+ 	t->kcov_area = area;
+ 	t->kcov_sequence = sequence;
++	t->kcov_writing = false;
+ 	/* See comment in check_kcov_mode(). */
+ 	barrier();
+ 	WRITE_ONCE(t->kcov_mode, mode);
+-- 
+2.34.1
 

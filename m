@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050E4529E1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290D5529E24
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242826AbiEQJeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
+        id S244794AbiEQJgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbiEQJeL (ORCPT
+        with ESMTP id S239029AbiEQJgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:34:11 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6E43A5DC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:34:09 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id D2C471F41931
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652780048;
-        bh=JjX9Dpbd4y1EXZipRCq/V3m9lUaqIH2abh5TZEersWk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Tj/Q8V7mKAB5+fGOWGQCHAnVuvw8P1FBI9Ra5pfptpnWws0QqJ91j7TQKAvKE7i48
-         uorjFjEd75UwKFbJabdDiCtyobnix20H2s95vsJXIL1TIdlbCIsdImqDtlk429FZKV
-         /CQBrknPD6Gk2U8SEL1MbWr+6VD1HNs/Y4JqXX7nul9z8pao1hjseT7jNdtHXSxq2O
-         5eclHFhAX7a61k32AJKv3bXAW7ChaXkOMaR2nM08wrG2h4ITtYp+NBs95PfykSEAhD
-         DpIWEjPIjtyheC7kRdyHOkBMr7M773aRCObe6ysI8eXl5XD9s4+nEkLPqOG7y9NZUi
-         jE3CwplldaasA==
-Message-ID: <03ac9b18-cb5d-5ff6-d220-f2f4062cea7e@collabora.com>
-Date:   Tue, 17 May 2022 11:34:05 +0200
+        Tue, 17 May 2022 05:36:50 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B7133E2B;
+        Tue, 17 May 2022 02:36:49 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kq17so33557141ejb.4;
+        Tue, 17 May 2022 02:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uvIkZ+SZSnuVFUBNtp24/kBbyO+aODjZMJiPGY46AQE=;
+        b=P7Zet47QTOLxAMMploN/gtFcpCsQahUrwANNEMf5srQdoy0K4SamF3yyncJKNsDWXM
+         5776p+7csXvkuXke9lFLjFr67J3ITueWrn9ZBI1jMeZ0KT0JCqDT/leSy0+IKMs4yfvq
+         owpKAoUAxZYmrYSkBVhQC3/8/84uNYugqLZ34fco+r4rrHv2J1enCptzzABiESd8Rlvj
+         2nFwbEUpuAIMcw7yW3TxsCW2DZmJR2jMXEvk84rbspWa7yNNwsz1EwM7Zhlyq1dQXrrg
+         0xa6ObPg/2tq+56ZVl5ZmftEdpjxMJ57E5KffvLAAbhryi/tg6u9BULJzt0ZT5xf6vWg
+         ViUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uvIkZ+SZSnuVFUBNtp24/kBbyO+aODjZMJiPGY46AQE=;
+        b=W0z0FaYF9EBpbJhBp2xLAAcqQAv6UFtfOGkBXCkLTpeFjIMVlwxLrNc0UbmnyP0YnX
+         282frEHlP1xciIOq2npnyyJ/JjyL14FZdOU7bDG2Bs0g+EP+ZQEpBEHXJBjENjCPdf1Y
+         V888f9SUUFffltLmjyllmGBOWJP1/1iigbmIkFCy5fU5JNEONnwzKR7tG67o+lFM9hEM
+         Xs4pM2+G39y40kVWT7c7LI7SCifPO41GVrHuVcZ8OQyahrLMLBjpCRHJ1COQUJYxfnDm
+         b7U4OcqHkBFXTv3TPLpCgNWCb3z0VfP4JuhiJa9eIVb7d7EPqjx615KxiC5VE+Z4UKTS
+         oZAw==
+X-Gm-Message-State: AOAM5336DGUEoVCyuxLB+ninVMIJQuYKhg+t7xVXCEXdFJA8QpGAAMsX
+        S+KMKm6uCCoIwwsVXQQGSD0=
+X-Google-Smtp-Source: ABdhPJyudOovXBvAo9oOsyE0ZzGQys4UBYK3amp163if6al1uIl7HOLPapjy43U9xX6w/NLuhOESDQ==
+X-Received: by 2002:a17:907:2d8d:b0:6f8:5c3c:7217 with SMTP id gt13-20020a1709072d8d00b006f85c3c7217mr19004815ejc.1.1652780208030;
+        Tue, 17 May 2022 02:36:48 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 2-20020a508e02000000b0042617ba63a9sm6730603edw.51.2022.05.17.02.36.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 02:36:47 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Anton Altaparmakov <anton@tuxera.com>,
+        linux-ntfs-dev@lists.sourceforge.net
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fs/ntfs: remove redundant variable idx
+Date:   Tue, 17 May 2022 10:36:45 +0100
+Message-Id: <20220517093646.93628-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 3/5] soc: mediatek: pwrap: Move and check return value
- of platform_get_irq()
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        zhiyong.tao@mediatek.com
-References: <20220516124659.69484-1-angelogioacchino.delregno@collabora.com>
- <20220516124659.69484-4-angelogioacchino.delregno@collabora.com>
- <ad736290-2e01-f867-d2ec-867a4385005a@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <ad736290-2e01-f867-d2ec-867a4385005a@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/05/22 11:18, Matthias Brugger ha scritto:
-> 
-> 
-> On 16/05/2022 14:46, AngeloGioacchino Del Regno wrote:
->> Move the call to platform_get_irq() earlier in the probe function
->> and check for its return value: if no interrupt is specified, it
->> wouldn't make sense to try to call devm_request_irq() so, in that
->> case, we can simply return early.
->>
->> Moving the platform_get_irq() call also makes it possible to use
->> one less goto, as clocks aren't required at that stage.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> ---
->>   drivers/soc/mediatek/mtk-pmic-wrap.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c 
->> b/drivers/soc/mediatek/mtk-pmic-wrap.c
->> index 852514366f1f..332cbcabc299 100644
->> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
->> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
->> @@ -2204,6 +2204,10 @@ static int pwrap_probe(struct platform_device *pdev)
->>       if (!wrp)
->>           return -ENOMEM;
->> +    irq = platform_get_irq(pdev, 0);
->> +    if (irq < 0)
->> +        return irq;
->> +
->>       platform_set_drvdata(pdev, wrp);
->>       wrp->master = of_device_get_match_data(&pdev->dev);
->> @@ -2316,7 +2320,6 @@ static int pwrap_probe(struct platform_device *pdev)
->>       if (HAS_CAP(wrp->master->caps, PWRAP_CAP_INT1_EN))
->>           pwrap_writel(wrp, wrp->master->int1_en_all, PWRAP_INT1_EN);
->> -    irq = platform_get_irq(pdev, 0);
-> 
-> For better readability of the code I'd prefer to keep platform_get_irq next to 
-> devm_request_irq. I understand that you did this change so that you don't have to code
-> if (irq < 0) {
->      ret = irq;
->      goto err_out2;
-> }
-> 
-> Or do I miss something?
-> 
+The variable idx is assigned a value and is never read. The variable
+is not used and is redundant, remove it.
 
-That's for the sake of reducing gotos in the code... but there's a bigger
-picture that I haven't explained in this commit and that will come later
-because I currently don't have the necessary time to perform a "decent"
-testing.
+Cleans up clang scan build warning:
+warning: Although the value stored to 'idx' is used in the enclosing
+expression, the value is never actually read from 'idx'
+[deadcode.DeadStores]
 
-As I was explaining - the bigger pictures implies adding a new function for
-clock teardown, that we will add as a devm action:
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/ntfs/file.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-devm_add_action_or_reset(&pdev->dev, pwrap_clk_disable_unprepare, wrp)
+diff --git a/fs/ntfs/file.c b/fs/ntfs/file.c
+index e1392a9b8ceb..a8abe2296514 100644
+--- a/fs/ntfs/file.c
++++ b/fs/ntfs/file.c
+@@ -1772,11 +1772,11 @@ static ssize_t ntfs_perform_write(struct file *file, struct iov_iter *i,
+ 	last_vcn = -1;
+ 	do {
+ 		VCN vcn;
+-		pgoff_t idx, start_idx;
++		pgoff_t start_idx;
+ 		unsigned ofs, do_pages, u;
+ 		size_t copied;
+ 
+-		start_idx = idx = pos >> PAGE_SHIFT;
++		start_idx = pos >> PAGE_SHIFT;
+ 		ofs = pos & ~PAGE_MASK;
+ 		bytes = PAGE_SIZE - ofs;
+ 		do_pages = 1;
+-- 
+2.35.1
 
-...so that we will be able to remove *all* gotos from the probe function.
-
-Sounds good?
-
-Cheers,
-Angelo

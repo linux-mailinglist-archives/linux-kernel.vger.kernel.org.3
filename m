@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A1452AC63
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905F552AC61
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352890AbiEQUDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S1352423AbiEQUDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352870AbiEQUDK (ORCPT
+        with ESMTP id S1345642AbiEQUDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:03:10 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C460F47AFE;
-        Tue, 17 May 2022 13:03:08 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id w4so26099104wrg.12;
-        Tue, 17 May 2022 13:03:08 -0700 (PDT)
+        Tue, 17 May 2022 16:03:09 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1408343499
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:03:07 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id q10so122225oia.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XkfCyrxoT2zrN+jBafASwOY2VNfhqpO8cs0A4/vlmzk=;
-        b=Z6NRcJCPTKd+uYuaaRGGyE7nPBIZDdYyoDwFkpGfsH37QepNFob3KfmyTQYbeeqSSm
-         T/fXK9dmyUJfqPAAZIr6134fHA3s0PxlclH/8XLCh8GARtsJd8GZskD/FiEBUVU4xFJO
-         YCodNWpbgUMw/l0n0CmBW9XGjz52F8yeVHwj6oUQNl4GvmATre1s23PkhP23UQV0Gx/A
-         m0cmU1ieDZOMQ+WilUJYZiQMGcNgJih7VzaR0Hzk7mQnQEPSYWlupp22hgD1Z1rZtkd8
-         ElxGECDRkNkMuYzWvSzxuZeTDTx3RYPwahuGKVZXwq3eRb4kdgVNObe+rVbWS5vcspYA
-         JPXQ==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ume0/+SZoFFON8dc+uE515Wu0Ph4fGUZ38Tn0hMV9MM=;
+        b=HyAewg8gxIOA2pd/BFLiNGcS7NiS5LwNVEPsXhAaFyAlQdl9eTkItVKwfAf77I2vUY
+         pVs7DhVb9DJf/o/q0SmfIVnBm1ZrEjN2cpGqsABTfMPkBngFX6e+7RTp2JolNY3o18F1
+         78ynrzkGIz7P34UOYlN8Ac4pqeo0s6VR+hVxg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XkfCyrxoT2zrN+jBafASwOY2VNfhqpO8cs0A4/vlmzk=;
-        b=C3tKvyp31pm1tKnYXODxDaWu/yEZ2KVi8qvRzq0ICpzGw/7AFNDTkd+lnknUYkuXM3
-         jeoSsn9pZ3DfbfcdqLtZKkXQekU7fPTewqmfrfNOm8gO+TpmE2frP35dAJDqEWr4xyPa
-         i5D41M3E+OWlZXItafoEIYzgHqDUajrfE8C/xtjtec4kriGLzBlZJLXpNrn1ObKF9awH
-         5WzOSgVuu7qDryjfYJwwu8nmeHBPiM8CSEaJDP/fmAaX1vUPyK6yfKIBVNo99XaVqSkK
-         urxZ/SwSfpuh9EBwVTEanAqppERYQIBnK2rR3Rbx5sbcDPTsNOkc2dEEW0AMWYWVKqsi
-         UkNg==
-X-Gm-Message-State: AOAM531IXIGzo6OaNmr3poGvHc0mwqdNLC6q0PopiWOzScd9kiNrMKkO
-        K722fMgRiJ95KgB+2+tWhjk=
-X-Google-Smtp-Source: ABdhPJwdMzs2tUU7ktkt0AD+WQ+TXU6s2t1Jd+DEvS6PRi5796o+TMfSh7eEyamExptxlHwVx3shNA==
-X-Received: by 2002:a05:6000:1f04:b0:20c:a0c3:b710 with SMTP id bv4-20020a0560001f0400b0020ca0c3b710mr20736024wrb.660.1652817787068;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ume0/+SZoFFON8dc+uE515Wu0Ph4fGUZ38Tn0hMV9MM=;
+        b=lPr1nQlokLDYUNY3DFzxRUp+N2F8FV8rVHTsuSB7AOhBdAsT1M1RAtPKqvRfSektRk
+         qZbS3czmzc1t+Q6oXw+wXf7bHyRnf4e2BeaGvVJAsQJgSqlCxfzMStHgg/kAmTZOJX6c
+         Q0WMSxTbWSA/klHGRL4Gcmpvl0r6/0v1tAuSe6t8UDgPbx6jQTLX7ibaj1KMnemckeuG
+         9dXKnyneZ7tXHrSSQuekrcsmcXP3bLEh4vMnq43OkjWp0o3lrNpAfHRbZbHEXpwMgJE1
+         A7IJlNQkA2DRgKLWm/WpGTTtUBz+Y9yz7BSLvuHPL7wwKgGyBhs8LmcOQ04O6GAyxuJP
+         Gaig==
+X-Gm-Message-State: AOAM531vXi0AYJ8g97jot60EvmZlRFQOtmnbnrwsKOS7MVQwbNoijDXR
+        xfN9mHo/1C+iEmIyguYuP2vbwA==
+X-Google-Smtp-Source: ABdhPJzAe/MomCsoT65bGybnIprRY0kptNVht3n5CUB9wUCyAGfYnZEKqJLcSJKtq9HKpaG+A95QQg==
+X-Received: by 2002:a05:6808:2108:b0:326:51c9:73a2 with SMTP id r8-20020a056808210800b0032651c973a2mr11187694oiw.175.1652817787190;
         Tue, 17 May 2022 13:03:07 -0700 (PDT)
-Received: from krava ([95.82.133.179])
-        by smtp.gmail.com with ESMTPSA id d6-20020adfc086000000b0020c5253d8fcsm15887563wrf.72.2022.05.17.13.03.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id k22-20020a056870959600b000e686d1386asm241432oao.4.2022.05.17.13.03.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Tue, 17 May 2022 13:03:06 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 17 May 2022 22:03:04 +0200
-To:     Eugene Syromiatnikov <esyr@redhat.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in
- kprobe_multi.addrs
-Message-ID: <YoP/eEMqAn3sVFXf@krava>
-References: <cover.1652772731.git.esyr@redhat.com>
- <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
- <YoNnAgDsIWef82is@krava>
- <20220517123050.GA25149@asgard.redhat.com>
+Subject: Re: [PATCH V5 0/3] Add unit test module for AMD P-State driver
+To:     Huang Rui <ray.huang@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220505022913.329259-1-li.meng@amd.com>
+ <YnNxlzRW2NGCx5dO@amd.com>
+ <615adab4-515c-7d61-5662-bd342b759d6d@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <27434868-1d0f-4493-3265-bea4e1dc8494@linuxfoundation.org>
+Date:   Tue, 17 May 2022 14:03:05 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517123050.GA25149@asgard.redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <615adab4-515c-7d61-5662-bd342b759d6d@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,220 +85,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 02:30:50PM +0200, Eugene Syromiatnikov wrote:
-> On Tue, May 17, 2022 at 11:12:34AM +0200, Jiri Olsa wrote:
-> > On Tue, May 17, 2022 at 09:36:47AM +0200, Eugene Syromiatnikov wrote:
-> > > With the interface as defined, it is impossible to pass 64-bit kernel
-> > > addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
-> > > which severly limits the useability of the interface, change the ABI
-> > > to accept an array of u64 values instead of (kernel? user?) longs.
-> > > Interestingly, the rest of the libbpf infrastructure uses 64-bit values
-> > > for kallsyms addresses already, so this patch also eliminates
-> > > the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
-> > 
-> > so the problem is when we have 32bit user sace on 64bit kernel right?
-> > 
-> > I think we should keep addrs as longs in uapi and have kernel to figure out
-> > if it needs to read u32 or u64, like you did for symbols in previous patch
+On 5/17/22 8:45 AM, Shuah Khan wrote:
+> On 5/5/22 12:41 AM, Huang Rui wrote:
+>> On Thu, May 05, 2022 at 10:29:10AM +0800, Meng, Li (Jassmine) wrote:
+>>> Hi all:
+>>>
+>>> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
+>>> the functions of amd-pstate driver.
+>>> It could import as a module to launch some test tasks.
+>>> 1) It can help all users to verify their processor support (SBIOS/
+>>> Firmware or Hardware).
+>>> 2) Kernel can have a basic function test to avoid the kernel regression
+>>> during the update.
+>>> 3) We can introduce more functional or performance tests to align the
+>>> together, it will benefit power and performance scale optimization.
+>>>
+>>> We upstream out AMD P-state driver into Linux kernel and use this unit
+>>> test module to verify the required conditions and basic functions of
+>>> amd-pstate before integration test.
+>>>
+>>> We use test module in the kselftest frameworks to implement it.
+>>> We create amd-pstate-ut module and tie it into kselftest.
+>>>
+>>> For example: The test case aput_acpi_cpc is used to check whether the
+>>> _CPC object is exist in SBIOS.
+>>> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+>>> existed at the detected processor, so it is a necessary condition.
+>>>
+>>> At present, it only implements the basic framework and some simple test
+>>> cases.
+>>>
+>>> TODO : 1) we will add more test cases to improve the depth and coverage of
+>>> the test.
+>>>
+>>> Please check the documentation amd-pstate.rst for details of the test steps.
+>>>
+>>> See patch series in below git repo:
+>>> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+>>> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
+>>> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
+>>> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
+>>>
 > 
-> No, it's not possible here, as addrs are kernel addrs and not user space
-> addrs, so user space has to explicitly pass 64-bit addresses on 64-bit
-> kernels (or have a notion whether it is running on a 64-bit
-> or 32-bit kernel, and form the passed array accordingly, which is against
-> the idea of compat layer that tries to abstract it out).
-
-hum :-\ I'll need to check on compat layer.. there must
-be some other code doing this already somewhere, right?
-
-jirka
-
+>>> Changes from V4 -> V5:
+>>> - selftests: amd-pstate:
+>>> - - add print the current scaling_driver.
+>>> - - add amd-pstate-ut.ko into TEST_GEN_FILES.
+>>> - - move "insmod/rmmod amd-pstate-ut.ko" stuff into script amd_pstate_ut.sh
+>>> - - add a check of read back from X86_FEATURE_CPPC in get_shared_mem().
+>>> - Documentation: amd-pstate:
+>>> - - delete the test step about insmod/rmmod amd-pstate-ut.ko
+>>>
+>>> Thanks,
+>>> Jasmine
+>>>
 > 
-> > we'll need to fix also bpf_kprobe_multi_cookie_swap because it assumes
-> > 64bit user space pointers
-> > 
-> > would be gret if we could have selftest for this
-> > 
-> > thanks,
-> > jirka
-> > 
-> > > 
-> > > Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-> > > Fixes: 5117c26e877352bc ("libbpf: Add bpf_link_create support for multi kprobes")
-> > > Fixes: ddc6b04989eb0993 ("libbpf: Add bpf_program__attach_kprobe_multi_opts function")
-> > > Fixes: f7a11eeccb111854 ("selftests/bpf: Add kprobe_multi attach test")
-> > > Fixes: 9271a0c7ae7a9147 ("selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts")
-> > > Fixes: 2c6401c966ae1fbe ("selftests/bpf: Add kprobe_multi bpf_cookie test")
-> > > Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
-> > > ---
-> > >  kernel/trace/bpf_trace.c                           | 25 ++++++++++++++++++----
-> > >  tools/lib/bpf/bpf.h                                |  2 +-
-> > >  tools/lib/bpf/libbpf.c                             |  8 +++----
-> > >  tools/lib/bpf/libbpf.h                             |  2 +-
-> > >  .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
-> > >  .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  8 +++----
-> > >  6 files changed, 32 insertions(+), 15 deletions(-)
-> > > 
-> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > > index 9d3028a..30a15b3 100644
-> > > --- a/kernel/trace/bpf_trace.c
-> > > +++ b/kernel/trace/bpf_trace.c
-> > > @@ -2454,7 +2454,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> > >  	void __user *ucookies;
-> > >  	unsigned long *addrs;
-> > >  	u32 flags, cnt, size, cookies_size;
-> > > -	void __user *uaddrs;
-> > > +	u64 __user *uaddrs;
-> > >  	u64 *cookies = NULL;
-> > >  	void __user *usyms;
-> > >  	int err;
-> > > @@ -2486,9 +2486,26 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> > >  		return -ENOMEM;
-> > >  
-> > >  	if (uaddrs) {
-> > > -		if (copy_from_user(addrs, uaddrs, size)) {
-> > > -			err = -EFAULT;
-> > > -			goto error;
-> > > +		if (sizeof(*addrs) == sizeof(*uaddrs)) {
-> > > +			if (copy_from_user(addrs, uaddrs, size)) {
-> > > +				err = -EFAULT;
-> > > +				goto error;
-> > > +			}
-> > > +		} else {
-> > > +			u32 i;
-> > > +			u64 addr;
-> > > +
-> > > +			for (i = 0; i < cnt; i++) {
-> > > +				if (get_user(addr, uaddrs + i)) {
-> > > +					err = -EFAULT;
-> > > +					goto error;
-> > > +				}
-> > > +				if (addr > ULONG_MAX) {
-> > > +					err = -EINVAL;
-> > > +					goto error;
-> > > +				}
-> > > +				addrs[i] = addr;
-> > > +			}
-> > >  		}
-> > >  	} else {
-> > >  		struct user_syms us;
-> > > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> > > index 2e0d373..da9c6037 100644
-> > > --- a/tools/lib/bpf/bpf.h
-> > > +++ b/tools/lib/bpf/bpf.h
-> > > @@ -418,7 +418,7 @@ struct bpf_link_create_opts {
-> > >  			__u32 flags;
-> > >  			__u32 cnt;
-> > >  			const char **syms;
-> > > -			const unsigned long *addrs;
-> > > +			const __u64 *addrs;
-> > >  			const __u64 *cookies;
-> > >  		} kprobe_multi;
-> > >  		struct {
-> > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > > index ef7f302..35fa9c5 100644
-> > > --- a/tools/lib/bpf/libbpf.c
-> > > +++ b/tools/lib/bpf/libbpf.c
-> > > @@ -10737,7 +10737,7 @@ static bool glob_match(const char *str, const char *pat)
-> > >  
-> > >  struct kprobe_multi_resolve {
-> > >  	const char *pattern;
-> > > -	unsigned long *addrs;
-> > > +	__u64 *addrs;
-> > >  	size_t cap;
-> > >  	size_t cnt;
-> > >  };
-> > > @@ -10752,12 +10752,12 @@ resolve_kprobe_multi_cb(unsigned long long sym_addr, char sym_type,
-> > >  	if (!glob_match(sym_name, res->pattern))
-> > >  		return 0;
-> > >  
-> > > -	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(unsigned long),
-> > > +	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(__u64),
-> > >  				res->cnt + 1);
-> > >  	if (err)
-> > >  		return err;
-> > >  
-> > > -	res->addrs[res->cnt++] = (unsigned long) sym_addr;
-> > > +	res->addrs[res->cnt++] = sym_addr;
-> > >  	return 0;
-> > >  }
-> > >  
-> > > @@ -10772,7 +10772,7 @@ bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
-> > >  	};
-> > >  	struct bpf_link *link = NULL;
-> > >  	char errmsg[STRERR_BUFSIZE];
-> > > -	const unsigned long *addrs;
-> > > +	const __u64 *addrs;
-> > >  	int err, link_fd, prog_fd;
-> > >  	const __u64 *cookies;
-> > >  	const char **syms;
-> > > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> > > index 9e9a3fd..76e171d 100644
-> > > --- a/tools/lib/bpf/libbpf.h
-> > > +++ b/tools/lib/bpf/libbpf.h
-> > > @@ -489,7 +489,7 @@ struct bpf_kprobe_multi_opts {
-> > >  	/* array of function symbols to attach */
-> > >  	const char **syms;
-> > >  	/* array of function addresses to attach */
-> > > -	const unsigned long *addrs;
-> > > +	const __u64 *addrs;
-> > >  	/* array of user-provided values fetchable through bpf_get_attach_cookie */
-> > >  	const __u64 *cookies;
-> > >  	/* number of elements in syms/addrs/cookies arrays */
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> > > index 83ef55e3..e843840 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> > > @@ -140,7 +140,7 @@ static void kprobe_multi_link_api_subtest(void)
-> > >  	cookies[6] = 7;
-> > >  	cookies[7] = 8;
-> > >  
-> > > -	opts.kprobe_multi.addrs = (const unsigned long *) &addrs;
-> > > +	opts.kprobe_multi.addrs = (const __u64 *) &addrs;
-> > >  	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
-> > >  	opts.kprobe_multi.cookies = (const __u64 *) &cookies;
-> > >  	prog_fd = bpf_program__fd(skel->progs.test_kprobe);
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> > > index 586dc52..7646112 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> > > @@ -108,7 +108,7 @@ static void test_link_api_addrs(void)
-> > >  	GET_ADDR("bpf_fentry_test7", addrs[6]);
-> > >  	GET_ADDR("bpf_fentry_test8", addrs[7]);
-> > >  
-> > > -	opts.kprobe_multi.addrs = (const unsigned long*) addrs;
-> > > +	opts.kprobe_multi.addrs = (const __u64 *) addrs;
-> > >  	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
-> > >  	test_link_api(&opts);
-> > >  }
-> > > @@ -186,7 +186,7 @@ static void test_attach_api_addrs(void)
-> > >  	GET_ADDR("bpf_fentry_test7", addrs[6]);
-> > >  	GET_ADDR("bpf_fentry_test8", addrs[7]);
-> > >  
-> > > -	opts.addrs = (const unsigned long *) addrs;
-> > > +	opts.addrs = (const __u64 *) addrs;
-> > >  	opts.cnt = ARRAY_SIZE(addrs);
-> > >  	test_attach_api(NULL, &opts);
-> > >  }
-> > > @@ -244,7 +244,7 @@ static void test_attach_api_fails(void)
-> > >  		goto cleanup;
-> > >  
-> > >  	/* fail_2 - both addrs and syms set */
-> > > -	opts.addrs = (const unsigned long *) addrs;
-> > > +	opts.addrs = (const __u64 *) addrs;
-> > >  	opts.syms = syms;
-> > >  	opts.cnt = ARRAY_SIZE(syms);
-> > >  	opts.cookies = NULL;
-> > > @@ -258,7 +258,7 @@ static void test_attach_api_fails(void)
-> > >  		goto cleanup;
-> > >  
-> > >  	/* fail_3 - pattern and addrs set */
-> > > -	opts.addrs = (const unsigned long *) addrs;
-> > > +	opts.addrs = (const __u64 *) addrs;
-> > >  	opts.syms = NULL;
-> > >  	opts.cnt = ARRAY_SIZE(syms);
-> > >  	opts.cookies = NULL;
-> > > -- 
-> > > 2.1.4
-> > > 
-> > 
+> Sorry for the delay on this. I will review the series in the next couple
+> of days.
 > 
+> Did you consider using KUnit for this? I think asked that question when
+> reviewing the previous version.
+> 
+
+I reviewed the patches and the test driver amd-pstate-ut doesn't belong under
+selftests. I would recommend the following approach:
+
+- add this test driver under drivers/cpufreq
+
+- KUnit is a better fit for this unit test driver unless you want
+   to be able to run this without KUnit configured
+
+- add the test script under selftests - the script then can load the
+   test driver and run tests and unload the driver.
+
+thanks,
+-- Shuah
+

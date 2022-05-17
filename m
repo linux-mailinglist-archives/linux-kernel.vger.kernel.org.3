@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B67529FFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17FE52A00E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344888AbiEQLHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S1345014AbiEQLI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbiEQLHn (ORCPT
+        with ESMTP id S1344950AbiEQLI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:07:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30CA60FB;
-        Tue, 17 May 2022 04:07:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B5E560AE0;
-        Tue, 17 May 2022 11:07:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2AB9C385B8;
-        Tue, 17 May 2022 11:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652785661;
-        bh=5tBsPYW0JHeXxvdkgiNd1jJmfnPjditVESh5dkxWeFo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kAw5YJsIfHwu8sfxpkMfWCIKj9sv+lv3f9AseTWanqKK8fuyWV/H4HRERRLDlhPEP
-         46gRtUfGOMQsC3l1fCQOVunxMr9/6+UbKQXUpqQENSd2w9rjp6DynvKkrgalWSjTiG
-         +lIGJjNfEbmTsWwM5x35LJWjkh01C59MGJZyfDUhwKfyrQY0yCBTS7rYSxIyrHTcf9
-         ji6kX4MZN4PKEtlNJZGmRWs0N2fAkgcY+uOYnur0ODRxnrmif9jXri2sf8DqqAmhhB
-         uBnu5Rlv3+Z6gnuTyPZUd6EONJ17l/5GzrFhNXb6WWm9ZZXF50k2CI09JVH6akXoJT
-         AUx+re60NY5bg==
-Date:   Tue, 17 May 2022 12:07:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, acme@kernel.org,
-        german.gomez@arm.com, leo.yan@linaro.org,
-        mathieu.poirier@linaro.org, john.garry@huawei.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] arm64/sve: Add Perf extensions documentation
-Message-ID: <YoOB9y9WR901CyTp@sirena.org.uk>
-References: <20220517100743.3020667-1-james.clark@arm.com>
- <20220517100743.3020667-3-james.clark@arm.com>
+        Tue, 17 May 2022 07:08:27 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D516452;
+        Tue, 17 May 2022 04:08:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652785701; x=1684321701;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=XUGgIusaR1c/M+hdwMIEtCQbJlvmDStPf6Do24whbYo=;
+  b=g0SGF6+1jLD5ChJNsN/azBflOJ9omaDJW09IIEkJHTpP7NqnBn62X7l3
+   um7fK98AdOShq7wLDsVCnm3pZwAAUSeJZU4k0VSDS4xlYmrMIO52gBIzT
+   8dGIsblieR2w2rM35Rug+quTv86jIzL2eKHSsXBb7YsAObSFyhgRhIpWx
+   jfYsyTDmbcSPi8scXnuBrtnfn6hltkHXuZdL7OhfbGLOhLj/kt8G58w8F
+   uiBw/vVIiwlopvQFYfPO+qzn5fDBttMcxvkh7aLdu0orgBx9RFrAxDBJX
+   JJqw0SGjdoCPL2NrkXvas1PD3SsqoKIEYzYLvnvsNkKDW/wQERFwSA87A
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="271268777"
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="271268777"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 04:08:21 -0700
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="568831117"
+Received: from mtarral-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.52.88])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 04:08:18 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 7/9] serial: st-asc: Sanitize CSIZE and correct PARENB for CS7
+Date:   Tue, 17 May 2022 14:07:35 +0300
+Message-Id: <20220517110737.37148-8-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220517110737.37148-1-ilpo.jarvinen@linux.intel.com>
+References: <20220517110737.37148-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iuQTJ7qbN0XNIs6b"
-Content-Disposition: inline
-In-Reply-To: <20220517100743.3020667-3-james.clark@arm.com>
-X-Cookie: Fats Loves Madelyn.
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
+CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
+to have parity, thus add PARENB.
 
---iuQTJ7qbN0XNIs6b
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Incorrect CSIZE results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
 
-On Tue, May 17, 2022 at 11:07:43AM +0100, James Clark wrote:
-> Document that the VG register is available in Perf samples
->=20
-> Signed-off-by: James Clark <james.clark@arm.com>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
+Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/tty/serial/st-asc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
+index d7fd692286cf..1b0da603ab54 100644
+--- a/drivers/tty/serial/st-asc.c
++++ b/drivers/tty/serial/st-asc.c
+@@ -535,10 +535,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	/* set character length */
+ 	if ((cflag & CSIZE) == CS7) {
+ 		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
++		cflag |= PARENB;
+ 	} else {
+ 		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
+ 						ASC_CTL_MODE_8BIT;
++		cflag &= ~CSIZE;
++		cflag |= CS8;
+ 	}
++	termios->c_cflag = cflag;
+ 
+ 	/* set stop bit */
+ 	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
+-- 
+2.30.2
 
---iuQTJ7qbN0XNIs6b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKDgfYACgkQJNaLcl1U
-h9BhmQf6An4DDFzlaW5rZWv/57ry7Yu0oiLAUrQ7m5XIlZszVEkFKP27yfGhGYTz
-5mcAcBKnMkQgBCN7Cj7MLkgwpEfO8EWhKvCd5JsU/BpFeXoj1bZQxmUMGbbwl36c
-oqJkE5sFYM0+cNaxK1YdKn2esA7q1WRqWsxf20FSc3RAbutamcwrUtU1oVfQzz6C
-FtAF05pUcUj3ViC9mLhf4wLvE2wwqOnQ8Hv8dRRDHZm0pzn61/ow+7f3zLEEdpXh
-dQxTEB1/l/1dISvPFvPcApYJYc+3qMqpn+7x07GhiqCSGN+/bZL5AODRP7j3IQDF
-v23ZAxfxi8uaU8WHLjZY3/8kZ/IxPA==
-=1IeJ
------END PGP SIGNATURE-----
-
---iuQTJ7qbN0XNIs6b--

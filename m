@@ -2,122 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D34529EF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F32529EFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344525AbiEQKLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
+        id S1343843AbiEQKMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343593AbiEQKJo (ORCPT
+        with ESMTP id S237342AbiEQKKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:09:44 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301AD47388;
-        Tue, 17 May 2022 03:08:11 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id n18so16903917plg.5;
-        Tue, 17 May 2022 03:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :organization;
-        bh=UmRh5WeDJb4FxIPG+OEtpyHlfmIGfbV1ERHbKbuEXYE=;
-        b=GWgmAxIVkNS1hGtn9UXI/hhbF+NlDnsuo1E29/vgNHDT9rX780CQX384vlcp8cBNSW
-         D0pm5QJwf/IZBxQ96by1TRF87mu8+gqRrI/78FWqJUI9Yd9hK6LogzLmOu1Cw6LNG3yp
-         T7Dm7NswUYZb9cOI5A7frGvpf/WJss6DFjc7aBzeYKLX+eqZ+GhaKEvg5Nb9sDhW11go
-         CBQfnbCUlOswlkMhAiwlf+eKMpdY/l0JUkRwIyF7lSbgfsDBTjfzP+ekrsW3OBeDdU3c
-         +Ckt5AF6GSeHUCDwzUfThV7ChJNA/Cmwg9hTQylZm/oyY3f3GFstT1UJg3zadTBz0sKD
-         wpdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:organization;
-        bh=UmRh5WeDJb4FxIPG+OEtpyHlfmIGfbV1ERHbKbuEXYE=;
-        b=41P5rCnLXm/us3LKrTt3gxiRvJSrozzo8M/NAhChpoqBCqEnDSoXYDiCsYKgd5+Yp1
-         5lP/5dCvasAPaGWuZLomI3L8ojELGK5iH8gi6I76oFuxmBoDoTEGMjhVovrVmtU78p6C
-         MLqrkg4wFfXnC6Kf5nwvRWTfi+frxjk0ZPKS4T+AFUPMbYjoDCIBGNBO4PmsyMT05R1e
-         N9laQInNAt/sTCr1tjJg1hn9EHIJMD+UwdHA0aAuGAfwj35EADvpyovIvOp47iDQEZjY
-         8ZqIryy5BhaGRtgEQPfGCeOR2VAZXH+E0bDCed0bzo+GSDIy9NJ7SOaIbOlvWycADQfo
-         ntCw==
-X-Gm-Message-State: AOAM533jgd+ZlcxuTQXLzjL5IMQsxTeWjixYrRhsqEsuw1852DUMriYW
-        wjx8L0eNyqQzhalymtrPQHs=
-X-Google-Smtp-Source: ABdhPJznjwSaPYLoRL29ez7lvADpiJ2YQUbUx8jjWJHSiWCTYjYJvVYOysHYKrK0biU4ndLkTZ2IxQ==
-X-Received: by 2002:a17:902:8501:b0:15c:ea4b:1398 with SMTP id bj1-20020a170902850100b0015cea4b1398mr21712865plb.109.1652782091353;
-        Tue, 17 May 2022 03:08:11 -0700 (PDT)
-Received: from localhost.localdomain ([219.91.171.244])
-        by smtp.googlemail.com with ESMTPSA id a10-20020a631a0a000000b003c6ab6ba06csm8202595pga.79.2022.05.17.03.08.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 03:08:11 -0700 (PDT)
-From:   Dharmendra Singh <dharamhans87@gmail.com>
-To:     miklos@szeredi.hu, vgoyal@redhat.com
-Cc:     Dharmendra Singh <dharamhans87@gmail.com>,
-        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, bschubert@ddn.com,
-        Dharmendra Singh <dsingh@ddn.com>
-Subject: [PATCH v5 2/3] FUSE: Rename fuse_create_open() to fuse_atomic_common()
-Date:   Tue, 17 May 2022 15:37:43 +0530
-Message-Id: <20220517100744.26849-3-dharamhans87@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220517100744.26849-1-dharamhans87@gmail.com>
-References: <20220517100744.26849-1-dharamhans87@gmail.com>
-Organization: DDN STORAGE
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 06:10:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A91A14B840;
+        Tue, 17 May 2022 03:09:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 772A312FC;
+        Tue, 17 May 2022 03:09:06 -0700 (PDT)
+Received: from e121896.warwick.arm.com (e121896.warwick.arm.com [10.32.33.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 64DA93F66F;
+        Tue, 17 May 2022 03:09:04 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, broonie@kernel.org,
+        acme@kernel.org
+Cc:     german.gomez@arm.com, leo.yan@linaro.org,
+        mathieu.poirier@linaro.org, john.garry@huawei.com,
+        James Clark <james.clark@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
+Subject: [PATCH v2 2/2] arm64/sve: Add Perf extensions documentation
+Date:   Tue, 17 May 2022 11:07:43 +0100
+Message-Id: <20220517100743.3020667-3-james.clark@arm.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20220517100743.3020667-1-james.clark@arm.com>
+References: <20220517100743.3020667-1-james.clark@arm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch just changes function name as it is used in next patch
-to make code better readable.
+Document that the VG register is available in Perf samples
 
-Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
+Signed-off-by: James Clark <james.clark@arm.com>
 ---
- fs/fuse/dir.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ Documentation/arm64/sve.rst | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index ed9da8d6b57b..517c9add014d 100644
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -521,9 +521,9 @@ static int get_security_context(struct dentry *entry, umode_t mode,
-  * If the filesystem doesn't support this, then fall back to separate
-  * 'mknod' + 'open' requests.
-  */
--static int fuse_create_open(struct inode *dir, struct dentry *entry,
--			    struct file *file, unsigned int flags,
--			    umode_t mode, uint32_t opcode)
-+static int fuse_atomic_common(struct inode *dir, struct dentry *entry,
-+			      struct file *file, unsigned int flags,
-+			      umode_t mode, uint32_t opcode)
- {
- 	int err;
- 	struct inode *inode;
-@@ -674,8 +674,8 @@ static int fuse_create_ext(struct inode *dir, struct dentry *entry,
- 	if (fc->no_create_ext)
- 		return -ENOSYS;
+diff --git a/Documentation/arm64/sve.rst b/Documentation/arm64/sve.rst
+index 9d9a4de5bc34..b34a1467057f 100644
+--- a/Documentation/arm64/sve.rst
++++ b/Documentation/arm64/sve.rst
+@@ -402,6 +402,24 @@ The regset data starts with struct user_sve_header, containing:
+ * Modifying the system default vector length does not affect the vector length
+   of any existing process or thread that does not make an execve() call.
  
--	err = fuse_create_open(dir, entry, file, flags, mode,
--			       FUSE_CREATE_EXT);
-+	err = fuse_atomic_common(dir, entry, file, flags, mode,
-+				 FUSE_CREATE_EXT);
- 	/* If ext create is not implemented then indicate in fc so that next
- 	 * request falls back to normal create instead of going into libufse and
- 	 * returning with -ENOSYS.
-@@ -723,8 +723,8 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
- 		if (err == -ENOSYS)
- 			goto lookup;
- 	} else
--		err = fuse_create_open(dir, entry, file, flags, mode,
--				       FUSE_CREATE);
-+		err = fuse_atomic_common(dir, entry, file, flags, mode,
-+					 FUSE_CREATE);
- 	if (err == -ENOSYS) {
- 		fc->no_create = 1;
- 		goto mknod;
++10.  Perf extensions
++--------------------------------
++
++* The arm64 specific DWARF standard [5] added the VG (Vector Granule) register
++  at index 46. This register is used for DWARF unwinding when variable length
++  SVE registers are pushed onto the stack.
++
++* Its value is equivalent to the current SVE vector length (VL) in bits divided
++  by 64.
++
++* The value is included in Perf samples in the regs[46] field if
++  PERF_SAMPLE_REGS_USER is set and the sample_regs_user mask has bit 46 set.
++
++* The value is the current value at the time the sample was taken, and it can
++  change over time.
++
++* If the system doesn't support SVE when perf_event_open is called with these
++  settings, the event will fail to open.
+ 
+ Appendix A.  SVE programmer's model (informative)
+ =================================================
+@@ -543,3 +561,5 @@ References
+     http://infocenter.arm.com/help/topic/com.arm.doc.ihi0055c/IHI0055C_beta_aapcs64.pdf
+     http://infocenter.arm.com/help/topic/com.arm.doc.subset.swdev.abi/index.html
+     Procedure Call Standard for the ARM 64-bit Architecture (AArch64)
++
++[5] https://github.com/ARM-software/abi-aa/blob/main/aadwarf64/aadwarf64.rst
 -- 
-2.17.1
+2.28.0
 

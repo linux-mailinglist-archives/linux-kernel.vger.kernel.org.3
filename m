@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3ED52ADB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C37C52ADB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiEQVxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        id S229788AbiEQV7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiEQVxt (ORCPT
+        with ESMTP id S229706AbiEQV7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:53:49 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57765517CD
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:53:48 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id ds11so168236pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:53:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=C40m2Lc+hbE2HZtiF1GEQoSOONIhAIucdtMggOxGNeE=;
-        b=ODtm0xJBW745rKr7CcjoK45FX2tcqA0/8aVOLndK+GjaCYtkIZ5MlUUIMv0aPcKM0o
-         RxP/yC4sSxuXOA35Mmf98ap0IJPnFN0ui9fXIKVkVNf03GjpTnBetqnFveZ6IeeSpPZo
-         t5a2H9vGJf2j9uqDGElDiw43dYcybMbTkqpCc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=C40m2Lc+hbE2HZtiF1GEQoSOONIhAIucdtMggOxGNeE=;
-        b=az215/dKOze60VtwfF/Fsf1E3WhHyCn+LDp14F31CboVeEm7Oas5rEsL0WtJLNwI6a
-         x2fkYlBLnxC7PBZ6rkXlsGB05emdw7ThOVnXJVRaYYD+YYEjQ/q1gM8oD2pTqH32d5ky
-         OWOND24Yo8B4LbAq/i1aeVAOKoLFNfhnUhJ7HjorJa5Sb5fdZcpdgsI5BnrWimvkS96s
-         g2vXUVw7Iv3NGUxZ6gexTPONIN5yZthbBUJjOD4/vrKWkAy8QAhp/C2PwojyRyJTI9ZU
-         sp6ThiO8+gL7e7YL6WlkMS9X+xYF4XSun+ohxLyMxKf+IDWZ1JTzI0YVUzruLe9kA842
-         xVjA==
-X-Gm-Message-State: AOAM532GaHFGJaw0V8YgHdcv8iN51b4LoND6L6XnT38JPvVqykuU+Xl5
-        GhW8gCikwqKggCI8rn2WnIOp/tW6ZlT56A==
-X-Google-Smtp-Source: ABdhPJysaDWZtgtnnxq/bdt1RPBGF+0gxiHhLFOtEPL9C51wZH42ItY9ww5qFSigdYr+AgJVsWd9tg==
-X-Received: by 2002:a17:903:2443:b0:161:bc26:825 with SMTP id l3-20020a170903244300b00161bc260825mr1612498pls.32.1652824427869;
-        Tue, 17 May 2022 14:53:47 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v24-20020a170902e8d800b0015f086e4aa5sm75200plg.291.2022.05.17.14.53.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 14:53:47 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     usama.anjum@collabora.com
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: Re: [PATCH] selftests/lkdtm: add config
-Date:   Tue, 17 May 2022 14:53:18 -0700
-Message-Id: <165282439481.879192.6175196633705238781.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220517132932.1484719-1-usama.anjum@collabora.com>
-References: <20220517132932.1484719-1-usama.anjum@collabora.com>
+        Tue, 17 May 2022 17:59:05 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98C24B1D0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:59:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652824744; x=1684360744;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/pJlWhY/khFLyPEJmOzUml3LUIYyj5VhrnvmwnmacYM=;
+  b=H3kEYWGY3AJvWzFqc4xr6h+IVwbSDIARq++0SHMKfddDqonE0fnSgz6P
+   FcUoxtVuqQjbmQejPncR1fcCK2eF4gfxT1VAZhF+MLEksgsY74IA7W4+9
+   MkICvA5EqmiMqW3sRySGaaPzcKLgSeACt7rDnRk2UOiUz6Lwlr8sqCpZd
+   zJdND6LwenrEwunW811w84+/8jn7Wj9hW6mxRD0S6pV/tdC9/6a7eEaQi
+   m+rTB95kIA87aRU7KtOjzg0H+c+jxupJzLbQHNrAOiPyE1dsFlF6G7XT3
+   quc6NNWo0CkuvGWbXev2lEkFRSLccAElEeVxF2YyVoFoGygtuTPg3warf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251863311"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="251863311"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 14:59:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="545107471"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 17 May 2022 14:59:03 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nr5Da-0001Tp-DR;
+        Tue, 17 May 2022 21:59:02 +0000
+Date:   Wed, 18 May 2022 05:58:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-5.18.y-rt-rebase 55/94] kernel/softirq.c:641:1:
+ sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not
+ declared. Should it be static?
+Message-ID: <202205180539.k0x6jZJq-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,19 +63,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 18:29:31 +0500, Muhammad Usama Anjum wrote:
-> Add config options which are needed for LKDTM sub-tests.
-> STACKLEAK_ERASING test needs GCC_PLUGIN_STACKLEAK config.
-> READ_AFTER_FREE and READ_BUDDY_AFTER_FREE tests need
-> INIT_ON_FREE_DEFAULT_ON config.
-> 
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.18.y-rt-rebase
+head:   df0c990058a5bce1eed5d3512c6efe4eacc62bed
+commit: e9b4bc6bcdfacbbe8125749a6135af2e61a3476c [55/94] tick: Fix timer storm since introduction of timersd
+config: i386-randconfig-s002-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180539.k0x6jZJq-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=e9b4bc6bcdfacbbe8125749a6135af2e61a3476c
+        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+        git fetch --no-tags rt-devel linux-5.18.y-rt-rebase
+        git checkout e9b4bc6bcdfacbbe8125749a6135af2e61a3476c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Applied to for-next/lkdtm, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[1/1] selftests/lkdtm: add config
-      https://git.kernel.org/kees/c/38c84c997d40
+
+sparse warnings: (new ones prefixed by >>)
+   kernel/softirq.c:640:1: sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be static?
+>> kernel/softirq.c:641:1: sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not declared. Should it be static?
+
+Please review and possibly fold the followup patch.
 
 -- 
-Kees Cook
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

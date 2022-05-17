@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39E652989B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 06:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4ECB5298A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 06:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237674AbiEQEOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 00:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54710 "EHLO
+        id S233360AbiEQESw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 00:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234450AbiEQEN7 (ORCPT
+        with ESMTP id S229971AbiEQESs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 00:13:59 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7623247562
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 21:13:41 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-edf3b6b0f2so22770542fac.9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 21:13:41 -0700 (PDT)
+        Tue, 17 May 2022 00:18:48 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0B130564;
+        Mon, 16 May 2022 21:18:47 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so1195152pjq.2;
+        Mon, 16 May 2022 21:18:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vlS8HH9kxm8e7oyzOpwYqn9TLCV2qWKpTfyr5YCSt/A=;
-        b=CT4MNXpeWUvPhXVxDxbzENUUVOBdGOtNsdLT3PNgZBjzQzggYUNwg9TQNBSMqRJ5oX
-         A/IFlgHmL78OhQcSWWAXh1RmrEVFQ2ax328nk9PDnPouUKz/7q6iWR7GiP5KgX4xibFS
-         JQuT/HBwSrRNsJSgKbaJsI5u2uEQWDicABhts=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xf0kL1+XuM7P75yKi5gORiIETclggCfCwYHC9O/komI=;
+        b=dGfNWhVuygx3lxtV8htZeLUSrHPK74n/4zuspp12F3Ej9aM1jDUfauaeUEwwflxDd1
+         cVfzVfCyiXz6HsQHbH3uqnCyETM0yGfbehqOfgpZjYrkRamWiLEAjUjU/N6XUCAGMwTg
+         e46ZvTeAHHkSFMQ3fJwFLWMW7AwEaAJJGbRZdKmJB+TENAhuzW3836VbZX0SLgkxvjQw
+         dwvW5/dOX/UeN8Rz/zat7MKgFD1Z3C5YP+RjOmCefWIW+Hfi05TAW6USx06+pNFf9TEl
+         SSiNgdWmlpUg386INY5i3wS7xQT1lUyDL2rOcTJJurcX6Q7JtYvwt6mfdCqGBBFKud9e
+         euTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vlS8HH9kxm8e7oyzOpwYqn9TLCV2qWKpTfyr5YCSt/A=;
-        b=6+KkXBDlX8MxJzNTuMACnNbxPW3C9Gy7xEnEc6X6PNW0PrfjZzTJuenmPC2JWylDV7
-         hvQmZ5g/8o4WnUHBURNROEeRicegfAxQf/9b6SOcQgRQIwJNgFZejGyQwKsxx8VNOHpb
-         emiva5RS/ZXCfoG2WXqoRZYDIRIVznUNMatiFW9yJoDFI5KWpyVG8Okk0osAgHXAu/PG
-         wUoJFX6xjX/bGWMAMSSBLotwSWnwqBTy5lXG1jFryWiLBV6zVKoMLHuj1I5M4OCmiUuV
-         AtCLAPcQEI2Kbx59IKgpFoeKE9qbRZqvEgorQzCs1lKm0YvT43CeWYIR3gIovEj5LuZm
-         zwuQ==
-X-Gm-Message-State: AOAM531d3AKLnLMw/SlEmlcPgOluf+km6muOuosAn2+qAvgpOds3i8KM
-        I6w/nRrVKqor4DILAQcP9hQWCw==
-X-Google-Smtp-Source: ABdhPJyTolo27BXXMRFHmmDpLVwb/LF3OFgkIccSFPHKl8sSgsbI/7a8ff7sIIrhkmoyHgyh5wnILA==
-X-Received: by 2002:a05:6870:d0ce:b0:ed:9988:ba91 with SMTP id k14-20020a056870d0ce00b000ed9988ba91mr11286681oaa.205.1652760820159;
-        Mon, 16 May 2022 21:13:40 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id ed5-20020a056870b78500b000e686d1387asm6121653oab.20.2022.05.16.21.13.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 21:13:39 -0700 (PDT)
-Subject: Re: [PATCH 5.17 000/114] 5.17.9-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220516193625.489108457@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <03643f12-8c15-a2ca-0897-5539b805930b@linuxfoundation.org>
-Date:   Mon, 16 May 2022 22:13:38 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=xf0kL1+XuM7P75yKi5gORiIETclggCfCwYHC9O/komI=;
+        b=cB09Zbb6zVriwEbMMN5ELDwdNY9RRaETuDQ7hT2MCKA6HAlKwhHv6Bmm3LivHCP7N1
+         BghGuUG7XznExHpKpbaCnus+3DCIJKIj6i0vADG/nmkz0iLx+LqvwEo2w+pF2I0CaU1H
+         cKpv2K18BR2Eidt/RddM6Hm11QYoL+Y8MeBJrOc9OP3Xgyn75jLrPYggmPNufEFaOV/S
+         xgT5Zjg9p5rEh6SJl6ZgjXfNRVAxaEcXQDzGilJpg0MSF0HFSbbH+0FVtRUpYDNrLz/z
+         Ikyd5YC5IqdTq6oEHHcy3PFeLYRbN4ybS6qKCa4H0MkF7LqNLRuWMYuPfp3qVRi7onNJ
+         ECVg==
+X-Gm-Message-State: AOAM531FZpMzu23+P4IgUwZ2akRypBkZUr/IOOZ2nsNw36YE/GtuElkd
+        Vlfh3P1AmfmcOlvIkBlYPGo=
+X-Google-Smtp-Source: ABdhPJwgsWcgQL4lPVuAZ8ixm4JN/ImNMVWhzcjD3C0B9Ty9Fqsv3rJBudKOk83QYc/aHonkST0aAQ==
+X-Received: by 2002:a17:90a:9b0d:b0:1dc:e81d:6c18 with SMTP id f13-20020a17090a9b0d00b001dce81d6c18mr23151877pjp.72.1652761126747;
+        Mon, 16 May 2022 21:18:46 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:62fc])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170902c2c100b0015e8d4eb28csm7790789pla.214.2022.05.16.21.18.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 21:18:46 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 16 May 2022 18:18:44 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     Zhang Wensheng <zhangwensheng5@huawei.com>,
+        "ming.lei@redhat.com >> Ming Lei" <ming.lei@redhat.com>,
+        axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Subject: Re: [PATCH -next] block: fix io hung of setting throttle limit
+ frequently
+Message-ID: <YoMiJIUehq1UyzgQ@slm.duckdns.org>
+References: <20220516014429.33723-1-zhangwensheng5@huawei.com>
+ <YoKmCOAzwzw3Lz7g@slm.duckdns.org>
+ <ca251645-8d52-7a93-6ac2-579d97922a9e@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca251645-8d52-7a93-6ac2-579d97922a9e@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 1:35 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.9 release.
-> There are 114 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, May 17, 2022 at 11:12:28AM +0800, yukuai (C) wrote:
+> Ming added a condition in tg_with_in_bps_limit():
+> -       if (bps_limit == U64_MAX) {
+> +       /* no need to throttle if this bio's bytes have been accounted */
+> +       if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
 > 
-> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
-> Anything received after that time might be too late.
+> Which will let the first throttled bio to be issued immediately once
+> the config if updated.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.9-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> Do you think this behaviour is OK? If so, we can do the same for
+> tg_with_in_iops_limit.
 
-Compiled and booted on my test system. No dmesg regressions.
+So, the current behavior is that if the user is being silly, it will get
+slower and slower. The new behavior would be that if the user is being
+silly, it can issue IOs faster and faster, which creates a perverse
+incentive to be silly.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Probably the right thing to do is probably something like translating the
+existing budget in light of the new configuration so that config change
+neither gives or takes away the budget which has already accumulated. That
+said, are you guys seeing this becoming an issue in practice?
 
-thanks,
--- Shuah
+Thanks.
+
+-- 
+tejun

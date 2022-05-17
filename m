@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E2452996B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF81D529970
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239125AbiEQGSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S239284AbiEQGV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234922AbiEQGSp (ORCPT
+        with ESMTP id S234922AbiEQGVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:18:45 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1981377F6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:18:43 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1652768321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=bgJcNcSW/ZMq/16RJL24GCiAZ43k7Fqc2lbAAdZ14Xs=;
-        b=jneRRm0m2sLAnjS4N+rQ+VNuOuFSWtEIZcbdT9qYQWRU7gh6o8xuTj/louzAlPl/TsVyK4
-        x4web+QTyQPXp3wh7Rh6UpLYkD7/tK5azSRFiicguS5F0sJHHJCst5Y8q/Btk5Kf6MmZM0
-        Q3lQd5e/xaNxXT+LjEWh4ktZA96/uwk=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH v3] sched/rt: fix the case where sched_rt_period_us is negative
-Date:   Tue, 17 May 2022 14:18:12 +0800
-Message-Id: <20220517061812.95276-1-yajun.deng@linux.dev>
+        Tue, 17 May 2022 02:21:24 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4642F3EAB8;
+        Mon, 16 May 2022 23:21:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CFELpoLm/T5bCWScTqAlgx1Rhso0AgfMtDUILvVD5Tg=; b=Ert0PJDqria2bGBH515+4RdK3V
+        k+JtKPX5RybqvZ0ZJOosCf6K+4egaua0MGLR7MNJVRO4S7soYpMJdvWzd/s6wTCSGwNqZoiCTv30i
+        /ONPxsQHJp8tLb9VFvfmDuqk9s5o1NBLa+16Mfmlgec+N0xyWoM0Jb4ir3xTDfHt6zlm2Ot22sRf7
+        RXl1GD7L0D8ucd3+LorFuGrXa9JqDOv8TGZ0lbLLBX9FKck83HgYmCPO0fveeh6LbYt+eCxBg+UfD
+        lee/RAdY/nKAnsxLM7GmKNUf9wIjaKXZkuSS9A+/uz630QxRVDdXsmY3qWnCiTaIGi0R68673bDVN
+        ZeFyfamw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqqa7-00Bn0U-T9; Tue, 17 May 2022 06:21:19 +0000
+Date:   Mon, 16 May 2022 23:21:19 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-s390@vger.kernel.org, alex.williamson@redhat.com,
+        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
+        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 17/22] vfio-pci/zdev: add open/close device hooks
+Message-ID: <YoM+3z6+9yMeLMJn@infradead.org>
+References: <20220513191509.272897-1-mjrosato@linux.ibm.com>
+ <20220513191509.272897-18-mjrosato@linux.ibm.com>
+ <20220516172734.GE1343366@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516172734.GE1343366@nvidia.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,79 +61,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The proc_dointvec() is for integer, but sysctl_sched_rt_period is a
-unsigned integer, proc_dointvec() would convert negative number into
-positive number. So both proc_dointvec() and sched_rt_global_validate()
-aren't return error even if we set a negative number.
+On Mon, May 16, 2022 at 02:27:34PM -0300, Jason Gunthorpe wrote:
+> Normally you'd want to do what is kvm_s390_pci_register_kvm() here,
+> where a failure can be propogated but then you have a race condition
+> with the kvm.
+> 
+> Blech, maybe it is time to just fix this race condition permanently,
+> what do you think? (I didn't even compile it)
 
-Use proc_dointvec_minmax() instead of proc_dointvec() and use extra1
-limit the minimum value for sched_rt_period_us/sched_rt_runtime_us.
+This is roughly were I was planning to get to, with one difference:
+I don't think we need or even want the VFIO_DEVICE_NEEDS_KVM flag.
+Instead just propagation ->kvm to the device whenever it is set and
+let drivers that have a hard requirements on it like gvt fail if it
+isn't there.  This could still allow using vfio for userspace PCI
+drivers on s390 for example or in general allow expressing a soft
+requirement, just without the whole notifier mess.
 
-Make sysctl_sched_rt_period integer to match proc_dointvec_minmax().
-
-v3:
- - Make sysctl_sched_rt_period integer (Valentin Schneider)
-v2:
- - Remove sched_rr_timeslice_ms related changes (Valentin Schneider)
-
-Fixes: d0b27fa77854 ("sched: rt-group: synchonised bandwidth period")
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- kernel/sched/rt.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 8c9ed9664840..cafc580edbe4 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -16,7 +16,7 @@ struct rt_bandwidth def_rt_bandwidth;
-  * period over which we measure -rt task CPU usage in us.
-  * default: 1s
-  */
--unsigned int sysctl_sched_rt_period = 1000000;
-+int sysctl_sched_rt_period = 1000000;
- 
- /*
-  * part of the period that we allow rt tasks to run in us.
-@@ -34,9 +34,10 @@ static struct ctl_table sched_rt_sysctls[] = {
- 	{
- 		.procname       = "sched_rt_period_us",
- 		.data           = &sysctl_sched_rt_period,
--		.maxlen         = sizeof(unsigned int),
-+		.maxlen         = sizeof(int),
- 		.mode           = 0644,
- 		.proc_handler   = sched_rt_handler,
-+		.extra1		= SYSCTL_ONE,
- 	},
- 	{
- 		.procname       = "sched_rt_runtime_us",
-@@ -44,6 +45,7 @@ static struct ctl_table sched_rt_sysctls[] = {
- 		.maxlen         = sizeof(int),
- 		.mode           = 0644,
- 		.proc_handler   = sched_rt_handler,
-+		.extra1		= SYSCTL_NEG_ONE,
- 	},
- 	{
- 		.procname       = "sched_rr_timeslice_ms",
-@@ -2960,9 +2962,6 @@ static int sched_rt_global_constraints(void)
- #ifdef CONFIG_SYSCTL
- static int sched_rt_global_validate(void)
- {
--	if (sysctl_sched_rt_period <= 0)
--		return -EINVAL;
--
- 	if ((sysctl_sched_rt_runtime != RUNTIME_INF) &&
- 		((sysctl_sched_rt_runtime > sysctl_sched_rt_period) ||
- 		 ((u64)sysctl_sched_rt_runtime *
-@@ -2993,7 +2992,7 @@ static int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
- 	old_period = sysctl_sched_rt_period;
- 	old_runtime = sysctl_sched_rt_runtime;
- 
--	ret = proc_dointvec(table, write, buffer, lenp, ppos);
-+	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
- 
- 	if (!ret && write) {
- 		ret = sched_rt_global_validate();
--- 
-2.25.1
-
+The other question is if we even need an extra reference per device,
+can't we hold the group reference until all devices are gone
+anyway?  That would remove the need to include kvm_host.h in the
+vfio code.

@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62C05297B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBD65297BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237091AbiEQDMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 23:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
+        id S239201AbiEQDNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 23:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239781AbiEQDMi (ORCPT
+        with ESMTP id S230417AbiEQDNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 23:12:38 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B1E1EC58;
-        Mon, 16 May 2022 20:12:32 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L2Ljp3wbHz1JC5q;
-        Tue, 17 May 2022 11:11:10 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 11:12:30 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 11:12:29 +0800
-Subject: Re: [PATCH -next] block: fix io hung of setting throttle limit
- frequently
-To:     Tejun Heo <tj@kernel.org>,
-        Zhang Wensheng <zhangwensheng5@huawei.com>,
-        "ming.lei@redhat.com >> Ming Lei" <ming.lei@redhat.com>
-CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>
-References: <20220516014429.33723-1-zhangwensheng5@huawei.com>
- <YoKmCOAzwzw3Lz7g@slm.duckdns.org>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <ca251645-8d52-7a93-6ac2-579d97922a9e@huawei.com>
-Date:   Tue, 17 May 2022 11:12:28 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 16 May 2022 23:13:07 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401611E3C5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:13:07 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id o16so3321161ilq.8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=niDVomHWwkj1X3m8uRV45HIt1hqCr2KxXgjlHwPIKZw=;
+        b=KxLOcxyT1YZOFWo202Qc637ttcdVK7B5an5XESVLniA4Ab/jI52SQicfzWoGA9QNlC
+         OhJgpaVbdEV8KiFIhxZWepcVWAKfF4WsdUMNkZGQLXyByOXy90RATcUOe7uWgJypH379
+         z4WGQjjO3WFR0SmtoXYCCIOD1gEf/sL1j83hE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=niDVomHWwkj1X3m8uRV45HIt1hqCr2KxXgjlHwPIKZw=;
+        b=FGN0KHfuQiBQgcDTqVmnUH0v2VzsInt7VsKRarmmNIoKp9QVpCFE8G0qN/8r9yudHQ
+         NWrq0M/HP9el5/njl72KnAcdiIYG+TFtod/jECa6CMaarBzrNqB57/3mLLRqYgRRBwsH
+         HLTYFdMEnPjlfFfIvrx6AsLKn+/d5N8F4TzdNE4Z4Y1nPfE/ekcmtY511dQFJ0EKh8JA
+         beEzYDPRV+7PV3b4AvfMpuxOCxtC+PEAUBF9+5hwi2NFgx3qzPfWSjX96q5HGfk13zKR
+         5SsuEcZZXiAPPhtdAezWWJXkFer9WofTJ98+u7HCx3yGRZs9V3IbsrKgilVOJfaXBnZW
+         q+Jw==
+X-Gm-Message-State: AOAM533KPQWslMI3W3XO27RRwbqJLPDEisbZQHVdgkMv1U9b6pJBEPi4
+        TZpA5ZgZVA2sTptVGWlIE2eiZg==
+X-Google-Smtp-Source: ABdhPJxaK8Ju413pdWokrmfK3dJZx0P/woREOdnS5matvmYa13VHk5GOklWBYzlSw0FXutwEgGzDKQ==
+X-Received: by 2002:a05:6e02:12ee:b0:2d1:36d2:5de9 with SMTP id l14-20020a056e0212ee00b002d136d25de9mr1059489iln.200.1652757186684;
+        Mon, 16 May 2022 20:13:06 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id n5-20020a6b4105000000b0065a47e16f5esm301697ioa.48.2022.05.16.20.13.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 20:13:06 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] mm: delete unused MMF_OOM_VICTIM flag
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
+        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
+        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
+        hch@infradead.org, oleg@redhat.com, david@redhat.com,
+        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
+        jhubbard@nvidia.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        kernel-team@android.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220516075619.1277152-1-surenb@google.com>
+ <20220516075619.1277152-2-surenb@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <fae23c69-18fa-a86f-f35a-e3c4d646a53c@linuxfoundation.org>
+Date:   Mon, 16 May 2022 21:13:05 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <YoKmCOAzwzw3Lz7g@slm.duckdns.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220516075619.1277152-2-surenb@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,48 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/05/17 3:29, Tejun Heo Ð´µÀ:
-> On Mon, May 16, 2022 at 09:44:29AM +0800, Zhang Wensheng wrote:
->> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
->> index 469c483719be..8acb205dfa85 100644
->> --- a/block/blk-throttle.c
->> +++ b/block/blk-throttle.c
->> @@ -1321,12 +1321,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
->>   	 * that a group's limit are dropped suddenly and we don't want to
->>   	 * account recently dispatched IO with new low rate.
->>   	 */
->> -	throtl_start_new_slice(tg, READ);
->> -	throtl_start_new_slice(tg, WRITE);
->> +	if (!timer_pending(&sq->parent_sq->pending_timer)) {
->> +		throtl_start_new_slice(tg, READ);
->> +		throtl_start_new_slice(tg, WRITE);
->>   
->> -	if (tg->flags & THROTL_TG_PENDING) {
->> -		tg_update_disptime(tg);
->> -		throtl_schedule_next_dispatch(sq->parent_sq, true);
->> +		if (tg->flags & THROTL_TG_PENDING) {
->> +			tg_update_disptime(tg);
->> +			throtl_schedule_next_dispatch(sq->parent_sq, true);
->> +		}
+On 5/16/22 1:56 AM, Suren Baghdasaryan wrote:
+> With the last usage of MMF_OOM_VICTIM in exit_mmap gone, this flag is
+> now unused and can be removed.
 > 
-> Yeah, but this ends up breaking the reason why it's starting the new slices
-> in the first place explained in the commit above, right? I'm not sure what
-> the right solution is but this likely isn't it.
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> ---
+>   include/linux/oom.h            | 9 ---------
+>   include/linux/sched/coredump.h | 7 +++----
+>   mm/oom_kill.c                  | 4 +---
+>   3 files changed, 4 insertions(+), 16 deletions(-)
 > 
-Hi, Tejun
+Looks good to me.
 
-Ming added a condition in tg_with_in_bps_limit():
--       if (bps_limit == U64_MAX) {
-+       /* no need to throttle if this bio's bytes have been accounted */
-+       if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Which will let the first throttled bio to be issued immediately once
-the config if updated.
-
-Do you think this behaviour is OK? If so, we can do the same for
-tg_with_in_iops_limit.
-
-Thanks,
-Kuai
-
-> 
+thanks,
+-- Shuah

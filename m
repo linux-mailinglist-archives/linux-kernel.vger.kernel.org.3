@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D64952A149
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F248952A14C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237053AbiEQMOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:14:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S232766AbiEQMO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbiEQMOr (ORCPT
+        with ESMTP id S1345869AbiEQMOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:14:47 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF3445ADF;
-        Tue, 17 May 2022 05:14:46 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24HCEesL085760;
-        Tue, 17 May 2022 07:14:40 -0500
+        Tue, 17 May 2022 08:14:52 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1494B4705F;
+        Tue, 17 May 2022 05:14:50 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24HCEhD4064087;
+        Tue, 17 May 2022 07:14:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652789680;
-        bh=snpMXomRtpDDePOTZho9J8n23UeRGv7WkTI+OKiZcq4=;
-        h=From:To:CC:Subject:Date;
-        b=xyYz/SbV77sfRCpvIte/vuJ1r/i5OW66XbpiLu2PWGde56EJE/yL+XGOtmKwylFmm
-         x7F3blU+CqhiLh9lmlYSArKuzOWsnVPyTPUR3jVGAtjssq53ngOvK0/oHjJPvsJTZ5
-         GY/z0qXAVtK1hHy2tmkBG+DJNF3fsasNP4aV3B+4=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24HCEeg4060029
+        s=ti-com-17Q1; t=1652789684;
+        bh=AAN7yCxwXAmZaIfxWJ8Cf7gbuYH4RiTHkj4w5fI5p38=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=B8HelsSi13HcInBdwf0s6sGVFbb2+29wzEgvbMqaOw+Bct1PsxuqPGHy9TnNAg4Tp
+         z2D1/zL4ud3bbg/7FEoZiHWE39UJkRgPecW+/72TS2Lgg6gky4HRGe+qMYvf+Yu3Cu
+         m6MTTCajjrn3fLr69aluU9QsSrAeEGNAVLaVsf6M=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24HCEh8j019250
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 May 2022 07:14:40 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 17 May 2022 07:14:43 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 17
- May 2022 07:14:39 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ May 2022 07:14:43 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 17 May 2022 07:14:40 -0500
+ Frontend Transport; Tue, 17 May 2022 07:14:43 -0500
 Received: from keerthy.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24HCEZdI014354;
-        Tue, 17 May 2022 07:14:36 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24HCEZdJ014354;
+        Tue, 17 May 2022 07:14:40 -0500
 From:   Keerthy <j-keerthy@ti.com>
 To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
@@ -47,10 +47,12 @@ To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
 CC:     <j-keerthy@ti.com>, <rafael@kernel.org>,
         <linux-pm@vger.kernel.org>, <vigneshr@ti.com>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 0/2] thermal: k3_j72xx_bandgap: Add the bandgap driver support
-Date:   Tue, 17 May 2022 17:44:21 +0530
-Message-ID: <20220517121423.8017-1-j-keerthy@ti.com>
+Subject: [PATCH v8 1/2] dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
+Date:   Tue, 17 May 2022 17:44:22 +0530
+Message-ID: <20220517121423.8017-2-j-keerthy@ti.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220517121423.8017-1-j-keerthy@ti.com>
+References: <20220517121423.8017-1-j-keerthy@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -64,65 +66,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add VTM thermal support. In the Voltage Thermal Management
-Module(VTM), K3 J72XX supplies a voltage reference and a temperature
-sensor feature that are gathered in the band gap voltage and
-temperature sensor (VBGAPTS) module. The band gap provides current and
-voltage reference for its internal circuits and other analog IP
-blocks. The analog-to-digital converter (ADC) produces an output value
-that is proportional to the silicon temperature.
+Add VTM bindings documentation. In the Voltage Thermal
+Management Module(VTM), K3 J72XX supplies a voltage
+reference and a temperature sensor feature that are gathered in the band
+gap voltage and temperature sensor (VBGAPTS) module. The band
+gap provides current and voltage reference for its internal
+circuits and other analog IP blocks. The analog-to-digital
+converter (ADC) produces an output value that is proportional
+to the silicon temperature.
 
-Currently reading temperatures only is supported.  There are no
-active/passive cooling agent supported.
-
-J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
-
-The series also incorporates workaround for Errata i2128.
-
-Changes in v8:
-
-  * Removed redundant items from compatible in the Documentation patch
-
-Changes in v7:
-
-  * Separated the DT patches from this series.
-  * Fixed description of reg property in the DT documentation patch.
-
-Changes in v6:
-
-  * Fixed the DT comments that were missed in v5.
-  * Changed the offsets, bit masks to 2-D array.
-  * Clean up
-
-Changes in v5:
-
-  * Simplified the computation of the table.
-  * Removed unnecessary members in the structures.
-
-Changes in v4:
-
-  * Fixed compilation warning with W=1.
-
-Changes in v3:
-
-  * Removed static look up tables & added functions to dynamically generate them.
-
-Changes in v2:
-
-  * Fixed DT binding errors.
- 
-
-Keerthy (2):
-  dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
-  thermal: k3_j72xx_bandgap: Add the bandgap driver support
-
- .../bindings/thermal/ti,j72xx-thermal.yaml    |  63 ++
- drivers/thermal/Makefile                      |   2 +-
- drivers/thermal/k3_j72xx_bandgap.c            | 566 ++++++++++++++++++
- 3 files changed, 630 insertions(+), 1 deletion(-)
+Signed-off-by: Keerthy <j-keerthy@ti.com>
+---
+ .../bindings/thermal/ti,j72xx-thermal.yaml    | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
- create mode 100644 drivers/thermal/k3_j72xx_bandgap.c
 
+diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+new file mode 100644
+index 000000000000..38429e6122eb
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+@@ -0,0 +1,63 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Texas Instruments J72XX VTM (DTS) binding
++
++maintainers:
++  - Keerthy <j-keerthy@ti.com>
++
++properties:
++  compatible:
++    enum:
++      - ti,j721e-vtm
++      - ti,j7200-vtm
++
++  reg:
++    items:
++      - description: VTM cfg1 register space
++      - description: VTM cfg2 register space
++      - description: VTM efuse register space
++
++  power-domains:
++    maxItems: 1
++
++  "#thermal-sensor-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - power-domains
++  - "#thermal-sensor-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/soc/ti,sci_pm_domain.h>
++    wkup_vtm0: thermal-sensor@42040000 {
++        compatible = "ti,j721e-vtm";
++        reg = <0x42040000 0x350>,
++            <0x42050000 0x350>,
++            <0x43000300 0x10>;
++        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
++        #thermal-sensor-cells = <1>;
++    };
++
++    mpu_thermal: mpu-thermal {
++        polling-delay-passive = <250>; /* milliseconds */
++        polling-delay = <500>; /* milliseconds */
++        thermal-sensors = <&wkup_vtm0 0>;
++
++        trips {
++                mpu_crit: mpu-crit {
++                        temperature = <125000>; /* milliCelsius */
++                        hysteresis = <2000>; /* milliCelsius */
++                        type = "critical";
++                };
++        };
++    };
++...
 -- 
 2.17.1
 

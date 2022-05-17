@@ -2,96 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FA552A165
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD9C52A167
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345935AbiEQMXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
+        id S1345952AbiEQMYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345325AbiEQMXn (ORCPT
+        with ESMTP id S1345325AbiEQMYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:23:43 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0B44553F;
-        Tue, 17 May 2022 05:23:43 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so2080274pjq.2;
-        Tue, 17 May 2022 05:23:43 -0700 (PDT)
+        Tue, 17 May 2022 08:24:17 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEA045ADC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:24:15 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id g17so6375332wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:24:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=neFz4/gw4GZbGKQE+sKbAChYelz9V5KdJJ0LHprcTfk=;
-        b=oH82CmvDbeMGvzQ47QUPJHrPLVppZ0oRAJfwVGEhhIjs49n4Vl5G+6fke9/CgFpwXf
-         SEYEEyGv3RwuWEEA1oJcEn4JpQKa79XLAwD8M3QKYvWmOZR17YXEbyCpDpYlJnfoHz6m
-         vbfD4HN+LqBGJDLKu3PQyD/XtzMUBuCgzhTDnUOLk2wjuqPukHhaEiW4kQNMkYlpd/zS
-         fgyqYdSy5QH7IZH48Hq09TYk1O5/V8WQYGesU3fhBZquANZOec8hGc5KCuXbQulk6cst
-         G3ew2reEXWlt7seMuitot7HfPAeE4yspeoO0VqaWTj22EPTygZ+Kt4uzvj91B/9j8Uus
-         Df4A==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=XbwAA+UV9EPS2eBIxxAE6MtJ2V0j/gU0x4NnduH/tGo=;
+        b=Uw5ox4qoK+tiwNJytljXi9S6rvn6HY8q4CA1Z0qKALSZ1b6S0ttNJU4tlRpkJEwsGG
+         K5E14DQUPF/n9al3BIk5Wd69mdn7QPzAsOLpKwuDKcQk2tv8n4WlBcaAALxs/wImrs8e
+         4fHKxDdBystE6zeabxnsurOqo6FCZs/3H9sQy78x0PW7/U86zvfnqZovupRnoe91hAyF
+         /H6aXkNICjxT1qH3CeU1CHrl2OLwYWeZQEyRNoGAEG3NOcy1dys7BEMSjVukbpur+CZM
+         OmA2xNqPaw7Ymp+GPDC3R3jATTNIDqwJkuEgxLev0w1q3uuR8ovmAgwO0Spp3GvsdaGX
+         i1gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=neFz4/gw4GZbGKQE+sKbAChYelz9V5KdJJ0LHprcTfk=;
-        b=Vin8Y7M1WDO2o757zTId1IatXPl21OPjfIUJ7oBZVZgJA+/LTToOiDYHg4M42hpqp2
-         q0r2FRoReo3laPtGbBhwWCtmOqpZDFeQGYep7aljfmyoSkvincNTB9FcCzuVE0CNF5s/
-         7DtPzr89KTU+6R4SMWrVJ31mcGJsQgu8eXa52ZStSwY/zJt1EGUCri9lhqDYFHWsuV7D
-         vt4lzqvFBhikJC5n6fIhp+VYqvpSaRxLy/PX9KQ3ca1W+RPLas0TARX+S5HVcA1XXCyo
-         +Cjr6E5YCbbgEygHcQ29tegcv4VnKVzFUcNey+kYwFcRMYtGSNMXWLXJrKuYpbjOs6c3
-         CILQ==
-X-Gm-Message-State: AOAM533fj8o1ExngV87/NZ9CMuy/fg73Hvl1yWZvLd+s2vEO2F62EhvS
-        hL4XsE0NqvzgIL7QAY6R3Y9MpFLvmeSl12lYqEuv62aL9IfTZm8/pw==
-X-Google-Smtp-Source: ABdhPJwo4Zvtc0ieMoWlmo8DUTEhTnJNpzES7Sj+dAzCaYKUoKjzaeYEV1j14cMWIo8LcRIk3+gLHbNuIMRk207MRMY=
-X-Received: by 2002:a17:902:c2cf:b0:15f:1396:f54e with SMTP id
- c15-20020a170902c2cf00b0015f1396f54emr22590323pla.161.1652790222510; Tue, 17
- May 2022 05:23:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=XbwAA+UV9EPS2eBIxxAE6MtJ2V0j/gU0x4NnduH/tGo=;
+        b=ylMZfbHvXGo9m/p9AObmfHM7zBSj5Fx9Rc3D1OZ02BcDdjURtdZBJRDZp82MQLfwNQ
+         CHPEFgKQyqBIS9666pjcv9KQdMet+Zjhz8id/GiBBvBG1HqTDjqgNpjH0EB5BIu8hkzS
+         vj+YPwZ5JY2lGakWAoaEPF3+P/EjDYY1Rn57TgF9T6kSE4J8qZAq6TZTfiKiOGA3SqWB
+         kD+wA2YT5DtcTNJ2Y+hevvI6RkUQLHjNzmmvQpadPjBKIfl7pb8f1aoTIjRrsg3xsc9e
+         ijqFNZlUlSsOKAFHVCXABH2J6XwL5PCAkpFhxQ/2npBw9VLVD+1s4GK8m6tWo8Xhf4ng
+         BzGw==
+X-Gm-Message-State: AOAM531Y1lHqDPylArM20i7pLakbk5DCThsOQjkKf2DWr93x20inca5j
+        nVc2r1ISdyEOWNKFkBj3W6w3jGriG8v42w==
+X-Google-Smtp-Source: ABdhPJz3x4PcIUtrHZDqnJVsGT3wJ9Nwu7VL4rnRukDmvPuwtIJOPqQH5SIYg1EKT+hP9pMFgOmZKw==
+X-Received: by 2002:adf:f787:0:b0:20d:8e3:9439 with SMTP id q7-20020adff787000000b0020d08e39439mr8257040wrp.425.1652790254379;
+        Tue, 17 May 2022 05:24:14 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id p26-20020adfa21a000000b0020c61af5e1fsm11917542wra.51.2022.05.17.05.24.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 05:24:14 -0700 (PDT)
+Date:   Tue, 17 May 2022 13:24:12 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
+Message-ID: <YoOT7Cyobsed5IE3@google.com>
+References: <YoOJ/T4QRKC+fAZE@google.com>
+ <97cba3e1-4ef7-0a17-8456-e0787d6702c6@kernel.dk>
 MIME-Version: 1.0
-References: <20220513143513.2284425-1-zheyuma97@gmail.com> <20220514153625.18c4d9f8@jic23-huawei>
-In-Reply-To: <20220514153625.18c4d9f8@jic23-huawei>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Tue, 17 May 2022 20:23:31 +0800
-Message-ID: <CAMhUBj=uq6HhzRpTUO_iqrFQeVjiKE0n0bJ6SMKw8ZTdvFkCEA@mail.gmail.com>
-Subject: Re: [PATCH] iio: imu: bmi160: Fix the error handling at bmi160_chip_init()
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     lars@metafoo.de, andriy.shevchenko@linux.intel.com,
-        sean@geanix.com, linux-iio@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <97cba3e1-4ef7-0a17-8456-e0787d6702c6@kernel.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 10:27 PM Jonathan Cameron <jic23@kernel.org> wrote:
->
-> On Fri, 13 May 2022 22:35:13 +0800
-> Zheyu Ma <zheyuma97@gmail.com> wrote:
->
-> > When the driver fails in bmi160_chip_init(), it should disable the
-> > regulator.
-> >
-> > The following log shows it:
-> >
-> > [   18.709662] WARNING: CPU: 0 PID: 294 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
-> > [   18.712069] RIP: 0010:_regulator_put+0x3ec/0x4e0
-> > [   18.716395] Call Trace:
-> > [   18.716522]  <TASK>
-> > [   18.716636]  regulator_bulk_free+0x82/0xe0
-> > [   18.717077]  i2c_device_probe+0x6f0/0x800
-> >
-> > Fixes: 5dea3fb066f0 ("iio: imu: bmi160: added regulator support")
-> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
->
-> Hi,
->
-> Good find, but Tong Zhang got their first and the resulting patch
-> fixes an additional issue missed in this fix. See below.
+On Tue, 17 May 2022, Jens Axboe wrote:
 
-Thanks for your reply! I'll check the linux-next branch next time.
+> On 5/17/22 5:41 AM, Lee Jones wrote:
+> > Good afternoon Jens, Pavel, et al.,
+> > 
+> > Not sure if you are presently aware, but there appears to be a
+> > use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
+> > in Stable v5.10.y.
+> > 
+> > The full sysbot report can be seen below [0].
+> > 
+> > The C-reproducer has been placed below that [1].
+> > 
+> > I had great success running this reproducer in an infinite loop.
+> > 
+> > My colleague reverse-bisected the fixing commit to:
+> > 
+> >   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
+> >   Author: Jens Axboe <axboe@kernel.dk>
+> >   Date:   Fri Feb 26 09:47:20 2021 -0700
+> > 
+> >        io-wq: have manager wait for all workers to exit
+> > 
+> >        Instead of having to wait separately on workers and manager, just have
+> >        the manager wait on the workers. We use an atomic_t for the reference
+> >        here, as we need to start at 0 and allow increment from that. Since the
+> >        number of workers is naturally capped by the allowed nr of processes,
+> >        and that uses an int, there is no risk of overflow.
+> > 
+> >        Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> > 
+> >     fs/io-wq.c | 30 ++++++++++++++++++++++--------
+> >     1 file changed, 22 insertions(+), 8 deletions(-)
+> 
+> Does this fix it:
+> 
+> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
+> Author: Jens Axboe <axboe@kernel.dk>
+> Date:   Fri Mar 5 12:59:30 2021 -0700
+> 
+>     io-wq: fix race in freeing 'wq' and worker access
+> 
+> Looks like it didn't make it into 5.10-stable, but we can certainly
+> rectify that.
 
-Zheyu Ma
+Thanks for your quick response Jens.
+
+This patch doesn't apply cleanly to v5.10.y.
+
+I'll have a go at back-porting it.  Please bear with me.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

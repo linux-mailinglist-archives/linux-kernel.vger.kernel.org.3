@@ -2,88 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01ADD52A1C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C853352A1CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346051AbiEQMlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
+        id S1346299AbiEQMl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346219AbiEQMlE (ORCPT
+        with ESMTP id S1346238AbiEQMlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:41:04 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED16C15724;
-        Tue, 17 May 2022 05:41:01 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id v65so22041308oig.10;
-        Tue, 17 May 2022 05:41:01 -0700 (PDT)
+        Tue, 17 May 2022 08:41:07 -0400
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D965175B9;
+        Tue, 17 May 2022 05:41:06 -0700 (PDT)
+Received: by mail-ot1-f46.google.com with SMTP id z5-20020a9d62c5000000b00606041d11f1so12097915otk.2;
+        Tue, 17 May 2022 05:41:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=tU6K7uetAiw+rSP5T9+Sc20G5SXNExj5PkXgukoIQpY=;
-        b=WoOztYx/XHDkFLmzQgiX5NVA5acRpqNk2LOdGBMiQ0WPUob9msphTQ9b5/L+L11j5N
-         tgU4b4xaYtvgmBIGMVO7e/wd41apzro+ZyVL3NOIT0buGVv28Zi0A+wBcuiiCv6RGWXm
-         fpX3iDd10qympp97Ay1jn30aKp7bPX9YiRKlErcTbxaAg68QX3Io6XzwEYmsEk3ylSvc
-         o6ObbNyXLbkSAlO9ic0twr2Hk21e/tXxDHj40ipNg4Es+4kVKU39V23pQrNL9Fnk/kRz
-         2uhAyQBzFnHiTNdsV01dMRTNUxLcI5H/ns32KYflyTaNEgs8MSyuZRZ2lAxJEQWYT4OW
-         +s9Q==
-X-Gm-Message-State: AOAM533nTLjyMklk4wJYjauL3KEWKt504EMjaKrKH3hCm0L2g6Rldsza
-        zlhaUqcZ1URpLFxDR3l1bg==
-X-Google-Smtp-Source: ABdhPJxnbOAePBrL+7Vj6jx6SHaZRvhNaYbZt0r4+5WYZOCl4zrCDiMenp0OWItuwFOIpyqmNZ74CQ==
-X-Received: by 2002:a05:6808:2c8:b0:325:ad24:a002 with SMTP id a8-20020a05680802c800b00325ad24a002mr16074643oid.82.1652791261252;
-        Tue, 17 May 2022 05:41:01 -0700 (PDT)
+        bh=j5BrlQzLDAXkM38uIDVehzNU2wxoisuVTDhfLkPcVrc=;
+        b=0RDRgmF5G0qzalk5RL6th1GOCJU0myYv2zLfiBlAJBtMZPSKWD/5sPjHHKvQR/h4oQ
+         NgeAxTRGsS4c01xg/0WQx5skz4VAgfF+gGQWxNDyfdi2+hpSni3bGrfhM3kmA+zh1lSh
+         00hNz8q/7jEpkBcPRgx0e889iJzvgH2DQ08ROspAAy44xG71Dnf9kINt0rrLDcw7n942
+         oMwz97RAzRgvBt2a/QML5ZyEZxsTcikkZ32s/A4NkMzNOLGJluzuTYStBi671l/bbz/n
+         0To9aW1AaIRcSA+Mg0ASMt3Un4aTJitEdhMrncIMuGqAW/nWt58zyYwOBFNJrKFo5/y+
+         tFWQ==
+X-Gm-Message-State: AOAM532YVkDdX4C13O3NO9uTjVdWbXkIfYpR+XlH5QOqNSp/bxQl8k36
+        XwL30Db+vdoOtHfJqStL0g==
+X-Google-Smtp-Source: ABdhPJxJmvcvtYfkkdf1N9RF24PpCjCJKFrr+60SDWwOuXaRZwDYasMaqX9n9wa5JyRWrgIr2jVGlw==
+X-Received: by 2002:a05:6830:1491:b0:606:103c:6680 with SMTP id s17-20020a056830149100b00606103c6680mr7862250otq.18.1652791265485;
+        Tue, 17 May 2022 05:41:05 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m1-20020a05680806c100b003266e656d39sm4722981oih.4.2022.05.17.05.40.59
+        by smtp.gmail.com with ESMTPSA id r196-20020acaa8cd000000b00325cda1ffa5sm4743640oie.36.2022.05.17.05.41.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 05:41:00 -0700 (PDT)
-Received: (nullmailer pid 785390 invoked by uid 1000);
+        Tue, 17 May 2022 05:41:04 -0700 (PDT)
+Received: (nullmailer pid 785394 invoked by uid 1000);
         Tue, 17 May 2022 12:40:59 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Marek Vasut <marex@denx.de>, Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        max.krummenacher@toradex.com,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-In-Reply-To: <20220516162826.23025-2-max.oss.09@gmail.com>
-References: <20220516162826.23025-1-max.oss.09@gmail.com> <20220516162826.23025-2-max.oss.09@gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: display: add new bus-format property for panel-dpi
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>, linux-usb@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        quic_pkondeti@quicinc.com, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
+In-Reply-To: <1652723410-1630-2-git-send-email-quic_kriskura@quicinc.com>
+References: <1652723410-1630-1-git-send-email-quic_kriskura@quicinc.com> <1652723410-1630-2-git-send-email-quic_kriskura@quicinc.com>
+Subject: Re: [v5 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy override params bindings
 Date:   Tue, 17 May 2022 07:40:59 -0500
-Message-Id: <1652791259.418473.785387.nullmailer@robh.at.kernel.org>
+Message-Id: <1652791259.453681.785393.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 18:28:25 +0200, Max Krummenacher wrote:
-> From: Max Krummenacher <max.krummenacher@toradex.com>
+On Mon, 16 May 2022 23:20:08 +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 > 
-> The property is used to set the enum bus_format and infer the bpc
-> for a panel defined by 'panel-dpi'.
-> This specifies how the panel is connected to the display interface.
+> Add device tree bindings for SNPS phy tuning parameters.
 > 
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
-> 
->  .../bindings/display/panel/panel-dpi.yaml     | 11 +++++++++
->  .../dt-bindings/display/dt-media-bus-format.h | 23 +++++++++++++++++++
->  2 files changed, 34 insertions(+)
->  create mode 100644 include/dt-bindings/display/dt-media-bus-format.h
+>  .../bindings/phy/qcom,usb-snps-femto-v2.yaml       | 105 +++++++++++++++++++++
+>  1 file changed, 105 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -92,11 +88,13 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/display/panel/panel-dpi.example.dts:20.9-10 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/display/panel/panel-dpi.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-rise-fall-time-bp: 'minimim' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'type', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: properties:qcom,hs-crossover-voltage-microvolt: '$ref' should not be valid under {'const': '$ref'}
+	hint: Standard unit suffix properties don't need a type $ref
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.yaml: ignoring, error in schema: properties: qcom,hs-rise-fall-time-bp
+Documentation/devicetree/bindings/phy/qcom,usb-snps-femto-v2.example.dtb:0:0: /example-0/phy@88e2000: failed to match any schema with compatible: ['qcom,sm8150-usb-hs-phy']
 
 doc reference errors (make refcheckdocs):
 

@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A7D529DB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A98529DBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244922AbiEQJQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
+        id S238764AbiEQJRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244479AbiEQJPK (ORCPT
+        with ESMTP id S244904AbiEQJQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:15:10 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9687837A35;
-        Tue, 17 May 2022 02:15:09 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L2VmC3KYRzbbmM;
-        Tue, 17 May 2022 17:13:47 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 17:15:07 +0800
-CC:     <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mark.rutland@arm.com>, <joro@8bytes.org>,
-        <shameerali.kolothum.thodi@huawei.com>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
-        <linuxarm@huawei.com>
-Subject: Re: [PATCH v8 2/8] hwtracing: hisi_ptt: Add trace function support
- for HiSilicon PCIe Tune and Trace device
-To:     John Garry <john.garry@huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        <gregkh@linuxfoundation.org>, <alexander.shishkin@linux.intel.com>,
-        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <acme@kernel.org>,
-        <jonathan.cameron@huawei.com>
-References: <20220516125223.32012-1-yangyicong@hisilicon.com>
- <20220516125223.32012-3-yangyicong@hisilicon.com>
- <90aafbc1-b7f6-1cc9-8f94-c72f05150f70@huawei.com>
- <31113797-29c5-1400-f7ac-bff79853b3fe@huawei.com>
- <f1e5309d-d330-faf1-32c5-78962b125f66@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <53d7db9f-dbd6-c21a-01dd-7316dd541957@huawei.com>
-Date:   Tue, 17 May 2022 17:15:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 17 May 2022 05:16:26 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B4E1EC5E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:16:24 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id c14so16369063pfn.2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VbT9MivaGcVQLFLyZe58CMZOydl8bMnPHecbxMnGlAA=;
+        b=K926XyreguR/4XEGI2/XdLSg8xqkk79XZxpz2krQ3cDJULT8zIyem67TELbGWBtmTg
+         b05B8JjUy+SFZn96XQv2wbJdy6P1+68y3XmUl2REMzKOsiCerWpY4gxfkPaXYimAbdMw
+         aPDfZjT5rKLnZhvekRWx46Led/eHS37TdbpQ+k2rA3u5jcJAA1qE4EjEdY61h/y1aGDJ
+         HwKKYCRVUMiHvXIhC9uLV+1DSufpqUQKWO7jZmK8YgLeFAdxBOwUCCjPXoideDBIZwgv
+         +DFJROmmKg7yUnB015J5PHMAo6BmnjJV06lEU25NzkLOxPGGWKOdzM+q3EK1WrqC3yTM
+         NXyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VbT9MivaGcVQLFLyZe58CMZOydl8bMnPHecbxMnGlAA=;
+        b=1GTFNaH0ZipH19BdIL9v3fks7Z2JjS2B4gYdGeteVcdEbToYDHz4OS6cws+kTZu4Br
+         UHOxTKkVR3WdTVN20UbEN1cmfjJFIamF50gzFB26D4l3OEXbL12fxzme2dOOAKXYz1YJ
+         kIxO6tiIaNyUa4qC1a1wLoI7n7l63Y8iTdtUZxZtHd4TcvJ23AiApYifERCCHpKJoecH
+         +Vw/vWaAV/kCmw7VDf+eGttRNtiSwWiNEqj11+pc1SK/2MG8Jxmizziz6jrEZuvLBEjq
+         o+UgU/f56yuoD3lWlZrvt4JpgwEEmA2VWk7OUVSK7kOtLgkMkAaQEbA6gftySBHuppbX
+         qXKA==
+X-Gm-Message-State: AOAM533HurWjR7r/KI69ck6EGe/gIoClfEcDSYiHTMet7CSpzW/ifPoJ
+        XcQsuv2q7yKLk2PYwEp//hftQyQixuU12DOP39Q=
+X-Google-Smtp-Source: ABdhPJwb7TUPydJ5uJgGFBM3zIUz6PP1+ayvhR0HdyDTVVnTuilVTQ3Ohszxg4ss5MiddupCWgYYK0W77rGbKie7r8Q=
+X-Received: by 2002:a63:4d4:0:b0:3c1:f13f:a9a1 with SMTP id
+ 203-20020a6304d4000000b003c1f13fa9a1mr18365793pge.398.1652778984401; Tue, 17
+ May 2022 02:16:24 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <f1e5309d-d330-faf1-32c5-78962b125f66@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220517082650.2005840-1-hsinyi@chromium.org> <20220517082650.2005840-2-hsinyi@chromium.org>
+In-Reply-To: <20220517082650.2005840-2-hsinyi@chromium.org>
+From:   Xiongwei Song <sxwjean@gmail.com>
+Date:   Tue, 17 May 2022 17:15:58 +0800
+Message-ID: <CAEVVKH8vOYov+edGWOWbrgi=5UAnNN4FzcAV5i3EVJ8S7_NSDw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] Revert "squashfs: provide backing_dev_info in
+ order to disable read-ahead"
+To:     Hsin-Yi Wang <hsinyi@chromium.org>
+Cc:     Phillip Lougher <phillip@squashfs.org.uk>,
+        Matthew Wilcox <willy@infradead.org>,
+        Xiongwei Song <Xiongwei.Song@windriver.com>,
+        Zheng Liang <zhengliang6@huawei.com>,
+        Zhang Yi <yi.zhang@huawei.com>, Hou Tao <houtao1@huawei.com>,
+        Miao Xie <miaoxie@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm @ kvack . org" <linux-mm@kvack.org>,
+        "squashfs-devel @ lists . sourceforge . net" 
+        <squashfs-devel@lists.sourceforge.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,19 +76,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/17 16:21, John Garry wrote:
-> On 17/05/2022 09:09, Yicong Yang wrote:
->>>> +    target = cpumask_any(cpumask_of_node(dev_to_node(&hisi_ptt->pdev->dev)));
->>>> +    if (target < nr_cpumask_bits) {
->>> the comment for cpumask_any() hints to check against nr_cpu_ids - any specific reason to check against nr_cpumask_bits?
->>>
->> here should be:
->>     if (target >= nr_cpumask_bits) {
->>
->> will fix this up.
->>
-> 
-> I am still not sure that using nr_cpumask_bits is correct.
+On Tue, May 17, 2022 at 4:27 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
+>
+> This reverts commit 9eec1d897139e5de287af5d559a02b811b844d82.
+>
+> Revert closing the readahead to squashfs since the readahead callback
+> for squashfs is implemented.
+>
+> Suggested-by: Xiongwei Song <sxwjean@gmail.com>
 
-Let's use nr_cpu_ids to match the comment of cpumask_any(). Actually we should have
-nr_cpu_ids(possible cpus, init to NR_CPUS) <= nr_cpumask_bits (NR_CPUS) so it's ok here.
+I'd like to use "xiongwei.song@windriver.com" in my tag.
+
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> ---
+>  fs/squashfs/super.c | 33 ---------------------------------
+>  1 file changed, 33 deletions(-)
+>
+> diff --git a/fs/squashfs/super.c b/fs/squashfs/super.c
+> index 6d594ba2ed28..32565dafa7f3 100644
+> --- a/fs/squashfs/super.c
+> +++ b/fs/squashfs/super.c
+> @@ -29,7 +29,6 @@
+>  #include <linux/module.h>
+>  #include <linux/magic.h>
+>  #include <linux/xattr.h>
+> -#include <linux/backing-dev.h>
+>
+>  #include "squashfs_fs.h"
+>  #include "squashfs_fs_sb.h"
+> @@ -113,24 +112,6 @@ static const struct squashfs_decompressor *supported_squashfs_filesystem(
+>         return decompressor;
+>  }
+>
+> -static int squashfs_bdi_init(struct super_block *sb)
+> -{
+> -       int err;
+> -       unsigned int major = MAJOR(sb->s_dev);
+> -       unsigned int minor = MINOR(sb->s_dev);
+> -
+> -       bdi_put(sb->s_bdi);
+> -       sb->s_bdi = &noop_backing_dev_info;
+> -
+> -       err = super_setup_bdi_name(sb, "squashfs_%u_%u", major, minor);
+> -       if (err)
+> -               return err;
+> -
+> -       sb->s_bdi->ra_pages = 0;
+> -       sb->s_bdi->io_pages = 0;
+> -
+> -       return 0;
+> -}
+>
+>  static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>  {
+> @@ -146,20 +127,6 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>
+>         TRACE("Entered squashfs_fill_superblock\n");
+>
+> -       /*
+> -        * squashfs provides 'backing_dev_info' in order to disable read-ahead. For
+> -        * squashfs, I/O is not deferred, it is done immediately in read_folio,
+> -        * which means the user would always have to wait their own I/O. So the effect
+> -        * of readahead is very weak for squashfs. squashfs_bdi_init will set
+> -        * sb->s_bdi->ra_pages and sb->s_bdi->io_pages to 0 and close readahead for
+> -        * squashfs.
+> -        */
+> -       err = squashfs_bdi_init(sb);
+> -       if (err) {
+> -               errorf(fc, "squashfs init bdi failed");
+> -               return err;
+> -       }
+> -
+>         sb->s_fs_info = kzalloc(sizeof(*msblk), GFP_KERNEL);
+>         if (sb->s_fs_info == NULL) {
+>                 ERROR("Failed to allocate squashfs_sb_info\n");
+> --
+> 2.36.0.550.gb090851708-goog
+>
+>

@@ -2,92 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C158552A247
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922CE52A277
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347269AbiEQM6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S243629AbiEQNAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346616AbiEQMz6 (ORCPT
+        with ESMTP id S1347116AbiEQM7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:55:58 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA22E63BC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:55:57 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HCLlZq010020;
-        Tue, 17 May 2022 12:55:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=pp1;
- bh=YrPfjDANUD45n3Zdgz895KDNs9u9b5h3UTyNbQxL5mM=;
- b=tgvayBDGBtaPau1L7BNC79xzgzDdA8xjXFw77XfaI0Tlx+Z8mxlZvgTw2XmQsqNONvRC
- 8HlLV4w5v5hWGibUDXr0t47UZ02WXmBcbNVDkqbum8pUrRH3vriVJKohkPTXd0dzgirf
- VYkGK2/hC8+pbSfQCXxVtWWY7Z3OwTt9o43eqlTHUVGL9CGyWKEA/nYXYZttjTK0QKw6
- HXot4psYrc3hjv6lk+j30PYfn9DLY8MSVdsj8v5OsWBEIb+smhBCAOo5uPJJhVrjGCuQ
- 0wEJtuwezSFoXX8iXxBEhylK0/hfwd7AxYxG99QRu/akCWKIpFMHzEpoT/F1SQ/rK2aZ 5g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4bn58y39-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 12:55:48 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24HCfPk5007842;
-        Tue, 17 May 2022 12:55:47 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4bn58y22-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 12:55:47 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HCr3xo027106;
-        Tue, 17 May 2022 12:55:45 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3g24293c9g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 12:55:44 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HCtgjS52101610
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 12:55:42 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BABEF5204F;
-        Tue, 17 May 2022 12:55:42 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.2.119])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 189345204E;
-        Tue, 17 May 2022 12:55:42 +0000 (GMT)
-Date:   Tue, 17 May 2022 15:55:40 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Jaewon Kim <jaewon31.kim@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jaewon Kim <jaewon31.kim@samsung.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Subject: Re: [RFC PATCH] page_ext: create page extension for all memblock
- memory regions
-Message-ID: <YoObTJcBUjeW+2l2@linux.ibm.com>
-References: <CGME20220509073953epcas1p127f2d36186316642068c92c5d9dee1c4@epcas1p1.samsung.com>
- <20220509074330.4822-1-jaewon31.kim@samsung.com>
- <20220516173321.67402b7f09eacc43d4e476f4@linux-foundation.org>
- <YoNcBG6kQnmLZ3Z9@linux.ibm.com>
- <CAJrd-UuzTh-0Ee9+rMRES9onP_EkvJS-VpPP66J4M4n0Ku0ZWA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJrd-UuzTh-0Ee9+rMRES9onP_EkvJS-VpPP66J4M4n0Ku0ZWA@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5YVPBFhqjLEYLYFotIEAw6eaMXRQIfXc
-X-Proofpoint-ORIG-GUID: 4jHQNVHVKyD_zTvEqWkYF-S_Zx8M_e7S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_03,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- phishscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205170076
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        Tue, 17 May 2022 08:59:45 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9EB4EF62
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:58:44 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220517125842epoutp03264a06ce8ad3a80cd80eca0434c1d093~v5dxKeeND0631206312epoutp03c
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:58:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220517125842epoutp03264a06ce8ad3a80cd80eca0434c1d093~v5dxKeeND0631206312epoutp03c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1652792322;
+        bh=eQWhvo0/26Op8Gp4Xd1DKPNSgbfiQhLLhKzi6R2xW/s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=secE2tRtGHp4F1yd2jkLCjepDUz+bVYQTvrt3gxSBk5A+yCoHImbkvDgwYHYzyadN
+         zZz/HNDLQ2+CUY20vs2Xxk4ocP0aDXyJfQ+xrmZZNa8LBSWQwj2PY2mGN8VBsubejb
+         aGobBJletrjNxMMyioLWUcX9w3fiB5GEattOHcYU=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20220517125841epcas5p2b0102154b4ee3b782b4403a4ee75ff66~v5dwi_NLx0253602536epcas5p2j;
+        Tue, 17 May 2022 12:58:41 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4L2blf1Jnzz4x9Ps; Tue, 17 May
+        2022 12:58:38 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        49.3C.09762.DFB93826; Tue, 17 May 2022 21:58:38 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220517125634epcas5p40259b75a9ea07495330144310d61a5c9~v5b5w6iLk3255032550epcas5p4E;
+        Tue, 17 May 2022 12:56:34 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220517125634epsmtrp10b4f06432e6bc6f5b1aee3b22e9f9bfb~v5b5vqDia3276532765epsmtrp1i;
+        Tue, 17 May 2022 12:56:34 +0000 (GMT)
+X-AuditID: b6c32a4b-1fdff70000002622-09-62839bfd5bdd
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        37.AA.11276.28B93826; Tue, 17 May 2022 21:56:34 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220517125629epsmtip1ab5ffa7d0d955ffe1e82f62b8673eefc~v5b0yjnYy2359123591epsmtip1U;
+        Tue, 17 May 2022 12:56:28 +0000 (GMT)
+From:   Smitha T Murthy <smitha.t@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        Smitha T Murthy <smitha.t@samsung.com>, linux-fsd@tesla.com
+Subject: [PATCH 13/20] media: s5p-mfc: Set context for valid case before
+ calling try_run
+Date:   Tue, 17 May 2022 18:25:41 +0530
+Message-Id: <20220517125548.14746-14-smitha.t@samsung.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220517125548.14746-1-smitha.t@samsung.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf0xTVxTHc19fX1tn3bNIvJIMSRfjICu0oy0XBptjzDxlcRji/BEnFHgp
+        hNLWvnZUgln5vaFsOGMmv8WyLUEUhuU3GCggiI7JZHQ6C4wfIoRNQwfBqbiWVvff557z/Z5z
+        cu69XJbgHuHDTVHraZ1aoRISG/DmXn9/0VpZToJ4ZRigycpmAplX5zA0YXbgyHq1iYMso2Us
+        9ONANxtV9Q2zUUvPFI5+eujMjpTYcTRXdQWg+dJxAjVOj7HRnwsH0Z32cgKdbmhio8t9dg76
+        3jaCoR8an2HoYtM/HJTX1cdB9s5mgHLz+7BdW6m6yjpAtdprAGWrWWJRbaV2DmXunMeoxtqv
+        COr+WCdBXa35gsrr/xenvrbUAmotu4JDFfbZCMrR6EsNLTs4MZuOpIYn04okWudHqxM1SSlq
+        ZYQwOjbuwziZXCwRSUJRiNBPrUijI4RRH8eIdqeonBsQ+n2uUBmcoRgFwwiD3gvXaQx62i9Z
+        w+gjhLQ2SaWVagMZRRpjUCsD1bQ+TCIWvyNzCuNTk+fOZuHaIp5xpsmEm4CdUwh4XEhKYWFH
+        NrsQbOAKyA4Ah3J7MPdhCcCJsics92EFwMnx1VcW8+Jd3J3ocqou/erx52LwWkE34VIR5Ntw
+        5dHNdd5CZgE4/aXexSzyKQuWjPq62Is8Am2D59kuxskdsLfavM58MgxW56x4um2Hlxq6nWNw
+        uTxnvGLtM1cvSL7gwuobDuDWRMHZbycwN3vBhQGLx+sD57/J97ASTjhyPHotrDBZPPr3Yfdo
+        Oe6qzyL9YX17kDv8Bjw3dAVzj7wJFj2d8cj5sLXyJQvhxVuDnvIQ/vZXE9tVBpIUNDkk7pUU
+        AVixepsoBr6l/3e4AEAt2EZrmTQlzci0wWo6/dWlJWrSGsH6Iw+IbgVTk48DrQDjAiuAXJZw
+        C19sNCUI+EmKExm0ThOnM6hoxgpkzvWdYfl4J2qcv0Stj5NIQ8VSuVwuDQ2WS4Rb+eSLrAQB
+        qVTo6VSa1tK6lz6My/MxYcEf/J2XVLIPGJdN+zWq7Ne2rzyIP+XwPj5Sr844GXm9/63EoFzL
+        nslIw8AvD4pHjAE3u+zGGE1Vy5MwrzBwfShHfnvUsH9WE2s9N/tcT1obemkB1QymH2fGhGTK
+        TNNt3q+ni3ZuFMV2SJeDMoa6C8JP7olMnAm6t/hMVvPRbkD6rO3kHbLFHwtl/143wczvuxF9
+        1rFXYB9hKXmbfe9ee/cEMbYjdo4MOSya68y7wOdsM9vOG5dlu4p7yu/sLWg/eFQyHHVq88bw
+        rOf2o/318wdw5a2pN8Ox4+OcxYfmy+n5x5YO4G2nv/uEDH50aCGTl/Pz4Kft9fcrWwYOm3QZ
+        SzN/CHEmWSEJYOkYxX8yutZtbQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIIsWRmVeSWpSXmKPExsWy7bCSnG7T7OYkg8WneSwezNvGZrH4x3Mm
+        i/uLP7NYHNq8ld1iy5XZzBbLjx9gtZh/5ByrxfaDj1gsNr4Ayl6ceZfF4vn8dYwWL2fdY7PY
+        9Pgaq8XDV+EWl3fNYbPo2bCV1WLtkbvsFkuvX2SyWLbpD5PFoq1f2C1a9x5ht7i7ZxujRUvb
+        ESYHcY8189Yweuy4u4TR4/qST8weO2fdZfdYvOclk8emVZ1sHneu7WHz2Lyk3qP16C8Wj74t
+        qxg9/jXNZffoOnKdzePzJjmPU18/swfwRXHZpKTmZJalFunbJXBlPJ/cyFLQy1nxZGsDSwPj
+        XfYuRk4OCQETicVvbrKA2EICuxklVuypgYhLSKz8PYkRwhaWWPnvOVA9F1BNE5PEy3NnwZrZ
+        BHQkvr0/zQaSEBFoZZS4vrKTCcRhFpjIIjHl+i9mkCphgQiJW59Wg41iEVCVOLxwMSuIzStg
+        JbGw+RvUGfISqzccAKrn4OAEis/9FwtiCglYSjzdbzGBkW8BI8MqRsnUguLc9NxiwwLDvNRy
+        veLE3OLSvHS95PzcTYzgWNPS3MG4fdUHvUOMTByMhxglOJiVRHgNKhqShHhTEiurUovy44tK
+        c1KLDzFKc7AoifNe6DoZLySQnliSmp2aWpBaBJNl4uCUamCKONKtO+NYzdcXx205z16R79BX
+        mTzrNXd7dK1C7MToEwfu8d007rVPLg/9s5Zn39kLbak/D18P9C/Omfl0ro7ms0fh8mZ+wQaR
+        f70Xzl+d8N3ow0TrVyuYjjoY3H27mt9pgoRLWvjxG82Llq2rzPTv+bRpyZFDFn8kPsX8YzjE
+        pc/UypP99n9oyYvGd0o2tja7/5scFKhLOBhzwLqdi/tJpcrZ9SdOfl/r0Xb/y/VPunyFCz9s
+        4BTJWvbiujVv2MQ9x85uayj0v7mjVrsq9J3OZM2Zr5MFH273a53QqepjpFe62+JB3pzktNCy
+        B8evLOs/8Cbdx2tx0dGexYLXSmsrY1JLOKwv/5kiW9Wpe9pFiaU4I9FQi7moOBEApE2MryQD
+        AAA=
+X-CMS-MailID: 20220517125634epcas5p40259b75a9ea07495330144310d61a5c9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220517125634epcas5p40259b75a9ea07495330144310d61a5c9
+References: <20220517125548.14746-1-smitha.t@samsung.com>
+        <CGME20220517125634epcas5p40259b75a9ea07495330144310d61a5c9@epcas5p4.samsung.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,146 +126,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 08:38:18PM +0900, Jaewon Kim wrote:
-> Hello Mike Rapoport
-> Thank you for your comment.
-> 
-> Oh really? Could you point out the code or the commit regarding 'all
-> struct pages in any section should be valid and
-> properly initialized' ?
+Context bit is set for hardware execution if there is a buffer
+in source and destination queue before calling try_run in the
+init_buffers function. Now there will be a new context created
+and hardware will be invoked for the buffer queued instead of
+waiting for another buffer to be queued from userspace to set
+this context bit for hw execution.
 
-There were several commits that refactored the memory map initialization,
-freeing of the unused memory map and abuse of pfn_valid() as a substitute
-of "is memory valid" semantics.
+Cc: linux-fsd@tesla.com
+Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+---
+ drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Actually I am using v5.10 based source tree on an arm64 device.
-
-Then most probably your change is not relevant for the upstream kernel.
-Did you observe any issues with page_ext initialization on v5.18-rcN
-kernels?
-
-> I tried to look up and found the following commit in v5.16-rc1, did
-> you mean this?
-> 3de360c3fdb3 arm64/mm: drop HAVE_ARCH_PFN_VALID
-
-Yes, this is one of those commits.
+diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+index a6e50981bdd6..3483be832f2e 100644
+--- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
++++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc.c
+@@ -589,6 +589,8 @@ static void s5p_mfc_handle_init_buffers(struct s5p_mfc_ctx *ctx,
+ 		s5p_mfc_clock_off();
  
-> I guess memblock_is_memory code in pfn_valid in arch/arm64/mm/init.c, v5.10
-> might affect the page_ext_init.
-
-Yes. In 5.10 the pfn_valid() test in page_ext_init() will skip an entire
-section if the first pfn in that section is not memory that can be mapped
-in the linear map.
-
-But again, this should be fixed in the latest kernels.
- 
-> Thank you
-> 
-> 2022년 5월 17일 (화) 오후 5:25, Mike Rapoport <rppt@linux.ibm.com>님이 작성:
-> >
-> > On Mon, May 16, 2022 at 05:33:21PM -0700, Andrew Morton wrote:
-> > > On Mon,  9 May 2022 16:43:30 +0900 Jaewon Kim <jaewon31.kim@samsung.com> wrote:
-> > >
-> > > > The page extension can be prepared for each section. But if the first
-> > > > page is not valid, the page extension for the section was not
-> > > > initialized though there were many other valid pages within the section.
-> >
-> > What do you mean by "first page [in a section] is not valid"?
-> > In recent kernels all struct pages in any section should be valid and
-> > properly initialized.
-> >
-> > > > To support the page extension for all sections, refer to memblock memory
-> > > > regions. If the page is valid use the nid from pfn_to_nid, otherwise use
-> > > > the previous nid.
-> > > >
-> > > > Also this pagech changed log to include total sections and a section
-> > > > size.
-> > > >
-> > > > i.e.
-> > > > allocated 100663296 bytes of page_ext for 64 sections (1 section : 0x8000000)
-> > >
-> > > Cc Joonsoo, who wrote this code.
-> > > Cc Mike, for memblock.
-> > >
-> > > Thanks.
-> > >
-> > > >
-> > > > diff --git a/mm/page_ext.c b/mm/page_ext.c
-> > > > index 2e66d934d63f..506d58b36a1d 100644
-> > > > --- a/mm/page_ext.c
-> > > > +++ b/mm/page_ext.c
-> > > > @@ -381,41 +381,43 @@ static int __meminit page_ext_callback(struct notifier_block *self,
-> > > >  void __init page_ext_init(void)
-> > > >  {
-> > > >     unsigned long pfn;
-> > > > -   int nid;
-> > > > +   int nid = 0;
-> > > > +   struct memblock_region *rgn;
-> > > > +   int nr_section = 0;
-> > > > +   unsigned long next_section_pfn = 0;
-> > > >
-> > > >     if (!invoke_need_callbacks())
-> > > >             return;
-> > > >
-> > > > -   for_each_node_state(nid, N_MEMORY) {
-> > > > +   /*
-> > > > +    * iterate each memblock memory region and do not skip a section having
-> > > > +    * !pfn_valid(pfn)
-> > > > +    */
-> > > > +   for_each_mem_region(rgn) {
-> > > >             unsigned long start_pfn, end_pfn;
-> > > >
-> > > > -           start_pfn = node_start_pfn(nid);
-> > > > -           end_pfn = node_end_pfn(nid);
-> > > > -           /*
-> > > > -            * start_pfn and end_pfn may not be aligned to SECTION and the
-> > > > -            * page->flags of out of node pages are not initialized.  So we
-> > > > -            * scan [start_pfn, the biggest section's pfn < end_pfn) here.
-> > > > -            */
-> > > > +           start_pfn = (unsigned long)(rgn->base >> PAGE_SHIFT);
-> > > > +           end_pfn = start_pfn + (unsigned long)(rgn->size >> PAGE_SHIFT);
-> > > > +
-> > > > +           if (start_pfn < next_section_pfn)
-> > > > +                   start_pfn = next_section_pfn;
-> > > > +
-> > > >             for (pfn = start_pfn; pfn < end_pfn;
-> > > >                     pfn = ALIGN(pfn + 1, PAGES_PER_SECTION)) {
-> > > >
-> > > > -                   if (!pfn_valid(pfn))
-> > > > -                           continue;
-> > > > -                   /*
-> > > > -                    * Nodes's pfns can be overlapping.
-> > > > -                    * We know some arch can have a nodes layout such as
-> > > > -                    * -------------pfn-------------->
-> > > > -                    * N0 | N1 | N2 | N0 | N1 | N2|....
-> > > > -                    */
-> > > > -                   if (pfn_to_nid(pfn) != nid)
-> > > > -                           continue;
-> > > > +                   if (pfn_valid(pfn))
-> > > > +                           nid = pfn_to_nid(pfn);
-> > > > +                   nr_section++;
-> > > >                     if (init_section_page_ext(pfn, nid))
-> > > >                             goto oom;
-> > > >                     cond_resched();
-> > > >             }
-> > > > +           next_section_pfn = pfn;
-> > > >     }
-> > > > +
-> > > >     hotplug_memory_notifier(page_ext_callback, 0);
-> > > > -   pr_info("allocated %ld bytes of page_ext\n", total_usage);
-> > > > +   pr_info("allocated %ld bytes of page_ext for %d sections (1 section : 0x%x)\n",
-> > > > +           total_usage, nr_section, (1 << SECTION_SIZE_BITS));
-> > > >     invoke_init_callbacks();
-> > > >     return;
-> > > >
-> > > > --
-> > > > 2.17.1
-> > > >
-> >
-> > --
-> > Sincerely yours,
-> > Mike.
-
+ 		wake_up(&ctx->queue);
++		if (ctx->src_queue_cnt >= 1 && ctx->dst_queue_cnt >= 1)
++			set_work_bit_irqsave(ctx);
+ 		s5p_mfc_hw_call(dev->mfc_ops, try_run, dev);
+ 	} else {
+ 		WARN_ON(test_and_clear_bit(0, &dev->hw_lock) == 0);
 -- 
-Sincerely yours,
-Mike.
+2.17.1
+

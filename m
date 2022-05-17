@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16B8529DD1
+	by mail.lfdr.de (Postfix) with ESMTP id 54CF8529DD0
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244499AbiEQJTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
+        id S244786AbiEQJTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244777AbiEQJTG (ORCPT
+        with ESMTP id S244485AbiEQJTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:19:06 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EBF2CE24
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:18:58 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 1-20020a05600c248100b00393fbf11a05so995836wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dF32UB4o24SEGA28gcaOp4TCwrJXmpV9PUTvVLdg0J4=;
-        b=BZwlrbpmJ8zOdGxjTeCtczfI1ZQYklBVK8c74MaVj1WY7Y9o4Aqd5kP2tukaQ//Ajn
-         L9FoT95VSj7Sz1ZIjxgaID8c7SLDINhsjeco4wxhWbi9KlANWpFAiaNajD4UnlSPvANy
-         GixXJY6sCLTLXVIMJLw82bL8A4Q1zlgGWikn8SRbn4R0BgaFXxzvHEcr5q4trKK+xo9K
-         zyi8q1Gtzgm42QpK2FUXsRx8F/lGCaAu4zLfURfBL2odsfy3MjAMKAxGsluxwPaH9/Yd
-         kuZQfnCpfsyXZkoOfnEy930Zh+sTpqqmCoCHhAvE6I/iExZzyWApPBnrw1gZYJXDMwTk
-         5LHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dF32UB4o24SEGA28gcaOp4TCwrJXmpV9PUTvVLdg0J4=;
-        b=H5oKR8Xa9BgO88CuMfpE0tcuDC3xXeDyuGOWQH4hir4qp/hoN3VkWMDUsvAdcPDOoF
-         cUgTcMSIxo4idX2xsTJgXhY8k6fSr+uNWSAQ0eCc1siLnRAJ4sqVAjxF1BK4DNLwcCr2
-         cgnXrJ96jcKtLPVC8Wo0o3d3qC8EfFYTY3hwCeIqLGcJQbck3sXHU9HVVd0Byld0aggT
-         apGWzLByVXtb3DP7witdaBYhoNNF+8oKqNzsUyi0Lytix/RN7Ctg+fJwdcEl03Zx2H+p
-         4u0BcPpAZBYU9VujBYPue2zeldu2IAGJU1u1PPv/EIkKbBAihA8UKh6gcH5WEF8GrKE+
-         mWWA==
-X-Gm-Message-State: AOAM530n0zNafhKbjDWiYra7ApeCagJNoamvr0e2BaOPLwEBQHROOYdX
-        CIn4fsegcj7eMusQA3q3aMY=
-X-Google-Smtp-Source: ABdhPJz9/ND0sjG0FG/5GKRjuvvp1OlseQo5NsUhcDFerQCp7aM3NgAUNbyM6QtWMQSe0E0mLLpHDg==
-X-Received: by 2002:a7b:ce8f:0:b0:394:46ae:549e with SMTP id q15-20020a7bce8f000000b0039446ae549emr20844385wmj.54.1652779136830;
-        Tue, 17 May 2022 02:18:56 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id p26-20020adfa21a000000b0020c61af5e1fsm11469542wra.51.2022.05.17.02.18.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 02:18:56 -0700 (PDT)
-Message-ID: <ad736290-2e01-f867-d2ec-867a4385005a@gmail.com>
-Date:   Tue, 17 May 2022 11:18:55 +0200
+        Tue, 17 May 2022 05:19:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022112A714;
+        Tue, 17 May 2022 02:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652779160; x=1684315160;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=grGQ9QQpYMfdTvHJAab0dxyFSKeeJ8ndipTrOFgXDeQ=;
+  b=h867A+GufgBdkh2Dau+6XLqJEsWf7iXM9EhwEI2G2foOmgvlb1AfpRzq
+   gGeRiS7fA+m4k2eqfuOH007iTLnZTT+uIAIZbnBOB/pPc40HhwoZRGi/b
+   6N1vVgUTHbbYpmzuOHbtU+gUagAzAmLpoyZ29xZ8bXEimFiDzJIjhr2z6
+   0hh8Dt2gjObr4IHyrOQzWBMPY3q8NUd1oDiYGL+3vsNsc8fUxI1ViFCiU
+   fLplN1+3yDlUb59EJ8daI21esXjYTQN1K4NHPoqcL5RKDQa96rB+I53h7
+   rf6D2N5N2CdLuNCkoER4pwcoLMLn4HlvX6whkxXqxn6y1l7ZwYGysh9nv
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="270814915"
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="270814915"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 02:19:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="555694551"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 17 May 2022 02:19:15 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqtMJ-0000nV-73;
+        Tue, 17 May 2022 09:19:15 +0000
+Date:   Tue, 17 May 2022 17:19:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
+ rcu_idle_exit noinstr
+Message-ID: <202205171711.hqxFhp5l-lkp@intel.com>
+References: <20220515203653.4039075-1-jolsa@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 3/5] soc: mediatek: pwrap: Move and check return value
- of platform_get_irq()
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        zhiyong.tao@mediatek.com
-References: <20220516124659.69484-1-angelogioacchino.delregno@collabora.com>
- <20220516124659.69484-4-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220516124659.69484-4-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220515203653.4039075-1-jolsa@kernel.org>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jiri,
 
+I love your patch! Perhaps something to improve:
 
-On 16/05/2022 14:46, AngeloGioacchino Del Regno wrote:
-> Move the call to platform_get_irq() earlier in the probe function
-> and check for its return value: if no interrupt is specified, it
-> wouldn't make sense to try to call devm_request_irq() so, in that
-> case, we can simply return early.
-> 
-> Moving the platform_get_irq() call also makes it possible to use
-> one less goto, as clocks aren't required at that stage.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
->   drivers/soc/mediatek/mtk-pmic-wrap.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
-> index 852514366f1f..332cbcabc299 100644
-> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
-> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
-> @@ -2204,6 +2204,10 @@ static int pwrap_probe(struct platform_device *pdev)
->   	if (!wrp)
->   		return -ENOMEM;
->   
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return irq;
-> +
->   	platform_set_drvdata(pdev, wrp);
->   
->   	wrp->master = of_device_get_match_data(&pdev->dev);
-> @@ -2316,7 +2320,6 @@ static int pwrap_probe(struct platform_device *pdev)
->   	if (HAS_CAP(wrp->master->caps, PWRAP_CAP_INT1_EN))
->   		pwrap_writel(wrp, wrp->master->int1_en_all, PWRAP_INT1_EN);
->   
-> -	irq = platform_get_irq(pdev, 0);
+[auto build test WARNING on bpf-next/master]
 
-For better readability of the code I'd prefer to keep platform_get_irq next to 
-devm_request_irq. I understand that you did this change so that you don't have 
-to code
-if (irq < 0) {
-     ret = irq;
-     goto err_out2;
-}
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/cpuidle-rcu-Making-arch_cpu_idle-and-rcu_idle_exit-noinstr/20220516-043752
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: x86_64-randconfig-a014-20220516 (https://download.01.org/0day-ci/archive/20220517/202205171711.hqxFhp5l-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/0b6fee32d730f621f2bfc4d8d9f0729814398415
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jiri-Olsa/cpuidle-rcu-Making-arch_cpu_idle-and-rcu_idle_exit-noinstr/20220516-043752
+        git checkout 0b6fee32d730f621f2bfc4d8d9f0729814398415
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Or do I miss something?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regards,
-Matthias
+All warnings (new ones prefixed by >>):
 
->   	ret = devm_request_irq(wrp->dev, irq, pwrap_interrupt,
->   			       IRQF_TRIGGER_HIGH,
->   			       "mt-pmic-pwrap", wrp);
+   vmlinux.o: warning: objtool: vmx_l1d_flush()+0x13: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: vmx_vcpu_enter_exit()+0x29: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: vmx_update_host_rsp()+0x3e: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: arch_cpu_idle()+0xb: call to {dynamic}() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: rcu_idle_exit()+0x25: call to trace_hardirqs_on() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode()+0x1c: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x21: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x1c: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: exit_to_user_mode()+0x1b: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_exit_to_user_mode()+0x36: call to static_key_count() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x1c: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_exit_to_user_mode()+0x22: call to static_key_count() leaves .noinstr.text section
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

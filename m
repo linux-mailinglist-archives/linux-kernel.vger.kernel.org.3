@@ -2,77 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8215652A5C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077F052A5C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349747AbiEQPNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S1349758AbiEQPOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348507AbiEQPNP (ORCPT
+        with ESMTP id S243212AbiEQPOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:13:15 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A7D47563
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:13:14 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id m6so1592405ljb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=BBebJTiHodUV9ldblV55ft742UQ2rJkdufcTm5gvCtQ=;
-        b=hxn7iaw4tq1xquaVPp0wxTjPeUgyEjfBAuck6J2NXlhakNKBfax9mn1vWTz3pwIIFf
-         BdZzItsrBjAP9KNSFu6ndW5TMq5YBKZ/H0Dm0l/hhDk/qTwDwUpfnaMClKpDboIpBl5m
-         fJP1wK1ceEuDB1btr5FDLLm1q/UWCDO2Mm6II78Vsa3EnfYmXPShujbHI6HvFjDD0Fsi
-         dvIuEtg78RaO2LdZoOAc4RVGzvfLQ94CBi607FpbvTda2+4L0K0QMwUWZYMzgux+P/4f
-         OEafD68znM0NFnN0paWta3ykmhAUhtPbomvzEZxzCmwKuEaNuI2qNipxoIX6/7bhVLUX
-         Wsvw==
+        Tue, 17 May 2022 11:14:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5A80545501
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652800458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zDg6wjmfUwF9ifzpSYYO2kPnU8cCr2A246HnYdWDqzY=;
+        b=MADRyUWpsYfSMSrsxlMa30bsztKVB1dSco9tp+0ph3QsBGAp0iGlbNSYInpbQhGjmC60UB
+        XumlFvpf4my+WbWEPz3wtXyO3ZkstGP1Tbl1cbJbMCS3CzbdipbdLshYs2ejPe0fdbHSFN
+        0LDwPRqESo2IS8wPBDLzp/Ul+o7POfk=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-177-lKDwMBrJMkaAEhLk2DWjIw-1; Tue, 17 May 2022 11:14:15 -0400
+X-MC-Unique: lKDwMBrJMkaAEhLk2DWjIw-1
+Received: by mail-qk1-f197.google.com with SMTP id c84-20020a379a57000000b0069fcf83c373so13880517qke.20
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:14:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BBebJTiHodUV9ldblV55ft742UQ2rJkdufcTm5gvCtQ=;
-        b=bCEOAGArzULbCKt6hs30FxVgTsZhhEUb75Y5bUEqUXn7R33gx+NbziLXNbC8WOtIcv
-         D8wSst3LwYjEGgjZGFN2/NXlZjs0m+kCwlLn/YAzvIt77XjZ/yA1ln3HvqLPPEXt7U8e
-         UBN9UQp5goX5oq2/bnudq6B5yjr6Eobm9KWpAIjsnBSX6fiERpJQt8SyADR6m8gAIkpI
-         5JHl4hZqhHEmPxgGYApXei6h2+aBk/V8nUTwRYtNiDYaHU2garHOYkC4/fOYrOIIJb/W
-         jHU6plOU5gYC2BjQzi+3KqKsJCQY+e23mIhBFexpEj+JinW9YvhlkxJgpjwpuS5CZGPX
-         q6Rw==
-X-Gm-Message-State: AOAM533JvMkqYi/qgQy0hmfFfSeYj0sOP7+YTeHbRhoUMl9snqeNYTaL
-        zA/JJ+EKmJQGb4Y6p5xCFVsLWQ==
-X-Google-Smtp-Source: ABdhPJzOLuMhp4MaQ12VNGb4UETImwpwiY6962rbziwYorAUl57YU9brLcb2V6S9vS2EmzYb5gBFKQ==
-X-Received: by 2002:a05:651c:893:b0:249:4023:3818 with SMTP id d19-20020a05651c089300b0024940233818mr15205604ljq.44.1652800392596;
-        Tue, 17 May 2022 08:13:12 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m20-20020a2e9114000000b0024f3d1daeb5sm1851049ljg.61.2022.05.17.08.13.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 08:13:12 -0700 (PDT)
-Message-ID: <214de163-d576-d9be-76f2-3b70eefd6e68@linaro.org>
-Date:   Tue, 17 May 2022 17:13:10 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zDg6wjmfUwF9ifzpSYYO2kPnU8cCr2A246HnYdWDqzY=;
+        b=pA1tdluwyi3KvMyLWssaxn4htsv8MB6K5vPO9wf3C3d73r1Q2qYDu70e7so8dgSvDW
+         knvs7jCzZ0iBalr94LbVceRNobYWFJPNJqoMoISn49I9quqJZ/qaWqqRfel41A1Cu8SL
+         M6aAWFKUmQWKQWeAuOziQOXxa3bpEjI+2XbEjGNq6TZC9PDnRHkbWUTulnng8gQBOR0s
+         CTSC/+XG4/GuF+k9jub/2/UPnJLDTlLiU5FDZDBGDnruIKLaGNLcs9OaWx5ia04Outpm
+         dmpOB1RDN7m/zhZeZz8v3aD9twZFtSOVOJhlFW8LF1ajY7d30Ss5jKKsrpoymN9mlAIv
+         7xEg==
+X-Gm-Message-State: AOAM532QqgRxmYoztL7tiBXHH+ojNVmMsaVqe8KZ8u5hguOoyhJwR6Sn
+        FmTCmhy6GjdzN3tSAU/tgm49yWCDYcVfrrByNoJZQ9gDOe9CTO+hJECpGU8SYCWpmUO4qw68PM8
+        YeT65D//LXspqOOrUujcA7dDk
+X-Received: by 2002:a05:6214:2aa6:b0:45b:474:f9d7 with SMTP id js6-20020a0562142aa600b0045b0474f9d7mr20456632qvb.75.1652800454675;
+        Tue, 17 May 2022 08:14:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw/BKkbx8m7APmdAwXMw6SgVlGa68Jz3O00qhGKjVlF/OOrYsrrU0GaJ2fqzzjTz3cD1U+3rg==
+X-Received: by 2002:a05:6214:2aa6:b0:45b:474:f9d7 with SMTP id js6-20020a0562142aa600b0045b0474f9d7mr20456598qvb.75.1652800454354;
+        Tue, 17 May 2022 08:14:14 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id b21-20020ac85415000000b002f39b99f68asm7817273qtq.36.2022.05.17.08.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 08:14:13 -0700 (PDT)
+Date:   Tue, 17 May 2022 17:14:04 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [RFC PATCH v1 0/8] virtio/vsock: experimental zerocopy receive
+Message-ID: <20220517151404.vqse5tampdsaaeji@sgarzare-redhat>
+References: <7cdcb1e1-7c97-c054-19cf-5caeacae981d@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/4] dmaengine: sprd-dma: Remove unneeded ERROR check
- before clk_disable_unprepare
-Content-Language: en-US
-To:     Wan Jiabing <wanjiabing@vivo.com>, Vinod Koul <vkoul@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220516084139.8864-1-wanjiabing@vivo.com>
- <20220516084139.8864-3-wanjiabing@vivo.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220516084139.8864-3-wanjiabing@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <7cdcb1e1-7c97-c054-19cf-5caeacae981d@sberdevices.ru>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,13 +86,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2022 10:41, Wan Jiabing wrote:
-> clk_disable_unprepare() already checks ERROR by using IS_ERR_OR_NULL.
+Hi Arseniy,
 
-Hmm, maybe I am looking at different sources, but which commit
-introduced IS_ERR_OR_NULL() check? Where is it in the sources?
+On Thu, May 12, 2022 at 05:04:11AM +0000, Arseniy Krasnov wrote:
+>                              INTRODUCTION
+>
+>	Hello, this is experimental implementation of virtio vsock zerocopy
+>receive. It was inspired by TCP zerocopy receive by Eric Dumazet. This API uses
+>same idea: call 'mmap()' on socket's descriptor, then every 'getsockopt()' will
+>fill provided vma area with pages of virtio RX buffers. After received data was
+>processed by user, pages must be freed by 'madvise()'  call with MADV_DONTNEED
+>flag set(if user won't call 'madvise()', next 'getsockopt()' will fail).
 
+Sounds cool, but maybe we would need some socket/net experts here for 
+review.
 
+Could we do something similar for the sending path as well?
 
-Best regards,
-Krzysztof
+>
+>                                 DETAILS
+>
+>	Here is how mapping with mapped pages looks exactly: first page mapping
+>contains array of trimmed virtio vsock packet headers (in contains only length
+>of data on the corresponding page and 'flags' field):
+>
+>	struct virtio_vsock_usr_hdr {
+>		uint32_t length;
+>		uint32_t flags;
+>	};
+>
+>Field  'length' allows user to know exact size of payload within each sequence
+>of pages and 'flags' allows user to handle SOCK_SEQPACKET flags(such as message
+>bounds or record bounds). All other pages are data pages from RX queue.
+>
+>             Page 0      Page 1      Page N
+>
+>	[ hdr1 .. hdrN ][ data ] .. [ data ]
+>           |        |       ^           ^
+>           |        |       |           |
+>           |        *-------------------*
+>           |                |
+>           |                |
+>           *----------------*
+>
+>	Of course, single header could represent array of pages (when packet's
+>buffer is bigger than one page).So here is example of detailed mapping layout
+>for some set of packages. Lets consider that we have the following sequence  of
+>packages: 56 bytes, 4096 bytes and 8200 bytes. All pages: 0,1,2,3,4 and 5 will
+>be inserted to user's vma(vma is large enough).
+>
+>	Page 0: [[ hdr0 ][ hdr 1 ][ hdr 2 ][ hdr 3 ] ... ]
+>	Page 1: [ 56 ]
+>	Page 2: [ 4096 ]
+>	Page 3: [ 4096 ]
+>	Page 4: [ 4096 ]
+>	Page 5: [ 8 ]
+>
+>	Page 0 contains only array of headers:
+>	'hdr0' has 56 in length field.
+>	'hdr1' has 4096 in length field.
+>	'hdr2' has 8200 in length field.
+>	'hdr3' has 0 in length field(this is end of data marker).
+>
+>	Page 1 corresponds to 'hdr0' and has only 56 bytes of data.
+>	Page 2 corresponds to 'hdr1' and filled with data.
+>	Page 3 corresponds to 'hdr2' and filled with data.
+>	Page 4 corresponds to 'hdr2' and filled with data.
+>	Page 5 corresponds to 'hdr2' and has only 8 bytes of data.
+>
+>	This patchset also changes packets allocation way: today implementation
+>uses only 'kmalloc()' to create data buffer. Problem happens when we try to map
+>such buffers to user's vma - kernel forbids to map slab pages to user's vma(as
+>pages of "not large" 'kmalloc()' allocations are marked with PageSlab flag and
+>"not large" could be bigger than one page). So to avoid this, data buffers now
+>allocated using 'alloc_pages()' call.
+>
+>                                   TESTS
+>
+>	This patchset updates 'vsock_test' utility: two tests for new feature
+>were added. First test covers invalid cases. Second checks valid transmission
+>case.
+
+Thanks for adding the test!
+
+>
+>                                BENCHMARKING
+>
+>	For benchmakring I've added small utility 'rx_zerocopy'. It works in
+>client/server mode. When client connects to server, server starts sending exact
+>amount of data to client(amount is set as input argument).Client reads data and
+>waits for next portion of it. Client works in two modes: copy and zero-copy. In
+>copy mode client uses 'read()' call while in zerocopy mode sequence of 'mmap()'
+>/'getsockopt()'/'madvise()' are used. Smaller amount of time for transmission
+>is better. For server, we can set size of tx buffer and for client we can set
+>size of rx buffer or rx mapping size(in zerocopy mode). Usage of this utility
+>is quiet simple:
+>
+>For client mode:
+>
+>./rx_zerocopy --mode client [--zerocopy] [--rx]
+>
+>For server mode:
+>
+>./rx_zerocopy --mode server [--mb] [--tx]
+>
+>[--mb] sets number of megabytes to transfer.
+>[--rx] sets size of receive buffer/mapping in pages.
+>[--tx] sets size of transmit buffer in pages.
+>
+>I checked for transmission of 4000mb of data. Here are some results:
+>
+>                           size of rx/tx buffers in pages
+>               *---------------------------------------------------*
+>               |    8   |    32    |    64   |   256    |   512    |
+>*--------------*--------*----------*---------*----------*----------*
+>|   zerocopy   |   24   |   10.6   |  12.2   |   23.6   |    21    | secs to
+>*--------------*---------------------------------------------------- process
+>| non-zerocopy |   13   |   16.4   |  24.7   |   27.2   |   23.9   | 4000 mb
+>*--------------*----------------------------------------------------
+>
+>I think, that results are not so impressive, but at least it is not worse than
+>copy mode and there is no need to allocate memory for processing date.
+
+Why is it twice as slow in the first column?
+
+>
+>                                 PROBLEMS
+>
+>	Updated packet's allocation logic creates some problem: when host gets
+>data from guest(in vhost-vsock), it allocates at least one page for each packet
+>(even if packet has 1 byte payload). I think this could be resolved in several
+>ways:
+
+Can we somehow copy the incoming packets into the payload of the already 
+queued packet?
+
+This reminds me that we have yet to fix a similar problem with kmalloc() 
+as well...
+
+https://bugzilla.kernel.org/show_bug.cgi?id=215329
+
+>	1) Make zerocopy rx mode disabled by default, so if user didn't enable
+>it, current 'kmalloc()' way will be used.
+
+That sounds reasonable to me, I guess also TCP needs a setsockopt() call 
+to enable the feature, right?
+
+>	2) Use 'kmalloc()' for "small" packets, else call page allocator. But
+>in this case, we have mix of packets, allocated in two different ways thus
+>during zerocopying to user(e.g. mapping pages to vma), such small packets will
+>be handled in some stupid way: we need to allocate one page for user, copy data
+>to it and then insert page to user's vma.
+
+It seems more difficult to me, but at the same time doable. I would go 
+more on option 1, though.
+
+>
+>P.S: of course this is experimental RFC, so what do You think guys?
+
+It seems cool :-)
+
+But I would like some feedback from the net guys to have some TCP-like 
+things.
+
+Thanks,
+Stefano
+

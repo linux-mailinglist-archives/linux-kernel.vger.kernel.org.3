@@ -2,67 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939AF52A142
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2566252A146
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344833AbiEQMNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S1345846AbiEQMON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345786AbiEQMN1 (ORCPT
+        with ESMTP id S1345396AbiEQMOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:13:27 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A6546651
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:13:23 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id w17-20020a17090a529100b001db302efed6so2052523pjh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=0CFZi2WdHh+fWnk2m1bIXH7l+E5jrgN/oQfn0swAlk0=;
-        b=J1JomReZIjMEXQobTzVFw7ummBWdomtyzdyFFet3/kcc/jM+gvVqVpq2Vc/6ULmkci
-         TrdzxzJOgkhyPeKaEB8TyJ7GUYbqXaJZChg1Rzz1OPOY2zKD77e7B0Ud/Ct9XzPpczfQ
-         yUdrdQGcMoQGHU1XbBhSp/qOlzwdGZgqOReniRcnAHlJWwroi239fLHrS611gIYdCqsQ
-         s1AQKsJqLq7O3ZWsoslHYwzyf+cl8QKLKbhwG54yFd7Xi3PMk4WPr07FuzlA155FlJn/
-         w1x8iegRjjG7bDocm0Y6wTLVG0E4NoUC9hTcL58Y6RzIYndo/yNAwrJ53a0ICDcGifsf
-         mAVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=0CFZi2WdHh+fWnk2m1bIXH7l+E5jrgN/oQfn0swAlk0=;
-        b=reC4fmIeRCj2M8TySuhzatmGLD5Hh0FyGIB0Uwzj3fEBV6TwJpqs2cX6iSKa1ap9Os
-         BQh/B+e9sPDNdMNhgMKJ3deYx1JbRbgBQBUplIDiHNz16W2Ho8rhJJHPzivGW2J2akyG
-         nhW6ZCLKr/9U4rcYpKufAZduDQ1k3KAXeW8HyTo+3LyVo7b9hXRlkZkwuofqSa/ws7mO
-         6J94FpHaUO8s/s31TOGRG47zZLmaU6BcetGDKhH7ODrwFgl4e1mddT/UPT9/+0IbxUzv
-         EyjdWp9zZzY11/zWwCgDpGOur957DkjQuV1JSHL4ZM4r2gFw5lsfua9N+nsQUK2fmu1j
-         5olg==
-X-Gm-Message-State: AOAM530NVam9Yu9+5L5BTG+/K/7hsNzk63QxvGIaithdDamlXjpcjLdg
-        kW7eSK4TU4r+wUNAyA/obaHPtw==
-X-Google-Smtp-Source: ABdhPJyDx71heU0gfcxf+CGzQq7lXgAi5h3sMUNbGKzfQW4j5ZJ5G1UoPX9LPtNbpGfbEUenH6f63w==
-X-Received: by 2002:a17:903:1248:b0:151:9708:d586 with SMTP id u8-20020a170903124800b001519708d586mr22127846plh.15.1652789603163;
-        Tue, 17 May 2022 05:13:23 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170902650a00b0015e8d4eb269sm8754436plk.179.2022.05.17.05.13.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 05:13:21 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tj@kernel.org, bh1scw@gmail.com
-Cc:     songmuchun@bytedance.com, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220516173930.159535-1-bh1scw@gmail.com>
-References: <20220516173930.159535-1-bh1scw@gmail.com>
-Subject: Re: [PATCH] blk-cgroup: Remove unnecessary rcu_read_lock/unlock()
-Message-Id: <165278960081.13853.15178111681664943346.b4-ty@kernel.dk>
-Date:   Tue, 17 May 2022 06:13:20 -0600
+        Tue, 17 May 2022 08:14:10 -0400
+Received: from mail.enpas.org (zhong.enpas.org [46.38.239.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF7F74578A;
+        Tue, 17 May 2022 05:14:08 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        by mail.enpas.org (Postfix) with ESMTPSA id 26B48FF9D7;
+        Tue, 17 May 2022 12:14:07 +0000 (UTC)
+Date:   Tue, 17 May 2022 14:14:04 +0200
+From:   Max Staudt <max@enpas.org>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
+ can_skb_headroom_valid to skb.c
+Message-ID: <20220517141404.578d188a.max@enpas.org>
+In-Reply-To: <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
+References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
+        <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
+        <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
+        <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net>
+        <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
+        <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
+        <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
+        <20220517104545.eslountqjppvcnz2@pengutronix.de>
+        <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,23 +50,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 01:39:30 +0800, bh1scw@gmail.com wrote:
-> From: Fanjun Kong <bh1scw@gmail.com>
+On Tue, 17 May 2022 13:51:57 +0200
+Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+
+
+> After looking through drivers/net/can/Kconfig I would probably phrase
+> it like this:
 > 
-> spin_lock_irq/spin_unlock_irq contains preempt_disable/enable().
-> Which can serve as RCU read-side critical region, so remove
-> rcu_read_lock/unlock().
+> Select CAN devices (hw/sw) -> we compile a can_dev module. E.g. to 
+> handle the skb stuff for vcan's.
 > 
+> Select hardware CAN devices -> we compile the netlink stuff into
+> can_dev and offer CAN_CALC_BITTIMING and CAN_LEDS to be compiled into
+> can_dev too.
 > 
-> [...]
+> In the latter case: The selection of flexcan, ti_hecc and mcp251xfd 
+> automatically selects CAN_RX_OFFLOAD which is then also compiled into 
+> can_dev.
+> 
+> Would that fit in terms of complexity?
 
-Applied, thanks!
-
-[1/1] blk-cgroup: Remove unnecessary rcu_read_lock/unlock()
-      commit: 77c570a1ea85ba4ab135c61a028420a6e9fe77f3
-
-Best regards,
--- 
-Jens Axboe
+IMHO these should always be compiled into can-dev. Out of tree drivers
+are fairly common here, and having to determine which kind of can-dev
+(stripped or not) the user has on their system is a nightmare waiting to
+happen.
 
 
+Max

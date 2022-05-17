@@ -2,94 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E37D529AD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E42529AFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240327AbiEQHbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
+        id S241617AbiEQHhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232531AbiEQHbX (ORCPT
+        with ESMTP id S241504AbiEQHfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:31:23 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2023BB16;
-        Tue, 17 May 2022 00:31:22 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id v11so16155427pff.6;
-        Tue, 17 May 2022 00:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1f0Z9m+vbuD/qdSf6InzF9TURBzbVV0rFya1IWbNtOo=;
-        b=NpF/ctrLv7ZXdNrGCvD0hg21ovh+HtPwfrjn2Vn5+Kaz9xxkY2bSYYX+jvXLILwQmK
-         GNLyzcfB9p5vtLQyy080RlDn8BI/wOniIJePP1KfvLiFgwFrQd2W2jb1Gjn+tfUWmqSg
-         oBuNRiQ/JvyIjvF86rQ94VnSC37y9e+rwNNOkVJr86rgx1kQ6N+DBrz75BSMppUymB4a
-         8vIJ3KqS7hfl2k07Q0i8lZWEIxmNWOfhMWwhtEa/aH0p0X8X5hnj6QH0zvS7wnEo439v
-         7pQqte7CIDeDmOeRajJft70DLqgo/e06I4kSUJW1Ztg9IyrJ/WQKDI2KPfQxXVjnbHgL
-         hPow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1f0Z9m+vbuD/qdSf6InzF9TURBzbVV0rFya1IWbNtOo=;
-        b=zyW3g2G2h2u+w9s5Z7eI4WNhlAQ0MKGV6pfrTtEdtn2Ov4ubtqGBSZWZKrkrSTzoxt
-         xLuu0MG5SnsAf5Pk5xT0D5VBQJJ04bUsNSjHP8kjm5uz7J8+73SHItvs8z6eVWT5bI0l
-         00oQq/lgZTVNW21/OFG+sSPL2arWq1YuyGylPI4alW4ZxipVrn/FcVZ4PgMekVY+CyVK
-         iu1s3DhvzLBYp/uV9sm0yPjA8407MClb3j8wEvfDdgYDL4qjgQWxd36wj6HxClCzjhac
-         BNc3erEWubkq+0Y2tGFWCRJA8G0i9j69eTDl/4+PVN45WVK3WjSp1xbNRmr2nfaFQUKr
-         qFxg==
-X-Gm-Message-State: AOAM533xoHriCkdHJs0oa3y4qMUY/QG2sYliwAz1xVeb0fG0MRDrLXCo
-        OOos9jctqbwvykXSkXrKyOI=
-X-Google-Smtp-Source: ABdhPJwBwlRgEtz4CIsRDE4/P/1KoC5oYgFYvc/cOm0mBXaUY0xTLJMW8V47e9NdfQAaW9fdCky+9g==
-X-Received: by 2002:a63:89c7:0:b0:3da:ee16:c84 with SMTP id v190-20020a6389c7000000b003daee160c84mr18727427pgd.320.1652772681611;
-        Tue, 17 May 2022 00:31:21 -0700 (PDT)
-Received: from localhost.localdomain ([103.197.71.140])
-        by smtp.gmail.com with ESMTPSA id c22-20020a17090ad91600b001df3d5a441bsm914186pjv.53.2022.05.17.00.31.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 00:31:21 -0700 (PDT)
-From:   Shida Zhang <starzhangzsd@gmail.com>
-X-Google-Original-From: Shida Zhang <zhangshida@kylinos.cn>
-To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
-Cc:     zhangshida@kylinos.cn, starzhangzsd@gmail.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: [PATCH] cgroup: fix potential null pointer risk
-Date:   Tue, 17 May 2022 15:31:06 +0800
-Message-Id: <20220517073106.1704628-1-zhangshida@kylinos.cn>
+        Tue, 17 May 2022 03:35:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A8649C87
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:34:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BFFBB8173F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:34:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3387C34100;
+        Tue, 17 May 2022 07:34:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652772852;
+        bh=mWtRFK07XdthxAyT5dCny+PVTYE0BwB4uEKr/xRO3zk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bLdytL7ALgmmfQn81ZRSqUooLSS+0Z05fX0kdO1KvKOt+ZhdAe9cGuYMEdjYKwb8y
+         psJQtyxYjhQOCNdu6eeHOJp8uCb0Ux8uB7GmdNAKZuoaSE66j4BDbzR0ddIbU2zHtv
+         uSzzXAuRMn0CBCXipi/Vq1CFe7y5w789X77Q7CGAmdkXs8M0izbRA1FW2eGPP2K/rf
+         sPly7nBMPbAAMGDp35FKAFE4ERIp3cHynAMVPtQGbRXQJInxT5VbBjDZFwhh4KGiHo
+         Z6tKa6zAXSojS7+KAV5LYek0hfg9hfvZDOVu0cCQlWL2WO22quFLa5qeI0uPKmpvV5
+         z92QWzj3wOxWA==
+From:   Chao Yu <chao@kernel.org>
+To:     xiang@kernel.org
+Cc:     chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH] erofs: support idmapped mounts
+Date:   Tue, 17 May 2022 15:32:10 +0800
+Message-Id: <20220517073210.3569589-1-chao@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We previously assumed 'parent' could be null,
-so null pointer judgment should be added.
+This patch enables idmapped mounts for erofs, since all dedicated helpers
+for this functionality existsm, so, in this patch we just pass down the
+user_namespace argument from the VFS methods to the relevant helpers.
 
-Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+Simple idmap example on erofs image:
+
+1. mkdir dir
+2. touch dir/file
+3. mkfs.erofs erofs.img dir
+4. mount -t erofs -o loop erofs.img  /mnt/erofs/
+
+5. ls -ln /mnt/erofs/
+total 0
+-rw-rw-r-- 1 1000 1000 0 May 17 15:26 file
+
+6. mount-idmapped --map-mount b:0:1001:1 /mnt/erofs/ /mnt/scratch_erofs/
+
+7. ls -ln /mnt/scratch_erofs/
+total 0
+-rw-rw-r-- 1 65534 65534 0 May 17 15:26 file
+
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
 ---
- kernel/cgroup/cgroup.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/erofs/inode.c | 2 +-
+ fs/erofs/super.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index adb820e98f24..7f230b0ab644 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -5701,7 +5701,8 @@ static int cgroup_destroy_locked(struct cgroup *cgrp)
- 	}
- 	spin_unlock_irq(&css_set_lock);
+diff --git a/fs/erofs/inode.c b/fs/erofs/inode.c
+index e8b37ba5e9ad..5320bf52c1ce 100644
+--- a/fs/erofs/inode.c
++++ b/fs/erofs/inode.c
+@@ -370,7 +370,7 @@ int erofs_getattr(struct user_namespace *mnt_userns, const struct path *path,
+ 	stat->attributes_mask |= (STATX_ATTR_COMPRESSED |
+ 				  STATX_ATTR_IMMUTABLE);
  
--	cgroup1_check_for_release(parent);
-+	if (parent)
-+		cgroup1_check_for_release(parent);
+-	generic_fillattr(&init_user_ns, inode, stat);
++	generic_fillattr(mnt_userns, inode, stat);
+ 	return 0;
+ }
  
- 	cgroup_bpf_offline(cgrp);
+diff --git a/fs/erofs/super.c b/fs/erofs/super.c
+index 0c4b41130c2f..7dc5f2e8ddee 100644
+--- a/fs/erofs/super.c
++++ b/fs/erofs/super.c
+@@ -781,7 +781,7 @@ static struct file_system_type erofs_fs_type = {
+ 	.name           = "erofs",
+ 	.init_fs_context = erofs_init_fs_context,
+ 	.kill_sb        = erofs_kill_sb,
+-	.fs_flags       = FS_REQUIRES_DEV,
++	.fs_flags       = FS_REQUIRES_DEV | FS_ALLOW_IDMAP,
+ };
+ MODULE_ALIAS_FS("erofs");
  
 -- 
 2.25.1

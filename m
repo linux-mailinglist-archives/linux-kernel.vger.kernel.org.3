@@ -2,81 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD1852A423
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3129152A41F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348332AbiEQOCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        id S1348267AbiEQOCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348265AbiEQOCk (ORCPT
+        with ESMTP id S1346587AbiEQOCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:02:40 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4948E3DDCE;
-        Tue, 17 May 2022 07:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652796159; x=1684332159;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=faeEMQ7OyUUptQglXkgamVq5rsrzWsmKaeH4VwE3gNU=;
-  b=Wltjw9gTX/Mey9tS9nQS5iv15tymLLm12keeV+qLVPf3famUPFAbOtXO
-   HKudZlpGqrr0c1havLPzpxiPKUBFVKMV2crXFpFGET68vqvBRnWDnTZGa
-   GuN7bXeDtY1T4fOcGZzIAn4Esoq47NnsFeKSJI8zTd0joEpoqmvSdpLQk
-   2ZGAuTLgB3hevW5gjoX/PnWnN4yC14KgBb88IvoMDeJXCJHDhJcEHVrnV
-   YValSHRh74aDQPTF+MQKT6WnpNsCTnbMoLHxO+TybzdeWIlHPezPzg2q7
-   aF0CAEa5oK1gPSq5fsAO6oaDpX6tncGVjUi3Tt179AX8p/3y0ny1WNkl8
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="357602592"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="357602592"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 07:02:38 -0700
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="568907519"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 07:02:32 -0700
-Date:   Tue, 17 May 2022 22:02:23 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>
-Subject: Re: [PATCH v9 0/9] IPI virtualization support for VM
-Message-ID: <20220517140218.GA569@gao-cwp>
-References: <20220419153155.11504-1-guang.zeng@intel.com>
- <2d33b71a-13e5-d377-abc2-c20958526497@redhat.com>
- <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
- <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
- <YoK48P2UrrjxaRrJ@google.com>
- <20220517135321.GA31556@gao-cwp>
+        Tue, 17 May 2022 10:02:31 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4201435846
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:02:30 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id c24so22030956lfv.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CQwSm2PuvXfSLnxNme8zs3Uk9oZ+IhRxhCGlk4ycJy0=;
+        b=Q5X5Jo3FzsfspuiqLOGZHCgZCd4mrQmvFLKZGsQP2z2Q7Io+RUDBQyVKOSeDDeGDPV
+         qVTG8fMs+Mzzh4ILiAb6EZu+kTZFnoVn+SBpOxluL5bi3zs4Nn9Ko48t8q6A1yn0J/u/
+         sALmNvpIe2L6dg8SLt+BI9+cP2qiENrUcMLOXBm15vB14YLf401p9JVrrrSpn54F7+NR
+         Ge9ddTqk6OJAJaWP8QOlmVJKJV01U5hlNMcDCuLu9rKEPjZqJXYPfbrWJvx4C4db7oZ/
+         wvFh1Vgt1e3ZFPqGXoKrfuNqWWsb0+WaTXHuLWXHZ0/W9X51TTEQMBKiRe/StsABjUS9
+         FAXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CQwSm2PuvXfSLnxNme8zs3Uk9oZ+IhRxhCGlk4ycJy0=;
+        b=6JcL8NxgjxHVPbRoUUzORshCkPmo4Tuhsw1b3K7vNFSUVPEreg+0xXDCyxq81BBDgX
+         xd+UdVpxPagKDW1oMHePdSRjnV6B7VeDRK5S+6xSJmAXbJaIfJXjB2gecA9tsZsVjnsG
+         LfN8GVoRn2obOphfv7Vztiabm0KTRX5MYLdOp4ZV7Sz0F8RDAbgnW8qpZw82pBHspO9L
+         nCqpKnFloldAxh2UBSNQkb1LXHUAf4iOHr2tBvswPTRi2TbOq+l++5Ki1coP8bH4Rhjq
+         1bCApY9w3bmMZUD78YFDQCDT9GiTzMSnTrNkbkSuCiSoWROYUMCKy0Qk1/fc5592LTuq
+         Raiw==
+X-Gm-Message-State: AOAM531kUcWPZt0Hp3IztiuXCA7ONyOQQPR8+b/7zUw6OoDReodOnxWv
+        niNs8MDRXVDjVCKtyT/AQt9nRQ==
+X-Google-Smtp-Source: ABdhPJyweBhl9pE8z5ss/fr4IZMnmqQ7r2cggKtk4orRrn9prFRQT3z2AljFX7ZsWU8AIClueF+7lA==
+X-Received: by 2002:a05:6512:2a92:b0:472:5c09:c1a8 with SMTP id dt18-20020a0565122a9200b004725c09c1a8mr16906494lfb.265.1652796148215;
+        Tue, 17 May 2022 07:02:28 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id a6-20020ac25e66000000b0047255d21157sm1598796lfr.134.2022.05.17.07.02.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 07:02:27 -0700 (PDT)
+Message-ID: <60219d61-a39c-554f-af71-07cf7e6c40b0@linaro.org>
+Date:   Tue, 17 May 2022 16:02:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517135321.GA31556@gao-cwp>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 19/20] arm64: dts: fsd: Add MFC related DT enteries
+Content-Language: en-US
+To:     Smitha T Murthy <smitha.t@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com
+References: <20220517125548.14746-1-smitha.t@samsung.com>
+ <CGME20220517125656epcas5p1cc1296b200ff8801f24243aa47de8fe1@epcas5p1.samsung.com>
+ <20220517125548.14746-20-smitha.t@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517125548.14746-20-smitha.t@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,33 +85,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Maxim
+On 17/05/2022 14:55, Smitha T Murthy wrote:
+> Add MFC DT node and reserve memory node for MFC usage.
+> 
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+> ---
+>  arch/arm64/boot/dts/tesla/fsd-evb.dts |  8 ++++++++
+>  arch/arm64/boot/dts/tesla/fsd.dtsi    | 22 ++++++++++++++++++++++
+>  2 files changed, 30 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/tesla/fsd-evb.dts b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> index 5af560c1b5e6..36f6b013ce99 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> +++ b/arch/arm64/boot/dts/tesla/fsd-evb.dts
+> @@ -37,3 +37,11 @@
+>  &serial_0 {
+>  	status = "okay";
+>  };
+> +
+> +&clock_mfc {
+> +	status = "okay";
+> +};
+> +
+> +&mfc_0 {
+> +	status = "okay";
+> +};
 
-On Tue, May 17, 2022 at 09:53:26PM +0800, Chao Gao wrote:
->On Mon, May 16, 2022 at 08:49:52PM +0000, Sean Christopherson wrote:
->>On Tue, May 03, 2022, Paolo Bonzini wrote:
->>> On 5/3/22 09:32, Zeng Guang wrote:
->>> > 
->>> > I don't see "[PATCH v9 4/9] KVM: VMX: Report tertiary_exec_control field in
->>> > dump_vmcs()" in kvm/queue. Does it not need ?
->>> 
->>> Added now (somehow the patches were not threaded, so I had to catch them one
->>> by one from lore).
->>> 
->>> > Selftests for KVM_CAP_MAX_VCPU_ID is posted in V2 which is revised on top of
->>> > kvm/queue.
->>> > ([PATCH v2] kvm: selftests: Add KVM_CAP_MAX_VCPU_ID cap test - Zeng
->>> > Guang (kernel.org) <https://lore.kernel.org/lkml/20220503064037.10822-1-guang.zeng@intel.com/>)
->>> 
->>> Queued, thanks.
->>
->>Shouldn't we have a solution for the read-only APIC_ID mess before this is merged?
->
->We can add a new inhibit to disable APICv if guest attempts to change APIC
->ID when IPIv (or AVIC) is enabled. Maxim also thinks using a new inhibit is
->the right direction [1].
->
->If no objection to this approach and Maxim doesn't have the patch, we can post
->one. But we will rely on Maxim to fix APIC ID mess for nested AVIC.
->
->[1] https://lore.kernel.org/all/6475522c58aec5db3ee0a5ccd3230c63a2f013a9.camel@redhat.com/
+Labels are ordered by name.
+
+> diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> index 9a652abcbcac..434ae75421d8 100644
+> --- a/arch/arm64/boot/dts/tesla/fsd.dtsi
+> +++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
+> @@ -249,6 +249,18 @@
+>  		#clock-cells = <0>;
+>  	};
+>  
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		mfc_left: region@84000000 {
+> +			compatible = "shared-dma-pool";
+> +			no-map;
+> +			reg = <0 0x84000000 0 0x8000000>;
+> +		};
+> +	};
+> +
+>  	soc: soc@0 {
+>  		compatible = "simple-bus";
+>  		#address-cells = <2>;
+> @@ -748,6 +760,16 @@
+>  			clocks = <&fin_pll>, <&clock_imem IMEM_MCT_PCLK>;
+>  			clock-names = "fin_pll", "mct";
+>  		};
+> +
+> +		mfc_0: mfc0@12880000 {
+
+Generic node names, so mfc.
+
+> +			compatible = "samsung,mfc-v12";
+> +			reg = <0x0 0x12880000 0x0 0x10000>;
+> +			interrupts = <GIC_SPI 137 IRQ_TYPE_LEVEL_HIGH>;
+> +			clock-names = "mfc";
+> +			clocks = <&clock_mfc MFC_MFC_IPCLKPORT_ACLK>;
+> +			memory-region = <&mfc_left>;
+> +			status = "disabled";
+
+Why exactly this is disabled? Usually we disable nodes which needs
+resources from the boards, but this is not the case here. Unless it is?
+
+> +		};
+>  	};
+>  };
+>  
+
+
+Best regards,
+Krzysztof

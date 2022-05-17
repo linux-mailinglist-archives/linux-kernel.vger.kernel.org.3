@@ -2,79 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0A552A3DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9394F52A3E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347500AbiEQNxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S1347803AbiEQNxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232850AbiEQNxo (ORCPT
+        with ESMTP id S1347571AbiEQNxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:53:44 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342646240;
-        Tue, 17 May 2022 06:53:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652795623; x=1684331623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qntudTR6UjQ9xuy4RHR1VXPdymqaf+mRmNGJmowhCTI=;
-  b=UsTh2OZlJYdtjoHxRyXEvJ6EWqZwYgB9kTD8vNvKBsUtASKwaSGRgBzJ
-   lIe33GP0ZwDEiidEc3mHEXcO/RUjeOC8WzY20T4I1pRimKjCP1dqpxHHg
-   WIKXsvflzqVnuFTd12Pr3WGTUkR2jIrhSftZ6RjhZaLRMQmr68izSSWer
-   WHWEIYrWy82REc5/+Cd6Kf8GoYI8YilIUWi56Sj9MRiXwdJzTVwuTAPpv
-   Y0fgO7TqTuBaW2tFHlcdIEzNKJ3xnXOHo+LnmiwFzfdyq81cIziteJBOj
-   i07l2csOF/NZUs9aag09olUkzIHvxEeDGFYQdG38wqXZad/bbVBu3H9XE
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="251084458"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="251084458"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 06:53:42 -0700
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="544915273"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 06:53:35 -0700
-Date:   Tue, 17 May 2022 21:53:26 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>
-Subject: Re: [PATCH v9 0/9] IPI virtualization support for VM
-Message-ID: <20220517135321.GA31556@gao-cwp>
-References: <20220419153155.11504-1-guang.zeng@intel.com>
- <2d33b71a-13e5-d377-abc2-c20958526497@redhat.com>
- <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
- <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
- <YoK48P2UrrjxaRrJ@google.com>
+        Tue, 17 May 2022 09:53:48 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6163326AF8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:53:47 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id fd25so9920440edb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3A4OivyTFNaDUV/j76uS7UAfnr06mF8BaqQDTpHH1NI=;
+        b=fso1T4lD4yWO8PPaFfhx9YZ/S5An9S2h6icVIVaWNn0/6FN2XmB0+6yoqEWPxxY+Rv
+         Q5SfZgRqP8YlX/QV2y/KE/iVEePjJ3lCd9SIDdWQzbxhKlyocKUNCqXa4suFVLgqqLgc
+         OBLdawBRX6/T4OFX/EAVi2n/kCZhclplFkTNI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3A4OivyTFNaDUV/j76uS7UAfnr06mF8BaqQDTpHH1NI=;
+        b=EGpzMllS4a/nYBYSUypD7Mqh2QYkBLL7/sPFlDvwijBGJDBMXHUhYVRGhsCTewpnep
+         iFAZDB/pxrKNS3G7hckBev8OM12wEUDd0ijjc+Hc4ul8S0U6ZND6+PxCCgN3r4hc4gXc
+         MyBMiAzWmF5v1bTx0WzROA75Ih1Kq6v2/KaaKI+t87fgCJ4gLuXpFWnMXXuUDUpWvyBL
+         u1Ie4EEKW4Jg4lqZ1d5Mb3OhaWeEZ5yOzbZwekZpuWlU3G4GLpiasg7ScNGZPqXSrTu6
+         qIwhF/R+wsI/nba1FBnB4iFa+/mhRmYbdf0qsjE2pfTE4/nD2kXmv+LWP2Hx6mx3E9HF
+         KKeg==
+X-Gm-Message-State: AOAM533MxZZubA8kwxQUIdVFhRXbPx5BDmkozG4AdFggKWWCo6NPxePF
+        wh245GY9xF2rsyjz9lFFcB/upw==
+X-Google-Smtp-Source: ABdhPJywNs/FNa8nCJvFyZ6zYFCJ0exS7vS472Ed5ayC3rSFnDN431mnp8g4VhrHiXVWjrdlrEeJ1A==
+X-Received: by 2002:a05:6402:1941:b0:413:2822:9c8 with SMTP id f1-20020a056402194100b00413282209c8mr19378672edz.13.1652795625905;
+        Tue, 17 May 2022 06:53:45 -0700 (PDT)
+Received: from panicking.amarulasolutions.com (mob-176-245-91-171.net.vodafone.it. [176.245.91.171])
+        by smtp.gmail.com with ESMTPSA id u20-20020a170906109400b006f3ef214e56sm1055806eju.188.2022.05.17.06.53.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 06:53:45 -0700 (PDT)
+From:   Michael Trimarchi <michael@amarulasolutions.com>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-amarula@amarulasolutions.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Simon Holesch <simon.holesch@bshg.com>
+Subject: [PATCH V2] arm: dts: imx6ulz-bsh-smm-m2: Support proper board power off
+Date:   Tue, 17 May 2022 15:53:42 +0200
+Message-Id: <20220517135342.2458267-1-michael@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoK48P2UrrjxaRrJ@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,30 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 08:49:52PM +0000, Sean Christopherson wrote:
->On Tue, May 03, 2022, Paolo Bonzini wrote:
->> On 5/3/22 09:32, Zeng Guang wrote:
->> > 
->> > I don't see "[PATCH v9 4/9] KVM: VMX: Report tertiary_exec_control field in
->> > dump_vmcs()" in kvm/queue. Does it not need ?
->> 
->> Added now (somehow the patches were not threaded, so I had to catch them one
->> by one from lore).
->> 
->> > Selftests for KVM_CAP_MAX_VCPU_ID is posted in V2 which is revised on top of
->> > kvm/queue.
->> > ([PATCH v2] kvm: selftests: Add KVM_CAP_MAX_VCPU_ID cap test - Zeng
->> > Guang (kernel.org) <https://lore.kernel.org/lkml/20220503064037.10822-1-guang.zeng@intel.com/>)
->> 
->> Queued, thanks.
->
->Shouldn't we have a solution for the read-only APIC_ID mess before this is merged?
+From: Simon Holesch <simon.holesch@bshg.com>
 
-We can add a new inhibit to disable APICv if guest attempts to change APIC
-ID when IPIv (or AVIC) is enabled. Maxim also thinks using a new inhibit is
-the right direction [1].
+Supports initiating poweroff on SNVS_PMIC_ON_REQ signal.
 
-If no objection to this approach and Maxim doesn't have the patch, we can post
-one. But we will rely on Maxim to fix APIC ID mess for nested AVIC.
+Signed-off-by: Simon Holesch <simon.holesch@bshg.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+---
+V1->V2:
+	- adjust the sign-off for mailing list policy (Thank you Fabio
+	  Estavam
+---
+ arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-[1] https://lore.kernel.org/all/6475522c58aec5db3ee0a5ccd3230c63a2f013a9.camel@redhat.com/
+diff --git a/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts b/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
+index 59bcfc9a6b10..c92e4e2f6ab9 100644
+--- a/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
++++ b/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
+@@ -29,6 +29,10 @@ &gpmi {
+ 	status = "okay";
+ };
+ 
++&snvs_poweroff {
++	status = "okay";
++};
++
+ &uart3 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_uart3>;
+-- 
+2.25.1
+

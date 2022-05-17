@@ -2,83 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247C852A99E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6480A52A9A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351622AbiEQRxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 13:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        id S1351658AbiEQRxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 13:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234949AbiEQRxU (ORCPT
+        with ESMTP id S1351629AbiEQRxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 13:53:20 -0400
-Received: from mail.enpas.org (zhong.enpas.org [IPv6:2a03:4000:2:537::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84DE33F88A;
-        Tue, 17 May 2022 10:53:18 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        by mail.enpas.org (Postfix) with ESMTPSA id ECB4AFF9D7;
-        Tue, 17 May 2022 17:52:41 +0000 (UTC)
-Date:   Tue, 17 May 2022 19:52:28 +0200
-From:   Max Staudt <max@enpas.org>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Message-ID: <20220517195228.1cb6ca16.max@enpas.org>
-In-Reply-To: <e51a64cd-1130-9c65-2bde-483c63f6aa10@hartkopp.net>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
-        <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
-        <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
-        <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net>
-        <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
-        <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
-        <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
-        <20220517104545.eslountqjppvcnz2@pengutronix.de>
-        <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
-        <20220517141404.578d188a.max@enpas.org>
-        <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
-        <20220517143921.08458f2c.max@enpas.org>
-        <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
-        <20220517154301.5bf99ba9.max@enpas.org>
-        <22590a57-c7c6-39c6-06d5-11c6e4e1534b@hartkopp.net>
-        <20220517173821.445c5e90.max@enpas.org>
-        <e51a64cd-1130-9c65-2bde-483c63f6aa10@hartkopp.net>
+        Tue, 17 May 2022 13:53:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A443FBEA
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:53:27 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nr1NS-0000eT-Gd; Tue, 17 May 2022 19:52:58 +0200
+Message-ID: <21250bc0-623b-f11d-7dbf-458d144b7963@pengutronix.de>
+Date:   Tue, 17 May 2022 19:52:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v10 2/7] KEYS: trusted: allow use of kernel RNG for key
+ material
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        David Gstir <david@sigma-star.at>,
+        Michael Walle <michael@walle.cc>,
+        John Ernberg <john.ernberg@actia.se>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
+ <20220513145705.2080323-3-a.fatoum@pengutronix.de>
+ <YoPa7C8xs8lgKtwv@zx2c4.com>
+Content-Language: en-US
+In-Reply-To: <YoPa7C8xs8lgKtwv@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 17:50:03 +0200
-Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+Hello Jason,
 
-> On 17.05.22 17:38, Max Staudt wrote:
-> > I'm a bit lost - what would CAN_DEV_SW do?  
+On 17.05.22 19:27, Jason A. Donenfeld wrote:
+> On Fri, May 13, 2022 at 04:57:00PM +0200, Ahmad Fatoum wrote:
+>> +	trusted.rng=	[KEYS]
+>> +			Format: <string>
+>> +			The RNG used to generate key material for trusted keys.
+>> +			Can be one of:
+>> +			- "kernel"
+>> +			- the same value as trusted.source: "tpm" or "tee"
+>> +			- "default"
+>> +			If not specified, "default" is used. In this case,
+>> +			the RNG's choice is left to each individual trust source.
+>> +
 > 
-> It should be just *one* enabler of building can-dev-ko
+> As a general mechanism, I object to this. The kernel's RNG must be
+> trusted in the first place for key material. That's the whole point of
+> it.
 > 
-> > If it enables can_dropped_invalid_skb(), then the HW drivers would
-> > also need to depend on CAN_DEV_SW directly or indirectly, or am I
-> > missing something?  
-> 
-> And CAN_DEV is another enabler that would build the skb stuff from 
-> CAN_DEV_SW too (but also the netlink stuff).
-> 
-> That's what I meant with "some Makefile magic" which is then building 
-> the can-dev.ko with the required features depending on CAN_DEV_SW, 
-> CAN_DEV, CAN_DEV_RX_OFFLOAD, CAN_CALC_BITTIMING, etc
+> However, it sounds like you're not proposing a general mechanism, but
+> just something particular to this "trusted keys" business.
 
-Ah, I see!
-Sounds good :)
+The two currently upstream trust sources (trusted key backends) each provide
+their own RNG callback. This series adds a third backend that uses kernel RNG
+and additionally provides users of the two existing trust sources the option
+to benefit from kernel RNG as well.
+
+> this should be a module flag, and thus not documented here, but rather
+> some place namespaced to your trusted keys stuff. "trusted_keys.preferred_rng={whatever}"
+
+The trusted keys module is trusted.ko and directly before my added lines is
+the trusted.source=  documentation, so I think this is already at the correct place.
+
+Thanks,
+Ahmad
+
+> 
+> Jason
+> 
 
 
-Max
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

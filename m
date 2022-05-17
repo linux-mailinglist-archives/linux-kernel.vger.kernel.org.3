@@ -2,216 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDC9529DDB
+	by mail.lfdr.de (Postfix) with ESMTP id A045D529DDA
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236456AbiEQJUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S244590AbiEQJVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244830AbiEQJUM (ORCPT
+        with ESMTP id S237393AbiEQJUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:20:12 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2056A3A18A;
-        Tue, 17 May 2022 02:20:01 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id r188-20020a1c44c5000000b003946c466c17so992954wma.4;
-        Tue, 17 May 2022 02:20:01 -0700 (PDT)
+        Tue, 17 May 2022 05:20:39 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FCA2AE17;
+        Tue, 17 May 2022 02:20:37 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id j4so30201841lfh.8;
+        Tue, 17 May 2022 02:20:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5/To3q1iix39r0lCQ+hhuwUqkdpFvOMo3ijNMqcdH64=;
-        b=kiu/iECmQxpFDXj3H3uLLN100wIRqg8E8311/LlhcNSFiQmy18ebSvnt9ct+FVv6Zn
-         hSt+mkPDxQDPhd/o+oBS7Rw8YazWmLE3uvixG85ukYIZoONIipM3R24UIpQe6FcU4T09
-         oUqKxrJRbJ9J3YkxIT2iVYCSSYXqcsU2Z2Fjg=
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=u1u68XBlOoqhQlGBcvLtqUGc4JmYDMhCSzrjxV3ZoEg=;
+        b=U2tyNAjwqBTWVt+uAa1+1l92ZWUT0TikMXMZ4M4/JtVFfdFxf0fV4gYZwRk3ELbi8N
+         Wt5mbUHCpbqzF/pmvr4+TicqhkEOhhVGYQM4CpCjRUDu+52esgCjvJtKyHIfWMmUVR3r
+         p+hVAE38t1k7bQvgLQZYnlVzoWLnsqOZPS9rJvpAYAOn/mVHKc3YC5kRSHkvfHK11v2m
+         QDerHO3Q8OWjq3Sx9eYbtzCm1qZ8DljqDmwnW0SVC+uEMiU93CZvzyXO0RItvUHJfKGy
+         Ag593g3SqjjDxOdQjrEwdh3NZ+yV2Ry0JwMjG1CGo3JKtv6TZkzYLtMUdz6PV4t7ycet
+         nuZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5/To3q1iix39r0lCQ+hhuwUqkdpFvOMo3ijNMqcdH64=;
-        b=49+y8WVNN63nxUJsGq+heXKJAvYSYG3Yt1dXcXOHRGEAsgbq6TvCoKZ270rGHhImwP
-         2ALcbkczo75k0W4Vr7e6OVrEyHa+xplNWzoqdgYuBricjkKcoppGtwaK7p/jjZROaNMv
-         jIYVqEHGwydgfVB/T8qZEQrtVMinRcPbuYNkLzXXlICrAuXBHnl/NRdn6PVPQSZaL06l
-         EzXf3wgbSQctDtlCyqSMkAS9+TQ9xGSThreRbCAsgoKN+K/SCcrNEtECWiiBg4dDWS4C
-         jdIF6QFZvYBMMvV1og7VAK2PKYRXIK8wyR1NgHVhpAyBkQwzwVHZpClOwc4v6hb6Af7N
-         Oo3A==
-X-Gm-Message-State: AOAM533dqy4ssaJfCzcXRH0cqeWFJ2uYp49kMt3IPkZWBF89G5p5SCev
-        crFEapKKtHE+ZbngpwXc5/q9vmzFFjUIESAipRgpQVf35I4=
-X-Google-Smtp-Source: ABdhPJy1rSqL48gyvRhmpjpN8GuHXjUytsXO0NGJntsr0tTAcsfAMsqLvBb8AQIyi9ayddqeP56N5IkuzIzJV/x8CEk=
-X-Received: by 2002:a7b:cd82:0:b0:389:77ef:66d7 with SMTP id
- y2-20020a7bcd82000000b0038977ef66d7mr19878367wmj.171.1652779199500; Tue, 17
- May 2022 02:19:59 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=u1u68XBlOoqhQlGBcvLtqUGc4JmYDMhCSzrjxV3ZoEg=;
+        b=gI8laU0ctJbpoBegK+D01BiorhrpO1Id6+ynXSe3xyCh4bcRhcoP1DprCZRa70jLrZ
+         JHkLXV821EcQ6uOEY9zc6GaFJQBcwvrJbPy0R4xm8+J2vlCQQ497Uo/6rMbFY8tPFA1P
+         B3I/sQ61UInP49aTCFEaHMDW9Cuq2AxU2CVjb8OIYOFqzVWzbDc7aMG5jHQhohhVdGfD
+         m5xpNVlm18n4pWbbbjaUr4xWwph9nsQ6Fu7cuXOJIq0LxJ/H6C1e09jtlKldas26XC64
+         rlouJ65GhBt+EOjImG5Nt0OSklMiRi2izHpmG5JN/wFC9sDpPJYWdemcqFuQ3pWr7GJG
+         n06w==
+X-Gm-Message-State: AOAM530ffu1n2dPkP3J9ph+PQtwamFH8wgtU/B7YhPVOQh9KollVrVN6
+        rjazhI1RglhYoyS+KTLbSxpau++8zPg=
+X-Google-Smtp-Source: ABdhPJwnsme02W8duFxrEVD9RI1ZPaBP3YaO1auHlKwka+mKyKSpL7rsbHZIt4m2cmMTPkeln8MYRQ==
+X-Received: by 2002:a19:a418:0:b0:473:c1af:fc9f with SMTP id q24-20020a19a418000000b00473c1affc9fmr16141770lfc.575.1652779235847;
+        Tue, 17 May 2022 02:20:35 -0700 (PDT)
+Received: from [192.168.1.103] ([178.176.77.211])
+        by smtp.gmail.com with ESMTPSA id w1-20020a05651234c100b0047255d2118fsm1533995lfr.190.2022.05.17.02.20.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 02:20:35 -0700 (PDT)
+Subject: Re: [PATCH -next] usb: typec: ucsi: fix return value check in
+ ucsi_acpi_probe()
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+References: <20220516131527.999909-1-yangyingliang@huawei.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <da320390-b47f-27a3-06e6-c4f660a41873@gmail.com>
+Date:   Tue, 17 May 2022 12:20:33 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220512231938.228651-1-joel@jms.id.au> <b6da2e5a-eb85-d3cf-d4c3-ca9c0f0c04a4@molgen.mpg.de>
-In-Reply-To: <b6da2e5a-eb85-d3cf-d4c3-ca9c0f0c04a4@molgen.mpg.de>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Tue, 17 May 2022 09:19:47 +0000
-Message-ID: <CACPK8XchZcjXjkhDEa=RnnbD3PycwM7Hu5x2tB3A4g0v4964_w@mail.gmail.com>
-Subject: Re: [PATCH net v2] net: ftgmac100: Disable hardware checksum on AST2600
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Dylan Hung <dylan_hung@aspeedtech.com>,
-        David Wilder <dwilder@us.ibm.com>,
-        Networking <netdev@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        David Wilder <wilder@us.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220516131527.999909-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 at 05:11, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->
-> Dear Joel,
->
->
-> Am 13.05.22 um 01:19 schrieb Joel Stanley:
-> > The AST2600 when using the i210 NIC over NC-SI has been observed to
-> > produce incorrect checksum results with specific MTU values. This was
-> > first observed when sending data across a long distance set of networks.
-> >
-> > On a local network, the following test was performed using a 1MB file of
-> > random data.
-> >
-> > On the receiver run this script:
-> >
-> >   #!/bin/bash
-> >   while [ 1 ]; do
-> >          # Zero the stats
-> >          nstat -r  > /dev/null
-> >          nc -l 9899 > test-file
-> >          # Check for checksum errors
-> >          TcpInCsumErrors=$(nstat | grep TcpInCsumErrors)
-> >          if [ -z "$TcpInCsumErrors" ]; then
-> >                  echo No TcpInCsumErrors
-> >          else
-> >                  echo TcpInCsumErrors = $TcpInCsumErrors
-> >          fi
-> >   done
-> >
-> > On an AST2600 system:
-> >
-> >   # nc <IP of  receiver host> 9899 < test-file
-> >
-> > The test was repeated with various MTU values:
-> >
-> >   # ip link set mtu 1410 dev eth0
-> >
-> > The observed results:
-> >
-> >   1500 - good
-> >   1434 - bad
-> >   1400 - good
-> >   1410 - bad
-> >   1420 - good
->
-> Sort the values? As some MTUs are good, should a allow list for these
-> values be added?
+Hello!
 
-No.
+On 5/16/22 4:15 PM, Yang Yingliang wrote:
 
->
-> > The test was repeated after disabling tx checksumming:
-> >
-> >   # ethtool -K eth0 tx-checksumming off
-> >
-> > And all MTU values tested resulted in transfers without error.
-> >
-> > An issue with the driver cannot be ruled out, however there has been no
-> > bug discovered so far.
-> >
-> > David has done the work to take the original bug report of slow data
-> > transfer between long distance connections and triaged it down to this
-> > test case.
-> >
-> > The vendor suspects this this is a hardware issue when using NC-SI. The fixes line refers
-> > to the patch that introduced AST2600 support.
->
-> Please wrap the line after 75 characters.
->
-> Can the problem be reproduced with QEMU?
+> If memremap() fails, it never returns NULL. Replace NULL check
 
-It can not. If you wanted to try you could modify the model to corrupt
-tx checksums, but I would consider this of limited value.
+   Oh, memremap() does! But devm_memremap() doesn't, indeed. :-)
 
->
-> > Fixes: 39bfab8844a0 ("net: ftgmac100: Add support for DT phy-handle property")
-> > Reported-by: David Wilder <wilder@us.ibm.com>
-> > Signed-off-by: Joel Stanley <joel@jms.id.au>
->
-> Should the intel-wired-lan folks be put in Cc?
+> with IS_ERR().
+> 
+> Fixes: cdc3d2abf438 ("usb: typec: ucsi: acpi: Map the mailbox with memremap()")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_acpi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> index 7455e3aff2be..8873c1644a29 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> @@ -133,8 +133,8 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	ua->base = devm_memremap(&pdev->dev, res->start, resource_size(res), MEMREMAP_WB);
+> -	if (!ua->base)
+> -		return -ENOMEM;
+> +	if (IS_ERR(ua->base))
+> +		return PTR_ERR(ua->base);
+>  
+>  	ret = guid_parse(UCSI_DSM_UUID, &ua->guid);
+>  	if (ret)
 
-No, as all evidence points towards this being an AST2600 problem.
-
-ASPEED did not report the issue relates to the i210 doing anything
-wrong. The issue is not seen from the host PCIe interface, and the
-i210 is in widespread use with other BMCs without issue.
-
->
-> > ---
-> > v2 updates the commit message with confirmation form the vendor that
->
-> from
->
-> > this is a hardware issue, and clarifes why the commit used in the fixes
->
-> clarifies
->
-> > tag was chosen.
-> >
-> >   drivers/net/ethernet/faraday/ftgmac100.c | 5 +++++
-> >   1 file changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
-> > index caf48023f8ea..5231818943c6 100644
-> > --- a/drivers/net/ethernet/faraday/ftgmac100.c
-> > +++ b/drivers/net/ethernet/faraday/ftgmac100.c
-> > @@ -1928,6 +1928,11 @@ static int ftgmac100_probe(struct platform_device *pdev)
-> >       /* AST2400  doesn't have working HW checksum generation */
-> >       if (np && (of_device_is_compatible(np, "aspeed,ast2400-mac")))
-> >               netdev->hw_features &= ~NETIF_F_HW_CSUM;
-> > +
-> > +     /* AST2600 tx checksum with NC-SI is broken */
->
-> Does ASPEED have an internal bug for this, so should there be new
-> revisions of the AST2600, the bug can be fixed?
-
-There are no plans to fix it that I'm aware of.
-
->
-> > +     if (priv->use_ncsi && of_device_is_compatible(np, "aspeed,ast2600-mac"))
-> > +             netdev->hw_features &= ~NETIF_F_HW_CSUM;
-> > +
->
-> I would fancy a note or even warning about this hardware issue.
-
-I don't see the need to clutter up the kernel logs.
-
-We've had a similar workaround for the 2400 since support was added
-for the aspeed part. It doesn't affect the operation of the system; in
-fact it improves it as without this we see degraded throughput due to
-retransmissions.
-
-We have git history for detailed notes on why a change was made.
-
->
-> >       if (np && of_get_property(np, "no-hw-checksum", NULL))
-> >               netdev->hw_features &= ~(NETIF_F_HW_CSUM | NETIF_F_RXCSUM);
-> >       netdev->features |= netdev->hw_features;
->
->
-> Kind regards,
->
-> Paul
+MBR, Sergey

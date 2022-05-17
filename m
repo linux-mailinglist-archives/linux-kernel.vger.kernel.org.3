@@ -2,187 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528C5529AAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1EA529AB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239465AbiEQHWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S240733AbiEQHXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiEQHWV (ORCPT
+        with ESMTP id S240026AbiEQHX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:22:21 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8963942A3A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:22:20 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id l13-20020a056e0212ed00b002d07cd1db63so7361209iln.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:22:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=EW5Q6QKsJ+9pJ/H1EnmsJZVigDkNagilqi9r8wZQf8c=;
-        b=44ul8s6HuEg/b63HJtGecFiQMzOWmxk3VtQe5rmvvvtmLNVDP7lHdErNf2QVwUN5Q/
-         kHABgZ3C9Z/MTVeOfAZzFrwfFQNvO5//KZPLrSw+A7eAF1qpZw9yQqzoOIoaU1gBTenE
-         UvjzfSOoo3wgvMIiEmpHSmA7AyXTMukJDho00seQFuBYrdagtohB/wZVewqL+v2hFfxS
-         sKY4h9A8+Ec1HuyyVn4lRzf3YpMA4FDb61qmScn6Be3Dpvkp7ZzIna8Eh5GW07CNvfgu
-         JD9t2rd0SAVXYy+GoChnZjyoNQnywHOrQKvf8f0BSSeg2uJJnnHz/NtkRp8wFHp3ACkD
-         Z13w==
-X-Gm-Message-State: AOAM533DDwHONePU2D6vO77qL+zCYJbU6Ib+I5c8U68J9cmzpzqW9+2T
-        4HDKaXIo49ctKSmGhAW3VULmjIQyiaKk7ZtRAHHNiKafNB+2
-X-Google-Smtp-Source: ABdhPJxNBlC94Li+OwfrMSHh7d5d52CQJhBaXh1yO6XqCJcp9M+IG5Up61bUzX4DRglaLc6Jnho1gM11b9bgUP+UMNHF+trXWBUg
+        Tue, 17 May 2022 03:23:29 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2092.outbound.protection.outlook.com [40.107.215.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B838C43ED5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:23:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LfZ9aJ1bn/j2+yxKxRvEdrUErdphMGUtKv1SQ5waYDna8j+gUgxTgTparueVixCUusazN4BOqsS0NMKvHL163/v0JKzjf7AnDPtH5Oifjynmo+pDfBE+TcNNqgUeJM5y4EmWbjVz2KAuONpAP5TeG2DK6QhCoPdeB/NjxRCvMorAhdhch3AD3ITAjfHTj/sgvC88l0d5GEa77JuWPCt0yWg6iTXplYShziLF3LR0+vrHrJyTwHsM+qCOFqT5OXf37VGSeMcN4YRN/PDJf1jQlYfObC/1bdtLZdu5rnYkr3andzSvp31mZDm2j+ok/XmlYo8ldIHf16MynbZwnt/tzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GMhtarYNcssJPsuy19+RW2wip1+Wdo/KS9q4Sx8DG6E=;
+ b=XyS2N1nOI6LhXLNqGl+LRdprsdH6lFqPmiNP/ChH6BbeLVALKcjTvIULKft5+BcoEXSnt+aqncPSSh5Pq+EMkrcCAFRF081h2Ixs4rgJ0Xk5Ulm4G7yefb98ZD6lwAzBxLSRs21AWMyaJtV8OBudX0BY5ZHqRad+N72eqnEbjYXRT15XzrqbTqKuAvXGoYgXbU+JLUqA76Jnw6Is71Q88UW2xhGI/0c+nWYe9qNCJDz7JMExODWFvuOU8e/4bpYYdi8+56P4q7VaknbWGjWJ3rYk3gBuulMIp1L7bxMXZD6UwuvoBDma2wo6nmQT6ueLikXUk6+GzhMKO2avL/U2Lg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GMhtarYNcssJPsuy19+RW2wip1+Wdo/KS9q4Sx8DG6E=;
+ b=pH10yY03tdesFEPNRw1jIqIxTDEUIOyPV8PRwe3VrLM8HQWFIMXMLdQRqDrsFDvjG5TYSdMCv+/kiF7ZVCv0uVMTrI5giELV6M5DNErrl7ArLHNwR1Wlq7fBqwX4oKeAkqjgsQQ5tudoklsf1GA9mnB4d8FGStI3lPmamhdjjxM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by SI2PR06MB4204.apcprd06.prod.outlook.com (2603:1096:4:f2::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
+ 2022 07:23:22 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08%7]) with mapi id 15.20.5250.018; Tue, 17 May 2022
+ 07:23:22 +0000
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+To:     Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        dri-devel@lists.freedesktop.org (open list:MXSFB DRM DRIVER),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
+Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
+Subject: [PATCH] drm: mxsfb: remove unnecessary NULL check before clk_disable_unprepare()
+Date:   Tue, 17 May 2022 15:22:58 +0800
+Message-Id: <20220517072259.123870-1-guozhengkui@vivo.com>
+X-Mailer: git-send-email 2.20.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYWP286CA0012.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:178::14) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
 MIME-Version: 1.0
-X-Received: by 2002:a92:c262:0:b0:2d1:3722:a3eb with SMTP id
- h2-20020a92c262000000b002d13722a3ebmr1365360ild.270.1652772139941; Tue, 17
- May 2022 00:22:19 -0700 (PDT)
-Date:   Tue, 17 May 2022 00:22:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004bc82405df30009e@google.com>
-Subject: [syzbot] BUG: sleeping function called from invalid context in binder_ioctl
-From:   syzbot <syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com>
-To:     arve@android.com, brauner@kernel.org, cmllamas@google.com,
-        gregkh@linuxfoundation.org, hridya@google.com,
-        joel@joelfernandes.org, linux-kernel@vger.kernel.org,
-        maco@android.com, surenb@google.com,
-        syzkaller-bugs@googlegroups.com, tkjos@android.com,
-        tkjos@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 429af4fe-1001-4d97-6425-08da37d61f8a
+X-MS-TrafficTypeDiagnostic: SI2PR06MB4204:EE_
+X-Microsoft-Antispam-PRVS: <SI2PR06MB4204FE52FC42026E56315798C7CE9@SI2PR06MB4204.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: D3cadlp77BDr9MZgr/sDIHiaK6nl5XB8J08VUaHx09BQ4i99X2b5OPeD7hxf2sX+fDbU/4hY4rhyUtW+iG1R0gijK0DhcUq4eP+Yw3650bZLnU+KyWtB6o8yeC1oPxgHs0l2w6EJ3Qr3XUaGbGBvHz6DjZSiSVuPCo3SUf8kWBTM/ULm01VrU6FYjK50SQDRssTmyEbHRMzePZbIXHYIitw+JrodTHxiSo6Qgc+cISVlqZc84fPp/gEGFUG4yakL/qU1CxjC2zxzhS4koDPLCMdm8MV0ospss/SSwLYHvrS7blcfOVp91IQbn0IwFoH86ZQ5/rGHMvGhdlrRG5bhvixX3U0o7Q02SLHute8V5JEH9fJJDjSZIXIKzqZmhla9WbGSzp3G8DohC4QYUpk4U4gJ7P7npBAk9Xf7tzEBBDZy/Ndd+cm6zpkAFRLZpA9uN5hqONKfFrH5KxiJwLc2EmXeKiILTO/lCSI7/N0L3BZiJo+0RiWnreTLj8PcTovOV0I9upFWtJKCCl+TYYBbKYF59MSgQthKYWvVao4bSJHmMrjOehPz2HBUpYuouCxv6j1goLDzVwTKGrv3bsC/PQGVVI9SopwEoWqU4aWBXog2T/2nv8j5INla+BjGyh+/ZHqvh+yrb+QZiKWNKe2vu3j0F7n7H/S16uns/A0bxUjfQVBDGti8XN/DOoWdcar1doeflZ0b5xuMQ1GlDgBxKO8Zm5hGCWw5Hz9nQ8g5aTw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(110136005)(7416002)(1076003)(36756003)(26005)(52116002)(107886003)(66556008)(6512007)(38350700002)(38100700002)(921005)(316002)(508600001)(6486002)(2906002)(86362001)(2616005)(8936002)(6666004)(66476007)(8676002)(83380400001)(6506007)(186003)(4326008)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?or+KsBjSlkBQs8BwGUSfVEQvd75Xu7D1+SckyTxAuG6JQkYqwEix7IBFpkZz?=
+ =?us-ascii?Q?E9BaH6RrqPkbOssX0Z61CUj6gsIJ7wZuvEt/HK5V/RfSLbkoS3Ygw+iNK3Jx?=
+ =?us-ascii?Q?kFRRGThtam+Cy43UiI23Osdk91kRSzs1b9rxu5IVk8evjdwkEuVTS6Ja9hQ3?=
+ =?us-ascii?Q?zClkmUiWDzM3PtDlkYtEKzAoqadSjpkANYjDfZkGqnUDxEbdBg4zE+Z8IC7n?=
+ =?us-ascii?Q?OUdtaeBdS+U3zFUZSVff5tTo4J09r+pQ2ewEs7XoihJsy+yAbATnyZVD1hzy?=
+ =?us-ascii?Q?wYtmgRLf+04WNQdlEdzVERhYvwn+p2Du/9mkrZ+vLPfssP/AyZikohirjPiD?=
+ =?us-ascii?Q?0iUVpx/bFrfUSJF38txycMUznUkd0U8AgEiqJdLfKhc/WrRPI7XOKjbWIN7m?=
+ =?us-ascii?Q?xSy7a/D8yLyFpyXqCpL74BH3WHDIOBTmAq6hcZWxW8Qr0h36SQQh+KvieDaq?=
+ =?us-ascii?Q?uY/V8VjDrRiaw4ITwJYxatWHfwvZ7CaLG5sRNUUb1FPIw3zqttYwpZGgrxI5?=
+ =?us-ascii?Q?vXabUKxhZgnNVqtkjsssFPxVYQ2eT/ZEE7FmU+PFqE0jz9PS5mSnWrYcgGc2?=
+ =?us-ascii?Q?ibQNFB3pamc6s0hZxbAYBtUY+G+MPRkmkMmH3kDmp9ZvOHXifgcTudN10qW8?=
+ =?us-ascii?Q?XeEwOLFRhKDcm28NRAneiEl24SxfCg6OKrVU0McVg75vs/yi+0C2sytYr2u3?=
+ =?us-ascii?Q?ecAN+YOVef9rMPCpVLFFyApJzwir8BZipQmpjm2SjxWiYEflNuAKS13U43mv?=
+ =?us-ascii?Q?qVym8YGTpdYApxrgzpG9uq8IvUjm7p3G8wUy4E69p9z+WSa7GnQ96Jxq/4SQ?=
+ =?us-ascii?Q?TfPRqxc2nAOwMqz1FkjxdaVwI1aJP71lrlwTdnZvn4QLzC3W7Hsz2RHvwzrg?=
+ =?us-ascii?Q?6k9zWAhuF8RQADJN8jKux4c+UwghcD3HxeGNvYUScvKRS4Pn6vIUbRiH6Npf?=
+ =?us-ascii?Q?LYLftuoiO5TgXNPt8XPacWvCLvbG6jFJ25IO1jAm6rDHMw0efppwTx3/l+f3?=
+ =?us-ascii?Q?p09+u6ow8Fs0FkLL1JgA3aGviNKPum/S/O6wiQL4HMTc0xYSXgX3O8hP4LBn?=
+ =?us-ascii?Q?f9IfOurI+Sb7+lxi5TQ4CKcHX9JtLBMqiLQIC4fuLhv9kKBXgBevJG7dmS4J?=
+ =?us-ascii?Q?rVMDxyGFP0IMBbzFgJ7hXaNIKKb2o5IaIUdsNheVAFLLunZdr9bATPML60HK?=
+ =?us-ascii?Q?Yi/Gxu5FO4bwnQE+fAMTSMKgeqfbcTz6q1hf+u9ThmfPUxP4fhGDyTvMqEjh?=
+ =?us-ascii?Q?VIPGUMdhH1ZoGKWYc2BTCsC/BQgz905J5aSNSjsyMQ/LpODYEC9wDGMbXdDS?=
+ =?us-ascii?Q?vlC724XvsdG1cm2dDG3fNBxoFryYGpFh1Yd8+dduIaSxhF91ybnfCy0lK4CP?=
+ =?us-ascii?Q?5SaapVWnxLrnehvQ6ktq+l0O3ORdyU7t8jZ//tMRaiKh5C3QrBCUydWqGECU?=
+ =?us-ascii?Q?/mDgjEF49N+IUV8guQpK44oTCOzRmrtL7jsKDhQT2jeTNiqHpayfjoZU/eut?=
+ =?us-ascii?Q?iAuz4HvmjqUoVxcNHcD2K6WDxxdRuFQyBcQRbPpwXIH1oVnzClrd9EZFMq4l?=
+ =?us-ascii?Q?MU5kNAZeOzMzkyMmiXv2oeYS9g2nT9IcPeXUZLRihJqtFN7GqPDA6A7fyvQg?=
+ =?us-ascii?Q?iS3KFO0gzOVpjEQ83mAXi0BYFC1OKA4DUTYlsh0Wwim+2xR3kt143xUo4CSK?=
+ =?us-ascii?Q?vyxGbah+SdX68L0AdLN91W17sCx5w1fW1QGw28dYWeyZZtkoXDv7y2eDQ2qn?=
+ =?us-ascii?Q?NdBFxNAwcw=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 429af4fe-1001-4d97-6425-08da37d61f8a
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 07:23:22.3663
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eDkplKQZ7frILnn/QVRlqdVaXasb+JZvuUwXDDl2wA+LGgcO/iaIMKijwaugt30udgynrT15nS1N1PKwI7avAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4204
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+NULL check has been done in clk_disable_unprepare() by IS_ERR_OR_NULL().
+So remove NULL check before it.
 
-syzbot found the following issue on:
-
-HEAD commit:    3f7bdc402fb0 Add linux-next specific files for 20220516
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=105218c6f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
-dashboard link: https://syzkaller.appspot.com/bug?extid=46fff6434a7f968ecb39
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11105599f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c7b2b1f00000
-
-The issue was bisected to:
-
-commit bd32889e841c12533d09a1bd02bba932baa9ed8f
-Author: Carlos Llamas <cmllamas@google.com>
-Date:   Fri Apr 29 23:56:41 2022 +0000
-
-    binder: add BINDER_GET_EXTENDED_ERROR ioctl
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1422c845f00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1622c845f00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1222c845f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com
-Fixes: bd32889e841c ("binder: add BINDER_GET_EXTENDED_ERROR ioctl")
-
-BUG: sleeping function called from invalid context at lib/usercopy.c:28
-in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3613, name: syz-executor152
-preempt_count: 1, expected: 0
-RCU nest depth: 0, expected: 0
-1 lock held by syz-executor152/3613:
- #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
- #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: _binder_inner_proc_lock drivers/android/binder.c:283 [inline]
- #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: binder_ioctl_get_extended_error drivers/android/binder.c:5167 [inline]
- #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: binder_ioctl+0x798/0x6d80 drivers/android/binder.c:5390
-Preemption disabled at:
-[<0000000000000000>] 0x0
-CPU: 0 PID: 3613 Comm: syz-executor152 Not tainted 5.18.0-rc6-next-20220516-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __might_resched.cold+0x222/0x26b kernel/sched/core.c:9791
- __might_fault+0x6c/0x170 mm/memory.c:5567
- _copy_to_user+0x25/0x140 lib/usercopy.c:28
- copy_to_user include/linux/uaccess.h:160 [inline]
- binder_ioctl_get_extended_error drivers/android/binder.c:5168 [inline]
- binder_ioctl+0x7aa/0x6d80 drivers/android/binder.c:5390
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f3ae108e059
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff28fbd878 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3ae108e059
-RDX: 0000000000000000 RSI: 00000000c00c6211 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007f3ae10fbe40 R09: 00007f3ae10fbe40
-R10: 00007fff28fbd2f0 R11: 0000000000000246 R12: 00007fff28fbd8b0
-R13: 00007fff28fbd8a0 R14: 00007fff28fbd890 R15: 0000000000000000
- </TASK>
-
-=============================
-[ BUG: Invalid wait context ]
-5.18.0-rc6-next-20220516-syzkaller #0 Tainted: G        W        
------------------------------
-syz-executor152/3613 is trying to lock:
-ffff888073415f98 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0xa1/0x170 mm/memory.c:5569
-other info that might help us debug this:
-context-{4:4}
-1 lock held by syz-executor152/3613:
- #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
- #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: _binder_inner_proc_lock drivers/android/binder.c:283 [inline]
- #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: binder_ioctl_get_extended_error drivers/android/binder.c:5167 [inline]
- #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: binder_ioctl+0x798/0x6d80 drivers/android/binder.c:5390
-stack backtrace:
-CPU: 0 PID: 3613 Comm: syz-executor152 Tainted: G        W         5.18.0-rc6-next-20220516-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_lock_invalid_wait_context kernel/locking/lockdep.c:4705 [inline]
- check_wait_context kernel/locking/lockdep.c:4766 [inline]
- __lock_acquire.cold+0xdb/0x3b4 kernel/locking/lockdep.c:5003
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- __might_fault mm/memory.c:5570 [inline]
- __might_fault+0x104/0x170 mm/memory.c:5563
- _copy_to_user+0x25/0x140 lib/usercopy.c:28
- copy_to_user include/linux/uaccess.h:160 [inline]
- binder_ioctl_get_extended_error drivers/android/binder.c:5168 [inline]
- binder_ioctl+0x7aa/0x6d80 drivers/android/binder.c:5390
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f3ae108e059
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff28fbd878 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3ae108e059
-RDX: 0000000000000000 RSI: 00000000c00c6211 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007f3ae10fbe40 R09: 00007f3ae10fbe40
-R10: 00007fff28fbd2f0 R11: 0000000000000246 R12: 00007fff28fbd8b0
-R13: 00007fff28fbd8a0 R14: 00007fff28fbd890 R15: 0000000000000000
- </TASK>
-binder: 3613:3613 ioctl c00c6211 0 returned -14
-
-
+Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/gpu/drm/mxsfb/mxsfb_drv.c | 3 +--
+ drivers/gpu/drm/mxsfb/mxsfb_kms.c | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/gpu/drm/mxsfb/mxsfb_drv.c b/drivers/gpu/drm/mxsfb/mxsfb_drv.c
+index 55aad92e08ba..90f8d6bc0d21 100644
+--- a/drivers/gpu/drm/mxsfb/mxsfb_drv.c
++++ b/drivers/gpu/drm/mxsfb/mxsfb_drv.c
+@@ -84,8 +84,7 @@ void mxsfb_enable_axi_clk(struct mxsfb_drm_private *mxsfb)
+ 
+ void mxsfb_disable_axi_clk(struct mxsfb_drm_private *mxsfb)
+ {
+-	if (mxsfb->clk_axi)
+-		clk_disable_unprepare(mxsfb->clk_axi);
++	clk_disable_unprepare(mxsfb->clk_axi);
+ }
+ 
+ static struct drm_framebuffer *
+diff --git a/drivers/gpu/drm/mxsfb/mxsfb_kms.c b/drivers/gpu/drm/mxsfb/mxsfb_kms.c
+index f021ab2c4520..ccd21ece21bf 100644
+--- a/drivers/gpu/drm/mxsfb/mxsfb_kms.c
++++ b/drivers/gpu/drm/mxsfb/mxsfb_kms.c
+@@ -221,8 +221,7 @@ static void mxsfb_disable_controller(struct mxsfb_drm_private *mxsfb)
+ 	writel(reg, mxsfb->base + LCDC_VDCTRL4);
+ 
+ 	clk_disable_unprepare(mxsfb->clk);
+-	if (mxsfb->clk_disp_axi)
+-		clk_disable_unprepare(mxsfb->clk_disp_axi);
++	clk_disable_unprepare(mxsfb->clk_disp_axi);
+ }
+ 
+ /*
+-- 
+2.20.1
+

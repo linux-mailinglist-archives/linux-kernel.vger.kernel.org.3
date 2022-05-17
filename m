@@ -2,164 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35B952A095
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914AD52A098
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbiEQLjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S1345362AbiEQLkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240513AbiEQLjt (ORCPT
+        with ESMTP id S240513AbiEQLkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:39:49 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0077D3E5D5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:39:47 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id z2so34109584ejj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:39:47 -0700 (PDT)
+        Tue, 17 May 2022 07:40:40 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7223E5D5;
+        Tue, 17 May 2022 04:40:39 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id n8so14283281qke.11;
+        Tue, 17 May 2022 04:40:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8b3219JiyhAdMu7qXtwLRDUhe9o17eXhnezQfisY3zg=;
-        b=U+CVj6qgp8QUW2lG8P8Rh01H0x3HW+BYkHmBnL45Jux2ihcoxftVomMk7yLlk6ViAj
-         biww0Q6BPNn9fMJZUPm4889jgoqwE1plSUPajL8SrciXIxXluT7PW5ziLpa2Z/yQU7Pr
-         cuygJT+roy+70H0YNeR66/h6yZmXXVDnfyTXSiX1x/jHfweJHIbtGMdUjAbhGFbHn9M9
-         VX4ONkl3yd8WMuGiIWPwVSKHDCksIJ972YZB5/IAOleH1OW9MBJtBXzD6aSxckObxc2W
-         i/qQ0e8giYJu4nWyqhLEoONNH6Bzu8426DB3uQSkthNRGiuxIhWcJArW7vKEGsV3tHc2
-         PGuw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uM51Zcymw4uk08szgMKZErz3xEoJBdUgSYcbBXV2GbY=;
+        b=pZfuPhwLGJ9jCe30O2q0IX3kvPhgLsZPkwgxHup2DQgixUYZvP/SsfbaP6LP3TjhBL
+         zYJtoxEXYWyeu5XmIGFr/pKFj1W+rHpuTgnxYtcATWMwS+tJGt9Bwocu720EqBGMdieQ
+         HaJoyP7jdb6+W4tF8xMarVherM3a1rkQmcW4o7zvlUTxp9B1kRXM+0tagy9QmYF08yZi
+         208byjI2U8jlP/6Zy0V5+h4VWn1NngxtzKHm/7ELURGMo6m8x0anyJFgBS0iZauS16az
+         ssLUgJwNUeXOFTyAdZ+VREOYIOJ4uVn42/eYRO+71TWGHyo9oRoYksLFzsDhBK6q9A+K
+         ITnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8b3219JiyhAdMu7qXtwLRDUhe9o17eXhnezQfisY3zg=;
-        b=I7BvpUzBYOmphcA6pgv6rJmI6Sl1TXjZDPkaBt9VQVyVDkLefUMyChMfB/phdTjFLn
-         NEGM0F7VM22vWSTp6ufznmYI/8zhZfJedZhyzBAKyDFCG++PeLMV/SboxkuLLTcUbpJq
-         kzKWl+oCkyEMXft3xgjoQ0Fh11LuMTU+JNBo7SHfB9yP8aPvT+rR7ZiTgTo+e8cVKjLv
-         qqGKLRIsrJDI3p3muD7hznandQys7pXwZaVIeVTPJYKDxNKOARCXJ07yblKucuyrGePy
-         DIVrYcumqTKdlcMWQpi/t8ptNazIj6DjVD3KLSBkz3u1EesvId+iKfSgNIn8hkTiKkZq
-         z27Q==
-X-Gm-Message-State: AOAM531ZVTnSmBiZ9jlglzK7Ir9BuJ7UMzICibPqkzcW/NaG4F62y8/a
-        PClpom+ZewTn9hYFEoQrao+llQ==
-X-Google-Smtp-Source: ABdhPJwgqNNl3jI9pDpOhkdwAZIe/YsCJxtidLWljh6gn11xfeO9oCI8pm2LH8sJJxfTzPHKk7kUvA==
-X-Received: by 2002:a17:907:9724:b0:6fe:69f4:f68c with SMTP id jg36-20020a170907972400b006fe69f4f68cmr1486140ejc.30.1652787586552;
-        Tue, 17 May 2022 04:39:46 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id k14-20020aa7c04e000000b0042a5a39ba7esm5919015edo.25.2022.05.17.04.39.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 04:39:46 -0700 (PDT)
-Message-ID: <171c13bb-9fc9-0807-e872-6859dfa2603d@linaro.org>
-Date:   Tue, 17 May 2022 13:39:44 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uM51Zcymw4uk08szgMKZErz3xEoJBdUgSYcbBXV2GbY=;
+        b=npWEEUoo2baqI4e6xXi2cUey4McAj0BoAqawmT7Lbts+EVF7kWAqzI3/eqF8xNttmD
+         AtBtmAxvK+Ch7frZVgAA98LZpqiWUnDjamlVahyeWEQCjjMJ+yRQXcbgofdmEYEEeIsa
+         KnhEBUVVBFzy+JpB/o3WlHxmONVf3ZzgU+buo4xbkdQuY9y1mMDkhseqwb1QbPaWPMga
+         AiaWfvjF3Q9sy3lhCW0wMJMpny9oBUMgzJLGN+QyeIuTJ1kYGJfo6pPh7OyoULIQnv/u
+         fLUacTT9FOGf+TQiXiEg41jESMrpZsVqCmqlsE9nVny80xGBPB2fO3o0o8P9Q4tyF3JW
+         zHMw==
+X-Gm-Message-State: AOAM530ZNLta/T+D0RIwD+v3fBXjwBhQ6nYNZUsaDMXk5k/zMv9GIOuE
+        b443VzAQIJRqKd6xpojGmMB5At1lPQVQze/3l0Q=
+X-Google-Smtp-Source: ABdhPJxNJYcB7qT1GnstL4Yc2ivjya6G/7KHE8kNzleGLFZI+uU9E//UH1YL+g9xhZ8AFHnCNyxrMddb7xpApyvWDMc=
+X-Received: by 2002:a05:620a:1a01:b0:69c:fda:7404 with SMTP id
+ bk1-20020a05620a1a0100b0069c0fda7404mr15931147qkb.522.1652787638429; Tue, 17
+ May 2022 04:40:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH net] NFC: hci: fix sleep in atomic context bugs in
- nfc_hci_hcp_message_tx
-Content-Language: en-US
-To:     duoming@zju.edu.cn
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
-        broonie@kernel.org, netdev@vger.kernel.org
-References: <20220516021028.54063-1-duoming@zju.edu.cn>
- <d5fdfe27-a6de-3030-ce51-9f4f45d552f3@linaro.org>
- <6aba1413.196eb.180cc609bf1.Coremail.duoming@zju.edu.cn>
- <ea2af2f9-002a-5681-4293-a05718ce9dcd@linaro.org>
- <fc6a78c.196ab.180d1a98cc9.Coremail.duoming@zju.edu.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fc6a78c.196ab.180d1a98cc9.Coremail.duoming@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220515203118.474684-1-robimarko@gmail.com> <fa11d71b-d53e-1eb3-22db-e7237c523cd4@linaro.org>
+In-Reply-To: <fa11d71b-d53e-1eb3-22db-e7237c523cd4@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Tue, 17 May 2022 13:40:27 +0200
+Message-ID: <CAOX2RU6AtVY5HSqK6LJk24yK2LPMN8YP4ZFgfHa2geEgwQcAgg@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: regulator: qcom,spmi-regulator: Convert
+ to dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 12:56, duoming@zju.edu.cn wrote:
-> Hello,
-> 
-> On Mon, 16 May 2022 12:43:07 +0200 Krzysztof wrote:
-> 
->>>>> There are sleep in atomic context bugs when the request to secure
->>>>> element of st21nfca is timeout. The root cause is that kzalloc and
->>>>> alloc_skb with GFP_KERNEL parameter is called in st21nfca_se_wt_timeout
->>>>> which is a timer handler. The call tree shows the execution paths that
->>>>> could lead to bugs:
->>>>>
->>>>>    (Interrupt context)
->>>>> st21nfca_se_wt_timeout
->>>>>   nfc_hci_send_event
->>>>>     nfc_hci_hcp_message_tx
->>>>>       kzalloc(..., GFP_KERNEL) //may sleep
->>>>>       alloc_skb(..., GFP_KERNEL) //may sleep
->>>>>
->>>>> This patch changes allocation mode of kzalloc and alloc_skb from
->>>>> GFP_KERNEL to GFP_ATOMIC in order to prevent atomic context from
->>>>> sleeping. The GFP_ATOMIC flag makes memory allocation operation
->>>>> could be used in atomic context.
->>>>>
->>>>> Fixes: 8b8d2e08bf0d ("NFC: HCI support")
->>>>> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
->>>>> ---
->>>>>  net/nfc/hci/hcp.c | 4 ++--
->>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/net/nfc/hci/hcp.c b/net/nfc/hci/hcp.c
->>>>> index 05c60988f59..1caf9c2086f 100644
->>>>> --- a/net/nfc/hci/hcp.c
->>>>> +++ b/net/nfc/hci/hcp.c
->>>>> @@ -30,7 +30,7 @@ int nfc_hci_hcp_message_tx(struct nfc_hci_dev *hdev, u8 pipe,
->>>>>  	int hci_len, err;
->>>>>  	bool firstfrag = true;
->>>>>  
->>>>> -	cmd = kzalloc(sizeof(struct hci_msg), GFP_KERNEL);
->>>>> +	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
->>>>
->>>> No, this does not look correct. This function can sleep, so it can use
->>>> GFP_KERNEL. Please just look at the function before replacing any flags...
->>>
->>> I am sorry, I don`t understand why nfc_hci_hcp_message_tx() can sleep.
->>
->> Why? because in line 93 it uses a mutex (which is a sleeping primitve).
->>
->>>
->>> I think st21nfca_se_wt_timeout() is a timer handler, which is in interrupt context.
->>> The call tree shows the execution paths that could lead to bugs:
->>>
->>> st21nfca_hci_se_io()
->>>   mod_timer(&info->se_info.bwi_timer,...)
->>>     st21nfca_se_wt_timeout()  //timer handler, interrupt context
->>>       nfc_hci_send_event()
->>>         nfc_hci_hcp_message_tx()
->>>           kzalloc(..., GFP_KERNEL) //may sleep
->>>           alloc_skb(..., GFP_KERNEL) //may sleep
->>>
->>> What`s more, I think the "mutex_lock(&hdev->msg_tx_mutex)" called by nfc_hci_hcp_message_tx()
->>> is also improper.
->>>
->>> Please correct me, If you think I am wrong. Thanks for your time.
->>
->> Your patch is not correct in current semantics of this function. This
->> function can sleep (because it uses a mutex), so the mistake is rather
->> calling it from interrupt context.
-> 
-> We have to call nfc_hci_send_event() in st21nfca_se_wt_timeout(), because we need to send 
-> a reset request as recovery procedure. I think replace GFP_KERNEL to GFP_ATOMIC and replace
-> mutex_lock to spin_lock in nfc_hci_hcp_message_tx() is better.
-> 
-> What's more, in order to synchronize with other functions related with hci message TX, 
-> We need to replace the mutex_lock(&hdev->msg_tx_mutex) to spin_lock in other functions
-> as well. I sent "patch v2" just now.
+On Tue, 17 May 2022 at 09:26, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 15/05/2022 22:31, Robert Marko wrote:
+> > Convert the bindings of Qualcomm SPMI regulators to DT schema.
+> >
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> > I am aware that syscon alone is not really acceptable, its converted
+> > directly from the old text bindings.
+> >
+> > There is also the issue of some MSM8994, MSM8996 and APQ8096 devices using
+> > '#address-cells', '#size-cells', some even defining reg property for
+> > regulators.
+> >
+> > Any advice on how to solve these issues is appreciated.
+> > ---
+> >  .../regulator/qcom,spmi-regulator.yaml        | 176 ++++++++++++++++++
+>
+> You miss here the actual conversion... where is the removal of old file?
 
-You sent v2 one minute before replying here... that's not how discussion
-work. Please do not sent next version before reaching some consensus.
+Hi,
 
+Oh yeah, sorry for forgetting this.
+Will fixup in v2.
 
-Best regards,
-Krzysztof
+>
+> >  1 file changed, 176 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> > new file mode 100644
+> > index 000000000000..f7da310f1845
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> > @@ -0,0 +1,176 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/regulator/qcom,spmi-regulator.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm SPMI Regulators
+> > +
+> > +maintainers:
+> > +  - Robert Marko <robert.marko@sartura.hr>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - qcom,pm660-regulators
+> > +      - qcom,pm660l-regulators
+> > +      - qcom,pm8004-regulators
+> > +      - qcom,pm8005-regulators
+> > +      - qcom,pm8226-regulators
+> > +      - qcom,pm8841-regulators
+> > +      - qcom,pm8916-regulators
+> > +      - qcom,pm8941-regulators
+> > +      - qcom,pm8950-regulators
+> > +      - qcom,pm8994-regulators
+> > +      - qcom,pmi8994-regulators
+> > +      - qcom,pms405-regulators
+> > +
+> > +  qcom,saw-reg:
+> > +    description: Reference to syscon node defining the SAW registers
+> > +    $ref: "/schemas/types.yaml#/definitions/phandle"
+> > +
+> > +allOf:
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - qcom,pm8941-regulators
+> > +    then:
+> > +      properties:
+> > +        interrupts:
+> > +          items:
+> > +            - description: Over-current protection interrupt for 5V S1
+> > +            - description: Over-current protection interrupt for 5V S2
+> > +        interrupt-names:
+> > +          items:
+> > +            - const: ocp-5vs1
+> > +            - const: ocp-5vs2
+> > +
+> > +patternProperties:
+>
+> This goes just after "properties:"
+
+Will fixup in v2.
+
+Regards,
+Robert
+>
+> > +  ".*-supply$":
+> > +    description: Input supply phandle(s) for this node
+> > +    $ref: "/schemas/types.yaml#/definitions/phandle"
+> > +
+>
+> Best regards,
+> Krzysztof

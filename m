@@ -2,121 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3D652A5B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87C252A5BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349688AbiEQPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
+        id S1349716AbiEQPLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241061AbiEQPKX (ORCPT
+        with ESMTP id S1349691AbiEQPLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:10:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC5A3BBE4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:10:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10E306167C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F4FC385B8;
-        Tue, 17 May 2022 15:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652800221;
-        bh=W9gM3dHcyJ8mhIJXhDEEP1pKOSlJKU41dtmN3UaOQak=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=C9ZGpKilUesMylP87pJHxYicHAxEFPXgWqXPO6h4OnayDwwGmIRwsJ3u84uq3XhN5
-         3FkmIldSAeWKo2A4shnLK8svZMRQ21SBclYYqmd0wxkCqOtcYCQukoWMy5k9pSoZDZ
-         +EvDqCpPnUDH9SFZuF0hUm/QBnXMQx9oxhS7OvyZacwGpQMP0HLvRKEpas4agJdQwf
-         1UA6F/n9Z42a1XscJ9eSwbJDji70EpGjBlio7hekZI7caDb7UL0j50coaP0hPH/F+n
-         1HhouCrf+Yxn72N5QN328WSvF0cpDR/2f44THsYXve85qHPwUB8NoEurzTPo6UYiRc
-         VPUECNQycqQuQ==
-Message-ID: <412276c5-ca5e-a644-e0e0-d52bad3c5ba8@kernel.org>
-Date:   Tue, 17 May 2022 23:10:15 +0800
+        Tue, 17 May 2022 11:11:45 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08C63BF8F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:11:43 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n8so17600392plh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=cmLXabcPdJC5+Jr+geeae2kzppnXJw8ILHcl1Qm7vBw=;
+        b=CMbAPHf6t+S5Kg1C4GszZxleCRPzPCJZatJ1Uhgf4vk0o6lS847ZRTFjB8hGXzHMWl
+         ll+/Pk58qJPLoniMeyG8G08xqU5f8Y1cYHkaDkQ68EI4RSuceZvg8L88QzT3nG1ggMQh
+         wpCPXtWUjd3VPVCZAzB0zNj9VYjpBbBGN0i5lSZugdLoFWYUYY403CgSeaPvbw/GJWfo
+         KoWb+QmOkyIhZFiG13zp7J2QOwQr5UeggVUWxzffet1NnT0TxQlosvVe3iY8p187yVk4
+         PGriacZsHbGjO6/cFvWrqRlURZJrIBSd0FdYh8B5fOKv/rRpHcFyySilRPJurX8HmkZ+
+         GF4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=cmLXabcPdJC5+Jr+geeae2kzppnXJw8ILHcl1Qm7vBw=;
+        b=fLdmcChxAB/4QpLAQZiMrdezlEU0kPvYvWEte+7NwPYQwzKxf3Q1B29dCs6Kqw1ftM
+         y4zTHVLdXjsAmGGCMiFZ6JqHNGSzKAPq2e4HqeZfasvVSJQF4RTkQas3KhX+pk/mppdG
+         OQA+KMx+/w3+xH0x160+2KZdxeBF3M3ChAFztRkbSz5Ts4UjCWIUx2BpE0+i3Z4ygKoN
+         bbW+3NJRpy2/1bEcRGe63w889LZWaT4KjFsCgBz6epz6hKDp15y1hEl4pRNzs22gNood
+         XC2Qm1IneD/2Y8IhEskj3IGnU0TN/w3xnBMhFoejHHQCDXjqAMXIs08+re5TPqY8btSL
+         p95w==
+X-Gm-Message-State: AOAM530hZGmQe3RAY9xWGShKZmBWSK2X8iw5tQ3AH2DxHBwXVlf8N0Xp
+        s6/RrfVOJ8jG/d5f0QaLJkdY
+X-Google-Smtp-Source: ABdhPJy/8+de+j926ut7sfC02FyPhUMi0LcfxLj34YwOAks7Rl82lL4Rj6Y5maOSEeF2PjT7605A/g==
+X-Received: by 2002:a17:902:dad1:b0:161:9abb:fb75 with SMTP id q17-20020a170902dad100b001619abbfb75mr6145785plx.135.1652800303244;
+        Tue, 17 May 2022 08:11:43 -0700 (PDT)
+Received: from thinkpad ([117.207.31.8])
+        by smtp.gmail.com with ESMTPSA id ja1-20020a170902efc100b001617e18e253sm4280263plb.143.2022.05.17.08.11.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 08:11:42 -0700 (PDT)
+Date:   Tue, 17 May 2022 20:41:34 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com, kbusch@kernel.org,
+        hch@lst.de, linux-nvme@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, svarbanov@mm-sol.com,
+        bjorn.andersson@linaro.org, axboe@fb.com,
+        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
+        quic_nitirawa@quicinc.com, vidyas@nvidia.com, sagi@grimberg.me
+Subject: Re: [PATCH 2/3] PCI: dwc: qcom: Set suspend_poweroff flag for SC7280
+Message-ID: <20220517151134.GB4528@thinkpad>
+References: <20220513110027.31015-3-manivannan.sadhasivam@linaro.org>
+ <20220516201950.GA1047412@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] erofs: fix buffer copy overflow of ztailpacking feature
-Content-Language: en-US
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        linux-erofs@lists.ozlabs.org
-Cc:     LKML <linux-kernel@vger.kernel.org>, Yue Hu <huyue2@yulong.com>
-References: <20220512115833.24175-1-hsiangkao@linux.alibaba.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220512115833.24175-1-hsiangkao@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220516201950.GA1047412@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/12 19:58, Gao Xiang wrote:
-> I got some KASAN report as below:
+On Mon, May 16, 2022 at 03:19:50PM -0500, Bjorn Helgaas wrote:
+> On Fri, May 13, 2022 at 04:30:26PM +0530, Manivannan Sadhasivam wrote:
+> > For aggressive power saving on SC7280 SoCs, the power for the PCI devices
+> > will be taken off during system suspend. Hence, notify the same to the
+> > PCI device drivers using "suspend_poweroff" flag so that the drivers can
+> > prepare the PCI devices to handle the poweroff and recover them during
+> > resume.
 > 
-> [   46.959738] ==================================================================
-> [   46.960430] BUG: KASAN: use-after-free in z_erofs_shifted_transform+0x2bd/0x370
-> [   46.960430] Read of size 4074 at addr ffff8880300c2f8e by task fssum/188
-> ...
-> [   46.960430] Call Trace:
-> [   46.960430]  <TASK>
-> [   46.960430]  dump_stack_lvl+0x41/0x5e
-> [   46.960430]  print_report.cold+0xb2/0x6b7
-> [   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
-> [   46.960430]  kasan_report+0x8a/0x140
-> [   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
-> [   46.960430]  kasan_check_range+0x14d/0x1d0
-> [   46.960430]  memcpy+0x20/0x60
-> [   46.960430]  z_erofs_shifted_transform+0x2bd/0x370
-> [   46.960430]  z_erofs_decompress_pcluster+0xaae/0x1080
+> No doubt "power ... will be taken off during system suspend" is true,
+> but this isn't very informative.  Is this a property of SC7280?  A
+> choice made by the SC7280 driver?  Why is this not applicable to other
+> systems?
 > 
-> The root cause is that the tail pcluster won't be a complete filesystem
-> block anymore. So if ztailpacking is used, the second part of an
-> uncompresed tail pcluster may not be ``rq->pageofs_out``.
 
-uncompressed
-
-> 
-> Fixes: ab749badf9f4 ("erofs: support unaligned data decompression")
-> Fixes: cecf864d3d76 ("erofs: support inline data decompression")
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-
-Reviewed-by: Chao Yu <chao@kernel.org>
+The SC7280's RPMh firmware is cutting off the PCIe power domain during system
+suspend. And as I explained in previous patch, the RC driver itself may put the
+devices in D3cold conditionally on this platform. The reason is to save power
+as this chipset is being used in Chromebooks.
 
 Thanks,
+Mani
 
-> ---
->   fs/erofs/decompressor.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
-> index 0f445f7e1df8..6dca1900c733 100644
-> --- a/fs/erofs/decompressor.c
-> +++ b/fs/erofs/decompressor.c
-> @@ -320,6 +320,7 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
->   		PAGE_ALIGN(rq->pageofs_out + rq->outputsize) >> PAGE_SHIFT;
->   	const unsigned int righthalf = min_t(unsigned int, rq->outputsize,
->   					     PAGE_SIZE - rq->pageofs_out);
-> +	const unsigned int lefthalf = rq->outputsize - righthalf;
->   	unsigned char *src, *dst;
->   
->   	if (nrpages_out > 2) {
-> @@ -342,10 +343,10 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
->   	if (nrpages_out == 2) {
->   		DBG_BUGON(!rq->out[1]);
->   		if (rq->out[1] == *rq->in) {
-> -			memmove(src, src + righthalf, rq->pageofs_out);
-> +			memmove(src, src + righthalf, lefthalf);
->   		} else {
->   			dst = kmap_atomic(rq->out[1]);
-> -			memcpy(dst, src + righthalf, rq->pageofs_out);
-> +			memcpy(dst, src + righthalf, lefthalf);
->   			kunmap_atomic(dst);
->   		}
->   	}
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index 6ab90891801d..4b0ad2827f8f 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -199,6 +199,7 @@ struct qcom_pcie_cfg {
+> >  	unsigned int has_ddrss_sf_tbu_clk:1;
+> >  	unsigned int has_aggre0_clk:1;
+> >  	unsigned int has_aggre1_clk:1;
+> > +	unsigned int suspend_poweroff:1;
+> >  };
+> >  
+> >  struct qcom_pcie {
+> > @@ -1220,6 +1221,10 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+> >  	if (pcie->cfg->pipe_clk_need_muxing)
+> >  		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
+> >  
+> > +	/* Indicate PCI device drivers that the power will be taken off during system suspend */
+> > +	if (pcie->cfg->suspend_poweroff)
+> > +		pci->pp.bridge->suspend_poweroff = true;
+> > +
+> >  	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
+> >  	if (ret < 0)
+> >  		goto err_disable_regulators;
+> > @@ -1548,6 +1553,7 @@ static const struct qcom_pcie_cfg sc7280_cfg = {
+> >  	.ops = &ops_1_9_0,
+> >  	.has_tbu_clk = true,
+> >  	.pipe_clk_need_muxing = true,
+> > +	.suspend_poweroff = true,
+> >  };
+> >  
+> >  static const struct dw_pcie_ops dw_pcie_ops = {
+> > -- 
+> > 2.25.1
+> > 
+
+-- 
+மணிவண்ணன் சதாசிவம்

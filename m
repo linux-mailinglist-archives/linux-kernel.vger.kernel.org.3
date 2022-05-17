@@ -2,124 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F875529F2C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AD2529F33
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343985AbiEQKRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S235576AbiEQKRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344854AbiEQKRI (ORCPT
+        with ESMTP id S1344929AbiEQKRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:17:08 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82FC54D24F;
-        Tue, 17 May 2022 03:14:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 505391042;
-        Tue, 17 May 2022 03:14:24 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.197.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BBB0E3F66F;
-        Tue, 17 May 2022 03:14:22 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Ross Burton <ross.burton@arm.com>,
-        Peter Maydell <peter.maydell@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH] of/fdt: Ignore disabled memory nodes
-Date:   Tue, 17 May 2022 11:14:10 +0100
-Message-Id: <20220517101410.3493781-1-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 17 May 2022 06:17:15 -0400
+Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A826D4D276;
+        Tue, 17 May 2022 03:14:35 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1652782473; bh=YrEZUatGpcW6tx9M6a5LX6XMkYrfUhXhCp7HQ5atufo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TrXosL0UZZkkt6fgbk91csygw41EyeGqBPO2f0cbhR2uUJgC9DINRS7ou8/BH23sE
+         XHIMAtA8Ni+ZFeQdICfmXbsMbNC/u4lT7JEFQ5Fdk7FjbXNdxYJrtbh9E4Unyk/fyk
+         +KwfvycX5F184GS4qDFYApGLW3dmgQq8SRv3whpEjIc7y1ZuFkGCeM9exzmly6LzY0
+         zy4ZyS1WopTWdsRyTgkmy3HomagWPwB3QycXz+L/DG9KKVqfH8nqd2ytCPMhvAiZDy
+         Ehy6rYKsFo67oBWSg5SbKYrtUATZ6VbcHOapx2ZSrOih0JbyyoiTm1SgwlTtkkodtd
+         5RbsJIH+0gn6w==
+To:     Pavel Skripkin <paskripkin@gmail.com>, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+Subject: Re: [PATCH v4 2/2] ath9k: htc: clean up statistics macros
+In-Reply-To: <4456bd112b9d35f1cb659ed2ecc1c7107ebf2b91.1652553719.git.paskripkin@gmail.com>
+References: <f158608e209a6f45c76ec856474a796df93d9dcf.1652553719.git.paskripkin@gmail.com>
+ <4456bd112b9d35f1cb659ed2ecc1c7107ebf2b91.1652553719.git.paskripkin@gmail.com>
+Date:   Tue, 17 May 2022 12:14:33 +0200
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <871qwscvp2.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we boot a machine using a devicetree, the generic DT code goes
-through all nodes with a 'device_type = "memory"' property, and collects
-all memory banks mentioned there. However it does not check for the
-status property, so any nodes which are explicitly "disabled" will still
-be added as a memblock.
-This ends up badly for QEMU, when booting with secure firmware on
-arm/arm64 machines, because QEMU adds a node describing secure-only
-memory:
-===================
-	secram@e000000 {
-		secure-status = "okay";
-		status = "disabled";
-		reg = <0x00 0xe000000 0x00 0x1000000>;
-		device_type = "memory";
-	};
-===================
+Pavel Skripkin <paskripkin@gmail.com> writes:
 
-The kernel will eventually use that memory block (which is located below
-the main DRAM bank), but accesses to that will be answered with an
-SError:
-===================
-[    0.000000] Internal error: synchronous external abort: 96000050 [#1] PREEMPT SMP
-[    0.000000] Modules linked in:
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0-rc6-00014-g10c8acb8b679 #524
-[    0.000000] Hardware name: linux,dummy-virt (DT)
-[    0.000000] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.000000] pc : new_slab+0x190/0x340
-[    0.000000] lr : new_slab+0x184/0x340
-[    0.000000] sp : ffff80000a4b3d10
-....
-==================
-The actual crash location and call stack will be somewhat random, and
-depend on the specific allocation of that physical memory range.
+> I've changed *STAT_* macros a bit in previous patch and I seems like
+> they become really unreadable. Align these macros definitions to make
+> code cleaner and fix folllowing checkpatch warning
+>
+> ERROR: Macros with complex values should be enclosed in parentheses
+>
+> Also, statistics macros now accept an hif_dev as argument, since
+> macros that depend on having a local variable with a magic name
+> don't abide by the coding style.
+>
+> No functional change
+>
+> Suggested-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
 
-As the DT spec[1] explicitly mentions standard properties, add a simple
-check to skip over disabled memory nodes, so that we only use memory
-that is meant for non-secure code to use.
+This patch doesn't apply; please rebase on top of the ath-next branch in
+Kalle's 'ath' tree...
 
-That fixes booting a QEMU arm64 VM with EL3 enabled ("secure=on"), when
-not using UEFI. In this case the QEMU generated DT will be handed on
-to the kernel, which will see the secram node.
-This issue is reproducible when using TF-A together with U-Boot as
-firmware, then booting with the "booti" command.
-
-When using U-Boot as an UEFI provider, the code there [2] explicitly
-filters for disabled nodes when generating the UEFI memory map, so we
-are safe.
-EDK/2 only reads the first bank of the first DT memory node [3] to learn
-about memory, so we got lucky there.
-
-[1] https://github.com/devicetree-org/devicetree-specification/blob/main/source/chapter3-devicenodes.rst#memory-node (after the table)
-[2] https://source.denx.de/u-boot/u-boot/-/blob/master/lib/fdtdec.c#L1061-1063
-[3] https://github.com/tianocore/edk2/blob/master/ArmVirtPkg/PrePi/FdtParser.c
-
-Reported-by: Ross Burton <ross.burton@arm.com>
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- drivers/of/fdt.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index ec315b060cd50..0f30496ce80bf 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -1105,6 +1105,9 @@ int __init early_init_dt_scan_memory(void)
- 		if (type == NULL || strcmp(type, "memory") != 0)
- 			continue;
- 
-+		if (!of_fdt_device_is_available(fdt, node))
-+			continue;
-+
- 		reg = of_get_flat_dt_prop(node, "linux,usable-memory", &l);
- 		if (reg == NULL)
- 			reg = of_get_flat_dt_prop(node, "reg", &l);
--- 
-2.25.1
-
+-Toke

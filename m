@@ -2,203 +2,526 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01FF852A529
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB95E52A52E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349255AbiEQOqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S1349187AbiEQOrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349198AbiEQOqK (ORCPT
+        with ESMTP id S1345654AbiEQOrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:46:10 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5012702;
-        Tue, 17 May 2022 07:46:06 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HDMgZY012974;
-        Tue, 17 May 2022 14:46:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=Pg0JKpH3PTn0fxBzUzc8UVJpX89sXpgMQsaZNUqAzdI=;
- b=Wyf19AlxorY8I9QlXPDy5p36MGbDYk+Rj7/gVBZT0+gsoy93T2G5J7j/uhyuioL6QnRR
- YltrBuS83qA2+kLR1dCV1XObDonQM4puBGF3QwwVmPi5hR+m7hGsCf0ohs+qYYvUPdwP
- b1eMWd0P2VbQsCZHtK3tNlRKfmQiU+6v9RXQz0FHYgIlcjxCFYfPMhi8u5rSwaj4VBrj
- t29A1sZnQPOvkpQxfvIU/Gd+ehxXK6+VxGKFwDtNQpZH3c74eQ7dQAYcmmFEh5qZFVFN
- m5WnwWX3wUL3i9rpGtFf121+Uo20rzocCIuiQjWN4c6WVFMFNB7+43BMqvqXoDXGOEKe ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4chqtfjx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 14:46:05 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24HDU1NB005728;
-        Tue, 17 May 2022 14:46:05 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4chqtfj2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 14:46:05 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HEf2U2031405;
-        Tue, 17 May 2022 14:46:01 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma02fra.de.ibm.com with ESMTP id 3g2428kh4n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 14:46:01 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HEjwCn36962722
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 14:45:58 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9617211C04A;
-        Tue, 17 May 2022 14:45:58 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37E0511C050;
-        Tue, 17 May 2022 14:45:58 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.40])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 17 May 2022 14:45:58 +0000 (GMT)
-Date:   Tue, 17 May 2022 16:45:56 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] KVM: s390: Don't indicate suppression on
- dirtying, failing memop
-Message-ID: <20220517164556.43fc22bb@p-imbrenda>
-In-Reply-To: <20220512131019.2594948-2-scgl@linux.ibm.com>
-References: <20220512131019.2594948-1-scgl@linux.ibm.com>
-        <20220512131019.2594948-2-scgl@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-redhat-linux-gnu)
+        Tue, 17 May 2022 10:47:45 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCEE2C643
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:47:43 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id bu29so31850378lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:47:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=1ADxgiQLsadtlyBXATdenPql6kXUNh01JZHYbHtbt2s=;
+        b=GwXLfClwt0cS9C6tPKOSNUhmAvTW7Fpc0cBtu2jd68ISufWBPfXfWtM2LnhA2EHzv9
+         EVrU6QMWGs6Ouv3fDwufRVXaHMdA1vUDya9cqzIU4RdaPmLQtgFVLUtNvLQZJxXG0fIY
+         EyqGx4JCY9IuNvC3LKKmJejHwhAU2pN8g6DdEVyLteo1Q9B8emWspxGUF/PEETR64TIR
+         zu4l3ooJ4aOxDclP7kmfy/bVenz8Jtron//flLJMJZwFc34/6LS1zgJPTajwzOLsbqwM
+         bcV1w8+Hd5V05DmU1yqBiBv9gTOsPx50YNDKu+ev4k6+l9QWoisevfCbJ+eVN02qxcKR
+         hb8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1ADxgiQLsadtlyBXATdenPql6kXUNh01JZHYbHtbt2s=;
+        b=3+0U72nECzo3YO7f4VumyPuWnivRE7smyf+MXHb/hcGfRXbrQZymNQV5J5RwZmr6xT
+         RvwKWYPCPeydTR0CmiXJl0B/7j/ri/cm1HSXChggOMgczwjr3cd3CEn5wVcRzKFeUWQx
+         gwgjVZeShvrij0yOBA1rgWfq0W44iAPy6nv3vbc0h3S1ouS+E/zI2/y31sEBbpWdi8aT
+         FyHzls/K2W5y+TQ2J3h/vhB/W/zd5BosFpAV9Bxi/B6wwnpC2WFD945QTYsMJWLL1Xkd
+         X1rSUpzVj4L8nnUVe+4JE64mAgp7qf4+AHlLz8uwnTQwkfW/DnnE59RheHOXPDSEZ7Jx
+         Z2CQ==
+X-Gm-Message-State: AOAM530OhMCLgaVejEtfnao9c1vmt7mj2P1UrezPzKStmnpRC1Rg3f7j
+        LRA2CnyN0Q+2kmpgLcYaQNgqag==
+X-Google-Smtp-Source: ABdhPJz++Dw3u6FLC7L1iEHAkj0Zht1u9ltgRXEIYjoRNOdtnR6Zdy6f4erggd+4giiSUtk7Ke/sNw==
+X-Received: by 2002:a05:6512:23a6:b0:477:943a:818d with SMTP id c38-20020a05651223a600b00477943a818dmr6826584lfv.644.1652798861331;
+        Tue, 17 May 2022 07:47:41 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id g10-20020a19ee0a000000b0047255d211f9sm1599540lfb.296.2022.05.17.07.47.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 07:47:40 -0700 (PDT)
+Message-ID: <12093e84-49b0-d36d-cfde-08ab8af3801c@linaro.org>
+Date:   Tue, 17 May 2022 16:47:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/6] dt-bindings: regulator: qcom,spmi-regulator:
+ Convert to dtschema
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220517120000.71048-1-robimarko@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517120000.71048-1-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Gzzh7hEK1GB0wbc7qsfQakJnZ2FSX55v
-X-Proofpoint-ORIG-GUID: LZiRXfUWm9-1Ry0gYocYVICla4OZ2VCS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_03,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- bulkscore=0 mlxscore=0 malwarescore=0 clxscore=1011 phishscore=0
- suspectscore=0 adultscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205170089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 15:10:17 +0200
-Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
-
-> If user space uses a memop to emulate an instruction and that
-> memop fails, the execution of the instruction ends.
-> Instruction execution can end in different ways, one of which is
-> suppression, which requires that the instruction execute like a no-op.
-> A writing memop that spans multiple pages and fails due to key
-> protection may have modified guest memory, as a result, the likely
-> correct ending is termination. Therefore, do not indicate a
-> suppressing instruction ending in this case.
+On 17/05/2022 13:59, Robert Marko wrote:
+> Convert the bindings of Qualcomm SPMI regulators to DT schema.
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
->  Documentation/virt/kvm/api.rst |  6 ++++++
->  arch/s390/kvm/gaccess.c        | 22 ++++++++++++++++++----
->  2 files changed, 24 insertions(+), 4 deletions(-)
+> I am aware that syscon alone is not really acceptable, its converted
+> directly from the old text bindings.
 > 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 4a900cdbc62e..b6aba4f50db7 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -3754,12 +3754,18 @@ in case of KVM_S390_MEMOP_F_CHECK_ONLY), the ioctl returns a positive
->  error number indicating the type of exception. This exception is also
->  raised directly at the corresponding VCPU if the flag
->  KVM_S390_MEMOP_F_INJECT_EXCEPTION is set.
-> +On protection exceptions, unless specified otherwise, the injected
-> +translation-exception identifier (TEID) indicates suppression.
->  
->  If the KVM_S390_MEMOP_F_SKEY_PROTECTION flag is set, storage key
->  protection is also in effect and may cause exceptions if accesses are
->  prohibited given the access key designated by "key"; the valid range is 0..15.
->  KVM_S390_MEMOP_F_SKEY_PROTECTION is available if KVM_CAP_S390_MEM_OP_EXTENSION
->  is > 0.
-> +Since the accessed memory may span multiple pages and those pages might have
-> +different storage keys, it is possible that a protection exception occurs
-> +after memory has been modified. In this case, if the exception is injected,
-> +the TEID does not indicate suppression.
->  
->  Absolute read/write:
->  ^^^^^^^^^^^^^^^^^^^^
-> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-> index d53a183c2005..227ed0009354 100644
-> --- a/arch/s390/kvm/gaccess.c
-> +++ b/arch/s390/kvm/gaccess.c
-> @@ -491,8 +491,8 @@ enum prot_type {
->  	PROT_TYPE_IEP  = 4,
->  };
->  
-> -static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
-> -		     u8 ar, enum gacc_mode mode, enum prot_type prot)
-> +static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
-> +			    enum gacc_mode mode, enum prot_type prot, bool terminate)
->  {
->  	struct kvm_s390_pgm_info *pgm = &vcpu->arch.pgm;
->  	struct trans_exc_code_bits *tec;
-> @@ -520,6 +520,11 @@ static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
->  			tec->b61 = 1;
->  			break;
->  		}
-> +		if (terminate) {
-> +			tec->b56 = 0;
-> +			tec->b60 = 0;
-> +			tec->b61 = 0;
-> +		}
->  		fallthrough;
->  	case PGM_ASCE_TYPE:
->  	case PGM_PAGE_TRANSLATION:
-> @@ -552,6 +557,12 @@ static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva,
->  	return code;
->  }
->  
-> +static int trans_exc(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
-> +		     enum gacc_mode mode, enum prot_type prot)
-> +{
-> +	return trans_exc_ending(vcpu, code, gva, ar, mode, prot, false);
-> +}
-> +
->  static int get_vcpu_asce(struct kvm_vcpu *vcpu, union asce *asce,
->  			 unsigned long ga, u8 ar, enum gacc_mode mode)
->  {
-> @@ -1109,8 +1120,11 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->  		data += fragment_len;
->  		ga = kvm_s390_logical_to_effective(vcpu, ga + fragment_len);
->  	}
-> -	if (rc > 0)
-> -		rc = trans_exc(vcpu, rc, ga, ar, mode, prot);
-> +	if (rc > 0) {
-> +		bool terminate = (mode == GACC_STORE) && (idx > 0);
-> +
-> +		rc = trans_exc_ending(vcpu, rc, ga, ar, mode, prot, terminate);
-> +	}
->  out_unlock:
->  	if (need_ipte_lock)
->  		ipte_unlock(vcpu);
+> There is also the issue of some MSM8994, MSM8996 and APQ8096 devices using
+> '#address-cells', '#size-cells', some even defining reg property for
+> regulators.
+> 
+> Any advice on how to solve these issues is appreciated.
+> 
+> Changes in v2:
 
+Changelog goes after ---
+
+
+
+
+> * Remove the forgotten text bindings
+> * Move allOf after patternProperties
+> * Use my private email as the maintainer email
+> ---
+>  .../regulator/qcom,spmi-regulator.txt         | 347 ------------------
+>  .../regulator/qcom,spmi-regulator.yaml        | 176 +++++++++
+>  2 files changed, 176 insertions(+), 347 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.txt
+>  create mode 100644 Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.txt b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.txt
+> deleted file mode 100644
+> index c2a39b121b1b..000000000000
+> --- a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.txt
+> +++ /dev/null
+> @@ -1,347 +0,0 @@
+> -Qualcomm SPMI Regulators
+> -
+> -- compatible:
+> -	Usage: required
+> -	Value type: <string>
+> -	Definition: must be one of:
+> -			"qcom,pm8004-regulators"
+> -			"qcom,pm8005-regulators"
+> -			"qcom,pm8226-regulators"
+> -			"qcom,pm8841-regulators"
+> -			"qcom,pm8916-regulators"
+> -			"qcom,pm8941-regulators"
+> -			"qcom,pm8950-regulators"
+> -			"qcom,pm8994-regulators"
+> -			"qcom,pmi8994-regulators"
+> -			"qcom,pm660-regulators"
+> -			"qcom,pm660l-regulators"
+> -			"qcom,pms405-regulators"
+> -
+> -- interrupts:
+> -	Usage: optional
+> -	Value type: <prop-encoded-array>
+> -	Definition: List of OCP interrupts.
+> -
+> -- interrupt-names:
+> -	Usage: required if 'interrupts' property present
+> -	Value type: <string-array>
+> -	Definition: List of strings defining the names of the
+> -		    interrupts in the 'interrupts' property 1-to-1.
+> -		    Supported values are "ocp-<regulator_name>", where
+> -		    <regulator_name> corresponds to a voltage switch
+> -		    type regulator.
+> -
+> -- vdd_s1-supply:
+> -- vdd_s2-supply:
+> -- vdd_s3-supply:
+> -- vdd_s4-supply:
+> -- vdd_s5-supply:
+> -- vdd_s6-supply:
+> -- vdd_s7-supply:
+> -- vdd_s8-supply:
+> -	Usage: optional (pm8841 only)
+> -	Value type: <phandle>
+> -	Definition: Reference to regulator supplying the input pin, as
+> -		    described in the data sheet.
+> -
+> -- vdd_s1-supply:
+> -- vdd_s2-supply:
+> -- vdd_s3-supply:
+> -- vdd_s4-supply:
+> -- vdd_l1_l3-supply:
+> -- vdd_l2-supply:
+> -- vdd_l4_l5_l6-supply:
+> -- vdd_l7-supply:
+> -- vdd_l8_l11_l14_l15_l16-supply:
+> -- vdd_l9_l10_l12_l13_l17_l18-supply:
+> -	Usage: optional (pm8916 only)
+> -	Value type: <phandle>
+> -	Definition: Reference to regulator supplying the input pin, as
+> -		    described in the data sheet.
+> -
+> -- vdd_s1-supply:
+> -- vdd_s2-supply:
+> -- vdd_s3-supply:
+> -- vdd_l1_l3-supply:
+> -- vdd_l2_lvs_1_2_3-supply:
+> -- vdd_l4_l11-supply:
+> -- vdd_l5_l7-supply:
+> -- vdd_l6_l12_l14_l15-supply:
+> -- vdd_l8_l16_l18_19-supply:
+> -- vdd_l9_l10_l17_l22-supply:
+> -- vdd_l13_l20_l23_l24-supply:
+> -- vdd_l21-supply:
+> -- vin_5vs-supply:
+> -	Usage: optional (pm8941 only)
+> -	Value type: <phandle>
+> -	Definition: Reference to regulator supplying the input pin, as
+> -		    described in the data sheet.
+> -
+> -- vdd_s1-supply:
+> -- vdd_s2-supply:
+> -- vdd_s3-supply:
+> -- vdd_s4-supply:
+> -- vdd_s4-supply:
+> -- vdd_s5-supply:
+> -- vdd_s6-supply:
+> -- vdd_l1_l19-supply:
+> -- vdd_l2_l23-supply:
+> -- vdd_l3-supply:
+> -- vdd_l4_l5_l6_l7_l16-supply:
+> -- vdd_l8_l11_l12_l17_l22-supply:
+> -- vdd_l9_l10_l13_l14_l15_l18-supply:
+> -- vdd_l20-supply:
+> -- vdd_l21-supply:
+> -	Usage: optional (pm8950 only)
+> -	Value type: <phandle>
+> -	Definition: reference to regulator supplying the input pin, as
+> -		    described in the data sheet
+> -
+> -- vdd_s1-supply:
+> -- vdd_s2-supply:
+> -- vdd_s3-supply:
+> -- vdd_s4-supply:
+> -- vdd_s5-supply:
+> -- vdd_s6-supply:
+> -- vdd_s7-supply:
+> -- vdd_s8-supply:
+> -- vdd_s9-supply:
+> -- vdd_s10-supply:
+> -- vdd_s11-supply:
+> -- vdd_s12-supply:
+> -- vdd_l1-supply:
+> -- vdd_l2_l26_l28-supply:
+> -- vdd_l3_l11-supply:
+> -- vdd_l4_l27_l31-supply:
+> -- vdd_l5_l7-supply:
+> -- vdd_l6_l12_l32-supply:
+> -- vdd_l8_l16_l30-supply:
+> -- vdd_l9_l10_l18_l22-supply:
+> -- vdd_l13_l19_l23_l24-supply:
+> -- vdd_l14_l15-supply:
+> -- vdd_l17_l29-supply:
+> -- vdd_l20_l21-supply:
+> -- vdd_l25-supply:
+> -- vdd_lvs_1_2-supply:
+> -	Usage: optional (pm8994 only)
+> -	Value type: <phandle>
+> -	Definition: Reference to regulator supplying the input pin, as
+> -		    described in the data sheet.
+> -
+> -- vdd_s1-supply:
+> -- vdd_s2-supply:
+> -- vdd_s3-supply:
+> -- vdd_l1-supply:
+> -	Usage: optional (pmi8994 only)
+> -	Value type: <phandle>
+> -	Definition: Reference to regulator supplying the input pin, as
+> -		    described in the data sheet.
+> -
+> -- vdd_l1_l6_l7-supply:
+> -- vdd_l2_l3-supply:
+> -- vdd_l5-supply:
+> -- vdd_l8_l9_l10_l11_l12_l13_l14-supply:
+> -- vdd_l15_l16_l17_l18_l19-supply:
+> -- vdd_s1-supply:
+> -- vdd_s2-supply:
+> -- vdd_s3-supply:
+> -- vdd_s5-supply:
+> -- vdd_s6-supply:
+> -	Usage: optional (pm660 only)
+> -	Value type: <phandle>
+> -	Definition: Reference to regulator supplying the input pin, as
+> -		    described in the data sheet.
+> -
+> -- vdd_l1_l9_l10-supply:
+> -- vdd_l2-supply:
+> -- vdd_l3_l5_l7_l8-supply:
+> -- vdd_l4_l6-supply:
+> -- vdd_s1-supply:
+> -- vdd_s2-supply:
+> -- vdd_s3-supply:
+> -- vdd_s4-supply:
+> -- vdd_s5-supply:
+> -	Usage: optional (pm660l only)
+> -	Value type: <phandle>
+> -	Definition: Reference to regulator supplying the input pin, as
+> -		    described in the data sheet.
+> -
+> -- vdd_l1_l2-supply:
+> -- vdd_l3_l8-supply:
+> -- vdd_l4-supply:
+> -- vdd_l5_l6-supply:
+> -- vdd_l10_l11_l12_l13-supply:
+> -- vdd_l7-supply:
+> -- vdd_l9-supply:
+> -- vdd_s1-supply:
+> -- vdd_s2-supply:
+> -- vdd_s3-supply:
+> -- vdd_s4-supply:
+> -- vdd_s5-supply
+> -	Usage: optional (pms405 only)
+> -	Value type: <phandle>
+> -	Definition: Reference to regulator supplying the input pin, as
+> -		    described in the data sheet.
+> -
+> -- qcom,saw-reg:
+> -	Usage: optional
+> -	Value type: <phandle>
+> -	Description: Reference to syscon node defining the SAW registers.
+> -
+> -
+> -The regulator node houses sub-nodes for each regulator within the device. Each
+> -sub-node is identified using the node's name, with valid values listed for each
+> -of the PMICs below.
+> -
+> -pm8004:
+> -	s2, s5
+> -
+> -pm8005:
+> -	s1, s2, s3, s4
+> -
+> -pm8841:
+> -	s1, s2, s3, s4, s5, s6, s7, s8
+> -
+> -pm8916:
+> -	s1, s2, s3, s4, l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13,
+> -	l14, l15, l16, l17, l18
+> -
+> -pm8941:
+> -	s1, s2, s3, s4, l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13,
+> -	l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, lvs1, lvs2, lvs3,
+> -	5vs1, 5vs2
+> -
+> -pm8994:
+> -	s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, l1, l2, l3, l4, l5,
+> -	l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20,
+> -	l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, lvs1, lvs2
+> -
+> -pmi8994:
+> -	s1, s2, s3, l1
+> -
+> -The content of each sub-node is defined by the standard binding for regulators -
+> -see regulator.txt - with additional custom properties described below:
+> -
+> -- regulator-initial-mode:
+> -	Usage: optional
+> -	Value type: <u32>
+> -	Description: 2 = Set initial mode to auto mode (automatically select
+> -		    between HPM and LPM); not available on boost type
+> -		    regulators.
+> -
+> -		    1 = Set initial mode to high power mode (HPM), also referred
+> -		    to as NPM. HPM consumes more ground current than LPM, but
+> -		    it can source significantly higher load current. HPM is not
+> -		    available on boost type regulators. For voltage switch type
+> -		    regulators, HPM implies that over current protection and
+> -		    soft start are active all the time.
+> -
+> -		    0 = Set initial mode to low power mode (LPM).
+> -
+> -- qcom,ocp-max-retries:
+> -	Usage: optional
+> -	Value type: <u32>
+> -	Description: Maximum number of times to try toggling a voltage switch
+> -		     off and back on as a result of consecutive over current
+> -		     events.
+> -
+> -- qcom,ocp-retry-delay:
+> -	Usage: optional
+> -	Value type: <u32>
+> -	Description: Time to delay in milliseconds between each voltage switch
+> -		     toggle after an over current event takes place.
+> -
+> -- qcom,pin-ctrl-enable:
+> -	Usage: optional
+> -	Value type: <u32>
+> -	Description: Bit mask specifying which hardware pins should be used to
+> -		     enable the regulator, if any; supported bits are:
+> -			0 = ignore all hardware enable signals
+> -			BIT(0) = follow HW0_EN signal
+> -			BIT(1) = follow HW1_EN signal
+> -			BIT(2) = follow HW2_EN signal
+> -			BIT(3) = follow HW3_EN signal
+> -
+> -- qcom,pin-ctrl-hpm:
+> -	Usage: optional
+> -	Value type: <u32>
+> -	Description: Bit mask specifying which hardware pins should be used to
+> -		     force the regulator into high power mode, if any;
+> -		     supported bits are:
+> -			0 = ignore all hardware enable signals
+> -			BIT(0) = follow HW0_EN signal
+> -			BIT(1) = follow HW1_EN signal
+> -			BIT(2) = follow HW2_EN signal
+> -			BIT(3) = follow HW3_EN signal
+> -			BIT(4) = follow PMIC awake state
+> -
+> -- qcom,vs-soft-start-strength:
+> -	Usage: optional
+> -	Value type: <u32>
+> -	Description: This property sets the soft start strength for voltage
+> -		     switch type regulators; supported values are:
+> -			0 = 0.05 uA
+> -			1 = 0.25 uA
+> -			2 = 0.55 uA
+> -			3 = 0.75 uA
+> -
+> -- qcom,saw-slave:
+> -	Usage: optional
+> -	Value type: <boo>
+> -	Description: SAW controlled gang slave. Will not be configured.
+> -
+> -- qcom,saw-leader:
+> -	Usage: optional
+> -	Value type: <boo>
+> -	Description: SAW controlled gang leader. Will be configured as
+> -		     SAW regulator.
+> -
+> -Example:
+> -
+> -	regulators {
+> -		compatible = "qcom,pm8941-regulators";
+> -		vdd_l1_l3-supply = <&s1>;
+> -
+> -		s1: s1 {
+> -			regulator-min-microvolt = <1300000>;
+> -			regulator-max-microvolt = <1400000>;
+> -		};
+> -
+> -		...
+> -
+> -		l1: l1 {
+> -			regulator-min-microvolt = <1225000>;
+> -			regulator-max-microvolt = <1300000>;
+> -		};
+> -
+> -		....
+> -	};
+> -
+> -Example 2:
+> -
+> -	saw3: syscon@9A10000 {
+> -		compatible = "syscon";
+> -		reg = <0x9A10000 0x1000>;
+> -	};
+> -
+> -	...
+> -
+> -	spm-regulators {
+> -		compatible = "qcom,pm8994-regulators";
+> -		qcom,saw-reg = <&saw3>;
+> -		s8 {
+> -			qcom,saw-slave;
+> -		};
+> -		s9 {
+> -			qcom,saw-slave;
+> -		};
+> -		s10 {
+> -			qcom,saw-slave;
+> -		};
+> -		pm8994_s11_saw: s11 {
+> -			qcom,saw-leader;
+> -			regulator-always-on;
+> -			regulator-min-microvolt = <900000>;
+> -			regulator-max-microvolt = <1140000>;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> new file mode 100644
+> index 000000000000..5c747c832529
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> @@ -0,0 +1,176 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/qcom,spmi-regulator.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SPMI Regulators
+> +
+> +maintainers:
+> +  - Robert Marko <robimarko@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,pm660-regulators
+> +      - qcom,pm660l-regulators
+> +      - qcom,pm8004-regulators
+> +      - qcom,pm8005-regulators
+> +      - qcom,pm8226-regulators
+> +      - qcom,pm8841-regulators
+> +      - qcom,pm8916-regulators
+> +      - qcom,pm8941-regulators
+> +      - qcom,pm8950-regulators
+> +      - qcom,pm8994-regulators
+> +      - qcom,pmi8994-regulators
+> +      - qcom,pms405-regulators
+> +
+
+You miss here interrupts+names.
+
+> +  qcom,saw-reg:
+> +    description: Reference to syscon node defining the SAW registers
+> +    $ref: "/schemas/types.yaml#/definitions/phandle"
+
+No quotes around this.
+
+> +
+> +patternProperties:
+> +  ".*-supply$":
+
+We should not allow any supply, but rather a strictly defined pattern.
+
+What I actually prefer is to see something like this:
+https://lore.kernel.org/all/20220426105501.73200-3-krzysztof.kozlowski@linaro.org/
+but that's not a requirement. Some specific pattern is enough.
+
+> +    description: Input supply phandle(s) for this node
+> +    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +
+> +  "^((s|l|lvs|5vs)[0-9]*)$":
+
+s1111 should not be a valid regulator. :)
+Neither s000000.
+
+
+
+Best regards,
+Krzysztof

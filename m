@@ -2,196 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEFC52AD56
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34F952AD57
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353157AbiEQVJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
+        id S1353163AbiEQVJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232813AbiEQVJO (ORCPT
+        with ESMTP id S1353161AbiEQVJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:09:14 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D21532E9;
-        Tue, 17 May 2022 14:09:12 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B921E240003;
-        Tue, 17 May 2022 21:09:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652821751;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4X0RThNZxtIdbfYHNEBRnxF0Yn3t5Yg/fIL7z0LUq1k=;
-        b=Kw37BgzduEUeCEtlDU3OFs5YdMk0lvNTTZwRFRUpLg7h7hyTe7ZpI6ACJ/GpabFbiiN/JL
-        jzMLbuNfs/Ds9ZW44fXyg3AEaPjtQ7k+NApU2CCjcREfzAk+ujwfwz6zVHLTB7qZunt3kL
-        6ItRvBX8bgC5kBa74qnrwazeRYUFNWksJt4fzzkBH0hLXpOJ/B/2d/P54JbaimIJ5Dh8V1
-        9wMgJ+kGIUGFEaon43qC5Nwqt3kz3H5zZUTYvPl5+WBzJ78Tz4CKmf++nvaWDz4y/cG2sh
-        qal+2nPLsy79cymLNK9ZLdhzz3+lYkAK8Nw/+j3nr+rVsDyFg7m/3vAJ9GwMeg==
-Date:   Tue, 17 May 2022 23:09:10 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     a.zummo@towertech.it, daire.mcnamara@microchip.com,
-        lewis.hanly@microchip.com, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 1/2] rtc: Add driver for Microchip PolarFire SoC
-Message-ID: <YoQO9or6g2r3EU8w@mail.local>
-References: <20220516082838.3717982-1-conor.dooley@microchip.com>
- <20220516082838.3717982-2-conor.dooley@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516082838.3717982-2-conor.dooley@microchip.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 17 May 2022 17:09:47 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E802532F5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:09:46 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id n10so17803pjh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:09:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R/7z8eWZxiYe9S0To66yjly59RWl9dyPFi7uANEALSM=;
+        b=vkkR5tKDxiQQYhXSKUjsv5XIK18wcJvUl2NcE2t/3wUFdjG/1uvIQXQf6lzhh6NsNx
+         aakGM81RtKLwz51MPDh8PH/xVqKHMKxkDEvwrdPyUNQ83FT9e7LelTlzO8A9mLjM0EId
+         WlL1qs5ogPv3DNH1y9e5cPMdBh5L/h6zQx6WNi3PPzOd9JAonlNbTMqSLRIffRH7mvdt
+         mSgIgITy+2Y0iZEm2K8Zy9VdalWT+F0xO8loMKOrwUAsDF2VEJfYzf55XI+kY1Qo6nzK
+         0ds/FyoJVy17vFeNh0HbIiveKB0Z4Dri5+U4gGRYaWbl3qCUE3+yO4adbX1iAu0GWNOo
+         eX6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=R/7z8eWZxiYe9S0To66yjly59RWl9dyPFi7uANEALSM=;
+        b=PvwhRtTWSuVixfpAqAUMQcPR+DCjPr3U0b/YtkAyCCPM9hGa5b9aWMS6rYDmpeYsey
+         LOf4Ldg4bKmZqTHmQW6CD46EDMINmZTrXsB/yf2Mas2Ufqeya5A8jLBqm8sGY2GE65n9
+         XKLV0H3C1i1dyff4Gw3bJKImXUDKM3J0YxSmUDbjtHZgx5/pL3CIVyogBJkObRhGm6h7
+         qSNGWqe2JBBscEEGEye34T6WuyC6m3n5XCLrd1TwD4MISao15TP+LPhPM9RaWPTyEzqY
+         Se34rsI/vi+G9LbfhcGBKGz6VCtI/91MNpkoikVz3lHyKbBu33HCvD+Pav6qPFe97UBn
+         H1Bg==
+X-Gm-Message-State: AOAM5307L2hs63VYIzlziTlnaz51RWZVoQ74tOfdmuTG/cyZzvGe+r0W
+        paJHDoL/dkDMK3Sv4nOoeFnUcw==
+X-Google-Smtp-Source: ABdhPJwyZDjPxyc5RmbaiaP1rkSweQ2E4F8JTK4aBmp1Io0axoQVTBsN13qBX6XYwUbLeDAc7Vck/w==
+X-Received: by 2002:a17:90a:6f44:b0:1df:7cfb:d9f9 with SMTP id d62-20020a17090a6f4400b001df7cfbd9f9mr6854344pjk.201.1652821785698;
+        Tue, 17 May 2022 14:09:45 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id 1-20020a620501000000b0050dc76281e1sm162511pff.187.2022.05.17.14.09.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 14:09:45 -0700 (PDT)
+Date:   Tue, 17 May 2022 14:09:45 -0700 (PDT)
+X-Google-Original-Date: Tue, 17 May 2022 14:09:43 PDT (-0700)
+Subject:     Re: CFP open for RISC-V MC at Linux Plumbers Conference 2022
+In-Reply-To: <CAOnJCUKjSCrRNT4841MzO3vWmYszX5CSmvtPoRLydzG7FFm7kA@mail.gmail.com>
+CC:     linux-riscv@lists.infradead.org, opensbi@lists.infradead.org,
+        linux-kernel@vger.kernel.org, sw-dev@groups.riscv.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     atishp@atishpatra.org
+Message-ID: <mhng-1b49d564-a55c-464c-9834-2ac4a334b930@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 03 May 2022 18:30:46 PDT (-0700), atishp@atishpatra.org wrote:
+> The CFP for topic proposals for the RISC-V micro conference[1] is open now.
+> Please submit your proposal before it's too late!
 
-On 16/05/2022 09:28:38+0100, Conor Dooley wrote:
-> +struct mpfs_rtc_dev {
-> +	struct rtc_device *rtc;
-> +	void __iomem *base;
-> +	int wakeup_irq;
+Due to all of the extra complexities around hosting conferences right 
+now we're going to try and get our schedule together a bit earlier than 
+usual this year: specifically we'll be going through our first round of 
+acceptances at 10am Pacific on Friday June 17th, to make sure we can 
+give adequate notice to both the attendees and organizers before the 
+schedule is set.  That's quite a bit earlier than usual and only a month 
+away so sorry if it's a bit inconvenient for folks, but the goal is to 
+remove one source of chaos from what will likely be a high complexity 
+set of conferences this fall.  As usual the deadline is soft, but if you 
+miss it then it just luck as to whether your talk can be fit in.
 
-I believe this is only used in .probe so you make it local to this
-function.
+Also including a reminder to anyone planning on attending that the visa 
+process is likely to be even more difficult than usual this year, so you 
+should plan accordingly.  If you're from a country that has a complex 
+visa process then we're happy to help any way we can, just let us know 
+via email.  As usual Plumbers fills up and late registrations are a 
+headache for the organizers, so be sure to register as early as possible 
+and let us know if you're running into any issues.
 
-> +};
-> +
-
-
-> +static int mpfs_rtc_readtime(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct mpfs_rtc_dev *rtcdev = dev_get_drvdata(dev);
-> +	u64 time;
-> +
-> +	time = ((u64)readl(rtcdev->base + DATETIME_UPPER_REG) & DATETIME_UPPER_MASK) << 32;
-> +	time |= readl(rtcdev->base + DATETIME_LOWER_REG);
-
-Are the registers properly latched on a DATETIME_UPPER_REG read?
-
-> +	rtc_time64_to_tm(time + rtcdev->rtc->range_min, tm);
-
-range_min is never set so it will end up being 0. I guess you can avoid
-a bunch of arithmetic in all the driver. Offsetting will happen in the
-core which will probably never happen anyway because the max year is
-141338. I guess we will all be gone by then ;)
-
-> +
-> +	return 0;
-> +}
-> +
-
-> +static int mpfs_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct mpfs_rtc_dev *rtcdev;
-> +	struct clk *clk;
-> +	u32 prescaler;
-> +	int ret;
-> +
-> +	rtcdev = devm_kzalloc(&pdev->dev, sizeof(struct mpfs_rtc_dev), GFP_KERNEL);
-> +	if (!rtcdev)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, rtcdev);
-> +
-> +	rtcdev->rtc = devm_rtc_allocate_device(&pdev->dev);
-> +	if (IS_ERR(rtcdev->rtc))
-> +		return PTR_ERR(rtcdev->rtc);
-> +
-> +	rtcdev->rtc->ops = &mpfs_rtc_ops;
-> +
-> +	/* range is capped by alarm max, lower reg is 31:0 & upper is 10:0 */
-> +	rtcdev->rtc->range_max = GENMASK_ULL(42, 0);
-> +
-> +	clk = mpfs_rtc_init_clk(&pdev->dev);
-> +	if (IS_ERR(clk))
-> +		return PTR_ERR(clk);
-> +
-> +	rtcdev->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(rtcdev->base)) {
-> +		dev_dbg(&pdev->dev, "invalid ioremap resources\n");
-> +		return PTR_ERR(rtcdev->base);
-> +	}
-> +
-> +	rtcdev->wakeup_irq = platform_get_irq(pdev, 0);
-> +	if (rtcdev->wakeup_irq <= 0) {
-> +		dev_dbg(&pdev->dev, "could not get wakeup irq\n");
-> +		return rtcdev->wakeup_irq;
-> +	}
-> +	ret = devm_request_irq(&pdev->dev, rtcdev->wakeup_irq, mpfs_rtc_wakeup_irq_handler, 0,
-> +			       dev_name(&pdev->dev), rtcdev);
-> +	if (ret) {
-> +		dev_dbg(&pdev->dev, "could not request wakeup irq\n");
-> +		return ret;
-> +	}
-> +
-> +	/* prescaler hardware adds 1 to reg value */
-> +	prescaler = clk_get_rate(devm_clk_get(&pdev->dev, "rtcref")) - 1;
-> +
-> +	if (prescaler > MAX_PRESCALER_COUNT) {
-> +		dev_dbg(&pdev->dev, "invalid prescaler %d\n", prescaler);
-> +		return -EINVAL;
-> +	}
-> +
-> +	writel(prescaler, rtcdev->base + PRESCALER_REG);
-> +	dev_info(&pdev->dev, "prescaler set to: 0x%X \r\n", prescaler);
-> +
-> +	device_init_wakeup(&pdev->dev, true);
-> +	ret = dev_pm_set_wake_irq(&pdev->dev, rtcdev->wakeup_irq);
-> +	if (ret)
-> +		dev_err(&pdev->dev, "failed to enable irq wake\n");
-> +
-> +	return devm_rtc_register_device(rtcdev->rtc);
-> +}
-> +
-> +static int mpfs_rtc_remove(struct platform_device *pdev)
-> +{
-> +	mpfs_rtc_alarm_irq_enable(&pdev->dev, 0);
-
-This is not something you want to do if you want to wake up from
-hibernate or any similar sleep state.
-
-> +	device_init_wakeup(&pdev->dev, 0);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id mpfs_rtc_of_match[] = {
-> +	{ .compatible = "microchip,mpfs-rtc" },
-> +	{ }
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, mpfs_rtc_of_match);
-> +
-> +static struct platform_driver mpfs_rtc_driver = {
-> +	.probe = mpfs_rtc_probe,
-> +	.remove = mpfs_rtc_remove,
-> +	.driver	= {
-> +		.name = "mpfs_rtc",
-> +		.of_match_table = mpfs_rtc_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(mpfs_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("Real time clock for Microchip Polarfire SoC");
-> +MODULE_AUTHOR("Daire McNamara <daire.mcnamara@microchip.com>");
-> +MODULE_AUTHOR("Conor Dooley <conor.dooley@microchip.com>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.36.1
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Here is the announcement[2].
+> https://lpc.events/blog/2022/index.php/2022/02/04/cfp-open-microconferences/
+>
+> The Linux plumbers event will be both in person and remote
+> (hybrid)virtual this year. More details can be found here [3].
+>
+> [1] https://lpc.events/event/16/contributions/1148/
+> [2] https://lpc.events/blog/2022/index.php/2022/02/04/cfp-open-microconferences/
+> [3] https://lpc.events/

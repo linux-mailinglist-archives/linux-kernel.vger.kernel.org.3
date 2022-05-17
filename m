@@ -2,169 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417D8529AE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E47E529AE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241451AbiEQHdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S241469AbiEQHdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241223AbiEQHdA (ORCPT
+        with ESMTP id S241431AbiEQHdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:33:00 -0400
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10EC48386;
-        Tue, 17 May 2022 00:32:58 -0700 (PDT)
-Received: from [77.244.183.192] (port=64646 helo=[192.168.178.75])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nqrhP-000129-WE; Tue, 17 May 2022 09:32:56 +0200
-Message-ID: <ebd3f89b-3487-a610-7583-4ffda01a0dd6@lucaceresoli.net>
-Date:   Tue, 17 May 2022 09:32:52 +0200
+        Tue, 17 May 2022 03:33:15 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B880B483BB;
+        Tue, 17 May 2022 00:33:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YJHfiVsUDykSPr5+k151RDcZIeCNT1afz4WMhHSQ+344SoeTAKh6P+3PI01q3b5aHIjVD9Q+xEeovXgsJG0GkECt/1tNYl97QC7tVyksiu+pRkVec/hblTVsx0iVjw6EeWtvIc6Zp0VgSwe/M1XmODOuU8s2hpcda7KAVR66ciC+kNnfHrUwZ/7QKBwd6jKALzduJjmdxtziFGg/7l83xl50rlxqM9WLLeV864u4LyqEvKyqsSU1g22Es8SyUFyO6x38ssCUYGUwmC7uFxdfcJdIny/dspp61E8mMZlcHsTsyWvm3X2Yfa3jsES3UfORrcj0X1VjC2gvs2AFIHhfOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PJO2/UqQXOTiG2HBuMZte525u9YRMZUNc7NuyzFtt4M=;
+ b=ceDdpipkdpXxo+usqvd6bKi3sHktSxKLmh+2eKCUX3WCYhOzDh1rAKkMstC/z8m9ckLb8X4BkchhcD33K6TwYyNVqnT8tzAthXaEK6reoh6oZ8tRTLlBVfeA1ODeDvbQjlxfKR+GBwgoCn1qF6IFsMVLneq+2gjPAJMpUyOxHkjgHR6At7hCJiD+W+r2egYVqQ8A7wLCA0ZKB7jzBVl4oYpCAC2ZhcBM90bR8Xmht7E9Q5cuqRCHSJjDfe3SsZSMt7QZhLlNDyClnXFHJ+VbCZOC7JtWX8lF9whhc/zFek3dPtGOtLixwJBu2fSQ60Q+fF+kyF/IKlmopi8zyDuSXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=microchip.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PJO2/UqQXOTiG2HBuMZte525u9YRMZUNc7NuyzFtt4M=;
+ b=ViHVPzR2RKNLuqpkLrjSAi5tzqxWLEJYhzvjQKdI9qizJVlK0Q+WNGvSN2JJEkT6Hsy8HVw5Q8dWKyQUtYLCJLWnRoVOS7gvTfjwMbhL3c8EDAkw23ZVv3YDSpK7mC5npCUCo9fiwT2yQg8Yt4/6HKzVPvJh0I3DfPDp4mQ8az8=
+Received: from BN9PR03CA0306.namprd03.prod.outlook.com (2603:10b6:408:112::11)
+ by BN7PR02MB4994.namprd02.prod.outlook.com (2603:10b6:408:2a::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.16; Tue, 17 May
+ 2022 07:33:07 +0000
+Received: from BN1NAM02FT051.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:112:cafe::a9) by BN9PR03CA0306.outlook.office365.com
+ (2603:10b6:408:112::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14 via Frontend
+ Transport; Tue, 17 May 2022 07:33:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT051.mail.protection.outlook.com (10.13.2.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5250.13 via Frontend Transport; Tue, 17 May 2022 07:33:07 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 17 May 2022 00:33:03 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 17 May 2022 00:33:03 -0700
+Envelope-to: nicolas.ferre@microchip.com,
+ davem@davemloft.net,
+ richardcochran@gmail.com,
+ claudiu.beznea@microchip.com,
+ kuba@kernel.org,
+ pabeni@redhat.com,
+ netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ harinikatakamlinux@gmail.com
+Received: from [10.140.6.13] (port=40442 helo=xhdharinik40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <harini.katakam@xilinx.com>)
+        id 1nqrhX-000GAX-D7; Tue, 17 May 2022 00:33:03 -0700
+From:   Harini Katakam <harini.katakam@xilinx.com>
+To:     <nicolas.ferre@microchip.com>, <davem@davemloft.net>,
+        <richardcochran@gmail.com>, <claudiu.beznea@microchip.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <michal.simek@xilinx.com>, <harinikatakamlinux@gmail.com>,
+        <harini.katakam@xilinx.com>, <radhey.shyam.pandey@xilinx.com>
+Subject: [PATCH 0/3] Macb PTP updates
+Date:   Tue, 17 May 2022 13:02:56 +0530
+Message-ID: <20220517073259.23476-1-harini.katakam@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] PCI: dra7xx: Fix link removal on probe error
-Content-Language: it-IT
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, PCI <linux-pci@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sekhar Nori <nsekhar@ti.com>
-References: <20211214221450.589884-1-luca@lucaceresoli.net>
- <CAL_Jsq+GQTcx1EGKHug2ZcDZufrKM-4k6PB0vQeTCTG42MHzvA@mail.gmail.com>
- <59a23c89-0810-eb28-acd9-7051ac34d438@lucaceresoli.net>
- <4579940c-27dc-733e-4022-ebea4671c839@lucaceresoli.net>
- <CAL_JsqJ5nr6xJoTv3A6UPMMDXhWKcwSEUA3ux3kK8OMWQxdc6w@mail.gmail.com>
- <YnvnNUrsCOUxMu8A@lpieralisi>
- <615718f9-151e-20fb-fcb0-56063ae61ca6@lucaceresoli.net>
- <CAGETcx9r4e9PkUFNZ+vUfqOSO5=e9apmBj0+DyOkKEvc4CnsLQ@mail.gmail.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-In-Reply-To: <CAGETcx9r4e9PkUFNZ+vUfqOSO5=e9apmBj0+DyOkKEvc4CnsLQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: afd473f2-9713-495d-8147-08da37d77c9b
+X-MS-TrafficTypeDiagnostic: BN7PR02MB4994:EE_
+X-Microsoft-Antispam-PRVS: <BN7PR02MB4994A7832663AE46847A3426C9CE9@BN7PR02MB4994.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G5FalLh2piL3vBb/u0syiVZGYTIAUezD0FkxMOhl0+mgPGnKPehlpvyR7ccWv8RjxMfWRYSK8qnz6DuFWLr3MOnfN7n7svkuxND4xhExbGpbV6OhtqOBhmwfbXUq4+L9hXduzqpvsVLzp4aIjtlYbWHqjNTczTJRcheQVFV4+MD0H5qdjDx0hYyf+Mtx/3Jt1hS9+XJsNogHv0haH/d52goXcMDnOzvNjjyQpKWv8I97YWGLiCc+MrRihVrxQ5bZQ1l9gwhZ5/Qu/4EQlCM10XgSzm1Ss3LeQALHck+4cjcZ3ekPfRjBuGYZQndpXdFl58jmHeM1+9GjLuiQHbvGSI+7WShSZ+LWPEtkc5vQHfrI12plQaWYeX0t6QmTHjE7w6ZDM0usqaQAXBOUNXUGHkBkQAjA2OEx4px71YqpHgpV23Cr5n4V8XUiae2g0goLAaYwEj7hpGbI9Q54VNw9Sg25bNtDzQpUqagxiugkh+K1tAgMW/sjb3uBHAMdC2KHwgar9xVu3kMPvS+Rv0dCE2Mfhtj0Um3oqEiRsuRhYc2hi/s4s7mBH1tyNqRBU0VqtTONtIZx6EL8D9bGPcS/u5GwUuYEo4NWuAsrBsGn24YPw50/jGMBvQdEKei0rGUiCt4W8VKtWXaGjtZKNLkdHJFRThIYbjfAxDe0TnAySl1EOSm0qYHKJsl08IQ0yGz8sDHnc6oS+SLl6n6sugJJQQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(4326008)(82310400005)(8676002)(15650500001)(2616005)(54906003)(70586007)(6666004)(83380400001)(2906002)(40460700003)(316002)(9786002)(508600001)(7636003)(36860700001)(8936002)(47076005)(336012)(36756003)(7696005)(426003)(1076003)(107886003)(356005)(70206006)(110136005)(44832011)(5660300002)(26005)(4744005)(186003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 07:33:07.2846
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: afd473f2-9713-495d-8147-08da37d77c9b
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT051.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR02MB4994
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
+Macb PTP updates to handle PTP one step sync support and other minor
+enhancements.
 
-On 14/05/22 05:46, Saravana Kannan wrote:
-> On Thu, May 12, 2022 at 7:07 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>
->> Hi Lorenzo,
->>
->> On 11/05/22 18:41, Lorenzo Pieralisi wrote:
->>> On Sat, Jan 15, 2022 at 10:02:00AM -0600, Rob Herring wrote:
->>>> +Saravana
->>>>
->>>> On Tue, Jan 11, 2022 at 4:35 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>>>>
->>>>> Hi Rob,
->>>>>
->>>>> On 16/12/21 10:08, Luca Ceresoli wrote:
->>>>>> Hi Rob,
->>>>>>
->>>>>> thanks for the quick feedback!
->>>>>>
->>>>>> On 14/12/21 23:42, Rob Herring wrote:
->>>>>>> On Tue, Dec 14, 2021 at 4:15 PM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>>>>>>>
->>>>>>>> If a devm_phy_get() calls fails with phy_count==N (N > 0), then N links
->>>>>>>> have already been added by device_link_add() and won't be deleted by
->>>>>>>> device_link_del() because the code calls 'return' and not 'goto err_link'.
->>>>>>>>
->>>>>>>> Fix in a very simple way by doing all the devm_phy_get() calls before all
->>>>>>>> the device_link_add() calls.
->>>>>>>>
->>>>>>>> Fixes: 7a4db656a635 ("PCI: dra7xx: Create functional dependency between PCIe and PHY")
->>>>>>>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>>>>>>> ---
->>>>>>>>  drivers/pci/controller/dwc/pci-dra7xx.c | 2 ++
->>>>>>>>  1 file changed, 2 insertions(+)
->>>>>>>>
->>>>>>>> diff --git a/drivers/pci/controller/dwc/pci-dra7xx.c b/drivers/pci/controller/dwc/pci-dra7xx.c
->>>>>>>> index f7f1490e7beb..2ccc53869e13 100644
->>>>>>>> --- a/drivers/pci/controller/dwc/pci-dra7xx.c
->>>>>>>> +++ b/drivers/pci/controller/dwc/pci-dra7xx.c
->>>>>>>> @@ -757,7 +757,9 @@ static int dra7xx_pcie_probe(struct platform_device *pdev)
->>>>>>>>                 phy[i] = devm_phy_get(dev, name);
->>>>>>>>                 if (IS_ERR(phy[i]))
->>>>>>>>                         return PTR_ERR(phy[i]);
->>>>>>>> +       }
->>>>>>>>
->>>>>>>> +       for (i = 0; i < phy_count; i++) {
->>>>>>>>                 link[i] = device_link_add(dev, &phy[i]->dev, DL_FLAG_STATELESS);
->>>>>>>
->>>>>>> I think this should happen automatically now with fw_devlink being
->>>>>>> enabled by default. Can you try?
->>>>>>
->>>>>> Do you mean removal should be done automatically? I think they are not
->>>>>> due to the DL_FLAG_STATELESS flag.
->>>>>
->>>>> I would love to have feedback because, as said, I think my patch is
->>>>> correct, but if I'm wrong (which might well be) I have to drop patch 1
->>>>> and rewrite patch 2 in a slightly more complex form.
->>>>
->>>> I mean that why do you need explicit dependency tracking here when
->>>> dependencies on a PHY should happen automatically now. IOW, what is
->>>> special about this driver and dependency?
->>>
->>> Any update on this patch ? I think patch 2 can be merged, please
->>> let me know if this one can be dropped.
->>
->> Thanks for the feedback! You would say yes, you can merge patch 2,
->> except it probably does not even apply as it is written in a way that is
->> based on the changes in patch 1.
->>
->> I could rewrite patch 2 to not depend on patch 1 of course, but it
->> wouldn't make code simpler, perhaps more complex. And moreover the
->> hardware that I used to have access to has phy_count==1 so I could never
->> test the failing case, and sadly now I have no access to that hardware.
-> 
-> Hi Luca,
-> 
-> The fw_devlink code to create device links from consumers to "phys"
-> suppliers is pretty well exercised. Most/all Android devices running
-> 5.10+ kernels (including Pixel 6) use fw_devlink=on to be able to boot
-> properly.
-> 
-> So I'd be pretty confident in deleting the device_link_add/del() code
-> in drivers/pci/controller/dwc/pci-dra7xx.c. The device links should
-> already be there before the probe is even called.
-> 
-> Also, if you want to check if the device links (even the 1 phy one you
-> have) are being created, you can look at /sys/class/devlink to see the
-> list of all device links that are currently present. You can delete
-> the code and then use this to check too.
+Harini Katakam (3):
+  net: macb: Fix PTP one step sync support
+  net: macb: Enable PTP unicast
+  net: macb: Optimize reading HW timestamp
 
-Thank you for your feedback. Unfortunately as I said I have no access to
-the hardware, and won't have anymore. I don't think it is a good idea to
-send a patch that I cannot test on real hardware, especially since it is
-for a generic hardware that thus might affect others. But I would be
-glad to review any such patch that might be sent, FWIW.
+ drivers/net/ethernet/cadence/macb.h      |  4 ++
+ drivers/net/ethernet/cadence/macb_main.c | 61 +++++++++++++++++++-----
+ drivers/net/ethernet/cadence/macb_ptp.c  | 12 +++--
+ 3 files changed, 63 insertions(+), 14 deletions(-)
 
 -- 
-Luca
+2.17.1
+

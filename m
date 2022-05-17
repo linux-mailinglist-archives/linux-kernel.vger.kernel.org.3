@@ -2,108 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8606D5299AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE505299AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240045AbiEQGnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        id S231407AbiEQGnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiEQGm4 (ORCPT
+        with ESMTP id S240062AbiEQGnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:42:56 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB793FBEA;
-        Mon, 16 May 2022 23:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=An34si7RN3x5AYHyo9ivNO4juXia4lwKqloOqJ0YQa0=; b=jKxTL6a94SajWnF7xG/o6Lgfqm
-        kl1vlPQz0hoaJ4EvVsBXD01Y9dJq8H/QK6h3UQfid7vyzt1aQYnd6CJO5UWu5NmV4kC4VckJOXs/e
-        mOtUQ/1gnmTR8uldKw0hZk4IfcSehAB9pS5Z8M9xqDWFm3jXwU4i76Ba9e/3qggGgcz8cx5Bw6btI
-        d015QjnDEbJ99qCo50TRnoD2WhCg2jQz7HvDkeeB6/jdJM4rzdZn2rY29VVQGDaIfd9Ru4ggwyBCL
-        jgy2rH8UrDwlag9Y3FKYEk90QQLee0cAGvoh4YNqlhDbapCwvfgtJ0uiZDBmdqAIYAwtcOuK5lLbd
-        WWNZMdzQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nqqup-0019ZV-0W; Tue, 17 May 2022 06:42:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0E72D3000DD;
-        Tue, 17 May 2022 08:42:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DEE062023D64A; Tue, 17 May 2022 08:42:39 +0200 (CEST)
-Date:   Tue, 17 May 2022 08:42:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christophe de Dinechin <dinechin@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3] sched/core: Address classes via __begin_sched_classes
-Message-ID: <YoND3ws5RUO4T+5g@hirez.programming.kicks-ass.net>
-References: <20220517030024.3388355-1-keescook@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517030024.3388355-1-keescook@chromium.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 17 May 2022 02:43:04 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3CB403ED;
+        Mon, 16 May 2022 23:43:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B4FA1CE1839;
+        Tue, 17 May 2022 06:43:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBBB0C34117;
+        Tue, 17 May 2022 06:42:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652769779;
+        bh=IkgpZRMDRokE+i/qDVN1ZJ1bBXEnwTYuhU5I2MyVykw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BBbc+U3g516zRPvEHx6rR68oL63QDxOu6wmXrjg6ADJO7EZDspBWQFoopYxLpfGQx
+         frdUv3YMua7gwvI8cgEtySJErWg9kk/jBfUpAzku6n2SQy2UtstYXKprFU0VppTMKC
+         7nRo9uSZldhoaC+FyNxb0siRDcErTgLlWWNbxyWRMHBk6Yxv+gxIogOWMBIyYiQb5c
+         uleQ7S5GU5lEjEki14B7DlRx963LKsGu+T28cPvbcbMvPA/O6Rk6y2Ktubww4I2rqk
+         9Gsz4/vNTxLzm71kpUqX5jtMnneLgFsoPoVCDnqkD25GjHaDm1SQRK26KKH34jXa9M
+         Jav6CRyXFQsXA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nqqv1-00Bp6o-EV; Tue, 17 May 2022 07:42:55 +0100
+Date:   Tue, 17 May 2022 07:42:54 +0100
+Message-ID: <87mtfgmzgx.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "kostap@marvell.com" <kostap@marvell.com>,
+        "robert.marko@sartura.hr" <robert.marko@sartura.hr>,
+        "vadym.kochan@plvision.eu" <vadym.kochan@plvision.eu>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v7 2/3] arm64: dts: marvell: Add Armada 98DX2530 SoC and RD-AC5X board
+In-Reply-To: <db5c3366-ac81-261b-ff32-3ccf94a930f6@alliedtelesis.co.nz>
+References: <20220512042501.3339775-1-chris.packham@alliedtelesis.co.nz>
+        <20220512042501.3339775-3-chris.packham@alliedtelesis.co.nz>
+        <87wnermc9c.wl-maz@kernel.org>
+        <5c01f20a-acd3-da15-081d-7cf878f8a77a@alliedtelesis.co.nz>
+        <a69eaf73-8c3c-dfd7-16e5-70460c68877e@alliedtelesis.co.nz>
+        <87mtfh6c58.wl-maz@kernel.org>
+        <db5c3366-ac81-261b-ff32-3ccf94a930f6@alliedtelesis.co.nz>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: Chris.Packham@alliedtelesis.co.nz, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kostap@marvell.com, robert.marko@sartura.hr, vadym.kochan@plvision.eu, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 08:00:23PM -0700, Kees Cook wrote:
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index d58c0389eb23..f2bcc7f15381 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5665,7 +5665,8 @@ static void put_prev_task_balance(struct rq *rq, struct task_struct *prev,
->  	 * We can terminate the balance pass as soon as we know there is
->  	 * a runnable task of @class priority or higher.
->  	 */
-> -	for_class_range(class, prev->sched_class, &idle_sched_class) {
-> +	for_class_range(class, prev->sched_class,
-> +			sched_class_higher(&idle_sched_class)) {
->  		if (class->balance(rq, prev, rf))
->  			break;
->  	}
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 8dccb34eb190..c757bd26b01a 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -2193,11 +2193,16 @@ const struct sched_class name##_sched_class \
->  extern struct sched_class __begin_sched_classes[];
->  extern struct sched_class __end_sched_classes[];
->  
-> -#define sched_class_highest (__end_sched_classes - 1)
-> -#define sched_class_lowest  (__begin_sched_classes - 1)
-> +#define sched_class_higher(class) ((class) + 1)
->  
-> +#define sched_class_highest (&__begin_sched_classes[__end_sched_classes     \
-> +						    - __begin_sched_classes \
-> +						    - 1])
-> +#define sched_class_lowest  (&__begin_sched_classes[0])
-> +
-> +/* For each class, inclusive from _from down to _to. */
->  #define for_class_range(class, _from, _to) \
-> -	for (class = (_from); class != (_to); class--)
-> +	for (class = (_from); class >= (_to); class--)
->  
->  #define for_each_class(class) \
->  	for_class_range(class, sched_class_highest, sched_class_lowest)
+On Mon, 16 May 2022 22:56:44 +0100,
+Chris Packham <Chris.Packham@alliedtelesis.co.nz> wrote:
+> 
+> >>>> Please fix your firmware to program CNTFRQ_EL0, and
+> >>>> remove this useless property.
+> >>> I'm kind of at the mercy of what Marvell have provided for ATF. I am
+> >>> working on the bootloader portion in parallel and am getting things
+> >>> ready for submitting the u-boot support upstream. I was hoping to
+> >>> leave ATF alone I can at least see if they haven't fixed this already
+> >>> (the original dtsi I started with was fairly old) and if they haven't
+> >>> I'll raise it via their support system.
+> >> Seems to work fine without the clock so I'll drop it.
+> > Thanks. If you can, please verify that this is set on both CPUs (I
+> > have seen plenty of firmware only setting it on CPU0 in the past).
+> The arch_timer interrupts are counting up on both CPUs and things 
+> generally seem to be getting scheduled (I don't have much of a userland 
+> at the moment so it's not exactly a stress test). Do you think that is 
+> sufficient to say the clock property is unnecessary and whatever 
+> firmware I have is working as expected.
 
+No, the counter always count, and CNTFRQ_EL0 is only an indication of
+the frequency for SW to find out. You can directly read CNTFRQ_EL0
+from userspace on each CPU and find whether they have the same value.
 
-Urgh, and we're back to unreadable garbage just because GCC is insane :/
+> >>>> You are also missing a PPI for the EL2 virtual timer which is present
+> >>>> on any ARMv8.1+ CPU (and since this system is using A55, it definitely
+> >>>> has it).
+> >>>>
+> >>>> [...]
+> >>> Will add.
+> >> I assume you're talking about the 5th PPI per the
+> >> timer/arm,arch_timer.yaml ("hypervisor virtual timer irq").
+> > Indeed.
+> >
+> >> Helpfully
+> >> Marvell don't include the PPI interrupt numbers in their datasheet. But
+> >> then I also notice that none of the other boards that have a
+> >> "arm,armv8-timer" provide a 5th interrupt either, have I misunderstood
+> >> something?
+> > This was only recently added to the DT binding, but the interrupt
+> > definitely exist at the CPU level for anything that implements ARMv8.1
+> > and up. AFAIK, the M1 is the only machine to expose this interrupt in
+> > DT, but this doesn't mean the interrupt doesn't exist on all the other
+> > systems that have the same architecture revision.
+> >
+> > If you have contacts in Marvell, maybe try and find out whether they
+> > have simply decided not to wire the interrupt (I wouldn't be
+> > surprised). In this case, please add a comment.
+> 
+> I've reached out via their customer support portal. So far they just 
+> want to know why I'm refusing to use their out of date SDK (maybe I 
+> should direct them at some of Jon Corbet's presentations :P).
+
+The fact that they are asking is already saying everything there is to
+know, sadly...
+
+> These integrated chips are sometimes a bit problematic because the 
+> support goes via the Switching group but these questions are really 
+> about IP blocks that have been taken from the SoC group. It may take a 
+> while before I get a response from someone that actually knows the 
+> internals.
+
+Fair enough. Until then, please drop a comment in the DT indicating
+that the fate of this PPI is unknown. If you eventually find out, just
+add it to the DT (it is easy to add things, much harder to remove
+them).
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

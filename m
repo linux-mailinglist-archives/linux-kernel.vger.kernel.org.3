@@ -2,85 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8338952AA00
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC90652AA13
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350035AbiEQSI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S1351820AbiEQSJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232354AbiEQSIW (ORCPT
+        with ESMTP id S232354AbiEQSJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:08:22 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEDC5FB8;
-        Tue, 17 May 2022 11:08:22 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-f1d2ea701dso1171891fac.10;
-        Tue, 17 May 2022 11:08:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yA1WC/CMw1QTEhMlwWP3KRXXpyfEqJZV8ewG6GE6Q2w=;
-        b=hjcWEvL+027cG6Xmg2jgzk+7PSntd0yBct1UDbeHuunkujfZxk+y5P3aKyWVsXGFf3
-         g78ryvXLd4GXU6n+5yH/A+7nEQQbyNR+j5c7UJO9PrOvJOFyesZvUPCUMzSSgDoKGIz6
-         4vkdwHi1S9OQv/fjOzg8NgwVBPP5LSVsA11Kb9KQEvUuNMD3J1IS8ufOkBWmx7oL6j28
-         Sz3vFqwwwDRW5VUuBhwT7FYUy92K6GicfIKD8ZZ4Af+CEW5Xv1OfTfBJsTCkeTpi4mCK
-         J9xJtL9Z2QK13KHRErUjDaAFD+A72XRJ2fPKm2Ju8a+zS8xvCCfn+o55RAjMAlD9gFao
-         6Kzg==
-X-Gm-Message-State: AOAM530ojR5OfqgWCRyCByDFxTqMNCH5maLtQf9+LXZihldlcrrjSbKS
-        23fdd60vB+SXT4UF3tZYJoX3J4DuUw==
-X-Google-Smtp-Source: ABdhPJyHxM+gcy+aOGsVHVFJUXDmZbeAjCxX3XCZt6jlOXXTkRGryo+YYnDX3wQV6bhyF7oqpe2Ofg==
-X-Received: by 2002:a05:6870:a40a:b0:f1:9240:2776 with SMTP id m10-20020a056870a40a00b000f192402776mr7214742oal.140.1652810901432;
-        Tue, 17 May 2022 11:08:21 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d5-20020a056870e24500b000e90544b79fsm40017oac.41.2022.05.17.11.08.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 11:08:20 -0700 (PDT)
-Received: (nullmailer pid 1342262 invoked by uid 1000);
-        Tue, 17 May 2022 18:08:19 -0000
-Date:   Tue, 17 May 2022 13:08:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH next v5 2/4] dt-bindings: nvmem: mediatek: efuse: add
- support mt8183
-Message-ID: <20220517180819.GA1342202-robh@kernel.org>
-References: <20220512062622.31484-1-chunfeng.yun@mediatek.com>
- <20220512062622.31484-2-chunfeng.yun@mediatek.com>
+        Tue, 17 May 2022 14:09:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2E75FB8;
+        Tue, 17 May 2022 11:09:07 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HHuj7S032306;
+        Tue, 17 May 2022 18:08:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=lZFnxU6GEX5YViFl4HPs4Icmctdn4XUXeWdOlmCpBqI=;
+ b=QJPxroUWOl7U/e0Sj75xbp+o88cRZji5Oj7CRaL/Cp9v/7F55yT+phD+bPuDDd9rdYVh
+ TR2jHE7Uyun/vqjI/VFfour4iWTs3PZjw0WiYbdoTpUugmoJRPac1PqNTMgragcgMWli
+ b89L9WdNoBtfhU2mjjIJ0YuvH/3+U08OcDx2p4L5S1UdQWMKgpdQUPLdNPDzeVNH29Wp
+ iuybvA7sgUFyjxJsSccP0yaIdsqVXGLvjPlnCUPrKC9S9baTj53bUBAZEsG4/ZrJrztw
+ cQwaEQRRkMH2Hl7I1Do3OJBt3fhIaBG616NbXSjh3gNxN4gAd8+aHdvK9EH3JDngVH7r rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4gj40esf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 18:08:59 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24HHvk73004564;
+        Tue, 17 May 2022 18:08:58 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4gj40erg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 18:08:58 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HI8Z07005730;
+        Tue, 17 May 2022 18:08:57 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma01dal.us.ibm.com with ESMTP id 3g242b4v30-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 18:08:57 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HI8ube7078890
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 May 2022 18:08:56 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BC5E9AE05F;
+        Tue, 17 May 2022 18:08:56 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9BAD5AE062;
+        Tue, 17 May 2022 18:08:54 +0000 (GMT)
+Received: from li-c92d2ccc-254b-11b2-a85c-a700b5bfb098.ibm.com.com (unknown [9.211.37.97])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 17 May 2022 18:08:54 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     jgg@nvidia.com, alex.williamson@redhat.com
+Cc:     cohuck@redhat.com, borntraeger@linux.ibm.com,
+        jjherne@linux.ibm.com, akrowiak@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, hch@infradead.org,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] vfio: remove VFIO_GROUP_NOTIFY_SET_KVM
+Date:   Tue, 17 May 2022 14:08:50 -0400
+Message-Id: <20220517180851.166538-1-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qhZLpU9-0YZ89O6SOHMewEQV1JK1GVPw
+X-Proofpoint-GUID: 9Pst9FCHRpDpoz83T36CDDZkW0241MAR
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512062622.31484-2-chunfeng.yun@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-17_03,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ malwarescore=0 priorityscore=1501 phishscore=0 spamscore=0 impostorscore=0
+ mlxlogscore=765 bulkscore=0 clxscore=1011 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205170107
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 14:26:20 +0800, Chunfeng Yun wrote:
-> Add "mediatek,mt8183-efuse" to fix dtbs check warning.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v5: new patch
-> ---
->  Documentation/devicetree/bindings/nvmem/mediatek,efuse.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+As discussed in this thread:
 
-Acked-by: Rob Herring <robh@kernel.org>
+https://lore.kernel.org/kvm/20220516172734.GE1343366@nvidia.com/
+
+Let's remove VFIO_GROUP_NOTIFY_SET_KVM and instead assume the association
+has already been established prior to device_open.  For the types today
+that need a KVM (GVT, vfio-ap) these will fail if a KVM is not found.
+Looking ahead, vfio-pci-zdev will optionally want the KVM association
+(enable hardware assists) but it will not be a hard requirement (still
+want to allow other, non-KVM userspace usage). 
+
+This is built on top of Jason's group locking series:
+https://github.com/jgunthorpe/linux/commits/vfio_group_locking
+
+And tested with s390x-pci (zdev-kvm series) and vfio-ap (no GVT to test
+with)
+
+@Jason since it's based on your initial patch if you'd rather a SoB just
+let me know.
+
+Matthew Rosato (1):
+  vfio: remove VFIO_GROUP_NOTIFY_SET_KVM
+
+ drivers/gpu/drm/i915/gvt/gvt.h        |  2 -
+ drivers/gpu/drm/i915/gvt/kvmgt.c      | 60 +++++------------------
+ drivers/s390/crypto/vfio_ap_ops.c     | 35 +++-----------
+ drivers/s390/crypto/vfio_ap_private.h |  3 --
+ drivers/vfio/vfio.c                   | 68 +++++++++------------------
+ include/linux/vfio.h                  |  5 +-
+ 6 files changed, 41 insertions(+), 132 deletions(-)
+
+-- 
+2.27.0
+

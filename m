@@ -2,191 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A4952A1AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BF152A1AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346174AbiEQMjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
+        id S1346148AbiEQMiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345637AbiEQMi5 (ORCPT
+        with ESMTP id S1345637AbiEQMix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:38:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231C94BFED
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:38:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 17 May 2022 08:38:53 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FD44BBBD;
+        Tue, 17 May 2022 05:38:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 180A41F8CA;
+        Tue, 17 May 2022 12:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652791130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RFMLqAwXg6vWYOQ8iLA3sbydzE5BkWsjD02JU3Y1ACY=;
+        b=fazXkWOe4HuB12Kh1xWJ4Y5jZIAQgTOUAsFpJ2VdRtGPXwFNEC9t3h39krfDBeMjDiEkaO
+        Ze075Fm2AhKmzyxeK4MJs8bay6DS6hHcsOI0BGk2aswDBTI8NlxMyeOMMTxnZI6xE5UAxJ
+        QFJR/SkeAIPE820viKAT7uZnSigl6Xc=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE743B81850
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:38:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B64FDC34116;
-        Tue, 17 May 2022 12:38:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652791133;
-        bh=tIADpdIqk/DMHwcrZqTQGsZAeC349U8CBKJCjIVM5dE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=btPwkau7QMRA+HilFb4hUFG6cyGAtCxMljQc+M7QoUEXh5w/hyIieehwdcm7pW3ln
-         EXri19VAxaPwckkjmocMpmxkQ5Jkv0k8RTEtGUZ/UtOY6qVC7dSTAnJoiaOuQUebdL
-         fS77N0/7stR2m3o7HaNxBEv97CDDbl5yq3GqcYgLuUtYwndQwraf2HI8HNmb8nOFYZ
-         cOSCaLLbfBc4wIb+BZA1CQM20BhA3p8yQZqH09lYTWpDm3saelhuiUEbCLwWTW/Bnd
-         VAhZWvcKfpnTTX5n/8UGQ3y8Mazh0xS/FJaMvIz/tNza1Ha9Q+roJn9zm0b4Je2mdb
-         Jv9xhdT081I5g==
-Date:   Tue, 17 May 2022 15:38:45 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Zhou Guanghui <zhouguanghui1@huawei.com>
-Cc:     akpm@linux-foundation.org, will@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, xuqiang36@huawei.com
-Subject: Re: [PATCH v2] arm64: Expand the static memblock memory table
-Message-ID: <YoOXVdjkj8nnUHn6@kernel.org>
-References: <20220517114309.10228-1-zhouguanghui1@huawei.com>
+        by relay2.suse.de (Postfix) with ESMTPS id AA01E2C141;
+        Tue, 17 May 2022 12:38:49 +0000 (UTC)
+Date:   Tue, 17 May 2022 14:38:46 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     linux-sgx@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>, linux-mm@kvack.org
+Subject: Re: [RFC PATCH] x86/sgx: Set active memcg prior to shmem allocation
+Message-ID: <YoOXVptckAU3/Aaa@dhcp22.suse.cz>
+References: <20220516172523.5113-1-kristen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220517114309.10228-1-zhouguanghui1@huawei.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220516172523.5113-1-kristen@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+[CC memcg people and linux-mm]
 
-On Tue, May 17, 2022 at 11:43:09AM +0000, Zhou Guanghui wrote:
-> In a system using HBM, a multi-bit ECC error occurs, and the BIOS
-> saves the corresponding area (for example, 2 MB). When the system
-> restarts next time, these areas are isolated and not reported or
-> reported as EFI_UNUSABLE_MEMORY. Both of them lead to an increase
-> in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads to
-> a larger number of memblocks.
-
-I'd slightly rephrase the description here:
-
-In a system using HBM, a multi-bit ECC error may occur, and the BIOS will
-mark the corresponding area (for example, 2 MB)i as unusable.  When the
-system restarts next time, these areas are not reported or reported as
-EFI_UNUSABLE_MEMORY. Both cases lead to an increase in the number of
-memblocks, whereas EFI_UNUSABLE_MEMORY leads to a larger number of
-memblocks.
- 
-> For example, if the EFI_UNUSABLE_MEMORY type is reported:
-> ...
-> memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-> memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-> memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
-> memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-> memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-> memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-> memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
-> memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
-> memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-> memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
-> memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-> memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
-> memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-> memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
-> ...
+On Mon 16-05-22 10:25:22, Kristen Carlson Accardi wrote:
+> When the system runs out of enclave memory, SGX can reclaim EPC pages
+> by swapping to normal RAM. These backing pages are allocated via a
+> per-enclave shared memory area. Since SGX allows unlimited over
+> commit on EPC memory, the reclaimer thread can allocate a large
+> number of backing RAM pages in response to EPC memory pressure.
 > 
-> If the size of the init memblock regions is exceeded before the
-> array size can be resized, the excess memory will be lost.
-
-And here I'd make it something like:
-
-The EFI memory map is parsed to construct the memblock arrays before the
-memblock arrays can be resized. As the result, memory regions beyond
-INIT_MEMBLOCK_REGIONS are lost.
-
-Allow overriding memblock.memory array size with architecture defined
-INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
-INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
-
+> When the shared memory backing RAM allocation occurs during
+> the reclaimer thread context, the shared memory is charged to
+> the root memory control group, and the shmem usage of the enclave
+> is not properly accounted for, making cgroups ineffective at
+> limiting the amount of RAM an enclave can consume.
 > 
-> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
-
-With changelog updates along those lines
-
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-
+> For example, when using a cgroup to launch a set of test
+> enclaves, the kernel does not properly account for 50% - 75% of
+> shmem page allocations on average. In the worst case, when
+> nearly all allocations occur during the reclaimer thread, the
+> kernel accounts less than a percent of the amount of shmem used
+> by the enclave's cgroup to the correct cgroup.
+> 
+> SGX currently stores a list of mm_structs that are associated with
+> an enclave. In order to allow the enclave's cgroup to more accurately
+> reflect the shmem usage, the memory control group (struct mem_cgroup)
+> of one of these mm_structs can be set as the active memory cgroup
+> prior to allocating any EPC backing pages. This will make any shmem
+> allocations be charged to a memory control group associated with the
+> enclave's cgroup. This will allow memory cgroup limits to restrict
+> RAM usage more effectively.
+> 
+> This patch will create a new function - sgx_encl_alloc_backing().
+> This function will be used whenever a new backing storage page
+> needs to be allocated. Previously the same function was used for
+> page allocation as well as retrieving a previously allocated page.
+> Prior to backing page allocation, if there is a mm_struct associated
+> with the enclave that is requesting the allocation, it will be set
+> as the active memory control group.
+> 
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
 > ---
->  arch/arm64/include/asm/memory.h |  9 +++++++++
->  mm/memblock.c                   | 14 +++++++++-----
->  2 files changed, 18 insertions(+), 5 deletions(-)
+>  arch/x86/kernel/cpu/sgx/encl.c | 89 +++++++++++++++++++++++++++++++++-
+>  arch/x86/kernel/cpu/sgx/encl.h |  6 ++-
+>  arch/x86/kernel/cpu/sgx/main.c |  4 +-
+>  3 files changed, 93 insertions(+), 6 deletions(-)
 > 
-> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-> index 0af70d9abede..eda61c0389c4 100644
-> --- a/arch/arm64/include/asm/memory.h
-> +++ b/arch/arm64/include/asm/memory.h
-> @@ -364,6 +364,15 @@ void dump_mem_limit(void);
->  # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
->  #endif
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+> index 001808e3901c..fa017bc4f99e 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.c
+> +++ b/arch/x86/kernel/cpu/sgx/encl.c
+> @@ -32,7 +32,7 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
+>  	else
+>  		page_index = PFN_DOWN(encl->size);
 >  
-> +/*
-> + * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
-> + * memory block into multiple parts. As a result, the number of memory regions
-> + * is large.
-> + */
-> +#ifdef CONFIG_EFI
-> +#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
-> +#endif
+> -	ret = sgx_encl_get_backing(encl, page_index, &b);
+> +	ret = sgx_encl_lookup_backing(encl, page_index, &b);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -574,7 +574,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
+>   *   0 on success,
+>   *   -errno otherwise.
+>   */
+> -int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
+> +static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
+>  			 struct sgx_backing *backing)
+>  {
+>  	pgoff_t pcmd_index = PFN_DOWN(encl->size) + 1 + (page_index >> 5);
+> @@ -601,6 +601,91 @@ int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
+>  	return 0;
+>  }
+>  
+> +static struct mem_cgroup * sgx_encl_set_active_memcg(struct sgx_encl *encl)
+> +{
+> +	struct mm_struct *mm = current->mm;
+> +	struct sgx_encl_mm *encl_mm;
+> +	struct mem_cgroup *memcg;
+> +	int idx;
 > +
->  #include <asm-generic/memory_model.h>
->  
->  #endif /* __ASM_MEMORY_H */
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index e4f03a6e8e56..7c63571a69d7 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -29,6 +29,10 @@
->  # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
->  #endif
->  
-> +#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
-> +#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
-> +#endif
+> +	memcg = get_mem_cgroup_from_mm(mm);
+> +
+> +	if (mm)
+> +		return memcg;
+> +
+> +	idx = srcu_read_lock(&encl->srcu);
+> +
+> +	list_for_each_entry_rcu(encl_mm, &encl->mm_list, list) {
+> +		if (encl_mm->mm == NULL)
+> +			continue;
+> +
+> +		mm = encl_mm->mm;
+> +		break;
+> +
+> +	}
+> +
+> +	srcu_read_unlock(&encl->srcu, idx);
+> +
+> +	if (!mm)
+> +		return memcg;
+> +
+> +	memcg = get_mem_cgroup_from_mm(mm);
+> +
+> +	return set_active_memcg(memcg);
+> +}
+> +
+> +/**
+> + * sgx_encl_alloc_backing() - allocate a new backing storage page
+> + * @encl:	an enclave pointer
+> + * @page_index:	enclave page index
+> + * @backing:	data for accessing backing storage for the page
+> + *
+> + * If this function is called from the kernel thread, it will set
+> + * the active memcg to one of the enclaves mm's in order to ensure
+> + * that shmem page allocations are charged to the enclave when they
+> + * are retrieved. Upon exit, the old memcg (if it existed at all)
+> + * will be restored.
+> + *
+> + * Return:
+> + *   0 on success,
+> + *   -errno otherwise.
+> + */
+> +int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
+> +			   struct sgx_backing *backing)
+> +{
+> +	struct mem_cgroup *old_memcg;
+> +	int ret;
+> +
+> +	old_memcg = sgx_encl_set_active_memcg(encl);
+> +
+> +	ret = sgx_encl_get_backing(encl, page_index, backing);
+> +
+> +	set_active_memcg(old_memcg);
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * sgx_encl_lookup_backing() - retrieve an existing backing storage page
+> + * @encl:	an enclave pointer
+> + * @page_index:	enclave page index
+> + * @backing:	data for accessing backing storage for the page
+> + *
+> + * Retrieve a backing page for loading data back into an EPC page with ELDU.
+> + * It is the caller's responsibility to ensure that it is appropriate to use
+> + * sgx_encl_lookup_backing() rather than sgx_encl_alloc_backing(). If lookup is
+> + * not used correctly, this will cause an allocation which is not accounted for.
+> + *
+> + * Return:
+> + *   0 on success,
+> + *   -errno otherwise.
+> + */
+> +int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
+> +			   struct sgx_backing *backing)
+> +{
+> +	return sgx_encl_get_backing(encl, page_index, backing);
+> +}
 > +
 >  /**
->   * DOC: memblock overview
->   *
-> @@ -55,9 +59,9 @@
->   * the allocator metadata. The "memory" and "reserved" types are nicely
->   * wrapped with struct memblock. This structure is statically
->   * initialized at build time. The region arrays are initially sized to
-> - * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
-> - * for "reserved". The region array for "physmem" is initially sized to
-> - * %INIT_PHYSMEM_REGIONS.
-> + * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
-> + * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
-> + * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
->   * The memblock_allow_resize() enables automatic resizing of the region
->   * arrays during addition of new regions. This feature should be used
->   * with care so that memory allocated for the region array will not
-> @@ -102,7 +106,7 @@ unsigned long min_low_pfn;
->  unsigned long max_pfn;
->  unsigned long long max_possible_pfn;
+>   * sgx_encl_put_backing() - Unpin the backing storage
+>   * @backing:	data for accessing backing storage for the page
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
+> index fec43ca65065..7816cfe8f832 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.h
+> +++ b/arch/x86/kernel/cpu/sgx/encl.h
+> @@ -105,8 +105,10 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
 >  
-> -static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
-> +static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
->  static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
->  #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
->  static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
-> @@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
->  struct memblock memblock __initdata_memblock = {
->  	.memory.regions		= memblock_memory_init_regions,
->  	.memory.cnt		= 1,	/* empty dummy entry */
-> -	.memory.max		= INIT_MEMBLOCK_REGIONS,
-> +	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
->  	.memory.name		= "memory",
+>  void sgx_encl_release(struct kref *ref);
+>  int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
+> -int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
+> -			 struct sgx_backing *backing);
+> +int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
+> +			    struct sgx_backing *backing);
+> +int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
+> +			   struct sgx_backing *backing);
+>  void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write);
+>  int sgx_encl_test_and_clear_young(struct mm_struct *mm,
+>  				  struct sgx_encl_page *page);
+> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+> index 4b41efc9e367..7d41c8538795 100644
+> --- a/arch/x86/kernel/cpu/sgx/main.c
+> +++ b/arch/x86/kernel/cpu/sgx/main.c
+> @@ -310,7 +310,7 @@ static void sgx_reclaimer_write(struct sgx_epc_page *epc_page,
+>  	encl->secs_child_cnt--;
 >  
->  	.reserved.regions	= memblock_reserved_init_regions,
+>  	if (!encl->secs_child_cnt && test_bit(SGX_ENCL_INITIALIZED, &encl->flags)) {
+> -		ret = sgx_encl_get_backing(encl, PFN_DOWN(encl->size),
+> +		ret = sgx_encl_alloc_backing(encl, PFN_DOWN(encl->size),
+>  					   &secs_backing);
+>  		if (ret)
+>  			goto out;
+> @@ -381,7 +381,7 @@ static void sgx_reclaim_pages(void)
+>  			goto skip;
+>  
+>  		page_index = PFN_DOWN(encl_page->desc - encl_page->encl->base);
+> -		ret = sgx_encl_get_backing(encl_page->encl, page_index, &backing[i]);
+> +		ret = sgx_encl_alloc_backing(encl_page->encl, page_index, &backing[i]);
+>  		if (ret)
+>  			goto skip;
+>  
 > -- 
-> 2.17.1
-> 
+> 2.20.1
 
 -- 
-Sincerely yours,
-Mike.
+Michal Hocko
+SUSE Labs

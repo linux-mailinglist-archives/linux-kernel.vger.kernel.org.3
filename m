@@ -2,193 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E58052A2CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B9C52A2EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347581AbiEQNLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
+        id S1347357AbiEQNNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347878AbiEQNLX (ORCPT
+        with ESMTP id S1347575AbiEQNM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:11:23 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF925260;
-        Tue, 17 May 2022 06:11:21 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0C7941F88E;
-        Tue, 17 May 2022 13:11:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652793080; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R3V2DPM1jjc4jD8tVw3U8Rq3S0Maoan+sJ+xup8d8sI=;
-        b=FE8yzrStcygQwANxOmZrJZbOrCy87Ou5DJ3FGcXlGzv/8KcD1Q9vQAYohnpV6O9yl65Qfm
-        zyx0GaYk63CmAg8xlzK3VRV5wlBb3dplZbLwFVDWl++Ff8DNSFdVejZHiQCHUg6G6gVRgz
-        J3YUEPeJCts4dfmVUl5hnzLG7sbV2vU=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D75DF2C141;
-        Tue, 17 May 2022 13:11:17 +0000 (UTC)
-Date:   Tue, 17 May 2022 15:11:10 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Subject: Re: [PATCH 14/30] panic: Properly identify the panic event to the
- notifiers' callbacks
-Message-ID: <YoOe7ifxfW8CEHdt@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-15-gpiccoli@igalia.com>
- <YnqBsXBImU64PAOL@alley>
- <244a412c-4589-28d1-bb77-d3648d4f0b12@igalia.com>
+        Tue, 17 May 2022 09:12:59 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55BA43499
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:12:46 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id r30so6996403wra.13
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uwMrKlO2MqbTE9nwU9Tb94pfbBXuygfDTBIAQ9AIcak=;
+        b=evSRBxjPOwiQhrL4v2tc5BXHcq28KJSKKUUZ8tw4lNVq9aRp8nPvo0pJBUfdetFaXm
+         V1KEXcs4XRianJg/wscukWim/Rvlkp7C612GqnAaSUACxnitN6m/g3d5Ust/ACWw4bWn
+         ssAVJhvdun7xb3pGk1hdC2KNF+7wfne3suLPkda0HabEDbl5vJloWdQeIzfNU9doEx7t
+         J30nZaYKFbeGK1xbb80WR1OVGVf9SvYg5Zow34xbjf69AzuGkqnVP303OajJm3PjJOaD
+         dCIQfCisE9iA7ytzHIjynNnkneq5ope+XqIOD9WHVk0i5oszK/B8QFcB3T2JEFcYTegk
+         Ewyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uwMrKlO2MqbTE9nwU9Tb94pfbBXuygfDTBIAQ9AIcak=;
+        b=lYezxQHNHXcDZh+AqCzYXkkRiULJNeoHsUpJfeOBkJhNsuxvt+ZtRfgnL0h/8TQzEO
+         PYM7BLzw++Kl59XFOgvtVPLdbPlUpMmLMV2btslYkFNR6hgTTrJtX9f5n1iQngxx789U
+         Be47aoJmJ9qtIpoHSkoIR6JMXLyy5ttmJygrRkR81fW0S5J9isKUmblGDIat/FuJgv6/
+         H7TZGrqs0TVpJ2UVHA1Y2sRCUA7X9bhscciASuWxboUoozRRMyqJTbpma8IgulOFasD3
+         WncpLUWWulnR1dROxrfohYh7QsMhxRytbwrKtiXv1Y1bst+ELYq0pFFufj13cgLlJk8Y
+         0Yag==
+X-Gm-Message-State: AOAM531Mc0xR+rfsKk9F1LGElmmqSi9yO4uZ1nhTKmyg7b1n6eQACup+
+        P3qEg4b1efADUl+U5h4u6jTpITz4R8ldUhDKWDiV
+X-Google-Smtp-Source: ABdhPJy5x7WRBePtOFFE9hLaUmgKrxsydjvYn2c1pQL2u+K02T5jzKArZGcf5IzxWufEnIOu/fDwZB7Ef592P6i5XQE=
+X-Received: by 2002:a5d:5888:0:b0:20c:9868:9d94 with SMTP id
+ n8-20020a5d5888000000b0020c98689d94mr17973192wrf.433.1652793165091; Tue, 17
+ May 2022 06:12:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <244a412c-4589-28d1-bb77-d3648d4f0b12@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220517103253.22601-1-ju.orth@gmail.com> <20220517103253.22601-2-ju.orth@gmail.com>
+In-Reply-To: <20220517103253.22601-2-ju.orth@gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 17 May 2022 09:12:34 -0400
+Message-ID: <CAHC9VhR_N+N1=3vbbmym36aDA+sUY2c4yRJq74K+=Fr27TBLQw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] audit,io_uring,io-wq: call __audit_uring_exit for
+ dummy contexts
+To:     Julian Orth <ju.orth@gmail.com>
+Cc:     Eric Paris <eparis@redhat.com>, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-05-10 13:16:54, Guilherme G. Piccoli wrote:
-> On 10/05/2022 12:16, Petr Mladek wrote:
-> > [...]
-> > Hmm, this looks like a hack. PANIC_UNUSED will never be used.
-> > All notifiers will be always called with PANIC_NOTIFIER.
-> > 
-> > The @val parameter is normally used when the same notifier_list
-> > is used in different situations.
-> > 
-> > But you are going to use it when the same notifier is used
-> > in more lists. This is normally distinguished by the @nh
-> > (atomic_notifier_head) parameter.
-> > 
-> > IMHO, it is a bad idea. First, it would confuse people because
-> > it does not follow the original design of the parameters.
-> > Second, the related code must be touched anyway when
-> > the notifier is moved into another list so it does not
-> > help much.
-> > 
-> > Or do I miss anything, please?
-> > 
-> > Best Regards,
-> > Petr
-> 
-> Hi Petr, thanks for the review.
-> 
-> I'm not strong attached to this patch, so we could drop it and refactor
-> the code of next patches to use the @nh as identification - but
-> personally, I feel this parameter could be used to identify the list
-> that called such function, in other words, what is the event that
-> triggered the callback. Some notifiers are even declared with this
-> parameter called "ev", like the event that triggers the notifier.
-> 
-> 
-> You mentioned 2 cases:
-> 
-> (a) Same notifier_list used in different situations;
-> 
-> (b) Same *notifier callback* used in different lists;
-> 
-> Mine is case (b), right? Can you show me an example of case (a)?
+On Tue, May 17, 2022 at 6:33 AM Julian Orth <ju.orth@gmail.com> wrote:
+>
+> Not calling the function for dummy contexts will cause the context to
+> not be reset. During the next syscall, this will cause an error in
+> __audit_syscall_entry:
+>
+>         WARN_ON(context->context != AUDIT_CTX_UNUSED);
+>         WARN_ON(context->name_count);
+>         if (context->context != AUDIT_CTX_UNUSED || context->name_count) {
+>                 audit_panic("unrecoverable error in audit_syscall_entry()");
+>                 return;
+>         }
+>
+> These problematic dummy contexts are created via the following call
+> chain:
+>
+>        exit_to_user_mode_prepare
+>     -> arch_do_signal_or_restart
+>     -> get_signal
+>     -> task_work_run
+>     -> tctx_task_work
+>     -> io_req_task_submit
+>     -> io_issue_sqe
+>     -> audit_uring_entry
+>
+> Fixes: 5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
+> Signed-off-by: Julian Orth <ju.orth@gmail.com>
+> ---
+>  include/linux/audit.h | 2 +-
+>  kernel/auditsc.c      | 6 ++++++
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 
-There are many examples of case (a):
+Hi Julian,
 
-   + module_notify_list:
-	MODULE_STATE_LIVE, 	/* Normal state. */
-	MODULE_STATE_COMING,	/* Full formed, running module_init. */
-	MODULE_STATE_GOING,	/* Going away. */
-	MODULE_STATE_UNFORMED,	/* Still setting it up. */
+Thanks for the report and the patch too!  I agree that it does seem a
+little odd that we haven't seen this before, let me dig into this a
+bit more today and respond back.
 
-
-   + netdev_chain:
-
-	NETDEV_UP	= 1,	/* For now you can't veto a device up/down */
-	NETDEV_DOWN,
-	NETDEV_REBOOT,		/* Tell a protocol stack a network interface
-				   detected a hardware crash and restarted
-				   - we can use this eg to kick tcp sessions
-				   once done */
-	NETDEV_CHANGE,		/* Notify device state change */
-	NETDEV_REGISTER,
-	NETDEV_UNREGISTER,
-	NETDEV_CHANGEMTU,	/* notify after mtu change happened */
-	NETDEV_CHANGEADDR,	/* notify after the address change */
-	NETDEV_PRE_CHANGEADDR,	/* notify before the address change */
-	NETDEV_GOING_DOWN,
-	...
-
-    + vt_notifier_list:
-
-	#define VT_ALLOCATE		0x0001 /* Console got allocated */
-	#define VT_DEALLOCATE		0x0002 /* Console will be deallocated */
-	#define VT_WRITE		0x0003 /* A char got output */
-	#define VT_UPDATE		0x0004 /* A bigger update occurred */
-	#define VT_PREWRITE		0x0005 /* A char is about to be written to the console */
-
-    + die_chain:
-
-	DIE_OOPS = 1,
-	DIE_INT3,
-	DIE_DEBUG,
-	DIE_PANIC,
-	DIE_NMI,
-	DIE_DIE,
-	DIE_KERNELDEBUG,
-	...
-
-These all call the same list/chain in different situations.
-The situation is distinguished by @val.
-
-
-> You can see in the following patches (or grep the kernel) that people are using
-> this identification parameter to determine which kind of OOPS trigger
-> the callback to condition the execution of the function to specific
-> cases.
-
-Could you please show me some existing code for case (b)?
-I am not able to find any except in your patches.
-
-Anyway, the solution in 16th patch is bad, definitely.
-hv_die_panic_notify_crash() uses "val" to disinguish
-both:
-
-     + "panic_notifier_list" vs "die_chain"
-     + die_val when callen via "die_chain"
-
-The API around "die_chain" API is not aware of enum panic_notifier_val
-and the API using "panic_notifier_list" is not aware of enum die_val.
-As I said, it is mixing apples and oranges and it is error prone.
-
-Best Regards,
-Petr
+-- 
+paul-moore.com

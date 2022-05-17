@@ -2,123 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D031529F65
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78DE8529F69
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241393AbiEQK2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
+        id S1344188AbiEQK3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344021AbiEQK2g (ORCPT
+        with ESMTP id S238397AbiEQK3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:28:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1B11CA;
-        Tue, 17 May 2022 03:28:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 668F86156A;
-        Tue, 17 May 2022 10:28:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051A2C385B8;
-        Tue, 17 May 2022 10:28:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652783313;
-        bh=H2A/jFCSJ+xqg/vLvKvV+fIaM4AAIUyg7v6zsd4rM1w=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MVec5s8SsX0DJYpVL/N/V8VBrlI5FY37E7huj+UgAVGxd0+S32Uua80uV1J/sy0k4
-         nMmyjfLihqiqdR68b1JgghbEyVamhtq5bGfZDnmfvKKmhciUD6OnZ0VyULnZKNE03o
-         zo/brvn3lTXUTtJ3LQimulPHSHbIAtWP9beMemKEKeJqQ4Qv6U7a1Nq4hdGS2lyJ+H
-         BWW3Pa0l+PZR6a4rFX8h0VC5dB3u+gIOg9eLXGq+qYizGBKJ2+DaPY53BcNdk5hXAq
-         dd01Qshgfe5JU2CH6XQ9ViU+AQjzMkoz9wv/8iYyNXodhoVbFR1XNuHMn32HqPdZP1
-         KZ+qjzVsmUIbA==
-From:   Miguel Ojeda <ojeda@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     rust-for-linux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Li Li <dualli@google.com>, linux-kernel@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: [PATCH v2] binder: convert `BINDER_*` ioctl `#define`s into an `enum`
-Date:   Tue, 17 May 2022 12:28:13 +0200
-Message-Id: <20220517102813.10310-1-ojeda@kernel.org>
+        Tue, 17 May 2022 06:29:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32C11CA
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:29:29 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HAMC7S028896;
+        Tue, 17 May 2022 10:29:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=K771XREqVjhON5S7y+Xj5nxm98y25hiqCAHk1+Djnbo=;
+ b=fw2qcmJjDFPzRZ8yAitfu90PfQIKJ0sEBkWcBHzHbGPr63yCSV1nPzl0dU1z/eYMvDm8
+ CxsELqI5wUGB396oOAMufx4zOFyfYdDwsD4HOqkySLyPtFn27ykygNHid29UQmG8uGoZ
+ MFudfploClTIDTaknANlPE3oplY3hSr2dH0sPgkxZBb8dpEY9evZZZ6B2RVi7jpuDLfj
+ Py5jKrx286e4AsjxnHrkBokmpQFZmrsAH4QOzbk2gs06bzwv9ilMeyM4qu3wDGWjJmVd
+ 2hU/iCcRBsJO0FNjKmii+gJG/FijWvDVSrTA+aUc/Q3sT6ALK0xfSTEqw27GG7lsEnoP BQ== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g49w103jh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 10:29:17 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HAMPq7031053;
+        Tue, 17 May 2022 10:29:15 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3g2428u75u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 10:29:15 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HATDxu55247302
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 May 2022 10:29:13 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E36EDAE045;
+        Tue, 17 May 2022 10:29:12 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A2A93AE051;
+        Tue, 17 May 2022 10:29:12 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 17 May 2022 10:29:12 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Subject: [PATCH v2] iommu/dma: Fix check for error return from iommu_map_sg_atomic()
+Date:   Tue, 17 May 2022 12:29:12 +0200
+Message-Id: <20220517102912.2115228-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4cVzg46uX1vm_vJ7q99rxN78cGXE8FIC
+X-Proofpoint-ORIG-GUID: 4cVzg46uX1vm_vJ7q99rxN78cGXE8FIC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-17_01,2022-05-17_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ impostorscore=0 mlxlogscore=968 lowpriorityscore=0 spamscore=0
+ adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205170060
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bindgen (a tool which generates the "raw" C bindings for Rust) only
-works (so far) with "simple" C `#define`s. In order to avoid having
-to manually maintain these constants in the (potential) Rust side,
-this patch converts them into an `enum`.
+In __iommu_dma_alloc_noncontiguous() the return value of
+iommu_map_sg_atomic() is treated as an error if it is smaller than size.
+Before upstream commit ad8f36e4b6b1 ("iommu: return full error code from
+iommu_map_sg[_atomic]()") this simply checked if the requested size was
+successfully mapped.
 
-There may be support in the future for expanding macros that end up in
-a "numeric" one: https://github.com/rust-lang/rust-bindgen/issues/753.
+After that commit iommu_map_sg_atomic() may also return a negative
+error value. In principle this too would be covered by the existing
+check. There is one problem however, as size is of type size_t while the
+return type of iommu_map_sg_atomic() is now of type ssize_t the latter gets
+converted to size_t and negative error values end up as very large
+positive values making the check succeed even if an error was returned.
+Fix this by casting size to ssize_t.
 
-Link: https://lore.kernel.org/lkml/YoIK2l6xbQMPGZHy@kroah.com/
-Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
+Cc: stable@vger.kernel.org
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
-v2:
-  - Rebased on top of Greg's char-misc-next.
-  - Added Link tag for future reference.
+v1 -> v2:
+- Don't needlessly add a local variable
 
-v1: https://lore.kernel.org/lkml/20220516100401.7639-1-ojeda@kernel.org/
+ drivers/iommu/dma-iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- include/uapi/linux/android/binder.h | 30 +++++++++++++++--------------
- 1 file changed, 16 insertions(+), 14 deletions(-)
-
-diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
-index e6ee8cae303b..a4c3e750168a 100644
---- a/include/uapi/linux/android/binder.h
-+++ b/include/uapi/linux/android/binder.h
-@@ -251,20 +251,22 @@ struct binder_extended_error {
- 	__s32	param;
- };
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 09f6e1c0f9c0..80db2aa5458c 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -814,7 +814,7 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
+ 	}
  
--#define BINDER_WRITE_READ		_IOWR('b', 1, struct binder_write_read)
--#define BINDER_SET_IDLE_TIMEOUT		_IOW('b', 3, __s64)
--#define BINDER_SET_MAX_THREADS		_IOW('b', 5, __u32)
--#define BINDER_SET_IDLE_PRIORITY	_IOW('b', 6, __s32)
--#define BINDER_SET_CONTEXT_MGR		_IOW('b', 7, __s32)
--#define BINDER_THREAD_EXIT		_IOW('b', 8, __s32)
--#define BINDER_VERSION			_IOWR('b', 9, struct binder_version)
--#define BINDER_GET_NODE_DEBUG_INFO	_IOWR('b', 11, struct binder_node_debug_info)
--#define BINDER_GET_NODE_INFO_FOR_REF	_IOWR('b', 12, struct binder_node_info_for_ref)
--#define BINDER_SET_CONTEXT_MGR_EXT	_IOW('b', 13, struct flat_binder_object)
--#define BINDER_FREEZE			_IOW('b', 14, struct binder_freeze_info)
--#define BINDER_GET_FROZEN_INFO		_IOWR('b', 15, struct binder_frozen_status_info)
--#define BINDER_ENABLE_ONEWAY_SPAM_DETECTION	_IOW('b', 16, __u32)
--#define BINDER_GET_EXTENDED_ERROR	_IOWR('b', 17, struct binder_extended_error)
-+enum {
-+	BINDER_WRITE_READ			= _IOWR('b', 1, struct binder_write_read),
-+	BINDER_SET_IDLE_TIMEOUT			= _IOW('b', 3, __s64),
-+	BINDER_SET_MAX_THREADS			= _IOW('b', 5, __u32),
-+	BINDER_SET_IDLE_PRIORITY		= _IOW('b', 6, __s32),
-+	BINDER_SET_CONTEXT_MGR			= _IOW('b', 7, __s32),
-+	BINDER_THREAD_EXIT			= _IOW('b', 8, __s32),
-+	BINDER_VERSION				= _IOWR('b', 9, struct binder_version),
-+	BINDER_GET_NODE_DEBUG_INFO		= _IOWR('b', 11, struct binder_node_debug_info),
-+	BINDER_GET_NODE_INFO_FOR_REF		= _IOWR('b', 12, struct binder_node_info_for_ref),
-+	BINDER_SET_CONTEXT_MGR_EXT		= _IOW('b', 13, struct flat_binder_object),
-+	BINDER_FREEZE				= _IOW('b', 14, struct binder_freeze_info),
-+	BINDER_GET_FROZEN_INFO			= _IOWR('b', 15, struct binder_frozen_status_info),
-+	BINDER_ENABLE_ONEWAY_SPAM_DETECTION	= _IOW('b', 16, __u32),
-+	BINDER_GET_EXTENDED_ERROR		= _IOWR('b', 17, struct binder_extended_error),
-+};
+ 	if (iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot)
+-			< size)
++			< (ssize_t)size)
+ 		goto out_free_sg;
  
- /*
-  * NOTE: Two special error codes you should check for when calling
-
-base-commit: 33a1c6618677fe33f8e84cb7bedc45abbce89a50
+ 	sgt->sgl->dma_address = iova;
 -- 
-2.36.1
+2.32.0
 

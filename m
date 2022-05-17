@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B607C52AEB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E35C52AEBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbiEQXjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 19:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39176 "EHLO
+        id S231929AbiEQXjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 19:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiEQXjQ (ORCPT
+        with ESMTP id S231928AbiEQXjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 19:39:16 -0400
+        Tue, 17 May 2022 19:39:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A3452B2D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:39:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A4952E48
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:39:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74D64B81D63
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:39:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69F9C385B8;
-        Tue, 17 May 2022 23:39:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05131B81D66
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:39:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E868C3411F;
+        Tue, 17 May 2022 23:39:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652830753;
-        bh=65mgIOZQb4alucF36hrCIzo3EqeozYcFQHGE5BWleDw=;
+        s=korg; t=1652830757;
+        bh=aQy6tkYog1Mp778DJe+lW+xbkRM8taLZzQIq09aiLTA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nTkTzCQq+k6ZGWtcRrAwxyP+pEayku3g3Cn2dp8puLuk+tazqL2q2aL4bYpFSK+Xc
-         /Y1Mj3RyBkGrdCnPdj1naIR9j81C5G38jaWIBfyuzL/bbfirPxyIzyodpq8rRPBXHf
-         //e3yx2m8Uke14VNx08u4foLV4M0F78b+XhjxzRM=
-Date:   Tue, 17 May 2022 16:39:12 -0700
+        b=1jSisTeT7F2wn8Pg7Jq0hHU1jm6tvO1jQr4nntqCqF3VIZj+bchU1iyxYn1QZd3PQ
+         lI19nkHGCQlnz2KxobTVShI64XC8lcKQ8OVm27tPeyh+6dZ2whHNL+IvV+oIJCfsyG
+         PA1Hwmb3LC15E7Mb7gwHRStYHTCtI4XnEC6pSEJ8=
+Date:   Tue, 17 May 2022 16:39:16 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
 To:     Miaohe Lin <linmiaohe@huawei.com>
 Cc:     NeilBrown <neilb@suse.de>, <willy@infradead.org>, <vbabka@suse.cz>,
@@ -37,14 +37,13 @@ Cc:     NeilBrown <neilb@suse.de>, <willy@infradead.org>, <vbabka@suse.cz>,
         <surenb@google.com>, <peterx@redhat.com>,
         <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 09/15] mm/swap: avoid calling swp_swap_info when try to
- check SWP_STABLE_WRITES
-Message-Id: <20220517163912.919475bf7fb5923da1325822@linux-foundation.org>
-In-Reply-To: <d674bc33-fcf2-ebc1-b252-1e7232b3bd1c@huawei.com>
+Subject: Re: [PATCH 11/15] mm/swap: add helper swap_offset_available()
+Message-Id: <20220517163916.71ab9aa1ec095bbc57b82f98@linux-foundation.org>
+In-Reply-To: <9319a62b-f43d-8ee9-77b9-a1afee7dbc10@huawei.com>
 References: <20220509131416.17553-1-linmiaohe@huawei.com>
-        <20220509131416.17553-10-linmiaohe@huawei.com>
-        <165214248406.14782.6536817483979050668@noble.neil.brown.name>
-        <d674bc33-fcf2-ebc1-b252-1e7232b3bd1c@huawei.com>
+        <20220509131416.17553-12-linmiaohe@huawei.com>
+        <165214355418.14782.13896859043718755300@noble.neil.brown.name>
+        <9319a62b-f43d-8ee9-77b9-a1afee7dbc10@huawei.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -59,52 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 10:21:21 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+On Tue, 10 May 2022 10:03:19 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
 
-> On 2022/5/10 8:28, NeilBrown wrote:
+> On 2022/5/10 8:45, NeilBrown wrote:
 > > On Mon, 09 May 2022, Miaohe Lin wrote:
-> >> Use flags of si directly to check SWP_STABLE_WRITES to avoid possible
-> >> READ_ONCE and thus save some cpu cycles.
-> >>
-> >> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> >> ---
-> >>  mm/memory.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/mm/memory.c b/mm/memory.c
-> >> index 9c3e7e6ac202..89dd15504f3d 100644
-> >> --- a/mm/memory.c
-> >> +++ b/mm/memory.c
-> >> @@ -3892,7 +3892,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
-> >>  			 */
-> >>  			exclusive = true;
-> >>  		} else if (exclusive && PageWriteback(page) &&
-> >> -			  (swp_swap_info(entry)->flags & SWP_STABLE_WRITES)) {
-> >> +			  (si->flags & SWP_STABLE_WRITES)) {
+> >> Add helper swap_offset_available() to remove some duplicated codes.
+> >> Minor readability improvement.
 > > 
-> > Should this have a data_race() annotation.  Other bit-tests of si->flags
-> > do because scan_swap_map_slots can update it asynchronously, but we know
-> > that won't matter in practice.
+> > I don't think that putting the spin_lock() inside the inline helper is
+> > good for readability.
+> > If the function was called
+> >    swap_offset_available_and_locked()
 > 
-> Yes, you're right. scan_swap_map_slots can update si->flags asynchronously while
-> do_swap_page tests SWP_STABLE_WRITES here. We know this is harmless because
-> SWP_STABLE_WRITES is only changed at swapon/swapoff.
-> 
-> Will add data_race() annotation in next version to avoid possible KCSAN data-race complaint.
+> Yes, swap_offset_available_and_locked should be more suitable as we do the spin_lock
+> inside it. Will do this in next version.
 > 
 
-I did this:
-
---- a/mm/memory.c~mm-swap-avoid-calling-swp_swap_info-when-try-to-check-swp_stable_writes-fix
-+++ a/mm/memory.c
-@@ -3889,7 +3889,7 @@ vm_fault_t do_swap_page(struct vm_fault
- 			 */
- 			exclusive = true;
- 		} else if (exclusive && PageWriteback(page) &&
--			  (si->flags & SWP_STABLE_WRITES)) {
-+			  data_race(si->flags & SWP_STABLE_WRITES)) {
- 			/*
- 			 * This is tricky: not all swap backends support
- 			 * concurrent page modifications while under writeback.
+--- a/mm/swapfile.c~mm-swap-add-helper-swap_offset_available-fix
++++ a/mm/swapfile.c
+@@ -775,7 +775,8 @@ static void set_cluster_next(struct swap
+ 	this_cpu_write(*si->cluster_next_cpu, next);
+ }
+ 
+-static inline bool swap_offset_available(struct swap_info_struct *si, unsigned long offset)
++static bool swap_offset_available_and_locked(struct swap_info_struct *si,
++					     unsigned long offset)
+ {
+ 	if (data_race(!si->swap_map[offset])) {
+ 		spin_lock(&si->lock);
+@@ -967,7 +968,7 @@ done:
+ scan:
+ 	spin_unlock(&si->lock);
+ 	while (++offset <= READ_ONCE(si->highest_bit)) {
+-		if (swap_offset_available(si, offset))
++		if (swap_offset_available_and_locked(si, offset))
+ 			goto checks;
+ 		if (unlikely(--latency_ration < 0)) {
+ 			cond_resched();
+@@ -977,7 +978,7 @@ scan:
+ 	}
+ 	offset = si->lowest_bit;
+ 	while (offset < scan_base) {
+-		if (swap_offset_available(si, offset))
++		if (swap_offset_available_and_locked(si, offset))
+ 			goto checks;
+ 		if (unlikely(--latency_ration < 0)) {
+ 			cond_resched();
 _
 

@@ -2,91 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BAE52AACB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051B552AACD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352219AbiEQS2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S1352196AbiEQS27 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 17 May 2022 14:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352204AbiEQS2m (ORCPT
+        with ESMTP id S1352248AbiEQS2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:28:42 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F45451E54;
-        Tue, 17 May 2022 11:28:20 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id fd25so17129edb.3;
-        Tue, 17 May 2022 11:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HmWMl24PLrdkb0RO6o7DaiaR1+eajCYcl4bE91rBER4=;
-        b=BH2Gw1ZQRnCcAtEp+ZPEzVyf5wjZWSj5fjQ1Vq3RhoPk0DOqRJt2w+cPkyeSkSalx9
-         mt8Lzg4S/9XBiV9znMETiSfuALWo+dfQTpw0vNxjEvZD9/LocM9XvEekNwRKS2sxAeAi
-         f5K5tuY2ucqtrR2cmQQ/u6RWsPSz4fAubURY/X2cTNIkGeeBWfFe5C4AufaqzcMvGthX
-         lwAezuCox7s6Pd2pKt9rRJhEwmZo9s0pNOv3e/LarYjJgYhwCXhvSPuFeOLO9bSwDND3
-         WT2CTcvFaX/MUcB1+MqxWQEr3tk1KXsEQ54Bl/oZXyyKqG3J7OEpUCn9HGtLEP2N5lF0
-         o/0w==
+        Tue, 17 May 2022 14:28:45 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1549449F19;
+        Tue, 17 May 2022 11:28:42 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id a3so14824099ybg.5;
+        Tue, 17 May 2022 11:28:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HmWMl24PLrdkb0RO6o7DaiaR1+eajCYcl4bE91rBER4=;
-        b=WIclwk705eRYx5mHw5b1NjY0E2cjoou6DpNkQ0PdMa2Oyd0jCePfm572fN9Sp42RbZ
-         IhJ4vwtRT9ZzWqhzyk9O668JgjxdUG8+6J2g4uWB5EeVI2UIY3Fnoj04gT/CizrMN5F+
-         3S+kInmOC30audkVMTBg/EHoxdFiPylRJQuUbCSRit9bhEFnDhSijE7Z5DieLtCT38xE
-         3Kv/gWYaItq3fV5Gc5jzSJptvcnYF71h21Tw9EhLgzuh/acWyW+Hap33w+cyJPNfjDRX
-         ZC3jvAk7eRY6XlpWjSx+Rl6+XVegnWH7oyAFc3o4NZUlr92BOilehgb9w1YSwixKb5lg
-         7seQ==
-X-Gm-Message-State: AOAM530Ai5POFH0fTBxMhcfum7LocGNSNIMrNunp7dp3WA/ydQc/3Ias
-        YX+dWyz78r1Haf5HFdI5zHHZHfrSEtEgg5yDx4f9RHkkY5Q=
-X-Google-Smtp-Source: ABdhPJy/uQrZWWIHO1CiHlPJevmtZBD+fUUpD/hDsMEIyLpgfqpzgyjpxRHV89afcJi4KPUeKwNo77D8FaDcclPUlK0=
-X-Received: by 2002:a05:6402:3585:b0:427:ccd4:bec3 with SMTP id
- y5-20020a056402358500b00427ccd4bec3mr20764880edc.2.1652812099078; Tue, 17 May
- 2022 11:28:19 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yLKFTvllEnb3n3nFUIfBrKxcB6r2mY4TZ0eJaZi1jOo=;
+        b=iyC1p4vbdozsAmKTgsiO69uGEugKzSk9HnSGJqxPzPE6xl78cQ0jUS6AfICx2pR1kP
+         X7T/zIH0T4NNTnlqxLTPorh9VMqESfhzZ/E5MvC1yi8QDlGIPt4cGVHiAt7AmbQB7YTf
+         8MBnVXaFUn0JFTyctt0EStxCzUhcdCfV/9feKwHtmR5xm0K0OGERk1ygHU2Rz6/OKv1q
+         myBbxQfx4Amqg9vioTunmAHydDxUyrwtk4GufaKLwg9a5fAvowJlFkerEInIKxZf0zVW
+         mlIwbpfFha6hWhusxMOxG/RTSBbQ7k/JoopAgmM+pFRLmvpVjuNn6GCG/QYd9xeN2DmV
+         u73w==
+X-Gm-Message-State: AOAM530c/IJ0iymz8jIG3i3jqya3/qFAfGdzK2cARgARdtjDCbCjc7bZ
+        a5XbEBWJQ4lTUmosV4fccuoMPu2ZKDR6UVdUC/f++vfF
+X-Google-Smtp-Source: ABdhPJygZZcshgEgipo6qKLVDSNEV4d442F2Y1m4FFHpoe9ENg6PLcKPOa83NuL3VpOGX/liUe0jzjwEBdFcig8Z7pE=
+X-Received: by 2002:a25:1145:0:b0:64d:d6be:c741 with SMTP id
+ 66-20020a251145000000b0064dd6bec741mr8749396ybr.137.1652812121705; Tue, 17
+ May 2022 11:28:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516115846.58328-1-max.oss.09@gmail.com> <20220516115846.58328-12-max.oss.09@gmail.com>
-In-Reply-To: <20220516115846.58328-12-max.oss.09@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 17 May 2022 15:28:10 -0300
-Message-ID: <CAOMZO5BtQtX2873RQJ6hB0rAZThJ82mf4gTm9JboAkMrwq+f6g@mail.gmail.com>
-Subject: Re: [PATCH v1 11/17] ARM: dts: imx6q-apalis: Add ov5640 mipi csi camera
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <f80dfd57fdca87897f070a3ea4ee0a26b03e7831.camel@mniewoehner.de>
+ <CAJZ5v0h+kKwdntGPC5PP6N0ZRbRzLxuwcwTGm-PNBH6Z3mnETg@mail.gmail.com> <28686e8d994c297a78fb816805cd3652a8f8c90a.camel@mniewoehner.de>
+In-Reply-To: <28686e8d994c297a78fb816805cd3652a8f8c90a.camel@mniewoehner.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 May 2022 20:28:30 +0200
+Message-ID: <CAJZ5v0hWxhn9WM3ciQgbZpa7x8JwpHK=Bz4kefB_3VnAM0gB9Q@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: utils: include UUID in _DSM evaluation warning
+To:     =?UTF-8?Q?Michael_Niew=C3=B6hner?= <linux@mniewoehner.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+On Tue, May 17, 2022 at 8:26 PM Michael Niewöhner <linux@mniewoehner.de> wrote:
+>
+> On Tue, 2022-05-17 at 16:49 +0200, Rafael J. Wysocki wrote:
+> > On Mon, May 16, 2022 at 7:25 PM Michael Niewöhner <linux@mniewoehner.de>
+> > wrote:
+> > >
+> > > The _DSM evaluation warning in its current form is not very helpful, as
+> > > it lacks any specific information:
+> > >   ACPI: \: failed to evaluate _DSM (0x1001)
+> > >
+> > > Thus, include the UUID of the missing _DSM:
+> > >   ACPI: \: failed to evaluate _DSM bf0212f2-... (0x1001)
+> > >
+> > > Signed-off-by: Michael Niewöhner <linux@mniewoehner.de>
+> > > ---
+> > >  drivers/acpi/utils.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+> > > index d5cedffeeff9..7da993f5b6c3 100644
+> > > --- a/drivers/acpi/utils.c
+> > > +++ b/drivers/acpi/utils.c
+> > > @@ -681,7 +681,8 @@ acpi_evaluate_dsm(acpi_handle handle, const guid_t
+> > > *guid,
+> > > u64 rev, u64 func,
+> > >
+> > >         if (ret != AE_NOT_FOUND)
+> > >                 acpi_handle_warn(handle,
+> > > -                               "failed to evaluate _DSM (0x%x)\n", ret);
+> > > +                               "failed to evaluate _DSM %pUb (0x%x)\n",
+> > > +                               ret, guid);
+> >
+> > Shouldn't this be "guid, ret" ?
+>
+> Ouch, yes ofc.
+>
+> > Also, don't you want to print the
+> > value of the GUID rather than the address of its location?
+>
+> Not sure what you mean tbh. Documentation/core-api/printk-formats.rst states
+> %pUb being the right format. lib/test_printf.c implements it that way, too.
 
-On Mon, May 16, 2022 at 8:59 AM Max Krummenacher <max.oss.09@gmail.com> wrote:
-
-> +       ov5640_csi_cam: ov5640_mipi@3c {
-> +               compatible = "ovti,ov5640";
-
-Does it make sense to describe the ov5640 camera in the Apalis SoM dtsi?
-
-The camera is not populated in the SoM. What if the customer baseboard
-uses a different camera?
-
-The same applies to the adv720 description.
+I missed that, sorry.

@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A64552A38A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583DB52A387
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348142AbiEQNgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        id S240597AbiEQNfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347913AbiEQNfo (ORCPT
+        with ESMTP id S1347951AbiEQNfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:35:44 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA777B1DE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:35:39 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id r1so32441151ybo.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:35:39 -0700 (PDT)
+        Tue, 17 May 2022 09:35:37 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E4F4CD67
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:35:31 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 4so21780606ljw.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:35:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fOF0mLHDO2JH2bQ/6nv6jUbZKAhgwoxMZS2LA7xTw8w=;
-        b=tUErUVmrc1o90SfSkKV+/w8V5J/wOadMHXCnTV+v1hGfUBiewMMlCCQ9R922MxXUFJ
-         CXL6o5kEYdeGXEZ9XUayHFw2Bx7CTXrNZEYqOR4t5UOJquSkPSk2l14FKzcrDDMN/Ki9
-         HxGEuhk227eucaLiw5I/kHK/pU2boYm3aKVx0Vb/d+pCY+m7nnLGUGp82RpL1ohf/6zT
-         wfcmlWPvfgs+skk/gSyVPvtCbMZ0carMJvFSqYO9OtBh5E8lrDwDRCORpL63t0RNyFJN
-         trV3RStYhYzRClC0rEev6roWRm/S3wq0fjSwsVvdeALYThwPJxXCf9mubOb/D7ozxHOT
-         0ExA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=gLHS/b9qQdVVuN1R0+pvG/oH+ldjA527p+Isz/IUtsc=;
+        b=r0L6AMtlOLjXttwltWd+JbJzYHNgR+IDkHHHPjxUdZQzj0grfqgUPyBz5kKri1XMK5
+         pEJixh88Gs+7Opa0zseBHRqDrb2js/6iH1GZOFnpRJ1crVAKh4emSJje7kqbePk4rcOp
+         Ghmk2pwH5Z/SrgaUcWWyfmijBnf2QmRNq/ErW2I0CpOLCR7PlIQHd/Ud+Ua66KKkODb0
+         1ukwRvOIIhCeyElAYXdTyYi/OXYZoZiUf59QyvbLvQkRFDhV3BRD2hbTOYa2JDczixrR
+         LQjCkQRW6wEFy73Tn7eosqge128eICghzWcpWgAzPLMAuvwgnWoxpyIIdrx7YsMaIoUS
+         aSCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fOF0mLHDO2JH2bQ/6nv6jUbZKAhgwoxMZS2LA7xTw8w=;
-        b=vnszFvM1/xU++R9du3+MMnqgExR7g7p/bDbM1QOcpvkV4Rij0XTj4cc3noXcW2aCuK
-         UVExNMw4EatWS7NZkEJyszbuLNo4gPIoOIOUACpVfWd6Zfg4sgItb9m0JQ/wNOp8YAMw
-         rJ8HiZRoy6dhkatBcEo1opJ8OmmYh/ZmgWO4lL4c0hC5q0gLFYEZ0hAcnucMclGDxb+6
-         j00tBYI2nwXiA+zo5gkW3Iji8/Zhc9oKG4xCARuotTk0I0OsMR/i5e8BSdRzqzWY1BhB
-         g2WPlCAZanIDISZI3VdCmwQcWFMf+/irkHzffxZUJ3tPHcWwS+CiM4Rur+w2JcmSnEFd
-         7R7Q==
-X-Gm-Message-State: AOAM530p8vshB6UM0xg0b+x6NmNr3ITWSgpzVe6ZE5VOkdcALMr5oQDR
-        TW4Oy9aTd5j007PuU8syMfG/TP4yMehc1vysqD5XJw==
-X-Google-Smtp-Source: ABdhPJztRuQtvVBTLQg6edpSDF+qMvzQOjoWKt4vt+4eTANGq9hhZnx+sdyWM0csT1/k4MO2PGQxYV2ou6bhA2HvmKU=
-X-Received: by 2002:a25:804e:0:b0:64d:eafa:450e with SMTP id
- a14-20020a25804e000000b0064deafa450emr5364927ybn.128.1652794538659; Tue, 17
- May 2022 06:35:38 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=gLHS/b9qQdVVuN1R0+pvG/oH+ldjA527p+Isz/IUtsc=;
+        b=sJvQnCpt9OxiknDk6+S2QbZ2pJiRurHlyMi84Dk1z8qFg3JvYy0VeAl1YTrwEfzCD3
+         XwDixRjHLL1/3u7WN4Q9pJ8FluzlsHEXDlX+lP38mx1c+bOncHj07TthT1U5ym61IDTD
+         cdIjJpO/u+2LJZ+rAPDL9iYzmdoHuWJtZJ+PHVLTXnosm7yFswZh6Uarx+86wdYY8+V4
+         fCTBKJXrFG85caZ68KeItGBogpC0GcqcRAPL549NGP3pAFwLziExR6PKI4wlcqYzGexE
+         YJ3fqONhuVovmBQy/V3kzGKiWMwuqimu7Wru1lZ9uLG3K8ZtzDTZbbwWi9nlQN1Z3nCY
+         iM2w==
+X-Gm-Message-State: AOAM531FvFGXMrHBy63eYu6LEw+siBL/VwfrSn8q4mq4yTo2UzEDNDce
+        pStG6XavbKeFf823KrBEmnxc/A==
+X-Google-Smtp-Source: ABdhPJwqY+kntOQKl2ieBGyE6CPyoGfX0pDII8HGb/ETfWZEhzvSJGq9Jm4m6B3zEith92RNYqw8gA==
+X-Received: by 2002:a05:651c:1198:b0:253:c443:cdcb with SMTP id w24-20020a05651c119800b00253c443cdcbmr386635ljo.22.1652794530237;
+        Tue, 17 May 2022 06:35:30 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id 10-20020ac2568a000000b0047255d211c9sm1591084lfr.248.2022.05.17.06.35.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 06:35:29 -0700 (PDT)
+Message-ID: <f5633395-0ff8-2de2-a7e5-b99891ede33e@linaro.org>
+Date:   Tue, 17 May 2022 15:35:28 +0200
 MIME-Version: 1.0
-References: <20220516213639.123296914@linuxfoundation.org>
-In-Reply-To: <20220516213639.123296914@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 17 May 2022 19:05:27 +0530
-Message-ID: <CA+G9fYtupv8KgDhatu1u8HVtMniURxT6pi-R2MpU0dgG75KHUA@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/68] 5.10.117-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 01/20] MAINTAINERS: Add git repo path for MFC
+Content-Language: en-US
+To:     Smitha T Murthy <smitha.t@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com
+References: <20220517125548.14746-1-smitha.t@samsung.com>
+ <CGME20220517125551epcas5p42cca7f0a2db6dc1d16d0e27265c43f56@epcas5p4.samsung.com>
+ <20220517125548.14746-2-smitha.t@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517125548.14746-2-smitha.t@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,179 +84,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 at 03:08, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.117 release.
-> There are 68 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 18 May 2022 21:35:34 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.117-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 17/05/2022 14:55, Smitha T Murthy wrote:
+> Add git repo path for MFC.
+> 
+> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index fd768d43e048..e53c7333562b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2703,6 +2703,7 @@ M:	Andrzej Hajda <andrzej.hajda@intel.com>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  L:	linux-media@vger.kernel.org
+>  S:	Maintained
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media.git
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+This is not a MFC repo, but a repo of media drivers. There is no need to
+add to every driver repo of the subsystem. It should be in subsystem
+instead.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-## Build
-* kernel: 5.10.117-rc2
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.10.y
-* git commit: 17429b76ed5416aac3996975e8e49e0b1f79ed27
-* git describe: v5.10.116-69-g17429b76ed54
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.116-69-g17429b76ed54
-
-## Test Regressions (compared to v5.10.116-65-g11c5de3d33a9)
-No test regressions found.
-
-## Metric Regressions (compared to v5.10.116-65-g11c5de3d33a9)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.116-65-g11c5de3d33a9)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.116-65-g11c5de3d33a9)
-No metric fixes found.
-
-## Test result summary
-total: 93799, pass: 79054, fail: 849, skip: 12960, xfail: 936
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 291 passed, 0 failed
-* arm64: 41 total, 41 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 40 total, 40 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 51 total, 51 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 41 total, 41 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+Krzysztof

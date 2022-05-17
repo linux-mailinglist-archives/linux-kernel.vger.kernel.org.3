@@ -2,251 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC78752A03B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5787F52A03E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345167AbiEQLQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
+        id S1345070AbiEQLSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344965AbiEQLP1 (ORCPT
+        with ESMTP id S1345704AbiEQLRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:15:27 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC382BB39
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:15:25 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id e78so10781262ybc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:15:25 -0700 (PDT)
+        Tue, 17 May 2022 07:17:23 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68E213F7B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:17:19 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id a191so16667193pge.2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:17:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kB5d6nG1IOqdEbMihF1vU/5xvhjB0T9I3Lr4Icspy1w=;
-        b=Cvyez+H2N2A5IbkuwdNSlG8B/C0MWk8rFU5xTXVFAU42LTMVmcS+5+IuE2wFuYdgsH
-         p0TxuYoOb4UKg8bTxLOzTHp96icemNsx9eCIlXaT0vxTZGgq+ukG2zz8nkXGSQuz/TYA
-         KlZDbhVWuuPrMwBitlP+l3UyHlV6N6KyeM6aGMmtWQ2Gz/VW8xDhy/40J7zckQPtM8Bx
-         jB9x+JJn7oeqF4ZJTbsZWTAhWNvtOFw4mNjsgPjALAMQ5iEIxK5Z81oZR5G/n8qiVaGz
-         BDGKyiM1ifmknc0WIzZzKrgrjw1dbv+UwCV3kTy5vmSnBh17OyvKP+v+7nzlyaVYetWq
-         0S9g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3He5zqQafCaqxIZZoOREzUNxsIzRMeOPPdePDkzSSxg=;
+        b=qiKm1mbardgIojujIEXZig/+qJiCfV5w3aki/6jtJF49OSvbAvTeya8kkPRO3xQZXo
+         SZfsaP2xwY3T+dbidEWwbVJjQTGHKqsR1Pn0ZsNBHdAiBYW107qT/z9cV6KyVaKCy/a2
+         muO3OlKawuiRWJ7Iu2SuOk8wjw8fLi2M1XizS0MWZZT4J7HleJ4nlw3C6A3x5VX1TQeu
+         RPPUKACz1ByBMGjQrMVgvKSHUpLc/POEtjr4WpHIt8Sk/AgS1AYACUGiDYs4Y5Al7pCk
+         K8AMNJRjsnutWKKzmG3llFcMjxGwCLikuBDWFBcg6VEq92wHeLgi1ye77RVwC98uO8WJ
+         Q8PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kB5d6nG1IOqdEbMihF1vU/5xvhjB0T9I3Lr4Icspy1w=;
-        b=QglThnT3l4mS5vs1+FymIi8PMRHRZFyAYrD0Sl+murXhYcVZ8gwGPy9caYaNfarE4q
-         6njPd0rWzLEueoQYplsDitrsuoAPgQpcL/8zwYHYDgyFmYdxIvzLI+Y02FDE+7bzjSXt
-         Twv6YZgMpZrX1bJWZIB/mpTd+4jP9a/VGq1kLxRTE8fohRUO0UYulVHQw1RYliiH9aXK
-         UQQ32o5r/V0VraWAJTR+qGBFR2YhyKELfc3ohHMeldcSqzijdtxucvtQqIjmVPIjBp9C
-         lPHU+MkHYB5VMXqXUSWxlu/PvASiulQAbi7paeNooRUnfPRnzj9xy2hRpXHUIzhGxYK5
-         YRCw==
-X-Gm-Message-State: AOAM530pYsVzE+hX9aegtP6EyRtq8xleHJBQnRp98rDZdUvV/cfIPA/B
-        HbiZVN0ESk40tXRpKqj7QRxtVa31T1ldb0xj/Uc3pQ==
-X-Google-Smtp-Source: ABdhPJzItig4NRa91d3C8CdwU1uEDDQt1blygdhT0kG3bsQR3n7t3Rigv5A5aQoQvgEqdufegdbdXfZBzC/uxDRlnzw=
-X-Received: by 2002:a25:aa30:0:b0:64d:ebad:538d with SMTP id
- s45-20020a25aa30000000b0064debad538dmr4781311ybi.603.1652786124572; Tue, 17
- May 2022 04:15:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3He5zqQafCaqxIZZoOREzUNxsIzRMeOPPdePDkzSSxg=;
+        b=x08/6gd1yONvnEMP1kVGLEJyIE+fxMAo3J0L2fWjCwJxhC6DFY0acDGnlJMPrFWozR
+         iDWSpooPvyBcXqU2VRtfOrtUCPhikwGke3SziDe9EMLCG1+xz5wUEzD2Fe/BpvLj4HGj
+         I/iYkXPdGPmxJYhrbwjY80NIM2DfWQd/YkwGi+44fr4Cjo7yQrILmZT5nd/9jwmAdkRc
+         7tGQRGBM8Sm4YZEA95NrDpv/UuGzKcQ7thR8W8GreEzty9N5PyobibxJ9rgAOpOKLVDe
+         v6cp+lE0T4GftaUxRmqK+QPsXwt/oK9U4ISfiqn6UuBaCE3pc4+mS2hwg7qg5j2a6+bA
+         siHQ==
+X-Gm-Message-State: AOAM5307dRoYTM7vRwA3GD/H38yEO0NeLPLa3l4WjYoNOzh7xW8Asj+q
+        +jh9IT9NodmlgkKG18GfGU4=
+X-Google-Smtp-Source: ABdhPJxiX2+4JCzqJi4lQkLBZjwoKutGXIxRhWZ5Awu1vC+sL4AHnlsvrnw3OzuvWGorZf8YwuII4w==
+X-Received: by 2002:aa7:9557:0:b0:50d:b868:4798 with SMTP id w23-20020aa79557000000b0050db8684798mr22212636pfq.84.1652786239205;
+        Tue, 17 May 2022 04:17:19 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id n11-20020a170902f60b00b0015ec71f72d6sm8800503plg.253.2022.05.17.04.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 04:17:18 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] irqchip/apple-aic: Fix refcount leak in build_fiq_affinity
+Date:   Tue, 17 May 2022 15:17:09 +0400
+Message-Id: <20220517111710.37753-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220516193623.989270214@linuxfoundation.org>
-In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 17 May 2022 16:45:13 +0530
-Message-ID: <CA+G9fYsZr-K7vXk9ORsf_1=BprFLejzKicZZtsS0PnmVa49YHw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/102] 5.15.41-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 at 01:18, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.41 release.
-> There are 102 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.41-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+of_find_node_by_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Fixes: a5e8801202b3 ("irqchip/apple-aic: Parse FIQ affinities from device-tree")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/irqchip/irq-apple-aic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+diff --git a/drivers/irqchip/irq-apple-aic.c b/drivers/irqchip/irq-apple-aic.c
+index 12dd48727a15..478d0af16d9f 100644
+--- a/drivers/irqchip/irq-apple-aic.c
++++ b/drivers/irqchip/irq-apple-aic.c
+@@ -1035,6 +1035,7 @@ static void build_fiq_affinity(struct aic_irq_chip *ic, struct device_node *aff)
+ 			continue;
+ 
+ 		cpu = of_cpu_node_to_id(cpu_node);
++		of_node_put(cpu_node);
+ 		if (WARN_ON(cpu < 0))
+ 			continue;
+ 
+-- 
+2.25.1
 
-## Build
-* kernel: 5.15.41-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-5.15.y
-* git commit: 4aa8770e7dfca33d694a86ec8fc85900ada99c26
-* git describe: v5.15.40-103-g4aa8770e7dfc
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.40-103-g4aa8770e7dfc
-
-## Test Regressions (compared to v5.15.39-22-g13b089c28632)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.39-22-g13b089c28632)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.39-22-g13b089c28632)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.39-22-g13b089c28632)
-No metric fixes found.
-
-## Test result summary
-total: 105033, pass: 88286, fail: 1128, skip: 14403, xfail: 1216
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 296 total, 293 passed, 3 failed
-* arm64: 47 total, 47 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 45 total, 41 passed, 4 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 59 total, 56 passed, 3 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 26 total, 23 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 47 total, 47 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-
-* kselftest-android
-* kselftest-arm64
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org

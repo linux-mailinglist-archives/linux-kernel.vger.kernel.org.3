@@ -2,130 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E64D529E4E
+	by mail.lfdr.de (Postfix) with ESMTP id AFAD3529E4F
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbiEQJnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S245152AbiEQJna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245256AbiEQJnJ (ORCPT
+        with ESMTP id S245296AbiEQJnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:43:09 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57264666E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:42:10 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id en5so7524918edb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=siNpk3iy/2AiI/CebguH+obcJ5iL3RxgB8kelVAB/A0=;
-        b=flcjJKUCXVDcDKfZLAcf2dTd/cE3yhkSrMqpLMEF4zqyodwEXUgqoRvuiKCZ+Dbdou
-         7QJVvCa6zEiBzarwRA+ZZzLhQ8RDLmCnqWXyL+r9hGEUstMGB6k6LX4l6/cemQnxgNf/
-         cVPJIXcyu814uTKjvXTRGR+kI4MOoOSWZk+PfZ2LRucLvoAYm1LakeYeJ1lSyvSkFeR4
-         6EIJUdmQicJInp5VQZF8kX7XQBRg2InnYnVTarcPFAv3/H03PE+uqmZLPgSIaUwYS5OX
-         7mYHqZm71VMB9ta16A87RyzplT+snNiJHs07Yc7INs+yu2Gv+Aaq/Y8GuDlNXbCR9U0l
-         S1mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=siNpk3iy/2AiI/CebguH+obcJ5iL3RxgB8kelVAB/A0=;
-        b=TT8CJoyBRgwq2FlK1qWZZVlFIuNoJjnE8DiHCc03NZ5rGHRYGi+jA62L3ltcfxkF0G
-         WuY6OuNUCifYmop8gkWURphYjbJOPEq2EbmV5mipPTFOv65QTkbBDtnuy9Lu1cTD2mHl
-         77LyiHvJf9UcHzDJ+Fuu0fqQ78q5Qp2vdUqtiP+DPsJCVhkklhyeZnguNiLafrJs/RrP
-         1YuPUQDKSpvpB+D1qup7ddbwIB+DnPwXhE7nUS93SUayky1/6rWG44DQBDpR1xrMVQM2
-         2MGg3xnLEty4NAMMKRuDI1QIhPrtV5HoP9odKlwuuiczpik5UuFD3hr+3Ky8lXLa6ctS
-         23zQ==
-X-Gm-Message-State: AOAM5314zFVK4dxE2+29kSAZBkMTL98FKGnU1Gx6duCo16d/rknLbSV2
-        qYJ74w+r5t3TA3ip9W05+lP9vxi79T4Z43gD3/XTZw==
-X-Google-Smtp-Source: ABdhPJyQwTl6/5xSRooPjamNgZDctgSI/lL5Ultsn4da+PPMTic/fwusW8sjtz1w8bZjOtUGY7FX64a+XwYtJqlE908=
-X-Received: by 2002:a05:6402:509:b0:42a:b6c9:eac with SMTP id
- m9-20020a056402050900b0042ab6c90eacmr7750279edv.225.1652780527711; Tue, 17
- May 2022 02:42:07 -0700 (PDT)
+        Tue, 17 May 2022 05:43:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6668847AD5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fQ18bOcZWJMyAOKMn21TJxJUQnxc5EQ7lV5e0eJOw3w=; b=NCJWKwPUDShydKFyRRzQuMq03g
+        XLxK2W86U+yT80ivw3iDDPC0RpdoWXMW5hKMEwwhAUpAAZuQj9a84KM8kRKinDxclVfWG7kr2I3C6
+        lE08zKXv6LjvnwXJeKSGauLcxiLyVvtrHONlzkyKCRsWuxaPKuuwe6ZCttplx3qQKN9YYPXXU59Ni
+        TzBGFzQhUwvwVLboS4Y53SbEww9YPxlu0nLjUUogUfZ+zQMZkN+eA3mfUy+zW2C90OkMUF7d1+fG5
+        BYqZbEnk5HWBqER1pCeNxbST2lVmpYee5adlJVSHpzRso4R3PDhsxtrIiQRSrduTjgZdc/RdVqYn6
+        PeBm+ZGw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqtiX-00AjnR-Es; Tue, 17 May 2022 09:42:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0BF043003AA;
+        Tue, 17 May 2022 11:42:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id EAD7C202BC439; Tue, 17 May 2022 11:42:12 +0200 (CEST)
+Date:   Tue, 17 May 2022 11:42:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] objtool: fix objtool regression on x32 systems
+Message-ID: <YoNt9GhFdKKqjuiu@hirez.programming.kicks-ass.net>
+References: <alpine.LRH.2.02.2205161041260.11556@file01.intranet.prod.int.rdu2.redhat.com>
+ <YoJwtCeVzYUm6Uhg@hirez.programming.kicks-ass.net>
+ <alpine.LRH.2.02.2205161145070.30905@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220516212517.GP76023@worktop.programming.kicks-ass.net>
+ <738a941ba2ff4e2db8f2268b281d9bd5@AcuMS.aculab.com>
 MIME-Version: 1.0
-References: <20220323034405.976643-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20220323034405.976643-1-peng.fan@oss.nxp.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Tue, 17 May 2022 10:41:56 +0100
-Message-ID: <CANLsYkx089h16omSwAuteQz4RX9BMgT4_gWg9OqggqXk6m2-rw@mail.gmail.com>
-Subject: Re: [PATCH V4 0/2] remoteproc: support self recovery
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     bjorn.andersson@linaro.org, arnaud.pouliquen@foss.st.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peng.fan@nxp.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <738a941ba2ff4e2db8f2268b281d9bd5@AcuMS.aculab.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Mar 2022 at 03:42, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
->
-> V4:
->   Based on Bjorn's comments on V2-2
->   Move the rproc_has_feature/rproc_set_feature to remoteproc_internal.h and
->  Keep rproc_features still in remoteproc.h, because we use
->  RPROC_MAX_FEATURES to declare bitmap.
->   Update commit log for patch 2/2, and add comments
+On Tue, May 17, 2022 at 08:26:42AM +0000, David Laight wrote:
+> From: Peter Zijlstra
+> > Sent: 16 May 2022 22:25
+> ...
+> > A quick look seems to suggest at least all the 'offset' fields should be
+> > u64 or something. The only reason that works is because -mcmodel=kernel
+> > keeps everything in the 2G range to make s32 immediates work. But it
+> > isn't right.
+> 
+> Offsets in instructions are only 8bit or 32bit.
+> The mod/reg/rm and SiB encodings don't support anything else.
+> If offsets might be large then they have to be loaded into
+> registers - which will slow things down.
 
-I have received your patches but there is a significant backlog to go
-through before I can take a look at them.
-
-Thanks,
-Mathieu
-
->
-> V3:
->  Resend the wrong labeled patchset
->  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=621311
->
->  Write a cover-letter
->  To i.MX8QM/QXP, they have a M4 core self-recovery capability without
->  Linux loading firmware. The self recovery is done by
->  SCU(System Control Unit). Current remoteproc framework only support Linux
->  help recovery remote processor(stop, loading firmware, start). This
->  patchset is support remote processor self recovery(attach recovery).
->
->  In order to avoid introducing a new variable(bool support_self_recovery),
->  patch 1 introduce a new function, rproc_has_feature to make code easy to
->  extend, cleaner, such as we could move "bool has_iommu" to
->  rproc_has_feature(rproc, RPROC_FEAT_IOMMU).
->
->  Patch 2 is introduce a new function rproc_attach_recovery for
->  self recovery, the original logic move to rproc_firmware_recovery meaning
->  needs linux to help recovery.
->
->  V2-version 2:
->  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=621311
->  Introduce rproc_has_feature
->
->  V2-version 1:
->  https://patchwork.kernel.org/project/linux-remoteproc/patch/20220126085120.3397450-1-peng.fan@oss.nxp.com/
->  Nothing change in V2.
->  Only move this patch out from
->  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=604364
->
->
->
-> Peng Fan (2):
->   remoteproc: introduce rproc features
->   remoteproc: support attach recovery after rproc crash
->
->  drivers/remoteproc/remoteproc_core.c     | 67 +++++++++++++++++-------
->  drivers/remoteproc/remoteproc_internal.h | 10 ++++
->  include/linux/remoteproc.h               |  7 +++
->  3 files changed, 65 insertions(+), 19 deletions(-)
->
-> --
-> 2.25.1
->
+Not relevant; these are Elf64_Addr fields, objtool currently uses
+'unsigned long' for them, but that goes sideways if ILP32.

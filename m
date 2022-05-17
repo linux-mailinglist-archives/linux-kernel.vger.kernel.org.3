@@ -2,169 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF755529B69
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:49:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F171529B6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241217AbiEQHto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S240322AbiEQHu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240976AbiEQHtj (ORCPT
+        with ESMTP id S241486AbiEQHuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:49:39 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A5445042;
-        Tue, 17 May 2022 00:49:38 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id r30so5799973wra.13;
-        Tue, 17 May 2022 00:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WTGEJWoQ+KMazLH3yrW+72dqg/PgbNlHkEqCaVYjBog=;
-        b=S3tFYVXPftNGoe5TTjpXm86BtSRghMjVlXdOUH2GD46ypvT1ThoEiwVTzn7hgCGpJk
-         +nHv0D//dyxLGIkqyM81f3shdBf/VjFq0DIkE9F9u2HKyakKyu/E+jPaM3Z/3vskPz9z
-         CGZmze3XBYZgRhfGtTfYZjC01r8YvACZ9Gb9j6c81Uy9iRMyFcqaPIcPOP5hIoGVePTW
-         dFewKBjJ38Ksu+dAIpzjG2FomSnV8cEFnnXxyMf5qbB0BBSK2O/Dhl2GsowhnjvunWpW
-         tx3yeC92V1dHnI4zakpxXu8sJtW4pnncqdJNE28QdzM2I2bFkORTcquXiL3OeNiVxnql
-         tl1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WTGEJWoQ+KMazLH3yrW+72dqg/PgbNlHkEqCaVYjBog=;
-        b=iL6buniMRSDpD2xPO5RjodaB9AYGzA0MIVtAWmdhuj82DMnJiujvz+Yp4iGpPaUQvh
-         GvsDA75HIHSq8xnY/9cRI6DGEq5J15NRKedpWHERfe6KchdTaonPFrLTMDu42G1p5/Kv
-         d3p9muqnUgsy0+mfhLK1pNdDMaOnSzOvJH/estgGQAdnYEAy78nwAQrov5ToIryetXFI
-         WJxr0V7Xkp9MNRV6h9SgnpBUU6GEd3KSZl+4vdFOdeBQfb0XeCZBy4wdzZorp9ChCNsX
-         N4EGPYBtZOdtcUq5mfBxrgn7q3Rrg4dlXyzX+O0F4LRVckzMYHKqTasKXr2FnLSSpa5X
-         9iTw==
-X-Gm-Message-State: AOAM532TTcurBjozB4OYhATmKnItdFGfhqz5jOZ32RBADQBlCulnBAFY
-        esacUuQCoJrX0dZ3J2JeL4A=
-X-Google-Smtp-Source: ABdhPJwJinC9xx8aL+n7AyfzFJtP5Esjdc5ojELdSIdDtMIUyooc4KUFhKwdwVHaXenKsX4dnQ61gA==
-X-Received: by 2002:a5d:4988:0:b0:20d:9b8:e560 with SMTP id r8-20020a5d4988000000b0020d09b8e560mr6820985wrq.33.1652773776628;
-        Tue, 17 May 2022 00:49:36 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id m26-20020a7bce1a000000b003942a244f3fsm1200543wmc.24.2022.05.17.00.49.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 00:49:36 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 17 May 2022 09:49:33 +0200
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
- rcu_idle_exit noinstr
-Message-ID: <YoNTjXBDLQe9xj27@krava>
-References: <20220515203653.4039075-1-jolsa@kernel.org>
- <5b4bd044-ba88-649b-9b85-e08e175691f9@fb.com>
+        Tue, 17 May 2022 03:50:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6E8744775
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:50:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652773814;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fcxa52FaP/LJSTmTsYRMIBzyizNUgowBuXRZOO4RnAA=;
+        b=b3R4XK7HNx9P1R7A20Yxi5XBsmG3a/NcGsgCAzhvlASXFrNLix94UujfIzyxRtPnuiySLs
+        q8wdsm6Tj7HZ2OWJEUetK9qCQ2NMJ34GhvZG/rAuAdQB8N1gTaxPLfAjQt/K11H7BKxXGV
+        4/5dGbNt+0zjviJVFNmhikBVQ8WS7q8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-433-zzZy4rXjM0e348ewSnTnaA-1; Tue, 17 May 2022 03:50:10 -0400
+X-MC-Unique: zzZy4rXjM0e348ewSnTnaA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B12DE3C138A6;
+        Tue, 17 May 2022 07:50:09 +0000 (UTC)
+Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 309F9154A380;
+        Tue, 17 May 2022 07:50:03 +0000 (UTC)
+Date:   Tue, 17 May 2022 15:49:58 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     "yukuai (C)" <yukuai3@huawei.com>
+Cc:     Tejun Heo <tj@kernel.org>,
+        Zhang Wensheng <zhangwensheng5@huawei.com>, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org
+Subject: Re: [PATCH -next] block: fix io hung of setting throttle limit
+ frequently
+Message-ID: <YoNTpswO2+tEWbWo@T590>
+References: <20220516014429.33723-1-zhangwensheng5@huawei.com>
+ <YoKmCOAzwzw3Lz7g@slm.duckdns.org>
+ <ca251645-8d52-7a93-6ac2-579d97922a9e@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5b4bd044-ba88-649b-9b85-e08e175691f9@fb.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ca251645-8d52-7a93-6ac2-579d97922a9e@huawei.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 07:54:37PM -0700, Yonghong Song wrote:
-> 
-> 
-> On 5/15/22 1:36 PM, Jiri Olsa wrote:
-> > Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
-> > in rcu 'not watching' context and if there's tracer attached to
-> > them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
-> > warning like:
+On Tue, May 17, 2022 at 11:12:28AM +0800, yukuai (C) wrote:
+> 在 2022/05/17 3:29, Tejun Heo 写道:
+> > On Mon, May 16, 2022 at 09:44:29AM +0800, Zhang Wensheng wrote:
+> > > diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> > > index 469c483719be..8acb205dfa85 100644
+> > > --- a/block/blk-throttle.c
+> > > +++ b/block/blk-throttle.c
+> > > @@ -1321,12 +1321,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
+> > >   	 * that a group's limit are dropped suddenly and we don't want to
+> > >   	 * account recently dispatched IO with new low rate.
+> > >   	 */
+> > > -	throtl_start_new_slice(tg, READ);
+> > > -	throtl_start_new_slice(tg, WRITE);
+> > > +	if (!timer_pending(&sq->parent_sq->pending_timer)) {
+> > > +		throtl_start_new_slice(tg, READ);
+> > > +		throtl_start_new_slice(tg, WRITE);
+> > > -	if (tg->flags & THROTL_TG_PENDING) {
+> > > -		tg_update_disptime(tg);
+> > > -		throtl_schedule_next_dispatch(sq->parent_sq, true);
+> > > +		if (tg->flags & THROTL_TG_PENDING) {
+> > > +			tg_update_disptime(tg);
+> > > +			throtl_schedule_next_dispatch(sq->parent_sq, true);
+> > > +		}
 > > 
-> >    [    3.017540] WARNING: suspicious RCU usage
-> >    ...
-> >    [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
-> >    [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
-> >    [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
-> >    [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
-> >    [    3.018371]  fprobe_handler.part.0+0xab/0x150
-> >    [    3.018374]  0xffffffffa00080c8
-> >    [    3.018393]  ? arch_cpu_idle+0x5/0x10
-> >    [    3.018398]  arch_cpu_idle+0x5/0x10
-> >    [    3.018399]  default_idle_call+0x59/0x90
-> >    [    3.018401]  do_idle+0x1c3/0x1d0
+> > Yeah, but this ends up breaking the reason why it's starting the new slices
+> > in the first place explained in the commit above, right? I'm not sure what
+> > the right solution is but this likely isn't it.
 > > 
-> > The call path is following:
-> > 
-> > default_idle_call
-> >    rcu_idle_enter
-> >    arch_cpu_idle
-> >    rcu_idle_exit
-> > 
-> > The arch_cpu_idle and rcu_idle_exit are the only ones from above
-> > path that are traceble and cause this problem on my setup.
-> > 
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >   arch/x86/kernel/process.c | 2 +-
-> >   kernel/rcu/tree.c         | 2 +-
-> >   2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-> > index b370767f5b19..1345cb0124a6 100644
-> > --- a/arch/x86/kernel/process.c
-> > +++ b/arch/x86/kernel/process.c
-> > @@ -720,7 +720,7 @@ void arch_cpu_idle_dead(void)
-> >   /*
-> >    * Called from the generic idle code.
-> >    */
-> > -void arch_cpu_idle(void)
-> > +void noinstr arch_cpu_idle(void)
+> Hi, Tejun
 > 
-> noinstr includes a lot of attributes:
+> Ming added a condition in tg_with_in_bps_limit():
+> -       if (bps_limit == U64_MAX) {
+> +       /* no need to throttle if this bio's bytes have been accounted */
+> +       if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
 > 
-> #define noinstr                                                         \
->         noinline notrace __attribute((__section__(".noinstr.text")))    \
->         __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
+> Which will let the first throttled bio to be issued immediately once
+> the config if updated.
 > 
-> should we use notrace here?
+> Do you think this behaviour is OK? If so, we can do the same for
+> tg_with_in_iops_limit.
 
-hm right, so notrace should be enough for our case (kprobe_multi)
-which is based on ftrace/fprobe jump
+IMO, you can't do that for iops limit. If BIO_THROTTLED is set for one
+bio, all its bytes have been accounted, so no need to throttle this bio
+in case of bps limit. iops limit is another story, since io account is
+done in request IO which is based on split bio, so the bio(split bio)
+still need to be check & throttle in case of iops limit.
 
-noinstr (among other things) adds the function also the kprobes
-blacklist, which will prevent standard kprobes to attach
 
-ASAICS standard kprobes use rcu in probe path as well, like in
-opt_pre_handler function
+Thanks,
+Ming
 
-so I think we should go with noinstr
-
-jirka
-
-> 
-> >   {
-> >   	x86_idle();
-> >   }
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index a4b8189455d5..20d529722f51 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -896,7 +896,7 @@ static void noinstr rcu_eqs_exit(bool user)
-> >    * If you add or remove a call to rcu_idle_exit(), be sure to test with
-> >    * CONFIG_RCU_EQS_DEBUG=y.
-> >    */
-> > -void rcu_idle_exit(void)
-> > +void noinstr rcu_idle_exit(void)
-> >   {
-> >   	unsigned long flags;

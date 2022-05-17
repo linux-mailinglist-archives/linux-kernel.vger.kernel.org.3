@@ -2,93 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C37C52ADB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4CD52ADBB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiEQV7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S229812AbiEQV72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiEQV7F (ORCPT
+        with ESMTP id S229783AbiEQV7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:59:05 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98C24B1D0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652824744; x=1684360744;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/pJlWhY/khFLyPEJmOzUml3LUIYyj5VhrnvmwnmacYM=;
-  b=H3kEYWGY3AJvWzFqc4xr6h+IVwbSDIARq++0SHMKfddDqonE0fnSgz6P
-   FcUoxtVuqQjbmQejPncR1fcCK2eF4gfxT1VAZhF+MLEksgsY74IA7W4+9
-   MkICvA5EqmiMqW3sRySGaaPzcKLgSeACt7rDnRk2UOiUz6Lwlr8sqCpZd
-   zJdND6LwenrEwunW811w84+/8jn7Wj9hW6mxRD0S6pV/tdC9/6a7eEaQi
-   m+rTB95kIA87aRU7KtOjzg0H+c+jxupJzLbQHNrAOiPyE1dsFlF6G7XT3
-   quc6NNWo0CkuvGWbXev2lEkFRSLccAElEeVxF2YyVoFoGygtuTPg3warf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251863311"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="251863311"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 14:59:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="545107471"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 17 May 2022 14:59:03 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nr5Da-0001Tp-DR;
-        Tue, 17 May 2022 21:59:02 +0000
-Date:   Wed, 18 May 2022 05:58:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [rt-devel:linux-5.18.y-rt-rebase 55/94] kernel/softirq.c:641:1:
- sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not
- declared. Should it be static?
-Message-ID: <202205180539.k0x6jZJq-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 17:59:23 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B66D50E33
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:59:22 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb7d137101so4236617b3.12
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=87brBgMZyYr2KZM5gqgOZ1FKoktrRC3RtBsl96TyHFk=;
+        b=OWZ1xxTAzR+DWRYf1pCTH/HydXSZArPwWEXY2qmEPGNHV4KEvfWQONU/80zcaaMoQT
+         UxIQd5HwISoRC1LniAQjieSp5FjKdd321vE7mx1xHK6ameQFtpXLHzcENSi6qXlvN+zI
+         SLtUWnjDn5hPEiQ+jNsY2Baj5rsbvSq1Z4BF4AY8H6pyHdBTJOF6wiimFd4x3T5QFBm9
+         wcVinFed7dxUOKfUcLy/8iy+/adRfOdwTprKzMntkMJA67QbD9olRsPqwnxYhVqGtkez
+         HxixWrlGWMqQsvO3N9pMov6EcTUmbxfa/YbDearvZO9bwRXgHu2Iow6t6c9C7/uwNpFT
+         XhoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=87brBgMZyYr2KZM5gqgOZ1FKoktrRC3RtBsl96TyHFk=;
+        b=eSVQPJRI/VGDxsF7jA7GTvN6bsbtNI7Ex36ziJCZQmNYF3rAb7ira3MUDn/J4YrnP1
+         JdBRhOQab1k+tm0rojqjV/prSL86pNyM+Rkr2seE/hZEy2nA9yN0xmFxnw6eTUaxMPdK
+         LbFgQaBEaYs1IB1ua20zRiC9mVJxpYMJm5g6fip5XGQfSJ4567VBl/MFfiH56tAcoJSh
+         b/d+0kFAp9qZx5YAvbqF5hZ9WYpLlcclLRs1TfeV4VQCT/w37wkRLV6LsmMh7vceRyOT
+         7f4xBSXv8syXlY1ZyC3KSuuqiNeqWyRqVHs7oUXRmT9UOu84mjSEhQbP+iGqd9VyPuib
+         jhIw==
+X-Gm-Message-State: AOAM531pe66xCCsL5UV+knx9JLNywupRThATqcjsUZkEwdUXXZqVYm19
+        ysp10gnncocbRfFfevo/O0l4Kjb2nBIU
+X-Google-Smtp-Source: ABdhPJyxEk2HSbePnkp7Cg+Zed5QyldoSY6BiLKeR0+bUCh9h22z7R6MWypZH/tO2eEHsxTwuCUlguFzn2Su
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a5a1:af73:fe09:fd5])
+ (user=irogers job=sendgmr) by 2002:a25:4091:0:b0:64d:6dd1:db7d with SMTP id
+ n139-20020a254091000000b0064d6dd1db7dmr16261350yba.191.1652824761121; Tue, 17
+ May 2022 14:59:21 -0700 (PDT)
+Date:   Tue, 17 May 2022 14:59:14 -0700
+Message-Id: <20220517215917.692906-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v3 0/3] JSON output for perf stat
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Claire Jensen <cjense@google.com>, Alyssa Ross <hi@alyssa.is>,
+        Like Xu <likexu@tencent.com>,
+        James Clark <james.clark@arm.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Claire Jensen <clairej735@gmail.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.18.y-rt-rebase
-head:   df0c990058a5bce1eed5d3512c6efe4eacc62bed
-commit: e9b4bc6bcdfacbbe8125749a6135af2e61a3476c [55/94] tick: Fix timer storm since introduction of timersd
-config: i386-randconfig-s002-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180539.k0x6jZJq-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=e9b4bc6bcdfacbbe8125749a6135af2e61a3476c
-        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
-        git fetch --no-tags rt-devel linux-5.18.y-rt-rebase
-        git checkout e9b4bc6bcdfacbbe8125749a6135af2e61a3476c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+Parsing the CSV or text output of perf stat can be problematic when
+new output is added (columns in CSV format). JSON names values and
+simplifies the job of parsing. Add a JSON output option to perf-stat
+then add unit test that parses and validates the output.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is a resend of two v2 patches:
+https://lore.kernel.org/lkml/20210813220754.2104922-1-cjense@google.com/
+https://lore.kernel.org/lkml/20210813220936.2105426-1-cjense@google.com/
+with a few formatting changes and improvements to the linter.
 
+The CSV test/linter is also added to ensure that CSV output doesn't regress:
+https://lore.kernel.org/lkml/20210813192108.2087512-1-cjense@google.com/
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/softirq.c:640:1: sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be static?
->> kernel/softirq.c:641:1: sparse: sparse: symbol '__pcpu_scope_pending_timer_softirq' was not declared. Should it be static?
+v3. There is some tidy up of CSV code including a potential memory
+    over run in the os.nfields set up caught by sanitizers. To
+    facilitate this an AGGR_MAX value is added. v3 also adds the CSV
+    testing.
 
-Please review and possibly fold the followup patch.
+v2. Fixes the system wide no aggregation test to not run if the
+    paranoia is wrong. It also makes the counter-value check handle
+    the "<not counted>" and "<not supported>" cases.
+
+Claire Jensen (3):
+  perf test: Add checking for perf stat CSV output.
+  perf stat: Add JSON output option
+  perf test: Json format checking
+
+ tools/perf/Documentation/perf-stat.txt        |  21 +
+ tools/perf/builtin-stat.c                     |   6 +
+ .../tests/shell/lib/perf_csv_output_lint.py   |  48 +++
+ .../tests/shell/lib/perf_json_output_lint.py  |  91 +++++
+ tools/perf/tests/shell/stat+csv_output.sh     | 147 +++++++
+ tools/perf/tests/shell/stat+json_output.sh    | 147 +++++++
+ tools/perf/util/stat-display.c                | 384 +++++++++++++-----
+ tools/perf/util/stat.c                        |   1 +
+ tools/perf/util/stat.h                        |   2 +
+ 9 files changed, 741 insertions(+), 106 deletions(-)
+ create mode 100644 tools/perf/tests/shell/lib/perf_csv_output_lint.py
+ create mode 100644 tools/perf/tests/shell/lib/perf_json_output_lint.py
+ create mode 100755 tools/perf/tests/shell/stat+csv_output.sh
+ create mode 100755 tools/perf/tests/shell/stat+json_output.sh
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.0.550.gb090851708-goog
+

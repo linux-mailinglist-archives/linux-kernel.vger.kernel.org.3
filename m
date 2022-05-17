@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378B052986D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBE452986F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233996AbiEQDwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 23:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S235960AbiEQDxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 23:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiEQDwS (ORCPT
+        with ESMTP id S231433AbiEQDx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 23:52:18 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8972DABF
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:52:17 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id p8so15780959pfh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gSM6wVFC/mVMfsxQOTfoNPtAY9TOEtVxrvAuav03prg=;
-        b=GtJjkmI/L43qn/3ogE8DrcyyWxxFdKOA54+ZqdMNSgMJyxeKdwS9NDoYHGz3XAAKkq
-         nvRmk1cfqZGlNg50FfK+71/kPFq3Pd87SHDsQgHH3eoqRMRHMpxfmBlBgXFzEFyxO8dn
-         uTKM9/qHuCyqxrrnopqUTymstMZXI6g6nCwxdxY0D+m2AuEV/WwudaBHbBYYYzP48rxQ
-         65YLM8KdC4zdFMpHasIsBePfPOThByKMVO7f5aGsXnFgxwbn5eBpNmEiHuaVg7weF36P
-         SDQuk5cQhqiqUlmmNdCmsLKWTccBtvtKocwHLV40NT+Ij7aGQ+zvhjRMRAE3TR9tnWlr
-         gZGw==
+        Mon, 16 May 2022 23:53:26 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB3D2E0B5;
+        Mon, 16 May 2022 20:53:25 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-e93bbb54f9so22711301fac.12;
+        Mon, 16 May 2022 20:53:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gSM6wVFC/mVMfsxQOTfoNPtAY9TOEtVxrvAuav03prg=;
-        b=JIgoVsxQC1ZOzOHKsISMCXO9QIxX6X2w0WO5wGitrC/HgkxGxJ06PH6e3Eq80Yo6Zn
-         RFt2d2C+VHP/vrVU/X40nth7ELQUqHB9MOyGtUm2aJ/3UmQG00hzprjDFzxl7+rsg1fw
-         E3UUMcVd67n2s+ObE/2CJpZK/4g2775b7s6cuYCi4GsmeQ8/7ZpK/vDZsyM6FD7HsmvA
-         PQIkIraxWyKeHUjejJ2DHRDJ4YyzKjUTgqcAL2SE1elJ70B7aGdz0Wxo+yChI+gzzhIh
-         ScaDgUvpTLKdhu0U6dqwEWM68UTKS1U2JBbYik12/0bSHV+aHH05M8ijvJM/qNR6gndm
-         euSw==
-X-Gm-Message-State: AOAM532Ij8m5mX2qapBl1G31O5Mn5mWQjdLUrOtj4G/0Tp4paYHJwFm+
-        nLjnQ/6G7/IfrRcEwDX+A5I4RQ==
-X-Google-Smtp-Source: ABdhPJynzXrKKF+8HCiNT42Gd9ddW0DtWdDBFJiZshptXN+TCskfLssajmzFGsdxpEisAtCJJXwEUw==
-X-Received: by 2002:a05:6a00:ac1:b0:4f1:29e4:b3a1 with SMTP id c1-20020a056a000ac100b004f129e4b3a1mr20609726pfl.63.1652759537058;
-        Mon, 16 May 2022 20:52:17 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i1-20020a628701000000b0050dc762813dsm7556911pfe.23.2022.05.16.20.52.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 20:52:16 -0700 (PDT)
-Date:   Tue, 17 May 2022 03:52:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 1/2] KVM: x86/mmu: Drop RWX=0 SPTEs during ept_sync_page()
-Message-ID: <YoMb7AiSGBE4kUKT@google.com>
-References: <20220513195000.99371-1-seanjc@google.com>
- <20220513195000.99371-2-seanjc@google.com>
- <CALzav=d36gccJv345Phdr0AJx9=6=TP=iZ60dscgQr64Rq4Kew@mail.gmail.com>
- <Yn7+HrYbXhror09V@google.com>
- <CALzav=eogd=sNaPOSW3_9hLSZ6pXe5eakHLr5vm8bUiwQrmA6Q@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nD103x5fG+vRGXoi7A4nPbMr2Eg2Wxzgpc5qUXVp5jI=;
+        b=RRpgskJCNxhqaARNCxhStVb+aI0xR+VZMvRpA8Nw68C3SwMOKSp4keJ3fs0/erXMpM
+         tYX2r5DDNZvuSWCPK/bfOAzgAWBGOoQBzQy7n4lIM910aGUkNeS91j0yQv+LKokbDvsr
+         lIZhOZrHa9LysAQPhjFCBqHYiWPKkwA9gXcVKDyGf29zozemnyZEvYLrIQcGXJr/KI6+
+         rkNJCIeTFSMe42jZlnqRgZEoT06CfhGeVhXS9OZs1vB7h4XiYiS0cxwPj3X+NgAX+cqs
+         /mN8++gU6di0N8GOq5H6VAf9NAR7CrEAjCXDrRHFSlZBBpX1ijgHJfkLDoK6SrkYKjPw
+         0FQQ==
+X-Gm-Message-State: AOAM532gIr9uOEDmbRNXUc1xgOXYX5YK3iq1WRdbqCwfIWDZ5cNKnB9O
+        r7oRShZ+tjjtRgut5r1mIOpzXZNz2qGyxXszrSUyx6wL
+X-Google-Smtp-Source: ABdhPJxz9J36HewhEH+fLy18JPu2xXLtQpHjd2qWD7qMIeXAWkkGIq8Jh338fRYZeHSZiT3ccS1kfIGpg5DzOmcCAtA=
+X-Received: by 2002:a05:6870:d1cd:b0:e1:e7ee:faa0 with SMTP id
+ b13-20020a056870d1cd00b000e1e7eefaa0mr17153127oac.5.1652759605259; Mon, 16
+ May 2022 20:53:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALzav=eogd=sNaPOSW3_9hLSZ6pXe5eakHLr5vm8bUiwQrmA6Q@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220513040519.1499333-1-irogers@google.com> <20220513040519.1499333-2-irogers@google.com>
+In-Reply-To: <20220513040519.1499333-2-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 16 May 2022 20:53:14 -0700
+Message-ID: <CAM9d7cjfCF+9SUGrO-WQ_OSAyq0U+idS8SCNFv+CoL6A+0RKGQ@mail.gmail.com>
+Subject: Re: [PATCH 1/7] perf test: Skip reason for suites with 1 test
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Marco Elver <elver@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022, David Matlack wrote:
-> On Fri, May 13, 2022 at 5:56 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Fri, May 13, 2022, David Matlack wrote:
-> > > On Fri, May 13, 2022 at 12:50 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > >
-> > > > Drop SPTEs whose new protections will yield a RWX=0 SPTE, i.e. a SPTE
-> > > > that is marked shadow-present but is not-present in the page tables.  If
-> > > > EPT with execute-only support is in use by L1, KVM can create a RWX=0
-> > > > SPTE can be created for an EPTE if the upper level combined permissions
-> > > > are R (or RW) and the leaf EPTE is changed from R (or RW) to X.
-> > >
-> > > For some reason I found this sentence hard to read.
-> >
-> > Heh, probably because "KVM can create a RWX=0 SPTE can be created" is nonsensical.
-> > I botched a late edit to the changelog...
-> >
-> > > What about this:
-> > >
-> > >   When shadowing EPT and NX HugePages is enabled, if the guest changes
-> >
-> > This doesn' thave anything to do with NX HugePages, it's an execute-only specific
-> > bug where L1 can create a gPTE that is !READABLE but is considered PRESENT because
-> > it is EXECUTABLE.  If the upper level protections are R or RW, the resulting
-> > protections for the entire translation are RWX=0.  All of sync_page()'s existing
-> > checks filter out only !PRESENT gPTE, because without execute-only, all upper
-> > levels are guaranteed to be at least READABLE.
-> 
-> I see what you mean, thanks.
-> 
-> And I also recall now you mentioned (off-list) that the NX HugePage
-> scenario isn't possible because KVM does not let huge pages go unsync.
+On Thu, May 12, 2022 at 9:05 PM Ian Rogers <irogers@google.com> wrote:
+>
+> When a suite has just 1 subtest, the subtest number is given as -1 to
+> avoid indented printing. When this subtest number is seen for the skip
+> reason, use the reason of the first test.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Yep.  The other thing that's semi-relevant and I've mentioned off-list at least
-once is that our (Google's) old kernel has a different NX HugePage implementation
-that _can_ result in RWX=0 SPTEs.  Unlike upstream, the internal NX HugePage
-implementation shatters a huge page _after_ installing said huge page, whereas
-upstream demotes the huge page before it's installed.  If shattering fails on huge
-page that L1 created a huge page with just X permissions, KVM is left with a RWX=0
-huge page.
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
+
+
+> ---
+>  tools/perf/tests/builtin-test.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+> index fac3717d9ba1..33fcafa0fa79 100644
+> --- a/tools/perf/tests/builtin-test.c
+> +++ b/tools/perf/tests/builtin-test.c
+> @@ -137,10 +137,10 @@ static bool has_subtests(const struct test_suite *t)
+>
+>  static const char *skip_reason(const struct test_suite *t, int subtest)
+>  {
+> -       if (t->test_cases && subtest >= 0)
+> -               return t->test_cases[subtest].skip_reason;
+> +       if (!t->test_cases)
+> +               return NULL;
+>
+> -       return NULL;
+> +       return t->test_cases[subtest >= 0 ? subtest : 0].skip_reason;
+>  }
+>
+>  static const char *test_description(const struct test_suite *t, int subtest)
+> --
+> 2.36.0.550.gb090851708-goog
+>

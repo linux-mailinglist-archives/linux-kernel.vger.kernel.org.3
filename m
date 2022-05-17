@@ -2,173 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34A15297C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F365297CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbiEQDRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 23:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S234383AbiEQDTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 23:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbiEQDRI (ORCPT
+        with ESMTP id S229512AbiEQDTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 23:17:08 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3755C2EA02;
-        Mon, 16 May 2022 20:17:07 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-edf3b6b0f2so22667941fac.9;
-        Mon, 16 May 2022 20:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tbMBXgyeDNJ8XSgJOtBDgLoNW60+5QspBWo0Od9KL+g=;
-        b=h5xlq7zOdfcDnoc9qfumZtnEVtKQKZtUdD8KdqXz/YF49Eo4d8DSmnuzLWv3lYadgH
-         a6Ug3JOtnb7vl1XvQkkZN8XzibPM07YDeHJxZfEZmtjE7X1brdyBWBxDSXJEkaLmLh0g
-         lbNUd80GkGj1vajfLikopVLWdNtmNg1Orka0pgeAiSabksyyy4tUm/lB8dkBA7HbClta
-         aAqsdiWkfrRk0AO/SRINB1TznwfbmjLkzoPN4h5SbiBg8s5Tgo4c4X0IQiOi5TqQmsHj
-         efB16iv/NAlDLnmaoJoWitE9Gvh/nTZFNtDqN2qJyOxvNre1iDYTpju3gJhnUE/7iYm1
-         3KsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tbMBXgyeDNJ8XSgJOtBDgLoNW60+5QspBWo0Od9KL+g=;
-        b=FxFe7ho+p/u3Km95r2auiY2infZZ0pYYTkFb0KV4oJcNlB9OY6KVBJVhqNPBXSLvlp
-         nxQeYaaNoiToWe+JcBAKJelxqxE40JvVwDgi2D8gOBvQalKMZIr8MifrnAmbhSWuOZZJ
-         Onaj7qbP/fiSaA+yCSGblUzOHDSzmuaIopV+ap1+mDz8S9tQ4om+xRj9RRv3Y6YrHREl
-         oBZb0jLDtA0SnBONXcwH27gEH80CvYOtsWZOBu+fjwphlJg3N2yZgCQjAKtIsxS81Hb0
-         q9bxf5J5ipdsaAqRv+LRNQuEerJoTgIQdh/hB/BDVBhcnlI/3/NRfVVouC0W9JYXGVJu
-         kOfQ==
-X-Gm-Message-State: AOAM533vLhNhwuzFXpjFC7Z2g/8w8rwhgfHWlVwN7ZVxRU8pE12MUXzc
-        sDIMRUdOr5/1QTtm6dba9QidXWTmHOEw4A==
-X-Google-Smtp-Source: ABdhPJwsWLQ21cpKDGpwu4dNMNiWcULWXcPvkKesR6Jw7SOGHRw+RZ5KdeJs2ixgqSMbC8dljtTYKg==
-X-Received: by 2002:a05:6870:a9a4:b0:e6:4451:f4b0 with SMTP id ep36-20020a056870a9a400b000e64451f4b0mr16969238oab.252.1652757426558;
-        Mon, 16 May 2022 20:17:06 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05683030a900b0060603221248sm4591475ots.24.2022.05.16.20.17.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 20:17:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <33aedaf3-3b57-daa4-0928-d9dcaea98788@roeck-us.net>
-Date:   Mon, 16 May 2022 20:17:03 -0700
+        Mon, 16 May 2022 23:19:44 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E34B40E43
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:19:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E3FFACE181E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:19:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DBEC385B8;
+        Tue, 17 May 2022 03:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652757580;
+        bh=VIHjd9WHoqUG2QiApVkWuQIrOpyDysFKEQQlq03kRIA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PlbuoWjU155FW8X2ZQgGyHZzC3b9YI1xXr++vJ6YOQoX7P2eukYHMyxzHlIhGdXQI
+         vK8b0mr1+FU1hjrVEgYIQhnVbZVHiy8rIxHrzUpgZlahNWOT4Y24nGGfu0JGVaw2QB
+         +PRtLa4qP03H6E00hioAJ/Mh791AwSk46sN3hoUmq3BPmnFfeWg3WQ0pQOT8/E2o4V
+         qjiGHyLvFnIg7Yp/9aPApV52DsInQzrJGTVI8Zp7K0o12vUrqnDmc3gQUuBMWsX7Se
+         2a3SXJx5ghRfwSk+54/71deNVs0bX/f+/b7PNUhc/iJRN3JoQxSeaIyvkbU4glhh5d
+         PdLKxJCearSDw==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v3] f2fs: separate NOCoW and pinfile semantics
+Date:   Tue, 17 May 2022 11:19:34 +0800
+Message-Id: <20220517031934.3563135-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] hwmon: Directly use ida_alloc()/free()
-Content-Language: en-US
-To:     keliu <liuke94@huawei.com>, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220517024022.1980274-1-liuke94@huawei.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220517024022.1980274-1-liuke94@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 19:40, keliu wrote:
-> Use ida_alloc()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
-> 
-> Signed-off-by: keliu <liuke94@huawei.com>
-> ---
->   drivers/hwmon/hwmon.c  |  6 +++---
->   drivers/hwmon/ibmaem.c | 10 +++++-----
+Pinning a file is heavy, because skipping pinned files make GC
+running with heavy load or no effect.
 
-One patch per file, please.
+So that this patch proposes to separate nocow and pinfile semantics:
+- NOCoW flag can only be set on regular file.
+- NOCoW file will only trigger IPU at common writeback/flush.
+- NOCow file will do OPU during GC.
 
-Guenter
+This flag can satisfying the demand of:
+1) avoiding fragment of file's physical block
+2) userspace doesn't want to pin file's physical address
 
->   2 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
-> index 22de7a9e7ba7..2e2cd79d89eb 100644
-> --- a/drivers/hwmon/hwmon.c
-> +++ b/drivers/hwmon/hwmon.c
-> @@ -764,7 +764,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->   			 "hwmon: '%s' is not a valid name attribute, please fix\n",
->   			 name);
->   
-> -	id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
-> +	id = ida_alloc(&hwmon_ida, GFP_KERNEL);
->   	if (id < 0)
->   		return ERR_PTR(id);
->   
-> @@ -856,7 +856,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
->   free_hwmon:
->   	hwmon_dev_release(hdev);
->   ida_remove:
-> -	ida_simple_remove(&hwmon_ida, id);
-> +	ida_free(&hwmon_ida, id);
->   	return ERR_PTR(err);
->   }
->   
-> @@ -968,7 +968,7 @@ void hwmon_device_unregister(struct device *dev)
->   
->   	if (likely(sscanf(dev_name(dev), HWMON_ID_FORMAT, &id) == 1)) {
->   		device_unregister(dev);
-> -		ida_simple_remove(&hwmon_ida, id);
-> +		ida_free(&hwmon_ida, id);
->   	} else
->   		dev_dbg(dev->parent,
->   			"hwmon_device_unregister() failed: bad class ID!\n");
-> diff --git a/drivers/hwmon/ibmaem.c b/drivers/hwmon/ibmaem.c
-> index de6baf6ca3d1..5c4cf742f5ae 100644
-> --- a/drivers/hwmon/ibmaem.c
-> +++ b/drivers/hwmon/ibmaem.c
-> @@ -482,7 +482,7 @@ static void aem_delete(struct aem_data *data)
->   	ipmi_destroy_user(data->ipmi.user);
->   	platform_set_drvdata(data->pdev, NULL);
->   	platform_device_unregister(data->pdev);
-> -	ida_simple_remove(&aem_ida, data->id);
-> +	ida_free(&aem_ida, data->id);
->   	kfree(data);
->   }
->   
-> @@ -539,7 +539,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
->   		data->power_period[i] = AEM_DEFAULT_POWER_INTERVAL;
->   
->   	/* Create sub-device for this fw instance */
-> -	data->id = ida_simple_get(&aem_ida, 0, 0, GFP_KERNEL);
-> +	data->id = ida_alloc(&aem_ida, GFP_KERNEL);
->   	if (data->id < 0)
->   		goto id_err;
->   
-> @@ -600,7 +600,7 @@ static int aem_init_aem1_inst(struct aem_ipmi_data *probe, u8 module_handle)
->   	platform_set_drvdata(data->pdev, NULL);
->   	platform_device_unregister(data->pdev);
->   dev_err:
-> -	ida_simple_remove(&aem_ida, data->id);
-> +	ida_free(&aem_ida, data->id);
->   id_err:
->   	kfree(data);
->   
-> @@ -679,7 +679,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
->   		data->power_period[i] = AEM_DEFAULT_POWER_INTERVAL;
->   
->   	/* Create sub-device for this fw instance */
-> -	data->id = ida_simple_get(&aem_ida, 0, 0, GFP_KERNEL);
-> +	data->id = ida_alloc(&aem_ida, GFP_KERNEL);
->   	if (data->id < 0)
->   		goto id_err;
->   
-> @@ -740,7 +740,7 @@ static int aem_init_aem2_inst(struct aem_ipmi_data *probe,
->   	platform_set_drvdata(data->pdev, NULL);
->   	platform_device_unregister(data->pdev);
->   dev_err:
-> -	ida_simple_remove(&aem_ida, data->id);
-> +	ida_free(&aem_ida, data->id);
->   id_err:
->   	kfree(data);
->   
+After commit 5d539245cb18 ("f2fs: export FS_NOCOW_FL flag to user"),
+Pin_file and NOCoW flags have already been twined closely. e.g.
+once we set pinfile flag in file, nocow flag will be shown; and after
+clearing pinfile flag, nocow flag will disappear.
+
+So, in order to keep backward compatibility, let use below semantics:
+
+f2fs_ioc_set_pin_file/f2fs_fileattr_set logic:
+		pinfile			nocow
+set		set pinfile | nocow	set nocow
+clear		clear pinfile | nocow	clear nocow
+
+File Behaviors:
+w/ pinfile, w/ nocow:		use pinfile semantics
+w/ pinfile, w/o nocow:		use pinfile semantics
+w/o pinfile, w/ nocow:		use nocow semantics
+w/o pinfile, w/o nocow:		no pinfile or nocow semantics
+
+NOCoW can also be set on directory, and it will have no effect on
+directory, however, new files created in nocow directory will have the
+flag set.
+
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+v3:
+- support nocow flag for directory.
+ fs/f2fs/data.c |  3 ++-
+ fs/f2fs/f2fs.h | 13 +++++++++++--
+ fs/f2fs/file.c | 18 +++++++++++++++++-
+ 3 files changed, 30 insertions(+), 4 deletions(-)
+
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 54a7a8ad994d..c8eab78f7d89 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2495,7 +2495,8 @@ bool f2fs_should_update_inplace(struct inode *inode, struct f2fs_io_info *fio)
+ 	if (is_inode_flag_set(inode, FI_ALIGNED_WRITE))
+ 		return false;
+ 
+-	if (f2fs_is_pinned_file(inode))
++	if (f2fs_is_pinned_file(inode) ||
++			F2FS_I(inode)->i_flags & F2FS_NOCOW_FL)
+ 		return true;
+ 
+ 	/* if this is cold file, we should overwrite to avoid fragmentation */
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 492af5b96de1..5c67736000a7 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -2916,13 +2916,15 @@ static inline void f2fs_change_bit(unsigned int nr, char *addr)
+ #define F2FS_NOCOMP_FL			0x00000400 /* Don't compress */
+ #define F2FS_INDEX_FL			0x00001000 /* hash-indexed directory */
+ #define F2FS_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
++#define F2FS_NOCOW_FL			0x00800000 /* Do not cow file */
+ #define F2FS_PROJINHERIT_FL		0x20000000 /* Create with parents projid */
+ #define F2FS_CASEFOLD_FL		0x40000000 /* Casefolded file */
+ 
+ /* Flags that should be inherited by new inodes from their parent. */
+ #define F2FS_FL_INHERITED (F2FS_SYNC_FL | F2FS_NODUMP_FL | F2FS_NOATIME_FL | \
+ 			   F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+-			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL)
++			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL | \
++			   F2FS_NOCOW_FL)
+ 
+ /* Flags that are appropriate for regular files (all but dir-specific ones). */
+ #define F2FS_REG_FLMASK		(~(F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+@@ -2954,9 +2956,16 @@ static inline void __mark_inode_dirty_flag(struct inode *inode,
+ 		fallthrough;
+ 	case FI_DATA_EXIST:
+ 	case FI_INLINE_DOTS:
+-	case FI_PIN_FILE:
+ 	case FI_COMPRESS_RELEASED:
+ 		f2fs_mark_inode_dirty_sync(inode, true);
++		break;
++	case FI_PIN_FILE:
++		if (set)
++			F2FS_I(inode)->i_flags |= F2FS_NOCOW_FL;
++		else
++			F2FS_I(inode)->i_flags &= ~F2FS_NOCOW_FL;
++		f2fs_mark_inode_dirty_sync(inode, true);
++		break;
+ 	}
+ }
+ 
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 216081ea8c81..9e71ce8601f9 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -1851,6 +1851,20 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
+ 	if (IS_NOQUOTA(inode))
+ 		return -EPERM;
+ 
++	if ((iflags ^ masked_flags) & F2FS_NOCOW_FL) {
++		int ret;
++
++		if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
++			return -EINVAL;
++		if (S_ISREG(inode->i_mode)) {
++			if (f2fs_should_update_outplace(inode, NULL))
++				return -EINVAL;
++			ret = f2fs_convert_inline_inode(inode);
++			if (ret)
++				return ret;
++		}
++	}
++
+ 	if ((iflags ^ masked_flags) & F2FS_CASEFOLD_FL) {
+ 		if (!f2fs_sb_has_casefold(F2FS_I_SB(inode)))
+ 			return -EOPNOTSUPP;
+@@ -1926,6 +1940,7 @@ static const struct {
+ 	{ F2FS_NOCOMP_FL,	FS_NOCOMP_FL },
+ 	{ F2FS_INDEX_FL,	FS_INDEX_FL },
+ 	{ F2FS_DIRSYNC_FL,	FS_DIRSYNC_FL },
++	{ F2FS_NOCOW_FL,	FS_NOCOW_FL },
+ 	{ F2FS_PROJINHERIT_FL,	FS_PROJINHERIT_FL },
+ 	{ F2FS_CASEFOLD_FL,	FS_CASEFOLD_FL },
+ };
+@@ -1957,7 +1972,8 @@ static const struct {
+ 		FS_NOCOMP_FL |		\
+ 		FS_DIRSYNC_FL |		\
+ 		FS_PROJINHERIT_FL |	\
+-		FS_CASEFOLD_FL)
++		FS_CASEFOLD_FL |	\
++		FS_NOCOW_FL)
+ 
+ /* Convert f2fs on-disk i_flags to FS_IOC_{GET,SET}FLAGS flags */
+ static inline u32 f2fs_iflags_to_fsflags(u32 iflags)
+-- 
+2.25.1
 

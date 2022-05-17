@@ -2,88 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC3D52AC27
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C985752AC34
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiEQTmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 15:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        id S240667AbiEQTsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 15:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbiEQTms (ORCPT
+        with ESMTP id S233185AbiEQTsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 15:42:48 -0400
-Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3A926AF9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:42:46 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id r35enso0WEMbDr35enGE51; Tue, 17 May 2022 21:42:44 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Tue, 17 May 2022 21:42:44 +0200
-X-ME-IP: 86.243.180.246
-Message-ID: <301a1d0a-971b-5b27-c5a9-86390358de9a@wanadoo.fr>
-Date:   Tue, 17 May 2022 21:42:41 +0200
+        Tue, 17 May 2022 15:48:00 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5663137BDC;
+        Tue, 17 May 2022 12:47:58 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1nr3Ad-0003Z8-52; Tue, 17 May 2022 21:47:51 +0200
+Date:   Tue, 17 May 2022 21:47:51 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     syzbot <syzbot+793a590957d9c1b96620@syzkaller.appspotmail.com>
+Cc:     ali.abdallah@suse.com, coreteam@netfilter.org, davem@davemloft.net,
+        edumazet@google.com, fw@strlen.de, kadlec@netfilter.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        ozsh@nvidia.com, pabeni@redhat.com, pablo@netfilter.org,
+        paulb@nvidia.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in nf_confirm
+Message-ID: <20220517194751.GA4316@breakpoint.cc>
+References: <000000000000fb4af305df391431@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] RDMA: remove null check after call container_of()
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>
-Newsgroups: gmane.linux.drivers.rdma,gmane.linux.kernel
-References: <1652751208-23211-1-git-send-email-baihaowen@meizu.com>
- <20220517121646.GE63055@ziepe.ca>
- <142a9c03-574f-adcf-bc4d-bb2a25c01e88@wanadoo.fr>
- <20220517180303.GK63055@ziepe.ca>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220517180303.GK63055@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000fb4af305df391431@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 17/05/2022 à 20:03, Jason Gunthorpe a écrit :
-> On Tue, May 17, 2022 at 07:54:38PM +0200, Christophe JAILLET wrote:
->> Le 17/05/2022 à 14:16, Jason Gunthorpe a écrit :
->>> On Tue, May 17, 2022 at 09:33:28AM +0800, Haowen Bai wrote:
->>>> container_of() will never return NULL, so remove useless code.
->>>
->>> It is confusing here, but it can be null.
->>
->> Hi,
->>
->> out of curiosity, can you elaborate how it can be NULL?
+syzbot <syzbot+793a590957d9c1b96620@syzkaller.appspotmail.com> wrote:
+> Hello,
 > 
-> It is guarented/required that that container_of is a 0 offset. The
-> normal usage of the ib_alloc_device macro:
+> syzbot found the following issue on:
 > 
-> #define ib_alloc_device(drv_struct, member)                                    \
-> 	container_of(_ib_alloc_device(sizeof(struct drv_struct) +              \
-> 				      BUILD_BUG_ON_ZERO(offsetof(              \
-> 					      struct drv_struct, member))),    \
-> 		     struct drv_struct, member)
+> HEAD commit:    d887ae3247e0 octeontx2-pf: Remove unnecessary synchronize_..
+> git tree:       net-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=17f2b659f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b1aab282dc5dd920
+> dashboard link: https://syzkaller.appspot.com/bug?extid=793a590957d9c1b96620
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1313dce6f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=169eb59ef00000
 > 
-> Enforces this property with a BUILD_BUG_ON
+> The issue was bisected to:
 > 
-> So, if the input pointer to container_of is reliably NULL or ERR_PTR
-> then the output pointer will be the same.
+> commit 1397af5bfd7d32b0cf2adb70a78c9a9e8f11d912
+> Author: Florian Westphal <fw@strlen.de>
+> Date:   Mon Apr 11 11:01:18 2022 +0000
 > 
-> The rvt code here open codes the call because it is a mid-layer and
-> the sizeof() calculation above is not correct for it.
-> 
-> Jason
-> 
+>     netfilter: conntrack: remove the percpu dying list
 
-Crystal clear.
-Thank you for the explanation.
+AFAICS this bug exists since
+Fixes: 71d8c47fc653 ("netfilter: conntrack: introduce clash resolution on insertion race")
 
-CJ
+nf_confirm needs to re-fetch 'ct' from skb->_nfct.  Will send a patch.

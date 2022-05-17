@@ -2,163 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B585D52ADCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC7B52ADD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiEQWEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 18:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        id S230115AbiEQWI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 18:08:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiEQWE3 (ORCPT
+        with ESMTP id S230040AbiEQWIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 18:04:29 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B474B851
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:04:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652825068; x=1684361068;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DYnEdSppO39yh6uNPMT5k/kcPnrUIqJqd4/BSKdNERc=;
-  b=BjbfxZHZEwBynJi1lPzs0SlSzNyrQU2V4xj0J7nIMcWyNqawa51U7IU8
-   verdxVoczLZ8EqdJwFMJO32uIVeagW4loCzeBW9OrRatJi/8WLnXNycH6
-   Vu3b4EUXAZmRBnbzmaZOLrRlrlrlSvvNNxtcR0+1Bocp2dF4zofMGsfzb
-   c0Fzs+/aymVFmN3k33xJt5E9nr6ZTysRxBmVll7sLySeBtQ1+x6wkU4Ka
-   G60ugC0gsvCZ9xtECH7RNu5LO6Wa7qiXaSPUC9/0vDxUEgdUh73CphNIL
-   pK+5xz2NIxc7qcdlHqYiBV9J+XfEt3VvOEUbFElaJfMmFXJb4wWGSShFX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="253399768"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="253399768"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 15:04:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="673075036"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga002.fm.intel.com with ESMTP; 17 May 2022 15:04:27 -0700
-Date:   Tue, 17 May 2022 15:08:10 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        iommu@lists.linux-foundation.org, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH v6 28/29] x86/tsc: Restart NMI watchdog after refining
- tsc_khz
-Message-ID: <20220517220810.GB6711@ranerica-svr.sc.intel.com>
-References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
- <20220506000008.30892-29-ricardo.neri-calderon@linux.intel.com>
- <1652180070.1r874kr0tg.astroid@bobo.none>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652180070.1r874kr0tg.astroid@bobo.none>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 18:08:24 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B645377FA
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:08:23 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fede3f229cso4575417b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=X9rd48IcOQMlJI4fL1LiOmaxrjRg+Q4uXQPcsoEgV+k=;
+        b=FlPd4Ema1RTlqOmUDneIdv1KEKzfvy5j81NCIQeDPZybHktJlCFTbLL4ZkCjfGPLVC
+         nMHR9eGulo22rP5seemivgemqbsWdMosN/8jIZz+5WRGX7iR97kNyjmLjJacDnOJnsdn
+         L+Rhi1RJ/5Vk2i2KnaG7WO10vJsTNBLaN4eITTnEPWFkpEzMB8yYbbm8Q3GEMOzVP5MQ
+         3HSQqqhUCeOpRHu4aKeQ6HDtK32bZIUNT2zL/+Kj+9UEztN8TtaM/gqYK841nJ9TcN5g
+         GMI5o9E8QNXP+KkedPoVP3OeQsAjzD9IDLkczE0Iu+oj9bEqvQO47sCQW8NfvLUrFFVE
+         NZ5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=X9rd48IcOQMlJI4fL1LiOmaxrjRg+Q4uXQPcsoEgV+k=;
+        b=7YuknLu1Skfdsae56zpV1glFmixxNYMSM85FTGiwJbdDtGgdn2pB+SD9wqKwQDSUqS
+         qCV9GImRi4Xozny3d1wtoHCGqAvP+2h7qS+x9mlifNjlqCTkEhJw1JfUFE9umm1Ss56+
+         3COzmh5o9n3Ro5/F8gEYteZxyEhzGVpZbHsqh2f7nOXjHfzl3/0lDoZH8TFfHXk42Bkc
+         1g+EenIGC4GxBK5mMXwDohIB4p7+6L0q1OX7dFFvl1Gc/idhLBFR9JGvmFwO2wwOLW+4
+         HH14xZZui/EyhwWUDcE7aGomHgzCKoDcVUwmovZCydbbIK4x4N9uWxUaDAGXooNmblHe
+         ZY0Q==
+X-Gm-Message-State: AOAM532gxPwuZOf/ELxKgw/sVA0bLNyVbL49WAifmSNV0YyUIe2XIACz
+        F88Le6BsUBt8yWOvMCP3chYoGC1i7CUgy48=
+X-Google-Smtp-Source: ABdhPJyAvSIgyxv8X2AWvhlPaUJR0PhTeRsTDBvxqVMgCBrF0GHmO5hdx8s6AygIcKEcbgRoxQnJXpmt/P1nufI=
+X-Received: from tansuresh.svl.corp.google.com ([2620:15c:2c5:13:3c9b:5345:708:1378])
+ (user=tansuresh job=sendgmr) by 2002:a05:6902:84:b0:63d:4a3d:eb5 with SMTP id
+ h4-20020a056902008400b0063d4a3d0eb5mr24596845ybs.145.1652825302496; Tue, 17
+ May 2022 15:08:22 -0700 (PDT)
+Date:   Tue, 17 May 2022 15:08:13 -0700
+Message-Id: <20220517220816.1635044-1-tansuresh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v3 0/3] Asynchronous shutdown interface and example implementation
+From:   Tanjore Suresh <tansuresh@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pci@vger.kernel.org, Tanjore Suresh <tansuresh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 09:16:21PM +1000, Nicholas Piggin wrote:
-> Excerpts from Ricardo Neri's message of May 6, 2022 10:00 am:
-> > The HPET hardlockup detector relies on tsc_khz to estimate the value of
-> > that the TSC will have when its HPET channel fires. A refined tsc_khz
-> > helps to estimate better the expected TSC value.
-> > 
-> > Using the early value of tsc_khz may lead to a large error in the expected
-> > TSC value. Restarting the NMI watchdog detector has the effect of kicking
-> > its HPET channel and make use of the refined tsc_khz.
-> > 
-> > When the HPET hardlockup is not in use, restarting the NMI watchdog is
-> > a noop.
-> > 
-> > Cc: Andi Kleen <ak@linux.intel.com>
-> > Cc: Stephane Eranian <eranian@google.com>
-> > Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
-> > Cc: iommu@lists.linux-foundation.org
-> > Cc: linuxppc-dev@lists.ozlabs.org
-> > Cc: x86@kernel.org
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > ---
-> > Changes since v5:
-> >  * Introduced this patch
-> > 
-> > Changes since v4
-> >  * N/A
-> > 
-> > Changes since v3
-> >  * N/A
-> > 
-> > Changes since v2:
-> >  * N/A
-> > 
-> > Changes since v1:
-> >  * N/A
-> > ---
-> >  arch/x86/kernel/tsc.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> > index cafacb2e58cc..cc1843044d88 100644
-> > --- a/arch/x86/kernel/tsc.c
-> > +++ b/arch/x86/kernel/tsc.c
-> > @@ -1386,6 +1386,12 @@ static void tsc_refine_calibration_work(struct work_struct *work)
-> >  	/* Inform the TSC deadline clockevent devices about the recalibration */
-> >  	lapic_update_tsc_freq();
-> >  
-> > +	/*
-> > +	 * If in use, the HPET hardlockup detector relies on tsc_khz.
-> > +	 * Reconfigure it to make use of the refined tsc_khz.
-> > +	 */
-> > +	lockup_detector_reconfigure();
-> 
-> I don't know if the API is conceptually good.
-> 
-> You change something that the lockup detector is currently using, 
-> *while* the detector is running asynchronously, and then reconfigure
-> it. 
+Problem:
 
-Yes, this is what happens.
+Some of our machines are configured with  many NVMe devices and
+are validated for strict shutdown time requirements. Each NVMe
+device plugged into the system, typicaly takes about 4.5 secs
+to shutdown. A system with 16 such NVMe devices will takes
+approximately 80 secs to shutdown and go through reboot.
 
-> What happens in the window? If this code is only used for small
-> adjustments maybe it does not really matter
+The current shutdown APIs as defined at bus level is defined to be
+synchronous. Therefore, more devices are in the system the greater
+the time it takes to shutdown. This shutdown time significantly
+contributes the machine reboot time.
 
-Please see my comment
+Solution:
 
-> but in principle it's a bad API to export.
-> 
-> lockup_detector_reconfigure as an internal API is okay because it
-> reconfigures things while the watchdog is stopped
+This patch set proposes an asynchronous shutdown interface at bus level,
+modifies the core driver, device shutdown routine to exploit the
+new interface while maintaining backward compatibility with synchronous
+implementation already existing (Patch 1 of 3) and exploits new interface
+to enable all PCI-E based devices to use asynchronous interface semantics
+if necessary (Patch 2 of 3). The implementation at PCI-E level also works
+in a backward compatible way, to allow exiting device implementation
+to work with current synchronous semantics. Only show cases an example
+implementation for NVMe device to exploit this asynchronous shutdown
+interface. (Patch 3 of 3).
 
-I see.
+Changelog:
 
-> [actually that  looks untrue for soft dog which uses watchdog_thresh in
-> is_softlockup(), but that should be fixed].
+v2: - Replaced the shutdown_pre & shutdown_post entry point names with the
+      recommended names (async_shutdown_start and asynch_shutdown_end).
 
-Perhaps there should be a watchdog_thresh_user. When the user updates it,
-the detector is stopped, watchdog_thresh is updated, and then the detector
-is resumed.
+    - Comment about ordering requirements between bridge shutdown versus
+      leaf/endpoint shutdown was agreed to be different when calling
+      async_shutdown_start and async_shutdown_end. Now this implements the
+      same order of calling both start and end entry points.
 
-> 
-> You're the arch so you're allowed to stop the watchdog and configure
-> it, e.g., hardlockup_detector_perf_stop() is called in arch/.
+v3: - This notes clarifies why power management framework was not
+      considered for implementing this shutdown optimization.
+      There is no code change done. This change notes clarfies
+      the reasoning only.
 
-I had it like this but it did not look right to me. You are right, however,
-I can stop/restart the watchdog when needed.
+      This patch is only for shutdown of the system. The shutdown
+      entry points are traditionally have different requirement
+      where all devices are brought to a quiescent state and then
+      system power may be removed (power down request scenarios)
+      and also the same entry point is used to shutdown all devices
+      and re-initialized and restarted (soft shutdown/reboot
+      scenarios).
 
-Thanks and BR,
-Ricardo
+      Whereas, the device power management (dpm)  allows the device
+      to bring down any device configured in the system that may be
+      idle to various low power states that the device may support
+      in a selective manner and based on transitions that device
+      implementation allows. The power state transitions initiated
+      by the system can be achieved using 'dpm' interfaces already
+      specified.
+
+      Therefore the request to use the 'dpm' interface to achieve
+      this shutdown optimization is not the right approach as the
+      suggested interface is meant to solve an orthogonal requirement
+      and have historically been kept separate from the shutdown entry
+      points defined and its associated semantics.
+
+Tanjore Suresh (3):
+  driver core: Support asynchronous driver shutdown
+  PCI: Support asynchronous shutdown
+  nvme: Add async shutdown support
+
+ drivers/base/core.c        | 38 +++++++++++++++++-
+ drivers/nvme/host/core.c   | 28 +++++++++----
+ drivers/nvme/host/nvme.h   |  8 ++++
+ drivers/nvme/host/pci.c    | 80 ++++++++++++++++++++++++--------------
+ drivers/pci/pci-driver.c   | 20 ++++++++--
+ include/linux/device/bus.h | 12 ++++++
+ include/linux/pci.h        |  4 ++
+ 7 files changed, 149 insertions(+), 41 deletions(-)
+
+-- 
+2.36.0.550.gb090851708-goog
+

@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF0B52AE2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8180E52AE3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiEQWcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 18:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
+        id S231315AbiEQWdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 18:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiEQWck (ORCPT
+        with ESMTP id S231336AbiEQWdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 18:32:40 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6B43E5C0;
-        Tue, 17 May 2022 15:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NkGrqohDhl0Ru/z/4CdG6vGOYGQQqFbS8Adgul9ZO6U=; b=Wiru92zKmLZwC3ibtyjcesi8uW
-        r/gJ+Fyxp3+obMLld0GCOAi2ZW9Y747BjG8+A/Ak32uwni/t/u2JP+qMxfXondYIU5lPWUH9gapzC
-        92BPGGXQfBre+Lz7UgKlLUQ0AU/UWZEi6wrTkzMhbfrc4SN79Z7ajKaYGFJR+3CC4+2NoDrJ6KEFK
-        BstTjmYOWCmb9BOyX5AKUQvkUs3UPHOEWpL4xkpn5x9ME5S+nxEtcRbaal778TVGIAUUFlbxhpBpo
-        IBUCULp06qp0Ak1+s3BkFtZHH4/gPiTvargskB89ZS0hbe14BOCbeBkczT1haQ9TaIweU6WpaqoTB
-        euS/N5XQ==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nr5k6-00Fr1x-GF; Tue, 17 May 2022 22:32:38 +0000
-Date:   Tue, 17 May 2022 22:32:38 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Daniil Lunev <dlunev@chromium.org>
-Cc:     linux-fsdevel@vger.kernel.org, hch@infradead.org,
-        fuse-devel@lists.sourceforge.net, tytso@mit.edu, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] FUSE: Retire superblock on force unmount
-Message-ID: <YoQihi4OMjJj2Mj0@zeniv-ca.linux.org.uk>
-References: <20220511222910.635307-1-dlunev@chromium.org>
- <20220512082832.v2.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
- <YoQfls6hFcP3kCaH@zeniv-ca.linux.org.uk>
+        Tue, 17 May 2022 18:33:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727483EABD;
+        Tue, 17 May 2022 15:33:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C93356132C;
+        Tue, 17 May 2022 22:33:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E060AC385B8;
+        Tue, 17 May 2022 22:33:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652826808;
+        bh=fMWd8B6Azz1Yz4Q3JOgMXGVN+v5a30E1TxzHvyasM/E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ef8kauu7i4yL96jbmNJ8mid/7sgRdte2U9SyhJ5bRw/wbmgD6shB6YPtkZAwhJda8
+         kWpfVmxQ/tGMgicfnMaqkXz0BG9a6U50A+Kc8UNDkr3tvKoJ18kv9fh9Fd0d7pzrzR
+         KKB02cmMlYDKFukiBLCIrmoGs+YJhn6qPkeV2o6MjdnnrbfN/ljm6z2ecXCcgxfcsQ
+         g4AF/UcVvryB9rTWbMzG6gW+ptOVJEs0YM68i2XRuZS+uO1CKCF8QLRL/5C/wmCUuf
+         o+FpdZ4UJaQyLJGhqP83LlE0FhD/QxuCXZfgxHpazA5Y8D51KLXcFCGhaxKScObtUZ
+         TJ4oWJB74GTSg==
+Date:   Tue, 17 May 2022 15:33:26 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jay Vosburgh <jay.vosburgh@canonical.com>
+Cc:     Jonathan Toppins <jtoppins@redhat.com>, netdev@vger.kernel.org,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC net-next] bonding: netlink error message support for
+ options
+Message-ID: <20220517153326.1fbbe2cc@kernel.org>
+In-Reply-To: <2125.1652821874@famine>
+References: <5a6ba6f14b0fad6d4ba077a5230ee71cbf970934.1652819479.git.jtoppins@redhat.com>
+        <2125.1652821874@famine>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoQfls6hFcP3kCaH@zeniv-ca.linux.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 10:20:06PM +0000, Al Viro wrote:
-> On Thu, May 12, 2022 at 08:29:10AM +1000, Daniil Lunev wrote:
-> > Force unmount of FUSE severes the connection with the user space, even
-> > if there are still open files. Subsequent remount tries to re-use the
-> > superblock held by the open files, which is meaningless in the FUSE case
-> > after disconnect - reused super block doesn't have userspace counterpart
-> > attached to it and is incapable of doing any IO.
+On Tue, 17 May 2022 14:11:14 -0700 Jay Vosburgh wrote:
+> 	If I'm reading the code correctly, rtnl isn't held that long.
+> Once the ->doit() returns, rtnl is dropped, but the copy happens later:
 > 
-> 	Why not simply have those simply rejected by fuse_test_super()?
-> Looks like that would be much smaller and less invasive patch...
-> Confused...
+> rtnetlink_rcv()
+> 	netlink_rcv_skb(skb, &rtnetlink_rcv_msg)
+> 		rtnetlink_rcv_msg()	[ as cb(skb, nlh, &extack) ]
+> 			rtnl_lock()
+> 			link->doit()	[ rtnl_setlink, rtnl_newlink, et al ]
+> 			rtnl_unlock()
+> 		netlink_ack()
+> 
+> inside netlink_ack():
+> 
+>         if (nlk_has_extack && extack) {
+>                 if (extack->_msg) {
+>                         WARN_ON(nla_put_string(skb, NLMSGERR_ATTR_MSG,
+>                                                extack->_msg));
+>                 }
 
-... because Miklos had suggested that, apparently ;-/  I disagree -
-that approach has more side effects.  "mount will skip that sucker" is,
-AFAICS, the only effect of modiyfing test_super callback(s); yours, OTOH...
+Indeed.
 
-Note that generic_shutdown_super() is *not* called while superblock is
-mounted anywhere.  And it doesn't get to eviction from the list while it still
-has live dentries.  Or inodes, for that matter.
+> 	Even if the strings have to be constant (via NL_SET_ERR_MSG),
+> adding extack messages is likely still an improvement.
 
-So this
-        if (sb->s_bdi != &noop_backing_dev_info) {
-		if (sb->s_iflags & SB_I_PERSB_BDI)
-			bdi_unregister(sb->s_bdi);
-		bdi_put(sb->s_bdi);
-		sb->s_bdi = &noop_backing_dev_info;
-	}
-is almost certainly not safe to be done on a live superblock.
+At a quick glance it seems like the major use of the printf here is to
+point at a particular option. If options are carried in individual
+attributes pointing at the right attribute with NL_SET_ERR_MSG_ATTR()
+should also be helpful. Maybe that's stating the obvious.

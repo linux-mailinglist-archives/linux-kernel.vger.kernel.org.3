@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC52F52AB5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A711C52AB5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352433AbiEQS6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S236392AbiEQS65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236392AbiEQS6q (ORCPT
+        with ESMTP id S1352450AbiEQS6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:58:46 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB31F50053;
-        Tue, 17 May 2022 11:58:43 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id n24so23399209oie.12;
-        Tue, 17 May 2022 11:58:43 -0700 (PDT)
+        Tue, 17 May 2022 14:58:52 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5EA50050
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:58:48 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id e20so2147967qvr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5OEZwf1a6NBQqaSeB1PoXjAnNB9RAFDi45J9mVUY6Mc=;
+        b=QBzP1DKPQbqGKOwIfmhQEGqpBNec/goHk3M1uethuYOR4H4TVy1TNG+78Yg/EfeA1p
+         O+QpBBWuxfJOO+9alDPgCh5Wk9mjLu3Lbb8GCkY7c4qN8WlXwMU0bFf/egc3hRMqfjE+
+         EqGiD6xZ/1RHdO8SzKC36Pf9IQqc8EFp5KZQYk+z2Um4RaWmAU2y2Y4r4Mlz/khF4X+Z
+         hay1CaKtA7G71htZGUjME3MNwvc90lKl8CGYiub7BwFlRXjiz3qFqFF7MgMpwpN6tHi9
+         4GdIvK/cJD17qDjaEhk+0wX+rdctJcJ9XKT12PLSxgUkl+jl5APFbAv2TRNCxKzqzF06
+         qorA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=I3ZXSbwtXnbTG8zgREWqc9qR1l4Fnmm+ZYjnu3VE+lA=;
-        b=NDwXTTqbD78D3KSTibz24Jk/Cup9BFXX2Jlv5BfbExMWzCa+ktFigktaczkIy0h9uK
-         iVEMNz5t4DEdEuev9KN8Ad0FjwqM5ULyA/GKLszoGOs+BBDGe6FibdqhURdSbTp0iIIC
-         U/UQ/SPQvUtr0vkkTT9mBAlBEZRG3y9XjqGYKLcgEKNei6XLlszSAKkmymUutwmW0nw8
-         /j3AQhqWlpTlJy6qTyjlUvvEgHBQLm3qY0c+Z7psf2JnritNVHq+j4NP8wg/v+mkVhLV
-         sVcVjS7Y5+6f9FbDItnjgi57GtrQCGghvzsnzoaQIEO6OUF2l7LABVZbCOsVZJz41VZ6
-         dcWQ==
-X-Gm-Message-State: AOAM530hg6D/7JwVkkJZJYW+CYFIqlBZ6JMmksERQeXAPNVtujD4xpnw
-        3uph71mqD53AXB+8u6LJiQ==
-X-Google-Smtp-Source: ABdhPJxrzDvBkqwcRQsKquYBOMXgBblq7AmcvwunVmwPxmIQE/e9kRoM0tLUsgCYudhkP+buO0TuJA==
-X-Received: by 2002:aca:c20b:0:b0:326:d448:43fb with SMTP id s11-20020acac20b000000b00326d44843fbmr16849871oif.12.1652813922797;
-        Tue, 17 May 2022 11:58:42 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id fp17-20020a056870659100b000e686d1387csm112570oab.22.2022.05.17.11.58.41
+        bh=5OEZwf1a6NBQqaSeB1PoXjAnNB9RAFDi45J9mVUY6Mc=;
+        b=bk8VurLOD/NQAoJfgZzbo5BmoKJI139aCwwe5X4xY08GuC52Z8g3IrjWsK8YAWXkSt
+         UqhkrifUcmEOiz/f+p3/SWSs0BdJRTd/IdDiPK+FSakkLnTtWd4rl5/oS9Yl0vhhiJji
+         ztN2VuKStv1Jn1Bd68TSsoLsrHFt8b+JkEiiUeu2DTkyY4krhtpGjuqDU1ifqB3XTxMr
+         AUZo6o9teZo9335/5RSiSMk+e0eCyQ2AFlFVJD+Ir0/rmdDLBH/7YvVwz9MdexX5siyl
+         vFfIhL13GmuArNzLGuXwwG1MKnH4yEIKg70URnWfvymRHRBUmVo4lXhyi+DjR6XsF6tO
+         xvmg==
+X-Gm-Message-State: AOAM532LvKJbr7VB9xcnJTDp0ULU4hGRUOyNV1vyhEbPbGed2wik7nUo
+        1eLSRp/7nIPwPxN5+YVpU3o7PA==
+X-Google-Smtp-Source: ABdhPJxr5Ef+82N/c8d7IbPg/4dPHISlmDsbtldITmrHL2THC7jy03ei/LC/QmSZlidmIpqFFDc9SQ==
+X-Received: by 2002:ad4:5aa1:0:b0:45a:af34:4dee with SMTP id u1-20020ad45aa1000000b0045aaf344deemr21321686qvg.115.1652813927373;
+        Tue, 17 May 2022 11:58:47 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id l18-20020a37f912000000b0069fc13ce20asm8575857qkj.59.2022.05.17.11.58.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 11:58:41 -0700 (PDT)
-Received: (nullmailer pid 1424064 invoked by uid 1000);
-        Tue, 17 May 2022 18:58:41 -0000
-Date:   Tue, 17 May 2022 13:58:41 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 01/23] dt-bindings: ata: ahci-platform: Drop
- dma-coherent property declaration
-Message-ID: <20220517185841.GA1388602-robh@kernel.org>
-References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
- <20220511231810.4928-2-Sergey.Semin@baikalelectronics.ru>
+        Tue, 17 May 2022 11:58:46 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nr2P7-0089GX-Qd; Tue, 17 May 2022 15:58:45 -0300
+Date:   Tue, 17 May 2022 15:58:45 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Yi Liu <yi.l.liu@intel.com>, Kevin Tian <kevin.tian@intel.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kvm/vfio: Fix potential deadlock problem in vfio
+Message-ID: <20220517185845.GL63055@ziepe.ca>
+References: <20220517023441.4258-1-wanjiabing@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511231810.4928-2-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220517023441.4258-1-wanjiabing@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,14 +75,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 02:17:48AM +0300, Serge Semin wrote:
-> It's redundant to have the 'dma-coherent' property explicitly specified in
-> the DT schema because it's a generic property described in the core
-> DT-schema by which the property is always evaluated.
+On Tue, May 17, 2022 at 10:34:41AM +0800, Wan Jiabing wrote:
+> Fix following coccicheck warning:
+> ./virt/kvm/vfio.c:258:1-7: preceding lock on line 236
+> 
+> If kvm_vfio_file_iommu_group() failed, code would goto err_fdput with
+> mutex_lock acquired and then return ret. It might cause potential
+> deadlock. Move mutex_unlock bellow err_fdput tag to fix it. 
+> 
+> Fixes: d55d9e7a45721 ("kvm/vfio: Store the struct file in the kvm_vfio_group")
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  virt/kvm/vfio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-It is not redundant.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-The core schema defines the property (as a boolean), but this schema 
-defines it being used in this binding. Otherwise, it won't be allowed.
-
-Rob
+Thanks,
+Jason

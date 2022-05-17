@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC0F52AD0D
+	by mail.lfdr.de (Postfix) with ESMTP id 7875752AD0E
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353059AbiEQUx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        id S1353077AbiEQUyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349048AbiEQUxt (ORCPT
+        with ESMTP id S1353028AbiEQUxu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:53:49 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649AA52525;
-        Tue, 17 May 2022 13:53:48 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id en5so497547edb.1;
-        Tue, 17 May 2022 13:53:48 -0700 (PDT)
+        Tue, 17 May 2022 16:53:50 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6766C5252C;
+        Tue, 17 May 2022 13:53:49 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id j28so419212eda.13;
+        Tue, 17 May 2022 13:53:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oIDUTK5KnimKV7JPutWUmQpjQBhC0JH0W89/0KDYnjU=;
-        b=dnfV2lEMAJvt9PTHFMClEM3ysANSw0wmI3otp5dX9UE6IDvmwVuL6Um0pomrixk9pu
-         4+Gpx09w7mj40CkxZzPgc4BSmJZOTxTIv24mO6DYDPMBN62BieOS6mAf2yUFxR/uz6HE
-         kmUiOWDSEV7VrgGW+mjjkW1SRG/N3XuOZjRdoCjSxv0MuDl68XrOFm3ygBMz8XdV48vn
-         sIZKvJ9kU71FbMO3t/SLYPkbvrzBbMH+raenZ2HFSj5ZD+u93oQXXQA5qYI5AusDg//B
-         gz4oa+FzWJZ/CMFjBHf9wRG/Bp3BR4LN6i9DWyZr3zxrMgN9t8RYqlJPVthF+Sqf69jL
-         qH4g==
+        bh=FdGw4UXoqhDZ4Yx6wA89AwB/5uJ2w5076ZwgHhnkRac=;
+        b=NIHvR9JJCNSyndwq3YMPz9lghV2QPlxX6Ld0kXQ1tPs9SEiGk9U0/SXU/NdNZxex3Y
+         KYYzIyOH7P6PyRgr0s8QPaJ172GBJHVKOhGNZJFZPYhq1koX4UmGTAYEyxRapLdZ9tXZ
+         HrxjAVFnQ7zz/0YYteQdQK22mcDOOO8KcuxEwgQJgHcqyJSDoSOFADs/5VrxXISUkm8h
+         cJCVzGtt7GtepvYJx8725XCw7Z2xpY4HyzP4K5jzHzI4enbzx6JQKIWk5Jq3cQnAjkMr
+         QUDshXVjCQ9SN1C1Yk/r/x8Tj85fB2JwsHBxMcl66Eqe7HWo9Jyv3bIt5yx9pHCmHCKo
+         5/1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oIDUTK5KnimKV7JPutWUmQpjQBhC0JH0W89/0KDYnjU=;
-        b=x5qlD/O3NF/bQrZp4SyNR5mozOk1KeNbwU5euWOMNw9Ldt/K+dE9f0um9YdzMRskAv
-         sInEkJci2BoNAd8BKGwsB3oGVuGwyaRsVYDs8OlYypovShnaaVEjmA7s6VqXIWGtSDVD
-         iE67Y1pOunLUVy8q7CMke/tSl7pK8AgpTmjwrgLbH3jfDTmHbFlhFyhA9v1zOK3IC19K
-         Avb6eRKM0Y7wjF0pZwS7yHAOADVlGKzmAJiWBCmR5QcQXOiFJahJuU87dE5aQmAV1eY3
-         95vpl3L0GbU0Wl294RWVMIfKcETKzjfuaGVvEqgcrhdGYDPKfv3JXf/Xu39UXIjgTyG5
-         dAuA==
-X-Gm-Message-State: AOAM532t8a69o8ohEB1Wtt5j7JMw1/96888GsywpfkNJKp489/zIhOGI
-        l+ysJfbjg5QtuFj0ztSxM54=
-X-Google-Smtp-Source: ABdhPJwSU25nMkZvKYNpJMBeL918OVrbpKUFyyYPBgHWoEGWrLBnTtQFq2fi7hyN1XwiX7Du2H02Tw==
-X-Received: by 2002:a05:6402:3291:b0:42a:aa4e:fd71 with SMTP id f17-20020a056402329100b0042aaa4efd71mr16276143eda.74.1652820826895;
-        Tue, 17 May 2022 13:53:46 -0700 (PDT)
+        bh=FdGw4UXoqhDZ4Yx6wA89AwB/5uJ2w5076ZwgHhnkRac=;
+        b=c7FGvUwdeMorcK4H1fZMIJdstkJeMtcJrA9hzEEUbjQJz/HKmJjRnUt+NlMy7YXSiF
+         xfWWpUk96mD5ka/C4320Py5QsFkoSMRDwEvnU56GVNLZ+u7ns7H0qxYhSyiHLbdQsATk
+         5gAacUTs0nxmxl7NdcBrQb0LOhsE4DYldQiPUckFS6PBy5GBhK1FSZEKvWg1udNEE4Y7
+         LSxS2qQMmiJHrXXyhRKN7mtiErVu8RM3bc+NeGY44iw7Vb3ynDV4317rQUisSJtHx98d
+         0KTH5wfIpUZ8GuxNTcbx7/oRqW0pffkM2/D7tz4veHl/7AFmjdReUbI0RfnHn0+70Hdn
+         4Vzg==
+X-Gm-Message-State: AOAM53097+AHySWuY8FcexDv5MvGyXK2hw7CqsELBW/7THYFYayUkfKZ
+        LGFyErSjMqXNEfsZrc1axt8=
+X-Google-Smtp-Source: ABdhPJwoqXYfraNQ/M6ll9AZ9/fKwYy67cJWapFU6TcBNAldlrLMI4/f4ICiJGjL7rtoRPb4krCimg==
+X-Received: by 2002:a05:6402:2789:b0:427:bc78:85c9 with SMTP id b9-20020a056402278900b00427bc7885c9mr21336458ede.50.1652820827995;
+        Tue, 17 May 2022 13:53:47 -0700 (PDT)
 Received: from fedora.robimarko.hr ([188.252.220.143])
-        by smtp.googlemail.com with ESMTPSA id v22-20020a17090651d600b006f3ef214e10sm120907ejk.118.2022.05.17.13.53.45
+        by smtp.googlemail.com with ESMTPSA id v22-20020a17090651d600b006f3ef214e10sm120907ejk.118.2022.05.17.13.53.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 13:53:46 -0700 (PDT)
+        Tue, 17 May 2022 13:53:47 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
         broonie@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v3 2/6] regulator: qcom_spmi: add support for HT_P150
-Date:   Tue, 17 May 2022 22:53:37 +0200
-Message-Id: <20220517205341.536587-2-robimarko@gmail.com>
+Subject: [PATCH v3 3/6] dt-bindings: regulator: qcom,spmi-regulator: add PMP8074 PMIC
+Date:   Tue, 17 May 2022 22:53:38 +0200
+Message-Id: <20220517205341.536587-3-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220517205341.536587-1-robimarko@gmail.com>
 References: <20220517205341.536587-1-robimarko@gmail.com>
@@ -72,59 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HT_P150 is a LDO PMOS regulator based on LV P150 using HFS430 layout
-found in PMP8074 and PMS405 PMIC-s.
-
-Both PMP8074 and PMS405 define the programmable range as 1.616V to 3.304V
-but the actual MAX output voltage depends on the exact LDO in each of
-the PMIC-s.
-
-It has a max current of 150mA, voltage step of 8mV.
+Document the PMP8074 PMIC compatible.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/regulator/qcom_spmi-regulator.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Changes in v3:
+* Add supply matching
+---
+ .../bindings/regulator/qcom,spmi-regulator.yaml      | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/regulator/qcom_spmi-regulator.c b/drivers/regulator/qcom_spmi-regulator.c
-index 02bfce981150..38bbc70241ae 100644
---- a/drivers/regulator/qcom_spmi-regulator.c
-+++ b/drivers/regulator/qcom_spmi-regulator.c
-@@ -164,6 +164,7 @@ enum spmi_regulator_subtype {
- 	SPMI_REGULATOR_SUBTYPE_ULT_HF_CTL3	= 0x0f,
- 	SPMI_REGULATOR_SUBTYPE_ULT_HF_CTL4	= 0x10,
- 	SPMI_REGULATOR_SUBTYPE_HFS430		= 0x0a,
-+	SPMI_REGULATOR_SUBTYPE_HT_P150		= 0x35,
- };
+diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+index 7f51e305eaae..334ba9e5e177 100644
+--- a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+@@ -23,6 +23,7 @@ properties:
+       - qcom,pm8950-regulators
+       - qcom,pm8994-regulators
+       - qcom,pmi8994-regulators
++      - qcom,pmp8074-regulators
+       - qcom,pms405-regulators
  
- enum spmi_common_regulator_registers {
-@@ -544,6 +545,10 @@ static struct spmi_voltage_range hfs430_ranges[] = {
- 	SPMI_VOLTAGE_RANGE(0, 320000, 320000, 2040000, 2040000, 8000),
- };
- 
-+static struct spmi_voltage_range ht_p150_ranges[] = {
-+	SPMI_VOLTAGE_RANGE(0, 1616000, 1616000, 3304000, 3304000, 8000),
-+};
-+
- static DEFINE_SPMI_SET_POINTS(pldo);
- static DEFINE_SPMI_SET_POINTS(nldo1);
- static DEFINE_SPMI_SET_POINTS(nldo2);
-@@ -564,6 +569,7 @@ static DEFINE_SPMI_SET_POINTS(nldo660);
- static DEFINE_SPMI_SET_POINTS(ht_lvpldo);
- static DEFINE_SPMI_SET_POINTS(ht_nldo);
- static DEFINE_SPMI_SET_POINTS(hfs430);
-+static DEFINE_SPMI_SET_POINTS(ht_p150);
- 
- static inline int spmi_vreg_read(struct spmi_regulator *vreg, u16 addr, u8 *buf,
- 				 int len)
-@@ -1458,6 +1464,7 @@ static const struct regulator_ops spmi_hfs430_ops = {
- 
- static const struct spmi_regulator_mapping supported_regulators[] = {
- 	/*           type subtype dig_min dig_max ltype ops setpoints hpm_min */
-+	SPMI_VREG(LDO,   HT_P150,  0, INF, HFS430, hfs430, ht_p150, 10000),
- 	SPMI_VREG(BUCK,  GP_CTL,   0, INF, SMPS,   smps,   smps,   100000),
- 	SPMI_VREG(BUCK,  HFS430,   0, INF, HFS430, hfs430, hfs430,  10000),
- 	SPMI_VREG(LDO,   N300,     0, INF, LDO,    ldo,    nldo1,   10000),
+   interrupts: true
+@@ -280,6 +281,17 @@ allOf:
+         vdd_l1-supply: true
+       patternProperties:
+         "^vdd_s[1-3]-supply$": true
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,pmp8074-regulators
++    then:
++      properties:
++        vdd_l10_l11_l12_l13-supply: true
++      patternProperties:
++        "^vdd_s[3-4]-supply$": true
+   - if:
+       properties:
+         compatible:
 -- 
 2.36.1
 

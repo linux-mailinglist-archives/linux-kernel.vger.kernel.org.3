@@ -2,72 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A86252AB6D
+	by mail.lfdr.de (Postfix) with ESMTP id 5159D52AB6E
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352465AbiEQTCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 15:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
+        id S1352486AbiEQTCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 15:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345117AbiEQTCL (ORCPT
+        with ESMTP id S1352468AbiEQTCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 15:02:11 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2A53F30D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:02:10 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id n5-20020a056602340500b0065a9f426e7aso13040122ioz.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:02:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=trJlUoBsAU0Gfja7NVm8U0mdQqxyIpgiYU5DZakIhBI=;
-        b=0zUtqd+nEynqrlcVtDjsniIKNj+8xLfTFJmjgBiKWTOHRjIPYHjN/x2cUxdMnViNgK
-         j7HYH8hJ+Ad/vi4iOtC4zb+NedPcMO5MC5/OpxwBZDiQ7SvajGpwn1lgoWO5NgUy/Kjc
-         AEWfob7McgftlZXSd3Q5b/kQVjBL/+BZinGuRWgigqe3lZazU09IJ+BeWlgQ27Kv4I8E
-         xtDNQw2PNaaQe1jps6OEmpd1HM3JxKLeEQ12l7b00M6O8auceypmIZ0eMZaL2GoKR0lL
-         vBm/eo6oKiEg70h49kLbPd0XB0rpgymKXfcUydIco9vrulHua2XbT0ywGmjcC3vc+Dce
-         LXOw==
-X-Gm-Message-State: AOAM5310nZS2Lwa9bSFGdoIBF+NVk9WdMfYhfPCXIiouQ/ObCTv37/0J
-        a3noq2vh9JxWwN6l2eFTYTxCy0fEjNwHX4YbOAsHklqQZXVU
-X-Google-Smtp-Source: ABdhPJzi+HvE6EnVZG74GdN+JteT30NG17qd1T8Fck4gK/b02ljT7Ivc1HOnroXCMXiZvdak88P7i4HRbU5ddf6lP8jLjD9XV1eY
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d13:b0:32b:cf94:275b with SMTP id
- q19-20020a0566380d1300b0032bcf94275bmr13195448jaj.22.1652814130055; Tue, 17
- May 2022 12:02:10 -0700 (PDT)
-Date:   Tue, 17 May 2022 12:02:10 -0700
-In-Reply-To: <b6f36795-97ac-fac0-ab07-98de8255e4f9@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001a0dba05df39c7d3@google.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in io_do_iopoll
-From:   syzbot <syzbot+1a0a53300ce782f8b3ad@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+        Tue, 17 May 2022 15:02:19 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082514ECC3;
+        Tue, 17 May 2022 12:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652814138; x=1684350138;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yEaVc81MOy5X/kSae+wqdeMCXD3tlK4JBj7Cvx13aao=;
+  b=mAd/cy7SAub2WAV4rVmhEIgzA2RRV9sc3SAG/JsDbgnS0S/vCMQyETPc
+   0bunqRd2Gls04iZ9Rhg35B/zZenf0qTyb9AjoSm6t/CS1kBskHBxFtZ4v
+   W9C9dQnBzSn9dAdE6fxzitLw9YdhEfjpCHh+Jh24122ywaJTIErcMAvvk
+   sQTanp1uQJy7/qmwexdG/Vpx+PT0WoS7rBDEOwSf/GbGyP6XVqkI7w2AK
+   /dFpBNn1AqWWLCFQ0Dd7aYjcIt4LND6pF4uGH4YGG0JSzdxgL3Kmlv1Ml
+   bYEjhqsMVovpB/A+vsrE4nnSZrG2N10qL4dZXTSnIfcfQWwVaedFXOWTh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="253338949"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="253338949"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 12:02:17 -0700
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="605496002"
+Received: from abhuwalk-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.246.60])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 12:02:16 -0700
+Message-ID: <afcc7b08ebe2578d32e6595d258afeec3e73512e.camel@linux.intel.com>
+Subject: Re: [PATCH v2 01/14] thermal/core: Change thermal_zone_ops to
+ thermal_sensor_ops
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>,
+        Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Peter Kaestle <peter@piie.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Chuansheng Liu <chuansheng.liu@intel.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Antoine Tenart <atenart@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
+        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
+        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
+        <platform-driver-x86@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:RENESAS R-CAR THERMAL DRIVERS" 
+        <linux-renesas-soc@vger.kernel.org>
+Date:   Tue, 17 May 2022 12:02:13 -0700
+In-Reply-To: <CAJZ5v0hqN-zKZvWTNPzW2P22Dirmyh99qyycf+US4Z9Yxw9mhA@mail.gmail.com>
+References: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
+         <20220507125443.2766939-2-daniel.lezcano@linexp.org>
+         <CAJZ5v0ik_JQ4Awtw7iR68W4-9ZL8FRDsDd-kWmL-n09fgg3reg@mail.gmail.com>
+         <7b1a9f3b5b5087f47bf4839858c7bfebdb60aa2f.camel@linux.intel.com>
+         <CAJZ5v0hqN-zKZvWTNPzW2P22Dirmyh99qyycf+US4Z9Yxw9mhA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 2022-05-17 at 20:53 +0200, Rafael J. Wysocki wrote:
+> On Tue, May 17, 2022 at 6:51 PM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> > 
+> > On Tue, 2022-05-17 at 17:42 +0200, Rafael J. Wysocki wrote:
+> > > On Sat, May 7, 2022 at 2:55 PM Daniel Lezcano
+> > > <daniel.lezcano@linexp.org> wrote:
+> > > > 
+> > > > A thermal zone is software abstraction of a sensor associated
+> > > > with
+> > > > properties and cooling devices if any.
+> > > > 
+> > > > The fact that we have thermal_zone and thermal_zone_ops mixed
+> > > > is
+> > > > confusing and does not clearly identify the different
+> > > > components
+> > > > entering in the thermal management process. A thermal zone
+> > > > appears
+> > > > to
+> > > > be a sensor while it is not.
+> > > 
+> > > Well, the majority of the operations in thermal_zone_ops don't
+> > > apply
+> > > to thermal sensors.  For example, ->set_trips(), -
+> > > >get_trip_type(),
+> > > ->get_trip_temp().
+> > > 
+> > In past we discussed adding thermal sensor sysfs with threshold to
+> > notify temperature.
+> > 
+> > So sensor can have set/get_threshold() functions instead of the
+> > set/get_trip for zones.
+> > 
+> > Like we have /sys/class/thermal_zone* we can have
+> > /sys/class/thermal_sensor*.
+> 
+> Exactly, so renaming thermal_zone_ops as thermal_sensor_ops isn't
+> quite helpful in this respect.
+> 
+> IMO there should be operations for sensors and there should be
+> operations for thermal zones and those two sets of operations should
+> be different.
+> 
+> > Thermal sensor(s) are bound to  thermal zones.
+> 
+> So I think that this binding should be analogous to the binding
+> between thermal zones and cooling devices.
+> 
+> > This can also include multiple sensors in a zone and can create a
+> > virtual sensor also.
+> 
+> It can.
+> 
+> However, what's the difference between a thermal zone with multiple
+> sensors and a thermal zone with one virtual sensor being an aggregate
+> of multiple physical sensors?
+> 
+Either way is fine. A thermal sensor can be aggregate of other sensors.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> Both involve some type of aggregation of temperature values measured
+> by the physical sensors.
+> 
+> > > > In order to set the scene for multiple thermal sensors
+> > > > aggregated
+> > > > into
+> > > > a single thermal zone. Rename the thermal_zone_ops to
+> > > > thermal_sensor_ops, that will appear clearyl the thermal zone
+> > > > is
+> > > > not a
+> > > > sensor but an abstraction of one [or multiple] sensor(s).
+> > > 
+> > > So I'm not convinced that the renaming mentioned above is
+> > > particularly
+> > > clean either.
+> > > 
+> > > IMV the way to go would be to split the thermal sensor
+> > > operations,
+> > > like ->get_temp(), out of thermal_zone_ops.
+> > > 
+> > > But then it is not clear what a thermal zone with multiple
+> > > sensors in
+> > > it really means.  I guess it would require an aggregation
+> > > function to
+> > > combine the thermal sensors in it that would produce an effective
+> > > temperature to check against the trip points.
+> > > 
+> > > Honestly, I don't think that setting a separate set of trips for
+> > > each
+> > > sensor in a thermal zone would make a lot of sense.
+> > 
 
-Reported-and-tested-by: syzbot+1a0a53300ce782f8b3ad@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         aa184e86 io_uring: don't attempt to IOPOLL for MSG_RIN..
-git tree:       git://git.kernel.dk/linux-block io_uring-5.18
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e408a5da421f07d4
-dashboard link: https://syzkaller.appspot.com/bug?extid=1a0a53300ce782f8b3ad
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.

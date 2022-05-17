@@ -2,170 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59E9529EE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2495529EDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343543AbiEQKJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
+        id S1343763AbiEQKLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240124AbiEQKHw (ORCPT
+        with ESMTP id S1343782AbiEQKKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:07:52 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55E82CDE2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:07:50 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 05B9E48B;
-        Tue, 17 May 2022 03:07:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1652782070;
-        bh=7/tSQcJTwFlAYZHGtTGrf3lNts+XD/u1WDbgTy1/QUE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dtOrTtJckFMCgB1Kh/uKzZFiJTssUMa2AnTJ557wFFDA0lC0NeVbCReLIqNVRj4WI
-         oRpRAKh+LlvUMDY2l2aWPXJH1SEHC23TLCjXCIRrZ4HurkFSU0XnwGDsbF3s0jA0WQ
-         4tok2RfF7GhCzV1W4hZ5C+5xobLfDLI7z1mzbMF8=
-Date:   Tue, 17 May 2022 03:07:48 -0700
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Mark Brown <broonie@kernel.org>, Chanwoo Choi <cwchoi00@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v2 2/2] extcon: Add extcon-regulator driver
-Message-ID: <YoNz9NPLkYSd8i/s@hatter.bewilderbeest.net>
-References: <20220505232557.10936-1-zev@bewilderbeest.net>
- <20220505232557.10936-3-zev@bewilderbeest.net>
- <e27ff1b2-c82f-8335-340f-ae1fa914ed30@gmail.com>
- <YnkyIBh2HnXXLHw3@sirena.org.uk>
- <CGME20220517010322epcas1p45d7fdaa06d23f07533350b7d0cf9e9d6@epcas1p4.samsung.com>
- <YoL0UGR+TiZojL9Y@hatter.bewilderbeest.net>
- <bc6595c8-5f05-ac2c-63e0-f442f9ec83be@samsung.com>
+        Tue, 17 May 2022 06:10:48 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30804BBA8;
+        Tue, 17 May 2022 03:09:28 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id t6so24033416wra.4;
+        Tue, 17 May 2022 03:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=t4zPUKpv7XaTfwCy6u8+Y9X67AplsbkFXvPulu0ea1U=;
+        b=aEs+kBHg2LKI6or1oWTOXdLQLX5BKJra6ZJ/JQVkHM6rAssedHYEsM5LLwYPaUnEW1
+         Er8hzUj6HM+y4+yiwXyGVakR9K1eW0wFG7ntWYX5PrRIhZBrwU73bj12BVqv7NW1xe73
+         rziM/EwhIps3HhQpVH3xaVdy9KwZFJThIxS8WO2QzKsRYwexHJQ5FVMx/yzgcCpRvCX3
+         /cEjZ9eofAuUBTLY2ZjgATPazGtrs7j+Kro5NGKhNPAU9Qsj1jj4Xk0gUlM5P2xco1/S
+         iWjuFJt8aUKqornzfztDZjF2cIMAHiiJJ4upNIaJSphy/O4g63nrhNzt3IXXaiTJKFZi
+         6qgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=t4zPUKpv7XaTfwCy6u8+Y9X67AplsbkFXvPulu0ea1U=;
+        b=shN6m1f3JJttSDu5wdr946HWluh2OFbBAFh9tBuq4FG3LbQzU5KSdwT58xFjR4+Wv9
+         zUD7UaewMcUtFMzs4nI2y8P3m2HpBn04FWBeuHyoaHsZU6nYRRzBUUT0KpB0CAID39Yv
+         kLVZXSwi/SMkYaNl5j3CMYMc1aJlY5Q4nUKORHiRW8O8O2uqzJ5s2fj3CnK0jcLZS7dB
+         EzLKFQ/+vYSwZIRZabIVu2J4vRg4qU+esPhAh+bGYAIk0QGVew549YLABwGv8Cv3hpx+
+         oVdH63EU3kwu/TyO/pdxgP+KiHUczJDWi5pncUKQI2zF/0X0vZv0eOljPi3pwH7PKsO8
+         3fFg==
+X-Gm-Message-State: AOAM532gMOeY859zNspEHeWvJXSon/DOjtgzNSwjdVjnwtXljpFv5+0w
+        ZLbGNQW4Qd4I8dEbJ5HrHKM=
+X-Google-Smtp-Source: ABdhPJzK4FAOgEnNQs53gtSOtT0Y8b5G++nzf2lJHnk/cY7kMsd4pENS/ntIKs/HT0Xr5wKaUtO4JA==
+X-Received: by 2002:a5d:6989:0:b0:20d:b25:f5 with SMTP id g9-20020a5d6989000000b0020d0b2500f5mr6372658wru.616.1652782167330;
+        Tue, 17 May 2022 03:09:27 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id s7-20020a05600c29c700b003942a244ec2sm1443015wmd.7.2022.05.17.03.09.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 03:09:26 -0700 (PDT)
+Message-ID: <3e9f0936-efee-cedf-6e2b-4dd9de79fc4e@gmail.com>
+Date:   Tue, 17 May 2022 12:09:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bc6595c8-5f05-ac2c-63e0-f442f9ec83be@samsung.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v7 0/3] cpufreq: mediatek: Cleanup and support MT8183 and
+ MT8186
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
+        hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220516111130.13325-1-rex-bc.chen@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220516111130.13325-1-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 08:15:31PM PDT, Chanwoo Choi wrote:
-> Hi Mark, Zev,
-> 
-> On 5/17/22 10:03 AM, Zev Weiss wrote:
-> > [Adding Sebastian for drivers/power discussion]
-> > 
-> > On Mon, May 09, 2022 at 08:24:16AM PDT, Mark Brown wrote:
-> >> On Mon, May 09, 2022 at 09:24:39PM +0900, Chanwoo Choi wrote:
-> >>> Hi Zev,
-> >>>
-> >>> I checked this patch. But, it doesn't look like the extcon provider
-> >>> driver. Because basically, extcon provider driver need the circuit
-> >>> in order to detect the kind of external connector. But, there are
-> >>> no any code for detection. Just add the specific sysfs attribute
-> >>> for only this driver. It is not standard interface.
-> >>
-> >> OTOH it's something where if I look at the physical system with the
-> >> hardware there's a clearly visible external connector that I can point
-> >> to - it just happens to not support hotplug.  It's not clear what other
-> >> system it would sit in, and it seems like an application that displays
-> >> external connections on a system in a UI would be able to do something
-> >> sensible with it.
-> > 
-> > Chanwoo, any further thoughts on Mark's reasoning above?
-> > 
-> > I certainly understand the reluctance to add an extcon driver that 
-> > doesn't really do anything with the extcon API, and I have no idea when 
-> > we might end up enhancing it to do something more meaningful with that 
-> > API (I don't know of any hardware at the moment that would need it).
-> > 
-> > That said, as Mark points out, the hardware *is* ultimately an "external 
-> > connector" (if a very simplistic one).
-> > 
-> > Do you have any other ideas for where this functionality could go?  Greg 
-> > wasn't enthusiastic about a previous revision that had it in 
-> > drivers/misc -- though now a fair amount of what was in that version is 
-> > now going to be in the regulator core, so maybe that could be 
-> > reconsidered?
-> > 
-> > Or maybe something under drivers/power, though it's not really a supply 
-> > or a reset device...drivers/power/output.c or something?
-> > 
-> > Personally I don't have any terribly strong opinions on this, I'd just 
-> > like to reach a mutually-agreeable consensus on a place for it to live.
-> > 
-> 
-> After Mark's reply, I considered extcon provider driver without hotplug
-> feature. I think that extcon need to support the following something:
-> 
-> 1. Need to specify the type of external connector instead of EXTCON_NONE.
-> 2. extcon subsystem provides the standard sysfs interface
->    for non-hotplug extcon provider driver.
-> 3. User can control the state of external connector via
->    the standard extcon sysfs attributes.
-> 
-> 
-> For example of extcon provider driver,
-> static const unsigned int supported_cables[] = {
-> 	EXTCON_USB,
-> 	EXTCON_NONE,
-> };
-> 
-> int extcon_usb_callback(int connector_id, int property_id, int state, void *data) {
-> 	struct extcon_dev *edev = data;
-> 
-> 	if (id == EXTCON_USB && property_id == EXTCON_NOT_HOTPLUG) {
-> 		regulator_enable() or regulator_disable()
-> 	}
-> 
-> 	return 0;
-> }
-> 
-> int extcon_provider_probe(...) {
-> 	edev = devm_extcon_dev_allocate(dev, supported_cables);
-> 
-> 	devm_extcon_dev_register(dev, edev);
-> 
-> 	extcon_set_property_capability(edev, EXTCON_USB, EXTCON_NOT_HOTPLUG);
-> 	extcon_set_property_callback(edev, EXTCON_USB, extcon_usb_callback);
-> 
-> 	...
-> }
-> 
-> And then user can change the state of each external connector
-> via '/sys/class/extcon/extcon0/cable.0/state' 
-> if cable.0 contains the EXTCON_NOT_HOTPLUG property.
-> 
-> I'm designing this approach. But it has not yet decided
-> because try to check that this approach is right or not.
-> 
-
-Okay, so if I'm understanding correctly we'd be using the extcon 
-subsystem's existing attached/detached state to model (and control) the 
-on/off state of the power output?
-
-That could work for the particular hardware I'm dealing with at the 
-moment, though I'd be a bit concerned that conflating the two might 
-constrain things in the future if there's some similar but slightly more 
-sophisticated hardware we'd want to extend the same driver to support.  
-For example on a power connector with some capability for presence 
-detection, we might want to be able to support "attached but powered 
-off" as a valid state for it to be in -- would the above approach be 
-able to do that?
 
 
-Thanks,
-Zev
+On 16/05/2022 13:11, Rex-BC Chen wrote:
+> Cpufreq is a DVFS driver used for power saving to scale the clock frequency
+> and supply the voltage for CPUs. This series do some cleanup for MediaTek
+> cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
+> devfreq[3] which are supported in MT8183 and MT8186.
+> 
 
+Series applied to v5.19-next/dts64
+
+Thanks!
+
+> Changes for v7:
+> 1. Drop all drviers patches because they are all accepted.
+> 2. Correct clock/clock-name for cci in dts.
+> 
+> Changes for v6:
+> 1. Reorder patches in this series.
+> 2. Add a new patch to do unregister platform device.
+> 3. Modify drivers from maintainer's advice.
+> 
+> Reference series:
+> [1]: V1 of this series is present by Jia-Wei Chang.
+>       https://lore.kernel.org/all/20220307122151.11666-1-jia-wei.chang@mediatek.com/
+> 
+> [2]: The MediaTek CCI devfreq driver is introduced in another series.
+>       https://lore.kernel.org/all/20220425125546.4129-1-johnson.wang@mediatek.com/
+> 
+> [3]: The MediaTek SVS driver is introduced in another series.
+>       https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
+> 
+> Rex-BC Chen (3):
+>    arm64: dts: mediatek: Add opp table and clock property for MT8183
+>      cpufreq
+>    arm64: dts: mediatek: Add MediaTek CCI node for MT8183
+>    arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
+> 
+>   arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  36 +++
+>   .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   4 +
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 286 ++++++++++++++++++
+>   3 files changed, 326 insertions(+)
+> 

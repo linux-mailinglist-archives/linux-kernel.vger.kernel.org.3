@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 646D552A4BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECDD52A4BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348887AbiEQOXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S243304AbiEQOXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348851AbiEQOXg (ORCPT
+        with ESMTP id S1348882AbiEQOXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:23:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBAF4F9F9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:23:35 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nqy6m-00080b-IX; Tue, 17 May 2022 16:23:32 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6513E8072E;
-        Tue, 17 May 2022 14:23:31 +0000 (UTC)
-Date:   Tue, 17 May 2022 16:23:30 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Max Staudt <max@enpas.org>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Message-ID: <20220517142330.vm7jqoe6i63ryqtc@pengutronix.de>
-References: <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
- <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
- <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
- <20220517104545.eslountqjppvcnz2@pengutronix.de>
- <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
- <20220517141404.578d188a.max@enpas.org>
- <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
- <20220517143921.08458f2c.max@enpas.org>
- <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
- <20220517154301.5bf99ba9.max@enpas.org>
+        Tue, 17 May 2022 10:23:40 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49D84163A
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:23:38 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id u23so31649106lfc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Lnn8RnWZse55RuB4yg/vu5G7bPymERhSpz38ty/G94A=;
+        b=FCgjt+lf9hFi7sB3SJOv43XgmvYxTBFuv1iaHRc4BG+bzmJCFyEIRbbuX7L4KvN6D1
+         jZaNpeKuLQIZh/dpKpDJaxcH4kaEHje4Ykc3lHWSRziSPuY8QwGCJud7QM/OoPS6EpVb
+         kc5CU3UASpZXUpsJvnh2zCBHk4tAyNZsOcI00zufriY6glGzShgkNNc5ozlAnT5M117f
+         WHcVHF+SzeFZ82gNRuZVjqex1jnKBeiVOKRcuk0AxbEqYVEErcSv8AsbQ7LRcMzEw3Qa
+         vHWff82Bt/+ba99MkJtVfDbo7fdUDKThMCLfT0oVRAUI1Uc/T7E01TJUepkNX+LO1B4q
+         0h/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Lnn8RnWZse55RuB4yg/vu5G7bPymERhSpz38ty/G94A=;
+        b=k49hxzOB4hZ43jwGcjWrQVoZuIOTvnVzzNbRgVrK1ju6ltHULFzJobZFpqkTlDpGdI
+         1hcQ8Ou/k0YwfCC+5KznWdDkJqkhlSaGOS8dTlv6TcAoyAMi9OjXBjpYDPyK20qeJ+os
+         rZRaFERLZS7555D/hLU5MU6DORaFKrFWn85DvV/5VVhPwoOkc5qXe8EXvehf0nJo7g8e
+         5SJqV8n/PE2jD0FkWhAcQfmEunA4hKSZtIbOwx98gQbY+cTyuJ3M/hP3ipyWa1yAAhhI
+         4sSAdaaWjI61MCe1ZIimqSP2E3duzn4wTuBqGYpcfO9Ham7Tun+bi/wf+eSX8bPtF47k
+         yrmQ==
+X-Gm-Message-State: AOAM532Ef4JVFNoSn+rfOFLmbd9ouMY1irku1j6MNOsduvoF+eOCB0MY
+        5SEJRI4z+320QbNv1P28gOoHxA==
+X-Google-Smtp-Source: ABdhPJzdrATa4hivK3skT4LaVtlu+jnncbJ7AOzRa56KLicCMPpXG+kCMdTvT8ScBNWmHguDQbZUVw==
+X-Received: by 2002:a05:6512:3c9b:b0:472:60d0:ebb0 with SMTP id h27-20020a0565123c9b00b0047260d0ebb0mr17556169lfv.682.1652797417174;
+        Tue, 17 May 2022 07:23:37 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q23-20020a2e8757000000b0024f3d1daed4sm1892435ljj.92.2022.05.17.07.23.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 07:23:36 -0700 (PDT)
+Message-ID: <669d68ce-959b-5486-8b1e-316aafa7b52a@linaro.org>
+Date:   Tue, 17 May 2022 16:23:35 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tgwfqoi623ckzpip"
-Content-Disposition: inline
-In-Reply-To: <20220517154301.5bf99ba9.max@enpas.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/8] dt-bindings: iommu: mediatek: Add mediatek,pericfg
+ phandle
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
+Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
+ <20220517132107.195932-4-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517132107.195932-4-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,59 +80,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 17/05/2022 15:21, AngeloGioacchino Del Regno wrote:
+> Add property "mediatek,pericfg" to let the mtk_iommu driver retrieve
+> a phandle to the pericfg syscon instead of performing a per-soc
+> compatible lookup, as it was also done with infracfg.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> index 78c72c22740b..a6cf9678271f 100644
+> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> @@ -116,6 +116,10 @@ properties:
+>        Refer to bindings/memory-controllers/mediatek,smi-larb.yaml. It must sort
+>        according to the local arbiter index, like larb0, larb1, larb2...
+>  
+> +  mediatek,pericfg:
+> +    $ref: "/schemas/types.yaml#/definitions/phandle"
 
---tgwfqoi623ckzpip
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No need for quotes.
 
-On 17.05.2022 15:43:01, Max Staudt wrote:
-> > Oh, I didn't want to introduce two new kernel modules but to have=20
-> > can_dev in different 'feature levels'.
->=20
-> Which I agree is a nice idea, as long as heisenbugs can be avoided :)
->=20
-> (as for the separate modules vs. feature levels of can-dev - sorry, my
-> two paragraphs were each referring to a different idea. I mixed them
-> into one single email...)
->=20
-> Maybe the can-skb and rx-offload parts could be a *visible* sub-option
-> of can-dev in Kconfig, which is normally optional, but immediately
-> force-selected once a CAN HW driver is selected?
 
-In the ctucanfd driver we made the base driver "invisible" if
-COMPILE_TEST is not selected:
-
-| config CAN_CTUCANFD
-|         tristate "CTU CAN-FD IP core" if COMPILE_TEST
-|=20
-| config CAN_CTUCANFD_PCI
-|         tristate "CTU CAN-FD IP core PCI/PCIe driver"
-|         depends on PCI
-|         select CAN_CTUCANFD
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---tgwfqoi623ckzpip
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKDr+AACgkQrX5LkNig
-011wSgf/RV+/tPG2xXLH0ovdmc9xiGLHdexWXlcaQGRlACwpK3TzxCdKsnf5EA/r
-AOx+7UogJqyoeBxO1lIm4Cqp3vclJ3i2xPjZADpGCvn+yulIZerhqOmEeerae0Bk
-CR+/vyCFGJIHERQOOR/B3Wum7pM1kOPHE7V+5DGJikZ59Giyq3Lnf1hAS+qP6I/8
-3w/eu8cGzYLkNigVyA+BWkZLm+hx2HH2sSWYNfnxpV5m7usfG+tKI8dROxLttPpx
-TgMXWCjyDC63y5V0yXD/B6+TaFFGsrZCOtBgwUP6eVyVyKnxZSYlI8fd4ybY+U7W
-mGX8jgAz6iGHy8sukm1eRz5mUxZxJg==
-=WKSH
------END PGP SIGNATURE-----
-
---tgwfqoi623ckzpip--
+Best regards,
+Krzysztof

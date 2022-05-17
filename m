@@ -2,133 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191BE529E4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924E1529E46
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245040AbiEQJmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
+        id S234055AbiEQJlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239753AbiEQJll (ORCPT
+        with ESMTP id S245016AbiEQJlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:41:41 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356CB3DA68
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:41:40 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 6C4FE1F4444E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652780492;
-        bh=PPIgkaWPk15dgyzq/HkLMqHpY+oCN4E+hy9YI/AB2gQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SZZBfKPMKBju08Lyb4AOiSQs6ZlnukomJCj4jXKLU2mNyz8OITOLZzAA4hJVeGhRR
-         sySdPoksQFofTHDPdCT8We/pIPDYG8aa7/+T15Wv6ILq7X8k9UIIS/k3/rVKMc4xtM
-         SMiHBMBSzHtFrBmFqLLieAj6+CJyFPJveZN421psOX1TRGHL0I+SviNhejNig4u+zJ
-         KI04i3GQFvMDTu0aZNUqF+HcExc4UaRtIC0lFCBJ6fGt41pdRd6MMowsZqv+caa3tl
-         wEbTLEiSTGcpxOFsF351xVItZjDn2S5vSnLo+HdtELq3qTXpxsmJDU5/1B+vwREv74
-         8MUO+yL7LHvPQ==
-Message-ID: <9f197c69-fe04-b636-afb7-8474763c8a3a@collabora.com>
-Date:   Tue, 17 May 2022 11:41:28 +0200
+        Tue, 17 May 2022 05:41:37 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC090403CE
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:41:33 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id fu47so13889164qtb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=kHvqhKfwkSYWgIBUppKUElAVHImwDcI/W0up7OF2SsA=;
+        b=DVa8huQTtD9H6MhwPAeCvKZaQGQNO+ImVqUTVhbFLhNTdrYx9EQaHaE7j4LoAJMcYa
+         3F18jFbjHgZnhcd6Qbq03eyfoDZGOKXJRHIeZosGDccMxtyzCApxel6THt2B6ngX5vXr
+         XYMwQ3XHDtyazNqiVxNTf9U2sT2cVNEWJ+naD695DX4juUcO/EEYS5lg3vSSBkW0sf32
+         n7LtK2tcbHP4mYmbX83IGwvUwpTy+mvQ9UTIrJ4fbvH/yVnzZXQLVi2HIanVgSUTWa4w
+         1vHEZEGKlJcgtI5QEGjMRwumGcN+66KIc6ojpkq0JJgEnFbERnPwDUvKg3HwDgkizhU3
+         BTjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=kHvqhKfwkSYWgIBUppKUElAVHImwDcI/W0up7OF2SsA=;
+        b=cQXZjyQvQyDzBw8m1RUbI/H+REtKvSgJolopBvSmT3RpLYq7iAlPi/jE3poSiI+RKL
+         1/vIiK4imDwq0R5HE7MrCfsHAKDBJBFUJt9mEavfxD5h3gEnjP7npakOXd83rXMpDLzc
+         pUfQzuo72dWtO2hl8mObuBBQyj3ELXzAZ89Tg1ifHP1LX2JfZgA5We2rPRJ8pHjD75PU
+         o//ra1ESIgekoVOqQAj/00/yYrEvTVEwJDJBNwxFfAXSN9GimHURMwSqB29p18uzyUb9
+         +UzRQUL0YWiU5s5zJpWzz5XrJbP+TI30Twb9t38VelHouon9G+ikcwmHhpPd44R+rPFX
+         1DRQ==
+X-Gm-Message-State: AOAM533Z31E5URZ1FUplxM1Kq6/g1GCKPkqN0zBkSPGw66xA2Ukm7Btn
+        HaRoE/WjORUkue4sZoxY1kD+KT9UuKyDvXo9+a4=
+X-Google-Smtp-Source: ABdhPJzcXdPqSBS6pwH8pXt8721Zrcj9dXMf77AEDVCR4XSQ2cgNqTR7yGiIgxc2avWSraijhz48W3/rKmy/n3IkrNI=
+X-Received: by 2002:ac8:5886:0:b0:2f3:c574:811b with SMTP id
+ t6-20020ac85886000000b002f3c574811bmr18939383qta.26.1652780493015; Tue, 17
+ May 2022 02:41:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 1/5] soc: mediatek: pwrap: Use readx_poll_timeout()
- instead of custom function
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
-        zhiyong.tao@mediatek.com
-References: <20220516124659.69484-1-angelogioacchino.delregno@collabora.com>
- <20220516124659.69484-2-angelogioacchino.delregno@collabora.com>
- <f8acbc75-970c-62fb-ad0d-914e512104a7@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <f8acbc75-970c-62fb-ad0d-914e512104a7@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6214:c4a:0:0:0:0 with HTTP; Tue, 17 May 2022 02:41:32
+ -0700 (PDT)
+Reply-To: peterwhite202101@gmail.com
+From:   Peter White <kkmanana125@gmail.com>
+Date:   Tue, 17 May 2022 09:41:32 +0000
+Message-ID: <CAKd6CoB=SnpEtmauX_0PBe3r14OB8GGZ_2APR81McSALe9mcBw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:835 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4984]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [kkmanana125[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [kkmanana125[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [peterwhite202101[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 17/05/22 11:25, Matthias Brugger ha scritto:
-> 
-> 
-> On 16/05/2022 14:46, AngeloGioacchino Del Regno wrote:
->> Function pwrap_wait_for_state() is a function that polls an address
->> through a helper function, but this is the very same operation that
->> the readx_poll_timeout macro means to do.
->> Convert all instances of calling pwrap_wait_for_state() to instead
->> use the read_poll_timeout macro.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> ---
->>   drivers/soc/mediatek/mtk-pmic-wrap.c | 60 +++++++++++++++-------------
->>   1 file changed, 33 insertions(+), 27 deletions(-)
->>
->> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c 
->> b/drivers/soc/mediatek/mtk-pmic-wrap.c
->> index bf39a64f3ecc..54a5300ab72b 100644
->> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
->> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
->> @@ -13,6 +13,9 @@
->>   #include <linux/regmap.h>
->>   #include <linux/reset.h>
->> +#define PWRAP_POLL_DELAY_US    10
->> +#define PWRAP_POLL_TIMEOUT_US    10000
->> +
->>   #define PWRAP_MT8135_BRIDGE_IORD_ARB_EN        0x4
->>   #define PWRAP_MT8135_BRIDGE_WACS3_EN        0x10
->>   #define PWRAP_MT8135_BRIDGE_INIT_DONE3        0x14
->> @@ -1241,27 +1244,14 @@ static bool pwrap_is_fsm_idle_and_sync_idle(struct 
->> pmic_wrapper *wrp)
->>           (val & PWRAP_STATE_SYNC_IDLE0);
->>   }
->> -static int pwrap_wait_for_state(struct pmic_wrapper *wrp,
->> -        bool (*fp)(struct pmic_wrapper *))
->> -{
->> -    unsigned long timeout;
->> -
->> -    timeout = jiffies + usecs_to_jiffies(10000);
->> -
->> -    do {
->> -        if (time_after(jiffies, timeout))
->> -            return fp(wrp) ? 0 : -ETIMEDOUT;
->> -        if (fp(wrp))
->> -            return 0;
->> -    } while (1);
->> -}
->> -
->>   static int pwrap_read16(struct pmic_wrapper *wrp, u32 adr, u32 *rdata)
->>   {
->> +    bool tmp;
->>       int ret;
->>       u32 val;
->> -    ret = pwrap_wait_for_state(wrp, pwrap_is_fsm_idle);
->> +    ret = readx_poll_timeout(pwrap_is_fsm_idle, wrp, tmp, tmp,
-> 
-> hm, if we make the cond (tmp > 0) that would help to understand the code. At least 
-> I had to think about it for a moment. But I leave it to you if you think it's worth 
-> the effort.
-> 
+Greetings from here.
 
-I would prefer size over readability in this case... if we do (tmp > 0), it would
-be incorrect to keep tmp as a `bool`, we would have to set it as an integer var,
-which is unnecessarily bigger (that's the reason why I wrote it like so!).
+I want to know if this email address is still valid to write to you.
+There is something important I would like to discuss with you.
 
-Another way to increase human readability would be to do (tmp == true), but it
-looks a bit weird to me, doesn't it?
-If you disagree about that looking weird, though, I can go with that one, perhaps!
+Thank you
 
-Cheers,
-Angelo
+Mr. Peter White

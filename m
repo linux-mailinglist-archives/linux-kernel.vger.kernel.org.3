@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6BD52A4DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAAB52A4E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348913AbiEQOaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
+        id S1348937AbiEQObL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235130AbiEQOaO (ORCPT
+        with ESMTP id S1348970AbiEQObE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:30:14 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A69842A3C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:30:13 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id h29so31709515lfj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:30:13 -0700 (PDT)
+        Tue, 17 May 2022 10:31:04 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682E519280
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:31:02 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id g17so6879306wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MwRo3rFibChV4O65q8eXjp101W+2zLrCGSrd/xmpC7M=;
-        b=SvO/C1fUqmnr64ihkaFXtCYLUItLInkrgOLwfRO07OyNF+am/v6RV4hFMu8TUxKgsD
-         es3SI5z1pxH665t48wNjeSMnHzYktwzjuYr3UdxNOwJuaPQt+SIXkxZhR8hocfZ9o3J/
-         leWLxo0HSkdHYNq681L6EqQ4uwW5SmJqkW7gMTgYVICD4yoreUDwp/Lw8LD8mqZRqGM3
-         Pixb7e6u9UL1qxI+ci7ku8qbSwO49JHBV72fRgzX3pdEARBHnXNw+eihCU/D9Rd6HwDE
-         Oa6ll7OPAegL7sIki8QrvBV9TvBDA9Wy7FmtfrPcUbOikiHfo9fpHilxO0SnoCC2Ygu0
-         kQkA==
+        d=google.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wVhR+tLTgWRBv165klscGkwBvwtkGY4K+gXBpaEt39o=;
+        b=AVNWGASSw6V5RUrPE0Xe922Dr1PoPah/DHCQjXENO9s0HFGB/eYpWl6axQWl/QnFZH
+         uRmMiarJD/nw2TwKyvyACE+uNu/LtM636YM+bXBmDWbMz/LvizwmSvb0uhzKoKggSF9I
+         RddWK4xmLBsCErMkW0NkfvF8unM5J4Sy7tB4XDdauDZT+qkVIm80Ijx7DdSpJQlMeNUQ
+         9MruKiM1t0I8MvBJdkw8JEuhdV4K7V79+VHa98U7QbGacXpl6JEqLz3ahlSfKlJq2FYV
+         w4pzBlJMAMO9CapLPiqmyQnhrxlET8Is5fQXqESFEI2JcPHofkbd9BYb47Gp15j9BJBN
+         XJ8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=MwRo3rFibChV4O65q8eXjp101W+2zLrCGSrd/xmpC7M=;
-        b=5B/klr4yY4fFKCL9xsQ0gWL9Nf1yDASenU6y6Cbzqnc8fH5cCVXT7AaSAxdHBhY6fE
-         8rTARZ+m06VJCKY4efSreGeXeBZNVMih2gU1NSetx1yWPGrgUPzULrJ6h1OjQXGwh86d
-         TUdSbQfNDHX5wtyz8NyoW88RBmLtUMrGV2tH8CROkDEFUPvrBgqBU06YgOlnSImjwXUE
-         ACA1EORPa26O4ozJVqLnd6ZrObBPOA+Zt+ZArYIbTTJp0Y1hnc0A6yZPxu/Wtqi7txfa
-         m0tGdir1DmgG96tV3b/Xwb+OD4oZUL//slMoRp5qM3gRUFWA0Kdd1MKqcacmtCGtaZxp
-         mc0w==
-X-Gm-Message-State: AOAM532DrEuUdXlJzFwLB9kZUbXR0arN2t5qiEe6lBIZuQXJa08IFRJ3
-        zTRzqvhv9QVNq9mAJcPTRtN+9w==
-X-Google-Smtp-Source: ABdhPJzzI1cy4wLl0DIOkPpDOw7qoQ8fui0WGqjeuo2pp5rjDj30k+XU38Y64hEoyl+kbNEnkf+CVA==
-X-Received: by 2002:a05:6512:10d0:b0:477:8ce3:ccd5 with SMTP id k16-20020a05651210d000b004778ce3ccd5mr10560371lfg.203.1652797811545;
-        Tue, 17 May 2022 07:30:11 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id u12-20020ac2518c000000b00477a97cb50bsm142157lfi.32.2022.05.17.07.30.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 07:30:11 -0700 (PDT)
-Message-ID: <b3c835fc-3b9a-8207-a99c-4c289a6ee7ed@linaro.org>
-Date:   Tue, 17 May 2022 16:30:09 +0200
+        bh=wVhR+tLTgWRBv165klscGkwBvwtkGY4K+gXBpaEt39o=;
+        b=WNAZ29PlLdFGjSIcX2qptjTeATKvT6qCnhEGyKFlrPH+PaottytA2ws6XaAiQemKtT
+         eanSjW88fI1YP6fHCo2kb2DYf+gP7UkrnOL9R6TPepoCFONWn4qYiZwKvsKAlWKIRlVk
+         Zn2Vd9JoYcGc+L4rDcwyHjNO3bePIk+kv3Vq4Ja75HXv4jG9iE1UVkd+PxnP1tmukv12
+         7CC9g/YYDXTQYqFDdszndsS4M9qUELWrapyFrG0PNISyf5VSpKS1wXEIVcPcn6ufjcCt
+         kn9z8unmKz657S5ZVZGQDxuJMUEBudLJW+Z4Xb8GXgm9CryxVh541DaT5RoVi2BnIHCl
+         IHEw==
+X-Gm-Message-State: AOAM531X5xG2C8rmq936V9PMkXN68fI03//OiJ4U3hdNL6IfWB9RvfsW
+        879Y7cO3nXCU9yeRyy/y/gtlaQ==
+X-Google-Smtp-Source: ABdhPJy3hzj7GtXAEMbX3XakDsp6tLitaXQroFjB5zMWxiGotgppusI9e/fS5ffNwObVzm/mABJOww==
+X-Received: by 2002:adf:ef8a:0:b0:20d:1028:3c36 with SMTP id d10-20020adfef8a000000b0020d10283c36mr6256611wro.481.1652797860454;
+        Tue, 17 May 2022 07:31:00 -0700 (PDT)
+Received: from localhost ([2a00:79e0:9d:4:b946:2cd:4ff6:1fbf])
+        by smtp.gmail.com with ESMTPSA id m6-20020a05600c460600b003942a244f2fsm1956398wmo.8.2022.05.17.07.30.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 07:30:59 -0700 (PDT)
+From:   Jann Horn <jannh@google.com>
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] s390/crypto: fix scatterwalk_unmap() callers in AES-GCM
+Date:   Tue, 17 May 2022 16:30:47 +0200
+Message-Id: <20220517143047.3054498-1-jannh@google.com>
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/6] dt-bindings: arm: mt8186-clock: Remove unnecessary
- 'items' and fix formatting
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sboyd@kernel.org, chun-jie.chen@mediatek.com,
-        rex-bc.chen@mediatek.com, wenst@chromium.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220517101514.21639-1-angelogioacchino.delregno@collabora.com>
- <20220517101514.21639-2-angelogioacchino.delregno@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220517101514.21639-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 12:15, AngeloGioacchino Del Regno wrote:
-> There's no need for 'items' when there's only one item; while at it,
-> also fix formatting by adding a blank line before specifying 'reg'.
-> 
-> Fixes: f113a51aa2cf ("dt-bindings: ARM: MediaTek: Add new document bindings of MT8186 clock")
+The argument of scatterwalk_unmap() is supposed to be the void* that was
+returned by the previous scatterwalk_map() call.
+The s390 AES-GCM implementation was instead passing the pointer to the
+struct scatter_walk.
 
-The original code was not buggy, so it is not a fix. There is no single
-reason to backport this patch (which you will cause with Fixes tag).
+This doesn't actually break anything because scatterwalk_unmap() only uses
+its argument under CONFIG_HIGHMEM and ARCH_HAS_FLUSH_ON_KUNMAP.
 
-For the rest:
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Note that I have not tested this patch in any way, not even compile-tested
+it.
 
-> Signed-off-by: AngeloGioacchino	Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../arm/mediatek/mediatek,mt8186-clock.yaml   | 28 +++++++++----------
->  1 file changed, 14 insertions(+), 14 deletions(-)
+Fixes: bf7fa038707c ("s390/crypto: add s390 platform specific aes gcm suppo=
+rt.")
+Signed-off-by: Jann Horn <jannh@google.com>
+---
+IDK which tree this has to go through - s390 or crypto?
+maybe s390 is better, since they can actually test it?
 
-Best regards,
-Krzysztof
+ arch/s390/crypto/aes_s390.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/s390/crypto/aes_s390.c b/arch/s390/crypto/aes_s390.c
+index 54c7536f2482..1023e9d43d44 100644
+--- a/arch/s390/crypto/aes_s390.c
++++ b/arch/s390/crypto/aes_s390.c
+@@ -701,7 +701,7 @@ static inline void _gcm_sg_unmap_and_advance(struct gcm=
+_sg_walk *gw,
+ 					     unsigned int nbytes)
+ {
+ 	gw->walk_bytes_remain -=3D nbytes;
+-	scatterwalk_unmap(&gw->walk);
++	scatterwalk_unmap(gw->walk_ptr);
+ 	scatterwalk_advance(&gw->walk, nbytes);
+ 	scatterwalk_done(&gw->walk, 0, gw->walk_bytes_remain);
+ 	gw->walk_ptr =3D NULL;
+@@ -776,7 +776,7 @@ static int gcm_out_walk_go(struct gcm_sg_walk *gw, unsi=
+gned int minbytesneeded)
+ 		goto out;
+ 	}
+=20
+-	scatterwalk_unmap(&gw->walk);
++	scatterwalk_unmap(gw->walk_ptr);
+ 	gw->walk_ptr =3D NULL;
+=20
+ 	gw->ptr =3D gw->buf;
+
+base-commit: 42226c989789d8da4af1de0c31070c96726d990c
+--=20
+2.36.0.550.gb090851708-goog
+

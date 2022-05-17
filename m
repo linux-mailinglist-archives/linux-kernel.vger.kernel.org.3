@@ -2,195 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF2252A9F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABB052A9F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351841AbiEQSGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
+        id S1351868AbiEQSGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352084AbiEQSGH (ORCPT
+        with ESMTP id S1352115AbiEQSGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:06:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9046250B1F;
-        Tue, 17 May 2022 11:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652810749; x=1684346749;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=G5Wv9shpOpxZTi2I/lWPe2CBntwVSC8iH9Z7DnGd2zo=;
-  b=Ce8caY3KTpwcG1kJRg521Hgq68jJuqxCs+ak/crw7MMv/G+pXOD9349g
-   7x8ZQDpnxI8lQTxx40/scBbtVHLBReCxLBBk1ptqPLKjeWouOHmiYcHbw
-   KJe2GPe2OxWuPFIpuLOyNXT+8RToL4CUvVDNeT26JVhRzaSgZgdpaNDMk
-   On3xZbla9cRsVxmGnj+FFYSwn/1lrhNq8C1g2cSNm0eAbEIRqt0JaXWV9
-   BC3/u5UiINpsLlEX0HSC2aTa1IROGTeYc6AX6bcriIUQsaXgcKm74u7sa
-   jsICuqR2HAPlI7PHmho3AjLJ7WlnqHtEYrnPxWg0//7pItpEfshqXnP7O
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="296556739"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="296556739"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 11:05:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="545024206"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 17 May 2022 11:05:48 -0700
-Received: from debox1-desk1.jf.intel.com (debox1-desk1.jf.intel.com [10.54.75.53])
-        by linux.intel.com (Postfix) with ESMTP id DE05A5807E8;
-        Tue, 17 May 2022 11:05:48 -0700 (PDT)
-Message-ID: <92f32b4703091acb0aaf3f784be448d469e9e2fa.camel@linux.intel.com>
-Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Date:   Tue, 17 May 2022 11:05:48 -0700
-In-Reply-To: <CAJZ5v0iNaAd=yP3DgDVVpffKU6kt+nSpPeqxWJyRddaX5K4FRA@mail.gmail.com>
-References: <CAJZ5v0g6GdKfN4b5uwHEhh4hBuG=haVHaXc-XuMQLe8Wd41Y3g@mail.gmail.com>
-         <20220517144846.GA1068039@bhelgaas>
-         <CAJZ5v0iNaAd=yP3DgDVVpffKU6kt+nSpPeqxWJyRddaX5K4FRA@mail.gmail.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        Tue, 17 May 2022 14:06:09 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4D850B3B;
+        Tue, 17 May 2022 11:05:59 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id q8so23234342oif.13;
+        Tue, 17 May 2022 11:05:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F9oiFXagRBRMM/DebPuqOfAkO2xPh1J2DfBuF2wn6jY=;
+        b=xe0XXT8brVgXGzTlap6H9xDOe+SauHmHwoRsb3chtKGz50eKcMYlZ10fpxrAFA36nN
+         I1SlAehf9IupWTZqKnQjXK2CsEuJUmdvSjJmE0IjhQl/KndxwMfeLd4MCMuTAxmieg6f
+         eUacQIMaYrjMYbg7EE/8uaAYYu1MhmTThOeAJCQjDZQ7i4+OBbL0o2tKCq9GErs7lvLv
+         4RuF7bVHnn6JV4CYXDDtT4t5Pqwae2w3Nq1TIjbeabHsW55xczkkXl7KkPVahZA8Yv6b
+         NguktNhBynQYLCFjYJ9b3d3F0IyokHJbHneFGt2+j90VKEjdxbIMKURXgt4RGFJissOq
+         MhkQ==
+X-Gm-Message-State: AOAM532Gvy+Ys+O+rjBcXlpYFastoN+ZZC3b8M42t9GpG/VJsY3Lfhq6
+        5ebazOSkzHyTeXpvSDyenw==
+X-Google-Smtp-Source: ABdhPJxfNzSDtx7hJ9IWeiR8Ju1BV+067OaqdyKqHEUUyEgP39xyDh5erKxEC5PILhcugCzNVYADaw==
+X-Received: by 2002:a05:6808:b19:b0:325:d028:7681 with SMTP id s25-20020a0568080b1900b00325d0287681mr16804320oij.195.1652810758556;
+        Tue, 17 May 2022 11:05:58 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r4-20020aca4404000000b00325cda1ff87sm20013oia.6.2022.05.17.11.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 11:05:57 -0700 (PDT)
+Received: (nullmailer pid 1337742 invoked by uid 1000);
+        Tue, 17 May 2022 18:05:56 -0000
+Date:   Tue, 17 May 2022 13:05:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel@pengutronix.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 0/3] document dt-schema for some USB Ethernet
+ controllers
+Message-ID: <20220517180556.GA1327859-robh@kernel.org>
+References: <20220517111505.929722-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517111505.929722-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-17 at 16:54 +0200, Rafael J. Wysocki wrote:
-> On Tue, May 17, 2022 at 4:48 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > 
-> > On Mon, May 16, 2022 at 10:59:32PM +0200, Rafael J. Wysocki wrote:
-> > > On Mon, May 16, 2022 at 10:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Fri, May 13, 2022 at 10:00:48PM +0000, Jingar, Rajvi wrote:
-> > > > > > -----Original Message-----
-> > > > > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > > > > Sent: Thursday, May 12, 2022 11:36 AM
-> > > > > > To: Rafael J. Wysocki <rafael@kernel.org>
-> > > > > > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
-> > > > > > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>;
-> > > > > > David Box
-> > > > > > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>;
-> > > > > > Linux
-> > > > > > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
-> > > > > > pm@vger.kernel.org>
-> > > > > > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to
-> > > > > > disable PTM
-> > > > > > 
-> > > > > > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
-> > > > > > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org>
-> > > > > > > wrote:
-> > > > > > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
-> > > > > > 
-> > > > > > > > > Something like this should suffice IMV:
-> > > > > > > > > 
-> > > > > > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
-> > > > > > > > > 
-> > > > > > > > >         pci_disable_ptm(pci_dev);
-> > > > > > > > 
-> > > > > > > > It makes sense to me that we needn't disable PTM if the device is
-> > > > > > > > in
-> > > > > > > > D3cold.  But the "!dev_state_saved" condition depends on what the
-> > > > > > > > driver did.  Why is that important?  Why should we not do the
-> > > > > > > > following?
-> > > > > > > > 
-> > > > > > > >   if (pci_dev->current_state != PCI_D3cold)
-> > > > > > > >     pci_disable_ptm(pci_dev);
-> > > > > > > 
-> > > > > > > We can do this too.  I thought we could skip the power state
-> > > > > > > check if dev_state_saved was unset, because then we would know
-> > > > > > > that the power state was not D3cold.  It probably isn't worth
-> > > > > > > the hassle though.
-> > > > > 
-> > > > > We see issue with certain platforms where only checking if device
-> > > > > power state in D3Cold is not enough and the !dev_state_saved check
-> > > > > is needed when disabling PTM. Device like nvme is relying on ASPM,
-> > > > > it stays in D0 but state is saved. Touching the config space wakes
-> > > > > up the device which prevents the system from entering into low power
-> > > > > state.
-> > > > 
-> > > > Correct me if I'm wrong: for NVMe devices, nvme_suspend() has already
-> > > > saved state and put the device in some low-power state.  Disabling PTM
-> > > > here is functionally OK but prevents a system low power state, so you
-> > > > want to leave PTM enabled.
-> > > > 
-> > > > But I must be missing something because pci_prepare_to_sleep()
-> > > > currently disables PTM for Root Ports.  If we leave PTM enabled on
-> > > > NVMe but disable it on the Root Port above it, any PTM Request from
-> > > > NVMe will cause an Unsupported Request error.
-> > > > 
-> > > > Disabling PTM must be coordinated across PTM Requesters and PTM
-> > > > Responders.  That means the decision to disable cannot depend on
-> > > > driver-specific things like whether the driver has saved state.
-> > > 
-> > > Setting state_saved generally informs pci_pm_suspend_noirq() that the
-> > > device has already been handled and it doesn't need to do anything to
-> > > it.
-> > > 
-> > > But you are right that PTM should be disabled on downstream devices as
-> > > well as on the ports that those devices are connected to and it can be
-> > > done even if the given device has already been handled, so the
-> > > state_saved value is technically irrelevant.
-> > > 
-> > > That's why I suggested to check if the power state is between D0 and
-> > > D3cold (exclusive) and only disable PTM if that is the case.  It is
-> > > pointless to disable PTM for devices in D3cold and it may be harmful
-> > > for devices that are left in D0.
-> > 
-> > "... it may be harmful for devices that are left in D0" -- I want to
-> > understand this better.  It sounds like nvme_suspend() leaves the
-> > device in some device-specific low-power flavor of D0, and subsequent
-> > config accesses take it out of that low-power situation?
+On Tue, May 17, 2022 at 01:15:02PM +0200, Oleksij Rempel wrote:
+> changes v6:
+> - remove USB hub example from microchip,lan95xx.yaml. We care only about
+>   ethernet node.
+> - use only documented USD ID in example.
+> - add Reviewed-by
+> - drop board patches, all of them are taken by different subsystem
+>   maintainers.
 > 
-
-This is exactly what we see. It's not all machines, but in our lab we've seen in
-it on 3 production systems out of about 20. And they were all different
-generations, a 7th, 8th, and 10th gen.
-
-nvme_suspend is relying on NVMe APST / PCIe ASPM to put the device in a low
-power state. The link state will be L1 or deeper while the device remains in D0.
-
-https://nvmexpress.org/resources/nvm-express-technology-features/nvme-technology-power-features/
-
-
-> That's my understanding of it.
+> changes v5:
+> - move compatible string changes to a separate patch
+> - add note about possible regressions
 > 
-> > If that's the case, it sounds a little brittle.  I don't think it's
-> > obvious that "pci_dev->state_saved was set by the driver" means "no
-> > config accesses allowed in pci_pm_suspend_noirq()."
+> changes v4:
+> - reword commit logs.
+> - add note about compatible fix
 > 
-> Well, yes and no.  The device may be in D3cold then, so
-> pci_pm_suspend_noirq() should at least check that before accessing its
-> config space.
-> 
-> > And pci_pm_suspend_noirq() calls quirks via pci_fixup_device(), which are
-> > very likely to do config accesses.
-> > 
-> > Maybe PTM needs to be disabled earlier, e.g., in pci_pm_suspend()?  I
-> > don't think PTM uses any interrupts, so there's probably no reason
-> > interrupts need to be disabled before disabling PTM.
-> 
-> That certainly is worth investigation.  For one, I don't see any
-> obvious downsides of doing so.
+> Oleksij Rempel (3):
+>   dt-bindings: net: add schema for ASIX USB Ethernet controllers
+>   dt-bindings: net: add schema for Microchip/SMSC LAN95xx USB Ethernet
+>     controllers
+>   dt-bindings: usb: ci-hdrc-usb2: fix node node for ethernet controller
 
-We will look at this.
+Series applied, thanks.
 
-David
-
-
+Rob

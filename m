@@ -2,111 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 557A752AB05
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F73752AB0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352282AbiEQSiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
+        id S1352296AbiEQSmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbiEQSiN (ORCPT
+        with ESMTP id S233429AbiEQSmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:38:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4AC37BF8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652812693; x=1684348693;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FTTY9ZFMfeTd8CI19p2u5YEYLQvqFSdIkPKeSEcRj4U=;
-  b=YUuJ/uUKTbiDNFd4y++5VrAtg9TpHLmaQenw1VguwtX41VOsbhYcMRF/
-   +WV0jZz/ovTh+WHJfS7eQRHhBgYjW+E8ObYQgDD0n7CfZOzOp8KeKP4Fe
-   VYbasYy4TvlRO7GunlbYTbiEkFfGWN9jqVa275WZBao3zWJUM6JdUEeGS
-   wwNSrmswYoqYhBDSfdikZlBQtDBiz6ZTjH6SyfPxWhCU/dvRPiBJeUOYZ
-   QGskWD3gpuE6SjUsaml91/F7Ork3NINy/Q9NA4CSxLKovZaGw83ziWULl
-   8bN9fKRiUZPr3iWIzLVMvNFZs4sWOAi/nUmcbAcNKejAp2N0+8d/tYKlM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251180154"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="251180154"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 11:38:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="555910452"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga002.jf.intel.com with ESMTP; 17 May 2022 11:38:12 -0700
-Date:   Tue, 17 May 2022 11:41:54 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     x86@kernel.org, Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        iommu@lists.linux-foundation.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 21/29] x86/nmi: Add an NMI_WATCHDOG NMI handler
- category
-Message-ID: <20220517184154.GA6711@ranerica-svr.sc.intel.com>
-References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
- <20220506000008.30892-22-ricardo.neri-calderon@linux.intel.com>
- <87a6bqrelv.ffs@tglx>
+        Tue, 17 May 2022 14:42:44 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5CC28E04;
+        Tue, 17 May 2022 11:42:43 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id z139so1259224iof.8;
+        Tue, 17 May 2022 11:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Kh4EnLD5q25bV5mnKOfEKUkGgPpU5YAK0WJ01JIxNg4=;
+        b=aUrMJiwv/pKGCIiR1FDh6ybW4X9ORE3GqTTU46RKMu/5qjgrJedBoy12P6roStHy+d
+         UDkoTN0toafzpAhVeCVBaef5V88Nc5mlJNtf+347enG/JDAAcYlQUmX0buXocznHk5Ko
+         jasUD1NLA/aFd66v+Hllo1XnExWtr7zC6s7H5i3HGDx8o8qwDH9VEMs1jfdpj4jw/5tf
+         c/N1bFsySnbbP76od6uYB40iaMD9qPoNRKPUcfxEN6TAIBj1nX09xS58DzZvQeKS+i55
+         rZ0ezrhe+BDDtQVGCvwcKG3PqWIDufzzV0gy5XihuCNMzywqD9n1CQYC5Mnv1Uq1CqHC
+         0MFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Kh4EnLD5q25bV5mnKOfEKUkGgPpU5YAK0WJ01JIxNg4=;
+        b=7AOnRciPniPIzk0sA1OKNklkZzXSsh4RDVVMxswWHklbSZ8HA+hCdHDoLxzDHRLrwE
+         UxTgBuvPPS+3DHCpBmT3vjjjQpIe6voh/xFhGQIklcHenE3VENVZu2mhP9yvF/4x5C4Z
+         QD7LQtiWQOJ4OA0vA/l+36bzOdJEO0UrZlaCe6qWqCFofIK3gOCMUmXFio7y6OLDM09o
+         p0E//whQkAJlkqrC7tny3T5JpqxglwpFoHvSfOf0s3UyaTyQ40RSNGgCG/ZggHTl8heC
+         erOXhzZD5+d+iXUSFXNaV1ZO0jRZxffbMaIcgYmapL36Bi61TXwpCC8uoXFyvnZ6+YgB
+         nfCQ==
+X-Gm-Message-State: AOAM531xL/mrHz9TjrovCePUmpnUFmrhSr5uG2mn3uZpa1IGDS4KD2j+
+        L5MoQuy9XV6lysOsUfhe9NhKyGyKe83UChKhzro1hTqDJORUcQ==
+X-Google-Smtp-Source: ABdhPJx2j+WLRuHx6rpO7Dl95/n6zjxwt0lx2dBVqcmN8p1lNQkuRQtrCf4t+2gbUw7UgAe8w7av6kvka5elU3LTjus=
+X-Received: by 2002:a05:6602:490:b0:65d:cfc5:9221 with SMTP id
+ y16-20020a056602049000b0065dcfc59221mr10786278iov.0.1652812962454; Tue, 17
+ May 2022 11:42:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a6bqrelv.ffs@tglx>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-2-linux.amoon@gmail.com>
+ <6a6ed76a-50fa-2b05-896e-8936d3c3f597@linaro.org>
+In-Reply-To: <6a6ed76a-50fa-2b05-896e-8936d3c3f597@linaro.org>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Wed, 18 May 2022 00:12:27 +0530
+Message-ID: <CANAwSgTMwKhn6QDcoOXcSVgUqLGq1W6X4QvcSRHT-JSVfOe0rA@mail.gmail.com>
+Subject: Re: [PATCHv2 1/6] thermal: exynos: Enable core tmu hardware clk flag
+ on exynos platform
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 03:59:40PM +0200, Thomas Gleixner wrote:
-> On Thu, May 05 2022 at 17:00, Ricardo Neri wrote:
-> > Add a NMI_WATCHDOG as a new category of NMI handler. This new category
-> > is to be used with the HPET-based hardlockup detector. This detector
-> > does not have a direct way of checking if the HPET timer is the source of
-> > the NMI. Instead, it indirectly estimates it using the time-stamp counter.
-> >
-> > Therefore, we may have false-positives in case another NMI occurs within
-> > the estimated time window. For this reason, we want the handler of the
-> > detector to be called after all the NMI_LOCAL handlers. A simple way
-> > of achieving this with a new NMI handler category.
-> >
-> > @@ -379,6 +385,10 @@ static noinstr void default_do_nmi(struct pt_regs *regs)
-> >  	}
-> >  	raw_spin_unlock(&nmi_reason_lock);
-> >  
-> > +	handled = nmi_handle(NMI_WATCHDOG, regs);
-> > +	if (handled == NMI_HANDLED)
-> > +		goto out;
-> > +
-> 
-> How is this supposed to work reliably?
-> 
-> If perf is active and the HPET NMI and the perf NMI come in around the
-> same time, then nmi_handle(LOCAL) can swallow the NMI and the watchdog
-> won't be checked. Because MSI is strictly edge and the message is only
-> sent once, this can result in a stale watchdog, no?
+Hi Krzysztof,
 
-This is true. Instead, at the end of each NMI I should _also_ check if the TSC
-is within the expected value of the HPET NMI watchdog. In this way, unrelated
-NMIs (e.g., perf NMI) are handled and we don't miss the NMI from the HPET
-channel.
+On Sun, 15 May 2022 at 15:22, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 15/05/2022 08:41, Anand Moon wrote:
+> > Use clk_prepare_enable api to enable tmu internal hardware clock
+> > flag on, use clk_disable_unprepare to disable the clock.
+> >
+> > Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+>
+> Here as well you ignored my first comment:
+> https://lore.kernel.org/lkml/CANAwSgS=08fVsqn95WHzSF71WTTyD2-=K2C6-BEz0tY0t6A1-g@mail.gmail.com/T/#mbfc57b40a7ed043dd4d4890bedb6bad8240058cd
+>
+> "This is not valid reason to do a change. What is clk_summary does not
+> really matter. Your change has negative impact on power consumption as
+> the clock stays enabled all the time. This is not what we want... so
+> please explain it more - why you need the clock to be enabled all the
+> time? What is broken (clk_summary is not broken in this case)?"
+>
+Ok, I fall short to understand the clock framework.
 
-Thanks and BR,
-Ricardo
+> This was not addressed, you just resent same code...
+>
+Thanks for the review comment.
+
+Here is the Exynos4412 user manual I am referring to get a better
+understanding of TMU drivers
+
+[0] https://chasinglulu.github.io/downloads/SEC_Exynos4412_Users%20Manual_Ver.1.00.00.pdf
+
+Exynos Thermal is controlled by CLK_SENSE field is toggled on/off by the TMU
+for rising and falling temperatures which control the interrupt.
+
+TMU monitors temperature variation in a chip by measuring on-chip temperature
+and generates an interrupt to CPU when the temperature exceeds or goes
+below pre-defined
+threshold. Instead of using an interrupt generation scheme, CPU can
+obtain on-chip
+temperature information by reading the related register field, that
+is, by using a polling scheme.
+
+tmu clk control the CPU freq with various power management like DVFS and MFC
+so this clk needs to be *enabled on*,
+If we use clk_prepare_enable API  we enable the clk and the clk counters,
+
+I check the call trace of the *clk_prepare_enable*
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/clk.h?h=v5.18-rc7#n945
+it first calls *clk_prepare* and then *clk_enable* functions to
+enable the clock and then the hardware flag gets enabled for the clock
+
+I also check the call trace of the *clk_prepare* below
+[2} https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/clk.c?h=v5.18-rc7#n943
+it does not enable the clk explicitly but prepares the clock to be used.
+
+"clk_prepare can be used instead of clk_enable to ungate a clk if the
+operation may sleep.  One example is a clk which is accessed over I2c.  In
+the complex case a clk ungate operation may require a fast and a slow part.
+It is this reason that clk_prepare and clk_enable are not mutually
+exclusive.  In fact clk_prepare must be called before clk_enable.
+Returns 0 on success, -EERROR otherwise."
+
+What it means is we still need to call *clk_enable* to enable clk in the drivers
+and *clk_disable* to disable within the driver.
+
+In exynos tmu driver uses many clk_enable and clk_disable
+to toggle the clock which we can avoid if we used the switch to used
+*clk_prepare_enable* function in the probe function.
+
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/samsung/exynos_tmu.c?h=v5.18-rc7#n259
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/samsung/exynos_tmu.c?h=v5.18-rc7#n350
+[5] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/samsung/exynos_tmu.c?h=v5.18-rc7#n653
+[6] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thermal/samsung/exynos_tmu.c?h=v5.18-rc7#n731
+
+Locally I remove these function calls of clk_enable/ clk_disable
+function calls in the driver
+with these changes, stress-tested did not find any lockup.
+
+Please correct me if I am wrong.
+
+>
+> Best regards,
+> Krzysztof
+
+Thanks & Regards
+
+
+
+
+
+
+
+
+
+
+-Anand

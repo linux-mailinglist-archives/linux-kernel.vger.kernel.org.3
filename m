@@ -2,80 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEE852A499
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6157852A49A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348698AbiEQOTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
+        id S1348751AbiEQOTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236741AbiEQOTR (ORCPT
+        with ESMTP id S1348668AbiEQOTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:19:17 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9D0344FA
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fQzWuq6EodGqOHx9GjfS0em/RXgWCwpj6VxGmmEdosQ=; b=GSTBgEDKg243NCQCyGxq80aNwY
-        UFyU1aun29GdmgxMKObbq2Hbt2UesJp8w7dKQHvVHGRXf67gtQFmxsekfTF+fQVtABv8mDgXc/Icf
-        Y9rVTbiiqWz00VT1N9LAWk/eDmZ4v6v2fFdBKW/pU8dkf9m1pLFOqsNF6TpZrnYyWh0CbZ0NUpI9n
-        SToxgqngGYftWPXFOiV8Pyp4s+bUygYNahLOMWMGEKS2LOxu0VmyokMbOVQGKgTgSNSEX60hu7eVu
-        rwgJ7S98vmojp8OkpyaV5QcgivGOwCpJPO6P97f6CfWPFMCrLpDYXRHdS9HRc4x34nG+NhQVE857h
-        viTCLWzA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60744)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nqy2Q-0000NU-O8; Tue, 17 May 2022 15:19:03 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nqy2O-0004VH-36; Tue, 17 May 2022 15:19:00 +0100
-Date:   Tue, 17 May 2022 15:19:00 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     alexander.sverdlin@nokia.com, ardb@kernel.org,
-        linus.walleij@linaro.org, nico@fluxnic.net,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] ARM: module: Add all unwind tables when load module
-Message-ID: <YoOu1Ng53Tv/ec0d@shell.armlinux.org.uk>
-References: <20220401131534.241205-1-chenzhongjin@huawei.com>
+        Tue, 17 May 2022 10:19:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5567C34BB1;
+        Tue, 17 May 2022 07:19:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 110491F37E;
+        Tue, 17 May 2022 14:19:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652797157; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3rQUg5g8HVgYE6JcE44TDMKLUGo/uar5kmWRIBWoHLs=;
+        b=Bn6qAxr4Td9Iu2Jozb32oiczD0gRern9oVkdsCQA3cMNWuqdN2q5x9zc4+Bu1Ddj+2N/h/
+        UHGs0bDr7hy4DNt5egMg4MfY3/cILf7juBdh0Z2XPset9zdl29bM6/REfQUfixScbCZp2c
+        tnpywNpoUT0zAanws9RG9FPC9M2TVDA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652797157;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3rQUg5g8HVgYE6JcE44TDMKLUGo/uar5kmWRIBWoHLs=;
+        b=jhoJ6SODV94MvktJidefHXilQiZ/XvJO+B8sl2LMapdBrja/CVFhQkkVt230LJrrQp6IoL
+        J0QJ2QV/GXMKluAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3BE013305;
+        Tue, 17 May 2022 14:19:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QFMvNuSug2LpTwAAMHmgww
+        (envelope-from <mliska@suse.cz>); Tue, 17 May 2022 14:19:16 +0000
+Message-ID: <21708ede-f378-d20e-0b1d-410e946fcca5@suse.cz>
+Date:   Tue, 17 May 2022 16:19:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401131534.241205-1-chenzhongjin@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
+Subject: [PATCH] gcc: fix -Warray-compare
+To:     netdev@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Fixes the following GCC warning:
 
-On Fri, Apr 01, 2022 at 09:15:34PM +0800, Chen Zhongjin wrote:
->  struct mod_arch_specific {
->  #ifdef CONFIG_ARM_UNWIND
-> -	struct unwind_table *unwind[ARM_SEC_MAX];
-> +	struct unwind_table unwind_list;
+drivers/net/ethernet/sun/cassini.c:1316:29: error: comparison between two arrays [-Werror=array-compare]
+drivers/net/ethernet/sun/cassini.c:3783:34: error: comparison between two arrays [-Werror=array-compare]
 
-Why is this not a:
+Signed-off-by: Martin Liska <mliska@suse.cz>
+---
+ drivers/net/ethernet/sun/cassini.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-	struct list_head unwind_list;
-
-because, from what I can tell, the _only_ member that is used in this
-struct unwind_table is the "mod_list" member - so everything else is
-entirely unused and redundant.
-
-Thanks.
-
+diff --git a/drivers/net/ethernet/sun/cassini.c b/drivers/net/ethernet/sun/cassini.c
+index b04a6a7bf566..435dc00d04e5 100644
+--- a/drivers/net/ethernet/sun/cassini.c
++++ b/drivers/net/ethernet/sun/cassini.c
+@@ -1313,7 +1313,7 @@ static void cas_init_rx_dma(struct cas *cp)
+ 	writel(val, cp->regs + REG_RX_PAGE_SIZE);
+ 
+ 	/* enable the header parser if desired */
+-	if (CAS_HP_FIRMWARE == cas_prog_null)
++	if (&CAS_HP_FIRMWARE[0] == &cas_prog_null[0])
+ 		return;
+ 
+ 	val = CAS_BASE(HP_CFG_NUM_CPU, CAS_NCPUS > 63 ? 0 : CAS_NCPUS);
+@@ -3780,7 +3780,7 @@ static void cas_reset(struct cas *cp, int blkflag)
+ 
+ 	/* program header parser */
+ 	if ((cp->cas_flags & CAS_FLAG_TARGET_ABORT) ||
+-	    (CAS_HP_ALT_FIRMWARE == cas_prog_null)) {
++	    (&CAS_HP_ALT_FIRMWARE[0] == &cas_prog_null[0])) {
+ 		cas_load_firmware(cp, CAS_HP_FIRMWARE);
+ 	} else {
+ 		cas_load_firmware(cp, CAS_HP_ALT_FIRMWARE);
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.36.1
+

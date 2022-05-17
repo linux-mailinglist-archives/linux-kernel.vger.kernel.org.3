@@ -2,68 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51DD529ABD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4AD529AC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240841AbiEQH12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S241238AbiEQH1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236256AbiEQH1W (ORCPT
+        with ESMTP id S241050AbiEQH1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:27:22 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66F943EED;
-        Tue, 17 May 2022 00:27:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652772441; x=1684308441;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xMiGsrSeghOS0yjMoEbRiyjbU0nqO5uR7AcrlNt3J5A=;
-  b=ggq73x3T+oyIP0vmECDazyNkvoSAj52VnRNSaqI7GE5OJ0tD0qWJF9Pl
-   UjmdDZ1LW7yfkNCjeTK5IlE0O24wjLad5DYfvqChjIbZlZqKB5Pkh6cHI
-   R7LlVM4nwxYGjO4u7mQ/1XO6+2i7SlunR8kmIFQgbqOEvinNEiD9nChER
-   s4fb/ieOFyZ/1i9Zg46ni9MPJBjMmHjFMe0Oa4Q7HGTFLuA7FMLHE5WHn
-   uB1ic2L0AIZ0alc9hkUxVWhIhGqSK421SA+/WVDwOWC98i2YCvRp7C2It
-   h/D1ECe0ntQNv3362US5cDKJlb+/IavI0BwSM2+0zLvEnXhvM/WVFSjKT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="251607351"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="251607351"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:27:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="605228191"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 May 2022 00:27:11 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqrbr-0000ij-AK;
-        Tue, 17 May 2022 07:27:11 +0000
-Date:   Tue, 17 May 2022 15:26:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Richard Guy Briggs <rgb@redhat.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v3 2/3] fanotify: define struct members to hold response
- decision context
-Message-ID: <202205171508.anzweWlm-lkp@intel.com>
-References: <1520f08c023d1e919b1a2af161d5a19367b6b4bf.1652730821.git.rgb@redhat.com>
+        Tue, 17 May 2022 03:27:32 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2057.outbound.protection.outlook.com [40.107.237.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52ABB47384
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:27:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HKkuh2F1kcir7eEoQIMkZljJDwtPipMlsgpFQG1YuGDk1qoQ18yjge1j+TJOECGLlGI8PJAPvCvSIn9Qmr/o6RgXqmk0TQhnHjf1wQKOwBOcrpzaoSgmCnJVhRSDFaYpClS6J7ZDWm+T/CxE/Yt3zEAWCCTXeS12GPClLsWnrxjUVznEny8pV8KpqvzYkiCSJbH5BE2AxP9wMI6gQ61SUsEgmkrjLF+FOIc/TLCwhu31PpjAXbL+/MuJte1mi1z2ft641hjdvoJj44x1x8mhTmY4sruSpjN8a6xoguC7Q5WtU9WbsoTlB05I7uQjXCOczxeDevDYlcIRqMY1CqMrQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z2Vpj/bLyoWpp0sjo7dmOZqPyfdFx4SFakbJD7wBg5w=;
+ b=RDPfSHbRThCTH7jGEQuVugBc2H5cLEinJs7zvVkYI/A8wLlYOlJA4JorXvawuSQ4G6TiGpygeF3o9uJUKQmpr4cRNRhzc1MZWSW79zCnwq+v8wOLPr6C2ISFYbho/cSGQ4+pqzSTLAFN7WF4xfgG9WJVAxNMEBaW0xD7+R8clfLdkqzQu0TZ7Hl8zXnjtYXfPSL0Tr9/FtPjCqoSaz2bsFctQomaNFvf5i+2iR0jewUpmBE5oUfRLsZD9o7+s1kour3xl2o3U2mwXrU6qcBKatALr3vKJAqGAhgrJTaDmGOvPQYLe9QTIkiqD217AlTsV6Y9+9k3j8UWNYEO63hs9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
+ dkim=pass header.d=silabs.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z2Vpj/bLyoWpp0sjo7dmOZqPyfdFx4SFakbJD7wBg5w=;
+ b=bv3jU1cMpl7JHYrNPlxzgUdgIE2qBUP1Ng/8o9306xsnr2nSq/zi/wmqaNNJPUVqkNgnlnAG19xzYFv1cVpa0Zzrzc6zwSXFDk2eP6rEJ30N8yfKGcAVmkfPsuf9MFJCBYdKEOQurGZHCXBJu4WGFCoR/6uPCmec7aYUP2dZgHc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=silabs.com;
+Received: from PH0PR11MB5657.namprd11.prod.outlook.com (2603:10b6:510:ee::19)
+ by MWHPR11MB2047.namprd11.prod.outlook.com (2603:10b6:300:2a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.16; Tue, 17 May
+ 2022 07:27:26 +0000
+Received: from PH0PR11MB5657.namprd11.prod.outlook.com
+ ([fe80::f8c2:3f6c:3211:7b29]) by PH0PR11MB5657.namprd11.prod.outlook.com
+ ([fe80::f8c2:3f6c:3211:7b29%6]) with mapi id 15.20.5250.018; Tue, 17 May 2022
+ 07:27:26 +0000
+From:   Jerome Pouiller <Jerome.Pouiller@silabs.com>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Pekka Paalanen <pekka.paalanen@collabora.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= 
+        <jerome.pouiller@silabs.com>
+Subject: [PATCH] dma-buf: fix use of DMA_BUF_SET_NAME_{A,B} in userspace
+Date:   Tue, 17 May 2022 09:27:08 +0200
+Message-Id: <20220517072708.245265-1-Jerome.Pouiller@silabs.com>
+X-Mailer: git-send-email 2.35.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-ClientProxiedBy: MR2P264CA0125.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:30::17) To PH0PR11MB5657.namprd11.prod.outlook.com
+ (2603:10b6:510:ee::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1520f08c023d1e919b1a2af161d5a19367b6b4bf.1652730821.git.rgb@redhat.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 80ff1d11-f157-4afe-1c38-08da37d6b132
+X-MS-TrafficTypeDiagnostic: MWHPR11MB2047:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR11MB20473ECDE87232974BA61FE293CE9@MWHPR11MB2047.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xyi0WlZlTkP16B04lzOzhGe6StyyW1dHuD0NyFBX9f12DCknf6ZaT9qJaIxh7aEeghOKez0wABaMxLfKVSoq86VNQuOR/X4z6+VhfvE3/nCNmsD4oFK6e2/1YQL3u96uj4YdGtMpWWoqbawaDkdnfAf0bsa7s8IZkg56EnSp0dcy4O0ZzeKfBmz3MZwiCA7lH1Yj/SJJLFhqyCBbiTDNcerd/l/wRDMhfBUPIoXQldergnvnAR9p78v7fxQ8snGGfbHy42bqJfUNHdBXPqGJF6QRd8oPqG8jNwZ/5VhJjXYHmn/n8xCC7N2chKhdM6kLZZI+mXishEjXHt255iEZQzYfmkspJf7LAe7hMSTjqmiU8qGZLb2KGR1Dy3zEAafZPodlZdEnC65kFSJzwVYzvyNRvFxrwlrMyhG8ie6pVMW4zXdvhyci+4hqBUnJ3wIFa6nWywHXyy/YxBw2riOCCNhA/b+tCRvxApzNfmeC6oiTx/FxCRGwQpcMasWybntZNI9+Q147FLDpOq9m4RclzCPiWz8OWaVQpgUxiXPjRhe8W9c6yGd/WxH/qBHImxVqjRbGmqgffDZp64R/Dn1xEYfChmT7oMOxeFAj4cHjG4pN/lo3IH9HK+p4v51L8LKv5eDMkJEjqEV5CIYzyWrrCKvz4YgRdQ1mvk2asSwj3l68mT/n5TPj3wl77skRz8k+QAmqrna+pyunkobhktRwDGr37BEX4632RN+J0mdHPt8oaNbYqimZhxroI+iG4cTGiY5KFg7ZC2NgCN6HNeXi6A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5657.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(966005)(6486002)(6512007)(6506007)(6666004)(52116002)(26005)(8936002)(316002)(86362001)(110136005)(83380400001)(36756003)(38100700002)(38350700002)(4326008)(107886003)(8676002)(2616005)(1076003)(66476007)(66946007)(66556008)(2906002)(5660300002)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aU50V2ZPM29MSGlWT01WZzRsbUU0Ti9WYzArR2VxMFFWU3lLN0tBanFSQ1F3?=
+ =?utf-8?B?dE1OVnR1N0krNXNMd0hrQVJjWTkzcjA2NVdhVDNXZklTTmJVWDdDcE94WDNX?=
+ =?utf-8?B?ZGFzWlZON3JZZzhxeitTcWZsSUZyZXB5UFpYS1JKdFhWTU9TNCtjWlo5bkhU?=
+ =?utf-8?B?YzVYN0xNa25uVkc2cUd5UG10eCsxVkttZ2RBditQajZGNExuZzE5M1EwcCs4?=
+ =?utf-8?B?VGVQZ01xVEEzNjExWThRTjNsRDhjWmdKZG1ETnh1cFNGZFZCVTdTU0pUWmVt?=
+ =?utf-8?B?TkU4T1VPZDRjZUU5V05FOE9BQityYXIrTENvZTYzdklMWjN5YUdwNTVCSENQ?=
+ =?utf-8?B?cndBWHFHbGV2eExQUjVlMVZtbW5PRUVyZitvOGdwQW02UU41SDVZUE1OcmdG?=
+ =?utf-8?B?WkhrTTE0SzhrMStMYWh0cWZwNzVEWDZuREgySDFKeEdsU2ZJSEdOMnMyOHpa?=
+ =?utf-8?B?dnYwNzB4b0hpb1dFSXYzdGthN2hVSTBsV2ZkQ2ZnZGVVdGN0aWxQNk44YjBl?=
+ =?utf-8?B?NUw3eFYxZ1lsZW9kTitTTVVJcG5CSGVjZkxwMkNwT0J6ZTZaVTBKWVlNSmZJ?=
+ =?utf-8?B?alNCRzRBZGJoa3RRUXhSU2c5ZkREQXkxUzZJaG43STJmcVIyTnlSVUxxR0VQ?=
+ =?utf-8?B?bDAwb3BBZFpRbGI3L3hyN1BGc1dlWGdWbWxNamE4T2hKdmZmcGJRSHR5Zy9G?=
+ =?utf-8?B?MVhGSDg0bWtQR2t6UnRGNWMyR1VrYms5V2FrRkNvMnJkcnNsSVJ1RDVlMkdB?=
+ =?utf-8?B?eU4zQ0tSdWZiSWRQN05ZUEtUVE1mbWpTaFRxdXpYZHR3eFU5TWtTbXVrOHc2?=
+ =?utf-8?B?WEdqUjZIYW82UlFHaVhhYmoxcGJiaUxPaTk2SmQvemcwYjVRR0E3aFlMSTJ2?=
+ =?utf-8?B?WFVwUjhadlpkMTRNblN1UWhWMklZckRYblNBTXFjV0RBdGxVSTU0ZmdsMDFn?=
+ =?utf-8?B?YVZsb2hiMk1FRzFoSmd5TS84cyswNURTam1IZjF5bS96cklEbDkxb2duVHlK?=
+ =?utf-8?B?eWVVUEF2WE9ITHNoSndENHFndWppdUhCcjE0T2ZLcThlQTFPa2JkNEh6Zkpw?=
+ =?utf-8?B?VUU2bm91MjJobjV5czlWNi9OVldzNk1oTlpjWjJHN0tNLzN0eFN0SFBqbnB0?=
+ =?utf-8?B?c0ErRUtrTWF6aGUxYkpPeWRLR0x3UUUxS0FpU294N1lUakpteG0vYXFCMGt4?=
+ =?utf-8?B?YW1BTEk2VER5MjEyLytZWjYwNnBjOFFxWTdUN2JjcVNxV25VcFV0aDFhUks0?=
+ =?utf-8?B?cmg2QWIwUXg3N1l1a1BQMDRSSExsVFJXOWR5ZVU0bVBKTTdiUHUxWWw2MWdn?=
+ =?utf-8?B?WW1ROEkyMHp6Z2crVXVDaVRBZTNYZ0JQaVpZekJnODFMemNOeTZlcnE3SDUv?=
+ =?utf-8?B?MGpQR0xRVmF3WUdCZlM0MUJNejdyMUhLMFBPZWUxYU80OGJFODV1eWtPem9N?=
+ =?utf-8?B?SFV3UC9BYk9TRWpiVlY3MHlTUWpkcEw2U2lKSVIzV0M0T1FFVkEyOExvMFRU?=
+ =?utf-8?B?NW9WWFlGbWovOFl6bW1TVG1PNVNYVS92MWZlUjExVHRsRUdkUGNXTGxrQm5i?=
+ =?utf-8?B?NWp4ckRzc25BdjluTGhYc2hpVXBPcVhMOExBODl4T3c4c25CMWQ5ZUE0dGJw?=
+ =?utf-8?B?T1I0dHBMYkd3ZjV6cG9hSEZqSUtUUWxHN1plaFBUWEVCUWMvajFUTG5pcHZ1?=
+ =?utf-8?B?b0hOalZIdVd0UmlVNVlPQkkxSXNkZFJoYm1iVTEzT2V6R1dYTjdkQXF3UXNh?=
+ =?utf-8?B?eGVDL2NxM2dNVmRnVmlQVTZHUGpLeXJVK1RZZHNpdWJEZ1lkbEw4NXFUT1lR?=
+ =?utf-8?B?L0t6SW01aHdsMS84c1F3NHNrU0tPQlRJcW5MdDNGVldqZnpQQUs5aDVKSTVV?=
+ =?utf-8?B?RG8vYU42dDgzUml2emF2czlBQU91YXprUjBWYVdoVFR3eHNweThnM1NFakIz?=
+ =?utf-8?B?UnB1OXRSZ0dpRHJBQ2ovVnNzeTh5WWd4QzVTRkYzVWY4b1dBNU8rSk1CVEZ1?=
+ =?utf-8?B?bmdvWVYxdEFoWUlpMW9ZRkR4UnJyRkROckJIWEczT3d6VlVraTlSRHBVcDRS?=
+ =?utf-8?B?QW4rN1c1cVVGU1E4aXBTRUZ6NFZMZXg3TkxVdEVWTnVzck0vNmgyK21ERzd0?=
+ =?utf-8?B?T1hpT0VUdHFScER5L0piRnNuQnlyNzVVK0JMRzNYdzVGdW55aFIxcXl6M2FR?=
+ =?utf-8?B?WFIwVjl3S3hob1NZN1dOQWw5SFZLMTk2Y05YZXRiQmkzVXovcUoxMVZ5Y3FJ?=
+ =?utf-8?B?OGRndWdUNmJ5M1E5SkdLWHpoQzVnVnFubmpoQUQ1R0tQM2hCY0xRajhjNGZx?=
+ =?utf-8?B?d3FDN3BveXNCN1lPV1RiSkR1MFBWSTdHcHBNL3pVRkhkTkVCOVM0Zz09?=
+X-OriginatorOrg: silabs.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80ff1d11-f157-4afe-1c38-08da37d6b132
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5657.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 07:27:26.4070
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 54dbd822-5231-4b20-944d-6f4abcd541fb
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: S+htM7EoKnOpWlr/TjYK+dfJjCStA84uweWyDCW7HDymiycAJ2NtfSQglrcjKxKFCZCU/WuWg/+0OCoDoJCb7g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB2047
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,133 +129,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on jack-fs/fsnotify]
-[also build test WARNING on pcmoore-audit/next linux/master linus/master v5.18-rc7 next-20220516]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220517-044904
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220517/202205171508.anzweWlm-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4d1fc23ae264424a2007ef5a3cfc1b4dbc8d82db
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220517-044904
-        git checkout 4d1fc23ae264424a2007ef5a3cfc1b4dbc8d82db
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash fs/notify/fanotify/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/m68k/include/asm/bug.h:32,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/m68k/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from arch/m68k/include/asm/irqflags.h:6,
-                    from include/linux/irqflags.h:16,
-                    from arch/m68k/include/asm/atomic.h:6,
-                    from include/linux/atomic.h:7,
-                    from include/linux/rcupdate.h:25,
-                    from include/linux/sysctl.h:26,
-                    from include/linux/fanotify.h:5,
-                    from fs/notify/fanotify/fanotify_user.c:2:
-   fs/notify/fanotify/fanotify_user.c: In function 'process_access_response':
->> fs/notify/fanotify/fanotify_user.c:325:18: warning: format '%lu' expects argument of type 'long unsigned int', but argument 8 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-     325 |         pr_debug("%s: group=%p fd=%d response=%u type=%u size=%lu\n", __func__,
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:336:21: note: in definition of macro 'pr_fmt'
-     336 | #define pr_fmt(fmt) fmt
-         |                     ^~~
-   include/linux/dynamic_debug.h:152:9: note: in expansion of macro '__dynamic_func_call'
-     152 |         __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
-     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:570:9: note: in expansion of macro 'dynamic_pr_debug'
-     570 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:325:9: note: in expansion of macro 'pr_debug'
-     325 |         pr_debug("%s: group=%p fd=%d response=%u type=%u size=%lu\n", __func__,
-         |         ^~~~~~~~
-   fs/notify/fanotify/fanotify_user.c:325:65: note: format string is defined here
-     325 |         pr_debug("%s: group=%p fd=%d response=%u type=%u size=%lu\n", __func__,
-         |                                                               ~~^
-         |                                                                 |
-         |                                                                 long unsigned int
-         |                                                               %u
-
-
-vim +325 fs/notify/fanotify/fanotify_user.c
-
-   316	
-   317	static int process_access_response(struct fsnotify_group *group,
-   318					   struct fanotify_response *response_struct,
-   319					   size_t count)
-   320	{
-   321		struct fanotify_perm_event *event;
-   322		int fd = response_struct->fd;
-   323		u32 response = response_struct->response;
-   324	
- > 325		pr_debug("%s: group=%p fd=%d response=%u type=%u size=%lu\n", __func__,
-   326			 group, fd, response, response_struct->extra_info_type, count);
-   327		if (fd < 0)
-   328			return -EINVAL;
-   329		/*
-   330		 * make sure the response is valid, if invalid we do nothing and either
-   331		 * userspace can send a valid response or we will clean it up after the
-   332		 * timeout
-   333		 */
-   334		if (FAN_INVALID_RESPONSE_MASK(response))
-   335			return -EINVAL;
-   336		if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
-   337			return -EINVAL;
-   338		if (response & FAN_EXTRA) {
-   339			if (count < offsetofend(struct fanotify_response, extra_info_type))
-   340				return -EINVAL;
-   341			switch (response_struct->extra_info_type) {
-   342			case FAN_RESPONSE_INFO_NONE:
-   343				break;
-   344			case FAN_RESPONSE_INFO_AUDIT_RULE:
-   345				if (count < offsetofend(struct fanotify_response, extra_info))
-   346					return -EINVAL;
-   347				break;
-   348			default:
-   349				return -EINVAL;
-   350			}
-   351		}
-   352		spin_lock(&group->notification_lock);
-   353		list_for_each_entry(event, &group->fanotify_data.access_list,
-   354				    fae.fse.list) {
-   355			if (event->fd != fd)
-   356				continue;
-   357	
-   358			list_del_init(&event->fae.fse.list);
-   359			finish_permission_event(group, event, response_struct);
-   360			wake_up(&group->fanotify_data.access_waitq);
-   361			return 0;
-   362		}
-   363		spin_unlock(&group->notification_lock);
-   364	
-   365		return -ENOENT;
-   366	}
-   367	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+RnJvbTogSsOpcsO0bWUgUG91aWxsZXIgPGplcm9tZS5wb3VpbGxlckBzaWxhYnMuY29tPgoKVGhl
+IHR5cGVkZWZzIHUzMiBhbmQgdTY0IGFyZSBub3QgYXZhaWxhYmxlIGluIHVzZXJzcGFjZS4gVGh1
+cyB1c2VyIGdldAphbiBlcnJvciBoZSB0cnkgdG8gdXNlIERNQV9CVUZfU0VUX05BTUVfQSBvciBE
+TUFfQlVGX1NFVF9OQU1FX0I6CgogICAgJCBnY2MgLVdhbGwgICAtYyAtTU1EIC1jIC1vIGlvY3Rs
+c19saXN0Lm8gaW9jdGxzX2xpc3QuYwogICAgSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC91c3IvaW5j
+bHVkZS94ODZfNjQtbGludXgtZ251L2FzbS9pb2N0bC5oOjEsCiAgICAgICAgICAgICAgICAgICAg
+IGZyb20gL3Vzci9pbmNsdWRlL2xpbnV4L2lvY3RsLmg6NSwKICAgICAgICAgICAgICAgICAgICAg
+ZnJvbSAvdXNyL2luY2x1ZGUvYXNtLWdlbmVyaWMvaW9jdGxzLmg6NSwKICAgICAgICAgICAgICAg
+ICAgICAgZnJvbSBpb2N0bHNfbGlzdC5jOjExOgogICAgaW9jdGxzX2xpc3QuYzo0NjM6Mjk6IGVy
+cm9yOiDigJh1MzLigJkgdW5kZWNsYXJlZCBoZXJlIChub3QgaW4gYSBmdW5jdGlvbikKICAgICAg
+NDYzIHwgICAgIHsgIkRNQV9CVUZfU0VUX05BTUVfQSIsIERNQV9CVUZfU0VUX05BTUVfQSwgLTEs
+IC0xIH0sIC8vIGxpbnV4L2RtYS1idWYuaAogICAgICAgICAgfCAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+CiAgICBpb2N0bHNfbGlzdC5jOjQ2NDoyOTogZXJy
+b3I6IOKAmHU2NOKAmSB1bmRlY2xhcmVkIGhlcmUgKG5vdCBpbiBhIGZ1bmN0aW9uKQogICAgICA0
+NjQgfCAgICAgeyAiRE1BX0JVRl9TRVRfTkFNRV9CIiwgRE1BX0JVRl9TRVRfTkFNRV9CLCAtMSwg
+LTEgfSwgLy8gbGludXgvZG1hLWJ1Zi5oCiAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn4KClRoZSBpc3N1ZSB3YXMgaW5pdGlhbGx5IHJlcG9y
+dGVkIGhlcmVbMV0uCgpbMV06IGh0dHBzOi8vZ2l0aHViLmNvbS9qZXJvbWUtcG91aWxsZXIvaW9j
+dGwvcHVsbC8xNAoKU2lnbmVkLW9mZi1ieTogSsOpcsO0bWUgUG91aWxsZXIgPGplcm9tZS5wb3Vp
+bGxlckBzaWxhYnMuY29tPgotLS0KIGluY2x1ZGUvdWFwaS9saW51eC9kbWEtYnVmLmggfCA0ICsr
+LS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZm
+IC0tZ2l0IGEvaW5jbHVkZS91YXBpL2xpbnV4L2RtYS1idWYuaCBiL2luY2x1ZGUvdWFwaS9saW51
+eC9kbWEtYnVmLmgKaW5kZXggOGU0YTJjYTBiY2JmLi5iMTUyM2NiOGFiMzAgMTAwNjQ0Ci0tLSBh
+L2luY2x1ZGUvdWFwaS9saW51eC9kbWEtYnVmLmgKKysrIGIvaW5jbHVkZS91YXBpL2xpbnV4L2Rt
+YS1idWYuaApAQCAtOTIsNyArOTIsNyBAQCBzdHJ1Y3QgZG1hX2J1Zl9zeW5jIHsKICAqIGJldHdl
+ZW4gdGhlbSBpbiBhY3R1YWwgdWFwaSwgdGhleSdyZSBqdXN0IGRpZmZlcmVudCBudW1iZXJzLgog
+ICovCiAjZGVmaW5lIERNQV9CVUZfU0VUX05BTUUJX0lPVyhETUFfQlVGX0JBU0UsIDEsIGNvbnN0
+IGNoYXIgKikKLSNkZWZpbmUgRE1BX0JVRl9TRVRfTkFNRV9BCV9JT1coRE1BX0JVRl9CQVNFLCAx
+LCB1MzIpCi0jZGVmaW5lIERNQV9CVUZfU0VUX05BTUVfQglfSU9XKERNQV9CVUZfQkFTRSwgMSwg
+dTY0KQorI2RlZmluZSBETUFfQlVGX1NFVF9OQU1FX0EJX0lPVyhETUFfQlVGX0JBU0UsIDEsIF9f
+dTMyKQorI2RlZmluZSBETUFfQlVGX1NFVF9OQU1FX0IJX0lPVyhETUFfQlVGX0JBU0UsIDEsIF9f
+dTY0KQogCiAjZW5kaWYKLS0gCjIuMzUuMQoK

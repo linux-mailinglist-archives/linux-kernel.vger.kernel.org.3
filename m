@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46C352A942
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0226652A950
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351446AbiEQR3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 13:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S1351457AbiEQRd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 13:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351428AbiEQR3n (ORCPT
+        with ESMTP id S1351447AbiEQRdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 13:29:43 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B0B36B71;
-        Tue, 17 May 2022 10:29:41 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24HHTaQK003334;
-        Tue, 17 May 2022 12:29:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652808576;
-        bh=deD3EIje9Vyk7QFSHVfQAyeVCw4AXB48R+C+3n6GWRY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=q0DMtRozylqsCsX1qt3C73A+iz8Jq80paOwGlzbF0YOHctcqMsVo2a6syy7F1eeEn
-         OmIx5mUbL4LTLxkCZS6BZIh33m9cOfo8mcroi+6X8jrKhbnRlZsV9YEEVP0jnlnjTT
-         43IqCI0wb27HeUL9SgiJut4vDasCgoBLT14jFPic=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24HHTa5m108805
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 May 2022 12:29:36 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 17
- May 2022 12:29:35 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 17 May 2022 12:29:35 -0500
-Received: from localhost.localdomain (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24HHTRYE079003;
-        Tue, 17 May 2022 12:29:32 -0500
-From:   Keerthy <j-keerthy@ti.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <amitk@kernel.org>, <kristo@kernel.org>
-CC:     <j-keerthy@ti.com>, <rafael@kernel.org>,
-        <linux-pm@vger.kernel.org>, <vigneshr@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v9 1/2] dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
-Date:   Tue, 17 May 2022 22:59:19 +0530
-Message-ID: <20220517172920.10857-2-j-keerthy@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220517172920.10857-1-j-keerthy@ti.com>
-References: <20220517172920.10857-1-j-keerthy@ti.com>
+        Tue, 17 May 2022 13:33:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B6E23A18E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:33:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652808804;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LGLIFlTQ2OG0Nit+kOZYpbPmMvBDDMh/ziDLpygha+E=;
+        b=i4pQegMjADJUz20HOFBJN7TwR/hT7gjcGQd6Y0br+RcxSPb3cDP3TD4E1pby+BqhnuZmvB
+        SxSlpfxXkSG7mmVlUHnxIYTAWnfZhJw/rZvhbMD7Arc0qGbAZqBdNfML6R7lzb5EB8/V6K
+        GRgyJyzHmm4ke0XPwQO9rzaSqNzf+s8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-296-IzFfBergOc-7ZtGOxWWsKg-1; Tue, 17 May 2022 13:33:22 -0400
+X-MC-Unique: IzFfBergOc-7ZtGOxWWsKg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3462685A5BE;
+        Tue, 17 May 2022 17:33:21 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.8.76])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F570492C14;
+        Tue, 17 May 2022 17:33:19 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     liuhangbin@gmail.com
+Cc:     andy@greyhouse.net, davem@davemloft.net, dsahern@gmail.com,
+        eric.dumazet@gmail.com, j.vosburgh@gmail.com, jtoppins@redhat.com,
+        kuba@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzbot+92beb3d46aab498710fa@syzkaller.appspotmail.com,
+        vfalico@gmail.com, vladimir.oltean@nxp.com,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2 net] bonding: fix missed rcu protection
+Date:   Tue, 17 May 2022 13:32:58 -0400
+Message-Id: <a4ed2a83d38a58b0984edb519382c867204b7ea2.1652804144.git.jtoppins@redhat.com>
+In-Reply-To: <20220517082312.805824-1-liuhangbin@gmail.com>
+References: <20220517082312.805824-1-liuhangbin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,91 +66,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add VTM bindings documentation. In the Voltage Thermal
-Management Module(VTM), K3 J72XX supplies a voltage
-reference and a temperature sensor feature that are gathered in the band
-gap voltage and temperature sensor (VBGAPTS) module. The band
-gap provides current and voltage reference for its internal
-circuits and other analog IP blocks. The analog-to-digital
-converter (ADC) produces an output value that is proportional
-to the silicon temperature.
-
-Signed-off-by: Keerthy <j-keerthy@ti.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
 ---
- .../bindings/thermal/ti,j72xx-thermal.yaml    | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+RESEND, list still didn't receive my last version
 
-diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-new file mode 100644
-index 000000000000..c74f124ebfc0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+The diffstat is slightly larger but IMO a slightly more readable version.
+When I was reading v2 I found myself jumping around.
+I only compile tested it, so YMMV.
+
+If this amount of change is too much v2 from Hangbin looks correct to
+me.
+
+ drivers/net/bonding/bond_main.c | 31 ++++++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 38e152548126..f9d27b63c454 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -5591,23 +5591,32 @@ static int bond_ethtool_get_ts_info(struct net_device *bond_dev,
+ 	const struct ethtool_ops *ops;
+ 	struct net_device *real_dev;
+ 	struct phy_device *phydev;
++	int ret = 0;
+ 
++	rcu_read_lock();
+ 	real_dev = bond_option_active_slave_get_rcu(bond);
+-	if (real_dev) {
+-		ops = real_dev->ethtool_ops;
+-		phydev = real_dev->phydev;
+-
+-		if (phy_has_tsinfo(phydev)) {
+-			return phy_ts_info(phydev, info);
+-		} else if (ops->get_ts_info) {
+-			return ops->get_ts_info(real_dev, info);
+-		}
+-	}
++	if (real_dev)
++		dev_hold(real_dev);
++	rcu_read_unlock();
 +
-+title: Texas Instruments J72XX VTM (DTS) binding
++	if (!real_dev)
++		goto software;
+ 
++	ops = real_dev->ethtool_ops;
++	phydev = real_dev->phydev;
 +
-+maintainers:
-+  - Keerthy <j-keerthy@ti.com>
++	if (phy_has_tsinfo(phydev))
++		ret = phy_ts_info(phydev, info);
++	else if (ops->get_ts_info)
++		ret = ops->get_ts_info(real_dev, info);
 +
-+properties:
-+  compatible:
-+    enum:
-+      - ti,j721e-vtm
-+      - ti,j7200-vtm
++	dev_put(real_dev);
++	return ret;
 +
-+  reg:
-+    items:
-+      - description: VTM cfg1 register space
-+      - description: VTM cfg2 register space
-+      - description: VTM efuse register space
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - power-domains
-+  - "#thermal-sensor-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-+    wkup_vtm0: thermal-sensor@42040000 {
-+        compatible = "ti,j721e-vtm";
-+        reg = <0x42040000 0x350>,
-+              <0x42050000 0x350>,
-+              <0x43000300 0x10>;
-+        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-+        #thermal-sensor-cells = <1>;
-+    };
-+
-+    mpu_thermal: mpu-thermal {
-+        polling-delay-passive = <250>; /* milliseconds */
-+        polling-delay = <500>; /* milliseconds */
-+        thermal-sensors = <&wkup_vtm0 0>;
-+
-+        trips {
-+            mpu_crit: mpu-crit {
-+                temperature = <125000>; /* milliCelsius */
-+                hysteresis = <2000>; /* milliCelsius */
-+                type = "critical";
-+            };
-+        };
-+    };
-+...
++software:
+ 	info->so_timestamping = SOF_TIMESTAMPING_RX_SOFTWARE |
+ 				SOF_TIMESTAMPING_SOFTWARE;
+ 	info->phc_index = -1;
+-
+ 	return 0;
+ }
+ 
 -- 
-2.17.1
+2.27.0
 

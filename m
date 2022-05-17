@@ -2,242 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDD352AA30
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1361152AA3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351964AbiEQSMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S1352011AbiEQSMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352098AbiEQSMG (ORCPT
+        with ESMTP id S1351994AbiEQSMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:12:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC153A461;
-        Tue, 17 May 2022 11:12:05 -0700 (PDT)
-Date:   Tue, 17 May 2022 18:12:03 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652811124;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zT74IsFjaBGYnYr73/KQVUxvkSUQ5oNAQYBdO3Q7jRM=;
-        b=N5JYoh+EFxF5TZv0a0WLc0vxD0lG1Zm39ojKLWmbG/2+lazu8MhUg99xUpteKUCf2V1V8m
-        HYW6+td34S18aB6kX+kmdYkp5LKUYc03zy8KI2Gxw1wxvnCdRRY4317mu7GDEpZf0HzJ1z
-        nyrMKJwyBrCa1Abm6m6NJDVhZUOvnGP53dGBg2dGhrhVe8ieQyvnsZqrhJtwPsHC3yB+uT
-        xQ4OVAH8f10q5S5aj1OqmQ9Jpn2yRa2g5HOcOBcXWPCvBWHOqzKTi8q3qIAHPYbhwiBt9F
-        gYT8JRhkuhKinfM51VnhryjswdYxq/EUMI3l62gQmQejhJlIGo33rbkhvAwEHw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652811124;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zT74IsFjaBGYnYr73/KQVUxvkSUQ5oNAQYBdO3Q7jRM=;
-        b=heus7phjg9FxtT7scbZONDYtBAzzjB8PBfXUVt2QJfIRZSwhzeBpKaektsnJ86xnS5WFmz
-        9mJ9SpNEcxK/dNAA==
-From:   "tip-bot2 for Reinette Chatre" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sgx] x86/sgx: Disconnect backing page references from dirty status
-Cc:     stable@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Haitao Huang <haitao.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cfa9f98986923f43e72ef4c6702a50b2a0b3c42e3=2E16523?=
- =?utf-8?q?89823=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
-References: =?utf-8?q?=3Cfa9f98986923f43e72ef4c6702a50b2a0b3c42e3=2E165238?=
- =?utf-8?q?9823=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
+        Tue, 17 May 2022 14:12:30 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8D551582
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:12:22 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id h17-20020a056602155100b0065aa0081429so12855037iow.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:12:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Aw7uWPlnCQDdmui5m+mgLu0Iob0U3Ta9YLf8ADEdGks=;
+        b=4JZfeBprAc90YALxaTkecPGR14VUKgFNsNonkbdeqJGgDcChMyYTrqPn+vvP6+sG4L
+         +Q/dSNvPlLOoRmoaMPdYO0Mbah12nZhPFqdSpNtFlreXtVWQeYcoOd3ElaxgRxnSqBvP
+         oZJN5FPiPHPGE2kwxYDT6kwVFnGUcZ1PcwgzYhJWc+yochn2yJKLbLYvR1ZHsumtg/Hk
+         eO7FaikWWLLhlsILFw9U05rCT4zAyxFZmvzM3XRM3zHOxO3b7nJl8EXCI7rc3xnlXQls
+         N4v4lLRr+aPSHGpgHn9FGDS7e4t4w1121Z3U4VkhviVHQpVHSPkIgQIFbru2NfRc0Xup
+         U/uA==
+X-Gm-Message-State: AOAM533YlK/p8tlB+7uBTQh5UhDE45o7ojGe0Lym2SqkctqHHDa+hRgP
+        9WDMWg9aKWJsDHKX7BBbew71X0CfrDDQxgM8sbd+0rdTJuEX
+X-Google-Smtp-Source: ABdhPJwCK5cHV8+sYepbR7Oy12L/Z261cSXDMON3P5HSx+Jeog9skRf1vYsCOtMs3VE/paQpDoTurjsh+fZRvYSM0UnByonVKa5J
 MIME-Version: 1.0
-Message-ID: <165281112316.4207.7499265545931946668.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:c898:0:b0:32e:120b:cdf9 with SMTP id
+ m24-20020a02c898000000b0032e120bcdf9mr9000904jao.158.1652811141946; Tue, 17
+ May 2022 11:12:21 -0700 (PDT)
+Date:   Tue, 17 May 2022 11:12:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ff239c05df391402@google.com>
+Subject: [syzbot] WARNING in nfnetlink_unbind
+From:   syzbot <syzbot+afd2d80e495f96049571@syzkaller.appspotmail.com>
+To:     ali.abdallah@suse.com, coreteam@netfilter.org, davem@davemloft.net,
+        edumazet@google.com, fw@strlen.de, kadlec@netfilter.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        ozsh@nvidia.com, pabeni@redhat.com, pablo@netfilter.org,
+        paulb@nvidia.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sgx branch of tip:
+Hello,
 
-Commit-ID:     6bd429643cc265e94a9d19839c771bcc5d008fa8
-Gitweb:        https://git.kernel.org/tip/6bd429643cc265e94a9d19839c771bcc5d008fa8
-Author:        Reinette Chatre <reinette.chatre@intel.com>
-AuthorDate:    Thu, 12 May 2022 14:50:57 -07:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Mon, 16 May 2022 15:15:51 -07:00
+syzbot found the following issue on:
 
-x86/sgx: Disconnect backing page references from dirty status
+HEAD commit:    f7b88d9ae91e Merge tag 'linux-can-next-for-5.19-20220516' ..
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14f791aef00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c05eee2efc702eed
+dashboard link: https://syzkaller.appspot.com/bug?extid=afd2d80e495f96049571
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ba8ae9f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ef1295f00000
 
-SGX uses shmem backing storage to store encrypted enclave pages
-and their crypto metadata when enclave pages are moved out of
-enclave memory. Two shmem backing storage pages are associated with
-each enclave page - one backing page to contain the encrypted
-enclave page data and one backing page (shared by a few
-enclave pages) to contain the crypto metadata used by the
-processor to verify the enclave page when it is loaded back into
-the enclave.
+The issue was bisected to:
 
-sgx_encl_put_backing() is used to release references to the
-backing storage and, optionally, mark both backing store pages
-as dirty.
+commit 2794cdb0b97bfe62d25c996c8afe4832207e78bc
+Author: Florian Westphal <fw@strlen.de>
+Date:   Mon Apr 25 13:15:41 2022 +0000
 
-Managing references and dirty status together in this way results
-in both backing store pages marked as dirty, even if only one of
-the backing store pages are changed.
+    netfilter: nfnetlink: allow to detect if ctnetlink listeners exist
 
-Additionally, waiting until the page reference is dropped to set
-the page dirty risks a race with the page fault handler that
-may load outdated data into the enclave when a page is faulted
-right after it is reclaimed.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13cb5bbef00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=102b5bbef00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17cb5bbef00000
 
-Consider what happens if the reclaimer writes a page to the backing
-store and the page is immediately faulted back, before the reclaimer
-is able to set the dirty bit of the page:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+afd2d80e495f96049571@syzkaller.appspotmail.com
+Fixes: 2794cdb0b97b ("netfilter: nfnetlink: allow to detect if ctnetlink listeners exist")
 
-sgx_reclaim_pages() {                    sgx_vma_fault() {
-  ...
-  sgx_encl_get_backing();
-  ...                                      ...
-  sgx_reclaimer_write() {
-    mutex_lock(&encl->lock);
-    /* Write data to backing store */
-    mutex_unlock(&encl->lock);
-  }
-                                           mutex_lock(&encl->lock);
-                                           __sgx_encl_eldu() {
-                                             ...
-                                             /*
-                                              * Enclave backing store
-                                              * page not released
-                                              * nor marked dirty -
-                                              * contents may not be
-                                              * up to date.
-                                              */
-                                              sgx_encl_get_backing();
-                                              ...
-                                              /*
-                                               * Enclave data restored
-                                               * from backing store
-                                               * and PCMD pages that
-                                               * are not up to date.
-                                               * ENCLS[ELDU] faults
-                                               * because of MAC or PCMD
-                                               * checking failure.
-                                               */
-                                               sgx_encl_put_backing();
-                                            }
-                                            ...
-  /* set page dirty */
-  sgx_encl_put_backing();
-  ...
-                                            mutex_unlock(&encl->lock);
-}                                        }
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3600 at net/netfilter/nfnetlink.c:703 nfnetlink_unbind net/netfilter/nfnetlink.c:703 [inline]
+WARNING: CPU: 0 PID: 3600 at net/netfilter/nfnetlink.c:703 nfnetlink_unbind+0x357/0x3b0 net/netfilter/nfnetlink.c:694
+Modules linked in:
+CPU: 0 PID: 3600 Comm: syz-executor186 Not tainted 5.18.0-rc6-syzkaller-01545-gf7b88d9ae91e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:nfnetlink_unbind net/netfilter/nfnetlink.c:703 [inline]
+RIP: 0010:nfnetlink_unbind+0x357/0x3b0 net/netfilter/nfnetlink.c:694
+Code: f9 48 c7 c2 00 0d d8 8a be b7 02 00 00 48 c7 c7 60 0d d8 8a c6 05 91 3d 14 06 01 e8 38 36 9b 01 e9 6e fd ff ff e8 09 66 e8 f9 <0f> 0b 41 c7 04 24 ff ff ff ff e9 9d fe ff ff e8 a5 7a 34 fa e9 dd
+RSP: 0018:ffffc90002e8fcf8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88801bd11d80 RSI: ffffffff8790d397 RDI: 0000000000000003
+RBP: ffffffff90947640 R08: 0000000000000000 R09: ffffc90002e8fc37
+R10: ffffffff8790d1e8 R11: 0000000000000001 R12: ffff8880230b4d20
+R13: ffff88814c73b000 R14: ffff888016aab518 R15: ffff888016aab000
+FS:  0000555557248300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020001280 CR3: 000000001f866000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ netlink_setsockopt+0x932/0xda0 net/netlink/af_netlink.c:1661
+ __sys_setsockopt+0x2db/0x6a0 net/socket.c:2227
+ __do_sys_setsockopt net/socket.c:2238 [inline]
+ __se_sys_setsockopt net/socket.c:2235 [inline]
+ __x64_sys_setsockopt+0xba/0x150 net/socket.c:2235
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f37f8e5faf9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffef051fc88 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f37f8e5faf9
+RDX: 0000000000000002 RSI: 000000000000010e RDI: 0000000000000003
+RBP: 00007f37f8e23ca0 R08: 0000000000000004 R09: 0000000000000000
+R10: 0000000020001280 R11: 0000000000000246 R12: 00007f37f8e23d30
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
-Remove the option to sgx_encl_put_backing() to set the backing
-pages as dirty and set the needed pages as dirty right after
-receiving important data while enclave mutex is held. This ensures that
-the page fault handler can get up to date data from a page and prepares
-the code for a following change where only one of the backing pages
-need to be marked as dirty.
 
-Cc: stable@vger.kernel.org
-Fixes: 1728ab54b4be ("x86/sgx: Add a page reclaimer")
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Tested-by: Haitao Huang <haitao.huang@intel.com>
-Link: https://lore.kernel.org/linux-sgx/8922e48f-6646-c7cc-6393-7c78dcf23d23@intel.com/
-Link: https://lkml.kernel.org/r/fa9f98986923f43e72ef4c6702a50b2a0b3c42e3.1652389823.git.reinette.chatre@intel.com
 ---
- arch/x86/kernel/cpu/sgx/encl.c | 10 ++--------
- arch/x86/kernel/cpu/sgx/encl.h |  2 +-
- arch/x86/kernel/cpu/sgx/main.c |  6 ++++--
- 3 files changed, 7 insertions(+), 11 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-index 7c63a19..398695a 100644
---- a/arch/x86/kernel/cpu/sgx/encl.c
-+++ b/arch/x86/kernel/cpu/sgx/encl.c
-@@ -94,7 +94,7 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
- 	kunmap_atomic(pcmd_page);
- 	kunmap_atomic((void *)(unsigned long)pginfo.contents);
- 
--	sgx_encl_put_backing(&b, false);
-+	sgx_encl_put_backing(&b);
- 
- 	sgx_encl_truncate_backing_page(encl, page_index);
- 
-@@ -645,15 +645,9 @@ int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
- /**
-  * sgx_encl_put_backing() - Unpin the backing storage
-  * @backing:	data for accessing backing storage for the page
-- * @do_write:	mark pages dirty
-  */
--void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write)
-+void sgx_encl_put_backing(struct sgx_backing *backing)
- {
--	if (do_write) {
--		set_page_dirty(backing->pcmd);
--		set_page_dirty(backing->contents);
--	}
--
- 	put_page(backing->pcmd);
- 	put_page(backing->contents);
- }
-diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
-index fec43ca..d44e737 100644
---- a/arch/x86/kernel/cpu/sgx/encl.h
-+++ b/arch/x86/kernel/cpu/sgx/encl.h
-@@ -107,7 +107,7 @@ void sgx_encl_release(struct kref *ref);
- int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
- int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
- 			 struct sgx_backing *backing);
--void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write);
-+void sgx_encl_put_backing(struct sgx_backing *backing);
- int sgx_encl_test_and_clear_young(struct mm_struct *mm,
- 				  struct sgx_encl_page *page);
- 
-diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-index 8e4bc64..e71df40 100644
---- a/arch/x86/kernel/cpu/sgx/main.c
-+++ b/arch/x86/kernel/cpu/sgx/main.c
-@@ -191,6 +191,8 @@ static int __sgx_encl_ewb(struct sgx_epc_page *epc_page, void *va_slot,
- 			  backing->pcmd_offset;
- 
- 	ret = __ewb(&pginfo, sgx_get_epc_virt_addr(epc_page), va_slot);
-+	set_page_dirty(backing->pcmd);
-+	set_page_dirty(backing->contents);
- 
- 	kunmap_atomic((void *)(unsigned long)(pginfo.metadata -
- 					      backing->pcmd_offset));
-@@ -320,7 +322,7 @@ static void sgx_reclaimer_write(struct sgx_epc_page *epc_page,
- 		sgx_encl_free_epc_page(encl->secs.epc_page);
- 		encl->secs.epc_page = NULL;
- 
--		sgx_encl_put_backing(&secs_backing, true);
-+		sgx_encl_put_backing(&secs_backing);
- 	}
- 
- out:
-@@ -411,7 +413,7 @@ skip:
- 
- 		encl_page = epc_page->owner;
- 		sgx_reclaimer_write(epc_page, &backing[i]);
--		sgx_encl_put_backing(&backing[i], true);
-+		sgx_encl_put_backing(&backing[i]);
- 
- 		kref_put(&encl_page->encl->refcount, sgx_encl_release);
- 		epc_page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

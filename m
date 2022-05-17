@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A689352A09A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049D452A0A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242852AbiEQLl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
+        id S244822AbiEQLmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231880AbiEQLlz (ORCPT
+        with ESMTP id S238852AbiEQLmp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:41:55 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D0F27FFE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:41:53 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id j24so9113432wrb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:41:53 -0700 (PDT)
+        Tue, 17 May 2022 07:42:45 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519BF27FFE
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:42:44 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 16so21421766lju.13
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:42:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=+DUMBwRnPHVrYaL6kEZ3uz/r3+Oyxm0IaH+DCCCsx84=;
-        b=bPI4vSnBSP28/nUgUDtt2F89yLw1MwKVa2XySzXFHR4qocSzHDurBPILO+uPIUQsiI
-         qrhMc6lhLiYs6BTSgWUgeULA9xgs0Dg0+8tVVmiSTMgj1FBbMOgJcWcImiMqoXUlciIF
-         yMmrzgTf/JRsqnYDEkZfMQu17baaeziPNgfWgMmRWDRqF2UB5GqNImwwSV5xCc/JrPkP
-         z+UsK1u5QSzJ0bY8dIxEFx3t4YY+coqz/OtOdmfrgrEyl+vdWD0NB7o2VidJXzEgWXea
-         o0+nHm03qP7jTGpwo+E8sTtKzp8YnycO6MN7PkYlAsErKAIXhuivotwX9c0wWgHDIlbP
-         wLlA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uj5rCEgrEME0641i65F/SbR6hoTPj4hzhlWTwqHQqWk=;
+        b=RcFydaN3PbLyev6mS4qntlxs4M51b7yJgGfZ8ex/bJuWNY0MSRmcIhwi52CSHHNZdN
+         ptBAimz8cIO2HJN9H/Ig0xRPIxLfJCNPWQ4+PPpm1u4UiJ/7LDS8rR/9UqByvZlpXKKd
+         PMrrZUBBzxyVPDbd6F8cBquq4HN7wkJ+jAm+nTco1smdGWT92QvDiX0L0QsGSXitoGY7
+         C/SMR6Bc4k4+9+KRvHwCh8OIsbvDO87DGgOvuIxuHz0qBdwCFF71dHc0k9MI41RKFExh
+         NSZ0DnGvT6jTrZMTXXuv6Wk56JTbW7jqg1PhfR6n3Dy2cKXOTTkR1xy69Z5mzIhThqpi
+         B+Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=+DUMBwRnPHVrYaL6kEZ3uz/r3+Oyxm0IaH+DCCCsx84=;
-        b=5kjgsZkhv56e6YskYGUpx1jMMz/4g+SxY+3xlbcpsa7dAQzhXL3Tk4BjGgJdi9TxwY
-         QpwQLA73ZAM3z3RCTYrXsoc+bRzGzFzbDhznNlfMVYA7wReYtyDGFyJYmrqg2+Fa860m
-         1VyReaqYmk/aTV17Ca0xD5PVOUbTb4kppjs13tLNB331UuVKa7+Tl1zuBKG8IW6j4Axg
-         vpN8ioyowePG3yj3OIdLXj1gluxvPYZxrKkf1OVP18uM4Vd2oK5POE7vbY1gkSnFgsgN
-         JInigm4aOGrvdgawbfKKjYGrE/inaLVwJkngAa38oSel6gVboKamRFEavcCVmE1KOrvQ
-         kcXw==
-X-Gm-Message-State: AOAM531Zd+Ab5voQVFLR2nvdwqnMXYZ1KHU0PxKWuuhjTF+Tf67+UgSP
-        mtwJYfrFuYIiFGjIXbvYxicUrg==
-X-Google-Smtp-Source: ABdhPJyWsqDkDnjgUydHlfprtuCEn64NfPwIVpRUETbc9yGZHtJEXgOTGwXN2fJY4jF6PrxA8woxMQ==
-X-Received: by 2002:adf:f106:0:b0:20d:20a:96e8 with SMTP id r6-20020adff106000000b0020d020a96e8mr11919213wro.495.1652787711855;
-        Tue, 17 May 2022 04:41:51 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id f26-20020a7bcd1a000000b003942a244ee2sm1599738wmj.39.2022.05.17.04.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 04:41:51 -0700 (PDT)
-Date:   Tue, 17 May 2022 12:41:49 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
-Message-ID: <YoOJ/T4QRKC+fAZE@google.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uj5rCEgrEME0641i65F/SbR6hoTPj4hzhlWTwqHQqWk=;
+        b=JxMTXoddkKet3WGKHeDtsqzAtYMQvcGo+j0BykjtVI7mDeZ4mlFNxGCeomSWSBSuEu
+         ti0ACdthV8mtf8VSUfNWca2Xv1R807R7bBVah+sNYZonTaFSaAqykqGyjvbPipexWr+O
+         JY+/S45vMKpxOxdkkLrrroeSPT3eCrdR5aIOLyn+5y3PgbleHAjC+iRvsAbPDn/NuG9r
+         PO/ZvLUwIHY2wWveiopsHkzvlfNSUFSc59dBlnFM2zReqLYBLgVma/Ceu7tmAPFqij+W
+         LFmI2f8zH5115DdSI+cgsYeF2QKvYSNh9BNytw7otTFO8itwHWHlFMVJ5gZfjsmhL1iy
+         Z3Zg==
+X-Gm-Message-State: AOAM532E7YD27AiXv3s5+zpyaXcMdCwoRYa6v7DI+Le/Dxa1W936fFAg
+        xSRI94kKJRL3jpOe0k2IuZEzwg==
+X-Google-Smtp-Source: ABdhPJxNGdUbUsF1H48W0SHvw7YaCknC4xl6XPByeWgTRCruMGoyqvNEwEBWhIoPpVCrhH3vfj0JpQ==
+X-Received: by 2002:a2e:81a:0:b0:250:a331:d0b1 with SMTP id 26-20020a2e081a000000b00250a331d0b1mr14297265lji.363.1652787762678;
+        Tue, 17 May 2022 04:42:42 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id j20-20020a2e8014000000b0024f3d1dae96sm1874136ljg.30.2022.05.17.04.42.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 04:42:42 -0700 (PDT)
+Message-ID: <2ce7a871-3e55-ae50-955c-bf04a443aba3@linaro.org>
+Date:   Tue, 17 May 2022 13:42:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net v2] NFC: hci: fix sleep in atomic context bugs in
+ nfc_hci_hcp_message_tx
+Content-Language: en-US
+To:     Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org
+Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, gregkh@linuxfoundation.org,
+        alexander.deucher@amd.com, broonie@kernel.org,
+        netdev@vger.kernel.org
+References: <20220517105526.114421-1-duoming@zju.edu.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517105526.114421-1-duoming@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,302 +77,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good afternoon Jens, Pavel, et al.,
+On 17/05/2022 12:55, Duoming Zhou wrote:
+> There are sleep in atomic context bugs when the request to secure
+> element of st21nfca is timeout. The root cause is that kzalloc and
+> alloc_skb with GFP_KERNEL parameter and mutex_lock are called in
+> st21nfca_se_wt_timeout which is a timer handler. The call tree shows
+> the execution paths that could lead to bugs:
+> 
+>    (Interrupt context)
+> st21nfca_se_wt_timeout
+>   nfc_hci_send_event
+>     nfc_hci_hcp_message_tx
+>       kzalloc(..., GFP_KERNEL) //may sleep
+>       alloc_skb(..., GFP_KERNEL) //may sleep
+>       mutex_lock() //may sleep
+> 
+> This patch changes allocation mode of kzalloc and alloc_skb from
+> GFP_KERNEL to GFP_ATOMIC and changes mutex_lock to spin_lock in
+> order to prevent atomic context from sleeping.
+> 
+> Fixes: 2130fb97fecf ("NFC: st21nfca: Adding support for secure element")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+> ---
+> Changes in v2:
+>   - Change mutex_lock to spin_lock.
+> 
+>  include/net/nfc/hci.h |  3 ++-
+>  net/nfc/hci/core.c    | 18 +++++++++---------
+>  net/nfc/hci/hcp.c     | 10 +++++-----
+>  3 files changed, 16 insertions(+), 15 deletions(-)
+> 
+> diff --git a/include/net/nfc/hci.h b/include/net/nfc/hci.h
+> index 756c11084f6..8f66e6e6b91 100644
+> --- a/include/net/nfc/hci.h
+> +++ b/include/net/nfc/hci.h
+> @@ -103,7 +103,8 @@ struct nfc_hci_dev {
+>  
+>  	bool shutting_down;
+>  
+> -	struct mutex msg_tx_mutex;
+> +	/* The spinlock is used to protect resources related with hci message TX */
+> +	spinlock_t msg_tx_spin;
+>  
+>  	struct list_head msg_tx_queue;
+>  
+> diff --git a/net/nfc/hci/core.c b/net/nfc/hci/core.c
+> index ceb87db57cd..fa22f9fe5fc 100644
+> --- a/net/nfc/hci/core.c
+> +++ b/net/nfc/hci/core.c
+> @@ -68,7 +68,7 @@ static void nfc_hci_msg_tx_work(struct work_struct *work)
+>  	struct sk_buff *skb;
+>  	int r = 0;
+>  
+> -	mutex_lock(&hdev->msg_tx_mutex);
+> +	spin_lock(&hdev->msg_tx_spin);
+>  	if (hdev->shutting_down)
+>  		goto exit;
 
-Not sure if you are presently aware, but there appears to be a
-use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
-in Stable v5.10.y.
+How did you test your patch?
 
-The full sysbot report can be seen below [0].
+Did you check, really check, that this can be an atomic (non-sleeping)
+section?
 
-The C-reproducer has been placed below that [1].
+I have doubts because I found at least one path leading to device_lock
+(which is a mutex) called within your new code.
 
-I had great success running this reproducer in an infinite loop.
+Before sending a new version, please wait for discussion to reach some
+consensus. The quality of these fixes is really poor. :(
 
-My colleague reverse-bisected the fixing commit to:
-
-  commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
-  Author: Jens Axboe <axboe@kernel.dk>
-  Date:   Fri Feb 26 09:47:20 2021 -0700
-
-       io-wq: have manager wait for all workers to exit
-
-       Instead of having to wait separately on workers and manager, just have
-       the manager wait on the workers. We use an atomic_t for the reference
-       here, as we need to start at 0 and allow increment from that. Since the
-       number of workers is naturally capped by the allowed nr of processes,
-       and that uses an int, there is no risk of overflow.
-
-       Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
-    fs/io-wq.c | 30 ++++++++++++++++++++++--------
-    1 file changed, 22 insertions(+), 8 deletions(-)
-
-I've had a go at back-porting this to v5.10.y, but due to the fact
-that the history has changed so much between v5.10 and the fixing
-commit, the dependency list became too large.
-
-As I'm sure you can imagine, v5.10.y is an important release.  Many
-devices depend on it as their foundation.
-
-Would you be able to help me solve this at all?
-
-As always, any help would be gratefully received.
-
-Kind regards,
-Lee
-
-[0]
-Link: https://groups.google.com/g/syzkaller-android-bugs/c/AHlBaNqM5Ao/m/v505LkOzDgAJ
-
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit: 0347b1658399 Merge 5.10.93 into android12-5.10-lts
-git tree: android12-5.10-lts
-console output: https://syzkaller.appspot.com/x/log.txt?x=15c5013db00000
-kernel config: https://syzkaller.appspot.com/x/.config?x=e0f3947457f8d2a4
-dashboard link: https://syzkaller.appspot.com/bug?extid=569a9f38546d62a570d2
-compiler: Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro: https://syzkaller.appspot.com/x/repro.syz?x=13ab16d0700000
-C reproducer: https://syzkaller.appspot.com/x/repro.c?x=15ac697bb00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+569a9f...@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:71 [inline]
-BUG: KASAN: use-after-free in atomic_read include/asm-generic/atomic-instrumented.h:27 [inline]
-BUG: KASAN: use-after-free in __fget_light fs/file.c:903 [inline]
-BUG: KASAN: use-after-free in __fdget_raw+0x57/0x1e0 fs/file.c:923
-Read of size 4 at addr ffff88811d4d0000 by task io_wqe_worker-0/374
-
-CPU: 1 PID: 374 Comm: io_wqe_worker-0 Not tainted 5.10.93-syzkaller-01028-g0347b1658399 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
-__dump_stack lib/dump_stack.c:77 [inline]
-dump_stack_lvl+0x1e2/0x24b lib/dump_stack.c:118
-print_address_description+0x8d/0x3d0 mm/kasan/report.c:233
-__kasan_report+0x142/0x220 mm/kasan/report.c:419
-kasan_report+0x51/0x70 mm/kasan/report.c:436
-check_region_inline mm/kasan/generic.c:135 [inline]
-kasan_check_range+0x2b6/0x2f0 mm/kasan/generic.c:186
-__kasan_check_read+0x11/0x20 mm/kasan/shadow.c:31
-instrument_atomic_read include/linux/instrumented.h:71 [inline]
-atomic_read include/asm-generic/atomic-instrumented.h:27 [inline]
-__fget_light fs/file.c:903 [inline]
-__fdget_raw+0x57/0x1e0 fs/file.c:923
-fdget_raw include/linux/file.h:70 [inline]
-path_init+0x6aa/0x1130 fs/namei.c:2347
-path_lookupat+0x2b/0x6c0 fs/namei.c:2403
-filename_lookup+0x23f/0x6c0 fs/namei.c:2446
-user_path_at_empty+0x40/0x50 fs/namei.c:2726
-user_path_at include/linux/namei.h:59 [inline]
-vfs_statx+0x10a/0x3f0 fs/stat.c:193
-do_statx+0xec/0x170 fs/stat.c:588
-io_statx fs/io_uring.c:4249 [inline]
-io_issue_sqe+0x2541/0xfc10 fs/io_uring.c:6086
-io_wq_submit_work+0x34c/0xf40 fs/io_uring.c:6155
-io_worker_handle_work+0x1558/0x1d90 fs/io-wq.c:573
-io_wqe_worker+0x39f/0xf20 fs/io-wq.c:615
-kthread+0x371/0x390 kernel/kthread.c:313
-ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
-
-Allocated by task 365:
-kasan_save_stack mm/kasan/common.c:38 [inline]
-kasan_set_track mm/kasan/common.c:46 [inline]
-set_alloc_info mm/kasan/common.c:428 [inline]
-__kasan_slab_alloc+0xb2/0xe0 mm/kasan/common.c:461
-kasan_slab_alloc include/linux/kasan.h:259 [inline]
-slab_post_alloc_hook mm/slab.h:583 [inline]
-slab_alloc_node mm/slub.c:2954 [inline]
-slab_alloc mm/slub.c:2962 [inline]
-kmem_cache_alloc+0x1a2/0x380 mm/slub.c:2967
-dup_fd+0x71/0xc60 fs/file.c:293
-copy_files kernel/fork.c:1517 [inline]
-copy_process+0x12a6/0x5340 kernel/fork.c:2139
-kernel_clone+0x21f/0x9a0 kernel/fork.c:2513
-__do_sys_clone kernel/fork.c:2632 [inline]
-__se_sys_clone kernel/fork.c:2616 [inline]
-__x64_sys_clone+0x258/0x2d0 kernel/fork.c:2616
-do_syscall_64+0x31/0x70 arch/x86/entry/common.c:46
-entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-Freed by task 366:
-kasan_save_stack mm/kasan/common.c:38 [inline]
-kasan_set_track+0x4c/0x80 mm/kasan/common.c:46
-kasan_set_free_info+0x23/0x40 mm/kasan/generic.c:357
-____kasan_slab_free+0x133/0x170 mm/kasan/common.c:360
-__kasan_slab_free+0x11/0x20 mm/kasan/common.c:368
-kasan_slab_free include/linux/kasan.h:235 [inline]
-slab_free_hook mm/slub.c:1602 [inline]
-slab_free_freelist_hook+0xcc/0x1a0 mm/slub.c:1628
-slab_free mm/slub.c:3210 [inline]
-kmem_cache_free+0xb5/0x1f0 mm/slub.c:3226
-put_files_struct+0x318/0x350 fs/file.c:434
-exit_files+0x80/0xa0 fs/file.c:458
-do_exit+0x6d9/0x23a0 kernel/exit.c:808
-do_group_exit+0x16a/0x2d0 kernel/exit.c:910
-__do_sys_exit_group+0x17/0x20 kernel/exit.c:921
-__se_sys_exit_group+0x14/0x20 kernel/exit.c:919
-__x64_sys_exit_group+0x3b/0x40 kernel/exit.c:919
-do_syscall_64+0x31/0x70 arch/x86/entry/common.c:46
-entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-The buggy address belongs to the object at ffff88811d4d0000
-which belongs to the cache files_cache of size 704
-The buggy address is located 0 bytes inside of
-704-byte region [ffff88811d4d0000, ffff88811d4d02c0)
-The buggy address belongs to the page:
-page:ffffea0004753400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x11d4d0
-head:ffffea0004753400 order:2 compound_mapcount:0 compound_pincount:0
-flags: 0x8000000000010200(slab|head)
-raw: 8000000000010200 dead000000000100 dead000000000122 ffff888100066f00
-raw: 0000000000000000 0000000080130013 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 357, ts 15953240908, free_ts 0
-set_page_owner include/linux/page_owner.h:35 [inline]
-post_alloc_hook mm/page_alloc.c:2385 [inline]
-prep_new_page mm/page_alloc.c:2391 [inline]
-get_page_from_freelist+0xa74/0xa90 mm/page_alloc.c:4063
-__alloc_pages_nodemask+0x3c8/0x820 mm/page_alloc.c:5106
-alloc_slab_page mm/slub.c:1813 [inline]
-allocate_slab+0x6b/0x350 mm/slub.c:1815
-new_slab mm/slub.c:1876 [inline]
-new_slab_objects mm/slub.c:2635 [inline]
-___slab_alloc+0x143/0x2f0 mm/slub.c:2798
-__slab_alloc mm/slub.c:2838 [inline]
-slab_alloc_node mm/slub.c:2920 [inline]
-slab_alloc mm/slub.c:2962 [inline]
-kmem_cache_alloc+0x26f/0x380 mm/slub.c:2967
-dup_fd+0x71/0xc60 fs/file.c:293
-copy_files kernel/fork.c:1517 [inline]
-copy_process+0x12a6/0x5340 kernel/fork.c:2139
-kernel_clone+0x21f/0x9a0 kernel/fork.c:2513
-__do_sys_clone kernel/fork.c:2632 [inline]
-__se_sys_clone kernel/fork.c:2616 [inline]
-__x64_sys_clone+0x258/0x2d0 kernel/fork.c:2616
-do_syscall_64+0x31/0x70 arch/x86/entry/common.c:46
-entry_SYSCALL_64_after_hwframe+0x44/0xa9
-page_owner free stack trace missing
-
-Memory state around the buggy address:
-ffff88811d4cff00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-ffff88811d4cff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88811d4d0000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-^
-ffff88811d4d0080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-ffff88811d4d0100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-============================
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzk...@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
-
-
-[1]
-
-#define _GNU_SOURCE
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <sched.h>
-#include <string.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/syscall.h>
-#include <sys/wait.h>
-#include <sys/shm.h>
-#include "io_uring.h"
-
-#ifndef __NR_io_uring_enter
-#define __NR_io_uring_enter 426
-#endif
-#ifndef __NR_io_uring_setup
-#define __NR_io_uring_setup 425
-#endif
-
-char filename[] = "./file0";
-
-int trigger(void *data) {
-	struct io_uring_params params = {};
-	int io_uring_fd = syscall(SYS_io_uring_setup, 0x200, &params);
-	if (io_uring_fd < 0) {
-		printf("io_uring_setup failed:%d\n", io_uring_fd);
-		exit(-1);
-	}
-	else {
-		printf("io_uring_setup success:%d\n", io_uring_fd);
-	}
-	uint32_t sq_ring_sz = params.sq_off.array + params.sq_entries * sizeof(uint32_t);
-	uint32_t cq_ring_sz = params.cq_off.cqes + params.cq_entries * sizeof(struct io_uring_cqe);
-	uint32_t ring_sz = sq_ring_sz > cq_ring_sz ? sq_ring_sz : cq_ring_sz;
-	unsigned char *sq_ring = mmap(NULL, ring_sz, PROT_READ | PROT_WRITE, MAP_SHARED, io_uring_fd,
-						IORING_OFF_SQ_RING);
-	uint32_t sqes_sz = params.sq_entries * sizeof(struct io_uring_sqe);
-	struct io_uring_sqe *sqes = mmap(NULL, sqes_sz, PROT_READ | PROT_WRITE,
-						MAP_SHARED, io_uring_fd, IORING_OFF_SQES);
-	if (sqes == MAP_FAILED && sq_ring == MAP_FAILED) {
-		perror("mmap");
-		exit(-1);
-	}
-	sqes[0] = (struct io_uring_sqe) {
-		.opcode = IORING_OP_MADVISE,
-		.flags = IOSQE_IO_LINK,
-		.addr = 0,
-		.user_data = 0x4000,
-	};
-	sqes[1] = (struct io_uring_sqe) {
-		.opcode = IORING_OP_STATX,
-		.fd = -1,
-		.addr = (unsigned long)filename,
-		.len = 1,
-		.rw_flags = 0x100,
-	};
-	((int *)(sq_ring + params.sq_off.array))[0] = 0;
-	((int *)(sq_ring + params.sq_off.array))[1] = 1;
-	for (int i = 2; i < 0x200; i++) {
-		((int *)(sq_ring + params.sq_off.array))[i] = 1;
-	}
-	(*(int *)(sq_ring + params.sq_off.tail)) += 0x200;
-	int submitted = syscall(SYS_io_uring_enter, io_uring_fd, 0x200, 0, 0, 0, 0);
-	close(io_uring_fd);
-	usleep(10000);
-	puts("exit");
-	exit(0);
-	return 0;
-}
-
-#define STACK_SIZE 1024 * 1024
-
-int main() {
-	char *stack, *stacktop;
-	pid_t pid;
-
-	stack = mmap(NULL, STACK_SIZE, PROT_READ | PROT_WRITE, 
-			MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, -1, 0);
-	if (stack == MAP_FAILED) {
-		perror("mmap stack");
-		exit(-1);
-	}
-	stacktop = stack + STACK_SIZE;
-	pid = clone(trigger, stacktop, CLONE_VM, NULL);
-	sleep(5);
-	return 0;
-}
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Best regards,
+Krzysztof

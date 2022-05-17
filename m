@@ -2,110 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D10529874
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CD6529873
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235499AbiEQD47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 23:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S229579AbiEQD5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 23:57:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236957AbiEQD4t (ORCPT
+        with ESMTP id S231331AbiEQD5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 23:56:49 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164E933E36;
-        Mon, 16 May 2022 20:56:47 -0700 (PDT)
-Received: from kwepemi500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L2Mhs2tGsz1JCVx;
-        Tue, 17 May 2022 11:55:25 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- kwepemi500022.china.huawei.com (7.221.188.64) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 11:56:44 +0800
-Received: from [10.67.101.67] (10.67.101.67) by kwepemm600003.china.huawei.com
- (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
- 2022 11:56:44 +0800
-Subject: Re: [PATCH 08/10] coresight: Remove legacy Trace ID allocation
- mechanism
-To:     Mike Leach <mike.leach@linaro.org>, <suzuki.poulose@arm.com>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <mathieu.poirier@linaro.org>, <peterz@infradead.org>,
-        <mingo@redhat.com>, <acme@kernel.org>,
-        <linux-perf-users@vger.kernel.org>, <leo.yan@linaro.org>
-References: <20220308205000.27646-1-mike.leach@linaro.org>
- <20220308205000.27646-9-mike.leach@linaro.org>
-From:   "liuqi (BA)" <liuqi115@huawei.com>
-Message-ID: <71c11820-433d-755d-0eb4-797313d693f9@huawei.com>
-Date:   Tue, 17 May 2022 11:56:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Mon, 16 May 2022 23:57:44 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E0134665
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:57:43 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id k16so9039255pff.5
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RA/GUWzgAi0lwcfXCy8dlx+jGczfHJXUzSsauTL7va8=;
+        b=BeY8zMiMW/X7WmzuCHmm965ikZQBIMdHFO0I2g7IFpQ/ePUkEQrrbK1b7NOv03NgJy
+         jUgWTBWWp3kBDafKOX1jHwQM0owBrZLkeuGN2XSMwL80ZByHsYivfiFBkgJwqxmQtTEB
+         32JfrkJUSOkiHW4FZ+uaFMe3qwYV1PWn0AOBU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RA/GUWzgAi0lwcfXCy8dlx+jGczfHJXUzSsauTL7va8=;
+        b=beHwn3lOUEGLTILx/jIrzaRIVV9sJYTe/FN0Z16XqRi1OWI9WTZo8lHS33DD9fz5ML
+         HQ8TDfRkJJ+4eVbLU8g8lYDGGA9DKHcP7lO4burtAAiAyGhP2vUHsviQkncTSx4R8Hu9
+         ULDyIVQ+9rDj9KeJoUPV+Wr0El+LkMGE04HilT8mDnBP9rDpXDrKqoFYC1ntLVHNb0pB
+         Tc0hoOup31//692NTfu82/iykRjpdNCWLXhPsAxjn+dY4BQC8ISLL7Rh9HL/P1cA1dA8
+         T5w/au8B2L+o2bY3iYmqSJ1lRQYWG2Fyz8hxSIhfeB2Rdo96lUHNJal6/3w0GsUXxOgb
+         F4LQ==
+X-Gm-Message-State: AOAM530GtoKRxEdif/zingi3ibuX/CKcqDWegwEJXegTZDRCWbnJoaFs
+        dwr4PXRWA8Z++5fyJozm+og5fjGtGfiv5Q==
+X-Google-Smtp-Source: ABdhPJx7EyLV14gnE/eybLsCaXASC+lPagUlZeJRA4bfE1u5jFeEF85vrcWSpco4cEgBtHask9Z3Bw==
+X-Received: by 2002:a63:1904:0:b0:3c6:3fd3:4c28 with SMTP id z4-20020a631904000000b003c63fd34c28mr17768518pgl.308.1652759863198;
+        Mon, 16 May 2022 20:57:43 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170902900100b0015e8d4eb2dfsm7711105plp.297.2022.05.16.20.57.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 20:57:42 -0700 (PDT)
+Date:   Mon, 16 May 2022 20:57:42 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Arend van Spriel <arend.vanspriel@broadcom.com>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 05/32] brcmfmac: Use mem_to_flex_dup() with struct
+ brcmf_fweh_queue_item
+Message-ID: <202205162056.F8D1BF3E@keescook>
+References: <20220504014440.3697851-1-keescook@chromium.org>
+ <20220504014440.3697851-6-keescook@chromium.org>
+ <b197ca6d-4285-5310-7e98-918c885a2e38@broadcom.com>
 MIME-Version: 1.0
-In-Reply-To: <20220308205000.27646-9-mike.leach@linaro.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.101.67]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b197ca6d-4285-5310-7e98-918c885a2e38@broadcom.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
+On Mon, May 16, 2022 at 02:49:21PM +0200, Arend van Spriel wrote:
+> On 5/4/2022 3:44 AM, Kees Cook wrote:
+> > As part of the work to perform bounds checking on all memcpy() uses,
+> > replace the open-coded a deserialization of bytes out of memory into a
+> > trailing flexible array by using a flex_array.h helper to perform the
+> > allocation, bounds checking, and copying.
+> > 
+> Reviewed-by: Arend van Spriel <aspriel@gmail.com>
 
-On 2022/3/9 4:49, Mike Leach wrote:
-> This static 'cpu * 2 + seed' was outdated and broken for systems with high
-> core counts (>46).
-> 
-> This has been replaced by a dynamic allocation system.
-> 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->   include/linux/coresight-pmu.h | 12 ------------
->   1 file changed, 12 deletions(-)
+Thanks!
 
-Seems coresight_get_trace_id() in tools/include/linux/coresight-pmu.h 
-need to be deleted too.
-
-Thanks,
-Qi
-
+> > [...]
+> > diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fweh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fweh.c
+> > index bc3f4e4edcdf..bea798ca6466 100644
+> > --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fweh.c
+> > +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/fweh.c
+> > @@ -32,8 +32,8 @@ struct brcmf_fweh_queue_item {
+> >   	u8 ifidx;
+> >   	u8 ifaddr[ETH_ALEN];
+> >   	struct brcmf_event_msg_be emsg;
+> > -	u32 datalen;
+> > -	u8 data[];
+> > +	DECLARE_FLEX_ARRAY_ELEMENTS_COUNT(u32, datalen);
+> > +	DECLARE_FLEX_ARRAY_ELEMENTS(u8, data);
+> >   };
+> > [...]
+> > @@ -414,8 +414,7 @@ void brcmf_fweh_process_event(struct brcmf_pub *drvr,
+> >   	    datalen + sizeof(*event_packet) > packet_len)
+> >   		return;
+> > -	event = kzalloc(sizeof(*event) + datalen, gfp);
+> > -	if (!event)
+> > +	if (mem_to_flex_dup(&event, data, datalen, gfp))
+> >   		return;
+> >   	event->code = code;
+> > @@ -423,8 +422,6 @@ void brcmf_fweh_process_event(struct brcmf_pub *drvr,
+> >   	/* use memcpy to get aligned event message */
+> >   	memcpy(&event->emsg, &event_packet->msg, sizeof(event->emsg));
+> > -	memcpy(event->data, data, datalen);
+> > -	event->datalen = datalen;
 > 
-> diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
-> index 4ac5c081af93..bb4eb4de3c77 100644
-> --- a/include/linux/coresight-pmu.h
-> +++ b/include/linux/coresight-pmu.h
-> @@ -8,7 +8,6 @@
->   #define _LINUX_CORESIGHT_PMU_H
->   
->   #define CORESIGHT_ETM_PMU_NAME "cs_etm"
-> -#define CORESIGHT_ETM_PMU_SEED  0x10
->   
->   /*
->    * Below are the definition of bit offsets for perf option, and works as
-> @@ -32,15 +31,4 @@
->   #define ETM4_CFG_BIT_RETSTK	12
->   #define ETM4_CFG_BIT_VMID_OPT	15
->   
-> -static inline int coresight_get_trace_id(int cpu)
-> -{
-> -	/*
-> -	 * A trace ID of value 0 is invalid, so let's start at some
-> -	 * random value that fits in 7 bits and go from there.  Since
-> -	 * the common convention is to have data trace IDs be I(N) + 1,
-> -	 * set instruction trace IDs as a function of the CPU number.
-> -	 */
-> -	return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
-> -}
-> -
->   #endif
+> So does mem_to_flex_dup() store event->datalen?
 > 
+> Don't have the entire thread so missing bits and pieces, but at least this
+> raises questions for me.
+
+Yes, that's part of the internal workings here -- the flex array counter
+is declared and will be set as part of the copy.
+
+-- 
+Kees Cook

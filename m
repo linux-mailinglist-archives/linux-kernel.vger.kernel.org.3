@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B2852A391
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A821052A390
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347992AbiEQNgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
+        id S1347961AbiEQNg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347975AbiEQNfs (ORCPT
+        with ESMTP id S1348152AbiEQNgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:35:48 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65170CF2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:35:46 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i19so34717589eja.11
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CczRdToQYyS79iXvOF9uezGc9FJnQwNkL8FC0j7GqZc=;
-        b=qa0WI3zitk4mo/vP9Tgu6LSAg4l9FD+vov9RuP5ZsrevoHrO6BGsT9PZZLR0s0C/ry
-         J74uOPc3PMXLsBoZ0snV+t2ugSnjriIVrvfmfJW5ROZkrO7etlFFBnmn5o6n8xlCEtOe
-         HMT3v77yUwOJI0Ag/OWI+KV0yZH/U1WpCAa7s=
+        Tue, 17 May 2022 09:36:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B15DB96
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652794572;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5P5WzWojyMXlDWaDvwnnFONKEvLDJzZaE27j1zka+wM=;
+        b=KT1lYCdQJOkk1gHVxfTFH1Ag6Fdxv7jkFvs6cinNeKxpxwhwzn/O+/X8ks7hoEYDkFqDgI
+        OZUKLeqaGERZWwBkp4IKfcljNisdmjmrc9XO9AgCKXv0Q0w67NUtrVT8WAFTLZrauZeyrj
+        hETdw9qJYdBocv79an78Ty6E+UwjqPU=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-558-ng0nEt7xMDK0hIozOOMOzQ-1; Tue, 17 May 2022 09:36:04 -0400
+X-MC-Unique: ng0nEt7xMDK0hIozOOMOzQ-1
+Received: by mail-qt1-f200.google.com with SMTP id f12-20020a05622a1a0c00b002f3b5acc2e7so13849856qtb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:36:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CczRdToQYyS79iXvOF9uezGc9FJnQwNkL8FC0j7GqZc=;
-        b=ftlfSOVnBdGifOkE7kHGv2xJrcVrDI5lZ+SoUjp2F9RmaU7RjmDQy7Vgt4VKbRrJ4n
-         1qJf7HCQiyfr15mbwpm2kbzZxsscjPDIFEatb84PjQUyB+/t07zbvogHJ3JDrnkhTmTy
-         0J1qvrZU0zh3qxbayKRzlsQk2Z/doNiH62qKDPySNYgm1q9yszjwCvDRPe06ClDK/V/z
-         jm6yA/omOftBL1izoNeZxIG59h+ioyvXvc5amIrPSqdNWfzpghR0o0yX3gRnBNivs25l
-         SmfE5zG7hHwM/FpAGfSzQRB1YXq9/17W8NQw6QFOhdx+vYZdyuWCtm7BRa4i180q8r9c
-         YdPQ==
-X-Gm-Message-State: AOAM532LI0LfIX/P9oxwK6wLAJblS1eV2CrqA8h9O/UxFhnXREqLWeOt
-        2z7iZa4hVBdFzrlvPJl6P8shjw==
-X-Google-Smtp-Source: ABdhPJyD21G2He0F3CPkBtOh7TINXtxAfy7CevKrvtEdyM5j0DLCSLTKCJ4IqkSMmDe5Tn1vj7Yy+A==
-X-Received: by 2002:a17:906:4795:b0:6f3:d1cc:7127 with SMTP id cw21-20020a170906479500b006f3d1cc7127mr20325899ejc.461.1652794544802;
-        Tue, 17 May 2022 06:35:44 -0700 (PDT)
-Received: from panicking.amarulasolutions.com (mob-176-245-91-171.net.vodafone.it. [176.245.91.171])
-        by smtp.gmail.com with ESMTPSA id jl28-20020a17090775dc00b006f50ceabcb8sm1051398ejc.102.2022.05.17.06.35.42
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5P5WzWojyMXlDWaDvwnnFONKEvLDJzZaE27j1zka+wM=;
+        b=G6XaOVAgRDPH49mGWN21tlK/L2LYH2KfKhW+AHMEJflZ9LMjJucQSBOKiYXTNVXriR
+         FumLdCxHqq9tOC0YwsO0pZujEBR9oASBhrBUDznr7Dz69V14GeuoA9yYbsoeckvjXA39
+         m6DgO04CrqZA10hYvPyt5afTDnmdedxdjybLS8+Wc2G06u9fWEGSgwrRF4/2eOZKYriJ
+         34AjjVaH4edj8H+dwE4cmJJBv/c2CMmdfjmfv4P0VX3ZJnaJADmHGRa3736fKwPGnBCm
+         J55hIwciOi7jabFLSd+O8RjgbiHqsE+N27PnGsoEEkZ1cyqPkt9YkUlCxe7rFdeAaHCN
+         wSBg==
+X-Gm-Message-State: AOAM5335hBwhGK9LWTEk+0gjnkSkSEKzKqX1WRTng30ZhY1rjb2Qd/XT
+        YpOLGxWrm+4EE/9bSlUOIVC6/BJA9c8U++TcahkfvTLRoHEcwsFZekm4Fa/g/tj3uHp8h42pgE+
+        uKvRSALRi3H4PvT8iWU2idvfQ
+X-Received: by 2002:a05:6214:29e9:b0:45a:c341:baaf with SMTP id jv9-20020a05621429e900b0045ac341baafmr19881082qvb.77.1652794563776;
+        Tue, 17 May 2022 06:36:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyEdc5eDHOjlBpS8FPC+AOzBoHQp0zSLnPR5J0xOEFYvmjviuh3P28nkrVwstGyAbD+Qf1rPg==
+X-Received: by 2002:a05:6214:29e9:b0:45a:c341:baaf with SMTP id jv9-20020a05621429e900b0045ac341baafmr19881031qvb.77.1652794563247;
+        Tue, 17 May 2022 06:36:03 -0700 (PDT)
+Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
+        by smtp.gmail.com with ESMTPSA id x2-20020a376302000000b0069fc13ce1e8sm7575349qkb.25.2022.05.17.06.36.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 06:35:43 -0700 (PDT)
-From:   Michael Trimarchi <michael@amarulasolutions.com>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-amarula@amarulasolutions.com,
+        Tue, 17 May 2022 06:36:02 -0700 (PDT)
+Date:   Tue, 17 May 2022 09:36:01 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Simon Holesch <simon.holesch@bshg.com>
-Subject: [PATCH] arm: dts: imx6ulz-bsh-smm-m2: Support proper board power off
-Date:   Tue, 17 May 2022 15:35:40 +0200
-Message-Id: <20220517133540.2456987-1-michael@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] phy: qcom-qmp: Add SC8280XP USB3 UNI phy
+Message-ID: <YoOkwZAH7EM9AUop@xps13>
+References: <20220513225348.1671639-1-bjorn.andersson@linaro.org>
+ <20220513225348.1671639-4-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513225348.1671639-4-bjorn.andersson@linaro.org>
+User-Agent: Mutt/2.2.1 (2022-02-19)
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,30 +82,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Simon Holesch <simon.holesch@bshg.com>
+On Fri, May 13, 2022 at 03:53:48PM -0700, Bjorn Andersson wrote:
+> The SC8280XP platform has two instances of the 5nm USB3 UNI phy attached
+> to the multi-port USB controller, add definition for these.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Supports initiating poweroff on SNVS_PMIC_ON_REQ signal.
+I verified that these match what's in the downstream sources for the
+sa8540p.
 
-Signed-off-by: Simon Holesch <simon.holesch@bshg.com>
----
- arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts b/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
-index 59bcfc9a6b10..c92e4e2f6ab9 100644
---- a/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
-+++ b/arch/arm/boot/dts/imx6ulz-bsh-smm-m2.dts
-@@ -29,6 +29,10 @@ &gpmi {
- 	status = "okay";
- };
- 
-+&snvs_poweroff {
-+	status = "okay";
-+};
-+
- &uart3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart3>;
--- 
-2.25.1
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 

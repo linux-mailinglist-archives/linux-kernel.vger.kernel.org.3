@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1CE52AABF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F34652AAC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352134AbiEQS1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
+        id S238919AbiEQS2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351900AbiEQS1r (ORCPT
+        with ESMTP id S1352065AbiEQS1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:27:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325BB3A5EC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:27:47 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nr1up-0006SK-Go; Tue, 17 May 2022 20:27:27 +0200
-Message-ID: <51473b0c-657e-9661-c9e1-5a066c5719d3@pengutronix.de>
-Date:   Tue, 17 May 2022 20:27:22 +0200
+        Tue, 17 May 2022 14:27:51 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2D649F1E;
+        Tue, 17 May 2022 11:27:50 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id i8so4157411plr.13;
+        Tue, 17 May 2022 11:27:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qf7lwYbb+YmEy4Sdln94RYRUHzXpgvgkHrp5ukF/qtk=;
+        b=bExLHaOgI9hzmShhcx+3FrTFTHywGjHpDNkaL1enjGCdwKtwptC3WJ8JqGRyGb7+i3
+         LkdhWIv9iMTvjFZihYAieiUyOJasWm6OMHFQ+GSxr8HgX6fj2aKVLcARvxYJ5ik4oST6
+         fkeDy2JqRFFpJKYhXx9TqhwqT1T4ZDmPl052ttR24JfGpVxCrk2uMWKKX7gxx/LjPCVU
+         Cb1dKVQKMgGyAtw634vDUaqLkCRIqZ5i+WOkVW0TnRaS69+Ajw9NLnSs0cAdVLrMjt+n
+         2LIQprGOCthHvYdBQEF1FY0wFYICUfAMS0RHgU2rmsWDyrA29tv2bjr1ueOFFqCIn626
+         Petg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Qf7lwYbb+YmEy4Sdln94RYRUHzXpgvgkHrp5ukF/qtk=;
+        b=6Tqqi+quEbSAd5/57qDOflaQBRdV0S15VwD3GPr/KcfDE52sCYMRp8zKmfElUmO/wb
+         yLVY3Y6wVfevEY79kVZa36I0rpVX7Bj5CJIfsj1U7iqqqE7Fag9gCp+Syte3+D0K+7W9
+         KlpdNyzU+JiPw/REF4Oq76KXuVvCE3FJiQ4epsOHZ8hWScvoF3DLRNS/hAvZNjZrKKjK
+         Spykicbf+mZslfbrQm6n2QlktM7hwttXOGSeOMj3iyjvSd2QI4qkG9lX3Q2cZoheoHe+
+         MsGJ/m35PEqNKU/ne2OCEEd2DcLTkJrI3go+IpdpNb86B2h9Ren77n9sVLFeXVqbb4x/
+         u3Vw==
+X-Gm-Message-State: AOAM533VdAobdEvwJC/bBLpHjh19CbblQPs+JOAK3tuQz+suV79r7jwM
+        TBRSHR/LdbTw0IB7pJ+OC6qdoVuw4ho=
+X-Google-Smtp-Source: ABdhPJxtaH8iWUJqH+nTzrJd+eTcXj/31uRvWBWafFUUBsRF+lVpnf52IWewqOlemGArt/JodSHyhA==
+X-Received: by 2002:a17:90b:4a42:b0:1dc:6bfa:bc40 with SMTP id lb2-20020a17090b4a4200b001dc6bfabc40mr25770930pjb.215.1652812069527;
+        Tue, 17 May 2022 11:27:49 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170902d88c00b0015e8d4eb1fasm9538656plz.68.2022.05.17.11.27.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 11:27:49 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     stable@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Nishad Kamdar <nishadkamdar@gmail.com>,
+        =?UTF-8?q?Christian=20L=C3=B6hle?= <CLoehle@hyperstone.com>,
+        linux-mmc@vger.kernel.org (open list:MULTIMEDIA CARD (MMC), SECURE
+        DIGITAL (SD) AND...), linux-kernel@vger.kernel.org (open list),
+        alcooperx@gmail.com, kdasu.kdev@gmail.com
+Subject: [PATCH stable 4.14 0/3] MMC timeout back ports
+Date:   Tue, 17 May 2022 11:27:43 -0700
+Message-Id: <20220517182746.252893-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v10 2/7] KEYS: trusted: allow use of kernel RNG for key
- material
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        David Gstir <david@sigma-star.at>,
-        Michael Walle <michael@walle.cc>,
-        John Ernberg <john.ernberg@actia.se>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
- <20220513145705.2080323-3-a.fatoum@pengutronix.de>
- <YoPa7C8xs8lgKtwv@zx2c4.com>
- <21250bc0-623b-f11d-7dbf-458d144b7963@pengutronix.de>
- <YoPizavHFXHah2z3@zx2c4.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <YoPizavHFXHah2z3@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jason,
+These 3 commits from upstream allow us to have more fine grained control
+over the MMC command timeouts and this solves the following timeouts
+that we have seen on our systems across suspend/resume cycles:
 
-On 17.05.22 20:00, Jason A. Donenfeld wrote:
-> On Tue, May 17, 2022 at 07:52:51PM +0200, Ahmad Fatoum wrote:
->> The trusted keys module is trusted.ko and directly before my added lines is
->> the trusted.source=  documentation, so I think this is already at the correct place.
-> 
-> My apologies; I should have looked at the file itself instead of just
-> relying on git line context. You're right, the module itself is called
-> trusted.ko. This is confusing (shouldn't it be trusted_keys or
-> something?)
-
-Encrypted keys are encrypted-keys.ko, so ye, trusted.ko is a bit unfortunate..
-
-> , but what you propose sounds consistent from a namespacing
-> perspective with what's already there.
+[   14.907496] usb usb2: root hub lost power or was reset
+[   15.216232] usb 1-1: reset high-speed USB device number 2 using
+xhci-hcd
+[   15.485812] bcmgenet 8f00000.ethernet eth0: Link is Down
+[   15.525328] mmc1: error -110 doing runtime resume
+[   15.531864] OOM killer enabled.
 
 Thanks!
-Ahmad
 
-> 
-> Jason
-> 
+Ulf Hansson (3):
+  mmc: core: Specify timeouts for BKOPS and CACHE_FLUSH for eMMC
+  mmc: block: Use generic_cmd6_time when modifying
+    INAND_CMD38_ARG_EXT_CSD
+  mmc: core: Default to generic_cmd6_time as timeout in __mmc_switch()
 
+ drivers/mmc/core/block.c   |  6 +++---
+ drivers/mmc/core/mmc_ops.c | 27 ++++++++++++++-------------
+ 2 files changed, 17 insertions(+), 16 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
+

@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6D0529EE8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59E9529EE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343618AbiEQKKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S1343543AbiEQKJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343711AbiEQKK1 (ORCPT
+        with ESMTP id S240124AbiEQKHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:10:27 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D52B48E5C;
-        Tue, 17 May 2022 03:08:17 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id m12so16908832plb.4;
-        Tue, 17 May 2022 03:08:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :organization;
-        bh=nSi8lK2ej4jIE2r69Kt4C5FMLn19t1lg4OcZ7Ppi7IU=;
-        b=UWfYE+cpD9WMJu9KnJuygH3cS+SM3blxo0BVKxeZelk2xlsTyaklywaJVMXsx78o1I
-         e7NLkGSQPUa7m5xcJ4WY7cDx01SSVqDjzIw1FQYlGfXCXsI+40h2/hVVrsgvqWfJ0hcz
-         pC9QyV3mTFWk0VonSIC1kUSs7JuOnJwSy4C6e7rBo3hwy3MGVhdmzI8wNV59hfub/Tu9
-         A7rAFlb4r44YbnrFU1nbwZC+dSJJ/SGeWbRrc7VIyO5j25rTMqxYAbrRNTvVZPys/sXB
-         2u7gQP7/txtGSqwiT20JKgRrj8IJw3pXPCTcFRQMu74mz/mGcdHDLXXmtpFmCLaLllnP
-         FPug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:organization;
-        bh=nSi8lK2ej4jIE2r69Kt4C5FMLn19t1lg4OcZ7Ppi7IU=;
-        b=dG5kPtzYZrMXTlDhOsdEWmSTVnby1M6vVSPuWjAmp7LK7zJV+DDLROPBWSir+sZeaM
-         a3v6j8BHl+lru0c/gzsb6JkiBRprN9t95HdxlOtv/jtJPfIDeae9eOh6FGAGR7gA3Ke0
-         01cBbObRLlgwUwXJnY3RTEJXGdcEoezkJhN/H9EOYLc+6FrbqmufLpjxAMQ7z+nxFGqz
-         rpBdgz9wX9OjpSG8vLtdyA/Mc4fFiY3g6MPmXfwiaHnC5+yUFzBgoOpL7frAAFooeP7/
-         8lNk9AoNrlmEpRRebCuk3BZ1b71kmCHYV0a3nC+iGZWxe8fDlhv7unUEyl5b9PPo4zzP
-         fXlQ==
-X-Gm-Message-State: AOAM530/BTnJbXt4jsZOxKHAxMwDweKY7u7y11GSO2DkTG0tZivDjG8v
-        HDwqN6ZMPEPslysOraCBKK8CcM9NapalkzZQ
-X-Google-Smtp-Source: ABdhPJxgo0Wpy3KbEIsntRkAH+/+GKHFDPPdJ5mefTYTF58kO0wQA3UMMkLkCE2pprzLUInzPxu1Aw==
-X-Received: by 2002:a17:902:e84d:b0:15e:b0af:477b with SMTP id t13-20020a170902e84d00b0015eb0af477bmr21452788plg.49.1652782096536;
-        Tue, 17 May 2022 03:08:16 -0700 (PDT)
-Received: from localhost.localdomain ([219.91.171.244])
-        by smtp.googlemail.com with ESMTPSA id a10-20020a631a0a000000b003c6ab6ba06csm8202595pga.79.2022.05.17.03.08.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 03:08:16 -0700 (PDT)
-From:   Dharmendra Singh <dharamhans87@gmail.com>
-To:     miklos@szeredi.hu, vgoyal@redhat.com
-Cc:     Dharmendra Singh <dharamhans87@gmail.com>,
-        linux-fsdevel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, bschubert@ddn.com,
-        Dharmendra Singh <dsingh@ddn.com>
-Subject: [PATCH v5 3/3] FUSE: Implement atomic lookup + open
-Date:   Tue, 17 May 2022 15:37:44 +0530
-Message-Id: <20220517100744.26849-4-dharamhans87@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220517100744.26849-1-dharamhans87@gmail.com>
-References: <20220517100744.26849-1-dharamhans87@gmail.com>
-Organization: DDN STORAGE
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Tue, 17 May 2022 06:07:52 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55E82CDE2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:07:50 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (174-21-163-222.tukw.qwest.net [174.21.163.222])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 05B9E48B;
+        Tue, 17 May 2022 03:07:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1652782070;
+        bh=7/tSQcJTwFlAYZHGtTGrf3lNts+XD/u1WDbgTy1/QUE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dtOrTtJckFMCgB1Kh/uKzZFiJTssUMa2AnTJ557wFFDA0lC0NeVbCReLIqNVRj4WI
+         oRpRAKh+LlvUMDY2l2aWPXJH1SEHC23TLCjXCIRrZ4HurkFSU0XnwGDsbF3s0jA0WQ
+         4tok2RfF7GhCzV1W4hZ5C+5xobLfDLI7z1mzbMF8=
+Date:   Tue, 17 May 2022 03:07:48 -0700
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Mark Brown <broonie@kernel.org>, Chanwoo Choi <cwchoi00@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        openbmc@lists.ozlabs.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v2 2/2] extcon: Add extcon-regulator driver
+Message-ID: <YoNz9NPLkYSd8i/s@hatter.bewilderbeest.net>
+References: <20220505232557.10936-1-zev@bewilderbeest.net>
+ <20220505232557.10936-3-zev@bewilderbeest.net>
+ <e27ff1b2-c82f-8335-340f-ae1fa914ed30@gmail.com>
+ <YnkyIBh2HnXXLHw3@sirena.org.uk>
+ <CGME20220517010322epcas1p45d7fdaa06d23f07533350b7d0cf9e9d6@epcas1p4.samsung.com>
+ <YoL0UGR+TiZojL9Y@hatter.bewilderbeest.net>
+ <bc6595c8-5f05-ac2c-63e0-f442f9ec83be@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc6595c8-5f05-ac2c-63e0-f442f9ec83be@samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,233 +61,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can optimize aggressive lookups which are triggered when
-there is normal open for file/dir (dentry is new/negative).
+On Mon, May 16, 2022 at 08:15:31PM PDT, Chanwoo Choi wrote:
+> Hi Mark, Zev,
+> 
+> On 5/17/22 10:03 AM, Zev Weiss wrote:
+> > [Adding Sebastian for drivers/power discussion]
+> > 
+> > On Mon, May 09, 2022 at 08:24:16AM PDT, Mark Brown wrote:
+> >> On Mon, May 09, 2022 at 09:24:39PM +0900, Chanwoo Choi wrote:
+> >>> Hi Zev,
+> >>>
+> >>> I checked this patch. But, it doesn't look like the extcon provider
+> >>> driver. Because basically, extcon provider driver need the circuit
+> >>> in order to detect the kind of external connector. But, there are
+> >>> no any code for detection. Just add the specific sysfs attribute
+> >>> for only this driver. It is not standard interface.
+> >>
+> >> OTOH it's something where if I look at the physical system with the
+> >> hardware there's a clearly visible external connector that I can point
+> >> to - it just happens to not support hotplug.  It's not clear what other
+> >> system it would sit in, and it seems like an application that displays
+> >> external connections on a system in a UI would be able to do something
+> >> sensible with it.
+> > 
+> > Chanwoo, any further thoughts on Mark's reasoning above?
+> > 
+> > I certainly understand the reluctance to add an extcon driver that 
+> > doesn't really do anything with the extcon API, and I have no idea when 
+> > we might end up enhancing it to do something more meaningful with that 
+> > API (I don't know of any hardware at the moment that would need it).
+> > 
+> > That said, as Mark points out, the hardware *is* ultimately an "external 
+> > connector" (if a very simplistic one).
+> > 
+> > Do you have any other ideas for where this functionality could go?  Greg 
+> > wasn't enthusiastic about a previous revision that had it in 
+> > drivers/misc -- though now a fair amount of what was in that version is 
+> > now going to be in the regulator core, so maybe that could be 
+> > reconsidered?
+> > 
+> > Or maybe something under drivers/power, though it's not really a supply 
+> > or a reset device...drivers/power/output.c or something?
+> > 
+> > Personally I don't have any terribly strong opinions on this, I'd just 
+> > like to reach a mutually-agreeable consensus on a place for it to live.
+> > 
+> 
+> After Mark's reply, I considered extcon provider driver without hotplug
+> feature. I think that extcon need to support the following something:
+> 
+> 1. Need to specify the type of external connector instead of EXTCON_NONE.
+> 2. extcon subsystem provides the standard sysfs interface
+>    for non-hotplug extcon provider driver.
+> 3. User can control the state of external connector via
+>    the standard extcon sysfs attributes.
+> 
+> 
+> For example of extcon provider driver,
+> static const unsigned int supported_cables[] = {
+> 	EXTCON_USB,
+> 	EXTCON_NONE,
+> };
+> 
+> int extcon_usb_callback(int connector_id, int property_id, int state, void *data) {
+> 	struct extcon_dev *edev = data;
+> 
+> 	if (id == EXTCON_USB && property_id == EXTCON_NOT_HOTPLUG) {
+> 		regulator_enable() or regulator_disable()
+> 	}
+> 
+> 	return 0;
+> }
+> 
+> int extcon_provider_probe(...) {
+> 	edev = devm_extcon_dev_allocate(dev, supported_cables);
+> 
+> 	devm_extcon_dev_register(dev, edev);
+> 
+> 	extcon_set_property_capability(edev, EXTCON_USB, EXTCON_NOT_HOTPLUG);
+> 	extcon_set_property_callback(edev, EXTCON_USB, extcon_usb_callback);
+> 
+> 	...
+> }
+> 
+> And then user can change the state of each external connector
+> via '/sys/class/extcon/extcon0/cable.0/state' 
+> if cable.0 contains the EXTCON_NOT_HOTPLUG property.
+> 
+> I'm designing this approach. But it has not yet decided
+> because try to check that this approach is right or not.
+> 
 
-Here in this case since we are anyway going to open the file/dir
-with USER SPACE, avoid this separate lookup call into libfuse
-and combine it with open call into libfuse.
+Okay, so if I'm understanding correctly we'd be using the extcon 
+subsystem's existing attached/detached state to model (and control) the 
+on/off state of the power output?
 
-This lookup + open in single call to libfuse has been named
-as atomic open. It is expected that USER SPACE opens the file
-and fills in the attributes, which are then used to make inode
-stand/revalidate in the kernel cache.
+That could work for the particular hardware I'm dealing with at the 
+moment, though I'd be a bit concerned that conflating the two might 
+constrain things in the future if there's some similar but slightly more 
+sophisticated hardware we'd want to extend the same driver to support.  
+For example on a power connector with some capability for presence 
+detection, we might want to be able to support "attached but powered 
+off" as a valid state for it to be in -- would the above approach be 
+able to do that?
 
-Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
----
- fs/fuse/dir.c             | 109 ++++++++++++++++++++++++++++----------
- fs/fuse/fuse_i.h          |   3 ++
- include/uapi/linux/fuse.h |   2 +-
- 3 files changed, 84 insertions(+), 30 deletions(-)
 
-diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index 517c9add014d..cb99e529b3e9 100644
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -516,14 +516,15 @@ static int get_security_context(struct dentry *entry, umode_t mode,
- }
- 
- /*
-- * Atomic create+open operation
-+ * If user has not implemented create ext or Atomic open + lookup
-+ * then fall back to usual Atomic create/open operations.
-  *
-- * If the filesystem doesn't support this, then fall back to separate
-- * 'mknod' + 'open' requests.
-+ * If the filesystem doesn't support Atomic create + open, then
-+ * fall back to separate 'mknod' + 'open' requests.
-  */
- static int fuse_atomic_common(struct inode *dir, struct dentry *entry,
--			      struct file *file, unsigned int flags,
--			      umode_t mode, uint32_t opcode)
-+			      struct dentry **alias, struct file *file,
-+			      unsigned int flags, umode_t mode, uint32_t opcode)
- {
- 	int err;
- 	struct inode *inode;
-@@ -538,10 +539,21 @@ static int fuse_atomic_common(struct inode *dir, struct dentry *entry,
- 	struct dentry *res = NULL;
- 	void *security_ctx = NULL;
- 	u32 security_ctxlen;
--	bool ext_create = (opcode == FUSE_CREATE_EXT ? true : false);
-+	bool simple_create = (opcode == FUSE_CREATE ? true : false);
-+	bool create_ops = (simple_create || opcode == FUSE_CREATE_EXT) ?
-+			   true : false;
-+	bool skipped_lookup = (opcode == FUSE_CREATE_EXT ||
-+			       opcode == FUSE_ATOMIC_OPEN) ? true : false;
-+
-+	if (alias)
-+		*alias = NULL;
- 
- 	/* Userspace expects S_IFREG in create mode */
--	BUG_ON((mode & S_IFMT) != S_IFREG);
-+	if (create_ops && (mode & S_IFMT) != S_IFREG) {
-+		WARN_ON(1);
-+		err = -EINVAL;
-+		goto out_err;
-+	}
- 
- 	forget = fuse_alloc_forget();
- 	err = -ENOMEM;
-@@ -616,33 +628,38 @@ static int fuse_atomic_common(struct inode *dir, struct dentry *entry,
- 	}
- 	kfree(forget);
- 	/*
--	 * In extended create, fuse_lookup() was skipped, which also uses
--	 * d_splice_alias(). As we come directly here after picking up dentry
--	 * it is very much likely that dentry has DCACHE_PAR_LOOKUP flag set
--	 * on it so call d_splice_alias().
-+	 * In extended create/atomic open, fuse_lookup() is skipped which also
-+	 * uses d_splice_alias(). As we come directly here after picking up
-+	 * dentry it is very much likely that dentry has DCACHE_PAR_LOOKUP flag
-+	 * set on it so call d_splice_alias().
- 	 */
--	if (!ext_create && !d_in_lookup(entry))
--		d_instantiate(entry, inode);
--	else {
-+	if (skipped_lookup) {
- 		res = d_splice_alias(inode, entry);
--		if (IS_ERR(res)) {
--			/* Close the file in user space, but do not unlink it,
--			 * if it was created - with network file systems other
--			 * clients might have already accessed it.
--			 */
--			fi = get_fuse_inode(inode);
--			fuse_sync_release(fi, ff, flags);
--			fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
--			err = PTR_ERR(res);
--			goto out_err;
-+		if (res) {
-+			if (IS_ERR(res)) {
-+				/* Close the file in user space, but do not unlink it,
-+				 * if it was created - with network file systems other
-+				 * clients might have already accessed it.
-+				 */
-+				fi = get_fuse_inode(inode);
-+				fuse_sync_release(fi, ff, flags);
-+				fuse_queue_forget(fm->fc, forget, outentry.nodeid, 1);
-+				err = PTR_ERR(res);
-+				goto out_err;
-+			}
-+			entry = res;
-+			if (alias)
-+				*alias = res;
- 		}
--	}
-+	} else
-+		d_instantiate(entry, inode);
-+
- 	fuse_change_entry_timeout(entry, &outentry);
- 	/*
- 	 * This should be always set when the file is created, but only
- 	 * CREATE_EXT introduced FOPEN_FILE_CREATED to user space.
- 	 */
--	if (!ext_create || (outopen.open_flags & FOPEN_FILE_CREATED)) {
-+	if (simple_create || (outopen.open_flags & FOPEN_FILE_CREATED)) {
- 		fuse_dir_changed(dir);
- 		file->f_mode |= FMODE_CREATED;
- 	}
-@@ -674,7 +691,7 @@ static int fuse_create_ext(struct inode *dir, struct dentry *entry,
- 	if (fc->no_create_ext)
- 		return -ENOSYS;
- 
--	err = fuse_atomic_common(dir, entry, file, flags, mode,
-+	err = fuse_atomic_common(dir, entry, NULL, file, flags, mode,
- 				 FUSE_CREATE_EXT);
- 	/* If ext create is not implemented then indicate in fc so that next
- 	 * request falls back to normal create instead of going into libufse and
-@@ -687,6 +704,31 @@ static int fuse_create_ext(struct inode *dir, struct dentry *entry,
- 	return err;
- }
- 
-+static int fuse_do_atomic_open(struct inode *dir, struct dentry *entry,
-+				struct dentry **alias, struct file *file,
-+				unsigned int flags, umode_t mode)
-+{
-+	int err;
-+	struct fuse_conn *fc = get_fuse_conn(dir);
-+
-+	if (fc->no_atomic_open)
-+		return -ENOSYS;
-+
-+	err = fuse_atomic_common(dir, entry, alias, file, flags, mode,
-+				 FUSE_ATOMIC_OPEN);
-+
-+	/* Set if atomic open not implemented */
-+	if (err == -ENOSYS) {
-+		if (!fc->no_atomic_open)
-+			fc->no_atomic_open = 1;
-+
-+	} else if (!fc->atomic_o_trunc) {
-+		/* If atomic open is set then imply atomic truncate as well */
-+		fc->atomic_o_trunc = 1;
-+	}
-+	return err;
-+}
-+
- static int fuse_mknod(struct user_namespace *, struct inode *, struct dentry *,
- 		      umode_t, dev_t);
- static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
-@@ -695,13 +737,22 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
- {
- 	int err;
- 	struct fuse_conn *fc = get_fuse_conn(dir);
--	struct dentry *res = NULL;
-+	struct dentry *res = NULL, *alias = NULL;
- 	bool create = flags & O_CREAT ? true : false;
- 
- 	if (fuse_is_bad(dir))
- 		return -EIO;
- 
-+	if (!create && !fc->no_atomic_open) {
-+		err = fuse_do_atomic_open(dir, entry, &alias,
-+					  file, flags, mode);
-+		res = alias;
-+		if (err != -ENOSYS)
-+			goto out_dput;
-+	}
-+
- lookup:
-+	/* Fall back to open- user space does not have full atomic open */
- 	if ((!create || fc->no_create_ext) && d_in_lookup(entry)) {
- 		res = fuse_lookup(dir, entry, 0);
- 		if (IS_ERR(res))
-@@ -723,7 +774,7 @@ static int fuse_atomic_open(struct inode *dir, struct dentry *entry,
- 		if (err == -ENOSYS)
- 			goto lookup;
- 	} else
--		err = fuse_atomic_common(dir, entry, file, flags, mode,
-+		err = fuse_atomic_common(dir, entry, NULL, file, flags, mode,
- 					 FUSE_CREATE);
- 	if (err == -ENOSYS) {
- 		fc->no_create = 1;
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 266133dcab5e..949c230e14c7 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -675,6 +675,9 @@ struct fuse_conn {
- 	 */
- 	unsigned no_create_ext:1;
- 
-+	/** Is atomic open implemented by fs ? */
-+	unsigned no_atomic_open : 1;
-+
- 	/** Is opendir/releasedir not implemented by fs? */
- 	unsigned no_opendir:1;
- 
-diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-index bebe4be3f1cb..f4c94e5bbffc 100644
---- a/include/uapi/linux/fuse.h
-+++ b/include/uapi/linux/fuse.h
-@@ -540,7 +540,7 @@ enum fuse_opcode {
- 	FUSE_REMOVEMAPPING	= 49,
- 	FUSE_SYNCFS		= 50,
- 	FUSE_CREATE_EXT		= 51,
--
-+	FUSE_ATOMIC_OPEN	= 52,
- 	/* CUSE specific operations */
- 	CUSE_INIT		= 4096,
- 
--- 
-2.17.1
+Thanks,
+Zev
 

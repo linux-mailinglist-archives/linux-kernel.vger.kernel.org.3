@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8962952A5AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3D652A5B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349671AbiEQPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        id S1349688AbiEQPK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349634AbiEQPJV (ORCPT
+        with ESMTP id S241061AbiEQPKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:09:21 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ACE3BA5E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:09:19 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id gg20so7584787pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:09:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=c37zykIbAvjFJYeekhN1tO9l8rsyfkhDhDABYYW7ubQ=;
-        b=IyKFIEv664GQuHoUUrx8MniZCSQahLCVahex0zoQ5/eIc3vMbL1OFDDhDNKk1nYTxn
-         swUcZfWl4f7dml8rPzm9rxDkHB2h/REMY9zKXWzgbt30Pn9TdQ1KvwE0MpnxhpWIQ0vC
-         CZXwCKrOF3OJ/FGH4HVr3rOP8poNBCFgCok4/hef7l9NZz04lX7KEMEjtKQcM7ByFP4L
-         LsM5wrJE6BVsKID61tcU/8ogohaf5IAPbnMb9dRSkXDgoFXl26LvfPoTsi8lsOd1gTB5
-         bLAuCEPBZU9JFDjRnDlqDau87RI48xnsfZGr7EP7ghv54bBagq8QHmp26XUkKtAdqOpW
-         B4Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=c37zykIbAvjFJYeekhN1tO9l8rsyfkhDhDABYYW7ubQ=;
-        b=HFgUV2iAU02B9RGCN5pBxn/Yk/wxDKGGcsgpEp6ylIoUwaUsT8V87ZMD9HUkGcfgfw
-         wTaz66e9uZqyayG4DSPWRlwO954ROHAyooQePKT3T28GCDtVp3oMPQQzmiKDmh8ROUzz
-         ZkTngr3eDgvqyZ73v1my+oXVKFLfDgJRToW1sSgkHF3xHQHTHIckVRJWn+vS+AdggYNX
-         OMKxQZy687UeJYCBDqoSxGzq5kAU+Z+/89Dw1nuJFFsbUm9/MJu1qYe1HYgZr3djDrjT
-         Qj64hcj6ErQpeKEqvJN0B11JiuYx2tfA0stH1I4Bd4RN7Ewz95J73fiM+0Zh+dC6YJxF
-         X+TA==
-X-Gm-Message-State: AOAM533H/0r8LlgwvDR2OoOJd9Dj9cnt1oarEnc3N5OEotpLmIIu2pmP
-        3bP0rWKtcZ4B8QmUXZMx+gT2
-X-Google-Smtp-Source: ABdhPJwXpnFf4RpEJB6ZM9C6d1HomdLU+ojRr/GSDmdjVh21K4qNzcEPWLJs85sZ4veBB/fpoL88ZA==
-X-Received: by 2002:a17:90b:3a86:b0:1dc:2343:2429 with SMTP id om6-20020a17090b3a8600b001dc23432429mr25390497pjb.206.1652800158569;
-        Tue, 17 May 2022 08:09:18 -0700 (PDT)
-Received: from thinkpad ([117.207.31.8])
-        by smtp.gmail.com with ESMTPSA id c12-20020a170902c2cc00b0015e8d4eb1ebsm9230630pla.53.2022.05.17.08.09.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 08:09:18 -0700 (PDT)
-Date:   Tue, 17 May 2022 20:39:08 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com, kbusch@kernel.org,
-        hch@lst.de, linux-nvme@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, svarbanov@mm-sol.com,
-        bjorn.andersson@linaro.org, axboe@fb.com,
-        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
-        quic_nitirawa@quicinc.com, vidyas@nvidia.com, sagi@grimberg.me
-Subject: Re: [PATCH 1/3] PCI: Add a flag to notify PCI drivers about
- powerdown during suspend
-Message-ID: <20220517150908.GA4528@thinkpad>
-References: <20220513110027.31015-2-manivannan.sadhasivam@linaro.org>
- <20220516201817.GA1047280@bhelgaas>
+        Tue, 17 May 2022 11:10:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC5A3BBE4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10E306167C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F4FC385B8;
+        Tue, 17 May 2022 15:10:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652800221;
+        bh=W9gM3dHcyJ8mhIJXhDEEP1pKOSlJKU41dtmN3UaOQak=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=C9ZGpKilUesMylP87pJHxYicHAxEFPXgWqXPO6h4OnayDwwGmIRwsJ3u84uq3XhN5
+         3FkmIldSAeWKo2A4shnLK8svZMRQ21SBclYYqmd0wxkCqOtcYCQukoWMy5k9pSoZDZ
+         +EvDqCpPnUDH9SFZuF0hUm/QBnXMQx9oxhS7OvyZacwGpQMP0HLvRKEpas4agJdQwf
+         1UA6F/n9Z42a1XscJ9eSwbJDji70EpGjBlio7hekZI7caDb7UL0j50coaP0hPH/F+n
+         1HhouCrf+Yxn72N5QN328WSvF0cpDR/2f44THsYXve85qHPwUB8NoEurzTPo6UYiRc
+         VPUECNQycqQuQ==
+Message-ID: <412276c5-ca5e-a644-e0e0-d52bad3c5ba8@kernel.org>
+Date:   Tue, 17 May 2022 23:10:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220516201817.GA1047280@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] erofs: fix buffer copy overflow of ztailpacking feature
+Content-Language: en-US
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        linux-erofs@lists.ozlabs.org
+Cc:     LKML <linux-kernel@vger.kernel.org>, Yue Hu <huyue2@yulong.com>
+References: <20220512115833.24175-1-hsiangkao@linux.alibaba.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220512115833.24175-1-hsiangkao@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 03:18:17PM -0500, Bjorn Helgaas wrote:
-> On Fri, May 13, 2022 at 04:30:25PM +0530, Manivannan Sadhasivam wrote:
-> > On some systems like Chromebooks based on Qcom chipsets, the OS may
-> > powerdown all PCIe devices during system suspend for aggressive
-> > powersaving. In that case, the PCI host controller drivers need to notify
-> > the PCI device drivers that the power will be taken off during system
-> > suspend so that the drivers can prepare the devices accordingly.
+On 2022/5/12 19:58, Gao Xiang wrote:
+> I got some KASAN report as below:
 > 
-> "The OS may powerdown all PCIe devices ..." makes it sound like this
-> is an OS policy decision.  Where exactly (what function) is that?
+> [   46.959738] ==================================================================
+> [   46.960430] BUG: KASAN: use-after-free in z_erofs_shifted_transform+0x2bd/0x370
+> [   46.960430] Read of size 4074 at addr ffff8880300c2f8e by task fssum/188
+> ...
+> [   46.960430] Call Trace:
+> [   46.960430]  <TASK>
+> [   46.960430]  dump_stack_lvl+0x41/0x5e
+> [   46.960430]  print_report.cold+0xb2/0x6b7
+> [   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
+> [   46.960430]  kasan_report+0x8a/0x140
+> [   46.960430]  ? z_erofs_shifted_transform+0x2bd/0x370
+> [   46.960430]  kasan_check_range+0x14d/0x1d0
+> [   46.960430]  memcpy+0x20/0x60
+> [   46.960430]  z_erofs_shifted_transform+0x2bd/0x370
+> [   46.960430]  z_erofs_decompress_pcluster+0xaae/0x1080
 > 
-> Or if it's not an OS policy decision, but rather some property of the
-> hardware, say that specifically.
-> 
+> The root cause is that the tail pcluster won't be a complete filesystem
+> block anymore. So if ztailpacking is used, the second part of an
+> uncompresed tail pcluster may not be ``rq->pageofs_out``.
 
-On SC7280, it is the Resource Power Manager(RPMh) that's powering the devices
-down by cutting off the PCIe voltage domain. But the SC7280 RC driver itself
-may put the PCIe devices into D3cold state during system suspend.
-https://lore.kernel.org/lkml/CAE-0n53ho2DX2rqQMvvKAuDCfsWW62TceTaNPzv5Mn_NQ-U6dA@mail.gmail.com/T/
+uncompressed
 
-So to cover both cases (one is a hardware independent of SoC and another one is
-the device driver), and to be generic, I've used the term "OS" after looking at
-the previous flags.
+> 
+> Fixes: ab749badf9f4 ("erofs: support unaligned data decompression")
+> Fixes: cecf864d3d76 ("erofs: support inline data decompression")
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+
+Reviewed-by: Chao Yu <chao@kernel.org>
 
 Thanks,
-Mani
 
-> > One prime example is the PCI NVMe driver. This flag can be used by the
-> > driver to shutdown the NVMe device during suspend and recover it during
-> > resume.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  include/linux/pci.h | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > index 60adf42460ab..069caf1fe88d 100644
-> > --- a/include/linux/pci.h
-> > +++ b/include/linux/pci.h
-> > @@ -578,6 +578,7 @@ struct pci_host_bridge {
-> >  	unsigned int	preserve_config:1;	/* Preserve FW resource setup */
-> >  	unsigned int	size_windows:1;		/* Enable root bus sizing */
-> >  	unsigned int	msi_domain:1;		/* Bridge wants MSI domain */
-> > +	unsigned int	suspend_poweroff:1;	/* OS may poweroff devices during system suspend */
-> >  
-> >  	/* Resource alignment requirements */
-> >  	resource_size_t (*align_resource)(struct pci_dev *dev,
-> > -- 
-> > 2.25.1
-> > 
-
--- 
-மணிவண்ணன் சதாசிவம்
+> ---
+>   fs/erofs/decompressor.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/erofs/decompressor.c b/fs/erofs/decompressor.c
+> index 0f445f7e1df8..6dca1900c733 100644
+> --- a/fs/erofs/decompressor.c
+> +++ b/fs/erofs/decompressor.c
+> @@ -320,6 +320,7 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
+>   		PAGE_ALIGN(rq->pageofs_out + rq->outputsize) >> PAGE_SHIFT;
+>   	const unsigned int righthalf = min_t(unsigned int, rq->outputsize,
+>   					     PAGE_SIZE - rq->pageofs_out);
+> +	const unsigned int lefthalf = rq->outputsize - righthalf;
+>   	unsigned char *src, *dst;
+>   
+>   	if (nrpages_out > 2) {
+> @@ -342,10 +343,10 @@ static int z_erofs_shifted_transform(struct z_erofs_decompress_req *rq,
+>   	if (nrpages_out == 2) {
+>   		DBG_BUGON(!rq->out[1]);
+>   		if (rq->out[1] == *rq->in) {
+> -			memmove(src, src + righthalf, rq->pageofs_out);
+> +			memmove(src, src + righthalf, lefthalf);
+>   		} else {
+>   			dst = kmap_atomic(rq->out[1]);
+> -			memcpy(dst, src + righthalf, rq->pageofs_out);
+> +			memcpy(dst, src + righthalf, lefthalf);
+>   			kunmap_atomic(dst);
+>   		}
+>   	}

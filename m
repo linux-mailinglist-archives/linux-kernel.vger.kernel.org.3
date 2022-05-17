@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33F352984D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A699529853
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbiEQDhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 23:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S235650AbiEQDiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 23:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiEQDhc (ORCPT
+        with ESMTP id S235745AbiEQDiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 23:37:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006AC4131E
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:37:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F4E1B816D4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B6CC385B8;
-        Tue, 17 May 2022 03:37:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652758649;
-        bh=isWA7aLKx1dRpSJoWvz9DhEYkVr5Q60QsXwO9Q/jGhM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=V78V9rnoN5nzFCHqK1RTxSX8hlyxcPv3GqZMMY0OuyTVq7hyMyizIsdYegR/duGMo
-         Bm5RFnJ+H8kOLMuiFJ6wPOSJrAb0KwgZXki1N4QL3HSIyAyh4fR5n3XuNd5uDKNC+3
-         JV7JNffFcrH0hEHccTWRNCR8ACMTdp4KvXLhOhHDpEpgyMPdNJrAoUahqgNm70h/kc
-         ODyDp6jGNzBF3MEWjryW/Hlc2mwwMXcRKLw1lhUP+oURDQaK0/r19qFJea8jekLwf0
-         rQeWQXHGPpX1L9fdmmg64JiIRiIqSFqQ2QUFWUo0HIJZsIODH8gc1qpMpd0q+HpjBk
-         3aSXPLclokfWg==
-From:   Chao Yu <chao@kernel.org>
-To:     jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        stable@kernel.org, Chao Yu <chao.yu@oppo.com>
-Subject: [PATCH] f2fs: fix fallocate to use file_modified to update permissions consistently
-Date:   Tue, 17 May 2022 11:37:23 +0800
-Message-Id: <20220517033723.3565469-1-chao@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 16 May 2022 23:38:16 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E07946B1F
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:38:14 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id x23so15769520pff.9
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:38:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8rb5YAnT4q61r5OFUKyY8/kc8YnIY9p2tTz3G6h+GnI=;
+        b=K+NCG2NOY2YHCZGF9tR3CDFh6GmYnmapld8oChptia7I0fznmJTqFy4IMPDhzPzrpB
+         GSJnUjrCDj89eeru6nx+LJLj1uPP74dleWSLfQYcQtNKqITscv70QYhZXqFiLf4zCOwW
+         ACYO6Tlu5Tz6ik2Cp8qUhoVk8JI4piml8NDRg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8rb5YAnT4q61r5OFUKyY8/kc8YnIY9p2tTz3G6h+GnI=;
+        b=FPa4xheEPlXE1KQdxlT5et0LnknPQzzC5OvvehHqs0zIJuEAVLP/WpbkRPyFY/1lvv
+         76O3F/K+fN7zzR9gbFmR89oSJThx2rEa8iCWzTRbtsqPjGEsWT5MFh3rdrVXW6hgtL0e
+         XgQN0g7IvlGJE9QOe2ktdA0RzK9heILdIIQl3be8lJR+8YQsKWWS6VJuh0idzcfo/koo
+         hA80UnxU88oz1m/eVVT1fB5c/t6F0dqpER8bcTfKCJ2KOBlPiX58p++Ymm1WSeDORY22
+         VusZa3IX7FJ5kf9d5uOzXcPNAVCbFGWNWNpkf+r+Zclhw1Din9t83G0aHGDQkSwJOK8W
+         rn8g==
+X-Gm-Message-State: AOAM533imqOQrDZksGXLghScQ33sHLqvj2g54yBY/vcpSSfsgCFnZpZN
+        QHV5mOM5RD1DsqFT6VqRk0nqSA==
+X-Google-Smtp-Source: ABdhPJyIsPDpWnvy/XwAKF70PpFSrTdafFUxvd2g6pCcfojmxhOeRGWOV4pPfIMZkiY5fzkbYDiRnA==
+X-Received: by 2002:a05:6a02:10d:b0:381:f4c8:ad26 with SMTP id bg13-20020a056a02010d00b00381f4c8ad26mr17570035pgb.135.1652758693846;
+        Mon, 16 May 2022 20:38:13 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i7-20020a17090332c700b0015e8d4eb27esm7802065plr.200.2022.05.16.20.38.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 20:38:13 -0700 (PDT)
+Date:   Mon, 16 May 2022 20:38:12 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dm: Add verity helpers for LoadPin
+Message-ID: <202205162035.CABA5B2C6@keescook>
+References: <20220504195419.1143099-1-mka@chromium.org>
+ <20220504125404.v3.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
+ <02028CEA-5704-4A51-8CAD-BEE53CEF7CCA@chromium.org>
+ <YoKdSrjVf/tHGoa5@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoKdSrjVf/tHGoa5@google.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,41 +76,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch tries to fix permission consistency issue as all other
-mainline filesystems.
+On Mon, May 16, 2022 at 11:51:54AM -0700, Matthias Kaehlcke wrote:
+> 'targets' are different types of DM mappings like 'linear' or 'verity'. A
+> device mapper table contains has one or more targets that define the mapping
+> of the blocks of the mapped device.
+> 
+> Having spelled that out I realize that the above check is wrong. It would
+> consider a device like this trusted:
+> 
+> 0 10000000 linear 8:1
+> 10000000 10001000 verity <params>
+> 
+> In the above case only a small part of the DM device would be backed by verity.
+> 
+> I think we want a table with a single entry that is a verity target.
 
-Since the initial introduction of (posix) fallocate back at the turn of
-the century, it has been possible to use this syscall to change the
-user-visible contents of files.  This can happen by extending the file
-size during a preallocation, or through any of the newer modes (punch,
-zero, collapse, insert range).  Because the call can be used to change
-file contents, we should treat it like we do any other modification to a
-file -- update the mtime, and drop set[ug]id privileges/capabilities.
+Ah-ha! Okay, that's what I was worried about. Yes, a device made up
+of only trusted verity targets should be the only trusted device. (So,
+technically it could be more than 1 verity target, but each would need
+to be trusted. Supporting that arrangement, though, may be overkill --
+I would expect a 1:1 mapping as you suggest.
 
-The VFS function file_modified() does all this for us if pass it a
-locked inode, so let's make fallocate drop permissions correctly.
-
-Cc: stable@kernel.org
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
----
- fs/f2fs/file.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 73ba1c6dceaa..f23a7cdee657 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -1783,6 +1783,10 @@ static long f2fs_fallocate(struct file *file, int mode,
- 
- 	inode_lock(inode);
- 
-+	ret = file_modified(file);
-+	if (ret)
-+		goto out;
-+
- 	if (mode & FALLOC_FL_PUNCH_HOLE) {
- 		if (offset >= inode->i_size)
- 			goto out;
 -- 
-2.25.1
-
+Kees Cook

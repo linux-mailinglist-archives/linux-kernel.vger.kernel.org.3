@@ -2,149 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6F252A0CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A7E52A0CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242780AbiEQLyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S1345561AbiEQLyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345332AbiEQLyf (ORCPT
+        with ESMTP id S1345567AbiEQLys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:54:35 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2088.outbound.protection.outlook.com [40.107.93.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A30419BB;
-        Tue, 17 May 2022 04:54:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pgmn+5lnnQWorT8kc6UZPp1e/6ydZsfk7dBGb8Y6sZW2ZdaZ/vVsMh9FJXvP/SpFArmhJugdziAZtriX92vCb7IyXebykFe0OA6tjoMUbCbfrSJmztkrhTVQ4GFwj2iB719DuJNX0zrs2F+0wZysjGXMCw1Vxfu147+baw+ARrcWNxaOze+tX6MYX99dQ4CuPXrrJKNrhhdk+MZ1J9VTxESL6HkEYHF659NfM7xG24upNX8VV790Lbg2plCnjR8tfjZW3gQ7EGsmIODCBusLQvXuey1U9zo1aqIbfYtAZicfKyeLly1jBbHJ2fAuSGx3ZLRjIsKQjhY3bP0yRk+Eow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3dlkMzG2LdXYBzC89AzKhOr9LVp2r9sjeuubvERx9M0=;
- b=jdfWNAaHORMGZPQZSTOeJJr0X7LnabrYVBGH6YYs1feItyN/S7rS0DKEVuY0eaD3QwgpMLxJ+vlkgrcaqNj9K0zYpGmaSmviQZ9BgdLm2fFQv1uNdcbIEPGRLqrPxX3ppx65HCvrMbsJ2fUZkJEEYgTK1AfJAvV6sUg3eKO1AXGTW9hwe8q4xkb+ttccZrjXK49VUlg3S7FTDFPiO5NlgDBNVSPJTT+xbV2etZgrNNuxVKddiqPm6l2+4CivjfZ1GSUYVgUMW2/g3W6sXIaieRjWyFvLO13XrnWUNCo5ArmCy6h+UV/LLaQCfdLRRZV0K4yQtOupIYG1i2mgApjarg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3dlkMzG2LdXYBzC89AzKhOr9LVp2r9sjeuubvERx9M0=;
- b=K9XnCcEsrEtR6h4WsVYPzbXClkvhZfQWilBTaCIOyCmFzWT6C3NZkgaWf6QjCEAv5bCyAkCxDRBjmEHQisZM2/QelytWfxw5cA7UedYzrupxBT/89HB4bEAUmwtNPvsG6zrPCOsa4caqgHaA5l9F7X+lqYOqJWs37jAnJHnF6nr9NhRJubSu6KvtfpJweO7XIIYv0uQ7qVSFWIbExEcVz8nTuVSV9lbXkbfeupk5uHImRXy/DLZdNfbyWXSr4e0c8d1hhhMvgk3HwmgHr42nZaSB+TZ7ii/wCJ9/QbLTl0zOplK346WtsawdoWyFXEUdvysewGsIL5WnMKeePuoUAw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MN2PR12MB3598.namprd12.prod.outlook.com (2603:10b6:208:d1::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
- 2022 11:54:30 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5250.018; Tue, 17 May 2022
- 11:54:30 +0000
-Date:   Tue, 17 May 2022 08:54:29 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     cgel.zte@gmail.com
-Cc:     mkalderon@marvell.com, aelior@marvell.com, leon@kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] qedr: Remove unnecessary synchronize_irq() before
- free_irq()
-Message-ID: <20220517115429.GA1901088@nvidia.com>
-References: <20220513081647.1631141-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220513081647.1631141-1-chi.minghao@zte.com.cn>
-X-ClientProxiedBy: MN2PR02CA0010.namprd02.prod.outlook.com
- (2603:10b6:208:fc::23) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 17 May 2022 07:54:48 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665A6419BB;
+        Tue, 17 May 2022 04:54:40 -0700 (PDT)
+X-UUID: 10a6435c58b44ea6be7a5091242888d2-20220517
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:0d8f568d-f922-46b5-b62f-9ea606901178,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:6b3d7fe2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 10a6435c58b44ea6be7a5091242888d2-20220517
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 613556711; Tue, 17 May 2022 19:54:35 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 17 May 2022 19:54:32 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 17 May 2022 19:54:32 +0800
+Message-ID: <b2a0449d7d1a1ae09ff9cdeff6a1a59b9aeac6bf.camel@mediatek.com>
+Subject: Re: [PATCH v6 1/7] thermal: mediatek: Relocate driver to mediatek
+ folder
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Alexandre Bailon <abailon@baylibre.com>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>, <matthias.bgg@gmail.com>,
+        <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <daniel.lezcano@linaro.org>,
+        <rafael@kernel.org>, <khilman@baylibre.com>,
+        <linux-pm@vger.kernel.org>, <amitk@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <michael.kao@mediatek.com>,
+        <ethan.chang@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        Michael Kao <michael.kao@mediatek.comi>, <rui.zhang@intel.com>,
+        <ben.tseng@mediatek.com>, <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <james.lo@mediatek.com>, <fan.chen@mediatek.com>,
+        <louis.yu@mediatek.com>
+Date:   Tue, 17 May 2022 19:54:32 +0800
+In-Reply-To: <20220512122433.1399802-2-abailon@baylibre.com>
+References: <20220512122433.1399802-1-abailon@baylibre.com>
+         <20220512122433.1399802-2-abailon@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4853df3d-b461-4181-450e-08da37fc0057
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3598:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB3598BE7D2CCC0E6F5B610390C2CE9@MN2PR12MB3598.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +9I79xQ1NQ2yndlcLV7DhnfZilRq47/oOAnmBjdeWq3LVYNGrA/9Z+b2swT/4gIwWKeGTYVKQAQMJmVeuSq94QF9Mxrz+W/cQph/I7tXRMbbVSaTbITA5SdxCoGRV3k9bQoBiXdqJzXjmBNtQvg3TMPAydBVTZtAdOkIfxtgVOfXQLD5K7kUA19zWzpmq7/IH40kqrPXb8zOqySHnRBQHEUboHCP15NQiCn5Wdq9FUQSDPW0p3Q5HviD5mzs7FR4ifE2Om29qd7WkKATaPeZNCmHFEG0cGkhZBf4FMds+3JFr6dDU1SKUquZ3PwGsV7E2P5VnxNzg85vJkU9AgxQQBeWuRCXLdlKETXpfV7Ee/6SZNOqYtrMLBu8IpVVQdxmM5Zib1GyVz+N4Xi5ft5bm7EI6uRMxnSRBnRppog5ACIESOEQ+LR30bF5sABMSkvceY8T0eaBemdJU23VaNzDEBVUr4MfrVzmOIjoRr1bVT5NOopSdoOX8TIpV/fR2iaJpRvbGfH1kTITJWYu4TYzFjpOh/0+4AMiBIbeE8M33FlngD82BS5kxT9F+DPgXA6kqohG2hEy8qvLzaU6vSfJ6F5PfynOk2PTfK81XtTCPXBAhzs87v6qriC5PDaKP5OvdxQq+vQ5o4E9GbdbOQUcoQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(83380400001)(316002)(38100700002)(33656002)(5660300002)(4744005)(508600001)(66556008)(8676002)(66476007)(6512007)(26005)(54906003)(6916009)(2616005)(186003)(1076003)(86362001)(36756003)(8936002)(2906002)(6486002)(4326008)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cGRreTdwdGJzRHFKUXhXNS82REhDOXh1dlFMQVRSaE1jRVVNUlpnS081YWRQ?=
- =?utf-8?B?MEZsc0lZUTVJUC9xRUowbzR5QlRMZnlEZDNzRFo0OTF4c25WOEt3SjltVnJs?=
- =?utf-8?B?OVR3cTNxN1dNWjJzeXFlOVRNQkxUZVZSdm95a2FYOFpuTGZLcW5xcURqRkdB?=
- =?utf-8?B?NGRYc010d2dyUVY1NUU5MkkvYnQ0MVg4a0Jpb1dTTDVYcUZGVlZPMnNDSHFs?=
- =?utf-8?B?SDdGNEdZd3NxMG5JL2dCU0dscUExUGFuYU1TakpFZk43ZldNRi9IMzA2bElD?=
- =?utf-8?B?anhzQ2xBaUFJVm1CeU1YM0lOVmcwanJ1ZVg5STBRL1ZqQnFzMFNxNDZJRGpU?=
- =?utf-8?B?R2VLNXM0QUIwT1MxdUdGRkgvQXl2ZktzenRuMEdQOXppM0JlU2xnUFhpTVZp?=
- =?utf-8?B?bDFvV1FCeWEzY1NmVnJFc282QU0wMEZzL1hMYVRUak4zdHk4ekhNckNOanlN?=
- =?utf-8?B?bFNnTTB2ZlErRU5laTltdHdhbEFXblJzT2szbSs1bGtDNEI3OU9lWkRYeG42?=
- =?utf-8?B?ZFc1R1RvNXpTSE8vcHlhN2EzdmJINzQrblgxN09ndmlNZThWWXVhY0xRbG1K?=
- =?utf-8?B?TnM0QUYvbDJibUVOUXJFT0RKNzdHcElQQXo2eFZpTVNBZEk2cTRucjFJbm42?=
- =?utf-8?B?SzhwRFJremMxaFVmT3cwVlJBVXZKL2x0SmhXQWtUNXp1NDJ4YnNsZUR6SFRw?=
- =?utf-8?B?RDRKaDVlR1lzY2E2S0lMcW5HUDIxMEVxanYrY0xTUnEwbDdPdXB1Qm1WOTNP?=
- =?utf-8?B?RVQzT01ycmFTdmhoTU9iNThrT0NDb05mYlkraEJmWCtGZzNTTjNaTzJ6OUVl?=
- =?utf-8?B?aHduNTdFVjJ4anJ3OTZEclhJSUZPMnUrVTNqT2x2MERRcm03VHJLalhrQmZp?=
- =?utf-8?B?cXpKSFhvS3VxMWJCRUdEc1VhQ2k3bktYZFI4aWZVeSsvZEgxaG11MDBWR29C?=
- =?utf-8?B?Y2xkeG5OeGVLS09tY3BEVHdSbkNjY1pyLzdITTVXZHRRZlN4YS9FVkJMcXhN?=
- =?utf-8?B?eURFemhQb05zcVludlBSM24yL0h4VHF2ZGMwU0JMdlErVTBSdkIwRkljcGhU?=
- =?utf-8?B?amlPNE5HZ1RKNHdPUHJQb3lKbHJab1VSSGZYWXNwMGFqVmlRQkdRZEtmR25r?=
- =?utf-8?B?RDJYamMxaGFHakcxb0MwT052a1dtQnNYdlZSOXFsT0NmSVRIQWxUN3JzL2Nm?=
- =?utf-8?B?UmcrRVJ5bmVIYVQ3WGhja3NJZFJReHhrSy9ML2I2dmlQTTNibi9mQ1pydmZN?=
- =?utf-8?B?TXV6ZmpobW8yY1Z0dnFpVkFIcDk5NE5aUXBabzB5Z1dHakZ0c1lOckQxZEY3?=
- =?utf-8?B?WmFTcnhESFpUSFVIR0pTNlhwdW5EVGtBTFNHYjRLbFRRQVJuRmxGNUlxaTB3?=
- =?utf-8?B?MmN3V0JpK0RCY3hjdGgwN1VDWVoydjUrZnYxZlZ5YzhaNEdJN1RZKzFXNGMy?=
- =?utf-8?B?KzJsQzV3d2ROckNYaVJCNGppbmZhTkNkcEwxZzlBdXBhQjA5NEFwSUJuZWtu?=
- =?utf-8?B?ZVZBblkrczRyVGxtOWZpU0t1TzZGdUlFVVJWVU55UEZvR1RIK01LbTlIZXpS?=
- =?utf-8?B?ak9XOEpLZFplL0YzOS9YTW1iUi9tZytIandSRUZ0UFNrUWRGTzBkbWJ4TjNH?=
- =?utf-8?B?V0xOMUU5bDFyWnRuaFptZEFlWndUb1dreHlDekFNWFltWUJUdHRVa25QcW1r?=
- =?utf-8?B?dWxMVWlOaEEvaTFSdG53K1RvbmRqWlU4K1g5WGxseGc1MC9kaFVWMWhkT0VN?=
- =?utf-8?B?RlB2ZFNsa2JIbnlRTmU2TGxaT2pBRFhCMFF5WHlQdWt0WHV1UEhPRzNkUHRy?=
- =?utf-8?B?VXBuY2p3THhVMDY5SVdlNmlOcXQzaTJwT0ZxTk5uaFg2OUtwL0tmaDdTKzlV?=
- =?utf-8?B?aGdVSGZnNGRCSUdNUEljcHV1ZVp5eEhjK1ZpRllsVDBiSjFMcGp2N29MQ0lI?=
- =?utf-8?B?c0tvZWJhbXNPZ1FZRTJMNTZEZldHREhJd01qS3VDWkw2Qk0wcy9vaHpiejR0?=
- =?utf-8?B?UGI0SFR6THAycFU0UUR1L01XNzdSSUlHU1FuNENRN0JBcHI3ekxyVGlKZXE3?=
- =?utf-8?B?dmNyMkh2SDJMSTArZzRUUXVXOFVQUzNkZHlTWWdiSEdmSG8zMWdJTHZTM3dT?=
- =?utf-8?B?NnQ3ZHJaR2E2eVhZck0zbWZFRmtXd0hTNlJiM1kzK0RXNlFMSHQ3cXJkeWEy?=
- =?utf-8?B?bEY2STR5aHpiTU9nWXRmQ1dWajNsNldLYTVhSTRrWEtrZUh1dFdDd0ZjNEti?=
- =?utf-8?B?RXJ6Yjg5Z3Z2anhVV25JYXYrQzhCZWFPQ2ZGQ3pBM05sZ1hXVTVVa3dOeTFQ?=
- =?utf-8?B?UjZsQjBNK25hMzRjN3oxemhDR21MUkljTTBBeW1TaGtNYXRNQjErQT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4853df3d-b461-4181-450e-08da37fc0057
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 11:54:30.5695
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WWPrlKdEzrV0yVIv27wqelEkVZeds7nWAV2687GR8uw7G6rNPyhs0mFxO3oi6fL+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3598
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 08:16:47AM +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On Thu, 2022-05-12 at 14:24 +0200, Alexandre Bailon wrote:
+> From: Michael Kao <michael.kao@mediatek.com>
 > 
-> Calling synchronize_irq() right before free_irq() is quite useless. On one
-> hand the IRQ can easily fire again before free_irq() is entered, on the
-> other hand free_irq() itself calls synchronize_irq() internally (in a race
-> condition free way), before any state associated with the IRQ is freed.
+> Add Mediatek proprietary folder to upstream more thermal zone and
+> cooler
+> drivers. Relocate the original thermal controller driver to it and
+> rename
+> as soc_temp.c to show its purpose more clearly.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> Acked-by: Michal Kalderon <michal.kalderon@marvell.com>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.comi>
+> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 > ---
->  drivers/infiniband/hw/qedr/main.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/thermal/Kconfig                       | 14 ++++-------
+>  drivers/thermal/Makefile                      |  2 +-
+>  drivers/thermal/mediatek/Kconfig              | 23
+> +++++++++++++++++++
+>  drivers/thermal/mediatek/Makefile             |  1 +
+>  .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
+>  5 files changed, 29 insertions(+), 11 deletions(-)
+>  create mode 100644 drivers/thermal/mediatek/Kconfig
+>  create mode 100644 drivers/thermal/mediatek/Makefile
+>  rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+> 
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e37691e0bf20..8669d7278055 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -410,16 +410,10 @@ config DA9062_THERMAL
+>  	  zone.
+>  	  Compatible with the DA9062 and DA9061 PMICs.
+>  
+> -config MTK_THERMAL
+> -	tristate "Temperature sensor driver for mediatek SoCs"
+> -	depends on ARCH_MEDIATEK || COMPILE_TEST
+> -	depends on HAS_IOMEM
+> -	depends on NVMEM || NVMEM=n
+> -	depends on RESET_CONTROLLER
+> -	default y
+> -	help
+> -	  Enable this option if you want to have support for thermal
+> management
+> -	  controller present in Mediatek SoCs
+> +menu "Mediatek thermal drivers"
 
-Applied to for-next, thanks
+Hello Alexandre,
 
-Jason
+could you help to do this?
+s/Mediatek/MediaTek/
+
+and please also apply this to this series.
+
+Thanks.
+
+> +depends on ARCH_MEDIATEK || COMPILE_TEST
+> +source "drivers/thermal/mediatek/Kconfig"
+> +endmenu
+>  
+>  config AMLOGIC_THERMAL
+>  	tristate "Amlogic Thermal Support"
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index f0c36a1530d5..9ade39bdb525 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -55,7 +55,7 @@ obj-y				+= st/
+>  obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+>  obj-y				+= tegra/
+>  obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
+>  obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+>  obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> diff --git a/drivers/thermal/mediatek/Kconfig
+> b/drivers/thermal/mediatek/Kconfig
+> new file mode 100644
+> index 000000000000..0351e73170b7
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Kconfig
+> @@ -0,0 +1,23 @@
+> +config MTK_THERMAL
+> +	tristate "Mediatek thermal drivers"
+> +	depends on THERMAL_OF
+> +	help
+> +	  This is the option for Mediatek thermal software
+> +	  solutions. Please enable corresponding options to
+> +	  get temperature information from thermal sensors or
+> +	  turn on throttle mechaisms for thermal mitigation.
+> +
+> +if MTK_THERMAL
+> +
+> +config MTK_SOC_THERMAL
+> +	tristate "Temperature sensor driver for mediatek SoCs"
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on RESET_CONTROLLER
+> +	help
+> +	  Enable this option if you want to get SoC temperature
+> +	  information for Mediatek platforms. This driver
+> +	  configures thermal controllers to collect temperature
+> +	  via AUXADC interface.
+> +
+> +endif
+> diff --git a/drivers/thermal/mediatek/Makefile
+> b/drivers/thermal/mediatek/Makefile
+> new file mode 100644
+> index 000000000000..f75313ddce5e
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Makefile
+> @@ -0,0 +1 @@
+> +obj-$(CONFIG_MTK_SOC_THERMAL)	+= soc_temp.o
+> diff --git a/drivers/thermal/mtk_thermal.c
+> b/drivers/thermal/mediatek/soc_temp.c
+> similarity index 100%
+> rename from drivers/thermal/mtk_thermal.c
+> rename to drivers/thermal/mediatek/soc_temp.c
+
+We should remain the original file "mtk_thermal.c" ?
+I think it's a old hardware structure for mtk socs, like mt8183.
+
+For mt8183, we still need to use this file.
+
+Therefore, I think we should use a config to handle this?
+And also, I think we can rename the mtk_thermal.c to mtk_thermal_adc.c.
+soc_temp.c to mtk_thermal_lvts.c.
+
+maybe we can discuss the file name offline.
+
+The new owner of mtk thermal is James Lo.
+Ben Tseng is no longer in mtk. Please remove this email.
+Please also cc these mail in next version.
+james.lo@mediatek.com
+fan.chen@mediatek.com
+louis.yu@mediatek.com
+rex-bc.chen@mediatek.com
+
+BRs,
+Rex
+
+

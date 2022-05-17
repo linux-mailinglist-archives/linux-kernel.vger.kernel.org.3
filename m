@@ -2,211 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A7E52A0CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C37552A0ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345561AbiEQLyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
+        id S1345605AbiEQL7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345567AbiEQLys (ORCPT
+        with ESMTP id S236666AbiEQL7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:54:48 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665A6419BB;
-        Tue, 17 May 2022 04:54:40 -0700 (PDT)
-X-UUID: 10a6435c58b44ea6be7a5091242888d2-20220517
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:0d8f568d-f922-46b5-b62f-9ea606901178,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:6b3d7fe2-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 10a6435c58b44ea6be7a5091242888d2-20220517
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 613556711; Tue, 17 May 2022 19:54:35 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 17 May 2022 19:54:32 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 17 May 2022 19:54:32 +0800
-Message-ID: <b2a0449d7d1a1ae09ff9cdeff6a1a59b9aeac6bf.camel@mediatek.com>
-Subject: Re: [PATCH v6 1/7] thermal: mediatek: Relocate driver to mediatek
- folder
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Alexandre Bailon <abailon@baylibre.com>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>, <matthias.bgg@gmail.com>,
-        <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <daniel.lezcano@linaro.org>,
-        <rafael@kernel.org>, <khilman@baylibre.com>,
-        <linux-pm@vger.kernel.org>, <amitk@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <michael.kao@mediatek.com>,
-        <ethan.chang@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-        Michael Kao <michael.kao@mediatek.comi>, <rui.zhang@intel.com>,
-        <ben.tseng@mediatek.com>, <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <james.lo@mediatek.com>, <fan.chen@mediatek.com>,
-        <louis.yu@mediatek.com>
-Date:   Tue, 17 May 2022 19:54:32 +0800
-In-Reply-To: <20220512122433.1399802-2-abailon@baylibre.com>
-References: <20220512122433.1399802-1-abailon@baylibre.com>
-         <20220512122433.1399802-2-abailon@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 17 May 2022 07:59:38 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FD142ED1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:59:32 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso2063094pjg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6bJrUMEtSXW29jAE/Fjd7T3L0w+l4E7RzwnxxvWAHe8=;
+        b=UdBUPa4BMmyVFV5X3dWdrK5zqOmwHha1ptAMFhb8SL2rLlIo8AJ7FPnik2YMvmrMNJ
+         ssOSsgM68lwN9ni0KROmiFhQhUGA4jnWcKve9u9NTZpMUEVLpXWNcVVL9TtHdm1lsm3n
+         8uKLB1B12pw89azmhp4NoaMee8WYe+e+VwTeAtWTf8Pz03PxTue+HF3uKTRzwN3yRtZ/
+         74yg+cjsn0uG9sn7dwxBFMdcvwg59p+fgSXVCoTD9+jXrR3Be2M3d5CB3IDo5qSkoSHC
+         OOhgfXy1WNDCDYuk069fDYph/30/E8H01USHxlHNJteGyXNMele7XSZHxfA/Agdm4/pW
+         KuyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6bJrUMEtSXW29jAE/Fjd7T3L0w+l4E7RzwnxxvWAHe8=;
+        b=MiXQgPnOhigzCbnhxdTQ6eE+TO5DTmmhRLizzrepq/cQh8BWxCRQkXGefkd402UTJB
+         hZQQvk897BhWQXeDeHIf8zC2WYszsrbn4TtSKzHtbHb0SznldstuTdC4mo8Hebm7K3DX
+         rlhQPOvtocT3gy87OUOIvp41rpaqylOUDuS1diOGnF2Rc6+EiagXckb36/i1cOqEvz5B
+         N5zydgoB0RLtpOq9Bu1rj0we7a4tYDZkwxi5wJ2tY3BpB+uO835y7+39HaTpOEnGr/K2
+         LXsz+ZB6UWD6dCYPko1hPQIku10vGfOGrc86RmO82JIJTpZQ1HtXhpY38/yNUxVUcZIy
+         87tQ==
+X-Gm-Message-State: AOAM53048MVMzPDS7KiQqzZb8oHwCD4MYsSHoZQeUA0ebE9Vqk9Wamrs
+        X6IFb1pjJsXumFDsKEHh/Pjqlg==
+X-Google-Smtp-Source: ABdhPJwDn9mKzuaqQbJzdWhprI6qSVJpv42TdCp8EjfKceUOQHBlOuV1qwFmHJTb0yOW2zx4jDf/cg==
+X-Received: by 2002:a17:90a:de02:b0:1df:3f94:811c with SMTP id m2-20020a17090ade0200b001df3f94811cmr12865265pjv.112.1652788771667;
+        Tue, 17 May 2022 04:59:31 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id c17-20020a17090ab29100b001dc7623950csm1481322pjr.11.2022.05.17.04.59.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 04:59:30 -0700 (PDT)
+Message-ID: <97cba3e1-4ef7-0a17-8456-e0787d6702c6@kernel.dk>
+Date:   Tue, 17 May 2022 05:59:29 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
+Content-Language: en-US
+To:     Lee Jones <lee.jones@linaro.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <YoOJ/T4QRKC+fAZE@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YoOJ/T4QRKC+fAZE@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-12 at 14:24 +0200, Alexandre Bailon wrote:
-> From: Michael Kao <michael.kao@mediatek.com>
+On 5/17/22 5:41 AM, Lee Jones wrote:
+> Good afternoon Jens, Pavel, et al.,
 > 
-> Add Mediatek proprietary folder to upstream more thermal zone and
-> cooler
-> drivers. Relocate the original thermal controller driver to it and
-> rename
-> as soc_temp.c to show its purpose more clearly.
+> Not sure if you are presently aware, but there appears to be a
+> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
+> in Stable v5.10.y.
 > 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.comi>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> ---
->  drivers/thermal/Kconfig                       | 14 ++++-------
->  drivers/thermal/Makefile                      |  2 +-
->  drivers/thermal/mediatek/Kconfig              | 23
-> +++++++++++++++++++
->  drivers/thermal/mediatek/Makefile             |  1 +
->  .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
->  5 files changed, 29 insertions(+), 11 deletions(-)
->  create mode 100644 drivers/thermal/mediatek/Kconfig
->  create mode 100644 drivers/thermal/mediatek/Makefile
->  rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+> The full sysbot report can be seen below [0].
 > 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index e37691e0bf20..8669d7278055 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -410,16 +410,10 @@ config DA9062_THERMAL
->  	  zone.
->  	  Compatible with the DA9062 and DA9061 PMICs.
->  
-> -config MTK_THERMAL
-> -	tristate "Temperature sensor driver for mediatek SoCs"
-> -	depends on ARCH_MEDIATEK || COMPILE_TEST
-> -	depends on HAS_IOMEM
-> -	depends on NVMEM || NVMEM=n
-> -	depends on RESET_CONTROLLER
-> -	default y
-> -	help
-> -	  Enable this option if you want to have support for thermal
-> management
-> -	  controller present in Mediatek SoCs
-> +menu "Mediatek thermal drivers"
+> The C-reproducer has been placed below that [1].
+> 
+> I had great success running this reproducer in an infinite loop.
+> 
+> My colleague reverse-bisected the fixing commit to:
+> 
+>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
+>   Author: Jens Axboe <axboe@kernel.dk>
+>   Date:   Fri Feb 26 09:47:20 2021 -0700
+> 
+>        io-wq: have manager wait for all workers to exit
+> 
+>        Instead of having to wait separately on workers and manager, just have
+>        the manager wait on the workers. We use an atomic_t for the reference
+>        here, as we need to start at 0 and allow increment from that. Since the
+>        number of workers is naturally capped by the allowed nr of processes,
+>        and that uses an int, there is no risk of overflow.
+> 
+>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> 
+>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
+>     1 file changed, 22 insertions(+), 8 deletions(-)
 
-Hello Alexandre,
+Does this fix it:
 
-could you help to do this?
-s/Mediatek/MediaTek/
+commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Fri Mar 5 12:59:30 2021 -0700
 
-and please also apply this to this series.
+    io-wq: fix race in freeing 'wq' and worker access
 
-Thanks.
+Looks like it didn't make it into 5.10-stable, but we can certainly
+rectify that.
 
-> +depends on ARCH_MEDIATEK || COMPILE_TEST
-> +source "drivers/thermal/mediatek/Kconfig"
-> +endmenu
->  
->  config AMLOGIC_THERMAL
->  	tristate "Amlogic Thermal Support"
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index f0c36a1530d5..9ade39bdb525 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -55,7 +55,7 @@ obj-y				+= st/
->  obj-$(CONFIG_QCOM_TSENS)	+= qcom/
->  obj-y				+= tegra/
->  obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
-> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
-> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
->  obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
->  obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
-> diff --git a/drivers/thermal/mediatek/Kconfig
-> b/drivers/thermal/mediatek/Kconfig
-> new file mode 100644
-> index 000000000000..0351e73170b7
-> --- /dev/null
-> +++ b/drivers/thermal/mediatek/Kconfig
-> @@ -0,0 +1,23 @@
-> +config MTK_THERMAL
-> +	tristate "Mediatek thermal drivers"
-> +	depends on THERMAL_OF
-> +	help
-> +	  This is the option for Mediatek thermal software
-> +	  solutions. Please enable corresponding options to
-> +	  get temperature information from thermal sensors or
-> +	  turn on throttle mechaisms for thermal mitigation.
-> +
-> +if MTK_THERMAL
-> +
-> +config MTK_SOC_THERMAL
-> +	tristate "Temperature sensor driver for mediatek SoCs"
-> +	depends on HAS_IOMEM
-> +	depends on NVMEM
-> +	depends on RESET_CONTROLLER
-> +	help
-> +	  Enable this option if you want to get SoC temperature
-> +	  information for Mediatek platforms. This driver
-> +	  configures thermal controllers to collect temperature
-> +	  via AUXADC interface.
-> +
-> +endif
-> diff --git a/drivers/thermal/mediatek/Makefile
-> b/drivers/thermal/mediatek/Makefile
-> new file mode 100644
-> index 000000000000..f75313ddce5e
-> --- /dev/null
-> +++ b/drivers/thermal/mediatek/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_MTK_SOC_THERMAL)	+= soc_temp.o
-> diff --git a/drivers/thermal/mtk_thermal.c
-> b/drivers/thermal/mediatek/soc_temp.c
-> similarity index 100%
-> rename from drivers/thermal/mtk_thermal.c
-> rename to drivers/thermal/mediatek/soc_temp.c
-
-We should remain the original file "mtk_thermal.c" ?
-I think it's a old hardware structure for mtk socs, like mt8183.
-
-For mt8183, we still need to use this file.
-
-Therefore, I think we should use a config to handle this?
-And also, I think we can rename the mtk_thermal.c to mtk_thermal_adc.c.
-soc_temp.c to mtk_thermal_lvts.c.
-
-maybe we can discuss the file name offline.
-
-The new owner of mtk thermal is James Lo.
-Ben Tseng is no longer in mtk. Please remove this email.
-Please also cc these mail in next version.
-james.lo@mediatek.com
-fan.chen@mediatek.com
-louis.yu@mediatek.com
-rex-bc.chen@mediatek.com
-
-BRs,
-Rex
-
+-- 
+Jens Axboe
 

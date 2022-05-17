@@ -2,305 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B651152A2FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0A552A2F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240397AbiEQNOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S1347391AbiEQNOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346014AbiEQNOO (ORCPT
+        with ESMTP id S1347327AbiEQNOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:14:14 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2077.outbound.protection.outlook.com [40.107.243.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CEB41F9A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:14:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f6NtaJbSVhTWt96/Mq9LtTmgwRQJ+Nrg7dJyBztU92RAVhH9jkHaIYToDlF4/pLRSyxmcGwYf2SSK3jLncMJyEp+iep361/i4QdHXAnOq1t6/6wHM/A1w7D+L7+UEt2Z7/2i3/Hu8845vPrKI88I6Csmqkuhaxfx+8SOZd9HHce/3AVYYcz9e0hzHg1mjIcJmrv7gm/4/yAQjjbpGjl/Gh6ZV2Qx4aadffivhFI9EWI/bqB2t4936dk2/LCazP6JNPIVhQsPrDHeFrZh/9Tmlm8ISKnZIKfS6zGg29Myc0MmCkIyhSRMgvdI25nHkUkmYcHMvbyhUTjuSxdRfqmmPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6Pi6WnOyiPFRfWQVGpvgB/982+kHi+Dgas0akDbhZKw=;
- b=mDNzp6s/QMrjc2hrI6wdRJ9zlBzpO0+L6qWaK4EHvcVqiUMY4RsDxuNcEEZdJAht8HP590//IMqPOMFwDcZW0HEWAfemjYdUe6bfl6E7cYe8SCuqXfUNrbnRFg4kSuJkDzV358CfYcL1KfYO85fuBuN8eofWmX6LAfdTF1C0HyYYXCYYjaF7eAJusqG7MbbmoB4xz0QZNnXZzXfnCwUewkF+iVRxhKSudZlb89doDOvUdFLpEgxGg0g7tag6xHTzuNxbT/CkdLUCWES/nPTJJI0vynol3lxQbK31cmbOk3dNW+bu18BwdDXonwB5Y28qze/wfTJ0I8iAPyQ5YaFBpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6Pi6WnOyiPFRfWQVGpvgB/982+kHi+Dgas0akDbhZKw=;
- b=kHtDAAlUF8ufHHRio7irOqy/hBtVMAb/Cwm0H/cgS94XGYd30msJz1jygycC9n+QbBoAGQJ0GFO+PQiX4beCyMFLBXdKE7uPchRJiYjSFvsjZU3HpbGgP+O4rR2hglvffbGK5vRw+HhnrqR9T8vl/CtqhTXQtIJbxdYujp5rjstR8drW4kB951UMfwkLMPGdoavszlTAUkgKBoCQ9hywyQt2Y45pEFRqzot3jtvQJSu8jPNjt8yBYNe690xJJvUU+voB3xognAYZxzEZIAlavQaTpLEcSrkFrfF0TIWuXr4x8UGzzSwXhV08jRXM/kWzEQVXDdaqGsWvE5XqD/H5wA==
-Received: from BN0PR03CA0046.namprd03.prod.outlook.com (2603:10b6:408:e7::21)
- by MN2PR12MB4079.namprd12.prod.outlook.com (2603:10b6:208:1d5::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Tue, 17 May
- 2022 13:14:06 +0000
-Received: from BN8NAM11FT008.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e7:cafe::1f) by BN0PR03CA0046.outlook.office365.com
- (2603:10b6:408:e7::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.17 via Frontend
- Transport; Tue, 17 May 2022 13:14:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT008.mail.protection.outlook.com (10.13.177.95) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5250.13 via Frontend Transport; Tue, 17 May 2022 13:14:05 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 17 May
- 2022 13:14:05 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 17 May
- 2022 06:14:04 -0700
-Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Tue, 17 May
- 2022 06:14:02 -0700
-From:   Eli Cohen <elic@nvidia.com>
-To:     <mst@redhat.com>, <jasowang@redhat.com>
-CC:     <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <si-wei.liu@oracle.com>,
-        Eli Cohen <elic@nvidia.com>
-Subject: [PATCH v7 5/5] vdpa/mlx5: Use readers/writers semaphore instead of mutex
-Date:   Tue, 17 May 2022 16:13:48 +0300
-Message-ID: <20220517131348.498421-6-elic@nvidia.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220517131348.498421-1-elic@nvidia.com>
-References: <20220517131348.498421-1-elic@nvidia.com>
+        Tue, 17 May 2022 09:14:02 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD5F41F9B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:13:59 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id 185so14485686qke.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=v6eTvLUEvVevBWajX03I9738Bo9HdDYIbURMPVLgI3o=;
+        b=oPZVvcPwz2accgrfPbP8mek4jw2FV2aLaLaxNt5GLBRqCXua49jJzrW3dz1IBGnbyN
+         AYy7zqnYY7qbbHb1M3VEpydqgzIJpFfwMXe1KXdTpgTLocSEh9VP5Xb9Ep8M2f5HO2Xc
+         BjTU3XVNv3v90gDgvmInVAskIVEmIcSbyf+9EWGIDJd+ea6EtBa82IT176L+rMyL7SlG
+         9mgzenSuE2H87Mp/RGA0+TpyXDz6rvUwO8AzCRjaH9PQCSoyecL5V1Igz6Ab/tEtKrfU
+         6XUlICw3kR/t0/hfqSy3QVv5K+DIiarqKOuUKdDFl/Bpj9XmVq73hNz9RP1VaZ8c4y/n
+         to5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=v6eTvLUEvVevBWajX03I9738Bo9HdDYIbURMPVLgI3o=;
+        b=S1JgIrx/AyX5RMPHiyiyTW21q6cSomJZ9kmRBCy8xJAYxazyR99CkxLJ0fhZy8VL1W
+         0V3ID6gyx7DItmqUEFkRi9u68UWKjrRyJ0BRPo4P8+JeDgFakl7xoYoFPfkJOYdH9azQ
+         OOMB5Drhvsz9FKD98Hjgw08rj/EIArYGdaS24kXtFaxpp15KWZMw3+JsG5SsdzZUtIc/
+         j0enphwZChylbi/6DeOIbgLAecpWOv6mGVUcEjCHZBeBlFAINmkTeSdPhlvXZvJj0Bcd
+         2ORe8UrIX69thD42iO3aXtqcNHWxR9Ztc/f4xuSCYDwkezkNh8JR2jcwX1fBE7cMju3E
+         v1hg==
+X-Gm-Message-State: AOAM531BH6/bh9p4tfFO+ard3EDqkZQgrHIWdNafTX1wsMj8Rhla7JL8
+        IPhQC/Oel6nvOZ+qpINr82dlWg==
+X-Google-Smtp-Source: ABdhPJzJUTu/kZOXxe6D9v/M0+MMu75gVhSgga0bLUrSZDERONsTz3Yb4XB6GpX3qEgbObri26puKQ==
+X-Received: by 2002:a05:620a:2792:b0:6a2:eb8d:70e1 with SMTP id g18-20020a05620a279200b006a2eb8d70e1mr7535050qkp.574.1652793238985;
+        Tue, 17 May 2022 06:13:58 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id y68-20020a37af47000000b0069fc13ce1f3sm7860925qke.36.2022.05.17.06.13.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 06:13:58 -0700 (PDT)
+Message-ID: <44a151e1cdbba8dcf3dfe7dfe00b6ee49c99bcfb.camel@ndufresne.ca>
+Subject: Re: [PATCH 06/20] Documention: v4l: Documentation for VP9 CIDs.
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Smitha T Murthy <smitha.t@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com
+Date:   Tue, 17 May 2022 09:13:56 -0400
+In-Reply-To: <20220517125548.14746-7-smitha.t@samsung.com>
+References: <20220517125548.14746-1-smitha.t@samsung.com>
+         <CGME20220517125608epcas5p48b5d2f91c711e5728f993169b1d4b9a1@epcas5p4.samsung.com>
+         <20220517125548.14746-7-smitha.t@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4dd73197-1ec6-45bf-2176-08da38071eec
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4079:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4079B7D922BA71777E8FE012ABCE9@MN2PR12MB4079.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UiHjDKB2tq7SVVVOJDCuEa/wGwC/O3e0sKEl5OKYtrGsCo7T9WMlxqHKpknYNyPwZituQT5+nJWvV2+GWphyuYOsLGIoawTc7zaoDTBSy4tLgeKGko8KnpPFNylLaDTTfyzvqQE4jRkIWqSKdY9iKkV9g9wt6JQFiSmneKPS9GhGnKRs0+neuw8gIUfK8Eq7IlT2eoi+SiDObgMaFoH4e8codop/CFz98x5omHyheH1q0Tnk8JHWJffM3+M7TbC8Tevv2jU9FKKHwwZd5+UyGGEGWWwiBx6udiBmHyXD2YxROanN92/XuEJwffhSYoHCY5lCRtedPUGLBvRv0SQ/IB6siPYMn/bDttqN2nPfrV13REge4eBEG5KqIreYG2ka1ntY7dENu7NrE+SE0fE5G5xuV5Vj63IOYJfrxQTS3rMYy4IHCOa6gnFdGa7ShMfcrXBzXKjjqRmq4l4/HPB6ox9LcCVe9V5gBzT03JQPSstZdBSH4+HIYSk4+VJDsXlLMf6yeMWmVPGevZwcoE6vnzM07hxChO5w+6oFILGeSU2uP1eNbbAilLk7SvG7veHiPwp84hvhBAuHzhh3DnCG+LDisMur8J7J3JFGa8Bo25N7+2ePCtgzVbvh05iBU1cRHarEZx5V6jylzX4tU4oZnQis32p1v2OUtCw+FzbkmTIo5d86S/qqA3IoBQAMm7TSAzNP4BT3Tkk/uLVrP3WkFg==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(107886003)(36860700001)(2906002)(186003)(2616005)(508600001)(5660300002)(7696005)(8936002)(36756003)(8676002)(82310400005)(83380400001)(6666004)(316002)(426003)(336012)(110136005)(86362001)(54906003)(4326008)(26005)(1076003)(47076005)(40460700003)(70586007)(81166007)(356005)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 13:14:05.9345
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dd73197-1ec6-45bf-2176-08da38071eec
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT008.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4079
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reading statistics could be done intensively and by several processes
-concurrently. Reader's lock is sufficient in this case.
+Hi Smitha,
 
-Change reslock from mutex to a rwsem.
+Le mardi 17 mai 2022 =C3=A0 18:25 +0530, Smitha T Murthy a =C3=A9crit=C2=A0=
+:
+> Adds V4l2 controls for VP9 encoder documention.
+>=20
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+> ---
+>  .../media/v4l/ext-ctrls-codec.rst             | 167 ++++++++++++++++++
+>  1 file changed, 167 insertions(+)
+>=20
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/=
+Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> index 4cd7c541fc30..1b617a08f973 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+> @@ -2165,6 +2165,16 @@ enum v4l2_mpeg_video_vp8_profile -
+>      * - ``V4L2_MPEG_VIDEO_VP8_PROFILE_3``
+>        - Profile 3
+> =20
+> +VP9 Control Reference
+> +---------------------
+> +
+> +The VP9 controls include controls for encoding parameters of VP9 video
+> +codec.
+> +
+> +.. _vp9-control-id:
+> +
+> +VP9 Control IDs
+> +
+>  .. _v4l2-mpeg-video-vp9-profile:
+> =20
+>  ``V4L2_CID_MPEG_VIDEO_VP9_PROFILE``
+> @@ -2231,6 +2241,163 @@ enum v4l2_mpeg_video_vp9_level -
+>      * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_6_2``
+>        - Level 6.2
+> =20
+> +``V4L2_CID_MPEG_VIDEO_VP9_I_FRAME_QP``
 
-Suggested-by: Si-Wei Liu <si-wei.liu@oracle.com>
-Signed-off-by: Eli Cohen <elic@nvidia.com>
----
- drivers/vdpa/mlx5/net/mlx5_vnet.c | 41 ++++++++++++++-----------------
- 1 file changed, 19 insertions(+), 22 deletions(-)
+The class was recently renamed V4L2_CID_CODEC... for a reason, can you rena=
+me
+MPEG_VIDEO with CODEC, specially for VP9 CODEC were MPEG makes no sense. Th=
+is
+applies all the doc and the defines in the other patch.
 
-diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index 2b815ef850c8..57cfc64248b7 100644
---- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-+++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -155,7 +155,7 @@ struct mlx5_vdpa_net {
- 	 * since memory map might change and we need to destroy and create
- 	 * resources while driver in operational.
- 	 */
--	struct mutex reslock;
-+	struct rw_semaphore reslock;
- 	struct mlx5_flow_table *rxft;
- 	struct mlx5_fc *rx_counter;
- 	struct mlx5_flow_handle *rx_rule_ucast;
-@@ -1695,7 +1695,7 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
- 	ndev = to_mlx5_vdpa_ndev(mvdev);
- 	cvq = &mvdev->cvq;
- 
--	mutex_lock(&ndev->reslock);
-+	down_write(&ndev->reslock);
- 
- 	if (!(mvdev->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
-@@ -1746,7 +1746,7 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
- 	}
- 
- out:
--	mutex_unlock(&ndev->reslock);
-+	up_write(&ndev->reslock);
- }
- 
- static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
-@@ -2244,7 +2244,7 @@ static int setup_driver(struct mlx5_vdpa_dev *mvdev)
- 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
- 	int err;
- 
--	WARN_ON(!mutex_is_locked(&ndev->reslock));
-+	WARN_ON(!rwsem_is_locked(&ndev->reslock));
- 
- 	if (ndev->setup) {
- 		mlx5_vdpa_warn(mvdev, "setup driver called for already setup driver\n");
-@@ -2292,7 +2292,7 @@ static int setup_driver(struct mlx5_vdpa_dev *mvdev)
- static void teardown_driver(struct mlx5_vdpa_net *ndev)
- {
- 
--	WARN_ON(!mutex_is_locked(&ndev->reslock));
-+	WARN_ON(!rwsem_is_locked(&ndev->reslock));
- 
- 	if (!ndev->setup)
- 		return;
-@@ -2322,7 +2322,7 @@ static void mlx5_vdpa_set_status(struct vdpa_device *vdev, u8 status)
- 
- 	print_status(mvdev, status, true);
- 
--	mutex_lock(&ndev->reslock);
-+	down_write(&ndev->reslock);
- 
- 	if ((status ^ ndev->mvdev.status) & VIRTIO_CONFIG_S_DRIVER_OK) {
- 		if (status & VIRTIO_CONFIG_S_DRIVER_OK) {
-@@ -2338,14 +2338,14 @@ static void mlx5_vdpa_set_status(struct vdpa_device *vdev, u8 status)
- 	}
- 
- 	ndev->mvdev.status = status;
--	mutex_unlock(&ndev->reslock);
-+	up_write(&ndev->reslock);
- 	return;
- 
- err_setup:
- 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
- 	ndev->mvdev.status |= VIRTIO_CONFIG_S_FAILED;
- err_clear:
--	mutex_unlock(&ndev->reslock);
-+	up_write(&ndev->reslock);
- }
- 
- static int mlx5_vdpa_reset(struct vdpa_device *vdev)
-@@ -2356,7 +2356,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
- 	print_status(mvdev, 0, true);
- 	mlx5_vdpa_info(mvdev, "performing device reset\n");
- 
--	mutex_lock(&ndev->reslock);
-+	down_write(&ndev->reslock);
- 	teardown_driver(ndev);
- 	clear_vqs_ready(ndev);
- 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
-@@ -2371,7 +2371,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
- 		if (mlx5_vdpa_create_mr(mvdev, NULL))
- 			mlx5_vdpa_warn(mvdev, "create MR failed\n");
- 	}
--	mutex_unlock(&ndev->reslock);
-+	up_write(&ndev->reslock);
- 
- 	return 0;
- }
-@@ -2411,7 +2411,7 @@ static int mlx5_vdpa_set_map(struct vdpa_device *vdev, struct vhost_iotlb *iotlb
- 	bool change_map;
- 	int err;
- 
--	mutex_lock(&ndev->reslock);
-+	down_write(&ndev->reslock);
- 
- 	err = mlx5_vdpa_handle_set_map(mvdev, iotlb, &change_map);
- 	if (err) {
-@@ -2423,7 +2423,7 @@ static int mlx5_vdpa_set_map(struct vdpa_device *vdev, struct vhost_iotlb *iotlb
- 		err = mlx5_vdpa_change_map(mvdev, iotlb);
- 
- err:
--	mutex_unlock(&ndev->reslock);
-+	up_write(&ndev->reslock);
- 	return err;
- }
- 
-@@ -2442,7 +2442,6 @@ static void mlx5_vdpa_free(struct vdpa_device *vdev)
- 		mlx5_mpfs_del_mac(pfmdev, ndev->config.mac);
- 	}
- 	mlx5_vdpa_free_resources(&ndev->mvdev);
--	mutex_destroy(&ndev->reslock);
- 	kfree(ndev->event_cbs);
- 	kfree(ndev->vqs);
- }
-@@ -2527,7 +2526,7 @@ static int mlx5_vdpa_get_vendor_vq_stats(struct vdpa_device *vdev, u16 idx,
- 	u64 completed_desc;
- 	int err = 0;
- 
--	mutex_lock(&ndev->reslock);
-+	down_read(&ndev->reslock);
- 	if (!is_index_valid(mvdev, idx)) {
- 		NL_SET_ERR_MSG_MOD(extack, "virtqueue index is not valid");
- 		err = -EINVAL;
-@@ -2566,7 +2565,7 @@ static int mlx5_vdpa_get_vendor_vq_stats(struct vdpa_device *vdev, u16 idx,
- 
- 	err = 0;
- out_err:
--	mutex_unlock(&ndev->reslock);
-+	up_read(&ndev->reslock);
- 	return err;
- }
- 
-@@ -2835,18 +2834,18 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 	}
- 
- 	init_mvqs(ndev);
--	mutex_init(&ndev->reslock);
-+	init_rwsem(&ndev->reslock);
- 	config = &ndev->config;
- 
- 	if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MTU)) {
- 		err = config_func_mtu(mdev, add_config->net.mtu);
- 		if (err)
--			goto err_mtu;
-+			goto err_alloc;
- 	}
- 
- 	err = query_mtu(mdev, &mtu);
- 	if (err)
--		goto err_mtu;
-+		goto err_alloc;
- 
- 	ndev->config.mtu = cpu_to_mlx5vdpa16(mvdev, mtu);
- 
-@@ -2860,14 +2859,14 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 	} else {
- 		err = mlx5_query_nic_vport_mac_address(mdev, 0, 0, config->mac);
- 		if (err)
--			goto err_mtu;
-+			goto err_alloc;
- 	}
- 
- 	if (!is_zero_ether_addr(config->mac)) {
- 		pfmdev = pci_get_drvdata(pci_physfn(mdev->pdev));
- 		err = mlx5_mpfs_add_mac(pfmdev, config->mac);
- 		if (err)
--			goto err_mtu;
-+			goto err_alloc;
- 
- 		ndev->mvdev.mlx_features |= BIT_ULL(VIRTIO_NET_F_MAC);
- 	}
-@@ -2917,8 +2916,6 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- err_mpfs:
- 	if (!is_zero_ether_addr(config->mac))
- 		mlx5_mpfs_del_mac(pfmdev, config->mac);
--err_mtu:
--	mutex_destroy(&ndev->reslock);
- err_alloc:
- 	put_device(&mvdev->vdev.dev);
- 	return err;
--- 
-2.35.1
+thanks,
+Nicolas
+
+> +    Quantization parameter for an I frame for VP9. Valid range: from 1 t=
+o 255.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_P_FRAME_QP``
+> +    Quantization parameter for an P frame for VP9. Valid range: from 1 t=
+o 255.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_MAX_QP``
+> +    Maximum quantization parameter for VP9. Valid range: from 1 to 255.
+> +    Recommended range for MFC is from 230 to 255.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_MIN_QP``
+> +    Minimum quantization parameter for VP9. Valid range: from 1 to 255.
+> +    Recommended range for MFC is from 1 to 24.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_RC_FRAME_RATE``
+> +    Indicates the number of evenly spaced subintervals, called ticks, wi=
+thin
+> +    one second. This is a 16 bit unsigned integer and has a maximum valu=
+e up to
+> +    0xffff and a minimum value of 1.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_GF_REFRESH_PERIOD``
+> +    Indicates the refresh period of the golden frame for VP9 encoder.
+> +
+> +.. _v4l2-vp9-golden-frame-sel:
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAMESEL``
+> +    (enum)
+> +
+> +enum v4l2_mpeg_vp9_golden_framesel -
+> +    Selects the golden frame for encoding. Valid when NUM_OF_REF is 2.
+> +    Possible values are:
+> +
+> +.. raw:: latex
+> +
+> +    \footnotesize
+> +
+> +.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
+> +
+> +.. flat-table::
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +
+> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAME_USE_PREV``
+> +      - Use the (n-2)th frame as a golden frame, current frame index bei=
+ng
+> +        'n'.
+> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAME_USE_REF_PERIOD``
+> +      - Use the previous specific frame indicated by
+> +        ``V4L2_CID_MPEG_VIDEO_VP9_GF_REFRESH_PERIOD`` as a
+> +        golden frame.
+> +
+> +.. raw:: latex
+> +
+> +    \normalsize
+> +
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_HIERARCHY_QP_ENABLE``
+> +    Allows host to specify the quantization parameter values for each
+> +    temporal layer through HIERARCHICAL_QP_LAYER. This is valid only
+> +    if HIERARCHICAL_CODING_LAYER is greater than 1. Setting the control
+> +    value to 1 enables setting of the QP values for the layers.
+> +
+> +.. _v4l2-vp9-ref-number-of-pframes:
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_REF_NUMBER_FOR_PFRAMES``
+> +    (enum)
+> +
+> +enum v4l2_mpeg_vp9_ref_num_for_pframes -
+> +    Number of reference pictures for encoding P frames.
+> +
+> +.. raw:: latex
+> +
+> +    \footnotesize
+> +
+> +.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
+> +
+> +.. flat-table::
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +
+> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_1_REF_PFRAME``
+> +      - Indicates one reference frame, last encoded frame will be search=
+ed.
+> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAME_USE_REF_PERIOD``
+> +      - Indicates 2 reference frames, last encoded frame and golden fram=
+e
+> +        will be searched.
+> +
+> +.. raw:: latex
+> +
+> +    \normalsize
+> +
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_HIERARCHICAL_CODING_LAYER``
+> +    Indicates the number of hierarchial coding layer.
+> +    In normal encoding (non-hierarchial coding), it should be zero.
+> +    VP9 has upto 3 layer of encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_HIERARCHY_RC_ENABLE``
+> +    Indicates enabling of bit rate for hierarchical coding layers VP9 en=
+coder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L0_BR``
+> +    Indicates bit rate for hierarchical coding layer 0 for VP9 encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L1_BR``
+> +    Indicates bit rate for hierarchical coding layer 1 for VP9 encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L2_BR``
+> +    Indicates bit rate for hierarchical coding layer 2 for VP9 encoder.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L0_QP``
+> +    Indicates quantization parameter for hierarchical coding layer 0.
+> +    Valid range: [V4L2_CID_MPEG_VIDEO_VP9_MIN_QP,
+> +    V4L2_CID_MPEG_VIDEO_VP9_MAX_QP].
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L1_QP``
+> +    Indicates quantization parameter for hierarchical coding layer 1.
+> +    Valid range: [V4L2_CID_MPEG_VIDEO_VP9_MIN_QP,
+> +    V4L2_CID_MPEG_VIDEO_VP9_MAX_QP].
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L2_QP``
+> +    Indicates quantization parameter for hierarchical coding layer 2.
+> +    Valid range: [V4L2_CID_MPEG_VIDEO_VP9_MIN_QP,
+> +    V4L2_CID_MPEG_VIDEO_VP9_MAX_QP].
+> +
+> +.. _v4l2-vp9-max-partition-depth:
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_MAX_PARTITION_DEPTH``
+> +    (enum)
+> +
+> +enum v4l2_mpeg_vp9_num_partitions -
+> +    Indicate maximum coding unit depth.
+> +
+> +.. raw:: latex
+> +
+> +    \footnotesize
+> +
+> +.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
+> +
+> +.. flat-table::
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +
+> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_0_PARTITION``
+> +      - No coding unit partition depth.
+> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_1_PARTITION``
+> +      - Allows one coding unit partition depth.
+> +
+> +.. raw:: latex
+> +
+> +    \normalsize
+> +
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_DISABLE_INTRA_PU_SPLIT``
+> +    Zero indicates enable intra NxN PU split.
+> +    One indicates disable intra NxN PU split.
+> +
+> +``V4L2_CID_MPEG_VIDEO_VP9_DISABLE_IVF_HEADER``
+> +    Indicates IVF header generation. Zero indicates enable IVF format.
+> +    One indicates disable IVF format.
+> +
+> =20
+>  High Efficiency Video Coding (HEVC/H.265) Control Reference
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 

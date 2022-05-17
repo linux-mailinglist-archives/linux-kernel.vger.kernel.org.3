@@ -2,168 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419FF529CCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9409529CD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243557AbiEQImj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 04:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
+        id S232603AbiEQIn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 04:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237158AbiEQImh (ORCPT
+        with ESMTP id S243631AbiEQInF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 04:42:37 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261E23EBAD;
-        Tue, 17 May 2022 01:42:36 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24H8TdFI007713;
-        Tue, 17 May 2022 08:42:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=3mHxfOz0HshFsBSgwMKSs6n6J3NpdC3WA3K2KybxGKg=;
- b=EP5e92olYg7DZ+VGofNknrnEfkxSQWs0CZB5U/lQhlUjhPmlOGfToiVM8PndEAwhfYdr
- cNCC84tRYSr2szgj/G7yI28mLvwxzhrvtsMTblsFWxHE4ATDE5QveHAF9uP4bQ8oRpC/
- GTJEMU91bZ3X0ZOQBi9I3Ok6VeCpyyiQwe0WVu4GIdKRoDZg0+VqnpxBJD3iOJC1E8JO
- btyd/XCJ+3fQPkOTezAt1blM8u7q9q8E8JPY4NUMmYWJQijvWBUP+Vi2KRf1i3Uz16SX
- vL473DhfSjDUyAeC8fN9EJWruYoJm5KrAZcxzenVX2RgWMByPUkVQsTyDtx9iCDwlcjy Yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g488bg8q8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 08:42:25 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24H8VdBU012808;
-        Tue, 17 May 2022 08:42:24 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g488bg8ph-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 08:42:24 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24H8bVlH028789;
-        Tue, 17 May 2022 08:42:22 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3g2429bw0p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 08:42:22 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24H8STU545875564
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 08:28:29 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 250B4A4055;
-        Tue, 17 May 2022 08:42:19 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B7981A404D;
-        Tue, 17 May 2022 08:42:18 +0000 (GMT)
-Received: from [9.152.224.153] (unknown [9.152.224.153])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 17 May 2022 08:42:18 +0000 (GMT)
-Message-ID: <78acfe88-97e3-92f9-29ef-736530179758@linux.ibm.com>
-Date:   Tue, 17 May 2022 10:42:18 +0200
+        Tue, 17 May 2022 04:43:05 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2040.outbound.protection.outlook.com [40.107.22.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC4343EE8;
+        Tue, 17 May 2022 01:43:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y8SJm9XZ/CEZAqLUoBYpLD+nFR71PzWOAWEUiRL1O0vOdha/ApQqd1nxH2CagALVpM4pfGt/0LioSNvDX2KJY0RIFW0+hkob5LcVA1lLbwa8lyJxeMbJ9T9aDNWdgi+huCMIzuNirTfsUvnXZ6KBSv+Pvbok6jEB++lzFG6bWEnmTCNdozwddDp83CKWxdSPFOVhmUlBKGmWptbM0VrwBmDC3dIaHe+6nIGGsjNUSDcSrpHqVJXsV/4kBmazymfxxV6ps58cEP562r86zYmLEtxTzXfIEF8ncDKORjMtYUTAqGMqR4p+OPkQykaIhXApKpc+TMVumnYXI7/jORPAmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rLdl1QtXNdk826eXHFZ9Ps0BSCp2qwXg3yx0RuEfPb0=;
+ b=VrABH6fPYXz9uyAwC6pSNWNJoZTWjTf6jT0le0aIKx7eOUoczTz8X0V3K0TuI2Bui85D4+c5neqcAlhAyMEh3+VylAOjlRSTb1kyjB+xMWLp+TEudA5Co/oVXzyPuhGOiSZ4udMy4ipPtOcfLL9hAB+e6noyZtc5yJb7v+QPEGMNzZ/oZoGXof4+BsKBoRKCDvy0fwwQmLYjUxVNGjlJEKy7/9JtXMg49Vag25y5T0UVRUiSQ6FnmTQBpNWnj7/vqgFrjsXA6mT4Z3yQs+7EOZcqUn01OxaaPVeYGlLvlePmeVRvQ7zM+TiCXFcDvDgUjgB2h1rSrouJHR6WdYchUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rLdl1QtXNdk826eXHFZ9Ps0BSCp2qwXg3yx0RuEfPb0=;
+ b=QAKj3CTQEevJ5YTxBeSQi2HniikTiWMzxobYQWo1AJWEUha114Jasc7tK/AwEyE/fdpSrvR+Wr6hMtUisIFXotX5u1agD/xHAGfTRJp79vI1H3PwiXJsNtcWCwDda9aDa74g11+gQO2FU202512FGwWJsoocqcbpMu5nBa0h2Qs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by DB7PR04MB4186.eurprd04.prod.outlook.com (2603:10a6:5:22::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Tue, 17 May
+ 2022 08:42:58 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::9060:4119:5466:f5d]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::9060:4119:5466:f5d%3]) with mapi id 15.20.5250.018; Tue, 17 May 2022
+ 08:42:58 +0000
+Date:   Tue, 17 May 2022 11:42:56 +0300
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] clk: imx8mp: fix usb_root_clk parent
+Message-ID: <YoNgEMgEUQ99Z+T1@abelvesa>
+References: <20220507125430.793287-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220507125430.793287-1-peng.fan@oss.nxp.com>
+X-ClientProxiedBy: AS9PR04CA0080.eurprd04.prod.outlook.com
+ (2603:10a6:20b:48b::28) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 1/2] drivers/s390/char: Add Ultravisor io device
-Content-Language: en-US
-To:     Janosch Frank <frankja@linux.ibm.com>, Greg KH <greg@kroah.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-References: <20220510144724.3321985-1-seiden@linux.ibm.com>
- <20220510144724.3321985-2-seiden@linux.ibm.com>
- <bae6b9f0-dd4d-f109-b220-f6b118c889ad@linux.ibm.com>
-From:   Steffen Eiden <seiden@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <bae6b9f0-dd4d-f109-b220-f6b118c889ad@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Z4lRWYKEPj0RpRHhvnqwHSytibG0zEPa
-X-Proofpoint-GUID: ClH09LhgoNZdRA6fOlNBk04cUthzE-9y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_01,2022-05-16_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=999
- priorityscore=1501 adultscore=0 phishscore=0 mlxscore=0 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205170051
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 80f16a29-2da0-43fd-c319-08da37e13ea3
+X-MS-TrafficTypeDiagnostic: DB7PR04MB4186:EE_
+X-Microsoft-Antispam-PRVS: <DB7PR04MB4186097C6EA2E790B222B9E2F6CE9@DB7PR04MB4186.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m4Bo7pWBUXFdMpdlUBHC4TwssrrI9sO6KN52Wx8W311mtn0tcWRQF47NYbWuN0Xn4xgjwrGfbtIJ+8XHxshmOwr0C0Cg6EGpzXL84D8v48UrewMZYWl2TFLynjsRWyD2BPSfc6pgbenFYdT0pi8UE6SRdGHng6bBMu9Q0PE0z1w8bxiDyrUinf4aRz7XvQbyiCJNoqYPqrX/Na67D/8ZEd90qAWyxNpXlMf1ZOn3uslC7zzBTdcyJl8DCGTfzOXPZQFAk6oLFYnhMG+jtPKrZcuUTSTkf9jJAyRJ4pCIyLd/VhI4sveNHbvTg3HwTzCeYBcU5gFb06FfGjBpmHwpg6xdx+cpVgqn0UlXflo+PZBHM/4FVY0au6ZHyPnEVDb+10aSHPv8fmNJBOhOIMPJOUOhFS08WOi32nuuiKACj0hPmt5u0DEKhOKbQgap7QyPmN4YryNZMUAVbT+ZMyd4Xv9h2QOdLpn8vUPnoaJ0TMtwQEN3hwe0bSB3buo6hs5WlYJf8Qh6v2f3qmm3aVl3c6DsE4m/dFSu1NM+hBaxB9g70ED0b85r9I14NxDV2UZUOmFjmp4ZTLbPjTFqD5Gc6zKOZxgIePxJJ9Dqd35PecyIuhIWGiE4NYqbi6w24Jrd9ikFrTiR8xSsiNAZ+9dNbl0PulxWu/bxuQLYgJJ1sT3aPlPix/S3VNIJc7CkRTvlBc69hTFAlcWntvzQLntTOr9JMxhlZVj6bcwUVLJ2NmlPwFHSbITmZMfnhcuINpi+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(44832011)(5660300002)(508600001)(8936002)(4326008)(6862004)(8676002)(66476007)(66556008)(66946007)(86362001)(6486002)(6506007)(53546011)(26005)(186003)(52116002)(2906002)(38350700002)(38100700002)(33716001)(6512007)(83380400001)(9686003)(316002)(32563001)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wu1Viucysa9PhE8WpSGpKyD48j2nnaUHtUfguSAZQyNR6tjrm31fZStpte9E?=
+ =?us-ascii?Q?hT3bt36GjM7M/mv0uBbeN6z95PXX6fkOM5rK4PsaWjdgDlqzalkVb1z9RmOb?=
+ =?us-ascii?Q?j51PO1/MYr0BdbHKgzQkNpmUcjkTD+vX8M8FtMq+hR+kVfGhZFFP0mraHnwG?=
+ =?us-ascii?Q?nWSUva6JVIA48GTLFo/nO7hc+gfxB2RF7V44wkV8rV65KsZ0o4qAd9A17AiP?=
+ =?us-ascii?Q?DjsYxiaC926QVkoZCtBK/9wxyTItCWlQnHjGMhTn6fp9a4br2GoszqIBH3Hj?=
+ =?us-ascii?Q?v3jAWSDSlvJ27ClSNv+SkYWsVeJgMOikZcy3YHPUIc3ozRQWcUaN3jAmuUPk?=
+ =?us-ascii?Q?6A6TFP2kLOYYVlgZA+PsDIG+GI/ffxj3SoEKpjyX3DbbOG+F2KUnIOO4RiRU?=
+ =?us-ascii?Q?W4re1VX/wFJm0NA7QLe696QazfV2EH8CZAG6YDTi4xm+VBgCCrIRhMx2cYZQ?=
+ =?us-ascii?Q?SwmFeLg/mx8ze0Jt7zCbgHtvJA63eGcFbruCqKsYW01NUY1XA990Ad06o94n?=
+ =?us-ascii?Q?oiT9CrJZs0yTD2jaRESpQiRK4tircmLA5ChZPXr7T8VFmiVoX0P+YGkxTwgd?=
+ =?us-ascii?Q?bYdw/T6ez5UhtfPUDqTfsfKHXSwCs/4Uhm1wnsy2Ey4cEW8uSKuv/+pLOktk?=
+ =?us-ascii?Q?NvQ+PqW3+SGaTacEdZoROf7TsRZkcpojubppft7NiEjXjIdJVrFz9yD8RcVL?=
+ =?us-ascii?Q?CWFPCOB0bIYBVvtxUD3NZRFz2YLUcFs53vL6MCVIKbMEG5J1NyrmEQ12h8W/?=
+ =?us-ascii?Q?EJwnjPJnzbu+TCTe5YfppNTuR4JScgtIuirzTQDJiZ88LsIB6/tYp9K9NKuO?=
+ =?us-ascii?Q?Ul6v8CCribCOPvDMHGi6dnnYZCFsqMnzVqZgSpEiOLydwClbzchO4af8Wo2d?=
+ =?us-ascii?Q?ghXv5nXJu8JmyliO7coeqi4FGFv9Vllab+WPCtKvLBjxa8FJH0BpBOuKiJ9J?=
+ =?us-ascii?Q?PQWnrfF0i/ymRMQnOdsevYRGbfKlefwcRJZE2cAwzSF+8YoPPcSJUpnsGyCQ?=
+ =?us-ascii?Q?5414TB9J9vzUimppuB5lGv8+uucMqmRd1XQPpHPWk5Al4AqYHPJdkDmN56Oh?=
+ =?us-ascii?Q?U7LeF3lrdqQN5FxAnaSjM0hTD4CcJxwUBhKZCJKWO+D2Shyi2sEAAeAK+OOs?=
+ =?us-ascii?Q?2u7Q3T6kbEdpQgJ6nAtd3fADZoC7AhZDc/d9hKowYiYEo4UPbFyuGRg1MIca?=
+ =?us-ascii?Q?2WFYKdiRdJY4HhnxOdTEJIyGkOZLWSTy476QCxmZGRiQlQCAdXNPgQTFUrU+?=
+ =?us-ascii?Q?pnzWPzonfeozqkBI+js5EW/r9s7MaYPNuQXKMMY9zWb9XbspYa/PkkXMujiS?=
+ =?us-ascii?Q?UVqF+Cg/bCGhFnCsebb8AaQtQri9GzycYHCJR6Y3lJA3a4YVs0RIFYwo+c1d?=
+ =?us-ascii?Q?X+ZhAtLG9+xNgZoHRwVymYUI4HKbN4N4nbtVDOwZUWjUAOCgMULHEhO+ohm8?=
+ =?us-ascii?Q?kT/3Hwvv/97MelmWEN5qIpyRz5D+SAuY7gjqviHU4XlMmKSAakPeSSgf0cyr?=
+ =?us-ascii?Q?/vD4cvjgALFyQ6/p5pnT0rk/3Gs68SSnm/YNxBwKSD/rhbcFahyreDXKLstQ?=
+ =?us-ascii?Q?hxGTzulnHEUl/YeDaVjh7Ybl57zlS/pTpvb02Ii2ozhG3L3No6P57BKgJ6JJ?=
+ =?us-ascii?Q?YRAbHEsyi9uDbIHkwF029IyNooXGHFM3LRjd87BA6XJkKILeO55/xOPUggMZ?=
+ =?us-ascii?Q?RpUv58/fYhiohs2cCvA388Y3jeikoFI4L9xsdqCpgC80kkV0xbTffpCs4JwD?=
+ =?us-ascii?Q?MWUp6gWhcA=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80f16a29-2da0-43fd-c319-08da37e13ea3
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 08:42:58.8341
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IlSA4xPPnXvV0LeQSmPxq5hF3NkkvgShRsEXmuphgGJQf8zBydG+g2GrOmtmsxmHyP3vL5YTRU8y1PFTZvaQwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4186
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 22-05-07 20:54:30, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> According to reference mannual CCGR77(usb) sources from hsio_axi, fix
+> it.
+>
+> Fixes: 9c140d9926761 ("clk: imx: Add support for i.MX8MP clock driver")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
+Applied, thanks.
 
-On 5/17/22 10:38, Janosch Frank wrote:
-> On 5/10/22 16:47, Steffen Eiden wrote:
->> This patch adds a new miscdevice to expose some Ultravisor functions
->> to userspace. Userspace can send IOCTLs to the uvdevice that will then
->> emit a corresponding Ultravisor Call and hands the result over to
->> userspace. The uvdevice is available if the Ultravisor Call facility is
->> present.
->> Userspace can call the Retrieve Attestation Measurement
->> Ultravisor Call using IOCTLs on the uvdevice.
->>
->> The uvdevice will do some sanity checks first.
->> Then, copy the request data to kernel space, build the UVCB,
->> perform the UV call, and copy the result back to userspace.
->>
->> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
->> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-> 
-> I'd like to pick this if I'm allowed to fix the two white space problems 
-> below.
-I am fine with that.
-
-Thank you.
-
-> 
->> ---
->>   MAINTAINERS                           |   2 +
->>   arch/s390/include/asm/uv.h            |  23 ++-
->>   arch/s390/include/uapi/asm/uvdevice.h |  51 +++++
->>   drivers/s390/char/Kconfig             |  10 +
->>   drivers/s390/char/Makefile            |   1 +
->>   drivers/s390/char/uvdevice.c          | 264 ++++++++++++++++++++++++++
->>   6 files changed, 350 insertions(+), 1 deletion(-)
->>   create mode 100644 arch/s390/include/uapi/asm/uvdevice.h
->>   create mode 100644 drivers/s390/char/uvdevice.c
->>
-> 
->> +#endif  /* __S390_ASM_UVDEVICE_H */
-> 
-> There are two spaces between the "endif" and the "/"
-> 
->> diff --git a/drivers/s390/char/Kconfig b/drivers/s390/char/Kconfig
->> index 6cc4b19acf85..e9b9902abbaf 100644
->> --- a/drivers/s390/char/Kconfig
->> +++ b/drivers/s390/char/Kconfig
->> @@ -100,6 +100,16 @@ config SCLP_OFB
->>         This option enables the Open-for-Business interface to the s390
->>         Service Element.
-> [...]
->> + * uvio_attestation() does a  Retrieve Attestation Measurement 
->> Ultravisor Call.
-> 
-> Double space
-> 
->> + * It verifies that the given userspace addresses are valid and 
->> request sizes
->> + * are sane. Every other check is made by the Ultravisor (UV) and 
->> won't result
->> + * in a negative return value. It copies the input to kernelspace, 
->> builds the
->> + * request, sends the UV-call, and copies the result to userspace.
->> + *
+> ---
+>  drivers/clk/imx/clk-imx8mp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+> index ba058fbccecc..e89db568f5a8 100644
+> --- a/drivers/clk/imx/clk-imx8mp.c
+> +++ b/drivers/clk/imx/clk-imx8mp.c
+> @@ -673,7 +673,7 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+>  	hws[IMX8MP_CLK_UART2_ROOT] = imx_clk_hw_gate4("uart2_root_clk", "uart2", ccm_base + 0x44a0, 0);
+>  	hws[IMX8MP_CLK_UART3_ROOT] = imx_clk_hw_gate4("uart3_root_clk", "uart3", ccm_base + 0x44b0, 0);
+>  	hws[IMX8MP_CLK_UART4_ROOT] = imx_clk_hw_gate4("uart4_root_clk", "uart4", ccm_base + 0x44c0, 0);
+> -	hws[IMX8MP_CLK_USB_ROOT] = imx_clk_hw_gate4("usb_root_clk", "osc_32k", ccm_base + 0x44d0, 0);
+> +	hws[IMX8MP_CLK_USB_ROOT] = imx_clk_hw_gate4("usb_root_clk", "hsio_axi", ccm_base + 0x44d0, 0);
+>  	hws[IMX8MP_CLK_USB_PHY_ROOT] = imx_clk_hw_gate4("usb_phy_root_clk", "usb_phy_ref", ccm_base + 0x44f0, 0);
+>  	hws[IMX8MP_CLK_USDHC1_ROOT] = imx_clk_hw_gate4("usdhc1_root_clk", "usdhc1", ccm_base + 0x4510, 0);
+>  	hws[IMX8MP_CLK_USDHC2_ROOT] = imx_clk_hw_gate4("usdhc2_root_clk", "usdhc2", ccm_base + 0x4520, 0);
+> --
+> 2.25.1
 >

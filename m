@@ -2,86 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC9F52A9E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F81052A9F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351771AbiEQSEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39026 "EHLO
+        id S1345143AbiEQSFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351829AbiEQSEU (ORCPT
+        with ESMTP id S1351895AbiEQSF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:04:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F128550B14
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:03:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60097B81B34
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:03:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F73C385B8;
-        Tue, 17 May 2022 18:03:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652810634;
-        bh=s1iMz7QuBiDw43pk+NOy8/Yc/NUPlEEPpk7eS7YwCrY=;
-        h=Subject:From:To:Cc:Date:From;
-        b=cB7B7oNxEsB0a+xkB85HI/YPZJBBTjPh7QtWgxbion21LTNaZwHeVGHs+vaeTq9kd
-         uqUxpjezleMl29nEueeMfJnjrLJp9f51TBZLIMToQFpt3/CAfKU8aKkLVdTApNYwBO
-         bX3KZO+Ug0g0aNZBSDHsMAVSi7kXGPOsmj2xKwMfrG9iOyS1Z/m+Abr22KSrt//liq
-         hnad9s4MYga0e3q7s3TX3Rgq2ZTe1hYySNV4oXd2m8QcZfSHgaFQIlbrbHn6ftpS5V
-         diWd3hyaOBXKMFqkUZln/mv8NLopSQoolLXXqUYsx0JTvguXJ/WdgmHIxL3zzDDm5c
-         EPXzVQZyLK75w==
-Message-ID: <d2ad3a3d7bdd794c6efb562d2f2b655fb67756b9.camel@kernel.org>
-Subject: new __write_overflow_field compiler warning
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 17 May 2022 14:03:52 -0400
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 14:05:26 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F67251582
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:04:31 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id p189so10866511wmp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:04:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=EKSmnvJVRKuNiorxmh6RKpW9+C+oBWZuirhwngUpiFA=;
+        b=d8XJLJsZpEXABv6ZORuvVlkZV/eZ0n5QWvVfV1Il8MFmUInxoYkMl3Kmq2wMRGnu/Y
+         tGbJqIujPWUGCNgZ/tqGy1+5cJlA7oXSk+0oDV1jG1oZ7o9gkyVG9ATGIB0RjMTRhhL3
+         OB76y7+GsffV/CyOU75jAwBwYjMFeWYOacizhtdmid6sisM4pzfceqYcyTq1aNYQkZ42
+         XcUOTZerZ4FvdaSvcQx0+uErEOW1VaA0Js5mUP10jFw0gcH5pu2DuTZ4HlBZo/OWP7lq
+         bUhyWznZSNRpzW/t/T6xXZf95iBXy/9wwFuCzKZcv/KtEhRZzwvHKypq/MhU7fck63m3
+         Gdxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=EKSmnvJVRKuNiorxmh6RKpW9+C+oBWZuirhwngUpiFA=;
+        b=2blnNmERAldlNgAf/dEtDb7YHJQOPDWqzmIMRhdK82Ld0IA1h3W0FfEco7ZdwMzbzc
+         LfzzQM4dfm3+zeRUn75nP49DutBqkziMBG8+qyH8SQQD9xKjkifcJmrzX79qrNSLXtZ3
+         nX3XhWP75qtWKxSmp17ZOhuhHHkgaejyCMfBHvwYHXxJhwWuYuCXx41eFizTxoBLiST6
+         oan6lKFw8zjwKmFFbS8kQqJiWJpd/T8oFVbOnDiVDsLLS+Fr5oT1oe5kGnCGYxFTPdq6
+         N0hyu6hEF12JNCv1Pn1sK2tf/XPTYQ586f8+L7v03mi3jzLE+ZDBvaOcsa77XPdkfZXD
+         nprg==
+X-Gm-Message-State: AOAM533B4OGkm0QIJOCqrPkvtyu0TsvkoSCUh30VmSgG9lmeKN6TBYqG
+        wknBrswu16vM67BdEDk16Ym6JWGleJk=
+X-Google-Smtp-Source: ABdhPJxvO8aJltdNydOcbp7B8L4owevPlqnxSW+KqTPFcqROlQBAyvV0Gb48z5sSt/DmKwKj8j4PqQ==
+X-Received: by 2002:a05:600c:3caa:b0:394:8fb8:716 with SMTP id bg42-20020a05600c3caa00b003948fb80716mr32758904wmb.105.1652810670151;
+        Tue, 17 May 2022 11:04:30 -0700 (PDT)
+Received: from otyshchenko.router ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id c3-20020adfc6c3000000b0020c5253d8dasm12978625wrh.38.2022.05.17.11.04.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 May 2022 11:04:29 -0700 (PDT)
+From:   Oleksandr Tyshchenko <olekstysh@gmail.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
+Subject: [RFC PATCH 0/2] Ability to allocate DMAable pages using unpopulated-alloc 
+Date:   Tue, 17 May 2022 21:04:16 +0300
+Message-Id: <1652810658-27810-1-git-send-email-olekstysh@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-I'm hoping you can help with this. I recently updated to Fedora 36,
-which has gcc v12, and I've started seeing this warning pop up when
-compiling the ceph.ko:
+Hello all.
 
-In file included from ./include/linux/string.h:253,
-                 from ./include/linux/ceph/ceph_debug.h:7,
-                 from fs/ceph/inode.c:2:
-In function =E2=80=98fortify_memset_chk=E2=80=99,
-    inlined from =E2=80=98netfs_i_context_init=E2=80=99 at ./include/linux/=
-netfs.h:326:2,
-    inlined from =E2=80=98ceph_alloc_inode=E2=80=99 at fs/ceph/inode.c:463:=
-2:
-./include/linux/fortify-string.h:242:25: warning: call to =E2=80=98__write_=
-overflow_field=E2=80=99 declared with attribute warning: detected write bey=
-ond size of field (1st parameter); maybe use struct_group()? [-Wattribute-w=
-arning]
-  242 |                         __write_overflow_field(p_size_field, size);
-      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The purpose of this RFC patch series is to get feedback about supporting the allocation
+of DMAable pages by Linux's unpopulated-alloc.
 
-This doesn't seem to happen with gcc v11. It looks like the code is
-doing the right thing. Is there something we need to fix how the netfs
-context gets initialized or is this a compiler problem?
+The unpopulated-alloc feature has been enabled on Arm since the extended-regions support
+reached upstream. With that (if, of course, we run new Xen version and Xen was able to
+allocate extended regions), we don't allocate the real RAM pages from host memory and balloon
+them out (in order to obtain physical memory space to map the guest pages into) anymore, we use
+the unpopulated pages instead. And it seems that all users I have played with on Arm (I mean,
+Xen PV and virtio backends) are happy with the pages provided by xen_alloc_unpopulated_pages().
+It is worth mentioning that these pages are not contiguous, but this wasn't an issue so far.
 
-FWIW: I'm using:
+There is one place, where we still steal RAM pages if user-space Xen PV backend tries
+to establish grant mapping with a need to be backed by a DMA buffer for the sake of zero-copy
+(see dma_alloc*() usage in gnttab_dma_alloc_pages()).
 
-    gcc (GCC) 12.1.1 20220507 (Red Hat 12.1.1-1)
+And, if I am not mistaken (there might be pitfalls which I am not aware of), we could avoid
+wasting real RAM pages in that particular case also by adding an ability to allocate
+unpopulated DMAable pages (which are guaranteed to be contiguous in IPA).
+The benefit is quite clear here:
+1. Avoid wasting real RAM pages (reducing the amount of CMA memory usable) for allocating
+   physical memory space to map the granted buffer into (which can be big enough if
+   we deal with Xen PV Display driver using multiple Full HD buffers) 
+2. Avoid superpage shattering in Xen P2M when establishing stage-2 mapping for that
+   granted buffer
+3. Avoid extra operations needed for the granted buffer to be properly mapped and
+   unmapped such as ballooning in/out real RAM pages
 
-Thanks,
---=20
-Jeff Layton <jlayton@kernel.org>
+Please note, there are several TODOs (described in corresponding commit subjects),
+which I will try to eliminate in next versions if we find a common ground regarding
+the approach.
+
+Any feedback/help would be highly appreciated.
+
+Oleksandr Tyshchenko (2):
+  xen/unpopulated-alloc: Introduce helpers for DMA allocations
+  xen/grant-table: Use unpopulated DMAable pages instead of real RAM
+    ones
+
+ drivers/xen/grant-table.c       |  27 +++++++
+ drivers/xen/unpopulated-alloc.c | 167 ++++++++++++++++++++++++++++++++++++++++
+ include/xen/xen.h               |  15 ++++
+ 3 files changed, 209 insertions(+)
+
+-- 
+2.7.4
+

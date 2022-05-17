@@ -2,71 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0B552AC23
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC3D52AC27
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352834AbiEQTlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 15:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
+        id S230396AbiEQTmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 15:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352958AbiEQTlq (ORCPT
+        with ESMTP id S233185AbiEQTms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 15:41:46 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F47135A80;
-        Tue, 17 May 2022 12:41:44 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:3d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id B82CC2ED;
-        Tue, 17 May 2022 19:41:43 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B82CC2ED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1652816503; bh=vc/mJB154ai0SSpGlWahmWov7w9vRHD/u4MB2x7MD0s=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=QVtajxX9Ui4rJWwE94scwj+Ns42KZggGfOmFffQuBplqmcoMGkGJfsvNJqvVt9pla
-         CBh4oJcE4uc8Fz8iz5x3kIOmz0cqhnAGOnxcrLldfq5fTYvybXWx4r5Ha5GP3nJMzq
-         UDWnxTELudspMNDjPBTW/MgdjXvTIEilGLIA0x5GWrlqtrxLGljs4nfklw7EgIAtMZ
-         zejvFNYYdc7ba+LbJXQ6PLSPYnyW0mPNegwTfB5oV+oLLDJNN0UhG1z8PCOSM9dCLC
-         sN9tYm+a8UwNxVN9kak8c/5txM1iiSjk57BTjpkhOxRwTp7+a0lWh03vu6ln8XJZZE
-         Zkz5sD/BkLphQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Akira Yokosawa <akiyks@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH] docs: pdfdocs: Add space for chapter counts >= 100 in TOC
-In-Reply-To: <bdb60ba3-7813-47d0-74f9-7c31dd912d95@gmail.com>
-References: <bdb60ba3-7813-47d0-74f9-7c31dd912d95@gmail.com>
-Date:   Tue, 17 May 2022 13:41:43 -0600
-Message-ID: <87h75ouetk.fsf@meer.lwn.net>
+        Tue, 17 May 2022 15:42:48 -0400
+Received: from smtp.smtpout.orange.fr (smtp02.smtpout.orange.fr [80.12.242.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3A926AF9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:42:46 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id r35enso0WEMbDr35enGE51; Tue, 17 May 2022 21:42:44 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 17 May 2022 21:42:44 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <301a1d0a-971b-5b27-c5a9-86390358de9a@wanadoo.fr>
+Date:   Tue, 17 May 2022 21:42:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] RDMA: remove null check after call container_of()
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>
+Newsgroups: gmane.linux.drivers.rdma,gmane.linux.kernel
+References: <1652751208-23211-1-git-send-email-baihaowen@meizu.com>
+ <20220517121646.GE63055@ziepe.ca>
+ <142a9c03-574f-adcf-bc4d-bb2a25c01e88@wanadoo.fr>
+ <20220517180303.GK63055@ziepe.ca>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220517180303.GK63055@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Akira Yokosawa <akiyks@gmail.com> writes:
+Le 17/05/2022 à 20:03, Jason Gunthorpe a écrit :
+> On Tue, May 17, 2022 at 07:54:38PM +0200, Christophe JAILLET wrote:
+>> Le 17/05/2022 à 14:16, Jason Gunthorpe a écrit :
+>>> On Tue, May 17, 2022 at 09:33:28AM +0800, Haowen Bai wrote:
+>>>> container_of() will never return NULL, so remove useless code.
+>>>
+>>> It is confusing here, but it can be null.
+>>
+>> Hi,
+>>
+>> out of curiosity, can you elaborate how it can be NULL?
+> 
+> It is guarented/required that that container_of is a 0 offset. The
+> normal usage of the ib_alloc_device macro:
+> 
+> #define ib_alloc_device(drv_struct, member)                                    \
+> 	container_of(_ib_alloc_device(sizeof(struct drv_struct) +              \
+> 				      BUILD_BUG_ON_ZERO(offsetof(              \
+> 					      struct drv_struct, member))),    \
+> 		     struct drv_struct, member)
+> 
+> Enforces this property with a BUILD_BUG_ON
+> 
+> So, if the input pointer to container_of is reliably NULL or ERR_PTR
+> then the output pointer will be the same.
+> 
+> The rvt code here open codes the call because it is a mid-layer and
+> the sizeof() calculation above is not correct for it.
+> 
+> Jason
+> 
 
-> It turns out that networking.pdf has exceeded 100 chapters and
-> titles of chapters >= 100 collide with their counts in its table
-> of contents (TOC).
->
-> Increase relevant params by 0.6em in the preamble to avoid such
-> ugly collisions.
->
-> While at it, fix a typo in comment (subsection).
->
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> ---
->  Documentation/sphinx/kerneldoc-preamble.sty | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+Crystal clear.
+Thank you for the explanation.
 
-Applied, thanks.
-
-jon
+CJ

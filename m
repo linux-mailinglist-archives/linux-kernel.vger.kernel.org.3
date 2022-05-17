@@ -2,448 +2,498 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A7752A23B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C7552A246
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346870AbiEQM4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37856 "EHLO
+        id S1346677AbiEQM5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346788AbiEQM4a (ORCPT
+        with ESMTP id S1346768AbiEQM5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:56:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17131188
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:56:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652792188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2pbrC0ccXNbn0M/vwJ7mEw/NOu7CiMEM/hIUWf/LhP8=;
-        b=cSfV7kMECHI2v9yJZnnvz4plbomQieWWCZmNHx6wpTY41kGy2gZzy7z9+dK9ZmdzzykWGd
-        PgS1ouPGhdalrNsTdMYEnsU43wmp6Acz/PyoPPg16Q8Rf3O1r9ivH5f3G3SWBy4RWxd3CX
-        Y9joVTIPrM9z7w2FFr2bOs5HXNnMOMk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-508-CcRcNTb8PC2ME0a94C9bbw-1; Tue, 17 May 2022 08:56:25 -0400
-X-MC-Unique: CcRcNTb8PC2ME0a94C9bbw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6CB053C01D9C;
-        Tue, 17 May 2022 12:56:24 +0000 (UTC)
-Received: from localhost (unknown [10.72.47.117])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 71EBF400E114;
-        Tue, 17 May 2022 12:56:23 +0000 (UTC)
-From:   Xiubo Li <xiubli@redhat.com>
-To:     jlayton@kernel.org, viro@zeniv.linux.org.uk
-Cc:     idryomov@gmail.com, vshankar@redhat.com,
-        ceph-devel@vger.kernel.org, dchinner@redhat.com, hch@lst.de,
-        arnd@arndb.de, mcgrof@kernel.org, akpm@linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiubo Li <xiubli@redhat.com>, kernel test robot <lkp@intel.com>
-Subject: [PATCH v3 2/2] ceph: wait the first reply of inflight async unlink
-Date:   Tue, 17 May 2022 20:55:49 +0800
-Message-Id: <20220517125549.148429-3-xiubli@redhat.com>
-In-Reply-To: <20220517125549.148429-1-xiubli@redhat.com>
-References: <20220517125549.148429-1-xiubli@redhat.com>
+        Tue, 17 May 2022 08:57:09 -0400
+Received: from outbound-smtp23.blacknight.com (outbound-smtp23.blacknight.com [81.17.249.191])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982F73EF24
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:57:06 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp23.blacknight.com (Postfix) with ESMTPS id CBAC8BED2A
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:57:04 +0100 (IST)
+Received: (qmail 20201 invoked from network); 17 May 2022 12:57:04 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 17 May 2022 12:57:04 -0000
+Date:   Tue, 17 May 2022 13:57:02 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+Subject: Re: [PATCH 6/6] mm/page_alloc: Remotely drain per-cpu lists
+Message-ID: <20220517125702.GN3441@techsingularity.net>
+References: <20220512085043.5234-1-mgorman@techsingularity.net>
+ <20220512085043.5234-7-mgorman@techsingularity.net>
+ <20220512123743.5be26b3ad4413f20d5f46564@linux-foundation.org>
+ <20220513150402.GJ3441@techsingularity.net>
+ <167d30f439d171912b1ef584f20219e67a009de8.camel@redhat.com>
+ <20220513182301.GK3441@techsingularity.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20220513182301.GK3441@techsingularity.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In async unlink case the kclient won't wait for the first reply
-from MDS and just drop all the links and unhash the dentry and then
-succeeds immediately.
+On Fri, May 13, 2022 at 07:23:01PM +0100, Mel Gorman wrote:
+> > > You raise a very valid point with Thomas' mail and it is a concern that
+> > > the local_lock is no longer strictly local. We still need preemption to
+> > > be disabled between the percpu lookup and the lock acquisition but that
+> > > can be done with get_cpu_var() to make the scope clear.
+> > 
+> > This isn't going to work in RT :(
+> > 
+> > get_cpu_var() disables preemption hampering RT spinlock use. There is more to
+> > it in Documentation/locking/locktypes.rst.
+> > 
+> 
+> Bah, you're right.  A helper that called preempt_disable() on !RT
+> and migrate_disable() on RT would work although similar to local_lock
+> with a different name. I'll look on Monday to see how the code could be
+> restructured to always have the get_cpu_var() call immediately before the
+> lock acquisition. Once that is done, I'll look what sort of helper that
+> "disables preempt/migration, lookup pcp structure, acquire lock, enable
+> preempt/migration". It's effectively the magic trick that local_lock uses
+> to always lock the right pcpu lock but we want the spinlock semantics
+> for remote drain.
+> 
 
-For any new create/link/rename,etc requests followed by using the
-same file names we must wait for the first reply of the inflight
-unlink request, or the MDS possibly will fail these following
-requests with -EEXIST if the inflight async unlink request was
-delayed for some reasons.
+Monday was busier than I expected. Alternative to local_lock currently
+looks like this but still needs testing. There is some churn because it
+was no longer possible to have the CPU pinning separate from the spinlock
+acquisition. It still should be possible to potentially make pcp->lock a
+normal spinlock but I haven't confirmed that yet.
 
-And the worst case is that for the none async openc request it will
-successfully open the file if the CDentry hasn't been unlinked yet,
-but later the previous delayed async unlink request will remove the
-CDenty. That means the just created file is possiblly deleted later
-by accident.
+---8<---
+mm/page_alloc: Replace local_lock with normal spinlock
 
-We need to wait for the inflight async unlink requests to finish
-when creating new files/directories by using the same file names.
+struct per_cpu_pages is no longer strictly local as PCP lists can be
+drained remotely using a lock for protection. While the use of local_lock
+works, it goes against the intent of local_lock which is for "pure
+CPU local concurrency control mechanisms and not suited for inter-CPU
+concurrency control" (Documentation/locking/locktypes.rst)
 
-URL: https://tracker.ceph.com/issues/55332
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Xiubo Li <xiubli@redhat.com>
+local_lock protects against migration between when the percpu pointer is
+accessed and the pcp->lock acquired. The lock acquisition is a preemption
+point so in the worst case, a task could migrate to another NUMA node
+and accidentally allocate remote memory. The main requirement is to pin
+the task to a CPU that is suitable for PREEMPT_RT and !PREEMPT_RT.
+
+Replace local_lock with helpers that pin a task to a CPU, lookup the
+per-cpu structure and acquire the embedded lock. It's similar to local_lock
+without breaking the intent behind the API.
+
 ---
- fs/ceph/dir.c        | 70 +++++++++++++++++++++++++++++++++++++++---
- fs/ceph/file.c       |  4 +++
- fs/ceph/mds_client.c | 73 ++++++++++++++++++++++++++++++++++++++++++++
- fs/ceph/mds_client.h |  1 +
- fs/ceph/super.c      |  3 ++
- fs/ceph/super.h      | 19 +++++++++---
- 6 files changed, 160 insertions(+), 10 deletions(-)
+ mm/page_alloc.c | 225 ++++++++++++++++++++++++++++++--------------------------
+ 1 file changed, 120 insertions(+), 105 deletions(-)
 
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index eae417d71136..01e7facef9b2 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -856,6 +856,10 @@ static int ceph_mknod(struct user_namespace *mnt_userns, struct inode *dir,
- 	if (ceph_snap(dir) != CEPH_NOSNAP)
- 		return -EROFS;
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0f5a6a5b0302..d9c186bf498d 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -125,13 +125,6 @@ typedef int __bitwise fpi_t;
+ static DEFINE_MUTEX(pcp_batch_high_lock);
+ #define MIN_PERCPU_PAGELIST_HIGH_FRACTION (8)
  
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_quota_is_max_files_exceeded(dir)) {
- 		err = -EDQUOT;
- 		goto out;
-@@ -918,6 +922,10 @@ static int ceph_symlink(struct user_namespace *mnt_userns, struct inode *dir,
- 	if (ceph_snap(dir) != CEPH_NOSNAP)
- 		return -EROFS;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_quota_is_max_files_exceeded(dir)) {
- 		err = -EDQUOT;
- 		goto out;
-@@ -968,9 +976,13 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 	struct ceph_mds_client *mdsc = ceph_sb_to_mdsc(dir->i_sb);
- 	struct ceph_mds_request *req;
- 	struct ceph_acl_sec_ctx as_ctx = {};
--	int err = -EROFS;
-+	int err;
- 	int op;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_snap(dir) == CEPH_SNAPDIR) {
- 		/* mkdir .snap/foo is a MKSNAP */
- 		op = CEPH_MDS_OP_MKSNAP;
-@@ -980,6 +992,7 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 		dout("mkdir dir %p dn %p mode 0%ho\n", dir, dentry, mode);
- 		op = CEPH_MDS_OP_MKDIR;
- 	} else {
-+		err = -EROFS;
- 		goto out;
- 	}
- 
-@@ -1037,6 +1050,10 @@ static int ceph_link(struct dentry *old_dentry, struct inode *dir,
- 	struct ceph_mds_request *req;
- 	int err;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_snap(dir) != CEPH_NOSNAP)
- 		return -EROFS;
- 
-@@ -1071,9 +1088,27 @@ static int ceph_link(struct dentry *old_dentry, struct inode *dir,
- static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
- 				 struct ceph_mds_request *req)
- {
-+	struct dentry *dentry = req->r_dentry;
-+	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
-+	struct ceph_dentry_info *di = ceph_dentry(dentry);
- 	int result = req->r_err ? req->r_err :
- 			le32_to_cpu(req->r_reply_info.head->result);
- 
-+	if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
-+		pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
-+			__func__, dentry, dentry);
-+
-+	spin_lock(&fsc->async_unlink_conflict_lock);
-+	hash_del_rcu(&di->hnode);
-+	spin_unlock(&fsc->async_unlink_conflict_lock);
-+
-+	spin_lock(&dentry->d_lock);
-+	di->flags &= ~CEPH_DENTRY_ASYNC_UNLINK;
-+	wake_up_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT);
-+	spin_unlock(&dentry->d_lock);
-+
-+	synchronize_rcu();
-+
- 	if (result == -EJUKEBOX)
- 		goto out;
- 
-@@ -1081,7 +1116,7 @@ static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
- 	if (result) {
- 		int pathlen = 0;
- 		u64 base = 0;
--		char *path = ceph_mdsc_build_path(req->r_dentry, &pathlen,
-+		char *path = ceph_mdsc_build_path(dentry, &pathlen,
- 						  &base, 0);
- 
- 		/* mark error on parent + clear complete */
-@@ -1089,13 +1124,13 @@ static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
- 		ceph_dir_clear_complete(req->r_parent);
- 
- 		/* drop the dentry -- we don't know its status */
--		if (!d_unhashed(req->r_dentry))
--			d_drop(req->r_dentry);
-+		if (!d_unhashed(dentry))
-+			d_drop(dentry);
- 
- 		/* mark inode itself for an error (since metadata is bogus) */
- 		mapping_set_error(req->r_old_inode->i_mapping, result);
- 
--		pr_warn("ceph: async unlink failure path=(%llx)%s result=%d!\n",
-+		pr_warn("async unlink failure path=(%llx)%s result=%d!\n",
- 			base, IS_ERR(path) ? "<<bad>>" : path, result);
- 		ceph_mdsc_free_path(path, pathlen);
- 	}
-@@ -1180,6 +1215,8 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
- 
- 	if (try_async && op == CEPH_MDS_OP_UNLINK &&
- 	    (req->r_dir_caps = get_caps_for_async_unlink(dir, dentry))) {
-+		struct ceph_dentry_info *di = ceph_dentry(dentry);
-+
- 		dout("async unlink on %llu/%.*s caps=%s", ceph_ino(dir),
- 		     dentry->d_name.len, dentry->d_name.name,
- 		     ceph_cap_string(req->r_dir_caps));
-@@ -1187,6 +1224,16 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
- 		req->r_callback = ceph_async_unlink_cb;
- 		req->r_old_inode = d_inode(dentry);
- 		ihold(req->r_old_inode);
-+
-+		spin_lock(&dentry->d_lock);
-+		di->flags |= CEPH_DENTRY_ASYNC_UNLINK;
-+		spin_unlock(&dentry->d_lock);
-+
-+		spin_lock(&fsc->async_unlink_conflict_lock);
-+		hash_add_rcu(fsc->async_unlink_conflict, &di->hnode,
-+			     dentry->d_name.hash);
-+		spin_unlock(&fsc->async_unlink_conflict_lock);
-+
- 		err = ceph_mdsc_submit_request(mdsc, dir, req);
- 		if (!err) {
- 			/*
-@@ -1198,6 +1245,15 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
- 		} else if (err == -EJUKEBOX) {
- 			try_async = false;
- 			ceph_mdsc_put_request(req);
-+
-+			spin_lock(&dentry->d_lock);
-+			di->flags &= ~CEPH_DENTRY_ASYNC_UNLINK;
-+			spin_unlock(&dentry->d_lock);
-+
-+			spin_lock(&fsc->async_unlink_conflict_lock);
-+			hash_del_rcu(&di->hnode);
-+			spin_unlock(&fsc->async_unlink_conflict_lock);
-+
- 			goto retry;
- 		}
- 	} else {
-@@ -1237,6 +1293,10 @@ static int ceph_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 	    (!ceph_quota_is_same_realm(old_dir, new_dir)))
- 		return -EXDEV;
- 
-+	err = ceph_wait_on_conflict_unlink(new_dentry);
-+	if (err)
-+		return err;
-+
- 	dout("rename dir %p dentry %p to dir %p dentry %p\n",
- 	     old_dir, old_dentry, new_dir, new_dentry);
- 	req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
-diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-index 8c8226c0feac..f039e799f5f4 100644
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -740,6 +740,10 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
- 	if (dentry->d_name.len > NAME_MAX)
- 		return -ENAMETOOLONG;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (flags & O_CREAT) {
- 		if (ceph_quota_is_max_files_exceeded(dir))
- 			return -EDQUOT;
-diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-index e8c87dea0551..480c69bc51b1 100644
---- a/fs/ceph/mds_client.c
-+++ b/fs/ceph/mds_client.c
-@@ -655,6 +655,79 @@ static void destroy_reply_info(struct ceph_mds_reply_info_parsed *info)
- 	free_pages((unsigned long)info->dir_entries, get_order(info->dir_buf_size));
- }
+-struct pagesets {
+-	local_lock_t lock;
+-};
+-static DEFINE_PER_CPU(struct pagesets, pagesets) __maybe_unused = {
+-	.lock = INIT_LOCAL_LOCK(lock),
+-};
+-
+ #if defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT)
+ /*
+  * On SMP, spin_trylock is sufficient protection.
+@@ -146,6 +139,80 @@ static DEFINE_PER_CPU(struct pagesets, pagesets) __maybe_unused = {
+ #define pcp_trylock_finish(flags)	local_irq_restore(flags)
+ #endif
  
 +/*
-+ * In async unlink case the kclient won't wait for the first reply
-+ * from MDS and just drop all the links and unhash the dentry and then
-+ * succeeds immediately.
-+ *
-+ * For any new create/link/rename,etc requests followed by using the
-+ * same file names we must wait for the first reply of the inflight
-+ * unlink request, or the MDS possibly will fail these following
-+ * requests with -EEXIST if the inflight async unlink request was
-+ * delayed for some reasons.
-+ *
-+ * And the worst case is that for the none async openc request it will
-+ * successfully open the file if the CDentry hasn't been unlinked yet,
-+ * but later the previous delayed async unlink request will remove the
-+ * CDenty. That means the just created file is possiblly deleted later
-+ * by accident.
-+ *
-+ * We need to wait for the inflight async unlink requests to finish
-+ * when creating new files/directories by using the same file names.
++ * Locking a pcp requires a PCP lookup followed by a spinlock. To avoid
++ * a migration causing the wrong PCP to be locked and remote memory being
++ * potentially allocated, pin the task to the CPU for the lookup+lock.
++ * preempt_disable is used on !RT because it is faster than migrate_disable.
++ * migrate_disable is used on RT because otherwise RT spinlock usage is
++ * interfered with and a high priority task cannot preempt the allocator.
 + */
-+int ceph_wait_on_conflict_unlink(struct dentry *dentry)
-+{
-+	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
-+	struct dentry *pdentry = dentry->d_parent;
-+	struct dentry *udentry, *found = NULL;
-+	struct ceph_dentry_info *di;
-+	struct qstr dname;
-+	u32 hash = dentry->d_name.hash;
-+	int err;
++#ifndef CONFIG_PREEMPT_RT
++#define pcpu_task_pin()		preempt_disable()
++#define pcpu_task_unpin()	preempt_enable()
++#else
++#define pcpu_task_pin()		migrate_disable()
++#define pcpu_task_unpin()	migrate_enable()
++#endif
 +
-+	dname.name = dentry->d_name.name;
-+	dname.len = dentry->d_name.len;
++/* Generic helper to lookup and a per-cpu variable with an embedded spinlock.
++ * Return value should be used with equivalent unlock helper.
++ */
++#define pcpu_spin_lock(type, member, ptr)				\
++({									\
++	type *_ret;							\
++	pcpu_task_pin();						\
++	_ret = this_cpu_ptr(ptr);					\
++	spin_lock(&_ret->member);					\
++	_ret;								\
++})
 +
-+	rcu_read_lock();
-+	hash_for_each_possible_rcu(fsc->async_unlink_conflict, di,
-+				   hnode, hash) {
-+		udentry = di->dentry;
++#define pcpu_spin_lock_irqsave(type, member, ptr, flags)		\
++({									\
++	type *_ret;							\
++	pcpu_task_pin();						\
++	_ret = this_cpu_ptr(ptr);					\
++	spin_lock_irqsave(&_ret->member, flags);			\
++	_ret;								\
++})
 +
-+		spin_lock(&udentry->d_lock);
-+		if (udentry->d_name.hash != hash)
-+			goto next;
-+		if (unlikely(udentry->d_parent != pdentry))
-+			goto next;
-+		if (!hash_hashed(&di->hnode))
-+			goto next;
++#define pcpu_spin_trylock_irqsave(type, member, ptr, flags)		\
++({									\
++	type *_ret;							\
++	pcpu_task_pin();						\
++	_ret = this_cpu_ptr(ptr);					\
++	if (!spin_trylock_irqsave(&_ret->member, flags))		\
++		_ret = NULL;						\
++	_ret;								\
++})
 +
-+		if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
-+			pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
-+				__func__, dentry, dentry);
++#define pcpu_spin_unlock(member, ptr)					\
++({									\
++	spin_unlock(&ptr->member);					\
++	pcpu_task_pin();						\
++})
 +
-+		if (d_compare(pdentry, udentry, &dname))
-+			goto next;
++#define pcpu_spin_unlock_irqrestore(member, ptr, flags)			\
++({									\
++	spin_unlock_irqrestore(&ptr->member, flags);			\
++	pcpu_task_unpin();						\
++})
 +
-+		spin_unlock(&udentry->d_lock);
-+		found = dget(udentry);
-+		break;
-+next:
-+		spin_unlock(&udentry->d_lock);
-+	}
-+	rcu_read_unlock();
++/* struct per_cpu_pages specific helpers. */
++#define pcp_spin_lock(ptr)						\
++	pcpu_spin_lock(struct per_cpu_pages, lock, ptr)
 +
-+	if (likely(!found))
-+		return 0;
++#define pcp_spin_lock_irqsave(ptr, flags)				\
++	pcpu_spin_lock_irqsave(struct per_cpu_pages, lock, ptr, flags)
 +
-+	dout("%s dentry %p:%pd conflict with old %p:%pd\n", __func__,
-+	     dentry, dentry, found, found);
++#define pcp_spin_trylock_irqsave(ptr, flags)				\
++	pcpu_spin_trylock_irqsave(struct per_cpu_pages, lock, ptr, flags)
 +
-+	err = wait_on_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT,
-+			  TASK_INTERRUPTIBLE);
-+	dput(found);
-+	return err;
-+}
++#define pcp_spin_unlock(ptr)						\
++	pcpu_spin_unlock(lock, ptr)
 +
++#define pcp_spin_unlock_irqrestore(ptr, flags)				\
++	pcpu_spin_unlock_irqrestore(lock, ptr, flags)
+ #ifdef CONFIG_USE_PERCPU_NUMA_NODE_ID
+ DEFINE_PER_CPU(int, numa_node);
+ EXPORT_PER_CPU_SYMBOL(numa_node);
+@@ -1466,10 +1533,7 @@ static void free_pcppages_bulk(struct zone *zone, int count,
+ 	/* Ensure requested pindex is drained first. */
+ 	pindex = pindex - 1;
  
- /*
-  * sessions
-diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
-index 33497846e47e..d1ae679c52c3 100644
---- a/fs/ceph/mds_client.h
-+++ b/fs/ceph/mds_client.h
-@@ -582,6 +582,7 @@ static inline int ceph_wait_on_async_create(struct inode *inode)
- 			   TASK_INTERRUPTIBLE);
+-	/*
+-	 * local_lock_irq held so equivalent to spin_lock_irqsave for
+-	 * both PREEMPT_RT and non-PREEMPT_RT configurations.
+-	 */
++	/* Caller must hold IRQ-safe pcp->lock so IRQs are disabled. */
+ 	spin_lock(&zone->lock);
+ 	isolated_pageblocks = has_isolate_pageblock(zone);
+ 
+@@ -3037,10 +3101,7 @@ static int rmqueue_bulk(struct zone *zone, unsigned int order,
+ {
+ 	int i, allocated = 0;
+ 
+-	/*
+-	 * local_lock_irq held so equivalent to spin_lock_irqsave for
+-	 * both PREEMPT_RT and non-PREEMPT_RT configurations.
+-	 */
++	/* Caller must hold IRQ-safe pcp->lock so IRQs are disabled. */
+ 	spin_lock(&zone->lock);
+ 	for (i = 0; i < count; ++i) {
+ 		struct page *page = __rmqueue(zone, order, migratetype,
+@@ -3353,30 +3414,17 @@ static int nr_pcp_high(struct per_cpu_pages *pcp, struct zone *zone,
+ 	return min(READ_ONCE(pcp->batch) << 2, high);
  }
  
-+extern int ceph_wait_on_conflict_unlink(struct dentry *dentry);
- extern u64 ceph_get_deleg_ino(struct ceph_mds_session *session);
- extern int ceph_restore_deleg_ino(struct ceph_mds_session *session, u64 ino);
- #endif
-diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-index b73b4f75462c..6542b71f8627 100644
---- a/fs/ceph/super.c
-+++ b/fs/ceph/super.c
-@@ -816,6 +816,9 @@ static struct ceph_fs_client *create_fs_client(struct ceph_mount_options *fsopt,
- 	if (!fsc->cap_wq)
- 		goto fail_inode_wq;
+-/* Returns true if the page was committed to the per-cpu list. */
+-static bool free_unref_page_commit(struct page *page, int migratetype,
+-				   unsigned int order, bool locked)
++static void free_unref_page_commit(struct per_cpu_pages *pcp, struct zone *zone,
++				   struct page *page, int migratetype,
++				   unsigned int order)
+ {
+-	struct zone *zone = page_zone(page);
+-	struct per_cpu_pages *pcp;
+ 	int high;
+ 	int pindex;
+ 	bool free_high;
+-	unsigned long __maybe_unused UP_flags;
  
-+	hash_init(fsc->async_unlink_conflict);
-+	spin_lock_init(&fsc->async_unlink_conflict_lock);
-+
- 	spin_lock(&ceph_fsc_lock);
- 	list_add_tail(&fsc->metric_wakeup, &ceph_fsc_list);
- 	spin_unlock(&ceph_fsc_lock);
-diff --git a/fs/ceph/super.h b/fs/ceph/super.h
-index 506d52633627..251e726ec628 100644
---- a/fs/ceph/super.h
-+++ b/fs/ceph/super.h
-@@ -19,6 +19,7 @@
- #include <linux/security.h>
- #include <linux/netfs.h>
- #include <linux/fscache.h>
-+#include <linux/hashtable.h>
+ 	__count_vm_event(PGFREE);
+-	pcp = this_cpu_ptr(zone->per_cpu_pageset);
+ 	pindex = order_to_pindex(migratetype, order);
  
- #include <linux/ceph/libceph.h>
+-	if (!locked) {
+-		/* Protect against a parallel drain. */
+-		pcp_trylock_prepare(UP_flags);
+-		if (!spin_trylock(&pcp->lock)) {
+-			pcp_trylock_finish(UP_flags);
+-			return false;
+-		}
+-	}
+-
+ 	list_add(&page->pcp_list, &pcp->lists[pindex]);
+ 	pcp->count += 1 << order;
  
-@@ -99,6 +100,8 @@ struct ceph_mount_options {
- 	char *mon_addr;
- };
+@@ -3394,13 +3442,6 @@ static bool free_unref_page_commit(struct page *page, int migratetype,
  
-+#define CEPH_ASYNC_CREATE_CONFLICT_BITS 8
-+
- struct ceph_fs_client {
- 	struct super_block *sb;
+ 		free_pcppages_bulk(zone, nr_pcp_free(pcp, high, batch, free_high), pcp, pindex);
+ 	}
+-
+-	if (!locked) {
+-		spin_unlock(&pcp->lock);
+-		pcp_trylock_finish(UP_flags);
+-	}
+-
+-	return true;
+ }
  
-@@ -124,6 +127,9 @@ struct ceph_fs_client {
- 	struct workqueue_struct *inode_wq;
- 	struct workqueue_struct *cap_wq;
- 
-+	DECLARE_HASHTABLE(async_unlink_conflict, CEPH_ASYNC_CREATE_CONFLICT_BITS);
-+	spinlock_t async_unlink_conflict_lock;
-+
- #ifdef CONFIG_DEBUG_FS
- 	struct dentry *debugfs_dentry_lru, *debugfs_caps;
- 	struct dentry *debugfs_congestion_kb;
-@@ -281,7 +287,8 @@ struct ceph_dentry_info {
- 	struct dentry *dentry;
- 	struct ceph_mds_session *lease_session;
- 	struct list_head lease_list;
--	unsigned flags;
-+	struct hlist_node hnode;
+ /*
+@@ -3408,10 +3449,12 @@ static bool free_unref_page_commit(struct page *page, int migratetype,
+  */
+ void free_unref_page(struct page *page, unsigned int order)
+ {
+-	unsigned long flags;
++	struct per_cpu_pages *pcp;
++	struct zone *zone;
+ 	unsigned long pfn = page_to_pfn(page);
+ 	int migratetype;
+-	bool freed_pcp = false;
 +	unsigned long flags;
- 	int lease_shared_gen;
- 	u32 lease_gen;
- 	u32 lease_seq;
-@@ -290,10 +297,12 @@ struct ceph_dentry_info {
- 	u64 offset;
- };
++	unsigned long __maybe_unused UP_flags;
  
--#define CEPH_DENTRY_REFERENCED		1
--#define CEPH_DENTRY_LEASE_LIST		2
--#define CEPH_DENTRY_SHRINK_LIST		4
--#define CEPH_DENTRY_PRIMARY_LINK	8
-+#define CEPH_DENTRY_REFERENCED		(1 << 0)
-+#define CEPH_DENTRY_LEASE_LIST		(1 << 1)
-+#define CEPH_DENTRY_SHRINK_LIST		(1 << 2)
-+#define CEPH_DENTRY_PRIMARY_LINK	(1 << 3)
-+#define CEPH_DENTRY_ASYNC_UNLINK_BIT	(4)
-+#define CEPH_DENTRY_ASYNC_UNLINK	(1 << CEPH_DENTRY_ASYNC_UNLINK_BIT)
+ 	if (!free_unref_page_prepare(page, pfn, order))
+ 		return;
+@@ -3432,12 +3475,16 @@ void free_unref_page(struct page *page, unsigned int order)
+ 		migratetype = MIGRATE_MOVABLE;
+ 	}
  
- struct ceph_inode_xattrs_info {
+-	local_lock_irqsave(&pagesets.lock, flags);
+-	freed_pcp = free_unref_page_commit(page, migratetype, order, false);
+-	local_unlock_irqrestore(&pagesets.lock, flags);
+-
+-	if (unlikely(!freed_pcp))
++	zone = page_zone(page);
++	pcp_trylock_prepare(UP_flags);
++	pcp = pcpu_spin_trylock_irqsave(struct per_cpu_pages, lock, zone->per_cpu_pageset, flags);
++	if (pcp) {
++		free_unref_page_commit(pcp, zone, page, migratetype, order);
++		pcp_spin_unlock_irqrestore(pcp, flags);
++	} else {
+ 		free_one_page(page_zone(page), page, pfn, order, migratetype, FPI_NONE);
++	}
++	pcp_trylock_finish(UP_flags);
+ }
+ 
+ /*
+@@ -3488,20 +3535,20 @@ void free_unref_page_list(struct list_head *list)
+ 
+ 	VM_BUG_ON(in_hardirq());
+ 
+-	local_lock_irqsave(&pagesets.lock, flags);
+-
+ 	page = lru_to_page(list);
+ 	locked_zone = page_zone(page);
+-	pcp = this_cpu_ptr(locked_zone->per_cpu_pageset);
+-	spin_lock(&pcp->lock);
++	pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
+ 
+ 	list_for_each_entry_safe(page, next, list, lru) {
+ 		struct zone *zone = page_zone(page);
+ 
+ 		/* Different zone, different pcp lock. */
+ 		if (zone != locked_zone) {
++			/* Leave IRQs enabled as a new lock is acquired. */
+ 			spin_unlock(&pcp->lock);
+ 			locked_zone = zone;
++
++			/* Preemption disabled by pcp_spin_lock_irqsave. */
+ 			pcp = this_cpu_ptr(zone->per_cpu_pageset);
+ 			spin_lock(&pcp->lock);
+ 		}
+@@ -3516,33 +3563,19 @@ void free_unref_page_list(struct list_head *list)
+ 
+ 		trace_mm_page_free_batched(page);
+ 
+-		/*
+-		 * If there is a parallel drain in progress, free to the buddy
+-		 * allocator directly. This is expensive as the zone lock will
+-		 * be acquired multiple times but if a drain is in progress
+-		 * then an expensive operation is already taking place.
+-		 *
+-		 * TODO: Always false at the moment due to local_lock_irqsave
+-		 *       and is preparation for converting to local_lock.
+-		 */
+-		if (unlikely(!free_unref_page_commit(page, migratetype, 0, true)))
+-			free_one_page(page_zone(page), page, page_to_pfn(page), 0, migratetype, FPI_NONE);
++		free_unref_page_commit(pcp, zone, page, migratetype, 0);
+ 
+ 		/*
+ 		 * Guard against excessive IRQ disabled times when we get
+ 		 * a large list of pages to free.
+ 		 */
+ 		if (++batch_count == SWAP_CLUSTER_MAX) {
+-			spin_unlock(&pcp->lock);
+-			local_unlock_irqrestore(&pagesets.lock, flags);
++			pcp_spin_unlock_irqrestore(pcp, flags);
+ 			batch_count = 0;
+-			local_lock_irqsave(&pagesets.lock, flags);
+-			pcp = this_cpu_ptr(locked_zone->per_cpu_pageset);
+-			spin_lock(&pcp->lock);
++			pcp = pcp_spin_lock_irqsave(locked_zone->per_cpu_pageset, flags);
+ 		}
+ 	}
+-	spin_unlock(&pcp->lock);
+-	local_unlock_irqrestore(&pagesets.lock, flags);
++	pcp_spin_unlock_irqrestore(pcp, flags);
+ }
+ 
+ /*
+@@ -3713,28 +3746,9 @@ struct page *__rmqueue_pcplist(struct zone *zone, unsigned int order,
+ 			int migratetype,
+ 			unsigned int alloc_flags,
+ 			struct per_cpu_pages *pcp,
+-			struct list_head *list,
+-			bool locked)
++			struct list_head *list)
+ {
+ 	struct page *page;
+-	unsigned long __maybe_unused UP_flags;
+-
+-	/*
+-	 * spin_trylock is not necessary right now due to due to
+-	 * local_lock_irqsave and is a preparation step for
+-	 * a conversion to local_lock using the trylock to prevent
+-	 * IRQ re-entrancy. If pcp->lock cannot be acquired, the caller
+-	 * uses rmqueue_buddy.
+-	 *
+-	 * TODO: Convert local_lock_irqsave to local_lock.
+-	 */
+-	if (unlikely(!locked)) {
+-		pcp_trylock_prepare(UP_flags);
+-		if (!spin_trylock(&pcp->lock)) {
+-			pcp_trylock_finish(UP_flags);
+-			return NULL;
+-		}
+-	}
+ 
+ 	do {
+ 		if (list_empty(list)) {
+@@ -3767,10 +3781,6 @@ struct page *__rmqueue_pcplist(struct zone *zone, unsigned int order,
+ 	} while (check_new_pcp(page, order));
+ 
+ out:
+-	if (!locked) {
+-		spin_unlock(&pcp->lock);
+-		pcp_trylock_finish(UP_flags);
+-	}
+ 
+ 	return page;
+ }
+@@ -3785,19 +3795,29 @@ static struct page *rmqueue_pcplist(struct zone *preferred_zone,
+ 	struct list_head *list;
+ 	struct page *page;
+ 	unsigned long flags;
++	unsigned long __maybe_unused UP_flags;
+ 
+-	local_lock_irqsave(&pagesets.lock, flags);
++	/*
++	 * spin_trylock_irqsave is not necessary right now as it'll only be
++	 * true when contending with a remote drain. It's in place as a
++	 * preparation step before converting pcp locking to spin_trylock
++	 * to protect against IRQ reentry.
++	 */
++	pcp_trylock_prepare(UP_flags);
++	pcp = pcp_spin_trylock_irqsave(zone->per_cpu_pageset, flags);
++	if (!pcp)
++		return NULL;
+ 
  	/*
--- 
-2.36.0.rc1
-
+ 	 * On allocation, reduce the number of pages that are batch freed.
+ 	 * See nr_pcp_free() where free_factor is increased for subsequent
+ 	 * frees.
+ 	 */
+-	pcp = this_cpu_ptr(zone->per_cpu_pageset);
+ 	pcp->free_factor >>= 1;
+ 	list = &pcp->lists[order_to_pindex(migratetype, order)];
+-	page = __rmqueue_pcplist(zone, order, migratetype, alloc_flags, pcp, list, false);
+-	local_unlock_irqrestore(&pagesets.lock, flags);
++	page = __rmqueue_pcplist(zone, order, migratetype, alloc_flags, pcp, list);
++	pcp_spin_unlock_irqrestore(pcp, flags);
++	pcp_trylock_finish(UP_flags);
+ 	if (page) {
+ 		__count_zid_vm_events(PGALLOC, page_zonenum(page), 1);
+ 		zone_statistics(preferred_zone, zone, 1);
+@@ -5396,10 +5416,8 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 		goto failed;
+ 
+ 	/* Attempt the batch allocation */
+-	local_lock_irqsave(&pagesets.lock, flags);
+-	pcp = this_cpu_ptr(zone->per_cpu_pageset);
++	pcp = pcp_spin_lock_irqsave(zone->per_cpu_pageset, flags);
+ 	pcp_list = &pcp->lists[order_to_pindex(ac.migratetype, 0)];
+-	spin_lock(&pcp->lock);
+ 
+ 	while (nr_populated < nr_pages) {
+ 
+@@ -5410,13 +5428,11 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 		}
+ 
+ 		page = __rmqueue_pcplist(zone, 0, ac.migratetype, alloc_flags,
+-							pcp, pcp_list, true);
++							pcp, pcp_list);
+ 		if (unlikely(!page)) {
+ 			/* Try and get at least one page */
+-			if (!nr_populated) {
+-				spin_unlock(&pcp->lock);
++			if (!nr_populated)
+ 				goto failed_irq;
+-			}
+ 			break;
+ 		}
+ 		nr_account++;
+@@ -5429,8 +5445,7 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 		nr_populated++;
+ 	}
+ 
+-	spin_unlock(&pcp->lock);
+-	local_unlock_irqrestore(&pagesets.lock, flags);
++	pcp_spin_unlock_irqrestore(pcp, flags);
+ 
+ 	__count_zid_vm_events(PGALLOC, zone_idx(zone), nr_account);
+ 	zone_statistics(ac.preferred_zoneref->zone, zone, nr_account);
+@@ -5439,7 +5454,7 @@ unsigned long __alloc_pages_bulk(gfp_t gfp, int preferred_nid,
+ 	return nr_populated;
+ 
+ failed_irq:
+-	local_unlock_irqrestore(&pagesets.lock, flags);
++	pcp_spin_unlock_irqrestore(pcp, flags);
+ 
+ failed:
+ 	page = __alloc_pages(gfp, 0, preferred_nid, nodemask);

@@ -2,89 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EAF52AD5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9884152AD65
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234479AbiEQVLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S1352161AbiEQVPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353200AbiEQVLW (ORCPT
+        with ESMTP id S238483AbiEQVPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:11:22 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65D227B37
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:11:20 -0700 (PDT)
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 81DAF3F164
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 21:11:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1652821877;
-        bh=ABLCy/8yhWR8/YRA8GGw8Leu35Alfnt7kjgvDbpodu8=;
-        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-         Content-Type:Date:Message-ID;
-        b=hqCkJTpRPKEcxSZDrucup0bfpzm3HMBbGo+0uKqMUEM1c9m2L5KjqcbU2GYCUTe/a
-         /u3JDMQ0qz1lHMU97zSqnN/rc6Ob1EUxdweeJyqpdKAvMtg3X5yIiNTokMIutL6g/x
-         lYn7OeDwLAJyo70541DfUnDqh0VbMuB9TffvkUGd/qARoo4VS2uj0dC+4wwwXLNbeO
-         n6NiyLagy9VfMlgDTPgzPUWy0YW1TngCEaNf1vtYjX6mqYJynKHpUq6Zc/o+Jv83C+
-         cQh6TAAcM15re2fwTw78ECT3LcdlEoBOjaYSyTlxRY60QM25dbqTvzoX6o1uHT4nNB
-         Hn6lmQAnwwEyA==
-Received: by mail-pj1-f71.google.com with SMTP id s1-20020a17090a760100b001dfa6169b1eso44558pjk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:11:17 -0700 (PDT)
+        Tue, 17 May 2022 17:15:45 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F882AD5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:15:44 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id i8so4488262plr.13
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:15:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JWJH0H3VnL630PpxKgPoS9Ozluel4tO19edpwjN9dAY=;
+        b=UY58ZLPSUEWH1oW7m8vE1PZXb1XF9W65pNy+7zoChQg79UoRE+M07cnON1DfeFsiNR
+         UTWXwYpV9VNT7S+u/LK2EYC4HNZQcm1aZBmLsIAwiBq8kBAwi/JRkBVnsTQdqQmygL+N
+         9eJAm5HiiqC1SLddngx11AH+JvWWyw6IFRufI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
-         :comments:mime-version:content-id:content-transfer-encoding:date
-         :message-id;
-        bh=ABLCy/8yhWR8/YRA8GGw8Leu35Alfnt7kjgvDbpodu8=;
-        b=PtxKKCjtczUML8hM4ucx/yWNt5gQ6sJfPke84ggo/P9y6N/0x1yTN5Vcag+WBQeGjg
-         rHqt4F1tUF2TkiXlJiveWJznS54AZSI2/Iid/i/iwcZMDdY5ZC7VJtFMit+9I3yS2bFY
-         xOdvo+QQfCo6JybjJhnUA4JxkJ5xrD4kmG8ZOnxWXdwc7kskUem50PZAH99M+VPtFvCL
-         c6qr6yGhu2fgmu1h/eb30qVsys3JO9rfkRaemt1JZyNZSfRTjbcjvv1jKObKeIg9pCFz
-         ZwkdS8nZSjkdKILisNTabv4gPjYKYNdE8YU26ghOylsqkHUSp+R40dnKEgqzcKWbblbe
-         t5cA==
-X-Gm-Message-State: AOAM532fCJqgnPP4oiAgTK5iNy0XKiLY3YKB7lSFwC0262N7kSp5Rjln
-        eIwqtfqUqXmoaaRmoGSclYglkF29kXYE1YFGeEgewMrl7IjfqjIThozyfWsOKhmZfYt+JqWCx8B
-        8a7wZ3/JOSy9iGqQmLoKdsnqHN8uMwow9e2AsAPNG+A==
-X-Received: by 2002:a17:90a:cc15:b0:1df:5929:15b9 with SMTP id b21-20020a17090acc1500b001df592915b9mr12007886pju.178.1652821875803;
-        Tue, 17 May 2022 14:11:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwirMLrDtjCxcsFM4LFMAkbF3zdaum6IIM0EBN4T5baoNo5mAWh+VNid7F9kZ1+M6UtSlZumg==
-X-Received: by 2002:a17:90a:cc15:b0:1df:5929:15b9 with SMTP id b21-20020a17090acc1500b001df592915b9mr12007856pju.178.1652821875336;
-        Tue, 17 May 2022 14:11:15 -0700 (PDT)
-Received: from famine.localdomain ([50.125.80.157])
-        by smtp.gmail.com with ESMTPSA id f16-20020a170902ab9000b0016191b843e2sm52271plr.235.2022.05.17.14.11.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 May 2022 14:11:14 -0700 (PDT)
-Received: by famine.localdomain (Postfix, from userid 1000)
-        id 6DF5D5FDEE; Tue, 17 May 2022 14:11:14 -0700 (PDT)
-Received: from famine (localhost [127.0.0.1])
-        by famine.localdomain (Postfix) with ESMTP id 67D51A0B21;
-        Tue, 17 May 2022 14:11:14 -0700 (PDT)
-From:   Jay Vosburgh <jay.vosburgh@canonical.com>
-To:     Jonathan Toppins <jtoppins@redhat.com>
-cc:     netdev@vger.kernel.org, Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC net-next] bonding: netlink error message support for options
-In-reply-to: <5a6ba6f14b0fad6d4ba077a5230ee71cbf970934.1652819479.git.jtoppins@redhat.com>
-References: <5a6ba6f14b0fad6d4ba077a5230ee71cbf970934.1652819479.git.jtoppins@redhat.com>
-Comments: In-reply-to Jonathan Toppins <jtoppins@redhat.com>
-   message dated "Tue, 17 May 2022 16:31:19 -0400."
-X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JWJH0H3VnL630PpxKgPoS9Ozluel4tO19edpwjN9dAY=;
+        b=aX/Mpi2Z5q0s8zzAmsfklctymlWnH3h/CbFaonAAVSHRvpLkfnNhEeOYKu6OIAw90O
+         YdbSB1Cbyeyi8Hc5vNNp72/3CqpcCvuEaHM8Tdpvsg7a9zNQjs6mI1RwFdkl6WBPSgPp
+         w//AwVNaTke+wDTZDFk2U8Fqn08JQjfx49+rK0ltzRTQ16ShmJmxBBPxgI1gjUfTkPqm
+         ioZ8V2UhmIMV8k/c6JRb1ldHs0bUnLv6YfFnItmnlKWF4Mkxv6DtpYTuuNqoP92ktT9/
+         46tvDvS9V8B3AxNhNfCnkDhcTOHO5USZx7dihFM/pIjQivcYXLZlIqKyZnLNTW6breY2
+         8Ekw==
+X-Gm-Message-State: AOAM532l1ywkguc3uVIdH3G+dUNZfS7h4eI6WJR0khjwDXOPMBOnHpgl
+        7NSmJJzxH8Zuwtlku9DeD4bh1A==
+X-Google-Smtp-Source: ABdhPJzuNYcm9pMZVcLxkSWUsXlyJcOrjqGa2NwCeZoMmCo7tW1EFesxNxH8CKotizug9h3lOMpglQ==
+X-Received: by 2002:a17:902:7886:b0:15f:4cc6:3196 with SMTP id q6-20020a170902788600b0015f4cc63196mr23676659pll.127.1652822143657;
+        Tue, 17 May 2022 14:15:43 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id mq7-20020a17090b380700b001cd4989ff5esm52794pjb.37.2022.05.17.14.15.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 14:15:43 -0700 (PDT)
+Date:   Tue, 17 May 2022 14:15:41 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Christophe de Dinechin <dinechin@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] bitmap: Fix return values to be unsigned
+Message-ID: <202205171414.D21437E7@keescook>
+References: <20220517035411.31144-1-keescook@chromium.org>
+ <b443e5d7-0803-cfa4-89ab-dec1637953bf@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2124.1652821874.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 17 May 2022 14:11:14 -0700
-Message-ID: <2125.1652821874@famine>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b443e5d7-0803-cfa4-89ab-dec1637953bf@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,624 +72,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jonathan Toppins <jtoppins@redhat.com> wrote:
+On Tue, May 17, 2022 at 08:49:38AM +0200, Rasmus Villemoes wrote:
+> On 17/05/2022 05.54, Kees Cook wrote:
+> > Both nodemask and bitmap routines had mixed return values that provided
+> > potentially signed results that could never happen. This was leading to
+> > the compiler getting confusing about the range of possible return values
+> > (it was thinking things could be negative where they could not be). Fix
+> > all the nodemask and bitmap routines that should be returning unsigned
+> > (or bool) values. Silences GCC 12 warnings:
+> 
+> So, for the bitmap functions themselves, makes sense, and then also for
+> the nodemask functions which are merely wrappers around the bitmap
+> functions (or wrappers around wrappers ...). But see below.
 
->Add support for reporting errors via extack in both bond_newlink
->and bond_changelink.
->
->Instead of having to look in the kernel log for why an option was not
->correct just report the error to the user via the extack variable.
->
->What is currently reported today:
->  ip link add bond0 type bond
->  ip link set bond0 up
->  ip link set bond0 type bond mode 4
-> RTNETLINK answers: Device or resource busy
->
->After this change:
->  ip link add bond0 type bond
->  ip link set bond0 up
->  ip link set bond0 type bond mode 4
-> Error: option mode: unable to set because the bond device is up.
->
->Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
->---
->
->Notes:
->    This is an RFC because the current NL_SET_ERR_MSG() macros do not sup=
-port
->    printf like semantics so I rolled my own buffer setting in __bond_opt=
-_set().
->    The issue is I could not quite figure out the life-cycle of the buffe=
-r, if
->    rtnl lock is held until after the text buffer is copied into the pack=
-et
->    then we are ok, otherwise, some other type of buffer management schem=
-e will
->    be needed as this could result in corrupted error messages when modif=
-ying
->    multiple bonds.
+Cool. I think I should split this into two patches.
 
-	If I'm reading the code correctly, rtnl isn't held that long.
-Once the ->doit() returns, rtnl is dropped, but the copy happens later:
+> 
+> >  
+> >  #define first_node(src) __first_node(&(src))
+> > -static inline int __first_node(const nodemask_t *srcp)
+> > +static inline unsigned int __first_node(const nodemask_t *srcp)
+> >  {
+> > -	return min_t(int, MAX_NUMNODES, find_first_bit(srcp->bits, MAX_NUMNODES));
+> > +	return min_t(unsigned int, MAX_NUMNODES, find_first_bit(srcp->bits, MAX_NUMNODES));
+> >  }
+> 
+> Unrelated to the type change, but what's that min() doing there in the
+> first place? Doesn't find_first_bit() already return the nbits argument
+> if no "first bit" exists (i.e., the bitmap is empty)?
+> 
+> >  #define next_node(n, src) __next_node((n), &(src))
+> > -static inline int __next_node(int n, const nodemask_t *srcp)
+> > +static inline unsigned int __next_node(int n, const nodemask_t *srcp)
+> >  {
+> > -	return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
+> > +	return min_t(unsigned int, MAX_NUMNODES, find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
+> >  }
+> 
+> Same here and a few more places.
+> 
+> It seems to go all the way back to pre-git. Hm. Could be cleaned up
+> separately I guess.
 
-rtnetlink_rcv()
-	netlink_rcv_skb(skb, &rtnetlink_rcv_msg)
-		rtnetlink_rcv_msg()	[ as cb(skb, nlh, &extack) ]
-			rtnl_lock()
-			link->doit()	[ rtnl_setlink, rtnl_newlink, et al ]
-			rtnl_unlock()
-		netlink_ack()
+Yeah, all I find as a hint is:
 
-inside netlink_ack():
+/* FIXME: better would be to fix all architectures to never return
+          > MAX_NUMNODES, then the silly min_ts could be dropped. */
 
-        if (nlk_has_extack && extack) {
-                if (extack->_msg) {
-                        WARN_ON(nla_put_string(skb, NLMSGERR_ATTR_MSG,
-                                               extack->_msg));
-                }
+which also predates git history.
 
-	Even if the strings have to be constant (via NL_SET_ERR_MSG),
-adding extack messages is likely still an improvement.
+> 
+> >  
+> >  #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
+> > -extern int node_random(const nodemask_t *maskp);
+> > +extern unsigned int node_random(const nodemask_t *maskp);
+> 
+> So this one I'm not convinced about. It has a documented return value of
+> NUMA_NO_NODE aka -1 if the mask is empty. And since it's not a wrapper
+> around a corresponding bitmap_random() (which would presumably, did it
+> exist, use the "return nbits if empty" convention), there's no
+> compelling reason to make its return type unsigned.
 
-	-J
+Agreed; I'll drop this change.
 
-> drivers/net/bonding/bond_netlink.c | 87 ++++++++++++++++++------------
-> drivers/net/bonding/bond_options.c | 62 +++++++++++++--------
-> include/net/bond_options.h         |  2 +-
-> 3 files changed, 96 insertions(+), 55 deletions(-)
->
->diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bon=
-d_netlink.c
->index f427fa1737c7..418a4f3d00a3 100644
->--- a/drivers/net/bonding/bond_netlink.c
->+++ b/drivers/net/bonding/bond_netlink.c
->@@ -151,7 +151,7 @@ static int bond_slave_changelink(struct net_device *b=
-ond_dev,
-> 		snprintf(queue_id_str, sizeof(queue_id_str), "%s:%u\n",
-> 			 slave_dev->name, queue_id);
-> 		bond_opt_initstr(&newval, queue_id_str);
->-		err =3D __bond_opt_set(bond, BOND_OPT_QUEUE_ID, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_QUEUE_ID, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -175,7 +175,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 		int mode =3D nla_get_u8(data[IFLA_BOND_MODE]);
-> =
+Thanks!
 
-> 		bond_opt_initval(&newval, mode);
->-		err =3D __bond_opt_set(bond, BOND_OPT_MODE, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_MODE, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -192,7 +192,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			active_slave =3D slave_dev->name;
-> 		}
-> 		bond_opt_initstr(&newval, active_slave);
->-		err =3D __bond_opt_set(bond, BOND_OPT_ACTIVE_SLAVE, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_ACTIVE_SLAVE, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -200,7 +201,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 		miimon =3D nla_get_u32(data[IFLA_BOND_MIIMON]);
-> =
-
-> 		bond_opt_initval(&newval, miimon);
->-		err =3D __bond_opt_set(bond, BOND_OPT_MIIMON, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_MIIMON, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -208,7 +209,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 		int updelay =3D nla_get_u32(data[IFLA_BOND_UPDELAY]);
-> =
-
-> 		bond_opt_initval(&newval, updelay);
->-		err =3D __bond_opt_set(bond, BOND_OPT_UPDELAY, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_UPDELAY, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -216,7 +217,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 		int downdelay =3D nla_get_u32(data[IFLA_BOND_DOWNDELAY]);
-> =
-
-> 		bond_opt_initval(&newval, downdelay);
->-		err =3D __bond_opt_set(bond, BOND_OPT_DOWNDELAY, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_DOWNDELAY, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -224,7 +225,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 		int delay =3D nla_get_u32(data[IFLA_BOND_PEER_NOTIF_DELAY]);
-> =
-
-> 		bond_opt_initval(&newval, delay);
->-		err =3D __bond_opt_set(bond, BOND_OPT_PEER_NOTIF_DELAY, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_PEER_NOTIF_DELAY, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -232,7 +234,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 		int use_carrier =3D nla_get_u8(data[IFLA_BOND_USE_CARRIER]);
-> =
-
-> 		bond_opt_initval(&newval, use_carrier);
->-		err =3D __bond_opt_set(bond, BOND_OPT_USE_CARRIER, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_USE_CARRIER, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -240,12 +243,14 @@ static int bond_changelink(struct net_device *bond_=
-dev, struct nlattr *tb[],
-> 		int arp_interval =3D nla_get_u32(data[IFLA_BOND_ARP_INTERVAL]);
-> =
-
-> 		if (arp_interval && miimon) {
->-			netdev_err(bond->dev, "ARP monitoring cannot be used with MII monitor=
-ing\n");
->+			NL_SET_ERR_MSG(extack,
->+				       "ARP monitoring cannot be used with MII monitoring");
-> 			return -EINVAL;
-> 		}
-> =
-
-> 		bond_opt_initval(&newval, arp_interval);
->-		err =3D __bond_opt_set(bond, BOND_OPT_ARP_INTERVAL, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_ARP_INTERVAL, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -264,7 +269,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> =
-
-> 			bond_opt_initval(&newval, (__force u64)target);
-> 			err =3D __bond_opt_set(bond, BOND_OPT_ARP_TARGETS,
->-					     &newval);
->+					     &newval, extack);
-> 			if (err)
-> 				break;
-> 			i++;
->@@ -297,7 +302,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> =
-
-> 			bond_opt_initextra(&newval, &addr6, sizeof(addr6));
-> 			err =3D __bond_opt_set(bond, BOND_OPT_NS_TARGETS,
->-					     &newval);
->+					     &newval, extack);
-> 			if (err)
-> 				break;
-> 			i++;
->@@ -312,12 +317,14 @@ static int bond_changelink(struct net_device *bond_=
-dev, struct nlattr *tb[],
-> 		int arp_validate =3D nla_get_u32(data[IFLA_BOND_ARP_VALIDATE]);
-> =
-
-> 		if (arp_validate && miimon) {
->-			netdev_err(bond->dev, "ARP validating cannot be used with MII monitor=
-ing\n");
->+			NL_SET_ERR_MSG(extack,
->+				       "ARP validating cannot be used with MII monitoring");
-> 			return -EINVAL;
-> 		}
-> =
-
-> 		bond_opt_initval(&newval, arp_validate);
->-		err =3D __bond_opt_set(bond, BOND_OPT_ARP_VALIDATE, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_ARP_VALIDATE, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -326,7 +333,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u32(data[IFLA_BOND_ARP_ALL_TARGETS]);
-> =
-
-> 		bond_opt_initval(&newval, arp_all_targets);
->-		err =3D __bond_opt_set(bond, BOND_OPT_ARP_ALL_TARGETS, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_ARP_ALL_TARGETS, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -340,7 +348,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			primary =3D dev->name;
-> =
-
-> 		bond_opt_initstr(&newval, primary);
->-		err =3D __bond_opt_set(bond, BOND_OPT_PRIMARY, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_PRIMARY, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -349,7 +357,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u8(data[IFLA_BOND_PRIMARY_RESELECT]);
-> =
-
-> 		bond_opt_initval(&newval, primary_reselect);
->-		err =3D __bond_opt_set(bond, BOND_OPT_PRIMARY_RESELECT, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_PRIMARY_RESELECT, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -358,7 +367,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u8(data[IFLA_BOND_FAIL_OVER_MAC]);
-> =
-
-> 		bond_opt_initval(&newval, fail_over_mac);
->-		err =3D __bond_opt_set(bond, BOND_OPT_FAIL_OVER_MAC, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_FAIL_OVER_MAC, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -367,7 +377,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u8(data[IFLA_BOND_XMIT_HASH_POLICY]);
-> =
-
-> 		bond_opt_initval(&newval, xmit_hash_policy);
->-		err =3D __bond_opt_set(bond, BOND_OPT_XMIT_HASH, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_XMIT_HASH, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -376,7 +386,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u32(data[IFLA_BOND_RESEND_IGMP]);
-> =
-
-> 		bond_opt_initval(&newval, resend_igmp);
->-		err =3D __bond_opt_set(bond, BOND_OPT_RESEND_IGMP, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_RESEND_IGMP, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -385,7 +396,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u8(data[IFLA_BOND_NUM_PEER_NOTIF]);
-> =
-
-> 		bond_opt_initval(&newval, num_peer_notif);
->-		err =3D __bond_opt_set(bond, BOND_OPT_NUM_PEER_NOTIF, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_NUM_PEER_NOTIF, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -394,7 +406,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u8(data[IFLA_BOND_ALL_SLAVES_ACTIVE]);
-> =
-
-> 		bond_opt_initval(&newval, all_slaves_active);
->-		err =3D __bond_opt_set(bond, BOND_OPT_ALL_SLAVES_ACTIVE, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_ALL_SLAVES_ACTIVE, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -403,7 +416,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u32(data[IFLA_BOND_MIN_LINKS]);
-> =
-
-> 		bond_opt_initval(&newval, min_links);
->-		err =3D __bond_opt_set(bond, BOND_OPT_MINLINKS, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_MINLINKS, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -412,7 +425,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u32(data[IFLA_BOND_LP_INTERVAL]);
-> =
-
-> 		bond_opt_initval(&newval, lp_interval);
->-		err =3D __bond_opt_set(bond, BOND_OPT_LP_INTERVAL, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_LP_INTERVAL, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -421,7 +435,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u32(data[IFLA_BOND_PACKETS_PER_SLAVE]);
-> =
-
-> 		bond_opt_initval(&newval, packets_per_slave);
->-		err =3D __bond_opt_set(bond, BOND_OPT_PACKETS_PER_SLAVE, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_PACKETS_PER_SLAVE, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -430,7 +445,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 		int lacp_active =3D nla_get_u8(data[IFLA_BOND_AD_LACP_ACTIVE]);
-> =
-
-> 		bond_opt_initval(&newval, lacp_active);
->-		err =3D __bond_opt_set(bond, BOND_OPT_LACP_ACTIVE, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_LACP_ACTIVE, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -440,7 +456,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u8(data[IFLA_BOND_AD_LACP_RATE]);
-> =
-
-> 		bond_opt_initval(&newval, lacp_rate);
->-		err =3D __bond_opt_set(bond, BOND_OPT_LACP_RATE, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_LACP_RATE, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -449,7 +465,7 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u8(data[IFLA_BOND_AD_SELECT]);
-> =
-
-> 		bond_opt_initval(&newval, ad_select);
->-		err =3D __bond_opt_set(bond, BOND_OPT_AD_SELECT, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_AD_SELECT, &newval, extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -458,7 +474,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u16(data[IFLA_BOND_AD_ACTOR_SYS_PRIO]);
-> =
-
-> 		bond_opt_initval(&newval, actor_sys_prio);
->-		err =3D __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYS_PRIO, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYS_PRIO, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -467,7 +484,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 			nla_get_u16(data[IFLA_BOND_AD_USER_PORT_KEY]);
-> =
-
-> 		bond_opt_initval(&newval, port_key);
->-		err =3D __bond_opt_set(bond, BOND_OPT_AD_USER_PORT_KEY, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_AD_USER_PORT_KEY, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -477,7 +495,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> =
-
-> 		bond_opt_initval(&newval,
-> 				 nla_get_u64(data[IFLA_BOND_AD_ACTOR_SYSTEM]));
->-		err =3D __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYSTEM, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYSTEM, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -485,7 +504,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 		int dynamic_lb =3D nla_get_u8(data[IFLA_BOND_TLB_DYNAMIC_LB]);
-> =
-
-> 		bond_opt_initval(&newval, dynamic_lb);
->-		err =3D __bond_opt_set(bond, BOND_OPT_TLB_DYNAMIC_LB, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_TLB_DYNAMIC_LB, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->@@ -494,7 +514,8 @@ static int bond_changelink(struct net_device *bond_de=
-v, struct nlattr *tb[],
-> 		int missed_max =3D nla_get_u8(data[IFLA_BOND_MISSED_MAX]);
-> =
-
-> 		bond_opt_initval(&newval, missed_max);
->-		err =3D __bond_opt_set(bond, BOND_OPT_MISSED_MAX, &newval);
->+		err =3D __bond_opt_set(bond, BOND_OPT_MISSED_MAX, &newval,
->+				     extack);
-> 		if (err)
-> 			return err;
-> 	}
->diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bon=
-d_options.c
->index 64f7db2627ce..4a95503384a3 100644
->--- a/drivers/net/bonding/bond_options.c
->+++ b/drivers/net/bonding/bond_options.c
->@@ -636,7 +636,8 @@ static int bond_opt_check_deps(struct bonding *bond,
-> }
-> =
-
-> static void bond_opt_dep_print(struct bonding *bond,
->-			       const struct bond_option *opt)
->+			       const struct bond_option *opt,
->+			       char *buf, size_t bufsize)
-> {
-> 	const struct bond_opt_value *modeval;
-> 	struct bond_params *params;
->@@ -644,16 +645,18 @@ static void bond_opt_dep_print(struct bonding *bond=
-,
-> 	params =3D &bond->params;
-> 	modeval =3D bond_opt_get_val(BOND_OPT_MODE, params->mode);
-> 	if (test_bit(params->mode, &opt->unsuppmodes))
->-		netdev_err(bond->dev, "option %s: mode dependency failed, not supporte=
-d in mode %s(%llu)\n",
->-			   opt->name, modeval->string, modeval->value);
->+		scnprintf(buf, bufsize, "option %s: mode dependency failed, not suppor=
-ted in mode %s(%llu)\n",
->+			  opt->name, modeval->string, modeval->value);
-> }
-> =
-
-> static void bond_opt_error_interpret(struct bonding *bond,
-> 				     const struct bond_option *opt,
->-				     int error, const struct bond_opt_value *val)
->+				     int error, const struct bond_opt_value *val,
->+				     char *buf, size_t bufsize)
-> {
-> 	const struct bond_opt_value *minval, *maxval;
-> 	char *p;
->+	int i =3D 0;
-> =
-
-> 	switch (error) {
-> 	case -EINVAL:
->@@ -663,38 +666,45 @@ static void bond_opt_error_interpret(struct bonding=
- *bond,
-> 				p =3D strchr(val->string, '\n');
-> 				if (p)
-> 					*p =3D '\0';
->-				netdev_err(bond->dev, "option %s: invalid value (%s)\n",
->-					   opt->name, val->string);
->+				i =3D scnprintf(buf, bufsize,
->+					      "option %s: invalid value (%s)",
->+					      opt->name, val->string);
-> 			} else {
->-				netdev_err(bond->dev, "option %s: invalid value (%llu)\n",
->-					   opt->name, val->value);
->+				i =3D scnprintf(buf, bufsize,
->+					      "option %s: invalid value (%llu)",
->+					      opt->name, val->value);
-> 			}
-> 		}
-> 		minval =3D bond_opt_get_flags(opt, BOND_VALFLAG_MIN);
-> 		maxval =3D bond_opt_get_flags(opt, BOND_VALFLAG_MAX);
-> 		if (!maxval)
-> 			break;
->-		netdev_err(bond->dev, "option %s: allowed values %llu - %llu\n",
->-			   opt->name, minval ? minval->value : 0, maxval->value);
->+		if (i) {
->+			// index buf to overwirte '\n' from above
->+			buf =3D &buf[i];
->+			bufsize -=3D i;
->+		}
->+		scnprintf(buf, bufsize, " allowed values %llu - %llu",
->+			  minval ? minval->value : 0, maxval->value);
-> 		break;
-> 	case -EACCES:
->-		bond_opt_dep_print(bond, opt);
->+		bond_opt_dep_print(bond, opt, buf, bufsize);
-> 		break;
-> 	case -ENOTEMPTY:
->-		netdev_err(bond->dev, "option %s: unable to set because the bond devic=
-e has slaves\n",
->-			   opt->name);
->+		scnprintf(buf, bufsize, "option %s: unable to set because the bond dev=
-ice has slaves",
->+			  opt->name);
-> 		break;
-> 	case -EBUSY:
->-		netdev_err(bond->dev, "option %s: unable to set because the bond devic=
-e is up\n",
->-			   opt->name);
->+		scnprintf(buf, bufsize, "option %s: unable to set because the bond dev=
-ice is up",
->+			  opt->name);
-> 		break;
-> 	case -ENODEV:
-> 		if (val && val->string) {
-> 			p =3D strchr(val->string, '\n');
-> 			if (p)
-> 				*p =3D '\0';
->-			netdev_err(bond->dev, "option %s: interface %s does not exist!\n",
->-				   opt->name, val->string);
->+			scnprintf(buf, bufsize, "option %s: interface %s does not exist!",
->+				  opt->name, val->string);
-> 		}
-> 		break;
-> 	default:
->@@ -713,7 +723,8 @@ static void bond_opt_error_interpret(struct bonding *=
-bond,
->  * must be obtained before calling this function.
->  */
-> int __bond_opt_set(struct bonding *bond,
->-		   unsigned int option, struct bond_opt_value *val)
->+		   unsigned int option, struct bond_opt_value *val,
->+		   struct netlink_ext_ack *extack)
-> {
-> 	const struct bond_opt_value *retval =3D NULL;
-> 	const struct bond_option *opt;
->@@ -734,8 +745,17 @@ int __bond_opt_set(struct bonding *bond,
-> 	}
-> 	ret =3D opt->set(bond, retval);
-> out:
->-	if (ret)
->-		bond_opt_error_interpret(bond, opt, ret, val);
->+	if (ret) {
->+		static char buf[120];
->+		buf[0] =3D '\0';
->+		bond_opt_error_interpret(bond, opt, ret, val, buf, sizeof(buf));
->+		if (buf[0] !=3D '\0') {
->+			if (extack)
->+				extack->_msg =3D buf;
->+			else
->+				netdev_err(bond->dev, "Error: %s\n", buf);
->+		}
->+	}
-> =
-
-> 	return ret;
-> }
->@@ -757,7 +777,7 @@ int __bond_opt_set_notify(struct bonding *bond,
-> =
-
-> 	ASSERT_RTNL();
-> =
-
->-	ret =3D __bond_opt_set(bond, option, val);
->+	ret =3D __bond_opt_set(bond, option, val, NULL);
-> =
-
-> 	if (!ret && (bond->dev->reg_state =3D=3D NETREG_REGISTERED))
-> 		call_netdevice_notifiers(NETDEV_CHANGEINFODATA, bond->dev);
->diff --git a/include/net/bond_options.h b/include/net/bond_options.h
->index 61b49063791c..ae38557adc25 100644
->--- a/include/net/bond_options.h
->+++ b/include/net/bond_options.h
->@@ -107,7 +107,7 @@ struct bond_option {
-> };
-> =
-
-> int __bond_opt_set(struct bonding *bond, unsigned int option,
->-		   struct bond_opt_value *val);
->+		   struct bond_opt_value *val, struct netlink_ext_ack *extack);
-> int __bond_opt_set_notify(struct bonding *bond, unsigned int option,
-> 			  struct bond_opt_value *val);
-> int bond_opt_tryset_rtnl(struct bonding *bond, unsigned int option, char=
- *buf);
->-- =
-
->2.27.0
->
-
----
-	-Jay Vosburgh, jay.vosburgh@canonical.com
+-- 
+Kees Cook

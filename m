@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810B352AB1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B2A52AB21
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352328AbiEQSof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S1352336AbiEQSox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347049AbiEQSod (ORCPT
+        with ESMTP id S243849AbiEQSov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:44:33 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FF139164;
-        Tue, 17 May 2022 11:44:32 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id d3so13218103ilr.10;
-        Tue, 17 May 2022 11:44:32 -0700 (PDT)
+        Tue, 17 May 2022 14:44:51 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D72638BED;
+        Tue, 17 May 2022 11:44:50 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id b11so9301495ilr.4;
+        Tue, 17 May 2022 11:44:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=j51jKuN9LxvI+OJRdkmu6rD6Kj69fRthuGQLklYAkDA=;
-        b=as17G5fbhkMRlyXiHsU2KOLKCrfeZcdSYQlK1LW7Q8XiRvt3/rvMdCt9YdS6IVQIyR
-         G5jGuOFEU38O7dokmbx2OkssSbKCCe4PNCnvyE4PWTfpNTlkqaWFsvCt+rkxOZffu1zn
-         eVkVlRV5tqGqvDBXVggSl4zD/n4rLWObhE3iac3Uua5g5n47TChEhLJcTZtshzjVGzv/
-         3H1q1UDPdjttHDKpQM0vIBxiavoZgLzuPVPzzO59GDqil4mokNUn7ON0krii5w1TqmIn
-         KDSSXSC5lcuZhi76ddqFyYUApnEz62L0ffUtc5+71dbXayAAlXPhVVXShSP2c1/9JP/b
-         v0Nw==
+        bh=TIAjTESKXuKYbBQ9smbJ5hCbcUOqEoo/oz4gEnlQ78Q=;
+        b=DPgmtPQWVfA3vIbNMZQ3dlB/yGfi3Ix95EyelERGa2sVYKTgoWsnPHlqe6MI7KR6Za
+         Xc56f9NFCWdGj6A+8h9DLBTvnabeJSS8noRHcYS+/rq9a3LyAygydGbD+KWtpZm5UPNP
+         3Rbn+rlpL3qwU5ywElBhJLGd0PAQ3JbAe6qc+su2arsmnbAPJYc+hPbHNv+fibtYsI/i
+         Mge1RL/gj77qG0xQuzam2uUrun2aQO49inccAs2JNRJexspMRIfi+Xe8EhybHburMiFg
+         +FJfywHSoDA/NwOp78r56JLl5icJd8Fo7xBKwdt6VAlkI09mcW4AIpXCJXrIk30h8fJK
+         c8gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=j51jKuN9LxvI+OJRdkmu6rD6Kj69fRthuGQLklYAkDA=;
-        b=yJcLuMxwNhw+qN8V91WP+RzXXta284U+Z8KMPsdl2my/Hn/bnuy+aGh4ncB5wxAWmc
-         spmSI6tl/SCTquwM5RIhOOAC294Q2as5bUbipqC4QS+7a2ylUdAxU36HhvWVi5hIHwG0
-         swF75AFSC3e7uioS+NIKP9FtkyrIR5NyN1etcWH781/LyCSEehD/jvuCgwcSTph3S69D
-         7lnjGCbbsVGzUgh+Nguq96buJ63HR+NqUAjmIhebBPCDKkgU7Zl/hz4tnyTNEL2IJ9VY
-         HeqHkYFhUvNxpqqVxfi88N6pG2P5fSia1Es002abSv1bM4hoJvg6aLBB/s9KyeRGMiD0
-         MIaA==
-X-Gm-Message-State: AOAM5320YFcY7NxgO85v5BFObyjC5VXhDVk7cAr6Br1AKOqD5BU0lKFQ
-        /L4OtY9VQ4Qqtcl8bYXWZWwzYyGCxNFBAmEafbw=
-X-Google-Smtp-Source: ABdhPJxJ6tU3iv6ZTZdFdsDIf4WvuvuPVt1sg1fug6jUfJkmip9XyKYbki5Vhi6bMNmdl6Ae9J2s/GR+4NVJhh7Ohx4=
-X-Received: by 2002:a05:6e02:20c3:b0:2cf:976d:f43c with SMTP id
- 3-20020a056e0220c300b002cf976df43cmr12036180ilq.264.1652813071800; Tue, 17
- May 2022 11:44:31 -0700 (PDT)
+        bh=TIAjTESKXuKYbBQ9smbJ5hCbcUOqEoo/oz4gEnlQ78Q=;
+        b=Ko75p3lvcyZ/HVNStwNrRnKNQcBBj+4HNQm6qZuLmLaXfpSL9QPX6xa/LwOqhF54xX
+         2WpOjjUrlF5CTVoJaC2BKABwfnYy+ufPtqPyRiFM7NquQsWX/hiC1Rw1WfzWjqPnwOOk
+         jtJSGZJVqZNKL03eQ2j3R4zzhbtH8LrFsLqp1FYUTdPalkCfqnvFqJzWzUWlsFlA15Yp
+         IfpoI23Kjk505c0Y+/h1EBp4gYKQGn3gx3udELNYl0dyQG0rxiJ7RI3tL8pH8RyjDMz7
+         rMb2HWhjxnX8yFWVgKITnC1gRqMGnDGifu5vkqxsF6g7L7yWIpcy29WdKdeJ8VkjrphP
+         azNA==
+X-Gm-Message-State: AOAM531QxrmCBK5lYMnDP2scbVmgoAmTXx5xGzxkTMPE2DKPa49JHWny
+        SL2LwWhPO0fpoMYtxZR99w01rK4ZSHdXS00U5QY=
+X-Google-Smtp-Source: ABdhPJwuI7b6xuzFoTXjG7KE+Q7htUi038IRRyyz2kzkuHY0dU8pIBnJ7MCtA6HBtUEHkVk0DAzG9BsMMgZrbNM3E/s=
+X-Received: by 2002:a92:509:0:b0:2d1:2766:1820 with SMTP id
+ q9-20020a920509000000b002d127661820mr5123564ile.6.1652813089835; Tue, 17 May
+ 2022 11:44:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-4-linux.amoon@gmail.com>
- <7c479bdb-4bf7-68a5-c6e7-20dc19b91dc8@linaro.org>
-In-Reply-To: <7c479bdb-4bf7-68a5-c6e7-20dc19b91dc8@linaro.org>
+References: <20220515064126.1424-5-linux.amoon@gmail.com> <202205161820.8rHIcsvI-lkp@intel.com>
+ <874f08d9-e67e-f7f3-4d98-89bdb8333ce5@kernel.org>
+In-Reply-To: <874f08d9-e67e-f7f3-4d98-89bdb8333ce5@kernel.org>
 From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 18 May 2022 00:14:16 +0530
-Message-ID: <CANAwSgS4uEJd98hs-CGU+LqzMfAqJzvbEgQp5MRC4ad5XT3XfA@mail.gmail.com>
-Subject: Re: [PATCHv2 3/6] thermal: exynos: Check before clk_disable_unprepare()
- not needed
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+Date:   Wed, 18 May 2022 00:14:35 +0530
+Message-ID: <CANAwSgSAAmM5iUdeS296dOOhDGN5EfFHkpSMudw6BXrw4oH7ZA@mail.gmail.com>
+Subject: Re: [PATCHv2 4/6] thermal: exynos: fixed the efuse min/max value for exynos5422
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
@@ -64,7 +64,8 @@ Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         Linux PM list <linux-pm@vger.kernel.org>,
         linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -78,49 +79,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Krzysztof,
 
-On Sun, 15 May 2022 at 15:13, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Mon, 16 May 2022 at 16:14, Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >
-> On 15/05/2022 08:41, Anand Moon wrote:
-> > All code in clk_disable_unprepare() already checks the clk ptr using
-> > IS_ERR_OR_NULL so there is no need to check it again before calling it.
-> > A lot of other drivers already rely on this behaviour, so it's safe
-> > to do so here.
+> On 16/05/2022 12:42, kernel test robot wrote:
+> > Hi Anand,
 > >
-> > Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> > v1: improve the commit message
-> > ---
-> >  drivers/thermal/samsung/exynos_tmu.c | 12 ++++--------
-> >  1 file changed, 4 insertions(+), 8 deletions(-)
+> > Thank you for the patch! Perhaps something to improve:
 > >
-> > diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-> > index 1ef90dc52c08..58ff1b577c47 100644
-> > --- a/drivers/thermal/samsung/exynos_tmu.c
-> > +++ b/drivers/thermal/samsung/exynos_tmu.c
-> > @@ -289,8 +289,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
+> > [auto build test WARNING on ec7f49619d8ee13e108740c82f942cd401b989e9]
 > >
-> >       mutex_lock(&data->lock);
-> >       clk_enable(data->clk);
-> > -     if (!IS_ERR(data->clk_sec))
-> > -             clk_enable(data->clk_sec);
-> > +     clk_enable(data->clk_sec);
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/Exynos-Thermal-code-inprovement/20220515-144336
+> > base:   ec7f49619d8ee13e108740c82f942cd401b989e9
+> > config: hexagon-randconfig-r033-20220516 (https://download.01.org/0day-ci/archive/20220516/202205161820.8rHIcsvI-lkp@intel.com/config)
+> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # https://github.com/intel-lab-lkp/linux/commit/eb50b0c2100fabd6d09b87abd11f52c5295512e8
+> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> >         git fetch --no-tags linux-review Anand-Moon/Exynos-Thermal-code-inprovement/20220515-144336
+> >         git checkout eb50b0c2100fabd6d09b87abd11f52c5295512e8
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/thermal/samsung/
+> >
+> > If you fix the issue, kindly add following tag as appropriate
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> >>> drivers/thermal/samsung/exynos_tmu.c:929:40: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
+> >                    if (data->soc == SOC_ARCH_EXYNOS5420 &&
+> >                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+> >    1 warning generated.
 >
-> You say that clk_enable() checks for IS_ERR_OR_NULL. Where? I see only
-> check for non-null case and then immediately taking clk prepare lock.
+> Ah, I did not notice it and it seems code was not compile-tested with W=1.
 >
-> This looks buggy... did you test it?
-
-Thanks for your review comments
-Yes have tested the changes, this was last-minute changes
-will drop this in the next version.
-
+> Anand, please be sure you compile your code with W=1...
+>
+Ok I will try to resolve this warning in the next version.
 >
 > Best regards,
 > Krzysztof
 
 Thanks & Regards
-
 
 -Anand

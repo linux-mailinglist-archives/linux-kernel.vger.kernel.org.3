@@ -2,125 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55B952ACE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E8552ACE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344703AbiEQUlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S244677AbiEQUnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233909AbiEQUlu (ORCPT
+        with ESMTP id S233909AbiEQUnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:41:50 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724681AF1A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:41:49 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dc7bdd666fso2917547b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=F1aO125Yx/obUzt176koWYfMkjjCHKow9Xi2uikrxmo=;
-        b=OJLu59Z9I7+iGu+w6BJz1flN1H7Lq37JKIIeBhbkkFE8lxwJAcd/Y/JolCT4Ugw/iR
-         UX7ZzX+kGoIr4PYaVPUDfI9TPmcQwGYT3K4cFHDHxvGpv9uhLQ911/69VKgjOK5i3nXr
-         kj0Oids4J4EhXyiwHl09Qv27HCg/SVpM/axA6QWi25KpJUQqd7mvLYAc5M15X82T1UqV
-         prVRY7nSuQv+oVsMriq1Qvuv0eiUsKBv/dXhppuPU3zL9sWGAdQkk8+WP13fBdA+Djt1
-         0BywV737AySz9ad0tMGXs3m+ujJGzptV38gDEfLJyh1unXHrUsd+RyLLXte2O7DiujVz
-         yR1A==
+        Tue, 17 May 2022 16:43:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0197452B07
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:43:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652820180;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P3trp4THKfLyNocMqM17tbB76f3WfC6Jda0LcAL37Fw=;
+        b=hU6JX74agI+e/rZMwauCYC6l4a2y5p8Xlnag8amN3sPbRIZ6x2KdPuVYbHoJ3EXTuh4pDW
+        kLaoKdxoECBG3YMT17cCU9Wp89kJJ3kcx1noBOuRUuneL44qSSzEnxtcNPcq9dnQegZSa3
+        tQ29IhtXgeh1CzBl0jcsg7Gpxgt+cfg=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-126-2bM31xgtMzKZUE29VtbHNQ-1; Tue, 17 May 2022 16:42:59 -0400
+X-MC-Unique: 2bM31xgtMzKZUE29VtbHNQ-1
+Received: by mail-il1-f199.google.com with SMTP id x1-20020a056e020f0100b002c98fce9c13so129915ilj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:42:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=F1aO125Yx/obUzt176koWYfMkjjCHKow9Xi2uikrxmo=;
-        b=bUau28jMdP0wYSjh2njOWLm2XifSMXsAMNd0dGmexaZy0lz7ThhC5MKHUY++lM9/0Q
-         Upa7JSMJUSlNZlB0Zie0vaUsuFQOv7yBRC7ObegpazDqLGBBWPrXKGT5OdZkAgChTwU+
-         1e2YLTYmOw31HQR0LasAh1imHTGe3Z5/Z/0ZbZWQLxSqp1i3LNklNY118Lc8+C2X33dY
-         Uj26KfB/napCcGlnEzboC3jEDAJ5AjWYOOPK4fAu5sfuplhz4q73zp2iZOCkBMb8sqrP
-         n1Bj6hD4nhHMvW+vIkc8MxSuEzBcMPo6y1Svj0vOnFHpCpZ3Qv9yWP5mafGMgTcjbMEp
-         2OhQ==
-X-Gm-Message-State: AOAM531AmKgdJZmpggTsx+uXQjsNjuJck9DUkx73rS2wxOdm1frDLn0t
-        DZnUYIpZSwoVoXUgKocquOxsevlPWYlo
-X-Google-Smtp-Source: ABdhPJzQbMHxPnHyCRWSpO1aAxJUO3kNUrzA0+BiWBnhXCydxYORM5RkoFxZ684mR8ROIS9ddQIxi/TLLKND
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a5a1:af73:fe09:fd5])
- (user=irogers job=sendgmr) by 2002:a0d:c4c2:0:b0:2f1:6c00:9eb4 with SMTP id
- g185-20020a0dc4c2000000b002f16c009eb4mr29222866ywd.448.1652820108545; Tue, 17
- May 2022 13:41:48 -0700 (PDT)
-Date:   Tue, 17 May 2022 13:41:44 -0700
-Message-Id: <20220517204144.645913-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH] perf test: Avoid shell test description infinite loop
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Marco Elver <elver@google.com>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=P3trp4THKfLyNocMqM17tbB76f3WfC6Jda0LcAL37Fw=;
+        b=lANfPBiuGb3pG8UDV85PfzqGdDrnkEZz3mfIHYQMTPKGvDXLxlzXgIyukQwnt2tEzU
+         u81cSoXhwdwjTQLaCr49reeQXob+1VmtCMm65DvxP0tW70SuTWS5c2UBV0mZQrB+IJqs
+         Z6G0Mc0vF0fwEPFLvSXbypAKhnzbS+ZPvRE0f95jJBx9qWSPYJqVmQu5go11DPll54qs
+         gi4dLXb1ZZG2P8veuZ6SUvtbPxKlyd8knLPeY0Wd/QfiIVtGgc6KNLbJHF9j70Kfck6i
+         zH/rI/2ShZzVA+MVIjH7ELQwD9ATiAtRfoimg8PNwfS8wiW0+ze+ID0IEjXbRwWJDsaf
+         aDRw==
+X-Gm-Message-State: AOAM530QvMENYwfktVmEK7ezYKNrMEn2KsbPJkmguVM3YSgFUFaiNgjE
+        l3dseg5JzaaYmBD2szp+FeDDX8+01E+/V0gK11UE6MBjGMRRo0LW+4jh96vXrFhhYIYKpLWlekW
+        5G8ru54qB5rjgM54TAmYMEsVh
+X-Received: by 2002:a05:6638:238d:b0:32b:7bda:c64f with SMTP id q13-20020a056638238d00b0032b7bdac64fmr12542379jat.83.1652820178178;
+        Tue, 17 May 2022 13:42:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJysULVQudYSzAq7UHtvBIObb6CAUc81Y/IWTz7+noeXw8UvvY/htZu0mz/yF3emnUQORNpBVA==
+X-Received: by 2002:a05:6638:238d:b0:32b:7bda:c64f with SMTP id q13-20020a056638238d00b0032b7bdac64fmr12542372jat.83.1652820177995;
+        Tue, 17 May 2022 13:42:57 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id d12-20020a0566380d4c00b0032e40f3e40dsm25502jak.124.2022.05.17.13.42.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 13:42:57 -0700 (PDT)
+Date:   Tue, 17 May 2022 14:42:56 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v4 4/4] vfio/pci: Move the unused device into low power
+ state with runtime PM
+Message-ID: <20220517144256.15991375.alex.williamson@redhat.com>
+In-Reply-To: <20220517100219.15146-5-abhsahu@nvidia.com>
+References: <20220517100219.15146-1-abhsahu@nvidia.com>
+        <20220517100219.15146-5-abhsahu@nvidia.com>
+Organization: Red Hat
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-for_each_shell_test is already strict in expecting tests to be files and
-executable. It is sometimes possible when it iterates over all files
-that it finds one that is executable and lacks a newline character. When
-this happens the loop never terminates as it doesn't check for EOF. Add
-the EOF check to make this loop at least bounded by the file size.
+On Tue, 17 May 2022 15:32:19 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
+> 5. Since the runtime PM framework will provide the same functionality,
+>    so directly writing into PCI PM config register can be replaced with
+>    the use of runtime PM routines. Also, the use of runtime PM can help
+>    us in more power saving.
+> 
+>    In the systems which do not support D3cold,
+> 
+>    With the existing implementation:
+> 
+>    // PCI device
+>    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
+>    D3hot
+>    // upstream bridge
+>    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
+>    D0
+> 
+>    With runtime PM:
+> 
+>    // PCI device
+>    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
+>    D3hot
+>    // upstream bridge
+>    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
+>    D3hot
 
-If the description is returned as NULL then also skip the test.
+I'm not able to reproduce these results.  Output below abridged:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/builtin-test.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+# lspci -t
+-[0000:00]-+-00.0
+           +-01.0-[01]--+-00.0
+           |            \-00.1
 
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index 3c34cb766724..aa40eae1c9cf 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -279,6 +279,7 @@ static const char *shell_test__description(char *description, size_t size,
- {
- 	FILE *fp;
- 	char filename[PATH_MAX];
-+	int ch;
- 
- 	path__join(filename, sizeof(filename), path, name);
- 	fp = fopen(filename, "r");
-@@ -286,7 +287,9 @@ static const char *shell_test__description(char *description, size_t size,
- 		return NULL;
- 
- 	/* Skip shebang */
--	while (fgetc(fp) != '\n');
-+	do {
-+		ch = fgetc(fp);
-+	} while (ch != EOF && ch != '\n');
- 
- 	description = fgets(description, size, fp);
- 	fclose(fp);
-@@ -419,7 +422,8 @@ static int run_shell_tests(int argc, const char *argv[], int i, int width,
- 			.priv = &st,
- 		};
- 
--		if (!perf_test__matches(test_suite.desc, curr, argc, argv))
-+		if (test_suite.desc == NULL ||
-+		    !perf_test__matches(test_suite.desc, curr, argc, argv))
- 			continue;
- 
- 		st.file = ent->d_name;
--- 
-2.36.0.550.gb090851708-goog
+# grep . /sys/bus/pci/devices/*/power_state
+/sys/bus/pci/devices/0000:00:01.0/power_state:D0
+/sys/bus/pci/devices/0000:01:00.0/power_state:D3hot
+/sys/bus/pci/devices/0000:01:00.1/power_state:D3hot
+
+# lspci -ks $DEV
+00:01.0 PCI bridge: Intel Corporation Xeon E3-1200 v2/3rd Gen Core processor PCI Express Root Port (rev 09)
+	Kernel driver in use: pcieport
+01:00.0 VGA compatible controller: NVIDIA Corporation GM107 [GeForce GTX 750] (rev a2)
+	Subsystem: eVga.com. Corp. Device 2753
+	Kernel driver in use: vfio-pci
+01:00.1 Audio device: NVIDIA Corporation GM107 High Definition Audio Controller [GeForce 940MX] (rev a1)
+	Subsystem: eVga.com. Corp. Device 2753
+	Kernel driver in use: vfio-pci
+	Kernel modules: snd_hda_intel
+
+Any debugging suggestions?  Thanks,
+
+Alex
 

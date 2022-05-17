@@ -2,214 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F40B529E5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E2F529E66
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239794AbiEQJpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        id S245434AbiEQJpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245377AbiEQJoh (ORCPT
+        with ESMTP id S245370AbiEQJog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:44:37 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F3F47AD8;
-        Tue, 17 May 2022 02:44:14 -0700 (PDT)
-X-UUID: 7808b7859d8b418ab7c6aae70101b4d6-20220517
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:4c919e80-f6f1-4c2b-a180-6b1d639b2c9e,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:2dc47be2-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 7808b7859d8b418ab7c6aae70101b4d6-20220517
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1524489763; Tue, 17 May 2022 17:44:10 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 17 May 2022 17:44:09 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 17 May 2022 17:44:09 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 17 May 2022 17:44:07 +0800
-Message-ID: <9f290b2bbdfd4b9d46b81d3ab02c2f50999e95e5.camel@mediatek.com>
-Subject: Re: [PATCH v2 2/2] memory: mtk-smi: Add support for MT6795 Helio X10
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-CC:     <krzysztof.kozlowski@linaro.org>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <konrad.dybcio@somainline.org>, <marijn.suijten@somainline.org>,
-        <martin.botka@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, <paul.bouchara@somainline.org>,
-        <kernel@collabora.com>, <yi.kuo@mediatek.com>,
-        <anthony.huang@mediatek.com>, <wendy-st.lin@mediatek.com>
-Date:   Tue, 17 May 2022 17:44:07 +0800
-In-Reply-To: <f222e1c5-4ce1-a42d-ceef-a292136d8b61@collabora.com>
-References: <20220513150633.387200-1-angelogioacchino.delregno@collabora.com>
-         <20220513150633.387200-3-angelogioacchino.delregno@collabora.com>
-         <cf2442b9c7124ebf1ce62ae5df597f003fa447d7.camel@mediatek.com>
-         <f222e1c5-4ce1-a42d-ceef-a292136d8b61@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 17 May 2022 05:44:36 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC2A47AEC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:44:15 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id a5so20139470wrp.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xFt28KVBptJqZXZcy2j7vQR/cUjdtAD4JIr71r3m1NI=;
+        b=E3m6vwrzu9qqznwzVA6PVPYb0KrMeGUMjSVxkZTqsqkoJETD7P+FMkRP8hxAtwJf1T
+         +JTlB6ue1pkmf/C+vau3LD0gVzqZLmR1DfBgexd16Y44930jLZJskv8nOuaqrl5eOfX9
+         2DYv9H5vhLA0P7Mfed8XHdlgeJi+BHdgZdLGv4+kQ5mYbH/u5R6/tHjUgEC4hUYDMZi9
+         RA/brVdCvFYAEmssuCwhR5OYP3rDKXwTBgb51nTZXq9wOoQIWWBOt4wm7YM4e/H4Op5H
+         +eOKx1Fwv70DJaN8+a7zqwiTAP+CR8cLE7ZN9Et7o3ZnfWDGfCc9hqn4QHD8u/vNuoNB
+         mEPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xFt28KVBptJqZXZcy2j7vQR/cUjdtAD4JIr71r3m1NI=;
+        b=gWI0AqlA/C+AqiH+MX2v5QzBe8rI88OwXvqBBp9vZhEr4M1HzvNUQOOwbhjZ0YiqxJ
+         /YL/i9DYVRFqVZV19wSzt06LR0MMsNiU+3HR7oZV7mBUz60YmELKdNzDo1Y2FSY01OVO
+         JNt9X4ewzWM53GQyEHyCPyXhcrfctBopVzKspHVMrFBizfdTDv9HIztiNCqBJQQ+AjHk
+         HAOQj9UTumBgdwtdOcmjzCLG4LKzX6JihZKlk4Zn6Ts4DiTtScd6t2HoPQS53p+8T9ZF
+         PRNe5be+LLEyTHcO1sywPV6pUuNWtXIPP/CAvnZgC40dh3p0cV1BiOGacnqJ3hLdRDjH
+         KhWA==
+X-Gm-Message-State: AOAM531/72SrNqDbR9pW5Tsc/SIl5PrsR2R7D7rbB869vJ96sB0vAXLU
+        U4cQ3ihBw4FgLUJ4QbWR1Ks=
+X-Google-Smtp-Source: ABdhPJx1GUr9fffSpx1lpZSn/YrvUVjYuNV7SxnP1mMQRxq4bK1KUpckqXBE/b8Ru/y+ysz1Jxm1MA==
+X-Received: by 2002:a05:6000:10d0:b0:20d:7d3:9972 with SMTP id b16-20020a05600010d000b0020d07d39972mr8625180wrx.554.1652780653881;
+        Tue, 17 May 2022 02:44:13 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id c22-20020a05600c0a5600b00396fbf6f524sm1471019wmq.1.2022.05.17.02.44.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 02:44:13 -0700 (PDT)
+Message-ID: <a8bd608c-d94c-f4a2-e3b1-3381c9098caf@gmail.com>
+Date:   Tue, 17 May 2022 11:44:12 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 1/5] soc: mediatek: pwrap: Use readx_poll_timeout()
+ instead of custom function
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        nfraprado@collabora.com, rex-bc.chen@mediatek.com,
+        zhiyong.tao@mediatek.com
+References: <20220516124659.69484-1-angelogioacchino.delregno@collabora.com>
+ <20220516124659.69484-2-angelogioacchino.delregno@collabora.com>
+ <f8acbc75-970c-62fb-ad0d-914e512104a7@gmail.com>
+ <9f197c69-fe04-b636-afb7-8474763c8a3a@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <9f197c69-fe04-b636-afb7-8474763c8a3a@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-17 at 10:27 +0200, AngeloGioacchino Del Regno wrote:
-> Il 17/05/22 08:37, Yong Wu ha scritto:
-> > On Fri, 2022-05-13 at 17:06 +0200, AngeloGioacchino Del Regno
-> > wrote:
-> > > The MediaTek Helio X10 (MT6795) SoC has 5 LARBs and one common
-> > > SMI
-> > > instance without any sub-common and without GALS.
-> > > 
-> > > While the smi-common configuration is specific to this SoC, on
-> > > the
-> > > LARB side, this is similar to MT8173, in the sense that it
-> > > doesn't
-> > > need the port in LARB, and the register layout is also compatible
-> > > with that one, which makes us able to fully reuse the smi-larb
-> > > platform data struct that was introduced for MT8173.
-> > > 
-> > > Signed-off-by: AngeloGioacchino Del Regno <
-> > > angelogioacchino.delregno@collabora.com>
-> > > ---
-> > >   drivers/memory/mtk-smi.c | 17 +++++++++++++++++
-> > >   1 file changed, 17 insertions(+)
-> > > 
-> > > diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-> > > index 86a3d34f418e..7e7c3ede19e4 100644
-> > > --- a/drivers/memory/mtk-smi.c
-> > > +++ b/drivers/memory/mtk-smi.c
-> > > @@ -21,11 +21,13 @@
-> > >   /* SMI COMMON */
-> > >   #define SMI_L1LEN			0x100
-> > >   
-> > > +#define SMI_L1_ARB			0x200
-> > >   #define SMI_BUS_SEL			0x220
-> > >   #define SMI_BUS_LARB_SHIFT(larbid)	((larbid) << 1)
-> > >   /* All are MMU0 defaultly. Only specialize mmu1 here. */
-> > >   #define F_MMU1_LARB(larbid)		(0x1 <<
-> > > SMI_BUS_LARB_SHIFT(larbid))
-> > >   
-> > > +#define SMI_FIFO_TH0			0x230
-> > 
-> > Does the name come from the coda you got?
-> > It is called SMI_READ_FIFO_TH in my coda.
-> > 
-> 
-> Documentation for this SoC is not public and I have no access to it,
-> so
-> everything that you see here comes from reading downstream kernel
-> code :-(
-> 
-> I'll change the name to SMI_READ_FIFO_TH as suggested, thanks!
-> 
-> > >   #define SMI_M4U_TH			0x234
-> > >   #define SMI_FIFO_TH1			0x238
-> > >   #define SMI_FIFO_TH2			0x23c
-> > > @@ -360,6 +362,7 @@ static const struct of_device_id
-> > > mtk_smi_larb_of_ids[] = {
-> > >   	{.compatible = "mediatek,mt2701-smi-larb", .data =
-> > > &mtk_smi_larb_mt2701},
-> > >   	{.compatible = "mediatek,mt2712-smi-larb", .data =
-> > > &mtk_smi_larb_mt2712},
-> > >   	{.compatible = "mediatek,mt6779-smi-larb", .data =
-> > > &mtk_smi_larb_mt6779},
-> > > +	{.compatible = "mediatek,mt6795-smi-larb", .data =
-> > > &mtk_smi_larb_mt8173},
-> > >   	{.compatible = "mediatek,mt8167-smi-larb", .data =
-> > > &mtk_smi_larb_mt8167},
-> > >   	{.compatible = "mediatek,mt8173-smi-larb", .data =
-> > > &mtk_smi_larb_mt8173},
-> > >   	{.compatible = "mediatek,mt8183-smi-larb", .data =
-> > > &mtk_smi_larb_mt8183},
-> > > @@ -541,6 +544,13 @@ static struct platform_driver
-> > > mtk_smi_larb_driver = {
-> > >   	}
-> > >   };
-> > >   
-> > > +static const struct mtk_smi_reg_pair
-> > > mtk_smi_common_mt6795_init[SMI_COMMON_INIT_REGS_NR] = {
-> > > +	{SMI_L1_ARB, 0x1b},
-> > > +	{SMI_M4U_TH, 0xce810c85},
-> > > +	{SMI_FIFO_TH1, 0x43214c8},
-> > > +	{SMI_FIFO_TH0, 0x191f},
-> > > +};
-> > > +
-> > >   static const struct mtk_smi_reg_pair
-> > > mtk_smi_common_mt8195_init[SMI_COMMON_INIT_REGS_NR] = {
-> > >   	{SMI_L1LEN, 0xb},
-> > >   	{SMI_M4U_TH, 0xe100e10},
-> > > @@ -565,6 +575,12 @@ static const struct mtk_smi_common_plat
-> > > mtk_smi_common_mt6779 = {
-> > >   		    F_MMU1_LARB(5) | F_MMU1_LARB(6) |
-> > > F_MMU1_LARB(7),
-> > >   };
-> > >   
-> > > +static const struct mtk_smi_common_plat mtk_smi_common_mt6795 =
-> > > {
-> > > +	.type	  = MTK_SMI_GEN2,
-> > > +	.bus_sel  = BIT(0),
-> > 
-> > Like the other larbs, use F_MMU1_LARB(0) here?
-> > 
-> 
-> I agree that F_MMU1_LARB(0) == (1 << (0 << 1)) == BIT(0), but that
-> would
-> not be correct and induce other people to mistake, I think?
 
-F_MMU1_LARB(x) means larbx enter MMU1. this is correct for me.
 
-OK. Maybe the macro name is not good. About the macro background,
-please see:
-567e58cf96dd (memory: mtk-smi: Add bus_sel for mt8183)
-
-If you have better name for this, please tell me:)
-
-> Downstream doesn't do MMU1 bits, but MMU0 in this case... but if you
-> can
-> check on internal documentation and confirm that the downstream
-> kernel's
-> logic is wrong on that - and that you've verified that this should 
-
-I don't know the detailed downstream code, But I find a internal branch
-about this SoC. I see the bus_sel did set to 0x1 as you did here. thus
-I don't think the downstream kernel is wrong. 0x1 means larb0 enter
-MMU1 while the others still enter MMU0. we could use F_MMU1_LARB(0)
-here.
-
-> indeed
-> be F_MMU1_LARB(x), you'll get a big(bigger) thank you from me :-)
+On 17/05/2022 11:41, AngeloGioacchino Del Regno wrote:
+> Il 17/05/22 11:25, Matthias Brugger ha scritto:
+>>
+>>
+>> On 16/05/2022 14:46, AngeloGioacchino Del Regno wrote:
+>>> Function pwrap_wait_for_state() is a function that polls an address
+>>> through a helper function, but this is the very same operation that
+>>> the readx_poll_timeout macro means to do.
+>>> Convert all instances of calling pwrap_wait_for_state() to instead
+>>> use the read_poll_timeout macro.
+>>>
+>>> Signed-off-by: AngeloGioacchino Del Regno 
+>>> <angelogioacchino.delregno@collabora.com>
+>>> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>> ---
+>>>   drivers/soc/mediatek/mtk-pmic-wrap.c | 60 +++++++++++++++-------------
+>>>   1 file changed, 33 insertions(+), 27 deletions(-)
+>>>
+>>> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c 
+>>> b/drivers/soc/mediatek/mtk-pmic-wrap.c
+>>> index bf39a64f3ecc..54a5300ab72b 100644
+>>> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+>>> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+>>> @@ -13,6 +13,9 @@
+>>>   #include <linux/regmap.h>
+>>>   #include <linux/reset.h>
+>>> +#define PWRAP_POLL_DELAY_US    10
+>>> +#define PWRAP_POLL_TIMEOUT_US    10000
+>>> +
+>>>   #define PWRAP_MT8135_BRIDGE_IORD_ARB_EN        0x4
+>>>   #define PWRAP_MT8135_BRIDGE_WACS3_EN        0x10
+>>>   #define PWRAP_MT8135_BRIDGE_INIT_DONE3        0x14
+>>> @@ -1241,27 +1244,14 @@ static bool pwrap_is_fsm_idle_and_sync_idle(struct 
+>>> pmic_wrapper *wrp)
+>>>           (val & PWRAP_STATE_SYNC_IDLE0);
+>>>   }
+>>> -static int pwrap_wait_for_state(struct pmic_wrapper *wrp,
+>>> -        bool (*fp)(struct pmic_wrapper *))
+>>> -{
+>>> -    unsigned long timeout;
+>>> -
+>>> -    timeout = jiffies + usecs_to_jiffies(10000);
+>>> -
+>>> -    do {
+>>> -        if (time_after(jiffies, timeout))
+>>> -            return fp(wrp) ? 0 : -ETIMEDOUT;
+>>> -        if (fp(wrp))
+>>> -            return 0;
+>>> -    } while (1);
+>>> -}
+>>> -
+>>>   static int pwrap_read16(struct pmic_wrapper *wrp, u32 adr, u32 *rdata)
+>>>   {
+>>> +    bool tmp;
+>>>       int ret;
+>>>       u32 val;
+>>> -    ret = pwrap_wait_for_state(wrp, pwrap_is_fsm_idle);
+>>> +    ret = readx_poll_timeout(pwrap_is_fsm_idle, wrp, tmp, tmp,
+>>
+>> hm, if we make the cond (tmp > 0) that would help to understand the code. At 
+>> least I had to think about it for a moment. But I leave it to you if you think 
+>> it's worth the effort.
+>>
 > 
-> Meanwhile...
+> I would prefer size over readability in this case... if we do (tmp > 0), it would
+> be incorrect to keep tmp as a `bool`, we would have to set it as an integer var,
+> which is unnecessarily bigger (that's the reason why I wrote it like so!).
 > 
-> Thanks!
-> Angelo
+> Another way to increase human readability would be to do (tmp == true), but it
+> looks a bit weird to me, doesn't it?
+> If you disagree about that looking weird, though, I can go with that one, perhaps!
 > 
-> > 
-> > After the two changes,
-> > 
-> > Reviewed-by: Yong Wu <yong.wu@mediatek.com>
-> > 
-> > Thanks.
 
+You are right, just leave it as it is.
+
+Regards,
+Matthias

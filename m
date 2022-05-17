@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B51352A440
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A6752A442
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245740AbiEQOFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S1348423AbiEQOGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348446AbiEQOFT (ORCPT
+        with ESMTP id S242110AbiEQOGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:05:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931704D603;
-        Tue, 17 May 2022 07:05:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29B64B818EC;
-        Tue, 17 May 2022 14:05:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E541C385B8;
-        Tue, 17 May 2022 14:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652796304;
-        bh=GudX6koMKPd3WgZ5qgsXK2Xg18G4EDiE+FysY70LTi0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dbQhGv2YdItufG4Za9YLbDOenBhNHSNRPsxL3LsDfZeJJraMhxtnsj5w+GCOQIchy
-         mbT7RFit/M5XFAP/O717QdsOTVn/cSq/B1unj5OWStMFyLOs2XlRe5xfDmwY7In4rU
-         rshHWtzcO/FhTFL9SnN+KQd+vdI30GuseXGyCLm0Ba3fMMPueK+Y/GBSgMfdHZ1XDX
-         iavatjJmx1hflB4L9zNU0l1Zuj5BXTYIehWE1en/c4hOYUeu64G7Eu42elhISPgG47
-         xQ+BnO7alXzdg/qdWYFy6XIcqFyFyKG8wE6jqqjTZZTgYqI8kIp47xRHYh2xz12XJ3
-         MZsbKImO5x5TA==
-Message-ID: <00f05f62-7bf5-0a57-d07a-2e068253b9e6@kernel.org>
-Date:   Tue, 17 May 2022 16:04:56 +0200
+        Tue, 17 May 2022 10:06:38 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437B13DDDD
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:06:37 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id q18so17407109pln.12
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nQgF3isZDKLWuH4ifhpSCAZBSH+rYxzOtBZkOg2gi8U=;
+        b=IKPT3GX934EYxIcfasHxe3tTubPIVtfAnAYWZyhpW6GwiiQm8Q6EvrP2+PB8BY19Uq
+         z+jk5+9YM1zPXzRO5OQ7YUIp53As19xlDBYBdy/uEzcOAzGRVrhjAkq966jbCHsoAuKA
+         tOWVI/NRZcv3Z4czEtGycQ0WEj+LhunFeJpIocarnusiOo+7JDpn55cQKQjKPbzbPzda
+         jtCH5gPbtVtnb+8C5U+OuKDP8CPrGLOgJgPa4aUyWbfiH1obfiNEQufp5X5lHBqLDJoU
+         cdKP0lDpxewvCjYEm23e5/TfGWuFdwVpYaXJDFtfOQhzGYQhxMDHhnS4EUfrHf+vXMm4
+         fi5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nQgF3isZDKLWuH4ifhpSCAZBSH+rYxzOtBZkOg2gi8U=;
+        b=QkSLZbNO2zyJAAIm9+JVRQFb+d652pnyPKbdmsy6gMhmsI7SoS26Y8d1dvsi1NBm+Y
+         pVb3eZkLOx0U3LFNJ/GSTvY2rT/aJu3+2wIq1D+u4wdOW6MddCKMyTeUvVqaVXNhf0Pd
+         HNo+5kha3C+8aatTI0GZexf6RgnDynk/biyhtiZ5zAzUCAvjvIN/+U3rE8DDDreuJjcu
+         tRgGitMOQ8P01nwKJjQYAIV1IF6/csrB3RBt1/xh4DAvURf3iu22IrNad/dxW6UPvtHO
+         BWHbcOH1TsA1klMPMRXg6vZOM6OOCtCB8m8rlN6+omGU+OxSk6efoCvIYhvRpr95vwtE
+         Sukw==
+X-Gm-Message-State: AOAM531fvTv807It0Mc4pIh4Ldz+YBUS1nPyYLkx6yp3FLKrxT//EYys
+        Ut3CvfbSEWmGgcUPFJkQxuw=
+X-Google-Smtp-Source: ABdhPJwg4wnpKRIv3claIbAuADoipHj0NqvZyKT11KCxorFdy2PIfBueO5522lxLSA+hZo/YBz6iVA==
+X-Received: by 2002:a17:90b:1651:b0:1dc:aec3:c17 with SMTP id il17-20020a17090b165100b001dcaec30c17mr25037491pjb.43.1652796396778;
+        Tue, 17 May 2022 07:06:36 -0700 (PDT)
+Received: from makvihas.localhost.com ([2405:201:202b:1:3174:ae5c:a49e:4e77])
+        by smtp.gmail.com with ESMTPSA id z34-20020a631922000000b003f27f91135asm3113289pgl.76.2022.05.17.07.06.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 07:06:36 -0700 (PDT)
+From:   Vihas Makwana <makvihas@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Vihas Makwana <makvihas@gmail.com>
+Subject: [PATCH v2 0/3] staging: r8188eu: fix some warnings 
+Date:   Tue, 17 May 2022 19:36:23 +0530
+Message-Id: <20220517140626.3716-1-makvihas@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 16/20] media: s5p-mfc: Fix to handle reference queue
- during finishing
-Content-Language: en-US
-To:     Smitha T Murthy <smitha.t@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com
-References: <20220517125548.14746-1-smitha.t@samsung.com>
- <CGME20220517125644epcas5p3fcabdc953c042cc9f2697f7fbfc74121@epcas5p3.samsung.com>
- <20220517125548.14746-17-smitha.t@samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220517125548.14746-17-smitha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        NO_RDNS_DOTCOM_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 14:55, Smitha T Murthy wrote:
-> On receiving last buffer driver puts MFC to
-> MFCINST_FINISHING state which in turn skips
-> transferring of frame from SRC to REF queue.
-> This causes driver to stop MFC encoding and
-> last frame is lost.
+This patchset fixes following checkpatch warning:
+    WARNING: Comparisons should place the constant on the right side of the test
 
-What type of wrapping is it exactly?
+Compiled tested only.
 
-https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+v1 -> v2:
+  Fixed subject line and removed extra spaces.
 
-> 
-> This patch guarantees safe handling of frames
-> during MFCINST_FINISHING and correct clearing
-> of workbit to avoid early stopping of encoding.
-> 
+Vihas Makwana (3):
+  staging: r8188eu: fix warnings in rtw_p2p
+  staging: r8188eu: fix warnings in rtw_pwrctrl
+  staging: r8188eu: fix warnings in rtw_wlan_util
 
-This looks like a bugfix so:
-1. Send it separately please.
-2. Add Fixes tag.
-3. Add Cc stable tag.
+ drivers/staging/r8188eu/core/rtw_p2p.c       |  8 ++++----
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c   | 12 ++++++------
+ drivers/staging/r8188eu/core/rtw_wlan_util.c |  2 +-
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-Best regards,
-Krzysztof
+-- 
+2.30.2
+

@@ -2,134 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F4152A7C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F9E52A7CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350850AbiEQQVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S1350859AbiEQQWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349466AbiEQQVq (ORCPT
+        with ESMTP id S243610AbiEQQWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:21:46 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D293A5E4;
-        Tue, 17 May 2022 09:21:44 -0700 (PDT)
+        Tue, 17 May 2022 12:22:30 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23903AA52;
+        Tue, 17 May 2022 09:22:29 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id a11so17343915pff.1;
+        Tue, 17 May 2022 09:22:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652804505; x=1684340505;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=rz7wGdnYyjlRioZFs+shuq5lGPKK9FQZMj/CbIgMddw=;
-  b=pesKrlpOlKheSPdctNHKZtMHLCb0uGKoBCBFRcTUNTFbKnTbyAlIYZp6
-   sDVppA7YYLCxLWJiAZqgulW2KQNJgyL3PKr5YRC3kapB4JYMgwIGi0S2b
-   2Bm6zRSZzcuhjAiNoxz1ouVe5viJtjq2tAt9Ht1R9/x8rEVXcizBd/ebv
-   Y=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 17 May 2022 09:21:44 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:21:44 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 17 May 2022 09:21:43 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 17 May 2022 09:21:43 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7] drm/msm/dp: Always clear mask bits to disable interrupts at dp_ctrl_reset_irq_ctrl()
-Date:   Tue, 17 May 2022 09:21:34 -0700
-Message-ID: <1652804494-19650-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ucBjucFRLoCm+fSN1r2d7kOJNJ0DcOpGqQ15rcjUeMA=;
+        b=GMlCRPNOBl0U8kUWJ+h1cRq1eDkVBFSBSimWnPlTdkJs30NCejY/oi7tflcow5oG0u
+         reNC7F+7WXgBWXVWr9W15j4VQ8+KzzzCElWHv+dl+cHNEHQSh9J7RFyJ9qZOQiGR4qso
+         51O+CkqfU65E6X1ATXlDNXO/U9epYzKV3Px0ZscdOnQG8FXRWn+Ic7bGxs5turgNr4MF
+         Ek/MteFCNDE1fHMytnEJMQqaBhoJpMxOmt9v7Q+HpdW5qBixum1vincbwZG8uzJJmDGR
+         wpqr1S1mTXa8NqacHujjnN6f59AJ6BrebaMIWMFDU0eM6tVDWPaacyilVKXuz8rn1816
+         o0MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ucBjucFRLoCm+fSN1r2d7kOJNJ0DcOpGqQ15rcjUeMA=;
+        b=NLvGzwElbRtu24wECUHR1MDpIkcRfDx49E48bg+DSubEan++mLP3IqgXVbVDYEoH1x
+         AMpd2935Rz9krQepP54wuk8aTw3YoI/oHuB5Kb2Wm9XR679429y3O9xJheKu7dFkmvQP
+         C9Y1m0xKKQzd/A6sjjXybqmg1tt376SnEfr8bjowru2aEBKAdvmKok/XpVysK5rCoRm/
+         FhTxFwv67h66Bsc0+s4EvzyDCSbNdta8ShLNJ+GZP5O1z0J3BDkdXf/fcYOatjdGuPCq
+         oCbNRQzayX67xOVUsBRWV2G8RcTGogYfqXTfWo/4GU5h4wItafegCIqCWilQE6by8bUv
+         Iesw==
+X-Gm-Message-State: AOAM53332jG7k4gacLaSu/4f77ptPJJajvUrtlW4efMnHy2xPFOhbwY6
+        3DdC2QhoPFTyOwc1lmygYOk=
+X-Google-Smtp-Source: ABdhPJw/XLRgnnIeudXfxqzg16Zi1H9cBFvzQnhI/WTy4mArrCc1RgCi1SWskS0L6QO1ZEYfsfGFQw==
+X-Received: by 2002:a63:87c7:0:b0:3d8:552d:20d9 with SMTP id i190-20020a6387c7000000b003d8552d20d9mr20029249pge.440.1652804549114;
+        Tue, 17 May 2022 09:22:29 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id u2-20020a170902bf4200b0015f44241a31sm9280091pls.110.2022.05.17.09.22.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 09:22:28 -0700 (PDT)
+Message-ID: <bf29d9d4-4d14-d45c-cd01-509fec795f97@gmail.com>
+Date:   Tue, 17 May 2022 09:22:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 5.15 000/102] 5.15.41-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220516193623.989270214@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dp_catalog_ctrl_reset() will software reset DP controller. But it will
-not reset programmable registers to default value. DP driver still have
-to clear mask bits to interrupt status registers to disable interrupts
-after software reset of controller.
 
-At current implementation, dp_ctrl_reset_irq_ctrl() will software reset dp
-controller but did not call dp_catalog_ctrl_enable_irq(false) to clear hpd
-related interrupt mask bits to disable hpd related interrupts due to it
-mistakenly think hpd related interrupt mask bits will be cleared by software
-reset of dp controller automatically. This mistake may cause system to crash
-during suspending procedure due to unexpected irq fired and trigger event
-thread to access dp controller registers with controller clocks are disabled.
 
-This patch fixes system crash during suspending problem by removing "enable"
-flag condition checking at dp_ctrl_reset_irq_ctrl() so that hpd related
-interrupt mask bits are cleared to prevent unexpected from happening.
+On 5/16/2022 12:35 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.41 release.
+> There are 102 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.41-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Changes in v2:
--- add more details commit text
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Changes in v3:
--- add synchrons_irq()
--- add atomic_t suspended
-
-Changes in v4:
--- correct Fixes's commit ID
--- remove synchrons_irq()
-
-Changes in v5:
--- revise commit text
-
-Changes in v6:
--- add event_lock to protect "suspended"
-
-Changes in v7:
--- delete "suspended" flag
-
-Fixes: 989ebe7bc446 ("drm/msm/dp: do not initialize phy until plugin interrupt received")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_ctrl.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index 5356856..5ddb4e8 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1380,8 +1380,13 @@ void dp_ctrl_reset_irq_ctrl(struct dp_ctrl *dp_ctrl, bool enable)
- 
- 	dp_catalog_ctrl_reset(ctrl->catalog);
- 
--	if (enable)
--		dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
-+	/*
-+	 * all dp controller programmable registers will not
-+	 * be reset to default value after DP_SW_RESET
-+	 * therefore interrupt mask bits have to be updated
-+	 * to enable/disable interrupts
-+	 */
-+	dp_catalog_ctrl_enable_irq(ctrl->catalog, enable);
- }
- 
- void dp_ctrl_phy_init(struct dp_ctrl *dp_ctrl)
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Florian

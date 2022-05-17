@@ -2,63 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0226652A950
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFAF52A97D
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351457AbiEQRd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 13:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
+        id S1351555AbiEQRmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 13:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351447AbiEQRdZ (ORCPT
+        with ESMTP id S242639AbiEQRmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 13:33:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B6E23A18E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652808804;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LGLIFlTQ2OG0Nit+kOZYpbPmMvBDDMh/ziDLpygha+E=;
-        b=i4pQegMjADJUz20HOFBJN7TwR/hT7gjcGQd6Y0br+RcxSPb3cDP3TD4E1pby+BqhnuZmvB
-        SxSlpfxXkSG7mmVlUHnxIYTAWnfZhJw/rZvhbMD7Arc0qGbAZqBdNfML6R7lzb5EB8/V6K
-        GRgyJyzHmm4ke0XPwQO9rzaSqNzf+s8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-296-IzFfBergOc-7ZtGOxWWsKg-1; Tue, 17 May 2022 13:33:22 -0400
-X-MC-Unique: IzFfBergOc-7ZtGOxWWsKg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3462685A5BE;
-        Tue, 17 May 2022 17:33:21 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.8.76])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F570492C14;
-        Tue, 17 May 2022 17:33:19 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     liuhangbin@gmail.com
-Cc:     andy@greyhouse.net, davem@davemloft.net, dsahern@gmail.com,
-        eric.dumazet@gmail.com, j.vosburgh@gmail.com, jtoppins@redhat.com,
-        kuba@kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
-        syzbot+92beb3d46aab498710fa@syzkaller.appspotmail.com,
-        vfalico@gmail.com, vladimir.oltean@nxp.com,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 net] bonding: fix missed rcu protection
-Date:   Tue, 17 May 2022 13:32:58 -0400
-Message-Id: <a4ed2a83d38a58b0984edb519382c867204b7ea2.1652804144.git.jtoppins@redhat.com>
-In-Reply-To: <20220517082312.805824-1-liuhangbin@gmail.com>
-References: <20220517082312.805824-1-liuhangbin@gmail.com>
+        Tue, 17 May 2022 13:42:21 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE45D128
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:42:20 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-f1d2ea701dso1067531fac.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eg7EH5Vrvb2fKjVFmkcCg9Zq9x2kct9i+zNiZ3Rb9nE=;
+        b=e1JvkQ93rAtCK7sn488U3SuJf4AoUESglxHXrKJTTMMkNeQNcU7i/nTgft7PxtzV81
+         JTZb2e0ArclXtYmdxk/G5BmXdnm+y8WTIxYFtmcmGcWKgMQy1d7RhscLPElAzT1nXsHj
+         Xd2uFtRkYUUKQb5Cxhh1Wdfsp9NSTDDMoVQRs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eg7EH5Vrvb2fKjVFmkcCg9Zq9x2kct9i+zNiZ3Rb9nE=;
+        b=y42rDLssUbag7VD0I2mGt2mEOTdSuEwSuWv2rjNgD7AgoIYfjyd3TkQsHs7hBNcqh6
+         3dQs29TA8pxKb7Eh2hLBbXG3JgXco//0Gr20YtIi4totMlYmJHH9gw4ynwkTppu2eHY/
+         NJ6heHxVlLmQZ7lpfdODzEyOm3jYgt8mvwCe/UX5qj51XXFarXJuzT4SdvNP1uKBzXKK
+         72mjS5WAROKJABjvjzwr85Sskf/rsiaVMvyy1Eg9S08W7ADiNXhLYps1WvWfaJb4z1hG
+         l+H0LLmNQI/WPMoNNoVtMEl4Zcv8O8102zBHUALJeRtZfJDwMMgvPd+Provwf1eNUj+o
+         4r7g==
+X-Gm-Message-State: AOAM530F1/4l0NELVCOjs2O9hpqPQZE/7Q3XHjxZQbD1fJrrleVSfXp/
+        TKs1aNixAXPs0mmCVaEB7lpU+y+CF33WJw==
+X-Google-Smtp-Source: ABdhPJwG8nRhvgI3W3FvY8JhBMDKh/vmTRfPNtrQFd2+D9mVFgIkrYE7TIfZVm9LReOVStGuql5sow==
+X-Received: by 2002:a05:6870:2053:b0:e9:3c2f:23d9 with SMTP id l19-20020a056870205300b000e93c2f23d9mr18943081oad.158.1652809339364;
+        Tue, 17 May 2022 10:42:19 -0700 (PDT)
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com. [209.85.167.179])
+        by smtp.gmail.com with ESMTPSA id i10-20020acaea0a000000b00328e70cae5csm42389oih.43.2022.05.17.10.42.18
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 10:42:18 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id j12so23188877oie.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:42:18 -0700 (PDT)
+X-Received: by 2002:a05:6808:d52:b0:328:acfc:d274 with SMTP id
+ w18-20020a0568080d5200b00328acfcd274mr11183218oik.174.1652808882898; Tue, 17
+ May 2022 10:34:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
+ <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com> <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 17 May 2022 10:34:05 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
+Message-ID: <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Encrypted Hibernation
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, LKML <linux-kernel@vger.kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,68 +91,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
----
-RESEND, list still didn't receive my last version
+Hi Rafael,
 
-The diffstat is slightly larger but IMO a slightly more readable version.
-When I was reading v2 I found myself jumping around.
-I only compile tested it, so YMMV.
+On Tue, May 17, 2022 at 9:06 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Mon, May 9, 2022 at 6:44 PM Evan Green <evgreen@chromium.org> wrote:
+> >
+> > On Fri, May 6, 2022 at 9:08 AM Pavel Machek <pavel@ucw.cz> wrote:
+> > >
+> > > Hi!
+> > >
+> > > > We are exploring enabling hibernation in some new scenarios. However,
+> > > > our security team has a few requirements, listed below:
+> > > > 1. The hibernate image must be encrypted with protection derived from
+> > > >    both the platform (eg TPM) and user authentication data (eg
+> > > >    password).
+> > > > 2. Hibernation must not be a vector by which a malicious userspace can
+> > > >    escalate to the kernel.
+> > >
+> > > Can you (or your security team) explain why requirement 2. is needed?
+> > >
+> > > On normal systems, trusted userspace handles kernel upgrades (for example),
+> > > so it can escalate to kernel priviledges.
+> > >
+> >
+> > Our systems are a little more sealed up than a normal distro, we use
+> > Verified Boot [1]. To summarize, RO firmware with an embedded public
+> > key verifies that the kernel+commandline was signed by Google. The
+> > commandline includes the root hash of the rootfs as well (where the
+> > modules live). So when an update is applied (A/B style, including the
+> > whole rootfs), assuming the RO firmware stayed RO (which requires
+> > physical measures to defeat), we can guarantee that the kernel,
+> > commandline, and rootfs have not been tampered with.
+> >
+> > Verified boot gives us confidence that on each boot, we're at least
+> > starting from known code. This makes it more challenging for an
+> > attacker to persist an exploit across reboot. With the kernel and
+> > modules verified, we try to make it non-trivial for someone who does
+> > manage to gain root execution once from escalating to kernel
+> > execution. Hibernation would be one obvious escalation route, so we're
+> > hoping to find a way to enable it without handing out that easy
+> > primitive.
+> >
+> > [1] https://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot/
+>
+> So I guess this really is an RFC.
 
-If this amount of change is too much v2 from Hangbin looks correct to
-me.
+Yes, I suppose it is.
 
- drivers/net/bonding/bond_main.c | 31 ++++++++++++++++++++-----------
- 1 file changed, 20 insertions(+), 11 deletions(-)
+>
+> Honestly, I need more time to go through this and there are pieces of
+> it that need to be looked at other people (like the TPM-related
+> changes).
 
-diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-index 38e152548126..f9d27b63c454 100644
---- a/drivers/net/bonding/bond_main.c
-+++ b/drivers/net/bonding/bond_main.c
-@@ -5591,23 +5591,32 @@ static int bond_ethtool_get_ts_info(struct net_device *bond_dev,
- 	const struct ethtool_ops *ops;
- 	struct net_device *real_dev;
- 	struct phy_device *phydev;
-+	int ret = 0;
- 
-+	rcu_read_lock();
- 	real_dev = bond_option_active_slave_get_rcu(bond);
--	if (real_dev) {
--		ops = real_dev->ethtool_ops;
--		phydev = real_dev->phydev;
--
--		if (phy_has_tsinfo(phydev)) {
--			return phy_ts_info(phydev, info);
--		} else if (ops->get_ts_info) {
--			return ops->get_ts_info(real_dev, info);
--		}
--	}
-+	if (real_dev)
-+		dev_hold(real_dev);
-+	rcu_read_unlock();
-+
-+	if (!real_dev)
-+		goto software;
- 
-+	ops = real_dev->ethtool_ops;
-+	phydev = real_dev->phydev;
-+
-+	if (phy_has_tsinfo(phydev))
-+		ret = phy_ts_info(phydev, info);
-+	else if (ops->get_ts_info)
-+		ret = ops->get_ts_info(real_dev, info);
-+
-+	dev_put(real_dev);
-+	return ret;
-+
-+software:
- 	info->so_timestamping = SOF_TIMESTAMPING_RX_SOFTWARE |
- 				SOF_TIMESTAMPING_SOFTWARE;
- 	info->phc_index = -1;
--
- 	return 0;
- }
- 
--- 
-2.27.0
+No problem, thanks for the reply to let me know. I expect some back
+and forth in terms of what should be hidden behind abstractions and
+where exactly things should live. But I wanted to get this out to
+upstream as early as I could, just to get initial reactions on the
+overall concept and design. Looking forward to hearing your thoughts
+when you get a chance, and let me know if there are others I should be
+adding that I've missed.
 
+-Evan
+
+>
+> Thanks!

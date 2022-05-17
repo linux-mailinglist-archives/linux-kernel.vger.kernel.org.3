@@ -2,55 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB42652A534
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0204852A535
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349257AbiEQOsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S1349268AbiEQOs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348400AbiEQOsu (ORCPT
+        with ESMTP id S1349244AbiEQOsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:48:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610724CD5C;
-        Tue, 17 May 2022 07:48:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF81861665;
-        Tue, 17 May 2022 14:48:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A079C34113;
-        Tue, 17 May 2022 14:48:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652798928;
-        bh=WH1XjOHZMUkBmVozWE2TGSdngqxpzYYtwhgMhjYHD08=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=sBlX4WLiZkn8cbvAIXQxMV8M+hCKD+y4Sidi3Smw476AHGWW0eKMxhHwJclFRXYVR
-         qAfMWePypc2OXfkXONjn0EQvSl8mp2wdPvqkqyTALRXgcyvR3YWZmE/j2sSEEX47cp
-         4O1n0Acl53n0c3FBia0WLP2q005RI4s4Wibyyq5c3DWZM2U0fONBbC4mzv40fDEM/1
-         a68UHUcWv708WOw9ZpKJPvApfixFjFvmalX8ewv0/vPIchdZA5Yv4A+myzsa0y3iTe
-         9Mhstqptv8d0RQenbofqWpm3e8w9snKA1p0PlApfT3NYS9XzprGhWb6E84PqICS/kN
-         I6myESnqnwOPg==
-Date:   Tue, 17 May 2022 09:48:46 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        David Box <david.e.box@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-Message-ID: <20220517144846.GA1068039@bhelgaas>
+        Tue, 17 May 2022 10:48:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E1E44CD5F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:48:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652798931;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Lrq/y6BGlNlVOgPjtbRzFqsueG5xaPLbHBUEC0COjvA=;
+        b=C45/SXAkVJTtw4SW1tEubueQRN6Npo9H9IGuaqbEoTYsVY4fPQfBFCq/BkH4ZTN4bLcv8w
+        54u6/XACyGqoXp8ejQVbYlHZBgskhUtWW4cWseYVF/Qcuy2QIz0F9zWyH47ddAnWuJOqFv
+        3b0aDfPrdlfyzW4cKcfPIryjZ9djfbg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-610-zMjbcAprPKahZTJiNs49Uw-1; Tue, 17 May 2022 10:48:49 -0400
+X-MC-Unique: zMjbcAprPKahZTJiNs49Uw-1
+Received: by mail-wm1-f72.google.com with SMTP id i131-20020a1c3b89000000b00393fbb0718bso1396079wma.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:48:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Lrq/y6BGlNlVOgPjtbRzFqsueG5xaPLbHBUEC0COjvA=;
+        b=1GsGQtk5em6H7jcAr2DdmxP0mit7VMnIk/WgqA/SJgXRcOUQ0SN978lxhMyI9hEhfb
+         GS1L1/hjTJ4sdznunzU+8bP35lBxCo+ag4Vtzv5SU42Y04JLZTXUs7VI+9A3aLHERfp5
+         Ka6EQCnOffS+J4jRrponU2E6R6DPFtDAfrGayI988kARma11lJqwI8pA+Bea5h4IVLhi
+         mf7lBfEsnq9gM8Lnv3x8TSFGN/BBvysTeLsLezHMr2k6FhXG+VhgNwzfji6C+PyVVlfi
+         NJ/juGK2cC0tUv/lSL3PtxI64UjjW299EGxqTrEn5YUfMrEOeJKg64p7v7knwPxDWL9b
+         llqg==
+X-Gm-Message-State: AOAM530x1dUyLcvqw0NU/VlVokInHkJeRYT6+z0YJl4owXGwHQqJ81hf
+        66JgF8dcuv2WMz2MNZL57q7I0Tqv0pam86r2JaP+WNxWSqrPRkmvq4d8EGgQAYmAxiT9C0ssUfV
+        mPcRwUI0pyq8lMWfUnB+6xMPCRAfIbPxc3/CI6N6T+4btvtnC2oHlHYaL350YPxJCN6fgA01gdF
+        dP
+X-Received: by 2002:a05:600c:4e94:b0:394:89c9:a505 with SMTP id f20-20020a05600c4e9400b0039489c9a505mr32372847wmq.172.1652798928337;
+        Tue, 17 May 2022 07:48:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxh56zphmlDWqYRhxQTx06KjFt7Px60hp28D9kA81BoQtzj/874xNJDmv2Be5W4+J65STy6RQ==
+X-Received: by 2002:a05:600c:4e94:b0:394:89c9:a505 with SMTP id f20-20020a05600c4e9400b0039489c9a505mr32372824wmq.172.1652798928100;
+        Tue, 17 May 2022 07:48:48 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id n4-20020a1c2704000000b003942a244eebsm2009750wmn.48.2022.05.17.07.48.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 07:48:47 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Yajun Deng <yajun.deng@linux.dev>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] sched/rt: fix the case where sched_rt_period_us is
+ negative
+In-Reply-To: <fdfc0c8f6027c2071674d52f27f7d7da@linux.dev>
+References: <xhsmhmtfh1ptb.mognet@vschneid.remote.csb>
+ <20220512003945.610093-1-yajun.deng@linux.dev>
+ <fdfc0c8f6027c2071674d52f27f7d7da@linux.dev>
+Date:   Tue, 17 May 2022 15:48:46 +0100
+Message-ID: <xhsmhk0ak1agh.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0g6GdKfN4b5uwHEhh4hBuG=haVHaXc-XuMQLe8Wd41Y3g@mail.gmail.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,89 +82,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:59:32PM +0200, Rafael J. Wysocki wrote:
-> On Mon, May 16, 2022 at 10:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, May 13, 2022 at 10:00:48PM +0000, Jingar, Rajvi wrote:
-> > > > -----Original Message-----
-> > > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > > Sent: Thursday, May 12, 2022 11:36 AM
-> > > > To: Rafael J. Wysocki <rafael@kernel.org>
-> > > > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
-> > > > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>; David Box
-> > > > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>; Linux
-> > > > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
-> > > > pm@vger.kernel.org>
-> > > > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-> > > >
-> > > > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
-> > > > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
-> > > >
-> > > > > > > Something like this should suffice IMV:
-> > > > > > >
-> > > > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
-> > > > > > >
-> > > > > > >         pci_disable_ptm(pci_dev);
-> > > > > >
-> > > > > > It makes sense to me that we needn't disable PTM if the device is in
-> > > > > > D3cold.  But the "!dev_state_saved" condition depends on what the
-> > > > > > driver did.  Why is that important?  Why should we not do the
-> > > > > > following?
-> > > > > >
-> > > > > >   if (pci_dev->current_state != PCI_D3cold)
-> > > > > >     pci_disable_ptm(pci_dev);
-> > > > >
-> > > > > We can do this too.  I thought we could skip the power state
-> > > > > check if dev_state_saved was unset, because then we would know
-> > > > > that the power state was not D3cold.  It probably isn't worth
-> > > > > the hassle though.
-> > >
-> > > We see issue with certain platforms where only checking if device
-> > > power state in D3Cold is not enough and the !dev_state_saved check
-> > > is needed when disabling PTM. Device like nvme is relying on ASPM,
-> > > it stays in D0 but state is saved. Touching the config space wakes
-> > > up the device which prevents the system from entering into low power
-> > > state.
-> >
-> > Correct me if I'm wrong: for NVMe devices, nvme_suspend() has already
-> > saved state and put the device in some low-power state.  Disabling PTM
-> > here is functionally OK but prevents a system low power state, so you
-> > want to leave PTM enabled.
-> >
-> > But I must be missing something because pci_prepare_to_sleep()
-> > currently disables PTM for Root Ports.  If we leave PTM enabled on
-> > NVMe but disable it on the Root Port above it, any PTM Request from
-> > NVMe will cause an Unsupported Request error.
-> >
-> > Disabling PTM must be coordinated across PTM Requesters and PTM
-> > Responders.  That means the decision to disable cannot depend on
-> > driver-specific things like whether the driver has saved state.
-> 
-> Setting state_saved generally informs pci_pm_suspend_noirq() that the
-> device has already been handled and it doesn't need to do anything to
-> it.
-> 
-> But you are right that PTM should be disabled on downstream devices as
-> well as on the ports that those devices are connected to and it can be
-> done even if the given device has already been handled, so the
-> state_saved value is technically irrelevant.
-> 
-> That's why I suggested to check if the power state is between D0 and
-> D3cold (exclusive) and only disable PTM if that is the case.  It is
-> pointless to disable PTM for devices in D3cold and it may be harmful
-> for devices that are left in D0.
+On 17/05/22 01:55, Yajun Deng wrote:
+> May 16, 2022 11:04 PM, "Valentin Schneider" <vschneid@redhat.com> wrote:
+>>> },
+>>> {
+>>> .procname = "sched_rt_runtime_us",
+>>> @@ -44,6 +45,8 @@ static struct ctl_table sched_rt_sysctls[] = {
+>>> .maxlen = sizeof(int),
+>>> .mode = 0644,
+>>> .proc_handler = sched_rt_handler,
+>>> + .extra1 = SYSCTL_NEG_ONE,
+>>> + .extra2 = (void *)&sysctl_sched_rt_period,
+>>
+>> Per this, you could also remove the
+>>
+>> ((sysctl_sched_rt_runtime > sysctl_sched_rt_period) ||
+>>
+>> from sched_rt_global_validate(), no?
+>>
+>
+> No, the extra2 just limit the maximum value of sysctl_sched_rt_runtime is sysctl_sched_rt_period, but not limit the minimum value of sysctl_sched_rt_period is sysctl_sched_rt_runtime. (sysctl_sched_rt_runtime > sysctl_sched_rt_period) can do both.
 
-"... it may be harmful for devices that are left in D0" -- I want to
-understand this better.  It sounds like nvme_suspend() leaves the
-device in some device-specific low-power flavor of D0, and subsequent
-config accesses take it out of that low-power situation?  
+Gotcha.
 
-If that's the case, it sounds a little brittle.  I don't think it's
-obvious that "pci_dev->state_saved was set by the driver" means "no
-config accesses allowed in pci_pm_suspend_noirq()."  And
-pci_pm_suspend_noirq() calls quirks via pci_fixup_device(), which are
-very likely to do config accesses.
+> Its purpose is to return error earlier. Perhaps I should remove extra2 to avoid ambiguity.
+>
 
-Maybe PTM needs to be disabled earlier, e.g., in pci_pm_suspend()?  I
-don't think PTM uses any interrupts, so there's probably no reason
-interrupts need to be disabled before disabling PTM.
+It's probably better to only have the "pure" bounds in there yes.
+

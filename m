@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250AA529E9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC18F529E9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245256AbiEQJ7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S245466AbiEQJ7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237354AbiEQJ7X (ORCPT
+        with ESMTP id S244928AbiEQJ7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:59:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408BF35877;
-        Tue, 17 May 2022 02:59:22 -0700 (PDT)
+        Tue, 17 May 2022 05:59:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF42138181
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:59:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2C36B817FA;
-        Tue, 17 May 2022 09:59:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D08C385B8;
-        Tue, 17 May 2022 09:59:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652781559;
-        bh=IjTrdkC91KRp+rvEIbIDiMLZHXKC2n8pE+7UtzloPrs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xn2gVi05KA3hpbMmcoE8VN3hUgnIIdxfa2xbfWTu2M+p5r82NT70wL9ohPKO2MIkp
-         6NPCY7ZXgy1CoQ+CtpCd3JaHZmivUEkqY+D+em7HjxVCE6UPPpxwl07IQWb0Xuj10Z
-         DvPzZ8d8fGgqN989RoDqKMpI+7ZidI7gD6iqlJRY=
-Date:   Tue, 17 May 2022 11:59:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] dma-buf: fix use of DMA_BUF_SET_NAME_{A,B} in userspace
-Message-ID: <YoNx8a8+gvOWwfc9@kroah.com>
-References: <20220517072708.245265-1-Jerome.Pouiller@silabs.com>
- <c1479285-7fd8-b73a-9672-6e0d7db4cbdf@amd.com>
- <3847797.kQq0lBPeGt@pc-42>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B28F61544
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:59:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6577C385B8;
+        Tue, 17 May 2022 09:59:22 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QG6001yk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652781561;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nCA6ktYPKqAc+mwvn1DjxnUKAjWZaMXrv9dPRAIjhFM=;
+        b=QG6001yk/IHfAT4LnOyFv24WDJiK7UYDJci5muPsqfJToKK5CGzkVPVtzHyLeiyWPkQvWA
+        Gkz1h7TeNyejOWPYvZ7eD32eZ5u3G1Ey+AbG0oLDUgEEFWG4sRnw88I9vjMW2kMDS6cY4V
+        zo+zUHt25TMD+cs2cy1umUaQ1SNjq1U=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a507a126 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 17 May 2022 09:59:21 +0000 (UTC)
+Date:   Tue, 17 May 2022 11:59:19 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] locking/lockdep: Use sched_clock() for random numbers.
+Message-ID: <YoNx9w1QocBY/P0I@zx2c4.com>
+References: <YoNn3pTkm5+QzE5k@linutronix.de>
+ <YoNwp+9ko89Tf1ep@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3847797.kQq0lBPeGt@pc-42>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YoNwp+9ko89Tf1ep@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 10:32:15AM +0200, Jérôme Pouiller wrote:
-> [add stable@vger.kernel.org to the recipients]
+On Tue, May 17, 2022 at 11:53:43AM +0200, Jason A. Donenfeld wrote:
+> Hi Sebastian,
 > 
-> On Tuesday 17 May 2022 09:30:24 CEST Christian König wrote:
-> > Am 17.05.22 um 09:27 schrieb Jerome Pouiller:
-> > > From: Jérôme Pouiller <jerome.pouiller@silabs.com>
-> > >
-> > > The typedefs u32 and u64 are not available in userspace. Thus user get
-> > > an error he try to use DMA_BUF_SET_NAME_A or DMA_BUF_SET_NAME_B:
-> > >
-> > >      $ gcc -Wall   -c -MMD -c -o ioctls_list.o ioctls_list.c
-> > >      In file included from /usr/include/x86_64-linux-gnu/asm/ioctl.h:1,
-> > >                       from /usr/include/linux/ioctl.h:5,
-> > >                       from /usr/include/asm-generic/ioctls.h:5,
-> > >                       from ioctls_list.c:11:
-> > >      ioctls_list.c:463:29: error: ‘u32’ undeclared here (not in a function)
-> > >        463 |     { "DMA_BUF_SET_NAME_A", DMA_BUF_SET_NAME_A, -1, -1 }, // linux/dma-buf.h
-> > >            |                             ^~~~~~~~~~~~~~~~~~
-> > >      ioctls_list.c:464:29: error: ‘u64’ undeclared here (not in a function)
-> > >        464 |     { "DMA_BUF_SET_NAME_B", DMA_BUF_SET_NAME_B, -1, -1 }, // linux/dma-buf.h
-> > >            |                             ^~~~~~~~~~~~~~~~~~
-> > >
-> > > The issue was initially reported here[1].
-> > >
-> > > [1]: https://urldefense.com/v3/__https://nam11.safelinks.protection.outlook.com/?url=https*3A*2F*2Fgithub.com*2Fjerome-pouiller*2Fioctl*2Fpull*2F14&amp;data=05*7C01*7Cchristian.koenig*40amd.com*7C4b665e3c2222463014ec08da37d6b3f4*7C3dd8961fe4884e608e11a82d994e183d*7C0*7C0*7C637883692533547283*7CUnknown*7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0*3D*7C3000*7C*7C*7C&amp;sdata=prj*2BSOuf*2B1IWK1XKGD381LhDuL9qOoj7lYy8xMoV*2B6o*3D&amp;reserved=0__;JSUlJSUlJSUlJSUlJSUlJSUlJSUlJSUlJSU!!N30Cs7Jr!Vp-6M6kuBq4uqEHaYTbkJbN3BTkd85DAeGS7xNYLPbNMp00kBlbD0iQPjJdQ5OVCFeCp_XVrsYIhxvLlpLQDmRhK5QXhQA$
-> > >
-> > > Signed-off-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
-> > 
-> > Good catch, Reviewed-by: Christian König <christian.koenig@amd.com>
-> > 
-> > CC: stable?
+> Interesting RT consideration. I hope there aren't too many of these
+> special cases that would necessitate a general mechanism. Fingers
+> crossed this is the only one.
 > 
-> Done
+> On Tue, May 17, 2022 at 11:16:14AM +0200, Sebastian Andrzej Siewior wrote:
+> > -			cookie.val = 1 + (prandom_u32() >> 16);
+> > +			cookie.val = 1 + (sched_clock() & 0xffff);
+> >  			hlock->pin_count += cookie.val;
+>  
+> I have no idea what the requirements here are. What would happen if you
+> just did atomic_inc_return(&some_global) instead? That'd be faster
+> anyhow, and it's not like 16 bits gives you much variance anyway...
 
-<formletter>
+Also, what is that `1 +` doing there? If the intention is to make sure
+this is non-zero, you might want the mask to be 0xfffe? Or you're
+counting on the assigned type being a u32 so it all overflows into the
+next zone the way you want it? Kinda weird.
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
-
-</formletter>
+Jason

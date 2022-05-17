@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C5852A8B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFEF52A8B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351266AbiEQQ5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36650 "EHLO
+        id S1351279AbiEQQ6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350068AbiEQQ5V (ORCPT
+        with ESMTP id S1347238AbiEQQ6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:57:21 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAD14FC56
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:57:20 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 202so17432777pgc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:57:20 -0700 (PDT)
+        Tue, 17 May 2022 12:58:09 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D414FC56;
+        Tue, 17 May 2022 09:58:08 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id e20so1898337qvr.6;
+        Tue, 17 May 2022 09:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZrkN+YgQcy8TmBn9IQj258ckKwGL6KgYMAMdpFCzl+0=;
-        b=Z0W6Fesmppi/k/m0+l3fvjlzx5G0H6gVZ2f07+JAuuTTeO8m8XLKP2G4bvCdR4dshd
-         oxnaIOLfzq6QRhRPG81rI5zqY7jSD9YM2LBq3QOcTjY0VHXuOngQiif1S5TCwBDxysoh
-         h0AjbNgPsSqPSwxx8oHr6i7jDH0j2OqWACyL+wN/ouZNo22OZiQDYFxaRZUY2QwsZ3xW
-         mcVqrIxTzRpSucPGRzuSVseoBxdg6sRhV8Q3S5WsxEloHQXn/6jPnnLECkDP0k0v7XSy
-         mr6KKhu8xhvceslqQ2zU98fQkxEHsOKLCQawz1a5xxLIiwNxN0+dzNgZRRhn1fndgvCT
-         1G6w==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zag6DxyUvX35uCpSTZxUOhCfsgCuB2xeq5nyKpnfous=;
+        b=aBvv7qbEuM5NOK3+ms6RjRMvBBgwoYcmyMWEJ2iAj+Z6C4UoNLxpGtx0dTrTVKbZyI
+         0764LNEo1doQjfRHRBHMytNVoRvB+SaLNlTi2PksdbJZuZX9pJASZbAWdNz+KRZAX9S4
+         K6zeDGxpNYqm3M5ariW1ZapeflzxN9VQ2esmRbg0SMxaksjNGT4FRv4KmoxuM90r6QsS
+         72gtk9imp5a7Yf/5L72DUC+fnnV31SkMTSoo++hNq7EVJJUkUsUW5NXhiBekuINSlU9V
+         uvBhHKLGvuv9q3ORJUxP263ruNJZM/35ID3sE4gzCgw5bkJfN8RSNuKLJDRYjn7EmJCX
+         RcVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZrkN+YgQcy8TmBn9IQj258ckKwGL6KgYMAMdpFCzl+0=;
-        b=1Ii2dX5PWRb88caWXRI+Xr1Be2oBMbQTMu2m01bmBNo2CjUzlatO0lqsdPzhrCkno0
-         4dhG6S9RB7yWTNkDO8D1Jnt4Ymm67oJLGv9RnaR71qNPm2mGnrgDFQWfIxDgQCSNKHUF
-         qgUT0MDDZdT8ui6/sWR+S84oZuYIL5EqeeDxkXcklljKjqVTDcmqJaL2W9+iaGdE2DOu
-         v0ycXAkTxPjIBUIwec/o2Pr6BLln/24padH4ncQDCLMLk/2G735Mq868lJNIe1fWpYjQ
-         eErkjCS8BtgRoZWSZi48tTztUgw7fgG7hTXybfS+KSlgvivZLdAFejdM3h+M9ie8I/4v
-         WUpQ==
-X-Gm-Message-State: AOAM530q+q5Uqd30UbYTmPkIijIGLfPBP9pm9p5TZW7cuYQZD4RtJye+
-        re6rwwlPIGu7FQxjkOT0CrvAMQ==
-X-Google-Smtp-Source: ABdhPJzWpE20upem7cs6BX2VWWBhtrwf10SFgIkk8EyDuL9wYbTgCsRbrxH8glHRNtY+fLSZh/J0rw==
-X-Received: by 2002:a62:a209:0:b0:510:3c47:7888 with SMTP id m9-20020a62a209000000b005103c477888mr23212920pff.14.1652806639519;
-        Tue, 17 May 2022 09:57:19 -0700 (PDT)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id cs20-20020a17090af51400b001df5dea7d4bsm1912045pjb.43.2022.05.17.09.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 09:57:18 -0700 (PDT)
-Date:   Tue, 17 May 2022 16:57:14 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH V2 6/7] KVM: X86/MMU: Allocate mmu->pae_root for PAE
- paging on-demand
-Message-ID: <YoPT6petoQUnF4vB@google.com>
-References: <20220503150735.32723-1-jiangshanlai@gmail.com>
- <20220503150735.32723-7-jiangshanlai@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zag6DxyUvX35uCpSTZxUOhCfsgCuB2xeq5nyKpnfous=;
+        b=du4FLCdAP/dzt1OaETFN7pq6b+1oqcpz2RX9WA2QbH0rG2Pv4BcOk7v1hJ+QcPduqn
+         Rl/4BXn/Ef3cNLWtCR5mbvutkWS5skPh3GVrbkqFXGHQ7sQ0Hn6EJ5lTtWrf5eVE4KSD
+         kueYzHT6ZsW3GbXtP0zyg4oetIpHO+A41HH9cacdY2NQKBqMQDFbx8+KUK3gW3gopU/D
+         EncIXc5ZBCwJwj1eDTbiryTIi8vTJV9iMJ0LkEsJhvQsc6IyxS3ZVyHI/RQASdTZ1c5A
+         ZrYO6UtSUvs/8+gWUQEGb/0miAEYZHPMwFXEAfCFjn1pk/7z2w4Prr9IxZywCZMK4NZ+
+         krFA==
+X-Gm-Message-State: AOAM532nV/RAdv2HwfwFFG4R86PVocCsacjDcwmfFzcaR8LfQMe2HLgI
+        1GctQxvPhbRBKqeWOiE3/d1sJBrxuXWYbCGolYeaynIPhLs=
+X-Google-Smtp-Source: ABdhPJzRetzGWaJgM5Bm8XUyu7JFJUNEPNIplk6KRyI2Mbb/gbaZFn5rwik9ILly613XvLY63cw4sgsA4PSnFm+j93s=
+X-Received: by 2002:ad4:5c6e:0:b0:45a:aefd:f551 with SMTP id
+ i14-20020ad45c6e000000b0045aaefdf551mr21174026qvh.95.1652806687381; Tue, 17
+ May 2022 09:58:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503150735.32723-7-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220517034107.92194-1-imagedong@tencent.com>
+In-Reply-To: <20220517034107.92194-1-imagedong@tencent.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 17 May 2022 09:57:56 -0700
+Message-ID: <CAADnVQLRmv107zFL-dgB07Mf8NmR0TCAC9eG9aZ1O4DG3=ityw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: add access control for map
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alan Maguire <alan.maguire@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,196 +71,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 11:07:34PM +0800, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> 
-> mmu->pae_root for non-PAE paging is allocated on-demand, but
-> mmu->pae_root for PAE paging is allocated early when struct kvm_mmu is
-> being created.
-> 
-> Simplify the code to allocate mmu->pae_root for PAE paging and make
-> it on-demand.
-> 
-> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c          | 99 ++++++++++++++-------------------
->  arch/x86/kvm/mmu/mmu_internal.h | 10 ----
->  2 files changed, 42 insertions(+), 67 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index bcb3e2730277..c97f830c5f8c 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -691,6 +691,41 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
->  	}
->  }
->  
-> +static int mmu_alloc_pae_root(struct kvm_vcpu *vcpu)
+On Mon, May 16, 2022 at 8:44 PM <menglong8.dong@gmail.com> wrote:
+>
+> From: Menglong Dong <imagedong@tencent.com>
+>
+> Hello,
+>
+> I have a idea about the access control of eBPF map, could you help
+> to see if it works?
+>
+> For now, only users with the CAP_SYS_ADMIN or CAP_BPF have the right
+> to access the data in eBPF maps. So I'm thinking, are there any way
+> to control the access to the maps, just like what we do to files?
+
+The bpf objects pinned in bpffs should always be accessible
+as files regardless of sysctl or cap-s.
+
+> Therefore, we can decide who have the right to read the map and who
+> can write.
+>
+> I think it is useful in some case. For example, I made a eBPF-based
+> network statistics program, and the information is stored in an array
+> map. And I want all users can read the information in the map, without
+> changing the capacity of them. As the information is iunsensitive,
+> normal users can read it. This make publish-consume mode possible,
+> the eBPF program is publisher and the user space program is consumer.
+
+Right. It is a choice of the bpf prog which data expose in the map.
+
+> So this aim can be achieve, if we can control the access of maps as a
+> file. There are many ways I thought, and I choosed one to implement:
+>
+> While pining the map, add the inode that is created to a list on the
+> map. root can change the permission of the inode through the pin path.
+> Therefore, we can try to find the inode corresponding to current user
+> namespace in the list, and check whether user have permission to read
+> or write.
+>
+> The steps can be:
+>
+> 1. create the map with BPF_F_UMODE flags, which imply that enable
+>    access control in this map.
+> 2. load and pin the map on /sys/fs/bpf/xxx.
+> 3. change the umode of /sys/fs/bpf/xxx with 'chmod 744 /sys/fs/bpf/xxx',
+>    therefor all user can read the map.
+
+This behavior should be available by default.
+Only sysctl was preventing it. It's being fixed by
+the following patch. Please take a look at:
+https://patchwork.kernel.org/project/netdevbpf/patch/1652788780-25520-2-git-send-email-alan.maguire@oracle.com/
+
+Does it solve your use case?
+
+> @@ -542,14 +557,26 @@ int bpf_obj_get_user(const char __user *pathname, int flags)
+>         if (IS_ERR(raw))
+>                 return PTR_ERR(raw);
+>
+> -       if (type == BPF_TYPE_PROG)
+> +       if (type != BPF_TYPE_MAP && !bpf_capable())
+> +               return -EPERM;
+
+obj_get already implements normal ACL style access to files.
+Let's not fragment this security model with extra cap checks.
+
+> +
+> +       switch (type) {
+> +       case BPF_TYPE_PROG:
+>                 ret = bpf_prog_new_fd(raw);
+> -       else if (type == BPF_TYPE_MAP)
+> +               break;
+> +       case BPF_TYPE_MAP:
+> +               if (bpf_map_permission(raw, f_flags)) {
+> +                       bpf_any_put(raw, type);
+> +                       return -EPERM;
+> +               }
+
+bpf_obj_do_get() already does such check.
+
+> +int bpf_map_permission(struct bpf_map *map, int flags)
 > +{
-> +	struct page *page;
+> +       struct bpf_map_inode *map_inode;
+> +       struct user_namespace *ns;
 > +
-> +	if (vcpu->arch.mmu->root_role.level != PT32E_ROOT_LEVEL)
-> +		return 0;
-> +	if (vcpu->arch.mmu->pae_root)
-> +		return 0;
+> +       if (capable(CAP_SYS_ADMIN))
+> +               return 0;
 > +
-> +	/*
-> +	 * Allocate a page to hold the four PDPTEs for PAE paging when emulating
-> +	 * 32-bit mode.  CR3 is only 32 bits even on x86_64 in this case.
-> +	 * Therefore we need to allocate the PDP table in the first 4GB of
-> +	 * memory, which happens to fit the DMA32 zone.
-> +	 */
-> +	page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_DMA32);
-> +	if (!page)
-> +		return -ENOMEM;
-> +	vcpu->arch.mmu->pae_root = page_address(page);
+> +       if (!(map->map_flags & BPF_F_UMODE))
+> +               return -1;
 > +
-> +	/*
-> +	 * CR3 is only 32 bits when PAE paging is used, thus it's impossible to
-> +	 * get the CPU to treat the PDPTEs as encrypted.  Decrypt the page so
-> +	 * that KVM's writes and the CPU's reads get along.  Note, this is
-> +	 * only necessary when using shadow paging, as 64-bit NPT can get at
-> +	 * the C-bit even when shadowing 32-bit NPT, and SME isn't supported
-> +	 * by 32-bit kernels (when KVM itself uses 32-bit NPT).
-> +	 */
-> +	if (!tdp_enabled)
-> +		set_memory_decrypted((unsigned long)vcpu->arch.mmu->pae_root, 1);
-> +	else
-> +		WARN_ON_ONCE(shadow_me_value);
-> +	return 0;
+> +       rcu_read_lock();
+> +       list_for_each_entry_rcu(map_inode, &map->inode_list, list) {
+> +               ns = map_inode->inode->i_sb->s_user_ns;
+> +               if (ns == current_user_ns())
+> +                       goto found;
+> +       }
+> +       rcu_read_unlock();
+> +       return -1;
+> +found:
+> +       rcu_read_unlock();
+> +       return inode_permission(ns, map_inode->inode, ACC_MODE(flags));
 > +}
-> +
->  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
->  {
->  	int r;
-> @@ -5031,6 +5066,9 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
->  	r = mmu_topup_memory_caches(vcpu, !vcpu->arch.mmu->root_role.direct);
->  	if (r)
->  		goto out;
-> +	r = mmu_alloc_pae_root(vcpu);
-> +	if (r)
-> +		return r;
->  	r = mmu_alloc_special_roots(vcpu);
->  	if (r)
->  		goto out;
-> @@ -5495,63 +5533,18 @@ static void free_mmu_pages(struct kvm_mmu *mmu)
->  	free_page((unsigned long)mmu->pml5_root);
->  }
->  
-> -static int __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
-> +static void __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
 
-vcpu is now unused.
+See path_permission() in bpf_obj_do_get().
 
->  {
-> -	struct page *page;
->  	int i;
->  
->  	mmu->root.hpa = INVALID_PAGE;
->  	mmu->root.pgd = 0;
->  	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
->  		mmu->prev_roots[i] = KVM_MMU_ROOT_INFO_INVALID;
+>  static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
+> @@ -3720,9 +3757,6 @@ static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
+>             attr->open_flags & ~BPF_OBJ_FLAG_MASK)
+>                 return -EINVAL;
+>
+> -       if (!capable(CAP_SYS_ADMIN))
+> -               return -EPERM;
+> -
 
-optional: Consider open-coding this directly in kvm_mmu_create() and
-drop __kvm_mmu_create().
+This part we cannot relax.
+What you're trying to do is to bypass path checks
+by pointing at a map with its ID only.
+That contradicts to your official goal in the cover letter.
 
-> -
-> -	/* vcpu->arch.guest_mmu isn't used when !tdp_enabled. */
-> -	if (!tdp_enabled && mmu == &vcpu->arch.guest_mmu)
-> -		return 0;
-> -
-> -	/*
-> -	 * When using PAE paging, the four PDPTEs are treated as 'root' pages,
-> -	 * while the PDP table is a per-vCPU construct that's allocated at MMU
-> -	 * creation.  When emulating 32-bit mode, cr3 is only 32 bits even on
-> -	 * x86_64.  Therefore we need to allocate the PDP table in the first
-> -	 * 4GB of memory, which happens to fit the DMA32 zone.  TDP paging
-> -	 * generally doesn't use PAE paging and can skip allocating the PDP
-> -	 * table.  The main exception, handled here, is SVM's 32-bit NPT.  The
-> -	 * other exception is for shadowing L1's 32-bit or PAE NPT on 64-bit
-> -	 * KVM; that horror is handled on-demand by mmu_alloc_special_roots().
-> -	 */
-> -	if (tdp_enabled && kvm_mmu_get_tdp_level(vcpu) > PT32E_ROOT_LEVEL)
-> -		return 0;
-> -
-> -	page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_DMA32);
-> -	if (!page)
-> -		return -ENOMEM;
-> -
-> -	mmu->pae_root = page_address(page);
-> -
-> -	/*
-> -	 * CR3 is only 32 bits when PAE paging is used, thus it's impossible to
-> -	 * get the CPU to treat the PDPTEs as encrypted.  Decrypt the page so
-> -	 * that KVM's writes and the CPU's reads get along.  Note, this is
-> -	 * only necessary when using shadow paging, as 64-bit NPT can get at
-> -	 * the C-bit even when shadowing 32-bit NPT, and SME isn't supported
-> -	 * by 32-bit kernels (when KVM itself uses 32-bit NPT).
-> -	 */
-> -	if (!tdp_enabled)
-> -		set_memory_decrypted((unsigned long)mmu->pae_root, 1);
-> -	else
-> -		WARN_ON_ONCE(shadow_me_value);
-> -
-> -	for (i = 0; i < 4; ++i)
-> -		mmu->pae_root[i] = INVALID_PAE_ROOT;
-> -
-> -	return 0;
->  }
->  
->  int kvm_mmu_create(struct kvm_vcpu *vcpu)
-
-kvm_mmu_create() could return void now too.
-
->  {
-> -	int ret;
-> -
->  	vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
->  	vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
->  
-> @@ -5563,18 +5556,10 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
->  	vcpu->arch.mmu = &vcpu->arch.root_mmu;
->  	vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
->  
-> -	ret = __kvm_mmu_create(vcpu, &vcpu->arch.guest_mmu);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = __kvm_mmu_create(vcpu, &vcpu->arch.root_mmu);
-> -	if (ret)
-> -		goto fail_allocate_root;
-> +	__kvm_mmu_create(vcpu, &vcpu->arch.guest_mmu);
-> +	__kvm_mmu_create(vcpu, &vcpu->arch.root_mmu);
->  
-> -	return ret;
-> - fail_allocate_root:
-> -	free_mmu_pages(&vcpu->arch.guest_mmu);
-> -	return ret;
-> +	return 0;
->  }
->  
->  #define BATCH_ZAP_PAGES	10
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index 1bff453f7cbe..d5673a42680f 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -20,16 +20,6 @@ extern bool dbg;
->  #define MMU_WARN_ON(x) do { } while (0)
->  #endif
->  
-> -/*
-> - * Unlike regular MMU roots, PAE "roots", a.k.a. PDPTEs/PDPTRs, have a PRESENT
-> - * bit, and thus are guaranteed to be non-zero when valid.  And, when a guest
-> - * PDPTR is !PRESENT, its corresponding PAE root cannot be set to INVALID_PAGE,
-> - * as the CPU would treat that as PRESENT PDPTR with reserved bits set.  Use
-> - * '0' instead of INVALID_PAGE to indicate an invalid PAE root.
-> - */
-> -#define INVALID_PAE_ROOT	0
-> -#define IS_VALID_PAE_ROOT(x)	(!!(x))
-> -
->  typedef u64 __rcu *tdp_ptep_t;
->  
->  struct kvm_mmu_page {
-> -- 
-> 2.19.1.6.gb485710b
-> 
+bpf_map_get_fd_by_id() has to stay cap_sys_admin only.
+Exactly for the reason that bpf subsystem has file ACL style.
+fd_by_id is a debug interface used by tools like bpftool and
+root admin that needs to see the system as a whole.
+Normal tasks/processes need to use bpffs and pin files with
+correct permissions to pass maps from one process to another.
+Or use FD passing kernel facilities.

@@ -2,283 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEF252A92E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DB552A930
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351420AbiEQR0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 13:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S1351470AbiEQR0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 13:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351521AbiEQR02 (ORCPT
+        with ESMTP id S1351529AbiEQR0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 13:26:28 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1875522B19;
-        Tue, 17 May 2022 10:26:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652808387; x=1684344387;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=HWRBR0+UgN1qn8UzjMrMhlumkaHTOr4lbZ2cBy/KxG0=;
-  b=ekEmyBczDi/2RWdaWFaCvcxJSsHht4ZVceajHhPznGB8yRf4ZI9B+cVh
-   lYayDk6fxk0DjVvrW1hY53b3VDg+7AFOTbIkTrO8rBbKOVMDA5MpnYRef
-   tkvIYecGc+ArAWtq66yJEWMyxTjmSvzULUupa6WmOhC8Bm+eMtaBBr/a6
-   4=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 17 May 2022 10:26:26 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 10:26:25 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 17 May 2022 10:26:25 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 17 May 2022 10:26:24 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 2/2] drm/msm/dp: delete vdda regulator related functions from eDP/DP controller
-Date:   Tue, 17 May 2022 10:26:00 -0700
-Message-ID: <1652808360-9830-3-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1652808360-9830-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1652808360-9830-1-git-send-email-quic_khsieh@quicinc.com>
+        Tue, 17 May 2022 13:26:35 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81D027FC8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:26:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652808393; x=1684344393;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iRXhC22uu9RZQXmrMy9WWKSs6bsrvvpYjaA9TfYfJGQ=;
+  b=OUKczpx6kTmV7WRbfE+HGqhoF9Uwa3awKw5HfR7Fc/lJtf0wdNuD7Hov
+   hro2NBXOA7UzUa7vxUjn2w9OQ15fFPdbDf0U6saIJaIrAvIaceuIXIJKB
+   wQLGCz60rNyYfRPCS35p1heYDRZYFo9wM7e/otSNsIbvm4ZaLzhgfk9Y4
+   U3yF8E0shZXSym0Jz8RwWipxGJI/BV/EZY6VlH1CkWCxVm2tjaGDAPtbM
+   +m7bChzmiJcUGnDpO0fkR1ONO3YCPBh/wlBveBaP46I8HO8PZNhxvFd84
+   /1coQUZh6kjiDrEvoczPSqYP4jVc/Y8MlYGiy73+Mw/wL7bucdH3bncYW
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251156869"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="251156869"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 10:26:33 -0700
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="672957331"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 10:26:33 -0700
+Date:   Tue, 17 May 2022 10:27:00 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        linux-kernel@vger.kernel.org, babu.moger@amd.com, x86@kernel.org
+Subject: Re: [PATCH v2] x86/resctrl: Fix zero cbm for AMD in cbm_validate
+Message-ID: <YoPa5L2jNYl/sFhw@fyu1.sc.intel.com>
+References: <20220517001234.3137157-1-eranian@google.com>
+ <YoPOWC0waMuSlvI6@fyu1.sc.intel.com>
+ <5a634c10-103e-6f3e-e51b-db26b2bc90a5@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a634c10-103e-6f3e-e51b-db26b2bc90a5@intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vdda regulators are related to both eDP and DP phy so that it should be
-managed at eDP and DP phy driver instead of controller. This patch remove
-vdda regulators related functions out of eDP/DP controller.
+Hi, Reinette,
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_parser.c | 14 ------
- drivers/gpu/drm/msm/dp/dp_parser.h |  6 ---
- drivers/gpu/drm/msm/dp/dp_power.c  | 95 +-------------------------------------
- 3 files changed, 2 insertions(+), 113 deletions(-)
+On Tue, May 17, 2022 at 09:49:22AM -0700, Reinette Chatre wrote:
+> Hi Fenghua,
+> 
+> On 5/17/2022 9:33 AM, Fenghua Yu wrote:
+> > Hi, Eranian,
+> > 
+> > On Mon, May 16, 2022 at 05:12:34PM -0700, Stephane Eranian wrote:
+> >> AMD supports cbm with no bits set as reflected in rdt_init_res_defs_amd() by:
+> > ...
+> >> @@ -107,6 +107,10 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
+> >>  	first_bit = find_first_bit(&val, cbm_len);
+> >>  	zero_bit = find_next_zero_bit(&val, cbm_len, first_bit);
+> >>  
+> >> +	/* no need to check bits if arch supports no bits set */
+> >> +	if (r->cache.arch_has_empty_bitmaps && val == 0)
+> >> +		goto done;
+> >> +
+> >>  	/* Are non-contiguous bitmaps allowed? */
+> >>  	if (!r->cache.arch_has_sparse_bitmaps &&
+> >>  	    (find_next_bit(&val, cbm_len, zero_bit) < cbm_len)) {
+> >> @@ -119,7 +123,7 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
+> >>  				    r->cache.min_cbm_bits);
+> >>  		return false;
+> >>  	}
+> >> -
+> >> +done:
+> >>  	*data = val;
+> >>  	return true;
+> >>  }
+> > 
+> > Isn't it AMD supports 0 minimal CBM bits? Then should set its min_cbm_bits as 0.
+> > Is the following patch a better fix? I don't have AMD machine and cannot
+> > test the patch.
+> > 
+> > diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+> > index 6055d05af4cc..031d77dd982d 100644
+> > --- a/arch/x86/kernel/cpu/resctrl/core.c
+> > +++ b/arch/x86/kernel/cpu/resctrl/core.c
+> > @@ -909,6 +909,7 @@ static __init void rdt_init_res_defs_amd(void)
+> >  			r->cache.arch_has_sparse_bitmaps = true;
+> >  			r->cache.arch_has_empty_bitmaps = true;
+> >  			r->cache.arch_has_per_cpu_cfg = true;
+> > +			r->cache.min_cbm_bits = 0;
+> >  		} else if (r->rid == RDT_RESOURCE_MBA) {
+> >  			hw_res->msr_base = MSR_IA32_MBA_BW_BASE;
+> >  			hw_res->msr_update = mba_wrmsr_amd;
+> 
+> That is actually what Stephane's V1 [1] did and I proposed that
+> he fixes it with (almost) what he has in V2 (I think the check
+> can be moved earlier before any bits are searched for).
+> 
+> The reasons why I proposed this change are:
+> - min_cbm_bits is a value that is exposed to user space and from the
+>   time AMD was supported this has always been 1 for those systems. I
+>   do not know how user space uses this value and unless I can be certain
+>   making this 0 will not affect user space I would prefer not to
+>   make such a change.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
-index 8f9fed9..4ef2130 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.c
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.c
-@@ -22,14 +22,6 @@
- #define DP_DEFAULT_P0_OFFSET	0x1000
- #define DP_DEFAULT_P0_SIZE	0x0400
- 
--static const struct dp_regulator_cfg sdm845_dp_reg_cfg = {
--	.num = 2,
--	.regs = {
--		{"vdda-1p2", 21800, 4 },	/* 1.2 V */
--		{"vdda-0p9", 36000, 32 },	/* 0.9 V */
--	},
--};
--
- static void __iomem *dp_ioremap(struct platform_device *pdev, int idx, size_t *len)
- {
- 	struct resource *res;
-@@ -298,12 +290,6 @@ static int dp_parser_parse(struct dp_parser *parser)
- 	if (rc)
- 		return rc;
- 
--	/* Map the corresponding regulator information according to
--	 * version. Currently, since we only have one supported platform,
--	 * mapping the regulator directly.
--	 */
--	parser->regulator_cfg = &sdm845_dp_reg_cfg;
--
- 	return 0;
- }
- 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-index 3a4d797..b56b4d7 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.h
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-@@ -101,11 +101,6 @@ struct dp_reg_entry {
- 	int disable_load;
- };
- 
--struct dp_regulator_cfg {
--	int num;
--	struct dp_reg_entry regs[DP_DEV_REGULATOR_MAX];
--};
--
- /**
-  * struct dp_parser - DP parser's data exposed to clients
-  *
-@@ -121,7 +116,6 @@ struct dp_parser {
- 	struct dp_pinctrl pinctrl;
- 	struct dp_io io;
- 	struct dp_display_data disp_data;
--	const struct dp_regulator_cfg *regulator_cfg;
- 	u32 max_dp_lanes;
- 	struct drm_bridge *next_bridge;
- 
-diff --git a/drivers/gpu/drm/msm/dp/dp_power.c b/drivers/gpu/drm/msm/dp/dp_power.c
-index d9e0117..b52ac1d 100644
---- a/drivers/gpu/drm/msm/dp/dp_power.c
-+++ b/drivers/gpu/drm/msm/dp/dp_power.c
-@@ -20,82 +20,10 @@ struct dp_power_private {
- 	struct clk *link_clk_src;
- 	struct clk *pixel_provider;
- 	struct clk *link_provider;
--	struct regulator_bulk_data supplies[DP_DEV_REGULATOR_MAX];
- 
- 	struct dp_power dp_power;
- };
- 
--static void dp_power_regulator_disable(struct dp_power_private *power)
--{
--	struct regulator_bulk_data *s = power->supplies;
--	const struct dp_reg_entry *regs = power->parser->regulator_cfg->regs;
--	int num = power->parser->regulator_cfg->num;
--	int i;
--
--	DBG("");
--	for (i = num - 1; i >= 0; i--)
--		if (regs[i].disable_load >= 0)
--			regulator_set_load(s[i].consumer,
--					   regs[i].disable_load);
--
--	regulator_bulk_disable(num, s);
--}
--
--static int dp_power_regulator_enable(struct dp_power_private *power)
--{
--	struct regulator_bulk_data *s = power->supplies;
--	const struct dp_reg_entry *regs = power->parser->regulator_cfg->regs;
--	int num = power->parser->regulator_cfg->num;
--	int ret, i;
--
--	DBG("");
--	for (i = 0; i < num; i++) {
--		if (regs[i].enable_load >= 0) {
--			ret = regulator_set_load(s[i].consumer,
--						 regs[i].enable_load);
--			if (ret < 0) {
--				pr_err("regulator %d set op mode failed, %d\n",
--					i, ret);
--				goto fail;
--			}
--		}
--	}
--
--	ret = regulator_bulk_enable(num, s);
--	if (ret < 0) {
--		pr_err("regulator enable failed, %d\n", ret);
--		goto fail;
--	}
--
--	return 0;
--
--fail:
--	for (i--; i >= 0; i--)
--		regulator_set_load(s[i].consumer, regs[i].disable_load);
--	return ret;
--}
--
--static int dp_power_regulator_init(struct dp_power_private *power)
--{
--	struct regulator_bulk_data *s = power->supplies;
--	const struct dp_reg_entry *regs = power->parser->regulator_cfg->regs;
--	struct platform_device *pdev = power->pdev;
--	int num = power->parser->regulator_cfg->num;
--	int i, ret;
--
--	for (i = 0; i < num; i++)
--		s[i].supply = regs[i].name;
--
--	ret = devm_regulator_bulk_get(&pdev->dev, num, s);
--	if (ret < 0) {
--		pr_err("%s: failed to init regulator, ret=%d\n",
--						__func__, ret);
--		return ret;
--	}
--
--	return 0;
--}
--
- static int dp_power_clk_init(struct dp_power_private *power)
- {
- 	int rc = 0;
-@@ -318,21 +246,10 @@ int dp_power_client_init(struct dp_power *dp_power)
- 
- 	pm_runtime_enable(&power->pdev->dev);
- 
--	rc = dp_power_regulator_init(power);
--	if (rc) {
--		DRM_ERROR("failed to init regulators %d\n", rc);
--		goto error;
--	}
--
- 	rc = dp_power_clk_init(power);
--	if (rc) {
-+	if (rc)
- 		DRM_ERROR("failed to init clocks %d\n", rc);
--		goto error;
--	}
--	return 0;
- 
--error:
--	pm_runtime_disable(&power->pdev->dev);
- 	return rc;
- }
- 
-@@ -365,22 +282,15 @@ int dp_power_init(struct dp_power *dp_power, bool flip)
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
- 	pm_runtime_get_sync(&power->pdev->dev);
--	rc = dp_power_regulator_enable(power);
--	if (rc) {
--		DRM_ERROR("failed to enable regulators, %d\n", rc);
--		goto exit;
--	}
- 
- 	rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
- 	if (rc) {
- 		DRM_ERROR("failed to enable DP core clocks, %d\n", rc);
--		goto err_clk;
-+		goto exit;
- 	}
- 
- 	return 0;
- 
--err_clk:
--	dp_power_regulator_disable(power);
- exit:
- 	pm_runtime_put_sync(&power->pdev->dev);
- 	return rc;
-@@ -393,7 +303,6 @@ int dp_power_deinit(struct dp_power *dp_power)
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
- 	dp_power_clk_enable(dp_power, DP_CORE_PM, false);
--	dp_power_regulator_disable(power);
- 	pm_runtime_put_sync(&power->pdev->dev);
- 	return 0;
- }
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+But a user visible mismatch is created by the V2 patch:
+User queries min_cbm_bits and finds it is 1 but turns out 0 can be written
+to the schemata.
 
+Is it an acceptable behavior? Shouldn't user read right min_cbm_bits (0)
+on AMD?
+
+Without the V2 patch, at least min_cbm_bits and writing to the schemata
+are matched: only 1 about above bits can be searched and written.
+
+By setting min_cbm_bits=0, it reflects the right value and user can see
+the value as 0 and set schemata as 0 as well. Seems all match each other.
+
+> - this fix restores original behavior that was changed in the patch noted
+>   in the Fixes link.
+> 
+> - this fix itself relies on math on error returns of bit checking on an empty
+>   bitmap. I find that hides what the code does and this fix is more obvious.
+>   You can see this feedback in my response to V1. 
+> 
+> - a fix like the above snippet is incomplete. To be appropriate 
+>   the initialization of rdt_resources_all[] needs to be changed to
+>   not initialize min_cbm_bits anymore and move the platform specific bits
+>   to rdt_init_res_defs_amd() and rdt_init_res_defs_intel() respectively.
+
+Maybe that's better.
+
+> 
+> 
+> Reinette
+> 
+> [1] https://lore.kernel.org/lkml/20220516055055.2734840-1-eranian@google.com/
+
+Thanks.
+
+-Fenghua

@@ -2,88 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0655E52A3D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8758452A3DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347264AbiEQNuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
+        id S1348084AbiEQNvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347224AbiEQNuj (ORCPT
+        with ESMTP id S1347768AbiEQNva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:50:39 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483A44D251;
-        Tue, 17 May 2022 06:50:36 -0700 (PDT)
-Received: from mail.denx.de (unknown [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: festevam@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 3213B8421D;
-        Tue, 17 May 2022 15:50:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1652795434;
-        bh=5IXUV2Kx1xnVHXkrKKZKLgyVgw2cRYtB2GljMt0oZ/s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XKduPSBR2aFo+VuIYzkbIjJErbNOwrIHzNFsDg/5lQpMd2DWtoH84qMCrL65r1YSh
-         nJkk6Zc7HSjinfnCfHaHYnFtzWwtmdNECIPfNRPIepL9/g3gYc0GU2qWoNC/GylZ2U
-         EXHdoNJfmUwAqk1q5vkaVlQ9t4LjfDYRe0Es5TxVrE3/ehQ0sSIhmMLUEKeYo7HpVh
-         qkjews15k2cliVCQO1gzhBvRdn2fl9BnFT9lvRYwBnm7duETnzT7z/SGl7kWU4bkvm
-         Mzsdih6dg4gdbahCU3YaeDp+UD/MLquMXBfSq+YbLdCayPjXPWfLBZLI7kGBuQ6rIV
-         xdIkOMdeF1vig==
+        Tue, 17 May 2022 09:51:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACCD426108
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652795487;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DI+2TLyotaAB4m8Wk/Jy92LMvHUEqA+a9jwjfCWo8vE=;
+        b=FmCca7dxnqMzFSaVZKJAvLEfynx6KuMhmfIPEBsM7X2lqFY4TD7Ux/TbWoeGqwlDl41nti
+        E+IoR0cNIqOAoGXWTMJ58jZPjGKxzM+/HpUsgywdNFn9aqSOQgiAB/dFDt6tSbsN1y+2CS
+        N0uzaeyQZObM0DpMQ4jeS0OhjfwlHcY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-611-4hwiblWhONy1fs9Q56W_ig-1; Tue, 17 May 2022 09:51:18 -0400
+X-MC-Unique: 4hwiblWhONy1fs9Q56W_ig-1
+Received: by mail-wm1-f70.google.com with SMTP id n26-20020a1c721a000000b003941ea1ced7so975984wmc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:51:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=DI+2TLyotaAB4m8Wk/Jy92LMvHUEqA+a9jwjfCWo8vE=;
+        b=5FDz4NFRrVAsBOJP7A1OAEMLY9islgU3KkbK41gX4KvIkQ0CGujmu6rccqObbsYvDN
+         TTGhYv/PC75lpAbgTOI306TI20A2e0jZ6VUbSFp7GAXM6W2xncYb1Jq+eWpucv2kRmwF
+         Dd079HkrGDQwJQknpLrnTER5aUJ9hjV838eF1nqwqhZc9Ue2l9EhIajqjdrwDz6DUMok
+         fgcBmE1xAnCkzNb4xodIZwazLDUt0VP1bqQc2JeYqFdVa4bmBE7+o8MmIvkFwtbU+zT+
+         4JR87YsSL5EPWU67C5aF57rzPr5pb7Rs10rM0b6wH3WI2lpl0y5ZNm+atwDkouaT33eM
+         YWVQ==
+X-Gm-Message-State: AOAM53328wJhcx74lBT7pG7Q5SmysovivsNP1vPNKvE8+FU+LDKoqUYQ
+        XU0EdOCBfZSzvEs9QVU51uur4Tka6unemTpLxNd8GgkNEpIY8KxHVZkTiBxLqDUBZISzIB1CFkJ
+        q5ftiXnTvJ6WObNN547xk0Q75yYbzhgPNolj7hYB5RD37AdjIrzQ0XHLehQmN9MclGbv4BpBkqR
+        fm
+X-Received: by 2002:a5d:595f:0:b0:20d:97d:4d14 with SMTP id e31-20020a5d595f000000b0020d097d4d14mr8262074wri.549.1652795477361;
+        Tue, 17 May 2022 06:51:17 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxGzb/41GwD8L8W8DX4aDq6yMVVszSErv2Y5yTV9eLtgY7MvadoakIwpfSvObshosUucUtTEA==
+X-Received: by 2002:a5d:595f:0:b0:20d:97d:4d14 with SMTP id e31-20020a5d595f000000b0020d097d4d14mr8262048wri.549.1652795477119;
+        Tue, 17 May 2022 06:51:17 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id o16-20020adf8b90000000b0020c5253d8e0sm12819325wra.44.2022.05.17.06.51.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 06:51:16 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 11/34] KVM: x86: hyper-v: Use preallocated buffer in
+ 'struct kvm_vcpu_hv' instead of on-stack 'sparse_banks'
+In-Reply-To: <YoKunaNKDjYx7C21@google.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-12-vkuznets@redhat.com>
+ <YoKunaNKDjYx7C21@google.com>
+Date:   Tue, 17 May 2022 15:51:15 +0200
+Message-ID: <87k0akuv1o.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 17 May 2022 10:50:34 -0300
-From:   Fabio Estevam <festevam@denx.de>
-To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-amarula@amarulasolutions.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Simon Holesch <simon.holesch@bshg.com>
-Subject: Re: [PATCH] arm: dts: imx6ulz-bsh-smm-m2: Support proper board power
- off
-In-Reply-To: <CAOf5uw=QxFM=CCFLZ=fZCfn9BBz1aFpkPQuED1uHxHRABwMHMQ@mail.gmail.com>
-References: <20220517133540.2456987-1-michael@amarulasolutions.com>
- <bd342e6be1723daa3787c7088c3510d0@denx.de>
- <CAOf5uw=QxFM=CCFLZ=fZCfn9BBz1aFpkPQuED1uHxHRABwMHMQ@mail.gmail.com>
-Message-ID: <7e434e2426ab61476e5f58db764cbd9f@denx.de>
-X-Sender: festevam@denx.de
-User-Agent: Roundcube Webmail/1.3.6
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Sean Christopherson <seanjc@google.com> writes:
 
-On 17/05/2022 10:44, Michael Nazzareno Trimarchi wrote:
+> On Thu, Apr 14, 2022, Vitaly Kuznetsov wrote:
+>> To make kvm_hv_flush_tlb() ready to handle L2 TLB flush requests, KVM needs
+>> to allow for all 64 sparse vCPU banks regardless of KVM_MAX_VCPUs as L1
+>> may use vCPU overcommit for L2. To avoid growing on-stack allocation, make
+>> 'sparse_banks' part of per-vCPU 'struct kvm_vcpu_hv' which is allocated
+>> dynamically.
+>> 
+>> Note: sparse_set_to_vcpu_mask() keeps using on-stack allocation as it
+>> won't be used to handle L2 TLB flush requests.
+>
+> I think it's worth using stronger language; handling TLB flushes for L2 _can't_
+> use sparse_set_to_vcpu_mask() because KVM has no idea how to translate an L2
+> vCPU index to an L1 vCPU.  I found the above mildly confusing because it didn't
+> call out "vp_bitmap" and so I assumed the note referred to yet another sparse_banks
+> "allocation".  And while vp_bitmap is related to sparse_banks, it tracks something
+> entirely different.
+>
+> Something like?
+>
+> Note: sparse_set_to_vcpu_mask() can never be used to handle L2 requests as
+> KVM can't translate L2 vCPU indices to L1 vCPUs, i.e. its vp_bitmap array
+> is still bounded by the number of L1 vCPUs and so can remain an on-stack
+> allocation.
 
->> You missed your own Signed-off-by tag here.
-> 
-> It's fine, I can add Tested-by: Michael Trimarchi 
-> <michael@amarulasolutions.com>
+My brain is probably tainted by looking at all this for some time so I
+really appreciate such improvements, thanks :)
 
-If you are transmitting someone else's patch, then you need to add
-your own Signed-off-by to it.
+I wouldn't, however, say "never" ('never say never' :-)): KVM could've
+kept 2-level reverse mapping up-to-date:
 
-This is explained in Documentation/process/submitting-patches.rst:
+KVM -> L2 VM list -> L2 vCPU ids -> L1 vCPUs which run them
 
-"Any further SoBs (Signed-off-by:'s) following the author's SoB are from
-people handling and transporting the patch, but were not involved in its
-development. SoB chains should reflect the **real** route a patch took
-as it was propagated to the maintainers and ultimately to Linus, with
-the first SoB entry signalling primary authorship of a single author."
+making it possible for KVM to quickly translate between L2 VP IDs and L1
+vCPUs. I don't do this in the series and just record L2 VM_ID/VP_ID for
+each L1 vCPU so I have to go over them all for each request. The
+optimization is, however, possible and we may get to it if really big
+Windows VMs become a reality.
+
+>
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/include/asm/kvm_host.h | 3 +++
+>>  arch/x86/kvm/hyperv.c           | 6 ++++--
+>>  2 files changed, 7 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>> index 058061621872..837c07e213de 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -619,6 +619,9 @@ struct kvm_vcpu_hv {
+>>  	} cpuid_cache;
+>>  
+>>  	struct kvm_vcpu_hv_tlb_flush_ring tlb_flush_ring[HV_NR_TLB_FLUSH_RINGS];
+>> +
+>> +	/* Preallocated buffer for handling hypercalls passing sparse vCPU set */
+>> +	u64 sparse_banks[64];
+>
+> Shouldn't this be HV_MAX_SPARSE_VCPU_BANKS?
+>
+
+It certainly should, thanks!
+
+-- 
+Vitaly
+

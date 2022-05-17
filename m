@@ -2,48 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A305298DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 06:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDD05298E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 06:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236117AbiEQEig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 00:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S236370AbiEQEoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 00:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiEQEi3 (ORCPT
+        with ESMTP id S229569AbiEQEoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 00:38:29 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA5D3B293;
-        Mon, 16 May 2022 21:38:27 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 9650A3FF60;
-        Tue, 17 May 2022 04:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1652762305;
-        bh=dUk5UzPbAaK7id+XUtZylZ2adMIECcKVZu5iTLHqEf8=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=CttwaKjmY6Rb+SwcDC6GP2cJgX6AnpP161M7TDY6Gsd6OqSXEh2ir7hmyWc68ySS/
-         0Xiu8Brr4RfCdJv+q/9iiA9Y1lvaDL0fxEbb5/aqDPk/+lpZx3R1HlMaQfH34ngkdT
-         Je7svv90dhn86eMG4zVo3qRP+48JOXrEeDzTJ8CZ+iQj/3kMJGLl2N1KuIaejU89oj
-         aCW85us93jeVniQSll64foNExtEoG0fakIVaapMYX9zIobm4p79/YRC6POz8tijeDL
-         VIHH0v3Qa+oUmzjt0t5Fj4qnmrddC0X8oNXZqHg807cxpvK5uTzfMNmzupJUxWHrls
-         cvcYmatj0lTfA==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     bhelgaas@google.com
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: Clear PCI_STATUS when setting up the device
-Date:   Tue, 17 May 2022 12:37:38 +0800
-Message-Id: <20220517043738.2308499-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 17 May 2022 00:44:10 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCD015FF1
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 21:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652762649; x=1684298649;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fFHdSQlxpu+7ScXMAnh/2InCU++7+PILYWME5L5dEy8=;
+  b=LxX4F9E1H1dXYi/weFBVKdbgwWhO/WAO13kMgYEsdLCZ3rlc0QSqE44e
+   vbC3dBLgZRcdA1oSExsQc1IUxDCoExphYn2/Xh2YCRE0Y0PIK4LmnbSqI
+   NMT4wlx4Pmevbkc9BFwsos+XSWzwUALBSKt13CZbZILuxom2iP5ObNfkx
+   tDnBuR+iZMVrNzmtcqLbTiA60OfCsODXtZk+kTI/auppnTP/W9jar5dab
+   XmWi9GBlE8Q7xigb+T7jiAazPowqd1PpO+TtNOf3ZkKZsA4xR1sQV0MW1
+   OkSEv0Bnp8KQ8Yr8CFi/qsRQbnt711ArRdgGOKSDLwXEKsDNtVowDfbWX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="250950787"
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="250950787"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 21:44:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="522785203"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 16 May 2022 21:44:07 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqp43-0000cV-6Z;
+        Tue, 17 May 2022 04:44:07 +0000
+Date:   Tue, 17 May 2022 12:43:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [rt-devel:linux-5.18.y-rt-rebase 54/94] kernel/softirq.c:640:1:
+ sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be
+ static?
+Message-ID: <202205171232.7c0gv15y-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,48 +63,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We are seeing Master Abort bit is set on Intel I350 ethernet device and its
-root port right after boot, probably happened during BIOS phase:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git linux-5.18.y-rt-rebase
+head:   df0c990058a5bce1eed5d3512c6efe4eacc62bed
+commit: 191f7764ab356da2cb7fc1a216b56b6ec0405f04 [54/94] rcutorture: Also force sched priority to timersd on boosting test.
+config: i386-randconfig-s002-20220516 (https://download.01.org/0day-ci/archive/20220517/202205171232.7c0gv15y-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/commit/?id=191f7764ab356da2cb7fc1a216b56b6ec0405f04
+        git remote add rt-devel https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git
+        git fetch --no-tags rt-devel linux-5.18.y-rt-rebase
+        git checkout 191f7764ab356da2cb7fc1a216b56b6ec0405f04
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
 
-00:06.0 PCI bridge [0604]: Intel Corporation Device [8086:464d] (rev 05) (prog-if 00 [Normal decode])
-        Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ >SERR- <PERR- INTx-
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-6e:00.0 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
-        Subsystem: Intel Corporation Ethernet Server Adapter I350-T2 [8086:00a2]
-        Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ >SERR- <PERR- INTx-
 
-6e:00.1 Ethernet controller [0200]: Intel Corporation I350 Gigabit Network Connection [8086:1521] (rev 01)
-        Subsystem: Intel Corporation Ethernet Server Adapter I350-T2 [8086:00a2]
-        Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort+ >SERR- <PERR- INTx-
+sparse warnings: (new ones prefixed by >>)
+>> kernel/softirq.c:640:1: sparse: sparse: symbol '__pcpu_scope_timersd' was not declared. Should it be static?
 
-And the Master Abort bit is cleared after S3.
+Please review and possibly fold the followup patch.
 
-Since there's no functional impact found, clear the PCI_STATUS to treat
-it anew at setting up.
-
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215989
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/pci/probe.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 17a969942d370..414f659dc8735 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -1890,6 +1890,9 @@ int pci_setup_device(struct pci_dev *dev)
- 
- 	dev->broken_intx_masking = pci_intx_mask_broken(dev);
- 
-+	/* Clear errors left from system firmware */
-+	pci_write_config_word(dev, PCI_STATUS, 0xffff);
-+
- 	switch (dev->hdr_type) {		    /* header type */
- 	case PCI_HEADER_TYPE_NORMAL:		    /* standard header */
- 		if (class == PCI_CLASS_BRIDGE_PCI)
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,134 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB2552A6E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDBA52A6EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350167AbiEQPfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
+        id S1350576AbiEQPgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347265AbiEQPes (ORCPT
+        with ESMTP id S1350219AbiEQPfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:34:48 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94205004D;
-        Tue, 17 May 2022 08:34:46 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-edeb6c3642so24654091fac.3;
-        Tue, 17 May 2022 08:34:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PTVbwF3S9Tbu51YtKoS67xXtieQ0lMn2T7P3U2Mtxxs=;
-        b=T3Hd6I6iLptwIzwoo/kt7TUZoWEgPo7G/Zij0z9kYooyS0TSgEyIp7OJ8rov0fT7LS
-         wzy4zzlfZVhwdu2nQLlE/M6PdjRCst1X4A+JNWfiegUnuu4E5+G9YPKbDplL0CNvkA5n
-         ihEJoSz6mVPTlII4jYUkbgcpA2b7rP/LisaBWlPWFgBSRNHmcu7sOgKcSoIKNvroCdVo
-         uPUNM8lt/hRX6fcjXXvISDvNgHwObmt5jCXvD2mIF4Bw2d+IoepoVLIi8hx1HgXNaGTt
-         26hnsoBJ2EE3fYoL8JNUON3M6419PK2CTzzSTp0O99shVm4/FngkPhUrLDWZgKIEh2cX
-         G7Iw==
-X-Gm-Message-State: AOAM533m2dcKUy0XaH4cYby1ga91Ilk6Bpp9EnAGU+p7TwWm/A+wtrL/
-        TiO6fMN6IghuRsiLGIxtTg==
-X-Google-Smtp-Source: ABdhPJzNzlBgcWyB4ZGLCHs+MDDXfQkSsqKXnlx93WBTwFdRaNJE12q6suyko6oDDUk2JvZ8XpGFIQ==
-X-Received: by 2002:a05:6870:602a:b0:f1:42cf:8296 with SMTP id t42-20020a056870602a00b000f142cf8296mr12042106oaa.111.1652801685681;
-        Tue, 17 May 2022 08:34:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g81-20020a9d12d7000000b006060322124csm12500otg.28.2022.05.17.08.34.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 08:34:45 -0700 (PDT)
-Received: (nullmailer pid 1081626 invoked by uid 1000);
-        Tue, 17 May 2022 15:34:44 -0000
-Date:   Tue, 17 May 2022 10:34:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ross Burton <ross.burton@arm.com>,
-        Peter Maydell <peter.maydell@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH] of/fdt: Ignore disabled memory nodes
-Message-ID: <20220517153444.GA1057027-robh@kernel.org>
-References: <20220517101410.3493781-1-andre.przywara@arm.com>
+        Tue, 17 May 2022 11:35:20 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAD65007A;
+        Tue, 17 May 2022 08:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652801712; x=1684337712;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OKRcLw6QsuGpSKY4/BO13xavP65NgCLYIODNZJ7MeM4=;
+  b=dbtZI3y2Y3r1LRtyGe7F6r22+6KEO/uVKXb3/58OMsyr+2xKpq2fOt+V
+   4bZxkLl2gvxvRAw9oozwdrEDziQhlcQlsQyIED95MT4c1zNjeYldPEXxT
+   PZDzBFBt6SI9FNDzM4xfHxmHdMcNPDI3iuCkNC4b78kfLCzWUW/5ptSRJ
+   +CpeB2agYD6t+7LLlSV5jEF5r3VG+MtSfNLsToQFxQhrJ0Ofma0K1W1NU
+   TIB8/SqaKr1TcNCX+eAGxPYuRNXbk3Lf43UEEiVxX+PO8/RqnN5p6m06m
+   ebQbbAg87i+MfsYpYvh6V58k3ub5RqnVy4o2lzCZMgnxXvb4NQ8M73kJG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270911635"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="270911635"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 08:35:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="672905613"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 17 May 2022 08:35:05 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 03686EAF; Tue, 17 May 2022 18:34:50 +0300 (EEST)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv6 15/15] mm/vmstat: Add counter for memory accepting
+Date:   Tue, 17 May 2022 18:34:44 +0300
+Message-Id: <20220517153444.11195-16-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
+References: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517101410.3493781-1-andre.przywara@arm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 11:14:10AM +0100, Andre Przywara wrote:
-> When we boot a machine using a devicetree, the generic DT code goes
-> through all nodes with a 'device_type = "memory"' property, and collects
-> all memory banks mentioned there. However it does not check for the
-> status property, so any nodes which are explicitly "disabled" will still
-> be added as a memblock.
-> This ends up badly for QEMU, when booting with secure firmware on
-> arm/arm64 machines, because QEMU adds a node describing secure-only
-> memory:
-> ===================
-> 	secram@e000000 {
+The counter increased every time kernel accepts a memory region.
 
-BTW, 'memory' is the correct node name.
+The counter allows to see if memory acceptation is still ongoing and
+contributes to memory allocation latency.
 
-> 		secure-status = "okay";
-> 		status = "disabled";
-> 		reg = <0x00 0xe000000 0x00 0x1000000>;
-> 		device_type = "memory";
-> 	};
-> ===================
-> 
-> The kernel will eventually use that memory block (which is located below
-> the main DRAM bank), but accesses to that will be answered with an
-> SError:
-> ===================
-> [    0.000000] Internal error: synchronous external abort: 96000050 [#1] PREEMPT SMP
-> [    0.000000] Modules linked in:
-> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0-rc6-00014-g10c8acb8b679 #524
-> [    0.000000] Hardware name: linux,dummy-virt (DT)
-> [    0.000000] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    0.000000] pc : new_slab+0x190/0x340
-> [    0.000000] lr : new_slab+0x184/0x340
-> [    0.000000] sp : ffff80000a4b3d10
-> ....
-> ==================
-> The actual crash location and call stack will be somewhat random, and
-> depend on the specific allocation of that physical memory range.
-> 
-> As the DT spec[1] explicitly mentions standard properties, add a simple
-> check to skip over disabled memory nodes, so that we only use memory
-> that is meant for non-secure code to use.
-> 
-> That fixes booting a QEMU arm64 VM with EL3 enabled ("secure=on"), when
-> not using UEFI. In this case the QEMU generated DT will be handed on
-> to the kernel, which will see the secram node.
-> This issue is reproducible when using TF-A together with U-Boot as
-> firmware, then booting with the "booti" command.
-> 
-> When using U-Boot as an UEFI provider, the code there [2] explicitly
-> filters for disabled nodes when generating the UEFI memory map, so we
-> are safe.
-> EDK/2 only reads the first bank of the first DT memory node [3] to learn
-> about memory, so we got lucky there.
-> 
-> [1] https://github.com/devicetree-org/devicetree-specification/blob/main/source/chapter3-devicenodes.rst#memory-node (after the table)
-> [2] https://source.denx.de/u-boot/u-boot/-/blob/master/lib/fdtdec.c#L1061-1063
-> [3] https://github.com/tianocore/edk2/blob/master/ArmVirtPkg/PrePi/FdtParser.c
-> 
-> Reported-by: Ross Burton <ross.burton@arm.com>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  drivers/of/fdt.c | 3 +++
->  1 file changed, 3 insertions(+)
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+---
+ arch/x86/mm/unaccepted_memory.c | 1 +
+ include/linux/vm_event_item.h   | 3 +++
+ mm/vmstat.c                     | 3 +++
+ 3 files changed, 7 insertions(+)
 
-Applied, thanks!
+diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
+index 6ecd79101922..fe1dabfae326 100644
+--- a/arch/x86/mm/unaccepted_memory.c
++++ b/arch/x86/mm/unaccepted_memory.c
+@@ -74,6 +74,7 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
+ 		}
+ 
+ 		bitmap_clear(bitmap, range_start, len);
++		count_vm_events(ACCEPT_MEMORY, len * PMD_SIZE / PAGE_SIZE);
+ 
+ 		/* In early boot nr_unaccepted is not yet initialized */
+ 		if (nr_unaccepted) {
+diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
+index 16a0a4fd000b..6a468164a2f9 100644
+--- a/include/linux/vm_event_item.h
++++ b/include/linux/vm_event_item.h
+@@ -136,6 +136,9 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+ #ifdef CONFIG_X86
+ 		DIRECT_MAP_LEVEL2_SPLIT,
+ 		DIRECT_MAP_LEVEL3_SPLIT,
++#endif
++#ifdef CONFIG_UNACCEPTED_MEMORY
++		ACCEPT_MEMORY,
+ #endif
+ 		NR_VM_EVENT_ITEMS
+ };
+diff --git a/mm/vmstat.c b/mm/vmstat.c
+index b75b1a64b54c..4c9197f32406 100644
+--- a/mm/vmstat.c
++++ b/mm/vmstat.c
+@@ -1397,6 +1397,9 @@ const char * const vmstat_text[] = {
+ 	"direct_map_level2_splits",
+ 	"direct_map_level3_splits",
+ #endif
++#ifdef CONFIG_UNACCEPTED_MEMORY
++	"accept_memory",
++#endif
+ #endif /* CONFIG_VM_EVENT_COUNTERS || CONFIG_MEMCG */
+ };
+ #endif /* CONFIG_PROC_FS || CONFIG_SYSFS || CONFIG_NUMA || CONFIG_MEMCG */
+-- 
+2.35.1
+

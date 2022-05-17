@@ -2,83 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB8052ACE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B55B952ACE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353024AbiEQUjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S1344703AbiEQUlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353005AbiEQUjJ (ORCPT
+        with ESMTP id S233909AbiEQUlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:39:09 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C0252B07
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:39:08 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id eg11so387958edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:39:08 -0700 (PDT)
+        Tue, 17 May 2022 16:41:50 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724681AF1A
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:41:49 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dc7bdd666fso2917547b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:41:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qFAZEBFOY9SmpYWcYe+bNPVMfKhT4EeYmR3/AEfOrRQ=;
-        b=qIiIfGP9SJn0HMWqwfthodh2jdAShSFM+ARfk4Nkfuuq8BK7um/fiyvlR1vEIcas9+
-         HVS/vce71sLHrnBlACXe1owCUDxTy/QUgnYmAjoyVtlBnBeQpXJiOvVUne0noESMRvn9
-         f0XGtGuocAgpHYwyvUuCA/Vno1McJGfiyo1+NWyAG+Ubj6kqD1bZ0CZ5eH22dpX20Swc
-         DyZbbhelV8FPN6fi1AxTXfmvhPR0k3toUWTZNx08pJbUVyo7MqDzQQcg+m2b5ykQq+uL
-         5cswuWypGHzD8OM0v20Ka0e4Yc1grf9HfaGIe2imIMbicrz/2au6ocz1v1vTnPFFHeSU
-         D2cQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=F1aO125Yx/obUzt176koWYfMkjjCHKow9Xi2uikrxmo=;
+        b=OJLu59Z9I7+iGu+w6BJz1flN1H7Lq37JKIIeBhbkkFE8lxwJAcd/Y/JolCT4Ugw/iR
+         UX7ZzX+kGoIr4PYaVPUDfI9TPmcQwGYT3K4cFHDHxvGpv9uhLQ911/69VKgjOK5i3nXr
+         kj0Oids4J4EhXyiwHl09Qv27HCg/SVpM/axA6QWi25KpJUQqd7mvLYAc5M15X82T1UqV
+         prVRY7nSuQv+oVsMriq1Qvuv0eiUsKBv/dXhppuPU3zL9sWGAdQkk8+WP13fBdA+Djt1
+         0BywV737AySz9ad0tMGXs3m+ujJGzptV38gDEfLJyh1unXHrUsd+RyLLXte2O7DiujVz
+         yR1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qFAZEBFOY9SmpYWcYe+bNPVMfKhT4EeYmR3/AEfOrRQ=;
-        b=q7LuB9ww/TAyLUBGU3KF32qLaSwSWxzkah2Lu4sWi7zXa7nj2UwY5dpeshPx/WFaqB
-         xmJ1k16mzoX6BWyRgOP97N/wQoiZ/kGse6rdgM+Yb8lufqGGdCjkniNZ634Ntr2a9xVo
-         xhS1cLOox0gTNvrvrpKB7UQwsRIMCQdz3IhHdbg90qTLzTVYZ9fSwMGe5CVfaBTzGoKk
-         8AO/xHEpYFFX8ejDDY24cdkXQguUkAFxUo767ZBbHO6+/ozhFGMycN3yDygzie9MIFam
-         40HgdohVLwgwJLpfcitkvQFzlrg1mNEDtP0e7DML5C3pSxjvWdWwJUQ7fQnzfk0/197p
-         SXCg==
-X-Gm-Message-State: AOAM532gcg/7w0IcY9gyIoF4Hf4U4Li72bXflWO2cNGe5WwThc/jko+d
-        zRSBenUFIubqHKcT6RnNM2Wa/EaEZ3YjDFdXn90R1w==
-X-Google-Smtp-Source: ABdhPJxeRR3pFJJ2Mj54dRvGTD1BK3KI9tP1xr/8Cxp2b/FUFIwyROHJj8wRMRSi8RBvS0sEGWkbtxTYO+wZnLyvh/w=
-X-Received: by 2002:a05:6402:51c8:b0:427:b374:6af4 with SMTP id
- r8-20020a05640251c800b00427b3746af4mr21002593edd.349.1652819946747; Tue, 17
- May 2022 13:39:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220513085108.3567310-1-davidgow@google.com>
-In-Reply-To: <20220513085108.3567310-1-davidgow@google.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 17 May 2022 16:38:55 -0400
-Message-ID: <CAFd5g47zzgs8eWU44aboYcUVtiQAoFFioNuTvRTMwGgOg0a8ng@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Use qemu-system-i386 for i386 runs
-To:     David Gow <davidgow@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=F1aO125Yx/obUzt176koWYfMkjjCHKow9Xi2uikrxmo=;
+        b=bUau28jMdP0wYSjh2njOWLm2XifSMXsAMNd0dGmexaZy0lz7ThhC5MKHUY++lM9/0Q
+         Upa7JSMJUSlNZlB0Zie0vaUsuFQOv7yBRC7ObegpazDqLGBBWPrXKGT5OdZkAgChTwU+
+         1e2YLTYmOw31HQR0LasAh1imHTGe3Z5/Z/0ZbZWQLxSqp1i3LNklNY118Lc8+C2X33dY
+         Uj26KfB/napCcGlnEzboC3jEDAJ5AjWYOOPK4fAu5sfuplhz4q73zp2iZOCkBMb8sqrP
+         n1Bj6hD4nhHMvW+vIkc8MxSuEzBcMPo6y1Svj0vOnFHpCpZ3Qv9yWP5mafGMgTcjbMEp
+         2OhQ==
+X-Gm-Message-State: AOAM531AmKgdJZmpggTsx+uXQjsNjuJck9DUkx73rS2wxOdm1frDLn0t
+        DZnUYIpZSwoVoXUgKocquOxsevlPWYlo
+X-Google-Smtp-Source: ABdhPJzQbMHxPnHyCRWSpO1aAxJUO3kNUrzA0+BiWBnhXCydxYORM5RkoFxZ684mR8ROIS9ddQIxi/TLLKND
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a5a1:af73:fe09:fd5])
+ (user=irogers job=sendgmr) by 2002:a0d:c4c2:0:b0:2f1:6c00:9eb4 with SMTP id
+ g185-20020a0dc4c2000000b002f16c009eb4mr29222866ywd.448.1652820108545; Tue, 17
+ May 2022 13:41:48 -0700 (PDT)
+Date:   Tue, 17 May 2022 13:41:44 -0700
+Message-Id: <20220517204144.645913-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH] perf test: Avoid shell test description infinite loop
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Marco Elver <elver@google.com>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 4:51 AM David Gow <davidgow@google.com> wrote:
->
-> We're currently using the x86_64 qemu for i386 builds. While this is not
-> incorrect, it's probably more sensible to use the i386 one, which will
-> at least fail properly if we accidentally were to build a 64-bit kernel.
->
-> Signed-off-by: David Gow <davidgow@google.com>
+for_each_shell_test is already strict in expecting tests to be files and
+executable. It is sometimes possible when it iterates over all files
+that it finds one that is executable and lacks a newline character. When
+this happens the loop never terminates as it doesn't check for EOF. Add
+the EOF check to make this loop at least bounded by the file size.
 
-A very sensible thing to do! When I was writing this, I probably
-copied and pasted the x64_64 qemu config and then forgot to change
-everything to i386 - whoops.
+If the description is returned as NULL then also skip the test.
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/tests/builtin-test.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+index 3c34cb766724..aa40eae1c9cf 100644
+--- a/tools/perf/tests/builtin-test.c
++++ b/tools/perf/tests/builtin-test.c
+@@ -279,6 +279,7 @@ static const char *shell_test__description(char *description, size_t size,
+ {
+ 	FILE *fp;
+ 	char filename[PATH_MAX];
++	int ch;
+ 
+ 	path__join(filename, sizeof(filename), path, name);
+ 	fp = fopen(filename, "r");
+@@ -286,7 +287,9 @@ static const char *shell_test__description(char *description, size_t size,
+ 		return NULL;
+ 
+ 	/* Skip shebang */
+-	while (fgetc(fp) != '\n');
++	do {
++		ch = fgetc(fp);
++	} while (ch != EOF && ch != '\n');
+ 
+ 	description = fgets(description, size, fp);
+ 	fclose(fp);
+@@ -419,7 +422,8 @@ static int run_shell_tests(int argc, const char *argv[], int i, int width,
+ 			.priv = &st,
+ 		};
+ 
+-		if (!perf_test__matches(test_suite.desc, curr, argc, argv))
++		if (test_suite.desc == NULL ||
++		    !perf_test__matches(test_suite.desc, curr, argc, argv))
+ 			continue;
+ 
+ 		st.file = ent->d_name;
+-- 
+2.36.0.550.gb090851708-goog
+

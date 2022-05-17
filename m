@@ -2,92 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538DB52A383
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A64552A38A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343889AbiEQNfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S1348142AbiEQNgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347899AbiEQNfT (ORCPT
+        with ESMTP id S1347913AbiEQNfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:35:19 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE76B4C794;
-        Tue, 17 May 2022 06:35:17 -0700 (PDT)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L2cTc5Vlpz67VyR;
-        Tue, 17 May 2022 21:31:32 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 15:35:15 +0200
-Received: from [10.47.88.19] (10.47.88.19) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
- 2022 14:35:14 +0100
-Message-ID: <f7a4e895-82e4-b8d2-7c30-931f2a48a838@huawei.com>
-Date:   Tue, 17 May 2022 14:35:14 +0100
+        Tue, 17 May 2022 09:35:44 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA777B1DE
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:35:39 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id r1so32441151ybo.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=fOF0mLHDO2JH2bQ/6nv6jUbZKAhgwoxMZS2LA7xTw8w=;
+        b=tUErUVmrc1o90SfSkKV+/w8V5J/wOadMHXCnTV+v1hGfUBiewMMlCCQ9R922MxXUFJ
+         CXL6o5kEYdeGXEZ9XUayHFw2Bx7CTXrNZEYqOR4t5UOJquSkPSk2l14FKzcrDDMN/Ki9
+         HxGEuhk227eucaLiw5I/kHK/pU2boYm3aKVx0Vb/d+pCY+m7nnLGUGp82RpL1ohf/6zT
+         wfcmlWPvfgs+skk/gSyVPvtCbMZ0carMJvFSqYO9OtBh5E8lrDwDRCORpL63t0RNyFJN
+         trV3RStYhYzRClC0rEev6roWRm/S3wq0fjSwsVvdeALYThwPJxXCf9mubOb/D7ozxHOT
+         0ExA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=fOF0mLHDO2JH2bQ/6nv6jUbZKAhgwoxMZS2LA7xTw8w=;
+        b=vnszFvM1/xU++R9du3+MMnqgExR7g7p/bDbM1QOcpvkV4Rij0XTj4cc3noXcW2aCuK
+         UVExNMw4EatWS7NZkEJyszbuLNo4gPIoOIOUACpVfWd6Zfg4sgItb9m0JQ/wNOp8YAMw
+         rJ8HiZRoy6dhkatBcEo1opJ8OmmYh/ZmgWO4lL4c0hC5q0gLFYEZ0hAcnucMclGDxb+6
+         j00tBYI2nwXiA+zo5gkW3Iji8/Zhc9oKG4xCARuotTk0I0OsMR/i5e8BSdRzqzWY1BhB
+         g2WPlCAZanIDISZI3VdCmwQcWFMf+/irkHzffxZUJ3tPHcWwS+CiM4Rur+w2JcmSnEFd
+         7R7Q==
+X-Gm-Message-State: AOAM530p8vshB6UM0xg0b+x6NmNr3ITWSgpzVe6ZE5VOkdcALMr5oQDR
+        TW4Oy9aTd5j007PuU8syMfG/TP4yMehc1vysqD5XJw==
+X-Google-Smtp-Source: ABdhPJztRuQtvVBTLQg6edpSDF+qMvzQOjoWKt4vt+4eTANGq9hhZnx+sdyWM0csT1/k4MO2PGQxYV2ou6bhA2HvmKU=
+X-Received: by 2002:a25:804e:0:b0:64d:eafa:450e with SMTP id
+ a14-20020a25804e000000b0064deafa450emr5364927ybn.128.1652794538659; Tue, 17
+ May 2022 06:35:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2 4/7] perf jevents: Modify match field
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        "Felix Fietkau" <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
-        Like Xu <likexu@tencent.com>, <linux-kernel@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        Nick Forrington <nick.forrington@arm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
-        <santosh.shukla@amd.com>, <sandipan.das@amd.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
-CC:     Stephane Eranian <eranian@google.com>
-References: <20220511211526.1021908-1-irogers@google.com>
- <20220511211526.1021908-5-irogers@google.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220511211526.1021908-5-irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.88.19]
-X-ClientProxiedBy: lhreml743-chm.china.huawei.com (10.201.108.193) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220516213639.123296914@linuxfoundation.org>
+In-Reply-To: <20220516213639.123296914@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 17 May 2022 19:05:27 +0530
+Message-ID: <CA+G9fYtupv8KgDhatu1u8HVtMniURxT6pi-R2MpU0dgG75KHUA@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/68] 5.10.117-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2022 22:15, Ian Rogers wrote:
-> The match_field function looks for json values to append to the event
-> string. As the C code processes these in order the output order matches
-> that in the json dictionary. Python json readers read the entire
-> dictionary and lose the ordering. To make the python and C output
-> comparable make the C code first read the extra fields then append them
-> to the event in an order not determined by their order in the file.
-> 
-> Modify the pmu-events test so that test expectations match the new
-> order.
-> 
-> Signed-off-by: Ian Rogers<irogers@google.com>
+On Tue, 17 May 2022 at 03:08, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.117 release.
+> There are 68 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 18 May 2022 21:35:34 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.117-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: John Garry <john.garry@huawei.com>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.10.117-rc2
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: 17429b76ed5416aac3996975e8e49e0b1f79ed27
+* git describe: v5.10.116-69-g17429b76ed54
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.116-69-g17429b76ed54
+
+## Test Regressions (compared to v5.10.116-65-g11c5de3d33a9)
+No test regressions found.
+
+## Metric Regressions (compared to v5.10.116-65-g11c5de3d33a9)
+No metric regressions found.
+
+## Test Fixes (compared to v5.10.116-65-g11c5de3d33a9)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.116-65-g11c5de3d33a9)
+No metric fixes found.
+
+## Test result summary
+total: 93799, pass: 79054, fail: 849, skip: 12960, xfail: 936
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 40 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

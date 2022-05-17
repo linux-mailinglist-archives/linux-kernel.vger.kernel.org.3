@@ -2,326 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F8A529E64
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C271B529E73
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245448AbiEQJp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S245476AbiEQJrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245391AbiEQJoh (ORCPT
+        with ESMTP id S1343730AbiEQJqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:44:37 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED0447AF5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:44:17 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id j4so30297083lfh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:44:17 -0700 (PDT)
+        Tue, 17 May 2022 05:46:38 -0400
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4D72D1D6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:45:49 -0700 (PDT)
+Received: by mail-wm1-x34a.google.com with SMTP id i131-20020a1c3b89000000b00393fbb0718bso1053066wma.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:45:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:reply-to:content-transfer-encoding;
-        bh=4Y7GTp06m87sjrCjAMpmQ5sQb3h3R2MyluXYoWhziFQ=;
-        b=MghXAnMT6KgtejKHKI+m5S8SyqmUYagS+dMS6d3Siyt9TDQsrCRUjWc6Af1jh3cJbV
-         Tqh+DfBGiOkHXNOEJMxbR7HlMjwq+wlzQD8Tnm6peub57oQqy3FrQM0iz2qatq17+g+G
-         vW64ljpV+gwxahaKaIZQlLdLl1wvofEtn20vw4bQDgnqbyetV3Ry6IsomfwJmeSIscUg
-         pV2pqY0Nzgs/8/xNTdyZtztvcr7anhSOTIrBB8HqZu/AZrudcrUXsNhCaJ8sgvtLRDrc
-         zJYjHz/fXOkFcwwbWB5v3Q5F8Pc88geDcDWRqusZeZ38rnDv5PD+1L+sa1IPyotMGU8n
-         tusA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=PbU163V9NpaquO6SCuL2TEI60d26RkRN2W+vaRvIf2Q=;
+        b=M5AaXstrZzKNEqxjubE0h4I7oP3Lc1dBo2zOqZmvFVoUhzFHGdkruDmgg7usMdo2J4
+         AAoUaZ5QzBw9c8N/l8xi7RCa1aBMuREC2x1dBIQ2nVB/cr4dOPRMDKEN2IF6700d4ZzP
+         8+hMYI0g9N+R39QOj21DGGb6rW8Z4QrUJVWePh6bP2VXHnIbNsVDkOiNcsDS9GiuxeQD
+         bytUmq12CSWcjpm/LPmZ/XzOXTzZyk6weuCk7s4GFHjv1xgrKZ7dYBWmlb1FCRbQY9jY
+         3w/NSf8cC4DAQBuqCljdtnHQFSBY0qYx2A1nQWTJ00VdDXtPa4KyBfNA2VUvUnEH74az
+         Fy3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:reply-to:content-transfer-encoding;
-        bh=4Y7GTp06m87sjrCjAMpmQ5sQb3h3R2MyluXYoWhziFQ=;
-        b=5grYqm3fIJu7cvRA/swqlKc8Zh/4gpEgzYd6D+YjjBOqno85dPdhhLtTcyGdQOia+5
-         wAMkzz8WMaa1n8opw7g0WHkCeCJDGdb4M4Jo+mirczlN3tVuN+dKbBWYN72ZMO1H/Xnj
-         XzD76jbBPcDh5lsh/nDzwJ/PXEvxDRnHb0rtF3FwK1n/E6ac/OkXzJXwqJkcjO9wBYdw
-         A417RSiOnNmXB7Pf5JkPi9g8K+N1njKS0tzzmaiR4KIX1KLGXONi/TKSiuFm+KmoImHo
-         8FZSJ+pwLzq0+tCoY1FCnZGP5QGqvm5L8YDJh18JlZgUQl/V/Sli9mKyft3LCWh3wLKF
-         AFsA==
-X-Gm-Message-State: AOAM530fBz/bOtI0UEeVAhdNlCmCazOuv7U9okLWVhS5RgIXoHWt5Piv
-        WIoZINuWyVrxo6a+QmX3yZZYgQ==
-X-Google-Smtp-Source: ABdhPJzcUizreDjMj6lesjstMRBHyYVo4l8fnzb8tHWmpwpORw+SWixzfqsvuUJJjw6CTjr+uQJjjw==
-X-Received: by 2002:a05:6512:2350:b0:472:6182:955c with SMTP id p16-20020a056512235000b004726182955cmr16059189lfu.214.1652780656167;
-        Tue, 17 May 2022 02:44:16 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id y16-20020ac24e70000000b0047255d211aasm1536573lfs.217.2022.05.17.02.44.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 02:44:15 -0700 (PDT)
-Message-ID: <8ef9de6a-7497-07f7-852c-befcc3843771@openvz.org>
-Date:   Tue, 17 May 2022 12:44:14 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH v2] tracing: add ACCOUNT flag for allocations from marked slab
- caches
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Michal Hocko <mhocko@suse.com>
-Content-Language: en-US
-Reply-To: YoMccU66auLAPEHa@casper.infradead.org
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=PbU163V9NpaquO6SCuL2TEI60d26RkRN2W+vaRvIf2Q=;
+        b=7ZM4xY8pq0DA9NkkS3Xs11lUYbm+UE6xBfN13GJTku+aAUl9yVgYySD28yt1mpeUOs
+         D3syILvzsvw7KmFFfYTk+nsjKL3GLPm8TMxppX+eqqhw9sEtiSIL3x3Y5ylsfv6R1NSk
+         gD/4SK9K/eFG1XNV1no1LwUUK3VmxAmc7YBUu5tsUC+DQznDrYW2Iaqr/h3vSstEaH8z
+         FYU08muxoAraSz77rRpUlD1McMQYQfarUUYfAxqfn5AfSF1mEvXJI0WU4qxSGWY8ahWU
+         1/qe9YDmtKNZo5EoKURj1+gjxEym4wh3OJxEiIz7AF/H5TnsSyUCNRjKzYwYzt2ytciQ
+         XKEQ==
+X-Gm-Message-State: AOAM533e6I3gVnx4o/BgloI7NsZ1644V9z8/hf2glsJUJ69+mnG2kldb
+        D7HZgb8/VoH2UnmrrZGlN3H4u31e9+s=
+X-Google-Smtp-Source: ABdhPJyduSrbVAvYxKEvK1sdYPUr1HXYq+Qu5FwsYmEM8CISkPzjSnRc1an8drEgN9+zFIeKi/8dL5vLv7A=
+X-Received: from rax.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:2a98])
+ (user=poprdi job=sendgmr) by 2002:a05:600c:1e17:b0:394:547c:e5a6 with SMTP id
+ ay23-20020a05600c1e1700b00394547ce5a6mr20628734wmb.203.1652780747377; Tue, 17
+ May 2022 02:45:47 -0700 (PDT)
+Date:   Tue, 17 May 2022 09:45:32 +0000
+Message-Id: <20220517094532.2729049-1-poprdi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH] Bluetooth: Collect kcov coverage from hci_rx_work
+From:   Tamas Koczka <poprdi@google.com>
+To:     Marcel Holtmann <marcel@holtmann.org>
+Cc:     theflow@google.com, Tamas Koczka <poprdi@google.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dSlab caches marked with SLAB_ACCOUNT force accounting for every
-allocation from this cache even if __GFP_ACCOUNT flag is not passed.
-Unfortunately, at the moment this flag is not visible in ftrace output,
-and this makes it difficult to analyze the accounted allocations.
+Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_stop()
+calls, so remote KCOV coverage is collected while processing the rx_q
+queue which is the main incoming Bluetooth packet queue.
 
-This patch adds the __GFP_ACCOUNT flag for allocations from slab caches
-marked with SLAB_ACCOUNT to the ftrace output
+Coverage is associated with the thread which created the packet skb.
+
+Signed-off-by: Tamas Koczka <poprdi@google.com>
 ---
-v2:
- 1) handle kmem_cache_alloc_node() too, thanks to Shakeel
- 2) rework kmem_cache_alloc* tracepoints to use cachep instead
-    of current cachep->*size parameters. Now kmalloc[_node] and
-    kmem_cache_alloc[_node] tracepoints do not use common template
+ net/bluetooth/hci_core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-NB: kmem_cache_alloc_node tracepoint in SLOB cannot be switched to cachep,
-    therefore it was replaced by kmalloc_node tracepoint.
----
-VvS: is this acceptable? Maybe I should split this patch?
-
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
- include/trace/events/kmem.h | 82 +++++++++++++++++++++++++++----------
- mm/slab.c                   |  7 +---
- mm/slab_common.c            |  7 ++--
- mm/slob.c                   | 10 ++---
- mm/slub.c                   |  6 +--
- 5 files changed, 71 insertions(+), 41 deletions(-)
-
-diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
-index 71c141804222..3b4f96e4a607 100644
---- a/include/trace/events/kmem.h
-+++ b/include/trace/events/kmem.h
-@@ -9,7 +9,7 @@
- #include <linux/tracepoint.h>
- #include <trace/events/mmflags.h>
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 45c2dd2e1590..703722031b8d 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -29,6 +29,7 @@
+ #include <linux/rfkill.h>
+ #include <linux/debugfs.h>
+ #include <linux/crypto.h>
++#include <linux/kcov.h>
+ #include <linux/property.h>
+ #include <linux/suspend.h>
+ #include <linux/wait.h>
+@@ -3780,7 +3781,9 @@ static void hci_rx_work(struct work_struct *work)
  
--DECLARE_EVENT_CLASS(kmem_alloc,
-+TRACE_EVENT(kmalloc,
+ 	BT_DBG("%s", hdev->name);
  
- 	TP_PROTO(unsigned long call_site,
- 		 const void *ptr,
-@@ -43,23 +43,41 @@ DECLARE_EVENT_CLASS(kmem_alloc,
- 		show_gfp_flags(__entry->gfp_flags))
- );
- 
--DEFINE_EVENT(kmem_alloc, kmalloc,
-+TRACE_EVENT(kmem_cache_alloc,
- 
--	TP_PROTO(unsigned long call_site, const void *ptr,
--		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
-+	TP_PROTO(unsigned long call_site,
-+		 const void *ptr,
-+		 struct kmem_cache *s,
-+		 gfp_t gfp_flags),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
--);
-+	TP_ARGS(call_site, ptr, s, gfp_flags),
- 
--DEFINE_EVENT(kmem_alloc, kmem_cache_alloc,
-+	TP_STRUCT__entry(
-+		__field(	unsigned long,	call_site	)
-+		__field(	const void *,	ptr		)
-+		__field(	size_t,		bytes_req	)
-+		__field(	size_t,		bytes_alloc	)
-+		__field(	unsigned long,	gfp_flags	)
-+	),
- 
--	TP_PROTO(unsigned long call_site, const void *ptr,
--		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
-+	TP_fast_assign(
-+		__entry->call_site	= call_site;
-+		__entry->ptr		= ptr;
-+		__entry->bytes_req	= s->object_size;
-+		__entry->bytes_alloc	= s->size;
-+		__entry->gfp_flags	= (__force unsigned long)gfp_flags |
-+				(s->flags & SLAB_ACCOUNT ? __GFP_ACCOUNT : 0);
-+	),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
-+	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
-+		(void *)__entry->call_site,
-+		__entry->ptr,
-+		__entry->bytes_req,
-+		__entry->bytes_alloc,
-+		show_gfp_flags(__entry->gfp_flags))
- );
- 
--DECLARE_EVENT_CLASS(kmem_alloc_node,
-+TRACE_EVENT(kmalloc_node,
- 
- 	TP_PROTO(unsigned long call_site,
- 		 const void *ptr,
-@@ -97,22 +115,42 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
- 		__entry->node)
- );
- 
--DEFINE_EVENT(kmem_alloc_node, kmalloc_node,
-+TRACE_EVENT(kmem_cache_alloc_node,
- 
--	TP_PROTO(unsigned long call_site, const void *ptr,
--		 size_t bytes_req, size_t bytes_alloc,
--		 gfp_t gfp_flags, int node),
-+	TP_PROTO(unsigned long call_site,
-+		 const void *ptr,
-+		 struct kmem_cache *s,
-+		 gfp_t gfp_flags,
-+		 int node),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
--);
-+	TP_ARGS(call_site, ptr, s, gfp_flags, node),
- 
--DEFINE_EVENT(kmem_alloc_node, kmem_cache_alloc_node,
-+	TP_STRUCT__entry(
-+		__field(	unsigned long,	call_site	)
-+		__field(	const void *,	ptr		)
-+		__field(	size_t,		bytes_req	)
-+		__field(	size_t,		bytes_alloc	)
-+		__field(	unsigned long,	gfp_flags	)
-+		__field(	int,		node		)
-+	),
- 
--	TP_PROTO(unsigned long call_site, const void *ptr,
--		 size_t bytes_req, size_t bytes_alloc,
--		 gfp_t gfp_flags, int node),
-+	TP_fast_assign(
-+		__entry->call_site	= call_site;
-+		__entry->ptr		= ptr;
-+		__entry->bytes_req	= s->object_size;
-+		__entry->bytes_alloc	= s->size;
-+		__entry->gfp_flags	= (__force unsigned long)gfp_flags |
-+				(s->flags & SLAB_ACCOUNT ? __GFP_ACCOUNT : 0);
-+		__entry->node		= node;
-+	),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
-+	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d",
-+		(void *)__entry->call_site,
-+		__entry->ptr,
-+		__entry->bytes_req,
-+		__entry->bytes_alloc,
-+		show_gfp_flags(__entry->gfp_flags),
-+		__entry->node)
- );
- 
- TRACE_EVENT(kfree,
-diff --git a/mm/slab.c b/mm/slab.c
-index 0edb474edef1..935b1c90d7f0 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -3492,8 +3492,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
- {
- 	void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
- 
--	trace_kmem_cache_alloc(_RET_IP_, ret,
--			       cachep->object_size, cachep->size, flags);
-+	trace_kmem_cache_alloc(_RET_IP_, ret, cachep, flags);
- 
- 	return ret;
- }
-@@ -3606,9 +3605,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid)
- {
- 	void *ret = slab_alloc_node(cachep, flags, nodeid, cachep->object_size, _RET_IP_);
- 
--	trace_kmem_cache_alloc_node(_RET_IP_, ret,
--				    cachep->object_size, cachep->size,
--				    flags, nodeid);
-+	trace_kmem_cache_alloc_node(_RET_IP_, ret, cachep, flags, nodeid);
- 
- 	return ret;
- }
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 2b3206a2c3b5..12299cf450fe 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -25,13 +25,12 @@
- #include <asm/page.h>
- #include <linux/memcontrol.h>
- 
--#define CREATE_TRACE_POINTS
--#include <trace/events/kmem.h>
--
- #include "internal.h"
--
- #include "slab.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/kmem.h>
+-	while ((skb = skb_dequeue(&hdev->rx_q))) {
++	for (; (skb = skb_dequeue(&hdev->rx_q)); kcov_remote_stop()) {
++		kcov_remote_start_common(skb_get_kcov_handle(skb));
 +
- enum slab_state slab_state;
- LIST_HEAD(slab_caches);
- DEFINE_MUTEX(slab_mutex);
-diff --git a/mm/slob.c b/mm/slob.c
-index 40ea6e2d4ccd..69875419769c 100644
---- a/mm/slob.c
-+++ b/mm/slob.c
-@@ -610,14 +610,12 @@ static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags, int node)
+ 		/* Send copy to monitor */
+ 		hci_send_to_monitor(hdev, skb);
  
- 	if (c->size < PAGE_SIZE) {
- 		b = slob_alloc(c->size, flags, c->align, node, 0);
--		trace_kmem_cache_alloc_node(_RET_IP_, b, c->object_size,
--					    SLOB_UNITS(c->size) * SLOB_UNIT,
--					    flags, node);
-+		trace_kmalloc_node(_RET_IP_, b, c->object_size,
-+				   SLOB_UNITS(c->size) * SLOB_UNIT, flags, node);
- 	} else {
- 		b = slob_new_pages(flags, get_order(c->size), node);
--		trace_kmem_cache_alloc_node(_RET_IP_, b, c->object_size,
--					    PAGE_SIZE << get_order(c->size),
--					    flags, node);
-+		trace_kmalloc_node(_RET_IP_, b, c->object_size,
-+				   PAGE_SIZE << get_order(c->size), flags, node);
- 	}
- 
- 	if (b && c->ctor) {
-diff --git a/mm/slub.c b/mm/slub.c
-index ed5c2c03a47a..fc6678269db0 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -3231,8 +3231,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
- {
- 	void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
- 
--	trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
--				s->size, gfpflags);
-+	trace_kmem_cache_alloc(_RET_IP_, ret, s, gfpflags);
- 
- 	return ret;
- }
-@@ -3266,8 +3265,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags, int node)
- {
- 	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, s->object_size);
- 
--	trace_kmem_cache_alloc_node(_RET_IP_, ret,
--				    s->object_size, s->size, gfpflags, node);
-+	trace_kmem_cache_alloc_node(_RET_IP_, ret, s, gfpflags, node);
- 
- 	return ret;
- }
 -- 
-2.31.1
+2.36.0.550.gb090851708-goog
 

@@ -2,100 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31760529EFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C33F529EAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343785AbiEQKNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S245426AbiEQKC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343797AbiEQKMK (ORCPT
+        with ESMTP id S231372AbiEQKCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:12:10 -0400
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0339E15FF6;
-        Tue, 17 May 2022 03:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=KEpTTAEC9xfg+HRhDO
-        p/Qpj2o7vJYyBbGM+BScxTLJY=; b=e4PqQu2T7ZY9F0k/gJYwdtr1BVuwA0iqS3
-        snAQ7SgDPMMANONxOxIb27SvjnwnYPCxaC280PloajwBrIIxS39BHmWLjxbJPDfF
-        ry3E+6lN0/nGtC12z6CMjw4eujlY+EmUCGcVnL3fNOMQSrEd0RtxUYvpOPqewHx/
-        7bjUYz/og=
-Received: from localhost.localdomain (unknown [202.112.113.212])
-        by smtp7 (Coremail) with SMTP id C8CowADnlLkOcYNigRf3Cw--.43433S4;
-        Tue, 17 May 2022 17:55:38 +0800 (CST)
-From:   Yuanjun Gong <ruc_gongyuanjun@163.com>
-To:     Yuanjun Gong <ruc_gongyuanjun@163.com>,
-        Benson Leung <bleung@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: [PATCH 1/1] platform/chrome: check *dest of memcpy
-Date:   Tue, 17 May 2022 17:55:21 +0800
-Message-Id: <20220517095521.6897-1-ruc_gongyuanjun@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: C8CowADnlLkOcYNigRf3Cw--.43433S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw15KF4UJw4DuFWUXrykuFg_yoW8XrWxpF
-        Z5ur17Ca10ka18Kw4Utay293W3Xw18tr97u3yxua4rXws8JasxAryFya4rCF1vyryxJ34Y
-        yryktF1rWa1xZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRKii-UUUUU=
-X-Originating-IP: [202.112.113.212]
-X-CM-SenderInfo: 5uxfsw5rqj53pdqm30i6rwjhhfrp/1tbiJw0E5V5vB8SlZwABs6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 17 May 2022 06:02:16 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E35F2D;
+        Tue, 17 May 2022 03:02:14 -0700 (PDT)
+X-UUID: b63e995b8210496ba0dba6811dc8b7f3-20220517
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:401017f9-3c99-46d5-b8bf-e3595f1903e4,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:401017f9-3c99-46d5-b8bf-e3595f1903e4,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:31577ce2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:b694db9682df,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: b63e995b8210496ba0dba6811dc8b7f3-20220517
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 195184224; Tue, 17 May 2022 18:02:08 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 17 May 2022 18:02:07 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 17 May 2022 18:02:07 +0800
+Message-ID: <eab324a190c47cd139c243d1034fa44aa51f9377.camel@mediatek.com>
+Subject: Re: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183
+ and MT8186
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 17 May 2022 18:02:07 +0800
+In-Reply-To: <dde746ce-5663-e12f-4537-4206945b6b59@gmail.com>
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+         <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
+         <86851bd03128cc61082d516ebff929d3637063cb.camel@mediatek.com>
+         <20220512052732.iqphgpveoyrqjlqg@vireshk-i7>
+         <af82434adea0b648d74ed5ffd123e0faaaac6508.camel@mediatek.com>
+         <20220512054825.aqe4g4lupuqj3rcq@vireshk-i7>
+         <ca85977bcff2e3de925d7ab834b8654ec5ddf8c1.camel@mediatek.com>
+         <dde746ce-5663-e12f-4537-4206945b6b59@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gong Yuanjun <ruc_gongyuanjun@163.com>
+On Tue, 2022-05-17 at 11:57 +0200, Matthias Brugger wrote:
+> 
+> On 12/05/2022 08:05, Rex-BC Chen wrote:
+> > On Thu, 2022-05-12 at 11:18 +0530, Viresh Kumar wrote:
+> > > On 12-05-22, 13:33, Rex-BC Chen wrote:
+> > > > Matthias is not the member of mediatek, so I think we still
+> > > > need
+> > > > his
+> > > > feedback for these three patches.
+> > > 
+> > > Please ping him and ask for his feedback then.
+> > > 
+> > 
+> > ok, I will do this.
+> > Thanks!
+> > 
+> 
+> Sorry for the late reply. I'll take the DTS patches through my tree.
+> As I'm late 
+> to the game this will be for v5.20.
+> 
+> Regards,
+> Matthias
 
-In regulator/cros-ec-regulator.c, cros_ec_cmd is sometimes called
-with *indata set to NULL.
+Hello Matthias,
 
-static int cros_ec_regulator_enable(struct regulator_dev *dev){
-...
-     cros_ec_cmd(data->ec_dev, 0, EC_CMD_REGULATOR_ENABLE, &cmd,
-			  sizeof(cmd), NULL, 0)
-...}
+Thanks for you reply,
+I send another version for this series.
+Please refer to this:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=641933
 
-Don't do memcpy if indata is NULL.
-
-Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
----
- drivers/platform/chrome/cros_ec_proto.c | 2 +-
- drivers/regulator/cros-ec-regulator.c   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-index c4caf2e2de82..da175c57cff7 100644
---- a/drivers/platform/chrome/cros_ec_proto.c
-+++ b/drivers/platform/chrome/cros_ec_proto.c
-@@ -938,7 +938,7 @@ int cros_ec_command(struct cros_ec_device *ec_dev,
- 	if (ret < 0)
- 		goto error;
- 
--	if (insize)
-+	if (indata && insize)
- 		memcpy(indata, msg->data, insize);
- error:
- 	kfree(msg);
-diff --git a/drivers/regulator/cros-ec-regulator.c b/drivers/regulator/cros-ec-regulator.c
-index c4754f3cf233..1c7ff085e492 100644
---- a/drivers/regulator/cros-ec-regulator.c
-+++ b/drivers/regulator/cros-ec-regulator.c
-@@ -44,7 +44,7 @@ static int cros_ec_cmd(struct cros_ec_device *ec, u32 version, u32 command,
- 	if (ret < 0)
- 		goto cleanup;
- 
--	if (insize)
-+	if (indata && insize)
- 		memcpy(indata, msg->data, insize);
- 
- cleanup:
--- 
-2.17.1
+BRs,
+Rex
 

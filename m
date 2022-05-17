@@ -2,208 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E2952A092
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35B952A095
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345322AbiEQLig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S232738AbiEQLjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240513AbiEQLif (ORCPT
+        with ESMTP id S240513AbiEQLjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:38:35 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733D93C723
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:38:30 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id a76so14287267qkg.12
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:38:30 -0700 (PDT)
+        Tue, 17 May 2022 07:39:49 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0077D3E5D5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:39:47 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id z2so34109584ejj.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:39:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7MuDWeCSuQazazoHOlGyQ/2mA3OQREOb6rejrGv/uN0=;
-        b=Ibizt8bP2vr4awv/7CMn8ECg8FVfXOSzi1w4kXv3P4hNWz1O1Vdo01q9zEbDQdPIFe
-         5M+To11ZIJS7qz0JHsIwjel9HgHFvBrbGURMP2e0aa7eAcaavTmRvT6Fxsn8DDCHgWt3
-         uUJVUWWIzevGisFFztQRGJllbFXM+qsDxG8fmHwSz4TBxqoPYWtm+j1qXQZbjDsPRHQ3
-         vEGB+BZyxBVIo/90VwwEFOesSRBmevHWc/iudfpkpO8rsaLFMnNnxjXIgPzXAwD1pMPY
-         HgK/VfgcpAld3UHAJ46U0EZKlDHWWCJPMlkJoY/WGBSD51hI1SoMN/jWek2Z5u7eKGLd
-         Yrfw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8b3219JiyhAdMu7qXtwLRDUhe9o17eXhnezQfisY3zg=;
+        b=U+CVj6qgp8QUW2lG8P8Rh01H0x3HW+BYkHmBnL45Jux2ihcoxftVomMk7yLlk6ViAj
+         biww0Q6BPNn9fMJZUPm4889jgoqwE1plSUPajL8SrciXIxXluT7PW5ziLpa2Z/yQU7Pr
+         cuygJT+roy+70H0YNeR66/h6yZmXXVDnfyTXSiX1x/jHfweJHIbtGMdUjAbhGFbHn9M9
+         VX4ONkl3yd8WMuGiIWPwVSKHDCksIJ972YZB5/IAOleH1OW9MBJtBXzD6aSxckObxc2W
+         i/qQ0e8giYJu4nWyqhLEoONNH6Bzu8426DB3uQSkthNRGiuxIhWcJArW7vKEGsV3tHc2
+         PGuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7MuDWeCSuQazazoHOlGyQ/2mA3OQREOb6rejrGv/uN0=;
-        b=w9w08+/8+ShYUusKWaillcIyVkHIHWheUdFRVECBW4aua4D0NHf29TKoVHYIcZcklK
-         J+Nhw+r3lXDn5h3EmeJwse+r88MMeWxOeXUa/Sb/6CwuDTcUqWgIcvK2YFIkBVTboRlG
-         IBvtPf/waMStTYb5zl9GUmAOKW0YfO1dWIDWOYtEtL3+qLtW8kYuWcGCy0JRcPFrzAut
-         YBIn8u5/FWxf7KgWbSl2tTTVe3PspJgsO1z4OLbqtfYxPodcDVrQUp6aQ2ZjRH5TnXtG
-         F3WvwUxfCQbsTbMhuRyCYEuhgjLSBZkz8Xn+By6eAJ2wGdk5yMYxII9Nq7G/swx7bsMR
-         0IdQ==
-X-Gm-Message-State: AOAM5302GHnzLYdfu1nPbqonczrNbKmab3ZzcGsPrCo0QnZdeWr/hubQ
-        MjRgMqqKIHp9ZmXNuFjMSKlQT6w2XSpPiJX5XdE=
-X-Google-Smtp-Source: ABdhPJxBxvj35eMYHQ7L3pX1KD3hqz+WaJDdihGkyJGjuExnQMlROHtZFSpN1tEoYTD36zSttWX6o59v7yqU15L7MqI=
-X-Received: by 2002:a05:620a:4451:b0:6a0:add:274b with SMTP id
- w17-20020a05620a445100b006a00add274bmr15704030qkp.196.1652787509582; Tue, 17
- May 2022 04:38:29 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8b3219JiyhAdMu7qXtwLRDUhe9o17eXhnezQfisY3zg=;
+        b=I7BvpUzBYOmphcA6pgv6rJmI6Sl1TXjZDPkaBt9VQVyVDkLefUMyChMfB/phdTjFLn
+         NEGM0F7VM22vWSTp6ufznmYI/8zhZfJedZhyzBAKyDFCG++PeLMV/SboxkuLLTcUbpJq
+         kzKWl+oCkyEMXft3xgjoQ0Fh11LuMTU+JNBo7SHfB9yP8aPvT+rR7ZiTgTo+e8cVKjLv
+         qqGKLRIsrJDI3p3muD7hznandQys7pXwZaVIeVTPJYKDxNKOARCXJ07yblKucuyrGePy
+         DIVrYcumqTKdlcMWQpi/t8ptNazIj6DjVD3KLSBkz3u1EesvId+iKfSgNIn8hkTiKkZq
+         z27Q==
+X-Gm-Message-State: AOAM531ZVTnSmBiZ9jlglzK7Ir9BuJ7UMzICibPqkzcW/NaG4F62y8/a
+        PClpom+ZewTn9hYFEoQrao+llQ==
+X-Google-Smtp-Source: ABdhPJwgqNNl3jI9pDpOhkdwAZIe/YsCJxtidLWljh6gn11xfeO9oCI8pm2LH8sJJxfTzPHKk7kUvA==
+X-Received: by 2002:a17:907:9724:b0:6fe:69f4:f68c with SMTP id jg36-20020a170907972400b006fe69f4f68cmr1486140ejc.30.1652787586552;
+        Tue, 17 May 2022 04:39:46 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k14-20020aa7c04e000000b0042a5a39ba7esm5919015edo.25.2022.05.17.04.39.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 04:39:46 -0700 (PDT)
+Message-ID: <171c13bb-9fc9-0807-e872-6859dfa2603d@linaro.org>
+Date:   Tue, 17 May 2022 13:39:44 +0200
 MIME-Version: 1.0
-References: <CGME20220509073953epcas1p127f2d36186316642068c92c5d9dee1c4@epcas1p1.samsung.com>
- <20220509074330.4822-1-jaewon31.kim@samsung.com> <20220516173321.67402b7f09eacc43d4e476f4@linux-foundation.org>
- <YoNcBG6kQnmLZ3Z9@linux.ibm.com>
-In-Reply-To: <YoNcBG6kQnmLZ3Z9@linux.ibm.com>
-From:   Jaewon Kim <jaewon31.kim@gmail.com>
-Date:   Tue, 17 May 2022 20:38:18 +0900
-Message-ID: <CAJrd-UuzTh-0Ee9+rMRES9onP_EkvJS-VpPP66J4M4n0Ku0ZWA@mail.gmail.com>
-Subject: Re: [RFC PATCH] page_ext: create page extension for all memblock
- memory regions
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jaewon Kim <jaewon31.kim@samsung.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net] NFC: hci: fix sleep in atomic context bugs in
+ nfc_hci_hcp_message_tx
+Content-Language: en-US
+To:     duoming@zju.edu.cn
+Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        gregkh@linuxfoundation.org, alexander.deucher@amd.com,
+        broonie@kernel.org, netdev@vger.kernel.org
+References: <20220516021028.54063-1-duoming@zju.edu.cn>
+ <d5fdfe27-a6de-3030-ce51-9f4f45d552f3@linaro.org>
+ <6aba1413.196eb.180cc609bf1.Coremail.duoming@zju.edu.cn>
+ <ea2af2f9-002a-5681-4293-a05718ce9dcd@linaro.org>
+ <fc6a78c.196ab.180d1a98cc9.Coremail.duoming@zju.edu.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fc6a78c.196ab.180d1a98cc9.Coremail.duoming@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mike Rapoport
-Thank you for your comment.
+On 17/05/2022 12:56, duoming@zju.edu.cn wrote:
+> Hello,
+> 
+> On Mon, 16 May 2022 12:43:07 +0200 Krzysztof wrote:
+> 
+>>>>> There are sleep in atomic context bugs when the request to secure
+>>>>> element of st21nfca is timeout. The root cause is that kzalloc and
+>>>>> alloc_skb with GFP_KERNEL parameter is called in st21nfca_se_wt_timeout
+>>>>> which is a timer handler. The call tree shows the execution paths that
+>>>>> could lead to bugs:
+>>>>>
+>>>>>    (Interrupt context)
+>>>>> st21nfca_se_wt_timeout
+>>>>>   nfc_hci_send_event
+>>>>>     nfc_hci_hcp_message_tx
+>>>>>       kzalloc(..., GFP_KERNEL) //may sleep
+>>>>>       alloc_skb(..., GFP_KERNEL) //may sleep
+>>>>>
+>>>>> This patch changes allocation mode of kzalloc and alloc_skb from
+>>>>> GFP_KERNEL to GFP_ATOMIC in order to prevent atomic context from
+>>>>> sleeping. The GFP_ATOMIC flag makes memory allocation operation
+>>>>> could be used in atomic context.
+>>>>>
+>>>>> Fixes: 8b8d2e08bf0d ("NFC: HCI support")
+>>>>> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+>>>>> ---
+>>>>>  net/nfc/hci/hcp.c | 4 ++--
+>>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/net/nfc/hci/hcp.c b/net/nfc/hci/hcp.c
+>>>>> index 05c60988f59..1caf9c2086f 100644
+>>>>> --- a/net/nfc/hci/hcp.c
+>>>>> +++ b/net/nfc/hci/hcp.c
+>>>>> @@ -30,7 +30,7 @@ int nfc_hci_hcp_message_tx(struct nfc_hci_dev *hdev, u8 pipe,
+>>>>>  	int hci_len, err;
+>>>>>  	bool firstfrag = true;
+>>>>>  
+>>>>> -	cmd = kzalloc(sizeof(struct hci_msg), GFP_KERNEL);
+>>>>> +	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
+>>>>
+>>>> No, this does not look correct. This function can sleep, so it can use
+>>>> GFP_KERNEL. Please just look at the function before replacing any flags...
+>>>
+>>> I am sorry, I don`t understand why nfc_hci_hcp_message_tx() can sleep.
+>>
+>> Why? because in line 93 it uses a mutex (which is a sleeping primitve).
+>>
+>>>
+>>> I think st21nfca_se_wt_timeout() is a timer handler, which is in interrupt context.
+>>> The call tree shows the execution paths that could lead to bugs:
+>>>
+>>> st21nfca_hci_se_io()
+>>>   mod_timer(&info->se_info.bwi_timer,...)
+>>>     st21nfca_se_wt_timeout()  //timer handler, interrupt context
+>>>       nfc_hci_send_event()
+>>>         nfc_hci_hcp_message_tx()
+>>>           kzalloc(..., GFP_KERNEL) //may sleep
+>>>           alloc_skb(..., GFP_KERNEL) //may sleep
+>>>
+>>> What`s more, I think the "mutex_lock(&hdev->msg_tx_mutex)" called by nfc_hci_hcp_message_tx()
+>>> is also improper.
+>>>
+>>> Please correct me, If you think I am wrong. Thanks for your time.
+>>
+>> Your patch is not correct in current semantics of this function. This
+>> function can sleep (because it uses a mutex), so the mistake is rather
+>> calling it from interrupt context.
+> 
+> We have to call nfc_hci_send_event() in st21nfca_se_wt_timeout(), because we need to send 
+> a reset request as recovery procedure. I think replace GFP_KERNEL to GFP_ATOMIC and replace
+> mutex_lock to spin_lock in nfc_hci_hcp_message_tx() is better.
+> 
+> What's more, in order to synchronize with other functions related with hci message TX, 
+> We need to replace the mutex_lock(&hdev->msg_tx_mutex) to spin_lock in other functions
+> as well. I sent "patch v2" just now.
 
-Oh really? Could you point out the code or the commit regarding 'all
-struct pages in any section should be valid and
-properly initialized' ?
+You sent v2 one minute before replying here... that's not how discussion
+work. Please do not sent next version before reaching some consensus.
 
-Actually I am using v5.10 based source tree on an arm64 device.
-I tried to look up and found the following commit in v5.16-rc1, did
-you mean this?
-3de360c3fdb3 arm64/mm: drop HAVE_ARCH_PFN_VALID
 
-I guess memblock_is_memory code in pfn_valid in arch/arm64/mm/init.c, v5.10
-might affect the page_ext_init.
-
-Thank you
-
-2022=EB=85=84 5=EC=9B=94 17=EC=9D=BC (=ED=99=94) =EC=98=A4=ED=9B=84 5:25, M=
-ike Rapoport <rppt@linux.ibm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> On Mon, May 16, 2022 at 05:33:21PM -0700, Andrew Morton wrote:
-> > On Mon,  9 May 2022 16:43:30 +0900 Jaewon Kim <jaewon31.kim@samsung.com=
-> wrote:
-> >
-> > > The page extension can be prepared for each section. But if the first
-> > > page is not valid, the page extension for the section was not
-> > > initialized though there were many other valid pages within the secti=
-on.
->
-> What do you mean by "first page [in a section] is not valid"?
-> In recent kernels all struct pages in any section should be valid and
-> properly initialized.
->
-> > > To support the page extension for all sections, refer to memblock mem=
-ory
-> > > regions. If the page is valid use the nid from pfn_to_nid, otherwise =
-use
-> > > the previous nid.
-> > >
-> > > Also this pagech changed log to include total sections and a section
-> > > size.
-> > >
-> > > i.e.
-> > > allocated 100663296 bytes of page_ext for 64 sections (1 section : 0x=
-8000000)
-> >
-> > Cc Joonsoo, who wrote this code.
-> > Cc Mike, for memblock.
-> >
-> > Thanks.
-> >
-> > >
-> > > diff --git a/mm/page_ext.c b/mm/page_ext.c
-> > > index 2e66d934d63f..506d58b36a1d 100644
-> > > --- a/mm/page_ext.c
-> > > +++ b/mm/page_ext.c
-> > > @@ -381,41 +381,43 @@ static int __meminit page_ext_callback(struct n=
-otifier_block *self,
-> > >  void __init page_ext_init(void)
-> > >  {
-> > >     unsigned long pfn;
-> > > -   int nid;
-> > > +   int nid =3D 0;
-> > > +   struct memblock_region *rgn;
-> > > +   int nr_section =3D 0;
-> > > +   unsigned long next_section_pfn =3D 0;
-> > >
-> > >     if (!invoke_need_callbacks())
-> > >             return;
-> > >
-> > > -   for_each_node_state(nid, N_MEMORY) {
-> > > +   /*
-> > > +    * iterate each memblock memory region and do not skip a section =
-having
-> > > +    * !pfn_valid(pfn)
-> > > +    */
-> > > +   for_each_mem_region(rgn) {
-> > >             unsigned long start_pfn, end_pfn;
-> > >
-> > > -           start_pfn =3D node_start_pfn(nid);
-> > > -           end_pfn =3D node_end_pfn(nid);
-> > > -           /*
-> > > -            * start_pfn and end_pfn may not be aligned to SECTION an=
-d the
-> > > -            * page->flags of out of node pages are not initialized. =
- So we
-> > > -            * scan [start_pfn, the biggest section's pfn < end_pfn) =
-here.
-> > > -            */
-> > > +           start_pfn =3D (unsigned long)(rgn->base >> PAGE_SHIFT);
-> > > +           end_pfn =3D start_pfn + (unsigned long)(rgn->size >> PAGE=
-_SHIFT);
-> > > +
-> > > +           if (start_pfn < next_section_pfn)
-> > > +                   start_pfn =3D next_section_pfn;
-> > > +
-> > >             for (pfn =3D start_pfn; pfn < end_pfn;
-> > >                     pfn =3D ALIGN(pfn + 1, PAGES_PER_SECTION)) {
-> > >
-> > > -                   if (!pfn_valid(pfn))
-> > > -                           continue;
-> > > -                   /*
-> > > -                    * Nodes's pfns can be overlapping.
-> > > -                    * We know some arch can have a nodes layout such=
- as
-> > > -                    * -------------pfn-------------->
-> > > -                    * N0 | N1 | N2 | N0 | N1 | N2|....
-> > > -                    */
-> > > -                   if (pfn_to_nid(pfn) !=3D nid)
-> > > -                           continue;
-> > > +                   if (pfn_valid(pfn))
-> > > +                           nid =3D pfn_to_nid(pfn);
-> > > +                   nr_section++;
-> > >                     if (init_section_page_ext(pfn, nid))
-> > >                             goto oom;
-> > >                     cond_resched();
-> > >             }
-> > > +           next_section_pfn =3D pfn;
-> > >     }
-> > > +
-> > >     hotplug_memory_notifier(page_ext_callback, 0);
-> > > -   pr_info("allocated %ld bytes of page_ext\n", total_usage);
-> > > +   pr_info("allocated %ld bytes of page_ext for %d sections (1 secti=
-on : 0x%x)\n",
-> > > +           total_usage, nr_section, (1 << SECTION_SIZE_BITS));
-> > >     invoke_init_callbacks();
-> > >     return;
-> > >
-> > > --
-> > > 2.17.1
-> > >
->
-> --
-> Sincerely yours,
-> Mike.
+Best regards,
+Krzysztof

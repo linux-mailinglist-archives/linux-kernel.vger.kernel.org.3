@@ -2,133 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5223052A124
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463A952A127
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242471AbiEQMEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S233084AbiEQMHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiEQMEs (ORCPT
+        with ESMTP id S231470AbiEQMHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:04:48 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93811C18
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652789086; x=1684325086;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=smvQa3wqVauPhjelylCg4Ba1X5Rjg/+IufAPhNKe30Y=;
-  b=IzOc2Dde6b80lUHaDL0+n6ErZRiNmo4nh9KIJlD+OShu8bx/TXF+QML2
-   RGlfmBqSPXGV6rgMqvpIBb3IVu/Iwz8XoR54jB04sKcVMisOEP1eoXrRx
-   vFhgQh7eJ4tf2533GCIlKis2jESPNG6GnAl/AzPd/UUisydl2d3+ABFMo
-   6r2XrMXgvLCbDcxCVRJAOqvzv0FM1vi/p8GWncONG0hszQUyouSG2/IBm
-   AVAQSu0nSBdmfQijEIy2RGHnhw4eDCApLG4xlcFplNZ5I2bnwD2rts9rf
-   dQiKp77Av7gHCgIMtWo51goT+Qjs5U/9K/NRjIb0CSrblczpt5nNVk99S
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="268741004"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="268741004"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 05:04:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="605325065"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 May 2022 05:04:38 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqvwL-0000wL-OB;
-        Tue, 17 May 2022 12:04:37 +0000
-Date:   Tue, 17 May 2022 20:03:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [arm-integrator:kernel-in-vmalloc-v5.18-rc1 6/9]
- arch/arm/mm/init.c:266:13: warning: no previous prototype for function
- 'mem_init_print_arm_info'
-Message-ID: <202205171937.w9TJHq6B-lkp@intel.com>
+        Tue, 17 May 2022 08:07:04 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8290444746;
+        Tue, 17 May 2022 05:07:03 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id k2so14125433qtp.1;
+        Tue, 17 May 2022 05:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qHCPn/5+IVbOfCi9iuEGhFmI1sfcIXa1/Qs52bDuAk0=;
+        b=SOh6EcMWhqj1rRTK+fVaTib5Wo+a7e/L9Fs8VOuS9uF1/qtWusul3kpCrScepzF0wP
+         6u8IaM+JgyJNaF4JOnrKqjNPudVUU8bzHESYxMNGKef9q+ECsd+AIcyTtNDjIsDZLIQb
+         RP7LLWwYVugwykCD8aIqaMsP0CR8xHLb45qGeVYvfTVDhcItNfr96GDxKCoM8RjyTSJm
+         l6ym8XXJxqfr68fKvDn7yxJWm/NrTO7XcRq93griWlVnMV3QnQvhSSQLeWSFI8AbSyfW
+         YbRKy9/2tmwySLVlmeIK36sY0yEQmWfGkMkLi5Re2g4hdKdx8yXY9lUrqWTdFJuwb3L/
+         hhIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qHCPn/5+IVbOfCi9iuEGhFmI1sfcIXa1/Qs52bDuAk0=;
+        b=3urMK9tpfciF5ZD7kcw4PW+Ar1mljXioRPn3z0xjIMaMg6JVSG0xiyqbkXL4ViNl0O
+         O94z8Nweb18YvJv3BsQu6FlMedOPExmumcqHkyA/TQaTZpw15QltgUjPicgST2Cp9QTk
+         4ZD6DfJKv3MX/4XreP+UkmLUFfuCLXX1LLR5aDX9Rx2iuAYl9fNyN1S+YCjiAx4cSdnu
+         M9C7IfDQ/64R40J+QtJzbQ4Io2S736XCzoQ8Enj9X9VofeJMHPWanzo1eDj5ZSR/9amQ
+         czQPMxBPabsq041Of4Zj8snpjkqIQBXw2Wp5j0WnWvSP6Oc3//4h8FyUYq7S4oOoA1Rp
+         ie6Q==
+X-Gm-Message-State: AOAM533qi068TI/B/MyGRNMYjN37MpvAEAAHn2KiqznhK3LZ8xPLgSFU
+        ruSDUhCiYPxx+Nmp6nnO9hPUkF1ULpSjWUTPmdA=
+X-Google-Smtp-Source: ABdhPJx6dQalt69lWc63M4e+8wGXLuOE1/eDQYeJ+SA5ExGvxJJtlQN/wjbt+8RYCUNNbbswNb0CJ1q8DRFBP/Zvdgg=
+X-Received: by 2002:ac8:4e42:0:b0:2f4:fc3c:b0c8 with SMTP id
+ e2-20020ac84e42000000b002f4fc3cb0c8mr19509798qtw.684.1652789222633; Tue, 17
+ May 2022 05:07:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1652730821.git.rgb@redhat.com> <1520f08c023d1e919b1a2af161d5a19367b6b4bf.1652730821.git.rgb@redhat.com>
+ <CAOQ4uxjV-eNxJ=O_WFTTzspCxXZqpMdh3Fe-N5aB-h1rDr_1hQ@mail.gmail.com>
+ <20220517103236.i7gtsw7akiikqwam@quack3.lan> <CAOQ4uxj5HZva82g_ku8uexnqE65K-ThKFJqABNg-A-rc03cVfg@mail.gmail.com>
+In-Reply-To: <CAOQ4uxj5HZva82g_ku8uexnqE65K-ThKFJqABNg-A-rc03cVfg@mail.gmail.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 17 May 2022 15:06:51 +0300
+Message-ID: <CAOQ4uxg2Kq_+cwn+7SxvE_8vpObpBHvuXpMLnu29FJWQwR2CFA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] fanotify: define struct members to hold response
+ decision context
+To:     Jan Kara <jack@suse.cz>
+Cc:     Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git kernel-in-vmalloc-v5.18-rc1
-head:   67a8d6eb3d015908f35d6091c02f17d7c3b55bf3
-commit: e916acde63f41816676698a5d750588269d0fd64 [6/9] ARM: Print virtual memory info again
-config: arm-buildonly-randconfig-r002-20220516 (https://download.01.org/0day-ci/archive/20220517/202205171937.w9TJHq6B-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=e916acde63f41816676698a5d750588269d0fd64
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator kernel-in-vmalloc-v5.18-rc1
-        git checkout e916acde63f41816676698a5d750588269d0fd64
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
+On Tue, May 17, 2022 at 2:31 PM Amir Goldstein <amir73il@gmail.com> wrote:
+>
+> On Tue, May 17, 2022 at 1:32 PM Jan Kara <jack@suse.cz> wrote:
+> >
+> > On Tue 17-05-22 08:37:28, Amir Goldstein wrote:
+> > > On Mon, May 16, 2022 at 11:22 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+> > > >
+> > > > This patch adds 2 structure members to the response returned from user
+> > > > space on a permission event. The first field is 32 bits for the context
+> > > > type.  The context type will describe what the meaning is of the second
+> > > > field. The default is none. The patch defines one additional context
+> > > > type which means that the second field is a union containing a 32-bit
+> > > > rule number. This will allow for the creation of other context types in
+> > > > the future if other users of the API identify different needs.  The
+> > > > second field size is defined by the context type and can be used to pass
+> > > > along the data described by the context.
+> > > >
+> > > > To support this, there is a macro for user space to check that the data
+> > > > being sent is valid. Of course, without this check, anything that
+> > > > overflows the bit field will trigger an EINVAL based on the use of
+> > > > FAN_INVALID_RESPONSE_MASK in process_access_response().
+> > > >
+> > > > Suggested-by: Steve Grubb <sgrubb@redhat.com>
+> > > > Link: https://lore.kernel.org/r/2745105.e9J7NaK4W3@x2
+> > > > Suggested-by: Jan Kara <jack@suse.cz>
+> > > > Link: https://lore.kernel.org/r/20201001101219.GE17860@quack2.suse.cz
+> > > > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> >
+> > ...
+> > > >  static int process_access_response(struct fsnotify_group *group,
+> > > > -                                  struct fanotify_response *response_struct)
+> > > > +                                  struct fanotify_response *response_struct,
+> > > > +                                  size_t count)
+> > > >  {
+> > > >         struct fanotify_perm_event *event;
+> > > >         int fd = response_struct->fd;
+> > > >         u32 response = response_struct->response;
+> > > >
+> > > > -       pr_debug("%s: group=%p fd=%d response=%u\n", __func__, group,
+> > > > -                fd, response);
+> > > > +       pr_debug("%s: group=%p fd=%d response=%u type=%u size=%lu\n", __func__,
+> > > > +                group, fd, response, response_struct->extra_info_type, count);
+> > > > +       if (fd < 0)
+> > > > +               return -EINVAL;
+> > > >         /*
+> > > >          * make sure the response is valid, if invalid we do nothing and either
+> > > >          * userspace can send a valid response or we will clean it up after the
+> > > >          * timeout
+> > > >          */
+> > > > -       switch (response & ~FAN_AUDIT) {
+> > > > -       case FAN_ALLOW:
+> > > > -       case FAN_DENY:
+> > > > -               break;
+> > > > -       default:
+> > > > -               return -EINVAL;
+> > > > -       }
+> > > > -
+> > > > -       if (fd < 0)
+> > > > +       if (FAN_INVALID_RESPONSE_MASK(response))
+> > >
+> > > That is a logic change, because now the response value of 0 becomes valid.
+> > >
+> > > Since you did not document this change in the commit message I assume this was
+> > > non intentional?
+> > > However, this behavior change is something that I did ask for, but it should be
+> > > done is a separate commit:
+> > >
+> > >  /* These are NOT bitwise flags.  Both bits can be used together.  */
+> > > #define FAN_TEST          0x00
+> > > #define FAN_ALLOW       0x01
+> > > #define FAN_DENY        0x02
+> > > #define FANOTIFY_RESPONSE_ACCESS \
+> > >             (FAN_TEST|FAN_ALLOW | FAN_DENY)
+> > >
+> > > ...
+> > > int access = response & FANOTIFY_RESPONSE_ACCESS;
+> > >
+> > > 1. Do return EINVAL for access == 0
+> > > 2. Let all the rest of the EINVAL checks run (including extra type)
+> > > 3. Move if (fd < 0) to last check
+> > > 4. Add if (!access) return 0 before if (fd < 0)
+> > >
+> > > That will provide a mechanism for userspace to probe the
+> > > kernel support for extra types in general and specific types
+> > > that it may respond with.
+> >
+> > I have to admit I didn't quite grok your suggestion here although I
+> > understand (and agree with) the general direction of the proposal :). Maybe
+> > code would explain it better what you have in mind?
+> >
+>
+> +/* These are NOT bitwise flags.  Both bits can be used together.  */
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I realize when reading this that this comment is weird, because
+0x01 and 0x02 cannot currently be used together.
+The comment was copied from above FAN_MARK_INODE where it
+has the same weirdness.
 
-All warnings (new ones prefixed by >>):
+The meaning is that (response & FANOTIFY_RESPONSE_ACCESS)
+is an enum. I am sure that a less confusing phrasing for this comment
+can be found.
 
-   arch/arm/mm/init.c:97:13: warning: no previous prototype for function 'setup_dma_zone' [-Wmissing-prototypes]
-   void __init setup_dma_zone(const struct machine_desc *mdesc)
-               ^
-   arch/arm/mm/init.c:97:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init setup_dma_zone(const struct machine_desc *mdesc)
-   ^
-   static 
->> arch/arm/mm/init.c:266:13: warning: no previous prototype for function 'mem_init_print_arm_info' [-Wmissing-prototypes]
-   void __init mem_init_print_arm_info(void)
-               ^
-   arch/arm/mm/init.c:266:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __init mem_init_print_arm_info(void)
-   ^
-   static 
-   2 warnings generated.
+> +#define FAN_TEST          0x00
+> #define FAN_ALLOW       0x01
+> #define FAN_DENY        0x02
+> #define FAN_AUDIT       0x10    /* Bit mask to create audit record for result */
+> +#define FANOTIFY_RESPONSE_ACCESS \
+> +            (FAN_TEST|FAN_ALLOW | FAN_DENY)
 
-
-vim +/mem_init_print_arm_info +266 arch/arm/mm/init.c
-
-   265	
- > 266	void __init mem_init_print_arm_info(void)
-   267	{
-   268	#define MLM(b, t) b, t, ((t) - (b)) >> 20
-   269		pr_notice("Virtual kernel memory layout:\n"
-   270			  "    fixmap  : 0x%08lx - 0x%08lx   (%4ld MB)\n"
-   271			  "    vmalloc : 0x%08lx - 0x%08lx   (%4ld MB)\n"
-   272			  "    lowmem  : 0x%08lx - 0x%08lx   (%4ld MB)\n"
-   273	#ifdef CONFIG_MODULES
-   274			  "    modules : 0x%08lx - 0x%08lx   (%4ld MB)\n",
-   275	#endif
-   276			  "     kernel : 0x%08lx - 0x%08lx   (%4ld MB)\n",
-   277			  MLM(FIXADDR_START, FIXADDR_END),
-   278			  MLM(VMALLOC_START, VMALLOC_END),
-   279			  MLM(PAGE_OFFSET, (unsigned long)high_memory),
-   280	#ifdef CONFIG_MODULES
-   281			  MLM(MODULES_VADDR, MODULES_END),
-   282	#endif
-   283			  /* From beginning of .text to end of .bss */
-   284			  MLM((unsigned long)_text, (unsigned long)__bss_stop));
-   285	#undef MLM
-   286	}
-   287	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Amir.

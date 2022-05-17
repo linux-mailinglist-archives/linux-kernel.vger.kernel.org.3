@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF97529AB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51DD529ABD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241205AbiEQH0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45852 "EHLO
+        id S240841AbiEQH12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241102AbiEQH0T (ORCPT
+        with ESMTP id S236256AbiEQH1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:26:19 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFF91055D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:26:17 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ks9so32922087ejb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=mkv+AFLKZ6z0pAWxiMD1eopJToeMN6aA5f5FUcc/dXc=;
-        b=djzgp8BTUZLH3FFMHVMXHi+RtKuPZCyyi+WeIn35v+xQ0YLN/eVBWWr0O7nSEe5XRE
-         RSXkIbxBerlskygCynbFApJ5+f6ctyT9lXsQP64L4fkhhJfXFlPAUFKqg6KoWz+dnumx
-         ZSB68iDT0kCh0exTS0PUZ0Dg/PswM5X53OaD5UUpuJJkFIzSANPssYzujL7MMcXd90y4
-         mJ2x2Losq1/2oz42FgJ1HauyUdcxTAf397rPzQ43R1oi2+AudM987DF+q4Y6EfHoz8j5
-         k3NDeu80iCyecY7fmIqvzpaNO4JLDWdJyDbgbnbd2qk+YPcE9a54qZ/v5WvGeaSZP8Ld
-         46aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=mkv+AFLKZ6z0pAWxiMD1eopJToeMN6aA5f5FUcc/dXc=;
-        b=1TEJ7W2I8zVCyX2TbRo+zdcT2OFZdMCcBLv86nsIqKXZ7DGWEuvTr5sm7nJ39RwBkc
-         yBcWj6ZaDjtG3crBqQQfR4UvfiWtceE2ZorXA7EpySqGPoo2lznu+9b4p0q2Ai4XCmMz
-         xcFV7Q+VCHj+Yt0G/BmI4jHUewhzxDIolwMm7wj7hvCbxjIIel9RakXDBLkVYUYEvBuC
-         KXev2gxbdj951h+9i3SdOYidLefbWtezvw6/7x5rJpSLu6MwMhq3WwshU/HedCmsn0j7
-         A/nbaAawPCk+yvn7cJC549pB4ICdlUnlg/pDKXAxCXjGy/3lf0xtNur9oIOWD1UdjbhP
-         5Gag==
-X-Gm-Message-State: AOAM532ZuEnWZN3qn3cPnmil59zf+w4c9T+lSqXq8Oc20vGCX1B7rO3Z
-        hPnYVooCPKMDFyzH87byvXU6v8G8dMVSsmvM
-X-Google-Smtp-Source: ABdhPJwgO/s2grWZe3PZvtpp+Q5Pvo1W2bpG+p15ZvVLJiQz2sQvGpgkchxCLLh4NmCrawcJmR9+JQ==
-X-Received: by 2002:a17:906:9748:b0:6fa:8c68:af0e with SMTP id o8-20020a170906974800b006fa8c68af0emr19080152ejy.153.1652772375886;
-        Tue, 17 May 2022 00:26:15 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id hv6-20020a17090760c600b006f3ef214d9esm711213ejc.4.2022.05.17.00.26.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 00:26:15 -0700 (PDT)
-Message-ID: <fa11d71b-d53e-1eb3-22db-e7237c523cd4@linaro.org>
-Date:   Tue, 17 May 2022 09:26:14 +0200
+        Tue, 17 May 2022 03:27:22 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66F943EED;
+        Tue, 17 May 2022 00:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652772441; x=1684308441;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xMiGsrSeghOS0yjMoEbRiyjbU0nqO5uR7AcrlNt3J5A=;
+  b=ggq73x3T+oyIP0vmECDazyNkvoSAj52VnRNSaqI7GE5OJ0tD0qWJF9Pl
+   UjmdDZ1LW7yfkNCjeTK5IlE0O24wjLad5DYfvqChjIbZlZqKB5Pkh6cHI
+   R7LlVM4nwxYGjO4u7mQ/1XO6+2i7SlunR8kmIFQgbqOEvinNEiD9nChER
+   s4fb/ieOFyZ/1i9Zg46ni9MPJBjMmHjFMe0Oa4Q7HGTFLuA7FMLHE5WHn
+   uB1ic2L0AIZ0alc9hkUxVWhIhGqSK421SA+/WVDwOWC98i2YCvRp7C2It
+   h/D1ECe0ntQNv3362US5cDKJlb+/IavI0BwSM2+0zLvEnXhvM/WVFSjKT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="251607351"
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="251607351"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:27:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
+   d="scan'208";a="605228191"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 17 May 2022 00:27:11 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqrbr-0000ij-AK;
+        Tue, 17 May 2022 07:27:11 +0000
+Date:   Tue, 17 May 2022 15:26:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v3 2/3] fanotify: define struct members to hold response
+ decision context
+Message-ID: <202205171508.anzweWlm-lkp@intel.com>
+References: <1520f08c023d1e919b1a2af161d5a19367b6b4bf.1652730821.git.rgb@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/6] dt-bindings: regulator: qcom,spmi-regulator: Convert
- to dtschema
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220515203118.474684-1-robimarko@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220515203118.474684-1-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1520f08c023d1e919b1a2af161d5a19367b6b4bf.1652730821.git.rgb@redhat.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,90 +71,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/2022 22:31, Robert Marko wrote:
-> Convert the bindings of Qualcomm SPMI regulators to DT schema.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
-> I am aware that syscon alone is not really acceptable, its converted
-> directly from the old text bindings.
-> 
-> There is also the issue of some MSM8994, MSM8996 and APQ8096 devices using
-> '#address-cells', '#size-cells', some even defining reg property for
-> regulators.
-> 
-> Any advice on how to solve these issues is appreciated.
-> ---
->  .../regulator/qcom,spmi-regulator.yaml        | 176 ++++++++++++++++++
+Hi Richard,
 
-You miss here the actual conversion... where is the removal of old file?
+Thank you for the patch! Perhaps something to improve:
 
->  1 file changed, 176 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-> new file mode 100644
-> index 000000000000..f7da310f1845
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-> @@ -0,0 +1,176 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/qcom,spmi-regulator.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SPMI Regulators
-> +
-> +maintainers:
-> +  - Robert Marko <robert.marko@sartura.hr>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pm660-regulators
-> +      - qcom,pm660l-regulators
-> +      - qcom,pm8004-regulators
-> +      - qcom,pm8005-regulators
-> +      - qcom,pm8226-regulators
-> +      - qcom,pm8841-regulators
-> +      - qcom,pm8916-regulators
-> +      - qcom,pm8941-regulators
-> +      - qcom,pm8950-regulators
-> +      - qcom,pm8994-regulators
-> +      - qcom,pmi8994-regulators
-> +      - qcom,pms405-regulators
-> +
-> +  qcom,saw-reg:
-> +    description: Reference to syscon node defining the SAW registers
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,pm8941-regulators
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          items:
-> +            - description: Over-current protection interrupt for 5V S1
-> +            - description: Over-current protection interrupt for 5V S2
-> +        interrupt-names:
-> +          items:
-> +            - const: ocp-5vs1
-> +            - const: ocp-5vs2
-> +
-> +patternProperties:
+[auto build test WARNING on jack-fs/fsnotify]
+[also build test WARNING on pcmoore-audit/next linux/master linus/master v5.18-rc7 next-20220516]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This goes just after "properties:"
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220517-044904
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220517/202205171508.anzweWlm-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4d1fc23ae264424a2007ef5a3cfc1b4dbc8d82db
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220517-044904
+        git checkout 4d1fc23ae264424a2007ef5a3cfc1b4dbc8d82db
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash fs/notify/fanotify/
 
-> +  ".*-supply$":
-> +    description: Input supply phandle(s) for this node
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Best regards,
-Krzysztof
+All warnings (new ones prefixed by >>):
+
+   In file included from include/asm-generic/bug.h:22,
+                    from arch/m68k/include/asm/bug.h:32,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/m68k/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from arch/m68k/include/asm/irqflags.h:6,
+                    from include/linux/irqflags.h:16,
+                    from arch/m68k/include/asm/atomic.h:6,
+                    from include/linux/atomic.h:7,
+                    from include/linux/rcupdate.h:25,
+                    from include/linux/sysctl.h:26,
+                    from include/linux/fanotify.h:5,
+                    from fs/notify/fanotify/fanotify_user.c:2:
+   fs/notify/fanotify/fanotify_user.c: In function 'process_access_response':
+>> fs/notify/fanotify/fanotify_user.c:325:18: warning: format '%lu' expects argument of type 'long unsigned int', but argument 8 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+     325 |         pr_debug("%s: group=%p fd=%d response=%u type=%u size=%lu\n", __func__,
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:336:21: note: in definition of macro 'pr_fmt'
+     336 | #define pr_fmt(fmt) fmt
+         |                     ^~~
+   include/linux/dynamic_debug.h:152:9: note: in expansion of macro '__dynamic_func_call'
+     152 |         __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
+     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:570:9: note: in expansion of macro 'dynamic_pr_debug'
+     570 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~
+   fs/notify/fanotify/fanotify_user.c:325:9: note: in expansion of macro 'pr_debug'
+     325 |         pr_debug("%s: group=%p fd=%d response=%u type=%u size=%lu\n", __func__,
+         |         ^~~~~~~~
+   fs/notify/fanotify/fanotify_user.c:325:65: note: format string is defined here
+     325 |         pr_debug("%s: group=%p fd=%d response=%u type=%u size=%lu\n", __func__,
+         |                                                               ~~^
+         |                                                                 |
+         |                                                                 long unsigned int
+         |                                                               %u
+
+
+vim +325 fs/notify/fanotify/fanotify_user.c
+
+   316	
+   317	static int process_access_response(struct fsnotify_group *group,
+   318					   struct fanotify_response *response_struct,
+   319					   size_t count)
+   320	{
+   321		struct fanotify_perm_event *event;
+   322		int fd = response_struct->fd;
+   323		u32 response = response_struct->response;
+   324	
+ > 325		pr_debug("%s: group=%p fd=%d response=%u type=%u size=%lu\n", __func__,
+   326			 group, fd, response, response_struct->extra_info_type, count);
+   327		if (fd < 0)
+   328			return -EINVAL;
+   329		/*
+   330		 * make sure the response is valid, if invalid we do nothing and either
+   331		 * userspace can send a valid response or we will clean it up after the
+   332		 * timeout
+   333		 */
+   334		if (FAN_INVALID_RESPONSE_MASK(response))
+   335			return -EINVAL;
+   336		if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
+   337			return -EINVAL;
+   338		if (response & FAN_EXTRA) {
+   339			if (count < offsetofend(struct fanotify_response, extra_info_type))
+   340				return -EINVAL;
+   341			switch (response_struct->extra_info_type) {
+   342			case FAN_RESPONSE_INFO_NONE:
+   343				break;
+   344			case FAN_RESPONSE_INFO_AUDIT_RULE:
+   345				if (count < offsetofend(struct fanotify_response, extra_info))
+   346					return -EINVAL;
+   347				break;
+   348			default:
+   349				return -EINVAL;
+   350			}
+   351		}
+   352		spin_lock(&group->notification_lock);
+   353		list_for_each_entry(event, &group->fanotify_data.access_list,
+   354				    fae.fse.list) {
+   355			if (event->fd != fd)
+   356				continue;
+   357	
+   358			list_del_init(&event->fae.fse.list);
+   359			finish_permission_event(group, event, response_struct);
+   360			wake_up(&group->fanotify_data.access_waitq);
+   361			return 0;
+   362		}
+   363		spin_unlock(&group->notification_lock);
+   364	
+   365		return -ENOENT;
+   366	}
+   367	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,86 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C06A52A5A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC9652A5AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349657AbiEQPH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
+        id S1349658AbiEQPIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347338AbiEQPHl (ORCPT
+        with ESMTP id S234068AbiEQPIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:07:41 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4B33BBE4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:07:36 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:c0f6:7ccf:c217:5f21])
-        by albert.telenet-ops.be with bizsmtp
-        id Xr7a270090nFbBY06r7aqB; Tue, 17 May 2022 17:07:34 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nqynN-000huY-Qg; Tue, 17 May 2022 17:07:33 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nqynN-004NOP-CH; Tue, 17 May 2022 17:07:33 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] sysctl: Merge adjacent CONFIG_TREE_RCU blocks
-Date:   Tue, 17 May 2022 17:07:31 +0200
-Message-Id: <a6931221b532ae7a5cf0eb229ace58acee4f0c1a.1652799977.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Tue, 17 May 2022 11:08:41 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9AE3B562
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1652800118; x=1684336118;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7m2XYwtoguE1rr8a0hZclV93DDxQXRnyoanZTRu0XsU=;
+  b=ylOFob0XkvMIsIjhqElDvfOgGN8Xu2HekcdhNB9orGZJYBlXihW+EkPW
+   uiWyy0wEPVvBJWmtpi7eZ8yEGxSBIhm7d9o5t/l+UAZe87depbuNIWFTl
+   jyhAnij5CFdvAdfwZN2ejtotdTM9gSuSf1RsxhAhAX3306Uw5yh3EPDnY
+   tItgC5R67L9kgtPEkfaa9ejOe4ZLfPM9gZJ18G4RDctunoyE7iBwxqJaa
+   aaJYOup+elWL/eb6wbwyui6gSxD12GvgWOv2/5AhBd/+lYZyLA4RnEoQi
+   bxHUizGaeROIM6bS+eW5EQeikZxUsDhxln6SiyOO3z3eoc8P8hma+lThS
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="159435231"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2022 08:08:37 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 17 May 2022 08:08:37 -0700
+Received: from ROU-LT-M43238L.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Tue, 17 May 2022 08:08:34 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        <arm@kernel.org>, <soc@kernel.org>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+Subject: [GIT PULL] ARM: at91: soc for 5.19 #2
+Date:   Tue, 17 May 2022 17:08:32 +0200
+Message-ID: <20220517150832.89451-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Organization: microchip
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two adjacent sysctl entries protected by the same
-CONFIG_TREE_RCU config symbol.  Merge them into a single block to
-improve readability.
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Use the more common "#ifdef" form while at it.
+Arnd, Olof,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- kernel/sysctl.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Here is one more soc patch for 5.19. It goes on top of previous PR from last
+week and fixes one patch queued in this presious series.
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 82bcf5e3009fa377..597069da18148f42 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2227,7 +2227,7 @@ static struct ctl_table kern_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
--#if defined(CONFIG_TREE_RCU)
-+#ifdef CONFIG_TREE_RCU
- 	{
- 		.procname	= "panic_on_rcu_stall",
- 		.data		= &sysctl_panic_on_rcu_stall,
-@@ -2237,8 +2237,6 @@ static struct ctl_table kern_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
--#endif
--#if defined(CONFIG_TREE_RCU)
- 	{
- 		.procname	= "max_rcu_stall_to_panic",
- 		.data		= &sysctl_max_rcu_stall_to_panic,
+Please pull. Thanks, best regards,
+  Nicolas
+
+The following changes since commit 6041558ebf1fc87d1e0bdeb51e985807dab06bed:
+
+  ARM: at91: debug: add lan966 support (2022-05-13 13:42:03 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.19-2
+
+for you to fetch changes up to 46a65cd376f9f754149be33b32244cabcf376982:
+
+  ARM: at91: pm: Fix rand build error (2022-05-17 16:40:34 +0200)
+
+----------------------------------------------------------------
+AT91 SoC #2 for 5.19:
+
+- One Kconfig fix for random build error
+
+----------------------------------------------------------------
+YueHaibing (1):
+      ARM: at91: pm: Fix rand build error
+
+ arch/arm/mach-at91/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 -- 
-2.25.1
-
+Nicolas Ferre

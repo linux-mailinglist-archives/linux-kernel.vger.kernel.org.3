@@ -2,84 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF16D529F7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A11529F7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245305AbiEQKcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S244049AbiEQKcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245157AbiEQKcJ (ORCPT
+        with ESMTP id S231470AbiEQKbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:32:09 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E6C220F5;
-        Tue, 17 May 2022 03:32:07 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id er5so8260125edb.12;
-        Tue, 17 May 2022 03:32:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uEnEZY/dd9ktvryiUzy6yTJg5bkVk4uxrlpwIrViCCI=;
-        b=B3zXpBqc/0bY2f91SoaokEvsoUPNyo8v3elAImRA7021+gVr+nNVSVPT2QGU35HzM2
-         CZ85KGEgOUfj7gtG/WcZU0Dkr/ICJvYxzMu4WkjXdKZfbsZgU0rrPtFpBZrdmtEB5+PA
-         Y0VVTue6JCOFiBnqblmaAbk9uAweK5Fly/COTu4EX22hNcyuttm3S3JzwIxE0IuACZNZ
-         eql/0LxeY7Th7NmpSbw68sK9tKXfUnqdZiDPC+PHU6MccBJzpwZMEeVLtIm1fScdq0Wi
-         6Pvwmy5hFMq7KYP+u6bL9fDVXiS7774byB5JInkgVFTmiPqZrdp/+7nl0Jmu3joUNx7X
-         lzog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uEnEZY/dd9ktvryiUzy6yTJg5bkVk4uxrlpwIrViCCI=;
-        b=Flk69V+/HAcEyQ68Ww3GC2h4Rh+DkUqmQ9oMguV24fibHCPpa4OCnI7XR9k49YWZME
-         xgkVe908NsfOPMtLx3ltSeZwjV60Iiq4DfMdjIlrc5lKIAmgb0WrPweLZRmzlCKKml9L
-         o+sgRgJiqeb9Yef5jpWykmWXhjHoQ6J+s4qR3mwtMWE/i5luqNKoucq+VKs9jPyTuKlq
-         +IUazSPd+ESaKiFLStOojojA2rYj0ShTHsg4wvRGqCku5scVbRwNRJYQzB0BUJEWnAhB
-         5qiHZKwoFafHR1XBUIy4rV73FF5dblW8LfHv197ZDqf1gIgYzKphH/RhplCaN9R8GwV/
-         ta9Q==
-X-Gm-Message-State: AOAM532L0y/7XVv34yQkskzqQtqj9G2HuszC+MMwTrHfpduMHegmNcC4
-        Iknxssw1k2W0JDp0yzyM7Dg=
-X-Google-Smtp-Source: ABdhPJypOkBB/juKM3PDlVQ4TJo3gdQuSTl+xu58nb70Gj2qpGpJk52Tamd1vhdzCn8q+q9OUYO1Qg==
-X-Received: by 2002:a05:6402:330b:b0:42a:b061:6e89 with SMTP id e11-20020a056402330b00b0042ab0616e89mr10985525eda.47.1652783525564;
-        Tue, 17 May 2022 03:32:05 -0700 (PDT)
-Received: from [192.168.8.198] ([85.255.232.74])
-        by smtp.gmail.com with ESMTPSA id s2-20020aa7cb02000000b0042617ba63a5sm6545168edt.47.2022.05.17.03.32.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 03:32:05 -0700 (PDT)
-Message-ID: <73daf2cb-bcc8-afef-eddd-151f39e8eaed@gmail.com>
-Date:   Tue, 17 May 2022 11:31:35 +0100
+        Tue, 17 May 2022 06:31:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F1521E3B;
+        Tue, 17 May 2022 03:31:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3D776164C;
+        Tue, 17 May 2022 10:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E726DC385B8;
+        Tue, 17 May 2022 10:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652783512;
+        bh=qPMo5lSmAtSD7QAltGba44U7tGlvFNsqKCNSCNp1EYY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gQBUrX7xBAQ1CUIk9G5ed9JrdnDR2flLHqd5FsOVRVjfF9qBL9fKod8ytEf8J7mxz
+         2BRMKyLJK8A/ShXRssg1BLILLyMEZh0J9CgyijbDY0oaKqoCP0yZMTkAhM9+2zThkL
+         b1vBynjkKr7cLbMf4zLBK2qs6/9Sx2HdyT122/hySOM5ZOM1OIUh9DiaRSwTmCKNXS
+         BV7h6RsNZzOhibyo9pN49n1CUmYMn+8SS9Jl1Clm3g586DEcg9hFyrCE4klATEGHVM
+         rhoCzLiB2QaWGA8oQh+m5xIa4CsaoWSBVpRLTn+3MW8xhcGtgqVfafBoJ3EDb9DU2c
+         HMMD6xLn6Lq8Q==
+Date:   Tue, 17 May 2022 16:01:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] phy: qcom-qmp: Add USB3 5NM QMP UNI registers
+Message-ID: <YoN5k0tNXDhwS9rC@matsya>
+References: <20220513225348.1671639-1-bjorn.andersson@linaro.org>
+ <20220513225348.1671639-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [REGRESSION] lxc-stop hang on 5.17.x kernels
-Content-Language: en-US
-To:     Christian Brauner <brauner@kernel.org>,
-        Daniel Harding <dharding@living180.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     regressions@lists.linux.dev, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <a204ba93-7261-5c6e-1baf-e5427e26b124@living180.net>
- <bd932b5a-9508-e58f-05f8-001503e4bd2b@gmail.com>
- <12a57dd9-4423-a13d-559b-2b1dd2fb0ef3@living180.net>
- <897dc597-fc0a-34ec-84b8-7e1c4901e0fc@leemhuis.info>
- <c2f956e2-b235-9937-d554-424ae44c68e4@living180.net>
- <41c86189-0d1f-60f0-ca8e-f80b3ccf5130@gmail.com>
- <da56fa5f-0624-413e-74a1-545993940d27@gmail.com>
- <3fc08243-f9e0-9cec-4207-883c55ccff78@living180.net>
- <13028ff4-3565-f09e-818c-19e5f95fa60f@living180.net>
- <152e8d96-28e9-0dda-8782-10690195643b@gmail.com>
- <20220517081900.j3n2277g34wno4md@wittgenstein>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20220517081900.j3n2277g34wno4md@wittgenstein>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513225348.1671639-3-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,237 +58,646 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/22 09:19, Christian Brauner wrote:
-> On Mon, May 16, 2022 at 07:13:05PM +0100, Pavel Begunkov wrote:
->> On 5/16/22 16:13, Daniel Harding wrote:
->>> On 5/16/22 16:57, Daniel Harding wrote:
->>>> On 5/16/22 16:25, Pavel Begunkov wrote:
->>>>> On 5/16/22 13:12, Pavel Begunkov wrote:
->>>>>> On 5/15/22 19:34, Daniel Harding wrote:
->>>>>>> On 5/15/22 11:20, Thorsten Leemhuis wrote:
->>>>>>>> On 04.05.22 08:54, Daniel Harding wrote:
->>>>>>>>> On 5/3/22 17:14, Pavel Begunkov wrote:
->>>>>>>>>> On 5/3/22 08:37, Daniel Harding wrote:
->>>>>>>>>>> [Resend with a smaller trace]
->>>>>>>>>>> On 5/3/22 02:14, Pavel Begunkov wrote:
->>>>>>>>>>>> On 5/2/22 19:49, Daniel Harding wrote:
->>>>>>>>>>>>> On 5/2/22 20:40, Pavel Begunkov wrote:
->>>>>>>>>>>>>> On 5/2/22 18:00, Jens Axboe wrote:
->>>>>>>>>>>>>>> On 5/2/22 7:59 AM, Jens Axboe wrote:
->>>>>>>>>>>>>>>> On 5/2/22 7:36 AM, Daniel Harding wrote:
->>>>>>>>>>>>>>>>> On 5/2/22 16:26, Jens Axboe wrote:
->>>>>>>>>>>>>>>>>> On 5/2/22 7:17 AM, Daniel Harding wrote:
->>>>>>>>>>>>>>>>>>> I use lxc-4.0.12 on Gentoo, built with io-uring support
->>>>>>>>>>>>>>>>>>> (--enable-liburing), targeting liburing-2.1.  My kernel
->>>>>>>>>>>>>>>>>>> config is a
->>>>>>>>>>>>>>>>>>> very lightly modified version of Fedora's generic kernel
->>>>>>>>>>>>>>>>>>> config. After
->>>>>>>>>>>>>>>>>>> moving from the 5.16.x series to the 5.17.x kernel series, I
->>>>>>>>>>>>>>>>>>> started
->>>>>>>>>>>>>>>>>>> noticed frequent hangs in lxc-stop. It doesn't happen 100%
->>>>>>>>>>>>>>>>>>> of the
->>>>>>>>>>>>>>>>>>> time, but definitely more than 50% of the time. Bisecting
->>>>>>>>>>>>>>>>>>> narrowed
->>>>>>>>>>>>>>>>>>> down the issue to commit
->>>>>>>>>>>>>>>>>>> aa43477b040251f451db0d844073ac00a8ab66ee:
->>>>>>>>>>>>>>>>>>> io_uring: poll rework. Testing indicates the problem is still
->>>>>>>>>>>>>>>>>>> present
->>>>>>>>>>>>>>>>>>> in 5.18-rc5. Unfortunately I do not have the expertise with the
->>>>>>>>>>>>>>>>>>> codebases of either lxc or io-uring to try to debug the problem
->>>>>>>>>>>>>>>>>>> further on my own, but I can easily apply patches to any of the
->>>>>>>>>>>>>>>>>>> involved components (lxc, liburing, kernel) and rebuild for
->>>>>>>>>>>>>>>>>>> testing or
->>>>>>>>>>>>>>>>>>> validation.  I am also happy to provide any further
->>>>>>>>>>>>>>>>>>> information that
->>>>>>>>>>>>>>>>>>> would be helpful with reproducing or debugging the problem.
->>>>>>>>>>>>>>>>>> Do you have a recipe to reproduce the hang? That would make it
->>>>>>>>>>>>>>>>>> significantly easier to figure out.
->>>>>>>>>>>>>>>>> I can reproduce it with just the following:
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>        sudo lxc-create --n lxc-test --template download --bdev
->>>>>>>>>>>>>>>>> dir --dir /var/lib/lxc/lxc-test/rootfs -- -d ubuntu -r bionic
->>>>>>>>>>>>>>>>> -a amd64
->>>>>>>>>>>>>>>>>        sudo lxc-start -n lxc-test
->>>>>>>>>>>>>>>>>        sudo lxc-stop -n lxc-test
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> The lxc-stop command never exits and the container continues
->>>>>>>>>>>>>>>>> running.
->>>>>>>>>>>>>>>>> If that isn't sufficient to reproduce, please let me know.
->>>>>>>>>>>>>>>> Thanks, that's useful! I'm at a conference this week and hence have
->>>>>>>>>>>>>>>> limited amount of time to debug, hopefully Pavel has time to
->>>>>>>>>>>>>>>> take a look
->>>>>>>>>>>>>>>> at this.
->>>>>>>>>>>>>>> Didn't manage to reproduce. Can you try, on both the good and bad
->>>>>>>>>>>>>>> kernel, to do:
->>>>>>>>>>>>>> Same here, it doesn't reproduce for me
->>>>>>>>>>>>> OK, sorry it wasn't something simple.
->>>>>>>>>>>>>> # echo 1 > /sys/kernel/debug/tracing/events/io_uring/enable
->>>>>>>>>>>>>>> run lxc-stop
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> # cp /sys/kernel/debug/tracing/trace ~/iou-trace
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> so we can see what's going on? Looking at the source, lxc is just
->>>>>>>>>>>>>>> using
->>>>>>>>>>>>>>> plain POLL_ADD, so I'm guessing it's not getting a notification
->>>>>>>>>>>>>>> when it
->>>>>>>>>>>>>>> expects to, or it's POLL_REMOVE not doing its job. If we have a
->>>>>>>>>>>>>>> trace
->>>>>>>>>>>>>>> from both a working and broken kernel, that might shed some light
->>>>>>>>>>>>>>> on it.
->>>>>>>>>>>>> It's late in my timezone, but I'll try to work on getting those
->>>>>>>>>>>>> traces tomorrow.
->>>>>>>>>>>> I think I got it, I've attached a trace.
->>>>>>>>>>>>
->>>>>>>>>>>> What's interesting is that it issues a multi shot poll but I don't
->>>>>>>>>>>> see any kind of cancellation, neither cancel requests nor task/ring
->>>>>>>>>>>> exit. Perhaps have to go look at lxc to see how it's supposed
->>>>>>>>>>>> to work
->>>>>>>>>>> Yes, that looks exactly like my bad trace.  I've attached good trace
->>>>>>>>>>> (captured with linux-5.16.19) and a bad trace (captured with
->>>>>>>>>>> linux-5.17.5).  These are the differences I noticed with just a
->>>>>>>>>>> visual scan:
->>>>>>>>>>>
->>>>>>>>>>> * Both traces have three io_uring_submit_sqe calls at the very
->>>>>>>>>>> beginning, but in the good trace, there are further
->>>>>>>>>>> io_uring_submit_sqe calls throughout the trace, while in the bad
->>>>>>>>>>> trace, there are none.
->>>>>>>>>>> * The good trace uses a mask of c3 for io_uring_task_add much more
->>>>>>>>>>> often than the bad trace:  the bad trace uses a mask of c3 only for
->>>>>>>>>>> the very last call to io_uring_task_add, but a mask of 41 for the
->>>>>>>>>>> other calls.
->>>>>>>>>>> * In the good trace, many of the io_uring_complete calls have a
->>>>>>>>>>> result of 195, while in the bad trace, they all have a result of 1.
->>>>>>>>>>>
->>>>>>>>>>> I don't know whether any of those things are significant or not, but
->>>>>>>>>>> that's what jumped out at me.
->>>>>>>>>>>
->>>>>>>>>>> I have also attached a copy of the script I used to generate the
->>>>>>>>>>> traces.  If there is anything further I can to do help debug, please
->>>>>>>>>>> let me know.
->>>>>>>>>> Good observations! thanks for traces.
->>>>>>>>>>
->>>>>>>>>> It sounds like multi-shot poll requests were getting downgraded
->>>>>>>>>> to one-shot, which is a valid behaviour and was so because we
->>>>>>>>>> didn't fully support some cases. If that's the reason, than
->>>>>>>>>> the userspace/lxc is misusing the ABI. At least, that's the
->>>>>>>>>> working hypothesis for now, need to check lxc.
->>>>>>>>> So, I looked at the lxc source code, and it appears to at least try to
->>>>>>>>> handle the case of multi-shot being downgraded to one-shot.  I don't
->>>>>>>>> know enough to know if the code is actually correct however:
->>>>>>>>>
->>>>>>>>> https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L165-L189
->>>>>>>>> https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L254
->>>>>>>>> https://github.com/lxc/lxc/blob/7e37cc96bb94175a8e351025d26cc35dc2d10543/src/lxc/mainloop.c#L288-L290
->>>>>>>> Hi, this is your Linux kernel regression tracker. Nothing happened here
->>>>>>>> for round about ten days now afaics; or did the discussion continue
->>>>>>>> somewhere else.
->>>>>>>>
->>>>>>>>   From what I gathered from this discussion is seems the root cause might
->>>>>>>> be in LXC, but it was exposed by kernel change. That makes it sill a
->>>>>>>> kernel regression that should be fixed; or is there a strong reason why
->>>>>>>> we should let this one slip?
->>>>>>>
->>>>>>> No, there hasn't been any discussion since the email you
->>>>>>> replied to. I've done a bit more testing on my end, but
->>>>>>> without anything conclusive.  The one thing I can say is
->>>>>>> that my testing shows that LXC does correctly handle
->>>>>>> multi-shot poll requests which were being downgraded to
->>>>>>> one-shot in 5.16.x kernels, which I think invalidates
->>>>>>> Pavel's theory.  In 5.17.x kernels, those same poll
->>>>>>> requests are no longer being downgraded to one-shot
->>>>>>> requests, and thus under 5.17.x LXC is no longer
->>>>>>> re-arming those poll requests (but also shouldn't need
->>>>>>> to, according to what is being returned by the kernel).
->>>>>>> I don't know if this change in kernel behavior is
->>>>>>> related to the hang, or if it is just a side effect of
->>>>>>> other io-uring changes that made it into 5.17.  Nothing
->>>>>>> in the LXC's usage of io-uring seems obviously incorrect
->>>>>>> to me, but I am far from an expert.  I also did some
->>>>>>> work toward creating a simpler reproducer, without
->>>>>>> success (I was able to get a simple program using
->>>>>>> io-uring running, but never could get it to hang).  ISTM
->>>>>>> that this is still a kernel regression, unless someone
->>>>>>> can point out a definite fault in the way LXC is using
->>>>>>> io-uring.
->>>>>>
->>>>>> Haven't had time to debug it. Apparently LXC is stuck on
->>>>>> read(2) terminal fd. Not yet clear what is the reason.
->>>>>
->>>>> How it was with oneshots:
->>>>>
->>>>> 1: kernel: poll fires, add a CQE
->>>>> 2: kernel: remove poll
->>>>> 3: userspace: get CQE
->>>>> 4: userspace: read(terminal_fd);
->>>>> 5: userspace: add new poll
->>>>> 6: goto 1)
->>>>>
->>>>> What might happen and actually happens with multishot:
->>>>>
->>>>> 1: kernel: poll fires, add CQE1
->>>>> 2: kernel: poll fires again, add CQE2
->>>>> 3: userspace: get CQE1
->>>>> 4: userspace: read(terminal_fd); // reads all data, for both CQE1 and CQE2
->>>>> 5: userspace: get CQE2
->>>>> 6: userspace: read(terminal_fd); // nothing to read, hangs here
+On 13-05-22, 15:53, Bjorn Andersson wrote:
+> Add all registers defines from qcom,usb3-5nm-qmp-uni.h of the msm-5.4
+> kernel. Offsets are adjusted to be relative to each sub-block, as we
+> describe the individual pieces in the upstream kernel and "5NM" are
+> injected in the defines to not collide with existing constants.
 > 
-> Ah, gotcha.
-> So "5: userspace: get CQE2" what's the correct way to handle this
-> problem surfacing in 6? Is it simply to use non-blocking fds and then
-> handle EAGAIN/EWOULDBLOCK or is there a better way I'm missing?
-
-I don't see a better way, unfortunately. If you read via io_uring it'll
-hide blocking from you, but it doesn't seem like a simple change and
-won't be performance-optimal anyway as ttys don't support IOCB_NOWAIT
-
-
->>>>> It should be the read in lxc_terminal_ptx_io().
->>>>>
->>>>> IMHO, it's not a regression but a not perfect feature API and/or
->>>>> an API misuse.
->>>>>
->>>>> Cc: Christian Brauner
->>>>>
->>>>> Christian, in case you may have some input on the LXC side of things.
->>>>> Daniel reported an LXC problem when it uses io_uring multishot poll requests.
->>>>> Before aa43477b04025 ("io_uring: poll rework"), multishot poll requests for
->>>>> tty/pty and some other files were always downgraded to oneshots, which had
->>>>> been fixed by the commit and exposed the problem. I hope the example above
->>>>> explains it, but please let me know if it needs more details
->>>>
->>>> Pavel, I had actually just started a draft email with the same theory (although you stated it much more clearly than I could have).  I'm working on debugging the LXC side, but I'm pretty sure the issue is due to LXC using blocking reads and getting stuck exactly as you describe.  If I can confirm this, I'll go ahead and mark this regression as invalid and file an issue with LXC. Thanks for your help and patience.
->>>
->>> Yes, it does appear that was the problem.  The attach POC patch against LXC fixes the hang.  The kernel is working as intended.
->>
->> Daniel, that's great, thanks for confirming!
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  .../phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h  | 617 ++++++++++++++++++
+>  1 file changed, 617 insertions(+)
+>  create mode 100644 drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
 > 
-> Daniel, Jens, Pavel, Thorsten,
-> 
-> Thanks for debugging this! I've received an issue on the LXC bug tracker
-> for this.
-> 
-> Just a little bit of background: LXC defaults to epoll event loops
-> currently still so users must explicitly at compile-time select that
-> they want to use io_uring. I exepct that in the future we might simply
-> switch to io_uring completely.
-> 
-> But the fact that it's not the default might be the reason the issue
-> hasn't surfaced earlier if it could've always been triggered.
-> 
-> (Fwiw, the multishot to oneshot downgrade of pty/tty fds was a bit of a
-> problem originally and I only found out about it because of a Twitter
-> thread with Jens; but maybe I missed documentation around this.)
+> diff --git a/drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h b/drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
+> new file mode 100644
+> index 000000000000..b912e50825f9
+> --- /dev/null
+> +++ b/drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
+> @@ -0,0 +1,617 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
 
-I bet it was quite a pain!
+should this be 2022 or add Linaro one for 2022..?
 
-"The CQE flags field will have IORING_CQE_F_MORE set on completion if
-the application should expect further CQE entries from the original
-request. If this flag isn't set on completion, then the poll request
-has been terminated and no further events will be generated."
-
-The rule still applies, though now we don't immediately downgrade it
-for a bunch of common cases like polling files with multiple wait
-queues.
+> + */
+> +
+> +#ifndef PHY_QCOM_USB3_5NM_QMP_UNI_H_
+> +#define PHY_QCOM_USB3_5NM_QMP_UNI_H_
+> +
+> +/* Module: USB3_UNI_PHY_QSERDES_COM_QSERDES_COM_PCIE_USB3_UNI_QMP_PLL */
+> +#define USB3_5NM_UNI_QSERDES_COM_ATB_SEL1			0x000
+> +#define USB3_5NM_UNI_QSERDES_COM_ATB_SEL2			0x004
+> +#define USB3_5NM_UNI_QSERDES_COM_FREQ_UPDATE			0x008
+> +#define USB3_5NM_UNI_QSERDES_COM_BG_TIMER			0x00c
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_EN_CENTER			0x010
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_ADJ_PER1			0x014
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_ADJ_PER2			0x018
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_PER1			0x01c
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_PER2			0x020
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE1_MODE0		0x024
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE2_MODE0		0x028
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE3_MODE0		0x02c
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE1_MODE1		0x030
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE2_MODE1		0x034
+> +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE3_MODE1		0x038
+> +#define USB3_5NM_UNI_QSERDES_COM_POST_DIV			0x03c
+> +#define USB3_5NM_UNI_QSERDES_COM_POST_DIV_MUX			0x040
+> +#define USB3_5NM_UNI_QSERDES_COM_BIAS_EN_CLKBUFLR_EN		0x044
+> +#define USB3_5NM_UNI_QSERDES_COM_CLK_ENABLE1			0x048
+> +#define USB3_5NM_UNI_QSERDES_COM_SYS_CLK_CTRL			0x04c
+> +#define USB3_5NM_UNI_QSERDES_COM_SYSCLK_BUF_ENABLE		0x050
+> +#define USB3_5NM_UNI_QSERDES_COM_PLL_EN				0x054
+> +#define USB3_5NM_UNI_QSERDES_COM_PLL_IVCO			0x058
+> +#define USB3_5NM_UNI_QSERDES_COM_CMN_IETRIM			0x05c
+> +#define USB3_5NM_UNI_QSERDES_COM_CMN_IPTRIM			0x060
+> +#define USB3_5NM_UNI_QSERDES_COM_EP_CLOCK_DETECT_CTRL		0x064
+> +#define USB3_5NM_UNI_QSERDES_COM_SYSCLK_DET_COMP_STATUS		0x068
+> +#define USB3_5NM_UNI_QSERDES_COM_CLK_EP_DIV_MODE0		0x06c
+> +#define USB3_5NM_UNI_QSERDES_COM_CLK_EP_DIV_MODE1		0x070
+> +#define USB3_5NM_UNI_QSERDES_COM_CP_CTRL_MODE0			0x074
+> +#define USB3_5NM_UNI_QSERDES_COM_CP_CTRL_MODE1			0x078
+> +#define USB3_5NM_UNI_QSERDES_COM_PLL_RCTRL_MODE0		0x07c
+> +#define USB3_5NM_UNI_QSERDES_COM_PLL_RCTRL_MODE1		0x080
+> +#define USB3_5NM_UNI_QSERDES_COM_PLL_CCTRL_MODE0		0x084
+> +#define USB3_5NM_UNI_QSERDES_COM_PLL_CCTRL_MODE1		0x088
+> +#define USB3_5NM_UNI_QSERDES_COM_PLL_CNTRL			0x08c
+> +#define USB3_5NM_UNI_QSERDES_COM_BIAS_EN_CTRL_BY_PSM		0x090
+> +#define USB3_5NM_UNI_QSERDES_COM_SYSCLK_EN_SEL			0x094
+> +#define USB3_5NM_UNI_QSERDES_COM_CML_SYSCLK_SEL			0x098
+> +#define USB3_5NM_UNI_QSERDES_COM_RESETSM_CNTRL			0x09c
+> +#define USB3_5NM_UNI_QSERDES_COM_RESETSM_CNTRL2			0x0a0
+> +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP_EN			0x0a4
+> +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP_CFG			0x0a8
+> +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP1_MODE0		0x0ac
+> +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP2_MODE0		0x0b0
+> +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP1_MODE1		0x0b4
+> +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP2_MODE1		0x0b8
+> +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MODE0		0x0bc
+> +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MSB_MODE0		0x0c0
+> +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MODE1		0x0c4
+> +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MSB_MODE1		0x0c8
+> +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START1_MODE0		0x0cc
+> +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START2_MODE0		0x0d0
+> +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START3_MODE0		0x0d4
+> +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START1_MODE1		0x0d8
+> +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START2_MODE1		0x0dc
+> +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START3_MODE1		0x0e0
+> +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_INITVAL		0x0e4
+> +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_EN			0x0e8
+> +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN0_MODE0		0x0ec
+> +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN1_MODE0		0x0f0
+> +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN0_MODE1		0x0f4
+> +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN1_MODE1		0x0f8
+> +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_P_PATH_GAIN0		0x0fc
+> +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_P_PATH_GAIN1		0x100
+> +#define USB3_5NM_UNI_QSERDES_COM_VCOCAL_DEADMAN_CTRL		0x104
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_CTRL			0x108
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MAP			0x10c
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE1_MODE0		0x110
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE2_MODE0		0x114
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE1_MODE1		0x118
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE2_MODE1		0x11c
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_INITVAL1		0x120
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_INITVAL2		0x124
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MINVAL1		0x128
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MINVAL2		0x12c
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MAXVAL1		0x130
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MAXVAL2		0x134
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_TIMER1		0x138
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_TIMER2		0x13c
+> +#define USB3_5NM_UNI_QSERDES_COM_CMN_STATUS			0x140
+> +#define USB3_5NM_UNI_QSERDES_COM_RESET_SM_STATUS		0x144
+> +#define USB3_5NM_UNI_QSERDES_COM_RESTRIM_CODE_STATUS		0x148
+> +#define USB3_5NM_UNI_QSERDES_COM_PLLCAL_CODE1_STATUS		0x14c
+> +#define USB3_5NM_UNI_QSERDES_COM_PLLCAL_CODE2_STATUS		0x150
+> +#define USB3_5NM_UNI_QSERDES_COM_CLK_SELECT			0x154
+> +#define USB3_5NM_UNI_QSERDES_COM_HSCLK_SEL			0x158
+> +#define USB3_5NM_UNI_QSERDES_COM_HSCLK_HS_SWITCH_SEL		0x15c
+> +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_BINCODE_STATUS	0x160
+> +#define USB3_5NM_UNI_QSERDES_COM_PLL_ANALOG			0x164
+> +#define USB3_5NM_UNI_QSERDES_COM_CORECLK_DIV_MODE0		0x168
+> +#define USB3_5NM_UNI_QSERDES_COM_CORECLK_DIV_MODE1		0x16c
+> +#define USB3_5NM_UNI_QSERDES_COM_SW_RESET			0x170
+> +#define USB3_5NM_UNI_QSERDES_COM_CORE_CLK_EN			0x174
+> +#define USB3_5NM_UNI_QSERDES_COM_C_READY_STATUS			0x178
+> +#define USB3_5NM_UNI_QSERDES_COM_CMN_CONFIG			0x17c
+> +#define USB3_5NM_UNI_QSERDES_COM_CMN_RATE_OVERRIDE		0x180
+> +#define USB3_5NM_UNI_QSERDES_COM_SVS_MODE_CLK_SEL		0x184
+> +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS0			0x188
+> +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS1			0x18c
+> +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS2			0x190
+> +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS3			0x194
+> +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS_SEL			0x198
+> +#define USB3_5NM_UNI_QSERDES_COM_CMN_MISC1			0x19c
+> +#define USB3_5NM_UNI_QSERDES_COM_CMN_MODE			0x1a0
+> +#define USB3_5NM_UNI_QSERDES_COM_CMN_MODE_CONTD			0x1a4
+> +#define USB3_5NM_UNI_QSERDES_COM_VCO_DC_LEVEL_CTRL		0x1a8
+> +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE1_MODE0	0x1ac
+> +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE0	0x1b0
+> +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE1_MODE1	0x1b4
+> +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE1	0x1b8
+> +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_HSCLK_SEL		0x1bc
+> +#define USB3_5NM_UNI_QSERDES_COM_RESERVED_1			0x1c0
+> +#define USB3_5NM_UNI_QSERDES_COM_MODE_OPERATION_STATUS		0x1c4
+> +
+> +/* Module: USB3_UNI_PHY_QSERDES_TX_PCIE_USB3_UNI_QMP_TX */
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_MODE_LANENO		0x000
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_INVERT			0x004
+> +#define USB3_5NM_UNI_QSERDES_TX_CLKBUF_ENABLE			0x008
+> +#define USB3_5NM_UNI_QSERDES_TX_TX_EMP_POST1_LVL		0x00c
+> +#define USB3_5NM_UNI_QSERDES_TX_TX_IDLE_LVL_LARGE_AMP		0x010
+> +#define USB3_5NM_UNI_QSERDES_TX_TX_DRV_LVL			0x014
+> +#define USB3_5NM_UNI_QSERDES_TX_TX_DRV_LVL_OFFSET		0x018
+> +#define USB3_5NM_UNI_QSERDES_TX_RESET_TSYNC_EN			0x01c
+> +#define USB3_5NM_UNI_QSERDES_TX_PRE_STALL_LDO_BOOST_EN		0x020
+> +#define USB3_5NM_UNI_QSERDES_TX_TX_BAND				0x024
+> +#define USB3_5NM_UNI_QSERDES_TX_SLEW_CNTL			0x028
+> +#define USB3_5NM_UNI_QSERDES_TX_INTERFACE_SELECT		0x02c
+> +#define USB3_5NM_UNI_QSERDES_TX_LPB_EN				0x030
+> +#define USB3_5NM_UNI_QSERDES_TX_RES_CODE_LANE_TX		0x034
+> +#define USB3_5NM_UNI_QSERDES_TX_RES_CODE_LANE_RX		0x038
+> +#define USB3_5NM_UNI_QSERDES_TX_RES_CODE_LANE_OFFSET_TX		0x03c
+> +#define USB3_5NM_UNI_QSERDES_TX_RES_CODE_LANE_OFFSET_RX		0x040
+> +#define USB3_5NM_UNI_QSERDES_TX_PERL_LENGTH1			0x044
+> +#define USB3_5NM_UNI_QSERDES_TX_PERL_LENGTH2			0x048
+> +#define USB3_5NM_UNI_QSERDES_TX_SERDES_BYP_EN_OUT		0x04c
+> +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS_SEL			0x050
+> +#define USB3_5NM_UNI_QSERDES_TX_TRANSCEIVER_BIAS_EN		0x054
+> +#define USB3_5NM_UNI_QSERDES_TX_HIGHZ_DRVR_EN			0x058
+> +#define USB3_5NM_UNI_QSERDES_TX_TX_POL_INV			0x05c
+> +#define USB3_5NM_UNI_QSERDES_TX_PARRATE_REC_DETECT_IDLE_EN	0x060
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN1			0x064
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN2			0x068
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN3			0x06c
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN4			0x070
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN5			0x074
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN6			0x078
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN7			0x07c
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN8			0x080
+> +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_1			0x084
+> +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_2			0x088
+> +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_3			0x08c
+> +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_4			0x090
+> +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_5			0x094
+> +#define USB3_5NM_UNI_QSERDES_TX_ATB_SEL1			0x098
+> +#define USB3_5NM_UNI_QSERDES_TX_ATB_SEL2			0x09c
+> +#define USB3_5NM_UNI_QSERDES_TX_RCV_DETECT_LVL			0x0a0
+> +#define USB3_5NM_UNI_QSERDES_TX_RCV_DETECT_LVL_2		0x0a4
+> +#define USB3_5NM_UNI_QSERDES_TX_PRBS_SEED1			0x0a8
+> +#define USB3_5NM_UNI_QSERDES_TX_PRBS_SEED2			0x0ac
+> +#define USB3_5NM_UNI_QSERDES_TX_PRBS_SEED3			0x0b0
+> +#define USB3_5NM_UNI_QSERDES_TX_PRBS_SEED4			0x0b4
+> +#define USB3_5NM_UNI_QSERDES_TX_RESET_GEN			0x0b8
+> +#define USB3_5NM_UNI_QSERDES_TX_RESET_GEN_MUXES			0x0bc
+> +#define USB3_5NM_UNI_QSERDES_TX_TRAN_DRVR_EMP_EN		0x0c0
+> +#define USB3_5NM_UNI_QSERDES_TX_TX_INTERFACE_MODE		0x0c4
+> +#define USB3_5NM_UNI_QSERDES_TX_VMODE_CTRL1			0x0c8
+> +#define USB3_5NM_UNI_QSERDES_TX_ALOG_OBSV_BUS_CTRL_1		0x0cc
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_STATUS			0x0d0
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_ERROR_COUNT1		0x0d4
+> +#define USB3_5NM_UNI_QSERDES_TX_BIST_ERROR_COUNT2		0x0d8
+> +#define USB3_5NM_UNI_QSERDES_TX_ALOG_OBSV_BUS_STATUS_1		0x0dc
+> +#define USB3_5NM_UNI_QSERDES_TX_LANE_DIG_CONFIG			0x0e0
+> +#define USB3_5NM_UNI_QSERDES_TX_PI_QEC_CTRL			0x0e4
+> +#define USB3_5NM_UNI_QSERDES_TX_PRE_EMPH			0x0e8
+> +#define USB3_5NM_UNI_QSERDES_TX_SW_RESET			0x0ec
+> +#define USB3_5NM_UNI_QSERDES_TX_DCC_OFFSET			0x0f0
+> +#define USB3_5NM_UNI_QSERDES_TX_DCC_CMUX_POSTCAL_OFFSET		0x0f4
+> +#define USB3_5NM_UNI_QSERDES_TX_DCC_CMUX_CAL_CTRL1		0x0f8
+> +#define USB3_5NM_UNI_QSERDES_TX_DCC_CMUX_CAL_CTRL2		0x0fc
+> +#define USB3_5NM_UNI_QSERDES_TX_DIG_BKUP_CTRL			0x100
+> +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS0			0x104
+> +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS1			0x108
+> +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS2			0x10c
+> +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS3			0x110
+> +#define USB3_5NM_UNI_QSERDES_TX_READ_EQCODE			0x114
+> +#define USB3_5NM_UNI_QSERDES_TX_READ_OFFSETCODE			0x118
+> +#define USB3_5NM_UNI_QSERDES_TX_IA_ERROR_COUNTER_LOW		0x11c
+> +#define USB3_5NM_UNI_QSERDES_TX_IA_ERROR_COUNTER_HIGH		0x120
+> +#define USB3_5NM_UNI_QSERDES_TX_VGA_READ_CODE			0x124
+> +#define USB3_5NM_UNI_QSERDES_TX_VTH_READ_CODE			0x128
+> +#define USB3_5NM_UNI_QSERDES_TX_DFE_TAP1_READ_CODE		0x12c
+> +#define USB3_5NM_UNI_QSERDES_TX_DFE_TAP2_READ_CODE		0x130
+> +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_I			0x134
+> +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_IBAR		0x138
+> +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_Q			0x13c
+> +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_QBAR		0x140
+> +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_A			0x144
+> +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_ABAR		0x148
+> +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_SM_ON		0x14c
+> +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_CAL_DONE		0x150
+> +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_SIGNERROR		0x154
+> +#define USB3_5NM_UNI_QSERDES_TX_DCC_CAL_STATUS			0x158
+> +#define USB3_5NM_UNI_QSERDES_TX_DCC_READ_CODE_STATUS		0x15c
+> +
+> +/* Module: USB3_UNI_PHY_QSERDES_RX_QSERDES_RX_PCIE_USB3_UNI_QMP_RX */
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FO_GAIN_HALF		0x000
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FO_GAIN_QUARTER		0x004
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FO_GAIN			0x008
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SO_GAIN_HALF		0x00c
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SO_GAIN_QUARTER		0x010
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SO_GAIN			0x014
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_FO_GAIN_HALF		0x018
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_FO_GAIN_QUARTER	0x01c
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_FO_GAIN		0x020
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_SO_GAIN_HALF		0x024
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_SO_GAIN_QUARTER	0x028
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_SO_GAIN		0x02c
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FASTLOCK_FO_GAIN		0x030
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SO_SATURATION_AND_ENABLE	0x034
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FO_TO_SO_DELAY		0x038
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FASTLOCK_COUNT_LOW		0x03c
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FASTLOCK_COUNT_HIGH	0x040
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_PI_CONTROLS		0x044
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_PI_CTRL2			0x048
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SB2_THRESH1		0x04c
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SB2_THRESH2		0x050
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SB2_GAIN1			0x054
+> +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SB2_GAIN2			0x058
+> +#define USB3_5NM_UNI_QSERDES_RX_AUX_CONTROL			0x05c
+> +#define USB3_5NM_UNI_QSERDES_RX_AUX_DATA_TCOARSE_TFINE		0x060
+> +#define USB3_5NM_UNI_QSERDES_RX_RCLK_AUXDATA_SEL		0x064
+> +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_ENABLE			0x068
+> +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_INITP			0x06c
+> +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_INITN			0x070
+> +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_LVL			0x074
+> +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_MODE			0x078
+> +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_RESET			0x07c
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_TERM_BW			0x080
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_RCVR_IQ_EN			0x084
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_I_DC_OFFSETS		0x088
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_IBAR_DC_OFFSETS		0x08c
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_Q_DC_OFFSETS		0x090
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_QBAR_DC_OFFSETS		0x094
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_A_DC_OFFSETS		0x098
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_ABAR_DC_OFFSETS		0x09c
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_EN			0x0a0
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_ENABLES			0x0a4
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_SIGN			0x0a8
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_HIGHZ_HIGHRATE		0x0ac
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_TERM_AC_BYPASS_DC_COUPLE_OFFSET	0x0b0
+> +#define USB3_5NM_UNI_QSERDES_RX_DFE_1				0x0b4
+> +#define USB3_5NM_UNI_QSERDES_RX_DFE_2				0x0b8
+> +#define USB3_5NM_UNI_QSERDES_RX_DFE_3				0x0bc
+> +#define USB3_5NM_UNI_QSERDES_RX_DFE_4				0x0c0
+> +#define USB3_5NM_UNI_QSERDES_RX_TX_ADAPT_PRE_THRESH1		0x0c4
+> +#define USB3_5NM_UNI_QSERDES_RX_TX_ADAPT_PRE_THRESH2		0x0c8
+> +#define USB3_5NM_UNI_QSERDES_RX_TX_ADAPT_POST_THRESH		0x0cc
+> +#define USB3_5NM_UNI_QSERDES_RX_TX_ADAPT_MAIN_THRESH		0x0d0
+> +#define USB3_5NM_UNI_QSERDES_RX_VGA_CAL_CNTRL1			0x0d4
+> +#define USB3_5NM_UNI_QSERDES_RX_VGA_CAL_CNTRL2			0x0d8
+> +#define USB3_5NM_UNI_QSERDES_RX_GM_CAL				0x0dc
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_VGA_GAIN2_LSB		0x0e0
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_VGA_GAIN2_MSB		0x0e4
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_EQU_ADAPTOR_CNTRL1		0x0e8
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_EQU_ADAPTOR_CNTRL2		0x0ec
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_EQU_ADAPTOR_CNTRL3		0x0f0
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_EQU_ADAPTOR_CNTRL4		0x0f4
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_TSETTLE_LOW		0x0f8
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_TSETTLE_HIGH		0x0fc
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_MEASURE_TIME		0x100
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_ACCUMULATOR		0x104
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_EQ_OFFSET_LSB		0x108
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_EQ_OFFSET_MSB		0x10c
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_EQ_OFFSET_ADAPTOR_CNTRL1	0x110
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_OFFSET_ADAPTOR_CNTRL2	0x114
+> +#define USB3_5NM_UNI_QSERDES_RX_SIGDET_ENABLES			0x118
+> +#define USB3_5NM_UNI_QSERDES_RX_SIGDET_CNTRL			0x11c
+> +#define USB3_5NM_UNI_QSERDES_RX_SIGDET_LVL			0x120
+> +#define USB3_5NM_UNI_QSERDES_RX_SIGDET_DEGLITCH_CNTRL		0x124
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_BAND				0x128
+> +#define USB3_5NM_UNI_QSERDES_RX_CDR_FREEZE_UP_DN		0x12c
+> +#define USB3_5NM_UNI_QSERDES_RX_CDR_RESET_OVERRIDE		0x130
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_INTERFACE_MODE		0x134
+> +#define USB3_5NM_UNI_QSERDES_RX_JITTER_GEN_MODE			0x138
+> +#define USB3_5NM_UNI_QSERDES_RX_SJ_AMP1				0x13c
+> +#define USB3_5NM_UNI_QSERDES_RX_SJ_AMP2				0x140
+> +#define USB3_5NM_UNI_QSERDES_RX_SJ_PER1				0x144
+> +#define USB3_5NM_UNI_QSERDES_RX_SJ_PER2				0x148
+> +#define USB3_5NM_UNI_QSERDES_RX_PPM_OFFSET1			0x14c
+> +#define USB3_5NM_UNI_QSERDES_RX_PPM_OFFSET2			0x150
+> +#define USB3_5NM_UNI_QSERDES_RX_SIGN_PPM_PERIOD1		0x154
+> +#define USB3_5NM_UNI_QSERDES_RX_SIGN_PPM_PERIOD2		0x158
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_LOW			0x15c
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_HIGH			0x160
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_HIGH2		0x164
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_HIGH3		0x168
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_HIGH4		0x16c
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_LOW			0x170
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_HIGH			0x174
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_HIGH2		0x178
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_HIGH3		0x17c
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_HIGH4		0x180
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_LOW			0x184
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_HIGH			0x188
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_HIGH2		0x18c
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_HIGH3		0x190
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_HIGH4		0x194
+> +#define USB3_5NM_UNI_QSERDES_RX_PHPRE_CTRL			0x198
+> +#define USB3_5NM_UNI_QSERDES_RX_PHPRE_INITVAL			0x19c
+> +#define USB3_5NM_UNI_QSERDES_RX_DFE_EN_TIMER			0x1a0
+> +#define USB3_5NM_UNI_QSERDES_RX_DFE_CTLE_POST_CAL_OFFSET	0x1a4
+> +#define USB3_5NM_UNI_QSERDES_RX_DCC_CTRL1			0x1a8
+> +#define USB3_5NM_UNI_QSERDES_RX_DCC_CTRL2			0x1ac
+> +#define USB3_5NM_UNI_QSERDES_RX_VTH_CODE			0x1b0
+> +#define USB3_5NM_UNI_QSERDES_RX_VTH_MIN_THRESH			0x1b4
+> +#define USB3_5NM_UNI_QSERDES_RX_VTH_MAX_THRESH			0x1b8
+> +#define USB3_5NM_UNI_QSERDES_RX_ALOG_OBSV_BUS_CTRL_1		0x1bc
+> +#define USB3_5NM_UNI_QSERDES_RX_PI_CTRL1			0x1c0
+> +#define USB3_5NM_UNI_QSERDES_RX_PI_CTRL2			0x1c4
+> +#define USB3_5NM_UNI_QSERDES_RX_PI_QUAD				0x1c8
+> +#define USB3_5NM_UNI_QSERDES_RX_IDATA1				0x1cc
+> +#define USB3_5NM_UNI_QSERDES_RX_IDATA2				0x1d0
+> +#define USB3_5NM_UNI_QSERDES_RX_AUX_DATA1			0x1d4
+> +#define USB3_5NM_UNI_QSERDES_RX_AUX_DATA2			0x1d8
+> +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_OUTP			0x1dc
+> +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_OUTN			0x1e0
+> +#define USB3_5NM_UNI_QSERDES_RX_RX_SIGDET			0x1e4
+> +#define USB3_5NM_UNI_QSERDES_RX_ALOG_OBSV_BUS_STATUS_1		0x1e8
+> +
+> +/* Module:  USB3_UNI_PCS_LN_PCIE_USB3_UNI_PCS_LANE */
+> +#define USB3_5NM_UNI_PCS_LN_PCS_STATUS1				0x00
+> +#define USB3_5NM_UNI_PCS_LN_PCS_STATUS2				0x04
+> +#define USB3_5NM_UNI_PCS_LN_PCS_STATUS2_CLEAR			0x08
+> +#define USB3_5NM_UNI_PCS_LN_PCS_STATUS3				0x0c
+> +#define USB3_5NM_UNI_PCS_LN_BIST_CHK_ERR_CNT_L_STATUS		0x10
+> +#define USB3_5NM_UNI_PCS_LN_BIST_CHK_ERR_CNT_H_STATUS		0x14
+> +#define USB3_5NM_UNI_PCS_LN_BIST_CHK_STATUS			0x18
+> +#define USB3_5NM_UNI_PCS_LN_INSIG_SW_CTRL1			0x1c
+> +#define USB3_5NM_UNI_PCS_LN_INSIG_MX_CTRL1			0x20
+> +#define USB3_5NM_UNI_PCS_LN_OUTSIG_SW_CTRL1			0x24
+> +#define USB3_5NM_UNI_PCS_LN_OUTSIG_MX_CTRL1			0x28
+> +#define USB3_5NM_UNI_PCS_LN_TEST_CONTROL1			0x2c
+> +#define USB3_5NM_UNI_PCS_LN_BIST_CTRL				0x30
+> +#define USB3_5NM_UNI_PCS_LN_PRBS_SEED0				0x34
+> +#define USB3_5NM_UNI_PCS_LN_PRBS_SEED1				0x38
+> +#define USB3_5NM_UNI_PCS_LN_FIXED_PAT_CTRL			0x3c
+> +#define USB3_5NM_UNI_PCS_LN_EQ_CONFIG				0x40
+> +#define USB3_5NM_UNI_PCS_LN_TEST_CONTROL2			0x44
+> +#define USB3_5NM_UNI_PCS_LN_TEST_CONTROL3			0x48
+> +
+> +/* Module: USB3_UNI_PCS_PCIE_LN_PCIE_USB3_UNI_PCS_PCIE_LANE */
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_OVERRIDE_PRE_POST	0x00
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_OVERRIDE_PRE_POST_RS	0x04
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_OVERRIDE_EN		0x08
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_DSBL_L			0x0c
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_DSBL_H			0x10
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_LANE_OFF_CONFIG		0x14
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_RXEQ_DONE_CONFIG1		0x18
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_RXEQ_DONE_CONFIG2		0x1c
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_PCIE_PCS_STATUS		0x20
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_INSIG_SW_CTRL2			0x24
+> +#define USB3_5NM_UNI_PCS_PCIE_LN_INSIG_MX_CTRL2			0x28
+> +
+> +/* Module: USB3_UNI_PHY_PCIE_USB3_UNI_PCS_PCIE_USB3_UNI_PCS_PCIE_USB3_UNI_PCS */
+> +#define USB3_5NM_UNI_PCS_SW_RESET				0x000
+> +#define USB3_5NM_UNI_PCS_REVISION_ID0				0x004
+> +#define USB3_5NM_UNI_PCS_REVISION_ID1				0x008
+> +#define USB3_5NM_UNI_PCS_REVISION_ID2				0x00c
+> +#define USB3_5NM_UNI_PCS_REVISION_ID3				0x010
+> +#define USB3_5NM_UNI_PCS_PCS_STATUS1				0x014
+> +#define USB3_5NM_UNI_PCS_PCS_STATUS2				0x018
+> +#define USB3_5NM_UNI_PCS_PCS_STATUS3				0x01c
+> +#define USB3_5NM_UNI_PCS_PCS_STATUS4				0x020
+> +#define USB3_5NM_UNI_PCS_PCS_STATUS5				0x024
+> +#define USB3_5NM_UNI_PCS_PCS_STATUS6				0x028
+> +#define USB3_5NM_UNI_PCS_PCS_STATUS7				0x02c
+> +#define USB3_5NM_UNI_PCS_DEBUG_BUS_0_STATUS			0x030
+> +#define USB3_5NM_UNI_PCS_DEBUG_BUS_1_STATUS			0x034
+> +#define USB3_5NM_UNI_PCS_DEBUG_BUS_2_STATUS			0x038
+> +#define USB3_5NM_UNI_PCS_DEBUG_BUS_3_STATUS			0x03c
+> +#define USB3_5NM_UNI_PCS_POWER_DOWN_CONTROL			0x040
+> +#define USB3_5NM_UNI_PCS_START_CONTROL				0x044
+> +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL1				0x048
+> +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL2				0x04c
+> +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL3				0x050
+> +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL4				0x054
+> +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL5				0x058
+> +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL6				0x05c
+> +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL7				0x060
+> +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL8				0x064
+> +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL1				0x068
+> +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL2				0x06c
+> +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL3				0x070
+> +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL4				0x074
+> +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL5				0x078
+> +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL7				0x07c
+> +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL8				0x080
+> +#define USB3_5NM_UNI_PCS_OUTSIG_SW_CTRL1			0x084
+> +#define USB3_5NM_UNI_PCS_OUTSIG_MX_CTRL1			0x088
+> +#define USB3_5NM_UNI_PCS_CLAMP_ENABLE				0x08c
+> +#define USB3_5NM_UNI_PCS_POWER_STATE_CONFIG1			0x090
+> +#define USB3_5NM_UNI_PCS_POWER_STATE_CONFIG2			0x094
+> +#define USB3_5NM_UNI_PCS_FLL_CNTRL1				0x098
+> +#define USB3_5NM_UNI_PCS_FLL_CNTRL2				0x09c
+> +#define USB3_5NM_UNI_PCS_FLL_CNT_VAL_L				0x0a0
+> +#define USB3_5NM_UNI_PCS_FLL_CNT_VAL_H_TOL			0x0a4
+> +#define USB3_5NM_UNI_PCS_FLL_MAN_CODE				0x0a8
+> +#define USB3_5NM_UNI_PCS_TEST_CONTROL1				0x0ac
+> +#define USB3_5NM_UNI_PCS_TEST_CONTROL2				0x0b0
+> +#define USB3_5NM_UNI_PCS_TEST_CONTROL3				0x0b4
+> +#define USB3_5NM_UNI_PCS_TEST_CONTROL4				0x0b8
+> +#define USB3_5NM_UNI_PCS_TEST_CONTROL5				0x0bc
+> +#define USB3_5NM_UNI_PCS_TEST_CONTROL6				0x0c0
+> +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG1			0x0c4
+> +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG2			0x0c8
+> +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG3			0x0cc
+> +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG4			0x0d0
+> +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG5			0x0d4
+> +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG6			0x0d8
+> +#define USB3_5NM_UNI_PCS_REFGEN_REQ_CONFIG1			0x0dc
+> +#define USB3_5NM_UNI_PCS_REFGEN_REQ_CONFIG2			0x0e0
+> +#define USB3_5NM_UNI_PCS_REFGEN_REQ_CONFIG3			0x0e4
+> +#define USB3_5NM_UNI_PCS_BIST_CTRL				0x0e8
+> +#define USB3_5NM_UNI_PCS_PRBS_POLY0				0x0ec
+> +#define USB3_5NM_UNI_PCS_PRBS_POLY1				0x0f0
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT0				0x0f4
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT1				0x0f8
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT2				0x0fc
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT3				0x100
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT4				0x104
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT5				0x108
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT6				0x10c
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT7				0x110
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT8				0x114
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT9				0x118
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT10				0x11c
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT11				0x120
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT12				0x124
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT13				0x128
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT14				0x12c
+> +#define USB3_5NM_UNI_PCS_FIXED_PAT15				0x130
+> +#define USB3_5NM_UNI_PCS_TXMGN_CONFIG				0x134
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V0				0x138
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V1				0x13c
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V2				0x140
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V3				0x144
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V4				0x148
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V0_RS			0x14c
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V1_RS			0x150
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V2_RS			0x154
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V3_RS			0x158
+> +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V4_RS			0x15c
+> +#define USB3_5NM_UNI_PCS_G3S2_TXMGN_MAIN			0x160
+> +#define USB3_5NM_UNI_PCS_G3S2_TXMGN_MAIN_RS			0x164
+> +#define USB3_5NM_UNI_PCS_G12S1_TXDEEMPH_M6DB			0x168
+> +#define USB3_5NM_UNI_PCS_G12S1_TXDEEMPH_M3P5DB			0x16c
+> +#define USB3_5NM_UNI_PCS_G3S2_PRE_GAIN				0x170
+> +#define USB3_5NM_UNI_PCS_G3S2_POST_GAIN				0x174
+> +#define USB3_5NM_UNI_PCS_G3S2_PRE_POST_OFFSET			0x178
+> +#define USB3_5NM_UNI_PCS_G3S2_PRE_GAIN_RS			0x17c
+> +#define USB3_5NM_UNI_PCS_G3S2_POST_GAIN_RS			0x180
+> +#define USB3_5NM_UNI_PCS_G3S2_PRE_POST_OFFSET_RS		0x184
+> +#define USB3_5NM_UNI_PCS_RX_SIGDET_LVL				0x188
+> +#define USB3_5NM_UNI_PCS_RX_SIGDET_DTCT_CNTRL			0x18c
+> +#define USB3_5NM_UNI_PCS_RCVR_DTCT_DLY_P1U2_L			0x190
+> +#define USB3_5NM_UNI_PCS_RCVR_DTCT_DLY_P1U2_H			0x194
+> +#define USB3_5NM_UNI_PCS_RATE_SLEW_CNTRL1			0x198
+> +#define USB3_5NM_UNI_PCS_RATE_SLEW_CNTRL2			0x19c
+> +#define USB3_5NM_UNI_PCS_PWRUP_RESET_DLY_TIME_AUXCLK		0x1a0
+> +#define USB3_5NM_UNI_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_L		0x1a4
+> +#define USB3_5NM_UNI_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_H		0x1a8
+> +#define USB3_5NM_UNI_PCS_TSYNC_RSYNC_TIME			0x1ac
+> +#define USB3_5NM_UNI_PCS_CDR_RESET_TIME				0x1b0
+> +#define USB3_5NM_UNI_PCS_TSYNC_DLY_TIME				0x1b4
+> +#define USB3_5NM_UNI_PCS_ELECIDLE_DLY_SEL			0x1b8
+> +#define USB3_5NM_UNI_PCS_CMN_ACK_OUT_SEL			0x1bc
+> +#define USB3_5NM_UNI_PCS_ALIGN_DETECT_CONFIG1			0x1c0
+> +#define USB3_5NM_UNI_PCS_ALIGN_DETECT_CONFIG2			0x1c4
+> +#define USB3_5NM_UNI_PCS_ALIGN_DETECT_CONFIG3			0x1c8
+> +#define USB3_5NM_UNI_PCS_ALIGN_DETECT_CONFIG4			0x1cc
+> +#define USB3_5NM_UNI_PCS_PCS_TX_RX_CONFIG			0x1d0
+> +#define USB3_5NM_UNI_PCS_RX_IDLE_DTCT_CNTRL			0x1d4
+> +#define USB3_5NM_UNI_PCS_RX_DCC_CAL_CONFIG			0x1d8
+> +#define USB3_5NM_UNI_PCS_EQ_CONFIG1				0x1dc
+> +#define USB3_5NM_UNI_PCS_EQ_CONFIG2				0x1e0
+> +#define USB3_5NM_UNI_PCS_EQ_CONFIG3				0x1e4
+> +#define USB3_5NM_UNI_PCS_EQ_CONFIG4				0x1e8
+> +#define USB3_5NM_UNI_PCS_EQ_CONFIG5				0x1ec
+> +
+> +/* Module: USB3_UNI_PHY_PCIE_PCS */
+> +#define USB3_5NM_UNI_PCS_PCIE_INT_AUX_CLK_STATUS		0x00
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_STATUS			0x04
+> +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG1		0x08
+> +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG2		0x0c
+> +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG3		0x10
+> +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG4		0x14
+> +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG5		0x18
+> +#define USB3_5NM_UNI_PCS_PCIE_PCS_TX_RX_CONFIG			0x1c
+> +#define USB3_5NM_UNI_PCS_PCIE_ENDPOINT_REFCLK_DRIVE		0x20
+> +#define USB3_5NM_UNI_PCS_PCIE_ENDPOINT_REFCLK_CNTRL		0x24
+> +#define USB3_5NM_UNI_PCS_PCIE_EPCLK_PRE_PLL_LOCK_DLY_AUXCLK	0x28
+> +#define USB3_5NM_UNI_PCS_PCIE_EPCLK_DLY_COUNT_VAL_L		0x2c
+> +#define USB3_5NM_UNI_PCS_PCIE_EPCLK_DLY_COUNT_VAL_H		0x30
+> +#define USB3_5NM_UNI_PCS_PCIE_RX_IDLE_DTCT_CNTRL1		0x34
+> +#define USB3_5NM_UNI_PCS_PCIE_RX_IDLE_DTCT_CNTRL2		0x38
+> +#define USB3_5NM_UNI_PCS_PCIE_SIGDET_CNTRL			0x3c
+> +#define USB3_5NM_UNI_PCS_PCIE_SIGDET_LOW_2_IDLE_TIME		0x40
+> +#define USB3_5NM_UNI_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_L	0x44
+> +#define USB3_5NM_UNI_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_H	0x48
+> +#define USB3_5NM_UNI_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_L	0x4c
+> +#define USB3_5NM_UNI_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_H	0x50
+> +#define USB3_5NM_UNI_PCS_PCIE_INT_AUX_CLK_CONFIG1		0x54
+> +#define USB3_5NM_UNI_PCS_PCIE_INT_AUX_CLK_CONFIG2		0x58
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG1			0x5c
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG2			0x60
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG3			0x64
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG4			0x68
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG5			0x6c
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG6			0x70
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG7			0x74
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG1		0x78
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG2		0x7c
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG3		0x80
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG4		0x84
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5		0x88
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG6		0x8c
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG7		0x90
+> +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_ACTIONS			0x94
+> +#define USB3_5NM_UNI_PCS_PCIE_LOCAL_FS				0x98
+> +#define USB3_5NM_UNI_PCS_PCIE_LOCAL_LF				0x9c
+> +#define USB3_5NM_UNI_PCS_PCIE_LOCAL_FS_RS			0xa0
+> +#define USB3_5NM_UNI_PCS_PCIE_EQ_CONFIG1			0xa4
+> +#define USB3_5NM_UNI_PCS_PCIE_EQ_CONFIG2			0xa8
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P0_P1_PRE			0xac
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P2_P3_PRE			0xb0
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P4_P5_PRE			0xb4
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P6_P7_PRE			0xb8
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P8_P9_PRE			0xbc
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P10_PRE			0xc0
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P1_P3_PRE_RS		0xc4
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P4_P5_PRE_RS		0xc8
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P6_P9_PRE_RS		0xcc
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P0_P1_POST			0xd0
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P2_P3_POST			0xd4
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P4_P5_POST			0xd8
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P6_P7_POST			0xdc
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P8_P9_POST			0xe0
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P10_POST			0xe4
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P1_P3_POST_RS		0xe8
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P4_P5_POST_RS		0xec
+> +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P6_P9_POST_RS		0xf0
+> +#define USB3_5NM_UNI_PCS_PCIE_RXEQEVAL_TIME			0xf4
+> +
+> +/* Module: USB3_UNI_PHY_PCIE_PCS_DEBUG_INTGEN */
+> +#define USB3_5NM_UNI_PCS_INTGEN_INTGEN_STATUS1			0x00
+> +#define USB3_5NM_UNI_PCS_INTGEN_INTGEN_STATUS2			0x04
+> +#define USB3_5NM_UNI_PCS_INTGEN_CONFIG1				0x08
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG1		0x0c
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG2		0x10
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG3		0x14
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG4		0x18
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG5		0x1c
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG1		0x20
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG2		0x24
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG3		0x28
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG4		0x2c
+> +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG5		0x30
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG1		0x34
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG2		0x38
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG3		0x3c
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG4		0x40
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG5		0x44
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG1		0x48
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG2		0x4c
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG3		0x50
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG4		0x54
+> +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG5		0x58
+> +
+> +
+> +/* Module: USB3_UNI_PCS_USB3_PCIE_USB3_UNI_PCS_USB3 */
+> +#define USB3_5NM_UNI_PCS_USB3_POWER_STATE_CONFIG1		0x00
+> +#define USB3_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_STATUS		0x04
+> +#define USB3_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_CTRL		0x08
+> +#define USB3_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_CTRL2		0x0c
+> +#define USB3_5NM_UNI_PCS_USB3_LFPS_RXTERM_IRQ_SOURCE_STATUS	0x10
+> +#define USB3_5NM_UNI_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR		0x14
+> +#define USB3_5NM_UNI_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL		0x18
+> +#define USB3_5NM_UNI_PCS_USB3_LFPS_TX_ECSTART			0x1c
+> +#define USB3_5NM_UNI_PCS_USB3_LFPS_PER_TIMER_VAL		0x20
+> +#define USB3_5NM_UNI_PCS_USB3_LFPS_TX_END_CNT_U3_START		0x24
+> +#define USB3_5NM_UNI_PCS_USB3_LFPS_CONFIG1			0x28
+> +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_LOCK_TIME		0x2c
+> +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_WAIT_TIME		0x30
+> +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_CTLE_TIME		0x34
+> +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_WAIT_TIME_S2		0x38
+> +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_DFE_TIME_S2		0x3c
+> +#define USB3_5NM_UNI_PCS_USB3_RCVR_DTCT_DLY_U3_L		0x40
+> +#define USB3_5NM_UNI_PCS_USB3_RCVR_DTCT_DLY_U3_H		0x44
+> +#define USB3_5NM_UNI_PCS_USB3_ARCVR_DTCT_EN_PERIOD		0x48
+> +#define USB3_5NM_UNI_PCS_USB3_ARCVR_DTCT_CM_DLY			0x4c
+> +#define USB3_5NM_UNI_PCS_USB3_TXONESZEROS_RUN_LENGTH		0x50
+> +#define USB3_5NM_UNI_PCS_USB3_ALFPS_DEGLITCH_VAL		0x54
+> +#define USB3_5NM_UNI_PCS_USB3_SIGDET_STARTUP_TIMER_VAL		0x58
+> +#define USB3_5NM_UNI_PCS_USB3_TEST_CONTROL			0x5c
+> +#define USB3_5NM_UNI_PCS_USB3_RXTERMINATION_DLY_SEL		0x60
+> +
+> +#endif
+> -- 
+> 2.35.1
 
 -- 
-Pavel Begunkov
+~Vinod

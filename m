@@ -2,106 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221DB52AB9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB07652ABA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352545AbiEQTJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 15:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S1352551AbiEQTLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 15:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344856AbiEQTJx (ORCPT
+        with ESMTP id S1352539AbiEQTK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 15:09:53 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A9E13D4A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:09:51 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso3153215pjg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:09:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WX9lP7cN1XhMLxAyp1fuinpNzyHjtW9iix4zXAbknMw=;
-        b=Z8ufLbQ+4mZKJyLdDDFC62aZ5/hDqWVFsdPEZUe33bzH3AdGyPj61awGDS5cNbbHDg
-         W0naIEoFAgkHlY99tWGdn5v6aLiFChtOCWg8sJMnXMl7EZ0442nl51aORC6xH7dmy/JF
-         XiGHxnjy8cCUW0mftFfTsk9zgCOzTxU4pzhd0=
+        Tue, 17 May 2022 15:10:59 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB41526126;
+        Tue, 17 May 2022 12:10:57 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-f1d5464c48so917985fac.6;
+        Tue, 17 May 2022 12:10:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WX9lP7cN1XhMLxAyp1fuinpNzyHjtW9iix4zXAbknMw=;
-        b=2kbnJX/TTrGMk7UZXATJbD++9Qe9o+upq+AV3Pp0DFWv9Rpblz+0bAxGoah923pTEV
-         nyycmbT8k0VOkM0zvrNF8ngbX2HKJ78Hs7xGKtUkObzHfjN6xa706RtLCYCntW29drff
-         GrAIP9nZR6MYTOTIgcyLLw7/RWL+ZcU0ySo8iEm9bG9Gomucm/wHOUFDWGaNBL+jYgg/
-         1HTgMnwVwUoK/QJ/2yYIy8dhfYfMsjYmqCW0RF5Yj0RHzogSSBiDQsnWGJanSTn6/tyt
-         TxF+A7ORsLG8NxFXhQ0ieRrlzthr54mbg/oFNrrc9BFvk2k7J+h3KdWITu9gZysKtidF
-         Fo2Q==
-X-Gm-Message-State: AOAM533QnVJDOJuMA+GY4sIyp1GCdcmWJxrD40Is91R5HHQx7hoDBGq6
-        0lEkIb1UrSRshptQ0LcIcmgLDA==
-X-Google-Smtp-Source: ABdhPJx+Bj9KO0Av1JRLZUrA6agVbkgI6FASmev7Quni+bS7dw7sIuv6+UWHsrp4bEZdBmdbt5QrIA==
-X-Received: by 2002:a17:903:1211:b0:15e:8208:8cc0 with SMTP id l17-20020a170903121100b0015e82088cc0mr23524064plh.52.1652814591197;
-        Tue, 17 May 2022 12:09:51 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:be81:6c26:5643:b3d9])
-        by smtp.gmail.com with ESMTPSA id f16-20020a170902ab9000b0015e8d4eb246sm9498265plr.144.2022.05.17.12.09.50
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yLWGf6noqZ2UAsrYDmsOYBAadodi2Bs3NIlH+wwmFZo=;
+        b=Azd0tm2mtuf/pKYeUOuT2jschQ/+L8iF+hBpsq2rZrhu4/r+f+ZFNu3ezDmnOONVfc
+         lQYWIOXp5HPX1sb2cOOY6ZGkrXmhKkHA6xSC1PuGTY8ZkVJLZn3GivEIW0hi1p6FrJYm
+         4UJgwDS1PRlGjEXSaDVcOhAomMFl4qxzI6uF1J37hhzQrpFDDDQR1MdUDdatdhstLPlg
+         3Q0NyDYoA/TVWQaNiCthl2hxSHGW3Z9fZ5ne7p9dGGAMSNzo+PcshgdBJTTH7s1Rvctd
+         OQKZ32O8w5wN+pb+DtnyOpBFqx0hIge3dM6SZlmksFE+eZQKWhs7vzUIP3WOtQmm3mPB
+         6HVQ==
+X-Gm-Message-State: AOAM5304giNkwmTmsDTZChL20o8kVpBVsAAu+lVm4wWb/UgJP5MUp++h
+        EkkAfJ6dH0w6WdPiEAlncQ==
+X-Google-Smtp-Source: ABdhPJy4miFKvM87CLia6X19+C4vW9J6H2mSavDuTAHJg59x2aj8kAcXZfvXKVJcD+y5m6DKMyvKxA==
+X-Received: by 2002:a05:6870:f206:b0:d6:ca78:94f0 with SMTP id t6-20020a056870f20600b000d6ca7894f0mr14282937oao.4.1652814656913;
+        Tue, 17 May 2022 12:10:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y80-20020aca4b53000000b00325cda1ffb6sm26413oia.53.2022.05.17.12.10.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 12:09:50 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        Alex Elder <elder@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Subject: [PATCH] clk: qcom: rpmh: Add note about sleep/wake state for BCMs
-Date:   Tue, 17 May 2022 12:09:49 -0700
-Message-Id: <20220517190949.2922197-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+        Tue, 17 May 2022 12:10:56 -0700 (PDT)
+Received: (nullmailer pid 1444903 invoked by uid 1000);
+        Tue, 17 May 2022 19:10:55 -0000
+Date:   Tue, 17 May 2022 14:10:55 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 02/23] dt-bindings: ata: ahci-platform: Detach common
+ AHCI bindings
+Message-ID: <20220517191055.GA1424316-robh@kernel.org>
+References: <20220511231810.4928-1-Sergey.Semin@baikalelectronics.ru>
+ <20220511231810.4928-3-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511231810.4928-3-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sleep/wake state doesn't need to be set here because of specific
-RPMh behavior that carries over the active state when sleep/wake state
-hasn't been modified. Add a note to the code so we aren't tempted to set
-the sleep/wake states.
+On Thu, May 12, 2022 at 02:17:49AM +0300, Serge Semin wrote:
+> In order to create a more sophisticated AHCI controller DT bindings let's
+> divide the already available generic AHCI platform YAML schema into the
+> platform part and a set of the common AHCI properties. The former part
+> will be used to evaluate the AHCI DT nodes mainly compatible with the
+> generic AHCI controller while the later schema will be used for more
+> thorough AHCI DT nodes description. For instance such YAML schemas design
+> will be useful for our DW AHCI SATA controller derivative with four clock
+> sources, two reset lines, one system controller reference and specific
+> max Rx/Tx DMA xfers size constraints.
+> 
+> Note the phys and target-supply property requirement is preserved in the
+> generic AHCI platform bindings because some platforms can lack of the
+> explicitly specified PHYs or target device power regulators.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Folks, I don't really see why the phys/target-supply requirement has been
+> added to the generic AHCI DT schema in the first place. Probably just to
+> imply some meaning for the sub-nodes definition. Anyway in one of the
+> further patches I am adding the DW AHCI SATA controller DT bindings which
+> won't require having these properties specified in the sub-nodes, but will
+> describe additional port-specific properties. That's why I get to keep the
+> constraints in the ahci-platform.yaml schema instead of moving them to the
+> common schema.
+> 
+> Changelog v2:
+> - This is a new patch created after rebasing v1 onto the 5.18-rc3 kernel.
+> 
+> Changelog v3:
+> - Replace Jens's email address with Damien's one in the list of the
+>   schema maintainers. (@Damien)
+> ---
+>  .../devicetree/bindings/ata/ahci-common.yaml  | 117 ++++++++++++++++++
+>  .../bindings/ata/ahci-platform.yaml           |  68 +---------
+>  2 files changed, 123 insertions(+), 62 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/ata/ahci-common.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/ata/ahci-common.yaml b/Documentation/devicetree/bindings/ata/ahci-common.yaml
+> new file mode 100644
+> index 000000000000..620042ca12e7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/ata/ahci-common.yaml
+> @@ -0,0 +1,117 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/ata/ahci-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Common Properties for Serial ATA AHCI controllers
+> +
+> +maintainers:
+> +  - Hans de Goede <hdegoede@redhat.com>
+> +  - Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> +
+> +description:
+> +  This document defines device tree properties for a common AHCI SATA
+> +  controller implementation. It's hardware interface is supposed to
+> +  conform to the technical standard defined by Intel (see Serial ATA
+> +  Advanced Host Controller Interface specification for details). The
+> +  document doesn't constitute a DT-node binding by itself but merely
+> +  defines a set of common properties for the AHCI-compatible devices.
+> +
+> +select: false
+> +
+> +allOf:
+> +  - $ref: sata-common.yaml#
+> +
+> +properties:
+> +  reg:
+> +    description:
+> +      Generic AHCI registers space conforming to the Serial ATA AHCI
+> +      specification.
+> +
+> +  reg-names:
+> +    description: CSR space IDs
+> +
+> +  interrupts:
+> +    description:
+> +      Generic AHCI state change interrupt. Can be implemented either as a
+> +      single line attached to the controller as a set of the dedicated signals
+> +      for the global and particular port events.
+> +
+> +  clocks:
+> +    description:
+> +      List of all the reference clocks connected to the controller.
+> +
+> +  clock-names:
+> +    description: Reference clocks IDs
+> +
+> +  resets:
+> +    description:
+> +      List of the reset control lines to reset the controller clock
+> +      domains.
+> +
+> +  reset-names:
+> +    description: Reset line IDs
+> +
+> +  power-domains:
+> +    description:
+> +      List of the power domain the AHCI controller being a part of.
 
-Cc: Alex Elder <elder@linaro.org>
-Cc: Taniya Das <quic_tdas@quicinc.com>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
+There's not really any point in listing all the above properties here, 
+because they all have to be listed in the device specific schemas.
 
-This superseedes a previous patch[1] I sent that tried to fix this.
+> +
+> +  ahci-supply:
+> +    description: Power regulator for AHCI controller
+> +
+> +  target-supply:
+> +    description: Power regulator for SATA target device
+> +
+> +  phy-supply:
+> +    description: Power regulator for SATA PHY
+> +
+> +  phys:
+> +    description: Reference to the SATA PHY node
+> +    maxItems: 1
+> +
+> +  phy-names:
+> +    maxItems: 1
+> +
+> +  ports-implemented:
+> +    $ref: '/schemas/types.yaml#/definitions/uint32'
+> +    description:
+> +      Mask that indicates which ports the HBA supports. Useful if PI is not
+> +      programmed by the BIOS, which is true for some embedded SoC's.
+> +    maximum: 0x1f
 
- drivers/clk/qcom/clk-rpmh.c | 5 +++++
- 1 file changed, 5 insertions(+)
+The AHCI spec says there's a max of 32 ports, not 5.
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index aed907982344..c07cab6905cb 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -274,6 +274,11 @@ static int clk_rpmh_bcm_send_cmd(struct clk_rpmh *c, bool enable)
- 		cmd.addr = c->res_addr;
- 		cmd.data = BCM_TCS_CMD(1, enable, 0, cmd_state);
- 
-+		/*
-+		 * Send only an active only state request. RPMh continues to
-+		 * use the active state when we're in sleep/wake state as long
-+		 * as the sleep/wake state has never been set.
-+		 */
- 		ret = clk_rpmh_send(c, RPMH_ACTIVE_ONLY_STATE, &cmd, enable);
- 		if (ret) {
- 			dev_err(c->dev, "set active state of %s failed: (%d)\n",
+https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/serial-ata-ahci-spec-rev1-3-1.pdf
 
-base-commit: 42226c989789d8da4af1de0c31070c96726d990c
--- 
-https://chromeos.dev
-[1] https://lore.kernel.org/r/20220412194505.614002-1-swboyd@chromium.org
+> +
+> +patternProperties:
+> +  "^sata-port@[0-9a-f]+$":
+> +    type: object
+> +    description:
+> +      It is optionally possible to describe the ports as sub-nodes so
+> +      to enable each port independently when dealing with multiple PHYs.
+> +
+> +    properties:
+> +      reg:
+> +        description: AHCI SATA port identifier
+> +        maxItems: 1
+> +
+> +      phys:
+> +        description: Individual AHCI SATA port PHY
+> +        maxItems: 1
+> +
+> +      phy-names:
+> +        description: AHCI SATA port PHY ID
+> +        maxItems: 1
+> +
+> +      target-supply:
+> +        description: Power regulator for SATA port target device
+> +
+> +    required:
+> +      - reg
+> +
+> +    additionalProperties: true
+
+If device specific bindings can add their own properties (as this 
+allows), then all the common sata-port properties needs to be its own 
+schema document. That way the device binding can reference it, define 
+extra properties and set 'unevaluatedProperties: false'.
+
+If other properties aren't allowed, then you can just change this to 
+false. That's what we had before this change.
+
+> +
+> +required:
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: true
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> index 9304e4731965..76075d3c8987 100644
+> --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
+> @@ -36,8 +36,7 @@ select:
+>      - compatible
+>  
+>  allOf:
+> -  - $ref: "sata-common.yaml#"
+> -
+> +  - $ref: "ahci-common.yaml#"
+>  
+>  properties:
+>    compatible:
+> @@ -69,90 +68,35 @@ properties:
+>      maxItems: 1
+>  
+>    clocks:
+> -    description:
+> -      Clock IDs array as required by the controller.
+>      minItems: 1
+>      maxItems: 3
+>  
+>    clock-names:
+> -    description:
+> -      Names of clocks corresponding to IDs in the clock property.
+>      minItems: 1
+>      maxItems: 3
+>  
+>    interrupts:
+>      maxItems: 1
+>  
+> -  ahci-supply:
+> -    description:
+> -      regulator for AHCI controller
+> -
+> -  phy-supply:
+> -    description:
+> -      regulator for PHY power
+> -
+> -  phys:
+> -    description:
+> -      List of all PHYs on this controller
+> -    maxItems: 1
+> -
+> -  phy-names:
+> -    description:
+> -      Name specifier for the PHYs
+> -    maxItems: 1
+> -
+> -  ports-implemented:
+> -    $ref: '/schemas/types.yaml#/definitions/uint32'
+> -    description: |
+> -      Mask that indicates which ports that the HBA supports
+> -      are available for software to use. Useful if PORTS_IMPL
+> -      is not programmed by the BIOS, which is true with
+> -      some embedded SoCs.
+> -    maximum: 0x1f
+> -
+>    power-domains:
+>      maxItems: 1
+>  
+>    resets:
+>      maxItems: 1
+>  
+> -  target-supply:
+> -    description:
+> -      regulator for SATA target power
+> -
+> -required:
+> -  - compatible
+> -  - reg
+> -  - interrupts
+> -
+>  patternProperties:
+>    "^sata-port@[0-9a-f]+$":
+>      type: object
+> -    additionalProperties: false
+> -    description:
+> -      Subnode with configuration of the Ports.
+> -
+> -    properties:
+> -      reg:
+> -        maxItems: 1
+> -
+> -      phys:
+> -        maxItems: 1
+> -
+> -      phy-names:
+> -        maxItems: 1
+> -
+> -      target-supply:
+> -        description:
+> -          regulator for SATA target power
+> -
+> -    required:
+> -      - reg
+>  
+>      anyOf:
+>        - required: [ phys ]
+>        - required: [ target-supply ]
+>  
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> -- 
+> 2.35.1
+> 
+> 

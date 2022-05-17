@@ -2,170 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBE052AE63
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD48952AE71
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbiEQXGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 19:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
+        id S231642AbiEQXJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 19:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbiEQXGf (ORCPT
+        with ESMTP id S229512AbiEQXJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 19:06:35 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342EF2496E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652828794; x=1684364794;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=g4WPYgaq9OyQo3O40xrtni2x9Looh9Fp0cHWCY/CocQ=;
-  b=HZoowDlC7OI+OmgF3ThBhy6I6+wGje8TjJfA2A6V0VW4Y2sH4izW51Op
-   UexMrljBIoLUJkVh7wrWunNZGMFp4MS241572cwv8JlPWHYfYd9K+EgeK
-   j9+K4ecSL/4qGvjRka+h6Me/gpJzkgZFb07pAT3i13R98BwNiIM+eDeOm
-   Yx8RqC0PQ95sBVKHtmf1fIYNqSxSDrAJu/XAc5SxGqiSOCvAuN6qmbXdw
-   z9Cu1jY0fBuqPkCDxTVNxoz6OTUfE/amG8yJLevRzscWAQRhC3jvreMhR
-   Rl6iETT4RgfrvMNLDWAzsdamm3nmkhivJmBGTv7FBmYjU0lygiEeXZyTs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270198807"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="270198807"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 16:06:32 -0700
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="545128039"
-Received: from jaimeavi-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.2.102])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 16:06:28 -0700
-Message-ID: <40caabe4c708b35844c246ec6a01b4ee03cbfa63.camel@intel.com>
-Subject: Re: [PATCH v6 5/5] x86/tdx: Add Quote generation support
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 18 May 2022 11:06:26 +1200
-In-Reply-To: <145b19b7-00e1-3542-a99d-866539081add@linux.intel.com>
-References: <20220512221952.3647598-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220512221952.3647598-6-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220513185824.GB2913259@ls.amr.corp.intel.com>
-         <c07c9fa1-ff6a-df8a-6050-60ade29367f3@linux.intel.com>
-         <38a7c7406f0b0c65e68679fb8399ffe3fae05cb2.camel@intel.com>
-         <145b19b7-00e1-3542-a99d-866539081add@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 17 May 2022 19:09:50 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7694337AA8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:09:49 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id eg11so806566edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 16:09:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YeWHEdiEl4Cq8ce8kfBVpVlo8D7OiDCUHl/qifLiacg=;
+        b=Ac44BK8Oxljl1wYTS+T/ipuXIsyXnhAcD2EFhI7JosK6s2AsQoPQngNUvXID4XQU8R
+         mW0BrgZPM9PBNfCplH1dStY4W0uPggK8Wt+6CMBU7mscY1UFX/6hj+LnoR0uGO52NXre
+         +l1DxyMl5Jwi0KNt25psFVNG6+TgblbCYW2TtaI+GwLWcc0rj9ss2lo1oue9eMU5+mcl
+         QXteQBsXYw0S2TIAGZrSAk7sk04efAskF4tiEnJP+nQNSTQe23HVsY46BflkEcbSzII4
+         b0A+fWJDBtTWwT2EvWpIPUBE45sfCcfqGke+ggcODtNpXcqxB5rOTK9AMM+Nb18pnlM0
+         rQ/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YeWHEdiEl4Cq8ce8kfBVpVlo8D7OiDCUHl/qifLiacg=;
+        b=o4tKoS5aQ2u+/bD8W6RWBeSz6V6y/xQB2GASx0a4WBnBNJ47mF0Wq8j8RhnXmUlnMr
+         b2fUngURGQ5MwQBLmKWT+seOz+m29U0B8F9X8PqEGKsBf14q/iorsoFvahYO7BFkR9aO
+         BX3wiDeBGLJKS9msi4IsBZRfBeY7aN7B2ILi+MPOPSukAyPpV1OGogakn61WHu5ir5rV
+         565lF0i2xzZr/2aQptlAa/HWOfm23HWPeaEaU5bcTo5eLied6AAv/FcvOiDN30khrVTf
+         uG3X0RFYo9hxwSqQSWv6IshzitqOznUizYBypGEL+b0OxslvPp7z2EnIdHQ6R88X6bPQ
+         XXJA==
+X-Gm-Message-State: AOAM532HOG5nk7pF2ijxDzEIpmQiJHzmS5QmE9/gO8o16qXcdgNjI9an
+        YnoSbDWWmL93AMIQ4rrXgaYYNUCZrZqP8St2JwUpjA==
+X-Google-Smtp-Source: ABdhPJx4nt0FkvBklwCxEBBCV/UBFXuXao7+3ByQEB1fVw4PsnGPgV8/sCFzvyTI3gvxHW8FGK42C/aj4o8mMw44U6w=
+X-Received: by 2002:a50:ed8b:0:b0:42a:a7e0:f889 with SMTP id
+ h11-20020a50ed8b000000b0042aa7e0f889mr17019013edr.79.1652828987857; Tue, 17
+ May 2022 16:09:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220516171315.2400578-1-tjmercier@google.com>
+ <175c5af3-9224-9c8e-0784-349dad9a2954@amd.com> <CABdmKX2GcgCs1xANYPBp8OEtk9qqH7AvCzpdppj9rHXvMqWSAw@mail.gmail.com>
+ <0875fa95-3a25-a354-1433-201fca81ed3e@amd.com> <CABdmKX1+VYfdzyVYOS5MCsr4ptGTygmuUP9ikyh-vW6DgKk2kg@mail.gmail.com>
+ <YoM9BAwybcjG7K/H@kroah.com>
+In-Reply-To: <YoM9BAwybcjG7K/H@kroah.com>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Tue, 17 May 2022 16:09:36 -0700
+Message-ID: <CABdmKX3SngXeq+X0YiQ8d4X3xpUhnUtewPiUam5Bfi7PCC6nWQ@mail.gmail.com>
+Subject: Re: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Greg Kroah-Hartman <gregkh@google.com>,
+        John Stultz <jstultz@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-17 at 13:08 -0700, Sathyanarayanan Kuppuswamy wrote:
-> 
-> On 5/16/22 7:58 PM, Kai Huang wrote:
-> > On Fri, 2022-05-13 at 12:29 -0700, Sathyanarayanan Kuppuswamy wrote:
-> > > > 
-> > > > 
-> > > > > +
-> > > > > +	/* Wait for attestation completion */
-> > > > > +	ret = wait_for_completion_interruptible(&entry->compl);
-> > > > > +	if (ret < 0) {
-> > > > > +		/*
-> > > > > +		 * For premature termination, since VMM still owns the
-> > > > > +		 * shared buffer, mark the request invalid to let
-> > > > > +		 * quote_callback_handler() handle the memory cleanup
-> > > > > +		 * function.
-> > > > > +		 */
-> > > > > +		invalidate_quote_request(entry);
-> > > > 
-> > > > Interrupt can arrive after signal interrupt.  So invalidate_quote_request()
-> > > > should check if the request is already processed, and return 0 or -EINTR.
-> > > > Probably check the state always and del_list under single lock/unlock pair.
-> > > 
-> > > Agree. But I think we should return -EINTR for the interrupted case
-> > > irrespective of the processed status (so no return 0).
-> > > 
-> > > I will hold the lock and handle the cleanup for the processed
-> > > status.
-> > 
-> > Even if we check the buffer status in invalidate_quote_request(), there's no
-> > guarantee the VMM won't change the buffer status _after_ we do the check, so
-> > looks such check isn't necessary.
-> > 
-> 
-> Consider the case where we get a callback interrupt, and before we
-> complete the processing for it, user terminates the request. In this
-> scenario,  quote_callback_handler() will consider the request is
-> still valid and no do the memory cleanup. To handle this case,
-> we need to check the status in invalidate_quote_request() and do
-> the cleanup if required.
-> 
-> /* Handles early termination of GetQuote requests */
-> void invalidate_quote_request(struct quote_entry *entry)
-> {
->          struct tdx_quote_hdr *quote_hdr;
-> 
->          /*
->           * For early termination, if the request is not yet
->           * processed by VMM (GET_QUOTE_IN_FLIGHT), the VMM
->           * still owns the shared buffer, so mark the request
->           * invalid to let quote_callback_handler() handle the
->           * memory cleanup function. If the request is already
->           * processed, then do the cleanup and return.
->           */
-> 
->          mutex_lock(&quote_lock);
->          quote_hdr = (struct tdx_quote_hdr *)entry->buf->vmaddr;
->          if (quote_hdr->status == GET_QUOTE_IN_FLIGHT) {
+On Mon, May 16, 2022 at 11:13 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, May 16, 2022 at 05:08:05PM -0700, T.J. Mercier wrote:
+> > On Mon, May 16, 2022 at 12:21 PM Christian K=C3=B6nig
+> > <christian.koenig@amd.com> wrote:
+> > >
+> > > Am 16.05.22 um 20:08 schrieb T.J. Mercier:
+> > > > On Mon, May 16, 2022 at 10:20 AM Christian K=C3=B6nig
+> > > > <christian.koenig@amd.com> wrote:
+> > > >> Am 16.05.22 um 19:13 schrieb T.J. Mercier:
+> > > >>> Recently, we noticed an issue where a process went into direct re=
+claim
+> > > >>> while holding the kernfs rw semaphore for sysfs in write (exclusi=
+ve)
+> > > >>> mode. This caused processes who were doing DMA-BUF exports and re=
+leases
+> > > >>> to go into uninterruptible sleep since they needed to acquire the=
+ same
+> > > >>> semaphore for the DMA-BUF sysfs entry creation/deletion. In order=
+ to avoid
+> > > >>> blocking DMA-BUF export for an indeterminate amount of time while
+> > > >>> another process is holding the sysfs rw semaphore in exclusive mo=
+de,
+> > > >>> this patch moves the per-buffer sysfs file creation to the defaul=
+t work
+> > > >>> queue. Note that this can lead to a short-term inaccuracy in the =
+dmabuf
+> > > >>> sysfs statistics, but this is a tradeoff to prevent the hot path =
+from
+> > > >>> being blocked. A work_struct is added to dma_buf to achieve this,=
+ but as
+> > > >>> it is unioned with the kobject in the sysfs_entry, dma_buf does n=
+ot
+> > > >>> increase in size.
+> > > >> I'm still not very keen of this approach as it strongly feels like=
+ we
+> > > >> are working around shortcoming somewhere else.
+> > > >>
+> > > > My read of the thread for the last version is that we're running in=
+to
+> > > > a situation where sysfs is getting used for something it wasn't
+> > > > originally intended for, but we're also stuck with this sysfs
+> > > > functionality for dmabufs.
+> > > >
+> > > >>> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BU=
+F stats in sysfs")
+> > > >>> Originally-by: Hridya Valsaraju <hridya@google.com>
+> > > >>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+> > > >>>
+> > > >>> ---
+> > > >>> See the originally submitted patch by Hridya Valsaraju here:
+> > > >>> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F=
+%2Flkml.org%2Flkml%2F2022%2F1%2F4%2F1066&amp;data=3D05%7C01%7Cchristian.koe=
+nig%40amd.com%7C794614324d114880a25508da37672e4b%7C3dd8961fe4884e608e11a82d=
+994e183d%7C0%7C0%7C637883213566903705%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wL=
+jAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;s=
+data=3DbGlA2FeubfSeL5XDHYyWMZqUXfScoCphZjjK4jrqQJs%3D&amp;reserved=3D0
+> > > >>>
+> > > >>> v2 changes:
+> > > >>> - Defer only sysfs creation instead of creation and teardown per
+> > > >>> Christian K=C3=B6nig
+> > > >>>
+> > > >>> - Use a work queue instead of a kthread for deferred work per
+> > > >>> Christian K=C3=B6nig
+> > > >>> ---
+> > > >>>    drivers/dma-buf/dma-buf-sysfs-stats.c | 56 +++++++++++++++++++=
++-------
+> > > >>>    include/linux/dma-buf.h               | 14 ++++++-
+> > > >>>    2 files changed, 54 insertions(+), 16 deletions(-)
+> > > >>>
+> > > >>> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-=
+buf/dma-buf-sysfs-stats.c
+> > > >>> index 2bba0babcb62..67b0a298291c 100644
+> > > >>> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
+> > > >>> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
+> > > >>> @@ -11,6 +11,7 @@
+> > > >>>    #include <linux/printk.h>
+> > > >>>    #include <linux/slab.h>
+> > > >>>    #include <linux/sysfs.h>
+> > > >>> +#include <linux/workqueue.h>
+> > > >>>
+> > > >>>    #include "dma-buf-sysfs-stats.h"
+> > > >>>
+> > > >>> @@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
+> > > >>>        kset_unregister(dma_buf_stats_kset);
+> > > >>>    }
+> > > >>>
+> > > >>> +static void sysfs_add_workfn(struct work_struct *work)
+> > > >>> +{
+> > > >>> +     struct dma_buf_sysfs_entry *sysfs_entry =3D
+> > > >>> +             container_of(work, struct dma_buf_sysfs_entry, sysf=
+s_add_work);
+> > > >>> +     struct dma_buf *dmabuf =3D sysfs_entry->dmabuf;
+> > > >>> +
+> > > >>> +     /*
+> > > >>> +      * A dmabuf is ref-counted via its file member. If this han=
+dler holds the only
+> > > >>> +      * reference to the dmabuf, there is no need for sysfs kobj=
+ect creation. This is an
+> > > >>> +      * optimization and a race; when the reference count drops =
+to 1 immediately after
+> > > >>> +      * this check it is not harmful as the sysfs entry will sti=
+ll get cleaned up in
+> > > >>> +      * dma_buf_stats_teardown, which won't get called until the=
+ final dmabuf reference
+> > > >>> +      * is released, and that can't happen until the end of this=
+ function.
+> > > >>> +      */
+> > > >>> +     if (file_count(dmabuf->file) > 1) {
+> > > >> Please completely drop that. I see absolutely no justification for=
+ this
+> > > >> additional complexity.
+> > > >>
+> > > > This case gets hit around 5% of the time in my testing so the else =
+is
+> > > > not a completely unused branch.
+> > >
+> > > Well I can only repeat myself: This means that your userspace is
+> > > severely broken!
+> > >
+> > > DMA-buf are meant to be long living objects
+> > This patch addresses export *latency* regardless of how long-lived the
+> > object is. Even a single, long-lived export will benefit from this
+> > change if it would otherwise be blocked on adding an object to sysfs.
+> > I think attempting to improve this latency still has merit.
+>
+> Fixing the latency is nice, but as it's just pushing the needed work off
+> to another code path, it will take longer overall for the sysfs stuff to
+> be ready for userspace to see.
+>
+> Perhaps we need to step back and understand what this code is supposed
+> to be doing.  As I recall, it was created because some systems do not
+> allow debugfs anymore, and they wanted the debugging information that
+> the dmabuf code was exposing to debugfs on a "normal" system.  Moving
+> that logic to sysfs made sense, but now I am wondering why we didn't see
+> these issues in the debugfs code previously?
+>
+The debugfs stuff doesn't happen on every export, right?
 
-What prevents VMM from updating quote_hdr->status from IN_FLIGHT to DONE _after_
-this check?
+> Perhaps we should go just one step further and make a misc device node
+> for dmabug debugging information to be in and just have userspace
+> poll/read on the device node and we spit the info that used to be in
+> debugfs out through that?  That way this only affects systems when they
+> want to read the information and not normal code paths?  Yeah that's a
+> hack, but this whole thing feels overly complex now.
+>
 
-If you want to add such check, you should check against GET_QUOTE_DONE, but not
-IN_FLIGHT.  Only after status is DONE,  VMM will not update the buffer.  Perhaps
-something like below:
+And deprecate sysfs support? I'm happy to try out anything you think
+might be a better way. As far as complexity of this patch, this
+revision is a much simpler version of the one from Hridya you already
+reviewed.
 
-	mutex_lock(&quote_lock);
-	/* Skip invalidate the buffer if VMM has done with the buffer */
-	if (quote_hdr->status == GET_QUOTE_DONE) {
-		mutex_unlock(&quote_lock);
-		return 0;
-	}
-
-And in the IOCTL, you can perhaps to choose to return 0, instead of -EINTR in
-this case, as the Quote has been finished already.
-
-But I am not sure whether this is necessary.  The worst case is one finished
-Quote is wasted I guess.
-
->                  entry->valid = false;
->                  mutex_unlock(&quote_lock);
->                  return;
->          }
->          _del_quote_entry(entry);
->          mutex_unlock(&quote_lock);
-> }
-> 
-> 
-
--- 
-Thanks,
--Kai
-
-
+> thanks,
+>
+> greg k-h

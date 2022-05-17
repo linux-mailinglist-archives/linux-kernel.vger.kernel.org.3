@@ -2,128 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 940AF52AE52
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9099452AE4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiEQWxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 18:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
+        id S231475AbiEQWtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 18:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbiEQWwz (ORCPT
+        with ESMTP id S231447AbiEQWt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 18:52:55 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7A14F459
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:52:53 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id a19so513058pgw.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OWhG3qNg/5eexE1crBNvOipFCjBLP3/z9bYPvdK0Xxw=;
-        b=fnN/DvFGJ4S3ggNNyN5o3rd3y77Dx9DNm4bOF+yHVmOoZS7i6nfjMCUF4X9DBpZxYd
-         XuHPR9H3pIcmzmNbjAw3ppEGPbJMMD1c9GlGZAlOJOYNk5d769FXmJa3KunEriq2eXIW
-         gssuRXaEqst3+WXdz5NiMVzWLvlHNCenbHb8S9DHg/nzHXKYFY7NlriVliFbsTZQG2oA
-         xqJg+S06MJKmKptc/ITVIQW6pv/Aiz0bfAjP8S0wZ/mCzEVmobXNHGxkHnn5hyyNoHjo
-         CEbdyk2Z0TyLR5nAiXf4wvk6D4nCOoCGityKQJcte7YfRTC6DkG6G/t1vcYenxABzFRA
-         9PrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OWhG3qNg/5eexE1crBNvOipFCjBLP3/z9bYPvdK0Xxw=;
-        b=FD9NSnUvLM8DMbTRUjhgSyKXqJhNZ7ALBmSdO/CKD0xpPYonxZ/Ea5u2UzHVvrBmCL
-         ja08IT7dPH/4/8rhIo+5UpBis8cUY9qIuVetBa4DH3729L+BN+HkL406EV5j0r43CCGk
-         Qi1IvReuW12hgMwEQ2iAFylCMSxhECA1R2VdZpefEanINWQ0OHImgQF/VFbRDtOFcm0/
-         oNKbAZOvjWdWbJaM1MeXgnAII5p5nTn4DGwNPkqH9RmH6yXhEvCtwS1Mf8jXWFAICfkg
-         l3weWaRFkTT4kKrYubeBQ4H/nm7SzTc0GaUV67NsSFucibq8BD8s3i0mlGNyxa5Ncwtj
-         rbZg==
-X-Gm-Message-State: AOAM533814kiUbG40ccG1btswRPa4HwpByhNLe7rPSo+qyjW3e9McOaf
-        ZHEtf7TXeqrjreDglAthoyl5Cw==
-X-Google-Smtp-Source: ABdhPJyizKDn01Z3nK2KyOrPiO1lbsfF2tvuKrM/43JMbGs3xC827t0VguJyVrqoCONQApzSp0k/Qg==
-X-Received: by 2002:a63:5a13:0:b0:3c6:3d28:87e5 with SMTP id o19-20020a635a13000000b003c63d2887e5mr21807441pgb.452.1652827972596;
-        Tue, 17 May 2022 15:52:52 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id w137-20020a627b8f000000b0050dc76281bbsm249334pfc.149.2022.05.17.15.52.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 15:52:52 -0700 (PDT)
-Date:   Tue, 17 May 2022 22:52:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
-        thomas.lendacky@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/tdx: Handle load_unaligned_zeropad() page-cross to a
- shared page
-Message-ID: <YoQnQIfX8GuOgKqH@google.com>
-References: <20220517153021.11116-1-kirill.shutemov@linux.intel.com>
- <e73cb19e-7dab-2fc1-b947-fac70fd607d2@intel.com>
- <20220517174042.v6s7wm3u5j2ebaoq@black.fi.intel.com>
- <c761e774-8014-6fa9-cf21-e7cd8f7aca54@intel.com>
- <20220517201710.ixbpsaga5jzvokvy@black.fi.intel.com>
- <083519ab-752f-9815-7741-22b3fcc03322@intel.com>
- <YoQkTtrMiU2bff9i@google.com>
+        Tue, 17 May 2022 18:49:27 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CA552E6E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:49:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652827766; x=1684363766;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eW9eeCQ/ZnkVlQzYhrGw1tL7ydi/5swHvLwwK3+msYw=;
+  b=KW0YKMPMHh9jm84ggUkMVPwKKOogXdXo6lACmg6OLYJajbhpC5oExT8u
+   TCjQUzBLtEQe1LbQ8Imhpxv/vK7HUBRQA8aqj3m+v0sp8cZbv5u0uz5G0
+   BUDQIKfBaQ81TCPHJVaqlnNIyH9qjsmwEnGOt5Wm4lmWal2Cp/8/2ylS0
+   cflszpzJ8APD/LE4QUQhXtuJnLJiAIw0BlvxBOQhYCz3OW7CTzM+Zj81c
+   jKgWu0giJU+BhDT9A6xpdHfuMvouxCFQbAobiMB37WPTXctjwJ2i4dyBw
+   8OUYyLKLozM6eLRrcDYTRLayD58i+krSeEQSQ7NLsZRkRMeEk6l5GmKbB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="331980533"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="331980533"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 15:49:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="626709312"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga008.fm.intel.com with ESMTP; 17 May 2022 15:49:25 -0700
+Date:   Tue, 17 May 2022 15:53:08 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Nicholas Piggin <npiggin@gmail.com>, x86@kernel.org,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Stephane Eranian <eranian@google.com>,
+        iommu@lists.linux-foundation.org, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH v6 28/29] x86/tsc: Restart NMI watchdog after refining
+ tsc_khz
+Message-ID: <20220517225308.GC6711@ranerica-svr.sc.intel.com>
+References: <20220506000008.30892-1-ricardo.neri-calderon@linux.intel.com>
+ <20220506000008.30892-29-ricardo.neri-calderon@linux.intel.com>
+ <1652180070.1r874kr0tg.astroid@bobo.none>
+ <87ilqdpq7u.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoQkTtrMiU2bff9i@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87ilqdpq7u.ffs@tglx>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022, Sean Christopherson wrote:
-> On Tue, May 17, 2022, Dave Hansen wrote:
-> > On 5/17/22 13:17, Kirill A. Shutemov wrote:
-> > >>> Given that we had to adjust IP in handle_mmio() anyway, do you still think
-> > >>> "ve->instr_len = 0;" is wrong? I dislike ip_adjusted more.
-> > >> Something is wrong about it.
-> > >>
-> > >> You could call it 've->instr_bytes_to_handle' or something. Then it
-> > >> makes actual logical sense when you handle it to zero it out.  I just
-> > >> want it to be more explicit when the upper levels need to do something.
-> > >>
-> > >> Does ve->instr_len==0 both when the TDX module isn't providing
-> > >> instruction sizes *and* when no handling is necessary?  That seems like
-> > >> an unfortunate logical multiplexing of 0.
-> > > For EPT violation, ve->instr_len has *something* (not zero) that doesn't
-> > > match the actual instruction size. I dig out that it is filled with data
-> > > from VMREAD(0x440C), but I don't know where is the ultimate origin of the
-> > > data.
-> > 
-> > The SDM has a breakdown:
-> > 
-> > 	27.2.5 Information for VM Exits Due to Instruction Execution
-> > 
-> > I didn't realize it came from VMREAD.  I guess I assumed it came from
-> > some TDX module magic.  Silly me.
-> > 
-> > The SDM makes it sound like we should be more judicious about using
-> > 've->instr_len' though.  "All VM exits other than those listed in the
-> > above items leave this field undefined."  Looking over
-> > virt_exception_kernel(), we've got five cases from CPU instructions that
-> > cause unconditional VMEXITs:
+On Tue, May 10, 2022 at 01:44:05PM +0200, Thomas Gleixner wrote:
+> On Tue, May 10 2022 at 21:16, Nicholas Piggin wrote:
+> > Excerpts from Ricardo Neri's message of May 6, 2022 10:00 am:
+> >> +	/*
+> >> +	 * If in use, the HPET hardlockup detector relies on tsc_khz.
+> >> +	 * Reconfigure it to make use of the refined tsc_khz.
+> >> +	 */
+> >> +	lockup_detector_reconfigure();
+> >
+> > I don't know if the API is conceptually good.
+> >
+> > You change something that the lockup detector is currently using, 
+> > *while* the detector is running asynchronously, and then reconfigure
+> > it. What happens in the window? If this code is only used for small
+> > adjustments maybe it does not really matter but in principle it's
+> > a bad API to export.
+> >
+> > lockup_detector_reconfigure as an internal API is okay because it
+> > reconfigures things while the watchdog is stopped [actually that
+> > looks untrue for soft dog which uses watchdog_thresh in
+> > is_softlockup(), but that should be fixed].
+> >
+> > You're the arch so you're allowed to stop the watchdog and configure
+> > it, e.g., hardlockup_detector_perf_stop() is called in arch/.
+> >
+> > So you want to disable HPET watchdog if it was enabled, then update
+> > wherever you're using tsc_khz, then re-enable.
+> 
+> The real question is whether making this refined tsc_khz value
+> immediately effective matters at all. IMO, it does not because up to
+> that point the watchdog was happily using the coarse calibrated value
+> and the whole use TSC to assess whether the HPET fired mechanism is just
+> a guestimate anyway. So what's the point of trying to guess 'more
+> correct'.
 
-Ideally, what the SDM says wouldn't matter at all.  The TDX module spec really
-should be the authorative source in this case, but it just punts to the SDM:
+In some of my test systems I observed that, the TSC value does not fall
+within the expected error window the first time the HPET channel expires.
 
-  The 32-bit value that would have been saved into the VMCS as VM-exit instruction
-  length if a legacy VM exit had occurred instead of the virtualization exception.
+I inferred that the error computed using the coarser tsc_khz was wrong.
+Recalculating the error window with refined tsc_khz would correct it.
 
-Even if the TDX spec wants to punt to the SDM, it would save a lot of headache and
-SDM reading if it also said something to the effect of:
+However, restarting the timer has the side-effect of kicking the timer and,
+therefore pushing the first HPET NMI further in the future.
 
-  The INSTRUCTION_LENGTH and INSTRUCTION_INFORMATION fields are valid for all
-  #VEs injected by the Intel TDX Module.  The fields are undefined for #VEs
-  injected by the CPU due to EPT Violations.
+Perhaps kicking HPET channel, not recomputing the error window, corrected
+(masked?) the problem.
+
+I will investigate further and rework or drop this patch as needed.
+
+Thanks and BR,
+Ricardo

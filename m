@@ -2,77 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD68529A77
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528C5529AAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238348AbiEQHId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
+        id S239465AbiEQHWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241096AbiEQHIP (ORCPT
+        with ESMTP id S229527AbiEQHWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:08:15 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940C147AF0;
-        Tue, 17 May 2022 00:07:56 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L2RxQ2bQ8z1JCTY;
-        Tue, 17 May 2022 15:06:34 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
- 2022 15:07:53 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v4 6/6] selftests/bpf: Fix trivial typo in fentry_fexit.c
-Date:   Tue, 17 May 2022 03:18:38 -0400
-Message-ID: <20220517071838.3366093-7-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220517071838.3366093-1-xukuohai@huawei.com>
-References: <20220517071838.3366093-1-xukuohai@huawei.com>
+        Tue, 17 May 2022 03:22:21 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8963942A3A
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:22:20 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id l13-20020a056e0212ed00b002d07cd1db63so7361209iln.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:22:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=EW5Q6QKsJ+9pJ/H1EnmsJZVigDkNagilqi9r8wZQf8c=;
+        b=44ul8s6HuEg/b63HJtGecFiQMzOWmxk3VtQe5rmvvvtmLNVDP7lHdErNf2QVwUN5Q/
+         kHABgZ3C9Z/MTVeOfAZzFrwfFQNvO5//KZPLrSw+A7eAF1qpZw9yQqzoOIoaU1gBTenE
+         UvjzfSOoo3wgvMIiEmpHSmA7AyXTMukJDho00seQFuBYrdagtohB/wZVewqL+v2hFfxS
+         sKY4h9A8+Ec1HuyyVn4lRzf3YpMA4FDb61qmScn6Be3Dpvkp7ZzIna8Eh5GW07CNvfgu
+         JD9t2rd0SAVXYy+GoChnZjyoNQnywHOrQKvf8f0BSSeg2uJJnnHz/NtkRp8wFHp3ACkD
+         Z13w==
+X-Gm-Message-State: AOAM533DDwHONePU2D6vO77qL+zCYJbU6Ib+I5c8U68J9cmzpzqW9+2T
+        4HDKaXIo49ctKSmGhAW3VULmjIQyiaKk7ZtRAHHNiKafNB+2
+X-Google-Smtp-Source: ABdhPJxNBlC94Li+OwfrMSHh7d5d52CQJhBaXh1yO6XqCJcp9M+IG5Up61bUzX4DRglaLc6Jnho1gM11b9bgUP+UMNHF+trXWBUg
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:c262:0:b0:2d1:3722:a3eb with SMTP id
+ h2-20020a92c262000000b002d13722a3ebmr1365360ild.270.1652772139941; Tue, 17
+ May 2022 00:22:19 -0700 (PDT)
+Date:   Tue, 17 May 2022 00:22:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004bc82405df30009e@google.com>
+Subject: [syzbot] BUG: sleeping function called from invalid context in binder_ioctl
+From:   syzbot <syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com>
+To:     arve@android.com, brauner@kernel.org, cmllamas@google.com,
+        gregkh@linuxfoundation.org, hridya@google.com,
+        joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+        maco@android.com, surenb@google.com,
+        syzkaller-bugs@googlegroups.com, tkjos@android.com,
+        tkjos@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,29 +57,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "ipv6" word in assertion message should be "fentry_fexit".
+Hello,
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Song Liu <songliubraving@fb.com>
+syzbot found the following issue on:
+
+HEAD commit:    3f7bdc402fb0 Add linux-next specific files for 20220516
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=105218c6f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
+dashboard link: https://syzkaller.appspot.com/bug?extid=46fff6434a7f968ecb39
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11105599f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c7b2b1f00000
+
+The issue was bisected to:
+
+commit bd32889e841c12533d09a1bd02bba932baa9ed8f
+Author: Carlos Llamas <cmllamas@google.com>
+Date:   Fri Apr 29 23:56:41 2022 +0000
+
+    binder: add BINDER_GET_EXTENDED_ERROR ioctl
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1422c845f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1622c845f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1222c845f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com
+Fixes: bd32889e841c ("binder: add BINDER_GET_EXTENDED_ERROR ioctl")
+
+BUG: sleeping function called from invalid context at lib/usercopy.c:28
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3613, name: syz-executor152
+preempt_count: 1, expected: 0
+RCU nest depth: 0, expected: 0
+1 lock held by syz-executor152/3613:
+ #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
+ #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: _binder_inner_proc_lock drivers/android/binder.c:283 [inline]
+ #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: binder_ioctl_get_extended_error drivers/android/binder.c:5167 [inline]
+ #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: binder_ioctl+0x798/0x6d80 drivers/android/binder.c:5390
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 0 PID: 3613 Comm: syz-executor152 Not tainted 5.18.0-rc6-next-20220516-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __might_resched.cold+0x222/0x26b kernel/sched/core.c:9791
+ __might_fault+0x6c/0x170 mm/memory.c:5567
+ _copy_to_user+0x25/0x140 lib/usercopy.c:28
+ copy_to_user include/linux/uaccess.h:160 [inline]
+ binder_ioctl_get_extended_error drivers/android/binder.c:5168 [inline]
+ binder_ioctl+0x7aa/0x6d80 drivers/android/binder.c:5390
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f3ae108e059
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff28fbd878 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3ae108e059
+RDX: 0000000000000000 RSI: 00000000c00c6211 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007f3ae10fbe40 R09: 00007f3ae10fbe40
+R10: 00007fff28fbd2f0 R11: 0000000000000246 R12: 00007fff28fbd8b0
+R13: 00007fff28fbd8a0 R14: 00007fff28fbd890 R15: 0000000000000000
+ </TASK>
+
+=============================
+[ BUG: Invalid wait context ]
+5.18.0-rc6-next-20220516-syzkaller #0 Tainted: G        W        
+-----------------------------
+syz-executor152/3613 is trying to lock:
+ffff888073415f98 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0xa1/0x170 mm/memory.c:5569
+other info that might help us debug this:
+context-{4:4}
+1 lock held by syz-executor152/3613:
+ #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:360 [inline]
+ #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: _binder_inner_proc_lock drivers/android/binder.c:283 [inline]
+ #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: binder_ioctl_get_extended_error drivers/android/binder.c:5167 [inline]
+ #0: ffff8880777572f8 (&proc->inner_lock){+.+.}-{2:2}, at: binder_ioctl+0x798/0x6d80 drivers/android/binder.c:5390
+stack backtrace:
+CPU: 0 PID: 3613 Comm: syz-executor152 Tainted: G        W         5.18.0-rc6-next-20220516-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_lock_invalid_wait_context kernel/locking/lockdep.c:4705 [inline]
+ check_wait_context kernel/locking/lockdep.c:4766 [inline]
+ __lock_acquire.cold+0xdb/0x3b4 kernel/locking/lockdep.c:5003
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ __might_fault mm/memory.c:5570 [inline]
+ __might_fault+0x104/0x170 mm/memory.c:5563
+ _copy_to_user+0x25/0x140 lib/usercopy.c:28
+ copy_to_user include/linux/uaccess.h:160 [inline]
+ binder_ioctl_get_extended_error drivers/android/binder.c:5168 [inline]
+ binder_ioctl+0x7aa/0x6d80 drivers/android/binder.c:5390
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7f3ae108e059
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff28fbd878 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3ae108e059
+RDX: 0000000000000000 RSI: 00000000c00c6211 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007f3ae10fbe40 R09: 00007f3ae10fbe40
+R10: 00007fff28fbd2f0 R11: 0000000000000246 R12: 00007fff28fbd8b0
+R13: 00007fff28fbd8a0 R14: 00007fff28fbd890 R15: 0000000000000000
+ </TASK>
+binder: 3613:3613 ioctl c00c6211 0 returned -14
+
+
 ---
- tools/testing/selftests/bpf/prog_tests/fentry_fexit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-index 130f5b82d2e6..e3c139bde46e 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-@@ -28,8 +28,8 @@ void test_fentry_fexit(void)
- 
- 	prog_fd = fexit_skel->progs.test1.prog_fd;
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "ipv6 test_run");
--	ASSERT_OK(topts.retval, "ipv6 test retval");
-+	ASSERT_OK(err, "fentry_fexit test_run");
-+	ASSERT_OK(topts.retval, "fentry_fexit test retval");
- 
- 	fentry_res = (__u64 *)fentry_skel->bss;
- 	fexit_res = (__u64 *)fexit_skel->bss;
--- 
-2.30.2
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,114 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F12652A593
+	by mail.lfdr.de (Postfix) with ESMTP id BC4E052A594
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349548AbiEQPDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S1349597AbiEQPDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349545AbiEQPDm (ORCPT
+        with ESMTP id S1349545AbiEQPDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:03:42 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7336A286F1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:03:41 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id hh4so14462930qtb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:03:41 -0700 (PDT)
+        Tue, 17 May 2022 11:03:46 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99124286F1;
+        Tue, 17 May 2022 08:03:45 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id q2so18969190vsr.5;
+        Tue, 17 May 2022 08:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nYw9MLrmTgrCyt32icuujwVIUmzRK3qobN37OJ0H6Dk=;
-        b=YIjyNubMBQN3j3kq8COxDOs9ZfyumC6z67UoQ2FYG9OrbcSw89m7muMq6Ee/AEBQIN
-         Znt8L77xweytRK5+XWVErzOjLGyuLd781OgCT7nEzZ+2p42AFQcJW6+vMmMqNqb6imCH
-         yC5ny4vzLdqIcnFqOtpkVy9/pchereg5BA/DDcpwXqViuGISm1EmqlzOWKyzrzLEX8fW
-         PDZupU2SGzflxTCdTC9+1ls0wSz05ZJSH8vKc7S2E+G40p9vgyR74ZH21+jPx5Ew26MD
-         sZbtW2pwcterOngapb6X791W2mKDNIB20J4hw3mTG8/RNL6irZULDmfs53nRiHWko8FA
-         +p/w==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=S4e8UP5BJWcehEd5lvqnvGFisDV1bTubwTjUFBZmIpM=;
+        b=it+A4dqWumEFH1OSAjnGrn0chRuB/5FpiUDVDsQus4pGIE77uwkNPajTFqp43yaQQV
+         0K4FVAfDKxGbfdWuXwGMuG7OWRggbGm9UcyR6gkdkalqgO7NTI8voWH0N6d7cHwOuPLb
+         tAwe5tmJsOrauX8ChVqllBdIg4J3215TuS3u6DcHR4ERrH0PN+5+kH7m93V1Cye9CgP+
+         vUeIStn210AYuqJef07EjLTloaNfpoPGmO2ohlLbpqZ8tzNhJ+mEmaAVYk7w2HQe2lqo
+         29xH4Y+sUjHCMOxqVITXcyH9o5Ob+H1KoW7qMDLlKIeQsHopFS681ikGrcVWoXCqVTOv
+         JKJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nYw9MLrmTgrCyt32icuujwVIUmzRK3qobN37OJ0H6Dk=;
-        b=z/n7PryDfQNjsO4d9H93nQ1lCQxXAJ38kAqP+16f+pFG42fqFUXXiZxYPTeCJ2pkyh
-         UzaLJMsJUSxEoAv6ZZSvNwRXkltZ1EX5/oh5i9ga6xTt2TGhBfQjeuPf67RBO3aFMNLx
-         MR4NnGda9Db428SZqbzDKQaLWprNn6e1rE4ymm6K4l4Wct7QlFPzTiyG3Ta3dxncRqFU
-         MxWb9AQT6YKa8qCNACy841VoMpMTHU2HuDgTxWixEEW2cueklByMUcsgA2ZFf7rPwcHF
-         uKdtRWhAaAdIE1PtUNj7k53m3Q9vn9GiFpQbb4kWosdtc2YHsTV2yF7z8nJXyZ+jeYl0
-         PfkA==
-X-Gm-Message-State: AOAM530tbiJeUTb3TLDUa3sYSu5eALVJLDQ00jcZM/idqm+CGUcHWzZ8
-        9LQHAUUaQNRdPRVQ1aIw8joeFA==
-X-Google-Smtp-Source: ABdhPJzNAviWPSBXWWUJ/iGKw+c/h25D3QSyPMqu9y9mjuiv7nOxJijw6Gy3AK7v52SKehoMul0w4Q==
-X-Received: by 2002:ac8:7f43:0:b0:2f3:d55d:7296 with SMTP id g3-20020ac87f43000000b002f3d55d7296mr20083913qtk.635.1652799820611;
-        Tue, 17 May 2022 08:03:40 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id u123-20020ae9d881000000b006a0462eb091sm7772405qkf.80.2022.05.17.08.03.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 08:03:39 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nqyjb-0084ZN-6l; Tue, 17 May 2022 12:03:39 -0300
-Date:   Tue, 17 May 2022 12:03:39 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     longli@microsoft.com
-Cc:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 09/12] net: mana: Move header files to a common location
-Message-ID: <20220517150339.GI63055@ziepe.ca>
-References: <1652778276-2986-1-git-send-email-longli@linuxonhyperv.com>
- <1652778276-2986-10-git-send-email-longli@linuxonhyperv.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=S4e8UP5BJWcehEd5lvqnvGFisDV1bTubwTjUFBZmIpM=;
+        b=Ixa3kqQJh7u+rcI8FT00j7ISHXObOAuEOvDw2JNo+O7PVH+hZuH5wdbbubopfMl6z9
+         +faYjoycZ0+OoE1NvLm7OBai0h5blQhD84sqSq5n2Xko2XO/OlaZH0IqFQ1CvLGiwJ6J
+         bNKJLNDMqedaOKX258T4uR7EckLhzTV0S4Sy3LJbPdkZ2tTDrp9AEw7CH+tpZXnV61Y0
+         PL7c2ickuhzKeqb65xbapHLTiD8qEk9AezxP3GhAgPU1hYVqpk2tMYCMIA3nIMkvqkM+
+         yjiwe+v1IG2pPVzai7yDMAFjbrW5QAdgpIKFX0e4EnNBiJCRd8QPKVuX91nxGePbyTn7
+         GlwA==
+X-Gm-Message-State: AOAM532WFodYtpWp+320nPRJ9k19+i3BiljLlHNer1nDvUW/bHXDdEyK
+        0NENvGddh9kslkksnb5jV5I=
+X-Google-Smtp-Source: ABdhPJxRUVIxQQmWioisYDsZbORonfIHNKzTiaRi23XzztneUyBk5dUPpWSFnz0dCz+HHvz3xLdiRA==
+X-Received: by 2002:a05:6102:548a:b0:32d:8c72:ee18 with SMTP id bk10-20020a056102548a00b0032d8c72ee18mr9187660vsb.70.1652799824751;
+        Tue, 17 May 2022 08:03:44 -0700 (PDT)
+Received: from [192.168.1.140] ([65.35.200.237])
+        by smtp.gmail.com with ESMTPSA id b20-20020a056102233400b0032d275e6922sm1207602vsa.34.2022.05.17.08.03.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 08:03:44 -0700 (PDT)
+Message-ID: <30bb7968-06fb-308c-a5f0-df316dfb240e@gmail.com>
+Date:   Tue, 17 May 2022 11:03:41 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652778276-2986-10-git-send-email-longli@linuxonhyperv.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/3] of: always populate a root node
+Content-Language: en-US
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Thomas Petazzoni <thomas.petazonni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20220427094502.456111-1-clement.leger@bootlin.com>
+ <20220427094502.456111-2-clement.leger@bootlin.com>
+ <YnEx5/ni1ddIFCj9@robh.at.kernel.org>
+ <d356acbe-daff-1c66-6511-aab97a171c82@gmail.com>
+ <20220517093729.214c33a3@fixe.home>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20220517093729.214c33a3@fixe.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 02:04:33AM -0700, longli@linuxonhyperv.com wrote:
-> From: Long Li <longli@microsoft.com>
+On 5/17/22 02:37, Clément Léger wrote:
+> Le Mon, 16 May 2022 23:11:03 -0400,
+> Frank Rowand <frowand.list@gmail.com> a écrit :
 > 
-> In preparation to add MANA RDMA driver, move all the required header files
-> to a common location for use by both Ethernet and RDMA drivers.
+>> On 5/3/22 08:45, Rob Herring wrote:
+>>> On Wed, Apr 27, 2022 at 11:45:00AM +0200, Clément Léger wrote:  
+>>>> When enabling CONFIG_OF on a platform where of_root is not populated by
+>>>> firmware, we end up without a root node. In order to apply overlays and
+>>>> create subnodes of the root node, we need one. This commit creates an
+>>>> empty root node if not present.  
+>>>
+>>> The existing unittest essentially does the same thing for running the 
+>>> tests on non-DT systems. It should be modified to use this support 
+>>> instead. Maybe that's just removing the unittest code that set of_root.
+>>>
+>>> I expect Frank will have some comments.  
+>>
+>> My preference would be for unflatten_and_copy_device_tree() to
+>> use a compiled in FDT that only contains a root node, in the
+>> case that no valid device tree is found (in other words,
+>> "if (!initial_boot_params)".
 > 
-> Signed-off-by: Long Li <longli@microsoft.com>
-> ---
->  MAINTAINERS                                                   | 1 +
->  drivers/net/ethernet/microsoft/mana/gdma_main.c               | 2 +-
->  drivers/net/ethernet/microsoft/mana/hw_channel.c              | 4 ++--
->  drivers/net/ethernet/microsoft/mana/mana_bpf.c                | 2 +-
->  drivers/net/ethernet/microsoft/mana/mana_en.c                 | 2 +-
->  drivers/net/ethernet/microsoft/mana/mana_ethtool.c            | 2 +-
->  drivers/net/ethernet/microsoft/mana/shm_channel.c             | 2 +-
->  {drivers/net/ethernet/microsoft => include/linux}/mana/gdma.h | 0
->  .../ethernet/microsoft => include/linux}/mana/hw_channel.h    | 0
->  {drivers/net/ethernet/microsoft => include/linux}/mana/mana.h | 0
->  .../ethernet/microsoft => include/linux}/mana/shm_channel.h   | 0
->  11 files changed, 8 insertions(+), 7 deletions(-)
->  rename {drivers/net/ethernet/microsoft => include/linux}/mana/gdma.h (100%)
->  rename {drivers/net/ethernet/microsoft => include/linux}/mana/hw_channel.h (100%)
->  rename {drivers/net/ethernet/microsoft => include/linux}/mana/mana.h (100%)
->  rename {drivers/net/ethernet/microsoft => include/linux}/mana/shm_channel.h (100%)
+> Ok, so basically, instead of creating the root node manually, you
+> expect a device-tree which contains the following to be builtin the
+> kernel and unflattened if needed:
+> 
+> / {
+> 
+> };
 
-I know mlx5 did it like this, but I wonder if include/net is more
-appropriate?
+Yes.  If you agree with this I can create a patch to implement it.  I think
+it is useful even stand alone from the rest of the series.
 
-Or maybe include/aux/?
+> 
+> Maybe "chosen" and "aliases" nodes should also be provided as empty
+> nodes since the unittest are creating them anyway and the core DT code
+> also uses them.
 
-Jason
+No. Unittest does not create both of them (I'm pretty sure, but I'm not
+going to double check).  If I recall correctly, unittest adds a property
+in one of those two nodes, and thus implicitly creates the node if not
+already present.  Unittest does populate internal pointers to those two
+nodes if the nodes are present (otherwise the pointers will have the
+value of null).  There is no need for the nodes to be present if empty.
+
+-Frank
+
+> 
+> Thanks,
+> 
+> Clément
+> 
+>>
+>> unflatten_and_copy_device_tree() calls unittest_unflatten_overlay_base()
+>> after unflattening the device tree passed into the booting kernel.  This
+>> step is needed for a specific portion of the unittests.
+>>
+>> I'm still looking at the bigger picture of using overlays for the PCIe
+>> card, so more comments will be coming about that bigger picture.
+>>
+>> -Frank
+>>
+> 
+> 
+

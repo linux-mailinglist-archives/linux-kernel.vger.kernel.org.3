@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1290529EA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E09529EA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245487AbiEQKAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
+        id S245368AbiEQKBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245426AbiEQKAa (ORCPT
+        with ESMTP id S245633AbiEQKBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:00:30 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95693C71B;
-        Tue, 17 May 2022 03:00:28 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2Wp15S1Mz4xY4;
-        Tue, 17 May 2022 20:00:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652781627;
-        bh=ACzjneqDXRTFSb31q0UAPmXWo5ic5ZuLKSemylhPJjk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BhcTrHEsF+igXDnkrdFg745RQpjTleUFXXiLwZbglwW3SfcncFuLK5lQwSBh7IEdO
-         AXmbV650JkEH894TqAOtUdWrQ8K5laKvMxdTNf825rCUy8fu5BR6P0ARMaEU3B7eDi
-         gdx7tUKs5Y6pRDEwzSP3C1p7Xvrqd0OgX2udR3Ij+IHMvzqOf1ADfRoo5+5oWBiso2
-         H0Lty5G+VqU8sZNx1JdwRvNzg4jOvGeZkN6/rUqQRCAc72slMeWufB005zS35bbPcS
-         jZX8s+VIWQUf8aQsNKq+ah9XdsIbowpwbMzQPGQ7xXF5MKzxRONuAlUR8oHTu24I0c
-         5cLl+iT3y9m7g==
-Date:   Tue, 17 May 2022 20:00:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Johannes Berg <johannes.berg@intel.com>,
-        Rameshkumar Sundaram <quic_ramess@quicinc.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the wireless-next tree
-Message-ID: <20220517200024.3bc972ed@canb.auug.org.au>
+        Tue, 17 May 2022 06:01:05 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B245B41F91;
+        Tue, 17 May 2022 03:01:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VDUBn8Y_1652781657;
+Received: from 30.39.94.219(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VDUBn8Y_1652781657)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 17 May 2022 18:00:58 +0800
+Message-ID: <55d724a8-ed7d-ae92-ca6d-3582e13587db@linux.alibaba.com>
+Date:   Tue, 17 May 2022 18:00:57 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Vh5HJxTto_A7tISj4ndI+2F";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [PATCH V2 1/1] ubd: add io_uring based userspace block driver
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+References: <20220517055358.3164431-1-ming.lei@redhat.com>
+ <20220517055358.3164431-2-ming.lei@redhat.com>
+From:   Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+In-Reply-To: <20220517055358.3164431-2-ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,41 +50,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Vh5HJxTto_A7tISj4ndI+2F
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022/5/17 13:53, Ming Lei wrote:
 
-Hi all,
+> +
+> +static void ubd_cancel_queue(struct ubd_queue *ubq)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ubq->q_depth; i++) {
+> +		struct ubd_io *io = &ubq->ios[i];
+> +
+> +		if (io->flags & UBD_IO_FLAG_ACTIVE) {
+> +			io->flags &= ~UBD_IO_FLAG_ACTIVE;
+> +			io_uring_cmd_done(io->cmd, UBD_IO_RES_ABORT, 0);
+> +		}
+> +	}
+> +}
 
-After merging the wireless-next tree, today's linux-next build (htmldocs)
-produced this warning:
+Hi Ming,
 
-include/net/cfg80211.h:1188: warning: bad line:         attribute is presen=
-t in beacon data or not.
+When ubdsrv sends STOP_DEV and all active IOs in ubd_drv are done(UBD_IO_RES_ABORT),
+there may be still some IOs handled by ubdsrv(UBD_IO_FLAG_ACTIVE not set).
+When these IOs complete and return to ubd_drv, how to handle them?
+I find that UBD_IO_FETCH_REQ are still set,
+so will these IOs be issued to ubdsrv again or canceled?
+(I see ubd_drv fails IOs when the daemon is dying 
+but maybe here the daemon is still alive)
 
-Introduced by commit
 
-  3d48cb74816d ("nl80211: Parse NL80211_ATTR_HE_BSS_COLOR as a part of nl80=
-211_parse_beacon")
 
---=20
-Cheers,
-Stephen Rothwell
+> +
+> +/* Cancel all pending commands, must be called after del_gendisk() returns */
+> +static void ubd_cancel_dev(struct ubd_device *ub)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ub->dev_info.nr_hw_queues; i++)
+> +		ubd_cancel_queue(ubd_get_queue(ub, i));
+> +}
+> +
+> +static void ubd_stop_dev(struct ubd_device *ub)
+> +{
+> +	mutex_lock(&ub->mutex);
+> +	if (!disk_live(ub->ub_disk))
+> +		goto unlock;
+> +
+> +	del_gendisk(ub->ub_disk);
+> +	ub->dev_info.state = UBD_S_DEV_DEAD;
+> +	ub->dev_info.ubdsrv_pid = -1;
+> +	ubd_cancel_dev(ub);
+> + unlock:
+> +	mutex_unlock(&ub->mutex);
+> +	cancel_delayed_work_sync(&ub->monitor_work);
+> +}
+> +
+> +static int ubd_ctrl_stop_dev(struct ubd_device *ub)
+> +{
+> +	ubd_stop_dev(ub);
+> +	return 0;
+> +}
+> +
 
---Sig_/Vh5HJxTto_A7tISj4ndI+2F
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKDcjgACgkQAVBC80lX
-0GxCuAf7BopOsVfrp3A6v/pMXmeaHb/fLGl+J5r1mtNFolUtGq0H8k58NpBX69ch
-64W9XJBeDx4fBfWgeFjHPl9b4XrsKg/q7JheNQBRgrdRri6dINfUXFjZb7Ps5H4K
-8EAOCaT8zFR+7jS3jBgCCM+frX1Ea/QHrBGA5aBz5U6CCkvWunHxHjGfYDuz33ds
-FC3wMqtWhQ8bix7CH9xF0jkpxCfcl0PvV2k1G/YZwZ46ob/hYpFu9CopELjNi0Fo
-dpHry2ENOBGfb9eP97jLT8j3+8Fj3bL1iU4tM20aJUyckt5hf8tW6D7VJHa7juIc
-KB+/lIQw4kr5bDs5+dWzctt3x8JPWQ==
-=gHGq
------END PGP SIGNATURE-----
-
---Sig_/Vh5HJxTto_A7tISj4ndI+2F--

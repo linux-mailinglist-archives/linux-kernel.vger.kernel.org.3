@@ -2,167 +2,715 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5978152AD59
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EAF52AD5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353171AbiEQVKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
+        id S234479AbiEQVLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239621AbiEQVKD (ORCPT
+        with ESMTP id S1353200AbiEQVLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:10:03 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2362F53715;
-        Tue, 17 May 2022 14:10:02 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24HKFHNA002129;
-        Tue, 17 May 2022 14:10:01 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : mime-version; s=facebook;
- bh=v2j8gyVyNBzi9Q1DmX/2WgA/4DXtXXfi5q689sq5WXc=;
- b=CztfCdFt1AAsdgVqyX+tPQ8gDEkwwAcnrdCM5Xe+pa2RcT6Zv/J+XUkVFqvlXH6tJx89
- YUP77Ty2z0DM66gBfrsyE1UCXjQMvdONLdzAlEJPnB/EOHqx4X1BYRtMrb9RWnc1QOZt
- nyrxlht8BQys5cn7uR63xUCbXSchxITawHg= 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3g283wmtv8-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 14:10:01 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kb3UpC6UvvOWw1LH/mGaQhicZGZixIyLotrY/+zS7sHiRP2yVrBKZFqGfEDbx0hYBh4RMqYmhGetBPkxG83OK9rEWVpuzRMKZOiNB/V37fVARKNSoSqfooJpKWaCcDxV3q+tulB/Q7ZLNcguWT9IImy+W/TxRv6MzWwMV1ZOTTGUlTC0ct5qgFMnFv1bzUXtR/5OaZGDOGTYA4r7hu4zsOz/yFNXfT2TB51fGOdmu0KfKa+e8rYOAckQnq2tB5HXKZsGngY4GaOFuqjQ2UMIqqAvTpnZLokbBRJaqIauqWqSlaEQX9RY1b1k6G8NmqiASQKI3r7mZxDs9C4W/Q6Ycw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v2j8gyVyNBzi9Q1DmX/2WgA/4DXtXXfi5q689sq5WXc=;
- b=Q2CeHQPIyQ5vLMHRQON35bu46kO8OSO9DrPnD4Zv1i9GNaGY+h4aYGyWov2LaS4bN+BcYIdt/Gehlbn0NW4AEf9Idmjiw4WgokdrzsZEh5xYzc6OOthO+5RDTruW/YA+FrDnSm3MhWgq3S7QGKdBBJmUFol7oDrTPF5Au6II1Cd8GCkG2XeJRufN/NIU/dYsMZs3E3y/RNvFcPQ07JV7kp/zPI3ORrJNU3Kds/vcrl3qqNNhr48NIq2YYhVNCzqnBX4M3qOPgA5Ha9xeDDJC7xhvPzyeWzMhcN81qAXIk2OZ16Kv7kyULyd7AxoWuxKe4C3JPBg2RI4cRC9d6/HkhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by BN7PR15MB2322.namprd15.prod.outlook.com (2603:10b6:406:90::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Tue, 17 May
- 2022 21:09:58 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::3061:40ff:2ad:33aa]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::3061:40ff:2ad:33aa%5]) with mapi id 15.20.5250.018; Tue, 17 May 2022
- 21:09:58 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>
-Subject: Re: [PATCH bpf-next 2/5] x86/alternative: introduce text_poke_set
-Thread-Topic: [PATCH bpf-next 2/5] x86/alternative: introduce text_poke_set
-Thread-Index: AQHYaOeQGQ/WNhSrw0WYR6bm3RcCIa0jc3eAgAAfpAA=
-Date:   Tue, 17 May 2022 21:09:57 +0000
-Message-ID: <C71A3F08-5FDC-4981-99E5-F486A048D377@fb.com>
-References: <20220516054051.114490-1-song@kernel.org>
- <20220516054051.114490-3-song@kernel.org>
- <e681c4083fc53cedded845301e8df7a4910d1075.camel@intel.com>
-In-Reply-To: <e681c4083fc53cedded845301e8df7a4910d1075.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.80.82.1.1)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8406cb27-ae3d-44dd-ef9b-08da3849992f
-x-ms-traffictypediagnostic: BN7PR15MB2322:EE_
-x-microsoft-antispam-prvs: <BN7PR15MB2322019D4B36D21FA341B141B3CE9@BN7PR15MB2322.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CdkEu8pjmFS7qpvLGUahAl5Uzf5LTu1BMHrvUb4wxjtM4pW7JubJ/mQ8rlrgq6u36KrY8vQk2cln02Z6q+Dz2wgGOslzphXkysnP1gQhStADguY003kKnl6khAcZkvdvUQIUP20dPqunrPBcr/bfyDmCQisDklx4M8vH8onngVdpx6hj9to/CmQRgjKYtEinau+0y1uvWJ4YWX7ri5UK18QHaVqtXFSQUZ4sTPYPJ5FTX97LgzZN20p2WutHxe/FP0/ZVlsAxSb7PALSazLCLnWWBKwewfKuR/R8Zc3xWcUa1JuxBhOCUaw+G5rbsxbiqgKdem7fXU4+WJitGEWpWV1cVkOO4uos162+/SUq53hUQ6+NAR2S2qHsLPlpcHOrmW6ptvTgFK5l3d+QAxfTWjbNgnkF1hpsQsQOqchWFseYa+cqm4pU+yYWhZtlzvSvoBbLLMabOMPhwclTDAErJ2tgW540NadYB6atUq/qIZ7jhj8oS7T2NgWLxJm8duIn6G3wFCeMl9KfkXbPrXkCbOtVyFsllSsNX/LEnSb7/QuydasoeuFfoAuGDTTxZeTw+Mm2Cs0J0OqrTAgTqH620qKIfFlq8ocAcANMfuF94+0P6fY1KzEMKpSThk+8gst408ar/j5lUkLoQCa42mNMUh7Nv0PiaCm8ZuN6lYryBOGvYlSTo7Lf0FiAze+iVKvJs1hSkUqW9jI8YTvjnDFnyvUwnpm/QX91GssMu3VNdYdIvym7Kny0ovDd/+IeLWR8
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(4326008)(64756008)(66556008)(66946007)(66476007)(66446008)(76116006)(186003)(71200400001)(54906003)(91956017)(6916009)(6506007)(53546011)(508600001)(6512007)(6486002)(316002)(2616005)(36756003)(2906002)(33656002)(86362001)(4744005)(5660300002)(38100700002)(122000001)(8936002)(38070700005)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WoLFZ6xpMsCZq75nww6Y21j6ZSjpsG6yjPwJFZqdNA4wc85d8HeKr/eb2VuC?=
- =?us-ascii?Q?s/W/mNZmPggyZUkhXo1NewCJUFOXOf89aHP2yLfsy/x8QfYS3WJs+Pkkt49p?=
- =?us-ascii?Q?6lRavPfCtiW71uWXYjHerVXULc1ExxZ7Ga6mwujwD5uUJ2r7jlE8OHl2E4HA?=
- =?us-ascii?Q?y8bgk1D0mVpv3NRY0KSHLVkjfYxCiEvbWfdAn6CVRusnBmKFAdciCUO4+JBM?=
- =?us-ascii?Q?tA/onfjaExIAPNYo2Rpfn4GT6bQCeHdIj9FnUQ8AP4N7qkKjGtaH1yMgAvau?=
- =?us-ascii?Q?eVYGjgFsgw1mjcx3K4P4DEEwNn8kDfIxwvwC3SrqdeSTSA3OnHibHIceMpt8?=
- =?us-ascii?Q?Deh4P3zzLGnglijgDWU8+qwa9nlE9E0RzZcQnuo2BOccmp65S+F8Rk1YAwv3?=
- =?us-ascii?Q?7M7BYBzcpsGyuEREK92VQzNcimbiYx6w485UxF9P2YZapkfTwBQNehvPMym5?=
- =?us-ascii?Q?gQEfRs/oyfiTnOJv9tnWiPg6EOizoQS+e6moWAH51zc0XZ3wPvQplf1wN8e+?=
- =?us-ascii?Q?ujMIoRjNaJIrwXf3XhC/AfLBd1L/gHiHM3Dw4tDM5rVbMW8YhsUhMsPF9PSJ?=
- =?us-ascii?Q?0zQQTeYNqd4Max4CIdGMgVD0uLPYrHZfmE/5KMAL2N2ygrgA4G0YWLnvU56o?=
- =?us-ascii?Q?593zsEISm7BRV2cwD+8/3eTZJPw0tEXAHEmdmedrrW+i21phkW6xLHsa8IDD?=
- =?us-ascii?Q?D6eE9QhTRReaBHmbSy12POnRldicG2BlhtxURVz5fHwHm0nuWkurWQwSHj7d?=
- =?us-ascii?Q?Tvjg0csjGBKtaCPpV+bK7nrTRUizzhHz55Gv335hgxj1LPKKxaTrEHfu+00g?=
- =?us-ascii?Q?z6LqKjI725Meyol70f0yWkRI2SxUtc9tu6Jd2bOjeyJLeZHw2kt3KF6kzMlj?=
- =?us-ascii?Q?Wxl2NOeuX5eoZJbc4rv7zu3FKGiSl8o5OrqGyHfqZ616xQXTVaGUN8XRf8Yw?=
- =?us-ascii?Q?lnBoRhPs0NjVGMSDeP7Imqn2ufpyzdWbKDPycN0QN7KpM6HKwu8cNoYix6jH?=
- =?us-ascii?Q?vh4XMQJ/Ocx3/U7yiuQ1o9T8mzEUHETHTjEdYVoMD8uKCHAKLEXUvIurJFw6?=
- =?us-ascii?Q?ECd/S9mZdCnUQ+4vRj1KBJyVaJ9zZr36x0TZO7tRW0tfC6I7EOygTfCJVshM?=
- =?us-ascii?Q?SH5sZ8NcLoFXMAGSNZGKpcpg6/LrV5NexOGCJrsxuC9jSy7x8IkIWIo59NGV?=
- =?us-ascii?Q?zZ4rwe9mtnjPquDSLII84pKDe6yUcrGRmpyFqwGwqPqNqvGhXeLuGTFUKcQF?=
- =?us-ascii?Q?+/FMRRqv4e0J/OnKSqLsoCAod7l2sixhIqaOBofiNTfeOuD2kfO3xUUHRp9y?=
- =?us-ascii?Q?Hu6qL36RMSE3Zr6gGtUcK53aNhIAIzWzn4f2/SfTjO5472Ef0OCMlvUi51Lv?=
- =?us-ascii?Q?WYniyc45d4x0YkMZRN8qvggMrwZeNd3hhv52lOKwwyr4+UWMYMIjY9LWyztv?=
- =?us-ascii?Q?rIXC3xV2rpLxBb+ZId2OuPWdP0EBJgiO6ZEawTGLLObRfkQixB/fIH6eHvLe?=
- =?us-ascii?Q?+ul/QLWW1oRegOAr+oA2tzdxVua/Gqz0J1yGRLEtizE3LC+XzYpQ05yyCkUF?=
- =?us-ascii?Q?E9zZCO4z5TttsHC5RwIodaldhuknGcizmadzqU4rw5rrd1I2XVPWQ9mtrXpI?=
- =?us-ascii?Q?A0RF8MCf0Ny1TocjP4AlfSlcnnuZqlcqMFhr6EoAn9lxsdmW2CZmfjwVvBD/?=
- =?us-ascii?Q?VqcKeQdl5bYJctEFYvHkORKUUsRIeOgc+X0wjWIS/r96/vIYlhA/X4Pw/s9t?=
- =?us-ascii?Q?PzwsPPrx5m2e5GSAmVA1rm0jKzzTa1Zyo3+VLm9x6sO7S2RTTnqv?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <87CF3FC68848B447A1F9FACAFEA5A3A6@namprd15.prod.outlook.com>
+        Tue, 17 May 2022 17:11:22 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65D227B37
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:11:20 -0700 (PDT)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 81DAF3F164
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 21:11:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1652821877;
+        bh=ABLCy/8yhWR8/YRA8GGw8Leu35Alfnt7kjgvDbpodu8=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=hqCkJTpRPKEcxSZDrucup0bfpzm3HMBbGo+0uKqMUEM1c9m2L5KjqcbU2GYCUTe/a
+         /u3JDMQ0qz1lHMU97zSqnN/rc6Ob1EUxdweeJyqpdKAvMtg3X5yIiNTokMIutL6g/x
+         lYn7OeDwLAJyo70541DfUnDqh0VbMuB9TffvkUGd/qARoo4VS2uj0dC+4wwwXLNbeO
+         n6NiyLagy9VfMlgDTPgzPUWy0YW1TngCEaNf1vtYjX6mqYJynKHpUq6Zc/o+Jv83C+
+         cQh6TAAcM15re2fwTw78ECT3LcdlEoBOjaYSyTlxRY60QM25dbqTvzoX6o1uHT4nNB
+         Hn6lmQAnwwEyA==
+Received: by mail-pj1-f71.google.com with SMTP id s1-20020a17090a760100b001dfa6169b1eso44558pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:11:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references
+         :comments:mime-version:content-id:content-transfer-encoding:date
+         :message-id;
+        bh=ABLCy/8yhWR8/YRA8GGw8Leu35Alfnt7kjgvDbpodu8=;
+        b=PtxKKCjtczUML8hM4ucx/yWNt5gQ6sJfPke84ggo/P9y6N/0x1yTN5Vcag+WBQeGjg
+         rHqt4F1tUF2TkiXlJiveWJznS54AZSI2/Iid/i/iwcZMDdY5ZC7VJtFMit+9I3yS2bFY
+         xOdvo+QQfCo6JybjJhnUA4JxkJ5xrD4kmG8ZOnxWXdwc7kskUem50PZAH99M+VPtFvCL
+         c6qr6yGhu2fgmu1h/eb30qVsys3JO9rfkRaemt1JZyNZSfRTjbcjvv1jKObKeIg9pCFz
+         ZwkdS8nZSjkdKILisNTabv4gPjYKYNdE8YU26ghOylsqkHUSp+R40dnKEgqzcKWbblbe
+         t5cA==
+X-Gm-Message-State: AOAM532fCJqgnPP4oiAgTK5iNy0XKiLY3YKB7lSFwC0262N7kSp5Rjln
+        eIwqtfqUqXmoaaRmoGSclYglkF29kXYE1YFGeEgewMrl7IjfqjIThozyfWsOKhmZfYt+JqWCx8B
+        8a7wZ3/JOSy9iGqQmLoKdsnqHN8uMwow9e2AsAPNG+A==
+X-Received: by 2002:a17:90a:cc15:b0:1df:5929:15b9 with SMTP id b21-20020a17090acc1500b001df592915b9mr12007886pju.178.1652821875803;
+        Tue, 17 May 2022 14:11:15 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwirMLrDtjCxcsFM4LFMAkbF3zdaum6IIM0EBN4T5baoNo5mAWh+VNid7F9kZ1+M6UtSlZumg==
+X-Received: by 2002:a17:90a:cc15:b0:1df:5929:15b9 with SMTP id b21-20020a17090acc1500b001df592915b9mr12007856pju.178.1652821875336;
+        Tue, 17 May 2022 14:11:15 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id f16-20020a170902ab9000b0016191b843e2sm52271plr.235.2022.05.17.14.11.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 May 2022 14:11:14 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 6DF5D5FDEE; Tue, 17 May 2022 14:11:14 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 67D51A0B21;
+        Tue, 17 May 2022 14:11:14 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Jonathan Toppins <jtoppins@redhat.com>
+cc:     netdev@vger.kernel.org, Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFC net-next] bonding: netlink error message support for options
+In-reply-to: <5a6ba6f14b0fad6d4ba077a5230ee71cbf970934.1652819479.git.jtoppins@redhat.com>
+References: <5a6ba6f14b0fad6d4ba077a5230ee71cbf970934.1652819479.git.jtoppins@redhat.com>
+Comments: In-reply-to Jonathan Toppins <jtoppins@redhat.com>
+   message dated "Tue, 17 May 2022 16:31:19 -0400."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8406cb27-ae3d-44dd-ef9b-08da3849992f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2022 21:09:57.9701
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gw0zpALxUHC6EDUWGPw9IY01qLHcjDQ/DGCb3FCVlzIdX0PxYLGUGvFfA/K9R9q34P9m93tNscn7FJgYUm/ADA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR15MB2322
-X-Proofpoint-GUID: D3HyMvpkWxV63clxEEalIRZpDdb49_67
-X-Proofpoint-ORIG-GUID: D3HyMvpkWxV63clxEEalIRZpDdb49_67
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_03,2022-05-17_02,2022-02-23_01
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2124.1652821874.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 17 May 2022 14:11:14 -0700
+Message-ID: <2125.1652821874@famine>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jonathan Toppins <jtoppins@redhat.com> wrote:
 
+>Add support for reporting errors via extack in both bond_newlink
+>and bond_changelink.
+>
+>Instead of having to look in the kernel log for why an option was not
+>correct just report the error to the user via the extack variable.
+>
+>What is currently reported today:
+>  ip link add bond0 type bond
+>  ip link set bond0 up
+>  ip link set bond0 type bond mode 4
+> RTNETLINK answers: Device or resource busy
+>
+>After this change:
+>  ip link add bond0 type bond
+>  ip link set bond0 up
+>  ip link set bond0 type bond mode 4
+> Error: option mode: unable to set because the bond device is up.
+>
+>Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+>---
+>
+>Notes:
+>    This is an RFC because the current NL_SET_ERR_MSG() macros do not sup=
+port
+>    printf like semantics so I rolled my own buffer setting in __bond_opt=
+_set().
+>    The issue is I could not quite figure out the life-cycle of the buffe=
+r, if
+>    rtnl lock is held until after the text buffer is copied into the pack=
+et
+>    then we are ok, otherwise, some other type of buffer management schem=
+e will
+>    be needed as this could result in corrupted error messages when modif=
+ying
+>    multiple bonds.
 
-> On May 17, 2022, at 12:16 PM, Edgecombe, Rick P <rick.p.edgecombe@intel.com> wrote:
-> 
-> On Sun, 2022-05-15 at 22:40 -0700, Song Liu wrote:
->> +static void text_poke_memset(void *dst, const void *src, size_t len)
->> +{
->> +       int c = *(int *)src;
-> 
-> It casts away the const unnecessarily. It could be *(const int *)src.
+	If I'm reading the code correctly, rtnl isn't held that long.
+Once the ->doit() returns, rtnl is dropped, but the copy happens later:
 
-I will fix this in the next version. Or we can ask the maintainer to 
-fix it when applying the patches. 
+rtnetlink_rcv()
+	netlink_rcv_skb(skb, &rtnetlink_rcv_msg)
+		rtnetlink_rcv_msg()	[ as cb(skb, nlh, &extack) ]
+			rtnl_lock()
+			link->doit()	[ rtnl_setlink, rtnl_newlink, et al ]
+			rtnl_unlock()
+		netlink_ack()
 
-Thanks,
-Song
+inside netlink_ack():
 
-> 
->> +
->> +       memset(dst, c, len);
->> +}
->> +
+        if (nlk_has_extack && extack) {
+                if (extack->_msg) {
+                        WARN_ON(nla_put_string(skb, NLMSGERR_ATTR_MSG,
+                                               extack->_msg));
+                }
 
+	Even if the strings have to be constant (via NL_SET_ERR_MSG),
+adding extack messages is likely still an improvement.
+
+	-J
+
+> drivers/net/bonding/bond_netlink.c | 87 ++++++++++++++++++------------
+> drivers/net/bonding/bond_options.c | 62 +++++++++++++--------
+> include/net/bond_options.h         |  2 +-
+> 3 files changed, 96 insertions(+), 55 deletions(-)
+>
+>diff --git a/drivers/net/bonding/bond_netlink.c b/drivers/net/bonding/bon=
+d_netlink.c
+>index f427fa1737c7..418a4f3d00a3 100644
+>--- a/drivers/net/bonding/bond_netlink.c
+>+++ b/drivers/net/bonding/bond_netlink.c
+>@@ -151,7 +151,7 @@ static int bond_slave_changelink(struct net_device *b=
+ond_dev,
+> 		snprintf(queue_id_str, sizeof(queue_id_str), "%s:%u\n",
+> 			 slave_dev->name, queue_id);
+> 		bond_opt_initstr(&newval, queue_id_str);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_QUEUE_ID, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_QUEUE_ID, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -175,7 +175,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 		int mode =3D nla_get_u8(data[IFLA_BOND_MODE]);
+> =
+
+> 		bond_opt_initval(&newval, mode);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_MODE, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_MODE, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -192,7 +192,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			active_slave =3D slave_dev->name;
+> 		}
+> 		bond_opt_initstr(&newval, active_slave);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_ACTIVE_SLAVE, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_ACTIVE_SLAVE, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -200,7 +201,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 		miimon =3D nla_get_u32(data[IFLA_BOND_MIIMON]);
+> =
+
+> 		bond_opt_initval(&newval, miimon);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_MIIMON, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_MIIMON, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -208,7 +209,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 		int updelay =3D nla_get_u32(data[IFLA_BOND_UPDELAY]);
+> =
+
+> 		bond_opt_initval(&newval, updelay);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_UPDELAY, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_UPDELAY, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -216,7 +217,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 		int downdelay =3D nla_get_u32(data[IFLA_BOND_DOWNDELAY]);
+> =
+
+> 		bond_opt_initval(&newval, downdelay);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_DOWNDELAY, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_DOWNDELAY, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -224,7 +225,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 		int delay =3D nla_get_u32(data[IFLA_BOND_PEER_NOTIF_DELAY]);
+> =
+
+> 		bond_opt_initval(&newval, delay);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_PEER_NOTIF_DELAY, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_PEER_NOTIF_DELAY, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -232,7 +234,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 		int use_carrier =3D nla_get_u8(data[IFLA_BOND_USE_CARRIER]);
+> =
+
+> 		bond_opt_initval(&newval, use_carrier);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_USE_CARRIER, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_USE_CARRIER, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -240,12 +243,14 @@ static int bond_changelink(struct net_device *bond_=
+dev, struct nlattr *tb[],
+> 		int arp_interval =3D nla_get_u32(data[IFLA_BOND_ARP_INTERVAL]);
+> =
+
+> 		if (arp_interval && miimon) {
+>-			netdev_err(bond->dev, "ARP monitoring cannot be used with MII monitor=
+ing\n");
+>+			NL_SET_ERR_MSG(extack,
+>+				       "ARP monitoring cannot be used with MII monitoring");
+> 			return -EINVAL;
+> 		}
+> =
+
+> 		bond_opt_initval(&newval, arp_interval);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_ARP_INTERVAL, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_ARP_INTERVAL, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -264,7 +269,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> =
+
+> 			bond_opt_initval(&newval, (__force u64)target);
+> 			err =3D __bond_opt_set(bond, BOND_OPT_ARP_TARGETS,
+>-					     &newval);
+>+					     &newval, extack);
+> 			if (err)
+> 				break;
+> 			i++;
+>@@ -297,7 +302,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> =
+
+> 			bond_opt_initextra(&newval, &addr6, sizeof(addr6));
+> 			err =3D __bond_opt_set(bond, BOND_OPT_NS_TARGETS,
+>-					     &newval);
+>+					     &newval, extack);
+> 			if (err)
+> 				break;
+> 			i++;
+>@@ -312,12 +317,14 @@ static int bond_changelink(struct net_device *bond_=
+dev, struct nlattr *tb[],
+> 		int arp_validate =3D nla_get_u32(data[IFLA_BOND_ARP_VALIDATE]);
+> =
+
+> 		if (arp_validate && miimon) {
+>-			netdev_err(bond->dev, "ARP validating cannot be used with MII monitor=
+ing\n");
+>+			NL_SET_ERR_MSG(extack,
+>+				       "ARP validating cannot be used with MII monitoring");
+> 			return -EINVAL;
+> 		}
+> =
+
+> 		bond_opt_initval(&newval, arp_validate);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_ARP_VALIDATE, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_ARP_VALIDATE, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -326,7 +333,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u32(data[IFLA_BOND_ARP_ALL_TARGETS]);
+> =
+
+> 		bond_opt_initval(&newval, arp_all_targets);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_ARP_ALL_TARGETS, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_ARP_ALL_TARGETS, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -340,7 +348,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			primary =3D dev->name;
+> =
+
+> 		bond_opt_initstr(&newval, primary);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_PRIMARY, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_PRIMARY, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -349,7 +357,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u8(data[IFLA_BOND_PRIMARY_RESELECT]);
+> =
+
+> 		bond_opt_initval(&newval, primary_reselect);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_PRIMARY_RESELECT, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_PRIMARY_RESELECT, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -358,7 +367,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u8(data[IFLA_BOND_FAIL_OVER_MAC]);
+> =
+
+> 		bond_opt_initval(&newval, fail_over_mac);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_FAIL_OVER_MAC, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_FAIL_OVER_MAC, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -367,7 +377,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u8(data[IFLA_BOND_XMIT_HASH_POLICY]);
+> =
+
+> 		bond_opt_initval(&newval, xmit_hash_policy);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_XMIT_HASH, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_XMIT_HASH, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -376,7 +386,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u32(data[IFLA_BOND_RESEND_IGMP]);
+> =
+
+> 		bond_opt_initval(&newval, resend_igmp);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_RESEND_IGMP, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_RESEND_IGMP, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -385,7 +396,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u8(data[IFLA_BOND_NUM_PEER_NOTIF]);
+> =
+
+> 		bond_opt_initval(&newval, num_peer_notif);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_NUM_PEER_NOTIF, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_NUM_PEER_NOTIF, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -394,7 +406,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u8(data[IFLA_BOND_ALL_SLAVES_ACTIVE]);
+> =
+
+> 		bond_opt_initval(&newval, all_slaves_active);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_ALL_SLAVES_ACTIVE, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_ALL_SLAVES_ACTIVE, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -403,7 +416,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u32(data[IFLA_BOND_MIN_LINKS]);
+> =
+
+> 		bond_opt_initval(&newval, min_links);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_MINLINKS, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_MINLINKS, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -412,7 +425,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u32(data[IFLA_BOND_LP_INTERVAL]);
+> =
+
+> 		bond_opt_initval(&newval, lp_interval);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_LP_INTERVAL, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_LP_INTERVAL, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -421,7 +435,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u32(data[IFLA_BOND_PACKETS_PER_SLAVE]);
+> =
+
+> 		bond_opt_initval(&newval, packets_per_slave);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_PACKETS_PER_SLAVE, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_PACKETS_PER_SLAVE, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -430,7 +445,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 		int lacp_active =3D nla_get_u8(data[IFLA_BOND_AD_LACP_ACTIVE]);
+> =
+
+> 		bond_opt_initval(&newval, lacp_active);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_LACP_ACTIVE, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_LACP_ACTIVE, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -440,7 +456,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u8(data[IFLA_BOND_AD_LACP_RATE]);
+> =
+
+> 		bond_opt_initval(&newval, lacp_rate);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_LACP_RATE, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_LACP_RATE, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -449,7 +465,7 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u8(data[IFLA_BOND_AD_SELECT]);
+> =
+
+> 		bond_opt_initval(&newval, ad_select);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_AD_SELECT, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_AD_SELECT, &newval, extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -458,7 +474,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u16(data[IFLA_BOND_AD_ACTOR_SYS_PRIO]);
+> =
+
+> 		bond_opt_initval(&newval, actor_sys_prio);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYS_PRIO, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYS_PRIO, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -467,7 +484,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 			nla_get_u16(data[IFLA_BOND_AD_USER_PORT_KEY]);
+> =
+
+> 		bond_opt_initval(&newval, port_key);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_AD_USER_PORT_KEY, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_AD_USER_PORT_KEY, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -477,7 +495,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> =
+
+> 		bond_opt_initval(&newval,
+> 				 nla_get_u64(data[IFLA_BOND_AD_ACTOR_SYSTEM]));
+>-		err =3D __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYSTEM, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_AD_ACTOR_SYSTEM, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -485,7 +504,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 		int dynamic_lb =3D nla_get_u8(data[IFLA_BOND_TLB_DYNAMIC_LB]);
+> =
+
+> 		bond_opt_initval(&newval, dynamic_lb);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_TLB_DYNAMIC_LB, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_TLB_DYNAMIC_LB, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>@@ -494,7 +514,8 @@ static int bond_changelink(struct net_device *bond_de=
+v, struct nlattr *tb[],
+> 		int missed_max =3D nla_get_u8(data[IFLA_BOND_MISSED_MAX]);
+> =
+
+> 		bond_opt_initval(&newval, missed_max);
+>-		err =3D __bond_opt_set(bond, BOND_OPT_MISSED_MAX, &newval);
+>+		err =3D __bond_opt_set(bond, BOND_OPT_MISSED_MAX, &newval,
+>+				     extack);
+> 		if (err)
+> 			return err;
+> 	}
+>diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bon=
+d_options.c
+>index 64f7db2627ce..4a95503384a3 100644
+>--- a/drivers/net/bonding/bond_options.c
+>+++ b/drivers/net/bonding/bond_options.c
+>@@ -636,7 +636,8 @@ static int bond_opt_check_deps(struct bonding *bond,
+> }
+> =
+
+> static void bond_opt_dep_print(struct bonding *bond,
+>-			       const struct bond_option *opt)
+>+			       const struct bond_option *opt,
+>+			       char *buf, size_t bufsize)
+> {
+> 	const struct bond_opt_value *modeval;
+> 	struct bond_params *params;
+>@@ -644,16 +645,18 @@ static void bond_opt_dep_print(struct bonding *bond=
+,
+> 	params =3D &bond->params;
+> 	modeval =3D bond_opt_get_val(BOND_OPT_MODE, params->mode);
+> 	if (test_bit(params->mode, &opt->unsuppmodes))
+>-		netdev_err(bond->dev, "option %s: mode dependency failed, not supporte=
+d in mode %s(%llu)\n",
+>-			   opt->name, modeval->string, modeval->value);
+>+		scnprintf(buf, bufsize, "option %s: mode dependency failed, not suppor=
+ted in mode %s(%llu)\n",
+>+			  opt->name, modeval->string, modeval->value);
+> }
+> =
+
+> static void bond_opt_error_interpret(struct bonding *bond,
+> 				     const struct bond_option *opt,
+>-				     int error, const struct bond_opt_value *val)
+>+				     int error, const struct bond_opt_value *val,
+>+				     char *buf, size_t bufsize)
+> {
+> 	const struct bond_opt_value *minval, *maxval;
+> 	char *p;
+>+	int i =3D 0;
+> =
+
+> 	switch (error) {
+> 	case -EINVAL:
+>@@ -663,38 +666,45 @@ static void bond_opt_error_interpret(struct bonding=
+ *bond,
+> 				p =3D strchr(val->string, '\n');
+> 				if (p)
+> 					*p =3D '\0';
+>-				netdev_err(bond->dev, "option %s: invalid value (%s)\n",
+>-					   opt->name, val->string);
+>+				i =3D scnprintf(buf, bufsize,
+>+					      "option %s: invalid value (%s)",
+>+					      opt->name, val->string);
+> 			} else {
+>-				netdev_err(bond->dev, "option %s: invalid value (%llu)\n",
+>-					   opt->name, val->value);
+>+				i =3D scnprintf(buf, bufsize,
+>+					      "option %s: invalid value (%llu)",
+>+					      opt->name, val->value);
+> 			}
+> 		}
+> 		minval =3D bond_opt_get_flags(opt, BOND_VALFLAG_MIN);
+> 		maxval =3D bond_opt_get_flags(opt, BOND_VALFLAG_MAX);
+> 		if (!maxval)
+> 			break;
+>-		netdev_err(bond->dev, "option %s: allowed values %llu - %llu\n",
+>-			   opt->name, minval ? minval->value : 0, maxval->value);
+>+		if (i) {
+>+			// index buf to overwirte '\n' from above
+>+			buf =3D &buf[i];
+>+			bufsize -=3D i;
+>+		}
+>+		scnprintf(buf, bufsize, " allowed values %llu - %llu",
+>+			  minval ? minval->value : 0, maxval->value);
+> 		break;
+> 	case -EACCES:
+>-		bond_opt_dep_print(bond, opt);
+>+		bond_opt_dep_print(bond, opt, buf, bufsize);
+> 		break;
+> 	case -ENOTEMPTY:
+>-		netdev_err(bond->dev, "option %s: unable to set because the bond devic=
+e has slaves\n",
+>-			   opt->name);
+>+		scnprintf(buf, bufsize, "option %s: unable to set because the bond dev=
+ice has slaves",
+>+			  opt->name);
+> 		break;
+> 	case -EBUSY:
+>-		netdev_err(bond->dev, "option %s: unable to set because the bond devic=
+e is up\n",
+>-			   opt->name);
+>+		scnprintf(buf, bufsize, "option %s: unable to set because the bond dev=
+ice is up",
+>+			  opt->name);
+> 		break;
+> 	case -ENODEV:
+> 		if (val && val->string) {
+> 			p =3D strchr(val->string, '\n');
+> 			if (p)
+> 				*p =3D '\0';
+>-			netdev_err(bond->dev, "option %s: interface %s does not exist!\n",
+>-				   opt->name, val->string);
+>+			scnprintf(buf, bufsize, "option %s: interface %s does not exist!",
+>+				  opt->name, val->string);
+> 		}
+> 		break;
+> 	default:
+>@@ -713,7 +723,8 @@ static void bond_opt_error_interpret(struct bonding *=
+bond,
+>  * must be obtained before calling this function.
+>  */
+> int __bond_opt_set(struct bonding *bond,
+>-		   unsigned int option, struct bond_opt_value *val)
+>+		   unsigned int option, struct bond_opt_value *val,
+>+		   struct netlink_ext_ack *extack)
+> {
+> 	const struct bond_opt_value *retval =3D NULL;
+> 	const struct bond_option *opt;
+>@@ -734,8 +745,17 @@ int __bond_opt_set(struct bonding *bond,
+> 	}
+> 	ret =3D opt->set(bond, retval);
+> out:
+>-	if (ret)
+>-		bond_opt_error_interpret(bond, opt, ret, val);
+>+	if (ret) {
+>+		static char buf[120];
+>+		buf[0] =3D '\0';
+>+		bond_opt_error_interpret(bond, opt, ret, val, buf, sizeof(buf));
+>+		if (buf[0] !=3D '\0') {
+>+			if (extack)
+>+				extack->_msg =3D buf;
+>+			else
+>+				netdev_err(bond->dev, "Error: %s\n", buf);
+>+		}
+>+	}
+> =
+
+> 	return ret;
+> }
+>@@ -757,7 +777,7 @@ int __bond_opt_set_notify(struct bonding *bond,
+> =
+
+> 	ASSERT_RTNL();
+> =
+
+>-	ret =3D __bond_opt_set(bond, option, val);
+>+	ret =3D __bond_opt_set(bond, option, val, NULL);
+> =
+
+> 	if (!ret && (bond->dev->reg_state =3D=3D NETREG_REGISTERED))
+> 		call_netdevice_notifiers(NETDEV_CHANGEINFODATA, bond->dev);
+>diff --git a/include/net/bond_options.h b/include/net/bond_options.h
+>index 61b49063791c..ae38557adc25 100644
+>--- a/include/net/bond_options.h
+>+++ b/include/net/bond_options.h
+>@@ -107,7 +107,7 @@ struct bond_option {
+> };
+> =
+
+> int __bond_opt_set(struct bonding *bond, unsigned int option,
+>-		   struct bond_opt_value *val);
+>+		   struct bond_opt_value *val, struct netlink_ext_ack *extack);
+> int __bond_opt_set_notify(struct bonding *bond, unsigned int option,
+> 			  struct bond_opt_value *val);
+> int bond_opt_tryset_rtnl(struct bonding *bond, unsigned int option, char=
+ *buf);
+>-- =
+
+>2.27.0
+>
+
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC6552ADB9
+	by mail.lfdr.de (Postfix) with ESMTP id 55E0752ADBA
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiEQV7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S229875AbiEQV7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiEQV7Y (ORCPT
+        with ESMTP id S229818AbiEQV72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:59:24 -0400
+        Tue, 17 May 2022 17:59:28 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD4E5131C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:59:23 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f7dbceab08so4288267b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:59:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832565131B
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:59:26 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fb7bf98f1aso4476337b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:59:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=fvU+Gi72lI7UuLvKQmm5tyEVTfbTBpYfMrJxtkdVrUA=;
-        b=f30fLm4axkE9Tg2UZ4RPiyaL8QLq/igCFboReOI+Xd0A+ZEmX6UdxDREvFF21Ahj+S
-         bFMyeP9vQ1EFFBvrVPai28qTk91yjFPBIGSpEeOVt6qACSpiylxyVuUy8wXRnT0Diekq
-         ujisnbkf2WUZWU3UbctpU4nI1lhUGOOIlhUHemo+/aL1+EiJ9cmr56DQlmRx05j5buid
-         ZtDE6pkRkFd457nS2oaO/vHK1uF86MJd8kPjuiBrmfb+KJvYwcs1ro4yZN+H0uT56paD
-         gWtbMfYpnI3ce6dp3nTnSVWspwpboLShcSEQgdpcC086q/1mjsvl+OvL8tFf7oQI7ka8
-         qJOw==
+        bh=p1MlX3r0r6RnLBy0CyjcLoTt2W4iqftQTSX78EoRHg4=;
+        b=qAvsl9+8c5jFWkDccwMiqcjuk7iLsfpMH95IB8kF+7uUIfm/xV5nMZzAmyUdTeex+H
+         XY8FroYbkQocsRo/1rjFDeZHxlKaHr7096z195FFpjeBBd8Md7sgMoCLAeihAfMjkbAg
+         aUWRD+MMFWC87SL8uuJ8XZsdeUn61O/EAq2zhmxPVXugbE/O5X2OcQwdm8deDTBN+g29
+         7EetC4Y9zPxgVcysjmgyCu2dyebf8o44bbH3DiotRqa86NBE3mtNRkEtopGfytPhCIrW
+         Fkz2g3eChI3JypY/wsEGX2USY/upU+gGjbDCfhF0J3S0LBQ2WLrN2/5BuUn26saMNIF2
+         EwXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=fvU+Gi72lI7UuLvKQmm5tyEVTfbTBpYfMrJxtkdVrUA=;
-        b=6eACANXklbjbB7aB4+tIY2iYeNFYLwp45jeTD5l7nYVTTvbSSdW1wSidt5eE5RN3uy
-         H/6sESl/B2v/9p4QA+WBnSdYI6FmsGxiaPNEx+DJrmznX35p3J0TBbrSNnmxBA1ao8Kv
-         ARDmY5ufOx4+IJHSqeafWI/VWwwvWiJmGTxXkurfhudaKJVhnBr+XzZMo6o7V9/HLOr1
-         pXTNMuyOajR+NL0Q7oIbxOz4HqIrKyaHykR216tE2rPWGjKoxki2bkAcW1zoUcHGqYPr
-         P2Al3/bPtf5R9clhvteIUPjOwG86WNv1ZWYyPh0unub4fqGAJBqm4h6eDkHmdMtVO4w6
-         lUhw==
-X-Gm-Message-State: AOAM531QNlSgLNkixn01futbSqb4+30gZrwZOlPdA63vU5wk77lPsm+A
-        EPVq5rlYiz8q8okowWXMqwQr23ZM4b82
-X-Google-Smtp-Source: ABdhPJxrhKe03q6UYtG7QGmmWThKSCqDwWK021ZpxxRnLkqz8+7Root0CcPncxPBetdy58cTIHxg2DNdpx0s
+        bh=p1MlX3r0r6RnLBy0CyjcLoTt2W4iqftQTSX78EoRHg4=;
+        b=e+ZFI7k+/RE4xkGspIjJq8WZktgkEyp6Hz3EGGPsxO/+OrRGxotrMhKOyLO0hvjEys
+         tIrFuhTdY0KuFfUTP7VL5XnDYPSI4CwtxI4CSW+2+m+cy9CkYfcspLfMy64EoSbUX0Ry
+         3Hv+I4NgC7ZpDYBdsoVE1cmx9br4/c8EG25NMm9vv7tbpfKUxtPpsBh0/e+GMbhg0eTc
+         gR4+tB4kmOuwsLzLIwHrJkoJ5D+eCQHglgFg7+kmaXJv9v2cDespDrXggSuQnMWmFB4N
+         hDczQhrpYcGnRvVgI4eEMLc2av4ld9GS0rcWeAVxDtLFxPuAfSrc3i7nelpofkZ94gSP
+         nL0A==
+X-Gm-Message-State: AOAM533MFfMADs86UdJalg4bUHzEyn+k+Fw4LnfzXHy/DZ8uQX6RO82f
+        Ui1fTv0F7rFRwFCxao1fJQz0d6UQKyvH
+X-Google-Smtp-Source: ABdhPJzhnFk7lIGFI3JO3ipKjWfKzSM3VmOxAcpccrfJcNPzRToNYM9mnKCbbK3FJvXeV6MyozlE0qJeNmcS
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a5a1:af73:fe09:fd5])
- (user=irogers job=sendgmr) by 2002:a0d:d801:0:b0:2fe:feb2:242a with SMTP id
- a1-20020a0dd801000000b002fefeb2242amr13162823ywe.127.1652824763346; Tue, 17
- May 2022 14:59:23 -0700 (PDT)
-Date:   Tue, 17 May 2022 14:59:15 -0700
+ (user=irogers job=sendgmr) by 2002:a25:258:0:b0:64d:6b57:bf25 with SMTP id
+ 85-20020a250258000000b0064d6b57bf25mr16649954ybc.193.1652824765685; Tue, 17
+ May 2022 14:59:25 -0700 (PDT)
+Date:   Tue, 17 May 2022 14:59:16 -0700
 In-Reply-To: <20220517215917.692906-1-irogers@google.com>
-Message-Id: <20220517215917.692906-2-irogers@google.com>
+Message-Id: <20220517215917.692906-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20220517215917.692906-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH v3 1/3] perf test: Add checking for perf stat CSV output.
+Subject: [PATCH v3 2/3] perf stat: Add JSON output option
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -85,238 +85,736 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Claire Jensen <cjense@google.com>
 
-Counts expected fields for various commands. No testing added for
-summary mode since it is broken.
+CSV output is tricky to format and column layout changes are susceptible
+to breaking parsers. New JSON-formatted output has variable names to
+identify fields that are consistent and informative, making
+the output parseable.
 
-An example of the summary output is:
+CSV output example:
 
-         summary,263831,,instructions:u,1435072,100.0,0.46,insn per cycle
-,,,,,1.37,stalled cycles per insn
+1.20,msec,task-clock:u,1204272,100.00,0.697,CPUs utilized
+0,,context-switches:u,1204272,100.00,0.000,/sec
+0,,cpu-migrations:u,1204272,100.00,0.000,/sec
+70,,page-faults:u,1204272,100.00,58.126,K/sec
 
-This should be:
+JSON output example:
 
-         summary,263831,,instructions:u,1435072,100.0,0.46,insn per cycle
-         summary,,,,,,1.37,stalled cycles per insn
+{"counter-value" : "3805.723968", "unit" : "msec", "event" :
+"cpu-clock", "event-runtime" : 3805731510100.00, "pcnt-running"
+: 100.00, "metric-value" : 4.007571, "metric-unit" : "CPUs utilized"}
+{"counter-value" : "6166.000000", "unit" : "", "event" :
+"context-switches", "event-runtime" : 3805723045100.00, "pcnt-running"
+: 100.00, "metric-value" : 1.620191, "metric-unit" : "K/sec"}
+{"counter-value" : "466.000000", "unit" : "", "event" :
+"cpu-migrations", "event-runtime" : 3805727613100.00, "pcnt-running"
+: 100.00, "metric-value" : 122.447136, "metric-unit" : "/sec"}
+{"counter-value" : "208.000000", "unit" : "", "event" :
+"page-faults", "event-runtime" : 3805726799100.00, "pcnt-running"
+: 100.00, "metric-value" : 54.654516, "metric-unit" : "/sec"}
 
-The output has 7 fields when it should have 8. Additionally, the newline
-spacing is wrong, so it was excluded from testing until a fix is made.
+Also added documentation for JSON option.
+There is some tidy up of CSV code including a potential memory over run
+in the os.nfields set up. To facilitate this an AGGR_MAX value is added.
 
 Signed-off-by: Claire Jensen <cjense@google.com>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- .../tests/shell/lib/perf_csv_output_lint.py   |  48 ++++++
- tools/perf/tests/shell/stat+csv_output.sh     | 147 ++++++++++++++++++
- 2 files changed, 195 insertions(+)
- create mode 100644 tools/perf/tests/shell/lib/perf_csv_output_lint.py
- create mode 100755 tools/perf/tests/shell/stat+csv_output.sh
+ tools/perf/Documentation/perf-stat.txt |  21 ++
+ tools/perf/builtin-stat.c              |   6 +
+ tools/perf/util/stat-display.c         | 384 ++++++++++++++++++-------
+ tools/perf/util/stat.c                 |   1 +
+ tools/perf/util/stat.h                 |   2 +
+ 5 files changed, 308 insertions(+), 106 deletions(-)
 
-diff --git a/tools/perf/tests/shell/lib/perf_csv_output_lint.py b/tools/perf/tests/shell/lib/perf_csv_output_lint.py
-new file mode 100644
-index 000000000000..714f283cfb1b
---- /dev/null
-+++ b/tools/perf/tests/shell/lib/perf_csv_output_lint.py
-@@ -0,0 +1,48 @@
-+#!/usr/bin/python
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/perf/Documentation/perf-stat.txt b/tools/perf/Documentation/perf-stat.txt
+index 8d1cde00b8d6..f9cdfd912b05 100644
+--- a/tools/perf/Documentation/perf-stat.txt
++++ b/tools/perf/Documentation/perf-stat.txt
+@@ -570,6 +570,27 @@ Additional metrics may be printed with all earlier fields being empty.
+ 
+ include::intel-hybrid.txt[]
+ 
++JSON FORMAT
++-----------
 +
-+import argparse
-+import sys
++With -j, perf stat is able to print out a JSON format output
++that can be used for parsing.
 +
-+# Basic sanity check of perf CSV output as specified in the man page.
-+# Currently just checks the number of fields per line in output.
++- timestamp : optional usec time stamp in fractions of second (with -I)
++- optional aggregate options:
++		- core : core identifier (with --per-core)
++		- die : die identifier (with --per-die)
++		- socket : socket identifier (with --per-socket)
++		- node : node identifier (with --per-node)
++		- thread : thread identifier (with --per-thread)
++- counter-value : counter value
++- unit : unit of the counter value or empty
++- event : event name
++- variance : optional variance if multiple values are collected (with -r)
++- runtime : run time of counter
++- metric-value : optional metric value
++- metric-unit : optional unit of metric
 +
-+ap = argparse.ArgumentParser()
-+ap.add_argument('--no-args', action='store_true')
-+ap.add_argument('--interval', action='store_true')
-+ap.add_argument('--system-wide-no-aggr', action='store_true')
-+ap.add_argument('--system-wide', action='store_true')
-+ap.add_argument('--event', action='store_true')
-+ap.add_argument('--per-core', action='store_true')
-+ap.add_argument('--per-thread', action='store_true')
-+ap.add_argument('--per-die', action='store_true')
-+ap.add_argument('--per-node', action='store_true')
-+ap.add_argument('--per-socket', action='store_true')
-+ap.add_argument('--separator', default=',', nargs='?')
-+args = ap.parse_args()
+ SEE ALSO
+ --------
+ linkperf:perf-top[1], linkperf:perf-list[1]
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 1b96636df01e..47f2d4d87b88 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1262,6 +1262,8 @@ static struct option stat_options[] = {
+ 		    "Merge identical named hybrid events"),
+ 	OPT_STRING('x', "field-separator", &stat_config.csv_sep, "separator",
+ 		   "print counts with custom separator"),
++	OPT_BOOLEAN('j', "json-output", &stat_config.json_output,
++		   "print counts in JSON format"),
+ 	OPT_CALLBACK('G', "cgroup", &evsel_list, "name",
+ 		     "monitor event in cgroup name only", parse_stat_cgroups),
+ 	OPT_STRING(0, "for-each-cgroup", &stat_config.cgroup_list, "name",
+@@ -1448,6 +1450,7 @@ static aggr_cpu_id_get_t aggr_mode__get_aggr(enum aggr_mode aggr_mode)
+ 	case AGGR_GLOBAL:
+ 	case AGGR_THREAD:
+ 	case AGGR_UNSET:
++	case AGGR_MAX:
+ 	default:
+ 		return NULL;
+ 	}
+@@ -1472,6 +1475,7 @@ static aggr_get_id_t aggr_mode__get_id(enum aggr_mode aggr_mode)
+ 	case AGGR_GLOBAL:
+ 	case AGGR_THREAD:
+ 	case AGGR_UNSET:
++	case AGGR_MAX:
+ 	default:
+ 		return NULL;
+ 	}
+@@ -1622,6 +1626,7 @@ static aggr_cpu_id_get_t aggr_mode__get_aggr_file(enum aggr_mode aggr_mode)
+ 	case AGGR_GLOBAL:
+ 	case AGGR_THREAD:
+ 	case AGGR_UNSET:
++	case AGGR_MAX:
+ 	default:
+ 		return NULL;
+ 	}
+@@ -1642,6 +1647,7 @@ static aggr_get_id_t aggr_mode__get_id_file(enum aggr_mode aggr_mode)
+ 	case AGGR_GLOBAL:
+ 	case AGGR_THREAD:
+ 	case AGGR_UNSET:
++	case AGGR_MAX:
+ 	default:
+ 		return NULL;
+ 	}
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 98669ca5a86b..a14014e9f940 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -28,15 +28,21 @@
+ static void print_running(struct perf_stat_config *config,
+ 			  u64 run, u64 ena)
+ {
+-	if (config->csv_output) {
+-		fprintf(config->output, "%s%" PRIu64 "%s%.2f",
+-					config->csv_sep,
+-					run,
+-					config->csv_sep,
+-					ena ? 100.0 * run / ena : 100.0);
+-	} else if (run != ena) {
 +
-+Lines = sys.stdin.readlines()
++	double enabled_percent = 100;
 +
-+def check_csv_output(exp):
-+  for line in Lines:
-+    if 'failed' not in line:
-+      count = line.count(args.separator)
-+      if count != exp:
-+        sys.stdout.write(''.join(Lines))
-+        raise RuntimeError(f'wrong number of fields. expected {exp} in {line}')
++	if (run != ena)
++		enabled_percent = 100 * run / ena;
++	if (config->json_output)
++		fprintf(config->output,
++			"\"event-runtime\" : %lu, \"pcnt-running\" : %.2f, ",
++			run, enabled_percent);
++	else if (config->csv_output)
++		fprintf(config->output,
++			"%s%" PRIu64 "%s%.2f", config->csv_sep,
++			run, config->csv_sep, enabled_percent);
++	else if (run != ena)
+ 		fprintf(config->output, "  (%.2f%%)", 100.0 * run / ena);
+-	}
+ }
+ 
+ static void print_noise_pct(struct perf_stat_config *config,
+@@ -44,7 +50,9 @@ static void print_noise_pct(struct perf_stat_config *config,
+ {
+ 	double pct = rel_stddev_stats(total, avg);
+ 
+-	if (config->csv_output)
++	if (config->json_output)
++		fprintf(config->output, "\"variance\" : %.2f, ", pct);
++	else if (config->csv_output)
+ 		fprintf(config->output, "%s%.2f%%", config->csv_sep, pct);
+ 	else if (pct)
+ 		fprintf(config->output, "  ( +-%6.2f%% )", pct);
+@@ -66,7 +74,11 @@ static void print_cgroup(struct perf_stat_config *config, struct evsel *evsel)
+ {
+ 	if (nr_cgroups) {
+ 		const char *cgrp_name = evsel->cgrp ? evsel->cgrp->name  : "";
+-		fprintf(config->output, "%s%s", config->csv_sep, cgrp_name);
 +
-+try:
-+  if args.no_args or args.system_wide or args.event:
-+    expected_items = 6
-+  elif args.interval or args.per_thread or args.system_wide_no_aggr:
-+    expected_items = 7
-+  elif args.per_core or args.per_socket or args.per_node or args.per_die:
-+    expected_items = 8
-+  else:
-+    ap.print_help()
-+    raise RuntimeError('No checking option specified')
-+  check_csv_output(expected_items)
++		if (config->json_output)
++			fprintf(config->output, "\"cgroup\" : \"%s\", ", cgrp_name);
++		else
++			fprintf(config->output, "%s%s", config->csv_sep, cgrp_name);
+ 	}
+ }
+ 
+@@ -74,69 +86,123 @@ static void print_cgroup(struct perf_stat_config *config, struct evsel *evsel)
+ static void aggr_printout(struct perf_stat_config *config,
+ 			  struct evsel *evsel, struct aggr_cpu_id id, int nr)
+ {
 +
-+except:
-+  sys.stdout.write('Test failed for input: ' + ''.join(Lines))
-+  raise
-diff --git a/tools/perf/tests/shell/stat+csv_output.sh b/tools/perf/tests/shell/stat+csv_output.sh
-new file mode 100755
-index 000000000000..82c25e9c7f21
---- /dev/null
-+++ b/tools/perf/tests/shell/stat+csv_output.sh
-@@ -0,0 +1,147 @@
-+#!/bin/bash
-+# perf stat CSV output linter
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+# Tests various perf stat CSV output commands for the
-+# correct number of fields and the CSV separator set to ','.
 +
-+set -e
++	if (config->json_output && !config->interval)
++		fprintf(config->output, "{");
 +
-+pythonchecker=$(dirname $0)/lib/perf_csv_output_lint.py
-+if [ "x$PYTHON" == "x" ]
-+then
-+	if which python3 > /dev/null
-+	then
-+		PYTHON=python3
-+	elif which python > /dev/null
-+	then
-+		PYTHON=python
+ 	switch (config->aggr_mode) {
+ 	case AGGR_CORE:
+-		fprintf(config->output, "S%d-D%d-C%*d%s%*d%s",
+-			id.socket,
+-			id.die,
+-			config->csv_output ? 0 : -8,
+-			id.core,
+-			config->csv_sep,
+-			config->csv_output ? 0 : 4,
+-			nr,
+-			config->csv_sep);
++		if (config->json_output) {
++			fprintf(config->output,
++				"\"core\" : \"S%d-D%d-C%d\", \"aggregate-number\" : %d, ",
++				id.socket,
++				id.die,
++				id.core,
++				nr);
++		} else {
++			fprintf(config->output, "S%d-D%d-C%*d%s%*d%s",
++				id.socket,
++				id.die,
++				config->csv_output ? 0 : -8,
++				id.core,
++				config->csv_sep,
++				config->csv_output ? 0 : 4,
++				nr,
++				config->csv_sep);
++		}
+ 		break;
+ 	case AGGR_DIE:
+-		fprintf(config->output, "S%d-D%*d%s%*d%s",
+-			id.socket,
+-			config->csv_output ? 0 : -8,
+-			id.die,
+-			config->csv_sep,
+-			config->csv_output ? 0 : 4,
+-			nr,
+-			config->csv_sep);
++		if (config->json_output) {
++			fprintf(config->output,
++				"\"die\" : \"S%d-D%d\", \"aggregate-number\" : %d, ",
++				id.socket,
++				id.die,
++				nr);
++		} else {
++			fprintf(config->output, "S%d-D%*d%s%*d%s",
++				id.socket,
++				config->csv_output ? 0 : -8,
++				id.die,
++				config->csv_sep,
++				config->csv_output ? 0 : 4,
++				nr,
++				config->csv_sep);
++		}
+ 		break;
+ 	case AGGR_SOCKET:
+-		fprintf(config->output, "S%*d%s%*d%s",
+-			config->csv_output ? 0 : -5,
+-			id.socket,
+-			config->csv_sep,
+-			config->csv_output ? 0 : 4,
+-			nr,
+-			config->csv_sep);
+-			break;
++		if (config->json_output) {
++			fprintf(config->output,
++				"\"socket\" : \"S%d\", \"aggregate-number\" : %d, ",
++				id.socket,
++				nr);
++		} else {
++			fprintf(config->output, "S%*d%s%*d%s",
++				config->csv_output ? 0 : -5,
++				id.socket,
++				config->csv_sep,
++				config->csv_output ? 0 : 4,
++				nr,
++				config->csv_sep);
++		}
++		break;
+ 	case AGGR_NODE:
+-		fprintf(config->output, "N%*d%s%*d%s",
+-			config->csv_output ? 0 : -5,
+-			id.node,
+-			config->csv_sep,
+-			config->csv_output ? 0 : 4,
+-			nr,
+-			config->csv_sep);
+-			break;
++		if (config->json_output) {
++			fprintf(config->output, "\"node\" : \"N%d\", \"aggregate-number\" : %d, ",
++				id.node,
++				nr);
++		} else {
++			fprintf(config->output, "N%*d%s%*d%s",
++				config->csv_output ? 0 : -5,
++				id.node,
++				config->csv_sep,
++				config->csv_output ? 0 : 4,
++				nr,
++				config->csv_sep);
++		}
++		break;
+ 	case AGGR_NONE:
+-		if (evsel->percore && !config->percore_show_thread) {
+-			fprintf(config->output, "S%d-D%d-C%*d%s",
+-				id.socket,
+-				id.die,
+-				config->csv_output ? 0 : -3,
+-				id.core, config->csv_sep);
+-		} else if (id.cpu.cpu > -1) {
+-			fprintf(config->output, "CPU%*d%s",
+-				config->csv_output ? 0 : -7,
+-				id.cpu.cpu, config->csv_sep);
++		if (config->json_output) {
++			if (evsel->percore && !config->percore_show_thread) {
++				fprintf(config->output, "\"core\" : \"S%d-D%d-C%d\"",
++					id.socket,
++					id.die,
++					id.core);
++			} else if (id.core > -1) {
++				fprintf(config->output, "\"cpu\" : \"%d\", ",
++					id.cpu.cpu);
++			}
++		} else {
++			if (evsel->percore && !config->percore_show_thread) {
++				fprintf(config->output, "S%d-D%d-C%*d%s",
++					id.socket,
++					id.die,
++					config->csv_output ? 0 : -3,
++					id.core, config->csv_sep);
++			} else if (id.core > -1) {
++				fprintf(config->output, "CPU%*d%s",
++					config->csv_output ? 0 : -7,
++					id.cpu.cpu, config->csv_sep);
++			}
+ 		}
+ 		break;
+ 	case AGGR_THREAD:
+-		fprintf(config->output, "%*s-%*d%s",
+-			config->csv_output ? 0 : 16,
+-			perf_thread_map__comm(evsel->core.threads, id.thread),
+-			config->csv_output ? 0 : -8,
+-			perf_thread_map__pid(evsel->core.threads, id.thread),
+-			config->csv_sep);
++		if (config->json_output) {
++			fprintf(config->output, "\"thread\" : \"%s-%d\", ",
++				perf_thread_map__comm(evsel->core.threads, id.thread),
++				perf_thread_map__pid(evsel->core.threads, id.thread));
++		} else {
++			fprintf(config->output, "%*s-%*d%s",
++				config->csv_output ? 0 : 16,
++				perf_thread_map__comm(evsel->core.threads, id.thread),
++				config->csv_output ? 0 : -8,
++				perf_thread_map__pid(evsel->core.threads, id.thread),
++				config->csv_sep);
++		}
+ 		break;
+ 	case AGGR_GLOBAL:
+ 	case AGGR_UNSET:
++	case AGGR_MAX:
+ 	default:
+ 		break;
+ 	}
+@@ -234,6 +300,31 @@ static void print_metric_csv(struct perf_stat_config *config __maybe_unused,
+ 	fprintf(out, "%s%s%s%s", config->csv_sep, vals, config->csv_sep, skip_spaces(unit));
+ }
+ 
++static void print_metric_json(struct perf_stat_config *config __maybe_unused,
++			     void *ctx,
++			     const char *color __maybe_unused,
++			     const char *fmt __maybe_unused,
++			     const char *unit, double val)
++{
++	struct outstate *os = ctx;
++	FILE *out = os->fh;
++
++	fprintf(out, "\"metric-value\" : %f, ", val);
++	fprintf(out, "\"metric-unit\" : \"%s\"", unit);
++	if (!config->metric_only)
++		fprintf(out, "}");
++}
++
++static void new_line_json(struct perf_stat_config *config, void *ctx)
++{
++	struct outstate *os = ctx;
++
++	fputc('\n', os->fh);
++	if (os->prefix)
++		fprintf(os->fh, "%s", os->prefix);
++	aggr_printout(config, os->evsel, os->id, os->nr);
++}
++
+ /* Filter out some columns that don't work well in metrics only mode */
+ 
+ static bool valid_only_metric(const char *unit)
+@@ -300,6 +391,27 @@ static void print_metric_only_csv(struct perf_stat_config *config __maybe_unused
+ 	fprintf(out, "%s%s", vals, config->csv_sep);
+ }
+ 
++static void print_metric_only_json(struct perf_stat_config *config __maybe_unused,
++				  void *ctx, const char *color __maybe_unused,
++				  const char *fmt,
++				  const char *unit, double val)
++{
++	struct outstate *os = ctx;
++	FILE *out = os->fh;
++	char buf[64], *vals, *ends;
++	char tbuf[1024];
++
++	if (!valid_only_metric(unit))
++		return;
++	unit = fixunit(tbuf, os->evsel, unit);
++	snprintf(buf, sizeof(buf), fmt, val);
++	ends = vals = skip_spaces(buf);
++	while (isdigit(*ends) || *ends == '.')
++		ends++;
++	*ends = 0;
++	fprintf(out, "{\"metric-value\" : \"%s\"}", vals);
++}
++
+ static void new_line_metric(struct perf_stat_config *config __maybe_unused,
+ 			    void *ctx __maybe_unused)
+ {
+@@ -318,10 +430,13 @@ static void print_metric_header(struct perf_stat_config *config,
+ 	    os->evsel->priv != os->evsel->evlist->selected->priv)
+ 		return;
+ 
+-	if (!valid_only_metric(unit))
++	if (!valid_only_metric(unit) && !config->json_output)
+ 		return;
+ 	unit = fixunit(tbuf, os->evsel, unit);
+-	if (config->csv_output)
++
++	if (config->json_output)
++		fprintf(os->fh, "\"unit\" : \"%s\"", unit);
++	else if (config->csv_output)
+ 		fprintf(os->fh, "%s%s", unit, config->csv_sep);
+ 	else
+ 		fprintf(os->fh, "%*s ", config->metric_only_len, unit);
+@@ -367,14 +482,28 @@ static void abs_printout(struct perf_stat_config *config,
+ 
+ 	aggr_printout(config, evsel, id, nr);
+ 
+-	fprintf(output, fmt, avg, config->csv_sep);
++	if (config->json_output)
++		fprintf(output, "\"counter-value\" : \"%f\", ", avg);
 +	else
-+		echo Skipping test, python not detected please set environment variable PYTHON.
-+		exit 2
-+	fi
-+fi
++		fprintf(output, fmt, avg, config->csv_sep);
 +
-+# Return true if perf_event_paranoid is > $1 and not running as root.
-+function ParanoidAndNotRoot()
-+{
-+	 [ $(id -u) != 0 ] && [ $(cat /proc/sys/kernel/perf_event_paranoid) -gt $1 ]
-+}
++	if (config->json_output) {
++		if (evsel->unit) {
++			fprintf(output, "\"unit\" : \"%s\", ",
++				evsel->unit);
++		}
++	} else {
++		if (evsel->unit)
++			fprintf(output, "%-*s%s",
++				config->csv_output ? 0 : config->unit_width,
++				evsel->unit, config->csv_sep);
++	}
+ 
+-	if (evsel->unit)
+-		fprintf(output, "%-*s%s",
+-			config->csv_output ? 0 : config->unit_width,
+-			evsel->unit, config->csv_sep);
+ 
+-	fprintf(output, "%-*s", config->csv_output ? 0 : 25, evsel__name(evsel));
++	if (config->json_output)
++		fprintf(output, "\"event\" : \"%s\", ", evsel__name(evsel));
++	else
++		fprintf(output, "%-*s", config->csv_output ? 0 : 25, evsel__name(evsel));
+ 
+ 	print_cgroup(config, evsel);
+ }
+@@ -416,34 +545,30 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
+ 		.nr = nr,
+ 		.evsel = counter,
+ 	};
+-	print_metric_t pm = print_metric_std;
++	print_metric_t pm;
+ 	new_line_t nl;
+ 
+-	if (config->metric_only) {
+-		nl = new_line_metric;
+-		if (config->csv_output)
+-			pm = print_metric_only_csv;
+-		else
+-			pm = print_metric_only;
+-	} else
+-		nl = new_line_std;
+-
+-	if (config->csv_output && !config->metric_only) {
+-		static int aggr_fields[] = {
+-			[AGGR_GLOBAL] = 0,
+-			[AGGR_THREAD] = 1,
++	if (config->csv_output) {
++		static const int aggr_fields[AGGR_MAX] = {
+ 			[AGGR_NONE] = 1,
++			[AGGR_GLOBAL] = 0,
+ 			[AGGR_SOCKET] = 2,
+ 			[AGGR_DIE] = 2,
+ 			[AGGR_CORE] = 2,
++			[AGGR_THREAD] = 1,
++			[AGGR_UNSET] = 0,
++			[AGGR_NODE] = 0,
+ 		};
+ 
+-		pm = print_metric_csv;
+-		nl = new_line_csv;
+-		os.nfields = 3;
+-		os.nfields += aggr_fields[config->aggr_mode];
+-		if (counter->cgrp)
+-			os.nfields++;
++		pm = config->metric_only ? print_metric_only_csv : print_metric_csv;
++		nl = config->metric_only ? new_line_metric : new_line_csv;
++		os.nfields = 3 + aggr_fields[config->aggr_mode] + (counter->cgrp ? 1 : 0);
++	} else if (config->json_output) {
++		pm = config->metric_only ? print_metric_only_json : print_metric_json;
++		nl = config->metric_only ? new_line_metric : new_line_json;
++	} else {
++		pm = config->metric_only ? print_metric_only : print_metric_std;
++		nl = config->metric_only ? new_line_metric : new_line_std;
+ 	}
+ 
+ 	if (!config->no_csv_summary && config->csv_output &&
+@@ -458,10 +583,15 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
+ 		}
+ 		aggr_printout(config, counter, id, nr);
+ 
+-		fprintf(config->output, "%*s%s",
+-			config->csv_output ? 0 : 18,
+-			counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED,
+-			config->csv_sep);
++		if (config->json_output) {
++			fprintf(config->output, "\"counter-value\" : \"%s\", ",
++					counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED);
++		} else {
++			fprintf(config->output, "%*s%s",
++				config->csv_output ? 0 : 18,
++				counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED,
++				config->csv_sep);
++		}
+ 
+ 		if (counter->supported) {
+ 			if (!evlist__has_hybrid(counter->evlist)) {
+@@ -471,21 +601,32 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
+ 			}
+ 		}
+ 
+-		fprintf(config->output, "%-*s%s",
+-			config->csv_output ? 0 : config->unit_width,
+-			counter->unit, config->csv_sep);
++		if (config->json_output) {
++			fprintf(config->output, "\"unit\" : \"%s\", ", counter->unit);
++		} else {
++			fprintf(config->output, "%-*s%s",
++				config->csv_output ? 0 : config->unit_width,
++				counter->unit, config->csv_sep);
++		}
+ 
+-		fprintf(config->output, "%*s",
+-			config->csv_output ? 0 : -25, evsel__name(counter));
++		if (config->json_output) {
++			fprintf(config->output, "\"event\" : \"%s\", ",
++				evsel__name(counter));
++		} else {
++			fprintf(config->output, "%*s",
++				 config->csv_output ? 0 : -25, evsel__name(counter));
++		}
+ 
+ 		print_cgroup(config, counter);
+ 
+-		if (!config->csv_output)
++		if (!config->csv_output && !config->json_output)
+ 			pm(config, &os, NULL, NULL, "", 0);
+ 		print_noise(config, counter, noise);
+ 		print_running(config, run, ena);
+ 		if (config->csv_output)
+ 			pm(config, &os, NULL, NULL, "", 0);
++		else if (config->json_output)
++			pm(config, &os, NULL, NULL, "", 0);
+ 		return;
+ 	}
+ 
+@@ -500,12 +641,15 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
+ 	if (config->csv_output && !config->metric_only) {
+ 		print_noise(config, counter, noise);
+ 		print_running(config, run, ena);
++	} else if (config->json_output && !config->metric_only) {
++		print_noise(config, counter, noise);
++		print_running(config, run, ena);
+ 	}
+ 
+ 	perf_stat__print_shadow_stats(config, counter, uval,
+ 				first_shadow_cpu_map_idx(config, counter, &id),
+ 				&out, &config->metric_events, st);
+-	if (!config->csv_output && !config->metric_only) {
++	if (!config->csv_output && !config->metric_only && !config->json_output) {
+ 		print_noise(config, counter, noise);
+ 		print_running(config, run, ena);
+ 	}
+@@ -1002,8 +1146,12 @@ static void print_metric_headers(struct perf_stat_config *config,
+ 	struct outstate os = {
+ 		.fh = config->output
+ 	};
++	bool first = true;
 +
-+check_no_args()
-+{
-+	echo -n "Checking CSV output: no args "
-+	perf stat -x, true 2>&1 | $PYTHON $pythonchecker --no-args
-+	echo "[Success]"
-+}
++		if (config->json_output && !config->interval)
++			fprintf(config->output, "{");
+ 
+-	if (prefix)
++	if (prefix && !config->json_output)
+ 		fprintf(config->output, "%s", prefix);
+ 
+ 	if (!config->csv_output && !no_indent)
+@@ -1023,6 +1171,9 @@ static void print_metric_headers(struct perf_stat_config *config,
+ 		os.evsel = counter;
+ 		out.ctx = &os;
+ 		out.print_metric = print_metric_header;
++		if (!first && config->json_output)
++			fprintf(config->output, ", ");
++		first = false;
+ 		out.new_line = new_line_metric;
+ 		out.force_header = true;
+ 		perf_stat__print_shadow_stats(config, counter, 0,
+@@ -1031,6 +1182,8 @@ static void print_metric_headers(struct perf_stat_config *config,
+ 					      &config->metric_events,
+ 					      &rt_stat);
+ 	}
++	if (config->json_output)
++		fprintf(config->output, "}");
+ 	fputc('\n', config->output);
+ }
+ 
+@@ -1046,10 +1199,18 @@ static void print_interval(struct perf_stat_config *config,
+ 	if (config->interval_clear)
+ 		puts(CONSOLE_CLEAR);
+ 
+-	if (!config->iostat_run)
+-		sprintf(prefix, "%6lu.%09lu%s", (unsigned long) ts->tv_sec, ts->tv_nsec, config->csv_sep);
+-
+-	if ((num_print_interval == 0 && !config->csv_output) || config->interval_clear) {
++	if (!config->iostat_run && !config->json_output)
++		sprintf(prefix, "%6lu.%09lu%s", (unsigned long) ts->tv_sec,
++				 ts->tv_nsec, config->csv_sep);
++	if (!config->iostat_run && config->json_output && !config->metric_only)
++		sprintf(prefix, "{\"interval\" : %lu.%09lu, ", (unsigned long)
++				 ts->tv_sec, ts->tv_nsec);
++	if (!config->iostat_run && config->json_output && config->metric_only)
++		sprintf(prefix, "{\"interval\" : %lu.%09lu}", (unsigned long)
++				 ts->tv_sec, ts->tv_nsec);
 +
-+check_system_wide()
-+{
-+	echo -n "Checking CSV output: system wide "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -x, -a true 2>&1 | $PYTHON $pythonchecker --system-wide
-+	echo "[Success]"
-+}
++	if ((num_print_interval == 0 && !config->csv_output && !config->json_output)
++			 || config->interval_clear) {
+ 		switch (config->aggr_mode) {
+ 		case AGGR_NODE:
+ 			fprintf(output, "#           time node   cpus");
+@@ -1089,12 +1250,19 @@ static void print_interval(struct perf_stat_config *config,
+ 					fprintf(output, "             counts %*s events\n", unit_width, "unit");
+ 			}
+ 		case AGGR_UNSET:
++		case AGGR_MAX:
+ 			break;
+ 		}
+ 	}
+ 
+-	if ((num_print_interval == 0 || config->interval_clear) && metric_only)
++	if ((num_print_interval == 0 || config->interval_clear)
++			 && metric_only && !config->json_output)
+ 		print_metric_headers(config, evlist, " ", true);
++	if ((num_print_interval == 0 || config->interval_clear)
++			 && metric_only && config->json_output) {
++		fprintf(output, "{");
++		print_metric_headers(config, evlist, " ", true);
++	}
+ 	if (++num_print_interval == 25)
+ 		num_print_interval = 0;
+ }
+@@ -1108,7 +1276,7 @@ static void print_header(struct perf_stat_config *config,
+ 
+ 	fflush(stdout);
+ 
+-	if (!config->csv_output) {
++	if (!config->csv_output && !config->json_output) {
+ 		fprintf(output, "\n");
+ 		fprintf(output, " Performance counter stats for ");
+ 		if (_target->bpf_str)
+@@ -1301,6 +1469,9 @@ void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *conf
+ 			num_print_iv = 0;
+ 		if (config->aggr_mode == AGGR_GLOBAL && prefix && !config->iostat_run)
+ 			fprintf(config->output, "%s", prefix);
 +
-+check_system_wide_no_aggr()
-+{
-+	echo -n "Checking CSV output: system wide "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	echo -n "Checking CSV output: system wide no aggregation "
-+	perf stat -x, -A -a --no-merge true 2>&1 | $PYTHON $pythonchecker --system-wide-no-aggr
-+	echo "[Success]"
-+}
-+
-+check_interval()
-+{
-+	echo -n "Checking CSV output: interval "
-+	perf stat -x, -I 1000 true 2>&1 | $PYTHON $pythonchecker --interval
-+	echo "[Success]"
-+}
-+
-+
-+check_event()
-+{
-+	echo -n "Checking CSV output: event "
-+	perf stat -x, -e cpu-clock true 2>&1 | $PYTHON $pythonchecker --event
-+	echo "[Success]"
-+}
-+
-+check_per_core()
-+{
-+	echo -n "Checking CSV output: per core "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -x, --per-core -a true 2>&1 | $PYTHON $pythonchecker --per-core
-+	echo "[Success]"
-+}
-+
-+check_per_thread()
-+{
-+	echo -n "Checking CSV output: per thread "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -x, --per-thread -a true 2>&1 | $PYTHON $pythonchecker --per-thread
-+	echo "[Success]"
-+}
-+
-+check_per_die()
-+{
-+	echo -n "Checking CSV output: per die "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -x, --per-die -a true 2>&1 | $PYTHON $pythonchecker --per-die
-+	echo "[Success]"
-+}
-+
-+check_per_node()
-+{
-+	echo -n "Checking CSV output: per node "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -x, --per-node -a true 2>&1 | $PYTHON $pythonchecker --per-node
-+	echo "[Success]"
-+}
-+
-+check_per_socket()
-+{
-+	echo -n "Checking CSV output: per socket "
-+	if ParanoidAndNotRoot 0
-+	then
-+		echo "[Skip] parnoia and not root"
-+		return
-+	fi
-+	perf stat -x, --per-socket -a true 2>&1 | $PYTHON $pythonchecker --per-socket
-+	echo "[Success]"
-+}
-+
-+check_no_args
-+check_system_wide
-+check_system_wide_no_aggr
-+check_interval
-+check_event
-+check_per_core
-+check_per_thread
-+check_per_die
-+check_per_node
-+check_per_socket
-+exit 0
++		if (config->json_output && !config->metric_only)
++			fprintf(config->output, "}");
+ 	}
+ 
+ 	switch (config->aggr_mode) {
+@@ -1339,12 +1510,13 @@ void evlist__print_counters(struct evlist *evlist, struct perf_stat_config *conf
+ 			}
+ 		}
+ 		break;
++	case AGGR_MAX:
+ 	case AGGR_UNSET:
+ 	default:
+ 		break;
+ 	}
+ 
+-	if (!interval && !config->csv_output)
++	if (!interval && !config->csv_output && !config->json_output)
+ 		print_footer(config);
+ 
+ 	fflush(config->output);
+diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+index 4a5f3b8ff820..1fc36dce2bb9 100644
+--- a/tools/perf/util/stat.c
++++ b/tools/perf/util/stat.c
+@@ -403,6 +403,7 @@ process_counter_values(struct perf_stat_config *config, struct evsel *evsel,
+ 		aggr->ena += count->ena;
+ 		aggr->run += count->run;
+ 	case AGGR_UNSET:
++	case AGGR_MAX:
+ 	default:
+ 		break;
+ 	}
+diff --git a/tools/perf/util/stat.h b/tools/perf/util/stat.h
+index b5aeb8e6d34b..668250022f8c 100644
+--- a/tools/perf/util/stat.h
++++ b/tools/perf/util/stat.h
+@@ -57,6 +57,7 @@ enum aggr_mode {
+ 	AGGR_THREAD,
+ 	AGGR_UNSET,
+ 	AGGR_NODE,
++	AGGR_MAX
+ };
+ 
+ enum {
+@@ -121,6 +122,7 @@ struct perf_stat_config {
+ 	bool			 no_inherit;
+ 	bool			 identifier;
+ 	bool			 csv_output;
++	bool			 json_output;
+ 	bool			 interval_clear;
+ 	bool			 metric_only;
+ 	bool			 null_run;
 -- 
 2.36.0.550.gb090851708-goog
 

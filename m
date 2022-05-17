@@ -2,94 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E379552A1A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A4952A1AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346137AbiEQMhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51178 "EHLO
+        id S1346174AbiEQMjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbiEQMhp (ORCPT
+        with ESMTP id S1345637AbiEQMi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:37:45 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253184BB95
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:37:43 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 17 May 2022 08:38:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231C94BFED
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:38:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2bHV08zxz4xZv;
-        Tue, 17 May 2022 22:37:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1652791062;
-        bh=FMyee9OENISgTkcRL2lDzqNzBk6D+Eq37HFU7uSV9Kw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=C/J/2V71XquPDWSFjL4+RG+V7Wb1EPOhDxFESsN9vY1L+tnh9zyXVF1ILe/9ji4oD
-         aHzWGWm4WM0rp2hhjvthb/qcRNjSWcyLhM3oW6wGwxzysluEZW04jfbZ0AR0ESveBU
-         sg4Mb1nA/GnKxjKrc8NR4V/MN+QMWR3Ska0JdTvrl98NAfEo4u7qXA8Mlvp+3sDWb7
-         ely8CzT5pD+8SHyH2xFGeh2ntJ58Pm0DtTWY8epK91VqduraNtRHjm2C7oNMmFZfhw
-         Stb5wama/Dvb+ODb8lHr08O3xtHnAR/iTAYC4ABLxvlFj0cuwL36KpGyiXvfUulwkO
-         G7kap7n26YJbQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <patch-notifications@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 0/4] Kill the time spent in patch_instruction()
-In-Reply-To: <f1481139-9ed6-3e00-e73e-87d4319c614d@csgroup.eu>
-References: <cover.1647962456.git.christophe.leroy@csgroup.eu>
- <165261053687.1047019.4165741740473209888.b4-ty@ellerman.id.au>
- <f1481139-9ed6-3e00-e73e-87d4319c614d@csgroup.eu>
-Date:   Tue, 17 May 2022 22:37:38 +1000
-Message-ID: <874k1opc6l.fsf@mpe.ellerman.id.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE743B81850
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:38:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B64FDC34116;
+        Tue, 17 May 2022 12:38:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652791133;
+        bh=tIADpdIqk/DMHwcrZqTQGsZAeC349U8CBKJCjIVM5dE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=btPwkau7QMRA+HilFb4hUFG6cyGAtCxMljQc+M7QoUEXh5w/hyIieehwdcm7pW3ln
+         EXri19VAxaPwckkjmocMpmxkQ5Jkv0k8RTEtGUZ/UtOY6qVC7dSTAnJoiaOuQUebdL
+         fS77N0/7stR2m3o7HaNxBEv97CDDbl5yq3GqcYgLuUtYwndQwraf2HI8HNmb8nOFYZ
+         cOSCaLLbfBc4wIb+BZA1CQM20BhA3p8yQZqH09lYTWpDm3saelhuiUEbCLwWTW/Bnd
+         VAhZWvcKfpnTTX5n/8UGQ3y8Mazh0xS/FJaMvIz/tNza1Ha9Q+roJn9zm0b4Je2mdb
+         Jv9xhdT081I5g==
+Date:   Tue, 17 May 2022 15:38:45 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Zhou Guanghui <zhouguanghui1@huawei.com>
+Cc:     akpm@linux-foundation.org, will@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, xuqiang36@huawei.com
+Subject: Re: [PATCH v2] arm64: Expand the static memblock memory table
+Message-ID: <YoOXVdjkj8nnUHn6@kernel.org>
+References: <20220517114309.10228-1-zhouguanghui1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517114309.10228-1-zhouguanghui1@huawei.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Le 15/05/2022 =C3=A0 12:28, Michael Ellerman a =C3=A9crit=C2=A0:
->> On Tue, 22 Mar 2022 16:40:17 +0100, Christophe Leroy wrote:
->>> This series reduces by 70% the time required to activate
->>> ftrace on an 8xx with CONFIG_STRICT_KERNEL_RWX.
->>>
->>> Measure is performed in function ftrace_replace_code() using mftb()
->>> around the loop.
->>>
->>> With the series,
->>> - Without CONFIG_STRICT_KERNEL_RWX, 416000 TB ticks are measured.
->>> - With CONFIG_STRICT_KERNEL_RWX, 546000 TB ticks are measured.
->>>
->>> [...]
->>=20
->> Patches 1, 3 and 4 applied to powerpc/next.
->>=20
->> [1/4] powerpc/code-patching: Don't call is_vmalloc_or_module_addr() with=
-out CONFIG_MODULES
->>        https://git.kernel.org/powerpc/c/cb3ac45214c03852430979a43180371a=
-44b74596
->> [3/4] powerpc/code-patching: Use jump_label for testing freed initmem
->>        https://git.kernel.org/powerpc/c/b033767848c4115e486b1a51946de3be=
-e2ac0fa6
->> [4/4] powerpc/code-patching: Use jump_label to check if poking_init() is=
- done
->>        https://git.kernel.org/powerpc/c/1751289268ef959db68b0b6f798d904d=
-6403309a
->>=20
->
-> Patch 2 was the keystone of this series. What happened to it ?
+Hi,
 
-It broke on 64-bit. I think I know why but I haven't had time to test
-it. Will try and get it fixed in the next day or two.
+On Tue, May 17, 2022 at 11:43:09AM +0000, Zhou Guanghui wrote:
+> In a system using HBM, a multi-bit ECC error occurs, and the BIOS
+> saves the corresponding area (for example, 2 MB). When the system
+> restarts next time, these areas are isolated and not reported or
+> reported as EFI_UNUSABLE_MEMORY. Both of them lead to an increase
+> in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads to
+> a larger number of memblocks.
 
-cheers
+I'd slightly rephrase the description here:
+
+In a system using HBM, a multi-bit ECC error may occur, and the BIOS will
+mark the corresponding area (for example, 2 MB)i as unusable.  When the
+system restarts next time, these areas are not reported or reported as
+EFI_UNUSABLE_MEMORY. Both cases lead to an increase in the number of
+memblocks, whereas EFI_UNUSABLE_MEMORY leads to a larger number of
+memblocks.
+ 
+> For example, if the EFI_UNUSABLE_MEMORY type is reported:
+> ...
+> memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+> memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
+> memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+> memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+> memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
+> memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
+> memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
+> memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
+> memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+> memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
+> ...
+> 
+> If the size of the init memblock regions is exceeded before the
+> array size can be resized, the excess memory will be lost.
+
+And here I'd make it something like:
+
+The EFI memory map is parsed to construct the memblock arrays before the
+memblock arrays can be resized. As the result, memory regions beyond
+INIT_MEMBLOCK_REGIONS are lost.
+
+Allow overriding memblock.memory array size with architecture defined
+INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
+INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
+
+> 
+> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
+
+With changelog updates along those lines
+
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+
+> ---
+>  arch/arm64/include/asm/memory.h |  9 +++++++++
+>  mm/memblock.c                   | 14 +++++++++-----
+>  2 files changed, 18 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+> index 0af70d9abede..eda61c0389c4 100644
+> --- a/arch/arm64/include/asm/memory.h
+> +++ b/arch/arm64/include/asm/memory.h
+> @@ -364,6 +364,15 @@ void dump_mem_limit(void);
+>  # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
+>  #endif
+>  
+> +/*
+> + * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
+> + * memory block into multiple parts. As a result, the number of memory regions
+> + * is large.
+> + */
+> +#ifdef CONFIG_EFI
+> +#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
+> +#endif
+> +
+>  #include <asm-generic/memory_model.h>
+>  
+>  #endif /* __ASM_MEMORY_H */
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index e4f03a6e8e56..7c63571a69d7 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -29,6 +29,10 @@
+>  # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+>  #endif
+>  
+> +#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
+> +#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
+> +#endif
+> +
+>  /**
+>   * DOC: memblock overview
+>   *
+> @@ -55,9 +59,9 @@
+>   * the allocator metadata. The "memory" and "reserved" types are nicely
+>   * wrapped with struct memblock. This structure is statically
+>   * initialized at build time. The region arrays are initially sized to
+> - * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
+> - * for "reserved". The region array for "physmem" is initially sized to
+> - * %INIT_PHYSMEM_REGIONS.
+> + * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
+> + * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
+> + * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
+>   * The memblock_allow_resize() enables automatic resizing of the region
+>   * arrays during addition of new regions. This feature should be used
+>   * with care so that memory allocated for the region array will not
+> @@ -102,7 +106,7 @@ unsigned long min_low_pfn;
+>  unsigned long max_pfn;
+>  unsigned long long max_possible_pfn;
+>  
+> -static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
+> +static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
+>  static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
+>  #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+>  static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
+> @@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
+>  struct memblock memblock __initdata_memblock = {
+>  	.memory.regions		= memblock_memory_init_regions,
+>  	.memory.cnt		= 1,	/* empty dummy entry */
+> -	.memory.max		= INIT_MEMBLOCK_REGIONS,
+> +	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
+>  	.memory.name		= "memory",
+>  
+>  	.reserved.regions	= memblock_reserved_init_regions,
+> -- 
+> 2.17.1
+> 
+
+-- 
+Sincerely yours,
+Mike.

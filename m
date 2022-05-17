@@ -2,146 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676B152966D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F55F52966F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235473AbiEQBC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 21:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S236188AbiEQBDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 21:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbiEQBCX (ORCPT
+        with ESMTP id S231313AbiEQBDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 21:02:23 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED1F3EAB3;
-        Mon, 16 May 2022 18:02:22 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id a3so10922088ybg.5;
-        Mon, 16 May 2022 18:02:22 -0700 (PDT)
+        Mon, 16 May 2022 21:03:04 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A58D3ED0A;
+        Mon, 16 May 2022 18:03:03 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 202so15607196pgc.9;
+        Mon, 16 May 2022 18:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uqWi4OnHu9ri4Nfr1SRDUI9tIGr2rwk7haOnQsBD3Ys=;
-        b=T92+XNl0GBjaHOZaaCfUzuxLeNI0GDBCfW61td3Vb4FeCnL/deQ1MMtkdearq4YlGX
-         9Nd0pBSrkLfd1ABfSyJiZvbo7fsIfPTUUUZToYOvWgYkcGWhOqvYsI+y2AAo9ht40+0j
-         XLiIOtmucBvTUa47yg1F6IYvyBqWlr6EVJsktPOpW8ugS+TejTtjC1YxS0pIq0YiX6bz
-         ELbIbSsL4vBAaSs6ulh31xB3jZpJgid/5L9ZK8FJmBt6A4H+KXdPXMlb6xKwa/mV3jAh
-         aklSiLr46NP0TqPB+F+iczNUX8HM8x1YW3oLpfAGzPX5AWE0BSZF71rwPqXYZDf79SDH
-         lytA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FFnrYrR8btBvbK2FeC/j5VXcaMZlzan2Ot1C6tFuF8E=;
+        b=TLYqtL/qWUEIAQNVfIfY7qhZdSRy88dfPqpG6VBa6IhU9g71r7r3CQ5l/9i3bOpk3z
+         3oju48qHYqB4tx1KrkE8SlRiC3RNmIlZ2lippuBIBW/5qiqo8BWIP+0IVVKjFV3mmQ5Y
+         3hSSZXqBR3UGXPxeVuiErVf4x7CkiJQRbAO+TU9sKlYk99tXHmven72WtqXAaN0NDTRy
+         6974HLSj3JdzlZpVSW8JJrxeYg8JpZK8z+h9uX2Y9op3eC6kH4i9yA005jreAvEV+ljv
+         XVxq1yUITdte0jaKK/YjeyJW/tOvFyqasHpdym/7SWmYbgLFbv7EIlzpqnroIb4CkR2s
+         fg3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uqWi4OnHu9ri4Nfr1SRDUI9tIGr2rwk7haOnQsBD3Ys=;
-        b=ZJUadBir1R+urqBBX3DfPIfRjK+dSms2AYGSiaycjB1NCZW4ZEJLLTULsmRO2Z19XX
-         lKAwCNifRpjyVpFwKqPiOSh+dKBqxnu/LjIclveCJ+K4e6zt42UwRBbJcDM0ZXC8dufb
-         Am69nVOo5RGNtWr3YiopccxR8sjGBJQ7SFxPlduxBbidPFOnhnvbdLTFiGdm9wQqeHaf
-         0OE62/dX1nV0E6CqHtH+He2LtzfXOb2K5Za12pd24k0eeQf4iArwykwBW7IpXnpNRnAk
-         8gtODgzUbe4j67j79HGFb+je7CuHK81kfKgM3vfGtonVCf2/exoeuU9/NsfMaY/Vh4ag
-         gkRw==
-X-Gm-Message-State: AOAM530V3KkmRwcfYYD0SDYTdnNaEsMc5KtaisiGZpgDGpZj4fAgxKnC
-        XFKT2MGoFx5zHErbDiOeGP3asjB3lJAU4KS+hbTu9ZyY+5E=
-X-Google-Smtp-Source: ABdhPJwxnH9d3ESAOWYk+zXNYrQeMU2xxTnLHC6hsf4faWRrotO6pkgfo6ewrvrH7mmXg7ahw++WqR31QTpU8QKvOHc=
-X-Received: by 2002:a25:2c55:0:b0:64d:f682:db36 with SMTP id
- s82-20020a252c55000000b0064df682db36mr754823ybs.352.1652749341908; Mon, 16
- May 2022 18:02:21 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=FFnrYrR8btBvbK2FeC/j5VXcaMZlzan2Ot1C6tFuF8E=;
+        b=sW/9w8yfkiKiotFTIw2oMaMoEdNkIOQ+R6568puXwsaFMkVYq7qfB878iBpgLwC1j3
+         RJPoHZ9ozV6hFuMAqx6Tin14xvcw/sqHT/3NsNoqroiNHCfNBf9gbGIQJiirpAHNyus5
+         sO+t5gnGrF6tuE5gnq6FbMRIH+5QX3f50tDS5YMwO9qBjRC97WKOmOLtWrSCmZxhMgiM
+         1NAW+rNu6joVTFWuPj9blON6VUrpfSxyWXyJnKGM4Cphp5kudjRJkOT9OW8Dl2Qdw5Co
+         DVQ+7Y/C1TP6Tj6B/XdLNBjO2Cz8mPCWI81fdN85uo/W2tjzJj0j+qkVA+sAHXMBpr2Y
+         Wg5A==
+X-Gm-Message-State: AOAM530eIV/AgQWzevNeW3kQnPh8D02f9/8Pw1GXs+7Qu2alLz3CJ73x
+        wif/DJs+OpnnXQRyA8tiQL2YUnKGrwE=
+X-Google-Smtp-Source: ABdhPJxIhi8angBGgKVD+iGxGFgtn4wr846sa87J7D9O24KBw/u7GHlgd8+kFwCAkh2DZ3OQrRQ4mA==
+X-Received: by 2002:a63:4f21:0:b0:3f2:678b:89e1 with SMTP id d33-20020a634f21000000b003f2678b89e1mr7319416pgb.596.1652749382497;
+        Mon, 16 May 2022 18:03:02 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:62fc])
+        by smtp.gmail.com with ESMTPSA id i76-20020a62874f000000b0050dc7628132sm7728981pfe.12.2022.05.16.18.03.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 18:03:02 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 16 May 2022 15:03:00 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com
+Subject: Re: [Phishing Risk] [External] Re: [PATCH] blk-iocost: fix very
+ large vtime when iocg activate
+Message-ID: <YoL0RHmU4tbS2f/F@slm.duckdns.org>
+References: <20220516084045.96004-1-zhouchengming@bytedance.com>
+ <YoKb7wpkz3xoCS6s@slm.duckdns.org>
+ <bcd0956a-9aa0-3211-801b-1f1eace6de79@bytedance.com>
 MIME-Version: 1.0
-References: <20220415103414.86555-1-jiangshanlai@gmail.com> <YoK3zEVj+DuIBEs7@google.com>
-In-Reply-To: <YoK3zEVj+DuIBEs7@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Tue, 17 May 2022 09:02:09 +0800
-Message-ID: <CAJhGHyBYaASEkB7FqGQ3FThgNDkOzvHmC5KFw9y0SEu3we8s3A@mail.gmail.com>
-Subject: Re: [PATCH] kvm: x86/svm/nested: Cache PDPTEs for nested NPT in PAE
- paging mode
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Avi Kivity <avi@redhat.com>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bcd0956a-9aa0-3211-801b-1f1eace6de79@bytedance.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 4:45 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Fri, Apr 15, 2022, Lai Jiangshan wrote:
-> > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> >
-> > When NPT enabled L1 is PAE paging, vcpu->arch.mmu->get_pdptrs() which
-> > is nested_svm_get_tdp_pdptr() reads the guest NPT's PDPTE from memroy
-> > unconditionally for each call.
-> >
-> > The guest PAE root page is not write-protected.
-> >
-> > The mmu->get_pdptrs() in FNAME(walk_addr_generic) might get different
-> > values every time or it is different from the return value of
-> > mmu->get_pdptrs() in mmu_alloc_shadow_roots().
-> >
-> > And it will cause FNAME(fetch) installs the spte in a wrong sp
-> > or links a sp to a wrong parent since FNAME(gpte_changed) can't
-> > check these kind of changes.
-> >
-> > Cache the PDPTEs and the problem is resolved.  The guest is responsible
-> > to info the host if its PAE root page is updated which will cause
-> > nested vmexit and the host updates the cache when next nested run.
->
-> Hmm, no, the guest is responsible for invalidating translations that can be
-> cached in the TLB, but the guest is not responsible for a full reload of PDPTEs.
-> Per the APM, the PDPTEs can be cached like regular PTEs:
->
->   Under SVM, however, when the processor is in guest mode with PAE enabled, the
->   guest PDPT entries are not cached or validated at this point, but instead are
->   loaded and checked on demand in the normal course of address translation, just
->   like page directory and page table entries. Any reserved bit violations ared
->   etected at the point of use, and result in a page-fault (#PF) exception rather
->   than a general-protection (#GP) exception.
->
-> So if L1 modifies a PDPTE from !PRESENT (or RESERVED) to PRESENT (and valid), then
-> any active L2 vCPUs should recognize the new PDPTE without a nested VM-Exit because
-> the old entry can't have been cached in the TLB.
+On Tue, May 17, 2022 at 08:57:55AM +0800, Chengming Zhou wrote:
+> #define time_after64(a,b)	\
+> 	(typecheck(__u64, a) &&	\
+> 	 typecheck(__u64, b) && \
+> 	 ((__s64)((b) - (a)) < 0))
+> #define time_before64(a,b)	time_after64(b,a)
+> 
+> I still don't get why my changes are wrong. :-)
 
-In this case, it is still !PRESENT in the shadow page, and it will cause
-a vmexit when L2 tries to use the translation.  I can't see anything wrong
-in TLB or vTLB(shadow pages).
+It's a wrapping timestamp where a lower value doesn't necessarily mean
+earlier. The before/after relationship is defined only in relation to each
+other. Imagine a cirle representing the whole value range and picking two
+spots in the circle, if one is in the clockwise half from the other, the
+former is said to be earlier than the latter and vice-versa. vtime runs way
+faster than nanosecs and wraps regularly, so we can't use absolute values to
+compare before/after.
 
-But I think some code is needed to reload the cached PDPTEs
-when guest_mmu->get_pdptrs() returns !PRESENT and reload mmu if
-the cache is changed. (and add code to avoid infinite loop)
+Thanks.
 
-The patch fails to reload mmu if the cache is changed which
-leaves the problem described in the changelog partial resolved
-only.
-
-Maybe we need to add mmu parameter back in load_pdptrs() for it.
-
->
-> In practice, snapshotting at nested VMRUN would likely work, but architecturally
-> it's wrong and could cause problems if L1+L2 are engange in paravirt shenanigans,
-> e.g. async #PF comes to mind.
->
-> I believe the correct way to fix this is to write-protect nNPT PDPTEs like all other
-> shadow pages, which shouldn't be too awful to do as part of your series to route
-> PDPTEs through kvm_mmu_get_page().
-
-In the one-off special shadow page (will be renamed to one-off local
-shadow page)
-patchsets, PAE PDPTEs is not write-protected.  Wirte-protecting it causing nasty
-code.
+-- 
+tejun

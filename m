@@ -2,153 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81834529703
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2DE529704
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238038AbiEQB5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 21:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
+        id S238274AbiEQB5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 21:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbiEQB5O (ORCPT
+        with ESMTP id S238216AbiEQB5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 21:57:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EFFA13E9F
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 18:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652752632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kOeeafra3Std2p8b6Lh4l6E2dF3DStmhC/ihedS5gIA=;
-        b=ahkqiR2sPzrHneQ22iGD2Rq0RpHTvqJ+r3tpjj2GluaFd6370WfdPCBWSu13SHRwjlI4hN
-        GUQJ16mFXSrkEubUlipSqPFcIs1R41vmAxv+V4qarqZxGPWYVDP7ibPDB1Lnb6y6iuB0sc
-        zBWknjsIfFMmbLqgsYZMjbsahVGz72A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-319-ZE2MvQIxPled__dIHmo2qw-1; Mon, 16 May 2022 21:57:09 -0400
-X-MC-Unique: ZE2MvQIxPled__dIHmo2qw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CDDB58032EA;
-        Tue, 17 May 2022 01:57:08 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.50.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 82BB5569787;
-        Tue, 17 May 2022 01:57:07 +0000 (UTC)
-Date:   Mon, 16 May 2022 21:57:05 -0400
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v3 3/3] fanotify: Allow audit to use the full permission
- event response
-Message-ID: <YoMA8YtkNrx1YNlw@madcap2.tricolour.ca>
-References: <cover.1652730821.git.rgb@redhat.com>
- <81264e038b7b1e0d8fd8bafb25452fb777cd664a.1652730821.git.rgb@redhat.com>
- <CAHC9VhSZNbQoFfStWp96G18_pdEtV1orKRvQ0reXfD7L4TiUHA@mail.gmail.com>
+        Mon, 16 May 2022 21:57:21 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6238D13F3F;
+        Mon, 16 May 2022 18:57:20 -0700 (PDT)
+Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L2Jyw5mJqzCsjB;
+        Tue, 17 May 2022 09:52:24 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 09:57:18 +0800
+Received: from [10.67.101.67] (10.67.101.67) by kwepemm600003.china.huawei.com
+ (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
+ 2022 09:57:17 +0800
+Subject: Re: [PATCH v8 5/8] perf tool: Add support for HiSilicon PCIe Tune and
+ Trace device driver
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>
+CC:     <gregkh@linuxfoundation.org>, <alexander.shishkin@linux.intel.com>,
+        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
+        <robin.murphy@arm.com>, <acme@kernel.org>, <john.garry@huawei.com>,
+        <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mark.rutland@arm.com>, <joro@8bytes.org>,
+        <shameerali.kolothum.thodi@huawei.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
+        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>
+References: <20220516125223.32012-1-yangyicong@hisilicon.com>
+ <20220516125223.32012-6-yangyicong@hisilicon.com>
+ <20220516152022.00001ab9@Huawei.com>
+From:   "liuqi (BA)" <liuqi115@huawei.com>
+Message-ID: <3b952043-53a0-b15e-47bb-e4680c1860c9@huawei.com>
+Date:   Tue, 17 May 2022 09:57:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhSZNbQoFfStWp96G18_pdEtV1orKRvQ0reXfD7L4TiUHA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220516152022.00001ab9@Huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.101.67]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-16 21:42, Paul Moore wrote:
-> On Mon, May 16, 2022 at 4:22 PM Richard Guy Briggs <rgb@redhat.com> wrote:
-> >
-> > This patch passes the full value so that the audit function can use all
-> > of it. The audit function was updated to log the additional information in
-> > the AUDIT_FANOTIFY record. The following is an example of the new record
-> > format:
-> >
-> > type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_ctx=17
-> >
-> > Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> > Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
-> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > ---
-> >  fs/notify/fanotify/fanotify.c |  4 +++-
-> >  include/linux/audit.h         |  9 +++++----
-> >  kernel/auditsc.c              | 18 +++++++++++++++---
-> >  3 files changed, 23 insertions(+), 8 deletions(-)
+
+
+On 2022/5/16 22:20, Jonathan Cameron wrote:
+> On Mon, 16 May 2022 20:52:20 +0800
+> Yicong Yang <yangyicong@hisilicon.com> wrote:
+> 
+>> From: Qi Liu <liuqi115@huawei.com>
+>>
+>> HiSilicon PCIe tune and trace device (PTT) could dynamically tune
+>> the PCIe link's events, and trace the TLP headers).
+>>
+>> This patch add support for PTT device in perf tool, so users could
+>> use 'perf record' to get TLP headers trace data.
+>>
+>> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> One query inline.
+> 
+> 
+>> diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
+>> index 384c7cfda0fd..297fffedf45e 100644
+>> --- a/tools/perf/arch/arm/util/auxtrace.c
+>> +++ b/tools/perf/arch/arm/util/auxtrace.c
 > 
 > ...
 > 
-> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > index 6973be0bf6c9..cb93c6ed07cd 100644
-> > --- a/kernel/auditsc.c
-> > +++ b/kernel/auditsc.c
-> > @@ -2893,10 +2894,21 @@ void __audit_log_kern_module(char *name)
-> >         context->type = AUDIT_KERN_MODULE;
-> >  }
-> >
-> > -void __audit_fanotify(u32 response)
-> > +void __audit_fanotify(u32 response, u32 type, union fanotify_response_extra *info)
-> >  {
-> > -       audit_log(audit_context(), GFP_KERNEL,
-> > -               AUDIT_FANOTIFY, "resp=%u", response);
-> > +       switch (type) {
-> > +       case FAN_RESPONSE_INFO_AUDIT_RULE:
-> > +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > +                         "resp=%u fan_type=%u fan_ctx=%u",
-> > +                         response, type, info->audit_rule);
-> > +               break;
-> > +       case FAN_RESPONSE_INFO_NONE:
-> > +       default:
-> > +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > +                         "resp=%u fan_type=%u fan_ctx=?",
-> > +                         response, type);
-> > +               break;
-> > +       }
-> >  }
+>>   static struct perf_pmu *find_pmu_for_event(struct perf_pmu **pmus,
+>>   					   int pmu_nr, struct evsel *evsel)
+>>   {
+>> @@ -71,17 +120,21 @@ struct auxtrace_record
+>>   {
+>>   	struct perf_pmu	*cs_etm_pmu = NULL;
+>>   	struct perf_pmu **arm_spe_pmus = NULL;
+>> +	struct perf_pmu **hisi_ptt_pmus = NULL;
+>>   	struct evsel *evsel;
+>>   	struct perf_pmu *found_etm = NULL;
+>>   	struct perf_pmu *found_spe = NULL;
+>> +	struct perf_pmu *found_ptt = NULL;
+>>   	int auxtrace_event_cnt = 0;
+>>   	int nr_spes = 0;
+>> +	int nr_ptts = 0;
+>>   
+>>   	if (!evlist)
+>>   		return NULL;
+>>   
+>>   	cs_etm_pmu = perf_pmu__find(CORESIGHT_ETM_PMU_NAME);
+>>   	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
+>> +	hisi_ptt_pmus = find_all_hisi_ptt_pmus(&nr_ptts, err);
+>>   
+>>   	evlist__for_each_entry(evlist, evsel) {
+>>   		if (cs_etm_pmu && !found_etm)
+>> @@ -89,9 +142,13 @@ struct auxtrace_record
+>>   
+>>   		if (arm_spe_pmus && !found_spe)
+>>   			found_spe = find_pmu_for_event(arm_spe_pmus, nr_spes, evsel);
+>> +
+>> +		if (arm_spe_pmus && !found_spe)
 > 
-> Two things:
+> 		if (hisi_ptt_pmus && !found_ptt) ?
 > 
-> * Instead of "fan_ctx=", would it make sense to call it "fan_extra="
-> to better match the UAPI struct?  I don't feel strongly either way,
-> but it did occur to me just now while looking at the code so I thought
-> I would mention it.
+> Otherwise, I'm not sure what the purpose of the checking against spe is.
+> 
 
-Yes, this is a good point.  This is the reason I changed from
-FAN_RESPONSE_INFO_AUDIT_NONE to FAN_RESPONSE_INFO_NONE, anticipating
-that the extra information could have nothing to do with audit.
+yes...it's a typo here, thanks for the reminder!
 
-> * I'm also wondering if there is a way to be a bit proactive about
-> future proofing this field.  Since we already hex encode some fields
-> with "bad" characters, would it make sense to hex encode this field
-> too?  Not for the "bad" character reason, but more as a way of
-> marshalling the fanotify_response_extra union into an audit record.  I
-> can't see far enough into the future to know if this would be a good
-> idea or not, but like the other point above, it popped into my head
-> while looking at the code so I thought I would put it in the email :)
-
-I resisted that idea because it adds overhead and makes it more complex
-than currently necessary.  I'm open to it, but would like to hear
-Steve's input on this.
-
-Thanks for the quick response.
-
-> paul-moore.com
-
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
-
+Qi
+>> +			found_ptt = find_pmu_for_event(hisi_ptt_pmus, nr_ptts, evsel);
+>>   	}
+>>   
+>>   	free(arm_spe_pmus);
+>> +	free(hisi_ptt_pmus);
+>>   
+>>   	if (found_etm)
+>>   		auxtrace_event_cnt++;
+>> @@ -99,6 +156,9 @@ struct auxtrace_record
+>>   	if (found_spe)
+>>   		auxtrace_event_cnt++;
+>>   
+>> +	if (found_ptt)
+>> +		auxtrace_event_cnt++;
+>> +
+>>   	if (auxtrace_event_cnt > 1) {
+>>   		pr_err("Concurrent AUX trace operation not currently supported\n");
+>>   		*err = -EOPNOTSUPP;
+>> @@ -111,6 +171,9 @@ struct auxtrace_record
+>>   #if defined(__aarch64__)
+>>   	if (found_spe)
+>>   		return arm_spe_recording_init(err, found_spe);
+>> +
+>> +	if (found_ptt)
+>> +		return hisi_ptt_recording_init(err, found_ptt);
+>>   #endif
+>>   
+> .
+> 

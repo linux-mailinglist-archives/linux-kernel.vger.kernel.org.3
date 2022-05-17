@@ -2,91 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E38F529EA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1290529EA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244828AbiEQKAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
+        id S245487AbiEQKAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240213AbiEQKAU (ORCPT
+        with ESMTP id S245426AbiEQKAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:00:20 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AA138181
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:00:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652781619; x=1684317619;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=F2+NXD/aW4xt/uExC7MtNoUKzDWRGFyOvhW+PDBUJss=;
-  b=hgoH0svPpnFxZrMGEx8hg9t7roLZYaUQT1Xsz9eaQ7tyoUMeYUx21AQf
-   Qce/NVHJeOzUTPvu3VJ0kaWkvZ6dKnpmAAD+/eh/Giy/Sszusbb+G5W0P
-   lc4kgYf70HPw4eeN5DnCwzlXeRjuoju8zkAkWnc89oXmGTrSluoU6F/wS
-   mq7IHPw1YNrIkfK6Eaxi5Y7uF6VBvpj+S6Mp1hjYH4M/mGskFq2lp9BHH
-   zkz6DzN2JVm9KU9ql1WLJjmwsMZWcBf3hhZ2D5Iw67FYJtlM8r4C4qAb/
-   wjp6g8fQwynL0F32Q7MiNP3THfIBkslxASf4Sph1D2DgafcOircDpeTxK
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="253182551"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="253182551"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 03:00:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="555705943"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 17 May 2022 03:00:18 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqu01-0000q5-Jp;
-        Tue, 17 May 2022 10:00:17 +0000
-Date:   Tue, 17 May 2022 17:59:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:linux-5.17.y 1443/2373] fs/io_uring.o: warning:
- objtool: io_req_prep()+0x4f: unreachable instruction
-Message-ID: <202205171702.ifM3QFjG-lkp@intel.com>
+        Tue, 17 May 2022 06:00:30 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95693C71B;
+        Tue, 17 May 2022 03:00:28 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2Wp15S1Mz4xY4;
+        Tue, 17 May 2022 20:00:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652781627;
+        bh=ACzjneqDXRTFSb31q0UAPmXWo5ic5ZuLKSemylhPJjk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BhcTrHEsF+igXDnkrdFg745RQpjTleUFXXiLwZbglwW3SfcncFuLK5lQwSBh7IEdO
+         AXmbV650JkEH894TqAOtUdWrQ8K5laKvMxdTNf825rCUy8fu5BR6P0ARMaEU3B7eDi
+         gdx7tUKs5Y6pRDEwzSP3C1p7Xvrqd0OgX2udR3Ij+IHMvzqOf1ADfRoo5+5oWBiso2
+         H0Lty5G+VqU8sZNx1JdwRvNzg4jOvGeZkN6/rUqQRCAc72slMeWufB005zS35bbPcS
+         jZX8s+VIWQUf8aQsNKq+ah9XdsIbowpwbMzQPGQ7xXF5MKzxRONuAlUR8oHTu24I0c
+         5cLl+iT3y9m7g==
+Date:   Tue, 17 May 2022 20:00:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>
+Cc:     Johannes Berg <johannes.berg@intel.com>,
+        Rameshkumar Sundaram <quic_ramess@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the wireless-next tree
+Message-ID: <20220517200024.3bc972ed@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/Vh5HJxTto_A7tISj4ndI+2F";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-head:   e1382731ef4e5e1634896596ebe74e48b9ed2b73
-commit: 0e76afd78907c78bb7f5c0cce17a4afecd2b126f [1443/2373] io_uring: defer splice/tee file validity check until command issue
-config: x86_64-randconfig-c022-20220516 (https://download.01.org/0day-ci/archive/20220517/202205171702.ifM3QFjG-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=0e76afd78907c78bb7f5c0cce17a4afecd2b126f
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.17.y
-        git checkout 0e76afd78907c78bb7f5c0cce17a4afecd2b126f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+--Sig_/Vh5HJxTto_A7tISj4ndI+2F
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi all,
 
-All warnings (new ones prefixed by >>):
+After merging the wireless-next tree, today's linux-next build (htmldocs)
+produced this warning:
 
-   fs/io_uring.c: In function '__io_submit_flush_completions':
-   fs/io_uring.c:2515:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
-    2515 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
->> fs/io_uring.o: warning: objtool: io_req_prep()+0x4f: unreachable instruction
+include/net/cfg80211.h:1188: warning: bad line:         attribute is presen=
+t in beacon data or not.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Introduced by commit
+
+  3d48cb74816d ("nl80211: Parse NL80211_ATTR_HE_BSS_COLOR as a part of nl80=
+211_parse_beacon")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Vh5HJxTto_A7tISj4ndI+2F
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKDcjgACgkQAVBC80lX
+0GxCuAf7BopOsVfrp3A6v/pMXmeaHb/fLGl+J5r1mtNFolUtGq0H8k58NpBX69ch
+64W9XJBeDx4fBfWgeFjHPl9b4XrsKg/q7JheNQBRgrdRri6dINfUXFjZb7Ps5H4K
+8EAOCaT8zFR+7jS3jBgCCM+frX1Ea/QHrBGA5aBz5U6CCkvWunHxHjGfYDuz33ds
+FC3wMqtWhQ8bix7CH9xF0jkpxCfcl0PvV2k1G/YZwZ46ob/hYpFu9CopELjNi0Fo
+dpHry2ENOBGfb9eP97jLT8j3+8Fj3bL1iU4tM20aJUyckt5hf8tW6D7VJHa7juIc
+KB+/lIQw4kr5bDs5+dWzctt3x8JPWQ==
+=gHGq
+-----END PGP SIGNATURE-----
+
+--Sig_/Vh5HJxTto_A7tISj4ndI+2F--

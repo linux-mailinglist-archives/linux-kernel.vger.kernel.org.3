@@ -2,188 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CA852993B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E365C529940
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbiEQGBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44930 "EHLO
+        id S236757AbiEQGE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiEQGBU (ORCPT
+        with ESMTP id S230367AbiEQGEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:01:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C09B7E8;
-        Mon, 16 May 2022 23:01:18 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2QT86wC9zhZG4;
-        Tue, 17 May 2022 14:00:28 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 17 May 2022 14:01:16 +0800
-Message-ID: <297c1735-fb99-57be-addb-2bad7ef94bf1@huawei.com>
-Date:   Tue, 17 May 2022 14:01:15 +0800
+        Tue, 17 May 2022 02:04:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318CA3E5EA;
+        Mon, 16 May 2022 23:04:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3B5061543;
+        Tue, 17 May 2022 06:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F0BC385B8;
+        Tue, 17 May 2022 06:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652767460;
+        bh=FgE6LrLuJ3LeyvdaaxAW7dFJk8FTlG8i7HpgFaazl5c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QhDkSXztayy6bs5gf3G4/xyEiLlU5CZzhRwEXzrX24pHhEkIdDn06LO5VIwTuozP+
+         q8yhj+V/mKS36NtDJr8a0+LeE58nFyHFlObbQsJ3wc23P6d+6B2y9vlWNpGw8lxiHB
+         VvUPpV8B8ZhN5dAy/HYlUFva46wrAWZvrRscvw1eF/e9VbyxWoJPH82JuLi/47tUWv
+         PgLUKQWTyBLzHo4emDomwHq+N0jduMwBe+oANXk2RVfPquL5uSVWm6HT/vlaYIpi5V
+         DTg+Np+LPBPDAf0uRxS42t7LUX82JBVG3xaPeVz77dh2vznyXH1Mlg5QfsaVTfyL6N
+         iVIAK65zYkecw==
+Date:   Tue, 17 May 2022 08:04:13 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski@canonical.com,
+        jie.deng@intel.com
+Subject: Re: [PATCH v4 2/9] i2c: npcm: Change the way of getting GCR regmap
+Message-ID: <YoM63XoYZbFGJ8s7@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <warp5tw@gmail.com>, avifishman70@gmail.com,
+        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, jarkko.nikula@linux.intel.com,
+        semen.protsenko@linaro.org, sven@svenpeter.dev, jsd@semihalf.com,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, openbmc@lists.ozlabs.org,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski@canonical.com,
+        jie.deng@intel.com
+References: <20220510091654.8498-1-warp5tw@gmail.com>
+ <20220510091654.8498-3-warp5tw@gmail.com>
+ <YoKqdfLSeJ69WFhi@kunai>
+ <CACD3sJa3koHGsC3PBbfZuBhTfVHhjF=3g3YysxZ0+TvQ1qwfyA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3] ext4: fix race condition between ext4_write and
- ext4_convert_inline_data
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yebin10@huawei.com>, <yukuai3@huawei.com>,
-        <stable@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>
-References: <20220428134031.4153381-1-libaokun1@huawei.com>
-From:   "libaokun (A)" <libaokun1@huawei.com>
-In-Reply-To: <20220428134031.4153381-1-libaokun1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZD0WxnqJMfI4UMfN"
+Content-Disposition: inline
+In-Reply-To: <CACD3sJa3koHGsC3PBbfZuBhTfVHhjF=3g3YysxZ0+TvQ1qwfyA@mail.gmail.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping.
 
-在 2022/4/28 21:40, Baokun Li 写道:
-> Hulk Robot reported a BUG_ON:
->   ==================================================================
->   EXT4-fs error (device loop3): ext4_mb_generate_buddy:805: group 0,
->   block bitmap and bg descriptor inconsistent: 25 vs 31513 free clusters
->   kernel BUG at fs/ext4/ext4_jbd2.c:53!
->   invalid opcode: 0000 [#1] SMP KASAN PTI
->   CPU: 0 PID: 25371 Comm: syz-executor.3 Not tainted 5.10.0+ #1
->   RIP: 0010:ext4_put_nojournal fs/ext4/ext4_jbd2.c:53 [inline]
->   RIP: 0010:__ext4_journal_stop+0x10e/0x110 fs/ext4/ext4_jbd2.c:116
->   [...]
->   Call Trace:
->    ext4_write_inline_data_end+0x59a/0x730 fs/ext4/inline.c:795
->    generic_perform_write+0x279/0x3c0 mm/filemap.c:3344
->    ext4_buffered_write_iter+0x2e3/0x3d0 fs/ext4/file.c:270
->    ext4_file_write_iter+0x30a/0x11c0 fs/ext4/file.c:520
->    do_iter_readv_writev+0x339/0x3c0 fs/read_write.c:732
->    do_iter_write+0x107/0x430 fs/read_write.c:861
->    vfs_writev fs/read_write.c:934 [inline]
->    do_pwritev+0x1e5/0x380 fs/read_write.c:1031
->   [...]
->   ==================================================================
->
-> Above issue may happen as follows:
->             cpu1                     cpu2
-> __________________________|__________________________
-> do_pwritev
->   vfs_writev
->    do_iter_write
->     ext4_file_write_iter
->      ext4_buffered_write_iter
->       generic_perform_write
->        ext4_da_write_begin
->                             vfs_fallocate
->                              ext4_fallocate
->                               ext4_convert_inline_data
->                                ext4_convert_inline_data_nolock
->                                 ext4_destroy_inline_data_nolock
->                                  clear EXT4_STATE_MAY_INLINE_DATA
->                                 ext4_map_blocks
->                                  ext4_ext_map_blocks
->                                   ext4_mb_new_blocks
->                                    ext4_mb_regular_allocator
->                                     ext4_mb_good_group_nolock
->                                      ext4_mb_init_group
->                                       ext4_mb_init_cache
->                                        ext4_mb_generate_buddy  --> error
->         ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
->                                  ext4_restore_inline_data
->                                   set EXT4_STATE_MAY_INLINE_DATA
->         ext4_block_write_begin
->        ext4_da_write_end
->         ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)
->         ext4_write_inline_data_end
->          handle=NULL
->          ext4_journal_stop(handle)
->           __ext4_journal_stop
->            ext4_put_nojournal(handle)
->             ref_cnt = (unsigned long)handle
->             BUG_ON(ref_cnt == 0)  ---> BUG_ON
->
-> The lock held by ext4_convert_inline_data is xattr_sem, but the lock
-> held by generic_perform_write is i_rwsem. Therefore, the two locks can
-> be concurrent.
->
-> To solve above issue, we add inode_lock() for ext4_convert_inline_data().
-> At the same time, move ext4_convert_inline_data() in front of
-> ext4_punch_hole(), remove similar handling from ext4_punch_hole().
->
-> Fixes: 0c8d414f163f ("ext4: let fallocate handle inline data correctly")
-> Cc: stable@vger.kernel.org
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> ---
-> V1->V2:
-> 	Increase the range of the inode_lock.
-> V2->V3:
-> 	Move the lock outside the ext4_convert_inline_data().
-> 	And reorganize ext4_fallocate().
->
->   fs/ext4/extents.c | 10 ++++++----
->   fs/ext4/inode.c   |  9 ---------
->   2 files changed, 6 insertions(+), 13 deletions(-)
->
-> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> index e473fde6b64b..474479ce76e0 100644
-> --- a/fs/ext4/extents.c
-> +++ b/fs/ext4/extents.c
-> @@ -4693,15 +4693,17 @@ long ext4_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
->   		     FALLOC_FL_INSERT_RANGE))
->   		return -EOPNOTSUPP;
->   
-> +	inode_lock(inode);
-> +	ret = ext4_convert_inline_data(inode);
-> +	inode_unlock(inode);
-> +	if (ret)
-> +		goto exit;
-> +
->   	if (mode & FALLOC_FL_PUNCH_HOLE) {
->   		ret = ext4_punch_hole(file, offset, len);
->   		goto exit;
->   	}
->   
-> -	ret = ext4_convert_inline_data(inode);
-> -	if (ret)
-> -		goto exit;
-> -
->   	if (mode & FALLOC_FL_COLLAPSE_RANGE) {
->   		ret = ext4_collapse_range(file, offset, len);
->   		goto exit;
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index 646ece9b3455..4779673d733e 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -3967,15 +3967,6 @@ int ext4_punch_hole(struct file *file, loff_t offset, loff_t length)
->   
->   	trace_ext4_punch_hole(inode, offset, length, 0);
->   
-> -	ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
-> -	if (ext4_has_inline_data(inode)) {
-> -		filemap_invalidate_lock(mapping);
-> -		ret = ext4_convert_inline_data(inode);
-> -		filemap_invalidate_unlock(mapping);
-> -		if (ret)
-> -			return ret;
-> -	}
-> -
->   	/*
->   	 * Write out all dirty pages to avoid race conditions
->   	 * Then release them.
+--ZD0WxnqJMfI4UMfN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
+> After reviewing these two links, we decided to keep only the author's
+> SoB for each commit.
+>=20
+> https://lore.kernel.org/lkml/YiCZlhJoXPLpQ6%2FD@smile.fi.intel.com/
+> https://lore.kernel.org/lkml/YiCb7LNY9tmMCZx7@smile.fi.intel.com/
+
+When Andy said "chain is wrong", he meant the order. You must add your
+SoB, otherwise I can't take the patches. But yours should be last. The
+SoBs need to be in the order people worked on it.
+
+Does that make sense to you?
+
+
+--ZD0WxnqJMfI4UMfN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKDOtkACgkQFA3kzBSg
+Kba2dQ/8DA/NMvr5xjTQrg+KZeVKu1FP8k7R6RkznvixaWJUaDTuRTuPXcFExLAu
+urIUfpDjZiVWqRQCqBKp2AGAh7yFnZU/V0GAEzhMI6OReamobsqq/TUPFdQ+TAgr
+ronrfnzaCMmjEFNzbZyhrcusCbtL0QczMxa1RIkfRzZSyYscuxVm8Nj8Ypy09r8k
+wd3UU+SHyow27742jNfoSYEVjC2J9r++Qb5ms4bjrW3JvsrTIHvP0FedPDBbJVrt
+fnXeEgOHkX6PYdopvaEVQb8/Dz1D04lgBtkZoqScHC3JHKskbaeNPoWkafRL9oKI
+AHuhRw1zebM82X+UpEfGzZDQprSikW1iKA780VwbI7xiR3ZTWTYPpRzqKayDWT5m
+X8cFQqWiaVXMOK2va2IdQT4hh8A1Y4kRlcV2w7u2Uk+K3qefl7PlN5xK2ysb+9Ij
+srbNuXUjeI0CXDg4CT20eHLiom5uhRQyd0ih8HZtkW+uddWXd/zaTfHxdFbXYUcj
+d/dpYAToxGjFPvyt9bbx8uGTs/NoEiNvTXyvgbCKR3wv9PhfQ0Duq7rPfH1BY1S0
+uNxh4nXMZeviqgx1Qu1ouL+5AJlGDp8hjW+58RzaIhvreLNn1GREPJ8X/s5vf+gb
+MG2K2pIS45sucLXqB5t+vWdYQDQigOx1IOt/x7YtUo2+IRqccVI=
+=71Iy
+-----END PGP SIGNATURE-----
+
+--ZD0WxnqJMfI4UMfN--

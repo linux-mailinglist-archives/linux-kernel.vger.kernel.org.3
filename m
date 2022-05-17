@@ -2,140 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C280A529CF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C458B529D13
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243814AbiEQIyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 04:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S243283AbiEQI5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 04:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240734AbiEQIy3 (ORCPT
+        with ESMTP id S244412AbiEQI4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 04:54:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2885C3D1DE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 01:54:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D1E7B817CA
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:54:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBCCC385B8;
-        Tue, 17 May 2022 08:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652777665;
-        bh=vGqNEA3mJP04TZ99mkPuPdUYdn2xE37AGeZ05E/n764=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iixZ5UiAAr+bLKFBvILoVzPeqe44u28ygJ/iGHWGsWmT63JPqY54DBRZTiPbXTKDp
-         4I59bSfRiVp4VrWsJY43IgOETMFH4dRooDl9+uUkTG+es8CdlEstsQigJeIk5hB1dQ
-         Ab1KvFUoZEB1eZEkyBBKwMQ4Tdgp1fv4LfsbNdphndOcrXG+oXcJ8+KdRc03L4ah03
-         BINoyD8uOCBRaDz2I3DEGEYr4gFvqKCW9hLVKqzEuMpdkTiCojrj5G3sx2IMFZ7FBp
-         16KM0Ewr6Qsz1YBruKiG+2jJLo/L/RtSG3MSAOIIwT316WMFQiIO/gSmhjhxfiL78I
-         vAbgy6ZkunonA==
-Date:   Tue, 17 May 2022 09:54:18 +0100
-From:   Will Deacon <will@kernel.org>
-To:     "Srivatsa S. Bhat" <srivatsa@csail.mit.edu>
-Cc:     Elliot Berman <quic_eberman@quicinc.com>,
-        Juergen Gross <jgross@suse.com>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Murali Nalajala <quic_mnalajal@quicinc.com>
-Subject: Re: [PATCH v3] arm64: paravirt: Use RCU read locks to guard
- stolen_time
-Message-ID: <20220517085418.GA3169@willie-the-truck>
-References: <20220513174654.362169-1-quic_eberman@quicinc.com>
- <c24e405e-b5f9-d2f7-a629-1ee1beab3681@csail.mit.edu>
+        Tue, 17 May 2022 04:56:47 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824BFF7;
+        Tue, 17 May 2022 01:56:44 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24H5DVRE001600;
+        Tue, 17 May 2022 10:56:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=s2qEOZlKr9MsuU1i2OUrgyJrLsdjR7f4BRplr0JaGKE=;
+ b=XcGqhU3zHJ2vGX7bKwHNLw0WCyn2WeA+XqrtnnVkSqb66SawTiBCsfF+cGcRDIrhhESO
+ oP4Z2x+/mehBwZdNGkWW4YM2GFGHG49nhviHf8Bd2u5PYfVx0p3WhprMZbrMih9rQ53L
+ J9rFQHli1OU2JQUGXo7bVvy9rTFZNRDDqjYhrzgCdR+jeG47T9vaEdza3JzXReVpdLzY
+ 9Vq0MFP+tsbD+2ea62L5p2x0JGp56IIAV+EdhKxwZzJ0nmn4ROdGiwG2RlrV/kwdvli2
+ 6ppjcuYgt2AsL9ZJluWgc+o2FWr4iqu1kqjJvIzMx1ghlSQp0HskgPQn4n/5LXkx8fXn 4g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3g23ahgnqd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 10:56:10 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6557610002A;
+        Tue, 17 May 2022 10:56:08 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 52128214D27;
+        Tue, 17 May 2022 10:56:08 +0200 (CEST)
+Received: from [10.48.1.102] (10.75.127.51) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 17 May
+ 2022 10:56:07 +0200
+Message-ID: <2330a9a6-877f-2f67-78ac-42aa3cde99dc@foss.st.com>
+Date:   Tue, 17 May 2022 10:56:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c24e405e-b5f9-d2f7-a629-1ee1beab3681@csail.mit.edu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/2] iio: adc: stm32: Fix ADCs iteration in irq handler
+Content-Language: en-US
+To:     Yannick Brosseau <yannick.brosseau@gmail.com>, <jic23@kernel.org>,
+        <lars@metafoo.de>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <olivier.moysan@foss.st.com>
+CC:     <paul@crapouillou.net>, <linux-iio@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220516203939.3498673-1-yannick.brosseau@gmail.com>
+ <20220516203939.3498673-2-yannick.brosseau@gmail.com>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <20220516203939.3498673-2-yannick.brosseau@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-17_01,2022-05-16_02,2022-02-23_01
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 04:32:53PM -0700, Srivatsa S. Bhat wrote:
-> On 5/13/22 10:46 AM, Elliot Berman wrote:
-> > From: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> > 
-> > During hotplug, the stolen time data structure is unmapped and memset.
-> > There is a possibility of the timer IRQ being triggered before memset
-> > and stolen time is getting updated as part of this timer IRQ handler. This
-> > causes the below crash in timer handler -
-> > 
-> >   [ 3457.473139][    C5] Unable to handle kernel paging request at virtual address ffffffc03df05148
-> >   ...
-> >   [ 3458.154398][    C5] Call trace:
-> >   [ 3458.157648][    C5]  para_steal_clock+0x30/0x50
-> >   [ 3458.162319][    C5]  irqtime_account_process_tick+0x30/0x194
-> >   [ 3458.168148][    C5]  account_process_tick+0x3c/0x280
-> >   [ 3458.173274][    C5]  update_process_times+0x5c/0xf4
-> >   [ 3458.178311][    C5]  tick_sched_timer+0x180/0x384
-> >   [ 3458.183164][    C5]  __run_hrtimer+0x160/0x57c
-> >   [ 3458.187744][    C5]  hrtimer_interrupt+0x258/0x684
-> >   [ 3458.192698][    C5]  arch_timer_handler_virt+0x5c/0xa0
-> >   [ 3458.198002][    C5]  handle_percpu_devid_irq+0xdc/0x414
-> >   [ 3458.203385][    C5]  handle_domain_irq+0xa8/0x168
-> >   [ 3458.208241][    C5]  gic_handle_irq.34493+0x54/0x244
-> >   [ 3458.213359][    C5]  call_on_irq_stack+0x40/0x70
-> >   [ 3458.218125][    C5]  do_interrupt_handler+0x60/0x9c
-> >   [ 3458.223156][    C5]  el1_interrupt+0x34/0x64
-> >   [ 3458.227560][    C5]  el1h_64_irq_handler+0x1c/0x2c
-> >   [ 3458.232503][    C5]  el1h_64_irq+0x7c/0x80
-> >   [ 3458.236736][    C5]  free_vmap_area_noflush+0x108/0x39c
-> >   [ 3458.242126][    C5]  remove_vm_area+0xbc/0x118
-> >   [ 3458.246714][    C5]  vm_remove_mappings+0x48/0x2a4
-> >   [ 3458.251656][    C5]  __vunmap+0x154/0x278
-> >   [ 3458.255796][    C5]  stolen_time_cpu_down_prepare+0xc0/0xd8
-> >   [ 3458.261542][    C5]  cpuhp_invoke_callback+0x248/0xc34
-> >   [ 3458.266842][    C5]  cpuhp_thread_fun+0x1c4/0x248
-> >   [ 3458.271696][    C5]  smpboot_thread_fn+0x1b0/0x400
-> >   [ 3458.276638][    C5]  kthread+0x17c/0x1e0
-> >   [ 3458.280691][    C5]  ret_from_fork+0x10/0x20
-> > 
-> > As a fix, introduce rcu lock to update stolen time structure.
-> > 
-> > Suggested-by: Will Deacon <will@kernel.org>
-> > Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-> > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> > ---
+On 5/16/22 22:39, Yannick Brosseau wrote:
+> The irq handler was only checking the mask for the first ADCs in the case of the
+> F4 and H7 generation, since it was iterating up to the num_irq value. This patch add
+> the maximum number of ADC in the common register, which map to the number of entries of
+> eoc_msk and ovr_msk in stm32_adc_common_regs. This allow the handler to check all ADCs in
+> that module.
 > 
-> Looks good to me, but one quick question though (see below).
+> Tested on a STM32F429NIH6.
 > 
-> Reviewed-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
+> Fixes: 695e2f5c289b ("iio: adc: stm32-adc: fix a regression when using dma and irq")
+> Signed-off-by: Yannick Brosseau <yannick.brosseau@gmail.com>
 
-Cheers.
+Hi Yannick,
 
-> >  static int stolen_time_cpu_down_prepare(unsigned int cpu)
-> >  {
-> > +	struct pvclock_vcpu_stolen_time *kaddr = NULL;
-> >  	struct pv_time_stolen_time_region *reg;
-> >  
-> >  	reg = this_cpu_ptr(&stolen_time_region);
-> >  	if (!reg->kaddr)
-> >  		return 0;
-> >  
-> > -	memunmap(reg->kaddr);
-> > -	memset(reg, 0, sizeof(*reg));
-> > +	kaddr = rcu_replace_pointer(reg->kaddr, NULL, true);
-> > +	synchronize_rcu();
-> > +	memunmap(kaddr);
-> >  
+Feel free to add my:
+
+Reviewed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+
+Thanks,
+Fabrice
+
+> ---
+>  drivers/iio/adc/stm32-adc-core.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> The original code used to memset the stolen time region, but this
-> patch seems to drop it. Was that change intentional?
-
-'struct pv_time_stolen_time_region' only has one field ('kaddr'), which
-we're now clearing with rcu_replace_pointer() so the memset doesn't make
-sense.
-
-Will
+> diff --git a/drivers/iio/adc/stm32-adc-core.c b/drivers/iio/adc/stm32-adc-core.c
+> index 142656232157..bb04deeb7992 100644
+> --- a/drivers/iio/adc/stm32-adc-core.c
+> +++ b/drivers/iio/adc/stm32-adc-core.c
+> @@ -64,6 +64,7 @@ struct stm32_adc_priv;
+>   * @max_clk_rate_hz: maximum analog clock rate (Hz, from datasheet)
+>   * @has_syscfg: SYSCFG capability flags
+>   * @num_irqs:	number of interrupt lines
+> + * @num_adcs:   maximum number of ADC instances in the common registers
+>   */
+>  struct stm32_adc_priv_cfg {
+>  	const struct stm32_adc_common_regs *regs;
+> @@ -71,6 +72,7 @@ struct stm32_adc_priv_cfg {
+>  	u32 max_clk_rate_hz;
+>  	unsigned int has_syscfg;
+>  	unsigned int num_irqs;
+> +	unsigned int num_adcs;
+>  };
+>  
+>  /**
+> @@ -352,7 +354,7 @@ static void stm32_adc_irq_handler(struct irq_desc *desc)
+>  	 * before invoking the interrupt handler (e.g. call ISR only for
+>  	 * IRQ-enabled ADCs).
+>  	 */
+> -	for (i = 0; i < priv->cfg->num_irqs; i++) {
+> +	for (i = 0; i < priv->cfg->num_adcs; i++) {
+>  		if ((status & priv->cfg->regs->eoc_msk[i] &&
+>  		     stm32_adc_eoc_enabled(priv, i)) ||
+>  		     (status & priv->cfg->regs->ovr_msk[i]))
+> @@ -792,6 +794,7 @@ static const struct stm32_adc_priv_cfg stm32f4_adc_priv_cfg = {
+>  	.clk_sel = stm32f4_adc_clk_sel,
+>  	.max_clk_rate_hz = 36000000,
+>  	.num_irqs = 1,
+> +	.num_adcs = 3,
+>  };
+>  
+>  static const struct stm32_adc_priv_cfg stm32h7_adc_priv_cfg = {
+> @@ -800,6 +803,7 @@ static const struct stm32_adc_priv_cfg stm32h7_adc_priv_cfg = {
+>  	.max_clk_rate_hz = 36000000,
+>  	.has_syscfg = HAS_VBOOSTER,
+>  	.num_irqs = 1,
+> +	.num_adcs = 2,
+>  };
+>  
+>  static const struct stm32_adc_priv_cfg stm32mp1_adc_priv_cfg = {
+> @@ -808,6 +812,7 @@ static const struct stm32_adc_priv_cfg stm32mp1_adc_priv_cfg = {
+>  	.max_clk_rate_hz = 40000000,
+>  	.has_syscfg = HAS_VBOOSTER | HAS_ANASWVDD,
+>  	.num_irqs = 2,
+> +	.num_adcs = 2,
+>  };
+>  
+>  static const struct of_device_id stm32_adc_of_match[] = {

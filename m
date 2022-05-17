@@ -2,92 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C7B529F48
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDEC529F4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344250AbiEQKTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S1343877AbiEQKUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343929AbiEQKSs (ORCPT
+        with ESMTP id S1344096AbiEQKTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:18:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C238738DB3;
-        Tue, 17 May 2022 03:17:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 703BCB8179C;
-        Tue, 17 May 2022 10:17:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3611AC385B8;
-        Tue, 17 May 2022 10:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652782647;
-        bh=PCtKPg+A7aw+WZhiBLKRgYNLuap3imxl4feEQ8tnkJw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XrQm0WeRZjhhgDHcqE261YARlXN8htL6onH8c+x05t3UsRRsc7AlPxQuiHMItv/k/
-         S07j1/kUYSdMqDHevnmu7iayWHQam8VTgVJoLo3atvaiHdhNdYP9nSCwjZPn3v2x4k
-         N0ldfp+pxgVKBscSNKyRCYTwWK+FpG0rEMyWybNk=
-Date:   Tue, 17 May 2022 12:17:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zheng Bin <zhengbin13@huawei.com>
-Cc:     jirislaby@kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gaochao49@huawei.com
-Subject: Re: [PATCH -next] tty: serial: max3100: Add missing
- uart_unregister_driver in max3100_probe
-Message-ID: <YoN2L5B6PE5pJU7c@kroah.com>
-References: <20220511071523.3128725-1-zhengbin13@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220511071523.3128725-1-zhengbin13@huawei.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 06:19:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0A34AE16
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:17:49 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24H8tk6O017920;
+        Tue, 17 May 2022 10:17:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=c/4EKALUn6ciriFQdTtpqBM9BWeoPsASPG0BiB5ElA8=;
+ b=qVk0u2h+mOYfY5RqhHv7QNoA8Sew+rKAfiWPuK9NRrwUF06TuQAT8JR/PTviHlPNzVOB
+ X7PApzBdZrGrJAJ9rQDS3hnKhGKTflNJVUMEIGTVQmyDGRt+MPTgkU2pPUoZsOl+BEbp
+ BohHbli1jT0QKg8cfXVWBpVr8s6cwWmKAbxD3j7dGSeeUD8ZzDOQwmmfGbnANQsfPBJA
+ HdrSxoE+5eI/EN/kUGw0yIJFTnzuRHfHJpVNfRDK0MtpvB2m3UQ5ZGqq2dr3r7lxqtsU
+ XnUVfhWXyKXbsvmPPC6lMDHzvqDb9+rXZIOfi/KPAzz1xgSLMYdbEZ1uu5OlS9kUjuwr Mw== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g48mkhs93-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 10:17:34 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HAAQX6020280;
+        Tue, 17 May 2022 10:17:32 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjc178-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 May 2022 10:17:32 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HA3eJG43057556
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 May 2022 10:03:40 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 72484A4054;
+        Tue, 17 May 2022 10:17:30 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E982A405B;
+        Tue, 17 May 2022 10:17:30 +0000 (GMT)
+Received: from oc-nschnelle.boeblingen.de.ibm.com (unknown [9.155.199.46])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 17 May 2022 10:17:30 +0000 (GMT)
+Message-ID: <27ae8b9f8e61dce4b31a37622e98b1c57b21b104.camel@linux.ibm.com>
+Subject: Re: [PATCH] iommu/dma: Fix check for error return from
+ iommu_map_sg_atomic()
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Date:   Tue, 17 May 2022 12:17:29 +0200
+In-Reply-To: <20220517083657.GA16377@lst.de>
+References: <20220513153948.310119-1-schnelle@linux.ibm.com>
+         <20220517083657.GA16377@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: daMTbgWliszemDDXT8VuhG2UlOwD9Wve
+X-Proofpoint-ORIG-GUID: daMTbgWliszemDDXT8VuhG2UlOwD9Wve
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-17_01,2022-05-17_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=679 phishscore=0 priorityscore=1501 impostorscore=0
+ adultscore=0 malwarescore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
+ mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205170060
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 03:15:23PM +0800, Zheng Bin wrote:
-> max3100_probe misses a call uart_unregister_driver in error path,
-> this patch fixes that.
+On Tue, 2022-05-17 at 10:36 +0200, Christoph Hellwig wrote:
+> On Fri, May 13, 2022 at 05:39:48PM +0200, Niklas Schnelle wrote:
+> > In __iommu_dma_alloc_noncontiguous() the value returned by
+> > iommu_map_sg_atomic() is checked for being smaller than size. Before
+> > commit ad8f36e4b6b1 ("iommu: return full error code from
+> > iommu_map_sg[_atomic]()") this simply checked if the requested size was
+> > successfully mapped.
+> > 
+> > After that commit iommu_map_sg_atomic() may also return a negative
+> > error value. In principle this too would be covered by the existing
+> > check. There is one problem however, as size is of type size_t while the
+> > return type of iommu_map_sg_atomic() is now of type ssize_t the latter gets
+> > converted to size_t and negative error values end up as very large
+> > positive values making the check succeed. Fix this by making the return
+> > type visible with a local variable and add an explicit cast to ssize_t.
+> > 
+> > Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > 
-> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
-> ---
->  drivers/tty/serial/max3100.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/tty/serial/max3100.c b/drivers/tty/serial/max3100.c
-> index 0b5f21fbb53d..6d34ca2a3f7b 100644
-> --- a/drivers/tty/serial/max3100.c
-> +++ b/drivers/tty/serial/max3100.c
-> @@ -752,6 +752,7 @@ static int max3100_probe(struct spi_device *spi)
->  		if (!max3100s[i])
->  			break;
->  	if (i == MAX_MAX3100) {
-> +		uart_unregister_driver(&max3100_uart_driver);
->  		dev_warn(&spi->dev, "too many MAX3100 chips\n");
->  		mutex_unlock(&max3100s_lock);
->  		return -ENOMEM;
-> @@ -759,6 +760,7 @@ static int max3100_probe(struct spi_device *spi)
-> 
->  	max3100s[i] = kzalloc(sizeof(struct max3100_port), GFP_KERNEL);
->  	if (!max3100s[i]) {
-> +		uart_unregister_driver(&max3100_uart_driver);
->  		dev_warn(&spi->dev,
->  			 "kmalloc for max3100 structure %d failed!\n", i);
->  		mutex_unlock(&max3100s_lock);
+> I don't see what the point of the newly added local variable is here.
+> Just casting size should be all that is needed as far as I can tell.
 
-As Jiri said, this change would break the existing devices that are
-registered with this driver.
+No technical reason just found it easier to read and more descriptive.
+I'll sent a v2 with just the cast, it does simplify the commit message.
 
-How did you test this change?  What tool found this?  How was it
-verified?
-
-thanks,
-
-greg k-h

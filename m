@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E46952A9D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A7552A9DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242994AbiEQSDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S237816AbiEQSDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351728AbiEQSDi (ORCPT
+        with ESMTP id S244572AbiEQSDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:03:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13CF93F88C
+        Tue, 17 May 2022 14:03:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0ECB5506E7
         for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652810615;
+        s=mimecast20190719; t=1652810616;
         h=from:from:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nC5sIeoZg0xNpUluSDaQNFJypbgrYlOswiBZevjeqz8=;
-        b=M0Y5Mgi7mnTmfQFu94oy/XxUQtmTdrX/7D5iI2cXtWB+Aq1Bd3EyBMRPdnfHIe63j6y8vY
-        bw3EVFTWmPe1Jm5mnpSolrqajXVCxLeVkmBbsGPyEWNLz5YDzO2P7DRmZ6ZPXJe4G6leNw
-        qA95MzNVX/YSjdjSbRRM326QRY4oGdU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=pH9ndaFUwLcCF+4STt10kq3tgUIQ5wHRs0TPJoZVpQM=;
+        b=Tr1CN+YioWEnN1RMa5IetA13qgEsPeFdWZSDPTWgnJ5CALQRzq+BMVjUiY5tvY5O/LP1dq
+        Z9OpPAFbx2dFHZsjJI0+p0zROmtCvCelku4z44sonEFSI5fG7SBQetWcGHDdUM9b1YDwtW
+        fcyu3xufgn1syiIDVddV3+dEYL5RSKs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-43-LnqSJRQrOYCWdZI8rg2zfQ-1; Tue, 17 May 2022 14:03:32 -0400
-X-MC-Unique: LnqSJRQrOYCWdZI8rg2zfQ-1
+ us-mta-176-92RZOzQiPjGy_JshsqWxPw-1; Tue, 17 May 2022 14:03:33 -0400
+X-MC-Unique: 92RZOzQiPjGy_JshsqWxPw-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 67ABA811E76;
-        Tue, 17 May 2022 18:03:31 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AAE9A384F805;
+        Tue, 17 May 2022 18:03:32 +0000 (UTC)
 Received: from dqiao.bos.com (unknown [10.22.10.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 105D640CF8F0;
-        Tue, 17 May 2022 18:03:31 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5307A400DFB5;
+        Tue, 17 May 2022 18:03:32 +0000 (UTC)
 From:   Donghai Qiao <dqiao@redhat.com>
 To:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
         peterz@infradead.org, heying24@huawei.com,
@@ -45,9 +45,9 @@ To:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
         rdunlap@infradead.org, tglx@linutronix.de, gor@linux.ibm.com
 Cc:     donghai.w.qiao@gmail.com, linux-kernel@vger.kernel.org,
         Donghai Qiao <dqiao@redhat.com>
-Subject: [PATCH v3 01/11] smp: consolidate the structure definitions to smp.h
-Date:   Tue, 17 May 2022 14:03:16 -0400
-Message-Id: <20220517180326.997129-2-dqiao@redhat.com>
+Subject: [PATCH v3 02/11] smp: the definitions of cross call interface
+Date:   Tue, 17 May 2022 14:03:17 -0400
+Message-Id: <20220517180326.997129-3-dqiao@redhat.com>
 In-Reply-To: <20220517180326.997129-1-dqiao@redhat.com>
 References: <20220517180326.997129-1-dqiao@redhat.com>
 Reply-To: dqiao@redhat.com
@@ -64,330 +64,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the structure definitions from kernel/smp.c to
-include/linux/smp.h
+The functions of cross CPU call interface are defined below :
 
-Move the structure definitions from include/linux/smp_types.h
-to include/linux/smp.h and delete smp_types.h
+int smp_call(int cpu, smp_call_func_t func, void *info,
+		unsigned int flags)
+
+int smp_call_cond(int cpu, smp_call_func_t func, void *info,
+		smp_cond_func_t condf, unsigned int flags)
+
+void smp_call_mask(const struct cpumask *mask, smp_call_func_t func,
+		void *info, unsigned int flags)
+
+void smp_call_mask_others(const struct cpumask *mask, smp_call_func_t func,
+		void *info, unsigned int flags)
+
+void smp_call_mask_cond(const struct cpumask *mask, smp_call_func_t func,
+		void *info, smp_cond_func_t condf, unsigned int flags)
+
+int smp_call_csd(int cpu, call_single_data_t *csd, unsigned int flags)
+
+Basically the set of functions above can cover the requirements for
+synchronous and asynchronous type of cross calls. The target CPUs
+can be specified as a unique one or all of the CPUs in a given cpumask
+or all of the CPUs in cpumask except the local CPU. The CPUs in cpumask
+can be as many as all the onlined CPUs or a set of selected CPUs.
+
+Although there is a constrain that cross calls cannot be called from
+context with disabled interrupts, the function smp_call_csd() is
+allowed to do so, which requires the callers to provide and maintain
+their own preallocated call_single_data_t structures.
 
 Signed-off-by: Donghai Qiao <dqiao@redhat.com>
 ---
-v2 -> v3: Moved the array seq_type[] back to smp.c as Thomas
-	   pointed out.
- include/linux/irq_work.h  |   2 +-
- include/linux/smp.h       | 118 ++++++++++++++++++++++++++++++++++++--
- include/linux/smp_types.h |  69 ----------------------
- kernel/smp.c              |  50 ----------------
- 4 files changed, 115 insertions(+), 124 deletions(-)
- delete mode 100644 include/linux/smp_types.h
+v1 -> v2: Removed 'x' from the function names and change XCALL to
+          SMP_CALL from the new macros
+v2 -> v3: In order to fix the issues that Peter pointed out previously:
+	  Removed smp_call_any();
+	  Changed smp_call_private to smp_call_csd;
+	  Added smp_call_mask_others();
+	  Modified the commit comments accordingly.
+ include/linux/smp.h |  30 ++++++++
+ kernel/smp.c        | 172 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 202 insertions(+)
 
-diff --git a/include/linux/irq_work.h b/include/linux/irq_work.h
-index 8cd11a223260..145af67b1cd3 100644
---- a/include/linux/irq_work.h
-+++ b/include/linux/irq_work.h
-@@ -2,7 +2,7 @@
- #ifndef _LINUX_IRQ_WORK_H
- #define _LINUX_IRQ_WORK_H
- 
--#include <linux/smp_types.h>
-+#include <linux/smp.h>
- #include <linux/rcuwait.h>
- 
- /*
 diff --git a/include/linux/smp.h b/include/linux/smp.h
-index a80ab58ae3f1..94bd901b4e4c 100644
+index 94bd901b4e4c..06a20454fd53 100644
 --- a/include/linux/smp.h
 +++ b/include/linux/smp.h
-@@ -10,13 +10,74 @@
- #include <linux/errno.h>
- #include <linux/types.h>
- #include <linux/list.h>
-+#include <linux/llist.h>
- #include <linux/cpumask.h>
- #include <linux/init.h>
--#include <linux/smp_types.h>
+@@ -148,6 +148,36 @@ do {						\
+ 	*(_csd) = CSD_INIT((_func), (_info));	\
+ } while (0)
  
- typedef void (*smp_call_func_t)(void *info);
- typedef bool (*smp_cond_func_t)(int cpu, void *info);
- 
-+enum {
-+	CSD_FLAG_LOCK		= 0x01,
-+
-+	IRQ_WORK_PENDING	= 0x01,
-+	IRQ_WORK_BUSY		= 0x02,
-+	IRQ_WORK_LAZY		= 0x04, /* No IPI, wait for tick */
-+	IRQ_WORK_HARD_IRQ	= 0x08, /* IRQ context on PREEMPT_RT */
-+
-+	IRQ_WORK_CLAIMED	= (IRQ_WORK_PENDING | IRQ_WORK_BUSY),
-+
-+	CSD_TYPE_ASYNC		= 0x00,
-+	CSD_TYPE_SYNC		= 0x10,
-+	CSD_TYPE_IRQ_WORK	= 0x20,
-+	CSD_TYPE_TTWU		= 0x30,
-+
-+	CSD_FLAG_TYPE_MASK	= 0xF0,
-+};
 +
 +/*
-+ * struct __call_single_node is the primary type on
-+ * smp.c:call_single_queue.
++ * smp_call Interface.
 + *
-+ * flush_smp_call_function_queue() only reads the type from
-+ * __call_single_node::u_flags as a regular load, the above
-+ * (anonymous) enum defines all the bits of this word.
-+ *
-+ * Other bits are not modified until the type is known.
-+ *
-+ * CSD_TYPE_SYNC/ASYNC:
-+ *	struct {
-+ *		struct llist_node node;
-+ *		unsigned int flags;
-+ *		smp_call_func_t func;
-+ *		void *info;
-+ *	};
-+ *
-+ * CSD_TYPE_IRQ_WORK:
-+ *	struct {
-+ *		struct llist_node node;
-+ *		atomic_t flags;
-+ *		void (*func)(struct irq_work *);
-+ *	};
-+ *
-+ * CSD_TYPE_TTWU:
-+ *	struct {
-+ *		struct llist_node node;
-+ *		unsigned int flags;
-+ *	};
-+ *
++ * Also see kernel/smp.c for the details.
 + */
-+struct __call_single_node {
-+	struct llist_node	llist;
-+	union {
-+		unsigned int	u_flags;
-+		atomic_t	a_flags;
-+	};
-+#ifdef CONFIG_64BIT
-+	u16 src, dst;
-+#endif
-+};
++#define	SMP_CALL_TYPE_SYNC		CSD_TYPE_SYNC
++#define	SMP_CALL_TYPE_ASYNC		CSD_TYPE_ASYNC
++#define	SMP_CALL_TYPE_IRQ_WORK		CSD_TYPE_IRQ_WORK
++#define	SMP_CALL_TYPE_TTWU		CSD_TYPE_TTWU
++#define	SMP_CALL_TYPE_MASK		CSD_FLAG_TYPE_MASK
++
++#define	SMP_CALL_ALL	-1
++
++extern int smp_call(int cpu, smp_call_func_t func, void *info, unsigned int flags);
++
++extern int smp_call_cond(int cpu, smp_call_func_t func, void *info,
++		smp_cond_func_t condf, unsigned int flags);
++
++extern void smp_call_mask(const struct cpumask *mask, smp_call_func_t func,
++		void *info, unsigned int flags);
++
++void smp_call_mask_others(const struct cpumask *mask, smp_call_func_t func,
++                void *info, unsigned int flags);
++
++extern void smp_call_mask_cond(const struct cpumask *mask, smp_call_func_t func,
++		void *info, smp_cond_func_t condf, unsigned int flags);
++
++extern int smp_call_csd(int cpu, call_single_data_t *csd, unsigned int flags);
 +
  /*
-  * structure shares (partial) layout with struct irq_work
-  */
-@@ -26,13 +87,62 @@ struct __call_single_data {
- 	void *info;
- };
- 
--#define CSD_INIT(_func, _info) \
--	(struct __call_single_data){ .func = (_func), .info = (_info), }
--
- /* Use __aligned() to avoid to use 2 cache lines for 1 csd */
- typedef struct __call_single_data call_single_data_t
- 	__aligned(sizeof(struct __call_single_data));
- 
-+struct cfd_percpu {
-+	call_single_data_t	csd;
-+#ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
-+	u64	seq_queue;
-+	u64	seq_ipi;
-+	u64	seq_noipi;
-+#endif
-+};
-+
-+struct call_function_data {
-+	struct cfd_percpu	__percpu *pcpu;
-+	cpumask_var_t		cpumask;
-+	cpumask_var_t		cpumask_ipi;
-+};
-+
-+#ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
-+union cfd_seq_cnt {
-+	u64		val;
-+	struct {
-+		u64	src:16;
-+		u64	dst:16;
-+#define CFD_SEQ_NOCPU	0xffff
-+		u64	type:4;
-+#define CFD_SEQ_QUEUE	0
-+#define CFD_SEQ_IPI	1
-+#define CFD_SEQ_NOIPI	2
-+#define CFD_SEQ_PING	3
-+#define CFD_SEQ_PINGED	4
-+#define CFD_SEQ_HANDLE	5
-+#define CFD_SEQ_DEQUEUE	6
-+#define CFD_SEQ_IDLE	7
-+#define CFD_SEQ_GOTIPI	8
-+#define CFD_SEQ_HDLEND	9
-+		u64	cnt:28;
-+	}		u;
-+};
-+
-+struct cfd_seq_local {
-+	u64	ping;
-+	u64	pinged;
-+	u64	handle;
-+	u64	dequeue;
-+	u64	idle;
-+	u64	gotipi;
-+	u64	hdlend;
-+};
-+#endif
-+
-+#define CSD_TYPE(_csd)	((_csd)->node.u_flags & CSD_FLAG_TYPE_MASK)
-+#define CSD_INIT(_func, _info) \
-+	((struct __call_single_data){ .func = (_func), .info = (_info), })
-+
- #define INIT_CSD(_csd, _func, _info)		\
- do {						\
- 	*(_csd) = CSD_INIT((_func), (_info));	\
-diff --git a/include/linux/smp_types.h b/include/linux/smp_types.h
-deleted file mode 100644
-index 2e8461af8df6..000000000000
---- a/include/linux/smp_types.h
-+++ /dev/null
-@@ -1,69 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __LINUX_SMP_TYPES_H
--#define __LINUX_SMP_TYPES_H
--
--#include <linux/llist.h>
--
--enum {
--	CSD_FLAG_LOCK		= 0x01,
--
--	IRQ_WORK_PENDING	= 0x01,
--	IRQ_WORK_BUSY		= 0x02,
--	IRQ_WORK_LAZY		= 0x04, /* No IPI, wait for tick */
--	IRQ_WORK_HARD_IRQ	= 0x08, /* IRQ context on PREEMPT_RT */
--
--	IRQ_WORK_CLAIMED	= (IRQ_WORK_PENDING | IRQ_WORK_BUSY),
--
--	CSD_TYPE_ASYNC		= 0x00,
--	CSD_TYPE_SYNC		= 0x10,
--	CSD_TYPE_IRQ_WORK	= 0x20,
--	CSD_TYPE_TTWU		= 0x30,
--
--	CSD_FLAG_TYPE_MASK	= 0xF0,
--};
--
--/*
-- * struct __call_single_node is the primary type on
-- * smp.c:call_single_queue.
-- *
-- * flush_smp_call_function_queue() only reads the type from
-- * __call_single_node::u_flags as a regular load, the above
-- * (anonymous) enum defines all the bits of this word.
-- *
-- * Other bits are not modified until the type is known.
-- *
-- * CSD_TYPE_SYNC/ASYNC:
-- *	struct {
-- *		struct llist_node node;
-- *		unsigned int flags;
-- *		smp_call_func_t func;
-- *		void *info;
-- *	};
-- *
-- * CSD_TYPE_IRQ_WORK:
-- *	struct {
-- *		struct llist_node node;
-- *		atomic_t flags;
-- *		void (*func)(struct irq_work *);
-- *	};
-- *
-- * CSD_TYPE_TTWU:
-- *	struct {
-- *		struct llist_node node;
-- *		unsigned int flags;
-- *	};
-- *
-- */
--
--struct __call_single_node {
--	struct llist_node	llist;
--	union {
--		unsigned int	u_flags;
--		atomic_t	a_flags;
--	};
--#ifdef CONFIG_64BIT
--	u16 src, dst;
--#endif
--};
--
--#endif /* __LINUX_SMP_TYPES_H */
+  * Enqueue a llist_node on the call_single_queue; be very careful, read
+  * flush_smp_call_function_queue() in detail.
 diff --git a/kernel/smp.c b/kernel/smp.c
-index 65a630f62363..4d192ac85a91 100644
+index 4d192ac85a91..906be125068f 100644
 --- a/kernel/smp.c
 +++ b/kernel/smp.c
-@@ -29,30 +29,7 @@
- #include "smpboot.h"
- #include "sched/smp.h"
- 
--#define CSD_TYPE(_csd)	((_csd)->node.u_flags & CSD_FLAG_TYPE_MASK)
--
- #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
--union cfd_seq_cnt {
--	u64		val;
--	struct {
--		u64	src:16;
--		u64	dst:16;
--#define CFD_SEQ_NOCPU	0xffff
--		u64	type:4;
--#define CFD_SEQ_QUEUE	0
--#define CFD_SEQ_IPI	1
--#define CFD_SEQ_NOIPI	2
--#define CFD_SEQ_PING	3
--#define CFD_SEQ_PINGED	4
--#define CFD_SEQ_HANDLE	5
--#define CFD_SEQ_DEQUEUE	6
--#define CFD_SEQ_IDLE	7
--#define CFD_SEQ_GOTIPI	8
--#define CFD_SEQ_HDLEND	9
--		u64	cnt:28;
--	}		u;
--};
--
- static char *seq_type[] = {
- 	[CFD_SEQ_QUEUE]		= "queue",
- 	[CFD_SEQ_IPI]		= "ipi",
-@@ -65,37 +42,10 @@ static char *seq_type[] = {
- 	[CFD_SEQ_GOTIPI]	= "gotipi",
- 	[CFD_SEQ_HDLEND]	= "hdlend (src CPU 0 == early)",
- };
--
--struct cfd_seq_local {
--	u64	ping;
--	u64	pinged;
--	u64	handle;
--	u64	dequeue;
--	u64	idle;
--	u64	gotipi;
--	u64	hdlend;
--};
- #endif
- 
--struct cfd_percpu {
--	call_single_data_t	csd;
--#ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
--	u64	seq_queue;
--	u64	seq_ipi;
--	u64	seq_noipi;
--#endif
--};
--
--struct call_function_data {
--	struct cfd_percpu	__percpu *pcpu;
--	cpumask_var_t		cpumask;
--	cpumask_var_t		cpumask_ipi;
--};
--
- static DEFINE_PER_CPU_ALIGNED(struct call_function_data, cfd_data);
--
- static DEFINE_PER_CPU_SHARED_ALIGNED(struct llist_head, call_single_queue);
--
- static void flush_smp_call_function_queue(bool warn_cpu_offline);
- 
- int smpcfd_prepare_cpu(unsigned int cpu)
+@@ -1185,3 +1185,175 @@ int smp_call_on_cpu(unsigned int cpu, int (*func)(void *), void *par, bool phys)
+ 	return sscs.ret;
+ }
+ EXPORT_SYMBOL_GPL(smp_call_on_cpu);
++
++
++void __smp_call_mask_cond(const struct cpumask *mask,
++		smp_call_func_t func, void *info,
++		smp_cond_func_t cond_func, bool local_cpu,
++		unsigned int flags)
++{
++}
++
++/*
++ * smp_call Interface
++ *
++ * Consolidate the cross CPU call usage from the history below:
++ *
++ * Normally this interface cannot be used with interrupts disabled or
++ * from a hardware interrupt handler or from a bottom half handler.
++ * But there are two exceptions:
++ * 1) It can be used during early boot while early_boot_irqs_disabled
++ *    is. In this scenario, you should use local_irq_save/restore()
++ *    instead of local_irq_disable/enable()
++ * 2) Because smp_call_csd(cpu, csd, SMP_CALL_TYPE_ASYNC) is an asynchonous
++ *    call with a preallocated csd structure, thus it can be called from
++ *    the context where interrupts are disabled.
++ */
++
++/*
++ * Parameters:
++ *
++ * cpu: If cpu == SMP_CALL_ALL, the cross call is for all the online CPUs
++ *      Otherwise, if 0 <= cpu < nr_cpu_ids, the cross call is for that cpu.
++ *
++ * func: It is the cross function that the destination CPUs need to execute.
++ *       This function must be fast and non-blocking.
++ *
++ * info: It is the parameter to func().
++ *
++ * flags: The flags specify the manner the cross call is performaned in terms
++ *	  of synchronous or asynchronous.
++ *
++ *	  A synchronous cross call will not return immediately until all
++ *	  the destination CPUs have executed func() and responded the call.
++ *
++ *	  An asynchrouse cross call will return immediately as soon as it
++ *	  has fired all the cross calls and run func() locally if needed
++ *	  regardless the status of the target CPUs.
++ *
++ * Return: %0 on success or negative errno value on error.
++ */
++int smp_call(int cpu, smp_call_func_t func, void *info, unsigned int flags)
++{
++	return smp_call_cond(cpu, func, info, NULL, flags);
++}
++EXPORT_SYMBOL(smp_call);
++
++/*
++ * Parameters:
++ *
++ * cond_func: This is a condition function cond_func(cpu, info) invoked by
++ *	      the underlying cross call mechanism only. If the return value
++ *	      from cond_func(cpu, info) is true, the cross call will be sent
++ *	      to that cpu, otherwise not.
++ *
++ * Others: see smp_call().
++ *
++ * Return: %0 on success or negative errno value on error.
++ */
++int smp_call_cond(int cpu, smp_call_func_t func, void *info,
++		    smp_cond_func_t cond_func, unsigned int flags)
++{
++	preempt_disable();
++	if (cpu == SMP_CALL_ALL) {
++		__smp_call_mask_cond(cpu_online_mask, func, info, cond_func, true, flags);
++	} else if ((unsigned int)cpu < nr_cpu_ids) {
++		__smp_call_mask_cond(cpumask_of(cpu), func, info, cond_func, true, flags);
++	} else {
++		preempt_enable();
++		pr_warn("Invalid cpu ID = %d\n", cpu);
++		return -ENXIO;
++	}
++	preempt_enable();
++	return 0;
++}
++EXPORT_SYMBOL(smp_call_cond);
++
++/*
++ * Parameters:
++ *
++ * mask: The cross call will be sent to all the CPUs in mask.
++ *
++ * Others: see smp_call().
++ */
++void smp_call_mask(const struct cpumask *mask, smp_call_func_t func,
++		void *info, unsigned int flags)
++{
++	if (mask == NULL) {
++		pr_warn("mask must not be NULL\n");
++		return;
++	}
++
++	preempt_disable();
++	__smp_call_mask_cond(mask, func, info, NULL, true, flags);
++	preempt_enable();
++}
++EXPORT_SYMBOL(smp_call_mask);
++
++/*
++ * Parameters:
++ *
++ * mask: The cross call will be sent to all the CPUs in mask except
++ *       the local CPU.
++ *
++ * Others: see smp_call().
++ *
++ * Besides, its the callers' discrimination as to whether preemption
++ * needs to be disabled or not during the call.
++ */
++void smp_call_mask_others(const struct cpumask *mask, smp_call_func_t func,
++		void *info, unsigned int flags)
++{
++	if (mask == NULL) {
++		pr_warn("mask must not be NULL\n");
++		return;
++	}
++
++	__smp_call_mask_cond(mask, func, info, NULL, false, flags);
++}
++EXPORT_SYMBOL(smp_call_mask_others);
++
++/*
++ * The combination of smp_call_cond() and smp_call_mask()
++ */
++void smp_call_mask_cond(const struct cpumask *mask,
++		smp_call_func_t func, void *info,
++		smp_cond_func_t cond_func,
++		unsigned int flags)
++{
++	if (!mask) {
++		/*
++		 * If mask is NULL meaning for all CPUs,
++		 * then cond_func must be provided.
++		 */
++		WARN_ON_ONCE(!cond_func);
++		mask = cpu_online_mask;
++	}
++
++	preempt_disable();
++	__smp_call_mask_cond(mask, func, info, cond_func, true, flags);
++	preempt_enable();
++}
++EXPORT_SYMBOL(smp_call_mask_cond);
++
++/*
++ * This function provides an alternative way of sending a cross call to
++ * only one destination CPU with a caller pre-allocated private csd instead
++ * of using the csd resource in the cross call mechanism. Thus it is the
++ * callers' responsibity to setup and maintain its own private csd.
++ *
++ * Because of that, this function can be used from the contexts with disabled
++ * interrupts.
++ *
++ * Parameters
++ *
++ * cpu:   Must be a positive value less than nr_cpu_id.
++ * csd:   The private csd provided by the callers.
++ *
++ * Others: see smp_call().
++ */
++int smp_call_csd(int cpu, call_single_data_t *csd, unsigned int flags)
++{
++	return 0;
++}
++EXPORT_SYMBOL(smp_call_csd);
 -- 
 2.27.0
 

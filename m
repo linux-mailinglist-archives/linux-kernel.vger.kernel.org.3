@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609C152A0F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9E152A0F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345739AbiEQMAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
+        id S1345690AbiEQMAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345579AbiEQL7r (ORCPT
+        with ESMTP id S235625AbiEQL7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:59:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2E2443ECA
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:59:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652788784;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bky1QCX4iUNRvLfJN4MOMnAL4Kz8bDrwtH7Mk3KIwD4=;
-        b=NGSmJJMhVOayQpbekUDjhEF5k0tuG2E+luv/lohyut477fgbU7leSH3fqYBWep6WjGBb0B
-        3/J3DwNCUVnjcrkTut/B9OcM7CtXygDorEUPmd96mf61RCYxx3jjNZuKe+xSifLqvV2I0C
-        HfIq2yIttLuy8Rhg22yedbtEshY2g+o=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-eiwqzgYvMAmQ01M1qF9cwQ-1; Tue, 17 May 2022 07:59:43 -0400
-X-MC-Unique: eiwqzgYvMAmQ01M1qF9cwQ-1
-Received: by mail-pl1-f200.google.com with SMTP id b10-20020a170902bd4a00b0015e7ee90842so9501045plx.8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:59:43 -0700 (PDT)
+        Tue, 17 May 2022 07:59:39 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A95B43AC9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:59:38 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id m20so34151739ejj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=We6UnTkt5DfPq+wuwoB7alfZF2Hv9K3HgKR2Inooa2M=;
+        b=mJUxow8TJYLd1QWdt4w54y14ncU32yxMoU6rAuy9WcO3jRkd7oe7jKuPrsY2rNm5sv
+         1BKYohHd6rUaSdXm5PduVz5YYYj/WNzO1gyqgmznJEr4jwUuuz3xIIfspVy5iZUe5YhQ
+         q1l32lRbVlLMCItWsIhV1mU6rnPvfK9fwRKkgflcgf0VpqLAtfHpwQNu1WE3VVurFdsA
+         iBr7rfZ/WlcszsTo/UvoSvzdkTYmse0qFb60Qb/YjL/eEzexO99zZrjtWGhYLDrKF3fj
+         La5T7bT9WybG4SiMlalfi1G9RI7UsOsibH+sFHt0JGH6m7rWrDkSKzp3bJrnWouYmXzX
+         QPgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=bky1QCX4iUNRvLfJN4MOMnAL4Kz8bDrwtH7Mk3KIwD4=;
-        b=V37xpnOLdvL1c6fbeo2P+yRNy5rLCYmug00vxEuw9yhFkqr0CuWWTTXjKutCZW6dVi
-         rWbkbvM1KVqJj5vMUP4V3iNsXX3MkCjbN148sLAX0+lvFu5UmJbQ2bf1dTGEBs+IB9gm
-         OaymxkHvloi5j4yq12rg88BL9/d3vR19SUeMCJ25SEgE2fV0ceQcN5csPQyeOldAV1rm
-         xqjXmbId0QUPvihYppKUXDaIjAlMR3SwxFo3R0Fpo6lkh14bDYFWd2NCqsUs2D+NqJOC
-         MCAgQiyT0ViDSNn6hL9bSaPa5TA5sAhYqO4eMLFBMbp6T52oPJdVQopbSsqNzHaN/hSZ
-         01Bw==
-X-Gm-Message-State: AOAM533MqrNz3WxJvZ7RF9ANpPoFcCRLMNa+c0nUDY750ZRhTOml/r9j
-        JmC+tSASOOMqZCmN0RkySR/V8uKMalu1+jWWBf55pUPzPk/EH1Ppk+8xyQZPzSVDD7QgaYlqGY+
-        jd37H4thUIzZeC3bV82TQ84vq
-X-Received: by 2002:a17:902:864b:b0:15e:f9e0:20ca with SMTP id y11-20020a170902864b00b0015ef9e020camr21879625plt.122.1652788782566;
-        Tue, 17 May 2022 04:59:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz7NyXpdX9BSQpzfJPwSczWlBe7ODqWrJK9S94Cn5fydFV8bNFIfqDgh6xxvNJ3ZGMTNnNGTw==
-X-Received: by 2002:a17:902:864b:b0:15e:f9e0:20ca with SMTP id y11-20020a170902864b00b0015ef9e020camr21879607plt.122.1652788782352;
-        Tue, 17 May 2022 04:59:42 -0700 (PDT)
-Received: from [10.72.12.136] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id z7-20020a170902d54700b0015e8d4eb2e8sm5132142plf.306.2022.05.17.04.59.37
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=We6UnTkt5DfPq+wuwoB7alfZF2Hv9K3HgKR2Inooa2M=;
+        b=iObmiw3hV+ecMmkNZFa9SWvh9e5LX3CCE5ND09IznXK2hkZJW4okJt5f/rh3b3q/yi
+         enb4X0I7cpei6kKR06GNhvIF/vWEFKCbHjkQ2IfzrNdBwhuNHApx3rkDToY6SRN+aCFV
+         wEHYv1j1MP7X2J3rDWECPRps7//ym+tsYXNTCD9l/yDCJy8ig6B3du5lyzRWqSYpvq9W
+         POvewIPXX4kXMk0gxlQnWrFyPd+CqmebemtdvmHzfUEERbt4IwAvyx31Hw3w0o0HB4v5
+         6W1oHZsh1t0RFHXaH/petLnRoUfNLggO0WME+x5gYkdCetSRWarA88SPQNFAIH23Hd+B
+         lgPg==
+X-Gm-Message-State: AOAM5303Tf+ZrntBysLQa6aKpVRrkVpXDyxuvGmCxiUwcpmeK09LM1gS
+        EnfxaiBhHa/Idoy7a+T53zge8w==
+X-Google-Smtp-Source: ABdhPJyvwVUAbJ0QXLt9/CxdM+HPOyaIV1T5I4ZB9Qx0sEtfYLUok+mJqrxKP1RTakPh02MMo1ynRQ==
+X-Received: by 2002:a17:907:1c9c:b0:6f4:2918:5672 with SMTP id nb28-20020a1709071c9c00b006f429185672mr19312685ejc.439.1652788777021;
+        Tue, 17 May 2022 04:59:37 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id eg16-20020a056402289000b0042abb914d6asm2074448edb.69.2022.05.17.04.59.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 04:59:41 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] ceph: wait the first reply of inflight
- unlink/rmdir
-To:     Jeff Layton <jlayton@kernel.org>, viro@zeniv.linux.org.uk
-Cc:     idryomov@gmail.com, vshankar@redhat.com,
-        ceph-devel@vger.kernel.org, arnd@arndb.de, mcgrof@kernel.org,
-        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20220517010316.81483-1-xiubli@redhat.com>
- <20220517010316.81483-3-xiubli@redhat.com>
- <a2d05d80e30831e915e707a48520139500befc2b.camel@kernel.org>
- <bce4ef40-277f-8bc0-6cdb-3435eddddf44@redhat.com>
- <bd2ea8d6467ff8ea98c7bd048fd417aced86e20d.camel@kernel.org>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <718ffcfa-d211-23ec-947c-0c9dec33781c@redhat.com>
-Date:   Tue, 17 May 2022 19:59:34 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 17 May 2022 04:59:36 -0700 (PDT)
+Message-ID: <96973d1d-c52c-d190-6989-3f7996dae70b@linaro.org>
+Date:   Tue, 17 May 2022 13:59:35 +0200
 MIME-Version: 1.0
-In-Reply-To: <bd2ea8d6467ff8ea98c7bd048fd417aced86e20d.camel@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 2/3] ARM: dts: aspeed: Add USB2.0 device controller
+ node
 Content-Language: en-US
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Li Yang <leoyang.li@nxp.com>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+References: <20220517082558.3534161-1-neal_liu@aspeedtech.com>
+ <20220517082558.3534161-3-neal_liu@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517082558.3534161-3-neal_liu@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 17/05/2022 10:25, Neal Liu wrote:
+> Add USB2.0 device controller(udc) node to device tree
+> for AST2600.
+> 
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> ---
+>  arch/arm/boot/dts/aspeed-g6.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
+> index 3d5ce9da42c3..5517313eb2b5 100644
+> --- a/arch/arm/boot/dts/aspeed-g6.dtsi
+> +++ b/arch/arm/boot/dts/aspeed-g6.dtsi
+> @@ -298,6 +298,16 @@ vhub: usb-vhub@1e6a0000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		udc: udc@1e6a2000 {
 
-On 5/17/22 7:54 PM, Jeff Layton wrote:
-> On Tue, 2022-05-17 at 19:49 +0800, Xiubo Li wrote:
->> On 5/17/22 7:35 PM, Jeff Layton wrote:
->>> On Tue, 2022-05-17 at 09:03 +0800, Xiubo Li wrote:
->>>> In async unlink case the kclient won't wait for the first reply
->>>> from MDS and just drop all the links and unhash the dentry and then
->>>> succeeds immediately.
->>>>
->>>> For any new create/link/rename,etc requests followed by using the
->>>> same file names we must wait for the first reply of the inflight
-...
->>> I doubt you need this large a hashtable, particularly given that this is
->>> per-superblock. In most cases, we'll just have a few of these in flight
->>> at a time.
->> A global hashtable ? And set the order to 8 ?
-> Per-sb is fine, IMO. 6-8 bits sounds reasonable.
+The same as DTS in bindings - generic node name, please.
 
-Sure, let's use 8. From my snaptest I can see there had a lot of 
-dentries in the hashtable at the same time some times.
 
--- Xiubo
-
+Best regards,
+Krzysztof

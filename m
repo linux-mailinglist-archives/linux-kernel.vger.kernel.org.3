@@ -2,112 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B165D529C16
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D19529C22
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240931AbiEQIRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 04:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        id S234083AbiEQIRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 04:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243356AbiEQIQs (ORCPT
+        with ESMTP id S235188AbiEQIRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 04:16:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C03C4B43B;
-        Tue, 17 May 2022 01:14:35 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 219F71F4423C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652775273;
-        bh=e71S4wIuVuA79Q95c0v+L8CnYV43+ZQVjRchLsfKsx4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AgCoAKkvvp4nrjNV6aZz6RXQXb+Cbzt9PK5dhhR/erkMhq0ItVYzF1/P1PhHRKphY
-         fLHouYqsatBCKHd13F/oHLAs1qXZm3VB6Lce50gDDVQdjP6+Kvowpjpk/XfQvr9PA5
-         oZB4W1Lwo7z3O5LqI6W9ob1uw2YQ3D7BkKMSegMcFRr+rdooEx1H5u+zWnNCsgnDt2
-         xMA5crRT44j96Is+3ExKju/RWR5c5lUzWqZKbP7aZ+LQ6xAa9M0CEq6GT9VMZ8CYAS
-         Eb92pow2UakeOR+Y6Bdh6Xc8/hdxs3Tue8G2sTBpPN5mzcv5fVfG+xB2xxRrUIXhNZ
-         LycdNcCNjLVYg==
-Message-ID: <32c97e47-47a8-d033-4948-3c73a4313703@collabora.com>
-Date:   Tue, 17 May 2022 10:14:30 +0200
+        Tue, 17 May 2022 04:17:23 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6C5640F;
+        Tue, 17 May 2022 01:16:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1652775372;
+  x=1684311372;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QLbnCx3HBW2+UtwoL1AvPcfRbpxQXJtdAP9UdNVlnlw=;
+  b=jFgrY87sv/JZA7lOe8ur1y2FKrtD2kEb2aLvjlfqzZeF1H17p4clW0mw
+   QT5cd9l+7zP0mIJnNLvt9LR0I0kLlFT0BIy8w4FR8k8FesYny1HTQUXud
+   bINoLndkutl+GzSaIwQZvs+4qGL8GGjtwsqyw78t3DhS3j+jOWONBpdoS
+   fzJ6YU0LV16j3uzUKnVImbQWtWB/v5ZngBtv22nBFsvtgOPTkkdlcjk9h
+   St0ueYTevgSFg4Y9Fs89b4jk6rubB/mT/kjI6VWqgLz6ECD0mhDdjWGmz
+   BAHKywQAgx6rsoUVvYzG6GsrJXDoOVSzo8Goju5aoH4psOugkR+j4c7Vd
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Jose Abreu <Jose.Abreu@synopsys.com>, <netdev@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next] net: stmmac: remove unused get_addr() callback
+Date:   Tue, 17 May 2022 10:16:01 +0200
+Message-ID: <20220517081602.1826154-1-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 5/7] arm64: dts: mediatek: mt6795: Add fixed clocks for
- 32kHz and 26MHz XOs
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        kernel@collabora.com
-References: <20220513171617.504430-1-angelogioacchino.delregno@collabora.com>
- <20220513171617.504430-6-angelogioacchino.delregno@collabora.com>
- <03e99a02-1233-3882-e1e5-24ab1bbaf257@linaro.org>
- <0f303425-3b12-7573-b201-030d4d044db8@collabora.com>
- <d78e1936-a0ab-663d-1381-b537bfd7f07d@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <d78e1936-a0ab-663d-1381-b537bfd7f07d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/05/22 16:51, Krzysztof Kozlowski ha scritto:
-> On 16/05/2022 10:51, AngeloGioacchino Del Regno wrote:
-> 
->>>
->>>
->>
->> I should reword the commit description to be clearer, sorry about that: I
->> went with "exactly what I've done", but looking at the actual diff, it is
->> just a rename. What my brain was ticking on here was about removing clocks
->> that didn't really exist (uart_clk is not a fixed clock, etc), and adding
->> the ones that do exist.... but then again, the result, casually, is a rename.
-> 
-> Yes, some better explanation would help.
-> 
+The last caller of the stmmac_desc_ops::get_addr() callback was removed
+a while ago, so remove the unused callback.
 
-Will do for v2 then!
+Note that the callback also only gets half the descriptor address on
+systems with 64-bit descriptor addresses, so that should be fixed if it
+needs to be resurrected later.
 
->>
->> In any case... no, these clocks are not board-specific for two reasons:
->> 1. AFAIK, these fixed clock outputs are from the SoC itself, not from
->>      external components placed on the board, and
-> 
-> This would be fine.
-> 
->> 2. Even if these were from external components, the SoC *needs* these
->>      ones to work and any board that doesn't have these fixed XOs simply
->>      wouldn't be able to work.
-> 
-> This is common pattern and Mediatek is not different here. In all cases
-> these are needed by SoC and in (almost?) all cases these should be
-> provided by board DTS. The DTS describes here the hardware, the board
-> has the clock thus the board DTS should define it.
-> 
+Fixes: ec222003bd948de8f3 ("net: stmmac: Prepare to add Split Header support")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c   | 6 ------
+ drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c | 6 ------
+ drivers/net/ethernet/stmicro/stmmac/enh_desc.c       | 6 ------
+ drivers/net/ethernet/stmicro/stmmac/hwif.h           | 4 ----
+ drivers/net/ethernet/stmicro/stmmac/norm_desc.c      | 6 ------
+ 5 files changed, 28 deletions(-)
 
-Right. If external components are strictly necessary, physically, they're
-still external components and not inside of the SoC, and anything external
-*may* change depending on the (hardware) implementation.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+index d3b4765c1a5b..8cc80b1db4cb 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_descs.c
+@@ -462,11 +462,6 @@ static void dwmac4_set_mss_ctxt(struct dma_desc *p, unsigned int mss)
+ 	p->des3 = cpu_to_le32(TDES3_CONTEXT_TYPE | TDES3_CTXT_TCMSSV);
+ }
+ 
+-static void dwmac4_get_addr(struct dma_desc *p, unsigned int *addr)
+-{
+-	*addr = le32_to_cpu(p->des0);
+-}
+-
+ static void dwmac4_set_addr(struct dma_desc *p, dma_addr_t addr)
+ {
+ 	p->des0 = cpu_to_le32(lower_32_bits(addr));
+@@ -575,7 +570,6 @@ const struct stmmac_desc_ops dwmac4_desc_ops = {
+ 	.init_tx_desc = dwmac4_rd_init_tx_desc,
+ 	.display_ring = dwmac4_display_ring,
+ 	.set_mss = dwmac4_set_mss_ctxt,
+-	.get_addr = dwmac4_get_addr,
+ 	.set_addr = dwmac4_set_addr,
+ 	.clear = dwmac4_clear,
+ 	.set_sarc = dwmac4_set_sarc,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
+index ccfb0102dde4..b1f0c3984a09 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
+@@ -239,11 +239,6 @@ static void dwxgmac2_set_mss(struct dma_desc *p, unsigned int mss)
+ 	p->des3 = cpu_to_le32(XGMAC_TDES3_CTXT | XGMAC_TDES3_TCMSSV);
+ }
+ 
+-static void dwxgmac2_get_addr(struct dma_desc *p, unsigned int *addr)
+-{
+-	*addr = le32_to_cpu(p->des0);
+-}
+-
+ static void dwxgmac2_set_addr(struct dma_desc *p, dma_addr_t addr)
+ {
+ 	p->des0 = cpu_to_le32(lower_32_bits(addr));
+@@ -366,7 +361,6 @@ const struct stmmac_desc_ops dwxgmac210_desc_ops = {
+ 	.init_rx_desc = dwxgmac2_init_rx_desc,
+ 	.init_tx_desc = dwxgmac2_init_tx_desc,
+ 	.set_mss = dwxgmac2_set_mss,
+-	.get_addr = dwxgmac2_get_addr,
+ 	.set_addr = dwxgmac2_set_addr,
+ 	.clear = dwxgmac2_clear,
+ 	.get_rx_hash = dwxgmac2_get_rx_hash,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/enh_desc.c b/drivers/net/ethernet/stmicro/stmmac/enh_desc.c
+index 6650edfab5bc..1bcbbd724fb5 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/enh_desc.c
++++ b/drivers/net/ethernet/stmicro/stmmac/enh_desc.c
+@@ -440,11 +440,6 @@ static void enh_desc_display_ring(void *head, unsigned int size, bool rx,
+ 	pr_info("\n");
+ }
+ 
+-static void enh_desc_get_addr(struct dma_desc *p, unsigned int *addr)
+-{
+-	*addr = le32_to_cpu(p->des2);
+-}
+-
+ static void enh_desc_set_addr(struct dma_desc *p, dma_addr_t addr)
+ {
+ 	p->des2 = cpu_to_le32(addr);
+@@ -475,7 +470,6 @@ const struct stmmac_desc_ops enh_desc_ops = {
+ 	.get_timestamp = enh_desc_get_timestamp,
+ 	.get_rx_timestamp_status = enh_desc_get_rx_timestamp_status,
+ 	.display_ring = enh_desc_display_ring,
+-	.get_addr = enh_desc_get_addr,
+ 	.set_addr = enh_desc_set_addr,
+ 	.clear = enh_desc_clear,
+ };
+diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+index f7dc447f05a0..592b4067f9b8 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
++++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+@@ -82,8 +82,6 @@ struct stmmac_desc_ops {
+ 			     dma_addr_t dma_rx_phy, unsigned int desc_size);
+ 	/* set MSS via context descriptor */
+ 	void (*set_mss)(struct dma_desc *p, unsigned int mss);
+-	/* get descriptor skbuff address */
+-	void (*get_addr)(struct dma_desc *p, unsigned int *addr);
+ 	/* set descriptor skbuff address */
+ 	void (*set_addr)(struct dma_desc *p, dma_addr_t addr);
+ 	/* clear descriptor */
+@@ -142,8 +140,6 @@ struct stmmac_desc_ops {
+ 	stmmac_do_void_callback(__priv, desc, display_ring, __args)
+ #define stmmac_set_mss(__priv, __args...) \
+ 	stmmac_do_void_callback(__priv, desc, set_mss, __args)
+-#define stmmac_get_desc_addr(__priv, __args...) \
+-	stmmac_do_void_callback(__priv, desc, get_addr, __args)
+ #define stmmac_set_desc_addr(__priv, __args...) \
+ 	stmmac_do_void_callback(__priv, desc, set_addr, __args)
+ #define stmmac_clear_desc(__priv, __args...) \
+diff --git a/drivers/net/ethernet/stmicro/stmmac/norm_desc.c b/drivers/net/ethernet/stmicro/stmmac/norm_desc.c
+index 98ef43f35802..e3da4da242ee 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/norm_desc.c
++++ b/drivers/net/ethernet/stmicro/stmmac/norm_desc.c
+@@ -292,11 +292,6 @@ static void ndesc_display_ring(void *head, unsigned int size, bool rx,
+ 	pr_info("\n");
+ }
+ 
+-static void ndesc_get_addr(struct dma_desc *p, unsigned int *addr)
+-{
+-	*addr = le32_to_cpu(p->des2);
+-}
+-
+ static void ndesc_set_addr(struct dma_desc *p, dma_addr_t addr)
+ {
+ 	p->des2 = cpu_to_le32(addr);
+@@ -326,7 +321,6 @@ const struct stmmac_desc_ops ndesc_ops = {
+ 	.get_timestamp = ndesc_get_timestamp,
+ 	.get_rx_timestamp_status = ndesc_get_rx_timestamp_status,
+ 	.display_ring = ndesc_display_ring,
+-	.get_addr = ndesc_get_addr,
+ 	.set_addr = ndesc_set_addr,
+ 	.clear = ndesc_clear,
+ };
+-- 
+2.34.1
 
-Anyway - I was wondering if splitting this change in two commits would be
-better to let people understand what's going on... probably it would, as
-that would clearly show both the addition of the 32K/26M clocks and the
-subsequent removal of the other two: I would at this point do that, what
-do you think?
-
-Regards,
-Angelo

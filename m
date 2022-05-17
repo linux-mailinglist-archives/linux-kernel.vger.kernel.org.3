@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD8852A77E
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCD452A77D
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350720AbiEQP7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S1350745AbiEQP7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350686AbiEQP72 (ORCPT
+        with ESMTP id S1350715AbiEQP7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:59:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17727496A6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:59:28 -0700 (PDT)
+        Tue, 17 May 2022 11:59:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6282049F8C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:59:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A67A861222
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:59:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50C4C34116;
-        Tue, 17 May 2022 15:59:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B308BB81AB1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB2FC34116;
+        Tue, 17 May 2022 15:59:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652803167;
-        bh=fERQZggsBwWdHxLHZxC0R2Zo7qJEWV8qww8X1ChV7yQ=;
+        s=k20201202; t=1652803170;
+        bh=HhBecZ0/0C++sVEsHjpIv1pbIB0KELfp5GVr+V5tmag=;
         h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=UmswcLTQcZ6lYohR+eGjuKxzz/8hmQSfYpceg8ruIh3IcM1uLe4ucUO/QGLDH/NHi
-         amZVYSEL2ZvFXzKDCS9TYFBNnmHOUhy+5Y6RDeM7S650l39uIg7CFMzgqVsTeLavUb
-         tRy3q0+U2GDPeU7tGCfYQye7JFjfRJ8iN6euPxdMVftG6LzSEYMBHJd9BqyMOpFY2G
-         GUjijiX0OUIRY6H+G4kdEb3okth1LkLkUlYFPZbj40EKcTugJMhew8AauQzJqt2CQ4
-         GoaZrgLp7ukC6qONRfMshQoycYExFIFBGRUUJIoIoygKbwghAxs7Y4W5olp+1USBd4
-         jFOU+73QxR+XA==
+        b=DxItctP5gYRBhGRnJYuIlPvB+JbtsBMJ0TnVwULf86ngLiQ9TJRpgqOb2Zomc8zxE
+         bveWrVURMhsqD4oLrADLkO6FEOlXltAniwgUzlo/L+ythhY07hNVYlbZXtRl88Hmi1
+         0Pd0m4zMBzvzGomRuwdm4x8EtTBJ217AhJ7MHaForkNM3yGuFtlC/Av61OFIhGpNpt
+         9nQoaJt5JXRfS3tRqe3q4QXEYnPN0lByjdL4aDXhUhXk2l3zFiI31b+qtJX63UVMwv
+         ccaOnO3vgwGpfx/i6HNcxL84ki9IGEmSuF7B9RNTcs5jdeYbxzYuqb2JxCzwHJFL0m
+         hx2bRbcsIMTOg==
 From:   Mark Brown <broonie@kernel.org>
-To:     tiwai@suse.com, alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        perex@perex.cz, linux-kernel@vger.kernel.org, linmq006@gmail.com,
-        peter.ujfalusi@gmail.com
-In-Reply-To: <20220512111331.44774-1-linmq006@gmail.com>
-References: <20220512111331.44774-1-linmq006@gmail.com>
-Subject: Re: [PATCH] ASoC: ti: j721e-evm: Fix refcount leak in j721e_soc_probe_*
-Message-Id: <165280316539.1635268.5141203985086127855.b4-ty@kernel.org>
-Date:   Tue, 17 May 2022 16:59:25 +0100
+To:     linma@zju.edu.cn, tiwai@suse.com, oder_chiou@realtek.com,
+        alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220516092035.28283-1-linma@zju.edu.cn>
+References: <20220516092035.28283-1-linma@zju.edu.cn>
+Subject: Re: [PATCH v0] ASoC: rt5645: Fix errorenous cleanup order
+Message-Id: <165280316877.1635268.8412157029649432133.b4-ty@kernel.org>
+Date:   Tue, 17 May 2022 16:59:28 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,12 +54,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 12 May 2022 15:13:30 +0400, Miaoqian Lin wrote:
-> of_parse_phandle() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when not needed anymore.
-> Add missing of_node_put() to avoid refcount leak.
+On Mon, 16 May 2022 17:20:35 +0800, Lin Ma wrote:
+> There is a logic error when removing rt5645 device as the function
+> rt5645_i2c_remove() first cancel the &rt5645->jack_detect_work and
+> delete the &rt5645->btn_check_timer latter. However, since the timer
+> handler rt5645_btn_check_callback() will re-queue the jack_detect_work,
+> this cleanup order is buggy.
 > 
+> That is, once the del_timer_sync in rt5645_i2c_remove is concurrently
+> run with the rt5645_btn_check_callback, the canceled jack_detect_work
+> will be rescheduled again, leading to possible use-after-free.
 > 
+> [...]
 
 Applied to
 
@@ -67,8 +73,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: ti: j721e-evm: Fix refcount leak in j721e_soc_probe_*
-      commit: a34840c4eb3278a7c29c9c57a65ce7541c66f9f2
+[1/1] ASoC: rt5645: Fix errorenous cleanup order
+      commit: 2def44d3aec59e38d2701c568d65540783f90f2f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,67 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3914E52ACBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DEA52ACB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352931AbiEQU3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S1350014AbiEQU1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiEQU3P (ORCPT
+        with ESMTP id S1346758AbiEQU1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:29:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B8152B08;
-        Tue, 17 May 2022 13:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652819354; x=1684355354;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0BZvYzXs/VFL7HDs3p14QlWRcnv89nNTDrsMX7Xxdvk=;
-  b=SgCHwUVG4EH6yD9Mmwquedibkn8WIe6SDUf/oGeYRGDrN0DS81jn8NMR
-   qZD3gHwqPzkVJwnn8W441zKtaT0NicGEJ5ijWoH5vJMedEvkCPGGdz/UE
-   Tf9EbeJ5QYXATgr7MFW4jEtJzjCotcMpNjQ+o2zmd9rsWJ0RjhIjkfl3v
-   daDyJ+y9KrE8VL/uqQoLKJqB01aRLKx7OtmEmh9CDPNnDlsdAehtyk9fG
-   tu3AWAzBYPrJ5J1t3oZoooVtkPA3+x0ZtV5kOrGsriIciAKCqJ0iRcLfF
-   7wdSmVBNMpY1z0xW01/G/hBnsqpAe6Ws/s6Zb1wI2Ra7oDRF9rI6sGBpW
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270145107"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="270145107"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 13:28:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="673033825"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 17 May 2022 13:27:57 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nr3nQ-0001Mz-JH;
-        Tue, 17 May 2022 20:27:56 +0000
-Date:   Wed, 18 May 2022 04:27:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Medad CChien <medadyoung@gmail.com>, benjaminfair@google.com,
-        yuenn@google.com, venture@google.com, tali.perry1@gmail.com,
-        tmaimon77@gmail.com, avifishman70@gmail.com, robh+dt@kernel.org,
-        alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
-        KFTING@nuvoton.com, ctcchien@nuvoton.com
-Cc:     kbuild-all@lists.01.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] RTC: nuvoton: Add NCT3018Y real time clock driver
-Message-ID: <202205180421.cGv6R8hi-lkp@intel.com>
-References: <20220516152751.27716-3-ctcchien@nuvoton.com>
+        Tue, 17 May 2022 16:27:30 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1028F527ED
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:27:29 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id n2-20020a056e021ba200b002d12462a1d1so85056ili.15
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:27:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=cRFwbGYYYJrN0dgN69OptN10qmU7nYDStfYj3Rja69A=;
+        b=pMn9ydg+ROs5VS6E5IJ0BXexhn0JNyBwdsrPgzRu3j5OtOPte6HHJCDzRqCtYV9uhx
+         mYqTMfvY1YeifqMx/YJuVtyw+Anp7+1g+6b3QBPCkB/9RUVE1d364HOX5/zM2RiWSO5I
+         Sbkq5CpbHZ+5BKT5cVfFjwTmT6DwyQ8PcOabY6M2tbaKnvJGGWKiyyJzyRTCUdj7kcfu
+         cEY2HVEEgXhFKzPrGqKeyWHkDOofD8akP84OCm6fI1ezxDq0JBUf4GLXLXjgADreCh64
+         qqnpSvFyBbEU7LpUJ2coPXJTfnV2FwWvW45PbExGep0sUjcRJTEBYmQnkazmRZ0IWBuF
+         6CPw==
+X-Gm-Message-State: AOAM533UoKafDewSzslucmwQRDfm0Isg0lHgqhQOFfyfWvXuF7g3TevS
+        8DLDY0WxatT6mvCzlacsErPCNRv0czzXRkIMXhrD9Wbfi/sf
+X-Google-Smtp-Source: ABdhPJxE11PZVRGHuTc9YY6/4wD1M/n3WhPIaE5dUdD2PTj5uKoKvDiQvKBXgpJCcrbYrkCE7MhUBGsD9En8T/m/CeEOx1CPSAoX
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516152751.27716-3-ctcchien@nuvoton.com>
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:15c9:b0:32d:b26d:a01e with SMTP id
+ i9-20020a05663815c900b0032db26da01emr13379939jat.11.1652819248466; Tue, 17
+ May 2022 13:27:28 -0700 (PDT)
+Date:   Tue, 17 May 2022 13:27:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002ecf9805df3af808@google.com>
+Subject: [syzbot] KASAN: slab-out-of-bounds Read in cttimeout_net_exit
+From:   syzbot <syzbot+92968395eedbdbd3617d@syzkaller.appspotmail.com>
+To:     coreteam@netfilter.org, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, kadlec@netfilter.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, pabeni@redhat.com,
+        pablo@netfilter.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,181 +56,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Medad,
+Hello,
 
-Thank you for the patch! Yet something to improve:
+syzbot found the following issue on:
 
-[auto build test ERROR on abelloni/rtc-next]
-[also build test ERROR on robh/for-next v5.18-rc7 next-20220517]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+HEAD commit:    65a9dedc11d6 net: phy: marvell: Add errata section 5.1 for..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16fafa9ef00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c05eee2efc702eed
+dashboard link: https://syzkaller.appspot.com/bug?extid=92968395eedbdbd3617d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Medad-CChien/ARM-dts-nuvoton-Add-nuvoton-RTC3018Y-node/20220516-232940
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220518/202205180421.cGv6R8hi-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5c51862ee8030cfd9f2e955c10ee580f168663e3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Medad-CChien/ARM-dts-nuvoton-Add-nuvoton-RTC3018Y-node/20220516-232940
-        git checkout 5c51862ee8030cfd9f2e955c10ee580f168663e3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+Unfortunately, I don't have any reproducer for this issue yet.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+92968395eedbdbd3617d@syzkaller.appspotmail.com
 
-All errors (new ones prefixed by >>):
+bond0 (unregistering): (slave bond_slave_1): Releasing backup interface
+bond0 (unregistering): (slave bond_slave_0): Releasing backup interface
+bond0 (unregistering): Released all slaves
+==================================================================
+BUG: KASAN: slab-out-of-bounds in __list_del_entry_valid+0xcc/0xf0 lib/list_debug.c:42
+Read of size 8 at addr ffff888051af75b8 by task kworker/u4:5/1223
 
-   drivers/rtc/rtc-nct3018y.c: In function 'nct3018y_rtc_read_time':
-   drivers/rtc/rtc-nct3018y.c:192:26: warning: unused variable 'nct3018y' [-Wunused-variable]
-     192 |         struct nct3018y *nct3018y = i2c_get_clientdata(client);
-         |                          ^~~~~~~~
-   drivers/rtc/rtc-nct3018y.c: In function 'nct3018y_rtc_set_time':
-   drivers/rtc/rtc-nct3018y.c:227:26: warning: unused variable 'nct3018y' [-Wunused-variable]
-     227 |         struct nct3018y *nct3018y = i2c_get_clientdata(client);
-         |                          ^~~~~~~~
-   drivers/rtc/rtc-nct3018y.c: In function 'nct3018y_rtc_set_alarm':
-   drivers/rtc/rtc-nct3018y.c:292:26: warning: unused variable 'nct3018y' [-Wunused-variable]
-     292 |         struct nct3018y *nct3018y = i2c_get_clientdata(client);
-         |                          ^~~~~~~~
-   drivers/rtc/rtc-nct3018y.c: In function 'nct3018y_irq_enable':
-   drivers/rtc/rtc-nct3018y.c:322:26: warning: unused variable 'nct3018y' [-Wunused-variable]
-     322 |         struct nct3018y *nct3018y = i2c_get_clientdata(client);
-         |                          ^~~~~~~~
-   In file included from include/linux/printk.h:555,
-                    from include/linux/kernel.h:29,
-                    from include/linux/cpumask.h:10,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/mutex.h:17,
-                    from include/linux/kernfs.h:11,
-                    from include/linux/sysfs.h:16,
-                    from include/linux/kobject.h:20,
-                    from include/linux/of.h:17,
-                    from include/linux/clk-provider.h:9,
-                    from drivers/rtc/rtc-nct3018y.c:5:
-   drivers/rtc/rtc-nct3018y.c: In function 'nct3018y_probe':
-   drivers/rtc/rtc-nct3018y.c:513:39: warning: format '%d' expects argument of type 'int', but argument 5 has type 'long unsigned int' [-Wformat=]
-     513 |                 dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is :%d\n",
-         |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
-     134 |                 func(&id, ##__VA_ARGS__);               \
-         |                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:166:9: note: in expansion of macro '_dynamic_func_call'
-     166 |         _dynamic_func_call(fmt,__dynamic_dev_dbg,               \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:30: note: in expansion of macro 'dev_fmt'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                              ^~~~~~~
-   drivers/rtc/rtc-nct3018y.c:513:17: note: in expansion of macro 'dev_dbg'
-     513 |                 dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is :%d\n",
-         |                 ^~~~~~~
-   drivers/rtc/rtc-nct3018y.c:513:66: note: format string is defined here
-     513 |                 dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is :%d\n",
-         |                                                                 ~^
-         |                                                                  |
-         |                                                                  int
-         |                                                                 %ld
->> drivers/rtc/rtc-nct3018y.c:535:22: error: 'struct rtc_device' has no member named 'uie_unsupported'
-     535 |         nct3018y->rtc->uie_unsupported = 1;
-         |                      ^~
->> drivers/rtc/rtc-nct3018y.c:561:15: error: implicit declaration of function 'rtc_register_device'; did you mean 'i2c_unregister_device'? [-Werror=implicit-function-declaration]
-     561 |         err = rtc_register_device(nct3018y->rtc);
-         |               ^~~~~~~~~~~~~~~~~~~
-         |               i2c_unregister_device
-   cc1: some warnings being treated as errors
+CPU: 1 PID: 1223 Comm: kworker/u4:5 Not tainted 5.18.0-rc6-syzkaller-01553-g65a9dedc11d6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: netns cleanup_net
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
+ print_report mm/kasan/report.c:429 [inline]
+ kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+ __list_del_entry_valid+0xcc/0xf0 lib/list_debug.c:42
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del include/linux/list.h:148 [inline]
+ cttimeout_net_exit+0x211/0x540 net/netfilter/nfnetlink_cttimeout.c:617
+ ops_exit_list+0xb0/0x170 net/core/net_namespace.c:162
+ cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:594
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+ </TASK>
+
+Allocated by task 9270:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:436 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:515 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:474 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
+ kmalloc include/linux/slab.h:586 [inline]
+ kzalloc include/linux/slab.h:714 [inline]
+ cttimeout_new_timeout+0x51f/0xa50 net/netfilter/nfnetlink_cttimeout.c:156
+ nfnetlink_rcv_msg+0xbcd/0x13f0 net/netfilter/nfnetlink.c:297
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2501
+ nfnetlink_rcv+0x1ac/0x420 net/netfilter/nfnetlink.c:655
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x917/0xe10 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:734
+ ____sys_sendmsg+0x6eb/0x810 net/socket.c:2460
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2514
+ __sys_sendmsg net/socket.c:2543 [inline]
+ __do_sys_sendmsg net/socket.c:2552 [inline]
+ __se_sys_sendmsg net/socket.c:2550 [inline]
+ __x64_sys_sendmsg+0x132/0x220 net/socket.c:2550
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+The buggy address belongs to the object at ffff888051af7500
+ which belongs to the cache kmalloc-128 of size 128
+The buggy address is located 56 bytes to the right of
+ 128-byte region [ffff888051af7500, ffff888051af7580)
+
+The buggy address belongs to the physical page:
+page:ffffea000146bdc0 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff888051af7100 pfn:0x51af7
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea0001ed5e48 ffffea0001cf4b08 ffff888010c418c0
+raw: ffff888051af7100 000000000010000b 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 7027, tgid 7027 (cmp), ts 227162348638, free_ts 227160439771
+ prep_new_page mm/page_alloc.c:2441 [inline]
+ get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4182
+ __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5408
+ __alloc_pages_node include/linux/gfp.h:587 [inline]
+ alloc_slab_page mm/slub.c:1801 [inline]
+ allocate_slab+0x80/0x3c0 mm/slub.c:1944
+ new_slab mm/slub.c:2004 [inline]
+ ___slab_alloc+0x8df/0xf20 mm/slub.c:3005
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
+ slab_alloc_node mm/slub.c:3183 [inline]
+ __kmalloc_node+0x2cb/0x390 mm/slub.c:4458
+ kmalloc_array_node include/linux/slab.h:676 [inline]
+ kcalloc_node include/linux/slab.h:681 [inline]
+ memcg_alloc_slab_cgroups+0x8b/0x140 mm/memcontrol.c:2810
+ account_slab mm/slab.h:652 [inline]
+ allocate_slab+0x2c9/0x3c0 mm/slub.c:1960
+ new_slab mm/slub.c:2004 [inline]
+ ___slab_alloc+0x8df/0xf20 mm/slub.c:3005
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
+ slab_alloc_node mm/slub.c:3183 [inline]
+ slab_alloc mm/slub.c:3225 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3232 [inline]
+ kmem_cache_alloc+0x360/0x3b0 mm/slub.c:3242
+ vm_area_dup+0x88/0x3f0 kernel/fork.c:467
+ __split_vma+0xa5/0x550 mm/mmap.c:2712
+ split_vma+0x95/0xd0 mm/mmap.c:2770
+ mprotect_fixup+0x72d/0x950 mm/mprotect.c:494
+ do_mprotect_pkey+0x532/0x980 mm/mprotect.c:650
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1356 [inline]
+ free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1406
+ free_unref_page_prepare mm/page_alloc.c:3328 [inline]
+ free_unref_page+0x19/0x6a0 mm/page_alloc.c:3423
+ __vunmap+0x85d/0xd30 mm/vmalloc.c:2667
+ free_work+0x58/0x70 mm/vmalloc.c:97
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+
+Memory state around the buggy address:
+ ffff888051af7480: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888051af7500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc
+>ffff888051af7580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                                        ^
+ ffff888051af7600: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888051af7680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
 
-vim +535 drivers/rtc/rtc-nct3018y.c
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-   486	
-   487	static int nct3018y_probe(struct i2c_client *client,
-   488				  const struct i2c_device_id *id)
-   489	{
-   490		struct nct3018y *nct3018y;
-   491		int err;
-   492		unsigned char buf;
-   493	
-   494		if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
-   495			dev_err(&client->dev, "%s: ENODEV\n", __func__);
-   496			return -ENODEV;
-   497		}
-   498	
-   499		nct3018y = devm_kzalloc(&client->dev, sizeof(struct nct3018y),
-   500					GFP_KERNEL);
-   501		if (!nct3018y)
-   502			return -ENOMEM;
-   503	
-   504		i2c_set_clientdata(client, nct3018y);
-   505		nct3018y->client = client;
-   506		device_set_wakeup_capable(&client->dev, 1);
-   507	
-   508		err = nct3018y_read_block_data(client, NCT3018Y_REG_CTRL, 1, &buf);
-   509		if (err < 0) {
-   510			dev_err(&client->dev, "%s: read error\n", __func__);
-   511			return err;
-   512		} else if (buf & NCT3018Y_BIT_TWO) {
-   513			dev_dbg(&client->dev, "%s: NCT3018Y_BIT_TWO is :%d\n",
-   514				__func__, buf & NCT3018Y_BIT_TWO);
-   515		}
-   516	
-   517		buf = 0 | NCT3018Y_BIT_TWO;
-   518		err = nct3018y_write_block_data(client, NCT3018Y_REG_CTRL, 1, &buf);
-   519		if (err < 0) {
-   520			dev_err(&client->dev, "%s: write fail, so ReadOnly\n", __func__);
-   521		} else {
-   522			buf = 0;
-   523			err = nct3018y_write_block_data(client, NCT3018Y_REG_ST, 1, &buf);
-   524			if (err < 0) {
-   525				dev_err(&client->dev, "%s: write error\n", __func__);
-   526				return err;
-   527			}
-   528		}
-   529	
-   530		nct3018y->rtc = devm_rtc_allocate_device(&client->dev);
-   531		if (IS_ERR(nct3018y->rtc))
-   532			return PTR_ERR(nct3018y->rtc);
-   533	
-   534		nct3018y->rtc->ops = &nct3018y_rtc_ops;
- > 535		nct3018y->rtc->uie_unsupported = 1;
-   536		nct3018y->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-   537		nct3018y->rtc->range_max = RTC_TIMESTAMP_END_2099;
-   538		nct3018y->rtc->set_start_time = true;
-   539	
-   540		nct3018y->wakeup_host = devm_gpiod_get(&client->dev, "host-wakeup", GPIOD_IN);
-   541		if (IS_ERR(nct3018y->wakeup_host)) {
-   542			err = PTR_ERR(nct3018y->wakeup_host);
-   543			dev_err(&client->dev, "could not get host wakeup gpio: %d", err);
-   544			return err;
-   545		}
-   546		client->irq = gpiod_to_irq(nct3018y->wakeup_host);
-   547	
-   548		dev_dbg(&client->dev, "%s: client->irq:%d\n", __func__, client->irq);
-   549	
-   550		if (client->irq > 0) {
-   551			err = devm_request_threaded_irq(&client->dev, client->irq,
-   552					NULL, nct3018y_irq,
-   553					IRQF_ONESHOT | IRQF_TRIGGER_FALLING,
-   554					nct3018y_driver.driver.name, client);
-   555			if (err) {
-   556				dev_err(&client->dev, "unable to request IRQ %d\n", client->irq);
-   557				return err;
-   558			}
-   559		}
-   560	
- > 561		err = rtc_register_device(nct3018y->rtc);
-   562		if (err)
-   563			return err;
-   564	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

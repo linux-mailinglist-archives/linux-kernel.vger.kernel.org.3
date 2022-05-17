@@ -2,201 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABBA5297E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB485297EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237007AbiEQDXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 23:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
+        id S237938AbiEQDYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 23:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbiEQDXD (ORCPT
+        with ESMTP id S238172AbiEQDYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 23:23:03 -0400
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADC644A3F;
-        Mon, 16 May 2022 20:23:01 -0700 (PDT)
-Received: by mail-vk1-xa35.google.com with SMTP id y27so8445971vkl.8;
-        Mon, 16 May 2022 20:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nEvgnb6e8KbkPHvMqBVVP/uj+xcyJbgepFxDgl/Iwok=;
-        b=p9Uz5g3xzyf5lryie2kbAjeaWgNf3qqdxTAltT5buWzdQ/X+3KizNrYxZYWdRZWNXM
-         ZSsoHsn7SJ5Qnp9AbLU7F1OvCJVW1s7KmXTPc2OiPX5B9fERgBiImQINhmbv2N7WR7Za
-         V2Hh6FBu8W1SGwDOmsHL2MmmfvYUFHJG/cQTXw7y/iR+wCbRdTS32V/V9BAOMVDfqGnf
-         BMMuGyzfBcmheuxL0Ojj0RhMZFZf/ZTAmS0UwkjYWK3+OrVwKt+sFOjhmoB3YQ/NTB97
-         YL4xMS4DqWfxLOjwjzQ6EWbf3oLuGk1rn5l4Vi1IWkvCl3NWw3Z3fAi9bMy8Bg0R8hmq
-         xXoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nEvgnb6e8KbkPHvMqBVVP/uj+xcyJbgepFxDgl/Iwok=;
-        b=nQBYAJgK3erEg1pBOCZ4Y7WDOxngp4cpoTCeIiW8ozNhsgz70PTdgbbQJDqAtnT+ND
-         HF+hZpkRx/RmR3JaJYCyEitmFbmAI8Xvlg/SOjW6y+e2SYe2hYDDal3vga6eRieuUksS
-         05d+6MZhg/ZKWJ3qU69mxsRwdlZMbaRl1dURBWVxVTn+Zy3A/WEnI8n5QJ9T822I0jax
-         6oqDrqEtdeUSrKfNSA+iecZJINDvMhKCalF1KOJNwT79QPBdmc9cVo5CXuNJS0C4lbEv
-         L2JLV0g78tJQfMYb7hgZX5rzYXJOuGKbSmNy99PpsEFs+LtfbgzCruwYBh9apWfefASV
-         8gqA==
-X-Gm-Message-State: AOAM531XpiN0M6yrPCyz4fzbjfBvb4EwtuLWBLxjs2tB/YD89sqzwkYq
-        4YqdVVFzK2JRgnJM0m447Wjf6MwHyko=
-X-Google-Smtp-Source: ABdhPJzl1IsdtVXJz7nlTPX+u2ijkOPUFUHxrBI/kHJdcqYtzHNz0u5QIGYVKwnlnbCCTsEdRtHN8A==
-X-Received: by 2002:a05:6122:154:b0:351:c442:e34e with SMTP id r20-20020a056122015400b00351c442e34emr7641410vko.26.1652757780711;
-        Mon, 16 May 2022 20:23:00 -0700 (PDT)
-Received: from [192.168.1.140] ([65.35.200.237])
-        by smtp.gmail.com with ESMTPSA id 7-20020a670407000000b0032d275e690asm1004148vse.10.2022.05.16.20.22.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 20:23:00 -0700 (PDT)
-Message-ID: <48b43291-b65a-0939-16ee-95b342e46377@gmail.com>
-Date:   Mon, 16 May 2022 23:22:57 -0400
+        Mon, 16 May 2022 23:24:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DE946143
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:24:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A563B80D2C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:24:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 703BDC385AA;
+        Tue, 17 May 2022 03:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652757856;
+        bh=lIb4LTEmMJ+9Fi6aXyTcRQ4qMsUp8+2ufFcwO9rQDyA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XGz3qNfM7GbIeXPDGPabGDbG/5klt0LpGzaUcOW+uGcFBlEcXIkSyxMpzUHMAgURA
+         qJAbmQKwA7pYkpjmudLZ3EDx2L8TYTXfFRYBRN8qgzp0mBAvwHHYibo5LgXfrJI3W5
+         Kx9cQgDIa+bE3UAZlNz5YDoJONmay+Td0/SAl1vrmkpUVuww80ljj8Sysn40NCZ0pg
+         zbf3m53xUU1RlkFt8ZSG471F97BwkBMYJCj0CvlVn0YIjpuyD8qtPJxZzroKAzCYvj
+         10ysxU/8xyq1E66yYRI5AUxT3sKSZu8dweEiKwAyNZTN5kOIXuGx1zmw/RzpLiUKME
+         MEfiIO0C++3mg==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Chao Yu <chao.yu@oppo.com>
+Subject: [PATCH v4] f2fs: separate NOCoW and pinfile semantics
+Date:   Tue, 17 May 2022 11:24:10 +0800
+Message-Id: <20220517032410.3564033-1-chao@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH V2 Create empty OF root 1/1] of: create empty of root
-Content-Language: en-US
-To:     Lizhi Hou <lizhi.hou@xilinx.com>, devicetree@vger.kernel.org,
-        robh@kernel.org
-Cc:     linux-kernel@vger.kernel.org, yilun.xu@intel.com, maxz@xilinx.com,
-        sonal.santan@xilinx.com, yliu@xilinx.com, michal.simek@xilinx.com,
-        stefanos@xilinx.com, trix@redhat.com, mdf@kernel.org,
-        dwmw2@infradead.org, Max Zhen <max.zhen@xilinx.com>
-References: <20220216050056.311496-1-lizhi.hou@xilinx.com>
- <20220216050056.311496-2-lizhi.hou@xilinx.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20220216050056.311496-2-lizhi.hou@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/16/22 23:00, Lizhi Hou wrote:
-> Xilinx Alveo PCIe accelerator cards use flattened device tree to describe
-> describe apertures in its PCIe BARs. Each device tree node represents an
-> aperture and each aperture is an hardware unit which requires a driver.
-> The product detail:
->     https://www.xilinx.com/products/boards-and-kits/alveo.html
-> 
-> Thus a base device tree is required. Then the Alveo card driver can load
-> its flattened device tree and overlay it to the base tree. However device
-> tree does not always exist. To resolve this, add OF_EMPTY_ROOT config.
-> When it is selected and there is not a device tree, create an empty device
-> tree root node.
-> 
+Pinning a file is heavy, because skipping pinned files make GC
+running with heavy load or no effect.
 
-Please run scripts/get_maintainer on your patches to see who to put in
-the distribution list.
+So that this patch proposes to separate nocow and pinfile semantics:
+- NOCoW flag can only be set on regular file.
+- NOCoW file will only trigger IPU at common writeback/flush.
+- NOCow file will do OPU during GC.
 
-I recently stumbled across this patch series and the previous related
-patch series (currently up to
-"[PATCH V3 XRT Alveo Infrastructure 0/8] XRT Alveo driver infrastructure overview")
-when I noticed it in an email archive.
+This flag can satisfying the demand of:
+1) avoiding fragment of file's physical block
+2) userspace doesn't want to pin file's physical address
 
-A similar need of creating an of_root if otherwise empty is being discussed
-in the thread "[PATCH 0/3] add dynamic PCI device of_node creation for overlay"
-at https://lore.kernel.org/r/20220427094502.456111-1-clement.leger@bootlin.com
+After commit 5d539245cb18 ("f2fs: export FS_NOCOW_FL flag to user"),
+Pin_file and NOCoW flags have already been twined closely. e.g.
+once we set pinfile flag in file, nocow flag will be shown; and after
+clearing pinfile flag, nocow flag will disappear.
 
--Frank
+So, in order to keep backward compatibility, let use below semantics:
 
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
-> ---
->  drivers/of/Kconfig         |  5 ++++
->  drivers/of/Makefile        |  1 +
->  drivers/of/of_empty_root.c | 51 ++++++++++++++++++++++++++++++++++++++
->  3 files changed, 57 insertions(+)
->  create mode 100644 drivers/of/of_empty_root.c
-> 
-> diff --git a/drivers/of/Kconfig b/drivers/of/Kconfig
-> index 80b5fd44ab1c..452d2316b47b 100644
-> --- a/drivers/of/Kconfig
-> +++ b/drivers/of/Kconfig
-> @@ -94,4 +94,9 @@ config OF_DMA_DEFAULT_COHERENT
->  	# arches should select this if DMA is coherent by default for OF devices
->  	bool
->  
-> +config OF_EMPTY_ROOT
-> +	# driver which requires at least the empty base device tree to
-> +	# overlay its own device nodes should select this.
-> +	bool
-> +
->  endif # OF
-> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
-> index e0360a44306e..c65364f32935 100644
-> --- a/drivers/of/Makefile
-> +++ b/drivers/of/Makefile
-> @@ -12,6 +12,7 @@ obj-$(CONFIG_OF_RESERVED_MEM) += of_reserved_mem.o
->  obj-$(CONFIG_OF_RESOLVE)  += resolver.o
->  obj-$(CONFIG_OF_OVERLAY) += overlay.o
->  obj-$(CONFIG_OF_NUMA) += of_numa.o
-> +obj-$(CONFIG_OF_EMPTY_ROOT) += of_empty_root.o
->  
->  ifdef CONFIG_KEXEC_FILE
->  ifdef CONFIG_OF_FLATTREE
-> diff --git a/drivers/of/of_empty_root.c b/drivers/of/of_empty_root.c
-> new file mode 100644
-> index 000000000000..5c429c7a27bd
-> --- /dev/null
-> +++ b/drivers/of/of_empty_root.c
-> @@ -0,0 +1,51 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Xilinx, Inc.
-> + */
-> +
-> +#include <linux/of.h>
-> +#include <linux/slab.h>
-> +
-> +#include "of_private.h"
-> +
-> +static int __init of_root_init(void)
-> +{
-> +	struct property *prop = NULL;
-> +	struct device_node *node;
-> +	__be32 *val = NULL;
-> +
-> +	if (of_root)
-> +		return 0;
-> +
-> +	pr_info("Create empty OF root node\n");
-> +	node = kzalloc(sizeof(*node), GFP_KERNEL);
-> +	if (!node)
-> +		return -ENOMEM;
-> +	of_node_init(node);
-> +	node->full_name = "/";
-> +
-> +	prop = kcalloc(2, sizeof(*prop), GFP_KERNEL);
-> +	if (!prop)
-> +		return -ENOMEM;
-> +
-> +	val = kzalloc(sizeof(*val), GFP_KERNEL);
-> +	if (!val)
-> +		return -ENOMEM;
-> +	*val = cpu_to_be32(sizeof(void *) / sizeof(u32));
-> +
-> +	prop->name = "#address-cells";
-> +	prop->value = val;
-> +	prop->length = sizeof(u32);
-> +	of_add_property(node, prop);
-> +	prop++;
-> +	prop->name = "#size-cells";
-> +	prop->value = val;
-> +	prop->length = sizeof(u32);
-> +	of_add_property(node, prop);
-> +	of_root = node;
-> +	for_each_of_allnodes(node)
-> +		__of_attach_node_sysfs(node);
-> +
-> +	return 0;
-> +}
-> +pure_initcall(of_root_init);
+f2fs_ioc_set_pin_file/f2fs_fileattr_set logic:
+		pinfile			nocow
+set		set pinfile | nocow	set nocow
+clear		clear pinfile | nocow	clear nocow
+
+File Behaviors:
+w/ pinfile, w/ nocow:		use pinfile semantics
+w/ pinfile, w/o nocow:		use pinfile semantics
+w/o pinfile, w/ nocow:		use nocow semantics
+w/o pinfile, w/o nocow:		no pinfile or nocow semantics
+
+NOCoW can also be set on directory, and it will have no effect on
+directory, however, new files created in nocow directory will have the
+flag set.
+
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+---
+v4:
+- allow IPU only for NoCowed regular inode.
+ fs/f2fs/data.c |  3 +++
+ fs/f2fs/f2fs.h | 13 +++++++++++--
+ fs/f2fs/file.c | 18 +++++++++++++++++-
+ 3 files changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 54a7a8ad994d..42d95ac6b508 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2498,6 +2498,9 @@ bool f2fs_should_update_inplace(struct inode *inode, struct f2fs_io_info *fio)
+ 	if (f2fs_is_pinned_file(inode))
+ 		return true;
+ 
++	if (S_ISREG(inode->i_mode) && F2FS_I(inode)->i_flags & F2FS_NOCOW_FL)
++		return true;
++
+ 	/* if this is cold file, we should overwrite to avoid fragmentation */
+ 	if (file_is_cold(inode))
+ 		return true;
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 492af5b96de1..5c67736000a7 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -2916,13 +2916,15 @@ static inline void f2fs_change_bit(unsigned int nr, char *addr)
+ #define F2FS_NOCOMP_FL			0x00000400 /* Don't compress */
+ #define F2FS_INDEX_FL			0x00001000 /* hash-indexed directory */
+ #define F2FS_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
++#define F2FS_NOCOW_FL			0x00800000 /* Do not cow file */
+ #define F2FS_PROJINHERIT_FL		0x20000000 /* Create with parents projid */
+ #define F2FS_CASEFOLD_FL		0x40000000 /* Casefolded file */
+ 
+ /* Flags that should be inherited by new inodes from their parent. */
+ #define F2FS_FL_INHERITED (F2FS_SYNC_FL | F2FS_NODUMP_FL | F2FS_NOATIME_FL | \
+ 			   F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+-			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL)
++			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL | \
++			   F2FS_NOCOW_FL)
+ 
+ /* Flags that are appropriate for regular files (all but dir-specific ones). */
+ #define F2FS_REG_FLMASK		(~(F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+@@ -2954,9 +2956,16 @@ static inline void __mark_inode_dirty_flag(struct inode *inode,
+ 		fallthrough;
+ 	case FI_DATA_EXIST:
+ 	case FI_INLINE_DOTS:
+-	case FI_PIN_FILE:
+ 	case FI_COMPRESS_RELEASED:
+ 		f2fs_mark_inode_dirty_sync(inode, true);
++		break;
++	case FI_PIN_FILE:
++		if (set)
++			F2FS_I(inode)->i_flags |= F2FS_NOCOW_FL;
++		else
++			F2FS_I(inode)->i_flags &= ~F2FS_NOCOW_FL;
++		f2fs_mark_inode_dirty_sync(inode, true);
++		break;
+ 	}
+ }
+ 
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 216081ea8c81..9e71ce8601f9 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -1851,6 +1851,20 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
+ 	if (IS_NOQUOTA(inode))
+ 		return -EPERM;
+ 
++	if ((iflags ^ masked_flags) & F2FS_NOCOW_FL) {
++		int ret;
++
++		if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
++			return -EINVAL;
++		if (S_ISREG(inode->i_mode)) {
++			if (f2fs_should_update_outplace(inode, NULL))
++				return -EINVAL;
++			ret = f2fs_convert_inline_inode(inode);
++			if (ret)
++				return ret;
++		}
++	}
++
+ 	if ((iflags ^ masked_flags) & F2FS_CASEFOLD_FL) {
+ 		if (!f2fs_sb_has_casefold(F2FS_I_SB(inode)))
+ 			return -EOPNOTSUPP;
+@@ -1926,6 +1940,7 @@ static const struct {
+ 	{ F2FS_NOCOMP_FL,	FS_NOCOMP_FL },
+ 	{ F2FS_INDEX_FL,	FS_INDEX_FL },
+ 	{ F2FS_DIRSYNC_FL,	FS_DIRSYNC_FL },
++	{ F2FS_NOCOW_FL,	FS_NOCOW_FL },
+ 	{ F2FS_PROJINHERIT_FL,	FS_PROJINHERIT_FL },
+ 	{ F2FS_CASEFOLD_FL,	FS_CASEFOLD_FL },
+ };
+@@ -1957,7 +1972,8 @@ static const struct {
+ 		FS_NOCOMP_FL |		\
+ 		FS_DIRSYNC_FL |		\
+ 		FS_PROJINHERIT_FL |	\
+-		FS_CASEFOLD_FL)
++		FS_CASEFOLD_FL |	\
++		FS_NOCOW_FL)
+ 
+ /* Convert f2fs on-disk i_flags to FS_IOC_{GET,SET}FLAGS flags */
+ static inline u32 f2fs_iflags_to_fsflags(u32 iflags)
+-- 
+2.25.1
 

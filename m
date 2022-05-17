@@ -2,194 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25C8529DB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3C7529DB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244767AbiEQJQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50552 "EHLO
+        id S244697AbiEQJQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244438AbiEQJOw (ORCPT
+        with ESMTP id S244446AbiEQJPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:14:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6106722B37
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:14:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 291531042;
-        Tue, 17 May 2022 02:14:51 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09B1A3F73D;
-        Tue, 17 May 2022 02:14:49 -0700 (PDT)
-Message-ID: <beda044e-0b91-4359-c6bf-5e34c285fc5c@arm.com>
-Date:   Tue, 17 May 2022 11:14:44 +0200
+        Tue, 17 May 2022 05:15:00 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31927366AC;
+        Tue, 17 May 2022 02:14:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652778898; x=1684314898;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=zGMNwgf7AhJx+C2tSJI6ZcLVK4iVnN8x7Ixj+NE3fdg=;
+  b=dk6pEZW1cu9w2LFX3VK6fRlwys9MpXRTa7EDahTg+iEmSUy+Ym6qmKPO
+   4a6MzUiTQwvqcGrcsIgxtadRRPVLeVSqk2aenX+iUU7+5XKBv9n2YnSrj
+   41zJQQ4LklfZGFyxzLcLeCSVo2ap+o684FVlBFsZOCkeT02CCBoJ6GXo7
+   A=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 17 May 2022 02:14:57 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 02:14:57 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 17 May 2022 02:14:56 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 17 May
+ 2022 02:14:53 -0700
+Subject: Re: [PATCH v2] mailbox: qcom-ipcc: Log the pending interrupt during
+ resume
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     <bjorn.andersson@linaro.org>, <jassisinghbrar@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <agross@kernel.org>, Prasad Sodagudi <quic_psodagud@quicinc.com>
+References: <1652251404-30562-1-git-send-email-quic_sibis@quicinc.com>
+ <20220512074312.GA35848@thinkpad>
+ <5b8aa653-5af8-a54f-b7bd-4d758eac9019@quicinc.com>
+ <20220512095952.GB35848@thinkpad>
+ <76a15747-b06e-e869-078f-ac4ad2e4a5ec@quicinc.com>
+ <20220516132737.GA5492@thinkpad>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <878688ab-9ee9-b353-d091-9cad7d725ade@quicinc.com>
+Date:   Tue, 17 May 2022 14:44:44 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC PATCH] arch_topology: Use llc_id instead of package_id
+In-Reply-To: <20220516132737.GA5492@thinkpad>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Qing Wang <wangqing@vivo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        linux-kernel@vger.kernel.org
-References: <20220513083400.343706-1-dietmar.eggemann@arm.com>
- <20220513090330.z25fwthekn4rjkwq@bogus>
- <afafbb0c-5279-bee8-1ef4-434733e2a552@arm.com>
- <20220513110312.wy6g5avs7ngkmhfu@bogus>
- <634a4b8c-84d2-51a9-ef54-33b81683c849@arm.com>
- <20220516103524.35swlxp2367baxx6@bogus>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20220516103524.35swlxp2367baxx6@bogus>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2022 12:35, Sudeep Holla wrote:
-> On Fri, May 13, 2022 at 02:04:29PM +0200, Dietmar Eggemann wrote:
->> On 13/05/2022 13:03, Sudeep Holla wrote:
->>> On Fri, May 13, 2022 at 12:42:00PM +0200, Dietmar Eggemann wrote:
->>>> On 13/05/2022 11:03, Sudeep Holla wrote:
->>>>> On Fri, May 13, 2022 at 10:34:00AM +0200, Dietmar Eggemann wrote:
 
-[...]
 
->> cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
->> CLS
->> MC
->> ... I skip the NUMA levels
+On 5/16/22 6:57 PM, Manivannan Sadhasivam wrote:
+> On Thu, May 12, 2022 at 04:49:30PM +0530, Sibi Sankar wrote:
 >>
->> # cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd] | head -5
->> cpu0 0
->> domain0 00000000,00000000,0000000f <--  4 CPUs <-- cluster_id
->> domain1 00000000,00000000,00ffffff <-- 24 CPUs
 >>
->> If you use cluster_id for 1. level cluster then you cover MC's 24 CPUs
+>> On 5/12/22 3:29 PM, Manivannan Sadhasivam wrote:
+>>> On Thu, May 12, 2022 at 03:08:43PM +0530, Sibi Sankar wrote:
+>>>> Hey Mani,
+>>>>
+>>>> Thanks for taking time to review the patch.
+>>>>
+>>>> On 5/12/22 1:13 PM, Manivannan Sadhasivam wrote:
+>>>>> On Wed, May 11, 2022 at 12:13:24PM +0530, Sibi Sankar wrote:
+>>>>>> From: Prasad Sodagudi <quic_psodagud@quicinc.com>
+>>>>>>
+>>>>>> Enable logging of the pending interrupt that triggered device wakeup. This
+>>>>>> logging information helps to debug IRQs that cause periodic device wakeups
+>>>>>> and prints the detailed information of pending IPCC interrupts instead of
+>>>>>> the generic "Resume caused by IRQ 17, ipcc".
+>>>>>>
+>>>>>> Scenario: Device wakeup caused by Modem crash
+>>>>>> Logs:
+>>>>>> qcom-ipcc mailbox: virq: 182 triggered client-id: 2; signal-id: 2
+>>>>>>
+>>>>>>    From the IPCC bindings it can further understood that the client here is
+>>>>>> IPCC_CLIENT_MPSS and the signal was IPCC_MPROC_SIGNAL_SMP2P.
+>>>>>>
+>>>>>> Signed-off-by: Prasad Sodagudi <quic_psodagud@quicinc.com>
+>>>>>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>>>>>> ---
+>>>>>>
+>>>>>> V2:
+>>>>>>     * Fix build error when ipcc is a module [Kernel Test Bot]
+>>>>>>
+>>>>>>     drivers/mailbox/qcom-ipcc.c | 27 +++++++++++++++++++++++++++
+>>>>>>     1 file changed, 27 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/mailbox/qcom-ipcc.c b/drivers/mailbox/qcom-ipcc.c
+>>>>>> index c5d963222014..21c071ec119c 100644
+>>>>>> --- a/drivers/mailbox/qcom-ipcc.c
+>>>>>> +++ b/drivers/mailbox/qcom-ipcc.c
+>>>>>> @@ -254,6 +254,28 @@ static int qcom_ipcc_setup_mbox(struct qcom_ipcc *ipcc,
+>>>>>>     	return devm_mbox_controller_register(dev, mbox);
+>>>>>>     }
+>>>>>> +#ifdef CONFIG_PM_SLEEP
+>>>>>
+>>>>> You don't need this guard anymore. Please see below.
+>>>>
+>>>> ack
+>>>>
+>>>>>
+>>>>>> +static int qcom_ipcc_pm_resume(struct device *dev)
+>>>>>> +{
+>>>>>> +	struct qcom_ipcc *ipcc = dev_get_drvdata(dev);
+>>>>>> +	u32 hwirq;
+>>>>>> +	int virq;
+>>>>>> +
+>>>>>> +	hwirq = readl(ipcc->base + IPCC_REG_RECV_ID);
+>>>>>> +	if (hwirq == IPCC_NO_PENDING_IRQ)
+>>>>>> +		return 0;
+>>>>>> +
+>>>>>> +	virq = irq_find_mapping(ipcc->irq_domain, hwirq);
+>>>>>> +
+>>>>>> +	dev_info(dev, "virq: %d triggered client-id: %ld; signal-id: %ld\n", virq,
+>>>>>> +		 FIELD_GET(IPCC_CLIENT_ID_MASK, hwirq), FIELD_GET(IPCC_SIGNAL_ID_MASK, hwirq));
+>>>>>> +
+>>>>>
+>>>>> Does this really need to be dev_info? This looks like a dev_dbg() material to
+>>>>> me.
+>>>>
+>>>> The whole point of the log is to catch sporadic issues like random
+>>>> wakeups caused by remoteprocs through ipcc. We would just end up with
+>>>> a single line identifying the client id during resume if ipcc had indeed
+>>>> caused the wakeup else it wouldn't print anything.
+>>>>
+>>>
+>>> Right but that information is only required for debugging the periodic wakeups.
+>>> And that's not going to be useful for an end user.
+>>
+>> I would consider this an extension to "Resume caused by IRQ xx, xxxx"
 > 
-> OK, the way I am looking at this from CPU topology perspective seem to be
-> different from what you are expecting here w.r.t sched_domains.
+> May I know from where it is coming? I couldn't grep it.
+
+My bad I happened to have an out of tree patch in there. And it happens 
+that all the logging done related to wakeup are under debug so I'll 
+convert mine as well in v3. Thanks for the review!
+
+-Sibi
+
 > 
-> IMO, these cpumasks on its own must represent real CPU topology and how it
-> is used via cpu_*_mask by the scheduler domains is different.
-
-I'm afraid that in case we want to change the mapping of scheduler
-(topology) flags (like SD_SHARE_PKG_RESOURCES) via `*_flags()` of
-default_topology[] we would have to consider all ACPI corner cases (see
-cpu_coregroup_mask()) as well.
-
-See (1) further down.
-
-[...]
-
-> I see on Juno with SCHED_CLUSTER and cluster masks set, I see CLS and MC
-> domains.
-
-Right but that's not really correct from the scheduler's POV.
-
-Juno has LLC on cpumasks [0,3-5] and [1-2], not on [0-5]. So the most
-important information is the highest Sched Domain with the
-SD_SHARE_PKG_RESOURCES flag. This is the MC layer (cpu_core_flags() in
-default_topology[]). So the scheduler would think that [0-5] are sharing
-LLC.
-
-You have LLC at:
-
-cat /sys/devices/system/cpu/cpu0/cache/index2/shared_cpu_list
-                                       ^^^^^^
-0,3-5
-
-but the scheduler sees the highest SD_SHARE_PKG_RESOURCES on MC:
-
-cat /sys/kernel/debug/sched/domains/cpu0/domain1/flags
-                                         ^^^^^^^
-... SD_SHARE_PKG_RESOURCES ...
-
-[...]
-
->> For one level (MC) yes, but not for 2 (MC and CLS). And cluster_id was
->> introduces for the 2. level.
+>> print that we get to identify the wake up source. That's the reasoning
+>> behind marking it as dev_info (being able to nail down random wakeups is
+>> just an added advantage). That said I'll re-spin it with dbg if that's
+>> the consensus.
 >>
 > 
-> That sounds wrong and not what ACPI PPTT code says. My series just aligns
-> with what is done with ACPI PPTT IIUC. I need to check that again if my
-> understand differs from what is being done. But the example of Kunpeng920
-> aligns with my understanding.
-
-(1) IMHO, as long as we don't consider cache (llc) information in DT we
-can't have the same coverage as ACPI.
-
-Let's take an ACPI !CONFIG_NUMA Kunpeng920 as an example.
-
-# cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
-CLS
-MC
-DIE
-
-# cat /sys/kernel/debug/sched/domains/cpu0/domain*/flags
-SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE
-  SD_SHARE_PKG_RESOURCES SD_PREFER_SIBLING
-  ^^^^^^^^^^^^^^^^^^^^^^
-SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE
-  SD_SHARE_PKG_RESOURCES SD_PREFER_SIBLING
-  ^^^^^^^^^^^^^^^^^^^^^^
-SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE
-  SD_PREFER_SIBLING
-
-cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd] | head -4
-cpu0 0
-domain0 00000000,00000000,0000000f
-domain1 00000000,00000000,00ffffff <-- (2)
-domain2 ffffffff,ffffffff,ffffffff
-
-cat /sys/devices/system/cpu/cpu0/topology/thread_siblings_list
-0
-cat /sys/devices/system/cpu/cpu0/topology/core_cpus_list
-0
-cat /sys/devices/system/cpu/cpu0/topology/cluster_cpus_list
-0-3
-cat /sys/devices/system/cpu/cpu0/topology/core_siblings_list
-0-47
-cat /sys/devices/system/cpu/cpu0/topology/package_cpus_list
-0-47
-
-The MC mask 00ffffff is not derived from any topology mask but from the
-llc (index3) mask:
-
-cat /sys/devices/system/cpu/cpu0/cache/index3/shared_cpu_list
-                                       ^^^^^^
-0-23 <-- (2)
-
-
-Coming back to the original request (the support of Armv9 L2 complexes
-in Android) from Qing on systems like QC SM8450:
-
-      .---------------.
-CPU   |0 1 2 3 4 5 6 7|
-      +---------------+
-uarch |l l l l m m m b| (so called tri-gear: little, medium, big)
-      +---------------+
-  L2  |   |   | | | | |
-      +---------------+
-  L3  |<--         -->|
-      +---------------+
-      |<-- cluster -->|
-      +---------------+
-      |<--   DSU   -->|
-      '---------------'
-
-This still wouldn't be possible. We know that Phantom Domain (grouping
-after uarch) is not supported in mainline but heavily used in Android
-(legacy deps).
-
-If we say we only support L2 sharing (asymmetric here since only CPU0-3
-have it !!!) and we don't support Phantom then your approach will work
-for such systems.
+> I'll leave it up to Jassi to decide. But this patch looks good to me otherwise.
+> 
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> 
+> Thanks,
+> Mani
+> 
+>>>
+>>> Thanks,
+>>> Mani
+>>>
+>>>> -Sibi
+>>>>>
+>>>>>> +	return 0;
+>>>>>> +}
+>>>>>> +#else
+>>>>>> +#define qcom_ipcc_pm_resume NULL
+>>>>>> +#endif
+>>>>>> +
+>>>>>>     static int qcom_ipcc_probe(struct platform_device *pdev)
+>>>>>>     {
+>>>>>>     	struct qcom_ipcc *ipcc;
+>>>>>> @@ -324,6 +346,10 @@ static const struct of_device_id qcom_ipcc_of_match[] = {
+>>>>>>     };
+>>>>>>     MODULE_DEVICE_TABLE(of, qcom_ipcc_of_match);
+>>>>>> +static const struct dev_pm_ops qcom_ipcc_dev_pm_ops = {
+>>>>>> +	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, qcom_ipcc_pm_resume)
+>>>>>> +};
+>>>>>> +
+>>>>>>     static struct platform_driver qcom_ipcc_driver = {
+>>>>>>     	.probe = qcom_ipcc_probe,
+>>>>>>     	.remove = qcom_ipcc_remove,
+>>>>>> @@ -331,6 +357,7 @@ static struct platform_driver qcom_ipcc_driver = {
+>>>>>>     		.name = "qcom-ipcc",
+>>>>>>     		.of_match_table = qcom_ipcc_of_match,
+>>>>>>     		.suppress_bind_attrs = true,
+>>>>>> +		.pm = &qcom_ipcc_dev_pm_ops,
+>>>>>
+>>>>> You can use the new pm_sleep_ptr() macro to avoid the PM_SLEEP guard.
+>>>>>
+>>>>> 		.pm = pm_sleep_ptr(&qcom_ipcc_dev_pm_ops),
+>>>>
+>>>> ack
+>>>>
+>>>>>
+>>>>> Thanks,
+>>>>> Mani
+>>>>>
+>>>>>>     	},
+>>>>>>     };
+>>>>>> -- 
+>>>>>> 2.7.4
+>>>>>>
+>>>>>
+>>>
+> 

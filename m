@@ -2,252 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651A2529E4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E64D529E4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240486AbiEQJmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S236272AbiEQJnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245022AbiEQJlu (ORCPT
+        with ESMTP id S245256AbiEQJnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:41:50 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC683EBAA;
-        Tue, 17 May 2022 02:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652780509; x=1684316509;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=krtV1GtbgBf2+Y5BPQUMRlBNrrlL71jREpmnMaQ5/fg=;
-  b=iJpyLrM9mYAc90E3f2xiQeiChp+f+RUo/+tUX1AO/56YnFSqS4Uk8xW+
-   3im3PxJ1iX3KufLa4/qQUiHhAuq+M3u3ROWqou/Q/mnyC/+Ybepeuul+v
-   zSwWmmHT9/KdF8xp9NJr5f31Y/uozSFK/FC76hu3OY/bhaH8VZI3kUXx3
-   8sbmZ6W5zM9Dx4GiMiiGd5fqpU3uI+KdnQZzSX1FZWQzi7B2d9eBUQJDL
-   4GJZyy41G9soLctNkZzcnxZW2tSEYsmQKtDGlsyjRKG72peLQ/kJVVGL/
-   M9DxMqptP/wH1MfF807r64ofAvFo1oFcGUd8uk9LVhxUHHaFCHZ+e9ViX
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="268708890"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="268708890"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 02:41:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="713778342"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 17 May 2022 02:41:42 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 May 2022 12:41:41 +0300
-Date:   Tue, 17 May 2022 12:41:41 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] drm: Add HPD state to
- drm_connector_oob_hotplug_event()
-Message-ID: <YoNt1edoLJpo50LJ@kuha.fi.intel.com>
-References: <20220502165316.4167199-1-bjorn.andersson@linaro.org>
- <20220502165316.4167199-3-bjorn.andersson@linaro.org>
+        Tue, 17 May 2022 05:43:09 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57264666E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:42:10 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id en5so7524918edb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 02:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=siNpk3iy/2AiI/CebguH+obcJ5iL3RxgB8kelVAB/A0=;
+        b=flcjJKUCXVDcDKfZLAcf2dTd/cE3yhkSrMqpLMEF4zqyodwEXUgqoRvuiKCZ+Dbdou
+         7QJVvCa6zEiBzarwRA+ZZzLhQ8RDLmCnqWXyL+r9hGEUstMGB6k6LX4l6/cemQnxgNf/
+         cVPJIXcyu814uTKjvXTRGR+kI4MOoOSWZk+PfZ2LRucLvoAYm1LakeYeJ1lSyvSkFeR4
+         6EIJUdmQicJInp5VQZF8kX7XQBRg2InnYnVTarcPFAv3/H03PE+uqmZLPgSIaUwYS5OX
+         7mYHqZm71VMB9ta16A87RyzplT+snNiJHs07Yc7INs+yu2Gv+Aaq/Y8GuDlNXbCR9U0l
+         S1mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=siNpk3iy/2AiI/CebguH+obcJ5iL3RxgB8kelVAB/A0=;
+        b=TT8CJoyBRgwq2FlK1qWZZVlFIuNoJjnE8DiHCc03NZ5rGHRYGi+jA62L3ltcfxkF0G
+         WuY6OuNUCifYmop8gkWURphYjbJOPEq2EbmV5mipPTFOv65QTkbBDtnuy9Lu1cTD2mHl
+         77LyiHvJf9UcHzDJ+Fuu0fqQ78q5Qp2vdUqtiP+DPsJCVhkklhyeZnguNiLafrJs/RrP
+         1YuPUQDKSpvpB+D1qup7ddbwIB+DnPwXhE7nUS93SUayky1/6rWG44DQBDpR1xrMVQM2
+         2MGg3xnLEty4NAMMKRuDI1QIhPrtV5HoP9odKlwuuiczpik5UuFD3hr+3Ky8lXLa6ctS
+         23zQ==
+X-Gm-Message-State: AOAM5314zFVK4dxE2+29kSAZBkMTL98FKGnU1Gx6duCo16d/rknLbSV2
+        qYJ74w+r5t3TA3ip9W05+lP9vxi79T4Z43gD3/XTZw==
+X-Google-Smtp-Source: ABdhPJyQwTl6/5xSRooPjamNgZDctgSI/lL5Ultsn4da+PPMTic/fwusW8sjtz1w8bZjOtUGY7FX64a+XwYtJqlE908=
+X-Received: by 2002:a05:6402:509:b0:42a:b6c9:eac with SMTP id
+ m9-20020a056402050900b0042ab6c90eacmr7750279edv.225.1652780527711; Tue, 17
+ May 2022 02:42:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220502165316.4167199-3-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220323034405.976643-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20220323034405.976643-1-peng.fan@oss.nxp.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Tue, 17 May 2022 10:41:56 +0100
+Message-ID: <CANLsYkx089h16omSwAuteQz4RX9BMgT4_gWg9OqggqXk6m2-rw@mail.gmail.com>
+Subject: Re: [PATCH V4 0/2] remoteproc: support self recovery
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     bjorn.andersson@linaro.org, arnaud.pouliquen@foss.st.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peng.fan@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 02, 2022 at 09:53:13AM -0700, Bjorn Andersson wrote:
-> In some implementations, such as the Qualcomm platforms, the display
-> driver has no way to query the current HPD state and as such it's
-> impossible to distinguish between disconnect and attention events.
-> 
-> Add a parameter to drm_connector_oob_hotplug_event() to pass the HPD
-> state.
-> 
-> Also push the test for unchanged state in the displayport altmode driver
-> into the i915 driver, to allow other drivers to act upon each update.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+On Wed, 23 Mar 2022 at 03:42, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> V4:
+>   Based on Bjorn's comments on V2-2
+>   Move the rproc_has_feature/rproc_set_feature to remoteproc_internal.h and
+>  Keep rproc_features still in remoteproc.h, because we use
+>  RPROC_MAX_FEATURES to declare bitmap.
+>   Update commit log for patch 2/2, and add comments
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I have received your patches but there is a significant backlog to go
+through before I can take a look at them.
 
-> ---
-> 
-> Changes since v3:
-> - Transition to drm_connector_status instead of custom hpd_state 
-> 
->  drivers/gpu/drm/drm_connector.c          |  6 ++++--
->  drivers/gpu/drm/i915/display/intel_dp.c  | 17 ++++++++++++++---
->  drivers/gpu/drm/i915/i915_drv.h          |  3 +++
->  drivers/usb/typec/altmodes/displayport.c | 10 +++-------
->  include/drm/drm_connector.h              |  6 ++++--
->  5 files changed, 28 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> index 1c48d162c77e..e86c69f0640f 100644
-> --- a/drivers/gpu/drm/drm_connector.c
-> +++ b/drivers/gpu/drm/drm_connector.c
-> @@ -2794,6 +2794,7 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->  /**
->   * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
->   * @connector_fwnode: fwnode_handle to report the event on
-> + * @status: hot plug detect logical state
->   *
->   * On some hardware a hotplug event notification may come from outside the display
->   * driver / device. An example of this is some USB Type-C setups where the hardware
-> @@ -2803,7 +2804,8 @@ struct drm_connector *drm_connector_find_by_fwnode(struct fwnode_handle *fwnode)
->   * This function can be used to report these out-of-band events after obtaining
->   * a drm_connector reference through calling drm_connector_find_by_fwnode().
->   */
-> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
-> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> +				     enum drm_connector_status status)
->  {
->  	struct drm_connector *connector;
->  
-> @@ -2812,7 +2814,7 @@ void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
->  		return;
->  
->  	if (connector->funcs->oob_hotplug_event)
-> -		connector->funcs->oob_hotplug_event(connector);
-> +		connector->funcs->oob_hotplug_event(connector, status);
->  
->  	drm_connector_put(connector);
->  }
-> diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
-> index e4a79c11fd25..56cc023f7bbd 100644
-> --- a/drivers/gpu/drm/i915/display/intel_dp.c
-> +++ b/drivers/gpu/drm/i915/display/intel_dp.c
-> @@ -4951,15 +4951,26 @@ static int intel_dp_connector_atomic_check(struct drm_connector *conn,
->  	return intel_modeset_synced_crtcs(state, conn);
->  }
->  
-> -static void intel_dp_oob_hotplug_event(struct drm_connector *connector)
-> +static void intel_dp_oob_hotplug_event(struct drm_connector *connector,
-> +				       enum drm_connector_status hpd_state)
->  {
->  	struct intel_encoder *encoder = intel_attached_encoder(to_intel_connector(connector));
->  	struct drm_i915_private *i915 = to_i915(connector->dev);
-> +	bool hpd_high = hpd_state == connector_status_connected;
-> +	unsigned int hpd_pin = encoder->hpd_pin;
-> +	bool need_work = false;
->  
->  	spin_lock_irq(&i915->irq_lock);
-> -	i915->hotplug.event_bits |= BIT(encoder->hpd_pin);
-> +	if (hpd_high != test_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state)) {
-> +		i915->hotplug.event_bits |= BIT(hpd_pin);
-> +
-> +		__assign_bit(hpd_pin, &i915->hotplug.oob_hotplug_last_state, hpd_high);
-> +		need_work = true;
-> +	}
->  	spin_unlock_irq(&i915->irq_lock);
-> -	queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
-> +
-> +	if (need_work)
-> +		queue_delayed_work(system_wq, &i915->hotplug.hotplug_work, 0);
->  }
->  
->  static const struct drm_connector_funcs intel_dp_connector_funcs = {
-> diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-> index 24111bf42ce0..96c088bb5522 100644
-> --- a/drivers/gpu/drm/i915/i915_drv.h
-> +++ b/drivers/gpu/drm/i915/i915_drv.h
-> @@ -135,6 +135,9 @@ struct i915_hotplug {
->  	/* Whether or not to count short HPD IRQs in HPD storms */
->  	u8 hpd_short_storm_enabled;
->  
-> +	/* Last state reported by oob_hotplug_event for each encoder */
-> +	unsigned long oob_hotplug_last_state;
-> +
->  	/*
->  	 * if we get a HPD irq from DP and a HPD irq from non-DP
->  	 * the non-DP HPD could block the workqueue on a mode config
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index c1d8c23baa39..9360ca177c7d 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -59,7 +59,6 @@ struct dp_altmode {
->  	struct typec_displayport_data data;
->  
->  	enum dp_state state;
-> -	bool hpd;
->  
->  	struct mutex lock; /* device lock */
->  	struct work_struct work;
-> @@ -143,10 +142,8 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->  		if (!ret)
->  			dp->state = DP_STATE_CONFIGURE;
->  	} else {
-> -		if (dp->hpd != hpd) {
-> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> -			dp->hpd = hpd;
-> -		}
-> +		drm_connector_oob_hotplug_event(dp->connector_fwnode,
-> +						hpd ? connector_status_connected : connector_status_disconnected);
->  	}
->  
->  	return ret;
-> @@ -573,8 +570,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
->  	cancel_work_sync(&dp->work);
->  
->  	if (dp->connector_fwnode) {
-> -		if (dp->hpd)
-> -			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> +		drm_connector_oob_hotplug_event(dp->connector_fwnode, connector_status_disconnected);
->  
->  		fwnode_handle_put(dp->connector_fwnode);
->  	}
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index 3ac4bf87f257..886aa1861ed9 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -1141,7 +1141,8 @@ struct drm_connector_funcs {
->  	 * This will get called when a hotplug-event for a drm-connector
->  	 * has been received from a source outside the display driver / device.
->  	 */
-> -	void (*oob_hotplug_event)(struct drm_connector *connector);
-> +	void (*oob_hotplug_event)(struct drm_connector *connector,
-> +				  enum drm_connector_status status);
->  
->  	/**
->  	 * @debugfs_init:
-> @@ -1749,7 +1750,8 @@ drm_connector_is_unregistered(struct drm_connector *connector)
->  		DRM_CONNECTOR_UNREGISTERED;
->  }
->  
-> -void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode);
-> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> +				     enum drm_connector_status status);
->  const char *drm_get_connector_type_name(unsigned int connector_type);
->  const char *drm_get_connector_status_name(enum drm_connector_status status);
->  const char *drm_get_subpixel_order_name(enum subpixel_order order);
-> -- 
-> 2.35.1
+Thanks,
+Mathieu
 
-thanks,
-
--- 
-heikki
+>
+> V3:
+>  Resend the wrong labeled patchset
+>  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=621311
+>
+>  Write a cover-letter
+>  To i.MX8QM/QXP, they have a M4 core self-recovery capability without
+>  Linux loading firmware. The self recovery is done by
+>  SCU(System Control Unit). Current remoteproc framework only support Linux
+>  help recovery remote processor(stop, loading firmware, start). This
+>  patchset is support remote processor self recovery(attach recovery).
+>
+>  In order to avoid introducing a new variable(bool support_self_recovery),
+>  patch 1 introduce a new function, rproc_has_feature to make code easy to
+>  extend, cleaner, such as we could move "bool has_iommu" to
+>  rproc_has_feature(rproc, RPROC_FEAT_IOMMU).
+>
+>  Patch 2 is introduce a new function rproc_attach_recovery for
+>  self recovery, the original logic move to rproc_firmware_recovery meaning
+>  needs linux to help recovery.
+>
+>  V2-version 2:
+>  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=621311
+>  Introduce rproc_has_feature
+>
+>  V2-version 1:
+>  https://patchwork.kernel.org/project/linux-remoteproc/patch/20220126085120.3397450-1-peng.fan@oss.nxp.com/
+>  Nothing change in V2.
+>  Only move this patch out from
+>  https://patchwork.kernel.org/project/linux-remoteproc/list/?series=604364
+>
+>
+>
+> Peng Fan (2):
+>   remoteproc: introduce rproc features
+>   remoteproc: support attach recovery after rproc crash
+>
+>  drivers/remoteproc/remoteproc_core.c     | 67 +++++++++++++++++-------
+>  drivers/remoteproc/remoteproc_internal.h | 10 ++++
+>  include/linux/remoteproc.h               |  7 +++
+>  3 files changed, 65 insertions(+), 19 deletions(-)
+>
+> --
+> 2.25.1
+>

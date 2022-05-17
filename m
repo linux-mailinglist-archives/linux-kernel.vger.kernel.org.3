@@ -2,46 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0832B529AD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0771D529ADA
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236176AbiEQHcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S241259AbiEQHcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiEQHcp (ORCPT
+        with ESMTP id S229904AbiEQHcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:32:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00416186DC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:32:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D55460B49
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A38C34100;
-        Tue, 17 May 2022 07:32:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652772762;
-        bh=oYBMRWypwUlY+I18dy7jJamOgc3MRE83oGpSjY67/Pc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1hSa10/16k78Z+PxemJ+EjyDgvmoRwDlDW7/zPt2BNrO5KGxfEWRgBwcjiwgq+GEr
-         +tQWvIplSMKfCT7nRBmH3SqDHhbePoNkxzeYjAwVRuv+Y1bFlwmCIoH6HrIT04+EO+
-         gLsqKEcEFkYZT/kQxMeLPSd2r22i4Jx6h7A6K6Zc=
-Date:   Tue, 17 May 2022 09:32:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Guixin Liu <kanie@linux.alibaba.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] uio: Replace mutex info_lock with percpu_ref
-Message-ID: <YoNPlgoUIzduNXih@kroah.com>
-References: <1652161831-77791-1-git-send-email-kanie@linux.alibaba.com>
+        Tue, 17 May 2022 03:32:46 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294F7222B4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:32:45 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id c10so83686edr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6+PM+IzbMhfXslyjFiVRohLtTwAYLD/wNY5LYHLjz2E=;
+        b=kcPFtNO6HjpPS2YFgXfW1xd43vq158WrRQFhegs5i8ItjE6arwKhjtBg2Q+OQf8rJ5
+         dfhJOyns7c3cx/mvCmMOdKWWmDz4ShVB+UGbOVHkRKOUQ1TtmcSHquKqkYt7E0iZ1HMQ
+         6CLzqPnnGMWOkj3gkhcTfiyWw6RBGpDNlpdnLpkIpBZ7wOpqbCA5hSU5I6UBMg+Erv9P
+         C15CIzqCLjyWwmAXjLhTSmAf79X/g+BjXSq7wuYXfo569wSPkEi5VIH5BX1KWUngjD5r
+         GE2ysgs5aBZp6g61OHqYuy9Ztl9e4I3aRhPZacsJhx38hKB8elWX5ptnhxIGMquaLSma
+         ogaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6+PM+IzbMhfXslyjFiVRohLtTwAYLD/wNY5LYHLjz2E=;
+        b=PKdyoTps4qzKjixYQE1eF6Ff8b/nEVeYJiAQPvXvnCGp3UrMDg7zTSx6JthW7/F+rF
+         f3hLAKZOAAUlKMh/VebcJN/0tklTR5apqbfpns5WLIV26ljQPIUQjSQ40LvQTrDWmuTr
+         zel1A6KPwm8GU2FP642NRwpTJWaPGP47OdovXMdegWlD2TjYxFiEAfoRapbTc2M9leP/
+         /74lMRj0e5AzO4BMn2vUl3DFXIlmwGkitKfDAT+EU5Q6BrlMUkwhW5z1uyl/05ezpzHh
+         4s1g5vOoV5WeAtUk6Ioyip/lkkTveszMsoRPhRNnFmzAibAtA4s8QwmGCvWSroyDsGwo
+         Dh7Q==
+X-Gm-Message-State: AOAM533QozwBb1j/hadd1oQvs50aLDAeP8WsVI7y9DLHny7Wqd2D+1La
+        K0Sj+SF5gj869rMKOxUzvOOF0g==
+X-Google-Smtp-Source: ABdhPJxYChotr5WqwFSmgPy49KOJnMiwVkU4JDEcWzo3NznHVFYDP8xEpw0QRHtt/Q1eDLjDqqYaAQ==
+X-Received: by 2002:a05:6402:2948:b0:42a:ae0c:2f26 with SMTP id ed8-20020a056402294800b0042aae0c2f26mr10624192edb.425.1652772763727;
+        Tue, 17 May 2022 00:32:43 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id ci18-20020a170907267200b006f3ef214e6dsm672543ejc.211.2022.05.17.00.32.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 00:32:43 -0700 (PDT)
+Message-ID: <94cceaf9-57ab-e7e7-9cc3-627013467768@linaro.org>
+Date:   Tue, 17 May 2022 09:32:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652161831-77791-1-git-send-email-kanie@linux.alibaba.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/3] dt-bindings: display: simple: add support for Samsung
+ LTL101AL01
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_J=c3=bccker?= <martin.juecker@gmail.com>,
+        linux-samsung-soc@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+References: <20220516193709.10037-1-martin.juecker@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220516193709.10037-1-martin.juecker@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,77 +83,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 01:50:31PM +0800, Guixin Liu wrote:
-> If the underlying driver works in parallel, the mutex info_lock in uio 
-> will force driver to work sequentially, so that become performance 
-> bottleneck. Lets replace it with percpu_ref for better performance. 
+On 16/05/2022 21:37, Martin Jücker wrote:
+> Add the Samsung LTL101AL01 WXGA LCD panel to the list.
 > 
-> Use tcm_loop and tcmu(backstore is file, and I did some work to make tcmu
-> work in parallel at uio_write() path) to evaluate performance,
-> fio job: fio -filename=/dev/sdb  -direct=1 -size=2G -name=1 -thread
-> -runtime=60 -time_based  -rw=randread -numjobs=16 -iodepth=16 -bs=128k
-> 
-> Without this patch:
-> 	READ: bw=2828MiB/s (2965MB/s), 176MiB/s-177MiB/s (185MB/s-186MB/s), 
-> io=166GiB (178GB), run=60000-60001msec
-> 
-> With this patch:
-> 	READ: bw=3382MiB/s (3546MB/s), 211MiB/s-212MiB/s (221MB/s-222MB/s), 
-> io=198GiB (213GB), run=60001-60001msec
-> 
-> Reviewed-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-> Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
-
-Why is UIO being used for a block device?  Why not use a real block
-driver instead that can properly handle the locking issues involved
-here?
-
-
-
+> Signed-off-by: Martin Jücker <martin.juecker@gmail.com>
 > ---
->  drivers/uio/uio.c          | 95 ++++++++++++++++++++++++++++++++++------------
->  include/linux/uio_driver.h |  5 ++-
->  2 files changed, 75 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/uio/uio.c b/drivers/uio/uio.c
-> index 43afbb7..72c16ba 100644
-> --- a/drivers/uio/uio.c
-> +++ b/drivers/uio/uio.c
-> @@ -24,6 +24,8 @@
->  #include <linux/kobject.h>
->  #include <linux/cdev.h>
->  #include <linux/uio_driver.h>
-> +#include <linux/completion.h>
-> +#include <linux/percpu-refcount.h>
->  
->  #define UIO_MAX_DEVICES		(1U << MINORBITS)
->  
-> @@ -218,7 +220,9 @@ static ssize_t name_show(struct device *dev,
->  	struct uio_device *idev = dev_get_drvdata(dev);
->  	int ret;
->  
-> -	mutex_lock(&idev->info_lock);
-> +	if (!percpu_ref_tryget_live(&idev->info_ref))
-> +		return -EINVAL;
-> +
+>  .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
 
-You are now just putting the contention to a per-cpu lock, so any
-single-cpu load will have the same issue, right?  And your example above
-is a single-cpu load, so how is this any faster?  Is the mutex going
-across all cpus to sync such a load that moving this to a percpu thing
-that much better?
 
-And as you have now split this into one-lock-per-cpu instead of
-one-lock-per-device, you just broke the situation where multiple threads
-are accessing the same device at the same time, right?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-You have also changed the functionality of the driver to force userspace
-to handle when the lock can not be taken as previously it would always
-work and just delay until it did happen.  What workflow does that now
-affect that always assumed that these code paths would succeed?
 
-Also the kernel test bot found problems with the patch :(
-
-thanks,
-
-greg k-h
+Best regards,
+Krzysztof

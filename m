@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC6752ABCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE2552ABCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 21:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352641AbiEQTSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 15:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
+        id S1352659AbiEQTTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 15:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243528AbiEQTSt (ORCPT
+        with ESMTP id S1352579AbiEQTTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 15:18:49 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7567C2B1AA
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:18:48 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id h8so2207819ljb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:18:48 -0700 (PDT)
+        Tue, 17 May 2022 15:19:15 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878F0424AF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:19:14 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n18so18207203plg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:19:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D5jj0hfLXwv5NKyNSQq0cQn2yY9wFPizqfDkJ1NRfo4=;
-        b=DWS8JGbeisC2lfPyrlCGUuKBIImqL9gH6ppVO68WrJgbfUd00qzpdFdZeABq8H1Cez
-         vWssXOe3XUjdUiD2vlMOtRDrmEG4B92Jn7mMc/CviQG5KMn+8oNwdPvL8Ddb9+l0M2cs
-         BzBS23a7oF/gqPt2lAyKlkLkCFGhnDTM4a3YcDU9Cxa9o8rlSeF1+zug8d+Q5kyVBHbx
-         DvEyKgOi2zODODUrpgOvz2IXM1nLcuS6NaXz0p648/YbZoJdtu9oNT5B5gNpClEgJa7i
-         RwSNOSovVQeDIlnnGKxBJn5h0LnmQilHewAEtGVdx7HvVRbI3kOs8TmbYLEmHXv5TKYH
-         R4+Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uFpzKd8+5eur2wnKQGvnGRu8GddC8MabfhuazKv+lQE=;
+        b=Ht5NLjURccfwH5eRnozuDpzDT+vxXb107WEJ1vLRCu2coMyeKDWx2GQ9oegu7jKrmx
+         RyMtljPSemntkEKFeXsAN050wKX0wgE/jsV36NQcepCnzmBzLztdBaevy0QrD9tAqWGL
+         gObyokYjTTVajTRzHGHWQzoDuo9+bh3iHIdTN33+9TC8JU63Md3G2Sw5l+JSGvDzaCk4
+         HA1PVBrOLZtU0nYAN6Issihrb/CMwvTkoaj8h+ssUTxk75eU+wvvugztlM7pRzwOKDCA
+         9Z8/GaR7UxuxwuTa5gXJzIcg4Km34zGZGIJRynkrmBXOw+K5GckP+zNm6Bikt5DcxtvT
+         Eg3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D5jj0hfLXwv5NKyNSQq0cQn2yY9wFPizqfDkJ1NRfo4=;
-        b=UYdrJjxBpxjfMCREOKZ1Sf9dXBchksSPKF+gzQ2PC5wTwoQSaDuZV4PnpygRAkz5U8
-         /ML8dMsGenelK5k1Mxv0EVA7ZEjpisHRlMuGONNC1sANPi8R0QHuJZ2TdCUL2pTZahcW
-         wh6CLbmkoDpedeGcl1i3GnEKcFudfyZy6cpqWVqQiAZvaAudLxNfFMxawheyKVn5xE+q
-         qtx4LjbP3O118oet1gq04VCrPtVL712GApj5W+K+yho2acF78rL9snU+QeoGcy51KMvy
-         XuA+M66U8cuSBDSGcAAKcFStKgBb8N0WsUsyxGa481mVyIkqLOOt/EJxEd7iF9CXeniA
-         TY9Q==
-X-Gm-Message-State: AOAM532mhtfliwiVA4+VLa4TKmAQf8DSknMvsvn7bjGtLYMRtcOR+dyZ
-        bbGT9tkdthC2XXWKLaAUIRYOnGbRqt9aPQQ4lUBaHQ==
-X-Google-Smtp-Source: ABdhPJwkMnRiD5WhBfVjkJHY8123izcEUknoDVqzKtNgmeKMqgfvP1WqkL4yVE8D3GRUGby3jI/mB4lPT/4XH4HnR28=
-X-Received: by 2002:a2e:944a:0:b0:24f:10bd:b7e8 with SMTP id
- o10-20020a2e944a000000b0024f10bdb7e8mr15214538ljh.238.1652815126626; Tue, 17
- May 2022 12:18:46 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uFpzKd8+5eur2wnKQGvnGRu8GddC8MabfhuazKv+lQE=;
+        b=2qlOUhvwcKf9v9hA41/3odEJYVKli/HY8n7i2xusupnLCxJZFItkS7zPUqyfrh4YNu
+         tiYQepWpjN1UC0c12MaNbNiZkzj2sFzj87i0rPQjfaW/x2ViW8RT9eGo0sdn4XIpoTtY
+         W8LSbbLT0z9TOzcuEy9flkCsuX27P5SWMdXNwiZ73aCm5Xx+X43pldJ64BTdhTeSeHD0
+         rRyGc/QcZOV+MJkBVyQ7kHfvJ+C3m9HfUigLQiBEK6TlURAfIwmHkHIKN/C+tcDW/TRF
+         SZ2JldZhwXTfQ6dbKLAzzZKY7z35DIm7UZDT/9z8HeTdr9fmehEUiBxQEgxb4kjG0eBe
+         WzJA==
+X-Gm-Message-State: AOAM530xe7vqOO6nnlF4vODjLGuQD94+jXm+MNApsbBIa9CajWriklHq
+        DZPgnC5EaRIDh25In2rkbm0peQ==
+X-Google-Smtp-Source: ABdhPJxwIeudU5F7scZJ2Z/4JvN7ksPaAFpJpjuAl7Cmz0kb9tcKYL/uFJPN2iknvyDqhYe81zdurw==
+X-Received: by 2002:a17:902:e948:b0:15e:cd79:2a1a with SMTP id b8-20020a170902e94800b0015ecd792a1amr23530940pll.109.1652815153759;
+        Tue, 17 May 2022 12:19:13 -0700 (PDT)
+Received: from google.com (201.59.83.34.bc.googleusercontent.com. [34.83.59.201])
+        by smtp.gmail.com with ESMTPSA id c11-20020a170903234b00b0015e8d4eb21csm9804505plh.102.2022.05.17.12.19.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 12:19:13 -0700 (PDT)
+Date:   Tue, 17 May 2022 19:19:09 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
+        hridya@google.com, surenb@google.com, linux-kernel@vger.kernel.org,
+        syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com
+Subject: Re: [PATCH] binder: fix atomic sleep when get extended error
+Message-ID: <YoP1LSSzgg9sHJDW@google.com>
+References: <20220517175225.65283-1-schspa@gmail.com>
 MIME-Version: 1.0
-References: <20220517185817.598872-1-cmllamas@google.com>
-In-Reply-To: <20220517185817.598872-1-cmllamas@google.com>
-From:   Todd Kjos <tkjos@google.com>
-Date:   Tue, 17 May 2022 12:18:34 -0700
-Message-ID: <CAHRSSEyoBLC4U-Z1hXqG=1XhDeh6bHD8-z+LD9kxmc6nSgg0UA@mail.gmail.com>
-Subject: Re: [PATCH] binder: fix potential UAF of target_{proc,thread}
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517175225.65283-1-schspa@gmail.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -75,55 +73,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 11:58 AM Carlos Llamas <cmllamas@google.com> wrote:
->
-> Commit 9474be34a727 ("binder: add failed transaction logging info")
-> dereferences target_{proc,thread} after they have been potentially
-> freed by binder_proc_dec_tmpref() and binder_thread_dec_tmpref().
->
-> This patch delays the release of the two references after their last
-> usage. Fixes the following two errors reported by smatch:
->
->   drivers/android/binder.c:3562 binder_transaction() error: dereferencing freed memory 'target_proc'
->   drivers/android/binder.c:3563 binder_transaction() error: dereferencing freed memory 'target_thread'
->
-> Fixes: 9474be34a727 ("binder: add failed transaction logging info")
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Carlos Llamas <cmllamas@google.com>
-
-Acked-by: Todd Kjos <tkjos@google.com>
-
+On Wed, May 18, 2022 at 01:52:25AM +0800, Schspa Shi wrote:
+> binder_inner_proc_lock(thread->proc) is a spin lock, copy_to_user can't
+> be called with in this lock.
+> 
+> Copy it as a local variable, and check the id to make sure the user space
+> gets the latest error message
+> 
+> Reported-by: syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com
+> Fixes: bd32889e841c ("binder: add BINDER_GET_EXTENDED_ERROR ioctl")
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
 > ---
->  drivers/android/binder.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
+>  drivers/android/binder.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
 > diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index d9253b2a7bd9..83facfa1a5c3 100644
+> index d9253b2a7bd9..5f2e1fa3da74 100644
 > --- a/drivers/android/binder.c
 > +++ b/drivers/android/binder.c
-> @@ -3546,10 +3546,6 @@ static void binder_transaction(struct binder_proc *proc,
->  err_empty_call_stack:
->  err_dead_binder:
->  err_invalid_target_handle:
-> -       if (target_thread)
-> -               binder_thread_dec_tmpref(target_thread);
-> -       if (target_proc)
-> -               binder_proc_dec_tmpref(target_proc);
->         if (target_node) {
->                 binder_dec_node(target_node, 1, 0);
->                 binder_dec_node_tmpref(target_node);
-> @@ -3565,6 +3561,11 @@ static void binder_transaction(struct binder_proc *proc,
->                      (u64)tr->data_size, (u64)tr->offsets_size,
->                      return_error_line);
+> @@ -5163,13 +5163,20 @@ static int binder_ioctl_get_extended_error(struct binder_thread *thread,
+>  					   void __user *ubuf)
+>  {
+>  	struct binder_extended_error *ee = &thread->ee;
+> +	struct binder_extended_error eeb;
+>  
+>  	binder_inner_proc_lock(thread->proc);
+> -	if (copy_to_user(ubuf, ee, sizeof(*ee))) {
+> -		binder_inner_proc_unlock(thread->proc);
+> +retry:
+> +	eeb = *ee;
+> +	binder_inner_proc_unlock(thread->proc);
+> +	if (copy_to_user(ubuf, &eeb, sizeof(eeb)))
+>  		return -EFAULT;
+> -	}
+>  
+> +	binder_inner_proc_lock(thread->proc);
+> +	if (eeb.id != ee->id) {
+> +		/* retry to get newest error info */
+> +		goto retry;
+> +	}
+>  	ee->id = 0;
+>  	ee->command = BR_OK;
+>  	ee->param = 0;
+> -- 
+> 2.24.3 (Apple Git-128)
 >
-> +       if (target_thread)
-> +               binder_thread_dec_tmpref(target_thread);
-> +       if (target_proc)
-> +               binder_proc_dec_tmpref(target_proc);
-> +
->         {
->                 struct binder_transaction_log_entry *fe;
->
-> --
-> 2.36.0.550.gb090851708-goog
->
+
+Oops! Thank you for your patch. In this case the local copy would be
+enough, no need for the retry logic as this is already taken care of.
+You could also leverage the binder_set_extended_error() to reset the
+thread->ee. Would you mind sending these updates? I was thinking
+something like this:
+
+ drivers/android/binder.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index 83facfa1a5c3..f92021cd384b 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -5163,19 +5163,16 @@ static int binder_ioctl_get_freezer_info(
+ static int binder_ioctl_get_extended_error(struct binder_thread *thread,
+ 					   void __user *ubuf)
+ {
+-	struct binder_extended_error *ee = &thread->ee;
++	struct binder_extended_error ee;
+
+ 	binder_inner_proc_lock(thread->proc);
+-	if (copy_to_user(ubuf, ee, sizeof(*ee))) {
+-		binder_inner_proc_unlock(thread->proc);
+-		return -EFAULT;
+-	}
+-
+-	ee->id = 0;
+-	ee->command = BR_OK;
+-	ee->param = 0;
++	ee = thread->ee;
++	binder_set_extended_error(&thread->ee, 0, BR_OK, 0);
+ 	binder_inner_proc_unlock(thread->proc);
+
++	if (copy_to_user(ubuf, &ee, sizeof(ee)))
++		return -EFAULT;
++
+ 	return 0;
+ }
+
+--
+
+Carlos Llamas

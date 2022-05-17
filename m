@@ -2,109 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7690E529B6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71052529B76
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241639AbiEQHv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
+        id S242037AbiEQHwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242175AbiEQHvW (ORCPT
+        with ESMTP id S241857AbiEQHwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:51:22 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E22618382
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:51:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652773881; x=1684309881;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=LWIEB4/lPMy65N4AJNM7XhWmKfMhu8OaBtUPWfYPFRM=;
-  b=oBQvk/8x+ysG+UXf+EL7cwQUiVXMrkP+DXGzRx6WpNvsb63Irvb8PcE6
-   zgpf0HFN3P2ppYmVflZAA+1eLxMFpdMSVVx3qP+tIQ7UMr5pejI1Xow4Q
-   vy8HB0kuKzGRAuHMisl5PR5mtRCBjYxslIT6q9XYyoFN29tzM7m/jkfis
-   TDWo1WuKmRKPEXt0PNtjlsu8M9n7TQvz+06ZcV4O+Qj/BpWrpdVjtxknL
-   kucm0DWy4qQOiBXmDJAHf6htGFSX+UqycSPhOMjuifmib4Jpx58kxQDYO
-   +eO6UWBns30tzhXrGYgNefDZ44bYunFkDqhYStHztIRylSayxJQmM6tSZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="271045377"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="271045377"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:51:19 -0700
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="568758921"
-Received: from psagan-mobl.ger.corp.intel.com (HELO localhost) ([10.249.132.13])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 00:51:16 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Mark Yacoub <markyacoub@chromium.org>
-Cc:     David Airlie <airlied@linux.ie>, markyacoub@chromium.org,
-        linux-kernel@vger.kernel.org, seanpaul@chromium.org,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>, markyacoub@google.com
-Subject: Re: [PATCH] drm: Add a debug message when getting a prop is missing
-In-Reply-To: <20220510182810.1223574-1-markyacoub@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220510182810.1223574-1-markyacoub@chromium.org>
-Date:   Tue, 17 May 2022 10:51:14 +0300
-Message-ID: <87bkvwfvgt.fsf@intel.com>
+        Tue, 17 May 2022 03:52:01 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382351B7A7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:51:59 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id ay15so6687669uab.9
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WShrHtR7o1bEMN+GHtHpoPB1ADyCcz+AwfB1sJZyYR4=;
+        b=LOFlwn77BRGGTHQ9iEWKPwBc8EC7NIg2bDsjKTz7PFhls9SUyJa0RoGbGs4i0gbs2h
+         FhVaPs5DErd6RbgHLLK0Psn0eW45ltdzDAmbdKIaYF8kbVhy3CrR3d7qdO6TueERI14t
+         1nslAb6aebvVqxtyL6KGKnnuTrLo4NW+MwcPU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WShrHtR7o1bEMN+GHtHpoPB1ADyCcz+AwfB1sJZyYR4=;
+        b=mE0/3OrvYCnjkRXuFwb3ahu7JYnbCGsDWJ2nWA+ASlRJekRstRyYXuTy1a+k3lPlk1
+         vD9ACFkVIWslkiIZ7avc4dlyg+yfXflV2eHoSTw+pgXvlCcJHcDn0NhWVhZT84CVjUfv
+         CkSlSaqn2NH6kg3RYKyBpEDbHKP6mej9XOCz5jutSF+mb6A3UEWzRAFKJ9alRWBXjfPf
+         JyfFXqnZll0Yn7ZGxqb5wM5unEhMZQfoKmXkdprk8xoKIFZgS/F2fMiXOsF6/u0oqgcF
+         7ueszcvRbIpkWASeygb7MbU2NItVwbzV5AOber72m1ORlBo3UbJzv1rZkLjogegVp26d
+         vlyA==
+X-Gm-Message-State: AOAM5302O7nn3IPswa9luUCiwuHAPDDPZ5c8qN3Ckyy94jK02S0uktsy
+        Lm41g9RNT/i9lcEDfxKa0Yapa9gF7JN8vZYHI3FgCQ==
+X-Google-Smtp-Source: ABdhPJwEplLYKvh+UGWkRWwFL7aUrldDFea1pw9lk57FA3WLEL60dkwzpZTESwKPQX9FIONp5mTUpyvS1luMK3t7Bqs=
+X-Received: by 2002:a9f:3193:0:b0:35d:21ec:4ae1 with SMTP id
+ v19-20020a9f3193000000b0035d21ec4ae1mr7292105uad.100.1652773918317; Tue, 17
+ May 2022 00:51:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220516105100.1412740-1-hsinyi@chromium.org> <20220517033557.3492-1-phillip@squashfs.org.uk>
+In-Reply-To: <20220517033557.3492-1-phillip@squashfs.org.uk>
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+Date:   Tue, 17 May 2022 15:51:32 +0800
+Message-ID: <CAJMQK-g2G=yDC9GW9Kcpuia+kdOcH_-WpR8xyLvx+5w0BHJJmg@mail.gmail.com>
+Subject: Re: [PATCH 3/2] squashfs: always build "file direct" version of page actor
+To:     Phillip Lougher <phillip@squashfs.org.uk>
+Cc:     Xiongwei.Song@windriver.com, akpm@linux-foundation.org,
+        houtao1@huawei.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, miaoxie@huawei.com,
+        squashfs-devel@lists.sourceforge.net, willy@infradead.org,
+        yi.zhang@huawei.com, zhengliang6@huawei.com,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022, Mark Yacoub <markyacoub@chromium.org> wrote:
-> [Why]
-> If a connector property is attached but
-> drm_atomic_connector_get_property doesn't handle a case for it,
-> modeteset will crash with a segfault without.
+On Tue, May 17, 2022 at 11:36 AM Phillip Lougher
+<phillip@squashfs.org.uk> wrote:
 >
-> [How]
-> Add a debug message indicating that a connector property is not handled
-> when user space is trying to read it.
+> Squashfs_readahead uses the "file direct" version of the page
+> actor, and so build it unconditionally.
 >
-> TEST=modetest
->
-> Signed-off-by: Mark Yacoub <markyacoub@chromium.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Phillip Lougher <phillip@squashfs.org.uk>
+Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+
+Tested with CONFIG_SQUASHFS_FILE_DIRECT unselected. I'll pick this
+patch to the series. Thanks
+
 > ---
->  drivers/gpu/drm/drm_atomic_uapi.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  fs/squashfs/Makefile     |  4 ++--
+>  fs/squashfs/page_actor.h | 41 ----------------------------------------
+>  2 files changed, 2 insertions(+), 43 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/drm_atomic_uapi.c b/drivers/gpu/drm/drm_atomic_uapi.c
-> index acb1ee93d206..36b0f664dd80 100644
-> --- a/drivers/gpu/drm/drm_atomic_uapi.c
-> +++ b/drivers/gpu/drm/drm_atomic_uapi.c
-> @@ -884,6 +884,12 @@ drm_atomic_connector_get_property(struct drm_connector *connector,
->  		return connector->funcs->atomic_get_property(connector,
->  				state, property, val);
->  	} else {
-> +		// LOG that the kernel is missing handling this property as a case here.
-
-The comment is unnecessary, and we also don't use // comments.
-
-> +		drm_dbg_atomic(
-> +			dev,
-> +			"[CONNECTOR:%d:%s] Get Property [PROP:%d:%s] is not handled\n",
-> +			connector->base.id, connector->name, property->base.id,
-> +			property->name);
-
-Why not use the same message as in drm_atomic_connector_set_property()?
-
-Blank line here.
-
-BR,
-Jani.
-
->  		return -EINVAL;
->  	}
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+> diff --git a/fs/squashfs/Makefile b/fs/squashfs/Makefile
+> index 7bd9b8b856d0..477c89a519ee 100644
+> --- a/fs/squashfs/Makefile
+> +++ b/fs/squashfs/Makefile
+> @@ -5,9 +5,9 @@
+>
+>  obj-$(CONFIG_SQUASHFS) += squashfs.o
+>  squashfs-y += block.o cache.o dir.o export.o file.o fragment.o id.o inode.o
+> -squashfs-y += namei.o super.o symlink.o decompressor.o
+> +squashfs-y += namei.o super.o symlink.o decompressor.o page_actor.o
+>  squashfs-$(CONFIG_SQUASHFS_FILE_CACHE) += file_cache.o
+> -squashfs-$(CONFIG_SQUASHFS_FILE_DIRECT) += file_direct.o page_actor.o
+> +squashfs-$(CONFIG_SQUASHFS_FILE_DIRECT) += file_direct.o
+>  squashfs-$(CONFIG_SQUASHFS_DECOMP_SINGLE) += decompressor_single.o
+>  squashfs-$(CONFIG_SQUASHFS_DECOMP_MULTI) += decompressor_multi.o
+>  squashfs-$(CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU) += decompressor_multi_percpu.o
+> diff --git a/fs/squashfs/page_actor.h b/fs/squashfs/page_actor.h
+> index 2e3073ace009..26e07373af8a 100644
+> --- a/fs/squashfs/page_actor.h
+> +++ b/fs/squashfs/page_actor.h
+> @@ -6,46 +6,6 @@
+>   * Phillip Lougher <phillip@squashfs.org.uk>
+>   */
+>
+> -#ifndef CONFIG_SQUASHFS_FILE_DIRECT
+> -struct squashfs_page_actor {
+> -       void    **page;
+> -       int     pages;
+> -       int     length;
+> -       int     next_page;
+> -};
+> -
+> -static inline struct squashfs_page_actor *squashfs_page_actor_init(void **page,
+> -       int pages, int length)
+> -{
+> -       struct squashfs_page_actor *actor = kmalloc(sizeof(*actor), GFP_KERNEL);
+> -
+> -       if (actor == NULL)
+> -               return NULL;
+> -
+> -       actor->length = length ? : pages * PAGE_SIZE;
+> -       actor->page = page;
+> -       actor->pages = pages;
+> -       actor->next_page = 0;
+> -       return actor;
+> -}
+> -
+> -static inline void *squashfs_first_page(struct squashfs_page_actor *actor)
+> -{
+> -       actor->next_page = 1;
+> -       return actor->page[0];
+> -}
+> -
+> -static inline void *squashfs_next_page(struct squashfs_page_actor *actor)
+> -{
+> -       return actor->next_page == actor->pages ? NULL :
+> -               actor->page[actor->next_page++];
+> -}
+> -
+> -static inline void squashfs_finish_page(struct squashfs_page_actor *actor)
+> -{
+> -       /* empty */
+> -}
+> -#else
+>  struct squashfs_page_actor {
+>         union {
+>                 void            **buffer;
+> @@ -76,4 +36,3 @@ static inline void squashfs_finish_page(struct squashfs_page_actor *actor)
+>         actor->squashfs_finish_page(actor);
+>  }
+>  #endif
+> -#endif
+> --
+> 2.34.1
+>

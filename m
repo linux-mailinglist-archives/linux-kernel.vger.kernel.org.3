@@ -2,206 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AB652A863
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280F252A859
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 18:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351130AbiEQQnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 12:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
+        id S1351102AbiEQQm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 12:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350063AbiEQQnB (ORCPT
+        with ESMTP id S1351099AbiEQQmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 12:43:01 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C073B3FDAD;
-        Tue, 17 May 2022 09:42:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=scD/9Z9PP3JtS/QbR0S82HRrb/qzzKD7mmsgRlJKv48=; b=A0Wed33QPDatmI/wU05BORZ9n1
-        0hhJk6U25fx6bbbZAsMcq0PkUqYkw6doFXVO3lE2gRlx4mNP2Gg+o2qX5D1iIed/eOGnpU07MiS7v
-        johrL8ZXBr9bRs4m6YspjNjUrp3CRZWOwFXObkbK34aTXOqWVxjbnj+S21xz3SW3iyyzLS8il/lBE
-        YgblTLXs216LyG4XvwA74bc/PHj8Q4o7WtYFZIjzCamKnOfAXbs0CZLburXLM75F/4BH78OE9Feno
-        1CTSSOT/QCKGLXFRsMSKXpMjqSuNKxrbhetupOiCZ9xDYHRTskdd6CLiaYJY53xEUzZgCM24bzp0B
-        WqYqJCVA==;
-Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nr0Hb-008gzd-4h; Tue, 17 May 2022 18:42:51 +0200
-Message-ID: <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
-Date:   Tue, 17 May 2022 13:42:06 -0300
+        Tue, 17 May 2022 12:42:22 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A4E403C3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:42:20 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id r11so33364812ybg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 09:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HMoOpKOlu+k7LW37DRFl0GsXtUqddEd+oHDo/auxrgg=;
+        b=fu8oxRN+9yYdHMKb8ZvWKHsQDWY7Y5UXQpgbzHN1HxclG7VW5xwjhxk3lxjz4fSoh9
+         e4m33w1jcki7Z6eVL0nQCG1gNGqtwbUfo2nX4gCNE5UZN/rV3Bhev+EBNTvZ1PyJRA/U
+         5pDrF08raIAQUR0/IJbsDRkFExpqf8jLdoiqI+iNmnNK8DRRw7pBUgomD9QCF0fojDhO
+         DybV63SWO4xmYpbC5QYdY72PleePs3F4gSjZzG9Bnx+v+sArkswwyj72Tpd7yp5JMinu
+         wO08p1+oe/Y3lbU+socKu4TdYdrMdNs1ZUmeDZlo+DHQemERs7ucpZBGRawrLQsssihn
+         WIGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HMoOpKOlu+k7LW37DRFl0GsXtUqddEd+oHDo/auxrgg=;
+        b=rqXdScy3e30zfLa2/TbNrCEHYddc+yYmVtnQ1SV33OAUA+gHcwwsmkzd5+6c2Jub5L
+         Kma8lkG+Hh2KnLoNhnX9TuKErCYBYbpz/dzLD6xbddRoncE8WoeYPtfbwopHb/lhVZHG
+         ncX+K649LCHcsaMt4hQlOjER49d8w424ckZE4YJ+qxtWDM3XNZJkWFGu3QQXu6VBJnsZ
+         PlCJFlTKdplXDuP7kkV8026CKta+l3sKLNreFi75BzpbCD9OM7yPD0CA8BFQFN5dTAeU
+         akyclfuBx0/pJX4D4owGHmo7dlzZRZgKKv6VrEVQx3RPFJtgpxmWM8H5LO2GQRq2CHcG
+         PZcQ==
+X-Gm-Message-State: AOAM531k6xFoYGli2+DfRFS5+uVmdt5LEibBxJvCjeVvX42wutqAwqDU
+        qThxwajfqjLjqxKTPKj4w3jSF3gWYKcxM6chzdfcFg==
+X-Google-Smtp-Source: ABdhPJxHjRPLoNTgsjT3o/XgWtKKJX8krSIPM4pcOr8f6InoMA/ExhFPEuR8BMoBPUOqfesTrH5yxdTL4PeCtF8Vu0I=
+X-Received: by 2002:a25:aa30:0:b0:64d:ebad:538d with SMTP id
+ s45-20020a25aa30000000b0064debad538dmr6335668ybi.603.1652805739369; Tue, 17
+ May 2022 09:42:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dexuan Cui <decui@microsoft.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        zhenwei pi <pizhenwei@bytedance.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
- <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YoOpyW1+q+Z5as78@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220516193614.773450018@linuxfoundation.org>
+In-Reply-To: <20220516193614.773450018@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 17 May 2022 22:12:07 +0530
+Message-ID: <CA+G9fYsRFZK87_9Xfcbraft9R34cqp7ZjcGsxvY65E3rMv=O3A@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/32] 4.19.244-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 10:57, Petr Mladek wrote:
-> [...]
->>>> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
->>>> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
->>>> @@ -1446,7 +1446,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->>> [... snip ...]
->>> It seems to reset some hardware or so. IMHO, it should go into the
->>> pre-reboot list.
->>
->> Mixed feelings here, I'm looping Broadcom maintainers to comment.
->> (CC Scott and Broadcom list)
->>
->> I'm afraid it breaks kdump if this device is not reset beforehand - it's
->> a doorbell write, so not high risk I think...
->>
->> But in case the not-reset device can be probed normally in kdump kernel,
->> then I'm fine in moving this to the reboot list! I don't have the HW to
->> test myself.
-> 
-> Good question. Well, it if has to be called before kdump then
-> even "hypervisor" list is a wrong place because is not always
-> called before kdump.
-
-Agreed! I'll defer that to Scott and Broadcom folks to comment.
-If it's not strictly necessary, I'll happily move it to the reboot list.
-
-If necessary, we could use the machine_crash_kexec() approach, but we'll
-fall into the case arm64 doesn't support it and I'm not sure if this
-device is available for arm - again a question for the maintainers.
+On Tue, 17 May 2022 at 01:11, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.244 release.
+> There are 32 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.244-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
->  [...]
->>>> --- a/drivers/power/reset/ltc2952-poweroff.c
->>>> +++ b/drivers/power/reset/ltc2952-poweroff.c
->> [...]
->> This is setting a variable only, and once it's set (data->kernel_panic
->> is the bool's name), it just bails out the IRQ handler and a timer
->> setting - this timer seems kinda tricky, so bailing out ASAP makes sense
->> IMHO.
-> 
-> IMHO, the timer informs the hardware that the system is still alive
-> in the middle of panic(). If the timer is not working then the
-> hardware (chip) will think that the system frozen in panic()
-> and will power off the system. See the comments in
-> drivers/power/reset/ltc2952-poweroff.c:
-> [.... snip ...]
-> IMHO, we really have to keep it alive until we reach the reboot stage.
-> 
-> Another question is how it actually works when the interrupts are
-> disabled during panic() and the timer callbacks are not handled.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Agreed here! Guess I can move this one the reboot list, fine by me.
-Unless PM folks think otherwise.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 4.19.244-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.19.y
+* git commit: bc41838f2dd87b1c999e8eb02de3c503953f0ab7
+* git describe: v4.19.243-33-gbc41838f2dd8
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.243-33-gbc41838f2dd8
 
-> [...]
->> Disagree here, I'm CCing Florian for information.
->>
->> This notifier preserves RAM so it's *very interesting* if we have
->> kmsg_dump() for example, but maybe might be also relevant in case kdump
->> kernel is configured to store something in a persistent RAM (then,
->> without this notifier, after kdump reboots the system data would be lost).
-> 
-> I see. It is actually similar problem as with
-> drivers/firmware/google/gsmi.c.
-> 
-> I does similar things like kmsg_dump() so it should be called in
-> the same location (after info notifier list and before kdump).
-> 
-> A solution might be to put it at these notifiers at the very
-> end of the "info" list or make extra "dump" notifier list.
+## Test Regressions (compared to v4.19.242-16-ga96b764d90b5)
+No test regressions found.
 
-Here I still disagree. I've commented in the other response thread
-(about Google gsmi) about the semantics of the hypervisor list, but
-again: this list should contain callbacks that
+## Metric Regressions (compared to v4.19.242-16-ga96b764d90b5)
+No metric regressions found.
 
-(a) Should run early, _by default_ before a kdump;
-(b) Communicate with the firmware/hypervisor in a "low-risk" way;
+## Test Fixes (compared to v4.19.242-16-ga96b764d90b5)
+No test fixes found.
 
-Imagine a scenario where users configure kdump kernel to save something
-in a persistent form in DRAM - it'd be like a late pstore, in the next
-kernel. This callback enables that, it's meant to inform FW "hey, panic
-happened, please from now on don't clear the RAM in the next FW-reboot".
-I don't see a reason to postpone that - let's see if the maintainers
-have an opinion.
+## Metric Fixes (compared to v4.19.242-16-ga96b764d90b5)
+No metric fixes found.
 
-Cheers,
+## Test result summary
+total: 74073, pass: 60228, fail: 866, skip: 11511, xfail: 1468
 
+## Build Summary
+* arm: 275 total, 275 passed, 0 failed
+* arm64: 39 total, 39 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 27 total, 27 passed, 0 failed
+* powerpc: 55 total, 54 passed, 1 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 38 total, 38 passed, 0 failed
 
-Guilherme
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

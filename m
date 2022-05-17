@@ -2,73 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 049D452A0A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D83B52A0B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244822AbiEQLmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S239610AbiEQLr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238852AbiEQLmp (ORCPT
+        with ESMTP id S229884AbiEQLr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:42:45 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519BF27FFE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:42:44 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 16so21421766lju.13
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uj5rCEgrEME0641i65F/SbR6hoTPj4hzhlWTwqHQqWk=;
-        b=RcFydaN3PbLyev6mS4qntlxs4M51b7yJgGfZ8ex/bJuWNY0MSRmcIhwi52CSHHNZdN
-         ptBAimz8cIO2HJN9H/Ig0xRPIxLfJCNPWQ4+PPpm1u4UiJ/7LDS8rR/9UqByvZlpXKKd
-         PMrrZUBBzxyVPDbd6F8cBquq4HN7wkJ+jAm+nTco1smdGWT92QvDiX0L0QsGSXitoGY7
-         C/SMR6Bc4k4+9+KRvHwCh8OIsbvDO87DGgOvuIxuHz0qBdwCFF71dHc0k9MI41RKFExh
-         NSZ0DnGvT6jTrZMTXXuv6Wk56JTbW7jqg1PhfR6n3Dy2cKXOTTkR1xy69Z5mzIhThqpi
-         B+Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uj5rCEgrEME0641i65F/SbR6hoTPj4hzhlWTwqHQqWk=;
-        b=JxMTXoddkKet3WGKHeDtsqzAtYMQvcGo+j0BykjtVI7mDeZ4mlFNxGCeomSWSBSuEu
-         ti0ACdthV8mtf8VSUfNWca2Xv1R807R7bBVah+sNYZonTaFSaAqykqGyjvbPipexWr+O
-         JY+/S45vMKpxOxdkkLrrroeSPT3eCrdR5aIOLyn+5y3PgbleHAjC+iRvsAbPDn/NuG9r
-         PO/ZvLUwIHY2wWveiopsHkzvlfNSUFSc59dBlnFM2zReqLYBLgVma/Ceu7tmAPFqij+W
-         LFmI2f8zH5115DdSI+cgsYeF2QKvYSNh9BNytw7otTFO8itwHWHlFMVJ5gZfjsmhL1iy
-         Z3Zg==
-X-Gm-Message-State: AOAM532E7YD27AiXv3s5+zpyaXcMdCwoRYa6v7DI+Le/Dxa1W936fFAg
-        xSRI94kKJRL3jpOe0k2IuZEzwg==
-X-Google-Smtp-Source: ABdhPJxNGdUbUsF1H48W0SHvw7YaCknC4xl6XPByeWgTRCruMGoyqvNEwEBWhIoPpVCrhH3vfj0JpQ==
-X-Received: by 2002:a2e:81a:0:b0:250:a331:d0b1 with SMTP id 26-20020a2e081a000000b00250a331d0b1mr14297265lji.363.1652787762678;
-        Tue, 17 May 2022 04:42:42 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id j20-20020a2e8014000000b0024f3d1dae96sm1874136ljg.30.2022.05.17.04.42.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 04:42:42 -0700 (PDT)
-Message-ID: <2ce7a871-3e55-ae50-955c-bf04a443aba3@linaro.org>
-Date:   Tue, 17 May 2022 13:42:41 +0200
+        Tue, 17 May 2022 07:47:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03850286E2
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:47:55 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L2Z8S4ywYzbc9t;
+        Tue, 17 May 2022 19:46:32 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500016.china.huawei.com
+ (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
+ 2022 19:47:52 +0800
+From:   Zhou Guanghui <zhouguanghui1@huawei.com>
+To:     <akpm@linux-foundation.org>, <rppt@kernel.org>, <will@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <xuqiang36@huawei.com>,
+        <zhouguanghui1@huawei.com>
+Subject: [PATCH v2] arm64: Expand the static memblock memory table
+Date:   Tue, 17 May 2022 11:43:09 +0000
+Message-ID: <20220517114309.10228-1-zhouguanghui1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH net v2] NFC: hci: fix sleep in atomic context bugs in
- nfc_hci_hcp_message_tx
-Content-Language: en-US
-To:     Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org
-Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, gregkh@linuxfoundation.org,
-        alexander.deucher@amd.com, broonie@kernel.org,
-        netdev@vger.kernel.org
-References: <20220517105526.114421-1-duoming@zju.edu.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220517105526.114421-1-duoming@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,73 +46,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 12:55, Duoming Zhou wrote:
-> There are sleep in atomic context bugs when the request to secure
-> element of st21nfca is timeout. The root cause is that kzalloc and
-> alloc_skb with GFP_KERNEL parameter and mutex_lock are called in
-> st21nfca_se_wt_timeout which is a timer handler. The call tree shows
-> the execution paths that could lead to bugs:
-> 
->    (Interrupt context)
-> st21nfca_se_wt_timeout
->   nfc_hci_send_event
->     nfc_hci_hcp_message_tx
->       kzalloc(..., GFP_KERNEL) //may sleep
->       alloc_skb(..., GFP_KERNEL) //may sleep
->       mutex_lock() //may sleep
-> 
-> This patch changes allocation mode of kzalloc and alloc_skb from
-> GFP_KERNEL to GFP_ATOMIC and changes mutex_lock to spin_lock in
-> order to prevent atomic context from sleeping.
-> 
-> Fixes: 2130fb97fecf ("NFC: st21nfca: Adding support for secure element")
-> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-> ---
-> Changes in v2:
->   - Change mutex_lock to spin_lock.
-> 
->  include/net/nfc/hci.h |  3 ++-
->  net/nfc/hci/core.c    | 18 +++++++++---------
->  net/nfc/hci/hcp.c     | 10 +++++-----
->  3 files changed, 16 insertions(+), 15 deletions(-)
-> 
-> diff --git a/include/net/nfc/hci.h b/include/net/nfc/hci.h
-> index 756c11084f6..8f66e6e6b91 100644
-> --- a/include/net/nfc/hci.h
-> +++ b/include/net/nfc/hci.h
-> @@ -103,7 +103,8 @@ struct nfc_hci_dev {
->  
->  	bool shutting_down;
->  
-> -	struct mutex msg_tx_mutex;
-> +	/* The spinlock is used to protect resources related with hci message TX */
-> +	spinlock_t msg_tx_spin;
->  
->  	struct list_head msg_tx_queue;
->  
-> diff --git a/net/nfc/hci/core.c b/net/nfc/hci/core.c
-> index ceb87db57cd..fa22f9fe5fc 100644
-> --- a/net/nfc/hci/core.c
-> +++ b/net/nfc/hci/core.c
-> @@ -68,7 +68,7 @@ static void nfc_hci_msg_tx_work(struct work_struct *work)
->  	struct sk_buff *skb;
->  	int r = 0;
->  
-> -	mutex_lock(&hdev->msg_tx_mutex);
-> +	spin_lock(&hdev->msg_tx_spin);
->  	if (hdev->shutting_down)
->  		goto exit;
+In a system using HBM, a multi-bit ECC error occurs, and the BIOS
+saves the corresponding area (for example, 2 MB). When the system
+restarts next time, these areas are isolated and not reported or
+reported as EFI_UNUSABLE_MEMORY. Both of them lead to an increase
+in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads to
+a larger number of memblocks.
 
-How did you test your patch?
+For example, if the EFI_UNUSABLE_MEMORY type is reported:
+...
+memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
+memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
+memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
+memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
+memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
+memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
+...
 
-Did you check, really check, that this can be an atomic (non-sleeping)
-section?
+If the size of the init memblock regions is exceeded before the
+array size can be resized, the excess memory will be lost.
 
-I have doubts because I found at least one path leading to device_lock
-(which is a mutex) called within your new code.
+Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
+---
+ arch/arm64/include/asm/memory.h |  9 +++++++++
+ mm/memblock.c                   | 14 +++++++++-----
+ 2 files changed, 18 insertions(+), 5 deletions(-)
 
-Before sending a new version, please wait for discussion to reach some
-consensus. The quality of these fixes is really poor. :(
+diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+index 0af70d9abede..eda61c0389c4 100644
+--- a/arch/arm64/include/asm/memory.h
++++ b/arch/arm64/include/asm/memory.h
+@@ -364,6 +364,15 @@ void dump_mem_limit(void);
+ # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
+ #endif
+ 
++/*
++ * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
++ * memory block into multiple parts. As a result, the number of memory regions
++ * is large.
++ */
++#ifdef CONFIG_EFI
++#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
++#endif
++
+ #include <asm-generic/memory_model.h>
+ 
+ #endif /* __ASM_MEMORY_H */
+diff --git a/mm/memblock.c b/mm/memblock.c
+index e4f03a6e8e56..7c63571a69d7 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -29,6 +29,10 @@
+ # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+ #endif
+ 
++#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
++#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
++#endif
++
+ /**
+  * DOC: memblock overview
+  *
+@@ -55,9 +59,9 @@
+  * the allocator metadata. The "memory" and "reserved" types are nicely
+  * wrapped with struct memblock. This structure is statically
+  * initialized at build time. The region arrays are initially sized to
+- * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
+- * for "reserved". The region array for "physmem" is initially sized to
+- * %INIT_PHYSMEM_REGIONS.
++ * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
++ * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
++ * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
+  * The memblock_allow_resize() enables automatic resizing of the region
+  * arrays during addition of new regions. This feature should be used
+  * with care so that memory allocated for the region array will not
+@@ -102,7 +106,7 @@ unsigned long min_low_pfn;
+ unsigned long max_pfn;
+ unsigned long long max_possible_pfn;
+ 
+-static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
++static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
+ static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
+ #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
+@@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
+ struct memblock memblock __initdata_memblock = {
+ 	.memory.regions		= memblock_memory_init_regions,
+ 	.memory.cnt		= 1,	/* empty dummy entry */
+-	.memory.max		= INIT_MEMBLOCK_REGIONS,
++	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
+ 	.memory.name		= "memory",
+ 
+ 	.reserved.regions	= memblock_reserved_init_regions,
+-- 
+2.17.1
 
-Best regards,
-Krzysztof

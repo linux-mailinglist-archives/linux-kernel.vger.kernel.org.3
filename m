@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382045296DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BF45296E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237409AbiEQBnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 21:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
+        id S236096AbiEQBqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 21:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiEQBnI (ORCPT
+        with ESMTP id S237880AbiEQBqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 21:43:08 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DC145ACA
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 18:43:07 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so542987wme.5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 18:43:07 -0700 (PDT)
+        Mon, 16 May 2022 21:46:06 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3139027CF3;
+        Mon, 16 May 2022 18:46:05 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id bh5so4273941plb.6;
+        Mon, 16 May 2022 18:46:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=hi9XAMIUva8PYVoM4ASCm/WWoKNxiCR5dujAiZRLNMg=;
-        b=cwaldFagj0bYiI4V6pIbONuNs1XGR5aGLxIKtTfxOiEY2Cx6JjEd84CdiBuwuzNE4c
-         vftNt5iTn5vOS9+NvhUnZG0Yk0gZagcbvEg1EUpPFbPuXW7Id5wqNQ2WUGzJl314SovB
-         iZ01f/Oxh0GRbgj0+5PQfnqVUbXNiLfz3GEJSUiH6fjfef5qLs9++I6K/WzXwVZCKk9e
-         o3PhgAEtT7Sqs2J2YKiHG/p+Vv377z23OCKx+EGUpOWNJ86+EwiyTwvrwT9azDP1OudF
-         DatRUYWSK2yHzM8+oF18sQm44s16pNPD8/kRM73G5shblRh6MedU108/KTVqXiYAd0+u
-         Pd5w==
+        bh=EPzXnjqGBoKUSwMfOnRB4WealJxyf+zAfiRWCAG8cJI=;
+        b=jJiuUNa5v8rogNVYljE2jP8mNUf7yu2SAtnYwjlSgtZR7lXQq/cy/I7PTqOjUrQ/Xg
+         bnnbmf5EzLoBO1UviRKV++IflXu3P5FoQxvKI2aLhaafAUJxwCvMOg7saOuhTw/cH3Kf
+         cggxDMlLT6HdnpDMQF1qQqyso8vAd8UHbQreGG0KYVEDswn8LPrPuZgMa7fe67jp5INX
+         zVqMCr+ka6rq6V6xD2XNLBYLnVu/QidFNXHyBoccTkTq6GiS80Ft86dSfMZQ1gFdMCJ8
+         dWyaeQonJrc/XCxa7+xDaNVgdJWqI5Tft0rC/HuQXZQ6rJaicz9QIYsI05Yo3LZxzXvG
+         NIxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hi9XAMIUva8PYVoM4ASCm/WWoKNxiCR5dujAiZRLNMg=;
-        b=29Z90GG8++agdPSBvq0Vuvmi4TC8Lo4GXQ3QLoGnqcqt1n4ZbShptQFS8T+JIhpksy
-         zX/rL1qz/NhbrokrJPHoL86KqyHiJCsB8uov6roqOEtiR0EuZg4BRvxo8s559hYi6USW
-         zz39tPHKz9HAyWYQ7iimh44zeo6t6aqUYknJQ/Z166FgEpCUaCu9poZSk9ezPZhIq924
-         KxqKtUhwIZRBLeAxNRjSSp8t/d13DnmrUIhgTk9OdBDmLHWiPZwWkbfXYHnt+UWmavMh
-         CB/p5IJuqsly+Uv0pmSMoPbopyuRznpcUrxdSJp+aObtzKRMPLK8w9J6bKStY857EnO+
-         m/zw==
-X-Gm-Message-State: AOAM531e77fd+c58mXypC7Vyqq6lYRr+JA0y5bmhny38bHktQjoPttCD
-        C+pB9L5Ng9nMrbTxgYyHkBtiAGZ7usz90ECLRwND
-X-Google-Smtp-Source: ABdhPJy5yfG2djBmHYBye+k28zX32hoDwji6J+Y1t09CcsDkJQe0j0gI/s/aaLtSInbN2dJvYDJTcu7tsJfUT8sBq4w=
-X-Received: by 2002:a7b:cf02:0:b0:393:fbb0:7189 with SMTP id
- l2-20020a7bcf02000000b00393fbb07189mr18520107wmg.197.1652751786116; Mon, 16
- May 2022 18:43:06 -0700 (PDT)
+        bh=EPzXnjqGBoKUSwMfOnRB4WealJxyf+zAfiRWCAG8cJI=;
+        b=S07RIgS/XEZu5P9Uz38FSGBDLuaWH80c7aeJb7SXXHGAFTw7bGWApBJGcc4Us+rILp
+         N7YZdxDNnhLzz/eMTceYmmiZWgca0w4U2JmQgfng1LOESomIuugS9/oW1+9hOrjakO6C
+         r7AivOmONMCbAEGzm3VndKh0FSdFqmg74c7b9I69GMgNFb//7lJGCSzUqTycN8d0vpeN
+         K+dmcgffSsnJ1JYIgf5aaItk/z1uBmeCGwiRNTEYL1VsPLw+ZMU4fkXImKRhqH8eVdyC
+         YP3S7hL0jni35fPYWaRDUn/EtPXZALRXlGtA0swf3KMPP0Po9RJE1odeBg2Amgg4tAId
+         QU/w==
+X-Gm-Message-State: AOAM5303ON9FxhhkOyuCtF5OB5yj3dGjVLf1lgbNwxMdZs29TEhRxfOI
+        yQvUrBBubMkWMH34iVebs6aTWxgym92X9aVhCkcM0NWEASs=
+X-Google-Smtp-Source: ABdhPJy6Wce9xA6NUB7pq4rf3jfiGgaWIljqAiscSttVZawINcOjbSzgSuTCIgND7606T2IiV+PWDuyR49HGz64IzYo=
+X-Received: by 2002:a17:90b:1e4b:b0:1dc:7b66:55d6 with SMTP id
+ pi11-20020a17090b1e4b00b001dc7b6655d6mr22558088pjb.80.1652751964635; Mon, 16
+ May 2022 18:46:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1652730821.git.rgb@redhat.com> <81264e038b7b1e0d8fd8bafb25452fb777cd664a.1652730821.git.rgb@redhat.com>
-In-Reply-To: <81264e038b7b1e0d8fd8bafb25452fb777cd664a.1652730821.git.rgb@redhat.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 16 May 2022 21:42:55 -0400
-Message-ID: <CAHC9VhSZNbQoFfStWp96G18_pdEtV1orKRvQ0reXfD7L4TiUHA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] fanotify: Allow audit to use the full permission
- event response
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
+References: <20220516193625.489108457@linuxfoundation.org>
+In-Reply-To: <20220516193625.489108457@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Mon, 16 May 2022 19:45:53 -0600
+Message-ID: <CAFU3qoYWAoffx9vDAb1qppCtXq8Rx5X53HyniKpGY8e8NVmC9Q@mail.gmail.com>
+Subject: Re: [PATCH 5.17 000/114] 5.17.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,68 +70,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 4:22 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+On Mon, May 16, 2022 at 2:21 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> This patch passes the full value so that the audit function can use all
-> of it. The audit function was updated to log the additional information in
-> the AUDIT_FANOTIFY record. The following is an example of the new record
-> format:
+> This is the start of the stable review cycle for the 5.17.9 release.
+> There are 114 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_ctx=17
+> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
+> Anything received after that time might be too late.
 >
-> Suggested-by: Steve Grubb <sgrubb@redhat.com>
-> Link: https://lore.kernel.org/r/3075502.aeNJFYEL58@x2
-> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> ---
->  fs/notify/fanotify/fanotify.c |  4 +++-
->  include/linux/audit.h         |  9 +++++----
->  kernel/auditsc.c              | 18 +++++++++++++++---
->  3 files changed, 23 insertions(+), 8 deletions(-)
-
-...
-
-> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> index 6973be0bf6c9..cb93c6ed07cd 100644
-> --- a/kernel/auditsc.c
-> +++ b/kernel/auditsc.c
-> @@ -2893,10 +2894,21 @@ void __audit_log_kern_module(char *name)
->         context->type = AUDIT_KERN_MODULE;
->  }
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.9-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
 >
-> -void __audit_fanotify(u32 response)
-> +void __audit_fanotify(u32 response, u32 type, union fanotify_response_extra *info)
->  {
-> -       audit_log(audit_context(), GFP_KERNEL,
-> -               AUDIT_FANOTIFY, "resp=%u", response);
-> +       switch (type) {
-> +       case FAN_RESPONSE_INFO_AUDIT_RULE:
-> +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> +                         "resp=%u fan_type=%u fan_ctx=%u",
-> +                         response, type, info->audit_rule);
-> +               break;
-> +       case FAN_RESPONSE_INFO_NONE:
-> +       default:
-> +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> +                         "resp=%u fan_type=%u fan_ctx=?",
-> +                         response, type);
-> +               break;
-> +       }
->  }
+> thanks,
+>
+> greg k-h
 
-Two things:
+Hi Greg,
 
-* Instead of "fan_ctx=", would it make sense to call it "fan_extra="
-to better match the UAPI struct?  I don't feel strongly either way,
-but it did occur to me just now while looking at the code so I thought
-I would mention it.
-* I'm also wondering if there is a way to be a bit proactive about
-future proofing this field.  Since we already hex encode some fields
-with "bad" characters, would it make sense to hex encode this field
-too?  Not for the "bad" character reason, but more as a way of
-marshalling the fanotify_response_extra union into an audit record.  I
-can't see far enough into the future to know if this would be a good
-idea or not, but like the other point above, it popped into my head
-while looking at the code so I thought I would put it in the email :)
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
---
-paul-moore.com
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
+
+     Total time: 0.439 [sec]
+
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
+
+     Total time: 11.491 [sec]
+
+      11.491534 usecs/op
+          87020 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

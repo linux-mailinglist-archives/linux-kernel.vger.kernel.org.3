@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C54952A2FD
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4B352A2FC
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343579AbiEQNOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S236044AbiEQNOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347321AbiEQNOE (ORCPT
+        with ESMTP id S1347358AbiEQNOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:14:04 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2083.outbound.protection.outlook.com [40.107.92.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14292419BE
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:14:03 -0700 (PDT)
+        Tue, 17 May 2022 09:14:10 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2089.outbound.protection.outlook.com [40.107.95.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B73541F94
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:14:05 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FldDUklDM4qmEPSZOvdczdjicLZUYo24uFxEsiTr6cALOeHPlzgKzDwSJhw0cbzlFQBFxExfsO/tUqKeccyN1MHSgV4ep8li11EzXXZPdCkbBL0d1cAjZJHxbc5UJ2DfAHlw3s+CWB0zofIh+QlklCRtdruG+sqBLV4j/iGGehmeoMlbJYQZ5TBcBH2JZNDnOoruU3Cs7xNJcD3/qsisUvbcy4E9xg16f5wFNWaLJIzrIapn+xJROVq+rQs40Orw70UeV0sI84EgX/sGiiXSuKLiKUt66BCQNSelJSjhQdqKYS2xgSlzRtw+E89sER9ZZcpvA5Mkljo78EJGuieYaA==
+ b=hTH16fYmyvXAY+dNVBsU8wxhASXaCDpzYbe3Wmkt2ihbwB9fLDpxTt3H/PBhi+BDZZECrS23EgSppn3v1kneS6RaB2XwtVCDMHBZUVp88rZpUWf4ge4eSKG3toFryg07+FjcuaDJe1+21PUzxjSzH+J9ciHzS0fiS/Pf4gVs57U9xh3eIaf/pz+Bki8uYQBpwJCjZZ61RSLuDHZ5DWIqRd4uXLnOy2LO7FiBwZltCzbYmDp44ZihEbUL3BW4+c7OJUei1sqTk8JjC2rDKuCKRtjZyb+bkWHZXj+LnZ0+A6lzBd6VHeyFtjCqQ+kZ/m9VrZgJm70AiAVlLQ/RCBVHNg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O+qpikeUqbOTtf4YHXHaIKDL0bLc39FNIb5j2geOlwQ=;
- b=cGHBQtBVuNFx+lxOdNsiKzrtYIykR5mU9EGmt4S0f+wluwwMJzugAovPHfzgs4Ko+9D/46ef5LxtZRhigZsKajn4H3aSmPVZ2CJ25jsPSRU7tXLzlxq9a5Aud1yVD4wZK7RpjQPycSO7WgZF6vQ+L1Eo3oNTPLndBrmQu+4mTuxBHiYkcCTjmRRWeekseWCHoGiFrP2iyurMesmne+uFkKTSP+C1x6WQMp2tl/ghPm9wQIZORSbG+BQn36DgtnUATlMY3DiEviIA1OAE1n5x9snPLQzOXAyibC+TrPURKHoEwvCOqS9VZvJhi2IT3m7tXQ44VcR2Wv8Kwu9N8C+IKA==
+ bh=DItOkeNP3L8G1rp1N7chn23N4FgDIkEm7EoUFb+2nPs=;
+ b=NTXqbk/N6sqlB/Mmw7YvrjDnPaZs+xHm/W/rn9F1hGItrVJ3Z7JAZpvM5wYPZ9kuFEdKE7bpN2HL6b6pYnUsbW+dBYfxCk/3wGSrXpfvdtEMwhSMdglJYCrVYb2GhvyboaKtDpjL8zGIHeJv6XEMkFEp8EaMOCSZez5ZD9saaYllTHMQWbXDgY3WapYwQy2GbunXlk6PwTb1A4Q7mIUtgOYxMrS2s72gg97NOCeGoCfcaU9VKMsVlJiaoDD3FE869TIvkBjWLNI91gBOuIDZbfq3kx0jXjF7/Mt2/oaAg2I94z0uvv24EWwOjokVy6kIrpwUXwHmc/pco6G6cbzXug==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O+qpikeUqbOTtf4YHXHaIKDL0bLc39FNIb5j2geOlwQ=;
- b=DLCAxoOzJ/fpYoHWS9CyCZpfqTQWAMiI1YbdJ8nT5Gp28tIqBPv3YGnI8yeghnWSfsb/+1OU0ITErurNsAcxoC1GORm0Hl9ZeTevHFHdc3pc3wTKUXkNtUk3KauWRwR+v51fYBFkNn8CDq5LuMI52EX58rOVaX5FIGwfXVc/DBJ+hfvt5eOgLlmBjeW9o8dJHeCkUYAtvK+W05+Yv8SfY6f7rm2LCHGZKQvcFs+ogJB53gZzQ/dl1Edho3OPY7pKPlQBGoCRs8gx6AGqnhTIdGAHERS3SOznMc1QQrw1s9hNZwzdhXJmQ2kgMAix0uwSzwyY2Sw0DHvEyh5wEI0nOA==
-Received: from DM6PR18CA0017.namprd18.prod.outlook.com (2603:10b6:5:15b::30)
- by BN8PR12MB3619.namprd12.prod.outlook.com (2603:10b6:408:46::19) with
+ bh=DItOkeNP3L8G1rp1N7chn23N4FgDIkEm7EoUFb+2nPs=;
+ b=lel7GQu7u0U7Vj0g3MO+GhVtZqgJcBrGaeJ5ZUjqqTUEPmKGSXoq5pE3JlkHhZP2kMeiuqCjjG8nv7/X8GFulOPqFaP+u/QvELeeR2CNM+ut8/AIh+ZOpds6Dx5uEd+8QvdnH3NH8JiqVr6T+Tn0Os/2s7Hxdn74kYDOIbFQTi9KXPwnVemdPq4SrpSpmK5UKvJ/VTXL6XYET4IrH4WlfoNSIgFcv1Fklm9Y0Lu67DXgwD8aSkYBGD9JLgEYX58taYcqTauw9ENlfAS/uDEPRcVIJYZDLmNnGnb+ZOgvlZIPrqv50t4eK8jAvRvZvf8ODgAUidpAwfd8olBpkQENPQ==
+Received: from DM6PR21CA0018.namprd21.prod.outlook.com (2603:10b6:5:174::28)
+ by BN6PR1201MB2528.namprd12.prod.outlook.com (2603:10b6:404:ae::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.17; Tue, 17 May
- 2022 13:14:01 +0000
-Received: from DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:15b:cafe::7) by DM6PR18CA0017.outlook.office365.com
- (2603:10b6:5:15b::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13 via Frontend
- Transport; Tue, 17 May 2022 13:14:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Tue, 17 May
+ 2022 13:14:03 +0000
+Received: from DM6NAM11FT045.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:174:cafe::46) by DM6PR21CA0018.outlook.office365.com
+ (2603:10b6:5:174::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.4 via Frontend
+ Transport; Tue, 17 May 2022 13:14:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- DM6NAM11FT031.mail.protection.outlook.com (10.13.172.203) with Microsoft SMTP
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT045.mail.protection.outlook.com (10.13.173.123) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5250.13 via Frontend Transport; Tue, 17 May 2022 13:14:01 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 17 May
- 2022 13:14:00 +0000
+ 15.20.5250.13 via Frontend Transport; Tue, 17 May 2022 13:14:02 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 17 May
+ 2022 13:14:02 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 17 May
- 2022 06:13:59 -0700
+ 2022 06:14:02 -0700
 Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.8)
  with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Tue, 17 May
- 2022 06:13:57 -0700
+ 2022 06:14:00 -0700
 From:   Eli Cohen <elic@nvidia.com>
 To:     <mst@redhat.com>, <jasowang@redhat.com>
 CC:     <virtualization@lists.linux-foundation.org>,
         <linux-kernel@vger.kernel.org>, <si-wei.liu@oracle.com>,
         Eli Cohen <elic@nvidia.com>
-Subject: [PATCH v7 3/5] net/vdpa: Use readers/writers semaphore instead of mutex
-Date:   Tue, 17 May 2022 16:13:46 +0300
-Message-ID: <20220517131348.498421-4-elic@nvidia.com>
+Subject: [PATCH v7 4/5] vdpa/mlx5: Add support for reading descriptor statistics
+Date:   Tue, 17 May 2022 16:13:47 +0300
+Message-ID: <20220517131348.498421-5-elic@nvidia.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220517131348.498421-1-elic@nvidia.com>
 References: <20220517131348.498421-1-elic@nvidia.com>
@@ -77,24 +77,24 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ec95bea3-4449-44c3-7eeb-08da38071bf6
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3619:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB36191312522AB5D0D689A113ABCE9@BN8PR12MB3619.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 431daa0f-420f-420a-28bf-08da38071d1d
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB2528:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB25289DC5CF49035ABDAA078EABCE9@BN6PR1201MB2528.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AUox9JppODhN4vRZY4rnYsP/y0q4Q4C3Ljz8fRQQWLtkYV0G8TGd+JZ7RuFlfUWV2Snh+BGQI6gdAh4vtjRISLsU/jJuVL/dGkZ8+8TveXZzVkrcB2ONlqZ11gBdflT9YkRrM8FOhormAZtAEbwzZBgf+jlGt+vww0+hn3QwBxGEt03BdGs9/kH7AfAMfBZjE6I94KjYUcxfJtc8sd1aDWNtencIbJoXkGk3W4zKL8LR4j0Zm1Y/47VsVBSoCXZO18N1Oz4mwtfzvxUjPSCaOFZbk5+wZchV2o9+CfpnfRMlc2oppkaT3pwSajYsOJwHKWawvfTliQWEV9V4yCy0ameX8Zbo0GWe8xzQDAFXEwCCI7PFMs2SJePcvcs1zWFSTuyB9TSkKMdt0pBHMuiyVZYAqFVBHRUA7RJWsh5zpfn0iIMiacXbbMP3n6b+cNAoce/TpXi0I9wip9mgQI4dJQnRL8zWikRozlLN2vkZDtco5/C6YrtPf90BCvPyXiFc0UqKvzcZGr9wRG5ot3XG3Sn9BjukChW8/gyiZ9qUZm77xkTGktIWRIALsTGWENTe3HdMpQeKwTCpPGQFLI8hXM3lncJXNmIqK13Kxvt5Pwb7aVf1+XLp8qgdcDVgxbxRBrn6Cg1c8KK9nF4XVNYAnjnzlWi9/SU6P97av3NxJCj4jZNJINE9/aMkAOnS2TzDoO0DovREbI+5lnG/oW7i3w==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(316002)(36756003)(36860700001)(81166007)(8676002)(4326008)(7696005)(86362001)(6666004)(2906002)(5660300002)(70206006)(2616005)(356005)(1076003)(107886003)(54906003)(186003)(40460700003)(110136005)(82310400005)(8936002)(508600001)(83380400001)(70586007)(26005)(426003)(336012)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: nW5Z37CCJmMymNhB5sbKUCDIShU7iSXJQ0bNicyESFpZvSTi+PbMwq6yp8iQC4vsciSxY/zQa/CH9Wg1PlqRQpQJaavVA6x9LkFPXUeT/fk+Va0zsIUgh69b4jBXQQnPKyNNQa8QHlwYp/TnBSahfkIqriqUt3MP265zpLJFBl9PPFi4Ni1hoDY+5/HyV94gTh89fAjCcnQC9D3k3kX/8k0DQzKr1fA1K3IHVDUuPerKOEFUStIrQjPux2kuoT14IXjb9lAF2qAhBc2VFxAr/5VLqdKOa47JJd7sFJejDA5X24Gb2ZaznjPefniov+cDZb1kqQ0nixXYOSEzh6kJDi9/SVFkp/sT7icAXuDcPpLil84jY4SttaHsPYrcAtKqBHcvlaWASvUhVZLnaJQjmIgOfHeCeB0EKIYp0iRPZjEot4iuyku7P7VAioYrzn+W+v9pGXYIncoCYEwTYvcCOm+IJLBupy832BtzmvmRb1Sf000IZ6QIDN2nz8zb4nODoqqhVxg7XMfytduHQMlkSP3xNVVTzn3/K4WeWqV3ZcvC1YmkTmjsWN41MS/k3tcMXi8WUnramdIIlam1ZRdbzbWkavuymUqjFmaCIzqt5u04i0qQ14IYqaBpUv4Kfo/FaoY63lSoFPxZlOAw5kVFGuXkfZLrZ/HzDi1Xa/SAAuJtDhHF1ZpMvrLHasSP8OPX2iYjI0ZeWo9oEhg/CV7KJw==
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(26005)(36860700001)(70586007)(8936002)(107886003)(30864003)(36756003)(83380400001)(6666004)(7696005)(70206006)(336012)(426003)(47076005)(82310400005)(1076003)(5660300002)(186003)(2616005)(2906002)(316002)(54906003)(110136005)(508600001)(8676002)(86362001)(356005)(4326008)(40460700003)(81166007)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 13:14:01.0162
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 13:14:02.9473
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec95bea3-4449-44c3-7eeb-08da38071bf6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 431daa0f-420f-420a-28bf-08da38071d1d
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT031.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT045.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3619
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB2528
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -105,271 +105,332 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use rw_semaphore instead of mutex to control access to vdpa devices.
-This can be especially beneficial in case processes poll on statistics
-information.
+Implement the get_vq_stats calback of vdpa_config_ops to return the
+statistics for a virtqueue.
 
-Suggested-by: Si-Wei Liu <si-wei.liu@oracle.com>
-Reviewed-by: Si-Wei Liu <si-wei.liu@oracle.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
+The statistics are provided as vendor specific statistics where the
+driver provides a pair of attribute name and attribute value.
+
+Currently supported are received descriptors and completed descriptors.
+
 Signed-off-by: Eli Cohen <elic@nvidia.com>
 ---
- drivers/vdpa/vdpa.c | 64 ++++++++++++++++++++++-----------------------
- 1 file changed, 32 insertions(+), 32 deletions(-)
+ drivers/vdpa/mlx5/core/mlx5_vdpa.h |   2 +
+ drivers/vdpa/mlx5/net/mlx5_vnet.c  | 149 +++++++++++++++++++++++++++++
+ include/linux/mlx5/mlx5_ifc.h      |   1 +
+ include/linux/mlx5/mlx5_ifc_vdpa.h |  39 ++++++++
+ 4 files changed, 191 insertions(+)
 
-diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-index 1b810961ccc3..510a82c2bae6 100644
---- a/drivers/vdpa/vdpa.c
-+++ b/drivers/vdpa/vdpa.c
-@@ -18,7 +18,7 @@
+diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+index daaf7b503677..44104093163b 100644
+--- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
++++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+@@ -61,6 +61,8 @@ struct mlx5_control_vq {
+ 	struct vringh_kiov riov;
+ 	struct vringh_kiov wiov;
+ 	unsigned short head;
++	unsigned int received_desc;
++	unsigned int completed_desc;
+ };
  
- static LIST_HEAD(mdev_head);
- /* A global mutex that protects vdpa management device and device level operations. */
--static DEFINE_MUTEX(vdpa_dev_mutex);
-+static DECLARE_RWSEM(vdpa_dev_lock);
- static DEFINE_IDA(vdpa_index_ida);
+ struct mlx5_vdpa_wq_ent {
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index e0de44000d92..2b815ef850c8 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -119,6 +119,7 @@ struct mlx5_vdpa_virtqueue {
+ 	struct mlx5_vdpa_umem umem2;
+ 	struct mlx5_vdpa_umem umem3;
  
- void vdpa_set_status(struct vdpa_device *vdev, u8 status)
-@@ -238,7 +238,7 @@ static int __vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
++	u32 counter_set_id;
+ 	bool initialized;
+ 	int index;
+ 	u32 virtq_id;
+@@ -818,6 +819,12 @@ static u16 get_features_12_3(u64 features)
+ 	       (!!(features & BIT_ULL(VIRTIO_NET_F_GUEST_CSUM)) << 6);
+ }
  
- 	vdev->nvqs = nvqs;
- 
--	lockdep_assert_held(&vdpa_dev_mutex);
-+	lockdep_assert_held(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, dev_name(&vdev->dev), vdpa_name_match);
- 	if (dev) {
- 		put_device(dev);
-@@ -278,9 +278,9 @@ int vdpa_register_device(struct vdpa_device *vdev, u32 nvqs)
++static bool counters_supported(const struct mlx5_vdpa_dev *mvdev)
++{
++	return MLX5_CAP_GEN_64(mvdev->mdev, general_obj_types) &
++	       BIT_ULL(MLX5_OBJ_TYPE_VIRTIO_Q_COUNTERS);
++}
++
+ static int create_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq)
  {
- 	int err;
+ 	int inlen = MLX5_ST_SZ_BYTES(create_virtio_net_q_in);
+@@ -872,6 +879,8 @@ static int create_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtque
+ 	MLX5_SET(virtio_q, vq_ctx, umem_3_id, mvq->umem3.id);
+ 	MLX5_SET(virtio_q, vq_ctx, umem_3_size, mvq->umem3.size);
+ 	MLX5_SET(virtio_q, vq_ctx, pd, ndev->mvdev.res.pdn);
++	if (counters_supported(&ndev->mvdev))
++		MLX5_SET(virtio_q, vq_ctx, counter_set_id, mvq->counter_set_id);
  
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	err = __vdpa_register_device(vdev, nvqs);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
+ 	err = mlx5_cmd_exec(ndev->mvdev.mdev, in, inlen, out, sizeof(out));
+ 	if (err)
+@@ -1135,6 +1144,47 @@ static int modify_virtqueue(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtque
  	return err;
  }
- EXPORT_SYMBOL_GPL(vdpa_register_device);
-@@ -293,7 +293,7 @@ EXPORT_SYMBOL_GPL(vdpa_register_device);
-  */
- void _vdpa_unregister_device(struct vdpa_device *vdev)
- {
--	lockdep_assert_held(&vdpa_dev_mutex);
-+	lockdep_assert_held(&vdpa_dev_lock);
- 	WARN_ON(!vdev->mdev);
- 	device_unregister(&vdev->dev);
- }
-@@ -305,9 +305,9 @@ EXPORT_SYMBOL_GPL(_vdpa_unregister_device);
-  */
- void vdpa_unregister_device(struct vdpa_device *vdev)
- {
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	device_unregister(&vdev->dev);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- }
- EXPORT_SYMBOL_GPL(vdpa_unregister_device);
  
-@@ -352,9 +352,9 @@ int vdpa_mgmtdev_register(struct vdpa_mgmt_dev *mdev)
- 		return -EINVAL;
++static int counter_set_alloc(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq)
++{
++	u32 in[MLX5_ST_SZ_DW(create_virtio_q_counters_in)] = {};
++	u32 out[MLX5_ST_SZ_DW(create_virtio_q_counters_out)] = {};
++	void *cmd_hdr;
++	int err;
++
++	if (!counters_supported(&ndev->mvdev))
++		return 0;
++
++	cmd_hdr = MLX5_ADDR_OF(create_virtio_q_counters_in, in, hdr);
++
++	MLX5_SET(general_obj_in_cmd_hdr, cmd_hdr, opcode, MLX5_CMD_OP_CREATE_GENERAL_OBJECT);
++	MLX5_SET(general_obj_in_cmd_hdr, cmd_hdr, obj_type, MLX5_OBJ_TYPE_VIRTIO_Q_COUNTERS);
++	MLX5_SET(general_obj_in_cmd_hdr, cmd_hdr, uid, ndev->mvdev.res.uid);
++
++	err = mlx5_cmd_exec(ndev->mvdev.mdev, in, sizeof(in), out, sizeof(out));
++	if (err)
++		return err;
++
++	mvq->counter_set_id = MLX5_GET(general_obj_out_cmd_hdr, out, obj_id);
++
++	return 0;
++}
++
++static void counter_set_dealloc(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq)
++{
++	u32 in[MLX5_ST_SZ_DW(destroy_virtio_q_counters_in)] = {};
++	u32 out[MLX5_ST_SZ_DW(destroy_virtio_q_counters_out)] = {};
++
++	if (!counters_supported(&ndev->mvdev))
++		return;
++
++	MLX5_SET(destroy_virtio_q_counters_in, in, hdr.opcode, MLX5_CMD_OP_DESTROY_GENERAL_OBJECT);
++	MLX5_SET(destroy_virtio_q_counters_in, in, hdr.obj_id, mvq->counter_set_id);
++	MLX5_SET(destroy_virtio_q_counters_in, in, hdr.uid, ndev->mvdev.res.uid);
++	MLX5_SET(destroy_virtio_q_counters_in, in, hdr.obj_type, MLX5_OBJ_TYPE_VIRTIO_Q_COUNTERS);
++	if (mlx5_cmd_exec(ndev->mvdev.mdev, in, sizeof(in), out, sizeof(out)))
++		mlx5_vdpa_warn(&ndev->mvdev, "dealloc counter set 0x%x\n", mvq->counter_set_id);
++}
++
+ static int setup_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq)
+ {
+ 	u16 idx = mvq->index;
+@@ -1162,6 +1212,10 @@ static int setup_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq)
+ 	if (err)
+ 		goto err_connect;
  
- 	INIT_LIST_HEAD(&mdev->list);
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	list_add_tail(&mdev->list, &mdev_head);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
++	err = counter_set_alloc(ndev, mvq);
++	if (err)
++		goto err_counter;
++
+ 	err = create_virtqueue(ndev, mvq);
+ 	if (err)
+ 		goto err_connect;
+@@ -1179,6 +1233,8 @@ static int setup_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq)
  	return 0;
- }
- EXPORT_SYMBOL_GPL(vdpa_mgmtdev_register);
-@@ -371,14 +371,14 @@ static int vdpa_match_remove(struct device *dev, void *data)
  
- void vdpa_mgmtdev_unregister(struct vdpa_mgmt_dev *mdev)
- {
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
+ err_connect:
++	counter_set_dealloc(ndev, mvq);
++err_counter:
+ 	qp_destroy(ndev, &mvq->vqqp);
+ err_vqqp:
+ 	qp_destroy(ndev, &mvq->fwqp);
+@@ -1223,6 +1279,7 @@ static void teardown_vq(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *
  
- 	list_del(&mdev->list);
+ 	suspend_vq(ndev, mvq);
+ 	destroy_virtqueue(ndev, mvq);
++	counter_set_dealloc(ndev, mvq);
+ 	qp_destroy(ndev, &mvq->vqqp);
+ 	qp_destroy(ndev, &mvq->fwqp);
+ 	cq_destroy(ndev, mvq->index);
+@@ -1659,6 +1716,7 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
+ 		if (read != sizeof(ctrl))
+ 			break;
  
- 	/* Filter out all the entries belong to this management device and delete it. */
- 	bus_for_each_dev(&vdpa_bus, NULL, mdev, vdpa_match_remove);
++		cvq->received_desc++;
+ 		switch (ctrl.class) {
+ 		case VIRTIO_NET_CTRL_MAC:
+ 			status = handle_ctrl_mac(mvdev, ctrl.cmd);
+@@ -1682,6 +1740,7 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
+ 		if (vringh_need_notify_iotlb(&cvq->vring))
+ 			vringh_notify(&cvq->vring);
  
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- }
- EXPORT_SYMBOL_GPL(vdpa_mgmtdev_unregister);
- 
-@@ -532,17 +532,17 @@ static int vdpa_nl_cmd_mgmtdev_get_doit(struct sk_buff *skb, struct genl_info *i
- 	if (!msg)
- 		return -ENOMEM;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	mdev = vdpa_mgmtdev_get_from_attr(info->attrs);
- 	if (IS_ERR(mdev)) {
--		mutex_unlock(&vdpa_dev_mutex);
-+		up_read(&vdpa_dev_lock);
- 		NL_SET_ERR_MSG_MOD(info->extack, "Fail to find the specified mgmt device");
- 		err = PTR_ERR(mdev);
- 		goto out;
++		cvq->completed_desc++;
+ 		queue_work(mvdev->wq, &wqent->work);
+ 		break;
  	}
- 
- 	err = vdpa_mgmtdev_fill(mdev, msg, info->snd_portid, info->snd_seq, 0);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	if (err)
- 		goto out;
- 	err = genlmsg_reply(msg, info);
-@@ -561,7 +561,7 @@ vdpa_nl_cmd_mgmtdev_get_dumpit(struct sk_buff *msg, struct netlink_callback *cb)
- 	int idx = 0;
- 	int err;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	list_for_each_entry(mdev, &mdev_head, list) {
- 		if (idx < start) {
- 			idx++;
-@@ -574,7 +574,7 @@ vdpa_nl_cmd_mgmtdev_get_dumpit(struct sk_buff *msg, struct netlink_callback *cb)
- 		idx++;
- 	}
- out:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	cb->args[0] = idx;
- 	return msg->len;
- }
-@@ -627,7 +627,7 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *i
- 	    !netlink_capable(skb, CAP_NET_ADMIN))
- 		return -EPERM;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	mdev = vdpa_mgmtdev_get_from_attr(info->attrs);
- 	if (IS_ERR(mdev)) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "Fail to find the specified management device");
-@@ -643,7 +643,7 @@ static int vdpa_nl_cmd_dev_add_set_doit(struct sk_buff *skb, struct genl_info *i
- 
- 	err = mdev->ops->dev_add(mdev, name, &config);
- err:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- 	return err;
+@@ -2303,6 +2362,8 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
+ 	mlx5_vdpa_destroy_mr(&ndev->mvdev);
+ 	ndev->mvdev.status = 0;
+ 	ndev->cur_num_vqs = 0;
++	ndev->mvdev.cvq.received_desc = 0;
++	ndev->mvdev.cvq.completed_desc = 0;
+ 	memset(ndev->event_cbs, 0, sizeof(*ndev->event_cbs) * (mvdev->max_vqs + 1));
+ 	ndev->mvdev.actual_features = 0;
+ 	++mvdev->generation;
+@@ -2422,6 +2483,93 @@ static u64 mlx5_vdpa_get_driver_features(struct vdpa_device *vdev)
+ 	return mvdev->actual_features;
  }
  
-@@ -659,7 +659,7 @@ static int vdpa_nl_cmd_dev_del_set_doit(struct sk_buff *skb, struct genl_info *i
- 		return -EINVAL;
- 	name = nla_data(info->attrs[VDPA_ATTR_DEV_NAME]);
++static int counter_set_query(struct mlx5_vdpa_net *ndev, struct mlx5_vdpa_virtqueue *mvq,
++			     u64 *received_desc, u64 *completed_desc)
++{
++	u32 in[MLX5_ST_SZ_DW(query_virtio_q_counters_in)] = {};
++	u32 out[MLX5_ST_SZ_DW(query_virtio_q_counters_out)] = {};
++	void *cmd_hdr;
++	void *ctx;
++	int err;
++
++	if (!counters_supported(&ndev->mvdev))
++		return -EOPNOTSUPP;
++
++	if (mvq->fw_state != MLX5_VIRTIO_NET_Q_OBJECT_STATE_RDY)
++		return -EAGAIN;
++
++	cmd_hdr = MLX5_ADDR_OF(query_virtio_q_counters_in, in, hdr);
++
++	MLX5_SET(general_obj_in_cmd_hdr, cmd_hdr, opcode, MLX5_CMD_OP_QUERY_GENERAL_OBJECT);
++	MLX5_SET(general_obj_in_cmd_hdr, cmd_hdr, obj_type, MLX5_OBJ_TYPE_VIRTIO_Q_COUNTERS);
++	MLX5_SET(general_obj_in_cmd_hdr, cmd_hdr, uid, ndev->mvdev.res.uid);
++	MLX5_SET(general_obj_in_cmd_hdr, cmd_hdr, obj_id, mvq->counter_set_id);
++
++	err = mlx5_cmd_exec(ndev->mvdev.mdev, in, sizeof(in), out, sizeof(out));
++	if (err)
++		return err;
++
++	ctx = MLX5_ADDR_OF(query_virtio_q_counters_out, out, counters);
++	*received_desc = MLX5_GET64(virtio_q_counters, ctx, received_desc);
++	*completed_desc = MLX5_GET64(virtio_q_counters, ctx, completed_desc);
++	return 0;
++}
++
++static int mlx5_vdpa_get_vendor_vq_stats(struct vdpa_device *vdev, u16 idx,
++					 struct sk_buff *msg,
++					 struct netlink_ext_ack *extack)
++{
++	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
++	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
++	struct mlx5_vdpa_virtqueue *mvq;
++	struct mlx5_control_vq *cvq;
++	u64 received_desc;
++	u64 completed_desc;
++	int err = 0;
++
++	mutex_lock(&ndev->reslock);
++	if (!is_index_valid(mvdev, idx)) {
++		NL_SET_ERR_MSG_MOD(extack, "virtqueue index is not valid");
++		err = -EINVAL;
++		goto out_err;
++	}
++
++	if (idx == ctrl_vq_idx(mvdev)) {
++		cvq = &mvdev->cvq;
++		received_desc = cvq->received_desc;
++		completed_desc = cvq->completed_desc;
++		goto out;
++	}
++
++	mvq = &ndev->vqs[idx];
++	err = counter_set_query(ndev, mvq, &received_desc, &completed_desc);
++	if (err) {
++		NL_SET_ERR_MSG_MOD(extack, "failed to query hardware");
++		goto out_err;
++	}
++
++out:
++	err = -EMSGSIZE;
++	if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME, "received_desc"))
++		goto out_err;
++
++	if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE, received_desc,
++			      VDPA_ATTR_PAD))
++		goto out_err;
++
++	if (nla_put_string(msg, VDPA_ATTR_DEV_VENDOR_ATTR_NAME, "completed_desc"))
++		goto out_err;
++
++	if (nla_put_u64_64bit(msg, VDPA_ATTR_DEV_VENDOR_ATTR_VALUE, completed_desc,
++			      VDPA_ATTR_PAD))
++		goto out_err;
++
++	err = 0;
++out_err:
++	mutex_unlock(&ndev->reslock);
++	return err;
++}
++
+ static const struct vdpa_config_ops mlx5_vdpa_ops = {
+ 	.set_vq_address = mlx5_vdpa_set_vq_address,
+ 	.set_vq_num = mlx5_vdpa_set_vq_num,
+@@ -2431,6 +2579,7 @@ static const struct vdpa_config_ops mlx5_vdpa_ops = {
+ 	.get_vq_ready = mlx5_vdpa_get_vq_ready,
+ 	.set_vq_state = mlx5_vdpa_set_vq_state,
+ 	.get_vq_state = mlx5_vdpa_get_vq_state,
++	.get_vendor_vq_stats = mlx5_vdpa_get_vendor_vq_stats,
+ 	.get_vq_notification = mlx5_get_vq_notification,
+ 	.get_vq_irq = mlx5_get_vq_irq,
+ 	.get_vq_align = mlx5_vdpa_get_vq_align,
+diff --git a/include/linux/mlx5/mlx5_ifc.h b/include/linux/mlx5/mlx5_ifc.h
+index 49a48d7709ac..1d193d9b6029 100644
+--- a/include/linux/mlx5/mlx5_ifc.h
++++ b/include/linux/mlx5/mlx5_ifc.h
+@@ -94,6 +94,7 @@ enum {
+ enum {
+ 	MLX5_OBJ_TYPE_GENEVE_TLV_OPT = 0x000b,
+ 	MLX5_OBJ_TYPE_VIRTIO_NET_Q = 0x000d,
++	MLX5_OBJ_TYPE_VIRTIO_Q_COUNTERS = 0x001c,
+ 	MLX5_OBJ_TYPE_MATCH_DEFINER = 0x0018,
+ 	MLX5_OBJ_TYPE_MKEY = 0xff01,
+ 	MLX5_OBJ_TYPE_QP = 0xff02,
+diff --git a/include/linux/mlx5/mlx5_ifc_vdpa.h b/include/linux/mlx5/mlx5_ifc_vdpa.h
+index 1a9c9d94cb59..4414ed5b6ed2 100644
+--- a/include/linux/mlx5/mlx5_ifc_vdpa.h
++++ b/include/linux/mlx5/mlx5_ifc_vdpa.h
+@@ -165,4 +165,43 @@ struct mlx5_ifc_modify_virtio_net_q_out_bits {
+ 	struct mlx5_ifc_general_obj_out_cmd_hdr_bits general_obj_out_cmd_hdr;
+ };
  
--	mutex_lock(&vdpa_dev_mutex);
-+	down_write(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, name, vdpa_name_match);
- 	if (!dev) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "device not found");
-@@ -677,7 +677,7 @@ static int vdpa_nl_cmd_dev_del_set_doit(struct sk_buff *skb, struct genl_info *i
- mdev_err:
- 	put_device(dev);
- dev_err:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_write(&vdpa_dev_lock);
- 	return err;
- }
- 
-@@ -743,7 +743,7 @@ static int vdpa_nl_cmd_dev_get_doit(struct sk_buff *skb, struct genl_info *info)
- 	if (!msg)
- 		return -ENOMEM;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, devname, vdpa_name_match);
- 	if (!dev) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "device not found");
-@@ -761,13 +761,13 @@ static int vdpa_nl_cmd_dev_get_doit(struct sk_buff *skb, struct genl_info *info)
- 
- 	err = genlmsg_reply(msg, info);
- 	put_device(dev);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	return err;
- 
- mdev_err:
- 	put_device(dev);
- err:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	nlmsg_free(msg);
- 	return err;
- }
-@@ -809,9 +809,9 @@ static int vdpa_nl_cmd_dev_get_dumpit(struct sk_buff *msg, struct netlink_callba
- 	info.start_idx = cb->args[0];
- 	info.idx = 0;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	bus_for_each_dev(&vdpa_bus, NULL, &info, vdpa_dev_dump);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	cb->args[0] = info.idx;
- 	return msg->len;
- }
-@@ -1029,7 +1029,7 @@ static int vdpa_nl_cmd_dev_config_get_doit(struct sk_buff *skb, struct genl_info
- 	if (!msg)
- 		return -ENOMEM;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, devname, vdpa_name_match);
- 	if (!dev) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "device not found");
-@@ -1050,7 +1050,7 @@ static int vdpa_nl_cmd_dev_config_get_doit(struct sk_buff *skb, struct genl_info
- mdev_err:
- 	put_device(dev);
- dev_err:
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	if (err)
- 		nlmsg_free(msg);
- 	return err;
-@@ -1088,9 +1088,9 @@ vdpa_nl_cmd_dev_config_get_dumpit(struct sk_buff *msg, struct netlink_callback *
- 	info.start_idx = cb->args[0];
- 	info.idx = 0;
- 
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	bus_for_each_dev(&vdpa_bus, NULL, &info, vdpa_dev_config_dump);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	cb->args[0] = info.idx;
- 	return msg->len;
- }
-@@ -1117,7 +1117,7 @@ static int vdpa_nl_cmd_dev_stats_get_doit(struct sk_buff *skb,
- 		return -ENOMEM;
- 
- 	index = nla_get_u32(info->attrs[VDPA_ATTR_DEV_QUEUE_INDEX]);
--	mutex_lock(&vdpa_dev_mutex);
-+	down_read(&vdpa_dev_lock);
- 	dev = bus_find_device(&vdpa_bus, NULL, devname, vdpa_name_match);
- 	if (!dev) {
- 		NL_SET_ERR_MSG_MOD(info->extack, "device not found");
-@@ -1137,7 +1137,7 @@ static int vdpa_nl_cmd_dev_stats_get_doit(struct sk_buff *skb,
- 	err = genlmsg_reply(msg, info);
- 
- 	put_device(dev);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 
- 	return err;
- 
-@@ -1145,7 +1145,7 @@ static int vdpa_nl_cmd_dev_stats_get_doit(struct sk_buff *skb,
- 	put_device(dev);
- dev_err:
- 	nlmsg_free(msg);
--	mutex_unlock(&vdpa_dev_mutex);
-+	up_read(&vdpa_dev_lock);
- 	return err;
- }
- 
++struct mlx5_ifc_virtio_q_counters_bits {
++	u8    modify_field_select[0x40];
++	u8    reserved_at_40[0x40];
++	u8    received_desc[0x40];
++	u8    completed_desc[0x40];
++	u8    error_cqes[0x20];
++	u8    bad_desc_errors[0x20];
++	u8    exceed_max_chain[0x20];
++	u8    invalid_buffer[0x20];
++	u8    reserved_at_180[0x280];
++};
++
++struct mlx5_ifc_create_virtio_q_counters_in_bits {
++	struct mlx5_ifc_general_obj_in_cmd_hdr_bits hdr;
++	struct mlx5_ifc_virtio_q_counters_bits virtio_q_counters;
++};
++
++struct mlx5_ifc_create_virtio_q_counters_out_bits {
++	struct mlx5_ifc_general_obj_in_cmd_hdr_bits hdr;
++	struct mlx5_ifc_virtio_q_counters_bits virtio_q_counters;
++};
++
++struct mlx5_ifc_destroy_virtio_q_counters_in_bits {
++	struct mlx5_ifc_general_obj_in_cmd_hdr_bits hdr;
++};
++
++struct mlx5_ifc_destroy_virtio_q_counters_out_bits {
++	struct mlx5_ifc_general_obj_out_cmd_hdr_bits hdr;
++};
++
++struct mlx5_ifc_query_virtio_q_counters_in_bits {
++	struct mlx5_ifc_general_obj_in_cmd_hdr_bits hdr;
++};
++
++struct mlx5_ifc_query_virtio_q_counters_out_bits {
++	struct mlx5_ifc_general_obj_in_cmd_hdr_bits hdr;
++	struct mlx5_ifc_virtio_q_counters_bits counters;
++};
++
+ #endif /* __MLX5_IFC_VDPA_H_ */
 -- 
 2.35.1
 

@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC9652A5AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8962952A5AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349658AbiEQPIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S1349671AbiEQPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234068AbiEQPIl (ORCPT
+        with ESMTP id S1349634AbiEQPJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:08:41 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9AE3B562
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:08:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652800118; x=1684336118;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7m2XYwtoguE1rr8a0hZclV93DDxQXRnyoanZTRu0XsU=;
-  b=ylOFob0XkvMIsIjhqElDvfOgGN8Xu2HekcdhNB9orGZJYBlXihW+EkPW
-   uiWyy0wEPVvBJWmtpi7eZ8yEGxSBIhm7d9o5t/l+UAZe87depbuNIWFTl
-   jyhAnij5CFdvAdfwZN2ejtotdTM9gSuSf1RsxhAhAX3306Uw5yh3EPDnY
-   tItgC5R67L9kgtPEkfaa9ejOe4ZLfPM9gZJ18G4RDctunoyE7iBwxqJaa
-   aaJYOup+elWL/eb6wbwyui6gSxD12GvgWOv2/5AhBd/+lYZyLA4RnEoQi
-   bxHUizGaeROIM6bS+eW5EQeikZxUsDhxln6SiyOO3z3eoc8P8hma+lThS
-   A==;
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="159435231"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2022 08:08:37 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 17 May 2022 08:08:37 -0700
-Received: from ROU-LT-M43238L.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 17 May 2022 08:08:34 -0700
-From:   <nicolas.ferre@microchip.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        <arm@kernel.org>, <soc@kernel.org>
-CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Linux Kernel list <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-Subject: [GIT PULL] ARM: at91: soc for 5.19 #2
-Date:   Tue, 17 May 2022 17:08:32 +0200
-Message-ID: <20220517150832.89451-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 17 May 2022 11:09:21 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ACE3BA5E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:09:19 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gg20so7584787pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=c37zykIbAvjFJYeekhN1tO9l8rsyfkhDhDABYYW7ubQ=;
+        b=IyKFIEv664GQuHoUUrx8MniZCSQahLCVahex0zoQ5/eIc3vMbL1OFDDhDNKk1nYTxn
+         swUcZfWl4f7dml8rPzm9rxDkHB2h/REMY9zKXWzgbt30Pn9TdQ1KvwE0MpnxhpWIQ0vC
+         CZXwCKrOF3OJ/FGH4HVr3rOP8poNBCFgCok4/hef7l9NZz04lX7KEMEjtKQcM7ByFP4L
+         LsM5wrJE6BVsKID61tcU/8ogohaf5IAPbnMb9dRSkXDgoFXl26LvfPoTsi8lsOd1gTB5
+         bLAuCEPBZU9JFDjRnDlqDau87RI48xnsfZGr7EP7ghv54bBagq8QHmp26XUkKtAdqOpW
+         B4Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=c37zykIbAvjFJYeekhN1tO9l8rsyfkhDhDABYYW7ubQ=;
+        b=HFgUV2iAU02B9RGCN5pBxn/Yk/wxDKGGcsgpEp6ylIoUwaUsT8V87ZMD9HUkGcfgfw
+         wTaz66e9uZqyayG4DSPWRlwO954ROHAyooQePKT3T28GCDtVp3oMPQQzmiKDmh8ROUzz
+         ZkTngr3eDgvqyZ73v1my+oXVKFLfDgJRToW1sSgkHF3xHQHTHIckVRJWn+vS+AdggYNX
+         OMKxQZy687UeJYCBDqoSxGzq5kAU+Z+/89Dw1nuJFFsbUm9/MJu1qYe1HYgZr3djDrjT
+         Qj64hcj6ErQpeKEqvJN0B11JiuYx2tfA0stH1I4Bd4RN7Ewz95J73fiM+0Zh+dC6YJxF
+         X+TA==
+X-Gm-Message-State: AOAM533H/0r8LlgwvDR2OoOJd9Dj9cnt1oarEnc3N5OEotpLmIIu2pmP
+        3bP0rWKtcZ4B8QmUXZMx+gT2
+X-Google-Smtp-Source: ABdhPJwXpnFf4RpEJB6ZM9C6d1HomdLU+ojRr/GSDmdjVh21K4qNzcEPWLJs85sZ4veBB/fpoL88ZA==
+X-Received: by 2002:a17:90b:3a86:b0:1dc:2343:2429 with SMTP id om6-20020a17090b3a8600b001dc23432429mr25390497pjb.206.1652800158569;
+        Tue, 17 May 2022 08:09:18 -0700 (PDT)
+Received: from thinkpad ([117.207.31.8])
+        by smtp.gmail.com with ESMTPSA id c12-20020a170902c2cc00b0015e8d4eb1ebsm9230630pla.53.2022.05.17.08.09.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 08:09:18 -0700 (PDT)
+Date:   Tue, 17 May 2022 20:39:08 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com, kbusch@kernel.org,
+        hch@lst.de, linux-nvme@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, svarbanov@mm-sol.com,
+        bjorn.andersson@linaro.org, axboe@fb.com,
+        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
+        quic_nitirawa@quicinc.com, vidyas@nvidia.com, sagi@grimberg.me
+Subject: Re: [PATCH 1/3] PCI: Add a flag to notify PCI drivers about
+ powerdown during suspend
+Message-ID: <20220517150908.GA4528@thinkpad>
+References: <20220513110027.31015-2-manivannan.sadhasivam@linaro.org>
+ <20220516201817.GA1047280@bhelgaas>
 MIME-Version: 1.0
-Organization: microchip
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220516201817.GA1047280@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,39 +79,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+On Mon, May 16, 2022 at 03:18:17PM -0500, Bjorn Helgaas wrote:
+> On Fri, May 13, 2022 at 04:30:25PM +0530, Manivannan Sadhasivam wrote:
+> > On some systems like Chromebooks based on Qcom chipsets, the OS may
+> > powerdown all PCIe devices during system suspend for aggressive
+> > powersaving. In that case, the PCI host controller drivers need to notify
+> > the PCI device drivers that the power will be taken off during system
+> > suspend so that the drivers can prepare the devices accordingly.
+> 
+> "The OS may powerdown all PCIe devices ..." makes it sound like this
+> is an OS policy decision.  Where exactly (what function) is that?
+> 
+> Or if it's not an OS policy decision, but rather some property of the
+> hardware, say that specifically.
+> 
 
-Arnd, Olof,
+On SC7280, it is the Resource Power Manager(RPMh) that's powering the devices
+down by cutting off the PCIe voltage domain. But the SC7280 RC driver itself
+may put the PCIe devices into D3cold state during system suspend.
+https://lore.kernel.org/lkml/CAE-0n53ho2DX2rqQMvvKAuDCfsWW62TceTaNPzv5Mn_NQ-U6dA@mail.gmail.com/T/
 
-Here is one more soc patch for 5.19. It goes on top of previous PR from last
-week and fixes one patch queued in this presious series.
+So to cover both cases (one is a hardware independent of SoC and another one is
+the device driver), and to be generic, I've used the term "OS" after looking at
+the previous flags.
 
-Please pull. Thanks, best regards,
-  Nicolas
+Thanks,
+Mani
 
-The following changes since commit 6041558ebf1fc87d1e0bdeb51e985807dab06bed:
-
-  ARM: at91: debug: add lan966 support (2022-05-13 13:42:03 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/at91-soc-5.19-2
-
-for you to fetch changes up to 46a65cd376f9f754149be33b32244cabcf376982:
-
-  ARM: at91: pm: Fix rand build error (2022-05-17 16:40:34 +0200)
-
-----------------------------------------------------------------
-AT91 SoC #2 for 5.19:
-
-- One Kconfig fix for random build error
-
-----------------------------------------------------------------
-YueHaibing (1):
-      ARM: at91: pm: Fix rand build error
-
- arch/arm/mach-at91/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > One prime example is the PCI NVMe driver. This flag can be used by the
+> > driver to shutdown the NVMe device during suspend and recover it during
+> > resume.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  include/linux/pci.h | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > index 60adf42460ab..069caf1fe88d 100644
+> > --- a/include/linux/pci.h
+> > +++ b/include/linux/pci.h
+> > @@ -578,6 +578,7 @@ struct pci_host_bridge {
+> >  	unsigned int	preserve_config:1;	/* Preserve FW resource setup */
+> >  	unsigned int	size_windows:1;		/* Enable root bus sizing */
+> >  	unsigned int	msi_domain:1;		/* Bridge wants MSI domain */
+> > +	unsigned int	suspend_poweroff:1;	/* OS may poweroff devices during system suspend */
+> >  
+> >  	/* Resource alignment requirements */
+> >  	resource_size_t (*align_resource)(struct pci_dev *dev,
+> > -- 
+> > 2.25.1
+> > 
 
 -- 
-Nicolas Ferre
+மணிவண்ணன் சதாசிவம்

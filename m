@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4AF529BBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4A8529BBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242288AbiEQIFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 04:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
+        id S241555AbiEQIFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 04:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237290AbiEQIFT (ORCPT
+        with ESMTP id S236264AbiEQIFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 04:05:19 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7AF3EB83;
-        Tue, 17 May 2022 01:05:18 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id tk15so9594956ejc.6;
-        Tue, 17 May 2022 01:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g2wIEkKAYlLfnMCLScX38TBed0imkFSk5PiJ4mF7M7o=;
-        b=XjUMaNeNzpjq8DGAKoTxcsxLvLebR52j5/UrFr1fTm14UTuFI3vWzbAR3mWREbJrUF
-         ZGbxRFQiQMr6X/eo8TtfkrQsTVsdmjWljyblQ9GG2B0QLn6IaAgrbpb/KjilGGuaWtWt
-         0DoRAyhIe4lW5Ny01IH6/E/EG6Y/r8/S6NFftsO4DFAPfGlobpLHiDYhxk4hZKvx5bEQ
-         PUgZ+m/XTvLtv0CC55yEQz7Mu8dLZ/Lfcf8zaproBUbm7zQJr56Lja5CCVkYLDxJyXol
-         y9mAsz4laAxacTX5wgq6wz6THqYNNcAsoXLAv2tcbhdlW7tkF4eGK8ig9oZn/pwNInx7
-         jzDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g2wIEkKAYlLfnMCLScX38TBed0imkFSk5PiJ4mF7M7o=;
-        b=byJaFHv3Z3jTM72i0kVnXH7njJUQk3rcxb7ovp3Q8oITUqpMolOGzbmnqBEUDhejPi
-         UAB5FYBwtG1VbjKrRY9As8UjyeUpwTe7Cx3t2ZmUKYn7F17vwlenNYVQaOcdlfqgGZyV
-         8zm9iqglnJfmyBrrDqpj/RAPjpKuY8icpWbh6Qqe2ViM7xSSilxXRYXUrfPbOwgcCQjl
-         a0cJInN+5iimT3a8ItXwQSxZqfi74LjQNXCj5YpO3inwW4Wk3ycvoK26Hx0a/pc046hH
-         Ws1jNo80HngQ2q66Rjtctl/jEMQRssFtMcvbelu37aeYw3Bukg78F2GxykzcGKClZO7r
-         BHHw==
-X-Gm-Message-State: AOAM531k+UYSFRQmPgV/VochiJUxDxwaYTFCJ3BMB0xKEuvSQlu4dPUk
-        kRlkZt7REzit17J3m8JJWbg=
-X-Google-Smtp-Source: ABdhPJxgF/tHnSq60sCri5mmqNhkR2Ul32Ist6TJ34IoQ3vHZ0wZ4dD8QavmgsQBhklbg2npiIkRJQ==
-X-Received: by 2002:a17:906:a5b:b0:6f4:55f6:78af with SMTP id x27-20020a1709060a5b00b006f455f678afmr18785426ejf.238.1652774717367;
-        Tue, 17 May 2022 01:05:17 -0700 (PDT)
-Received: from caracal.goemobile.intern (erm103.goemobile.de. [134.76.0.103])
-        by smtp.googlemail.com with ESMTPSA id n1-20020a05640204c100b0042617ba63basm6396052edw.68.2022.05.17.01.05.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 01:05:16 -0700 (PDT)
-From:   Eugene Shalygin <eugene.shalygin@gmail.com>
-To:     eugene.shalygin@gmail.com
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (asus-ec-sensors) fix Formula VIII definition
-Date:   Tue, 17 May 2022 10:05:08 +0200
-Message-Id: <20220517080508.1910953-1-eugene.shalygin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 17 May 2022 04:05:37 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500DB3EBA0;
+        Tue, 17 May 2022 01:05:34 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2T9l1n5fzGnxs;
+        Tue, 17 May 2022 16:02:19 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 16:05:12 +0800
+CC:     <gregkh@linuxfoundation.org>, <alexander.shishkin@linux.intel.com>,
+        <leo.yan@linaro.org>, <james.clark@arm.com>, <will@kernel.org>,
+        <robin.murphy@arm.com>, <acme@kernel.org>, <john.garry@huawei.com>,
+        <helgaas@kernel.org>, <lorenzo.pieralisi@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mark.rutland@arm.com>, <joro@8bytes.org>,
+        <shameerali.kolothum.thodi@huawei.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pci@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <linuxarm@huawei.com>
+Subject: Re: [PATCH v8 2/8] hwtracing: hisi_ptt: Add trace function support
+ for HiSilicon PCIe Tune and Trace device
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+References: <20220516125223.32012-1-yangyicong@hisilicon.com>
+ <20220516125223.32012-3-yangyicong@hisilicon.com>
+ <20220516150333.000031d7@Huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <a233704a-5b73-4286-cae5-dba0d8454c93@huawei.com>
+Date:   Tue, 17 May 2022 16:05:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220516150333.000031d7@Huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,49 +63,449 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ROG CROSSHAIR VIII FORMULA board has the same sensors as the
-CROSSHAIR VIII HERO [1] thus let's join their definitions which adds
-missing sensors for Formula.
+On 2022/5/16 22:03, Jonathan Cameron wrote:
+> On Mon, 16 May 2022 20:52:17 +0800
+> Yicong Yang <yangyicong@hisilicon.com> wrote:
+> 
+>> HiSilicon PCIe tune and trace device(PTT) is a PCIe Root Complex integrated
+>> Endpoint(RCiEP) device, providing the capability to dynamically monitor and
+>> tune the PCIe traffic and trace the TLP headers.
+>>
+>> Add the driver for the device to enable the trace function. Register PMU
+>> device of PTT trace, then users can use trace through perf command. The
+>> driver makes use of perf AUX trace function and support the following
+>> events to configure the trace:
+>>
+>> - filter: select Root port or Endpoint to trace
+>> - type: select the type of traced TLP headers
+>> - direction: select the direction of traced TLP headers
+>> - format: select the data format of the traced TLP headers
+>>
+>> This patch initially add a basic driver of PTT trace.
+>>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> Hi Yicong,
+> 
+> It's been a while since I looked at this driver, so I'll admit
+> I can't remember if any of the things I've raised below were
+> previously discussed. 
+> 
+> All minor stuff (biggest is question of failing cleanly in unlikely
+> case of failing the allocation in the filter addition vs carrying
+> on anyway), so feel free to add
+> 
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+>> diff --git a/drivers/hwtracing/ptt/Makefile b/drivers/hwtracing/ptt/Makefile
+>> new file mode 100644
+>> index 000000000000..908c09a98161
+>> --- /dev/null
+>> +++ b/drivers/hwtracing/ptt/Makefile
+>> @@ -0,0 +1,2 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +obj-$(CONFIG_HISI_PTT) += hisi_ptt.o
+>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
+>> new file mode 100644
+>> index 000000000000..ef25ce98f664
+>> --- /dev/null
+>> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
+> 
+> 
+> ...
+> 
+> 
+>> +
+>> +static int hisi_ptt_init_filters(struct pci_dev *pdev, void *data)
+>> +{
+>> +	struct hisi_ptt_filter_desc *filter;
+>> +	struct hisi_ptt *hisi_ptt = data;
+>> +
+>> +	filter = kzalloc(sizeof(*filter), GFP_KERNEL);
+>> +	if (!filter) {
+>> +		pci_err(hisi_ptt->pdev, "failed to add filter %s\n", pci_name(pdev));
+> 
+> If this fails we carry on anyway (no error checking on the bus_walk).
+> I think we should error out in that case (would need to use a flag placed
+> somewhere in hisi_ptt to tell we had an error).
+> 
+> That would complicate the unwind though.
+> Easiest way to do that unwind is probably to register a separate
+> devm_add_action_or_reset() callback for each filter.
+> 
+> If you prefer to carry on even with this allocation error, then maybe add a comment
+> here somewhere to make it clear that will happen.
+> 
 
-[1] https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/pull/740
+I'd prefer to carry on with this memory allocation error because this may not be fatal
+as: 1) the filter maybe partial initialized but the trace is available with resident
+filters and 2) the driver log here provides enough information that which filter has
+problem to add. 3) furthermore the tune function doesn't rely on this so we give a
+chance for the tune to be available if the filter allocation failed.
 
-Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
----
- drivers/hwmon/asus-ec-sensors.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+The log message provide information about what happened here, will add a comment here
+why we decide to carry on:
 
-diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-index 611e897429b1..57e11b2bab74 100644
---- a/drivers/hwmon/asus-ec-sensors.c
-+++ b/drivers/hwmon/asus-ec-sensors.c
-@@ -54,7 +54,7 @@ static char *mutex_path_override;
- /* ACPI mutex for locking access to the EC for the firmware */
- #define ASUS_HW_ACCESS_MUTEX_ASMX	"\\AMW0.ASMX"
- 
--#define MAX_IDENTICAL_BOARD_VARIATIONS	2
-+#define MAX_IDENTICAL_BOARD_VARIATIONS	3
- 
- /* Moniker for the ACPI global lock (':' is not allowed in ASL identifiers) */
- #define ACPI_GLOBAL_LOCK_PSEUDO_PATH	":GLOBAL_LOCK"
-@@ -257,17 +257,9 @@ static const struct ec_board_info board_info[] = {
- 		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
- 		.family = family_amd_500_series,
- 	},
--	{
--		.board_names = {"ROG CROSSHAIR VIII FORMULA"},
--		.sensors = SENSOR_SET_TEMP_CHIPSET_CPU_MB |
--			SENSOR_TEMP_T_SENSOR | SENSOR_TEMP_VRM |
--			SENSOR_FAN_CPU_OPT | SENSOR_FAN_CHIPSET |
--			SENSOR_CURR_CPU | SENSOR_IN_CPU_CORE,
--		.mutex_path = ASUS_HW_ACCESS_MUTEX_ASMX,
--		.family = family_amd_500_series,
--	},
- 	{
- 		.board_names = {
-+			"ROG CROSSHAIR VIII FORMULA"
- 			"ROG CROSSHAIR VIII HERO",
- 			"ROG CROSSHAIR VIII HERO (WI-FI)",
- 		},
--- 
-2.35.1
+	/*
+	 * We won't fail the probe if filter allocation failed here. The filters
+	 * should be partial initialized and users would know which filter fails
+	 * through the log. Other functions of PTT device are still available.
+	 */
+	filter = kzalloc(sizeof(*filter), GFP_KERNEL);
+	if (!filter) {
+		pci_err(hisi_ptt->pdev, "failed to add filter %s\n", pci_name(pdev));
+		return -ENOMEM;
+	}
 
+It's better to manually manage the filters as we're going to add support of dynamically
+updating the filters, which means the filter can be added/removed after probe. With
+devres it'll be complex to keep the order (the new added one will be released before
+the PMU unregistration, which is not expected).
+
+Will address the rest comments.
+
+Thanks,
+Yicong
+
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>> +	filter->devid = PCI_DEVID(pdev->bus->number, pdev->devfn);
+>> +
+>> +	if (pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT) {
+>> +		filter->is_port = true;
+>> +		list_add_tail(&filter->list, &hisi_ptt->port_filters);
+>> +
+>> +		/* Update the available port mask */
+>> +		hisi_ptt->port_mask |= hisi_ptt_get_filter_val(filter->devid, true);
+>> +	} else {
+>> +		list_add_tail(&filter->list, &hisi_ptt->req_filters);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void hisi_ptt_release_filters(void *data)
+>> +{
+>> +	struct hisi_ptt_filter_desc *filter, *tmp;
+>> +	struct hisi_ptt *hisi_ptt = data;
+>> +
+>> +	list_for_each_entry_safe(filter, tmp, &hisi_ptt->req_filters, list) {
+>> +		list_del(&filter->list);
+>> +		kfree(filter);
+> 
+> I think with separate release per entry above, this bit become simpler as
+> we walk all the elements in the devm_ callback list rather than two lists here.
+> 
+>> +	}
+>> +
+>> +	list_for_each_entry_safe(filter, tmp, &hisi_ptt->port_filters, list) {
+>> +		list_del(&filter->list);
+>> +		kfree(filter);
+>> +	}
+>> +}
+>> +
+> 
+> ...
+> 
+>> +
+>> +static int hisi_ptt_init_ctrls(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +	struct pci_dev *pdev = hisi_ptt->pdev;
+>> +	struct pci_bus *bus;
+>> +	int ret;
+>> +	u32 reg;
+>> +
+>> +	INIT_LIST_HEAD(&hisi_ptt->port_filters);
+>> +	INIT_LIST_HEAD(&hisi_ptt->req_filters);
+>> +
+>> +	ret = hisi_ptt_config_trace_buf(hisi_ptt);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	/*
+>> +	 * The device range register provides the information about the
+>> +	 * root ports which the RCiEP can control and trace. The RCiEP
+>> +	 * and the root ports it support are on the same PCIe core, with
+>> +	 * same domain number but maybe different bus number. The device
+>> +	 * range register will tell us which root ports we can support,
+>> +	 * Bit[31:16] indicates the upper BDF numbers of the root port,
+>> +	 * while Bit[15:0] indicates the lower.
+>> +	 */
+>> +	reg = readl(hisi_ptt->iobase + HISI_PTT_DEVICE_RANGE);
+>> +	hisi_ptt->upper_bdf = FIELD_GET(HISI_PTT_DEVICE_RANGE_UPPER, reg);
+>> +	hisi_ptt->lower_bdf = FIELD_GET(HISI_PTT_DEVICE_RANGE_LOWER, reg);
+>> +
+>> +	bus = pci_find_bus(pci_domain_nr(pdev->bus), PCI_BUS_NUM(hisi_ptt->upper_bdf));
+>> +	if (bus)
+>> +		pci_walk_bus(bus, hisi_ptt_init_filters, hisi_ptt);
+>> +
+>> +	ret = devm_add_action_or_reset(&pdev->dev, hisi_ptt_release_filters, hisi_ptt);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	hisi_ptt->trace_ctrl.on_cpu = -1;
+>> +	return 0;
+>> +}
+>> +
+>> +static ssize_t available_root_port_filters_show(struct device *dev,
+>> +						struct device_attribute *attr,
+>> +						char *buf)
+>> +{
+>> +	struct hisi_ptt *hisi_ptt = to_hisi_ptt(dev_get_drvdata(dev));
+>> +	struct hisi_ptt_filter_desc *filter;
+>> +	int pos = 0;
+>> +
+>> +	if (list_empty(&hisi_ptt->port_filters)) {
+>> +		pos = sysfs_emit(buf, "\n");
+>> +		goto out;
+>> +	}
+>> +
+>> +	list_for_each_entry(filter, &hisi_ptt->port_filters, list) {
+>> +		u16 devid = filter->devid;
+>> +		pos += sysfs_emit_at(buf, pos, "%04x:%02x:%02x.%d\t0x%05lx\n",
+>> +				     pci_domain_nr(hisi_ptt->pdev->bus),
+>> +				     PCI_BUS_NUM(devid),
+>> +				     PCI_SLOT(devid & 0xff),
+>> +				     PCI_FUNC(devid & 0xff),
+>> +				     hisi_ptt_get_filter_val(devid, true) |
+>> +				     HISI_PTT_PMU_FILTER_IS_PORT);
+>> +	}
+>> +
+>> +out:
+> 
+> As below. I'd directly return in the empty case and drop the label.
+> 
+>> +	return pos;
+>> +}
+>> +static DEVICE_ATTR_ADMIN_RO(available_root_port_filters);
+>> +
+>> +static ssize_t available_requester_filters_show(struct device *dev,
+>> +						struct device_attribute *attr,
+>> +						char *buf)
+>> +{
+>> +	struct hisi_ptt *hisi_ptt = to_hisi_ptt(dev_get_drvdata(dev));
+>> +	struct hisi_ptt_filter_desc *filter;
+>> +	int pos = 0;
+>> +
+>> +	if (list_empty(&hisi_ptt->req_filters)) {
+>> +		pos = sysfs_emit(buf, "\n");
+>> +		goto out;
+>> +	}
+>> +
+>> +	list_for_each_entry(filter, &hisi_ptt->req_filters, list) {
+>> +		u16 devid = filter->devid;
+>> +		pos += sysfs_emit_at(buf, pos, "%04x:%02x:%02x.%d\t0x%05x\n",
+>> +				     pci_domain_nr(hisi_ptt->pdev->bus),
+>> +				     PCI_BUS_NUM(devid),
+>> +				     PCI_SLOT(devid & 0xff),
+>> +				     PCI_FUNC(devid & 0xff),
+>> +				     hisi_ptt_get_filter_val(devid, false));
+>> +	}
+>> +
+>> +out:
+> 
+> Why bother with the label?  Given empty is a special case, you can
+> just do
+> 	return sysfs_emit(buf, "\n");
+> 
+> above.
+> 
+>> +	return pos;
+>> +}
+>> +static DEVICE_ATTR_ADMIN_RO(available_requester_filters);
+> 
+> 
+>> +static int hisi_ptt_trace_valid_filter(struct hisi_ptt *hisi_ptt, u64 config)
+>> +{
+>> +	unsigned long val, port_mask = hisi_ptt->port_mask;
+>> +	struct hisi_ptt_filter_desc *filter;
+>> +	int ret = -EINVAL;
+>> +
+>> +	hisi_ptt->trace_ctrl.is_port = FIELD_GET(HISI_PTT_PMU_FILTER_IS_PORT, config);
+>> +	val = FIELD_GET(HISI_PTT_PMU_FILTER_VAL_MASK, config);
+>> +
+>> +	/*
+>> +	 * Port filters are defined as bit mask. For port filters, check
+>> +	 * the bits in the @val are within the range of hisi_ptt->port_mask
+>> +	 * and whether it's empty or not, otherwise user has specified
+>> +	 * some unsupported root ports.
+>> +	 *
+>> +	 * For Requester ID filters, walk the available filter list to see
+>> +	 * whether we have one matched.
+>> +	 */
+>> +	if (!hisi_ptt->trace_ctrl.is_port) {
+>> +		list_for_each_entry(filter, &hisi_ptt->req_filters, list) {
+>> +			if (val == hisi_ptt_get_filter_val(filter->devid, filter->is_port)) {
+>> +				ret = 0;
+> 				return 0; ?
+> 
+> Unless someone has previously requested this particular form...
+> 
+> 
+>> +				break;
+>> +			}
+>> +		}
+>> +	} else if (bitmap_subset(&val, &port_mask, BITS_PER_LONG)) {
+>> +		ret = 0;
+> 
+> 		return 0;
+> 
+>> +	}
+>> +
+>> +	if (ret)
+>> +		return ret;
+> 
+> If you get here, return -EINVAL;
+> 
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void hisi_ptt_pmu_init_configs(struct hisi_ptt *hisi_ptt, struct perf_event *event)
+> 
+>> +static int hisi_ptt_pmu_event_init(struct perf_event *event)
+>> +{
+>> +	struct hisi_ptt *hisi_ptt = to_hisi_ptt(event->pmu);
+>> +	int ret;
+>> +	u32 val;
+>> +
+>> +	if (event->cpu < 0) {
+>> +		dev_dbg(event->pmu->dev, "Per-task mode not supported\n");
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	if (event->attr.type != hisi_ptt->hisi_ptt_pmu.type)
+>> +		return -ENOENT;
+>> +
+>> +	ret = hisi_ptt_trace_valid_filter(hisi_ptt, event->attr.config);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	val = FIELD_GET(HISI_PTT_PMU_DIRECTION_MASK, event->attr.config);
+>> +	ret = hisi_ptt_trace_valid_direction(val);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	val = FIELD_GET(HISI_PTT_PMU_TYPE_MASK, event->attr.config);
+>> +	ret = hisi_ptt_trace_valid_type(val);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	val = FIELD_GET(HISI_PTT_PMU_FORMAT_MASK, event->attr.config);
+>> +	ret = hisi_ptt_trace_valid_format(val);
+> You could do
+> 
+> 	return hisi_ptt_trace_valid_format(val);
+> 
+> Up to you on this one.
+> 
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	return 0;
+>> +}
+>> +
+> 
+> 
+> 
+> 
+>> +/*
+>> + * The DMA of PTT trace can only use direct mapping, due to some
+>> + * hardware restriction. Check whether there is an IOMMU or the
+> 
+> "Check whether there is no IOMMU or the policy of the IOMMU domain
+> is passthrough, otherwise the trace cannot work."
+> 
+> (need the "no" for the IOMMU presence)
+> 
+>> + * policy of the IOMMU domain is passthrough, otherwise the trace
+>> + * cannot work.
+>> + *
+>> + * The PTT device is supposed to behind an ARM SMMUv3, which
+>> + * should have passthrough the device by a quirk.
+>> + */
+>> +static int hisi_ptt_check_iommu_mapping(struct pci_dev *pdev)
+>> +{
+>> +	struct iommu_domain *iommu_domain;
+>> +
+>> +	iommu_domain = iommu_get_domain_for_dev(&pdev->dev);
+>> +	if (!iommu_domain || iommu_domain->type == IOMMU_DOMAIN_IDENTITY)
+>> +		return 0;
+>> +
+>> +	return -EOPNOTSUPP;
+>> +}
+>> +
+> 
+> ...
+> 
+>> +
+>> +static int hisi_ptt_cpu_teardown(unsigned int cpu, struct hlist_node *node)
+>> +{
+>> +	struct hisi_ptt *hisi_ptt;
+>> +	int target, src;
+>> +
+>> +	hisi_ptt = hlist_entry_safe(node, struct hisi_ptt, hotplug_node);
+>> +	src = hisi_ptt->trace_ctrl.on_cpu;
+>> +
+>> +	if (!hisi_ptt->trace_ctrl.started || src != cpu)
+>> +		return 0;
+>> +
+>> +	target = cpumask_any(cpumask_of_node(dev_to_node(&hisi_ptt->pdev->dev)));
+>> +	if (target < nr_cpumask_bits) {
+>> +		dev_err(hisi_ptt->hisi_ptt_pmu.dev, "no available cpu for perf context migration\n");
+> 
+> Very long line, and not obvious disadvantage in splitting it before the string.
+> 
+>> +		return 0;
+>> +	}
+>> +
+>> +	perf_pmu_migrate_context(&hisi_ptt->hisi_ptt_pmu, src, target);
+>> +	WARN_ON(irq_set_affinity(pci_irq_vector(hisi_ptt->pdev, HISI_PTT_TRACE_DMA_IRQ),
+>> +				 cpumask_of(cpu)));
+>> +	hisi_ptt->trace_ctrl.on_cpu = target;
+>> +
+>> +	return 0;
+>> +}
+>> +
+> 
+>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.h b/drivers/hwtracing/ptt/hisi_ptt.h
+>> new file mode 100644
+>> index 000000000000..2344e4195648
+>> --- /dev/null
+>> +++ b/drivers/hwtracing/ptt/hisi_ptt.h
+> 
+> 
+>> +/**
+>> + * struct hisi_ptt_filter_desc - Descriptor of the PTT trace filter
+>> + * @list:    entry of this descriptor in the filter list
+>> + * @is_port: the PCI device of the filter is a Root Port or not
+>> + * @devid:   the PCI device's devid of the filter
+>> + */
+>> +struct hisi_ptt_filter_desc {
+>> +	struct list_head list;
+>> +	bool is_port;
+>> +	u16 devid;
+>> +};
+>> +
+>> +
+> 
+> Trivial if you are doing a v9: one blank line only.
+> 
+>> +/**
+>> + * struct hisi_ptt_pmu_buf - Descriptor of the AUX buffer of PTT trace
+>> + * @length:   size of the AUX buffer
+>> + * @nr_pages: number of pages of the AUX buffer
+>> + * @base:     start address of AUX buffer
+>> + * @pos:      position in the AUX buffer to commit traced data
+>> + */
+>> +struct hisi_ptt_pmu_buf {
+>> +	size_t length;
+>> +	int nr_pages;
+>> +	void *base;
+>> +	long pos;
+>> +};
+>> +
+> 
+> .
+> 

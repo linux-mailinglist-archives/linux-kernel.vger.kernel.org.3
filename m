@@ -2,121 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6555752A161
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FA552A165
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345902AbiEQMWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S1345935AbiEQMXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiEQMV6 (ORCPT
+        with ESMTP id S1345325AbiEQMXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:21:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF7645ADC
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:21:57 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nqwD5-0004h1-Nl; Tue, 17 May 2022 14:21:55 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 959A78055C;
-        Tue, 17 May 2022 12:21:54 +0000 (UTC)
-Date:   Tue, 17 May 2022 14:21:53 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Max Staudt <max@enpas.org>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Message-ID: <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
- <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net>
- <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
- <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
- <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
- <20220517104545.eslountqjppvcnz2@pengutronix.de>
- <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
- <20220517141404.578d188a.max@enpas.org>
+        Tue, 17 May 2022 08:23:43 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0B44553F;
+        Tue, 17 May 2022 05:23:43 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so2080274pjq.2;
+        Tue, 17 May 2022 05:23:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=neFz4/gw4GZbGKQE+sKbAChYelz9V5KdJJ0LHprcTfk=;
+        b=oH82CmvDbeMGvzQ47QUPJHrPLVppZ0oRAJfwVGEhhIjs49n4Vl5G+6fke9/CgFpwXf
+         SEYEEyGv3RwuWEEA1oJcEn4JpQKa79XLAwD8M3QKYvWmOZR17YXEbyCpDpYlJnfoHz6m
+         vbfD4HN+LqBGJDLKu3PQyD/XtzMUBuCgzhTDnUOLk2wjuqPukHhaEiW4kQNMkYlpd/zS
+         fgyqYdSy5QH7IZH48Hq09TYk1O5/V8WQYGesU3fhBZquANZOec8hGc5KCuXbQulk6cst
+         G3ew2reEXWlt7seMuitot7HfPAeE4yspeoO0VqaWTj22EPTygZ+Kt4uzvj91B/9j8Uus
+         Df4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=neFz4/gw4GZbGKQE+sKbAChYelz9V5KdJJ0LHprcTfk=;
+        b=Vin8Y7M1WDO2o757zTId1IatXPl21OPjfIUJ7oBZVZgJA+/LTToOiDYHg4M42hpqp2
+         q0r2FRoReo3laPtGbBhwWCtmOqpZDFeQGYep7aljfmyoSkvincNTB9FcCzuVE0CNF5s/
+         7DtPzr89KTU+6R4SMWrVJ31mcGJsQgu8eXa52ZStSwY/zJt1EGUCri9lhqDYFHWsuV7D
+         vt4lzqvFBhikJC5n6fIhp+VYqvpSaRxLy/PX9KQ3ca1W+RPLas0TARX+S5HVcA1XXCyo
+         +Cjr6E5YCbbgEygHcQ29tegcv4VnKVzFUcNey+kYwFcRMYtGSNMXWLXJrKuYpbjOs6c3
+         CILQ==
+X-Gm-Message-State: AOAM533fj8o1ExngV87/NZ9CMuy/fg73Hvl1yWZvLd+s2vEO2F62EhvS
+        hL4XsE0NqvzgIL7QAY6R3Y9MpFLvmeSl12lYqEuv62aL9IfTZm8/pw==
+X-Google-Smtp-Source: ABdhPJwo4Zvtc0ieMoWlmo8DUTEhTnJNpzES7Sj+dAzCaYKUoKjzaeYEV1j14cMWIo8LcRIk3+gLHbNuIMRk207MRMY=
+X-Received: by 2002:a17:902:c2cf:b0:15f:1396:f54e with SMTP id
+ c15-20020a170902c2cf00b0015f1396f54emr22590323pla.161.1652790222510; Tue, 17
+ May 2022 05:23:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6yob3xezug2i52qe"
-Content-Disposition: inline
-In-Reply-To: <20220517141404.578d188a.max@enpas.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220513143513.2284425-1-zheyuma97@gmail.com> <20220514153625.18c4d9f8@jic23-huawei>
+In-Reply-To: <20220514153625.18c4d9f8@jic23-huawei>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Tue, 17 May 2022 20:23:31 +0800
+Message-ID: <CAMhUBj=uq6HhzRpTUO_iqrFQeVjiKE0n0bJ6SMKw8ZTdvFkCEA@mail.gmail.com>
+Subject: Re: [PATCH] iio: imu: bmi160: Fix the error handling at bmi160_chip_init()
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     lars@metafoo.de, andriy.shevchenko@linux.intel.com,
+        sean@geanix.com, linux-iio@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, May 14, 2022 at 10:27 PM Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> On Fri, 13 May 2022 22:35:13 +0800
+> Zheyu Ma <zheyuma97@gmail.com> wrote:
+>
+> > When the driver fails in bmi160_chip_init(), it should disable the
+> > regulator.
+> >
+> > The following log shows it:
+> >
+> > [   18.709662] WARNING: CPU: 0 PID: 294 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+> > [   18.712069] RIP: 0010:_regulator_put+0x3ec/0x4e0
+> > [   18.716395] Call Trace:
+> > [   18.716522]  <TASK>
+> > [   18.716636]  regulator_bulk_free+0x82/0xe0
+> > [   18.717077]  i2c_device_probe+0x6f0/0x800
+> >
+> > Fixes: 5dea3fb066f0 ("iio: imu: bmi160: added regulator support")
+> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+>
+> Hi,
+>
+> Good find, but Tong Zhang got their first and the resulting patch
+> fixes an additional issue missed in this fix. See below.
 
---6yob3xezug2i52qe
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for your reply! I'll check the linux-next branch next time.
 
-On 17.05.2022 14:14:04, Max Staudt wrote:
-> > After looking through drivers/net/can/Kconfig I would probably phrase
-> > it like this:
-> >=20
-> > Select CAN devices (hw/sw) -> we compile a can_dev module. E.g. to=20
-> > handle the skb stuff for vcan's.
-> >=20
-> > Select hardware CAN devices -> we compile the netlink stuff into
-> > can_dev and offer CAN_CALC_BITTIMING and CAN_LEDS to be compiled into
-> > can_dev too.
-> >=20
-> > In the latter case: The selection of flexcan, ti_hecc and mcp251xfd=20
-> > automatically selects CAN_RX_OFFLOAD which is then also compiled into=
-=20
-> > can_dev.
-> >=20
-> > Would that fit in terms of complexity?
->=20
-> IMHO these should always be compiled into can-dev. Out of tree drivers
-> are fairly common here, and having to determine which kind of can-dev
-> (stripped or not) the user has on their system is a nightmare waiting to
-> happen.
-
-I personally don't care about out-of-tree drivers.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---6yob3xezug2i52qe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKDk14ACgkQrX5LkNig
-013nswf/crAeAo5zG26rSgyiO4+0Drl9nH1Ptc+d3qXd6HIClrOU2nT5hFOvM/K6
-Woz8yqddAltpBRIccYjfYuDD02sR9U+PnhJOFohObcDr1nJiwUR1hKkZdoeKfc6B
-BoMaKtUxX+a54BT3AyzK2hrTm+2SwGEcmzWDkYp6e2HDLlrE66/bP55WleFIGzru
-hbkX387AAnKvUcEPLAb06eoYwOSyXD5I8qouMtHPVkxfRRxgN3Bl4dtvOAPs4m/M
-PK4cTOV+p0mPDWJn9IK1rSr+/oySE+Ashr0YisONu14ayjLaCJ70ZnAPviTpf/p5
-wa5dG4B4FxGhfz8GU7dnfruvfUg30w==
-=gM/F
------END PGP SIGNATURE-----
-
---6yob3xezug2i52qe--
+Zheyu Ma

@@ -2,85 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C74B5295E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E5D5295E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234773AbiEQALk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 20:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        id S236313AbiEQAMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 20:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiEQALi (ORCPT
+        with ESMTP id S230284AbiEQAMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 20:11:38 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B777863EF;
-        Mon, 16 May 2022 17:11:37 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-d39f741ba0so22292801fac.13;
-        Mon, 16 May 2022 17:11:37 -0700 (PDT)
+        Mon, 16 May 2022 20:12:40 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FF1E0BF
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:12:38 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id p2-20020a25d802000000b0064d9002a5abso4248429ybg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=POSUQDnHPrpNehehyVbBQzZS/bdNcKX8LMqXFHOPYiQ=;
+        b=F7MTUDzBqqXmZTgOG1Blw7YHBcIMvU3AZ+oaermvjpTkUV1IcxqB0FaQN+BZFIXdOT
+         tbcybxWl0hiGKWQMuApoHEL1nWa0GMmMHktHEW8naewTRLqMC20k/5J0bkgxxLIefWAa
+         uwSRZts3L5DxRlFnsRPjYP99jXzjhtkB0XnXzAlcLWZXZsNURpOBs3/wvSu8m3EdG9zZ
+         bCzgD4TliZUNwBD6Rr0zMOE9lsPmb12auG2iA/XtXRDnYWkUyeUAohBSwSTVxAfoP9Px
+         MIPRxClfRDrQzjEthWUNNBYYSqhUERXGbDQLgYGGYcyoh85xGMTyEx8Ll98X+R72vLLQ
+         SK/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B59B15X2Y9707ITMe3Q0ZoBhueaMaEM8WsTZOA0UaUI=;
-        b=k9Od3VBElk+dZsfFGmjrIczXTFr6MjGIwXflxcfNlXQSDLZ0eJs1wD6f+kkFcWV/nq
-         zxLFtWyY2u+PXO3ub0F/RwjvhZ53c+S1XdqWL5+Y02uFCZgFJmmtKbd2br0lKHr/rqrR
-         hVJz4WdLa62OiVCD/HsQNz/mda8mPAN2eNJ4NPrGu4Rtduc1r2V7MnoyDPcB9LXXEi43
-         3TWSYyMTOFmRaw8QwSFWpp3U/UBtLOkspWpphs29rCIHpSJxeGdJBZr5ogJaZ5bDtgEd
-         KJ3jBMaAW3inCIOfKcb3L4QWRNoAgkN9BdcX7LYdJ2Ivq2N2gvAM+khqbF00pAqfe4lS
-         zm0Q==
-X-Gm-Message-State: AOAM53304b+sDaJQ5Pc6GHqwJQB6YLD/So0fnmD3tKo7CmIL5P98BX93
-        aELFxjjnRA4btnpyFYUlbw==
-X-Google-Smtp-Source: ABdhPJy/FjSWyr0EuO88WWVHdVeVWy8f5dNYYK1eSBYd+d8aSX7IHAyFLoKjHN5yea6VyPWiXSOdNg==
-X-Received: by 2002:a05:6870:9a09:b0:e9:20a7:6cf6 with SMTP id fo9-20020a0568709a0900b000e920a76cf6mr16579934oab.122.1652746297033;
-        Mon, 16 May 2022 17:11:37 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x16-20020a056830245000b0060603221251sm4411822otr.33.2022.05.16.17.11.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 17:11:36 -0700 (PDT)
-Received: (nullmailer pid 3620853 invoked by uid 1000);
-        Tue, 17 May 2022 00:11:34 -0000
-Date:   Mon, 16 May 2022 19:11:34 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Kiran Gunda <kgunda@codeaurora.org>
-Subject: Re: [PATCH 1/2] dt-bindings: leds: qcom-wled: fix number of addresses
-Message-ID: <20220517001134.GA3620793-robh@kernel.org>
-References: <20220505154702.422108-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505154702.422108-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=POSUQDnHPrpNehehyVbBQzZS/bdNcKX8LMqXFHOPYiQ=;
+        b=N3NS2sEX8RvaWfBp7o9DN9NAH1F8YOMadQ653bjfbhYmRAgSC6STr7onw/oFBUDCf5
+         TO+BbWlh2vXyQ2MifwMwKKsUqrjbb+hJ+X2Z7RuJi4u7PlovjSfS7wDCo8p7DmhAeN1j
+         Tuc++Q0YztcJvP8TZOgamxKAHrDVTgwis42lSrwSEOGr16zVu5plbGDtVmzAjKSUwetn
+         LNQDcaLxJX/s4VGRSy5G+Rn6GruuqxW95TTwZWihW/XmflFLZX2GlRrYt1kfNJMcuA1N
+         A0LHx0ouwrN47IoqiO34POu3i/Zz3XXeg72YPkqpplxqpO8X9q8irCQ+XrV73MNaIf8o
+         OEtQ==
+X-Gm-Message-State: AOAM5327s+3sBi6AAaDs96JyDHMDlet7qsi2uRSdTgszhJ2Z59VC30Qg
+        s1d2Mv/sAgLJnwdVpKjBDBJkBMa3mS84oQsG/rc2MoViJr7Fa6m94eyoyOKJEcj1daO7ja/DOto
+        NxNOM8C9MzArHcZZzBlW2NaB+TSFkNV/7XZq9iZOJkt35ZBmck9/DRjNqdNMCvYSXoIqMurS8
+X-Google-Smtp-Source: ABdhPJw7wkOQEnebG0bKDEfy+HO9/dT6x/P8BAv9r1r6AFgai6HwZg0ceermgPNfExmtjbfP+GG2DmGNXpJW
+X-Received: from uluru3.svl.corp.google.com ([2620:15c:2cd:202:666:6be0:2971:54bb])
+ (user=eranian job=sendgmr) by 2002:a81:200b:0:b0:2f8:5866:9eb0 with SMTP id
+ g11-20020a81200b000000b002f858669eb0mr23219985ywg.269.1652746357705; Mon, 16
+ May 2022 17:12:37 -0700 (PDT)
+Date:   Mon, 16 May 2022 17:12:34 -0700
+Message-Id: <20220517001234.3137157-1-eranian@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
+Subject: [PATCH v2] x86/resctrl: Fix zero cbm for AMD in cbm_validate
+From:   Stephane Eranian <eranian@google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     fenghua.yu@intel.com, reinette.chatre@intel.com,
+        babu.moger@amd.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 05 May 2022 17:47:01 +0200, Krzysztof Kozlowski wrote:
-> On PM660L, PMI8994 and PMI8998, the WLED has two address spaces.  This
-> also fixes dtbs_check warnings like:
-> 
->   arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dtb: leds@d800: reg: [[55296], [55552]] is too long
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/leds/backlight/qcom-wled.yaml    | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
+AMD supports cbm with no bits set as reflected in rdt_init_res_defs_amd() by:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+	r->cache.arch_has_empty_bitmaps = true;
+
+However given the unified code in cbm_validate(), checking for:
+
+    val == 0 && !arch_has_empty_bitmaps
+
+is not enough because you also have in cbm_validate():
+	if ((zero_bit - first_bit) < r->cache.min_cbm_bits)
+
+Default value for if r->cache.min_cbm_bits = 1
+
+Leading to:
+
+$ cd /sys/fs/resctrl
+$ mkdir foo
+$ cd foo
+$ echo L3:0=0 > schemata
+-bash: echo: write error: Invalid argument
+
+Patch initializes fixes the logic in cbm_validate() to take into account
+arch_has_empty_bitmaps when true and cbm value is 0.
+
+Fixes: 316e7f901f5a ("x86/resctrl: Add struct rdt_cache::arch_has_{sparse, empty}_bitmaps")
+
+Signed-off-by: Stephane Eranian <eranian@google.com>
+---
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+index 87666275eed9..f376ed8bff8f 100644
+--- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
++++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+@@ -107,6 +107,10 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
+ 	first_bit = find_first_bit(&val, cbm_len);
+ 	zero_bit = find_next_zero_bit(&val, cbm_len, first_bit);
+ 
++	/* no need to check bits if arch supports no bits set */
++	if (r->cache.arch_has_empty_bitmaps && val == 0)
++		goto done;
++
+ 	/* Are non-contiguous bitmaps allowed? */
+ 	if (!r->cache.arch_has_sparse_bitmaps &&
+ 	    (find_next_bit(&val, cbm_len, zero_bit) < cbm_len)) {
+@@ -119,7 +123,7 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
+ 				    r->cache.min_cbm_bits);
+ 		return false;
+ 	}
+-
++done:
+ 	*data = val;
+ 	return true;
+ }
+-- 
+2.36.0.550.gb090851708-goog
+

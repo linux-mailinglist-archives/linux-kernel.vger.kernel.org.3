@@ -2,232 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7BE529FD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0760529FE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344668AbiEQK5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S1344789AbiEQK61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344811AbiEQK5h (ORCPT
+        with ESMTP id S1344691AbiEQK6U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:57:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12D2749FA0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:57:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2AB91042;
-        Tue, 17 May 2022 03:57:21 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B32B73F66F;
-        Tue, 17 May 2022 03:57:20 -0700 (PDT)
-Date:   Tue, 17 May 2022 11:57:18 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Qing Wang <wangqing@vivo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] arch_topology: Use llc_id instead of package_id
-Message-ID: <20220517105718.tvpmj2xxb2qj3bev@bogus>
-References: <20220513083400.343706-1-dietmar.eggemann@arm.com>
- <20220513090330.z25fwthekn4rjkwq@bogus>
- <afafbb0c-5279-bee8-1ef4-434733e2a552@arm.com>
- <20220513110312.wy6g5avs7ngkmhfu@bogus>
- <634a4b8c-84d2-51a9-ef54-33b81683c849@arm.com>
- <20220516103524.35swlxp2367baxx6@bogus>
- <beda044e-0b91-4359-c6bf-5e34c285fc5c@arm.com>
+        Tue, 17 May 2022 06:58:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13820483AA;
+        Tue, 17 May 2022 03:58:18 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 97F9F21CB7;
+        Tue, 17 May 2022 10:58:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652785097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UpU3PwW0+vEopHT6mwlEtKZnt5vjcj6K5z6p2RvwFDI=;
+        b=A62HHwy96rt3Peh/2oQoJb/W5OQ8Z85j1RGtcSopCMAn7XlytDk/24zuEW9Tpga7/Yq/ue
+        yQKQnkJYG61eGpGqLTfCCGX/srVGllxHF23XScgduJU8Byym34HyS4Bk1MWh3Z8Rwo0Y9Q
+        s5hDkQjh35sYKTX8Zcjp7xwrzg3RpvU=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5CD572C141;
+        Tue, 17 May 2022 10:58:15 +0000 (UTC)
+Date:   Tue, 17 May 2022 12:58:15 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 05/30] misc/pvpanic: Convert regular spinlock into
+ trylock on panic path
+Message-ID: <YoN/x2fpdDU4+nSB@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-6-gpiccoli@igalia.com>
+ <YnpXGOXicwdy1E6n@alley>
+ <0a20dd06-f459-638e-cb4d-8255ab1a1f23@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <beda044e-0b91-4359-c6bf-5e34c285fc5c@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0a20dd06-f459-638e-cb4d-8255ab1a1f23@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dietmar,
-
-Thanks for the detailed response.
-
-On Tue, May 17, 2022 at 11:14:44AM +0200, Dietmar Eggemann wrote:
-> On 16/05/2022 12:35, Sudeep Holla wrote:
-> > On Fri, May 13, 2022 at 02:04:29PM +0200, Dietmar Eggemann wrote:
-> >> On 13/05/2022 13:03, Sudeep Holla wrote:
-> >>> On Fri, May 13, 2022 at 12:42:00PM +0200, Dietmar Eggemann wrote:
-> >>>> On 13/05/2022 11:03, Sudeep Holla wrote:
-> >>>>> On Fri, May 13, 2022 at 10:34:00AM +0200, Dietmar Eggemann wrote:
-> 
-> [...]
-> 
-> >> cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
-> >> CLS
-> >> MC
-> >> ... I skip the NUMA levels
-> >>
-> >> # cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd] | head -5
-> >> cpu0 0
-> >> domain0 00000000,00000000,0000000f <--  4 CPUs <-- cluster_id
-> >> domain1 00000000,00000000,00ffffff <-- 24 CPUs
-> >>
-> >> If you use cluster_id for 1. level cluster then you cover MC's 24 CPUs
+On Tue 2022-05-10 10:00:58, Guilherme G. Piccoli wrote:
+> On 10/05/2022 09:14, Petr Mladek wrote:
+> > [...]
+> >> With that said, it's dangerous to use regular spinlocks in such path,
+> >> as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
+> >> This patch fixes that by replacing regular spinlocks with the trylock
+> >> safer approach.
 > > 
-> > OK, the way I am looking at this from CPU topology perspective seem to be
-> > different from what you are expecting here w.r.t sched_domains.
+> > It seems that the lock is used just to manipulating a list. A super
+> > safe solution would be to use the rcu API: rcu_add_rcu() and
+> > list_del_rcu() under rcu_read_lock(). The spin lock will not be
+> > needed and the list will always be valid.
 > > 
-> > IMO, these cpumasks on its own must represent real CPU topology and how it
-> > is used via cpu_*_mask by the scheduler domains is different.
-> 
-> I'm afraid that in case we want to change the mapping of scheduler
-> (topology) flags (like SD_SHARE_PKG_RESOURCES) via `*_flags()` of
-> default_topology[] we would have to consider all ACPI corner cases (see
-> cpu_coregroup_mask()) as well.
-> 
-> See (1) further down.
->
-
-Understood.
-
-> [...]
-> 
-> > I see on Juno with SCHED_CLUSTER and cluster masks set, I see CLS and MC
-> > domains.
-> 
-> Right but that's not really correct from the scheduler's POV.
->
-
-OK
-
-> Juno has LLC on cpumasks [0,3-5] and [1-2], not on [0-5]. So the most
-> important information is the highest Sched Domain with the
-> SD_SHARE_PKG_RESOURCES flag. This is the MC layer (cpu_core_flags() in
-> default_topology[]). So the scheduler would think that [0-5] are sharing
-> LLC.
->
-
-Ah OK, but if LLC sibling masks are updated, cpu_coregroup_mask() takes
-care of it IIUC, right ?
-
-> You have LLC at:
-> 
-> cat /sys/devices/system/cpu/cpu0/cache/index2/shared_cpu_list
->                                        ^^^^^^
-> 0,3-5
-> 
-> but the scheduler sees the highest SD_SHARE_PKG_RESOURCES on MC:
-> 
-> cat /sys/kernel/debug/sched/domains/cpu0/domain1/flags
->                                          ^^^^^^^
-> ... SD_SHARE_PKG_RESOURCES ...
-> 
-> [...]
-> 
-> >> For one level (MC) yes, but not for 2 (MC and CLS). And cluster_id was
-> >> introduces for the 2. level.
-> >>
+> > The advantage would be that it will always call members that
+> > were successfully added earlier. That said, I am not familiar
+> > with pvpanic and am not sure if it is worth it.
 > > 
-> > That sounds wrong and not what ACPI PPTT code says. My series just aligns
-> > with what is done with ACPI PPTT IIUC. I need to check that again if my
-> > understand differs from what is being done. But the example of Kunpeng920
-> > aligns with my understanding.
+> >> It also fixes an old comment (about a long gone framebuffer code) and
+> >> the notifier priority - we should execute hypervisor notifiers early,
+> >> deferring this way the panic action to the hypervisor, as expected by
+> >> the users that are setting up pvpanic.
+> > 
+> > This should be done in a separate patch. It changes the behavior.
+> > Also there might be a discussion whether it really should be
+> > the maximal priority.
+> > 
+> > Best Regards,
+> > Petr
 > 
-> (1) IMHO, as long as we don't consider cache (llc) information in DT we
-> can't have the same coverage as ACPI.
->
-
-Agreed. But we are not changing any topology masks as per sched domain
-requirements as they get exposed to the userspace as is.
-
-> Let's take an ACPI !CONFIG_NUMA Kunpeng920 as an example.
+> Thanks for the review Petr. Patch was already merged - my goal was to be
+> concise, i.e., a patch per driver / module, so the patch kinda fixes
+> whatever I think is wrong with the driver with regards panic handling.
 > 
-> # cat /sys/kernel/debug/sched/domains/cpu0/domain*/name
-> CLS
-> MC
-> DIE
-> 
-> # cat /sys/kernel/debug/sched/domains/cpu0/domain*/flags
-> SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE
->   SD_SHARE_PKG_RESOURCES SD_PREFER_SIBLING
->   ^^^^^^^^^^^^^^^^^^^^^^
-> SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE
->   SD_SHARE_PKG_RESOURCES SD_PREFER_SIBLING
->   ^^^^^^^^^^^^^^^^^^^^^^
-> SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE
->   SD_PREFER_SIBLING
-> 
-> cat /proc/schedstat | awk '{print $1 " " $2 }' | grep ^[cd] | head -4
-> cpu0 0
-> domain0 00000000,00000000,0000000f
-> domain1 00000000,00000000,00ffffff <-- (2)
-> domain2 ffffffff,ffffffff,ffffffff
-> 
-> cat /sys/devices/system/cpu/cpu0/topology/thread_siblings_list
-> 0
-> cat /sys/devices/system/cpu/cpu0/topology/core_cpus_list
-> 0
-> cat /sys/devices/system/cpu/cpu0/topology/cluster_cpus_list
-> 0-3
-> cat /sys/devices/system/cpu/cpu0/topology/core_siblings_list
-> 0-47
-> cat /sys/devices/system/cpu/cpu0/topology/package_cpus_list
-> 0-47
-> 
-> The MC mask 00ffffff is not derived from any topology mask but from the
-> llc (index3) mask:
-> 
-> cat /sys/devices/system/cpu/cpu0/cache/index3/shared_cpu_list
->                                        ^^^^^^
-> 0-23 <-- (2)
->
+> Do you think it worth to remove this patch from Greg's branch just to
+> split it in 2? Personally I think it's not worth, but opinions are welcome.
 
-Understood and on Juno if we get llc_siblings right, the sched domains
-must be sorted correctly ?
+No problem. It is not worth the effort.
 
->
-> Coming back to the original request (the support of Armv9 L2 complexes
-> in Android) from Qing on systems like QC SM8450:
->
->       .---------------.
-> CPU   |0 1 2 3 4 5 6 7|
->       +---------------+
-> uarch |l l l l m m m b| (so called tri-gear: little, medium, big)
->       +---------------+
->   L2  |   |   | | | | |
->       +---------------+
->   L3  |<--         -->|
->       +---------------+
->       |<-- cluster -->|
->       +---------------+
->       |<--   DSU   -->|
->       '---------------'
->
-> This still wouldn't be possible. We know that Phantom Domain (grouping
-> after uarch) is not supported in mainline but heavily used in Android
-> (legacy deps).
->
 
-Correct, unless you convince to get a suitable notion of *whatever*
-phantom domains represent into the DT bindings, they don't exist.
-If someone wants to support this config, they must first represent that
-in the firmware so that OS can infer information from the same.
+> About the RCU part, this one really could be a new patch, a good
+> improvement patch - it makes sense to me, we can think about that after
+> the fixes I guess.
 
-> If we say we only support L2 sharing (asymmetric here since only CPU0-3
-> have it !!!) and we don't support Phantom then your approach will work
-> for such systems.
+Yup.
 
-Thanks, as I said what is *Phantom* domain ;) ? Can you point me to the
-DT or ACPI binding for the same ? Just kidding, I know they don't exist.
-
-Anyways, I understand your concern that llc_sibling must go with my set
-of topology changes which I agree. Is that the only concern ?
-
---
-Regards,
-Sudeep
+Best Regards,
+Petr

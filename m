@@ -2,53 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967BA529BF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E915529BF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241740AbiEQINI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 04:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38212 "EHLO
+        id S242121AbiEQINO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 04:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242524AbiEQIL6 (ORCPT
+        with ESMTP id S242556AbiEQIMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 04:11:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8283CA5B;
-        Tue, 17 May 2022 01:11:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D8CAB81676;
-        Tue, 17 May 2022 08:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA72FC34118;
-        Tue, 17 May 2022 08:11:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652775114;
-        bh=llNkl7VjoDFq45GE9zLRv3fM/rdlrqyTYZ0Se5GgTdo=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=UtSmDl9WNRGU0BI0/WBNJk0fMEnYSZXzY4F9kNiqfmN/mKUBJDNFK5zySt5d4RR+f
-         dCsuRZ6NaYYyJTfcqgEu0o+eO5cQE6oOMQq/P3ppWwLfSa4ir2bUKkJbnKvRebhERZ
-         ACWmtMNRJSI47E/uEWw8WTb8S3np8wK/hKoL+JqwLabjODlI3aqMUTB3i8LDNFk1d9
-         kiHYXaw2sTdAmhSj18ZVzteVBAGIsEOHo4ksASJccQmrWzYv+slI7x9HdYgYOHdwa/
-         /bZt3LL5ovU/Sgw6fd8r/uU0QJErFhGO+QxhBXVh2so0W35vsGr4f/BqneXwKgQd5t
-         bkNbyss5hlqHw==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 17 May 2022 04:12:02 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19123CA5D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 01:12:00 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id gh6so33234881ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 01:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=wgki0G9Wv5/n5UTtWnBOnizEKI49Vz+o/9uXaANdQKM=;
+        b=KH000ohs4fSRZFwYuUErgsFjS+0iNt/SolTKyFfq26a3M3FIDXGsqXxQEfc5l8K4mu
+         3sWrag2zururob2VyYFZxro19RauMPzVqz4rLMmCA/XP1pPNk0b9bxkrk9obSUqCWZAw
+         IpgWgDAPdSpYAiMun3VHd2A1jY8fF581XNbGbs0BFzR5W/muhOob3IM/cf5qt/l4HpKd
+         /u4qbkk60mPFKIp6lUcL5PziR5DToDcieBM24iVWCKjYqQMF5Pcd7+bKCBBOVIWE9HNj
+         LUHTOyd4M6BSh14CfxJMclr9f+7hRnFdPTkusygmS9+yp4rVJwSiE4DCt9PVeDNLJRnz
+         eFmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wgki0G9Wv5/n5UTtWnBOnizEKI49Vz+o/9uXaANdQKM=;
+        b=VmQedNW8Hrn7BvTZUvOrIFK9qOOWDOeXqPYx/B2XL0rfQFs5XQAJerce9oriZh+w3R
+         EyXnWAnLixf7AwZEc44SDYEF5+wiOB6zlIfsUNDIXaKw07eGEpP3A72/t2q4uSE/Tw8A
+         aHgluRPyuV/pHbIumI2TSOKIXDMxYoWIsD3EWXpoeL6zkFJZZGer2y7tpcwggEnn43DZ
+         3TXpip4kYzINS+amqtKlgnfM1NN3WwHG/IGRuSZcT7T/MhCW1+7TDYN0sbFJtMgHEtGS
+         FI4gsfymhPycgdf1YMfm6M8McaJPqABAT75LescNPwf+hS+w2Vst0wYRrVCQ1nVhGZr4
+         OsqQ==
+X-Gm-Message-State: AOAM530P6aDJR9XGsqk5DUZTjE7sdYhb0jANn/QqoNuFTgrPWxG1IUe4
+        BWVqdp/ha0JZrl5hrO+gUevcqQ==
+X-Google-Smtp-Source: ABdhPJyiJ3rLUoJTATJaGDEwhiHxCghwyEgdBWxx+/58U3F4TRYwNr4DHdavl9jouiCx3wsL9t04uA==
+X-Received: by 2002:a17:907:2bde:b0:6f3:8e91:3a60 with SMTP id gv30-20020a1709072bde00b006f38e913a60mr18053727ejc.434.1652775119498;
+        Tue, 17 May 2022 01:11:59 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f4-20020a056402194400b0042aa6a43ccdsm3830418edz.28.2022.05.17.01.11.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 01:11:59 -0700 (PDT)
+Message-ID: <824e71c1-11e9-a5f6-1706-e3970e42ef90@linaro.org>
+Date:   Tue, 17 May 2022 10:11:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220426212136.1543984-1-bjorn.andersson@linaro.org>
-References: <20220426212136.1543984-1-bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v4] clk: qcom: rcg2: Cache CFG register updates for parked RCGs
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <quic_tdas@quicinc.com>
-Date:   Tue, 17 May 2022 01:11:52 -0700
-User-Agent: alot/0.10
-Message-Id: <20220517081154.AA72FC34118@smtp.kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 07/11] dt-bindings: clocks: qcom,gcc-ipq8074: support
+ power domains
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, bjorn.andersson@linaro.org,
+        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tdas@codeaurora.org, absahu@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmitry.baryshkov@linaro.org
+References: <20220515210048.483898-1-robimarko@gmail.com>
+ <20220515210048.483898-7-robimarko@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220515210048.483898-7-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,40 +80,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bjorn Andersson (2022-04-26 14:21:36)
-> As GDSCs are turned on and off some associated clocks are momentarily
-> enabled for house keeping purposes. For this, and similar, purposes the
-> "shared RCGs" will park the RCG on a source clock which is known to be
-> available.
-> When the RCG is parked, a safe clock source will be selected and
-> committed, then the original source would be written back and upon enable
-> the change back to the unparked source would be committed.
->=20
-> But starting with SM8350 this fails, as the value in CFG is committed by
-> the GDSC handshake and without a ticking parent the GDSC enablement will
-> time out.
->=20
-> This becomes a concrete problem if the runtime supended state of a
-> device includes disabling such rcg's parent clock. As the device
-> attempts to power up the domain again the rcg will fail to enable and
-> hence the GDSC enablement will fail, preventing the device from
-> returning from the suspended state.
->=20
-> This can be seen in e.g. the display stack during probe on SM8350.
->=20
-> To avoid this problem, the software needs to ensure that the RCG is
-> configured to a active parent clock while it is disabled. This is done
-> by caching the CFG register content while the shared RCG is parked on
-> this safe source.
->=20
-> Writes to M, N and D registers are committed as they are requested. New
-> helpers for get_parent() and recalc_rate() are extracted from their
-> previous implementations and __clk_rcg2_configure() is modified to allow
-> it to operate on the cached value.
->=20
-> Fixes: 7ef6f11887bd ("clk: qcom: Configure the RCGs to a safe source as n=
-eeded")
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+On 15/05/2022 23:00, Robert Marko wrote:
+> GCC inside of IPQ8074 also provides power management via built-in GDSCs.
+> In order to do so, '#power-domain-cells' must be set to 1.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
+> Changes in v4:
+> * Alphabetically sort the cells properties
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

@@ -2,83 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C4352A912
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5AC52A918
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 19:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346615AbiEQRVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 13:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S1351425AbiEQRVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 13:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351413AbiEQRU5 (ORCPT
+        with ESMTP id S1351409AbiEQRVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 13:20:57 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01032B48F
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:20:51 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso2890218pjg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=qqJFZR8hTHMEpR03D7fICklADGJ1sACe7dmVDrtTPPA=;
-        b=ysKA7bOi5+9RdlYYFAsM9Hnm1Y0faip7O/uZx4Jtrfz0r6k4k9vYUggKvc5yQ1exMX
-         0Pwj7rSiWyjhXnLuAa1fGnu86owf5xZB9vxKXt7HfttlGj2yZzMka+qecyCOX9uSp5cY
-         UqTpAmywLrPUduIU5lo9vkJltg04KLwc8vGzsN4HDy2Jnt5RmvGUqK7ghg+RU4exZ6vV
-         utDNHvGDt6AEwWhhCSMvNpL88PIS7CnKCStA4CTurHtGE66zyvTeVATQ/VFDPEqYO0Ey
-         7jxg4aj0txKQirK+i5UXExqVypOCrnjFbiHxI/V18PcD3EcvzB9R2TEgawxCCzAaKEnG
-         43qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=qqJFZR8hTHMEpR03D7fICklADGJ1sACe7dmVDrtTPPA=;
-        b=7VMYTUbVlIQh/ibe1n/9HFosAW45Oeh8/SoNlM4xEjQXcUBMU9Y63CVnbBW66kOi2B
-         K9D0YBVH6jjxQZjrcyBA0wKKIiJY9gmhYMxp/F8026rSyM0pr2LvC/0X0pTw07gDmsZs
-         ZYTrm37767D2r84K1uIfMP0Hn4GDR4DT/z7MTLMg0eMLzTLju6sptLouQV7T97OVuUrR
-         MEHw/VBevGRq++NZx19wCQL0btvLiURKO5W95CVaSFPg1UKYw2dipfih+Mwv2+LRUhL+
-         hY6ZUVCBLvnvMnm/WVPxV04EfMJHSjkwsof1oLTLx+XQwjHVMMA+3OtSK1fNozPrd1xf
-         q2sQ==
-X-Gm-Message-State: AOAM5305nVk1mmqu4F9D4UatxJQWBJ811mdGqjntupresRNsLqZL2kaX
-        OZiSBRp0CxZDl9RpOA20Ejmd
-X-Google-Smtp-Source: ABdhPJyhG3jIHWQ/4DWEUJffCPPujUE5uN8SWJy3rwsGgWf/e3ngmDrUje9ryR1pgmwqMjvcBEexhg==
-X-Received: by 2002:a17:90a:8b91:b0:1be:db25:eecd with SMTP id z17-20020a17090a8b9100b001bedb25eecdmr25779420pjn.10.1652808051232;
-        Tue, 17 May 2022 10:20:51 -0700 (PDT)
-Received: from thinkpad ([117.207.31.8])
-        by smtp.gmail.com with ESMTPSA id i7-20020a63cd07000000b003c14af5063esm8882115pgg.86.2022.05.17.10.20.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 10:20:50 -0700 (PDT)
-Date:   Tue, 17 May 2022 22:50:42 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 15/17] PCI: dwc: Introduce dma-ranges property support
- for RC-host
-Message-ID: <20220517172042.GC4528@thinkpad>
-References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
- <20220503214638.1895-16-Sergey.Semin@baikalelectronics.ru>
- <20220512135708.GC35848@thinkpad>
- <20220512194135.ku73pae2xdvyocx7@mobilestation>
+        Tue, 17 May 2022 13:21:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4331226558
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 10:21:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EA07EB81AFE
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:21:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 759A6C34117;
+        Tue, 17 May 2022 17:21:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652808073;
+        bh=sGI0SIwD4fAPPTdfOu7XlL38Ob5/zjrX0pvs0T8hZDw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qeajyuTBFxeaxD5Ozxxca0tZU9wXyCJUta1Ts7I44JU7F+fvrH8spO7c1hfRk/811
+         b/5fskW+qwnkezzOyg7CmxVFtauDrTNqAGKqcOUpzpxL0sRfYBOkrAqRCEN47RmKRW
+         GAHEbcIf1DglUmWGxU3Y5VSirKOoaanvzdXwxEr0s93WvqAvMQOz//SnkUpfkHvGHP
+         ONrzWn3N46xORjMPPeVhagLCLumIkZA/xwZMuGIph1pAvXHhepCQNqramvhciwtPIG
+         OvwsYyuhyAxLSuRvI2MJBCvet9cpsAy0woLXImMavL7tw1PlfmGWb6Or8Fl6SSHhnb
+         RpXpTaiKtbnEw==
+Date:   Tue, 17 May 2022 10:21:11 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+Subject: Re: [PATCH v4] f2fs: separate NOCoW and pinfile semantics
+Message-ID: <YoPZh+vl68IH5loV@google.com>
+References: <20220517032410.3564033-1-chao@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220512194135.ku73pae2xdvyocx7@mobilestation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220517032410.3564033-1-chao@kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,180 +54,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 10:41:35PM +0300, Serge Semin wrote:
-> On Thu, May 12, 2022 at 07:27:08PM +0530, Manivannan Sadhasivam wrote:
-> > On Wed, May 04, 2022 at 12:46:36AM +0300, Serge Semin wrote:
-> > > In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
-> > > property has the same format as the "ranges" property. The only difference
-> > > is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
-> > > memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
-> > > property. Even though the DW PCIe controllers are normally equipped with
-> > > internal Address Translation Unit which inbound and outbound tables can be
-> > > used to implement both properties semantics, it was surprise for me to
-> > > discover that the host-related part of the DW PCIe driver currently
-> > > supports the "ranges" property only while the "dma-ranges" windows are
-> > > just ignored. Having the "dma-ranges" supported in the driver would be
-> > > very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
-> > > mapping and require customized the PCIe memory layout. So let's fix that
-> > > by introducing the "dma-ranges" property support.
-> > > 
-> > > First of all we suggest to rename the dw_pcie_prog_inbound_atu() method to
-> > > dw_pcie_prog_ep_inbound_atu() and create a new version of the
-> > > dw_pcie_prog_inbound_atu() function. Thus we'll have two methods for RC
-> > > and EP controllers respectively in the same way as it has been developed
-> > > for the outbound ATU setup methods.
-> > > 
-> > > Secondly aside with the memory window index and type the new
-> > > dw_pcie_prog_inbound_atu() function will accept CPU address, PCIe address
-> > > and size as its arguments. These parameters define the PCIe and CPU memory
-> > > ranges which will be used to setup the respective inbound ATU mapping. The
-> > > passed parameters need to be verified against the ATU ranges constraints
-> > > in the same way as it is done for the outbound ranges.
-> > > 
-> > > Finally the DMA-ranges detected for the PCIe controller need to be
-> > > converted into the inbound ATU entries during the host controller
-> > > initialization procedure. It will be done in the framework of the
-> > > dw_pcie_iatu_setup() method. Note before setting the inbound ranges up we
-> > > need to disable all the inbound ATU entries in order to prevent unexpected
-> > > PCIe TLPs translations defined by some third party software like
-> > > bootloader.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > ---
-> > >  .../pci/controller/dwc/pcie-designware-ep.c   |  4 +-
-> > >  .../pci/controller/dwc/pcie-designware-host.c | 32 ++++++++++-
-> > >  drivers/pci/controller/dwc/pcie-designware.c  | 57 ++++++++++++++++++-
-> > >  drivers/pci/controller/dwc/pcie-designware.h  |  6 +-
-> > >  4 files changed, 90 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > index c62640201246..9b0540cfa9e8 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > @@ -167,8 +167,8 @@ static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no, int type,
-> > >  		return -EINVAL;
-> > >  	}
-> > >  
-> > > -	ret = dw_pcie_prog_inbound_atu(pci, func_no, free_win, type,
-> > > -				       cpu_addr, bar);
-> > > +	ret = dw_pcie_prog_ep_inbound_atu(pci, func_no, free_win, type,
-> > > +					  cpu_addr, bar);
-> > >  	if (ret < 0) {
-> > >  		dev_err(pci->dev, "Failed to program IB window\n");
-> > >  		return ret;
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > index 7caca6c575a5..9cb406f5c185 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > @@ -612,12 +612,15 @@ static int dw_pcie_iatu_setup(struct pcie_port *pp)
-> > >  	}
-> > >  
-> > >  	/*
-> > > -	 * Ensure all outbound windows are disabled before proceeding with
-> > > -	 * the MEM/IO ranges setups.
-> > > +	 * Ensure all out/inbound windows are disabled before proceeding with
-> > > +	 * the MEM/IO (dma-)ranges setups.
-> > >  	 */
-> > >  	for (i = 0; i < pci->num_ob_windows; i++)
-> > >  		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_OB, i);
-> > >  
-> > > +	for (i = 0; i < pci->num_ib_windows; i++)
-> > > +		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_IB, i);
-> > > +
-> > >  	i = 0;
-> > >  	resource_list_for_each_entry(entry, &pp->bridge->windows) {
-> > >  		if (resource_type(entry->res) != IORESOURCE_MEM)
-> > > @@ -654,9 +657,32 @@ static int dw_pcie_iatu_setup(struct pcie_port *pp)
-> > >  	}
-> > >  
-> > >  	if (pci->num_ob_windows <= i)
-> > > -		dev_warn(pci->dev, "Resources exceed number of ATU entries (%d)\n",
-> > > +		dev_warn(pci->dev, "Ranges exceed outbound iATU size (%d)\n",
-> > >  			 pci->num_ob_windows);
-> > >  
-> > > +	i = 0;
-> > > +	resource_list_for_each_entry(entry, &pp->bridge->dma_ranges) {
-> > > +		if (resource_type(entry->res) != IORESOURCE_MEM)
-> > > +			continue;
-> > > +
-> > > +		if (pci->num_ib_windows <= i)
-> > > +			break;
-> > > +
-> > > +		ret = dw_pcie_prog_inbound_atu(pci, i++, PCIE_ATU_TYPE_MEM,
-> > > +					       entry->res->start,
-> > > +					       entry->res->start - entry->offset,
-> > > +					       resource_size(entry->res));
-> > > +		if (ret) {
-> > > +			dev_err(pci->dev, "Failed to set DMA range %pr\n",
-> > > +				entry->res);
-> > > +			return ret;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	if (pci->num_ib_windows <= i)
-> > > +		dev_warn(pci->dev, "Dma-ranges exceed inbound iATU size (%u)\n",
-> > > +			 pci->num_ib_windows);
-> > > +
-> > >  	return 0;
-> > >  }
-> > >  
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > > index 747e252c09e6..33718ed6c511 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > > @@ -397,8 +397,61 @@ static inline void dw_pcie_writel_atu_ib(struct dw_pcie *pci, u32 index, u32 reg
-> > >  	dw_pcie_writel_atu(pci, PCIE_ATU_REGION_DIR_IB, index, reg, val);
-> > >  }
-> > >  
-> > > -int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> > > -			     int type, u64 cpu_addr, u8 bar)
-> > > +int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
-> > > +			     u64 cpu_addr, u64 pci_addr, u64 size)
-> > > +{
-> > > +	u64 limit_addr = pci_addr + size - 1;
-> > > +	u32 retries, val;
-> > > +
-> > > +	if ((limit_addr & ~pci->region_limit) != (pci_addr & ~pci->region_limit) ||
-> > > +	    !IS_ALIGNED(cpu_addr, pci->region_align) ||
-> > > +	    !IS_ALIGNED(pci_addr, pci->region_align) ||
-> > > +	    !IS_ALIGNED(size, pci->region_align) ||
-> > 
+On 05/17, Chao Yu wrote:
+> Pinning a file is heavy, because skipping pinned files make GC
+> running with heavy load or no effect.
 > 
-> > Why do you want the size to be aligned? What if I want to transfer a small size
-> > buffer?
-> > 
-> > Same question applies to outbound programming as well.
-> 
-> You can't program a region with the unaligned size by the DW PCIe CSRs
-> design. The limit address lower bits are read-only and fixed with
-> one's in accordance with the IP-core synthesize parameter
-> CX_ATU_MIN_REGION_SIZE. So the mapping is always performed in the
-> CX_ATU_MIN_REGION_SIZE chunks.
-> 
-> IATU_LIMIT_ADDR_OFF_{IN,OUT}BOUND.LIMIT_ADDR_HW = 
-> {(CX_ATU_MIN_REGION_SIZE == 65536) ? "0xffff" :
->  (CX_ATU_MIN_REGION_SIZE == 32768) ? "0x7fff" :
->  (CX_ATU_MIN_REGION_SIZE == 16384) ? "0x3fff" :
->  (CX_ATU_MIN_REGION_SIZE == 8192)  ? "0x1fff" :
->  (CX_ATU_MIN_REGION_SIZE == 4096)  ? "0xfff" : "0xffff"}
-> 
+> So that this patch proposes to separate nocow and pinfile semantics:
+> - NOCoW flag can only be set on regular file.
+> - NOCoW file will only trigger IPU at common writeback/flush.
+> - NOCow file will do OPU during GC.
 
-Right. Even though the minimum size that could be mapped is 4k, I could still
-use that 4k size for mapping small buffers also. So you should not be erroring
-out here if the size is not aligned. I know that it is a waste of memory but
-that doesn't mean that it won't work.
+How about adding
+ - NOCow file will allocate 2MB-aligned space via fallocate.
 
-Thanks,
-Mani
+So, it'd be same as file pinning except allowing GCs. wdyt?
 
-> -Sergey
 > 
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > -- 
-> > மணிவண்ணன் சதாசிவம்
-
--- 
-மணிவண்ணன் சதாசிவம்
+> This flag can satisfying the demand of:
+> 1) avoiding fragment of file's physical block
+> 2) userspace doesn't want to pin file's physical address
+> 
+> After commit 5d539245cb18 ("f2fs: export FS_NOCOW_FL flag to user"),
+> Pin_file and NOCoW flags have already been twined closely. e.g.
+> once we set pinfile flag in file, nocow flag will be shown; and after
+> clearing pinfile flag, nocow flag will disappear.
+> 
+> So, in order to keep backward compatibility, let use below semantics:
+> 
+> f2fs_ioc_set_pin_file/f2fs_fileattr_set logic:
+> 		pinfile			nocow
+> set		set pinfile | nocow	set nocow
+> clear		clear pinfile | nocow	clear nocow
+> 
+> File Behaviors:
+> w/ pinfile, w/ nocow:		use pinfile semantics
+> w/ pinfile, w/o nocow:		use pinfile semantics
+> w/o pinfile, w/ nocow:		use nocow semantics
+> w/o pinfile, w/o nocow:		no pinfile or nocow semantics
+> 
+> NOCoW can also be set on directory, and it will have no effect on
+> directory, however, new files created in nocow directory will have the
+> flag set.
+> 
+> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+> ---
+> v4:
+> - allow IPU only for NoCowed regular inode.
+>  fs/f2fs/data.c |  3 +++
+>  fs/f2fs/f2fs.h | 13 +++++++++++--
+>  fs/f2fs/file.c | 18 +++++++++++++++++-
+>  3 files changed, 31 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+> index 54a7a8ad994d..42d95ac6b508 100644
+> --- a/fs/f2fs/data.c
+> +++ b/fs/f2fs/data.c
+> @@ -2498,6 +2498,9 @@ bool f2fs_should_update_inplace(struct inode *inode, struct f2fs_io_info *fio)
+>  	if (f2fs_is_pinned_file(inode))
+>  		return true;
+>  
+> +	if (S_ISREG(inode->i_mode) && F2FS_I(inode)->i_flags & F2FS_NOCOW_FL)
+> +		return true;
+> +
+>  	/* if this is cold file, we should overwrite to avoid fragmentation */
+>  	if (file_is_cold(inode))
+>  		return true;
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 492af5b96de1..5c67736000a7 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -2916,13 +2916,15 @@ static inline void f2fs_change_bit(unsigned int nr, char *addr)
+>  #define F2FS_NOCOMP_FL			0x00000400 /* Don't compress */
+>  #define F2FS_INDEX_FL			0x00001000 /* hash-indexed directory */
+>  #define F2FS_DIRSYNC_FL			0x00010000 /* dirsync behaviour (directories only) */
+> +#define F2FS_NOCOW_FL			0x00800000 /* Do not cow file */
+>  #define F2FS_PROJINHERIT_FL		0x20000000 /* Create with parents projid */
+>  #define F2FS_CASEFOLD_FL		0x40000000 /* Casefolded file */
+>  
+>  /* Flags that should be inherited by new inodes from their parent. */
+>  #define F2FS_FL_INHERITED (F2FS_SYNC_FL | F2FS_NODUMP_FL | F2FS_NOATIME_FL | \
+>  			   F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+> -			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL)
+> +			   F2FS_CASEFOLD_FL | F2FS_COMPR_FL | F2FS_NOCOMP_FL | \
+> +			   F2FS_NOCOW_FL)
+>  
+>  /* Flags that are appropriate for regular files (all but dir-specific ones). */
+>  #define F2FS_REG_FLMASK		(~(F2FS_DIRSYNC_FL | F2FS_PROJINHERIT_FL | \
+> @@ -2954,9 +2956,16 @@ static inline void __mark_inode_dirty_flag(struct inode *inode,
+>  		fallthrough;
+>  	case FI_DATA_EXIST:
+>  	case FI_INLINE_DOTS:
+> -	case FI_PIN_FILE:
+>  	case FI_COMPRESS_RELEASED:
+>  		f2fs_mark_inode_dirty_sync(inode, true);
+> +		break;
+> +	case FI_PIN_FILE:
+> +		if (set)
+> +			F2FS_I(inode)->i_flags |= F2FS_NOCOW_FL;
+> +		else
+> +			F2FS_I(inode)->i_flags &= ~F2FS_NOCOW_FL;
+> +		f2fs_mark_inode_dirty_sync(inode, true);
+> +		break;
+>  	}
+>  }
+>  
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 216081ea8c81..9e71ce8601f9 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -1851,6 +1851,20 @@ static int f2fs_setflags_common(struct inode *inode, u32 iflags, u32 mask)
+>  	if (IS_NOQUOTA(inode))
+>  		return -EPERM;
+>  
+> +	if ((iflags ^ masked_flags) & F2FS_NOCOW_FL) {
+> +		int ret;
+> +
+> +		if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
+> +			return -EINVAL;
+> +		if (S_ISREG(inode->i_mode)) {
+> +			if (f2fs_should_update_outplace(inode, NULL))
+> +				return -EINVAL;
+> +			ret = f2fs_convert_inline_inode(inode);
+> +			if (ret)
+> +				return ret;
+> +		}
+> +	}
+> +
+>  	if ((iflags ^ masked_flags) & F2FS_CASEFOLD_FL) {
+>  		if (!f2fs_sb_has_casefold(F2FS_I_SB(inode)))
+>  			return -EOPNOTSUPP;
+> @@ -1926,6 +1940,7 @@ static const struct {
+>  	{ F2FS_NOCOMP_FL,	FS_NOCOMP_FL },
+>  	{ F2FS_INDEX_FL,	FS_INDEX_FL },
+>  	{ F2FS_DIRSYNC_FL,	FS_DIRSYNC_FL },
+> +	{ F2FS_NOCOW_FL,	FS_NOCOW_FL },
+>  	{ F2FS_PROJINHERIT_FL,	FS_PROJINHERIT_FL },
+>  	{ F2FS_CASEFOLD_FL,	FS_CASEFOLD_FL },
+>  };
+> @@ -1957,7 +1972,8 @@ static const struct {
+>  		FS_NOCOMP_FL |		\
+>  		FS_DIRSYNC_FL |		\
+>  		FS_PROJINHERIT_FL |	\
+> -		FS_CASEFOLD_FL)
+> +		FS_CASEFOLD_FL |	\
+> +		FS_NOCOW_FL)
+>  
+>  /* Convert f2fs on-disk i_flags to FS_IOC_{GET,SET}FLAGS flags */
+>  static inline u32 f2fs_iflags_to_fsflags(u32 iflags)
+> -- 
+> 2.25.1

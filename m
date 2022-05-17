@@ -2,108 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D52052986A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378B052986D
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbiEQDtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 23:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        id S233996AbiEQDwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 23:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbiEQDtL (ORCPT
+        with ESMTP id S231433AbiEQDwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 23:49:11 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9B84506C
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:49:07 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id h29so29151628lfj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:49:07 -0700 (PDT)
+        Mon, 16 May 2022 23:52:18 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8972DABF
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:52:17 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id p8so15780959pfh.8
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:52:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lGiz4p3kxgbMH9lusf5BWvhTcTAA3XuA7I+cyo20aFU=;
-        b=KGPssm/7bmpN1DTbVssXvg9tm6OfO3jm9NFcr2pufN/1/sLBZUGaDWghu23RRa/0Zn
-         x/x0exYJZInOQCGV9Lxc8XiA7JL10BxrgMGhO/zAwUYwkfbY1IVdTtrz9bYhCYkyhBCM
-         VqeWzGjmxZalZh6UDw5GOE69mpmcAFuYsicwAbdaR8+roNrFH7Cz1dqO8BAreDSGyEaJ
-         QZ3KjARK6ZBMibp6AMrxKzm9s24jI+xrU/rFGdu249zu75LTLWKiaffd3YiYHxmQVX8h
-         ECfhmLQ4NXgBHPBctbSBq3ZcV+TiCjSxE9p46x6mG03JYiBu6nGbDPH++ZvXu0AagmZ0
-         WdQQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gSM6wVFC/mVMfsxQOTfoNPtAY9TOEtVxrvAuav03prg=;
+        b=GtJjkmI/L43qn/3ogE8DrcyyWxxFdKOA54+ZqdMNSgMJyxeKdwS9NDoYHGz3XAAKkq
+         nvRmk1cfqZGlNg50FfK+71/kPFq3Pd87SHDsQgHH3eoqRMRHMpxfmBlBgXFzEFyxO8dn
+         uTKM9/qHuCyqxrrnopqUTymstMZXI6g6nCwxdxY0D+m2AuEV/WwudaBHbBYYYzP48rxQ
+         65YLM8KdC4zdFMpHasIsBePfPOThByKMVO7f5aGsXnFgxwbn5eBpNmEiHuaVg7weF36P
+         SDQuk5cQhqiqUlmmNdCmsLKWTccBtvtKocwHLV40NT+Ij7aGQ+zvhjRMRAE3TR9tnWlr
+         gZGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lGiz4p3kxgbMH9lusf5BWvhTcTAA3XuA7I+cyo20aFU=;
-        b=0xTijEM01llRZ4Q8+M/If+8TDFN7uzopruddL/UJLppVKfxmuc1vSrYq5qU9/VTFMA
-         q4QaWj0KLdJ+PjhLhpnIV8EKyjh2BnfUGDWwpraOtGkF5LpvkkwCJH5RWZbfIhnuVAGQ
-         kmXk9fa4PrgcIv2aEGPqSdE0VCtPSSbNB2EXGN2VbwIeS/jvYM6yglA17FCs64vQKESm
-         pwTwTzr+GUl6ZHL8JOl2p78o53NZcrNSac+lqIlwXGQ/ykGbRIFNEXg9LpEhYQUKa1oc
-         uyz0hIrxuuJFXLf16uLneR1KJYnkYrOR4sEpMEm8pdAoyL8ZDjsLyMWYHn4A1UTFY4Uw
-         zasw==
-X-Gm-Message-State: AOAM530v1Q+66PqJnVZmV3wAJW82aUlJHpmMtwax8GeydbDJ5ZNvTz8m
-        Z6JvmQCvjyy9OC12ccJPm+1uMA==
-X-Google-Smtp-Source: ABdhPJxOHUcBQrR1cJ96BRB3ARHbqZ3B+VU/xSoanrIBMJQJ59fSC2XfpV+rK/KpaxxjhuCX0GtHMQ==
-X-Received: by 2002:a05:6512:3f13:b0:464:f55f:7806 with SMTP id y19-20020a0565123f1300b00464f55f7806mr16024479lfa.598.1652759346146;
-        Mon, 16 May 2022 20:49:06 -0700 (PDT)
-Received: from [192.168.1.72] (46-138-221-128.dynamic.spd-mgts.ru. [46.138.221.128])
-        by smtp.gmail.com with ESMTPSA id 27-20020ac25f5b000000b0047255d210desm1468420lfz.13.2022.05.16.20.49.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 20:49:05 -0700 (PDT)
-Message-ID: <768859b4-5cae-4e16-1d9c-8b78a7b36ced@openvz.org>
-Date:   Tue, 17 May 2022 06:49:04 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] tracing: add ACCOUNT flag for allocations from marked
- slab caches
-Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>, kernel@openvz.org,
-        Linux MM <linux-mm@kvack.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gSM6wVFC/mVMfsxQOTfoNPtAY9TOEtVxrvAuav03prg=;
+        b=JIgoVsxQC1ZOzOHKsISMCXO9QIxX6X2w0WO5wGitrC/HgkxGxJ06PH6e3Eq80Yo6Zn
+         RFt2d2C+VHP/vrVU/X40nth7ELQUqHB9MOyGtUm2aJ/3UmQG00hzprjDFzxl7+rsg1fw
+         E3UUMcVd67n2s+ObE/2CJpZK/4g2775b7s6cuYCi4GsmeQ8/7ZpK/vDZsyM6FD7HsmvA
+         PQIkIraxWyKeHUjejJ2DHRDJ4YyzKjUTgqcAL2SE1elJ70B7aGdz0Wxo+yChI+gzzhIh
+         ScaDgUvpTLKdhu0U6dqwEWM68UTKS1U2JBbYik12/0bSHV+aHH05M8ijvJM/qNR6gndm
+         euSw==
+X-Gm-Message-State: AOAM532Ij8m5mX2qapBl1G31O5Mn5mWQjdLUrOtj4G/0Tp4paYHJwFm+
+        nLjnQ/6G7/IfrRcEwDX+A5I4RQ==
+X-Google-Smtp-Source: ABdhPJynzXrKKF+8HCiNT42Gd9ddW0DtWdDBFJiZshptXN+TCskfLssajmzFGsdxpEisAtCJJXwEUw==
+X-Received: by 2002:a05:6a00:ac1:b0:4f1:29e4:b3a1 with SMTP id c1-20020a056a000ac100b004f129e4b3a1mr20609726pfl.63.1652759537058;
+        Mon, 16 May 2022 20:52:17 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i1-20020a628701000000b0050dc762813dsm7556911pfe.23.2022.05.16.20.52.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 20:52:16 -0700 (PDT)
+Date:   Tue, 17 May 2022 03:52:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Matlack <dmatlack@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm list <kvm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-References: <1fd21e25-b095-e055-fc2e-abda640a0575@openvz.org>
- <CALvZod6wmxxigoLVg8Q+upqOkyoh+nPuVT0yx_XTbu8RXYYFgA@mail.gmail.com>
- <8eccb3bc-e6b1-354b-e1de-bd3d896dcb35@suse.cz> <YoLLcFFi5UXFEIYg@carbon>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <YoLLcFFi5UXFEIYg@carbon>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 1/2] KVM: x86/mmu: Drop RWX=0 SPTEs during ept_sync_page()
+Message-ID: <YoMb7AiSGBE4kUKT@google.com>
+References: <20220513195000.99371-1-seanjc@google.com>
+ <20220513195000.99371-2-seanjc@google.com>
+ <CALzav=d36gccJv345Phdr0AJx9=6=TP=iZ60dscgQr64Rq4Kew@mail.gmail.com>
+ <Yn7+HrYbXhror09V@google.com>
+ <CALzav=eogd=sNaPOSW3_9hLSZ6pXe5eakHLr5vm8bUiwQrmA6Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzav=eogd=sNaPOSW3_9hLSZ6pXe5eakHLr5vm8bUiwQrmA6Q@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/22 01:08, Roman Gushchin wrote:
-> On Mon, May 16, 2022 at 11:41:27PM +0200, Vlastimil Babka wrote:
->> On 5/16/22 21:10, Shakeel Butt wrote:
->>> On Mon, May 16, 2022 at 11:53 AM Vasily Averin <vvs@openvz.org> wrote:
->>>>  {
->>>>         void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
->>>>
->>>> +       if (cachep->flags & SLAB_ACCOUNT)
->>>
->>> Should this 'if' be unlikely() or should we trace cachep->flags
->>> explicitly to avoid this branch altogether?
->>
->> Hm I think ideally the tracepoint accepts cachep instead of current
->> cachep->*size parameters and does the necessary extraction and
->> modification in its fast_assign.
+On Mon, May 16, 2022, David Matlack wrote:
+> On Fri, May 13, 2022 at 5:56 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Fri, May 13, 2022, David Matlack wrote:
+> > > On Fri, May 13, 2022 at 12:50 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > >
+> > > > Drop SPTEs whose new protections will yield a RWX=0 SPTE, i.e. a SPTE
+> > > > that is marked shadow-present but is not-present in the page tables.  If
+> > > > EPT with execute-only support is in use by L1, KVM can create a RWX=0
+> > > > SPTE can be created for an EPTE if the upper level combined permissions
+> > > > are R (or RW) and the leaf EPTE is changed from R (or RW) to X.
+> > >
+> > > For some reason I found this sentence hard to read.
+> >
+> > Heh, probably because "KVM can create a RWX=0 SPTE can be created" is nonsensical.
+> > I botched a late edit to the changelog...
+> >
+> > > What about this:
+> > >
+> > >   When shadowing EPT and NX HugePages is enabled, if the guest changes
+> >
+> > This doesn' thave anything to do with NX HugePages, it's an execute-only specific
+> > bug where L1 can create a gPTE that is !READABLE but is considered PRESENT because
+> > it is EXECUTABLE.  If the upper level protections are R or RW, the resulting
+> > protections for the entire translation are RWX=0.  All of sync_page()'s existing
+> > checks filter out only !PRESENT gPTE, because without execute-only, all upper
+> > levels are guaranteed to be at least READABLE.
 > 
-> +1 for fast_assign
+> I see what you mean, thanks.
 > 
-> Changing flags just for tracing looks a bit excessive.
+> And I also recall now you mentioned (off-list) that the NX HugePage
+> scenario isn't possible because KVM does not let huge pages go unsync.
 
-At the kmem_cache_alloc and kmem_alloc use the same tracing template.
-Ok, I'll try to redesign this.
+Yep.  The other thing that's semi-relevant and I've mentioned off-list at least
+once is that our (Google's) old kernel has a different NX HugePage implementation
+that _can_ result in RWX=0 SPTEs.  Unlike upstream, the internal NX HugePage
+implementation shatters a huge page _after_ installing said huge page, whereas
+upstream demotes the huge page before it's installed.  If shattering fails on huge
+page that L1 created a huge page with just X permissions, KVM is left with a RWX=0
+huge page.

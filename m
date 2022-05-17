@@ -2,169 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A1852A431
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3930C52A429
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348358AbiEQODm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S243822AbiEQOEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348330AbiEQODY (ORCPT
+        with ESMTP id S1345992AbiEQOEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:03:24 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDF74DF6C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:03:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FsDJiFDoSLFKqJqiLSWWtOBKxj8/TbkhIo3ibs+ML3K1OWpVdQgum1h6EH8E7frPtZnpf4DJZXp109G9L4Q0HAdRqw6jMDf8O0auHWU7wXjXBXKcYiJVBZakoCDUQvzmb8s/0XjEM8+4etikwxKhtpKLfsVFDEx8H+8jczuY9eqRmOqepwY98DPvtT0DWVwsRL0w7ld6yuohZlD4m8P3DraVBVi4DFq3NKECig923OrjX/YFJ6WS6kN+BMb4bUbti1pGAsIqvws29W53G82ODKktcpD9tz8WvYcWPOilHUByG9RZym2Sk48Tm7sT1QjZyX3mnrEdzsdReiBFcUDbfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nquBEbOEyj7Th+D5qXPFuZQ+1TA544c2XS/wat/lA00=;
- b=hN3Wo3g54IZW90PN4XCQBI4Y29meN6DCIjKZ/Y3T9Pgdyn0Gh8zsxbgcsjIt12RtZWbfwJ+0M+AQbtnoYEuKv1R5yimpJltipFronlRFGkkrBGY0zwxme0KggVZhcOememd2Yoqgis+auhYEJrND+z6IjAVl+IMqyzNnvSOnglGYkQrT2yaK8limoWRd22ztlbNj/rWm0uTH2wwWtXjDwrs70eovWwdAMFV5Pcdv2h3sM5SlVK2AHkO3Lnz9tT/HMec5H+nzKYiLpe854ZhlbeQvb3Xb5n5/V8T4najmxcV0mfRtao/SYpzWk4E815UIATh9WWc84zAo8lUyCmsm5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nquBEbOEyj7Th+D5qXPFuZQ+1TA544c2XS/wat/lA00=;
- b=X8YFyz3mJn2C/BHmZ8Jgyy7ZoLxyPrmgjHnH9gH26AEX9xAbVLJ0AxlT8Tz98O3kKp9MYwfOOMASlMC2M+YIV30gDMB3lV1CakVAx0XMu5vphZSqs5MlcFKkzg0H/rJAERlOoyRBD01nGySbLUrOIRDsaQk7AbRXyqsu6j+BHDw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com (2603:10b6:3:111::23)
- by DS0PR12MB6655.namprd12.prod.outlook.com (2603:10b6:8:d0::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Tue, 17 May
- 2022 14:03:18 +0000
-Received: from DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::9d18:7a38:7c5d:4a40]) by DM5PR12MB1947.namprd12.prod.outlook.com
- ([fe80::9d18:7a38:7c5d:4a40%10]) with mapi id 15.20.5250.018; Tue, 17 May
- 2022 14:03:17 +0000
-Message-ID: <573fae0d-c9ab-98b0-c6f1-5b0d4e52dd01@amd.com>
-Date:   Tue, 17 May 2022 10:03:15 -0400
+        Tue, 17 May 2022 10:04:06 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3655A42ED5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:04:05 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id j4so31510824lfh.8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:04:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=82nn5njmNFS06nAyeGbhe4/PKMO1d9feXCrIA8HyNjc=;
+        b=GTxGHiVMrZumPRt2uTlizP4Tsv9d4TAS2zKEsgMz9oZTZ3U0+BwXZvY/8fGGwcJpU/
+         vVuP1wy6xOr4XPIzQb7HaYdo8TN8xjqwdzoKudqpK1Q09tx1Oy1gFfTWEVixD31Sc45q
+         z9QeiFF2MXNBOyba07fDPuiX4hvU30TSHRgVwDNOzuwctb/EK6LZlQg0YyoOmArM5B9E
+         DiY/VhrzZqlZ9cIor7Qamto7oJrvCOmoR2wHetRfc4ChF9cqNOqLkhxG9xxEBZuCPt3O
+         XtGwxBWjtTmSqnPh1fDnz/xdTTuHTdV7Dy/bAcYtCmx7jOyupgkGGwJqeh2gcWu9/0Qh
+         k/XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=82nn5njmNFS06nAyeGbhe4/PKMO1d9feXCrIA8HyNjc=;
+        b=r0IqQFmNZkx9hc2SZNZnhn1J5N7S/HgHZumFq3h3yWMpB7M2cVNZJq6zVmibL9nhuo
+         z9qeQ3Ie4Np8AN56+HD/L2F0GzwemHRYpm30iaH+E5CD69KCbTcvut6IFWDTCb3CeKYk
+         96PJ22cpqoCqpbg45i4Qii/DbU9hEKikc7QhOW1Am0FBM+XPAmlSqz4D/AUckAyngwhI
+         3MPifvOK7JZC52x5gbLQnPZ+Vc8ts9XGDVVJY9JZ57wJ1pFTW0eMGHh6/9eS/Z3LC3OY
+         VDbRpkWu9eKYvsQjTe3+z0zpOW6mrtMEz5qmz2rd+Umw+uZJR/ThIBAxtIQ2E3x3NJFn
+         m6EA==
+X-Gm-Message-State: AOAM533B8NV0LqHmsvrS5MX4p1+mjJRw5CHFfriO+vZasq267A0qFyiV
+        Ddo2WRX9uR/Jz2VTiqjyiQwUnA==
+X-Google-Smtp-Source: ABdhPJw7Ao2jJpJZDHuKc/blm7UkO+dmm9TC3lGw+GS++5c5qbDv/k/C2KTT4jXpWDmBuyPgTGFFGw==
+X-Received: by 2002:a19:fc1b:0:b0:474:4bf7:e135 with SMTP id a27-20020a19fc1b000000b004744bf7e135mr17368382lfi.362.1652796243553;
+        Tue, 17 May 2022 07:04:03 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id d11-20020a056512368b00b0047255d211cfsm1600354lfs.254.2022.05.17.07.04.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 07:04:03 -0700 (PDT)
+Message-ID: <a5b6a8e8-929b-91ef-c07c-69ed31174121@linaro.org>
+Date:   Tue, 17 May 2022 16:04:01 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
+Subject: Re: [PATCH 18/20] media: s5p-mfc: Correction in register read and
+ write for H264
 Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Erico Nunes <nunes.erico@gmail.com>,
-        Steven Price <steven.price@arm.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
- <a78343c8-2a6d-b223-4219-6b6b0a4fcb1f@arm.com>
- <CAK4VdL2hCEoshWZbCh5mkHuS6wYMiPFR3v4MWTnrEKM9zyv6Mw@mail.gmail.com>
- <ef88ec2c-77b5-fa0d-49d1-fdd2451713b7@collabora.com>
-From:   Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-In-Reply-To: <ef88ec2c-77b5-fa0d-49d1-fdd2451713b7@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Smitha T Murthy <smitha.t@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        linux-fsd@tesla.com
+References: <20220517125548.14746-1-smitha.t@samsung.com>
+ <CGME20220517125652epcas5p31abe2138fbff6218c9031da714bfb448@epcas5p3.samsung.com>
+ <20220517125548.14746-19-smitha.t@samsung.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517125548.14746-19-smitha.t@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT3PR01CA0107.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:85::20) To DM5PR12MB1947.namprd12.prod.outlook.com
- (2603:10b6:3:111::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 69ca42f7-7fff-43a1-e603-08da380dfe18
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6655:EE_
-X-Microsoft-Antispam-PRVS: <DS0PR12MB6655290CB152941341BAF3CEEACE9@DS0PR12MB6655.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: N577blC3Aq408J6OACs5G8eBHRrLgzGHLg4+zmSpS3cT8oGifV5JfHL4nSd+ul3xAiG2LLeJmh9MNogmMu3eDAW1+V+tkc7CtTt08tlAWGxsdAs/+GnOeyImGQKw8tQlXvIWdxJc8LY2mQI8wAlGGqaaGMnlxUZwv+hvlPehSGydc4hZuQ8uWq7uOO9Lq3kiu2r5PXrASugN3rwQcb7Q+EAjQkzOn/MB3soatE4aN8F+IUVsnmNBTzRr6EuBxVXtZYsfaNu+FTAHz7GHauPNhZ7ft37RrljtaRbgKmKwv7v7aNf0nSs/uAL9HiyVXBRJsyoU9/AswvS+RgLNrkwepGKW6AVrGLpDKaady0RDDmvtBmHu/aG2j1IxU4lwFa8GRIrdrV8Ynfz4CuOvrArUxn/ZBJR+tSpmqgn8KlIipBoB5rgNC0V9QHzSyQPiPFcm5DiOMgcRCSM3LI+rIepbyZvYaXofxcgZYinzLKVhLdY97g/FgJk/8SmifcvH03IT1ihnS6FX0ureTvWKUI1xEv/uftxG7Gb0lLRvR5WisQGfGsA4v3oZEP6G2nmCmaSim2LLfPSPe0hjrX/e/AxEC4pd4s7vRdKdpVI5jO4HJ/5Gk0s9tikoxB6Hyfd0JSugv7A3ajm3ADS246Fww0xyQZp3ZL/ZTElovH5R+tzTKGl9pOB2ooWaO1yM+QqOg32OXoxJcRlsQRyIqB5r7WvMdaCH2yPYm5mqJNWHFgmEJrc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB1947.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(110136005)(508600001)(66476007)(6506007)(6512007)(2616005)(316002)(38100700002)(44832011)(186003)(8936002)(7416002)(53546011)(4326008)(86362001)(31696002)(83380400001)(5660300002)(8676002)(36756003)(2906002)(31686004)(6486002)(66556008)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YTczTVNTaTFSelBYeFpEbWdwWTFkOHJ1eTZjU1VpM2d0aURmUkt5NGIyMGl2?=
- =?utf-8?B?ZE55YkhEbEdGcmRXZktCd1JMUWJLMXlNaGFITUp1Mm9mc2pabUdtV3dldEJN?=
- =?utf-8?B?NlorTWk1cjkvMm1pQVJyVGpVaUVEY0UxbHpvMW1jTEVaTlNoUzFLY2lGNUZG?=
- =?utf-8?B?S2VKZ0gwVCtGbW5raG1say9tdkpRVmFrM0NDMHpWbEY5K2NFVFVNbmgvT1Yr?=
- =?utf-8?B?aHJGVWM2djdmdW8wdUIrazM1cWdIbUllN2RWSHkvMWNHUytnNU1OTVZ0MkdT?=
- =?utf-8?B?Y3A3WEg0dzlBcSttWDZLNXhEanVrSkxLRHl0V0FTK0oxNU1QMDh6RlltR0NS?=
- =?utf-8?B?WkdIeVpMQThYbGlpWHdSWmMrZlFod3NhanRXbnoxdnRQZ1g3RHdaeTFCT1hi?=
- =?utf-8?B?MUw0VVpuSnN6ZWY1K3NubFhZcUg3ODNZWVo4RU5CMkxWaUFoelB1QzlYSjR1?=
- =?utf-8?B?b05kZjhISFlSZUlzS20yMlRlUm1nbStPSXFBcXFJWitiNERGenhhMDlEK0sw?=
- =?utf-8?B?L2N5bER2Qmsva0JSSkYrRWZqUXFVako2bUR6RHNhcUpESTlVdUxRbWxqUWZO?=
- =?utf-8?B?Nml1dUxmcHpHS3ljendIVGd2OVE0MDgxRkFGaHRaS3orK3pRT2pqeUE1UU1U?=
- =?utf-8?B?a24vMS85bTdXcGlFbnFYYXlSK0NOaUQzd05MU1I5R080WVdCK3hXZHlrdHhK?=
- =?utf-8?B?cG5sTmNUT1FCSlRrdjYycGZIeFdORVgxT3lzOXZXYlkxNWM4ME1sTG1EaHZa?=
- =?utf-8?B?cXZHZElQUGFvYVlQMkJ6ckVHcmdjYnYxa1pQTWRJTTAvMk9wZHlvbjRkdmNN?=
- =?utf-8?B?RVdrU2ZzazM5WU8zSi9udzJydFp5YmNuLzEyakZHTjB5Z2lqeGIwUWx6SUQx?=
- =?utf-8?B?dFhpUEF4YTlnNndqQVg4VVBXUTFVOVJyb3NxSzJuQnY3eU1tMUZLalBGa0Rq?=
- =?utf-8?B?RWJJTi9oZm05RmZwK09SNDVhQWlvY3pvOEhvLzNBNDg0bmowU2dIQmQvUDlZ?=
- =?utf-8?B?T3dObXZxQ1FTL0RWM3U3UHVpMXVCbmU1eWZFU1A2Yms5S09uSGh2emxoL0l5?=
- =?utf-8?B?ZGpPcGJwWDZqZlUxRkpjK2ZIUTNXZkFndlFKREZ6TEV4bitiOUpwNTJoM2E5?=
- =?utf-8?B?WnVmTGN5cU55UGRVcDI4S0cwYzJnaWxrcTdyYTlRSzBXa2dnOGhVNjFqRnJi?=
- =?utf-8?B?K1BoSExZSEFISDBDa1ZRaVZVZkJMYjFyS29iUm9sSVRZNzZWSmNLU29RMHJR?=
- =?utf-8?B?TVRRaWNFZkhDRTQ4Mmg5QkJsSmgxT2ZHMlo2dCtuYUNuVkFQRHE0MGZSNmMz?=
- =?utf-8?B?NWdkTCtRTGt2U1J4NmEwdENsTmRScFQxc3ZzY3NKTURiTDc1OFVSV2VCdTZX?=
- =?utf-8?B?VkhnL3ZyWGZVTFJGUVlCSmxiSitkTnJrRFZwd21Pc2FHL0NITkFKd1h3bzFB?=
- =?utf-8?B?MC9KQmRNY3RCYzRUSGMxTlV6bzhJekZVVUNrYXVmbitFNTZIbmkvMm9HQk9Z?=
- =?utf-8?B?c0VFWnNsSzE2WkVhVWVZTzJTTnhiSDl4VTUwbnZNWExVS01kZzB4Z3hCL2Ux?=
- =?utf-8?B?RG9NRWxvWVI0NGVlQ1ZtdHUyc0JzcFE5cGFjd0V1OWVSSlZGV1dPMTJHSkd5?=
- =?utf-8?B?eXZFTm4rOXhnMmR3UGx0L0JyWlNkUkp2MmpmTTZQOStjbTQ5bzhnSmVoQmMw?=
- =?utf-8?B?RldRczUweVJxb0M0ZkpIWFBrb245bjRFdTZKcWROMTdwcDNUaWZRdWpUVmRM?=
- =?utf-8?B?dE5JOHhqd1pFZzZnbkVBeTc0SzhMNW5kUHc2Vko4c0xZUFlDckRLdkNmc1FF?=
- =?utf-8?B?cFFGaUJFTGxpN3Y0aDNZY29UN3RFRS9SQmNHSEpqUGhPSGZDaEQ5dHdvMTVm?=
- =?utf-8?B?eWllV0pqWUxmSmlXVnBKYVMwWjZ1MzZicjJ2VmFTaStPV0tJZDh1ekN4dnEw?=
- =?utf-8?B?QUt4Q1Nhb3g0MlhBQktQTHl6eFBBclNIZ1dUTE50TG9ySmdDdzJEbXFKdkZr?=
- =?utf-8?B?cGgwa3hjanJHMXNwdDVhUWlKREdidlVkOUt1TDBSaEN4WmJaa2dwNGZ0WVZF?=
- =?utf-8?B?WkR0V2lVLzVBSHhyM1FxbzR5N1RPWkRiOHg4akhoWE9mWm90VnRkV3BqTE1X?=
- =?utf-8?B?UFlGTlA0dkhDN2d2ZW9xRTJLalZRalNlTVZsTGpDTThNWXlVNlFIcHZmN2Vn?=
- =?utf-8?B?dVluTURmeTQ1SmVvUVdXK0hGWVB1VmFEckRNOWgzQ3FmTUNtNytsV0dNWFA0?=
- =?utf-8?B?OHMwcFAzd25Vcy9yKys4NmdaVmtJU3lDa0VFNjZ1eGs4c3hUVVlsS1QvVUFH?=
- =?utf-8?B?Y1g1c2pYOXc0elV4d2xUY3VjUGdVRWZTMGxBYWx0Z2RXTk10WEUrcHlNODRI?=
- =?utf-8?Q?7MpUc8qkmEDkfMeVVFZEkwZ8yhd01+5QbGnoMlMrL3bPC?=
-X-MS-Exchange-AntiSpam-MessageData-1: CVDXNtgCPjotlg==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69ca42f7-7fff-43a1-e603-08da380dfe18
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB1947.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 14:03:17.7777
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +36K3x3Oip/vHCuAh8fCByYD+WcPJwGzm7GRBFwqcIG4vBnh+QTsqFF+AiWwsfFtgPVEIiAdgpIp1R6UZXjemQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6655
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let me push it into drm-misc-next.
+On 17/05/2022 14:55, Smitha T Murthy wrote:
+> Few of the H264 encoder registers written were not
+> getting reflected since the read values was not
+> stored and getting overwritten.
 
-Andrey
+This looks like a bugfix so:
+1. Send it separately please.
+2. Add Fixes tag.
+3. Add Cc stable tag.
 
-On 2022-05-17 05:03, Dmitry Osipenko wrote:
 
-> On 5/17/22 10:40, Erico Nunes wrote:
->> On Wed, Apr 13, 2022 at 12:05 PM Steven Price <steven.price@arm.com> wrote:
->>> On 11/04/2022 23:15, Dmitry Osipenko wrote:
->>>> Interrupt context can't sleep. Drivers like Panfrost and MSM are taking
->>>> mutex when job is released, and thus, that code can sleep. This results
->>>> into "BUG: scheduling while atomic" if locks are contented while job is
->>>> freed. There is no good reason for releasing scheduler's jobs in IRQ
->>>> context, hence use normal context to fix the trouble.
->>>>
->>>> Cc: stable@vger.kernel.org
->>>> Fixes: 542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
->>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>> Reviewed-by: Steven Price <steven.price@arm.com>
->> Is there something blocking this patch?
->> Mesa CI is still hitting the issue and I have been waiting for it to
->> be applied/backported to update CI with it.
->> Thanks
-> If this patch won't be picked up anytime soon, then I'll include it into
-> my "memory shrinker" patchset together with the rest of the fixes, so it
-> won't get lost.
->
+Best regards,
+Krzysztof

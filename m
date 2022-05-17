@@ -2,149 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728F1529F20
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3BB529F31
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236910AbiEQKPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
+        id S1343769AbiEQKRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343920AbiEQKMy (ORCPT
+        with ESMTP id S1344382AbiEQKQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:12:54 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194E21E3F1;
-        Tue, 17 May 2022 03:12:14 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id l11so16505476pgt.13;
-        Tue, 17 May 2022 03:12:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=aMBOI9YkUSIsWIlQdfz41gQk4nmmHQa5UOI2C/hBUEU=;
-        b=JtkF5r+oqYFZIyXuBu6cPFpvbyE/I3CGuS9xPWbrbxa9FneoN4paYaudwt+RBnSDrO
-         5X/79Ll2Fd2qonqa1Ubkk8KYhES4DpT+4h84wXNtok9qDHh8bQu8GZSbIOvL4yA4wuf4
-         OoJ8gGM4111xYPvCHRJnRsNHrbuYOHYiiktovHa3QNmVOx0c56bReuTjaCFxSWJkLFaD
-         G1Gkdi3E26J5Zl/wYf34rDekFek+EXo83nUupgPXvRzI1k6OjJ9wD1T9y+3nQqjiGUAb
-         4uNnjrVFNDHvhMoI50zu0hbHX+DAg2UNqiSbHC01MZi7lHk23i1hcVyFZN5sAgCCA5AH
-         qk8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=aMBOI9YkUSIsWIlQdfz41gQk4nmmHQa5UOI2C/hBUEU=;
-        b=EAVuv3wzqX7l8G0VremnzYv+q0Lg1a+TG2ujBRC9jjD7hzZPiYW6F1mwKQQT0OEKQr
-         vEp2qsA6UhdA+6b6TKeFutuDx2td94Wx5HdI8vU54hqH06WPQ3Jk0vyr0SwpyovDYNBX
-         uK+Shx2MvCBh95fKiq03Pt/BqDmmWFWwcynN7vFkMNtVZ6FMBKjnknEyyrD0N+3EKhx3
-         Q30bRsz9PchwEhGng/XsLIXVZ6fLFxs63EPNmZwMncyAcjH30yqJ6saygrbhMltV7ELT
-         2AW+oQHQGBN42N3OV7fiCt2u9Izfvaoutz1po6iDrD4C/DcbR0kqQdRv5xLBuhh1VKLf
-         c5JQ==
-X-Gm-Message-State: AOAM532DRtStbsEF95uY7bxMJaDobiYAww1cawUYsXyaj8fMVUBWpLZ4
-        3z15DPWGg324gYW+9125qw==
-X-Google-Smtp-Source: ABdhPJzTg9eea+BcxaCZFzMBUKvm4hvmH7A1NnWXwh2q1t9VyhA+uHTXLd3jc55tn++kghtu5gGqVQ==
-X-Received: by 2002:a05:6a00:2408:b0:4f7:a8cb:9b63 with SMTP id z8-20020a056a00240800b004f7a8cb9b63mr21900585pfh.33.1652782333486;
-        Tue, 17 May 2022 03:12:13 -0700 (PDT)
-Received: from localhost (220-133-130-217.hinet-ip.hinet.net. [220.133.130.217])
-        by smtp.gmail.com with ESMTPSA id z4-20020a62d104000000b0050dc7628184sm8751369pfg.94.2022.05.17.03.12.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 17 May 2022 03:12:13 -0700 (PDT)
-From:   Tyrone Ting <warp5tw@gmail.com>
-To:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        wsa@kernel.org, andriy.shevchenko@linux.intel.com,
-        jarkko.nikula@linux.intel.com, semen.protsenko@linaro.org,
-        rafal@milecki.pl, sven@svenpeter.dev, jsd@semihalf.com,
-        jie.deng@intel.com, lukas.bulwahn@gmail.com, arnd@arndb.de,
-        olof@lixom.net, warp5tw@gmail.com, tali.perry@nuvoton.com,
-        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com
-Cc:     openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 10/10] i2c: npcm: Capitalize the one-line comment
-Date:   Tue, 17 May 2022 18:11:42 +0800
-Message-Id: <20220517101142.28421-11-warp5tw@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220517101142.28421-1-warp5tw@gmail.com>
-References: <20220517101142.28421-1-warp5tw@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 06:16:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6554E1D335;
+        Tue, 17 May 2022 03:13:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01F49615A2;
+        Tue, 17 May 2022 10:13:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C545C385B8;
+        Tue, 17 May 2022 10:13:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652782428;
+        bh=pwPflkY6883sgamo1V6UO6qAd1DW0795Cg7hqZS4LZg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ykhO7ngSFIqUuUkptf+X/kohsqKTZ54ModnsOpD4KyVBRPnV3KZ5tnhFcybG2L3DY
+         cYhO76EsdNFgojIIAqxdBJAMBXqfDMj53iZCT19Xv4sz0xbDgT9X3XwUzjtGW+QAvg
+         lUn62ixjbTT4bKKKNvRnrEYbH5eETCMFNs3l07U0=
+Date:   Tue, 17 May 2022 12:13:40 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tanjore Suresh <tansuresh@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] driver core: Support asynchronous driver shutdown
+Message-ID: <YoN1VC0v4RNFC+0s@kroah.com>
+References: <20220412224348.1038613-1-tansuresh@google.com>
+ <20220412224348.1038613-2-tansuresh@google.com>
+ <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
+ <CALVARr6v5hcY0Vcf1izPUX-tXNJyyNXBMANbKX4CW9wfRf-pYQ@mail.gmail.com>
+ <YmzqrqfVLQ9/4KXp@kroah.com>
+ <CALVARr50MWexNpCf_PoZ4-pdnexiZiibz7Nd0PH+b-EVnBUN6w@mail.gmail.com>
+ <CALVARr71u8VD0+zaWbm=6A-1_6gO=bYUm7OM4K5b6kOVz09XOA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALVARr71u8VD0+zaWbm=6A-1_6gO=bYUm7OM4K5b6kOVz09XOA@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyrone Ting <kfting@nuvoton.com>
+On Wed, May 11, 2022 at 02:02:08PM -0700, Tanjore Suresh wrote:
+> Greg
+> 
+> On Mon, May 2, 2022 at 12:13 PM Tanjore Suresh <tansuresh@google.com> wrote:
+> >
+> > On Sat, Apr 30, 2022 at 12:52 AM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > A: http://en.wikipedia.org/wiki/Top_post
+> > > Q: Were do I find info about this thing called top-posting?
+> > > A: Because it messes up the order in which people normally read text.
+> > > Q: Why is top-posting such a bad thing?
+> > > A: Top-posting.
+> > > Q: What is the most annoying thing in e-mail?
+> > >
+> > > A: No.
+> > > Q: Should I include quotations after my reply?
+> > >
+> > > http://daringfireball.net/2007/07/on_top
+> > >
+> > > On Fri, Apr 29, 2022 at 11:03:07AM -0700, Tanjore Suresh wrote:
+> > > > Rafael,
+> > > >
+> > > > That is a good observation, however, many of the use cases in data
+> > > > centers (deployment of devices in data centers) do not exploit device
+> > > > power management. Therefore, I'm not sure that is the right way to
+> > > > design this.
+> > >
+> > > Yes it is, enable device power management and use that interface please.
+> > > Devices in data centers should of course be doing the same thing as
+> > > everyone else, as it actually saves real money in power costs.  To not
+> > > do so is very odd.
+> > >
+> >
+> > I guess we are intermixing the  terminology of device power management
+> > with shutdown.
+> > My second, third reasoning in my previous e-mail, thought it brings
+> > out that difference. Maybe not.
+> > I will try one more time, my thought process on this one.
+> >
+> > This patch is only for shutdown. The shutdown can be done in a system
+> > in various flavors,
+> > (this may include a power being pulled from the system components when
+> > all the devices
+> > are quiescent and it can also be soft shutdown, where power is not
+> > removed from the system, but system
+> > could be attempting a reboot)
+> >
+> > The device power management allows the device to bring down any
+> > devices that may be idle to various power states that
+> > device may support in a selective manner & based on the transition
+> > allowed by the device. Such a transition initiated by
+> > the system can be achieved using the 'dpm' interface for runtime power
+> > management (more for extending laptop battery life).
+> > It can also be exploited for system sleep models (suspend and resume -
+> > where state is preserved and restarted from where it left off
+> > --> More applicable for laptops/desktops). That does not mean data
+> > center devices cannot exploit, but they worry about slight latency
+> > variation in any
+> > I/O initiated to any device. Such power management could introduce
+> > more latency when it transitions from one state to another.
+> > Therefore, the use case is more apt for Laptops, in certain cases
+> > desktops in my opinion or understanding.
+> >
+> > The shutdown entry point has been traditionally different and the
+> > semantics is that the whole system is going down to a
+> > quiescent state and power may be pulled or may not be, IMO, i am
+> > seeing both are independent requirements, in my view.
+> > Let me know if I am mistaken. I am not sure why we should break the
+> > shutdown semantics as understood by driver developers and
+> > overload it with dpm requirements?
+> >
+> 
+> I have not seen additional comments, I request your help
+> in moving this further, please. If i have missed something,
+> Please let me know.
 
-Make the one-line comments capital in the driver to get the comment style
-consistent.
+Please rebase and resubmit your series with the extra information you
+have provided here in the changelog text so we can review it again.  The
+patch series is long gone from my queue, sorry.
 
-Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller driver")
-Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
----
- drivers/i2c/busses/i2c-npcm7xx.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+thanks,
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index a032b407f104..a60e392dda50 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -683,7 +683,7 @@ static void npcm_i2c_reset(struct npcm_i2c *bus)
- 	}
- #endif
- 
--	/* clear status bits for spurious interrupts */
-+	/* Clear status bits for spurious interrupts */
- 	npcm_i2c_clear_master_status(bus);
- 
- 	bus->state = I2C_IDLE;
-@@ -1255,7 +1255,7 @@ static irqreturn_t npcm_i2c_int_slave_handler(struct npcm_i2c *bus)
- 	} /* SDAST */
- 
- 	/*
--	 * if irq is not one of the above, make sure EOB is disabled and all
-+	 * If irq is not one of the above, make sure EOB is disabled and all
- 	 * status bits are cleared.
- 	 */
- 	if (ret == IRQ_NONE) {
-@@ -1509,7 +1509,7 @@ static void npcm_i2c_irq_handle_nack(struct npcm_i2c *bus)
- 		npcm_i2c_clear_master_status(bus);
- 		readx_poll_timeout_atomic(ioread8, bus->reg + NPCM_I2CCST, val,
- 					  !(val & NPCM_I2CCST_BUSY), 10, 200);
--		/* verify no status bits are still set after bus is released */
-+		/* Verify no status bits are still set after bus is released */
- 		npcm_i2c_clear_master_status(bus);
- 	}
- 	bus->state = I2C_IDLE;
-@@ -1977,7 +1977,7 @@ static int npcm_i2c_init_module(struct npcm_i2c *bus, enum i2c_mode mode,
- 
- 	npcm_i2c_reset(bus);
- 
--	/* check HW is OK: SDA and SCL should be high at this point. */
-+	/* Check HW is OK: SDA and SCL should be high at this point. */
- 	if ((npcm_i2c_get_SDA(&bus->adap) == 0) || (npcm_i2c_get_SCL(&bus->adap) == 0)) {
- 		dev_err(bus->dev, "I2C%d init fail: lines are low\n", bus->num);
- 		dev_err(bus->dev, "SDA=%d SCL=%d\n", npcm_i2c_get_SDA(&bus->adap),
-@@ -2037,7 +2037,7 @@ static irqreturn_t npcm_i2c_bus_irq(int irq, void *dev_id)
- 			return IRQ_HANDLED;
- 	}
- #endif
--	/* clear status bits for spurious interrupts */
-+	/* Clear status bits for spurious interrupts */
- 	npcm_i2c_clear_master_status(bus);
- 
- 	return IRQ_HANDLED;
-@@ -2219,7 +2219,7 @@ static int npcm_i2c_master_xfer(struct i2c_adapter *adap, struct i2c_msg *msgs,
- 		 (bus->data->rxf_ctl_last_pec & ioread8(bus->reg + NPCM_I2CRXF_CTL)))
- 		npcm_i2c_reset(bus);
- 
--	/* after any xfer, successful or not, stall and EOB must be disabled */
-+	/* After any xfer, successful or not, stall and EOB must be disabled */
- 	npcm_i2c_stall_after_start(bus, false);
- 	npcm_i2c_eob_int(bus, false);
- 
--- 
-2.17.1
-
+greg k-h

@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 588855295AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45535295AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350487AbiEQAB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 20:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S1350523AbiEQABc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 20:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbiEQABX (ORCPT
+        with ESMTP id S238584AbiEQABX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 16 May 2022 20:01:23 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4003403C3
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B70A3FBC1
         for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:01:22 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id hh4so13271772qtb.10
+Received: by mail-pf1-x432.google.com with SMTP id p8so15439724pfh.8
         for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:01:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bwFNpFYZRI4s8sYRdgxEUvvxEJucfpjzv82WDEUnK6U=;
-        b=OhrSGSIxaeDgQCl5Fa7khH4ffPvRr+LBU76vP11lvWXAfAwhDOlAIz18UHnX0Q53Rl
-         mzugI8fOZUNpjXhXuhdaX58LegHizQWV9ikpReFzq4/lXvribHQJW2krXByHQ67Ppu+K
-         xQLcR2RTlPosawHhYxQ5qyXWVCZE3Jls6BYusHIRXvzvvaoB2xzh2npDtHHS4Dp4Bnhm
-         r3+DKCNYEVnQPmH3Y7fjqfP9xDMGiYyVpjz7oH86u8r/uvvrUd2QR/mwT2qftkEzJkZx
-         oqN2PpUzRSx/Hv6Rt8vOJF5JwQXfjvuV0icn3EI7t8WpycX99l7HbgpWAoREtjaTLvsg
-         fyCw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IX2wmwvaDyZMh7ib5ZKuwhVkKDHyhdCDkN7AoejMd14=;
+        b=QO4M1yV2IkKeIohfCfSn9H3sUzERCQ1hJGTky+xBqF2Rgc4HUQud/A0HZ5mhCRjOC9
+         X9PJy3n49zrIzWH5CF1gyUvkBMCgbhctRGm/yJl1gIn2Z9Nib3jcV5NaP4iSz9XhATB/
+         lUnlNNq5VqtrQ7JBDpM9kerEriKcO1fQSh6nNcaNjZaFoKMG0/4d1q6sPxPy6MqgLGFp
+         K/xv4+vuwxaUGTBLDO3AjcPw0k5uMJxmdbA40w0uaCdxttoP35ebrshjn4E7LQPGsJ8I
+         uqkXOlz+jnD1NMvb95PKCI0MDx/uY/+LaOTkepYltMJWWdcD7FOj6IeB14TRA0Bs9m6i
+         NUZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bwFNpFYZRI4s8sYRdgxEUvvxEJucfpjzv82WDEUnK6U=;
-        b=7wN7V8XYPxRlKbyTzXsiDmmCgA6LlUgGiWPwUdVb/XoNAJLuPdUZAST3VfuNUWTG97
-         xtojAdknOn6Sh1qxjd6i2TBBpdtK2/iMW1+rCCsdFAJnVluZHWyeWOoDS8YiieR09a70
-         WUbtaRLvCvakYnIPx9JnpW4Y9rBmHFLdoo9Mz52Ikpo7YtGLh/CUNKFtiy/QuXxlI4ol
-         VhxbMEzd474ODm2JhYSAC33roH5EUCT7GplmUNAFBnQLGvJO9yyo+oOMoNTE4WHHHBab
-         IrCEr+gcPlLEhi0TZfqIG2/SAKteJ3XJnoiVOWqPHrQT5wnJvXHWlr8wdP3+M2xkpXch
-         KdJw==
-X-Gm-Message-State: AOAM530oOM16fM/qw+JbOW14jcft15DBpReBd0sWAgCtS4ff48eLtau2
-        K6sEdpZVKtvYjk6ND+LoKhNnBG+n4JB8DGWv2KE=
-X-Google-Smtp-Source: ABdhPJzVEABwTV+appVmP953wYlG+AunVSoKlWbSkWciXQ/gFLiD/SSK/t8dBxfpcc1aYIKqEU25vjrrnWvNM00vWrw=
-X-Received: by 2002:ac8:5e49:0:b0:2f3:be19:ec08 with SMTP id
- i9-20020ac85e49000000b002f3be19ec08mr17947594qtx.450.1652745681588; Mon, 16
- May 2022 17:01:21 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IX2wmwvaDyZMh7ib5ZKuwhVkKDHyhdCDkN7AoejMd14=;
+        b=4mZ9wVq7x81RWWx/5TzErvDTcO6u2W/w2f1ksnl1KumcCua6q1Ybj20o08J0DD2xM/
+         R0oc5oWQwsFFzAq2CEh7E/A9j7zn/riwBtfrbO3nH9XlQ8AnTPShuXI/BTHGDFo7eVFj
+         YknKd7DEm4WDE1wTAa8/M5Ix0KiQKtr1ugu2QzzSO+6irmrbr0cG5A+ocV0rqFIVAC0f
+         u6VJC+XD/Qz21UyO28YuSxCqhKA+09UqRFNvkYTl/4TC1GzQQuKl4YXyOq6JDmiTEuj8
+         phbws4U7LE73qYqidqGbbD7B3ANHPlnnqswhqXj0otLic/ggddrO3dNDwO0ikKCO6ZDr
+         rwKA==
+X-Gm-Message-State: AOAM530BZP2KhJJnbbFwBhA6300rm188wuDnQKcaBBjYC/wTf/mlKw6P
+        0CKf2jsqk4qRhKEX/t0H5Gbx9w==
+X-Google-Smtp-Source: ABdhPJzkLlYlwYRPn9ndHoCIDmiWHid04iZptb+cvXrjdGCNaUQpOU5WDN40xqZ+9PaRB0vWiHaVdA==
+X-Received: by 2002:a05:6a00:23c6:b0:50f:f570:7ea7 with SMTP id g6-20020a056a0023c600b0050ff5707ea7mr19962149pfc.76.1652745681364;
+        Mon, 16 May 2022 17:01:21 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id i13-20020a170902eb4d00b0015e8d4eb1b9sm7781773pli.3.2022.05.16.17.01.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 17:01:20 -0700 (PDT)
+Date:   Tue, 17 May 2022 00:01:17 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH V2 3/7] KVM: X86/MMU: Link PAE root pagetable with its
+ children
+Message-ID: <YoLlzcejEDh8VpoB@google.com>
+References: <20220503150735.32723-1-jiangshanlai@gmail.com>
+ <20220503150735.32723-4-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-References: <CGME20220509073953epcas1p127f2d36186316642068c92c5d9dee1c4@epcas1p1.samsung.com>
- <20220509074330.4822-1-jaewon31.kim@samsung.com> <CAJrd-UvRgtox=JD3jMKiUouHO7Jj42_qAfsZv5Rx38TKMdLv1A@mail.gmail.com>
-In-Reply-To: <CAJrd-UvRgtox=JD3jMKiUouHO7Jj42_qAfsZv5Rx38TKMdLv1A@mail.gmail.com>
-From:   Jaewon Kim <jaewon31.kim@gmail.com>
-Date:   Tue, 17 May 2022 09:01:10 +0900
-Message-ID: <CAJrd-UsFTAyh2ifJRErM+yX5ysivHXg9VckLwoo3HeZPBr_iHQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] page_ext: create page extension for all memblock
- memory regions
-To:     Jaewon Kim <jaewon31.kim@samsung.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220503150735.32723-4-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,115 +83,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello guys, could look into this patch?
+On Tue, May 03, 2022 at 11:07:31PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> When special shadow pages are activated, link_shadow_page() might link
+> a special shadow pages which is the PAE root for PAE paging with its
+> children.
+> 
+> Add make_pae_pdpte() to handle it.
+> 
+> The code is not activated since special shadow pages are not activated
+> yet.
+> 
+> Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c  | 6 +++++-
+>  arch/x86/kvm/mmu/spte.c | 7 +++++++
+>  arch/x86/kvm/mmu/spte.h | 1 +
+>  3 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 126f0cd07f98..3fe70ad3bda2 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2277,7 +2277,11 @@ static void link_shadow_page(struct kvm_vcpu *vcpu, u64 *sptep,
+>  
+>  	BUILD_BUG_ON(VMX_EPT_WRITABLE_MASK != PT_WRITABLE_MASK);
+>  
+> -	spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
+> +	if (unlikely(sp->role.level == PT32_ROOT_LEVEL &&
+> +		     vcpu->arch.mmu->root_role.level == PT32E_ROOT_LEVEL))
+> +		spte = make_pae_pdpte(sp->spt);
+> +	else
+> +		spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
+>  
+>  	mmu_spte_set(sptep, spte);
+>  
+> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+> index 75c9e87d446a..ccd9267a58ca 100644
+> --- a/arch/x86/kvm/mmu/spte.c
+> +++ b/arch/x86/kvm/mmu/spte.c
+> @@ -251,6 +251,13 @@ u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
+>  	return child_spte;
+>  }
+>  
+> +u64 make_pae_pdpte(u64 *child_pt)
+> +{
+> +	/* The only ignore bits in PDPTE are 11:9. */
+> +	BUILD_BUG_ON(!(GENMASK(11,9) & SPTE_MMU_PRESENT_MASK));
+> +	return __pa(child_pt) | PT_PRESENT_MASK | SPTE_MMU_PRESENT_MASK |
+> +		shadow_me_value;
 
-2022=EB=85=84 5=EC=9B=94 10=EC=9D=BC (=ED=99=94) =EC=98=A4=EC=A0=84 9:00, J=
-aewon Kim <jaewon31.kim@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> let me add Joonsoo Kim
->
-> 2022=EB=85=84 5=EC=9B=94 9=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 4:39, =
-Jaewon Kim <jaewon31.kim@samsung.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
-> >
-> > The page extension can be prepared for each section. But if the first
-> > page is not valid, the page extension for the section was not
-> > initialized though there were many other valid pages within the section=
-.
-> >
-> > To support the page extension for all sections, refer to memblock memor=
-y
-> > regions. If the page is valid use the nid from pfn_to_nid, otherwise us=
-e
-> > the previous nid.
-> >
-> > Also this pagech changed log to include total sections and a section
-> > size.
-> >
-> > i.e.
-> > allocated 100663296 bytes of page_ext for 64 sections (1 section : 0x80=
-00000)
-> >
-> > Signed-off-by: Jaewon Kim <jaewon31.kim@samsung.com>
-> > ---
-> >  mm/page_ext.c | 42 ++++++++++++++++++++++--------------------
-> >  1 file changed, 22 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/mm/page_ext.c b/mm/page_ext.c
-> > index 2e66d934d63f..506d58b36a1d 100644
-> > --- a/mm/page_ext.c
-> > +++ b/mm/page_ext.c
-> > @@ -381,41 +381,43 @@ static int __meminit page_ext_callback(struct not=
-ifier_block *self,
-> >  void __init page_ext_init(void)
-> >  {
-> >         unsigned long pfn;
-> > -       int nid;
-> > +       int nid =3D 0;
-> > +       struct memblock_region *rgn;
-> > +       int nr_section =3D 0;
-> > +       unsigned long next_section_pfn =3D 0;
-> >
-> >         if (!invoke_need_callbacks())
-> >                 return;
-> >
-> > -       for_each_node_state(nid, N_MEMORY) {
-> > +       /*
-> > +        * iterate each memblock memory region and do not skip a sectio=
-n having
-> > +        * !pfn_valid(pfn)
-> > +        */
-> > +       for_each_mem_region(rgn) {
-> >                 unsigned long start_pfn, end_pfn;
-> >
-> > -               start_pfn =3D node_start_pfn(nid);
-> > -               end_pfn =3D node_end_pfn(nid);
-> > -               /*
-> > -                * start_pfn and end_pfn may not be aligned to SECTION =
-and the
-> > -                * page->flags of out of node pages are not initialized=
-.  So we
-> > -                * scan [start_pfn, the biggest section's pfn < end_pfn=
-) here.
-> > -                */
-> > +               start_pfn =3D (unsigned long)(rgn->base >> PAGE_SHIFT);
-> > +               end_pfn =3D start_pfn + (unsigned long)(rgn->size >> PA=
-GE_SHIFT);
-> > +
-> > +               if (start_pfn < next_section_pfn)
-> > +                       start_pfn =3D next_section_pfn;
-> > +
-> >                 for (pfn =3D start_pfn; pfn < end_pfn;
-> >                         pfn =3D ALIGN(pfn + 1, PAGES_PER_SECTION)) {
-> >
-> > -                       if (!pfn_valid(pfn))
-> > -                               continue;
-> > -                       /*
-> > -                        * Nodes's pfns can be overlapping.
-> > -                        * We know some arch can have a nodes layout su=
-ch as
-> > -                        * -------------pfn-------------->
-> > -                        * N0 | N1 | N2 | N0 | N1 | N2|....
-> > -                        */
-> > -                       if (pfn_to_nid(pfn) !=3D nid)
-> > -                               continue;
-> > +                       if (pfn_valid(pfn))
-> > +                               nid =3D pfn_to_nid(pfn);
-> > +                       nr_section++;
-> >                         if (init_section_page_ext(pfn, nid))
-> >                                 goto oom;
-> >                         cond_resched();
-> >                 }
-> > +               next_section_pfn =3D pfn;
-> >         }
-> > +
-> >         hotplug_memory_notifier(page_ext_callback, 0);
-> > -       pr_info("allocated %ld bytes of page_ext\n", total_usage);
-> > +       pr_info("allocated %ld bytes of page_ext for %d sections (1 sec=
-tion : 0x%x)\n",
-> > +               total_usage, nr_section, (1 << SECTION_SIZE_BITS));
-> >         invoke_init_callbacks();
-> >         return;
-> >
-> > --
-> > 2.17.1
-> >
+If I'm reading mmu_alloc_{direct,shadow}_roots() correctly, PAE page
+directories just get: root | PT_PRESENT_MASK | shadow_me_value. Is there
+a reason to add SPTE_MMU_PRESENT_MASK or am I misreading the code?
+
+> +}
+>  
+>  u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled)
+>  {
+> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> index fbbab180395e..09a7e4ba017a 100644
+> --- a/arch/x86/kvm/mmu/spte.h
+> +++ b/arch/x86/kvm/mmu/spte.h
+> @@ -413,6 +413,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  	       u64 old_spte, bool prefetch, bool can_unsync,
+>  	       bool host_writable, u64 *new_spte);
+>  u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index);
+> +u64 make_pae_pdpte(u64 *child_pt);
+>  u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled);
+>  u64 make_mmio_spte(struct kvm_vcpu *vcpu, u64 gfn, unsigned int access);
+>  u64 mark_spte_for_access_track(u64 spte);
+> -- 
+> 2.19.1.6.gb485710b
+> 

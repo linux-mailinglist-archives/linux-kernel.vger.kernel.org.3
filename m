@@ -2,177 +2,544 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D35952AD25
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E92752AD28
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347792AbiEQU63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
+        id S1352927AbiEQU6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241513AbiEQU6Z (ORCPT
+        with ESMTP id S240306AbiEQU6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:58:25 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5844852E7C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:58:22 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id dk23so37008290ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:58:22 -0700 (PDT)
+        Tue, 17 May 2022 16:58:32 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35005532C6;
+        Tue, 17 May 2022 13:58:30 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id v14so301543qtc.3;
+        Tue, 17 May 2022 13:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wG//9LUlNxX10FI60aAD9TW4A6u0+UVzKTFUfna9EcM=;
-        b=AxBMNTbcHtmh4XBZsbTZkYEST7SubuiZ7mqjxOZOiMHXh43ts9yox8tTHJ+1hVeBIN
-         lY4fIhS+/lSj1st458hrZs6h5UyhayvPYCMRsR5CUSJGFGJ4JieKWcr5QD11SAurNEZw
-         XbaC58/XduEvKMk/yRYy0ERGkk6fE3d1ghzgCC0GhJVlhkZwQN5Ssx3QyOM8OYzflvEO
-         /RCBr0tVf2zPpkxY+sbZIfqK6likvHV1Dw4IzxHuady9FzE6y39pk3MRhizDmY4m8w0w
-         BfL2pSY84wMy/v9UJeBFzF5P3fmLp+DXF9hTrL+jC2wUiElYRRm7ExC0URvxQsbfIJ+I
-         WzlA==
+        bh=6M8MD85L5UIxWhXOozbt3pALkeE+11GMex5LaHsMzps=;
+        b=JOZ7L4lLhs0MnpSSws4GQ0TBhJsK/7TgIzQOUkSD5G/qiZNRG+VqetQ4xZVJy73YAG
+         hL17y8MtzvPmT+mTozmQkRdlB1E+Yei8u/p+0zSFW1DBBqqJjDDUdHnImhrUElieBPZq
+         AtD+Ff6MLMnXPLeDJLEriG9LiFiCma+gBWDQrRyE4LSngO37RCvQV61VXKht2VBMAJB6
+         V1zRjSVE4NjN6siYNLnnKFcP0Lhk47wYxa+t6GvkKZMtFlr4BJ/O7lihKbqCqFKh5QBJ
+         OFG3tpt+MA6d8f3fU4gu7HiUacDtWD2gO5jGV2nsZq3ub3K7/NhFwvl6x8UvC3v2rXfk
+         JF1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wG//9LUlNxX10FI60aAD9TW4A6u0+UVzKTFUfna9EcM=;
-        b=xFcIP5OTtE/Vimh5534+ipb8Zu+nKNPDVW0qsmwXS/Yq2D9R9u6mnf8BIvIbkZvYiw
-         /1Kn4+yV7mwmkdLE9VOpL4yLEe+tlmUBqrvvYfpR23pfqkKW1xfeda4F54Qr83RDzMWZ
-         L6u7wOVXgurY75OQo2BGq6n0KDgb5LreqD9PobQo7dZiy/hW8LdqxOLryVAeKHJwfNqh
-         MD5G3+zQvaqYN1X1RWttJLA6mLPA/eJhlVHck3dnW3zfEN2ny5bFPVxFuP2vtXoiaRZd
-         Z9ycvcKgI6RsOGfXlJRBBvkxxGOyl0Zn9EiDdGswpRYmAnRorsRPB/GPiMO4g/bBtShg
-         shiQ==
-X-Gm-Message-State: AOAM531KDvP/P5eXopW8T/Sxb5m2YqzSBFdNPdqj0JDH9tcAu4EhaY6u
-        StdT5Bej8zwC6qP2QQdklv45PaqUbr0tUeaDa7xZsw==
-X-Google-Smtp-Source: ABdhPJzIamuR1/kdHQioWL/LbryCYzlRAz8brhzkGJnKiTbrFbAryR+D9resD6kTTvU0KeuWD2VCw5Yxttr6yNiHuvQ=
-X-Received: by 2002:a17:907:1c89:b0:6f4:4089:8256 with SMTP id
- nb9-20020a1709071c8900b006f440898256mr20638205ejc.60.1652821100668; Tue, 17
- May 2022 13:58:20 -0700 (PDT)
+        bh=6M8MD85L5UIxWhXOozbt3pALkeE+11GMex5LaHsMzps=;
+        b=asq34ED91yF7kBS8klPJaLGKCkQ67bgb6xGuOza77J+TFzk0D/MAONku66kUNcWNoi
+         GK5F3lo2l+ElzOF3pLDcwR3roOLMuleITAAF8wxgeoc+mhfibdDgTLzOf5dQj6T+R8ib
+         4GnIOJLhP4L1QAK4bCct+bcRhW41aM7jnAYOYAYA9a7KxT8V8weJVpeHHRb1jCkO98R8
+         v6Zx+/rAKhR0TJyQsdcSmBGe2ST3H+KMq0cTptUJgANWcgBP1PoMnBbIiRs68z8xu5ai
+         T8i4bUItNzUmOEv0VxB7ubSGuFu5/XEy3eO2l/MbQ4GQam401GM5RelG3xzLkpWvDBpy
+         AT6A==
+X-Gm-Message-State: AOAM533hPh1wDknzScJOQR+gF6YGrOspvC2EfZbKgWiLsprXY/AVmpUk
+        x9sZSJuSp1sJmlZEPw/H61F4iKRYrz8Jb+Bxr34=
+X-Google-Smtp-Source: ABdhPJxkYpXzeoMb1N+v8d0dEfS4YsQTMINKntlr7/azToPi+F/6JC436DAqcd0gVtiATyfDFLckxn/MNA6ZwyUavOE=
+X-Received: by 2002:ac8:5dcb:0:b0:2f3:e079:8d66 with SMTP id
+ e11-20020ac85dcb000000b002f3e0798d66mr20908222qtx.318.1652821109192; Tue, 17
+ May 2022 13:58:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429043913.626647-1-davidgow@google.com> <20220513083212.3537869-2-davidgow@google.com>
- <CAGS_qxr54nYThsj6UhqX54JO5WnyJXVQURnNF1eCzGB+4GCKLA@mail.gmail.com>
- <CABVgOS=gTznLFBTZbmNH7AFDnr7O70mWR9v4q6sDA7q04fKT=Q@mail.gmail.com> <CAGS_qxqFEcw=28FxbMMtEcjqcsgFHXV6Td+uTgDj32Z=PiQJkA@mail.gmail.com>
-In-Reply-To: <CAGS_qxqFEcw=28FxbMMtEcjqcsgFHXV6Td+uTgDj32Z=PiQJkA@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 17 May 2022 16:58:09 -0400
-Message-ID: <CAFd5g45MCdydiLtn_UHku8d9-RMurLS+ep3fwZTuBafABpFrPw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] kunit: Taint the kernel when KUnit tests are run
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Joe Fradley <joefradley@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
+References: <20220517120000.71048-1-robimarko@gmail.com> <12093e84-49b0-d36d-cfde-08ab8af3801c@linaro.org>
+In-Reply-To: <12093e84-49b0-d36d-cfde-08ab8af3801c@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Tue, 17 May 2022 22:58:18 +0200
+Message-ID: <CAOX2RU4PpTQJUNkDremkhfdPG-=1NbG5xLmu22zFSOrqKMce5g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] dt-bindings: regulator: qcom,spmi-regulator:
+ Convert to dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 3:25 PM Daniel Latypov <dlatypov@google.com> wrote:
+On Tue, 17 May 2022 at 16:47, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> On Fri, May 13, 2022 at 8:04 PM David Gow <davidgow@google.com> wrote:
-> > Hmm... thinking about it, I think it might be worth not tainting if 0
-> > suites run, but tainting if 0 tests run.
+> On 17/05/2022 13:59, Robert Marko wrote:
+> > Convert the bindings of Qualcomm SPMI regulators to DT schema.
 > >
-> > If we taint even if there are no suites present, that'll make things
-> > awkward for the "build KUnit in, but not any tests" case: the kernel
-> > would be tainted regardless. Given Android might be having the KUnit
->
-> Actually, this is what the code does right now. I was wrong.
-> If there are 0 suites => not tainted.
-> If there are 0 tests in the suites => tainted.
->
-> For kunit being built in, it first goes through this func
->    206  static void kunit_exec_run_tests(struct suite_set *suite_set)
->    207  {
->    208          struct kunit_suite * const * const *suites;
->    209
->    210          kunit_print_tap_header(suite_set);
->    211
->    212          for (suites = suite_set->start; suites <
-> suite_set->end; suites++)
->    213                  __kunit_test_suites_init(*suites);
->    214  }
->
-> So for the "build KUnit in, but not any tests" case, you'll never
-> enter that for-loop.
-> Thus you'll never call __kunit_test_suites_init() => kunit_run_tests().
->
-> For module-based tests, we have the same behavior.
-> If there's 0 test suites, we never enter the second loop, so we never taint.
-> But if there's >0 suites, then we will, regardless of the # of test cases.
->
->    570  int __kunit_test_suites_init(struct kunit_suite * const * const suites)
->    571  {
->    572          unsigned int i;
->    573
->    574          for (i = 0; suites[i] != NULL; i++) {
->    575                  kunit_init_suite(suites[i]);
->    576                  kunit_run_tests(suites[i]);
->    577          }
->    578          return 0;
->    579  }
->
-> So this change should already work as intended.
->
-> > execution stuff built-in (but using modules for tests), it's probably
-> > worth not tainting there. (Though I think they have a separate way of
-> > disabling KUnit as well, so it's probably not a complete
-> > deal-breaker).
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> > I am aware that syscon alone is not really acceptable, its converted
+> > directly from the old text bindings.
 > >
-> > The case of having suites but no tests should still taint the kernel,
-> > as suite_init functions could still run.
->
-> Yes, suite_init functions are the concern. I agree we should taint if
-> there are >0 suites but 0 test cases.
->
-> I don't think it's worth trying to be fancy and tainting iff there >0
-> test cases or a suite_init/exit function ran.
->
+> > There is also the issue of some MSM8994, MSM8996 and APQ8096 devices using
+> > '#address-cells', '#size-cells', some even defining reg property for
+> > regulators.
 > >
-> > Assuming that seems sensible, I'll send out a v4 with that changed.
+> > Any advice on how to solve these issues is appreciated.
+> >
+> > Changes in v2:
 >
-> Just to be clear: that shouldn't be necessary.
+> Changelog goes after ---
 
-Agreed. I think the current behavior is acceptable, and should be
-unobtrusive to Android: Joe has a patch that introduces a kernel param
-which disables running KUnit tests at the suite level which would
-happen before this taint occurs. So the only way the taint happens is
-if we actually try to execute some test cases (whether or not the
-cases actually run).
+Ok, will fix up in v3.
 
-> > > I wasn't quite sure where this applied, but I manually applied the changes here.
-> > > Without this patch, this command exits fine:
-> > > $ ./tools/testing/kunit/kunit.py run --kernel_args=panic_on_taint=0x40000
-> > >
-> > > With it, I get
-> > > [12:03:31] Kernel panic - not syncing: panic_on_taint set ...
-> > > [12:03:31] CPU: 0 PID: 1 Comm: swapper Tainted: G                 N
+While we are here,
+any ideas about the DTS-s that use reg and #address/size-cells for
+regulator subnodes and syscon?
+
+>
+>
+>
+>
+> > * Remove the forgotten text bindings
+> > * Move allOf after patternProperties
+> > * Use my private email as the maintainer email
+> > ---
+> >  .../regulator/qcom,spmi-regulator.txt         | 347 ------------------
+> >  .../regulator/qcom,spmi-regulator.yaml        | 176 +++++++++
+> >  2 files changed, 176 insertions(+), 347 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.txt
+> >  create mode 100644 Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
 > >
-> > This is showing both 'G' and 'N' ('G' being the character for GPL --
+> > diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.txt b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.txt
+> > deleted file mode 100644
+> > index c2a39b121b1b..000000000000
+> > --- a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.txt
+> > +++ /dev/null
+> > @@ -1,347 +0,0 @@
+> > -Qualcomm SPMI Regulators
+> > -
+> > -- compatible:
+> > -     Usage: required
+> > -     Value type: <string>
+> > -     Definition: must be one of:
+> > -                     "qcom,pm8004-regulators"
+> > -                     "qcom,pm8005-regulators"
+> > -                     "qcom,pm8226-regulators"
+> > -                     "qcom,pm8841-regulators"
+> > -                     "qcom,pm8916-regulators"
+> > -                     "qcom,pm8941-regulators"
+> > -                     "qcom,pm8950-regulators"
+> > -                     "qcom,pm8994-regulators"
+> > -                     "qcom,pmi8994-regulators"
+> > -                     "qcom,pm660-regulators"
+> > -                     "qcom,pm660l-regulators"
+> > -                     "qcom,pms405-regulators"
+> > -
+> > -- interrupts:
+> > -     Usage: optional
+> > -     Value type: <prop-encoded-array>
+> > -     Definition: List of OCP interrupts.
+> > -
+> > -- interrupt-names:
+> > -     Usage: required if 'interrupts' property present
+> > -     Value type: <string-array>
+> > -     Definition: List of strings defining the names of the
+> > -                 interrupts in the 'interrupts' property 1-to-1.
+> > -                 Supported values are "ocp-<regulator_name>", where
+> > -                 <regulator_name> corresponds to a voltage switch
+> > -                 type regulator.
+> > -
+> > -- vdd_s1-supply:
+> > -- vdd_s2-supply:
+> > -- vdd_s3-supply:
+> > -- vdd_s4-supply:
+> > -- vdd_s5-supply:
+> > -- vdd_s6-supply:
+> > -- vdd_s7-supply:
+> > -- vdd_s8-supply:
+> > -     Usage: optional (pm8841 only)
+> > -     Value type: <phandle>
+> > -     Definition: Reference to regulator supplying the input pin, as
+> > -                 described in the data sheet.
+> > -
+> > -- vdd_s1-supply:
+> > -- vdd_s2-supply:
+> > -- vdd_s3-supply:
+> > -- vdd_s4-supply:
+> > -- vdd_l1_l3-supply:
+> > -- vdd_l2-supply:
+> > -- vdd_l4_l5_l6-supply:
+> > -- vdd_l7-supply:
+> > -- vdd_l8_l11_l14_l15_l16-supply:
+> > -- vdd_l9_l10_l12_l13_l17_l18-supply:
+> > -     Usage: optional (pm8916 only)
+> > -     Value type: <phandle>
+> > -     Definition: Reference to regulator supplying the input pin, as
+> > -                 described in the data sheet.
+> > -
+> > -- vdd_s1-supply:
+> > -- vdd_s2-supply:
+> > -- vdd_s3-supply:
+> > -- vdd_l1_l3-supply:
+> > -- vdd_l2_lvs_1_2_3-supply:
+> > -- vdd_l4_l11-supply:
+> > -- vdd_l5_l7-supply:
+> > -- vdd_l6_l12_l14_l15-supply:
+> > -- vdd_l8_l16_l18_19-supply:
+> > -- vdd_l9_l10_l17_l22-supply:
+> > -- vdd_l13_l20_l23_l24-supply:
+> > -- vdd_l21-supply:
+> > -- vin_5vs-supply:
+> > -     Usage: optional (pm8941 only)
+> > -     Value type: <phandle>
+> > -     Definition: Reference to regulator supplying the input pin, as
+> > -                 described in the data sheet.
+> > -
+> > -- vdd_s1-supply:
+> > -- vdd_s2-supply:
+> > -- vdd_s3-supply:
+> > -- vdd_s4-supply:
+> > -- vdd_s4-supply:
+> > -- vdd_s5-supply:
+> > -- vdd_s6-supply:
+> > -- vdd_l1_l19-supply:
+> > -- vdd_l2_l23-supply:
+> > -- vdd_l3-supply:
+> > -- vdd_l4_l5_l6_l7_l16-supply:
+> > -- vdd_l8_l11_l12_l17_l22-supply:
+> > -- vdd_l9_l10_l13_l14_l15_l18-supply:
+> > -- vdd_l20-supply:
+> > -- vdd_l21-supply:
+> > -     Usage: optional (pm8950 only)
+> > -     Value type: <phandle>
+> > -     Definition: reference to regulator supplying the input pin, as
+> > -                 described in the data sheet
+> > -
+> > -- vdd_s1-supply:
+> > -- vdd_s2-supply:
+> > -- vdd_s3-supply:
+> > -- vdd_s4-supply:
+> > -- vdd_s5-supply:
+> > -- vdd_s6-supply:
+> > -- vdd_s7-supply:
+> > -- vdd_s8-supply:
+> > -- vdd_s9-supply:
+> > -- vdd_s10-supply:
+> > -- vdd_s11-supply:
+> > -- vdd_s12-supply:
+> > -- vdd_l1-supply:
+> > -- vdd_l2_l26_l28-supply:
+> > -- vdd_l3_l11-supply:
+> > -- vdd_l4_l27_l31-supply:
+> > -- vdd_l5_l7-supply:
+> > -- vdd_l6_l12_l32-supply:
+> > -- vdd_l8_l16_l30-supply:
+> > -- vdd_l9_l10_l18_l22-supply:
+> > -- vdd_l13_l19_l23_l24-supply:
+> > -- vdd_l14_l15-supply:
+> > -- vdd_l17_l29-supply:
+> > -- vdd_l20_l21-supply:
+> > -- vdd_l25-supply:
+> > -- vdd_lvs_1_2-supply:
+> > -     Usage: optional (pm8994 only)
+> > -     Value type: <phandle>
+> > -     Definition: Reference to regulator supplying the input pin, as
+> > -                 described in the data sheet.
+> > -
+> > -- vdd_s1-supply:
+> > -- vdd_s2-supply:
+> > -- vdd_s3-supply:
+> > -- vdd_l1-supply:
+> > -     Usage: optional (pmi8994 only)
+> > -     Value type: <phandle>
+> > -     Definition: Reference to regulator supplying the input pin, as
+> > -                 described in the data sheet.
+> > -
+> > -- vdd_l1_l6_l7-supply:
+> > -- vdd_l2_l3-supply:
+> > -- vdd_l5-supply:
+> > -- vdd_l8_l9_l10_l11_l12_l13_l14-supply:
+> > -- vdd_l15_l16_l17_l18_l19-supply:
+> > -- vdd_s1-supply:
+> > -- vdd_s2-supply:
+> > -- vdd_s3-supply:
+> > -- vdd_s5-supply:
+> > -- vdd_s6-supply:
+> > -     Usage: optional (pm660 only)
+> > -     Value type: <phandle>
+> > -     Definition: Reference to regulator supplying the input pin, as
+> > -                 described in the data sheet.
+> > -
+> > -- vdd_l1_l9_l10-supply:
+> > -- vdd_l2-supply:
+> > -- vdd_l3_l5_l7_l8-supply:
+> > -- vdd_l4_l6-supply:
+> > -- vdd_s1-supply:
+> > -- vdd_s2-supply:
+> > -- vdd_s3-supply:
+> > -- vdd_s4-supply:
+> > -- vdd_s5-supply:
+> > -     Usage: optional (pm660l only)
+> > -     Value type: <phandle>
+> > -     Definition: Reference to regulator supplying the input pin, as
+> > -                 described in the data sheet.
+> > -
+> > -- vdd_l1_l2-supply:
+> > -- vdd_l3_l8-supply:
+> > -- vdd_l4-supply:
+> > -- vdd_l5_l6-supply:
+> > -- vdd_l10_l11_l12_l13-supply:
+> > -- vdd_l7-supply:
+> > -- vdd_l9-supply:
+> > -- vdd_s1-supply:
+> > -- vdd_s2-supply:
+> > -- vdd_s3-supply:
+> > -- vdd_s4-supply:
+> > -- vdd_s5-supply
+> > -     Usage: optional (pms405 only)
+> > -     Value type: <phandle>
+> > -     Definition: Reference to regulator supplying the input pin, as
+> > -                 described in the data sheet.
+> > -
+> > -- qcom,saw-reg:
+> > -     Usage: optional
+> > -     Value type: <phandle>
+> > -     Description: Reference to syscon node defining the SAW registers.
+> > -
+> > -
+> > -The regulator node houses sub-nodes for each regulator within the device. Each
+> > -sub-node is identified using the node's name, with valid values listed for each
+> > -of the PMICs below.
+> > -
+> > -pm8004:
+> > -     s2, s5
+> > -
+> > -pm8005:
+> > -     s1, s2, s3, s4
+> > -
+> > -pm8841:
+> > -     s1, s2, s3, s4, s5, s6, s7, s8
+> > -
+> > -pm8916:
+> > -     s1, s2, s3, s4, l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13,
+> > -     l14, l15, l16, l17, l18
+> > -
+> > -pm8941:
+> > -     s1, s2, s3, s4, l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13,
+> > -     l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24, lvs1, lvs2, lvs3,
+> > -     5vs1, 5vs2
+> > -
+> > -pm8994:
+> > -     s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, l1, l2, l3, l4, l5,
+> > -     l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20,
+> > -     l21, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32, lvs1, lvs2
+> > -
+> > -pmi8994:
+> > -     s1, s2, s3, l1
+> > -
+> > -The content of each sub-node is defined by the standard binding for regulators -
+> > -see regulator.txt - with additional custom properties described below:
+> > -
+> > -- regulator-initial-mode:
+> > -     Usage: optional
+> > -     Value type: <u32>
+> > -     Description: 2 = Set initial mode to auto mode (automatically select
+> > -                 between HPM and LPM); not available on boost type
+> > -                 regulators.
+> > -
+> > -                 1 = Set initial mode to high power mode (HPM), also referred
+> > -                 to as NPM. HPM consumes more ground current than LPM, but
+> > -                 it can source significantly higher load current. HPM is not
+> > -                 available on boost type regulators. For voltage switch type
+> > -                 regulators, HPM implies that over current protection and
+> > -                 soft start are active all the time.
+> > -
+> > -                 0 = Set initial mode to low power mode (LPM).
+> > -
+> > -- qcom,ocp-max-retries:
+> > -     Usage: optional
+> > -     Value type: <u32>
+> > -     Description: Maximum number of times to try toggling a voltage switch
+> > -                  off and back on as a result of consecutive over current
+> > -                  events.
+> > -
+> > -- qcom,ocp-retry-delay:
+> > -     Usage: optional
+> > -     Value type: <u32>
+> > -     Description: Time to delay in milliseconds between each voltage switch
+> > -                  toggle after an over current event takes place.
+> > -
+> > -- qcom,pin-ctrl-enable:
+> > -     Usage: optional
+> > -     Value type: <u32>
+> > -     Description: Bit mask specifying which hardware pins should be used to
+> > -                  enable the regulator, if any; supported bits are:
+> > -                     0 = ignore all hardware enable signals
+> > -                     BIT(0) = follow HW0_EN signal
+> > -                     BIT(1) = follow HW1_EN signal
+> > -                     BIT(2) = follow HW2_EN signal
+> > -                     BIT(3) = follow HW3_EN signal
+> > -
+> > -- qcom,pin-ctrl-hpm:
+> > -     Usage: optional
+> > -     Value type: <u32>
+> > -     Description: Bit mask specifying which hardware pins should be used to
+> > -                  force the regulator into high power mode, if any;
+> > -                  supported bits are:
+> > -                     0 = ignore all hardware enable signals
+> > -                     BIT(0) = follow HW0_EN signal
+> > -                     BIT(1) = follow HW1_EN signal
+> > -                     BIT(2) = follow HW2_EN signal
+> > -                     BIT(3) = follow HW3_EN signal
+> > -                     BIT(4) = follow PMIC awake state
+> > -
+> > -- qcom,vs-soft-start-strength:
+> > -     Usage: optional
+> > -     Value type: <u32>
+> > -     Description: This property sets the soft start strength for voltage
+> > -                  switch type regulators; supported values are:
+> > -                     0 = 0.05 uA
+> > -                     1 = 0.25 uA
+> > -                     2 = 0.55 uA
+> > -                     3 = 0.75 uA
+> > -
+> > -- qcom,saw-slave:
+> > -     Usage: optional
+> > -     Value type: <boo>
+> > -     Description: SAW controlled gang slave. Will not be configured.
+> > -
+> > -- qcom,saw-leader:
+> > -     Usage: optional
+> > -     Value type: <boo>
+> > -     Description: SAW controlled gang leader. Will be configured as
+> > -                  SAW regulator.
+> > -
+> > -Example:
+> > -
+> > -     regulators {
+> > -             compatible = "qcom,pm8941-regulators";
+> > -             vdd_l1_l3-supply = <&s1>;
+> > -
+> > -             s1: s1 {
+> > -                     regulator-min-microvolt = <1300000>;
+> > -                     regulator-max-microvolt = <1400000>;
+> > -             };
+> > -
+> > -             ...
+> > -
+> > -             l1: l1 {
+> > -                     regulator-min-microvolt = <1225000>;
+> > -                     regulator-max-microvolt = <1300000>;
+> > -             };
+> > -
+> > -             ....
+> > -     };
+> > -
+> > -Example 2:
+> > -
+> > -     saw3: syscon@9A10000 {
+> > -             compatible = "syscon";
+> > -             reg = <0x9A10000 0x1000>;
+> > -     };
+> > -
+> > -     ...
+> > -
+> > -     spm-regulators {
+> > -             compatible = "qcom,pm8994-regulators";
+> > -             qcom,saw-reg = <&saw3>;
+> > -             s8 {
+> > -                     qcom,saw-slave;
+> > -             };
+> > -             s9 {
+> > -                     qcom,saw-slave;
+> > -             };
+> > -             s10 {
+> > -                     qcom,saw-slave;
+> > -             };
+> > -             pm8994_s11_saw: s11 {
+> > -                     qcom,saw-leader;
+> > -                     regulator-always-on;
+> > -                     regulator-min-microvolt = <900000>;
+> > -                     regulator-max-microvolt = <1140000>;
+> > -             };
+> > -     };
+> > diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> > new file mode 100644
+> > index 000000000000..5c747c832529
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
+> > @@ -0,0 +1,176 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/regulator/qcom,spmi-regulator.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm SPMI Regulators
+> > +
+> > +maintainers:
+> > +  - Robert Marko <robimarko@gmail.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - qcom,pm660-regulators
+> > +      - qcom,pm660l-regulators
+> > +      - qcom,pm8004-regulators
+> > +      - qcom,pm8005-regulators
+> > +      - qcom,pm8226-regulators
+> > +      - qcom,pm8841-regulators
+> > +      - qcom,pm8916-regulators
+> > +      - qcom,pm8941-regulators
+> > +      - qcom,pm8950-regulators
+> > +      - qcom,pm8994-regulators
+> > +      - qcom,pmi8994-regulators
+> > +      - qcom,pms405-regulators
+> > +
 >
-> I just somehow missed the fact there was an 'N' at the end there.
-> Thanks, I thought I was going crazy. I guess I was just going blind.
+> You miss here interrupts+names.
+>
+> > +  qcom,saw-reg:
+> > +    description: Reference to syscon node defining the SAW registers
+> > +    $ref: "/schemas/types.yaml#/definitions/phandle"
+>
+> No quotes around this.
+
+Ok, I will remove them, it's a bit confusing as most bindings use
+quotes around refs.
+>
+> > +
+> > +patternProperties:
+> > +  ".*-supply$":
+>
+> We should not allow any supply, but rather a strictly defined pattern.
+>
+> What I actually prefer is to see something like this:
+> https://lore.kernel.org/all/20220426105501.73200-3-krzysztof.kozlowski@linaro.org/
+> but that's not a requirement. Some specific pattern is enough.
+
+I have implemented this style of supply matching per compatible in v3 as
+trying to regex does not seem to cover matching them properly.
+
+>
+> > +    description: Input supply phandle(s) for this node
+> > +    $ref: "/schemas/types.yaml#/definitions/phandle"
+> > +
+> > +  "^((s|l|lvs|5vs)[0-9]*)$":
+>
+> s1111 should not be a valid regulator. :)
+> Neither s000000.
+
+Got it, have implemented a much stricter regex in v3.
+
+Regards,
+Robert
 >
 >
-> Daniel
+>
+> Best regards,
+> Krzysztof

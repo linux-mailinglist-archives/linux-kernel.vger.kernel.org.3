@@ -2,123 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78DE8529F69
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42E4529F6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344188AbiEQK3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S1344230AbiEQK3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238397AbiEQK3b (ORCPT
+        with ESMTP id S1344021AbiEQK3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:29:31 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32C11CA
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:29:29 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HAMC7S028896;
-        Tue, 17 May 2022 10:29:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=K771XREqVjhON5S7y+Xj5nxm98y25hiqCAHk1+Djnbo=;
- b=fw2qcmJjDFPzRZ8yAitfu90PfQIKJ0sEBkWcBHzHbGPr63yCSV1nPzl0dU1z/eYMvDm8
- CxsELqI5wUGB396oOAMufx4zOFyfYdDwsD4HOqkySLyPtFn27ykygNHid29UQmG8uGoZ
- MFudfploClTIDTaknANlPE3oplY3hSr2dH0sPgkxZBb8dpEY9evZZZ6B2RVi7jpuDLfj
- Py5jKrx286e4AsjxnHrkBokmpQFZmrsAH4QOzbk2gs06bzwv9ilMeyM4qu3wDGWjJmVd
- 2hU/iCcRBsJO0FNjKmii+gJG/FijWvDVSrTA+aUc/Q3sT6ALK0xfSTEqw27GG7lsEnoP BQ== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g49w103jh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 10:29:17 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HAMPq7031053;
-        Tue, 17 May 2022 10:29:15 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03fra.de.ibm.com with ESMTP id 3g2428u75u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 10:29:15 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HATDxu55247302
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 10:29:13 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E36EDAE045;
-        Tue, 17 May 2022 10:29:12 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2A93AE051;
-        Tue, 17 May 2022 10:29:12 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 17 May 2022 10:29:12 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: [PATCH v2] iommu/dma: Fix check for error return from iommu_map_sg_atomic()
-Date:   Tue, 17 May 2022 12:29:12 +0200
-Message-Id: <20220517102912.2115228-1-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 17 May 2022 06:29:33 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92437C1;
+        Tue, 17 May 2022 03:29:31 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so1015572wme.3;
+        Tue, 17 May 2022 03:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Vxisw3Hi44x5twaMivDjLGFhUD0fUbxKpcmcLxOdkIw=;
+        b=e/qh6WLxUTS+sXD6t/Mhvgl+X9qerZPVQ2gX4wXKahJJrVmDQ2z1lFt/r8dvU+xlDh
+         yboCALSNrqACdnL3x5d6WZO2R0BjYwqr+zmLSQVILMXypRqhiC9Eir6lGEr5QH/+qdkX
+         JtOUZVBVu7GVl8QbFNo8rMX3JYoV4CPZMxjW2mvRbFtvetfULTJwG2dZej9uTj/VpP/7
+         Jv9W/nQGsF4cFKUHT7zWsz6d4aQa02PY4INtnUHWGO48joLipKxTctp8kSDJVkU7jm5p
+         jtGrqVqrkFpRw8vpvvmlYFSOL7IlrApUu3GfD1R7SoJOuu+2nnE7+40/drHmKe6tJF5M
+         oloQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vxisw3Hi44x5twaMivDjLGFhUD0fUbxKpcmcLxOdkIw=;
+        b=6+VDpNlRO2Q0BG9Eg+5W4VLSLkdP4hazJiuz5REOLScvqdcBnZ7KTWM07uKmxO3HRp
+         tJKCa1jVETS8pObgZZUHXalLUePimxf2f0et8pLRdaS5aCLH4F7rbXsB3Yfs4ybG8P8N
+         LRSoV5pGV2OyneeD5afRCV30gm6Qh1RbDEvahxaFYPSWazjWkusT0sC4gt/Xr3oVocTs
+         ySVxr/KHGAixiEOtioweO4jmN0EmPiOWpotbrptC5gSe2aeZ0K8yn0PhpUlOCSydZ+5w
+         6xkeQBgrLhTP3NmZTbc/9wMRw8oZA54jbuPGQ6AqyqpqbEJ5S5WV2CSPjX8PKm4os3fe
+         8Rqw==
+X-Gm-Message-State: AOAM530aDip7Xn2hGYYNwoCWexd9JxRWnIiCyoYefSGpgz2pLFVFZ0OS
+        xtx6NSl8ObwzwghaOQjEtdE=
+X-Google-Smtp-Source: ABdhPJxeHmi/dJgRvCtWQ+8Nrr79od0BB1V9M9NaLxo9VbirJO3YvMd+eVgoytq9QwTzYynRNSCbHw==
+X-Received: by 2002:a1c:f30b:0:b0:37b:b5de:c804 with SMTP id q11-20020a1cf30b000000b0037bb5dec804mr31022786wmq.166.1652783370091;
+        Tue, 17 May 2022 03:29:30 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id m29-20020a05600c3b1d00b0039429bfebebsm2204390wms.3.2022.05.17.03.29.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 03:29:29 -0700 (PDT)
+Message-ID: <96742ddc-5989-2538-a5f8-4b3ce637ecb7@gmail.com>
+Date:   Tue, 17 May 2022 12:29:27 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4cVzg46uX1vm_vJ7q99rxN78cGXE8FIC
-X-Proofpoint-ORIG-GUID: 4cVzg46uX1vm_vJ7q99rxN78cGXE8FIC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_01,2022-05-17_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- impostorscore=0 mlxlogscore=968 lowpriorityscore=0 spamscore=0
- adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205170060
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4] pwrap: mediatek: fix FSM timeout issue
+Content-Language: en-US
+To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
+        robh+dt@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+        eddie.huang@mediatek.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, fshao@chromium.org
+Cc:     srv_heupstream@mediatek.com, hui.liu@mediatek.com,
+        tinghan.shen@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220513034356.5268-1-zhiyong.tao@mediatek.com>
+ <20220513034356.5268-2-zhiyong.tao@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220513034356.5268-2-zhiyong.tao@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In __iommu_dma_alloc_noncontiguous() the return value of
-iommu_map_sg_atomic() is treated as an error if it is smaller than size.
-Before upstream commit ad8f36e4b6b1 ("iommu: return full error code from
-iommu_map_sg[_atomic]()") this simply checked if the requested size was
-successfully mapped.
 
-After that commit iommu_map_sg_atomic() may also return a negative
-error value. In principle this too would be covered by the existing
-check. There is one problem however, as size is of type size_t while the
-return type of iommu_map_sg_atomic() is now of type ssize_t the latter gets
-converted to size_t and negative error values end up as very large
-positive values making the check succeed even if an error was returned.
-Fix this by casting size to ssize_t.
 
-Fixes: ad8f36e4b6b1 ("iommu: return full error code from iommu_map_sg[_atomic]()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
-v1 -> v2:
-- Don't needlessly add a local variable
+On 13/05/2022 05:43, Zhiyong Tao wrote:
+> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+> 
+> Fix pwrap FSM timeout issue which leads the system crash on GFX VSRAM
+> power on.
+> The crash log:
+> [ 3986.543401] mediatek-drm-dp 1c500000.edp_tx: drm_helper_hpd_irq_event
+> [ 3986.670756] vsram_others: is_enabled() failed: -ETIMEDOUT
+> [ 3986.670765] mali 13000000.mali: Power on reg 1 failed error = -110
+> [ 3986.670768] ------------[ cut here ]------------
+> [ 3986.670770] unbalanced disables for vsram_others
+> [ 3986.670783] WARNING: CPU: 7 PID: 4125 at drivers/regulator/core.c:2761 _regulator_disable+0x194/0x1a0
+> [ 3986.670785] Modules linked in: rfcomm algif_hash algif_skcipher af_alg veth uinput btusb btmtk btintel btbcm btrtl xt_cgroup bluetooth uvcvideo videobuf2_vmalloc ecdh_generic ecc mtk_vcodec_dec mtk_vcodec_enc mtk_mdp3 v4l2_h264 mtk_vcodec_common videobuf2_dma_contig mtk_vpu videobuf2_memops v4l2_mem2mem xt_MASQUERADE videobuf2_v4l2 videobuf2_common cros_ec_rpmsg mtk_scp mtk_rpmsg rpmsg_core mtk_scp_ipi ip6table_nat fuse 8021q iio_trig_sysfs cros_ec_sensors cros_ec_lid_angle cros_ec_sensors_core industrialio_triggered_buffer kfifo_buf cros_ec_sensorhub mt7921e mt7921_common mt76_connac_lib lzo_rle mt76 lzo_compress mac80211 cfg80211 zram r8152 mii joydev
+> [ 3986.670830] CPU: 7 PID: 4125 Comm: mali-cmar-backe Not tainted 5.10.78-CL2781499-v287 #1 b899b40a63da40d4767c6c0e96b6700d2f3eb242
+> [ 3986.670832] Hardware name: MediaTek Tomato board (DT)
+> [ 3986.670835] pstate: 60400009 (nZCv daif +PAN -UAO -TCO BTYPE=--)
+> [ 3986.670838] pc : _regulator_disable+0x194/0x1a0
+> [ 3986.670840] lr : _regulator_disable+0x194/0x1a0
+> [ 3986.670842] sp : ffffffc016203a10
+> [ 3986.670843] x29: ffffffc016203a10 x28: ffffffb7c3186b28
+> [ 3986.670846] x27: 0000000000000002 x26: fffffffffffffdc8
+> [ 3986.670848] x25: ffffffc017225000 x24: ffffffb7c0e94880
+> [ 3986.670851] x23: ffffffb7c31840f0 x22: ffffffd6b4f3e275
+> [ 3986.670853] x21: ffffffb7c3181a00 x20: ffffffb7c27e7800
+> [ 3986.670855] x19: ffffffb7c27e7800 x18: 00000000ffff0a10
+> [ 3986.670857] x17: 0000000000000020 x16: 00000000000000ec
+> [ 3986.670860] x15: ffffffd6b44fa17c x14: 0000000000000003
+> [ 3986.670862] x13: 0000000000000004 x12: 0000000000fd8318
+> [ 3986.670864] x11: c000000100029ccd x10: 00000000ffffffff
+> [ 3986.670866] x9 : 7dd6d080afd6f400 x8 : 7dd6d080afd6f400
+> [ 3986.670868] x7 : 0000000000000000 x6 : ffffffd6b5459f0c
+> [ 3986.670871] x5 : ffffffc016203a58 x4 : 0000000000000000
+> [ 3986.670873] x3 : ffffffc016203668 x2 : ffffffc016203670
+> [ 3986.670875] x1 : 0000000100029ccd x0 : 0000000000000024
+> [ 3986.670878] Call trace:
+> [ 3986.670880]  _regulator_disable+0x194/0x1a0
+> [ 3986.670883]  regulator_disable+0x4c/0x8c
+> 
+> Add a usleep delay to avoid busy read for the H/W status.
+> If (time_after()) be turn first, it maybe cause the system behavior
+> crash problem like above. so we change it after sleep delay.
+> 
+> Fixes: 1f022d84bd19 ("soc: mediatek: Add PMIC wrapper for MT8135 and
+> MT8173 SoCs")
+> 
+> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
 
- drivers/iommu/dma-iommu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I prefer the solution send by Angelo on this:
+https://lore.kernel.org/linux-mediatek/a8bd608c-d94c-f4a2-e3b1-3381c9098caf@gmail.com/T/#m44170235be954f39bafc404b266d2c5b59dd4853
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 09f6e1c0f9c0..80db2aa5458c 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -814,7 +814,7 @@ static struct page **__iommu_dma_alloc_noncontiguous(struct device *dev,
- 	}
- 
- 	if (iommu_map_sg_atomic(domain, iova, sgt->sgl, sgt->orig_nents, ioprot)
--			< size)
-+			< (ssize_t)size)
- 		goto out_free_sg;
- 
- 	sgt->sgl->dma_address = iova;
--- 
-2.32.0
+Please feel free to provide feedback on this.
 
+Regards,
+Matthias
+
+> ---
+>   drivers/soc/mediatek/mtk-pmic-wrap.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/soc/mediatek/mtk-pmic-wrap.c b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> index 952bc554f443..f9e7c2f35157 100644
+> --- a/drivers/soc/mediatek/mtk-pmic-wrap.c
+> +++ b/drivers/soc/mediatek/mtk-pmic-wrap.c
+> @@ -4,6 +4,7 @@
+>    * Author: Flora Fu, MediaTek
+>    */
+>   #include <linux/clk.h>
+> +#include <linux/delay.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/io.h>
+>   #include <linux/kernel.h>
+> @@ -1197,10 +1198,13 @@ static int pwrap_wait_for_state(struct pmic_wrapper *wrp,
+>   	timeout = jiffies + usecs_to_jiffies(10000);
+>   
+>   	do {
+> -		if (time_after(jiffies, timeout))
+> -			return fp(wrp) ? 0 : -ETIMEDOUT;
+>   		if (fp(wrp))
+>   			return 0;
+> +
+> +		usleep_range(10, 11);
+> +
+> +		if (time_after(jiffies, timeout))
+> +			return fp(wrp) ? 0 : -ETIMEDOUT;
+>   	} while (1);
+>   }
+>   

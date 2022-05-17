@@ -2,60 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3282752A018
+	by mail.lfdr.de (Postfix) with ESMTP id 36BD652A01A
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235232AbiEQLKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S1343703AbiEQLK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343703AbiEQLK3 (ORCPT
+        with ESMTP id S235790AbiEQLKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:10:29 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB64611A02;
-        Tue, 17 May 2022 04:10:10 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id AB0C91F43AE1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652785809;
-        bh=qf8uzbZ1EqZKktmG/w8A35nbIzmMTkGNdHNjUDAKrE0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=YSEpN29NXtz9y0X68InodlahgVwMXAbQqp76hpOV6ZqVaCMcmQ604Hsdc+EMgGSWp
-         iHP21VfOdjsMU1q4z3olc5ksKIpVDuSNx5b9aEEkn+xSaDc1zsEJl8U+RYi2zn9jpe
-         byljfm3THQOEyYqu66vH85Ci4JOmATN1oJW7XYCJHYhoshg/JkrBjoXEyLcWFdkxXX
-         5dR6aWBFVpXtDo80jDCg5oYpCI1Er0M31yjCljsEj17+xl84lwResrSPnngcH1cR3f
-         HaQGPDaasbSn3GpwwWP6Tsl/H+vf1lvUEF2O2fuHLT+AHtofAujWeTA5b7lMIk/kOh
-         DIboZigcnu4hQ==
-Message-ID: <0ab46d63-3b3a-c847-df21-40efbeb01486@collabora.com>
-Date:   Tue, 17 May 2022 13:10:06 +0200
+        Tue, 17 May 2022 07:10:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FC63380
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652785845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kWX72bEnjjzAU+t4++AyFmo+uTUVABf+VCDnKL48yO4=;
+        b=g4jJw/LpcRImknTB0ZVkyWWtU4ljANgK+lMqllwzpkPyR2ZhMqwQS3l4sZsKVgcrUBXTke
+        H/ABbPoAuATeUDBBR4adHAwUkbb/n3eDZNeAcdDNYUHDCOYO8PnaRAZ615vCX+CXbfvwYp
+        YzzCjmmZmUHSC8WlN6wJ5bYu34U54T8=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-549-a1rVJs8SN-W7xNX2f16wIQ-1; Tue, 17 May 2022 07:10:43 -0400
+X-MC-Unique: a1rVJs8SN-W7xNX2f16wIQ-1
+Received: by mail-ed1-f69.google.com with SMTP id w14-20020a50fa8e000000b0042ab142d677so3785662edr.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:10:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kWX72bEnjjzAU+t4++AyFmo+uTUVABf+VCDnKL48yO4=;
+        b=u3CzbV5Gaa1GSmqAVoRVNCrdztzNx+UtYe6sl6xR2UB05xSXoVAAmN+clmsxth2zxu
+         KBB6XvOF6IVAp5lavO747zc1QxLzgGn1o4RHDVlMccb1tt/+902RBfZgndBzwWeeL0Kg
+         VaIZRSdlxAoXSgLoSf3UpNTR1eTUDGzRMAQGeJVlzdkmyklNr1Th+baZ+Zzqmx5oK/7A
+         maf0j7XZpJMpxCU4GTc7rIJ+1u64aWMoXS3vTodnXFfY+DdUXGStjmia9kuUCKOSFsyP
+         sgD6AcsafalDS71esG+ogkR3a/56I4qwgSsH85HEuhA+Pq7SWsb06MPV+h9tdcGjJajs
+         26aA==
+X-Gm-Message-State: AOAM531CcP8QVKrVv9LbeyHc6IT94okUHU/EllntHbc7Ew/Czem58+LP
+        sfcbEvBnuMyJnsruWZQA7B9G66Wcij5wHdgjy5F3a/mC9b34GX/ZKjdDkCEE/54amLuyXSq11gS
+        ZaOS1ji5U19SRzaYgzoyFXz0A
+X-Received: by 2002:a17:907:72d0:b0:6f5:108c:a34 with SMTP id du16-20020a17090772d000b006f5108c0a34mr19194181ejc.218.1652785842534;
+        Tue, 17 May 2022 04:10:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyG1VdcJkmKyShSzXvdkW6dl7PU945Qyqo6WlCpamECBV/HnypHfduiJVknMHZYrbYcikpczQ==
+X-Received: by 2002:a17:907:72d0:b0:6f5:108c:a34 with SMTP id du16-20020a17090772d000b006f5108c0a34mr19194160ejc.218.1652785842212;
+        Tue, 17 May 2022 04:10:42 -0700 (PDT)
+Received: from [10.39.192.205] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
+        by smtp.gmail.com with ESMTPSA id w26-20020aa7d29a000000b0042aae307407sm3673956edq.21.2022.05.17.04.10.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 May 2022 04:10:41 -0700 (PDT)
+From:   Eelco Chaudron <echaudro@redhat.com>
+To:     Vlad Buslov <vladbu@nvidia.com>,
+        Toms Atteka <cpp.code.lv@gmail.com>
+Cc:     Roi Dayan <roid@nvidia.com>, Ilya Maximets <i.maximets@ovn.org>,
+        Aaron Conole <aconole@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Pravin B Shelar <pshelar@ovn.org>, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Maor Dickman <maord@nvidia.com>
+Subject: Re: [PATCH net-next v2] net: openvswitch: fix uAPI incompatibility
+ with existing user space
+Date:   Tue, 17 May 2022 13:10:40 +0200
+X-Mailer: MailMate (1.14r5895)
+Message-ID: <FFBEB52B-FA8C-4989-BDC1-1F3908F024B8@redhat.com>
+In-Reply-To: <87lev783k8.fsf@nvidia.com>
+References: <20220309222033.3018976-1-i.maximets@ovn.org>
+ <f7ty21hir5v.fsf@redhat.com>
+ <44eeb550-3310-d579-91cc-ec18b59966d2@nvidia.com>
+ <1a185332-3693-2750-fef2-f6938bbc8500@ovn.org> <87k0c171ml.fsf@nvidia.com>
+ <9cc34fbc-3fd6-b529-7a05-554224510452@ovn.org>
+ <4778B505-DBF5-4F57-90AF-87F12C1E0311@redhat.com> <87lev783k8.fsf@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: mediatek: Add bindings for MT6795 M4U
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     martin.botka@somainline.org, linux-mediatek@lists.infradead.org,
-        robh+dt@kernel.org, konrad.dybcio@somainline.org,
-        paul.bouchara@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        will@kernel.org, linux-kernel@vger.kernel.org,
-        yong.wu@mediatek.com, ~postmarketos/upstreaming@lists.sr.ht,
-        joro@8bytes.org, phone-devel@vger.kernel.org,
-        devicetree@vger.kernel.org, marijn.suijten@somainline.org,
-        linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
-        iommu@lists.linux-foundation.org
-References: <20220513151411.395744-1-angelogioacchino.delregno@collabora.com>
- <20220513151411.395744-2-angelogioacchino.delregno@collabora.com>
- <20220516160307.GA2732645-robh@kernel.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220516160307.GA2732645-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,50 +91,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/05/22 18:03, Rob Herring ha scritto:
-> On Fri, 13 May 2022 17:14:10 +0200, AngeloGioacchino Del Regno wrote:
->> Add bindings for the MediaTek Helio X10 (MT6795) IOMMU/M4U.
+
+
+On 12 May 2022, at 12:08, Vlad Buslov wrote:
+
+> On Thu 12 May 2022 at 12:19, Eelco Chaudron <echaudro@redhat.com> wrote=
+:
+>> On 7 Apr 2022, at 12:22, Ilya Maximets wrote:
 >>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   .../bindings/iommu/mediatek,iommu.yaml        |  3 +
->>   include/dt-bindings/memory/mt6795-larb-port.h | 96 +++++++++++++++++++
->>   2 files changed, 99 insertions(+)
->>   create mode 100644 include/dt-bindings/memory/mt6795-larb-port.h
+>>> On 4/7/22 10:02, Vlad Buslov wrote:
+>>>> On Mon 14 Mar 2022 at 20:40, Ilya Maximets <i.maximets@ovn.org> wrot=
+e:
+>>>>> On 3/14/22 19:33, Roi Dayan wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 2022-03-10 8:44 PM, Aaron Conole wrote:
+>>>>>>> Ilya Maximets <i.maximets@ovn.org> writes:
+>>>>>>>
+>>>>>>>> Few years ago OVS user space made a strange choice in the commit=
+ [1]
+>>>>>>>> to define types only valid for the user space inside the copy of=
+ a
+>>>>>>>> kernel uAPI header.=C2=A0 '#ifndef __KERNEL__' and another attri=
+bute was
+>>>>>>>> added later.
+>>>>>>>>
+>>>>>>>> This leads to the inevitable clash between user space and kernel=
+ types
+>>>>>>>> when the kernel uAPI is extended.=C2=A0 The issue was unveiled w=
+ith the
+>>>>>>>> addition of a new type for IPv6 extension header in kernel uAPI.=
+
+>>>>>>>>
+>>>>>>>> When kernel provides the OVS_KEY_ATTR_IPV6_EXTHDRS attribute to =
+the
+>>>>>>>> older user space application, application tries to parse it as
+>>>>>>>> OVS_KEY_ATTR_PACKET_TYPE and discards the whole netlink message =
+as
+>>>>>>>> malformed.=C2=A0 Since OVS_KEY_ATTR_IPV6_EXTHDRS is supplied alo=
+ng with
+>>>>>>>> every IPv6 packet that goes to the user space, IPv6 support is f=
+ully
+>>>>>>>> broken.
+>>>>>>>>
+>>>>>>>> Fixing that by bringing these user space attributes to the kerne=
+l
+>>>>>>>> uAPI to avoid the clash.=C2=A0 Strictly speaking this is not the=
+ problem
+>>>>>>>> of the kernel uAPI, but changing it is the only way to avoid bre=
+akage
+>>>>>>>> of the older user space applications at this point.
+>>>>>>>>
+>>>>>>>> These 2 types are explicitly rejected now since they should not =
+be
+>>>>>>>> passed to the kernel.=C2=A0 Additionally, OVS_KEY_ATTR_TUNNEL_IN=
+FO moved
+>>>>>>>> out from the '#ifdef __KERNEL__' as there is no good reason to h=
+ide
+>>>>>>>> it from the userspace.=C2=A0 And it's also explicitly rejected n=
+ow, because
+>>>>>>>> it's for in-kernel use only.
+>>>>>>>>
+>>>>>>>> Comments with warnings were added to avoid the problem coming ba=
+ck.
+>>>>>>>>
+>>>>>>>> (1 << type) converted to (1ULL << type) to avoid integer overflo=
+w on
+>>>>>>>> OVS_KEY_ATTR_IPV6_EXTHDRS, since it equals 32 now.
+>>>>>>>>
+>>>>>>>> =C2=A0 [1] beb75a40fdc2 ("userspace: Switching of L3 packets in =
+L2 pipeline")
+>>>>>>>>
+>>>>>>>> Fixes: 28a3f0601727 ("net: openvswitch: IPv6: Add IPv6 extension=
+ header support")
+>>>>>>>> Link: https://lore.kernel.org/netdev/3adf00c7-fe65-3ef4-b6d7-6d8=
+a0cad8a5f@nvidia.com
+>>>>>>>> Link: https://github.com/openvswitch/ovs/commit/beb75a40fdc295bf=
+d6521b0068b4cd12f6de507c
+>>>>>>>> Reported-by: Roi Dayan <roid@nvidia.com>
+>>>>>>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+>>>>>>>> ---
+>>>>>>>
+>>>>>>> Acked-by: Aaron Conole <aconole@redhat.com>
+>>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> I got to check traffic with the fix and I do get some traffic
+>>>>>> but something is broken. I didn't investigate much but the quick
+>>>>>> test shows me rules are not offloaded and dumping ovs rules gives
+>>>>>> error like this
+>>>>>>
+>>>>>> recirc_id(0),in_port(enp8s0f0_1),ct_state(-trk),eth(),eth_type(0x8=
+6dd),ipv6(frag=3Dno)(bad
+>>>>>> key length 2, expected -1)(00 00/(bad mask length 2, expected -1)(=
+00 00),
+>>>>>> packets:2453, bytes:211594, used:0.004s, flags:S., actions:ct,reci=
+rc(0x2)
+>>>>>
+>>>>> Such a dump is expected, because kernel parses fields that current
+>>>>> userspace doesn't understand, and at the same time OVS by design is=
+
+>>>>> using kernel provided key/mask while installing datapath rules, IIR=
+C.
+>>>>> It should be possible to make these dumps a bit more friendly thoug=
+h.
+>>>>>
+>>>>> For the offloading not working, see my comment in the v2 patch emai=
+l
+>>>>> I sent (top email of this thread).  In short, it's a problem in use=
+r
+>>>>> space and it can not be fixed from the kernel side, unless we rever=
+t
+>>>>> IPv6 extension header support and never add any new types, which is=
+
+>>>>> unreasonable.  I didn't test any actual offloading, but I had a
+>>>>> successful run of 'make check-offloads' with my quick'n'dirty fix f=
+rom
+>>>>> the top email.
+>>>>
+>>>> Hi Ilya,
+>>>>
+>>>> I can confirm that with latest OvS master IPv6 rules offload still f=
+ails
+>>>> without your pastebin code applied.
+>>>>
+>>>>>
+>>>>> Since we're here:
+>>>>>
+>>>>> Toms, do you plan to submit user space patches for this feature?
+>>>>
+>>>> I see there is a patch from you that is supposed to fix compatibilit=
+y
+>>>> issues caused by this change in OvS d96d14b14733 ("openvswitch.h: Al=
+ign
+>>>> uAPI definition with the kernel."), but it doesn't fix offload for m=
+e
+>>>> without pastebin patch.
+>>>
+>>> Yes.  OVS commit d96d14b14733 is intended to only fix the uAPI.
+>>> Issue with offload is an OVS bug that should be fixed separately.
+>>> The fix will also need to be backported to OVS stable branches.
+>>>
+>>>> Do you plan to merge that code into OvS or you
+>>>> require some help from our side?
+>>>
+>>> I could do that, but I don't really have enough time.  So, if you
+>>> can work on that fix, it would be great.  Note that comments inside
+>>> the OVS's lib/odp-util.c:parse_key_and_mask_to_match() was blindly
+>>> copied from the userspace datapath and are incorrect for the general
+>>> case, so has to be fixed alongside the logic of that function.
 >>
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
+>> Tom or Vlad, are you working on this? Asking, as the release of a kern=
+el with
+>> Tom=E2=80=99s =E2=80=9Cnet: openvswitch: IPv6: Add IPv6 extension head=
+er support=E2=80=9D patch will
+>> break OVS.
+>>
+>> //Eelco
+>
+> Hi Eelco,
+>
+> My simple fix for OvS was rejected and I don't have time to rework it a=
+t
+> the moment.
 
+That=E2=80=99s a pity, Tom do you maybe have time as your patch left OVS =
+in this error state?
 
-Hello Rob,
+//Eelco
 
-I'm sad to say that, but I have to send a new version of this patch even though
-you have acked it already... and I will have to drop your ack, as the changes to
-the yaml patch will be a bit different, as we're adding support for a phandle
-to mediatek,infracfg after some discussion about it on patch 2/2 of this series.
-
-The mediatek,infracfg phandle addition will come as a different series, and this
-patch (on v2) will add a conditional for:
-
-   - if:
-
-       properties:
-
-         compatible:
-
-           contains:
-
-             enum:
-
-               - mediatek,mt6795-m4u
-
-     then:
-
-       required:
-
-         - mediatek,infracfg
-
-Sorry about wasting your time on this v1.
-
-Regards,
-Angelo

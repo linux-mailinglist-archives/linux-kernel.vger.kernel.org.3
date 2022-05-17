@@ -2,119 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE970529BCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC45529BCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 10:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242376AbiEQIIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 04:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
+        id S242387AbiEQIIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 04:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237359AbiEQIH6 (ORCPT
+        with ESMTP id S236249AbiEQIIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 04:07:58 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07073BA65;
-        Tue, 17 May 2022 01:07:57 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id C074B1F441D1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652774876;
-        bh=tuq3VbAxgnS0xWzmyEnSJuvgMj+dNp4blLu8nvOqYac=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=igs8DLrZN4Gos9vjSRnjpGxorfB1377dTfD9fD5n8b+Nk4yBkVMVyscC91Mk+NWjV
-         H2HBKftBFAu5UwKhI1XQrKvWbZTQzeh2C19Thy5oOcfAaJKN8MidSEae+ZYk0+NPGO
-         M5m1URHuDjYnnlDSsI9L1kiOqY3Qf5T5Y3hJ1EaryIO0LBNwJd/Y4M4+2So4qdgBuS
-         Bk9EjMdZDurNMq/ARdDMZpKTuIlPv+7p2eYjKfgdZj0gpitwkAUWwAo6XXq5bzKg3S
-         VrORLF/gAOVcVZzTQDM6Sj1wctjKoGDlnrf/m5nmTOs05hKqn1mn7td8nQ20L/C6E5
-         afVZ7ckSwKmeA==
-Message-ID: <b65546e1-2d3a-d525-b664-1730dc06994f@collabora.com>
-Date:   Tue, 17 May 2022 10:07:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 5/5] clk: mediatek: Add MediaTek Helio X10 MT6795 clock
- drivers
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de, y.oudjana@protonmail.com,
-        jason-jh.lin@mediatek.com, ck.hu@mediatek.com,
-        fparent@baylibre.com, rex-bc.chen@mediatek.com,
-        tinghan.shen@mediatek.com, chun-jie.chen@mediatek.com,
-        weiyi.lu@mediatek.com, ikjn@chromium.org, miles.chen@mediatek.com,
-        sam.shih@mediatek.com, wenst@chromium.org,
-        bgolaszewski@baylibre.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
-        kernel@collabora.com
-References: <20220513165050.500831-1-angelogioacchino.delregno@collabora.com>
- <20220513165050.500831-6-angelogioacchino.delregno@collabora.com>
- <8177c547-2a38-691b-0a32-bc7e6ba1e2ed@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <8177c547-2a38-691b-0a32-bc7e6ba1e2ed@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 17 May 2022 04:08:14 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021CD3BBF3;
+        Tue, 17 May 2022 01:08:12 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id o190so18439263iof.10;
+        Tue, 17 May 2022 01:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=uqBuyz0vb3Im0RdIoWGhyWrZQdrO0ywLM0M+Qv0sRv0=;
+        b=hHH4I0ryVz7JP0EnFxhCLLypTYJknvGcioKD03MLxJbkfO6bEHLuvnfXXKD7iPwZcO
+         hl8lamixpy6EUBCec7pduHmcXDkgK7mHCq3AL29nf7bmhgysm4MGwcu0jDQtIK9EX29V
+         U3+e5aZMMM6sIdWQZA7Mz7EnbdvvnsIQuV2r3GUvklm1XmAjQlpnVkXsuUmgg6x2lslX
+         cjBPwmBa1gFKdQg5HHkxWfKjtfE6wF15oSrS1J4hzgQLMBzFY3SoxAUdNupNFd0q98IU
+         +HpsZbmP4cQ1orA/VdMVcEwvUn45x+A0Xrah4QACJ0t6mDtoQgVZwgJhLGQ2wp4fdkGM
+         gR9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=uqBuyz0vb3Im0RdIoWGhyWrZQdrO0ywLM0M+Qv0sRv0=;
+        b=KYkfjbWDZMsoTTcixQ2C8lEm5v8kLfA+yzd/CbiruY7hnZobZ1CZFzNrK/wMOTORms
+         qZG4hV4AfGHOo1HS3kkJmBOgi0JWQitfDR9eGJtKvCi0u3u5s4ipnlSqunlg6Ju+NTvT
+         XXrxHycy3BClR6q5ojSzXa8ODLflRrHKbagXecxQt+HZh1acYGncZrdSHaUGbOQmlGnD
+         gsHxK2z5KVkwDqxZ4g8m56Y3tiTRKFXx5IxlRTu9zITmBBEkLZFXXgiYSi2MQXQb7zi0
+         kgmzbXCEwcSq7wdmCgIVrVjVv307oYJc2YGq+F4QfiLizZaVLQ7BUiBvvAiok7CNSvKz
+         yckQ==
+X-Gm-Message-State: AOAM530VrWdUdyYlIkHHZlTGGcXZBBC/Ioni95HQdUYW++u15u1blx2l
+        LtQ4jiMSLxghHnBRTuZQwsrpQipzJseweF+g
+X-Google-Smtp-Source: ABdhPJzGGV1cgu3m7nAzR/ddstZnp9k13hHNVKhG8k0XzzNNvkBZMs2IUyUmXnnzeGFEV3GncwAHzA==
+X-Received: by 2002:a05:6602:148b:b0:657:c59b:f336 with SMTP id a11-20020a056602148b00b00657c59bf336mr9923076iow.141.1652774891449;
+        Tue, 17 May 2022 01:08:11 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id t20-20020a02ab94000000b0032e5205f4e7sm440535jan.4.2022.05.17.01.08.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 01:08:11 -0700 (PDT)
+Message-ID: <628357eb.1c69fb81.3bc22.1805@mx.google.com>
+Date:   Tue, 17 May 2022 01:08:11 -0700 (PDT)
+X-Google-Original-Date: Tue, 17 May 2022 08:08:09 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220516193623.989270214@linuxfoundation.org>
+Subject: RE: [PATCH 5.15 000/102] 5.15.41-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/05/22 13:30, Matthias Brugger ha scritto:
+On Mon, 16 May 2022 21:35:34 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.15.41 release.
+> There are 102 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
+> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
+> Anything received after that time might be too late.
 > 
-> On 13/05/2022 18:50, AngeloGioacchino Del Regno wrote:
->> Add the clock drivers for the entire clock tree of MediaTek Helio X10
->> MT6795, including system clocks (apmixedsys, infracfg, pericfg, topckgen)
->> and multimedia clocks (mmsys, mfg, vdecsys, vencsys).
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.41-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 > 
-> Thanks a lot for taking care of this!
-> I just wonder if we couldn't build most of the clock drivers as modules like done 
-> for the mt6779. It would help us to keep the kernel image smaller.
+> thanks,
+> 
+> greg k-h
 > 
 
-Hello Matthias!
+5.15.41-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-You're welcome!
-...but I simply couldn't stand at seeing partially working (..or actually, not
-really working) SoCs upstream. If something is upstream, it must work, or it
-shouldn't be here for real :-)
-
-Regarding your question about the clock drivers as module... I believe we can,
-but that'd be only for {vdec,venc}sys and *maybe* MFG (gpu clocks): I don't know
-if it'd be worth to do, as these are about... 8 clocks out of... I haven't counted
-them, but more than 250, I think?
-
-It *should* be straightforward though, just about giving them a tristate in Kconfig
-instead of a bool, but that would still be limited to just those three...
-
-The reason for me excluding clk-mt6795-mm from this choice is that - at least for
-me - my development platform is a commercial smartphone, where the only thing that
-"saves you" is having some display output... I mean - I *do* have a UART port, but
-that's only because I've been able to solder thin wires on 0.2mm pads... you surely
-agree on the fact that this isn't a common practice, even across developers.
-
-Besides, if you think that clk-mt6795-mm should indeed be a module by default,
-well, that.. is.. possible - I don't see why it shouldn't be... obviously keeping
-in mind that this will largely slow down the boot process, which isn't a big issue.
-
-In any case, it is *not* possible to compile as module *any* of the clock drivers
-that I have included in the CONFIG_COMMON_CLK_MT6795 (apmixed, infra, peri, topck)
-as.. you know.. these are "a bit critical" on older platforms :-)
-
-
-How would you proceed?
-
-Cheers,
-Angelo

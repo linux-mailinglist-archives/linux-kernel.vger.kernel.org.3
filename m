@@ -2,128 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDAB52A699
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9050452A6A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350006AbiEQPaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        id S1350038AbiEQPcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239158AbiEQPag (ORCPT
+        with ESMTP id S1349205AbiEQPcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:30:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A334E4F9C7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652801435; x=1684337435;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=aXZnyU0djTha+7ry1uEu2zsq27L4rt5KsD7gfEWC7Gs=;
-  b=KT6Rj9WOzXIfqeCU+9r6E7MlR9PT0FDN9lJLYr0iJsm4ErRCslYeKGKw
-   pLit+HAzJiWY6S/HgM2HoabUBfZWOFSba71xpuf1Kn+iOP2i8elc30Rs6
-   3rbxiL7PCc9RrdkoZkAKLAe9/v6wtZYYuZiqtorZFid/cHLZddmdzoOzm
-   ZN2HT1aT6yS2qh7NohvjaII7fsf68j/ltPd2Ho00vCkQmru0t2icrBjuJ
-   GmoBg1A1yFmvnzYzCahdUcGby2Q5RzZ2Coqud20OZ2qKBxbksvN5Urq+8
-   Qh8qM3v1Ir3o0TQEJDhTxQbUjf5K814zCnfxqVQpTKBp1xryfhXm6qsGp
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270040137"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="270040137"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 08:30:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="700103995"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 17 May 2022 08:30:30 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 05014159; Tue, 17 May 2022 18:30:30 +0300 (EEST)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
-        seanjc@google.com, thomas.lendacky@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCH] x86/tdx: Handle load_unaligned_zeropad() page-cross to a shared page
-Date:   Tue, 17 May 2022 18:30:21 +0300
-Message-Id: <20220517153021.11116-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 17 May 2022 11:32:23 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2098.outbound.protection.outlook.com [40.107.255.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DAB40E54;
+        Tue, 17 May 2022 08:32:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U1L4kbLeGTowPwYboCzbBPJJH4tnHvY4o/iZKMmwHGGJ86QAHeMQkZd5QisYea3V+eZqk5NBoOsZe2sSOZ1BWgJafjT1jR6AE3yRSOhk8RwBYtUOKVvzGZ4AOJhZF66MpG7ZQNDUHs6698oTt6lpANz8G1trRVtJK6OZ9z7Pjl7kHI2tpXevgfb7LJGmwwF2C960mEvZnSxE2+fAVQYdAm9eZ7URiAfUMLbxLiYuhxr1XsmP50lgB4QJwVA0LnT18/3qgaXCGK78BsJDa9rP96AwfdbQkaO80r+7RoQt5TzI0kHAEwt06gJv7XV9Kh5QFRSKz7RsUEVNOhsHLSDnHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZWeK5mpdxZSkAOt4Mh8IzCQ7SPu85zh2Q0gO8v6XyEE=;
+ b=fH73jgXtTeVWYhEpbp3udyNthHGGbM3xuLLFC48fLmL0UlFr9UBYfR5FUJ5Qd7paJmcWJ9ZUQKWE8/Res6v5MMHlhitoWmRMKvRvL2QzGI9c+v3FBPZkom4rcdxIx2c/Y74jDI/5zqeN5JNsI5N5IPB5tKGRUDejDVkUasP0uUbe3KIRUPjFykyacYM9XaPkoEnXSrMTyDjQZSXneDBTVLQUjk85dJJSYeeo3FQ8QL5v4BE0ODKpSqPW5n/ju1DqOeyeL70mpaquy3ArQljyVKwaZlBhGzEVB/lv2Vj8nOXQyV5XPby21VCHuSr+DzshfFYzjCw/1o7NOglak+fBdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZWeK5mpdxZSkAOt4Mh8IzCQ7SPu85zh2Q0gO8v6XyEE=;
+ b=DS/Sx2QFyNx1pXNY3RC+4z1+TLIGjWWGcLAkU1GAzpMhWa7wLtO8iQZxKpk2C8qNBmub64nQaQYPsvWkrxQFRUAwxmUbmtNBvsYOVPPtAxvSmS53rJ+9CeyeFUlMf/ub+fI4GG0Y3/grJxEA5mQ6MZTakB56PbJGJCR/2kqwYMmjjJNyKzXESbyMk6On0MTKNRvYWbYgBYWsm0Sar7s7JF3ED8As8wnwA/e1GYnA87lysUqReJNxsxcrfVsjQyRxk/DYfTZXp7U3bhHhhfO+Qyowlq+bMCfx/jpWEyI/b8TmsycDtc5d3tzA9dyDh7yNSwDKcZNKK9CdgArv3k/ecg==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by SI2PR06MB4779.apcprd06.prod.outlook.com (2603:1096:4:14c::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
+ 2022 15:32:15 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::3d31:8c42:b7f1:ece8]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::3d31:8c42:b7f1:ece8%7]) with mapi id 15.20.5250.018; Tue, 17 May 2022
+ 15:32:15 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?utf-8?B?Q2hyaXN0aWFuIEvDtm5pZw==?= <christian.koenig@amd.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Li Yang <leoyang.li@nxp.com>
+CC:     "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>
+Subject: RE: [PATCH v2 2/3] ARM: dts: aspeed: Add USB2.0 device controller
+ node
+Thread-Topic: [PATCH v2 2/3] ARM: dts: aspeed: Add USB2.0 device controller
+ node
+Thread-Index: AQHYacfDGaMXzDQN90y+BFiyb1NEtq0i95eAgAAutxCAAAHkgIAAB2YAgAABpgCAAAGSEA==
+Date:   Tue, 17 May 2022 15:32:15 +0000
+Message-ID: <HK0PR06MB32023F7AFBFA243CA715DF7F80CE9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20220517082558.3534161-1-neal_liu@aspeedtech.com>
+ <20220517082558.3534161-3-neal_liu@aspeedtech.com>
+ <96973d1d-c52c-d190-6989-3f7996dae70b@linaro.org>
+ <HK0PR06MB32027CAC4BEE443F426F587380CE9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <0bc5ba24-5bfb-593e-cbd0-828ef44aabc5@linaro.org>
+ <HK0PR06MB320295DB0748CEFC68B73CCF80CE9@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <1327ec95-f6b4-838d-f3f2-a115c2ab632b@linaro.org>
+In-Reply-To: <1327ec95-f6b4-838d-f3f2-a115c2ab632b@linaro.org>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a314532e-54b7-44e2-1c5b-08da381a6b8a
+x-ms-traffictypediagnostic: SI2PR06MB4779:EE_
+x-microsoft-antispam-prvs: <SI2PR06MB4779344D6F795B5FB328A31080CE9@SI2PR06MB4779.apcprd06.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ++w2l6jRsheb5M8BFXnEulTmarUg5Dj85f4cRdSE7Q5002Ebx4kkRlZep9qDpc0DDpp5pTHV3BObKJUZsjWoZjlYdxWV/RjdqnGcrByEJcwkBIE84trZ69rlXyVs6KeEaIf+jZLSvfDNsnsQ1duB8PlJwAB1c2Sw30k+Vsadvz22Eft/6decAtDDjAZ6n0jI6FtEbfq40I8AGV4mgm1Wd1EEV58ATFgDfOd7VT8fLgZy50dEK0zJ3hz09cj6itjqUg8QHsfbLObQ9dKTHryHSBZCEPIVzpQpq951vqNEn612LWHJGcM1Wibp+N3WHW6lAlWaTGpzGdRBMzl96dNhnSdazbFui6g/bjrXWL3z4V+1YytAwhbDsXPB2CDAywHZ6cSLOf11RTkktM3cKwATt13c489SKakUPg7At1AkqKmorMgVfHTzeVaOcZwSGz1Qc+IPOPGStHiLo4oADbO4ubpP26c0OdUCt9xgL0BqouFtYaAZ74R6CRxt4XbcS4Chb+OH7nhCPPwDyEhi6ufHfLFECR6yEi1WRpwNbTucNagV8CWTZMPrniX6mvajbH2OvJgbSY5mM9qA3Cj4FY1EtTe5MXyz5S+wY6gpqTRH2T6ZoDslb5LR9bLJw2mFMyy8/RBzyGgn/rBhHOgbvCEUitthiYcMsK8Eus13ePfxBX3LgBBH4uybKrRkfgFAz5U+LYKsn2PsvD225PO9e4m/jfaFrkflU//fX4kF1k0uleI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(39850400004)(346002)(376002)(136003)(396003)(366004)(110136005)(316002)(41300700001)(54906003)(122000001)(83380400001)(2906002)(38100700002)(186003)(64756008)(66446008)(66476007)(66574015)(66946007)(76116006)(8676002)(4326008)(66556008)(33656002)(71200400001)(52536014)(7416002)(86362001)(7696005)(5660300002)(8936002)(55016003)(921005)(38070700005)(508600001)(6506007)(53546011)(26005)(9686003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c0RFZHRyejh3dlRGbzBKTEtsVmdaT25ycG9rN2NWbFlrNUhmLzVXajFTT3po?=
+ =?utf-8?B?cURXOStJNEdTb21vL1dpQS9DM2tiek9LL3JwUXBRKzNmRU5jb0Foc2pFUHNW?=
+ =?utf-8?B?cTk3blRLekNmbHJ3ODgwVGJqTndGYnZIZVRiQmpjN3NOYUJnWTIya2ROMHZO?=
+ =?utf-8?B?WUNsbzJlOUdUMlBXdVQrUDU3WTNSb1h0a0tleUs3MUlkMkJxTU5CMjVYNU9u?=
+ =?utf-8?B?NXNyMmZreERZZW5IcE5ZZkxxc2NRMnNRdjhTbTVoNFMwa2dzWG0rNW45U3o0?=
+ =?utf-8?B?MDh6MmdwUTVBdS9nWTRTRGRMeFJTV2YzVnp6czJhT0Z5OUsrNU9wdyswZkdT?=
+ =?utf-8?B?QjZrdk1hNWM2b0M4T3ZicGR2S2cvZWxMV21zdGQrOExSeGNncjFjQ09zbU9S?=
+ =?utf-8?B?NE16aUZNSnhhV0laV1lVOTNjcnMxREZ2d2djVU1XYVBMWkFWREtISmg1Umhm?=
+ =?utf-8?B?ZVhkeDFkakNEU1ZwSHdaWnFHeS80STMyY3ZHTC83VGplaUZ2YlU2dUNmcXRa?=
+ =?utf-8?B?blBGSkhTZzl1VTJjdXBLamJVcis5cmgyTW1HeUNlZW1McEl5aDFxVzJBdFFi?=
+ =?utf-8?B?S2JFQ3FoOTFsbitwaXA0cFFjcENJQXY1Sk95T0U1NjJySTU1L3RPRXlpWWtn?=
+ =?utf-8?B?UjJuLytpTDhlWVhTZnA3eW9iUTZtSVNoUjJnV29FMk8zSm5JTzJwU2trZWtX?=
+ =?utf-8?B?SXV4NDZUY0xLekFqZll5Rm1qM29tSzdBQUtTb3hqTnVTaHQ2WjJJak4zZ25T?=
+ =?utf-8?B?dGlONklxYUpBVG1qS25sbThtRFJLQkNBWm9tUzIyUFduUk1qcms0aDZXRXRP?=
+ =?utf-8?B?dEFPa01jOWdmTGJaNDZ1cGtnbFRzUytOQlh1Z3R0MnArTTcxVXg2TCtSbmNz?=
+ =?utf-8?B?NlVGZmJnRU1TUkFSaWxCRCtwdEJ0eWVwTE5jcEdoc1FvN3MvY1h3dzNHN1hz?=
+ =?utf-8?B?WGdwcis3M0ZmMzRaOVh3QnpBeTdtcUtxSmZ6VTNnYjFDek82bWlGWFVURXJ6?=
+ =?utf-8?B?RCtSRTFRQksrZHZPdjVwb2ZRTUpLY2pJdTdXN0FFYTNxM0U1aEF6eUlFQm8r?=
+ =?utf-8?B?cU9hOWxhOW9CdXp1S1dIS0xwamZjVDlTOFdiUUVHbG85Szk5YktPOWdBZllL?=
+ =?utf-8?B?cnVCUGZzOW9rYlFzTlI5QmZhU0lQSlJ3Mkg5Mm80K2dESEhZVUgrZzlMUmVU?=
+ =?utf-8?B?Y3VYTDEzL2FCajJZdU1EdVdOZTVXNFBoRWsyUHJiU1VpczFoVHVta1lEcFE5?=
+ =?utf-8?B?bGJobWRpRnlJUEJBNVJORHc2TXp4K1NnUzdUandkb09DN2ZtR2hWR0JPMlRU?=
+ =?utf-8?B?K1paQWpKZzh1QUFNWHlwZ0IxdUdoZ0pBYzdmbC92c1pmem0xaHhjdjZQK2ZN?=
+ =?utf-8?B?OVhVWk9ySmpjMy9ERlJPUUVoSWE2WElNRllNZ1ZLRVNnbTU3YTBYZ1V1QTgw?=
+ =?utf-8?B?Z1p1eUVIZGsyMHFKVHdZTCtrK0d3ZXY0eXgyRnZ6NWgwTFlwNmtjdjU3MjBK?=
+ =?utf-8?B?Vjg3bVNvL0plWUY3QmtVcHFLYytWRkUyNXh4Vmdrdzd2WEZWUm94ejN0STFi?=
+ =?utf-8?B?ZXVVYUZoL3czOFM4QlNpblIyeG9oSjI5RXNZKzYxT1RUOFpzc0pHVFQvcGdU?=
+ =?utf-8?B?MzV1TmV1RDBWSjFSTjQ3VzUzTDlhSjlRTWNRUVRDdDBPUkt2cTA5U0JkdW1Y?=
+ =?utf-8?B?M09YSVdtYjJjd1lUb1VWZDh2VkducDFCaVQ5ZlFRaTltbmNCR09PNjBXcEFk?=
+ =?utf-8?B?azRWWjUzRWZ4dk1JanNudmpPYWJCNGVaaHVWWG5xUUZZK20wNHFMY2RnaExh?=
+ =?utf-8?B?TnhEd1ZIMnVLdkJOa05sTktFSFpSRjZNQVgxQTRFbGw3T0wrZjZsbEQ4VXhO?=
+ =?utf-8?B?U1JXY1hobWFFYmNQd1d6dUd5NndLMDVLRCttMFlqZngyTHkyT1dLNGVPVjdk?=
+ =?utf-8?B?ZWNiekNSTTl4ejluY0MxTjRlYkFvU3I3MTFaZCtDUjFOQmNyMnJneUczd0hO?=
+ =?utf-8?B?eVlLR21Ra1VVTnZEWUJUVy9uYk1MZGl0bVpXbk5nTkJ2TXQ3ekZoMllmVU03?=
+ =?utf-8?B?c1o5UVpENlBPWXdCa0RMSzI3Smh0TG82ZjlUZTNRL2cxNmlGWTM2Vkx4QTdB?=
+ =?utf-8?B?YmpndWpQTHRZVXdiODUvUFlkbEJqWmVHTlFDNUFIY0NvVCsxRXJ4OGRiYklI?=
+ =?utf-8?B?ZWNaMGVxWlBvQTQ0d0N5SXpzVkppQmU2a2FZUnErZngwWWloK0gzcWlKekhR?=
+ =?utf-8?B?L1dCbmJYUzczWWl0aDFDWjMwV2pXVFZRanFxZUY0QUNSQmpDbjZ6NzllYmlo?=
+ =?utf-8?B?RnJzeEdlallrOHZvR08wWkgzVVh6bkM5Nkh1clFRSWMvQ0p3M05EQT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a314532e-54b7-44e2-1c5b-08da381a6b8a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2022 15:32:15.0552
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yrF3DwXSAWoDxC684Fe7FoY4k+hFUdhoVGwvt/jvqVzol5jt5RzoGE34bBdg6A5P5+USGFUa+trPhSWjiQuMxw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4779
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
-The unwanted loads are typically harmless. But, they might be made to
-totally unrelated or even unmapped memory. load_unaligned_zeropad()
-relies on exception fixup (#PF, #GP and now #VE) to recover from these
-unwanted loads.
-
-In TDX guest the second page can be shared page and VMM may configure it
-to trigger #VE.
-
-Kernel assumes that #VE on a shared page is MMIO access and tries to
-decode instruction to handle it. In case of load_unaligned_zeropad() it
-may result in confusion as it is not MMIO access.
-
-Check fixup table before trying to handle MMIO.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- arch/x86/coco/tdx/tdx.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 03deb4d6920d..5fbdda2f2b86 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -11,6 +11,8 @@
- #include <asm/insn.h>
- #include <asm/insn-eval.h>
- #include <asm/pgtable.h>
-+#include <asm/trapnr.h>
-+#include <asm/extable.h>
- 
- /* TDX module Call Leaf IDs */
- #define TDX_GET_INFO			1
-@@ -296,6 +298,26 @@ static bool handle_mmio(struct pt_regs *regs, struct ve_info *ve)
- 	if (WARN_ON_ONCE(user_mode(regs)))
- 		return false;
- 
-+	/*
-+	 * load_unaligned_zeropad() relies on exception fixups in case of the
-+	 * word being a page-crosser and the second page is not accessible.
-+	 *
-+	 * In TDX guest the second page can be shared page and VMM may
-+	 * configure it to trigger #VE.
-+	 *
-+	 * Kernel assumes that #VE on a shared page is MMIO access and tries to
-+	 * decode instruction to handle it. In case of load_unaligned_zeropad()
-+	 * it may result in confusion as it is not MMIO access.
-+	 *
-+	 * Check fixup table before trying to handle MMIO.
-+	 */
-+	if (fixup_exception(regs, X86_TRAP_VE, 0, ve->gla)) {
-+		/* regs->ip is adjusted by fixup_exception() */
-+		ve->instr_len = 0;
-+
-+		return true;
-+	}
-+
- 	if (copy_from_kernel_nofault(buffer, (void *)regs->ip, MAX_INSN_SIZE))
- 		return false;
- 
--- 
-2.35.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tp
+IDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQo+IFNlbnQ6IFR1ZXNkYXksIE1heSAx
+NywgMjAyMiAxMToyNiBQTQ0KPiBUbzogTmVhbCBMaXUgPG5lYWxfbGl1QGFzcGVlZHRlY2guY29t
+PjsgR3JlZyBLcm9haC1IYXJ0bWFuDQo+IDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz47IFJv
+YiBIZXJyaW5nIDxyb2JoK2R0QGtlcm5lbC5vcmc+OyBLcnp5c3p0b2YNCj4gS296bG93c2tpIDxr
+cnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc+OyBKb2VsIFN0YW5sZXkgPGpvZWxAam1z
+LmlkLmF1PjsNCj4gQW5kcmV3IEplZmZlcnkgPGFuZHJld0Bhai5pZC5hdT47IEZlbGlwZSBCYWxi
+aSA8YmFsYmlAa2VybmVsLm9yZz47IFN1bWl0DQo+IFNlbXdhbCA8c3VtaXQuc2Vtd2FsQGxpbmFy
+by5vcmc+OyBDaHJpc3RpYW4gS8O2bmlnDQo+IDxjaHJpc3RpYW4ua29lbmlnQGFtZC5jb20+OyBH
+ZWVydCBVeXR0ZXJob2V2ZW4gPGdlZXJ0QGxpbnV4LW02OGsub3JnPjsNCj4gTGkgWWFuZyA8bGVv
+eWFuZy5saUBueHAuY29tPg0KPiBDYzogbGludXgtYXNwZWVkQGxpc3RzLm96bGFicy5vcmc7IGxp
+bnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7DQo+IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOyBs
+aW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2Vy
+Lmtlcm5lbC5vcmc7IGxpbnV4LW1lZGlhQHZnZXIua2VybmVsLm9yZzsNCj4gZHJpLWRldmVsQGxp
+c3RzLmZyZWVkZXNrdG9wLm9yZzsgbGluYXJvLW1tLXNpZ0BsaXN0cy5saW5hcm8ub3JnDQo+IFN1
+YmplY3Q6IFJlOiBbUEFUQ0ggdjIgMi8zXSBBUk06IGR0czogYXNwZWVkOiBBZGQgVVNCMi4wIGRl
+dmljZSBjb250cm9sbGVyDQo+IG5vZGUNCj4gDQo+IE9uIDE3LzA1LzIwMjIgMTc6MjEsIE5lYWwg
+TGl1IHdyb3RlOg0KPiA+Pj4+Pg0KPiA+Pj4+PiArCQl1ZGM6IHVkY0AxZTZhMjAwMCB7DQo+ID4+
+Pj4NCj4gPj4+PiBUaGUgc2FtZSBhcyBEVFMgaW4gYmluZGluZ3MgLSBnZW5lcmljIG5vZGUgbmFt
+ZSwgcGxlYXNlLg0KPiA+Pj4+DQo+ID4+Pg0KPiA+Pj4gSXMgaXQgcG9zc2libGUgdG8gdXNlICJ1
+ZGM6IHVzYi11ZGNAMWU2YTIwMDAiIHRvIGRpc3Rpbmd1aXNoIGl0IGJldHdlZW4NCj4gInZodWI6
+DQo+ID4+IHVzYi12aHViQDFlNmEwMDAwIj8NCj4gPj4NCj4gPj4gUG9zc2libGUgeWVzIDopLCBi
+dXQgbm90IHJlY29tbWVuZGVkIGFuZCBub3Qgd2FudGVkLiBOb2RlcyBzaG91bGQgYmUNCj4gPj4g
+Z2VuZXJpYyBhbmQgcHJlZml4ZXMgYXJlIGFkZGVkIG9ubHkgaWYgdGhlcmUgaXMgbm8gdW5pdCBh
+ZGRyZXNzLiBZb3UNCj4gPj4gY2FuIHRob3VnaCB1c2Ugc29tZSBtb3JlIGRlc2NyaXB0aXZlIGxh
+YmVsLg0KPiA+Pg0KPiA+ICJ1ZGM6IHVzYkAxZTZhMjAwMCIgaXMgb2theSBmb3IgeW91Pw0KPiAN
+Cj4gWWVzLCBpdCdzIHBlcmZlY3QuDQoNCkdyZWF0ICEgSSdsbCB1cGRhdGUgaXQgZm9yIG5leHQg
+cGF0Y2guDQpUaGFua3MgZm9yIHlvdXIgc3VnZ2VzdGlvbi4NCj4gDQo+IA0KPiBCZXN0IHJlZ2Fy
+ZHMsDQo+IEtyenlzenRvZg0K

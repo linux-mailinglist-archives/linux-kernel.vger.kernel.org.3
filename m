@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9248752965A
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4760B529652
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbiEQA6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 20:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S237204AbiEQA6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 20:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239719AbiEQAzx (ORCPT
+        with ESMTP id S237143AbiEQAzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 20:55:53 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62042DEA3;
-        Mon, 16 May 2022 17:55:46 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id t11-20020a17090a6a0b00b001df6f318a8bso958517pjj.4;
-        Mon, 16 May 2022 17:55:46 -0700 (PDT)
+        Mon, 16 May 2022 20:55:54 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1D91408B
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:55:50 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id x23-20020a17090a789700b001df763d4ed0so1059549pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=oszu+rft9ZMt8hn3XlfQBiWXh4vkWerpEVjVpNGVwQE=;
-        b=GmR3175J1QJA++Kl/bkM18GAR0pdIOR/nKTuYJ02O2yIkNWXEOJPq5w2+cfh2DL/TI
-         +jpF745GD82YqiM0gAdhkEKWSc1XbAzth44QQ+UornMYJ4amJjWzRY33tQN2cmVR4ZWe
-         aUt8vVXkkVq0g7off74SJU92u11TirCMvQligM3DUzTK7LwzvsjXzY8jNQyQTQVHUY6G
-         Wl/ZlIgB8DVF8oJQKkNjJGtI74NFgq2+9SOhSvo8bQx38xZOaKs6snbLQD2nvg3DT4wT
-         j7yJRDZp4nZL3LnHSNNdGMqGRVp+SBRs8NMW1exWDQAv5MMUkn6s4sPJL4eNLfA873eH
-         Wwzg==
+        bh=ikZ+PR/EklJmOrxEmrNGimc9Z26aJRLTxGu7euJ5K94=;
+        b=lolJi/grF0XlxD0r+TbFled81nc41kCjirhMSf0FXwqJhgcA8wkMXF7orqRsYZ4O8K
+         HGYSFBCi8BY43TfxB2xjssMePXmxTLaSehRbu64Z9Osgx/XCY0VqetZzjwV5MiOlVfOY
+         JgOqIIahzEqUFFqnxRATc+KX0bd4/2F0mGu1iu9jOpImzUOhHcTquEk2rrPwb/uDFN5C
+         V3w+3hYVC4/yqYcG/G/AI0HThbrMZlky4kg0uIDDYfun/gSr1lY/xw3U/sjDm7M7O1JH
+         29ctNIXRq6FYVn3IxBOqGVS6RlE2PPiP6VuUVXvvcnOf1y0Nr07UYEGMKjQ0qVhFwaNc
+         +2mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oszu+rft9ZMt8hn3XlfQBiWXh4vkWerpEVjVpNGVwQE=;
-        b=veYIC+h+A4zg0b7UWqwWJlDCvLPIpRUv/1yxy+CU1IYSF6NNZ8psnOmMAveYLobQna
-         5WV24ZS0mQzhki7NoxQ/CSCZUNa2HfiPkLNtnwaGg9a2xfCBPJDmgxTEPJItSaxvEkWW
-         K71kzgFbEyGKo14lwtb8sts5GoBhkIRc0NZ3VVy/FHFBLAoz0JkpQ8B5MMvMYq/gGH/a
-         uyX11BztmYu/rl67yBhXt3wOsrRO8/VXqo+vDaFiZhQpDhE93VfX9hBmu5lInyKzX5mG
-         o8R9OOJfSY8az1n+iWoFxzUJW1r6KZATradB2fy0TcCK/2TxxjI9vzgXHvSZCjGF1VSK
-         7VJQ==
-X-Gm-Message-State: AOAM532+XcaJnOvigQUJUa3x3O8MimYT/47q0OUDwva7KQPenxFg8CwX
-        rewvzBJenoF+SUXxSBhkAMzaV8OeOgEElw==
-X-Google-Smtp-Source: ABdhPJx6yIrIZNvt4OMM4DykP/blCEK67dJ+2zkDI1WzYEMFAxHoTyKI6A15UXJyEq9tmctm+aFOgQ==
-X-Received: by 2002:a17:902:ce11:b0:15f:4acc:f1fb with SMTP id k17-20020a170902ce1100b0015f4accf1fbmr19520857plg.76.1652748945576;
-        Mon, 16 May 2022 17:55:45 -0700 (PDT)
+        bh=ikZ+PR/EklJmOrxEmrNGimc9Z26aJRLTxGu7euJ5K94=;
+        b=Ilcl90R8VGYY+glp5hNQOg51oypoCcjn18u918UHzRB3UJgUWuqTB2Rgxc498vBUsq
+         gdnuEyWC+PKmu7Kb2BJ7F5Gg5q9p0qze0KU7aNFMkITKGw/nHpUBVvUu1CNsHPkI9Igw
+         ahASjYQlqn4Jfvakzoh1b2xYMMjLzBdAVpO5h6qeADYcajIFO1A3X799ikjeSq0Gjtsz
+         fvugEHBFXRJw9NP/8v7KghmZsoHA2v7M426UJLPMxxDwRgFkNhBF+/bRjpFD9Gho7jpE
+         n+bKvxHIgAAWJJLQFwSXYXWc+J75mgZY1mQjGzOPr4xgqmAYUX07Xxc7/73Qo5yTZCC8
+         HA8Q==
+X-Gm-Message-State: AOAM530dGtQtE89XA24MAmYSAPyds97Xm6KIl5haRgHVlrUbpwCN/F1C
+        HX/BsLnkkqZVRFh8kkp8crMOY8z7J/zdfg==
+X-Google-Smtp-Source: ABdhPJzHJQEjBCfKJWcGHDyr9TTDGKtZomcGfjSzIvd4OX6WWrNI7QdR0unRWlq3+NmORDe+a0HdLg==
+X-Received: by 2002:a17:902:d191:b0:161:5c4f:ce9e with SMTP id m17-20020a170902d19100b001615c4fce9emr11941745plb.159.1652748948956;
+        Mon, 16 May 2022 17:55:48 -0700 (PDT)
 Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id p26-20020a62b81a000000b0050dc7628177sm7474333pfe.81.2022.05.16.17.55.44
+        by smtp.gmail.com with ESMTPSA id 13-20020a630e4d000000b003c14af50626sm7084057pgo.62.2022.05.16.17.55.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 17:55:44 -0700 (PDT)
+        Mon, 16 May 2022 17:55:48 -0700 (PDT)
 From:   Stafford Horne <shorne@gmail.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Openrisc <openrisc@lists.librecores.org>,
         Stafford Horne <shorne@gmail.com>,
         Jonas Bonn <jonas@southpole.se>,
         Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel Somlo <gsomlo@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH v2 06/13] openrisc: Update litex defconfig to support glibc userland
-Date:   Tue, 17 May 2022 09:55:03 +0900
-Message-Id: <20220517005510.3500105-7-shorne@gmail.com>
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH v2 07/13] openrisc/traps: Declare file scope symbols as static
+Date:   Tue, 17 May 2022 09:55:04 +0900
+Message-Id: <20220517005510.3500105-8-shorne@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220517005510.3500105-1-shorne@gmail.com>
 References: <20220517005510.3500105-1-shorne@gmail.com>
@@ -76,86 +69,48 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I have been using a litex SoC for glibc verification.  Update the
-default litex config to support required userspace API's needed for the
-full glibc testsuite to pass.
+Sparse was reporting the following warnings:
 
-This includes enabling the litex mmc driver and filesystems used
-in a typical litex environment.
+    arch/openrisc/kernel/traps.c:37:5: warning: symbol 'kstack_depth_to_print' was not declared. Should it be static?
+    arch/openrisc/kernel/traps.c:39:22: warning: symbol 'lwa_addr' was not declared. Should it be static?
+    arch/openrisc/kernel/traps.c:41:6: warning: symbol 'print_trace' was not declared. Should it be static?
+
+The function print_trace and local variables kstack_depth_to_print and
+lwa_addr are not used outside of this file.  This patch marks them as
+static.
 
 Signed-off-by: Stafford Horne <shorne@gmail.com>
 ---
- arch/openrisc/configs/or1klitex_defconfig | 33 +++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ arch/openrisc/kernel/traps.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/openrisc/configs/or1klitex_defconfig b/arch/openrisc/configs/or1klitex_defconfig
-index d695879a4d26..4c0138340bd9 100644
---- a/arch/openrisc/configs/or1klitex_defconfig
-+++ b/arch/openrisc/configs/or1klitex_defconfig
-@@ -1,22 +1,55 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_CGROUPS=y
-+CONFIG_NAMESPACES=y
-+CONFIG_USER_NS=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_SGETMASK_SYSCALL=y
- CONFIG_EMBEDDED=y
- CONFIG_OPENRISC_BUILTIN_DTB="or1klitex"
-+# CONFIG_OPENRISC_HAVE_INST_RORI is not set
- CONFIG_HZ_100=y
-+CONFIG_OPENRISC_HAVE_SHADOW_GPRS=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-+CONFIG_PACKET_DIAG=y
- CONFIG_UNIX=y
-+CONFIG_UNIX_DIAG=y
- CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_ADVANCED_ROUTER=y
-+CONFIG_INET_UDP_DIAG=y
-+CONFIG_INET_RAW_DIAG=y
-+# CONFIG_WIRELESS is not set
-+# CONFIG_ETHTOOL_NETLINK is not set
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_OF_OVERLAY=y
- CONFIG_NETDEVICES=y
- CONFIG_LITEX_LITEETH=y
-+# CONFIG_WLAN is not set
- CONFIG_SERIAL_LITEUART=y
- CONFIG_SERIAL_LITEUART_CONSOLE=y
- CONFIG_TTY_PRINTK=y
-+# CONFIG_GPIO_CDEV is not set
-+CONFIG_MMC=y
-+CONFIG_MMC_LITEX=y
-+# CONFIG_VHOST_MENU is not set
-+# CONFIG_IOMMU_SUPPORT is not set
- CONFIG_LITEX_SOC_CONTROLLER=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT3_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_EXFAT_FS=y
- CONFIG_TMPFS=y
-+CONFIG_NFS_FS=y
-+CONFIG_NFS_V3_ACL=y
-+CONFIG_NFS_V4=y
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,bpf"
- CONFIG_PRINTK_TIME=y
- CONFIG_PANIC_ON_OOPS=y
- CONFIG_SOFTLOCKUP_DETECTOR=y
+diff --git a/arch/openrisc/kernel/traps.c b/arch/openrisc/kernel/traps.c
+index f2478bba77b9..9e0937eb31ca 100644
+--- a/arch/openrisc/kernel/traps.c
++++ b/arch/openrisc/kernel/traps.c
+@@ -34,11 +34,11 @@
+ #include <asm/unwinder.h>
+ #include <asm/sections.h>
+ 
+-int kstack_depth_to_print = 0x180;
++static int kstack_depth_to_print = 0x180;
+ int lwa_flag;
+-unsigned long __user *lwa_addr;
++static unsigned long __user *lwa_addr;
+ 
+-void print_trace(void *data, unsigned long addr, int reliable)
++static void print_trace(void *data, unsigned long addr, int reliable)
+ {
+ 	const char *loglvl = data;
+ 
 -- 
 2.31.1
 

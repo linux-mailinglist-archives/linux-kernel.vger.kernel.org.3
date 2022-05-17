@@ -2,164 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D767452AD1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D35952AD25
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245613AbiEQU41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
+        id S1347792AbiEQU63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237362AbiEQU4Q (ORCPT
+        with ESMTP id S241513AbiEQU6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:56:16 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212116335;
-        Tue, 17 May 2022 13:56:14 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id r6-20020a1c2b06000000b00396fee5ebc9so13903wmr.1;
-        Tue, 17 May 2022 13:56:14 -0700 (PDT)
+        Tue, 17 May 2022 16:58:25 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5844852E7C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:58:22 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id dk23so37008290ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:58:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SttB0Al2SmA1Ml2eTj/wShEo5Nwp1X2GJB1Zw/Jq5fs=;
-        b=XAvJ64DTg2filoPTc7irccoZINdkOQRv9oxEwoMQGDhK4O1U80pzXCFuZjJVE3FjWp
-         wzyfulpgNydLZVyljEzJHhtWMj9TFHHiioK0yIligTXDdr1L2F7tFsWbpKCz8Nm7vjD1
-         yiDrUo8mdB8Jqn5GQhTTPNZVk4ZnTLL07oF7cdSEAGneTPaznZcwQrFAIlMth93g4PyC
-         sW2qatOQM3Lek969GECns1t2VlOEOK2/0KvGW+q6kJJ7DqrATSSGGlpJd9aWE8fozGGl
-         r7K5fNQnME+1rDbh7xE5bhnLOB9GWe+Ucl/mHSw8/fHLTtRSNGDk5iq8NcGtQP8hlqGG
-         h67A==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wG//9LUlNxX10FI60aAD9TW4A6u0+UVzKTFUfna9EcM=;
+        b=AxBMNTbcHtmh4XBZsbTZkYEST7SubuiZ7mqjxOZOiMHXh43ts9yox8tTHJ+1hVeBIN
+         lY4fIhS+/lSj1st458hrZs6h5UyhayvPYCMRsR5CUSJGFGJ4JieKWcr5QD11SAurNEZw
+         XbaC58/XduEvKMk/yRYy0ERGkk6fE3d1ghzgCC0GhJVlhkZwQN5Ssx3QyOM8OYzflvEO
+         /RCBr0tVf2zPpkxY+sbZIfqK6likvHV1Dw4IzxHuady9FzE6y39pk3MRhizDmY4m8w0w
+         BfL2pSY84wMy/v9UJeBFzF5P3fmLp+DXF9hTrL+jC2wUiElYRRm7ExC0URvxQsbfIJ+I
+         WzlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SttB0Al2SmA1Ml2eTj/wShEo5Nwp1X2GJB1Zw/Jq5fs=;
-        b=vrw7919geKxjaOng9yRjR3oHJwGJcWur8bkKUKNMqoKTxyjng4IdYiwKnumdNsEHkX
-         Hn4MzApmPMoCRwPRNw6Q3Y7nS/olQb1qqeyUZeiibCso5BJiag8unlxSO/v83yLMIsKh
-         6lSHTGlYe155U+zFK7nv39smYll8FI4glS5SjneK8WKCfQ5a0EnGkixppXJShfG+hum7
-         fO+8RllMD/e3MzoTUEKFkvy0Bw27EJympRf5HL7paBJ1V2vayV5Hw0wsfreQJUCLMh3L
-         /MDQjbVWILO9QGSzvwsAtqvwAW/yghBz99w76/oNjlz02vlMegWnDbVW8zzGZC8xrq/k
-         ddhA==
-X-Gm-Message-State: AOAM5330FBIT5FABY1nzucW94gmcMdJ62dvK/hef0OKOUUo4ouR744Od
-        k0BrOIXrj1Hf18FcSrOdXCxOSZ3t2gc=
-X-Google-Smtp-Source: ABdhPJxlpNKQuhQSJ2hEFYuSL2olvE3fgInpxw9a5UdtqtVkXl3QVdrp6UlvAJnusHS8jfSHPkGvdg==
-X-Received: by 2002:a7b:c5cd:0:b0:38c:8b1b:d220 with SMTP id n13-20020a7bc5cd000000b0038c8b1bd220mr22753995wmk.118.1652820972354;
-        Tue, 17 May 2022 13:56:12 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id e25-20020adfa459000000b0020c5253d8dcsm73870wra.40.2022.05.17.13.56.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 13:56:11 -0700 (PDT)
-Message-ID: <62840beb.1c69fb81.9bdaf.070c@mx.google.com>
-X-Google-Original-Message-ID: <YoQL6ULpjb9muRvn@Ansuel-xps.>
-Date:   Tue, 17 May 2022 22:56:09 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: mtd: qcom_nandc: document
- qcom,boot-pages binding
-References: <20220503154353.4367-1-ansuelsmth@gmail.com>
- <20220503154353.4367-3-ansuelsmth@gmail.com>
- <20220516184912.GA3063673-robh@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wG//9LUlNxX10FI60aAD9TW4A6u0+UVzKTFUfna9EcM=;
+        b=xFcIP5OTtE/Vimh5534+ipb8Zu+nKNPDVW0qsmwXS/Yq2D9R9u6mnf8BIvIbkZvYiw
+         /1Kn4+yV7mwmkdLE9VOpL4yLEe+tlmUBqrvvYfpR23pfqkKW1xfeda4F54Qr83RDzMWZ
+         L6u7wOVXgurY75OQo2BGq6n0KDgb5LreqD9PobQo7dZiy/hW8LdqxOLryVAeKHJwfNqh
+         MD5G3+zQvaqYN1X1RWttJLA6mLPA/eJhlVHck3dnW3zfEN2ny5bFPVxFuP2vtXoiaRZd
+         Z9ycvcKgI6RsOGfXlJRBBvkxxGOyl0Zn9EiDdGswpRYmAnRorsRPB/GPiMO4g/bBtShg
+         shiQ==
+X-Gm-Message-State: AOAM531KDvP/P5eXopW8T/Sxb5m2YqzSBFdNPdqj0JDH9tcAu4EhaY6u
+        StdT5Bej8zwC6qP2QQdklv45PaqUbr0tUeaDa7xZsw==
+X-Google-Smtp-Source: ABdhPJzIamuR1/kdHQioWL/LbryCYzlRAz8brhzkGJnKiTbrFbAryR+D9resD6kTTvU0KeuWD2VCw5Yxttr6yNiHuvQ=
+X-Received: by 2002:a17:907:1c89:b0:6f4:4089:8256 with SMTP id
+ nb9-20020a1709071c8900b006f440898256mr20638205ejc.60.1652821100668; Tue, 17
+ May 2022 13:58:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516184912.GA3063673-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220429043913.626647-1-davidgow@google.com> <20220513083212.3537869-2-davidgow@google.com>
+ <CAGS_qxr54nYThsj6UhqX54JO5WnyJXVQURnNF1eCzGB+4GCKLA@mail.gmail.com>
+ <CABVgOS=gTznLFBTZbmNH7AFDnr7O70mWR9v4q6sDA7q04fKT=Q@mail.gmail.com> <CAGS_qxqFEcw=28FxbMMtEcjqcsgFHXV6Td+uTgDj32Z=PiQJkA@mail.gmail.com>
+In-Reply-To: <CAGS_qxqFEcw=28FxbMMtEcjqcsgFHXV6Td+uTgDj32Z=PiQJkA@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 17 May 2022 16:58:09 -0400
+Message-ID: <CAFd5g45MCdydiLtn_UHku8d9-RMurLS+ep3fwZTuBafABpFrPw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] kunit: Taint the kernel when KUnit tests are run
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Joe Fradley <joefradley@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 01:49:12PM -0500, Rob Herring wrote:
-> On Tue, May 03, 2022 at 05:43:53PM +0200, Ansuel Smith wrote:
-> > Document new qcom,boot_pages binding used to apply special
-> 
-> s/boot_pages/boot-pages/
-> 
-> > read/write configuration to boot pages.
-> > 
-> > QCOM apply a special configuration where spare data is not protected
-> > by ECC for some special pages (used for boot partition). Add
-> > Documentation on how to declare these special pages.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 22 +++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > index 84ad7ff30121..fafeca0cafff 100644
-> > --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > @@ -102,6 +102,26 @@ allOf:
-> >              - const: rx
-> >              - const: cmd
-> >  
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - qcom,ipq8074-nand
-> > +
-> > +    then:
-> > +      properties:
-> > +        qcom,boot-pages:
-> > +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> 
-> You need to define the dimensions. Something like this:
-> 
->              items:
->                items:
->                  - description: offset
->                  - description: size
+On Sat, May 14, 2022 at 3:25 PM Daniel Latypov <dlatypov@google.com> wrote:
 >
+> On Fri, May 13, 2022 at 8:04 PM David Gow <davidgow@google.com> wrote:
+> > Hmm... thinking about it, I think it might be worth not tainting if 0
+> > suites run, but tainting if 0 tests run.
+> >
+> > If we taint even if there are no suites present, that'll make things
+> > awkward for the "build KUnit in, but not any tests" case: the kernel
+> > would be tainted regardless. Given Android might be having the KUnit
+>
+> Actually, this is what the code does right now. I was wrong.
+> If there are 0 suites => not tainted.
+> If there are 0 tests in the suites => tainted.
+>
+> For kunit being built in, it first goes through this func
+>    206  static void kunit_exec_run_tests(struct suite_set *suite_set)
+>    207  {
+>    208          struct kunit_suite * const * const *suites;
+>    209
+>    210          kunit_print_tap_header(suite_set);
+>    211
+>    212          for (suites = suite_set->start; suites <
+> suite_set->end; suites++)
+>    213                  __kunit_test_suites_init(*suites);
+>    214  }
+>
+> So for the "build KUnit in, but not any tests" case, you'll never
+> enter that for-loop.
+> Thus you'll never call __kunit_test_suites_init() => kunit_run_tests().
+>
+> For module-based tests, we have the same behavior.
+> If there's 0 test suites, we never enter the second loop, so we never taint.
+> But if there's >0 suites, then we will, regardless of the # of test cases.
+>
+>    570  int __kunit_test_suites_init(struct kunit_suite * const * const suites)
+>    571  {
+>    572          unsigned int i;
+>    573
+>    574          for (i = 0; suites[i] != NULL; i++) {
+>    575                  kunit_init_suite(suites[i]);
+>    576                  kunit_run_tests(suites[i]);
+>    577          }
+>    578          return 0;
+>    579  }
+>
+> So this change should already work as intended.
+>
+> > execution stuff built-in (but using modules for tests), it's probably
+> > worth not tainting there. (Though I think they have a separate way of
+> > disabling KUnit as well, so it's probably not a complete
+> > deal-breaker).
+> >
+> > The case of having suites but no tests should still taint the kernel,
+> > as suite_init functions could still run.
+>
+> Yes, suite_init functions are the concern. I agree we should taint if
+> there are >0 suites but 0 test cases.
+>
+> I don't think it's worth trying to be fancy and tainting iff there >0
+> test cases or a suite_init/exit function ran.
+>
+> >
+> > Assuming that seems sensible, I'll send out a v4 with that changed.
+>
+> Just to be clear: that shouldn't be necessary.
 
-Considering this is not limited to one item how should I declare that an
-user can declare multiple items? (the user can declare multiple zones)
-Declaring minItems without a maxItems? 
+Agreed. I think the current behavior is acceptable, and should be
+unobtrusive to Android: Joe has a patch that introduces a kernel param
+which disables running KUnit tests at the suite level which would
+happen before this taint occurs. So the only way the taint happens is
+if we actually try to execute some test cases (whether or not the
+cases actually run).
 
-I assume in the suggested form it's assumed
-minItems: 1
-maxItems: 1
-so this would be problematic.
-
-> > +          description:
-> > +            Some special page used by boot partition have spare data
-> > +            not protected by ECC. Use this to declare these special page
-> > +            by defining first the offset and then the size.
-> > +
-> > +            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
-> > +
-> > +            Refer to the ipq8064 example on how to use this special binding.
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> > @@ -135,6 +155,8 @@ examples:
-> >          nand-ecc-strength = <4>;
-> >          nand-bus-width = <8>;
-> >  
-> > +        qcom,boot-pages = <0x0 0x58a0000>;
-> > +
-> >          partitions {
-> >            compatible = "fixed-partitions";
-> >            #address-cells = <1>;
-> > -- 
-> > 2.34.1
-> > 
-> > 
-
--- 
-	Ansuel
+> > > I wasn't quite sure where this applied, but I manually applied the changes here.
+> > > Without this patch, this command exits fine:
+> > > $ ./tools/testing/kunit/kunit.py run --kernel_args=panic_on_taint=0x40000
+> > >
+> > > With it, I get
+> > > [12:03:31] Kernel panic - not syncing: panic_on_taint set ...
+> > > [12:03:31] CPU: 0 PID: 1 Comm: swapper Tainted: G                 N
+> >
+> > This is showing both 'G' and 'N' ('G' being the character for GPL --
+>
+> I just somehow missed the fact there was an 'N' at the end there.
+> Thanks, I thought I was going crazy. I guess I was just going blind.
+>
+>
+> Daniel

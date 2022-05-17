@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858D6529F52
+	by mail.lfdr.de (Postfix) with ESMTP id D1F5A529F53
 	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343840AbiEQKWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S1343899AbiEQKXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344829AbiEQKV7 (ORCPT
+        with ESMTP id S1344852AbiEQKWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:21:59 -0400
+        Tue, 17 May 2022 06:22:00 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4FFBA4BFEC;
-        Tue, 17 May 2022 03:20:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66EAC4BFF7;
+        Tue, 17 May 2022 03:20:29 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 178601063;
-        Tue, 17 May 2022 03:20:26 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38CE312FC;
+        Tue, 17 May 2022 03:20:29 -0700 (PDT)
 Received: from e121896.warwick.arm.com (e121896.warwick.arm.com [10.32.33.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A01C93F66F;
-        Tue, 17 May 2022 03:20:23 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C5C413F66F;
+        Tue, 17 May 2022 03:20:26 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         broonie@kernel.org, acme@kernel.org
@@ -36,9 +36,9 @@ Cc:     german.gomez@arm.com, leo.yan@linaro.org,
         Jiri Olsa <jolsa@kernel.org>,
         Namhyung Kim <namhyung@kernel.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 3/4] perf tools: arm64: Decouple Libunwind register names from Perf
-Date:   Tue, 17 May 2022 11:20:04 +0100
-Message-Id: <20220517102005.3022017-4-james.clark@arm.com>
+Subject: [PATCH v2 4/4] perf tools: arm64: Add support for VG register
+Date:   Tue, 17 May 2022 11:20:05 +0100
+Message-Id: <20220517102005.3022017-5-james.clark@arm.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20220517102005.3022017-1-james.clark@arm.com>
 References: <20220517102005.3022017-1-james.clark@arm.com>
@@ -53,107 +53,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dwarf register numbers and real register numbers on aarch64 are
-equivalent. Remove the references to the register names from
-Libunwind so that new registers are supported without having to
-add build time feature checks for each new register.
+Add the name of the VG register so it can be used in --user-regs
 
-The unwinder won't ask for a register that it doesn't know about
-and Perf will already report an error for an unknown or unrecorded
-register in the perf_reg_value() function so extra validation
-isn't needed.
-
-After this change the new VG register can be read by libunwind.
+The event will fail to open if the register is requested but not
+available so only add it to the mask if the kernel supports sve and also
+if it supports that specific register.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- tools/perf/arch/arm64/util/unwind-libunwind.c | 73 +------------------
- 1 file changed, 2 insertions(+), 71 deletions(-)
+ tools/perf/arch/arm64/util/perf_regs.c | 34 ++++++++++++++++++++++++++
+ tools/perf/util/perf_regs.c            |  2 ++
+ 2 files changed, 36 insertions(+)
 
-diff --git a/tools/perf/arch/arm64/util/unwind-libunwind.c b/tools/perf/arch/arm64/util/unwind-libunwind.c
-index 5aecf88e3de6..871af5992298 100644
---- a/tools/perf/arch/arm64/util/unwind-libunwind.c
-+++ b/tools/perf/arch/arm64/util/unwind-libunwind.c
-@@ -10,77 +10,8 @@
+diff --git a/tools/perf/arch/arm64/util/perf_regs.c b/tools/perf/arch/arm64/util/perf_regs.c
+index 476b037eea1c..c0a921512a90 100644
+--- a/tools/perf/arch/arm64/util/perf_regs.c
++++ b/tools/perf/arch/arm64/util/perf_regs.c
+@@ -2,9 +2,11 @@
+ #include <errno.h>
+ #include <regex.h>
+ #include <string.h>
++#include <sys/auxv.h>
+ #include <linux/kernel.h>
+ #include <linux/zalloc.h>
  
- int LIBUNWIND__ARCH_REG_ID(int regnum)
- {
--	switch (regnum) {
--	case UNW_AARCH64_X0:
--		return PERF_REG_ARM64_X0;
--	case UNW_AARCH64_X1:
--		return PERF_REG_ARM64_X1;
--	case UNW_AARCH64_X2:
--		return PERF_REG_ARM64_X2;
--	case UNW_AARCH64_X3:
--		return PERF_REG_ARM64_X3;
--	case UNW_AARCH64_X4:
--		return PERF_REG_ARM64_X4;
--	case UNW_AARCH64_X5:
--		return PERF_REG_ARM64_X5;
--	case UNW_AARCH64_X6:
--		return PERF_REG_ARM64_X6;
--	case UNW_AARCH64_X7:
--		return PERF_REG_ARM64_X7;
--	case UNW_AARCH64_X8:
--		return PERF_REG_ARM64_X8;
--	case UNW_AARCH64_X9:
--		return PERF_REG_ARM64_X9;
--	case UNW_AARCH64_X10:
--		return PERF_REG_ARM64_X10;
--	case UNW_AARCH64_X11:
--		return PERF_REG_ARM64_X11;
--	case UNW_AARCH64_X12:
--		return PERF_REG_ARM64_X12;
--	case UNW_AARCH64_X13:
--		return PERF_REG_ARM64_X13;
--	case UNW_AARCH64_X14:
--		return PERF_REG_ARM64_X14;
--	case UNW_AARCH64_X15:
--		return PERF_REG_ARM64_X15;
--	case UNW_AARCH64_X16:
--		return PERF_REG_ARM64_X16;
--	case UNW_AARCH64_X17:
--		return PERF_REG_ARM64_X17;
--	case UNW_AARCH64_X18:
--		return PERF_REG_ARM64_X18;
--	case UNW_AARCH64_X19:
--		return PERF_REG_ARM64_X19;
--	case UNW_AARCH64_X20:
--		return PERF_REG_ARM64_X20;
--	case UNW_AARCH64_X21:
--		return PERF_REG_ARM64_X21;
--	case UNW_AARCH64_X22:
--		return PERF_REG_ARM64_X22;
--	case UNW_AARCH64_X23:
--		return PERF_REG_ARM64_X23;
--	case UNW_AARCH64_X24:
--		return PERF_REG_ARM64_X24;
--	case UNW_AARCH64_X25:
--		return PERF_REG_ARM64_X25;
--	case UNW_AARCH64_X26:
--		return PERF_REG_ARM64_X26;
--	case UNW_AARCH64_X27:
--		return PERF_REG_ARM64_X27;
--	case UNW_AARCH64_X28:
--		return PERF_REG_ARM64_X28;
--	case UNW_AARCH64_X29:
--		return PERF_REG_ARM64_X29;
--	case UNW_AARCH64_X30:
--		return PERF_REG_ARM64_LR;
--	case UNW_AARCH64_SP:
--		return PERF_REG_ARM64_SP;
--	case UNW_AARCH64_PC:
--		return PERF_REG_ARM64_PC;
--	default:
--		pr_err("unwind: invalid reg id %d\n", regnum);
-+	if (regnum < 0 || regnum >= PERF_REG_ARM64_EXTENDED_MAX)
- 		return -EINVAL;
--	}
++#include "../../../perf-sys.h"
+ #include "../../../util/debug.h"
+ #include "../../../util/event.h"
+ #include "../../../util/perf_regs.h"
+@@ -43,6 +45,7 @@ const struct sample_reg sample_reg_masks[] = {
+ 	SMPL_REG(lr, PERF_REG_ARM64_LR),
+ 	SMPL_REG(sp, PERF_REG_ARM64_SP),
+ 	SMPL_REG(pc, PERF_REG_ARM64_PC),
++	SMPL_REG(vg, PERF_REG_ARM64_VG),
+ 	SMPL_REG_END
+ };
  
--	return -EINVAL;
-+	return regnum;
+@@ -131,3 +134,34 @@ int arch_sdt_arg_parse_op(char *old_op, char **new_op)
+ 
+ 	return SDT_ARG_VALID;
  }
++
++uint64_t arch__user_reg_mask(void)
++{
++	struct perf_event_attr attr = {
++		.type                   = PERF_TYPE_HARDWARE,
++		.config                 = PERF_COUNT_HW_CPU_CYCLES,
++		.sample_type            = PERF_SAMPLE_REGS_USER,
++		.disabled               = 1,
++		.exclude_kernel         = 1,
++		.sample_period		= 1,
++		.sample_regs_user	= PERF_REGS_MASK
++	};
++	int fd;
++
++	if (getauxval(AT_HWCAP) & HWCAP_SVE)
++		attr.sample_regs_user |= SMPL_REG_MASK(PERF_REG_ARM64_VG);
++
++	/*
++	 * Check if the pmu supports perf extended regs, before
++	 * returning the register mask to sample.
++	 */
++	if (attr.sample_regs_user != PERF_REGS_MASK) {
++		event_attr_init(&attr);
++		fd = sys_perf_event_open(&attr, 0, -1, -1, 0);
++		if (fd != -1) {
++			close(fd);
++			return attr.sample_regs_user;
++		}
++	}
++	return PERF_REGS_MASK;
++}
+diff --git a/tools/perf/util/perf_regs.c b/tools/perf/util/perf_regs.c
+index a982e40ee5a9..872dd3d38782 100644
+--- a/tools/perf/util/perf_regs.c
++++ b/tools/perf/util/perf_regs.c
+@@ -103,6 +103,8 @@ static const char *__perf_reg_name_arm64(int id)
+ 		return "lr";
+ 	case PERF_REG_ARM64_PC:
+ 		return "pc";
++	case PERF_REG_ARM64_VG:
++		return "vg";
+ 	default:
+ 		return NULL;
+ 	}
 -- 
 2.28.0
 

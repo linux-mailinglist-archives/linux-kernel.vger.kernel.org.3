@@ -2,365 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE62D52A4F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73ED952A4F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348980AbiEQOdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
+        id S1349003AbiEQOeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiEQOdr (ORCPT
+        with ESMTP id S1348940AbiEQOdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:33:47 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E37040E68
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:33:46 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id f10so5635736pjs.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Bi1M9z7jrVbKOqLe6/b4plNwVoUH+5L8lsvnyy/YrYs=;
-        b=KiXVDJyLu3yeG9gWaZDWHwWVdGkfld2Cl0b99nTR5onmp6m0mbJqyv/2i0ATUlcv/R
-         hud0NHbp9YalaeaBrez89GswkWgBRzWZGTvipC92RnP/Yi8BDb+uUp+4IZVlUDereqxT
-         gm8v8cFxWD79h5YVWT62fId6G/o4govyawQVQf527t3MfkM2tgL1XV8lfgaKiEqOKs1J
-         Qrd6/JPD2/2jPblHm5/GpwNMrSgbBTdmFDMRaaosdsEQjxbvw/jEFXvCLiYdRW/Qodw0
-         gDZeTUAfgWRcg4rJc3aGW22XO5mb8KkXcileca9/Z+GqYWYIYxRaSTtEUDcoVLSIyemu
-         OjcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Bi1M9z7jrVbKOqLe6/b4plNwVoUH+5L8lsvnyy/YrYs=;
-        b=mKGTows24DaCMVBckFfHJfGETq2Y9KalQEYHD+BdrtYZIMxmR/uZGX36EhNVTE/TDG
-         Pjjiup/Ytt+dgadVjkcbesbpCstdGxBut0UIMqSyMpI+jyFZOP0dhip53mZs8TTul3kd
-         8wOh7ggDgOBo4QmaWHcUaglWwdMRlDEqEJDnX1yt+PCKvKRV4+TuvhvTpQHR4oGpG8zn
-         t6d/p072GdLEU3WtdOIDRD1rzKCDlTpcVITm6mm19h3Glynny81qMBvxn1Wyg9v+EChX
-         FU6u/ZWGRJpGPAez/z+IyYepzjEF24o2VHrQe9fFELRwnvtP6if7VQnlpVJF6F+1Zo0Z
-         VEYg==
-X-Gm-Message-State: AOAM532I4rxFn8WEa4avhISBJg/vVbpBsQ5dZTlOwMMNEgn27NgiU6x9
-        6XdEJjayAyO9B8SmTtpHR5naX22mpwPNv71OZ3gBeg==
-X-Google-Smtp-Source: ABdhPJz4gz0WBIaXZ7E4dwKLnG1goAhDCmZq1z7lxs4FhZMh0pRNN8wg/PWBwfBI4JlAx2K2kU7LnoxILwGVWyQmNPw=
-X-Received: by 2002:a17:902:7e01:b0:15e:caea:d6 with SMTP id
- b1-20020a1709027e0100b0015ecaea00d6mr22684003plm.33.1652798025579; Tue, 17
- May 2022 07:33:45 -0700 (PDT)
+        Tue, 17 May 2022 10:33:55 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70082.outbound.protection.outlook.com [40.107.7.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B8F4F9FD;
+        Tue, 17 May 2022 07:33:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J38wd3VonpJefDtthwXiww3lLWQCS1fv/1vCedaqJpXXF6yCtfUGO2K1CbQ2HCCJrWnGrPOG08WD1lLMkv7FHU8syxKaZn0CELdcOyIK1xRdBDwytyDs6MWdgS79M2GxVcvrCu4C0o8Q13ei6lB2tq2GBV4CmoIaJUeYnGTduX2cG5dSpmVYNUNvdaeHfBEs3o7AHx+ooUOV20IvAAPXUJg8kKQ6+Y8XGV5pFuQuRqbdFOvCDiNsQeiGpuc55B6bCAwlhQspSmhBhp7NJx/8lAvxojA0kb7Iy3R2HLS/wfDBWBKvGrkZKJl1cL3xWAas8kc+yLRcckJ4uzx//Vq+Cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z6j92IZ9QzXoqnu4bfRd5JKQxDys8j0bHudIod3TmtM=;
+ b=DvVd4M7uoK2frCsS/RK9Rn/zhTBkgDU0tmG1JfS/HdczCSVIZ0Q37RBOLfGjdl6td122eFSjpnJ3edZkst2q1ywKOfa5ZQnQjDPQbAj5Hy+MeFIksA/Bbqth7SzuOGnFHIEOIAWCcF46EsbASen8DTuFHIam24/JLR+z/Qyud+Mp9RQbJ4ZNvxsRtDJZc+PAAEoZRApwleZxxYmCHcqRlAAFPBIRWMkGkvEyzXUIjMj27kZuUJ4AXArIfryHKVJhauAasTNLGyZDFx3tp0ScggbIWqOif9fwPQscqW1dd9gYsCx9o7u/CfjjpeM4XVpsYX6pDGx11CUBT+2Smy3vrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z6j92IZ9QzXoqnu4bfRd5JKQxDys8j0bHudIod3TmtM=;
+ b=Ls59krjSXhVwAJdvXmbwuOheD96M/WGKzHdzETxuNIBIkutpbJLn1OgJacY7bJqONH9D1wRPp1WTwBjym5Y0U3hqk9hZgakeA+RMSY6smdCXjrehPbnIa7vMwQfyKt+dZzGA+Sh03K/DsILXGzaYJRsS7XrJCJclSXKEecbBXzi4DciM7hsxY2/K2azC3Q2wXhG0XtnZTVIz/CxxiJrqgOrTjHeibI6/cBSnLV4oBDaGEvK7dakUg/XjY0yad3bwj/UEGciO1WGVhPk6B6wDDkKh4be3q0dY/yrRMxY9abKTOX0g4+w8lzXQiZbvmXc9NYii9oH4HDdhaX14veVcZg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by VI1PR03MB6317.eurprd03.prod.outlook.com (2603:10a6:800:136::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Tue, 17 May
+ 2022 14:33:50 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::cc0b:c665:8330:89bc]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::cc0b:c665:8330:89bc%3]) with mapi id 15.20.5250.018; Tue, 17 May 2022
+ 14:33:50 +0000
+Subject: Re: [PATCH 1/9] serial: uartline: Fix BRKINT clearing
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Peter Korsgaard <jacmet@sunsite.dk>,
+        linux-kernel@vger.kernel.org
+References: <20220517110737.37148-1-ilpo.jarvinen@linux.intel.com>
+ <20220517110737.37148-2-ilpo.jarvinen@linux.intel.com>
+From:   Sean Anderson <sean.anderson@seco.com>
+Message-ID: <d96ccec0-f95e-4f56-a12c-c7c0461a1e7d@seco.com>
+Date:   Tue, 17 May 2022 10:33:45 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <20220517110737.37148-2-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MN2PR14CA0010.namprd14.prod.outlook.com
+ (2603:10b6:208:23e::15) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
-References: <20220507110114.4128854-1-tongtiangen@huawei.com>
- <20220507110114.4128854-6-tongtiangen@huawei.com> <20220517135435.GA553@mutt> <CA+CK2bAnfxTo-Osvo9=0t=RkC4rTR+mgg2JSypsu3wm6BZFT=A@mail.gmail.com>
-In-Reply-To: <CA+CK2bAnfxTo-Osvo9=0t=RkC4rTR+mgg2JSypsu3wm6BZFT=A@mail.gmail.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Tue, 17 May 2022 16:33:34 +0200
-Message-ID: <CADYN=9JtrZSAmN8J8KbG_PRVGKPhJ3JkP+nq2bqrpFqEa=Avjg@mail.gmail.com>
-Subject: Re: [PATCH -next v7 5/6] arm64/mm: Enable ARCH_SUPPORTS_PAGE_TABLE_CHECK
-To:     Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc:     Tong Tiangen <tongtiangen@huawei.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv@lists.infradead.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8dc1a467-0e7f-4046-6493-08da3812428d
+X-MS-TrafficTypeDiagnostic: VI1PR03MB6317:EE_
+X-Microsoft-Antispam-PRVS: <VI1PR03MB63173ECF87DECAA4CCB9C02B96CE9@VI1PR03MB6317.eurprd03.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IXIaDWCPI6FG0QKXY+XCqsnE2Sc8GC5DFJJOURzEW0k4KKK/UJgUPUfp83UAHnH5W/SG3L5ip7N0fU36hz6QH5cQcCvg1RmCSmH5plAHiqLE+rGdecBsSvlxEubcpOY4pm3gEsQdlsKFWUhi9e6p1fYYuzIVrTdzQ5wY5vOcRubsnzrQDvdXGDWxigrvmJkWW4He2KGBkmaYP9UxxbUGZ3o4vmO4tdRAQ7i9xhHk2M++pmyFDnTJyPQv6l2Dlgs/ndFdZTqVXr1zLHEdotf5FlN88X3FbUaTBUXiAQmE9gcavGnt7CpVqDS/kGJMxFefNSZYxofb4taLTODZus7pT2I71Ta7IuQbLp5DFox3C4nXnkCS6RH0+kichS84NrggmtPoa7ob6pJxDM5Uhb7hA+alrEya+mMYP0N6kTM5MCy3WqKMbb/b9fJdV4+kgQPRYBGsluMJlXIpvSTNFCOqkuGvRAM8OPN34iltSXJFu7H6btKpF6Elfik8MI7KPJNBFZOGustdbnz90ajHbtRuh+HYu7UVlf8BtG1F73/FnsBzetOy06Vziy/uGfwJOXTvWgyHtm9y7f+eD2gyKpw69JfwBTHswS1k1zyP6/hG14WwHdX0nWLpijtpLYIEud9/U7cb6difK9iMtuZTReBWHKeVzDMsGqz+dQ5JWWfMkCDHYZWxWz5WeBxusWolW1+3yglouqC2spV/yLJ+DLpFkoWTl7hO6pqntXhysTl0FV5LYx91jUcKz9+ZTFDQhePH4klKmolP6XcDPEOv3eZJBA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(86362001)(83380400001)(110136005)(52116002)(31696002)(6666004)(186003)(6486002)(2616005)(66476007)(38100700002)(8676002)(53546011)(2906002)(66556008)(508600001)(38350700002)(44832011)(316002)(66574015)(26005)(8936002)(6512007)(36756003)(6506007)(31686004)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V0F5ZGo4VjRSSWp4MlV4Y2RLbndrYkNDNU50aVZoaXNsMVVmZUNRelF1cjMv?=
+ =?utf-8?B?VkZyaE5vUHZPd1RJOVlzd0htelA0Tk8rSzNKRnVzYVJPMmtydGtQRWYwT1Ar?=
+ =?utf-8?B?U1lUTWM5VEZKRWlvVUpKN3hSd1o3V2FjLzdlQi93dTdSNHF6UURteGZXZThP?=
+ =?utf-8?B?RnVXR0JSb2I0UUZHaWxwSE1mUWFQZTRFOWt6ZmxhS2s1NzcwWDF4bDdock40?=
+ =?utf-8?B?QndsNGtIOW4yR2lhNkVZd3VPVkllTkErNWE5d0lKWkkxVFR5all0VXpMVWJR?=
+ =?utf-8?B?R2h0YThtY0E5bTkwQU5qcEY3NEE4amZxMzZscTQ5UW9HTFkzM1RCUmFUT2wz?=
+ =?utf-8?B?L3R4ejllclQ3ODUwTWpla3pWdXRZT3VWMlB6UmRGZ3dleFM0ejR6WGRsWERj?=
+ =?utf-8?B?WXZyaEFEL0J2UEcveVpKRDJGUXFJakxNaDNiS3hkSFVOZGp3OHFINHE0ZGw5?=
+ =?utf-8?B?QkZLWVBob1hER3RTclRqUnBVVlhCek4vSzV2eEJaOGxWK0ppRStETmYxN3Jk?=
+ =?utf-8?B?KzhCekw2aWhmVk1McjYrVDU1OVB5U05zb2VFYTJNQTBadjA3YTZrVTBHN0wr?=
+ =?utf-8?B?Rk1kK0I4SnB1UnptT3ZldEkxL0ZYczU0eWVsS0QzOXdLNEd4cjBzdzR1cFlP?=
+ =?utf-8?B?Y3diM1dEeHVCNU5sbzl3UEtJWVkybVlQTCt5S1pVZ3V5a2J5UmV0WnFvb1Y5?=
+ =?utf-8?B?ZHNDWGJZYzhIR2dPM1hFQll0bXhwNWRtS2wxN0cyMnhpeU5rcG93Zk9GQUkz?=
+ =?utf-8?B?SmRWVFBtMDdGeDE4dUo3eFVLWnNNYmF5cm1jQ2E1TzRLYTdoK0ZDTEszNkRw?=
+ =?utf-8?B?VnBkWXJYMmQ0M2dKbjJuVmVPeFNoZjd1V1YvZ0FhOVVjUU5Lc3lHb3JBRVpT?=
+ =?utf-8?B?U0tpenFXRlc0U2oxalNFUUNjWXZUYWNwLy9ZeE1YZU1IYzNIUkNxSnM1d1M1?=
+ =?utf-8?B?SGRyQWNTMUxmVkt0bmQ2bTc2RFBjN00zSE92aFRSMDYwZ09MZ0l6UlVaK3dW?=
+ =?utf-8?B?R2dMa0U3bmdoYWtkWVZ5d2piUDNDZEF2YnVIQkNUU092SHN6WXlBcmIrNlo3?=
+ =?utf-8?B?UEhxQzBBSTBoTXpQN3cxMFlwVXNHQ01pMkJ2UjZlK0E1a2ErSnJQQVV1MENQ?=
+ =?utf-8?B?bHdwUkpPUW15REJyclE2N0JMd01pYWxkamtYQ2VQYkxxODA0Vk9vNWRiTEFX?=
+ =?utf-8?B?VmNpNDF6a200U0NOUThQeG42aTJ1V3JOK3hydkdad0R3MGZGekl3WlYvQXBY?=
+ =?utf-8?B?ZW5RcEFtR2l0U053ZnZwL1dRWGdOUnNNdE5yT3E2dk83MExWY3NIT05EWGZj?=
+ =?utf-8?B?SkdiS2dzS3BIa0d4NzRVcFRXckk1Ky9mcWF0MDlpQWoxRU5RT2JqTSt1aU9D?=
+ =?utf-8?B?TXFVM3RWeW5lbU9jYzNVeHM0Z0hNc00rajhqWVRWN3oxN0FxWVdTZ3h0c2J1?=
+ =?utf-8?B?TmxjaE9RRy9IR3crd3FLN3cxT0hFdy8rVE5EUEdxK3ZhcmtGSklhQTFseGhm?=
+ =?utf-8?B?YUdBQis5N2tCUFlkdjc5VEhZenRuUWZrekVzNURpamlUK2JhRnpmTWlKWUQy?=
+ =?utf-8?B?ZHFucHU4T01VZk1OY2JpMnNRQnVhTzM3RGVqYVNXZE0vUnFkUlBmbS92czBB?=
+ =?utf-8?B?OHMxa3k0ZldGSWZndmRoYjhBSlFQQlRKM29TcWRJd2tGYjdYZXZ3ODZhTDFE?=
+ =?utf-8?B?QXd0dHZrTFdUcjg4alRFVlEzTlJXamJFa1I3N080dUJ6S0pEeCsvS1piUmpu?=
+ =?utf-8?B?M0YyeUNzaUZjbWRKN3hVdGJvckJ5SkVObnZwRnRBQ0NjaTRlemlTT3B1U2xU?=
+ =?utf-8?B?MFA1ZmxIV1l6L2ZQa0RBczlCNWhrcmFsQVI2cTdsRFBTdDRmdFQ4WnVDcTB1?=
+ =?utf-8?B?cGEzejBId09KWGFPSWZWRGVNMVFDb3kvcVNkL2lmWFlONzVoRkN4d24wWXFL?=
+ =?utf-8?B?am1RbDRmV29LUEdpNms2QW5rbGZMUXRFbFBOTm9WbW5Uck1Cb0dtVHRidEEz?=
+ =?utf-8?B?cnBwRktsWTdGT3pkeno2clhKeVVFWFUvWG1ha0lwRUUrM2NpcFMvdUJBS21P?=
+ =?utf-8?B?S0wyTHQvSTNoYUdoWUw4d1JHSDg3Zy9zZGhjd1VreEVVRFpMZElhaFVUZnU4?=
+ =?utf-8?B?WmFnU0U4RlRlR2I1b0FhYjV3eFl4RjNwbVc1Q1ZVWFFjZXlaWmtIeFJtR1No?=
+ =?utf-8?B?RVlTSjVmWURrMUJnZ202SmcvZ202L3NKa0NjcGlEY0F4R1VLNkhnYVVycDZ5?=
+ =?utf-8?B?Mk5hbHpoeFJFN3Z5Z2ZVakYwWHc4aEdENG9UakU2SWxCM2YyV2I5Q3h0dkdW?=
+ =?utf-8?B?TUNjbTM0OUlqek1ZYVFjZjRiTkxabExaemRpY3poOUJid0dyOGRtdXhmTUd1?=
+ =?utf-8?Q?L3x0yVlzSgVqIcww=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dc1a467-0e7f-4046-6493-08da3812428d
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 14:33:50.5663
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aE4vMPHJRPd6fjFysFlgaLg5slMwhChc+E33aYcbHgj6Fo+yjCU2QRMdGz9UlTH8ZktJL230SnEhT+592PPs7Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB6317
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 at 16:02, Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
->
-> On Tue, May 17, 2022 at 9:54 AM Anders Roxell <anders.roxell@linaro.org> wrote:
-> >
-> > On 2022-05-07 11:01, Tong Tiangen wrote:
-> > > From: Kefeng Wang <wangkefeng.wang@huawei.com>
-> > >
-> > > As commit d283d422c6c4 ("x86: mm: add x86_64 support for page table check")
-> > > , enable ARCH_SUPPORTS_PAGE_TABLE_CHECK on arm64.
-> > >
-> > > Add additional page table check stubs for page table helpers, these stubs
-> > > can be used to check the existing page table entries.
-> > >
-> > > Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> > > Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> > > Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> >
-> > When building and booting an arm64 allmodconfig kernel on the next tree, branch next-20220516,
-> > see the following kernel oops when booting in QEMU [1]:
-> >
-> > T35] ------------[ cut here ]------------
-> > [  578.695796][   T35] kernel BUG at mm/page_table_check.c:82!
-> > [  578.697292][   T35] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-> > [  578.704318][   T35] Modules linked in:
-> > [  578.705907][   T35] CPU: 0 PID: 35 Comm: khugepaged Tainted: G                T 5.18.0-rc6-next-20220513 #1 893498a5d8159d9fb26e12492a93c07e83dd4b7f
-> > [  578.711170][   T35] Hardware name: linux,dummy-virt (DT)
-> > [  578.713315][   T35] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [  578.716398][   T35] pc : page_table_check_clear.constprop.0+0x1f4/0x280
-> > [  578.719107][   T35] lr : page_table_check_clear.constprop.0+0x1cc/0x280
-> > [  578.721781][   T35] sp : ffff80000f3778b0
-> > [  578.723446][   T35] x29: ffff80000f3778b0 x28: ffff80000b891218 x27: ffff000012dd55f0
-> > [  578.726667][   T35] x26: 0000000000000008 x25: ffff80000c38cd80 x24: 0000000000000000
-> > [  578.729870][   T35] x23: ffff80000c38c9c0 x22: 0000000000000000 x21: 0000000000000200
-> > [  578.733079][   T35] x20: ffff000007bae000 x19: ffff000007bae008 x18: 0000000000000000
-> > [  578.736299][   T35] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-> > [  578.739505][   T35] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
-> > [  578.742735][   T35] x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-> > [  578.745925][   T35] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
-> > [  578.749145][   T35] x5 : 0000000000000000 x4 : 0000000000000000 x3 : ffff000007bae00c
-> > [  578.752348][   T35] x2 : 0000000000000000 x1 : 0000000000000001 x0 : 00000000ffffffff
-> > [  578.755556][   T35] Call trace:
-> > [  578.756877][   T35]  page_table_check_clear.constprop.0+0x1f4/0x280
-> > [  578.759446][   T35]  __page_table_check_pmd_clear+0xc4/0x140
-> > [  578.761757][   T35]  pmdp_collapse_flush+0xa4/0x1c0
-> > [  578.763771][   T35]  collapse_huge_page+0x4e4/0xb00
-> > [  578.765778][   T35]  khugepaged_scan_pmd+0xc18/0xd00
-> > [  578.767840][   T35]  khugepaged_scan_mm_slot+0x580/0x780
-> > [  578.770018][   T35]  khugepaged+0x2dc/0x400
-> > [  578.771786][   T35]  kthread+0x164/0x180
-> > [  578.773430][   T35]  ret_from_fork+0x10/0x20
-> > [  578.775253][   T35] Code: 52800021 91001263 14000388 36f80040 (d4210000)
-> > [  578.777990][   T35] ---[ end trace 0000000000000000 ]---
-> > [  578.778021][   T35] Kernel panic - not syncing: Oops - BUG: Fatal exception
-> > [  578.782934][   T35] Kernel Offset: disabled
-> > [  578.784642][   T35] CPU features: 0x000,00100010,00001086
-> > [  578.786848][   T35] Memory Limit: none
-> > [  578.788433][   T35] ---[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
-> >
-> > Bisected down to this patch, see the bisect log [2].
-> >
-> > When I revert this patch I don't see the issue anymore.
->
-> Thank you for reporting this. I believe, this is the same problem that
-> Anshuman saw [1].
 
-Yes looks like the same issue, I missed that.
 
-> However, at that time he could not reproduce it
-> anymore. Can you please provide QEMU command line
+On 5/17/22 7:07 AM, Ilpo Järvinen wrote:
+> BRKINT is within c_iflag rather than c_cflag.
+> 
+> Cc: Sean Anderson <sean.anderson@seco.com>
+> Fixes: ea017f5853e9 (tty: serial: uartlite: Prevent changing fixed parameters)
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/tty/serial/uartlite.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+> index 007db67292a2..880e2afbb97b 100644
+> --- a/drivers/tty/serial/uartlite.c
+> +++ b/drivers/tty/serial/uartlite.c
+> @@ -321,7 +321,8 @@ static void ulite_set_termios(struct uart_port *port, struct ktermios *termios,
+>  	struct uartlite_data *pdata = port->private_data;
+>  
+>  	/* Set termios to what the hardware supports */
+> -	termios->c_cflag &= ~(BRKINT | CSTOPB | PARENB | PARODD | CSIZE);
+> +	termios->c_iflag &= ~BRKINT;
+> +	termios->c_cflag &= ~(CSTOPB | PARENB | PARODD | CSIZE);
+>  	termios->c_cflag |= pdata->cflags & (PARENB | PARODD | CSIZE);
+>  	tty_termios_encode_baud_rate(termios, pdata->baud, pdata->baud);
+>  
+> 
 
-$ qemu-system-aarch64 --enable-kvm -cpu cortex-a53 -kernel
-Image-20220517-1.gz -serial stdio -monitor none -nographic -m 2G -M
-virt -fsdev local,id=root,path=/srv/kvm/tmp/stretch/arm64,security_model=none,writeout=immediate
--device virtio-rng-pci -device
-virtio-9p-pci,fsdev=root,mount_tag=/dev/root -append "root=/dev/root
-rootfstype=9p rootflags=trans=virtio,msize=131072
-console=ttyAMA0,38400n8 earlycon=pl011,0x9000000 initcall_debug
-softlockup_panic=0 security=none kpti=no kfence.sample_interval=0"
--object rng-random,id=rng0,filename=/dev/urandom -device
-virtio-rng-pci,rng=rng0
-
->, QEMU version,
-
-$ qemu-system-aarch64 --version
-QEMU emulator version 5.2.0 (Debian 1:5.2+dfsg-11+deb11u1)
-Copyright (c) 2003-2020 Fabrice Bellard and the QEMU Project developers
-
-I'm running on an arm64 host.
-
-> kernel config
-
-Kernel config [1].
-
-I build the kernel with tuxmake [2] like this:
-$ tuxmake --runtime podman --target-arch arm64 --toolchain gcc-11
---kconfig http://ix.io/3Y06
-
->, and information about the base image you are using.
-
-Using a debian:stretch release when booting up QEMU.
-Host system debian:bullseye
-
-Cheers,
-Anders
-[1] http://ix.io/3Y06
-[2] https://tuxmake.org/install-pypi/
-
->
-> Thank you,
-> Pasha
->
-> [1] https://lore.kernel.org/all/1c314feb-cd78-2bb3-462e-4ea3cefe122e@arm.com/
->
->
-> >
-> > Cheers,
-> > Anders
-> > [1] https://people.linaro.org/~anders.roxell/output-next-20220513.log
-> > [2] http://ix.io/3XZB
-> >
-> > > ---
-> > >  arch/arm64/Kconfig               |  1 +
-> > >  arch/arm64/include/asm/pgtable.h | 61 ++++++++++++++++++++++++++++----
-> > >  2 files changed, 56 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> > > index 272c75af9302..3055fb5b3fb4 100644
-> > > --- a/arch/arm64/Kconfig
-> > > +++ b/arch/arm64/Kconfig
-> > > @@ -92,6 +92,7 @@ config ARM64
-> > >       select ARCH_SUPPORTS_ATOMIC_RMW
-> > >       select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
-> > >       select ARCH_SUPPORTS_NUMA_BALANCING
-> > > +     select ARCH_SUPPORTS_PAGE_TABLE_CHECK
-> > >       select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
-> > >       select ARCH_WANT_DEFAULT_BPF_JIT
-> > >       select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> > > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> > > index 8ebf1cec5d90..4e61cde27f9f 100644
-> > > --- a/arch/arm64/include/asm/pgtable.h
-> > > +++ b/arch/arm64/include/asm/pgtable.h
-> > > @@ -33,6 +33,7 @@
-> > >  #include <linux/mmdebug.h>
-> > >  #include <linux/mm_types.h>
-> > >  #include <linux/sched.h>
-> > > +#include <linux/page_table_check.h>
-> > >
-> > >  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> > >  #define __HAVE_ARCH_FLUSH_PMD_TLB_RANGE
-> > > @@ -96,6 +97,7 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
-> > >  #define pte_young(pte)               (!!(pte_val(pte) & PTE_AF))
-> > >  #define pte_special(pte)     (!!(pte_val(pte) & PTE_SPECIAL))
-> > >  #define pte_write(pte)               (!!(pte_val(pte) & PTE_WRITE))
-> > > +#define pte_user(pte)                (!!(pte_val(pte) & PTE_USER))
-> > >  #define pte_user_exec(pte)   (!(pte_val(pte) & PTE_UXN))
-> > >  #define pte_cont(pte)                (!!(pte_val(pte) & PTE_CONT))
-> > >  #define pte_devmap(pte)              (!!(pte_val(pte) & PTE_DEVMAP))
-> > > @@ -312,8 +314,8 @@ static inline void __check_racy_pte_update(struct mm_struct *mm, pte_t *ptep,
-> > >                    __func__, pte_val(old_pte), pte_val(pte));
-> > >  }
-> > >
-> > > -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> > > -                           pte_t *ptep, pte_t pte)
-> > > +static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
-> > > +                             pte_t *ptep, pte_t pte)
-> > >  {
-> > >       if (pte_present(pte) && pte_user_exec(pte) && !pte_special(pte))
-> > >               __sync_icache_dcache(pte);
-> > > @@ -343,6 +345,13 @@ static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> > >       set_pte(ptep, pte);
-> > >  }
-> > >
-> > > +static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> > > +                           pte_t *ptep, pte_t pte)
-> > > +{
-> > > +     page_table_check_pte_set(mm, addr, ptep, pte);
-> > > +     return __set_pte_at(mm, addr, ptep, pte);
-> > > +}
-> > > +
-> > >  /*
-> > >   * Huge pte definitions.
-> > >   */
-> > > @@ -454,6 +463,8 @@ static inline int pmd_trans_huge(pmd_t pmd)
-> > >  #define pmd_dirty(pmd)               pte_dirty(pmd_pte(pmd))
-> > >  #define pmd_young(pmd)               pte_young(pmd_pte(pmd))
-> > >  #define pmd_valid(pmd)               pte_valid(pmd_pte(pmd))
-> > > +#define pmd_user(pmd)                pte_user(pmd_pte(pmd))
-> > > +#define pmd_user_exec(pmd)   pte_user_exec(pmd_pte(pmd))
-> > >  #define pmd_cont(pmd)                pte_cont(pmd_pte(pmd))
-> > >  #define pmd_wrprotect(pmd)   pte_pmd(pte_wrprotect(pmd_pte(pmd)))
-> > >  #define pmd_mkold(pmd)               pte_pmd(pte_mkold(pmd_pte(pmd)))
-> > > @@ -501,8 +512,19 @@ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
-> > >  #define pud_pfn(pud)         ((__pud_to_phys(pud) & PUD_MASK) >> PAGE_SHIFT)
-> > >  #define pfn_pud(pfn,prot)    __pud(__phys_to_pud_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
-> > >
-> > > -#define set_pmd_at(mm, addr, pmdp, pmd)      set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd))
-> > > -#define set_pud_at(mm, addr, pudp, pud)      set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud))
-> > > +static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
-> > > +                           pmd_t *pmdp, pmd_t pmd)
-> > > +{
-> > > +     page_table_check_pmd_set(mm, addr, pmdp, pmd);
-> > > +     return __set_pte_at(mm, addr, (pte_t *)pmdp, pmd_pte(pmd));
-> > > +}
-> > > +
-> > > +static inline void set_pud_at(struct mm_struct *mm, unsigned long addr,
-> > > +                           pud_t *pudp, pud_t pud)
-> > > +{
-> > > +     page_table_check_pud_set(mm, addr, pudp, pud);
-> > > +     return __set_pte_at(mm, addr, (pte_t *)pudp, pud_pte(pud));
-> > > +}
-> > >
-> > >  #define __p4d_to_phys(p4d)   __pte_to_phys(p4d_pte(p4d))
-> > >  #define __phys_to_p4d_val(phys)      __phys_to_pte_val(phys)
-> > > @@ -643,6 +665,24 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
-> > >  #define pud_present(pud)     pte_present(pud_pte(pud))
-> > >  #define pud_leaf(pud)                (pud_present(pud) && !pud_table(pud))
-> > >  #define pud_valid(pud)               pte_valid(pud_pte(pud))
-> > > +#define pud_user(pud)                pte_user(pud_pte(pud))
-> > > +
-> > > +#ifdef CONFIG_PAGE_TABLE_CHECK
-> > > +static inline bool pte_user_accessible_page(pte_t pte)
-> > > +{
-> > > +     return pte_present(pte) && (pte_user(pte) || pte_user_exec(pte));
-> > > +}
-> > > +
-> > > +static inline bool pmd_user_accessible_page(pmd_t pmd)
-> > > +{
-> > > +     return pmd_present(pmd) && (pmd_user(pmd) || pmd_user_exec(pmd));
-> > > +}
-> > > +
-> > > +static inline bool pud_user_accessible_page(pud_t pud)
-> > > +{
-> > > +     return pud_present(pud) && pud_user(pud);
-> > > +}
-> > > +#endif
-> > >
-> > >  static inline void set_pud(pud_t *pudp, pud_t pud)
-> > >  {
-> > > @@ -876,7 +916,11 @@ static inline int pmdp_test_and_clear_young(struct vm_area_struct *vma,
-> > >  static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
-> > >                                      unsigned long address, pte_t *ptep)
-> > >  {
-> > > -     return __pte(xchg_relaxed(&pte_val(*ptep), 0));
-> > > +     pte_t pte = __pte(xchg_relaxed(&pte_val(*ptep), 0));
-> > > +
-> > > +     page_table_check_pte_clear(mm, address, pte);
-> > > +
-> > > +     return pte;
-> > >  }
-> > >
-> > >  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> > > @@ -884,7 +928,11 @@ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
-> > >  static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
-> > >                                           unsigned long address, pmd_t *pmdp)
-> > >  {
-> > > -     return pte_pmd(ptep_get_and_clear(mm, address, (pte_t *)pmdp));
-> > > +     pmd_t pmd = __pmd(xchg_relaxed(&pmd_val(*pmdp), 0));
-> > > +
-> > > +     page_table_check_pmd_clear(mm, address, pmd);
-> > > +
-> > > +     return pmd;
-> > >  }
-> > >  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-> > >
-> > > @@ -918,6 +966,7 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
-> > >  static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
-> > >               unsigned long address, pmd_t *pmdp, pmd_t pmd)
-> > >  {
-> > > +     page_table_check_pmd_set(vma->vm_mm, address, pmdp, pmd);
-> > >       return __pmd(xchg_relaxed(&pmd_val(*pmdp), pmd_val(pmd)));
-> > >  }
-> > >  #endif
-> > > --
-> > > 2.25.1
-> > >
-> >
-> > --
-> > Anders Roxell
-> > anders.roxell@linaro.org
-> > M: +46 708 22 71 05 | IRC: roxell
+Reviewed-by: Sean Anderson <sean.anderson@seco.com>

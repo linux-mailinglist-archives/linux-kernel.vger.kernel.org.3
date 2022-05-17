@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA8E52AB37
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C34052AB3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352371AbiEQSt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S1352378AbiEQSxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 14:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238741AbiEQSt1 (ORCPT
+        with ESMTP id S245048AbiEQSxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:49:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C1C39BB0;
-        Tue, 17 May 2022 11:49:26 -0700 (PDT)
+        Tue, 17 May 2022 14:53:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54513BA5E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 11:53:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E329E615F0;
-        Tue, 17 May 2022 18:49:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D07C385B8;
-        Tue, 17 May 2022 18:49:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FF2AB8182C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:53:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727CEC385B8;
+        Tue, 17 May 2022 18:53:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652813365;
-        bh=QbR97zXTo/NaC1jwtAoXzhOVIO4EnZxkhALYWJt3s1g=;
+        s=k20201202; t=1652813584;
+        bh=fByl9pfdaNvhQc+16AHfxnAyMA07zzkUJbvT+offdtU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kuqWIdQKLyeN7nlz+CcqYfc4xOJV5rQVhDnfvKvx8yT3JSbeof2xnY4I+qsyFGWeZ
-         40z5U6jzfh9FSlv3AYsJaRfAYzAOF2XEzqiWQQ2Si7azi0sulysaAB39QMrGRUi/ps
-         FGq991sN8UyU5oqjSmza7h5PqZHLIGlLV8fB4GNA3vDjJZXHGHMkgjEL7bUhpy20UJ
-         Eb4HMJLirkNk/g9phi8jqLbugty5tc6+2d2RE6mZ/Xxb0ErMlIx+F1unhHb5w0yF/g
-         bFYtWV1PRiBCQJdaV4dTNruigqO4/WrMLcksw54XFreFrFSd0FnOTFn1XF4D1uwoKH
-         P5woZcV7I7FtQ==
-Date:   Tue, 17 May 2022 11:49:22 -0700
+        b=nn3siSFSOFDm796GrRsXYVqwPLk4FSJzlVDfJztuWcGHsScTp6LswUrBFrCLNyz7y
+         pDP1JeG0vZ/ov7jfqlLmbGT/hofPPMxa/kpSyO05uvgt/JOkELasnurgz7oZeHbpuH
+         /iByZusRlQzK4G5U5HGnNW2pAk67zcB/AzM/gIYkDYJkIU0vhDUCVBSNkoR0CgSb4b
+         JRMM+oKuKeLnr5aw6jl8ekyeffLwqsKeLUpwQS9w0jb5N0Q6S95xDiYd+Z0VQYQ1W3
+         0ZqKBS76SGUY8iOiI7Zu9Z8+qoOVrK4RAFL07XWFXQFfByWQhGQcIpcM8WVfsrweuY
+         BFemIAZyY6l5A==
+Date:   Tue, 17 May 2022 11:53:02 -0700
 From:   Nathan Chancellor <nathan@kernel.org>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v2 00/21] KCFI support
-Message-ID: <YoPuMhc03hUJxmPs@dev-arch.thelio-3990X>
-References: <20220513202159.1550547-1-samitolvanen@google.com>
- <CA+icZUWr+-HjMvY1VZf+nqjTadxSTDciux0Y5Y-+p_j4o7CmXg@mail.gmail.com>
- <CABCJKueVcwYishxSoEyn9b1vaGTXdoYWF7VyANPm7V=H+yyfhQ@mail.gmail.com>
- <CA+icZUUBqz1zTcj61nK=sbkWcSncKYZgR2Qg0FSCWi9un84yLw@mail.gmail.com>
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
+Message-ID: <YoPvDn0Nb2fBtJCs@dev-arch.thelio-3990X>
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+ <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+ <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
+ <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+icZUUBqz1zTcj61nK=sbkWcSncKYZgR2Qg0FSCWi9un84yLw@mail.gmail.com>
+In-Reply-To: <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,118 +59,287 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 09:33:47AM +0200, Sedat Dilek wrote:
-> Is your tags/kcfi-rfc-v2 the recommended LLVM toolchain for testing kcfi-rfc-v2?
+On Tue, May 17, 2022 at 05:42:04PM +0200, Peter Zijlstra wrote:
+> On Tue, May 17, 2022 at 05:33:59PM +0200, Peter Zijlstra wrote:
+> > On Mon, May 16, 2022 at 11:40:06PM +0200, Peter Zijlstra wrote:
+> > > Does something simple like this work? If not, I'll try and reproduce
+> > > tomorrow, it shouldn't be too hard to fix.
+> > 
+> > Oh, man, I so shouldn't have said that :/
+> > 
+> > I have something that almost works, except it now mightly upsets
+> > modpost.
+> > 
+> > I'm not entirely sure how the old code worked as well as it did. Oh
+> > well, I'll get it sorted.
 > 
-> What I want to ask is if your commit well tested for x86 (and arm64)
-> means build and boot on bare metal?
+> Pff, it's been a *long* day.. here this works.
 
-I have run kCFI (v1, I haven't had time to test v2) on x86_64 hardware,
-both AMD and Intel. I have only found two failures so far: the i915
-issue that I mention below and a failure in the KVM subsystem, which I
-can see by just running QEMU:
+Thanks a lot for the quick fix! It resolves the error I see on 5.17 and
+I don't see any new issues on mainline.
 
-[  124.344654] CFI failure at kvm_mmu_notifier_invalidate_range_end+0xca/0x177 [kvm] (target: kvm_null_fn+0x0/0x7 [kvm]; expected type: 0x1e2c5b9c)
-[  124.344691] WARNING: CPU: 5 PID: 2767 at kvm_mmu_notifier_invalidate_range_end+0xca/0x177 [kvm]
-[  124.344708] Modules linked in: ...
-[  124.344737] CPU: 5 PID: 2767 Comm: qemu-system-x86 Tainted: P                  5.18.0-rc6-debug-00033-g1d5284aff7cd #1 8c4966c7fb24f3345076747feebac5fb340a4797
-[  124.344738] Hardware name: ASUS System Product Name/PRIME Z590M-PLUS, BIOS 1203 10/27/2021
-[  124.344738] RIP: 0010:kvm_mmu_notifier_invalidate_range_end+0xca/0x177 [kvm]
-[  124.344756] Code: 48 89 da e8 88 16 86 dd 48 85 c0 89 6c 24 0c 74 30 4d 85 f6 74 36 48 c7 c5 19 c8 b4 c0 4c 8b 34 24 81 7d fa 9c 5b 2c 1e 74 02 <0f> 0b 48 89 c7 4c 89 fe 48 89 da e8 b6 16 86 dd 48 85 c0 75 e2 eb
-[  124.344757] RSP: 0018:ffffc033039d78e8 EFLAGS: 00010282
-[  124.344758] RAX: ffffa0a141ed9450 RBX: 00007fb897e9efff RCX: ffffa0a143c9d850
-[  124.344758] RDX: 00007fb897e9efff RSI: 00007fb897e9e000 RDI: ffffc03304499cf8
-[  124.344759] RBP: ffffffffc0b4c819 R08: 0000000000000000 R09: 0000000000000000
-[  124.344759] R10: 0000000000000000 R11: ffffffffc0b4c639 R12: ffffc03304499000
-[  124.344760] R13: ffffc033044a30a0 R14: ffffc033044a3120 R15: 00007fb897e9e000
-[  124.344760] FS:  00007fbca4bc3640(0000) GS:ffffa0a87f540000(0000) knlGS:0000000000000000
-[  124.344761] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  124.344761] CR2: 0000000000000000 CR3: 0000000119f74006 CR4: 0000000000772ee0
-[  124.344762] PKRU: 55555554
-[  124.344762] Call Trace:
-[  124.344762]  <TASK>
-[  124.344763]  __mmu_notifier_invalidate_range_end+0xa1/0xd7
-[  124.344764]  wp_page_copy+0x592/0x920
-[  124.344766]  __handle_mm_fault+0x820/0x8f0
-[  124.344767]  handle_mm_fault+0xe0/0x227
-[  124.344768]  __get_user_pages+0x17a/0x430
-[  124.344769]  get_user_pages_unlocked+0xd9/0x327
-[  124.344770]  hva_to_pfn+0xfa/0x3f7 [kvm 950e483805e01f967a3e331506278d766494a4cc]
-[  124.344788]  kvm_faultin_pfn+0xc3/0x2f0 [kvm 950e483805e01f967a3e331506278d766494a4cc]
-[  124.344806]  ? fast_page_fault+0x400/0x4c0 [kvm 950e483805e01f967a3e331506278d766494a4cc]
-[  124.344823]  direct_page_fault+0x130/0x350 [kvm 950e483805e01f967a3e331506278d766494a4cc]
-[  124.344841]  kvm_mmu_page_fault+0x176/0x2f7 [kvm 950e483805e01f967a3e331506278d766494a4cc]
-[  124.344858]  vmx_handle_exit+0xe/0x37 [kvm_intel 647f514f18fc365045dc57db46d2bb4930b746eb]
-[  124.344863]  vcpu_enter_guest+0xbff/0x1030 [kvm 950e483805e01f967a3e331506278d766494a4cc]
-[  124.344881]  vcpu_run+0x65/0x2f0 [kvm 950e483805e01f967a3e331506278d766494a4cc]
-[  124.344898]  kvm_arch_vcpu_ioctl_run+0x15f/0x3f7 [kvm 950e483805e01f967a3e331506278d766494a4cc]
-[  124.344916]  kvm_vcpu_ioctl+0x547/0x627 [kvm 950e483805e01f967a3e331506278d766494a4cc]
-[  124.344933]  ? syscall_exit_to_user_mode+0x24/0x47
-[  124.344934]  ? do_syscall_64+0x7a/0x97
-[  124.344935]  ? __fget_files+0xa1/0xc0
-[  124.344936]  __se_sys_ioctl+0x7c/0xc0
-[  124.344937]  do_syscall_64+0x6c/0x97
-[  124.344938]  ? do_syscall_64+0x7a/0x97
-[  124.344939]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  124.344940] RIP: 0033:0x7fbca75f7b1f
-[  124.344940] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 ff ff 77 18 48 8b 44 24 18 64 48 2b 04 25 28 00 00
-[  124.344941] RSP: 002b:00007fbca4bc2550 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-[  124.344942] RAX: ffffffffffffffda RBX: 000000000000ae80 RCX: 00007fbca75f7b1f
-[  124.344942] RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 000000000000000e
-[  124.344943] RBP: 000056351ba661d0 R08: 000056351a74dc48 R09: 0000000000000004
-[  124.344943] R10: 004818cf4f129e11 R11: 0000000000000246 R12: 0000000000000000
-[  124.344943] R13: 0000000000000000 R14: 00007fbca814f004 R15: 0000000000000000
-[  124.344944]  </TASK>
-[  124.344945] ---[ end trace 0000000000000000 ]---
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-I don't do any bare metal testing for the tc-build known good revision
-bumps, just QEMU tests with boot-utils.
-
-> Just for the records:
-> You definitely need a pre-LLVM-15 toolchain + KCFI sanitizer patch?
-> LLVM-14?
-
-The feature won't land in LLVM 14, so there is little point to
-backporting and testing it on LLVM 14. This is a work in progress
-feature so it has to target the main branch. I have fairly good coverage
-of tip of tree locally and we have solid coverage through CI so we'll
-know if something major happens, it should be pretty safe to test Sami's
-series.
-
-> > > Nathan has a i915 cfi patch in His personal kernel.org Git.
-> > > Is this relevant to kcfi?
-> >
-> > It fixes a type mismatch, so in that sense it's relevant.
-> >
+> ---
+>  tools/objtool/elf.c | 191 ++++++++++++++++++++++++++++++++++------------------
+>  1 file changed, 125 insertions(+), 66 deletions(-)
 > 
-> Here the link to patch "drm/i915: Fix CFI violation with show_dynamic_id()":
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/nathan/linux.git/commit/?h=submitted/i915-cfi-fix&id=53735be6dc53453fcfbac658e847b54360e73871
-
-This is now in the i915 tree so that branch is going to disappear:
-
-https://cgit.freedesktop.org/drm/drm-intel/commit/?id=18fb42db05a0b93ab5dd5eab5315e50eaa3ca620
-
-> You say no need to build your kernel with LTO...
-> That sounds good.
-> Currently, I build my kernels with Clang-14 and CONFIG_LTO_CLANG_THIN=y.
-> Does something speak against using CONFIG_LTO_CLANG_THIN=y with KCFI support?
-> Build-time?
-> Disc-usage?
-
-I wouldn't expect the build time or disk usage to significantly increase
-with kCFI. I ran a quick benchmark with Arch Linux's configuration with
-ThinLTO then ThinLTO + kCFI on an AMD EPYC 7513:
-
-Benchmark 1: ThinLTO
-  Time (abs ≡):        166.036 s               [User: 4687.951 s, System: 1636.767 s]
-
-Benchmark 2: ThinLTO + kCFI
-  Time (abs ≡):        168.739 s               [User: 4682.020 s, System: 1638.109 s]
-
-Summary
-  'ThinLTO' ran
-    1.02 times faster than 'ThinLTO + kCFI'
-
-Cheers,
-Nathan
+> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+> index ebf2ba5755c1..a9c3e27527de 100644
+> --- a/tools/objtool/elf.c
+> +++ b/tools/objtool/elf.c
+> @@ -600,24 +600,24 @@ static void elf_dirty_reloc_sym(struct elf *elf, struct symbol *sym)
+>  }
+>  
+>  /*
+> - * Move the first global symbol, as per sh_info, into a new, higher symbol
+> - * index. This fees up the shndx for a new local symbol.
+> + * The libelf API is terrible; gelf_update_sym*() takes a data block relative
+> + * index value. As such, iterate the data blocks and adjust index until it fits.
+> + *
+> + * If no data block is found, allow adding a new data block provided the index
+> + * is only one past the end.
+>   */
+> -static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
+> -				  struct section *symtab_shndx)
+> +static int elf_update_symbol(struct elf *elf, struct section *symtab,
+> +			     struct section *symtab_shndx, struct symbol *sym)
+>  {
+> -	Elf_Data *data, *shndx_data = NULL;
+> -	Elf32_Word first_non_local;
+> -	struct symbol *sym;
+> -	Elf_Scn *s;
+> +	Elf_Data *symtab_data = NULL, *shndx_data = NULL;
+> +	Elf32_Word shndx = sym->sec->idx;
+> +	Elf_Scn *s, *t = NULL;
+> +	int size, idx = sym->idx;
+>  
+> -	first_non_local = symtab->sh.sh_info;
+> -
+> -	sym = find_symbol_by_index(elf, first_non_local);
+> -	if (!sym) {
+> -		WARN("no non-local symbols !?");
+> -		return first_non_local;
+> -	}
+> +	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
+> +		size = sizeof(Elf32_Sym);
+> +	else
+> +		size = sizeof(Elf64_Sym);
+>  
+>  	s = elf_getscn(elf->elf, symtab->idx);
+>  	if (!s) {
+> @@ -625,79 +625,120 @@ static int elf_move_global_symbol(struct elf *elf, struct section *symtab,
+>  		return -1;
+>  	}
+>  
+> -	data = elf_newdata(s);
+> -	if (!data) {
+> -		WARN_ELF("elf_newdata");
+> -		return -1;
+> +	if (symtab_shndx) {
+> +		t = elf_getscn(elf->elf, symtab_shndx->idx);
+> +		if (!t) {
+> +			WARN_ELF("elf_getscn");
+> +			return -1;
+> +		}
+>  	}
+>  
+> -	data->d_buf = &sym->sym;
+> -	data->d_size = sizeof(sym->sym);
+> -	data->d_align = 1;
+> -	data->d_type = ELF_T_SYM;
+> +	for (;;) {
+> +		symtab_data = elf_getdata(s, symtab_data);
+> +		if (t)
+> +			shndx_data = elf_getdata(t, shndx_data);
+>  
+> -	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
+> -	elf_dirty_reloc_sym(elf, sym);
+> +		if (!symtab_data) {
+> +			if (!idx) {
+> +				void *buf;
+>  
+> -	symtab->sh.sh_info += 1;
+> -	symtab->sh.sh_size += data->d_size;
+> -	symtab->changed = true;
+> +				symtab_data = elf_newdata(s);
+> +				if (t)
+> +					shndx_data = elf_newdata(t);
+>  
+> -	if (symtab_shndx) {
+> -		s = elf_getscn(elf->elf, symtab_shndx->idx);
+> -		if (!s) {
+> -			WARN_ELF("elf_getscn");
+> +				buf = calloc(1, size);
+> +				if (!buf) {
+> +					WARN("malloc");
+> +					return -1;
+> +				}
+> +
+> +				symtab_data->d_buf = buf;
+> +				symtab_data->d_size = size;
+> +				symtab_data->d_align = 1;
+> +				symtab_data->d_type = ELF_T_SYM;
+> +
+> +				symtab->sh.sh_size += size;
+> +				symtab->changed = true;
+> +
+> +				if (t) {
+> +					shndx_data->d_buf = &sym->sec->idx;
+> +					shndx_data->d_size = sizeof(Elf32_Word);
+> +					shndx_data->d_align = 4;
+> +					shndx_data->d_type = ELF_T_WORD;
+> +
+> +					symtab_shndx->sh.sh_size += 4;
+> +					symtab_shndx->changed = true;
+> +				}
+> +
+> +				break;
+> +			}
+> +
+> +			WARN("index out of range");
+>  			return -1;
+>  		}
+>  
+> -		shndx_data = elf_newdata(s);
+> -		if (!shndx_data) {
+> -			WARN_ELF("elf_newshndx_data");
+> +		if (!symtab_data->d_size) {
+> +			WARN("zero size data");
+>  			return -1;
+>  		}
+>  
+> -		shndx_data->d_buf = &sym->sec->idx;
+> -		shndx_data->d_size = sizeof(Elf32_Word);
+> -		shndx_data->d_align = 4;
+> -		shndx_data->d_type = ELF_T_WORD;
+> +		if (idx * size < symtab_data->d_size)
+> +			break;
+>  
+> -		symtab_shndx->sh.sh_size += 4;
+> -		symtab_shndx->changed = true;
+> +		idx -= symtab_data->d_size / size;
+>  	}
+>  
+> -	return first_non_local;
+> +	if (idx < 0) {
+> +		WARN("negative index");
+> +		return -1;
+> +	}
+> +
+> +	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
+> +		sym->sym.st_shndx = shndx;
+> +		if (!shndx_data)
+> +			shndx = 0;
+> +	} else {
+> +		sym->sym.st_shndx = SHN_XINDEX;
+> +		if (!shndx_data) {
+> +			WARN("no .symtab_shndx");
+> +			return -1;
+> +		}
+> +	}
+> +
+> +	if (!gelf_update_symshndx(symtab_data, shndx_data, idx, &sym->sym, shndx)) {
+> +		WARN_ELF("gelf_update_symshndx");
+> +		return -1;
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static struct symbol *
+>  elf_create_section_symbol(struct elf *elf, struct section *sec)
+>  {
+>  	struct section *symtab, *symtab_shndx;
+> -	Elf_Data *shndx_data = NULL;
+> -	struct symbol *sym;
+> -	Elf32_Word shndx;
+> +	Elf32_Word first_non_local, new;
+> +	struct symbol *sym, *old;
+> +	int size;
+> +
+> +	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
+> +		size = sizeof(Elf32_Sym);
+> +	else
+> +		size = sizeof(Elf64_Sym);
+>  
+>  	symtab = find_section_by_name(elf, ".symtab");
+>  	if (symtab) {
+>  		symtab_shndx = find_section_by_name(elf, ".symtab_shndx");
+> -		if (symtab_shndx)
+> -			shndx_data = symtab_shndx->data;
+>  	} else {
+>  		WARN("no .symtab");
+>  		return NULL;
+>  	}
+>  
+> -	sym = malloc(sizeof(*sym));
+> +	sym = calloc(1, sizeof(*sym));
+>  	if (!sym) {
+>  		perror("malloc");
+>  		return NULL;
+>  	}
+> -	memset(sym, 0, sizeof(*sym));
+> -
+> -	sym->idx = elf_move_global_symbol(elf, symtab, symtab_shndx);
+> -	if (sym->idx < 0) {
+> -		WARN("elf_move_global_symbol");
+> -		return NULL;
+> -	}
+>  
+>  	sym->name = sec->name;
+>  	sym->sec = sec;
+> @@ -707,24 +748,42 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
+>  	// st_other 0
+>  	// st_value 0
+>  	// st_size 0
+> -	shndx = sec->idx;
+> -	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
+> -		sym->sym.st_shndx = shndx;
+> -		if (!shndx_data)
+> -			shndx = 0;
+> -	} else {
+> -		sym->sym.st_shndx = SHN_XINDEX;
+> -		if (!shndx_data) {
+> -			WARN("no .symtab_shndx");
+> +
+> +	new = symtab->sh.sh_size / size;
+> +
+> +	/*
+> +	 * Move the first global symbol, as per sh_info, into a new, higher
+> +	 * symbol index. This fees up a spot for a new local symbol.
+> +	 */
+> +	first_non_local = symtab->sh.sh_info;
+> +	old = find_symbol_by_index(elf, first_non_local);
+> +	if (old) {
+> +		old->idx = new;
+> +
+> +		hlist_del(&old->hash);
+> +		elf_hash_add(symbol, &old->hash, old->idx);
+> +
+> +		elf_dirty_reloc_sym(elf, old);
+> +
+> +		if (elf_update_symbol(elf, symtab, symtab_shndx, old)) {
+> +			WARN("elf_update_symbol move");
+>  			return NULL;
+>  		}
+> +
+> +		new = first_non_local;
+>  	}
+>  
+> -	if (!gelf_update_symshndx(symtab->data, shndx_data, sym->idx, &sym->sym, shndx)) {
+> -		WARN_ELF("gelf_update_symshndx");
+> +	sym->idx = new;
+> +	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
+> +		WARN("elf_update_symbol");
+>  		return NULL;
+>  	}
+>  
+> +	/*
+> +	 * Either way, we added a LOCAL symbol.
+> +	 */
+> +	symtab->sh.sh_info += 1;
+> +
+>  	elf_add_symbol(elf, sym);
+>  
+>  	return sym;

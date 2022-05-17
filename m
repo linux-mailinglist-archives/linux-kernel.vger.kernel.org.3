@@ -2,91 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED5852AE43
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EC152AE44
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiEQWoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 18:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        id S231402AbiEQWq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 18:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbiEQWoY (ORCPT
+        with ESMTP id S231219AbiEQWq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 18:44:24 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC464551B
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:44:22 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id u15so402024pfi.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8U1UMJO6lMuPvxVoVzvgi2MLyng4q5uGVH6c9a5w1Bw=;
-        b=gOnMTaEdFttEm6/q8XtGmPklahi2Ik82IJeay691COcljHc/LzBEOEZ+QVt5k3HkLF
-         UnL/oGGGW2/VFzZgtbsSAur2VSqGY+QcnetKELX4zENMxP2HF4AD0pYpvRUUnfx5QxJJ
-         /NYylHnGAula72P6fk/YTbEvjagUiN1WY+5HPfUadvcw/S7lMRuvf3B/RrMmhU6ZgDHg
-         0rBZ2xIkZ3i89x5tTMwUXfLT9vrslj1/p4kUQ4Lkfb9kV57oIL17dphdh2ka/Dw05b6q
-         qUrM6QxLItmWu8bqC4Z9casbE/DLbJUeElEtqSO36fYxetMDZr4cbiCjhETywSexSnUx
-         v8ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8U1UMJO6lMuPvxVoVzvgi2MLyng4q5uGVH6c9a5w1Bw=;
-        b=hZxtC672Ei+lHEoJUrNitqOtH/rdZRyTbp+n0BM42b5QiuPCGFVgVbAGXnLtOI4McO
-         uaQ8umN3kIt53yW0Yg7/XN3QxWXQbQO6+eDgXXueLgntBLhIlEIGdu34BT45k2XC0d1U
-         aLWxhVIQcU9M4Io5rkp/T+stk+X0gmP/XE/yYlPICedhQkz6hxuKoQaLkxb4uxyTYlBe
-         p9Us2z5Z6tm/gpPmwlLz0sevV3+EhSUiVHmIxr3IZLo1c4EpT4lA5caqVPGqd0Llo2MX
-         nLa40MtJnxuWLJFwS64b5uq11m25AHVRWSafTqdl/Ooj1n451dqpEw6Y4c0xvc6SF2Qa
-         Zvxw==
-X-Gm-Message-State: AOAM5323K1LDC4yMJIMHbC9PeeG+q1Gg+IlOrwF2okL+4euk/T1Jcn2K
-        i+BEsagH7gzezCaWpCwKTioXSw==
-X-Google-Smtp-Source: ABdhPJzLuFFNqxfqGKiJ0TkzxI3fsKb53qCzXi0B6fJhZIeZBQremcpXYRvvdsFyH6ad2jVYDhxf+A==
-X-Received: by 2002:a63:1645:0:b0:3c2:4706:f62b with SMTP id 5-20020a631645000000b003c24706f62bmr21634955pgw.11.1652827462116;
-        Tue, 17 May 2022 15:44:22 -0700 (PDT)
-Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
-        by smtp.gmail.com with ESMTPSA id i24-20020a056a00225800b0050dc7628168sm257134pfu.66.2022.05.17.15.44.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 15:44:21 -0700 (PDT)
-Date:   Tue, 17 May 2022 15:44:19 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Jonathan Toppins <jtoppins@redhat.com>
-Cc:     netdev@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC net-next] bonding: netlink error message support for
- options
-Message-ID: <20220517154419.44a1cb6a@hermes.local>
-In-Reply-To: <5a6ba6f14b0fad6d4ba077a5230ee71cbf970934.1652819479.git.jtoppins@redhat.com>
-References: <5a6ba6f14b0fad6d4ba077a5230ee71cbf970934.1652819479.git.jtoppins@redhat.com>
+        Tue, 17 May 2022 18:46:57 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69563FD96
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:46:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652827616; x=1684363616;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UPbb30qoGysGCMXmrylZxu9LDvbk/g1BrvZvUwm92gE=;
+  b=kywTdcAsYEveIIeAjSNy2luiwIos45EkgsczZ6+Z0PEk4lB3eIKZ6cYa
+   gDywFYzrIrvO1/GZiqHYrEMbAxf7UuBv6ocptJu3qpzQ8yVhSI7WGbWZi
+   ASMou6C2LnFhrMjXd1hfBtDterpnU/xX9QVmnPIf5c5kbmeDfgvWXbEV1
+   TxLd4i0RjTYILkoBRi7R3LqfW/xI6lMpJfoKqGyGjg6lDx108aD8P8Ylr
+   PZgilogDoVlv2+XFk1uQCNgJi9UlAEBpTzsBW6Nibd7ZOlQfGLgTuf3ba
+   qXMcyw/zc4eXqYKzrk1wUHmYWT4e7hAP0tF4AOXV2NgTcHzVj6OouNlhD
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271309955"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="271309955"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 15:46:56 -0700
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="597388075"
+Received: from hrong1-mobl.amr.corp.intel.com (HELO localhost) ([10.212.21.169])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 15:46:55 -0700
+Date:   Tue, 17 May 2022 15:46:55 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V10 33/44] kmap: Make kmap work for devmap protected pages
+Message-ID: <YoQl3yLa4iDCjicO@iweiny-desk3>
+References: <20220419170649.1022246-1-ira.weiny@intel.com>
+ <20220419170649.1022246-34-ira.weiny@intel.com>
+ <Ymq3yrQ3rmgnbX1o@infradead.org>
+ <Ynxh/5jewIuGwb5d@iweiny-desk3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ynxh/5jewIuGwb5d@iweiny-desk3>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 16:31:19 -0400
-Jonathan Toppins <jtoppins@redhat.com> wrote:
+On Wed, May 11, 2022 at 06:25:19PM -0700, Ira wrote:
+> On Thu, Apr 28, 2022 at 08:50:34AM -0700, Christoph Hellwig wrote:
+> > On Tue, Apr 19, 2022 at 10:06:38AM -0700, ira.weiny@intel.com wrote:
+> > > index a77be5630209..32ed07c2994b 100644
+> > > --- a/include/linux/highmem-internal.h
+> > > +++ b/include/linux/highmem-internal.h
+> > > @@ -151,6 +151,8 @@ static inline void totalhigh_pages_add(long count)
+> > >  
+> > >  #else /* CONFIG_HIGHMEM */
+> > >  
+> > > +#include <linux/memremap.h>
+> > 
+> > Uuuh, I'd really prefer to avoid having to pull in memremap.h into
+> > basically the whole kernel build.
+> > 
+> 
+> Fair enough.  What should I call a header to store the new pgmap_set_*() calls?
+> 
+> devmap_prot.h
+> 
+> ?
+> 
+> Or I could just add the calls into highmem-internal.h.  That might be more
+> appropriate given the new direction of that interface.
+> 
+> I think I'm leaning toward that vs adding another header.
 
->     This is an RFC because the current NL_SET_ERR_MSG() macros do not support
->     printf like semantics so I rolled my own buffer setting in __bond_opt_set().
->     The issue is I could not quite figure out the life-cycle of the buffer, if
->     rtnl lock is held until after the text buffer is copied into the packet
->     then we are ok, otherwise, some other type of buffer management scheme will
->     be needed as this could result in corrupted error messages when modifying
->     multiple bonds.
+Ok there is a trade off here which I'm not sure is a good idea.
 
-Might be better for others in long term if NL_SET_ERR_MSG() had printf like
-semantics. Surely this isn't going to be first or last case.
+In order to make kmap faster I carefully placed the devmap_protected() call
+completely inline.[1]  This specifically checks the PGMAP_PROTECTION flag in
+dev_pagemap.[1]
 
-Then internally, it could print right to the netlink message.
+I see only 2 ways of not including memremap.h in highmem-internal.h.
+
+1) Make this check a function call and place it in memremap.c
+2) Move struct dev_pagemap (and it's dependencies) to another header.
+
+Number 2 negates any positive effect of splitting the header file.
+
+Number 1 is going to force some overhead on all ZONE_DEVICE pages if PMEM is in
+the system.
+
+Do you think the extra run time overhead is a reasonable trade off to
+eliminating the header?
+
+Ira
+
+[1] https://lore.kernel.org/lkml/20220419170649.1022246-29-ira.weiny@intel.com/

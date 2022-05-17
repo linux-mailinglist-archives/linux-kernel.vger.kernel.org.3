@@ -2,88 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD1052A75D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1776C52A75A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 17:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350620AbiEQPud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 11:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
+        id S1349674AbiEQPuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 11:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350495AbiEQPuP (ORCPT
+        with ESMTP id S234543AbiEQPuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 11:50:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAB004F47C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652802612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6h7GjHXovS7HJ4Kp5wqYSGdYt0+9AQpi6DLOx1zqHHk=;
-        b=bUeMce+2eB36pTjYH0dRgMEPdTye0Pmc3dsmlzAWlF4ZOyC71yuHIuzh/AirMZoE/uyFcC
-        uKPgPHesr9wsWLjqNXBWmaqOyGzTnJKd0VwPT9hP+I2UUNyztjiM3HEh/owQEuk6u+GcsD
-        tWpu/AgS2RkKehnkL3Et1NbowbXwZck=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-571-20ng5kgcO-CKBmFv_Lz9uA-1; Tue, 17 May 2022 11:50:10 -0400
-X-MC-Unique: 20ng5kgcO-CKBmFv_Lz9uA-1
-Received: by mail-ed1-f69.google.com with SMTP id r8-20020a056402018800b00428b43999feso12171738edv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 08:50:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=6h7GjHXovS7HJ4Kp5wqYSGdYt0+9AQpi6DLOx1zqHHk=;
-        b=nOziIlfju6brrKtkHlX3pnpOb4tyRvp99c5n9mtv+/dT9kCuc9Hem4fqyDDyHsymCI
-         bbqz0RBibtGDKQN6Bu4Gk6LdOfCcE0df6Qof7jltdC04917sAnMSp6xg2+ymEuN1roAl
-         UsxcJURxEqz8i4hmAMjaBjboccH/ZGGIA6onXN2THVJKXpD5uC7VqvJ2uZEDV7J4HHjx
-         ovv18L9TXgIorJVGnvrRTEHNF9kpmbv344IjAt3ILUQxzOsFBbgZZlpdpI40xCDhlzIB
-         l797Vy2NHRHUzW1qOq1uQJe9J73wPK/WyMYoH+VruJHvZWlhfuxz9vGf4DUQquXytkg4
-         VnQg==
-X-Gm-Message-State: AOAM532GqvaOMh9WXafCu6nmmTRqstpSFiROGKYgi16yZxO4y1O4qgTn
-        nCeI2oZUf+lquo7hxFy9pJUPZmmQqNC1J0hCuQ9Pb7xq0f6pU+EXmiXrM/psQU1IUEKAVFfsOH+
-        dUeA4O6O6xgfwHlZ7db7Hb4xE
-X-Received: by 2002:a17:907:1b1c:b0:6f0:10e2:7a9b with SMTP id mp28-20020a1709071b1c00b006f010e27a9bmr21197677ejc.58.1652802609254;
-        Tue, 17 May 2022 08:50:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwauTfVmlCJoRiKhXSBiOeT/A7JIF17V3tL8pRBRkaE+ZWZTtEnTbdgpF/bFVMc/K/bASQynw==
-X-Received: by 2002:a17:907:1b1c:b0:6f0:10e2:7a9b with SMTP id mp28-20020a1709071b1c00b006f010e27a9bmr21197664ejc.58.1652802609081;
-        Tue, 17 May 2022 08:50:09 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id u11-20020a50eacb000000b0042617ba6383sm7426505edp.13.2022.05.17.08.50.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 08:50:08 -0700 (PDT)
-Message-ID: <04f2e08c-4c39-16d3-d785-f36494c6256c@redhat.com>
-Date:   Tue, 17 May 2022 17:50:08 +0200
-MIME-Version: 1.0
+        Tue, 17 May 2022 11:50:14 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2048.outbound.protection.outlook.com [40.107.244.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EEB424AE;
+        Tue, 17 May 2022 08:50:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NnjDqMHaChFnmUDADF8UQvVuGgOvT4kxOI22wpoT+9jaVN/s3/5TjGQ5M7tEESyfEt/jFHD+1ReO670a/T5/jdCoIklaC0XFW89PvDRdk24Nr9r+63uzb5cBjqJHVsNserUB3qbvETDbuNo/NUQ0lTQTT54IvwnYg+8pG6KSAep8iLR36SvO8OY5/JKjQvjZtP1zOK9MmePD/omJ4QEC/hByG0uZXZMz6aDQ65DHB2AOHFVrdICrHoaHvjRWbgazfIpH7h++ErlWPTQa+2mgKYu6Eaxiip2IGWajuhkSemYRvl19YeZnOCK0//NsYLamBu7YwDnymfzQ33Yi7LrlHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+AfdnHkrsB8hvOnfwFuh0+FlxbNKsiOVp9HqYS+8yNo=;
+ b=bZtYnvtOlQmYEdGA7DNySe+j+D3MLK8xiz3MaiaIWiabBb1lVD38rbtTp5FeHNLOM8HAKe4polUJMfxWM/16B8YD4sppn853dCASJMz3IfK/xwR8vh5HdUGWijWTMcogXGTtJhoypm3X5+o6X1cEnUlbGJeXo0w73PYiHo9iDjzbezE7duAk9AVSo6o7lavt1dugw3YNJu7PddrvcZT/3sZGyPvJ1qlPW1SabosS+sQA3LIxX4sBFO37xdC9uyzPm5RcR5cfTveSBaXIWJ8OqIuUZY2V/nkF6CONMfmDqAm79pVrROpFxyS+j+Jt4ZnebddADG2v/IbXfXCblBuDFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+AfdnHkrsB8hvOnfwFuh0+FlxbNKsiOVp9HqYS+8yNo=;
+ b=L1hfk3c0rfnfJgbTm4vLxCM3EW16jHp82RpeuLdjAEl39o++gs72kDj+yAwYwPFKqM5H8G30VKRU2w3S9n5hLfc02tNFKwaq9TsAY0Mayoa+vZkJVAguPqEkHJSkQfJA6i9vSh8R4+T7dWifYpaG6jEoeYam826JiZ8J2rguVGg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DM5PR12MB1594.namprd12.prod.outlook.com (2603:10b6:4:e::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5250.17; Tue, 17 May 2022 15:50:10 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::db8:5b23:acf0:6f9a]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::db8:5b23:acf0:6f9a%4]) with mapi id 15.20.5250.018; Tue, 17 May 2022
+ 15:50:10 +0000
+Message-ID: <e0d23029-21e9-b1bb-9d35-1bfcdd3dca12@amd.com>
+Date:   Tue, 17 May 2022 10:50:08 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: Linux regressions report for mainline [2022-05-09] (was: Linux
- 5.18-rc6)
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3] crypto: ccp - Use kzalloc for sev ioctl interfaces to
+ prevent kernel memory leak
 Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <CAHk-=wi0vqZQUAS67tBsJQW+dtt89m+dqA-Z4bOs8CH-mm8u2w@mail.gmail.com>
- <165209064657.193515.10163777181547077546@leemhuis.info>
- <CAHk-=wj0gHsG6iw3D8ufptm9a_dvTSqrrOFY9WopObbYbyuwnA@mail.gmail.com>
- <54664f6a-b046-1330-e794-cb533e942a94@redhat.com>
-In-Reply-To: <54664f6a-b046-1330-e794-cb533e942a94@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+To:     John Allen <john.allen@amd.com>, herbert@gondor.apana.org.au,
+        linux-crypto@vger.kernel.org
+Cc:     seanjc@google.com, Ashish.Kalra@amd.com,
+        linux-kernel@vger.kernel.org, theflow@google.com,
+        rientjes@google.com, pgonda@google.com, stable@vger.kernel.org
+References: <20220517153958.262959-1-john.allen@amd.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20220517153958.262959-1-john.allen@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-ClientProxiedBy: CH2PR05CA0025.namprd05.prod.outlook.com (2603:10b6:610::38)
+ To DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3fc66352-9727-45ad-3f5d-08da381cec33
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1594:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB159463404095B82503F36105ECCE9@DM5PR12MB1594.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: llMoM5ImIkLM2lKy/msPo7ItNp23dzzSR8hHlZWRINcTnfxi34uJfhLSrD63iFgHaErJbira+0e2kcrT37QfvjB52fmbs5XQCZekQQRya3oh9UFCKSXPlkcBlel2hdM71Y1PQ/kqTnY8MUVpeA7l6PhjxfSdoOt66+mX+C20XcqESe6DrEfhjN3e1YGk5OMJT4rUzvia4Cj98HX4TbwOW4woJD4YbOuuPTtvIcXNZlslPTN6NsWUMQyDcZ3BVvIFH6CoTGw9TaxBr8atbY8NrdbJRg8IU7rZ7QXZvCsdnTayXui4ZWgGqzeV/g6CQBA9omSLTJejUDP3YqPcd8D+BH3IaYJ0A30dXPHAjeuxTjXkTUy/060KMl3ha4FKL72Zi4Kdt+OV1edb6yL318e0a7QAU4hYSngyQP2LPAht3xomUd7B2hyLxVlvLx9q4zeZRDXK3LMtqFj4ev4r2f1lub/cZaBZbqw0vkUVq1ssglpbfh3mhX7+3ij5FWOy4o5PnVB4sZ/NhpkMEfkByTEdSrAUo2GHVi7V8ElMMaOUNBB71gyRGXYToEJfYmGvTTR+cjQD3lpy+7Cvf7RiuQl/6JkxxiZXeGGbP2LvgBbGOhV2tIp2J94yxlLEpiTmaP8VmsdxnziU1YKS0nw/v27bm1cWYTFoY+InDiwpU8Q8bMIVeGSL/OmJ+fbxF2pQn3vh8PCeUQcNz6cO+y9qhz94McED5JZf8bDcj8KJoI/4vsEXu4e49o5lx9mCtbx6Z/zk
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(2616005)(2906002)(4326008)(31696002)(186003)(66476007)(66946007)(31686004)(5660300002)(66556008)(36756003)(53546011)(6506007)(83380400001)(508600001)(6512007)(6486002)(316002)(86362001)(38100700002)(8936002)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2ZjQ0Y4YjdZRS8wWkxDbGRYeVJPdU9EL3NGV3NQRHBrR3kyS0VJMUZNMjhY?=
+ =?utf-8?B?SGFqK3E5YnB1RmNmV1Z2QXIybk5RZS9HVTZDajZGYTRFMmM0dHBlYUJxVFQ1?=
+ =?utf-8?B?U2xLTDRKamMyQTdaRWlpcVhpU3BrR0x4RVpwdXQ4N0tKZ2pwbXV1Y2xjc0Nw?=
+ =?utf-8?B?d0NyYzkreWRnMUZMTFNobFp4VHg3dVlGMVdIaHZvNk45dWgxcHNmTlhOVkI5?=
+ =?utf-8?B?NFdEeXJDQXN3ajllSFRBNkh3bHlzNmN0UndJa0NwRlpqR09jejVuOCs2ak1k?=
+ =?utf-8?B?Sjhza2lRWXIrOFNNNis1VmNpTjIvcFE2b21KUzNIamRVVlgxQm5DMkw3YUFT?=
+ =?utf-8?B?eEZJTDRjYTI4Ykd3SXYvemVuMlNuSTNvU2tKWTRGVXpMR09xbDRkODBNa3dU?=
+ =?utf-8?B?SWNmZnBXVS8vaG95Ykoxd0ZpWjZUV2x1dzExUWttY2VrenlkclFEYkY4d2Zq?=
+ =?utf-8?B?T2k3QU02YXVrWFVuaS9yWkxSa3FRYThXdkc2T2d4dE9YcGswYTNuWGswZU1T?=
+ =?utf-8?B?bCtBYUNpQmkvTW9iKzI2anlqNVR0dElJZFM5WGc5VWt1SHVKN2Z0U1RtMHRB?=
+ =?utf-8?B?cjhrOUJSNGZGc0IvZk90cUVSY3RoK3llUysyTlhVandrNU5oUnUxeS9oc040?=
+ =?utf-8?B?NlV3S3FSSHVoWmE3Tmx2elFvV1JZNnNpOURnWmdUdDBoYTlXRE5vbjIyaUpO?=
+ =?utf-8?B?YlF5YmdiNk5QRENRTVpYZnMyRktISmFLa0plUGN6bjh2OGtDWWxpK0dPMUhD?=
+ =?utf-8?B?dGxhRjQ2THpZS2VQenVxNHNDMGozeVNnVDA1UGc1dWlBSXJreCtlaVZJWmpV?=
+ =?utf-8?B?ZE4vdFlzbXR0dmpVdFFEc2twSkdFNFd2cGc1bU5JMlAzVk54SkNKaUZKdWRE?=
+ =?utf-8?B?Uk40cm9kZGl3U1ZxUkdZQnQ5RnQ0TU1SODA4YW5xSlZrWHFhZEw5YThaOHlp?=
+ =?utf-8?B?dU9DNlNEREJPT0ZWU1ZZcUNVQlZDQjhteWdqRWZTamZRRWhyRVZtRHFsc1VL?=
+ =?utf-8?B?dFV1YXNnSGFWK3NxM0VFcHpBS052S01xb0ZQa1hqSjZ4MnNmTTFqSldCenhr?=
+ =?utf-8?B?cVZML0tvdE9TTVBTR1hiV3VEbExiN09RR2lobU5jZk5sWDZjajBQRndtRmxL?=
+ =?utf-8?B?djNnRXEyZzcyb0ZNb0owUWh2cU1kMytyYXZ6eFhoRWYvNUsrclUraHJtNDQz?=
+ =?utf-8?B?RGltbTVjcWdxandVQ3JVcW5SWUhWSUpEdHVvdndnOU5PQXFLeFlVQVk2VzJj?=
+ =?utf-8?B?MWU3ZmNNU1JDRWNVbVNrQ3JFbXNRU05GUnJ3bndhS05UWkNLaW5HVkxtM0RO?=
+ =?utf-8?B?ZVZTT1UwbU1Lb2R3b1RkWE1uMGI1YWdvRkpGamZxUGE1emJsQzJOemN0dHQ4?=
+ =?utf-8?B?VDJjLzBlUHlEcjQ4QXQvY0ZFTnVpMjIzblBkMnpmMEYvbEI5ekNQbHBNZzJ2?=
+ =?utf-8?B?L3hYTmZtVlhCeWJFNWRIelhIWG55R044Nll5b0RQUjcvYkgyem1aSkMwK1NJ?=
+ =?utf-8?B?NlhpaWNWOVN4eS93ellaLzYzNDBkUFE0UWc4NG51dGUwTURBMzlkb1FoUG44?=
+ =?utf-8?B?NE92TjloSDlzQlJrdEtMRjdWOCs4akhtNzcyOGtRM2o3Z1ZnU2Y1d3FPc1RV?=
+ =?utf-8?B?VmVYdDVpb0VCR0d0TS9pTWgyMEN1c2F6dGFlRHlmZHFvaDBTMnBRQnE3aTlE?=
+ =?utf-8?B?ZXlaKzVQUllzRmJ0VE5xTHNnSDdjbDg4OVA4bTFIQ1FqK0xJSGp4RmUwR3I5?=
+ =?utf-8?B?ZUhIN3hQZnFaK2V6VW9JcVNwRGZrVWNUS0tkVTgvV3h3ZFdhZlB0SC91UDdz?=
+ =?utf-8?B?QkVaU3BsWENOS0p6VzhMRnNNc3ZXamFDMjVrd3hVMllUb2FNQ096dXJaK0Rm?=
+ =?utf-8?B?U0c4b2tpLzhuU2lDaTNqMkczcTBRb3VYcGF2S0QyM0FIVXIxYXJXU2dKNHNY?=
+ =?utf-8?B?emJobG50ZERqVVRIRklEM0o0cnVDV0Q1TitlckZ0Zm9rYTJIOHhmUm1yemlP?=
+ =?utf-8?B?eTZFb0dSTWxDd0ZFdkJ0T3hCWFpnb0RXZzBEcGJCcWFocFcwbTUxWHYvTExx?=
+ =?utf-8?B?ZnZuYlF6WUFOc0VodWtZUGl3WXI0TEN4WTk2VHk0UkxmQy9XTXBXbWVPRDFn?=
+ =?utf-8?B?b1MwM0dzM0lxdFdWRDhwdGxYMlRSbHEwRDVYVmM4ZEQ0MThRZUVyaTFla21I?=
+ =?utf-8?B?L0FTWjNlR0J5TVZNSVowMGg0UVRyalBGUHRMellKMDBibExZOHlOZGd5bW5z?=
+ =?utf-8?B?My9IMDlCUm5pNnlBTS9vNFd0TG9Kdll2RE9pYkt0L2F3T2NwMzdacVF2RG9I?=
+ =?utf-8?B?aS9JOVpQVUhaa0RINU1wUGRTZ0d5SXUzcCtndnQ0eWdTNW9Nc2Q0Zz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fc66352-9727-45ad-3f5d-08da381cec33
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 15:50:10.0461
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: h0AeKZuDEftdFj7EIjJpsoRrYtC1LlniZJOt+xnL3wpeRp9LgIPRSZbTK5xVttMa06zcmU1a0k55iwLJcP6f0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1594
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,55 +129,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 5/9/22 21:04, Hans de Goede wrote:
-> Hi,
+On 5/17/22 10:39, John Allen wrote:
+> For some sev ioctl interfaces, input may be passed that is less than or
+> equal to SEV_FW_BLOB_MAX_SIZE, but larger than the data that PSP
+> firmware returns. In this case, kmalloc will allocate memory that is the
+> size of the input rather than the size of the data. Since PSP firmware
+> doesn't fully overwrite the buffer, the sev ioctl interfaces with the
+> issue may return uninitialized slab memory.
 > 
-> On 5/9/22 19:20, Linus Torvalds wrote:
->> On Mon, May 9, 2022 at 3:47 AM Regzbot (on behalf of Thorsten
->> Leemhuis) <regressions@leemhuis.info> wrote:
->>>
->>> Hi Linus! Here's a quick compilation of open reports about regressions in
->>> 5.18-rc that I'm currently aware of; most of the reports are quite
->>> recent and there afaics is nothing that looks particularly worrisome.
->>
->> Well, the Intel GPU issue seems likely to cause problems for lots of people:
->>
->>> [ *NEW* ] drm/i915: BYT rendering broken due to "Remove short-term pins from execbuf, v6"
->>> -----------------------------------------------------------------------------------------
->>> https://linux-regtracking.leemhuis.info/regzbot/regression/1366349e-f96a-3f2c-3094-f5cd1a6fa31f@redhat.com/
->>> https://lore.kernel.org/dri-devel/1366349e-f96a-3f2c-3094-f5cd1a6fa31f@redhat.com/
->>>
->>> By Hans de Goede; 0 days ago; 2 activities, latest 0 days ago.
->>> Introduced in b5cfe6f7a6e1 (v5.18-rc1)
->>>
->>> Recent activities from: Tvrtko Ursulin (1), Hans de Goede (1)
->>
->> Although it looks possible that it mainly affects old chipsets (ie the
->> two reports are for a Bay Trail chip and a Core 2 Duo chip - I have no
->> idea how they compare).
->>
->> That probably means there are a lot of machines out there, but likely
->> not the kind that most kernel developers will be testing, so not a ton
->> of reports until it hits distro kernels etc.
->>
->> It looks like Maarten is already involved.
+> Currently, all of the ioctl interfaces in the ccp driver are safe, but
+> to prevent future problems, change all ioctl interfaces that allocate
+> memory with kmalloc to use kzalloc and memset the data buffer to zero in
+> sev_ioctl_do_platform_status.
 > 
-> This is being tracked here:
-> https://gitlab.freedesktop.org/drm/intel/-/issues/5806
+> Fixes: e799035609e15 ("crypto: ccp: Implement SEV_PEK_CSR ioctl command")
+> Fixes: 76a2b524a4b1d ("crypto: ccp: Implement SEV_PDH_CERT_EXPORT ioctl command")
+> Fixes: d6112ea0cb344 ("crypto: ccp - introduce SEV_GET_ID2 command")
+> Cc: stable@vger.kernel.org
+> Reported-by: Andy Nguyen <theflow@google.com>
+> Suggested-by: David Rientjes <rientjes@google.com>
+> Suggested-by: Peter Gonda <pgonda@google.com>
+> Signed-off-by: John Allen <john.allen@amd.com>
+> ---
+> v2:
+>    - Add fixes tags and CC stable@vger.kernel.org
+> v3:
+>    - memset data buffer to zero in sev_ioctl_do_platform_status
+> ---
+>   drivers/crypto/ccp/sev-dev.c | 10 ++++++----
+>   1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> I've just tested a patch from Maarten which fixes things for me,
-> so hopefully we can get this resolved soon.
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index 6ab93dfd478a..da143cc3a8f5 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -551,6 +551,8 @@ static int sev_ioctl_do_platform_status(struct sev_issue_cmd *argp)
+>   	struct sev_user_data_status data;
+>   	int ret;
+>   
+> +	memset(&data, 0, sizeof(data));
+> +
 
-Maarten, it would be nice if we can get this fixed before 5.18
-is released. What is the status of getting your:
+Probably needs an additional Fixes: tag now?
 
-https://patchwork.freedesktop.org/patch/485889/
+Fixes: 38103671aad3 ("crypto: ccp: Use the stack and common buffer for status commands")
 
-patch for this merged ?
+Thanks,
+Tom
 
-Regards,
-
-Hans
-
+>   	ret = __sev_do_cmd_locked(SEV_CMD_PLATFORM_STATUS, &data, &argp->error);
+>   	if (ret)
+>   		return ret;
+> @@ -604,7 +606,7 @@ static int sev_ioctl_do_pek_csr(struct sev_issue_cmd *argp, bool writable)
+>   	if (input.length > SEV_FW_BLOB_MAX_SIZE)
+>   		return -EFAULT;
+>   
+> -	blob = kmalloc(input.length, GFP_KERNEL);
+> +	blob = kzalloc(input.length, GFP_KERNEL);
+>   	if (!blob)
+>   		return -ENOMEM;
+>   
+> @@ -828,7 +830,7 @@ static int sev_ioctl_do_get_id2(struct sev_issue_cmd *argp)
+>   	input_address = (void __user *)input.address;
+>   
+>   	if (input.address && input.length) {
+> -		id_blob = kmalloc(input.length, GFP_KERNEL);
+> +		id_blob = kzalloc(input.length, GFP_KERNEL);
+>   		if (!id_blob)
+>   			return -ENOMEM;
+>   
+> @@ -947,14 +949,14 @@ static int sev_ioctl_do_pdh_export(struct sev_issue_cmd *argp, bool writable)
+>   	if (input.cert_chain_len > SEV_FW_BLOB_MAX_SIZE)
+>   		return -EFAULT;
+>   
+> -	pdh_blob = kmalloc(input.pdh_cert_len, GFP_KERNEL);
+> +	pdh_blob = kzalloc(input.pdh_cert_len, GFP_KERNEL);
+>   	if (!pdh_blob)
+>   		return -ENOMEM;
+>   
+>   	data.pdh_cert_address = __psp_pa(pdh_blob);
+>   	data.pdh_cert_len = input.pdh_cert_len;
+>   
+> -	cert_blob = kmalloc(input.cert_chain_len, GFP_KERNEL);
+> +	cert_blob = kzalloc(input.cert_chain_len, GFP_KERNEL);
+>   	if (!cert_blob) {
+>   		ret = -ENOMEM;
+>   		goto e_free_pdh;

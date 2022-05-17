@@ -2,175 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A976552ADB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B4452ADB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 23:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiEQVwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 17:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
+        id S229749AbiEQVxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 17:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiEQVw2 (ORCPT
+        with ESMTP id S229706AbiEQVxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 17:52:28 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BAF4CD75
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:52:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id f2so178055wrc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:52:27 -0700 (PDT)
+        Tue, 17 May 2022 17:53:00 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FED5159F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:52:59 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id v10so393967pgl.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:52:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aMzWkBZQL9aXbZvmMQEZqAkqSC2fGMMdXYlck3K8ttk=;
-        b=lRZ5GxxxrkWxHuTV9nhyvyTmdpz78TOI1zQA1xl82f7kTLOB3C3gakvuMQbXDJXl2J
-         fogZI6IRq2L0TyIBR/A2xVS650k799Zw2lpmLrIq6BDVqOgi8hE7V6afS8zj/ASXKIML
-         hBwLR1q4KHyqWqK02TMxkkTUfiMmnIqO/KZQUBnZY7i4cpePrAZ7IcaqWfDjdYjhsEuv
-         CETs/qZ6oMbCJA3bXYsZ1e739HI5xqLkrgtNhwmuDCLZtqFcXquVY4QfqTGpKwF+W/p1
-         5Nqm7UL1nc1wjchOez5kkQqqyoXFBp6pKjpGucj3YGrBFFJ489gN2zLQOxiFk0KMwXRv
-         IEIA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=qTq76WexBV0JNyRRFUKu1P5KggbbCHsuVBAPQSD8ruw=;
+        b=WKfDVvhKWDSZfPwR0R3nD6JkuqRrEYYVJ/NT1Nz5iBgc5Y3lkZv4Po6hC5icvlkZ2P
+         6W+u7wffkTAUNO/7GndZ2Kpd5+Pnsqqk/YJ+dDPXGtWsgc+yVxpoHpYX/oj+b+hojB/m
+         fe8gcoVa/DhqnThJ075JV4mbj/8RwTs39NCC8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aMzWkBZQL9aXbZvmMQEZqAkqSC2fGMMdXYlck3K8ttk=;
-        b=SQPpB13D+P1Hebk4stI6jffMCIl8ndl1UuP0AcJuj3AP7sbAzg4ECmKFcQ4f+2TV7e
-         9ACfuX094SYstWr9lC8Se6yBJDStTKUXtEKkafNJH8y13ABq80h/LSiqL3e3L88aqw8i
-         SR4O1riwRYL8gfVukw2qG98PEFVQPRgaIBzC3xH9EA9emcygTSf5N0x+HvEfG17poxe+
-         o9uJxawrJ9AkfmFDZjxjvIbaNbqg1R1d+8YGLn3jA1zE6PKCKD0zPpz9vAzqm6BwhPSj
-         RBhztXtB/piqKYYieVYLrRPpIIOgU+OlBBoiyq+I0mEkTBob/pSeAG3f3l0RyQo1BzGn
-         w+Yg==
-X-Gm-Message-State: AOAM532xKG/kwQK6SkiI5Bh2zjpQuwcQbYl/d1T0MtczJEaBcGKLPHPX
-        E51bk++rCpbSeHElCdCVJlyfwLmxbtZ9SNQzV1WpdiCfQe+tFw==
-X-Google-Smtp-Source: ABdhPJwkD4NBCsYJCrEGudQHrl3n4XCoQFQunN5fD0Av9+UeGss5C/xYh6EoMYvlQ2BTtWl6HgiteKNolpbFPYtmWKA=
-X-Received: by 2002:adf:fb05:0:b0:20a:e113:8f3f with SMTP id
- c5-20020adffb05000000b0020ae1138f3fmr20501121wrr.534.1652824345517; Tue, 17
- May 2022 14:52:25 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=qTq76WexBV0JNyRRFUKu1P5KggbbCHsuVBAPQSD8ruw=;
+        b=t6e5Gu3oM9N0O+Bx8Yp46ti6PfnluCXwHzefLhzeFaoe5uaL3atM+aBprzWzVEVT3t
+         sUzHahp9lXpuZe7fHi7nffZyBRVfKfu8jKDcjeh6JLkEzg462BDfIY8zPdlpOLfMSOeH
+         0ZJIYtxT3dB3h0NZVkn2rSiA0/vGvMVbWvD1xIijw8Qpq0AwDiGVw+/6IBzWGELOTPiy
+         M6eBDDP5n4DAQzAAFaG16KXpQyA2MpXqpxe1Jkx2F1iAb8+cSq7ZwgKD+8kQtDHFavNN
+         woDnGeat585eoKPI4wW9GgKb8+yPIwuGsaTwO5MBo+izFyDLFKUvZ6OlExrPyQiowq0a
+         2g4A==
+X-Gm-Message-State: AOAM533ZCIuZjn/Q4jMNJpxMXaK0UFk4SzRNq4xTJzDL1WP32nAKdRao
+        iyELk3pGRv0sh/YJ7pA7YLOEChQk4o/o3Q==
+X-Google-Smtp-Source: ABdhPJxk4MDeCaMJr0rnFLcT0JlYl4qymEx4H2CwxmdDPMOBrKp45ToZgHDIYqghYn9z/XgRGpnSPw==
+X-Received: by 2002:a65:5c48:0:b0:382:2c7:28e9 with SMTP id v8-20020a655c48000000b0038202c728e9mr21494730pgr.472.1652824379139;
+        Tue, 17 May 2022 14:52:59 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u2-20020a1709026e0200b00161455d8029sm113731plk.12.2022.05.17.14.52.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 14:52:58 -0700 (PDT)
+Date:   Tue, 17 May 2022 14:52:58 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Subject: [GIT PULL] lkdtm updates for -next
+Message-ID: <202205171451.EE8E27685@keescook>
 MIME-Version: 1.0
-References: <20220515023504.1823463-1-yosryahmed@google.com>
- <20220515023504.1823463-3-yosryahmed@google.com> <20220517020840.vyfp5cit66fs2k2o@MBP-98dd607d3435.dhcp.thefacebook.com>
-In-Reply-To: <20220517020840.vyfp5cit66fs2k2o@MBP-98dd607d3435.dhcp.thefacebook.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 17 May 2022 14:51:49 -0700
-Message-ID: <CAJD7tkbDtO=wDXFDDmnPLDnEeXG6JQXr=xqqeim+OEC6xTOCew@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 2/7] cgroup: bpf: flush bpf stats on rstat flush
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 7:08 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sun, May 15, 2022 at 02:34:59AM +0000, Yosry Ahmed wrote:
-> > +
-> > +void bpf_rstat_flush(struct cgroup *cgrp, int cpu)
-> > +{
-> > +     struct bpf_rstat_flusher *flusher;
-> > +     struct bpf_rstat_flush_ctx ctx = {
-> > +             .cgrp = cgrp,
-> > +             .parent = cgroup_parent(cgrp),
-> > +             .cpu = cpu,
-> > +     };
-> > +
-> > +     rcu_read_lock();
-> > +     migrate_disable();
-> > +     spin_lock(&bpf_rstat_flushers_lock);
-> > +
-> > +     list_for_each_entry(flusher, &bpf_rstat_flushers, list)
-> > +             (void) bpf_prog_run(flusher->prog, &ctx);
-> > +
-> > +     spin_unlock(&bpf_rstat_flushers_lock);
-> > +     migrate_enable();
-> > +     rcu_read_unlock();
-> > +}
-> > diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-> > index 24b5c2ab5598..0285d496e807 100644
-> > --- a/kernel/cgroup/rstat.c
-> > +++ b/kernel/cgroup/rstat.c
-> > @@ -2,6 +2,7 @@
-> >  #include "cgroup-internal.h"
-> >
-> >  #include <linux/sched/cputime.h>
-> > +#include <linux/bpf-rstat.h>
-> >
-> >  static DEFINE_SPINLOCK(cgroup_rstat_lock);
-> >  static DEFINE_PER_CPU(raw_spinlock_t, cgroup_rstat_cpu_lock);
-> > @@ -168,6 +169,7 @@ static void cgroup_rstat_flush_locked(struct cgroup *cgrp, bool may_sleep)
-> >                       struct cgroup_subsys_state *css;
-> >
-> >                       cgroup_base_stat_flush(pos, cpu);
-> > +                     bpf_rstat_flush(pos, cpu);
->
-> Please use the following approach instead:
->
-> __weak noinline void bpf_rstat_flush(struct cgroup *cgrp, struct cgroup *parent, int cpu)
-> {
-> }
->
-> and change above line to:
->   bpf_rstat_flush(pos, cgroup_parent(pos), cpu);
->
-> Then tracing bpf fentry progs will be able to attach to bpf_rstat_flush.
-> Pretty much the patches 1, 2, 3 are not necessary.
-> In patch 4 add bpf_cgroup_rstat_updated/flush as two kfuncs instead of stable helpers.
->
-> This way patches 1,2,3,4 will become 2 trivial patches and we will be
-> able to extend the interface between cgroup rstat and bpf whenever we need
-> without worrying about uapi stability.
->
-> We had similar discusison with HID subsystem that plans to use bpf in HID
-> with the same approach.
-> See this patch set:
-> https://lore.kernel.org/bpf/20220421140740.459558-2-benjamin.tissoires@redhat.com/
-> You'd need patch 1 from it to enable kfuncs for tracing.
->
-> Your patch 5 is needed as-is.
-> Yonghong,
-> please review it.
-> Different approach for patch 1-4 won't affect patch 5.
-> Patches 6 and 7 look good.
->
-> With this approach that patch 7 will mostly stay as-is. Instead of:
-> +SEC("rstat/flush")
-> +int vmscan_flush(struct bpf_rstat_flush_ctx *ctx)
-> +{
-> +       struct vmscan_percpu *pcpu_stat;
-> +       struct vmscan *total_stat, *parent_stat;
-> +       struct cgroup *cgrp = ctx->cgrp, *parent = ctx->parent;
->
-> it will become
->
-> SEC("fentry/bpf_rstat_flush")
-> int BPF_PROG(vmscan_flush, struct cgroup *cgrp, struct cgroup *parent, int cpu)
+Hi Greg,
 
-Thanks so much for taking the time to look into this.
+Please pull these lkdtm updates for -next (preferably for the coming
+merge window).
 
-Indeed, this approach looks cleaner and simpler. I will incorporate
-that into a V1 and send it. Thanks!
+Thanks!
+
+-Kees
+
+The following changes since commit 2a0338769f27a38b5dd60b6bef5b83003789439b:
+
+  lkdtm: cfi: Fix type width for masking PAC bits (2022-04-26 17:11:05 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/lkdtm-next
+
+for you to fetch changes up to f260fd59e3f387432bda51072fff4494fba10b91:
+
+  lkdtm/heap: Hide allocation size from -Warray-bounds (2022-05-17 14:47:08 -0700)
+
+----------------------------------------------------------------
+lkdtm updates for -next
+
+- Test for new usercopy memory regions
+- avoid GCC 12 warnings
+- update expected CONFIGs for selftests
+
+----------------------------------------------------------------
+Kees Cook (3):
+      lkdtm/usercopy: Rename "heap" to "slab"
+      lkdtm/usercopy: Check vmalloc and >0-order folios
+      lkdtm/heap: Hide allocation size from -Warray-bounds
+
+Muhammad Usama Anjum (1):
+      selftests/lkdtm: Add configs for stackleak and "after free" tests
+
+ drivers/misc/lkdtm/heap.c               |   1 +
+ drivers/misc/lkdtm/usercopy.c           | 113 +++++++++++++++++++++++++++-----
+ tools/testing/selftests/lkdtm/config    |   2 +
+ tools/testing/selftests/lkdtm/tests.txt |   8 +--
+ 4 files changed, 105 insertions(+), 19 deletions(-)
+
+-- 
+Kees Cook

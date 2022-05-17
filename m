@@ -2,83 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBA752A115
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7314252A119
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241635AbiEQMC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
+        id S1345793AbiEQMCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345715AbiEQMCD (ORCPT
+        with ESMTP id S1345788AbiEQMCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:02:03 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521542A709;
-        Tue, 17 May 2022 05:01:42 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id d15so30885934lfk.5;
-        Tue, 17 May 2022 05:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1XEfcTfh5IBE4Hjq7tgRfCnyVEzUbgopQ2XduZTHdoY=;
-        b=JsoIPfQZlAqsSaswROdKslKyG/uZD3znk3WFv+pc2Cjlwgs8av4+twevvWm9xqngtE
-         qBhT3LmHzN93yhSzjBckOWuSoOj162DzbXzGdHMCi/7byVkjMITOwZmsw6YVsTOzErB9
-         9EuPWUL9A9mpwqNpFhrPEA54Ptp+D4/cNopmpOQ8FTtxb6+s1HC0s7l216032h2qixBK
-         sb8mtRG0V/p8VmT09slzOqk5HZqLRy5QSAY4MYtZnNFTKcH3Ji0Q/+BXg/7gzrnJffWe
-         NVYUDdSkUj5q97JDjff9uT2Rcu3hNEuao+cEWu1KzvAm/tmUGjQLndkq4v4+yNrCKisU
-         EnOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1XEfcTfh5IBE4Hjq7tgRfCnyVEzUbgopQ2XduZTHdoY=;
-        b=FEDV0CCHg7TFvP7STxFHLuQk0p8x9CRoVR3o3qoGsW4fcH3XLG4vfdzDjTKJ6WSURq
-         jJFe4xlbj7jIg3aLwJMwWPUQXlD+FaHOcFvfl/aCqz79yWFp4BfkBTmv2GVeK14CF2mR
-         30s5wt53yrAAiNqmEcuUQsVAx6ZdfR7jBuMTso/8ZPSdR/LcAA+a70TEbx0hRTIvncI7
-         yx884dmeG6n/43pPyiBnTBZXWZO6ZthkIA6qGgJA+8bmckLSHDM1jIYVxG2u1LV9Tg9S
-         jX2MZHT9jnSejIH2kg4ZDXjzFVtHhr66mk02cvxHHw1R1yUAGp0f4OAlrbChVgLsFwdS
-         LHIQ==
-X-Gm-Message-State: AOAM5307vUiZzyM1EBZ1IK0U2mbI7rcRSmyH2YCtziMduJzpKh50ocDl
-        7L2eq/06j7NIx3940M6+kas=
-X-Google-Smtp-Source: ABdhPJyw6crfKTxgnFRCnsGY6+gLCyX9jN1UKVLmG7EouLUk9AG2WbNzvsc1rSStulGPSfMQci/JcA==
-X-Received: by 2002:a05:6512:b10:b0:477:a556:4ab6 with SMTP id w16-20020a0565120b1000b00477a5564ab6mr1938339lfu.385.1652788898914;
-        Tue, 17 May 2022 05:01:38 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id p17-20020a2eb7d1000000b0024f3d1dae8csm1869603ljo.20.2022.05.17.05.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 05:01:38 -0700 (PDT)
-Date:   Tue, 17 May 2022 15:01:36 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-clk@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] clk: baikal-t1: Move reset-controls code into a
- dedicated module
-Message-ID: <20220517120136.mg6ihyzjb6rme6lc@mobilestation>
-References: <20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru>
- <20220503205722.24755-4-Sergey.Semin@baikalelectronics.ru>
- <20220517073729.2FAE2C385B8@smtp.kernel.org>
+        Tue, 17 May 2022 08:02:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D72FBAE68
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:02:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E40B1042;
+        Tue, 17 May 2022 05:02:06 -0700 (PDT)
+Received: from [10.57.82.55] (unknown [10.57.82.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E27C03F66F;
+        Tue, 17 May 2022 05:02:04 -0700 (PDT)
+Message-ID: <8f193bdd-3a0a-f9ed-0726-e6081f374320@arm.com>
+Date:   Tue, 17 May 2022 13:02:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517073729.2FAE2C385B8@smtp.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH] dma-iommu: Add iommu_dma_max_mapping_size()
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
+        will@kernel.org, hch@lst.de, m.szyprowski@samsung.com
+Cc:     chenxiang66@hisilicon.com, thunder.leizhen@huawei.com,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        liyihang6@hisilicon.com
+References: <1652706361-92557-1-git-send-email-john.garry@huawei.com>
+ <f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com>
+ <9160031b-50be-6993-5a8e-f238391962c5@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <9160031b-50be-6993-5a8e-f238391962c5@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,44 +49,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 12:37:26AM -0700, Stephen Boyd wrote:
-> Quoting Serge Semin (2022-05-03 13:57:21)
-> > Before adding the directly controlled resets support it's reasonable to
-> > move the existing resets control functionality into a dedicated object for
-> > the sake of the CCU dividers clock driver simplification. After the new
-> > functionality is added clk-ccu-div.c would have got to a mixture of the
-> > weakly dependent clocks and resets methods. Splitting the methods up into
-> > the two objects will make code easier to read especially seeing it isn't
-> > that hard to do.
-> > 
-> > As before the CCU reset module will support the trigger-like CCU resets
-> > only, which are responsible for the AXI-bus, APB-bus and SATA-ref blocks
-> > reset. The assert/de-assert-capable reset controls support will be added
-> > in the next commit.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/clk/baikal-t1/Kconfig       |  12 +-
-> >  drivers/clk/baikal-t1/Makefile      |   1 +
-> >  drivers/clk/baikal-t1/ccu-rst.c     | 258 ++++++++++++++++++++++++++++
-> >  drivers/clk/baikal-t1/ccu-rst.h     |  60 +++++++
-> >  drivers/clk/baikal-t1/clk-ccu-div.c |  94 ++--------
+On 2022-05-17 12:26, John Garry wrote:
+> On 17/05/2022 11:40, Robin Murphy wrote:
+>> On 2022-05-16 14:06, John Garry wrote:
+>>> For streaming DMA mappings involving an IOMMU and whose IOVA len 
+>>> regularly
+>>> exceeds the IOVA rcache upper limit (meaning that they are not cached),
+>>> performance can be reduced.
+>>>
+>>> Add the IOMMU callback for DMA mapping API dma_max_mapping_size(), which
+>>> allows the drivers to know the mapping limit and thus limit the 
+>>> requested
+>>> IOVA lengths.
+>>>
+>>> This resolves the performance issue originally reported in [0] for a 
+>>> SCSI
+>>> HBA driver which was regularly mapping SGLs which required IOVAs in
+>>> excess of the IOVA caching limit. In this case the block layer limits 
+>>> the
+>>> max sectors per request - as configured in __scsi_init_queue() - which
+>>> will limit the total SGL length the driver tries to map and in turn 
+>>> limits
+>>> IOVA lengths requested.
+>>>
+>>> [0] 
+>>> https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/ 
+>>>
+>>>
+>>> Signed-off-by: John Garry <john.garry@huawei.com>
+>>> ---
+>>> Sending as an RFC as iommu_dma_max_mapping_size() is a soft limit, 
+>>> and not
+>>> a hard limit which I expect is the semantics of 
+>>> dma_map_ops.max_mapping_size
+>>
+>> Indeed, sorry but NAK for this being nonsense. As I've said at least 
+>> once before, if the unnecessary SAC address allocation attempt slows 
+>> down your workload, make it not do that in the first place. If you 
+>> don't like the existing command-line parameter then fine, > there are 
+>> plenty of
+>> other options, it just needs to be done in a way that doesn't break 
+>> x86 systems with dodgy firmware, as my first attempt turned out to.
 > 
+> Sorry, but I am not interested in this. It was discussed in Jan last 
+> year without any viable solution.
 
-> Perhaps this should be done via the auxiliary bus by having the clk
-> driver register the reset driver and have some private API to pass any
-> data to the reset driver? Then the whole file could be in
-> drivers/reset/, reviewed and maintained by the reset maintainer.
+Er, OK, if you're not interested in solving that problem I don't see why 
+you'd bring it up, but hey ho. *I* still think it's important, so I 
+guess I'll revive my old patch with a CONFIG_X86 bodge and have another 
+go at some point.
 
-I'd rather stick to the current design in the same way as the most of
-the OF-based platform clock drivers. Completely splitting the reset
-and clock parts isn't that easy is it seems like (though the main part
-has been done in the framework of this patchset). AXI/APB-interface
-reset controls are tightly coupled with the AXI/APB-clock domains at
-least by having the same CSRs. Due to that the corresponding AXI-clock
-domains reset functionality will need to be left in the
-drivers/clk/baikal-t1/clk-ccu* module. It makes the movement isn't
-that justified and will result in needless code complications and the
-code coherency worsening.
+> Anyway we still have the long-term IOVA aging issue, and requesting 
+> non-cached IOVAs is involved in that. So I would rather keep the SCSI 
+> driver to requesting cached IOVAs all the time.
+> 
+> I did try to do it the other way around - configuring the IOVA caching 
+> range according to the drivers requirement but that got nowhere.
 
--Sergey
+FWIW I thought that all looked OK, it just kept getting drowned out by 
+more critical things in my inbox so I hoped someone else might comment. 
+If it turns out that I've become the de-facto IOVA maintainer in 
+everyone else's minds now and they're all waiting for my word then fair 
+enough, I just need to know and reset my expectations accordingly. Joerg?
+
+>> Furthermore, if a particular SCSI driver doesn't benefit from mappings 
+>> larger than 256KB, then that driver is also free to limit its own 
+>> mapping size. There are other folks out there with use-cases for 
+>> mapping *gigabytes* at once; you don't get to cripple the API and say 
+>> that that's suddenly not allowed just because it happens to make your 
+>> thing go faster, that's absurd.
+> 
+> I'd say less catastrophically slow, not faster.
+> 
+> So how to inform the SCSI driver of this caching limit then so that it 
+> may limit the SGL length?
+
+Driver-specific mechanism; block-layer-specific mechanism; redefine this 
+whole API to something like dma_opt_mapping_size(), as a limit above 
+which mappings might become less efficient or start to fail (callback to 
+my thoughts on [1] as well, I suppose); many options. Just not imposing 
+a ridiculously low *maximum* on everyone wherein mapping calls "should 
+not be larger than the returned value" when that's clearly bollocks.
+
+Cheers,
+Robin.
+
+[1] 
+https://lore.kernel.org/linux-iommu/20220510142109.777738-1-ltykernel@gmail.com/

@@ -2,163 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FFC52A348
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:24:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D4D52A35C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346618AbiEQNYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S1347731AbiEQN2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243615AbiEQNYr (ORCPT
+        with ESMTP id S1346419AbiEQN22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:24:47 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBC042EF3;
-        Tue, 17 May 2022 06:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652793876;
-        bh=chPWBUzZEK38/cCzN4Tnk5e6iV1JZN6qpcNu8tbABrg=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Umrk/MVOaTUOrHUnbMniaWfY9K/TeXGSBXdl2qsQU5sdUbaHPboh1hkZCYqzyc7re
-         htG/4NLkAaZaCgik1fx8GS3XqJSSi6olfyIab0Le243VEbT2+sE+Cnk2CvlxM+4gCx
-         YLAgv6gDKVntU8TremLkW47skYueTl7cNAeboQYQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mf0BM-1nNgyc0TwQ-00gYKJ; Tue, 17
- May 2022 15:24:36 +0200
-Date:   Tue, 17 May 2022 15:24:34 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Marvin Lin <milkfafa@gmail.com>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kwliu@nuvoton.com,
-        tmaimon77@gmail.com, avifishman70@gmail.com,
-        openbmc@lists.ozlabs.org, tali.perry1@gmail.com, kflin@nuvoton.com
-Subject: Re: [PATCH v1 2/5] dt-bindings: media: Add dt-bindings for NPCM
- Video Capture/Encode Engine
-Message-ID: <YoOiEtY822XQ+JYl@latitude>
-References: <20220512072722.25005-1-kflin@nuvoton.com>
- <20220512072722.25005-3-kflin@nuvoton.com>
+        Tue, 17 May 2022 09:28:28 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0519434B4;
+        Tue, 17 May 2022 06:28:24 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4DBA821CC7;
+        Tue, 17 May 2022 13:28:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652794103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m8eH28qbE+2Xy0DKW3X9feLJxxFiFeYxt7IWdkwBacU=;
+        b=D3nbGBAQ9bCKnB1WwjJRY0SPMWZeGE7s6okektsDFoMjSCg4MWkDlGu0CaIrnv72L2dSjB
+        TH4hbCd7WNPBQBo5APMhOgzqiXxMfJKdv72h+T8GhDipQ36bscz5ULSJq0aGA9QxAaz7ZE
+        2DHOtfp4NZ3vqG8gLdmAnQza/SAFmg4=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DE9622C141;
+        Tue, 17 May 2022 13:28:20 +0000 (UTC)
+Date:   Tue, 17 May 2022 15:28:20 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        kexec@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Message-ID: <YoOi9PFK/JnNwH+D@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
+ <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+ <CAE=gft7ds+dHfEkRz8rnSH1EbTpGTpKbi5Wxj9DW0Jr5mX_j4w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kYh3ep2r/8CyteCm"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220512072722.25005-3-kflin@nuvoton.com>
-X-Provags-ID: V03:K1:uE4d+DLiRj04CDPtCPs1nhzxYQaiLH/NdLjpSsQf0mbXsdhAYzk
- /XsOHXkmtR2jA8EdEevnRDvlyPxTi8ciqjvyrMTbvbN0O/qWQQr9eO2k9X2wLdl3h+fc89g
- vEpFuiELMSy8gqwo7zcoEVr5P5nq1tqtj4plFoS5DFgGJHyzyvQCN+HVYMs0DEnj+6kJVGT
- uqc+cC7sY3fg15QsAQvvQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+57fJft9JUQ=:PLr42ZRI3X91jn9RNUU52S
- hpQuu9DSnkvehU80br3h36XOf+TGkwpyMBHM7myy8cLTxgAVC/MLtgIvdG9q472kEmyP0EJro
- b80NdPoPnSuc52MAASBWiLHpBgzLj66yGJP/lBC81ZIJweSTwKd9xDZOhQjHZKHbYf+QIBMyA
- Z9Of6MnUjyYsgvygvNwSdRPvRz4xqOHVMur86uplbXUcVutuOuvYRtSmH5Z7pUQiRcRd2wFmE
- ENRaxVZffu5OZywypLBwtCcGcuI89V+itqvL0AEfMMQxSJRTrmE0rKyuEf+4af3m+mmOzTqV7
- BAoQE0Cs5fEWhlcmc2gaxiiMirNJlrW0MsmiMyYP5kdP+UebCVgTpfnk3Zq6Ft1q36vVQI2os
- Q9QvtryLzh22eRGkVDYoNEH64LgsWJamMjsp4o7GFpEzRXMRVMOcjG8iujo4TXVAvC+O1R1F3
- AJ0wC6I46Uq5WtpWI1mU8vjNuEIeRSSlGNZ2FBQMwTxYdZVPcNmMVKRF92YWY2kl8BlE4u6ar
- 46x/20ahaI/zVkL8QVn7b1PhQn3rSgBWeK1D1uRGDavW8g5jwNHuzZut7VuaANR4t80irdBUj
- gHhQjyWBzmFaqmOtS2FfiFx0REm/q5EJ3lk6aeZ3fFD3fXGHFz7B1yXvCWes+ghqmDJdxmDuu
- Eb1UD8C67TaJH3CpQx5/nPXo7ifDbKYNW2Xu/fNvau2D+AqW8Bcdb/xSKz/bRu440iRJUCMD7
- QO1FEreQtrz/To6tKwDUD0tA0UAL22rAlc8NYx9bEINBtZik0Ff4GQLFdTx7WiosxmRWl91oU
- WtYEJwmyszWjOayiYEPy9NhtOyZblJhnnqXlq7W2bIyX0Vuzzqq9TZUenyhfo65M5rNwntB3C
- J7KsdKdWUKmpuzKQNp9HN3zGeNhlcmPr9JyXZ0542Cb6mgAdztIWWI308Z2LDIBEkv1/GLutu
- 2F0f5m4xbzO8k3H/T5HURVfEulF82tuI+y7u8mA6MKf9wDERphV8szZDIHkOBexqfnToAf9S8
- TOqdGQMQ1x0f/Wha8UIynR9FmI6a3qATeyNxk/7BwuDbHjwraSF1zcVTvry9cBxjN3bVigu3q
- gkBQ+MlS1RUTCed+RzwWawab7MO0mCbAUEyYesjhfDBtCn5dwUJSgpM5w==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAE=gft7ds+dHfEkRz8rnSH1EbTpGTpKbi5Wxj9DW0Jr5mX_j4w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 2022-05-16 09:02:10, Evan Green wrote:
+> On Mon, May 16, 2022 at 8:07 AM Guilherme G. Piccoli
+> <gpiccoli@igalia.com> wrote:
+> >
+> > Thanks for the review!
+> >
+> > I agree with the blinking stuff, I can rework and add all LED/blinking
+> > stuff into the loop list, it does make sense. I'll comment a bit in the
+> > others below...
+> >
+> > On 16/05/2022 11:01, Petr Mladek wrote:
+> > > [...]
+> > >> --- a/arch/mips/sgi-ip22/ip22-reset.c
+> > >> +++ b/arch/mips/sgi-ip22/ip22-reset.c
+> > >> @@ -195,7 +195,7 @@ static int __init reboot_setup(void)
+> > >>      }
+> > >>
+> > >>      timer_setup(&blink_timer, blink_timeout, 0);
+> > >> -    atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> > >> +    atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
+> > >
+> > > This notifier enables blinking. It is not much safe. It calls
+> > > mod_timer() that takes a lock internally.
+> > >
+> > > This kind of functionality should go into the last list called
+> > > before panic() enters the infinite loop. IMHO, all the blinking
+> > > stuff should go there.
+> > > [...]
+> > >> --- a/arch/mips/sgi-ip32/ip32-reset.c
+> > >> +++ b/arch/mips/sgi-ip32/ip32-reset.c
+> > >> @@ -145,7 +144,7 @@ static __init int ip32_reboot_setup(void)
+> > >>      pm_power_off = ip32_machine_halt;
+> > >>
+> > >>      timer_setup(&blink_timer, blink_timeout, 0);
+> > >> -    atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> > >> +    atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
+> > >
+> > > Same here. Should be done only before the "loop".
+> > > [...]
+> >
+> > Ack.
+> >
+> >
+> > >> --- a/drivers/firmware/google/gsmi.c
+> > >> +++ b/drivers/firmware/google/gsmi.c
+> > >> @@ -1034,7 +1034,7 @@ static __init int gsmi_init(void)
+> > >>
+> > >>      register_reboot_notifier(&gsmi_reboot_notifier);
+> > >>      register_die_notifier(&gsmi_die_notifier);
+> > >> -    atomic_notifier_chain_register(&panic_notifier_list,
+> > >> +    atomic_notifier_chain_register(&panic_hypervisor_list,
+> > >>                                     &gsmi_panic_notifier);
+> > >
+> > > I am not sure about this one. It looks like some logging or
+> > > pre_reboot stuff.
+> > >
+> >
+> > Disagree here. I'm looping Google maintainers, so they can comment.
+> > (CCed Evan, David, Julius)
+> >
+> > This notifier is clearly a hypervisor notification mechanism. I've fixed
+> > a locking stuff there (in previous patch), I feel it's low-risk but even
+> > if it's mid-risk, the class of such callback remains a perfect fit with
+> > the hypervisor list IMHO.
+>
+> This logs a panic to our "eventlog", a tiny logging area in SPI flash
+> for critical and power-related events. In some cases this ends up
+> being the only clue we get in a Chromebook feedback report that a
+> panic occurred, so from my perspective moving it to the front of the
+> line seems like a good idea.
 
---kYh3ep2r/8CyteCm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+IMHO, this would really better fit into the pre-reboot notifier list:
 
-Hi,
+   + the callback stores the log so it is similar to kmsg_dump()
+     or console_flush_on_panic()
 
-since the WPCM450 also includes a VCD block, I'd be interested in
-reusing the same bindings and driver there.
+   + the callback should be proceed after "info" notifiers
+     that might add some other useful information.
 
-On Thu, May 12, 2022 at 03:27:19PM +0800, Marvin Lin wrote:
-> Add dt-bindings document for NPCM Video Capture/Encode Engine.
->=20
-> Signed-off-by: Marvin Lin <kflin@nuvoton.com>
-> ---
->  .../bindings/media/nuvoton,npcm-video.yaml    | 87 +++++++++++++++++++
->  1 file changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/nuvoton,npcm-=
-video.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/media/nuvoton,npcm-video.y=
-aml b/Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml
-> new file mode 100644
-> index 000000000000..b5be7ef09038
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/nuvoton,npcm-video.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/media/nuvoton,npcm-video.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nuvoton NPCM Video Capture/Encode Engine Device Tree Bindings
-> +
-> +maintainers:
-> +  - Joseph Liu <kwliu@nuvoton.com>
-> +  - Marvin Lin <kflin@nuvoton.com>
-> +
-> +description: |
-> +  Video Capture/Differentiation Engine (VCD) and Encoding Compression En=
-gine
-> +  (ECE) present on Nuvoton NPCM SoCs.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nuvoton,npcm750-video
-> +      - nuvoton,npcm845-video
-> +
-> +  reg:
-> +    items:
-> +      - description: VCD registers
-> +      - description: ECE registers
+Honestly, I am not sure what exactly hypervisor callbacks do. But I
+think that they do not try to extract the kernel log because they
+would need to handle the internal format.
 
-I'd somewhat prefer if these were actually two separate devicetree
-nodes, since there are two hardware blocks and two register ranges.
-
-This would make reuse of the VCD binding easier on WPCM450, because it
-doesn't have an ECE block.
-
-
-Best regards,
-Jonathan
-
---kYh3ep2r/8CyteCm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmKDofIACgkQCDBEmo7z
-X9uXtQ//ezRzp0TGXgDyumHGdn89+Zb5LoXLRPBpknkiIhQ2Ozc29lC5k12ABrAH
-HOu2tBhB+JlweLPJkNQIm5JQtFmIqG4fwU97jRiKbnbDDptacAnR3WOTwcHipiLr
-kfTkeEOFQZ2XuznwbMtI16Rg32AhbKLkHTmWd70zsZzmdEz3RMMOs6jCtSlz36Zt
-UxUm+Egq8JD2TgL2mTorTHdbZEhx6MUBu5ByQWk/ljAPSQHpz+PDf9VEzfgb+4Bs
-N03rJUT8ns2xrtw5JI5UBxNRii7YSD+qsG4RXYjo9yjpjtf4Lys3LzKnivDP5+0l
-2KXsby8vPrhNvTO+x5YGvU0dE7LVXoX/xqjIq8csod6Kd6ZNNBE+OaQ832+e+ZB2
-d1Xso9HRtaih3YE/M9IvR0x0k8hfAePjJImlfBBcjqlQmGFT+h1rEfBez1SrACtl
-mUpLcnAEZfm+qrpTpMLoDsZxIcZoyJZ0fej9IvTuRcCjk4Dwx54OS9AxHY4HD4GN
-Mjhc6ZwGONbcqYh1iZ8thWYY4natr2wh4tNJ3UJbZwtqbFqUD0ze3sm7hdjpnC5m
-3PikvXzyg3GALPBUjRj+FfWVzSDxRZ0w6t15C0ynZlW8pl419yzsMf2MWtjOkA/d
-ZZrBqwgv3zqNZseitWyJ2HsOoWZbRWXOanBvd5zclk1EvZQVivU=
-=RkHI
------END PGP SIGNATURE-----
-
---kYh3ep2r/8CyteCm--
+Best Regards,
+Petr

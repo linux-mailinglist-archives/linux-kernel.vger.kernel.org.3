@@ -2,185 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE13352A19E
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D6852A18F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241240AbiEQMee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S237772AbiEQMbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242745AbiEQMea (ORCPT
+        with ESMTP id S1346090AbiEQMbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:34:30 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D214B876;
-        Tue, 17 May 2022 05:34:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4F01221CD1;
-        Tue, 17 May 2022 12:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652790867;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 17 May 2022 08:31:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07013FD19
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:31:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652790663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=HuIMRN14JGi6FVhkYyikXn4jfOnEwx41w5UWTDF8TaI=;
-        b=Z8zGI2cKe92t43wF3IU8bzZyLOD1eIzVh+XRmfFfA6iEaBK3UDTIJIKDdQYPthEOG3zt1o
-        g2YKAKlDnuaZQmDsxJ5dBK03IpuardW3AsptMLcG2p3bv0Z/s6ifQGoHjb3qEhcPPor/Sg
-        aozwRi1f3Fd79OLBoBPL33qpmG9NK9c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652790867;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HuIMRN14JGi6FVhkYyikXn4jfOnEwx41w5UWTDF8TaI=;
-        b=Iw3UGc1yIjzzyQ8fyKM97yOidrUBmUbrPGDJQSoaNowvHl51NhOMmoquPvOoNgp/eBpYAo
-        pjcfAiOlbvzbLCCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=pxQ81kD5pO+X6MjmThFV7RI2sDMmt3S69I1NIsp38ck=;
+        b=XsH+ZHBUmoCmeNUox1R5ZbIr2khcMR79tDZOXyYbgKe6h6RJKQO+KLRpeuGtqOZWaTJ61f
+        ExHJOBdO1Y0yY0z+p5m/oDBXRD8zjeRgeRMjJcTtUtLLGsuSCF5abekcyordSe1VQjAkuX
+        iSELTtCYTf8eItEdZGLMkdyNGFX6TGw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-wB7Fyas3NySB-qlWCTsG-A-1; Tue, 17 May 2022 08:30:58 -0400
+X-MC-Unique: wB7Fyas3NySB-qlWCTsG-A-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E47AA13305;
-        Tue, 17 May 2022 12:34:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8iC/NlKWg2KVFwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 17 May 2022 12:34:26 +0000
-Date:   Tue, 17 May 2022 14:30:08 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        pankydev8@gmail.com, dsterba@suse.com, hch@lst.de,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, jiangbo.365@bytedance.com,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH v4 07/13] btrfs: zoned: use generic btrfs zone helpers to
- support npo2 zoned devices
-Message-ID: <20220517123008.GC18596@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Pankaj Raghav <p.raghav@samsung.com>,
-        axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        pankydev8@gmail.com, dsterba@suse.com, hch@lst.de,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, jiangbo.365@bytedance.com,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        Luis Chamberlain <mcgrof@kernel.org>
-References: <20220516165416.171196-1-p.raghav@samsung.com>
- <CGME20220516165428eucas1p1374b5f9592db3ca6a6551aff975537ce@eucas1p1.samsung.com>
- <20220516165416.171196-8-p.raghav@samsung.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 36083100BAAE;
+        Tue, 17 May 2022 12:30:57 +0000 (UTC)
+Received: from asgard.redhat.com (unknown [10.36.110.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 62A6341652B;
+        Tue, 17 May 2022 12:30:53 +0000 (UTC)
+Date:   Tue, 17 May 2022 14:30:50 +0200
+From:   Eugene Syromiatnikov <esyr@redhat.com>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in
+ kprobe_multi.addrs
+Message-ID: <20220517123050.GA25149@asgard.redhat.com>
+References: <cover.1652772731.git.esyr@redhat.com>
+ <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
+ <YoNnAgDsIWef82is@krava>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516165416.171196-8-p.raghav@samsung.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YoNnAgDsIWef82is@krava>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 06:54:10PM +0200, Pankaj Raghav wrote:
-> Add helpers to calculate alignment, round up and round down
-> for zoned devices. These helpers encapsulates the necessary handling for
-> power_of_2 and non-power_of_2 zone sizes. Optimized calculations are
-> performed for zone sizes that are power_of_2 with log and shifts.
+On Tue, May 17, 2022 at 11:12:34AM +0200, Jiri Olsa wrote:
+> On Tue, May 17, 2022 at 09:36:47AM +0200, Eugene Syromiatnikov wrote:
+> > With the interface as defined, it is impossible to pass 64-bit kernel
+> > addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
+> > which severly limits the useability of the interface, change the ABI
+> > to accept an array of u64 values instead of (kernel? user?) longs.
+> > Interestingly, the rest of the libbpf infrastructure uses 64-bit values
+> > for kallsyms addresses already, so this patch also eliminates
+> > the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
 > 
-> btrfs_zoned_is_aligned() is added instead of reusing bdev_zone_aligned()
-> helper due to some use cases in btrfs where zone alignment is checked
-> before having access to the underlying block device such as in this
-> function: btrfs_load_block_group_zone_info().
+> so the problem is when we have 32bit user sace on 64bit kernel right?
 > 
-> Use the generic btrfs zone helpers to calculate zone index, check zone
-> alignment, round up and round down operations.
+> I think we should keep addrs as longs in uapi and have kernel to figure out
+> if it needs to read u32 or u64, like you did for symbols in previous patch
+
+No, it's not possible here, as addrs are kernel addrs and not user space
+addrs, so user space has to explicitly pass 64-bit addresses on 64-bit
+kernels (or have a notion whether it is running on a 64-bit
+or 32-bit kernel, and form the passed array accordingly, which is against
+the idea of compat layer that tries to abstract it out).
+
+> we'll need to fix also bpf_kprobe_multi_cookie_swap because it assumes
+> 64bit user space pointers
 > 
-> The zone_size_shift field is not needed anymore as generic helpers are
-> used for calculation.
-
-Overall this looks reasonable to me.
-
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->  fs/btrfs/volumes.c | 24 +++++++++-------
->  fs/btrfs/zoned.c   | 72 ++++++++++++++++++++++------------------------
->  fs/btrfs/zoned.h   | 43 +++++++++++++++++++++++----
->  3 files changed, 85 insertions(+), 54 deletions(-)
+> would be gret if we could have selftest for this
 > 
-> --- a/fs/btrfs/zoned.c
-> +++ b/fs/btrfs/zoned.c
-> @@ -1108,14 +1101,14 @@ int btrfs_reset_device_zone(struct btrfs_device *device, u64 physical,
->  int btrfs_ensure_empty_zones(struct btrfs_device *device, u64 start, u64 size)
->  {
->  	struct btrfs_zoned_device_info *zinfo = device->zone_info;
-> -	const u8 shift = zinfo->zone_size_shift;
-> -	unsigned long begin = start >> shift;
-> -	unsigned long end = (start + size) >> shift;
-> +	unsigned long begin = bdev_zone_no(device->bdev, start >> SECTOR_SHIFT);
-> +	unsigned long end =
-> +		bdev_zone_no(device->bdev, (start + size) >> SECTOR_SHIFT);
+> thanks,
+> jirka
+> 
+> > 
+> > Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
+> > Fixes: 5117c26e877352bc ("libbpf: Add bpf_link_create support for multi kprobes")
+> > Fixes: ddc6b04989eb0993 ("libbpf: Add bpf_program__attach_kprobe_multi_opts function")
+> > Fixes: f7a11eeccb111854 ("selftests/bpf: Add kprobe_multi attach test")
+> > Fixes: 9271a0c7ae7a9147 ("selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts")
+> > Fixes: 2c6401c966ae1fbe ("selftests/bpf: Add kprobe_multi bpf_cookie test")
+> > Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+> > ---
+> >  kernel/trace/bpf_trace.c                           | 25 ++++++++++++++++++----
+> >  tools/lib/bpf/bpf.h                                |  2 +-
+> >  tools/lib/bpf/libbpf.c                             |  8 +++----
+> >  tools/lib/bpf/libbpf.h                             |  2 +-
+> >  .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
+> >  .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  8 +++----
+> >  6 files changed, 32 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 9d3028a..30a15b3 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -2454,7 +2454,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+> >  	void __user *ucookies;
+> >  	unsigned long *addrs;
+> >  	u32 flags, cnt, size, cookies_size;
+> > -	void __user *uaddrs;
+> > +	u64 __user *uaddrs;
+> >  	u64 *cookies = NULL;
+> >  	void __user *usyms;
+> >  	int err;
+> > @@ -2486,9 +2486,26 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+> >  		return -ENOMEM;
+> >  
+> >  	if (uaddrs) {
+> > -		if (copy_from_user(addrs, uaddrs, size)) {
+> > -			err = -EFAULT;
+> > -			goto error;
+> > +		if (sizeof(*addrs) == sizeof(*uaddrs)) {
+> > +			if (copy_from_user(addrs, uaddrs, size)) {
+> > +				err = -EFAULT;
+> > +				goto error;
+> > +			}
+> > +		} else {
+> > +			u32 i;
+> > +			u64 addr;
+> > +
+> > +			for (i = 0; i < cnt; i++) {
+> > +				if (get_user(addr, uaddrs + i)) {
+> > +					err = -EFAULT;
+> > +					goto error;
+> > +				}
+> > +				if (addr > ULONG_MAX) {
+> > +					err = -EINVAL;
+> > +					goto error;
+> > +				}
+> > +				addrs[i] = addr;
+> > +			}
+> >  		}
+> >  	} else {
+> >  		struct user_syms us;
+> > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> > index 2e0d373..da9c6037 100644
+> > --- a/tools/lib/bpf/bpf.h
+> > +++ b/tools/lib/bpf/bpf.h
+> > @@ -418,7 +418,7 @@ struct bpf_link_create_opts {
+> >  			__u32 flags;
+> >  			__u32 cnt;
+> >  			const char **syms;
+> > -			const unsigned long *addrs;
+> > +			const __u64 *addrs;
+> >  			const __u64 *cookies;
+> >  		} kprobe_multi;
+> >  		struct {
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index ef7f302..35fa9c5 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -10737,7 +10737,7 @@ static bool glob_match(const char *str, const char *pat)
+> >  
+> >  struct kprobe_multi_resolve {
+> >  	const char *pattern;
+> > -	unsigned long *addrs;
+> > +	__u64 *addrs;
+> >  	size_t cap;
+> >  	size_t cnt;
+> >  };
+> > @@ -10752,12 +10752,12 @@ resolve_kprobe_multi_cb(unsigned long long sym_addr, char sym_type,
+> >  	if (!glob_match(sym_name, res->pattern))
+> >  		return 0;
+> >  
+> > -	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(unsigned long),
+> > +	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(__u64),
+> >  				res->cnt + 1);
+> >  	if (err)
+> >  		return err;
+> >  
+> > -	res->addrs[res->cnt++] = (unsigned long) sym_addr;
+> > +	res->addrs[res->cnt++] = sym_addr;
+> >  	return 0;
+> >  }
+> >  
+> > @@ -10772,7 +10772,7 @@ bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
+> >  	};
+> >  	struct bpf_link *link = NULL;
+> >  	char errmsg[STRERR_BUFSIZE];
+> > -	const unsigned long *addrs;
+> > +	const __u64 *addrs;
+> >  	int err, link_fd, prog_fd;
+> >  	const __u64 *cookies;
+> >  	const char **syms;
+> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > index 9e9a3fd..76e171d 100644
+> > --- a/tools/lib/bpf/libbpf.h
+> > +++ b/tools/lib/bpf/libbpf.h
+> > @@ -489,7 +489,7 @@ struct bpf_kprobe_multi_opts {
+> >  	/* array of function symbols to attach */
+> >  	const char **syms;
+> >  	/* array of function addresses to attach */
+> > -	const unsigned long *addrs;
+> > +	const __u64 *addrs;
+> >  	/* array of user-provided values fetchable through bpf_get_attach_cookie */
+> >  	const __u64 *cookies;
+> >  	/* number of elements in syms/addrs/cookies arrays */
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > index 83ef55e3..e843840 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > @@ -140,7 +140,7 @@ static void kprobe_multi_link_api_subtest(void)
+> >  	cookies[6] = 7;
+> >  	cookies[7] = 8;
+> >  
+> > -	opts.kprobe_multi.addrs = (const unsigned long *) &addrs;
+> > +	opts.kprobe_multi.addrs = (const __u64 *) &addrs;
+> >  	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
+> >  	opts.kprobe_multi.cookies = (const __u64 *) &cookies;
+> >  	prog_fd = bpf_program__fd(skel->progs.test_kprobe);
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > index 586dc52..7646112 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > @@ -108,7 +108,7 @@ static void test_link_api_addrs(void)
+> >  	GET_ADDR("bpf_fentry_test7", addrs[6]);
+> >  	GET_ADDR("bpf_fentry_test8", addrs[7]);
+> >  
+> > -	opts.kprobe_multi.addrs = (const unsigned long*) addrs;
+> > +	opts.kprobe_multi.addrs = (const __u64 *) addrs;
+> >  	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
+> >  	test_link_api(&opts);
+> >  }
+> > @@ -186,7 +186,7 @@ static void test_attach_api_addrs(void)
+> >  	GET_ADDR("bpf_fentry_test7", addrs[6]);
+> >  	GET_ADDR("bpf_fentry_test8", addrs[7]);
+> >  
+> > -	opts.addrs = (const unsigned long *) addrs;
+> > +	opts.addrs = (const __u64 *) addrs;
+> >  	opts.cnt = ARRAY_SIZE(addrs);
+> >  	test_attach_api(NULL, &opts);
+> >  }
+> > @@ -244,7 +244,7 @@ static void test_attach_api_fails(void)
+> >  		goto cleanup;
+> >  
+> >  	/* fail_2 - both addrs and syms set */
+> > -	opts.addrs = (const unsigned long *) addrs;
+> > +	opts.addrs = (const __u64 *) addrs;
+> >  	opts.syms = syms;
+> >  	opts.cnt = ARRAY_SIZE(syms);
+> >  	opts.cookies = NULL;
+> > @@ -258,7 +258,7 @@ static void test_attach_api_fails(void)
+> >  		goto cleanup;
+> >  
+> >  	/* fail_3 - pattern and addrs set */
+> > -	opts.addrs = (const unsigned long *) addrs;
+> > +	opts.addrs = (const __u64 *) addrs;
+> >  	opts.syms = NULL;
+> >  	opts.cnt = ARRAY_SIZE(syms);
+> >  	opts.cookies = NULL;
+> > -- 
+> > 2.1.4
+> > 
+> 
 
-There are unsinged long types here though I'd rather see u64, better for
-a separate patch. Fixed width types are cleaner here and in the zoned
-code as there's always some conversion to/from sectors.
-
->  	u64 pos;
->  	int ret;
->  
-> -	ASSERT(IS_ALIGNED(start, zinfo->zone_size));
-> -	ASSERT(IS_ALIGNED(size, zinfo->zone_size));
-> +	ASSERT(btrfs_zoned_is_aligned(start, zinfo->zone_size));
-> +	ASSERT(btrfs_zoned_is_aligned(size, zinfo->zone_size));
->  
->  	if (end > zinfo->nr_zones)
->  		return -ERANGE;
-> --- a/fs/btrfs/zoned.h
-> +++ b/fs/btrfs/zoned.h
-> @@ -30,6 +30,36 @@ struct btrfs_zoned_device_info {
->  	u32 sb_zone_location[BTRFS_SUPER_MIRROR_MAX];
->  };
->  
-> +static inline bool btrfs_zoned_is_aligned(u64 pos, u64 zone_size)
-> +{
-> +	u64 remainder = 0;
-> +
-> +	if (is_power_of_two_u64(zone_size))
-> +		return IS_ALIGNED(pos, zone_size);
-> +
-> +	div64_u64_rem(pos, zone_size, &remainder);
-> +	return remainder == 0;
-> +}
-> +
-> +static inline u64 btrfs_zoned_roundup(u64 pos, u64 zone_size)
-> +{
-> +	if (is_power_of_two_u64(zone_size))
-> +		return ALIGN(pos, zone_size);
-
-Please use round_up as the rounddown helper uses round_down
-
-> +
-> +	return div64_u64(pos + zone_size - 1, zone_size) * zone_size;
-> +}
-> +
-> +static inline u64 btrfs_zoned_rounddown(u64 pos, u64 zone_size)
-> +{
-> +	u64 remainder = 0;
-> +	if (is_power_of_two_u64(zone_size))
-> +		return round_down(pos, zone_size);
-> +
-> +	div64_u64_rem(pos, zone_size, &remainder);
-> +	pos -= remainder;
-> +	return pos;
-> +}
-> +
->  #ifdef CONFIG_BLK_DEV_ZONED
->  int btrfs_get_dev_zone(struct btrfs_device *device, u64 pos,
->  		       struct blk_zone *zone);

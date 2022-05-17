@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D3652A47F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D06252A48B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348617AbiEQOO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
+        id S1348573AbiEQOQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348567AbiEQOOl (ORCPT
+        with ESMTP id S1348587AbiEQOQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:14:41 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE094F446
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:14:40 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 37A7F3F5EF
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1652796879;
-        bh=KRqMU95ectLf1biwXZ9JbXYqJSOfFsXEinRiaScCjPk=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=F2+PNAsC7Wv0ddjsw9XdCptQs31u6bTdrbH/JZPb+oJgr6wmsgVCWk3pxq2fK3Oaq
-         2pKhLUSbueLly1mvEYUQf9waT8tlZ/C6mUJCgAYbixkbrLOhnaUr49gu4rUf6g8iAR
-         nNHz2M3ZY3lHnSCsTd+cqiPtHmZC7dV6PNtMSzvY/fBwm0BFMdTtWPIPik8Z/rPoIK
-         3+758QQfRO7jFXYMGCEMUB6k2p4umU7M7Gh+MJ2/pTKvWkS+Tj54w2KMNUefpcYYKr
-         eWgp/uYEnyvjlNeQY7thhHqAdw7Xgr+FwlvvSNk2QUgfJCBN47tCfLjvsE9l28l/+k
-         yAdqoSe+6zj7Q==
-Received: by mail-ej1-f70.google.com with SMTP id nb10-20020a1709071c8a00b006e8f89863ceso7455851ejc.18
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:14:39 -0700 (PDT)
+        Tue, 17 May 2022 10:16:40 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFC3BE3C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:16:38 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id r1so32647836ybo.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:16:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=FbsLkTlBRK9V5w9TVhQDtQ29lIrXV8IwRzrUpg6BETk=;
+        b=Q8YU9uym0taBo6AFiiFbXkUC56kTGpa96zoyy7ewEo9I6agoe1RwlqalbfZTjKrty4
+         usWvX3vuQZ05D85FZk5w7Gddibx+ak8G5gEw6BXGWCd8gpq43nEyRmWmOOl2EptzO936
+         giO5I1UGsod+aiPW1tx2DU6ombstkgqqtUo/zHbi8BKGxKs08B+2Tuayuqf/uFPHAUct
+         YROjzHSnc2PiF/nxvc/QsuTalKjtYpXkPqVfrkQRPVUPBQGVWR2WAMFFFnAhYnITeR+F
+         nhv1yEFl8nektaSHqNFCqaHy7R3emdb06Dpsuvoqok1J80cc8NjUsnuxJpmORlGrhG/K
+         FlgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KRqMU95ectLf1biwXZ9JbXYqJSOfFsXEinRiaScCjPk=;
-        b=19D0gStBrazDPn2HFv/FWqJ9e2sq1Ghhq0jvgg3gL8n4HSrugVl9Cm2dGbHJBCm555
-         f+F3R8YHM2FQSMhDtOZMTrGkpHXbno+ezZCE607WZCCTWfvTncVtQJ3D4q6srLftRrpb
-         zpoYQBQWuwxiRdZ1TJLl3dS6V9tOU38jsF9qZmRP/8Uk1o7N0qbAmR2wh6yLHfYEK2SA
-         Z4ssIpewTw/C83LWNwxdpUoTTIy9BJ+BjOHVMCgRLG1CA8h4MBPE9godRf2xIJJ7W74T
-         CsqtPg4wpj0k+a88bkOYEipT2/RuGSn8b71lFZty6oyJtlwOk//IYUU5lOqQo2Z2Zkx7
-         vqpA==
-X-Gm-Message-State: AOAM532hce8a+dM/dOM7klTKh3/OT9RfQ70gdxw/jeY7b3quD7CLTdi5
-        HRjO0Fk/xqPLYCTVE+QjMWN/NzQcVICPygWf6zkNlq8iWD77Jb2+HTZBVZtq6Yg5jOIovqodmCm
-        ++vaddV3gtVuwdhiMQOrI/DAsPooDcfWtWNlhMq/dKw==
-X-Received: by 2002:a05:6402:331a:b0:42a:cbcc:dd53 with SMTP id e26-20020a056402331a00b0042acbccdd53mr2568831eda.8.1652796879031;
-        Tue, 17 May 2022 07:14:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwxKdjqKHc+dVjB63y1xSh3CuNvjTb9+wICuNc56GAq0XqWnVjVqv54Uo5uY7nBvnZzMGp7wg==
-X-Received: by 2002:a05:6402:331a:b0:42a:cbcc:dd53 with SMTP id e26-20020a056402331a00b0042acbccdd53mr2568801eda.8.1652796878822;
-        Tue, 17 May 2022 07:14:38 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id em9-20020a170907288900b006f3ef214e4fsm1079265ejc.181.2022.05.17.07.14.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 07:14:38 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-X-Google-Original-From: Juerg Haefliger <juergh@canonical.com>
-To:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        Juerg Haefliger <juergh@canonical.com>
-Subject: [PATCH 3/3] ARM: Kconfig.debug: Fix indentation
-Date:   Tue, 17 May 2022 16:14:24 +0200
-Message-Id: <20220517141424.331759-4-juergh@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220517141424.331759-1-juergh@canonical.com>
-References: <20220517141424.331759-1-juergh@canonical.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FbsLkTlBRK9V5w9TVhQDtQ29lIrXV8IwRzrUpg6BETk=;
+        b=DkDFVv2iZ6PFcTRWJvt2eYSV114pTcGCJqi1ZqIpLSCogISO4qyoKI197Vz41H0+gh
+         Z9gZq/iX54K8VTSa43I++q8i+QkgivVWMZxG7tCN2GWLcnvKJOW7j6ZHBJ3AI1dXuasj
+         QvY2CaJ7EMnbl+VVni97LmudVIjzZT2nn/PL4H6feR+g1o3uD62BEhYEJZdYi1vgVc2P
+         8tXF6SPlagPaddNZpNzROvZsaHQ9rN2fAKqeAaBxeo1lA/QJXx9q5NUmJaWnyTQlcTHp
+         hsCBVWjDKVkVdrvQrQ2nECH1E+jeRnWRRfu3oAwZmidIM4ISFpqIPd95B0C1CHAsqCqi
+         Xo7Q==
+X-Gm-Message-State: AOAM532zntBKzKSHZ4u7E3+xQZ9V240Y58ASZ3TaEbwBbq0x0LpC2yh4
+        n8nG0Jtngm338XB44FkZVilKjcinQULisocHqu6rWA==
+X-Google-Smtp-Source: ABdhPJwKz9LopBJlylFdCqxavwxIeFl5+xWOyu2HxR2KcPnTYHCLzeicopwrTp11gQ3GRKyz53yvPnXxwLI6c/NOOnI=
+X-Received: by 2002:a25:804e:0:b0:64d:eafa:450e with SMTP id
+ a14-20020a25804e000000b0064deafa450emr5554651ybn.128.1652796997742; Tue, 17
+ May 2022 07:16:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220516193614.714657361@linuxfoundation.org>
+In-Reply-To: <20220516193614.714657361@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 17 May 2022 19:46:26 +0530
+Message-ID: <CA+G9fYtUa+B+3r5o8H=0WKa4VZe4Nm3b_cEqHuUxPyMXZou9qQ@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/43] 5.4.195-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,97 +71,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two whitespaces. Fix the lines that
-violate these rules.
+On Tue, 17 May 2022 at 01:13, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.195 release.
+> There are 43 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.195-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Juerg Haefliger <juergh@canonical.com>
----
- arch/arm/Kconfig.debug | 35 +++++++++++++++++------------------
- 1 file changed, 17 insertions(+), 18 deletions(-)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/arch/arm/Kconfig.debug b/arch/arm/Kconfig.debug
-index 0c9497d549e3..4b00b1fd9ab3 100644
---- a/arch/arm/Kconfig.debug
-+++ b/arch/arm/Kconfig.debug
-@@ -22,28 +22,28 @@ config DEBUG_WX
- 	depends on MMU
- 	select ARM_PTDUMP_CORE
- 	help
--		Generate a warning if any W+X mappings are found at boot.
-+	  Generate a warning if any W+X mappings are found at boot.
- 
--		This is useful for discovering cases where the kernel is leaving
--		W+X mappings after applying NX, as such mappings are a security risk.
-+	  This is useful for discovering cases where the kernel is leaving
-+	  W+X mappings after applying NX, as such mappings are a security risk.
- 
--		Look for a message in dmesg output like this:
-+	  Look for a message in dmesg output like this:
- 
--			arm/mm: Checked W+X mappings: passed, no W+X pages found.
-+		arm/mm: Checked W+X mappings: passed, no W+X pages found.
- 
--		or like this, if the check failed:
-+	  or like this, if the check failed:
- 
--			arm/mm: Checked W+X mappings: FAILED, <N> W+X pages found.
-+		arm/mm: Checked W+X mappings: FAILED, <N> W+X pages found.
- 
--		Note that even if the check fails, your kernel is possibly
--		still fine, as W+X mappings are not a security hole in
--		themselves, what they do is that they make the exploitation
--		of other unfixed kernel bugs easier.
-+	  Note that even if the check fails, your kernel is possibly
-+	  still fine, as W+X mappings are not a security hole in
-+	  themselves, what they do is that they make the exploitation
-+	  of other unfixed kernel bugs easier.
- 
--		There is no runtime or memory usage effect of this option
--		once the kernel has booted up - it's a one time check.
-+	  There is no runtime or memory usage effect of this option
-+	  once the kernel has booted up - it's a one time check.
- 
--		If in doubt, say "Y".
-+	  If in doubt, say "Y".
- 
- choice
- 	prompt "Choose kernel unwinder"
-@@ -293,7 +293,7 @@ choice
- 		select DEBUG_UART_8250
- 		help
- 		  Say Y here if you want the debug print routines to direct
--                  their output to the CNS3xxx UART0.
-+		  their output to the CNS3xxx UART0.
- 
- 	config DEBUG_DAVINCI_DA8XX_UART1
- 		bool "Kernel low-level debugging on DaVinci DA8XX using UART1"
-@@ -847,7 +847,7 @@ choice
- 		select DEBUG_UART_8250
- 		help
- 		  Say Y here if you want kernel low-level debugging support
--                  on Rockchip RV1108 based platforms.
-+		  on Rockchip RV1108 based platforms.
- 
- 	config DEBUG_RV1108_UART1
- 		bool "Kernel low-level debugging messages via Rockchip RV1108 UART1"
-@@ -1724,7 +1724,7 @@ config DEBUG_UART_PHYS
- 	default 0xffffee00 if DEBUG_AT91_SAM9263_DBGU
- 	default 0xfffff200 if DEBUG_AT91_RM9200_DBGU
- 	depends on ARCH_EP93XX || \
--	        DEBUG_LL_UART_8250 || DEBUG_LL_UART_PL01X || \
-+		DEBUG_LL_UART_8250 || DEBUG_LL_UART_PL01X || \
- 		DEBUG_UART_8250 || DEBUG_UART_PL01X || DEBUG_MESON_UARTAO || \
- 		DEBUG_QCOM_UARTDM || DEBUG_R7S72100_SCIF2 || \
- 		DEBUG_R7S9210_SCIF2 || DEBUG_R7S9210_SCIF4 || \
-@@ -1895,7 +1895,6 @@ config DEBUG_UNCOMPRESS
- 	  When this option is set, the selected DEBUG_LL output method
- 	  will be re-used for normal decompressor output on multiplatform
- 	  kernels.
--	  
- 
- config UNCOMPRESS_INCLUDE
- 	string
--- 
-2.32.0
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.4.195-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.4.y
+* git commit: 25f2e99af01b5b7328f55bbadab563cb26478289
+* git describe: v5.4.194-44-g25f2e99af01b
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+94-44-g25f2e99af01b
+
+## Test Regressions (compared to v5.4.193-19-g15301ad60009)
+No test regressions found.
+
+## Metric Regressions (compared to v5.4.193-19-g15301ad60009)
+No metric regressions found.
+
+## Test Fixes (compared to v5.4.193-19-g15301ad60009)
+No test fixes found.
+
+## Metric Fixes (compared to v5.4.193-19-g15301ad60009)
+No metric fixes found.
+
+## Test result summary
+total: 84577, pass: 70335, fail: 911, skip: 12348, xfail: 983
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 290 total, 290 passed, 0 failed
+* arm64: 40 total, 34 passed, 6 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 20 total, 20 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 40 total, 40 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

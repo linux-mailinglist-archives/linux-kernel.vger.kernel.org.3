@@ -2,177 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75323529B59
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48C4529B5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238957AbiEQHsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S229445AbiEQHsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiEQHr4 (ORCPT
+        with ESMTP id S239678AbiEQHsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:47:56 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486242ED76;
-        Tue, 17 May 2022 00:47:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D2EE51F383;
-        Tue, 17 May 2022 07:47:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652773671; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ghycn6t5xJ3FJyT4xCbUwPxtWo84lq0XciIN7RNaQPw=;
-        b=i868hRhnCUZBdkwQJa44Asp8b1Nc0V/TynvKKK44LKL3NafC+P3RNwyXMfDY3KbBG+R/Na
-        QdJYGCO+I4wuL88+HbcyfHGK2GjIZhYTN7K/FceKkrk0akPVhVfISw3W42ziV+/uv2tpu8
-        brVz8X3/ql+x4n1JTJm778CHu2zXdBY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652773671;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ghycn6t5xJ3FJyT4xCbUwPxtWo84lq0XciIN7RNaQPw=;
-        b=Q9pVjJenIkTEi5h+JnIgeYZNGJuWpAXJulbLyZhBh6PUEVTplPxsxls8rVimwa1DseFClU
-        x/giIQLPPpKrznAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 391BD13305;
-        Tue, 17 May 2022 07:47:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xvtrCiZTg2ILfwAAMHmgww
-        (envelope-from <osalvador@suse.de>); Tue, 17 May 2022 07:47:50 +0000
-Date:   Tue, 17 May 2022 09:47:48 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     corbet@lwn.net, mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v12 3/7] mm: memory_hotplug: enumerate all supported
- section flags
-Message-ID: <YoNTJNfhUO7/oUrn@localhost.localdomain>
-References: <20220516102211.41557-1-songmuchun@bytedance.com>
- <20220516102211.41557-4-songmuchun@bytedance.com>
+        Tue, 17 May 2022 03:48:21 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40434477A;
+        Tue, 17 May 2022 00:48:20 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id eq14so13854155qvb.4;
+        Tue, 17 May 2022 00:48:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0/BndUcyTw55Mcn304/1HhrFAvm3GtAMoXqIn6Pxinc=;
+        b=q7gMa3oqgkcHxQpzh7ikn+HbRlLo2zzPHahNbLV+X5MDZOx2hAY+6CV6MIx50aOh9S
+         FofWuL6LGA/Tw759xzInkCc/+pFDuajWBLlEGUCDEb3C/6tJnY9pxvNVKOwG+4XZXqOU
+         Zzc6RKGtQdVo6wK4B53IY18VUVWvKQhq89hStxD9KopGndauW/BiHv+7ZUT2xzuN7EkQ
+         c+8b8ylchgiOBF+5v9x2sbY8a8golww1hSr6qYtyebYnNvRQsJixJWYI9bwaHMA3XFyb
+         IvpLE0F/wq3m9Lxhuy7XzRaL6J13cc1L9U4xYuvpq0gxjgP+M52ytIcTIApwzl5bhnTt
+         pWgA==
+X-Gm-Message-State: AOAM531fQOod5z9KAtCoaSAiOY3O/tL6qWgkUlXHkZ3Ic24UIEFRkk70
+        xszJ3kJB1Iztg24atXXAKNSiNZuJZ51dDA==
+X-Google-Smtp-Source: ABdhPJygvIxBcGeCCvK9RkbWE23WgW4JmZJy4wjCBfyef5bQFvCpF1KCgoqxAPRmjfNBzvOSt2TZHw==
+X-Received: by 2002:a05:6214:32b:b0:461:d8e3:1bcf with SMTP id j11-20020a056214032b00b00461d8e31bcfmr3541369qvu.29.1652773699530;
+        Tue, 17 May 2022 00:48:19 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id t7-20020ac87387000000b002f39b99f6b1sm7163875qtp.75.2022.05.17.00.48.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 00:48:19 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id p139so10136644ybc.11;
+        Tue, 17 May 2022 00:48:19 -0700 (PDT)
+X-Received: by 2002:a25:4289:0:b0:64d:746f:5311 with SMTP id
+ p131-20020a254289000000b0064d746f5311mr12151686yba.89.1652773698802; Tue, 17
+ May 2022 00:48:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220516102211.41557-4-songmuchun@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220511094057.3151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220511094057.3151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 17 May 2022 09:48:07 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV=vWrXYtdt-OsNYpRm_dgbtieKKu1Cyzr8Hwbbsomgyw@mail.gmail.com>
+Message-ID: <CAMuHMdV=vWrXYtdt-OsNYpRm_dgbtieKKu1Cyzr8Hwbbsomgyw@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: renesas: pinctrl-rzg2l: Return -EINVAL for pins
+ which have input disabled
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 06:22:07PM +0800, Muchun Song wrote:
-> We are almost running out of free slots, only one bit is available in the
+On Wed, May 11, 2022 at 11:41 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Pin status reported by pinconf-pins file always reported pin status as
+> "input enabled" even for pins which had input disabled. Fix this by
+> returning -EINVAL for the pins which have input disabled.
+>
+> Fixes: c4c4637eb57f2 ("pinctrl: renesas: Add RZ/G2L pin and gpio controller driver")
+> Reported-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-I would be more precise about what are we running out of. Free slots of
-what?
+Nice catch!
 
-> worst case (powerpc with 256k pages).  However, there are still some free
-> slots on other architectures (e.g. x86_64 has 10 bits available, arm64
-> has 8 bits available with worst case of 64K pages).  We have hard coded
-> those numbers in code, it is inconvenient to use those bits on other
-> architectures except powerpc.  So transfer those section flags to
-> enumeration to make it easy to add new section flags in the future. Also,
-> move SECTION_TAINT_ZONE_DEVICE into the scope of CONFIG_ZONE_DEVICE
-> to save a bit on non-zone-device case.
-> 
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> ---
-...
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -1418,16 +1418,37 @@ extern size_t mem_section_usage_size(void);
->   *      (equal SECTION_SIZE_BITS - PAGE_SHIFT), and the
->   *      worst combination is powerpc with 256k pages,
->   *      which results in PFN_SECTION_SHIFT equal 6.
-> - * To sum it up, at least 6 bits are available.
-> + * To sum it up, at least 6 bits are available on all architectures.
-> + * However, we can exceed 6 bits on some other architectures except
-> + * powerpc (e.g. 15 bits are available on x86_64, 13 bits are available
-> + * with the worst case of 64K pages on arm64) if we make sure the
-> + * exceeded bit is not applicable to powerpc.
->   */
-> -#define SECTION_MARKED_PRESENT		(1UL<<0)
-> -#define SECTION_HAS_MEM_MAP		(1UL<<1)
-> -#define SECTION_IS_ONLINE		(1UL<<2)
-> -#define SECTION_IS_EARLY		(1UL<<3)
-> -#define SECTION_TAINT_ZONE_DEVICE	(1UL<<4)
-> -#define SECTION_MAP_LAST_BIT		(1UL<<5)
-> +#define ENUM_SECTION_FLAG(MAPPER)						\
-> +	MAPPER(MARKED_PRESENT)							\
-> +	MAPPER(HAS_MEM_MAP)							\
-> +	MAPPER(IS_ONLINE)							\
-> +	MAPPER(IS_EARLY)							\
-> +	MAPPER(TAINT_ZONE_DEVICE, CONFIG_ZONE_DEVICE)				\
-> +	MAPPER(MAP_LAST_BIT)
-> +
-> +#define __SECTION_SHIFT_FLAG_MAPPER_0(x)
-> +#define __SECTION_SHIFT_FLAG_MAPPER_1(x)	SECTION_##x##_SHIFT,
-> +#define __SECTION_SHIFT_FLAG_MAPPER(x, ...)	\
-> +	__PASTE(__SECTION_SHIFT_FLAG_MAPPER_, IS_ENABLED(__VA_ARGS__))(x)
-> +
-> +#define __SECTION_FLAG_MAPPER_0(x)
-> +#define __SECTION_FLAG_MAPPER_1(x)		SECTION_##x = BIT(SECTION_##x##_SHIFT),
-> +#define __SECTION_FLAG_MAPPER(x, ...)		\
-> +	__PASTE(__SECTION_FLAG_MAPPER_, IS_ENABLED(__VA_ARGS__))(x)
-> +
-> +enum {
-> +	ENUM_SECTION_FLAG(__SECTION_SHIFT_FLAG_MAPPER)
-> +	ENUM_SECTION_FLAG(__SECTION_FLAG_MAPPER)
-> +};
-> +
->  #define SECTION_MAP_MASK		(~(SECTION_MAP_LAST_BIT-1))
-> -#define SECTION_NID_SHIFT		6
-> +#define SECTION_NID_SHIFT		SECTION_MAP_LAST_BIT_SHIFT
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-pinctrl-for-v5.20.
 
-Is this really worth the extra code? And it might be me that I am not
-familiar with all this magic, but it looks overcomplicated.
-Maybe some comments here and there help clarifying what it is going on
-here.
+BTW, several other (non-Renesas) drivers seem to get this wrong, too.
 
->  static inline struct page *__section_mem_map_addr(struct mem_section *section)
->  {
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 111684878fd9..aef3f041dec7 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -655,12 +655,18 @@ static void __meminit resize_pgdat_range(struct pglist_data *pgdat, unsigned lon
->  
->  }
->  
-> +#ifdef CONFIG_ZONE_DEVICE
->  static void section_taint_zone_device(unsigned long pfn)
->  {
->  	struct mem_section *ms = __pfn_to_section(pfn);
->  
->  	ms->section_mem_map |= SECTION_TAINT_ZONE_DEVICE;
->  }
-> +#else
-> +static inline void section_taint_zone_device(unsigned long pfn)
-> +{
-> +}
-> +#endif
->  
->  /*
->   * Associate the pfn range with the given zone, initializing the memmaps
-> -- 
-> 2.11.0
-> 
-> 
+Gr{oetje,eeting}s,
 
--- 
-Oscar Salvador
-SUSE Labs
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

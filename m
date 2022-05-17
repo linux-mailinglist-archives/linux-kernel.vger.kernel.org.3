@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB75E52A339
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE4B52A33D
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345868AbiEQNWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S1347638AbiEQNWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347630AbiEQNVP (ORCPT
+        with ESMTP id S1347647AbiEQNVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:21:15 -0400
+        Tue, 17 May 2022 09:21:16 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58B73616C;
-        Tue, 17 May 2022 06:21:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BA338DA7;
+        Tue, 17 May 2022 06:21:14 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id EEE141F433D9
+        with ESMTPSA id C94481F433FD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652793672;
-        bh=OVAmupcImeep7rSBDHFhNuaLOusX/y6qibNhNwPjm9g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AwQWRiA+XZoWp6LVlmA0BAa4UYFfmEJsptnY3ren35hQka/i6zRgZXvpgsQzjpt7o
-         tKbi05/UA3sjchbZCztyRXBUFY5zEV8qCVxKtO+ow+R6/4S+wFZ+g6RVZ4YISiQdYD
-         4cPHeE0fnt8VsvWCPzKeLRV0gavS7ryrQcZKaQMDlKkLiApzWTlrnuM5ypulvAL0qX
-         NdvHicWqqcA1Ra9blXd1sFv1ZUx75CgWBKHwXWrrZGKvf8dQfxUUdTMAbv6DhhnqGu
-         xRwVn/xG7gkVp7hmnjrC4BzL3YIFeRK9Bwi4xPsIACLJ40hq+3PyAHjQ0nMcIZNOUz
-         FyBcYgIh7C5Pg==
+        s=mail; t=1652793673;
+        bh=PV/c5CsQfIEeeK1hM+QeRKiJih/2FjYi3kjZiefnius=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FbaJmAgGCe4rbB7Isi1Deq0+sZu4HnAwVsOVzYvgyjc0lzSa+1eAGbdlEzNtP/cU0
+         ajJjmmbxhCPuTdRzhI4o6sX/Dji+385KB8uRFWgxlqGGyeWyEHN36wxJdr7dX2FEVY
+         9H9Gdh54JH9NRpRookRdVCLcE7cjDzGm3YUQGo7C3o4rJDQfaBMgcFKN9P0zEbLViT
+         RwCSEf44skMDOYcWkthTAxfc1Tg9MLX9CguAwgHdp0Cw4dfZHSiAqY+aT7ekvz4g/M
+         FgPb6F4oW9fZSN4A07DWbZM4Z0sYPU3d+wF54oPBbRM/nIELyQRPVysFBHOUv+JnWY
+         je++8ZeN7B16w==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     yong.wu@mediatek.com
@@ -38,10 +38,12 @@ Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 0/8] mtk_iommu: Specify phandles to infracfg and pericfg
-Date:   Tue, 17 May 2022 15:20:59 +0200
-Message-Id: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 1/8] dt-bindings: iommu: mediatek: Add mediatek,infracfg phandle
+Date:   Tue, 17 May 2022 15:21:00 +0200
+Message-Id: <20220517132107.195932-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
+References: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -54,37 +56,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IOMMU has registers in the infracfg and/or pericfg iospaces: as
-for the currently supported SoCs, MT2712 and MT8173 need a phandle to
-infracfg, while MT8195 needs one to pericfg.
+Add property "mediatek,infracfg" to let the mtk_iommu driver retrieve
+a phandle to the infracfg syscon instead of performing a per-soc
+compatible lookup.
 
-Before this change, the driver was checking for a SoC-specific infra/peri
-compatible but, sooner or later, these lists are going to grow a lot...
-...and this is why it was chosen to add phandles (as it was done with
-some other drivers already - look at mtk-pm-domains, mt8192-afe
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Please note that, while it was necessary to update the devicetrees for
-MT8173 and MT2712e, there was no update for MT8195 because there is no
-IOMMU node in there yet.
-
-AngeloGioacchino Del Regno (8):
-  dt-bindings: iommu: mediatek: Add mediatek,infracfg phandle
-  iommu: mtk_iommu: Lookup phandle to retrieve syscon to infracfg
-  dt-bindings: iommu: mediatek: Add mediatek,pericfg phandle
-  iommu: mtk_iommu: Lookup phandle to retrieve syscon to pericfg
-  arm64: dts: mediatek: mt8173: Add mediatek,infracfg phandle for IOMMU
-  arm64: dts: mediatek: mt2712e: Add mediatek,infracfg phandle for IOMMU
-  dt-bindings: iommu: mediatek: Require mediatek,infracfg for
-    mt2712/8173
-  dt-bindings: iommu: mediatek: Require mediatek,pericfg for
-    mt8195-infra
-
- .../bindings/iommu/mediatek,iommu.yaml        | 30 +++++++++
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |  2 +
- arch/arm64/boot/dts/mediatek/mt8173.dtsi      |  1 +
- drivers/iommu/mtk_iommu.c                     | 66 ++++++++++++-------
- 4 files changed, 75 insertions(+), 24 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+index 2ae3bbad7f1a..78c72c22740b 100644
+--- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
++++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+@@ -101,6 +101,10 @@ properties:
+     items:
+       - const: bclk
+ 
++  mediatek,infracfg:
++    $ref: "/schemas/types.yaml#/definitions/phandle"
++    description: The phandle to the mediatek infracfg syscon
++
+   mediatek,larbs:
+     $ref: /schemas/types.yaml#/definitions/phandle-array
+     minItems: 1
 -- 
 2.35.1
 

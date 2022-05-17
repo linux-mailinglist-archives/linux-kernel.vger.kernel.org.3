@@ -2,181 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9815B5299FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED5F529A02
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238331AbiEQG6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S239469AbiEQG77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237354AbiEQG6T (ORCPT
+        with ESMTP id S231332AbiEQG74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:58:19 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406DF3CFC6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:58:17 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id y32so29630561lfa.6
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:58:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:reply-to:content-transfer-encoding;
-        bh=1RvgKJ6LvNRwpDqbWjhSHqRjqbALbxe9WSC5YoB1n3M=;
-        b=4ofP/QmIn0Ha+/IoETbP26y/1YXDl9NYa76GpbV1x2jtShvYRG5BBAFub2bSgyKTCg
-         1iqD/ultqkysZd62hwyWznfZDmPRa+8U+A3A8ymPT3PXHUnRTDra/GFt7IKMJb2xWKQ1
-         u7YMZ+kE1e/nNKNlf8uD7iFXiYlAmxu4f2UVpqo3MlbJ2/Mfcd/gQRlpyc57tdfb7Af9
-         TvbbWkkeR7E2eSnH3z1N3D9FeV7cvJiurq2MY/zeD0SmJIYNUjGEiAZqjPeFZCCvfAfe
-         VwmKx/qBVQLymHnopbowsHyPSO+AXBmIWnPekuth5vmHOEA9GUmchRmwOrPG6S4Wafyb
-         rxjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:reply-to:content-transfer-encoding;
-        bh=1RvgKJ6LvNRwpDqbWjhSHqRjqbALbxe9WSC5YoB1n3M=;
-        b=tjuWcS5PaYepTCob7OjFx1/zYXZWxnhinV4R/zXq1yjAlJT2X6F7P+z9H9Ff+LT+uh
-         KT2th9putcSmq0RIimzwCaYVRvUxO3hK5w/5u4OVg+G9WPif+NZAo4prgq9iX3RCcca+
-         hS5LLlRjLbYZIvrj4A4jp1sc+qZ00nJiVRNR40ybH8sNCdZiqNA+gTrSWktnhoslh3mQ
-         1qOVdcvmCsrIETcC24Mvmz49g4mvU69U9Dw8Bff6yOYghoIbuXR/quPBebT97F4Ku0KJ
-         2fqL3urhU06PDyyTBgX/3lQDJlAa4hNVP/izywGMTL3kpI8/5RfThWWTwpGFOVaVlT0z
-         oOLA==
-X-Gm-Message-State: AOAM533YM+jjx/q0p5i5DkvQ0d/v34gtUIrjm3bqlZHRhFczLsZFbKwQ
-        t2hThtNhOpSshR5/KBtKAaXRzZ6SSm6MMg==
-X-Google-Smtp-Source: ABdhPJxQiYOTTwfhcNqXc4iNzdCwgn9Wb/kdPusee9Rz30iAZ0YokR51Jy/E+754zL2U4qWSxHvMnw==
-X-Received: by 2002:a05:6512:3888:b0:477:a898:2e75 with SMTP id n8-20020a056512388800b00477a8982e75mr592971lft.147.1652770695610;
-        Mon, 16 May 2022 23:58:15 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.177])
-        by smtp.gmail.com with ESMTPSA id d23-20020a056512369700b00473cb4f7cf6sm1487674lfs.309.2022.05.16.23.58.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 23:58:15 -0700 (PDT)
-Message-ID: <6f811e19-41c6-f3e8-fca6-23a19a62e313@openvz.org>
-Date:   Tue, 17 May 2022 09:58:14 +0300
-MIME-Version: 1.0
+        Tue, 17 May 2022 02:59:56 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2B73CFCD;
+        Mon, 16 May 2022 23:59:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W1hqDVwAi51ho6P6GDCyP4PLHCX2cR67sEeHiT3VhdGOI9XMfyB8QawnSltx3+jta+MwbTTVrXJrDrXpOKqbGKQaMNcuCdXQFgBasfqU6EH2noaySQdCoT/o5m8h0gys2h9CFDxSenKkNVOWu60oiRdU5XbTLY6GyX+EeeDkmFb6qDK1H8ldgt0IMJ6Pqw5BwCYt3nblZpFw6nSjIDfXJ63fqNv4s0ssiVZ3elJy+CZNsTJ+uRAP/PDoEb3PDD8O1Jf3nLzzB2OQaICovoGXW5iqkD7J8nI1OKxumz428xOsL5RQeclqeV7uBdj5X9QUBrY5MIJzs+/VS34JyjRyTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u6gMRQ9BQhC8ticeyu8kdODbzEkz/RkxWSfcAF5XfSs=;
+ b=m/dxIBDiGsmyJ330TmW38K9F2GIqUt5B4SCh2EDnYSodMGTZFg+EOQioGdp65OxLv8W/PMg20zaPaMMcVZO3a5NaFxoUel/K4pJ4oCFehyKFCUXklqYK2+kNTIA6VrLfu2wsR8DYkud5pSk0/JfsMcPJk9e5Iyktmwh6m+3DQg03sCdi9OcWRIt3ZFn9D+O7kd/dbiADHea0ZtpMS3sX39ChkG4PHnOasschLSqwn0kqytg2Qt2IFa6NLG7fHUf75/gts/yVMvKJQcTqLjfAsEjqWVR/1XzZqIr/8hJ+sQqcn2h82ydicLd3qp7bhPZnEmGoSqx/4QgcJD7e8kQX+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u6gMRQ9BQhC8ticeyu8kdODbzEkz/RkxWSfcAF5XfSs=;
+ b=fTDLFYLqOgci15BfOAEoAniVlnvI+rHxUfNIu8JO2X4OcLtYuu/bETWeQ3h2b9iD3OXYwybZjXO2vtcLBoesGi4wbRaQMRwI/vHsInA1+3HW7oFF3NLSeW5wG37W7hgMNzsnkAjiOi7u3UBDYvj2ZZs98BpInN4HKCSltXrGah8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM6PR12MB3292.namprd12.prod.outlook.com (2603:10b6:5:18c::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Tue, 17 May
+ 2022 06:59:52 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7146:65ee:8fd3:dd03]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7146:65ee:8fd3:dd03%4]) with mapi id 15.20.5250.018; Tue, 17 May 2022
+ 06:59:52 +0000
+Message-ID: <d820893c-fa2e-3bac-88be-f39c06d89c01@amd.com>
+Date:   Tue, 17 May 2022 08:59:44 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH mm-stable] cleanup for "tracing: incorrect gfp_t conversion"
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
 Content-Language: en-US
-Reply-To: 20220516135537.8458fe08464d97bb45684252@linux-foundation.org
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "T.J. Mercier" <tjmercier@google.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Greg Kroah-Hartman <gregkh@google.com>,
+        John Stultz <jstultz@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20220516171315.2400578-1-tjmercier@google.com>
+ <175c5af3-9224-9c8e-0784-349dad9a2954@amd.com>
+ <CABdmKX2GcgCs1xANYPBp8OEtk9qqH7AvCzpdppj9rHXvMqWSAw@mail.gmail.com>
+ <0875fa95-3a25-a354-1433-201fca81ed3e@amd.com>
+ <CABdmKX1+VYfdzyVYOS5MCsr4ptGTygmuUP9ikyh-vW6DgKk2kg@mail.gmail.com>
+ <YoM9BAwybcjG7K/H@kroah.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <YoM9BAwybcjG7K/H@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS9PR06CA0207.eurprd06.prod.outlook.com
+ (2603:10a6:20b:45d::34) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a6679a98-47d6-4389-f45d-08da37d2d723
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3292:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB329228066B93AE885739D40F83CE9@DM6PR12MB3292.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gtqmA8VwPEH9CwxwIzpfgxE6djtBxm7BXPPC/Q9yb2Fa96WcFlvVKSfAiLDQt5OHu5EmupX1LuceGgDGw3Uhf5eWN+micqp7N/3jcVr31T23Wn6iTKeGFl0OyAg1mHN2UZlUwiSS8A1prGJC51xdmUSU6fUNJSCI+fxv6ks2P4PlwU8sAIxcBPEO9H7miplnxbghVvV3GiVPV3Eh3b6CmRL5DJsomJ8MXKEdZ/L0OJzAzyrqmpoDXhYy8I+ta6D6uYz9XhUsfQ4/JkQ5ms+5PUHA55m7FYLNkMlDTr7quA0NuLUdZNh5gcZpbzHA67xOXKyy59ErCordBDWJdoasFs9JwDxU2OskxA+qlEMAuLCVIRimZUoBA1FhiFNLfAsDOQlrSG4VnsPp6bMTMbPXuzDoDnqQ9Nseyxa+dyGs8eDwZnBBDJFDOxWLxdxloH34XZciF8jKI99cOADTIbbEzcTkb4mYQ/Bi3W7RWsTL3wvo422y2PLm1RVRzYI5XF+tvRoEcpjyIGcK/nZGs1kaRN8NGdXdTJtL6lN/3GcltUEwBpmfHHgCtq8zZz8l34M7/cRX8HTmdr4Cm3Y8O+XiTOARutH6Yfd9a5NNWP0yjTLLuPzsgZss5Q0C204MU/GZ7mCQrocZLGwpf7dwu9jprJ6CPo2Y6Hs0m3SkJPheevJl+B8YSzeTaLT6FlZ9VhuL8zjJmjhowPAbYlP2xFghKWF/wMTzo8oIWnw4U4R0Yo8+r50c6l4d8fVFLjCd5676roN83sfSkmwGxXFa1bPZXJtsjXF5FkJtzDBkYluiQ/alLLYRcoiuGk+B/wswqOg/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(966005)(508600001)(6512007)(6486002)(6506007)(6666004)(26005)(31696002)(45080400002)(8936002)(7416002)(316002)(86362001)(66574015)(110136005)(83380400001)(54906003)(36756003)(8676002)(4326008)(2616005)(66946007)(66556008)(66476007)(31686004)(2906002)(5660300002)(38100700002)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UEFRTmwrT3Q4SDVKcWc5KzFqd3E2ZE5YUXlLQ0ZsUFlEMER1SFNwZzlHMWF3?=
+ =?utf-8?B?NnZRL0ZpSCtKTDBINDhjRmJ6UE9jMXJrS0ZQaTIxTk1kZmp2N05MNmpTbnBn?=
+ =?utf-8?B?QjNEdEpEYUxsTzJyUzAxdWRSdG16ZkN1K1BYREtDSS9acVgzTlFWVDBkbzBN?=
+ =?utf-8?B?clF1RXhHM1RmcGlBVUR1TitRd3kxYlp6R1JPVUhOUERDUnhpNUdCREoxZGVS?=
+ =?utf-8?B?aFA4eHZDYk5hTnBQZFFKaFBKZXhUbHg5eUZwNHRkUm1RR3FsbmEwWFMrb3px?=
+ =?utf-8?B?NWVUczdCeDE4VjZ6K0dyRzN4ZmdhekRNczliNlZvaWlNNFp5RTl2Y1RLaXY3?=
+ =?utf-8?B?L1BicmNDNXBrRHMwK3EySVVLYUE4NGJJODR3bGxPdEUrK25NMFVQVDFVZlY0?=
+ =?utf-8?B?UGFZSmJ6TnAra0Rlam1UYnJNUmdranhPR3I4d0ZYbW1NODRQOFFRSG5uZFJ4?=
+ =?utf-8?B?ZStEeXErZFBWVHZ6ZnkyaUJtRlFjOFFtZHJWaWNDRUZmYTFzSENxbFRrcXhN?=
+ =?utf-8?B?MGlwL1BzdDJsWGFLUTk5WnVRYmpDbjhROVdDWEhLNXNxaXlIVnYvRDNQRTJk?=
+ =?utf-8?B?NnRHaE5GVGoxNUVneVRaNFpIT2NTWlFoU002QW5ocFVIYjl5cklaNElWdjBK?=
+ =?utf-8?B?R2RQTnk5UUpaVXhISTdpTHhORktYWlQ4S1JQczZzU0laZkRFZHZrK3V3SW1H?=
+ =?utf-8?B?MUlkcmVnWGFoUGdGNXU2NlpJSXlzL3RnTDh4dUg1anlvYTRMVUdjZHlhek9m?=
+ =?utf-8?B?eEF0YUFSV0lBUXVXaGpEQmVEMWhQV1dZZzJsRDQ1alpHRmhwRDVvcHk5b2FE?=
+ =?utf-8?B?d1poTjkrdVRxb3lEZ2pFY0pMQVRoVFN6SEd3UEIzaC9WWU9naTBmSHNJKyt6?=
+ =?utf-8?B?b1lPRHp6WHBBWnBuaE95czdTaEc2SGdKUEpMcVFnNHdZaTFnRHhyVWxGaWVC?=
+ =?utf-8?B?QjRTQlFQUjh1bE9YZ0YyMk1HRUptcnQxVnR3RmtZT0ZrZWUrcHhsNHgvSDBR?=
+ =?utf-8?B?WCsvZGkwb1doMzlBbXZLWE0zR242WWQ3dmxrY2YxZENhVC9uV0U3N2E3WHh5?=
+ =?utf-8?B?V3ZVdDVGZnYyazhDWmVCNlE1WEZEd29Eb2MwVXB4aVd5VldlcDM2MDNEa0sx?=
+ =?utf-8?B?Wkk1NmZ3WUlFeW43d1VMSnFDdlRnMTNsSjBJQjZsRkkyU2dBQ1JSWG5KaHQ5?=
+ =?utf-8?B?SDdHMzRyQ09maVhzdzVQQk9QWk1KM1ZXTlFVM1AyTExtYjd2cmk5bjdkK05k?=
+ =?utf-8?B?UVBGbHZxangzOHBwZzBKenQ4MGhDU2c5TFBPK0U4akFGd1hnWGhHdGtDWm02?=
+ =?utf-8?B?TWpvYmE4UHZsUW5WRnFEWm9SMjRTWXdZRUJYZ0YzRUVUMVJXZkhBdkM2NHR5?=
+ =?utf-8?B?anNOZmwwUWFiblcreis0bXdyMWN0aDRxV01iWHJNcHFSb1dMdVVlSmFVRVMy?=
+ =?utf-8?B?cnVjN2FUQjBzM2NWT2JKSDErVlM0TFN6bzNyLzVIVW9qTUh1aEZid2VZd0RP?=
+ =?utf-8?B?dHJpL2Y5eFhTcUhYRWt4ajZFTW54ZitkOElXOHVDdEZPZ25aUjRIYzNiZWxo?=
+ =?utf-8?B?OHNQZUVUTVFxd0krVVBlNWhoZ25HUDY5emlHaDlPRWJ1b0JNMTRJcW9QSDY3?=
+ =?utf-8?B?MHprbXBpT3pWTWQ5OEdjYXVYbGtmeFRXbnNpSXg1MU9DZithWGV4Q25ndTJl?=
+ =?utf-8?B?ZDZoOGRudmc1c1JzS1BjUUtQSEx1UXNWZ1ZoeGUvS3JDVnlkRFpNMjFoNmly?=
+ =?utf-8?B?T0NselZnZEpCb09NaFIrRy94U2JEenpETUtqOWNpL0pxMGtzcjBIeWhQaDRn?=
+ =?utf-8?B?QUFrTDluV20zK2pCZ0xOa05NeXlPVVF0cVhwTm5Obm5zTWJ1U21mUytoOUtM?=
+ =?utf-8?B?ME5IVXBya3ZaSWtMT1NFR3JsRXpmRmUvUDlWNVZHOW5EQXZXSnRzaW1vSlpR?=
+ =?utf-8?B?ZWIxNE9TaEgzSm9FZlMzQ0k5TU95UUtFZTljaGlIU3hlVUh6eUlsVUd4Tkdn?=
+ =?utf-8?B?cHZ0Sy9NYVIzMWJ0U3U3SkE4dXNZNUVoaHovemN1NmlSclNRVWkyMFNlR2U0?=
+ =?utf-8?B?Ly9OaHZPanhnUVBmTVpUWTR1MnVXanA1dXhNVExkY3BSTkNVQ2h0WUlHOGps?=
+ =?utf-8?B?MXpOb3BHVzNLY21oaTJTVW44R0d1SVhmUTVXRDR2ZXBGV211N2phUmkzVlFD?=
+ =?utf-8?B?Z1VlcWszeWZGU2VnSkVQb29JdEJxNmo0a0hsV1duM291TkFBL0Rkc3A4RmFr?=
+ =?utf-8?B?cXhtN2RVSTB3WEg4T01pWWFHSndhOTVmejJoV1NtZmdFSDdoTC9YS3hUdmQw?=
+ =?utf-8?B?RXBZMSsrVm9QVk8renNDRjg2UVhiM2VId2dtT05qRTI1ekNiUS9ZUT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6679a98-47d6-4389-f45d-08da37d2d723
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 06:59:52.0651
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1vgNWzahnMNFdQeHOCab+XXvK5ABVwDvjSgJ2MCeGPITv4einz/dKKLrUXOwswYh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3292
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch re-defines __def_gfpflag_names array according to
-akpm@, willy@ and Joe Perches recommendations.
+Am 17.05.22 um 08:13 schrieb Greg Kroah-Hartman:
+> On Mon, May 16, 2022 at 05:08:05PM -0700, T.J. Mercier wrote:
+>> [SNIP]
+>>>>>> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
+>>>>>> Originally-by: Hridya Valsaraju <hridya@google.com>
+>>>>>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
+>>>>>>
+>>>>>> ---
+>>>>>> See the originally submitted patch by Hridya Valsaraju here:
+>>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F1%2F4%2F1066&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C61d7d3acbe5f47c7d0e608da37cc5ed7%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637883648212878440%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=HdSHA2vbBkBgdKxPXIp57EHW49yoMjgmigkVOKeTasI%3D&amp;reserved=0
+>>>>>>
+>>>>>> v2 changes:
+>>>>>> - Defer only sysfs creation instead of creation and teardown per
+>>>>>> Christian König
+>>>>>>
+>>>>>> - Use a work queue instead of a kthread for deferred work per
+>>>>>> Christian König
+>>>>>> ---
+>>>>>>     drivers/dma-buf/dma-buf-sysfs-stats.c | 56 ++++++++++++++++++++-------
+>>>>>>     include/linux/dma-buf.h               | 14 ++++++-
+>>>>>>     2 files changed, 54 insertions(+), 16 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
+>>>>>> index 2bba0babcb62..67b0a298291c 100644
+>>>>>> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
+>>>>>> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
+>>>>>> @@ -11,6 +11,7 @@
+>>>>>>     #include <linux/printk.h>
+>>>>>>     #include <linux/slab.h>
+>>>>>>     #include <linux/sysfs.h>
+>>>>>> +#include <linux/workqueue.h>
+>>>>>>
+>>>>>>     #include "dma-buf-sysfs-stats.h"
+>>>>>>
+>>>>>> @@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
+>>>>>>         kset_unregister(dma_buf_stats_kset);
+>>>>>>     }
+>>>>>>
+>>>>>> +static void sysfs_add_workfn(struct work_struct *work)
+>>>>>> +{
+>>>>>> +     struct dma_buf_sysfs_entry *sysfs_entry =
+>>>>>> +             container_of(work, struct dma_buf_sysfs_entry, sysfs_add_work);
+>>>>>> +     struct dma_buf *dmabuf = sysfs_entry->dmabuf;
+>>>>>> +
+>>>>>> +     /*
+>>>>>> +      * A dmabuf is ref-counted via its file member. If this handler holds the only
+>>>>>> +      * reference to the dmabuf, there is no need for sysfs kobject creation. This is an
+>>>>>> +      * optimization and a race; when the reference count drops to 1 immediately after
+>>>>>> +      * this check it is not harmful as the sysfs entry will still get cleaned up in
+>>>>>> +      * dma_buf_stats_teardown, which won't get called until the final dmabuf reference
+>>>>>> +      * is released, and that can't happen until the end of this function.
+>>>>>> +      */
+>>>>>> +     if (file_count(dmabuf->file) > 1) {
+>>>>> Please completely drop that. I see absolutely no justification for this
+>>>>> additional complexity.
+>>>>>
+>>>> This case gets hit around 5% of the time in my testing so the else is
+>>>> not a completely unused branch.
+>>> Well I can only repeat myself: This means that your userspace is
+>>> severely broken!
+>>>
+>>> DMA-buf are meant to be long living objects
+>> This patch addresses export *latency* regardless of how long-lived the
+>> object is. Even a single, long-lived export will benefit from this
+>> change if it would otherwise be blocked on adding an object to sysfs.
+>> I think attempting to improve this latency still has merit.
+> Fixing the latency is nice, but as it's just pushing the needed work off
+> to another code path, it will take longer overall for the sysfs stuff to
+> be ready for userspace to see.
+>
+> Perhaps we need to step back and understand what this code is supposed
+> to be doing.  As I recall, it was created because some systems do not
+> allow debugfs anymore, and they wanted the debugging information that
+> the dmabuf code was exposing to debugfs on a "normal" system.  Moving
+> that logic to sysfs made sense, but now I am wondering why we didn't see
+> these issues in the debugfs code previously?
 
-Fixes: fe573327ffb1 ("tracing: incorrect gfp_t conversion")
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
- include/trace/events/mmflags.h | 84 +++++++++++++++++-----------------
- 1 file changed, 43 insertions(+), 41 deletions(-)
+Well, I think that some key information is that adding the sysfs support 
+was justified with the argument that this is not only used for debugging.
 
-diff --git a/include/trace/events/mmflags.h b/include/trace/events/mmflags.h
-index fcb1ffb2cc8d..e87cb2b80ed3 100644
---- a/include/trace/events/mmflags.h
-+++ b/include/trace/events/mmflags.h
-@@ -13,49 +13,51 @@
-  * Thus most bits set go first.
-  */
- 
--#define __def_gfpflag_names						\
--	{(__force unsigned long)GFP_TRANSHUGE,		"GFP_TRANSHUGE"},	\
--	{(__force unsigned long)GFP_TRANSHUGE_LIGHT,	"GFP_TRANSHUGE_LIGHT"}, \
--	{(__force unsigned long)GFP_HIGHUSER_MOVABLE,	"GFP_HIGHUSER_MOVABLE"},\
--	{(__force unsigned long)GFP_HIGHUSER,		"GFP_HIGHUSER"},	\
--	{(__force unsigned long)GFP_USER,		"GFP_USER"},		\
--	{(__force unsigned long)GFP_KERNEL_ACCOUNT,	"GFP_KERNEL_ACCOUNT"},	\
--	{(__force unsigned long)GFP_KERNEL,		"GFP_KERNEL"},		\
--	{(__force unsigned long)GFP_NOFS,		"GFP_NOFS"},		\
--	{(__force unsigned long)GFP_ATOMIC,		"GFP_ATOMIC"},		\
--	{(__force unsigned long)GFP_NOIO,		"GFP_NOIO"},		\
--	{(__force unsigned long)GFP_NOWAIT,		"GFP_NOWAIT"},		\
--	{(__force unsigned long)GFP_DMA,		"GFP_DMA"},		\
--	{(__force unsigned long)__GFP_HIGHMEM,		"__GFP_HIGHMEM"},	\
--	{(__force unsigned long)GFP_DMA32,		"GFP_DMA32"},		\
--	{(__force unsigned long)__GFP_HIGH,		"__GFP_HIGH"},		\
--	{(__force unsigned long)__GFP_ATOMIC,		"__GFP_ATOMIC"},	\
--	{(__force unsigned long)__GFP_IO,		"__GFP_IO"},		\
--	{(__force unsigned long)__GFP_FS,		"__GFP_FS"},		\
--	{(__force unsigned long)__GFP_NOWARN,		"__GFP_NOWARN"},	\
--	{(__force unsigned long)__GFP_RETRY_MAYFAIL,	"__GFP_RETRY_MAYFAIL"},	\
--	{(__force unsigned long)__GFP_NOFAIL,		"__GFP_NOFAIL"},	\
--	{(__force unsigned long)__GFP_NORETRY,		"__GFP_NORETRY"},	\
--	{(__force unsigned long)__GFP_COMP,		"__GFP_COMP"},		\
--	{(__force unsigned long)__GFP_ZERO,		"__GFP_ZERO"},		\
--	{(__force unsigned long)__GFP_NOMEMALLOC,	"__GFP_NOMEMALLOC"},	\
--	{(__force unsigned long)__GFP_MEMALLOC,		"__GFP_MEMALLOC"},	\
--	{(__force unsigned long)__GFP_HARDWALL,		"__GFP_HARDWALL"},	\
--	{(__force unsigned long)__GFP_THISNODE,		"__GFP_THISNODE"},	\
--	{(__force unsigned long)__GFP_RECLAIMABLE,	"__GFP_RECLAIMABLE"},	\
--	{(__force unsigned long)__GFP_MOVABLE,		"__GFP_MOVABLE"},	\
--	{(__force unsigned long)__GFP_ACCOUNT,		"__GFP_ACCOUNT"},	\
--	{(__force unsigned long)__GFP_WRITE,		"__GFP_WRITE"},		\
--	{(__force unsigned long)__GFP_RECLAIM,		"__GFP_RECLAIM"},	\
--	{(__force unsigned long)__GFP_DIRECT_RECLAIM,	"__GFP_DIRECT_RECLAIM"},\
--	{(__force unsigned long)__GFP_KSWAPD_RECLAIM,	"__GFP_KSWAPD_RECLAIM"},\
--	{(__force unsigned long)__GFP_ZEROTAGS,		"__GFP_ZEROTAGS"}	\
-+#define gfpflag_string(flag) {(__force unsigned long)flag, #flag}
-+
-+#define __def_gfpflag_names			\
-+	gfpflag_string(GFP_TRANSHUGE),		\
-+	gfpflag_string(GFP_TRANSHUGE_LIGHT),	\
-+	gfpflag_string(GFP_HIGHUSER_MOVABLE),	\
-+	gfpflag_string(GFP_HIGHUSER),		\
-+	gfpflag_string(GFP_USER),		\
-+	gfpflag_string(GFP_KERNEL_ACCOUNT),	\
-+	gfpflag_string(GFP_KERNEL),		\
-+	gfpflag_string(GFP_NOFS),		\
-+	gfpflag_string(GFP_ATOMIC),		\
-+	gfpflag_string(GFP_NOIO),		\
-+	gfpflag_string(GFP_NOWAIT),		\
-+	gfpflag_string(GFP_DMA),		\
-+	gfpflag_string(__GFP_HIGHMEM),		\
-+	gfpflag_string(GFP_DMA32),		\
-+	gfpflag_string(__GFP_HIGH),		\
-+	gfpflag_string(__GFP_ATOMIC),		\
-+	gfpflag_string(__GFP_IO),		\
-+	gfpflag_string(__GFP_FS),		\
-+	gfpflag_string(__GFP_NOWARN),		\
-+	gfpflag_string(__GFP_RETRY_MAYFAIL),	\
-+	gfpflag_string(__GFP_NOFAIL),		\
-+	gfpflag_string(__GFP_NORETRY),		\
-+	gfpflag_string(__GFP_COMP),		\
-+	gfpflag_string(__GFP_ZERO),		\
-+	gfpflag_string(__GFP_NOMEMALLOC),	\
-+	gfpflag_string(__GFP_MEMALLOC),		\
-+	gfpflag_string(__GFP_HARDWALL),		\
-+	gfpflag_string(__GFP_THISNODE),		\
-+	gfpflag_string(__GFP_RECLAIMABLE),	\
-+	gfpflag_string(__GFP_MOVABLE),		\
-+	gfpflag_string(__GFP_ACCOUNT),		\
-+	gfpflag_string(__GFP_WRITE),		\
-+	gfpflag_string(__GFP_RECLAIM),		\
-+	gfpflag_string(__GFP_DIRECT_RECLAIM),	\
-+	gfpflag_string(__GFP_KSWAPD_RECLAIM),	\
-+	gfpflag_string(__GFP_ZEROTAGS)
- 
- #ifdef CONFIG_KASAN_HW_TAGS
--#define __def_gfpflag_names_kasan ,					       \
--	{(__force unsigned long)__GFP_SKIP_ZERO,	   "__GFP_SKIP_ZERO"},	       \
--	{(__force unsigned long)__GFP_SKIP_KASAN_POISON,   "__GFP_SKIP_KASAN_POISON"}, \
--	{(__force unsigned long)__GFP_SKIP_KASAN_UNPOISON, "__GFP_SKIP_KASAN_UNPOISON"}
-+#define __def_gfpflag_names_kasan ,			\
-+	gfpflag_string(__GFP_SKIP_ZERO),		\
-+	gfpflag_string(__GFP_SKIP_KASAN_POISON),	\
-+	gfpflag_string(__GFP_SKIP_KASAN_UNPOISON)
- #else
- #define __def_gfpflag_names_kasan
- #endif
--- 
-2.31.1
+If it would be used only for debugging then debugfs would the right 
+choice for this. If debugfs is then not available in your environment 
+then you should *not* ask the kernel to work around that. Instead we 
+should discuss why you want to disable some debugging access, but not 
+all of that.
+
+So for now let's assume that this is also used for accounting, e.g. when 
+userspace wants to know how many DMA-bufs of which size are flying 
+around to make decisions like which process to put into background or 
+which to swap out based on that information.
+
+> Perhaps we should go just one step further and make a misc device node
+> for dmabug debugging information to be in and just have userspace
+> poll/read on the device node and we spit the info that used to be in
+> debugfs out through that?  That way this only affects systems when they
+> want to read the information and not normal code paths?  Yeah that's a
+> hack, but this whole thing feels overly complex now.
+
+Yeah, totally agree on the complexity note. I'm just absolutely not keen 
+to add hack over hack over hack to make something work which from my 
+point of view has some serious issues with it's design.
+
+For example trying to do accounting based on DMA-bufs is extremely 
+questionable to begin with. See a modern game for example can have 
+between 10k and 100k of different buffers, reserving one file descriptor 
+for each of those objects is absolutely not going to work.
+
+So my request is to please describe your full use case and not just why 
+you think this patch is justified.
+
+Regards,
+Christian.
+
+>
+> thanks,
+>
+> greg k-h
 

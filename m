@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C4652A506
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C85F52A509
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349071AbiEQOge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S1349154AbiEQOgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349142AbiEQOg3 (ORCPT
+        with ESMTP id S1349131AbiEQOgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:36:29 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB262E9;
-        Tue, 17 May 2022 07:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652798187; x=1684334187;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HVPfHtlxBRDzWgbJQqS6BesX8jQgiqWFkyA4yeFc3gI=;
-  b=UVieVEOp96d/tbqg2jPSnMJ5juY6icIiJ6QBzceAq03BjcbCFnv1PFkO
-   iS/WVghUsvU+5g+JYPzISHSNuhsn2fraaxuy7orlB1JOguZTJD55jWghY
-   /7nrNkiQ1wEnPa5dBX4lPi2rW7o/9MLtk/h0qrfUX9mTOIPvzlGK1GxDr
-   2RMKy92Qp4JkGvwnpH33OlD3N4Tg7gp+9cP8uGBOJNjGCKaOT0ef1k7M0
-   hebBUIwdG/MkmkMDSOC7KAPtINe9dCOV/ip/PTsYJ2/DerIFlOZ9hP1QJ
-   KmZ/fLsLG3DUS3kLZ90HdsOTjb3i4+TLAtBo3ysqGsMtzNr6KTOtUv4aM
-   A==;
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="173758629"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2022 07:36:25 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 17 May 2022 07:36:25 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 17 May 2022 07:36:20 -0700
-Message-ID: <21a16074-9179-f57b-a667-cccddcab6e24@microchip.com>
-Date:   Tue, 17 May 2022 16:36:17 +0200
+        Tue, 17 May 2022 10:36:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72AC04FC7E;
+        Tue, 17 May 2022 07:36:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CZekkTwrC4S+/YZo062E5YXgbQ0lRlxuhi1puw/bt/M=; b=uTu+DhNslWz8qWcmVmfH54N8KF
+        wBUcjSpcSJ2nJHiPkW7OMlvxTG/p7GEThEEHmIvejja/Th7nfN9SgZs00QOlQM9lj+Afr/XBUlo9R
+        NrTdcBD6HaKEn4+/erscw4J7/nD/1qbABGbfPcXEEHrYgWpC05pJYW4yylOjsTLWa0bEYrIzJQo0j
+        VUNXn4UnOlD/Q6uzKfMD5D0zfW6v/HOp6ZKwl4bfC1jArn8OIVR7L/zd15dOZ8Xp32hfTMdhGXBVc
+        eqd2lhtWc8OhEElbhDSM0FafInhFphzZrN3tEQldNOPtBzY0xKcDd66gODXEYjQfYUyYdLqn8zXDV
+        q6Wf+5IQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nqyJ9-00Ave3-IJ; Tue, 17 May 2022 14:36:19 +0000
+Date:   Tue, 17 May 2022 15:36:19 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     jlayton@kernel.org, viro@zeniv.linux.org.uk, idryomov@gmail.com,
+        vshankar@redhat.com, ceph-devel@vger.kernel.org,
+        dchinner@redhat.com, hch@lst.de, arnd@arndb.de, mcgrof@kernel.org,
+        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 2/2] ceph: wait the first reply of inflight async
+ unlink
+Message-ID: <YoOy40sGQv4DjmAq@casper.infradead.org>
+References: <20220517125549.148429-1-xiubli@redhat.com>
+ <20220517125549.148429-3-xiubli@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 5/6] ARM: dts: lan966x: rename pinctrl nodes
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        "Quentin Schulz" <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        <UNGLinuxDriver@microchip.com>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mips@vger.kernel.org>
-References: <20220319204628.1759635-1-michael@walle.cc>
- <20220319204628.1759635-6-michael@walle.cc>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220319204628.1759635-6-michael@walle.cc>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517125549.148429-3-xiubli@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/03/2022 at 21:46, Michael Walle wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> The pinctrl device tree binding will be converted to YAML format. Rename
-> the pin nodes so they end with "-pins" to match the schema.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+On Tue, May 17, 2022 at 08:55:49PM +0800, Xiubo Li wrote:
+> +int ceph_wait_on_conflict_unlink(struct dentry *dentry)
+> +{
+> +	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
+> +	struct dentry *pdentry = dentry->d_parent;
+> +	struct dentry *udentry, *found = NULL;
+> +	struct ceph_dentry_info *di;
+> +	struct qstr dname;
+> +	u32 hash = dentry->d_name.hash;
+> +	int err;
+> +
+> +	dname.name = dentry->d_name.name;
+> +	dname.len = dentry->d_name.len;
+> +
+> +	rcu_read_lock();
+> +	hash_for_each_possible_rcu(fsc->async_unlink_conflict, di,
+> +				   hnode, hash) {
+> +		udentry = di->dentry;
+> +
+> +		spin_lock(&udentry->d_lock);
+> +		if (udentry->d_name.hash != hash)
+> +			goto next;
+> +		if (unlikely(udentry->d_parent != pdentry))
+> +			goto next;
+> +		if (!hash_hashed(&di->hnode))
+> +			goto next;
+> +
+> +		if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
+> +			pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
+> +				__func__, dentry, dentry);
+> +
+> +		if (d_compare(pdentry, udentry, &dname))
+> +			goto next;
+> +
+> +		spin_unlock(&udentry->d_lock);
+> +		found = dget(udentry);
+> +		break;
+> +next:
+> +		spin_unlock(&udentry->d_lock);
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	if (likely(!found))
+> +		return 0;
+> +
+> +	dout("%s dentry %p:%pd conflict with old %p:%pd\n", __func__,
+> +	     dentry, dentry, found, found);
+> +
+> +	err = wait_on_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT,
+> +			  TASK_INTERRUPTIBLE);
 
-For the record:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Do you really want to use TASK_INTERRUPTIBLE here?  If the window is
+resized and you get a SIGWINCH, or a timer goes off and you get a
+SIGALRM, you want to return -EINTR?  I would suggest that TASK_KILLABLE
+is probably the semantics that you want.
 
-This patch was taken by Claudiu and sent in the PR targeting 5.19 
-arm-soc tree via the at91-dt branch. It's currently in linux-next.
-
-Best regards,
-   Nicolas
-
-> ---
->   arch/arm/boot/dts/lan966x-pcb8291.dts | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
-> index 3281af90ac6d..3c7e3a7d6f14 100644
-> --- a/arch/arm/boot/dts/lan966x-pcb8291.dts
-> +++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
-> @@ -35,7 +35,7 @@ fc3_b_pins: fcb3-spi-pins {
->                  function = "fc3_b";
->          };
-> 
-> -       can0_b_pins:  can0_b_pins {
-> +       can0_b_pins:  can0-b-pins {
->                  /* RX, TX */
->                  pins = "GPIO_35", "GPIO_36";
->                  function = "can0_b";
-> --
-> 2.30.2
-> 
-
-
--- 
-Nicolas Ferre

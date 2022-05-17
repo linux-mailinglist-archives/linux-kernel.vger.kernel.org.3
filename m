@@ -2,83 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E1A529F9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3382529FA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 12:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238025AbiEQKkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 06:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S245642AbiEQKlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 06:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234568AbiEQKkP (ORCPT
+        with ESMTP id S1344446AbiEQKlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 06:40:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D582AE31;
-        Tue, 17 May 2022 03:40:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0551AB81829;
-        Tue, 17 May 2022 10:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 905FCC34100;
-        Tue, 17 May 2022 10:40:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652784011;
-        bh=lG+WzhlQu/F5FgYOMdxsU/i/OcTiws5bU6cJHnimqTI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lfJI5YNlohnRV0I4JzS3kWuqM8L48KfcU30EtMWroiLL0o95z1drEWJEO6dH/5YcF
-         b0fQqOFWYiG9NcS5zd4VBF4mMXWF2qQCpOeXOXQlwjKmPtCqNqd5T6riMGHGYbPv3y
-         OkbN3m26VEvU0nOOzpI7snFcCKYnbbD5tFsWDtI0SVidOTTkgacfu+xeesPfUTZoXZ
-         ZnYSUIiO5ai0LCJQG/PS6rdmJnnujYTpc1pR/2YTJu2lOPzX7ImMkq4FC6/k1vpKHf
-         RqpXKr+jV/YVQj0XdIEzgKvs7IsQvsu57dQ0sGeKEbvz/W3QK3Fy2/Ky88u+ydDsY4
-         6OW+puIfx7ETg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 72EEEF0389D;
-        Tue, 17 May 2022 10:40:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 17 May 2022 06:41:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B784B49A
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 03:41:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E845A1042;
+        Tue, 17 May 2022 03:40:59 -0700 (PDT)
+Received: from [10.57.82.55] (unknown [10.57.82.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 590E93F66F;
+        Tue, 17 May 2022 03:40:58 -0700 (PDT)
+Message-ID: <f5b78c9c-312e-70ab-ecbb-f14623a4b6e3@arm.com>
+Date:   Tue, 17 May 2022 11:40:52 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] ax25: merge repeat codes in ax25_dev_device_down()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165278401146.26222.3962756403091826373.git-patchwork-notify@kernel.org>
-Date:   Tue, 17 May 2022 10:40:11 +0000
-References: <20220516062804.254742-1-luwei32@huawei.com>
-In-Reply-To: <20220516062804.254742-1-luwei32@huawei.com>
-To:     Lu Wei <luwei32@huawei.com>
-Cc:     jreuter@yaina.de, ralf@linux-mips.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH] dma-iommu: Add iommu_dma_max_mapping_size()
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>, joro@8bytes.org,
+        will@kernel.org, hch@lst.de, m.szyprowski@samsung.com
+Cc:     chenxiang66@hisilicon.com, thunder.leizhen@huawei.com,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        liyihang6@hisilicon.com
+References: <1652706361-92557-1-git-send-email-john.garry@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <1652706361-92557-1-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Mon, 16 May 2022 14:28:04 +0800 you wrote:
-> Merge repeat codes to reduce the duplication.
+On 2022-05-16 14:06, John Garry wrote:
+> For streaming DMA mappings involving an IOMMU and whose IOVA len regularly
+> exceeds the IOVA rcache upper limit (meaning that they are not cached),
+> performance can be reduced.
 > 
-> Signed-off-by: Lu Wei <luwei32@huawei.com>
+> Add the IOMMU callback for DMA mapping API dma_max_mapping_size(), which
+> allows the drivers to know the mapping limit and thus limit the requested
+> IOVA lengths.
+> 
+> This resolves the performance issue originally reported in [0] for a SCSI
+> HBA driver which was regularly mapping SGLs which required IOVAs in
+> excess of the IOVA caching limit. In this case the block layer limits the
+> max sectors per request - as configured in __scsi_init_queue() - which
+> will limit the total SGL length the driver tries to map and in turn limits
+> IOVA lengths requested.
+> 
+> [0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+> 
+> Signed-off-by: John Garry <john.garry@huawei.com>
 > ---
->  net/ax25/ax25_dev.c | 22 ++++++++++------------
->  1 file changed, 10 insertions(+), 12 deletions(-)
+> Sending as an RFC as iommu_dma_max_mapping_size() is a soft limit, and not
+> a hard limit which I expect is the semantics of dma_map_ops.max_mapping_size
 
-Here is the summary with links:
-  - [net-next] ax25: merge repeat codes in ax25_dev_device_down()
-    https://git.kernel.org/netdev/net-next/c/a968c799eb1d
+Indeed, sorry but NAK for this being nonsense. As I've said at least 
+once before, if the unnecessary SAC address allocation attempt slows 
+down your workload, make it not do that in the first place. If you don't 
+like the existing command-line parameter then fine, there are plenty of 
+other options, it just needs to be done in a way that doesn't break x86 
+systems with dodgy firmware, as my first attempt turned out to.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Furthermore, if a particular SCSI driver doesn't benefit from mappings 
+larger than 256KB, then that driver is also free to limit its own 
+mapping size. There are other folks out there with use-cases for mapping 
+*gigabytes* at once; you don't get to cripple the API and say that 
+that's suddenly not allowed just because it happens to make your thing 
+go faster, that's absurd.
 
+Thanks,
+Robin.
 
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index 09f6e1c0f9c0..e2d5205cde37 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -1442,6 +1442,21 @@ static unsigned long iommu_dma_get_merge_boundary(struct device *dev)
+>   	return (1UL << __ffs(domain->pgsize_bitmap)) - 1;
+>   }
+>   
+> +static size_t iommu_dma_max_mapping_size(struct device *dev)
+> +{
+> +	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+> +	struct iommu_dma_cookie *cookie;
+> +
+> +	if (!domain)
+> +		return 0;
+> +
+> +	cookie = domain->iova_cookie;
+> +	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
+> +		return 0;
+> +
+> +	return iova_rcache_range();
+> +}
+> +
+>   static const struct dma_map_ops iommu_dma_ops = {
+>   	.alloc			= iommu_dma_alloc,
+>   	.free			= iommu_dma_free,
+> @@ -1462,6 +1477,7 @@ static const struct dma_map_ops iommu_dma_ops = {
+>   	.map_resource		= iommu_dma_map_resource,
+>   	.unmap_resource		= iommu_dma_unmap_resource,
+>   	.get_merge_boundary	= iommu_dma_get_merge_boundary,
+> +	.max_mapping_size	= iommu_dma_max_mapping_size,
+>   };
+>   
+>   /*
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index db77aa675145..9f00b58d546e 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -26,6 +26,11 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
+>   static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad);
+>   static void free_iova_rcaches(struct iova_domain *iovad);
+>   
+> +unsigned long iova_rcache_range(void)
+> +{
+> +	return PAGE_SIZE << (IOVA_RANGE_CACHE_MAX_SIZE - 1);
+> +}
+> +
+>   static int iova_cpuhp_dead(unsigned int cpu, struct hlist_node *node)
+>   {
+>   	struct iova_domain *iovad;
+> diff --git a/include/linux/iova.h b/include/linux/iova.h
+> index 320a70e40233..ae3e18d77e6c 100644
+> --- a/include/linux/iova.h
+> +++ b/include/linux/iova.h
+> @@ -79,6 +79,8 @@ static inline unsigned long iova_pfn(struct iova_domain *iovad, dma_addr_t iova)
+>   int iova_cache_get(void);
+>   void iova_cache_put(void);
+>   
+> +unsigned long iova_rcache_range(void);
+> +
+>   void free_iova(struct iova_domain *iovad, unsigned long pfn);
+>   void __free_iova(struct iova_domain *iovad, struct iova *iova);
+>   struct iova *alloc_iova(struct iova_domain *iovad, unsigned long size,
+> @@ -105,6 +107,11 @@ static inline void iova_cache_put(void)
+>   {
+>   }
+>   
+> +static inline unsigned long iova_rcache_range(void)
+> +{
+> +	return 0;
+> +}
+> +
+>   static inline void free_iova(struct iova_domain *iovad, unsigned long pfn)
+>   {
+>   }

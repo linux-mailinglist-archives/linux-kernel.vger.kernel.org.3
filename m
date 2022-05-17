@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80DB52AB03
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7951D52AB07
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 20:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352283AbiEQShF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 14:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S1352288AbiEQSkT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 17 May 2022 14:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352278AbiEQSg6 (ORCPT
+        with ESMTP id S233429AbiEQSkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 14:36:58 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F1B3669E;
-        Tue, 17 May 2022 11:36:56 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HIO9vF000774;
-        Tue, 17 May 2022 18:36:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=xSpmZomObbwmdVwXU2DztWRfkUMxLlEd6R0FQm0Cvqk=;
- b=U94saHecCqVzoNu8qSKsqaxqQOnUHnOAGuX1nuUvJeauNa8TJZtT17AqmzfFL9ZeFu3/
- iOiz0wnGoEW6GNCUu7HBlXSXX6iVCbFb+EiFiOFXZ+MUiOGF/8/d5zOWAqNoGbB3EZZ5
- p0sI+bhehLgnQjYenZ8w6GZAiXy2BFm7udHVHXW+SRhh60lR2qmbv/8AyvjxcNwtBr3W
- PMK/e7XO9BhPQrYY9dwCaE+rRXmCjyT/S/iIcGpF1dNtIY0Kg7okwy/+5v/Iw/688qDq
- dRrzPgIZKmi9JP3G7vY7xO0u3z/VwzzSlvW2vrZlNPA0eWol2xa/7apWUwZ4KybdMhTx vg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4gy10bky-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 18:36:54 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24HIOO3s001298;
-        Tue, 17 May 2022 18:36:54 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4gy10bk7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 18:36:54 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24HI7mkN007589;
-        Tue, 17 May 2022 18:36:53 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma03dal.us.ibm.com with ESMTP id 3g242ad2gh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 May 2022 18:36:53 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24HIapVu35914134
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 17 May 2022 18:36:52 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D784D6A054;
-        Tue, 17 May 2022 18:36:51 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1B596A04F;
-        Tue, 17 May 2022 18:36:50 +0000 (GMT)
-Received: from [9.65.254.31] (unknown [9.65.254.31])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Tue, 17 May 2022 18:36:50 +0000 (GMT)
-Message-ID: <08b82fea-b728-0920-297a-a0d3dd8cc176@linux.ibm.com>
-Date:   Tue, 17 May 2022 14:36:50 -0400
+        Tue, 17 May 2022 14:40:17 -0400
+Received: from sender4-of-o58.zoho.com (sender4-of-o58.zoho.com [136.143.188.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED9F3915C;
+        Tue, 17 May 2022 11:40:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1652812811; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=c/QgVX0MF2YimVNef7KMN9cFsenAkl5MIqMhNQ8bYUp6lHgNyTn3Kd8TDuLGBdfoM4Qqh+LDl8AerhHbMuu+ykQFysMtxUEeqLBokS48SEYiMW3Fqmv3A2lfH5RcBIz6d80saWL44U+cphp/KWxb5k/wmHL6DZaY17rxMbxzcTQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1652812811; h=Content-Type:Content-Transfer-Encoding:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=ifEE5KWRWUfeHk88nuZ3bY6KRsfs2POeZbigRez0zFs=; 
+        b=UUCqp9HCKfRVttc/nkdCFrXCKo5UCTnCrj3KXuVze1XfKylmsZUtnbIkRCKjo7Ce+sTGa9pgQ0w0AJ3vkSqkA/qDFD+Of4YZqwkX6g+QNFwcXMDIGRJrdldjSmjoMYUBM/fK8gWh3IUwNft0Gpzk3J5YqZe47aF0KUPzAMxilOE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (185.31.62.161 [185.31.62.161]) by mx.zohomail.com
+        with SMTPS id 1652812808776471.9683795053037; Tue, 17 May 2022 11:40:08 -0700 (PDT)
+Message-ID: <c766b4d9758b9fd1e15af89643093c595404a665.camel@mniewoehner.de>
+Subject: [PATCH v2] ACPI: utils: include UUID in _DSM evaluation warning
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+In-Reply-To: <CAJZ5v0hWxhn9WM3ciQgbZpa7x8JwpHK=Bz4kefB_3VnAM0gB9Q@mail.gmail.com>
+References: <f80dfd57fdca87897f070a3ea4ee0a26b03e7831.camel@mniewoehner.de>
+         <CAJZ5v0h+kKwdntGPC5PP6N0ZRbRzLxuwcwTGm-PNBH6Z3mnETg@mail.gmail.com>
+         <28686e8d994c297a78fb816805cd3652a8f8c90a.camel@mniewoehner.de>
+         <CAJZ5v0hWxhn9WM3ciQgbZpa7x8JwpHK=Bz4kefB_3VnAM0gB9Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Tue, 17 May 2022 20:40:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v19 07/20] s390/vfio-ap: rename matrix_dev->lock mutex to
- matrix_dev->mdevs_lock
-Content-Language: en-US
-To:     jjherne@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     freude@linux.ibm.com, borntraeger@de.ibm.com, cohuck@redhat.com,
-        mjrosato@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, kwankhede@nvidia.com,
-        fiuczy@linux.ibm.com
-References: <20220404221039.1272245-1-akrowiak@linux.ibm.com>
- <20220404221039.1272245-8-akrowiak@linux.ibm.com>
- <a26ce34d-0ed8-5479-805b-d863ff056848@linux.ibm.com>
-From:   Tony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <a26ce34d-0ed8-5479-805b-d863ff056848@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: GDXWZ8emObZJ-VNq_4SmZ7TreLcKDhWa
-X-Proofpoint-GUID: EZERV1N4eoBxGDdVK1OzneBLJqNJ3fMW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-17_03,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 bulkscore=0 spamscore=0
- mlxlogscore=827 mlxscore=0 clxscore=1015 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205170108
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.42.2 
+Content-Transfer-Encoding: 8BIT
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for the review.
+The _DSM evaluation warning in its current form is not very helpful, as 
+it lacks any specific information:
+  ACPI: \: failed to evaluate _DSM (0x1001)
 
-On 5/17/22 10:02 AM, Jason J. Herne wrote:
-> Reviewed-by: Jason J. Herne <jjherne@linux.ibm.com>
+Thus, include the UUID of the missing _DSM:
+  ACPI: \: failed to evaluate _DSM bf0212f2-... (0x1001)
+
+Signed-off-by: Michael Niewöhner <linux@mniewoehner.de>
+---
+Changes in v2:
+ - fix arguments order
+ - fix indentation
+ - drop line break
+
+ drivers/acpi/utils.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+index d5cedffeeff9..3a9773a09e19 100644
+--- a/drivers/acpi/utils.c
++++ b/drivers/acpi/utils.c
+@@ -681,7 +681,7 @@ acpi_evaluate_dsm(acpi_handle handle, const guid_t *guid, u64 rev, u64 func,
+ 
+ 	if (ret != AE_NOT_FOUND)
+ 		acpi_handle_warn(handle,
+-				"failed to evaluate _DSM (0x%x)\n", ret);
++				 "failed to evaluate _DSM %pUb (0x%x)\n", guid, ret);
+ 
+ 	return NULL;
+ }
+-- 
+2.34.1
 

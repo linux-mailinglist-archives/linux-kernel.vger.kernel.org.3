@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E923452AEDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D114C52AED8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 01:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbiEQXwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 19:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        id S232152AbiEQXw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 19:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232022AbiEQXwO (ORCPT
+        with ESMTP id S232136AbiEQXwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 19:52:14 -0400
+        Tue, 17 May 2022 19:52:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1B741339;
-        Tue, 17 May 2022 16:52:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814D252E48;
+        Tue, 17 May 2022 16:52:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74BBFB81D67;
-        Tue, 17 May 2022 23:52:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0A553C34117;
-        Tue, 17 May 2022 23:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652831531;
-        bh=spYIMVPV55N3AgdMlDTGz8M6k1WuTg+xQApxQCdZtNs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=h1bXy9WiypVJqCB87dygxFOiAH6gbD/QyvxcIIP/SKbkFUumpFz210BvM72wVN5Kt
-         lyRpTlqA9vAxUSpjxF5szDhefDwzGT43Cy0qiE+ECdjB9d2jcI06NMvQksytp4mLP0
-         dZ+mJTywH5iwPT54f/QCDh9rzZuFkYD2UfR3ptdTEm0uydoWTUqJoBbMR++Ygnn8GD
-         NrcvBuHDAddL9GUEmRvkterw4/zKFEUV7LjJftSWXoI8q3TD2YYPF1b8jpoLo56rPb
-         y0MiCRPWPEbq2XOMJLULFImNw2ccAHy44zbMkT1BG7CuZL+njrvMeTQOvmWqf1gU/g
-         7RPcZzBM25rPg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6003F0389D;
-        Tue, 17 May 2022 23:52:10 +0000 (UTC)
-Subject: Re: [GIT PULL] PCI fixes for v5.18
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220517203530.GA1102878@bhelgaas>
-References: <20220517203530.GA1102878@bhelgaas>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220517203530.GA1102878@bhelgaas>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.18-fixes-1
-X-PR-Tracked-Commit-Id: a3b69dd0ad6265c29c4b6fb381cd76fb3bebdf8c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 210e04ff768142b96452030c4c2627512b30ad95
-Message-Id: <165283153093.29538.8971651599965342621.pr-tracker-bot@kernel.org>
-Date:   Tue, 17 May 2022 23:52:10 +0000
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Stefan Gottwald <gottwald@igel.com>,
-        Steev Klimaszewski <steev@kali.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F218B81D16;
+        Tue, 17 May 2022 23:52:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D4B0C34117;
+        Tue, 17 May 2022 23:52:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652831537;
+        bh=pEz6dre40UCCubkWjCpmYmIXIWT0QJP+YHG6iJ3oqAE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tsprR4zmK/oALRYBT6vfLxQ1klcvHAWxPcTURMr4US/hz7Uw0voe1Rd7mrChl8sdH
+         2miTXW+EY7qU+TEI2unOpAlcbme0xr2QXB48zpwSoZaqLZ+c/nu+dY2yTH5iNx0vo8
+         yhD8XhZUkOY2U6dkpIa/o/EV1/RwxLY79S8QzLW0=
+Date:   Tue, 17 May 2022 16:52:16 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
+Message-Id: <20220517165216.7acd8434f8b25606836e21e6@linux-foundation.org>
+In-Reply-To: <YoKtgaxOAMBVKiCf@cmpxchg.org>
+References: <20220510152847.230957-1-hannes@cmpxchg.org>
+        <20220510152847.230957-7-hannes@cmpxchg.org>
+        <20220511173218.GB31592@blackbody.suse.cz>
+        <YnwJUL90fuoHs3YW@cmpxchg.org>
+        <20220513151426.GC16096@blackbody.suse.cz>
+        <Yn6QfdouzkcrygTR@cmpxchg.org>
+        <20220516143459.GA17557@blackbody.suse.cz>
+        <YoKtgaxOAMBVKiCf@cmpxchg.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,15 +65,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 17 May 2022 15:35:30 -0500:
+On Mon, 16 May 2022 16:01:05 -0400 Johannes Weiner <hannes@cmpxchg.org> wrote:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.18-fixes-1
+> > > Flushing unnecessary groups with a ratelimit doesn't sound like an
+> > > improvement to me.
+> > 
+> > Then I'm only concerned about a situation when there's a single deep
+> > memcg that undergoes both workingset_refault() and zswap querying.
+> > The latter (bare call to cgroup_rstat_flush()) won't reset
+> > stats_flush_threshold, so the former (or the async flush more likely)
+> > would attempt a flush too. The flush work (on the leaf memcg) would be
+> > done twice even though it may be within the tolerance of cumulated
+> > error the second time.
+> > 
+> > This is a thing that might require attention in the future (depending on
+> > some data how it actually performs). I see how the current approach is
+> > justified.
+> 
+> Yes, we can optimize it should the need arise. So far it's been fine.
+> 
+> Thanks for your thoughts, Michal.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/210e04ff768142b96452030c4c2627512b30ad95
+Me too.
 
-Thank you!
+I think everything is settled here so I plan to import this series into
+mm-stable in a couple of days.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+at
+https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/
+
+ documentation-filesystems-proc-update-meminfo-section.patch
+ documentation-filesystems-proc-update-meminfo-section-fix.patch
+ documentation-filesystems-proc-update-meminfo-section-fix-2.patch
+ mm-kconfig-move-swap-and-slab-config-options-to-the-mm-section.patch
+ mm-kconfig-group-swap-slab-hotplug-and-thp-options-into-submenus.patch
+ mm-kconfig-group-swap-slab-hotplug-and-thp-options-into-submenus-fix.patch
+ mm-kconfig-group-swap-slab-hotplug-and-thp-options-into-submenus-fix-fix.patch
+ mm-kconfig-simplify-zswap-configuration.patch
+ mm-zswap-add-basic-meminfo-and-vmstat-coverage.patch
+ zswap-memcg-accounting.patch
+ zswap-memcg-accounting-fix.patch
+ zswap-memcg-accounting-fix-2.patch
+
+

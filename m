@@ -2,91 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D8A52A011
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3282752A018
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345258AbiEQLJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
+        id S235232AbiEQLKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344985AbiEQLIg (ORCPT
+        with ESMTP id S1343703AbiEQLK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:08:36 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309D62DABA;
-        Tue, 17 May 2022 04:08:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652785711; x=1684321711;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nQ+lnY6dYx8GIiIqMS+NqyRc9HSpuylhm5ub7+G+Sro=;
-  b=CxWEBRFnwuGMk//GWb0esBq7Gonnjr/PxnOHH4jgL/UiIp4j4MzYtary
-   H0Kmf6zL94RFjpTkHE0eZCzt2RdZPY5K6pTtfwIpocXedbpKTrzoHfOuJ
-   n8xbua6TAmVgsqQZ76K8TZdxHO3hLJdfsOnBTQoWv6YlZPgNW0Tk3XVDZ
-   7QBnZzx5xzkvRBQyi83tXVbNoNbuL5Uk0UDhylAN4MuNXu5kZxu7idmWC
-   YNF0UihJf1HSXHnVN2GqV9c/xoaQcifWCw4mmi34srIh36h/fpxDwx5WR
-   WeoyB4HmkDzOMN8AckHkgL67VvbVJVoxKECUV0uh1yLOBBrZF93V8bu6O
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="271268802"
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="271268802"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 04:08:30 -0700
-X-IronPort-AV: E=Sophos;i="5.91,232,1647327600"; 
-   d="scan'208";a="568831154"
-Received: from mtarral-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.52.88])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 04:08:26 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 9/9] pcmcia: synclink_cs: Don't allow CS5-6
-Date:   Tue, 17 May 2022 14:07:37 +0300
-Message-Id: <20220517110737.37148-10-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220517110737.37148-1-ilpo.jarvinen@linux.intel.com>
-References: <20220517110737.37148-1-ilpo.jarvinen@linux.intel.com>
+        Tue, 17 May 2022 07:10:29 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB64611A02;
+        Tue, 17 May 2022 04:10:10 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id AB0C91F43AE1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652785809;
+        bh=qf8uzbZ1EqZKktmG/w8A35nbIzmMTkGNdHNjUDAKrE0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YSEpN29NXtz9y0X68InodlahgVwMXAbQqp76hpOV6ZqVaCMcmQ604Hsdc+EMgGSWp
+         iHP21VfOdjsMU1q4z3olc5ksKIpVDuSNx5b9aEEkn+xSaDc1zsEJl8U+RYi2zn9jpe
+         byljfm3THQOEyYqu66vH85Ci4JOmATN1oJW7XYCJHYhoshg/JkrBjoXEyLcWFdkxXX
+         5dR6aWBFVpXtDo80jDCg5oYpCI1Er0M31yjCljsEj17+xl84lwResrSPnngcH1cR3f
+         HaQGPDaasbSn3GpwwWP6Tsl/H+vf1lvUEF2O2fuHLT+AHtofAujWeTA5b7lMIk/kOh
+         DIboZigcnu4hQ==
+Message-ID: <0ab46d63-3b3a-c847-df21-40efbeb01486@collabora.com>
+Date:   Tue, 17 May 2022 13:10:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: mediatek: Add bindings for MT6795 M4U
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     martin.botka@somainline.org, linux-mediatek@lists.infradead.org,
+        robh+dt@kernel.org, konrad.dybcio@somainline.org,
+        paul.bouchara@somainline.org, krzysztof.kozlowski+dt@linaro.org,
+        will@kernel.org, linux-kernel@vger.kernel.org,
+        yong.wu@mediatek.com, ~postmarketos/upstreaming@lists.sr.ht,
+        joro@8bytes.org, phone-devel@vger.kernel.org,
+        devicetree@vger.kernel.org, marijn.suijten@somainline.org,
+        linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
+        iommu@lists.linux-foundation.org
+References: <20220513151411.395744-1-angelogioacchino.delregno@collabora.com>
+ <20220513151411.395744-2-angelogioacchino.delregno@collabora.com>
+ <20220516160307.GA2732645-robh@kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220516160307.GA2732645-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only CS7 and CS8 seem supported but CSIZE was not sanitized in termios
-c_cflag. The driver sets 7 bits whenever data_bits is not 8 so default
-to CS7 when CSIZE is not CS8.
+Il 16/05/22 18:03, Rob Herring ha scritto:
+> On Fri, 13 May 2022 17:14:10 +0200, AngeloGioacchino Del Regno wrote:
+>> Add bindings for the MediaTek Helio X10 (MT6795) IOMMU/M4U.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   .../bindings/iommu/mediatek,iommu.yaml        |  3 +
+>>   include/dt-bindings/memory/mt6795-larb-port.h | 96 +++++++++++++++++++
+>>   2 files changed, 99 insertions(+)
+>>   create mode 100644 include/dt-bindings/memory/mt6795-larb-port.h
+>>
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/char/pcmcia/synclink_cs.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-index 78baba55a8b5..d0572bbe8832 100644
---- a/drivers/char/pcmcia/synclink_cs.c
-+++ b/drivers/char/pcmcia/synclink_cs.c
-@@ -1418,7 +1418,11 @@ static void mgslpc_change_params(MGSLPC_INFO *info, struct tty_struct *tty)
- 		info->serial_signals &= ~(SerialSignal_RTS | SerialSignal_DTR);
- 
- 	/* byte size and parity */
--
-+	if ((cflag & CSIZE) != CS8) {
-+		cflag &= ~CSIZE;
-+		cflag |= CS7;
-+		tty->termios.c_cflag = cflag;
-+	}
- 	info->params.data_bits = tty_get_char_size(cflag);
- 
- 	if (cflag & CSTOPB)
--- 
-2.30.2
+Hello Rob,
 
+I'm sad to say that, but I have to send a new version of this patch even though
+you have acked it already... and I will have to drop your ack, as the changes to
+the yaml patch will be a bit different, as we're adding support for a phandle
+to mediatek,infracfg after some discussion about it on patch 2/2 of this series.
+
+The mediatek,infracfg phandle addition will come as a different series, and this
+patch (on v2) will add a conditional for:
+
+   - if:
+
+       properties:
+
+         compatible:
+
+           contains:
+
+             enum:
+
+               - mediatek,mt6795-m4u
+
+     then:
+
+       required:
+
+         - mediatek,infracfg
+
+Sorry about wasting your time on this v1.
+
+Regards,
+Angelo

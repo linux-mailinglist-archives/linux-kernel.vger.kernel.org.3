@@ -2,106 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4371E529D9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C784529DA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 11:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236928AbiEQJMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 05:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
+        id S238967AbiEQJNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 05:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234483AbiEQJMk (ORCPT
+        with ESMTP id S243768AbiEQJMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 05:12:40 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15EF3056F;
-        Tue, 17 May 2022 02:12:37 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id gh6so33520399ejb.0;
-        Tue, 17 May 2022 02:12:37 -0700 (PDT)
+        Tue, 17 May 2022 05:12:46 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7C53055B;
+        Tue, 17 May 2022 02:12:45 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id j28so7495513eda.13;
+        Tue, 17 May 2022 02:12:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WSRw1Pwnan2nbIFjF7GvgpMAawLqzQo4p+q82BQEguE=;
+        b=LjeX+DA75x1FUBh9TKF2FwzUAn42vtQcynsZgE53sBbfQ2Z+W/Q8EvBRkxSWSkFt9E
+         ZzHkJEbd1yEw/kW3653DnDdqxVbzqoicSH2Ca9v1EM0KexEts3z0si04eArE33PAmQpm
+         YP9iwaPxnodFuDxT0dbcx8QI/Im96YAg0MC0MNyxfNETOxiW7TR1aiMEcOI8vLT0RA+t
+         VIwIutJ8k26XKrmHSyo2vCFlj24rx1HY0El/xVrV3VLK1yTBnmKacaH9blICJId9bO61
+         SMEAIbReF94tx5qKwYA6KNGH22wapcjP8Jq6Bao8y7TjUuYj3HgZpUoH+hhsSlAhDsjg
+         HGWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=u9TgFyNaE4p2EaZjj5YgXSyanohJeg831YsqvlUy2XI=;
-        b=ro9trW4/N3KuztgkC55vFwJJFFWdOo16tJViXJ1B38Ugr2Z48ws0nAE3OR21NfkB0J
-         f/rrdw6amvkf59uP+52jUE92aW6e2u78JM9+DhO3BrDXf7oda45uRY3U98I7mA6WFCEY
-         Nh1o17QZsy4MMtZviy5b4Vysvvu3rMON5JfiuJUu0iOm39ow8pYQumj4PCCuUIbP9SEA
-         pGjuaOnpZB/dcmm3ay3hmYaSpGnLsVZj+P2N2bQzH7u+qGbuTfBbLw08pHfRmzaL5n4S
-         MuPwGP1R6qoO40CJ3MXmzgiw5S9FOvKPQEC4EUvWjMDPHXz+ycNU7Q8dC2ncLWB3cvGz
-         Hxvw==
-X-Gm-Message-State: AOAM533FTZmNLYNXAsgQYZsMuZmxrYhuHOU7bo3spbi32iri30reO+xB
-        anXiLnZ2UeH2+LMt5DXkFBY=
-X-Google-Smtp-Source: ABdhPJwo3pxSdraA2uivrQySwWjWLtIN4MSsEULWrOe+I6i9F+VrLl+L5tUWZor0uNVAElfwc7I4Cw==
-X-Received: by 2002:a17:906:5d05:b0:6f6:2f7c:ffb8 with SMTP id g5-20020a1709065d0500b006f62f7cffb8mr19829361ejt.649.1652778756171;
-        Tue, 17 May 2022 02:12:36 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id er22-20020a170907739600b006f3ef214e29sm802668ejc.143.2022.05.17.02.12.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 02:12:35 -0700 (PDT)
-Message-ID: <2612fae5-e972-5c82-c44e-af1fb1d839fd@kernel.org>
-Date:   Tue, 17 May 2022 11:12:34 +0200
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WSRw1Pwnan2nbIFjF7GvgpMAawLqzQo4p+q82BQEguE=;
+        b=OSNFgBH7BQNiZGPFdkKRh6CbNJoJMeI7ExRhNJCZS7arkWT7fSwPGJO8gkpuZEjOXp
+         DAmNkVvj+pCNhL/stVCdQzVNPIo6OanqmQMsKcj41iu0E/gy8pL7Ixd8OE61z25geHBb
+         mPTNdM4/d/IfIkYJ60/dDbk6mMbtjWtOP75o5XsacjSTydep5chYtZN8kTzfxvrCQqB0
+         mT3k2wknQomTOa+VwA4PH9YbalptZbN6DMYWnCHopItRh+WDKMf1Xk/4RNBEKR64Xymo
+         dROseObpLRUPtwfhAp/MU4YE6eP1kYbj+VMxxsyv0APt0Jt+DmzjsqzOfJ3Vcc7nxIkZ
+         DtWg==
+X-Gm-Message-State: AOAM532iBpson5lGpYNCQIwk3E7rQauyyt5ZInYMyZLn8bY12GLkDwGT
+        dTT8HSly8RQuYubaPvCauvI=
+X-Google-Smtp-Source: ABdhPJzI+2mseapOLyonVdtI88hGRVWahwfpEgpTCab/cMq7qfEYOPFG16q4lbZAKku81lBLCRGMuA==
+X-Received: by 2002:a05:6402:3585:b0:427:ccd4:bec3 with SMTP id y5-20020a056402358500b00427ccd4bec3mr18004810edc.2.1652778763846;
+        Tue, 17 May 2022 02:12:43 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id s2-20020aa7cb02000000b0042617ba63a5sm6440784edt.47.2022.05.17.02.12.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 02:12:43 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 17 May 2022 11:12:41 +0200
+To:     Eugene Syromiatnikov <esyr@redhat.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/4] bpf_trace: check size for overflow in
+ bpf_kprobe_multi_link_attach
+Message-ID: <YoNnCaofiAc6M8jc@krava>
+References: <cover.1652772731.git.esyr@redhat.com>
+ <9e4171972a3d75e656073e0c25cd4071a6f652e4.1652772731.git.esyr@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH -next] serial: cpm_uart: Fix build error without
- CONFIG_SERIAL_CPM_CONSOLE
-Content-Language: en-US
-To:     YueHaibing <yuehaibing@huawei.com>, gregkh@linuxfoundation.org,
-        geert@linux-m68k.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220517081355.35456-1-yuehaibing@huawei.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220517081355.35456-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e4171972a3d75e656073e0c25cd4071a6f652e4.1652772731.git.esyr@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17. 05. 22, 10:13, YueHaibing wrote:
-> drivers/tty/serial/cpm_uart/cpm_uart_core.c: In function ‘cpm_uart_init_port’:
-> drivers/tty/serial/cpm_uart/cpm_uart_core.c:1251:7: error: ‘udbg_port’ undeclared (first use in this function); did you mean ‘uart_port’?
->    if (!udbg_port)
->         ^~~~~~~~~
->         uart_port
+On Tue, May 17, 2022 at 09:36:15AM +0200, Eugene Syromiatnikov wrote:
+> Check that size would not overflow before calculation (and return
+> -EOVERFLOW if it will), to prevent potential out-of-bounds write
+> with the following copy_from_user.  Use kvmalloc_array
+> in copy_user_syms to prevent out-of-bounds write into syms
+> (and especially buf) as well.
 > 
-> commit d142585bceb3 leave this corner, wrap it with #ifdef block
-> 
-> Fixes: d142585bceb3 ("serial: cpm_uart: Protect udbg definitions by CONFIG_SERIAL_CPM_CONSOLE")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
+> Cc: <stable@vger.kernel.org> # 5.18
+> Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+thanks,
+jirka
+
 > ---
->   drivers/tty/serial/cpm_uart/cpm_uart_core.c | 2 ++
->   1 file changed, 2 insertions(+)
+>  kernel/trace/bpf_trace.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/tty/serial/cpm_uart/cpm_uart_core.c b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-> index d6d3db9c3b1f..ec3a8f768555 100644
-> --- a/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-> +++ b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-> @@ -1248,7 +1248,9 @@ static int cpm_uart_init_port(struct device_node *np,
->   
->   #ifdef CONFIG_PPC_EARLY_DEBUG_CPM
->   #ifdef CONFIG_CONSOLE_POLL
-> +#ifdef CONFIG_SERIAL_CPM_CONSOLE
->   	if (!udbg_port)
-> +#endif
->   #endif
-
-That's ugly, could you merge the two to
-   #if defined(ONE) && defined(TWO)
-instead
-?
-
->   		udbg_putc = NULL;
->   #endif
-
-
--- 
-js
-suse labs
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 7141ca8..9c041be 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2261,11 +2261,11 @@ static int copy_user_syms(struct user_syms *us, unsigned long __user *usyms, u32
+>  	int err = -ENOMEM;
+>  	unsigned int i;
+>  
+> -	syms = kvmalloc(cnt * sizeof(*syms), GFP_KERNEL);
+> +	syms = kvmalloc_array(cnt, sizeof(*syms), GFP_KERNEL);
+>  	if (!syms)
+>  		goto error;
+>  
+> -	buf = kvmalloc(cnt * KSYM_NAME_LEN, GFP_KERNEL);
+> +	buf = kvmalloc_array(cnt, KSYM_NAME_LEN, GFP_KERNEL);
+>  	if (!buf)
+>  		goto error;
+>  
+> @@ -2461,7 +2461,8 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+>  	if (!cnt)
+>  		return -EINVAL;
+>  
+> -	size = cnt * sizeof(*addrs);
+> +	if (check_mul_overflow(cnt, (u32)sizeof(*addrs), &size))
+> +		return -EOVERFLOW;
+>  	addrs = kvmalloc(size, GFP_KERNEL);
+>  	if (!addrs)
+>  		return -ENOMEM;
+> -- 
+> 2.1.4
+> 

@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C4F52A576
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E103D52A575
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349470AbiEQO4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S1349429AbiEQO4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240074AbiEQO4r (ORCPT
+        with ESMTP id S235603AbiEQO4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:56:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A742430555
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 07:56:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 445F2B818F3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 14:56:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB605C34116;
-        Tue, 17 May 2022 14:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652799403;
-        bh=Aun7xA8wrKxkh8OitJvtWBCd91a1rKp95MRXQjNQsRE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d8SZ6Ne2UdUUm623dbz/Zoy06FydBfBFMzE5AvpQ8pjrJeWWKkg3nG+Fd4RmQ5Wen
-         99w2nlSrztxq9DbVK0FyUOFNLE/OONGa3th44h3fQ74jV/4/SVO/IR9ob8sJOF/rn1
-         h0MoXQS7+Rtsa9ajPLQySK2uky0/KNc8cul1LDkMt7qollmGJe4OdKDKKh4S+EIXnN
-         383ZvVzOuMdBe6pssOJNPyCrisAPx3KYjGtvlDOdU998nCdWVjU+Dau7w8rT/2dF5k
-         0x0V/opCynL/l+6+puuCWv6qtqY4fRaQICjIixmafGMC0G5F40fvwit5VJDWJ/UYc9
-         tfVlaCK+BYmIQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 088BE400B1; Tue, 17 May 2022 11:56:41 -0300 (-03)
-Date:   Tue, 17 May 2022 11:56:40 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH 0/3] perf intel-pt: Add support for emulated ptwrite
-Message-ID: <YoO3qM9EyF1WZOkq@kernel.org>
-References: <20220509152400.376613-1-adrian.hunter@intel.com>
- <d9b6a2c0-2387-2c2e-eedb-9de8a36a2eb5@intel.com>
+        Tue, 17 May 2022 10:56:43 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE27024F3C;
+        Tue, 17 May 2022 07:56:41 -0700 (PDT)
+Received: from mail-yw1-f170.google.com ([209.85.128.170]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MzQPe-1ndgwC0Ocy-00vRnN; Tue, 17 May 2022 16:56:40 +0200
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2fedd26615cso77498037b3.7;
+        Tue, 17 May 2022 07:56:39 -0700 (PDT)
+X-Gm-Message-State: AOAM532SeLwfjctoKqmpGfeDF1zEHxm9lGBts33JPuG/U/seg6sQGDHY
+        Y153oxZLKtozhOjXYLZhfJz0PJVv00Y14NiWMAE=
+X-Google-Smtp-Source: ABdhPJzfQfMq9H+I8M/viBf/bZGDpOu9d60f+7Mz7Q+Kz6SQ6MND8STnx2JgGosiR2GP3lJ5ACWXszxYKv0jdRmGk1s=
+X-Received: by 2002:a0d:cd06:0:b0:2f8:f39c:4cfc with SMTP id
+ p6-20020a0dcd06000000b002f8f39c4cfcmr26196437ywd.495.1652799398796; Tue, 17
+ May 2022 07:56:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d9b6a2c0-2387-2c2e-eedb-9de8a36a2eb5@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220407204115.34350-1-krzysztof.kozlowski@linaro.org> <YoOZ4TawKslvu01w@xhacker>
+In-Reply-To: <YoOZ4TawKslvu01w@xhacker>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 17 May 2022 15:56:43 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a34dz7Fkk3jbwNq45BRHMt9tGuO=r5NJDiAuMyX05xW6g@mail.gmail.com>
+Message-ID: <CAK8P3a34dz7Fkk3jbwNq45BRHMt9tGuO=r5NJDiAuMyX05xW6g@mail.gmail.com>
+Subject: Re: [RESEND PATCH] arm64: dts: synaptics: remove unused DTSI for AS370
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm-soc <arm@kernel.org>, SoC Team <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:hmx3t1U0Jy8jKsEIrWSg53d6svImoOqDMm/Y063DOSGTNGV/5RO
+ PV4dUNXBTcay3+dLIOmieyAGb0OFDvRXX5Qydr302OBCmG9OvOen5XRnm4//md16AyZ6sJK
+ qyukf0xcmj91wSHwDgGaXIC+cK2rPRI9QF6HOmDbxpVtTc96p+UsqWHAsEwXHEhx60koZwi
+ BZ/xdjrJCxjZE9WFqqW1g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0Q2xj5Wdlb0=:fxa9/3eub71EB5gTwlspTN
+ t1wR4DhiO2MxcCDf1WAqDwcJCpLHE2510CCLURDpBP/Ex2Beq0RUNDR3IgAC0SbWqzgP/O3Wl
+ jK/K+yS1bGn9mZSHbAtJL/JFNBLai5CnQBVgtuaRqL99Zqxs1JavffJn+kK7Lqo+qVpSX+6zq
+ ejb7ugPX7OUYbIJo7gOOs/XxQ0Vq+yFoqy5wIDx9XBpSALc8wnrlFl7OvOGm5YUV7ki0cqCq9
+ O3CE9Nu4b7fCn0r6oeFvuIVI7/0MqzJXn+2jUE3dBiJacEit5YLQNa4upKjQTe8Y5gj9rFkgx
+ j8O1RoBiTGy3eeWGSmCNf7QASy98EwjyGU/eR7/UQM+gYusJfECaGvElVro12oYJz04b+GZqP
+ 8+Muox+UYk7aFCUId+Klmw1j64fe0DFAGiDijtaKk3rEbKahy0prSe/Xv1NVhXfrqypfXE3TD
+ 5IW6vZcRqCsOBfKae/tNiJAXiO5Xmys6+0/8KbC5789EdKQe22H6t2rin+OuL17TvM3bmvlv4
+ sc9/XgayBtT050U3KwpjDf56oZEmV14a3W8qzBAJKZuWRbZLAUdd5LGA+g6jWprW+O4avF297
+ dxTP8dLT/E7qbBGKNHey34r+xUIJdKO32VaGyOFsAvJF3zxHeZajZmmOBULsUFDM8+bXTVUQ6
+ VlOTO1a0r1gECCGbnz0m76kXCyxpEDZwfQEQpDMn76lHU7G1eDTldrihhJVDyB2lXxjFK7Hpo
+ T9tTyjVmzKIVFmWO1qLDjL+9FseniQOD4HwRjDYeW/PThA2JYyAp356qJIAwnOSjqEknHSz0l
+ pHnSeyzy6qpJEmlp3O4/wa4mRNOG1nZhLnCEUDTiAejcBqPEaOTXWBQ5P5xRtSpk/FRoy+o4v
+ wf57WYCepNa+6Xu3xdJw==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,41 +73,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, May 17, 2022 at 04:13:14PM +0300, Adrian Hunter escreveu:
-> On 9/05/22 18:23, Adrian Hunter wrote:
-> > Hi
-> > 
-> > Here are 3 patches (on top of "perf intel-pt: Add link to the perf wiki's
-> > Intel PT page") to add support for decoding emulated ptwrite i.e. for
-> > hardware that does not have the ptwrite instruction.
-> 
-> Is this OK?
+On Tue, May 17, 2022 at 1:49 PM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> On Thu, Apr 07, 2022 at 10:41:15PM +0200, Krzysztof Kozlowski wrote:
+> > The as370.dtsi for Synaptics AS370 SoC does not have a user (DTS board
+> > file), is uncompilable and untestable.  It was added back in 2018.  No
+> > user appeared since that time, so assume it won't be added.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Acked-by: Rob Herring <robh@kernel.org>
+>
+> Acked-by: Jisheng Zhang <jszhang@kernel.org>
+>
+> Hi Arnd, Olof,
+>
+> This is the only one patch of berlin-soc for v5.19, Can you please
+> take it?
 
-yeah, thanks, applied.
+I had already applied when Krzysztof sent it, but forgot to send
+a notification about it.
 
-- Arnaldo
- 
-> > 
-> > 
-> > Adrian Hunter (3):
-> >       perf intel-pt: Add support for emulated ptwrite
-> >       perf script: Print Intel ptwrite value as a string if it is ASCII
-> >       perf scripts python: intel-pt-events.py: Print ptwrite value as a string if it is ASCII
-> > 
-> >  tools/perf/Documentation/perf-intel-pt.txt         | 88 +++++++++++++++++++
-> >  tools/perf/builtin-script.c                        | 32 ++++++-
-> >  tools/perf/scripts/python/intel-pt-events.py       |  8 +-
-> >  .../perf/util/intel-pt-decoder/intel-pt-decoder.c  | 99 +++++++++++++++++++++-
-> >  .../perf/util/intel-pt-decoder/intel-pt-decoder.h  |  1 +
-> >  .../util/intel-pt-decoder/intel-pt-insn-decoder.c  |  1 +
-> >  .../util/intel-pt-decoder/intel-pt-insn-decoder.h  |  1 +
-> >  tools/perf/util/intel-pt.c                         | 37 +++++++-
-> >  8 files changed, 261 insertions(+), 6 deletions(-)
-> > 
-> > 
-> > Regards
-> > Adrian
-
--- 
-
-- Arnaldo
+         Arnd

@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259A652A32C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B8E52A33E
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347548AbiEQNVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
+        id S1347690AbiEQNWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347697AbiEQNV3 (ORCPT
+        with ESMTP id S1347671AbiEQNVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:21:29 -0400
+        Tue, 17 May 2022 09:21:22 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076E140E7B;
-        Tue, 17 May 2022 06:21:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96665424B8;
+        Tue, 17 May 2022 06:21:20 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id E218B1F43490
+        with ESMTPSA id BEE6B1F433FD
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652793678;
-        bh=NSHC9jr1SktgRyogww62O4j6dftElLCQcN59dUpsrwQ=;
+        s=mail; t=1652793679;
+        bh=wExmkwG26MlgAOyGVtuHJ9fB7p/HupGT2oLsUu37GPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mg9vgY26ZsZkR1bhWe/HrA3BhQ0yR740ZsnUBGWgAPNItH3WIG9vIRmfyGM1lrSjX
-         Yehh33G3DOMxOp9pEQKx00aIUckLohR2nDQ/pDaTzRxX5Y2lMD1jiywpPKC6P2QHo3
-         9z4V8ABheLJI6wDdFRU8O+B2QVUW+Zpy5+GDwrwKBrTj4ghoKzZV9+KkOBkCt2h6o3
-         WxYZm90xyFTqs2VF64tTVsZsJJiYi6VuvxosuFdTGd3CxdF+D3cJ1Oq54RDtErmJUA
-         K9T+FZmtN6dV3EIi9w6O4/EA8T9dvV1K+M59ooPWlqqZ2aa4vvD3SLSDbbXx+rWI3K
-         xOpU1OaJXYQ7Q==
+        b=aZBoDF7S6WLjXzn71iCMIL/V+Lycg10Qf7ZK8Ug7yKiDvZZ5tyETWVCdqn6xklQJ+
+         CXOSXUk3mZsGhMY/unAz9RgNyzAo7PIM3EB699GyOr0TaimNnoA48fYU8x0SZbt+6B
+         gx2mLb0fQbQJ+mw4kkyzJXv8r5DNPar9Folgy/+CyM4SQe4rRQdpgNSja0B96wxFqh
+         Gry+R2j5QUj5dMUIbszjkpPGKH037OQv8IGSdhWH/HvRcTBikY0/vPlmY5GeaQHmCb
+         NOwxzv7phBvnhQJhpX64+n6enj3E1Gnzq9uTZyi0BJg8kb05E2Rw2r/tq5ItHHRkXo
+         veS3kWTfmVYDg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     yong.wu@mediatek.com
@@ -38,9 +38,9 @@ Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 7/8] dt-bindings: iommu: mediatek: Require mediatek,infracfg for mt2712/8173
-Date:   Tue, 17 May 2022 15:21:06 +0200
-Message-Id: <20220517132107.195932-8-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 8/8] dt-bindings: iommu: mediatek: Require mediatek,pericfg for mt8195-infra
+Date:   Tue, 17 May 2022 15:21:07 +0200
+Message-Id: <20220517132107.195932-9-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
 References: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
@@ -56,34 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both MT2712 and MT8173 got a mediatek,infracfg phandle: add that to
-the required properties for these SoCs to deprecate the old way of
-looking for SoC-specific infracfg compatible in the entire devicetree.
+The MT8195 SoC has IOMMU related registers in the pericfg_ao iospace:
+require a phandle to that.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../devicetree/bindings/iommu/mediatek,iommu.yaml    | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+
+Note for Rob: as of now, there's no iommu node in upstream mt8195 devicetrees yet.
+
+ .../devicetree/bindings/iommu/mediatek,iommu.yaml      | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-index a6cf9678271f..17d78b17027a 100644
+index 17d78b17027a..2441c2e8e55d 100644
 --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
 +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-@@ -175,6 +175,18 @@ allOf:
+@@ -187,6 +187,16 @@ allOf:
        required:
-         - power-domains
+         - mediatek,infracfg
  
 +  - if:
 +      properties:
 +        compatible:
 +          contains:
-+            enum:
-+              - mediatek,mt2712-m4u
-+              - mediatek,mt8173-m4u
++            const: mediatek,mt8195-iommu-infra
 +
 +    then:
 +      required:
-+        - mediatek,infracfg
++        - mediatek,pericfg
 +
    - if: # The IOMMUs don't have larbs.
        not:

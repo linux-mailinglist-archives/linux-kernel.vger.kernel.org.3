@@ -2,149 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EC6529614
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1649E529619
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 02:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234002AbiEQAd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 20:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
+        id S233803AbiEQAfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 20:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiEQAdZ (ORCPT
+        with ESMTP id S229613AbiEQAfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 20:33:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7389924F33
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:33:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 39FA6B816AA
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 00:33:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A1FC385AA;
-        Tue, 17 May 2022 00:33:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652747602;
-        bh=0pM6ajRonXAd36beDn0bSIZ5S34lHL+3SAO1ZfDWDBY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YJUHs/Tzpopnj0FkV/p0abeft/SHtGlPtnE3cUHAfI7TfoCxowJ8pQbbVtIbkUi0S
-         lNmZCxe/TRSTUEg9ZN3CaJfh/0II+hvE0DulkxwHOFsRRoqdtUtlmgQ8lruX3eZixN
-         KW2cJLcVEv4sej5IJf1xo5FAKcuwUVvSiYvyvtSk=
-Date:   Mon, 16 May 2022 17:33:21 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Jaewon Kim <jaewon31.kim@samsung.com>
-Cc:     vbabka@suse.cz, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        jaewon31.kim@gmail.com, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [RFC PATCH] page_ext: create page extension for all memblock
- memory regions
-Message-Id: <20220516173321.67402b7f09eacc43d4e476f4@linux-foundation.org>
-In-Reply-To: <20220509074330.4822-1-jaewon31.kim@samsung.com>
-References: <CGME20220509073953epcas1p127f2d36186316642068c92c5d9dee1c4@epcas1p1.samsung.com>
-        <20220509074330.4822-1-jaewon31.kim@samsung.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 16 May 2022 20:35:51 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA23D130
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:35:50 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id w130so20711786oig.0
+        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 17:35:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4PVGGuxc9ZyUOJ1tHjoyl2dymltFthy0B+E7Sw+J42M=;
+        b=nfqtFXnTGOPZxAFd1Lz+1d12jCgsAih4qDV1EY6Tvbl+0akZYChQ5Edmn9Uy0ZuML2
+         /Yr2uYhf+wPUsW+RhlPj0jnrgI6xQnFnDJXSdsS2bB2o2rEq8kT5IQzy30s3KZT90pj3
+         UHgi++aGzhoNWQSG7KMtVVGVzZ8lXDP3PxyzHRe/cj2CsiK8ysEKX+N/C/JCofnhP6Zy
+         ysHoSuNHqM8uW8oykrmhadP4GJgmD8QVWKo1rTWmFdO3T0RLNLOU8o5Y2if5frE7OzBe
+         tqgcEGsK8+XiuMXFj87N0IFHRR1P/0s3glsmvAukolmHIqsHn647aZrbjw9qXweuOLeg
+         q85A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4PVGGuxc9ZyUOJ1tHjoyl2dymltFthy0B+E7Sw+J42M=;
+        b=W458CLhIF6PeNAkBu6aIv44wSg3hSt/ZV6eDvHQ+mUYOAOX8ZkzB5+Gicgd0Tu1G1h
+         t+3jaY1s4glhPlyyA9uUeh9xWvV2iDNSdlihGNMk30lF+tMQciZW8M75a9HtMHQT4eEZ
+         QMtnZfZ1yF8pXrR+71X57aeiu+v5y1Si7MjxXuad1h7z08VSk+8ZJuMgYO5exqrbdUj1
+         1cdGfFZNNCAWysz0my4wg2FXGsiVzuZv0IgGTbByK8byxXDZWVtdPNRYkX7iY/kSUfnW
+         DPXNCwtSzqmkT0QOyOnYvKLncJCdX2YZI6oP7HTE9w2nusxgyRS2TQHzYNP6hFEH2W73
+         dGYA==
+X-Gm-Message-State: AOAM531CTo510gEZ1yrfa2zIzFWq2lhM8M8Yu3zFDs1GK+tdmxON2Xp5
+        Cd/5NhA2ZZ1q/4rzHMLtsYKCPRzvGbVCkQd4nKZ2Gw==
+X-Google-Smtp-Source: ABdhPJw5B1NweHHaLVC4lRIhd+qyP/8JLgQyMfz7YK8nShVG08v7sqngNhnkN1GmZyWt//h2whVvG0TuH3ANoPCzPGs=
+X-Received: by 2002:a05:6808:2125:b0:326:b51f:bbc2 with SMTP id
+ r37-20020a056808212500b00326b51fbbc2mr15101655oiw.13.1652747749600; Mon, 16
+ May 2022 17:35:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20181205191956.31480-1-ehabkost@redhat.com> <66796b4a-f5be-baeb-07ea-db95764e4bab@redhat.com>
+In-Reply-To: <66796b4a-f5be-baeb-07ea-db95764e4bab@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Mon, 16 May 2022 17:35:38 -0700
+Message-ID: <CALMp9eT2+299s3DE=q8AnDnMXj+H249dzytmHw6EqnRqCaqsVw@mail.gmail.com>
+Subject: Re: [PATCH] kvm: x86: Report STIBP on GET_SUPPORTED_CPUID
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Eduardo Habkost <ehabkost@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        KarimAllah Ahmed <karahmed@amazon.de>,
+        David Woodhouse <dwmw2@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  9 May 2022 16:43:30 +0900 Jaewon Kim <jaewon31.kim@samsung.com> wrote:
+On Fri, Dec 14, 2018 at 2:55 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 05/12/18 20:19, Eduardo Habkost wrote:
+> > Months ago, we have added code to allow direct access to MSR_IA32_SPEC_CTRL
+> > to the guest, which makes STIBP available to guests.  This was implemented
+> > by commits d28b387fb74d ("KVM/VMX: Allow direct access to
+> > MSR_IA32_SPEC_CTRL") and b2ac58f90540 ("KVM/SVM: Allow direct access to
+> > MSR_IA32_SPEC_CTRL").
+> >
+> > However, we never updated GET_SUPPORTED_CPUID to let userspace know that
+> > STIBP can be enabled in CPUID.  Fix that by updating
+> > kvm_cpuid_8000_0008_ebx_x86_features and kvm_cpuid_7_0_edx_x86_features.
+> >
+> > Signed-off-by: Eduardo Habkost <ehabkost@redhat.com>
+> > ...
+> Queued, thanks.
+>
+> Paolo
 
-> The page extension can be prepared for each section. But if the first
-> page is not valid, the page extension for the section was not
-> initialized though there were many other valid pages within the section.
-> 
-> To support the page extension for all sections, refer to memblock memory
-> regions. If the page is valid use the nid from pfn_to_nid, otherwise use
-> the previous nid.
-> 
-> Also this pagech changed log to include total sections and a section
-> size.
-> 
-> i.e.
-> allocated 100663296 bytes of page_ext for 64 sections (1 section : 0x8000000)
 
-Cc Joonsoo, who wrote this code.
-Cc Mike, for memblock.
+On second thought, I believe this is premature. KVM does not currently
+support Intel's STIBP.
 
-Thanks.
+From volume 4 of the SDM, "Prevents indirect branch predictions on
+*all* logical processors on the core from being controlled by any
+sibling logical processor in the same core." (emphasis mine)
 
-> 
-> diff --git a/mm/page_ext.c b/mm/page_ext.c
-> index 2e66d934d63f..506d58b36a1d 100644
-> --- a/mm/page_ext.c
-> +++ b/mm/page_ext.c
-> @@ -381,41 +381,43 @@ static int __meminit page_ext_callback(struct notifier_block *self,
->  void __init page_ext_init(void)
->  {
->  	unsigned long pfn;
-> -	int nid;
-> +	int nid = 0;
-> +	struct memblock_region *rgn;
-> +	int nr_section = 0;
-> +	unsigned long next_section_pfn = 0;
->  
->  	if (!invoke_need_callbacks())
->  		return;
->  
-> -	for_each_node_state(nid, N_MEMORY) {
-> +	/*
-> +	 * iterate each memblock memory region and do not skip a section having
-> +	 * !pfn_valid(pfn)
-> +	 */
-> +	for_each_mem_region(rgn) {
->  		unsigned long start_pfn, end_pfn;
->  
-> -		start_pfn = node_start_pfn(nid);
-> -		end_pfn = node_end_pfn(nid);
-> -		/*
-> -		 * start_pfn and end_pfn may not be aligned to SECTION and the
-> -		 * page->flags of out of node pages are not initialized.  So we
-> -		 * scan [start_pfn, the biggest section's pfn < end_pfn) here.
-> -		 */
-> +		start_pfn = (unsigned long)(rgn->base >> PAGE_SHIFT);
-> +		end_pfn = start_pfn + (unsigned long)(rgn->size >> PAGE_SHIFT);
-> +
-> +		if (start_pfn < next_section_pfn)
-> +			start_pfn = next_section_pfn;
-> +
->  		for (pfn = start_pfn; pfn < end_pfn;
->  			pfn = ALIGN(pfn + 1, PAGES_PER_SECTION)) {
->  
-> -			if (!pfn_valid(pfn))
-> -				continue;
-> -			/*
-> -			 * Nodes's pfns can be overlapping.
-> -			 * We know some arch can have a nodes layout such as
-> -			 * -------------pfn-------------->
-> -			 * N0 | N1 | N2 | N0 | N1 | N2|....
-> -			 */
-> -			if (pfn_to_nid(pfn) != nid)
-> -				continue;
-> +			if (pfn_valid(pfn))
-> +				nid = pfn_to_nid(pfn);
-> +			nr_section++;
->  			if (init_section_page_ext(pfn, nid))
->  				goto oom;
->  			cond_resched();
->  		}
-> +		next_section_pfn = pfn;
->  	}
-> +
->  	hotplug_memory_notifier(page_ext_callback, 0);
-> -	pr_info("allocated %ld bytes of page_ext\n", total_usage);
-> +	pr_info("allocated %ld bytes of page_ext for %d sections (1 section : 0x%x)\n",
-> +		total_usage, nr_section, (1 << SECTION_SIZE_BITS));
->  	invoke_init_callbacks();
->  	return;
->  
-> -- 
-> 2.17.1
-> 
+In particular, if two virtual HT siblings are running on different
+physical cores, and one of them sets IA32_SPEC_CTRL.STIBP, KVM must
+intercept the MSR write, track down the sibling vCPU thread, and
+ensure that IA32_SPEC_CTRL.STIBP is set on its logical processor.
+Moreover, whenever a vCPU thread migrates to a new logical processor,
+IA32_SPEC_CTRL.STIBP on the logical processor must be set to the
+logical or of the vCPU thread's own IA32_SPEC_CTRL.STIBP value and its
+sibling vCPU thread's IA32_SPEC_CTRL.STIBP value. Note that this
+implies that IA32_SPEC_CTRL cannot be a pass-through MSR.

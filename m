@@ -2,131 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87FF52A4FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6B952A502
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 16:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349078AbiEQOfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 10:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S1349089AbiEQOgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 10:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348989AbiEQOfP (ORCPT
+        with ESMTP id S1349127AbiEQOgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 10:35:15 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9020D4FC77;
-        Tue, 17 May 2022 07:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652798110;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=J4Lj0h3j4UiNNQppf5MxuIa77BYo4dAXtQP4Rxpu7fw=;
-    b=QZqk9E23590GTpmbxMTUuk5j4tRFRmOkyDwSOSmdsJ7dv1/lJ++cHBy1oG5QI+50zH
-    HOP6jI27BwViVGeT4QJLCiEkdLR19qtY0bIUWaj2KE4c7Vh9hkC3Jw9YHUdALYLI8Jqi
-    pXAjmVDTMYAnIzZr0mkS5Hjo8ZGGxD6yS/JH8+JXA7ptnAJV2TH38uPdrkF99Va2pIRY
-    S2vxTvAswIvcHAPlZK5zrR1MCfGDIabQ96qj832DoAdTS6zXaP6tjSraN8banBk5ewcS
-    zIxGFe5obSEBY2Afik6QUeYwqzHf5salqYWWhYprOslJWUhOlp3hvI9JZnaGR6oGRNTS
-    lgZA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cff:5b00::b82]
-    by smtp.strato.de (RZmta 47.45.0 AUTH)
-    with ESMTPSA id R0691fy4HEZAEW5
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 17 May 2022 16:35:10 +0200 (CEST)
-Message-ID: <22590a57-c7c6-39c6-06d5-11c6e4e1534b@hartkopp.net>
-Date:   Tue, 17 May 2022 16:35:05 +0200
+        Tue, 17 May 2022 10:36:12 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2BB2E9;
+        Tue, 17 May 2022 07:36:10 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 6A5E2DF866;
+        Tue, 17 May 2022 07:35:40 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tUInY8X_WcUF; Tue, 17 May 2022 07:35:39 -0700 (PDT)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1652798139; bh=0IASOl+36nZc05gh2SkCy6PUCwx8Zj2iARw2qdlE2FE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hAakK45ngtWlK27gcKaRE/cvpViGaHTm+fawKVtw5nHoIDwRrTZbt2YJdLpfglSYF
+         UStLJkk1jYycYuXYf8spNqCS5XDYgzm/dlbkpyrDe3hdfw/ivEuYoFvp5aBkFbLdKK
+         z1oxpRHuhVtzdivceGrTtS5oxZL0pCGcy0NudmvRK36EcgNQUT/rHkw83kErPM/4A7
+         n+mHF93ukD3UwqWhR4OdFOxCV50V8h4+JXh1mxvXaxFvC+IZuwrVy++LqunI62O/k4
+         VaB48WGjXpPEjjd+wIc90vMuJNEQvcm7n74dRzgqIX0v1DcMdddpRGt9L1tLbo04AV
+         R6xP4tdJXaDwQ==
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH] media: hantro: fix compatible string deprecation warning
+Date:   Tue, 17 May 2022 16:35:21 +0200
+Message-Id: <20220517143521.1670663-1-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Content-Language: en-US
-To:     Max Staudt <max@enpas.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20220513142355.250389-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-1-mailhol.vincent@wanadoo.fr>
- <20220514141650.1109542-4-mailhol.vincent@wanadoo.fr>
- <7b1644ad-c117-881e-a64f-35b8d8b40ef7@hartkopp.net>
- <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
- <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
- <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
- <20220517104545.eslountqjppvcnz2@pengutronix.de>
- <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
- <20220517141404.578d188a.max@enpas.org>
- <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
- <20220517143921.08458f2c.max@enpas.org>
- <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
- <20220517154301.5bf99ba9.max@enpas.org>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220517154301.5bf99ba9.max@enpas.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+of_device_is_compatible() in the end uses strlen of the string
+for comparison, so in this case, the condition is true even if
+the requested string "nxp,imx8mq-vpu-g1" is being used. The first
+chars containing "nxp,imx8mq-vpu" are the same.
+
+Fix this by encoding what the comment says.
+
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+---
+
+This is more of a bugreport as the solution doesn't look very elegant
+to me. I'm happy for advice.
+
+thanks,
+                           martin
 
 
-On 17.05.22 15:43, Max Staudt wrote:
-> On Tue, 17 May 2022 15:35:03 +0200
-> Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> 
->> Oh, I didn't want to introduce two new kernel modules but to have
->> can_dev in different 'feature levels'.
-> 
-> Which I agree is a nice idea, as long as heisenbugs can be avoided :)
-> 
-> (as for the separate modules vs. feature levels of can-dev - sorry, my
-> two paragraphs were each referring to a different idea. I mixed them
-> into one single email...)
-> 
-> 
-> Maybe the can-skb and rx-offload parts could be a *visible* sub-option
-> of can-dev in Kconfig, which is normally optional, but immediately
-> force-selected once a CAN HW driver is selected?
+ drivers/staging/media/hantro/hantro_drv.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-I think it should be even more simple.
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index ac232b5f7825..014fab637df0 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -923,10 +923,11 @@ static int hantro_probe(struct platform_device *pdev)
+ 
+ 	/*
+ 	 * Support for nxp,imx8mq-vpu is kept for backwards compatibility
+-	 * but it's deprecated. Please update your DTS file to use
+-	 * nxp,imx8mq-vpu-g1 or nxp,imx8mq-vpu-g2 instead.
++	 * but it's deprecated.
+ 	 */
+-	if (of_device_is_compatible(pdev->dev.of_node, "nxp,imx8mq-vpu"))
++	if ((of_device_is_compatible(pdev->dev.of_node, "nxp,imx8mq-vpu")) &&
++	    (!of_device_is_compatible(pdev->dev.of_node, "nxp,imx8mq-vpu-g1")) &&
++	    (!of_device_is_compatible(pdev->dev.of_node, "nxp,imx8mq-vpu-g2")))
+ 		dev_warn(&pdev->dev, "%s compatible is deprecated\n",
+ 			 match->compatible);
+ 
+-- 
+2.30.2
 
-When you enter the current Kconfig page of "CAN Device Drivers" every 
-selection of vcan/vxcan/slcan should directly select CAN_DEV_SW.
-
-The rest could stay the same, e.g. selecting CAN_DEV "Platform CAN 
-drivers with Netlink support" which then enables CAN_CALC_BITTIMING and 
-CAN_LEDS to be selectable. Which also makes sure the old .config files 
-still apply.
-
-And finally the selection of flexcan, ti_hecc and
-mcp251xfd automatically selects CAN_DEV_RX_OFFLOAD.
-
-Then only some more Makefile magic has to be done to build can-dev.ko 
-accordingly.
-
-Best regards,
-Oliver
-
-
-
-> 
-> 
->> But e.g. the people that are running Linux instances in a cloud only
->> using vcan and vxcan would not need to carry the entire
->> infrastructure of CAN hardware support and rx-offload.
-> 
-> Out of curiosity, do you have an example use case for this vcan cloud
-> setup? I can't dream one up...
-> 
-> 
-> 
-> Max

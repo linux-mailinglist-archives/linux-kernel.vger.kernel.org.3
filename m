@@ -2,165 +2,482 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F9752A01F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9128352A023
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236826AbiEQLN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S244205AbiEQLOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiEQLNy (ORCPT
+        with ESMTP id S229688AbiEQLOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:13:54 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2080.outbound.protection.outlook.com [40.107.243.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1922E205CD
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:13:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q+yZZOOWMsVOVZAI/hC+ew5hjorC0h695bccYa4JTU61rjYiX5svyS66/ysh3ux0BKimR4cZdKPDbSKsSs0ccze9J1EajG9k8FItKAFGKqdaAKEwHw5LX37fJVuxg5PPKI61NokNcMowPadxtc2KpgGp65vsjnrRmkN3O0BMwc0pleQEyKoLpUPJjdtmP2kDDaYBG+WtU0FGJAKe5hggj9hSaVBCKDw6Nos12S0qTIJ6/Pj8JJ9ApYDYoDEkr52OwWenXywmQKxr2fCA4W+bsXgjWV8S2/8bw358cOMOzJZYyNyOhn8DwoyK6gAF8bVdrs8EzFG/cz7R7XMySzfXxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ExAogaj4lLheqNLIWfIeZ3BH/4RosNO6PAFKsIU5xkI=;
- b=OrScDsgtLa7meZRfQEbm7UhAJPdL+eoSwOUCUdjZv+IUXqc9njarObxZTlf3hIYYYro8ukzZq9KnDzbmZCEihD1BFpqh8WXSGioVQu2SbWMadBOUfk5utkaikX/pFGAjxWz+5opa7q8PNlZvl6ddIX9psRhtqEpSUyQ4CBakQX7/eUv4cHrZPI86S/3yrPrfWgZoRUywvao0bZZW8rqHMTzIDS/j4ASfpKfJiRjW6AxmycQ9BU5FbEnfv8L+RzghaIHAmNagAzNYq8Rg+a8qvoMAAvLF3pdOlWap6KsjUKCrq8h6sOutm3dxcCAUTCtxjS0HpT3tONZlJOZxWsXwcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ExAogaj4lLheqNLIWfIeZ3BH/4RosNO6PAFKsIU5xkI=;
- b=JLylg1I5KRvyRjN5DxwgWsu3tOQv2SGka9XOBYmTmkWSK7jUYh+DmEMdIH9xzSrbSIFXA9DTo9G4UPMm6bd/EHiTYM2S4a0zFv1/DxkyUYNbCXTudDcBkABp7cDqVPxsnRM1FQ0I6xfmIJeBb99gz0n6VScxB5TiXzPVv34Jg4x74KFk+pqReZ3orDuZ/EJMIylUsZh2b9qKQR7yfBIs8nfm8A26h41LtIg3q1xWQqyXjcf23LwY89yZQCW4FQqz/fBbqMFuNJnr48XU56U/RT/aSiyYp6c39hMPXvFQtTGJa3MGZU2e88bEpCIr4iTyym8HNLs3u5DZeMiBf4qWxQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SA0PR12MB4575.namprd12.prod.outlook.com (2603:10b6:806:73::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Tue, 17 May
- 2022 11:13:51 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%5]) with mapi id 15.20.5250.018; Tue, 17 May 2022
- 11:13:51 +0000
-Date:   Tue, 17 May 2022 08:13:50 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ning Sun <ning.sun@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] x86/boot/tboot: Move tboot_force_iommu() to Intel
- IOMMU
-Message-ID: <20220517111350.GR1343366@nvidia.com>
-References: <20220514014322.2927339-1-baolu.lu@linux.intel.com>
- <20220514014322.2927339-7-baolu.lu@linux.intel.com>
- <20220516180628.GL1343366@nvidia.com>
- <6cdc43a3-72ba-5360-0827-6915ef563d64@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6cdc43a3-72ba-5360-0827-6915ef563d64@linux.intel.com>
-X-ClientProxiedBy: BLAPR03CA0070.namprd03.prod.outlook.com
- (2603:10b6:208:329::15) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Tue, 17 May 2022 07:14:34 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01286205CD
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:14:28 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id gh6so34098891ejb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pMuj8TkVOAB+jwNIhonnH5zPZlMb0gPT5hLpAJsKz0M=;
+        b=dkJ2rvYQ6hp7hLdTMSTePE1OSAs7O84XiyW4yucTRpLl58RzLpCFpCCxyXqnPY3Xrh
+         cvObNz5n4WpCg7EY6jcCRkdYklpHAn82k4KhDv54AwtR/8gyapQcIFucgxrCk9YaHKe0
+         VTQPWw5ZzPP5Y04BfJ4gQGO0W2FHnDNngSQh50THTSczMowiVNyA8Dsm2/UH0bGZ/MpU
+         IHqMK+3mNDjnZNntPaXyTCq+jhYL7glzgkf1i5/tplmmxKIHGsgpkEQ3yrbNPUubhJCM
+         DdiFaJTTQe1zB3TvMklPLzPsrITAQhng4AD5/pbqa/BCHPlxRC5PorT0GFvPkHzxbD9T
+         7z6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pMuj8TkVOAB+jwNIhonnH5zPZlMb0gPT5hLpAJsKz0M=;
+        b=sAz3wAy6/F9pU2FSpZ6XrYaKJZPddJArBQV5LBd73k8RZlmKt6M70wVSG8cIgt3YKP
+         6Zefd1CDu+5zxzOPkJB41ufa45oMiOILSTxKyR+CMxoi+eyPa/uWiSmDtchWRVPWxR9E
+         TKFfBN7WCMvMxySb7CX1SvxJb28PpHq8nDOO49pD+A3Bda2HTM/JLGPZQn9fyn/UHmz4
+         FekUlTBPU2SvV32zzH0DFNmWVLkbOxWjyUNToqYduFpTsOnl+S79vlmqB6FLwtel9bzl
+         QCgQK340U9smrZkJhtuYJPJTAj5czh64fvZz6EAmmkD0DInVq0F7o4jtGZmo0P2IJTw7
+         aXyg==
+X-Gm-Message-State: AOAM531fFiHnbEMkhFR+osUDAeU7EiqO0V0N6JSQ8VBvwRXteDI3qsKk
+        wE4gMG8jam9KbEJtsed/OW+XSXoinpvufgv16W8=
+X-Google-Smtp-Source: ABdhPJztqhRP3sXFxcb7PeFvR81Zv9xDHMuBM8PJJD5wdEGAJy19XgpKBWScAAg+14tbLFD5nXDW+K/MYuhSyLNdl10=
+X-Received: by 2002:a17:906:7309:b0:6f5:ea1:afa with SMTP id
+ di9-20020a170906730900b006f50ea10afamr18880331ejc.170.1652786066956; Tue, 17
+ May 2022 04:14:26 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2e6b5612-908e-4538-c12f-08da37f6526c
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4575:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR12MB45751077CBF79BE938E34843C2CE9@SA0PR12MB4575.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ez1w98ONnj80PQIhfNw1uWXhlYD1w8kaQIUvxDgJKvIk3asGUxPW+oUR5LJZRf8CmWyVeBiHRG9uKrWBFlTH31aXbRxfeEvYQWynDJBtvm0f99fiiT6jGRYMSVoT81ysKiYmDQDdnuh5AS2g7nVmj6j+AzWkH+t6WxVH0675y7DWmFIxtvQdGrDcXpYDy6bSQlCRrtppWCMDCvpMKBw+xUqm8x30j3T/8hwG4SLjk3d27MROdgKkuSOoDW2cde/P2cCaR4d4ST5htVbVKrqoqwkx5qVLA9Kkc4TNDyJrWGnO1evuas+/CsvhyhepDeQGmcndHF73nC4EdMuIcdLeIqDTrXj5cQRIuZYzVxfnx8epjD1fE1eRj2j4Hs0vN4kJch2lhda0QQsO7QZdv4RKP+LIxhlPdIRUg0I2mnNsQxkPi0GCJJWXs6b9qM/3VNKJzc8AtWKASBfmwVlSt0mUaGucT5C4ZeG3TeBQV7y0s7xbPWca0iIt19SYgqHUF5zn3Sr6GTxiW3XPSaZnqBtpdtaNDdajO3GtCISeHefiMkNHxsRxRTqNKAh2DHFA0kw+EiJYnOR0vOeTwqWOLuNsZtMgUUTbW7dCrRyjvTiJiFfxoYF4i1Xmy0sEJ3XgXnMlf1WtI/yWwDFBC+2DqEwY8Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(508600001)(4744005)(4326008)(8936002)(8676002)(66476007)(66556008)(66946007)(7416002)(33656002)(86362001)(6486002)(6506007)(53546011)(26005)(36756003)(2616005)(54906003)(38100700002)(6512007)(2906002)(83380400001)(186003)(1076003)(6916009)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SETbynjIvJYXZo4haR+AnUfb/EVW37ugyVzk8iSAKl96VFR630r0mDwbwzz+?=
- =?us-ascii?Q?rNzgKkippDhNfd/84L0tHy3jjLfEN0Tc/qRS9Irgv3hmZDNuBrVMaaW6OF9C?=
- =?us-ascii?Q?FWcD/yshcYxX5MtdXSD59x+lWTOvY8XHSqBOE+S6qUNIFPRZzuxhvxwz3KrT?=
- =?us-ascii?Q?2bTJQkc+mUv9H9FokEDJ4PKzQ4sULkZHJ3Rm2JwyE5wnwRMp6RG3hAmi8TUz?=
- =?us-ascii?Q?pEwYZqfHAvE7jTh+5XQf09ZuEeM3lw79aSRK35EU2D5gjQvegqIVTiS47m9B?=
- =?us-ascii?Q?zeyjnhoLwPWEQdi1cj/8JDmbIeXxkfF4PiS54+ANJC/rD+en4BDJEWcWjjmi?=
- =?us-ascii?Q?+HkSCaVAyXRNz9gk2H0OWn4zTpIyqovYIEpO8/nwZrYoe2mSCuL0dsiWjf9f?=
- =?us-ascii?Q?S4NQ5L+rG8FJBztdrnfTiNnMHlc7B1k1ZEXteFrY8cT9AX1e9Fh/4dUKRf58?=
- =?us-ascii?Q?mkzK8vcjUukBKa2EPfdhvFUCg/h0hRi3FFCbOvcS3p+QfS5G8F4vcfWXvgQY?=
- =?us-ascii?Q?BbMD8B09AU36d8Et6IBEACjkBQDcjtqnMrpdzm80rQDEs0LU+Dajqw/IUQEl?=
- =?us-ascii?Q?sCqOT/G3ybvraLAs+TsOWeuPhJYo5L1/nYMp0id4EtGzigQN3HAHSvPMUHhA?=
- =?us-ascii?Q?xnEKvm/47Fu+0OhAI1QKnE5+ByM1qUWBQC5DseDo42C/B/eHvD2esT5XK+XY?=
- =?us-ascii?Q?npcIlQWcDYO1GUsztb+in/A3flXzcRH8VD8PC0DfFZtp2sFEIlPushJBtrvG?=
- =?us-ascii?Q?HLSX+kjhZHHpgxRIw7t2ix3E98QoLYUJwF0X0E3uQjtYxnYNogNNUUwdS2Dn?=
- =?us-ascii?Q?bCpu06yXHu3kzVwtP81L0zPdjfaN60u772DdHga/AbrYSUVS1ldnzaJt84oO?=
- =?us-ascii?Q?mkEPXU9NbVbLfgfa4v+6wiG+Vl5NN+JaYrw/XxUpm3gqCkl6XZ94Kcn+XBNJ?=
- =?us-ascii?Q?uS8o85DICrzlrSCtlBoQ2rOboNVWyjZrxYj2DjTrkc7Eh3VDJAQxj6mxCzxB?=
- =?us-ascii?Q?S4xccYxAKFrQy3hl7K/NdRCLclaJFK5rljpD5y8q3qVra3iYNZ6Kywte+ZZu?=
- =?us-ascii?Q?4irWzj3eVnCpNUTfs4q2kQ8Lj2a1yCUK/ijvFSqe6LYrLxDIqprrWu/cdSwr?=
- =?us-ascii?Q?5nYLy/kS/JpyV/I/bCfIbDmmk38nxEhd8OVDgBPA5stY0GQ5IsYk6ewbatRC?=
- =?us-ascii?Q?rhuYJoVFTZ8AgR/8aYXZA1/qDqH7HHpGwpB1zNC+yYkCzP2hYwLvmGIL0u6B?=
- =?us-ascii?Q?/FQC+KdX2dFlHBw2p8FBv9r0quYTpbNUtVnSV25ecq1WYiHxAP7/ce/QseHl?=
- =?us-ascii?Q?03ypzPZpKujlwrs43dQTBzuaxI1wYsvvZrKAqxkbrR6Hl4WHIgBZwmsPlkBH?=
- =?us-ascii?Q?dpBrlHAd9ZYWVCuNnAsGeCBpW6/SBjcWCevdLse9mkHwN9vNB1nZ0zPGQEfa?=
- =?us-ascii?Q?9+SiBiUCWmaV9NbBT3/uH6IPrO/0qSmj78S7ykxkR9YduodbwGPbBhdcE3Sb?=
- =?us-ascii?Q?xDkMNK5lk6tYWTrCFpPqGZZ2pIExhIqjYEwpGxNsuLR1KDLKm3n+Pal6EY3M?=
- =?us-ascii?Q?YnSaqghPypz+0pPCfi88HeRbLEdMPoqNdDms0FVtR9//vgFRtp61uvSpEnJF?=
- =?us-ascii?Q?jj10ijQ9DccnvgPAAPuLDGDNH8/R6FPDt4eyxifuBfeuw/beuyxi+hJDK7x/?=
- =?us-ascii?Q?nSNhfVBy/Wltl1Lh8G2/A4ADEPDeHskKbIMR/VXQQZ9sBHibVNrsT37FAsxw?=
- =?us-ascii?Q?vZYKyEBASQ=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e6b5612-908e-4538-c12f-08da37f6526c
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2022 11:13:51.2875
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 95K8mvvJcDxhttCGPVAXQU5HFEMXv+159ZWOGVcwqDx2w7HSRuHu5wG1nvKted2j
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4575
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com>
+ <e3c1beb1-e3d5-6e26-bae2-06785080b57e@linux.alibaba.com> <CAGsJ_4weJ9onh0EJVy8QXMXZ++4qVyVuRi7oP3wiD0XWnqF-Dg@mail.gmail.com>
+ <CAGsJ_4z8vMNDwL4uYB6_=txvm9zW7LKrFA2HChS2D-+fxhBiKA@mail.gmail.com>
+ <08fff4b9-3ae9-db68-13bb-cf5f0654e20a@linux.alibaba.com> <CAGsJ_4wKqPEnFGdijwjKeCvfRwfdxkk-263EZt2Y21GMyn1_uA@mail.gmail.com>
+ <CAGsJ_4z2TT5H2PO+mvgMSnL3h5ke=QVhFzDmYs6yOgwgB24bhg@mail.gmail.com> <1b2040ba-9780-8d2b-257d-35c66567011b@linux.alibaba.com>
+In-Reply-To: <1b2040ba-9780-8d2b-257d-35c66567011b@linux.alibaba.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Tue, 17 May 2022 23:14:15 +1200
+Message-ID: <CAGsJ_4wK=Xw7g=FZgRBo4FRK11AeyS0Jyrd7D0UeDe3DLVUmfA@mail.gmail.com>
+Subject: Re: DAMON VA regions don't split on an large Android APP
+To:     Rongwei Wang <rongwei.wang@linux.alibaba.com>
+Cc:     sj@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, shuah@kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>,
+        foersleo@amazon.de, sieberf@amazon.com,
+        Shakeel Butt <shakeelb@google.com>, sjpark@amazon.de,
+        tuhailong@gmail.com, Song Jiang <sjiang88@gmail.com>,
+        =?UTF-8?B?5byg6K+X5piOKFNpbW9uIFpoYW5nKQ==?= 
+        <zhangshiming@oppo.com>,
+        =?UTF-8?B?5p2O5Z+56ZSLKHdpbmsp?= <lipeifeng@oppo.com>,
+        xhao@linux.alibaba.com, vxc5208@mavs.uta.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 10:05:43AM +0800, Baolu Lu wrote:
-> Hi Jason,
-> 
-> On 2022/5/17 02:06, Jason Gunthorpe wrote:
-> > > +static __init int tboot_force_iommu(void)
-> > > +{
-> > > +	if (!tboot_enabled())
-> > > +		return 0;
-> > > +
-> > > +	if (no_iommu || dmar_disabled)
-> > > +		pr_warn("Forcing Intel-IOMMU to enabled\n");
-> > Unrelated, but when we are in the special secure IOMMU modes, do we
-> > force ATS off? Specifically does the IOMMU reject TLPs that are marked
-> > as translated?
-> 
-> Good question. From IOMMU point of view, I don't see a point to force
-> ATS off, but trust boot involves lots of other things that I am not
-> familiar with. Anybody else could help to answer?
+On Tue, May 17, 2022 at 3:00 AM Rongwei Wang
+<rongwei.wang@linux.alibaba.com> wrote:
+>
+>
+>
+> On 5/16/22 3:03 PM, Barry Song wrote:
+> > On Thu, Apr 28, 2022 at 7:37 PM Barry Song <21cnbao@gmail.com> wrote:
+> >>
+> >> On Thu, Apr 28, 2022 at 2:05 PM Rongwei Wang
+> >> <rongwei.wang@linux.alibaba.com> wrote:
+> >>>
+> >>>
+> >>>
+> >>> On 4/27/22 5:22 PM, Barry Song wrote:
+> >>>> On Wed, Apr 27, 2022 at 7:44 PM Barry Song <21cnbao@gmail.com> wrote:
+> >>>>>
+> >>>>> On Wed, Apr 27, 2022 at 6:56 PM Rongwei Wang
+> >>>>> <rongwei.wang@linux.alibaba.com> wrote:
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>> On 4/27/22 7:19 AM, Barry Song wrote:
+> >>>>>>> Hi SeongJae & Andrew,
+> >>>>>>> (also Cc-ed main damon developers)
+> >>>>>>> On an Android phone, I tried to use the DAMON vaddr monitor and found
+> >>>>>>> that vaddr regions don't split well on large Android Apps though
+> >>>>>>> everything works well on native Apps.
+> >>>>>>>
+> >>>>>>> I have tried the below two cases on an Android phone with 12GB memory
+> >>>>>>> and snapdragon 888 CPU.
+> >>>>>>> 1. a native program with small memory working set  as below,
+> >>>>>>> #define size (1024*1024*100)
+> >>>>>>> main()
+> >>>>>>> {
+> >>>>>>>            volatile int *p = malloc(size);
+> >>>>>>>            memset(p, 0x55, size);
+> >>>>>>>
+> >>>>>>>            while(1) {
+> >>>>>>>                    int i;
+> >>>>>>>                    for (i = 0; i < size / 4; i++)
+> >>>>>>>                            (void)*(p + i);
+> >>>>>>>                    usleep(1000);
+> >>>>>>>
+> >>>>>>>                    for (i = 0; i < size / 16; i++)
+> >>>>>>>                            (void)*(p + i);
+> >>>>>>>                    usleep(1000);
+> >>>>>>>
+> >>>>>>>            }
+> >>>>>>> }
+> >>>>>>> For this application, the Damon vaddr monitor works very well.
+> >>>>>>> I have modified monitor.py in the damo userspace tool a little bit to
+> >>>>>>> show the raw data getting from the kernel.
+> >>>>>>> Regions can split decently on this kind of applications, a typical raw
+> >>>>>>> data is as below,
+> >>>>>>>
+> >>>>>>> monitoring_start:             2.224 s
+> >>>>>>> monitoring_end:               2.329 s
+> >>>>>>> monitoring_duration:       104.336 ms
+> >>>>>>> target_id: 0
+> >>>>>>> nr_regions: 24
+> >>>>>>> 005fb37b2000-005fb734a000(  59.594 MiB): 0
+> >>>>>>> 005fb734a000-005fbaf95000(  60.293 MiB): 0
+> >>>>>>> 005fbaf95000-005fbec0b000(  60.461 MiB): 0
+> >>>>>>> 005fbec0b000-005fc2910000(  61.020 MiB): 0
+> >>>>>>> 005fc2910000-005fc6769000(  62.348 MiB): 0
+> >>>>>>> 005fc6769000-005fca33f000(  59.836 MiB): 0
+> >>>>>>> 005fca33f000-005fcdc8b000(  57.297 MiB): 0
+> >>>>>>> 005fcdc8b000-005fd115a000(  52.809 MiB): 0
+> >>>>>>> 005fd115a000-005fd45bd000(  52.387 MiB): 0
+> >>>>>>> 007661c59000-007661ee4000(   2.543 MiB): 2
+> >>>>>>> 007661ee4000-0076623e4000(   5.000 MiB): 3
+> >>>>>>> 0076623e4000-007662837000(   4.324 MiB): 2
+> >>>>>>> 007662837000-0076630f1000(   8.727 MiB): 3
+> >>>>>>> 0076630f1000-007663494000(   3.637 MiB): 2
+> >>>>>>> 007663494000-007663753000(   2.746 MiB): 1
+> >>>>>>> 007663753000-007664251000(  10.992 MiB): 3
+> >>>>>>> 007664251000-0076666fd000(  36.672 MiB): 2
+> >>>>>>> 0076666fd000-007666e73000(   7.461 MiB): 1
+> >>>>>>> 007666e73000-007667c89000(  14.086 MiB): 2
+> >>>>>>> 007667c89000-007667f97000(   3.055 MiB): 0
+> >>>>>>> 007667f97000-007668112000(   1.480 MiB): 1
+> >>>>>>> 007668112000-00766820f000(1012.000 KiB): 0
+> >>>>>>> 007ff27b7000-007ff27d6000( 124.000 KiB): 0
+> >>>>>>> 007ff27d6000-007ff27d8000(   8.000 KiB): 8
+> >>>>>>>
+> >>>>>>> 2. a large Android app like Asphalt 9
+> >>>>>>> For this case, basically regions can't split very well, but monitor
+> >>>>>>> works on small vma:
+> >>>>>>>
+> >>>>>>> monitoring_start:             2.220 s
+> >>>>>>> monitoring_end:               2.318 s
+> >>>>>>> monitoring_duration:        98.576 ms
+> >>>>>>> target_id: 0
+> >>>>>>> nr_regions: 15
+> >>>>>>> 000012c00000-0001c301e000(   6.754 GiB): 0
+> >>>>>>> 0001c301e000-000371b6c000(   6.730 GiB): 0
+> >>>>>>> 000371b6c000-000400000000(   2.223 GiB): 0
+> >>>>>>> 005c6759d000-005c675a2000(  20.000 KiB): 0
+> >>>>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
+> >>>>>>> 005c675a3000-005c675a7000(  16.000 KiB): 0
+> >>>>>>> 0072f1e14000-0074928d4000(   6.510 GiB): 0
+> >>>>>>> 0074928d4000-00763c71f000(   6.655 GiB): 0
+> >>>>>>> 00763c71f000-0077e863e000(   6.687 GiB): 0
+> >>>>>>> 0077e863e000-00798e214000(   6.590 GiB): 0
+> >>>>>>> 00798e214000-007b0e48a000(   6.002 GiB): 0
+> >>>>>>> 007b0e48a000-007c62f00000(   5.323 GiB): 0
+> >>>>>>> 007c62f00000-007defb19000(   6.199 GiB): 0
+> >>>>>>> 007defb19000-007f794ef000(   6.150 GiB): 0
+> >>>>>>> 007f794ef000-007fe8f53000(   1.745 GiB): 0
+> >>>>>>>
+> >>>>>>> As you can see, we have some regions which are very very big and they
+> >>>>>>> are losing the chance to be splitted. But
+> >>>>>>> Damon can still monitor memory access for those small VMA areas very well like:
+> >>>>>>> 005c675a2000-005c675a3000(   4.000 KiB): 3
+> >>>>>> Hi, Barry
+> >>>>>>
+> >>>>>> Actually, we also had found the same problem in redis by ourselves
+> >>>>>> tool[1]. The DAMON can not split the large anon VMA well, and the anon
+> >>>>>> VMA has 10G~20G memory. I guess the whole region doesn't have sufficient
+> >>>>>> hot areas to been monitored or found by DAMON, likes one or more address
+> >>>>>> choose by DAMON not been accessed during sample period.
+> >>>>>
+> >>>>> Hi Rongwei,
+> >>>>> Thanks  for your comments and thanks for sharing your tools.
+> >>>>>
+> >>>>> I guess the cause might be:
+> >>>>> in case a region is very big like 10GiB, we have only 1MiB hot pages
+> >>>>> in this large region.
+> >>>>> damon will randomly pick one page to sample, but the page has only
+> >>>>> 1MiB/10GiB, thus
+> >>>>> less than 1/10000 chance to hit the hot 1MiB. so probably we need
+> >>>>> 10000 sample periods
+> >>>>> to hit the hot 1MiB in order to split this large region?
+> >>>>>
+> >>>>> @SeongJae, please correct me if I am wrong.
+> >>>>>
+> >>>>>>
+> >>>>>> I'm not sure whether sets init_regions can deal with the above problem,
+> >>>>>> or dynamic choose one or limited number VMA to monitor.
+> >>>>>>
+> >>>>>
+> >>>>> I won't set a limited number of VMA as this will make the damon too hard to use
+> >>>>> as nobody wants to make such complex operations, especially an Android
+> >>>>> app might have more than 8000 VMAs.
+> >>>>>
+> >>>>> I agree init_regions might be the right place to enhance the situation.
+> >>>>>
+> >>>>>> I'm not sure, just share my idea.
+> >>>>>>
+> >>>>>> [1] https://github.com/aliyun/data-profile-tools.git
+> >>>>>
+> >>>>> I suppose this tool is based on damon? How do you finally resolve the problem
+> >>>>> that large anon VMAs can't be splitted?
+> >>>>> Anyway, I will give your tool a try.
+> >>>>
+> >>>> Unfortunately, data-profile-tools.git doesn't build on aarch64 ubuntu
+> >>>> though autogen.sh
+> >>>> runs successfully.
+> >>>>
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(disp.o): in function `cons_handler':
+> >>>> /root/data-profile-tools/src/disp.c:625: undefined reference to `stdscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
+> >>>> reference to `stdscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/disp.c:625: undefined
+> >>>> reference to `wgetch'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_create':
+> >>>> /root/data-profile-tools/src/reg.c:108: undefined reference to `stdscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
+> >>>> reference to `stdscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:108: undefined
+> >>>> reference to `subwin'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_erase':
+> >>>> /root/data-profile-tools/src/reg.c:161: undefined reference to `werase'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh':
+> >>>> /root/data-profile-tools/src/reg.c:171: undefined reference to `wrefresh'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_refresh_nout':
+> >>>> /root/data-profile-tools/src/reg.c:182: undefined reference to `wnoutrefresh'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_update_all':
+> >>>> /root/data-profile-tools/src/reg.c:191: undefined reference to `doupdate'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_win_destroy':
+> >>>> /root/data-profile-tools/src/reg.c:200: undefined reference to `delwin'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_line_write':
+> >>>> /root/data-profile-tools/src/reg.c:226: undefined reference to `mvwprintw'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:230: undefined
+> >>>> reference to `wattr_off'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:217: undefined
+> >>>> reference to `wattr_on'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_highlight_write':
+> >>>> /root/data-profile-tools/src/reg.c:245: undefined reference to `wattr_on'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
+> >>>> reference to `wattr_off'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:252: undefined
+> >>>> reference to `mvwprintw'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:255: undefined
+> >>>> reference to `wattr_off'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_fini':
+> >>>> /root/data-profile-tools/src/reg.c:367: undefined reference to `stdscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
+> >>>> reference to `stdscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:367: undefined
+> >>>> reference to `wclear'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:368: undefined
+> >>>> reference to `wrefresh'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:369: undefined
+> >>>> reference to `endwin'
+> >>>> /usr/bin/ld: ./.libs/libdatop.a(reg.o): in function `reg_curses_init':
+> >>>> /root/data-profile-tools/src/reg.c:382: undefined reference to `stdscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:381: undefined
+> >>>> reference to `initscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
+> >>>> reference to `stdscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:382: undefined
+> >>>> reference to `wrefresh'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:383: undefined
+> >>>> reference to `use_default_colors'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:384: undefined
+> >>>> reference to `start_color'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:385: undefined
+> >>>> reference to `keypad'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:386: undefined
+> >>>> reference to `nonl'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:387: undefined
+> >>>> reference to `cbreak'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:388: undefined
+> >>>> reference to `noecho'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:389: undefined
+> >>>> reference to `curs_set'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
+> >>>> reference to `stdscr'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:401: undefined
+> >>>> reference to `mvwprintw'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:403: undefined
+> >>>> reference to `mvwprintw'
+> >>>> /usr/bin/ld: /root/data-profile-tools/src/reg.c:405: undefined
+> >>>> reference to `wrefresh'
+> >>>> collect2: error: ld returned 1 exit status
+> >>>> make[1]: *** [Makefile:592: datop] Error 1
+> >>>> make[1]: Leaving directory '/root/data-profile-tools'
+> >>>> make: *** [Makefile:438: all] Error 2
+> >>> Hi, Barry
+> >>>
+> >>> Now, the question made me realize that the compatibility of this tool is
+> >>> very poor. I built a ubuntu environment at yesterday, and fixed above
+> >>> errors by:
+> >>>
+> >>> diff --git a/configure.ac b/configure.ac
+> >>> index 7922f27..1ed823c 100644
+> >>> --- a/configure.ac
+> >>> +++ b/configure.ac
+> >>> @@ -21,13 +21,9 @@ AC_PROG_INSTALL
+> >>>    AC_CHECK_LIB([numa], [numa_free])
+> >>>    AC_CHECK_LIB([pthread], [pthread_create])
+> >>>
+> >>> -PKG_CHECK_MODULES([CHECK], [check])
+> >>> -
+> >>> -PKG_CHECK_MODULES([NCURSES], [ncursesw ncurses], [LIBS="$LIBS
+> >>> $ncurses_LIBS"], [
+> >>> -       AC_SEARCH_LIBS([delwin], [ncursesw ncurses], [], [
+> >>> -               AC_MSG_ERROR([ncurses is required but was not found])
+> >>> -       ], [])
+> >>> -])
+> >>> +AC_SEARCH_LIBS([stdscr], [ncurses ncursesw], [], [
+> >>> +       AC_MSG_ERROR([required library libncurses or ncurses not found])
+> >>> +       ])
+> >>>
+> >>
+> >> I can confirm the patch fixed the issue I reported yesterday, thanks!
+> >>
+> >>> It works. But I found an another thing will hinder you using this tool.
+> >>> We had developed other patches about DAMON base on upstream. This tool
+> >>> only works well in ourselves kernel(anolis kernel, already open source).
+> >>> Of course, I think it's unnecessary for you to change kernel, just let
+> >>> you know this tool still has this problem.
+> >>>
+> >>
+> >> Although I can't use this tool directly as I am not a NUMA right now,
+> >> ~/data-profile-tools # ./datop --help
+> >> Not support NUMA fault stat (DAMON)!
+> >>
+> >
+> > I wonder if you can extend it to non-numa by setting "remote" to 0%
+> > and local to "100%" always for non-numa machines rather than death.
+> Hi Barry
+>
+> That's a great suggestion. Actually, I have removed 'numa_stat' check in
+> datop. Maybe you can found. It does not enable numa stat when
+> 'numa_stat' sysfs not found in the current system.
 
-ATS is inherently not secure, if a rouge device can issue a TLP with
-the translated bit set then it has unlimited access to host memory.
+yep. i am able to run it on a non-numa machine, but datop immediately crashes
+due to some memory corruption issues:
 
-Many of these trusted iommu scenarios rely on the idea that a rouge
-device cannot DMA to arbitary system memory.
+Monitoring 270 processes (interval: 5.5s)
 
-Jason
+   PID           PROC       TYPE           START             END
+SIZE(KiB)    ACCESS      AGE
+  1693    Binder:1693       ----               0               0
+   0         0        0
+   428        ueventd       ----               0               0
+   0         0        0
+ 28654           adbd       ----               0               0
+   0         0        0
+   971    usb@1.2-ser       ----               0               0
+   0         0        0
+   619           logd       ----               0               0
+   0         0        0
+  4311    a...
+
+<- Hotkey for sorting: 1(PID), 2(START), 3(SIZE), 4(ACCESS), 5(RMA) ->
+CPU% = system CPU utilization
+
+Q: Quit; H: Home; B: Back; R: Refresh; D: DAMON
+double free or corruption (!prev)
+
+         Aborted
+
+if i move to monitor only one process, datop doesn't crash but it
+doesn't show any
+data either:
+
+# pgrep youtube
+4311
+ # ./datop -p 4311
+
+Monitoring 1 processes (interval: 5.0s)
+
+   PID           PROC       TYPE           START             END
+SIZE(KiB)   *ACCESS      AGE
+  4311    youtube      ----               0               0          0
+        0        0
+
+
+>
+> What's more, a new hot key 'f' will be introduced which can enable some
+> features dynamically, such as numa stat. Others features can be used
+> only in our internal version, likes 'f' in top, and will be open source
+> when stable.
+>
+> > as your tools can map regions to .so, which seems to be quite useful.
+> enen, I'm agree with you. But you know, one region maybe covers one or
+> more VMAs, hard to map access count of regions to the related .so or
+> anon. A lazy way used by me now. I still think it's valuable in the future.
+>
+
+it seems really an interesting topic worth more investigation. I wonder if
+damon vaddr monitor should actually take vmas, or at least the types of
+vmas into consideration while splitting.
+
+Different vma types should be inherently different in hotness. for example,
+if 1mb text and 1mb data are put in the same region, the monitored data
+to reflect the hotness for the whole 2mb seems to be pointless at all.
+
+Hi SeongJae,
+what do you think about it?
+
+> Anyway, any idea are welcome.
+>
+> Thanks,
+> -wrw
+>
+> >
+> >> I am still quite interested in your design and the purpose of this project.
+> >> Unfortunately the project seems to be lacking some design doc.
+> >>
+> >> And would you like to send patches to lkml regarding what you
+> >> have changed atop DAMON?
+> >>
+> >>> Anyway, the question that you reported was valuable, made me realize
+> >>> what we need to improve next.
+> >>>
+> >>> Thanks,
+> >>> Rongwei Wang
+> >>>>
+> >>>>>
+> >>>>>>>
+> >>>>>>> Typical characteristics of a large Android app is that it has
+> >>>>>>> thousands of vma and very large virtual address spaces:
+> >>>>>>> ~/damo # pmap 2550 | wc -l
+> >>>>>>> 8522
+> >>>>>>>
+> >>>>>>> ~/damo # pmap 2550
+> >>>>>>> ...
+> >>>>>>> 0000007992bbe000      4K r----   [ anon ]
+> >>>>>>> 0000007992bbf000     24K rw---   [ anon ]
+> >>>>>>> 0000007fe8753000      4K -----   [ anon ]
+> >>>>>>> 0000007fe8754000   8188K rw---   [ stack ]
+> >>>>>>>     total         36742112K
+> >>>>>>>
+> >>>>>>> Because the whole vma list is too long, I have put the list here for
+> >>>>>>> you to download:
+> >>>>>>> wget http://www.linuxep.com/patches/android-app-vmas
+> >>>>>>>
+> >>>>>>> I can reproduce this problem on other Apps like youtube as well.
+> >>>>>>> I suppose we need to boost the algorithm of splitting regions for this
+> >>>>>>> kind of application.
+> >>>>>>> Any thoughts?
+> >>>>>>>
+> >>>>>
+> >
+
+Thanks
+Barry

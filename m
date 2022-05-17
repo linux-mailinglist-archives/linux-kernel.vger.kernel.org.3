@@ -2,86 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B149A52AD19
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C89452AD1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 22:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344337AbiEQUzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 16:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S1353045AbiEQU4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 16:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235434AbiEQUzs (ORCPT
+        with ESMTP id S1353138AbiEQU4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 16:55:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71E28226
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:55:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652820942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bjDVUYk4HAdG1tZM7dsKEhmRYaWZVB/tCHA1P3Bkphg=;
-        b=EL1te23LBSapBK/LIiXlubmGTFqqBvalo6/KeMK2HbPr0uLXC/7bRPOZufcKNV1IQpB+rq
-        xecOO4jokXAG0f5mBgIJxh7uIp2S48POtDeap6y1V2ZsHDxl4lD05KJVTeYCdSiiuoEC9b
-        vE3+l+MNxPePVVAM1sYM5z1rWos018E=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-531-K6IsFE_rNR-7e8BCNAZktA-1; Tue, 17 May 2022 16:55:41 -0400
-X-MC-Unique: K6IsFE_rNR-7e8BCNAZktA-1
-Received: by mail-io1-f72.google.com with SMTP id x13-20020a0566022c4d00b0065491fa5614so13169591iov.9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:55:41 -0700 (PDT)
+        Tue, 17 May 2022 16:56:10 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B636B55BC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:56:09 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id fu47so291537qtb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 13:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IlwUjNSLf76IqlK4dytNhwOeLSPnXacyr795IjKBjN0=;
+        b=OhMMKe4D/Xy4ZfBgi4xNp/2vinjcK1iw9/dAHtcgVHLrurwYDrxu+nvOuw6/1QxysI
+         6QaUP0Xphjt8+WFHFz9mMPJCGlJ8cxXARBeTpcubZhogfi32h9bDuDPIM/ehqlanH+FG
+         zQC/R8uYxpXzjBokrAVv5F8CsznHIAKSvPdVLo2hXgt1ygUGIIN/PBS1VvfNQAUbj58r
+         iNqUWGaaQm4bqgvRit1H7duT8ehgKFPB94Dx3olM0Z3T2PlaC4kTe2Pci1ypIZU2kVLp
+         3LZqfU/RjwK3UIQjoEHTLemGexjTRhgHH6cF99pf93CP6bGgM/fe6fPUO/W8yVtiocm7
+         +Rmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=bjDVUYk4HAdG1tZM7dsKEhmRYaWZVB/tCHA1P3Bkphg=;
-        b=4MjnF2nBIHoqcAJCgM0UPIjHMXQk1MTyMxUd88WxUIlVNCQ6AVuaKPIPPeBr2nQFbF
-         hAS0G0Plbny/9XjGl3fzzxgDY34qBGlM2MX90y/o7zjVII0F/jR5JinTiUaadgNx50y3
-         oeILprgkkVkHU/WhYZqsuqkDrsP2CtlDgnyqjf5D3dE4pUn5Jo1vPuAx2Gn1s08pFN+J
-         9P9C/dVRJUyIeRoOEWI8RKZNeHd/zXBLfderC69zWvuS7/cfsJB27HJ68vhz19EkRld/
-         3hhYHNg0hk5FliFw/CO/Pvr8bHFeRnGKSaRgO60duUwsZJlcSpF489KG8tp22TQLJqTX
-         Nu+A==
-X-Gm-Message-State: AOAM531xUvXH6eH4NS+V666opydnDR1lDgDfFHW6asm+ndzzVLcJTiEX
-        xnAPhP4YoEp/QGzHeYnttCd36QRKFxz7IqFJrnOZQc7ssy0Zu0sZI24bcnnihIkOy1F71guAIcp
-        Cd4V7YpFqq35tn1FaV969RNMv
-X-Received: by 2002:a05:6638:4185:b0:32b:6a0d:90dc with SMTP id az5-20020a056638418500b0032b6a0d90dcmr12863689jab.193.1652820941091;
-        Tue, 17 May 2022 13:55:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz9BjoRLt6hzI2bLuSuOSH1OMVZ6HeJ3OXGYhShr0wiGLKOz5B/iPyuZS/yHg0uVPwGQJxgNw==
-X-Received: by 2002:a05:6638:4185:b0:32b:6a0d:90dc with SMTP id az5-20020a056638418500b0032b6a0d90dcmr12863678jab.193.1652820940861;
-        Tue, 17 May 2022 13:55:40 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id a2-20020a02ac02000000b0032e2996cadesm40325jao.66.2022.05.17.13.55.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 13:55:40 -0700 (PDT)
-Date:   Tue, 17 May 2022 14:55:39 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v4 4/4] vfio/pci: Move the unused device into low power
- state with runtime PM
-Message-ID: <20220517145539.7265b41a.alex.williamson@redhat.com>
-In-Reply-To: <20220517144256.15991375.alex.williamson@redhat.com>
-References: <20220517100219.15146-1-abhsahu@nvidia.com>
-        <20220517100219.15146-5-abhsahu@nvidia.com>
-        <20220517144256.15991375.alex.williamson@redhat.com>
-Organization: Red Hat
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IlwUjNSLf76IqlK4dytNhwOeLSPnXacyr795IjKBjN0=;
+        b=MJfdj32LxGTcUXDRfTFHNBO9D1yLab5//rX7uXOHp1HiD9HnfC07pr8eAYoLQfPgKJ
+         8lngkZChTvAWxfx1UWNg+mmEA3/+zqYpddskUEJaz69YhuFdIJLoEuY50g6uTcsUEH0i
+         JLCtSqCw6tNCxEgnCbDq9Q1EZbTV1MXoSrBWxGA7byfgT43v/A0zEbnqvK2MGT1dphDo
+         USbsdsARztaEHs8z0xrjiOyJ+cG6R6bvo9I6c7H00zeMp4VUJxKXiDAWM9GLxkGJOpEn
+         UpdYMSQTZFh278hjaGeiZQpHRAXqudHYYS2YvHy0tkV3nzS5TP/ziK1bKVYJ9aOywnlo
+         yhpA==
+X-Gm-Message-State: AOAM532TEBtLR2imKIfJeTo9wicDv0EOk9cPUwQSPavJPyQmm5MwcSI+
+        qiURvJmMNXlnFesK3yuuN/xAqWpyU/g52A==
+X-Google-Smtp-Source: ABdhPJzI8jTA6RPSQ/jSxS3vrh06ZHXlk0E56JG7bV/rr2t7IxudeVW3ddgVrP3RbcBI/Af2Qwrl9w==
+X-Received: by 2002:a05:622a:1a24:b0:2f3:bc7c:dade with SMTP id f36-20020a05622a1a2400b002f3bc7cdademr21557051qtb.647.1652820968738;
+        Tue, 17 May 2022 13:56:08 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id 78-20020a370a51000000b0069ffe63228fsm112755qkk.121.2022.05.17.13.56.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 13:56:07 -0700 (PDT)
+Message-ID: <1cbd12ad-4147-5d97-ef7f-4104b630244b@linaro.org>
+Date:   Tue, 17 May 2022 15:56:06 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] arm64: dts: qcom: sc7180: Remove ipa_fw_mem node on
+ trogdor
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
+References: <20220517193307.3034602-1-swboyd@chromium.org>
+ <ceb32b66-1341-d54f-a60a-5c342119c784@linaro.org>
+ <CAE-0n50rUW7Lqk4CwfSUgKYEJzwjXuVohAnbj9uKA=kEkXikyw@mail.gmail.com>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <CAE-0n50rUW7Lqk4CwfSUgKYEJzwjXuVohAnbj9uKA=kEkXikyw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,63 +78,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 14:42:56 -0600
-Alex Williamson <alex.williamson@redhat.com> wrote:
+On 5/17/22 3:06 PM, Stephen Boyd wrote:
+> Quoting Alex Elder (2022-05-17 12:51:34)
+>> On 5/17/22 2:33 PM, Stephen Boyd wrote:
+>>> We don't use this carveout on trogdor boards, and having it defined in
+>>> the sc7180 SoC file causes an overlap message to be printed at boot.
+>>>
+>>>    OF: reserved mem: OVERLAP DETECTED!
+>>>    memory@86000000 (0x0000000086000000--0x000000008ec00000) overlaps with memory@8b700000 (0x000000008b700000--0x000000008b710000)
+>>>
+>>> Delete the node in the trogdor dtsi file to fix the overlap problem and
+>>> remove the error message.'
+>>
+>> Is the mpss_mem node (which defines 0x86000000-0x8ec00000) correct?
+> 
+> I think it is. Modem is working for me.
+> 
+>>
+>> You're right, we don't use that memory on Chrome OS, but I just
+>> wondered whether the other node might also have a problem.
+> 
+> What sort of problem are you thinking about?
 
-> On Tue, 17 May 2022 15:32:19 +0530
-> Abhishek Sahu <abhsahu@nvidia.com> wrote:
-> > 5. Since the runtime PM framework will provide the same functionality,
-> >    so directly writing into PCI PM config register can be replaced with
-> >    the use of runtime PM routines. Also, the use of runtime PM can help
-> >    us in more power saving.
-> > 
-> >    In the systems which do not support D3cold,
-> > 
-> >    With the existing implementation:
-> > 
-> >    // PCI device
-> >    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
-> >    D3hot
-> >    // upstream bridge
-> >    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
-> >    D0
-> > 
-> >    With runtime PM:
-> > 
-> >    // PCI device
-> >    # cat /sys/bus/pci/devices/0000\:01\:00.0/power_state
-> >    D3hot
-> >    // upstream bridge
-> >    # cat /sys/bus/pci/devices/0000\:00\:01.0/power_state
-> >    D3hot  
-> 
-> I'm not able to reproduce these results.  Output below abridged:
-> 
-> # lspci -t
-> -[0000:00]-+-00.0
->            +-01.0-[01]--+-00.0
->            |            \-00.1
-> 
-> # grep . /sys/bus/pci/devices/*/power_state
-> /sys/bus/pci/devices/0000:00:01.0/power_state:D0
-> /sys/bus/pci/devices/0000:01:00.0/power_state:D3hot
-> /sys/bus/pci/devices/0000:01:00.1/power_state:D3hot
-> 
-> # lspci -ks $DEV
-> 00:01.0 PCI bridge: Intel Corporation Xeon E3-1200 v2/3rd Gen Core processor PCI Express Root Port (rev 09)
-> 	Kernel driver in use: pcieport
-> 01:00.0 VGA compatible controller: NVIDIA Corporation GM107 [GeForce GTX 750] (rev a2)
-> 	Subsystem: eVga.com. Corp. Device 2753
-> 	Kernel driver in use: vfio-pci
-> 01:00.1 Audio device: NVIDIA Corporation GM107 High Definition Audio Controller [GeForce 940MX] (rev a1)
-> 	Subsystem: eVga.com. Corp. Device 2753
-> 	Kernel driver in use: vfio-pci
-> 	Kernel modules: snd_hda_intel
-> 
-> Any debugging suggestions?  Thanks,
+At some point in the past I think some of these carved out
+areas got updated (perhaps on sdm845?).  I.e. they were
+wrong, and got corrected later.  Some things worked despite
+that.  So the problem, for example, might be that the
+mpss region is bigger than it needs to be.
 
-Nevermind, I see a whole bunch of reasons in pci_bridge_d3_possible()
-that runtime-pm wouldn't support D3hot on this bridge/system.  Thanks,
+I don't *assume* there's a problem, I was just asking,
+and maybe Bjorn or someone else can verify what's right.
 
-Alex
+I'm done for the day right now; otherwise I'd spend a
+little more time trying to track the information down
+myself...
+
+					-Alex
+
+
+>>
+>> I don't actually know...  Bjorn, do you?
+>>
 

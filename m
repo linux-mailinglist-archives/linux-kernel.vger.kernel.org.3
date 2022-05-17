@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943E5529695
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00E352969A
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 03:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235898AbiEQBOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 21:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S232791AbiEQBOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 21:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiEQBOH (ORCPT
+        with ESMTP id S236359AbiEQBOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 21:14:07 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFAC40928;
-        Mon, 16 May 2022 18:14:06 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id r1so29963762ybo.7;
-        Mon, 16 May 2022 18:14:06 -0700 (PDT)
+        Mon, 16 May 2022 21:14:15 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EB741984;
+        Mon, 16 May 2022 18:14:14 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 202so15624060pgc.9;
+        Mon, 16 May 2022 18:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Krh36ViT/EwDdvnp42Kcg/9QiROI+wYenJfQpSBh8DQ=;
-        b=dZ0jQ9xFO9MEBQYlRmAuN309bWDTIKOAEWzH10mbYlxK3A92D3O0rHe3NMpGuuQRQ0
-         82bXfjvfZbU8U3eVvx/0QD4KI+iKYr756RlYNR6+VTLCwjM+kkGTBPSXnaMWH3stcIhY
-         vHxweQPMbfB2eifacLq1uvr8DRxV1oFRo9vlvfHhreO9osahVcApnPBYPyvDlMUbCsV8
-         G+F3cLdAzLnhtRB7IAt8X+y9WfkVbQLtMU5rMFylehhZezTHqvuiNzVGAyB86G4/qMCe
-         172JNlMOqmXe+aSUG0Ti93KH8Ky0IOH8nJ7VpS0nsgyOJUT6597M2MIhN1IUXsI4fyy3
-         f2Vw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yvfLNgzj0LlML7YO1Uk64PllzBEDEnVgEw1ErIJEf1c=;
+        b=fNItWEesTtzgODmxS5UzL83e0LdGMRcZUHKoHxfdsqWlRDPMw4VjeO7/83Q6yA+AjJ
+         xfogqJxIzSLw/84O91UkEZGLrMFafY6nqi31d+06pn8t367x1pg4yt9jWbutGlUrk8s5
+         UvjE/W0kEXSZsKM4KW07CPKGjPu1cZA02MJ12uMppQKHNF7DCAPtXBss2Y+OzaoLVPHE
+         uwvr/6+FHE2ttqKrv7PhiirbSCKa8HaVPqbDbWFQzssUbW3juphOV71pChMR4JGxxKQf
+         xWvy5SBA3Jvt6LR/tQ2cFvWjS9blMa97lAB5Zs8Z/apyTbzb0s8sVYV7HWN+WYj5ix13
+         WdpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Krh36ViT/EwDdvnp42Kcg/9QiROI+wYenJfQpSBh8DQ=;
-        b=bo7hlcxO/eO/rssHf5vIysaLWaAFBRy/6KoCbsdLMEFHb7bop2fQdeUEmkHt9qiZOM
-         +/WaRRaPXbPeKPTqLcgr4o3slT83dvxn+LtkuttkuRdTnbLDbs3WHk6RhIkTuJ7t+br7
-         bmBNbMeBMGFYf8q7o+lav3/bK7Nll/C4wKHi6vCnxsPJakiZpQYn/P6WsSrISTQP5qTT
-         4YhGLP8Gw0MvYPhikhbTaFeIF7UoRyAlLKYdTluKZlDKGUlFJi7NENYxvnUeCb3ixgxU
-         ixJ7zop8Tcb88rPE2RMngDLuWuCdgjmcu0SXI9khGDc/bVxz3keKc0PyMcJCVz1cuNQz
-         RRdQ==
-X-Gm-Message-State: AOAM532+ZUXA7fy11IatRMAglrjJxsw2wmhZBfBvwGGmp8zUyomjyz5v
-        uuoA/ThIjkSYYNjfqtVuj/LjLv+FXtoT5EV4kkA=
-X-Google-Smtp-Source: ABdhPJyFdaX9VMqmdftxmEICDY2lizLH2P+RWV4/NuazfAIT5DH3J4F0SfPEA0zhjUDb0Rx58XTM5r2HrA5UMLS+7TQ=
-X-Received: by 2002:a25:7694:0:b0:64d:b38b:40ec with SMTP id
- r142-20020a257694000000b0064db38b40ecmr6827973ybc.526.1652750045900; Mon, 16
- May 2022 18:14:05 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yvfLNgzj0LlML7YO1Uk64PllzBEDEnVgEw1ErIJEf1c=;
+        b=JOd3uMUxKoB8qOWj0Jm/eYx/1nG6egLKZZz0myVNWk4W6wSN+KTmCNvURZj6I8JLg5
+         ppozharNJ6xXetks+A19hbV+XPRXM76cQXFK0NGemJNYrVoZBlDhGGeQLGYPJ6YqZDJy
+         NtWjskK/WOVp/3/jGojB+JVN9kSxi4Ewetra0XNCjMCUWqrfqAeb0He7pXVZrHnR+23p
+         K8u0hp/CG6K+3j+H4yw7OOXlF3AKs8MACjWPpxFKBFaRB2BgUWWaF2bqtNWu1Lkxqdm9
+         Dib0Hpi2L21v2ryr5COCXgGLcdP+kwJ/zGw7S5EdI/uSgD/21m1cgaGtjVbVAREgKOBu
+         FiYQ==
+X-Gm-Message-State: AOAM530cjjg9pQQ35C6yLpSTqCFCcYoEhZQAdSPR5utqBkYI3lHAvsek
+        2z9M0Ja4+BCmyVd1Dd1lkiA=
+X-Google-Smtp-Source: ABdhPJz4auVTYWheSOfsiZtbJjA5qb3+6f/OJK+ZHip29RXltDL0KkzN5+jbnVcLSWEttXrtzZ1Y6w==
+X-Received: by 2002:a63:9553:0:b0:3c6:25b2:9525 with SMTP id t19-20020a639553000000b003c625b29525mr17669892pgn.294.1652750053728;
+        Mon, 16 May 2022 18:14:13 -0700 (PDT)
+Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:400::4:3651])
+        by smtp.gmail.com with ESMTPSA id z11-20020a1709027e8b00b0016144a84c31sm5556207pla.119.2022.05.16.18.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 18:14:13 -0700 (PDT)
+Date:   Mon, 16 May 2022 18:14:09 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Eugene Syromiatnikov <esyr@redhat.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf 1/4] bpf_trace: check size for overflow in
+ bpf_kprobe_multi_link_attach
+Message-ID: <20220517011409.qexxrowf6b2ticid@MBP-98dd607d3435.dhcp.thefacebook.com>
+References: <20220516182708.GA29437@asgard.redhat.com>
+ <YoLDdaObEQePcIN+@krava>
+ <20220516224934.GA5013@asgard.redhat.com>
 MIME-Version: 1.0
-References: <20220503150735.32723-1-jiangshanlai@gmail.com>
- <20220503150735.32723-4-jiangshanlai@gmail.com> <YoLlzcejEDh8VpoB@google.com>
-In-Reply-To: <YoLlzcejEDh8VpoB@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Tue, 17 May 2022 09:13:54 +0800
-Message-ID: <CAJhGHyCKdxti0gDjDP27MDd=bK+0BecXqzExo5t-WAOQLO5WwA@mail.gmail.com>
-Subject: Re: [PATCH V2 3/7] KVM: X86/MMU: Link PAE root pagetable with its children
-To:     David Matlack <dmatlack@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516224934.GA5013@asgard.redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,84 +84,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 8:01 AM David Matlack <dmatlack@google.com> wrote:
->
-> On Tue, May 03, 2022 at 11:07:31PM +0800, Lai Jiangshan wrote:
-> > From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> >
-> > When special shadow pages are activated, link_shadow_page() might link
-> > a special shadow pages which is the PAE root for PAE paging with its
-> > children.
-> >
-> > Add make_pae_pdpte() to handle it.
-> >
-> > The code is not activated since special shadow pages are not activated
-> > yet.
-> >
-> > Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c  | 6 +++++-
-> >  arch/x86/kvm/mmu/spte.c | 7 +++++++
-> >  arch/x86/kvm/mmu/spte.h | 1 +
-> >  3 files changed, 13 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 126f0cd07f98..3fe70ad3bda2 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -2277,7 +2277,11 @@ static void link_shadow_page(struct kvm_vcpu *vcpu, u64 *sptep,
-> >
-> >       BUILD_BUG_ON(VMX_EPT_WRITABLE_MASK != PT_WRITABLE_MASK);
-> >
-> > -     spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
-> > +     if (unlikely(sp->role.level == PT32_ROOT_LEVEL &&
-> > +                  vcpu->arch.mmu->root_role.level == PT32E_ROOT_LEVEL))
-> > +             spte = make_pae_pdpte(sp->spt);
-> > +     else
-> > +             spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
-> >
-> >       mmu_spte_set(sptep, spte);
-> >
-> > diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-> > index 75c9e87d446a..ccd9267a58ca 100644
-> > --- a/arch/x86/kvm/mmu/spte.c
-> > +++ b/arch/x86/kvm/mmu/spte.c
-> > @@ -251,6 +251,13 @@ u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index)
-> >       return child_spte;
-> >  }
-> >
-> > +u64 make_pae_pdpte(u64 *child_pt)
-> > +{
-> > +     /* The only ignore bits in PDPTE are 11:9. */
-> > +     BUILD_BUG_ON(!(GENMASK(11,9) & SPTE_MMU_PRESENT_MASK));
-> > +     return __pa(child_pt) | PT_PRESENT_MASK | SPTE_MMU_PRESENT_MASK |
-> > +             shadow_me_value;
->
-> If I'm reading mmu_alloc_{direct,shadow}_roots() correctly, PAE page
-> directories just get: root | PT_PRESENT_MASK | shadow_me_value. Is there
-> a reason to add SPTE_MMU_PRESENT_MASK or am I misreading the code?
+On Tue, May 17, 2022 at 12:49:34AM +0200, Eugene Syromiatnikov wrote:
+> On Mon, May 16, 2022 at 11:34:45PM +0200, Jiri Olsa wrote:
+> > On Mon, May 16, 2022 at 08:27:08PM +0200, Eugene Syromiatnikov wrote:
+> > > +	if (check_mul_overflow(cnt, sizeof(*syms), &size))
+> > > +		return -EOVERFLOW;
+> > 
+> > there was an update already:
+> > 
+> >   0236fec57a15 bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link
+> > 
+> > so this won't apply anymore, could you please rebase on top of the latest bpf-next/master?
+> 
+> The issue that this specific check has to go in 4.18, as it covers
+> possible out-of-bounds write, I'm not sure how to handle it, have
+> a branch where it is merged manually?
 
-Because it has a struct kvm_mmu_page associated with it now.
-
-sp->spt[i] requires SPTE_MMU_PRESENT_MASK if it is present.
-
->
-> > +}
-> >
-> >  u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled)
-> >  {
-> > diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> > index fbbab180395e..09a7e4ba017a 100644
-> > --- a/arch/x86/kvm/mmu/spte.h
-> > +++ b/arch/x86/kvm/mmu/spte.h
-> > @@ -413,6 +413,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-> >              u64 old_spte, bool prefetch, bool can_unsync,
-> >              bool host_writable, u64 *new_spte);
-> >  u64 make_huge_page_split_spte(u64 huge_spte, int huge_level, int index);
-> > +u64 make_pae_pdpte(u64 *child_pt);
-> >  u64 make_nonleaf_spte(u64 *child_pt, bool ad_disabled);
-> >  u64 make_mmio_spte(struct kvm_vcpu *vcpu, u64 gfn, unsigned int access);
-> >  u64 mark_spte_for_access_track(u64 spte);
-> > --
-> > 2.19.1.6.gb485710b
-> >
+As Jiri said, please use bpf-next.

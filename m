@@ -2,102 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB4352A223
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9835652A22C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346488AbiEQMyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
+        id S243754AbiEQMzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346765AbiEQMyi (ORCPT
+        with ESMTP id S236081AbiEQMzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:54:38 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B3B4D9D8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:54:13 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so220711pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:54:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tjiV1xKHbPTP8VkdWgv75f9elF2yNt/M/Hgxyubwsvs=;
-        b=jJAeyDDGVYAM6anJp5eoX+Bdo0+J99EROle8FXnCYomSg/lbrcKJLLjd6hcvwzDvUm
-         6zr4/avmcBBW6EM5X3wFV/U9Ynp8o4RUuago9cZIMUpj55YnxmTwlBg3M+h97wI0fOiW
-         49eJ9lwL8F26LCUDhVAeljV8Hs6OWpTO/V3DqQv1co1K45gP1DEyjY4J8OIac6KE3CY+
-         /KjuLFXew+595Z8SpuJCTvFRgpYCLioPegnwmdHFMe8E8DcQGmo9mfKH2xHfuWJ4LNFn
-         2BAwRhWXavX2UiGRAsGVfYBH2NLdqOAgqwTokZNJjG5RkOtC6E7gJuy4CpCBcNCc3NLg
-         IQdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tjiV1xKHbPTP8VkdWgv75f9elF2yNt/M/Hgxyubwsvs=;
-        b=N/PSD0X8xJD4Nd72PkZkBTyoYWGQkJ0mIuqCWEco/rc1aoiKBHnI3JMqZTY8yK8L15
-         /pvXxOKchq0T39o0AMZ7npNUPphuPFVwDPUl9h1qyeIcBnh4GW1rtfoMChgoZti93idx
-         OkjorqZdY+4eeYqzUmX9qD7iJxrk+T2+qlEjJ37/Cp+JfqRzp+nQOldAO0GhXVOF9IXi
-         Kcr+HdNkvyWG2/acgSS2J47mkUnGT/iNpukfx/MVj1UoWDjKZwumF5qSqdN3pYqrhbgI
-         fjlm7MYxVuX8gEHLAdpq3Lr4GrkSHJL5yGX7cSlyp04+qEYlx9RRGxElQgdxxF6lwxbz
-         JwlQ==
-X-Gm-Message-State: AOAM532a9L+gsDTUbQqQm+Fgl6y5h/msSqc7T2CtVWkp7i3cGBexGbie
-        Y/MI8Asgw15uTGI+KVQCFAagpA==
-X-Google-Smtp-Source: ABdhPJyipCIyJ38tRbhMT94MHL3O0NMmglFB3vvh77tC+0eyDQ2a4pEKSzIHKnqG3HbX+LeUaMee2g==
-X-Received: by 2002:a17:90b:1a8b:b0:1dc:e565:3238 with SMTP id ng11-20020a17090b1a8b00b001dce5653238mr24998790pjb.64.1652792052892;
-        Tue, 17 May 2022 05:54:12 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([46.249.98.195])
-        by smtp.gmail.com with ESMTPSA id gt13-20020a17090af2cd00b001df4b919937sm1598571pjb.16.2022.05.17.05.54.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 05:54:12 -0700 (PDT)
-Date:   Tue, 17 May 2022 20:54:04 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        broonie@kernel.org, acme@kernel.org, german.gomez@arm.com,
-        mathieu.poirier@linaro.org, john.garry@huawei.com,
-        Will Deacon <will@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/4] perf tools: arm64: Decouple Libunwind register
- names from Perf
-Message-ID: <20220517125404.GD153558@leoy-ThinkPad-X240s>
-References: <20220517102005.3022017-1-james.clark@arm.com>
- <20220517102005.3022017-4-james.clark@arm.com>
+        Tue, 17 May 2022 08:55:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B6D321834
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652792135;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CCBYm7JRURrb8ISptdPCXIyZxDNW+RgvRlpoFcroHpc=;
+        b=AEIzXRNhRi1iMKhUbrvWr6VpAK9rysTSFka8eQ2NX/GOkzFSoNODsoyk+dt9n3KirHRj1t
+        +8wVCN6HjlOA31yFDum3XkT9Gd06pr18HzqFLnyrPvzoEDI7dJWRlsbixZCI39+4dBQlBY
+        C3THFZTgV3I41FBeYUJJzCoHKx5g2iU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-QoLd5d2PMYWgONyitcW1ZQ-1; Tue, 17 May 2022 08:55:32 -0400
+X-MC-Unique: QoLd5d2PMYWgONyitcW1ZQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A900C811E84;
+        Tue, 17 May 2022 12:55:31 +0000 (UTC)
+Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D81F140CF8F6;
+        Tue, 17 May 2022 12:55:25 +0000 (UTC)
+Date:   Tue, 17 May 2022 20:55:20 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH V2 1/1] ubd: add io_uring based userspace block driver
+Message-ID: <YoObOMur7x/u0w1C@T590>
+References: <20220517055358.3164431-1-ming.lei@redhat.com>
+ <20220517055358.3164431-2-ming.lei@redhat.com>
+ <55d724a8-ed7d-ae92-ca6d-3582e13587db@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220517102005.3022017-4-james.clark@arm.com>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <55d724a8-ed7d-ae92-ca6d-3582e13587db@linux.alibaba.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 11:20:04AM +0100, James Clark wrote:
-> Dwarf register numbers and real register numbers on aarch64 are
-> equivalent. Remove the references to the register names from
-> Libunwind so that new registers are supported without having to
-> add build time feature checks for each new register.
+On Tue, May 17, 2022 at 06:00:57PM +0800, Ziyang Zhang wrote:
+> On 2022/5/17 13:53, Ming Lei wrote:
 > 
-> The unwinder won't ask for a register that it doesn't know about
-> and Perf will already report an error for an unknown or unrecorded
-> register in the perf_reg_value() function so extra validation
-> isn't needed.
+> > +
+> > +static void ubd_cancel_queue(struct ubd_queue *ubq)
+> > +{
+> > +	int i;
+> > +
+> > +	for (i = 0; i < ubq->q_depth; i++) {
+> > +		struct ubd_io *io = &ubq->ios[i];
+> > +
+> > +		if (io->flags & UBD_IO_FLAG_ACTIVE) {
+> > +			io->flags &= ~UBD_IO_FLAG_ACTIVE;
+> > +			io_uring_cmd_done(io->cmd, UBD_IO_RES_ABORT, 0);
+> > +		}
+> > +	}
+> > +}
 > 
-> After this change the new VG register can be read by libunwind.
+> Hi Ming,
 > 
-> Signed-off-by: James Clark <james.clark@arm.com>
+> When ubdsrv sends STOP_DEV and all active IOs in ubd_drv are done(UBD_IO_RES_ABORT),
+> there may be still some IOs handled by ubdsrv(UBD_IO_FLAG_ACTIVE not set).
+> When these IOs complete and return to ubd_drv, how to handle them?
 
-Looks good to me:
+Either UBD_IO_COMMIT_AND_FETCH_REQ or UBD_IO_COMMIT_REQ will be sent to ubd_drv
+for completing these IOs. And finally ubd_cancel_dev() in ubd driver will
+cancel all pending io commands, so io_uring can be exited. I guess
+UBD_IO_COMMIT_REQ can be removed too.
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
+> I find that UBD_IO_FETCH_REQ are still set,
+> so will these IOs be issued to ubdsrv again or canceled?
+> (I see ubd_drv fails IOs when the daemon is dying 
+> but maybe here the daemon is still alive)
+
+If daemon is alive, ubd_drv will rely on ubq_daemon for completing
+all inflight IOs. Otherwise, the monitor work will be triggered for
+completing/failing inflight IOs. The mechanism is actually very simple:
+
+static void ubd_stop_dev(struct ubd_device *ub)
+{
+        mutex_lock(&ub->mutex);
+        if (!disk_live(ub->ub_disk))
+                goto unlock;
+
+        del_gendisk(ub->ub_disk);	// drain & wait in-flight IOs
+        ub->dev_info.state = UBD_S_DEV_DEAD;
+        ub->dev_info.ubdsrv_pid = -1;
+        ubd_cancel_dev(ub);	   //No IO is possible now, so cancel pending io commands
+ unlock:
+        mutex_unlock(&ub->mutex);
+        cancel_delayed_work_sync(&ub->monitor_work);
+}
+
+When waiting for IO completion in del_gendisk(), in case that ubq_daemon
+is exiting/dying, monitor work will be triggered to call ubd_abort_queue() to
+fail in-flight requests for making forward progress. ubd_abort_queue() may
+looks a bit tricky to try using task work for aborting request, that
+is just for sync with ubd_rq_task_work_fn().
+
+
+Thanks, 
+Ming
+

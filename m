@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28E65297B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E62C05297B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 05:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbiEQDMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 16 May 2022 23:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S237091AbiEQDMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 16 May 2022 23:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbiEQDMS (ORCPT
+        with ESMTP id S239781AbiEQDMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 16 May 2022 23:12:18 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F221B1D0E5
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:12:16 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id a10so17982561ioe.9
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 20:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1kuEDxhPJAEoL+pT1AeoocUUxdiiHKoBFkSkZvL+zTE=;
-        b=MwI1QIx35vX1X2b4JzO+XSYcC0c4I+ihLcGgCP6FK2jTm+GGZFCJDhuTGoAPBkQLc/
-         VW948CJ7molBxVHIVACnnWLmYIcBSm2Qc3oRv99jfBAgesfc9SnMAvypFVgkF6kyClmo
-         dfxqT2Iih3GWPQIpZYCe2qJpofO9HFUQmQD1k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1kuEDxhPJAEoL+pT1AeoocUUxdiiHKoBFkSkZvL+zTE=;
-        b=P+3nLZQDZ3wZ59EXcIOIPrk/zHxyMJdLBaWkRtQDH+Bt4+HwbbVQowlqUDP5I9phFf
-         OoBxkshCUckSj8W5DJFQhLsFJq2awyKbnfF4pOpUR0cnvXOQ5zZbhqFfx/kiDut9KGi7
-         tEZ0czVoJA2zfnCXaeWrCwy+dNyIBoBEEUOr74svdguty1jKSklM4g50OKTZd6F6B8fq
-         7hAwXp2dkG6At4uZVpEDB8NfjKE5KqQh/0GoALemo1BHxEXxAdQ5CxQY0afjUURATj+v
-         C2FIoiBcLJJzPZjSyw3HwjffUOp5LDhOk9UdcoxHYPbQ0IIAZr0/BiOFqF7ESEfvsGyv
-         lD0g==
-X-Gm-Message-State: AOAM530XLupH/sBYWKEOZRlOfH+GsHaZeoI0ED9J2q7g5ErRsVNjCkk5
-        HhFxw0RyQZOyelysm+OMnUz6Cg==
-X-Google-Smtp-Source: ABdhPJyKur7KEmswRvvVt7T+HSxN6g34XcNeFHOa9PWInnFFz3vXE+rekPH9pYMo+VYF9f0Xl/sBlA==
-X-Received: by 2002:a05:6638:3397:b0:32b:a9da:9603 with SMTP id h23-20020a056638339700b0032ba9da9603mr10415917jav.283.1652757136387;
-        Mon, 16 May 2022 20:12:16 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id f19-20020a056638329300b0032e102760c5sm2458323jav.73.2022.05.16.20.12.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 20:12:15 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] mm: drop oom code from exit_mmap
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
-        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
-        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
-        hch@infradead.org, oleg@redhat.com, david@redhat.com,
-        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
-        jhubbard@nvidia.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        kernel-team@android.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220516075619.1277152-1-surenb@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <66da8e2f-62e5-2a09-e8ad-960d77bde75c@linuxfoundation.org>
-Date:   Mon, 16 May 2022 21:12:14 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 16 May 2022 23:12:38 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B1E1EC58;
+        Mon, 16 May 2022 20:12:32 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L2Ljp3wbHz1JC5q;
+        Tue, 17 May 2022 11:11:10 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500015.china.huawei.com (7.221.188.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 11:12:30 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 11:12:29 +0800
+Subject: Re: [PATCH -next] block: fix io hung of setting throttle limit
+ frequently
+To:     Tejun Heo <tj@kernel.org>,
+        Zhang Wensheng <zhangwensheng5@huawei.com>,
+        "ming.lei@redhat.com >> Ming Lei" <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <cgroups@vger.kernel.org>
+References: <20220516014429.33723-1-zhangwensheng5@huawei.com>
+ <YoKmCOAzwzw3Lz7g@slm.duckdns.org>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <ca251645-8d52-7a93-6ac2-579d97922a9e@huawei.com>
+Date:   Tue, 17 May 2022 11:12:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20220516075619.1277152-1-surenb@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YoKmCOAzwzw3Lz7g@slm.duckdns.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,34 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/22 1:56 AM, Suren Baghdasaryan wrote:
-> The primary reason to invoke the oom reaper from the exit_mmap path used
-> to be a prevention of an excessive oom killing if the oom victim exit
-> races with the oom reaper (see [1] for more details). The invocation has
-> moved around since then because of the interaction with the munlock
-> logic but the underlying reason has remained the same (see [2]).
+ÔÚ 2022/05/17 3:29, Tejun Heo Ð´µÀ:
+> On Mon, May 16, 2022 at 09:44:29AM +0800, Zhang Wensheng wrote:
+>> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+>> index 469c483719be..8acb205dfa85 100644
+>> --- a/block/blk-throttle.c
+>> +++ b/block/blk-throttle.c
+>> @@ -1321,12 +1321,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
+>>   	 * that a group's limit are dropped suddenly and we don't want to
+>>   	 * account recently dispatched IO with new low rate.
+>>   	 */
+>> -	throtl_start_new_slice(tg, READ);
+>> -	throtl_start_new_slice(tg, WRITE);
+>> +	if (!timer_pending(&sq->parent_sq->pending_timer)) {
+>> +		throtl_start_new_slice(tg, READ);
+>> +		throtl_start_new_slice(tg, WRITE);
+>>   
+>> -	if (tg->flags & THROTL_TG_PENDING) {
+>> -		tg_update_disptime(tg);
+>> -		throtl_schedule_next_dispatch(sq->parent_sq, true);
+>> +		if (tg->flags & THROTL_TG_PENDING) {
+>> +			tg_update_disptime(tg);
+>> +			throtl_schedule_next_dispatch(sq->parent_sq, true);
+>> +		}
 > 
-> Munlock code is no longer a problem since [3] and there shouldn't be
-> any blocking operation before the memory is unmapped by exit_mmap so
-> the oom reaper invocation can be dropped. The unmapping part can be done
-> with the non-exclusive mmap_sem and the exclusive one is only required
-> when page tables are freed.
+> Yeah, but this ends up breaking the reason why it's starting the new slices
+> in the first place explained in the commit above, right? I'm not sure what
+> the right solution is but this likely isn't it.
 > 
-> Remove the oom_reaper from exit_mmap which will make the code easier to
-> read. This is really unlikely to make any observable difference although
-> some microbenchmarks could benefit from one less branch that needs to be
-> evaluated even though it almost never is true.
-> 
-> [1] 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
-> [2] 27ae357fa82b ("mm, oom: fix concurrent munlock and oom reaper unmap, v3")
-> [3] a213e5cf71cb ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> ---
-Looks good to me.
+Hi, Tejun
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Ming added a condition in tg_with_in_bps_limit():
+-       if (bps_limit == U64_MAX) {
++       /* no need to throttle if this bio's bytes have been accounted */
++       if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
 
-thanks,
--- Shuah
+Which will let the first throttled bio to be issued immediately once
+the config if updated.
+
+Do you think this behaviour is OK? If so, we can do the same for
+tg_with_in_iops_limit.
+
+Thanks,
+Kuai
+
+> 

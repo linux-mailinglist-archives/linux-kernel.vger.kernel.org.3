@@ -2,82 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF0C52A409
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E4F52A40C
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348145AbiEQN6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
+        id S1348200AbiEQN7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347595AbiEQN6H (ORCPT
+        with ESMTP id S1348126AbiEQN61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:58:07 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75B43C4A7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:58:05 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id c24so22004966lfv.11
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eVaeE8EmFrZMCLqtcrlHzNvDehbUwPxJkr68zMJQkE0=;
-        b=keEYssJeA35i6Sta2I6KzzG+AyLAfGU3Lx5PpJy7XNJd46Oikjsl41K2FOclcNwgsf
-         LqEnxpal51K+s3Phphr9gnko8bztzkVvQMsZQXRbcHbIr5ZnHY04mUhXClzZfjIpyvfu
-         JN9u/WWFVTrS4rRPtrtQzTDX9UHmrPHcNwDmSP1Sf1+qW7loeTyBdIzkPd9y5JfV5bsS
-         b9fc4HEg9c5FtmdbLVKOFO47fPPvdiC9fbVkmb7R8UW54e/N5wXAgSffVIgmIhziQj9q
-         +Cfuea8uomdXM/3DRACVZLltyktTJwr4fDkOFZHDT75WmQilucE/VyjIzTvR+zh/8i15
-         rLaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eVaeE8EmFrZMCLqtcrlHzNvDehbUwPxJkr68zMJQkE0=;
-        b=GMs0JIiCeKbAJl4dW5IyH0AScOtg6yWtWGcS/V1csH5slJLLP0IVsnDxlQoL6PiDDD
-         GNoGTHP2gcTQ9RHnq8MiYz6hg9S3MwxsQTTL2c0X3dFerYUGuh8utlkWzgjDramAg8vu
-         ocOOeYNUp0l8UJT7QaRhQCSkAGmwmXALvbk3hVWuu2mcV/1tmaUILPSWeQOWmTOzQfY6
-         u5fdPjLuasKOxlyIeJeCaL1/+K8rdptvXK2Yx7ewwF/bVvDQu6Nvo2IT6/ELHkPQAdfr
-         hauhigumx02wE6Gcd9aP0CrzbWnSI1uTug0CDdXMMWDGAgXNd2H3L3PJBvyisrGAlY82
-         ye1A==
-X-Gm-Message-State: AOAM531Z7SBnqZoetuYt5Wm5zjkY2tZwtDcHCyZ3lR6cE8boq1BAtXc+
-        /6soTL+VK+vRiunwtfNGfkuE0w==
-X-Google-Smtp-Source: ABdhPJxw8xo2pjvHxPlfO7zErtguu1LhEFbww2MX8pjsfBIN1zJWlGEkdKQlYDEvVNX2wu/6K/T+fw==
-X-Received: by 2002:a05:6512:1399:b0:448:9f0b:bf4f with SMTP id p25-20020a056512139900b004489f0bbf4fmr16621673lfa.67.1652795884116;
-        Tue, 17 May 2022 06:58:04 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id t8-20020ac25488000000b0047255d21117sm1602236lfk.70.2022.05.17.06.58.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 06:58:03 -0700 (PDT)
-Message-ID: <9606459e-7d9f-90af-1c5c-263e8ab1fae1@linaro.org>
-Date:   Tue, 17 May 2022 15:58:02 +0200
+        Tue, 17 May 2022 09:58:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEEBA3C4B4;
+        Tue, 17 May 2022 06:58:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8AF991042;
+        Tue, 17 May 2022 06:58:15 -0700 (PDT)
+Received: from hype-n1-sdp.warwick.arm.com (hype-n1-sdp.warwick.arm.com [10.32.32.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0C14B3F718;
+        Tue, 17 May 2022 06:58:12 -0700 (PDT)
+From:   Nick Forrington <nick.forrington@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     Nick Forrington <nick.forrington@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/1] perf vendors events arm64: Update Cortex A57/A72
+Date:   Tue, 17 May 2022 14:58:04 +0100
+Message-Id: <20220517135805.313184-1-nick.forrington@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 03/20] dt-bindings: media: s5p-mfc: Add mfcv12 variant
-Content-Language: en-US
-To:     Smitha T Murthy <smitha.t@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        linux-fsd@tesla.com
-References: <20220517125548.14746-1-smitha.t@samsung.com>
- <CGME20220517125558epcas5p228cdf5f665468d3fd065d88a5d0ad157@epcas5p2.samsung.com>
- <20220517125548.14746-4-smitha.t@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220517125548.14746-4-smitha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,29 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 14:55, Smitha T Murthy wrote:
-> Adds DT schema for s5p-mfc with a new compatible
-> string for mfcv12 variant.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
-> ---
->  Documentation/devicetree/bindings/media/s5p-mfc.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.yaml b/Documentation/devicetree/bindings/media/s5p-mfc.yaml
-> index fff7c7e0d575..209da53f3582 100644
-> --- a/Documentation/devicetree/bindings/media/s5p-mfc.yaml
-> +++ b/Documentation/devicetree/bindings/media/s5p-mfc.yaml
-> @@ -21,6 +21,7 @@ properties:
->        - samsung,mfc-v8                  # Exynos5800
->        - samsung,exynos5433-mfc          # Exynos5433
->        - samsung,mfc-v10                 # Exynos7880
-> +      - samsung,mfc-v12                 # Tesla FSD
+Update Perf PMU events for Cortex-A57 and Cortex-A72 CPUs.
 
-No. We moved already to SoC specific comaptibles. You introduced back
-wrong pattern with MFCv10, but it should be rather fixed. Don't go back
-to it...
+This adds missing events to existing event data, and splits events in to
+separate files/groups for categorisation.
 
-Best regards,
-Krzysztof
+This improves consistency with recently submitted events for Cortex-A
+CPUs:
+https://lore.kernel.org/lkml/61141530-7d4a-ed6a-f8b7-933bd550f3c2@arm.com/
+
+(This should be independent of above patches as no mapfile / common
+event updates are required)
+
+Nick Forrington (1):
+  perf vendors events arm64: Update Cortex A57/A72
+
+ .../arch/arm64/arm/cortex-a57-a72/branch.json |  17 ++
+ .../arch/arm64/arm/cortex-a57-a72/bus.json    |  29 +++
+ .../arch/arm64/arm/cortex-a57-a72/cache.json  |  80 ++++++++
+ .../arm/cortex-a57-a72/core-imp-def.json      | 179 ------------------
+ .../arm64/arm/cortex-a57-a72/exception.json   |  47 +++++
+ .../arm64/arm/cortex-a57-a72/instruction.json |  68 +++++++
+ .../arch/arm64/arm/cortex-a57-a72/memory.json |  20 ++
+ 7 files changed, 261 insertions(+), 179 deletions(-)
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a57-a72/branch.json
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a57-a72/bus.json
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a57-a72/cache.json
+ delete mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a57-a72/core-imp-def.json
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a57-a72/exception.json
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a57-a72/instruction.json
+ create mode 100644 tools/perf/pmu-events/arch/arm64/arm/cortex-a57-a72/memory.json
+
+-- 
+2.25.1
+

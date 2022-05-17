@@ -2,143 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 741A952AE2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A6652AE3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 00:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiEQW34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 18:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        id S231377AbiEQWds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 18:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiEQW3x (ORCPT
+        with ESMTP id S231376AbiEQWdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 18:29:53 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C26F52E6C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:29:50 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bq30so565803lfb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vRrKK940tfY15AL/k2whqSoFtZdbDZpofZ1keoPwuls=;
-        b=bmW79KvYYbX9yJ25BckYi9U4OZPqh9WoGqI0OtODtPwXovUvFB0Mlx7LQg5aEmBLUA
-         BiVzwzxveln6wne0cgVGF37mWxwUOsxkjXFyhS7Ax8UPP2uL61asXWWhB84s9eLrEoZI
-         afCElLueYI9Ar3gaweUf3VPgkl8g5E5Xa1bH3nfox4kc7tal/yDxEE7djtQyPkLGrlNm
-         FZTPC87BoRi7kWr611X2F6GFlucPK7Ih5N/LkMzOwVzwow7t/qDugrr5X5/tiMk8pEf7
-         pcJeNVa+Qj8MSJRjtdM+pY3HWqdoLYvA/hhXaTzVduKO35znsTrdWKlyNc4Jl4t0AgRo
-         3SZg==
+        Tue, 17 May 2022 18:33:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B85D14738C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652826811;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xsgZD2xN95jcvNsVYdiJpz1wstzqtrmwvWpl/rt8mrs=;
+        b=L8fzmDd0uHM83sPFQiJ6i5qF/xxWBxqf1kRgBkoa4ILD17qJWuoxBzULtuUcf9rwocq7cm
+        cB6sm7y+t3Y67yXFZfOxMlIyG+yBwZc/eH8OyKHqr8/Vze0IFhVJn1/cd37amHq8BOaYp7
+        NoOCB61XYkABnpt5fDgpj+gcnZWYGFs=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-79-PTKlFvK5M5iFlJ37ooRhyw-1; Tue, 17 May 2022 18:33:30 -0400
+X-MC-Unique: PTKlFvK5M5iFlJ37ooRhyw-1
+Received: by mail-qt1-f198.google.com with SMTP id h5-20020ac81385000000b002f3f91834ffso414772qtj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 15:33:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vRrKK940tfY15AL/k2whqSoFtZdbDZpofZ1keoPwuls=;
-        b=Tduh0rNSDIsMsYKIjlBEQI7m0es65z5IbZwE7b2HQsCXl42hguibEuD/jkwS/SewZn
-         gPNlCyQ/q7Vopyb0sE+XKfUAHEqKyRZw87g9ykDHysVf0eAwmLilUKf6F74GcEIVzyle
-         Vx/3iPq7WM0k/s0BEqlxG/WQJ90oOScB0L19mMPH0XK/lVQu/oJonYcanDVqfSFzMKeB
-         VdqotuxpBD0h8FnPxa5xiGRqsZy+epva/WRgxM/DzE2o6bg23pFAG/pA7TMA/OJI6+yX
-         CBfuZse7cQ+e5by9C9H1jKcNQM+LyuDwBonB6Aq7JnJu9zi+WeMeGhWRPfEeyltZZOCV
-         0hVw==
-X-Gm-Message-State: AOAM532vxfsi2gTsstIPA3cBQ6GVT2EeQQoerVOzu6DdstnFGYNS9dcZ
-        BXomxahhQAnVPm8nJZRMQnbPo6eR3S6fHx9PpRBj6Q==
-X-Google-Smtp-Source: ABdhPJzAQmbCDjA2O7dLfFPHDMx+mXoBHhB/mP3eIxQ/7+fxV1qQkpaIZEiwttGEcDDfQrLU5iW98Ti7DlMBe9dnlbo=
-X-Received: by 2002:a05:6512:1d1:b0:471:f63a:b182 with SMTP id
- f17-20020a05651201d100b00471f63ab182mr18342309lfp.392.1652826588756; Tue, 17
- May 2022 15:29:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local> <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
- <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local>
-In-Reply-To: <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 17 May 2022 15:29:36 -0700
-Message-ID: <CAKwvOd=yLgY_0SwfBuOAzo=+zeWNMu4FMp65y0bi_RM+1G3NWQ@mail.gmail.com>
-Subject: Re: Dangerous addr to ctrl dependency transformation in fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
-To:     =?UTF-8?Q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
-Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=xsgZD2xN95jcvNsVYdiJpz1wstzqtrmwvWpl/rt8mrs=;
+        b=OFuuL+YhJjoz/OLO7kn15tveosKlVw1RkjBM0CeoDV1b45zAxY42ajpM1tFExIkfKz
+         WLjk2fRLYeNJtIbu+HUyeHRCR4YPsHQH/b/CbkAf4Af7nT2Nt4IzpSgm4pR2wzp1cF13
+         oxy8cpYMCtp+LxmrAfV6CAnL7Im7/l6SlFCI3X1rDwReg4UFoLBitukL9YAEoIB3NOe6
+         MGNi0rmn2Bx1i52R/iZQXqetWEmmjAnuC+Tq5Gffgf9h9I/2wg/oq0Z3pbNfrF72bn5K
+         NwsSlmqq5Ql/pytW50juEUkXiCRuTyuT3QLBYuzXG0a7Sv+84Sj+o44Dl1wCsP3mMvRT
+         OJDw==
+X-Gm-Message-State: AOAM533eTyI6FJa3iNAY1xo0UiLddo9MMXPKSuORonNQjoyBPyMo2a+0
+        uYkwlQzxPQhwCD5iakz7qXvouSUGXfrxk08nIa/erYLKORp2ash6jO6LlnW5UBif3i8Yi+W14Qd
+        0YxrYq1cRUAxJy+omoJj1sISM
+X-Received: by 2002:a05:620a:4727:b0:6a0:3036:8bfe with SMTP id bs39-20020a05620a472700b006a030368bfemr18258015qkb.239.1652826809385;
+        Tue, 17 May 2022 15:33:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz1rJobn4JcdOWoAqeK93N2MhQ5S8q1IuwRVLFycp/5h0rBE3NqehxIR7DkNsuosW/5+564Lw==
+X-Received: by 2002:a05:620a:4727:b0:6a0:3036:8bfe with SMTP id bs39-20020a05620a472700b006a030368bfemr18258006qkb.239.1652826809198;
+        Tue, 17 May 2022 15:33:29 -0700 (PDT)
+Received: from [192.168.8.138] (static-71-184-137-158.bstnma.ftas.verizon.net. [71.184.137.158])
+        by smtp.gmail.com with ESMTPSA id z197-20020a3765ce000000b0069fc13ce212sm276480qkb.67.2022.05.17.15.31.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 15:31:56 -0700 (PDT)
+Message-ID: <aed19bec63ddcb63bf87582754c96d7fbe2c06b3.camel@redhat.com>
+Subject: Re: [PATCH v2] drm/nouveau: reorder nouveau_drm_device_fini
+From:   Lyude Paul <lyude@redhat.com>
+To:     Mark Menzynski <mmenzyns@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
+Date:   Tue, 17 May 2022 18:31:03 -0400
+In-Reply-To: <20220516133103.324365-1-mmenzyns@redhat.com>
+References: <20220516133103.324365-1-mmenzyns@redhat.com>
+Organization: Red Hat Inc.
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 3:39 AM Paul Heidekr=C3=BCger
-<paul.heidekrueger@in.tum.de> wrote:
->
-> On Thu, Apr 14, 2022 at 02:21:25PM -0700, Nick Desaulniers wrote:
-> > On Thu, Apr 7, 2022 at 8:22 AM Paul Heidekr=C3=BCger
-> > <paul.heidekrueger@in.tum.de> wrote:
-> > >
-> > > Hi all,
-> > >
-> > > work on my dependency checker tool is progressing nicely, and it is
-> > > flagging, what I believe is, a harmful addr to ctrl dependency
-> > > transformation. For context, see [1] and [2]. I'm using the Clang
-> > > compiler.
-> > > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachme=
-nts/598/1075/LPC_2020_--_Dependency_ordering.pdf
-> > > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pr=
-o/T/#u
-> >
-> > Hi Paul,
-> > Thanks for the report and your (and your team's) work on this tool.
-> > Orthogonal to your report, Jose (cc'ed) and I are currently in the
-> > planning process to put together a Kernel+Toolchain microconference
-> > track at Linux Plumbers Conference [0] this year (Sept 12-14) in
-> > Dublin, Ireland.  Would you or someone from your group be able and
-> > interested in presenting more information about your work to an
-> > audience of kernel and toolchain developers at such an event?
-> >
-> > Would others be interested in such a topic? (What do they say in
-> > Starship Troopers...?...Would you like to know more?)
-> >
-> > [0] https://lpc.events/event/16/
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
->
-> Hi Nick and Jose,
->
-> Many thanks for inviting us! I would love to do a talk at LPC! Hopefully
-> in person too.
->
-> Given that there have been several talks around this topic at LPC
-> already, it seems very fitting, and we'll hopefully have more to share
-> by then. Actually we have more to share already :-)
->
-> https://lore.kernel.org/all/YmKE%2FXgmRnGKrBbB@Pauls-MacBook-Pro.local/T/=
-#u
->
-> I assume we will have to submit an abstract soon?
+So I think you forgot to update the subject of the patch. If you can send a
+respin of this patch with a corrected patch title, then you can consider this:
 
-Yes, if you go to: https://lpc.events/event/16/abstracts/
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-click "Submit new abstract" in the bottom right.
+I'll push once you get the respin out
 
-Under the "Track" dropdown, please select "Toolchains Track."
---=20
-Thanks,
-~Nick Desaulniers
+On Mon, 2022-05-16 at 15:31 +0200, Mark Menzynski wrote:
+> Resources needed for output poll workers are destroyed in
+> nouveau_fbcon_fini() before output poll workers are cleared in
+> nouveau_display_fini(). This means there is a time between fbcon_fini()
+> and display_fini(), where if output poll happens, it crashes.
+> 
+> This makes output poll workers cleared right before fbcon resources are
+> destroyed.
+> 
+> BUG: KASAN: use-after-free in
+> __drm_fb_helper_initial_config_and_unlock.cold+0x1f3/0x291
+> [drm_kms_helper]
+> 
+> Cc: Ben Skeggs <bskeggs@redhat.com>
+> Cc: Karol Herbst <kherbst@redhat.com>
+> Cc: Lyude Paul <lyude@redhat.com>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: nouveau@lists.freedesktop.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Mark Menzynski <mmenzyns@redhat.com>
+> ---
+>  drivers/gpu/drm/nouveau/nouveau_fbcon.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_fbcon.c
+> b/drivers/gpu/drm/nouveau/nouveau_fbcon.c
+> index 4f9b3aa5deda..5226323e55d3 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_fbcon.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_fbcon.c
+> @@ -39,6 +39,7 @@
+>  
+>  #include <drm/drm_crtc.h>
+>  #include <drm/drm_crtc_helper.h>
+> +#include <drm/drm_probe_helper.h>
+>  #include <drm/drm_fb_helper.h>
+>  #include <drm/drm_fourcc.h>
+>  #include <drm/drm_atomic.h>
+> @@ -605,6 +606,7 @@ nouveau_fbcon_fini(struct drm_device *dev)
+>         if (!drm->fbcon)
+>                 return;
+>  
+> +       drm_kms_helper_poll_fini(dev);
+>         nouveau_fbcon_accel_fini(dev);
+>         nouveau_fbcon_destroy(dev, drm->fbcon);
+>         kfree(drm->fbcon);
+
+-- 
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
+

@@ -2,80 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CC052A0B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9705652A0D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 13:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345471AbiEQLuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 07:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
+        id S1345590AbiEQLzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 07:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345456AbiEQLuU (ORCPT
+        with ESMTP id S1345574AbiEQLzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 07:50:20 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EAA377E0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:50:19 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id g11-20020a056e021a2b00b002cf48b48824so9247884ile.21
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 04:50:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ohu20Gei/ORrqs2QS7qZhTZWRQML4W4vk+6nw675mBs=;
-        b=PfhLw39m7AzKihXoGwVNqySZxHLb+mvvtb1sIaUidhtW0WjRH2trnZ0a07FS4sqnig
-         lq+ceUWXapJj3ikniyGqlfIURBzebt9nVfU5IZvt/GpkLeZOX/9mDARaCiCHtJiMAq2o
-         jLP5DJCqjhFlGNSOzz77AhWKl8BTpX9ZCBrgzCPnOY3vQsZsDQnBpVN+Fof1NuIsYVLE
-         qUOrSlOohlnVD7y/4T3UobgJUHdpL76nhV726b/kQUB51Dcqz5mL9KRWVe7g3uzQ+Kmw
-         6yEgxStXN4aEVwFzsNlPAOViY74u3VWT18qtqe6FXTJdd4EAnEkW0L/cJiYMAXu7/Pgk
-         nacw==
-X-Gm-Message-State: AOAM533pRvCJgMDAeJp1yD/jNQ8jUyAazqrfOSIMWBfxrKBMhVCr/24d
-        95vIFq/Sn1AzyTtEzhT+ov/lwRq03ibx6ohqYtlizbAkAKA/
-X-Google-Smtp-Source: ABdhPJzGQpSEEHGpXaDF+BwJwyVS5yee9rx2BeXMo+M4VKfJGc/JNONGpbBDwPiPxS5/InacMv1SoM7iYfNMnRNAlUiGhc/OEguL
+        Tue, 17 May 2022 07:55:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A714C41B;
+        Tue, 17 May 2022 04:55:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1FA761F8F7;
+        Tue, 17 May 2022 11:55:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652788540;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XWV9I8vEC/gVBQMdfp4ZLR/XCARFFY3wFzVWUZZsLyM=;
+        b=j9NlYg+lgeZw9lxeHS9hEMqYh9EWqsSTl22Ibl6SLszboSCxHZeZodscBEl49w/4vIrcOB
+        uAXkoX1nvTKjUM1EUBcvOyjjqjRbNUJbZ/kq4stZ+0/lerrP5gO4626alqaz99tsnRPc1F
+        LBtIqYYF955Cs3zK/ONXbGQa4CWL9/k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652788540;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XWV9I8vEC/gVBQMdfp4ZLR/XCARFFY3wFzVWUZZsLyM=;
+        b=dxEL63L4qVfrlSY8/gFaeGBil7Jzz5/q5q2u14C3uE+vuxIzDaaJnUvlZVhVxGzwFZtcYq
+        HrloqJOf4p4mS8Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B7A1D13305;
+        Tue, 17 May 2022 11:55:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nQDZKzuNg2JOAwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 17 May 2022 11:55:39 +0000
+Date:   Tue, 17 May 2022 13:51:21 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "pankydev8@gmail.com" <pankydev8@gmail.com>,
+        "dsterba@suse.com" <dsterba@suse.com>, "hch@lst.de" <hch@lst.de>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: Re: [PATCH v4 06/13] btrfs: zoned: Make sb_zone_number function non
+ power of 2 compatible
+Message-ID: <20220517115121.GA18596@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "damien.lemoal@opensource.wdc.com" <damien.lemoal@opensource.wdc.com>,
+        "pankydev8@gmail.com" <pankydev8@gmail.com>,
+        "dsterba@suse.com" <dsterba@suse.com>, "hch@lst.de" <hch@lst.de>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "jiangbo.365@bytedance.com" <jiangbo.365@bytedance.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+References: <20220516165416.171196-1-p.raghav@samsung.com>
+ <CGME20220516165427eucas1p1cfd87ca44ec314ea1d2ddc8ece7259f9@eucas1p1.samsung.com>
+ <20220516165416.171196-7-p.raghav@samsung.com>
+ <PH0PR04MB741673F9764EFCA93F1932809BCE9@PH0PR04MB7416.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:400d:b0:65d:bff5:4f35 with SMTP id
- bk13-20020a056602400d00b0065dbff54f35mr10076844iob.199.1652788219320; Tue, 17
- May 2022 04:50:19 -0700 (PDT)
-Date:   Tue, 17 May 2022 04:50:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b3a1f405df33be01@google.com>
-Subject: [syzbot] linux-next build error (13)
-From:   syzbot <syzbot+7013da477748d0b624b9@syzkaller.appspotmail.com>
-To:     axboe@fb.com, hch@lst.de, james.smart@broadcom.com,
-        kbusch@kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-nvme@lists.infradead.org,
-        sagi@grimberg.me, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR04MB741673F9764EFCA93F1932809BCE9@PH0PR04MB7416.namprd04.prod.outlook.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, May 17, 2022 at 06:53:40AM +0000, Johannes Thumshirn wrote:
+> On 16/05/2022 18:54, Pankaj Raghav wrote:
+> >  	/* Cache the sb zone number */
+> >  	for (i = 0; i < BTRFS_SUPER_MIRROR_MAX; ++i) {
+> >  		zone_info->sb_zone_location[i] =
+> > -			sb_zone_number(zone_info->zone_size_shift, i);
+> > +			sb_zone_number(bdev, i);
+> 
+> I think this easily fits on one line now, doesn't it? But given David's
+> statement, it'll probably can go away anyways.
 
-syzbot found the following issue on:
-
-HEAD commit:    47c1c54d1bcd Add linux-next specific files for 20220517
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=137f0301f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=95ad7f734b04ada9
-dashboard link: https://syzkaller.appspot.com/bug?extid=7013da477748d0b624b9
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7013da477748d0b624b9@syzkaller.appspotmail.com
-
-drivers/nvme/host/fc.c:1914: undefined reference to `blkcg_get_fc_appid'
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I agree that the formatting can be adjusted, but I'm never sure if I
+should point it out during the phase of functional changes so it's fixed
+in the next iteration as well, or not to point it out to avoid fixups
+that would go away anyway. I think I've seen more, a styling pass will
+be done anyway once we're close to the final version..

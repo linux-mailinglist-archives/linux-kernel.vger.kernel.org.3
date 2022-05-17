@@ -2,40 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD770529993
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92BD52995D
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 08:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239864AbiEQG36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 02:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
+        id S238368AbiEQGNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 02:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239807AbiEQG3u (ORCPT
+        with ESMTP id S239028AbiEQGNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 02:29:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84B0D44772
-        for <linux-kernel@vger.kernel.org>; Mon, 16 May 2022 23:29:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EFB3ED1;
-        Mon, 16 May 2022 23:29:49 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [10.162.43.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 337D93F718;
-        Mon, 16 May 2022 23:29:45 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Subject: [PATCH] amba: Drop builtin_amba_driver()
-Date:   Tue, 17 May 2022 11:59:29 +0530
-Message-Id: <20220517062929.3109873-1-anshuman.khandual@arm.com>
+        Tue, 17 May 2022 02:13:04 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F44443D4;
+        Mon, 16 May 2022 23:13:02 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2QhG5mv0zGpQh;
+        Tue, 17 May 2022 14:10:06 +0800 (CST)
+Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 14:13:00 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 14:12:59 +0800
+From:   keliu <liuke94@huawei.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>,
+        <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     keliu <liuke94@huawei.com>
+Subject: [PATCH 1/2] hwmon: Directly use ida_alloc()/free()
+Date:   Tue, 17 May 2022 06:31:25 +0000
+Message-ID: <20220517063126.2142637-1-liuke94@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500018.china.huawei.com (7.185.36.111)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -44,41 +50,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop builtin_amba_driver() which is not used anymore.
+Use ida_alloc()/ida_free() instead of deprecated
+ida_simple_get()/ida_simple_remove() .
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Wang Kefeng <wangkefeng.wang@huawei.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Signed-off-by: keliu <liuke94@huawei.com>
 ---
-This applies on v5.18-rc7
+ drivers/hwmon/hwmon.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- include/linux/amba/bus.h | 10 ----------
- 1 file changed, 10 deletions(-)
-
-diff --git a/include/linux/amba/bus.h b/include/linux/amba/bus.h
-index 6562f543c3e0..7c5d2aa73437 100644
---- a/include/linux/amba/bus.h
-+++ b/include/linux/amba/bus.h
-@@ -171,14 +171,4 @@ struct amba_device name##_device = {				\
-  */
- #define module_amba_driver(__amba_drv) \
- 	module_driver(__amba_drv, amba_driver_register, amba_driver_unregister)
--
--/*
-- * builtin_amba_driver() - Helper macro for drivers that don't do anything
-- * special in driver initcall.  This eliminates a lot of boilerplate.  Each
-- * driver may only use this macro once, and calling it replaces the instance
-- * device_initcall().
-- */
--#define builtin_amba_driver(__amba_drv) \
--	builtin_driver(__amba_drv, amba_driver_register)
--
- #endif
+diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+index 22de7a9e7ba7..2e2cd79d89eb 100644
+--- a/drivers/hwmon/hwmon.c
++++ b/drivers/hwmon/hwmon.c
+@@ -764,7 +764,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ 			 "hwmon: '%s' is not a valid name attribute, please fix\n",
+ 			 name);
+ 
+-	id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
++	id = ida_alloc(&hwmon_ida, GFP_KERNEL);
+ 	if (id < 0)
+ 		return ERR_PTR(id);
+ 
+@@ -856,7 +856,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+ free_hwmon:
+ 	hwmon_dev_release(hdev);
+ ida_remove:
+-	ida_simple_remove(&hwmon_ida, id);
++	ida_free(&hwmon_ida, id);
+ 	return ERR_PTR(err);
+ }
+ 
+@@ -968,7 +968,7 @@ void hwmon_device_unregister(struct device *dev)
+ 
+ 	if (likely(sscanf(dev_name(dev), HWMON_ID_FORMAT, &id) == 1)) {
+ 		device_unregister(dev);
+-		ida_simple_remove(&hwmon_ida, id);
++		ida_free(&hwmon_ida, id);
+ 	} else
+ 		dev_dbg(dev->parent,
+ 			"hwmon_device_unregister() failed: bad class ID!\n");
 -- 
-2.20.1
+2.25.1
 

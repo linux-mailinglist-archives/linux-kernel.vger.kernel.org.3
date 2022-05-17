@@ -2,64 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9835652A22C
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B8452A244
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243754AbiEQMzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
+        id S1346926AbiEQM44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236081AbiEQMzh (ORCPT
+        with ESMTP id S1345989AbiEQMz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:55:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B6D321834
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:55:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652792135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CCBYm7JRURrb8ISptdPCXIyZxDNW+RgvRlpoFcroHpc=;
-        b=AEIzXRNhRi1iMKhUbrvWr6VpAK9rysTSFka8eQ2NX/GOkzFSoNODsoyk+dt9n3KirHRj1t
-        +8wVCN6HjlOA31yFDum3XkT9Gd06pr18HzqFLnyrPvzoEDI7dJWRlsbixZCI39+4dBQlBY
-        C3THFZTgV3I41FBeYUJJzCoHKx5g2iU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-QoLd5d2PMYWgONyitcW1ZQ-1; Tue, 17 May 2022 08:55:32 -0400
-X-MC-Unique: QoLd5d2PMYWgONyitcW1ZQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A900C811E84;
-        Tue, 17 May 2022 12:55:31 +0000 (UTC)
-Received: from T590 (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D81F140CF8F6;
-        Tue, 17 May 2022 12:55:25 +0000 (UTC)
-Date:   Tue, 17 May 2022 20:55:20 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH V2 1/1] ubd: add io_uring based userspace block driver
-Message-ID: <YoObOMur7x/u0w1C@T590>
-References: <20220517055358.3164431-1-ming.lei@redhat.com>
- <20220517055358.3164431-2-ming.lei@redhat.com>
- <55d724a8-ed7d-ae92-ca6d-3582e13587db@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <55d724a8-ed7d-ae92-ca6d-3582e13587db@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 17 May 2022 08:55:56 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A692C6317
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:55:50 -0700 (PDT)
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220517125546epoutp02304a73248e120e555121ef6a86abbe51~v5bNoQ86I0964209642epoutp027
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 12:55:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220517125546epoutp02304a73248e120e555121ef6a86abbe51~v5bNoQ86I0964209642epoutp027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1652792147;
+        bh=OVhES/rcDLq4Fi6eEb2iXvfOpdkKuNFGmcfznNbuyxI=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=HPRqPbLvj3f5KcyajqImXpzHpSy1v+IATj853u5mpE4yEqd2XmdhzmOqfJ2XWv6vE
+         cIoJ8Ru1065sOZZkPY6i7D+ahkfr9Ta0o0af9Y1S9KYucR7ZGwl4CHUPNrmN7GEXTg
+         AbIqUZZCo938wkZT4e8/vAMoSmMKJhx57OqmzRVA=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220517125546epcas5p3e56563600381bb7f6a62dc06caf66bfa~v5bM6LVwO3186031860epcas5p3x;
+        Tue, 17 May 2022 12:55:46 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.183]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4L2bhH59LCz4x9Pw; Tue, 17 May
+        2022 12:55:43 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B3.DB.09762.F4B93826; Tue, 17 May 2022 21:55:43 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220517125511epcas5p4e9a4e3c327771dd1faf0a50057a2c17b~v5asQ9Goq1998519985epcas5p4Q;
+        Tue, 17 May 2022 12:55:11 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220517125511epsmtrp156957d73069d62bd702d29fa07223d2d~v5asP1maN3276532765epsmtrp1c;
+        Tue, 17 May 2022 12:55:11 +0000 (GMT)
+X-AuditID: b6c32a4b-213ff70000002622-a4-62839b4f7391
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EE.8A.11276.E2B93826; Tue, 17 May 2022 21:55:11 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220517125507epsmtip16dd1109d45e05858658073883203b133~v5apUbHHC2359423594epsmtip1R;
+        Tue, 17 May 2022 12:55:07 +0000 (GMT)
+From:   Smitha T Murthy <smitha.t@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, stanimir.varbanov@linaro.org,
+        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
+        andi@etezian.org, alim.akhtar@samsung.com,
+        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
+        Smitha T Murthy <smitha.t@samsung.com>
+Subject: [PATCH 00/20] Add MFC v12 support.
+Date:   Tue, 17 May 2022 18:25:28 +0530
+Message-Id: <20220517125548.14746-1-smitha.t@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WTf0xTVxTHue+1rwUte6EwLl107BEXdBRbaOFBQDZk5kVNbFimbtF1D/rW
+        Ekrb9IfoEiYIMmEbIMOMUQQnCArKj0IZIM4K3Vh0bkERFqQgPzbpFsFQUQNbtpbW7b/POd9z
+        7vlx7+WiQXZMwM3SGBm9hlYTWACrZ2hrpHCfuTBDVPWMIB/U9WBkw/OHCDnd4GKRg11WDtk9
+        akbJ5mEbm6y3/8wmv70xyyI7F9zqyNcOFvmwvg2QzpopjLTMjbHJu/21GPl5h5VNXrE7OOSF
+        8RGEbLL8hZDnrU845Mlrdg7pGOgBZFGxHXnzZepy3WVA9ToaATXeuIxSfTUODtUw4EQoS0sJ
+        Rk2ODWBUV+Nx6uT3qyyqrLsFUKX2cYxyWTZTN1dcHBnv/ewkFUMrGH04o8nUKrI0ymRizzvy
+        nXJpnEgsFCeQ8US4hs5hkom0vTLhriy1e3Ai/AitNrldMtpgILbvSNJrTUYmXKU1GJMJRqdQ
+        6yS6aAOdYzBplNEaxpgoFolipO7AD7NVfd/cZusuhR1tXHNh+aA+uBRwuRCXwJZTglIQwA3C
+        rwJYedHJ9hrLAE4V24DXeArgs9YlpBT4r2fcKmrjeIVrAFY038c8QhBehMALq4c9jOFR8OnS
+        rXV/MF4A4NwpoycBxX9HodP2hO0R+PgbsLbiNsfDLHwLHDIvox7m4QnweX0r21vtVdjaYUO9
+        PMmF7SU+ToNVYyWYl/nwj+FujpcF0Fle7GMlnHYVAi/r4Nn8bt8EKdA2WsvyzI/iW2F7/3av
+        exM8c7NtPQTFA+EXa/O+cB7srXvBBDz/04++4yG898jqa5OCZ+vmON49HIbn5iewCrCp5v8K
+        5wBoAWGMzpCjZAxSXayGyf3vnjK1ORaw/py37ekFsw8eRw8ChAsGAeSiRDBPdDQ/I4inoI99
+        zOi1cr1JzRgGgdS9stOoICRT6/4PGqNcLEkQSeLi4iQJsXFiIpSH/1OQEYQraSOTzTA6Rv8i
+        D+H6C/KRQNVCysoda1TP2PXOtXL+UrrRKTv92i+B9TtataMRga3yt4RFqWVXquMP3CgU+4Vk
+        Hrw+8tKvfvxR9aWMO8GfHMrDPtBZku6GCnbbuqRULG/L2A+hlGJmztjME/r3RTnaZvmfCSJm
+        VQ39soATf6dPDCcfr47ZOJF3QL73kWVmozL4cerapxNLMa+r8pAjQ9bFnjTXIVPnzim05lhK
+        Z3Ovf7e5tt0p3NypkJUfPPNlRZI0vqU5dPLiR9Md74Z8FRlpPiHR7w8sqyzYn5hJ36tbsWpz
+        TTP23KSaxKv3q/xc/D+1C01vM/R7USu7KqubjOnsWOyVDWGLq4vmiPzv5n9rT91AsAwqWrwN
+        1RvofwHBBCmRVwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMLMWRmVeSWpSXmKPExsWy7bCSnK7+7OYkg7cNzBYP5m1js1j84zmT
+        xf3Fn1ksDm3eym6x5cpsZovlxw+wWsw/co7VYvvBRywWG18AZS/OvMti8Xz+OkaLl7PusVls
+        enyN1eLyrjlsFj0btrJarD1yl91i6fWLTBbLNv1hsli09Qu7ReveI+wWd/dsY7RoaTvC5CDm
+        sWbeGkaPHXeXMHpcX/KJ2WPnrLvsHov3vGTy2LSqk83jzrU9bB6bl9R7tB79xeLRt2UVo0fX
+        ketsHp83yXmc+vqZPYA3issmJTUnsyy1SN8ugStj58KzrAUrJSuW/P7M1sA4X6SLkZNDQsBE
+        4nTLOvYuRi4OIYHdjBL3/l1hh0hISKz8PYkRwhaWWPnvOVRRE5PE5mUNzCAJNgEdiW/vT7OB
+        JEQEWhklrq/sZAJxmAV+MUssfHUarF1YQFtizoSzYGNZBFQlDs/+BNbNK2Ap8WP+alaIFfIS
+        qzccYJ7AyLOAkWEVo2RqQXFuem6xYYFhXmq5XnFibnFpXrpecn7uJkZwvGhp7mDcvuqD3iFG
+        Jg7GQ4wSHMxKIrwGFQ1JQrwpiZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgt
+        gskycXBKNTCt++QTblr3tm+muZP70oOnky9vXbV4zbTFv+U4JjVV7Oja2elwcMrGSJepK2ab
+        bJu16sW52VUXTb79DevpTnGUPuRwsaOsQO/xLGulhbf111RvLll8eOtkPhOes+1CfSLbuSfb
+        qZxf9mJfcQ3n0WJl27rZJ9Vvnwgr/XzU7N6GtpDVr/5mdj55e/jOLRXziD1J06Ylbnn0w9/Z
+        wP4h016b3MzEfM5NJwq7dlx1Vp48KXpdpS7zilDezT7XG2w+bz1jlft/g/Wl+Qce/1wxaXmL
+        ZPx9TT3fqN05yW/1uv0a7+TvOye069qzP1+Uw/NU/VWSp/w/m5n/8fvlwO1OC1kWrvyg9335
+        2xl1a8Nn14U0KiqxFGckGmoxFxUnAgAv+VkIBgMAAA==
+X-CMS-MailID: 20220517125511epcas5p4e9a4e3c327771dd1faf0a50057a2c17b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220517125511epcas5p4e9a4e3c327771dd1faf0a50057a2c17b
+References: <CGME20220517125511epcas5p4e9a4e3c327771dd1faf0a50057a2c17b@epcas5p4.samsung.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,66 +122,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 06:00:57PM +0800, Ziyang Zhang wrote:
-> On 2022/5/17 13:53, Ming Lei wrote:
-> 
-> > +
-> > +static void ubd_cancel_queue(struct ubd_queue *ubq)
-> > +{
-> > +	int i;
-> > +
-> > +	for (i = 0; i < ubq->q_depth; i++) {
-> > +		struct ubd_io *io = &ubq->ios[i];
-> > +
-> > +		if (io->flags & UBD_IO_FLAG_ACTIVE) {
-> > +			io->flags &= ~UBD_IO_FLAG_ACTIVE;
-> > +			io_uring_cmd_done(io->cmd, UBD_IO_RES_ABORT, 0);
-> > +		}
-> > +	}
-> > +}
-> 
-> Hi Ming,
-> 
-> When ubdsrv sends STOP_DEV and all active IOs in ubd_drv are done(UBD_IO_RES_ABORT),
-> there may be still some IOs handled by ubdsrv(UBD_IO_FLAG_ACTIVE not set).
-> When these IOs complete and return to ubd_drv, how to handle them?
+This patch series adds MFC v12 support. MFC v12 is used in
+Tesla FSD SoC.
 
-Either UBD_IO_COMMIT_AND_FETCH_REQ or UBD_IO_COMMIT_REQ will be sent to ubd_drv
-for completing these IOs. And finally ubd_cancel_dev() in ubd driver will
-cancel all pending io commands, so io_uring can be exited. I guess
-UBD_IO_COMMIT_REQ can be removed too.
+This adds support for following:
 
-> I find that UBD_IO_FETCH_REQ are still set,
-> so will these IOs be issued to ubdsrv again or canceled?
-> (I see ubd_drv fails IOs when the daemon is dying 
-> but maybe here the daemon is still alive)
+* Add support for VP9 encoder
+* Add support for YV12 and I420 format (3-plane)
+* Add support for Rate Control, UHD and DMABUF for encoder
+* Add support for DPB buffers allocation based on MFC requirement
+* Fix to handle reference queue at MFCINST_FINISHING state.
+* Fix to handle error scenario on CLOSE_INSTANCE command.
+* Fix for register read and write for H264 codec encoding.
+* Update Documentation for control id definitions
 
-If daemon is alive, ubd_drv will rely on ubq_daemon for completing
-all inflight IOs. Otherwise, the monitor work will be triggered for
-completing/failing inflight IOs. The mechanism is actually very simple:
+Smitha T Murthy (20):
+  MAINTAINERS: Add git repo path for MFC
+  dt-bindings: media: s5p-mfc: Convert s5p-mfc.txt to new DT schema
+  dt-bindings: media: s5p-mfc: Add mfcv12 variant
+  media: s5p-mfc: Rename IS_MFCV10 macro
+  media: s5p-mfc: Add initial support for MFCv12
+  Documention: v4l: Documentation for VP9 CIDs.
+  media: v4l2: Add v4l2 control IDs for VP9 encoder.
+  media: s5p-mfc: Add support for VP9 encoder.
+  media: s5p-mfc: Add YV12 and I420 multiplanar format support
+  media: s5p-mfc: Add support for rate controls in MFCv12
+  media: s5p-mfc: Add support for UHD encoding.
+  media: s5p-mfc: Add support for DMABUF for encoder
+  media: s5p-mfc: Set context for valid case before calling try_run
+  media: s5p-mfc: Load firmware for each run in MFCv12.
+  media: s5p-mfc: DPB Count Independent of VIDIOC_REQBUF
+  media: s5p-mfc: Fix to handle reference queue during finishing
+  media: s5p-mfc: Clear workbit to handle error condition
+  media: s5p-mfc: Correction in register read and write for H264
+  arm64: dts: fsd: Add MFC related DT enteries
+  arm64 defconfig: Add MFC in defconfig
 
-static void ubd_stop_dev(struct ubd_device *ub)
-{
-        mutex_lock(&ub->mutex);
-        if (!disk_live(ub->ub_disk))
-                goto unlock;
+ .../devicetree/bindings/media/s5p-mfc.txt     |  77 +--
+ .../devicetree/bindings/media/s5p-mfc.yaml    |  99 ++++
+ .../media/v4l/ext-ctrls-codec.rst             | 167 +++++++
+ MAINTAINERS                                   |   1 +
+ arch/arm64/boot/dts/tesla/fsd-evb.dts         |   8 +
+ arch/arm64/boot/dts/tesla/fsd.dtsi            |  22 +
+ arch/arm64/configs/defconfig                  |   4 +-
+ .../platform/samsung/s5p-mfc/regs-mfc-v12.h   |  60 +++
+ .../platform/samsung/s5p-mfc/regs-mfc-v7.h    |   1 +
+ .../platform/samsung/s5p-mfc/regs-mfc-v8.h    |   3 +
+ .../media/platform/samsung/s5p-mfc/s5p_mfc.c  |  36 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_cmd_v6.c |   3 +
+ .../platform/samsung/s5p-mfc/s5p_mfc_common.h |  48 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_ctrl.c   |  13 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_dec.c    |  51 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_enc.c    | 417 ++++++++++++++--
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr.h    |  16 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v5.c |  12 +-
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c | 446 ++++++++++++++++--
+ .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.h |   3 +
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  44 ++
+ include/uapi/linux/v4l2-controls.h            |  33 ++
+ 22 files changed, 1362 insertions(+), 202 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/s5p-mfc.yaml
+ create mode 100644 drivers/media/platform/samsung/s5p-mfc/regs-mfc-v12.h
 
-        del_gendisk(ub->ub_disk);	// drain & wait in-flight IOs
-        ub->dev_info.state = UBD_S_DEV_DEAD;
-        ub->dev_info.ubdsrv_pid = -1;
-        ubd_cancel_dev(ub);	   //No IO is possible now, so cancel pending io commands
- unlock:
-        mutex_unlock(&ub->mutex);
-        cancel_delayed_work_sync(&ub->monitor_work);
-}
 
-When waiting for IO completion in del_gendisk(), in case that ubq_daemon
-is exiting/dying, monitor work will be triggered to call ubd_abort_queue() to
-fail in-flight requests for making forward progress. ubd_abort_queue() may
-looks a bit tricky to try using task work for aborting request, that
-is just for sync with ubd_rq_task_work_fn().
-
-
-Thanks, 
-Ming
+base-commit: 3ae87d2f25c0e998da2721ce332e2b80d3d53c39
+-- 
+2.17.1
 

@@ -2,158 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D8752A1E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0221752A1F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346355AbiEQMrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
+        id S1346377AbiEQMsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346386AbiEQMrX (ORCPT
+        with ESMTP id S1346368AbiEQMsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:47:23 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C9F3C4B7
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:47:21 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id q15so843566pgr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:47:21 -0700 (PDT)
+        Tue, 17 May 2022 08:48:13 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BECD3FBE3;
+        Tue, 17 May 2022 05:48:10 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id i25-20020a9d6259000000b00605df9afea7so12091884otk.1;
+        Tue, 17 May 2022 05:48:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uPzI2NrDruMsQhpRvojLxqAMj39DRNPyO6rdqBSN6WI=;
-        b=8MnH6yhBAp56fktUprxfKAWWVHVAc10JTu9Cu3lZkdbut6LdHfKVs6lUqV0hKis3kO
-         7JHDLaQBSlglECY2YwhiCXKBAMuAgpb+/S5hPklqFZFOYsn4jvR59jxlTfEZKb+7muhg
-         pXBAxpnN5Uca1L5YFqmvqN+PEnBkZDtH4Yn85SwLx8RsNnhmdVwIbcww7HXHUsAXRSn7
-         +eYmoHri323IPMJd4LYxD8DVMWIp8bgb8A8HUJZ7ODKO/WqkLJYPevkR/amqvi+HJ8Xs
-         n3Hw5W28f1Oopd7cfnE3q5CE6xaMOUvNBj2wCMuYMIitIlZ6vktHucsRjoseTHV1XQwe
-         vqeQ==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NpzpNLoEmkRn/F6uE5+1oVZ1luFPE9xSZEAZD03pdY0=;
+        b=FkMdQ424AFm5M4F/la9481PW4y7bKE4/auUO4eSkzUdj6YeDa8M2rjq1p7Wz54zNqr
+         uG5FWhf2fZYePV8/u9/SktVm6eF9boZfRLzRJ2BwEbG4En9gXIyRyZ9q3S9gBnNtER2T
+         nFHzne0bdnmApZ3G2LK41oGO2twG8y4iggio2J4i7SGwErgbAf0gujw0N8lhqsmGPatY
+         pD4cyk/NA1pgU42CfDrTIMwt+sy2Iuyv18XldQm5QVQc1bt5bKrRhDKauzqg+WCzAcvO
+         TAssoj5mHf3QOTg0VL2mlCCSWSN2Ohi8I64K8VOYbr/lu8QL1yczqBdVEUSCeH+aNJI+
+         Ghew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uPzI2NrDruMsQhpRvojLxqAMj39DRNPyO6rdqBSN6WI=;
-        b=M3oF9jTJky7jzqjaD7pWsGHeZ4mZqGzm90394AMQ+Apv9kgQQsE157LJzQyNVb0tG4
-         SNm6BAVfCll6ITZYPNB4umz4a7L1E5AXJnhU9+3JwbFo/blHIaYvnVJqWSXT4VfdmX9K
-         IcadF9FxYblY5x8VTg9x3Y1HiQr4h5iDxoOg0Uic0PNL89BLxJEvvZcmPUVU2vhLAdMo
-         BhXfZdrzseGLdWBLBz7SeS3axerQ7CLmSZRjDQMW958htylO/joFoL7BZdbD4P8EUTrp
-         PSRbzyHKSAFB+07nlQk8Q2EVcxqKCe8zlwpoR2j5BWVckcf3wvwnARk4J4tqs2BX7Cp3
-         Zj0g==
-X-Gm-Message-State: AOAM533PZDFacnQyULYd4+FvpCAMQTIzOZFONEgsK0g+ed0nALxsyDhv
-        sfDUCd9yn2N8NqGGnofV/Q2vFQ==
-X-Google-Smtp-Source: ABdhPJx1CPqw/ut3dzEX3LKjQ08PsOTU2iRbFD2/TlBgCe3+4sFB4uej65dGSXc4brDcrHOKXOCGuQ==
-X-Received: by 2002:a05:6a00:2484:b0:50e:68e:d5a5 with SMTP id c4-20020a056a00248400b0050e068ed5a5mr22340952pfv.47.1652791641262;
-        Tue, 17 May 2022 05:47:21 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y13-20020a170902b48d00b00161ac982b52sm1372754plr.95.2022.05.17.05.47.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 05:47:19 -0700 (PDT)
-Message-ID: <3d271554-9ddc-07ad-3ff8-30aba31f8bf2@kernel.dk>
-Date:   Tue, 17 May 2022 06:47:17 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=NpzpNLoEmkRn/F6uE5+1oVZ1luFPE9xSZEAZD03pdY0=;
+        b=7mtA49q5zkhom3fgWffwOz4KiaQI+/jBol2cLCTuFClD7OMzUD+KuA7GMEfz9WglSJ
+         V3g1yDMfjQwPZ08W6Vdar+cy6s4asG/O45cszmHPAlAV+ynUjW5Gf4T0KywbgIpZXYrc
+         IuSltj7uaj4R+SkY/Tjvsa2rM3rfm1O/6rNR/GtjIV00t6WLn5QuLwlS7k97HpRGmk6o
+         sYSw7GE/WrirU56iIwGmuRMbKg1KUwbu7YL9ORSMxtAX93Hw3CQ9i8dwNpEZDPjoRTfD
+         QbSOnXExm8zW4pjarcwCFcEuohIJSw9MBZmj28cbMlbaIgyNRO1orqoTQzeuJHhwKWME
+         0U5A==
+X-Gm-Message-State: AOAM530updsHCbjKzCUHYnMAX5nFeMWHsekVuq51PM674BmjJTSnkYOc
+        kAhpWzpLd4/g0VK+O6+pOK4=
+X-Google-Smtp-Source: ABdhPJzqHePQEq34dcSNWFfMU4S9Z3Cpk/nI2Y3MDxu6fdQnSRWoOAttAJVy0Os7wsFCy5CQ5TiuAg==
+X-Received: by 2002:a05:6830:25cc:b0:5c9:5fc5:32b1 with SMTP id d12-20020a05683025cc00b005c95fc532b1mr7925519otu.138.1652791689934;
+        Tue, 17 May 2022 05:48:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f22-20020a9d5e96000000b00606765d8db2sm4790749otl.77.2022.05.17.05.48.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 05:48:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 17 May 2022 05:48:08 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     keliu <liuke94@huawei.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <YoOJ/T4QRKC+fAZE@google.com>
- <97cba3e1-4ef7-0a17-8456-e0787d6702c6@kernel.dk>
- <YoOT7Cyobsed5IE3@google.com>
- <d503d5ff-4bc5-2bd0-00d3-cd7b0a0724cb@kernel.dk>
- <YoOW2+ov8KF1YcYF@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YoOW2+ov8KF1YcYF@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/2] hwmon: Directly use ida_alloc()/free()
+Message-ID: <20220517124808.GA3438318@roeck-us.net>
+References: <20220517063126.2142637-1-liuke94@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517063126.2142637-1-liuke94@huawei.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/22 6:36 AM, Lee Jones wrote:
-> On Tue, 17 May 2022, Jens Axboe wrote:
+On Tue, May 17, 2022 at 06:31:25AM +0000, keliu wrote:
+> Use ida_alloc()/ida_free() instead of deprecated
+> ida_simple_get()/ida_simple_remove() .
 > 
->> On 5/17/22 6:24 AM, Lee Jones wrote:
->>> On Tue, 17 May 2022, Jens Axboe wrote:
->>>
->>>> On 5/17/22 5:41 AM, Lee Jones wrote:
->>>>> Good afternoon Jens, Pavel, et al.,
->>>>>
->>>>> Not sure if you are presently aware, but there appears to be a
->>>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
->>>>> in Stable v5.10.y.
->>>>>
->>>>> The full sysbot report can be seen below [0].
->>>>>
->>>>> The C-reproducer has been placed below that [1].
->>>>>
->>>>> I had great success running this reproducer in an infinite loop.
->>>>>
->>>>> My colleague reverse-bisected the fixing commit to:
->>>>>
->>>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
->>>>>   Author: Jens Axboe <axboe@kernel.dk>
->>>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
->>>>>
->>>>>        io-wq: have manager wait for all workers to exit
->>>>>
->>>>>        Instead of having to wait separately on workers and manager, just have
->>>>>        the manager wait on the workers. We use an atomic_t for the reference
->>>>>        here, as we need to start at 0 and allow increment from that. Since the
->>>>>        number of workers is naturally capped by the allowed nr of processes,
->>>>>        and that uses an int, there is no risk of overflow.
->>>>>
->>>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>>>>
->>>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
->>>>>     1 file changed, 22 insertions(+), 8 deletions(-)
->>>>
->>>> Does this fix it:
->>>>
->>>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
->>>> Author: Jens Axboe <axboe@kernel.dk>
->>>> Date:   Fri Mar 5 12:59:30 2021 -0700
->>>>
->>>>     io-wq: fix race in freeing 'wq' and worker access
->>>>
->>>> Looks like it didn't make it into 5.10-stable, but we can certainly
->>>> rectify that.
->>>
->>> Thanks for your quick response Jens.
->>>
->>> This patch doesn't apply cleanly to v5.10.y.
->>
->> This is probably why it never made it into 5.10-stable :-/
-> 
-> Right.  It doesn't apply at all unfortunately.
-> 
->>> I'll have a go at back-porting it.  Please bear with me.
->>
->> Let me know if you into issues with that and I can help out.
-> 
-> I think the dependency list is too big.
-> 
-> Too much has changed that was never back-ported.
-> 
-> Actually the list of patches pertaining to fs/io-wq.c alone isn't so
-> bad, I did start to back-port them all but some of the big ones have
-> fs/io_uring.c changes incorporated and that list is huge (256 patches
-> from v5.10 to the fixing patch mentioned above).
+> Signed-off-by: keliu <liuke94@huawei.com>
 
-The problem is that 5.12 went to the new worker setup, and this patch
-landed after that even though it also applies to the pre-native workers.
-Hence the dependency chain isn't really as long as it seems, probably
-just a few patches backporting the change references and completions.
+Applied.
 
-I'll take a look this afternoon.
+Thanks,
+Guenter
 
--- 
-Jens Axboe
-
+> ---
+>  drivers/hwmon/hwmon.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hwmon/hwmon.c b/drivers/hwmon/hwmon.c
+> index 22de7a9e7ba7..2e2cd79d89eb 100644
+> --- a/drivers/hwmon/hwmon.c
+> +++ b/drivers/hwmon/hwmon.c
+> @@ -764,7 +764,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+>  			 "hwmon: '%s' is not a valid name attribute, please fix\n",
+>  			 name);
+>  
+> -	id = ida_simple_get(&hwmon_ida, 0, 0, GFP_KERNEL);
+> +	id = ida_alloc(&hwmon_ida, GFP_KERNEL);
+>  	if (id < 0)
+>  		return ERR_PTR(id);
+>  
+> @@ -856,7 +856,7 @@ __hwmon_device_register(struct device *dev, const char *name, void *drvdata,
+>  free_hwmon:
+>  	hwmon_dev_release(hdev);
+>  ida_remove:
+> -	ida_simple_remove(&hwmon_ida, id);
+> +	ida_free(&hwmon_ida, id);
+>  	return ERR_PTR(err);
+>  }
+>  
+> @@ -968,7 +968,7 @@ void hwmon_device_unregister(struct device *dev)
+>  
+>  	if (likely(sscanf(dev_name(dev), HWMON_ID_FORMAT, &id) == 1)) {
+>  		device_unregister(dev);
+> -		ida_simple_remove(&hwmon_ida, id);
+> +		ida_free(&hwmon_ida, id);
+>  	} else
+>  		dev_dbg(dev->parent,
+>  			"hwmon_device_unregister() failed: bad class ID!\n");

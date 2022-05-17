@@ -2,98 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48C4529B5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E689529B63
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 09:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiEQHsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 03:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        id S241718AbiEQHsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 03:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239678AbiEQHsV (ORCPT
+        with ESMTP id S241486AbiEQHsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 03:48:21 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40434477A;
-        Tue, 17 May 2022 00:48:20 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id eq14so13854155qvb.4;
-        Tue, 17 May 2022 00:48:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0/BndUcyTw55Mcn304/1HhrFAvm3GtAMoXqIn6Pxinc=;
-        b=q7gMa3oqgkcHxQpzh7ikn+HbRlLo2zzPHahNbLV+X5MDZOx2hAY+6CV6MIx50aOh9S
-         FofWuL6LGA/Tw759xzInkCc/+pFDuajWBLlEGUCDEb3C/6tJnY9pxvNVKOwG+4XZXqOU
-         Zzc6RKGtQdVo6wK4B53IY18VUVWvKQhq89hStxD9KopGndauW/BiHv+7ZUT2xzuN7EkQ
-         c+8b8ylchgiOBF+5v9x2sbY8a8golww1hSr6qYtyebYnNvRQsJixJWYI9bwaHMA3XFyb
-         IvpLE0F/wq3m9Lxhuy7XzRaL6J13cc1L9U4xYuvpq0gxjgP+M52ytIcTIApwzl5bhnTt
-         pWgA==
-X-Gm-Message-State: AOAM531fQOod5z9KAtCoaSAiOY3O/tL6qWgkUlXHkZ3Ic24UIEFRkk70
-        xszJ3kJB1Iztg24atXXAKNSiNZuJZ51dDA==
-X-Google-Smtp-Source: ABdhPJygvIxBcGeCCvK9RkbWE23WgW4JmZJy4wjCBfyef5bQFvCpF1KCgoqxAPRmjfNBzvOSt2TZHw==
-X-Received: by 2002:a05:6214:32b:b0:461:d8e3:1bcf with SMTP id j11-20020a056214032b00b00461d8e31bcfmr3541369qvu.29.1652773699530;
-        Tue, 17 May 2022 00:48:19 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id t7-20020ac87387000000b002f39b99f6b1sm7163875qtp.75.2022.05.17.00.48.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 00:48:19 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id p139so10136644ybc.11;
-        Tue, 17 May 2022 00:48:19 -0700 (PDT)
-X-Received: by 2002:a25:4289:0:b0:64d:746f:5311 with SMTP id
- p131-20020a254289000000b0064d746f5311mr12151686yba.89.1652773698802; Tue, 17
- May 2022 00:48:18 -0700 (PDT)
+        Tue, 17 May 2022 03:48:36 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D6A47393;
+        Tue, 17 May 2022 00:48:30 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 8ADA31F441AA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652773709;
+        bh=ExwtYhF6lW41/VV+VosOgNIh/aIBIehqgDlrAU2wlqI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=llZKudObnwhLoG7831KnTVNHUlFkO6VQxYU9MnYi/2Tjfen3kZxHbcg1jUNBXi4pj
+         ZvSVeei11j1tJRXPCE+7+OiaXsX6oJltMp9hOe7+IdhXSq5wEMNyqXZ9n27mUGVdt/
+         bc9qtEwgeUDzl25M0osEVwNOPGNMWKqCHgLq8bWLrXHAArODExKHdDGEfqSrj2ww49
+         8+6KF54m8/pVVdmMj6qrGSQ4vr9r3bMqUYe9AKeM+knvnoVz2hKlmDY4/Fd3TRIZR4
+         t3wfLguv3KsdglOl37QL0PxAZLh5OTajsNe9q61Zr4mxkF4SceWzvo6ZZNjt6bywSm
+         c2GwOyoe+yIWg==
+Message-ID: <b3e34db8-4e79-f6e3-35b8-e32891f2c85b@collabora.com>
+Date:   Tue, 17 May 2022 09:48:25 +0200
 MIME-Version: 1.0
-References: <20220511094057.3151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220511094057.3151-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 17 May 2022 09:48:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV=vWrXYtdt-OsNYpRm_dgbtieKKu1Cyzr8Hwbbsomgyw@mail.gmail.com>
-Message-ID: <CAMuHMdV=vWrXYtdt-OsNYpRm_dgbtieKKu1Cyzr8Hwbbsomgyw@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: renesas: pinctrl-rzg2l: Return -EINVAL for pins
- which have input disabled
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 4/5] dt-bindings: arm: mediatek: Add clock driver bindings
+ for MT6795
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        y.oudjana@protonmail.com, jason-jh.lin@mediatek.com,
+        ck.hu@mediatek.com, fparent@baylibre.com, rex-bc.chen@mediatek.com,
+        tinghan.shen@mediatek.com, chun-jie.chen@mediatek.com,
+        weiyi.lu@mediatek.com, ikjn@chromium.org, miles.chen@mediatek.com,
+        sam.shih@mediatek.com, wenst@chromium.org,
+        bgolaszewski@baylibre.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
+        kernel@collabora.com
+References: <20220513165050.500831-1-angelogioacchino.delregno@collabora.com>
+ <20220513165050.500831-5-angelogioacchino.delregno@collabora.com>
+ <20220516172819.GA2938099-robh@kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220516172819.GA2938099-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 11:41 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Pin status reported by pinconf-pins file always reported pin status as
-> "input enabled" even for pins which had input disabled. Fix this by
-> returning -EINVAL for the pins which have input disabled.
->
-> Fixes: c4c4637eb57f2 ("pinctrl: renesas: Add RZ/G2L pin and gpio controller driver")
-> Reported-by: Phil Edworthy <phil.edworthy@renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Il 16/05/22 19:28, Rob Herring ha scritto:
+> On Fri, May 13, 2022 at 06:50:49PM +0200, AngeloGioacchino Del Regno wrote:
+>> Add the bindings for the clock drivers of the MediaTek Helio X10
+>> MT6795 SoC.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>   .../arm/mediatek/mediatek,mt6795-clock.yaml   | 67 +++++++++++++++++
+>>   .../mediatek/mediatek,mt6795-sys-clock.yaml   | 73 +++++++++++++++++++
+>>   2 files changed, 140 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-clock.yaml
+>>   create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-sys-clock.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-clock.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-clock.yaml
+>> new file mode 100644
+>> index 000000000000..b7d96d0ed867
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt6795-clock.yaml
+>> @@ -0,0 +1,67 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt6795-clock.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: MediaTek Functional Clock Controller for MT6795
+>> +
+>> +maintainers:
+>> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> +  - Chun-Jie Chen <chun-jie.chen@mediatek.com>
+>> +
+>> +description: |
+>> +  The clock architecture in MediaTek like below
+>> +  PLLs -->
+>> +          dividers -->
+>> +                      muxes
+>> +                           -->
+>> +                              clock gate
+>> +
+>> +  The devices provide clock gate control in different IP blocks.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+> 
+> Don't need 'items' if only 1 item.
+> 
+>> +      - enum:
+>> +          - mediatek,mt6795-mfgcfg
+>> +          - mediatek,mt6795-vdecsys
+>> +          - mediatek,mt6795-vencsys
+> 
+> blank line.
+> 
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  '#clock-cells':
+>> +    const: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+> 
+> Why is #clock-cells optional?
+> 
 
-Nice catch!
+I've used one of the other mediatek,mt(something)-(sys-)clock.yaml as a base
+for these ones, giving for granted that they were correct, but now that you're
+pointing that out... effectively, I should've checked if the ones that are
+already merged in were correct *before* using these as a base for mine.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-pinctrl-for-v5.20.
+Thanks for your review: I'll send a v2 soon... and I will also separately
+send some fixes for the existing ones, as your review comments also apply
+to these ones.
 
-BTW, several other (non-Renesas) drivers seem to get this wrong, too.
+Regards,
+Angelo
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

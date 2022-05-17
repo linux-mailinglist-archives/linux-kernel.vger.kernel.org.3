@@ -2,66 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5128652A3C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A536552A388
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 15:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348050AbiEQNo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 09:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        id S1348020AbiEQNgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 09:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243712AbiEQNox (ORCPT
+        with ESMTP id S1347907AbiEQNf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 09:44:53 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E814B868
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:44:52 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id q76so16963853pgq.10
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 06:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pt9MMK51ZD888dBndiS0dCoASz75vrxRph8/MPvQlS8=;
-        b=S3DU+VBR0vm772cv1uuDUnEMbgqi5yllUJiH1XBd8ZgQ4Aa6e3xzZKy/FSRlhnfEjm
-         7KwPw1ZSSGIIpXU9+ll+6Bspg6BaRGB+ZMNu9SvgRA6OsgIwgPx5KMqgyRt9SE0ufuWL
-         c6oamKAdAHZvfeiBmoeFJd1Bw3EYnZffuqldI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pt9MMK51ZD888dBndiS0dCoASz75vrxRph8/MPvQlS8=;
-        b=5TN8h0yYEK//Mp+hnyrXn8VB2pnmuOa6gHq1Kvv3PyD104e9rVaHxfc4HESaKrHiIP
-         /pTZTdA+WSj2KPrUOBmPv1qppfqtM1DrqW0M5ytysk3DCD51iXYrFFCtseX6C3urtRVP
-         1Cou4brHlRxjdgEMQj26tzv6erTa+ThZww6Kq3viz2FhM03w/DI0QkvjWqN3HjpnNBEx
-         wqY2WlSh/VkAo10Ns+aQzpd3p4RQS2ZUWwqukHsaNADe9yLqYRumAkxz1Xrk4LydquFk
-         M1MEtLCPu8qyX4gJg7z6F1P1ghGReEu9tM+qiBC2vud5aL7fYY3hLxwarBNqh2AoPSTN
-         67Jg==
-X-Gm-Message-State: AOAM533ECPDhQ6eA/CUXr1sevQQyiM9r0wD2CI9cs47wXNRKhGlhX+uD
-        pOBtXKhusuNaPCYCp/ezn9mzj28LBqjgV3GZ9tOACw==
-X-Google-Smtp-Source: ABdhPJywjPgdoOw/JtyQqrp/ClohzClPu2c7khu0+BbVFnTWtqh85DgsiXbxBLueR83+PuwsPeQwxmrLYwQItGP6LFw=
-X-Received: by 2002:a05:6a00:1891:b0:50d:e6e7:acae with SMTP id
- x17-20020a056a00189100b0050de6e7acaemr22569699pfh.26.1652795091779; Tue, 17
- May 2022 06:44:51 -0700 (PDT)
+        Tue, 17 May 2022 09:35:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9AA4CD5F;
+        Tue, 17 May 2022 06:35:26 -0700 (PDT)
+Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2cY844NkzgYsy;
+        Tue, 17 May 2022 21:34:36 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 21:35:24 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
+ 2022 21:35:23 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <tj@kernel.org>, <axboe@kernel.dk>, <ming.lei@redhat.com>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next] blk-throttle: delay the setting of 'BIO_THROTTLED' to when throttle is done
+Date:   Tue, 17 May 2022 21:49:09 +0800
+Message-ID: <20220517134909.2910251-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220517133540.2456987-1-michael@amarulasolutions.com> <bd342e6be1723daa3787c7088c3510d0@denx.de>
-In-Reply-To: <bd342e6be1723daa3787c7088c3510d0@denx.de>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Tue, 17 May 2022 15:44:40 +0200
-Message-ID: <CAOf5uw=QxFM=CCFLZ=fZCfn9BBz1aFpkPQuED1uHxHRABwMHMQ@mail.gmail.com>
-Subject: Re: [PATCH] arm: dts: imx6ulz-bsh-smm-m2: Support proper board power off
-To:     Fabio Estevam <festevam@denx.de>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-amarula@amarulasolutions.com,
-        Rob Herring <robh+dt@kernel.org>,
-        "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Simon Holesch <simon.holesch@bshg.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,36 +51,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabio
+commit 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
+introduce a new problem, for example:
 
-On Tue, May 17, 2022 at 3:41 PM Fabio Estevam <festevam@denx.de> wrote:
->
-> Hi Michael,
->
-> On 17/05/2022 10:35, Michael Trimarchi wrote:
-> > From: Simon Holesch <simon.holesch@bshg.com>
-> >
-> > Supports initiating poweroff on SNVS_PMIC_ON_REQ signal.
-> >
-> > Signed-off-by: Simon Holesch <simon.holesch@bshg.com>
->
-> You missed your own Signed-off-by tag here.
+[root@localhost ~]# echo "8:0 1024" > /sys/fs/cgroup/blkio/blkio.throttle.write_bps_device
+[root@localhost ~]# echo $$ > /sys/fs/cgroup/blkio/cgroup.procs
+[root@localhost ~]# dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
+[1] 620
+[root@localhost ~]# dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
+[2] 626
+[root@localhost ~]# 1+0 records in
+1+0 records out
+10240 bytes (10 kB, 10 KiB) copied, 10.0038 s, 1.0 kB/s1+0 records in
+1+0 records out
 
-It's fine, I can add Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
+10240 bytes (10 kB, 10 KiB) copied, 9.23076 s, 1.1 kB/s
+-> the second bio is issued after 10s instead of 20s.
 
-Michael
+This is because if some bios are already queued, current bio is queued
+directly and the flag 'BIO_THROTTLED' is set. And later, when former
+bios are dispatched, this bio will be dispatched without waiting at all,
+this is due to tg_with_in_bps_limit() will return 0 if the flag is set.
 
+Instead of setting the flag when bio starts throttle, delay to when
+throttle is done to fix the problem.
 
+Fixes: 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ block/blk-throttle.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
+diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+index 447e1b8722f7..f952f2d942ff 100644
+--- a/block/blk-throttle.c
++++ b/block/blk-throttle.c
+@@ -811,7 +811,7 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
+ 	unsigned int bio_size = throtl_bio_data_size(bio);
+ 
+ 	/* no need to throttle if this bio's bytes have been accounted */
+-	if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
++	if (bps_limit == U64_MAX) {
+ 		if (wait)
+ 			*wait = 0;
+ 		return true;
+@@ -1226,8 +1226,10 @@ static void blk_throtl_dispatch_work_fn(struct work_struct *work)
+ 
+ 	spin_lock_irq(&q->queue_lock);
+ 	for (rw = READ; rw <= WRITE; rw++)
+-		while ((bio = throtl_pop_queued(&td_sq->queued[rw], NULL)))
++		while ((bio = throtl_pop_queued(&td_sq->queued[rw], NULL))) {
++			bio_set_flag(bio, BIO_THROTTLED);
+ 			bio_list_add(&bio_list_on_stack, bio);
++		}
+ 	spin_unlock_irq(&q->queue_lock);
+ 
+ 	if (!bio_list_empty(&bio_list_on_stack)) {
+@@ -2134,7 +2136,8 @@ bool __blk_throtl_bio(struct bio *bio)
+ 			}
+ 			break;
+ 		}
+-
++		/* this bio will be issued directly */
++		bio_set_flag(bio, BIO_THROTTLED);
+ 		/* within limits, let's charge and dispatch directly */
+ 		throtl_charge_bio(tg, bio);
+ 
+@@ -2190,7 +2193,6 @@ bool __blk_throtl_bio(struct bio *bio)
+ 
+ out_unlock:
+ 	spin_unlock_irq(&q->queue_lock);
+-	bio_set_flag(bio, BIO_THROTTLED);
+ 
+ #ifdef CONFIG_BLK_DEV_THROTTLING_LOW
+ 	if (throttled || !td->track_bio_latency)
 -- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
+2.31.1
 
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com

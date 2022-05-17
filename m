@@ -2,148 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E3752A1CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B0B52A1D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 17 May 2022 14:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345926AbiEQMnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 08:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S1346219AbiEQMo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 08:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242996AbiEQMnM (ORCPT
+        with ESMTP id S238428AbiEQMo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 08:43:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A10626556
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 05:43:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0726B1042;
-        Tue, 17 May 2022 05:43:11 -0700 (PDT)
-Received: from [10.57.82.55] (unknown [10.57.82.55])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 05AA13F66F;
-        Tue, 17 May 2022 05:43:08 -0700 (PDT)
-Message-ID: <f971aea9-8ae1-95f8-b10a-cd77e9704dc0@arm.com>
-Date:   Tue, 17 May 2022 13:43:03 +0100
+        Tue, 17 May 2022 08:44:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20892654F;
+        Tue, 17 May 2022 05:44:25 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2bQH47B6zgYbf;
+        Tue, 17 May 2022 20:43:35 +0800 (CST)
+Received: from localhost.localdomain (10.67.164.66) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 17 May 2022 20:44:23 +0800
+From:   Yicong Yang <yangyicong@hisilicon.com>
+To:     <bhelgaas@google.com>, <linux-pci@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [RESEND PATCH v5] PCI: Make sure the bus bridge powered on when scanning bus
+Date:   Tue, 17 May 2022 20:43:19 +0800
+Message-ID: <20220517124319.47125-1-yangyicong@hisilicon.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/5] iommu: Add blocking_domain_ops field in iommu_ops
-Content-Language: en-GB
-To:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20220516015759.2952771-1-baolu.lu@linux.intel.com>
- <20220516015759.2952771-3-baolu.lu@linux.intel.com>
- <8a0fc6cf-f46e-f17e-2b76-099ada1683c3@arm.com>
- <20220516135741.GV1343366@nvidia.com>
- <c8492b29-bc27-ae12-d5c4-9fbbc797e310@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <c8492b29-bc27-ae12-d5c4-9fbbc797e310@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-17 03:37, Baolu Lu wrote:
-> Hi Jason,
-> 
-> On 2022/5/16 21:57, Jason Gunthorpe wrote:
->> On Mon, May 16, 2022 at 12:22:08PM +0100, Robin Murphy wrote:
->>> On 2022-05-16 02:57, Lu Baolu wrote:
->>>> Each IOMMU driver must provide a blocking domain ops. If the hardware
->>>> supports detaching domain from device, setting blocking domain equals
->>>> detaching the existing domain from the deivce. Otherwise, an UNMANAGED
->>>> domain without any mapping will be used instead.
->>> Unfortunately that's backwards - most of the implementations of 
->>> .detach_dev
->>> are disabling translation entirely, meaning the device ends up 
->>> effectively
->>> in passthrough rather than blocked.
->> Ideally we'd convert the detach_dev of every driver into either
->> a blocking or identity domain. The trick is knowing which is which..
-> 
-> I am still a bit puzzled about how the blocking_domain should be used 
-> when it is extended to support ->set_dev_pasid.
-> 
-> If it's a blocking domain, the IOMMU driver knows that setting the
-> blocking domain to device pasid means detaching the existing one.
-> 
-> But if it's an identity domain, how could the IOMMU driver choose
-> between:
-> 
->   - setting the input domain to the pasid on device; or,
->   - detaching the existing domain.
-> 
-> I've ever thought about below solutions:
-> 
-> - Checking the domain types and dispatching them to different
->    operations.
-> - Using different blocking domains for different types of domains.
-> 
-> But both look rough.
-> 
->>
->> Guessing going down the list:
->>   apple dart - blocking, detach_dev calls apple_dart_hw_disable_dma() 
->> same as
->>                IOMMU_DOMAIN_BLOCKED
->>           [I wonder if this drive ris wrong in other ways though because
->>                 I dont see a remove_streams in attach_dev]
->>   exynos - this seems to disable the 'sysmmu' so I'm guessing this is
->>            identity
->>   iommu-vmsa - Comment says 'disable mmu translaction' so I'm guessing
->>                this is idenity
->>   mkt_v1 - Code looks similar to mkt, which is probably identity.
->>   rkt - No idea
->>   sprd - No idea
->>   sun50i - This driver confusingly treats identity the same as
->>            unmanaged, seems wrong, no idea.
->>   amd - Not sure, clear_dte_entry() seems to set translation on but 
->> points
->>         the PTE to 0 ? Based on the spec table 8 I would have expected
->>         TV to be clear which would be blocking. Maybe a bug??
->>   arm smmu qcomm - not sure
->>   intel - blocking
->>
->> These doesn't support default domains, so detach_dev should return
->> back to DMA API ownership, which is either identity or something weird:
->>   fsl_pamu - identity due to the PPC use of dma direct
->>   msm
->>   mkt
->>   omap
->>   s390 - platform DMA ops
->>   terga-gart - Usually something called a GART would be 0 length once
->>                disabled, guessing blocking?
->>   tegra-smmu
->>
->> So, the approach here should be to go driver by driver and convert
->> detach_dev to either identity, blocking or just delete it entirely,
->> excluding the above 7 that don't support default domains. And get acks
->> from the driver owners.
->>
-> 
-> Agreed. There seems to be a long way to go. I am wondering if we could
-> decouple this refactoring from my new SVA API work? We can easily switch
-> .detach_dev_pasid to using blocking domain later.
+When the bus bridge is runtime suspended, we'll fail to rescan
+the devices through sysfs as we cannot access the configuration
+space correctly when the bridge is in D3hot.
+It can be reproduced like:
 
-FWIW from my point of view I'm happy with having a .detach_dev_pasid op 
-meaning implicitly-blocked access for now. On SMMUv3, PASIDs don't mix 
-with our current notion of IOMMU_DOMAIN_IDENTITY (nor the potential one 
-for IOMMU_DOMAIN_BLOCKED), so giving PASIDs functional symmetry with 
-devices would need significantly more work anyway.
+$ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
+$ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
 
-Thanks,
-Robin.
+0000:80:00.0 is a Root Port and it is runtime-suspended, so
+0000:81:00.1 is unreachable after a rescan.
+
+Power up the bridge when scanning the child bus and allow it to
+suspend again by adding pm_runtime_get_sync()/pm_runtime_put()
+in pci_scan_child_bus_extend().
+
+Cc: Rafael J. Wysocki <rafael@kernel.org>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/pci/probe.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+index 17a969942d37..b108e72b6586 100644
+--- a/drivers/pci/probe.c
++++ b/drivers/pci/probe.c
+@@ -2859,11 +2859,20 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+ 	unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
+ 	unsigned int start = bus->busn_res.start;
+ 	unsigned int devfn, fn, cmax, max = start;
++	struct pci_dev *bridge = bus->self;
+ 	struct pci_dev *dev;
+ 	int nr_devs;
+ 
+ 	dev_dbg(&bus->dev, "scanning bus\n");
+ 
++	/*
++	 * Make sure the bus bridge is powered on, otherwise we may not be
++	 * able to scan the devices as we may fail to access the configuration
++	 * space of subordinates.
++	 */
++	if (bridge)
++		pm_runtime_get_sync(&bridge->dev);
++
+ 	/* Go find them, Rover! */
+ 	for (devfn = 0; devfn < 256; devfn += 8) {
+ 		nr_devs = pci_scan_slot(bus, devfn);
+@@ -2976,6 +2985,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
+ 		}
+ 	}
+ 
++	if (bridge)
++		pm_runtime_put(&bridge->dev);
++
+ 	/*
+ 	 * We've scanned the bus and so we know all about what's on
+ 	 * the other side of any bridges that may be on this bus plus
+-- 
+2.24.0
+

@@ -2,73 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C77652C085
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488F852C038
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240390AbiERQnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
+        id S240432AbiERQni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240334AbiERQnN (ORCPT
+        with ESMTP id S240422AbiERQne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:43:13 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5152D60AB7;
-        Wed, 18 May 2022 09:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Juc744IBDe0/YlnjwfVrcCw9F1+WRXzjcPzfaEDrEQs=; b=u95C2A0MeWd+0tomPwWSEfB5Vx
-        odYGsMh6kbUIWaOqxhRSdu76ciEwYQrqo3YTYW3y4s9PwYR/crfV++hRzQ6+eiwHnfnurAiAtyYyB
-        FthrILmgkwA0QCV5u1x0Yfx7vG5f1dungjyRGRZk3rOthSqpeSmcP3XHUzB3dx1tnZ5NGUo9wvdt1
-        1ouqD+oUS2l51PXGtMtNUHR7pOpfRnynPsZtB3+PWkcCpi2AvSZFgy9Mi2mcZGwVIUQCaReX2hVk2
-        pC/xsN9ZiDMqL6yGhVV3Q0ie0IN0GYsBXlGk53wV9gARinfmX6e6jZDWi4okMXYHGtHcqnh9pvS/k
-        /qBnPgFQ==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrMlS-00G4od-SG; Wed, 18 May 2022 16:43:11 +0000
-Date:   Wed, 18 May 2022 16:43:10 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [git pull] a couple of fixes
-Message-ID: <YoUiHhz1NsTbN5Vo@zeniv-ca.linux.org.uk>
+        Wed, 18 May 2022 12:43:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E539E72236
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:43:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7248B616E4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 16:43:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF90C385A5;
+        Wed, 18 May 2022 16:43:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652892212;
+        bh=N0jqf98S6MCwY3SB9ldiOE4WNRUDEyBxsZ4YKe4A7+w=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=R2lh2k6a1E1AJCYojMbcn9iHe1kIMsfgFmNhWkHsUM0kxo/AFAuvIDwtHnvOIU+R6
+         zyljShRnT4m0Q4/YjdWyCAMueMkMCJfjQMPrNsB5EEiukM9YIeMKg4+/hQoJlFZr76
+         6E46ZUfdVAdHjT8gh4F2i8f9eog22NCQcArxDhorzNjuVF+0y8bSi0IaMKySA+JHpi
+         nJLuoNAiE+S/GsJoVYvZbXyzG8c1WMMAhUZSI88nZxaCIY2EVOkpORk9J8ErLbG1ku
+         rfwR3R/Q5yKmyA11sIV0a35GKghRQ+Ao+TxxVDr48LT7mInLKzZgFaOy5tdNaVb4aI
+         4fZSysEQ87iUw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 6C3565C042D; Wed, 18 May 2022 09:43:32 -0700 (PDT)
+Date:   Wed, 18 May 2022 09:43:32 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev 43/51] ERROR: modpost:
+ "rcu_tasks_trace_qs_blkd" [kernel/torture.ko] undefined!
+Message-ID: <20220518164332.GP1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202205181919.oILbHBZa-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202205181919.oILbHBZa-lkp@intel.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-	vhost race fix + percpu_ref_init-caused cgroup double-free fix
-(the latter had manifested as buggered struct mount refcounting -
-those are also using percpu data structures, but anything that does
-percpu allocations could be hit)
+On Wed, May 18, 2022 at 08:00:00PM +0800, kernel test robot wrote:
+> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
+> head:   9a9671fb7a3966dfc7dc67f6aa80acdfe185d72d
+> commit: 7c98805ebf93263213dac7b52846d73cebe983f3 [43/51] tasks-rcu: Track blocked RCU Tasks Trace readers
+> config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220518/202205181919.oILbHBZa-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/ammarfaizi2/linux-block/commit/7c98805ebf93263213dac7b52846d73cebe983f3
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
+>         git checkout 7c98805ebf93263213dac7b52846d73cebe983f3
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> >> ERROR: modpost: "rcu_tasks_trace_qs_blkd" [kernel/torture.ko] undefined!
+> >> ERROR: modpost: "rcu_tasks_trace_qs_blkd" [kernel/rcu/rcuscale.ko] undefined!
 
-The following changes since commit feb9c5e19e913b53cb536a7aa7c9f20107bb51ec:
+Good catch, folding an EXPORT_SYMBOL_GPL() into the original commit
+with attribution, thank you!
 
-  Merge tag 'for_linus' of git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost (2022-05-10 11:15:05 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git fixes
-
-for you to fetch changes up to fb4554c2232e44d595920f4d5c66cf8f7d13f9bc:
-
-  Fix double fget() in vhost_net_set_backend() (2022-05-18 12:33:51 -0400)
-
-----------------------------------------------------------------
-Al Viro (2):
-      percpu_ref_init(): clean ->percpu_count_ref on failure
-      Fix double fget() in vhost_net_set_backend()
-
- drivers/vhost/net.c   | 15 +++++++--------
- lib/percpu-refcount.c |  1 +
- 2 files changed, 8 insertions(+), 8 deletions(-)
+							Thanx, Paul

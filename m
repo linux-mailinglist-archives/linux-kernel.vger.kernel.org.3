@@ -2,103 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A618952BAB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0554252BA57
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236363AbiERMTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S236359AbiERMVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236253AbiERMTs (ORCPT
+        with ESMTP id S236388AbiERMVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:19:48 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7409A5B88B;
-        Wed, 18 May 2022 05:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=kQKtiTZ0LH/w5S3uWV2zXb3ODADItlkkeofFb+AnfrE=; b=Wv5U2pmuhaGCoLOzHzJK+Nq6cQ
-        EGJBrHRoJFiP/8QEBn6R+hA6bbpRr8oLNh5EVEtnLyyKpJePXmTEnVYtGLqGDlyKTwfy0WSbgi6My
-        iSvOJjjGqikleFr50AmwdM1qnWFvIi3QyjQ786H9g1LQOYSReGILeRYHV25ojKWRg7h4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nrIeB-003K0L-QZ; Wed, 18 May 2022 14:19:23 +0200
-Date:   Wed, 18 May 2022 14:19:23 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vivek Kumar <quic_vivekuma@quicinc.com>
-Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, axboe@kernel.dk,
-        rafael@kernel.org, akpm@linux-foundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com,
-        pavel@ucw.cz, paulmck@kernel.org, bp@suse.de,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org,
-        tsoni@quicinc.com, quic_psodagud@quicinc.com,
-        quic_svaddagi@quicinc.com,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: Re: [RFC 2/6] PM: Hibernate: Add option to disable disk offset
- randomization
-Message-ID: <YoTkSx96vt1NTdZ/@lunn.ch>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
- <1652860121-24092-3-git-send-email-quic_vivekuma@quicinc.com>
+        Wed, 18 May 2022 08:21:03 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49F018362
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:20:59 -0700 (PDT)
+Received: from mail-yw1-f169.google.com ([209.85.128.169]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N8nnU-1nm7mp3pPq-015rbq for <linux-kernel@vger.kernel.org>; Wed, 18 May
+ 2022 14:20:58 +0200
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2ff155c239bso22415777b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:20:57 -0700 (PDT)
+X-Gm-Message-State: AOAM530ixRG2fC0+nbFAe5rounzddXShL19xyCt1Q4YjCoz6QM3aXMWX
+        9QtjCM/FT6Tj8DrfSSHoTE3UFcM4zTr08ltSY14=
+X-Google-Smtp-Source: ABdhPJz+l0wS1nVeYafL+Ay12/JOAIvZZBhyFl7cQRy9NnTlRIP6H8dI/62vEluN48oSLHCTIuVuFHzZmV31lVc5m8c=
+X-Received: by 2002:a0d:efc2:0:b0:2fe:d2b7:da8 with SMTP id
+ y185-20020a0defc2000000b002fed2b70da8mr20495418ywe.42.1652876456640; Wed, 18
+ May 2022 05:20:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652860121-24092-3-git-send-email-quic_vivekuma@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220517062929.3109873-1-anshuman.khandual@arm.com>
+In-Reply-To: <20220517062929.3109873-1-anshuman.khandual@arm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 18 May 2022 13:20:59 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3eR-eiY4Y8TNbyQNZiFXoEA8rk5EObZXg-D=JmxjnGCA@mail.gmail.com>
+Message-ID: <CAK8P3a3eR-eiY4Y8TNbyQNZiFXoEA8rk5EObZXg-D=JmxjnGCA@mail.gmail.com>
+Subject: Re: [PATCH] amba: Drop builtin_amba_driver()
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:YovaPeljDeZWzcM5S7kkutcg/hx3cpkPpP9QNrLljwsjUR5nz+8
+ XR/9rjv9KMYMvewFll4ACPLHfEm1wPaAvfS9SsHR8KPYnDmQtNepAo72yguAwWth2TwgVUH
+ sq5CGJE1bgWXvNQyw5qwvj0wf2CE5zvdjvilYC8spd/kVkSIARyvDjdmSMak+/TUozCj03F
+ OpnzCWbHj+EAHujXfMg8Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qo/08GCtF4w=:GBY67TvoDSsf8j1QAhVxMq
+ /nUMltcEbVDPkAHvpaLGYDAo73EH6DV9mQSGnNbGBk0jnhTUurNHtJFR9J6XVGq4Jb+IhGbmn
+ h+RG2pQHSTRCxsy5hRVuBN6DNKoEMinXmaFSo4y1yAuAKkcNPlKRj1SuTFTiZC/M/kfuo0Vfj
+ 98nb0wMUmZCCDAVB75vSQTx5KucSqLWeWtFUSn4ikePAJhtxg9z/W82BQdtrfB/lBE0Eqd7kP
+ MF21+Nq2WDm/aiEhrbXRKrElACTxUztNNJNh5Sql0PUjWqeZ0D8obChVA81xWwbYQujPQ9a7D
+ WUrWwqnjONLIMIthT+vAiIBfiUym0pelFaQZd70IAIo6JtwS0sCMVo/4wHVf+livIiPas7YJO
+ EBzn7rolGw+IykoF9j1BY6Gd/zP2Ilj3zaRElqzGbzkgx9KGcM1UYcF0iE+rXhmFM9GjrAJfP
+ nugzF4PMyq0UUcQPp+oWdAIbF6IgS/TxDFOIaNK1I1ChG5palIofz/ENnm4ImUuwWVMykSQw5
+ ZlKAa+TAL3+a/w5K9iK632ybW6Hq1CkpKggKdK2KFRTk102uy0FI/sryIqULHP2YmzTDbLNsU
+ ZhisGZ6dTRtp+5Nf0MYVF4d2Xux9rgC/0q6H4E/BQQfrnE7sui2gy2Cx5SHJyyQ4yA/FmxbaG
+ JuBlyy7q3lX707S8BukitVslsNq+lbdXJIbAs4AjED6NInjQzsKqApGsZj7GuxNM9oveFZE8C
+ lsoRHKj1pOxLPbCkIlPO995t+zPcaQyuq6WnZbTjx8cyocEVWMO5JVk55rY+0BHk4MjvpXoUP
+ 8cN/KawXFmHRirXTuaEdXEToWBhK6dSV4TBjzKIFeJgHumkPAtSoGNkqLBGRdFjRRpMJ4wEbu
+ q8JcWUHN0sSIxYqSJF9NrGTlmYzdQZOph+5qt7SLs=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:18:37PM +0530, Vivek Kumar wrote:
-> Add a kernel parameter to disable the disk offset randomization
-> for SSD devices in which such feature is available at the
-> firmware level. This is helpful in improving hibernation
-> resume time.
-> 
-> Signed-off-by: Vivek Kumar <quic_vivekuma@quicinc.com>
-> Signed-off-by: Prasanna Kumar <quic_kprasan@quicinc.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
->  kernel/power/swap.c                             |  9 +++++++++
->  2 files changed, 20 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 666ade9..06b4f10 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5192,6 +5192,17 @@
->  			Useful for devices that are detected asynchronously
->  			(e.g. USB and MMC devices).
->  
-> +	noswap_randomize
-> +			Kernel uses random disk offsets to help with wear-levelling
-> +			of SSD devices, while saving the hibernation snapshot image to
-> +			disk. Use this parameter to disable this feature for SSD
-> +			devices in scenarios when, such randomization is addressed at
-> +			the firmware level and hibenration image is not re-generated
-> +			frequently.
-> +			(Useful for improving hibernation resume time as snapshot pages
-> +			are available in disk serially and can be read in bigger chunks
-> +			without seeking)
+On Tue, May 17, 2022 at 7:29 AM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+>
+> Drop builtin_amba_driver() which is not used anymore.
 
-Seeking is a NOP for SSD, so it seems odd you mentioned that. Is the
-real problem here that the bootloader driver is very simple, it does
-not queue multiple reads to the hardware, but does it one block at a
-time?
+The patch looks correct, but I don't see the purpose. Are you trying
+to discourage
+having amba drivers as built-in? Otherwise the next time we get an amba
+driver that cannot be a loadable module, someone might want to add back the
+same macro.
 
-Do you have performance numbers for both the bootloader and Linux?
-Does Linux performance reading the snapshot increase as much as for
-the bootloader?
-
-	Andrew
+        Arnd

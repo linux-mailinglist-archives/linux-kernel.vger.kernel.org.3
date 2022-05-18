@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1CD52C28A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BC552C287
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241544AbiERSnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        id S241527AbiERSnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241539AbiERSnJ (ORCPT
+        with ESMTP id S241498AbiERSm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:43:09 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375B420D26D;
-        Wed, 18 May 2022 11:43:08 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so3673583wme.5;
-        Wed, 18 May 2022 11:43:08 -0700 (PDT)
+        Wed, 18 May 2022 14:42:59 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09561EEE3D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:42:58 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id l14so2918659pjk.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:42:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=629EuCNPVzAl5BBiBBvqoC7bqwWqe2HUHf+13KFi4EU=;
-        b=N7x9i4oKZ4spJf0nC2xpourbHxhcMVu1vA8uxqp5db6agGtadWpvfKgcSZy22+razd
-         khZ0cUQWoy5hjWYylmTD1NFHpSGizMg6fRaNDnQm2QlQ+aEarO4QJ32JZyYRTsyngtjX
-         6dPEhuvVZUaye94Mqb90L+BRJwrvfHuiMaoC17GrGBnJ8e3R8mVi8MjvFDOMlUePZCD9
-         0VfRzgsQox21clqN0799qYokGk+yT8mwnpyR3Uc1sSL1Bz8Dp3HffTJ+w0+tkV0l2T78
-         rPoQT5NzN3z6Mn088Dl9UpHyCbOjYnttWzROnXrzuHSba7O4XP3RKFmu83NAVelwIKkC
-         xTyA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=x+g2rI3f9oK4A/om4OOZJvYEp73ECKayN/tR0aYxCMw=;
+        b=Q80G3RnbtpvRJA63+uR6stq540RtUi4AagkeurUmvxepwPIQRsgp8o8jj08wIst1hG
+         Is278rav3tXRlFrJPNWNIYazK7OwAx1d+JizqaI/U52yB9Qm0owpfsRqfmufiglC9cYQ
+         Gj+rx6J7czR8BwSWk8T0JAG/gJb91ETDVGKSIqRGgT6GMFXKTXl2AIrwYI8jdY5kQxPQ
+         A+q/cpwzEV7Jx8xNAVgc3fp3WC3JuxaWaLvdOTtuCcuhkRDHQDnUKUHjVFaFj0CNVOgB
+         o5Q/HMMhKHjghY8zWmQ4LGaaWIf72CR/NmoIUb1DjrSbnc+HKod2Go3FGxUpy3YUEK//
+         zBXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=629EuCNPVzAl5BBiBBvqoC7bqwWqe2HUHf+13KFi4EU=;
-        b=E5xBz0gefq7ItEmEWuw28CaIGSI8Mo+UyFoKPqNxHwzpf2j53A5nKO3JzjaQKdKsNn
-         cRTkQi89aujPYD/WUYzkUC79PXLc1RQAbrSKUmu3XTvnl9ymksyKvOl7/NIwvVRuNMmE
-         qKlLw/zzvYBJMEbrapoLPVEOZhqHFi2eI5p9ftnfnDybk3KGhPYbRy2coj1UPWDYCqTU
-         rUo87VJ2oSjeWreYtA7zB0uf1nAf3pNJeNW42CMr6cD55Ak/znrc2H4YfB/9nsJ42+oK
-         y1HD8zR570G/FR3vcIisCyJqE/uH6vKMhyUUd2OzFIQiYKZuhjqveio2tW0LqO9af4+V
-         CAaw==
-X-Gm-Message-State: AOAM532rbira6jZwiK82CKE6WHfic4g6HSDQB5YLpLUhdM0KCUGIjPi5
-        vbiYDAkgMygzfcTJQSgQDgVhNfS1XNc=
-X-Google-Smtp-Source: ABdhPJwv3JxgSmNPpRs7CVBBT2W/2LDoLrHtng0kDykKkolE2BmoGPlfR5Iwtvh5hNhPGcBkeIxznw==
-X-Received: by 2002:a7b:cb84:0:b0:382:a9b9:2339 with SMTP id m4-20020a7bcb84000000b00382a9b92339mr1137496wmi.91.1652899386459;
-        Wed, 18 May 2022 11:43:06 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id q9-20020adf9dc9000000b0020d02ddf4d5sm2768546wre.5.2022.05.18.11.43.05
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x+g2rI3f9oK4A/om4OOZJvYEp73ECKayN/tR0aYxCMw=;
+        b=LlGZLIT8yPFPxOxKXAjJHDmlCuGPdZe8SlE3HTkhhhMEdQugAnE+0VOLZ5DDdjBwF2
+         fYzs08n9tV/uIb/f/zzFZOnndwOPs5sZ8Rx88rfjWKJQwlnfXibvsBL+kAf7XNw/5jE+
+         Mdc4oFH9+j1B+7kU+EfKYJzDY++v7NFruvvXmn3aNGJoNn6GKQ6ZQ9qJy+ReK+r7TLqF
+         hY7MQ0wGDtkb9shoIMidtzrVWQeFCnDjgiNDlW0JAlXtbrunf22sp+KyBjBRLGSRQnbd
+         2UMeUwcFVTuWr2CaiZmBIY/s7q4ZG52PhxMYmkWHIVzjSufxuJEFpJNVrAMjRG+CFVVk
+         E1og==
+X-Gm-Message-State: AOAM531Q7tnBm7pgobqzioABgvSDlPUs9lhs+2r5ePvD8WHiUEnOPuG6
+        17YVlJyFy/8CjiHZ0oBRzJ5JWQ==
+X-Google-Smtp-Source: ABdhPJyRrDGCtxh9RJlRWdSxB1pWuIzfZFdraxOUaO2zUZx3ip0YIZGag6vXuR9V8JKYHtmC6BxhKg==
+X-Received: by 2002:a17:902:e745:b0:15e:c057:d452 with SMTP id p5-20020a170902e74500b0015ec057d452mr896003plf.69.1652899377950;
+        Wed, 18 May 2022 11:42:57 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b19-20020a17090a991300b001df4a0e9357sm1957705pjp.12.2022.05.18.11.42.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 11:43:05 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [PATCH v3 0/2] Add support for unprotected spare data page
-Date:   Wed, 18 May 2022 20:42:54 +0200
-Message-Id: <20220518184256.21238-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 18 May 2022 11:42:57 -0700 (PDT)
+Date:   Wed, 18 May 2022 18:42:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chenyi Qiang <chenyi.qiang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/3] KVM: X86: Save&restore the triple fault request
+Message-ID: <YoU+LgHbeiYNbDJ8@google.com>
+References: <20220421072958.16375-1-chenyi.qiang@intel.com>
+ <20220421072958.16375-2-chenyi.qiang@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421072958.16375-2-chenyi.qiang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,65 +77,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some background about this.
-On original qsdk ipq8064 based firmware there was a big separation from
-boot partition and user partition. With boot partition we refer to
-partition used to init the router (bootloader, spm firmware and other
-internal stuff) With user partition we refer to linux partition and data
-partition not used to init the router.
-When someone had to write to these boot partition a special mode was
-needed, to switch the nand driver to this special configuration.
+Nits on the shortlog...
 
-Upstream version of the nandc driver totally dropped this and the result
-is that if someone try to read data from these partition a CRC warning
-is printed and if someone try to write that (if for example someone
-wants to replace the bootloader) result is a broken system as the data
-is badly written.
+Please don't capitalize x86, spell out "and" instead of using an ampersand (though
+I think it can be omitted entirely), and since there are plenty of chars left, call
+out that this is adding/extending KVM's ABI, e.g. it's not obvious from the shortlog
+where/when the save+restore happens.
 
-This series comes to fix this.
+  KVM: x86: Extend KVM_{G,S}ET_VCPU_EVENTS to support pending triple fault
 
-A user can declare offset and size of these special partition using the
-qcom,boot-pages binding.
+On Thu, Apr 21, 2022, Chenyi Qiang wrote:
+> For the triple fault sythesized by KVM, e.g. the RSM path or
+> nested_vmx_abort(), if KVM exits to userspace before the request is
+> serviced, userspace could migrate the VM and lose the triple fault.
+> 
+> Add the support to save and restore the triple fault event from
+> userspace. Introduce a new event KVM_VCPUEVENT_VALID_TRIPLE_FAULT in
+> get/set_vcpu_events to track the triple fault request.
+> 
+> Note that in the set_vcpu_events path, userspace is able to set/clear
+> the triple fault request through triple_fault_pending field.
+> 
+> Signed-off-by: Chenyi Qiang <chenyi.qiang@intel.com>
+> ---
+>  Documentation/virt/kvm/api.rst  |  7 +++++++
+>  arch/x86/include/uapi/asm/kvm.h |  4 +++-
+>  arch/x86/kvm/x86.c              | 15 +++++++++++++--
+>  3 files changed, 23 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 72183ae628f7..e09ce3cb49c5 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -1150,6 +1150,9 @@ The following bits are defined in the flags field:
+>    fields contain a valid state. This bit will be set whenever
+>    KVM_CAP_EXCEPTION_PAYLOAD is enabled.
+>  
+> +- KVM_VCPUEVENT_VALID_TRIPLE_FAULT may be set to signal that the
+> +  triple_fault_pending field contains a valid state.
+> +
+>  ARM64:
+>  ^^^^^^
+>  
+> @@ -1245,6 +1248,10 @@ can be set in the flags field to signal that the
+>  exception_has_payload, exception_payload, and exception.pending fields
+>  contain a valid state and shall be written into the VCPU.
+>  
+> +KVM_VCPUEVENT_VALID_TRIPLE_FAULT can be set in flags field to signal that
+> +the triple_fault_pending field contains a valid state and shall be written
+> +into the VCPU.
+> +
+>  ARM64:
+>  ^^^^^^
+>  
+> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+> index 21614807a2cb..fd083f6337af 100644
+> --- a/arch/x86/include/uapi/asm/kvm.h
+> +++ b/arch/x86/include/uapi/asm/kvm.h
+> @@ -325,6 +325,7 @@ struct kvm_reinject_control {
+>  #define KVM_VCPUEVENT_VALID_SHADOW	0x00000004
+>  #define KVM_VCPUEVENT_VALID_SMM		0x00000008
+>  #define KVM_VCPUEVENT_VALID_PAYLOAD	0x00000010
+> +#define KVM_VCPUEVENT_VALID_TRIPLE_FAULT	0x00000020
+>  
+>  /* Interrupt shadow states */
+>  #define KVM_X86_SHADOW_INT_MOV_SS	0x01
+> @@ -359,7 +360,8 @@ struct kvm_vcpu_events {
+>  		__u8 smm_inside_nmi;
+>  		__u8 latched_init;
+>  	} smi;
+> -	__u8 reserved[27];
+> +	__u8 triple_fault_pending;
 
-An initial implementation of this assumed that the boot-pages started
-from the start of the nand but we discover that some device have backup
-of these special partition and we can have situation where we have this
-partition scheme
-- APPSBL (require special mode)
-- APPSBLENV (doesn't require special mode)
-- ART
-- APPSBLBK (back of APPSBL require special mode)
-- APPSBLENVBK (back of APPSBLENV doesn't require special mode)
-With this configuration we need to declare sparse boot page and we can't
-assume boot-pages always starts from the start of the nand.
+What about writing this as
 
-A user can use this form to declare sparse boot pages
-qcom,boot-pages = <0x0 0x0c80000 0x0c80000 0x0500000>;
+	struct {
+		__u8 pending;
+	} triple_fault;
 
-The driver internally will parse this array, convert it to nand pages
-and check internally on every read/write if this special configuration
-should used for that page or the normal one.
+to match the other events?  It's kinda silly, but I find it easier to visually
+identify the various events that are handled by kvm_vcpu_events.
 
-The reason for all of this is that qcom FOR SOME REASON, disable ECC for
-spare data only for these boot partition and we need to reflect this
-special configuration to mute these warning and to permit actually
-writing to these pages.
+> +	__u8 reserved[26];
+>  	__u8 exception_has_payload;
+>  	__u64 exception_payload;
+>  };
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index ab336f7c82e4..c8b9b0bc42aa 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4911,9 +4911,12 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+>  		!!(vcpu->arch.hflags & HF_SMM_INSIDE_NMI_MASK);
+>  	events->smi.latched_init = kvm_lapic_latched_init(vcpu);
+>  
+> +	events->triple_fault_pending = kvm_test_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+> +
+>  	events->flags = (KVM_VCPUEVENT_VALID_NMI_PENDING
+>  			 | KVM_VCPUEVENT_VALID_SHADOW
+> -			 | KVM_VCPUEVENT_VALID_SMM);
+> +			 | KVM_VCPUEVENT_VALID_SMM
+> +			 | KVM_VCPUEVENT_VALID_TRIPLE_FAULT);
 
-v3:
-- Fix typo in Docmunetation commit desription
-- Add items description for uint32-matrix
-v2:
-- Add fixes from Krzysztof in Documentation
+Does setting KVM_VCPUEVENT_VALID_TRIPLE_FAULT need to be guarded with a capability,
+a la KVM_CAP_EXCEPTION_PAYLOAD, so that migrating from a new KVM to an old KVM doesn't
+fail?  Seems rather pointless since the VM is likely hosed either way...
 
-Ansuel Smith (2):
-  mtd: nand: raw: qcom_nandc: add support for unprotected spare data
-    pages
-  dt-bindings: mtd: qcom_nandc: document qcom,boot-pages binding
-
- .../devicetree/bindings/mtd/qcom,nandc.yaml   |  26 +++
- drivers/mtd/nand/raw/qcom_nandc.c             | 148 +++++++++++++++++-
- 2 files changed, 169 insertions(+), 5 deletions(-)
-
--- 
-2.34.1
-
+>  	if (vcpu->kvm->arch.exception_payload_enabled)
+>  		events->flags |= KVM_VCPUEVENT_VALID_PAYLOAD;

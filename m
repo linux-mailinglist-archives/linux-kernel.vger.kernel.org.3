@@ -2,232 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50F352B080
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816D452B06A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbiERChk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 22:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
+        id S234197AbiERCP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 22:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbiERChh (ORCPT
+        with ESMTP id S234184AbiERCPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 22:37:37 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DAF3541BC;
-        Tue, 17 May 2022 19:37:34 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id ADC4D1E80D72;
-        Wed, 18 May 2022 10:31:08 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0HRLVRu_izNp; Wed, 18 May 2022 10:31:05 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 61A3B1E80D71;
-        Wed, 18 May 2022 10:31:05 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     rostedt@goodmis.org
-Cc:     mingo@redhat.com, linux@armlinux.org.uk, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH v2] ftrace: Remove return value of ftrace_arch_modify_*()
-Date:   Wed, 18 May 2022 10:36:40 +0800
-Message-Id: <20220518023639.4065-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-In-Reply-To: <20220517101351.273b385f@gandalf.local.home>
-References: <20220517101351.273b385f@gandalf.local.home>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 22:15:48 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFC42185
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 19:15:45 -0700 (PDT)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220518021541epoutp038c717eaad0b9eccf05de396325797ab9~wEVoBvjr82607726077epoutp03Z
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:15:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220518021541epoutp038c717eaad0b9eccf05de396325797ab9~wEVoBvjr82607726077epoutp03Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1652840141;
+        bh=RGMnH5Mr3tLvcHqVdjOQOhEFHZ+A8PY/ydTZdiMenqU=;
+        h=From:Subject:To:Cc:Date:References:From;
+        b=mGskIKhsS4zRpDol8ge66xB3R1UpuU4G70Dt5ORle0D9Frh0huvpo/2WN1NOBPbWY
+         5RjE7yWjuvTXuTkUj1dPXbyB0Mrk2I4i8U7FQv6xVX129a5dmKpiKwvSW6WMjI2cgC
+         4B3DGnUEmYzwETRzK6CTv1CQufMG40+Sn3ZwuPt0=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220518021541epcas1p17b2faad16b436055c7dbb4f78b551377~wEVnn_pSr1471414714epcas1p1C;
+        Wed, 18 May 2022 02:15:41 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.36.133]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4L2xRH5Rgkz4x9QH; Wed, 18 May
+        2022 02:15:39 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        F2.AB.10354.BC654826; Wed, 18 May 2022 11:15:39 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220518021539epcas1p3449c756c4aca3c12000e2350b288a197~wEVmIQleW1011610116epcas1p3t;
+        Wed, 18 May 2022 02:15:39 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220518021539epsmtrp1b98c28f4566624f32811498b5a8f1892~wEVmHiWfk1931719317epsmtrp11;
+        Wed, 18 May 2022 02:15:39 +0000 (GMT)
+X-AuditID: b6c32a38-4b5ff70000002872-99-628456cb4ea0
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        62.61.11276.BC654826; Wed, 18 May 2022 11:15:39 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220518021539epsmtip2ed97f37acc89d1f7c586f462b69e6873~wEVl4oSZK1319213192epsmtip2S;
+        Wed, 18 May 2022 02:15:39 +0000 (GMT)
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [GIT PULL] devfreq next for 5.19
+Organization: Samsung Electronics
+To:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Chanwoo Choi (samsung.com)" <cw00.choi@samsung.com>,
+        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>
+Message-ID: <3acd6c32-6e78-dfc2-3e45-84f69a7d5f36@samsung.com>
+Date:   Wed, 18 May 2022 11:42:04 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
+MIME-Version: 1.0
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMJsWRmVeSWpSXmKPExsWy7bCmru7psJYkg12bdCwm3rjCYnH9y3NW
+        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJyrbJ
+        SE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpASaEsMacU
+        KBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgWqBXnJhbXJqXrpeXWmJlaGBgZApUmJCdsefK
+        OraCMyoVW1e/YWpg/CvTxcjJISFgIrH4+BL2LkYuDiGBHYwSPfsa2CCcT4wSR/78gHK+MUos
+        XP6GFaZl4ecDjBCJvYwSi9avYYZw3jNKTH59kBmkik1AS2L/ixtsILawgKbE+2dPmUBsfgFF
+        ias/HgN1c3CICNhLdHzIBOllFrjAJHH53EmwXl4BO4mf53+C9bIIqEpc/DiFBcQWFQiTOLmt
+        hRGiRlDi5MwnYHFmAXGJW0/mM0HY8hLb385hhrj0J7vEz8NSILskBFwkGpZoQISFJV4d38IO
+        YUtJvOxvA/tfQqCZUaLhxW1GCKeHUeLosz4WiCpjif1LJzOBDGIGemb9Ln2IsKLEzt9zGSH2
+        8km8+9rDCrGLV6KjTQiiRFni8oO7TBC2pMTi9k42CNtD4vKkz+wTGBVnIflmFpJvZiH5ZhbC
+        4gWMLKsYxVILinPTU4sNC0zgsZ2cn7uJEZw6tSx2MM59+0HvECMTB+MhRgkOZiURXoOKhiQh
+        3pTEyqrUovz4otKc1OJDjKbA8J3ILCWanA9M3nkl8YYmlgYmZkbGJhaGZoZK4ry9U08nCgmk
+        J5akZqemFqQWwfQxcXBKNTCVCjyasmOlQG/fn5vyWpbCuieEBAOFzT+uOaUyY5La5ZVX1L/f
+        0GSY6/X0Qvjj0L/drcLHbXa1Rdw1eFlZz/3d4PftLiX9+2kaaScfz1EzErH/vtxZ8vkxi9W5
+        7I9vTfqsxnRwScYDyyN1nTtOX85Y4j/3VeJOkbfJ16xWb9l7ddvyHPapT8POtP8Or27xPvhB
+        48qNHT/XHW14PiNxc22DQtbvKCaXoGiHqYbuYbdNfs35fVOofdYDn/KdjW91J39P+HxKUOQ6
+        60LpH9ovZWfqWNTYiBq4mNsWPS5d+jnBevmclVN99gv3sfzcafw0Tzb67fNKabdX0VdOrPMw
+        DPZZ0nL246nI1HgvN9OTTQtylFiKMxINtZiLihMBdOprJSYEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKLMWRmVeSWpSXmKPExsWy7bCSvO7psJYkgzefRC0m3rjCYnH9y3NW
+        i7NNb9gtLu+aw2bxufcIo8XtxhVsFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJ4rJJ
+        Sc3JLEst0rdL4MrYc2UdW8EZlYqtq98wNTD+leli5OSQEDCRWPj5AGMXIxeHkMBuRomdKy6y
+        QSQkJaZdPMrcxcgBZAtLHD5cDFHzllFi4orXrCA1bAJaEvtf3ACrFxbQlHj/7CkTiM0voChx
+        9cdjRpBeEQF7iY4PmSC9zAKXmCT6NvaA9fIK2En8PP8TrJdFQFXi4scpLCC2qECYxM4lj5kg
+        agQlTs58AhZnFlCX+DPvEjOELS5x68l8JghbXmL72znMExgFZyFpmYWkZRaSlllIWhYwsqxi
+        lEwtKM5Nzy02LDDMSy3XK07MLS7NS9dLzs/dxAiOCS3NHYzbV33QO8TIxMF4iFGCg1lJhNeg
+        oiFJiDclsbIqtSg/vqg0J7X4EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBiaPxTfN
+        NWYk9LJ5h+8pWp92fCKXwebT0cH/iiyVv5UJbzJf4vhU88STTcYsJ14v3f1tgv3npZUrmn7X
+        L3m2OoLJ5LuTre3B8k9qdgcvLT9z8GueTJB5vuijTKdNU+PC2K82lTr113gra/aW5s/SsOtQ
+        WHbAMnumS5XFJy9Jh6TOmqrsOVkdPjmsCbYnPjLe3R4jxRx3WkXVsTPBPHs954/GI3YhD67f
+        MhbpE0rlWT+JfalpvfUOJjlNN0UdywVhrFn/Gy5ZJV2c3Z5ssXVq51Ntrc0vUvflWHmbC7HX
+        3K25uDLY9fi/2mvuu/5w57++5KSoLudb8W+HMc+cysl+65kdOT9sfMW5q2pVl2i2EktxRqKh
+        FnNRcSIAZpT8ffgCAAA=
+X-CMS-MailID: 20220518021539epcas1p3449c756c4aca3c12000e2350b288a197
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220518021539epcas1p3449c756c4aca3c12000e2350b288a197
+References: <CGME20220518021539epcas1p3449c756c4aca3c12000e2350b288a197@epcas1p3.samsung.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All instances of the function ftrace_arch_modify_prepare() and
-  ftrace_arch_modify_post_process() return zero. There's no point in
-  checking their return value. Just have them be void functions.
+Dear Rafael,
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
----
- arch/arm/kernel/ftrace.c   |  6 ++----
- arch/riscv/kernel/ftrace.c |  6 ++----
- arch/s390/kernel/ftrace.c  |  3 +--
- arch/x86/kernel/ftrace.c   |  6 ++----
- include/linux/ftrace.h     |  4 ++--
- kernel/trace/ftrace.c      | 16 ++++------------
- 6 files changed, 13 insertions(+), 28 deletions(-)
+This is devfreq-next pull request for v5.19-rc1. I add detailed description of
+this pull request on the following tag. Please pull devfreq with
+following updates.
+- tag name : devfreq-next-for-5.19
 
-diff --git a/arch/arm/kernel/ftrace.c b/arch/arm/kernel/ftrace.c
-index 83cc068586bc..a0b6d1e3812f 100644
---- a/arch/arm/kernel/ftrace.c
-+++ b/arch/arm/kernel/ftrace.c
-@@ -79,16 +79,14 @@ static unsigned long __ref adjust_address(struct dyn_ftrace *rec,
- 	return (unsigned long)&ftrace_regs_caller_from_init;
- }
- 
--int ftrace_arch_code_modify_prepare(void)
-+void ftrace_arch_code_modify_prepare(void)
- {
--	return 0;
- }
- 
--int ftrace_arch_code_modify_post_process(void)
-+void ftrace_arch_code_modify_post_process(void)
- {
- 	/* Make sure any TLB misses during machine stop are cleared. */
- 	flush_tlb_all();
--	return 0;
- }
- 
- static unsigned long ftrace_call_replace(unsigned long pc, unsigned long addr,
-diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-index 4716f4cdc038..2086f6585773 100644
---- a/arch/riscv/kernel/ftrace.c
-+++ b/arch/riscv/kernel/ftrace.c
-@@ -12,16 +12,14 @@
- #include <asm/patch.h>
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
--int ftrace_arch_code_modify_prepare(void) __acquires(&text_mutex)
-+void ftrace_arch_code_modify_prepare(void) __acquires(&text_mutex)
- {
- 	mutex_lock(&text_mutex);
--	return 0;
- }
- 
--int ftrace_arch_code_modify_post_process(void) __releases(&text_mutex)
-+void ftrace_arch_code_modify_post_process(void) __releases(&text_mutex)
- {
- 	mutex_unlock(&text_mutex);
--	return 0;
- }
- 
- static int ftrace_check_current_call(unsigned long hook_pos,
-diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
-index 1852d46babb1..416b5a94353d 100644
---- a/arch/s390/kernel/ftrace.c
-+++ b/arch/s390/kernel/ftrace.c
-@@ -225,14 +225,13 @@ void arch_ftrace_update_code(int command)
- 	ftrace_modify_all_code(command);
- }
- 
--int ftrace_arch_code_modify_post_process(void)
-+void ftrace_arch_code_modify_post_process(void)
- {
- 	/*
- 	 * Flush any pre-fetched instructions on all
- 	 * CPUs to make the new code visible.
- 	 */
- 	text_poke_sync_lock();
--	return 0;
- }
- 
- #ifdef CONFIG_MODULES
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 1e31c7d21597..73d2719ed12c 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -37,7 +37,7 @@
- 
- static int ftrace_poke_late = 0;
- 
--int ftrace_arch_code_modify_prepare(void)
-+void ftrace_arch_code_modify_prepare(void)
-     __acquires(&text_mutex)
- {
- 	/*
-@@ -47,10 +47,9 @@ int ftrace_arch_code_modify_prepare(void)
- 	 */
- 	mutex_lock(&text_mutex);
- 	ftrace_poke_late = 1;
--	return 0;
- }
- 
--int ftrace_arch_code_modify_post_process(void)
-+void ftrace_arch_code_modify_post_process(void)
-     __releases(&text_mutex)
- {
- 	/*
-@@ -61,7 +60,6 @@ int ftrace_arch_code_modify_post_process(void)
- 	text_poke_finish();
- 	ftrace_poke_late = 0;
- 	mutex_unlock(&text_mutex);
--	return 0;
- }
- 
- static const char *ftrace_nop_replace(void)
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 4816b7e11047..a5f74f6e7e4e 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -449,8 +449,8 @@ static inline void stack_tracer_enable(void) { }
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
- 
--int ftrace_arch_code_modify_prepare(void);
--int ftrace_arch_code_modify_post_process(void);
-+void ftrace_arch_code_modify_prepare(void);
-+void ftrace_arch_code_modify_post_process(void);
- 
- enum ftrace_bug_type {
- 	FTRACE_BUG_UNKNOWN,
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 4f1d2f5e7263..35a899f136fe 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -2707,18 +2707,16 @@ ftrace_nop_initialize(struct module *mod, struct dyn_ftrace *rec)
-  * archs can override this function if they must do something
-  * before the modifying code is performed.
-  */
--int __weak ftrace_arch_code_modify_prepare(void)
-+void __weak ftrace_arch_code_modify_prepare(void)
- {
--	return 0;
- }
- 
- /*
-  * archs can override this function if they must do something
-  * after the modifying code is performed.
-  */
--int __weak ftrace_arch_code_modify_post_process(void)
-+void __weak ftrace_arch_code_modify_post_process(void)
- {
--	return 0;
- }
- 
- void ftrace_modify_all_code(int command)
-@@ -2804,12 +2802,7 @@ void __weak arch_ftrace_update_code(int command)
- 
- static void ftrace_run_update_code(int command)
- {
--	int ret;
--
--	ret = ftrace_arch_code_modify_prepare();
--	FTRACE_WARN_ON(ret);
--	if (ret)
--		return;
-+	ftrace_arch_code_modify_prepare();
- 
- 	/*
- 	 * By default we use stop_machine() to modify the code.
-@@ -2819,8 +2812,7 @@ static void ftrace_run_update_code(int command)
- 	 */
- 	arch_ftrace_update_code(command);
- 
--	ret = ftrace_arch_code_modify_post_process();
--	FTRACE_WARN_ON(ret);
-+	ftrace_arch_code_modify_post_process();
- }
- 
- static void ftrace_run_modify_code(struct ftrace_ops *ops, int command,
--- 
-2.18.2
+Best Regards,
+Chanwoo Choi
 
+
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.19
+
+for you to fetch changes up to 26984d9d581e5049bd75091d2e789b9cc3ea12e0:
+
+  PM / devfreq: passive: Keep cpufreq_policy for possible cpus (2022-05-17 18:24:39 +0900)
+
+----------------------------------------------------------------
+Update devfreq next for v5.19
+
+Detailed description for this pull request:
+1. Update devfreq core
+- Add cpu based scaling support to passive governor. Some device like
+cache might require the dynamic frequency scaling. But, it has very
+tightly to cpu frequency. So that use passive governor to scale
+the frequency according to current cpu frequency.
+
+To decide the frequency of the device, the governor does one of the following:
+: Derives the optimal devfreq device opp from required-opps property of
+  the parent cpu opp_table.
+
+: Scales the device frequency in proportion to the CPU frequency. So, if
+  the CPUs are running at their max frequency, the device runs at its
+  max frequency. If the CPUs are running at their min frequency, the
+  device runs at its min frequency. It is interpolated for frequencies
+  in between.
+
+2. Update devfreq driver
+- Update rk3399_dmc.c as following:
+: Convert dt-binding document to YAML and deprecate unused properties.
+
+: Use Hz units for the device-tree properties of rk3399_dmc.
+
+: rk3399_dmc is able to set the idle time before changing the dmc clock.
+  Specify idle time parameters by using nano-second unit on dt bidning.
+
+: Add new disable-freq properties to optimize the power-saving feature
+  of rk3399_dmc.
+
+: Disable devfreq-event device on remove() to fix unbalanced
+  enable-disable count.
+
+: Use devm_pm_opp_of_add_table()
+
+: Block PMU (Power-Management Unit) transitions when scaling frequency
+  by ARM Trust Firmware in order to fix the conflict between PMU and DMC
+  (Dynamic Memory Controller).
+----------------------------------------------------------------
+
+Brian Norris (15):
+      dt-bindings: devfreq: rk3399_dmc: Convert to YAML
+      dt-bindings: devfreq: rk3399_dmc: Deprecate unused/redundant properties
+      dt-bindings: devfreq: rk3399_dmc: Fix Hz units
+      dt-bindings: devfreq: rk3399_dmc: Specify idle params in nanoseconds
+      dt-bindings: devfreq: rk3399_dmc: Add more disable-freq properties
+      PM / devfreq: rk3399_dmc: Drop undocumented ondemand DT props
+      PM / devfreq: rk3399_dmc: Drop excess timing properties
+      PM / devfreq: rk3399_dmc: Use bitfield macro definitions for ODT_PD
+      PM / devfreq: rk3399_dmc: Support new disable-freq properties
+      PM / devfreq: rk3399_dmc: Support new *-ns properties
+      PM / devfreq: rk3399_dmc: Disable edev on remove()
+      PM / devfreq: rk3399_dmc: Use devm_pm_opp_of_add_table()
+      PM / devfreq: rk3399_dmc: Avoid static (reused) profile
+      soc: rockchip: power-domain: Manage resource conflicts with firmware
+      PM / devfreq: rk3399_dmc: Block PMU during transitions
+
+Chanwoo Choi (3):
+      PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+      PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+      PM / devfreq: passive: Keep cpufreq_policy for possible cpus
+
+Saravana Kannan (1):
+      PM / devfreq: Add cpu based scaling support to passive governor
+
+ .../devicetree/bindings/devfreq/rk3399_dmc.txt     | 212 -----------
+ .../memory-controllers/rockchip,rk3399-dmc.yaml    | 384 ++++++++++++++++++++
+ drivers/devfreq/devfreq.c                          |  20 +-
+ drivers/devfreq/governor.h                         |  27 ++
+ drivers/devfreq/governor_passive.c                 | 403 +++++++++++++++++----
+ drivers/devfreq/rk3399_dmc.c                       | 312 ++++++++--------
+ drivers/soc/rockchip/pm_domains.c                  | 118 ++++++
+ include/linux/devfreq.h                            |  17 +-
+ include/soc/rockchip/pm_domains.h                  |  25 ++
+ 9 files changed, 1063 insertions(+), 455 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
+ create mode 100644 include/soc/rockchip/pm_domains.h

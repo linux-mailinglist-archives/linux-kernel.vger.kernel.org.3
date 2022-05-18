@@ -2,108 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0618252C291
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC86152C286
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241513AbiERSmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
+        id S241479AbiERSkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241498AbiERSmU (ORCPT
+        with ESMTP id S241280AbiERSj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:42:20 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A960E195BEA
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:42:18 -0700 (PDT)
-Received: from pps.filterd (m0134422.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IHeIYV031831;
-        Wed, 18 May 2022 18:41:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=JkdAJp6/nFA0fMkh73Q6AHAhW3P+czhEF0OIA1t5HCg=;
- b=Qg2AhnHrd3KBRi0DM+Bb3C5HbTo+NMkyfHHtmg++jWG9ug+/mnlUut0DeIcgWTWtI//2
- HI6OjGG/DUrRPlT32fATsiDynZSEP+I3w0v6l2juXvPIUAPpeADtplpUS+ptlXAG3tFI
- d+t4fePOEIgxlDSGArqM8HgF2nYdi2nUvcC2nqJrCqM0ypC9/4655ZTL2f9YPksE/jl9
- Pk3xAGjSmX8pnhrRgS8KClB67yDFV7hx7UFCHMQdsGNdGQJ/6nj1PWHFv/lgNkyS2s5D
- Y/H7skS6+Wn3n5hPvTuDy+i9B1Wm4vBh0lEx/9u2lMfxgj8ZWjloLXNVjOBm7tCsCmxE fQ== 
-Received: from g4t3427.houston.hpe.com (g4t3427.houston.hpe.com [15.241.140.73])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3g52ynjr3w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 18:41:29 +0000
-Received: from g4t3433.houston.hpecorp.net (g4t3433.houston.hpecorp.net [16.208.49.245])
-        by g4t3427.houston.hpe.com (Postfix) with ESMTP id A42CD57;
-        Wed, 18 May 2022 18:41:28 +0000 (UTC)
-Received: from swahl-home.5wahls.com (unknown [10.207.216.251])
-        by g4t3433.houston.hpecorp.net (Postfix) with ESMTP id CAE565B;
-        Wed, 18 May 2022 18:41:25 +0000 (UTC)
-Date:   Wed, 18 May 2022 13:41:25 -0500
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ning Sun <ning.sun@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] iommu/vt-d: Make intel-iommu.h private
-Message-ID: <YoU91f2ncSkJP27T@swahl-home.5wahls.com>
-References: <20220514014322.2927339-1-baolu.lu@linux.intel.com>
+        Wed, 18 May 2022 14:39:58 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B641DB588;
+        Wed, 18 May 2022 11:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652899197; x=1684435197;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=M/oKhYTcnY4myTpFoegzGHopmAVVEEzgyLwyapl7tQQ=;
+  b=gjifRWwVI7atM6NqpjKQjmIIKSpRRAvJjla4cCLFkc5/c5LeqQwiOPmq
+   KraYXLAeeWMDecMyFyPbwEQmu6QVzhfBD4Hd4SB08h24jDQYLaRJLuxx7
+   pjF7eRU/yHmf59EaRXYMnU/rPUSBRa4MX9HccnwP6e0fyZfpvttn1MxNX
+   wsT4o+PKpfOs/kDGJwK7KvG9kE3pe3tj9IL21ilIWyXUDj82f3hAkVyOv
+   FoLIc49hjSoHw+0zgbbwnHXDI2/dseCwKpZMheoqbvy+0sSrLVbq4Q7Jd
+   aoB2iW2VBrHyQVI1D40EAELe/wapHYj7LJYfbfUmg35oiJeXyUNI+eKym
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="269425271"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="269425271"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:38:14 -0700
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="569686074"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:38:14 -0700
+Date:   Wed, 18 May 2022 11:42:04 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, vkoul@kernel.org,
+        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v3 1/4] iommu/vt-d: Implement domain ops for
+ attach_dev_pasid
+Message-ID: <20220518114204.4d251b41@jacob-builder>
+In-Reply-To: <20220511182908.GK49344@nvidia.com>
+References: <20220510210704.3539577-1-jacob.jun.pan@linux.intel.com>
+        <20220510210704.3539577-2-jacob.jun.pan@linux.intel.com>
+        <20220510232121.GP49344@nvidia.com>
+        <20220510172309.3c4e7512@jacob-builder>
+        <20220511115427.GU49344@nvidia.com>
+        <20220511082958.79d5d8ee@jacob-builder>
+        <20220511161237.GB49344@nvidia.com>
+        <20220511100216.7615e288@jacob-builder>
+        <20220511170025.GF49344@nvidia.com>
+        <20220511102521.6b7c578c@jacob-builder>
+        <20220511182908.GK49344@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220514014322.2927339-1-baolu.lu@linux.intel.com>
-X-Proofpoint-GUID: eeDz9k6Fyio9EZLTXEQmcX-SiAr354e5
-X-Proofpoint-ORIG-GUID: eeDz9k6Fyio9EZLTXEQmcX-SiAr354e5
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- bulkscore=0 mlxlogscore=648 lowpriorityscore=0 spamscore=0 adultscore=0
- mlxscore=0 impostorscore=0 clxscore=1011 suspectscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205180108
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 09:43:15AM +0800, Lu Baolu wrote:
-> Hi folks,
-> 
-> The include/linux/intel-iommu.h should be private to the Intel IOMMU
-> driver. Other drivers or components should interact with the IOMMU
-> drivers through the kAPIs provided by the iommu core.
-> 
-> This series cleanups all includes of intel-iommu.h outside of the Intel
-> IOMMU driver and move this header from include/linux to
-> drivers/iommu/intel/.
-> 
-> No functional changes intended. Please help to review and suggest.
+Hi Jason,
 
-I went through and examined the changes as well.  These changes make the
-robots complaint against my patch go away, which is great by me!
+On Wed, 11 May 2022 15:29:08 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
+> On Wed, May 11, 2022 at 10:25:21AM -0700, Jacob Pan wrote:
+> > Hi Jason,
+> > 
+> > On Wed, 11 May 2022 14:00:25 -0300, Jason Gunthorpe <jgg@nvidia.com>
+> > wrote: 
+> > > On Wed, May 11, 2022 at 10:02:16AM -0700, Jacob Pan wrote:  
+> > > > > > If not global, perhaps we could have a list of pasids (e.g.
+> > > > > > xarray) attached to the device_domain_info. The TLB flush logic
+> > > > > > would just go through the list w/o caring what the PASIDs are
+> > > > > > for. Does it make sense to you?      
+> > > > > 
+> > > > > Sort of, but we shouldn't duplicate xarrays - the group already
+> > > > > has this xarray - need to find some way to allow access to it
+> > > > > from the driver.
+> > > > >     
+> > > > I am not following,  here are the PASIDs for devTLB flush which is
+> > > > per device. Why group?    
+> > > 
+> > > Because group is where the core code stores it.  
+> > I see, with singleton group. I guess I can let dma-iommu code call
+> > 
+> > iommu_attach_dma_pasid {
+> > 	iommu_attach_device_pasid();
+> > Then the PASID will be stored in the group xa.  
+> 
+> Yes, again, the dma-iommu should not be any different from the normal
+> unmanaged path. At this point there is no longer any difference, we
+> should not invent new ones.
+> 
+> > The flush code can retrieve PASIDs from device_domain_info.device ->
+> > group -> pasid_array.  Thanks for pointing it out, I missed the new
+> > pasid_array.  
+> 
+> Yes.. It seems inefficient to iterate over that xarray multiple times
+> on the flush hot path, but maybe there is little choice. Try to use
+> use the xas iterators under the xa_lock spinlock..
+> 
+xas_for_each takes a max range, here we don't really have one. So I posted
+v4 w/o using the xas advanced API. Please let me know if you have
+suggestions.
+xa_for_each takes RCU read lock, it should be fast for tlb flush, right? The
+worst case maybe over flush when we have stale data but should be very rare.
 
--- 
-Steve Wahl, Hewlett Packard Enterprise
+> The challenge will be accessing the group xa in the first place, but
+> maybe the core code can gain a function call to return a pointer to
+> that XA or something..
+> 
+I added a helper function to find the matching DMA API PASID in v4.
+
+
+Thanks,
+
+Jacob

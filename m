@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7643752B4E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE5552B4CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233325AbiERIcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S233293AbiERIeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233243AbiERIco (ORCPT
+        with ESMTP id S233252AbiERIeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:32:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716E04ECF1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:32:43 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nrF6i-0005rw-Ea; Wed, 18 May 2022 10:32:36 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nrF6c-0002Y8-VS; Wed, 18 May 2022 10:32:30 +0200
-Date:   Wed, 18 May 2022 10:32:30 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-wireless@vger.kernel.org
-Cc:     Ping-Ke Shih <pkshih@realtek.com>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        netdev@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        linux-kernel@vger.kernel.org, Neo Jou <neojou@gmail.com>,
-        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>,
-        neo_jou <neo_jou@realtek.com>
-Subject: Re: [PATCH 06/10] rtw88: Add common USB chip support
-Message-ID: <20220518083230.GR25578@pengutronix.de>
-References: <20220518082318.3898514-1-s.hauer@pengutronix.de>
- <20220518082318.3898514-7-s.hauer@pengutronix.de>
+        Wed, 18 May 2022 04:34:03 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DDE4F446
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:34:02 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ff39b44b06so15939957b3.13
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PrZaKflJcqAm6ITWcjGceKP2vw/l5blOH42KyEb340k=;
+        b=ncomM3peKSn04FpIn39Tye5gpWIkIHpJe+eZQVH3AEcRe+PayE+bjnIgzYa+tYzSpn
+         a+duRleDpSvtHwQV5QJBWp1tz3yNsSB6g3AtI2aMihK58iKLiEbJvFHSW3XMIcCgysWV
+         /c19HSvwfQV+031guMjkhQYQmzFzKch82/yV9Y2HdkoERvFuxbnck4I8+09O8fON0/4s
+         t6NUIWgNkqzpGoUKcrINlMwHntweiO6u/E1yOf/rdbj11tesv88Em8Negn/xffloU5NU
+         2FDoZr+6zThRLHgzR8Hkl+I+IhYp5vOec3uoAzYqM3TyWkUEFPCfV0u0/j/ZinGic0L3
+         pwsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PrZaKflJcqAm6ITWcjGceKP2vw/l5blOH42KyEb340k=;
+        b=xijGywU/TT9RCMd9u3yGi8wTaF6jUwnjLEfm+z8oGRGMZA5gpmirK3CYqpwgmAPaWW
+         58u9uMpRdTEqdh4GdB4dAEJxsnTn+FPJJWfpjZY5aJBlF5USk7Z/EX+YR7aeza5PnZHB
+         1oBlM294VhRlMdI0x4skcvo2Qy/u9wjxujbhfaBhMltBxewUudD+NLtDTzswjnVMpIZy
+         LpYCrm8Jm2a8MCIvynkIE4JBLNqb46znW4+0KN1tNtGoW+NLEWUIQOtbbf6OucHE08Vr
+         H9VVETlp8Lv5WUKYPrie8wjwb3bOWCqWkVxU3AtdOmAbQeoSTYFWB7cagZjeQ4iU/D88
+         4VUA==
+X-Gm-Message-State: AOAM533IVi/hPkDQUjuFNVErZKFKRVfTg2XS5Kch0G8DY6Ny914B8QxS
+        MCUiZfYv2aroYpzcCi3Hgh08iUpUnmxGg4futMDunw==
+X-Google-Smtp-Source: ABdhPJzptGy3TNS2w3LxYTNzAV1jeNgHV/LL+PxFsbqHAIkz8CDMWjg9njpIZjIx1Tl/gchvpdBXIzK86XzjQVa2bWE=
+X-Received: by 2002:a05:690c:443:b0:2fe:eefc:1ad5 with SMTP id
+ bj3-20020a05690c044300b002feeefc1ad5mr16379342ywb.199.1652862841052; Wed, 18
+ May 2022 01:34:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518082318.3898514-7-s.hauer@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:27:57 up 48 days, 20:57, 79 users,  load average: 0.07, 0.10,
- 0.09
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220516193614.678319286@linuxfoundation.org>
+In-Reply-To: <20220516193614.678319286@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 18 May 2022 14:03:50 +0530
+Message-ID: <CA+G9fYt0_sus+OcfndkeA+OmjfwPWsm=sgaBJT+pPKR1nO-n0g@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/25] 4.14.280-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,97 +71,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 10:23:14AM +0200, Sascha Hauer wrote:
-> Add the common bits and pieces to add USB support to the RTW88 driver.
-> This is based on https://github.com/ulli-kroll/rtw88-usb.git which
-> itself is first written by Neo Jou.
-> 
-> Signed-off-by: neo_jou <neo_jou@realtek.com>
-> Signed-off-by: Hans Ulli Kroll <linux@ulli-kroll.de>
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
->  drivers/net/wireless/realtek/rtw88/Kconfig  |    3 +
->  drivers/net/wireless/realtek/rtw88/Makefile |    2 +
->  drivers/net/wireless/realtek/rtw88/mac.c    |    3 +
->  drivers/net/wireless/realtek/rtw88/main.c   |    5 +
->  drivers/net/wireless/realtek/rtw88/main.h   |    4 +
->  drivers/net/wireless/realtek/rtw88/reg.h    |    1 +
->  drivers/net/wireless/realtek/rtw88/tx.h     |   31 +
->  drivers/net/wireless/realtek/rtw88/usb.c    | 1051 +++++++++++++++++++
->  drivers/net/wireless/realtek/rtw88/usb.h    |  109 ++
->  9 files changed, 1209 insertions(+)
->  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.c
->  create mode 100644 drivers/net/wireless/realtek/rtw88/usb.h
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/Kconfig b/drivers/net/wireless/realtek/rtw88/Kconfig
-> index e3d7cb6c12902..1624c5db69bac 100644
-> --- a/drivers/net/wireless/realtek/rtw88/Kconfig
-> +++ b/drivers/net/wireless/realtek/rtw88/Kconfig
-> @@ -16,6 +16,9 @@ config RTW88_CORE
->  config RTW88_PCI
->  	tristate
->  
-> +config RTW88_USB
-> +	tristate
-> +
->  config RTW88_8822B
->  	tristate
->  
-> diff --git a/drivers/net/wireless/realtek/rtw88/Makefile b/drivers/net/wireless/realtek/rtw88/Makefile
-> index 834c66ec0af9e..9e095f8181483 100644
-> --- a/drivers/net/wireless/realtek/rtw88/Makefile
-> +++ b/drivers/net/wireless/realtek/rtw88/Makefile
-> @@ -45,4 +45,6 @@ obj-$(CONFIG_RTW88_8821CE)	+= rtw88_8821ce.o
->  rtw88_8821ce-objs		:= rtw8821ce.o
->  
->  obj-$(CONFIG_RTW88_PCI)		+= rtw88_pci.o
-> +obj-$(CONFIG_RTW88_USB)		+= rtw88_usb.o
->  rtw88_pci-objs			:= pci.o
-> +rtw88_usb-objs			:= usb.o
-> diff --git a/drivers/net/wireless/realtek/rtw88/mac.c b/drivers/net/wireless/realtek/rtw88/mac.c
-> index d1678aed9d9cb..19728c705eaa9 100644
-> --- a/drivers/net/wireless/realtek/rtw88/mac.c
-> +++ b/drivers/net/wireless/realtek/rtw88/mac.c
-> @@ -1032,6 +1032,9 @@ static int txdma_queue_mapping(struct rtw_dev *rtwdev)
->  	if (rtw_chip_wcpu_11ac(rtwdev))
->  		rtw_write32(rtwdev, REG_H2CQ_CSR, BIT_H2CQ_FULL);
->  
-> +	if (rtw_hci_type(rtwdev) == RTW_HCI_TYPE_USB)
-> +		rtw_write8_set(rtwdev, REG_TXDMA_PQ_MAP, BIT_RXDMA_ARBBW_EN);
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/net/wireless/realtek/rtw88/main.c b/drivers/net/wireless/realtek/rtw88/main.c
-> index 5afb8bef9696a..162fa432ce0d1 100644
-> --- a/drivers/net/wireless/realtek/rtw88/main.c
-> +++ b/drivers/net/wireless/realtek/rtw88/main.c
-> @@ -1715,6 +1715,10 @@ static int rtw_chip_parameter_setup(struct rtw_dev *rtwdev)
->  		rtwdev->hci.rpwm_addr = 0x03d9;
->  		rtwdev->hci.cpwm_addr = 0x03da;
->  		break;
-> +	case RTW_HCI_TYPE_USB:
-> +		rtwdev->hci.rpwm_addr = 0xfe58;
-> +		rtwdev->hci.cpwm_addr = 0xfe57;
-> +		break;
->  	default:
->  		rtw_err(rtwdev, "unsupported hci type\n");
->  		return -EINVAL;
-> @@ -2105,6 +2109,7 @@ int rtw_register_hw(struct rtw_dev *rtwdev, struct ieee80211_hw *hw)
->  	hw->wiphy->available_antennas_rx = hal->antenna_rx;
->  
->  	hw->wiphy->flags |= WIPHY_FLAG_SUPPORTS_TDLS |
-> +			    WIPHY_FLAG_HAS_REMAIN_ON_CHANNEL |
->  			    WIPHY_FLAG_TDLS_EXTERNAL_SETUP;
+On Tue, 17 May 2022 at 01:10, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.280 release.
+> There are 25 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.280-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-This change should be in a separate patch. I don't have an idea though
-what it's good for anyway. Is this change desired for the PCI variants
-as well or only for USB? Do we want to have this change at all?
 
-Sascha
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.14.280-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.14.y
+* git commit: 371779ee7c349696d0848d670711e87d44903fe1
+* git describe: v4.14.279-26-g371779ee7c34
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.279-26-g371779ee7c34
+
+## Test Regressions (compared to v4.14.278-15-g4477341b2b19)
+No test regressions found.
+
+## Metric Regressions (compared to v4.14.278-15-g4477341b2b19)
+No metric regressions found.
+
+## Test Fixes (compared to v4.14.278-15-g4477341b2b19)
+No test fixes found.
+
+## Metric Fixes (compared to v4.14.278-15-g4477341b2b19)
+No metric fixes found.
+
+## Test result summary
+total: 79237, pass: 62537, fail: 1123, skip: 13203, xfail: 2374
+
+## Build Summary
+* arm: 270 total, 270 passed, 0 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* powerpc: 16 total, 16 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 34 total, 34 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,201 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6679852B43C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD60252B44B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbiERH5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S232784AbiERH5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbiERH5S (ORCPT
+        with ESMTP id S232777AbiERH52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:57:18 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92DBE64DB;
-        Wed, 18 May 2022 00:57:16 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24I7urPV024570;
-        Wed, 18 May 2022 02:56:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652860613;
-        bh=P4F7f/HFsSYJM14QiiyJ/DYiatoS1hZl6AKwPrhOcoc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Q7f2wKZ5U0/Xc6zelmerAA6VpUUqLbj76051mZjFB2TT3LcpYikXiGvDEdUZ7BRRD
-         lbEGeaWr0KOTwQ3nsrHlGWziA7EgBLTIx1V07RZUjqKuGXK0Iwun2ehqI496imAjrB
-         gUIJQVdfBH/QtjxcK2EWSBek7kN3UQBu9StDXTI8=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24I7urAZ109191
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 18 May 2022 02:56:53 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 18
- May 2022 02:56:52 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 18 May 2022 02:56:52 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24I7uq2S005572;
-        Wed, 18 May 2022 02:56:52 -0500
-Date:   Wed, 18 May 2022 13:26:51 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Michael Walle <michael@walle.cc>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mark Brown <broonie@kernel.org>,
-        =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-spi@vger.kernel.org>
-Subject: Re: [RFC PATCH 3/6] mtd: spi-nor: core: run calibration when
- initialization is done
-Message-ID: <20220518075651.mvdhfnfbgutecgyq@ti.com>
-References: <20210311191216.7363-1-p.yadav@ti.com>
- <20210311191216.7363-4-p.yadav@ti.com>
- <20220517160226.4107f282@xps-13>
- <20220518060640.os5fp5rez4ie7qc4@ti.com>
- <20220518091931.279c5398@xps-13>
+        Wed, 18 May 2022 03:57:28 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB784EABAB
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652860647; x=1684396647;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=B/wddhpG1M++lBJRfP914u1JTqElrj9YCwj9LlOvvIs=;
+  b=AX3PFdNocTYXEayTfyElt8JKDq4kHe0Sbdtzsmob34tiY+eobeK6qM7O
+   DiFhyk5Lx1A1jsDVMNMZfrlBjqJeJAtBnl2Zn1eanXNUUR8hTxjQHDhtX
+   COxB3EKvo6JRbmymx8CCMTYSEoHNhvvdGAcJD+4+NJZxA8RdWoMiubZ8r
+   jslpSVtGiEKBQlc+JA3fkJM40FGEIUAqhooak7KxQ1xq166rNgB89x14C
+   C+9Hr14QnCPiq9FU7ETgBXAZiofKcfoHR5GX06nkX0+PryH1rbCqRSJzQ
+   7T8LTkw7ScHeUNJBWpvWn7oLFY7409/smig+zoH/bpUqU1K5uJpZpt7x9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="269123546"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="269123546"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:57:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="661034423"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by FMSMGA003.fm.intel.com with ESMTP; 18 May 2022 00:57:27 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 18 May 2022 00:57:26 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 18 May 2022 00:57:26 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 18 May 2022 00:57:26 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.48) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 18 May 2022 00:57:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PhynDJeBpzp3J+9e1ZrgQqfhFERXvFefV0SSiiG38fGdbD5mM5znEkUz5UIWwu+swqoh4OugWBeqVX5jUDvHHWwhlY2/hhRS92G4h6ZC7GkyKWmI/pviWTqjRHuKI+VZCov+zMB/hYzuRlY/hrR/LNWozzPrws/7zTcJ1VmEdj+dnjVZdW8gbMXF4+BJk1TZMsd6fziqMMNs30r+y1+LxTLNhO/pChzKytVgu0rBENBx6RCWL/3ibv4Y3RotjQokeA1lVcbzsejRkXqhbi8V1RfQiGhe8q2CPlcKC8hHHpiP1ppGltRrbiRmQoHrKqix+W8yRMx9EhPdCeoFyydCNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0VoB875S1s0X+a/f0fnPJCzMCVbl/UFpHhZJ4CCGJTQ=;
+ b=l5IteyqwpzZxlyOpaPweSjI10h2kBsWIEQCzTgITxZLyquqwaY+SizGK8u6T3mCCXznZjBF2WKLim3bgnuuAC7mGKPWj6FGZcBthEZksOyuu0Jp5s535uoCIck5l1L3P5Pu42tvhsWI5wOLbMNjwpS8XM3iK4ekq5ewGUb7+JDwwwF+YOXI0MvGj3X01Y5NbvIDaIY84w+849YdnXFjLJJ5LDOm40Df2S75FpS2VnuMUq4rH1cqsB3nICfsArcZQd2Rn9UePJ96XKZjuhwmBU3rbmmXlnIhJgl0GJc7LAJh5iU49NBRjZT+BdwTVuaxWpROHPhplH9/71qLxYPg2kQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3180.namprd11.prod.outlook.com (2603:10b6:5:9::13) by
+ CY5PR11MB6534.namprd11.prod.outlook.com (2603:10b6:930:42::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5273.14; Wed, 18 May 2022 07:57:24 +0000
+Received: from DM6PR11MB3180.namprd11.prod.outlook.com
+ ([fe80::b1fa:393c:9fb6:6871]) by DM6PR11MB3180.namprd11.prod.outlook.com
+ ([fe80::b1fa:393c:9fb6:6871%5]) with mapi id 15.20.5250.018; Wed, 18 May 2022
+ 07:57:24 +0000
+Message-ID: <dc52f807-f4bc-13d6-7b9e-81b4fe94a6e0@intel.com>
+Date:   Wed, 18 May 2022 09:57:16 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.0
+Subject: Re: [PATCH] drm: bridge: sii8620: fix possible off-by-one
+Content-Language: en-US
+To:     Hangyu Hua <hbh25y@gmail.com>, <narmstrong@baylibre.com>,
+        <robert.foss@linaro.org>, <Laurent.pinchart@ideasonboard.com>,
+        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@linux.ie>,
+        <daniel@ffwll.ch>, <architt@codeaurora.org>
+CC:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20220518065856.18936-1-hbh25y@gmail.com>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20220518065856.18936-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM5PR0301CA0008.eurprd03.prod.outlook.com
+ (2603:10a6:206:14::21) To DM6PR11MB3180.namprd11.prod.outlook.com
+ (2603:10b6:5:9::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220518091931.279c5398@xps-13>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 93d4ed81-119e-43c6-664d-08da38a40b3c
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6534:EE_
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-Microsoft-Antispam-PRVS: <CY5PR11MB65340CC0C32BBDF8DB998C10EBD19@CY5PR11MB6534.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Gccu0Ycw4cn4woC8KpP9UubmAVdUlOuV39s+gjUNyWsqy0MfncMXDpMZ9Klb1QlcZPm0Ve5QXIESSoFbni+YIvVqMYLCiOdm0Bik55o1kvubHorJ7Y6jw4zZACJqtDQOYYxNdkqS1eBpbjHcV8T2r/0m2Z6J0RAPM5GPJ57OAbcDaMct0FA02yqTK/pxhypULJ6oSJmj12pONcTWlB3R8zOCPSKLBJCuwqfOL+i6yrO/Wuk1YnD+fuBE7rwWsw4ylTBh0RNENsCcLQ8bp8vc7o6cfYE7pp0uJinehnSwQcRrcQDf9xXDAAbPA1oGD1Tn1DLKOH50XaKRCnG9Ph7KFtyMJQz5dSPx3yFyFlEhYZ1ig3ypg6pd2zMlCWaYTIG9foH81GQ9lZ9fa33VBoVvF9xOJ6toeR0WyCKZt1UyQ+3cyXICkZUwtrM1RfOzb46/yALEX1e6gqv2rttZt9ue3A9bREFPiivm2HusUfel6MjlWoKDzTLlORte+x9ecGlHxr8XHjkvfSoSJyAGfvR6EAViz9MF/OTa2wAt5FBRrz73o1hhcCzjG1mxL192vK5NAKfVWr61RBi4b8IWgioLRaB3decQlEF/oal74adlZTiK+vN563oJlgdgDJwFQx1D5mSw27VpOl/qwa0IswycTF3ki0DX1tJhJwJ2iz8Bruu+5v4AjNY0nhrxRqoftkHfY3m+VKFs9PHVNPrsgPn29kl77kBfJaxrA8eS31Dnlwo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3180.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(66476007)(66556008)(66946007)(36916002)(53546011)(8676002)(4326008)(7416002)(5660300002)(82960400001)(8936002)(2616005)(508600001)(83380400001)(2906002)(6486002)(6506007)(6512007)(26005)(316002)(6666004)(186003)(36756003)(44832011)(31686004)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cnJJTy9XUm43dzEzYzBPR29xZzloYTZFSFRxTnlKaGp2U2VFVllJSE9WOUdS?=
+ =?utf-8?B?MFZ6ZzBtOHI5R3FJaGZzNXNrVkhQa3pPZmkxSkJKYmRTVFRlR0x4TU5sbnpq?=
+ =?utf-8?B?ZVlaWlltSHV3S2NpQk1KNkJjWS9tV05DT2RuM1dCOVVqUkQrcTBpS1J1WW9W?=
+ =?utf-8?B?d0pCeHlqK0ZnRms5K3hOU2VQU2tsOTE2ZStiOHNiMmplZ0NubDQ5L1JldUxv?=
+ =?utf-8?B?eWQwZGszY2hzbHpkRkVWS0pkaGNGQjJQdDdzdjB4cEZGeXorUll4SHMwMklT?=
+ =?utf-8?B?dEFtWkRnckRVMmhCZmFMSDNkY0x5RHBPKzBYK3NyRzJyUzZzR1RBSWI4MCtk?=
+ =?utf-8?B?UklpQnF6b3ArQUVSbUlFR3Bvd3I4bVZyWXdESk5YRUFnQ01DRDhReVM1c3hK?=
+ =?utf-8?B?VTB3Sm95cnFRYnNpYTFUa1NwcFNTUUd1dS8vTlJuUEd3YmljdHNXWnp5dGIx?=
+ =?utf-8?B?M1A1ZnU4Z2ZjelR5eU52VTFuRDRmOXlHSEhvZE1lOElJWHB5eXhMVjQrSXZD?=
+ =?utf-8?B?b3ZGK3dQS0JhNWwyZ0QzSzdYaU04VHpuMnY4a3NDUlQ1V0d6ZlJqeGZpYkVv?=
+ =?utf-8?B?enhzNE9aZlhaRno3MnFGMU1nd2lTaklyaXJsbVBzTlZFQnhFVnp5MHpERXhM?=
+ =?utf-8?B?SGh3eGpyVGZkWkYzQ3BobzdTb1IwTHN4R3lVa0FyNFU5WWJTVUVESlRhUmRW?=
+ =?utf-8?B?VGxYVUR5Wm9jSmp5WHF6SVBsV3lxQU0vV0Q1aDYraHZVYjlFS3BLaDVieGF2?=
+ =?utf-8?B?OWdtTW5uN0QxVnBFWlNOcDlBNXZXTFlrWmhPRWViOElweG52SURNWkhjMS9H?=
+ =?utf-8?B?c3E5anprWXhXbkhBM3lZZUxuWGtYK0pzN25EQ3o2Y08yckE1QXRqcWliTU1W?=
+ =?utf-8?B?Qm4yOFNHdlhweThKdmJPeGk2QzFlNnFFQytaTFA2OHR3alFIbTloaGhTU0c4?=
+ =?utf-8?B?Q21zZjNKTHBUcFBGUUJuQVNXcWswTTZ6YVVVVGRFV29ZdmhJd2hiLzYybk9T?=
+ =?utf-8?B?eWNXWC8xM1oyNFdBc0RXSFdvd3dDeWw1UEJMWGs5Z3dxL3VjUmlIQm1iTVBM?=
+ =?utf-8?B?SklkdVgzSWhnREc0R3owRDRkYTR2KzlHRmE1emp1blhVTk9qS0NaVVlPcjY3?=
+ =?utf-8?B?aTMvbnd1S20yUE82NXBwa0pOZVg1R2FGZCtRN2F0bks5Zmsyd25sTGhoMTRa?=
+ =?utf-8?B?emtDS1BrU3RodXp0N1VOOW1VNTFpSUZpNE8wRStXQk45cmhHR21wUXR0aVV0?=
+ =?utf-8?B?L1V3S3c5MWs3ZDNhN0RPM0s1b3JPRXFNK2RjNWhleEtjN09JTWg3NGpsNkJ2?=
+ =?utf-8?B?TVo2RVBDVmxnY1RpNHpGYWhOdm52bFRMb0tBUVVINTFrOG9ITkRGOGw0cWJ0?=
+ =?utf-8?B?K2lzN1JlUzd6aCtHeHZCdlppUk9XMnlqcUo2TExLVGY1QStDRE1Cc1MyWklk?=
+ =?utf-8?B?aHEvdmxQMlUwMTBpenVGVnljRGtoODNMR3lHWGxjT0lTdk9Fd2JjVkg4U1Ju?=
+ =?utf-8?B?WWg5ZFhFc2F6bjkyZWhSTzBPSFJzdnBmYXBmUUlNcXpOU3d1UU5qb3NucVBV?=
+ =?utf-8?B?WDF4b0ZuWllhOWNtWGJVWWdrQzlNRzlMQ3VTdy9Rd1VtQmp0N1pVbDQ2VHh3?=
+ =?utf-8?B?VytBSFhCMTlWZWhRemR6YVJHZGxjNHMvT0l2bjFabE02UGMyenhmeks3azcw?=
+ =?utf-8?B?aEhrV3J4Zk8rTDMrOTZuT3pzcXlSZ3hHd3NabE92MTR3UXdYTFhkaWxyVXR3?=
+ =?utf-8?B?UE1wRm16MGJsbGVPaHcyeHh5Z2Rmd2d2Z1JNWUtMMi8rMHc4eWRaVStrZDVI?=
+ =?utf-8?B?VUpzTWJOcDFXbU1TUnNCRWxGUVdUUlRpM2ZuNkhNbXEzMW43TzN4My96NTNQ?=
+ =?utf-8?B?YmNRL0ZzRFFIb1RlUFZpdDF5Wnd1TWVTRlJUcFFVTGxpNUFsbUIzWGNmcnJU?=
+ =?utf-8?B?dEdSWFpRWEM3NGJuQ3Qxa0xEUGlRaS90MXNNOGQydFF6c0hVMUZYdFJEaTRN?=
+ =?utf-8?B?WTQ0eGxyZEhldXVqK0cxTkRGaWI4L1Vubjh2UEhULy9XTk5EOXVHRkxickhW?=
+ =?utf-8?B?MTRMWTMraGRtakF5b0hPWlZGYXVacXgwTUtUQXpQSEZsMUlOUjVSR0pESk5F?=
+ =?utf-8?B?cnBRSklVQ3duV281ZlhVWW9oZjU1K0NzTkVTWnFYbmtOK1dQSHJxZERoVU9h?=
+ =?utf-8?B?TERNa2Z6dkw3ZS8vak1WemYyZU0vczl0Qmh1SVdxN3VMQ0htYWQrK0J5bUQw?=
+ =?utf-8?B?VkZwek5BTFE3UU9waDNDN1UzNUF4NlRnVS9HTzI4MmNINk11a01MK3N3SHNh?=
+ =?utf-8?B?d3M5YWZJbHpIN1pveVdzazUyaFVPOGhjTDZyZEptNmtrait5c2ZqbXpuZzIz?=
+ =?utf-8?Q?Fvccu+anAeN6JHdg=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93d4ed81-119e-43c6-664d-08da38a40b3c
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3180.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 07:57:24.5645
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Iz16qfp2K9qeqlCjVBNPyMosyXcbX0AbwWFDOnnqwxsg1UQShRiMbassnKLxSYoim/Spd3fJsCH4wrXYOzIjGA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6534
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/22 09:19AM, Miquel Raynal wrote:
-> Hi Pratyush,
-> 
-> p.yadav@ti.com wrote on Wed, 18 May 2022 11:37:05 +0530:
-> 
-> > +Cedric
-> > 
-> > On 17/05/22 04:02PM, Miquel Raynal wrote:
-> > > Hi Pratyush,
-> > > 
-> > > p.yadav@ti.com wrote on Fri, 12 Mar 2021 00:42:13 +0530:
-> > >   
-> > > > Once the flash is initialized tell the controller it can run
-> > > > calibration procedures if needed. This can be useful when calibration is
-> > > > needed to run at higher clock speeds.
-> > > > 
-> > > > Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> > > > ---
-> > > >  drivers/mtd/spi-nor/core.c | 12 ++++++++++--
-> > > >  1 file changed, 10 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> > > > index 88888df009f0..e0cbcaf1be89 100644
-> > > > --- a/drivers/mtd/spi-nor/core.c
-> > > > +++ b/drivers/mtd/spi-nor/core.c
-> > > > @@ -3650,6 +3650,7 @@ static int spi_nor_probe(struct spi_mem *spimem)
-> > > >  	 * checking what's really supported using spi_mem_supports_op().
-> > > >  	 */
-> > > >  	const struct spi_nor_hwcaps hwcaps = { .mask = SNOR_HWCAPS_ALL };
-> > > > +	struct spi_mem_op op;
-> > > >  	char *flash_name;
-> > > >  	int ret;
-> > > >  
-> > > > @@ -3709,8 +3710,15 @@ static int spi_nor_probe(struct spi_mem *spimem)
-> > > >  	if (ret)
-> > > >  		return ret;
-> > > >  
-> > > > -	return mtd_device_register(&nor->mtd, data ? data->parts : NULL,
-> > > > -				   data ? data->nr_parts : 0);
-> > > > +	ret = mtd_device_register(&nor->mtd, data ? data->parts : NULL,
-> > > > +				  data ? data->nr_parts : 0);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	op = spi_nor_spimem_get_read_op(nor);  
-> > > 
-> > > Isn't this too specific? I really don't know much about spi-nors, but I
-> > > find odd to have this op being created here, why not moving this into
-> > > the _do_calibration() helper?  
-> > 
-> > Maybe the naming confused you but this is a function in the SPI NOR 
-> > core, not in SPI MEM. SPI NOR supports both SPI MEM based controllers 
-> > and "legacy" controllers, so the convention is to add the "spimem" 
-> > prefix before SPI MEM specific functions. So I don't get the comment 
-> > about it being too specific. It is too specific to what?
-> 
-> Mmh right, it's fine then.
-> 
-> > 
-> > And how can spi_mem_do_calibration() know what op the flash uses to read 
-> > data? SPI NOR or SPI NAND would know it, but not SPI MEM. That is why we 
-> > pass in that information to spi_mem_do_calibration().
-> 
-> But here the op is "spi-nor wide", I would have expected a
-> per-device op. But that is not a big deal, that is something that can
-> also be updated later if needed I guess.
 
-It is per-device. The op is generated using nor->read_opcode, 
-nor->addr_width, nor->read_dummy, etc. So if you have 2 NOR flashes on 
-your system with different opcodes, it would work for both.
 
-> 
-> One last question, is there something that mtd_device_register() does
-> that is really needed for the calibration to work? Otherwise I would
-> rather prefer to have that calibration happening before the user gets
-> access to the device.
+On 18.05.2022 08:58, Hangyu Hua wrote:
+> The next call to sii8620_burst_get_tx_buf will result in off-by-one
+> When ctx->burst.tx_count + size == ARRAY_SIZE(ctx->burst.tx_buf). The same
+> thing happens in sii8620_burst_get_rx_buf.
+>
+> This patch also change tx_count and tx_buf to rx_count and rx_buf in
+> sii8620_burst_get_rx_buf. It is unreasonable to check tx_buf's size and
+> use rx_buf.
+>
+> Fixes: e19e9c692f81 ("drm/bridge/sii8620: add support for burst eMSC transmissions")
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
 
-The calibration works by reading a known pattern that is already written 
-to the flash again and again and seeing what delays work and what don't. 
-For that to happen, the controller driver needs to know where the 
-pattern is stored. This series does that by looking at the MTD 
-partitions. For that to happen, we need to create those partitions 
-first, which happens after mtd_device_register().
+Regards
+Andrzej
+> ---
+>   drivers/gpu/drm/bridge/sil-sii8620.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/sil-sii8620.c b/drivers/gpu/drm/bridge/sil-sii8620.c
+> index ec7745c31da0..ab0bce4a988c 100644
+> --- a/drivers/gpu/drm/bridge/sil-sii8620.c
+> +++ b/drivers/gpu/drm/bridge/sil-sii8620.c
+> @@ -605,7 +605,7 @@ static void *sii8620_burst_get_tx_buf(struct sii8620 *ctx, int len)
+>   	u8 *buf = &ctx->burst.tx_buf[ctx->burst.tx_count];
+>   	int size = len + 2;
+>   
+> -	if (ctx->burst.tx_count + size > ARRAY_SIZE(ctx->burst.tx_buf)) {
+> +	if (ctx->burst.tx_count + size >= ARRAY_SIZE(ctx->burst.tx_buf)) {
+>   		dev_err(ctx->dev, "TX-BLK buffer exhausted\n");
+>   		ctx->error = -EINVAL;
+>   		return NULL;
+> @@ -622,7 +622,7 @@ static u8 *sii8620_burst_get_rx_buf(struct sii8620 *ctx, int len)
+>   	u8 *buf = &ctx->burst.rx_buf[ctx->burst.rx_count];
+>   	int size = len + 1;
+>   
+> -	if (ctx->burst.tx_count + size > ARRAY_SIZE(ctx->burst.tx_buf)) {
+> +	if (ctx->burst.rx_count + size >= ARRAY_SIZE(ctx->burst.rx_buf)) {
+>   		dev_err(ctx->dev, "RX-BLK buffer exhausted\n");
+>   		ctx->error = -EINVAL;
+>   		return NULL;
 
-But I am planning to use device tree to get that information now so this 
-should no longer be needed and we can do calibration before registering 
-the device with MTD.
-
-> 
-> > 
-> > >   
-> > > > +	spi_mem_do_calibration(nor->spimem, &op);  
-> > > 
-> > > A warning/info upon calibration error (not on the absence of the hook)
-> > > would be nice?  
-> > 
-> > Yes, agreed.
-> > 
-> > >   
-> > > > +
-> > > > +	return 0;
-> > > >  }
-> > > >  
-> > > >  static int spi_nor_remove(struct spi_mem *spimem)  
-> > > 
-> > > Otherwise I like the overall idea.  
-> > 
-> > Thanks for reviewing.
-> > 
-> > > 
-> > > Thanks,
-> > > Miquèl  
-> > 
-> 
-> 
-> Thanks,
-> Miquèl
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.

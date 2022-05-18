@@ -2,209 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1F952B96B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C2852B9BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236245AbiERMHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S236109AbiERMJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236201AbiERMHC (ORCPT
+        with ESMTP id S236083AbiERMJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:07:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CF9AF1D5;
-        Wed, 18 May 2022 05:06:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D6C76120D;
-        Wed, 18 May 2022 12:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13886C385A5;
-        Wed, 18 May 2022 12:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652875616;
-        bh=QotIh7ZOcCKwfWvV5sJOexyAfJaV8SzuQ0JxUEs2VIk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t7TyWoBQWift1DQwXw80K3wSMoi8EEezmi+HW8MyoJ32dXLuwWMmmZO2mfmci9gqc
-         ZoJsmDXJuo84Il6+QuJF2aG0qv8KdOGYEE5cN94b4uaWLw5HD/Qt0Xbe2WYY+ueHcA
-         sBsrbUsOnOeIpt9XTCvqvmawGE8SQuMA6T6fII+0=
-Date:   Wed, 18 May 2022 14:06:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "T.J. Mercier" <tjmercier@google.com>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Greg Kroah-Hartman <gregkh@google.com>,
-        John Stultz <jstultz@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Hridya Valsaraju <hridya@google.com>, kernel-team@android.com,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dma-buf: Move sysfs work out of DMA-BUF export path
-Message-ID: <YoThXfnVT0RzITBk@kroah.com>
-References: <20220516171315.2400578-1-tjmercier@google.com>
- <175c5af3-9224-9c8e-0784-349dad9a2954@amd.com>
- <CABdmKX2GcgCs1xANYPBp8OEtk9qqH7AvCzpdppj9rHXvMqWSAw@mail.gmail.com>
- <0875fa95-3a25-a354-1433-201fca81ed3e@amd.com>
- <CABdmKX1+VYfdzyVYOS5MCsr4ptGTygmuUP9ikyh-vW6DgKk2kg@mail.gmail.com>
- <YoM9BAwybcjG7K/H@kroah.com>
- <CABdmKX3SngXeq+X0YiQ8d4X3xpUhnUtewPiUam5Bfi7PCC6nWQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Wed, 18 May 2022 08:09:14 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2091.outbound.protection.outlook.com [40.107.215.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2332E9C5;
+        Wed, 18 May 2022 05:09:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AH1aHo6KvlxGW3BrRbGXBCZ6Ul0cHO1g431cVNwUyMpI7h5yef81xp5hBLKILMREaJFvaPUhY3YLSy0qBxxaeBUSqtrFtJodXEwwuby8o7zZlaJVTu6bCJBWpirMyL8RHaoqcowLvSJUxyZqk+IssmuB/wGBUX+S3QuNSawCRgvKlHRmPkD5M/Nc9WEIw491W7E1+hxIPmkQnITiRhByONg8CT4a21fE5CEL37ZRQp533zJu5mlm/8G/DdLNNA0aTrEaA+HAHr906hAcb0R8bXGqaJeh2jK6IQYJCOJ7FWYVVew+KIFQG7rYj3CBb+f+6UcEDfnfoWTZZHySKYjNfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jTqE/2fnE7c6PaHnN/iy+mRqfso4q1FNVM0fKEq+dK4=;
+ b=Av79Qu3lo+ylrfs9qzCUQBqojIuEKD2VT+NxkW9jA+pAY0NKbPt8U4dQqiDn9uXVFjgWuUzYBf8Yi/kFeDp+R8fMWK/49Hs6XoikkDpX8xeKGqpFsCesSfN5WwkmnV9xQzskU4mYrxmAiTdu2roNBI0GkDctZ84M3LROJJPhBvjpBsZqmfIMN4hywMflDMoOJphCi4KBu4+1wy87Dw1pKmtEKYnJJeL2AiKbtJpwKFknwF8+Eb0pl9xAjHOZmu+qQrY5hhmhWxfQtQDZFMc3/5U1i0L1IQ97oJHlG1okE1fdqd+p+cMdcA4DkUGMyJsU6xEg0HKbbli/6UIB4Ce30A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jTqE/2fnE7c6PaHnN/iy+mRqfso4q1FNVM0fKEq+dK4=;
+ b=XnPAlyYZWU133oqd1+Z+67poYX3S7Mztm/GJ0W3OYmD+qadcmIvM6njWVIIl3uCmO7LEfX/PEdl7hPL045Ygc9Kzhl0jkLPe0jPW5JcJK+vSE+w00ib8eSPCRDU6z1+5QfC5ypZcOwDBhzV3/wT7Un0+TOWPrFj32fKJdTbZTEE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by TYZPR06MB4352.apcprd06.prod.outlook.com (2603:1096:400:8a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Wed, 18 May
+ 2022 12:09:08 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::88e1:dc04:6851:ad08%7]) with mapi id 15.20.5250.018; Wed, 18 May 2022
+ 12:09:08 +0000
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+To:     Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/SAMSUNG S5P
+        SERIES JPEG CODEC SUPPORT),
+        linux-media@vger.kernel.org (open list:ARM/SAMSUNG S5P SERIES JPEG
+        CODEC SUPPORT), linux-kernel@vger.kernel.org (open list)
+Cc:     zhengkui_guo@outlook.com, Guo Zhengkui <guozhengkui@vivo.com>
+Subject: [PATCH v2] media: platform: samsung: s5p-jpeg: replace ternary operator with max()
+Date:   Wed, 18 May 2022 20:08:36 +0800
+Message-Id: <20220518120836.126368-1-guozhengkui@vivo.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <1761ab1a-68ce-4946-24d4-8f4f9575e735@xs4all.nl>
+References: <1761ab1a-68ce-4946-24d4-8f4f9575e735@xs4all.nl>
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABdmKX3SngXeq+X0YiQ8d4X3xpUhnUtewPiUam5Bfi7PCC6nWQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: TYAPR01CA0227.jpnprd01.prod.outlook.com
+ (2603:1096:404:11e::23) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d3337e54-5f6f-43f9-1c9a-08da38c7359d
+X-MS-TrafficTypeDiagnostic: TYZPR06MB4352:EE_
+X-Microsoft-Antispam-PRVS: <TYZPR06MB43521C137BA5D3DC4E1AAAC2C7D19@TYZPR06MB4352.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JJ89OQnEgR2eEoP9p5d057lgI3yETDBO6MuQg7CZ4G3gBoxuSTfH7HqeJLXTKXiV3cHaC0Un16JEnTuA0N+gCUVvQkrRGF71frVwrYyB9KyVymZnjpkHFeabvNRHqvA3M3swZ73VfXL2hr3tvJbqQjR7DqwcA1/HzfE5jkq/Qc8Uz4uJgBJosVmcXCWkWjXR7meaGEMu8l4xq4EJzMIDpz8IGdDH4/q0OoDAVwfXO99CyrLEfAQj+CVTjoJu1QZwGPQsgd/I95uZ+FkiPr8SGBW+pLvH/taLX4OsUx8TKwQNrAU5+D1Hfd+VFZjlH8s/tUt/GxrNVSnraTefLXkGqxVlCqHhJl0pWkhLqC3gqG+yHa1kh1JU0gZk0oycZhm1+XNPIjQxYHJGiGybXDGSt4HInAwt2mslSv4cK+SaDjyaYRGEAPzQL+aq7Wu15+vNLs0suIxTvBCcDymS5FsJ3JHtq1gzClBiWuTcO1s/gAijuGFGbIcr7V/PYTpU/t/T9nCjplSGIX8YR16dnQ03LtPq9IfJYGcrM5f9hUuHnumT1rHIra0gR/jo7wxdOWiPLbdvxgamQ2ynM4tBGRwmnyWBLR7e8xl1KMKt3FrVgfAfdvAiSj2C/Np+ClBGCNcNk2HYKxHLSOq80GuBdNyHNJA7lnVkVN07HuJmBtAPTrDsnzokSS8p+DZ7KEm4uIkPNt+y9SsjDRKv/JPv6WHZ0g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(2906002)(5660300002)(36756003)(110136005)(83380400001)(107886003)(52116002)(1076003)(86362001)(186003)(66946007)(2616005)(38350700002)(38100700002)(8936002)(8676002)(4326008)(6512007)(66556008)(66476007)(6506007)(6486002)(6666004)(26005)(508600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s9OO6kcsHFl0EyFSW6SirXp/cAC/nEbIjlHcm9mSuJqkNhsxpLTs++DQCyB2?=
+ =?us-ascii?Q?dUm3FhrXWmaEJxhou7TjeHhzTUHNe0/GB8aXOg9gik9NrpcPCzY+FqqsFF2y?=
+ =?us-ascii?Q?g5yOjl7l0NOtnYN6szMrP+wnqJzT2E/87fvJ/q7xVTg20utSQwTEDPCNy/Wt?=
+ =?us-ascii?Q?agm+3ctpr9PKDoIkRwnGTuOKoIXrczU5LYLUocV5pt9O9/b/sHlvGmRnaqxj?=
+ =?us-ascii?Q?/ICtFFBPR7TZHRBI+c7GB2jUffLUxtl+nLGC/iDN19g+GkQ+11P0LucuZ656?=
+ =?us-ascii?Q?ZU7VJGFOz5pGcjph1QDIASlJkcDmQJzB3JUW2hh3zjoE70HnjdduQyncgNKU?=
+ =?us-ascii?Q?Dzhihx3wQ0+G3hWSb7Os4ZXu5YXhFpTndFeyqwQEE3ya5m6OSABa9Qvh8I0M?=
+ =?us-ascii?Q?QQkkkxZ3pWM4pN7n52f2vCtTEXWXEV5Kd6gSdX7rdr/E6DF3omCkFgOz5eGp?=
+ =?us-ascii?Q?BpFb31zWWE7nJXK0kqH2Rolk0YYNDVjAX84C8dZJ3eKs9ABTk7QBZlh0Pl3x?=
+ =?us-ascii?Q?wTLR8NxTJQ2ilDXMWC9k2w7EmK3NeosLAeYzga2R6ZVCfHbb7bijBhKx821T?=
+ =?us-ascii?Q?Ny+vrHFy+D/9MPRVVdO2xJfM4iVmnGnswAZI5nLdMIZntV/sNYMBVcutfV8K?=
+ =?us-ascii?Q?NytIoUeoJoE366lHd8qb6wjgktjB+dxw6R7HbYaVsOi2Oz0K5ftNuFBPuthY?=
+ =?us-ascii?Q?XT1jWXkYaAtbTYMPe+jMbCk2LRc4eY5uI2LGcsXYjUFkoPiSc14skrQgjpa0?=
+ =?us-ascii?Q?aUA3fcB3sT5eYNiWSfSzxPaqt6SnTv5JlEzEuDAHeL6ccSr1tXJFcABIgjk3?=
+ =?us-ascii?Q?tw5nX3r6BXcYVVHke9sRoiIe2Io5pXlsbc9SFlLGewo3coVFFex0JP6Jetx9?=
+ =?us-ascii?Q?DXyMvN8QE4lguDlvWtt2wDTwSVyd11aDhmwenGuqKUxUyUb4tLtaJVQtt3F2?=
+ =?us-ascii?Q?R9w4+db6MVf+YdGFjh/bxknuAd9nlbWlVLv5fCaZ4AB6rzsyl7/O0P6YYFVr?=
+ =?us-ascii?Q?48LgoV0A9piia0rR7OthE66BCyWoIS0IbyPC9z4FEQsjIerzpmn/GEhpE5t+?=
+ =?us-ascii?Q?U/FCYvDiVkxgOmeSoKwxHoyAs3sQzVSeaxwEWnTQsKfYoYqZrCgRnZYbo3pI?=
+ =?us-ascii?Q?yF0e26bD0d4TEW2uP5DvlKVNgGycW1JxM+4Fe/CQ8v2pT9mplKhTqn5vOA0L?=
+ =?us-ascii?Q?2oekIsY/qUUz9NQFbR8hqguBaWYlq5qxRvJEyonAWUwkeWD//e9hI6c2OPAM?=
+ =?us-ascii?Q?5dguxt4uc9lSvNtIDSzJf+M5wPZHX93tTuGH9BgdSu1rmmkzOKfCL9WORzep?=
+ =?us-ascii?Q?/aesCqS4GM0XP0guDhMKWKL2jdoU4vSSTJl/YmCYmnRsv0dCJeOwcrA9/2pR?=
+ =?us-ascii?Q?X4EPbuizNQFLQY9sdpsusgxY5uR5Bb2BaQcYR/mcH5Hv1SgAIWpCCbneGG4O?=
+ =?us-ascii?Q?2koJSRy7uuybGoDuTI2w4pdH6BARr0vAuw/wEjt5fO7oG/cxACBO1kYNPphw?=
+ =?us-ascii?Q?zgJDOa9AOpHhh2yqHhQ+He3ieNX4fyicYqZIigr9FyrKwIykRj106hQO5QOt?=
+ =?us-ascii?Q?lUMngRwAQnTUv/hAQIEJMak1p9m6AVAOykRF8/BOxXfgRH5LFnUquk8DDt2T?=
+ =?us-ascii?Q?Uy1a2wpLMkbJtLpGgpfbwuelM9cQ5NZsov/YfwetOYRpGwKcFNbVfEealIss?=
+ =?us-ascii?Q?OnZy+Ogvl/Hsn75ElxJSlm7gkDuV/72vbKLAU3tfZTgFlZyPnC37oBESe6IS?=
+ =?us-ascii?Q?mn8HAJ58tQ=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3337e54-5f6f-43f9-1c9a-08da38c7359d
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 12:09:07.9388
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DNrLNFBoGa/LKCpc+BO8wA7gDQDUHXwRlUrcQ77Jjcv2BNtDNMmSm7yi6hGkbIRtINXHQe5pdvztHfAm9isX9w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB4352
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 04:09:36PM -0700, T.J. Mercier wrote:
-> On Mon, May 16, 2022 at 11:13 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, May 16, 2022 at 05:08:05PM -0700, T.J. Mercier wrote:
-> > > On Mon, May 16, 2022 at 12:21 PM Christian König
-> > > <christian.koenig@amd.com> wrote:
-> > > >
-> > > > Am 16.05.22 um 20:08 schrieb T.J. Mercier:
-> > > > > On Mon, May 16, 2022 at 10:20 AM Christian König
-> > > > > <christian.koenig@amd.com> wrote:
-> > > > >> Am 16.05.22 um 19:13 schrieb T.J. Mercier:
-> > > > >>> Recently, we noticed an issue where a process went into direct reclaim
-> > > > >>> while holding the kernfs rw semaphore for sysfs in write (exclusive)
-> > > > >>> mode. This caused processes who were doing DMA-BUF exports and releases
-> > > > >>> to go into uninterruptible sleep since they needed to acquire the same
-> > > > >>> semaphore for the DMA-BUF sysfs entry creation/deletion. In order to avoid
-> > > > >>> blocking DMA-BUF export for an indeterminate amount of time while
-> > > > >>> another process is holding the sysfs rw semaphore in exclusive mode,
-> > > > >>> this patch moves the per-buffer sysfs file creation to the default work
-> > > > >>> queue. Note that this can lead to a short-term inaccuracy in the dmabuf
-> > > > >>> sysfs statistics, but this is a tradeoff to prevent the hot path from
-> > > > >>> being blocked. A work_struct is added to dma_buf to achieve this, but as
-> > > > >>> it is unioned with the kobject in the sysfs_entry, dma_buf does not
-> > > > >>> increase in size.
-> > > > >> I'm still not very keen of this approach as it strongly feels like we
-> > > > >> are working around shortcoming somewhere else.
-> > > > >>
-> > > > > My read of the thread for the last version is that we're running into
-> > > > > a situation where sysfs is getting used for something it wasn't
-> > > > > originally intended for, but we're also stuck with this sysfs
-> > > > > functionality for dmabufs.
-> > > > >
-> > > > >>> Fixes: bdb8d06dfefd ("dmabuf: Add the capability to expose DMA-BUF stats in sysfs")
-> > > > >>> Originally-by: Hridya Valsaraju <hridya@google.com>
-> > > > >>> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> > > > >>>
-> > > > >>> ---
-> > > > >>> See the originally submitted patch by Hridya Valsaraju here:
-> > > > >>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F1%2F4%2F1066&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C794614324d114880a25508da37672e4b%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637883213566903705%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=bGlA2FeubfSeL5XDHYyWMZqUXfScoCphZjjK4jrqQJs%3D&amp;reserved=0
-> > > > >>>
-> > > > >>> v2 changes:
-> > > > >>> - Defer only sysfs creation instead of creation and teardown per
-> > > > >>> Christian König
-> > > > >>>
-> > > > >>> - Use a work queue instead of a kthread for deferred work per
-> > > > >>> Christian König
-> > > > >>> ---
-> > > > >>>    drivers/dma-buf/dma-buf-sysfs-stats.c | 56 ++++++++++++++++++++-------
-> > > > >>>    include/linux/dma-buf.h               | 14 ++++++-
-> > > > >>>    2 files changed, 54 insertions(+), 16 deletions(-)
-> > > > >>>
-> > > > >>> diff --git a/drivers/dma-buf/dma-buf-sysfs-stats.c b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> > > > >>> index 2bba0babcb62..67b0a298291c 100644
-> > > > >>> --- a/drivers/dma-buf/dma-buf-sysfs-stats.c
-> > > > >>> +++ b/drivers/dma-buf/dma-buf-sysfs-stats.c
-> > > > >>> @@ -11,6 +11,7 @@
-> > > > >>>    #include <linux/printk.h>
-> > > > >>>    #include <linux/slab.h>
-> > > > >>>    #include <linux/sysfs.h>
-> > > > >>> +#include <linux/workqueue.h>
-> > > > >>>
-> > > > >>>    #include "dma-buf-sysfs-stats.h"
-> > > > >>>
-> > > > >>> @@ -168,10 +169,46 @@ void dma_buf_uninit_sysfs_statistics(void)
-> > > > >>>        kset_unregister(dma_buf_stats_kset);
-> > > > >>>    }
-> > > > >>>
-> > > > >>> +static void sysfs_add_workfn(struct work_struct *work)
-> > > > >>> +{
-> > > > >>> +     struct dma_buf_sysfs_entry *sysfs_entry =
-> > > > >>> +             container_of(work, struct dma_buf_sysfs_entry, sysfs_add_work);
-> > > > >>> +     struct dma_buf *dmabuf = sysfs_entry->dmabuf;
-> > > > >>> +
-> > > > >>> +     /*
-> > > > >>> +      * A dmabuf is ref-counted via its file member. If this handler holds the only
-> > > > >>> +      * reference to the dmabuf, there is no need for sysfs kobject creation. This is an
-> > > > >>> +      * optimization and a race; when the reference count drops to 1 immediately after
-> > > > >>> +      * this check it is not harmful as the sysfs entry will still get cleaned up in
-> > > > >>> +      * dma_buf_stats_teardown, which won't get called until the final dmabuf reference
-> > > > >>> +      * is released, and that can't happen until the end of this function.
-> > > > >>> +      */
-> > > > >>> +     if (file_count(dmabuf->file) > 1) {
-> > > > >> Please completely drop that. I see absolutely no justification for this
-> > > > >> additional complexity.
-> > > > >>
-> > > > > This case gets hit around 5% of the time in my testing so the else is
-> > > > > not a completely unused branch.
-> > > >
-> > > > Well I can only repeat myself: This means that your userspace is
-> > > > severely broken!
-> > > >
-> > > > DMA-buf are meant to be long living objects
-> > > This patch addresses export *latency* regardless of how long-lived the
-> > > object is. Even a single, long-lived export will benefit from this
-> > > change if it would otherwise be blocked on adding an object to sysfs.
-> > > I think attempting to improve this latency still has merit.
-> >
-> > Fixing the latency is nice, but as it's just pushing the needed work off
-> > to another code path, it will take longer overall for the sysfs stuff to
-> > be ready for userspace to see.
-> >
-> > Perhaps we need to step back and understand what this code is supposed
-> > to be doing.  As I recall, it was created because some systems do not
-> > allow debugfs anymore, and they wanted the debugging information that
-> > the dmabuf code was exposing to debugfs on a "normal" system.  Moving
-> > that logic to sysfs made sense, but now I am wondering why we didn't see
-> > these issues in the debugfs code previously?
-> >
-> The debugfs stuff doesn't happen on every export, right?
+Fix the following coccicheck warning:
 
-I do not remember.  If not, then why not do what that does?  :)
+drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:1712:24-25:
+WARNING opportunity for max()
 
-> > Perhaps we should go just one step further and make a misc device node
-> > for dmabug debugging information to be in and just have userspace
-> > poll/read on the device node and we spit the info that used to be in
-> > debugfs out through that?  That way this only affects systems when they
-> > want to read the information and not normal code paths?  Yeah that's a
-> > hack, but this whole thing feels overly complex now.
-> >
-> 
-> And deprecate sysfs support?
+max() macro is defined in include/linux/minmax.h. It avoids multiple
+evaluations of the arguments when non-constant and performs strict
+type-checking.
 
-As Android is the only current user, that would be easy to do.
+Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+---
+v1 -> v2: Change the subject according to Hans Verkuil's suggestion.
 
-> I'm happy to try out anything you think might be a better way. As far
-> as complexity of this patch, this revision is a much simpler version
-> of the one from Hridya you already reviewed.
+ drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I agree we should work to resolve this now, but just that going forward,
-perhaps this whole api should be revisited now that we see just how much
-complexity and extra system load it has added to to the system due to
-how some users interact with the dmabuf apis.
+diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+index 456287186ad8..55814041b8d8 100644
+--- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
++++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
+@@ -1709,7 +1709,7 @@ static int exynos3250_jpeg_try_downscale(struct s5p_jpeg_ctx *ctx,
+ 	w_ratio = ctx->out_q.w / r->width;
+ 	h_ratio = ctx->out_q.h / r->height;
+ 
+-	scale_factor = w_ratio > h_ratio ? w_ratio : h_ratio;
++	scale_factor = max(w_ratio, h_ratio);
+ 	scale_factor = clamp_val(scale_factor, 1, 8);
+ 
+ 	/* Align scale ratio to the nearest power of 2 */
+-- 
+2.20.1
 
-You never learn just how bad an API really is until it gets used a lot,
-so it's no one's fault.  But let's learn and move forward if possible to
-make things better.
-
-thanks,
-
-greg k-h

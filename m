@@ -2,83 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E417552C1EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA1352C1DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241165AbiERRvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S241166AbiERRxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241248AbiERRvg (ORCPT
+        with ESMTP id S241140AbiERRxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:51:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DC3036E3D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652896292;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nk8FG1zVlK+b3cf8Z9HOHSMj2oGGXMKoRhmwTtaFzXg=;
-        b=awERrsvg2MQ7E8oIgWuNDW/kZKqWrIBF6PrRGZVzV4+10W+nH3cYSaVRb67yYpJolUiWak
-        vW7MxRUGmu/ItWoQynaVBrXZzy1AwS2Gs/DojJIMpMpgPZft1ReCia6f+K9iqXTQ88Kboh
-        OJNjH8eBuz2GZ+xGRmQIP/95NzGXjXM=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-477-y3otTXqAOsa-YtugL3UC7g-1; Wed, 18 May 2022 13:51:31 -0400
-X-MC-Unique: y3otTXqAOsa-YtugL3UC7g-1
-Received: by mail-io1-f69.google.com with SMTP id i66-20020a6bb845000000b00657bac76fb4so673129iof.15
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:51:31 -0700 (PDT)
+        Wed, 18 May 2022 13:53:05 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9753719D7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:53:02 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id f4so4890611lfu.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bHXUs1sphneg6gPI/YEdiZAYQkq1Vx1rkOSsPvFYenY=;
+        b=VdRh9A8jpOxUA+WIJ23MyvZOTzvS8CKoXMypbsIv9+mnStyDA8gxg9O+sYaaN9eEJh
+         e95J3i7uJ0hTlflmQUsxxZBxVty9loaKPXJtmgA/idb//zROXyL4XNYvdm6NpVOyuOnX
+         FLl/3kVdjeuip9Yc4gKrVTKMdfm7t2+Ago+j9++8g2c1E6pJTnM0YZnT2ET0M7tV/kIs
+         DED2cxnvdLe3iftVkl5JNz6tvmexJbJBJIp+7lqeotAMBBwbAVhtbTkfr4U0IJNxkbCi
+         6xUi07uSKaC5CKgQDqrkIgtUqu6pfM6SC8AzGjNe++Av1KH5f8GlrU62GpFiAMupU5iI
+         kCxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=Nk8FG1zVlK+b3cf8Z9HOHSMj2oGGXMKoRhmwTtaFzXg=;
-        b=qk7uod/OabqVGZFRM5tsF12nv17Tvm87wshNa7lal27fb1hiC81KcWSBJIPZDwS2Xw
-         b3SUUKqdpe+IO0Kt5TYdlcrTcfZIUJOnPiN+NZmo0G9M+/lx6zMRxLApuGgG7wDLlhx1
-         8WW3ZeJJpMe21dV7JdLBG0M1QEyHHgYwI2EEm6i0lBFiktklfVV2q3kJEk9kdIVBmF3K
-         vBmzm2i+iiNNhZOFVfTwRK+RDQPiaLHqZbrlMFcXFNkXEXHPAwomd1bDcgkt3X/oIUrb
-         gxDPRu/ADx7XoUctiWKJ4M8V8zS2KlXwZEAHIn9ia2LOX8Qr+63BTkKDpiaUcUTA7fG8
-         nScg==
-X-Gm-Message-State: AOAM530WyLx8hr48dcr6D30TzJShO7PnzL8BMZG25zCHoj/IjvfYsdfA
-        0m8CFKylQzMAl5T8+Rk2jdIKLuZK6pyemt9KHP12sBSx7iHa+xY6vYQ1bK38p9k/OkpJv3p7Zpa
-        74XDS1pZcERdZEtVyxq9zd2vF
-X-Received: by 2002:a05:6e02:170b:b0:2cf:970f:6050 with SMTP id u11-20020a056e02170b00b002cf970f6050mr502307ill.5.1652896290456;
-        Wed, 18 May 2022 10:51:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyvGIXeh5ZKDwW8XXL/TqH2zn8XMIgmzLTRYqD89L8R+HvJolPMaoY0IBC9xwKmkIM5aMFVTw==
-X-Received: by 2002:a05:6e02:170b:b0:2cf:970f:6050 with SMTP id u11-20020a056e02170b00b002cf970f6050mr502296ill.5.1652896290223;
-        Wed, 18 May 2022 10:51:30 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id d15-20020a02a48f000000b0032b3a7817bdsm31618jam.129.2022.05.18.10.51.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 10:51:29 -0700 (PDT)
-Date:   Wed, 18 May 2022 11:51:29 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v5 0/4] vfio/pci: power management changes
-Message-ID: <20220518115129.72beddcd.alex.williamson@redhat.com>
-In-Reply-To: <20220518111612.16985-1-abhsahu@nvidia.com>
-References: <20220518111612.16985-1-abhsahu@nvidia.com>
-Organization: Red Hat
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bHXUs1sphneg6gPI/YEdiZAYQkq1Vx1rkOSsPvFYenY=;
+        b=NCqmxvEaDcJ75eCTpyV68mDQWpRcAoJneRAGJyLy4pZ731QBpKceKcxl5XJFUzhSir
+         R7Cfl6G8m5BVkeLQun0BYe+3FRK1LTSC8UqZHOGoS8oJIOLmRMJloIaFuuU2xZ1D/vuJ
+         m79JOpze7pmPS5Eqs212R1UwM9j7vM5zdM2kK8LmbwtjBQj+gW8/5UZNZPcqNr63jN1K
+         E2vZ1NyfvXPj/c1ihlGGM2rGSV0RTFI22hBXzFjmUQtnit6J7TYNUovoKRK2RjpY/bBv
+         +1NHDjtIgfV73iAomgE0yVrtq5MYKFNDUul0VfBI0hJk/+nQWpP1LRBLMwVpF31OmAF2
+         1Pcg==
+X-Gm-Message-State: AOAM533RD9bO7YpVAAs2n9wdMDRMGdLf0Vo4/SqZQJ+bAusIQU0HCeoF
+        796X4xqDo9mNpWpDCMVgS2fCfA==
+X-Google-Smtp-Source: ABdhPJz6d7WK+2FpbvcVt7IiAihWBw3AcT/h+c/hnH2vcO8gAjUMQ2vwbPQeWXocQIfeG68bq+vUIQ==
+X-Received: by 2002:a19:fc1d:0:b0:473:dc7c:d012 with SMTP id a29-20020a19fc1d000000b00473dc7cd012mr465840lfi.92.1652896381260;
+        Wed, 18 May 2022 10:53:01 -0700 (PDT)
+Received: from ?IPV6:2001:470:dd84:abc0::8a5? ([2001:470:dd84:abc0::8a5])
+        by smtp.gmail.com with ESMTPSA id o11-20020ac24e8b000000b0047255d2111esm13791lfr.77.2022.05.18.10.52.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 10:53:00 -0700 (PDT)
+Message-ID: <42b0034f-0be1-2951-d6a6-bf0a51cf0fc2@linaro.org>
+Date:   Wed, 18 May 2022 20:52:59 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/2] phy/qcom: add regulator_set_load to edp/dp phy
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1652892186-22346-1-git-send-email-quic_khsieh@quicinc.com>
+ <1652892186-22346-2-git-send-email-quic_khsieh@quicinc.com>
+ <CAA8EJpr9znfxLK+kDstMFFk3V8goyaceGXi4sDc9ghz4eryXMg@mail.gmail.com>
+ <c5decaeb-2e88-ef23-ce6c-50d3d853766b@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <c5decaeb-2e88-ef23-ce6c-50d3d853766b@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,134 +82,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022 16:46:08 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
+On 18/05/2022 20:36, Kuogee Hsieh wrote:
+> 
+> On 5/18/2022 10:12 AM, Dmitry Baryshkov wrote:
+>> On Wed, 18 May 2022 at 19:43, Kuogee Hsieh <quic_khsieh@quicinc.com> 
+>> wrote:
+>>> This patch add regulator_set_load() to both eDP and DP phy driver
+>>> to have totally control regulators.
+>>>
+>>> Changes in v2:
+>>> -- no regulator_set_laod() before disable regulator
+>>>
+>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>> ---
+>>>   drivers/phy/qualcomm/phy-qcom-edp.c | 25 +++++++++++++++++++++----
+>>>   drivers/phy/qualcomm/phy-qcom-qmp.c | 13 +++++++++++++
+>> Split into -edp and -qmp part.
+>>
+>>>   2 files changed, 34 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c 
+>>> b/drivers/phy/qualcomm/phy-qcom-edp.c
+>>> index cacd32f..9b55095 100644
+>>> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
+>>> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
+>>> @@ -87,17 +87,24 @@ struct qcom_edp {
+>>>
+>>>          struct clk_bulk_data clks[2];
+>>>          struct regulator_bulk_data supplies[2];
+>>> +       int enable_load[2];
+>>> +       int disable_load[2];
+>> As noticed in the review of the previous patch, disable_load is 
+>> unnecessary.
+>>
+>>>   };
+>>>
+>>>   static int qcom_edp_phy_init(struct phy *phy)
+>>>   {
+>>>          struct qcom_edp *edp = phy_get_drvdata(phy);
+>>>          int ret;
+>>> +       int num_consumers = ARRAY_SIZE(edp->supplies);
+>>> +       int i;
+>>>
+>>> -       ret = regulator_bulk_enable(ARRAY_SIZE(edp->supplies), 
+>>> edp->supplies);
+>>> +       ret = regulator_bulk_enable(num_consumers, edp->supplies);
+>>>          if (ret)
+>>>                  return ret;
+>>>
+>>> +       for (i = num_consumers - 1; i >= 0; --i)
+>>> +               regulator_set_load(edp->supplies[i].consumer, 
+>>> edp->enable_load[i]);
+>>> +
+>>>          ret = clk_bulk_prepare_enable(ARRAY_SIZE(edp->clks), 
+>>> edp->clks);
+>>>          if (ret)
+>>>                  goto out_disable_supplies;
+>>> @@ -425,9 +432,15 @@ static int qcom_edp_phy_power_off(struct phy *phy)
+>>>   static int qcom_edp_phy_exit(struct phy *phy)
+>>>   {
+>>>          struct qcom_edp *edp = phy_get_drvdata(phy);
+>>> +       int num_consumers = ARRAY_SIZE(edp->supplies);
+>>> +       int i;
+>>>
+>>>          clk_bulk_disable_unprepare(ARRAY_SIZE(edp->clks), edp->clks);
+>>> -       regulator_bulk_disable(ARRAY_SIZE(edp->supplies), 
+>>> edp->supplies);
+>>> +
+>>> +       for (i = num_consumers - 1; i >= 0; --i)
+>>> +               regulator_set_load(edp->supplies[i].consumer, 
+>>> edp->disable_load[i]);
+>>> +
+>>> +       regulator_bulk_disable(num_consumers, edp->supplies);
+>>>
+>>>          return 0;
+>>>   }
+>>> @@ -633,8 +646,12 @@ static int qcom_edp_phy_probe(struct 
+>>> platform_device *pdev)
+>>>          if (ret)
+>>>                  return ret;
+>>>
+>>> -       edp->supplies[0].supply = "vdda-phy";
+>>> -       edp->supplies[1].supply = "vdda-pll";
+>>> +       edp->supplies[0].supply = "vdda-1p2";
+>>> +       edp->supplies[1].supply = "vdda-0p9";
+>> NAK, You can not randomly change supply names.
+> 
+> if you do no change here, then we have to change dtsi.
+> 
+> They are not match.
 
-> Currently, there is very limited power management support available
-> in the upstream vfio-pci driver. If there is no user of vfio-pci device,
-> then it will be moved into D3Hot state. Similarly, if we enable the
-> runtime power management for vfio-pci device in the guest OS, then the
-> device is being runtime suspended (for linux guest OS) and the PCI
-> device will be put into D3hot state (in function
-> vfio_pm_config_write()). If the D3cold state can be used instead of
-> D3hot, then it will help in saving maximum power. The D3cold state can't
-> be possible with native PCI PM. It requires interaction with platform
-> firmware which is system-specific. To go into low power states
-> (including D3cold), the runtime PM framework can be used which
-> internally interacts with PCI and platform firmware and puts the device
-> into the lowest possible D-States.
-> 
-> This patch series registers the vfio-pci driver with runtime
-> PM framework and uses the same for moving the physical PCI
-> device to go into the low power state for unused idle devices.
-> There will be separate patch series that will add the support
-> for using runtime PM framework for used idle devices.
-> 
-> The current PM support was added with commit 6eb7018705de ("vfio-pci:
-> Move idle devices to D3hot power state") where the following point was
-> mentioned regarding D3cold state.
-> 
->  "It's tempting to try to use D3cold, but we have no reason to inhibit
->   hotplug of idle devices and we might get into a loop of having the
->   device disappear before we have a chance to try to use it."
-> 
-> With the runtime PM, if the user want to prevent going into D3cold then
-> /sys/bus/pci/devices/.../d3cold_allowed can be set to 0 for the
-> devices where the above functionality is required instead of
-> disallowing the D3cold state for all the cases.
-> 
-> The BAR access needs to be disabled if device is in D3hot state.
-> Also, there should not be any config access if device is in D3cold
-> state. For SR-IOV, the PF power state should be higher than VF's power
-> state.
-> 
-> * Changes in v5
-> 
-> - Rebased over https://github.com/awilliam/linux-vfio/tree/next.
-> - Renamed vfio_pci_lock_and_set_power_state() to
->   vfio_lock_and_set_power_state() and made it static.
-> - Inside vfio_pci_core_sriov_configure(), protected setting of
->   power state and sriov enablement with 'memory_lock'.
-> - Removed CONFIG_PM macro use since it is not needed with current
->   code.
+Where is no match? I don't see any in-kernel dtsi using them.
 
-Applied to vfio next branch for v5.19.  Thanks!
 
-Alex
+>>> +       edp->enable_load[0] = 21800;    /* 1.2 V */
+>>> +       edp->enable_load[1] = 36000;    /* 1.2 V */
+>>> +       edp->disable_load[0] = 4;       /* 0.9 V */
+>>> +       edp->disable_load[1] = 4;       /* 10.9V */
+>> Again, 10.9V here. Kuogee. Have you read the review points?
+> I have read it. but forget to make  change at edp file.
+>>
+>>>          ret = devm_regulator_bulk_get(dev, 
+>>> ARRAY_SIZE(edp->supplies), edp->supplies);
+>>>          if (ret)
+>>>                  return ret;
+>>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c 
+>>> b/drivers/phy/qualcomm/phy-qcom-qmp.c
+>>> index b144ae1..0a4c8a8 100644
+>>> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+>>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+>>> @@ -3130,6 +3130,7 @@ struct qmp_phy_cfg {
+>>>          int num_resets;
+>>>          /* regulators to be requested */
+>>>          const char * const *vreg_list;
+>>> +       const unsigned int *vreg_enable_load;
+>>>          int num_vregs;
+>>>
+>>>          /* array of registers with different offsets */
+>>> @@ -3346,6 +3347,10 @@ static const char * const qmp_phy_vreg_l[] = {
+>>>          "vdda-phy", "vdda-pll",
+>>>   };
+>>>
+>>> +static const unsigned int qmp_phy_vreg_enable_load[] = {
+>>> +       21800, 36000
+>>> +};
+>>> +
+>>>   static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
+>>>          .type                   = PHY_TYPE_USB3,
+>>>          .nlanes                 = 1,
+>>> @@ -4072,6 +4077,7 @@ static const struct qmp_phy_cfg 
+>>> sm8250_usb3phy_cfg = {
+>>>          .reset_list             = msm8996_usb3phy_reset_l,
+>>>          .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
+>>>          .vreg_list              = qmp_phy_vreg_l,
+>>> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
+>>>          .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
+>>>          .regs                   = qmp_v4_usb3phy_regs_layout,
+>>>
+>>> @@ -4139,6 +4145,7 @@ static const struct qmp_phy_cfg 
+>>> sm8250_dpphy_cfg = {
+>>>          .reset_list             = msm8996_usb3phy_reset_l,
+>>>          .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
+>>>          .vreg_list              = qmp_phy_vreg_l,
+>>> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
 
-> * Changes in v4
->   (https://lore.kernel.org/lkml/20220517100219.15146-1-abhsahu@nvidia.com)
-> 
-> - Rebased over https://github.com/awilliam/linux-vfio/tree/next.
-> - Split the patch series into 2 parts. This part contains the patches
->   for using runtime PM for unused idle device.
-> - Used the 'pdev->current_state' for checking if the device in D3 state.
-> - Adds the check in __vfio_pci_memory_enabled() function itself instead
->   of adding power state check at each caller.
-> - Make vfio_pci_lock_and_set_power_state() global since it is needed
->   in different files.
-> - Used vfio_pci_lock_and_set_power_state() instead of
->   vfio_pci_set_power_state() before pci_enable_sriov().
-> - Inside vfio_pci_core_sriov_configure(), handled both the cases
->   (the device is in low power state with and without user).
-> - Used list_for_each_entry_continue_reverse() in
->   vfio_pci_dev_set_pm_runtime_get().
-> 
-> * Changes in v3
->   (https://lore.kernel.org/lkml/20220425092615.10133-1-abhsahu@nvidia.com)
-> 
-> - Rebased patches on v5.18-rc3.
-> - Marked this series as PATCH instead of RFC.
-> - Addressed the review comments given in v2.
-> - Removed the limitation to keep device in D0 state if there is any
->   access from host side. This is specific to NVIDIA use case and
->   will be handled separately.
-> - Used the existing DEVICE_FEATURE IOCTL itself instead of adding new
->   IOCTL for power management.
-> - Removed all custom code related with power management in runtime
->   suspend/resume callbacks and IOCTL handling. Now, the callbacks
->   contain code related with INTx handling and few other stuffs and
->   all the PCI state and platform PM handling will be done by PCI core
->   functions itself.
-> - Add the support of wake-up in main vfio layer itself since now we have
->   more vfio/pci based drivers.
-> - Instead of assigning the 'struct dev_pm_ops' in individual parent
->   driver, now the vfio_pci_core tself assigns the 'struct dev_pm_ops'. 
-> - Added handling of power management around SR-IOV handling.
-> - Moved the setting of drvdata in a separate patch.
-> - Masked INTx before during runtime suspended state.
-> - Changed the order of patches so that Fix related things are at beginning
->   of this patch series.
-> - Removed storing the power state locally and used one new boolean to
->   track the d3 (D3cold and D3hot) power state 
-> - Removed check for IO access in D3 power state.
-> - Used another helper function vfio_lock_and_set_power_state() instead
->   of touching vfio_pci_set_power_state().
-> - Considered the fixes made in
->   https://lore.kernel.org/lkml/20220217122107.22434-1-abhsahu@nvidia.com
->   and updated the patches accordingly.
-> 
-> * Changes in v2
->   (https://lore.kernel.org/lkml/20220124181726.19174-1-abhsahu@nvidia.com)
-> 
-> - Rebased patches on v5.17-rc1.
-> - Included the patch to handle BAR access in D3cold.
-> - Included the patch to fix memory leak.
-> - Made a separate IOCTL that can be used to change the power state from
->   D3hot to D3cold and D3cold to D0.
-> - Addressed the review comments given in v1.
-> 
-> * v1
->   https://lore.kernel.org/lkml/20211115133640.2231-1-abhsahu@nvidia.com/
-> 
-> Abhishek Sahu (4):
->   vfio/pci: Invalidate mmaps and block the access in D3hot power state
->   vfio/pci: Change the PF power state to D0 before enabling VFs
->   vfio/pci: Virtualize PME related registers bits and initialize to zero
->   vfio/pci: Move the unused device into low power state with runtime PM
-> 
->  drivers/vfio/pci/vfio_pci_config.c |  56 ++++++++-
->  drivers/vfio/pci/vfio_pci_core.c   | 178 ++++++++++++++++++++---------
->  2 files changed, 178 insertions(+), 56 deletions(-)
-> 
+So, you apply this change only to the sm8250 (sc7280) config. Are you 
+sure that both of them have the same requirement?
 
+Also there are other DP phy instances (sc8180x, sc7180). Do they have to 
+be extended too?
+
+>>>          .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
+>>>          .regs                   = qmp_v4_usb3phy_regs_layout,
+>>>
+>>> @@ -5008,6 +5015,11 @@ static int qcom_qmp_phy_com_init(struct 
+>>> qmp_phy *qphy)
+>>>                  return 0;
+>>>          }
+>>>
+>>> +       if (cfg->vreg_enable_load) {
+>>> +               for (i = cfg->num_vregs - 1; i >= 0; --i)
+>> What's the point of iterating the list backwards?
+> 
+> do no  know,
+> 
+> I just follow the order from regulator_bulk_enable()
+
+regulator_bulk_enable() iterates the list in the ascending order.
+
+> 
+>>
+>>> +                       regulator_set_load(qmp->vregs[i].consumer, 
+>>> cfg->vreg_enable_load[i]);
+>>> +       }
+>>> +
+>>>          /* turn on regulator supplies */
+>>>          ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
+>>>          if (ret) {
+>>> @@ -5116,6 +5128,7 @@ static int qcom_qmp_phy_com_exit(struct qmp_phy 
+>>> *qphy)
+>>>
+>>>          clk_bulk_disable_unprepare(cfg->num_clks, qmp->clks);
+>>>
+>>> +       /* no minimum load set required before disable regulator */
+>> No otneed for the comment.
+>>
+>>>          regulator_bulk_disable(cfg->num_vregs, qmp->vregs);
+>>>
+>>>          mutex_unlock(&qmp->phy_mutex);
+>>> -- 
+>>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+>>> Forum,
+>>> a Linux Foundation Collaborative Project
+>>>
+>>
+
+
+-- 
+With best wishes
+Dmitry

@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A9652B357
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2989452B365
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbiERHPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S231996AbiERHQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiERHPO (ORCPT
+        with ESMTP id S232011AbiERHQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:15:14 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2B1111B9B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:15:12 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id h8so1430495ljb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=gxNp7wo0EZOb9E1oU3VMuWuT9HM6AfJUFpl0839G+5s=;
-        b=tKXG6V85D2IceWP9CGx1Vc1gGzqurlyZq7Oah63v/H7nSicVwXlhdnL588nU1vOKcB
-         xzu9ZZllIl8ae9KUaRi0UpDLfZCZWB0bbqLDdOMlzeusYmZkHfOuxDC0qJAvvxRrHIyG
-         uqrc/xMkLN942zfAiH4pYrzsaJgq/AbAaMjvLiqLeAjR3nCJ/YpSndJec3HJ/fUbobra
-         kNMrylw8k4PYqTt4eq70W8h2IB/hUNAEuW9Ey3e8hmGKVRagJE9dGPpeAFocatr9fm20
-         F6MDGl37XtMVV3P20vp3flUxfUTzOad2mIjAKMb+a7gMHFZ9PBvJ2iY37+bOPnSmTnFx
-         +gAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gxNp7wo0EZOb9E1oU3VMuWuT9HM6AfJUFpl0839G+5s=;
-        b=7SMbZlgPaamT2ZGEksbiiS9S1lrMRd2Ew6rztjJNgJfEzFkCe7ELCqXrOPEfa/NYUg
-         htpgKncpCWIjaL5gMtJeCOqZiCptx2nPsD+b6KubTGV4bQ+5jSy2+Xu81fW20eQEoyIi
-         KPBsLKICund0/yGhpz6QyNxv0reXwkbVkaoiUcoUz4a/BIeqEoqXybpqeM0aRTqnJlsP
-         CA7kvbYP3T6HosX8d7Wrk/Dl6ZEvNxokhhXafUOGwYZDb6oB/fx4Mfmprhy8DH2kDghw
-         F2QqudADpqaRov1CMtdnXx++VLIX0zLQZEbgdYgD+J6Sv3uRHEtF1ZR8ghtSnnlPqBCR
-         b7pQ==
-X-Gm-Message-State: AOAM533rk1bPJtNPRfCyJeuy6MLzPJAUOWq1jk6vIlryjG5jk/+zg1r+
-        bYP0SbrT4L6AFOro3suKaIvO8g==
-X-Google-Smtp-Source: ABdhPJwURjJVQZqzoLW8bTWlGprlMgYzVTATCzQl9kCMuCP3oIFU+YXs2kBOcrsE0DtsAebLjZHIxw==
-X-Received: by 2002:a2e:96d3:0:b0:24f:11ea:2118 with SMTP id d19-20020a2e96d3000000b0024f11ea2118mr16352095ljj.316.1652858110428;
-        Wed, 18 May 2022 00:15:10 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id v9-20020a197409000000b0047255d21101sm123190lfe.48.2022.05.18.00.15.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 00:15:09 -0700 (PDT)
-Message-ID: <02e9ba1a-852b-b2b9-209e-4c819f86dc34@linaro.org>
-Date:   Wed, 18 May 2022 09:15:08 +0200
+        Wed, 18 May 2022 03:16:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D688FD7A;
+        Wed, 18 May 2022 00:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652858199; x=1684394199;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0IL0WsCd3/HrKBEhnZxB/UtqoL3AiE13Ig/YdXaNECc=;
+  b=eFQDZfadVSk4x17IA06xFmftv8weyNNCUQ6ymjTKMoaZJ01iwuQC4uza
+   HUFQzDw0iyWjtVG16ndwvJCeSFgkoQ713Q0So0mJR+z8g0ZbkxTym63JI
+   e5EE9BKE2xypVWaI4fYTSMTQOXwCCxs4zpdfDEQXgeNqTBQMoklqFKSqM
+   PS+u1HlMSilA+adW6rjj23Q2Kop8Yl8O8wTkfABOi8S1GquOoLz72uSy6
+   mVIOK82OT72fArfdO4I6e7YvTOdUELDRalAVrGCH7Njwgrqw4gmN4m8Gj
+   HIhU9N/Sn4j1ptq0siWsldYUBoJQ2DM81/Wmsj/xpk1ok2uKprQFmMCI6
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="357931708"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="357931708"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:16:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="898089195"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 18 May 2022 00:16:22 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrDuw-0001v6-6S;
+        Wed, 18 May 2022 07:16:22 +0000
+Date:   Wed, 18 May 2022 15:16:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Besar Wicaksono <bwicaksono@nvidia.com>, robin.murphy@arm.com,
+        catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, sudeep.holla@arm.com,
+        thanu.rangarajan@arm.com, Michael.Williams@arm.com,
+        suzuki.poulose@arm.com, treding@nvidia.com, jonathanh@nvidia.com,
+        vsethi@nvidia.com, Besar Wicaksono <bwicaksono@nvidia.com>
+Subject: Re: [PATCH v2 1/2] perf: coresight_pmu: Add support for ARM
+ CoreSight PMU driver
+Message-ID: <202205181534.wuyBFt9d-lkp@intel.com>
+References: <20220515163044.50055-2-bwicaksono@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/4] dmaengine: ste_dma40: Remove unneeded ERROR and NULL
- check in ste_dma40
-Content-Language: en-US
-To:     Wan Jiabing <wanjiabing@vivo.com>, Vinod Koul <vkoul@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220516084139.8864-1-wanjiabing@vivo.com>
- <20220516084139.8864-4-wanjiabing@vivo.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220516084139.8864-4-wanjiabing@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220515163044.50055-2-bwicaksono@nvidia.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +70,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2022 10:41, Wan Jiabing wrote:
-> clk_put() already checks ERROR by using IS_ERR.
-> clk_disable_unprepare() already checks NULL by using IS_ERR_OR_NULL.
-> Remove unneeded NULL check for clk_ret and ERROR check for clk.
-> 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->  drivers/dma/ste_dma40.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/dma/ste_dma40.c b/drivers/dma/ste_dma40.c
-> index e1827393143f..7d1bf4ae4495 100644
-> --- a/drivers/dma/ste_dma40.c
-> +++ b/drivers/dma/ste_dma40.c
-> @@ -3119,7 +3119,7 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
->  	clk = clk_get(&pdev->dev, NULL);
->  	if (IS_ERR(clk)) {
->  		d40_err(&pdev->dev, "No matching clock found\n");
-> -		goto check_prepare_enabled;
-> +		goto disable_unprepare;
+Hi Besar,
 
-This should be rather return PTR_ERR. No need to jump to labels which
-are not relevant (even if harmless) for this case. It's a confusing code.
+Thank you for the patch! Perhaps something to improve:
 
->  	}
->  
->  	clk_ret = clk_prepare_enable(clk);
-> @@ -3305,12 +3305,10 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
->  	iounmap(virtbase);
->   release_region:
->  	release_mem_region(res->start, resource_size(res));
-> - check_prepare_enabled:
-> -	if (!clk_ret)
->   disable_unprepare:
-> -		clk_disable_unprepare(clk);
-> -	if (!IS_ERR(clk))
-> -		clk_put(clk);
-> +	clk_disable_unprepare(clk);
-> +	clk_put(clk);
-> +
->  	return NULL;
->  }
->  
+[auto build test WARNING on arm64/for-next/core]
+[also build test WARNING on soc/for-next linus/master v5.18-rc7 next-20220517]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Besar-Wicaksono/perf-coresight_pmu-Add-support-for-ARM-CoreSight-PMU-driver/20220516-013131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220518/202205181534.wuyBFt9d-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/79f30980a7a91e6bbe7430206e4e46fa8134cfa9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Besar-Wicaksono/perf-coresight_pmu-Add-support-for-ARM-CoreSight-PMU-driver/20220516-013131
+        git checkout 79f30980a7a91e6bbe7430206e4e46fa8134cfa9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/media/platform/qcom/venus/ drivers/perf/coresight_pmu/ drivers/rtc/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:165:49: error: incomplete definition of type 'struct acpi_apmt_node'
+           return CHECK_APMT_FLAG(coresight_pmu->apmt_node->flags, ATOMIC, SUPP);
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:4: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+             ^~~~~
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:165:9: error: use of undeclared identifier 'ACPI_APMT_FLAGS_ATOMIC'
+           return CHECK_APMT_FLAG(coresight_pmu->apmt_node->flags, ATOMIC, SUPP);
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:13: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+                      ^
+   <scratch space>:61:1: note: expanded from here
+   ACPI_APMT_FLAGS_ATOMIC
+   ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:165:9: error: use of undeclared identifier 'ACPI_APMT_FLAGS_ATOMIC_SUPP'
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:41: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+                                                  ^
+   <scratch space>:64:1: note: expanded from here
+   ACPI_APMT_FLAGS_ATOMIC_SUPP
+   ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:369:13: error: incomplete definition of type 'struct acpi_apmt_node'
+                   (apmt_node->impl_id) ? apmt_node->impl_id :
+                    ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:369:35: error: incomplete definition of type 'struct acpi_apmt_node'
+                   (apmt_node->impl_id) ? apmt_node->impl_id :
+                                          ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:894:58: error: incomplete definition of type 'struct acpi_apmt_node'
+                   devm_kasprintf(dev, GFP_KERNEL, PMUNAME "%u", apmt_node->id);
+                                                                 ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:920:31: error: incomplete definition of type 'struct acpi_apmt_node'
+           if (CHECK_APMT_FLAG(apmt_node->flags, DUAL_PAGE, SUPP)) {
+                               ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:4: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+             ^~~~~
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:920:6: error: use of undeclared identifier 'ACPI_APMT_FLAGS_DUAL_PAGE'
+           if (CHECK_APMT_FLAG(apmt_node->flags, DUAL_PAGE, SUPP)) {
+               ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:13: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+                      ^
+   <scratch space>:60:1: note: expanded from here
+   ACPI_APMT_FLAGS_DUAL_PAGE
+   ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:920:6: error: use of undeclared identifier 'ACPI_APMT_FLAGS_DUAL_PAGE_SUPP'
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:129:41: note: expanded from macro 'CHECK_APMT_FLAG'
+           ((flags & (ACPI_APMT_FLAGS_ ## f)) == (ACPI_APMT_FLAGS_ ## f ## _ ## v))
+                                                  ^
+   <scratch space>:63:1: note: expanded from here
+   ACPI_APMT_FLAGS_DUAL_PAGE_SUPP
+   ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1028:15: error: incomplete definition of type 'struct acpi_apmt_node'
+           if (apmt_node->ovflw_irq == 0)
+               ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+>> drivers/perf/coresight_pmu/arm_coresight_pmu.c:1053:6: warning: variable 'level' set but not used [-Wunused-but-set-variable]
+           int level = 0;
+               ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1079:27: error: incomplete definition of type 'struct acpi_apmt_node'
+           affinity_flag = apmt_node->flags & ACPI_APMT_FLAGS_AFFINITY;
+                           ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1079:37: error: use of undeclared identifier 'ACPI_APMT_FLAGS_AFFINITY'
+           affinity_flag = apmt_node->flags & ACPI_APMT_FLAGS_AFFINITY;
+                                              ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1081:23: error: use of undeclared identifier 'ACPI_APMT_FLAGS_AFFINITY_PROC'
+           if (affinity_flag == ACPI_APMT_FLAGS_AFFINITY_PROC) {
+                                ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1083:17: error: incomplete definition of type 'struct acpi_apmt_node'
+                           if (apmt_node->proc_affinity ==
+                               ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.c:1093:23: error: incomplete definition of type 'struct acpi_apmt_node'
+                                       cpu, apmt_node->proc_affinity))
+                                            ~~~~~~~~~^
+   drivers/perf/coresight_pmu/arm_coresight_pmu.h:116:9: note: forward declaration of 'struct acpi_apmt_node'
+           struct acpi_apmt_node *apmt_node;
+                  ^
+   1 warning and 15 errors generated.
 
 
-Best regards,
-Krzysztof
+vim +/level +1053 drivers/perf/coresight_pmu/arm_coresight_pmu.c
+
+  1047	
+  1048	static inline int coresight_pmu_find_cpu_container(int cpu, u32 container_uid)
+  1049	{
+  1050		u32 acpi_uid;
+  1051		struct device *cpu_dev = get_cpu_device(cpu);
+  1052		struct acpi_device *acpi_dev = ACPI_COMPANION(cpu_dev);
+> 1053		int level = 0;
+  1054	
+  1055		if (!cpu_dev)
+  1056			return -ENODEV;
+  1057	
+  1058		while (acpi_dev) {
+  1059			if (!strcmp(acpi_device_hid(acpi_dev),
+  1060				    ACPI_PROCESSOR_CONTAINER_HID) &&
+  1061			    !kstrtouint(acpi_device_uid(acpi_dev), 0, &acpi_uid) &&
+  1062			    acpi_uid == container_uid)
+  1063				return 0;
+  1064	
+  1065			acpi_dev = acpi_dev->parent;
+  1066			level++;
+  1067		}
+  1068	
+  1069		return -ENODEV;
+  1070	}
+  1071	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

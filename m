@@ -2,210 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7C052AF66
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68FB52AF68
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbiERAw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 20:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
+        id S232890AbiERAwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 20:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbiERAw1 (ORCPT
+        with ESMTP id S232924AbiERAwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 20:52:27 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C269527E5;
-        Tue, 17 May 2022 17:52:26 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-d39f741ba0so740638fac.13;
-        Tue, 17 May 2022 17:52:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p/MnfFetCNPy/OGaJyPe/9LawJdkP2TbRs1icnabz0g=;
-        b=0hSRJAmywelMurkmvorrwdM8kP4n8TlwqFnZ1s8TfJDN7Nt9BwRJLkqwhoBNlkz2ou
-         bM3dV3eesbvIOFspqDq8vzRJcLmZfUekd7wc2E3yOhJ8O4fEqVh9XcZClFNUglC4MBaW
-         0P+QTJwlA45J3pnFEKVeFs8o+IQPh0rRrfbGS4vITosipMPR6ZYR69aehMh5P0adSgdq
-         QDvc8D76u/nYEEqmdeex3mASTkN/Ty6V2QAf1HgxDQftXTMoIFhxN/FA8aBmSdYgxWu0
-         fCCYpkzAUspJEXDOzV/83RACIe+JXrNmWUoZq6rcOs6/uXmmyc0/CdrbogJ5EHWvrFJU
-         +gEg==
-X-Gm-Message-State: AOAM533uhMCqORYMTC2qdKzpLyrw+W6m28ES1EYbL+TAncnNcmOMyB28
-        jbfkLAM67ev7X7LCzHM7YsPX7cNQ2w==
-X-Google-Smtp-Source: ABdhPJzrZJlKes6PsY7+V0jGexlBqAaNhNYOWvSJc4RNos3ZrWmW0m4fxZ4fU1Xy/k9EsmytiBDLvw==
-X-Received: by 2002:a05:6870:5ba6:b0:f1:5840:f3a5 with SMTP id em38-20020a0568705ba600b000f15840f3a5mr12208951oab.254.1652835145409;
-        Tue, 17 May 2022 17:52:25 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i3-20020a056870044300b000ead8b89484sm408601oak.5.2022.05.17.17.52.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 17:52:24 -0700 (PDT)
-Received: (nullmailer pid 1974016 invoked by uid 1000);
-        Wed, 18 May 2022 00:52:23 -0000
-Date:   Tue, 17 May 2022 19:52:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v2 4/5] net: dt-bindings: Introduce the Qualcomm
- IPQESS Ethernet controller
-Message-ID: <20220518005223.GA1970862-robh@kernel.org>
-References: <20220514150656.122108-1-maxime.chevallier@bootlin.com>
- <20220514150656.122108-5-maxime.chevallier@bootlin.com>
+        Tue, 17 May 2022 20:52:37 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E5153E23;
+        Tue, 17 May 2022 17:52:34 -0700 (PDT)
+Date:   Tue, 17 May 2022 17:52:25 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1652835152;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1o3oJN5gQQTieH2g5nQdeNUsC++N3DE8B+0iuF60aw4=;
+        b=GewWqVjHhWuzqety2mXdbrWLrO/2oTjNznANQxyCkgxP+e0u82igfbs4pzNk60tmlj1tYB
+        BlmTPiX2hXmz4bXqK+HQh8R74tV+IczWEnsR7jCoVrqBTpmbRGGdqnG2cWlqtXsyrIz6Sh
+        JMQY/aTeFX58HSFvXL1xAE3A9SQntrI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        void@manifault.com, cgroups@vger.kernel.org, hannes@cmpxchg.org,
+        kernel-team@fb.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, mhocko@kernel.org, shakeelb@google.com,
+        tj@kernel.org, Richard Palethorpe <rpalethorpe@suse.de>
+Subject: Re: [PATCH 4/4] selftests: memcg: Remove protection from top level
+ memcg
+Message-ID: <YoRDSfv6xK/R+n+R@carbon>
+References: <20220512174452.tr34tuh4k5jm6qjs@dev0025.ash9.facebook.com>
+ <20220513171811.730-1-mkoutny@suse.com>
+ <20220513171811.730-5-mkoutny@suse.com>
+ <Yn6qrHHS935ppX98@carbon>
+ <20220517172443.3e524a8319c693ab24c5f22e@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220514150656.122108-5-maxime.chevallier@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220517172443.3e524a8319c693ab24c5f22e@linux-foundation.org>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 14, 2022 at 05:06:55PM +0200, Maxime Chevallier wrote:
-> Add the DT binding for the IPQESS Ethernet Controller. This is a simple
-> controller, only requiring the phy-mode, interrupts, clocks, and
-> possibly a MAC address setting.
+On Tue, May 17, 2022 at 05:24:43PM -0700, Andrew Morton wrote:
+> On Fri, 13 May 2022 11:59:56 -0700 Roman Gushchin <roman.gushchin@linux.dev> wrote:
 > 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> ---
-> V1->V2:
->  - Fixed the example
->  - Added reset and clocks
->  - Removed generic ethernet attributes
+> > On Fri, May 13, 2022 at 07:18:11PM +0200, Michal Koutny wrote:
+> > > The reclaim is triggered by memory limit in a subtree, therefore the
+> > > testcase does not need configured protection against external reclaim.
+> > > 
+> > > Also, correct/deduplicate respective comments
+> > > 
+> > > Signed-off-by: Michal Koutný <mkoutny@suse.com>
+> > > ---
+> > >  tools/testing/selftests/cgroup/test_memcontrol.c | 12 ++++--------
+> > >  1 file changed, 4 insertions(+), 8 deletions(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > > index 9ffacf024bbd..9d370aafd799 100644
+> > > --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> > > +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > > @@ -247,7 +247,7 @@ static int cg_test_proc_killed(const char *cgroup)
+> > >  
+> > >  /*
+> > >   * First, this test creates the following hierarchy:
+> > > - * A       memory.min = 50M,  memory.max = 200M
+> > > + * A       memory.min = 0,    memory.max = 200M
+> > >   * A/B     memory.min = 50M,  memory.current = 50M
+> > >   * A/B/C   memory.min = 75M,  memory.current = 50M
+> > >   * A/B/D   memory.min = 25M,  memory.current = 50M
+> > > @@ -257,7 +257,7 @@ static int cg_test_proc_killed(const char *cgroup)
+> > >   * Usages are pagecache, but the test keeps a running
+> > >   * process in every leaf cgroup.
+> > >   * Then it creates A/G and creates a significant
+> > > - * memory pressure in it.
+> > > + * memory pressure in A.
+> > >   *
+> > >   * A/B    memory.current ~= 50M
+> > >   * A/B/C  memory.current ~= 29M
+> > > @@ -335,8 +335,6 @@ static int test_memcg_min(const char *root)
+> > >  			      (void *)(long)fd);
+> > >  	}
+> > >  
+> > > -	if (cg_write(parent[0], "memory.min", "50M"))
+> > > -		goto cleanup;
+> > >  	if (cg_write(parent[1], "memory.min", "50M"))
+> > >  		goto cleanup;
+> > >  	if (cg_write(children[0], "memory.min", "75M"))
+> > > @@ -404,8 +402,8 @@ static int test_memcg_min(const char *root)
+> > >  
+> > >  /*
+> > >   * First, this test creates the following hierarchy:
+> > > - * A       memory.low = 50M,  memory.max = 200M
+> > > - * A/B     memory.low = 50M,  memory.current = 50M
+> > > + * A       memory.low = 0,    memory.max = 200M
+> > > + * A/B     memory.low = 50M,  memory.current = ...
+> > 
+> > Can you, please, just remove "memory.current = ...", it's not
+> > because obvious what "..." means here.
+> > 
 > 
->  .../devicetree/bindings/net/qcom,ipqess.yaml  | 104 ++++++++++++++++++
->  1 file changed, 104 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/qcom,ipqess.yaml
+> You mean this?
 > 
-> diff --git a/Documentation/devicetree/bindings/net/qcom,ipqess.yaml b/Documentation/devicetree/bindings/net/qcom,ipqess.yaml
-> new file mode 100644
-> index 000000000000..ea0023509737
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/qcom,ipqess.yaml
-> @@ -0,0 +1,104 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/qcom,ipqess.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm IPQ ESS EDMA Ethernet Controller
-> +
-> +maintainers:
-> +  - Maxime Chevallier <maxime.chevallier@bootlin.com>
-> +
-> +allOf:
-> +  - $ref: "ethernet-controller.yaml#"
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,ipq4019e-ess-edma
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 2
-> +    maxItems: 32
-> +    description: One interrupt per tx and rx queue, with up to 16 queues.
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: ess
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c~selftests-memcg-remove-protection-from-top-level-memcg-fix
+> +++ a/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -403,15 +403,14 @@ cleanup:
+>  /*
+>   * First, this test creates the following hierarchy:
+>   * A       memory.low = 0,    memory.max = 200M
+> - * A/B     memory.low = 50M,  memory.current = ...
+> + * A/B     memory.low = 50M
+>   * A/B/C   memory.low = 75M,  memory.current = 50M
+>   * A/B/D   memory.low = 25M,  memory.current = 50M
+>   * A/B/E   memory.low = 0,    memory.current = 50M
+>   * A/B/F   memory.low = 500M, memory.current = 0
+>   *
+>   * Usages are pagecache.
+> - * Then it creates A/G an creates a significant
+> - * memory pressure in it.
+> + * Then it creates A/G and creates significant memory pressure in it.
+>   *
+>   * Then it checks actual memory usages and expects that:
+>   * A/B    memory.current ~= 50M
+> _
+> 
+> (includes gratuitous comment cleanup)
 
-Always kind of pointless to have a single *-names entry when it's just 
-the block name.
+Yes, thank you!
 
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    const: ess
-
-ditto
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - phy-mode
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,gcc-ipq4019.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    gmac: ethernet@c080000 {
-> +        compatible = "qcom,ipq4019-ess-edma";
-> +        reg = <0xc080000 0x8000>;
-> +        resets = <&gcc ESS_RESET>;
-> +        reset-names = "ess";
-> +        clocks = <&gcc GCC_ESS_CLK>;
-> +        clock-names = "ess";
-> +        interrupts = <GIC_SPI  65 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  66 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  67 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  68 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  69 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  70 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  71 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  72 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  73 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  74 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  75 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  76 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  77 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  78 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  79 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI  80 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 240 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 241 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 242 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 243 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 244 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 245 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 246 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 247 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 248 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 249 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 250 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 251 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 252 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 253 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 254 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 255 IRQ_TYPE_EDGE_RISING>;
-> +
-> +        phy-mode = "internal";
-> +        fixed-link {
-> +            speed = <1000>;
-> +            full-duplex;
-> +            pause;
-> +            asym-pause;
-> +        };
-> +    };
-> +
-> +...
-> -- 
-> 2.36.1
 > 
+> I assume your comment in
+> https://lkml.kernel.org/r/Yn6pBPq+lAXm9NG8@carbon can be addressed in a
+> later patch.
 > 
+> I'm not sure what to amke of https://lkml.kernel.org/r/Yn6pWPodGPlz+D8G@carbon
+> 
+> Do we feel this series needs more work before merging it up?
+> 
+
+Please, go ahead with it. If anything comes up, it can be addressed later.
+
+Thanks!

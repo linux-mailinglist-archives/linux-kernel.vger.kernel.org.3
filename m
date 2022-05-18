@@ -2,287 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AD752C353
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F3552C34E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:28:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241940AbiERT1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 15:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S241970AbiERT0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 15:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241959AbiERT0a (ORCPT
+        with ESMTP id S241962AbiERT0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 15:26:30 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF48835DDD;
-        Wed, 18 May 2022 12:26:28 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id a23so3683715ljd.9;
-        Wed, 18 May 2022 12:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LJX3AisiurXZoiui3Et8QtmT0gkjoXJj1LK+vbdvp1s=;
-        b=kVXm3fVaDrCw/7A3pQ/Wb9jC7JSMfEdHMXEhDCFBQXq/7UFQSSwwNioPMAWQhYjyUq
-         sCkRu2h+p9zsnIcGDX9gu7VIxzsiTbCZ5L1sKFpkRuv9DsfWSOcuOZaHz6O+E94FIS+p
-         IYi6g5TSmJlyBlhUSEsAlSvC/pmJX3miBPjFdIQVdCWjwMl7Y2oga2D5I1Dir8qHjfJz
-         leYWErekvS8k2TkWdH4UtQzRvHgRRsikv9Uwju+Cd9S0QvbP4HIPDWJhUSgSpq7ul/XJ
-         twE3MWMJIoZbOQU4gYGwYCI4A5Cc7nlKM3CppT9UDYJlydQmbb8bGg1LF/5+4c/gG/HO
-         DMcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LJX3AisiurXZoiui3Et8QtmT0gkjoXJj1LK+vbdvp1s=;
-        b=celTZCa6PzqKr3Ua65o2wvFJmDvqfLOZ7UhC5mhnPDfVCo2gXF2/aIsbrwP6R1zw3v
-         1z3v8bB6NvZj7icCu1q5qsHhchTwP/O1w36eAoWxn0oG/VYeUZYkWppY6fQ99DOjWSqY
-         uc9NkyvGU9Jlcp+moEP4Vrlm+JXe4xta1iSrPhRq7r7jQQAenvzTFedFWPEceOzLiynM
-         6joU5X+Qn/k0bTBDr/g3o9YR1V7xL74stuL+0PSBdvFjESD3h/yjBYFSCBVMQC/rVTHz
-         nyPrb/aICAaa3T0cDDdR/H6E3+cm2DcZP5t/icx+/u+UFi0l5Wv3VPYDz6BI9W+hyNfR
-         1VKA==
-X-Gm-Message-State: AOAM532Ti1iyZ2sKGPovrKUmD9hrXDfnKNYnLWhSwfCTyTOKjV78rs2F
-        0ctIB8wU9wsQcf6g80zB/p0=
-X-Google-Smtp-Source: ABdhPJxNb4EAiC07ONAlvyeJ367ZCRT/5pJzGzbZ0HyineDUpl2vFkJ5vfcMykc+aHPZ9Tra+vXUdQ==
-X-Received: by 2002:a05:651c:1617:b0:247:fd84:2195 with SMTP id f23-20020a05651c161700b00247fd842195mr528641ljq.356.1652901986919;
-        Wed, 18 May 2022 12:26:26 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id f14-20020a056512360e00b0047255d2111fsm35381lfs.78.2022.05.18.12.26.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 12:26:26 -0700 (PDT)
-Date:   Wed, 18 May 2022 22:26:23 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 15/17] PCI: dwc: Introduce dma-ranges property support
- for RC-host
-Message-ID: <20220518192623.fl3ogcxlurcd6okd@mobilestation>
-References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
- <20220503214638.1895-16-Sergey.Semin@baikalelectronics.ru>
- <20220512135708.GC35848@thinkpad>
- <20220512194135.ku73pae2xdvyocx7@mobilestation>
- <20220517172042.GC4528@thinkpad>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Wed, 18 May 2022 15:26:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B6C3969C;
+        Wed, 18 May 2022 12:26:43 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IJC4um000631;
+        Wed, 18 May 2022 19:26:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=0fMn5fcB8WBRcgKZhrh/fmqe4B2CE1yWRHyP0K9nFUE=;
+ b=d5Hw3Ux6clt7+X8qJL+wWkhc8kyJWI02/p47nu4FtHdwKc5z6DYhh032c/gETITbK7/v
+ 4OsweJXUjKPYnc8Cgy7Bf6LNVCN3pERdYoTSNAG6WUdv5R9fD2KUD5ulFLKgRYkdRm9/
+ NeCQ5wTQU9vOSmF+Vd8UrX6blP8MwGz6JGDFvtAMPoikazVe4qgifg1EItdGNMFmuKrJ
+ QuKu3hmt9TB+aRSb/ED8onCLcURcHaGcZNDocsq5hRn1muEx5FxnK4Df9G4g4xaQifJf
+ RF3tv65X425+S6SiEahypbe+qu2xMhNsHCXgCivO/MWIlFOOH3YCqe+FcCWDP+Q+dEMA cA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g56rb09kh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 19:26:37 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IJFlJs012622;
+        Wed, 18 May 2022 19:26:37 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g56rb09k3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 19:26:37 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IJMpdO012327;
+        Wed, 18 May 2022 19:26:36 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04wdc.us.ibm.com with ESMTP id 3g4wp5bbsx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 19:26:36 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IJQZaU30212370
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 19:26:35 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 256D0C6055;
+        Wed, 18 May 2022 19:26:35 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A3087C6059;
+        Wed, 18 May 2022 19:26:34 +0000 (GMT)
+Received: from [9.211.84.41] (unknown [9.211.84.41])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 18 May 2022 19:26:34 +0000 (GMT)
+Message-ID: <e5327191-50c5-85b5-6c01-3f43cffc142b@linux.vnet.ibm.com>
+Date:   Wed, 18 May 2022 15:26:34 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] tpm: sleep at least <...> ms in tpm_msleep()
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Johannes Holland <johannes.holland@infineon.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca
+References: <20220510112902.23213-1-johannes.holland@infineon.com>
+ <YnvTSqRgYkWu0qgp@kernel.org>
+ <99541f08e8b554dea59334005cafb0af978f9a05.camel@linux.ibm.com>
+ <eb9ef8aeab4c0284028c013a2c86b248719a46ae.camel@HansenPartnership.com>
+ <YoKQchfJ//FUws7i@kernel.org>
+From:   Nayna <nayna@linux.vnet.ibm.com>
+In-Reply-To: <YoKQchfJ//FUws7i@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: W2-w1RYqYKLES2lZ4X-4HgpuJmeqtaTu
+X-Proofpoint-GUID: xFsCr7f6tHpE9XZGLchG5KdWriWfSirK
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220517172042.GC4528@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 adultscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ mlxscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205180110
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 10:50:42PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, May 12, 2022 at 10:41:35PM +0300, Serge Semin wrote:
-> > On Thu, May 12, 2022 at 07:27:08PM +0530, Manivannan Sadhasivam wrote:
-> > > On Wed, May 04, 2022 at 12:46:36AM +0300, Serge Semin wrote:
-> > > > In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
-> > > > property has the same format as the "ranges" property. The only difference
-> > > > is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
-> > > > memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
-> > > > property. Even though the DW PCIe controllers are normally equipped with
-> > > > internal Address Translation Unit which inbound and outbound tables can be
-> > > > used to implement both properties semantics, it was surprise for me to
-> > > > discover that the host-related part of the DW PCIe driver currently
-> > > > supports the "ranges" property only while the "dma-ranges" windows are
-> > > > just ignored. Having the "dma-ranges" supported in the driver would be
-> > > > very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
-> > > > mapping and require customized the PCIe memory layout. So let's fix that
-> > > > by introducing the "dma-ranges" property support.
-> > > > 
-> > > > First of all we suggest to rename the dw_pcie_prog_inbound_atu() method to
-> > > > dw_pcie_prog_ep_inbound_atu() and create a new version of the
-> > > > dw_pcie_prog_inbound_atu() function. Thus we'll have two methods for RC
-> > > > and EP controllers respectively in the same way as it has been developed
-> > > > for the outbound ATU setup methods.
-> > > > 
-> > > > Secondly aside with the memory window index and type the new
-> > > > dw_pcie_prog_inbound_atu() function will accept CPU address, PCIe address
-> > > > and size as its arguments. These parameters define the PCIe and CPU memory
-> > > > ranges which will be used to setup the respective inbound ATU mapping. The
-> > > > passed parameters need to be verified against the ATU ranges constraints
-> > > > in the same way as it is done for the outbound ranges.
-> > > > 
-> > > > Finally the DMA-ranges detected for the PCIe controller need to be
-> > > > converted into the inbound ATU entries during the host controller
-> > > > initialization procedure. It will be done in the framework of the
-> > > > dw_pcie_iatu_setup() method. Note before setting the inbound ranges up we
-> > > > need to disable all the inbound ATU entries in order to prevent unexpected
-> > > > PCIe TLPs translations defined by some third party software like
-> > > > bootloader.
-> > > > 
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > > ---
-> > > >  .../pci/controller/dwc/pcie-designware-ep.c   |  4 +-
-> > > >  .../pci/controller/dwc/pcie-designware-host.c | 32 ++++++++++-
-> > > >  drivers/pci/controller/dwc/pcie-designware.c  | 57 ++++++++++++++++++-
-> > > >  drivers/pci/controller/dwc/pcie-designware.h  |  6 +-
-> > > >  4 files changed, 90 insertions(+), 9 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > > index c62640201246..9b0540cfa9e8 100644
-> > > > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > > @@ -167,8 +167,8 @@ static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no, int type,
-> > > >  		return -EINVAL;
-> > > >  	}
-> > > >  
-> > > > -	ret = dw_pcie_prog_inbound_atu(pci, func_no, free_win, type,
-> > > > -				       cpu_addr, bar);
-> > > > +	ret = dw_pcie_prog_ep_inbound_atu(pci, func_no, free_win, type,
-> > > > +					  cpu_addr, bar);
-> > > >  	if (ret < 0) {
-> > > >  		dev_err(pci->dev, "Failed to program IB window\n");
-> > > >  		return ret;
-> > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > index 7caca6c575a5..9cb406f5c185 100644
-> > > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > > @@ -612,12 +612,15 @@ static int dw_pcie_iatu_setup(struct pcie_port *pp)
-> > > >  	}
-> > > >  
-> > > >  	/*
-> > > > -	 * Ensure all outbound windows are disabled before proceeding with
-> > > > -	 * the MEM/IO ranges setups.
-> > > > +	 * Ensure all out/inbound windows are disabled before proceeding with
-> > > > +	 * the MEM/IO (dma-)ranges setups.
-> > > >  	 */
-> > > >  	for (i = 0; i < pci->num_ob_windows; i++)
-> > > >  		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_OB, i);
-> > > >  
-> > > > +	for (i = 0; i < pci->num_ib_windows; i++)
-> > > > +		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_IB, i);
-> > > > +
-> > > >  	i = 0;
-> > > >  	resource_list_for_each_entry(entry, &pp->bridge->windows) {
-> > > >  		if (resource_type(entry->res) != IORESOURCE_MEM)
-> > > > @@ -654,9 +657,32 @@ static int dw_pcie_iatu_setup(struct pcie_port *pp)
-> > > >  	}
-> > > >  
-> > > >  	if (pci->num_ob_windows <= i)
-> > > > -		dev_warn(pci->dev, "Resources exceed number of ATU entries (%d)\n",
-> > > > +		dev_warn(pci->dev, "Ranges exceed outbound iATU size (%d)\n",
-> > > >  			 pci->num_ob_windows);
-> > > >  
-> > > > +	i = 0;
-> > > > +	resource_list_for_each_entry(entry, &pp->bridge->dma_ranges) {
-> > > > +		if (resource_type(entry->res) != IORESOURCE_MEM)
-> > > > +			continue;
-> > > > +
-> > > > +		if (pci->num_ib_windows <= i)
-> > > > +			break;
-> > > > +
-> > > > +		ret = dw_pcie_prog_inbound_atu(pci, i++, PCIE_ATU_TYPE_MEM,
-> > > > +					       entry->res->start,
-> > > > +					       entry->res->start - entry->offset,
-> > > > +					       resource_size(entry->res));
-> > > > +		if (ret) {
-> > > > +			dev_err(pci->dev, "Failed to set DMA range %pr\n",
-> > > > +				entry->res);
-> > > > +			return ret;
-> > > > +		}
-> > > > +	}
-> > > > +
-> > > > +	if (pci->num_ib_windows <= i)
-> > > > +		dev_warn(pci->dev, "Dma-ranges exceed inbound iATU size (%u)\n",
-> > > > +			 pci->num_ib_windows);
-> > > > +
-> > > >  	return 0;
-> > > >  }
-> > > >  
-> > > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > > > index 747e252c09e6..33718ed6c511 100644
-> > > > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > > > @@ -397,8 +397,61 @@ static inline void dw_pcie_writel_atu_ib(struct dw_pcie *pci, u32 index, u32 reg
-> > > >  	dw_pcie_writel_atu(pci, PCIE_ATU_REGION_DIR_IB, index, reg, val);
-> > > >  }
-> > > >  
-> > > > -int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> > > > -			     int type, u64 cpu_addr, u8 bar)
-> > > > +int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
-> > > > +			     u64 cpu_addr, u64 pci_addr, u64 size)
-> > > > +{
-> > > > +	u64 limit_addr = pci_addr + size - 1;
-> > > > +	u32 retries, val;
-> > > > +
-> > > > +	if ((limit_addr & ~pci->region_limit) != (pci_addr & ~pci->region_limit) ||
-> > > > +	    !IS_ALIGNED(cpu_addr, pci->region_align) ||
-> > > > +	    !IS_ALIGNED(pci_addr, pci->region_align) ||
-> > > > +	    !IS_ALIGNED(size, pci->region_align) ||
-> > > 
-> > 
-> > > Why do you want the size to be aligned? What if I want to transfer a small size
-> > > buffer?
-> > > 
-> > > Same question applies to outbound programming as well.
-> > 
-> > You can't program a region with the unaligned size by the DW PCIe CSRs
-> > design. The limit address lower bits are read-only and fixed with
-> > one's in accordance with the IP-core synthesize parameter
-> > CX_ATU_MIN_REGION_SIZE. So the mapping is always performed in the
-> > CX_ATU_MIN_REGION_SIZE chunks.
-> > 
-> > IATU_LIMIT_ADDR_OFF_{IN,OUT}BOUND.LIMIT_ADDR_HW = 
-> > {(CX_ATU_MIN_REGION_SIZE == 65536) ? "0xffff" :
-> >  (CX_ATU_MIN_REGION_SIZE == 32768) ? "0x7fff" :
-> >  (CX_ATU_MIN_REGION_SIZE == 16384) ? "0x3fff" :
-> >  (CX_ATU_MIN_REGION_SIZE == 8192)  ? "0x1fff" :
-> >  (CX_ATU_MIN_REGION_SIZE == 4096)  ? "0xfff" : "0xffff"}
-> > 
-> 
 
-> Right. Even though the minimum size that could be mapped is 4k, I could still
-> use that 4k size for mapping small buffers also. So you should not be erroring
-> out here if the size is not aligned. 
+On 5/16/22 13:57, Jarkko Sakkinen wrote:
+> On Thu, May 12, 2022 at 08:32:55AM -0400, James Bottomley wrote:
+>> On Thu, 2022-05-12 at 08:21 -0400, Mimi Zohar wrote:
+>>> On Wed, 2022-05-11 at 18:16 +0300, Jarkko Sakkinen wrote:
+>>>> On Tue, May 10, 2022 at 01:29:03PM +0200, Johannes Holland wrote:
+>>>>> To comply with protocol requirements, minimum polling times must
+>>>>> often
+>>>>> be adhered to. Therefore, a macro like tpm_msleep() should sleep
+>>>>> at
+>>>>> least the given amount of time (not up to the given period). Have
+>>>>> tpm_msleep() sleep at least the given number of milliseconds.
+>>>>>
+>>>>> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+>>>>> ---
+>>>>>   drivers/char/tpm/tpm.h | 4 ++--
+>>>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+>>>>> index 2163c6ee0d36..0971b55fffe3 100644
+>>>>> --- a/drivers/char/tpm/tpm.h
+>>>>> +++ b/drivers/char/tpm/tpm.h
+>>>>> @@ -185,8 +185,8 @@ int tpm_pm_resume(struct device *dev);
+>>>>>   
+>>>>>   static inline void tpm_msleep(unsigned int delay_msec)
+>>>>>   {
+>>>>> -	usleep_range((delay_msec * 1000) - TPM_TIMEOUT_RANGE_US,
+>>>>> -		     delay_msec * 1000);
+>>>>> +	usleep_range(delay_msec * 1000, (delay_msec * 1000)
+>>>>> +		     + TPM_TIMEOUT_RANGE_US);
+>>>>>   };
+>>>>>   
+>>>>>   int tpm_chip_start(struct tpm_chip *chip);
+>>>>> -- 
+>>>>> 2.34.1
+>>>>>
+>>>> For this I would really like to hear a 2nd opinion from Nayna and
+>>>> Mimi.
+>>> This patch reverts commit 5ef924d9e2e8 ("tpm: use tpm_msleep() value
+>>> as max delay").    Are you experiencing TPM issues that require it?
+>> I am:
+>>
+>> https://lore.kernel.org/linux-integrity/1531328689.3260.8.camel@HansenPartnership.com/
+>>
+>> I'm about 24h into a soak test of the patch with no TPM failure so far.
+>> I think it probably needs to run another 24h just to be sure, but it
+>> does seem the theory is sound (my TPM gets annoyed by being poked too
+>> soon) so reverting 5ef924d9e2e8 looks to be the correct action.  The
+>> only other ways I've found to fix this are either revert the
+>> usleep_range patch altogether or increase the timings:
+>>
+>> https://lore.kernel.org/linux-integrity/1531329074.3260.9.camel@HansenPartnership.com/
+>>
+>> Which obviously pushes the min past whatever issue my TPM is having
+>> even with 5ef924d9e2e8 applied.
+>>
+>> Given that even the commit message for 5ef924d9e2e8 admits it only
+>> shaves about 12% off the TPM response time, that would appear to be an
+>> optimization too far if it's going to cause some TPMs to fail.
+>>
+>> James
+> What if TPM started with the timings as they are now and use the
+> "reverted" timings if coming up too early?  The question here is
+> though,  is such complexity worth of anything or should we just
+> revert and do nothing else.
 
-Why would you need to do that? Even if you do and the operation
-doesn't return an error (or at least splash the syslog with a
-warning), the hardware would expand the mapping up to the aligned size
-anyway. Such implicit behavior would have given your software an
-impression that the mapping was performed in the way you asked with
-the size you specified so the upper part of the unaligned range is
-free to be used for something else. If the range is accessed, instead
-of a bus error or silent IO termination it may cause unexpected result
-of creating random PCIe bus traffic. So I'd rather have the
-code/platform setup fixed right from the start instead of waiting for
-the hard to find bug cause.
+TCG Specification(TCG PC Client Device Driver Design Principles, Section 
+10), says - General control timeouts, denoted as TIMEOUT_A (A), 
+TIMEOUT_B (B), TIMEOUT_C (C) and TIMEOUT_D (D), are the maximum waiting 
+time from a certain control operation from the DD until the TPM shows 
+the expected status change.
 
-> I know that it is a waste of memory but that doesn't mean that it won't work.
+usleep_range(min, max) takes second parameter as max value which is same 
+as maximum delay in our case. Thus the code is in compliance with the 
+standard already. We still haven't heard back yet as to the reason for 
+this change, nor if the problem is pervasive.
 
-The correct statement in this case would be "it won't work in a way
-you expected, but with the implicit side effect applied to the memory
-above the requested one."
+Lastly, a 12% improvement makes a difference or not depends on usecase. 
+It did at least in our case.
 
--Sergey
+Thanks & Regards,
 
-> 
-> Thanks,
-> Mani
-> 
-> > -Sergey
-> > 
-> > > 
-> > > Thanks,
-> > > Mani
-> > > 
-> > > -- 
-> > > மணிவண்ணன் சதாசிவம்
-> 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+      - Nayna
+

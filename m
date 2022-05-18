@@ -2,170 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714A452B212
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB7252B229
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbiERF6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 01:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
+        id S230477AbiERGOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiERF6o (ORCPT
+        with ESMTP id S230453AbiERGOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 01:58:44 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A962DC1ED8;
-        Tue, 17 May 2022 22:58:42 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id k16so1190072pff.5;
-        Tue, 17 May 2022 22:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Wvwoi2ieX1SAY39tBWj8LHG37asi931JP8mrlpfaKk4=;
-        b=IYRMNrIiumsSaflitKrY0i7FLS+lQCNLzOzrzfpuDPHl8qKTyR2SruC/IiZPaWASLU
-         h1814XYKS6hk+GXI8YmOfUnZZvmtntVApJKWkygY16itKnRQP2mlCzMkvZBUWHpeFhdf
-         vxsTjQ/hFRdQmWf81TAcvUVbgUIqwgYy/P2macO/GgTqyvjwUq6j6rEzicfyDezBeCJh
-         jalDG8dek+x5k4G1i6fjll8rsPu9bLOuh5MuDAsCSNI+H91QXyUx22iqd8m24ddtm7p9
-         SQvgRYreW4YjQ3RNg+uvIuLy6RceXkwr/A5qYIInoXTV+YQHxzPC4L5WS8ySQpgc+F6R
-         R5yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Wvwoi2ieX1SAY39tBWj8LHG37asi931JP8mrlpfaKk4=;
-        b=xCX9NlvSF5v2EHSXkqW2W7By52Pssel/I3L1TpNUQop0PsCIdJ0KaswWdZmsYhT9UL
-         ROCiwZqU9vDGnfnFLZjXK8LJ8lAg6d5nXXNzoGV3k+KOlpTwibI+LWnwf207VyrnvjKm
-         qTCJfdnXurpPdzMrZhZ8gva4eY2/pzligiZc+uCbb/T+PKClqKt6sM1QRtxjiub3tIil
-         Lps85V/5MzQ0GO9406X6z+rxUShcoL5F+bAdTJImJ+WBpejALcycdSIZYkKsLwW4+2h2
-         DhN++/vmXwD86by/NM5gIAeAEJf9r54SB27Qa3Y7ScI0R+0HxmYlynT4iA0Ggt20b6iW
-         54Ng==
-X-Gm-Message-State: AOAM530R0N0HgWofdpR6aAGaAJCE9WMCiPMaI/Suj8jZVNiYJZ52yHGj
-        E5+U2s0hBOBul3eS4h5oGKY=
-X-Google-Smtp-Source: ABdhPJwr9HRFJAt/zhYuJZ10Py9yYXbZjFzFpTiFrytFhnSOVnn+LtwTvwpMfpIndB0c1Sf+6QiTvA==
-X-Received: by 2002:a63:5d50:0:b0:3db:5325:b120 with SMTP id o16-20020a635d50000000b003db5325b120mr22910678pgm.212.1652853521830;
-        Tue, 17 May 2022 22:58:41 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170903204d00b0015e8d4eb20asm649445pla.84.2022.05.17.22.58.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 22:58:41 -0700 (PDT)
-Message-ID: <62848b11.1c69fb81.6ce50.2091@mx.google.com>
-X-Google-Original-Message-ID: <20220518055839.GA1677365@cgel.zte@gmail.com>
-Date:   Wed, 18 May 2022 05:58:39 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
-        shy828301@gmail.com, roman.gushchin@linux.dev, shakeelb@google.com,
-        linmiaohe@huawei.com, william.kucharski@oracle.com,
-        peterx@redhat.com, hughd@google.com, vbabka@suse.cz,
-        songmuchun@bytedance.com, surenb@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
-References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
- <YnUlntNFR4zeD+qa@dhcp22.suse.cz>
- <6275d3e7.1c69fb81.1d62.4504@mx.google.com>
- <YnjmPAToTR0C5o8x@dhcp22.suse.cz>
- <6278fa75.1c69fb81.9c598.f794@mx.google.com>
- <Ynj/l+pyFJxKfcbQ@dhcp22.suse.cz>
- <6279c354.1c69fb81.7f6c1.15e0@mx.google.com>
- <Yno3pNQOn1lAMPnu@dhcp22.suse.cz>
- <627a5214.1c69fb81.1b7fb.47be@mx.google.com>
- <YnpqYte2jLdcBiPg@dhcp22.suse.cz>
+        Wed, 18 May 2022 02:14:30 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-cusazlp170100000.outbound.protection.outlook.com [IPv6:2a01:111:f403:c111::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5D64D9E7;
+        Tue, 17 May 2022 23:14:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XDGCUjYHeVl3zC+m9LnkjOb0qLa4afitdCJshIsIezW6RwPpsdc3RtR58NR9n0Ytb7O5BAppMlSSqHSORwFsyLeN85N6j2IcM9ieVTGL/YkELw48foC+2arM+ZdfewE63iJZaUGBAfS7wNU7T03UiIQ2GmbRE/nLNFi4/kZYfWXHQk3lGegqMRak7nlHWI0E++glQam7B0lIJ57eC25DPh6qlpEeSWzYvj1x601RN40+1MIut+U3956AwlSX4+UVYQy+oDGfqRQML6TPyTchYjwzEiuvfvP63gS1oyD1yhsf31YgyIB/bTXJVQBirYlvmleJ7Q4P3mNs7VKY77je8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6MYFygRsH+rbiDd0hkmJYkZ91EFGnYJDzRFk9TihjaA=;
+ b=d0v8vT/7oU8Kx+t9zxzP6krM7BdQfZbLhVI+qZeuU8FQcU/CnY7pJow16dvyk+vMxhsolXsQ6NyrWLRGZnymBTEPtHLEAxdTPGqVYuAMZBnIZ4iMElDBz/+jjh1vUyimv6V99qJPqkQzGI+YwF4WWDaYFujsOACvkG3ZsRaEZlFzCfTn0ZjPEhuXIH8bKVVz7F5xLVn0kO/TgsDcbcGs9redwrbuGqExROOs0OnP1iut767XH1yRfDrCe5jI0eQnqsbecejdy7+ycVDeyHbKWopqVoMGB4RGDw28thK238ibiYfSFBsdx4NGqUkGDWvrGUze/wkC8dL2qQtCL33w0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6MYFygRsH+rbiDd0hkmJYkZ91EFGnYJDzRFk9TihjaA=;
+ b=CGhhn9gzAwJqOI7x8peehaA3PlZDMwDSoo66hqJwDnU4Nsg4a2CZDURnYS5pFZpam5BHKGjjfsARNpxne009kAHMdzjuY6EUKPhNPt6qF9JyZD7hxIAP+yb6iv9OUySZA/8qrdjX+vQsKZffyrKppCpapuRfzak1KHeEhMAP+Ro=
+Received: from BL1PR21MB3283.namprd21.prod.outlook.com (2603:10b6:208:39b::8)
+ by LV2PR21MB3252.namprd21.prod.outlook.com (2603:10b6:408:172::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.5; Wed, 18 May
+ 2022 05:59:00 +0000
+Received: from BL1PR21MB3283.namprd21.prod.outlook.com
+ ([fe80::e0d1:ed2f:325a:8393]) by BL1PR21MB3283.namprd21.prod.outlook.com
+ ([fe80::e0d1:ed2f:325a:8393%9]) with mapi id 15.20.5273.005; Wed, 18 May 2022
+ 05:59:00 +0000
+From:   Ajay Sharma <sharmaajay@microsoft.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>, Long Li <longli@microsoft.com>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        Ajay Sharma <sharmaajay@microsoft.com>
+Subject: RE: [EXTERNAL] Re: [PATCH 05/12] net: mana: Set the DMA device max
+ page size
+Thread-Topic: [EXTERNAL] Re: [PATCH 05/12] net: mana: Set the DMA device max
+ page size
+Thread-Index: AQHYac0t/cR6HA52CUOHz8pr+lzroa0jKeeAgABLXKCAAAGZgIAABm1QgABEpQCAAFjD8A==
+Date:   Wed, 18 May 2022 05:59:00 +0000
+Message-ID: <BL1PR21MB3283790E8270ED6C639AAB0DD6D19@BL1PR21MB3283.namprd21.prod.outlook.com>
+References: <1652778276-2986-1-git-send-email-longli@linuxonhyperv.com>
+ <1652778276-2986-6-git-send-email-longli@linuxonhyperv.com>
+ <20220517145949.GH63055@ziepe.ca>
+ <PH7PR21MB3263EFA8F624F681C3B57636CECE9@PH7PR21MB3263.namprd21.prod.outlook.com>
+ <20220517193515.GN63055@ziepe.ca>
+ <PH7PR21MB3263C44368F02B8AF8521C4ACECE9@PH7PR21MB3263.namprd21.prod.outlook.com>
+ <20220518000356.GO63055@ziepe.ca>
+In-Reply-To: <20220518000356.GO63055@ziepe.ca>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=101d5414-e489-41f6-83e8-238ce5201743;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-05-18T05:21:38Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 82f2c23e-42f2-4902-479b-08da3893813c
+x-ms-traffictypediagnostic: LV2PR21MB3252:EE_
+x-microsoft-antispam-prvs: <LV2PR21MB32525A0672ABEE6A8774A713D6D19@LV2PR21MB3252.namprd21.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xbGXHN367BPdShIz9RzJEC377nzSa3ylbHilFlxcNwoUKHwsBTOXa4uyoD5hoIoO5uifX9u6WLP0Q41N8YgQ/NuVkqb1xCyyipGUGoVy6MZhcnkoJfbS5czC2T48Br1V6spPxOhfaU/BafMWOD0ClqxgimFndLemX2VBiUpJJLJhK6N+BNYnGykALYIn1JYA15S98GL+c+R37fpZ3VwVDOEwgnPXSST8eUixSO3lJ/E7h5h3i05cbVaMcrbHAwOJzjaBrh+P2u3mTMXdFOQpevyeKVluuCJzWiURY6GJoGFe24A+VUeldhFTBi+9T0DlIMpYxKKK0QGP6FfEfpymkffnmBRhk+88xwtL93Gnq9v1ZE6jVhr+1OwPgBL2rVA7cq50r5WE3GLWozRjyiWP7VKQGwuNoepoUVdQVURFEYVg91HQ9KRswq5mxMAaBRFiS+f8goOqqDYP6cTj18HGWLd5+3lXhaqRFKtM1Wl0IUgBjD/gLCPEWrtko8GU1Ll1j9XO+HYvbd6F4IdcbHOSFNx3O0/O/EO5W8qRACt5NeS8HIXMk5VfJReKRqs3yGGqdaypBPWc+zr8GkWe7N2OYAlCrTphCdOWmBvAd0vbNs4ht55WszAcbeOQYoUiQA1R3vz9cG/k5RMCP5pKuNZdOM4guzg1/1wOe8LJsYXoVP+pq1VOJnQiD3wH44R35X7wFo/UYAf/bofkYOIKpi+qjzUvmigtmER8CZx7oftOJWhEOFyDm97rcHS2lB4FMUHD
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR21MB3283.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(6636002)(7416002)(110136005)(38100700002)(186003)(2906002)(316002)(8990500004)(54906003)(38070700005)(966005)(55016003)(7696005)(53546011)(8936002)(52536014)(5660300002)(33656002)(107886003)(4326008)(9686003)(83380400001)(6506007)(82950400001)(71200400001)(8676002)(10290500003)(508600001)(82960400001)(122000001)(66556008)(64756008)(66446008)(66476007)(76116006)(66946007)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?I/Jtonvd9nLxCEKDYR5fJuh6/1LDl6/PN1P9JP00+8ueTbdgiRFyb3JzuoiA?=
+ =?us-ascii?Q?QZ0xHG/2QBblkk5Jh3vc0UgEXpECYVwxV+pKOVQ9XOUASwbcejUNG/u23YWg?=
+ =?us-ascii?Q?tTmFB9ISH8RoskAKWuKR2HpbGbKARDutNggtDCjTZBeG9o5OMLqjKSn6s++p?=
+ =?us-ascii?Q?uvb0fdbS4S4tgd4XJ9pc60y43YFHoWaBLjoN3AVeX/bQIbCIRNOjkKet141B?=
+ =?us-ascii?Q?VhHPuQkN2drQ5inXIRaDBL+oTVKxu8QC3fy4oiKhifkHYQPWfikEVVrb/RcK?=
+ =?us-ascii?Q?ZvDEkitieJ3yyHxP4QBEm2OlKtWt6fLX2tHbp9nDnmrNUUuFgy8fGiH92msd?=
+ =?us-ascii?Q?0htTiswfIojPiDDDXcOror+eQgc8aiw1VSyb3VbyO0lD6kNNBc2O38jhcYgB?=
+ =?us-ascii?Q?tIcoh42vTdxEFx39s7CItfGYXHBRZOUvsuJ6D1F/CIp7UPDp9YowiLV0FNc0?=
+ =?us-ascii?Q?CF/JJdSnQHtnloff3w7qHkEaJtWYyMWg1J12KwwQKZOtRgebn9wW+5Kaeqwn?=
+ =?us-ascii?Q?wWcXkucQdoTYoo7cLwT4TzCLBLsQ+iHkGwxfvesQLQeMyWxkiO5GsXlvn70c?=
+ =?us-ascii?Q?xLjqgXKDFUZGFEg6K3pRyBW3Xak34V+QRkOTv19ulB9JSYu23RvSjgueQg56?=
+ =?us-ascii?Q?nzmpRlQWIvwVeIX2MK06pHH1BeNKU7WqaNj7SNAcDFtZR1oAJDhgX0+DN8/e?=
+ =?us-ascii?Q?9M8p7+tryM718pQGFysN4uBgiS7bJx7XzEm0Pc6h3BpXY3dROdRUw/5wsPkr?=
+ =?us-ascii?Q?ggEerdFrusnRzmIy8f14K+uFqUc/c9r1R1pUDBgc0x29WZPqXzUx5MVeMEqR?=
+ =?us-ascii?Q?au7uxgCOp674xz1CYaWFHMDsJCMMpkO23qHpc39pVsrRhQoU1PHGpNMiB9r/?=
+ =?us-ascii?Q?hEukJPbdjqJtppCzzdbRUvc0SZnm/IBDgQ/lnLrnSWasAg2hdQOwG8Y9+paS?=
+ =?us-ascii?Q?L8qGutXIbj5W1jUnoj7y0/jcSVZNqLF/3Jae3uvRRKgLWIfYP8qgBo5nQXvU?=
+ =?us-ascii?Q?bVJivw7L8tHtbfg/Y8LQGH1cdNhehWb3maXEjh1Cqqm+CgEosqQHWeqtIfLr?=
+ =?us-ascii?Q?TySe7zNb3OSw8SCHM9oNcOL0Bcsj1I5H7tOKSVRMcPI2ugxk40BajUUvzRcM?=
+ =?us-ascii?Q?NSDWXFD9JPZV/7BOQX7TfOn989HVxnaw7vJQAOeBfKyftR3+w8WQukLKL8LW?=
+ =?us-ascii?Q?zPDZK/RiGRQvVY73m4YSQpUOUxC2KzFKsvQ+Vqh+vEcNbmRqwDph1N4M2G5p?=
+ =?us-ascii?Q?uyd8EzXih+VCwhfPJJxU6hfYIT0QX3dsCO1+zQSYHCi2MBFKM/hd59IYIugX?=
+ =?us-ascii?Q?JXJmUIeSgufGyEWIGf+ZPR4VhcfcpMvKRKjPFXAdTma0kpFxSljxzM5nwsMa?=
+ =?us-ascii?Q?d5Aao7NRKyxBOSq4M3TFC12JXPcsXTbpuitdOlZqRg5MuxvKgvJg6aj9b8pa?=
+ =?us-ascii?Q?F/N1dt9TJ0gu4ole2sXHOVFsEmMHs3rCF5vJs1gf5OzYUkG04ExX1+XUUB90?=
+ =?us-ascii?Q?ZrbL3tZV1ClX1mnGXcbDETevdJVqOeIduRFfdugcehD5ltgM7QWHLGi9Mlbw?=
+ =?us-ascii?Q?rSnmXYtRmHQ9ecBSjEeIccIt4KaqEERiiRIARrTKkkCs2ktXpKkGSSrTtR92?=
+ =?us-ascii?Q?gqsxqQIzSCafmLUrGlw78gV7F6pyyoo70kLmmVdeRHqfqAGM9q9mTcIRNozv?=
+ =?us-ascii?Q?fKNyJThmKLYW3VZTVpPjm082Pi83LfEE7wa/FiU7hELWHqMk8BUk4t3nTGyx?=
+ =?us-ascii?Q?OBhRWZrGWA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnpqYte2jLdcBiPg@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR21MB3283.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82f2c23e-42f2-4902-479b-08da3893813c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2022 05:59:00.5205
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z4BXomu9S+lO/0fk2jpEiWZi+yi/mDhoWxEN/P9EImxVcMOq9h+jWMy4rxKIqV6gbp+jJBRxTgDTfDbJYV9gkFddZJVYB1qVz2PpQVCR17c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR21MB3252
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 03:36:34PM +0200, Michal Hocko wrote:
-> On Tue 10-05-22 11:52:51, CGEL wrote:
-> > On Tue, May 10, 2022 at 12:00:04PM +0200, Michal Hocko wrote:
-> > > On Tue 10-05-22 01:43:38, CGEL wrote:
-> > > > On Mon, May 09, 2022 at 01:48:39PM +0200, Michal Hocko wrote:
-> > > > > On Mon 09-05-22 11:26:43, CGEL wrote:
-> > > > > > On Mon, May 09, 2022 at 12:00:28PM +0200, Michal Hocko wrote:
-> > > > > > > On Sat 07-05-22 02:05:25, CGEL wrote:
-> > > > > > > [...]
-> > > > > > > > If there are many containers to run on one host, and some of them have high
-> > > > > > > > performance requirements, administrator could turn on thp for them:
-> > > > > > > > # docker run -it --thp-enabled=always
-> > > > > > > > Then all the processes in those containers will always use thp.
-> > > > > > > > While other containers turn off thp by:
-> > > > > > > > # docker run -it --thp-enabled=never
-> > > > > > > 
-> > > > > > > I do not know. The THP config space is already too confusing and complex
-> > > > > > > and this just adds on top. E.g. is the behavior of the knob
-> > > > > > > hierarchical? What is the policy if parent memcg says madivise while
-> > > > > > > child says always? How does the per-application configuration aligns
-> > > > > > > with all that (e.g. memcg policy madivise but application says never via
-> > > > > > > prctl while still uses some madvised - e.g. via library).
-> > > > > > >
-> > > > > > 
-> > > > > > The cgroup THP behavior is align to host and totally independent just likes
-> > > > > > /sys/fs/cgroup/memory.swappiness. That means if one cgroup config 'always'
-> > > > > > for thp, it has no matter with host or other cgroup. This make it simple for
-> > > > > > user to understand or control.
-> > > > > 
-> > > > > All controls in cgroup v2 should be hierarchical. This is really
-> > > > > required for a proper delegation semantic.
+Thanks Long.=20
+Hello Jason,
+I am the author of the patch.
+To your comment below :=20
+" As I've already said, you are supposed to set the value that limits to ib=
+_sge and *NOT* the value that is related to ib_umem_find_best_pgsz. It is u=
+sually 2G because the ib_sge's typically work on a 32 bit length."
+
+The ib_sge is limited by the __sg_alloc_table_from_pages() which uses ib_dm=
+a_max_seg_size() which is what is set by the eth driver using dma_set_max_s=
+eg_size() . Currently our hw does not support PTEs larger than 2M.=20
+
+So ib_umem_find_best_pgsz()  takes as an input PG_SZ_BITMAP .  The bitmap h=
+as all the bits set for the page sizes supported by the HW.
+
+#define PAGE_SZ_BM (SZ_4K | SZ_8K | SZ_16K | SZ_32K | SZ_64K | SZ_128K \
+		    | SZ_256K | SZ_512K | SZ_1M | SZ_2M)
+
+ Are you suggesting we are too restrictive in the bitmap  we are passing ? =
+or that we should not set this bitmap let the function choose default ?
+
+Regards,
+Ajay
+
+-----Original Message-----
+From: Jason Gunthorpe <jgg@ziepe.ca>=20
+Sent: Tuesday, May 17, 2022 5:04 PM
+To: Long Li <longli@microsoft.com>
+Cc: Ajay Sharma <sharmaajay@microsoft.com>; KY Srinivasan <kys@microsoft.co=
+m>; Haiyang Zhang <haiyangz@microsoft.com>; Stephen Hemminger <sthemmin@mic=
+rosoft.com>; Wei Liu <wei.liu@kernel.org>; Dexuan Cui <decui@microsoft.com>=
+; David S. Miller <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; =
+Paolo Abeni <pabeni@redhat.com>; Leon Romanovsky <leon@kernel.org>; linux-h=
+yperv@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org=
+; linux-rdma@vger.kernel.org
+Subject: [EXTERNAL] Re: [PATCH 05/12] net: mana: Set the DMA device max pag=
+e size
+
+[You don't often get email from jgg@ziepe.ca. Learn why this is important a=
+t https://aka.ms/LearnAboutSenderIdentification.]
+
+On Tue, May 17, 2022 at 08:04:58PM +0000, Long Li wrote:
+> > Subject: Re: [PATCH 05/12] net: mana: Set the DMA device max page=20
+> > size
+> >
+> > On Tue, May 17, 2022 at 07:32:51PM +0000, Long Li wrote:
+> > > > Subject: Re: [PATCH 05/12] net: mana: Set the DMA device max=20
+> > > > page size
+> > > >
+> > > > On Tue, May 17, 2022 at 02:04:29AM -0700,=20
+> > > > longli@linuxonhyperv.com
+> > wrote:
+> > > > > From: Long Li <longli@microsoft.com>
 > > > > >
-> > > > 
-> > > > Could we align to the semantic of /sys/fs/cgroup/memory.swappiness?
-> > > > Some distributions like Ubuntu is still using cgroup v1.
-> > > 
-> > > cgroup v1 interface is mostly frozen. All new features are added to the
-> > > v2 interface.
+> > > > > The system chooses default 64K page size if the device does=20
+> > > > > not specify the max page size the device can handle for DMA.=20
+> > > > > This do not work well when device is registering large chunk=20
+> > > > > of memory in that a large page size is more efficient.
+> > > > >
+> > > > > Set it to the maximum hardware supported page size.
+> > > >
+> > > > For RDMA devices this should be set to the largest segment size=20
+> > > > an ib_sge can take in when posting work. It should not be the=20
+> > > > page size of MR. 2M is a weird number for that, are you sure it is =
+right?
 > > >
-> > 
-> > So what about we add this interface to cgroup v2?
-> 
-> Can you come up with a sane hierarchical behavior?
-> 
-> [...]
-> > > > For micro-service architecture, the application in one container is not a
-> > > > set of loosely tight processes, it's aim at provide one certain service,
-> > > > so different containers means different service, and different service
-> > > > has different QoS demand. 
-> > > 
-> > > OK, if they are tightly coupled you could apply the same THP policy by
-> > > an existing prctl interface. Why is that not feasible. As you are noting
-> > > below...
-> > > 
-> > > >     5.containers usually managed by compose software, which treats container as
-> > > > base management unit;
-> > > 
-> > > ..so the compose software can easily start up the workload by using prctl
-> > > to disable THP for whatever workloads it is not suitable for.
-> > 
-> > prctl(PR_SET_THP_DISABLE..) can not be elegance to support the semantic we
-> > need. If only some containers needs THP, other containers and host do not need
-> > THP. We must set host THP to always first, and call prctl() to close THP for
-> > host tasks and other containers one by one,
-> 
-> It might not be the most elegant solution but it should work.
-> Maintaining user interfaces for ever has some cost and the THP
-> configuration space is quite large already. So I would rather not add
-> more complication in unless that is absolutely necessary.
+> > > Yes, this is the maximum page size used in hardware page tables.
+> >
+> > As I said, it should be the size of the sge in the WQE, not the=20
+> > "hardware page tables"
 >
+> This driver uses the following code to figure out the largest page=20
+> size for memory registration with hardware:
+>
+> page_sz =3D ib_umem_find_best_pgsz(mr->umem, PAGE_SZ_BM, iova);
+>
+> In this function, mr->umem is created with ib_dma_max_seg_size() as=20
+> its max segment size when creating its sgtable.
+>
+> The purpose of setting DMA page size to 2M is to make sure this=20
+> function returns the largest possible MR size that the hardware can=20
+> take. Otherwise, this function will return 64k: the default DMA size.
 
-By the way, should we let prctl() support PR_SET_THP_ALWAYS? Just likes
-PR_TASK_PERF_EVENTS_DISABLE and PR_TASK_PERF_EVENTS_ENABLE. This would
-make it simpler to let certain process use THP while others not use.
+As I've already said, you are supposed to set the value that limits to ib_s=
+ge and *NOT* the value that is related to ib_umem_find_best_pgsz. It is usu=
+ally 2G because the ib_sge's typically work on a 32 bit length.
 
-> > in this process some tasks that start before we call prctl() may
-> > already use THP with no need.
-> 
-> As long as all those processes have a common ancestor I do not see how
-> that would be possible.
-> 
-> -- 
-> Michal Hocko
-> SUSE Labs
+Jason

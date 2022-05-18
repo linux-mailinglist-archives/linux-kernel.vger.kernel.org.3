@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EBA52B9A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3660252BA3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236332AbiERMN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S236518AbiERM1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236273AbiERMMt (ORCPT
+        with ESMTP id S236379AbiERM04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:12:49 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C7514C758;
-        Wed, 18 May 2022 05:12:41 -0700 (PDT)
-Received: from kwepemi100015.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3BgB0f8zzhYgp;
-        Wed, 18 May 2022 20:11:50 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100015.china.huawei.com (7.221.188.125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 18 May 2022 20:12:39 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 20:12:38 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <josef@toxicpanda.com>, <axboe@kernel.dk>, <ming.lei@redhat.com>
-CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v2 6/6] nbd: use pr_err to output error message
-Date:   Wed, 18 May 2022 20:26:18 +0800
-Message-ID: <20220518122618.1702997-7-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220518122618.1702997-1-yukuai3@huawei.com>
-References: <20220518122618.1702997-1-yukuai3@huawei.com>
+        Wed, 18 May 2022 08:26:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30486D4D0;
+        Wed, 18 May 2022 05:26:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A5C6B81F43;
+        Wed, 18 May 2022 12:26:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B817EC3411A;
+        Wed, 18 May 2022 12:26:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652876812;
+        bh=jpp7JaAjtpYcJypZTqEMC1XKrOHHdguJX9I0ndKgnbA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=f1bLlc/rFCCTpcleeiaRDtN6oPm+C5AxfSu7EnFRpJdDTuJCnvQDr4ZosE0mdtqFO
+         LXUqEV1ZSuR5PSEzQ4GJbf50xdr8KuhUfzNBCYMyvDAreItSlvkn3wXHbUhsAZ5VzJ
+         4zKHxSXa0co5F2YIY0pKZlYhZ0Y+uISME/0CRm3bPtoX7xhTQbM3g//+o3/X7qTvyB
+         rArhZ2IdrXSuu7BeHELJXjsdutQlIldIawIBgVh1TUqQQZ4UKXCoGf4NykJvGF9gT9
+         m9WJM2H0AmTWb/oJo+LXx+H45C5SE6cv8m5KQYw2KLFad45GWObOPDmtB/wBTa5Mpj
+         pNIPnRmqLe5MQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kieran Frewen <kieran.frewen@morsemicro.com>,
+        Bassem Dawood <bassem@morsemicro.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Sasha Levin <sashal@kernel.org>, johannes@sipsolutions.net,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 05/23] cfg80211: retrieve S1G operating channel number
+Date:   Wed, 18 May 2022 08:26:18 -0400
+Message-Id: <20220518122641.342120-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220518122641.342120-1-sashal@kernel.org>
+References: <20220518122641.342120-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,172 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of using the long printk(KERN_ERR "nbd: ...") to
-output error message, defining pr_fmt and using
-the short pr_err("") to do that. The replacemen is done
-by using the following command:
+From: Kieran Frewen <kieran.frewen@morsemicro.com>
 
-  sed -i 's/printk(KERN_ERR "nbd: /pr_err("/g' \
-		  drivers/block/nbd.c
+[ Upstream commit e847ffe2d146cfd52980ca688d84358e024a6e70 ]
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+When retrieving the S1G channel number from IEs, we should retrieve
+the operating channel instead of the primary channel. The S1G operation
+element specifies the main channel of operation as the oper channel,
+unlike for HT and HE which specify their main channel of operation as
+the primary channel.
+
+Signed-off-by: Kieran Frewen <kieran.frewen@morsemicro.com>
+Signed-off-by: Bassem Dawood <bassem@morsemicro.com>
+Link: https://lore.kernel.org/r/20220420041321.3788789-1-kieran.frewen@morsemicro.com
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ net/wireless/scan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 349bc3da878d..25902ebc87f1 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1928,16 +1928,16 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
- 		 * MKDEV() expect that the max bits of first_minor is 20.
- 		 */
- 		if (index < 0 || index > MINORMASK >> part_shift) {
--			printk(KERN_ERR "nbd: illegal input index %d\n", index);
-+			pr_err("illegal input index %d\n", index);
- 			return -EINVAL;
+diff --git a/net/wireless/scan.c b/net/wireless/scan.c
+index 4a6d86432910..6d82bd9eaf8c 100644
+--- a/net/wireless/scan.c
++++ b/net/wireless/scan.c
+@@ -1829,7 +1829,7 @@ int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
+ 		if (tmp && tmp->datalen >= sizeof(struct ieee80211_s1g_oper_ie)) {
+ 			struct ieee80211_s1g_oper_ie *s1gop = (void *)tmp->data;
+ 
+-			return s1gop->primary_ch;
++			return s1gop->oper_ch;
  		}
- 	}
- 	if (!info->attrs[NBD_ATTR_SOCKETS]) {
--		printk(KERN_ERR "nbd: must specify at least one socket\n");
-+		pr_err("must specify at least one socket\n");
- 		return -EINVAL;
- 	}
- 	if (!info->attrs[NBD_ATTR_SIZE_BYTES]) {
--		printk(KERN_ERR "nbd: must specify a size in bytes for the device\n");
-+		pr_err("must specify a size in bytes for the device\n");
- 		return -EINVAL;
- 	}
- again:
-@@ -1973,7 +1973,7 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
- 		nbd_put(nbd);
- 		if (index == -1)
- 			goto again;
--		printk(KERN_ERR "nbd: nbd%d already in use\n", index);
-+		pr_err("nbd%d already in use\n", index);
- 		return -EBUSY;
- 	}
- 	if (WARN_ON(nbd->config)) {
-@@ -1985,7 +1985,7 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
- 	if (IS_ERR(config)) {
- 		mutex_unlock(&nbd->config_lock);
- 		nbd_put(nbd);
--		printk(KERN_ERR "nbd: couldn't allocate config\n");
-+		pr_err("couldn't allocate config\n");
- 		return PTR_ERR(config);
- 	}
- 	nbd->config = config;
-@@ -2041,7 +2041,7 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
- 			struct nlattr *socks[NBD_SOCK_MAX+1];
- 
- 			if (nla_type(attr) != NBD_SOCK_ITEM) {
--				printk(KERN_ERR "nbd: socks must be embedded in a SOCK_ITEM attr\n");
-+				pr_err("socks must be embedded in a SOCK_ITEM attr\n");
- 				ret = -EINVAL;
- 				goto out;
- 			}
-@@ -2050,7 +2050,7 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
- 							  nbd_sock_policy,
- 							  info->extack);
- 			if (ret != 0) {
--				printk(KERN_ERR "nbd: error processing sock list\n");
-+				pr_err("error processing sock list\n");
- 				ret = -EINVAL;
- 				goto out;
- 			}
-@@ -2122,7 +2122,7 @@ static int nbd_genl_disconnect(struct sk_buff *skb, struct genl_info *info)
- 		return -EPERM;
- 
- 	if (!info->attrs[NBD_ATTR_INDEX]) {
--		printk(KERN_ERR "nbd: must specify an index to disconnect\n");
-+		pr_err("must specify an index to disconnect\n");
- 		return -EINVAL;
- 	}
- 	index = nla_get_u32(info->attrs[NBD_ATTR_INDEX]);
-@@ -2130,13 +2130,13 @@ static int nbd_genl_disconnect(struct sk_buff *skb, struct genl_info *info)
- 	nbd = idr_find(&nbd_index_idr, index);
- 	if (!nbd) {
- 		mutex_unlock(&nbd_index_mutex);
--		printk(KERN_ERR "nbd: couldn't find device at index %d\n",
-+		pr_err("couldn't find device at index %d\n",
- 		       index);
- 		return -EINVAL;
- 	}
- 	if (!refcount_inc_not_zero(&nbd->refs)) {
- 		mutex_unlock(&nbd_index_mutex);
--		printk(KERN_ERR "nbd: device at index %d is going down\n",
-+		pr_err("device at index %d is going down\n",
- 		       index);
- 		return -EINVAL;
- 	}
-@@ -2162,7 +2162,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
- 		return -EPERM;
- 
- 	if (!info->attrs[NBD_ATTR_INDEX]) {
--		printk(KERN_ERR "nbd: must specify a device to reconfigure\n");
-+		pr_err("must specify a device to reconfigure\n");
- 		return -EINVAL;
- 	}
- 	index = nla_get_u32(info->attrs[NBD_ATTR_INDEX]);
-@@ -2170,7 +2170,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
- 	nbd = idr_find(&nbd_index_idr, index);
- 	if (!nbd) {
- 		mutex_unlock(&nbd_index_mutex);
--		printk(KERN_ERR "nbd: couldn't find a device at index %d\n",
-+		pr_err("couldn't find a device at index %d\n",
- 		       index);
- 		return -EINVAL;
- 	}
-@@ -2192,7 +2192,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
- 	}
- 	if (!refcount_inc_not_zero(&nbd->refs)) {
- 		mutex_unlock(&nbd_index_mutex);
--		printk(KERN_ERR "nbd: device at index %d is going down\n",
-+		pr_err("device at index %d is going down\n",
- 		       index);
- 		return -EINVAL;
- 	}
-@@ -2257,7 +2257,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
- 			struct nlattr *socks[NBD_SOCK_MAX+1];
- 
- 			if (nla_type(attr) != NBD_SOCK_ITEM) {
--				printk(KERN_ERR "nbd: socks must be embedded in a SOCK_ITEM attr\n");
-+				pr_err("socks must be embedded in a SOCK_ITEM attr\n");
- 				ret = -EINVAL;
- 				goto out;
- 			}
-@@ -2266,7 +2266,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
- 							  nbd_sock_policy,
- 							  info->extack);
- 			if (ret != 0) {
--				printk(KERN_ERR "nbd: error processing sock list\n");
-+				pr_err("error processing sock list\n");
- 				ret = -EINVAL;
- 				goto out;
- 			}
-@@ -2483,7 +2483,7 @@ static int __init nbd_init(void)
- 	BUILD_BUG_ON(sizeof(struct nbd_request) != 28);
- 
- 	if (max_part < 0) {
--		printk(KERN_ERR "nbd: max_part must be >= 0\n");
-+		pr_err("max_part must be >= 0\n");
- 		return -EINVAL;
- 	}
- 
-@@ -2562,10 +2562,10 @@ static void __exit nbd_cleanup(void)
- 		nbd = list_first_entry(&del_list, struct nbd_device, list);
- 		list_del_init(&nbd->list);
- 		if (refcount_read(&nbd->config_refs))
--			printk(KERN_ERR "nbd: possibly leaking nbd_config (ref %d)\n",
-+			pr_err("possibly leaking nbd_config (ref %d)\n",
- 					refcount_read(&nbd->config_refs));
- 		if (refcount_read(&nbd->refs) != 1)
--			printk(KERN_ERR "nbd: possibly leaking a device\n");
-+			pr_err("possibly leaking a device\n");
- 		nbd_put(nbd);
- 	}
- 
+ 	} else {
+ 		tmp = cfg80211_find_elem(WLAN_EID_DS_PARAMS, ie, ielen);
 -- 
-2.31.1
+2.35.1
 

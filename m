@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A7E52C2AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C61152C2A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241641AbiERSuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
+        id S241657AbiERSuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241624AbiERSuO (ORCPT
+        with ESMTP id S241624AbiERSu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:50:14 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8732EA17
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:50:13 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id ck4so1275885ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pqI2+xUvKnWcIdSP6yP4fejkeLxIn1EuNN3syEENFFE=;
-        b=ku0RmPMoWqvIQqEw7XKved+GSKuUfRade7blj4kfDUDuPWoOiPGgOjCbSoHSzCn9R6
-         S+HsJ3PMaJ9qIpGRIkp7qCyCRFU5BjNDyAeg9M0u315lzErTSZ/wqPxH6ibHPU65aM6r
-         xhnKdhx7o+yN4xzdu+2R62ATJrYY/NZYGtfSmZWP0EYGzEpvzlfiaVrk5/0FP8bYyv0t
-         s6yPe5UT6mwoaKnLahx7w0IotyxuMnwFWjjF9Kt5LZjjFnx8mafw3rso8GVCTkIR7oSY
-         YadjW6svAKOLhv8NH/AhtzAPr4a3lOTFpDZrNSYuy+FGoHayRF2qqEAMQMbNwhzAho+X
-         vlkA==
+        Wed, 18 May 2022 14:50:29 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74892177076;
+        Wed, 18 May 2022 11:50:27 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2ec42eae76bso34188157b3.10;
+        Wed, 18 May 2022 11:50:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pqI2+xUvKnWcIdSP6yP4fejkeLxIn1EuNN3syEENFFE=;
-        b=l3s85XCc7vtiB5ADlOHlwhMnSI+d3WpaPxy7iDFboDtcoVlj7dfTOVN3rld23u8tjh
-         pqcvCWc4bNzWUcyf7FGwnvY6vjwWn0xSRsxqH0d8y9hhx5HafvXD+rJVZqGklPfEWZTr
-         YWkiBk3uWFhKRC6U89eqOIsO5UJoz7kbYKKoIINsEZ9lsPcgHVKHiIw/pTIWrLa84JH0
-         aMs/Z82KeF16epJTqXNyFxQPeXJNamrD+/TqCeZkilmB/ssuBpnPkudqwOAjgzHnKZy1
-         aqTPILad1/jXh8mUbMJVsa8j+HiSaN7GTNU1JaegrEFeEEwhGopwyws6S6TSbY91TPiz
-         svPg==
-X-Gm-Message-State: AOAM5310gCmh9WsrRBCMVIwamc44XzjEFL41OAh4Ha9XRRZwinC3qakE
-        4OU3+igEXnc1jXwtg28zGGTuxAPqDn1/kw==
-X-Google-Smtp-Source: ABdhPJwVRPW7HZvyZ26jxm0P3qXxTBvjoAoK5+NSeQQ+iz1Mg9/hFPy50tr8cQrpXctlskSrLqzFYA==
-X-Received: by 2002:a17:907:1b0c:b0:6fe:25bf:b3e5 with SMTP id mp12-20020a1709071b0c00b006fe25bfb3e5mr844547ejc.689.1652899811358;
-        Wed, 18 May 2022 11:50:11 -0700 (PDT)
-Received: from localhost.localdomain (93-103-18-160.static.t-2.net. [93.103.18.160])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906008400b006fe8a4ec62fsm961343ejc.4.2022.05.18.11.50.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 11:50:10 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>, Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: [PATCH] sched/clock: Use try_cmpxchg64 in sched_clock_{local,remote}
-Date:   Wed, 18 May 2022 20:49:53 +0200
-Message-Id: <20220518184953.3446778-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JeOeCVH7gCGznzqm2nGSE0funGSjnIdlMb+nr+xRP/A=;
+        b=3+ugiIGKRuORnUBE3aWmDYPmfo2uoKReK9QoB9jYqINY0xOKGYRLD4kaHXsqZbsFBQ
+         xikCFVQ81XLmVFHXafYVezePnJ+jFtjhf6pZmoO+aiu8kfVYcZ8Df+B31IoA+upCDVMA
+         IUEeaxuBg3/G+VOhZfVb0k0j1aP+w7oSqR63bOjM8ISxVx+ogFxiuuYJrFt3ol6pJWOd
+         7p80i5ixfyK0/5EwMPce3rb3lpsboEllF82sfE0Mq0ztsd7ljZd1gTA5LZW338M5enp3
+         Y0gV6dhtrsIrigpFM/cbyCMeKD9Dg75kBwYHrUHkWOmcqfpXlqL3AoIupPN2ziz0lpgr
+         66OA==
+X-Gm-Message-State: AOAM531s/TwKcTwNgkHuJeNSTgKx6vkmKKEeJuMoNNXo5Mpy55xTGz5S
+        s7fFmXpfZ20PAXU6l8gIqAOTMb9qhOyuM+5K+YQ=
+X-Google-Smtp-Source: ABdhPJxcL5gAMOBXXOO+YGL6Y0P2PkXH2MCCVm1GVtiV2ayBXlf+abelWHS3qgKA5DVkPjc2lFFUvR3mDUeY/B0dZQA=
+X-Received: by 2002:a0d:c8c3:0:b0:2fe:e9eb:664 with SMTP id
+ k186-20020a0dc8c3000000b002fee9eb0664mr844761ywd.301.1652899826747; Wed, 18
+ May 2022 11:50:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220514152032.758738-1-ulf.hansson@linaro.org> <CAAhSdy3m3FzbkL-On5kPtrZgyO4x=6onr6mXi_=te5B=m_n8GQ@mail.gmail.com>
+In-Reply-To: <CAAhSdy3m3FzbkL-On5kPtrZgyO4x=6onr6mXi_=te5B=m_n8GQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 18 May 2022 20:50:15 +0200
+Message-ID: <CAJZ5v0i+RR2nK8gew9tbnO_VVU3YUx2JgdRTBW07EPrB3UK87g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpuidle: psci: Fix regression leading to no genpd governor
+To:     Anup Patel <anup@brainfault.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@rivosinc.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use try_cmpxchg64 instead of cmpxchg64 (*ptr, old, new) != old in
-sched_clock_{local,remote}. x86 cmpxchg returns success in ZF flag,
-so this change saves a compare after cmpxchg (and related move
-instruction in front of cmpxchg).
+On Sat, May 14, 2022 at 6:49 PM Anup Patel <anup@brainfault.org> wrote:
+>
+> On Sat, May 14, 2022 at 8:50 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > While factoring out the PM domain related code from PSCI domain driver into
+> > a set of library functions, a regression when initializing the genpds got
+> > introduced. More precisely, we fail to assign a genpd governor, so let's
+> > fix this.
+> >
+> > Fixes: 9d976d6721df ("cpuidle: Factor-out power domain related code from PSCI domain driver")
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+>
+> Looks good to me.
+>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+>
 
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
----
-Patch requires commits 0aa7be05d83cc584da0782405e8007e351dfb6cc
-and c2df0a6af177b6c06a859806a876f92b072dc624 from tip.git
----
- kernel/sched/clock.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Ulf, do you want me to take this lot or is it going to be handled elsewhere?
 
-diff --git a/kernel/sched/clock.c b/kernel/sched/clock.c
-index d9272d9061a3..e374c0c923da 100644
---- a/kernel/sched/clock.c
-+++ b/kernel/sched/clock.c
-@@ -287,7 +287,7 @@ notrace static u64 sched_clock_local(struct sched_clock_data *scd)
- 	clock = wrap_max(clock, min_clock);
- 	clock = wrap_min(clock, max_clock);
- 
--	if (cmpxchg64(&scd->clock, old_clock, clock) != old_clock)
-+	if (!try_cmpxchg64(&scd->clock, &old_clock, clock))
- 		goto again;
- 
- 	return clock;
-@@ -349,7 +349,7 @@ notrace static u64 sched_clock_remote(struct sched_clock_data *scd)
- 		val = remote_clock;
- 	}
- 
--	if (cmpxchg64(ptr, old_val, val) != old_val)
-+	if (!try_cmpxchg64(ptr, &old_val, val))
- 		goto again;
- 
- 	return val;
--- 
-2.35.1
-
+> > ---
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> > index 755bbdfc5b82..3db4fca1172b 100644
+> > --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> > @@ -52,7 +52,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+> >         struct generic_pm_domain *pd;
+> >         struct psci_pd_provider *pd_provider;
+> >         struct dev_power_governor *pd_gov;
+> > -       int ret = -ENOMEM, state_count = 0;
+> > +       int ret = -ENOMEM;
+> >
+> >         pd = dt_idle_pd_alloc(np, psci_dt_parse_state_node);
+> >         if (!pd)
+> > @@ -71,7 +71,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+> >                 pd->flags |= GENPD_FLAG_ALWAYS_ON;
+> >
+> >         /* Use governor for CPU PM domains if it has some states to manage. */
+> > -       pd_gov = state_count > 0 ? &pm_domain_cpu_gov : NULL;
+> > +       pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
+> >
+> >         ret = pm_genpd_init(pd, pd_gov, false);
+> >         if (ret)
+> > --
+> > 2.25.1
+> >

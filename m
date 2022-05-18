@@ -2,55 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B0752BF30
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23DA52BF10
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239939AbiERQFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S239816AbiERQFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239945AbiERQFG (ORCPT
+        with ESMTP id S239790AbiERQF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:05:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F281A0764;
-        Wed, 18 May 2022 09:05:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 225AE614B2;
-        Wed, 18 May 2022 16:05:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BEAC385A5;
-        Wed, 18 May 2022 16:05:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652889902;
-        bh=X3NOZZM14krYh97jlLnxREynzXhmiCcmRbnYysiRhck=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fpqRgUjNRlT1n5lCCA+scbxCmmG36DFgUgZ2Pj7Z7i3vQ1QdQv/dWCBjo54PEIzgx
-         7od1AlzDT+jsF7KNs1YzMLFC78q71QtZxm6rZtYF5QyvBbPsOXNOEDQEuZ9qtSbtTA
-         lTrTDGyIOINEjV39VmZjqR8QCIHe9UrsxGnWHvn00GZJf+L/Enr/N0hZxsgOif8m5C
-         Y7vBC+yR1rQHXNsxT6bD3uFGjTKYJ+uReckCBXs/44Bh5aO1Dp3dzz60V85TmnVkvm
-         R21d1AZjZQ+wT1oIJt6KyufK7DT+vWvCuPf0MCp8tKP0qqKQkdMdwG9gHQH4xB4e0s
-         H7JPwolJYumBg==
-Date:   Wed, 18 May 2022 09:05:00 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org
-Subject: Re: [PATCH] can: mcp251xfd: silence clang's -Wunaligned-access
- warning
-Message-ID: <YoUZLHIbxPu15/lN@dev-arch.thelio-3990X>
-References: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
- <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
+        Wed, 18 May 2022 12:05:29 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B131D6746
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:05:28 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id j3so1877429qvn.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:05:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AsDPJQJoORPGh0qS4EUeaOiktBXOii5jyqGHGv+kXII=;
+        b=N76w0omWsgq1J3trQP+78nGSW1FVT0gWGjc72Mb7QVydmmWW9+FAv5I3Dcl5COOIKO
+         4vA4c/iw6Hjv1lPlLWYuu4ZXAV0cmilaFztjoqQq3rpGsdIFIbi3551Hy18a84tDtlM1
+         /PVy20Jd2KeJ0STPnZZTjPBpGkbDWJmfUuaImI4EugibkVhOCmGuKS4x5BqJjjSa84Tw
+         nnk40ZmaQIdUG4daGMY+vWEQed0/kZKjkAfoSigwJTPRTsEEfJAYQcPLAAF4LtR/2p+U
+         xlREPjULkf2pEVenp75I+mD993ExL5U5UfVfMA2Y0WgBGhVwjcrJdMytRTXhKHsMJl4j
+         uWxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AsDPJQJoORPGh0qS4EUeaOiktBXOii5jyqGHGv+kXII=;
+        b=Ms/RzsYKseP7WjmzVhpQZOtnCCwNAqftlTTi3RFGEY44sWui8ChLe+VV4ekPAjhocr
+         2HCw2cEuyI6+DRudXE7OehBi3cnSZr2KOq2nWC52LJFpVHr+XMFAqoEY6LZtTbrrfPXH
+         8z3Y8pSHy158uCK49kbj1g6gMHsLaDBnJ1iC2FhftsGOSEyJ/dCQ/z4toyV6ATlHZnKx
+         LArTxoijo9fYgCohBZigxqR60gSaYFKpieBMp9sO9nLjI7xnbzxhjtZbNz09uxTPRi68
+         K7h9AnuPmCYKo5+wLVmRR1/vEAT9zCe0Eo4c6TvaxpwFry8OP9/hkn85eTQXPSyeBv5l
+         PAow==
+X-Gm-Message-State: AOAM530aQxkdGcnXupQcKiwztlaXowtwVHUqgl3ChVTO4x8xjsRi1wfj
+        TVmml4BgrE/i4xRi4dfSr4l/Tw==
+X-Google-Smtp-Source: ABdhPJwuWum5215mzbkNuSWa3OtW1/3pKlaT8sVXotoEFY0mMu9fuRHdN8UiWPfDKaWJgTpYISj/9g==
+X-Received: by 2002:a05:6214:224d:b0:461:f264:ba2 with SMTP id c13-20020a056214224d00b00461f2640ba2mr406148qvc.43.1652889927418;
+        Wed, 18 May 2022 09:05:27 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id l19-20020a05622a175300b002f39b99f670sm1567656qtk.10.2022.05.18.09.05.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 09:05:26 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nrMAv-008VXe-MH; Wed, 18 May 2022 13:05:25 -0300
+Date:   Wed, 18 May 2022 13:05:25 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Ajay Sharma <sharmaajay@microsoft.com>
+Cc:     Long Li <longli@microsoft.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: Re: [EXTERNAL] Re: [PATCH 05/12] net: mana: Set the DMA device max
+ page size
+Message-ID: <20220518160525.GP63055@ziepe.ca>
+References: <1652778276-2986-1-git-send-email-longli@linuxonhyperv.com>
+ <1652778276-2986-6-git-send-email-longli@linuxonhyperv.com>
+ <20220517145949.GH63055@ziepe.ca>
+ <PH7PR21MB3263EFA8F624F681C3B57636CECE9@PH7PR21MB3263.namprd21.prod.outlook.com>
+ <20220517193515.GN63055@ziepe.ca>
+ <PH7PR21MB3263C44368F02B8AF8521C4ACECE9@PH7PR21MB3263.namprd21.prod.outlook.com>
+ <20220518000356.GO63055@ziepe.ca>
+ <BL1PR21MB3283790E8270ED6C639AAB0DD6D19@BL1PR21MB3283.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <BL1PR21MB3283790E8270ED6C639AAB0DD6D19@BL1PR21MB3283.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,75 +91,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+On Wed, May 18, 2022 at 05:59:00AM +0000, Ajay Sharma wrote:
+> Thanks Long. 
+> Hello Jason,
+> I am the author of the patch.
+> To your comment below : 
+> " As I've already said, you are supposed to set the value that limits to ib_sge and *NOT* the value that is related to ib_umem_find_best_pgsz. It is usually 2G because the ib_sge's typically work on a 32 bit length."
+> 
+> The ib_sge is limited by the __sg_alloc_table_from_pages() which
+> uses ib_dma_max_seg_size() which is what is set by the eth driver
+> using dma_set_max_seg_size() . Currently our hw does not support
+> PTEs larger than 2M.
 
-On Wed, May 18, 2022 at 08:43:57PM +0900, Vincent Mailhol wrote:
-> clang emits a -Wunaligned-access warning on union
-> mcp251xfd_tx_ojb_load_buf.
-> 
-> The reason is that field hw_tx_obj (not declared as packed) is being
-> packed right after a 16 bits field inside a packed struct:
-> 
-> | union mcp251xfd_tx_obj_load_buf {
-> | 	struct __packed {
-> | 		struct mcp251xfd_buf_cmd cmd;
-> | 		  /* ^ 16 bits fields */
-> | 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-> | 		  /* ^ not declared as packed */
-> | 	} nocrc;
-> | 	struct __packed {
-> | 		struct mcp251xfd_buf_cmd_crc cmd;
-> | 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-> | 		__be16 crc;
-> | 	} crc;
-> | } ____cacheline_aligned;
-> 
-> Starting from LLVM 14, having an unpacked struct nested in a packed
-> struct triggers a warning. c.f. [1].
-> 
-> This is a false positive because the field is always being accessed
-> with the relevant put_unaligned_*() function. Adding __packed to the
-> structure declaration silences the warning.
-> 
-> [1] https://github.com/llvm/llvm-project/issues/55520
-> 
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
-> Actually, I do not have llvm 14 installed so I am not able to test
-> (this check was introduced in v14). But as explained in [1], adding
-> __packed should fix the warning.
+*sigh* again it has nothing to do with *PTEs* in the HW.
 
-Thanks for the patch! This does resolve the warning (verified with LLVM
-15).
-
-> Because this is a false positive, I did not add a Fixes tag, nor a
-> Reported-by: kernel test robot.
-
-I think that the Reported-by tag should always be included but I agree
-that a Fixes tag is not necessary for this warning, as we currently have
-it under W=1, so it should not be visible under normal circumstances.
-
-> ---
->  drivers/net/can/spi/mcp251xfd/mcp251xfd.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> index 1d43bccc29bf..2b0309fedfac 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> @@ -441,7 +441,7 @@ struct mcp251xfd_hw_tef_obj {
->  /* The tx_obj_raw version is used in spi async, i.e. without
->   * regmap. We have to take care of endianness ourselves.
->   */
-> -struct mcp251xfd_hw_tx_obj_raw {
-> +struct __packed mcp251xfd_hw_tx_obj_raw {
->  	__le32 id;
->  	__le32 flags;
->  	u8 data[sizeof_field(struct canfd_frame, data)];
-> -- 
-> 2.35.1
-> 
-> 
-
-Cheers,
-Nathan
+Jason

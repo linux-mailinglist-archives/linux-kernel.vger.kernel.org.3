@@ -2,728 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C6252C5CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 23:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50A552C5D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbiERV5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 17:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S230118AbiERWCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 18:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiERV4m (ORCPT
+        with ESMTP id S229991AbiERWCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 17:56:42 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F58967D2C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 14:46:12 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id w17-20020a17090a529100b001db302efed6so3348421pjh.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 14:46:12 -0700 (PDT)
+        Wed, 18 May 2022 18:02:08 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFABF99687
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 14:51:35 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id i24so3348118pfa.7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 14:51:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Qv72LZ1I+yxP8Z33Zcc51S6DMPxQv1FsKOMTh3G7lXA=;
-        b=hjRENAQ8Yg11HTuIS0/5Y7Wye95sMeI+sztS9IqMgAkkjLNXifeuFVPoG3j6Pb4DnI
-         PurzaNWx2G0BXy9stCAPQfHS/xWDw4h8qAzjF2i9fnDC+Jx+CVWXkbd+1cZrvvPDN+sz
-         1fTZs+z0zzjAsx8OFyoiAMoNTHsv3p7rV7tNzm+7xv6DqHmF1kPggZ4UHoTLSjDC60WK
-         +q9YSd/QfbTFjL05Y84aS4tAhg5rBsWFDfaPzr9DeEMbdyhNTjR/iXWbwxXm1oDTTao6
-         OfiYyJAIODN6+yueQdT6qPZKdujU5JjXGL/7n3wh2y+Di8on+za2f/hH2Gtv4bncQIsv
-         cHqQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rlileXECXQwcs4FwBCFGgd9tlzU7JPOtD7+Op7dKw2A=;
+        b=Ku1CxZ7SlLE9GBbQ8dzXmhq85kFZNi5vcrvHKOMNhhhVvvOh3k+JTtG1I91mqxOvPz
+         LxpEDdwdyUv3b7kshP/C7OV8Xnvt6lTCj47UuL95QjfjiaxUgz2OBHUsP5Srhkx1kCIy
+         4K5H099dlnW9vAKbuow+u2t6st3v9RVot6OcI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Qv72LZ1I+yxP8Z33Zcc51S6DMPxQv1FsKOMTh3G7lXA=;
-        b=Cq5ctIrN/3dEJ0GbzUs8Ooeha6h72OE49R2jOXd5dSDZfDJ1shfNWRR6x1Ckz70oJV
-         /Kt0ZgaUh+rGqPX36RGKlRxWz/4bk2CtCFNbaWZsN14LCATFNPZra8/u+nx21dQFWm+u
-         i1yRY4YKD7OkJUfwDqrUK6CMSd0Jd0ieTOp8m80VPBfKaKUTvhNDWaRZnxmP0xqotkpL
-         xMjKpIPprPBIC+QaDjgBSBmKVCjoM3gaXxjI0qRwAhTFBGfUN4N3SCKIiANjiB+qbHI7
-         Jvb8ny9w3Ipb5cQSd2kFxjvekyQdXK6AJEggE1CkGsJJg2t/pG1ByUDYLpM7oXljxJzX
-         F68A==
-X-Gm-Message-State: AOAM533d+FbHhyeX6gL1k+kYL9uWp8kgrNyxohyH7RFqex4hDAPovBz3
-        MGj7Ta+95qtxTdAzb63KScQhow==
-X-Google-Smtp-Source: ABdhPJy5Gc24u3CYNmxZNEGxlRlEFunywsgYO7e26DZTdIBUVuOMtCLDAxPMUCwxEU5+sCogR8SeJg==
-X-Received: by 2002:a17:902:e886:b0:15e:8ba0:b749 with SMTP id w6-20020a170902e88600b0015e8ba0b749mr1578860plg.95.1652910371953;
-        Wed, 18 May 2022 14:46:11 -0700 (PDT)
-Received: from yoga (pat_11.qualcomm.com. [192.35.156.11])
-        by smtp.gmail.com with ESMTPSA id i1-20020a056a00004100b0050dc76281besm2414396pfk.152.2022.05.18.14.46.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rlileXECXQwcs4FwBCFGgd9tlzU7JPOtD7+Op7dKw2A=;
+        b=3gb118uJxn27xFpOOb5VgqByIuik38M1PGnmXisyDw7Rpeww5i5OhwK45NhSJ995x2
+         U7DECe9A/Y3p6U6gVR7/6QgeXDXcCO2iQniUTA4a/oPxa87qm1EMQXRYlFvJmAVbQ0Hh
+         fif1nWCE9JIz1O6Js3n5B4bamtYUkgwhLgzloz30MaUjmJ2fhE83/g1P2nR2D1a+cD1k
+         YVY8UGqNRHrdoj3ju18q+XVUIQIFfpSiESXjXcQveV+eRAroWpno1dy0uHX172qWLpqo
+         ytpYz6rUGrX8Ortw4q0vWtvGOGtmgUVcxdA8L1pfVhJoK3Xz8GYbqTCQ7xwgzSNplYFq
+         S/bw==
+X-Gm-Message-State: AOAM5311O+Op1c5/ilxATOvg2RwkB3rUFwQQ+NbwUlBgkNaA63Vsprp0
+        EpJAK7bFsC0G5iSboNSM7+2LSA==
+X-Google-Smtp-Source: ABdhPJx5zkS+wcjiBUuPi4E4o4+onZ93b/N6GptRLkvIzlS3sA/PCVWVNd99O1FMK2DLDlCQ9qFAWw==
+X-Received: by 2002:a63:2c01:0:b0:3db:5e24:67f8 with SMTP id s1-20020a632c01000000b003db5e2467f8mr1256683pgs.372.1652910695229;
+        Wed, 18 May 2022 14:51:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n9-20020a17090a928900b001d92e2e5694sm4153624pjo.1.2022.05.18.14.51.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 14:46:11 -0700 (PDT)
-Date:   Wed, 18 May 2022 14:45:58 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] phy: qcom-qmp: Add USB3 5NM QMP UNI registers
-Message-ID: <YoVpFlOIYvPUq9ni@yoga>
-References: <20220513225348.1671639-1-bjorn.andersson@linaro.org>
- <20220513225348.1671639-3-bjorn.andersson@linaro.org>
- <YoN5k0tNXDhwS9rC@matsya>
+        Wed, 18 May 2022 14:51:34 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        keyrings@vger.kernel.org, Adam Langley <agl@google.com>,
+        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2] sign-file: Convert API usage to support OpenSSL v3
+Date:   Wed, 18 May 2022 14:51:29 -0700
+Message-Id: <20220518215129.264872-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoN5k0tNXDhwS9rC@matsya>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3057; h=from:subject; bh=QlyfmW5tdA+uLyxr7PSBpgInoqAH8CjIlte2jMmmCSk=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBihWpg7oF3z/IhRHBvgWCBLQG1wB92GJbkzLV7JT+D Wb5E12+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYoVqYAAKCRCJcvTf3G3AJkWnD/ 4n+7O3v/HOHC7LCGNI91a9+Q0utWAK/W5HL/4mZ5izGsoZpD4QoVAQmM2qZVQZMa4cnX2cl8dz3x0d 0wNUq5XM3nEs1aWWWVa4ZHllXFHe+LyXbWCB/zd0sQzIZ2qPALm/H1/uWy685YEyRy1umNXP81xNUn Cyint3G5gCdXUki5OTBXriJMcQTL32nfOscwjeGwnbV0SSRyv7L4aXkvnFkZPe1bLDVwr7gsr8w95h j5raVbRgsFtVHc7t74qEkQC51p5awAFRoziJWA0IiDKlFA8pMmzBblAWI4RQsIeb84EtneWUy2hbmY i80Hr7r1knxsn5vH2ocLDdIv12u2o3jJ9AebZYXN2rvPiw3jkVfP8iaa3x/PqwDbgAxQ/IBDHasYwV rCoU4X/dLo4vSu4PeilPUhrX4xMEjmtsZOm1JGmcCeoQMvXgXwdLpIWmc69VgsroCL+FDu/JrqhQUl SgqNBinCjl7H4k9I9HjxfcURhqV0pMD8vdemQr0i5X1gdXsHIO029Ye3iKhP05Hf5nmNeKrPI+RDwO /DWX61tE6ZZIDbddTAg79kfXIiXztoqMdfq+aVy+PoOl7WWq7XafjBvZkgRYkGI+cuJvlUBaX06x7G iP5KTwpdSTQqPVkOowMgyG1mWzEjBmyP2egZbsDBYRCUnI8TrIFoAU54V72g==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 17 May 03:31 PDT 2022, Vinod Koul wrote:
+OpenSSL's ENGINE API is deprecated in OpenSSL v3.0, along with some
+other functions. Remove the ENGINE use and a macro work-around for
+ERR_get_error_line().
 
-> On 13-05-22, 15:53, Bjorn Andersson wrote:
-> > Add all registers defines from qcom,usb3-5nm-qmp-uni.h of the msm-5.4
-> > kernel. Offsets are adjusted to be relative to each sub-block, as we
-> > describe the individual pieces in the upstream kernel and "5NM" are
-> > injected in the defines to not collide with existing constants.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >  .../phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h  | 617 ++++++++++++++++++
-> >  1 file changed, 617 insertions(+)
-> >  create mode 100644 drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
-> > 
-> > diff --git a/drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h b/drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
-> > new file mode 100644
-> > index 000000000000..b912e50825f9
-> > --- /dev/null
-> > +++ b/drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
-> > @@ -0,0 +1,617 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > +/*
-> > + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> 
-> should this be 2022 or add Linaro one for 2022..?
-> 
+Cc: David Howells <dhowells@redhat.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Salvatore Bonaccorso <carnil@debian.org>
+Cc: keyrings@vger.kernel.org
+Suggested-by: Adam Langley <agl@google.com>
+Co-developed-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v1: https://lore.kernel.org/lkml/20211005161833.1522737-1-lee.jones@linaro.org/
+v2: https://lore.kernel.org/lkml/Yicwb+Ceiu8JjVIS@google.com/
+v3:
+ - Eliminate all the build warnings with OpenSSL 3
+ - Fully remove ENGINE usage, if it can be optional, just drop it.
+---
+ scripts/sign-file.c | 49 ++++++++++-----------------------------------
+ 1 file changed, 11 insertions(+), 38 deletions(-)
 
-I thought about it, but Qualcomm produced this with the 2020 copyright
-and I didn't change anything copyrightable.
+diff --git a/scripts/sign-file.c b/scripts/sign-file.c
+index fbd34b8e8f57..2d633c5f57c3 100644
+--- a/scripts/sign-file.c
++++ b/scripts/sign-file.c
+@@ -52,6 +52,10 @@
+ #include <openssl/pkcs7.h>
+ #endif
+ 
++#if OPENSSL_VERSION_MAJOR >= 3
++#define ERR_get_error_line(f, l)	ERR_get_error_all(f, l, NULL, NULL, NULL)
++#endif
++
+ struct module_signature {
+ 	uint8_t		algo;		/* Public-key crypto algorithm [0] */
+ 	uint8_t		hash;		/* Digest algorithm [0] */
+@@ -92,16 +96,6 @@ static void display_openssl_errors(int l)
+ 	}
+ }
+ 
+-static void drain_openssl_errors(void)
+-{
+-	const char *file;
+-	int line;
+-
+-	if (ERR_peek_error() == 0)
+-		return;
+-	while (ERR_get_error_line(&file, &line)) {}
+-}
+-
+ #define ERR(cond, fmt, ...)				\
+ 	do {						\
+ 		bool __cond = (cond);			\
+@@ -135,35 +129,14 @@ static int pem_pw_cb(char *buf, int len, int w, void *v)
+ static EVP_PKEY *read_private_key(const char *private_key_name)
+ {
+ 	EVP_PKEY *private_key;
++	BIO *b;
+ 
+-	if (!strncmp(private_key_name, "pkcs11:", 7)) {
+-		ENGINE *e;
+-
+-		ENGINE_load_builtin_engines();
+-		drain_openssl_errors();
+-		e = ENGINE_by_id("pkcs11");
+-		ERR(!e, "Load PKCS#11 ENGINE");
+-		if (ENGINE_init(e))
+-			drain_openssl_errors();
+-		else
+-			ERR(1, "ENGINE_init");
+-		if (key_pass)
+-			ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
+-			    "Set PKCS#11 PIN");
+-		private_key = ENGINE_load_private_key(e, private_key_name,
+-						      NULL, NULL);
+-		ERR(!private_key, "%s", private_key_name);
+-	} else {
+-		BIO *b;
+-
+-		b = BIO_new_file(private_key_name, "rb");
+-		ERR(!b, "%s", private_key_name);
+-		private_key = PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
+-						      NULL);
+-		ERR(!private_key, "%s", private_key_name);
+-		BIO_free(b);
+-	}
+-
++	b = BIO_new_file(private_key_name, "rb");
++	ERR(!b, "%s", private_key_name);
++	private_key = PEM_read_bio_PrivateKey(b, NULL, pem_pw_cb,
++					      NULL);
++	ERR(!private_key, "%s", private_key_name);
++	BIO_free(b);
+ 	return private_key;
+ }
+ 
+-- 
+2.32.0
 
-Regards,
-Bjorn
-
-> > + */
-> > +
-> > +#ifndef PHY_QCOM_USB3_5NM_QMP_UNI_H_
-> > +#define PHY_QCOM_USB3_5NM_QMP_UNI_H_
-> > +
-> > +/* Module: USB3_UNI_PHY_QSERDES_COM_QSERDES_COM_PCIE_USB3_UNI_QMP_PLL */
-> > +#define USB3_5NM_UNI_QSERDES_COM_ATB_SEL1			0x000
-> > +#define USB3_5NM_UNI_QSERDES_COM_ATB_SEL2			0x004
-> > +#define USB3_5NM_UNI_QSERDES_COM_FREQ_UPDATE			0x008
-> > +#define USB3_5NM_UNI_QSERDES_COM_BG_TIMER			0x00c
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_EN_CENTER			0x010
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_ADJ_PER1			0x014
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_ADJ_PER2			0x018
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_PER1			0x01c
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_PER2			0x020
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE1_MODE0		0x024
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE2_MODE0		0x028
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE3_MODE0		0x02c
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE1_MODE1		0x030
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE2_MODE1		0x034
-> > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE3_MODE1		0x038
-> > +#define USB3_5NM_UNI_QSERDES_COM_POST_DIV			0x03c
-> > +#define USB3_5NM_UNI_QSERDES_COM_POST_DIV_MUX			0x040
-> > +#define USB3_5NM_UNI_QSERDES_COM_BIAS_EN_CLKBUFLR_EN		0x044
-> > +#define USB3_5NM_UNI_QSERDES_COM_CLK_ENABLE1			0x048
-> > +#define USB3_5NM_UNI_QSERDES_COM_SYS_CLK_CTRL			0x04c
-> > +#define USB3_5NM_UNI_QSERDES_COM_SYSCLK_BUF_ENABLE		0x050
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLL_EN				0x054
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLL_IVCO			0x058
-> > +#define USB3_5NM_UNI_QSERDES_COM_CMN_IETRIM			0x05c
-> > +#define USB3_5NM_UNI_QSERDES_COM_CMN_IPTRIM			0x060
-> > +#define USB3_5NM_UNI_QSERDES_COM_EP_CLOCK_DETECT_CTRL		0x064
-> > +#define USB3_5NM_UNI_QSERDES_COM_SYSCLK_DET_COMP_STATUS		0x068
-> > +#define USB3_5NM_UNI_QSERDES_COM_CLK_EP_DIV_MODE0		0x06c
-> > +#define USB3_5NM_UNI_QSERDES_COM_CLK_EP_DIV_MODE1		0x070
-> > +#define USB3_5NM_UNI_QSERDES_COM_CP_CTRL_MODE0			0x074
-> > +#define USB3_5NM_UNI_QSERDES_COM_CP_CTRL_MODE1			0x078
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLL_RCTRL_MODE0		0x07c
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLL_RCTRL_MODE1		0x080
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLL_CCTRL_MODE0		0x084
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLL_CCTRL_MODE1		0x088
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLL_CNTRL			0x08c
-> > +#define USB3_5NM_UNI_QSERDES_COM_BIAS_EN_CTRL_BY_PSM		0x090
-> > +#define USB3_5NM_UNI_QSERDES_COM_SYSCLK_EN_SEL			0x094
-> > +#define USB3_5NM_UNI_QSERDES_COM_CML_SYSCLK_SEL			0x098
-> > +#define USB3_5NM_UNI_QSERDES_COM_RESETSM_CNTRL			0x09c
-> > +#define USB3_5NM_UNI_QSERDES_COM_RESETSM_CNTRL2			0x0a0
-> > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP_EN			0x0a4
-> > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP_CFG			0x0a8
-> > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP1_MODE0		0x0ac
-> > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP2_MODE0		0x0b0
-> > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP1_MODE1		0x0b4
-> > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP2_MODE1		0x0b8
-> > +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MODE0		0x0bc
-> > +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MSB_MODE0		0x0c0
-> > +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MODE1		0x0c4
-> > +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MSB_MODE1		0x0c8
-> > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START1_MODE0		0x0cc
-> > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START2_MODE0		0x0d0
-> > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START3_MODE0		0x0d4
-> > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START1_MODE1		0x0d8
-> > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START2_MODE1		0x0dc
-> > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START3_MODE1		0x0e0
-> > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_INITVAL		0x0e4
-> > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_EN			0x0e8
-> > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN0_MODE0		0x0ec
-> > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN1_MODE0		0x0f0
-> > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN0_MODE1		0x0f4
-> > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN1_MODE1		0x0f8
-> > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_P_PATH_GAIN0		0x0fc
-> > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_P_PATH_GAIN1		0x100
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCOCAL_DEADMAN_CTRL		0x104
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_CTRL			0x108
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MAP			0x10c
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE1_MODE0		0x110
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE2_MODE0		0x114
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE1_MODE1		0x118
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE2_MODE1		0x11c
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_INITVAL1		0x120
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_INITVAL2		0x124
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MINVAL1		0x128
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MINVAL2		0x12c
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MAXVAL1		0x130
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MAXVAL2		0x134
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_TIMER1		0x138
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_TIMER2		0x13c
-> > +#define USB3_5NM_UNI_QSERDES_COM_CMN_STATUS			0x140
-> > +#define USB3_5NM_UNI_QSERDES_COM_RESET_SM_STATUS		0x144
-> > +#define USB3_5NM_UNI_QSERDES_COM_RESTRIM_CODE_STATUS		0x148
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLLCAL_CODE1_STATUS		0x14c
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLLCAL_CODE2_STATUS		0x150
-> > +#define USB3_5NM_UNI_QSERDES_COM_CLK_SELECT			0x154
-> > +#define USB3_5NM_UNI_QSERDES_COM_HSCLK_SEL			0x158
-> > +#define USB3_5NM_UNI_QSERDES_COM_HSCLK_HS_SWITCH_SEL		0x15c
-> > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_BINCODE_STATUS	0x160
-> > +#define USB3_5NM_UNI_QSERDES_COM_PLL_ANALOG			0x164
-> > +#define USB3_5NM_UNI_QSERDES_COM_CORECLK_DIV_MODE0		0x168
-> > +#define USB3_5NM_UNI_QSERDES_COM_CORECLK_DIV_MODE1		0x16c
-> > +#define USB3_5NM_UNI_QSERDES_COM_SW_RESET			0x170
-> > +#define USB3_5NM_UNI_QSERDES_COM_CORE_CLK_EN			0x174
-> > +#define USB3_5NM_UNI_QSERDES_COM_C_READY_STATUS			0x178
-> > +#define USB3_5NM_UNI_QSERDES_COM_CMN_CONFIG			0x17c
-> > +#define USB3_5NM_UNI_QSERDES_COM_CMN_RATE_OVERRIDE		0x180
-> > +#define USB3_5NM_UNI_QSERDES_COM_SVS_MODE_CLK_SEL		0x184
-> > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS0			0x188
-> > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS1			0x18c
-> > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS2			0x190
-> > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS3			0x194
-> > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS_SEL			0x198
-> > +#define USB3_5NM_UNI_QSERDES_COM_CMN_MISC1			0x19c
-> > +#define USB3_5NM_UNI_QSERDES_COM_CMN_MODE			0x1a0
-> > +#define USB3_5NM_UNI_QSERDES_COM_CMN_MODE_CONTD			0x1a4
-> > +#define USB3_5NM_UNI_QSERDES_COM_VCO_DC_LEVEL_CTRL		0x1a8
-> > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE1_MODE0	0x1ac
-> > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE0	0x1b0
-> > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE1_MODE1	0x1b4
-> > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE1	0x1b8
-> > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_HSCLK_SEL		0x1bc
-> > +#define USB3_5NM_UNI_QSERDES_COM_RESERVED_1			0x1c0
-> > +#define USB3_5NM_UNI_QSERDES_COM_MODE_OPERATION_STATUS		0x1c4
-> > +
-> > +/* Module: USB3_UNI_PHY_QSERDES_TX_PCIE_USB3_UNI_QMP_TX */
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_MODE_LANENO		0x000
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_INVERT			0x004
-> > +#define USB3_5NM_UNI_QSERDES_TX_CLKBUF_ENABLE			0x008
-> > +#define USB3_5NM_UNI_QSERDES_TX_TX_EMP_POST1_LVL		0x00c
-> > +#define USB3_5NM_UNI_QSERDES_TX_TX_IDLE_LVL_LARGE_AMP		0x010
-> > +#define USB3_5NM_UNI_QSERDES_TX_TX_DRV_LVL			0x014
-> > +#define USB3_5NM_UNI_QSERDES_TX_TX_DRV_LVL_OFFSET		0x018
-> > +#define USB3_5NM_UNI_QSERDES_TX_RESET_TSYNC_EN			0x01c
-> > +#define USB3_5NM_UNI_QSERDES_TX_PRE_STALL_LDO_BOOST_EN		0x020
-> > +#define USB3_5NM_UNI_QSERDES_TX_TX_BAND				0x024
-> > +#define USB3_5NM_UNI_QSERDES_TX_SLEW_CNTL			0x028
-> > +#define USB3_5NM_UNI_QSERDES_TX_INTERFACE_SELECT		0x02c
-> > +#define USB3_5NM_UNI_QSERDES_TX_LPB_EN				0x030
-> > +#define USB3_5NM_UNI_QSERDES_TX_RES_CODE_LANE_TX		0x034
-> > +#define USB3_5NM_UNI_QSERDES_TX_RES_CODE_LANE_RX		0x038
-> > +#define USB3_5NM_UNI_QSERDES_TX_RES_CODE_LANE_OFFSET_TX		0x03c
-> > +#define USB3_5NM_UNI_QSERDES_TX_RES_CODE_LANE_OFFSET_RX		0x040
-> > +#define USB3_5NM_UNI_QSERDES_TX_PERL_LENGTH1			0x044
-> > +#define USB3_5NM_UNI_QSERDES_TX_PERL_LENGTH2			0x048
-> > +#define USB3_5NM_UNI_QSERDES_TX_SERDES_BYP_EN_OUT		0x04c
-> > +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS_SEL			0x050
-> > +#define USB3_5NM_UNI_QSERDES_TX_TRANSCEIVER_BIAS_EN		0x054
-> > +#define USB3_5NM_UNI_QSERDES_TX_HIGHZ_DRVR_EN			0x058
-> > +#define USB3_5NM_UNI_QSERDES_TX_TX_POL_INV			0x05c
-> > +#define USB3_5NM_UNI_QSERDES_TX_PARRATE_REC_DETECT_IDLE_EN	0x060
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN1			0x064
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN2			0x068
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN3			0x06c
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN4			0x070
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN5			0x074
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN6			0x078
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN7			0x07c
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_PATTERN8			0x080
-> > +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_1			0x084
-> > +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_2			0x088
-> > +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_3			0x08c
-> > +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_4			0x090
-> > +#define USB3_5NM_UNI_QSERDES_TX_LANE_MODE_5			0x094
-> > +#define USB3_5NM_UNI_QSERDES_TX_ATB_SEL1			0x098
-> > +#define USB3_5NM_UNI_QSERDES_TX_ATB_SEL2			0x09c
-> > +#define USB3_5NM_UNI_QSERDES_TX_RCV_DETECT_LVL			0x0a0
-> > +#define USB3_5NM_UNI_QSERDES_TX_RCV_DETECT_LVL_2		0x0a4
-> > +#define USB3_5NM_UNI_QSERDES_TX_PRBS_SEED1			0x0a8
-> > +#define USB3_5NM_UNI_QSERDES_TX_PRBS_SEED2			0x0ac
-> > +#define USB3_5NM_UNI_QSERDES_TX_PRBS_SEED3			0x0b0
-> > +#define USB3_5NM_UNI_QSERDES_TX_PRBS_SEED4			0x0b4
-> > +#define USB3_5NM_UNI_QSERDES_TX_RESET_GEN			0x0b8
-> > +#define USB3_5NM_UNI_QSERDES_TX_RESET_GEN_MUXES			0x0bc
-> > +#define USB3_5NM_UNI_QSERDES_TX_TRAN_DRVR_EMP_EN		0x0c0
-> > +#define USB3_5NM_UNI_QSERDES_TX_TX_INTERFACE_MODE		0x0c4
-> > +#define USB3_5NM_UNI_QSERDES_TX_VMODE_CTRL1			0x0c8
-> > +#define USB3_5NM_UNI_QSERDES_TX_ALOG_OBSV_BUS_CTRL_1		0x0cc
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_STATUS			0x0d0
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_ERROR_COUNT1		0x0d4
-> > +#define USB3_5NM_UNI_QSERDES_TX_BIST_ERROR_COUNT2		0x0d8
-> > +#define USB3_5NM_UNI_QSERDES_TX_ALOG_OBSV_BUS_STATUS_1		0x0dc
-> > +#define USB3_5NM_UNI_QSERDES_TX_LANE_DIG_CONFIG			0x0e0
-> > +#define USB3_5NM_UNI_QSERDES_TX_PI_QEC_CTRL			0x0e4
-> > +#define USB3_5NM_UNI_QSERDES_TX_PRE_EMPH			0x0e8
-> > +#define USB3_5NM_UNI_QSERDES_TX_SW_RESET			0x0ec
-> > +#define USB3_5NM_UNI_QSERDES_TX_DCC_OFFSET			0x0f0
-> > +#define USB3_5NM_UNI_QSERDES_TX_DCC_CMUX_POSTCAL_OFFSET		0x0f4
-> > +#define USB3_5NM_UNI_QSERDES_TX_DCC_CMUX_CAL_CTRL1		0x0f8
-> > +#define USB3_5NM_UNI_QSERDES_TX_DCC_CMUX_CAL_CTRL2		0x0fc
-> > +#define USB3_5NM_UNI_QSERDES_TX_DIG_BKUP_CTRL			0x100
-> > +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS0			0x104
-> > +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS1			0x108
-> > +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS2			0x10c
-> > +#define USB3_5NM_UNI_QSERDES_TX_DEBUG_BUS3			0x110
-> > +#define USB3_5NM_UNI_QSERDES_TX_READ_EQCODE			0x114
-> > +#define USB3_5NM_UNI_QSERDES_TX_READ_OFFSETCODE			0x118
-> > +#define USB3_5NM_UNI_QSERDES_TX_IA_ERROR_COUNTER_LOW		0x11c
-> > +#define USB3_5NM_UNI_QSERDES_TX_IA_ERROR_COUNTER_HIGH		0x120
-> > +#define USB3_5NM_UNI_QSERDES_TX_VGA_READ_CODE			0x124
-> > +#define USB3_5NM_UNI_QSERDES_TX_VTH_READ_CODE			0x128
-> > +#define USB3_5NM_UNI_QSERDES_TX_DFE_TAP1_READ_CODE		0x12c
-> > +#define USB3_5NM_UNI_QSERDES_TX_DFE_TAP2_READ_CODE		0x130
-> > +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_I			0x134
-> > +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_IBAR		0x138
-> > +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_Q			0x13c
-> > +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_QBAR		0x140
-> > +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_A			0x144
-> > +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_ABAR		0x148
-> > +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_SM_ON		0x14c
-> > +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_CAL_DONE		0x150
-> > +#define USB3_5NM_UNI_QSERDES_TX_IDAC_STATUS_SIGNERROR		0x154
-> > +#define USB3_5NM_UNI_QSERDES_TX_DCC_CAL_STATUS			0x158
-> > +#define USB3_5NM_UNI_QSERDES_TX_DCC_READ_CODE_STATUS		0x15c
-> > +
-> > +/* Module: USB3_UNI_PHY_QSERDES_RX_QSERDES_RX_PCIE_USB3_UNI_QMP_RX */
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FO_GAIN_HALF		0x000
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FO_GAIN_QUARTER		0x004
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FO_GAIN			0x008
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SO_GAIN_HALF		0x00c
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SO_GAIN_QUARTER		0x010
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SO_GAIN			0x014
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_FO_GAIN_HALF		0x018
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_FO_GAIN_QUARTER	0x01c
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_FO_GAIN		0x020
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_SO_GAIN_HALF		0x024
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_SO_GAIN_QUARTER	0x028
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SVS_SO_GAIN		0x02c
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FASTLOCK_FO_GAIN		0x030
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SO_SATURATION_AND_ENABLE	0x034
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FO_TO_SO_DELAY		0x038
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FASTLOCK_COUNT_LOW		0x03c
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_FASTLOCK_COUNT_HIGH	0x040
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_PI_CONTROLS		0x044
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_PI_CTRL2			0x048
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SB2_THRESH1		0x04c
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SB2_THRESH2		0x050
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SB2_GAIN1			0x054
-> > +#define USB3_5NM_UNI_QSERDES_RX_UCDR_SB2_GAIN2			0x058
-> > +#define USB3_5NM_UNI_QSERDES_RX_AUX_CONTROL			0x05c
-> > +#define USB3_5NM_UNI_QSERDES_RX_AUX_DATA_TCOARSE_TFINE		0x060
-> > +#define USB3_5NM_UNI_QSERDES_RX_RCLK_AUXDATA_SEL		0x064
-> > +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_ENABLE			0x068
-> > +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_INITP			0x06c
-> > +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_INITN			0x070
-> > +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_LVL			0x074
-> > +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_MODE			0x078
-> > +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_RESET			0x07c
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_TERM_BW			0x080
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_RCVR_IQ_EN			0x084
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_I_DC_OFFSETS		0x088
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_IBAR_DC_OFFSETS		0x08c
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_Q_DC_OFFSETS		0x090
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_QBAR_DC_OFFSETS		0x094
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_A_DC_OFFSETS		0x098
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_ABAR_DC_OFFSETS		0x09c
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_EN			0x0a0
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_ENABLES			0x0a4
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_SIGN			0x0a8
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_HIGHZ_HIGHRATE		0x0ac
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_TERM_AC_BYPASS_DC_COUPLE_OFFSET	0x0b0
-> > +#define USB3_5NM_UNI_QSERDES_RX_DFE_1				0x0b4
-> > +#define USB3_5NM_UNI_QSERDES_RX_DFE_2				0x0b8
-> > +#define USB3_5NM_UNI_QSERDES_RX_DFE_3				0x0bc
-> > +#define USB3_5NM_UNI_QSERDES_RX_DFE_4				0x0c0
-> > +#define USB3_5NM_UNI_QSERDES_RX_TX_ADAPT_PRE_THRESH1		0x0c4
-> > +#define USB3_5NM_UNI_QSERDES_RX_TX_ADAPT_PRE_THRESH2		0x0c8
-> > +#define USB3_5NM_UNI_QSERDES_RX_TX_ADAPT_POST_THRESH		0x0cc
-> > +#define USB3_5NM_UNI_QSERDES_RX_TX_ADAPT_MAIN_THRESH		0x0d0
-> > +#define USB3_5NM_UNI_QSERDES_RX_VGA_CAL_CNTRL1			0x0d4
-> > +#define USB3_5NM_UNI_QSERDES_RX_VGA_CAL_CNTRL2			0x0d8
-> > +#define USB3_5NM_UNI_QSERDES_RX_GM_CAL				0x0dc
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_VGA_GAIN2_LSB		0x0e0
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_VGA_GAIN2_MSB		0x0e4
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_EQU_ADAPTOR_CNTRL1		0x0e8
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_EQU_ADAPTOR_CNTRL2		0x0ec
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_EQU_ADAPTOR_CNTRL3		0x0f0
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_EQU_ADAPTOR_CNTRL4		0x0f4
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_TSETTLE_LOW		0x0f8
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_TSETTLE_HIGH		0x0fc
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_MEASURE_TIME		0x100
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_IDAC_ACCUMULATOR		0x104
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_EQ_OFFSET_LSB		0x108
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_EQ_OFFSET_MSB		0x10c
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_EQ_OFFSET_ADAPTOR_CNTRL1	0x110
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_OFFSET_ADAPTOR_CNTRL2	0x114
-> > +#define USB3_5NM_UNI_QSERDES_RX_SIGDET_ENABLES			0x118
-> > +#define USB3_5NM_UNI_QSERDES_RX_SIGDET_CNTRL			0x11c
-> > +#define USB3_5NM_UNI_QSERDES_RX_SIGDET_LVL			0x120
-> > +#define USB3_5NM_UNI_QSERDES_RX_SIGDET_DEGLITCH_CNTRL		0x124
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_BAND				0x128
-> > +#define USB3_5NM_UNI_QSERDES_RX_CDR_FREEZE_UP_DN		0x12c
-> > +#define USB3_5NM_UNI_QSERDES_RX_CDR_RESET_OVERRIDE		0x130
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_INTERFACE_MODE		0x134
-> > +#define USB3_5NM_UNI_QSERDES_RX_JITTER_GEN_MODE			0x138
-> > +#define USB3_5NM_UNI_QSERDES_RX_SJ_AMP1				0x13c
-> > +#define USB3_5NM_UNI_QSERDES_RX_SJ_AMP2				0x140
-> > +#define USB3_5NM_UNI_QSERDES_RX_SJ_PER1				0x144
-> > +#define USB3_5NM_UNI_QSERDES_RX_SJ_PER2				0x148
-> > +#define USB3_5NM_UNI_QSERDES_RX_PPM_OFFSET1			0x14c
-> > +#define USB3_5NM_UNI_QSERDES_RX_PPM_OFFSET2			0x150
-> > +#define USB3_5NM_UNI_QSERDES_RX_SIGN_PPM_PERIOD1		0x154
-> > +#define USB3_5NM_UNI_QSERDES_RX_SIGN_PPM_PERIOD2		0x158
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_LOW			0x15c
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_HIGH			0x160
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_HIGH2		0x164
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_HIGH3		0x168
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_00_HIGH4		0x16c
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_LOW			0x170
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_HIGH			0x174
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_HIGH2		0x178
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_HIGH3		0x17c
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_01_HIGH4		0x180
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_LOW			0x184
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_HIGH			0x188
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_HIGH2		0x18c
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_HIGH3		0x190
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_MODE_10_HIGH4		0x194
-> > +#define USB3_5NM_UNI_QSERDES_RX_PHPRE_CTRL			0x198
-> > +#define USB3_5NM_UNI_QSERDES_RX_PHPRE_INITVAL			0x19c
-> > +#define USB3_5NM_UNI_QSERDES_RX_DFE_EN_TIMER			0x1a0
-> > +#define USB3_5NM_UNI_QSERDES_RX_DFE_CTLE_POST_CAL_OFFSET	0x1a4
-> > +#define USB3_5NM_UNI_QSERDES_RX_DCC_CTRL1			0x1a8
-> > +#define USB3_5NM_UNI_QSERDES_RX_DCC_CTRL2			0x1ac
-> > +#define USB3_5NM_UNI_QSERDES_RX_VTH_CODE			0x1b0
-> > +#define USB3_5NM_UNI_QSERDES_RX_VTH_MIN_THRESH			0x1b4
-> > +#define USB3_5NM_UNI_QSERDES_RX_VTH_MAX_THRESH			0x1b8
-> > +#define USB3_5NM_UNI_QSERDES_RX_ALOG_OBSV_BUS_CTRL_1		0x1bc
-> > +#define USB3_5NM_UNI_QSERDES_RX_PI_CTRL1			0x1c0
-> > +#define USB3_5NM_UNI_QSERDES_RX_PI_CTRL2			0x1c4
-> > +#define USB3_5NM_UNI_QSERDES_RX_PI_QUAD				0x1c8
-> > +#define USB3_5NM_UNI_QSERDES_RX_IDATA1				0x1cc
-> > +#define USB3_5NM_UNI_QSERDES_RX_IDATA2				0x1d0
-> > +#define USB3_5NM_UNI_QSERDES_RX_AUX_DATA1			0x1d4
-> > +#define USB3_5NM_UNI_QSERDES_RX_AUX_DATA2			0x1d8
-> > +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_OUTP			0x1dc
-> > +#define USB3_5NM_UNI_QSERDES_RX_AC_JTAG_OUTN			0x1e0
-> > +#define USB3_5NM_UNI_QSERDES_RX_RX_SIGDET			0x1e4
-> > +#define USB3_5NM_UNI_QSERDES_RX_ALOG_OBSV_BUS_STATUS_1		0x1e8
-> > +
-> > +/* Module:  USB3_UNI_PCS_LN_PCIE_USB3_UNI_PCS_LANE */
-> > +#define USB3_5NM_UNI_PCS_LN_PCS_STATUS1				0x00
-> > +#define USB3_5NM_UNI_PCS_LN_PCS_STATUS2				0x04
-> > +#define USB3_5NM_UNI_PCS_LN_PCS_STATUS2_CLEAR			0x08
-> > +#define USB3_5NM_UNI_PCS_LN_PCS_STATUS3				0x0c
-> > +#define USB3_5NM_UNI_PCS_LN_BIST_CHK_ERR_CNT_L_STATUS		0x10
-> > +#define USB3_5NM_UNI_PCS_LN_BIST_CHK_ERR_CNT_H_STATUS		0x14
-> > +#define USB3_5NM_UNI_PCS_LN_BIST_CHK_STATUS			0x18
-> > +#define USB3_5NM_UNI_PCS_LN_INSIG_SW_CTRL1			0x1c
-> > +#define USB3_5NM_UNI_PCS_LN_INSIG_MX_CTRL1			0x20
-> > +#define USB3_5NM_UNI_PCS_LN_OUTSIG_SW_CTRL1			0x24
-> > +#define USB3_5NM_UNI_PCS_LN_OUTSIG_MX_CTRL1			0x28
-> > +#define USB3_5NM_UNI_PCS_LN_TEST_CONTROL1			0x2c
-> > +#define USB3_5NM_UNI_PCS_LN_BIST_CTRL				0x30
-> > +#define USB3_5NM_UNI_PCS_LN_PRBS_SEED0				0x34
-> > +#define USB3_5NM_UNI_PCS_LN_PRBS_SEED1				0x38
-> > +#define USB3_5NM_UNI_PCS_LN_FIXED_PAT_CTRL			0x3c
-> > +#define USB3_5NM_UNI_PCS_LN_EQ_CONFIG				0x40
-> > +#define USB3_5NM_UNI_PCS_LN_TEST_CONTROL2			0x44
-> > +#define USB3_5NM_UNI_PCS_LN_TEST_CONTROL3			0x48
-> > +
-> > +/* Module: USB3_UNI_PCS_PCIE_LN_PCIE_USB3_UNI_PCS_PCIE_LANE */
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_OVERRIDE_PRE_POST	0x00
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_OVERRIDE_PRE_POST_RS	0x04
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_OVERRIDE_EN		0x08
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_DSBL_L			0x0c
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_PRESET_DSBL_H			0x10
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_LANE_OFF_CONFIG		0x14
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_RXEQ_DONE_CONFIG1		0x18
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_RXEQ_DONE_CONFIG2		0x1c
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_PCIE_PCS_STATUS		0x20
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_INSIG_SW_CTRL2			0x24
-> > +#define USB3_5NM_UNI_PCS_PCIE_LN_INSIG_MX_CTRL2			0x28
-> > +
-> > +/* Module: USB3_UNI_PHY_PCIE_USB3_UNI_PCS_PCIE_USB3_UNI_PCS_PCIE_USB3_UNI_PCS */
-> > +#define USB3_5NM_UNI_PCS_SW_RESET				0x000
-> > +#define USB3_5NM_UNI_PCS_REVISION_ID0				0x004
-> > +#define USB3_5NM_UNI_PCS_REVISION_ID1				0x008
-> > +#define USB3_5NM_UNI_PCS_REVISION_ID2				0x00c
-> > +#define USB3_5NM_UNI_PCS_REVISION_ID3				0x010
-> > +#define USB3_5NM_UNI_PCS_PCS_STATUS1				0x014
-> > +#define USB3_5NM_UNI_PCS_PCS_STATUS2				0x018
-> > +#define USB3_5NM_UNI_PCS_PCS_STATUS3				0x01c
-> > +#define USB3_5NM_UNI_PCS_PCS_STATUS4				0x020
-> > +#define USB3_5NM_UNI_PCS_PCS_STATUS5				0x024
-> > +#define USB3_5NM_UNI_PCS_PCS_STATUS6				0x028
-> > +#define USB3_5NM_UNI_PCS_PCS_STATUS7				0x02c
-> > +#define USB3_5NM_UNI_PCS_DEBUG_BUS_0_STATUS			0x030
-> > +#define USB3_5NM_UNI_PCS_DEBUG_BUS_1_STATUS			0x034
-> > +#define USB3_5NM_UNI_PCS_DEBUG_BUS_2_STATUS			0x038
-> > +#define USB3_5NM_UNI_PCS_DEBUG_BUS_3_STATUS			0x03c
-> > +#define USB3_5NM_UNI_PCS_POWER_DOWN_CONTROL			0x040
-> > +#define USB3_5NM_UNI_PCS_START_CONTROL				0x044
-> > +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL1				0x048
-> > +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL2				0x04c
-> > +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL3				0x050
-> > +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL4				0x054
-> > +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL5				0x058
-> > +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL6				0x05c
-> > +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL7				0x060
-> > +#define USB3_5NM_UNI_PCS_INSIG_SW_CTRL8				0x064
-> > +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL1				0x068
-> > +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL2				0x06c
-> > +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL3				0x070
-> > +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL4				0x074
-> > +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL5				0x078
-> > +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL7				0x07c
-> > +#define USB3_5NM_UNI_PCS_INSIG_MX_CTRL8				0x080
-> > +#define USB3_5NM_UNI_PCS_OUTSIG_SW_CTRL1			0x084
-> > +#define USB3_5NM_UNI_PCS_OUTSIG_MX_CTRL1			0x088
-> > +#define USB3_5NM_UNI_PCS_CLAMP_ENABLE				0x08c
-> > +#define USB3_5NM_UNI_PCS_POWER_STATE_CONFIG1			0x090
-> > +#define USB3_5NM_UNI_PCS_POWER_STATE_CONFIG2			0x094
-> > +#define USB3_5NM_UNI_PCS_FLL_CNTRL1				0x098
-> > +#define USB3_5NM_UNI_PCS_FLL_CNTRL2				0x09c
-> > +#define USB3_5NM_UNI_PCS_FLL_CNT_VAL_L				0x0a0
-> > +#define USB3_5NM_UNI_PCS_FLL_CNT_VAL_H_TOL			0x0a4
-> > +#define USB3_5NM_UNI_PCS_FLL_MAN_CODE				0x0a8
-> > +#define USB3_5NM_UNI_PCS_TEST_CONTROL1				0x0ac
-> > +#define USB3_5NM_UNI_PCS_TEST_CONTROL2				0x0b0
-> > +#define USB3_5NM_UNI_PCS_TEST_CONTROL3				0x0b4
-> > +#define USB3_5NM_UNI_PCS_TEST_CONTROL4				0x0b8
-> > +#define USB3_5NM_UNI_PCS_TEST_CONTROL5				0x0bc
-> > +#define USB3_5NM_UNI_PCS_TEST_CONTROL6				0x0c0
-> > +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG1			0x0c4
-> > +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG2			0x0c8
-> > +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG3			0x0cc
-> > +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG4			0x0d0
-> > +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG5			0x0d4
-> > +#define USB3_5NM_UNI_PCS_LOCK_DETECT_CONFIG6			0x0d8
-> > +#define USB3_5NM_UNI_PCS_REFGEN_REQ_CONFIG1			0x0dc
-> > +#define USB3_5NM_UNI_PCS_REFGEN_REQ_CONFIG2			0x0e0
-> > +#define USB3_5NM_UNI_PCS_REFGEN_REQ_CONFIG3			0x0e4
-> > +#define USB3_5NM_UNI_PCS_BIST_CTRL				0x0e8
-> > +#define USB3_5NM_UNI_PCS_PRBS_POLY0				0x0ec
-> > +#define USB3_5NM_UNI_PCS_PRBS_POLY1				0x0f0
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT0				0x0f4
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT1				0x0f8
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT2				0x0fc
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT3				0x100
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT4				0x104
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT5				0x108
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT6				0x10c
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT7				0x110
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT8				0x114
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT9				0x118
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT10				0x11c
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT11				0x120
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT12				0x124
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT13				0x128
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT14				0x12c
-> > +#define USB3_5NM_UNI_PCS_FIXED_PAT15				0x130
-> > +#define USB3_5NM_UNI_PCS_TXMGN_CONFIG				0x134
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V0				0x138
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V1				0x13c
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V2				0x140
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V3				0x144
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V4				0x148
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V0_RS			0x14c
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V1_RS			0x150
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V2_RS			0x154
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V3_RS			0x158
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXMGN_V4_RS			0x15c
-> > +#define USB3_5NM_UNI_PCS_G3S2_TXMGN_MAIN			0x160
-> > +#define USB3_5NM_UNI_PCS_G3S2_TXMGN_MAIN_RS			0x164
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXDEEMPH_M6DB			0x168
-> > +#define USB3_5NM_UNI_PCS_G12S1_TXDEEMPH_M3P5DB			0x16c
-> > +#define USB3_5NM_UNI_PCS_G3S2_PRE_GAIN				0x170
-> > +#define USB3_5NM_UNI_PCS_G3S2_POST_GAIN				0x174
-> > +#define USB3_5NM_UNI_PCS_G3S2_PRE_POST_OFFSET			0x178
-> > +#define USB3_5NM_UNI_PCS_G3S2_PRE_GAIN_RS			0x17c
-> > +#define USB3_5NM_UNI_PCS_G3S2_POST_GAIN_RS			0x180
-> > +#define USB3_5NM_UNI_PCS_G3S2_PRE_POST_OFFSET_RS		0x184
-> > +#define USB3_5NM_UNI_PCS_RX_SIGDET_LVL				0x188
-> > +#define USB3_5NM_UNI_PCS_RX_SIGDET_DTCT_CNTRL			0x18c
-> > +#define USB3_5NM_UNI_PCS_RCVR_DTCT_DLY_P1U2_L			0x190
-> > +#define USB3_5NM_UNI_PCS_RCVR_DTCT_DLY_P1U2_H			0x194
-> > +#define USB3_5NM_UNI_PCS_RATE_SLEW_CNTRL1			0x198
-> > +#define USB3_5NM_UNI_PCS_RATE_SLEW_CNTRL2			0x19c
-> > +#define USB3_5NM_UNI_PCS_PWRUP_RESET_DLY_TIME_AUXCLK		0x1a0
-> > +#define USB3_5NM_UNI_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_L		0x1a4
-> > +#define USB3_5NM_UNI_PCS_P2U3_WAKEUP_DLY_TIME_AUXCLK_H		0x1a8
-> > +#define USB3_5NM_UNI_PCS_TSYNC_RSYNC_TIME			0x1ac
-> > +#define USB3_5NM_UNI_PCS_CDR_RESET_TIME				0x1b0
-> > +#define USB3_5NM_UNI_PCS_TSYNC_DLY_TIME				0x1b4
-> > +#define USB3_5NM_UNI_PCS_ELECIDLE_DLY_SEL			0x1b8
-> > +#define USB3_5NM_UNI_PCS_CMN_ACK_OUT_SEL			0x1bc
-> > +#define USB3_5NM_UNI_PCS_ALIGN_DETECT_CONFIG1			0x1c0
-> > +#define USB3_5NM_UNI_PCS_ALIGN_DETECT_CONFIG2			0x1c4
-> > +#define USB3_5NM_UNI_PCS_ALIGN_DETECT_CONFIG3			0x1c8
-> > +#define USB3_5NM_UNI_PCS_ALIGN_DETECT_CONFIG4			0x1cc
-> > +#define USB3_5NM_UNI_PCS_PCS_TX_RX_CONFIG			0x1d0
-> > +#define USB3_5NM_UNI_PCS_RX_IDLE_DTCT_CNTRL			0x1d4
-> > +#define USB3_5NM_UNI_PCS_RX_DCC_CAL_CONFIG			0x1d8
-> > +#define USB3_5NM_UNI_PCS_EQ_CONFIG1				0x1dc
-> > +#define USB3_5NM_UNI_PCS_EQ_CONFIG2				0x1e0
-> > +#define USB3_5NM_UNI_PCS_EQ_CONFIG3				0x1e4
-> > +#define USB3_5NM_UNI_PCS_EQ_CONFIG4				0x1e8
-> > +#define USB3_5NM_UNI_PCS_EQ_CONFIG5				0x1ec
-> > +
-> > +/* Module: USB3_UNI_PHY_PCIE_PCS */
-> > +#define USB3_5NM_UNI_PCS_PCIE_INT_AUX_CLK_STATUS		0x00
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_STATUS			0x04
-> > +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG1		0x08
-> > +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG2		0x0c
-> > +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG3		0x10
-> > +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG4		0x14
-> > +#define USB3_5NM_UNI_PCS_PCIE_POWER_STATE_CONFIG5		0x18
-> > +#define USB3_5NM_UNI_PCS_PCIE_PCS_TX_RX_CONFIG			0x1c
-> > +#define USB3_5NM_UNI_PCS_PCIE_ENDPOINT_REFCLK_DRIVE		0x20
-> > +#define USB3_5NM_UNI_PCS_PCIE_ENDPOINT_REFCLK_CNTRL		0x24
-> > +#define USB3_5NM_UNI_PCS_PCIE_EPCLK_PRE_PLL_LOCK_DLY_AUXCLK	0x28
-> > +#define USB3_5NM_UNI_PCS_PCIE_EPCLK_DLY_COUNT_VAL_L		0x2c
-> > +#define USB3_5NM_UNI_PCS_PCIE_EPCLK_DLY_COUNT_VAL_H		0x30
-> > +#define USB3_5NM_UNI_PCS_PCIE_RX_IDLE_DTCT_CNTRL1		0x34
-> > +#define USB3_5NM_UNI_PCS_PCIE_RX_IDLE_DTCT_CNTRL2		0x38
-> > +#define USB3_5NM_UNI_PCS_PCIE_SIGDET_CNTRL			0x3c
-> > +#define USB3_5NM_UNI_PCS_PCIE_SIGDET_LOW_2_IDLE_TIME		0x40
-> > +#define USB3_5NM_UNI_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_L	0x44
-> > +#define USB3_5NM_UNI_PCS_PCIE_L1P1_WAKEUP_DLY_TIME_AUXCLK_H	0x48
-> > +#define USB3_5NM_UNI_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_L	0x4c
-> > +#define USB3_5NM_UNI_PCS_PCIE_L1P2_WAKEUP_DLY_TIME_AUXCLK_H	0x50
-> > +#define USB3_5NM_UNI_PCS_PCIE_INT_AUX_CLK_CONFIG1		0x54
-> > +#define USB3_5NM_UNI_PCS_PCIE_INT_AUX_CLK_CONFIG2		0x58
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG1			0x5c
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG2			0x60
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG3			0x64
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG4			0x68
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG5			0x6c
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG6			0x70
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_CONFIG7			0x74
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG1		0x78
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG2		0x7c
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG3		0x80
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG4		0x84
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG5		0x88
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG6		0x8c
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_MODE2_CONFIG7		0x90
-> > +#define USB3_5NM_UNI_PCS_PCIE_OSC_DTCT_ACTIONS			0x94
-> > +#define USB3_5NM_UNI_PCS_PCIE_LOCAL_FS				0x98
-> > +#define USB3_5NM_UNI_PCS_PCIE_LOCAL_LF				0x9c
-> > +#define USB3_5NM_UNI_PCS_PCIE_LOCAL_FS_RS			0xa0
-> > +#define USB3_5NM_UNI_PCS_PCIE_EQ_CONFIG1			0xa4
-> > +#define USB3_5NM_UNI_PCS_PCIE_EQ_CONFIG2			0xa8
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P0_P1_PRE			0xac
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P2_P3_PRE			0xb0
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P4_P5_PRE			0xb4
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P6_P7_PRE			0xb8
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P8_P9_PRE			0xbc
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P10_PRE			0xc0
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P1_P3_PRE_RS		0xc4
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P4_P5_PRE_RS		0xc8
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P6_P9_PRE_RS		0xcc
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P0_P1_POST			0xd0
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P2_P3_POST			0xd4
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P4_P5_POST			0xd8
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P6_P7_POST			0xdc
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P8_P9_POST			0xe0
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P10_POST			0xe4
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P1_P3_POST_RS		0xe8
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P4_P5_POST_RS		0xec
-> > +#define USB3_5NM_UNI_PCS_PCIE_PRESET_P6_P9_POST_RS		0xf0
-> > +#define USB3_5NM_UNI_PCS_PCIE_RXEQEVAL_TIME			0xf4
-> > +
-> > +/* Module: USB3_UNI_PHY_PCIE_PCS_DEBUG_INTGEN */
-> > +#define USB3_5NM_UNI_PCS_INTGEN_INTGEN_STATUS1			0x00
-> > +#define USB3_5NM_UNI_PCS_INTGEN_INTGEN_STATUS2			0x04
-> > +#define USB3_5NM_UNI_PCS_INTGEN_CONFIG1				0x08
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG1		0x0c
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG2		0x10
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG3		0x14
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG4		0x18
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK1_CONFIG5		0x1c
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG1		0x20
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG2		0x24
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG3		0x28
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG4		0x2c
-> > +#define USB3_5NM_UNI_PCS_INTGEN_SIGNALBLK2_CONFIG5		0x30
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG1		0x34
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG2		0x38
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG3		0x3c
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG4		0x40
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK1_CONFIG5		0x44
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG1		0x48
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG2		0x4c
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG3		0x50
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG4		0x54
-> > +#define USB3_5NM_UNI_PCS_INTGEN_STRINGBLK2_CONFIG5		0x58
-> > +
-> > +
-> > +/* Module: USB3_UNI_PCS_USB3_PCIE_USB3_UNI_PCS_USB3 */
-> > +#define USB3_5NM_UNI_PCS_USB3_POWER_STATE_CONFIG1		0x00
-> > +#define USB3_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_STATUS		0x04
-> > +#define USB3_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_CTRL		0x08
-> > +#define USB3_5NM_UNI_PCS_USB3_AUTONOMOUS_MODE_CTRL2		0x0c
-> > +#define USB3_5NM_UNI_PCS_USB3_LFPS_RXTERM_IRQ_SOURCE_STATUS	0x10
-> > +#define USB3_5NM_UNI_PCS_USB3_LFPS_RXTERM_IRQ_CLEAR		0x14
-> > +#define USB3_5NM_UNI_PCS_USB3_LFPS_DET_HIGH_COUNT_VAL		0x18
-> > +#define USB3_5NM_UNI_PCS_USB3_LFPS_TX_ECSTART			0x1c
-> > +#define USB3_5NM_UNI_PCS_USB3_LFPS_PER_TIMER_VAL		0x20
-> > +#define USB3_5NM_UNI_PCS_USB3_LFPS_TX_END_CNT_U3_START		0x24
-> > +#define USB3_5NM_UNI_PCS_USB3_LFPS_CONFIG1			0x28
-> > +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_LOCK_TIME		0x2c
-> > +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_WAIT_TIME		0x30
-> > +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_CTLE_TIME		0x34
-> > +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_WAIT_TIME_S2		0x38
-> > +#define USB3_5NM_UNI_PCS_USB3_RXEQTRAINING_DFE_TIME_S2		0x3c
-> > +#define USB3_5NM_UNI_PCS_USB3_RCVR_DTCT_DLY_U3_L		0x40
-> > +#define USB3_5NM_UNI_PCS_USB3_RCVR_DTCT_DLY_U3_H		0x44
-> > +#define USB3_5NM_UNI_PCS_USB3_ARCVR_DTCT_EN_PERIOD		0x48
-> > +#define USB3_5NM_UNI_PCS_USB3_ARCVR_DTCT_CM_DLY			0x4c
-> > +#define USB3_5NM_UNI_PCS_USB3_TXONESZEROS_RUN_LENGTH		0x50
-> > +#define USB3_5NM_UNI_PCS_USB3_ALFPS_DEGLITCH_VAL		0x54
-> > +#define USB3_5NM_UNI_PCS_USB3_SIGDET_STARTUP_TIMER_VAL		0x58
-> > +#define USB3_5NM_UNI_PCS_USB3_TEST_CONTROL			0x5c
-> > +#define USB3_5NM_UNI_PCS_USB3_RXTERMINATION_DLY_SEL		0x60
-> > +
-> > +#endif
-> > -- 
-> > 2.35.1
-> 
-> -- 
-> ~Vinod

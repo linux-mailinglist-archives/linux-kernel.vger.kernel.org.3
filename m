@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB2152B34A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BE452B33B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbiERHQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
+        id S232047AbiERHTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbiERHQ1 (ORCPT
+        with ESMTP id S232024AbiERHTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:16:27 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C42F7CB34
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:16:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652858185; x=1684394185;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PcRevddGN/h5sqx6Ciz2gc2PYJvQVhE5R6wwNzzDbC0=;
-  b=SHZutk/uC01wQDzLVJ4ygHPSCOmzjpjrfOglcwV0pFJWWp/pzfh5hB0o
-   UcmDmZ5My8HohNDM3ksjc0a9+GB7B6Gf+lopjP7e2l4fB2yCMqxpNZYbl
-   KcxsDdDPxKlOR1wzlNWF2pu8cVszJPts/DknWo6Q8gQn+4Eg8ZPVAW7ZM
-   puQVkyoD/BfLgA2SO7u9nrPJy05pxt7gsKVun7N4FJwavRzK6zdQTpt4m
-   Bn2dAj8Aef7cheB41XLnXnNbHB3n7y754gLdVlq6Qc81C5LUYm3Dx92G3
-   LtHFVmZhEatK46YWnZ9NABMRDe0rs7syGvO+pSXhgjXa4vMoBVTnafLoV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271653186"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="271653186"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:16:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="523383739"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 18 May 2022 00:16:22 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrDuw-0001v3-5N;
-        Wed, 18 May 2022 07:16:22 +0000
-Date:   Wed, 18 May 2022 15:16:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xin Ji <xji@analogixsemi.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Robert Foss <robert.foss@linaro.org>
-Subject: [drm-misc:drm-misc-next 2/2]
- drivers/gpu/drm/bridge/analogix/anx7625.c:1643:18: error: use of undeclared
- identifier 'V4L2_FWNODE_BUS_TYPE_DPI'
-Message-ID: <202205181514.UVkvf0YL-lkp@intel.com>
+        Wed, 18 May 2022 03:19:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE8D3D4A8;
+        Wed, 18 May 2022 00:19:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D338B81DF0;
+        Wed, 18 May 2022 07:18:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2C3C385AA;
+        Wed, 18 May 2022 07:18:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652858338;
+        bh=7fYgeoge+NXi6dIVbh7wEGd2VdZVCmjEuo2jZ0QyhPk=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Zr5BFiQFHSiY5gMplt9DVm9vQpCNg96qbRU7BZeSi2TKAFRMljjkNYtE1U60Q7Eim
+         UAHl/LpsCPB0gpr6Mwd6rdTaR4mJPFLnSEN1tmnGaZD8WHTYgZ6MsRn+kBO3EMkW5/
+         zeVci2LanmdcQEBwEc966Si1IfPBIMhOO27RozE+TkPkZvedvOV15cPZyXCijlXoOP
+         0JXToXEl5uQiLdJH1iP3MtW85bqzJPMGH8CAL0Af220BDpEkqf4Od+/iZ+y/JpWplR
+         gDswNFBX02p7r9p+Q935K7xo4T2ieNb6iF+ViZ9+oEahDG20w7/KIlwTKPRsfS4u+9
+         3n7ILsE55rHdw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Steev Klimaszewski <steev@kali.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Govind Singh <govinds@codeaurora.org>,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] ath10k: do not enforce interrupt trigger type
+References: <20220513151516.357549-1-krzysztof.kozlowski@linaro.org>
+        <87zgjl4e8t.fsf@kernel.org>
+        <3d856d44-a2d6-b5b8-ec78-ce19a3686986@kali.org>
+        <3bf28d29-f841-81f7-68f8-3fb7f9c274bf@kali.org>
+Date:   Wed, 18 May 2022 10:18:50 +0300
+In-Reply-To: <3bf28d29-f841-81f7-68f8-3fb7f9c274bf@kali.org> (Steev
+        Klimaszewski's message of "Sat, 14 May 2022 13:09:11 -0500")
+Message-ID: <87y1yz2tr9.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,91 +67,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-head:   315a8d00ac74c59a688a1a88c0ed97a7791d1c91
-commit: a77c2af0994e24ee36c7ffb6dc852770bdf06fb1 [2/2] drm/bridge: anx7625: Use DPI bus type
-config: arm-buildonly-randconfig-r001-20220518 (https://download.01.org/0day-ci/archive/20220518/202205181514.UVkvf0YL-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add drm-misc git://anongit.freedesktop.org/drm/drm-misc
-        git fetch --no-tags drm-misc drm-misc-next
-        git checkout a77c2af0994e24ee36c7ffb6dc852770bdf06fb1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/bridge/analogix/
+Steev Klimaszewski <steev@kali.org> writes:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On 5/14/22 12:05 AM, Steev Klimaszewski wrote:
+>>
+>> On 5/13/22 10:57 AM, Kalle Valo wrote:
+>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+>>>
+>>>> Interrupt line can be configured on different hardware in
+>>>> different way,
+>>>> even inverted.=C2=A0 Therefore driver should not enforce specific trig=
+ger
+>>>> type - edge rising - but instead rely on Devicetree to configure it.
+>>>>
+>>>> All Qualcomm DTSI with WCN3990 define the interrupt type as level high,
+>>>> so the mismatch between DTSI and driver causes rebind issues:
+>>>>
+>>>> =C2=A0=C2=A0 $ echo 18800000.wifi > /sys/bus/platform/drivers/ath10k_s=
+noc/unbind
+>>>> =C2=A0=C2=A0 $ echo 18800000.wifi > /sys/bus/platform/drivers/ath10k_s=
+noc/bind
+>>>> =C2=A0=C2=A0 [=C2=A0=C2=A0 44.763114] irq: type mismatch, failed to ma=
+p hwirq-446 for
+>>>> interrupt-controller@17a00000!
+>>>> =C2=A0=C2=A0 [=C2=A0=C2=A0 44.763130] ath10k_snoc 18800000.wifi: error=
+ -ENXIO: IRQ
+>>>> index 0 not found
+>>>> =C2=A0=C2=A0 [=C2=A0=C2=A0 44.763140] ath10k_snoc 18800000.wifi: faile=
+d to initialize
+>>>> resource: -6
+>>> So you tested on WCN3990? On what firmware version? I can add the
+>>> Tested-on tag if you provide that.
+>>>
+>> Hello Krzystof, Kalle,
+>>
+>> I have seen this issue as well on a Lenovo Flex 5G, which has a WCN3990:
+>>
+>> wcn3990 hw1.0 target 0x00000008 chip_id 0x00000000 sub 0000:0000
+>> kconfig debug 0 debugfs 0 tracing 0 dfs 0 testmode 0
+>> firmware ver=C2=A0 api 5 features wowlan,mgmt-tx-by-reference,non-bmi
+>> crc32 b3d4b790
+>> htt-ver 3.86 wmi-op 4 htt-op 3 cal file max-sta 32 raw 0 hwcrypto 1
+>>
+>> With this patch applied, I no longer see the error message in the
+>> commit message, when I unbind/bind when wifi stops working.
+>>
+>> Tested-by: Steev Klimaszewski <steev@kali.org>
+>>
+>> -- Steev
+>>
+> Apologies for the second email - I've tested this now on both the
+> Lenovo Flex 5G, as I have seen the issue on it as well, as well as on
+> the Lenovo Yoga C630, where I did not but I did have issues with
+> attempting to rebind the device, prior to this patch.
+>
+> Firmware version for the Flex 5G is
+>
+> qmi chip_id 0x30224 chip_family 0x4001 board_id 0xff soc_id 0x40060000
+> qmi fw_version 0x32080009 fw_build_timestamp 2020-11-16 14:44
+> fw_build_id
+> QC_IMAGE_VERSION_STRING=3DWLAN.HL.3.2.0.c8-00009-QCAHLSWSC8180XMTPLZ-1
+>
+> Firmware version on the Yoga C630 is
+>
+> qmi chip_id 0x30214 chip_family 0x4001 board_id 0xff soc_id 0x40030001
+> qmi fw_version 0x2009856b fw_build_timestamp 2018-07-19 12:28
+> fw_build_id QC_IMAGE_VERSION_STRING=3DWLAN.HL.2.0-01387-QCAHLSWMTPLZ-1
 
-All errors (new ones prefixed by >>):
+In the pending branch I added these to the commit log:
 
->> drivers/gpu/drm/bridge/analogix/anx7625.c:1643:18: error: use of undeclared identifier 'V4L2_FWNODE_BUS_TYPE_DPI'
-           if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
-                           ^
-   1 error generated.
+Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.0.c8-00009-QCAHLSWSC8180XMTPLZ-1
+Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.2.0-01387-QCAHLSWMTPLZ-1
 
+Thanks for testing, very much appreciated!
 
-vim +/V4L2_FWNODE_BUS_TYPE_DPI +1643 drivers/gpu/drm/bridge/analogix/anx7625.c
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-  1617	
-  1618	static int anx7625_parse_dt(struct device *dev,
-  1619				    struct anx7625_platform_data *pdata)
-  1620	{
-  1621		struct device_node *np = dev->of_node, *ep0;
-  1622		int bus_type, mipi_lanes;
-  1623	
-  1624		anx7625_get_swing_setting(dev, pdata);
-  1625	
-  1626		pdata->is_dpi = 0; /* default dsi mode */
-  1627		pdata->mipi_host_node = of_graph_get_remote_node(np, 0, 0);
-  1628		if (!pdata->mipi_host_node) {
-  1629			DRM_DEV_ERROR(dev, "fail to get internal panel.\n");
-  1630			return -ENODEV;
-  1631		}
-  1632	
-  1633		bus_type = 0;
-  1634		mipi_lanes = MAX_LANES_SUPPORT;
-  1635		ep0 = of_graph_get_endpoint_by_regs(np, 0, 0);
-  1636		if (ep0) {
-  1637			if (of_property_read_u32(ep0, "bus-type", &bus_type))
-  1638				bus_type = 0;
-  1639	
-  1640			mipi_lanes = of_property_count_u32_elems(ep0, "data-lanes");
-  1641		}
-  1642	
-> 1643		if (bus_type == V4L2_FWNODE_BUS_TYPE_DPI) /* bus type is DPI */
-  1644			pdata->is_dpi = 1;
-  1645	
-  1646		pdata->mipi_lanes = mipi_lanes;
-  1647		if (pdata->mipi_lanes > MAX_LANES_SUPPORT || pdata->mipi_lanes <= 0)
-  1648			pdata->mipi_lanes = MAX_LANES_SUPPORT;
-  1649	
-  1650		if (pdata->is_dpi)
-  1651			DRM_DEV_DEBUG_DRIVER(dev, "found MIPI DPI host node.\n");
-  1652		else
-  1653			DRM_DEV_DEBUG_DRIVER(dev, "found MIPI DSI host node.\n");
-  1654	
-  1655		if (of_property_read_bool(np, "analogix,audio-enable"))
-  1656			pdata->audio_en = 1;
-  1657	
-  1658		pdata->panel_bridge = devm_drm_of_get_bridge(dev, np, 1, 0);
-  1659		if (IS_ERR(pdata->panel_bridge)) {
-  1660			if (PTR_ERR(pdata->panel_bridge) == -ENODEV)
-  1661				return 0;
-  1662	
-  1663			return PTR_ERR(pdata->panel_bridge);
-  1664		}
-  1665	
-  1666		DRM_DEV_DEBUG_DRIVER(dev, "get panel node.\n");
-  1667	
-  1668		return 0;
-  1669	}
-  1670	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes

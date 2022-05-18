@@ -2,71 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EB252B8EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:45:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C6352B8F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbiERLdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        id S235747AbiERLei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235652AbiERLdY (ORCPT
+        with ESMTP id S235711AbiERLee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:33:24 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E4A5C878;
-        Wed, 18 May 2022 04:33:20 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id i40so2584758eda.7;
-        Wed, 18 May 2022 04:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gJ3rsnwq2b/rwZyiM+K6St2dD//MHaJRGiRZ+2rN6jw=;
-        b=boSZSG16VTmcUf9r+ZEJo1bDXBXu800Ay6RdbxwGTxtnWhZtEKXO1kS/q9r6t4Tbci
-         qL3ppu4OcqJi0yGfUQ8PEQXAM37v19+vWyt/KkmPyWYi6F0LLZnjXPCGdz/3bKRQkXZT
-         lacgus8QOEdvO43y/iK1HshJzwZ7xXyaUplatLnYfmn6pXxRT82uMM4Ni2/WHTR2II8K
-         ALtwTOzMDdk6fjrCaMfZyt2H6ggyBkfLPti/+alKhAF/HQkLqC1+TCdXR0w9sBbi7H1e
-         1GE0pCaRFMH3c9+2fLt8NFmnwIkMfkpwnJWn/kpqhAWWfbEdxxxPjRoOzTV/7SuTb4wQ
-         SHww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gJ3rsnwq2b/rwZyiM+K6St2dD//MHaJRGiRZ+2rN6jw=;
-        b=buWKwSzrfJUXVJQ5jCuzZn3JGe3F6f+ajsWYfur5yGEyavNFP+JXdEwKBEps+kOxw9
-         X4gI12v03touR18QQmmv6e2WJqDegjLZJ8H3IdJrqqCOJPXS7IoszjmUm97i8JREzUWe
-         LDxxrG2DU1wvUdQsaynZ/Jqd5CUqX3KpMdA/LpiqkuMQ1RBJqXS4hGmonFdtHo3GCENi
-         LZsO+CcdrBzQOnCQy9cy+EP+H5P7njGMXwxYYNaSWdJfTh1o30RbEUWvQsLSu+0LCs25
-         f+4vH//BDp0nnUYorBTj186o6pZo+YKD9JLgxkuSU1C1Rxu0zc5QvwYDJfrliUBuvgH2
-         S0RA==
-X-Gm-Message-State: AOAM532EHBsDkXMqEt+Uoe16kOJ32QISUgnmWntyS+uvpmtggXKizjLg
-        ytfQQ2DX9mdCKesglhXwsi0=
-X-Google-Smtp-Source: ABdhPJyxtALu03Yuzdg/AfJ0FAnnybpgKbzcjrKmwL/9vAr2Byxm+xGrgpvROIgpruNaQz1AgwGHxA==
-X-Received: by 2002:a05:6402:741:b0:42a:8fad:8f67 with SMTP id p1-20020a056402074100b0042a8fad8f67mr21895251edy.285.1652873599246;
-        Wed, 18 May 2022 04:33:19 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id d19-20020a1709067a1300b006f3ef214e05sm852697ejo.107.2022.05.18.04.33.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 04:33:18 -0700 (PDT)
-Date:   Wed, 18 May 2022 14:33:15 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, Hauke Mehrtens <hauke@hauke-m.de>
-Subject: Re: [PATCH net v1 2/2] net: dsa: lantiq_gswip: Fix typo in
- gswip_port_fdb_dump() error print
-Message-ID: <20220518113315.w3p6vzj3djat2abd@skbuf>
-References: <20220517194015.1081632-1-martin.blumenstingl@googlemail.com>
- <20220517194015.1081632-3-martin.blumenstingl@googlemail.com>
+        Wed, 18 May 2022 07:34:34 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7989B178549
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 04:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652873673; x=1684409673;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=chfxsfqqx6UW0S3OYhECYveYnJLSaTg3JUufhYxCG4s=;
+  b=i1JonZ4XXb0U8bbZYvSUnNewmuqdvyZs6ciKqwKi8JlgWih7SJobYsTO
+   bu8tH0gBBP8yZoM2dlboNZhSn72PCX/xbEzddukXNi5wEzaTlWRryF0HN
+   d+GSrz6G7Ydg9baSGGDwtygzQmXsSfSSVg/oX2jry8Ta5OOuGzs2DlSzO
+   f/SNHnQtMrHtWU7bIstdoli21mBUapM+2iBqNgDLl8AaIsZafINAy3wEX
+   DuSSB9lqXs+3sqRbDMivDvebdMberux9QNBB9AHdRByKoIq38fEX0gKB5
+   JQ8jtW93UmFTEk+gjVp7JhsdXJI6srpLONGhifJvEBU1rG4TTVQBeaaC0
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="332246407"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="332246407"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 04:34:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="523474206"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 18 May 2022 04:34:31 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrHwl-00027h-6x;
+        Wed, 18 May 2022 11:34:31 +0000
+Date:   Wed, 18 May 2022 19:33:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/sev] BUILD SUCCESS
+ 0621210ab7693e6d50585ca689d95d57df617455
+Message-ID: <6284d9a6.HWv21SWIARfnPT0l%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517194015.1081632-3-martin.blumenstingl@googlemail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,38 +63,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 09:40:15PM +0200, Martin Blumenstingl wrote:
-> gswip_port_fdb_dump() reads the MAC bridge entries. The error message
-> should say "failed to read mac bridge entry". While here, also add the
-> index to the error print so humans can get to the cause of the problem
-> easier.
-> 
-> Fixes: 58c59ef9e930c4 ("net: dsa: lantiq: Add Forwarding Database access")
-> Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/sev
+branch HEAD: 0621210ab7693e6d50585ca689d95d57df617455  x86/sev: Remove duplicated assignment to variable info
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+elapsed time: 1424m
 
->  drivers/net/dsa/lantiq_gswip.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/lantiq_gswip.c b/drivers/net/dsa/lantiq_gswip.c
-> index 0c313db23451..8af4def38a98 100644
-> --- a/drivers/net/dsa/lantiq_gswip.c
-> +++ b/drivers/net/dsa/lantiq_gswip.c
-> @@ -1426,8 +1426,9 @@ static int gswip_port_fdb_dump(struct dsa_switch *ds, int port,
->  
->  		err = gswip_pce_table_entry_read(priv, &mac_bridge);
->  		if (err) {
-> -			dev_err(priv->dev, "failed to write mac bridge: %d\n",
-> -				err);
-> +			dev_err(priv->dev,
-> +				"failed to read mac bridge entry %d: %d\n",
-> +				i, err);
->  			return err;
->  		}
->  
-> -- 
-> 2.36.1
-> 
+configs tested: 114
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                 randconfig-c001-20220516
+m68k                        m5407c3_defconfig
+m68k                             allmodconfig
+m68k                       m5208evb_defconfig
+sh                             sh03_defconfig
+m68k                       m5249evb_defconfig
+sparc                       sparc64_defconfig
+s390                             allyesconfig
+powerpc                       ppc64_defconfig
+arc                        nsimosci_defconfig
+powerpc                     pq2fads_defconfig
+sh                         ecovec24_defconfig
+mips                            gpr_defconfig
+sh                               j2_defconfig
+mips                           ci20_defconfig
+openrisc                            defconfig
+arm                            mps2_defconfig
+arm                         at91_dt_defconfig
+powerpc                 mpc8540_ads_defconfig
+m68k                          amiga_defconfig
+arm                             pxa_defconfig
+arm                         cm_x300_defconfig
+sh                   sh7770_generic_defconfig
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                                defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+parisc64                            defconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64               randconfig-a012-20220516
+x86_64               randconfig-a011-20220516
+x86_64               randconfig-a013-20220516
+x86_64               randconfig-a014-20220516
+x86_64               randconfig-a016-20220516
+x86_64               randconfig-a015-20220516
+i386                 randconfig-a011-20220516
+i386                 randconfig-a013-20220516
+i386                 randconfig-a012-20220516
+i386                 randconfig-a014-20220516
+i386                 randconfig-a015-20220516
+i386                 randconfig-a016-20220516
+arc                  randconfig-r043-20220516
+riscv                randconfig-r042-20220516
+s390                 randconfig-r044-20220516
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+powerpc              randconfig-c003-20220518
+x86_64                        randconfig-c007
+riscv                randconfig-c006-20220518
+mips                 randconfig-c004-20220518
+i386                          randconfig-c001
+arm                  randconfig-c002-20220518
+powerpc                     pseries_defconfig
+powerpc                    mvme5100_defconfig
+arm                     davinci_all_defconfig
+x86_64               randconfig-a001-20220516
+x86_64               randconfig-a006-20220516
+x86_64               randconfig-a003-20220516
+x86_64               randconfig-a005-20220516
+x86_64               randconfig-a002-20220516
+x86_64               randconfig-a004-20220516
+i386                 randconfig-a001-20220516
+i386                 randconfig-a003-20220516
+i386                 randconfig-a005-20220516
+i386                 randconfig-a004-20220516
+i386                 randconfig-a006-20220516
+i386                 randconfig-a002-20220516
+hexagon              randconfig-r045-20220516
+hexagon              randconfig-r041-20220516
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,122 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C40952B17E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B7752B186
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbiEREcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 00:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S229940AbiEREcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 00:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiEREcJ (ORCPT
+        with ESMTP id S229909AbiEREcK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 00:32:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F87E4D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 21:32:08 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nrBLb-0008QJ-Dh; Wed, 18 May 2022 06:31:43 +0200
-Message-ID: <4e0e8f5b-f5c9-003b-6aac-cea7c49b3f96@pengutronix.de>
-Date:   Wed, 18 May 2022 06:31:33 +0200
+        Wed, 18 May 2022 00:32:10 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7850CD0;
+        Tue, 17 May 2022 21:32:07 -0700 (PDT)
+X-UUID: f93d8a7ec43a430d9e92ab4a41ceb90c-20220518
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:1a3431a6-9d98-4d9c-ad33-682530c15756,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:25
+X-CID-META: VersionHash:2a19b09,CLOUDID:f6ad95e2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:3,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: f93d8a7ec43a430d9e92ab4a41ceb90c-20220518
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1251744058; Wed, 18 May 2022 12:31:59 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 18 May 2022 12:31:57 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 18 May 2022 12:31:57 +0800
+Message-ID: <8edc3b72195ecf82369a6c040c70e5b97e7c718a.camel@mediatek.com>
+Subject: Re: [PATCH v6 3/4] drm/mediatek: Add mt8186 dsi compatible to
+ mtk_dsi.c
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <jitao.shi@mediatek.com>,
+        <xinlei.lee@mediatek.com>, <airlied@linux.ie>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 18 May 2022 12:31:57 +0800
+In-Reply-To: <20220504091923.2219-4-rex-bc.chen@mediatek.com>
+References: <20220504091923.2219-1-rex-bc.chen@mediatek.com>
+         <20220504091923.2219-4-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v10 2/7] KEYS: trusted: allow use of kernel RNG for key
- material
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        David Gstir <david@sigma-star.at>,
-        Michael Walle <michael@walle.cc>,
-        John Ernberg <john.ernberg@actia.se>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Pascal Van Leeuwen <pvanleeuwen@verimatrix.com>
-References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
- <20220513145705.2080323-3-a.fatoum@pengutronix.de>
- <1c6a5ce2564c29a06eca255072a379351a5fc026.camel@linux.ibm.com>
- <YoPdfjswwA2wKinr@zx2c4.com>
- <4fe5564e860eb3093a88528ba1d30364d57723e0.camel@linux.ibm.com>
- <YoPpyDjn61AFqcZp@zx2c4.com>
- <dd488736ab86c0e0b2809b4ce30f1827563b52b2.camel@linux.ibm.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <dd488736ab86c0e0b2809b4ce30f1827563b52b2.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mimi,
+Hi, Rex:
 
-On 17.05.22 21:49, Mimi Zohar wrote:
-> On Tue, 2022-05-17 at 20:30 +0200, Jason A. Donenfeld wrote:
->> Hi Mimi,
->>
->> On Tue, May 17, 2022 at 02:21:08PM -0400, Mimi Zohar wrote:
->>> On Tue, 2022-05-17 at 19:38 +0200, Jason A. Donenfeld wrote:
->> Apologies in advance if I've missed the mark here; I'm not very familiar
->> with this thread or what it's driving at. If the simple question was
->> just "is get_random_bytes_wait() good to use?" the answer is just "yes"
->> and I can disappear and stop confusing things. :)
+On Wed, 2022-05-04 at 17:19 +0800, Rex-BC Chen wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
 > 
-> My apologies for your having been brought into this discussion without
-> having properly reviewed and summarized the previous thread.   As you
-> saw there is a long history.
-> 
-> Jarrko, Ahmad,  "Trusted" keys, by definition, are based on the TPM
-> RNG.  If CAAM trusted key support wants to use kernel RNG by default,
-> that's fine.  However defining and allowing a boot command line option
-> to use kernel RNG instead of the TPM RNG, needs to be configurable.
+> Add the compatible because use different cmdq addresses in mt8186.
 
-The use of kernel RNG for TPM Trusted Keys is already opt-in. The default
-is trusted.rng=default, which maintains existing behavior. Users who want
-to use kernel RNG instead need to explicitly specify trusted.rng=kernel.
-
-What more is needed?
-
-Cheers,
-Ahmad
-
-
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
 > 
-> thanks,
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> Mimi
-> 
-> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index ccb0511b9cd5..b13fd0317e96 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -1155,6 +1155,12 @@ static const struct mtk_dsi_driver_data
+> mt8183_dsi_driver_data = {
+>  	.has_size_ctl = true,
+>  };
+>  
+> +static const struct mtk_dsi_driver_data mt8186_dsi_driver_data = {
+> +	.reg_cmdq_off = 0xd00,
+> +	.has_shadow_ctl = true,
+> +	.has_size_ctl = true,
+> +};
+> +
+>  static const struct of_device_id mtk_dsi_of_match[] = {
+>  	{ .compatible = "mediatek,mt2701-dsi",
+>  	  .data = &mt2701_dsi_driver_data },
+> @@ -1162,6 +1168,8 @@ static const struct of_device_id
+> mtk_dsi_of_match[] = {
+>  	  .data = &mt8173_dsi_driver_data },
+>  	{ .compatible = "mediatek,mt8183-dsi",
+>  	  .data = &mt8183_dsi_driver_data },
+> +	{ .compatible = "mediatek,mt8186-dsi",
+> +	  .data = &mt8186_dsi_driver_data },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(of, mtk_dsi_of_match);
 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

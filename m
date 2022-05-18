@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9429F52C060
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 108B852C014
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239886AbiERQPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S240000AbiERQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234867AbiERQPT (ORCPT
+        with ESMTP id S239976AbiERQQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:15:19 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC421E15D0;
-        Wed, 18 May 2022 09:15:16 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2fedd26615cso29892517b3.7;
-        Wed, 18 May 2022 09:15:16 -0700 (PDT)
+        Wed, 18 May 2022 12:16:43 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092ACA76D4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:16:41 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a23-20020a17090acb9700b001df4e9f4870so2564175pju.1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=27J+LsUtyeeYy/GvJkk2tphV2jBbsCOsrmpZjooJvdA=;
+        b=WsFMsQRAqPFYtDRXv1eq/d16y4WXmvGrQzz4CAO9ARgrPBnZudm/BdIonig9LJyFcm
+         x6L1zSSnkCAOWz2YA0yASGUB+S/LnV93goRZsCwFI/c0oM6Wt6HovjUhwpPIhHwnAmgf
+         0UULa2rgpV/0NpYuJBZ1n9Y7Z3J0NyCqw3cQu4ZP70oCUpqlb8b8MsNZ0F22EDY2ZbA3
+         5E1hyQWNsllEe7cLvGs3pzHDGEMwvrxA4n0ilcZn7OsnEXZa9Xik24fr3nohv7oQ4WX1
+         CW6+uDBt2U+dmO+Q5ct+H8Au3VCnLrnBY51f3Z4vRidqf2HwVg5OVps7L3et5gtGQ2aA
+         EKFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5sLPjtLKM+w66TgU+5tbLygmukIL12gj1V2vL7d+pjQ=;
-        b=lyrG1meUZ1+i0egDUomc463vPzyFwtUrX8G0Rbxl/r7SXg77vYF0Eh9z9phLC79lkf
-         KHyrx0O18RfDel4JVVXX8ldwcgjNMeUeDB/Pr9M3Tzlx090LTIlYbSnPAEeSeSp9Ze9S
-         TByPz//ocGGxcgH1N6mo9tq/oecylfR8ibqmP15tvzMyQuvat7nNO3gWXfhClbjrhbLi
-         x4Psel/yZR8sTrTVrcKvoszs8fEApkoLPhw9u3Z5wqk9pg6xqTdF7rnaMQMXg4IYawV0
-         IPUjTbFSMFcNqGEszyCFRLNxBWENnmURSQGx3KnLmq6jK6L0xXck3f7Db3OcV8TyI1FH
-         cEfw==
-X-Gm-Message-State: AOAM5320LgLl8IoNzxHcZ9l1uxnkil8iN7fSTKGZ0qqdK6TrSEp56tpa
-        J2BKEWxRIu/6cz3FFvKpseT0t50CPsO7Fu7Z1Wk=
-X-Google-Smtp-Source: ABdhPJz0aeWOuS+lv+DkhnzdtwnLkPUMU/co7zL+PuGJoK33yIPpIoCN+eypEXA95MzKmENxwAkxjLaCHc5NEsiCf38=
-X-Received: by 2002:a81:3d43:0:b0:2f9:7d:f320 with SMTP id k64-20020a813d43000000b002f9007df320mr128935ywa.191.1652890515810;
- Wed, 18 May 2022 09:15:15 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=27J+LsUtyeeYy/GvJkk2tphV2jBbsCOsrmpZjooJvdA=;
+        b=KqbdwOCGfod8n1bo2nrNrHDZNkoPISnWr6llifjLn5WvsVjJt08mZ5uRNaEjyWi+dm
+         tT6dqFC7k4GDmqrAJzmwnNbpAQ3jjciukBOrtTG2vQTRqQG+YbPQcOk2r/j10vfT0jYa
+         vC+dkhvkmFcwkoiVhwqbpQFOyHspmjGRDt0b+kT848wb+X3iKEVlu8+Zl34xPQ3OfZFv
+         6NeKoQMy/f98sdn+bCUHj10cHJQrDQo9GEa/ZEEClHwbBe9BWfERo99pprvrGdR0YJ1C
+         96G4Ovy2O/9YXXEa8fn2TjqCJ/JJQcI/YzAKFQdGoVh1Y+cVm3EGi9MOamgdRVp9aHQo
+         Lf5A==
+X-Gm-Message-State: AOAM531VOpYpdbf6yzRkc7OX+J5oRFZ7NEaYDbXYALXHetNAoskYqGXs
+        psskEXEgcGDLzYmmJ7eC0z16nw==
+X-Google-Smtp-Source: ABdhPJzlMzaxzyxYIp0EtYqROS3OrIc3ty0dMgOLbrexh3oQF/2zOIfjp3/5KS2qx0kdvnbCWlOOjg==
+X-Received: by 2002:a17:90a:7441:b0:1df:5f54:502c with SMTP id o1-20020a17090a744100b001df5f54502cmr770638pjk.129.1652890600319;
+        Wed, 18 May 2022 09:16:40 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 4-20020a170902e9c400b0015e8d4eb264sm1893016plk.174.2022.05.18.09.16.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 09:16:39 -0700 (PDT)
+Date:   Wed, 18 May 2022 16:16:35 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     John Allen <john.allen@amd.com>
+Cc:     Yang Weijiang <weijiang.yang@intel.com>, pbonzini@redhat.com,
+        jmattson@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yu.c.zhang@linux.intel.com
+Subject: Re: [PATCH v15 07/14] KVM: VMX: Emulate reads and writes to CET MSRs
+Message-ID: <YoUb4/iP+X+xgsfQ@google.com>
+References: <20210203113421.5759-1-weijiang.yang@intel.com>
+ <20210203113421.5759-8-weijiang.yang@intel.com>
+ <YoUW4Oh0eRL9um5m@dell9853host>
 MIME-Version: 1.0
-References: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
- <20220518114357.55452-1-mailhol.vincent@wanadoo.fr> <YoUZLHIbxPu15/lN@dev-arch.thelio-3990X>
-In-Reply-To: <YoUZLHIbxPu15/lN@dev-arch.thelio-3990X>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 19 May 2022 01:15:04 +0900
-Message-ID: <CAMZ6RqL2eKd-uqP-2vnt99_0RRE-8x7hxwYy6x1b0Oqes-HGgA@mail.gmail.com>
-Subject: Re: [PATCH] can: mcp251xfd: silence clang's -Wunaligned-access warning
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoUW4Oh0eRL9um5m@dell9853host>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue. 19 May 2022 at 01:08, Nathan Chancellor <nathan@kernel.org> wrote:
-> Hi Vincent,
->
-> On Wed, May 18, 2022 at 08:43:57PM +0900, Vincent Mailhol wrote:
-> > clang emits a -Wunaligned-access warning on union
-> > mcp251xfd_tx_ojb_load_buf.
-> >
-> > The reason is that field hw_tx_obj (not declared as packed) is being
-> > packed right after a 16 bits field inside a packed struct:
-> >
-> > | union mcp251xfd_tx_obj_load_buf {
-> > |     struct __packed {
-> > |             struct mcp251xfd_buf_cmd cmd;
-> > |               /* ^ 16 bits fields */
-> > |             struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-> > |               /* ^ not declared as packed */
-> > |     } nocrc;
-> > |     struct __packed {
-> > |             struct mcp251xfd_buf_cmd_crc cmd;
-> > |             struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
-> > |             __be16 crc;
-> > |     } crc;
-> > | } ____cacheline_aligned;
-> >
-> > Starting from LLVM 14, having an unpacked struct nested in a packed
-> > struct triggers a warning. c.f. [1].
-> >
-> > This is a false positive because the field is always being accessed
-> > with the relevant put_unaligned_*() function. Adding __packed to the
-> > structure declaration silences the warning.
-> >
-> > [1] https://github.com/llvm/llvm-project/issues/55520
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> > Actually, I do not have llvm 14 installed so I am not able to test
-> > (this check was introduced in v14). But as explained in [1], adding
-> > __packed should fix the warning.
->
-> Thanks for the patch! This does resolve the warning (verified with LLVM
-> 15).
+On Wed, May 18, 2022, John Allen wrote:
+> On Wed, Feb 03, 2021 at 07:34:14PM +0800, Yang Weijiang wrote:
+> > +	case MSR_IA32_PL0_SSP ... MSR_IA32_PL3_SSP:
+> > +		if (!cet_is_ssp_msr_accessible(vcpu, msr_info))
+> > +			return 1;
+> > +		if ((data & GENMASK(2, 0)) || is_noncanonical_address(data, vcpu))
+> 
+> Sorry to revive this old thread. I'm working on the corresponding SVM
+> bits for shadow stack and I noticed the above check. Why isn't this
+> GENMASK(1, 0)? The *SSP MSRs should be a 4-byte aligned canonical
+> address meaning that just bits 1 and 0 should always be zero. I was
+> looking through the previous versions of the set and found that this
+> changed between versions 11 and 12, but I don't see any discussion
+> related to this on the list.
 
-Great, thanks for the check! Does this mean we can add you Tested-by
-(I assume yes, c.f. below, if not the case, please raise your voice).
+Huh.  I'm not entirely sure what to make of the SDM's wording:
 
-> > Because this is a false positive, I did not add a Fixes tag, nor a
-> > Reported-by: kernel test robot.
->
-> I think that the Reported-by tag should always be included but I agree
-> that a Fixes tag is not necessary for this warning, as we currently have
-> it under W=1, so it should not be visible under normal circumstances.
+  The linear address written must be aligned to 8 bytes and bits 2:0 must be 0
+  (hardware requires bits 1:0 to be 0).
 
-ACK.
-Marc, can you directly add below tags to the patch:
-
-Reported-by: kernel test robot <lkp@intel.com>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-Or do you want me to send a v2?
-
-
-Yours sincerely,
-Vincent Mailhol
+Looking at the rest of the CET stuff, I believe requiring 8-byte alignment is
+correct, and that the "hardware requires" blurb is trying to call out that the
+SSP stored in hardware will always be 4-byte aligned but not necessarily 8-byte
+aligned in order to play nice with 32-bit/compatibility mode.  But "base" addresses
+that come from software, e.g. via MSRs and whatnot, must always be 8-byte aligned.

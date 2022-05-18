@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F79B52B446
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F44E52B456
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiERHwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        id S232725AbiERHw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbiERHwk (ORCPT
+        with ESMTP id S232690AbiERHwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:52:40 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E72C1D315;
-        Wed, 18 May 2022 00:52:39 -0700 (PDT)
-Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MacjC-1nKep525V4-00c9eU; Wed, 18 May 2022 09:52:37 +0200
-Received: by mail-yb1-f172.google.com with SMTP id i11so2284619ybq.9;
-        Wed, 18 May 2022 00:52:37 -0700 (PDT)
-X-Gm-Message-State: AOAM5310E/qHKgRwu6pCfA5aDN3GZjyYZYU1aadiAN0pr2M465Snsz+j
-        dpBIorVb7X+JhP/rDxC6UImIXR5/MniFOoLcS7A=
-X-Google-Smtp-Source: ABdhPJw/C4Wp2+lD/LeOurnHShFuhY2DtohuPYVV6u7+PgmQYQQI/BkFuP71sEIcZsVIId0pYZQ/YQF1du1xWbey4uo=
-X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
- x185-20020a2531c2000000b00641660f230fmr26122159ybx.472.1652860356229; Wed, 18
- May 2022 00:52:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220516100401.7639-1-ojeda@kernel.org>
-In-Reply-To: <20220516100401.7639-1-ojeda@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 18 May 2022 08:52:37 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3Z5qBQWUbPNEHhPDNX0XC8CQk+dUtC9K_=N3AXK2uHHA@mail.gmail.com>
-Message-ID: <CAK8P3a3Z5qBQWUbPNEHhPDNX0XC8CQk+dUtC9K_=N3AXK2uHHA@mail.gmail.com>
-Subject: Re: [PATCH v1] binder: convert `BINDER_*` ioctl `#define`s into an `enum`
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Li Li <dualli@google.com>,
+        Wed, 18 May 2022 03:52:53 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC361D0E4;
+        Wed, 18 May 2022 00:52:53 -0700 (PDT)
+Received: from zn.tnic (p200300ea974657d0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57d0:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 903F21EC0666;
+        Wed, 18 May 2022 09:52:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652860367;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=gUc3S3Gcatvt5eEi+z7OKNcWBrt7L039MRb0Fapa9rg=;
+        b=WyIYPFDdDPaRV9LCi7UZ3Z46r1RXVEfi+ihmhgCPEF7cdGk8pAW8wQ7lt8OqOVoz05Wd1w
+        XQHMnhFBhTguaXpbCYdLe23xw93WsOXOkhfY+ShAaok+Za9L9zn8bXRvCHYIlJQgyTPR7N
+        gsMLIlVEozKbPeChEI3wjYU/oc/WLTY=
+Date:   Wed, 18 May 2022 09:52:46 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Richard Hughes <hughsient@gmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Martin Fernandez <martin.fernandez@eclypsium.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:RvNaoVhsKy/bl7e01yVRZPNCHTSzNVxkQOTa4CHsOxQi6cBmBV0
- irMG0JmXc+HPgBJW2MXiBdOUioHMkAQOg7IVQgcqxWCyTInWE0ff4gTEWRubbxoesfnLyhO
- 2wskqRDsZSY/66JT5cHW6lXYns2RNPvH0GLcHonUYMcer7qLlCVoC+q9TEOjQAxpIhkSB+Q
- LEEtocEIBpC0KlG3GySJA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vIIedTA3yxI=:oenWVqKVw4BcMnowOKp8gM
- 2JwizoidJg2/5NaZgl1B4goOUE8OZJh8d5+Ib4/RfVLrRou1rR5Ua7N/6JKKK0+MtzMyZcXe9
- fs/IAtB2GMkyF4OLRhxfhelg+tGgguPWy9Efn+51vr4IGjeR0pGskrlhvesxEYqtX5qq8fIbP
- ecYVsCW2UjJY2CDDowaF0c3dfg/QjTrRRgvcQRz4LiJch4/8UsUbNowpgCP/gy1vii9rBKnGu
- pmlXhav04vKpLHfdCMjSNkgMpgI//6zGh7QwepojufJ495e7C51vP5sOth3D2Vrl6ck2L2ruh
- 8jwWTDsQ5+bxDuOfzZGHKVjEfwVIzoVOk7wmtP94QrqMe8VOutXrJWDypJlShCjfK6txhmjRS
- Sm/kAPLPpX+rXzKclRsCmpcMtku3ZoTnxDFYXMGN6Fw/KLRXI9cDoFsXXtre++aI8V9F81tYo
- +cX3WPpyKyVSdcUGu+D6/mER37LIneTa3nMCsr+iC6Am2rzDWzWPurrvhrdIrA8q4K+hVFsuH
- utVuf827AjStLn4T6PDlNCtZ1Y8hlO4zRgSdomuUt5qPupxM+Fpu2JEp3jll9iyjOel236vVT
- wD4JhWFJHo69+8s39Oj6PDBnt3YfAQ44dN0YV+cadlZB2u1NdVn7EaaH+dwXE6O1JEnsYtNLp
- l7NX75H9UCiMjaqD3tLVGrHcYfHUvBBFg05NVx4LFlZINiIDiF9u9iC8cIuvXhyq/9peifwoO
- WDw3jkN8eQnXZJwL5sHKI00w1UhWHOTAVa0twfkmsgPuBiVx3PWBRmozSClsE8MVSUNq/9yrd
- s5aRhP3CIxiUXk3GqrZG4+6xk8D4XAYTfkgEhogYhj/c7m6RUnv2Jv8FMuxZAUZt+pECI9+Qk
- kEXNzfVNYCqT4dyvXQKg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, daniel.gutson@eclypsium.com,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, X86 ML <x86@kernel.org>,
+        "Schofield, Alison" <alison.schofield@intel.com>,
+        alex.bazhaniuk@eclypsium.com, Greg KH <gregkh@linuxfoundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Subject: Re: [PATCH v8 0/8] x86: Show in sysfs if a memory node is able to do
+ encryption
+Message-ID: <YoSlzqSGLrQ+jdnD@zn.tnic>
+References: <CAKgze5YDD02AsrF0yESv2sptZ4qxyTMgCDmnOKcbQWjKQsJRsw@mail.gmail.com>
+ <YnUYLDjIThbIz/Uf@zn.tnic>
+ <6d90c832-af4a-7ed6-4f72-dae08bb69c37@intel.com>
+ <CAPcyv4i73m6iPPfJE9CBdxf-OWGXahvGqvh6G-pqVO=3LB6ktQ@mail.gmail.com>
+ <47140A56-D3F8-4292-B355-5F92E3BA9F67@alien8.de>
+ <6abea873-52a2-f506-b21b-4b567bee1874@intel.com>
+ <FDABC5C8-B80A-4977-9F97-5A8FC47F69D6@alien8.de>
+ <4bc56567-e2ce-40ec-19ab-349c8de8d969@intel.com>
+ <CE52D65A-C9F4-408D-B18A-72D87495A433@alien8.de>
+ <CAD2FfiHe3hCSNHEA0mSWPbH4LEWhj+FgxkhO83U1GgYEJR6wrw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAD2FfiHe3hCSNHEA0mSWPbH4LEWhj+FgxkhO83U1GgYEJR6wrw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 11:04 AM Miguel Ojeda <ojeda@kernel.org> wrote:
->
-> -#define BINDER_WRITE_READ              _IOWR('b', 1, struct binder_write_read)
-> -#define BINDER_SET_IDLE_TIMEOUT                _IOW('b', 3, __s64)
-> -#define BINDER_SET_MAX_THREADS         _IOW('b', 5, __u32)
-> -#define BINDER_SET_IDLE_PRIORITY       _IOW('b', 6, __s32)
-> -#define BINDER_SET_CONTEXT_MGR         _IOW('b', 7, __s32)
-> -#define BINDER_THREAD_EXIT             _IOW('b', 8, __s32)
-> -#define BINDER_VERSION                 _IOWR('b', 9, struct binder_version)
-> -#define BINDER_GET_NODE_DEBUG_INFO     _IOWR('b', 11, struct binder_node_debug_info)
-> -#define BINDER_GET_NODE_INFO_FOR_REF   _IOWR('b', 12, struct binder_node_info_for_ref)
-> -#define BINDER_SET_CONTEXT_MGR_EXT     _IOW('b', 13, struct flat_binder_object)
-> -#define BINDER_FREEZE                  _IOW('b', 14, struct binder_freeze_info)
-> -#define BINDER_GET_FROZEN_INFO         _IOWR('b', 15, struct binder_frozen_status_info)
-> -#define BINDER_ENABLE_ONEWAY_SPAM_DETECTION    _IOW('b', 16, __u32)
-> +enum {
-> +       BINDER_WRITE_READ                       = _IOWR('b', 1, struct binder_write_read),
-> +       BINDER_SET_IDLE_TIMEOUT                 = _IOW('b', 3, __s64),
-> +       BINDER_SET_MAX_THREADS                  = _IOW('b', 5, __u32),
-> +       BINDER_SET_IDLE_PRIORITY                = _IOW('b', 6, __s32),
-> +       BINDER_SET_CONTEXT_MGR                  = _IOW('b', 7, __s32),
-> +       BINDER_THREAD_EXIT                      = _IOW('b', 8, __s32),
-> +       BINDER_VERSION                          = _IOWR('b', 9, struct binder_version),
+On Mon, May 16, 2022 at 09:39:06AM +0100, Richard Hughes wrote:
+> This is still something consumers need; at the moment users have no
+> idea if data is *actually* being encrypted.
 
-I wonder if that breaks any tools that extract ioctl command number definitions
-from kernel headers. I see one other header using enum, but everything else
-has the #define. The main user of ioctl command definitions that comes to
-mind is 'strace', but I don't know where they get the numbers from.
+As it was already pointed out - that's in /proc/cpuinfo.
 
-It's probably not a big deal as long as it's limited to binder, but it
-may become
-more of a problem if we do this for more subsystems over time.
+> I think Martin has done an admirable job going down the rabbit hole
+> to add this functionality in the proper manner -- so it's actually
+> accurate and useful for other use cases to that of fwupd.
 
-         Arnd
+Only after I scratched the surface as to why this is needed.
+
+> At the moment my professional advice to people asking about Intel
+> memory encryption
+
+Well, what kind of memory encryption? Host, guest?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

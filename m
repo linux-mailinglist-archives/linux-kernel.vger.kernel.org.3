@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A221C52C244
+	by mail.lfdr.de (Postfix) with ESMTP id 093E752C242
 	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbiERSO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S241322AbiERSQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234057AbiERSO1 (ORCPT
+        with ESMTP id S241312AbiERSQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:14:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AAB16A277;
-        Wed, 18 May 2022 11:14:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89D1EB82019;
-        Wed, 18 May 2022 18:14:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43327C385A5;
-        Wed, 18 May 2022 18:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652897663;
-        bh=HXcgqQoC2j8uMdZbslQ5dj2wJLQUBcNJqdHvlFwHJ/A=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=QkXS9DmFT0x0MJgHh4vg9bjRKA0Sfa5QT1m+UQTOO2/1gK5AETm0+/zlg2jZYLfYl
-         NVsFvdgKFtQIGvicTy8Sn/gdo4OV0Z9+kRoUmHecC4xLkNGiFBAEIH1CnNjpDTsK1Y
-         FlQDAzrjNFI/mlVILP4bz+fSon6upBDIlLQdmwRscts8CnH8n7L1MAfickowlJqKMl
-         uuv4frt8pK84aJAGfnT5yjfWYvgrzOKJUw88j6WU4tho3MRal5w0MnV02zvOJdq7lQ
-         TPCjT/QBT4/bMh7tuPkavYf91FEBTGFCuwbfmifsS1dvLCrLicchZAgmPB6UQQlqPE
-         R60gBY1XZWt4g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D06605C042D; Wed, 18 May 2022 11:14:22 -0700 (PDT)
-Date:   Wed, 18 May 2022 11:14:22 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     frederic@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: Add cpu-exp indicator to expedited RCU CPU stall
- warnings
-Message-ID: <20220518181422.GR1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220518114310.1478091-1-qiang1.zhang@intel.com>
+        Wed, 18 May 2022 14:16:53 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0195D5F8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:16:51 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id h14so3825006wrc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:16:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=kWHj3GGl8z0pQ8ELFmv+NfP4zyxBIorTjHSTLj3pqmE=;
+        b=TYfcHLJ3sVF2GMZ/bt1Qslc/cTbhJ89bSU3/3f8cVSFgbWvFp0lw3otLcOG3hv8Fbc
+         4RZFlvI8WP5f5bmLTnKRkychHi63T9jZw9UBq8xKjPao5euS2MeARa9zMpg9CucRUCa7
+         GxzHqqOKuFQTr6SipwfHLWBgNhiaTvfVKqqG/50WCTkOEhT6+2YcDiVfSrI7Ad4DZcig
+         mxYNZQSW/WHE5SmuoTcxDe1FnoldZ8kZtpmoOmYPGeqTREwtIBnGpG2+Aac/d585pUYL
+         zRk3pgvcIki599diV1OZv/zLo9MquCPW8Rtbwhk0JDuH5+Qx4I8abUZdLb1efm/mBN1v
+         ZcOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=kWHj3GGl8z0pQ8ELFmv+NfP4zyxBIorTjHSTLj3pqmE=;
+        b=jUxncJYWolQtTqq1MO0gfSV84+oIHhIYG9+x0bQ+CdRmvPLn/hkTLHG5A3YQU6lTg0
+         6iCkFSdtv0yLdHrMBqE6MX3ZfmM7dhXqinT8XmK1KKrgaNQbDsV56bsHa9Sa7PJYcZda
+         eQCd/PcnoSCQyKBem6IG2l2g0byQxSxoVc/R9WIPpksRN6tw/vTlu/jtRXqd5WKtayE7
+         6QyudvcH7UguIuT+IJG/X2+hcoF9936DurOLGJuKPhDpRmfkxerrpBQScvwMcHYX9t5u
+         WNHKrfeIN216NHSP+3u5jLlCrGn0oyV54C8HcOcnlieqNopzJsTfz+/wRDHvH3sqz53N
+         eVxg==
+X-Gm-Message-State: AOAM533FBrgn8vm2ZWkXEFpWkbflrn8Ldjp1i/ATrQEHL2LMFJ3oYQee
+        BtyyxbCb1wZY/ESOkCYrzxLJmBo01gxaGvNOrS30Pyvbq300
+X-Google-Smtp-Source: ABdhPJw6wDTkc19Ln53H3KAjKofnbEQ0/3R2SNkk59SSN0lJv209DtpZRbRuCUXeYxHnwcvgHTLS0DeJD7fITuZLl38=
+X-Received: by 2002:adf:f049:0:b0:20d:a8d:b1e3 with SMTP id
+ t9-20020adff049000000b0020d0a8db1e3mr751533wro.241.1652897809699; Wed, 18 May
+ 2022 11:16:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518114310.1478091-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 18 May 2022 14:16:39 -0400
+Message-ID: <CAHC9VhRzZwD5X6AVojX8eFyN8i4fHfw1T5ugDd8brb=qRi1Cug@mail.gmail.com>
+Subject: [GIT PULL] SELinux fixes for v5.18 (#1)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 07:43:10PM +0800, Zqiang wrote:
-> This commit adds a "D" indicator to expedited RCU CPU stall warnings.
-> when an expedited grace period begins, due to CPU disable interrupt
-> time too long, cause the IPI(rcu_exp_handler()) unable to respond in
-> time, this debugging id will be showed.
-> 
-> runqemu kvm slirp nographic qemuparams="-m 4096 -smp 4"  bootparams=
-> "isolcpus=2,3 nohz_full=2,3 rcu_nocbs=2,3 rcutree.dump_tree=1
-> rcutorture.stall_cpu_holdoff=30 rcutorture.stall_cpu=40
-> rcutorture.stall_cpu_irqsoff=1 rcutorture.stall_cpu_block=0
-> rcutorture.stall_no_softlockup=1" -d
-> 
-> rcu_torture_stall start on CPU 1.
-> ............
-> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks:
-> { 1-...D } 26467 jiffies s: 13317 root: 0x1/.
-> rcu: blocking rcu_node structures (internal RCU debug): l=1:0-1:0x2/.
-> Task dump for CPU 1:
-> task:rcu_torture_sta state:R  running task     stack:    0 pid:   76
-> ppid:     2 flags:0x00004008
-> 
-> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Linus,
 
-Nice!!!  I have queued this for v5.20 and for further testing and
-review, thank you!
+A single SELinux patch to fix an error path that was doing the wrong
+thing with respect to freeing memory.  Please merge for v5.18.
 
-As usual, I could not resist the temptation to wordsmith the commit log,
-so could you please check it in case I messed something up?
+Thanks,
+-Paul
 
-							Thanx, Paul
+--
+The following changes since commit 42226c989789d8da4af1de0c31070c96726d990c:
 
-------------------------------------------------------------------------
+ Linux 5.18-rc7 (2022-05-15 18:08:58 -0700)
 
-commit 178b9d47f3049e8122738c3166ee4975b75cba55
-Author: Zqiang <qiang1.zhang@intel.com>
-Date:   Wed May 18 19:43:10 2022 +0800
+are available in the Git repository at:
 
-    rcu: Add irqs-disabled indicator to expedited RCU CPU stall warnings
-    
-    If a CPU has interrupts disabled continuously starting before the
-    beginning of a given expedited RCU grace period, that CPU will not
-    execute that grace period's IPI handler.  This will in turn mean
-    that the ->cpu_no_qs.b.exp field in that CPU's rcu_data structure
-    will continue to contain the boolean value false.
-    
-    Knowing whether or not a CPU has had interrupts disabled can be helpful
-    when debugging an expedited RCU CPU stall warning, so this commit
-    adds a "D" indicator expedited RCU CPU stall warnings that signifies
-    that the corresponding CPU has had interrupts disabled throughout.
-    
-    This capability was tested as follows:
-    
-    runqemu kvm slirp nographic qemuparams="-m 4096 -smp 4"  bootparams=
-    "isolcpus=2,3 nohz_full=2,3 rcu_nocbs=2,3 rcutree.dump_tree=1
-    rcutorture.stall_cpu_holdoff=30 rcutorture.stall_cpu=40
-    rcutorture.stall_cpu_irqsoff=1 rcutorture.stall_cpu_block=0
-    rcutorture.stall_no_softlockup=1" -d
-    
-    The rcu_torture_stall() function ran on CPU 1, which displays the "D"
-    as expected given the rcutorture.stall_cpu_irqsoff=1 module parameter:
-    
-    ............
-    rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks:
-    { 1-...D } 26467 jiffies s: 13317 root: 0x1/.
-    rcu: blocking rcu_node structures (internal RCU debug): l=1:0-1:0x2/.
-    Task dump for CPU 1:
-    task:rcu_torture_sta state:R  running task     stack:    0 pid:   76  ppid:     2 flags:0x00004008
-    
-    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+ git://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git
+   tags/selinux-pr-20220518
 
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 4c7037b507032..f092c7f18a5f3 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -637,10 +637,11 @@ static void synchronize_rcu_expedited_wait(void)
- 					continue;
- 				ndetected++;
- 				rdp = per_cpu_ptr(&rcu_data, cpu);
--				pr_cont(" %d-%c%c%c", cpu,
-+				pr_cont(" %d-%c%c%c%c", cpu,
- 					"O."[!!cpu_online(cpu)],
- 					"o."[!!(rdp->grpmask & rnp->expmaskinit)],
--					"N."[!!(rdp->grpmask & rnp->expmaskinitnext)]);
-+					"N."[!!(rdp->grpmask & rnp->expmaskinitnext)],
-+					"D."[!!(rdp->cpu_no_qs.b.exp)]);
- 			}
- 		}
- 		pr_cont(" } %lu jiffies s: %lu root: %#lx/%c\n",
+for you to fetch changes up to 6254bd3db316c9ccb3b05caa8b438be63245466f:
+
+ selinux: fix bad cleanup on error in hashtab_duplicate()
+   (2022-05-17 18:34:35-0400)
+
+----------------------------------------------------------------
+selinux/stable-5.18 PR 20220518
+
+----------------------------------------------------------------
+Ondrej Mosnacek (1):
+     selinux: fix bad cleanup on error in hashtab_duplicate()
+
+security/selinux/ss/hashtab.c | 3 ++-
+1 file changed, 2 insertions(+), 1 deletion(-)
+
+-- 
+paul-moore.com

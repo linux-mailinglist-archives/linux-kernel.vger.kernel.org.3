@@ -2,111 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEF352B434
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C5352B455
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232940AbiERH7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S232979AbiERIAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232846AbiERH6R (ORCPT
+        with ESMTP id S232861AbiERH6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:58:17 -0400
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15E81207CE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652860694;
-        bh=hoX39PemcSFYcIE/U6fMYNXcF/lSXAXQ7ENdEkgZSZ0=;
-        h=X-UI-Sender-Class:Date:From:Subject:To;
-        b=Bw5ELnsckKQ1mt88xZZ1DxTfrCExNpUYHshrxt6g9g06V/nbAzOJECFfWCb1N1JAS
-         70TAkLLSofmBi3YHrx6pRu6UrECR0YpL88hbyBeZd3EJCoYZbSnOYpUpbbuFk9C99X
-         kHARDQiw5GnGUOHSm9n/ARgzC5nGm+bwZjWT9r4I=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [10.15.110.18] ([143.244.38.17]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MBDnC-1o1eRP2VNm-00CeJ9 for
- <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:58:13 +0200
-Message-ID: <877bc1ca-e72b-1a48-25de-61250df601ad@gmx.com>
-Date:   Wed, 18 May 2022 07:58:12 +0000
+        Wed, 18 May 2022 03:58:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB051207E6;
+        Wed, 18 May 2022 00:58:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1B35021B9A;
+        Wed, 18 May 2022 07:58:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652860701; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QH8rZRpDaB1rKzYBSvbHTkuJfXIZgq5PPOEyov0S61g=;
+        b=T0gGp12c0pU5b8b1i3GTuIGm3SeP3EhRpXPECQNn/enftlsKdapz4VZkfCcS2uIPqM17q+
+        /PBA3AVHUNLBKEckN04LlFAw1RfXD18Ad2wMfhhColdg9InPjS0Cl4zZnO5bfZL0Ln9Soj
+        5NqvLRJqL5BZI+4DmlPHTXzoYIVJS4o=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0683D2C142;
+        Wed, 18 May 2022 07:58:19 +0000 (UTC)
+Date:   Wed, 18 May 2022 09:58:18 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Message-ID: <YoSnGmBJ3kYs5WMf@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
+ <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+ <YoOpyW1+q+Z5as78@alley>
 MIME-Version: 1.0
-From:   "Artem S. Tashkinov" <aros@gmx.com>
-Subject: Cannot build Linux 5.17 on Fedora 36
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:JnbqlO50qYhUdp2d6lc7+ou6782U+x5qYqfJc4f4pAiK/kXtSRD
- 0bO0CKZxlVZQvYIf0MUfzupd8rj19wIVRPTGz/win443EERaAbdqXovtOsa0Pd0wvd3oia0
- I+CmcUqeKUL9ndRS0X4JZrEk7VHKulfDMC2sEB8FKxfY38ezDuImNXrQGZZs5ZA5zMDwuyC
- tUa2YwOT6JlzBcDH7yEKw==
-X-UI-Out-Filterresults: junk:10;V03:K0:yaOUZKOtfyY=:5UmBM6rZY4CVDLpf94WlJ7aU
- Etk+sFASPLBunuwSUH6zgVoA79OCe+zHeIgdmPONG/Tgv6qVlXypYDZQpBXdUsvodXNVJMGZS
- +kxsHJqWZRB19NErroB92R4OuoZWgRJapJRYzZzOAKqfAk8OL7U4Q1UxHL2/BaDdzqz31kJ1L
- DHRY3FcZ+NV+SaklajplDOMO0x6n5HWpReb+WbFTFe6OrdqzqYQV98z3XZ0pCJjp6q4dpiFkO
- i3mnRVrwQUQt3bJxL2UPMhB5b6Bs/1aTkZhDvrU+5b2AnUTsqShv0obbN1LD7PGbkrf+Yezis
- 70XX8h4YLI8sEvFhnK5uvN+Z3CAFRD9NqnGp3SEWo946HvgnXPRnEDfekFBKzDbeO6ZuoeQYQ
- 0ehkDjq94ao3BTnigc6WXN+UmRoiCSMbMG9sqSAuFSxbvuCW1KlYGGm18JPw4yLiMblynNbwt
- 2dRBEKTzDIm/DJvD5DXDyifvG2msviZegxiZIKMbGQ9rV96+yXQNzWIz1JBYLb07BttuaxuUK
- laGOQl3WLw6gNOTqXk6GZKQnBb6TS6ygPnfFZJNu1JOEf63SlIRgI0mZNhFw3QBtoK375D+vP
- ygWQdYXKNQf71HQlb9rlDvWqVeIRFanIR4q6u5OBu6i+VmBhg6SS0S2FnPOCoELUrBm0at483
- osM52WRaddsA5C5c6HAkZQrlDsJD/Wi2LxJGl47vx7hJbvIhGpvi7ax2nuLpTe3IKTBSGhsyv
- YftBjlbtiXYek2uN7vmz1WsLg7KsKpy5/5ZB6cS98aQDs18VehH0AO5I7CiIyYYkoysZjX9Mi
- wAmb+RdH/dTd7zSM+leMucdgpOc/f0OckdQgqPd5eokDpb4KGILnvbYdgzLlJfQ9wOGtLNEm0
- 6rJWhVl4pdtrVO9b9WI8Dm78itLlJxW4o8bVYuR8EYqLL8fsl0e9f20q0X+BKuZunfxOmvpNx
- Qj4rds6Zegz3wS8ZmneT4UPA8T4Qc6jX+o1T2Be69NtFzCRYGS5f8aRSlIALgXKJfrX4y0O8E
- kAaj0VzxRAx/RgpdjHyavF3rEVGi+IFzUFxbWgkLSRD0GYvCrjS/w4v9p0UXeXqRPmvn+ToQ6
- VcsRAw3M+l+LmXqC0N2D6scUUOHar8cf12pB3qSAPrrHNYHVrsTBPZeoMUDziJLiGdekAQUFP
- Or8=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoOpyW1+q+Z5as78@alley>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue 2022-05-17 15:57:34, Petr Mladek wrote:
+> On Mon 2022-05-16 12:06:17, Guilherme G. Piccoli wrote:
+> > >> --- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> > >> +++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+> > >> @@ -814,7 +814,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+> > >>  		goto out;
+> > >>  	}
+> > >>  
+> > >> -	atomic_notifier_chain_register(&panic_notifier_list,
+> > >> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+> > >>  				       &brcmstb_pm_panic_nb);
+> > > 
+> > > I am not sure about this one. It instruct some HW to preserve DRAM.
+> > > IMHO, it better fits into pre_reboot category but I do not have
+> > > strong opinion.
+> > 
+> > Disagree here, I'm CCing Florian for information.
+> > 
+> > This notifier preserves RAM so it's *very interesting* if we have
+> > kmsg_dump() for example, but maybe might be also relevant in case kdump
+> > kernel is configured to store something in a persistent RAM (then,
+> > without this notifier, after kdump reboots the system data would be lost).
+> 
+> I see. It is actually similar problem as with
+> drivers/firmware/google/gsmi.c.
 
-I cannot build vanilla Linux 5.17:
+As discussed in the other other reply, it seems that both affected
+notifiers do not store kernel logs and should stay in the "hypervisor".
 
-# make defconfig
-   HOSTCC  scripts/basic/fixdep
-   HOSTCC  scripts/kconfig/conf.o
-   HOSTCC  scripts/kconfig/confdata.o
-   HOSTCC  scripts/kconfig/expr.o
-   LEX     scripts/kconfig/lexer.lex.c
-   YACC    scripts/kconfig/parser.tab.[ch]
-   HOSTCC  scripts/kconfig/lexer.lex.o
-   HOSTCC  scripts/kconfig/menu.o
-   HOSTCC  scripts/kconfig/parser.tab.o
-   HOSTCC  scripts/kconfig/preprocess.o
-   HOSTCC  scripts/kconfig/symbol.o
-   HOSTCC  scripts/kconfig/util.o
-   HOSTLD  scripts/kconfig/conf
-*** Default configuration is based on 'x86_64_defconfig'
-gold linker is not supported as it is not capable of linking the kernel
-proper.
-scripts/Kconfig.include:56: Sorry, this linker is not supported.
-make[1]: *** [scripts/kconfig/Makefile:87: defconfig] Error 1
-make: *** [Makefile:619: defconfig] Error 2
+> I does similar things like kmsg_dump() so it should be called in
+> the same location (after info notifier list and before kdump).
+>
+> A solution might be to put it at these notifiers at the very
+> end of the "info" list or make extra "dump" notifier list.
 
-No idea what's going on. I've recently updated gcc and binutils packages.
+I just want to point out that the above idea has problems.
+Notifiers storing kernel log need to be treated as kmsg_dump().
+In particular, we would  need to know if there are any.
+We do not need to call "info" notifier list before kdump
+when there is no kernel log dumper registered.
 
-# dnf update
-Dependencies resolved.
-Nothing to do.
-Complete!
-
-binutils-2.37-27.fc36.x86_64
-gcc-12.1.1-1.fc36.x86_64
-
-ls -la /etc/alternatives/ld
-lrwxrwxrwx. 1 root root 15 Oct  7  2020 /etc/alternatives/ld ->
-/usr/bin/ld.bfd
-
-So, the symbolic link hasn't been changed in more than a year.
-
-No idea what's going on. What am I missing?
-
-Best regards,
-Artem
+Best Regards,
+Petr

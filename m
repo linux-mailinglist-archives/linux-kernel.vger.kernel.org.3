@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8BF52B6DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B1D52B6A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234829AbiERKFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        id S234918AbiERKFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 06:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234820AbiERKFN (ORCPT
+        with ESMTP id S234821AbiERKFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:05:13 -0400
+        Wed, 18 May 2022 06:05:14 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A896EB07;
-        Wed, 18 May 2022 03:05:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA566F482;
+        Wed, 18 May 2022 03:05:13 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 8EE241F44E07
+        with ESMTPSA id 61ED61F44E08
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652868311;
-        bh=U70cvP2/Lgt8lNyOqWL39jq+Fark+U7neoHz5F2M2Nw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IsAoTuF0LZAK/38ZusnqIkI10GGd2aWgxdN2rhyFkvOY3sbmzggDeRnYWAI6SbDSu
-         ARC0oZ7uzAKHX27vDoS7ruoS1PWqv19s3xjNgagzfltsoJoxEwnlt9krLrIyuiHFtA
-         W1CTf+5vhhtcu5bLxzlld4STZIHFdhy4fyYNrI6EDrOKNkmJwa1uFM9LvBqyqPBccP
-         XnRtWgFvqjV1XeLyqQmiPp3KzW3TvugS98vL9sYxT8ECATIakSJ28M1nmHK/W+Bhh4
-         y+fiK2jGk5YvAyqJN/bapRl105yVdat8KERFg8G1mNKQbiRToc6Qqn5wyKjN55r32X
-         4HvGjdXoTvj5Q==
+        s=mail; t=1652868312;
+        bh=QldET8Tith6XpQTESLUFmBU4bL4nM1vDAby2xnsh/3s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OKHk/q8oiV3Jx3vURxCYvrr6N5xQTM4Rz6VneBa345wqTTsd7cyy706N9/c1Ef0LL
+         Uo1pcr/J2bfK7IVi5S9JVpE/Nzf6FstsiVPOvRJl4MlMxGL3Ffaak2NLVO+DSIGoEY
+         JuzIue3TVMTOZMsjQrkpI9Klyql3w06eO6Iz1ewjzOf5gReh2QeNyB+tIjoZ01uTu+
+         RdSzpYgDrgYJ08oMFOboynMNmbYDJas7zfM/stIogyptfG2a+ilzRJAhVi84l5a61K
+         Od5YBOeDWxAzgYZvKUQs10U5B9x8RW2k5FderWzNRBuPsanB3Bl88sZmBErSkoRv4z
+         TMN2KNghaK3dA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     yong.wu@mediatek.com
@@ -39,10 +39,12 @@ Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski@linaro.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 0/7] mtk_iommu: Specify phandles to infracfg and pericfg
-Date:   Wed, 18 May 2022 12:04:56 +0200
-Message-Id: <20220518100503.37279-1-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 1/7] dt-bindings: iommu: mediatek: Add phandles for mediatek infra/pericfg
+Date:   Wed, 18 May 2022 12:04:57 +0200
+Message-Id: <20220518100503.37279-2-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220518100503.37279-1-angelogioacchino.delregno@collabora.com>
+References: <20220518100503.37279-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,41 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IOMMU has registers in the infracfg and/or pericfg iospaces: as
-for the currently supported SoCs, MT2712 and MT8173 need a phandle to
-infracfg, while MT8195 needs one to pericfg.
+Add properties "mediatek,infracfg" and "mediatek,pericfg" to let the
+mtk_iommu driver retrieve phandles to the infracfg and pericfg syscon(s)
+instead of performing a per-soc compatible lookup.
 
-Before this change, the driver was checking for a SoC-specific infra/peri
-compatible but, sooner or later, these lists are going to grow a lot...
-...and this is why it was chosen to add phandles (as it was done with
-some other drivers already - look at mtk-pm-domains, mt8192-afe
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ .../devicetree/bindings/iommu/mediatek,iommu.yaml         | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Please note that, while it was necessary to update the devicetrees for
-MT8173 and MT2712e, there was no update for MT8195 because there is no
-IOMMU node in there yet.
-
-Changes in v2:
- - Squashed dt-bindings patches as suggested by Matthias
- - Removed quotes from infra/peri phandle refs
- - Changed dev_warn to dev_info in patches [2/7], [3/7]
-
-AngeloGioacchino Del Regno (7):
-  dt-bindings: iommu: mediatek: Add phandles for mediatek infra/pericfg
-  iommu: mtk_iommu: Lookup phandle to retrieve syscon to infracfg
-  iommu: mtk_iommu: Lookup phandle to retrieve syscon to pericfg
-  arm64: dts: mediatek: mt8173: Add mediatek,infracfg phandle for IOMMU
-  arm64: dts: mediatek: mt2712e: Add mediatek,infracfg phandle for IOMMU
-  dt-bindings: iommu: mediatek: Require mediatek,infracfg for
-    mt2712/8173
-  dt-bindings: iommu: mediatek: Require mediatek,pericfg for
-    mt8195-infra
-
- .../bindings/iommu/mediatek,iommu.yaml        | 30 +++++++++
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |  2 +
- arch/arm64/boot/dts/mediatek/mt8173.dtsi      |  1 +
- drivers/iommu/mtk_iommu.c                     | 66 ++++++++++++-------
- 4 files changed, 75 insertions(+), 24 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+index 2ae3bbad7f1a..c4af41947593 100644
+--- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
++++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+@@ -101,6 +101,10 @@ properties:
+     items:
+       - const: bclk
+ 
++  mediatek,infracfg:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: The phandle to the mediatek infracfg syscon
++
+   mediatek,larbs:
+     $ref: /schemas/types.yaml#/definitions/phandle-array
+     minItems: 1
+@@ -112,6 +116,10 @@ properties:
+       Refer to bindings/memory-controllers/mediatek,smi-larb.yaml. It must sort
+       according to the local arbiter index, like larb0, larb1, larb2...
+ 
++  mediatek,pericfg:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: The phandle to the mediatek pericfg syscon
++
+   '#iommu-cells':
+     const: 1
+     description: |
 -- 
 2.35.1
 

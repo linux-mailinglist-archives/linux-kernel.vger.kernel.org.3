@@ -2,56 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A28C52AF23
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A75052AF25
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbiERAYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 20:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
+        id S232542AbiERAZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 20:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232457AbiERAYs (ORCPT
+        with ESMTP id S232457AbiERAZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 20:24:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563D127143;
-        Tue, 17 May 2022 17:24:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0C1BB81D9D;
-        Wed, 18 May 2022 00:24:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E5DC385B8;
-        Wed, 18 May 2022 00:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652833484;
-        bh=IqdtSbJNm+VCuGfNAw8HzsuQPLkmpT4BhAuMLtG+vDI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vhDZhQ93mCmb4YxS1mh5DEHHIcUSZbxx4FRPaLVghQFUuACIEem5vS0qa46A1JKZi
-         a14rGVLnWHkOEKmkq1nnAYQENCzmQKAD9lqyHEfMWXg14bN0oFYkUAJ9VmLHZsK/zL
-         mNWuy+13jtxf2UCabEYHHbwSU7jhlcDty3FRiM1w=
-Date:   Tue, 17 May 2022 17:24:43 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        void@manifault.com, cgroups@vger.kernel.org, hannes@cmpxchg.org,
-        kernel-team@fb.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mhocko@kernel.org, shakeelb@google.com,
-        tj@kernel.org, Richard Palethorpe <rpalethorpe@suse.de>
-Subject: Re: [PATCH 4/4] selftests: memcg: Remove protection from top level
- memcg
-Message-Id: <20220517172443.3e524a8319c693ab24c5f22e@linux-foundation.org>
-In-Reply-To: <Yn6qrHHS935ppX98@carbon>
-References: <20220512174452.tr34tuh4k5jm6qjs@dev0025.ash9.facebook.com>
-        <20220513171811.730-1-mkoutny@suse.com>
-        <20220513171811.730-5-mkoutny@suse.com>
-        <Yn6qrHHS935ppX98@carbon>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 17 May 2022 20:25:33 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078E726133;
+        Tue, 17 May 2022 17:25:32 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id e189so857039oia.8;
+        Tue, 17 May 2022 17:25:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2PN69YcQuRroEf0QfFtNKCNOl7n65i1negbEM5qktIY=;
+        b=38J75vJgBiDnzThl1r83jA1e5GVsND80GTR9dVBmYbG3pLPUZqRoLTZRbAPcpivp7J
+         BKbmrjsI88AvAQWEm9rinVHXT90ylEGZ8xFi82wsDSXVpy79IeTjebqkYRWzmwSxg8tb
+         NdSp8frBLTcY2WJe6AM2u3ft4qGIykgMNl9lEV+A+JH6zlaZL12tT8MrjakLQDLTICkn
+         wMZh9Re/GzQk/QiyRjrdyIFkxTQVGUeYGwS2fQYK1dOncli+fXSTPaQvHTrVW458lkf9
+         52xXEL1xKAV3GdhA10VD+BPvLCPQraUKKm6kMncN607HqJngk4mBREgPHNatzayQYOyR
+         XIWg==
+X-Gm-Message-State: AOAM533FSeLi2eEQsgHtQgY3EOZ4wNGwGBX3dvzPNyETYjsQu9+vMw5M
+        ylbVIRthXw7uH9Zhv/xwpw==
+X-Google-Smtp-Source: ABdhPJziK8pztuaPLKL5LYFdMFqO/56+2LtDMRgd6gaQ462+ZfsGb5YXE9b65MNQRYlF7QOm36X91Q==
+X-Received: by 2002:a05:6808:151f:b0:328:aaa2:10b8 with SMTP id u31-20020a056808151f00b00328aaa210b8mr17147368oiw.60.1652833531280;
+        Tue, 17 May 2022 17:25:31 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v196-20020acaaccd000000b00325cda1ff8fsm318670oie.14.2022.05.17.17.25.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 17:25:30 -0700 (PDT)
+Received: (nullmailer pid 1933964 invoked by uid 1000);
+        Wed, 18 May 2022 00:25:29 -0000
+Date:   Tue, 17 May 2022 19:25:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, atishp@atishpatra.org,
+        anup@brainfault.org, mick@ics.forth.gr, samuel@sholland.org,
+        cmuellner@linux.com, philipp.tomsich@vrull.eu, krzk+dt@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: riscv: document cbom-block-size
+Message-ID: <20220518002529.GA1928329-robh@kernel.org>
+References: <20220511214132.2281431-1-heiko@sntech.de>
+ <20220511214132.2281431-2-heiko@sntech.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511214132.2281431-2-heiko@sntech.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,98 +67,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 11:59:56 -0700 Roman Gushchin <roman.gushchin@linux.dev=
-> wrote:
+On Wed, May 11, 2022 at 11:41:30PM +0200, Heiko Stuebner wrote:
+> The Zicbom operates on a block-size defined for the cpu-core,
+> which does not necessarily match other cache-sizes used.
+> 
+> So add the necessary property for the system to know the core's
+> block-size.
+> 
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> ---
+>  Documentation/devicetree/bindings/riscv/cpus.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> index d632ac76532e..b179bfd155a3 100644
+> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> @@ -63,6 +63,13 @@ properties:
+>        - riscv,sv48
+>        - riscv,none
+>  
+> +  riscv,cbom-block-size:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-> On Fri, May 13, 2022 at 07:18:11PM +0200, Michal Koutny wrote:
-> > The reclaim is triggered by memory limit in a subtree, therefore the
-> > testcase does not need configured protection against external reclaim.
-> >=20
-> > Also, correct/deduplicate respective comments
-> >=20
-> > Signed-off-by: Michal Koutn=FD <mkoutny@suse.com>
-> > ---
-> >  tools/testing/selftests/cgroup/test_memcontrol.c | 12 ++++--------
-> >  1 file changed, 4 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/t=
-esting/selftests/cgroup/test_memcontrol.c
-> > index 9ffacf024bbd..9d370aafd799 100644
-> > --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> > +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> > @@ -247,7 +247,7 @@ static int cg_test_proc_killed(const char *cgroup)
-> > =20
-> >  /*
-> >   * First, this test creates the following hierarchy:
-> > - * A       memory.min =3D 50M,  memory.max =3D 200M
-> > + * A       memory.min =3D 0,    memory.max =3D 200M
-> >   * A/B     memory.min =3D 50M,  memory.current =3D 50M
-> >   * A/B/C   memory.min =3D 75M,  memory.current =3D 50M
-> >   * A/B/D   memory.min =3D 25M,  memory.current =3D 50M
-> > @@ -257,7 +257,7 @@ static int cg_test_proc_killed(const char *cgroup)
-> >   * Usages are pagecache, but the test keeps a running
-> >   * process in every leaf cgroup.
-> >   * Then it creates A/G and creates a significant
-> > - * memory pressure in it.
-> > + * memory pressure in A.
-> >   *
-> >   * A/B    memory.current ~=3D 50M
-> >   * A/B/C  memory.current ~=3D 29M
-> > @@ -335,8 +335,6 @@ static int test_memcg_min(const char *root)
-> >  			      (void *)(long)fd);
-> >  	}
-> > =20
-> > -	if (cg_write(parent[0], "memory.min", "50M"))
-> > -		goto cleanup;
-> >  	if (cg_write(parent[1], "memory.min", "50M"))
-> >  		goto cleanup;
-> >  	if (cg_write(children[0], "memory.min", "75M"))
-> > @@ -404,8 +402,8 @@ static int test_memcg_min(const char *root)
-> > =20
-> >  /*
-> >   * First, this test creates the following hierarchy:
-> > - * A       memory.low =3D 50M,  memory.max =3D 200M
-> > - * A/B     memory.low =3D 50M,  memory.current =3D 50M
-> > + * A       memory.low =3D 0,    memory.max =3D 200M
-> > + * A/B     memory.low =3D 50M,  memory.current =3D ...
->=20
-> Can you, please, just remove "memory.current =3D ...", it's not
-> because obvious what "..." means here.
->=20
+Any value 0-2^32 is valid? 
 
-You mean this?
+> +    description:
+> +      Blocksize in bytes for the Zicbom cache operations. The block
+> +      size is a property of the core itself and does not necessarily
+> +      match other software defined cache sizes.
 
---- a/tools/testing/selftests/cgroup/test_memcontrol.c~selftests-memcg-remo=
-ve-protection-from-top-level-memcg-fix
-+++ a/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -403,15 +403,14 @@ cleanup:
- /*
-  * First, this test creates the following hierarchy:
-  * A       memory.low =3D 0,    memory.max =3D 200M
-- * A/B     memory.low =3D 50M,  memory.current =3D ...
-+ * A/B     memory.low =3D 50M
-  * A/B/C   memory.low =3D 75M,  memory.current =3D 50M
-  * A/B/D   memory.low =3D 25M,  memory.current =3D 50M
-  * A/B/E   memory.low =3D 0,    memory.current =3D 50M
-  * A/B/F   memory.low =3D 500M, memory.current =3D 0
-  *
-  * Usages are pagecache.
-- * Then it creates A/G an creates a significant
-- * memory pressure in it.
-+ * Then it creates A/G and creates significant memory pressure in it.
-  *
-  * Then it checks actual memory usages and expects that:
-  * A/B    memory.current ~=3D 50M
-_
+What about hardware defined cache sizes? I'm scratching my head as to 
+what a 'software defined cache size' is.
 
-(includes gratuitous comment cleanup)
-
-I assume your comment in
-https://lkml.kernel.org/r/Yn6pBPq+lAXm9NG8@carbon can be addressed in a
-later patch.
-
-I'm not sure what to amke of https://lkml.kernel.org/r/Yn6pWPodGPlz+D8G@car=
-bon
-
-Do we feel this series needs more work before merging it up?
-
+> +
+>    riscv,isa:
+>      description:
+>        Identifies the specific RISC-V instruction set architecture
+> -- 
+> 2.35.1
+> 
+> 

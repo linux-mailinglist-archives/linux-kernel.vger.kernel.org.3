@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F58552B1E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 07:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982C952B1F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 07:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiERFea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 01:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
+        id S230248AbiERFh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 01:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiERFeM (ORCPT
+        with ESMTP id S230238AbiERFhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 01:34:12 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A855205CC;
-        Tue, 17 May 2022 22:34:11 -0700 (PDT)
+        Wed, 18 May 2022 01:37:23 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417ACDCC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 22:37:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=YSN+WtsO0fZFIV6KhoO12+ocgcJf0i8ccKnsR6saRAU=; b=wNXbbFByzCAFxzM/RFy0NeldX8
-        +oL1HLlG+dAOQMTF93PAgj7krqYKbkbL7SJNY/npRpqHTsOdijFe/w7F3trQTlvjYULiX51ulq7YC
-        Lljy0FyVi9fFRrCmn6OZNBDl5vxav1DV03IuoyeAOq2LiLycfkvMXi0GyXewZCIFs3IcAD6gyncXk
-        tlREWaHScE07UAYmql5Yry9okQ+AIl318H2t2ar3FhS0d40+7MJ8AZW6b7dInBPTJQQbVHWdQadMX
-        NXvep3ApsZJsDlO0lJvo5DnrJGTIpprjpM40Us6ya1k7rbPzXVeoSWgkK4kxLZ/cCc9kCov5evop5
-        BpdUY97g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrCJo-00BTgP-Oc; Wed, 18 May 2022 05:33:57 +0000
-Message-ID: <f964a040-b9eb-75ae-ce01-6e8a62dc4d20@infradead.org>
-Date:   Tue, 17 May 2022 22:33:52 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [syzbot] linux-next build error (13)
-Content-Language: en-US
-To:     syzbot <syzbot+7013da477748d0b624b9@syzkaller.appspotmail.com>,
-        axboe@fb.com, hch@lst.de, james.smart@broadcom.com,
-        kbusch@kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-nvme@lists.infradead.org,
-        sagi@grimberg.me, sfr@canb.auug.org.au,
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OWzOnyRGhSNWu55pQcD8xrowoz0GoENefMIUO4eEwjk=; b=q0mu0N5AlN1YSnpALMhm77VNam
+        YipxR9GrpOqt3CyownScjSeTqTr8dhUEamMCggbshS4dITDFSem4K9oI8p6M8D4dxbl0MdLD2+H1Z
+        +uY8Pd/37RpV2ZKkt8nIPhiwIeFnCMOPDeYaRcU5g3OA1kRYM34rQQvJt3NAEzBUIncj7CzWSH020
+        QmCbVwm+s50tYOCGa1IwbafhlWOxbe7KuQEpkol+RKsxwEoFSLOFUocsCfXAytYJ1eaTArCmUcqkf
+        MjSXclgH0gAJ7eRuC9EAMTzYyivDmTz63l/JNUd6NbR4CliN471tgI3kQiU9WAuXM/82ENA/l9jg7
+        p6UnCdAw==;
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrCN5-00Fx12-13; Wed, 18 May 2022 05:37:19 +0000
+Date:   Wed, 18 May 2022 05:37:19 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
+Cc:     hdanton@sina.com, linux-kernel@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
-References: <000000000000b3a1f405df33be01@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <000000000000b3a1f405df33be01@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
+Message-ID: <YoSGDwu++m4/gCIK@zeniv-ca.linux.org.uk>
+References: <20220517223806.2299-1-hdanton@sina.com>
+ <000000000000be329205df3cf252@google.com>
+ <YoQohxAFD3EPujRC@zeniv-ca.linux.org.uk>
+ <YoRFAoe99ob/YzD5@zeniv-ca.linux.org.uk>
+ <YoRHfB7lEGUwQBGU@zeniv-ca.linux.org.uk>
+ <YoRS0L0ywSZkflq7@zeniv-ca.linux.org.uk>
+ <YoR4XSN2fn2BjkXw@zeniv-ca.linux.org.uk>
+ <YoR8yrgorv8QssX6@zeniv-ca.linux.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoR8yrgorv8QssX6@zeniv-ca.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 18, 2022 at 04:57:46AM +0000, Al Viro wrote:
 
+> Gotcha.
+> percpu_ref_init():
+>         ref->percpu_count_ptr = (unsigned long)
+>                 __alloc_percpu_gfp(sizeof(unsigned long), align, gfp);
+>         if (!ref->percpu_count_ptr)
+>                 return -ENOMEM;
+>         data = kzalloc(sizeof(*ref->data), gfp);
+>         if (!data) {
+>                 free_percpu((void __percpu *)ref->percpu_count_ptr);
+>                 return -ENOMEM;
+>         }
+> 
+> cgroup_create():
+>         err = percpu_ref_init(&css->refcnt, css_release, 0, GFP_KERNEL);
+>         if (err)
+>                 goto err_free_css;
+> 
+>         err = cgroup_idr_alloc(&ss->css_idr, NULL, 2, 0, GFP_KERNEL);
+>         if (err < 0)
+>                 goto err_free_css;
+> 
+> Now note that we end up hitting the same path in case of successful and
+> failed percpu_ref_init().  With no way to tell if css->refcnt.percpu_count_ptr
+> is an already freed object or needs to be freed.  And sure enough, we have
+> 
+> err_free_css:
+>         list_del_rcu(&css->rstat_css_node);
+>         INIT_RCU_WORK(&css->destroy_rwork, css_free_rwork_fn);
+>         queue_rcu_work(cgroup_destroy_wq, &css->destroy_rwork);
+> 
+> with css_free_rwork_fn() starting with
+>         percpu_ref_exit(&css->refcnt);
+> 
+> which will give that double free.  That might be not the only cause of
+> trouble, but this looks like a bug and a plausible source of the
+> symptoms observed here.  Let's see if this helps:
+> 
+> diff --git a/lib/percpu-refcount.c b/lib/percpu-refcount.c
+> index af9302141bcf..e5c5315da274 100644
+> --- a/lib/percpu-refcount.c
+> +++ b/lib/percpu-refcount.c
+> @@ -76,6 +76,7 @@ int percpu_ref_init(struct percpu_ref *ref, percpu_ref_func_t *release,
+>  	data = kzalloc(sizeof(*ref->data), gfp);
+>  	if (!data) {
+>  		free_percpu((void __percpu *)ref->percpu_count_ptr);
+> +		ref->percpu_count_ptr = 0;
+>  		return -ENOMEM;
+>  	}
+>  
 
-On 5/17/22 04:50, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    47c1c54d1bcd Add linux-next specific files for 20220517
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=137f0301f00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=95ad7f734b04ada9
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7013da477748d0b624b9
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+7013da477748d0b624b9@syzkaller.appspotmail.com
-> 
-> drivers/nvme/host/fc.c:1914: undefined reference to `blkcg_get_fc_appid'
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-Fix is here:
-
-https://lore.kernel.org/lkml/e2f636e1-33ff-3d9f-a793-960f239d0bc2@infradead.org/T/#m2cca6716362ec3f367d15798c0af05f6c3f879a0
-
--- 
-~Randy
+... and it appears to fix the damn thing.  10 minutes and still running;
+without that it usually fails within a few seconds.

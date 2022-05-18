@@ -2,84 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFB052B344
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D0952B35D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbiERHTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S232132AbiERHVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbiERHTh (ORCPT
+        with ESMTP id S232214AbiERHVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:19:37 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E506C9C2E2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:19:35 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bq30so2068072lfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:19:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uE38ie4dSRzW9FDj6U1cSKtlpjyoAmfqSD8WeGqIZ6w=;
-        b=V4tVnXW4I9FGwv3pHQXWH7Sx8fdLQJwrMstJPHl9bZRUUYOg2pcGBpvWAR+dvhZaUJ
-         dqmWA2BlaNO3fm+y75NRnNuQyxlnntvgL1ujn80JTsUEXmH+5rBDJ/4GlLB0JtH9XvUA
-         kPCVtHBTX9rsDDOu4JfQ2Y/gMoBwvuYRwVYcHxO4ZnW1LabVY7w9weZE/IAE1bfyH3Ea
-         qNS0Bs1SqwJfcCWeEuf0HDdyAM+WdyWOEjb6g4y1S/LJkRh24jBpAtnRleUXIjQ7ftq6
-         iNrbhJD3wgUAD8gLTWCFvF12RdQeYlc3uGh1Y3wex7Zj7s79ZZU2FZFFn+Z3l5bGtRkS
-         VR7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uE38ie4dSRzW9FDj6U1cSKtlpjyoAmfqSD8WeGqIZ6w=;
-        b=nGBHVEw+8maBbNMTHugOCk5DYmB+YwZBKvrtDl5HMYfn5QkZAVnjHqL2WfCEwt5VpA
-         m+oPGXHK6RBfM2d9x//PBdLHz2dKIC2SXmrpe0asAggpR4Qz3T1/w4Fm6wjlwNHNQB9e
-         dX9grKRuxzZnth7lIxtlHYi6tDuF81JAomgvuVCUcqoxLPOXbbKQSM5gK9GOUcWc9oC+
-         /G/PRhb242tACKNAtNs184obhK3wRROwDP9Fzok94Nar5T0Q38dctFA01qJZ4TD4h9k3
-         H8lmjvTk/FiTb+B5xVV1RRIk7T3zzLw2ff2kdjuO5WZhKPbNTf5Uka7IbmgXtmJTwlZn
-         KGnw==
-X-Gm-Message-State: AOAM5339kG1zsTpGLPxq5R44ivxekHYQlrXY6iz6N+P0maAmy8iXqjGt
-        XuWoVmZk5ubGziRB9bTEivXARA==
-X-Google-Smtp-Source: ABdhPJzvx8mjcJx30Zvd3j2WPSo0iXGfy8QxdtkLmD+nJl8zb+xMYGpxRy5mCBgHUmVpkdiN9sT7QA==
-X-Received: by 2002:a05:6512:3183:b0:473:dffc:18ac with SMTP id i3-20020a056512318300b00473dffc18acmr18907162lfe.217.1652858374048;
-        Wed, 18 May 2022 00:19:34 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h21-20020ac250d5000000b00477b7264806sm125962lfm.9.2022.05.18.00.19.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 00:19:33 -0700 (PDT)
-Message-ID: <018b97c2-efab-699d-653d-c220a98f5ec3@linaro.org>
-Date:   Wed, 18 May 2022 09:19:32 +0200
+        Wed, 18 May 2022 03:21:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5686811A31;
+        Wed, 18 May 2022 00:21:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E81816125B;
+        Wed, 18 May 2022 07:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FAD9C385A5;
+        Wed, 18 May 2022 07:21:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652858480;
+        bh=Z2Hthqp8KamMwaRyOnQgeWg8sKO8QHlR39SF4zKnXc4=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=nGZxLw/nb7pTaCGz5xDXtFkANXc7mb2cwz2A7XO0Wy57+RabREGGiM5RRSn5mLl/J
+         FL+7390d9tF1niOyIMVnO3S8rB9I1xoYzw/p+58sQttVtFWeZFaMDWKrpa2J0nyhFq
+         cPbpQLBnk/zwGOovIjiw0jyWz2f1IwOBciTzWJA59VJOk+VJyhxYhckmYGshhwChMG
+         mitv8g8ayQhIdlF7tMX3MGcRg+DfaJkZGuakcdP6sgDNSOyyCNwrGLFdj5aSA7qioq
+         vg376YiDQvlIceWdTPYs/Pa4rNP8dqMWqN5kAApXUH5SrVzSVArM+WE6o7vsI2jWKm
+         JgMTyUmiQXc7Q==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHv2 6/6] thermal: exynos: Add runtime power management for
- tmu
-Content-Language: en-US
-To:     Anand Moon <linux.amoon@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-References: <20220515064126.1424-1-linux.amoon@gmail.com>
- <20220515064126.1424-7-linux.amoon@gmail.com>
- <79b727f8-0631-5a96-fbc6-6e5d637bab7d@linaro.org>
- <CANAwSgSY=4zOLjw22GN+a7cc5j=myWWkD7gEQ4_3sgEaTS74Rw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CANAwSgSY=4zOLjw22GN+a7cc5j=myWWkD7gEQ4_3sgEaTS74Rw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH] ath11k: Fix pointer dereferenced before checking
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <1652671437-20235-1-git-send-email-baihaowen@meizu.com>
+References: <1652671437-20235-1-git-send-email-baihaowen@meizu.com>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        Haowen Bai <baihaowen@meizu.com>, <ath11k@lists.infradead.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <165285847598.17755.2700505085056283549.kvalo@kernel.org>
+Date:   Wed, 18 May 2022 07:21:17 +0000 (UTC)
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,31 +60,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2022 20:45, Anand Moon wrote:
-> Hi Krzysztof,
+Haowen Bai <baihaowen@meizu.com> wrote:
+
+> The pointer sspec is dereferencing pointer sar before sar is being
+> null checked. Fix this by assigning sar->sub_specs to sspec only if
+> sar is not NULL, otherwise just NULL. The code has checked sar whether
+> it is NULL or not as below, but use before checking.
 > 
-> On Sun, 15 May 2022 at 15:18, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 15/05/2022 08:41, Anand Moon wrote:
->>> Add runtime power management for exynos thermal driver.
->>
->> First of all - why? Second, I do not see it being added. Where are the
->> runtime callbacks?
->>
-> 
-> To control runtime control PMU, did I miss something?
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
 
-Controlling runtime PM by itself is not a goal. What does it change if
-it is enabled?
+I prefer Baochen's version:
 
-> I looked into imx thermal driver # drivers/thermal/imx_thermal.c
-> to enable run-time power management for exynos driver.
+https://patchwork.kernel.org/project/linux-wireless/patch/20220517004844.2412660-1-quic_bqiang@quicinc.com/
 
-So you have runtime PM enabled and then what happens? Where is the power
-saving? Since you did not implement the callbacks, all this should be
-explained in commit msg.
+Patch set to Superseded.
 
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/1652671437-20235-1-git-send-email-baihaowen@meizu.com/
 
-Best regards,
-Krzysztof
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

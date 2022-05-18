@@ -2,131 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B5A52BE4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7618452BE22
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238813AbiEROoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S238801AbiEROnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238795AbiEROoQ (ORCPT
+        with ESMTP id S238755AbiEROnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:44:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E771BB13E;
-        Wed, 18 May 2022 07:44:13 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IETksQ027084;
-        Wed, 18 May 2022 14:43:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=s2X7aKS1B3qNFqFNHXfey4nXV8WvfRyNdSmSs1pSdhA=;
- b=F7f1kErIqMMm6Oy/QYJJCeifq7HzAAzezJWo6o6hECUEU2dM9/CWKNzbBXA6cwBnrPu8
- 3E87/9okzG/cAudc7NFDcN70DNyfRwtrcUehaMyv/pU8WHTM2Y8ZjD6W+fbPIuH/W8No
- alH2jnThs1KQspeHFbqpEamZ8iPuJmEsAcXhvk/cEYPkxGf3OyMRXrraaQdIrq70C3QF
- 8+esJeSBEr5/pwbJwcNJLRwzaJgvB8y6CZj6NN7IV1PF6oZKDcthx8lTGXELd8lv8op9
- QoRXiVRMqMxvU4FPED0hcQcFIuE0I7s/VIXkL1vfL490lIVfg8Goj2341V84x9w06hNU FQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g52m60cy6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 14:43:39 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IEUe8f030487;
-        Wed, 18 May 2022 14:43:38 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g52m60cww-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 14:43:38 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IEcDZT002835;
-        Wed, 18 May 2022 14:43:36 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjdvej-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 14:43:36 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IEgxPJ32702858
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 14:42:59 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 499E2A405C;
-        Wed, 18 May 2022 14:43:34 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B627DA4054;
-        Wed, 18 May 2022 14:43:32 +0000 (GMT)
-Received: from sig-9-65-85-166.ibm.com (unknown [9.65.85.166])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 14:43:32 +0000 (GMT)
-Message-ID: <8634d4dd0813b9522f039ed211023c2c65c6f888.camel@linux.ibm.com>
-Subject: Re: [PATCH v4] x86/kexec: Carry forward IMA measurement log on kexec
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Jonathan McDowell <noodles@fb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Wed, 18 May 2022 10:43:32 -0400
-In-Reply-To: <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
-References: <YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG>
-         <YmgjXZphkmDKgaOA@noodles-fedora-PC23Y6EG>
-         <YnuJCH75GrhVm0Tp@noodles-fedora.dhcp.thefacebook.com>
-         <Yn01Cfb3Divf49g7@noodles-fedora.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3j1qAuAknE9Q2XYy-99AwogH-4lbo8ak
-X-Proofpoint-ORIG-GUID: BzPswUanOJTZocBwpcSZoufSs1cruqHx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_05,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- spamscore=0 impostorscore=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=999 mlxscore=0
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180087
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 18 May 2022 10:43:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22CDA1D4A35
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:43:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652885023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UhIAzrZlP5b0i3o1JZmMpkBOPZBq8P077L23uqMpDbI=;
+        b=a8u06DJvFOB9zR5/sCkQrIZ1649OVWbRgtNgiMk3q75jFKvCopEqznWUNp0+NaUUd7Lqpb
+        CAABPnie3f3MdaTSPEBdaSIikM3mvMyLB47J9yjyQOs7l7BlbwGiYth1xvZ5ycUkFpQpQP
+        jw+smOWTwz0R7BQ3nW3+WfJf+Wt9g0o=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-VS5megc2Pn-OnpRpYsF3zg-1; Wed, 18 May 2022 10:43:41 -0400
+X-MC-Unique: VS5megc2Pn-OnpRpYsF3zg-1
+Received: by mail-wm1-f70.google.com with SMTP id m124-20020a1c2682000000b00393fcd2722dso856153wmm.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:43:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=UhIAzrZlP5b0i3o1JZmMpkBOPZBq8P077L23uqMpDbI=;
+        b=d/J2G5zaeE8PYLLUMfETUqnGZYphDcyposObnRly1CMt8is6HvI0+0M3WMvVxScqFg
+         8yPMsXVWDWcv09neYfod40UYZOOH7NB1U9Ox+qxE2Xthmo7XcECNecVw2+Rlpe9+Oeb9
+         FLDZUGEVhdIcV65CVqRLsH2UqF3fP/3sRQf3FeqPWKwD5GjCPiroQJzUWxK/SXjvqkAt
+         Vb+Uh6KKmV/eMT/JYIWU5kr3yzJm2qqtmqNPkdS4c2hEJ7/cPwHcorghxStSMTOer5S0
+         IqhmB/TjXNCCBJGeTb0FBfz1vj0TPSYZouYXuGRiWZ5cGuUHY0Ri4QOBwjI10HNOgX4i
+         8+3A==
+X-Gm-Message-State: AOAM531Wsu4bWhxc1j8oIpH466JKvgTfyWhygE3Uv2f1v4i5Ptk8KnjK
+        jMJVApOlOeGPARs3Iz6M8rfAEeejYTAOmhv2TRM78ZC7Fop0CS4G3804VatsDd1pOHJZYSbW0xJ
+        BBM91g2jSQR4qNEkPnr824S+g
+X-Received: by 2002:a05:6000:154a:b0:20c:7e65:c79e with SMTP id 10-20020a056000154a00b0020c7e65c79emr42571wry.582.1652885020774;
+        Wed, 18 May 2022 07:43:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy1tUZPrs0aGeRCeoRMTq7S873vylB577Hd5LWEh1T4z3FePha2SLMPoPBbOBefUrEfYhTqTQ==
+X-Received: by 2002:a05:6000:154a:b0:20c:7e65:c79e with SMTP id 10-20020a056000154a00b0020c7e65c79emr42555wry.582.1652885020577;
+        Wed, 18 May 2022 07:43:40 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id bh16-20020a05600c3d1000b003942a244edfsm1947203wmb.36.2022.05.18.07.43.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 07:43:40 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 04/34] KVM: x86: hyper-v: Handle
+ HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
+In-Reply-To: <YoUAM9UtfQlGOZxl@google.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-5-vkuznets@redhat.com>
+ <165aea185dfef1eba9ba0f4fd1c3a95361c41396.camel@redhat.com>
+ <877d6juqkw.fsf@redhat.com> <YoUAM9UtfQlGOZxl@google.com>
+Date:   Wed, 18 May 2022 16:43:39 +0200
+Message-ID: <87y1yyucis.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-05-12 at 16:25 +0000, Jonathan McDowell wrote:
-> On kexec file load Integrity Measurement Architecture (IMA) subsystem
-> may verify the IMA signature of the kernel and initramfs, and measure
-> it. The command line parameters passed to the kernel in the kexec call
-> may also be measured by IMA. A remote attestation service can verify
-> a TPM quote based on the TPM event log, the IMA measurement list, and
-> the TPM PCR data. This can be achieved only if the IMA measurement log
-> is carried over from the current kernel to the next kernel across
-> the kexec call.
-> 
-> powerpc and ARM64 both achieve this using device tree with a
-> "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
-> device tree, so use the setup_data mechanism to pass the IMA buffer to
-> the new kernel.
-> 
-> Signed-off-by: Jonathan McDowell <noodles@fb.com>
+Sean Christopherson <seanjc@google.com> writes:
 
-Not from using "setup_data" perspective,
+> On Wed, May 18, 2022, Vitaly Kuznetsov wrote:
+>> Maxim Levitsky <mlevitsk@redhat.com> writes:
+>> > Or if using kfifo, then it can contain plain u64 items, which is even more natural.
+>> >
+>> 
+>> In the next version I switch to fifo and get rid of 'flush_all' entries
+>> but instead of a boolean I use a 'magic' value of '-1' in GVA. This way
+>> we don't need to synchronize with the reader and add any special
+>> handling for the flag.
+>
+> Isn't -1 theoretically possible?  Or is wrapping not allowed?  E.g. requesting a
+> flush for address=0xfffffffffffff000, count = 0xfff will yield -1 and doesn't
+> create any illegal addresses in the process.
+>
 
-	Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>  # IMA function
-definitions
+Such an error would just lead to KVM flushing the whole guest address
+space instead of flushing 4096 pages starting with 0xfffffffffffff000
+but over-flushing is always architecturally correct, isn't it?
 
-thanks,
+Personally, I'm not opposed to dropping the magic and enhancing flush
+entries with 'flags' again but I'd like to avoid keeping this info
+somewhere aside. Also, after we switch to kfifo, we can't play with
+ring indexes to somehow indicate this special case. We probably can use
+'fifo is full' as such indication but this is very, very un-obvious.
 
-Mimi
+-- 
+Vitaly
 

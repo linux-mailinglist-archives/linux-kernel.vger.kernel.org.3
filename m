@@ -2,177 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DA052BBEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF9352BD2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238369AbiERN7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
+        id S238358AbiERN7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbiERN7Q (ORCPT
+        with ESMTP id S229721AbiERN7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:59:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8CE18AAA1;
-        Wed, 18 May 2022 06:59:15 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IDXnUv007817;
-        Wed, 18 May 2022 13:59:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : subject :
- date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=5pm2sC9TyD63m8Zi2N59BnzNbbWG8F//iqD8lnQajTs=;
- b=gE1WG9e45jY1qGp6dE1hN4G3o+DZuziKRoU3ZNed96NEEz73nsLJY9ubZ6EPM/7KTt7B
- 2JPJwV/75O+71Q45wgUFUOV1DRyCu54JGMSwkg2BCTR7K1Zi3aU9XTSW6J1/Kk2q8+7P
- pXhh6NDzRF+IpdtPtIkOTy8koLBoGrKaI3vNbz9Dvt7YL6WFoMXn1zF8my0xA3Z9KF7x
- 69q0qmWVyi6jQMiL52TamF0kALSxB0mcGh93/uck5kmow8wfFhQ8JKw0I9fMCqVOcZE7
- cL5hpHGKTOydZxUeWxfKCQjRoBgG6+OLTeoQbBImkdJxDqc+7v4yW3UqL2WJe7whcYfu 6A== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g51sq8mq3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 13:59:14 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IDwNRf005985;
-        Wed, 18 May 2022 13:59:12 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3g2429dt9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 13:59:12 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IDjHqN17826300
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 13:45:17 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 85F0442041;
-        Wed, 18 May 2022 13:59:09 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D3984203F;
-        Wed, 18 May 2022 13:59:09 +0000 (GMT)
-Received: from t46lp73.. (unknown [9.152.108.100])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 13:59:09 +0000 (GMT)
-From:   Steffen Eiden <seiden@linux.ibm.com>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] s390: Add attestation query information
-Date:   Wed, 18 May 2022 13:59:08 +0000
-Message-Id: <20220518135908.1110319-2-seiden@linux.ibm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220518135908.1110319-1-seiden@linux.ibm.com>
-References: <20220518135908.1110319-1-seiden@linux.ibm.com>
+        Wed, 18 May 2022 09:59:49 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBC41A7D28
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:59:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=diFgENTszdQUHXAKgwYmdyZMPkaYBZcehcdCuI+8CNI=; b=piMPTHj0XG5LeId6adfAZJaoiu
+        gsW2AlDfqunjvacbNZ/xs4ODNR4GizI/LByJtwiD30R11aQIkyOmX3NDkQ+jgnqWMOXc2GtT0LE99
+        PnDJ0pGknFeTbCpw1F3+NIjAuuv9Irh5ovdQgb6UNJZjvzQORVnts4X88IrdFjxtgT/dN4UjZy2U4
+        Pwcu9m61SgyVlI3lZ4ECgfKR4hlHsnRgSJ0GLCv5J3YLYLJVpHfol+t5/bnuuLbonzVNv0nvliGUw
+        p1Nn5EKLXc/vLbBXxIaO9APm0HBwzecwb7RCKeNfiyPB/BGf08Iog1J9oDAQouGohRcGq2u2vAdDR
+        urBkCclg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrKD9-001YVZ-N4; Wed, 18 May 2022 13:59:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1AFB93003AA;
+        Wed, 18 May 2022 15:59:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 00C42202391E4; Wed, 18 May 2022 15:59:34 +0200 (CEST)
+Date:   Wed, 18 May 2022 15:59:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/4] sched/numa: Apply imbalance limitations consistently
+Message-ID: <YoT7xtVc0f3DVCKL@hirez.programming.kicks-ass.net>
+References: <20220511143038.4620-1-mgorman@techsingularity.net>
+ <20220511143038.4620-4-mgorman@techsingularity.net>
+ <20220518093156.GD10117@worktop.programming.kicks-ass.net>
+ <20220518104652.GO3441@techsingularity.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rlyk_sclANzyseAgelSdHMOKwJqUSrdX
-X-Proofpoint-GUID: rlyk_sclANzyseAgelSdHMOKwJqUSrdX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_04,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0 mlxscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 mlxlogscore=999
- suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518104652.GO3441@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have information about the supported attestation header version
-and plaintext attestation flag bits.
-Let's expose it via the sysfs files.
+On Wed, May 18, 2022 at 11:46:52AM +0100, Mel Gorman wrote:
 
-Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
----
- arch/s390/boot/uv.c        |  2 ++
- arch/s390/include/asm/uv.h |  7 ++++++-
- arch/s390/kernel/uv.c      | 20 ++++++++++++++++++++
- 3 files changed, 28 insertions(+), 1 deletion(-)
+> > (Although I do wonder about that 25% figure in the comment; that doesn't
+> > seem to relate to any actual code anymore)
+> > 
+> 
+> You're right, by the end of the series it's completely inaccurate and
+> currently it's not accurate if there are multiple LLCs per node. I
+> adjusted the wording to "Allow a NUMA imbalance if busy CPUs is less
+> than the maximum threshold. Above this threshold, individual tasks may
+> be contending for both memory bandwidth and any shared HT resources."
+> 
 
-diff --git a/arch/s390/boot/uv.c b/arch/s390/boot/uv.c
-index 67c737c1e580..a5fa667160b2 100644
---- a/arch/s390/boot/uv.c
-+++ b/arch/s390/boot/uv.c
-@@ -45,6 +45,8 @@ void uv_query_info(void)
- 		uv_info.supp_se_hdr_pcf = uvcb.supp_se_hdr_pcf;
- 		uv_info.conf_dump_storage_state_len = uvcb.conf_dump_storage_state_len;
- 		uv_info.conf_dump_finalize_len = uvcb.conf_dump_finalize_len;
-+		uv_info.supp_att_req_hdr_ver = uvcb.supp_att_req_hdr_ver;
-+		uv_info.supp_att_pflags = uvcb.supp_att_pflags;
- 	}
- 
- #ifdef CONFIG_PROTECTED_VIRTUALIZATION_GUEST
-diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
-index 3e597bb634bd..18fe04c8547e 100644
---- a/arch/s390/include/asm/uv.h
-+++ b/arch/s390/include/asm/uv.h
-@@ -124,7 +124,10 @@ struct uv_cb_qui {
- 	u64 reservedc0;				/* 0x00c0 */
- 	u64 conf_dump_storage_state_len;	/* 0x00c8 */
- 	u64 conf_dump_finalize_len;		/* 0x00d0 */
--	u8  reservedd8[256 - 216];		/* 0x00d8 */
-+	u64 reservedd8;				/* 0x00d8 */
-+	u64 supp_att_req_hdr_ver;		/* 0x00e0 */
-+	u64 supp_att_pflags;			/* 0x00e8 */
-+	u8 reservedf0[256 - 240];		/* 0x00f0 */
- } __packed __aligned(8);
- 
- /* Initialize Ultravisor */
-@@ -350,6 +353,8 @@ struct uv_info {
- 	unsigned long supp_se_hdr_pcf;
- 	unsigned long conf_dump_storage_state_len;
- 	unsigned long conf_dump_finalize_len;
-+	unsigned long supp_att_req_hdr_ver;
-+	unsigned long supp_att_pflags;
- };
- 
- extern struct uv_info uv_info;
-diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-index 84fe33b6af4d..c13d5a7b71f0 100644
---- a/arch/s390/kernel/uv.c
-+++ b/arch/s390/kernel/uv.c
-@@ -479,6 +479,24 @@ static ssize_t uv_query_max_guest_addr(struct kobject *kobj,
- static struct kobj_attribute uv_query_max_guest_addr_attr =
- 	__ATTR(max_address, 0444, uv_query_max_guest_addr, NULL);
- 
-+static ssize_t uv_query_supp_att_req_hdr_ver(struct kobject *kobj,
-+					     struct kobj_attribute *attr, char *page)
-+{
-+	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_att_req_hdr_ver);
-+}
-+
-+static struct kobj_attribute uv_query_supp_att_req_hdr_ver_attr =
-+	__ATTR(supp_att_req_hdr_ver, 0444, uv_query_supp_att_req_hdr_ver, NULL);
-+
-+static ssize_t uv_query_supp_att_pflags(struct kobject *kobj,
-+					struct kobj_attribute *attr, char *page)
-+{
-+	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_att_pflags);
-+}
-+
-+static struct kobj_attribute uv_query_supp_att_pflags_attr =
-+	__ATTR(supp_att_pflags, 0444, uv_query_supp_att_pflags, NULL);
-+
- static struct attribute *uv_query_attrs[] = {
- 	&uv_query_facilities_attr.attr,
- 	&uv_query_feature_indications_attr.attr,
-@@ -490,6 +508,8 @@ static struct attribute *uv_query_attrs[] = {
- 	&uv_query_dump_storage_state_len_attr.attr,
- 	&uv_query_dump_finalize_len_attr.attr,
- 	&uv_query_dump_cpu_len_attr.attr,
-+	&uv_query_supp_att_req_hdr_ver_attr.attr,
-+	&uv_query_supp_att_pflags_attr.attr,
- 	NULL,
- };
- 
--- 
-2.30.2
-
+Looks good. Meanwhile I saw a 0-day complaint that this regresses
+something something unixbench by a bit. Do we care enough? I suppose
+this is one of those trade-off patches again, win some, loose some.

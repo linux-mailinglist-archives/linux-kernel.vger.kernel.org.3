@@ -2,362 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FE852C0B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E45E552BFE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240031AbiERQTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        id S240004AbiERQT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239917AbiERQTP (ORCPT
+        with ESMTP id S240019AbiERQTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:19:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737C81EE081;
-        Wed, 18 May 2022 09:19:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0B7DD21BAB;
-        Wed, 18 May 2022 16:19:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652890753; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MgDcGy2HGZHoFIxp9YRQq/LcvV4yVV/hIqOQDLhYAM0=;
-        b=ezfRN2AIIGjl/CefJvBF7rwajbzilhILeOycFOxvDvIufHeNNtOY9guxyG2loFT2LBwMqy
-        7Ps8hJkPdxQ2eX8TSKkzlJHLAd+8rH0KgL8dIgIh3CKWAnvWUnvHAmbUFF12o1FN7yJT5j
-        9k5j+9as1w/HQBMiXZ7WK0eWzZrij9s=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D5CB213ADC;
-        Wed, 18 May 2022 16:19:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eM1eM4AchWLqZAAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 18 May 2022 16:19:12 +0000
-From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To:     cgroups@vger.kernel.org, linux-mm@kvack.org
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Richard Palethorpe <rpalethorpe@suse.de>
-Subject: [PATCH v2 5/5] selftests: memcg: Factor out common parts of memory.{low,min} tests
-Date:   Wed, 18 May 2022 18:18:59 +0200
-Message-Id: <20220518161859.21565-6-mkoutny@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220518161859.21565-1-mkoutny@suse.com>
-References: <20220518161859.21565-1-mkoutny@suse.com>
+        Wed, 18 May 2022 12:19:55 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1788D1EEE13
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:19:55 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ff1ed64f82so30421007b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BNQ1Sa8MZ2F954WTku5lIs6bezzi8M4d/JzexPqTkEI=;
+        b=fuukVjSGGYTWbJMh/yBcEw8dHvuu4PEx3FHNDRLqR7NKu60rnIJx02YBO5994skMbT
+         u5xPEzDUd+jLjKMcPAyYpjdJ7oOFgiSjLCpsH6FdqQ1NaqpIDjHibGpdFkG5G7ybeSEJ
+         f+mN3GRJE4fjEtXo0Hzuy4124GXXpHdNyK6kAtQvU70tn2XhvZDhxIHSlPWs0RNnXlak
+         fgS9fmVNq/HLync824wEwPuv3SjrdXf8eTYlN/0yc4QrIBvN8pMswFBJ4mYXwdnhRw09
+         3/VqgxmtgO7os7Ul7xsUUzTHpCGCicou+eR8KC4WNU9SCe8H1gpfdV4v8dWDGabiM3rG
+         v9kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BNQ1Sa8MZ2F954WTku5lIs6bezzi8M4d/JzexPqTkEI=;
+        b=X8KJCj4Q4xlvk3fTsZBsrKHZDblYev91XEkU760s8TBwmBqFj3ccg4fs3Crtd4fR0U
+         pYue7UQpYtSk7baplXPMTJWvDUuvhFsm0aZabL9vJ0DcWMpMxbrR2Foh3IUWQwVH8ouS
+         JnV8IFVfMaXF394VwQje8HgJjIcSS4E+qfGY0GKCxxl84Sj9mM2ju9C4A2z9s34RYCXW
+         hAe3lwMu+5JPFt1HTFwkMUwyX51uIQmQGwGgnNakl6AETY/JkswB6Ah6Gv7Qctw2R7IA
+         EXiRGaHHBut3Vw87h6luHYg7YO7EvLRP2rphtnb5Yft58WgFb80CjDOpbIjw3yxgSnTx
+         aMfA==
+X-Gm-Message-State: AOAM531RkqusNu0RDdzFWXeOQyPnyS4bX6ORRyvwYD6dNSHTvDyCqjGL
+        XcJoGN5/jSDhRhZNYezuMp4qS/lXcKNXp50S8UJF7A==
+X-Google-Smtp-Source: ABdhPJxqzMdIcOL87yz5TF1jKPIrr4XeCqmKaldQ0Y4MMtbT5EEsngoSDAW4iYMlsjmCFhHVDfSS1Qr4vlYQCUgc+VQ=
+X-Received: by 2002:a81:d54d:0:b0:2fe:e1c2:eb35 with SMTP id
+ l13-20020a81d54d000000b002fee1c2eb35mr151712ywj.285.1652890794100; Wed, 18
+ May 2022 09:19:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1649219184.git.kai.huang@intel.com> <3f19ac995d184e52107e7117a82376cb7ecb35e7.1649219184.git.kai.huang@intel.com>
+ <b3c81b7f-3016-8f4e-3ac5-bff1fc52a879@intel.com> <345753e50e4c113b1dfb71bba1ed841eee55aed3.camel@intel.com>
+In-Reply-To: <345753e50e4c113b1dfb71bba1ed841eee55aed3.camel@intel.com>
+From:   Sagi Shahar <sagis@google.com>
+Date:   Wed, 18 May 2022 09:19:43 -0700
+Message-ID: <CAAhR5DFFGTHAG9U74v9YXZkjfgfQ9vD4B76ky-MtM5fkjTgRFQ@mail.gmail.com>
+Subject: Re: [PATCH v3 06/21] x86/virt/tdx: Shut down TDX module in case of error
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, len.brown@intel.com,
+        tony.luck@intel.com, rafael.j.wysocki@intel.com,
+        reinette.chatre@intel.com, dan.j.williams@intel.com,
+        peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory protection test setup and runtime is almost equal for
-memory.low and memory.min cases.
-It makes modification of the common parts prone to mistakes, since the
-protections are similar not only in setup but also in principle, factor
-the common part out.
+On Tue, Apr 26, 2022 at 5:06 PM Kai Huang <kai.huang@intel.com> wrote:
+>
+> On Tue, 2022-04-26 at 13:59 -0700, Dave Hansen wrote:
+> > On 4/5/22 21:49, Kai Huang wrote:
+> > > TDX supports shutting down the TDX module at any time during its
+> > > lifetime.  After TDX module is shut down, no further SEAMCALL can be
+> > > made on any logical cpu.
+> >
+> > Is this strictly true?
+> >
+> > I thought SEAMCALLs were used for the P-SEAMLDR too.
+>
+> Sorry will change to no TDX module SEAMCALL can be made on any logical cpu.
+>
+> [...]
+>
+> > >
+> > > +/* Data structure to make SEAMCALL on multiple CPUs concurrently */
+> > > +struct seamcall_ctx {
+> > > +   u64 fn;
+> > > +   u64 rcx;
+> > > +   u64 rdx;
+> > > +   u64 r8;
+> > > +   u64 r9;
+> > > +   atomic_t err;
+> > > +   u64 seamcall_ret;
+> > > +   struct tdx_module_output out;
+> > > +};
+> > > +
+> > > +static void seamcall_smp_call_function(void *data)
+> > > +{
+> > > +   struct seamcall_ctx *sc = data;
+> > > +   int ret;
+> > > +
+> > > +   ret = seamcall(sc->fn, sc->rcx, sc->rdx, sc->r8, sc->r9,
+> > > +                   &sc->seamcall_ret, &sc->out);
 
-Past exceptions between the tests:
-- missing memory.min is fine (kept),
-- test_memcg_low protected orphaned pagecache (adapted like
-  test_memcg_min and we keep the processes of protected memory running).
+Are the seamcall_ret and out fields in seamcall_ctx going to be used?
+Right now it looks like no one is going to read them.
+If they are going to be used then this is going to cause a race since
+the different CPUs are going to write concurrently to the same address
+inside seamcall().
+We should either use local memory and write using atomic_set like the
+case for the err field or hard code NULL at the call site if they are
+not going to be used.
 
-The evaluation in two tests is different (OOM of allocator vs low events
-of protégés), this is kept different.
+> > > +   if (ret)
+> > > +           atomic_set(&sc->err, ret);
+> > > +}
+> > > +
+> > > +/*
+> > > + * Call the SEAMCALL on all online cpus concurrently.
+> > > + * Return error if SEAMCALL fails on any cpu.
+> > > + */
+> > > +static int seamcall_on_each_cpu(struct seamcall_ctx *sc)
+> > > +{
+> > > +   on_each_cpu(seamcall_smp_call_function, sc, true);
+> > > +   return atomic_read(&sc->err);
+> > > +}
+> >
+> > Why bother returning something that's not read?
+>
+> It's not needed.  I'll make it void.
+>
+> Caller can check seamcall_ctx::err directly if they want to know whether any
+> error happened.
+>
+>
+>
+> --
+> Thanks,
+> -Kai
+>
+>
 
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
----
- .../selftests/cgroup/test_memcontrol.c        | 199 ++++--------------
- 1 file changed, 36 insertions(+), 163 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 63c6a683a8c1..c3d0d5f7b19c 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -190,13 +190,6 @@ static int test_memcg_current(const char *root)
- 	return ret;
- }
- 
--static int alloc_pagecache_50M(const char *cgroup, void *arg)
--{
--	int fd = (long)arg;
--
--	return alloc_pagecache(fd, MB(50));
--}
--
- static int alloc_pagecache_50M_noexit(const char *cgroup, void *arg)
- {
- 	int fd = (long)arg;
-@@ -254,7 +247,9 @@ static int cg_test_proc_killed(const char *cgroup)
-  * A/B/E   memory.min = 0,    memory.current = 50M
-  * A/B/F   memory.min = 500M, memory.current = 0
-  *
-- * Usages are pagecache, but the test keeps a running
-+ * (or memory.low if we test soft protection)
-+ *
-+ * Usages are pagecache and the test keeps a running
-  * process in every leaf cgroup.
-  * Then it creates A/G and creates a significant
-  * memory pressure in A.
-@@ -268,15 +263,16 @@ static int cg_test_proc_killed(const char *cgroup)
-  * (for origin of the numbers, see model in memcg_protection.m.)
-  *
-  * After that it tries to allocate more than there is
-- * unprotected memory in A available, and checks
-- * checks that memory.min protects pagecache even
-- * in this case.
-+ * unprotected memory in A available, and checks that:
-+ * a) memory.min protects pagecache even in this case,
-+ * b) memory.low allows reclaiming page cache with low events.
-  */
--static int test_memcg_min(const char *root)
-+static int test_memcg_protection(const char *root, bool min)
- {
--	int ret = KSFT_FAIL;
-+	int ret = KSFT_FAIL, rc;
- 	char *parent[3] = {NULL};
- 	char *children[4] = {NULL};
-+	const char *attribute = min ? "memory.min" : "memory.low";
- 	long c[4];
- 	int i, attempts;
- 	int fd;
-@@ -300,8 +296,10 @@ static int test_memcg_min(const char *root)
- 	if (cg_create(parent[0]))
- 		goto cleanup;
- 
--	if (cg_read_long(parent[0], "memory.min")) {
--		ret = KSFT_SKIP;
-+	if (cg_read_long(parent[0], attribute)) {
-+		/* No memory.min on older kernels is fine */
-+		if (min)
-+			ret = KSFT_SKIP;
- 		goto cleanup;
- 	}
- 
-@@ -338,15 +336,15 @@ static int test_memcg_min(const char *root)
- 			      (void *)(long)fd);
- 	}
- 
--	if (cg_write(parent[1], "memory.min", "50M"))
-+	if (cg_write(parent[1],   attribute, "50M"))
- 		goto cleanup;
--	if (cg_write(children[0], "memory.min", "75M"))
-+	if (cg_write(children[0], attribute, "75M"))
- 		goto cleanup;
--	if (cg_write(children[1], "memory.min", "25M"))
-+	if (cg_write(children[1], attribute, "25M"))
- 		goto cleanup;
--	if (cg_write(children[2], "memory.min", "0"))
-+	if (cg_write(children[2], attribute, "0"))
- 		goto cleanup;
--	if (cg_write(children[3], "memory.min", "500M"))
-+	if (cg_write(children[3], attribute, "500M"))
- 		goto cleanup;
- 
- 	attempts = 0;
-@@ -375,161 +373,26 @@ static int test_memcg_min(const char *root)
- 	if (c[3] != 0)
- 		goto cleanup;
- 
--	if (!cg_run(parent[2], alloc_anon, (void *)MB(170)))
--		goto cleanup;
--
--	if (!values_close(cg_read_long(parent[1], "memory.current"), MB(50), 3))
--		goto cleanup;
--
--	ret = KSFT_PASS;
--
--cleanup:
--	for (i = ARRAY_SIZE(children) - 1; i >= 0; i--) {
--		if (!children[i])
--			continue;
--
--		cg_destroy(children[i]);
--		free(children[i]);
--	}
--
--	for (i = ARRAY_SIZE(parent) - 1; i >= 0; i--) {
--		if (!parent[i])
--			continue;
--
--		cg_destroy(parent[i]);
--		free(parent[i]);
--	}
--	close(fd);
--	return ret;
--}
--
--/*
-- * First, this test creates the following hierarchy:
-- * A       memory.low = 0,    memory.max = 200M
-- * A/B     memory.low = 50M
-- * A/B/C   memory.low = 75M,  memory.current = 50M
-- * A/B/D   memory.low = 25M,  memory.current = 50M
-- * A/B/E   memory.low = 0,    memory.current = 50M
-- * A/B/F   memory.low = 500M, memory.current = 0
-- *
-- * Usages are pagecache.
-- * Then it creates A/G an creates a significant
-- * memory pressure in it.
-- *
-- * Then it checks actual memory usages and expects that:
-- * A/B    memory.current ~= 50M
-- * A/B/C  memory.current ~= 29M
-- * A/B/D  memory.current ~= 21M
-- * A/B/E  memory.current ~= 0
-- * A/B/F  memory.current  = 0
-- * (for origin of the numbers, see model in memcg_protection.m.)
-- *
-- * After that it tries to allocate more than there is
-- * unprotected memory in A available,
-- * and checks low and oom events in memory.events.
-- */
--static int test_memcg_low(const char *root)
--{
--	int ret = KSFT_FAIL;
--	char *parent[3] = {NULL};
--	char *children[4] = {NULL};
--	long low, oom;
--	long c[4];
--	int i;
--	int fd;
--
--	fd = get_temp_fd();
--	if (fd < 0)
--		goto cleanup;
--
--	parent[0] = cg_name(root, "memcg_test_0");
--	if (!parent[0])
--		goto cleanup;
--
--	parent[1] = cg_name(parent[0], "memcg_test_1");
--	if (!parent[1])
--		goto cleanup;
--
--	parent[2] = cg_name(parent[0], "memcg_test_2");
--	if (!parent[2])
--		goto cleanup;
--
--	if (cg_create(parent[0]))
--		goto cleanup;
--
--	if (cg_read_long(parent[0], "memory.low"))
--		goto cleanup;
--
--	if (cg_write(parent[0], "cgroup.subtree_control", "+memory"))
-+	rc = cg_run(parent[2], alloc_anon, (void *)MB(170));
-+	if (min && !rc)
- 		goto cleanup;
--
--	if (cg_write(parent[0], "memory.max", "200M"))
--		goto cleanup;
--
--	if (cg_write(parent[0], "memory.swap.max", "0"))
--		goto cleanup;
--
--	if (cg_create(parent[1]))
--		goto cleanup;
--
--	if (cg_write(parent[1], "cgroup.subtree_control", "+memory"))
--		goto cleanup;
--
--	if (cg_create(parent[2]))
-+	else if (!min && rc) {
-+		fprintf(stderr,
-+			"memory.low prevents from allocating anon memory\n");
- 		goto cleanup;
--
--	for (i = 0; i < ARRAY_SIZE(children); i++) {
--		children[i] = cg_name_indexed(parent[1], "child_memcg", i);
--		if (!children[i])
--			goto cleanup;
--
--		if (cg_create(children[i]))
--			goto cleanup;
--
--		if (i > 2)
--			continue;
--
--		if (cg_run(children[i], alloc_pagecache_50M, (void *)(long)fd))
--			goto cleanup;
- 	}
- 
--	if (cg_write(parent[1], "memory.low", "50M"))
--		goto cleanup;
--	if (cg_write(children[0], "memory.low", "75M"))
--		goto cleanup;
--	if (cg_write(children[1], "memory.low", "25M"))
--		goto cleanup;
--	if (cg_write(children[2], "memory.low", "0"))
--		goto cleanup;
--	if (cg_write(children[3], "memory.low", "500M"))
--		goto cleanup;
--
--	if (cg_run(parent[2], alloc_anon, (void *)MB(148)))
--		goto cleanup;
--
- 	if (!values_close(cg_read_long(parent[1], "memory.current"), MB(50), 3))
- 		goto cleanup;
- 
--	for (i = 0; i < ARRAY_SIZE(children); i++)
--		c[i] = cg_read_long(children[i], "memory.current");
--
--	if (!values_close(c[0], MB(29), 10))
--		goto cleanup;
--
--	if (!values_close(c[1], MB(21), 10))
--		goto cleanup;
--
--	if (c[3] != 0)
--		goto cleanup;
--
--	if (cg_run(parent[2], alloc_anon, (void *)MB(166))) {
--		fprintf(stderr,
--			"memory.low prevents from allocating anon memory\n");
-+	if (min) {
-+		ret = KSFT_PASS;
- 		goto cleanup;
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(children); i++) {
- 		int no_low_events_index = 1;
-+		long low, oom;
- 
- 		oom = cg_read_key_long(children[i], "memory.events", "oom ");
- 		low = cg_read_key_long(children[i], "memory.events", "low ");
-@@ -565,6 +428,16 @@ static int test_memcg_low(const char *root)
- 	return ret;
- }
- 
-+static int test_memcg_min(const char *root)
-+{
-+	return test_memcg_protection(root, true);
-+}
-+
-+static int test_memcg_low(const char *root)
-+{
-+	return test_memcg_protection(root, false);
-+}
-+
- static int alloc_pagecache_max_30M(const char *cgroup, void *arg)
- {
- 	size_t size = MB(50);
--- 
-2.35.3
-
+Sagi

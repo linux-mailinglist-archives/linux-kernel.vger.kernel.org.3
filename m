@@ -2,53 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4ED52BC1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F2952BD19
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237744AbiERNVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
+        id S237723AbiERNVT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 May 2022 09:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237730AbiERNVT (ORCPT
+        with ESMTP id S237689AbiERNVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:21:19 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112A032073;
-        Wed, 18 May 2022 06:21:17 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id D52411F450A3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652880076;
-        bh=QwUtZ0MlTuyD+kVFho3tPCQtHU2Givu7vatYONjked0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PTQ+51j+Sfhs+k6XBL27swuBTeZdnYk2vb6hvfwVBIjsO04Fk+wu+LwCabRDYcYo2
-         G362puEVZI21RLHZWwF5UnF/bF/tLvqok86cDY2ernlFdVm2+7CcYAQBZyxr0CnBV0
-         xUmFV75fVWju0y/kipSfLWAD/4S4gV3nHcR9YEyBRnfBmyvhZlWa8ZC4/qk+xGh38N
-         cRJjEQgo3rmBjna2bSFY+BJl8vx63oeHFswQ8sjbrzmllBrwwy4D3cERuSsyIlNARR
-         OgWHSGN8pqfKmdE+SSPwo16FdpMtZdzzLQo74Rx9iU6zVCHV4z7YxDwKe9B1BQio1t
-         Qphsm5/psb2lQ==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, gregkh@linuxfoundation.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, heiko@sntech.de, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org
-Cc:     kernel@pengutronix.de, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Subject: [PATCH v4] media: Add P010 video format
-Date:   Wed, 18 May 2022 15:21:05 +0200
-Message-Id: <20220518132105.629797-1-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 18 May 2022 09:21:16 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831C53207B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:21:14 -0700 (PDT)
+Received: from mail-yw1-f178.google.com ([209.85.128.178]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mf0Nm-1nP7P03tzG-00gY1W for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022
+ 15:21:13 +0200
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2ff53d86abbso4879067b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:21:12 -0700 (PDT)
+X-Gm-Message-State: AOAM532aocdncswfo+3bluwEcBPO6bXU+DfzhvBcMhTLgIDwdDwGUdR1
+        xUlLoL+YptAXCUlo7FxEW1p3kgQDtF8wV1RjV0o=
+X-Google-Smtp-Source: ABdhPJwBjy4ur3XLA4K8ugyaq6ZpN4zxCDmLVI7nhrJH0342w016iDhD3WX3/lYGpyx1rpcDzpcnq5gSYG2aj9C9IIk=
+X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
+ 206-20020a810ad7000000b002e684de3223mr31357253ywk.209.1652880071778; Wed, 18
+ May 2022 06:21:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <20220505125123.2088143-1-mpe@ellerman.id.au> <c6cbd41c-4cef-d4d7-324a-b4c3e2498262@csgroup.eu>
+ <87fsl7nggr.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87fsl7nggr.fsf@mpe.ellerman.id.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 18 May 2022 14:21:08 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a17qq2dpyv1SzD=VmXWAs0JQiyG-AQL=Uv+N6xQzoMsQQ@mail.gmail.com>
+Message-ID: <CAK8P3a17qq2dpyv1SzD=VmXWAs0JQiyG-AQL=Uv+N6xQzoMsQQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] powerpc: Add generic PAGE_SIZE config symbols
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:vSU/9qQem/qqXcK/9nouj8TNQEbk5M1f1RgDMXWBukLFFK6za1C
+ ca0RLl4NezNg7sqC9oSsbFLdIIe2x4IsmvjTYtsYwzbttvcrW+N91J5sShldc5/tJ3CtWea
+ rHmKBmQ3MUXv1jJJGRbyINrUheenw2Ev4Img7gYuSg/DeeDMBGDwXvfmeIjyruTR/wdGgUm
+ f/UpPGzKmd8+8T5qE1Fpw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BltRFptvygA=:K3/2R/fYfF7ot2yyTSj4SV
+ hpniwt8UmJ4DeKd68EfR51BJDW4XNPAFB05AAitwa50UKHBkcu2W/WiH8WtN7hGr7JhJXl3Mj
+ Ff3c+PDV4M91QzLIGJpgwDOeVME+GYxrLxrgWlRWsKZEM/Ondvq8Xfpq9nhEhhdHOo5EG62tv
+ YUxbBNtElef2HJtzEvkRma05kcouLNpPojVul8I4L/GqARSd/AojkFE6ZaHSysbOPdhR2K67D
+ 5vpMUktKIAywsjMJ2kGde43gMrfmmSkq+9WWBzF2xE4P4YECbsZXMR3BLaNQniHq3A5BVpqPB
+ sfsARJ7pzIKf6Zsnw5i+C/7dBo27UGjlqzixs6Wtgk4CrQJjLKGn49Xx4pf+UExLKrqDjJ2ys
+ IddcWOPfBDEbCF1Z5D6Cw0GJQqgFHqzfipLokDm0rkngzECCW+OJYRkzuzPenwlllOVUViFle
+ IRcb74/XBzFsa6yPBDGs8p1pAa6PgTsQ1kEVn2nY5k3ZkYUQ8usMzeK7TppX5Pwn7XEIcXKzi
+ FF69nWsyajr7y5rkvgpPU31BRlCydjuVv/DRPgqlcEsD97NzmAM8Om1KiPyT5rPcPqARlHat5
+ YRNp+ECa/biNMqG1imrFXjL7fKLedBAFZoE+Klp1LqKkaTUkxhOeuRE54iHkA0qWL1gyvhKi/
+ m+K88ECS2ij5u7t0Mtk2rH0B48xXuLpEvLaYz46gQYP42a0xOC8hwDl6Ktu56HuJW/3M9z30m
+ C/wHnZ1jxpF+hB0pUFiqcAJTIYlr9dYH0yyY2Q==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,139 +67,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-P010 is a YUV format with 16-bits per pixel with interleaved UV.
+On Wed, May 18, 2022 at 2:00 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> > Le 05/05/2022 à 14:51, Michael Ellerman a écrit :
+> >> Other arches (sh, mips, hexagon) use standard names for PAGE_SIZE
+> >> related config symbols.
+> >>
+> >> Add matching symbols for powerpc, which are enabled by default but
+> >> depend on our architecture specific PAGE_SIZE symbols.
+> >>
+> >> This allows generic/driver code to express dependencies on the PAGE_SIZE
+> >> without needing to refer to architecture specific config symbols.
+> >
+> > I guess next step should be to get rid of powerpc specific symbols and
+> > use generic symbols instead.
+> >
+> > We have (only) 111 occurences of it.
+>
+> I thought about doing that, but it's quite a bit of churn. Maybe it's
+> worth it though to avoid confusion between the two symbols.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
-version 4:
-- Fix 10-bits per components wording.
+I have actually done this at some point, but for some reason never sent it out,
+see my old patch at:
 
-version 3:
-- remove LE suffix
-- rebased on media_tree_master branch
+https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/commit/?h=randconfig-5.15-next&id=184c7273ee367fda3626e35f0079f181075690c8
 
- .../media/v4l/pixfmt-yuv-planar.rst           | 54 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-common.c         |  1 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
- include/uapi/linux/videodev2.h                |  1 +
- 4 files changed, 57 insertions(+)
+Feel free to take ideas or the entire patch from that.
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-index 8dff5906639b..a900ff66911a 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-@@ -109,6 +109,13 @@ All components are stored with the same number of bits per component.
-       - Cb, Cr
-       - No
-       - 16x16 tiles
-+    * - V4L2_PIX_FMT_P010
-+      - 'P010'
-+      - 10
-+      - 4:2:0
-+      - Cb, Cr
-+      - Yes
-+      - Linear
-     * - V4L2_PIX_FMT_NV16
-       - 'NV16'
-       - 8
-@@ -171,6 +178,7 @@ horizontally.
- .. _V4L2-PIX-FMT-NV21:
- .. _V4L2-PIX-FMT-NV12M:
- .. _V4L2-PIX-FMT-NV21M:
-+.. _V4L2-PIX-FMT-P010:
- 
- NV12, NV21, NV12M and NV21M
- ---------------------------
-@@ -519,6 +527,52 @@ number of lines as the luma plane.
-       - Cb\ :sub:`33`
-       - Cr\ :sub:`33`
- 
-+.. _V4L2_PIX_FMT_P010:
-+
-+P010
-+----
-+
-+Like NV12 with 10 bits per component, expanded to 16 bits.
-+Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian order.
-+
-+.. flat-table:: Sample 4x4 P010 Image
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - start + 0:
-+      - Y'\ :sub:`00`
-+      - Y'\ :sub:`01`
-+      - Y'\ :sub:`02`
-+      - Y'\ :sub:`03`
-+    * - start + 8:
-+      - Y'\ :sub:`10`
-+      - Y'\ :sub:`11`
-+      - Y'\ :sub:`12`
-+      - Y'\ :sub:`13`
-+    * - start + 16:
-+      - Y'\ :sub:`20`
-+      - Y'\ :sub:`21`
-+      - Y'\ :sub:`22`
-+      - Y'\ :sub:`23`
-+    * - start + 24:
-+      - Y'\ :sub:`30`
-+      - Y'\ :sub:`31`
-+      - Y'\ :sub:`32`
-+      - Y'\ :sub:`33`
-+    * - start + 32:
-+      - Cb\ :sub:`00`
-+      - Cr\ :sub:`00`
-+      - Cb\ :sub:`01`
-+      - Cr\ :sub:`01`
-+    * - start + 40:
-+      - Cb\ :sub:`10`
-+      - Cr\ :sub:`10`
-+      - Cb\ :sub:`11`
-+      - Cr\ :sub:`11`
-+
-+.. raw:: latex
-+
-+    \endgroup
- 
- Fully Planar YUV Formats
- ========================
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index df34b2a283bc..1e38ad8906a2 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
- 		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
- 
- 		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
- 		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index e2636539c9db..536aaeb4df82 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1305,6 +1305,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
- 	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
- 	case V4L2_PIX_FMT_NV42:		descr = "Y/CrCb 4:4:4"; break;
-+	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CrCb 4:2:0"; break;
- 	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/CbCr 4:2:0 (4x4 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/CbCr 4:2:0 (16x16 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/CbCr 4:2:0 (32x32 Linear)"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 6d465dc443b7..311f106bbdf5 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -601,6 +601,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
- #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
- #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
-+#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 16  Y/CbCr 4:2:0 16-bit per pixel */
- 
- /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
- #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
--- 
-2.32.0
-
+      Arnd

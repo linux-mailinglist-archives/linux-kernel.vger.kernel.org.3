@@ -2,125 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D3A52C635
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3314C52C639
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiERWXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 18:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
+        id S229874AbiERW1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 18:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiERWXt (ORCPT
+        with ESMTP id S229495AbiERW13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 18:23:49 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6841F7E13
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:23:48 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id d3so2467604ilr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:23:48 -0700 (PDT)
+        Wed, 18 May 2022 18:27:29 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AA416D4A1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:27:26 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id u3so3231354qta.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:27:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=w5RfX8/Rv7yQPUAnH5qBKrcDO1Mm9mdpkNqUpF+8goU=;
-        b=Vp6aagYWx+xbz9SJTBgZR0G9TrlTmXBPwdVDNVlS/jP6tMxTDONTEtXxFFMACKHQ92
-         e4DhrJbFSk/A8EVBl+jyJZHPz88EhUnxgn4YhPZ/R8KR3kwLnl9YHshvCJfNKCuBW6YA
-         vVVxZNiKJrNAjD7ii58tkXT+SNlhWxQMXwKtM=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4e2k0Xzs0N4K3ysaBNCtRHldaZWwVY5QUxC6Y2ywRTc=;
+        b=eTFHghXuJ6ffqSdFZkHc9pwFYJ2ct5eV2UB05tO+YLjqqoFMP2y7b6UgbffHNiidTA
+         NLa1Z8CVNeTzkORvqOCBxL1lzZnlxw+j6DZdUt82085zHshmD+LAIdtlirSveKGGJBq0
+         kdxX78gtzhNMRqW2VfYcX1urWuJuP9q4VP9Ns7r2s5FWtZHBpP92VJXGfcW2jgFwik9S
+         aJnvKgN6GwZcrC1hm/Wq6U3ZyL7zl3JJqmqSsE+vqCtpT8sxxp35sHd3amQARNxEH1Xd
+         4zUgH1H7f48Q8jK9uzMJrTYtkMVOar/kzVhCDUaxfdlPjAFfmd5kH01I7DGx9u3vqEfq
+         yTnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=w5RfX8/Rv7yQPUAnH5qBKrcDO1Mm9mdpkNqUpF+8goU=;
-        b=zpyv2g/PFTvWkkXnUHxyifSlNWtZhA2PHTTohkpA5VIKhSoc+VroCFhORxoj8OKyEy
-         uQJZb2394Mi/X13HQLr4Ugwm6J50Rq2sQeWC5qqC8YTYZkQhd2N7eRXjtU7rbxu857yd
-         6mwHmY+u+29qmjd2SdxL1CpjfEN5dl3GlNoGQVMGCEvVVSYSpzhlMFwWBHyEZwaVpoI3
-         zMdDYC7kYAYjPJKMh5TA/CluNIzWl70V87R5/ksg/BrD3+6NldziVaspnLc2uxAUVqjA
-         d2n1p4/hPmvB7aKygr8s+1erXkj32VTKJQ4ZWOnyYCJCF5VusRjhhrZhlGELNgmYy8TX
-         +IUg==
-X-Gm-Message-State: AOAM532amNqPAgErXBZownPZgtBpxs8FV6ad4hJ6Ji72i6fGt2JKBqEq
-        AXSn5W/2pbyjxV+6uvRTJhkdcA==
-X-Google-Smtp-Source: ABdhPJzKCuF7JRxOdyp5CvlBmcPHkPFHNXjwd+grkUrJqygaKaMSoob85tO7D69QkE403CTm54Cqqg==
-X-Received: by 2002:a05:6e02:1c4e:b0:2d1:a8d:e94d with SMTP id d14-20020a056e021c4e00b002d10a8de94dmr1020917ilg.194.1652912627881;
-        Wed, 18 May 2022 15:23:47 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id d5-20020a05663802a500b0032e15dfbf13sm201221jaq.113.2022.05.18.15.23.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 15:23:47 -0700 (PDT)
-Subject: Re: [PATCH v3 1/1] selftests: vm: add process_mrelease tests
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
-        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
-        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
-        hch@infradead.org, oleg@redhat.com, david@redhat.com,
-        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
-        jhubbard@nvidia.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220518204316.13131-1-surenb@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <4b05f63a-c1b7-1b36-4305-8ee9e34f0e04@linuxfoundation.org>
-Date:   Wed, 18 May 2022 16:23:46 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4e2k0Xzs0N4K3ysaBNCtRHldaZWwVY5QUxC6Y2ywRTc=;
+        b=RpYWPGTxo7/koXjJSRlo6Q+sZ8DFyoilAZJpSTyuCOTS0Q82SBMxD2RhVyUuGQnVh7
+         q0xx0PjA7t923y0UJ+9mvxpLd9LSIQwVSYwuuzQ8GVluOzE6d/YZfANR3bIqz+fyR4/y
+         QM/qGZNqK81PpNjOr6cdteXq4topGQ8wGchR+9VjSEK17LQcUaBXGgJT3/fb448tmHw2
+         +ELN8xKT+JzUyoACkbjHMcOss6hkl9q0h/+yFWyVbKAiwJyREh42YHkU7UKOpGlYdbdB
+         e351PVkdYYdg9uSN1MrlsG2a+WeoM8vU828Qd/OZTquxq7WHbBp5nsjGn4Pnufyguda3
+         MhCQ==
+X-Gm-Message-State: AOAM5335xTmu92WfxylNTX4GywIUp66L2zpSAavsNEsrC0s3N5k4G+FY
+        VT22hy2VZMOqKqkC341VFpMolhbv6695jVopVurTQw==
+X-Google-Smtp-Source: ABdhPJyWforIMlP/Mylzyx44Pfglhahym13tW4MHFx0tewZ1ZB1zO3uJVZvqSDA4ETYcknhJQXeQpIR4c/HnjW+eEEU=
+X-Received: by 2002:ac8:4e45:0:b0:2f9:fc2:ee3a with SMTP id
+ e5-20020ac84e45000000b002f90fc2ee3amr561381qtw.370.1652912845789; Wed, 18 May
+ 2022 15:27:25 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220518204316.13131-1-surenb@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1652909790-16245-1-git-send-email-quic_khsieh@quicinc.com> <1652909790-16245-3-git-send-email-quic_khsieh@quicinc.com>
+In-Reply-To: <1652909790-16245-3-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 19 May 2022 01:27:14 +0300
+Message-ID: <CAA8EJpoQ5B=iZo=u0Yi4Bgn7b3DHXkf7aKOEzvV3yvFwmRSFhg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] phy/qualcomm: add regulator_set_load to dp phy
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/22 2:43 PM, Suren Baghdasaryan wrote:
-> Introduce process_mrelease syscall sanity tests which include tests
-> which expect to fail:
-> - process_mrelease with invalid pidfd and flags inputs
-> - process_mrelease on a live process with no pending signals
-> and valid process_mrelease usage which is expected to succeed.
-> Because process_mrelease has to be used against a process with a pending
-> SIGKILL, it's possible that the process exits before process_mrelease
-> gets called. In such cases we retry the test with a victim that allocates
-> twice more memory up to 1GB. This would require the victim process to
-> spend more time during exit and process_mrelease has a better chance of
-> catching the process before it exits and succeeding.
-> 
-> On success the test reports the amount of memory the child had to
-> allocate for reaping to succeed. Sample output:
-> 
-> $ mrelease_test
-> Success reaping a child with 1MB of memory allocations
-> 
-> On failure the test reports the failure. Sample outputs:
-> 
-> $ mrelease_test
-> All process_mrelease attempts failed!
-> 
-> $ mrelease_test
-> process_mrelease: Invalid argument
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+On Thu, 19 May 2022 at 00:36, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+> This patch add regulator_set_load() before enable regulator at
+> DP phy driver.
+>
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 > ---
-> Changes in v3:
-> - Applied on git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm mm-stable,
-> per Andrew
-> - Fixed formatting for sample outputs in the description, per Shuah
-> - Removed pidfd_open, process_mrelease, write_fault_pages functions, per Shuah
-> - Moved child main routine into its own function, per Shuah
-> - Followed tools/testing/selftests/pidfd/pidfd.h as a model to deal with
-> undefined syscall numbers, per Shuah
-> 
+>  drivers/phy/qualcomm/phy-qcom-qmp.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> index b144ae1..20ac446 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> @@ -3130,6 +3130,7 @@ struct qmp_phy_cfg {
+>         int num_resets;
+>         /* regulators to be requested */
+>         const char * const *vreg_list;
+> +       const unsigned int *vreg_enable_load;
+>         int num_vregs;
+>
+>         /* array of registers with different offsets */
+> @@ -3346,6 +3347,10 @@ static const char * const qmp_phy_vreg_l[] = {
+>         "vdda-phy", "vdda-pll",
+>  };
+>
+> +static const unsigned int qmp_phy_vreg_enable_load[] = {
+> +       21800, 36000
+> +};
+> +
+>  static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
+>         .type                   = PHY_TYPE_USB3,
+>         .nlanes                 = 1,
+> @@ -4072,6 +4077,7 @@ static const struct qmp_phy_cfg sm8250_usb3phy_cfg = {
+>         .reset_list             = msm8996_usb3phy_reset_l,
+>         .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
+>         .vreg_list              = qmp_phy_vreg_l,
+> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
+>         .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
+>         .regs                   = qmp_v4_usb3phy_regs_layout,
+>
+> @@ -4139,6 +4145,7 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
+>         .reset_list             = msm8996_usb3phy_reset_l,
+>         .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
+>         .vreg_list              = qmp_phy_vreg_l,
+> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
+>         .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
+>         .regs                   = qmp_v4_usb3phy_regs_layout,
 
-Looks good to me Suren. Thank you.
+I'd ask again: what about the sdm845? SC8180x? SC7180? Do we need to
+change them too?
+Currently they will all be handled by the DP driver.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+>
+> @@ -5008,6 +5015,11 @@ static int qcom_qmp_phy_com_init(struct qmp_phy *qphy)
+>                 return 0;
+>         }
+>
+> +       if (cfg->vreg_enable_load) {
+> +               for (i = cfg->num_vregs - 1; i >= 0; --i)
+> +                       regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_enable_load[i]);
+> +       }
+> +
+>         /* turn on regulator supplies */
+>         ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
+>         if (ret) {
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
 
-thanks,
--- Shuah
 
+-- 
+With best wishes
+Dmitry

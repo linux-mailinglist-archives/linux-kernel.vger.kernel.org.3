@@ -2,114 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CBE52B397
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6270B52B385
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbiERHc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S232198AbiERHdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiERHc4 (ORCPT
+        with ESMTP id S232171AbiERHds (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:32:56 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E48867D2B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:32:55 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fed274f3fbso13019407b3.17
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=GtAQDy8qrMQs7mWCa7GmbHUrKXDNUra1mtOtVoTKAPY=;
-        b=PitbkuosP0m9OyM6dQN2cmaA2R4TV0wtkHCCHVa73WeHclEwLHKbiFoC0Sb0UXjF4/
-         phkuGrGZytvuuRY+NZdRDOmesIvzLbcZ/cfcX11EoBRhBb0u62TqSAr7vPJm21/PA+sS
-         ZeyHbua9VjgwrD5RRuvaXPuVYLix0CHBKzifC9EdkHgrl/nrCi1QiyYqvBTFw0zRZ07f
-         4N2tYOIDqeuFdnOciG0tqWMXLMLyXn9tT1cAk+45NpWRYOYnG2nND4vMX6jub467EYCk
-         d3B6+0c9r80jbXS2tDHiWUp8XG/F/7fJjy9fyOeETn0N1mDCSLTjS1C4oauut4E2o9zJ
-         03mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=GtAQDy8qrMQs7mWCa7GmbHUrKXDNUra1mtOtVoTKAPY=;
-        b=KtFvDu0jaFcxzv94nd8xzNC+7Lam4N9U3i5YiZTFnfg41sPYM/l48AFMYZVFGiYihj
-         Vtw3tV87oZgzbKHhG7a0kJmI8g90Gyo0h90hooG9qjqDv+rr+O0gRp0BhzyVmbzwHX9u
-         Q03F4nEo8vRJagPs8XrXlK7Sw3oGYVjo4DLQViYRG8F6/WgHbz/0EkeF6lruwWbtpiT/
-         c6NtUiHYFlZyUZR4NAq6bfdTuFE+I01ATQRFkRr2Jkso8Hqh2fZvPTDzbLDj/tu0WwDH
-         HLmxdr4I7vpD+DFMf1sEXQ/qbD8sjwYVXgP11K+LkSnR/g9BGbchOSCeZL6AVkTtyrx6
-         CZtA==
-X-Gm-Message-State: AOAM531uPCtgnDJch6/elVJ97BeCGu7I+SKG09JafHnq2coUOLKzIKcb
-        z7IF7B5A22pr3oZlV8+jgFjiVAWK37EEAQ==
-X-Google-Smtp-Source: ABdhPJypIjypMVBz81HOJFDpHJ7rpL5x8W5jV1aqxXIeXWi9VdXO2Rh5JREbuHPp6e6Kke8tghRgheFxC3ijYA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a81:2643:0:b0:2f4:c975:b7ca with SMTP id
- m64-20020a812643000000b002f4c975b7camr28529608ywm.494.1652859174736; Wed, 18
- May 2022 00:32:54 -0700 (PDT)
-Date:   Wed, 18 May 2022 15:32:32 +0800
-In-Reply-To: <20220518073232.526443-1-davidgow@google.com>
-Message-Id: <20220518073232.526443-2-davidgow@google.com>
-Mime-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH 2/2] kcsan: test: Add a .kunitconfig to run KCSAN tests
-From:   David Gow <davidgow@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Marco Elver <elver@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     David Gow <davidgow@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
-        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        Wed, 18 May 2022 03:33:48 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01364880CB
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:33:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OSnS9Gc8JFL+vsVD6+x2CBXZoMLLZDp5qoKeoDP2gxA=; b=ayjs67fDG9+njrHbDEJTD9Wpn+
+        VfAbhXrt8x9HPt6bho0wfOK+tWDf7fjXj8G4RLKd5dc0b1p8x+ilq5A7AtI5f1yhYST6I0NI5UZKz
+        73B+bwrgwHckQsuq/5T09mhlu4nBzsrhS7wDDkhYppgGq64NAE3TDa+H3CD5YlnzmewQ015Bx9okK
+        DTqg8Ni3QfQgPdFmEezZHKT8FlcB4BWofb8rtIxoR4b2ef0qpVY+SN4tD3pYeZ8rBCDxF+ttcSusm
+        q91Uo4Sgx8Du8i91hpDZE/+wCBUhxry0SG7ENO5Q3RSEeOOKm4VboHdSk2/44h1oM36yQ/YYoWnno
+        2BpUPT+w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrEBk-0006Rr-K7; Wed, 18 May 2022 07:33:44 +0000
+Date:   Wed, 18 May 2022 00:33:44 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH V10 33/44] kmap: Make kmap work for devmap protected pages
+Message-ID: <YoShWMGVj9ZJbWqT@infradead.org>
+References: <20220419170649.1022246-1-ira.weiny@intel.com>
+ <20220419170649.1022246-34-ira.weiny@intel.com>
+ <Ymq3yrQ3rmgnbX1o@infradead.org>
+ <Ynxh/5jewIuGwb5d@iweiny-desk3>
+ <YoQl3yLa4iDCjicO@iweiny-desk3>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoQl3yLa4iDCjicO@iweiny-desk3>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a .kunitconfig file, which provides a default, working config for
-running the KCSAN tests. Note that it needs to run on an SMP machine, so
-to run under kunit_tool, the x86_64-smp qemu-based setup should be used:
-./tools/testing/kunit/kunit.py run --arch=x86_64-smp --kunitconfig=kernel/kcsan
+On Tue, May 17, 2022 at 03:46:55PM -0700, Ira Weiny wrote:
+> Ok there is a trade off here which I'm not sure is a good idea.
+> 
+> In order to make kmap faster I carefully placed the devmap_protected() call
+> completely inline.[1]  This specifically checks the PGMAP_PROTECTION flag in
+> dev_pagemap.[1]
+> 
+> I see only 2 ways of not including memremap.h in highmem-internal.h.
+> 
+> 1) Make this check a function call and place it in memremap.c
+> 2) Move struct dev_pagemap (and it's dependencies) to another header.
+> 
+> Number 2 negates any positive effect of splitting the header file.
+> 
+> Number 1 is going to force some overhead on all ZONE_DEVICE pages if PMEM is in
+> the system.
+> 
+> Do you think the extra run time overhead is a reasonable trade off to
+> eliminating the header?
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- kernel/kcsan/.kunitconfig | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 kernel/kcsan/.kunitconfig
+Well, given how big these devmap helpes are it seems like they should be
+out of line anyway due to the code size impact.  It would be great to
+compare the code size for the cases of:
 
-diff --git a/kernel/kcsan/.kunitconfig b/kernel/kcsan/.kunitconfig
-new file mode 100644
-index 000000000000..a8a815b1eb73
---- /dev/null
-+++ b/kernel/kcsan/.kunitconfig
-@@ -0,0 +1,20 @@
-+# Note that the KCSAN tests need to run on an SMP setup.
-+# Under kunit_tool, this can be done by using the x86_64-smp
-+# qemu-based architecture:
-+# ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan --arch=x86_64-smp
-+
-+CONFIG_KUNIT=y
-+
-+CONFIG_DEBUG_KERNEL=y
-+
-+CONFIG_KCSAN=y
-+CONFIG_KCSAN_KUNIT_TEST=y
-+
-+# Needed for test_barrier_nothreads
-+CONFIG_KCSAN_STRICT=y
-+CONFIG_KCSAN_WEAK_MEMORY=y
-+
-+# This prevents the test from timing out on many setups. Feel free to remove
-+# (or alter) this, in conjunction with setting a different test timeout with,
-+# for example, the --timeout kunit_tool option.
-+CONFIG_KCSAN_REPORT_ONCE_IN_MS=100
--- 
-2.36.0.550.gb090851708-goog
+ 1) baseline kernel
+ 2) devmap protection inline
+ 3) devmap protection out of line
 
+And maybe you need to add linux-mm and Thomas to get a few more
+opinions.

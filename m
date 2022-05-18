@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720AE52C3FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D58852C3F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242274AbiERT7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 15:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S242286AbiERUA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 16:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242217AbiERT7n (ORCPT
+        with ESMTP id S242276AbiERUAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 15:59:43 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2996E2B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 12:59:42 -0700 (PDT)
-Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IJ20Eh031668;
-        Wed, 18 May 2022 19:58:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=NMq5uB0MTUMudjGBVLDD0OXDum4Fof15hbz7EILKipA=;
- b=S9/BQaeS5Y7O2ldOLm8s2/g8bgN51M5WxJf4bH5UKRkYtHACbJaQPeulatNDG+qI1LUD
- Tv48Hy3xuNThQ4WluRIbdLewM0Bo6/rug1nBQcYtfi/L/RbZCaHt5MhrKxjmZmCgrpjf
- y9dv5iucW18UJvXcREecqf2TthV14woPYN/u+AkwgN/WbQxDn2CnbPREN7HLGNftd4cF
- 0OiA5K+9BnCnf6ClLgsB2rXXMWdC/ml3Qre2mTUhr3Rdnt79l+r6d2Ga1lTqAczvTxPN
- ygvzfQi08JEwpF3IupvGZmLglUBO5DGif02YBuNU8+uhb2cmiYJeXpEHBzVSiy558fhG rQ== 
-Received: from g4t3425.houston.hpe.com (g4t3425.houston.hpe.com [15.241.140.78])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3g4rvbuju6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 19:58:27 +0000
-Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
-        by g4t3425.houston.hpe.com (Postfix) with ESMTP id 2C7A7A8;
-        Wed, 18 May 2022 19:58:26 +0000 (UTC)
-Received: from swahl-home.5wahls.com (unknown [10.207.216.251])
-        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id E645C4E;
-        Wed, 18 May 2022 19:58:23 +0000 (UTC)
-Date:   Wed, 18 May 2022 14:58:23 -0500
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Steve Wahl <steve.wahl@hpe.com>, Joerg Roedel <jroedel@suse.de>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
-Message-ID: <YoVP3w5cJWriLBlu@swahl-home.5wahls.com>
-References: <20220505194658.246121-1-steve.wahl@hpe.com>
- <20220512151309.330068-1-steve.wahl@hpe.com>
- <Yn2UYst0ETp42uzq@swahl-home.5wahls.com>
- <2c65b8cf-3813-3ddf-3f5b-c374cc842678@linux.intel.com>
+        Wed, 18 May 2022 16:00:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93E10227825
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652904023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aS7gQ5qpFeKUv7/KfR+Cnnmeed9eVIGi0Wg+eyJp4Fg=;
+        b=DVKbEtQAoG29VWe0sk6PDmx7z37TsxseOtSv5Tltz5097mwWR6dGgWRqaU97WzOxwUpTA7
+        DGAhdpcys3tB5fgjgROKHxtRZr15aSW0rlEo1ZdQ1gW31juGDG0ROgf+/RPJVJKP97R7GE
+        WqYwtAdXsJ40SSZCTTo5Hc6clw3G0yU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-31-HEMs9FENPBm7CP3UBs-DXA-1; Wed, 18 May 2022 16:00:18 -0400
+X-MC-Unique: HEMs9FENPBm7CP3UBs-DXA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C54F818019D7;
+        Wed, 18 May 2022 20:00:17 +0000 (UTC)
+Received: from asgard.redhat.com (unknown [10.36.110.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D5051492C14;
+        Wed, 18 May 2022 20:00:13 +0000 (UTC)
+Date:   Wed, 18 May 2022 22:00:10 +0200
+From:   Eugene Syromiatnikov <esyr@redhat.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf v3 1/2] bpf_trace: check size for overflow in
+ bpf_kprobe_multi_link_attach
+Message-ID: <20220518200010.GA29226@asgard.redhat.com>
+References: <cover.1652876187.git.esyr@redhat.com>
+ <39c4a91f2867684dc51c5395d26cb56ffe9d995d.1652876188.git.esyr@redhat.com>
+ <412bf136-6a5b-f442-1e84-778697e2b694@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2c65b8cf-3813-3ddf-3f5b-c374cc842678@linux.intel.com>
-X-Proofpoint-ORIG-GUID: bAtMyue4fwEGQiU_GnCx-nmpbuHsVI6G
-X-Proofpoint-GUID: bAtMyue4fwEGQiU_GnCx-nmpbuHsVI6G
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- phishscore=0 mlxlogscore=701 clxscore=1015 adultscore=0 bulkscore=0
- malwarescore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180117
+In-Reply-To: <412bf136-6a5b-f442-1e84-778697e2b694@fb.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,56 +74,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 10:09:46AM +0800, Baolu Lu wrote:
-> On 2022/5/13 07:12, Steve Wahl wrote:
-> > On Thu, May 12, 2022 at 10:13:09AM -0500, Steve Wahl wrote:
-> > > To support up to 64 sockets with 10 DMAR units each (640), make the
-> > > value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
-> > > CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
-> > > set.
-> > > 
-> > > If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
-> > > to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
-> > > allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
-> > > remapping doesn't support X2APIC mode x2apic disabled"; and the system
-> > > fails to boot properly.
-> > > 
-> > > Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
-> > 
-> > I've received a report from the kernel test robot <lkp@intel.com>,
-> > that this patch causes an error (shown below) when
-> > CONFIG_IOMMU_SUPPORT is not set.
-> > 
-> > In my opinion, this is because include/linux/dmar.h and
-> > include/linux/intel-iommu are being #included when they are not really
-> > being used.
-> > 
-> > I've tried placing the contents of intel-iommu.h within an #ifdef
-> > CONFIG_INTEL_IOMMU, and that fixes the problem.
-> > 
-> > Two questions:
-> > 
-> > A) Is this the desired approach to to the fix?
+On Wed, May 18, 2022 at 09:34:22AM -0700, Yonghong Song wrote:
+> On 5/18/22 5:22 AM, Eugene Syromiatnikov wrote:
+> >-	size = cnt * sizeof(*syms);
+> >+	if (check_mul_overflow(cnt, (u32)sizeof(*syms), &size))
+> >+		return -EOVERFLOW;
 > 
-> Most part of include/linux/intel-iommu.h is private to Intel IOMMU
-> driver. They should be put in a header like drivers/iommu/intel
-> /iommu.h. Eventually, we should remove include/linux/intel-iommu.h
-> and device drivers interact with iommu subsystem through the IOMMU
-> kAPIs.
+> In mm/util.c kvmalloc_node(), we have
 > 
-> Best regards,
-> baolu
+>         /* Don't even allow crazy sizes */
+>         if (unlikely(size > INT_MAX)) {
+>                 WARN_ON_ONCE(!(flags & __GFP_NOWARN));
+>                 return NULL;
+>         }
+> 
+> Basically the maximum size to be allocated in INT_MAX.
+> 
+> Here, we have 'size' as u32, which means if the size is 0xffff0000,
+> the check_mul_overflow will return false (no overflow) but
+> kvzalloc will still have a warning.
+> 
+> I think we should change the type of 'size' to be 'int' which
+> should catch the above case and be consistent with
+> what kvmalloc_node() intends to warn.
 
-Baolu's recent patch to move intel-iommu.h private still allows my
-[PATCH v2] to apply with no changes, and gets rid of the compile
-errors when CONFIG_IOMMU_SUPPORT is not set, so the kernel test robot
-should be happy now.
+Huh, it's a bitmore complicated as check_mul_overflow requires types to
+match; what do you think about
 
-Is there another step I should do to bring this patch back into focus?
++	if (check_mul_overflow(cnt, (u32)sizeof(*syms), &size) || size > INT_MAX)
 
-Thanks.
+?
 
---> Steve
-
--- 
-Steve Wahl, Hewlett Packard Enterprise

@@ -2,123 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FBF52C56E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 23:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5197952C58C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 23:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243123AbiERVKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 17:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S243178AbiERV0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 17:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243004AbiERVKh (ORCPT
+        with ESMTP id S243157AbiERV0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 17:10:37 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693AE2550B5;
-        Wed, 18 May 2022 14:10:36 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id c10so4605689edr.2;
-        Wed, 18 May 2022 14:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JKV9lVU79l7/vRGdMw2VsgQs72ssBgmwLYPjAHdPP+k=;
-        b=j0k+UnRq5J9c8xRJb8t2ZFQxvhVMSIEUS06QQ3g8MRSG0RhOcHfvHDar/OqRnEUMSg
-         eLv81Hp3bTCBl+auQwcV8fuWNnk59F1lpJk1UDYmNTfW00LGRqRRk+I/WpfcCJQmQt2j
-         VCnlZy66/ZMgr9Yugy5li82Be3EDvd6utsKvcuG5NZh8YxO7IMo6n11HLKUAZlSjfbFc
-         MXGDevQ8kZOJYsd/s1gs8SQXjTVumsBsc6B7Ga/ZUrFFBXFm6n8SBu3y9BbHOtJGf9h7
-         UgI0BNHUEchB+aB89eR7A5JeNbs/Jfdz5AI5GZ4dOCqaSLxkz3D0SUNG/GqhTdtpflb4
-         Za6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JKV9lVU79l7/vRGdMw2VsgQs72ssBgmwLYPjAHdPP+k=;
-        b=nJebd5kGxH9Q2BXDqsQD7FHSWw5ylvNxrH+4RPk+YqyAy9Bbci+cXQ2hO44mWHM2C7
-         FDMBIW/fGYLIXbGZ/5mIQcUbZLTeGS5jol2CdM3cm4CQT0QVVTjJsePAtuK1HVwaZ92C
-         ZkQPT9CbdHg4r2qkcjERO79gF0elHRKcgaHOlb1xZnqoknRrrc317ZFINc+9lGp5D6jr
-         Rb03r5+HckqlzHm2cwM4cEiC1GpHkzjK8Hauh7mkIQwMoFzt8MxxtWZrq7JIEEogV1Aa
-         euvh0/RaFRhQnY7o+diQKTUhOXDC6URYR1LiTamvIhI50hxIzMvoG2GT8OO/LxW+vghT
-         xfYg==
-X-Gm-Message-State: AOAM532h8f9I6vxqH0ogtYPBGaagmiSHl82h9hbC1UIziYXuN62KrN2q
-        lkUsfZLbNwWjvNCGNbpE3tGuaW6W2Qv4BTTr6VM=
-X-Google-Smtp-Source: ABdhPJw51DfdxfGRtfLi5oKyYAPymH2LdfYbR1w83oGWn93l2R5ph/BmGYdd3FNyq5X+5mv5vg8vCwJVKWA3RHzvv80=
-X-Received: by 2002:aa7:d911:0:b0:42a:af69:e167 with SMTP id
- a17-20020aa7d911000000b0042aaf69e167mr1825172edr.54.1652908234980; Wed, 18
- May 2022 14:10:34 -0700 (PDT)
+        Wed, 18 May 2022 17:26:36 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DE73BFB6;
+        Wed, 18 May 2022 14:26:35 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IL37Yc011281;
+        Wed, 18 May 2022 21:26:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=y7+InN4T1AhNfnrU+hjtQbi+AUPcRelZo9Aro4X0ebI=;
+ b=Cmwc0+XWsZfiP+nmbI1Lgl131c8TUhy7H7ZNgfPLKnvGxTJBLwAfMeAtHQ37T1tsYO5c
+ L0EG6zbdPYiIpS2ShYDHu4F7EjvMC2qYMN6NYpVlHX3KBscJzv6UI/H69fKjJDi+I3IU
+ XQvaCp1gljf3OpxiHRW8toPAdSUcR4/n9jbbDFz061PtYk85nxmiM7NFlx3XuGRhAm8V
+ fefudY7suiC57SqAIsryNJ0BtjMA7a66g8HqTcMIbs3WMHFWR1XdzwaQDsSPmQmQzS24
+ HYfx2Sz4dqfDJ2zVniZTQhii3+ABMakAKQDsG56sz9Zkl/hpe8iuw4/0pd+Q/fPap80H lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g58cgrgap-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 21:26:19 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24ILJr2m009229;
+        Wed, 18 May 2022 21:26:19 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g58cgrgac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 21:26:19 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IL2rtQ019537;
+        Wed, 18 May 2022 21:26:18 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma05wdc.us.ibm.com with ESMTP id 3g242af9se-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 21:26:18 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24ILQHHC27328794
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 21:26:17 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8B5E528060;
+        Wed, 18 May 2022 21:26:17 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C359E2805E;
+        Wed, 18 May 2022 21:26:13 +0000 (GMT)
+Received: from li-c92d2ccc-254b-11b2-a85c-a700b5bfb098.ibm.com.com (unknown [9.211.37.97])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 18 May 2022 21:26:13 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     jgg@nvidia.com, alex.williamson@redhat.com
+Cc:     cohuck@redhat.com, borntraeger@linux.ibm.com,
+        jjherne@linux.ibm.com, akrowiak@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, hch@infradead.org,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/1] vfio: remove VFIO_GROUP_NOTIFY_SET_KVM
+Date:   Wed, 18 May 2022 17:26:06 -0400
+Message-Id: <20220518212607.467538-1-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QrOItCWy51AZo_qIJ1RCc4LMGLxnuhOY
+X-Proofpoint-GUID: C7naun7PRSTlUTRKk_2a_XczLp56l8kd
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20220518192924.20948-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220518192924.20948-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 18 May 2022 23:09:58 +0200
-Message-ID: <CAHp75VeyU4Ox76wz9VfT8qEKHsE1eAo2iw27Lro1tmjJB0npMg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/7] Renesas RZ/G2L IRQC support
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ impostorscore=0 adultscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0
+ spamscore=0 priorityscore=1501 mlxlogscore=560 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205180121
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 9:29 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> Hi All,
->
-> The RZ/G2L Interrupt Controller is a front-end for the GIC found on
-> Renesas RZ/G2L SoC's with below pins:
-> - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI
->   interrupts
-> - GPIO pins used as external interrupt input pins out of GPIOINT0-122 a
->   maximum of only 32 can be mapped to 32 GIC SPI interrupts,
-> - NMI edge select.
->
->                                                              _____________
->                                                              |    GIC     |
->                                                              |  ________  |
->                                       ____________           | |        | |
-> NMI --------------------------------->|          |  SPI0-479 | | GIC-600| |
->              _______                  |          |------------>|        | |
->              |      |                 |          |  PPI16-31 | |        | |
->              |      | IRQ0-IRQ7       |   IRQC   |------------>|        | |
-> P0_P48_4 --->| GPIO |---------------->|          |           | |________| |
->              |      |GPIOINT0-122     |          |           |            |
->              |      |---------------->| TINT0-31 |           |            |
->              |______|                 |__________|           |____________|
->
-> The proposed patches add hierarchical IRQ domain, one in IRQC driver and
-> another in pinctrl driver. Upon interrupt requests map the interrupt to
-> GIC. Out of GPIOINT0-122 only 32 can be mapped to GIC SPI, this mapping is
-> handled by the pinctrl and IRQC driver.
+As discussed in this thread:
 
-Where is the explanation on why valid_mask can't be used instead?
+https://lore.kernel.org/kvm/20220516172734.GE1343366@nvidia.com/
 
+Let's remove VFIO_GROUP_NOTIFY_SET_KVM and instead assume the association
+has already been established prior to device_open.  For the types today
+that need a KVM (GVT, vfio-ap) these will fail if a KVM is not found.
+Looking ahead, vfio-pci-zdev will optionally want the KVM association
+(enable hardware assists) but it will not be a hard requirement (still
+want to allow other, non-KVM userspace usage). 
+
+This is built on top of Jason's group locking series:
+https://github.com/jgunthorpe/linux/commits/vfio_group_locking
+
+And tested with s390x-pci (zdev-kvm series) and vfio-ap (GVT changes are
+compile-tested only)
+
+Changes for v2:
+- gvt no longer needs release_work, get rid of it (Christoph)
+- a few compile fixes for gvt
+- update commit to mention fixes gvt oops (Jason)
+- s/down_write/down_read/ in a few spots (Jason)
+- avoid kvm build dependency by holding group read lock over device
+  open/close and put the onus on the driver to obtain a reference if
+  it will actually use the kvm pointer.  Document the requirement,
+  use lockdep_assert to ensure lock is held during register_notifer;
+  today all callers are from driver open_device.
+
+Matthew Rosato (1):
+  vfio: remove VFIO_GROUP_NOTIFY_SET_KVM
+
+ drivers/gpu/drm/i915/gvt/gtt.c        |  4 +-
+ drivers/gpu/drm/i915/gvt/gvt.h        |  3 -
+ drivers/gpu/drm/i915/gvt/kvmgt.c      | 82 ++++++---------------------
+ drivers/s390/crypto/vfio_ap_ops.c     | 38 ++++---------
+ drivers/s390/crypto/vfio_ap_private.h |  3 -
+ drivers/vfio/vfio.c                   | 75 ++++++++----------------
+ include/linux/vfio.h                  |  5 +-
+ 7 files changed, 56 insertions(+), 154 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.27.0
+

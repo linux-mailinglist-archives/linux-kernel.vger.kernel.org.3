@@ -2,160 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F51752BC6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3C252BC2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238467AbiEROH6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 May 2022 10:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
+        id S238482AbiEROIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238454AbiEROHu (ORCPT
+        with ESMTP id S238454AbiEROIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:07:50 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93D616ABC3;
-        Wed, 18 May 2022 07:07:47 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id q135so3829078ybg.10;
-        Wed, 18 May 2022 07:07:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QXYjMoct8jHy31FBakzpCRkd+Wppn/IEAU7MUWDLFiQ=;
-        b=ez7/MlI9wDfj0ZG4XcHSkTTmgGiS1z4ymcAOkW8ECwRYScqYUhIuQErX3vSsWkVWog
-         ejaoKVEqdTaB/dmYjvk5LZBx+4t5+AFJd5DLZOFCBHaCW2wKaaLpckiMMxqViVs/uH6H
-         LCYahL9gSDi945NaE/yrP9PqwzV6KcNb+502szV+/wljE1tU/mkQw4SyVvpNIZnMTIgC
-         4XqwAqkj51s+ZpkiaUpsFFGFhzj6cYjvZ8gntD/s23URYs5mhIJo5gMYNAzH8SvOXxkw
-         +GEVHfqliQtdWz498NlEyv4SipQpyIFYRLRGphj33Y+m5ksFfEjBRuZI6vUNFVci6LTM
-         mICw==
-X-Gm-Message-State: AOAM532ziQC1zWv5inqa8dT97GKr4nwcJinEOkQQBrtvVq29tZ5uv1qz
-        lHzqNcnRbHK1FbBj0TViFAcKoV8KyPnAsrO1qsapGOicK2iX4A==
-X-Google-Smtp-Source: ABdhPJyLHZ2AgpCh9R3fj0oOs2ey9AP1V4nx8RS0AvuWHKgetRwnyrtQBOZTyg/mJL52a1rIhFf17NbJc7JTUGB6SYg=
-X-Received: by 2002:a25:e093:0:b0:64d:6c85:6bc6 with SMTP id
- x141-20020a25e093000000b0064d6c856bc6mr18989580ybg.500.1652882866975; Wed, 18
- May 2022 07:07:46 -0700 (PDT)
+        Wed, 18 May 2022 10:08:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C96D11A2C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:08:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B78FFB820E3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 14:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4465C385A5;
+        Wed, 18 May 2022 14:08:42 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LVqMS3jx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652882920;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bLeYtCK6G3ymqO+moQ4LY9PCLZcMxZYin7etzLxfMPI=;
+        b=LVqMS3jxuGZ5bKY4K0Xlh+3CwrNw8ccBTiS7C8sjZZnwYX8w78u6/vjcO9OmWV2qOzqPaa
+        SXCXbcKfwnIi1up1lgbBQJKuQP5KKQMu+7db6lAYKpmGsGoiDxUDGHQw8nqDWd46Letk67
+        mAfFdDRe/ts0tuW4lPdqAdTIHq/KEPY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c1e1eaba (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 18 May 2022 14:08:40 +0000 (UTC)
+Date:   Wed, 18 May 2022 16:08:32 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Filipe Manana <fdmanana@suse.com>,
+        Vadim Galitsin <vadim.galitsyn@oracle.com>
+Subject: Re: [patch 0/3] x86/fpu: Prevent FPU state corruption
+Message-ID: <YoT94NOAVt9V43Y7@zx2c4.com>
+References: <20220501192740.203963477@linutronix.de>
+ <YnKeag3Ulg0NR58Q@zx2c4.com>
+ <YoRFjTIzMYZu8Hq8@zx2c4.com>
+ <87fsl7j8bh.ffs@tglx>
 MIME-Version: 1.0
-References: <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
- <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
- <20220517104545.eslountqjppvcnz2@pengutronix.de> <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
- <20220517141404.578d188a.max@enpas.org> <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
- <20220517143921.08458f2c.max@enpas.org> <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
- <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
- <43768ff7-71f8-a6c3-18f8-28609e49eedd@hartkopp.net> <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
-In-Reply-To: <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 18 May 2022 23:07:35 +0900
-Message-ID: <CAMZ6RqJqeNjAtoDWADHsWocgbSXqQixcebJBhiBFS8BVeKCb3g@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Max Staudt <max@enpas.org>, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87fsl7j8bh.ffs@tglx>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed. 18 May 2022 à 22:32, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 18.05.2022 15:10:44, Oliver Hartkopp wrote:
-> > On 18.05.22 14:03, Vincent MAILHOL wrote:
-> > > I didn't think this would trigger such a passionate discussion!
-> >
-> > :-D
-> >
-> > Maybe your change was the drop that let the bucket run over ;-)
->
-> It's so trivial that everybody feels the urge to say something. :D
->
-> > > > But e.g. the people that are running Linux instances in a cloud only
-> > > > using vcan and vxcan would not need to carry the entire infrastructure
-> > > > of CAN hardware support and rx-offload.
-> > >
-> > > Are there really some people running custom builds of the Linux kernel
-> > > in a cloud environment? The benefit of saving a few kilobytes by not
-> > > having to carry the entire CAN hardware infrastructure is blown away
-> > > by the cost of having to maintain a custom build.
-> >
-> > When looking to the current Kconfig and Makefile content in
-> > drivers/net/can(/dev) there is also some CONFIG_CAN_LEDS which "depends on
-> > BROKEN" and builds a leds.o from a non existing leds.c ?!?
-> >
-> > Oh leds.c is in drivers/net/can/leds.c but not in drivers/net/can/dev/leds.c
-> > where it could build ... ?
-> >
-> > So what I would suggest is that we always build a can-dev.ko when a CAN
-> > driver is needed.
-> >
-> > Then we have different options that may be built-in:
-> >
-> > 1. netlink hw config interface
-> > 2. bitrate calculation
-> > 3. rx-offload
-> > 4. leds
-> >
-> > E.g. having the netlink interface without bitrate calculation does not make
-> > sense to me too.
->
-> ACK
->
-> > > I perfectly follow the idea to split rx-offload. Integrators building
-> > > some custom firmware for an embedded device might want to strip out
-> > > any unneeded piece. But I am not convinced by this same argument when
-> > > applied to v(x)can.
-> >
-> > It does. I've seen CAN setups (really more than one or two!) in VMs and
-> > container environments that are fed by Ethernet tunnels - sometimes also in
-> > embedded devices.
+Hi Thomas,
 
-Are those VM running custom builds of the kernel in which all the CAN
-hardware devices have been removed? Also, isn't it hard to keep those
-up to date with all the kernel security patches?
+On Wed, May 18, 2022 at 03:09:54PM +0200, Thomas Gleixner wrote:
+> In the interest of users we should probably bite the bullet and just
+> disable hard interrupt FPU usage upstream and Cc stable. The stable
+> kernel updates probably reach users faster.
 
-> > > A two level split (with or without rx-offload) is what makes the most
-> > > sense to me.
-> > >
-> > > Regardless, having the three level split is not harmful. And because
-> > > there seems to be a consensus on that, I am fine to continue in this
-> > > direction.
-> >
-> > Thanks!
-> >
-> > Should we remove the extra option for the bitrate calculation then?
->
-> +1
+Considering <https://git.zx2c4.com/linux-rng/commit/?id=e3e33fc2e> is
+slated for 5.19, that seems fine, as this will remove what is hopefully
+the last hardirq FPU user.
 
-I can imagine people wanting to ship a product with the bitrate
-calculation removed. For example, an infotainment unit designed for
-one specific vehicle platform (i.e. baudrate is fixed). In that case,
-the integrator might decide to remove bittiming calculation and
-hardcode all hand calculated bittiming parameters instead.
+The bigger motivation, though, for removing the hardirq FPU code would
+be for just simplifying the FPU handling. The VirtualBox people are
+going to have to fix this bug anyway, since it also affects old kernels
+they support.
 
-So that one, I prefer to keep it. I just didn't mention it in my
-previous message because it was already splitted out.
-
-> > And what about the LEDS support depending on BROKEN?
-> > That was introduced by commit 30f3b42147ba6f ("can: mark led trigger as
-> > broken") from Uwe as it seems there were some changes in 2018.
->
-> There's a proper generic LED trigger now for network devices. So remove
-> LED triggers, too.
-
-Yes, the broken LED topic also popped-up last year:
-
-https://lore.kernel.org/linux-can/20210906143057.zrpor5fkh67uqwi2@pengutronix.de/
-
-I am OK to add one patch to the series for LED removal. Just some
-heads-up: I will take my time, it will definitely not be ready for the
-v5.19 merge window. And I also expect that there will be at least one
-more round of discussion.
-
-While I am at it, anything else to add to the wish list before I start
-to working it?
+Jason

@@ -2,118 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D13552B958
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB6352B982
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236166AbiERMFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
+        id S236237AbiERMHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236119AbiERMFO (ORCPT
+        with ESMTP id S236152AbiERMHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:05:14 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810549D060;
-        Wed, 18 May 2022 05:05:07 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id i27so3353956ejd.9;
-        Wed, 18 May 2022 05:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HBvttKt/+puk2DR73PUb7EYpaQbMG8BEPu8CTXCnIwM=;
-        b=Fr6vweAA0egXTuuZRjpQKI6IEn98MQsoAcswBc5h6vhOadmz7K4WLAuf0M7I5Z+GuM
-         begrmOP04Gm65RcAZPJ4jDKgPHp1oBkDE1sEYHaqihVuaBEEf/Jg0GbjioYPMLrjmcQC
-         Zkf89kyxyTNvKH+uRjCYj54wTbJwaKD19Dswlcpw0q/tfW016CXXUOgtDSpj9AsQzkqn
-         ng1gYmdYow5ZGAAH9NeIDERMBXcLUjCLp7DzDH+pcRt9HRYRwoDoqpnYNI4pZHiO+722
-         Yz2e0DMBzYtfLBfI+dBlqzrAB7F+N+YisvPd3ypTHjXRRTmsQN9dqX6Sj1HMoYlSVsue
-         VVmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HBvttKt/+puk2DR73PUb7EYpaQbMG8BEPu8CTXCnIwM=;
-        b=kHR3W3cDCkp5q/1VECU8qZafwpvnzxp5tqaTC93q02a806Fw1DamGj3IPB/faIfvDK
-         vleYZS0vQSZ1RmDT2aGLr6dHkTmzH8d5BTCipVo+WxfDQUrbPwkfikOHs/8hRgPT31lG
-         NXnPfkm5OGuKws6Wabgjd6xf4oiJt78sZ8DyYoWOQlcUsZJMLHzeRFeUCDHwX3qa4oHG
-         rcvoXNiWBSQCysPVOww+19QvvCuQUfbZzJP4qDmAlEgpUUsKZV5zyzFww2EHF415FgB2
-         bKmCEzLRcjnWFgjFPiaxA4LDMB5WC+Uc0rszPoUuK5il262jfi8pQnvLX6oqvoX14uIS
-         L9Ww==
-X-Gm-Message-State: AOAM533a20EVq1xLADClRlwokPyDi6tTMBg8LLXKSYMzsSlYd6VU5lGn
-        4R9DFbkRzybaae7YGB5dx4Y=
-X-Google-Smtp-Source: ABdhPJyr/sVG76W5wUvAmPcZnxHV7/Na7Nm1x9m0hiioEFYlFBk5pFQNLe9QjIUWIyDhUuMvrb+J8g==
-X-Received: by 2002:a17:907:9723:b0:6f4:77c7:8fef with SMTP id jg35-20020a170907972300b006f477c78fefmr23701102ejc.680.1652875505702;
-        Wed, 18 May 2022 05:05:05 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id be18-20020a0564021a3200b0042aac7c2fa3sm1193832edb.96.2022.05.18.05.05.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 05:05:05 -0700 (PDT)
-Date:   Wed, 18 May 2022 15:05:03 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v4 05/12] dt-bindings: net: dsa: add bindings
- for Renesas RZ/N1 Advanced 5 port switch
-Message-ID: <20220518120503.3m2zfw7kmhsfg336@skbuf>
-References: <20220509131900.7840-1-clement.leger@bootlin.com>
- <20220509131900.7840-6-clement.leger@bootlin.com>
- <20220511152221.GA334055-robh@kernel.org>
- <20220511153337.deqxawpbbk3actxf@skbuf>
- <20220518015924.GC2049643-robh@kernel.org>
+        Wed, 18 May 2022 08:07:01 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEFDAF1D4;
+        Wed, 18 May 2022 05:06:56 -0700 (PDT)
+X-UUID: 19150da488a94fdab41ab2d65bdac7cb-20220518
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:cd629019-1e6a-4897-aec4-87e755b2b50b,OB:0,LO
+        B:10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:cd629019-1e6a-4897-aec4-87e755b2b50b,OB:0,LOB:
+        10,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:feb5a6e2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:65e73d4f7736,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: 19150da488a94fdab41ab2d65bdac7cb-20220518
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1917153530; Wed, 18 May 2022 20:06:51 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 18 May 2022 20:06:50 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 18 May 2022 20:06:49 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 18 May 2022 20:06:48 +0800
+Message-ID: <d101876a72e6248c77ee5de0d1dc52687e225629.camel@mediatek.com>
+Subject: Re: [PATCH v6, 6/7] media: mediatek: vcodec: prevent kernel crash
+ when scp ipi timeout
+From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        "Fritz Koenig" <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 18 May 2022 20:06:48 +0800
+In-Reply-To: <31992c67-400e-8e14-38c2-4655995886f5@xs4all.nl>
+References: <20220513092526.9670-1-yunfei.dong@mediatek.com>
+         <20220513092526.9670-7-yunfei.dong@mediatek.com>
+         <ea9a04fb-368d-daca-96ae-9366253a5e91@xs4all.nl>
+         <f26d5225fc8c499226c297ed86feb5ee20e8f3d3.camel@mediatek.com>
+         <31992c67-400e-8e14-38c2-4655995886f5@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518015924.GC2049643-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 08:59:24PM -0500, Rob Herring wrote:
-> On Wed, May 11, 2022 at 06:33:37PM +0300, Vladimir Oltean wrote:
-> > On Wed, May 11, 2022 at 10:22:21AM -0500, Rob Herring wrote:
-> > > > +patternProperties:
-> > > > +  "^ethernet-ports$":
-> > > 
-> > > Move to 'properties', not a pattern.
-> > > 
-> > > With that,
-> > > 
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > 
-> > Even if it should have been "^(ethernet-)?ports$"?
-> 
-> Why? Allowing 'ports' is for existing users. New ones don't need the 
-> variability and should use just 'ethernet-ports'.
-> 
-> Rob
+Dear Hans,
 
-Yeah, ok, somehow the memo that new DSA drivers shouldn't support "ports"
-didn't reach me. They invariably will though, since the DSA framework is
-the main parser of the property, and that is shared by both old and new
-drivers.
+Thanks for your suggestion.
+
+On Wed, 2022-05-18 at 13:34 +0200, Hans Verkuil wrote:
+> 
+> On 5/18/22 13:29, yunfei.dong@mediatek.com wrote:
+> > Dear Hans,
+> > 
+> > Thanks for your review.
+> > On Wed, 2022-05-18 at 11:37 +0200, Hans Verkuil wrote:
+> > > Hi Yunfei,
+> > > 
+> > > On 5/13/22 11:25, Yunfei Dong wrote:
+> > > > When SCP timeout during playing video, kernel crashes with
+> > > > following
+> > > > message. It's caused by accessing NULL pointer in
+> > > > vpu_dec_ipi_handler.
+> > > > This patch doesn't solve the root cause of NULL pointer, but
+> > > > merely
+> > > > prevent kernel crashed when encounter the NULL pointer.
+> > > 
+> > > Is the root cause being addressed as well? Where is the root
+> > > cause?
+> > > Is it
+> > > in this driver or in the scp (i.e. the remoteproc) driver?
+> > > 
+> > > I need a bit more information to decide whether this series is
+> > > ready
+> > > to
+> > > be merged for 5.20 or not.
+> > > 
+> > > Regards,
+> > > 
+> > > 	Hans
+> > > 
+> > 
+> > Vpu will be NUll when scp(micro processor) is hang or crash. Need
+> > to
+> > keep kernel works well , so add this patch.
+> 
+> OK, I think this should be stated in the commit log, and also in the
+> code
+> (see below).
+> 
+> > 
+> > Best Regards,
+> > Yunfei Dong
+> 
+> <snip>
+> 
+> > > > diff --git
+> > > > a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
+> > > > b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
+> > > > index 35f4d5583084..1041dd663e76 100644
+> > > > --- a/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
+> > > > +++ b/drivers/media/platform/mediatek/vcodec/vdec_vpu_if.c
+> > > > @@ -91,6 +91,11 @@ static void vpu_dec_ipi_handler(void *data,
+> > > > unsigned int len, void *priv)
+> > > >  	struct vdec_vpu_inst *vpu = (struct vdec_vpu_inst *)
+> > > >  					(unsigned long)msg-
+> > > > > ap_inst_addr;
+> > > > 
+> > > >  
+> > > > +	if (!vpu) {
+> > > > +		mtk_v4l2_err("ap_inst_addr is NULL");
+> 
+> E.g., either add a comment here or perhaps change the error message
+> to:
+> 
+> "ap_inst_addr is NULL, did the SCP hang?"
+> 
+> Or something along those lines.
+> 
+I will change the message in next patch like below.
+
+mtk_v4l2_err("ap_inst_addr is NULL, did the SCP hang or crash?");
+
+> Shouldn't there be a \n at the end of this message as well? Or does
+> mtk_v4l2_err add that?
+> 
+mtk_v4l2_err add '\n' in the end.
+> Regards,
+> 
+> 	Hans
+> 
+Best Regards,
+Yunfei Dong
+> > > > +		return;
+> > > > +	}
+> > > > +
+> > > >  	mtk_vcodec_debug(vpu, "+ id=%X", msg->msg_id);
+> > > >  
+> > > >  	vpu->failure = msg->status;
+

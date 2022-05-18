@@ -2,79 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7123C52B459
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEF352B434
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbiERH5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
+        id S232940AbiERH7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbiERH5s (ORCPT
+        with ESMTP id S232846AbiERH6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:57:48 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACCC118007;
-        Wed, 18 May 2022 00:57:47 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id i19so2126166eja.11;
-        Wed, 18 May 2022 00:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7ktjmA9lbYY+r3k7Xl4dUBOmRn/WA+0dOC0w53gvyVI=;
-        b=X0zcqKITNYv1TLoj7hswq47oFfYJ7vnsmf3gLIsQ7si/uX69O69xbpuznQyl96N2KR
-         6xl+3NoBa6wa9trbSHLKUdcI/doQHK8unsfCuQHXKvz9oYTQKR+RV31uM75p30dYaQu8
-         EAkBrThXrZJusSX8iicfNV1vRQQnBc81rGVtDvJdIa5EITWBcbnKBsEtPPJ1jV3MD8bU
-         XQEp3gdMeslcQY8gcRFIY5A+LH35hlhCVRdPv3WIF06Kyfyzazkti9tdidslDYjaxYva
-         2L1uTNvWeoRBrq3ohGmn4BKzSLH4n6Xc3T7NX1v1HrUjgoTAglis9mleel6rzIWqN5E+
-         4edg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7ktjmA9lbYY+r3k7Xl4dUBOmRn/WA+0dOC0w53gvyVI=;
-        b=LfsSVB0MEIMk7pGtSiEbvhsgkYxGwxroA7nFtmNUTPCrUYZsAgspKAafMrtaZ/iP1K
-         6DxVcp8r5otFu4It6GkKS3bNcAYBnrydrM/umiWB5Ey+PMZlCCNwECZwZy2xyas7K3xd
-         l+EO9b29QV9nNFb/hphQN9fjrd5ELCH4uzgJSC2wGqlXJ2ykLGuL1Rlk/ZfZuf04WX9G
-         allNgTLLHDW+W9osh5Tb7uk2IOX+/6f+BKdOuPa4zhHYowYgM7mD4czvnwHtDCFT++j4
-         ybV/+9cndx/G7R90gki46SK6Ez5qLcLMq9RHVAq9MPICeiYX2+EFQn/mX5sVpCjBbENB
-         S/Sg==
-X-Gm-Message-State: AOAM533SqgPGR5jV8Pq9nTs5HqM+lsiSBMpehxeaS4aGAqhIBpjDspeR
-        ceyrYaFmFwVP3XINjDZRNec=
-X-Google-Smtp-Source: ABdhPJztZ+He6oZQpf5QYU8EpE4w74uBqb8gCz5K0anlddF2ScBUceeYay5gmr2N6k7sTt2XgAqIxw==
-X-Received: by 2002:a17:907:7216:b0:6f4:70d4:a3c4 with SMTP id dr22-20020a170907721600b006f470d4a3c4mr22754545ejc.529.1652860665411;
-        Wed, 18 May 2022 00:57:45 -0700 (PDT)
-Received: from [192.168.2.27] (85-70-151-113.rcd.o2.cz. [85.70.151.113])
-        by smtp.gmail.com with ESMTPSA id ee46-20020a056402292e00b0042617ba63aesm928060edb.56.2022.05.18.00.57.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 00:57:44 -0700 (PDT)
-Message-ID: <19149028-ec94-8f64-aed4-1e58f29942a8@gmail.com>
-Date:   Wed, 18 May 2022 09:57:43 +0200
+        Wed, 18 May 2022 03:58:17 -0400
+Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15E81207CE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1652860694;
+        bh=hoX39PemcSFYcIE/U6fMYNXcF/lSXAXQ7ENdEkgZSZ0=;
+        h=X-UI-Sender-Class:Date:From:Subject:To;
+        b=Bw5ELnsckKQ1mt88xZZ1DxTfrCExNpUYHshrxt6g9g06V/nbAzOJECFfWCb1N1JAS
+         70TAkLLSofmBi3YHrx6pRu6UrECR0YpL88hbyBeZd3EJCoYZbSnOYpUpbbuFk9C99X
+         kHARDQiw5GnGUOHSm9n/ARgzC5nGm+bwZjWT9r4I=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [10.15.110.18] ([143.244.38.17]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MBDnC-1o1eRP2VNm-00CeJ9 for
+ <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:58:13 +0200
+Message-ID: <877bc1ca-e72b-1a48-25de-61250df601ad@gmx.com>
+Date:   Wed, 18 May 2022 07:58:12 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [dm-devel] [PATCH v4 1/3] dm: Add verity helpers for LoadPin
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     dm-devel@redhat.com, Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>,
-        linux-security-module@vger.kernel.org
-References: <20220517233457.1123309-1-mka@chromium.org>
- <20220517163437.v4.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
-From:   Milan Broz <gmazyland@gmail.com>
-In-Reply-To: <20220517163437.v4.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
+From:   "Artem S. Tashkinov" <aros@gmx.com>
+Subject: Cannot build Linux 5.17 on Fedora 36
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:JnbqlO50qYhUdp2d6lc7+ou6782U+x5qYqfJc4f4pAiK/kXtSRD
+ 0bO0CKZxlVZQvYIf0MUfzupd8rj19wIVRPTGz/win443EERaAbdqXovtOsa0Pd0wvd3oia0
+ I+CmcUqeKUL9ndRS0X4JZrEk7VHKulfDMC2sEB8FKxfY38ezDuImNXrQGZZs5ZA5zMDwuyC
+ tUa2YwOT6JlzBcDH7yEKw==
+X-UI-Out-Filterresults: junk:10;V03:K0:yaOUZKOtfyY=:5UmBM6rZY4CVDLpf94WlJ7aU
+ Etk+sFASPLBunuwSUH6zgVoA79OCe+zHeIgdmPONG/Tgv6qVlXypYDZQpBXdUsvodXNVJMGZS
+ +kxsHJqWZRB19NErroB92R4OuoZWgRJapJRYzZzOAKqfAk8OL7U4Q1UxHL2/BaDdzqz31kJ1L
+ DHRY3FcZ+NV+SaklajplDOMO0x6n5HWpReb+WbFTFe6OrdqzqYQV98z3XZ0pCJjp6q4dpiFkO
+ i3mnRVrwQUQt3bJxL2UPMhB5b6Bs/1aTkZhDvrU+5b2AnUTsqShv0obbN1LD7PGbkrf+Yezis
+ 70XX8h4YLI8sEvFhnK5uvN+Z3CAFRD9NqnGp3SEWo946HvgnXPRnEDfekFBKzDbeO6ZuoeQYQ
+ 0ehkDjq94ao3BTnigc6WXN+UmRoiCSMbMG9sqSAuFSxbvuCW1KlYGGm18JPw4yLiMblynNbwt
+ 2dRBEKTzDIm/DJvD5DXDyifvG2msviZegxiZIKMbGQ9rV96+yXQNzWIz1JBYLb07BttuaxuUK
+ laGOQl3WLw6gNOTqXk6GZKQnBb6TS6ygPnfFZJNu1JOEf63SlIRgI0mZNhFw3QBtoK375D+vP
+ ygWQdYXKNQf71HQlb9rlDvWqVeIRFanIR4q6u5OBu6i+VmBhg6SS0S2FnPOCoELUrBm0at483
+ osM52WRaddsA5C5c6HAkZQrlDsJD/Wi2LxJGl47vx7hJbvIhGpvi7ax2nuLpTe3IKTBSGhsyv
+ YftBjlbtiXYek2uN7vmz1WsLg7KsKpy5/5ZB6cS98aQDs18VehH0AO5I7CiIyYYkoysZjX9Mi
+ wAmb+RdH/dTd7zSM+leMucdgpOc/f0OckdQgqPd5eokDpb4KGILnvbYdgzLlJfQ9wOGtLNEm0
+ 6rJWhVl4pdtrVO9b9WI8Dm78itLlJxW4o8bVYuR8EYqLL8fsl0e9f20q0X+BKuZunfxOmvpNx
+ Qj4rds6Zegz3wS8ZmneT4UPA8T4Qc6jX+o1T2Be69NtFzCRYGS5f8aRSlIALgXKJfrX4y0O8E
+ kAaj0VzxRAx/RgpdjHyavF3rEVGi+IFzUFxbWgkLSRD0GYvCrjS/w4v9p0UXeXqRPmvn+ToQ6
+ VcsRAw3M+l+LmXqC0N2D6scUUOHar8cf12pB3qSAPrrHNYHVrsTBPZeoMUDziJLiGdekAQUFP
+ Or8=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,68 +65,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2022 01:34, Matthias Kaehlcke wrote:
-> LoadPin limits loading of kernel modules, firmware and certain
-> other files to a 'pinned' file system (typically a read-only
-> rootfs). To provide more flexibility LoadPin is being extended
-> to also allow loading these files from trusted dm-verity
-> devices. For that purpose LoadPin can be provided with a list
-> of verity root digests that it should consider as trusted.
-> 
-> Add a bunch of helpers to allow LoadPin to check whether a DM
-> device is a trusted verity device. The new functions broadly
-> fall in two categories: those that need access to verity
-> internals (like the root digest), and the 'glue' between
-> LoadPin and verity. The new file dm-verity-loadpin.c contains
-> the glue functions.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+Hi,
 
-...
+I cannot build vanilla Linux 5.17:
 
-> +
-> +	if (dm_verity_get_root_digest(ti, &root_digest, &digest_size))
-> +		return false;
+# make defconfig
+   HOSTCC  scripts/basic/fixdep
+   HOSTCC  scripts/kconfig/conf.o
+   HOSTCC  scripts/kconfig/confdata.o
+   HOSTCC  scripts/kconfig/expr.o
+   LEX     scripts/kconfig/lexer.lex.c
+   YACC    scripts/kconfig/parser.tab.[ch]
+   HOSTCC  scripts/kconfig/lexer.lex.o
+   HOSTCC  scripts/kconfig/menu.o
+   HOSTCC  scripts/kconfig/parser.tab.o
+   HOSTCC  scripts/kconfig/preprocess.o
+   HOSTCC  scripts/kconfig/symbol.o
+   HOSTCC  scripts/kconfig/util.o
+   HOSTLD  scripts/kconfig/conf
+*** Default configuration is based on 'x86_64_defconfig'
+gold linker is not supported as it is not capable of linking the kernel
+proper.
+scripts/Kconfig.include:56: Sorry, this linker is not supported.
+make[1]: *** [scripts/kconfig/Makefile:87: defconfig] Error 1
+make: *** [Makefile:619: defconfig] Error 2
 
-Almost unrelated note, but as there are more and more situations
-that checks verity root digest, shouldn't we export this as read-only
-sysfs attribute for DM verity devices?
+No idea what's going on. I've recently updated gcc and binutils packages.
 
-Attacker can always calculate (but not change) Merkle tree, so this
-is not something that need to be hidden.
+# dnf update
+Dependencies resolved.
+Nothing to do.
+Complete!
 
-It would allow userspace to easily enumerate trusted DM devices without
-calling kernel ioctls...
+binutils-2.37-27.fc36.x86_64
+gcc-12.1.1-1.fc36.x86_64
 
-...
+ls -la /etc/alternatives/ld
+lrwxrwxrwx. 1 root root 15 Oct  7  2020 /etc/alternatives/ld ->
+/usr/bin/ld.bfd
 
-> +
-> +	table = dm_get_live_table(md, &srcu_idx);
-> +
-> +	if (dm_table_get_num_targets(table) != 1)
-> +		goto out;
-> +
-> +	ti = dm_table_get_target(table, 0);
-> +
-> +	if (is_trusted_verity_target(ti))
-> +		trusted = true;
+So, the symbolic link hasn't been changed in more than a year.
 
-What happens is someone reloads verity table later with
-a different content (or even different target type)?
-Does LoadPin even care here?
+No idea what's going on. What am I missing?
 
-...
-
->   static struct target_type verity_target = {
->   	.name		= "verity",
->   	.version	= {1, 8, 0},
-
-Please increase the minor version, it is very useful to detect (in logs)
-that the target driver has compatible extensions.
-
-
-I guess this change does not affect userspace veristysetup
-(as it is used handled by different tooling), right?
-
-Thanks,
-Milan
+Best regards,
+Artem

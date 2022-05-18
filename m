@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA7852C08A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFCF52C047
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240367AbiERQg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S240358AbiERQgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240526AbiERQga (ORCPT
+        with ESMTP id S240394AbiERQgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:36:30 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C84D205C6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652891789; x=1684427789;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nfxk6QHzxTv2778lb7oSutOL+8TQsowLGTPneGlEfdk=;
-  b=np1D3I2P8vPJU91+uO9KSc4MtyVPqitXnHHMGgUq8J2YNJtiNhCsG/az
-   U2h2bSUBA1yodBowRjvDP+uNsPSOErfwk8CmHZQvopOYQ0j7/KlvjWA2n
-   hIut5T+YIfTNArKd61QCMFxbWNjNfo1qh2fi6i53xP0R4SiS360GIT+bi
-   jSTdtuHdGxbeKmQLxaH3pfdWQEjRlcb0gV1CJFuPWO0Qrn8Wjs8saQNWV
-   bjMt1wawr4/pIubll45Vk5mHBtWIQLH7TUoHAEsg4T0TAcuCl1fBdzdbm
-   coYv7AcLkvCiD+P11+imZ0K4c9CJTjLbtGqXBf4RTgGUy97iNwjpAJnhE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="259332717"
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="259332717"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 09:34:21 -0700
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="605971356"
-Received: from fyu1.sc.intel.com ([172.25.103.126])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 09:34:21 -0700
-Date:   Wed, 18 May 2022 09:34:48 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        linux-kernel@vger.kernel.org, babu.moger@amd.com, x86@kernel.org
-Subject: Re: [PATCH v2] x86/resctrl: Fix zero cbm for AMD in cbm_validate
-Message-ID: <YoUgKB5svdI/blZa@fyu1.sc.intel.com>
-References: <20220517001234.3137157-1-eranian@google.com>
- <YoPOWC0waMuSlvI6@fyu1.sc.intel.com>
- <5a634c10-103e-6f3e-e51b-db26b2bc90a5@intel.com>
- <YoPa5L2jNYl/sFhw@fyu1.sc.intel.com>
- <0077efdf-ab64-2924-c290-cd940977b818@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0077efdf-ab64-2924-c290-cd940977b818@intel.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Wed, 18 May 2022 12:36:03 -0400
+X-Greylist: delayed 30093 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 09:35:55 PDT
+Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id A9901F0F;
+        Wed, 18 May 2022 09:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=3KgQ3zrN3LBLM7gFu4d9St4sYVmP9yxCPwwUUX7EJ3A=; b=L
+        l7yuLxSZ5EP3U4aUM86tvoyS8fQv4Yd9snjAO1A5IDnm2qLlMyJTX9UM44Vv4o/u
+        OlkNp7qACnO1zBb3DGkn/jWf9W+5CdTnYUuPi6Jgez7PoblzyWG9X9VbN8xISX8j
+        rcn95n7/uyCHtkhcPTS1Sd13A2FbTTMDQkPvpQ0gZk=
+Received: from localhost (unknown [10.129.21.144])
+        by front02 (Coremail) with SMTP id 54FpogDn7nphIIVihK+CBg--.61907S2;
+        Thu, 19 May 2022 00:35:46 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     pawell@cadence.com, gregkh@linuxfoundation.org, peter.chen@nxp.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fuyq@stu.pku.edu.cn, Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] usb: cdnsp:  Fix potential dereference of NULL pointer
+Date:   Wed, 18 May 2022 09:35:43 -0700
+Message-Id: <1652891743-110930-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 54FpogDn7nphIIVihK+CBg--.61907S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7JF45AFWxZF47GrWrAw13Jwb_yoWfXFX_Gw
+        4ruFy7tF1agFy7Aw18Cr9xWrWjkw1qvF4kXa1Igw43CFy7ur1kZryxXr4kJF1xZ3yUKr1D
+        KFyYk398uF1kAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbx8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWle2I262IYc4
+        CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
+        Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
+        0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48J
+        MxAIw28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+        JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+        DUUUUU=
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEJBlPy7vIULQAOsH
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,86 +60,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Babu,
+The return value of cdnsp_get_transfer_ring()
+needs to be checked to avoid use of NULL pointer
+in case of an acquisition failure.
 
-On Tue, May 17, 2022 at 11:10:40AM -0700, Reinette Chatre wrote:
-> On 5/17/2022 10:27 AM, Fenghua Yu wrote:
-> > On Tue, May 17, 2022 at 09:49:22AM -0700, Reinette Chatre wrote:
-> >> On 5/17/2022 9:33 AM, Fenghua Yu wrote:
-> >>> On Mon, May 16, 2022 at 05:12:34PM -0700, Stephane Eranian wrote:
-> >>>> AMD supports cbm with no bits set as reflected in rdt_init_res_defs_amd() by:
-> >>> ...
-> >>>> @@ -107,6 +107,10 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
-> >>>>  	first_bit = find_first_bit(&val, cbm_len);
-> >>>>  	zero_bit = find_next_zero_bit(&val, cbm_len, first_bit);
-> >>>>  
-> >>>> +	/* no need to check bits if arch supports no bits set */
-> >>>> +	if (r->cache.arch_has_empty_bitmaps && val == 0)
-> >>>> +		goto done;
-> >>>> +
-> >>>>  	/* Are non-contiguous bitmaps allowed? */
-> >>>>  	if (!r->cache.arch_has_sparse_bitmaps &&
-> >>>>  	    (find_next_bit(&val, cbm_len, zero_bit) < cbm_len)) {
-> >>>> @@ -119,7 +123,7 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
-> >>>>  				    r->cache.min_cbm_bits);
-> >>>>  		return false;
-> >>>>  	}
-> >>>> -
-> >>>> +done:
-> >>>>  	*data = val;
-> >>>>  	return true;
-> >>>>  }
-> >>>
-> >>> Isn't it AMD supports 0 minimal CBM bits? Then should set its min_cbm_bits as 0.
-> >>> Is the following patch a better fix? I don't have AMD machine and cannot
-> >>> test the patch.
-> >>>
-> >>> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-> >>> index 6055d05af4cc..031d77dd982d 100644
-> >>> --- a/arch/x86/kernel/cpu/resctrl/core.c
-> >>> +++ b/arch/x86/kernel/cpu/resctrl/core.c
-> >>> @@ -909,6 +909,7 @@ static __init void rdt_init_res_defs_amd(void)
-> >>>  			r->cache.arch_has_sparse_bitmaps = true;
-> >>>  			r->cache.arch_has_empty_bitmaps = true;
-> >>>  			r->cache.arch_has_per_cpu_cfg = true;
-> >>> +			r->cache.min_cbm_bits = 0;
-> >>>  		} else if (r->rid == RDT_RESOURCE_MBA) {
-> >>>  			hw_res->msr_base = MSR_IA32_MBA_BW_BASE;
-> >>>  			hw_res->msr_update = mba_wrmsr_amd;
-> >>
-> >> That is actually what Stephane's V1 [1] did and I proposed that
-> >> he fixes it with (almost) what he has in V2 (I think the check
-> >> can be moved earlier before any bits are searched for).
-> >>
-> >> The reasons why I proposed this change are:
-> >> - min_cbm_bits is a value that is exposed to user space and from the
-> >>   time AMD was supported this has always been 1 for those systems. I
-> >>   do not know how user space uses this value and unless I can be certain
-> >>   making this 0 will not affect user space I would prefer not to
-> >>   make such a change.
-> > 
-> > But a user visible mismatch is created by the V2 patch:
-> 
-> No. V2 does not create a user visible change, it restores original behavior.
-> 
-> > User queries min_cbm_bits and finds it is 1 but turns out 0 can be written
-> > to the schemata.
-> > 
-> > Is it an acceptable behavior? Shouldn't user read right min_cbm_bits (0)
-> > on AMD?
-> 
-> Original AMD enabling set min_cbm_bits as 1 while also supporting 0 to
-> be written to schemata file. Supporting 0 to be written to schemata file
-> was unintentionally broken during one of the MPAM prep patches. This
-> patch fixes that.
-> 
-> You are proposing a change to original AMD support that impacts user
-> space API while I find fixing to restore original behavior to
-> be the safest option. Perhaps Babu could pick the preferred solution
-> and I would step aside if you prefer to go with (an improved) V1.
+Fixes: 3d8290455 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
 
-Is it OK for you to set min_cbm_bits to 0 on AMD?
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/usb/cdns3/cdnsp-ring.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks.
+diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+index 1b14384..9f206b9 100644
+--- a/drivers/usb/cdns3/cdnsp-ring.c
++++ b/drivers/usb/cdns3/cdnsp-ring.c
+@@ -655,6 +655,8 @@ static int cdnsp_cmd_set_deq(struct cdnsp_device *pdev,
+ 	 * to reflect the new position.
+ 	 */
+ 	ep_ring = cdnsp_get_transfer_ring(pdev, pep, deq_state->stream_id);
++	if (!ep_ring)
++		return -EINVAL;
+ 
+ 	if (cdnsp_trb_is_link(ep_ring->dequeue)) {
+ 		ep_ring->deq_seg = ep_ring->deq_seg->next;
+-- 
+2.7.4
 
--Fenghua

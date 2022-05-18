@@ -2,234 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E1C52C136
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334E352C181
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240924AbiERRMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
+        id S240932AbiERRMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240912AbiERRMs (ORCPT
+        with ESMTP id S240917AbiERRMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 May 2022 13:12:48 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BD616F922
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:12:45 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id x22so2122745qto.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:12:45 -0700 (PDT)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CC016F939
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:12:46 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id c12so3832148eds.10
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:12:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Y4UE5H+Qnusz3rzEkkxU6stWLdz4Y33ozjvYB3NqVSA=;
-        b=RSfjecloRGhRW/UQN5l5aCzWD79I94AuY3gcoVKCy2Sm2uJ096vMywk3fhKDSFmJ7X
-         G+f8jBhRW+Ym3igzzeqOrdwoVqtJtOJBwVhQVQoeMCnJosxDcWIZ6JHv1+3ci1bf4XOc
-         cIKtiIppRT8cZtrE4qKWndWqNNXq8mUmPmDttHzmn+dqdhz0ZpDpR3jp8veOvHP939o5
-         WYQnFlljHxGTTZD9GSN0aO4PALTUrMgQK59P9Tmtieh+8Y9AXmtfYvgoNZxzCnyrSMXy
-         zdPpcBnAnzI8VSdapJdBwgBFSXjIToxmFovLpBMqEQLD/1VswfFCFiDzv69F2fSlJMb4
-         vRzw==
+        bh=WoeKVgQABRiIJ4QhptJclADbVq8q7TSfdxFYu0C6EmM=;
+        b=Ma9D+cIlFW04py/6cnvXihNXKKUOyruPaDKvMkEpXXLxniULao3+RFtBBFXQAHbK+X
+         pSF6VcB05zYk1XftYnanS0MMJoGECNAcFBZWn63xIbWTiGw5IT0yeLFmLPF/SIv7c6Sl
+         y4lcwIaZ5iJcm3YSlIlv1kw4KRuIWjp38enZpuTL6+08MtJZgIZ6p8c1Qh17ADRhFpNd
+         IykMIxH5IY6v4soCsHWIARWvtxR3e6Q37uNUh2mdbVi0ltj9RvQN7dj7SDO5D3qINGVl
+         MO3B4LaiuPwwE80pHp2g1XYR2lzHnrzEujVFj+t8jbwIdEwFvg1WtbII/ftjHLTA9IL/
+         x4QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Y4UE5H+Qnusz3rzEkkxU6stWLdz4Y33ozjvYB3NqVSA=;
-        b=X5zLXaYl1JSVQgXquz2TcoWr7wK9upNHSmMChP/Y/hIOl7jP4NElsULHEXxlEkFc9f
-         YPpLFh7+r7CnFubbT1AvYk5O8IQQ8Scg2/1PfaoZaAq/MOhERSC05LXZXJ+F6n6ALngj
-         ymVdVSZgK7xxTi1kTM2bOp5G7O2bE1HqLADcnx0wT1+BGGmTp56DFUcchfjPeZ8TbTG3
-         1eOF+nRyOp4zB0SE/KEgvwqOzQtjPeS8TKlXBFEvqiB31IOo/2mDCMoS63ePQ7Z35zLx
-         li5w0YdMCgIWzqtNGaQvZKNiuwiG0zWqSs03QSv8FEAZWfa8cscxcDoGXL3rP/WA0TYS
-         YFSA==
-X-Gm-Message-State: AOAM532iwIgYqyBq9S4JTtdlMdJp1R+Wj6Aeu1B9PoFouk+1+l/Lm/iU
-        VZZngdiCqMCsiPiG7xlWXXnuywj1Z6pgGB5gZ1Tdew==
-X-Google-Smtp-Source: ABdhPJzkv3ubYpMhhPTvfkO5ywoWAX2qwWiKt0vZwdhBnwnSGCfCgOKT9MWkrczG3oVakt/Wc7XaWJ/Paywb2ErXrbQ=
-X-Received: by 2002:ac8:57c2:0:b0:2f3:bd82:241 with SMTP id
- w2-20020ac857c2000000b002f3bd820241mr747818qta.370.1652893964869; Wed, 18 May
- 2022 10:12:44 -0700 (PDT)
+        bh=WoeKVgQABRiIJ4QhptJclADbVq8q7TSfdxFYu0C6EmM=;
+        b=yvTJERu5DxmBOk+s3KfMmHW6dwoabfVGkZQMBES7XbvOf+j4pbQc+8m5Cdm75PWwU0
+         BHCz3jyTtwLMdiQtmbZaryHFHKTxqI9cjrTc0FAeyT0EwML+XLd414ycouDiurBySEjH
+         NZd4hetyEUjAXNrSGUXHmh88osj88QdByx2UDHVTjLA9+/1wDClz02CCRrI4sxjkcj2+
+         tYByF0G/YJ9wvp9K/co6qiuuiu57XAhkNqJCWHL0TNMhzo5/nJHuM1J+5OdhrsVdu0TO
+         ZKM+KLEVuVF1Nwd0Bm1FKTvaG1AgTh4G/XEaLb7qoGNqk6l02Sk6m4fTknAFu+cJtu8G
+         wimQ==
+X-Gm-Message-State: AOAM530i/Z/Sp4J5sp0N43z8ru9g9aFWQY3gm/91hWQ8lAkz6C/BlP+m
+        lWkR87llKE7XGWy72bfsXlVEpv2iiKxvoVFf0tOdUQ==
+X-Google-Smtp-Source: ABdhPJzx1BOV2G21NGWMSsebUsdvZMFHsJ3ej189OLe2xnBCmMerviba6vUoml7QDMEl4WYVqQwW1fH9OG9i+sc8ZXA=
+X-Received: by 2002:a05:6402:84a:b0:426:262d:967e with SMTP id
+ b10-20020a056402084a00b00426262d967emr857938edz.286.1652893964661; Wed, 18
+ May 2022 10:12:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <1652892186-22346-1-git-send-email-quic_khsieh@quicinc.com> <1652892186-22346-2-git-send-email-quic_khsieh@quicinc.com>
-In-Reply-To: <1652892186-22346-2-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 18 May 2022 20:12:33 +0300
-Message-ID: <CAA8EJpr9znfxLK+kDstMFFk3V8goyaceGXi4sDc9ghz4eryXMg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] phy/qcom: add regulator_set_load to edp/dp phy
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220518073232.526443-1-davidgow@google.com> <20220518073232.526443-2-davidgow@google.com>
+In-Reply-To: <20220518073232.526443-2-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 18 May 2022 10:12:33 -0700
+Message-ID: <CAGS_qxoVucD5N00g3Tjav5gmYQWvxndTWJYHuKY6mH4bkWXGgA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kcsan: test: Add a .kunitconfig to run KCSAN tests
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Marco Elver <elver@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
+        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022 at 19:43, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->
-> This patch add regulator_set_load() to both eDP and DP phy driver
-> to have totally control regulators.
->
-> Changes in v2:
-> -- no regulator_set_laod() before disable regulator
->
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-edp.c | 25 +++++++++++++++++++++----
->  drivers/phy/qualcomm/phy-qcom-qmp.c | 13 +++++++++++++
+On Wed, May 18, 2022 at 12:32 AM David Gow <davidgow@google.com> wrote:
+> diff --git a/kernel/kcsan/.kunitconfig b/kernel/kcsan/.kunitconfig
+> new file mode 100644
+> index 000000000000..a8a815b1eb73
+> --- /dev/null
+> +++ b/kernel/kcsan/.kunitconfig
+> @@ -0,0 +1,20 @@
+> +# Note that the KCSAN tests need to run on an SMP setup.
+> +# Under kunit_tool, this can be done by using the x86_64-smp
+> +# qemu-based architecture:
+> +# ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan --arch=x86_64-smp
 
-Split into -edp and -qmp part.
+Just noting here, if we go with --qemu_args [1], then we'd change this to
+  --arch=x86_64 --qemu_args='-smp 8'
+and then probably add
+  CONFIG_SMP=y
+to this file.
 
->  2 files changed, 34 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c b/drivers/phy/qualcomm/phy-qcom-edp.c
-> index cacd32f..9b55095 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
-> @@ -87,17 +87,24 @@ struct qcom_edp {
->
->         struct clk_bulk_data clks[2];
->         struct regulator_bulk_data supplies[2];
-> +       int enable_load[2];
-> +       int disable_load[2];
+[1] https://lore.kernel.org/linux-kselftest/20220518170124.2849497-1-dlatypov@google.com
 
-As noticed in the review of the previous patch, disable_load is unnecessary.
-
->  };
->
->  static int qcom_edp_phy_init(struct phy *phy)
->  {
->         struct qcom_edp *edp = phy_get_drvdata(phy);
->         int ret;
-> +       int num_consumers = ARRAY_SIZE(edp->supplies);
-> +       int i;
->
-> -       ret = regulator_bulk_enable(ARRAY_SIZE(edp->supplies), edp->supplies);
-> +       ret = regulator_bulk_enable(num_consumers, edp->supplies);
->         if (ret)
->                 return ret;
->
-> +       for (i = num_consumers - 1; i >= 0; --i)
-> +               regulator_set_load(edp->supplies[i].consumer, edp->enable_load[i]);
 > +
->         ret = clk_bulk_prepare_enable(ARRAY_SIZE(edp->clks), edp->clks);
->         if (ret)
->                 goto out_disable_supplies;
-> @@ -425,9 +432,15 @@ static int qcom_edp_phy_power_off(struct phy *phy)
->  static int qcom_edp_phy_exit(struct phy *phy)
->  {
->         struct qcom_edp *edp = phy_get_drvdata(phy);
-> +       int num_consumers = ARRAY_SIZE(edp->supplies);
-> +       int i;
->
->         clk_bulk_disable_unprepare(ARRAY_SIZE(edp->clks), edp->clks);
-> -       regulator_bulk_disable(ARRAY_SIZE(edp->supplies), edp->supplies);
+> +CONFIG_KUNIT=y
 > +
-> +       for (i = num_consumers - 1; i >= 0; --i)
-> +               regulator_set_load(edp->supplies[i].consumer, edp->disable_load[i]);
+> +CONFIG_DEBUG_KERNEL=y
 > +
-> +       regulator_bulk_disable(num_consumers, edp->supplies);
->
->         return 0;
->  }
-> @@ -633,8 +646,12 @@ static int qcom_edp_phy_probe(struct platform_device *pdev)
->         if (ret)
->                 return ret;
->
-> -       edp->supplies[0].supply = "vdda-phy";
-> -       edp->supplies[1].supply = "vdda-pll";
-> +       edp->supplies[0].supply = "vdda-1p2";
-> +       edp->supplies[1].supply = "vdda-0p9";
-
-NAK, You can not randomly change supply names.
-
-> +       edp->enable_load[0] = 21800;    /* 1.2 V */
-> +       edp->enable_load[1] = 36000;    /* 1.2 V */
-> +       edp->disable_load[0] = 4;       /* 0.9 V */
-> +       edp->disable_load[1] = 4;       /* 10.9V */
-
-Again, 10.9V here. Kuogee. Have you read the review points?
-
->         ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(edp->supplies), edp->supplies);
->         if (ret)
->                 return ret;
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> index b144ae1..0a4c8a8 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> @@ -3130,6 +3130,7 @@ struct qmp_phy_cfg {
->         int num_resets;
->         /* regulators to be requested */
->         const char * const *vreg_list;
-> +       const unsigned int *vreg_enable_load;
->         int num_vregs;
->
->         /* array of registers with different offsets */
-> @@ -3346,6 +3347,10 @@ static const char * const qmp_phy_vreg_l[] = {
->         "vdda-phy", "vdda-pll",
->  };
->
-> +static const unsigned int qmp_phy_vreg_enable_load[] = {
-> +       21800, 36000
-> +};
+> +CONFIG_KCSAN=y
+> +CONFIG_KCSAN_KUNIT_TEST=y
 > +
->  static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
->         .type                   = PHY_TYPE_USB3,
->         .nlanes                 = 1,
-> @@ -4072,6 +4077,7 @@ static const struct qmp_phy_cfg sm8250_usb3phy_cfg = {
->         .reset_list             = msm8996_usb3phy_reset_l,
->         .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
->         .vreg_list              = qmp_phy_vreg_l,
-> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
->         .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
->         .regs                   = qmp_v4_usb3phy_regs_layout,
->
-> @@ -4139,6 +4145,7 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
->         .reset_list             = msm8996_usb3phy_reset_l,
->         .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
->         .vreg_list              = qmp_phy_vreg_l,
-> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
->         .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
->         .regs                   = qmp_v4_usb3phy_regs_layout,
->
-> @@ -5008,6 +5015,11 @@ static int qcom_qmp_phy_com_init(struct qmp_phy *qphy)
->                 return 0;
->         }
->
-> +       if (cfg->vreg_enable_load) {
-> +               for (i = cfg->num_vregs - 1; i >= 0; --i)
-
-What's the point of iterating the list backwards?
-
-> +                       regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_enable_load[i]);
-> +       }
+> +# Needed for test_barrier_nothreads
+> +CONFIG_KCSAN_STRICT=y
+> +CONFIG_KCSAN_WEAK_MEMORY=y
 > +
->         /* turn on regulator supplies */
->         ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
->         if (ret) {
-> @@ -5116,6 +5128,7 @@ static int qcom_qmp_phy_com_exit(struct qmp_phy *qphy)
->
->         clk_bulk_disable_unprepare(cfg->num_clks, qmp->clks);
->
-> +       /* no minimum load set required before disable regulator */
+> +# This prevents the test from timing out on many setups. Feel free to remove
+> +# (or alter) this, in conjunction with setting a different test timeout with,
+> +# for example, the --timeout kunit_tool option.
+> +CONFIG_KCSAN_REPORT_ONCE_IN_MS=100
 
-No need for the comment.
+Tangent:
 
->         regulator_bulk_disable(cfg->num_vregs, qmp->vregs);
->
->         mutex_unlock(&qmp->phy_mutex);
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
+Ah this reminds me, unfortunately you can't use --kconfig_add to
+overwrite this atm.
+Right now, it'll just blindly try to append and then complain that one
+of the two copies of the option is missing.
 
+That might be a feature to look into.
+Or at least, we can maybe give a better error message.
 
--- 
-With best wishes
-Dmitry
+E.g. with the default kunitconfig, the error currently looks like
+# Try to overwrite CONFIG_KUNIT_ALL_TESTS=y
+$ ./tools/testing/kunit/kunit.py config --kconfig_add=CONFIG_KUNIT_ALL_TESTS=m
+...
+ERROR:root:Not all Kconfig options selected in kunitconfig were in the
+generated .config.
+This is probably due to unsatisfied dependencies.
+Missing: CONFIG_KUNIT_ALL_TESTS=m

@@ -2,121 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4C252C172
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46ACF52C17E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241105AbiERRlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
+        id S241178AbiERRmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241137AbiERRlI (ORCPT
+        with ESMTP id S241059AbiERRmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:41:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EB952BB0D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652895666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sPnZ+RZGIkLqRaIJaYL7JahMWqDmcz+voS99NuTbAns=;
-        b=VPftXZQzXzQyfrsPGBw0wOyQcYtQPBVJhWoJuJRD46c5M4JPT2oaiXTTPT/wQWVivgbgui
-        GtbTlr3v2qK1NLdFJbnPVrIwxsm3oXIZ065MQ+G0fbT+OOHhRzPhJ+wiLj+Gtt4tj4PGFX
-        KYKDTxUyrmKXXhpEp6zfCrOEa7PCt2s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-561-6pijxGN6NR6xvj_bJ_OBrw-1; Wed, 18 May 2022 13:41:03 -0400
-X-MC-Unique: 6pijxGN6NR6xvj_bJ_OBrw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90BB3811E78;
-        Wed, 18 May 2022 17:41:02 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.22.16.154])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 581882026D2F;
-        Wed, 18 May 2022 17:41:02 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id 0C6E22208FA; Wed, 18 May 2022 13:41:02 -0400 (EDT)
-Date:   Wed, 18 May 2022 13:41:01 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Dharmendra Singh <dharamhans87@gmail.com>
-Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
-        fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        bschubert@ddn.com, Dharmendra Singh <dsingh@ddn.com>
-Subject: Re: [PATCH v5 1/3] FUSE: Avoid lookups in fuse create
-Message-ID: <YoUvrSdh4B0rKy78@redhat.com>
-References: <20220517100744.26849-1-dharamhans87@gmail.com>
- <20220517100744.26849-2-dharamhans87@gmail.com>
+        Wed, 18 May 2022 13:42:32 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3879019C751
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:42:31 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id f4so3124197iov.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:42:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=FCjAMF+t6xv+nOgAS8IDF6DMWgTC+Nhvzypvvbrh9wA=;
+        b=hCjvSXLxmlAniS/CaWOF1M1d6LOv9BD0qdTUFahO8rcz4Ef3II2Xlw/8KoFY4FygDA
+         aXYIcSQ0UKMl/m+vCwm9AVY6pw82AZ7bFPA4fV6AmYtFjaaFka9N/GjRdP7SS/Nzfz5r
+         rq4Ye1iT2m3dXuSuqoHjQZU4MzMqkb/TigRDiC/Om6iq2ljPNQuRBJGyCgHI5vT+dBIF
+         gwW+uzS0iUBDAABEStAdvjcFNrqqi0bCDFOtMf4XEw63dqi5YEbb9tkAStZkjn1WliRa
+         4IkPuZmaWy/jUNPU6ve2/l8zXZKn1qYsRjYXrMK5MX+6FlhmtZX2hfy09gKhOnKiL/KR
+         sa+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=FCjAMF+t6xv+nOgAS8IDF6DMWgTC+Nhvzypvvbrh9wA=;
+        b=S2zUrA9ldAXI9DfTN4S/uxEiFapagqEwg3loY3w5NfyWychxnDJIElwtLHlRe+9z0D
+         IXXn1zGxVMbWHXXvs8mIIXs1wCU0QKlU73wnitFudFEhohhriz3ldF1SToHwUJ6y+HsP
+         Iqk8FSd+/QDZwNRzxlZmEVeORe+JbylckRHL/8A1NLAeIB575af0jMZ/STQvL43kxRIc
+         30U2ro6isQspoedkcvHDB44C1TSZi22TEVATafvef8zzpodTyLn+hy90vBCdZMbz1kCf
+         MiM447UGbMcCujZeKEgxRhM9sIa3gDrK9dXU8tpJfr3omN+pyzaAeJUaFtZxNBXpb9lU
+         k8ZQ==
+X-Gm-Message-State: AOAM532n63Y2wUmSJm1GHv1A5AblBh44oLahGj+n6MOqEsPIBESRozA5
+        bt6nuP2rsAce6wt/OGclEnpX2g==
+X-Google-Smtp-Source: ABdhPJxK+bvQfVY5kKryj5XE95OVW3cbNlrCysNq41edVfeThstVpKoamTAblitMLurRSUHwe871jQ==
+X-Received: by 2002:a05:6638:34a4:b0:32b:b205:ca82 with SMTP id t36-20020a05663834a400b0032bb205ca82mr353129jal.165.1652895750485;
+        Wed, 18 May 2022 10:42:30 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id r23-20020a6b5d17000000b006050cababc5sm54076iob.0.2022.05.18.10.42.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 10:42:29 -0700 (PDT)
+Message-ID: <38f63cda-b208-0d83-6aec-25115bd1c021@kernel.dk>
+Date:   Wed, 18 May 2022 11:42:28 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517100744.26849-2-dharamhans87@gmail.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
+Content-Language: en-US
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <YoOcYR15Jhkw2XwL@google.com>
+ <f34c85cc-71a5-59d4-dd7a-cc07e2af536c@kernel.dk>
+ <YoTrmjuct3ctvFim@google.com>
+ <b7dc2992-e2d6-8e76-f089-b33561f8471f@kernel.dk>
+ <f821d544-78d5-a227-1370-b5f0895fb184@kernel.dk>
+ <06710b30-fec8-b593-3af4-1318515b41d8@kernel.dk>
+ <YoUNQlzU0W4ShA85@google.com>
+ <49609b89-f2f0-44b3-d732-dfcb4f73cee1@kernel.dk>
+ <YoUTPIVOhLlnIO04@google.com>
+ <1e64d20a-42cc-31cd-0fd8-2718dd8b1f31@kernel.dk>
+ <YoUgHjHn+UFvj0o1@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YoUgHjHn+UFvj0o1@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 03:37:42PM +0530, Dharmendra Singh wrote:
-
-[..]
-> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-> index d6ccee961891..bebe4be3f1cb 100644
-> --- a/include/uapi/linux/fuse.h
-> +++ b/include/uapi/linux/fuse.h
-> @@ -301,6 +301,7 @@ struct fuse_file_lock {
->   * FOPEN_CACHE_DIR: allow caching this directory
->   * FOPEN_STREAM: the file is stream-like (no file position at all)
->   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
-> + * FOPEN_FILE_CREATED: the file was actually created
->   */
->  #define FOPEN_DIRECT_IO		(1 << 0)
->  #define FOPEN_KEEP_CACHE	(1 << 1)
-> @@ -308,6 +309,7 @@ struct fuse_file_lock {
->  #define FOPEN_CACHE_DIR		(1 << 3)
->  #define FOPEN_STREAM		(1 << 4)
->  #define FOPEN_NOFLUSH		(1 << 5)
-> +#define FOPEN_FILE_CREATED	(1 << 6)
->  
->  /**
->   * INIT request/reply flags
-> @@ -537,6 +539,7 @@ enum fuse_opcode {
->  	FUSE_SETUPMAPPING	= 48,
->  	FUSE_REMOVEMAPPING	= 49,
->  	FUSE_SYNCFS		= 50,
-> +	FUSE_CREATE_EXT		= 51,
-
-I am wondering if we really have to introduce a new opcode for this. Both
-FUSE_CREATE and FUSE_CREATE_EXT prepare and send fuse_create_in{} and
-expect fuse_entry_out and fuse_open_out in response. So no new structures
-are being added. Only thing FUSE_CREATE_EXT does extra is that it also
-reports back whether file was actually created or not.
-
-May be instead of adding an new fuse_opcode, we could simply add a
-new flag which we send in fuse_create_in and that reqeusts to report
-if file was created or not. This is along the lines of
-FUSE_OPEN_KILL_SUIDGID.
-
-So say, a new flag FUSE_OPEN_REPORT_CREATE flag. Which we will set in
-fuse_create_in->open_flags. If file server sees this flag is set, it
-knows that it needs to set FOPEN_FILE_CREATED flag in response.
-
-To me creating a new flag FUSE_OPEN_REPORT_CREATE seems better instead
-of adding a new opcode.
-
-Thanks
-Vivek
->  
->  	/* CUSE specific operations */
->  	CUSE_INIT		= 4096,
-> -- 
-> 2.17.1
+On 5/18/22 10:34 AM, Lee Jones wrote:
+> On Wed, 18 May 2022, Jens Axboe wrote:
 > 
+>> On 5/18/22 09:39, Lee Jones wrote:
+>>> On Wed, 18 May 2022, Jens Axboe wrote:
+>>>
+>>>> On 5/18/22 9:14 AM, Lee Jones wrote:
+>>>>> On Wed, 18 May 2022, Jens Axboe wrote:
+>>>>>
+>>>>>> On 5/18/22 6:54 AM, Jens Axboe wrote:
+>>>>>>> On 5/18/22 6:52 AM, Jens Axboe wrote:
+>>>>>>>> On 5/18/22 6:50 AM, Lee Jones wrote:
+>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+>>>>>>>>>
+>>>>>>>>>> On 5/17/22 7:00 AM, Lee Jones wrote:
+>>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+>>>>>>>>>>>
+>>>>>>>>>>>> On 5/17/22 6:36 AM, Lee Jones wrote:
+>>>>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>> On 5/17/22 6:24 AM, Lee Jones wrote:
+>>>>>>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>> On 5/17/22 5:41 AM, Lee Jones wrote:
+>>>>>>>>>>>>>>>>> Good afternoon Jens, Pavel, et al.,
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> Not sure if you are presently aware, but there appears to be a
+>>>>>>>>>>>>>>>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
+>>>>>>>>>>>>>>>>> in Stable v5.10.y.
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> The full sysbot report can be seen below [0].
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> The C-reproducer has been placed below that [1].
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> I had great success running this reproducer in an infinite loop.
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> My colleague reverse-bisected the fixing commit to:
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
+>>>>>>>>>>>>>>>>>   Author: Jens Axboe <axboe@kernel.dk>
+>>>>>>>>>>>>>>>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>        io-wq: have manager wait for all workers to exit
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>        Instead of having to wait separately on workers and manager, just have
+>>>>>>>>>>>>>>>>>        the manager wait on the workers. We use an atomic_t for the reference
+>>>>>>>>>>>>>>>>>        here, as we need to start at 0 and allow increment from that. Since the
+>>>>>>>>>>>>>>>>>        number of workers is naturally capped by the allowed nr of processes,
+>>>>>>>>>>>>>>>>>        and that uses an int, there is no risk of overflow.
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
+>>>>>>>>>>>>>>>>>     1 file changed, 22 insertions(+), 8 deletions(-)
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>> Does this fix it:
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
+>>>>>>>>>>>>>>>> Author: Jens Axboe <axboe@kernel.dk>
+>>>>>>>>>>>>>>>> Date:   Fri Mar 5 12:59:30 2021 -0700
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>     io-wq: fix race in freeing 'wq' and worker access
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>> Looks like it didn't make it into 5.10-stable, but we can certainly
+>>>>>>>>>>>>>>>> rectify that.
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> Thanks for your quick response Jens.
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> This patch doesn't apply cleanly to v5.10.y.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> This is probably why it never made it into 5.10-stable :-/
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Right.  It doesn't apply at all unfortunately.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> I'll have a go at back-porting it.  Please bear with me.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Let me know if you into issues with that and I can help out.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> I think the dependency list is too big.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Too much has changed that was never back-ported.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Actually the list of patches pertaining to fs/io-wq.c alone isn't so
+>>>>>>>>>>>>> bad, I did start to back-port them all but some of the big ones have
+>>>>>>>>>>>>> fs/io_uring.c changes incorporated and that list is huge (256 patches
+>>>>>>>>>>>>> from v5.10 to the fixing patch mentioned above).
+>>>>>>>>>>>>
+>>>>>>>>>>>> The problem is that 5.12 went to the new worker setup, and this patch
+>>>>>>>>>>>> landed after that even though it also applies to the pre-native workers.
+>>>>>>>>>>>> Hence the dependency chain isn't really as long as it seems, probably
+>>>>>>>>>>>> just a few patches backporting the change references and completions.
+>>>>>>>>>>>>
+>>>>>>>>>>>> I'll take a look this afternoon.
+>>>>>>>>>>>
+>>>>>>>>>>> Thanks Jens.  I really appreciate it.
+>>>>>>>>>>
+>>>>>>>>>> Can you see if this helps? Untested...
+>>>>>>>>>
+>>>>>>>>> What base does this apply against please?
+>>>>>>>>>
+>>>>>>>>> I tried Mainline and v5.10.116 and both failed.
+>>>>>>>>
+>>>>>>>> It's against 5.10.116, so that's puzzling. Let me double check I sent
+>>>>>>>> the right one...
+>>>>>>>
+>>>>>>> Looks like I sent the one from the wrong directory, sorry about that.
+>>>>>>> This one should be better:
+>>>>>>
+>>>>>> Nope, both are the right one. Maybe your mailer is mangling the patch?
+>>>>>> I'll attach it gzip'ed here in case that helps.
+>>>>>
+>>>>> Okay, that applied, thanks.
+>>>>>
+>>>>> Unfortunately, I am still able to crash the kernel in the same way.
+>>>>
+>>>> Alright, maybe it's not enough. I can't get your reproducer to crash,
+>>>> unfortunately. I'll try on a different box.
+>>>
+>>> You need to have fuzzing and kasan enabled.
+>>
+>> I do have kasan enabled. What's fuzzing?
+> 
+> CONFIG_KCOV
+
+Ah ok - I don't think that's needed for this.
+
+Looking a bit deeper at this, I'm now convinced your bisect went off the
+rails at some point. Probably because this can be timing specific.
+
+Can you try with this patch?
+
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 4330603eae35..3ecf71151fb1 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -4252,12 +4252,8 @@ static int io_statx(struct io_kiocb *req, bool force_nonblock)
+ 	struct io_statx *ctx = &req->statx;
+ 	int ret;
+ 
+-	if (force_nonblock) {
+-		/* only need file table for an actual valid fd */
+-		if (ctx->dfd == -1 || ctx->dfd == AT_FDCWD)
+-			req->flags |= REQ_F_NO_FILE_TABLE;
++	if (force_nonblock)
+ 		return -EAGAIN;
+-	}
+ 
+ 	ret = do_statx(ctx->dfd, ctx->filename, ctx->flags, ctx->mask,
+ 		       ctx->buffer);
+
+-- 
+Jens Axboe
 

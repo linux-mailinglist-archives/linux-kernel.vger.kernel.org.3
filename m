@@ -2,139 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4347B52BCB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A4D52BD01
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236917AbiERMsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S237170AbiERMrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237572AbiERMqF (ORCPT
+        with ESMTP id S237776AbiERMqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:46:05 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87511632AC;
-        Wed, 18 May 2022 05:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652877785; x=1684413785;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=s1haGoMzWn+D78/Wjs5Eo95uLM9lSkcETlTB2+3u46w=;
-  b=hnpwlAkkzVzs23vGtWnOfs/wUZonfu7p2syRxT77kFgjRaBgptaGyWRy
-   YYYiBm8r2Oajs5yr+k9fV8Xhg4g7sBXtbvnNC+CC+2Vf3zZNLQg0WYlG3
-   dxcU+71xKU3D09DqeYMl7Ix3sgK4GFLhl4PTJQ1/2cnTmDp/Nq87w0ki4
-   4=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 18 May 2022 05:43:03 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 05:43:03 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 05:43:02 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 05:42:56 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
-        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
-        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>, <vkoul@kernel.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Subject: [PATCH v2] ASoC: qcom: soundwire: Add support for controlling audio CGCR from HLOS
-Date:   Wed, 18 May 2022 18:12:35 +0530
-Message-ID: <1652877755-25120-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 18 May 2022 08:46:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C7E41796C4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652877790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8sp1AZTsVwKlhQc+YaMhxHvmVTkY1Ldp+tQJ/IC5G3M=;
+        b=iZ5QASfTGD5gt+sBfljrNgRJNtJzkIyRMG0bZaYnirEK6k9abbu6QsW2z+9zLJFYuhiaKN
+        eoyG/bkjcWGDaLsQ5j10C7dPw7PIhTD37sMpUIYPCQlAzNnp79OEBEwb5ARmKL+2tXTR96
+        E++zzvGH9sUvhzOjzahtvDfwc+Kupiw=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-316-onblDNiXPrqPGT-mI8UN6A-1; Wed, 18 May 2022 08:43:09 -0400
+X-MC-Unique: onblDNiXPrqPGT-mI8UN6A-1
+Received: by mail-wr1-f71.google.com with SMTP id z5-20020a5d4d05000000b0020e6457f2b4so103403wrt.1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:43:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=8sp1AZTsVwKlhQc+YaMhxHvmVTkY1Ldp+tQJ/IC5G3M=;
+        b=nzNLvm67+fFRLzlUQkkIPrIix+AdDE5TLyMtgAq6ncbO2Vzt3tSUkIUzWCf15+oXmC
+         HeJKIlD+JgdpUc27DTjipkoMcyHcQtrXDPmOISf4tQ3B60J/G6Pfux9QQbg9IfHZ4FTd
+         bDDnqZKBOM0egfNN5tioVHdlZUjUJ8cFWdyZqATo3oB0SE459+R9hDFOugbCR9aIbHmX
+         eHc3KureU9tRYIBSQ1Sfq4eIyVg5lCKe9z8Pmo1m2Ix1r3UR8kjy32izxXZ/t+L5Eu98
+         RIguM+2K/fE8IGIY+h3Yj5i+KgfSxkdHihwuOHc/TkEP1pQwoTTht5M1uYYTDxO7Cc4i
+         PNqA==
+X-Gm-Message-State: AOAM530mAabuzbaPW/ziuvBGyzI7Fbf+gIteiBxp2JGjkpbN9leG3qSP
+        W4cUdfUxIyOqn9kNxpOc3x4zs5A0By9Q1xNSE2r4UVcqBniZhbTmrzZ5Ksy0qtHBqRJDdeovBz7
+        oC6e1wwhkBbgKKCY6Qr/6C/BJ
+X-Received: by 2002:a05:600c:4f15:b0:394:8ea0:bb45 with SMTP id l21-20020a05600c4f1500b003948ea0bb45mr25964704wmq.206.1652877788566;
+        Wed, 18 May 2022 05:43:08 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyhEfV7UD7ccFso+2Cr2aFdjNKyFXmOetoImfKzVeTI8YIwgYAJmh/GUkPIje9ETqc0ZXPaMw==
+X-Received: by 2002:a05:600c:4f15:b0:394:8ea0:bb45 with SMTP id l21-20020a05600c4f1500b003948ea0bb45mr25964676wmq.206.1652877788335;
+        Wed, 18 May 2022 05:43:08 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id f1-20020a5d64c1000000b0020c5253d927sm1990018wri.115.2022.05.18.05.43.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 05:43:07 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 14/34] KVM: x86: Introduce .post_hv_l2_tlb_flush()
+ nested hook
+In-Reply-To: <deae695da02d7f22dcfa4635eec53ab61baf9026.camel@redhat.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-15-vkuznets@redhat.com>
+ <deae695da02d7f22dcfa4635eec53ab61baf9026.camel@redhat.com>
+Date:   Wed, 18 May 2022 14:43:07 +0200
+Message-ID: <871qwrui3o.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for controlling soundwire audio CGCR interface using clock
-framework to make hclk ungating with software. As per new hardware
-changes, software has to always ungate hclk if soundwire is operational
-and keep it running. This requirement is for latest LPASS chipsets for
-RX, TX and WSA path to work.
+Maxim Levitsky <mlevitsk@redhat.com> writes:
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
----
-This patch set depends on:
-    -- Clock driver patches for CGCR reset control support.
-	--- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638002
-	--- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=637998	
+> On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+>> Hyper-V supports injecting synthetic L2->L1 exit after performing
+>> L2 TLB flush operation but the procedure is vendor specific.
+>> Introduce .post_hv_l2_tlb_flush() nested hook for it.
+>> 
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/include/asm/kvm_host.h |  1 +
+>>  arch/x86/kvm/Makefile           |  3 ++-
+>>  arch/x86/kvm/svm/hyperv.c       | 11 +++++++++++
+>>  arch/x86/kvm/svm/hyperv.h       |  2 ++
+>>  arch/x86/kvm/svm/nested.c       |  1 +
+>>  arch/x86/kvm/vmx/evmcs.c        |  4 ++++
+>>  arch/x86/kvm/vmx/evmcs.h        |  1 +
+>>  arch/x86/kvm/vmx/nested.c       |  1 +
+>>  8 files changed, 23 insertions(+), 1 deletion(-)
+>>  create mode 100644 arch/x86/kvm/svm/hyperv.c
+>> 
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>> index 8b2a52bf26c0..ce62fde5f4ff 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -1558,6 +1558,7 @@ struct kvm_x86_nested_ops {
+>>  	int (*enable_evmcs)(struct kvm_vcpu *vcpu,
+>>  			    uint16_t *vmcs_version);
+>>  	uint16_t (*get_evmcs_version)(struct kvm_vcpu *vcpu);
+>> +	void (*post_hv_l2_tlb_flush)(struct kvm_vcpu *vcpu);
+>>  };
+>>  
+>>  struct kvm_x86_init_ops {
+>> diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
+>> index 30f244b64523..b6d53b045692 100644
+>> --- a/arch/x86/kvm/Makefile
+>> +++ b/arch/x86/kvm/Makefile
+>> @@ -25,7 +25,8 @@ kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
+>>  			   vmx/evmcs.o vmx/nested.o vmx/posted_intr.o
+>>  kvm-intel-$(CONFIG_X86_SGX_KVM)	+= vmx/sgx.o
+>>  
+>> -kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o svm/sev.o
+>> +kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o \
+>> +			   svm/sev.o svm/hyperv.o
+>>  
+>>  ifdef CONFIG_HYPERV
+>>  kvm-amd-y		+= svm/svm_onhyperv.o
+>> diff --git a/arch/x86/kvm/svm/hyperv.c b/arch/x86/kvm/svm/hyperv.c
+>> new file mode 100644
+>> index 000000000000..c0749fc282fe
+>> --- /dev/null
+>> +++ b/arch/x86/kvm/svm/hyperv.c
+>> @@ -0,0 +1,11 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * AMD SVM specific code for Hyper-V on KVM.
+>> + *
+>> + * Copyright 2022 Red Hat, Inc. and/or its affiliates.
+>> + */
+>> +#include "hyperv.h"
+>> +
+>> +void svm_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu)
+>> +{
+>> +}
+>> diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
+>> index 8cf702fed7e5..a2b0d7580b0d 100644
+>> --- a/arch/x86/kvm/svm/hyperv.h
+>> +++ b/arch/x86/kvm/svm/hyperv.h
+>> @@ -48,4 +48,6 @@ static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
+>>  	hv_vcpu->nested.vp_id = hve->hv_vp_id;
+>>  }
+>>  
+>> +void svm_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu);
+>> +
+>>  #endif /* __ARCH_X86_KVM_SVM_HYPERV_H__ */
+>> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+>> index 2d1a76343404..de3f27301b5c 100644
+>> --- a/arch/x86/kvm/svm/nested.c
+>> +++ b/arch/x86/kvm/svm/nested.c
+>> @@ -1665,4 +1665,5 @@ struct kvm_x86_nested_ops svm_nested_ops = {
+>>  	.get_nested_state_pages = svm_get_nested_state_pages,
+>>  	.get_state = svm_get_nested_state,
+>>  	.set_state = svm_set_nested_state,
+>> +	.post_hv_l2_tlb_flush = svm_post_hv_l2_tlb_flush,
+>>  };
+>> diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
+>> index 87e3dc10edf4..e390e67496df 100644
+>> --- a/arch/x86/kvm/vmx/evmcs.c
+>> +++ b/arch/x86/kvm/vmx/evmcs.c
+>> @@ -437,3 +437,7 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
+>>  
+>>  	return 0;
+>>  }
+>> +
+>> +void vmx_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu)
+>> +{
+>> +}
+>> diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
+>> index 8d70f9aea94b..b120b0ead4f3 100644
+>> --- a/arch/x86/kvm/vmx/evmcs.h
+>> +++ b/arch/x86/kvm/vmx/evmcs.h
+>> @@ -244,5 +244,6 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
+>>  			uint16_t *vmcs_version);
+>>  void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata);
+>>  int nested_evmcs_check_controls(struct vmcs12 *vmcs12);
+>> +void vmx_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu);
+>>  
+>>  #endif /* __KVM_X86_VMX_EVMCS_H */
+>> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+>> index ee88921c6156..cc6c944b5815 100644
+>> --- a/arch/x86/kvm/vmx/nested.c
+>> +++ b/arch/x86/kvm/vmx/nested.c
+>> @@ -6850,4 +6850,5 @@ struct kvm_x86_nested_ops vmx_nested_ops = {
+>>  	.write_log_dirty = nested_vmx_write_pml_buffer,
+>>  	.enable_evmcs = nested_enable_evmcs,
+>>  	.get_evmcs_version = nested_get_evmcs_version,
+>> +	.post_hv_l2_tlb_flush = vmx_post_hv_l2_tlb_flush,
+>>  };
+>
+>
+> I think that the name of the function is misleading, since it is not called
+> after each L2 HV tlb flush, but only after a flush which needs to inject
+> that synthetic VM exit.
+>
+> I think something like 'inject_synthetic_l2_hv_tlb_flush_vmexit' 
+> (not a good name IMHO, but you get the idea) would be better.
+>
 
-Changes since v1:
-    -- Add audio cgcr reset control in runtime PM resume handler.
-    -- Update dependency list.
+Naming is hard indeed,
 
- drivers/soundwire/qcom.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+hv_inject_synthetic_vmexit_post_tlb_flush()
 
-diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-index da1ad7e..445e481 100644
---- a/drivers/soundwire/qcom.c
-+++ b/drivers/soundwire/qcom.c
-@@ -13,6 +13,7 @@
- #include <linux/of_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/regmap.h>
-+#include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/pm_wakeirq.h>
- #include <linux/slimbus.h>
-@@ -142,6 +143,7 @@ struct qcom_swrm_ctrl {
- 	struct device *dev;
- 	struct regmap *regmap;
- 	void __iomem *mmio;
-+	struct reset_control *audio_cgcr;
- #ifdef CONFIG_DEBUG_FS
- 	struct dentry *debugfs;
- #endif
-@@ -656,6 +658,8 @@ static int qcom_swrm_init(struct qcom_swrm_ctrl *ctrl)
- 	val = FIELD_PREP(SWRM_MCP_FRAME_CTRL_BANK_ROW_CTRL_BMSK, ctrl->rows_index);
- 	val |= FIELD_PREP(SWRM_MCP_FRAME_CTRL_BANK_COL_CTRL_BMSK, ctrl->cols_index);
- 
-+	reset_control_reset(ctrl->audio_cgcr);
-+
- 	ctrl->reg_write(ctrl, SWRM_MCP_FRAME_CTRL_BANK_ADDR(0), val);
- 
- 	/* Enable Auto enumeration */
-@@ -1333,6 +1337,10 @@ static int qcom_swrm_probe(struct platform_device *pdev)
- 	ctrl->bus.compute_params = &qcom_swrm_compute_params;
- 	ctrl->bus.clk_stop_timeout = 300;
- 
-+	ctrl->audio_cgcr = devm_reset_control_get_exclusive(dev, "swr_audio_cgcr");
-+	if (IS_ERR(ctrl->audio_cgcr))
-+		dev_err(dev, "Failed to get audio_cgcr reset required for soundwire-v1.6.0\n");
-+
- 	ret = qcom_swrm_get_port_config(ctrl);
- 	if (ret)
- 		goto err_clk;
-@@ -1486,6 +1494,8 @@ static int __maybe_unused swrm_runtime_resume(struct device *dev)
- 		qcom_swrm_get_device_status(ctrl);
- 		sdw_handle_slave_status(&ctrl->bus, ctrl->status);
- 	} else {
-+		reset_control_reset(ctrl->audio_cgcr);
-+
- 		ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL, SWRM_MCP_BUS_CLK_START);
- 		ctrl->reg_write(ctrl, SWRM_INTERRUPT_CLEAR,
- 			SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET);
+seems to be accurate.
+
 -- 
-2.7.4
+Vitaly
 

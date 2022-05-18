@@ -2,80 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20A352C154
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AA452C170
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240735AbiERROY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S240731AbiERRPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240774AbiERROG (ORCPT
+        with ESMTP id S240720AbiERRPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:14:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08B4117DDE7
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:14:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652894043;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qf34QxTWXu6jfX2j3XIj3eZmVPnYfmk76qYQB3qVuUQ=;
-        b=FkLA6MyNCmDRCfggeK4w1UEXMSc1UpzkUh+gGdVC0wkxNwphvvS1oEE8okWtCNQt4C6zJN
-        SeC90AIsDlnPkGqAcPLfWzXYGV9JHz11OnELGs0ptLmX1SHOFkOF25O+t+3Bbp9Yz8QwmH
-        MnNNfSNP5P2GZOB0U93tmcXbb9T+oEg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-264-IiGtG4eXN_uBsaFoMSm2-g-1; Wed, 18 May 2022 13:13:55 -0400
-X-MC-Unique: IiGtG4eXN_uBsaFoMSm2-g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 18 May 2022 13:15:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AA417EC24
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:14:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9C23899ED0;
-        Wed, 18 May 2022 17:13:53 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A7A1B40CF8F0;
-        Wed, 18 May 2022 17:13:47 +0000 (UTC)
-Message-ID: <c6fbaa85304eb18eb9adf6b6212698d5fe78e9c7.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 01/19] KVM: x86: document AVIC/APICv inhibit
- reasons
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Date:   Wed, 18 May 2022 20:13:46 +0300
-In-Reply-To: <YoUXFmh9vef4CC+8@google.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
-         <20220427200314.276673-2-mlevitsk@redhat.com> <YoUXFmh9vef4CC+8@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 735606176F
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 17:14:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1A0C385A5;
+        Wed, 18 May 2022 17:14:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652894098;
+        bh=DjL0pfE9hgVf4gbXU7TI41U63++YFNAG705cDBjMhVA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S/QHbpzTZGX2r3peroCT3HOUPOoMZhrTllorZ+Uqd06sQzWrcCnIDBK5RWaZTQiPq
+         dPpLRMS8IsS/i4v3OkUhqvqX1HlsSdQcEDXC/ApxMDewBBR0AORrtdGHKBsjTXEERD
+         vSWbXVMule11lVtFKgyGqwGW3YOQHD4DX0tkXcoIzPcGFqdpXBW/XGrjP9tWPtGOpk
+         Fc7NuYCRlhCKex4/773E6+RYwF7qTA0LcRIrccqdFCljruCYD1YyFHAYIaugNwjTQe
+         Q+7fx72jGlBq6BCR9Ev5RC+0j26ga7J/STURMmNoUFv7gkzFY29EBY+YWQdGgnCmr6
+         hdZkOMCk25KqQ==
+Date:   Wed, 18 May 2022 10:14:56 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
+Message-ID: <20220518171456.tao6lmum4a2cpvs5@treble>
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+ <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+ <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
+ <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
+ <20220518012429.4zqzarvwsraxivux@treble>
+ <YoSEXii2v0ob/8db@hirez.programming.kicks-ass.net>
+ <20220518161725.2bkzavre2bg4xu72@treble>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220518161725.2bkzavre2bg4xu72@treble>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,93 +62,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-18 at 15:56 +0000, Sean Christopherson wrote:
-> On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> > These days there are too many AVIC/APICv inhibit
-> > reasons, and it doesn't hurt to have some documentation
-> > for them.
-> 
-> Please wrap at ~75 chars.
-> 
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/include/asm/kvm_host.h | 15 +++++++++++++++
-> >  1 file changed, 15 insertions(+)
+On Wed, May 18, 2022 at 09:17:27AM -0700, Josh Poimboeuf wrote:
+> On Wed, May 18, 2022 at 07:30:06AM +0200, Peter Zijlstra wrote:
+> > On Tue, May 17, 2022 at 06:24:29PM -0700, Josh Poimboeuf wrote:
+> > > On Tue, May 17, 2022 at 05:42:04PM +0200, Peter Zijlstra wrote:
+> > > > +	for (;;) {
+> > > > +		symtab_data = elf_getdata(s, symtab_data);
+> > > > +		if (t)
+> > > > +			shndx_data = elf_getdata(t, shndx_data);
+> > > >  
+> > > > +		if (!symtab_data) {
+> > > > +			if (!idx) {
+> > > > +				void *buf;
+> > > 
+> > > I'm confused by whatever this is doing, how is !symtab_data possible,
+> > > i.e. why would symtab not have data?
 > > 
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index f164c6c1514a4..63eae00625bda 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1046,14 +1046,29 @@ struct kvm_x86_msr_filter {
-> >  };
-> >  
-> >  enum kvm_apicv_inhibit {
-> > +	/* APICv/AVIC is disabled by module param and/or not supported in hardware */
-> 
-> Rather than tag every one as APICv vs. AVIC, what about reorganizing the enums so
-> that the common vs. AVIC flags are bundled together?  And then the redundant info
-> in the comments about "XYZ is inhibited" can go away too, i.e. the individual
-> comments can focus on explaining what triggers the inhibit (and for some, why that
-> action is incompatible with APIC virtualization).
-
-Very good idea, will do!
-
-Best regards,
-	Maxim Levitsky
-
-> 
-> E.g.
-> 	/***************************************************************/
-> 	/* INHIBITs are relevant to both Intel's APICv and AMD's AVIC. */
-> 	/***************************************************************/
-> 
-> 	/* APIC/AVIC is unsupported and/or disabled via module param. */
-> 	APICV_INHIBIT_REASON_DISABLE,
-> 
-> 	/* The local APIC is not in-kernel.  See KVM_CREATE_IRQCHIP. */
-> 	APICV_INHIBIT_REASON_ABSENT,
-> 
-> 	/*
-> 	 * At least one IRQ vector is configured for HyperV's AutoEOI, which
-> 	 * requires manually injecting the IRQ to do EOI on behalf of the guest.
-> 	 */
-> 	APICV_INHIBIT_REASON_HYPERV,
-> 	
-> 
-> 	/**********************************************/
-> 	/* INHIBITs relevant only to AMD's AVIC. */
-> 	/**********************************************/
-> 
-> >  	APICV_INHIBIT_REASON_DISABLE,
-> > +	/* APICv/AVIC is inhibited because AutoEOI feature is being used by a HyperV guest*/
-> >  	APICV_INHIBIT_REASON_HYPERV,
-> > +	/* AVIC is inhibited on a CPU because it runs a nested guest */
-> >  	APICV_INHIBIT_REASON_NESTED,
-> > +	/* AVIC is inhibited due to wait for an irq window (AVIC doesn't support this) */
-> >  	APICV_INHIBIT_REASON_IRQWIN,
-> > +	/*
-> > +	 * AVIC is inhibited because i8254 're-inject' mode is used
-> > +	 * which needs EOI intercept which AVIC doesn't support
-> > +	 */
-> >  	APICV_INHIBIT_REASON_PIT_REINJ,
-> > +	/* AVIC is inhibited because the guest has x2apic in its CPUID*/
-> >  	APICV_INHIBIT_REASON_X2APIC,
-> > +	/* AVIC/APICv is inhibited because KVM_GUESTDBG_BLOCKIRQ was enabled */
-> >  	APICV_INHIBIT_REASON_BLOCKIRQ,
-> > +	/*
-> > +	 * AVIC/APICv is inhibited because the guest didn't yet
-> 
-> s/guest/userspace
-> 
-> > +	 * enable kernel/split irqchip
-> > +	 */
-> >  	APICV_INHIBIT_REASON_ABSENT,
-> > +	/* AVIC is disabled because SEV doesn't support it */
-> >  	APICV_INHIBIT_REASON_SEV,
-> >  };
-> >  
-> > -- 
-> > 2.26.3
+> > Elf_Data *elf_getdata(Elf_Scn *scn, Elf_Data *data);
 > > 
+> > is an iterator, if @data is null it will return the first element, which
+> > you then feed into @data the next time to get the next element, once it
+> > returns NULL, you've found the end.
+> > 
+> > In our specific case, we iterate the data sections, if idx fits inside
+> > the current section, we good, otherwise we lower idx by however many did
+> > fit and try the next.
+> 
+> Ok, I think I see.  But why are there multiple data blocks to begin
+> with?  It's because of a previous call to elf_newdata() right?
+> 
+> If so then I don't see how it would "fit" in an existing data block,
+> since each block should already be full.  Or... is the hole the one you
+> just made, by moving the old symbol out?
+> 
+> If so, the function seems weirdly generalized for the two distinct cases
+> and the loop seems unnecessary.  When adding a symbol at the end, just
+> use elf_newdata().  When adding a symbol in the middle, the hole should
+> be in the first data block.
 
+Then I went for a bike ride and realized that if adding enough section
+symbols to a file which didn't have very many non-locals, the hole might
+occur in a later data block.
 
+So yeah, this looks fine :-)
+
+Another idea I had was to forego elf_newdata() entirely in favor of just
+rewriting the original data block every time.  But this is also fine.
+
+-- 
+Josh

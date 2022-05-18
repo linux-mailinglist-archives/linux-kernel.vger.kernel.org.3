@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 887FE52B811
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6828E52B7E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235155AbiERKb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
+        id S235114AbiERKew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 06:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235131AbiERKby (ORCPT
+        with ESMTP id S234980AbiERKes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:31:54 -0400
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1786813D31;
-        Wed, 18 May 2022 03:31:52 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id j24so2081728wrb.1;
-        Wed, 18 May 2022 03:31:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Eg50Z55dIlImdG91r9MKVZYSO4VE8hp0Z0PI1gXalc4=;
-        b=17GhCUPB6gzydg59s66OzUrr1Zoxx5DDbNgqWvRHniESqu/LeRsEsUJeriOWT/cH6+
-         UB1Pbxx6maO4TbrEDtpu/2Ll4WAy3tPw1khXUbtmQd88aM0sWwV4pEA4zyNvbxDsHmiy
-         Gp8ykJwSAePBafZB1N0MN2IX6ekB2DUoA4P6aU/4Dspcr7nrr2uVipjmwNSQeJvDsflC
-         wsDOGKV9lgwrhToOTYwLHijq/2stqHzX20gGC5JDE6HuVVJj+OVo+WEQgaaxqBkAzZ4f
-         JcEJ+GeqxhEHXMIVSiUBSf4+JbLP3QVIb1AojKcmAm4j4d66Seni3ENTquq4LXnagLTe
-         dZdQ==
-X-Gm-Message-State: AOAM532E4jUf/ngr9gGB90f92HP34L5elGDS/PlUdo7Rxe12EWZzMMhI
-        rkTE6jRYUuc5KjqKVa6f3wxRosY3J1FV+VvS4avvUToKv8oGDw==
-X-Google-Smtp-Source: ABdhPJxyZbgVaQyT6J8R85YfGoFx158Afu+6TaWLZEGsBFx00ecoRJUc1+YMNuYZovSDNtJL6qWAmJJtDyzoDyjUIOo=
-X-Received: by 2002:a5d:48c1:0:b0:20c:52e9:6c5b with SMTP id
- p1-20020a5d48c1000000b0020c52e96c5bmr21414633wrs.233.1652869910631; Wed, 18
- May 2022 03:31:50 -0700 (PDT)
+        Wed, 18 May 2022 06:34:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AA4426F8;
+        Wed, 18 May 2022 03:34:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CCF723A;
+        Wed, 18 May 2022 03:34:46 -0700 (PDT)
+Received: from [192.168.1.11] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB1DF3F718;
+        Wed, 18 May 2022 03:34:43 -0700 (PDT)
+Message-ID: <16566ef8-15d3-bf1b-37f2-c0b94b0493bc@arm.com>
+Date:   Wed, 18 May 2022 12:34:24 +0200
 MIME-Version: 1.0
-References: <20220517073259.23476-1-harini.katakam@xilinx.com>
- <20220517073259.23476-2-harini.katakam@xilinx.com> <20220517194254.015e87f3@kernel.org>
- <CAFcVEC+qdouQ+tJdBG_Vv8QsaUX99uFtjKnB5WwQawA1fxmgEQ@mail.gmail.com> <20220517220603.36eec66e@kernel.org>
-In-Reply-To: <20220517220603.36eec66e@kernel.org>
-From:   Harini Katakam <harinik@xilinx.com>
-Date:   Wed, 18 May 2022 16:01:39 +0530
-Message-ID: <CAFcVEC+K42w0eW_bCd2XaBz91bFwF9+r52m0rEziHP+MZr5TWQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] net: macb: Fix PTP one step sync support
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Harini Katakam <harini.katakam@xilinx.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        David Miller <davem@davemloft.net>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 1/5] ACPI: CPPC: Check _OSC for flexible address space
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        dietmar.eggemann@arm.com, sudeep.holla@arm.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        devel@acpica.org
+References: <20220518090901.2724518-1-pierre.gondois@arm.com>
+ <20220518094243.6oxbdmf226jvqoef@viresh-thinkpad>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20220518094243.6oxbdmf226jvqoef@viresh-thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
 
-<snip>
->
-> > > > @@ -1158,13 +1192,14 @@ static int macb_tx_complete(struct macb_queue *queue, int budget)
-> > > >
-> > > >                       /* First, update TX stats if needed */
-> > > >                       if (skb) {
-> > > > -                             if (unlikely(skb_shinfo(skb)->tx_flags &
-> > > > -                                          SKBTX_HW_TSTAMP) &&
-> > > > -                                 gem_ptp_do_txstamp(queue, skb, desc) == 0) {
-> > > > -                                     /* skb now belongs to timestamp buffer
-> > > > -                                      * and will be removed later
-> > > > -                                      */
-> > > > -                                     tx_skb->skb = NULL;
-> > > > +                             if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP) &&
-> > >
-> > > ptp_oss already checks if HW_TSTAMP is set.
-> >
-> > The check for SKBTX_HW_TSTAMP is required here universally and not
-> > just inside ptp_oss.
-> > I will remove the redundant check in ptp_oss instead. Please see the
-> > reply below.
->
-> But then you need to add this check in the padding/fcs call site and
-> the place where NOCRC is set. If you wrap the check for SKBTX_HW_TSTAMP
-> in the helper with likely() and remove the inline - will the compiler
-> not split the function and inline just that check? And leave the rest
-> as a functionname.part... thing?
 
-Yes, I checked the disassembly and this is what's happening. This
-should be good for
-the non-PTP packet (going to "likely" branch) and the rest of ptp_oss
-is evaluated for
-PTP packets.
+On 5/18/22 11:42, Viresh Kumar wrote:
+> On 18-05-22, 11:08, Pierre Gondois wrote:
+>> ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
+>>    Starting with ACPI Specification 6.2, all _CPC registers can be in
+>>    PCC, System Memory, System IO, or Functional Fixed Hardware address
+>>    spaces. OSPM support for this more flexible register space scheme is
+>>    indicated by the “Flexible Address Space for CPPC Registers” _OSC bit
+>>
+>> Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
+>> - PCC or Functional Fixed Hardware address space if defined
+>> - SystemMemory address space (NULL register) if not defined
+>>
+>> Add the corresponding _OSC bit and check it when parsing _CPC objects.
+>>
+>> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+>> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+>> ---
+>>   drivers/acpi/bus.c       | 18 ++++++++++++++++++
+>>   drivers/acpi/cppc_acpi.c |  9 +++++++++
+>>   include/linux/acpi.h     |  2 ++
+>>   3 files changed, 29 insertions(+)
+> 
+> It would be much useful to get a cover letter for this series with
+> what you have changed since the previous version. It is almost
+> impossible to find that out otherwise.
+> 
+
+Yes indeed, sorry for that, the changelog is:
+v2:
+[1/5] ACPI: CPPC: Check _OSC for flexible address space
+- Renamed OSC_SB_CPC_FLEXIBLE_ADR_SP to OSC_SB_CPC_FLEXIBLE_ADR_SPACE
+[3/5] ACPI: CPPC: Assume no transition latency if no PCCT
+and
+[4/5] cpufreq: CPPC: Enable fast_switch
+- Renamed CPC_IN_SIO to CPC_IN_SYSTEM_IO
+- Renamed CPC_IN_SM to CPC_IN_SYSTEM_MEMORY
+
+or do you prefer to have the serie re-submitted ?
 
 Regards,
-Harini
+Pierre

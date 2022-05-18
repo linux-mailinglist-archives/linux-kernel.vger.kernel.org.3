@@ -2,174 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E02852C43E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC9052C419
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242424AbiERUKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 16:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
+        id S242361AbiERUKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 16:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242417AbiERUKF (ORCPT
+        with ESMTP id S242525AbiERUKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 16:10:05 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E567239796
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:09:54 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id m2-20020a1ca302000000b003943bc63f98so1609212wme.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:09:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gmIO/D4Ceaesv/SdaQGf7VpiPn4xB80QGFNJbqSVbYc=;
-        b=vPcmgPS1Zkav7EL8kAY3mLgR+8wgJTaoIpwtC8pZglq1poCcoa4VPa4pSJdm98yba3
-         Dc9i8L8D17fg1dDV1MciA85vi0SwtvTf0cIWWa0jaWi7FlHTh81D3xxtAYUio5a7q9yo
-         oVb1izlVGPk2k31vczCTsEvwhVj4scccR45jYEXUJzfd+kt6Y1S3y8bdLsIML35boUm4
-         D/00jIZVyCNxRNFcViiyr0lvuZb2bnlheBghCO/T6idKUPOe+w2viE9ZGodiSxZ6rPym
-         6w1tRY/kpkOqM0ShsI/anVPC7SJgVvi0Sd3tKll0sY9mdRGB6Bc1w3QjAdiKooMiMpPO
-         ODTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gmIO/D4Ceaesv/SdaQGf7VpiPn4xB80QGFNJbqSVbYc=;
-        b=ceLDTs8DwlONgJ+CB45dj1+TyJzhLaEuYkT3EnpgffvFHcoTegc10j3kr35scKKld8
-         Fopdv86aTeqSnhvI8a/T+vnr6FZJHUg8qO9t/549fARknw0DkIgp8ezUwWt0w3JVH+W5
-         xxGtavNPo9YE2dozXL3SaWF+DRsdRa8lgoNgYv3SE8TA2xvCf5kTDprIAhYEsJfds13b
-         fFQFeDNGu2SXJRMF0A3kljHZDcG8E1o69+2JsLPMd6YAVV2taYph8PtDEZpBJKGID66d
-         XnHJc7ds1T37XU1SrLFpxgFZxE3QjL3d1rTIQEyGDmfL7gD/fLqcqw0RPAh9R7O46/34
-         84jg==
-X-Gm-Message-State: AOAM531Mm7b8K0wbO4H+7VyfbNCyjgthWIAAnZmnTMUu+Y50BrbKL/Hz
-        r4qkGeJBvdhD6YgkBaW7kbRfCA==
-X-Google-Smtp-Source: ABdhPJwlu63b6+jK/4XJihJY2QnEy9b9pt9pGCMB3OHShfvK84RY+TPog8SwVoHsv1ZZ3Xh7i0PkEA==
-X-Received: by 2002:a05:600c:1c84:b0:394:5de0:2475 with SMTP id k4-20020a05600c1c8400b003945de02475mr888627wms.27.1652904592329;
-        Wed, 18 May 2022 13:09:52 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id o23-20020a05600c511700b0039456c00ba7sm6859281wms.1.2022.05.18.13.09.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 13:09:51 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     andrew@lunn.ch, broonie@kernel.org, calvin.johnson@oss.nxp.com,
-        davem@davemloft.net, edumazet@google.com, hkallweit1@gmail.com,
-        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
-        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
-        wens@csie.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        netdev@vger.kernel.org,
-        =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v2 5/5] arm64: dts: allwinner: orange-pi-3: Enable ethernet
-Date:   Wed, 18 May 2022 20:09:39 +0000
-Message-Id: <20220518200939.689308-6-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220518200939.689308-1-clabbe@baylibre.com>
-References: <20220518200939.689308-1-clabbe@baylibre.com>
+        Wed, 18 May 2022 16:10:42 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C452C244F1C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652904628; x=1684440628;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vk2PHlYvv5Cus4Lj94Clz+Z1voayxRVicOxsYTDXq8o=;
+  b=QZin+pTDsE96rQSSRWkMpJbXREvIwuR9zdKvSfh/zFF0nK+rSoBK3uem
+   fOLiy0FsrlpLOk/yR3m2P/+FD7g1KOEZp9hoFzTLID/BfDSW5lusOOdP9
+   9LLz7Ug8WWNm34xxS3YiL3rJTA5Dc7lm6FSEy2lYhgSQ64VX9Mk9OmSxm
+   Fx2mNTFZir/swi25O2S7OhQH+V9fj8xL1OCEV/u8xMgwqxymTvfsoD6P3
+   KrZKDx1/0wpZmydTc5783wuGk5na7j85o8QzzLNRu25XMt0X3rGF6uzER
+   NPXFRc6I7RaWCl9VH5r//he1V0qxMLviFGVvz19ekNLcxK4Og/5QH+btI
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="259440157"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="259440157"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 13:10:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="575258209"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 18 May 2022 13:10:24 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrPzz-0002ae-VR;
+        Wed, 18 May 2022 20:10:23 +0000
+Date:   Thu, 19 May 2022 04:09:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Donghai Qiao <dqiao@redhat.com>, akpm@linux-foundation.org,
+        sfr@canb.auug.org.au, arnd@arndb.de, peterz@infradead.org,
+        heying24@huawei.com, andriy.shevchenko@linux.intel.com,
+        axboe@kernel.dk, rdunlap@infradead.org, tglx@linutronix.de,
+        gor@linux.ibm.com
+Cc:     kbuild-all@lists.01.org, donghai.w.qiao@gmail.com,
+        linux-kernel@vger.kernel.org, Donghai Qiao <dqiao@redhat.com>
+Subject: Re: [PATCH v3 08/11] smp: replace smp_call_function_many_cond() with
+ __smp_call_mask_cond()
+Message-ID: <202205190420.dnidcWc5-lkp@intel.com>
+References: <20220517180326.997129-9-dqiao@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517180326.997129-9-dqiao@redhat.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondřej Jirman <megi@xff.cz>
+Hi Donghai,
 
-Orange Pi 3 has two regulators that power the Realtek RTL8211E
-PHY. According to the datasheet, both regulators need to be enabled
-at the same time, or that "phy-io" should be enabled slightly earlier
-than "phy" regulator.
+Thank you for the patch! Yet something to improve:
 
-RTL8211E/RTL8211EG datasheet says:
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on linus/master v5.18-rc7]
+[cannot apply to tip/x86/core powerpc/next next-20220518]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-  Note 4: 2.5V (or 1.8/1.5V) RGMII power should be risen simultaneously
-  or slightly earlier than 3.3V power. Rising 2.5V (or 1.8/1.5V) power
-  later than 3.3V power may lead to errors.
+url:    https://github.com/intel-lab-lkp/linux/commits/Donghai-Qiao/smp-cross-CPU-call-interface/20220518-020728
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: parisc-defconfig (https://download.01.org/0day-ci/archive/20220519/202205190420.dnidcWc5-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/84d80dd2d0311a0de7a50290032cb79c13151af1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Donghai-Qiao/smp-cross-CPU-call-interface/20220518-020728
+        git checkout 84d80dd2d0311a0de7a50290032cb79c13151af1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
 
-The timing is set in DT via startup-delay-us.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Ondrej Jirman <megi@xff.cz>
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- .../dts/allwinner/sun50i-h6-orangepi-3.dts    | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
+All errors (new ones prefixed by >>):
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts
-index c45d7b7fb39a..c3749b7302ba 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts
-@@ -13,6 +13,7 @@ / {
- 	compatible = "xunlong,orangepi-3", "allwinner,sun50i-h6";
- 
- 	aliases {
-+		ethernet0 = &emac;
- 		serial0 = &uart0;
- 		serial1 = &uart1;
- 	};
-@@ -55,6 +56,15 @@ led-1 {
- 		};
- 	};
- 
-+	reg_gmac_2v5: gmac-2v5 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "gmac-2v5";
-+		regulator-min-microvolt = <2500000>;
-+		regulator-max-microvolt = <2500000>;
-+		enable-active-high;
-+		gpio = <&pio 3 6 GPIO_ACTIVE_HIGH>; /* PD6 */
-+	};
-+
- 	reg_vcc5v: vcc5v {
- 		/* board wide 5V supply directly from the DC jack */
- 		compatible = "regulator-fixed";
-@@ -113,6 +123,33 @@ &ehci3 {
- 	status = "okay";
- };
- 
-+&emac {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ext_rgmii_pins>;
-+	phy-mode = "rgmii-id";
-+	phy-handle = <&ext_rgmii_phy>;
-+	status = "okay";
-+};
-+
-+&mdio {
-+	ext_rgmii_phy: ethernet-phy@1 {
-+		compatible = "ethernet-phy-ieee802.3-c22";
-+		reg = <1>;
-+		/*
-+		 * The board uses 2.5V RGMII signalling. Power sequence to enable
-+		 * the phy is to enable GMAC-2V5 and GMAC-3V (aldo2) power rails
-+		 * at the same time and to wait 100ms. The driver enables phy-io
-+		 * first. Delay is achieved with enable-ramp-delay on reg_aldo2.
-+		 */
-+		regulators = <&reg_gmac_2v5>, <&reg_aldo2>;
-+		regulator-names = "phy-io", "phy";
-+
-+		reset-gpios = <&pio 3 14 GPIO_ACTIVE_LOW>; /* PD14 */
-+		reset-assert-us = <15000>;
-+		reset-deassert-us = <40000>;
-+	};
-+};
-+
- &gpu {
- 	mali-supply = <&reg_dcdcc>;
- 	status = "okay";
-@@ -211,6 +248,7 @@ reg_aldo2: aldo2 {
- 				regulator-min-microvolt = <3300000>;
- 				regulator-max-microvolt = <3300000>;
- 				regulator-name = "vcc33-audio-tv-ephy-mac";
-+				regulator-enable-ramp-delay = <100000>;
- 			};
- 
- 			/* ALDO3 is shorted to CLDO1 */
+   arch/parisc/mm/init.c: In function 'pagetable_init':
+   arch/parisc/mm/init.c:623:31: warning: variable 'end_paddr' set but not used [-Wunused-but-set-variable]
+     623 |                 unsigned long end_paddr;
+         |                               ^~~~~~~~~
+   arch/parisc/mm/init.c: In function 'flush_tlb_all':
+>> arch/parisc/mm/init.c:850:32: error: 'lush_tlb_all_local' undeclared (first use in this function); did you mean 'flush_tlb_all_local'?
+     850 |         smp_call(SMP_CALL_ALL, lush_tlb_all_local, NULL, SMP_CALL_TYPE_SYNC);
+         |                                ^~~~~~~~~~~~~~~~~~
+         |                                flush_tlb_all_local
+   arch/parisc/mm/init.c:850:32: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +850 arch/parisc/mm/init.c
+
+   835	
+   836	void flush_tlb_all(void)
+   837	{
+   838		int do_recycle;
+   839	
+   840		do_recycle = 0;
+   841		spin_lock(&sid_lock);
+   842		__inc_irq_stat(irq_tlb_count);
+   843		if (dirty_space_ids > RECYCLE_THRESHOLD) {
+   844		    BUG_ON(recycle_inuse);  /* FIXME: Use a semaphore/wait queue here */
+   845		    get_dirty_sids(&recycle_ndirty,recycle_dirty_array);
+   846		    recycle_inuse++;
+   847		    do_recycle++;
+   848		}
+   849		spin_unlock(&sid_lock);
+ > 850		smp_call(SMP_CALL_ALL, lush_tlb_all_local, NULL, SMP_CALL_TYPE_SYNC);
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

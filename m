@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FC052BBF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EE752BCFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238080AbiERNkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
+        id S238316AbiERNtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238056AbiERNj7 (ORCPT
+        with ESMTP id S238296AbiERNti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:39:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18171BE11D;
-        Wed, 18 May 2022 06:39:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5296DB820BF;
-        Wed, 18 May 2022 13:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9E96C385A5;
-        Wed, 18 May 2022 13:39:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652881195;
-        bh=YAGu07lD7nk9Sec8Z4RqDJGNVMRvtX91QuhoK9EteBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qBhRzGBkhJ/WS21W8UymKR/Yj7C9/5Idf0bT5jKtz2m/7qX77Ydy3/D/Gxt8mpFAy
-         m7Gn+S6iy7zsm/GjIuSiU5gYw/mQHit5V4radJO3h6m0NTmPcjR+sxljfoKN/zCRsn
-         gLo0ACR7qA1u9iAjrB+Yw5DroprSEp96IOtSkJPmxN5JTuO2iTv7ki6DofkfRFdJss
-         DwK2WK13qd4UTb65ZRR13MQedDzJIYWleNj5RI/J7Cn9rJdMMwFprNq6gWogWl2HmX
-         dDjSgKkTOwo+xaOfo9hILAgFvEW9QbTfTvUxOLuca4HAMquqajnPjg4tIBzoIgIFQj
-         mZRdk6/KEVTvw==
-Date:   Wed, 18 May 2022 08:49:20 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Lin Yujun <linyujun809@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, johnny.chenyi@huawei.com,
-        chenjiahao16@huawei.com, chenlifu@huawei.com,
-        lizhengyu3@huawei.com, liaochang1@huawei.com, wangzhu9@huawei.com,
-        xuyihang@huawei.com, chris.zjh@huawei.com, zouyipeng@huawei.com
-Subject: Re: [PATCH -next] x86/events:Use struct_size() helper in kzalloc()
-Message-ID: <20220518134920.GA8361@embeddedor>
-References: <20220518131626.109123-1-linyujun809@huawei.com>
+        Wed, 18 May 2022 09:49:38 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9451A6AC8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:49:37 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ff53d86abbso5856197b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=/uSQZYQC48Xh2e0RFjJ15gMwehueueWJuEM4ni7IAqM=;
+        b=Y2aFu9K0BTRGI2n7MUc9dau75LbpGzCHltRngu7vm4TRJI7KDwyOikctoIx09chBDB
+         EH984hCxhjYrvvVXreT5fVZCvK4DcaQWYChptfXZTcjWaWt/EbarmXO9Qnofcy2h+Po0
+         PjpGQrEkp66TixNwSfA3n8O25ono7XEPD+via+Tw0azVa2ylNFq4znhj7giywdE8KceU
+         aW7+glvKjdRki5uALy6kEeuIQ6zsE1QjDEjw2GtcoknnH1QeRKlMmtPLbM+ufy6mA+iz
+         wqnjiae5Km04nHv6MxSDrU9p1hTK1Tbv/kLbp3lFKUDTGRK5EvAD4djqLu0TKAD/NvSy
+         VuLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=/uSQZYQC48Xh2e0RFjJ15gMwehueueWJuEM4ni7IAqM=;
+        b=4cVvOizKaH/fTh54fj3lkN8NLjO4vn45lUltL3Mis/WI9QP8Eeq9HfC7aYptcktv/A
+         rJugELkiOlmmdEIfUHoryp6AAUAJ4q38oB4eDYC5fBkxwuB5Z+cMGVieamaV26XR50oX
+         T8RMm5msXWnqxmmyZHOV4AlHvMPGAHH7VNeo06sWvIbyRK0aBa6sojaTSOay7ucgQFbC
+         D39dBCDtselXaRCFJ4nCSyzQjJvjG+tLdk6tOTyKd9loSan8xNrm85LE1Bir8CbSnuXa
+         Oo4avhQwq7HdcgddiS8sjFZfFOGKW0mnrnsCsZVIji3v7VfyVUbcaEo0sRyTEn/qr7w1
+         pMdQ==
+X-Gm-Message-State: AOAM533m03TNDWIAJxPN/KQzaOiwoBT5+TLQFXp/4p3t0SjWihT83O2V
+        Qcv/ptxFmyanCrqdIY95pdlCBsCnpQcN3fQmKk10/Q==
+X-Google-Smtp-Source: ABdhPJzw1z+kfHZISgByJwPHuHAXbNlF06gRJA5E1r7mTarvzL0wb6gQ289QrQYAKn8Bdtg4HI5xklVJIACphkx4MJo=
+X-Received: by 2002:a05:690c:443:b0:2fe:eefc:1ad5 with SMTP id
+ bj3-20020a05690c044300b002feeefc1ad5mr17673105ywb.199.1652881776372; Wed, 18
+ May 2022 06:49:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518131626.109123-1-linyujun809@huawei.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 18 May 2022 19:19:24 +0530
+Message-ID: <CA+G9fYuCzU5VZ_nc+6NEdBXJdVCH=J2SB1Na1G_NS_0BNdGYtg@mail.gmail.com>
+Subject: net/ethernet/dec/tulip/eeprom.c:120:40: error: 'struct pci_dev' has
+ no member named 'pdev'; did you mean 'dev'?
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>, eike-kernel@sf-tec.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,48 +68,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 09:16:26PM +0800, Lin Yujun wrote:
-> Replace sizeof() with struct_size() to avoid potential integer
-> or heap overflow.
+The Linux next-20220517 and next-20220518 arch parisc builds failed.
 
-This is not exactly what the patch does.
+Regressions found on parisc:
+ - gcc-8-defconfig
+ - gcc-9-defconfig
+ - gcc-11-defconfig
+ - gcc-10-defconfig
 
-Your patch is replacing the open-coded calculation of the total amount
-of memory to be allocated for rapl_pmus with struct_size().
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=parisc
+CROSS_COMPILE=hppa-linux-gnu- 'CC=sccache hppa-linux-gnu-gcc'
+'HOSTCC=sccache gcc'
+arch/parisc/kernel/vdso32/Makefile:30: FORCE prerequisite is missing
+drivers/net/ethernet/dec/tulip/eeprom.c: In function
+'tulip_build_fake_mediatable':
+drivers/net/ethernet/dec/tulip/eeprom.c:120:40: error: 'struct
+pci_dev' has no member named 'pdev'; did you mean 'dev'?
+  120 |   tp->mtable = devm_kmalloc(&tp->pdev->pdev, sizeof(struct mediatable) +
+      |                                        ^~~~
+      |                                        dev
+make[6]: *** [scripts/Makefile.build:295:
+drivers/net/ethernet/dec/tulip/eeprom.o] Error 1
 
-> 
-> Also, address the following sparse warnings:
-> arch/x86/events/rapl.c:685:16: warning: using sizeof on a
-> flexible structure
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-This does not address this warning because struct_size()
-still make use of sizeof on the struct-with-flex-array,
-internally.
+Build log link,
+https://builds.tuxbuild.com/29HszOsHU1On0kNlZbdJBfNWstp/
 
-So, the mention to the sparse warning should be removed from
-this changelog text.
-
-> 
-> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
-> ---
->  arch/x86/events/rapl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-> index 77e3a47af5ad..c7e79f0ac04f 100644
-> --- a/arch/x86/events/rapl.c
-> +++ b/arch/x86/events/rapl.c
-> @@ -685,7 +685,7 @@ static int __init init_rapl_pmus(void)
->  	int maxdie = topology_max_packages() * topology_max_die_per_package();
->  	size_t size;
->  
-> -	size = sizeof(*rapl_pmus) + maxdie * sizeof(struct rapl_pmu *);
-> +	size = struct_size(rapl_pmus, pmus, maxdie);
->  	rapl_pmus = kzalloc(size, GFP_KERNEL);
-
-It seems that in this case, size could be entirely replaced by
-struct_size().
-
-Thanks
 --
-Gustavo
+Linaro LKFT
+https://lkft.linaro.org

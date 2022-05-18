@@ -2,121 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5386952B1E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 07:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A144052B1EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 07:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiERFaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 01:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
+        id S230292AbiERFbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 01:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiERFaR (ORCPT
+        with ESMTP id S230282AbiERFbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 01:30:17 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D97014037
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 22:30:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ISxEuC4Kiq3vjUGUEirY3WiUkmrk0AhD6N2mrq7YQrw=; b=FiX5lak8VUsm5Z8979SsoFCjc8
-        T2oQp66j9cPLFBhrAngOda54jnJI9CZX1TXMKxTp061Nlb9agO73fm0u1EMtVNv++t1Zb7RJoJYcn
-        L9DND/cKiXkP+cHucd5hwV4EOP7SDMHMEiNJiaQVTy23F0FX+KmFa2k3zuIeCWbnJDfOIcsOc9Fk0
-        ZSt4ixhKLcynJtK8hr009UgvL3NN69LkkwN+JbCyV4j8adRlxKVslooprfsfBuEcuTx2+0S3gcxSa
-        KGLCe/9EkN8GZFuGwXh+lOu1botuGT/rzgY+pKj2hUsj1hm4uvXaD4B4M+uppVfHydBmiX5lKQgKN
-        htGS6OGA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrCG9-001RwI-1K; Wed, 18 May 2022 05:30:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BDF1C30018E;
-        Wed, 18 May 2022 07:30:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A068A206F245B; Wed, 18 May 2022 07:30:06 +0200 (CEST)
-Date:   Wed, 18 May 2022 07:30:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com
-Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
-Message-ID: <YoSEXii2v0ob/8db@hirez.programming.kicks-ass.net>
-References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
- <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
- <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
- <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
- <20220518012429.4zqzarvwsraxivux@treble>
+        Wed, 18 May 2022 01:31:35 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A632313E9D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 22:31:33 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id h186so1194781pgc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 22:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9kEkRsbbLsq2qV20KhrtybMkQdykLU0YNEuC/iZp52Q=;
+        b=g3ld8fRujihoN2eknR81U31G0FS+U73zYUSpmkf3drtwft6xCz09BWP5LHGh21RXHM
+         ZqMqDENux59/5mX5V3SKbj4OgNfOR82SIerS4igN9GirjvkWmFEOPxXZxJaGWj4Abein
+         4G5MQewmtTkjQyn6q0YPmUrm/jgXpQMfcrB9sshsTB84rkSscWZTQ7FRXErBkfE/5LY7
+         69qMmHhS81MFeUam+P6BcV/1bsgMlTXNe7d17BaPewtAn4hdKqBi6tYpaI/EQI5RddlD
+         qAery9se8TulsXXoZMHQluAoLgj4AG9Kl5+tQbAUy4NRdDPGs0fn61jYIuKJcnzJQ/fM
+         xKKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9kEkRsbbLsq2qV20KhrtybMkQdykLU0YNEuC/iZp52Q=;
+        b=bGyPkc3LENFfNKE6Eh+rVhJJxYqsLIYYSeJ3o5a2uJMZddkndCGNUDg3hKQUSHD8m2
+         UYSmNfO0BsbVskKffSB1TG1onF/nVMGvwabBrs+/eXhg8fJXKfpMU7W9Nur1Hc81Jg9/
+         h2xaGRmIW1yw1V+JQVZJspvpDnOjLofB73hpKo0VwkgbEvtSP8TSgPcA5EMGnFWGkem3
+         WwMAPEc99SPuWzNKDrat6XIIB0sWKu1f+8/854j2vviwoS71ujW3NkOeo6O6NwSRyE68
+         p0kvwzWnHOY9CjQPsvD5HLoI49v1g+/f8iruikNf7sVFE+PVffWnVVRO/vQZPkUMUNiu
+         yf8g==
+X-Gm-Message-State: AOAM533575fXgiIPAqMuwpLG17MGgipCN03LZailogSuLX5mc+N1G06Z
+        xfO6QiC3TIdqUC14f/khGo7miA==
+X-Google-Smtp-Source: ABdhPJyeuvMsiegKpQJ08W3/jMArV0nt/mYOgEbBrg7ZcQmLJahdE2agmiW8yXxuNTu6FNSGK2Nbaw==
+X-Received: by 2002:a63:2048:0:b0:3db:7de7:34b4 with SMTP id r8-20020a632048000000b003db7de734b4mr22634662pgm.105.1652851893176;
+        Tue, 17 May 2022 22:31:33 -0700 (PDT)
+Received: from localhost ([139.177.225.234])
+        by smtp.gmail.com with ESMTPSA id in19-20020a17090b439300b001cb6527ca39sm2666824pjb.0.2022.05.17.22.31.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 22:31:32 -0700 (PDT)
+Date:   Wed, 18 May 2022 13:31:29 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     willy@infradead.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH] mm: pvmw: check possible huge PMD map by
+ transhuge_vma_suitable()
+Message-ID: <YoSEsa2zvqylYuZC@FVFYT0MHHV2J.usts.net>
+References: <20220513191705.457775-1-shy828301@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220518012429.4zqzarvwsraxivux@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220513191705.457775-1-shy828301@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 06:24:29PM -0700, Josh Poimboeuf wrote:
-> On Tue, May 17, 2022 at 05:42:04PM +0200, Peter Zijlstra wrote:
-> > +	for (;;) {
-> > +		symtab_data = elf_getdata(s, symtab_data);
-> > +		if (t)
-> > +			shndx_data = elf_getdata(t, shndx_data);
-> >  
-> > +		if (!symtab_data) {
-> > +			if (!idx) {
-> > +				void *buf;
+On Fri, May 13, 2022 at 12:17:05PM -0700, Yang Shi wrote:
+> IIUC PVMW checks if the vma is possibly huge PMD mapped by
+> transparent_hugepage_active() and "pvmw->nr_pages >= HPAGE_PMD_NR".
 > 
-> I'm confused by whatever this is doing, how is !symtab_data possible,
-> i.e. why would symtab not have data?
-
-Elf_Data *elf_getdata(Elf_Scn *scn, Elf_Data *data);
-
-is an iterator, if @data is null it will return the first element, which
-you then feed into @data the next time to get the next element, once it
-returns NULL, you've found the end.
-
-In our specific case, we iterate the data sections, if idx fits inside
-the current section, we good, otherwise we lower idx by however many did
-fit and try the next.
-
-> >  elf_create_section_symbol(struct elf *elf, struct section *sec)
-> >  {
-> >  	struct section *symtab, *symtab_shndx;
-> > -	Elf_Data *shndx_data = NULL;
-> > -	struct symbol *sym;
-> > -	Elf32_Word shndx;
-> > +	Elf32_Word first_non_local, new;
-> > +	struct symbol *sym, *old;
-> > +	int size;
-> > +
-> > +	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
-> > +		size = sizeof(Elf32_Sym);
-> > +	else
-> > +		size = sizeof(Elf64_Sym);
+> Actually pvmw->nr_pages is returned by compound_nr() or
+> folio_nr_pages(), so the page should be THP as long as "pvmw->nr_pages
+> >= HPAGE_PMD_NR".  And it is guaranteed THP is allocated for valid VMA
+> in the first place.  But it may be not PMD mapped if the VMA is file
+> VMA and it is not properly aligned.  The transhuge_vma_suitable()
+> is used to do such check, so replace transparent_hugepage_active() to
+> it, which is too heavy and overkilling.
 > 
-> This should probably be called 'entsize' and I think you can just get it
-> from symtab->sh.sh_entsize.
-
-Ok, that would be easier, I'll check.
-
-> > +	/*
-> > +	 * Either way, we added a LOCAL symbol.
-> > +	 */
-> > +	symtab->sh.sh_info += 1;
-> > +
-> >  	elf_add_symbol(elf, sym);
+> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Cc: Muchun Song <songmuchun@bytedance.com>
+> Signed-off-by: Yang Shi <shy828301@gmail.com>
+> ---
+> v2: * Fixed build error for !CONFIG_TRANSPARENT_HUGEPAGE
+>     * Removed fixes tag per Willy
 > 
-> Not sure if it matters here, but elf_add_symbol() doesn't set sym->alias
-> and sym->pv_target, and both of those are unconditionally initialized in
-> read_symbols().  Should elf_add_symbol() be changed to initialize them?
+>  include/linux/huge_mm.h | 8 ++++++--
+>  mm/page_vma_mapped.c    | 2 +-
+>  2 files changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> index fbf36bb1be22..c2826b1f4069 100644
+> --- a/include/linux/huge_mm.h
+> +++ b/include/linux/huge_mm.h
+> @@ -117,8 +117,10 @@ extern struct kobj_attribute shmem_enabled_attr;
+>  extern unsigned long transparent_hugepage_flags;
+>  
+>  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+> -		unsigned long haddr)
+> +		unsigned long addr)
+>  {
+> +	unsigned long haddr;
+> +
+>  	/* Don't have to check pgoff for anonymous vma */
+>  	if (!vma_is_anonymous(vma)) {
+>  		if (!IS_ALIGNED((vma->vm_start >> PAGE_SHIFT) - vma->vm_pgoff,
+> @@ -126,6 +128,8 @@ static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+>  			return false;
+>  	}
+>  
+> +	haddr = addr & HPAGE_PMD_MASK;
+> +
+>  	if (haddr < vma->vm_start || haddr + HPAGE_PMD_SIZE > vma->vm_end)
+>  		return false;
+>  	return true;
+> @@ -328,7 +332,7 @@ static inline bool transparent_hugepage_active(struct vm_area_struct *vma)
+>  }
+>  
+>  static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+> -		unsigned long haddr)
+> +		unsigned long addr)
+>  {
+>  	return false;
+>  }
+> diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+> index c10f839fc410..e971a467fcdf 100644
+> --- a/mm/page_vma_mapped.c
+> +++ b/mm/page_vma_mapped.c
+> @@ -243,7 +243,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+>  			 * cleared *pmd but not decremented compound_mapcount().
+>  			 */
+>  			if ((pvmw->flags & PVMW_SYNC) &&
+> -			    transparent_hugepage_active(vma) &&
+> +			    transhuge_vma_suitable(vma, pvmw->address) &&
 
-I'll go have a look, breakfast first though! :-)
+How about the following diff? Then we do not need to change
+transhuge_vma_suitable().  All the users of transhuge_vma_suitable()
+are already do the alignment by themselves.
+
+Thanks.
+
+diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+index c10f839fc410..0aed5ca60c67 100644
+--- a/mm/page_vma_mapped.c
++++ b/mm/page_vma_mapped.c
+@@ -243,7 +243,8 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+                         * cleared *pmd but not decremented compound_mapcount().
+                         */
+                        if ((pvmw->flags & PVMW_SYNC) &&
+-                           transparent_hugepage_active(vma) &&
++                           IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE) &&
++                           transhuge_vma_suitable(vma, pvmw->address & HPAGE_PMD_MASK) &&
+                            (pvmw->nr_pages >= HPAGE_PMD_NR)) {
+                                spinlock_t *ptl = pmd_lock(mm, pvmw->pmd);
+
+>  			    (pvmw->nr_pages >= HPAGE_PMD_NR)) {
+>  				spinlock_t *ptl = pmd_lock(mm, pvmw->pmd);
+>  
+> -- 
+> 2.26.3
+> 
+> 

@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA8952BE4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C05752BDC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239193AbiERPNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S239227AbiERPQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239184AbiERPNj (ORCPT
+        with ESMTP id S239241AbiERPOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:13:39 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBC01E0100
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:13:37 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id p12so2464020pfn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:13:37 -0700 (PDT)
+        Wed, 18 May 2022 11:14:15 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319B11E0102
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:14:14 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id e28so2565043wra.10
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=R6GKon/CB8AHTG2BVleTAVkCbJAIy+Ec31rGL7OpKrA=;
-        b=ZsuolC/u6gVSVbsjl80xIx9d92sVwUDm1BDTXCnzgAFODiEOkChMaPBr7zQUMfYsht
-         SSH+xklDOFhrdNLYvsq0Y8M9re/iu2wBG9DbpNQVk4p8RpbiOaJJNrkyRR4wSiJDPbPH
-         V7V19n7NzwXmmsj8U31P/+1xRFdHTgxMOiSlw=
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=+LQogaNeLDAS97QlCWLMJmUyFddvKMyNGiPi+yDq2F0=;
+        b=n5xi3tHdutaDh9rrQj2apRUFkB6OjbZliJwoJ7XQIWlnrUW5F05sPh42Hwf1rzAIuW
+         DrAS9zX6HFAMvX6Iy2qQj8RQx9k5H32X8iai7ZKcAcuWhfLvCaYYxA0g9D4o9/mtRHub
+         6DsUvK8S7vdORqiMsNa/FGE1H6kw9smloxYwFWsCd2WC8dwdmD8UZAmRJtlnvLjX6hLd
+         U5fn3xRN5vF0bf39UvDCNgWWAE6WGFRVrsmLd+ClR1EFvgI1x5rta1xjKDpuWSB+GXHE
+         nRmsIj+MddXNS9FoJs3cMF39J982LzjbOixh+vpd1ckXvAVBjBY6c/02qwpkoX2VpOvg
+         /q3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R6GKon/CB8AHTG2BVleTAVkCbJAIy+Ec31rGL7OpKrA=;
-        b=vGyfmBPQuN/9b+8oJZVA0kTSUUn4jyhPfXRgKUlaPsrT+uRFhwrNZLDIvfpVBpXJEX
-         9HrWZZccFC+b/iYm9Pm3/mmi4jwMf1zFbVn6an7k1/yyExeGfYuUK9KVw3dVBe3wJem7
-         CFWiNpyawyXkudkzf7O8Xsie6qHGyAJEdhhVTiOwlFoc3jPzMO5IQi59prU1AC2rpixJ
-         dI36cA61uNOTlfBWKiJSg0rTw846hbE6M3OP+p6JG2DZ+2J6rYF5it4wXo35kqGdJQzg
-         qCtVrJQm2MxkO4dkuiPAoqHE0fjLdRyu2K6+RABrbQey4Uyz6RbQwv9z92BdiSLUGSq8
-         WrBg==
-X-Gm-Message-State: AOAM531AMhDZVWJeiaZCPLu2/qDwRYGcmt0Tao+YhKlqUHWJRmYsx9PF
-        BlUynMPTLmUp+msOhmH6EsYFEA==
-X-Google-Smtp-Source: ABdhPJyFOeC90y1HStFFR+BKQhegBQbMZrwLsSMlHpm5O9PYUeML8M3eBG6IOYh/5ylSnQ2jWSXYFw==
-X-Received: by 2002:a65:4bc5:0:b0:3da:ec0c:c5f2 with SMTP id p5-20020a654bc5000000b003daec0cc5f2mr23770774pgr.221.1652886817386;
-        Wed, 18 May 2022 08:13:37 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:a14:3166:4b67:b688])
-        by smtp.gmail.com with UTF8SMTPSA id j128-20020a62c586000000b005182e39038csm1629435pfg.38.2022.05.18.08.13.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 08:13:36 -0700 (PDT)
-Date:   Wed, 18 May 2022 08:13:35 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Milan Broz <gmazyland@gmail.com>
-Cc:     Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>, dm-devel@redhat.com,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [dm-devel] [PATCH v4 1/3] dm: Add verity helpers for LoadPin
-Message-ID: <YoUNH7MrfEb844ft@google.com>
-References: <20220517233457.1123309-1-mka@chromium.org>
- <20220517163437.v4.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
- <19149028-ec94-8f64-aed4-1e58f29942a8@gmail.com>
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=+LQogaNeLDAS97QlCWLMJmUyFddvKMyNGiPi+yDq2F0=;
+        b=Sf7iTjSsWlX5kYbpgSlagErFpJZGWROoswScN6BuPpGVmsty/mlq3nWM0Yl++EnJw6
+         0MSbyMEoQHJO9tLOr/uUpq4+h/5DLZoJNP/q9fKtHe2Oww6eUJflxaW+7CT5BjeNRa1X
+         7lxEatSGQKbOtn2JnYjwTgyu8lK6EdG1DTa+Z6FnMI4C0oouXGiDJ22Q/lrdifvPrLYk
+         kFyBqhFtqYYHPqCafqDy9NkgkcRxsicx22nShKxNP3gIn5yigwkLDahPQ4pYYNzNWUZM
+         OKOILIamW9ttRStDgURk55CIbH7ueJtspY20RavgMUAGFP04lTfJD13pTEnO6qzDEpm1
+         26KQ==
+X-Gm-Message-State: AOAM530zz1xI/V3hCU4A8okZF9fnms5AdJ48GbrSRBGalKBplEHBZooa
+        6yLnpeewuBtqCkVx7L+TswF/Bg==
+X-Google-Smtp-Source: ABdhPJyXcejc46FtV9lcG+iVTF5hR4aDmYrlea0kN4aHfbpAK+gmuRJ4CMZkLDs62u6ZfzkTCUPTWw==
+X-Received: by 2002:a5d:620f:0:b0:20c:c1ba:cf8e with SMTP id y15-20020a5d620f000000b0020cc1bacf8emr163475wru.426.1652886852771;
+        Wed, 18 May 2022 08:14:12 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id p11-20020a5d59ab000000b0020e615bab7bsm2127288wrr.7.2022.05.18.08.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 08:14:12 -0700 (PDT)
+Date:   Wed, 18 May 2022 16:14:10 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
+Message-ID: <YoUNQlzU0W4ShA85@google.com>
+References: <YoOT7Cyobsed5IE3@google.com>
+ <d503d5ff-4bc5-2bd0-00d3-cd7b0a0724cb@kernel.dk>
+ <YoOW2+ov8KF1YcYF@google.com>
+ <3d271554-9ddc-07ad-3ff8-30aba31f8bf2@kernel.dk>
+ <YoOcYR15Jhkw2XwL@google.com>
+ <f34c85cc-71a5-59d4-dd7a-cc07e2af536c@kernel.dk>
+ <YoTrmjuct3ctvFim@google.com>
+ <b7dc2992-e2d6-8e76-f089-b33561f8471f@kernel.dk>
+ <f821d544-78d5-a227-1370-b5f0895fb184@kernel.dk>
+ <06710b30-fec8-b593-3af4-1318515b41d8@kernel.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <19149028-ec94-8f64-aed4-1e58f29942a8@gmail.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <06710b30-fec8-b593-3af4-1318515b41d8@kernel.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,80 +81,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Milan,
+On Wed, 18 May 2022, Jens Axboe wrote:
 
-On Wed, May 18, 2022 at 09:57:43AM +0200, Milan Broz wrote:
-> On 18/05/2022 01:34, Matthias Kaehlcke wrote:
-> > LoadPin limits loading of kernel modules, firmware and certain
-> > other files to a 'pinned' file system (typically a read-only
-> > rootfs). To provide more flexibility LoadPin is being extended
-> > to also allow loading these files from trusted dm-verity
-> > devices. For that purpose LoadPin can be provided with a list
-> > of verity root digests that it should consider as trusted.
+> On 5/18/22 6:54 AM, Jens Axboe wrote:
+> > On 5/18/22 6:52 AM, Jens Axboe wrote:
+> >> On 5/18/22 6:50 AM, Lee Jones wrote:
+> >>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>
+> >>>> On 5/17/22 7:00 AM, Lee Jones wrote:
+> >>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>>>
+> >>>>>> On 5/17/22 6:36 AM, Lee Jones wrote:
+> >>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>>>>>
+> >>>>>>>> On 5/17/22 6:24 AM, Lee Jones wrote:
+> >>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>>>>>>>
+> >>>>>>>>>> On 5/17/22 5:41 AM, Lee Jones wrote:
+> >>>>>>>>>>> Good afternoon Jens, Pavel, et al.,
+> >>>>>>>>>>>
+> >>>>>>>>>>> Not sure if you are presently aware, but there appears to be a
+> >>>>>>>>>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
+> >>>>>>>>>>> in Stable v5.10.y.
+> >>>>>>>>>>>
+> >>>>>>>>>>> The full sysbot report can be seen below [0].
+> >>>>>>>>>>>
+> >>>>>>>>>>> The C-reproducer has been placed below that [1].
+> >>>>>>>>>>>
+> >>>>>>>>>>> I had great success running this reproducer in an infinite loop.
+> >>>>>>>>>>>
+> >>>>>>>>>>> My colleague reverse-bisected the fixing commit to:
+> >>>>>>>>>>>
+> >>>>>>>>>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
+> >>>>>>>>>>>   Author: Jens Axboe <axboe@kernel.dk>
+> >>>>>>>>>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
+> >>>>>>>>>>>
+> >>>>>>>>>>>        io-wq: have manager wait for all workers to exit
+> >>>>>>>>>>>
+> >>>>>>>>>>>        Instead of having to wait separately on workers and manager, just have
+> >>>>>>>>>>>        the manager wait on the workers. We use an atomic_t for the reference
+> >>>>>>>>>>>        here, as we need to start at 0 and allow increment from that. Since the
+> >>>>>>>>>>>        number of workers is naturally capped by the allowed nr of processes,
+> >>>>>>>>>>>        and that uses an int, there is no risk of overflow.
+> >>>>>>>>>>>
+> >>>>>>>>>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> >>>>>>>>>>>
+> >>>>>>>>>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
+> >>>>>>>>>>>     1 file changed, 22 insertions(+), 8 deletions(-)
+> >>>>>>>>>>
+> >>>>>>>>>> Does this fix it:
+> >>>>>>>>>>
+> >>>>>>>>>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
+> >>>>>>>>>> Author: Jens Axboe <axboe@kernel.dk>
+> >>>>>>>>>> Date:   Fri Mar 5 12:59:30 2021 -0700
+> >>>>>>>>>>
+> >>>>>>>>>>     io-wq: fix race in freeing 'wq' and worker access
+> >>>>>>>>>>
+> >>>>>>>>>> Looks like it didn't make it into 5.10-stable, but we can certainly
+> >>>>>>>>>> rectify that.
+> >>>>>>>>>
+> >>>>>>>>> Thanks for your quick response Jens.
+> >>>>>>>>>
+> >>>>>>>>> This patch doesn't apply cleanly to v5.10.y.
+> >>>>>>>>
+> >>>>>>>> This is probably why it never made it into 5.10-stable :-/
+> >>>>>>>
+> >>>>>>> Right.  It doesn't apply at all unfortunately.
+> >>>>>>>
+> >>>>>>>>> I'll have a go at back-porting it.  Please bear with me.
+> >>>>>>>>
+> >>>>>>>> Let me know if you into issues with that and I can help out.
+> >>>>>>>
+> >>>>>>> I think the dependency list is too big.
+> >>>>>>>
+> >>>>>>> Too much has changed that was never back-ported.
+> >>>>>>>
+> >>>>>>> Actually the list of patches pertaining to fs/io-wq.c alone isn't so
+> >>>>>>> bad, I did start to back-port them all but some of the big ones have
+> >>>>>>> fs/io_uring.c changes incorporated and that list is huge (256 patches
+> >>>>>>> from v5.10 to the fixing patch mentioned above).
+> >>>>>>
+> >>>>>> The problem is that 5.12 went to the new worker setup, and this patch
+> >>>>>> landed after that even though it also applies to the pre-native workers.
+> >>>>>> Hence the dependency chain isn't really as long as it seems, probably
+> >>>>>> just a few patches backporting the change references and completions.
+> >>>>>>
+> >>>>>> I'll take a look this afternoon.
+> >>>>>
+> >>>>> Thanks Jens.  I really appreciate it.
+> >>>>
+> >>>> Can you see if this helps? Untested...
+> >>>
+> >>> What base does this apply against please?
+> >>>
+> >>> I tried Mainline and v5.10.116 and both failed.
+> >>
+> >> It's against 5.10.116, so that's puzzling. Let me double check I sent
+> >> the right one...
 > > 
-> > Add a bunch of helpers to allow LoadPin to check whether a DM
-> > device is a trusted verity device. The new functions broadly
-> > fall in two categories: those that need access to verity
-> > internals (like the root digest), and the 'glue' between
-> > LoadPin and verity. The new file dm-verity-loadpin.c contains
-> > the glue functions.
-> > 
-> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > Looks like I sent the one from the wrong directory, sorry about that.
+> > This one should be better:
 > 
-> ...
-> 
-> > +
-> > +	if (dm_verity_get_root_digest(ti, &root_digest, &digest_size))
-> > +		return false;
-> 
-> Almost unrelated note, but as there are more and more situations
-> that checks verity root digest, shouldn't we export this as read-only
-> sysfs attribute for DM verity devices?
-> 
-> Attacker can always calculate (but not change) Merkle tree, so this
-> is not something that need to be hidden.
-> 
-> It would allow userspace to easily enumerate trusted DM devices without
-> calling kernel ioctls...
+> Nope, both are the right one. Maybe your mailer is mangling the patch?
+> I'll attach it gzip'ed here in case that helps.
 
-I guess that's an option if there are scenarios where it is useful. It
-should probably be a separate patch, since it isn't directly related with
-extending LoadPin support to trusted verity devices.
+Okay, that applied, thanks.
 
-> > +
-> > +	table = dm_get_live_table(md, &srcu_idx);
-> > +
-> > +	if (dm_table_get_num_targets(table) != 1)
-> > +		goto out;
-> > +
-> > +	ti = dm_table_get_target(table, 0);
-> > +
-> > +	if (is_trusted_verity_target(ti))
-> > +		trusted = true;
-> 
-> What happens is someone reloads verity table later with
-> a different content (or even different target type)?
-> Does LoadPin even care here?
+Unfortunately, I am still able to crash the kernel in the same way.
 
-LoadPin cares, but only when new kernel files are loaded. It will then check
-against the new verity table, and only allow loading of the file if it comes
-from a verity target with a trusted digest.
-
-> >   static struct target_type verity_target = {
-> >   	.name		= "verity",
-> >   	.version	= {1, 8, 0},
-> 
-> Please increase the minor version, it is very useful to detect (in logs)
-> that the target driver has compatible extensions.
-
-I can do that, but would like to confirm that this is really needed/desired.
-This patch adds kernel-internal APIs which aren't accessible to userspace,
-that don't impact verity directly, so I'm not sure an increased minor version
-would be useful.
-
-> I guess this change does not affect userspace veristysetup
-> (as it is used handled by different tooling), right?
-
-Correct, from the verity side this is effectively a NOP, the new
-kernel-internal APIs only provide information to LoadPin, but don't
-change any verity specific behavior.
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

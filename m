@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900B152B927
+	by mail.lfdr.de (Postfix) with ESMTP id 441EB52B926
 	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235917AbiERLvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
+        id S235799AbiERLtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235891AbiERLvL (ORCPT
+        with ESMTP id S235772AbiERLtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:51:11 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DA06467;
-        Wed, 18 May 2022 04:51:07 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ch13so3243832ejb.12;
-        Wed, 18 May 2022 04:51:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PVVRJWY3LkzCEn7edt9NNkxfoGmjpJZT2KNTYyeloog=;
-        b=CjICLHLfzEsizEKMpfYtP4+FXeytqoBUiGcF8Vub9GBQ+59eXLfiF+tjH+FXhjsGKj
-         8N/lrHELQWFsoe3ofAr/i5aX9YUsrHGwRKfHp00YSNONeCdNTzRwl59h1h1oQbLpyX/p
-         qsRo9cB1qAAoLDMAK1nvRIRqF5oxukk2/HnfGZvevzardH6wOfuZqZv6Cm7uC1ZufS9A
-         CDnkpF9fwIzLXOiUlnjxrTHk/RvlrbLdFRZpYOOUu+PBJLeLnehlWmhYfOLWsIti4afQ
-         gfCtjQQOMEFlFEyqPssinRQvmQMbBMVIGAnJ1Kq5iOJnxLvGaDYaAuth8r1fVf5s2wwm
-         538w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PVVRJWY3LkzCEn7edt9NNkxfoGmjpJZT2KNTYyeloog=;
-        b=M62DDiimlAwOxA7vSP9axB1TZ+t/pCt+LA+brb0BM9ZM1pHptcd0+dtt/nlKfAmslu
-         PwKHUV/DwhGmVsXqsO8Yr/xrd4iTCm6GGXk1yp9UesU8RbNyKG2h0rxbi1HElY4OHvqC
-         zrgU6l2I1rhN7y9vbHUpE/zK2Twkpp+ipL4c47zjVpdnel9nJq7PHYG0Tc+w/CXmfsG8
-         5b1OSJQ4SZNVLKAqL3FYdIjJ1qDu3WePuGlk2R8hfVPfYfnAv9BidoYYS6tGgM9vr3ML
-         pMRQwXgCvaaYueVh8Fl7y0p5FuDDvUKhgOWlcJ9QJrA8Jgz/IYiwdtT4wr/Xgw8t3AxG
-         nncA==
-X-Gm-Message-State: AOAM531BgH4j594GapNJLA4UCEzkOd11yOynpaxijGoIk/wKhlRLsyRK
-        LOkD3/nGkKH9UKOp+a3j3xOyYP44ZGc=
-X-Google-Smtp-Source: ABdhPJyMZcAKlF9TgxW4enniFw0Fk9br2XUT7LiwWSOS6Ct21rHMSM1o88ch9RjHRfbBXraJijyd5A==
-X-Received: by 2002:a17:906:3c52:b0:6fe:8b16:5f92 with SMTP id i18-20020a1709063c5200b006fe8b165f92mr1896598ejg.423.1652874665894;
-        Wed, 18 May 2022 04:51:05 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id hf15-20020a1709072c4f00b006f3ef214da4sm872517ejc.10.2022.05.18.04.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 04:51:05 -0700 (PDT)
-Date:   Wed, 18 May 2022 14:51:03 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Marek Vasut <marex@denx.de>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: [Patch net-next 3/9] net: dsa: microchip: perform the
- compatibility check for dev probed
-Message-ID: <20220518115103.nlssfqkrlisqcxx3@skbuf>
-References: <20220517094333.27225-1-arun.ramadoss@microchip.com>
- <20220517094333.27225-4-arun.ramadoss@microchip.com>
+        Wed, 18 May 2022 07:49:11 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF263179C19;
+        Wed, 18 May 2022 04:49:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1652874549; x=1684410549;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=d9QZeZd2/xhOso7dWnKP7HbWb4p7FSS+gP0Yr1dxXPE=;
+  b=2Fnye8GT2IwDRrc2mJpNP4eaFGygTEA/zVmqmHY8yVcFcjIhVhTxGoHn
+   yA57sU1i3vVrC996BPFB03A0CT8BpU2d+yq6XCnjpKrqXXaf0h/of5oLR
+   5Z35jGp35KD44JaAJ0RprWnKYxzIrzy5pEF/G1iWsnwtZqqPLGREjMyTf
+   T8ZNdlDH7tbjwn7+l4HOlQjerz1tDb0sP9+tyCZU7dSafsf88DtYonL+7
+   zr+QEWKVhepIdAbE55VSayC1dBe75wKLwDESxpDmqUyAxzUI2qgTQuzCC
+   5lUvLzmoA5zZkcVoG0pvoJfkBjBm3Vb1jvVpKxmBQZksrLx6u/SybR93o
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="164583728"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 May 2022 04:49:08 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 18 May 2022 04:49:07 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Wed, 18 May 2022 04:49:05 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v3 0/2] nvmem: add Microchip OTP controller
+Date:   Wed, 18 May 2022 14:51:27 +0300
+Message-ID: <20220518115129.908787-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517094333.27225-4-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 03:13:27PM +0530, Arun Ramadoss wrote:
-> This patch perform the compatibility check for the device after the chip
-> detect is done. It is to prevent the mismatch between the device
-> compatible specified in the device tree and actual device found during
-> the detect. The ksz9477 device doesn't use any .data in the
-> of_device_id. But the ksz8795_spi uses .data for assigning the regmap
-> between 8830 family and 87xx family switch. Changed the regmap
-> assignment based on the chip_id from the .data.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
+Hi,
 
-Other than hoping this doesn't cause regressions:
+This series adds support for Microchip OTP controller available on
+SAMA7G5. The driver gives access to a non-volatile memory which
+keeps (at the moment) information like booting media and temperature
+calibration data used for thermal measurements.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Thank you,
+Claudiu Beznea
+
+Changes in v3:
+- fixed Documentation and binding files names
+- used __maybe_unused for mchp_otpc_ids
+
+Changes in v2:
+- updated the bindings (patch 1/2) as follows:
+	- included the device name in files names and updated binding
+	  content accordingly
+	- updated the description
+	- removed address-cells, size-cells
+	- removed clock include
+	- use GPL-2.0 OR BSD-2-Clause license
+	- removed OTP_PKT_SAMA7G5_TEMP_CALIB_LEN and keep hardcoded
+	  value in examples
+	  
+- updated MAINTAINERS file with new naming of bindings
+
+Claudiu Beznea (2):
+  dt-bindings: microchip-otpc: document Microchip OTPC
+  nvmem: microchip-otpc: add support
+
+ .../nvmem/microchip,sama7g5-otpc.yaml         |  50 +++
+ MAINTAINERS                                   |   8 +
+ drivers/nvmem/Kconfig                         |   7 +
+ drivers/nvmem/Makefile                        |   2 +
+ drivers/nvmem/microchip-otpc.c                | 288 ++++++++++++++++++
+ .../nvmem/microchip,sama7g5-otpc.h            |  12 +
+ 6 files changed, 367 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
+ create mode 100644 drivers/nvmem/microchip-otpc.c
+ create mode 040000 include/dt-bindings/nvmem
+ create mode 100644 include/dt-bindings/nvmem/microchip,sama7g5-otpc.h
+
+-- 
+2.34.1
+

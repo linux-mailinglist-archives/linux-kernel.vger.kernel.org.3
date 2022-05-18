@@ -2,88 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6E252B80B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5902752B800
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235160AbiERKiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        id S235148AbiERKja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 06:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiERKiQ (ORCPT
+        with ESMTP id S231126AbiERKjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:38:16 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B70B30F79
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:38:14 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id p22so2823879lfo.10
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:38:14 -0700 (PDT)
+        Wed, 18 May 2022 06:39:25 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED7340E8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:39:22 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id x2so2597820ybi.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=konsulko.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0NTxAn+6T8w9hdTIq5Cgi6wlBNu0iH0H7rw7aIi/4xE=;
-        b=WE8yOgYWIlCFKn3BmxelqQ8z0cjjx62N+D1DFq8X+98cqbZTXiEMtmqZTl+O8LPO/t
-         EJDO25DHuNUV6zVcMgrSPZFpwWIH0h9N2cP2iF5r/4ZHoIcYz+HTbn/6oKHhQuHK71FJ
-         eWOe9VCbBhz+/8uFkOeaFbdQ81U57R6OTPx9tWfM5ZLcnnwOavLSyPx+tGNobR51hSHx
-         SBjt+92sKXxmpeob6HIMIjkCrSVQH5owrdCyWKRq7NPccPwnYO0srHWn76K4R/u0rmMQ
-         T+zDYZNEBos+1sKtzK+yj97clDWQwwweh3VXgy2GxkZhM8PZdIpZprmioB9+Basswh/U
-         y1EA==
+        bh=aIo0+jAZVz4Yxlhwrlq1Z7PbqEin+fkk3AOXZtUT/6g=;
+        b=iV8TRbJSRpfQvAEcTpMm0CZiJqiz0jqwGauSIol9w+Xtw0JDFNG8DQN+tcwk1SBjZb
+         QIhHkI4tocIbftoYt1/FDg7Heprewt/yv7swXnk9vMIVLXtVejVNNGKbR+nJ4NHnq6I/
+         jgXNjfDV70rWPbhou+F8ROUvTeuNCumZrDFec=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0NTxAn+6T8w9hdTIq5Cgi6wlBNu0iH0H7rw7aIi/4xE=;
-        b=PsrGHNQO1lyaooullnmZhko934kK9Iet9nPgbrlSA1XlJR9m3Dj2TQOhBnzrBxHICx
-         HNwxJ2boXj3xKJa+C7p0aszorlt5Pi7VlfTYJBeA5DxhLJTiBKsXV4+WndN6Mbb4eX3f
-         Os+4qShwn3abyiZO4sm1AqIcMvjB+rSVjQiORvBnwj52YKaWdetpBMXczIHZZhiFqarH
-         24k/71u5JoFmoAcH4jpnACHsTJcWs0M3dUsrk4H+x6g1+6nPyPfmjq8YB0KpD9TSPN5R
-         tyLftZbAf2kEVt28EDm+mZ5WaGObwt255sJT6kDzM72uQuv/ZCJsITI3+HHUqu6p/sqD
-         il7A==
-X-Gm-Message-State: AOAM531Wq7H0euIrYeBiXekREM2/2dZ0c9/pKHmL7vD4kj/FFkF8OM3n
-        OuCY9L12st287OADGEJZMYuDDPPC7NtBUBQOEzp4uQ==
-X-Google-Smtp-Source: ABdhPJz95Pu6mvN7sneb+w+UwiN7N58yqxFti8Y9pz/wc22jLoKypJHa7M7XEU7IipN2UYUFTw4c20WWjuV+BG7fvX8=
-X-Received: by 2002:a19:e303:0:b0:477:b578:7df3 with SMTP id
- a3-20020a19e303000000b00477b5787df3mr2420941lfh.54.1652870292902; Wed, 18 May
- 2022 03:38:12 -0700 (PDT)
+        bh=aIo0+jAZVz4Yxlhwrlq1Z7PbqEin+fkk3AOXZtUT/6g=;
+        b=sXnMvRbucSlrrxF3jK7hgyqFQLpavjWC3BCaKkK5yXO6V+Uvi27/jui9rdOObXE9sH
+         Ar4N7FA5hzE7gM8uZm4KiRbrAvrOPIPY8cYZfkuYZHCDKg0IIL9u5yNwL5at5ZsJ3woI
+         EF8seDSXt6FkFYS5DErXA/LNvDTh/lnlPFeE9UmqFU6RJzJ8tAOcn9DIg7CzS4x26U8o
+         wIvDGQlYjKnEffpcLD5sfqvywAfMl7VceLSzhqO2GkOtiWdAHm+8iUP966vqfNEF+OlO
+         K5pnmjIF2lFKmexoQvYNlT8li9I0qljvi6a9uXnaKR9KizmZ2bA9o4trnQVuVRrs8F4G
+         tvIg==
+X-Gm-Message-State: AOAM5336Lz5CntsLt0iwOrJ5pwKOONjrDueI14YpwoDgSRy3ozU1tAB1
+        W0Z8kDW1Z5O08V99IMl2x/tHDi3zwnQcCB2wj8P2pKx9gds=
+X-Google-Smtp-Source: ABdhPJwZAzPOtY3hjC/L3Ea0I8RcPaN91yjCvK0GKg7jOtNI9J51WFghWJGZdHwSKR5MQDdKJkKUU0lGSwLThGt67Zg=
+X-Received: by 2002:a25:b197:0:b0:64e:ae59:e2d0 with SMTP id
+ h23-20020a25b197000000b0064eae59e2d0mr619095ybj.523.1652870361313; Wed, 18
+ May 2022 03:39:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518100841.1497391-1-fam.zheng@bytedance.com> <20220518102140.GF10117@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220518102140.GF10117@worktop.programming.kicks-ass.net>
-From:   "Feiran Zheng ." <fam.zheng@bytedance.com>
-Date:   Wed, 18 May 2022 11:38:02 +0100
-Message-ID: <CAG+v+Kb5ON2-49t8ZZwH2jT31Jvi+F_HYW0gQ3ss040GKdp0Zw@mail.gmail.com>
-Subject: Re: [External] Re: [RFC PATCH] sched: Enable root level cgroup
- bandwidth control
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        zhouchengming@bytedance.com,
-        Vincent Guittot <vincent.guittot@linaro.org>, fam@euphon.net,
-        Mel Gorman <mgorman@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        songmuchun@bytedance.com, Juri Lelli <juri.lelli@redhat.com>
+References: <20220429064051.61552-1-linmiaohe@huawei.com> <20220517164553.29d6b76eb0cc656556916372@linux-foundation.org>
+ <6f42e812-ab51-9b24-13f2-2493b917cb98@huawei.com>
+In-Reply-To: <6f42e812-ab51-9b24-13f2-2493b917cb98@huawei.com>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Wed, 18 May 2022 12:39:10 +0200
+Message-ID: <CAM4kBBKicBu-MsJ+=1QRwA4xpOUaz_iRj15+qkK4URyLzVSmCQ@mail.gmail.com>
+Subject: Re: [PATCH 0/9] A few fixup patches for z3fold
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 11:21 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed, May 18, 2022 at 4:02 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
 >
-> On Wed, May 18, 2022 at 11:08:41AM +0100, Fam Zheng wrote:
-> > In the data center there sometimes comes a need to throttle down a
-> > server,
+> On 2022/5/18 7:45, Andrew Morton wrote:
+> > On Fri, 29 Apr 2022 14:40:42 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+> >
+> >> This series contains a few fixup patches to fix sheduling while atomic,
+> >> fix possible null pointer dereferencing, fix various race conditions and
+> >> so on. More details can be found in the respective changelogs.
+> >
+> > We haven't heard from Vitaly but this series has been in mm-unstable
 >
-> Why?
+> I will be really grateful if Vitaly has the time to review. :)
 
-For economical reasons there can be over-provisioning in DC power
-supply (UPS capacity etc) because the utilization expectation of the
-racks is not maximum value. But the workload can be client driven,
-depending on how many users are online, and in the end the power
-supply may overload and trip itself. To avoid that, upon a threshold,
-some servers need to be brought down or throttled. The latter is
-obviously going to be much more smooth.
+I absolutely will, sorry for the delay.
+
+~Vitaly
+
+>
+>
+> > and linux-next for three weeks, so I plan to move it into mm-stable
+> > later this week.
+>
+> Thanks!
+>
+> > .
+> >
+>

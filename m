@@ -2,92 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3690C52B561
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C9352B56B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbiERIqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S233560AbiERIqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233522AbiERIqM (ORCPT
+        with ESMTP id S233546AbiERIqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:46:12 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9C233340;
-        Wed, 18 May 2022 01:46:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652863571; x=1684399571;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L/lLZmPJYIUElQLXz0c6cMAmGlkHoAzU1BvepLn3GXQ=;
-  b=Q27HzFAzfmVArlPIVnWYqhHPfWCifaCw3HHGT1pw9nxht7ljdjMNn2Yw
-   UqeM1PAMFf7eT0867Tw91ECrp0172XGLgfzmCzMNPTchUOUpIEyc/uWQg
-   9EWMeXMGWM6OdyxINw4bULnxuIOpb7F62CtVrq3AprGw3KwXOa5RiL9an
-   9hhAbfQfv+fjzCrYUyPr3wdVA5Qe5rci9tLX8mHQIQWe/b3ZG6EEEZPBO
-   Mo2ZA2oBt5ja4VS3UUCeYriHxzKL+knoqnoEyuKcGJJna6DHhTtgUn6AS
-   6yVJqrnzWQ88M70JjKPwYjqhTHixAZzQeEfsGYYz/U324nkUAk99455RU
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="252079130"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="252079130"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:46:11 -0700
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="545338044"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:46:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nrFJm-0008vp-SS;
-        Wed, 18 May 2022 11:46:06 +0300
-Date:   Wed, 18 May 2022 11:46:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 1/2] pinctrl: intel: make irq_chip immutable
-Message-ID: <YoSyTq2908EptTGd@smile.fi.intel.com>
-References: <20220517163820.86768-1-andriy.shevchenko@linux.intel.com>
- <YoR/QXuS+VlLVWto@lahna>
+        Wed, 18 May 2022 04:46:39 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBB66FD27
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:46:36 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2fee010f509so16345277b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qPcKS1Ha+hKfB2lrvxghAjYU5JFm8iV16VHBnSnQMMs=;
+        b=moffsW5YZQuTFTUwPQu0v29BDmri2WHu0YtRzq2bvstH6QEBFna3ydED/dthnqnIah
+         cAxmAvPik9cNa9fknZOGyzwqCQJVjrGRGdbaBZRgtqYTY+KXjGv2H191T4dCWADm7Vil
+         evKE7U2qrgJUcj9bpDIJLXbH8+kjV64n32K+YALbYKbrduLPP4QeUC4uQOW2g1QyUHbG
+         KhZXjSkJe9RK+NOtc4UE1zMiRdBSGKjgaWGLKxbx7SvyIFH38v7lpqgOxR2eyyvtG1DY
+         H0Tz7jxJqR19kLHuYqt4f7HKj6B+UDsYKjmHhcGefNb+sI4dVfbdBV3gilCRwIMlhHs2
+         vW2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qPcKS1Ha+hKfB2lrvxghAjYU5JFm8iV16VHBnSnQMMs=;
+        b=pIdJkrdVJJCcMNQAvjfH9iQGqvK3YL1S9boLcAn/R8DbRYu5iMBT2zDbpzL9akVifs
+         zC6VC0HDEViv4Ewx9rOn/PCC5yOO+tU6ggr/4EK3Ohp2JiTBhh1GKxqw4TAwwqZzD5as
+         GymJgvgFhWGlfUOrnHlIFdDrxTnY2g1A5qYmr8OzRer7TsWguc+45wzPvjbkrEfI7/By
+         CmhKHig0tmkaIM+LBbIaVO+PpBtTLUm8C7FIP0gXnYUrQS1rwIfmf2iKGVIohhcnYf76
+         KT/dR/P0KA5g7tdXZRsNfDGFvWfXYAmZDu8ozOvd0CEphzwPuJ/E5CBF2fNFfuYWTQVQ
+         cCHA==
+X-Gm-Message-State: AOAM5308g9NrzkqfP8n6U5cESiSaCWfQPhhyUKbmmFw6EfYb/Tca0XMt
+        sJdULYvfVMcW4yLwDcOgwgeoBPwOrrCXhc7ElOcrdQ==
+X-Google-Smtp-Source: ABdhPJzKJHs24G9bBTdAAJdbd7PD2VDpfRxHHH4l80yKXHscXrAk081wTw1rc2EdCUO27l8eEclEZuXt/OFQgSYbYvE=
+X-Received: by 2002:a81:3ac2:0:b0:2f7:f777:a43 with SMTP id
+ h185-20020a813ac2000000b002f7f7770a43mr30466814ywa.60.1652863595994; Wed, 18
+ May 2022 01:46:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoR/QXuS+VlLVWto@lahna>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220516193613.497233635@linuxfoundation.org>
+In-Reply-To: <20220516193613.497233635@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 18 May 2022 14:16:24 +0530
+Message-ID: <CA+G9fYuX+-cb5V=OtgpAH2w762yUTwccmdBOG-GsOJuYLHuQjg@mail.gmail.com>
+Subject: Re: [PATCH 4.9 00/19] 4.9.315-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 08:08:17AM +0300, Mika Westerberg wrote:
-> On Tue, May 17, 2022 at 07:38:19PM +0300, Andy Shevchenko wrote:
-> > +static const struct irq_chip intel_gpio_irq_chip = {
-> > +	.name		= "intel-gpio",
-> > +	.irq_ack	= intel_gpio_irq_ack,
-> > +	.irq_mask	= intel_gpio_irq_mask,
-> > +	.irq_unmask	= intel_gpio_irq_unmask,
-> > +	.irq_set_type	= intel_gpio_irq_type,
-> > +	.irq_set_wake	= intel_gpio_irq_wake,
-> > +	.flags		= IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
-> > +	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-> > +};
-> 
-> You still have the inconsistent alignment here.
+On Tue, 17 May 2022 at 01:07, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.315 release.
+> There are 19 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 18 May 2022 19:36:02 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.315-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I'm not sure what problem do you see.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-If you are talking about last line, it's special and that's how it's done
-in other drivers which have been converted already.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
--- 
-With Best Regards,
-Andy Shevchenko
+## Build
+* kernel: 4.9.315-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-4.9.y
+* git commit: f71a7b3321693ff2eb8f97a521ad23ca53934428
+* git describe: v4.9.314-20-gf71a7b332169
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
+14-20-gf71a7b332169
 
+## Test Regressions (compared to v4.9.313-8-g0d0d580b3778)
+No test regressions found.
 
+## Metric Regressions (compared to v4.9.313-8-g0d0d580b3778)
+No metric regressions found.
+
+## Test Fixes (compared to v4.9.313-8-g0d0d580b3778)
+No test fixes found.
+
+## Metric Fixes (compared to v4.9.313-8-g0d0d580b3778)
+No metric fixes found.
+
+## Test result summary
+total: 80137, pass: 63338, fail: 858, skip: 13732, xfail: 2209
+
+## Build Summary
+* arm: 238 total, 238 passed, 0 failed
+* arm64: 32 total, 32 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 31 total, 31 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-inte[
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

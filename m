@@ -2,84 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6551652B007
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDFC52B009
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbiERBmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S233777AbiERBmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233709AbiERBmR (ORCPT
+        with ESMTP id S233762AbiERBmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:42:17 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD04541A6;
-        Tue, 17 May 2022 18:42:15 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-f189b07f57so926245fac.1;
-        Tue, 17 May 2022 18:42:15 -0700 (PDT)
+        Tue, 17 May 2022 21:42:44 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA2351E47
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:42:42 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so1371069pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:42:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6IbrZNf7jtW60Nrdztn2g8OCQmqlbxKofa0AB+lB5iw=;
+        b=r02X7VM/XjJFy+/Ecy7q/RvNSrxIQKNulQrRs+z1nSV9l08hB6NHRBrBo7Agqc1YSz
+         ImsrTajN4r4joSRdEKoIWQjebdXQ/IWVlHueB3QmRKjvjbZR+r3gnSYJ8Yr7vbWpfYOk
+         xDCUt2Sbmi/ETtp/hNdGIF29/dvpSqPZqt2rFoIXn5FYa/OD+sBI60PVw++iZ9KpMt4r
+         eYEil0cDwTgYMVZqnFx9PZLhPB9wrRPKR0sbUCZJQg6uFW9EAEEXIFUT1J5MqNNlkr7k
+         Kb0zfQEg+P1tCjl7gpigoC92wj+OtTnccjA08QjLeaAzq8S6fSrfVO1xhzRCoG+747+o
+         Z2tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=crkI7+HwsdAoc3Iq1GjjnJUYtoumtzV3pILJENOsucw=;
-        b=paDn/idW6m4wLhw5KkJ19HKat1dPY4xuzAKWb06qPkjqubnZn6cclKGyOMycNGK2C+
-         FjoSrSil2mnNsfeRoHtRLs5yLQuMqW2MKjYCu7I+oBhMOOVhwKTDMx9CV5BaWND4ARDM
-         y9vs8xKR+7CC+UW8/CghtFpX5J7IXtShVBc026/Hwe1Rp0DJav5C67buK1YlsEJU1Wyj
-         W562SnAl0ONNIcvGkH6Ky3qJOFBEfCD+F+EX1oiojLqad8QVIcQ21ktt6588AOQ4jnAp
-         q94dXK5Yi6CZcq30modnskb0GZLC9qy8yZkf2dB0Slj72Ov2o9KDUGHe9SuFxF6FqO2P
-         Sp2Q==
-X-Gm-Message-State: AOAM532p1C9c214cejlyu0vD/lhKzHnlZRv4ZK/ShpGX8vBNmU+kAi/P
-        xlQaW3Bi5/84Ynr0rsN0KQ==
-X-Google-Smtp-Source: ABdhPJxdxYNaSg4qceB2OCZjxphvGORaZqyQisZZrLDaSde4Qt++qmPmm1WVwJIhjbJG92ClP0kR9g==
-X-Received: by 2002:a05:6870:65a5:b0:f1:9153:c355 with SMTP id fp37-20020a05687065a500b000f19153c355mr8456281oab.163.1652838134589;
-        Tue, 17 May 2022 18:42:14 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r41-20020a05687017a900b000f15ca674b2sm406734oae.52.2022.05.17.18.42.13
+        bh=6IbrZNf7jtW60Nrdztn2g8OCQmqlbxKofa0AB+lB5iw=;
+        b=zoWpznRYmSgaRFIht6rNXs02x6mn3FBTW+BeADXW/sZGMjf1NhUwGkJVkxajjc9jpL
+         bHXcQCoGDb3qJ0RmuC62ewjBZEbXkyL0BX6iQBEUNWDg5Pv5WLkERmQDL2xFvc6R9NB8
+         cSpMsWzlWGzT80+WG3LnH0/nPNP4EFCatvsvSBNg5Ri2Xserh9r0ydYI9BrYCMJv46ZC
+         paXpdbqI64LeLJ+G2FNz4StvwaTKvnjU/68H5qiWyphEGAnBE/Aac7VPHq/TqgxP5edQ
+         4DvgjmOFRIoDRZ6532k2Sj655dIx+B/YV7Do6WAqI4QEMmzTLN//RzpezM9sgk/j+u6v
+         UKow==
+X-Gm-Message-State: AOAM531x9tuIufN+Voaa3MiA8iyNkAVQH7e/QoDj/AgUH5Ol8dvYeEcx
+        +Nzzuwqy1WhfCHixMUgp/J75Ug==
+X-Google-Smtp-Source: ABdhPJxd+CRJIEzDvmDRGSr6j4b03U5qwpeOar3AelIBlKDP/ruyeK7TKPT66WYlKJQ5TuVXhmK7Xg==
+X-Received: by 2002:a17:90a:a410:b0:1dc:d03b:5623 with SMTP id y16-20020a17090aa41000b001dcd03b5623mr28288258pjp.95.1652838162215;
+        Tue, 17 May 2022 18:42:42 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v13-20020a056a00148d00b0050dc76281c8sm387208pfu.162.2022.05.17.18.42.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 18:42:13 -0700 (PDT)
-Received: (nullmailer pid 2045103 invoked by uid 1000);
-        Wed, 18 May 2022 01:42:12 -0000
-Date:   Tue, 17 May 2022 20:42:12 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     joro@8bytes.org, krzysztof.kozlowski+dt@linaro.org,
-        yong.wu@mediatek.com, will@kernel.org,
-        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        matthias.bgg@gmail.com
-Subject: Re: [PATCH 8/8] dt-bindings: iommu: mediatek: Require
- mediatek,pericfg for mt8195-infra
-Message-ID: <20220518014212.GA2045069-robh@kernel.org>
-References: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
- <20220517132107.195932-9-angelogioacchino.delregno@collabora.com>
+        Tue, 17 May 2022 18:42:41 -0700 (PDT)
+Date:   Wed, 18 May 2022 01:42:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Waiman Long <longman@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: VMX: do not disable interception for
+ MSR_IA32_SPEC_CTRL on eIBRS
+Message-ID: <YoRPDp/3jfDUE529@google.com>
+References: <20220512174427.3608-1-jon@nutanix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220517132107.195932-9-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220512174427.3608-1-jon@nutanix.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 15:21:07 +0200, AngeloGioacchino Del Regno wrote:
-> The MT8195 SoC has IOMMU related registers in the pericfg_ao iospace:
-> require a phandle to that.
+On Thu, May 12, 2022, Jon Kohler wrote:
+> Avoid expensive rdmsr on every VM Exit for MSR_IA32_SPEC_CTRL on
+> eIBRS enabled systems iff the guest only sets IA32_SPEC_CTRL[0] (IBRS)
+> and not [1] (STIBP) or [2] (SSBD) by not disabling interception in
+> the MSR bitmap.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> eIBRS enabled guests using just IBRS will only write SPEC_CTRL MSR
+> once or twice per vCPU on boot, so it is far better to take those
+> VM exits on boot than having to read and save this msr on every
+> single VM exit forever. This outcome was suggested on Andrea's commit
+> 2f46993d83ff ("x86: change default to spec_store_bypass_disable=prctl spectre_v2_user=prctl")
+> however, since interception is still unilaterally disabled, the rdmsr
+> tax is still there even after that commit.
+> 
+> This is a significant win for eIBRS enabled systems as this rdmsr
+> accounts for roughly ~50% of time for vmx_vcpu_run() as observed
+> by perf top disassembly, and is in the critical path for all
+> VM-Exits, including fastpath exits.
+> 
+> Update relevant comments in vmx_vcpu_run() with appropriate SDM
+> references for future onlookers.
+> 
+> Fixes: 2f46993d83ff ("x86: change default to spec_store_bypass_disable=prctl spectre_v2_user=prctl")
+> Signed-off-by: Jon Kohler <jon@nutanix.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> Cc: Waiman Long <longman@redhat.com>
 > ---
+>  arch/x86/kvm/vmx/vmx.c | 46 +++++++++++++++++++++++++++++++-----------
+>  1 file changed, 34 insertions(+), 12 deletions(-)
 > 
-> Note for Rob: as of now, there's no iommu node in upstream mt8195 devicetrees yet.
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index d58b763df855..d9da6fcecd8c 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -2056,6 +2056,25 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  		if (kvm_spec_ctrl_test_value(data))
+>  			return 1;
 > 
->  .../devicetree/bindings/iommu/mediatek,iommu.yaml      | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
+> +		/*
+> +		 * For Intel eIBRS, IBRS (SPEC_CTRL_IBRS aka 0x00000048 BIT(0))
+> +		 * only needs to be set once and can be left on forever without
+> +		 * needing to be constantly toggled. If the guest attempts to
+> +		 * write that value, let's not disable interception. Guests
+> +		 * with eIBRS awareness should only be writing SPEC_CTRL_IBRS
+> +		 * once per vCPU per boot.
+> +		 *
+> +		 * The guest can still use other SPEC_CTRL features on top of
+> +		 * eIBRS such as SSBD, and we should disable interception for
 
-Acked-by: Rob Herring <robh@kernel.org>
+Please don't add comments that say "should" or "need", just state what is being
+done.  Just because a comment says XYZ should do something doesn't necessarily
+mean that XYZ actually does that thing.
+
+> +		 * those situations to avoid a multitude of VM-Exits's;
+> +		 * however, we will need to check SPEC_CTRL on each exit to
+> +		 * make sure we restore the host value properly.
+> +		 */
+
+This whole comment can be more succint.  Better yet, merge it with the comment
+below (out of sight in this diff) and opportunistically update that comment to
+reflect what actually happens if L2 is the first to write a non-zero value (arguably
+a bug that should be fixed, but meh).  The IBPB MSR has the same flaw.  :-/
+
+> +		if (boot_cpu_has(X86_FEATURE_IBRS_ENHANCED) && data == BIT(0)) {
+
+Use SPEC_CTRL_IBRS instead of open coding "BIT(0)", then a chunk of the comment
+goes away.
+
+> +			vmx->spec_ctrl = data;
+> +			break;
+> +		}
+
+There's no need for a separate if statement.  And the boot_cpu_has() check can
+be dropped, kvm_spec_ctrl_test_value() has already verified the bit is writable
+(unless you're worried about bit 0 being used for something else?)
+
+> +
+>  		vmx->spec_ctrl = data;
+>  		if (!data)
+>  			break;
+> @@ -6887,19 +6906,22 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+>  	vmx_vcpu_enter_exit(vcpu, vmx);
+> 
+>  	/*
+> -	 * We do not use IBRS in the kernel. If this vCPU has used the
+> -	 * SPEC_CTRL MSR it may have left it on; save the value and
+> -	 * turn it off. This is much more efficient than blindly adding
+> -	 * it to the atomic save/restore list. Especially as the former
+> -	 * (Saving guest MSRs on vmexit) doesn't even exist in KVM.
+> -	 *
+> -	 * For non-nested case:
+> -	 * If the L01 MSR bitmap does not intercept the MSR, then we need to
+> -	 * save it.
+> +	 * SDM 25.1.3 - handle conditional exit for MSR_IA32_SPEC_CTRL.
+> +	 * To prevent constant VM exits for SPEC_CTRL, kernel may
+
+Please wrap at 80 chars (ignore the bad examples in KVM).
+
+> +	 * disable interception in the MSR bitmap for SPEC_CTRL MSR,
+> +	 * such that the guest can read and write to that MSR without
+> +	 * trapping to KVM; however, the guest may set a different
+> +	 * value than the host. For exit handling, do rdmsr below if
+> +	 * interception is disabled, such that we can save the guest
+> +	 * value for restore on VM entry, as it does not get saved
+> +	 * automatically per SDM 27.3.1.
+>  	 *
+> -	 * For nested case:
+> -	 * If the L02 MSR bitmap does not intercept the MSR, then we need to
+> -	 * save it.
+> +	 * This behavior is optimized on eIBRS enabled systems, such
+> +	 * that the kernel only disables interception for MSR_IA32_SPEC_CTRL
+> +	 * when guests choose to use additional SPEC_CTRL features
+> +	 * above and beyond IBRS, such as STIBP or SSBD. This
+> +	 * optimization allows the kernel to avoid doing the expensive
+> +	 * rdmsr below.
+
+I don't see any reason to restate why the MSR may or may not be intercepted, just
+explain when the value needs to be read.
+
+E.g. something like this for the whole patch?
+
+---
+ arch/x86/kvm/vmx/vmx.c | 60 +++++++++++++++++++-----------------------
+ 1 file changed, 27 insertions(+), 33 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 610355b9ccce..70d863a7882d 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2057,20 +2057,30 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 			return 1;
+
+ 		vmx->spec_ctrl = data;
+-		if (!data)
++
++		/*
++		 * Disable interception on the first non-zero write, unless the
++		 * guest is setting only SPEC_CTRL_IBRS, which is typically set
++		 * once at boot and never touched again.  All other bits are
++		 * often set on a per-task basis, i.e. may change frequently,
++		 * so the benefit of avoiding VM-exits during guest context
++		 * switches outweighs the cost of RDMSR on every VM-Exit to
++		 * save the guest's value.
++		 */
++		if (!data || data == SPEC_CTRL_IBRS)
+ 			break;
+
+ 		/*
+-		 * For non-nested:
+-		 * When it's written (to non-zero) for the first time, pass
+-		 * it through.
+-		 *
+-		 * For nested:
+-		 * The handling of the MSR bitmap for L2 guests is done in
+-		 * nested_vmx_prepare_msr_bitmap. We should not touch the
+-		 * vmcs02.msr_bitmap here since it gets completely overwritten
+-		 * in the merging. We update the vmcs01 here for L1 as well
+-		 * since it will end up touching the MSR anyway now.
++		 * Update vmcs01.msr_bitmap even if L2 is active, i.e. disable
++		 * interception for the vCPU on the first write regardless of
++		 * whether the WRMSR came from L1 or L2.  vmcs02's bitmap is a
++		 * combination of vmcs01 and vmcs12 bitmaps, and will be
++		 * recomputed by nested_vmx_prepare_msr_bitmap() on the next
++		 * nested VM-Enter.  Note, this does mean that future WRMSRs
++		 * from L2 will be intercepted until the next nested VM-Exit if
++		 * L2 was the first to write, but L1 exposing the MSR to L2
++		 * without first writing it is unlikely and not worth the
++		 * extra bit of complexity.
+ 		 */
+ 		vmx_disable_intercept_for_msr(vcpu,
+ 					      MSR_IA32_SPEC_CTRL,
+@@ -2098,15 +2108,9 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 		wrmsrl(MSR_IA32_PRED_CMD, PRED_CMD_IBPB);
+
+ 		/*
+-		 * For non-nested:
+-		 * When it's written (to non-zero) for the first time, pass
+-		 * it through.
+-		 *
+-		 * For nested:
+-		 * The handling of the MSR bitmap for L2 guests is done in
+-		 * nested_vmx_prepare_msr_bitmap. We should not touch the
+-		 * vmcs02.msr_bitmap here since it gets completely overwritten
+-		 * in the merging.
++		 * Disable interception on the first IBPB, odds are good IBPB
++		 * will be a frequent guest action.  See the comment for
++		 * MSR_IA32_SPEC_CTRL for details on the nested interaction.
+ 		 */
+ 		vmx_disable_intercept_for_msr(vcpu, MSR_IA32_PRED_CMD, MSR_TYPE_W);
+ 		break;
+@@ -6887,19 +6891,9 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
+ 	vmx_vcpu_enter_exit(vcpu, vmx);
+
+ 	/*
+-	 * We do not use IBRS in the kernel. If this vCPU has used the
+-	 * SPEC_CTRL MSR it may have left it on; save the value and
+-	 * turn it off. This is much more efficient than blindly adding
+-	 * it to the atomic save/restore list. Especially as the former
+-	 * (Saving guest MSRs on vmexit) doesn't even exist in KVM.
+-	 *
+-	 * For non-nested case:
+-	 * If the L01 MSR bitmap does not intercept the MSR, then we need to
+-	 * save it.
+-	 *
+-	 * For nested case:
+-	 * If the L02 MSR bitmap does not intercept the MSR, then we need to
+-	 * save it.
++	 * Save SPEC_CTRL if it may have been written by the guest, the current
++	 * value in hardware is used by x86_spec_ctrl_restore_host() to avoid
++	 * WRMSR if the current value matches the host's desired value.
+ 	 */
+ 	if (unlikely(!msr_write_intercepted(vmx, MSR_IA32_SPEC_CTRL)))
+ 		vmx->spec_ctrl = native_read_msr(MSR_IA32_SPEC_CTRL);
+
+base-commit: 69b59889b0147aa80098936e383b06fec30cdf5c
+--
+

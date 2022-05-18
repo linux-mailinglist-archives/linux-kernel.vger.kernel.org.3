@@ -2,159 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980CB52C3ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A739A52C3F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242380AbiERUGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 16:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
+        id S242264AbiERUG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 16:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242255AbiERUGM (ORCPT
+        with ESMTP id S242364AbiERUGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 16:06:12 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66604DE31D;
-        Wed, 18 May 2022 13:06:10 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IJg40j027170;
-        Wed, 18 May 2022 20:06:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=3JgnKZ+mUY8j3RzKtqkPm7SfmQ/4kc4VFfN2P1P7R+Y=;
- b=dqXvk20tEiZUqHLLkaX5D1EU/2uE7ATIxr+9QviFm6B+FpVw5YeYrIUZyVj1YHQ0jfVJ
- ZJN8Xfh/4LqFx1h3x6E3ilVMS9nRa5FhSSF+pDMl30X8NlJqh5EuuWprgGC/ErDIgOpJ
- wmVee6kiLg0onTd+ovGL7MEPcBElhHIk54N4WfW3+tmnLXeVQrUwhnlnTvuWePTXmesx
- hhGVvhdzz5FuiVsU8wdE5G+MYfWKCwDja0+A8jrO3a1R1uauP6DRX0if0ycte5ICrMzL
- Myr3RRaVmSIR3wk/tug7DHgGh5jZe1txf/5jo3J+R+1Yz9yNQ5WBmaot4HLkAd/ycyrn WA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g576agh57-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 20:06:02 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IJmUFw015763;
-        Wed, 18 May 2022 20:06:01 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g576agh43-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 20:06:01 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IK5LXX019229;
-        Wed, 18 May 2022 20:05:59 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3g2429e6gh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 20:05:59 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IJq2CJ18940372
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 19:52:02 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 095CFA4051;
-        Wed, 18 May 2022 20:05:55 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB2C1A404D;
-        Wed, 18 May 2022 20:05:51 +0000 (GMT)
-Received: from vajain21.in.ibm.com (unknown [9.43.77.53])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Wed, 18 May 2022 20:05:51 +0000 (GMT)
-Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Thu, 19 May 2022 01:35:50 +0530
-From:   Vaibhav Jain <vaibhav@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Prakhar Srivastava <prsriva@linux.microsoft.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH] powerpc: check previous kernel's ima-kexec-buffer against memory bounds
-Date:   Thu, 19 May 2022 01:35:47 +0530
-Message-Id: <20220518200547.655788-1-vaibhav@linux.ibm.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 18 May 2022 16:06:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42B8623EB45
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652904392;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kUEP9mgzsY6Z/VY2AYK1ldrCYllOmEnEcAskiI5ssd0=;
+        b=f7DE5iMJ0HxRFCiTxzN1Zv/NYuRpWmWBplhC9CqxszbVAzV+kOQ0pXhLSM6ABvZuwPmAY2
+        Lsjfu8QwS70/e8TTKq7IbVcd9Zxo6sFqD41TKlYKt9dFXF27yFY13mMGDyUVaGRvgGjjvm
+        7MSMV7Ac1jYHMq/pC1IF0BCZllMdA4U=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-670-sZ0lk0PTMT-RF1lxZDJiNw-1; Wed, 18 May 2022 16:06:31 -0400
+X-MC-Unique: sZ0lk0PTMT-RF1lxZDJiNw-1
+Received: by mail-io1-f70.google.com with SMTP id k2-20020a0566022d8200b0065ad142f8c1so886092iow.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:06:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kUEP9mgzsY6Z/VY2AYK1ldrCYllOmEnEcAskiI5ssd0=;
+        b=F231hjTESDiA9QpwYEyb+YZXwK4Dii0DMKO/3ZaKZ3D4Nr5JR7Q1WO3c27WD+8l7ai
+         GmOzpETR/R3sbTEPH/s7QWx4hF8VmuE+DpNaNdMuHQw2aWlvFUr5hdKVCsCAa6kT1AO4
+         8Qj6fruxJLPy5LRDsdK4Wy9msC2Wdkmom8LtUDhwH6zhsjIOLTcrGIHvbqhNtGTVcs14
+         9htnJWITJwtdGXh2ZVpUR8KGLikuwTTEnlSTF0WwiZTscdkabMTOPX0ebS374E0ybA4+
+         IqsqmNQODOhksHWIQtTQxACDNHUDvQUWCMOk5XLp1NrmzDmByFsGCeOis/1GF3WGs0Ct
+         a/pg==
+X-Gm-Message-State: AOAM531A4PwQfVRpAb+g74ZHB+cdxTkqhSNR1j9aotnufXmYotJPQObo
+        W+451qC0wIvyxg59j9mfYUZMyYhuBirFT+YptDU0TrJs1e82enSUcZW/9nR0FlAwofoqiB/sYsZ
+        cg6AtlOUn87V/gmkuRzYwyBR0
+X-Received: by 2002:a92:c263:0:b0:2d1:173d:962e with SMTP id h3-20020a92c263000000b002d1173d962emr784809ild.156.1652904390942;
+        Wed, 18 May 2022 13:06:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxmMl6ZbCxagrfmGNsZaZ9j44die4g02KWinO4zidjTob0E4y896zjJZBw25cxYgYQv2WjNJg==
+X-Received: by 2002:a92:c263:0:b0:2d1:173d:962e with SMTP id h3-20020a92c263000000b002d1173d962emr784791ild.156.1652904390703;
+        Wed, 18 May 2022 13:06:30 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id 134-20020a6b148c000000b0065a47e16f4esm114134iou.32.2022.05.18.13.06.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 13:06:30 -0700 (PDT)
+Date:   Wed, 18 May 2022 16:06:28 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH v2] mm: Avoid unnecessary page fault retires on shared
+ memory types
+Message-ID: <YoVRxLEHG392qsjR@xz-m1.local>
+References: <20220506135205.46810-1-peterx@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: biRZhQYwiHimDKKLP5rnfJK5_zi4-rMx
-X-Proofpoint-ORIG-GUID: 3sWKm3k6UXgfSfcunPfsLO6XWtqpMRaY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- mlxlogscore=999 adultscore=0 bulkscore=0 spamscore=0 impostorscore=0
- clxscore=1011 malwarescore=0 priorityscore=1501 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180118
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220506135205.46810-1-peterx@redhat.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Presently ima_get_kexec_buffer() doesn't check if the previous kernel's
-ima-kexec-buffer lies outside the addressable memory range. This can result
-in a kernel panic if the new kernel is booted with 'mem=X' arg and the
-ima-kexec-buffer was allocated beyond that range by the previous kernel.
-The panic is usually of the form below:
+On Fri, May 06, 2022 at 09:52:05AM -0400, Peter Xu wrote:
+> v2:
+> - Fix syzbot report
+> - Added unit to the test results in commit message
+> 
+> Note: I didn't copy any arch maintainers yet because I want to get some
+> feedback from the mm people first..  I'll start doing so when there's a new
+> version.  Please have a look, thanks.
+> ---
 
-$ sudo kexec --initrd initrd vmlinux --append='mem=16G'
+Any further comment on this one before I start to copy arch maintainers?
 
-<snip>
- BUG: Unable to handle kernel data access on read at 0xc000c01fff7f0000
- Faulting instruction address: 0xc000000000837974
- Oops: Kernel access of bad area, sig: 11 [#1]
-<snip>
- NIP [c000000000837974] ima_restore_measurement_list+0x94/0x6c0
- LR [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
- Call Trace:
- [c00000000371fa80] [c00000000083b55c] ima_load_kexec_buffer+0xac/0x160
- [c00000000371fb00] [c0000000020512c4] ima_init+0x80/0x108
- [c00000000371fb70] [c0000000020514dc] init_ima+0x4c/0x120
- [c00000000371fbf0] [c000000000012240] do_one_initcall+0x60/0x2c0
- [c00000000371fcc0] [c000000002004ad0] kernel_init_freeable+0x344/0x3ec
- [c00000000371fda0] [c0000000000128a4] kernel_init+0x34/0x1b0
- [c00000000371fe10] [c00000000000ce64] ret_from_kernel_thread+0x5c/0x64
- Instruction dump:
- f92100b8 f92100c0 90e10090 910100a0 4182050c 282a0017 3bc00000 40810330
- 7c0802a6 fb610198 7c9b2378 f80101d0 <a1240000> 2c090001 40820614 e9240010
- ---[ end trace 0000000000000000 ]---
+Thanks,
 
-Fix this issue by checking returned address/size of previous kernel's
-ima-kexec-buffer against memblock's memory bounds.
-
-Fixes: fee3ff99bc67("powerpc: Move arch independent ima kexec functions to
-drivers/of/kexec.c")
-
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: Prakhar Srivastava <prsriva@linux.microsoft.com>
-Cc: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-Cc: Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc: Rob Herring <robh@kernel.org>
-Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
----
- drivers/of/kexec.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/of/kexec.c b/drivers/of/kexec.c
-index b9bd1cff1793..c73007eda52d 100644
---- a/drivers/of/kexec.c
-+++ b/drivers/of/kexec.c
-@@ -140,6 +140,13 @@ int ima_get_kexec_buffer(void **addr, size_t *size)
- 	if (ret)
- 		return ret;
- 
-+	/* if the ima-kexec-buffer goes beyond the addressable memory */
-+	if (!memblock_is_region_memory(tmp_addr, tmp_size)) {
-+		pr_warn("IMA buffer at 0x%lx, size = 0x%zx beyond memory\n",
-+			tmp_addr, tmp_size);
-+		return -EINVAL;
-+	}
-+
- 	*addr = __va(tmp_addr);
- 	*size = tmp_size;
- 
 -- 
-2.35.1
+Peter Xu
 

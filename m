@@ -2,129 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7734352BCBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3CC52BC3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237606AbiERNJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
+        id S237531AbiERNKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237448AbiERNJ6 (ORCPT
+        with ESMTP id S237448AbiERNKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:09:58 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D133117B851
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:09:56 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652879394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nSL1VQXqpZd0642FdZ4Hh+Wwgy2znoxK/NkE70FKucE=;
-        b=vpWWbTn2+Qyhoa8rsTdRFpwkyH1IZp3/1KYQYA6U+D9wd/CL1snBLVLc6qCATpFmNRS/yj
-        rirrwQCl9tWNNlYSlmnn4VFkZtW1a7jyTmJo0AnkUU5mQFgScdqfaRAWzgoVt4+28EDL0q
-        UPjR4FvtgnSHLUQF3lTKeYRNf/JHJYDu2Q2hVzjmq1sgWGAQvcPbbzboJXaLfYCCoApogb
-        hAq8BFObpoESWuWbe8YeXWVJsuOJBvSRUn8Kru4cRVL+Ry5z12QQadF85KP6RveB82ABbk
-        LvxTuFpLMM1vqG1iO3Vfm7vhJR+or0RFkFMUuXMYC+vceM9HKlqNQTQndcyBaw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652879394;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nSL1VQXqpZd0642FdZ4Hh+Wwgy2znoxK/NkE70FKucE=;
-        b=Vs++B3BoYyxtqvIxD+PRh6GrtBXsD+uTbGmF+HJTVD3vlRwP9CnqNPUAjbThd3p4YZWtoX
-        paYiR6jP8lDpPNCg==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Filipe Manana <fdmanana@suse.com>,
-        Vadim Galitsin <vadim.galitsyn@oracle.com>
-Subject: Re: [patch 0/3] x86/fpu: Prevent FPU state corruption
-In-Reply-To: <YoRFjTIzMYZu8Hq8@zx2c4.com>
-References: <20220501192740.203963477@linutronix.de>
- <YnKeag3Ulg0NR58Q@zx2c4.com> <YoRFjTIzMYZu8Hq8@zx2c4.com>
-Date:   Wed, 18 May 2022 15:09:54 +0200
-Message-ID: <87fsl7j8bh.ffs@tglx>
+        Wed, 18 May 2022 09:10:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F63517B871;
+        Wed, 18 May 2022 06:10:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10AB26178C;
+        Wed, 18 May 2022 13:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6990DC385AA;
+        Wed, 18 May 2022 13:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652879413;
+        bh=S0c/U8TGnMAYSAUg3XSouU7ZNEiDpnBInkFtKaT+sRQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mV2EhdMhLnlFAInQUoHPWybAImi4yxkvVC7qIPn13+P44jHIX0En7ZLT+aEZ68QQq
+         OSrmJ1Uz1vSGv48PATGkcE2WBvyDvWMK3zhlX8JtPX3PqiZh1TFnA7Bt6TKJ7Nqkjt
+         uGnVvriJVSGBYJYQuNS0ApKbX8Y7iVgvyxF7kpY1WX81qeKOfoocfkv/fE+6fNvyc+
+         NCNbPoABXNNc+f2RlLaR6hatIcGmXT15V0AIWApLI9/4N/qAFw0QMnMnhh1sT8OLeC
+         C7gE90z//IgKq7WTL0wn6lrrlskrX2XinEoq7togUcllCyeThsWq0kKNq+lEaZwS0L
+         XW3fJAjWFmUnQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 558E3F0393B;
+        Wed, 18 May 2022 13:10:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] eth: sun: cassini: remove dead code
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165287941334.26952.3275082787982617735.git-patchwork-notify@kernel.org>
+Date:   Wed, 18 May 2022 13:10:13 +0000
+References: <e3cf25ce-740a-c9eb-0d30-41230672b67c@suse.cz>
+In-Reply-To: <e3cf25ce-740a-c9eb-0d30-41230672b67c@suse.cz>
+To:     =?utf-8?b?TWFydGluIExpxaFrYSA8bWxpc2thQHN1c2UuY3o+?=@ci.codeaurora.org
+Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18 2022 at 03:02, Jason A. Donenfeld wrote:
-> On Wed, May 04, 2022 at 05:40:26PM +0200, Jason A. Donenfeld wrote:
->> On Sun, May 01, 2022 at 09:31:42PM +0200, Thomas Gleixner wrote:
->> > The recent changes in the random code unearthed a long standing FPU state
->> > corruption due do a buggy condition for granting in-kernel FPU usage.
->>  
->> Thanks for working that out. I've been banging my head over [1] for a
->> few days now trying to see if it's a mis-bisect or a real thing. I'll
->> ask Larry to retry with this patchset.
->
-> So, Larry's debugging was inconsistent and didn't result in anything I
-> could piece together into basic cause and effect. But luckily Vadim, who
-> maintains the VirtualBox drivers for Oracle, was able to reproduce the
-> issue and was able to conduct some real debugging. I've CC'd him here.
-> From talking with Vadim, here are some findings thus far:
->
->   - Certain Linux guest processes crash under high load.
->   - Windows kernel guest panics.
->
-> Observation: the Windows kernel uses SSSE3 in their kernel all over the
-> place, generated by the compiler.
->
->   - Moving the mouse around helps induce the crash.
->
-> Observation: add_input_randomness() -> .. -> kernel_fpu_begin() -> blake2s_compress().
->
->   - The problem exhibits itself in rc7, so this patchset does not fix
->     the issue.
->   - Applying https://xn--4db.cc/ttEUSvdC fixes the issue.
->
-> Observation: the problem is definitely related to using the FPU in a
-> hard IRQ.
->
-> I went reading KVM to get some idea of why KVM does *not* have this
-> problem, and it looks like there's some careful code there about doing
-> xsave and such around IRQs. So my current theory is that VirtualBox's
-> VMM just forgot to do this, and until now this bug went unnoticed.
+Hello:
 
-That's a very valid assumption. I audited all places which fiddle with
-FPU in Linus tree and with the fix applied they're all safe.
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-> Since VirtualBox is out of tree (and extremely messy of a codebase), and
-> this appears to be an out of tree module problem rather than a kernel
-> problem, I'm inclined to think that there's not much for us to do, at
-> least until we receive information to the contrary of this presumption.
+On Wed, 18 May 2022 09:18:53 +0200 you wrote:
+> Fixes the following GCC warning:
+> 
+> drivers/net/ethernet/sun/cassini.c:1316:29: error: comparison between two arrays [-Werror=array-compare]
+> drivers/net/ethernet/sun/cassini.c:3783:34: error: comparison between two arrays [-Werror=array-compare]
+> 
+> Note that 2 arrays should be compared by comparing of their addresses:
+> note: use ‘&cas_prog_workaroundtab[0] == &cas_prog_null[0]’ to compare the addresses
+> 
+> [...]
 
-Agreed in all points.
+Here is the summary with links:
+  - [v2] eth: sun: cassini: remove dead code
+    https://git.kernel.org/netdev/net-next/c/32329216ca1d
 
-> But in case you do want to do something proactively, I don't have any
-> objections to just disabling the FPU in hard IRQ for 5.18. And in 5.19,
-> add_input_randomness() isn't going to hit that path anyway. But also,
-> doing nothing and letting the VirtualBox people figure out their bug
-> would be fine with me too. Either way, just wanted to give you a heads
-> up.
-
-That virtualborx bug has to be fixed in any case as this problem exists
-forever and there have been drivers using FPU in hard interrupt context
-in the past sporadically, so it's sheer luck that this didn't explode
-before. AFAICT all of this has been moved to softirq context over the
-years, so the random code is probably the sole in hard interrupt user in
-mainline today.
-
-In the interest of users we should probably bite the bullet and just
-disable hard interrupt FPU usage upstream and Cc stable. The stable
-kernel updates probably reach users faster.
-
-Thanks,
-
-        tglx
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 

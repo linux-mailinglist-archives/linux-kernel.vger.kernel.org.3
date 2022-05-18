@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754E152B3CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834D252B40F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbiERHt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S232527AbiERHtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbiERHtS (ORCPT
+        with ESMTP id S232518AbiERHt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:49:18 -0400
+        Wed, 18 May 2022 03:49:26 -0400
 Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D780C11E4B6;
-        Wed, 18 May 2022 00:49:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA991207DE;
+        Wed, 18 May 2022 00:49:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652860158; x=1684396158;
+  t=1652860166; x=1684396166;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=rOYdWmdQCnEpAHcJFCYdRtOeaAOYF7eoFxilIXHP6Bo=;
-  b=f76IxhdMGRpcFIVZl4IoTOvtiIGxMgmbcF5O68qO3WRp3t0i5EFlC3nQ
-   GP2f97x2etzlO2ZE3TygF0xsWdZsNTQTcZEDjgvE+cYvxJvuRuRLVpGse
-   YjdmChiVaYpg0oHfvMguDJ/JPDTve9Qy17U7qma1wL+izhjsTabITBwxt
-   Y=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 May 2022 00:49:17 -0700
+  bh=2p+D/WdtUzo7ZNUrDbOnD9yJq+2AeopkckDysa1nz80=;
+  b=tQCfcPvOz6bnrV7muXGxEVPBWt6WJvrrfLTOEre3u2lkQ8TkOCcAx2t7
+   XiPj5NJhPPDSdAuaysQOrwJlpYhFBcyE6zrOytBeO5iUKxnCE400PPXo/
+   yNShTkQSMcSyekk99XrTz2cqTZQFozC8BfhqwJiwcvL9mT0Qeq/09ywMk
+   0=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 May 2022 00:49:25 -0700
 X-QCInternal: smtphost
 Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:49:17 -0700
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:49:25 -0700
 Received: from blr-ubuntu-185.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 00:49:09 -0700
+ 15.2.986.22; Wed, 18 May 2022 00:49:17 -0700
 From:   Vivek Kumar <quic_vivekuma@quicinc.com>
 To:     <corbet@lwn.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
         <tglx@linutronix.de>, <maz@kernel.org>, <axboe@kernel.dk>,
@@ -50,9 +50,9 @@ CC:     <len.brown@intel.com>, <pavel@ucw.cz>, <paulmck@kernel.org>,
         <quic_svaddagi@quicinc.com>,
         Vivek Kumar <quic_vivekuma@quicinc.com>,
         Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: [RFC 2/6] PM: Hibernate: Add option to disable disk offset randomization
-Date:   Wed, 18 May 2022 13:18:37 +0530
-Message-ID: <1652860121-24092-3-git-send-email-quic_vivekuma@quicinc.com>
+Subject: [RFC 3/6] block: gendisk: Add a new genhd capability flag
+Date:   Wed, 18 May 2022 13:18:38 +0530
+Message-ID: <1652860121-24092-4-git-send-email-quic_vivekuma@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
 References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
@@ -71,64 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a kernel parameter to disable the disk offset randomization
-for SSD devices in which such feature is available at the
-firmware level. This is helpful in improving hibernation
-resume time.
+Add a new genhd capability flag to serialize offsets
+for swap partition. This flag is enabled for the gendisk of
+the block device which will be used for saving the snapshot
+of the hibernation image, based on a kernel parameter
+"noswap_randomize". Serializing offset in swap partition
+helps in improving hibernation resume time from bootloader.
 
 Signed-off-by: Vivek Kumar <quic_vivekuma@quicinc.com>
 Signed-off-by: Prasanna Kumar <quic_kprasan@quicinc.com>
 ---
- Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
- kernel/power/swap.c                             |  9 +++++++++
- 2 files changed, 20 insertions(+)
+ include/linux/blkdev.h | 1 +
+ kernel/power/swap.c    | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 666ade9..06b4f10 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5192,6 +5192,17 @@
- 			Useful for devices that are detected asynchronously
- 			(e.g. USB and MMC devices).
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 1b24c1f..be094e7 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -92,6 +92,7 @@ enum {
+ 	GENHD_FL_REMOVABLE			= 1 << 0,
+ 	GENHD_FL_HIDDEN				= 1 << 1,
+ 	GENHD_FL_NO_PART			= 1 << 2,
++	GENHD_FL_NO_RANDOMIZE			= 1 << 3,
+ };
  
-+	noswap_randomize
-+			Kernel uses random disk offsets to help with wear-levelling
-+			of SSD devices, while saving the hibernation snapshot image to
-+			disk. Use this parameter to disable this feature for SSD
-+			devices in scenarios when, such randomization is addressed at
-+			the firmware level and hibenration image is not re-generated
-+			frequently.
-+			(Useful for improving hibernation resume time as snapshot pages
-+			are available in disk serially and can be read in bigger chunks
-+			without seeking)
-+
- 	retain_initrd	[RAM] Keep initrd memory after extraction
- 
- 	rfkill.default_state=
+ enum {
 diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 91fffdd..8d5c811 100644
+index 8d5c811..0a40eda 100644
 --- a/kernel/power/swap.c
 +++ b/kernel/power/swap.c
-@@ -44,6 +44,7 @@ u32 swsusp_hardware_signature;
-  */
- static bool clean_pages_on_read;
- static bool clean_pages_on_decompress;
-+static bool noswap_randomize;
- 
- /*
-  *	The swap map is a data structure used for keeping track of each page
-@@ -1616,3 +1617,11 @@ static int __init swsusp_header_init(void)
- }
- 
- core_initcall(swsusp_header_init);
-+
-+static int __init noswap_randomize_setup(char *str)
-+{
-+	noswap_randomize = true;
-+	return 1;
-+}
-+
-+__setup("noswap_randomize", noswap_randomize_setup);
+@@ -1526,6 +1526,9 @@ int swsusp_check(void)
+ 					    FMODE_READ | FMODE_EXCL, &holder);
+ 	if (!IS_ERR(hib_resume_bdev)) {
+ 		set_blocksize(hib_resume_bdev, PAGE_SIZE);
++		if (noswap_randomize)
++			hib_resume_bdev->bd_disk->flags |=
++					GENHD_FL_NO_RANDOMIZE;
+ 		clear_page(swsusp_header);
+ 		error = hib_submit_io(REQ_OP_READ, 0,
+ 					swsusp_resume_block,
 -- 
 2.7.4
 

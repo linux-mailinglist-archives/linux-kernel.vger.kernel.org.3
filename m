@@ -2,76 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8780352C78C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F84052C78E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiERXb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 19:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
+        id S231370AbiERXco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 19:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiERXb0 (ORCPT
+        with ESMTP id S229982AbiERXck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 19:31:26 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4020D35A97;
-        Wed, 18 May 2022 16:31:25 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id 3so2589440ily.2;
-        Wed, 18 May 2022 16:31:25 -0700 (PDT)
+        Wed, 18 May 2022 19:32:40 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157A91666B3;
+        Wed, 18 May 2022 16:32:39 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id p4so4827293lfg.4;
+        Wed, 18 May 2022 16:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lVJJebMlPVF5A5XDAVZHl3sAYnjL4i4r2zSkkM3XY8w=;
-        b=VvozH93x1DMs7MoQRYYrpmPKDJzo27XgtQpKQUaSvtapVIjZMPcc3umx50yBaGc3AI
-         2OJRktp86/F83ESrsUw73BGfgcIz8oD1qku2Klj1+ZD4g4feUO9h7XT8eO+mUTASchDT
-         u80QvVlcDUSM4elq9L8TrQXNgF4y7LEjlc+ZDHqprw2TsnJqEMyAA6/OnMWt0JPVxi2a
-         gMhy7oEp8sdBxJb1G9SGKIhIhQvi3ppo6BsBjR5Rv/4j65Q2rFDHUabpJ8dOB2UwuQun
-         dkeTru0yttbeY5hKK2/5wbE8RNt9PSoJzKN1Vps49/7OQoAyJlaJVqjnlfFMtYolw4C5
-         l97g==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=+LGXPC/nc5jPsFNWeFnV3sMHcGrlhqWcYZ7LdmbKRk8=;
+        b=YTHEh7mTOmNtdzt4vQbdAc2SgEofQ268qYKBDuNf/dOC6SxLJE063CXRsT7pOhKL1B
+         EGVemTL1TLKqWYa9CSGx5cbFZ4E9T+4Of+1+hsq50kvDC4VGTl+vLzagzw/9FIiMD3mD
+         68EtqA8PUsGWxuwkNjJN7CN0F5dYVrBn60wH/8QkhglC7NjT1tcsmpDa3P1fOxbvWmqJ
+         GGo/O2fedbOeYWcu0CSzqlUmHH69ulzsmxE4XTaT3WZenUfYjq66nFfHk9uJYHgiBNez
+         3SGwnSe2PpE/fxhUokfLiy6EqKaSwofgOGt66tG6Ex/mFSOaAX1KZIwwHiS95tMT+i/l
+         kFrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lVJJebMlPVF5A5XDAVZHl3sAYnjL4i4r2zSkkM3XY8w=;
-        b=yaTrvQQt80oSRqfo849G2UzqCo/Sxuq96Yk4u1NNpBLH0s9CeeD6e8OxVkI7NRNOwr
-         J74QpAUSaiJObH/rZsR04ANF5kaH54JU1Aez6AdqAda9S+VBJEPthKayriziGlk3dLMR
-         yIIVJQC+2pmQ2og7DOiH96PT0ek2kOHnwri5TQp0lkGhEpzTIUlDKYUtc8T6z3/a0Wvr
-         6YKqHJogyOIF+HX+thjMnbs4CvSJ06cyfOZIAjlP5LMwVxOLGOJ1KPjxEIee6PYTZ/FP
-         RH3tSIkmjz4NkhZ1+jsrBLwtKz4c3kSuGUK+QKxUTM+NGc1Qu0FV0V3/U11/mjvBTQF1
-         2Y4g==
-X-Gm-Message-State: AOAM532/k/lS5p2QGEj3iHwH9Z68gtpF0zSWdYYNOg/mTyZu4BBzIxe6
-        +zLf0Rq6a2W9JPv7Id9C8Mj0qYrtfSzJ5JvWBiE=
-X-Google-Smtp-Source: ABdhPJxUY57EsYv0YkxIbk9exT0rzX/VTjAxYY4RoeiARphLhvlVkfc7PeXga1KW7ZLOI0tPa/wvQwKKSQXP6itPWR8=
-X-Received: by 2002:a05:6e02:1b82:b0:2cf:199f:3b4b with SMTP id
- h2-20020a056e021b8200b002cf199f3b4bmr1133463ili.71.1652916684309; Wed, 18 May
- 2022 16:31:24 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=+LGXPC/nc5jPsFNWeFnV3sMHcGrlhqWcYZ7LdmbKRk8=;
+        b=XRWmeA9h/jW7mB0+0mHxKHMmhGYGAGvXdfR0metNHui3bHYfSZqa3uTsDb+LnawV2m
+         CK0MaQcz6sf3ZJs58qMf4ZlwXdtck9NzTOfDra7dTMybDYlScKulycredohOXT0yWH5v
+         ycHsNvYLjzwCbZJaWJgslfESZ6G0bo0xVDpmK5atEYnro1qC9NDOtVIniQjOT+HigdYP
+         MOSLRU+D2NyZtQl968ZH9ntcAaY2ITKjakR9/18d6oM4QsNWv3nDcqfudiMQiNKiLcNR
+         KxM7DAObE67iqtimkJbPshNrdRLakeTnt/jZBzpkPu9O1c84GHVT3IyjajmgIcc+Ghwi
+         NJKA==
+X-Gm-Message-State: AOAM530l4q6yZQrDcMIn+p+zEMONV6Vbz0MxBWLldUmLVpyLCsvVnwnr
+        u4POMkObXQAV9xWhqU5RJHZp8aKCOJw=
+X-Google-Smtp-Source: ABdhPJwjk0UvPnxiWmUdMMDJvHCgF0t+PGqTImMMJx2jyaDgM9Se5UhDGarsoLtoC23AOueCaP89SQ==
+X-Received: by 2002:a19:494b:0:b0:476:5917:b67 with SMTP id l11-20020a19494b000000b0047659170b67mr1293318lfj.452.1652916757237;
+        Wed, 18 May 2022 16:32:37 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id 189-20020a2e09c6000000b00253b5bb829esm358776ljj.98.2022.05.18.16.32.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 16:32:36 -0700 (PDT)
+Subject: Re: [PATCH V2 5/7] dt-bindings: Add xen,dev-domid property
+ description for xen-grant DMA ops
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     xen-devel <xen-devel@lists.xenproject.org>,
+        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
+        <virtualization@lists.linux-foundation.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
+ <1651947548-4055-6-git-send-email-olekstysh@gmail.com>
+ <CAK8P3a2cAnXr8TDDYTiFxTWzQxa67sGnYDQRRD+=Q8_cSb1mEw@mail.gmail.com>
+ <56e8c32d-6771-7179-005f-26ca58555659@gmail.com>
+ <CAK8P3a1YhkEZ8gcbXHEa5Bwx-4VVRJO8SUHf8=RNWRsc2Yo-+A@mail.gmail.com>
+From:   Oleksandr <olekstysh@gmail.com>
+Message-ID: <460a746c-6b61-214b-4653-44a1430e314d@gmail.com>
+Date:   Thu, 19 May 2022 02:32:35 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <cover.1652772731.git.esyr@redhat.com> <525b99881dc144b986e381eb23b12617a311f243.1652772731.git.esyr@redhat.com>
-In-Reply-To: <525b99881dc144b986e381eb23b12617a311f243.1652772731.git.esyr@redhat.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 18 May 2022 16:31:13 -0700
-Message-ID: <CAEf4BzZVe2k1q-XrTwq=OMvcFRdZSfYa0bv1occxR0NX_Ax2rA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/4] bpf_trace: support 32-bit kernels in bpf_kprobe_multi_link_attach
-To:     Eugene Syromiatnikov <esyr@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+In-Reply-To: <CAK8P3a1YhkEZ8gcbXHEa5Bwx-4VVRJO8SUHf8=RNWRsc2Yo-+A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,82 +92,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 12:36 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
->
-> It seems that there is no reason not to support 32-bit architectures;
-> doing so requires a bit of rework with respect to cookies handling,
-> however, as the current code implicitly assumes
-> that sizeof(long) == sizeof(u64).
->
-> Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
-> ---
->  kernel/trace/bpf_trace.c | 17 ++++++++---------
->  1 file changed, 8 insertions(+), 9 deletions(-)
->
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 9c041be..a93a54f 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2435,16 +2435,12 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->         struct bpf_link_primer link_primer;
->         void __user *ucookies;
->         unsigned long *addrs;
-> -       u32 flags, cnt, size;
-> +       u32 flags, cnt, size, cookies_size;
->         void __user *uaddrs;
->         u64 *cookies = NULL;
->         void __user *usyms;
->         int err;
->
-> -       /* no support for 32bit archs yet */
-> -       if (sizeof(u64) != sizeof(void *))
-> -               return -EOPNOTSUPP;
-> -
->         if (prog->expected_attach_type != BPF_TRACE_KPROBE_MULTI)
->                 return -EINVAL;
->
-> @@ -2454,6 +2450,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->
->         uaddrs = u64_to_user_ptr(attr->link_create.kprobe_multi.addrs);
->         usyms = u64_to_user_ptr(attr->link_create.kprobe_multi.syms);
-> +       ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
->         if (!!uaddrs == !!usyms)
->                 return -EINVAL;
->
-> @@ -2461,8 +2458,11 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->         if (!cnt)
->                 return -EINVAL;
->
-> -       if (check_mul_overflow(cnt, (u32)sizeof(*addrs), &size))
-> +       if (check_mul_overflow(cnt, (u32)sizeof(*addrs), &size) ||
-> +           (ucookies &&
-> +            check_mul_overflow(cnt, (u32)sizeof(*cookies), &cookies_size))) {
->                 return -EOVERFLOW;
-> +       }
->         addrs = kvmalloc(size, GFP_KERNEL);
->         if (!addrs)
->                 return -ENOMEM;
-> @@ -2486,14 +2486,13 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->                         goto error;
->         }
->
-> -       ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
->         if (ucookies) {
-> -               cookies = kvmalloc(size, GFP_KERNEL);
-> +               cookies = kvmalloc(cookies_size, GFP_KERNEL);
 
-same question about consistent use of kvmalloc_array() and delegating
-all the overflow checks to it?
+On 18.05.22 19:39, Arnd Bergmann wrote:
 
->                 if (!cookies) {
->                         err = -ENOMEM;
->                         goto error;
->                 }
-> -               if (copy_from_user(cookies, ucookies, size)) {
-> +               if (copy_from_user(cookies, ucookies, cookies_size)) {
->                         err = -EFAULT;
->                         goto error;
->                 }
-> --
-> 2.1.4
+
+Hello Arnd
+
+
+> On Wed, May 18, 2022 at 5:06 PM Oleksandr <olekstysh@gmail.com> wrote:
+>> On 18.05.22 17:32, Arnd Bergmann wrote:
+>>> On Sat, May 7, 2022 at 7:19 PM Oleksandr Tyshchenko <olekstysh@gmail.com> wrote:
+>>>    This would mean having a device
+>>> node for the grant-table mechanism that can be referred to using the 'iommus'
+>>> phandle property, with the domid as an additional argument.
+>> I assume, you are speaking about something like the following?
+>>
+>>
+>> xen_dummy_iommu {
+>>      compatible = "xen,dummy-iommu";
+>>      #iommu-cells = <1>;
+>> };
+>>
+>> virtio@3000 {
+>>      compatible = "virtio,mmio";
+>>      reg = <0x3000 0x100>;
+>>      interrupts = <41>;
+>>
+>>      /* The device is located in Xen domain with ID 1 */
+>>      iommus = <&xen_dummy_iommu 1>;
+>> };
+> Right, that's that's the idea,
+
+thank you for the confirmation
+
+
+
+>   except I would not call it a 'dummy'.
+>  From the perspective of the DT, this behaves just like an IOMMU,
+> even if the exact mechanism is different from most hardware IOMMU
+> implementations.
+
+well, agree
+
+
 >
+>>> It does not quite fit the model that Linux currently uses for iommus,
+>>> as that has an allocator for dma_addr_t space
+>> yes (# 3/7 adds grant-table based allocator)
+>>
+>>
+>>> , but it would think it's
+>>> conceptually close enough that it makes sense for the binding.
+>> Interesting idea. I am wondering, do we need an extra actions for this
+>> to work in Linux guest (dummy IOMMU driver, etc)?
+> It depends on how closely the guest implementation can be made to
+> resemble a normal iommu. If you do allocate dma_addr_t addresses,
+> it may actually be close enough that you can just turn the grant-table
+> code into a normal iommu driver and change nothing else.
+
+Unfortunately, I failed to find a way how use grant references at the 
+iommu_ops level (I mean to fully pretend that we are an IOMMU driver). I 
+am not too familiar with that, so what is written below might be wrong 
+or at least not precise.
+
+The normal IOMMU driver in Linux doesn’t allocate DMA addresses by 
+itself, it just maps (IOVA-PA) what was requested to be mapped by the 
+upper layer. The DMA address allocation is done by the upper layer 
+(DMA-IOMMU which is the glue layer between DMA API and IOMMU API 
+allocates IOVA for PA?). But, all what we need here is just to allocate 
+our specific grant-table based DMA addresses (DMA address = grant 
+reference + offset in the page), so let’s say we need an entity to take 
+a physical address as parameter and return a DMA address (what actually 
+commit #3/7 is doing), and that’s all. So working at the dma_ops layer 
+we get exactly what we need, with the minimal changes to guest 
+infrastructure. In our case the Xen itself acts as an IOMMU.
+
+Assuming that we want to reuse the IOMMU infrastructure somehow for our 
+needs. I think, in that case we will likely need to introduce a new 
+specific IOVA allocator (alongside with a generic one) to be hooked up 
+by the DMA-IOMMU layer if we run on top of Xen. But, even having the 
+specific IOVA allocator to return what we indeed need (DMA address = 
+grant reference + offset in the page) we will still need the specific 
+minimal required IOMMU driver to be present in the system anyway in 
+order to track the mappings(?) and do nothing with them, returning a 
+success (this specific IOMMU driver should have all mandatory callbacks 
+implemented).
+
+I completely agree, it would be really nice to reuse generic IOMMU 
+bindings rather than introducing Xen specific property if what we are 
+trying to implement in current patch series fits in the usage of 
+"iommus" in Linux more-less. But, if we will have to add more 
+complexity/more components to the code for the sake of reusing device 
+tree binding, this raises a question whether that’s worthwhile.
+
+Or I really missed something?
+
+
+>
+>          Arnd
+
+-- 
+Regards,
+
+Oleksandr Tyshchenko
+

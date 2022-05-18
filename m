@@ -2,96 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EF252B938
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D842552B930
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235892AbiERLy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S235887AbiERLyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235810AbiERLyu (ORCPT
+        with ESMTP id S235810AbiERLyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:54:50 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190AE49C86;
-        Wed, 18 May 2022 04:54:48 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IBlL3S016293;
-        Wed, 18 May 2022 11:54:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=Ap+lBzAtoKjwarN7fWcNP0poXNCXF3aQkSAGGC9mrNQ=;
- b=NZ7uR6yZYJ6e74NjpaNPrJrrcRrB/09ejn0/ApE2z6qFILFvQiQKg7xT0PoI09hY3cvT
- zJAGWDEMwIcgmMn+/DofYRip5ICBEclD2b36drlRFtlkBkoz/VkK/sgMvNrPhJCIu5J4
- Vm6nBwp9sRM/lZQit0tD+L6cajsFoHk29x72dc03eZgw8bwLrvIZTjXDVDTwb+UjI2hK
- BHQRqdtD8Aw9CgJUQQQcIqRgXHFCTxwA9AwG20f0CcuEGiO30fEHHbbwkUZWqMF20Clg
- BhwPRTv3KYEN9nuIWYf1uqe4qQU9roJuq4XU40sc5iOPozf/TO8cqyksh6rdD5WxI9kG Xg== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g508103x6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 11:54:46 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IBqsiq002923;
-        Wed, 18 May 2022 11:54:45 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma02fra.de.ibm.com with ESMTP id 3g2428mjfk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 11:54:44 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IBsfIl48628084
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 11:54:41 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AADF852057;
-        Wed, 18 May 2022 11:54:41 +0000 (GMT)
-Received: from osiris (unknown [9.145.54.247])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 5B02A5204E;
-        Wed, 18 May 2022 11:54:41 +0000 (GMT)
-Date:   Wed, 18 May 2022 13:54:39 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Steffen Eiden <seiden@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] s390: Add attestation query information
-Message-ID: <YoTefxTetgGrfKym@osiris>
-References: <20220518095113.982955-1-seiden@linux.ibm.com>
+        Wed, 18 May 2022 07:54:43 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782D642A1C;
+        Wed, 18 May 2022 04:54:36 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L3B9b2Vr5zCskK;
+        Wed, 18 May 2022 19:49:39 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
+ (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
+ 2022 19:54:33 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yebin10@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH] ext4: fix bug_on in __es_tree_search
+Date:   Wed, 18 May 2022 20:08:16 +0800
+Message-ID: <20220518120816.1541863-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518095113.982955-1-seiden@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TKogau4XcC4SsuoX52VFtJzUpFkxKPIy
-X-Proofpoint-ORIG-GUID: TKogau4XcC4SsuoX52VFtJzUpFkxKPIy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_04,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- spamscore=0 impostorscore=0 mlxscore=0 bulkscore=0 clxscore=1015
- phishscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=538
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 09:51:13AM +0000, Steffen Eiden wrote:
-> We have information about the supported attestation header version
-> and paf (=  plaintext attestation flag) bits.
-> Let's expose it via the sysfs files.
-> 
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
-> ---
->  arch/s390/boot/uv.c        |  2 ++
->  arch/s390/include/asm/uv.h |  7 ++++++-
->  arch/s390/kernel/uv.c      | 20 ++++++++++++++++++++
->  3 files changed, 28 insertions(+), 1 deletion(-)
+Hulk Robot reported a BUG_ON:
+==================================================================
+kernel BUG at fs/ext4/extents_status.c:199!
+[...]
+RIP: 0010:ext4_es_end fs/ext4/extents_status.c:199 [inline]
+RIP: 0010:__es_tree_search+0x1e0/0x260 fs/ext4/extents_status.c:217
+[...]
+Call Trace:
+ ext4_es_cache_extent+0x109/0x340 fs/ext4/extents_status.c:766
+ ext4_cache_extents+0x239/0x2e0 fs/ext4/extents.c:561
+ ext4_find_extent+0x6b7/0xa20 fs/ext4/extents.c:964
+ ext4_ext_map_blocks+0x16b/0x4b70 fs/ext4/extents.c:4384
+ ext4_map_blocks+0xe26/0x19f0 fs/ext4/inode.c:567
+ ext4_getblk+0x320/0x4c0 fs/ext4/inode.c:980
+ ext4_bread+0x2d/0x170 fs/ext4/inode.c:1031
+ ext4_quota_read+0x248/0x320 fs/ext4/super.c:6257
+ v2_read_header+0x78/0x110 fs/quota/quota_v2.c:63
+ v2_check_quota_file+0x76/0x230 fs/quota/quota_v2.c:82
+ vfs_load_quota_inode+0x5d1/0x1530 fs/quota/dquot.c:2368
+ dquot_enable+0x28a/0x330 fs/quota/dquot.c:2490
+ ext4_quota_enable fs/ext4/super.c:6137 [inline]
+ ext4_enable_quotas+0x5d7/0x960 fs/ext4/super.c:6163
+ ext4_fill_super+0xa7c9/0xdc00 fs/ext4/super.c:4754
+ mount_bdev+0x2e9/0x3b0 fs/super.c:1158
+ mount_fs+0x4b/0x1e4 fs/super.c:1261
+[...]
+==================================================================
 
-Please write in the cover-letter *why* this is needed.
+Above issue may happen as follows:
+-------------------------------------
+ext4_fill_super
+ ext4_enable_quotas
+  ext4_quota_enable
+   ext4_iget
+    __ext4_iget
+     ext4_ext_check_inode
+      ext4_ext_check
+       __ext4_ext_check
+        ext4_valid_extent_entries
+         Check for overlapping extents does't take effect
+   dquot_enable
+    vfs_load_quota_inode
+     v2_check_quota_file
+      v2_read_header
+       ext4_quota_read
+        ext4_bread
+         ext4_getblk
+          ext4_map_blocks
+           ext4_ext_map_blocks
+            ext4_find_extent
+             ext4_cache_extents
+              ext4_es_cache_extent
+               ext4_es_cache_extent
+                __es_tree_search
+                 ext4_es_end
+                  BUG_ON(es->es_lblk + es->es_len < es->es_lblk)
+
+The error ext4 extents is as follows:
+0af3 0300 0400 0000 00000000    extent_header
+00000000 0100 0000 12000000     extent1
+00000000 0100 0000 18000000     extent2
+02000000 0400 0000 14000000     extent3
+
+In the ext4_valid_extent_entries function,
+if prev is 0, no error is returned even if lblock<=prev.
+This was intended to skip the check on the first extent, but
+in the error image above, prev=0+1-1=0 when checking the second extent,
+so even though lblock<=prev, the function does not return an error.
+As a result, bug_ON occurs in __es_tree_search and the system panics.
+
+To solve this problem, we only need to check that:
+1. The lblock of the first extent is not less than 0.
+2. The lblock of the next extent  is not less than
+   the next block of the previous extent.
+The same applies to extent_idx.
+
+Fixes: 5946d089379a ("ext4: check for overlapping extents in ext4_valid_extent_entries()")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+ fs/ext4/extents.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index e473fde6b64b..86ba0db20968 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -372,7 +372,7 @@ static int ext4_valid_extent_entries(struct inode *inode,
+ {
+ 	unsigned short entries;
+ 	ext4_lblk_t lblock = 0;
+-	ext4_lblk_t prev = 0;
++	ext4_lblk_t cur = 0;
+ 
+ 	if (eh->eh_entries == 0)
+ 		return 1;
+@@ -396,11 +396,11 @@ static int ext4_valid_extent_entries(struct inode *inode,
+ 
+ 			/* Check for overlapping extents */
+ 			lblock = le32_to_cpu(ext->ee_block);
+-			if ((lblock <= prev) && prev) {
++			if (lblock < cur) {
+ 				*pblk = ext4_ext_pblock(ext);
+ 				return 0;
+ 			}
+-			prev = lblock + ext4_ext_get_actual_len(ext) - 1;
++			cur = lblock + ext4_ext_get_actual_len(ext);
+ 			ext++;
+ 			entries--;
+ 		}
+@@ -420,13 +420,13 @@ static int ext4_valid_extent_entries(struct inode *inode,
+ 
+ 			/* Check for overlapping index extents */
+ 			lblock = le32_to_cpu(ext_idx->ei_block);
+-			if ((lblock <= prev) && prev) {
++			if (lblock < cur) {
+ 				*pblk = ext4_idx_pblock(ext_idx);
+ 				return 0;
+ 			}
+ 			ext_idx++;
+ 			entries--;
+-			prev = lblock;
++			cur = lblock + 1;
+ 		}
+ 	}
+ 	return 1;
+-- 
+2.31.1
+

@@ -2,145 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2101452B20E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714A452B212
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiERF7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 01:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        id S230425AbiERF6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 01:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiERF6s (ORCPT
+        with ESMTP id S230407AbiERF6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 01:58:48 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AB3C0396
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 22:58:47 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n18so818060plg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 22:58:47 -0700 (PDT)
+        Wed, 18 May 2022 01:58:44 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A962DC1ED8;
+        Tue, 17 May 2022 22:58:42 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id k16so1190072pff.5;
+        Tue, 17 May 2022 22:58:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=o0tYGv5gKzzwAKbeBtiGIhGw8+poYiZW6V66JN4rF/Y=;
-        b=Jmj34sGWh4dN6sVL1KcsVd5Ko6DxtA2ljfd7CxuyhF0iUnOPhJmr2jY9Jr4u0QQ15+
-         tht1CE1RtsOzKeg6g9OeQd8lluEuraX0SPjxQ+Ql84rNDcEXBJGwTrH+Tpe3hNdyk6rB
-         jh26SGTW8V0fnzBmjXSvV/r/LkwqA6pU832kpVBTQgwDAubo+aUt0IOvC9ElMg/RABtF
-         4pcZb1ZLnvGX3/k8qVUnPT5Ougk+NC9SxeKU1o4Os/e+SAEWrqrbZtAn4auU5x4zt0mz
-         zDLFUf6abxMtF8s3JTr4GXFaVcpY308IwERcMvZNT31n9wEZYyjvnphXCIW1idmPzJf0
-         kwvA==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Wvwoi2ieX1SAY39tBWj8LHG37asi931JP8mrlpfaKk4=;
+        b=IYRMNrIiumsSaflitKrY0i7FLS+lQCNLzOzrzfpuDPHl8qKTyR2SruC/IiZPaWASLU
+         h1814XYKS6hk+GXI8YmOfUnZZvmtntVApJKWkygY16itKnRQP2mlCzMkvZBUWHpeFhdf
+         vxsTjQ/hFRdQmWf81TAcvUVbgUIqwgYy/P2macO/GgTqyvjwUq6j6rEzicfyDezBeCJh
+         jalDG8dek+x5k4G1i6fjll8rsPu9bLOuh5MuDAsCSNI+H91QXyUx22iqd8m24ddtm7p9
+         SQvgRYreW4YjQ3RNg+uvIuLy6RceXkwr/A5qYIInoXTV+YQHxzPC4L5WS8ySQpgc+F6R
+         R5yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=o0tYGv5gKzzwAKbeBtiGIhGw8+poYiZW6V66JN4rF/Y=;
-        b=T681Lxo3RZVWomsUW4A3rgBNO0AmmDnd8FQB673KKhdh3KOb6BzVlluIPf/IiiJYkv
-         LM03jgGUJvdHsBGFewH50QDoO42DI38M11yO3TbcQe/R1WJV3otvI6O5xm3DkT8MMEeC
-         WmnSwp2oc06s2aEOjpM5YRPwtLLjpcagdb39bMJDbjGMWRfGOB64dF0L17xeDXcNXure
-         RbqPMoVHhCbjbD2YIOiCVmqobRL9+VaHuPYWqVqJp1poZ0CkBSbpSGBjzxmhB86iOMZB
-         qROebdKGmbf1YpT0gm6iS/h0fk5q+hmsJTUE9sIl/iep1Gti9gB0uBG76fQxSPCrMNKt
-         zk7A==
-X-Gm-Message-State: AOAM533QRvwkoigMhEKJEVzXmVKrE9qlfzd6u3Nx6eetTZGBNUcpMxFv
-        8UCSNeBuHnkZZrGcuVYhwoPl/Q==
-X-Google-Smtp-Source: ABdhPJwmo4MX8EtkpMW+wz6uUQ0J0zamBatqn6h0/7O/GiKhQ482py0wwHuBMX+OYGXPQpJEJSSkWQ==
-X-Received: by 2002:a17:903:41c1:b0:161:bec6:b308 with SMTP id u1-20020a17090341c100b00161bec6b308mr2581103ple.161.1652853526569;
-        Tue, 17 May 2022 22:58:46 -0700 (PDT)
-Received: from localhost.localdomain (n058152048195.netvigator.com. [58.152.48.195])
-        by smtp.gmail.com with ESMTPSA id cp16-20020a170902e79000b0015e8d4eb2c2sm627127plb.268.2022.05.17.22.58.41
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Wvwoi2ieX1SAY39tBWj8LHG37asi931JP8mrlpfaKk4=;
+        b=xCX9NlvSF5v2EHSXkqW2W7By52Pssel/I3L1TpNUQop0PsCIdJ0KaswWdZmsYhT9UL
+         ROCiwZqU9vDGnfnFLZjXK8LJ8lAg6d5nXXNzoGV3k+KOlpTwibI+LWnwf207VyrnvjKm
+         qTCJfdnXurpPdzMrZhZ8gva4eY2/pzligiZc+uCbb/T+PKClqKt6sM1QRtxjiub3tIil
+         Lps85V/5MzQ0GO9406X6z+rxUShcoL5F+bAdTJImJ+WBpejALcycdSIZYkKsLwW4+2h2
+         DhN++/vmXwD86by/NM5gIAeAEJf9r54SB27Qa3Y7ScI0R+0HxmYlynT4iA0Ggt20b6iW
+         54Ng==
+X-Gm-Message-State: AOAM530R0N0HgWofdpR6aAGaAJCE9WMCiPMaI/Suj8jZVNiYJZ52yHGj
+        E5+U2s0hBOBul3eS4h5oGKY=
+X-Google-Smtp-Source: ABdhPJwr9HRFJAt/zhYuJZ10Py9yYXbZjFzFpTiFrytFhnSOVnn+LtwTvwpMfpIndB0c1Sf+6QiTvA==
+X-Received: by 2002:a63:5d50:0:b0:3db:5325:b120 with SMTP id o16-20020a635d50000000b003db5325b120mr22910678pgm.212.1652853521830;
+        Tue, 17 May 2022 22:58:41 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id q13-20020a170903204d00b0015e8d4eb20asm649445pla.84.2022.05.17.22.58.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 22:58:46 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Like Xu <likexu@tencent.com>, Alyssa Ross <hi@alyssa.is>,
-        Ian Rogers <irogers@google.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Adam Li <adamli@amperemail.onmicrosoft.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        German Gomez <german.gomez@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ali Saidi <alisaidi@amazon.com>, Joe Mario <jmario@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v3 11/11] perf c2c: Use 'peer' as default display for Arm64
-Date:   Wed, 18 May 2022 13:57:29 +0800
-Message-Id: <20220518055729.1869566-12-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220518055729.1869566-1-leo.yan@linaro.org>
-References: <20220518055729.1869566-1-leo.yan@linaro.org>
+        Tue, 17 May 2022 22:58:41 -0700 (PDT)
+Message-ID: <62848b11.1c69fb81.6ce50.2091@mx.google.com>
+X-Google-Original-Message-ID: <20220518055839.GA1677365@cgel.zte@gmail.com>
+Date:   Wed, 18 May 2022 05:58:39 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, willy@infradead.org,
+        shy828301@gmail.com, roman.gushchin@linux.dev, shakeelb@google.com,
+        linmiaohe@huawei.com, william.kucharski@oracle.com,
+        peterx@redhat.com, hughd@google.com, vbabka@suse.cz,
+        songmuchun@bytedance.com, surenb@google.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, Yang Yang <yang.yang29@zte.com.cn>
+Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
+References: <20220505033814.103256-1-xu.xin16@zte.com.cn>
+ <YnUlntNFR4zeD+qa@dhcp22.suse.cz>
+ <6275d3e7.1c69fb81.1d62.4504@mx.google.com>
+ <YnjmPAToTR0C5o8x@dhcp22.suse.cz>
+ <6278fa75.1c69fb81.9c598.f794@mx.google.com>
+ <Ynj/l+pyFJxKfcbQ@dhcp22.suse.cz>
+ <6279c354.1c69fb81.7f6c1.15e0@mx.google.com>
+ <Yno3pNQOn1lAMPnu@dhcp22.suse.cz>
+ <627a5214.1c69fb81.1b7fb.47be@mx.google.com>
+ <YnpqYte2jLdcBiPg@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YnpqYte2jLdcBiPg@dhcp22.suse.cz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since Arm64 arch doesn't support HITMs flags, so use 'peer' as default
-if user doesn't specify display type; for other arches, it still uses
-'tot' as default display type if user doesn't specify it.
+On Tue, May 10, 2022 at 03:36:34PM +0200, Michal Hocko wrote:
+> On Tue 10-05-22 11:52:51, CGEL wrote:
+> > On Tue, May 10, 2022 at 12:00:04PM +0200, Michal Hocko wrote:
+> > > On Tue 10-05-22 01:43:38, CGEL wrote:
+> > > > On Mon, May 09, 2022 at 01:48:39PM +0200, Michal Hocko wrote:
+> > > > > On Mon 09-05-22 11:26:43, CGEL wrote:
+> > > > > > On Mon, May 09, 2022 at 12:00:28PM +0200, Michal Hocko wrote:
+> > > > > > > On Sat 07-05-22 02:05:25, CGEL wrote:
+> > > > > > > [...]
+> > > > > > > > If there are many containers to run on one host, and some of them have high
+> > > > > > > > performance requirements, administrator could turn on thp for them:
+> > > > > > > > # docker run -it --thp-enabled=always
+> > > > > > > > Then all the processes in those containers will always use thp.
+> > > > > > > > While other containers turn off thp by:
+> > > > > > > > # docker run -it --thp-enabled=never
+> > > > > > > 
+> > > > > > > I do not know. The THP config space is already too confusing and complex
+> > > > > > > and this just adds on top. E.g. is the behavior of the knob
+> > > > > > > hierarchical? What is the policy if parent memcg says madivise while
+> > > > > > > child says always? How does the per-application configuration aligns
+> > > > > > > with all that (e.g. memcg policy madivise but application says never via
+> > > > > > > prctl while still uses some madvised - e.g. via library).
+> > > > > > >
+> > > > > > 
+> > > > > > The cgroup THP behavior is align to host and totally independent just likes
+> > > > > > /sys/fs/cgroup/memory.swappiness. That means if one cgroup config 'always'
+> > > > > > for thp, it has no matter with host or other cgroup. This make it simple for
+> > > > > > user to understand or control.
+> > > > > 
+> > > > > All controls in cgroup v2 should be hierarchical. This is really
+> > > > > required for a proper delegation semantic.
+> > > > >
+> > > > 
+> > > > Could we align to the semantic of /sys/fs/cgroup/memory.swappiness?
+> > > > Some distributions like Ubuntu is still using cgroup v1.
+> > > 
+> > > cgroup v1 interface is mostly frozen. All new features are added to the
+> > > v2 interface.
+> > >
+> > 
+> > So what about we add this interface to cgroup v2?
+> 
+> Can you come up with a sane hierarchical behavior?
+> 
+> [...]
+> > > > For micro-service architecture, the application in one container is not a
+> > > > set of loosely tight processes, it's aim at provide one certain service,
+> > > > so different containers means different service, and different service
+> > > > has different QoS demand. 
+> > > 
+> > > OK, if they are tightly coupled you could apply the same THP policy by
+> > > an existing prctl interface. Why is that not feasible. As you are noting
+> > > below...
+> > > 
+> > > >     5.containers usually managed by compose software, which treats container as
+> > > > base management unit;
+> > > 
+> > > ..so the compose software can easily start up the workload by using prctl
+> > > to disable THP for whatever workloads it is not suitable for.
+> > 
+> > prctl(PR_SET_THP_DISABLE..) can not be elegance to support the semantic we
+> > need. If only some containers needs THP, other containers and host do not need
+> > THP. We must set host THP to always first, and call prctl() to close THP for
+> > host tasks and other containers one by one,
+> 
+> It might not be the most elegant solution but it should work.
+> Maintaining user interfaces for ever has some cost and the THP
+> configuration space is quite large already. So I would rather not add
+> more complication in unless that is absolutely necessary.
+>
 
-Suggested-by: Ali Saidi <alisaidi@amazon.com>
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- tools/perf/builtin-c2c.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+By the way, should we let prctl() support PR_SET_THP_ALWAYS? Just likes
+PR_TASK_PERF_EVENTS_DISABLE and PR_TASK_PERF_EVENTS_ENABLE. This would
+make it simpler to let certain process use THP while others not use.
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index 3bd422c5e8ae..042431b7b6ba 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -2785,7 +2785,7 @@ static int setup_callchain(struct evlist *evlist)
- 
- static int setup_display(const char *str)
- {
--	const char *display = str ?: "tot";
-+	const char *display = str;
- 
- 	if (!strcmp(display, "tot"))
- 		c2c.display = DISPLAY_TOT_HITM;
-@@ -2971,9 +2971,6 @@ static int perf_c2c__report(int argc, const char **argv)
- 	data.path  = input_name;
- 	data.force = symbol_conf.force;
- 
--	err = setup_display(display);
--	if (err)
--		goto out;
- 
- 	err = setup_coalesce(coalesce, no_source);
- 	if (err) {
-@@ -2994,6 +2991,22 @@ static int perf_c2c__report(int argc, const char **argv)
- 		goto out;
- 	}
- 
-+	/*
-+	 * Use the 'tot' as default display type if user doesn't specify it;
-+	 * since Arm64 platform doesn't support HITMs flag, use 'peer' as the
-+	 * default display type.
-+	 */
-+	if (!display) {
-+		if (!strcmp(perf_env__arch(&session->header.env), "arm64"))
-+			display = "peer";
-+		else
-+			display = "tot";
-+	}
-+
-+	err = setup_display(display);
-+	if (err)
-+		goto out_session;
-+
- 	session->itrace_synth_opts = &itrace_synth_opts;
- 
- 	err = setup_nodes(session);
--- 
-2.25.1
-
+> > in this process some tasks that start before we call prctl() may
+> > already use THP with no need.
+> 
+> As long as all those processes have a common ancestor I do not see how
+> that would be possible.
+> 
+> -- 
+> Michal Hocko
+> SUSE Labs

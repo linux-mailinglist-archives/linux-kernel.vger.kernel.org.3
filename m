@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DA752C679
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC3852C682
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiERWnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 18:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S230147AbiERWq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 18:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbiERWnJ (ORCPT
+        with ESMTP id S229885AbiERWq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 18:43:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E16F1F63AE;
-        Wed, 18 May 2022 15:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652913789; x=1684449789;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bApYtvt/TSAUqep0W2MdhIPoVxtJbVVYS29imwsu5XA=;
-  b=YCLap5/wYpa7Kea6sXxEo48yPC+7gFMK+MCghU7h9PAwcs1cpOn2KGX3
-   mbkZwTgffTkYQ6fKp2sK0f30z2a3qD9Q8YQMvro3WbMVZR6uuBk98SVwt
-   cvIy8kBSyMfZaxHvFuJMiZxZNPa7wka+JlEJ0PeZkPyp4z+3G2z29/JIF
-   xqxkr0gFWLJAMI3HdQthWF+X5y69tghXeDsJDGCFeQiui+ACJkdCxqX9s
-   cu6mSMAtDyOccXGARC/rrdw1JJxN4n0sXy0EWkZijqZLMr+5y5WIaTmOS
-   ilVUj7PDaYxxWcRMU/OE8+H/gu1PuAO9lYEjRRTYxpf/RrldRAtgxM4gQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="334968674"
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="334968674"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 15:43:08 -0700
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="700830716"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.11.158]) ([10.212.11.158])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 15:43:08 -0700
-Message-ID: <a05caaa9-244b-a84f-88b2-2d6bfec61fdd@intel.com>
-Date:   Wed, 18 May 2022 15:43:08 -0700
+        Wed, 18 May 2022 18:46:26 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5B07DE23;
+        Wed, 18 May 2022 15:46:25 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id q135so6093612ybg.10;
+        Wed, 18 May 2022 15:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r48GKaexilEZNN+sQI3f0KxD7Fc9KKp25yevrNkJt6M=;
+        b=Uzpo+Wgkuo7R9nwjoHz1Ywf5spGLvNmVK+Xc6NxnoGeZGsW9V8khu/KycVadRKaXiy
+         iq3kVj+dY8e4KMrH8HSV5JV/KPPFunpcLjWea7QhqBHGggAcffOYB2Frt9evVt/HhO2Y
+         0mulST3hR6HRg4ftUvKogatrBdZfVpv2crnQuJml1ybZmKZl2IRfEam1UbH4Fx5sR9GC
+         ARYrsqhHqqY40hR95yK83uSNwJfkOYJoQDmM5Axo3wMICESqCKQ1dVYgAzqypMr8X8FG
+         a5E6revze3QNx75jZgt2mFBXg70+yGgDA1RC+Xd+9z9CclvEK2CPPj8s4XAUsjliPJZa
+         p1fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r48GKaexilEZNN+sQI3f0KxD7Fc9KKp25yevrNkJt6M=;
+        b=Msogf2aF+VwbXxeH/WG8iErOR5qsUImIkPLZWVWm/SUkDE34iatdYRJKZ2Sq5/lvRL
+         x+0Ws6VO3q7RvlTaHGwXHDMmEV87bhdkDwpkII0aCEWtF5K8gQmsy+5XKnzFyGm88oMA
+         gMgrQlTZZkkZFetLO3nCLimWMKyEHN0Ro5II+hRVVXRh3VnDzVoSLlzzR65Y5F6keczR
+         m4vi+AyegTVj2WESP+pQk8XpVeP5MEjmGQ9QMQVZ5EPmMXgxwzJIrcWrfYBQFnv82sa4
+         BMoCDiYeClw7cfq+q6piVFkGRcz+OzdHpjSYrD1hKq2rtI+x8vT86vd0/l0aidJScwHN
+         ftJQ==
+X-Gm-Message-State: AOAM533uiE6pa45OCBjpfJ9MtgkwszDnX2ERq8NOBjtI2CEDxNv9Mb8e
+        6Zs3zT8+NWeKIfCzmZY2ONT4IulRce7wpzp/PBFKhiEl
+X-Google-Smtp-Source: ABdhPJye/mYo5nOX2hmyGqdD1Ru3j/LwxF30VPrIqOSRotDqSuRuVEvHLiMrmLPSBPHAaE7iXLfqSf7LfaQf75CdokM=
+X-Received: by 2002:a25:748b:0:b0:64d:b0ec:2c68 with SMTP id
+ p133-20020a25748b000000b0064db0ec2c68mr1790213ybc.173.1652913984223; Wed, 18
+ May 2022 15:46:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.0
-Subject: Re: linux-next: manual merge of the dmaengine tree with Linus' tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220517153435.645a9313@canb.auug.org.au>
- <YoTcmqygoMm/gmsZ@matsya> <a6df0b8a-dc42-51e4-4b7b-62d1d11c7800@intel.com>
- <20220519084049.3e5b58a8@canb.auug.org.au>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220519084049.3e5b58a8@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220415104951.27104-1-linux@fw-web.de> <20220415104951.27104-2-linux@fw-web.de>
+ <11363549.CDJkKcVGEf@phil>
+In-Reply-To: <11363549.CDJkKcVGEf@phil>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Wed, 18 May 2022 18:46:12 -0400
+Message-ID: <CAMdYzYqOEzNqwwRWx2U85uBBXtkz3OfVEWXDS-YCGmFg8Z7q5Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] arm64: dts: rockchip: set display regulators to
+ always-on on BPI-R2-Pro
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,20 +74,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/18/2022 3:40 PM, Stephen Rothwell wrote:
-> Hi Dave,
+On Tue, May 17, 2022 at 2:47 PM Heiko Stuebner <heiko@sntech.de> wrote:
 >
-> On Wed, 18 May 2022 10:20:59 -0700 Dave Jiang <dave.jiang@intel.com> wrote:
->> The lock needs to go around both functions, we can move it outside the if().
->>
->>    + 		mutex_lock(&wq->wq_lock);
->>     		if (wq->state == IDXD_WQ_ENABLED) {
->>     			idxd_wq_disable_cleanup(wq);
->>    -			idxd_wq_device_reset_cleanup(wq);
->>     			wq->state = IDXD_WQ_DISABLED;
->>     		}
->>    +		idxd_wq_device_reset_cleanup(wq);
->>    + 		mutex_unlock(&wq->wq_lock);
-> Thanks for checking.  I have made that change to my merge resolution.
-Thank you!
+> Am Freitag, 15. April 2022, 12:49:49 CEST schrieb Frank Wunderlich:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> >
+> > Set display related regulators to always-on on Banana PI R2 Pro
+> > board.
+>
+> Hmm, I'd expect some sort of explanation for the "why" here.
+> It looks like both the gpu patch as well as the vop patch do
+> reference the relevant regulators for the gpu+hdmi nodes,
+> so in theory this shouldn't be necessary anymore?
+
+I agree the hdmi power nodes don't need to be always on, if the hdmi
+driver is handling them correctly. Unfortunately the gpu power supply
+needs to stay always on until the issues with power-domains not being
+regulator aware is resolved. Otherwise we run into issues like the one
+mentioned in Lee's email, and issues where the gpu-regulator gets shut
+down and we start getting mmu faults.
+
+>
+> >
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > ---
+> >  arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+> > index 2700fb18a3bc..0950f9659bb4 100644
+> > --- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
+> > @@ -225,6 +225,7 @@ regulator-state-mem {
+> >
+> >                       vdd_gpu: DCDC_REG2 {
+> >                               regulator-name = "vdd_gpu";
+> > +                             regulator-always-on;
+> >                               regulator-init-microvolt = <900000>;
+> >                               regulator-initial-mode = <0x2>;
+> >                               regulator-min-microvolt = <500000>;
+> > @@ -274,6 +275,7 @@ regulator-state-mem {
+> >
+> >                       vdda0v9_image: LDO_REG1 {
+> >                               regulator-name = "vdda0v9_image";
+> > +                             regulator-always-on;
+> >                               regulator-min-microvolt = <900000>;
+> >                               regulator-max-microvolt = <900000>;
+> >
+> > @@ -369,6 +371,7 @@ regulator-state-mem {
+> >
+> >                       vcca1v8_image: LDO_REG9 {
+> >                               regulator-name = "vcca1v8_image";
+> > +                             regulator-always-on;
+> >                               regulator-min-microvolt = <1800000>;
+> >                               regulator-max-microvolt = <1800000>;
+> >
+> >
+>
+>
+>
+>

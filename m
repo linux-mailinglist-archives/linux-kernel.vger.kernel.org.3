@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF9D52B4C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA9352B4E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233046AbiERIXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S233097AbiERI1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbiERIXa (ORCPT
+        with ESMTP id S233092AbiERI1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:23:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E35910788A;
-        Wed, 18 May 2022 01:23:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 944491F9AF;
-        Wed, 18 May 2022 08:23:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652862207; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FJND1+favEk/cOgY0turwQ+6cBnWq+nsb19SAKTVPUA=;
-        b=t/o5epZYvxiBIQDzueYrPOwwiW1warWt2xq1/43b4Mj1nJfRwe5l+xKZd0iZfTWfO74CG4
-        7P318fbQMXRSCtWT9vlEpfhiCbavhA1HuRdRPC5UIYPhedEviCDhQ6jGCzMuYHoBDrdKt5
-        No7H2oBTBt/Q01S/kFrhKyw7lnHceNo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 60317133F5;
-        Wed, 18 May 2022 08:23:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7MepFv+shGK4aQAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Wed, 18 May 2022 08:23:27 +0000
-Date:   Wed, 18 May 2022 10:23:26 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, Roman Gushchin <guro@fb.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH v2 6/6] zswap: memcg accounting
-Message-ID: <20220518082326.GH17557@blackbody.suse.cz>
-References: <20220510152847.230957-1-hannes@cmpxchg.org>
- <20220510152847.230957-7-hannes@cmpxchg.org>
- <20220511173218.GB31592@blackbody.suse.cz>
- <YnwJUL90fuoHs3YW@cmpxchg.org>
- <20220513151426.GC16096@blackbody.suse.cz>
- <Yn6QfdouzkcrygTR@cmpxchg.org>
- <20220516143459.GA17557@blackbody.suse.cz>
- <YoKtgaxOAMBVKiCf@cmpxchg.org>
- <20220517165216.7acd8434f8b25606836e21e6@linux-foundation.org>
+        Wed, 18 May 2022 04:27:22 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEE7E277F;
+        Wed, 18 May 2022 01:27:10 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id gg20so1327306pjb.1;
+        Wed, 18 May 2022 01:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6uhcCD9Q9c+zxCoqwp1SKWrlds09Ui+hTejJMadUYQ8=;
+        b=knwLeeGs2uTSf5TwdhIm5ljqftyq1jOVfMGjDCVCBvz+83z5bXFaX8traenYQKYQ8C
+         brZkSLz9KC2b8krw58NkVoJw7Ud89iYQwNAzPkIkOaQktOoSYrP6j4rCZhGuWN8TxEgN
+         ramS9v19nXbCk8S71Wts7wJEb9/2SrRWIpcr/0kCAGD3cFI3+/6f26O729X1Jvv3O6c/
+         errWLCITazNz03uyIZJu3618L0T9aO6RxfqzsuLLL3JSWeS+K80KJAvYlXERe1U787PE
+         UJ7F/Mxg69KsqzhDiUwXkBXCrIplFXzYI3RGlELI/deqFj874rIBdROFxc2c0uUqVqxD
+         vyuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6uhcCD9Q9c+zxCoqwp1SKWrlds09Ui+hTejJMadUYQ8=;
+        b=yDdSXrpKZVV9TMkXSGgKPdVhxB2WhxxTfm7/QDdNqkO4oetzljGburtAuASaJ7gkDD
+         wtPK74GCJH5b62pYNz5j0pkEL6RQgEH0w/olDAgf2jp7wRyjLlToFVbDkv4VSo9/Ky6M
+         FG+W6Xo9Ks3znO6sWOg7LAOVXtPHGb9yOgAfrElBi0o2TFgxdMAvBDMd4pxLNVM+3VxU
+         2bIYS3lUyB3FEJDxO4rPxxxY+9Za1+f1uWFQX60XjqJg5rg30eW+Auv0fWWUxNTrAEh5
+         ssLwuzV1r+EyBZZ/pYJ9zB/sgm9/lP0XP5cwL5McaS6el12gBFFMjCuSvqf0UdubTGuF
+         Tbgg==
+X-Gm-Message-State: AOAM530r8VASqmGkBjZy+Npjo98ZzL8gdO3EZzFxTuYznwmMzCECl/Dn
+        Fmwrdrlh9W99YnmKPY9WsgI=
+X-Google-Smtp-Source: ABdhPJzNcgMOvUnJ/r2cIpDRhf/x+W2Y7fPUMs3R1jptn1Ppwt0PjAo2/lB6RnG7YaR7+yNBtgjoxA==
+X-Received: by 2002:a17:902:7781:b0:161:c85a:8fff with SMTP id o1-20020a170902778100b00161c85a8fffmr1444679pll.97.1652862424843;
+        Wed, 18 May 2022 01:27:04 -0700 (PDT)
+Received: from ip-172-31-7-97.ap-south-1.compute.internal (ec2-15-207-112-74.ap-south-1.compute.amazonaws.com. [15.207.112.74])
+        by smtp.gmail.com with ESMTPSA id s26-20020a056a001c5a00b005180ea859d7sm1206643pfw.123.2022.05.18.01.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 01:27:04 -0700 (PDT)
+From:   Praghadeesh T K S <praghadeeshthevendria@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        "GitAuthor: Praghadeesh T K S" <praghadeeshthevendria@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     skhan@linuxfoundation.org, praghadeeshtks@zohomail.in
+Subject: [PATCH] Fixed 'make htmldocs' warning: Documentation/admin-guide/perf/hisi-pcie-pmu.rst: WARNING: document isn't included in any toctree
+Date:   Wed, 18 May 2022 08:26:27 +0000
+Message-Id: <20220518082627.9144-1-praghadeeshthevendria@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517165216.7acd8434f8b25606836e21e6@linux-foundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 04:52:16PM -0700, Andrew Morton <akpm@linux-foundation.org> wrote:
-> On Mon, 16 May 2022 16:01:05 -0400 Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > Thanks for your thoughts, Michal.
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Praghadeesh T K S <praghadeeshthevendria@gmail.com>
+---
+ Documentation/admin-guide/perf/index.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-You're welcome. The change is well-reasoned...
+diff --git a/Documentation/admin-guide/perf/index.rst b/Documentation/admin-guide/perf/index.rst
+index 5a8f252..69b23f0 100644
+--- a/Documentation/admin-guide/perf/index.rst
++++ b/Documentation/admin-guide/perf/index.rst
+@@ -8,6 +8,7 @@ Performance monitor support
+    :maxdepth: 1
+ 
+    hisi-pmu
++   hisi-pcie-pmu
+    imx-ddr
+    qcom_l2_pmu
+    qcom_l3_pmu
+-- 
+2.34.1
 
-> I think everything is settled here so I plan to import this series into
-> mm-stable in a couple of days.
-
-...and makes sense with the listed fixups.
-
-Michal

@@ -2,96 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019B652AFBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9189152AFC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbiERBPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
+        id S233380AbiERBRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiERBPD (ORCPT
+        with ESMTP id S233353AbiERBRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:15:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0A651E4C;
-        Tue, 17 May 2022 18:15:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BDB4B81BE3;
-        Wed, 18 May 2022 01:15:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8505C385B8;
-        Wed, 18 May 2022 01:14:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652836499;
-        bh=1FAGE2F5QluYFDYsSaQPr26HXYE6L0gi0jyOY35c6uM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fceAip9tgfCYolvMzQ45mOd5P7VrLMRoiDAtJu51yZGz2G7GsjS46D3hHDyJbJmjb
-         TF6eGE9MbKzs3AGaUJg1ZGwUvkWL5IH2zmaXmiUvAj3F1MlUe4TCpjdCrFa+lpwu+6
-         hV4ntKOWewTW/LaM4V1pgPWEqp49UwoPDeEk28VQTAoktoHx6Jmi6onYaSD1zsMBjI
-         l6+Gy3nsL8eteN5Oczi2zM9XYLkj/S8U2l/FZytk393Qrjdx95pVyco71FiKQiNr7y
-         sNZgsqQtPZLD/7yE2d0z9An0/plmN/+ElsCwwy1i3BmcZ82xqnN8X778b7wVbN209X
-         ceqcTNH1DWP+A==
-Date:   Tue, 17 May 2022 18:14:57 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     menglong8.dong@gmail.com
-Cc:     edumazet@google.com, rostedt@goodmis.org, mingo@redhat.com,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        pabeni@redhat.com, imagedong@tencent.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org,
-        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Jiang Biao <benbjiang@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
-Subject: Re: [PATCH net-next v2 1/9] net: skb: introduce
- __DEFINE_SKB_DROP_REASON() to simply the code
-Message-ID: <20220517181457.04c37147@kernel.org>
-In-Reply-To: <20220517081008.294325-2-imagedong@tencent.com>
-References: <20220517081008.294325-1-imagedong@tencent.com>
-        <20220517081008.294325-2-imagedong@tencent.com>
+        Tue, 17 May 2022 21:17:19 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488162BB3C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:17:18 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id k30so554416wrd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=66BpVpX1hmsXLIKfSSFdSpdl5oqz90D5jwxwG9o6mz4=;
+        b=xRYWEaCNYX3CRkGbSb4Lw1NbuD1fUhSJXWVeeeS+fYrLui8cAamp3GLZ5IrJmOwlHL
+         cIwxRHBDy2EYZaX5HQlzo5cHlmXO4fc6AkevIifcdVt3aqG/EefBANpLhfO/IgGNThLi
+         XXLG+lLTKSGbegkuAdO/g7AGpPVLaAUdZSBWcy+FO+q+hMmllMvXwCPop9daonKuHsTB
+         tglkvTKV9qIWdLh0wlZz6dVSqg1zMF7WsuVzxKms+6AHzX2isFrEv75VOukGFsUyZy5D
+         pNTnRKdGNlqV7iWjgnlst45h2wwejrXC1qf/n4xNGqx+LtpHMX4qYW1fo7tfBm8x3pQy
+         1pRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=66BpVpX1hmsXLIKfSSFdSpdl5oqz90D5jwxwG9o6mz4=;
+        b=5CUzIztVDqj2aTE6ARKMn+XMLZRwBiOpoJLxPG2/wRQmnxZK8MFvUea17T63TWgzsj
+         OjAF+Vxi5D+kLhRPVtCwWhjgHJvO/9CgJM6hzXxu82Kjhmqi/8F8anOlF3zATVN8ZwQ2
+         d49L5tXxiE1+MD4Xgk8UXkhW3b0o3ldbKw+EuEQZpgaPV+EVsbtXmqKMt1cEouxCvIKd
+         DOOM9lAlthyDeFUTfSrY8kix/qkM2xKLvMLOYbZ7JTSBoFkcjyQE3DsqXH0KTPrj019m
+         tpOgD2+qeopXQjLIjyFi7S/CRmobak8JtgsPQBZ7IMxjUHeRxARnndHTARmfW5NbdmKp
+         ZC2A==
+X-Gm-Message-State: AOAM532c+rYdPP7oyFULHezMxJTpzj5rDOaz1QkcOBVBsTMCfdPcfiQy
+        5TUn+WPUB+bJt3eK8fik8U4EuzJCBXK9UVDOmN39
+X-Google-Smtp-Source: ABdhPJwgGJ20dTMB4rX7QcbmClGxzMeLSl+5R1372QnAoz8I90LnDWXFMl7B7wWxBi+NGEuc+n5MNXshqKaGIp7Rhoc=
+X-Received: by 2002:a5d:5888:0:b0:20c:9868:9d94 with SMTP id
+ n8-20020a5d5888000000b0020c98689d94mr19998482wrf.433.1652836636768; Tue, 17
+ May 2022 18:17:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220503183750.1977-1-duguoweisz@gmail.com>
+In-Reply-To: <20220503183750.1977-1-duguoweisz@gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 17 May 2022 21:17:06 -0400
+Message-ID: <CAHC9VhRfRKS_-A6LGhgMp06wsvHtRj6ZaiQWp8c7U_LXozTeYg@mail.gmail.com>
+Subject: Re: [PATCH] fsnotify: add generic perm check for unlink/rmdir
+To:     Guowei Du <duguoweisz@gmail.com>
+Cc:     jack@suse.cz, amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jmorris@namei.org, serge@hallyn.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, linux-security-module@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com, selinux@vger.kernel.org,
+        duguowei <duguowei@xiaomi.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 16:10:00 +0800 menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> It is annoying to add new skb drop reasons to 'enum skb_drop_reason'
-> and TRACE_SKB_DROP_REASON in trace/event/skb.h, and it's easy to forget
-> to add the new reasons we added to TRACE_SKB_DROP_REASON.
-> 
-> TRACE_SKB_DROP_REASON is used to convert drop reason of type number
-> to string. For now, the string we passed to user space is exactly the
-> same as the name in 'enum skb_drop_reason' with a 'SKB_DROP_REASON_'
-> prefix. So why not make them togather by define a macro?
-> 
-> Therefore, introduce __DEFINE_SKB_DROP_REASON() and use it for 'enum
-> skb_drop_reason' definition and string converting.
-> 
-> Now, what should we with the document for the reasons? How about follow
-> __BPF_FUNC_MAPPER() and make these document togather?
+On Tue, May 3, 2022 at 2:38 PM Guowei Du <duguoweisz@gmail.com> wrote:
+>
+> From: duguowei <duguowei@xiaomi.com>
+>
+> For now, there have been open/access/open_exec perms for file operation,
+> so we add new perms check with unlink/rmdir syscall. if one app deletes
+> any file/dir within pubic area, fsnotify can sends fsnotify_event to
+> listener to deny that, even if the app have right dac/mac permissions.
+>
+> Signed-off-by: duguowei <duguowei@xiaomi.com>
+> ---
+>  fs/notify/fsnotify.c             |  2 +-
+>  include/linux/fs.h               |  2 ++
+>  include/linux/fsnotify.h         | 16 ++++++++++++++++
+>  include/linux/fsnotify_backend.h |  6 +++++-
+>  security/security.c              | 12 ++++++++++--
+>  security/selinux/hooks.c         |  4 ++++
+>  6 files changed, 38 insertions(+), 4 deletions(-)
 
-Hi, I know BPF does this but I really find the definition-by-macro 
-counter productive :(
+...
 
-kdoc will no longer work right because the parser will not see 
-the real values. cscope and other code indexers will struggle 
-to find definitions.
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index e9e959343de9..f0780f0eb903 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -1801,8 +1801,12 @@ static int may_create(struct inode *dir,
+>  }
+>
+>  #define MAY_LINK       0
+> +#ifndef MAY_UNLINK
+>  #define MAY_UNLINK     1
+> +#endif
+> +#ifndef MAY_RMDIR
+>  #define MAY_RMDIR      2
+> +#endif
 
-Did you investigate using auto-generation? Kernel already generates 
-a handful of headers. Maybe with a little script we could convert 
-the enum into the string thing at build time?
+In the future if you run into a symbol collision here I would prefer
+if you renamed the SELinux constants to something like SEL_MAY_LINK,
+etc.
 
-Also let's use this opportunity to move the enum to a standalone
-header, it's getting huge.
-
-Probably worth keeping this rework separate from the TCP patches.
-Up to you which one you'd like to get done first.
+-- 
+paul-moore.com

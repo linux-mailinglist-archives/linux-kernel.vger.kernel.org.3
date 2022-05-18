@@ -2,56 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF8A52B2E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF3352B30F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbiERHJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S231892AbiERHKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbiERHJT (ORCPT
+        with ESMTP id S231770AbiERHKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:09:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0175EBCE95
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:09:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 18 May 2022 03:10:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F7B7E64FA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652857807;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=prrUFOxxPGBXsAVaNBQls2o1O45l2Jpg1ONT+gGV6XE=;
+        b=AN/CF4EpIsT+w1Zeq7+96ozKQ+L8sG7huIDGIl7yY2S/VExQmnCaoXXyqP7QwvYBCIWhvm
+        KJE/BQV3pTlGz9kiDGUMY+yacGWYWsa0M2GumPcdQFi8IHn9rPydXeWix7jqy5H9NvWFyD
+        Kzdzrmv/MmD2hq9ANcCalE5N8pRNf5k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-f4PwmSjFMrK1OTWJQfOgjw-1; Wed, 18 May 2022 03:10:03 -0400
+X-MC-Unique: f4PwmSjFMrK1OTWJQfOgjw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7A4CB81E91
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:09:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBCF5C385AA;
-        Wed, 18 May 2022 07:09:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652857755;
-        bh=5VOCG6D7WIJ+aptpFBTKRAjSL5vE+/rVyHeXhlnHmuo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mCDVzWkIzB5296VRCBwWDjhnnI6AHpE8Oz3xvcwgGItJaDFFprY0SiAENX9e2eD8y
-         fNHpHFVPH1/x2Trt/GPuW0OA4XamPZAa8d43KXAEXdk1R6Kz3lDk5aZH1Uhz9pu6lV
-         QyH39GovNr+oznN7Ua8c5oP3rLN00DY3+Lve1cio=
-Date:   Wed, 18 May 2022 09:09:12 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, rafael@kernel.org,
-        mchehab+huawei@kernel.org, eugenis@google.com, tony.luck@intel.com,
-        pcc@google.com, peterz@infradead.org, marcos@orca.pet,
-        conor.dooley@microchip.com, nicolas.ferre@microchip.com,
-        marcan@marcan.st, linus.walleij@linaro.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/8] drivers: base: Add hardware prefetch control core
- driver
-Message-ID: <YoSbmA+5m1Le0XGe@kroah.com>
-References: <20220518063032.2377351-1-tarumizu.kohei@fujitsu.com>
- <20220518063032.2377351-2-tarumizu.kohei@fujitsu.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC9DD85A5BE;
+        Wed, 18 May 2022 07:10:02 +0000 (UTC)
+Received: from T590 (ovpn-8-29.pek2.redhat.com [10.72.8.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1CF6E492C3B;
+        Wed, 18 May 2022 07:09:54 +0000 (UTC)
+Date:   Wed, 18 May 2022 15:09:46 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Stefan Hajnoczi <stefanha@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        ming.lei@redhat.com
+Subject: Re: [PATCH V2 0/1] ubd: add io_uring based userspace block driver
+Message-ID: <YoSbuvT88sG5UkfG@T590>
+References: <20220517055358.3164431-1-ming.lei@redhat.com>
+ <YoOr6jBfgVm8GvWg@stefanha-x1.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220518063032.2377351-2-tarumizu.kohei@fujitsu.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YoOr6jBfgVm8GvWg@stefanha-x1.localdomain>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,252 +67,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 03:30:25PM +0900, Kohei Tarumizu wrote:
-> Adds a register/unregister function to provide sysfs interface to
-> control CPU's hardware prefetch behavior. It creates the
-> "prefetch_control" sysfs directory and some attributes.
+On Tue, May 17, 2022 at 03:06:34PM +0100, Stefan Hajnoczi wrote:
+> Here are some more thoughts on the ubd-control device:
 > 
-> Attributes are hardware dependent, so it must be implemented for each
-> hardware. If CPU has a hardware prefetch behavior, call this function
-> to create sysfs.
+> The current patch provides a ubd-control device for processes with
+> suitable permissions (i.e. root) to create, start, stop, and fetch
+> information about devices.
 > 
-> Following patches add support for A64FX and x86.
+> There is no isolation between devices created by one process and those
+
+I understand linux hasn't device namespace yet, so can you share the
+rational behind the idea of device isolation, is it because ubd device
+is served by ubd daemon which belongs to one pid NS? Or the user creating
+/dev/ubdbN belongs to one user NS?
+
+IMO, ubd device is one file in VFS, and FS permission should be applied,
+then here the closest model should be user NS, and process privilege &
+file ownership.
+
+> created by another. Therefore two processes that do not trust each other
+> cannot both use UBD without potential interference. There is also no
+
+Can you share what the expectation is for this situation?
+
+It is the created UBD which can only be used in this NS, or can only be
+visible inside this NS? I guess the latter isn't possible since we don't
+have this kind of isolation framework yet.
+
+> isolation for containers.
 > 
-> Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
-> ---
->  drivers/base/pfctl.c  | 180 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/pfctl.h |  14 ++++
->  2 files changed, 194 insertions(+)
->  create mode 100644 drivers/base/pfctl.c
->  create mode 100644 include/linux/pfctl.h
+> I think it would be a mistake to keep the ubd-control interface in its
+> current form since the current global/root model is limited. Instead I
+> suggest:
+> - Creating a device returns a new file descriptor instead of a global
+>   dev_id. The device can be started/stopped/configured through this (and
+>   only through this) per-device file descriptor. The device is not
+>   visible to other processes through ubd-control so interference is not
+>   possible. In order to give another process control over the device the
+>   fd can be passed (e.g. SCM_RIGHTS). 
 > 
-> diff --git a/drivers/base/pfctl.c b/drivers/base/pfctl.c
-> new file mode 100644
-> index 000000000000..08ee8faaf277
-> --- /dev/null
-> +++ b/drivers/base/pfctl.c
-> @@ -0,0 +1,180 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Hardware prefetch control support via sysfs.
-> + *
-> + * Copyright 2022 FUJITSU LIMITED
-> + *
-> + * See Documentation/ABI/testing/sysfs-devices-system-cpu for more information.
-> + */
-> +
-> +#include <linux/cacheinfo.h>
-> +#include <linux/cpu.h>
-> +#include <linux/device.h>
-> +#include <linux/pfctl.h>
-> +#include <linux/slab.h>
-> +
-> +#ifdef pr_fmt
-> +#undef pr_fmt
-> +#endif
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +const struct pfctl_group *pgroups;
-> +enum cpuhp_state hp_online;
-> +
-> +static struct device_attribute **
-> +get_pfctl_attribute(unsigned int level, enum cache_type type)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; pgroups[i].attrs; i++)
-> +		if ((level == pgroups[i].level) && (type == pgroups[i].type))
-> +			return pgroups[i].attrs;
-> +
-> +	return NULL;
-> +}
-> +
-> +static int remove_pfctl_attr(struct device *index_dev, void *data)
-> +{
-> +	struct cacheinfo *leaf = dev_get_drvdata(index_dev);
-> +	struct device_attribute **attrs;
-> +	struct device *pfctl_dev;
-> +	int i;
-> +
-> +	attrs = get_pfctl_attribute(leaf->level, leaf->type);
-> +	if (!attrs)
-> +		return 0;
-> +
-> +	pfctl_dev = device_find_child_by_name(index_dev, "prefetch_control");
-> +	if (!pfctl_dev)
-> +		return 0;
-> +
-> +	for (i = 0; attrs[i]; i++)
-> +		device_remove_file(pfctl_dev, attrs[i]);
 
-This feels wrong, attributes should be groups and be automatically added
-and removed by the driver core that way.  Not as lists of attributes
-like this, as that will race and be wrong.
+/dev/ubdcN can only be opened by the process which is the descendant of
+the process which creates the device by sending ADD_DEV.
 
-Use a list of attribute groups please.
+But the device can be deleted/queried by other processes, however, I
+think it is reasonable if all these processes has permission to do that,
+such as all processes owns the device with same uid.
 
-> +
-> +	device_unregister(pfctl_dev);
-> +	put_device(pfctl_dev);
-> +
-> +	pfctl_dev = NULL;
-> +
-> +	return 0;
-> +}
-> +
-> +static int create_pfctl_attr(struct device *index_dev, void *data)
-> +{
-> +	struct cacheinfo *leaf = dev_get_drvdata(index_dev);
-> +	struct device_attribute **attrs;
-> +	struct device *pfctl_dev;
-> +	int i, err;
-> +
-> +	attrs = get_pfctl_attribute(leaf->level, leaf->type);
-> +	if (!attrs)
-> +		return 0;
-> +
-> +	pfctl_dev = cpu_device_create(index_dev, NULL, NULL,
-> +				      "prefetch_control");
-> +	if (IS_ERR(pfctl_dev))
-> +		return PTR_ERR(pfctl_dev);
-> +
-> +	for (i = 0; attrs[i]; i++) {
-> +		err = device_create_file(pfctl_dev, attrs[i]);
+So can we apply process privilege & file ownership for isolating ubd device?
 
-You just raced with userspace and lost :(
+If per-process FD is used, it may confuse people, because process can
+not delete/query ubd device even though its uid shows it has the
+privilege.
 
-Please use attribute groups instead of manually adding files after the
-device is created and userspace is notified that it was present.
+> Now multiple applications/containers/etc can use ubd-control without
+> interfering with each other. The security model still requires root
+> though since devices can be malicious.
+> 
+> FUSE allows unprivileged mounts (see fuse_allow_current_process()). Only
+> processes with the same uid as the FUSE daemon can access such mounts
+> (in the default configuration). This prevents security issues while
+> still allowing unprivileged use cases.
 
-That also makes your clean up logic much simpler (i.e. none as the drive
-core did it for you already.)
+OK, looks FUSE applies process privilege & file ownership for dealing
+with unprivileged mounts.
 
-> +		if (err) {
-> +			while (--i >= 0)
-> +				device_remove_file(pfctl_dev, attrs[i]);
-> +
-> +			device_unregister(pfctl_dev);
-> +			pfctl_dev = NULL;
-> +
-> +			return err;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int pfctl_online(unsigned int cpu)
-> +{
-> +	struct device *cpu_dev = get_cpu_device(cpu);
-> +	struct device *cache_dev;
-> +	int ret;
-> +
-> +	cache_dev = device_find_child_by_name(cpu_dev, "cache");
-> +	if (!cache_dev)
-> +		return -ENODEV;
-> +
-> +	ret = device_for_each_child(cache_dev, NULL, create_pfctl_attr);
-> +	if (ret < 0)
-> +		device_for_each_child(cache_dev, NULL, remove_pfctl_attr);
-> +
-> +	put_device(cache_dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int pfctl_prepare_down(unsigned int cpu)
-> +{
-> +	struct device *cpu_dev = get_cpu_device(cpu);
-> +	struct device *cache_dev;
-> +
-> +	cache_dev = device_find_child_by_name(cpu_dev, "cache");
-> +	if (!cache_dev)
-> +		return 0;
-> +
-> +	device_for_each_child(cache_dev, NULL, remove_pfctl_attr);
-> +
-> +	put_device(cache_dev);
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * pfctl_register_attrs - register a Hardware Prefetch Control attributes
-> + * @pfctl_groups: pfctl_groups contains device attribute group to control the
-> + *                hardware prefetch register.
-> + *
-> + * Note: Call this function after the cache device is initialized because it
-> + * requires access to the cache device. (e.g. Call at the late_initcall)
-> + *
-> + * Context: Any context.
-> + * Return: 0 on success, negative error code on failure.
-> + */
-> +int pfctl_register_attrs(const struct pfctl_group *pfctl_groups)
-> +{
-> +	int ret;
-> +
-> +	if (pgroups)
-> +		return -EEXIST;
-> +
-> +	pgroups = pfctl_groups;
-> +
-> +	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "base/pfctl:online",
-> +				pfctl_online, pfctl_prepare_down);
-> +	if (ret < 0) {
-> +		pr_err("failed to register hotplug callbacks\n");
-> +		pgroups = NULL;
-> +		return ret;
-> +	}
-> +
-> +	hp_online = ret;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(pfctl_register_attrs);
-> +
-> +/**
-> + * pfctl_unregister_attrs - unregister the Hardware Prefetch Control driver
-> + * @pfctl_groups: Used to verify that this function is called by the same driver
-> + *                that called pfctl_register_attrs.
-> + *
-> + * Context: Any context.
-> + * Return: nothing.
-> + */
-> +void pfctl_unregister_attrs(const struct pfctl_group *pfctl_groups)
-> +{
-> +	if (!pgroups || (pfctl_groups != pgroups))
-> +		return;
-> +
-> +	cpuhp_remove_state(hp_online);
-> +
-> +	pgroups = NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(pfctl_unregister_attrs);
-> diff --git a/include/linux/pfctl.h b/include/linux/pfctl.h
-> new file mode 100644
-> index 000000000000..ecdab78be09f
-> --- /dev/null
-> +++ b/include/linux/pfctl.h
-> @@ -0,0 +1,14 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _LINUX_PFCTL_H
-> +#define _LINUX_PFCTL_H
-> +
-> +struct pfctl_group {
-> +	unsigned int		level;
-> +	enum cache_type		type;
-> +	struct device_attribute	**attrs;
+> 
+> I suggest adapting the FUSE security model to block devices:
+> - Devices can be created without CAP_SYS_ADMIN but they have an
+>   'unprivileged' flag set to true.
+> - Unprivileged devices are not probed for partitions and LVM doesn't
+>   touch them. This means the kernel doesn't access these devices via
+>   code paths that might be exploitable.
 
-Attribute groups please.
+The above two makes sense.
 
-> +};
-> +
-> +int pfctl_register_attrs(const struct pfctl_group *pfctl_groups);
-> +void pfctl_unregister_attrs(const struct pfctl_group *pfctl_groups);
+> - When another process with a different uid from ubdsrv opens an
+>   unprivileged device, -EACCES is returned. This protects other
+>   uids from the unprivileged device.
 
-Why do you think this needs to be in the driver core?  Why isn't this
-just a normal cpu driver?
+OK, only the user who owns the device can access unprivileged device.
 
-thanks,
+> - When another process with a different uid from ubdsrv opens a
+>   _privileged_ device there is no special access check because ubdsrv is
+>   privileged.
 
-greg k-h
+IMO, it depends if uid of this process has permission to access the
+ubd device, and we can set ubd device's owership by the process
+credentials.
+
+> 
+> With these changes UBD can be used by unprivileged processes and
+> containers. I think it's worth discussing the details and having this
+> model from the start so UBD can be used in a wide range of use cases.
+
+I am pretty happy to discuss & figure out the details, but not sure
+it is one blocker for ubd:
+
+1) kernel driver of loop/nbd or others haven't support the isolation
+
+2) still don't know exact ubd use case for containers
+
+
+Thanks, 
+Ming
+

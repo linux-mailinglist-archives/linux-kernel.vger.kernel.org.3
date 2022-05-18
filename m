@@ -2,66 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C96A52B641
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6687B52B603
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233909AbiERJOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S233930AbiERJP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233872AbiERJOe (ORCPT
+        with ESMTP id S233901AbiERJPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:14:34 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84966146403
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:14:33 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id z3so102350pgn.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:14:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GjvQwPM1daZo8+jCqWpaTz2mh/pEzt/6tEe1yGu9dLM=;
-        b=eQ6HR9gNmBjFbYML7Gui5OzZdhQ1ZJrrout1YiW/OYAgfXojWKCDuV86ePsOqi8nHc
-         Q/zJMR8PLB4HUUvyQg60hVOtESQhHMagFOehN8Q+EZPU1tRYuO8ZMApeTCpvwtJHq/De
-         I2AeL1NGadVpwvZU+UvRBmdFjJMVp+Wyrmw8BDFcLXdZAlyrOUA74BPZYYkT1C6LuOIm
-         BOLQMyqpWZRz28NR53+azrOdFnIrUTeZ0IwvuFe0KwKlb7Q0ARYbekaBm3N4i61x5x9V
-         +Ifyw1XogMpMIz4lWf9qMZRD3kLrTlp63mTXaxQHJ+9ErEVtg26/R+1HHAPNpPO8cg9i
-         TLgg==
+        Wed, 18 May 2022 05:15:24 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04969FD4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:15:23 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id h19-20020a056e021d9300b002d11f6f002bso921890ila.11
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:15:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GjvQwPM1daZo8+jCqWpaTz2mh/pEzt/6tEe1yGu9dLM=;
-        b=T1IaN2W4JMF18pSTwOign3Y/OylzLnkPnvBVOydvL98UiY5RyuMwaua0EpEfw3H2Kv
-         P1dj6cRH6mMqSZxToUGVWq+02uu0wcVovYky6kpSSUHAXjVz1Uo23S2jyf7KAJfP8FNN
-         5iCd48x3sVj/KX9CxfAbuKDOsZnWGSs+pTg8DxAuEXY+yx/KVlchPqOVj0txlr0XZicZ
-         VpupwjQakdRMBdKUlhBT82U3Birb0fJBlimTzojcPUcpBfLNpPssZlgdvdxFoT4mkIEz
-         ZGSNjE+frq3wxuF1mpqnKWr+v4NRdEidBxWMPtpzAEMnC5anTdcjDB6mBJQtR6ad7KpS
-         UTDA==
-X-Gm-Message-State: AOAM531gjz9TvtsjctK4S7k8WLIv9+wDnZ4JEOVEqQiEcXZGUVPownwu
-        cQvIo8Y1Xzpntn9mLYo19uqK5tFb2gyFQpGORWaAjw==
-X-Google-Smtp-Source: ABdhPJympDV8mO/7wcUhujZ0IVK8Fi+T7b+h4c4ApG6fzgAOF2agcfhcnphsmdMxge90eiicfp3r24uSzxyxcZv9/dU=
-X-Received: by 2002:a63:111f:0:b0:3da:ed0d:7623 with SMTP id
- g31-20020a63111f000000b003daed0d7623mr23285972pgl.586.1652865272760; Wed, 18
- May 2022 02:14:32 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=beK/RyAk6JMkokDhacR9sWsAak3KfcE5cJn8YM9YfXo=;
+        b=QCRtTVMkXGzkI3P+9tHELEikLWD/Ee6WoE3v54pNzlwlGyNePBk2u7IcmjgqN+DGgD
+         CizfosNQ2wBPSMdE7r7mJ3aZrhsFzf7b6EGY8VTXaWKZwboQJucXEmg0Hu0tWf+TV9Ko
+         mEg0d2EpZuTLN9GKmr6PEVg0zKqI+Oalj3o9qGJn5Rr78aaT1+ayx2MC/WGv851riVt6
+         ureVBxxUhxXxUUBMh8omsb0ZU3T1ixHFGrzNS6TKY/POYIRdl4ZXxa5Lqi5GxIyGGcES
+         ewQBQm9S6sM8mVwwffPoQYKp0iW/WU0RHevkya8rN9S6+20oHaTGt2YFwc+r3HSpxuSv
+         7jHg==
+X-Gm-Message-State: AOAM531ETk2XABDfhLPXCLY3xBPpDUsixuGPK80CHUqsqo+kXARtVgYF
+        ouAt4TvRAaQkrQorD6EKMwgwwLjkIZ+2AhWOdr5xi04wAB7s
+X-Google-Smtp-Source: ABdhPJwt3FmoutrzsR+CsxDMxj/k4tujVOEsXNvPIF709dM07yn4rtyCh7r50mBFGtbTVUq1qQySxrLJcDlVhEYCEjc/cJ/YcyS+
 MIME-Version: 1.0
-References: <20220518090738.2694556-1-yangyingliang@huawei.com>
-In-Reply-To: <20220518090738.2694556-1-yangyingliang@huawei.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Wed, 18 May 2022 11:13:56 +0200
-Message-ID: <CAMZdPi9uvh4E70-AXpGrdzkgh35mfWQbhL8Kxw_o9_DsfL2gbw@mail.gmail.com>
-Subject: Re: [PATCH -next] net: wwan: t7xx: use GFP_ATOMIC under spin lock in t7xx_cldma_gpd_set_next_ptr()
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        haijun.liu@mediatek.com, chandrashekar.devegowda@intel.com,
-        ricardo.martinez@linux.intel.com, davem@davemloft.net,
-        kuba@kernel.org
+X-Received: by 2002:a05:6638:411d:b0:32b:7465:fee2 with SMTP id
+ ay29-20020a056638411d00b0032b7465fee2mr15097962jab.318.1652865322948; Wed, 18
+ May 2022 02:15:22 -0700 (PDT)
+Date:   Wed, 18 May 2022 02:15:22 -0700
+In-Reply-To: <000000000000f2b07b05d5dc87cc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006f9dbc05df45b23b@google.com>
+Subject: Re: [syzbot] general protection fault in fscache_free_cookie
+From:   syzbot <syzbot+5b129e8586277719bab3@syzkaller.appspotmail.com>
+To:     dhowells@redhat.com, linux-cachefs-bounces@redhat.com,
+        linux-cachefs-owner@redhat.com, linux-cachefs@redhat.com,
+        linux-kernel@vger.kernel.org, mudongliangabcd@gmail.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,71 +57,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
-
-On Wed, 18 May 2022 at 10:57, Yang Yingliang <yangyingliang@huawei.com> wrote:
->
-> Sometimes t7xx_cldma_gpd_set_next_ptr() is called under spin lock,
-> so add a parameter in t7xx_cldma_gpd_set_next_ptr() to make if it
-> use GFP_ATOMIC flag.
->
-> Fixes: 39d439047f1d ("net: wwan: t7xx: Add control DMA interface")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/net/wwan/t7xx/t7xx_hif_cldma.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
-> index 0c52801ed0de..1fa9bb763831 100644
-> --- a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
-> +++ b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
-> @@ -91,9 +91,12 @@ static void t7xx_cldma_gpd_set_next_ptr(struct cldma_gpd *gpd, dma_addr_t next_p
->  }
->
->  static int t7xx_cldma_alloc_and_map_skb(struct cldma_ctrl *md_ctrl, struct cldma_request *req,
-> -                                       size_t size)
-> +                                       size_t size, bool is_atomic)
-
-Would be simpler to directly pass the gfp_mask as a parameter.
-
-
->  {
-> -       req->skb = __dev_alloc_skb(size, GFP_KERNEL);
-> +       if (is_atomic)
-> +               req->skb = __dev_alloc_skb(size, GFP_ATOMIC);
-> +       else
-> +               req->skb = __dev_alloc_skb(size, GFP_KERNEL);
->         if (!req->skb)
->                 return -ENOMEM;
->
-> @@ -174,7 +177,7 @@ static int t7xx_cldma_gpd_rx_from_q(struct cldma_queue *queue, int budget, bool
->                 spin_unlock_irqrestore(&queue->ring_lock, flags);
->                 req = queue->rx_refill;
->
-> -               ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, queue->tr_ring->pkt_size);
-> +               ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, queue->tr_ring->pkt_size, false);
->                 if (ret)
->                         return ret;
->
-> @@ -402,7 +405,7 @@ static struct cldma_request *t7xx_alloc_rx_request(struct cldma_ctrl *md_ctrl, s
->         if (!req->gpd)
->                 goto err_free_req;
->
-> -       val = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, pkt_size);
-> +       val = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, pkt_size, false);
->         if (val)
->                 goto err_free_pool;
->
-> @@ -801,7 +804,7 @@ static int t7xx_cldma_clear_rxq(struct cldma_ctrl *md_ctrl, int qnum)
->                 if (req->skb)
->                         continue;
->
-> -               ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, rxq->tr_ring->pkt_size);
-> +               ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, rxq->tr_ring->pkt_size, true);
->                 if (ret)
->                         break;
->
-> --
-> 2.25.1
->
+This bug is marked as fixed by commit:
+fscache: fix GPF in fscache_free_cookie
+But I can't find it in any tested tree for more than 90 days.
+Is it a correct commit? Please update it by replying:
+#syz fix: exact-commit-title
+Until then the bug is still considered open and
+new crashes with the same signature are ignored.

@@ -2,137 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6AD52BDCA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2830A52BEB8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238714AbiEROgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S238982AbiERPAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238738AbiEROgi (ORCPT
+        with ESMTP id S238862AbiERPAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:36:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378FC33E31;
-        Wed, 18 May 2022 07:36:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0760EB82123;
-        Wed, 18 May 2022 14:36:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B3CC385A9;
-        Wed, 18 May 2022 14:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652884587;
-        bh=5uHRMXROqGI1jREuoXs06Hh8a5iU4VH9zbi+x+j3zP4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qqtkE77EhtH/MOwRftTZUurCR4Qgawjdfkav3u2UkX0Y4c9EqXVN4MdWElXxNwc5Y
-         rCPkneNenYgAxO15LYoDhx+OcRWCaPBfnAWcKJcWDOn45IDfJQ9d9igHpdCYGbM2Dz
-         ytqasYdjE9H1CeGVRn7asq8EVnf+8RnX087A9M2GMYQxQ2wj8JoDOWZfUNgcFyOPBq
-         MyMaOlv6MlXJhGjjLIk3vMTpmUB1PJYkAxO3X+fnq7FyFytGzq+MRg6C/WbjKVMT5N
-         dI6+1CvlxTFCXlpVyBUs4K19fVWoct/XUiLaymzLAAOvrOO79MvZQ77iMioly20+Wn
-         HL4uSoyRcx3Dg==
-Message-ID: <6f18ea96-0ba6-23ba-9d74-ebe76b42c828@kernel.org>
-Date:   Wed, 18 May 2022 08:36:26 -0600
+        Wed, 18 May 2022 11:00:40 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9031A0AFE;
+        Wed, 18 May 2022 08:00:39 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IEgr6V017549;
+        Wed, 18 May 2022 15:00:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xW1COiFlwf0PL00R4GkXtkJN3M/L1hWKr4zjOB9Yp9M=;
+ b=pPZD/yxVLcy5VnDo5Jgh0tk0ovOcQbNqZ4LsoKnycLW3vfseSiMBUPwbrdCh3XYkBa3S
+ DgyFVqTWd5g0nrN7qw+VokS94G2YSTFqMANSmq4yIjq1wEGkkD8sZLyluuqf7Ue2Xuqe
+ kl/D3aV8yyOWgd3vWln/+e2hE53zPIedtzRhfg2lEgfHFpFKZh2LY1i0XqGLs4ob+dA/
+ O1lZb3Q649ODOCRETCAXcpb58oExMIG07klJQSGFLiRy+BUse1iyqnDV0953MQyCAFpS
+ PMU+PZ2Aw5ieGsVXdW+8SymNrZTZJVCbzoUDPNxTcZf19HekuYV1phtJXQKnAnxjtPnf Ng== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g52t70e0r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 15:00:21 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IEhUDl019538;
+        Wed, 18 May 2022 15:00:19 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g52t70dwk-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 15:00:19 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IEbXS0011511;
+        Wed, 18 May 2022 14:37:53 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma02wdc.us.ibm.com with ESMTP id 3g2429w3t2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 14:37:53 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IEbrW721561800
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 14:37:53 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 172B3124058;
+        Wed, 18 May 2022 14:37:53 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D0B0124052;
+        Wed, 18 May 2022 14:37:49 +0000 (GMT)
+Received: from [9.211.37.97] (unknown [9.211.37.97])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 18 May 2022 14:37:49 +0000 (GMT)
+Message-ID: <2e51b388-48d0-4689-07f4-65f607dbce59@linux.ibm.com>
+Date:   Wed, 18 May 2022 10:37:48 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH net-next] net: PIM register decapsulation and Forwarding.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/1] vfio: remove VFIO_GROUP_NOTIFY_SET_KVM
 Content-Language: en-US
-To:     Ido Schimmel <idosch@nvidia.com>, Jakub Kicinski <kuba@kernel.org>
-Cc:     Saranya Panjarathina <plsaranya@gmail.com>, netdev@vger.kernel.org,
-        Saranya_Panjarathina@dell.com, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, edumazet@google.com, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, g_balaji1@dell.com,
-        Nikolay Aleksandrov <razor@blackwall.org>
-References: <20220512070138.19170-1-plsaranya@gmail.com>
- <20220516112906.2095-1-plsaranya@gmail.com>
- <20220517171026.1230e034@kernel.org> <YoS3kymdTBwRnrRI@shredder>
- <YoT/tea4TZ2lWN8f@shredder>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <YoT/tea4TZ2lWN8f@shredder>
-Content-Type: text/plain; charset=UTF-8
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     jgg@nvidia.com, alex.williamson@redhat.com
+Cc:     cohuck@redhat.com, borntraeger@linux.ibm.com,
+        jjherne@linux.ibm.com, akrowiak@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, hch@infradead.org,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220517180851.166538-1-mjrosato@linux.ibm.com>
+ <20220517180851.166538-2-mjrosato@linux.ibm.com>
+In-Reply-To: <20220517180851.166538-2-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XQrM_ApcMDR7ZDvn9Jz1fR-tTzTwQMqx
+X-Proofpoint-ORIG-GUID: OXJa_RJ2BtWJbsJAxvOQSjAKl28F0lCB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_05,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ lowpriorityscore=0 clxscore=1015 priorityscore=1501 spamscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205180087
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/22 8:16 AM, Ido Schimmel wrote:
-> On Wed, May 18, 2022 at 12:08:35PM +0300, Ido Schimmel wrote:
->> On Tue, May 17, 2022 at 05:10:26PM -0700, Jakub Kicinski wrote:
->>> On Mon, 16 May 2022 04:29:06 -0700 Saranya Panjarathina wrote:
->>>> PIM register packet is decapsulated but not forwarded in RP
->>>>
->>>> __pim_rcv decapsulates the PIM register packet and reinjects for forwarding
->>>> after replacing the skb->dev to reg_dev (vif with VIFF_Register)
->>>>
->>>> Ideally the incoming device should be same as skb->dev where the
->>>> original PIM register packet is received. mcache would not have
->>>> reg_vif as IIF. Decapsulated packet forwarding is failing
->>>> because of IIF mismatch. In RP for this S,G RPF interface would be
->>>> skb->dev vif only, so that would be IIF for the cache entry.
->>>>
->>>> Signed-off-by: Saranya Panjarathina <plsaranya@gmail.com>
->>>
->>> Not sure if this can cause any trouble. And why it had become 
->>> a problem now, seems like the code has been this way forever.
->>> David? Ido?
->>
->> Trying to understand the problem:
->>
->> 1. The RP has an (*, G) towards the receiver(s) (receiver joins first)
->> 2. The RP receives a PIM Register packet encapsulating the packet from
->> the source
->> 3. The kernel decapsulates the packet and injects it into the Rx path as
->> if the packet was received by the pimreg netdev
->> 4. The kernel forwards the packet according to the (*, G) route (no RPF
->> check)
->>
->> At the same time, the PIM Register packet should be received by whatever
->> routing daemon is running in user space via a raw socket for the PIM
->> protocol. My understanding is that it should cause the RP to send a PIM
->> Join towards the FHR, causing the FHR to send two copies of each packet
->> from the source: encapsulated in the PIM Register packet and over the
->> (S, G) Tree.
->>
->> If the RP already has an (S, G) route with IIF of skb->dev and the
->> decapsulated packet is injected into the Rx path via skb->dev, then what
->> prevents the RP from forwarding the same packet twice towards the
->> receiver(s)?
->>
->> I'm not a PIM expert so the above might be nonsense. Anyway, I will
->> check with someone from the FRR teams who understands PIM better than
->> me.
+On 5/17/22 2:08 PM, Matthew Rosato wrote:
+> Rather than relying on a notifier for associating the KVM with
+> the group, let's assume that the association has already been
+> made prior to device_open.  The first time a device is opened
+> associate the group KVM with the device.
 > 
-> We discussed this patch in FRR slack with the author and PIM experts.
-> The tl;dr is that the patch is working around what we currently believe
-> is an FRR bug, which the author will try to fix.
-> 
-> After receiving a PIM Register message on the RP, FRR installs an (S, G)
-> route with IIF being the interface via which the packet was received
-> (skb->dev). FRR also sends a PIM Join towards the FHR and eventually a
-> PIM Register Stop.
-> 
-> The current behavior means that due to RPF assertion, all the
-> encapsulated traffic from the source is dropped on the RP after FRR
-> installs the (S, G) route.
-> 
-> The patch is problematic because during the time the FHR sends both
-> encapsulated and native traffic towards the RP, the RP will forward both
-> copies towards the receiver(s).
-> 
-> Instead, the suggestion is for FRR to install the initial (S, G) route
-> with IIF being the pimreg device. This should allow decapsulated traffic
-> to be forwarded correctly. Native traffic will trigger RPF assertion and
-> thereby prompt FRR to: a) Replace the IIF from pimreg to the one via
-> which traffic is received b) Send a PIM Register Stop towards the FHR,
-> instructing it to stop sending encapsulated traffic.
-> 
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-Thanks for diving into the problem and for the detailed response.
+...
+
+> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
+> index cfcff7764403..c5d421eda275 100644
+> --- a/drivers/vfio/vfio.c
+> +++ b/drivers/vfio/vfio.c
+> @@ -10,6 +10,7 @@
+>    * Author: Tom Lyon, pugs@cisco.com
+>    */
+>   
+> +#include "linux/kvm_host.h"
+>   #include <linux/cdev.h>
+>   #include <linux/compat.h>
+>   #include <linux/device.h>
+> @@ -1083,6 +1084,13 @@ static struct file *vfio_device_open(struct vfio_device *device)
+>   
+>   	mutex_lock(&device->dev_set->lock);
+>   	device->open_count++;
+> +	down_write(&device->group->group_rwsem);
+> +	if (device->open_count == 1 && device->group->kvm) {
+> +		device->kvm = device->group->kvm;
+> +		kvm_get_kvm(device->kvm);
+
+Did some more compile testing, since vfio has no hard kvm dependency, 
+kvm_get_kvm and kvm_put_kvm are an issue if KVM is a module while vfio 
+is built-in...

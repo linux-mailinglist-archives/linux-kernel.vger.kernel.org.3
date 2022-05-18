@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A6752B604
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5072C52B623
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233717AbiERJDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
+        id S233759AbiERJEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233682AbiERJDN (ORCPT
+        with ESMTP id S233672AbiERJE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:03:13 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E20131F0E;
-        Wed, 18 May 2022 02:03:07 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nrFa3-0007Q7-65; Wed, 18 May 2022 11:02:55 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Rob Herring <robh@kernel.org>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, atishp@atishpatra.org,
-        anup@brainfault.org, mick@ics.forth.gr, samuel@sholland.org,
-        cmuellner@linux.com, krzk+dt@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: riscv: document cbom-block-size
-Date:   Wed, 18 May 2022 11:02:54 +0200
-Message-ID: <1893094.PYKUYFuaPT@diego>
-In-Reply-To: <CAAeLtUBLpDHeJHfPtaUb_OLZb_6cUQa1Z_F+06pkdJMSHtWrfQ@mail.gmail.com>
-References: <20220511214132.2281431-1-heiko@sntech.de> <20220518002529.GA1928329-robh@kernel.org> <CAAeLtUBLpDHeJHfPtaUb_OLZb_6cUQa1Z_F+06pkdJMSHtWrfQ@mail.gmail.com>
+        Wed, 18 May 2022 05:04:26 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9C513CA32
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:04:24 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:1425:89ca:2e9e:5fc1])
+        by laurent.telenet-ops.be with bizsmtp
+        id Y94M2700H10zdRX0194MBv; Wed, 18 May 2022 11:04:22 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nrFbR-000oUd-5V; Wed, 18 May 2022 11:04:21 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nrFbQ-00BX4e-Jh; Wed, 18 May 2022 11:04:20 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Guo Zhengkui <guozhengkui@vivo.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] net: smc911x: Fix min() use in debug code
+Date:   Wed, 18 May 2022 11:04:19 +0200
+Message-Id: <ca032d4122fc70d3a56a524e5944a8eff9a329e8.1652864652.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, 18. Mai 2022, 10:22:17 CEST schrieb Philipp Tomsich:
-> +David Kruckemyer (who is chairing the CMO task-group within RVI).
-> 
-> On Wed, 18 May 2022 at 02:25, Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Wed, May 11, 2022 at 11:41:30PM +0200, Heiko Stuebner wrote:
-> > > The Zicbom operates on a block-size defined for the cpu-core,
-> > > which does not necessarily match other cache-sizes used.
-> > >
-> > > So add the necessary property for the system to know the core's
-> > > block-size.
-> > >
-> > > Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-> > > ---
-> > >  Documentation/devicetree/bindings/riscv/cpus.yaml | 7 +++++++
-> > >  1 file changed, 7 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > index d632ac76532e..b179bfd155a3 100644
-> > > --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > @@ -63,6 +63,13 @@ properties:
-> > >        - riscv,sv48
-> > >        - riscv,none
-> > >
-> > > +  riscv,cbom-block-size:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> >
-> > Any value 0-2^32 is valid?
-> >
-> > > +    description:
-> > > +      Blocksize in bytes for the Zicbom cache operations. The block
-> > > +      size is a property of the core itself and does not necessarily
-> > > +      match other software defined cache sizes.
-> >
-> > What about hardware defined cache sizes? I'm scratching my head as to
-> > what a 'software defined cache size' is.
+If ENABLE_SMC_DEBUG_PKTS=1:
 
-I agree that this should be worded better. The intent was to tell that this
-is different from say the l1-cache-block-size.
+    drivers/net/ethernet/smsc/smc911x.c: In function ‘smc911x_hardware_send_pkt’:
+    include/linux/minmax.h:20:28: error: comparison of distinct pointer types lacks a cast [-Werror]
+       20 |  (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+	  |                            ^~
+    drivers/net/ethernet/smsc/smc911x.c:483:17: note: in expansion of macro ‘min’
+      483 |  PRINT_PKT(buf, min(len, 64));
 
-I.e. these values can be the same but don't need to be. But I guess I got
-too much lead on by a kernel implementation detail (L1_CACHE_BYTES constant)
+Fix this by making the constant unsigned, to match the type of "len".
+While at it, replace the other missed ternary operator by min(), too.
 
+Convert the dummy PRINT_PKT() from a macro to a static inline function,
+to catch mistakes like this without having to enable debug options
+manually.
 
-> This seems to be a misnomer, as the specification doesn't use the term
-> and rather talks about the "size of a cache block for [operation
-> name]".
-> 
-> There are currently two such 'operation sizes' discoverable by software:
-> - size of the cache block for management and prefetch instructions
-> - size of the cache block for zero instructions
-> 
-> For whatever it's worth, cache operations in RISC-V attempt to
-> disassociate the underlying hardware cache geometry from software.
-> See https://github.com/riscv/riscv-CMOs/blob/master/specifications/cmobase-v1.0.1.pdf
-> for the CMO specification, and the discoverable parameters are listed
-> in section 2.7.
-> 
-> Philipp.
-> 
-> > > +
-> > >    riscv,isa:
-> > >      description:
-> > >        Identifies the specific RISC-V instruction set architecture
-> > > --
-> > > 2.35.1
-> > >
-> > >
-> 
+Fixes: 5ff0348b7f755aac ("net: smc911x: replace ternary operator with min()")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/net/ethernet/smsc/smc911x.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
-
+diff --git a/drivers/net/ethernet/smsc/smc911x.c b/drivers/net/ethernet/smsc/smc911x.c
+index 2694287770e6cd8e..24d66af797d465ca 100644
+--- a/drivers/net/ethernet/smsc/smc911x.c
++++ b/drivers/net/ethernet/smsc/smc911x.c
+@@ -140,7 +140,7 @@ static void PRINT_PKT(u_char *buf, int length)
+ 	pr_cont("\n");
+ }
+ #else
+-#define PRINT_PKT(x...)  do { } while (0)
++static inline void PRINT_PKT(u_char *buf, int length) { }
+ #endif
+ 
+ 
+@@ -430,7 +430,7 @@ static inline void	 smc911x_rcv(struct net_device *dev)
+ 		SMC_PULL_DATA(lp, data, pkt_len+2+3);
+ 
+ 		DBG(SMC_DEBUG_PKTS, dev, "Received packet\n");
+-		PRINT_PKT(data, ((pkt_len - 4) <= 64) ? pkt_len - 4 : 64);
++		PRINT_PKT(data, min(pkt_len - 4, 64U));
+ 		skb->protocol = eth_type_trans(skb, dev);
+ 		netif_rx(skb);
+ 		dev->stats.rx_packets++;
+@@ -480,7 +480,7 @@ static void smc911x_hardware_send_pkt(struct net_device *dev)
+ 	SMC_SET_TX_FIFO(lp, cmdB);
+ 
+ 	DBG(SMC_DEBUG_PKTS, dev, "Transmitted packet\n");
+-	PRINT_PKT(buf, min(len, 64));
++	PRINT_PKT(buf, min(len, 64U));
+ 
+ 	/* Send pkt via PIO or DMA */
+ #ifdef SMC_USE_DMA
+-- 
+2.25.1
 

@@ -2,107 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D40752BDC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBB152BE54
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238973AbiEROz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S239012AbiERO4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238860AbiEROzW (ORCPT
+        with ESMTP id S238955AbiEROz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:55:22 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD54A4616A
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:55:20 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id bo5so2382251pfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=o7tY6ZcRmC6gYAakiOEfUJCGVoPD3Xvj9BL1UezKdDA=;
-        b=VPhKTi9d8w7lwf065MCuP6kWcomDghzJDkfvBQwDM9ND2AbNAeIZk20nTc63vu6Mos
-         wag31H9GOQNSydzbC5RipG22vzckeEC+ITBUZzqhHq7mDWtPnoKq5jo2cTUqWpLKrTe4
-         WRkoKwzSZ6uhDh9PaswEQCSHJIPI22M/PAjIqhjrXaGjT3XGB75hvtpifewTVXtoWVmn
-         iJ0qdKOWoGkCWpDZrLhex/I5t0AlklSTgtp4IWxeJ0JihjReGg8FJ+USEvlJmqa8Esfi
-         i6NlWqbaVKThA/yt171mlYyO0TUSCPiXvO14Ex5U20QOp72xCVt484SU7jhaoMdIof0b
-         LBwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o7tY6ZcRmC6gYAakiOEfUJCGVoPD3Xvj9BL1UezKdDA=;
-        b=cr9ZYUahui1v6pj9c1A5Vf0YqcboQYBolfNLdq1oBbIlppzUWyBuJVkLt3gbje6lW0
-         kVcm4HCIYgli3UZaDOvW22aTxxqEyHM+nkIKJ1byDEC+h+Gb2HM9LT07r4xEcQiq6Vxf
-         XvmhSCAC82CZUgosPU9LbAUUpod2owB6gdpD1UkJeLMEqQui/eMcnU/PkiXrl7xNiujk
-         nRCe/o9yshERtdEH+lc8kjMxBtNhp/QggsuasNl7xOyuqsCGc5nvZgp4ylxKue+r/B1U
-         VeFoQoA12KwUIsq3xkfFo3n8csCPRTjVTT6Z10w9UmECtQO/TdIfW8G1f1pzoHrjKdTF
-         7+tg==
-X-Gm-Message-State: AOAM530P/4qqBJ7ISWSBjM6yM+SH70KeohMZY9SvXo4nB67RwDA25Q0f
-        rr3x8bTj5FIDGEtCUTPd/GRZUQ==
-X-Google-Smtp-Source: ABdhPJysEejWXF06hcE4vW/aCi2q+cxS02x/9DLbVEAvnOwBC9SO7Q3PrJUwsB/1bty7W3/d06HCcQ==
-X-Received: by 2002:a05:6a00:2908:b0:4fa:9297:f631 with SMTP id cg8-20020a056a00290800b004fa9297f631mr93240pfb.3.1652885720016;
-        Wed, 18 May 2022 07:55:20 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id jh1-20020a170903328100b0015e8d4eb269sm1781608plb.179.2022.05.18.07.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 07:55:19 -0700 (PDT)
-Date:   Wed, 18 May 2022 14:55:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v3 04/34] KVM: x86: hyper-v: Handle
- HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
-Message-ID: <YoUI03NDdMPYTiSO@google.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
- <20220414132013.1588929-5-vkuznets@redhat.com>
- <165aea185dfef1eba9ba0f4fd1c3a95361c41396.camel@redhat.com>
- <877d6juqkw.fsf@redhat.com>
- <YoUAM9UtfQlGOZxl@google.com>
- <87y1yyucis.fsf@redhat.com>
+        Wed, 18 May 2022 10:55:59 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81118A0D2C;
+        Wed, 18 May 2022 07:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652885748;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:References:Cc:To:From:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=hYcXcVlFfZvhuv9lwG+hye9EfZ3gHatNRoDkftDUeBA=;
+    b=Cuf9zkMbPoAgn8g3F1Ud6Dt6PDDOpeyuar18uYcRNT+y/2t4smyXEb8tqmYaw0RTeu
+    P4S15iqyyCLY9ovfvOUmWK1Tud1CXVoola59TWCzwY9F7bJ9eIxW9CGx1VUvzfGy8ooa
+    GYD+YKKT25qY4bycjMm3+SbnAbv6JCDf7nNtOT9IoP3pLKEZxA+qTzUqYbHnrMtysnKd
+    Rv08soLyo6TNB5ixmLKpL9RPDk38SjEVfyLGd+rUn9UsAs7Z9dyccOF/V1WZ9Nr6Z34l
+    mMaM7+sQVvMQaPeWwLj8G54q2pMF+112eggoTyR9BqKUa+ieYRV0bgCE0a7aongd3thB
+    5TYw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b00::b82]
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id R0691fy4IEtmHtG
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 18 May 2022 16:55:48 +0200 (CEST)
+Message-ID: <899706c6-0aac-b039-4b67-4e509ff0930d@hartkopp.net>
+Date:   Wed, 18 May 2022 16:55:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y1yyucis.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
+ can_skb_headroom_valid to skb.c
+Content-Language: en-US
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Max Staudt <max@enpas.org>, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
+ <20220517141404.578d188a.max@enpas.org>
+ <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
+ <20220517143921.08458f2c.max@enpas.org>
+ <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
+ <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
+ <43768ff7-71f8-a6c3-18f8-28609e49eedd@hartkopp.net>
+ <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
+ <CAMZ6RqJqeNjAtoDWADHsWocgbSXqQixcebJBhiBFS8BVeKCb3g@mail.gmail.com>
+ <3dbe135e-d13c-5c5d-e7e4-b9c13b820fb8@hartkopp.net>
+ <20220518143613.2a7alnw6vtkw7ct2@pengutronix.de>
+ <482fd87a-df5a-08f7-522b-898d68c3b04a@hartkopp.net>
+In-Reply-To: <482fd87a-df5a-08f7-522b-898d68c3b04a@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> 
-> > On Wed, May 18, 2022, Vitaly Kuznetsov wrote:
-> >> Maxim Levitsky <mlevitsk@redhat.com> writes:
-> >> > Or if using kfifo, then it can contain plain u64 items, which is even more natural.
-> >> >
-> >> 
-> >> In the next version I switch to fifo and get rid of 'flush_all' entries
-> >> but instead of a boolean I use a 'magic' value of '-1' in GVA. This way
-> >> we don't need to synchronize with the reader and add any special
-> >> handling for the flag.
-> >
-> > Isn't -1 theoretically possible?  Or is wrapping not allowed?  E.g. requesting a
-> > flush for address=0xfffffffffffff000, count = 0xfff will yield -1 and doesn't
-> > create any illegal addresses in the process.
-> >
-> 
-> Such an error would just lead to KVM flushing the whole guest address
-> space instead of flushing 4096 pages starting with 0xfffffffffffff000
-> but over-flushing is always architecturally correct, isn't it?
 
-Oh, duh.  Yeah, flushing everything is totally ok.  Maybe just add a comment above
-the #define for the magic value calling out that corner case and why it's ok?
+
+On 18.05.22 16:38, Oliver Hartkopp wrote:
+> 
+> 
+> On 18.05.22 16:36, Marc Kleine-Budde wrote:
+>> On 18.05.2022 16:33:58, Oliver Hartkopp wrote:
+> 
+>>> I would suggest to remove the Kconfig entry but not all the code 
+>>> inside the
+>>> drivers, so that a volunteer can convert the LED support based on the
+>>> existing trigger points in the drivers code later.
+>>
+>> The generic netdev LED trigger code doesn't need any support in the
+>> netdev driver.
+> 
+> Oh! Yes, then it could be removed. Sorry for not looking that deep into it.
+
+I can send a patch for this removal too. That's an easy step which might 
+get into 5.19 then.
+
+Best regards,
+Oliver
+

@@ -2,86 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BA352B046
+	by mail.lfdr.de (Postfix) with ESMTP id D499452B047
 	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbiERBzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S234061AbiERB4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:56:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbiERBzp (ORCPT
+        with ESMTP id S234054AbiERBzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:55:45 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0C638D;
-        Tue, 17 May 2022 18:55:40 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 18 May
- 2022 09:55:38 +0800
-Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 18 May
- 2022 09:55:38 +0800
-Message-ID: <bf354eb3-2149-5faa-8ada-baa4b2f4ad09@meizu.com>
-Date:   Wed, 18 May 2022 09:55:37 +0800
+        Tue, 17 May 2022 21:55:52 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D50F07;
+        Tue, 17 May 2022 18:55:50 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HKgGIQ031659;
+        Wed, 18 May 2022 01:55:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2021-07-09;
+ bh=WINoPMnV95p+ub5aBvEYZWMBEM7WAa67hzS2CHcAaio=;
+ b=dwHYrkVDO/TpiP0jM/grCR0oLAW2moLDg/VdNtXeW60TeX+Ctc+/q0SsrcRS002PI0Y8
+ H6P9hEhtGBhjWg2ZqfCPOP1c0DbnvGE21+SEp12uUVc2ZYGae4NCmRb4iiVKqQsh2GOX
+ dsKus5IQNi790E2d8zKfEL+RFYTTUysKFUYIy1I33CcntPDxkDgRyMcS9Rxxuglfnrf0
+ BUgTHllwN9rl2J3DWDIYBVIYoaMsHnKZc6l/rouh5LqS1bmvcR1NoObcCr8PNC5om9z5
+ RPWGQSwcZfZycYzkE4IwGxptMEBu80n+2+VBLUi1+iN8xEbaYmi79cnZJgXWs2UwCXlU Sw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24aaftv4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 01:55:41 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24I1j166022553;
+        Wed, 18 May 2022 01:55:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v3r69s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 01:55:40 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 24I1tdCY004454;
+        Wed, 18 May 2022 01:55:39 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v3r69m-1;
+        Wed, 18 May 2022 01:55:39 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     mingzhe.zou@easystack.cn, michael.christie@oracle.com,
+        torvalds@linux-foundation.org, zgrieee@gmail.com
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dongsheng.yang@easystack.cn, zoumingzhe@qq.com,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: target: fixup incorrect use of 'cpumask_t'
+Date:   Tue, 17 May 2022 21:55:38 -0400
+Message-Id: <165283883037.1328.16838345221393341169.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220516054721.1548-1-mingzhe.zou@easystack.cn>
+References: <20220516054721.1548-1-mingzhe.zou@easystack.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] RDMA: remove null check after call container_of()
-To:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        "Leon Romanovsky" <leon@kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1652751208-23211-1-git-send-email-baihaowen@meizu.com>
- <20220517121646.GE63055@ziepe.ca>
- <142a9c03-574f-adcf-bc4d-bb2a25c01e88@wanadoo.fr>
- <20220517180303.GK63055@ziepe.ca>
-From:   baihaowen <baihaowen@meizu.com>
-In-Reply-To: <20220517180303.GK63055@ziepe.ca>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-ORIG-GUID: gep8iAr9P7wUo-80x8z-rdTt17I37yM_
+X-Proofpoint-GUID: gep8iAr9P7wUo-80x8z-rdTt17I37yM_
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/5/18 上午2:03, Jason Gunthorpe 写道:
-> On Tue, May 17, 2022 at 07:54:38PM +0200, Christophe JAILLET wrote:
->> Le 17/05/2022 à 14:16, Jason Gunthorpe a écrit :
->>> On Tue, May 17, 2022 at 09:33:28AM +0800, Haowen Bai wrote:
->>>> container_of() will never return NULL, so remove useless code.
->>> It is confusing here, but it can be null.
->> Hi,
->>
->> out of curiosity, can you elaborate how it can be NULL?
-> It is guarented/required that that container_of is a 0 offset. The
-> normal usage of the ib_alloc_device macro:
->
-> #define ib_alloc_device(drv_struct, member)                                    \
-> 	container_of(_ib_alloc_device(sizeof(struct drv_struct) +              \
-> 				      BUILD_BUG_ON_ZERO(offsetof(              \
-> 					      struct drv_struct, member))),    \
-> 		     struct drv_struct, member)
->
-> Enforces this property with a BUILD_BUG_ON
->
-> So, if the input pointer to container_of is reliably NULL or ERR_PTR
-> then the output pointer will be the same.
->
-> The rvt code here open codes the call because it is a mid-layer and
-> the sizeof() calculation above is not correct for it.
->
-> Jason
-Thank you for the explanation.   : )
+On Mon, 16 May 2022 13:47:21 +0800, mingzhe.zou@easystack.cn wrote:
+
+> From: mingzhe <mingzhe.zou@easystack.cn>
+> 
+> In commit d72d827f2f26, I used 'cpumask_t' incorrectly.
+> ```
+> void iscsit_thread_get_cpumask(struct iscsi_conn *conn)
+> {
+>         int ord, cpu;
+>         cpumask_t conn_allowed_cpumask;
+>         ......
+> }
+> 
+> [...]
+
+Applied to 5.18/scsi-fixes, thanks!
+
+[1/1] scsi: target: fixup incorrect use of 'cpumask_t'
+      https://git.kernel.org/mkp/scsi/c/525f447f88b1
 
 -- 
-Haowen Bai
-
+Martin K. Petersen	Oracle Linux Engineering

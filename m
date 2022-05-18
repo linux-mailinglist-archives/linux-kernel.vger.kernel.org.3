@@ -2,74 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25CD52C1BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D219552C1BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240759AbiERRyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S241171AbiERRzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbiERRyk (ORCPT
+        with ESMTP id S231372AbiERRzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:54:40 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E8521A966
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:54:40 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2fefb051547so32901107b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wAFhBNGkOYqIauqmAMb6moZVrSw8HOJBfdYpqesZq6Y=;
-        b=vs9ButGw7170Q/jEs+fO1lQveZiTXXsgwXYCkgtgQO09RlQztc3/GxtOitWuHeXu2+
-         /m5UIMGqa+jiWxNGKo3H1/D9oMvC/sYdhfX+LOTuCNJVTY8nvtyyodAe7NB4yVZ6tK0+
-         c/SdQO3Y6jVZmVJAXeNoY/5fs3sDRwtH/fP80XkLq3cUjQ/Rc4dX5GTWC9+tzMSg48sW
-         Flac7WAF1NQggHKxkWDJIJ6Vh4LASxdp06hGbSQOl1y08Guq5Y61mXm47is1jS7G/Wjl
-         EixXBi++mSL7Xffq0yM4KMyLbCrYwJueODALS+TYjh7Z5o0zOVDvtAixJzlR7m41G89u
-         Jdtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wAFhBNGkOYqIauqmAMb6moZVrSw8HOJBfdYpqesZq6Y=;
-        b=4CdsDOqS9q92CDfU+w1ukAk9/1FIFulFM8HX4pcmqogZ6fI67xQ3MpLX1hpJYJNdKL
-         bwvkTOs/3BqkOsWb0sTOw0vcZxP7otl3YmMCzthG7JMrInoSJ4g30KTthWT/1WXJcYu2
-         t2mbPUG4Q0TcrQurHyfev0Y05gnD42AyGTxwHyhnR+qKyqSI8+EglTB6SiV6B5V7eut9
-         kfyy8b7vO0wl5UmX5x6ruN5qbwVlECYcrYAuaL91EoXvzUx4Fu6WeqcoCk3AalfVs/hl
-         4z9WfdyogptMCBxYD8F8wzEX7xdZCmuuE4McFExoldAQ0Hi2IXYjyDx86UuNS/T042Cf
-         O0kA==
-X-Gm-Message-State: AOAM533PkhRmGyAwWWYN+mgSi3ohZTN22F9p1K542oAYqN9MVvjk4F7L
-        i6FiXmeqLhi3AihZladHSFpK4utMC02y6XsIMBcJuA==
-X-Google-Smtp-Source: ABdhPJxcdiytOucNPQKz7tmCfcmD4wZOseejv1XT7mflreTeZKYT19r/h5oY+Ga1GZ2fAhunKyzGPlKDPrqsdZg1R/o=
-X-Received: by 2002:a81:1dcf:0:b0:2fa:d094:14ff with SMTP id
- d198-20020a811dcf000000b002fad09414ffmr642224ywd.10.1652896479286; Wed, 18
- May 2022 10:54:39 -0700 (PDT)
+        Wed, 18 May 2022 13:55:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DB533EBD;
+        Wed, 18 May 2022 10:55:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78ECAB82019;
+        Wed, 18 May 2022 17:55:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EBECC385A9;
+        Wed, 18 May 2022 17:55:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652896536;
+        bh=ZgCBLE1QWTMc6nvvCJgjubvC1o2zHVrOcytVV9+84lM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZYwLZO+d5qhEePDch/VRC7Pi0r/xbqOerZDdXv9gIU/cDR5Steo5WlDQJuHk1gNbO
+         KondzmIdbI8v86jeJRL99+8VC3DSRRUkSkgshvlL7YHabzxuS35d7LEGCgmMrLj0pO
+         IboCCpliexaKK1IPFzDpO/aKpc9IW1F/BHIKZCTSSMrYeU+NFcL8Ygv7tj/n00zTTZ
+         /qNyEfWgoygSTuhijE5cN1yLGUEiTZMoM3rEKZ3NqHh0UdTyBHKuT6iFL3PTLZaJhn
+         33EKYR0tM4R04X2+WVGffFx0H9HZ2vslPsKmbUaDy/To60Z08Mtc+AwOnMAnMIv8tm
+         vBUuwNJqjJyOQ==
+Date:   Wed, 18 May 2022 10:55:34 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Zhang Jianhua <chris.zjh@huawei.com>
+Cc:     tytso@mit.edu, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] fs-verity: Use struct_size() helper in
+ enable_verity()
+Message-ID: <YoUzFm9kL13oQi0K@sol.localdomain>
+References: <20220518061309.2179692-1-chris.zjh@huawei.com>
 MIME-Version: 1.0
-References: <20220517101410.3493781-1-andre.przywara@arm.com>
- <20220517153444.GA1057027-robh@kernel.org> <CAFEAcA8sE8Rj0GmF71ox4BdDr0UcaS4QwiLUVUUFH5oj+hDhfA@mail.gmail.com>
- <CAL_JsqLRvEn2E7cpTzQJRCJ=aeLjUtKhDimWat=nPtm3QP+cfA@mail.gmail.com>
- <CAFEAcA_DRoJmnFdyEEcSvCxtPYignZFqQFnHyWkcpyijCBSrCg@mail.gmail.com> <20220518165421.GF3302100-robh@kernel.org>
-In-Reply-To: <20220518165421.GF3302100-robh@kernel.org>
-From:   Peter Maydell <peter.maydell@linaro.org>
-Date:   Wed, 18 May 2022 18:54:28 +0100
-Message-ID: <CAFEAcA80B2aGdaxK2pm7AK84KK_UqwD-KCMKtK6b8fF41MeKRg@mail.gmail.com>
-Subject: Re: [PATCH] of/fdt: Ignore disabled memory nodes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ross Burton <ross.burton@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518061309.2179692-1-chris.zjh@huawei.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,45 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022 at 17:54, Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, May 17, 2022 at 08:19:47PM +0100, Peter Maydell wrote:
-> > We generate the DTB with libfdt, so source-only information
-> > isn't something we can put in, I think. (The quoted DT fragment
-> > in this patch's commit message is the result of decompiling
-> > the runtime generated DT binary blob with dtc.)
->
-> Given the runtime aspect with overlays, it's conceivable that libfdt
-> could support setting labels some day and then dts output maintaining
-> them.
->
-> We could also consider a standard node name such as 'secure-memory'.
-> It's a whole can of worms though on how secure vs. non-secure memory
-> (and other things) are represented.
+On Wed, May 18, 2022 at 02:13:09PM +0800, Zhang Jianhua wrote:
+> Make use of the struct_size() helper instead of an open-coded version,
+> in order to avoid any potential type mistakes or integer overflows
+> that, in the worst scenario, could lead to heap overflows.
+> 
+> Also, address the following sparse warnings:
+> fs/verity/enable.c:205:28: warning: using sizeof on a flexible structure
+> 
+> Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+> ---
+>  fs/verity/enable.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/verity/enable.c b/fs/verity/enable.c
+> index f75d2c010f36..075dc0aa5416 100644
+> --- a/fs/verity/enable.c
+> +++ b/fs/verity/enable.c
+> @@ -201,7 +201,7 @@ static int enable_verity(struct file *filp,
+>  	const struct fsverity_operations *vops = inode->i_sb->s_vop;
+>  	struct merkle_tree_params params = { };
+>  	struct fsverity_descriptor *desc;
+> -	size_t desc_size = sizeof(*desc) + arg->sig_size;
+> +	size_t desc_size = struct_size(desc, signature, arg->sig_size);
+>  	struct fsverity_info *vi;
+>  	int err;
 
-Mmm. We put in the very basic parts years ago in
-Documentation/devicetree/bindings/arm/secure.txt
-which is (and has remained) generally sufficient for the QEMU->Trusted
-Firmware-> maybe uboot->Linux stack, which is pretty much the only use
-case I think. (My intention when we wrote that up was that memory
-that's S-only would be indicated the same way as S-only devices,
-with the secure-status and status properties.)
+This patch is a bit more useful than the other one, as the validation of
+->sig_size happens in a different function.  But it still happens.  So please
+don't claim that this patch is fixing a heap overflow.  People use commit
+messages to determine whether patches are fixing something, and how important
+the fix is.  So if it's a cleanup (not a bug fix), write that.
 
-> > Are we just stuck with what we have for historical reasons ?
->
-> Yes. If we were designing this, we'd probably have 'compatible =
-> "memory"'. We're likely just stuck with things how they are. Mostly node
-> names haven't been an ABI and we're just trying to be consistent in
-> naming and use of unit-addresses.
-
-So, do you think it's worthwhile/a good idea for me to rename
-the DT node that QEMU is currently calling "secmem" to be
-"memory" ? My default is "leave it as it is", for economy of
-effort reasons :-) -- but it's an easy enough change to make.
-Though EDK2's dtb reading code just looks for the first
-"memory" node and assumes it's the big one, so changing the node
-name would make us reliant on the order of the two nodes in the
-DTB unless we fixed EDK2 (which we should probably do anyway, tbh).
-
-thanks
--- PMM
+- Eric

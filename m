@@ -2,199 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B78552BDF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8153052BE73
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239256AbiERPUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
+        id S239324AbiERPVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239239AbiERPUT (ORCPT
+        with ESMTP id S239260AbiERPVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:20:19 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2C219C2C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:20:18 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id m6so2621822iob.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ybDEtV3nXAdy0xbiVIgxxDeVerG9En9+3bXJwrFbqrw=;
-        b=YVrFL08D2lPVhB/5yy8xa63dBxa+8NiqBxbReoA0xj4oWZyKh9ZaGIcZAQFs7kFY8m
-         UEVoDuzdonNRQeM05dDIZHkmL5sLa48A0f9lvbxu+aiSUxvs+2Mhb2S6ejMxmzyqKw78
-         92WqbCA/Srp+T+M7gQqfbc6U98KPjnJ/qtC40KLNRMf297i36QYA7uXxJMJoYoWdd4qi
-         pwQzLU/AjpJBr7C7kU3/cK7+HGNAUqOoCGdy+OyKBoPghK4Y06jzAclmU/R+wwb267Ay
-         JopayF5RlvM9hDpZrLjCrcXzg+w+v3O4Inyti3u0xgM6mOe+WKiZtmYsID6ELxROhzKg
-         NYXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ybDEtV3nXAdy0xbiVIgxxDeVerG9En9+3bXJwrFbqrw=;
-        b=QfDU0/5TIiAHxk2FKUwVcp4XFs6TzujpenqyL6O2w7A9UTvtekDLpYh8capTZ1zx8j
-         HZH/vj87eTbphStCDpyfFBpYLuVDMgJaqUdEnX0vBx1BFH2s+o0UxJNB+wA89h/pl5pC
-         qq4paoAykkT42kamWYDUfkwzFsmFTQ6V4mdmshsPtLRqp1oMFOfFsW3L0XqU2CQJs1xZ
-         rkxi4PzMcbd0LUCKv0tb9b/ujJVXQ1TMojooDWNzqKvBMm6/I7BFeyXMGU4JcmdAdEME
-         2P363cMcWj9jh2KEUcy1q80jMIfHdAB1khTYTnZ39TGk+6VptuEkIZZFSRctEymYM+VG
-         88DQ==
-X-Gm-Message-State: AOAM530XjRu2Zif3eUKN1ezXzBUdl5ijPzBLqVsqt93oG8tQO3Uxe5p7
-        Xdeixm4MOdOh8q8H5RKR5WmGDQ==
-X-Google-Smtp-Source: ABdhPJxHuzvINXblCDKRPB94RIuHqGlAcKaKQlMspzJXlx07bcy3C8plJlCZvx58qme+L7Xd92Lpnw==
-X-Received: by 2002:a05:6638:1649:b0:32b:e328:c95d with SMTP id a9-20020a056638164900b0032be328c95dmr1121jat.143.1652887217456;
-        Wed, 18 May 2022 08:20:17 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id j13-20020a02cb0d000000b0032e262428d1sm584797jap.143.2022.05.18.08.20.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 08:20:16 -0700 (PDT)
-Message-ID: <49609b89-f2f0-44b3-d732-dfcb4f73cee1@kernel.dk>
-Date:   Wed, 18 May 2022 09:20:12 -0600
+        Wed, 18 May 2022 11:21:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 727C92655C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652887270;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3ehACCvrw7UhqaYWryKtTRqeTT9ThoHFc3Uj/+RsDps=;
+        b=f+RPEPX0g05Xp8zSBrg97nnARam73C4RLenmlMILPGhvsA9DVAAjM9pIORf0OTExZBt1Gk
+        QnCcWG5rPwXSq0KuyaX6iee4ysJaK8DaBswlrN46y+RgsnavutJ6s0CvFxAXExxvVdbPwX
+        GqUwHlMHnFpZ5sw4s93MrDm0ulUjgvg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-163-ThK-0Q9EP52LdzYlHYzTEA-1; Wed, 18 May 2022 11:21:07 -0400
+X-MC-Unique: ThK-0Q9EP52LdzYlHYzTEA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE9853C11731;
+        Wed, 18 May 2022 15:21:06 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 237EAC28101;
+        Wed, 18 May 2022 15:21:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <aa9e13f50be440a192b6acbce422db96@AcuMS.aculab.com>
+References: <aa9e13f50be440a192b6acbce422db96@AcuMS.aculab.com> <20220517210230.864239-1-keescook@chromium.org> <2692904.1652861114@warthog.procyon.org.uk>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     dhowells@redhat.com, Kees Cook <keescook@chromium.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH] netfs: Use container_of() for offset casting
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <YoOT7Cyobsed5IE3@google.com>
- <d503d5ff-4bc5-2bd0-00d3-cd7b0a0724cb@kernel.dk>
- <YoOW2+ov8KF1YcYF@google.com>
- <3d271554-9ddc-07ad-3ff8-30aba31f8bf2@kernel.dk>
- <YoOcYR15Jhkw2XwL@google.com>
- <f34c85cc-71a5-59d4-dd7a-cc07e2af536c@kernel.dk>
- <YoTrmjuct3ctvFim@google.com>
- <b7dc2992-e2d6-8e76-f089-b33561f8471f@kernel.dk>
- <f821d544-78d5-a227-1370-b5f0895fb184@kernel.dk>
- <06710b30-fec8-b593-3af4-1318515b41d8@kernel.dk>
- <YoUNQlzU0W4ShA85@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YoUNQlzU0W4ShA85@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2953402.1652887264.1@warthog.procyon.org.uk>
+Date:   Wed, 18 May 2022 16:21:04 +0100
+Message-ID: <2953403.1652887264@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/22 9:14 AM, Lee Jones wrote:
-> On Wed, 18 May 2022, Jens Axboe wrote:
-> 
->> On 5/18/22 6:54 AM, Jens Axboe wrote:
->>> On 5/18/22 6:52 AM, Jens Axboe wrote:
->>>> On 5/18/22 6:50 AM, Lee Jones wrote:
->>>>> On Tue, 17 May 2022, Jens Axboe wrote:
->>>>>
->>>>>> On 5/17/22 7:00 AM, Lee Jones wrote:
->>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
->>>>>>>
->>>>>>>> On 5/17/22 6:36 AM, Lee Jones wrote:
->>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
->>>>>>>>>
->>>>>>>>>> On 5/17/22 6:24 AM, Lee Jones wrote:
->>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
->>>>>>>>>>>
->>>>>>>>>>>> On 5/17/22 5:41 AM, Lee Jones wrote:
->>>>>>>>>>>>> Good afternoon Jens, Pavel, et al.,
->>>>>>>>>>>>>
->>>>>>>>>>>>> Not sure if you are presently aware, but there appears to be a
->>>>>>>>>>>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
->>>>>>>>>>>>> in Stable v5.10.y.
->>>>>>>>>>>>>
->>>>>>>>>>>>> The full sysbot report can be seen below [0].
->>>>>>>>>>>>>
->>>>>>>>>>>>> The C-reproducer has been placed below that [1].
->>>>>>>>>>>>>
->>>>>>>>>>>>> I had great success running this reproducer in an infinite loop.
->>>>>>>>>>>>>
->>>>>>>>>>>>> My colleague reverse-bisected the fixing commit to:
->>>>>>>>>>>>>
->>>>>>>>>>>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
->>>>>>>>>>>>>   Author: Jens Axboe <axboe@kernel.dk>
->>>>>>>>>>>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
->>>>>>>>>>>>>
->>>>>>>>>>>>>        io-wq: have manager wait for all workers to exit
->>>>>>>>>>>>>
->>>>>>>>>>>>>        Instead of having to wait separately on workers and manager, just have
->>>>>>>>>>>>>        the manager wait on the workers. We use an atomic_t for the reference
->>>>>>>>>>>>>        here, as we need to start at 0 and allow increment from that. Since the
->>>>>>>>>>>>>        number of workers is naturally capped by the allowed nr of processes,
->>>>>>>>>>>>>        and that uses an int, there is no risk of overflow.
->>>>>>>>>>>>>
->>>>>>>>>>>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>>>>>>>>>>>>
->>>>>>>>>>>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
->>>>>>>>>>>>>     1 file changed, 22 insertions(+), 8 deletions(-)
->>>>>>>>>>>>
->>>>>>>>>>>> Does this fix it:
->>>>>>>>>>>>
->>>>>>>>>>>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
->>>>>>>>>>>> Author: Jens Axboe <axboe@kernel.dk>
->>>>>>>>>>>> Date:   Fri Mar 5 12:59:30 2021 -0700
->>>>>>>>>>>>
->>>>>>>>>>>>     io-wq: fix race in freeing 'wq' and worker access
->>>>>>>>>>>>
->>>>>>>>>>>> Looks like it didn't make it into 5.10-stable, but we can certainly
->>>>>>>>>>>> rectify that.
->>>>>>>>>>>
->>>>>>>>>>> Thanks for your quick response Jens.
->>>>>>>>>>>
->>>>>>>>>>> This patch doesn't apply cleanly to v5.10.y.
->>>>>>>>>>
->>>>>>>>>> This is probably why it never made it into 5.10-stable :-/
->>>>>>>>>
->>>>>>>>> Right.  It doesn't apply at all unfortunately.
->>>>>>>>>
->>>>>>>>>>> I'll have a go at back-porting it.  Please bear with me.
->>>>>>>>>>
->>>>>>>>>> Let me know if you into issues with that and I can help out.
->>>>>>>>>
->>>>>>>>> I think the dependency list is too big.
->>>>>>>>>
->>>>>>>>> Too much has changed that was never back-ported.
->>>>>>>>>
->>>>>>>>> Actually the list of patches pertaining to fs/io-wq.c alone isn't so
->>>>>>>>> bad, I did start to back-port them all but some of the big ones have
->>>>>>>>> fs/io_uring.c changes incorporated and that list is huge (256 patches
->>>>>>>>> from v5.10 to the fixing patch mentioned above).
->>>>>>>>
->>>>>>>> The problem is that 5.12 went to the new worker setup, and this patch
->>>>>>>> landed after that even though it also applies to the pre-native workers.
->>>>>>>> Hence the dependency chain isn't really as long as it seems, probably
->>>>>>>> just a few patches backporting the change references and completions.
->>>>>>>>
->>>>>>>> I'll take a look this afternoon.
->>>>>>>
->>>>>>> Thanks Jens.  I really appreciate it.
->>>>>>
->>>>>> Can you see if this helps? Untested...
->>>>>
->>>>> What base does this apply against please?
->>>>>
->>>>> I tried Mainline and v5.10.116 and both failed.
->>>>
->>>> It's against 5.10.116, so that's puzzling. Let me double check I sent
->>>> the right one...
->>>
->>> Looks like I sent the one from the wrong directory, sorry about that.
->>> This one should be better:
->>
->> Nope, both are the right one. Maybe your mailer is mangling the patch?
->> I'll attach it gzip'ed here in case that helps.
-> 
-> Okay, that applied, thanks.
-> 
-> Unfortunately, I am still able to crash the kernel in the same way.
+David Laight <David.Laight@ACULAB.COM> wrote:
 
-Alright, maybe it's not enough. I can't get your reproducer to crash,
-unfortunately. I'll try on a different box.
+> Can't you just name the structure so it is:
+> 
+> 	struct afs_vnode {
+>  		struct netfs_i_c_pair {
+>  			/* These must be contiguous */
+>  			struct inode	vfs_inode;
+>  			struct netfs_i_context netfs_ctx;
+>  		};
+>  		...
+>  	};
 
--- 
-Jens Axboe
+No.  C won't let you do that (the same thing has to be done in 9p, ceph as
+well, and at some point hopefully cifs and nfs too).
+
+David
 

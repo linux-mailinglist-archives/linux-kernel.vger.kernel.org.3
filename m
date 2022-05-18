@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4CC52C4BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9A652C4C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242779AbiERUnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 16:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        id S242751AbiERUpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 16:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242772AbiERUn1 (ORCPT
+        with ESMTP id S242734AbiERUpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 16:43:27 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CCEA7E01
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:43:21 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fed274f3fbso28527967b3.17
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:43:21 -0700 (PDT)
+        Wed, 18 May 2022 16:45:14 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B766FA3C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:45:13 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id b11so2338024ilr.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:45:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=CIr61HKlKWK8BgnDg7ZLMPTf6+BKTF/FV6epAVcSa/k=;
-        b=oYScb9Tq2re7Q+570vAn+FAY8dEW4InJb7V4G9TlPme9NIh3kl07+hORXd26OP+Chm
-         OevTtOQn+3PsbvIrUopd3zcgARQkqbwjk9KXW3IsJMVvFDBQDFoD/PGQpL3cbQ8QlOdz
-         V6DTJvuRtqXPEZe792a+eemEvz4FdT9EA1CN7cc0CV1yjCOFqr2WkG1SJNXS08xTKatb
-         +1WPUkJxRNzFuoGTcUlVWwvJyS16KxlSPB7mQbOQZlTb+8IqYBxi2f+Wc1bjUFDeQaFq
-         HVztWTipQgBqjSOSLslEomu+FRtnfBD1C01yjYlIt2bQ2KlFCBPD1lxi2/b7W1c+lDSP
-         qdMA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/LqHVbHkRtSXSWgRorqDL1rnNBZq7KUPq1AfC0mPC/E=;
+        b=NMSkahHunZrqlzsGNcFHRpOqRGdBCbPIwXcry9fcbtEaPi4EgWh/G3ORW/DTiJJCiR
+         2caHmsOY1o2oDg/Lq2mDZc44l7S2DvbYBa/xRoSOrGQLzLQ1VeJFugUH4DpTm/NOUEzQ
+         80JzEYq2mYF4QyVkFmhDPslstvCcA6ywYjLNGo9fWtOnlyLkkFYt3RSezI1KpaFPv3Tf
+         KMc0lUlcgNA6WE2PCSt1FuIByXJXAoQfD43IljOLeBhBIrejNuY3OeOj96r8LgaG6DGv
+         lcudB9Q/FZFVK06KTHbUVhpRwE6f/lRMJYv9f81dbzrujs5UvJTyJPX5/xJwZzoO4Bf2
+         dacg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=CIr61HKlKWK8BgnDg7ZLMPTf6+BKTF/FV6epAVcSa/k=;
-        b=1k1HrzdEEg9g3ahp9QYrtep3JAzvkCQNNmoalGz3AzSul2TcFBGS3NkHEEl0E7nfts
-         4NW3ezHghOD3zk77xXiFo2xrnc5lT0pM/ISGQAji4CI10S10DAdAidSxifX3E+OG0HeN
-         pEFq28oP5mvn4aFHYyr7mKE5RAj9p9ekV24OEDwz/YE8fOZNuvilLcLzkR+f1sjOzz2u
-         Z9Z4riu1e6ispqbZrL8ZeLicO0nWRGG3tDfxbQ7EDJkt/gvEyuunI7O4MId+e51usjB5
-         V0Hrqm1/IvpCoUXHsytnWOhRZjK/r640u4O+DSUIfMR/5f6+7mHVxoXc3P852K7QFEbW
-         LidQ==
-X-Gm-Message-State: AOAM5319trgDIyKkxGxVNJPKdulbjZvmhMqv33YdHyfqfm/Z0uRq3N3V
-        cFu9Gzy3oftF5MGvY/FNA4lQSXmPwBc=
-X-Google-Smtp-Source: ABdhPJzvX2KiGyXAwjO6xhBeIGYYfuEyPPUX/l1T4qTDcZeTAgBeusLO2vb0AjO9Q+gvfXqbEha7rFhNHoo=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:88b3:2be3:5f71:58e2])
- (user=surenb job=sendgmr) by 2002:a25:d312:0:b0:64d:74b9:5caa with SMTP id
- e18-20020a25d312000000b0064d74b95caamr1476152ybf.37.1652906600500; Wed, 18
- May 2022 13:43:20 -0700 (PDT)
-Date:   Wed, 18 May 2022 13:43:16 -0700
-Message-Id: <20220518204316.13131-1-surenb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH v3 1/1] selftests: vm: add process_mrelease tests
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     mhocko@suse.com, rientjes@google.com, willy@infradead.org,
-        hannes@cmpxchg.org, guro@fb.com, minchan@kernel.org,
-        kirill@shutemov.name, aarcange@redhat.com, brauner@kernel.org,
-        hch@infradead.org, oleg@redhat.com, david@redhat.com,
-        jannh@google.com, shakeelb@google.com, peterx@redhat.com,
-        jhubbard@nvidia.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com,
-        surenb@google.com
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/LqHVbHkRtSXSWgRorqDL1rnNBZq7KUPq1AfC0mPC/E=;
+        b=aLbtl5pH6FTon+bBlHbqANQfQ1ZMklT215O8QVFZ0LCBvBoN5GbimmjxqzwA5eudcg
+         WLUiaWkyyfYhTCdeHnBfgZ4lta04jjCYAwn1KzzWGs0TIsZ3LPRzeda48ikhpDd5b4Aa
+         c/Yhih9AmxHHNuDGI7HVO+Ll2tdOpAFzesY/IKkP02In+rvF5le70nckqAl2RCDvzQzo
+         ooOHYoQEstDdQEdVBjksu9OJ17dZE3mZwct1Jx9SupYLqhmYr4jMuiiDNU0vIphypX2h
+         isvJjE8NzSwt7Z1Lw9t0aSHK/dPmm5GIKPw8A7JkB/O639LYJiQjQrkl62BbHL67qg4W
+         JlsQ==
+X-Gm-Message-State: AOAM533MH1BhBSPPHA0bBNABzf/Uwe7eH7xPDwGbwKYSxGuMDOwMe/7U
+        pLUqx+gHVBHJKf17cZoX+PbWydCfN1+aZGGvh8QXgg==
+X-Google-Smtp-Source: ABdhPJx1Ez6BpUQnbL8AlNoGX541z5V/MXG31cj11qq+Au56qG8lqli8zs9VnjmgQGsyu7jqJzGrzQ5OuwzUdlo/wrE=
+X-Received: by 2002:a92:cc11:0:b0:2d1:129:e1e9 with SMTP id
+ s17-20020a92cc11000000b002d10129e1e9mr851387ilp.211.1652906712429; Wed, 18
+ May 2022 13:45:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAJZ5v0ibBw41YSfSWF1CtY7w9oLO+8bKNK2AK0grE0qabJ6QQA@mail.gmail.com>
+ <20220518175002.GA1148748@bhelgaas> <CAJZ5v0hOp0UuUjRL3AYS_WW+2BxZOaGwURrrSMGQvjpPe+sOmg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hOp0UuUjRL3AYS_WW+2BxZOaGwURrrSMGQvjpPe+sOmg@mail.gmail.com>
+From:   Tanjore Suresh <tansuresh@google.com>
+Date:   Wed, 18 May 2022 13:45:01 -0700
+Message-ID: <CALVARr6ORrcsgEx7A71wFFx67kya8Kf4O6mkN5p-dmFiS=HVSA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] driver core: Support asynchronous driver shutdown
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,293 +74,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce process_mrelease syscall sanity tests which include tests
-which expect to fail:
-- process_mrelease with invalid pidfd and flags inputs
-- process_mrelease on a live process with no pending signals
-and valid process_mrelease usage which is expected to succeed.
-Because process_mrelease has to be used against a process with a pending
-SIGKILL, it's possible that the process exits before process_mrelease
-gets called. In such cases we retry the test with a victim that allocates
-twice more memory up to 1GB. This would require the victim process to
-spend more time during exit and process_mrelease has a better chance of
-catching the process before it exits and succeeding.
+Rafeal,
 
-On success the test reports the amount of memory the child had to
-allocate for reaping to succeed. Sample output:
+On Wed, May 18, 2022 at 11:01 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, May 18, 2022 at 7:50 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > On Wed, May 18, 2022 at 01:38:49PM +0200, Rafael J. Wysocki wrote:
+> > > On Wed, May 18, 2022 at 12:08 AM Tanjore Suresh <tansuresh@google.com> wrote:
+> > > >
+> > > > This changes the bus driver interface with additional entry points
+> > > > to enable devices to implement asynchronous shutdown. The existing
+> > > > synchronous interface to shutdown is unmodified and retained for
+> > > > backward compatibility.
+> > > >
+> > > > This changes the common device shutdown code to enable devices to
+> > > > participate in asynchronous shutdown implementation.
+> > > >
+> > > > Signed-off-by: Tanjore Suresh <tansuresh@google.com>
+> > > > ---
+> > > >  drivers/base/core.c        | 38 +++++++++++++++++++++++++++++++++++++-
+> > > >  include/linux/device/bus.h | 12 ++++++++++++
+> > > >  2 files changed, 49 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > > > index 3d6430eb0c6a..ba267ae70a22 100644
+> > > > --- a/drivers/base/core.c
+> > > > +++ b/drivers/base/core.c
+> > > > @@ -4479,6 +4479,7 @@ EXPORT_SYMBOL_GPL(device_change_owner);
+> > > >  void device_shutdown(void)
+> > > >  {
+> > > >         struct device *dev, *parent;
+> > > > +       LIST_HEAD(async_shutdown_list);
+> > > >
+> > > >         wait_for_device_probe();
+> > > >         device_block_probing();
+> > > > @@ -4523,7 +4524,13 @@ void device_shutdown(void)
+> > > >                                 dev_info(dev, "shutdown_pre\n");
+> > > >                         dev->class->shutdown_pre(dev);
+> > > >                 }
+> > > > -               if (dev->bus && dev->bus->shutdown) {
+> > > > +               if (dev->bus && dev->bus->async_shutdown_start) {
+> > > > +                       if (initcall_debug)
+> > > > +                               dev_info(dev, "async_shutdown_start\n");
+> > > > +                       dev->bus->async_shutdown_start(dev);
+> > > > +                       list_add_tail(&dev->kobj.entry,
+> > > > +                               &async_shutdown_list);
+> > > > +               } else if (dev->bus && dev->bus->shutdown) {
+> > > >                         if (initcall_debug)
+> > > >                                 dev_info(dev, "shutdown\n");
+> > > >                         dev->bus->shutdown(dev);
+> > > > @@ -4543,6 +4550,35 @@ void device_shutdown(void)
+> > > >                 spin_lock(&devices_kset->list_lock);
+> > > >         }
+> > > >         spin_unlock(&devices_kset->list_lock);
+> > > > +
+> > > > +       /*
+> > > > +        * Second pass spin for only devices, that have configured
+> > > > +        * Asynchronous shutdown.
+> > > > +        */
+> > > > +       while (!list_empty(&async_shutdown_list)) {
+> > > > +               dev = list_entry(async_shutdown_list.next, struct device,
+> > > > +                               kobj.entry);
+> > > > +               parent = get_device(dev->parent);
+> > > > +               get_device(dev);
+> > > > +               /*
+> > > > +                * Make sure the device is off the  list
+> > > > +                */
+> > > > +               list_del_init(&dev->kobj.entry);
+> > > > +               if (parent)
+> > > > +                       device_lock(parent);
+> > > > +               device_lock(dev);
+> > > > +               if (dev->bus && dev->bus->async_shutdown_end) {
+> > > > +                       if (initcall_debug)
+> > > > +                               dev_info(dev,
+> > > > +                               "async_shutdown_end called\n");
+> > > > +                       dev->bus->async_shutdown_end(dev);
+> > > > +               }
+> > > > +               device_unlock(dev);
+> > > > +               if (parent)
+> > > > +                       device_unlock(parent);
+> > > > +               put_device(dev);
+> > > > +               put_device(parent);
+> > > > +       }
+> > > >  }
+> > > >
+> > > >  /*
+> > > > diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+> > > > index a039ab809753..f582c9d21515 100644
+> > > > --- a/include/linux/device/bus.h
+> > > > +++ b/include/linux/device/bus.h
+> > > > @@ -49,6 +49,16 @@ struct fwnode_handle;
+> > > >   *             will never get called until they do.
+> > > >   * @remove:    Called when a device removed from this bus.
+> > > >   * @shutdown:  Called at shut-down time to quiesce the device.
+> > > > + * @async_shutdown_start:      Called at the shutdown-time to start
+> > > > + *                             the shutdown process on the device.
+> > > > + *                             This entry point will be called only
+> > > > + *                             when the bus driver has indicated it would
+> > > > + *                             like to participate in asynchronous shutdown
+> > > > + *                             completion.
+> > > > + * @async_shutdown_end:        Called at shutdown-time  to complete the shutdown
+> > > > + *                     process of the device. This entry point will be called
+> > > > + *                     only when the bus drive has indicated it would like to
+> > > > + *                     participate in the asynchronous shutdown completion.
+> > >
+> > > I'm going to repeat my point here, but only once.
+> > >
+> > > I see no reason to do async shutdown this way, instead of adding a
+> > > flag for drivers to opt in for calling their existing shutdown
+> > > callbacks asynchronously, in analogy with the async suspend and resume
+> > > implementation.
+> >
+> > There's a lot of code here that mere mortals like myself don't
+> > understand very well, so here's my meager understanding of how
+> > async suspend works and what you're suggesting to make this a
+> > little more concrete.
+> >
+> > Devices have this async_suspend bit:
+> >
+> >   struct device {
+> >     struct dev_pm_info {
+> >       unsigned int async_suspend:1;
+> >
+> > Drivers call device_enable_async_suspend() to set async_suspend if
+> > they want it.  The system suspend path is something like this:
+> >
+> >   suspend_enter
+> >     dpm_suspend_noirq(PMSG_SUSPEND)
+> >       dpm_noirq_suspend_devices(PMSG_SUSPEND)
+> >         pm_transition = PMSG_SUSPEND
+> >         while (!list_empty(&dpm_late_early_list))
+> >           device_suspend_noirq(dev)
+> >             dpm_async_fn(dev, async_suspend_noirq)
+> >               if (is_async(dev))
+> >                 async_schedule_dev(async_suspend_noirq)       # async path
+> >
+> >                   async_suspend_noirq               # called asynchronously
+> >                   __device_suspend_noirq(dev, PMSG_SUSPEND, true)
+> >                     callback = pm_noirq_op(PMSG_SUSPEND) # .suspend_noirq()
+> >                     dpm_run_callback(callback)      # async call
+> >
+> >             __device_suspend_noirq(dev, pm_transition, false) # sync path
+> >               callback = pm_noirq_op(PMSG_SUSPEND)  # .suspend_noirq()
+> >               dpm_run_callback(callback)            # sync call
+> >
+> >         async_synchronize_full                                # wait
+> >
+> > If a driver has called device_enable_async_suspend(), we'll use the
+> > async_schedule_dev() path to schedule the appropriate .suspend_noirq()
+> > method.  After scheduling it via the async path or directly calling it
+> > via the sync path, the async_synchronize_full() waits for completion
+> > of all the async methods.
+> >
+> > I assume your suggestion is to do something like this:
+> >
+> >   struct device {
+> >     struct dev_pm_info {
+> >       unsigned int async_suspend:1;
+> >  +    unsigned int async_shutdown:1;
+> >
+> >  + void device_enable_async_shutdown(struct device *dev)
+> >  +   dev->power.async_shutdown = true;
+> >
+> >     device_shutdown
+> >       while (!list_empty(&devices_kset->list))
+> >  -      dev->...->shutdown()
+> >  +      if (is_async_shutdown(dev))
+> >  +        async_schedule_dev(async_shutdown)   # async path
+> >  +
+> >  +         async_shutdown               # called asynchronously
+> >  +           dev->...->shutdown()
+> >  +
+> >  +      else
+> >  +        dev->...->shutdown()                 # sync path
+> >  +
+> >  +    async_synchronize_full                   # wait
+>
+> Yes, that's the idea IIUC.
 
-$ mrelease_test
-Success reaping a child with 1MB of memory allocations
+Thanks for the clarification, I misunderstood your earlier comment,
+thanks for explaining and clarification. Let me evaluate and get back
+to you as soon as possible.
 
-On failure the test reports the failure. Sample outputs:
-
-$ mrelease_test
-All process_mrelease attempts failed!
-
-$ mrelease_test
-process_mrelease: Invalid argument
-
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
-Changes in v3:
-- Applied on git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm mm-stable,
-per Andrew
-- Fixed formatting for sample outputs in the description, per Shuah
-- Removed pidfd_open, process_mrelease, write_fault_pages functions, per Shuah
-- Moved child main routine into its own function, per Shuah
-- Followed tools/testing/selftests/pidfd/pidfd.h as a model to deal with
-undefined syscall numbers, per Shuah
-
- tools/testing/selftests/vm/.gitignore      |   1 +
- tools/testing/selftests/vm/Makefile        |   1 +
- tools/testing/selftests/vm/mrelease_test.c | 200 +++++++++++++++++++++
- tools/testing/selftests/vm/run_vmtests.sh  |   2 +
- 4 files changed, 204 insertions(+)
- create mode 100644 tools/testing/selftests/vm/mrelease_test.c
-
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 3cb4fa771ec2..6c2ac4208c27 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -10,6 +10,7 @@ map_populate
- thuge-gen
- compaction_test
- mlock2-tests
-+mrelease_test
- mremap_dontunmap
- mremap_test
- on-fault-limit
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index f1228370e99b..8111a33e4824 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -44,6 +44,7 @@ TEST_GEN_FILES += memfd_secret
- TEST_GEN_FILES += migration
- TEST_GEN_FILES += mlock-random-test
- TEST_GEN_FILES += mlock2-tests
-+TEST_GEN_FILES += mrelease_test
- TEST_GEN_FILES += mremap_dontunmap
- TEST_GEN_FILES += mremap_test
- TEST_GEN_FILES += on-fault-limit
-diff --git a/tools/testing/selftests/vm/mrelease_test.c b/tools/testing/selftests/vm/mrelease_test.c
-new file mode 100644
-index 000000000000..96671c2f7d48
---- /dev/null
-+++ b/tools/testing/selftests/vm/mrelease_test.c
-@@ -0,0 +1,200 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2022 Google LLC
-+ */
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include "util.h"
-+
-+#include "../kselftest.h"
-+
-+#ifndef __NR_pidfd_open
-+#define __NR_pidfd_open -1
-+#endif
-+
-+#ifndef __NR_process_mrelease
-+#define __NR_process_mrelease -1
-+#endif
-+
-+#define MB(x) (x << 20)
-+#define MAX_SIZE_MB 1024
-+
-+static int alloc_noexit(unsigned long nr_pages, int pipefd)
-+{
-+	int ppid = getppid();
-+	int timeout = 10; /* 10sec timeout to get killed */
-+	unsigned long i;
-+	char *buf;
-+
-+	buf = (char *)mmap(NULL, nr_pages * PAGE_SIZE, PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE | MAP_ANON, 0, 0);
-+	if (buf == MAP_FAILED) {
-+		perror("mmap failed, halting the test");
-+		return KSFT_FAIL;
-+	}
-+
-+	for (i = 0; i < nr_pages; i++)
-+		*((unsigned long *)(buf + (i * PAGE_SIZE))) = i;
-+
-+	/* Signal the parent that the child is ready */
-+	if (write(pipefd, "", 1) < 0) {
-+		perror("write");
-+		return KSFT_FAIL;
-+	}
-+
-+	/* Wait to be killed (when reparenting happens) */
-+	while (getppid() == ppid && timeout > 0) {
-+		sleep(1);
-+		timeout--;
-+	}
-+
-+	munmap(buf, nr_pages * PAGE_SIZE);
-+
-+	return (timeout > 0) ? KSFT_PASS : KSFT_FAIL;
-+}
-+
-+/* The process_mrelease calls in this test are expected to fail */
-+static void run_negative_tests(int pidfd)
-+{
-+	/* Test invalid flags. Expect to fail with EINVAL error code. */
-+	if (!syscall(__NR_process_mrelease, pidfd, (unsigned int)-1) ||
-+			errno != EINVAL) {
-+		perror("process_mrelease with wrong flags");
-+		exit(errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
-+	}
-+	/*
-+	 * Test reaping while process is alive with no pending SIGKILL.
-+	 * Expect to fail with EINVAL error code.
-+	 */
-+	if (!syscall(__NR_process_mrelease, pidfd, 0) || errno != EINVAL) {
-+		perror("process_mrelease on a live process");
-+		exit(errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
-+	}
-+}
-+
-+static int child_main(int pipefd[], size_t size)
-+{
-+	int res;
-+
-+	/* Allocate and fault-in memory and wait to be killed */
-+	close(pipefd[0]);
-+	res = alloc_noexit(MB(size) / PAGE_SIZE, pipefd[1]);
-+	close(pipefd[1]);
-+	return res;
-+}
-+
-+int main(void)
-+{
-+	int pipefd[2], pidfd;
-+	bool success, retry;
-+	size_t size;
-+	pid_t pid;
-+	char byte;
-+	int res;
-+
-+	/* Test a wrong pidfd */
-+	if (!syscall(__NR_process_mrelease, -1, 0) || errno != EBADF) {
-+		perror("process_mrelease with wrong pidfd");
-+		exit(errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
-+	}
-+
-+	/* Start the test with 1MB child memory allocation */
-+	size = 1;
-+retry:
-+	/*
-+	 * Pipe for the child to signal when it's done allocating
-+	 * memory
-+	 */
-+	if (pipe(pipefd)) {
-+		perror("pipe");
-+		exit(KSFT_FAIL);
-+	}
-+	pid = fork();
-+	if (pid < 0) {
-+		perror("fork");
-+		close(pipefd[0]);
-+		close(pipefd[1]);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	if (pid == 0) {
-+		/* Child main routine */
-+		res = child_main(pipefd, size);
-+		exit(res);
-+	}
-+
-+	/*
-+	 * Parent main routine:
-+	 * Wait for the child to finish allocations, then kill and reap
-+	 */
-+	close(pipefd[1]);
-+	/* Block until the child is ready */
-+	res = read(pipefd[0], &byte, 1);
-+	close(pipefd[0]);
-+	if (res < 0) {
-+		perror("read");
-+		if (!kill(pid, SIGKILL))
-+			waitpid(pid, NULL, 0);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	pidfd = syscall(__NR_pidfd_open, pid, 0);
-+	if (pidfd < 0) {
-+		perror("pidfd_open");
-+		if (!kill(pid, SIGKILL))
-+			waitpid(pid, NULL, 0);
-+		exit(KSFT_FAIL);
-+	}
-+
-+	/* Run negative tests which require a live child */
-+	run_negative_tests(pidfd);
-+
-+	if (kill(pid, SIGKILL)) {
-+		perror("kill");
-+		exit(errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
-+	}
-+
-+	success = (syscall(__NR_process_mrelease, pidfd, 0) == 0);
-+	if (!success) {
-+		/*
-+		 * If we failed to reap because the child exited too soon,
-+		 * before we could call process_mrelease. Double child's memory
-+		 * which causes it to spend more time on cleanup and increases
-+		 * our chances of reaping its memory before it exits.
-+		 * Retry until we succeed or reach MAX_SIZE_MB.
-+		 */
-+		if (errno == ESRCH) {
-+			retry = (size <= MAX_SIZE_MB);
-+		} else {
-+			perror("process_mrelease");
-+			waitpid(pid, NULL, 0);
-+			exit(errno == ENOSYS ? KSFT_SKIP : KSFT_FAIL);
-+		}
-+	}
-+
-+	/* Cleanup to prevent zombies */
-+	if (waitpid(pid, NULL, 0) < 0) {
-+		perror("waitpid");
-+		exit(KSFT_FAIL);
-+	}
-+	close(pidfd);
-+
-+	if (!success) {
-+		if (retry) {
-+			size *= 2;
-+			goto retry;
-+		}
-+		printf("All process_mrelease attempts failed!\n");
-+		exit(KSFT_FAIL);
-+	}
-+
-+	printf("Success reaping a child with %zuMB of memory allocations\n",
-+	       size);
-+	return KSFT_PASS;
-+}
-diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
-index a2302b5faaf2..41fce8bea929 100755
---- a/tools/testing/selftests/vm/run_vmtests.sh
-+++ b/tools/testing/selftests/vm/run_vmtests.sh
-@@ -141,6 +141,8 @@ run_test ./mlock-random-test
- 
- run_test ./mlock2-tests
- 
-+run_test ./mrelease_test
-+
- run_test ./mremap_test
- 
- run_test ./thuge-gen
--- 
-2.36.1.124.g0e6072fb45-goog
-
+Thanks
+sureshtk

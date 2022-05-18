@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C976352BC86
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A0552BD08
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238513AbiERMrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S237344AbiERMr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237191AbiERMpt (ORCPT
+        with ESMTP id S237425AbiERMp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:45:49 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92065E02;
-        Wed, 18 May 2022 05:42:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652877731; x=1684413731;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=g12NRS8alSxAMdjIZ7FyL80YifoKRkRmio1kwZZ1BfQ=;
-  b=BfbxW1gcSO24QVRvo6ssEedhk1lu9c77zNq8gfdaTQaftojY2dtHhTg5
-   IaqToqJnFaI/aQDUiEt8GqiWXx9zF8a86UN8P0+bY066Scx8rAAO11bIn
-   Ql0EngWZneimo9rfH5MwestFV48oHE6ZbXmJLP9PfVFCX6LKDPfuESc4Z
-   wNJnP3eaB9k5Qt5DQ6TlMmtccHFvztTs7ZLNAMgPzQwZKdzEIQcXTos2+
-   RHPIR8s7ElhyoNuoeVldnab9W7OFaI7XbeOnvrysotcqJ2LUVCz1lpkca
-   r5lkKcVsU4xgaNbr/UFj64e1RCQ6/aW93cLhu0iioE3hrC7BntSAaIe1D
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="332270387"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="332270387"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 05:41:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="639243416"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 18 May 2022 05:41:33 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrIzd-0002BR-4H;
-        Wed, 18 May 2022 12:41:33 +0000
-Date:   Wed, 18 May 2022 20:40:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     kbuild-all@lists.01.org, linux-security-module@vger.kernel.org,
-        dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, Song Liu <song@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: Re: [PATCH v4 2/3] LoadPin: Enable loading from trusted dm-verity
- devices
-Message-ID: <202205182059.6QY3zspw-lkp@intel.com>
-References: <20220517163437.v4.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid>
+        Wed, 18 May 2022 08:45:57 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C60715D308;
+        Wed, 18 May 2022 05:42:25 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 1863A240006;
+        Wed, 18 May 2022 12:42:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652877744;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3gM9WXfVKLQSwc3deM8grfiskd/pEHtQBWIsO3/UiFA=;
+        b=BVT23yrs3RTS7Oays8mQt1y5yO2CLE6kuXnLPiQJ35xmRgRerwJGEJJ75CA2EnSviEn4tH
+        k9FsITgPYESsuQMEoR7Mf6yMyrYLMLLHcaca/wmC3HllzJuinX32Ndmfp0//C4gOA0R7ZK
+        694jNF25jIcEz0pKhrRqRhfpj24hJ0sFX4roiI4shAekeVVvFbBQUzI4c5s+ZwufI01M/2
+        dGSNO70ZXEc//bLwo6uGK91g7gwjjPkTuQC+B2IleBwiGD2jcGEkndMnRvEAQN5WFBFj+S
+        ewQgZFJ/7/nou1jSRwatnNUO0qSYxouAisQ4w8xvnd/WNE4l6RlLpbIeRhP4aQ==
+Date:   Wed, 18 May 2022 14:41:11 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v4 05/12] dt-bindings: net: dsa: add bindings
+ for Renesas RZ/N1 Advanced 5 port switch
+Message-ID: <20220518144111.135c7d0d@fixe.home>
+In-Reply-To: <20220518120503.3m2zfw7kmhsfg336@skbuf>
+References: <20220509131900.7840-1-clement.leger@bootlin.com>
+        <20220509131900.7840-6-clement.leger@bootlin.com>
+        <20220511152221.GA334055-robh@kernel.org>
+        <20220511153337.deqxawpbbk3actxf@skbuf>
+        <20220518015924.GC2049643-robh@kernel.org>
+        <20220518120503.3m2zfw7kmhsfg336@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517163437.v4.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+Le Wed, 18 May 2022 15:05:03 +0300,
+Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
 
-Thank you for the patch! Yet something to improve:
+> On Tue, May 17, 2022 at 08:59:24PM -0500, Rob Herring wrote:
+> > On Wed, May 11, 2022 at 06:33:37PM +0300, Vladimir Oltean wrote: =20
+> > > On Wed, May 11, 2022 at 10:22:21AM -0500, Rob Herring wrote: =20
+> > > > > +patternProperties:
+> > > > > +  "^ethernet-ports$": =20
+> > > >=20
+> > > > Move to 'properties', not a pattern.
+> > > >=20
+> > > > With that,
+> > > >=20
+> > > > Reviewed-by: Rob Herring <robh@kernel.org> =20
+> > >=20
+> > > Even if it should have been "^(ethernet-)?ports$"? =20
+> >=20
+> > Why? Allowing 'ports' is for existing users. New ones don't need the=20
+> > variability and should use just 'ethernet-ports'.
+> >=20
+> > Rob =20
+>=20
+> Yeah, ok, somehow the memo that new DSA drivers shouldn't support "ports"
+> didn't reach me. They invariably will though, since the DSA framework is
+> the main parser of the property, and that is shared by both old and new
+> drivers.
 
-[auto build test ERROR on device-mapper-dm/for-next]
-[also build test ERROR on song-md/md-next kees/for-next/pstore linus/master v5.18-rc7 next-20220517]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Should also the subnodes of "ethernet-ports" use the
+"ethernet-port@[0-9]*" naming ? Or keeping the existing pattern is ok
+(ie "^(ethernet-)?port@[0-4]$") ?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthias-Kaehlcke/LoadPin-Enable-loading-from-trusted-dm-verity-devices/20220518-073635
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220518/202205182059.6QY3zspw-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/755e5d82e4d054b2b58a54c94681080cc8cb4582
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthias-Kaehlcke/LoadPin-Enable-loading-from-trusted-dm-verity-devices/20220518-073635
-        git checkout 755e5d82e4d054b2b58a54c94681080cc8cb4582
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash security/
+Thanks,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from security/loadpin/loadpin.c:21:
->> include/linux/dm-verity-loadpin.h:22:1: error: expected identifier or '(' before '{' token
-      22 | {
-         | ^
-   include/linux/dm-verity-loadpin.h:21:20: warning: 'dm_verity_loadpin_is_sb_trusted' used but never defined
-      21 | static inline bool dm_verity_loadpin_is_sb_trusted(struct super_block *sb);
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +22 include/linux/dm-verity-loadpin.h
-
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  17  
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  18  #if IS_ENABLED(CONFIG_SECURITY_LOADPIN) && IS_BUILTIN(CONFIG_DM_VERITY)
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  19  bool dm_verity_loadpin_is_sb_trusted(struct super_block *sb);
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  20  #else
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  21  static inline bool dm_verity_loadpin_is_sb_trusted(struct super_block *sb);
-afd03270f57b8c Matthias Kaehlcke 2022-05-17 @22  {
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  23  	return false;
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  24  }
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  25  #endif
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  26  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

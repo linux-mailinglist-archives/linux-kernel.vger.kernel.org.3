@@ -2,95 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D499452B047
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BA652B058
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234061AbiERB4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
+        id S234092AbiERB6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbiERBzw (ORCPT
+        with ESMTP id S234076AbiERB6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:55:52 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D50F07;
-        Tue, 17 May 2022 18:55:50 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24HKgGIQ031659;
-        Wed, 18 May 2022 01:55:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=WINoPMnV95p+ub5aBvEYZWMBEM7WAa67hzS2CHcAaio=;
- b=dwHYrkVDO/TpiP0jM/grCR0oLAW2moLDg/VdNtXeW60TeX+Ctc+/q0SsrcRS002PI0Y8
- H6P9hEhtGBhjWg2ZqfCPOP1c0DbnvGE21+SEp12uUVc2ZYGae4NCmRb4iiVKqQsh2GOX
- dsKus5IQNi790E2d8zKfEL+RFYTTUysKFUYIy1I33CcntPDxkDgRyMcS9Rxxuglfnrf0
- BUgTHllwN9rl2J3DWDIYBVIYoaMsHnKZc6l/rouh5LqS1bmvcR1NoObcCr8PNC5om9z5
- RPWGQSwcZfZycYzkE4IwGxptMEBu80n+2+VBLUi1+iN8xEbaYmi79cnZJgXWs2UwCXlU Sw== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24aaftv4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 01:55:41 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24I1j166022553;
-        Wed, 18 May 2022 01:55:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v3r69s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 01:55:40 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 24I1tdCY004454;
-        Wed, 18 May 2022 01:55:39 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22v3r69m-1;
-        Wed, 18 May 2022 01:55:39 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     mingzhe.zou@easystack.cn, michael.christie@oracle.com,
-        torvalds@linux-foundation.org, zgrieee@gmail.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.yang@easystack.cn, zoumingzhe@qq.com,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: target: fixup incorrect use of 'cpumask_t'
-Date:   Tue, 17 May 2022 21:55:38 -0400
-Message-Id: <165283883037.1328.16838345221393341169.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220516054721.1548-1-mingzhe.zou@easystack.cn>
-References: <20220516054721.1548-1-mingzhe.zou@easystack.cn>
+        Tue, 17 May 2022 21:58:46 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0804F340C6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=j23IKT8AReeydsEeJtOMrkt6EF8d6kyrYRtSyXUiq64=; b=QiacaCmmX72WLCEwp4mJWLgQkl
+        WBDDDMyVrQvQPO3rLcU8gb4rFcX7QDR5SkbU8rt1Z64UqB3PZTuSf8ZCIVioNk3VmJk1426lWv5IA
+        Ietp4fomDkXKbdEtiJpvNb9g+qwrG7MVcS6pzH7L6O0iH55JMUq3wxbC83YEXlucJKiUjM0WDUk+W
+        bxHl1P/XkNZzmtHRkRktR8dc7FA8m2H+CqrHQ9aCpvIpLWoAxOu6MS8g4alDS4AZWwkScPkTED4BW
+        3ONiBlRom1bEO4nwyiNDPHF/sj8xPDJpM5pH9rGHhNyaCYii/XGS98bI+fA4lhRjGBYx2MywdZouL
+        hWUB/f3g==;
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nr8xU-00FtoS-Ci; Wed, 18 May 2022 01:58:40 +0000
+Date:   Wed, 18 May 2022 01:58:40 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
+Cc:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
+Message-ID: <YoRS0L0ywSZkflq7@zeniv-ca.linux.org.uk>
+References: <20220517223806.2299-1-hdanton@sina.com>
+ <000000000000be329205df3cf252@google.com>
+ <YoQohxAFD3EPujRC@zeniv-ca.linux.org.uk>
+ <YoRFAoe99ob/YzD5@zeniv-ca.linux.org.uk>
+ <YoRHfB7lEGUwQBGU@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: gep8iAr9P7wUo-80x8z-rdTt17I37yM_
-X-Proofpoint-GUID: gep8iAr9P7wUo-80x8z-rdTt17I37yM_
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoRHfB7lEGUwQBGU@zeniv-ca.linux.org.uk>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 13:47:21 +0800, mingzhe.zou@easystack.cn wrote:
-
-> From: mingzhe <mingzhe.zou@easystack.cn>
+On Wed, May 18, 2022 at 01:10:20AM +0000, Al Viro wrote:
+> On Wed, May 18, 2022 at 12:59:46AM +0000, Al Viro wrote:
+> > On Tue, May 17, 2022 at 10:58:15PM +0000, Al Viro wrote:
+> > > On Tue, May 17, 2022 at 03:49:07PM -0700, syzbot wrote:
+> > > > Hello,
+> > > > 
+> > > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> > > > WARNING in mntput_no_expire
+> > > 
+> > > Obvious question: which filesystem it is?
+> > 
+> > FWIW, can't reproduce here - at least not with C reproducer +
+> > -rc7^ kernel + .config from report + debian kvm image (bullseye,
+> > with systemd shite replaced with sysvinit, which might be relevant).
+> > 
+> > In case systemd-specific braindamage is needed to reproduce it...
+> > Hell knows; at least mount --make-rshared / doesn't seem to suffice.
 > 
-> In commit d72d827f2f26, I used 'cpumask_t' incorrectly.
-> ```
-> void iscsit_thread_get_cpumask(struct iscsi_conn *conn)
-> {
->         int ord, cpu;
->         cpumask_t conn_allowed_cpumask;
->         ......
-> }
-> 
-> [...]
+> ... doesn't reproduce with genuine systemd either.  FWIW, 4-way SMP
+> setup here.
 
-Applied to 5.18/scsi-fixes, thanks!
-
-[1/1] scsi: target: fixup incorrect use of 'cpumask_t'
-      https://git.kernel.org/mkp/scsi/c/525f447f88b1
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+OK, reproduced...

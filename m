@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AE952C0C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B655E52C050
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240080AbiERQYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S240086AbiERQ0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240055AbiERQYN (ORCPT
+        with ESMTP id S240182AbiERQ02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:24:13 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A4F1F1CAC;
-        Wed, 18 May 2022 09:24:12 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id d137so4507936ybc.13;
-        Wed, 18 May 2022 09:24:12 -0700 (PDT)
+        Wed, 18 May 2022 12:26:28 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A65D50E20
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:26:26 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id c12so3677498eds.10
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:26:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=dhSiyOtTgaVAjZan+u734uFv0uo0oRV2yOrUrfVrqPI=;
-        b=ftlbUEnn8IO7BNvrI7YTiIMgh3qQlAmfrLh0Fl+h5QRnIhLZOLq7WI9ET85EyJ1Cpa
-         quiq3mVM0pSHuB73vN+hp9E0iwqTc8Q2gPAth7OPnjHd0nWoVzu2/cpWgfYb+y9Xs/CT
-         13RjgC/epaBnZqz1vw+83XxJ43JzpRxDBh7Wc820RLUFcpiauU3G/zbmbdHJBS0XYuGe
-         YdrUzvCJmONGzOoAceOEQ3o0w9C/91OfsbIcqp3tsCvmJmNJtnvrtazNsUrJ9CcA5AMc
-         StCt/z6SFfAvZCsu2oVV40hbI9dAj+dtvfqAHg1ICepWLt8DobL36pOZDgdr6ytYwt1K
-         Ahpg==
+        bh=OT9eEBFMeKZroeDVOBWrAfjCYcqI+X5VChXxs9BlrXg=;
+        b=Gsl7VPQ9FyK0s5sL1fpz/EjhUZoQKGnGlpYrkZXH8BfbxKlvO5GUZPMlOfQz+y5b0t
+         /3+JhrFXrolcoO2X5Onss7j27Lxsb9Ew1AC0L6/7HCsHCwgPBRwWU3FHfyMoIdbMeeqf
+         YIDfQCWhi1TCO6M/Sdn6KoljmmkQjNNDN5fst0xkAjc9nj3OHmM4BRHkMKyxlFpU6a1S
+         Gaf/zuL0mhBX5ySZz1xCfh6QXNOLHJJONgeNBlxRY3irGcwfekbX9znijLdKWdEU9hBj
+         vLdo5SsbDeV1WlQxwvEg6rU9in5kF2p6DcdSMCKg3DNrL3zc/9SKETvhllh/zgiLQ+Zg
+         zkNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=dhSiyOtTgaVAjZan+u734uFv0uo0oRV2yOrUrfVrqPI=;
-        b=s6u8bJXbbE9AIT+uo8RCnZ7xqwTEVArE3B4rVwKbrQsDkOP/VJSgWGAI8bpAHwIaN4
-         NzbvtI/CekvZXY3UUgMXd5k7vtyxoG7H7xL0OdIs9kV7/k4AF19JQqJmIXuhyG74x0Ep
-         1bCnVEiyyO4iE5KVtgGOTWSPoS977Si9ZwJ/vILWCFO2aR1/IFBNcJXXXyc0hohBsQmH
-         3QBI2F9tkHHXDmsu/oU9n8TiN355qP2uD3HWAYHoDHXDI2jM2VCyMjYeiDsYkJ8CYxhx
-         Q5aFySZsvfWk7B0pn4glOAX670MKapmgLmoKmJX595i19+tmW4HR+g75LjEXoqpDhR4L
-         5BRA==
-X-Gm-Message-State: AOAM531VG2viUzdvWTUUwoO1XMCICCjHWiW91NLxA+VyAgU+BJYJi+Fw
-        FO8leC6k+1BQmK0PwXRsDcaxRWkrIYPGJVQOB1U=
-X-Google-Smtp-Source: ABdhPJwpx4YSwofMVxD1GzkihxNpPcH9+j+L8tVg2vc3hhwdL2JpKktwokGCaMrXTskUVRl3/A/eAkWgAdBeGWzmuUI=
-X-Received: by 2002:a25:3145:0:b0:64e:ac9a:eb27 with SMTP id
- x66-20020a253145000000b0064eac9aeb27mr401338ybx.630.1652891051851; Wed, 18
- May 2022 09:24:11 -0700 (PDT)
+        bh=OT9eEBFMeKZroeDVOBWrAfjCYcqI+X5VChXxs9BlrXg=;
+        b=W7Wpljn7o/LxvPBM1TkqMENpQM7X1uZAKDZETsMMUUv25FMntTxE9XeuL94aoDRVnc
+         PSB0pi6jNTEQ44U9kJxpkjQCk2AAHTZyXLCeWlmVBI9i9jzyLCsTK9zz+PgR0F5Boj6t
+         ZkkBQ+FaNtJCCw6R/wdnJTJ4t9gGd0MQsamEJAksTIxn55X67Q+yyNALHoblTjGVF3oj
+         QDg9LmPgy5xWNnbLPJJ7VcR9Tm/nmir1uKma87A6+pmIlv8kyTRm9i05PGO5eW0sqq83
+         4VgD55jVESW8a80buT4UFYq5zbfpSbMc5xHYFNysgkEqrC4bL3hLds7YMknhyGEQE0pP
+         rAKg==
+X-Gm-Message-State: AOAM5300O79a/tj+IHYw9xNmHI5EBBYV9lSPTaiyIaibicBiRzgSB//6
+        dlvBRZMIWzytyU5PpvJKrB+euqVloGdAd33fUokf/g==
+X-Google-Smtp-Source: ABdhPJxhxyt/6HNDWzDngc8o2BdNPg+mRcwwuAQDkoEXX/yMHM4iyhj0NqJ0xgaCR9pwDVqv2xyC5E11gy00UG4FXjM=
+X-Received: by 2002:a05:6402:2709:b0:428:3ed9:abe3 with SMTP id
+ y9-20020a056402270900b004283ed9abe3mr593155edd.51.1652891184623; Wed, 18 May
+ 2022 09:26:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512182921.193462-1-max@enpas.org>
-In-Reply-To: <20220512182921.193462-1-max@enpas.org>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Thu, 19 May 2022 01:24:00 +0900
-Message-ID: <CAMZ6RqJqW+RuPOe6wYkAQh500BzVWnx9hcSAC3bvC7zYNYV-iw@mail.gmail.com>
-Subject: Re: [PATCH v6] can, tty: can327 CAN/ldisc driver for ELM327 based
- OBD-II adapters
-To:     Max Staudt <max@enpas.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
+References: <20220518091814.2028579-1-tzungbi@kernel.org> <20220518091814.2028579-3-tzungbi@kernel.org>
+In-Reply-To: <20220518091814.2028579-3-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Wed, 18 May 2022 09:26:13 -0700
+Message-ID: <CABXOdTe=K8V762Z3cgXq6qSFLosWKBfVQ1D4sCoZwqKY1RLNqg@mail.gmail.com>
+Subject: Re: [PATCH 2/4] platform/chrome: cros_ec_proto: factor legacy out
+ from cros_ec_prepare_tx()
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,68 +71,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Forgot one comment.
+On Wed, May 18, 2022 at 2:18 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> cros_ec_prepare_tx() mixed the code for both versions.  To be neat and to
+> make it clear, factor the legacy part out as a separate function, rename
+> the function, and update the comments.
+>
+> Specifically,
+> - prepare_tx(), for current protocol version (i.e. 3).
+> - prepare_tx_legacy(), for protocol version <= 2.
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-On Fri 13 May 2022 at 03:29, Max Staudt <max@enpas.org> wrote:
-[...]
-> +/* Send a can_frame to a TTY. */
-> +static netdev_tx_t can327_netdev_start_xmit(struct sk_buff *skb,
-> +                                           struct net_device *dev)
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+
+> ---
+>  drivers/platform/chrome/cros_ec_proto.c | 51 ++++++++++++++-----------
+>  1 file changed, 28 insertions(+), 23 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index ff767dccdf0f..01ab58b3269b 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -52,8 +52,8 @@ static int cros_ec_map_error(uint32_t result)
+>         return ret;
+>  }
+>
+> -static int prepare_packet(struct cros_ec_device *ec_dev,
+> -                         struct cros_ec_command *msg)
+> +static int prepare_tx(struct cros_ec_device *ec_dev,
+> +                     struct cros_ec_command *msg)
+>  {
+>         struct ec_host_request *request;
+>         u8 *out;
+> @@ -85,6 +85,28 @@ static int prepare_packet(struct cros_ec_device *ec_dev,
+>         return sizeof(*request) + msg->outsize;
+>  }
+>
+> +static int prepare_tx_legacy(struct cros_ec_device *ec_dev,
+> +                            struct cros_ec_command *msg)
 > +{
-> +       struct can327 *elm = netdev_priv(dev);
-> +       struct can_frame *frame = (struct can_frame *)skb->data;
+> +       u8 *out;
+> +       u8 csum;
+> +       int i;
 > +
-> +       if (can_dropped_invalid_skb(dev, skb))
-> +               return NETDEV_TX_OK;
+> +       if (msg->outsize > EC_PROTO2_MAX_PARAM_SIZE)
+> +               return -EINVAL;
 > +
-> +       /* BHs are already disabled, so no spin_lock_bh().
-> +        * See Documentation/networking/netdevices.txt
-> +        */
-> +       spin_lock(&elm->lock);
+> +       out = ec_dev->dout;
+> +       out[0] = EC_CMD_VERSION0 + msg->version;
+> +       out[1] = msg->command;
+> +       out[2] = msg->outsize;
+> +       csum = out[0] + out[1] + out[2];
+> +       for (i = 0; i < msg->outsize; i++)
+> +               csum += out[EC_MSG_TX_HEADER_BYTES + i] = msg->data[i];
+> +       out[EC_MSG_TX_HEADER_BYTES + msg->outsize] = csum;
 > +
-> +       /* We shouldn't get here after a hardware fault:
-> +        * can_bus_off() calls netif_carrier_off()
-> +        */
-> +       WARN_ON_ONCE(elm->uart_side_failure);
-> +
-> +       if (!elm->tty ||
-> +           elm->uart_side_failure ||
-> +           elm->can.ctrlmode & CAN_CTRLMODE_LISTENONLY) {
-> +               spin_unlock(&elm->lock);
-> +               goto out;
-> +       }
-> +
-> +       netif_stop_queue(dev);
-> +
-> +       elm327_send_frame(elm, frame);
-> +       spin_unlock(&elm->lock);
-> +
-> +       dev->stats.tx_packets++;
-> +       dev->stats.tx_bytes += frame->len;
-
-Do not increase tx_bytes for RTR frame. c.f.
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cc4b08c31b5c51352f258032cc65e884b3e61e6a
-
-Also, when is the frame freed? Did you double check there is no race
-condition resulting in a use after free on frame->len? Similar to:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=03f16c5075b22c8902d2af739969e878b0879c94
-
-> +       can_led_event(dev, CAN_LED_EVENT_TX);
-
-Please adjust according to Oliver's patch.
-
-> +out:
-> +       kfree_skb(skb);
-> +       return NETDEV_TX_OK;
+> +       return EC_MSG_TX_PROTO_BYTES + msg->outsize;
 > +}
 > +
-> +static const struct net_device_ops can327_netdev_ops = {
-> +       .ndo_open       = can327_netdev_open,
-> +       .ndo_stop       = can327_netdev_close,
-> +       .ndo_start_xmit = can327_netdev_start_xmit,
-> +       .ndo_change_mtu = can_change_mtu,
-> +};
-[...]
-
-Yours sincerely,
-Vincent Mailhol
+>  static int send_command(struct cros_ec_device *ec_dev,
+>                         struct cros_ec_command *msg)
+>  {
+> @@ -161,35 +183,18 @@ static int send_command(struct cros_ec_device *ec_dev,
+>   * @ec_dev: Device to register.
+>   * @msg: Message to write.
+>   *
+> - * This is intended to be used by all ChromeOS EC drivers, but at present
+> - * only SPI uses it. Once LPC uses the same protocol it can start using it.
+> - * I2C could use it now, with a refactor of the existing code.
+> + * This is used by all ChromeOS EC drivers to prepare the outgoing message
+> + * according to different protocol versions.
+>   *
+>   * Return: number of prepared bytes on success or negative error code.
+>   */
+>  int cros_ec_prepare_tx(struct cros_ec_device *ec_dev,
+>                        struct cros_ec_command *msg)
+>  {
+> -       u8 *out;
+> -       u8 csum;
+> -       int i;
+> -
+>         if (ec_dev->proto_version > 2)
+> -               return prepare_packet(ec_dev, msg);
+> -
+> -       if (msg->outsize > EC_PROTO2_MAX_PARAM_SIZE)
+> -               return -EINVAL;
+> -
+> -       out = ec_dev->dout;
+> -       out[0] = EC_CMD_VERSION0 + msg->version;
+> -       out[1] = msg->command;
+> -       out[2] = msg->outsize;
+> -       csum = out[0] + out[1] + out[2];
+> -       for (i = 0; i < msg->outsize; i++)
+> -               csum += out[EC_MSG_TX_HEADER_BYTES + i] = msg->data[i];
+> -       out[EC_MSG_TX_HEADER_BYTES + msg->outsize] = csum;
+> +               return prepare_tx(ec_dev, msg);
+>
+> -       return EC_MSG_TX_PROTO_BYTES + msg->outsize;
+> +       return prepare_tx_legacy(ec_dev, msg);
+>  }
+>  EXPORT_SYMBOL(cros_ec_prepare_tx);
+>
+> --
+> 2.36.0.550.gb090851708-goog
+>

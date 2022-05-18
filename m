@@ -2,96 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4076952B95D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D50D52B953
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235903AbiERL6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45302 "EHLO
+        id S235964AbiERL6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235885AbiERL56 (ORCPT
+        with ESMTP id S235953AbiERL6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:57:58 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3DA24093
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 04:57:57 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id wh22so3190088ejb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 04:57:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1AQVLqL8oPCsWqIf0y5cLrjgJaveJU57q/bnqY+Bcwc=;
-        b=oy5BQ1sPa+NNYI44WvlAhaedelel72TvA+F0iA95vikBTLLK/78vZ+B3nN3vxgrIHZ
-         1ub3KAZd6byRBhiUxivonltflM0hRYEm7ah6fM1zbSbnT13QLxV7WAzmrOsyn/gkY975
-         /VQOv6SrG1Dv2Vq0c58Z9F+EMLND4vnSrCvyc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1AQVLqL8oPCsWqIf0y5cLrjgJaveJU57q/bnqY+Bcwc=;
-        b=WlS/vIARezwr+oIYNbGhvVycUw2qNTfYjG2kZGNvx2lg1zTtG6PbsKsYR7ONkVm6wF
-         7KMz8V2c1/m/Fw/eVs7yB6CF2mALop9qzS08OpTGlNuHl9zfkZPsmckK9uA9gcecYMbO
-         AnRXynYEpsVNkyHealrFxzt880/GS6q21tXuOLCPtK3DfN7FgPlVIsifIOHcI3TQspkb
-         esCGD8Njiujhc31+gbilvsG9RRCB3WTxOFzeBU9nn2aLNpxC2/60f7JbHmXzCJwiIuWk
-         8Mt6F8KJLIOiBh7vdbsQ/ms1I+RRjLpvOQA/1G/rVB8w/Ulb3+QCPqnmuF4/ySdddt9+
-         avlQ==
-X-Gm-Message-State: AOAM532I77qDYI0THf4l/TFIE31jchavUvEwL3Bm91hn4Jg8K1/jFGdX
-        H3M4nIGLaNb3l6Iee6JPONQ3NBNzWCu0c+bcqLqmwA==
-X-Google-Smtp-Source: ABdhPJwxUucUZ5jQkIxILawVnBHu4LaNFhal53sVL/JVRbmmLUpb/dQrdpadwZ931FvDV3vgHVdeI22o598w+yO6yeE=
-X-Received: by 2002:a17:907:6e9e:b0:6fe:8d81:b4a3 with SMTP id
- sh30-20020a1709076e9e00b006fe8d81b4a3mr1443382ejc.748.1652875076330; Wed, 18
- May 2022 04:57:56 -0700 (PDT)
+        Wed, 18 May 2022 07:58:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6684A3D9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 04:58:32 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1nrIJr-0001Di-BI; Wed, 18 May 2022 13:58:23 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E451F8134B;
+        Wed, 18 May 2022 11:58:20 +0000 (UTC)
+Date:   Wed, 18 May 2022 13:58:20 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: mcp251xfd: silence clang's -Wunaligned-access
+ warning
+Message-ID: <20220518115820.qzvyrnwsb4wvayq2@pengutronix.de>
+References: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
+ <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-References: <20220511222910.635307-1-dlunev@chromium.org> <20220512082832.v2.2.I692165059274c30b59bed56940b54a573ccb46e4@changeid>
- <YoQfls6hFcP3kCaH@zeniv-ca.linux.org.uk> <YoQihi4OMjJj2Mj0@zeniv-ca.linux.org.uk>
-In-Reply-To: <YoQihi4OMjJj2Mj0@zeniv-ca.linux.org.uk>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 18 May 2022 13:57:45 +0200
-Message-ID: <CAJfpegtQUP045X5N8ib1rUTKzSj-giih0eL=jC5-MP7aVgyN_g@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] FUSE: Retire superblock on force unmount
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Daniil Lunev <dlunev@chromium.org>, linux-fsdevel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="57rj3wezavrbut5g"
+Content-Disposition: inline
+In-Reply-To: <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022 at 00:32, Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Tue, May 17, 2022 at 10:20:06PM +0000, Al Viro wrote:
-> > On Thu, May 12, 2022 at 08:29:10AM +1000, Daniil Lunev wrote:
-> > > Force unmount of FUSE severes the connection with the user space, even
-> > > if there are still open files. Subsequent remount tries to re-use the
-> > > superblock held by the open files, which is meaningless in the FUSE case
-> > > after disconnect - reused super block doesn't have userspace counterpart
-> > > attached to it and is incapable of doing any IO.
-> >
-> >       Why not simply have those simply rejected by fuse_test_super()?
-> > Looks like that would be much smaller and less invasive patch...
-> > Confused...
->
-> ... because Miklos had suggested that, apparently ;-/  I disagree -
-> that approach has more side effects.  "mount will skip that sucker" is,
-> AFAICS, the only effect of modiyfing test_super callback(s); yours, OTOH...
 
-Yep, messing with the bdi doesn't look good.  Fuse always uses a
-private bdi, so it's not even necessary.
+--57rj3wezavrbut5g
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Just removing from type->fs_supers should not have any side effects,
-at least I can't spot any.
+On 18.05.2022 20:43:57, Vincent Mailhol wrote:
+> clang emits a -Wunaligned-access warning on union
+> mcp251xfd_tx_ojb_load_buf.
+>=20
+> The reason is that field hw_tx_obj (not declared as packed) is being
+> packed right after a 16 bits field inside a packed struct:
+>=20
+> | union mcp251xfd_tx_obj_load_buf {
+> | 	struct __packed {
+> | 		struct mcp251xfd_buf_cmd cmd;
+> | 		  /* ^ 16 bits fields */
+> | 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+> | 		  /* ^ not declared as packed */
+> | 	} nocrc;
+> | 	struct __packed {
+> | 		struct mcp251xfd_buf_cmd_crc cmd;
+> | 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+> | 		__be16 crc;
+> | 	} crc;
+> | } ____cacheline_aligned;
+>=20
+> Starting from LLVM 14, having an unpacked struct nested in a packed
+> struct triggers a warning. c.f. [1].
+>=20
+> This is a false positive because the field is always being accessed
+> with the relevant put_unaligned_*() function. Adding __packed to the
+> structure declaration silences the warning.
+>=20
+> [1] https://github.com/llvm/llvm-project/issues/55520
+>=20
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-Fixing fuse_test_super() is not sufficient, as the fuseblk type goes
-though get_tree_bdev().  That could be tweaked as well, but it would
-end up with more complexity.
+Thank! Applies to linux-can-next/testing.
 
-Thanks,
-Miklos
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--57rj3wezavrbut5g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKE31kACgkQrX5LkNig
+011t0ggAq8G16P8sCd0leKEHsfIg71a0qsHV2KuL4mFSOedd48EPrhnA0jsvaIF8
+byxhVqb5H/VjWWQ6y4x3e0AGfj3h/3c7PZJL/P6K77Hq2frEkepTGtzLd7Lp/UWC
+uXy2m+tC3C8Emd8z2mLw0sH6bdgkZ4vtQjEPy1oHWTxPcSp1LRnAwXt8iS+ReVhA
+pp8J8k3ctN8KJdfisVRScLINFYa5dGDpbrFjLQCDkan+S1TubuqwgvIghP5V6Stb
+ilB9OFEcDh8BSqiId9YhQsocIf3z6akzTfZWBA6Vd9vxl/1VkNbm09A9u0onIfBv
+mQlJi8sA48p9WMrNmj9E6Ech2dnnVA==
+=lBes
+-----END PGP SIGNATURE-----
+
+--57rj3wezavrbut5g--

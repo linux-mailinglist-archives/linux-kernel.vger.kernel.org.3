@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C389652C214
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FCA52C211
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbiERSLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S236183AbiERSMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237740AbiERSLE (ORCPT
+        with ESMTP id S232312AbiERSMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:11:04 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A844123177;
-        Wed, 18 May 2022 11:11:02 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-f1d2ea701dso3742306fac.10;
-        Wed, 18 May 2022 11:11:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2SbH21NI1RxYzUW8Fc68yUKxfiyOdhoY7sVVRkwTa5c=;
-        b=b0wyhlyp9ooTdbNyTPbV2vY5e4sfyc4FmaTotnr6Xg8E7BS6wgiiHKtqYsR1KEedxB
-         dDJ8fiYsHBSciCz+/ZuhEXa1TksqPxdId/27rygiJ0Wvj0RFxsfFOn+BqfczMjTCTcyk
-         W7vfHM9VCBYDluBuV02bjwsglMwnj1OOV5RI+VgyyilICd7q8OH78+uHJRLLui2lkrsZ
-         ej2xEAPKr5CwIn8p4ip/VK/iLsC9PHpWS7MOh4aOBUv9CO0ZxJWFM7J9FxZjYa1LeqiJ
-         0VDMovHoZ6dS3Gdl5UUX6yVjRsB6/7jjg4kOIMMxQMAWvEZBtxke1OM0JkSlJ3/zskZU
-         cfwg==
-X-Gm-Message-State: AOAM532UjxOCYX5L/qnyid4wi9TFpAtpuRDSYmIrRNXhgznlxTJO2Oyl
-        XDPCd7XLMqQRZv7sFXwLyA==
-X-Google-Smtp-Source: ABdhPJyY34Vx2sbvEO/kb6TuZqgF4pxQHTW0SZ1pk0lPygem0MFJXB98JiXyUZaeU/emLp1lwUyc5g==
-X-Received: by 2002:a05:6870:64a6:b0:f1:e54f:5923 with SMTP id cz38-20020a05687064a600b000f1e54f5923mr798509oab.123.1652897461805;
-        Wed, 18 May 2022 11:11:01 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e133-20020acab58b000000b00325cda1ff99sm1019554oif.24.2022.05.18.11.11.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 11:11:00 -0700 (PDT)
-Received: (nullmailer pid 3615615 invoked by uid 1000);
-        Wed, 18 May 2022 18:11:00 -0000
-Date:   Wed, 18 May 2022 13:11:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: mtd: qcom_nandc: document
- qcom,boot-pages binding
-Message-ID: <20220518181100.GG3302100-robh@kernel.org>
-References: <20220503154353.4367-1-ansuelsmth@gmail.com>
- <20220503154353.4367-3-ansuelsmth@gmail.com>
- <20220516184912.GA3063673-robh@kernel.org>
- <62840beb.1c69fb81.9bdaf.070c@mx.google.com>
+        Wed, 18 May 2022 14:12:16 -0400
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6396833C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:12:15 -0700 (PDT)
+Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id C66A02086D;
+        Wed, 18 May 2022 18:12:13 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 42ABB6000E;
+        Wed, 18 May 2022 18:12:12 +0000 (UTC)
+Message-ID: <f0acebb66b9b46ad472e0d0989dc0f5810cac3dd.camel@perches.com>
+Subject: Re: [PATCH -next v2 6/6] nbd: use pr_err to output error message
+From:   Joe Perches <joe@perches.com>
+To:     Yu Kuai <yukuai3@huawei.com>, josef@toxicpanda.com,
+        axboe@kernel.dk, ming.lei@redhat.com
+Cc:     linux-block@vger.kernel.org, nbd@other.debian.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Date:   Wed, 18 May 2022 11:12:11 -0700
+In-Reply-To: <20220518122618.1702997-7-yukuai3@huawei.com>
+References: <20220518122618.1702997-1-yukuai3@huawei.com>
+         <20220518122618.1702997-7-yukuai3@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62840beb.1c69fb81.9bdaf.070c@mx.google.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Stat-Signature: w4co9fngahnb146d6hsxcz85b1hfpa7z
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 42ABB6000E
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19oEFmBk8xUFTV8bdFQZy9WR91s/9xDnsE=
+X-HE-Tag: 1652897532-761824
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 10:56:09PM +0200, Ansuel Smith wrote:
-> On Mon, May 16, 2022 at 01:49:12PM -0500, Rob Herring wrote:
-> > On Tue, May 03, 2022 at 05:43:53PM +0200, Ansuel Smith wrote:
-> > > Document new qcom,boot_pages binding used to apply special
-> > 
-> > s/boot_pages/boot-pages/
-> > 
-> > > read/write configuration to boot pages.
-> > > 
-> > > QCOM apply a special configuration where spare data is not protected
-> > > by ECC for some special pages (used for boot partition). Add
-> > > Documentation on how to declare these special pages.
-> > > 
-> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > > ---
-> > >  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 22 +++++++++++++++++++
-> > >  1 file changed, 22 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > > index 84ad7ff30121..fafeca0cafff 100644
-> > > --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > > +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
-> > > @@ -102,6 +102,26 @@ allOf:
-> > >              - const: rx
-> > >              - const: cmd
-> > >  
-> > > +  - if:
-> > > +      properties:
-> > > +        compatible:
-> > > +          contains:
-> > > +            enum:
-> > > +              - qcom,ipq8074-nand
-> > > +
-> > > +    then:
-> > > +      properties:
-> > > +        qcom,boot-pages:
-> > > +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > 
-> > You need to define the dimensions. Something like this:
-> > 
-> >              items:
-> >                items:
-> >                  - description: offset
-> >                  - description: size
-> >
+On Wed, 2022-05-18 at 20:26 +0800, Yu Kuai wrote:
+> Instead of using the long printk(KERN_ERR "nbd: ...") to
+> output error message, defining pr_fmt and using
+> the short pr_err("") to do that. The replacemen is done
+> by using the following command:
 > 
-> Considering this is not limited to one item how should I declare that an
-> user can declare multiple items? (the user can declare multiple zones)
-> Declaring minItems without a maxItems? 
-> 
-> I assume in the suggested form it's assumed
-> minItems: 1
-> maxItems: 1
-> so this would be problematic.
+>   sed -i 's/printk(KERN_ERR "nbd: /pr_err("/g' \
+> 		  drivers/block/nbd.c
 
-No, the outer 'items' being a schema rather than a list means it applies 
-to all items and does not set a size of (offset, size) pairs.
+It's also good to rewrap to 80 columns where possible.
 
-If you do have a maximum number, you could set the range.
+> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+[]
+> @@ -2130,13 +2130,13 @@ static int nbd_genl_disconnect(struct sk_buff *skb, struct genl_info *info)
+>  	nbd = idr_find(&nbd_index_idr, index);
+>  	if (!nbd) {
+>  		mutex_unlock(&nbd_index_mutex);
+> -		printk(KERN_ERR "nbd: couldn't find device at index %d\n",
+> +		pr_err("couldn't find device at index %d\n",
+>  		       index);
 
-Rob
+like here
+
+>  		return -EINVAL;
+>  	}
+>  	if (!refcount_inc_not_zero(&nbd->refs)) {
+>  		mutex_unlock(&nbd_index_mutex);
+> -		printk(KERN_ERR "nbd: device at index %d is going down\n",
+> +		pr_err("device at index %d is going down\n",
+>  		       index);
+
+and here and below...
+
+> @@ -2170,7 +2170,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
+>  	nbd = idr_find(&nbd_index_idr, index);
+>  	if (!nbd) {
+>  		mutex_unlock(&nbd_index_mutex);
+> -		printk(KERN_ERR "nbd: couldn't find a device at index %d\n",
+> +		pr_err("couldn't find a device at index %d\n",
+>  		       index);
+>  		return -EINVAL;
+>  	}
+> @@ -2192,7 +2192,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
+>  	}
+>  	if (!refcount_inc_not_zero(&nbd->refs)) {
+>  		mutex_unlock(&nbd_index_mutex);
+> -		printk(KERN_ERR "nbd: device at index %d is going down\n",
+> +		pr_err("device at index %d is going down\n",
+>  		       index);
+>  		return -EINVAL;
+>  	}
+
+

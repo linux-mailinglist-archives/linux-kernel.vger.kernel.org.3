@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FA452C028
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C1752C048
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240303AbiERQbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S240275AbiERQcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240272AbiERQbp (ORCPT
+        with ESMTP id S240247AbiERQcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:31:45 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D883366AC
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:31:34 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id ck4so613924ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:31:34 -0700 (PDT)
+        Wed, 18 May 2022 12:32:13 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14429AFAFE;
+        Wed, 18 May 2022 09:32:10 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id d137so4547820ybc.13;
+        Wed, 18 May 2022 09:32:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=r1oLO7O64SDRDNcmae9yhgZmG0/o3ZbaE07wdLh2WFQ=;
-        b=d3ftFDSE2RnvF12jRgGG+txqJyBd/ppy2FzGUzh8ZdS5XsqYp41rNlyyk0uGlh1kG8
-         8+ipFezXKpEJqt0FbB9RD9nE01cndrmo9l3Z4xO6xhaHoNPhZ6+lHIAAQONJBRnL0XGz
-         jAlRAlMGYgQyvsL7A4D0ExDfDOr4R8T/uMR/R0uZE/X2XsQh4ILJ6XhT11Ve/GNdcrry
-         64MapQem4AuA/rXiRqKblOHsX6Odiz6FjT1AJCslR14QCpdbWGfEfAOFsxcs+rOFpitC
-         uFaSkhgLaE57WMDFBIZHHtJGWCeC5mkKS40RjuiB9x2QpvERtyH1dY6/MuK2JQcqq0sN
-         CGog==
+        bh=uayVpCC1eBrYAegb3COrd5jXgXqO970SEpGm9TSisnQ=;
+        b=OL6XdaoriVped5yCN9aw3PcvVWLudDFf6W8HhuDr6Qp8wD1XkYnyDnceZKHcwp1uLU
+         O0TgDqRINtHpSITcW32PN8LboZx2GJSqQeQASUcf4dld37DDvDBW1CiTYX4RQYxIJvwm
+         FVFtIsyMBjdce1w/xuhDONhikNOfNgbOr3GHGktIl1NfYXgnbpKVy265kiZxEsW2qVEk
+         Wwxe8TM/LSJRAjXYJDyIux8XOBUmwUih+frd5Iq07dIcD1z0EdW1bHhloQrgXtjBTps1
+         Fprs2rOXkomu3fetYc4l4EnWwQXYwB1o1vVW0px+H2wIYS1ta66TtDSXm5kb+EOKAnvw
+         aJVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=r1oLO7O64SDRDNcmae9yhgZmG0/o3ZbaE07wdLh2WFQ=;
-        b=If/36NDw/tBe0X6X9JpKALblSbsdiE+xb+cg5qQrQ1TRioqv3oSBwqprrCi7QXrVtF
-         6DQTzWENt6ttik8G9UnaHeNEouKzUAxAlN8DfGgMsK0ofmNzzD8ss7yP0B1Hea18fTY1
-         pqZNBng51nonDAGR5D0Mneqpe9/QxYY8484epNJpgKlXH4F1+sZNst8mE2b2ch+Kwz4r
-         +T/WAddECpgm99L/z0V2mPhy1hK/K4NeygZIK/Q9Q8PSC99Og3J5bvd7adQ9bRuB04T6
-         PYWRovl+UGPZh9FRGPuzsCL267n15GiNGFEkEp6WvRhXs5PKCpuNz18Epa44ELCevKRy
-         RVlg==
-X-Gm-Message-State: AOAM531YAklrZhyPgzIcuLrHsK2AU7qQbeqV5JpIzLazALAxSGHqA5Bu
-        pPRbf96kwNmjog2MP1z3TaV2lEPcZxrJSikaiJZ4DJXHaq8=
-X-Google-Smtp-Source: ABdhPJxeTSwGbl7FGSVnCs22tbEzqpLymMjcjO0LZv2ZWelzkkszQjknqK4mMIFHEeBmZVCFBtcARPNbd052uiFrKNw=
-X-Received: by 2002:a17:907:6ea2:b0:6fe:6da9:5d2a with SMTP id
- sh34-20020a1709076ea200b006fe6da95d2amr377345ejc.189.1652891492792; Wed, 18
- May 2022 09:31:32 -0700 (PDT)
+        bh=uayVpCC1eBrYAegb3COrd5jXgXqO970SEpGm9TSisnQ=;
+        b=44S20JcZq+KiTmbYTdOWhCw5dPKkObrRgZr6VZD4BrkLEiwPNlq3tu2TZO8mIqc7BA
+         SOfnhFc0t+QnTNdsWPzfTXa7+tg92a9H7REXbxq1cIcydQtPkY9WIGWPFUKyzukjBfly
+         NmrPM2RxYsqS2AuncnhWv0Qmzr+kRyCNVrk9PqPciqh7SqTAcYqLHHCuWBS1B1exoU2O
+         7ZMMpqHfkq9HUzWzSZ3A0/8uLAoNNzhDJirOckZYAN4jVDdg6cwogUMIl61uGLSDr5Oa
+         jgbxAQL0oW2XzW8cNrfosQDtNGfdsfwLfaOo0ta9050IVtDALmMYPCxiIaP3yJ5s26f8
+         hUaw==
+X-Gm-Message-State: AOAM532Rm4JnfniQlG1UPI2R9m02xx6QpQZsXWYzptD23ZnRFtBCEvCJ
+        gfRTObsdGFnAtu2sRMZ/2qZ+i4ffbXxaQqKfkvk=
+X-Google-Smtp-Source: ABdhPJzUp6xpKisfhOxd9uQJGz88DPeNGapWqgTtrNqFkZdWFQHKK66l2ec8Tt56Ai/jEVMzyFzRwz4EAekJKLlFhBM=
+X-Received: by 2002:a25:e093:0:b0:64d:6c85:6bc6 with SMTP id
+ x141-20020a25e093000000b0064d6c856bc6mr433101ybg.500.1652891530181; Wed, 18
+ May 2022 09:32:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518091814.2028579-1-tzungbi@kernel.org> <20220518091814.2028579-5-tzungbi@kernel.org>
-In-Reply-To: <20220518091814.2028579-5-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 18 May 2022 09:31:21 -0700
-Message-ID: <CABXOdTdUtP+7CLHfpUh+zJ7ho+MduEiMYRtMK5JNnzaY8bCWdw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] platform/chrome: cros_ec_proto: add Kunit tests for cros_ec_check_result()
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Doug Anderson <dianders@chromium.org>
+References: <20220512182921.193462-1-max@enpas.org> <CAMZ6RqJqW+RuPOe6wYkAQh500BzVWnx9hcSAC3bvC7zYNYV-iw@mail.gmail.com>
+In-Reply-To: <CAMZ6RqJqW+RuPOe6wYkAQh500BzVWnx9hcSAC3bvC7zYNYV-iw@mail.gmail.com>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Thu, 19 May 2022 01:31:59 +0900
+Message-ID: <CAMZ6RqJwitvx26K_5+_mtbiBfUD8q5oaWcWo-a-GTouUG+uc0g@mail.gmail.com>
+Subject: Re: [PATCH v6] can, tty: can327 CAN/ldisc driver for ELM327 based
+ OBD-II adapters
+To:     Max Staudt <max@enpas.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,81 +70,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 2:18 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+On Thu. 19 May 2022 at 01:24, Vincent Mailhol <vincent.mailhol@gmail.com> wrote:
+> Forgot one comment.
 >
-> cros_ec_check_result() is used to check if the EC communication success but
-> EC responded EC_RES_IN_PROGRESS.  It should return 0 even if EC wasn't
-> happy about the host command.
+> On Fri 13 May 2022 at 03:29, Max Staudt <max@enpas.org> wrote:
+> [...]
+> > +/* Send a can_frame to a TTY. */
+> > +static netdev_tx_t can327_netdev_start_xmit(struct sk_buff *skb,
+> > +                                           struct net_device *dev)
+> > +{
+> > +       struct can327 *elm = netdev_priv(dev);
+> > +       struct can_frame *frame = (struct can_frame *)skb->data;
+> > +
+> > +       if (can_dropped_invalid_skb(dev, skb))
+> > +               return NETDEV_TX_OK;
+> > +
+> > +       /* BHs are already disabled, so no spin_lock_bh().
+> > +        * See Documentation/networking/netdevices.txt
+> > +        */
+> > +       spin_lock(&elm->lock);
+> > +
+> > +       /* We shouldn't get here after a hardware fault:
+> > +        * can_bus_off() calls netif_carrier_off()
+> > +        */
+> > +       WARN_ON_ONCE(elm->uart_side_failure);
+> > +
+> > +       if (!elm->tty ||
+> > +           elm->uart_side_failure ||
+> > +           elm->can.ctrlmode & CAN_CTRLMODE_LISTENONLY) {
+> > +               spin_unlock(&elm->lock);
+> > +               goto out;
+> > +       }
+> > +
+> > +       netif_stop_queue(dev);
+> > +
+> > +       elm327_send_frame(elm, frame);
+> > +       spin_unlock(&elm->lock);
+> > +
+> > +       dev->stats.tx_packets++;
+> > +       dev->stats.tx_bytes += frame->len;
 >
-> Add Kunit tests for cros_ec_check_result().
+> Do not increase tx_bytes for RTR frame. c.f.
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=cc4b08c31b5c51352f258032cc65e884b3e61e6a
 >
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> Also, when is the frame freed? Did you double check there is no race
+> condition resulting in a use after free on frame->len? Similar to:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=03f16c5075b22c8902d2af739969e878b0879c94
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Never mind, the free is just two lines below inside the out label.
+Sorry for the noise.
 
-> ---
->  drivers/platform/chrome/cros_ec_proto_test.c | 41 ++++++++++++++++++++
->  1 file changed, 41 insertions(+)
+> > +       can_led_event(dev, CAN_LED_EVENT_TX);
 >
-> diff --git a/drivers/platform/chrome/cros_ec_proto_test.c b/drivers/platform/chrome/cros_ec_proto_test.c
-> index 61abb18ac00b..25c4fca5c165 100644
-> --- a/drivers/platform/chrome/cros_ec_proto_test.c
-> +++ b/drivers/platform/chrome/cros_ec_proto_test.c
-> @@ -132,6 +132,46 @@ static void cros_ec_proto_test_prepare_tx_bad_msg_outsize(struct kunit *test)
->         KUNIT_EXPECT_EQ(test, ret, -EINVAL);
->  }
+> Please adjust according to Oliver's patch.
 >
-> +static void cros_ec_proto_test_check_result(struct kunit *test)
-> +{
-> +       struct cros_ec_proto_test_priv *priv = test->priv;
-> +       struct cros_ec_device *ec_dev = &priv->ec_dev;
-> +       struct cros_ec_command *msg = priv->msg;
-> +       int ret, i;
-> +       static enum ec_status status[] = {
-> +               EC_RES_SUCCESS,
-> +               EC_RES_INVALID_COMMAND,
-> +               EC_RES_ERROR,
-> +               EC_RES_INVALID_PARAM,
-> +               EC_RES_ACCESS_DENIED,
-> +               EC_RES_INVALID_RESPONSE,
-> +               EC_RES_INVALID_VERSION,
-> +               EC_RES_INVALID_CHECKSUM,
-> +               EC_RES_UNAVAILABLE,
-> +               EC_RES_TIMEOUT,
-> +               EC_RES_OVERFLOW,
-> +               EC_RES_INVALID_HEADER,
-> +               EC_RES_REQUEST_TRUNCATED,
-> +               EC_RES_RESPONSE_TOO_BIG,
-> +               EC_RES_BUS_ERROR,
-> +               EC_RES_BUSY,
-> +               EC_RES_INVALID_HEADER_VERSION,
-> +               EC_RES_INVALID_HEADER_CRC,
-> +               EC_RES_INVALID_DATA_CRC,
-> +               EC_RES_DUP_UNAVAILABLE,
-> +       };
-> +
-> +       for (i = 0; i < ARRAY_SIZE(status); ++i) {
-> +               msg->result = status[i];
-> +               ret = cros_ec_check_result(ec_dev, msg);
-> +               KUNIT_EXPECT_EQ(test, ret, 0);
-> +       }
-> +
-> +       msg->result = EC_RES_IN_PROGRESS;
-> +       ret = cros_ec_check_result(ec_dev, msg);
-> +       KUNIT_EXPECT_EQ(test, ret, -EAGAIN);
-> +}
-> +
->  static int cros_ec_proto_test_init(struct kunit *test)
->  {
->         struct cros_ec_proto_test_priv *priv;
-> @@ -159,6 +199,7 @@ static struct kunit_case cros_ec_proto_test_cases[] = {
->         KUNIT_CASE(cros_ec_proto_test_prepare_tx_legacy_bad_msg_outsize),
->         KUNIT_CASE(cros_ec_proto_test_prepare_tx_normal),
->         KUNIT_CASE(cros_ec_proto_test_prepare_tx_bad_msg_outsize),
-> +       KUNIT_CASE(cros_ec_proto_test_check_result),
->         {}
->  };
+> > +out:
+> > +       kfree_skb(skb);
+> > +       return NETDEV_TX_OK;
+> > +}
+> > +
+> > +static const struct net_device_ops can327_netdev_ops = {
+> > +       .ndo_open       = can327_netdev_open,
+> > +       .ndo_stop       = can327_netdev_close,
+> > +       .ndo_start_xmit = can327_netdev_start_xmit,
+> > +       .ndo_change_mtu = can_change_mtu,
+> > +};
+> [...]
 >
-> --
-> 2.36.0.550.gb090851708-goog
->
+> Yours sincerely,
+> Vincent Mailhol

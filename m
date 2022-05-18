@@ -2,152 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45E552BFE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6BF852C083
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240004AbiERQT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S240050AbiERQVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240019AbiERQTz (ORCPT
+        with ESMTP id S240218AbiERQVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:19:55 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1788D1EEE13
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:19:55 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2ff1ed64f82so30421007b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BNQ1Sa8MZ2F954WTku5lIs6bezzi8M4d/JzexPqTkEI=;
-        b=fuukVjSGGYTWbJMh/yBcEw8dHvuu4PEx3FHNDRLqR7NKu60rnIJx02YBO5994skMbT
-         u5xPEzDUd+jLjKMcPAyYpjdJ7oOFgiSjLCpsH6FdqQ1NaqpIDjHibGpdFkG5G7ybeSEJ
-         f+mN3GRJE4fjEtXo0Hzuy4124GXXpHdNyK6kAtQvU70tn2XhvZDhxIHSlPWs0RNnXlak
-         fgS9fmVNq/HLync824wEwPuv3SjrdXf8eTYlN/0yc4QrIBvN8pMswFBJ4mYXwdnhRw09
-         3/VqgxmtgO7os7Ul7xsUUzTHpCGCicou+eR8KC4WNU9SCe8H1gpfdV4v8dWDGabiM3rG
-         v9kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BNQ1Sa8MZ2F954WTku5lIs6bezzi8M4d/JzexPqTkEI=;
-        b=X8KJCj4Q4xlvk3fTsZBsrKHZDblYev91XEkU760s8TBwmBqFj3ccg4fs3Crtd4fR0U
-         pYue7UQpYtSk7baplXPMTJWvDUuvhFsm0aZabL9vJ0DcWMpMxbrR2Foh3IUWQwVH8ouS
-         JnV8IFVfMaXF394VwQje8HgJjIcSS4E+qfGY0GKCxxl84Sj9mM2ju9C4A2z9s34RYCXW
-         hAe3lwMu+5JPFt1HTFwkMUwyX51uIQmQGwGgnNakl6AETY/JkswB6Ah6Gv7Qctw2R7IA
-         EXiRGaHHBut3Vw87h6luHYg7YO7EvLRP2rphtnb5Yft58WgFb80CjDOpbIjw3yxgSnTx
-         aMfA==
-X-Gm-Message-State: AOAM531RkqusNu0RDdzFWXeOQyPnyS4bX6ORRyvwYD6dNSHTvDyCqjGL
-        XcJoGN5/jSDhRhZNYezuMp4qS/lXcKNXp50S8UJF7A==
-X-Google-Smtp-Source: ABdhPJxqzMdIcOL87yz5TF1jKPIrr4XeCqmKaldQ0Y4MMtbT5EEsngoSDAW4iYMlsjmCFhHVDfSS1Qr4vlYQCUgc+VQ=
-X-Received: by 2002:a81:d54d:0:b0:2fe:e1c2:eb35 with SMTP id
- l13-20020a81d54d000000b002fee1c2eb35mr151712ywj.285.1652890794100; Wed, 18
- May 2022 09:19:54 -0700 (PDT)
+        Wed, 18 May 2022 12:21:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CCA640E;
+        Wed, 18 May 2022 09:21:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F2D2B82181;
+        Wed, 18 May 2022 16:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C308DC385A5;
+        Wed, 18 May 2022 16:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652890878;
+        bh=mQx13ixPFfWmjCAZU7uaysFnjiR4jCHG6AlzgZSAi/U=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=EcgDfoAWfVDJIKzpQO2IzMSEHrGnMocac6QKzqeRnBW2XjhnFMxshF02q/moTM/tV
+         O3ySnbRmS89B77xq7osKUnXInCdLVNhciQPSH+lueT4SEc/NrrJxD1xY6Ct8kbZmrN
+         x2os08lf3x08Y1Iu8FyFsWA1GhF/OZJ/882UJPvPJf7F4qGa7NYHOFO1llg718jyCv
+         ebpW5r913UKsKMat7BcpxuavdQr2IWiqdrflZrOSOgriA93t6sumY47eLOpPlop43O
+         w8I3+aetWJr3S1NTztdJhFnWN0skMqsXzy9L7IaJvgQkOb7jMaWBuKTXIZO8+u9OCw
+         RODUb2XdO29lw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 609835C042D; Wed, 18 May 2022 09:21:18 -0700 (PDT)
+Date:   Wed, 18 May 2022 09:21:18 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
+ rcu_idle_exit noinstr
+Message-ID: <20220518162118.GA2661055@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220515203653.4039075-1-jolsa@kernel.org>
+ <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220516114922.GA349949@lothringen>
+ <YoN1WULUoKtMKx8v@krava>
 MIME-Version: 1.0
-References: <cover.1649219184.git.kai.huang@intel.com> <3f19ac995d184e52107e7117a82376cb7ecb35e7.1649219184.git.kai.huang@intel.com>
- <b3c81b7f-3016-8f4e-3ac5-bff1fc52a879@intel.com> <345753e50e4c113b1dfb71bba1ed841eee55aed3.camel@intel.com>
-In-Reply-To: <345753e50e4c113b1dfb71bba1ed841eee55aed3.camel@intel.com>
-From:   Sagi Shahar <sagis@google.com>
-Date:   Wed, 18 May 2022 09:19:43 -0700
-Message-ID: <CAAhR5DFFGTHAG9U74v9YXZkjfgfQ9vD4B76ky-MtM5fkjTgRFQ@mail.gmail.com>
-Subject: Re: [PATCH v3 06/21] x86/virt/tdx: Shut down TDX module in case of error
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, len.brown@intel.com,
-        tony.luck@intel.com, rafael.j.wysocki@intel.com,
-        reinette.chatre@intel.com, dan.j.williams@intel.com,
-        peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoN1WULUoKtMKx8v@krava>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 5:06 PM Kai Huang <kai.huang@intel.com> wrote:
->
-> On Tue, 2022-04-26 at 13:59 -0700, Dave Hansen wrote:
-> > On 4/5/22 21:49, Kai Huang wrote:
-> > > TDX supports shutting down the TDX module at any time during its
-> > > lifetime.  After TDX module is shut down, no further SEAMCALL can be
-> > > made on any logical cpu.
-> >
-> > Is this strictly true?
-> >
-> > I thought SEAMCALLs were used for the P-SEAMLDR too.
->
-> Sorry will change to no TDX module SEAMCALL can be made on any logical cpu.
->
-> [...]
->
-> > >
-> > > +/* Data structure to make SEAMCALL on multiple CPUs concurrently */
-> > > +struct seamcall_ctx {
-> > > +   u64 fn;
-> > > +   u64 rcx;
-> > > +   u64 rdx;
-> > > +   u64 r8;
-> > > +   u64 r9;
-> > > +   atomic_t err;
-> > > +   u64 seamcall_ret;
-> > > +   struct tdx_module_output out;
-> > > +};
-> > > +
-> > > +static void seamcall_smp_call_function(void *data)
-> > > +{
-> > > +   struct seamcall_ctx *sc = data;
-> > > +   int ret;
-> > > +
-> > > +   ret = seamcall(sc->fn, sc->rcx, sc->rdx, sc->r8, sc->r9,
-> > > +                   &sc->seamcall_ret, &sc->out);
+On Tue, May 17, 2022 at 12:13:45PM +0200, Jiri Olsa wrote:
+> On Mon, May 16, 2022 at 01:49:22PM +0200, Frederic Weisbecker wrote:
+> > On Sun, May 15, 2022 at 09:25:35PM -0700, Paul E. McKenney wrote:
+> > > On Sun, May 15, 2022 at 10:36:52PM +0200, Jiri Olsa wrote:
+> > > > Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
+> > > > in rcu 'not watching' context and if there's tracer attached to
+> > > > them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
+> > > > warning like:
+> > > > 
+> > > >   [    3.017540] WARNING: suspicious RCU usage
+> > > >   ...
+> > > >   [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
+> > > >   [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
+> > > >   [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
+> > > >   [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
+> > > >   [    3.018371]  fprobe_handler.part.0+0xab/0x150
+> > > >   [    3.018374]  0xffffffffa00080c8
+> > > >   [    3.018393]  ? arch_cpu_idle+0x5/0x10
+> > > >   [    3.018398]  arch_cpu_idle+0x5/0x10
+> > > >   [    3.018399]  default_idle_call+0x59/0x90
+> > > >   [    3.018401]  do_idle+0x1c3/0x1d0
+> > > > 
+> > > > The call path is following:
+> > > > 
+> > > > default_idle_call
+> > > >   rcu_idle_enter
+> > > >   arch_cpu_idle
+> > > >   rcu_idle_exit
+> > > > 
+> > > > The arch_cpu_idle and rcu_idle_exit are the only ones from above
+> > > > path that are traceble and cause this problem on my setup.
+> > > > 
+> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > 
+> > > From an RCU viewpoint:
+> > > 
+> > > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> > > 
+> > > [ I considered asking for an instrumentation_on() in rcu_idle_exit(),
+> > > but there is no point given that local_irq_restore() isn't something
+> > > you instrument anyway. ]
+> > 
+> > So local_irq_save() in the beginning of rcu_idle_exit() is unsafe because
+> > it is instrumentable by the function (graph)  tracers and the irqsoff tracer.
+> > 
+> > Also it calls into lockdep that might make use of RCU.
+> > 
+> > That's why rcu_idle_exit() is not noinstr yet. See this patch:
+> > 
+> > https://lore.kernel.org/lkml/20220503100051.2799723-4-frederic@kernel.org/
+> 
+> I see, could we mark it at least with notrace meanwhile?
 
-Are the seamcall_ret and out fields in seamcall_ctx going to be used?
-Right now it looks like no one is going to read them.
-If they are going to be used then this is going to cause a race since
-the different CPUs are going to write concurrently to the same address
-inside seamcall().
-We should either use local memory and write using atomic_set like the
-case for the err field or hard code NULL at the call site if they are
-not going to be used.
+For the RCU part, how about as follows?
 
-> > > +   if (ret)
-> > > +           atomic_set(&sc->err, ret);
-> > > +}
-> > > +
-> > > +/*
-> > > + * Call the SEAMCALL on all online cpus concurrently.
-> > > + * Return error if SEAMCALL fails on any cpu.
-> > > + */
-> > > +static int seamcall_on_each_cpu(struct seamcall_ctx *sc)
-> > > +{
-> > > +   on_each_cpu(seamcall_smp_call_function, sc, true);
-> > > +   return atomic_read(&sc->err);
-> > > +}
-> >
-> > Why bother returning something that's not read?
->
-> It's not needed.  I'll make it void.
->
-> Caller can check seamcall_ctx::err directly if they want to know whether any
-> error happened.
->
->
->
-> --
-> Thanks,
-> -Kai
->
->
+If this approach is reasonable, my guess would be that Frederic will pull
+it into his context-tracking series, perhaps using a revert of this patch
+to maintain sanity in the near term.
 
-Sagi
+If this approach is unreasonable, well, that is Murphy for you!
+
+For the x86 idle part, my feeling is still that the rcu_idle_enter()
+and rcu_idle_exit() need to be pushed deeper into the code.  Perhaps
+an ongoing process as the idle loop continues to be dug deeper?
+
+							Thanx, Paul
+
+------------------------------------------------------------------------
+
+commit cd338be719a0a692e0d50e1a8438e1f6c7165d9c
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Tue May 17 21:00:04 2022 -0700
+
+    rcu: Apply noinstr to rcu_idle_enter() and rcu_idle_exit()
+    
+    This commit applies the "noinstr" tag to the rcu_idle_enter() and
+    rcu_idle_exit() functions, which are invoked from portions of the idle
+    loop that cannot be instrumented.  These tags require reworking the
+    rcu_eqs_enter() and rcu_eqs_exit() functions that these two functions
+    invoke in order to cause them to use normal assertions rather than
+    lockdep.  In addition, within rcu_idle_exit(), the raw versions of
+    local_irq_save() and local_irq_restore() are used, again to avoid issues
+    with lockdep in uninstrumented code.
+    
+    This patch is based in part on an earlier patch by Jiri Olsa, discussions
+    with Peter Zijlstra and Frederic Weisbecker, earlier changes by Thomas
+    Gleixner, and off-list discussions with Yonghong Song.
+    
+    Link: https://lore.kernel.org/lkml/20220515203653.4039075-1-jolsa@kernel.org/
+    Reported-by: Jiri Olsa <jolsa@kernel.org>
+    Reported-by: Alexei Starovoitov <ast@kernel.org>
+    Reported-by: Andrii Nakryiko <andrii@kernel.org>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Reviewed-by: Yonghong Song <yhs@fb.com>
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 222d59299a2af..02233b17cce0e 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -635,8 +635,8 @@ static noinstr void rcu_eqs_enter(bool user)
+ 		return;
+ 	}
+ 
+-	lockdep_assert_irqs_disabled();
+ 	instrumentation_begin();
++	lockdep_assert_irqs_disabled();
+ 	trace_rcu_dyntick(TPS("Start"), rdp->dynticks_nesting, 0, atomic_read(&rdp->dynticks));
+ 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !user && !is_idle_task(current));
+ 	rcu_preempt_deferred_qs(current);
+@@ -663,9 +663,9 @@ static noinstr void rcu_eqs_enter(bool user)
+  * If you add or remove a call to rcu_idle_enter(), be sure to test with
+  * CONFIG_RCU_EQS_DEBUG=y.
+  */
+-void rcu_idle_enter(void)
++void noinstr rcu_idle_enter(void)
+ {
+-	lockdep_assert_irqs_disabled();
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !raw_irqs_disabled());
+ 	rcu_eqs_enter(false);
+ }
+ EXPORT_SYMBOL_GPL(rcu_idle_enter);
+@@ -865,7 +865,7 @@ static void noinstr rcu_eqs_exit(bool user)
+ 	struct rcu_data *rdp;
+ 	long oldval;
+ 
+-	lockdep_assert_irqs_disabled();
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !raw_irqs_disabled());
+ 	rdp = this_cpu_ptr(&rcu_data);
+ 	oldval = rdp->dynticks_nesting;
+ 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && oldval < 0);
+@@ -900,13 +900,13 @@ static void noinstr rcu_eqs_exit(bool user)
+  * If you add or remove a call to rcu_idle_exit(), be sure to test with
+  * CONFIG_RCU_EQS_DEBUG=y.
+  */
+-void rcu_idle_exit(void)
++void noinstr rcu_idle_exit(void)
+ {
+ 	unsigned long flags;
+ 
+-	local_irq_save(flags);
++	raw_local_irq_save(flags);
+ 	rcu_eqs_exit(false);
+-	local_irq_restore(flags);
++	raw_local_irq_restore(flags);
+ }
+ EXPORT_SYMBOL_GPL(rcu_idle_exit);
+ 

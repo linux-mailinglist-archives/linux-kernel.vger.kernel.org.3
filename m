@@ -2,242 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262D552C3D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1BA52C3DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242221AbiERT4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 15:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
+        id S242270AbiERT6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 15:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242217AbiERT4U (ORCPT
+        with ESMTP id S242217AbiERT6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 15:56:20 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25435DE7E
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 12:56:18 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id l9-20020a056830268900b006054381dd35so2110148otu.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 12:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=q6k7TwXQDY275UxkUuTVNtao4TZzazR5moehWbU13Bc=;
-        b=g5/fbsGkOpFvl3DvRZPpEo8jogun8jSOWCLsALy94X/VCP6ncGUUeLsIqnLGqdKEzW
-         P8/cLn9bNiLprBIroXErfdY4WYJFHqO/bdJITBfN50ZhToYrp0ye5UhOb1QKEHoifbq8
-         OKiURvgnNxPbcMitcPLkdDI96p+slNJxk/9w4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=q6k7TwXQDY275UxkUuTVNtao4TZzazR5moehWbU13Bc=;
-        b=Tps4D6IXc7Y9a9AzMrRba59LX+fHLnMoLedSDYtVJCs9z/AEU0LZNYw7xX0fx2rXos
-         h/f9nfPDO9ngBg8RR+xRrU2shZ50pUZuMu5rQ5hyFQVTdjuEqDen2gkasN7/jyrheTCY
-         qg/Pp1gTB6uG1L7qKI/7qHXwQ/thW4wggitD3rmncOcyw1oKURaT6Xmm+bCB9dhsJzXH
-         VrFzFCst3mKIXRVODd/8adEcZhmblYJ6DeozjiVRbucN8etWERb3R0NG1TED84DfMBfD
-         DmTAOZuApqDPZgXQtUHGpeXKh0thqqulFxsbZSEPzHvxJ+eCZMwI9suqpfHxE4sn6tF1
-         OPwA==
-X-Gm-Message-State: AOAM531IjNDusA/rqbwXXL/OPbFl76ckDUXh8aECjRR/4fLuBarx8eHE
-        6ryiSuwgc2lOemKseuKPbKheI1E0xxlZL4X3XAjnbw==
-X-Google-Smtp-Source: ABdhPJwLifvJOWX3yKWzLoGN0MnHOdrbsoJrvUWC4w9Xr9cAvIQorp5Y2A947/vh4RjZprkumyYkzxKdHOHmmWcv7uE=
-X-Received: by 2002:a05:6830:13ce:b0:606:702b:87f0 with SMTP id
- e14-20020a05683013ce00b00606702b87f0mr541140otq.159.1652903777929; Wed, 18
- May 2022 12:56:17 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 18 May 2022 12:56:17 -0700
+        Wed, 18 May 2022 15:58:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73951227817;
+        Wed, 18 May 2022 12:58:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA5686191F;
+        Wed, 18 May 2022 19:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21195C34113;
+        Wed, 18 May 2022 19:58:01 +0000 (UTC)
+Date:   Wed, 18 May 2022 15:57:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/6] ftrace: Fix deadloop caused by direct
+ call in ftrace selftest
+Message-ID: <20220518155759.4054d9a2@gandalf.local.home>
+In-Reply-To: <20220517071838.3366093-3-xukuohai@huawei.com>
+References: <20220517071838.3366093-1-xukuohai@huawei.com>
+        <20220517071838.3366093-3-xukuohai@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20220518161348.GC3302100-robh@kernel.org>
-References: <20220512013921.164637-1-swboyd@chromium.org> <20220512013921.164637-4-swboyd@chromium.org>
- <20220516152003.GB2659134-robh@kernel.org> <CAE-0n53p1mKME=vfed2SB7UXrg9K+-vbp6JPHJBchJc-Pp1Hgg@mail.gmail.com>
- <20220518161348.GC3302100-robh@kernel.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 18 May 2022 12:56:17 -0700
-Message-ID: <CAE-0n53CMwtCY6XqYRXBpY5g21cFKyr8BF34t79JfK3dKg8cEg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] dt-bindings: cros-ec: Add ChromeOS fingerprint binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        chrome-platform@lists.linux.dev,
-        Guenter Roeck <groeck@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Craig Hesling <hesling@chromium.org>,
-        Tom Hughes <tomhughes@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Lee Jones <lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rob Herring (2022-05-18 09:13:48)
-> On Mon, May 16, 2022 at 12:23:03PM -0700, Stephen Boyd wrote:
-> > Quoting Rob Herring (2022-05-16 08:20:03)
-> > > On Wed, May 11, 2022 at 06:39:21PM -0700, Stephen Boyd wrote:
-> > > > diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> > > > index 409ecef967ce..e5fe60beb9fe 100644
-> > > > --- a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> > > > +++ b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-> > > > +      - items:
-> > > > +          - const: google,cros-ec-i2c
-> > > > +      # For implementations of the FPMCU connected through SPI.
-> > > > +      - items:
-> > > > +          - const: google,cros-ec-fp
-> > > > +          - const: google,cros-ec-spi
-> > > > +      # For implementations of the EC is connected through SPI.
-> > > > +      - items:
-> > > > +          - const: google,cros-ec-spi
-> > > > +      # For implementations of the EC is connected through RPMSG.
-> > > > +      - items:
-> > > > +          - const: google,cros-ec-rpmsg
-> > > >
-> > > >    controller-data:
-> > > >      description:
-> > > > @@ -176,6 +189,37 @@ allOf:
-> > > >          - reg
-> > > >          - interrupts
-> > > >
-> > > > +  - if:
-> > > > +      properties:
-> > > > +        compatible:
-> > > > +          contains:
-> > > > +            const: google,cros-ec-fp
-> > > > +    then:
-> > > > +      properties:
-> > > > +        '#address-cells': false
-> > > > +        '#size-cells': false
-> > > > +        typec: false
-> > > > +        ec-pwm: false
-> > > > +        keyboard-controller: false
-> > > > +        proximity: false
-> > > > +        codecs: false
-> > > > +        cbas: false
-> > > > +
-> > > > +      patternProperties:
-> > > > +        "^i2c-tunnel[0-9]*$": false
-> > > > +        "^regulator@[0-9]+$": false
-> > > > +        "^extcon[0-9]*$": false
-> > >
-> > > Is the list of what's allowed shorter? If so, you could list those
-> > > properties and use 'additionalProperties: false'.
-> >
-> > Yes.
-> >
-> > >
-> > > Or maybe this is a sign that this should be a separate schema document.
-> >
-> > I couldn't figure that out. I tried to add new properties here but it
-> > didn't work.
->
-> Like this?:
->
-> then:
->   properties:
->     allowed-prop-1: true
->     allowed-prop-2: true
->     allowed-prop-3: true
->   additionalProperties: false
+On Tue, 17 May 2022 03:18:34 -0400
+Xu Kuohai <xukuohai@huawei.com> wrote:
 
-It doesn't seem to combine constraints?
+> After direct call is enabled for arm64, ftrace selftest enters a
+> dead loop:
+> 
+> <trace_selftest_dynamic_test_func>:
+> 00  bti     c
+> 01  mov     x9, x30                            <trace_direct_tramp>:
+> 02  bl      <trace_direct_tramp>    ---------->     ret
+>                                                      |
+>                                          lr/x30 is 03, return to 03
+>                                                      |
+> 03  mov     w0, #0x0   <-----------------------------|
+>      |                                               |
+>      |                   dead loop!                  |
+>      |                                               |
+> 04  ret   ---- lr/x30 is still 03, go back to 03 ----|
+> 
+> The reason is that when the direct caller trace_direct_tramp() returns
+> to the patched function trace_selftest_dynamic_test_func(), lr is still
+> the address after the instrumented instruction in the patched function,
+> so when the patched function exits, it returns to itself!
+> 
+> To fix this issue, we need to restore lr before trace_direct_tramp()
+> exits, so rewrite a dedicated trace_direct_tramp() for arm64.
+> 
+> Reported-by: Li Huafei <lihuafei1@huawei.com>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
 
-I get this error:
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-	Documentation/devicetree/bindings/mfd/google,cros-ec.example.dt.yaml:
-	ec@0: Additional properties are not allowed ('$nodename' was unexpected)
-
-
-with this interdiff. I added the spi properties to reduce the additional
-properties that aren't allowed.
-
----8<----
-diff --git a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-index 04b847fd5070..d47c7a273026 100644
---- a/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-+++ b/Documentation/devicetree/bindings/mfd/google,cros-ec.yaml
-@@ -18,24 +18,21 @@ description:
-
- properties:
-   compatible:
--    anyOf:
-+    oneOf:
-       - description:
-           For implementations of the EC connected through I2C.
--      - items:
--          - const: google,cros-ec-i2c
-+        const: google,cros-ec-i2c
-       - description:
-           For implementations of the FPMCU connected through SPI.
--      - items:
-+        items:
-           - const: google,cros-ec-fp
-           - const: google,cros-ec-spi
-       - description:
-           For implementations of the EC connected through SPI.
--      - items:
--          - const: google,cros-ec-spi
-+        const: google,cros-ec-spi
-       - description:
-           For implementations of the EC connected through RPMSG.
--      - items:
--          - const: google,cros-ec-rpmsg
-+        const: google,cros-ec-rpmsg
-
-   controller-data:
-     description:
-@@ -200,19 +197,14 @@ allOf:
-             const: google,cros-ec-fp
-     then:
-       properties:
--        '#address-cells': false
--        '#size-cells': false
--        typec: false
--        ec-pwm: false
--        keyboard-controller: false
--        proximity: false
--        codecs: false
--        cbas: false
--
--      patternProperties:
--        "^i2c-tunnel[0-9]*$": false
--        "^regulator@[0-9]+$": false
--        "^extcon[0-9]*$": false
-+        reset-gpios: true
-+        boot0-gpios: true
-+        vdd-supply: true
-+        interrupts: true
-+        compatible: true
-+        reg: true
-+        spi-max-frequency: true
-+      additionalProperties: false
-
-       required:
-         - reset-gpios
-
->
-> > And then when I tried to make a different schema document
-> > it complained that the example for google,cros-ec-spi in here had a
-> > problem.
->
-> You probably need a custom 'select' so that both schemas aren't
-> matching. Otherwise a schema is applied if any of the compatible strings
-> match.
-
-I see. Maybe that's better vs. jamming it all into one file.
-
->
-> > Can properties be defined in this section?
->
-> Yes, but discouraged for vendor specific properties. The if/then should
-> really be just additional constraints.
-
-Ok.
+-- Steve

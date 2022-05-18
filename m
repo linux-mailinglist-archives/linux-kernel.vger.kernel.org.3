@@ -2,145 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD9552B451
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660FE52B43F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232649AbiERIFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
+        id S232672AbiERIF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbiERIFT (ORCPT
+        with ESMTP id S232631AbiERIFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:05:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E90B115B
+        Wed, 18 May 2022 04:05:20 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC82DE7
         for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652861118;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=29QeuCJvIYZX5IxA1A2tYSm/a0P9ltwNVD+SSkHIFlk=;
-        b=Pwic/Uz5w/Oo2nR4eJPPBhcIxTch9DQZuS2pC79lMo5Z6bT0uRG3bB+n5bYapyyc7MoeQ7
-        dW0THTLmLevrrbZy9sg33rVgxu+xNrxvF8UFL9aN0CJkGE/GsGTd6Xf8H3c8onQmgF+z9x
-        wvnpKGY+YGIOH3TD2BwesAbiIptw74k=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-518-Y7pGVLVfPF6DqA7BDYgjVQ-1; Wed, 18 May 2022 04:05:16 -0400
-X-MC-Unique: Y7pGVLVfPF6DqA7BDYgjVQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A6C11D32371;
-        Wed, 18 May 2022 08:05:16 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 92575492C3B;
-        Wed, 18 May 2022 08:05:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220517210230.864239-1-keescook@chromium.org>
-References: <20220517210230.864239-1-keescook@chromium.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     dhowells@redhat.com, Jeff Layton <jlayton@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] netfs: Use container_of() for offset casting
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VDcGX1e_1652861115;
+Received: from 30.47.240.162(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VDcGX1e_1652861115)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 18 May 2022 16:05:16 +0800
+Message-ID: <1daee377-cdd5-40c9-866d-c0f626a4c465@linux.alibaba.com>
+Date:   Wed, 18 May 2022 16:05:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2692903.1652861114.1@warthog.procyon.org.uk>
-Date:   Wed, 18 May 2022 09:05:14 +0100
-Message-ID: <2692904.1652861114@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.1
+Subject: Re: [RFC PATCH] sched: Queue task on wakelist in the same llc if the
+ wakee cpu is idle
+Content-Language: en-US
+To:     Mel Gorman <mgorman@suse.de>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <20220513062427.2375743-1-dtcccc@linux.alibaba.com>
+ <20220517135807.GS20579@suse.de>
+From:   Tianchen Ding <dtcccc@linux.alibaba.com>
+In-Reply-To: <20220517135807.GS20579@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I wonder if it would be worth making this explicit in the inode wrappers of
-the users of netfslib.  In afs, for instance, there is:
+On 2022/5/17 21:58, Mel Gorman wrote:
+> On Fri, May 13, 2022 at 02:24:27PM +0800, Tianchen Ding wrote:
+>> We notice the commit 518cd6234178 ("sched: Only queue remote wakeups
+>> when crossing cache boundaries") disabled queuing tasks on wakelist when
+>> the cpus share llc. This is because, at that time, the scheduler must
+>> send IPIs to do ttwu_queue_wakelist. Nowadays, ttwu_queue_wakelist also
+>> supports TIF_POLLING, so this is not a problem now when the wakee cpu is
+>> in idle polling.
+>>
+>> Benefits:
+>>    Queuing the task on idle cpu can help improving performance on waker cpu
+>>    and utilization on wakee cpu, and further improve locality because
+>>    the wakee cpu can handle its own rq. This patch helps improving rt on
+>>    our real java workloads where wakeup happens frequently.
+>>
+>> Does this patch bring IPI flooding?
+>>    For archs with TIF_POLLING_NRFLAG (e.g., x86), there will be no
+>>    difference if the wakee cpu is idle polling. If the wakee cpu is idle
+>>    but not polling, the later check_preempt_curr() will send IPI too.
+>>
+> 
+> That's a big if. Polling does not last very long -- somewhere between 10
+> and 62 microseconds for HZ=1000 or 250 microseconds for HZ=250. It may
+> not bring IPI flooding depending on the workload but it will increase
+> IPI counts.
 
-	struct afs_vnode {
-		struct {
-			/* These must be contiguous */
-			struct inode	vfs_inode;
-			struct netfs_i_context netfs_ctx;
-		};
-		...
-	};
+This patch only takes effect when the wakee cpu is:
+1) idle polling
+2) idle not polling
 
-would it be worth making that:
+For 1), there will be no IPI with or without this patch.
 
-	struct afs_vnode {
-		union {
-			struct netfs_i_c_pair netfs_inode;
-			struct {
-				/* These must be contiguous */
-				struct inode	vfs_inode;
-				struct netfs_i_context netfs_ctx;
-			};
-		};
-		...
-	};
+For 2), there will always be an IPI with or without this patch.
+Without this patch: waker cpu will enqueue task and check preempt. Since 
+"idle" will be sure to be preempted, waker cpu must send an resched IPI.
+With this patch: waker cpu will put the task to the wakelist of wakee 
+cpu, and send an IPI.
 
-I don't want to do the following, say:
+So there should be no difference about IPI counts.
 
+> 
+>>    For archs without TIF_POLLING_NRFLAG (e.g., arm64), the IPI is
+>>    unavoidable, since the later check_preempt_curr() will send IPI when
+>>    wakee cpu is idle.
+>>
+>> Benchmark:
+>> running schbench -m 2 -t 8 on 8269CY:
+>>
+>> without patch:
+>> Latency percentiles (usec)
+>>          50.0000th: 10
+>>          75.0000th: 14
+>>          90.0000th: 16
+>>          95.0000th: 16
+>>          *99.0000th: 17
+>>          99.5000th: 20
+>>          99.9000th: 23
+>>          min=0, max=28
+>>
+>> with patch:
+>> Latency percentiles (usec)
+>>          50.0000th: 6
+>>          75.0000th: 8
+>>          90.0000th: 9
+>>          95.0000th: 9
+>>          *99.0000th: 10
+>>          99.5000th: 10
+>>          99.9000th: 14
+>>          min=0, max=16
+>>
+>> We've also tested unixbench and see about 10% improvement on Pipe-based
+>> Context Switching, and no performance regression on other test cases.
+> 
+> It'll show a benefit for any heavily communicating tasks that rapidly
+> enters/exits idle because the wakee CPU may be still polling due to the
+> rapid enter/exit pattern.
+> 
+>> Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+>> ---
+>>   kernel/sched/core.c | 12 +++++++++---
+>>   1 file changed, 9 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>> index 51efaabac3e4..cae5011a8b1f 100644
+>> --- a/kernel/sched/core.c
+>> +++ b/kernel/sched/core.c
+>> @@ -3820,6 +3820,9 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
+>>   	if (!cpu_active(cpu))
+>>   		return false;
+>>   
+>> +	if (cpu == smp_processor_id())
+>> +		return false;
+>> +
+>>   	/*
+>>   	 * If the CPU does not share cache, then queue the task on the
+>>   	 * remote rqs wakelist to avoid accessing remote data.
+> 
+> Is this suggesting that the running CPU should try sending an IPI to
+> itself?
+> 
 
-	struct afs_vnode {
-		struct netfs_i_c_pair ni;
-		...
-	};
+No. When the running CPU is the same as wakee cpu, ttwu_queue_cond() 
+will return false. So ttwu_queue_wakelist() will be skipped. This logic 
+is not changed with or without this patch.
 
-as that would then require a lot of s/->vfs_inode/->ni.vfs_inode/, but maybe
-it would be better to include a struct inode in struct netfs_i_context, and
-then do:
+We move this if() forward to ttwu_queue_cond(), it is originally at 
+ttwu_queue_wakelist().
 
-	struct afs_vnode {
-		union {
-			struct netfs_i_context netfs_ctx;
-			struct inode vfs_inode;
-		};
-		...
-	};
+The reason we need to check it is at b6e13e85829f0 ("sched/core: Fix 
+ttwu() race").
+The reason we move it forward is that, without this patch, 
+!cpus_share_cache() can cover the condition. But with this patch, we 
+need an explicit check.
 
-and perhaps rename netfs_i_context to netfs_inode (though that looks a bit
-close to nfs_inode).  It's just a shame I can't do:
+>> @@ -3827,6 +3830,12 @@ static inline bool ttwu_queue_cond(int cpu, int wake_flags)
+>>   	if (!cpus_share_cache(smp_processor_id(), cpu))
+>>   		return true;
+>>   
+>> +	/*
+>> +	 * If the CPU is idle, let itself do activation to improve utilization.
+>> +	 */
+>> +	if (available_idle_cpu(cpu))
+>> +		return true;
+>> +
+>>   	/*
+>>   	 * If the task is descheduling and the only running task on the
+>>   	 * CPU then use the wakelist to offload the task activation to
+> 
+> It is highly likely that the target CPU is idle given that we almost
+> certainly called select_idle_sibling() before reaching here.
+> 
+> I suspect what you are trying to do is use the wakelist regardless of
+> locality if the CPU is polling because polling means an IPI is avoided
+> but it's not what the patch does.
+> 
 
-	struct netfs_inode : inode {
-		...
-	};
+As I explained above, IPI is not my key point. In fact, without my 
+patch, if the wakee cpu is polling, there will be no IPI, too. See 
+resched_curr() -> trace_sched_wake_idle_without_ipi().
 
-	struct afs_vnode : netfs_inode {
-		...
-	};
+My point is to improve rt and idle cpu utilization.
 
-right? ;-)
+Consider the normal condition (CPU0 and CPU1 share same llc) without 
+this patch (origin path):
 
-On the other hand:
+               CPU0                            CPU1
 
-	warthog>git grep '[>.]vfs_inode' -- fs/{9p,afs,ceph,cifs,nfs} | wc -l
-	181
+             select_task_rq()                 idle
+             rq_lock(CPU1->rq)
+             enqueue_task(CPU1->rq)
+             notify CPU1 (by sending IPI or CPU1 polling)
 
-so maybe a mass change to, say:
+                                              resched()
 
-	struct netfs_inode {
-		struct inode vfs_inode;
-		...
-	};
+With this patch:
 
-	struct afs_vnode {
-		struct netfs_inode ni;
-		...
-	};
+               CPU0                            CPU1
 
-wouldn't be so bad.
+             select_task_rq()                 idle
+             add to wakelist of CPU1
+             notify CPU1 (by sending IPI or CPU1 polling)
 
-David
+                                              rq_lock(CPU1->rq)
+                                              enqueue_task(CPU1->rq)
+                                              resched()
+
+We see CPU0 can finish its work earlier. It only needs to put task to 
+wakelist and return.
+While CPU1 is idle, so let itself handle its own runqueue data.
 

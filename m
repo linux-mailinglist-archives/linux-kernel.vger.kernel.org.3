@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51B752B184
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A299952B17A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiERE1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 00:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S229872AbiERE1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 00:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiERE1q (ORCPT
+        with ESMTP id S229840AbiERE1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 00:27:46 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B6D33E05
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 21:27:43 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id c26so817171vsl.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 21:27:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fN13pJNCQ7oz0V1a6VyLZjsh0STVPMddJluiS+KeExg=;
-        b=WlCChO47c3vDXVCIaGjEVf7IsHZmcxFElzELAX1bTuklI1SJiAii02Y+KhlrHFYMcA
-         l0FGFrztHSYpPDGyy8kQ0dO9s3cgF74xrLRcYkXkB5ZXX/jTXS7V/UDH7LpMNoDMUPVD
-         +IVOB9LKz5YDLy8a4J3vZUgYFMrDyjbzf5KnnkUX+cIiOSx8TN2bGVFRqcPlaI5YU8/G
-         rkJe32cp1+sc8NasjculNggoEIyDRikxGBiYx74LLl/kly1+2tWIx7radm01VM8Yst9i
-         HbZ55rTzMDRwqwJ78PMAr5E01gN87P8l+IR8Ie0RqJTnApjh0O4Tqm+p/NhW4DmQnqos
-         BTTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fN13pJNCQ7oz0V1a6VyLZjsh0STVPMddJluiS+KeExg=;
-        b=ZqC3VhDRnoO8ZnMFPAKaZoPJpXKOE1/fCCNrWymnuTJmJ/Fa7ijlfCECPIO42qPz3I
-         /s22lrBBsn40W7PmZw4CgY6KZ1WxeUAflsCG29UNLSr0EzkZ3MCB93Otl3eLsvxSc+ld
-         8aX+D/GYoAlF/fuPKNg3BjB9M3TaR2q4EMm4fUqWKerfYhabGxtF0efcb3OuBbNln8Em
-         7iUtzqvJEIrQpoNszK2XKJOM9PTZ6qLaB8AEI4JTIBfG35yvrMUEYHQY7RhWtRFAZvjm
-         /6+QrPezZy5Z0GgJCIJ2c0eeAzI/Wt3te1W30l61eyvlWSruQZBTl4A/6/k6sUGNE6nW
-         iahw==
-X-Gm-Message-State: AOAM531mHdGwrP4tPnhHjJcjVhHL6+jZu+P8TnTpPemMj7ineXbbb6XF
-        TzQrxWg9rRa8t9594NHA85hCohwrd0z4sLjM8L4onQ==
-X-Google-Smtp-Source: ABdhPJyzw43sJvn/BjBJ4J3dd+xIY/MZ8OmiSF0fwCF8JKQdEJrryLQyhDsSb7VIBjOrszsdKaAZ80vl8prxdgu+JEo=
-X-Received: by 2002:a67:db95:0:b0:335:cd7c:6e9 with SMTP id
- f21-20020a67db95000000b00335cd7c06e9mr1726746vsk.41.1652848062686; Tue, 17
- May 2022 21:27:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220412195846.3692374-1-zhanwei@google.com> <YnmqgFkhqWklrQIw@google.com>
- <CAN86XOYNpzEUN0aL9g=_GQFz5zdXX9Pvcs_TDmBVyJZDTfXREg@mail.gmail.com>
- <YnwRld0aH8489+XQ@google.com> <CAN86XOZdW7aZXhSU2=gP5TrRQc8wLmtTQui0J2kwhchp2pnbeQ@mail.gmail.com>
-In-Reply-To: <CAN86XOZdW7aZXhSU2=gP5TrRQc8wLmtTQui0J2kwhchp2pnbeQ@mail.gmail.com>
-From:   Suleiman Souhlal <suleiman@google.com>
-Date:   Wed, 18 May 2022 13:27:30 +0900
-Message-ID: <CABCjUKCCc2irAnJrGWfKAnXJj-pb=YNL4F0uAEr-c0LMX22_hw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] KVM: x86: Fix incorrect VM-exit profiling
-To:     Wei Zhang <zhanwei@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Sangwhan Moon <sxm@google.com>, Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        David Matlack <dmatlack@google.com>
+        Wed, 18 May 2022 00:27:39 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904A533A04;
+        Tue, 17 May 2022 21:27:37 -0700 (PDT)
+X-UUID: c65ff59a023a40518d15a09babdf754b-20220518
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:6d50f75d-dc25-4767-842f-8f8304d834d3,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:25
+X-CID-META: VersionHash:2a19b09,CLOUDID:c39da579-5ef6-470b-96c9-bdb8ced32786,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:3,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: c65ff59a023a40518d15a09babdf754b-20220518
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 302774173; Wed, 18 May 2022 12:27:34 +0800
+Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 18 May 2022 12:27:32 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 18 May 2022 12:27:32 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 18 May 2022 12:27:32 +0800
+Message-ID: <b85893ee561b5678e25447d1ad50636912ea91a7.camel@mediatek.com>
+Subject: Re: [PATCH v6 2/4] dt-bindings: display: mediatek: dsi: Add
+ compatible for MediaTek MT8186
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <jitao.shi@mediatek.com>,
+        <xinlei.lee@mediatek.com>, <airlied@linux.ie>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 18 May 2022 12:27:32 +0800
+In-Reply-To: <20220504091923.2219-3-rex-bc.chen@mediatek.com>
+References: <20220504091923.2219-1-rex-bc.chen@mediatek.com>
+         <20220504091923.2219-3-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 4:30 AM Wei Zhang <zhanwei@google.com> wrote:
->
-> > Please don't top-post.  From https://people.kernel.org/tglx/notes-about-netiquette:
->
-> Ah, I didn't know this should be avoided. Thanks for the info!
->
-> > My preference would be to find a more complete, KVM-specific solution.  The
-> > profiling stuff seems like it's a dead end, i.e. will always be flawed in some
-> > way.  If this cleanup didn't require a new hypercall then I wouldn't care, but
-> > I don't love having to extend KVM's guest/host ABI for something that ideally
-> > will become obsolete sooner than later.
->
-> I also feel that adding a new hypercall is too much here. A
-> KVM-specific solution is definitely better, and the eBPF based
-> approach you mentioned sounds like the ultimate solution (at least for
-> inspecting exit reasons).
->
-> +Suleiman What do you think? The on-going work Sean described sounds
-> promising, perhaps we should put this patch aside for the time being.
+Hi, Rex:
 
-I'm ok with that.
-That said, the advantage of the current solution is that it already
-exists and is very easy to use, by anyone, without having to write any
-code. The proposed solution doesn't sound like it will be as easy.
+On Wed, 2022-05-04 at 17:19 +0800, Rex-BC Chen wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+> 
+> Add dt-binding documentation of dsi for MediaTek MT8186 SoC.
 
-Regarding the earlier question about wanting to know which
-instructions trigger exits, most times I've needed to get exit
-profiles, I actually wanted to know where the guest was at the time of
-the exit, regardless of who triggered the exit.
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
--- Suleiman
+> 
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/display/mediatek/mediatek,dsi.yaml       | 1
+> +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yam
+> l
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yam
+> l
+> index fa5bdf28668a..b18d6a57c6e1 100644
+> ---
+> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yam
+> l
+> +++
+> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dsi.yam
+> l
+> @@ -28,6 +28,7 @@ properties:
+>        - mediatek,mt8167-dsi
+>        - mediatek,mt8173-dsi
+>        - mediatek,mt8183-dsi
+> +      - mediatek,mt8186-dsi
+>  
+>    reg:
+>      maxItems: 1
+

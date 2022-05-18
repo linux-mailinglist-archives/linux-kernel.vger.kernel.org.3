@@ -2,267 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F25252B6BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44D652B6E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234636AbiERJqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
+        id S234691AbiERJqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiERJp7 (ORCPT
+        with ESMTP id S234922AbiERJqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:45:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF33FB0A7E;
-        Wed, 18 May 2022 02:45:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60F50617AD;
-        Wed, 18 May 2022 09:45:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC49C34100;
-        Wed, 18 May 2022 09:45:30 +0000 (UTC)
-Message-ID: <55f5f601-466a-5f90-0c71-1ea1e219ef56@xs4all.nl>
-Date:   Wed, 18 May 2022 11:45:29 +0200
+        Wed, 18 May 2022 05:46:19 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13340B1C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:46:09 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24I9gi64006451;
+        Wed, 18 May 2022 09:45:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=QQVA55xALZqqZ0+UCK4bbILmJo0n4KksKg2EVFGHGDc=;
+ b=O2XfT2w/1QSCq2fRsAeHDD4Lny+5Gr1CjxkRjxnEKhfvxEw+zWL8x2ZTWlcbGyjuzKcY
+ 560KMV4uKAPGrP+aG+cckHCeWw1vjjpT4mEdwMfKiepjCjxe+8aB30fowMNV2d5LW2jm
+ zOxOcgKJbNLoq9RinCKSNyFlaICVxNg1xHQ0G7qkvPPKg6ehgTP9Pon+FxYUikUrgPvZ
+ gVuJl/ajoycDn1fDVSUNSWJjpgKei8mYf2xzkjB04vdHFmCvTaRtIUvYPQB0j64hAMpn
+ esH6k2Qm9zD7/ljWsvQVN8HCQmQ7NULIsboWLzyCAJiLlWTxlcJPCreselHQUBUsMwTn iA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4xdh8238-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 09:45:47 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24I9gbcq020274;
+        Wed, 18 May 2022 09:45:45 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429dfwh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 09:45:45 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24I9jh6A42336578
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 09:45:43 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E45CAE04D;
+        Wed, 18 May 2022 09:45:43 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D830EAE045;
+        Wed, 18 May 2022 09:45:42 +0000 (GMT)
+Received: from localhost (unknown [9.43.19.36])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 18 May 2022 09:45:42 +0000 (GMT)
+Date:   Wed, 18 May 2022 15:15:40 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v3 19/25] powerpc/ftrace: Minimise number of #ifdefs
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
+        <18ce6708d6f8c71d87436f9c6019f04df4125128.1652074503.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <18ce6708d6f8c71d87436f9c6019f04df4125128.1652074503.git.christophe.leroy@csgroup.eu>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1652866821.cdcfe8bs78.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: -xXV3WEQRZy-1nk7o9MuDv6wx1WAzkTW
+X-Proofpoint-ORIG-GUID: -xXV3WEQRZy-1nk7o9MuDv6wx1WAzkTW
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 06/20] Documention: v4l: Documentation for VP9 CIDs.
-Content-Language: en-US
-To:     Smitha T Murthy <smitha.t@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        jernej.skrabec@gmail.com, benjamin.gaignard@collabora.com,
-        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
-        david.plowman@raspberrypi.com, mark.rutland@arm.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
-        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, linux-fsd@tesla.com
-References: <20220517125548.14746-1-smitha.t@samsung.com>
- <CGME20220517125608epcas5p48b5d2f91c711e5728f993169b1d4b9a1@epcas5p4.samsung.com>
- <20220517125548.14746-7-smitha.t@samsung.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220517125548.14746-7-smitha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_03,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
+ adultscore=0 clxscore=1011 suspectscore=0 malwarescore=0 mlxlogscore=928
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205180052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Smitha,
-
-On 5/17/22 14:55, Smitha T Murthy wrote:
-> Adds V4l2 controls for VP9 encoder documention.
-> 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+Christophe Leroy wrote:
+> A lot of #ifdefs can be replaced by IS_ENABLED()
+>=20
+> Do so.
+>=20
+> This requires to have kernel_toc_addr() defined at all time
+> as well as PPC_INST_LD_TOC and PPC_INST_STD_LR.
+>=20
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 > ---
->  .../media/v4l/ext-ctrls-codec.rst             | 167 ++++++++++++++++++
->  1 file changed, 167 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 4cd7c541fc30..1b617a08f973 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -2165,6 +2165,16 @@ enum v4l2_mpeg_video_vp8_profile -
->      * - ``V4L2_MPEG_VIDEO_VP8_PROFILE_3``
->        - Profile 3
->  
-> +VP9 Control Reference
-> +---------------------
-> +
-> +The VP9 controls include controls for encoding parameters of VP9 video
-> +codec.
-> +
-> +.. _vp9-control-id:
-> +
-> +VP9 Control IDs
-> +
->  .. _v4l2-mpeg-video-vp9-profile:
->  
->  ``V4L2_CID_MPEG_VIDEO_VP9_PROFILE``
-> @@ -2231,6 +2241,163 @@ enum v4l2_mpeg_video_vp9_level -
->      * - ``V4L2_MPEG_VIDEO_VP9_LEVEL_6_2``
->        - Level 6.2
->  
-> +``V4L2_CID_MPEG_VIDEO_VP9_I_FRAME_QP``
-> +    Quantization parameter for an I frame for VP9. Valid range: from 1 to 255.
+> v2: Moved the setup of pop outside of the big if()/else() in __ftrace_mak=
+e_nop()
+> ---
+>  arch/powerpc/include/asm/code-patching.h |   2 -
+>  arch/powerpc/include/asm/module.h        |   2 -
+>  arch/powerpc/include/asm/sections.h      |  24 +--
+>  arch/powerpc/kernel/trace/ftrace.c       | 182 +++++++++++------------
+>  4 files changed, 103 insertions(+), 107 deletions(-)
+>=20
 
-Hmm, for this CID and most of the others you added there already exists a CID:
-V4L2_CID_MPEG_VIDEO_VPX_I_FRAME_QP.
+<snip>
 
-It's called VPX since it is valid for both VP8 and VP9.
+> @@ -710,6 +707,9 @@ void arch_ftrace_update_code(int command)
+>=20
+>  #ifdef CONFIG_PPC64
+>  #define PACATOC offsetof(struct paca_struct, kernel_toc)
+> +#else
+> +#define PACATOC 0
+> +#endif
 
-So I think quite a few of these VP9 controls can be dropped, unless I am missing
-something?
+This conflicts with my fix for the ftrace init tramp:
+https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20220516071422.4637=
+38-1-naveen.n.rao@linux.vnet.ibm.com/
 
-Regards,
+It probably makes sense to retain #ifdef CONFIG_PPC64, so that we can=20
+get rid of the PACATOC. Here is an incremental diff:
 
-	Hans
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
+/ftrace.c
+index da1a2f8ebb72f3..28169a1ccc7377 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -701,11 +701,6 @@ void arch_ftrace_update_code(int command)
+ }
+=20
+ #ifdef CONFIG_PPC64
+-#define PACATOC offsetof(struct paca_struct, kernel_toc)
+-#else
+-#define PACATOC 0
+-#endif
+-
+ extern unsigned int ftrace_tramp_text[], ftrace_tramp_init[];
+=20
+ void ftrace_free_init_tramp(void)
+@@ -724,7 +719,7 @@ int __init ftrace_dyn_arch_init(void)
+ 	int i;
+ 	unsigned int *tramp[] =3D { ftrace_tramp_text, ftrace_tramp_init };
+ 	u32 stub_insns[] =3D {
+-		PPC_RAW_LD(_R12, _R13, PACATOC),
++		PPC_RAW_LD(_R12, _R13, offsetof(struct paca_struct, kernel_toc)),
+ 		PPC_RAW_ADDIS(_R12, _R12, 0),
+ 		PPC_RAW_ADDI(_R12, _R12, 0),
+ 		PPC_RAW_MTCTR(_R12),
+@@ -733,9 +728,6 @@ int __init ftrace_dyn_arch_init(void)
+ 	unsigned long addr;
+ 	long reladdr;
+=20
+-	if (IS_ENABLED(CONFIG_PPC32))
+-		return 0;
+-
+ 	addr =3D ppc_global_function_entry((void *)FTRACE_REGS_ADDR);
+ 	reladdr =3D addr - kernel_toc_addr();
+=20
+@@ -754,6 +746,7 @@ int __init ftrace_dyn_arch_init(void)
+=20
+ 	return 0;
+ }
++#endif
+=20
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+=20
 
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_P_FRAME_QP``
-> +    Quantization parameter for an P frame for VP9. Valid range: from 1 to 255.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_MAX_QP``
-> +    Maximum quantization parameter for VP9. Valid range: from 1 to 255.
-> +    Recommended range for MFC is from 230 to 255.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_MIN_QP``
-> +    Minimum quantization parameter for VP9. Valid range: from 1 to 255.
-> +    Recommended range for MFC is from 1 to 24.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_RC_FRAME_RATE``
-> +    Indicates the number of evenly spaced subintervals, called ticks, within
-> +    one second. This is a 16 bit unsigned integer and has a maximum value up to
-> +    0xffff and a minimum value of 1.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_GF_REFRESH_PERIOD``
-> +    Indicates the refresh period of the golden frame for VP9 encoder.
-> +
-> +.. _v4l2-vp9-golden-frame-sel:
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAMESEL``
-> +    (enum)
-> +
-> +enum v4l2_mpeg_vp9_golden_framesel -
-> +    Selects the golden frame for encoding. Valid when NUM_OF_REF is 2.
-> +    Possible values are:
-> +
-> +.. raw:: latex
-> +
-> +    \footnotesize
-> +
-> +.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAME_USE_PREV``
-> +      - Use the (n-2)th frame as a golden frame, current frame index being
-> +        'n'.
-> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAME_USE_REF_PERIOD``
-> +      - Use the previous specific frame indicated by
-> +        ``V4L2_CID_MPEG_VIDEO_VP9_GF_REFRESH_PERIOD`` as a
-> +        golden frame.
-> +
-> +.. raw:: latex
-> +
-> +    \normalsize
-> +
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_HIERARCHY_QP_ENABLE``
-> +    Allows host to specify the quantization parameter values for each
-> +    temporal layer through HIERARCHICAL_QP_LAYER. This is valid only
-> +    if HIERARCHICAL_CODING_LAYER is greater than 1. Setting the control
-> +    value to 1 enables setting of the QP values for the layers.
-> +
-> +.. _v4l2-vp9-ref-number-of-pframes:
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_REF_NUMBER_FOR_PFRAMES``
-> +    (enum)
-> +
-> +enum v4l2_mpeg_vp9_ref_num_for_pframes -
-> +    Number of reference pictures for encoding P frames.
-> +
-> +.. raw:: latex
-> +
-> +    \footnotesize
-> +
-> +.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_1_REF_PFRAME``
-> +      - Indicates one reference frame, last encoded frame will be searched.
-> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_GOLDEN_FRAME_USE_REF_PERIOD``
-> +      - Indicates 2 reference frames, last encoded frame and golden frame
-> +        will be searched.
-> +
-> +.. raw:: latex
-> +
-> +    \normalsize
-> +
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_HIERARCHICAL_CODING_LAYER``
-> +    Indicates the number of hierarchial coding layer.
-> +    In normal encoding (non-hierarchial coding), it should be zero.
-> +    VP9 has upto 3 layer of encoder.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_HIERARCHY_RC_ENABLE``
-> +    Indicates enabling of bit rate for hierarchical coding layers VP9 encoder.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L0_BR``
-> +    Indicates bit rate for hierarchical coding layer 0 for VP9 encoder.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L1_BR``
-> +    Indicates bit rate for hierarchical coding layer 1 for VP9 encoder.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L2_BR``
-> +    Indicates bit rate for hierarchical coding layer 2 for VP9 encoder.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L0_QP``
-> +    Indicates quantization parameter for hierarchical coding layer 0.
-> +    Valid range: [V4L2_CID_MPEG_VIDEO_VP9_MIN_QP,
-> +    V4L2_CID_MPEG_VIDEO_VP9_MAX_QP].
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L1_QP``
-> +    Indicates quantization parameter for hierarchical coding layer 1.
-> +    Valid range: [V4L2_CID_MPEG_VIDEO_VP9_MIN_QP,
-> +    V4L2_CID_MPEG_VIDEO_VP9_MAX_QP].
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_HIER_CODING_L2_QP``
-> +    Indicates quantization parameter for hierarchical coding layer 2.
-> +    Valid range: [V4L2_CID_MPEG_VIDEO_VP9_MIN_QP,
-> +    V4L2_CID_MPEG_VIDEO_VP9_MAX_QP].
-> +
-> +.. _v4l2-vp9-max-partition-depth:
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_MAX_PARTITION_DEPTH``
-> +    (enum)
-> +
-> +enum v4l2_mpeg_vp9_num_partitions -
-> +    Indicate maximum coding unit depth.
-> +
-> +.. raw:: latex
-> +
-> +    \footnotesize
-> +
-> +.. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_0_PARTITION``
-> +      - No coding unit partition depth.
-> +    * - ``V4L2_CID_MPEG_VIDEO_VP9_1_PARTITION``
-> +      - Allows one coding unit partition depth.
-> +
-> +.. raw:: latex
-> +
-> +    \normalsize
-> +
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_DISABLE_INTRA_PU_SPLIT``
-> +    Zero indicates enable intra NxN PU split.
-> +    One indicates disable intra NxN PU split.
-> +
-> +``V4L2_CID_MPEG_VIDEO_VP9_DISABLE_IVF_HEADER``
-> +    Indicates IVF header generation. Zero indicates enable IVF format.
-> +    One indicates disable IVF format.
-> +
->  
->  High Efficiency Video Coding (HEVC/H.265) Control Reference
->  ===========================================================
+- Naveen

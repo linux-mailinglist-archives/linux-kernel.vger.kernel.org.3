@@ -2,107 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D789052B3AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A1852B3A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiERHja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S232322AbiERHi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:38:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbiERHj1 (ORCPT
+        with ESMTP id S232286AbiERHiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:39:27 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71419115CA2;
-        Wed, 18 May 2022 00:39:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652859566; x=1684395566;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Daoi5XaegiVVBVBvMlk587j4GbG+Rc+fXkmJuyrCp4o=;
-  b=fCsHPXhVLyoPbIhrG4/t3grb6BoiU9rJ0iI+ky6AFlffyoqhq3JGFfui
-   fI+AQnYojhtn0HSKrjTmANc5JbAsSmmpeASgbgGmgo9+Uu8PepcLYXeE2
-   WAes+8h31NqO2AbRTgt2idCjaIsNHBC+7+hUa7LO0bfv1qd2jduIAXPaT
-   lIYx8DSwFzYeK1vnuw5gr1rkjVbKokzOVWsHE19hKdWUujl0/4cU0UAG1
-   GFjszjVgDSjYS8GdKC/s7DRTx7/6h92+sp5yOLXJ3EQbbha3H/Vx0AyZ2
-   c61F+FAci441ye2aJnIQz32AdwEuQSGuEEcgab/t68M97OFWrfRPFvIBn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270358808"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="270358808"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:39:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="574939464"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by fmsmga007.fm.intel.com with ESMTP; 18 May 2022 00:39:12 -0700
-From:   tien.sung.ang@intel.com
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dinh Nguyen <dinh.nguyen@intel.com>,
-        Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: [PATCH] fpga: altera-cvp: allow interrupt to continue next time
-Date:   Wed, 18 May 2022 15:38:44 +0800
-Message-Id: <20220518073844.2713722-1-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 18 May 2022 03:38:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CE31059E0;
+        Wed, 18 May 2022 00:38:54 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id F09A21F9A4;
+        Wed, 18 May 2022 07:38:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652859533; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+lyyDjAjgyfEhWEBfN0EDdR6Jmx4pHSl+tBKIhX1g7c=;
+        b=j0w4/FD8BT6n50PoBFWZ2B9hxn1McNizrLx3lcvWYTHgmFBxhdJUV3RAv4Ssdii4QSileV
+        Dl88LCOs7NY6Zlry9hleanS5GY4TpOEfeqkhXf/HNSrx5fV+jFGy5YS3+L30Mt6n4dNsLm
+        vyO1S4F65bAw7AbpuXo9HU2OHf85ddo=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5D79B2C142;
+        Wed, 18 May 2022 07:38:52 +0000 (UTC)
+Date:   Wed, 18 May 2022 09:38:52 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Message-ID: <YoSijKwuwbY9uHxG@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
+ <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+ <YoOpyW1+q+Z5as78@alley>
+ <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinh.nguyen@intel.com>
+On Tue 2022-05-17 13:42:06, Guilherme G. Piccoli wrote:
+> On 17/05/2022 10:57, Petr Mladek wrote:
+> >> Disagree here, I'm CCing Florian for information.
+> >>
+> >> This notifier preserves RAM so it's *very interesting* if we have
+> >> kmsg_dump() for example, but maybe might be also relevant in case kdump
+> >> kernel is configured to store something in a persistent RAM (then,
+> >> without this notifier, after kdump reboots the system data would be lost).
+> > 
+> > I see. It is actually similar problem as with
+> > drivers/firmware/google/gsmi.c.
+> > 
+> > I does similar things like kmsg_dump() so it should be called in
+> > the same location (after info notifier list and before kdump).
+> > 
+> > A solution might be to put it at these notifiers at the very
+> > end of the "info" list or make extra "dump" notifier list.
+> 
+> Here I still disagree. I've commented in the other response thread
+> (about Google gsmi) about the semantics of the hypervisor list, but
+> again: this list should contain callbacks that
+> 
+> (a) Should run early, _by default_ before a kdump;
+> (b) Communicate with the firmware/hypervisor in a "low-risk" way;
+> 
+> Imagine a scenario where users configure kdump kernel to save something
+> in a persistent form in DRAM - it'd be like a late pstore, in the next
+> kernel. This callback enables that, it's meant to inform FW "hey, panic
+> happened, please from now on don't clear the RAM in the next FW-reboot".
+> I don't see a reason to postpone that - let's see if the maintainers
+> have an opinion.
 
-CFG_READY signal/bit may time-out due to firmware not responding
-within the given time-out. This time varies due to numerous
-factors like size of bitstream and others.
-This time-out error does not impact the result of the CvP
-previous transactions. The CvP driver shall then, respond with
-EAGAIN instead Time out error.
+I have answered this in more detail in the other reply, see
+https://lore.kernel.org/r/YoShZVYNAdvvjb7z@alley
 
-Signed-off-by: Dinh Nguyen <dinh.nguyen@intel.com>
-Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
----
- drivers/fpga/altera-cvp.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+I agree that both notifiers in
 
-diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
-index 4ffb9da537d8..d74ff63c61e8 100644
---- a/drivers/fpga/altera-cvp.c
-+++ b/drivers/fpga/altera-cvp.c
-@@ -309,10 +309,22 @@ static int altera_cvp_teardown(struct fpga_manager *mgr,
- 	/* STEP 15 - poll CVP_CONFIG_READY bit for 0 with 10us timeout */
- 	ret = altera_cvp_wait_status(conf, VSE_CVP_STATUS_CFG_RDY, 0,
- 				     conf->priv->poll_time_us);
--	if (ret)
-+	if (ret) {
- 		dev_err(&mgr->dev, "CFG_RDY == 0 timeout\n");
-+		goto error_path;
-+	}
- 
- 	return ret;
-+
-+error_path:
-+	/* reset CVP_MODE and HIP_CLK_SEL bit */
-+	altera_read_config_dword(conf, VSE_CVP_MODE_CTRL, &val);
-+	val &= ~VSE_CVP_MODE_CTRL_HIP_CLK_SEL;
-+	val &= ~VSE_CVP_MODE_CTRL_CVP_MODE;
-+	altera_write_config_dword(conf, VSE_CVP_MODE_CTRL, val);
-+
-+	return -EAGAIN;
-+
- }
- 
- static int altera_cvp_write_init(struct fpga_manager *mgr,
--- 
-2.25.1
+    drivers/soc/bcm/brcmstb/pm/pm-arm.c
+    drivers/firmware/google/gsmi.c
 
+better fit into the hypervisor list after all.
+
+Best Regards,
+Petr

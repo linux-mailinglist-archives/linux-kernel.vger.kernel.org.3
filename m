@@ -2,180 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A90252BC4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC3C52BBE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237789AbiERNYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
+        id S237742AbiERNYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237757AbiERNYb (ORCPT
+        with ESMTP id S237755AbiERNYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:24:31 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4475169E0B;
-        Wed, 18 May 2022 06:24:28 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L3D9H5JmhzCsmx;
-        Wed, 18 May 2022 21:19:31 +0800 (CST)
-Received: from huawei.com (10.67.174.96) by canpemm500005.china.huawei.com
- (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 21:24:26 +0800
-From:   Zhang Jianhua <chris.zjh@huawei.com>
-To:     <ebiggers@kernel.org>, <tytso@mit.edu>
-CC:     <linux-fscrypt@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] fs-verity: remove unused parameter desc_size in fsverity_create_info()
-Date:   Wed, 18 May 2022 21:22:56 +0800
-Message-ID: <20220518132256.2297655-1-chris.zjh@huawei.com>
-X-Mailer: git-send-email 2.31.0
+        Wed, 18 May 2022 09:24:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DF714AF4D;
+        Wed, 18 May 2022 06:23:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C505617C1;
+        Wed, 18 May 2022 13:23:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89F71C385AA;
+        Wed, 18 May 2022 13:23:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AedMgvm1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652880235;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=riCdYgYm6xWR+07QfZ5ZGl294AJhNyVhkZnipGK9nxE=;
+        b=AedMgvm17KpzdenpHUkrbYOR9YrwdPYmjUW/kJw7USjbosMsJurspfiwDPnaBZyaTMwCDd
+        P6O6QBmW1Ryk4oxvcoj/DZILksm6VAucnfqOADav7XLYEMlrj5HWV8xzSmySfNLimtS54t
+        D7cG5aDXyEw4pvAMqJbtOKwHGDTr3LA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2d46933c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 18 May 2022 13:23:54 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-spdx@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] siphash: add SPDX tags as sole licensing authority
+Date:   Wed, 18 May 2022 15:23:45 +0200
+Message-Id: <20220518132345.40615-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.96]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_HEX
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The parameter desc_size in fsverity_create_info() is useless and it is
-not referenced anywhere. The greatest meaning of desc_size here is to
-indecate the size of struct fsverity_descriptor and futher calculate the
-size of signature. However, the desc->sig_size can do it also and it is
-indeed, so remove it.
+The text "dual BSD/GPLv2 license" is somewhat ambiguous, and moving this
+over to SPDX is overdue. This commit adds SPDX tags to the relevant
+files and clarifies that it's GPLv2 only and 3-clause BSD. It also
+removes the old text, so that the SPDX tags are the only source of the
+information.
 
-Therefore, it is no need to acquire desc_size by fsverity_get_descriptor()
-in ensure_verity_info(), so remove the parameter desc_ret in
-fsverity_get_descriptor() too.
-
-Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- fs/verity/enable.c           |  2 +-
- fs/verity/fsverity_private.h |  6 ++----
- fs/verity/open.c             | 12 ++++--------
- fs/verity/read_metadata.c    |  5 ++---
- 4 files changed, 9 insertions(+), 16 deletions(-)
+ include/linux/siphash.h | 5 ++---
+ lib/siphash.c           | 5 ++---
+ lib/test_siphash.c      | 7 +++----
+ 3 files changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/fs/verity/enable.c b/fs/verity/enable.c
-index 075dc0aa5416..df6b499bf6a1 100644
---- a/fs/verity/enable.c
-+++ b/fs/verity/enable.c
-@@ -280,7 +280,7 @@ static int enable_verity(struct file *filp,
- 	 * from disk.  This is simpler, and it serves as an extra check that the
- 	 * metadata we're writing is valid before actually enabling verity.
- 	 */
--	vi = fsverity_create_info(inode, desc, desc_size);
-+	vi = fsverity_create_info(inode, desc);
- 	if (IS_ERR(vi)) {
- 		err = PTR_ERR(vi);
- 		goto rollback;
-diff --git a/fs/verity/fsverity_private.h b/fs/verity/fsverity_private.h
-index c6fb62e0ef1a..629785c95007 100644
---- a/fs/verity/fsverity_private.h
-+++ b/fs/verity/fsverity_private.h
-@@ -115,16 +115,14 @@ int fsverity_init_merkle_tree_params(struct merkle_tree_params *params,
- 				     const u8 *salt, size_t salt_size);
- 
- struct fsverity_info *fsverity_create_info(const struct inode *inode,
--					   struct fsverity_descriptor *desc,
--					   size_t desc_size);
-+					   struct fsverity_descriptor *desc);
- 
- void fsverity_set_info(struct inode *inode, struct fsverity_info *vi);
- 
- void fsverity_free_info(struct fsverity_info *vi);
- 
- int fsverity_get_descriptor(struct inode *inode,
--			    struct fsverity_descriptor **desc_ret,
--			    size_t *desc_size_ret);
-+			    struct fsverity_descriptor **desc_ret);
- 
- int __init fsverity_init_info_cache(void);
- void __init fsverity_exit_info_cache(void);
-diff --git a/fs/verity/open.c b/fs/verity/open.c
-index 92df87f5fa38..81ff94442f7b 100644
---- a/fs/verity/open.c
-+++ b/fs/verity/open.c
-@@ -147,8 +147,7 @@ static int compute_file_digest(struct fsverity_hash_alg *hash_alg,
-  * fsverity_descriptor must have already undergone basic validation.
-  */
- struct fsverity_info *fsverity_create_info(const struct inode *inode,
--					   struct fsverity_descriptor *desc,
--					   size_t desc_size)
-+					   struct fsverity_descriptor *desc)
- {
- 	struct fsverity_info *vi;
- 	int err;
-@@ -264,8 +263,7 @@ static bool validate_fsverity_descriptor(struct inode *inode,
-  * the filesystem, and do basic validation of it.
-  */
- int fsverity_get_descriptor(struct inode *inode,
--			    struct fsverity_descriptor **desc_ret,
--			    size_t *desc_size_ret)
-+			    struct fsverity_descriptor **desc_ret)
- {
- 	int res;
- 	struct fsverity_descriptor *desc;
-@@ -297,7 +295,6 @@ int fsverity_get_descriptor(struct inode *inode,
- 	}
- 
- 	*desc_ret = desc;
--	*desc_size_ret = res;
- 	return 0;
- }
- 
-@@ -306,17 +303,16 @@ static int ensure_verity_info(struct inode *inode)
- {
- 	struct fsverity_info *vi = fsverity_get_info(inode);
- 	struct fsverity_descriptor *desc;
--	size_t desc_size;
- 	int err;
- 
- 	if (vi)
- 		return 0;
- 
--	err = fsverity_get_descriptor(inode, &desc, &desc_size);
-+	err = fsverity_get_descriptor(inode, &desc);
- 	if (err)
- 		return err;
- 
--	vi = fsverity_create_info(inode, desc, desc_size);
-+	vi = fsverity_create_info(inode, desc);
- 	if (IS_ERR(vi)) {
- 		err = PTR_ERR(vi);
- 		goto out_free_desc;
-diff --git a/fs/verity/read_metadata.c b/fs/verity/read_metadata.c
-index 7e2d0c7bdf0d..6ee849dc7bc1 100644
---- a/fs/verity/read_metadata.c
-+++ b/fs/verity/read_metadata.c
-@@ -101,7 +101,7 @@ static int fsverity_read_descriptor(struct inode *inode,
- 	size_t desc_size;
- 	int res;
- 
--	res = fsverity_get_descriptor(inode, &desc, &desc_size);
-+	res = fsverity_get_descriptor(inode, &desc);
- 	if (res)
- 		return res;
- 
-@@ -119,10 +119,9 @@ static int fsverity_read_signature(struct inode *inode,
- 				   void __user *buf, u64 offset, int length)
- {
- 	struct fsverity_descriptor *desc;
--	size_t desc_size;
- 	int res;
- 
--	res = fsverity_get_descriptor(inode, &desc, &desc_size);
-+	res = fsverity_get_descriptor(inode, &desc);
- 	if (res)
- 		return res;
- 
+diff --git a/include/linux/siphash.h b/include/linux/siphash.h
+index 3af1428da559..9153e77382e1 100644
+--- a/include/linux/siphash.h
++++ b/include/linux/siphash.h
+@@ -1,6 +1,5 @@
+-/* Copyright (C) 2016 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+- *
+- * This file is provided under a dual BSD/GPLv2 license.
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause) */
++/* Copyright (C) 2016-2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+  *
+  * SipHash: a fast short-input PRF
+  * https://131002.net/siphash/
+diff --git a/lib/siphash.c b/lib/siphash.c
+index 71d315a6ad62..15bc5b6f368c 100644
+--- a/lib/siphash.c
++++ b/lib/siphash.c
+@@ -1,6 +1,5 @@
+-/* Copyright (C) 2016 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+- *
+- * This file is provided under a dual BSD/GPLv2 license.
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/* Copyright (C) 2016-2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+  *
+  * SipHash: a fast short-input PRF
+  * https://131002.net/siphash/
+diff --git a/lib/test_siphash.c b/lib/test_siphash.c
+index a6d854d933bf..a96788d0141d 100644
+--- a/lib/test_siphash.c
++++ b/lib/test_siphash.c
+@@ -1,8 +1,7 @@
+-/* Test cases for siphash.c
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
++/* Copyright (C) 2016-2022 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+  *
+- * Copyright (C) 2016 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+- *
+- * This file is provided under a dual BSD/GPLv2 license.
++ * Test cases for siphash.c
+  *
+  * SipHash: a fast short-input PRF
+  * https://131002.net/siphash/
 -- 
-2.31.0
+2.35.1
 

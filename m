@@ -2,130 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1809E52C406
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D7852C3F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242200AbiERUCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 16:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S242212AbiERUDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 16:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242110AbiERUCm (ORCPT
+        with ESMTP id S242186AbiERUDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 16:02:42 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE88B1EE091
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:02:40 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id d3so2251153ilr.10
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mj28eAA7jFmQsuBi8F2d/CpOSog8MsvJJWpWNUXOAqY=;
-        b=c0xg0dXTIMvvVLpM9pxFLIASs/USM8les0/qR9K+D5itQ2NBoW4ldkbunCJnr9ftRh
-         YMT2nk4JcRIYdccAZ/hFCsq8zvh+VCtCwc/saB48SkxtDSQ0+Yo6zFqzAuxHa3IqZY5K
-         Km4+KzVtjrJb6hTD7I3HrzpSO2+CbIczQlJNM=
+        Wed, 18 May 2022 16:03:48 -0400
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0A52370D1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:03:46 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id bs17so2397074qkb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:03:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mj28eAA7jFmQsuBi8F2d/CpOSog8MsvJJWpWNUXOAqY=;
-        b=gl2QskxB2w1HNnpGC7CXlnjyINAt3hqRjP2m9h7v/9Yjiko+IVVIvyxWN8O1LMljhl
-         z0+crfqSE9BbdQ1Z8tlPyWua2pmdUl9Junfg5Zjv0cOr5ok09A9GxNDzgDRPdPIeLjXP
-         oqElnVTsO/dtHhvJ9P7d0wH58Tsc9qfw9K6ksSurL+c9CLlYiO3CX7jPLAKQVDpRhNiM
-         RPBUlfBEts5I6A3lWKSzY2eoA1tjmqPgeq4R8/1Uc2Nv7VGYNhYqJDSNsP7z8M43YDpW
-         METmSNS97cspd3NzvpVpYG4xwDdq8EmtMGA+mZX2NDGiszGocaeUEwaPV1kqlaN1WY2O
-         aPAw==
-X-Gm-Message-State: AOAM533Kn4Ip7oPy7bKylt7t6kEQ81bT+YIAHIGqVjiyBnI7p+2VYhG4
-        eQ7YPvlRZPYH7qGOGK91ZK5ObA==
-X-Google-Smtp-Source: ABdhPJyodFs+oGS3ms9XYWcg56utelXkCdpo91qxHRbf//xPU48zYUhJXJt0/3+l9ZeJnz271kd/jA==
-X-Received: by 2002:a92:d20b:0:b0:2d1:1588:385e with SMTP id y11-20020a92d20b000000b002d11588385emr756936ily.23.1652904160177;
-        Wed, 18 May 2022 13:02:40 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id e17-20020a022111000000b0032e2c859d8esm110971jaa.138.2022.05.18.13.02.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 13:02:39 -0700 (PDT)
-Subject: Re: [PATCH V5 0/3] Add unit test module for AMD P-State driver
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220505022913.329259-1-li.meng@amd.com>
- <YnNxlzRW2NGCx5dO@amd.com>
- <615adab4-515c-7d61-5662-bd342b759d6d@linuxfoundation.org>
- <27434868-1d0f-4493-3265-bea4e1dc8494@linuxfoundation.org>
- <YoSB6JRplJR79Beu@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <bafe3aab-166d-7d9f-8909-8ffa41579a47@linuxfoundation.org>
-Date:   Wed, 18 May 2022 14:02:38 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7Qpd/J7A8SCSKU6yZw0hxy+iztL0Wu+jzDVTa+YGvyo=;
+        b=b0AO6wJQK3g3h7TTwurmzzO/+LCwRyfDQ5PkDFRHzHijkdU8l9LsJhXi23rNm6JqyS
+         LxAFHUl68HVqzm0nTsezOGTpjHNwRGQN21LOs71L3n3WxKRGy6x1IZl5PwGzklgSUtLT
+         0uX3FQ8LqMriB9s4SLOTZpGUY0P2NT2HuylQ7wV3rgiXdJmL5kpk1AYDxplKqZ3wTL1U
+         a3GQCNQlxHlgUMrjRcQKucjMjaTyi6ecpLM8x/FBWQrMWmyotoX0JVIfpdI14b1jnCtV
+         ADQlsZxell2WZmt2PYSZ8m4LT2kQrwngJz29lfW4xqMMyRQbm5+Ou3L/3SAv35ZN2Y3T
+         Ty3g==
+X-Gm-Message-State: AOAM532ujvaykWfyZRdt8JB6pq6x8e/v6fiNZfsXItBjnIy0tLeFobg0
+        Nlr2HzhzbuDe+/1WqS1AEL6I
+X-Google-Smtp-Source: ABdhPJwEU5F9uKrOZEN4PLvxlHlsC7JKL94tfNkKx/c8tpQgbDVfOXmn74Adm6rOuDC33973uwbA2A==
+X-Received: by 2002:a05:620a:4612:b0:6a0:125b:56be with SMTP id br18-20020a05620a461200b006a0125b56bemr821947qkb.369.1652904225547;
+        Wed, 18 May 2022 13:03:45 -0700 (PDT)
+Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
+        by smtp.gmail.com with ESMTPSA id w140-20020a376292000000b006a10aa7908dsm108133qkb.38.2022.05.18.13.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 13:03:45 -0700 (PDT)
+Date:   Wed, 18 May 2022 16:03:44 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Milan Broz <gmazyland@gmail.com>, Alasdair Kergon <agk@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, dm-devel@redhat.com,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] dm: Add verity helpers for LoadPin
+Message-ID: <YoVRIHfXPa7+e1Zh@redhat.com>
+References: <20220517233457.1123309-1-mka@chromium.org>
+ <20220517163437.v4.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
+ <19149028-ec94-8f64-aed4-1e58f29942a8@gmail.com>
+ <YoUNH7MrfEb844ft@google.com>
 MIME-Version: 1.0
-In-Reply-To: <YoSB6JRplJR79Beu@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoUNH7MrfEb844ft@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/22 11:19 PM, Huang Rui wrote:
-> On Wed, May 18, 2022 at 04:03:05AM +0800, Shuah Khan wrote:
+On Wed, May 18 2022 at 11:13P -0400,
+Matthias Kaehlcke <mka@chromium.org> wrote:
 
->> I reviewed the patches and the test driver amd-pstate-ut doesn't belong under
->> selftests. I would recommend the following approach:
->>
->> - add this test driver under drivers/cpufreq
->>
->> - KUnit is a better fit for this unit test driver unless you want
->>     to be able to run this without KUnit configured
->>
->> - add the test script under selftests - the script then can load the
->>     test driver and run tests and unload the driver.
->>
+> Hi Milan,
 > 
-> Thanks Shuah. We would like to introduce more CPU benchmark testing based
-> the amd-pstate-ut next step, it may not be all the stuff in the kernel
-> module. E.X.  use the script to trigger the tbench, gitsource, kernbench,
-> netperf, speedometer, and etc. testing and monitor the cpu frequency and
-> performance goals change, power consumption at runtime. Can the KUnit +
-> Kselftests work more straight forward in user scenario?
+> On Wed, May 18, 2022 at 09:57:43AM +0200, Milan Broz wrote:
+> > On 18/05/2022 01:34, Matthias Kaehlcke wrote:
+> > > LoadPin limits loading of kernel modules, firmware and certain
+> > > other files to a 'pinned' file system (typically a read-only
+> > > rootfs). To provide more flexibility LoadPin is being extended
+> > > to also allow loading these files from trusted dm-verity
+> > > devices. For that purpose LoadPin can be provided with a list
+> > > of verity root digests that it should consider as trusted.
+> > > 
+> > > Add a bunch of helpers to allow LoadPin to check whether a DM
+> > > device is a trusted verity device. The new functions broadly
+> > > fall in two categories: those that need access to verity
+> > > internals (like the root digest), and the 'glue' between
+> > > LoadPin and verity. The new file dm-verity-loadpin.c contains
+> > > the glue functions.
+> > > 
+> > > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > 
+> > ...
+> > 
+> > > +
+> > > +	if (dm_verity_get_root_digest(ti, &root_digest, &digest_size))
+> > > +		return false;
+> > 
+> > Almost unrelated note, but as there are more and more situations
+> > that checks verity root digest, shouldn't we export this as read-only
+> > sysfs attribute for DM verity devices?
+> > 
+> > Attacker can always calculate (but not change) Merkle tree, so this
+> > is not something that need to be hidden.
+> > 
+> > It would allow userspace to easily enumerate trusted DM devices without
+> > calling kernel ioctls...
 > 
+> I guess that's an option if there are scenarios where it is useful. It
+> should probably be a separate patch, since it isn't directly related with
+> extending LoadPin support to trusted verity devices.
+> 
+> > > +
+> > > +	table = dm_get_live_table(md, &srcu_idx);
+> > > +
+> > > +	if (dm_table_get_num_targets(table) != 1)
+> > > +		goto out;
+> > > +
+> > > +	ti = dm_table_get_target(table, 0);
+> > > +
+> > > +	if (is_trusted_verity_target(ti))
+> > > +		trusted = true;
+> > 
+> > What happens is someone reloads verity table later with
+> > a different content (or even different target type)?
+> > Does LoadPin even care here?
+> 
+> LoadPin cares, but only when new kernel files are loaded. It will then check
+> against the new verity table, and only allow loading of the file if it comes
+> from a verity target with a trusted digest.
+> 
+> > >   static struct target_type verity_target = {
+> > >   	.name		= "verity",
+> > >   	.version	= {1, 8, 0},
+> > 
+> > Please increase the minor version, it is very useful to detect (in logs)
+> > that the target driver has compatible extensions.
+> 
+> I can do that, but would like to confirm that this is really needed/desired.
+> This patch adds kernel-internal APIs which aren't accessible to userspace,
+> that don't impact verity directly, so I'm not sure an increased minor version
+> would be useful.
 
-I am not sure if I understand your question. Also I am not sure if understand
-the scope of the testing you are intending to do using amd-pstate-ut.
-
-tbench, gitsource etc. are external tests (meaning not in kernel repo). Do these
-tests depend on amd-pstate-ut?
-
-It would be helpful to understand the scope first. What exactly will amd-pstate-ut
-used for? Based on the patch series it looked like:
-
--- amd-pstate-ut has unit test code which will be triggered from kselftest
-
-This is perfectly fine. The driver can reside under drivers/cpufreq and a test.sh
-can reside under selftests. It can just use kselftest framework.
-
-Based on what you are saying. kselftest might be a good choice.
-
-thanks,
--- Shuah
-
+Bumping to 1.8.1 is useful to indicate new changes that offer expanded
+use of the verity target (even if by LoadPin).

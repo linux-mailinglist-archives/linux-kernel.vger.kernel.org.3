@@ -2,38 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094E252C193
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4C252C172
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240943AbiERRhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
+        id S241105AbiERRlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240945AbiERRhG (ORCPT
+        with ESMTP id S241137AbiERRlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:37:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 891AA11E1E3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:37:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CB6723A;
-        Wed, 18 May 2022 10:37:04 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1BC3F3F718;
-        Wed, 18 May 2022 10:37:03 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org, will@kernel.org
-Cc:     iommu@lists.linux-foundation.org, john.garry@huawei.com,
-        hch@lst.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] iommu/dma: Add config for PCI SAC address trick
-Date:   Wed, 18 May 2022 18:36:59 +0100
-Message-Id: <ef8abf1c6b0839e39b272738fc7bc4d9699c8bcb.1652895419.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.35.3.dirty
+        Wed, 18 May 2022 13:41:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EB952BB0D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652895666;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sPnZ+RZGIkLqRaIJaYL7JahMWqDmcz+voS99NuTbAns=;
+        b=VPftXZQzXzQyfrsPGBw0wOyQcYtQPBVJhWoJuJRD46c5M4JPT2oaiXTTPT/wQWVivgbgui
+        GtbTlr3v2qK1NLdFJbnPVrIwxsm3oXIZ065MQ+G0fbT+OOHhRzPhJ+wiLj+Gtt4tj4PGFX
+        KYKDTxUyrmKXXhpEp6zfCrOEa7PCt2s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-6pijxGN6NR6xvj_bJ_OBrw-1; Wed, 18 May 2022 13:41:03 -0400
+X-MC-Unique: 6pijxGN6NR6xvj_bJ_OBrw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 90BB3811E78;
+        Wed, 18 May 2022 17:41:02 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.16.154])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 581882026D2F;
+        Wed, 18 May 2022 17:41:02 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 0C6E22208FA; Wed, 18 May 2022 13:41:02 -0400 (EDT)
+Date:   Wed, 18 May 2022 13:41:01 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Dharmendra Singh <dharamhans87@gmail.com>
+Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
+        fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        bschubert@ddn.com, Dharmendra Singh <dsingh@ddn.com>
+Subject: Re: [PATCH v5 1/3] FUSE: Avoid lookups in fuse create
+Message-ID: <YoUvrSdh4B0rKy78@redhat.com>
+References: <20220517100744.26849-1-dharamhans87@gmail.com>
+ <20220517100744.26849-2-dharamhans87@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517100744.26849-2-dharamhans87@gmail.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,87 +64,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For devices stuck behind a conventional PCI bus, saving extra cycles at
-33MHz is probably fairly significant. However since native PCI Express
-is now the norm for high-performance devices, the optimisation to always
-prefer 32-bit addresses for the sake of avoiding DAC is starting to look
-rather anachronistic. Technically 32-bit addresses do have shorter TLPs
-on PCIe, but unless the device is saturating its link bandwidth with
-small transfers it seems unlikely that the difference is appreciable.
+On Tue, May 17, 2022 at 03:37:42PM +0530, Dharmendra Singh wrote:
 
-What definitely is appreciable, however, is that the IOVA allocator
-doesn't behave all that well once the 32-bit space starts getting full.
-As DMA working sets get bigger, this optimisation increasingly backfires
-and adds considerable overhead to the dma_map path for use-cases like
-high-bandwidth networking. We've increasingly bandaged the allocator
-in attempts to mitigate this, but it remains fundamentally at odds with
-other valid requirements to try as hard as possible to satisfy a request
-within the given limit; what we really need is to just avoid this odd
-notion of a speculative allocation when it isn't beneficial anyway.
+[..]
+> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> index d6ccee961891..bebe4be3f1cb 100644
+> --- a/include/uapi/linux/fuse.h
+> +++ b/include/uapi/linux/fuse.h
+> @@ -301,6 +301,7 @@ struct fuse_file_lock {
+>   * FOPEN_CACHE_DIR: allow caching this directory
+>   * FOPEN_STREAM: the file is stream-like (no file position at all)
+>   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
+> + * FOPEN_FILE_CREATED: the file was actually created
+>   */
+>  #define FOPEN_DIRECT_IO		(1 << 0)
+>  #define FOPEN_KEEP_CACHE	(1 << 1)
+> @@ -308,6 +309,7 @@ struct fuse_file_lock {
+>  #define FOPEN_CACHE_DIR		(1 << 3)
+>  #define FOPEN_STREAM		(1 << 4)
+>  #define FOPEN_NOFLUSH		(1 << 5)
+> +#define FOPEN_FILE_CREATED	(1 << 6)
+>  
+>  /**
+>   * INIT request/reply flags
+> @@ -537,6 +539,7 @@ enum fuse_opcode {
+>  	FUSE_SETUPMAPPING	= 48,
+>  	FUSE_REMOVEMAPPING	= 49,
+>  	FUSE_SYNCFS		= 50,
+> +	FUSE_CREATE_EXT		= 51,
 
-Unfortunately that's where things get awkward... Having been present on
-x86 for 15 years or so now, it turns out there are systems which fail to
-properly define the upper limit of usable IOVA space for certain devices
-and this trick was the only thing letting them work OK. I had a similar
-ulterior motive for a couple of early arm64 systems when originally
-adding it to iommu-dma, but those really should now be fixed with proper
-firmware bindings, and other arm64 users really need it out of the way,
-so let's just leave it default-on for x86.
+I am wondering if we really have to introduce a new opcode for this. Both
+FUSE_CREATE and FUSE_CREATE_EXT prepare and send fuse_create_in{} and
+expect fuse_entry_out and fuse_open_out in response. So no new structures
+are being added. Only thing FUSE_CREATE_EXT does extra is that it also
+reports back whether file was actually created or not.
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/iommu/Kconfig     | 24 ++++++++++++++++++++++++
- drivers/iommu/dma-iommu.c |  2 +-
- 2 files changed, 25 insertions(+), 1 deletion(-)
+May be instead of adding an new fuse_opcode, we could simply add a
+new flag which we send in fuse_create_in and that reqeusts to report
+if file was created or not. This is along the lines of
+FUSE_OPEN_KILL_SUIDGID.
 
-diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-index c79a0df090c0..bf9b295f1c89 100644
---- a/drivers/iommu/Kconfig
-+++ b/drivers/iommu/Kconfig
-@@ -144,6 +144,30 @@ config IOMMU_DMA
- 	select IRQ_MSI_IOMMU
- 	select NEED_SG_DMA_LENGTH
- 
-+config IOMMU_DMA_PCI_SAC_OPT
-+	bool "Enable 64-bit legacy PCI optimisation by default"
-+	depends on IOMMU_DMA
-+	default X86
-+	help
-+	  Enable by default an IOMMU optimisation for 64-bit legacy PCI devices,
-+	  wherein the DMA API layer will always first try to allocate a 32-bit
-+	  DMA address suitable for a single address cycle, before falling back
-+	  to allocating from the full usable address range. If your system has
-+	  64-bit legacy PCI devices in 32-bit slots where using dual address
-+	  cycles reduces DMA throughput significantly, this optimisation may be
-+	  beneficial to overall performance.
-+
-+	  If you have a modern PCI Express based system, it should usually be
-+	  safe to say "n" here and avoid the potential extra allocation overhead.
-+	  However, beware that this optimisation has also historically papered
-+	  over bugs where the IOMMU address range above 32 bits is not fully
-+	  usable. If device DMA problems and/or IOMMU faults start occurring
-+	  with IOMMU translation enabled after disabling this option, it is
-+	  likely a sign of a latent driver or firmware/BIOS bug.
-+
-+	  If this option is not set, the optimisation can be enabled at
-+	  boot time with the "iommu.forcedac=0" command-line argument.
-+
- # Shared Virtual Addressing
- config IOMMU_SVA
- 	bool
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 09f6e1c0f9c0..c8d409d3f861 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -66,7 +66,7 @@ struct iommu_dma_cookie {
- };
- 
- static DEFINE_STATIC_KEY_FALSE(iommu_deferred_attach_enabled);
--bool iommu_dma_forcedac __read_mostly;
-+bool iommu_dma_forcedac __read_mostly = !IS_ENABLED(CONFIG_IOMMU_DMA_PCI_SAC_OPT);
- 
- static int __init iommu_dma_forcedac_setup(char *str)
- {
--- 
-2.35.3.dirty
+So say, a new flag FUSE_OPEN_REPORT_CREATE flag. Which we will set in
+fuse_create_in->open_flags. If file server sees this flag is set, it
+knows that it needs to set FOPEN_FILE_CREATED flag in response.
+
+To me creating a new flag FUSE_OPEN_REPORT_CREATE seems better instead
+of adding a new opcode.
+
+Thanks
+Vivek
+>  
+>  	/* CUSE specific operations */
+>  	CUSE_INIT		= 4096,
+> -- 
+> 2.17.1
+> 
 

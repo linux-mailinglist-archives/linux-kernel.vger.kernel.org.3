@@ -2,48 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A6252BBD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED7652BBC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237634AbiERNSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S237641AbiERNTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236559AbiERNSR (ORCPT
+        with ESMTP id S237631AbiERNTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:18:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9247B0A64;
-        Wed, 18 May 2022 06:18:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 18 May 2022 09:19:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 476DFD808A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652879941;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2DQALIgDOHGNkvengitHc0v197uadYCpWLUueswTRnU=;
+        b=HN+rdHQ4Yc75aKuj7J7px3oMaxv4d2MZiSLg2QMemhaZbAODlnCz2xF76YnMY7wLzTNplv
+        z13GuTJJUSwNiKjUySMz5D4o3PYPfN8BIaRf+F17fMeTjHrmH+Iu9HUoZMqQho4pQ/SgGv
+        6z3W4OGusry+zrgpHhkcZZeeEJI/Djs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-Tss1-yDPNfiFC43WVtTzsg-1; Wed, 18 May 2022 09:18:58 -0400
+X-MC-Unique: Tss1-yDPNfiFC43WVtTzsg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79712B82032;
-        Wed, 18 May 2022 13:18:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D865C385AA;
-        Wed, 18 May 2022 13:18:12 +0000 (UTC)
-Message-ID: <adb0c664-a662-4823-9e54-0daab22932a0@linux-m68k.org>
-Date:   Wed, 18 May 2022 23:18:09 +1000
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF95C38035A5;
+        Wed, 18 May 2022 13:18:57 +0000 (UTC)
+Received: from T590 (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2A87A1410F36;
+        Wed, 18 May 2022 13:18:50 +0000 (UTC)
+Date:   Wed, 18 May 2022 21:18:45 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Liu Xiaodong <xiaodong.liu@intel.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, ming.lei@redhat.com
+Subject: Re: [PATCH V2 0/1] ubd: add io_uring based userspace block driver
+Message-ID: <YoTyNVccpIYDpx9q@T590>
+References: <20220517055358.3164431-1-ming.lei@redhat.com>
+ <20220518063808.GA168577@storage2.sh.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] m68knommu: fix 68000 CPU link with no platform
- selected
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux/m68k <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20220518065639.2432213-1-gerg@linux-m68k.org>
- <20220518065639.2432213-4-gerg@linux-m68k.org>
- <CAMuHMdWADK4d-OxKYdnRvbtVsGtbZ_+vF2D70S-5hXNt0rqg9w@mail.gmail.com>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-In-Reply-To: <CAMuHMdWADK4d-OxKYdnRvbtVsGtbZ_+vF2D70S-5hXNt0rqg9w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518063808.GA168577@storage2.sh.intel.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,87 +67,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+Hello Liu,
 
-On 18/5/22 19:20, Geert Uytterhoeven wrote:
-> Hi Greg.
+On Wed, May 18, 2022 at 02:38:08AM -0400, Liu Xiaodong wrote:
+> On Tue, May 17, 2022 at 01:53:57PM +0800, Ming Lei wrote:
+> > Hello Guys,
+> > 
+> > ubd driver is one kernel driver for implementing generic userspace block
+> > device/driver, which delivers io request from ubd block device(/dev/ubdbN) into
+> > ubd server[1] which is the userspace part of ubd for communicating
+> > with ubd driver and handling specific io logic by its target module.
+> > 
+> > Another thing ubd driver handles is to copy data between user space buffer
+> > and request/bio's pages, or take zero copy if mm is ready for support it in
+> > future. ubd driver doesn't handle any IO logic of the specific driver, so
+> > it is small/simple, and all io logics are done by the target code in ubdserver.
+> > 
+> > The above two are main jobs done by ubd driver.
 > 
-> On Wed, May 18, 2022 at 8:56 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
->> If building for a nommu m68k classic CPU and no platform (board) is
->> selected then the final link fails with:
->>
->>       LD      vmlinux.o
->>     m68k-linux-ld: cannot find arch/m68k/kernel/head.o: No such file or directory
->>     make: *** [Makefile:1158: vmlinux] Error 1
->>
->> Not selecting a platform is ok, that is a generic 68000 system build.
->> All of the platform selections are for 68328 variants.
->>
->> The underlying problem is that the CPU config option (CONFIG_M68000)
->> ends up not being set, it is currently only selected by one of the
->> platform choices.
->>
->> Change CONFIG_M68000 so that it is always enabled for the nommu m68k
->> classic configuration.
->>
->> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+> Hi, Lei
 > 
-> Thanks for your patch!
+> Your UBD implementation looks great. Its io_uring based design is interesting
+> and brilliant.
+> Towards the purpose of userspace block device, last year,
+> VDUSE initialized by Yongji is going to do a similar work. But VDUSE is under
+> vdpa. VDUSE will present a virtio-blk device to other userspace process
+> like containers, while serving virtio-blk req also by an userspace target.
+> https://lists.linuxfoundation.org/pipermail/iommu/2021-June/056956.html 
 > 
->> --- a/arch/m68k/Kconfig.cpu
->> +++ b/arch/m68k/Kconfig.cpu
->> @@ -37,7 +37,7 @@ endchoice
->>   if M68KCLASSIC
->>
->>   config M68000
->> -       bool
->> +       def_bool y
+> I've been working and thinking on serving RUNC container by SPDK efficiently.
+> But this work requires a new proper userspace block device module in kernel.
+> The highlevel design idea for userspace block device implementations
+> should be that: Using ring for IO request, so client and target can exchange
+> req/resp quickly in batch; Map bounce buffer between kernel and userspace
+> target, so another extra IO data copy like NBD can be avoid. (Oh, yes, SPDK
+> needs this kernel module has some more minor functions)
 > 
-> And then the selects can be removed, too, as the symbol is now always
-> enabled?
-
-Yes, I think that would be the case.
-
-
-> I'm wondering how to handle this when another nommu-m68k-classic
-> platform shows up (again, cfr. the removed 68360 support) , that
-> would need a different head.S?  Of course that's something to be
-> solved later...
-
-Yes, indeed. I am kinda kicking that can down the road :-)
-
-It probably doesn't make a lot of sense to be able to select
-multiple platform types in this specific nommu m68k classic setup.
-The startup config code does not support probing of platform type,
-it has hard coded #if conditionals that mean it only supports a
-single platform selection anyway.
-
-Anyway, a problem to deal with when we have more choices here.
-
-
->>          depends on !MMU
->>          select CPU_HAS_NO_BITFIELDS
->>          select CPU_HAS_NO_CAS
+> UBD and VDUSE are both implemented in this way, while of course each of
+> them has specific features and advantages.
 > 
-> Note that mmu-m68k-classic (e.g. CONFIG_MMU=y + allnonfig) has the
-> same problem.  That config does need other fixes too.  E.g. I have
-> a local patch to make sure NR_IRQS is never zero, but never got to
-> solve the missing head.o problem in an acceptable way.
+> Not like UBD which is straightforward and starts from scratch, VDUSE is
+> embedded in virtio framework. So its implementation is more complicated, but
+> all virtio frontend utilities can be leveraged.
+> When considering security/permission issues, feels UBD would be easier to
+> solve them.
 
-Yep, ok.
+Stefan Hajnoczi and I are discussing related security/permission
+issues, can you share more details in your case?
 
-Regards
-Greg
-
-
-
-> Gr{oetje,eeting}s,
 > 
->                          Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
+> So my questions are:
+> 1. what do you think about the purpose overlap between UBD and VDUSE?
+
+Sorry, I am not familiar with VDUSE, motivation of ubd is just to make one
+high performance generic userspace block driver. ubd driver(kernel part) is
+just responsible for communication and copying data between userspace buffers
+and kernel io request pages, and the ubdsrv(userspace) target handles io
+logic.
+
+> 2. Could UBD be implemented with SPDK friendly functionalities? (mainly about
+> io data mapping, since HW devices in SPDK need to access the mapped data
+> buffer. Then, in function ubdsrv.c/ubdsrv_init_io_bufs(),
+> "addr = mmap(,,,,dev->cdev_fd,)",
+
+No, that code is actually for supporting zero copy.
+
+But each request's buffer is allocated by ubdsrv and definitely available for any
+target, please see loop_handle_io_async() which handles IO from /dev/ubdbN about
+how to use the buffer. Fro READ, the target code needs to implement READ
+logic and fill data to the buffer, then the buffer will be copied to
+kernel io request pages; for WRITE, the target code needs to use the buffer to handle
+WRITE and the buffer has been updated with kernel io request.
+
+> SPDK needs to know the PA of "addr".
+
+What is PA? and why?
+
+Userspace can only see VM of each buffer. 
+
+> Also memory pointed by "addr" should be pinned all the time.)
+
+The current implementation only pins pages when copying data between
+userspace buffers and kernel io request pages. But I plan to support
+three pin behavior:
+
+- never (current behavior, just pin pages when copying pages)
+- lazy (pin pages until the request is idle for enough time)
+- always (all pages in userpace VM are pinned during the device lifetime)
+
+
+Thanks, 
+Ming
+

@@ -2,96 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C3552B0C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 05:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A824D52B0C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 05:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiERDXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 23:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
+        id S229643AbiERD2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 23:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiERDXf (ORCPT
+        with ESMTP id S229446AbiERD16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 23:23:35 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B552E6B7D1;
-        Tue, 17 May 2022 20:23:32 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id i1so568249plg.7;
-        Tue, 17 May 2022 20:23:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=A7qjxbV5ccZJoe1So3Vum/fwudHwqptCH4mNhXLjotw=;
-        b=Z/3OC5GwuTiGw/CfXcsXqXM50Kjl+mSfvXZ+gcI7awvPPAyZUIu/jQPQ6jAW28NSP0
-         I7vXTWwG7GPYiTbONaA4iunoJFDz2WuILxUD/2VarW4Dko4TLq9442rH9qq0y3doYKRm
-         8zQaXE0qa3qqLsPpQP4PI8qpavEHU9bnquMWMjkbsrCPOTrWDvhnBDMBQDa9ohC3TNIt
-         mO2jK69RVKPNBOYGhJsHQOUD2xDeNcQ6BAbDx7ceejOuv6OCWHptfMSUC4pvkgkzM00O
-         96oj4W2y2GcuGbpod/7EjG6Fagrekbsgio/M3VBtHcGE2/5jNXm9ctpS12fbl+AZWaEH
-         +52g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A7qjxbV5ccZJoe1So3Vum/fwudHwqptCH4mNhXLjotw=;
-        b=WDu+Vtu9f5EouYHFN0UfQlLmPfut8a3e4cc37l2qUEGxVGK1PLrHTR65GYJJzjgngf
-         F3/kBetBnKDiD3lMSjWJ04KlUAxtU/zUO4+CwBsdbRUzWRCc1qGJKZapWBxV5RzQhhyk
-         qaGcgBgcomYXMKIX8Q7eQTD9SEq+s+JAxcFsTI9o6zOxB82bgw/2Ko8Z4zfn8dhRcaIs
-         q3PlyAQnIReiNk8TK8py23hlgiH4xmGsieGPBAs5iqjGmf+h8zWNZrR51EDMJHTGPy0A
-         wSgdjStTitcZs1Q4P7FUVZeGMqJ7FWYEhCES4PKKWuIzvyL/8NBTSa28euvy0QLN7KfQ
-         Y4Zw==
-X-Gm-Message-State: AOAM531MvDctoVDpLu9gtU78hqvpBf4VoDvwK+gpEz1WDyHqMnZznlrm
-        3kD88y+woPibiziA86SQf78=
-X-Google-Smtp-Source: ABdhPJw9C8U0ZQmZFDNoFJdQJVk4VcQE6g7z15+QGM7xxM0rvE9jGc3OPLYLlYrEC99lGScNnMI1kQ==
-X-Received: by 2002:a17:903:41c5:b0:15e:a7b6:e031 with SMTP id u5-20020a17090341c500b0015ea7b6e031mr25335717ple.82.1652844212221;
-        Tue, 17 May 2022 20:23:32 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-63.three.co.id. [116.206.12.63])
-        by smtp.gmail.com with ESMTPSA id r12-20020a170903020c00b0015e8d4eb2d2sm340025plh.284.2022.05.17.20.23.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 20:23:31 -0700 (PDT)
-Message-ID: <b159beea-c7ab-b175-26c2-496f82443470@gmail.com>
-Date:   Wed, 18 May 2022 10:23:28 +0700
+        Tue, 17 May 2022 23:27:58 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8456AA5D
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 20:27:55 -0700 (PDT)
+X-UUID: ab63fdc84db9426bb18f9912a3959b37-20220518
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:d01f7d87-f8ec-4dfa-8b44-3e5d40f6e065,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:50
+X-CID-INFO: VERSION:1.1.5,REQID:d01f7d87-f8ec-4dfa-8b44-3e5d40f6e065,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:50
+X-CID-META: VersionHash:2a19b09,CLOUDID:173293e2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:283834cedcbb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: ab63fdc84db9426bb18f9912a3959b37-20220518
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 826719575; Wed, 18 May 2022 11:27:51 +0800
+Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 18 May 2022 11:27:50 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 18 May 2022 11:27:49 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Wed, 18 May 2022 11:27:49 +0800
+Message-ID: <d006d5883b7053d7d4269582dfe3c597a81fdc20.camel@mediatek.com>
+Subject: Re: [PATCH v6,1/4] drm/mediatek: Modify dsi funcs to atomic
+ operations
+From:   CK Hu <ck.hu@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>
+CC:     <jitao.shi@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>, <rex-bc.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 18 May 2022 11:27:49 +0800
+In-Reply-To: <1652337012-9053-2-git-send-email-xinlei.lee@mediatek.com>
+References: <1652337012-9053-1-git-send-email-xinlei.lee@mediatek.com>
+         <1652337012-9053-2-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: linux-next: build warning after merge of the chrome-platform tree
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Tzung-Bi Shih <tzungbi@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220516213832.19127535@canb.auug.org.au>
- <5d148732-c14d-4e96-f8fc-31acc8932534@collabora.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <5d148732-c14d-4e96-f8fc-31acc8932534@collabora.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/22 20:09, Muhammad Usama Anjum wrote:
-> I've found these warnings in local build. But I'm unable to fix them.
-> Apparently, there doesn't seem any unexpected indentation. This kind of
-> same warnings have also appeared on some more files before this commit
-> without any reason.
+Hi, Xinlei:
+
+On Thu, 2022-05-12 at 14:30 +0800, xinlei.lee@mediatek.com wrote:
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
 > 
+> Because .enable & .disable are deprecated.
+> Use .atomic_enable & .atomic_disable instead.
 
-Hi,
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
-I've figured out the fix on [1]. Please review.
+> 
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index bd3f5b485085..f880136cec09 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -763,14 +763,16 @@ static void mtk_dsi_bridge_mode_set(struct
+> drm_bridge *bridge,
+>  	drm_display_mode_to_videomode(adjusted, &dsi->vm);
+>  }
+>  
+> -static void mtk_dsi_bridge_disable(struct drm_bridge *bridge)
+> +static void mtk_dsi_bridge_atomic_disable(struct drm_bridge *bridge,
+> +					  struct drm_bridge_state
+> *old_bridge_state)
+>  {
+>  	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+>  
+>  	mtk_output_dsi_disable(dsi);
+>  }
+>  
+> -static void mtk_dsi_bridge_enable(struct drm_bridge *bridge)
+> +static void mtk_dsi_bridge_atomic_enable(struct drm_bridge *bridge,
+> +					 struct drm_bridge_state
+> *old_bridge_state)
+>  {
+>  	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+>  
+> @@ -779,8 +781,8 @@ static void mtk_dsi_bridge_enable(struct
+> drm_bridge *bridge)
+>  
+>  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
+>  	.attach = mtk_dsi_bridge_attach,
+> -	.disable = mtk_dsi_bridge_disable,
+> -	.enable = mtk_dsi_bridge_enable,
+> +	.atomic_disable = mtk_dsi_bridge_atomic_disable,
+> +	.atomic_enable = mtk_dsi_bridge_atomic_enable,
+>  	.mode_set = mtk_dsi_bridge_mode_set,
+>  };
+>  
 
-[1]: https://lore.kernel.org/linux-next/20220518031750.21923-2-bagasdotme@gmail.com/
-
--- 
-An old man doll... just what I always wanted! - Clara

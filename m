@@ -2,74 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AEDA52BC67
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6C952BC6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238140AbiERNlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
+        id S238127AbiERNkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238128AbiERNkw (ORCPT
+        with ESMTP id S238078AbiERNkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:40:52 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6B0BCAA
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:40:46 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id c12so3038450eds.10
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:40:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unimore.it; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=C4enMuSsWShHZvSMfmofWFHp1s0VWIVvo26glgzEjsU=;
-        b=P4SxG7mcd2ke1GYLJFHSLqgxP7V7hogPl4RGWYBlVVrhY0axP1Iky6IK5YixeM5qp6
-         3P9VhN+xwQ9KOpKRMWfvAQN2c6IT+8AooRe1nS9VL4wwXGzFeYH7G3Q7EscLmz15j+OW
-         OB5DmKYjWSx3K7kjSVfSN5kIKYTK2qlUaos8Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=C4enMuSsWShHZvSMfmofWFHp1s0VWIVvo26glgzEjsU=;
-        b=tFm3cGRk2jmMbCHcaasEoiu9VgdU/HiN3/HuD0hwA9pd9q983uZ0gjJ2Q9850vGxDL
-         8Qi4h5rc6VJPdAtooD3Zow2+MhwYmNzrOTfj4lVsC88U419edtBKF2kJrjbOUtayIRgd
-         uQXXW1e33BIeXlfyvySLBIX9mVGKs9iGavVbBKn3dfT+LdyYskxRxmwZw7BJMEu7J+tr
-         Lbq5SJb+IdDoBd7SktZFhGwbAfCFV/tRMm5Q9YNJkkBVCiFqGj1QpGKRwiQtSmmVTWUS
-         9i36gfQkTHyytwkcN6tq1SKrVVb9Q7XQe/CxT/i0W4bmd3CcB7AzYQYxw55lE92mR3Jr
-         8Gkg==
-X-Gm-Message-State: AOAM531j4dpRzfHX+D6yThY2SBHdR3Ia16pnkgJmDnm9DPY0xqEW7+rh
-        D7c6F/pxJ2Saf8T2Z98rR9BCfHKfZ5Dm
-X-Google-Smtp-Source: ABdhPJwTPnRlBvY02OOPDtbxOajP27ccZ9X78R/IJy1C8Be6exSnJxYvAQyjuumvZ/BeEbQhBTQ0lQ==
-X-Received: by 2002:a05:6402:2803:b0:42a:e4de:3270 with SMTP id h3-20020a056402280300b0042ae4de3270mr4516167ede.261.1652881244720;
-        Wed, 18 May 2022 06:40:44 -0700 (PDT)
-Received: from [192.168.94.233] (mob-5-90-205-72.net.vodafone.it. [5.90.205.72])
-        by smtp.gmail.com with ESMTPSA id n24-20020a056402515800b0042ad0358c8bsm1353204edd.38.2022.05.18.06.40.22
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 May 2022 06:40:44 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH -next v2 2/2] block, bfq: make bfq_has_work() more
- accurate
-From:   Paolo VALENTE <paolo.valente@unimore.it>
-In-Reply-To: <54d06657-a5e2-a94d-c9af-2f10900e7f32@huawei.com>
-Date:   Wed, 18 May 2022 15:40:05 +0200
-Cc:     Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <75C5D422-A11F-4965-8785-781E13EC6C1B@unimore.it>
-References: <20220513023507.2625717-1-yukuai3@huawei.com>
- <20220513023507.2625717-3-yukuai3@huawei.com>
- <20220516095620.ge5gxmwrnbanfqea@quack3.lan>
- <740D270D-8723-4399-82CC-26CD861843D7@linaro.org>
- <22FEB802-2872-45A7-8ED8-2DE7D0D5E6CD@linaro.org>
- <54d06657-a5e2-a94d-c9af-2f10900e7f32@huawei.com>
-To:     "yukuai (C)" <yukuai3@huawei.com>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 May 2022 09:40:37 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7389A6353C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:40:35 -0700 (PDT)
+Received: from [10.1.250.9] (riviera.nat.ds.pw.edu.pl [194.29.137.1])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id F3BBD2060E;
+        Wed, 18 May 2022 15:40:31 +0200 (CEST)
+Message-ID: <77726e82-eaef-4cce-514a-1df04e5c33ee@somainline.org>
+Date:   Wed, 18 May 2022 15:40:30 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH v3 5/6] arm64: dts: ipq8074: add SPMI PMP8074 PMIC
+ regulators
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220517205341.536587-1-robimarko@gmail.com>
+ <20220517205341.536587-5-robimarko@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220517205341.536587-5-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,138 +49,77 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 17/05/2022 22:53, Robert Marko wrote:
+> PMP8074 is used in IPQ8074 and provides S3 for cores,
+> S4 for UBI core and LDO11 for SDIO/eMMC.
+>
+> So, lets add the nodes in preparation for DVFS later.
+>
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>   arch/arm64/boot/dts/qcom/ipq8074.dtsi | 34 +++++++++++++++++++++++++++
+>   1 file changed, 34 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> index 789fec7c6aa4..d1a0b77c38a4 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> @@ -5,6 +5,7 @@
+>   
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   #include <dt-bindings/clock/qcom,gcc-ipq8074.h>
+> +#include <dt-bindings/spmi/spmi.h>
+>   
+>   / {
+>   	model = "Qualcomm Technologies, Inc. IPQ8074";
+> @@ -421,6 +422,39 @@ spmi_bus: spmi@200f000 {
+>   			interrupt-controller;
+>   			#interrupt-cells = <4>;
+>   			cell-index = <0>;
+> +
+> +			pmic@1 {
 
-> Il giorno 18 mag 2022, alle ore 03:17, yukuai (C) <yukuai3@huawei.com> =
-ha scritto:
->=20
-> =E5=9C=A8 2022/05/17 23:06, Paolo Valente =E5=86=99=E9=81=93:
->>> Il giorno 17 mag 2022, alle ore 16:21, Paolo Valente =
-<paolo.valente@linaro.org> ha scritto:
->>>=20
->>>=20
->>>=20
->>>> Il giorno 16 mag 2022, alle ore 11:56, Jan Kara <jack@suse.cz> ha =
-scritto:
->>>>=20
->>>> On Fri 13-05-22 10:35:07, Yu Kuai wrote:
->>>>> bfq_has_work() is using busy_queues currently, which is not =
-accurate
->>>>> because bfq_queue is busy doesn't represent that it has requests. =
-Since
->>>>> bfqd aready has a counter 'queued' to record how many requests are =
-in
->>>>> bfq, use it instead of busy_queues.
->>>>>=20
->>>=20
->>> The number of requests queued is not equal to the number of busy
->>> queues (it is >=3D).
->> No, sorry. It is actually !=3D in general.
-> Hi, Paolo
->=20
-> I'm aware that number of requests queued is not equal to the number of
-> busy queues, and that is the motivation of this patch.
->=20
->> In particular, if queued =3D=3D 0 but there are busy queues (although
->> still waiting for I/O to arrive), then responding that there is no
->> work caused blk-mq to stop asking, and hence an I/O freeze.  IOW I/O
->> eventually arrives for a busy queue, but blk-mq does not ask for a =
-new
->> request any longer.  But maybe things have changed around bfq since
->> then.
->=20
-> The problem is that if queued =3D=3D 0 while there are busy queues, is =
-there
-> any point to return true in bfq_has_work() ? IMO, it will only cause
-> unecessary run queue. And if new request arrives,
-> blk_mq_sched_insert_request() will trigger a run queue.
+Hi!
 
-Great, if this is the scheme now, then the patch is correct and =
-optimizing.
 
-Thanks,
-Paolo
+These nodes belong in the PMIC DTSI (check pm8150.dtsi and others alike 
+for reference).
 
->=20
-> Thanks,
-> Kuai
->> Paolo
->>>  If this patch is based on this assumption then
->>> unfortunately it is wrong :(
->>>=20
->>> Paolo
->>>=20
->>>>> Noted that bfq_has_work() can be called with 'bfqd->lock' held, =
-thus the
->>>>> lock can't be held in bfq_has_work() to protect 'bfqd->queued'.
->>>>>=20
->>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>>>=20
->>>> Looks good. Feel free to add:
->>>>=20
->>>> Reviewed-by: Jan Kara <jack@suse.cz>
->>>>=20
->>>> 								Honza
->>>>=20
->>>>> ---
->>>>> block/bfq-iosched.c | 16 ++++++++++++----
->>>>> 1 file changed, 12 insertions(+), 4 deletions(-)
->>>>>=20
->>>>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
->>>>> index 61750696e87f..740dd83853a6 100644
->>>>> --- a/block/bfq-iosched.c
->>>>> +++ b/block/bfq-iosched.c
->>>>> @@ -2210,7 +2210,11 @@ static void bfq_add_request(struct request =
-*rq)
->>>>>=20
->>>>> 	bfq_log_bfqq(bfqd, bfqq, "add_request %d", rq_is_sync(rq));
->>>>> 	bfqq->queued[rq_is_sync(rq)]++;
->>>>> -	bfqd->queued++;
->>>>> +	/*
->>>>> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', =
-however, it
->>>>> +	 * may be read without holding the lock in bfq_has_work().
->>>>> +	 */
->>>>> +	WRITE_ONCE(bfqd->queued, bfqd->queued + 1);
->>>>>=20
->>>>> 	if (RB_EMPTY_ROOT(&bfqq->sort_list) && bfq_bfqq_sync(bfqq)) {
->>>>> 		bfq_check_waker(bfqd, bfqq, now_ns);
->>>>> @@ -2402,7 +2406,11 @@ static void bfq_remove_request(struct =
-request_queue *q,
->>>>> 	if (rq->queuelist.prev !=3D &rq->queuelist)
->>>>> 		list_del_init(&rq->queuelist);
->>>>> 	bfqq->queued[sync]--;
->>>>> -	bfqd->queued--;
->>>>> +	/*
->>>>> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', =
-however, it
->>>>> +	 * may be read without holding the lock in bfq_has_work().
->>>>> +	 */
->>>>> +	WRITE_ONCE(bfqd->queued, bfqd->queued - 1);
->>>>> 	elv_rb_del(&bfqq->sort_list, rq);
->>>>>=20
->>>>> 	elv_rqhash_del(q, rq);
->>>>> @@ -5063,11 +5071,11 @@ static bool bfq_has_work(struct =
-blk_mq_hw_ctx *hctx)
->>>>> 	struct bfq_data *bfqd =3D hctx->queue->elevator->elevator_data;
->>>>>=20
->>>>> 	/*
->>>>> -	 * Avoiding lock: a race on bfqd->busy_queues should cause at
->>>>> +	 * Avoiding lock: a race on bfqd->queued should cause at
->>>>> 	 * most a call to dispatch for nothing
->>>>> 	 */
->>>>> 	return !list_empty_careful(&bfqd->dispatch) ||
->>>>> -		bfq_tot_busy_queues(bfqd) > 0;
->>>>> +		READ_ONCE(bfqd->queued);
->>>>> }
->>>>>=20
->>>>> static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx =
-*hctx)
->>>>> --=20
->>>>> 2.31.1
->>>>>=20
->>>> --=20
->>>> Jan Kara <jack@suse.com>
->>>> SUSE Labs, CR
->>>=20
->> .
 
+Konrad
+
+> +				compatible ="qcom,spmi-pmic";
+> +				reg = <0x1 SPMI_USID>;
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +				regulators {
+> +					compatible = "qcom,pmp8074-regulators";
+> +
+> +					s3: s3 {
+> +						regulator-name = "vdd_s3";
+> +						regulator-min-microvolt = <592000>;
+> +						regulator-max-microvolt = <1064000>;
+> +						regulator-always-on;
+> +						regulator-boot-on;
+> +					};
+> +
+> +					s4: s4 {
+> +						regulator-name = "vdd_s4";
+> +						regulator-min-microvolt = <712000>;
+> +						regulator-max-microvolt = <992000>;
+> +						regulator-always-on;
+> +						regulator-boot-on;
+> +					};
+> +
+> +					l11: l11 {
+> +						regulator-name = "l11";
+> +						regulator-min-microvolt = <1800000>;
+> +						regulator-max-microvolt = <3300000>;
+> +					};
+> +				};
+> +			};
+>   		};
+>   
+>   		sdhc_1: sdhci@7824900 {
+>

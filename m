@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312C652BCDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775C352BC5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238211AbiERN3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        id S237874AbiERNaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237877AbiERN2r (ORCPT
+        with ESMTP id S238049AbiERN3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:28:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131611BE941
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:28:17 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nrJin-0006xP-9T; Wed, 18 May 2022 15:28:13 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id EF3A7814A6;
-        Wed, 18 May 2022 13:28:11 +0000 (UTC)
-Date:   Wed, 18 May 2022 15:28:11 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Max Staudt <max@enpas.org>, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Message-ID: <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
-References: <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
- <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
- <20220517104545.eslountqjppvcnz2@pengutronix.de>
- <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
- <20220517141404.578d188a.max@enpas.org>
- <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
- <20220517143921.08458f2c.max@enpas.org>
- <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
- <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
- <43768ff7-71f8-a6c3-18f8-28609e49eedd@hartkopp.net>
+        Wed, 18 May 2022 09:29:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0164C1A359B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652880542;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WcMQ1jNwCWloTdpOHWUHdU6u3lkdhIdHHgvKjDKaJhQ=;
+        b=BkiNZUDvd5+Uvr6ZB6TLe1z7GEKJmTAENtFTijTBYOnkH1WyL9Djy8yIrJWHquqYSlJMfP
+        Tw5qNGrersurt4DZygF3PXhXGGYZal+KWrGjNcrhECPsPKOOQxoG/Cb3XnnsxODShpc+NF
+        tc5BYKtdASqU7Ou8LHQ8KIh+6Pf4acA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-331-PWzgkEwWPLmtbfnu11grTA-1; Wed, 18 May 2022 09:28:58 -0400
+X-MC-Unique: PWzgkEwWPLmtbfnu11grTA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7CFFD18E0044;
+        Wed, 18 May 2022 13:28:58 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 723CF400E118;
+        Wed, 18 May 2022 13:28:58 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 24IDSwo0014628;
+        Wed, 18 May 2022 09:28:58 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 24IDSvJx014624;
+        Wed, 18 May 2022 09:28:58 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Wed, 18 May 2022 09:28:57 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] objtool: fix objtool regression on x32 systems
+In-Reply-To: <20220516212517.GP76023@worktop.programming.kicks-ass.net>
+Message-ID: <alpine.LRH.2.02.2205180813200.22292@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2205161041260.11556@file01.intranet.prod.int.rdu2.redhat.com> <YoJwtCeVzYUm6Uhg@hirez.programming.kicks-ass.net> <alpine.LRH.2.02.2205161145070.30905@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220516212517.GP76023@worktop.programming.kicks-ass.net>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="43mv6ogbut5bwzf7"
-Content-Disposition: inline
-In-Reply-To: <43768ff7-71f8-a6c3-18f8-28609e49eedd@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,105 +71,129 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---43mv6ogbut5bwzf7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 18.05.2022 15:10:44, Oliver Hartkopp wrote:
-> On 18.05.22 14:03, Vincent MAILHOL wrote:
-> > I didn't think this would trigger such a passionate discussion!
->=20
-> :-D
->
-> Maybe your change was the drop that let the bucket run over ;-)
+On Mon, 16 May 2022, Peter Zijlstra wrote:
 
-It's so trivial that everybody feels the urge to say something. :D
+> On Mon, May 16, 2022 at 11:56:21AM -0400, Mikulas Patocka wrote:
+> > 
+> > With this patch, the compiled kernel works. With kernels 5.17 or older, it 
+> > also works. I bisected it and the breakage is caused by the commit 
+> > 4abff6d48dbc.
+> 
+> Sure; but it works doesn't mean there aren't more latent issues. ILP32
+> hosted (cross) builds just aren't a thing I've ever considered. If we
+> really want to go support that then we should at least audit the whole
+> thing.
+> 
+> A quick look seems to suggest at least all the 'offset' fields should be
+> u64 or something. The only reason that works is because -mcmodel=kernel
+> keeps everything in the 2G range to make s32 immediates work. But it
+> isn't right.
 
-> > > But e.g. the people that are running Linux instances in a cloud only
-> > > using vcan and vxcan would not need to carry the entire infrastructure
-> > > of CAN hardware support and rx-offload.
-> >=20
-> > Are there really some people running custom builds of the Linux kernel
-> > in a cloud environment? The benefit of saving a few kilobytes by not
-> > having to carry the entire CAN hardware infrastructure is blown away
-> > by the cost of having to maintain a custom build.
->=20
-> When looking to the current Kconfig and Makefile content in
-> drivers/net/can(/dev) there is also some CONFIG_CAN_LEDS which "depends on
-> BROKEN" and builds a leds.o from a non existing leds.c ?!?
->=20
-> Oh leds.c is in drivers/net/can/leds.c but not in drivers/net/can/dev/led=
-s.c
-> where it could build ... ?
->=20
-> So what I would suggest is that we always build a can-dev.ko when a CAN
-> driver is needed.
->=20
-> Then we have different options that may be built-in:
->=20
-> 1. netlink hw config interface
-> 2. bitrate calculation
-> 3. rx-offload
-> 4. leds
->=20
-> E.g. having the netlink interface without bitrate calculation does not ma=
-ke
-> sense to me too.
+There are many 'offset' variables and its hard to determine which should 
+be 64-bit. Would it be possible to commit this patch, so that kernel 5.18 
+can be compiled on x32 distributions? And you can do code refactoring in 
+the next merge window.
 
-ACK
+Mikulas
 
-> > I perfectly follow the idea to split rx-offload. Integrators building
-> > some custom firmware for an embedded device might want to strip out
-> > any unneeded piece. But I am not convinced by this same argument when
-> > applied to v(x)can.
->=20
-> It does. I've seen CAN setups (really more than one or two!) in VMs and
-> container environments that are fed by Ethernet tunnels - sometimes also =
-in
-> embedded devices.
->=20
-> > A two level split (with or without rx-offload) is what makes the most
-> > sense to me.
-> >=20
-> > Regardless, having the three level split is not harmful. And because
-> > there seems to be a consensus on that, I am fine to continue in this
-> > direction.
->=20
-> Thanks!
->=20
-> Should we remove the extra option for the bitrate calculation then?
 
-+1
+From: Mikulas Patocka <mpatocka@redhat.com>
 
-> And what about the LEDS support depending on BROKEN?
-> That was introduced by commit 30f3b42147ba6f ("can: mark led trigger as
-> broken") from Uwe as it seems there were some changes in 2018.
+The patch 4abff6d48dbc ("objtool: Fix code relocs vs weak symbols") makes
+the kernel unbootable.  The patch c087c6e7b551 ("objtool: Fix type of
+reloc::addend") attempts to fix it by replacing 'int' with 'long'.
 
-There's a proper generic LED trigger now for network devices. So remove
-LED triggers, too.
+However, we may be running on a system with x32 ABI and 'long' on x32 is
+32-bit, thus the patch c087c6e7b551 doesn't really change anything and we
+still end up with miscompiled kernel.  This patch replaces 'long' with
+'s64', so that the 64-bit kernel is correctly compiled on a x32 system.
 
-Marc
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Fixes: 4abff6d48dbc ("objtool: Fix code relocs vs weak symbols")
+Fixes: c087c6e7b551 ("objtool: Fix type of reloc::addend")
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
+ tools/objtool/check.c               |    9 +++++----
+ tools/objtool/elf.c                 |    2 +-
+ tools/objtool/include/objtool/elf.h |    4 ++--
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
---43mv6ogbut5bwzf7
-Content-Type: application/pgp-signature; name="signature.asc"
+Index: linux-2.6/tools/objtool/check.c
+===================================================================
+--- linux-2.6.orig/tools/objtool/check.c	2022-05-18 13:51:22.000000000 +0200
++++ linux-2.6/tools/objtool/check.c	2022-05-18 13:52:37.000000000 +0200
+@@ -6,6 +6,7 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <sys/mman.h>
++#include <inttypes.h>
+ 
+ #include <arch/elf.h>
+ #include <objtool/builtin.h>
+@@ -560,12 +561,12 @@ static int add_dead_ends(struct objtool_
+ 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
+ 			insn = find_last_insn(file, reloc->sym->sec);
+ 			if (!insn) {
+-				WARN("can't find unreachable insn at %s+0x%lx",
++				WARN("can't find unreachable insn at %s+0x%"PRIx64,
+ 				     reloc->sym->sec->name, reloc->addend);
+ 				return -1;
+ 			}
+ 		} else {
+-			WARN("can't find unreachable insn at %s+0x%lx",
++			WARN("can't find unreachable insn at %s+0x%"PRIx64,
+ 			     reloc->sym->sec->name, reloc->addend);
+ 			return -1;
+ 		}
+@@ -595,12 +596,12 @@ reachable:
+ 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
+ 			insn = find_last_insn(file, reloc->sym->sec);
+ 			if (!insn) {
+-				WARN("can't find reachable insn at %s+0x%lx",
++				WARN("can't find reachable insn at %s+0x%"PRIx64,
+ 				     reloc->sym->sec->name, reloc->addend);
+ 				return -1;
+ 			}
+ 		} else {
+-			WARN("can't find reachable insn at %s+0x%lx",
++			WARN("can't find reachable insn at %s+0x%"PRIx64,
+ 			     reloc->sym->sec->name, reloc->addend);
+ 			return -1;
+ 		}
+Index: linux-2.6/tools/objtool/elf.c
+===================================================================
+--- linux-2.6.orig/tools/objtool/elf.c	2022-05-18 13:51:22.000000000 +0200
++++ linux-2.6/tools/objtool/elf.c	2022-05-18 13:51:22.000000000 +0200
+@@ -546,7 +546,7 @@ static struct section *elf_create_reloc_
+ 						int reltype);
+ 
+ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+-		  unsigned int type, struct symbol *sym, long addend)
++		  unsigned int type, struct symbol *sym, s64 addend)
+ {
+ 	struct reloc *reloc;
+ 
+Index: linux-2.6/tools/objtool/include/objtool/elf.h
+===================================================================
+--- linux-2.6.orig/tools/objtool/include/objtool/elf.h	2022-05-18 13:51:22.000000000 +0200
++++ linux-2.6/tools/objtool/include/objtool/elf.h	2022-05-18 13:51:22.000000000 +0200
+@@ -73,7 +73,7 @@ struct reloc {
+ 	struct symbol *sym;
+ 	unsigned long offset;
+ 	unsigned int type;
+-	long addend;
++	s64 addend;
+ 	int idx;
+ 	bool jump_table_start;
+ };
+@@ -135,7 +135,7 @@ struct elf *elf_open_read(const char *na
+ struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
+ 
+ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+-		  unsigned int type, struct symbol *sym, long addend);
++		  unsigned int type, struct symbol *sym, s64 addend);
+ int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
+ 			  unsigned long offset, unsigned int type,
+ 			  struct section *insn_sec, unsigned long insn_off);
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKE9GgACgkQrX5LkNig
-013/Rgf9Eov4y1zksOqRf5lhd3kxutLaOL3d+BBBq7uExlRmSMhiFPOetpn22wWy
-jHYM1Pouoq8/Vpznk3EMv2AKlitfeoNtwYHJDAAWwgrhnB4ok0L9/YjDJWwy+e/F
-t01PYBs3tXMkII8nGI3wZhiY7rkmtcrcI5IMHoiSC6abpCxOcqp3R6vqyIytC0tH
-2hUg5j69Y1Z4+ZtDGuV1oHcizJZ2nVFpzXwguszU+2x2rYZtXSevUzcuSqWhpUHK
-XTUlzW+IH/pjL2d4aYSZAkE7ZBhzrY33BMk8Vqk5W5Ko4zjVx4Rn7fDVo4S7UrL2
-SEsZnDXDsGJ/iZBie/JoGTe5Z5sfRg==
-=51BL
------END PGP SIGNATURE-----
-
---43mv6ogbut5bwzf7--

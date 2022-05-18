@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACDA52B602
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C96A52B641
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233923AbiERJK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
+        id S233909AbiERJOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbiERJKs (ORCPT
+        with ESMTP id S233872AbiERJOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:10:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49135E47;
-        Wed, 18 May 2022 02:10:46 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 51E3C1F4432B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652865045;
-        bh=FlrKwEJaWOEcsQb+NEXsjeQ2j8JFEBDbmFMsL5Q5hK8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wqi00/h/rLUy4nZRdCsCz6bv47BFhnhvAHEc1mXljIaU1uSOjfKZGIDCOJhrMZGzd
-         K6uLVba1kIshyPketkRmAvCOlNRsDSe3zDvtqQI/w5CtcnZ2Ht5C5ZgCRQS3rThAGg
-         8wUMyY3AbTkdu177rskNbUU3CpbG1RaIdjbMlMN2F7TZX6c7Sy8qTy8r1QqNq2Du2V
-         pdhc0PWm1xnUFAYxob5AKbjlZXIx8rwEgX1nShxlGy55seZaOQ1hxukhPYoOXbz/8T
-         Ai3s2ZaIA6YjcnRhrlFtNhTilI5ZVOBFatqH8P5+ywsIc4w2YQa7FslrRay9qOmhKq
-         RE2aTol+pl3Vg==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     yong.wu@mediatek.com
-Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, konrad.dybcio@somainline.org,
-        marijn.suijten@somainline.org, martin.botka@somainline.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        paul.bouchara@somainline.org, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v3 2/2] memory: mtk-smi: Add support for MT6795 Helio X10
-Date:   Wed, 18 May 2022 11:10:38 +0200
-Message-Id: <20220518091038.22380-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220518091038.22380-1-angelogioacchino.delregno@collabora.com>
-References: <20220518091038.22380-1-angelogioacchino.delregno@collabora.com>
+        Wed, 18 May 2022 05:14:34 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84966146403
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:14:33 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id z3so102350pgn.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GjvQwPM1daZo8+jCqWpaTz2mh/pEzt/6tEe1yGu9dLM=;
+        b=eQ6HR9gNmBjFbYML7Gui5OzZdhQ1ZJrrout1YiW/OYAgfXojWKCDuV86ePsOqi8nHc
+         Q/zJMR8PLB4HUUvyQg60hVOtESQhHMagFOehN8Q+EZPU1tRYuO8ZMApeTCpvwtJHq/De
+         I2AeL1NGadVpwvZU+UvRBmdFjJMVp+Wyrmw8BDFcLXdZAlyrOUA74BPZYYkT1C6LuOIm
+         BOLQMyqpWZRz28NR53+azrOdFnIrUTeZ0IwvuFe0KwKlb7Q0ARYbekaBm3N4i61x5x9V
+         +Ifyw1XogMpMIz4lWf9qMZRD3kLrTlp63mTXaxQHJ+9ErEVtg26/R+1HHAPNpPO8cg9i
+         TLgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GjvQwPM1daZo8+jCqWpaTz2mh/pEzt/6tEe1yGu9dLM=;
+        b=T1IaN2W4JMF18pSTwOign3Y/OylzLnkPnvBVOydvL98UiY5RyuMwaua0EpEfw3H2Kv
+         P1dj6cRH6mMqSZxToUGVWq+02uu0wcVovYky6kpSSUHAXjVz1Uo23S2jyf7KAJfP8FNN
+         5iCd48x3sVj/KX9CxfAbuKDOsZnWGSs+pTg8DxAuEXY+yx/KVlchPqOVj0txlr0XZicZ
+         VpupwjQakdRMBdKUlhBT82U3Birb0fJBlimTzojcPUcpBfLNpPssZlgdvdxFoT4mkIEz
+         ZGSNjE+frq3wxuF1mpqnKWr+v4NRdEidBxWMPtpzAEMnC5anTdcjDB6mBJQtR6ad7KpS
+         UTDA==
+X-Gm-Message-State: AOAM531gjz9TvtsjctK4S7k8WLIv9+wDnZ4JEOVEqQiEcXZGUVPownwu
+        cQvIo8Y1Xzpntn9mLYo19uqK5tFb2gyFQpGORWaAjw==
+X-Google-Smtp-Source: ABdhPJympDV8mO/7wcUhujZ0IVK8Fi+T7b+h4c4ApG6fzgAOF2agcfhcnphsmdMxge90eiicfp3r24uSzxyxcZv9/dU=
+X-Received: by 2002:a63:111f:0:b0:3da:ed0d:7623 with SMTP id
+ g31-20020a63111f000000b003daed0d7623mr23285972pgl.586.1652865272760; Wed, 18
+ May 2022 02:14:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220518090738.2694556-1-yangyingliang@huawei.com>
+In-Reply-To: <20220518090738.2694556-1-yangyingliang@huawei.com>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Wed, 18 May 2022 11:13:56 +0200
+Message-ID: <CAMZdPi9uvh4E70-AXpGrdzkgh35mfWQbhL8Kxw_o9_DsfL2gbw@mail.gmail.com>
+Subject: Re: [PATCH -next] net: wwan: t7xx: use GFP_ATOMIC under spin lock in t7xx_cldma_gpd_set_next_ptr()
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        haijun.liu@mediatek.com, chandrashekar.devegowda@intel.com,
+        ricardo.martinez@linux.intel.com, davem@davemloft.net,
+        kuba@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,83 +69,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MediaTek Helio X10 (MT6795) SoC has 5 LARBs and one common SMI
-instance without any sub-common and without GALS.
+Hi Yang,
 
-While the smi-common configuration is specific to this SoC, on the
-LARB side, this is similar to MT8173, in the sense that it doesn't
-need the port in LARB, and the register layout is also compatible
-with that one, which makes us able to fully reuse the smi-larb
-platform data struct that was introduced for MT8173.
+On Wed, 18 May 2022 at 10:57, Yang Yingliang <yangyingliang@huawei.com> wrote:
+>
+> Sometimes t7xx_cldma_gpd_set_next_ptr() is called under spin lock,
+> so add a parameter in t7xx_cldma_gpd_set_next_ptr() to make if it
+> use GFP_ATOMIC flag.
+>
+> Fixes: 39d439047f1d ("net: wwan: t7xx: Add control DMA interface")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/net/wwan/t7xx/t7xx_hif_cldma.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
+> index 0c52801ed0de..1fa9bb763831 100644
+> --- a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
+> +++ b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
+> @@ -91,9 +91,12 @@ static void t7xx_cldma_gpd_set_next_ptr(struct cldma_gpd *gpd, dma_addr_t next_p
+>  }
+>
+>  static int t7xx_cldma_alloc_and_map_skb(struct cldma_ctrl *md_ctrl, struct cldma_request *req,
+> -                                       size_t size)
+> +                                       size_t size, bool is_atomic)
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-Reviewed-by: Yong Wu <yong.wu@mediatek.com>
----
- drivers/memory/mtk-smi.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Would be simpler to directly pass the gfp_mask as a parameter.
 
-diff --git a/drivers/memory/mtk-smi.c b/drivers/memory/mtk-smi.c
-index 86a3d34f418e..7d26bc3485fd 100644
---- a/drivers/memory/mtk-smi.c
-+++ b/drivers/memory/mtk-smi.c
-@@ -21,11 +21,13 @@
- /* SMI COMMON */
- #define SMI_L1LEN			0x100
- 
-+#define SMI_L1_ARB			0x200
- #define SMI_BUS_SEL			0x220
- #define SMI_BUS_LARB_SHIFT(larbid)	((larbid) << 1)
- /* All are MMU0 defaultly. Only specialize mmu1 here. */
- #define F_MMU1_LARB(larbid)		(0x1 << SMI_BUS_LARB_SHIFT(larbid))
- 
-+#define SMI_READ_FIFO_TH		0x230
- #define SMI_M4U_TH			0x234
- #define SMI_FIFO_TH1			0x238
- #define SMI_FIFO_TH2			0x23c
-@@ -360,6 +362,7 @@ static const struct of_device_id mtk_smi_larb_of_ids[] = {
- 	{.compatible = "mediatek,mt2701-smi-larb", .data = &mtk_smi_larb_mt2701},
- 	{.compatible = "mediatek,mt2712-smi-larb", .data = &mtk_smi_larb_mt2712},
- 	{.compatible = "mediatek,mt6779-smi-larb", .data = &mtk_smi_larb_mt6779},
-+	{.compatible = "mediatek,mt6795-smi-larb", .data = &mtk_smi_larb_mt8173},
- 	{.compatible = "mediatek,mt8167-smi-larb", .data = &mtk_smi_larb_mt8167},
- 	{.compatible = "mediatek,mt8173-smi-larb", .data = &mtk_smi_larb_mt8173},
- 	{.compatible = "mediatek,mt8183-smi-larb", .data = &mtk_smi_larb_mt8183},
-@@ -541,6 +544,13 @@ static struct platform_driver mtk_smi_larb_driver = {
- 	}
- };
- 
-+static const struct mtk_smi_reg_pair mtk_smi_common_mt6795_init[SMI_COMMON_INIT_REGS_NR] = {
-+	{SMI_L1_ARB, 0x1b},
-+	{SMI_M4U_TH, 0xce810c85},
-+	{SMI_FIFO_TH1, 0x43214c8},
-+	{SMI_READ_FIFO_TH, 0x191f},
-+};
-+
- static const struct mtk_smi_reg_pair mtk_smi_common_mt8195_init[SMI_COMMON_INIT_REGS_NR] = {
- 	{SMI_L1LEN, 0xb},
- 	{SMI_M4U_TH, 0xe100e10},
-@@ -565,6 +575,12 @@ static const struct mtk_smi_common_plat mtk_smi_common_mt6779 = {
- 		    F_MMU1_LARB(5) | F_MMU1_LARB(6) | F_MMU1_LARB(7),
- };
- 
-+static const struct mtk_smi_common_plat mtk_smi_common_mt6795 = {
-+	.type	  = MTK_SMI_GEN2,
-+	.bus_sel  = F_MMU1_LARB(0),
-+	.init     = mtk_smi_common_mt6795_init,
-+};
-+
- static const struct mtk_smi_common_plat mtk_smi_common_mt8183 = {
- 	.type     = MTK_SMI_GEN2,
- 	.has_gals = true,
-@@ -609,6 +625,7 @@ static const struct of_device_id mtk_smi_common_of_ids[] = {
- 	{.compatible = "mediatek,mt2701-smi-common", .data = &mtk_smi_common_gen1},
- 	{.compatible = "mediatek,mt2712-smi-common", .data = &mtk_smi_common_gen2},
- 	{.compatible = "mediatek,mt6779-smi-common", .data = &mtk_smi_common_mt6779},
-+	{.compatible = "mediatek,mt6795-smi-common", .data = &mtk_smi_common_mt6795},
- 	{.compatible = "mediatek,mt8167-smi-common", .data = &mtk_smi_common_gen2},
- 	{.compatible = "mediatek,mt8173-smi-common", .data = &mtk_smi_common_gen2},
- 	{.compatible = "mediatek,mt8183-smi-common", .data = &mtk_smi_common_mt8183},
--- 
-2.35.1
 
+>  {
+> -       req->skb = __dev_alloc_skb(size, GFP_KERNEL);
+> +       if (is_atomic)
+> +               req->skb = __dev_alloc_skb(size, GFP_ATOMIC);
+> +       else
+> +               req->skb = __dev_alloc_skb(size, GFP_KERNEL);
+>         if (!req->skb)
+>                 return -ENOMEM;
+>
+> @@ -174,7 +177,7 @@ static int t7xx_cldma_gpd_rx_from_q(struct cldma_queue *queue, int budget, bool
+>                 spin_unlock_irqrestore(&queue->ring_lock, flags);
+>                 req = queue->rx_refill;
+>
+> -               ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, queue->tr_ring->pkt_size);
+> +               ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, queue->tr_ring->pkt_size, false);
+>                 if (ret)
+>                         return ret;
+>
+> @@ -402,7 +405,7 @@ static struct cldma_request *t7xx_alloc_rx_request(struct cldma_ctrl *md_ctrl, s
+>         if (!req->gpd)
+>                 goto err_free_req;
+>
+> -       val = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, pkt_size);
+> +       val = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, pkt_size, false);
+>         if (val)
+>                 goto err_free_pool;
+>
+> @@ -801,7 +804,7 @@ static int t7xx_cldma_clear_rxq(struct cldma_ctrl *md_ctrl, int qnum)
+>                 if (req->skb)
+>                         continue;
+>
+> -               ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, rxq->tr_ring->pkt_size);
+> +               ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, rxq->tr_ring->pkt_size, true);
+>                 if (ret)
+>                         break;
+>
+> --
+> 2.25.1
+>

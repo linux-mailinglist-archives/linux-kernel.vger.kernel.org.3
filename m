@@ -2,210 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0984E52B830
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F9252B82C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235175AbiERKrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
+        id S235252AbiERKtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 06:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235146AbiERKrD (ORCPT
+        with ESMTP id S235238AbiERKtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:47:03 -0400
-Received: from outbound-smtp22.blacknight.com (outbound-smtp22.blacknight.com [81.17.249.190])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F43793B1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:46:56 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
-        by outbound-smtp22.blacknight.com (Postfix) with ESMTPS id 1D73CBAA9D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:46:55 +0100 (IST)
-Received: (qmail 18669 invoked from network); 18 May 2022 10:46:55 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 18 May 2022 10:46:54 -0000
-Date:   Wed, 18 May 2022 11:46:52 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/4] sched/numa: Apply imbalance limitations consistently
-Message-ID: <20220518104652.GO3441@techsingularity.net>
-References: <20220511143038.4620-1-mgorman@techsingularity.net>
- <20220511143038.4620-4-mgorman@techsingularity.net>
- <20220518093156.GD10117@worktop.programming.kicks-ass.net>
+        Wed, 18 May 2022 06:49:11 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D6095A36
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:49:10 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id q130so2028322ljb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=THEFsdSxydD0vt+onRmNubTxehHSNNOEbCpKvaGHi2w=;
+        b=52dZFMDohGaff05/XhlRhzygsS0/or6wRli7ktIUzoe6PNy7W5T/FFKjLmsGxr2hqw
+         xtEB2H7YeCYhUPR20L7wzpIAQ6LUtYIUS9uGz7NQMW3eapjtEl6V7NIJKfBrfwBZCdD/
+         glrCu7koVJMqe96czllFD8/KaQI8QpeI5vdK4vnWX8d70Kyx0H2HrkK8vEifOXu7SgRh
+         IivMpoIvGSrdhmy+wpQtYH4y2khVcI6yClZzUKGglLNYYXiM4QD08j2PDqCI3u83cjCY
+         65pTFkRcD/74/NUK8ftRDrkRwnM61JObdkkPWAfHPvPk9H4RsT0fv+myc2hXatEkBvIh
+         lLew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=THEFsdSxydD0vt+onRmNubTxehHSNNOEbCpKvaGHi2w=;
+        b=6IWjqYp4GYAu3s89K1YWogmgBMe1RToKMfYrri54jszPxeTRA7RapZU60XC62/Q6bA
+         vQrR50pGnas3vtcGer93mXCQMMtE1UDDJUd+2AiTET3nUcG5ChkM6NGymh2WfNYa2fUn
+         TxPOmNDEH7cFBKYaXE8NeDt9IWTmAcP8v1uViXt19oQgmXLXxOOiRvFd0pQMhwLpY86a
+         9OHhGtd7bz/wLdrxv7kJdqxzWokOEZxeernDmKw+RgsvCCdeyYl2+JV614evx7HKgZa5
+         X7REMTEcrni+oeYxjQNHq/A0JKk/x18N86EB69vqjwGZhVZnYwY5BRHc6fmHl2320x7s
+         NvAw==
+X-Gm-Message-State: AOAM530YTnuiE5+Cm2WwBpMfwsd3pPKiCq2+jI40X7M/pnIcPvkhfZ59
+        gvzJ3+D7KeG7LJPuieCZnzU5Pg==
+X-Google-Smtp-Source: ABdhPJxV+i/RpLYpfwa3suBX2wn1svrIhOGj77DoePZz6SYcFTUqqOZ6BNOELpNKbuelmsT8SmvZYw==
+X-Received: by 2002:a2e:a23b:0:b0:24f:b6f:6fe7 with SMTP id i27-20020a2ea23b000000b0024f0b6f6fe7mr16743076ljm.67.1652870949255;
+        Wed, 18 May 2022 03:49:09 -0700 (PDT)
+Received: from [192.168.43.196] ([185.174.128.243])
+        by smtp.gmail.com with ESMTPSA id 1-20020ac25681000000b0047255d211b4sm169881lfr.227.2022.05.18.03.49.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 03:49:08 -0700 (PDT)
+Message-ID: <86e82d40-0952-e76f-aac5-53abe48ec770@openvz.org>
+Date:   Wed, 18 May 2022 13:49:07 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20220518093156.GD10117@worktop.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH v2] sparse: fix incorrect fmode_t casts
+To:     Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Matthew Bobrowski <repnop@google.com>,
+        linux-fsdevel@vger.kernel.org
+References: <YoNDA0SOFjyoFlJS@infradead.org>
+Content-Language: en-US
+In-Reply-To: <YoNDA0SOFjyoFlJS@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 11:31:56AM +0200, Peter Zijlstra wrote:
-> On Wed, May 11, 2022 at 03:30:37PM +0100, Mel Gorman wrote:
-> 
-> > @@ -9108,6 +9108,24 @@ static inline bool allow_numa_imbalance(int running, int imb_numa_nr)
-> >  	return running <= imb_numa_nr;
-> >  }
-> >  
-> > +#define NUMA_IMBALANCE_MIN 2
-> > +
-> > +static inline long adjust_numa_imbalance(int imbalance,
-> > +				int dst_running, int imb_numa_nr)
-> > +{
-> > +	if (!allow_numa_imbalance(dst_running, imb_numa_nr))
-> > +		return imbalance;
-> > +
-> > +	/*
-> > +	 * Allow a small imbalance based on a simple pair of communicating
-> > +	 * tasks that remain local when the destination is lightly loaded.
-> > +	 */
-> > +	if (imbalance <= NUMA_IMBALANCE_MIN)
-> > +		return 0;
-> > +
-> > +	return imbalance;
-> > +}
-> 
-> > @@ -9334,24 +9356,6 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
-> >  	}
-> >  }
-> >  
-> > -#define NUMA_IMBALANCE_MIN 2
-> > -
-> > -static inline long adjust_numa_imbalance(int imbalance,
-> > -				int dst_running, int imb_numa_nr)
-> > -{
-> > -	if (!allow_numa_imbalance(dst_running, imb_numa_nr))
-> > -		return imbalance;
-> > -
-> > -	/*
-> > -	 * Allow a small imbalance based on a simple pair of communicating
-> > -	 * tasks that remain local when the destination is lightly loaded.
-> > -	 */
-> > -	if (imbalance <= NUMA_IMBALANCE_MIN)
-> > -		return 0;
-> > -
-> > -	return imbalance;
-> > -}
-> 
-> If we're going to move that one up and remove the only other caller of
-> allow_numa_imbalance() we might as well move it up further still and
-> fold the functions.
-> 
-> Hmm?
-> 
+Fixes sparce warnings:
+fs/notify/fanotify/fanotify_user.c:267:63: sparse:
+ warning: restricted fmode_t degrades to integer
+fs/notify/fanotify/fanotify_user.c:1351:28: sparse:
+ warning: restricted fmode_t degrades to integer
+fs/proc/base.c:2240:25: sparse: warning: cast to restricted fmode_t
+fs/proc/base.c:2297:42: sparse: warning: cast from restricted fmode_t
+fs/proc/base.c:2394:48: sparse: warning: cast from restricted fmode_t
+fs/open.c:1024:21: sparse: warning: restricted fmode_t degrades to integer
 
-Yes, that would be fine and makes sense. I remember thinking that they
-should be folded and then failed to follow through.
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+v2:
+ 1) use __FMODE_NONOTIFY instead of FMODE_NONOTIFY
+ 2) introduced fmode_instantiate_de/encode helpers
+      thanks Christoph Hellwig for the hints
+---
+ fs/notify/fanotify/fanotify_user.c |  4 ++--
+ fs/open.c                          |  2 +-
+ fs/proc/base.c                     | 21 ++++++++++++++++-----
+ 3 files changed, 19 insertions(+), 8 deletions(-)
 
-> (Although I do wonder about that 25% figure in the comment; that doesn't
-> seem to relate to any actual code anymore)
-> 
-
-You're right, by the end of the series it's completely inaccurate and
-currently it's not accurate if there are multiple LLCs per node. I
-adjusted the wording to "Allow a NUMA imbalance if busy CPUs is less
-than the maximum threshold. Above this threshold, individual tasks may
-be contending for both memory bandwidth and any shared HT resources."
-
-Diff between v1 and v2 is now below
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 602c05b22805..51fde61ec756 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1536,8 +1536,31 @@ struct task_numa_env {
+diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+index 9b32b76a9c30..2bec3b612618 100644
+--- a/fs/notify/fanotify/fanotify_user.c
++++ b/fs/notify/fanotify/fanotify_user.c
+@@ -264,7 +264,7 @@ static int create_fd(struct fsnotify_group *group, struct path *path,
+ 	 * originally opened O_WRONLY.
+ 	 */
+ 	new_file = dentry_open(path,
+-			       group->fanotify_data.f_flags | FMODE_NONOTIFY,
++			       group->fanotify_data.f_flags | __FMODE_NONOTIFY,
+ 			       current_cred());
+ 	if (IS_ERR(new_file)) {
+ 		/*
+@@ -1348,7 +1348,7 @@ SYSCALL_DEFINE2(fanotify_init, unsigned int, flags, unsigned int, event_f_flags)
+ 	    (!(fid_mode & FAN_REPORT_NAME) || !(fid_mode & FAN_REPORT_FID)))
+ 		return -EINVAL;
  
- static unsigned long cpu_load(struct rq *rq);
- static unsigned long cpu_runnable(struct rq *rq);
--static inline long adjust_numa_imbalance(int imbalance,
--					int dst_running, int imb_numa_nr);
-+
-+#define NUMA_IMBALANCE_MIN 2
-+
-+static inline long
-+adjust_numa_imbalance(int imbalance, int dst_running, int imb_numa_nr)
+-	f_flags = O_RDWR | FMODE_NONOTIFY;
++	f_flags = O_RDWR | __FMODE_NONOTIFY;
+ 	if (flags & FAN_CLOEXEC)
+ 		f_flags |= O_CLOEXEC;
+ 	if (flags & FAN_NONBLOCK)
+diff --git a/fs/open.c b/fs/open.c
+index 1315253e0247..386c52e4c3b1 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1021,7 +1021,7 @@ inline struct open_how build_open_how(int flags, umode_t mode)
+ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
+ {
+ 	u64 flags = how->flags;
+-	u64 strip = FMODE_NONOTIFY | O_CLOEXEC;
++	u64 strip = __FMODE_NONOTIFY | O_CLOEXEC;
+ 	int lookup_flags = 0;
+ 	int acc_mode = ACC_MODE(flags);
+ 
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index c1031843cc6a..b8ed41eb5784 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -2233,11 +2233,21 @@ static const struct inode_operations proc_map_files_link_inode_operations = {
+ 	.setattr	= proc_setattr,
+ };
+ 
++static fmode_t fmode_instantiate_decode(const void *ptr)
 +{
-+	/*
-+	 * Allow a NUMA imbalance if busy CPUs is less than the maximum
-+	 * threshold. Above this threshold, individual tasks may be contending
-+	 * for both memory bandwidth and any shared HT resources.  This is an
-+	 * approximation as the number of running tasks may not be related to
-+	 * the number of busy CPUs due to sched_setaffinity.
-+	 */
-+	if (dst_running > imb_numa_nr)
-+		return imbalance;
-+
-+	/*
-+	 * Allow a small imbalance based on a simple pair of communicating
-+	 * tasks that remain local when the destination is lightly loaded.
-+	 */
-+	if (imbalance <= NUMA_IMBALANCE_MIN)
-+		return 0;
-+
-+	return imbalance;
++	return (__force fmode_t)(unsigned long)ptr;
 +}
++
++static void *fmode_instantiate_encode(fmode_t fmode)
++{
++	return (void *)(__force unsigned long)fmode;
++}
++
+ static struct dentry *
+ proc_map_files_instantiate(struct dentry *dentry,
+ 			   struct task_struct *task, const void *ptr)
+ {
+-	fmode_t mode = (fmode_t)(unsigned long)ptr;
++	fmode_t mode = fmode_instantiate_decode(ptr);
+ 	struct proc_inode *ei;
+ 	struct inode *inode;
  
- static inline enum
- numa_type numa_classify(unsigned int imbalance_pct,
-@@ -9098,34 +9121,6 @@ static bool update_pick_idlest(struct sched_group *idlest,
- 	return true;
- }
+@@ -2292,10 +2302,11 @@ static struct dentry *proc_map_files_lookup(struct inode *dir,
+ 	if (!vma)
+ 		goto out_no_vma;
  
--/*
-- * Allow a NUMA imbalance if busy CPUs is less than 25% of the domain.
-- * This is an approximation as the number of running tasks may not be
-- * related to the number of busy CPUs due to sched_setaffinity.
-- */
--static inline bool allow_numa_imbalance(int running, int imb_numa_nr)
--{
--	return running <= imb_numa_nr;
--}
--
--#define NUMA_IMBALANCE_MIN 2
--
--static inline long adjust_numa_imbalance(int imbalance,
--				int dst_running, int imb_numa_nr)
--{
--	if (!allow_numa_imbalance(dst_running, imb_numa_nr))
--		return imbalance;
--
--	/*
--	 * Allow a small imbalance based on a simple pair of communicating
--	 * tasks that remain local when the destination is lightly loaded.
--	 */
--	if (imbalance <= NUMA_IMBALANCE_MIN)
--		return 0;
--
--	return imbalance;
--}
--
- /*
-  * find_idlest_group() finds and returns the least busy CPU group within the
-  * domain.
-@@ -9448,14 +9443,15 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
- 			 * idle cpus.
- 			 */
- 			env->migration_type = migrate_task;
--			env->imbalance = max_t(long, 0, (local->idle_cpus -
--						 busiest->idle_cpus));
-+			env->imbalance = max_t(long, 0,
-+					       (local->idle_cpus - busiest->idle_cpus));
- 		}
+-	if (vma->vm_file)
+-		result = proc_map_files_instantiate(dentry, task,
+-				(void *)(unsigned long)vma->vm_file->f_mode);
++	if (vma->vm_file) {
++		void *ptr = fmode_instantiate_encode(vma->vm_file->f_mode);
  
- 		/* Consider allowing a small imbalance between NUMA groups */
- 		if (env->sd->flags & SD_NUMA) {
- 			env->imbalance = adjust_numa_imbalance(env->imbalance,
--				local->sum_nr_running + 1, env->sd->imb_numa_nr);
-+							       local->sum_nr_running + 1,
-+							       env->sd->imb_numa_nr);
- 		}
- 
- 		/* Number of tasks to move to restore balance */
++		result = proc_map_files_instantiate(dentry, task, ptr);
++	}
+ out_no_vma:
+ 	mmap_read_unlock(mm);
+ out_put_mm:
+@@ -2391,7 +2402,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
+ 				      buf, len,
+ 				      proc_map_files_instantiate,
+ 				      task,
+-				      (void *)(unsigned long)p->mode))
++				      (void *)(__force unsigned long)p->mode))
+ 			break;
+ 		ctx->pos++;
+ 	}
+-- 
+2.31.1
+

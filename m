@@ -2,138 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC35D52B2D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AB552B334
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbiERHKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
+        id S231993AbiERHSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiERHKG (ORCPT
+        with ESMTP id S231947AbiERHR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:10:06 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F50E64FA
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:10:05 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id t6so1300447wra.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=ZCNKI5woerPUrmPCB0wU/T9brPPBMRmt8DMnLhy8VFA=;
-        b=3ZiEMpESJJSEUhffXP/IpwU9L2ho0mVvu018crv9SbiP4Y91EhmpwbxBkut6kmW1uv
-         bSEKpuWdEwxM4fOwpWwLa+ybzQ6DPAj15+PJQtxz1og9wv16KN7EX41jzdDipCfRiAfE
-         m97bekTjXB9iaz45+9UF8ZyqSm3JWC1Gnoz2RY9fb1AlsbWUtLXVsrrbV93IpKJlleVb
-         f18fBUCx5xabxRATX6cxrdH0wMsUzwTgi6gS9Rp+poGVHR4ba/RPti6wCFBtgJRdMQDC
-         3yjk4jRLsWEewxBy/ZCKewsTZ7kzOLG6TVMXyjkBHA0LY9YwDI5igpSRV4tILoOJ258e
-         p+PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=ZCNKI5woerPUrmPCB0wU/T9brPPBMRmt8DMnLhy8VFA=;
-        b=FqRuLZMIT8G/kesYtbm/x7WlFzA84V6UDM97+NlhJ/XTrPOkI1VWDdpS4xDbGmXuhP
-         bKlt99y599RtnOOHXg79Omotre55MaeYMSFnpiZ1pVUL4q0PjA+bBkx7zD36AbEztXZi
-         Fkfke7r3zpmkz+fzn+BZgGajpAANBeOQIID9lJOJDy+RljFtjsMyyYv0/Fx71ezEfzv3
-         4VEs9lMi2vhBvSHIRYkBaI5UDAaWbxzSY8Cyjo5pSkNmFOPXn7flYsNoGAlCr5TQjaZh
-         Djs/V2+txyH4yEMcY4ERHP4uBbnAGDuhVf+0YMquC95MOKiApb9hWKGN0L8LSvPH9FX+
-         4tPA==
-X-Gm-Message-State: AOAM531EQE+yQ0foZO5aKZ+pYeHpNx6PNwAUv6OkdhdcwOdITS9IBAgt
-        OZGRQz2oNe/MnzQmaFHg/m35AhN3uHKj3KEQ
-X-Google-Smtp-Source: ABdhPJyOF3VINKLZf/L/OcxPy0tS8BWcAs3AlYPYrG5qnl7HqufB62jEn9h9Q2demM7n5Qsnkh6J/w==
-X-Received: by 2002:a5d:584b:0:b0:20c:6317:1f77 with SMTP id i11-20020a5d584b000000b0020c63171f77mr21948376wrf.355.1652857803413;
-        Wed, 18 May 2022 00:10:03 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:dea9:338d:d500:c574? ([2001:861:44c0:66c0:dea9:338d:d500:c574])
-        by smtp.gmail.com with ESMTPSA id bg26-20020a05600c3c9a00b003942a244ee0sm962397wmb.37.2022.05.18.00.10.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 00:10:02 -0700 (PDT)
-Message-ID: <bb8e1955-b82f-bb6d-69ce-bd0845aa2ec1@baylibre.com>
-Date:   Wed, 18 May 2022 09:10:01 +0200
+        Wed, 18 May 2022 03:17:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F442F3B2;
+        Wed, 18 May 2022 00:17:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652858277; x=1684394277;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=q+JFlMjJAbHftH3ICVKYgfpJzrW4prf2V94k/9k9eo0=;
+  b=kjNzYqfr+LU8FIUfavgY4mWbwQQhokbimq4fybA0Hvwm7C6IWkcVJmwi
+   u3/6vtRnBwo46Wk/k90QhXJN400mZEshalGLunBkSrId2eNaIP5wNPKY+
+   2phyRNcWLrYXxGJVluw3Qlagz0yEAix5ZosCnHGNw57Pc7AphO2eQTrj0
+   QSLiFIrqy5dVuX4GUk/Wm1977UGS5B37XA0W0Xuk86BRXwap+xhgOlQvE
+   WenBWMTkMP1kXdnlj9Bc4rVu9whyGylIAoGuACGK7yRaX7g17XWj6kOye
+   D5S/aDiw9Ex1w7zvsQxk98T8vby20YunTIA+gMZyEKqcD7nJzSmafGeYI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="252042965"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="252042965"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:17:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="545297940"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga006.jf.intel.com with ESMTP; 18 May 2022 00:17:43 -0700
+Date:   Wed, 18 May 2022 15:10:10 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Russ Weight <russell.h.weight@intel.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, lee.jones@linaro.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
+Subject: Re: [PATCH v20 3/5] fpga: m10bmc-sec: expose max10 flash update count
+Message-ID: <20220518071010.GA55267@yilunxu-OptiPlex-7050>
+References: <20220516234941.592886-1-russell.h.weight@intel.com>
+ <20220516234941.592886-4-russell.h.weight@intel.com>
+ <20220517041310.GA40711@yilunxu-OptiPlex-7050>
+ <8fb5dea0-9ce6-a17c-1253-64a43c86c82c@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] drm/meson: add YUV422 output support
-Content-Language: en-US
-To:     Christian Hewitt <christianshewitt@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Dongjin Kim <tobetter@gmail.com>,
-        Furkan Kardame <f.kardame@manjaro.org>
-References: <20220516072245.10745-1-christianshewitt@gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220516072245.10745-1-christianshewitt@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8fb5dea0-9ce6-a17c-1253-64a43c86c82c@intel.com>
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/05/2022 09:22, Christian Hewitt wrote:
-> From: Dongjin Kim <tobetter@gmail.com>
+On Tue, May 17, 2022 at 09:16:50AM -0700, Russ Weight wrote:
 > 
-> Support YUV422 output from the Amlogic Meson SoC VPU to the HDMI
-> controller. Without this YUV422 format out of the HDMI encoder
-> leads to using the dw-hdmi YUV444 to YUV422 color conversion which
-> gives wrong colors and a green line on the left edge of the screen.
 > 
-> Signed-off-by: Dongjin Kim <tobetter@gmail.com>
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-> Tested-by: Furkan Kardame <f.kardame@manjaro.org>
-> ---
-> I've had this patch in my sources for some time now; originally picked
-> from Dongjin's mainline branches for Hardkernel boards and tweaked for
-> some minor renaming after DRM bridge changes were merged. Furkhan has
-> reminded me this is still needed a couple of days ago and now the same
-> issue is reported on the mailing list [0] so best to submit it. If a
-> fixes tag is required? please advise the commit and i'll resend.
+> On 5/16/22 21:13, Xu Yilun wrote:
+> > On Mon, May 16, 2022 at 04:49:39PM -0700, Russ Weight wrote:
+> >> Extend the MAX10 BMC Secure Update driver to provide a sysfs file to
+> >> expose the flash update count.
+> >>
+> >> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> >> Reviewed-by: Tom Rix <trix@redhat.com>
+> >> ---
+> >> v20:
+> >>   - No change
+> >> v19:
+> >>   - Change "card bmc" naming back to "m10 bmc" naming to be consistent
+> >>     with the parent driver.
+> >> v18:
+> >>   - No change
+> >> v17:
+> >>   - Update the Date and KernelVersion for the ABI documentation to Jul 2022
+> >>     and 5.19 respectively.
+> >>   - Change "m10bmc" in symbol names to "cardbmc" to reflect the fact that the
+> >>     future devices will not necessarily use the MAX10.
+> >> v16:
+> >>   - No Change
+> >> v15:
+> >>   - Updated the Dates and KernelVersions in the ABI documentation
+> >> v14:
+> >>   - No change
+> >> v13:
+> >>   - Updated ABI documentation date and kernel version
+> >> v12:
+> >>   - Updated Date and KernelVersion fields in ABI documentation
+> >> v11:
+> >>   - No change
+> >> v10:
+> >>   - Changed the path expression in the sysfs documentation to
+> >>     replace the n3000 reference with something more generic to
+> >>     accomodate other devices that use the same driver.
+> >> v9:
+> >>   - Rebased to 5.12-rc2 next
+> >>   - Updated Date and KernelVersion in ABI documentation
+> >> v8:
+> >>   - Previously patch 3/6, otherwise no change
+> >> v7:
+> >>   - Updated Date and KernelVersion in ABI documentation
+> >> v6:
+> >>   - Changed flash_count_show() parameter list to achieve
+> >>     reverse-christmas tree format.
+> >>   - Added WARN_ON() call for (FLASH_COUNT_SIZE / stride) to ensure
+> >>     that the proper count is passed to regmap_bulk_read().
+> >> v5:
+> >>   - Renamed sysfs node user_flash_count to flash_count and updated the
+> >>     sysfs documentation accordingly.
+> >> v4:
+> >>   - Moved the sysfs file for displaying the flash count from the
+> >>     FPGA Security Manager class driver to here. The
+> >>     m10bmc_user_flash_count() function is removed and the
+> >>     functionality is moved into a user_flash_count_show()
+> >>     function.
+> >>   - Added ABI documentation for the new sysfs entry
+> >> v3:
+> >>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
+> >>   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
+> >>     driver"
+> >>   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
+> >>     underlying functions are now called directly.
+> >> v2:
+> >>   - Renamed get_qspi_flash_count() to m10bmc_user_flash_count()
+> >>   - Minor code cleanup per review comments
+> >>   - Added m10bmc_ prefix to functions in m10bmc_iops structure
+> >> ---
+> >>  .../sysfs-driver-intel-m10-bmc-sec-update     |  8 +++++
+> >>  drivers/fpga/intel-m10-bmc-sec-update.c       | 36 +++++++++++++++++++
+> >>  2 files changed, 44 insertions(+)
+> >>
+> >> diff --git a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+> >> index 2bb271695e14..1132e39b2125 100644
+> >> --- a/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+> >> +++ b/Documentation/ABI/testing/sysfs-driver-intel-m10-bmc-sec-update
+> >> @@ -27,3 +27,11 @@ Description:	Read only. Returns the root entry hash for the BMC image
+> >>  		"hash not programmed".  This file is only visible if the
+> >>  		underlying device supports it.
+> >>  		Format: string.
+> >> +
+> >> +What:		/sys/bus/platform/drivers/intel-m10bmc-sec-update/.../security/flash_count
+> >> +Date:		Jul 2022
+> >> +KernelVersion:	5.19
+> >> +Contact:	Russ Weight <russell.h.weight@intel.com>
+> >> +Description:	Read only. Returns number of times the secure update
+> >> +		staging area has been flashed.
+> >> +		Format: "%u".
+> >> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> >> index f9f39d2cfe5b..3f183202de3b 100644
+> >> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> >> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> >> @@ -78,7 +78,43 @@ DEVICE_ATTR_SEC_REH_RO(bmc, BMC_PROG_MAGIC, BMC_PROG_ADDR, BMC_REH_ADDR);
+> >>  DEVICE_ATTR_SEC_REH_RO(sr, SR_PROG_MAGIC, SR_PROG_ADDR, SR_REH_ADDR);
+> >>  DEVICE_ATTR_SEC_REH_RO(pr, PR_PROG_MAGIC, PR_PROG_ADDR, PR_REH_ADDR);
+> >>  
+> >> +#define FLASH_COUNT_SIZE 4096	/* count stored as inverted bit vector */
+> >> +
+> >> +static ssize_t flash_count_show(struct device *dev,
+> >> +				struct device_attribute *attr, char *buf)
+> >> +{
+> >> +	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> >> +	unsigned int stride, num_bits;
+> >> +	u8 *flash_buf;
+> >> +	int cnt, ret;
+> >> +
+> >> +	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> >> +	num_bits = FLASH_COUNT_SIZE * 8;
+> >> +
+> >> +	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
+> >> +	if (!flash_buf)
+> >> +		return -ENOMEM;
+> >> +
+> >> +	WARN_ON(FLASH_COUNT_SIZE % stride);
+> > The same concern here. Stop users from getting the broken value.
 > 
->   drivers/gpu/drm/meson/meson_encoder_hdmi.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
+> Sure - I will change this.
 > 
-> diff --git a/drivers/gpu/drm/meson/meson_encoder_hdmi.c b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-> index 5e306de6f485..08529efb4405 100644
-> --- a/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-> +++ b/drivers/gpu/drm/meson/meson_encoder_hdmi.c
-> @@ -218,7 +218,8 @@ static void meson_encoder_hdmi_atomic_enable(struct drm_bridge *bridge,
->   	if (encoder_hdmi->output_bus_fmt == MEDIA_BUS_FMT_UYYVYY8_0_5X24) {
->   		ycrcb_map = VPU_HDMI_OUTPUT_CRYCB;
->   		yuv420_mode = true;
-> -	}
-> +	} else if (encoder_hdmi->output_bus_fmt == MEDIA_BUS_FMT_UYVY8_1X16)
-> +		ycrcb_map = VPU_HDMI_OUTPUT_CRYCB;
->   
->   	/* VENC + VENC-DVI Mode setup */
->   	meson_venc_hdmi_mode_set(priv, vic, ycrcb_map, yuv420_mode, mode);
-> @@ -230,6 +231,10 @@ static void meson_encoder_hdmi_atomic_enable(struct drm_bridge *bridge,
->   		/* Setup YUV420 to HDMI-TX, no 10bit diphering */
->   		writel_relaxed(2 | (2 << 2),
->   			       priv->io_base + _REG(VPU_HDMI_FMT_CTRL));
-> +	else if (encoder_hdmi->output_bus_fmt == MEDIA_BUS_FMT_UYVY8_1X16)
-> +		/* Setup YUV422 to HDMI-TX, no 10bit diphering */
-> +		writel_relaxed(1 | (2 << 2),
-> +				priv->io_base + _REG(VPU_HDMI_FMT_CTRL));
->   	else
->   		/* Setup YUV444 to HDMI-TX, no 10bit diphering */
->   		writel_relaxed(0, priv->io_base + _REG(VPU_HDMI_FMT_CTRL));
-> @@ -257,6 +262,7 @@ static void meson_encoder_hdmi_atomic_disable(struct drm_bridge *bridge,
->   
->   static const u32 meson_encoder_hdmi_out_bus_fmts[] = {
->   	MEDIA_BUS_FMT_YUV8_1X24,
-> +	MEDIA_BUS_FMT_UYVY8_1X16,
->   	MEDIA_BUS_FMT_UYYVYY8_0_5X24,
->   };
->   
+> I was using WARN_ON() because it indicates a problem in the device or
+> the driver itself. It is not really validating information from userspace.
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Understood. So it is OK we keep the WARN_ON, or WARN_ON_ONCE？But we
+should still have some code to handle the issue gracefully rather
+than just passing the broken value to user.
+
+Thanks
+Yilun
+
+> 
+> As I understand it, WARN_ON() is used to log such events to the kernel
+> log. If this isn't an appropriate use of WARN_ON(), then when should I
+> consider using it?
+> 
+> Thanks,
+> - Russ
+> >
+> >> +	ret = regmap_bulk_read(sec->m10bmc->regmap, STAGING_FLASH_COUNT,
+> >> +			       flash_buf, FLASH_COUNT_SIZE / stride);
+> >> +	if (ret) {
+> >> +		dev_err(sec->dev,
+> >> +			"failed to read flash count: %x cnt %x: %d\n",
+> >> +			STAGING_FLASH_COUNT, FLASH_COUNT_SIZE / stride, ret);
+> >> +		goto exit_free;
+> >> +	}
+> >> +	cnt = num_bits - bitmap_weight((unsigned long *)flash_buf, num_bits);
+> >> +
+> >> +exit_free:
+> >> +	kfree(flash_buf);
+> >> +
+> >> +	return ret ? : sysfs_emit(buf, "%u\n", cnt);
+> >> +}
+> >> +static DEVICE_ATTR_RO(flash_count);
+> >> +
+> >>  static struct attribute *m10bmc_security_attrs[] = {
+> >> +	&dev_attr_flash_count.attr,
+> >>  	&dev_attr_bmc_root_entry_hash.attr,
+> >>  	&dev_attr_sr_root_entry_hash.attr,
+> >>  	&dev_attr_pr_root_entry_hash.attr,
+> >> -- 
+> >> 2.25.1

@@ -2,216 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF5752B2AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D0152B29C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbiERGiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S231476AbiERGnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiERGiS (ORCPT
+        with ESMTP id S231428AbiERGng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:38:18 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124ECA196;
-        Tue, 17 May 2022 23:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652855897; x=1684391897;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SccqK8pQ+krYGgs0A+kpUPRwXH/oMFCZKToaB5yNYLI=;
-  b=X/A8bvYUSgijymIEAXm5yeA8/A0jXHZRQfzXy/Uq4C9TSpgMwQd7HZY8
-   SbLeiMQPHdsrHkbTyQAGESGn3VSB9nroAcQCqbf/J3gbHU0y7TsFgIZOY
-   bjeUXhwdhVB8aUFFKUoSEOdGB/OW9+TzOO8SnImjl5xxdLnikvtGk9UqK
-   8CR98KY04N1h1Ac/bU+689o9dVQwn3HVy8KdQPVReFJy68vfmZAQ3uIu4
-   8exWgzFBaeqWafd2D1aP/PsuUNbsSX621VzfLTNHuImTu5ceWVXlPitYv
-   y6d4BBwr3N/NRPABu7cF1jGyk7qAEd6S4e9Ed8uF+d56ZjPm1wIaXvSw/
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="332125885"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="332125885"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 23:38:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="545281761"
-Received: from storage2.sh.intel.com (HELO localhost) ([10.67.110.197])
-  by orsmga006.jf.intel.com with ESMTP; 17 May 2022 23:38:11 -0700
-Date:   Wed, 18 May 2022 02:38:08 -0400
-From:   Liu Xiaodong <xiaodong.liu@intel.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Liu Xiaodong <xiaodong.liu@intel.com>
-Subject: Re: [PATCH V2 0/1] ubd: add io_uring based userspace block driver
-Message-ID: <20220518063808.GA168577@storage2.sh.intel.com>
-References: <20220517055358.3164431-1-ming.lei@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517055358.3164431-1-ming.lei@redhat.com>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 May 2022 02:43:36 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3AF151DA68
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:43:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=QqUT63+lVdVPLayOPSpvAYh9oQVOVeBSUyqI0pU89dU=; b=s
+        CjLQmnAVjtEEiXx8ljxJpqLF7jay2G0sp/WBT8qiaJNj4DlB6jlbNZIgSxFlzOt7
+        wSfTMs8TYV2IoP4CYa9aQo67usrzsQZmBQpar7ekU5EoWvUsF+VV1LFyFbSUGjwW
+        9QYnByNB76G2VzIXVhhUaR6ua5BbJ753cu54DjVVhU=
+Received: from localhost (unknown [10.129.21.144])
+        by front01 (Coremail) with SMTP id 5oFpogDHzaV5lYRiupBaBw--.38611S2;
+        Wed, 18 May 2022 14:43:05 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, jic23@kernel.org,
+        lars@metafoo.de
+Cc:     linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, fuyq@stu.pku.edu.cn,
+        Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] iio: vadc: Fix potential dereference of NULL pointer
+Date:   Tue, 17 May 2022 23:43:00 -0700
+Message-Id: <1652856180-100582-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 5oFpogDHzaV5lYRiupBaBw--.38611S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtr43ZF1xurWrZrW3AF47Arb_yoWfWrbEk3
+        Wvqw1xXasakrWUCr4jkr4xWr98KFyUWrn5Xw1jvas3KasxJFs3AasFyr4Iyr47Aa1kZ3WD
+        Grs8G3sYkFWakjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK
+        82IY6x8ErcxFaVAv8VWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
+        UU=
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEJBlPy7vIULQAHsO
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 01:53:57PM +0800, Ming Lei wrote:
-> Hello Guys,
-> 
-> ubd driver is one kernel driver for implementing generic userspace block
-> device/driver, which delivers io request from ubd block device(/dev/ubdbN) into
-> ubd server[1] which is the userspace part of ubd for communicating
-> with ubd driver and handling specific io logic by its target module.
-> 
-> Another thing ubd driver handles is to copy data between user space buffer
-> and request/bio's pages, or take zero copy if mm is ready for support it in
-> future. ubd driver doesn't handle any IO logic of the specific driver, so
-> it is small/simple, and all io logics are done by the target code in ubdserver.
-> 
-> The above two are main jobs done by ubd driver.
+The return value of vadc_get_channel() needs to be checked
+to avoid use of NULL pointer, which is followed by
+the caller 'vadc_do_conversion' of function 'vadc_configure'.
+Fix this by adding the null pointer check on prop
+in function 'vadc_configure'.
 
-Hi, Lei
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/iio/adc/qcom-spmi-vadc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Your UBD implementation looks great. Its io_uring based design is interesting
-and brilliant.
-Towards the purpose of userspace block device, last year,
-VDUSE initialized by Yongji is going to do a similar work. But VDUSE is under
-vdpa. VDUSE will present a virtio-blk device to other userspace process
-like containers, while serving virtio-blk req also by an userspace target.
-https://lists.linuxfoundation.org/pipermail/iommu/2021-June/056956.html 
+diff --git a/drivers/iio/adc/qcom-spmi-vadc.c b/drivers/iio/adc/qcom-spmi-vadc.c
+index 34202ba..d99bd72 100644
+--- a/drivers/iio/adc/qcom-spmi-vadc.c
++++ b/drivers/iio/adc/qcom-spmi-vadc.c
+@@ -210,6 +210,9 @@ static int vadc_configure(struct vadc_priv *vadc,
+ 	u8 decimation, mode_ctrl;
+ 	int ret;
+ 
++	if (!prop)
++		return -ENODEV;
++
+ 	/* Mode selection */
+ 	mode_ctrl = (VADC_OP_MODE_NORMAL << VADC_OP_MODE_SHIFT) |
+ 		     VADC_ADC_TRIM_EN | VADC_AMUX_TRIM_EN;
+-- 
+2.7.4
 
-I've been working and thinking on serving RUNC container by SPDK efficiently.
-But this work requires a new proper userspace block device module in kernel.
-The highlevel design idea for userspace block device implementations
-should be that: Using ring for IO request, so client and target can exchange
-req/resp quickly in batch; Map bounce buffer between kernel and userspace
-target, so another extra IO data copy like NBD can be avoid. (Oh, yes, SPDK
-needs this kernel module has some more minor functions)
-
-UBD and VDUSE are both implemented in this way, while of course each of
-them has specific features and advantages.
-
-Not like UBD which is straightforward and starts from scratch, VDUSE is
-embedded in virtio framework. So its implementation is more complicated, but
-all virtio frontend utilities can be leveraged.
-When considering security/permission issues, feels UBD would be easier to
-solve them.
-
-So my questions are:
-1. what do you think about the purpose overlap between UBD and VDUSE?
-2. Could UBD be implemented with SPDK friendly functionalities? (mainly about
-io data mapping, since HW devices in SPDK need to access the mapped data
-buffer. Then, in function ubdsrv.c/ubdsrv_init_io_bufs(),
-"addr = mmap(,,,,dev->cdev_fd,)", SPDK needs to know the PA of "addr".
-Also memory pointed by "addr" should be pinned all the time.)
-
-Thanks
-Xiaodong
-
-> 
-> ubd driver can help to move IO logic into userspace, in which the
-> development work is easier/more effective than doing in kernel, such as,
-> ubd-loop takes < 200 lines of loop specific code to get basically same 
-> function with kernel loop block driver, meantime the performance is
-> still good. ubdsrv[1] provide built-in test for comparing both by running
-> "make test T=loop".
-> 
-> Another example is high performance qcow2 support[2], which could be built with
-> ubd framework more easily than doing it inside kernel.
-> 
-> Also there are more people who express interests on userspace block driver[3],
-> Gabriel Krisman Bertazi proposes this topic in lsf/mm/ebpf 2022 and mentioned
-> requirement from Google. Ziyang Zhang from Alibaba said they "plan to
-> replace TCMU by UBD as a new choice" because UBD can get better throughput than
-> TCMU even with single queue[4], meantime UBD is simple. Also there is userspace
-> storage service for providing storage to containers.
-> 
-> It is io_uring based: io request is delivered to userspace via new added
-> io_uring command which has been proved as very efficient for making nvme
-> passthrough IO to get better IOPS than io_uring(READ/WRITE). Meantime one
-> shared/mmap buffer is used for sharing io descriptor to userspace, the
-> buffer is readonly for userspace, each IO just takes 24bytes so far.
-> It is suggested to use io_uring in userspace(target part of ubd server)
-> to handle IO request too. And it is still easy for ubdserver to support
-> io handling by non-io_uring, and this work isn't done yet, but can be
-> supported easily with help o eventfd.
-> 
-> This way is efficient since no extra io command copy is required, no sleep
-> is needed in transferring io command to userspace. Meantime the communication
-> protocol is simple and efficient, one single command of
-> UBD_IO_COMMIT_AND_FETCH_REQ can handle both fetching io request desc and commit
-> command result in one trip. IO handling is often batched after single
-> io_uring_enter() returns, both IO requests from ubd server target and
-> IO commands could be handled as a whole batch.
-> 
-> Remove RFC now because ubd driver codes gets lots of cleanup, enhancement and
-> bug fixes since V1:
-> 
-> - cleanup uapi: remove ubd specific error code,  switch to linux error code,
-> remove one command op, remove one field from cmd_desc
-> 
-> - add monitor mechanism to handle ubq_daemon being killed, ubdsrv[1]
->   includes builtin tests for covering heavy IO with deleting ubd / killing
->   ubq_daemon at the same time, and V2 pass all the two tests(make test T=generic),
->   and the abort/stop mechanism is simple
-> 
-> - fix MQ command buffer mmap bug, and now 'xfstetests -g auto' works well on
->   MQ ubd-loop devices(test/scratch)
-> 
-> - improve batching submission as suggested by Jens
-> 
-> - improve handling for starting device, replace random wait/poll with
-> completion
-> 
-> - all kinds of cleanup, bug fix,..
-> 
-> And the patch by patch change since V1 can be found in the following
-> tree:
-> 
-> https://github.com/ming1/linux/commits/my_for-5.18-ubd-devel_v2
-> 
-> Todo:
-> 	- add lazy user page release for avoiding cost of pinning user pages in
-> 	ubd_copy_pages() most of time, so we can save CPU for handling io logic
-> 	in userpsace
-> 
-> 
-> [1] ubd server
-> https://github.com/ming1/ubdsrv/commits/devel-v2
-> 
-> [2] qcow2 kernel driver attempt
-> https://www.spinics.net/lists/kernel/msg4292965.html
-> https://patchwork.kernel.org/project/linux-block/cover/20190823225619.15530-1-development@manuel-bentele.de/#22841183
-> 
-> [3] [LSF/MM/BPF TOPIC] block drivers in user space
-> https://lore.kernel.org/linux-block/87tucsf0sr.fsf@collabora.com/
-> 
-> [4] Follow up on UBD discussion
-> https://lore.kernel.org/linux-block/YnsW+utCrosF0lvm@T590/#r
-> 
-> Ming Lei (1):
->   ubd: add io_uring based userspace block driver
-> 
->  drivers/block/Kconfig        |    6 +
->  drivers/block/Makefile       |    2 +
->  drivers/block/ubd_drv.c      | 1444 ++++++++++++++++++++++++++++++++++
->  include/uapi/linux/ubd_cmd.h |  158 ++++
->  4 files changed, 1610 insertions(+)
->  create mode 100644 drivers/block/ubd_drv.c
->  create mode 100644 include/uapi/linux/ubd_cmd.h
-> 
-> -- 
-> 2.31.1

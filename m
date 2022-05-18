@@ -2,52 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50AE952B874
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F88D52B877
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbiERLTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
+        id S235549AbiERLUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235512AbiERLTT (ORCPT
+        with ESMTP id S235544AbiERLT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:19:19 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD201737E9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 04:19:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L39VN1yvhz4xVP;
-        Wed, 18 May 2022 21:19:08 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1652872748;
-        bh=INuX9O1IpEtUTzC6kCGyh8Jm7VeQJzuBU2ZaIDDAs2k=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=kc6++Pc9tP7sM3sl1kuk5x93XTnxicRThAJ3MYfhJjEWMWVLUZFDyk+OP6WEc7kx4
-         QD6A5s6ZYg6SoMxfgCUqkWqrXocW8WENiso45OYN8wRfMQPubEDIhxE5MRRyKVmnS7
-         +fdUQzjR0U50KVu6Y2HPcvBt3/bGhNyLOdzas6wRM4BwFGTJIfdCU2blUo4SWLOTZu
-         4rcQ1Jv664j0G2aFXMdhBCJET5jTH8UbFYQbbE8ghpSYg1taxZFt9o3Um6H4EDYyLT
-         DclLaYMy9K08TAMbIM+lFMqzYnFSLGx5Hc8YzEH7fhGmJbCXzrRjKZm7gItKDun6Of
-         ZOZ8HWVbNX+dQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 19/25] powerpc/ftrace: Minimise number of #ifdefs
-In-Reply-To: <1652866821.cdcfe8bs78.naveen@linux.ibm.com>
-References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
- <18ce6708d6f8c71d87436f9c6019f04df4125128.1652074503.git.christophe.leroy@csgroup.eu>
- <1652866821.cdcfe8bs78.naveen@linux.ibm.com>
-Date:   Wed, 18 May 2022 21:19:06 +1000
-Message-ID: <87leuznl5h.fsf@mpe.ellerman.id.au>
+        Wed, 18 May 2022 07:19:57 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0EE1737FE;
+        Wed, 18 May 2022 04:19:52 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IBDsJg019124;
+        Wed, 18 May 2022 11:19:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=NMUk7scsu6NZ9A1gFglIKuqfx7tEaQ6FQyLAtW1QS68=;
+ b=rtE8Wqlxjoe8QfOFmSd2+jRg3IUTqV3FBLPi7MVk9L7p90i6gipSPe9NcI2xPjg6BpKF
+ g1qqE+RriQPYLON6LaGWrVMe1ANb9pAbUeoJlAjU6h1H3QXNlts93RjPDYOngIMbBvKM
+ 7gBGqQ9QmDq1k43jGPIKqLv5aYPSe30rrR7vxFi0P3bILBp1G3p5P27/v3T9XZjMMKof
+ GLClDFCsNLXPHYhJmxQ5Sn7K+KL1mbrjmA/yoU8enaNgfTwHzkNgLRuyghgenHoOYCCq
+ Zcx54Cj4Mu78UVaINU6YoTUwBjQuoEt1Ucd+U6hPcOnbGzZNomqX7rrWVW+STONjdbO8 xQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4yr4g41v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 11:19:47 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IBFUAt022640;
+        Wed, 18 May 2022 11:19:47 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4yr4g41c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 11:19:47 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IB8OMI029648;
+        Wed, 18 May 2022 11:19:44 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjdm57-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 11:19:44 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IBJfqI44892572
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 11:19:41 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 79BA54C046;
+        Wed, 18 May 2022 11:19:41 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C3764C040;
+        Wed, 18 May 2022 11:19:41 +0000 (GMT)
+Received: from osiris (unknown [9.145.54.247])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 18 May 2022 11:19:40 +0000 (GMT)
+Date:   Wed, 18 May 2022 13:19:39 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Jann Horn <jannh@google.com>,
+        Harald Freudenberger <freude@linux.ibm.com>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] s390/crypto: fix scatterwalk_unmap() callers in AES-GCM
+Message-ID: <YoTWSxEYPo1MLQTc@osiris>
+References: <20220517143047.3054498-1-jannh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517143047.3054498-1-jannh@google.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pdTgmxH6gZ8qS8AQOKYU6qdavpgfHgm3
+X-Proofpoint-ORIG-GUID: 7x1tqo9l-E_uOcaMWYkxGA9jVmv9O3fb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_04,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=767 bulkscore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 phishscore=0 mlxscore=0
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205180059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,90 +96,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
-> Christophe Leroy wrote:
->> A lot of #ifdefs can be replaced by IS_ENABLED()
->> 
->> Do so.
->> 
->> This requires to have kernel_toc_addr() defined at all time
->> as well as PPC_INST_LD_TOC and PPC_INST_STD_LR.
->> 
->> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->> ---
->> v2: Moved the setup of pop outside of the big if()/else() in __ftrace_make_nop()
->> ---
->>  arch/powerpc/include/asm/code-patching.h |   2 -
->>  arch/powerpc/include/asm/module.h        |   2 -
->>  arch/powerpc/include/asm/sections.h      |  24 +--
->>  arch/powerpc/kernel/trace/ftrace.c       | 182 +++++++++++------------
->>  4 files changed, 103 insertions(+), 107 deletions(-)
->> 
->
-> <snip>
->
->> @@ -710,6 +707,9 @@ void arch_ftrace_update_code(int command)
->> 
->>  #ifdef CONFIG_PPC64
->>  #define PACATOC offsetof(struct paca_struct, kernel_toc)
->> +#else
->> +#define PACATOC 0
->> +#endif
->
-> This conflicts with my fix for the ftrace init tramp:
-> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20220516071422.463738-1-naveen.n.rao@linux.vnet.ibm.com/
->
-> It probably makes sense to retain #ifdef CONFIG_PPC64, so that we can 
-> get rid of the PACATOC. Here is an incremental diff:
+On Tue, May 17, 2022 at 04:30:47PM +0200, Jann Horn wrote:
+> The argument of scatterwalk_unmap() is supposed to be the void* that was
+> returned by the previous scatterwalk_map() call.
+> The s390 AES-GCM implementation was instead passing the pointer to the
+> struct scatter_walk.
+> 
+> This doesn't actually break anything because scatterwalk_unmap() only uses
+> its argument under CONFIG_HIGHMEM and ARCH_HAS_FLUSH_ON_KUNMAP.
+> 
+> Note that I have not tested this patch in any way, not even compile-tested
+> it.
+> 
+> Fixes: bf7fa038707c ("s390/crypto: add s390 platform specific aes gcm support.")
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
+> IDK which tree this has to go through - s390 or crypto?
+> maybe s390 is better, since they can actually test it?
 
-Where is the incremental diff meant to apply?
-
-It doesn't apply on top of patch 19, or at the end of the series.
-
-cheers
-
-> diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
-> index da1a2f8ebb72f3..28169a1ccc7377 100644
-> --- a/arch/powerpc/kernel/trace/ftrace.c
-> +++ b/arch/powerpc/kernel/trace/ftrace.c
-> @@ -701,11 +701,6 @@ void arch_ftrace_update_code(int command)
->  }
->  
->  #ifdef CONFIG_PPC64
-> -#define PACATOC offsetof(struct paca_struct, kernel_toc)
-> -#else
-> -#define PACATOC 0
-> -#endif
-> -
->  extern unsigned int ftrace_tramp_text[], ftrace_tramp_init[];
->  
->  void ftrace_free_init_tramp(void)
-> @@ -724,7 +719,7 @@ int __init ftrace_dyn_arch_init(void)
->  	int i;
->  	unsigned int *tramp[] = { ftrace_tramp_text, ftrace_tramp_init };
->  	u32 stub_insns[] = {
-> -		PPC_RAW_LD(_R12, _R13, PACATOC),
-> +		PPC_RAW_LD(_R12, _R13, offsetof(struct paca_struct, kernel_toc)),
->  		PPC_RAW_ADDIS(_R12, _R12, 0),
->  		PPC_RAW_ADDI(_R12, _R12, 0),
->  		PPC_RAW_MTCTR(_R12),
-> @@ -733,9 +728,6 @@ int __init ftrace_dyn_arch_init(void)
->  	unsigned long addr;
->  	long reladdr;
->  
-> -	if (IS_ENABLED(CONFIG_PPC32))
-> -		return 0;
-> -
->  	addr = ppc_global_function_entry((void *)FTRACE_REGS_ADDR);
->  	reladdr = addr - kernel_toc_addr();
->  
-> @@ -754,6 +746,7 @@ int __init ftrace_dyn_arch_init(void)
->  
->  	return 0;
->  }
-> +#endif
->  
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  
->
-> - Naveen
+Applied to s390 tree. Thanks!

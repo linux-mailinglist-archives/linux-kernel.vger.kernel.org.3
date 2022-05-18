@@ -2,129 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537F952B8B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE2C52B8D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235676AbiERL3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S235716AbiERLaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235630AbiERL3a (ORCPT
+        with ESMTP id S235643AbiERL34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:29:30 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10791756A6;
-        Wed, 18 May 2022 04:29:25 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso3038297wma.0;
-        Wed, 18 May 2022 04:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=uFIsWxhH+SfWDbQeGJib3EffwTOsdWgNhmP3BKg6cTI=;
-        b=GIk1v/SP46GpQB2aa29XniHa4XWAzmRQTBwJvI2ojRUnPlE+MqZBO6G6nMAupnb8W+
-         G2EA2unw0FCDCoBzqtVzORAZzUFAFXx+Kdr8mqijkt1cl3qR20Nu7ks1Ou4EEIyvLfG1
-         BKNUqHtpdNg9JkHJn34prfdFRVXewGK/0aMoRwE31kjLG9CzM4rhFuUz60WAX4Xx4Qtf
-         Iw5hAdG4s9z4F6oM41gnCOxtwot5uL5itCKcTOqR+V3kIeqKyCtmTTLGt5h7TbNeBK4l
-         1nRGHnUOJvvntrUCPXJu1pJXgzrO3r0Q2kDfNl8uDHZhwRBCu9LgjhUgB/igxBzXk6Dk
-         Y+OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=uFIsWxhH+SfWDbQeGJib3EffwTOsdWgNhmP3BKg6cTI=;
-        b=r7bMVYTEcFIWdWVVfFZRIV76V3Siu6yEXzNA5WQfwP1qDmgGo0yKscAtuKwkJIqZ2O
-         mRHaDQt7KD2DwZYe4VKetQsKMoYAGodAucOfxWFJFM63r+zTWhbLJmODa3AtVzbw1/HV
-         XspZkk82RLOpA7a90B+cn0UczBia06LYlb+1PA7Jv1KelUGbCMck5bLEU3wnYs/X67wK
-         dW9p+RhHBQaMTuNwfXY4yNPTApEILYeWd0uo3jGN3Yv0t6FU1w+O2MnpNxiTFK87lIRc
-         rkNIY+8S2Kv1xi5S55pGoEpNkX22WmRvKXHXzFC7DgNViVjfUa2r1MzqWRnbDa5MTJg9
-         eMTQ==
-X-Gm-Message-State: AOAM530yHaFDBoZ/LSudWjyZA1r8Q6BhuhrcyoAT+GF6OchwCYe2XikF
-        WM0P0DvGwhjbhx+N9jI1WJs=
-X-Google-Smtp-Source: ABdhPJwmMEJmW+CILoBoRlmxrlpjiQs7Ka6eyFZQusCiGX6OE9WPle9wfc8RX8mJ6nniBuuCC/UxRQ==
-X-Received: by 2002:a05:600c:3549:b0:394:89ba:e1be with SMTP id i9-20020a05600c354900b0039489bae1bemr25309861wmq.181.1652873364178;
-        Wed, 18 May 2022 04:29:24 -0700 (PDT)
-Received: from [192.168.0.36] ([5.225.216.194])
-        by smtp.gmail.com with ESMTPSA id v65-20020a1cac44000000b003947b59dfdesm5121659wme.36.2022.05.18.04.29.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 04:29:23 -0700 (PDT)
-Message-ID: <4cfbc8dd-83d3-80df-630d-6f8fb2efb9fd@gmail.com>
-Date:   Wed, 18 May 2022 13:29:22 +0200
+        Wed, 18 May 2022 07:29:56 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E101778A8;
+        Wed, 18 May 2022 04:29:55 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IBOs2m016543;
+        Wed, 18 May 2022 11:29:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=0EciM2JOStnqa7conOmfeN1U3vKQZFHvrLdmVzuLBUk=;
+ b=lkrAr7oPP61U5vpzE2lSKvsJx/FVB4lPNeqjp0CexhhHGevAEH4aUhvIsBL7SFp6X8sj
+ UKRgQQEPl+4+cnCXIzgIq9SrSX7DA4FKGy58SRCCuZQSWPHLZIyjPxB+BWsZ6yg9jmmS
+ RDY/eUfjsLxT/ySmu/5GzSaoNveeWLmt0EgxPvE/x+L3KNILvWQVzwO5iVAqy/mVITwg
+ /S7wqiW0xrCoRS2vEnzgXssapY4QwpY0uzwaIoO87I7x0HOP5XZOBQn/QGsgaJgNLEjM
+ DxnvxWJiXzTbHJmYSp9Hx46UskLiD6bD90cTajYqIeI2f2W+Sp6oGhhVRLSgZhS/CypZ BQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4yw6r29u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 11:29:40 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IBPnB8023788;
+        Wed, 18 May 2022 11:29:38 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4yw6r28k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 11:29:38 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IB854f028911;
+        Wed, 18 May 2022 11:29:36 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjdmg9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 11:29:36 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IBFfBX52232570
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 11:15:41 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 27C75A404D;
+        Wed, 18 May 2022 11:29:33 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5FCAEA4040;
+        Wed, 18 May 2022 11:29:32 +0000 (GMT)
+Received: from osiris (unknown [9.145.54.247])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 18 May 2022 11:29:32 +0000 (GMT)
+Date:   Wed, 18 May 2022 13:29:31 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
+        stable@vger.kernel.org, Philipp Rudo <prudo@linux.ibm.com>,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        "open list:S390" <linux-s390@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 4/4] kexec, KEYS, s390: Make use of built-in and
+ secondary keyring for signature verification
+Message-ID: <YoTYm6Fo1vBUuJGu@osiris>
+References: <20220512070123.29486-1-coxu@redhat.com>
+ <20220512070123.29486-5-coxu@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/7] dt-bindings: iommu: mediatek: Add phandles for
- mediatek infra/pericfg
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
-Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski@linaro.org
-References: <20220518100503.37279-1-angelogioacchino.delregno@collabora.com>
- <20220518100503.37279-2-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220518100503.37279-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512070123.29486-5-coxu@redhat.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QZ2aRxCw1ojqOWeZzANhIM2N8TBQebSk
+X-Proofpoint-ORIG-GUID: IjCvJ7YuMN2ii3itPe7V6ahbqtuLjERA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_04,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=905 phishscore=0 spamscore=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 clxscore=1011 malwarescore=0
+ adultscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205180059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/05/2022 12:04, AngeloGioacchino Del Regno wrote:
-> Add properties "mediatek,infracfg" and "mediatek,pericfg" to let the
-> mtk_iommu driver retrieve phandles to the infracfg and pericfg syscon(s)
-> instead of performing a per-soc compatible lookup.
+On Thu, May 12, 2022 at 03:01:23PM +0800, Coiby Xu wrote:
+> From: Michal Suchanek <msuchanek@suse.de>
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> commit e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
+> adds support for KEXEC_SIG verification with keys from platform keyring
+> but the built-in keys and secondary keyring are not used.
+> 
+> Add support for the built-in keys and secondary keyring as x86 does.
+> 
+> Fixes: e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
+> Cc: stable@vger.kernel.org
+> Cc: Philipp Rudo <prudo@linux.ibm.com>
+> Cc: kexec@lists.infradead.org
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> Reviewed-by: "Lee, Chun-Yi" <jlee@suse.com>
+> Acked-by: Baoquan He <bhe@redhat.com>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
 > ---
->   .../devicetree/bindings/iommu/mediatek,iommu.yaml         | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> index 2ae3bbad7f1a..c4af41947593 100644
-> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> @@ -101,6 +101,10 @@ properties:
->       items:
->         - const: bclk
->   
-> +  mediatek,infracfg:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle to the mediatek infracfg syscon
-> +
->     mediatek,larbs:
->       $ref: /schemas/types.yaml#/definitions/phandle-array
->       minItems: 1
-> @@ -112,6 +116,10 @@ properties:
->         Refer to bindings/memory-controllers/mediatek,smi-larb.yaml. It must sort
->         according to the local arbiter index, like larb0, larb1, larb2...
->   
-> +  mediatek,pericfg:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle to the mediatek pericfg syscon
-> +
+>  arch/s390/kernel/machine_kexec_file.c | 18 +++++++++++++-----
+>  1 file changed, 13 insertions(+), 5 deletions(-)
 
-I didn't explain myself. What I was suguesting was to squash the patch that add 
-requiered mediatek,infracfg with the patch that adds mediatk,infracfg to the 
-binding description. And then squash the both patches adding pericfg as well.
+As far as I can tell this doesn't have any dependency to the other
+patches in this series, so should I pick this up for the s390 tree, or
+how will this go upstream?
 
-Regards,
-Matthias
-
-
->     '#iommu-cells':
->       const: 1
->       description: |
+In any case:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>

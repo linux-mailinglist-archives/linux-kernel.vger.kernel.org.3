@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAD652AFF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB3A52AFF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbiERBgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S233693AbiERBhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiERBgi (ORCPT
+        with ESMTP id S229824AbiERBhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:36:38 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D8024F1C;
-        Tue, 17 May 2022 18:36:37 -0700 (PDT)
-X-UUID: 610e22e4ee1c4bcfb8c21545e4798f7a-20220518
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:129e1bdf-bfa9-428a-a0e7-af13740df3d0,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:dab69d79-5ef6-470b-96c9-bdb8ced32786,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 610e22e4ee1c4bcfb8c21545e4798f7a-20220518
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 227094953; Wed, 18 May 2022 09:36:33 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 18 May 2022 09:36:26 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 18 May 2022 09:36:26 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 18 May 2022 09:36:26 +0800
-Message-ID: <2b46032a99e6f8994d402ebbf34d9174135993c4.camel@mediatek.com>
-Subject: Re: [PATCH -next] cpufreq: mediatek: fix error return code in
- mtk_cpu_dvfs_info_init()
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-CC:     <jia-wei.chang@mediatek.com>,
-        <angelogioacchino.delregno@collabora.com>, <khilman@baylibre.com>,
-        <viresh.kumar@linaro.org>
-Date:   Wed, 18 May 2022 09:36:26 +0800
-In-Reply-To: <20220517133450.2266243-1-yangyingliang@huawei.com>
-References: <20220517133450.2266243-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 17 May 2022 21:37:48 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94E531340;
+        Tue, 17 May 2022 18:37:47 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id w17-20020a17090a529100b001db302efed6so568464pjh.4;
+        Tue, 17 May 2022 18:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xx6rePJGi7UaKhXkXrJAOBEtEBFBD4Xp8h1aCNNQ5pk=;
+        b=UQsNDu+K3TL0RoWiqYU8aJzPlG4KoKs+NqzgTjzA9gmgB35p+OeNfvgvxiT+Otn5ux
+         jI5s5WqirBU7Jhbz2L+2B+EJXfZ2e4Cs3jAZ/A0cQMHaqEnA96dxbK2nCn7UlGNwaamT
+         vImHt36Kj+bSNIwtjD+WJcqbXUskciCiPM1BbywHDZQvN8JxmTzU2MFyqB3E1OqyDLPZ
+         vO8A3/HfT0FQ0B2vxv1qWYmZKph3LyIe5s/jDZcMgrwyx4sty97N81e32k6rigUqWKIh
+         CeBuaUr31rQy/LHnS/aJHG3hlw7k5cwRtGBd4X70mYiDYzbWzv3/zupNOkklKPlQW7CU
+         Cu/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xx6rePJGi7UaKhXkXrJAOBEtEBFBD4Xp8h1aCNNQ5pk=;
+        b=QNrypGJioS2wh1rQyD/XJJ7IyZk6OEy2imJo+dhDHvDMAJBxGli1tJ4mopcFxOGsdz
+         k3FANd7i6pOuSJKrU+E1FnYwuGGRmYA2nvu5wB6d3fMvz7Ob3z3aM1sZV170ietiJXAd
+         EO4gOcN90sPWAl5YHAI9g2KLQxNzG+QPVKOnZHV+8C/FlZn4Ej5Zo73wai5tUiIs5iTE
+         kjCBAIcoSqZUE8Zpg6/nkEkUclBC6OU3DS8oGEQmQog51G0hlpjk3lamQ0LWXnTzUDeV
+         BKBqL0/tMzRFQBe3xQUF3fS8jR45qOW+arVyFIidcLG+Ii5nvhNqaC450dYA7kkjSBAD
+         CKPg==
+X-Gm-Message-State: AOAM532rEpfPac5CNgyEXuuXJzxQUiOXWuxZsFV8PuLfG44NP5PY5sSI
+        vOWPejxX1IryvCJHXK47S0I=
+X-Google-Smtp-Source: ABdhPJzL1j+HlqKCklCP1DJ3aVsnn6tiCC6/9z58A4PyGRc11yVUV/wuFWJ20A+4USqxe2a+Et2nYQ==
+X-Received: by 2002:a17:90a:c48:b0:1df:6210:48a0 with SMTP id u8-20020a17090a0c4800b001df621048a0mr12119030pje.119.1652837867447;
+        Tue, 17 May 2022 18:37:47 -0700 (PDT)
+Received: from localhost.localdomain ([103.197.71.140])
+        by smtp.gmail.com with ESMTPSA id u191-20020a6385c8000000b003c14af50627sm200052pgd.63.2022.05.17.18.37.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 18:37:46 -0700 (PDT)
+From:   Shida Zhang <starzhangzsd@gmail.com>
+X-Google-Original-From: Shida Zhang <zhangshida@kylinos.cn>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org
+Cc:     zhangshida@kylinos.cn, starzhangzsd@gmail.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
+Subject: [PATCH v2] cgroup: remove the superfluous judgment
+Date:   Wed, 18 May 2022 09:36:47 +0800
+Message-Id: <20220518013647.1749568-1-zhangshida@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-17 at 21:34 +0800, Yang Yingliang wrote:
-> If regulator_get_voltage() fails, it should return the error code in
-> mtk_cpu_dvfs_info_init().
-> 
-> Fixes: 0daa47325bae ("cpufreq: mediatek: Link CCI device to CPU")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/cpufreq/mediatek-cpufreq.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c
-> b/drivers/cpufreq/mediatek-cpufreq.c
-> index 37a1eb20f5ba..3a2be4552020 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -474,6 +474,7 @@ static int mtk_cpu_dvfs_info_init(struct
-> mtk_cpu_dvfs_info *info, int cpu)
->  	if (info->soc_data->ccifreq_supported) {
->  		info->vproc_on_boot = regulator_get_voltage(info-
-> >proc_reg);
->  		if (info->vproc_on_boot < 0) {
-> +			ret = info->vproc_on_boot;
->  			dev_err(info->cpu_dev,
->  				"invalid Vproc value: %d\n", info-
-> >vproc_on_boot);
->  			goto out_disable_inter_clock;
+Remove the superfluous judgment since the function is
+never called for a root cgroup, as suggested by Tejun.
 
-Thanks for fix this!
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
+---
+ Changes from v1:
+ - Just remove the superfluous judgment instead.
 
-Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+ kernel/cgroup/cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index adb820e98f24..7d8a463c461b 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -5685,7 +5685,7 @@ static int cgroup_destroy_locked(struct cgroup *cgrp)
+ 	css_clear_dir(&cgrp->self);
+ 	kernfs_remove(cgrp->kn);
+ 
+-	if (parent && cgroup_is_threaded(cgrp))
++	if (cgroup_is_threaded(cgrp))
+ 		parent->nr_threaded_children--;
+ 
+ 	spin_lock_irq(&css_set_lock);
+-- 
+2.25.1
 

@@ -2,278 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7E252B416
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDB052B3D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbiERHt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
+        id S232552AbiERHta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbiERHtw (ORCPT
+        with ESMTP id S232535AbiERHtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:49:52 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AC21207F0;
-        Wed, 18 May 2022 00:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652860191; x=1684396191;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=YXZfjMQjUYv74UOxyPEdQftsBYoYCO06rHvgPycGMF8=;
-  b=ZAvNySM6n3yl2pZeG1iXhTqolcDLZaADSHpvy3vuynfXl/faTsnXvTAW
-   9dYy498KbpKXU2t4bxZ5yBApZyWpfAVS11h2a6re6tcPbsnmG86W+IrGZ
-   aID367ji8W1AhFCNt2YXWmv931bK5OejVxrKjvYE8Dqvewi0z7wx/+3GS
-   c=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 May 2022 00:49:50 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:49:50 -0700
-Received: from blr-ubuntu-185.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 00:49:41 -0700
-From:   Vivek Kumar <quic_vivekuma@quicinc.com>
-To:     <corbet@lwn.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <axboe@kernel.dk>,
-        <rafael@kernel.org>, <akpm@linux-foundation.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-block@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-mm@kvack.org>
-CC:     <len.brown@intel.com>, <pavel@ucw.cz>, <paulmck@kernel.org>,
-        <bp@suse.de>, <keescook@chromium.org>, <songmuchun@bytedance.com>,
-        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
-        <pasha.tatashin@soleen.com>, <tabba@google.com>, <ardb@kernel.org>,
-        <tsoni@quicinc.com>, <quic_psodagud@quicinc.com>,
-        <quic_svaddagi@quicinc.com>,
-        Vivek Kumar <quic_vivekuma@quicinc.com>,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: [RFC 6/6] irqchip/gic-v3: Re-init GIC hardware upon hibernation restore
-Date:   Wed, 18 May 2022 13:18:41 +0530
-Message-ID: <1652860121-24092-7-git-send-email-quic_vivekuma@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
+        Wed, 18 May 2022 03:49:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CFB411E4BA
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:49:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652860163;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/9KbdBagwz7kDxwouZHcG+NJq65qAT71CiKpPT8LRhE=;
+        b=MzpqMG5vZC4ubBtHiaCO53nSNLtudWkHTTnEsnZI5G32UcA+5Ap+7SuFSjnid3T+h4HgVT
+        tXEIF2NJpUKmV85Ygb8BPSKat97Bg1DDnpgkPcWomBiUAoTIZIVyiAuP8ZeLbXXaOVMJo3
+        ez9KUnUFEZ3JgNve23CjnC+Wu0KSNeQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-2UAAZv01PmaGHv2Mle1Twg-1; Wed, 18 May 2022 03:49:19 -0400
+X-MC-Unique: 2UAAZv01PmaGHv2Mle1Twg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 366B029DD9A5;
+        Wed, 18 May 2022 07:49:19 +0000 (UTC)
+Received: from localhost (ovpn-13-59.pek2.redhat.com [10.72.13.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7672D1410DD5;
+        Wed, 18 May 2022 07:49:18 +0000 (UTC)
+Date:   Wed, 18 May 2022 15:49:14 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] kexec_file: Drop pr_err in weak implementations of
+ arch_kexec_apply_relocations[_add]
+Message-ID: <YoSk+jRjNQtUL50d@MiWiFi-R3L-srv>
+References: <20220425174128.11455-1-naveen.n.rao@linux.vnet.ibm.com>
+ <YoNqJ/MOSIVwKP/o@MiWiFi-R3L-srv>
+ <1652782155.56t7mah8ib.naveen@linux.ibm.com>
+ <8735h8b2f1.fsf@email.froward.int.ebiederm.org>
+ <87v8u3o9tk.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8u3o9tk.fsf@mpe.ellerman.id.au>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Code added in this patch takes backup of different set of
-registers during hibernation suspend. On receiving hibernation
-restore callback, it restores register values from backup. This
-ensures state of hardware to be same just before hibernation and
-after restore.
+On 05/18/22 at 12:26pm, Michael Ellerman wrote:
+> "Eric W. Biederman" <ebiederm@xmission.com> writes:
+> > Looking at this the pr_err is absolutely needed.  If an unsupported case
+> > winds up in the purgatory blob and the code can't handle it things
+> > will fail silently much worse later.
+> 
+> It won't fail later, it will fail the syscall.
+> 
+> sys_kexec_file_load()
+>   kimage_file_alloc_init()
+>     kimage_file_prepare_segments()
+>       arch_kexec_kernel_image_load()
+>         kexec_image_load_default()
+>           image->fops->load()
+>             elf64_load()        # powerpc
+>             bzImage64_load()    # x86
+>               kexec_load_purgatory()
+>                 kexec_apply_relocations()
+> 
+> Which does:
+> 
+> 	if (relsec->sh_type == SHT_RELA)
+> 		ret = arch_kexec_apply_relocations_add(pi, section,
+> 						       relsec, symtab);
+> 	else if (relsec->sh_type == SHT_REL)
+> 		ret = arch_kexec_apply_relocations(pi, section,
+> 						   relsec, symtab);
+> 	if (ret)
+> 		return ret;
+> 
+> And that error is bubbled all the way back up. So as long as
+> arch_kexec_apply_relocations() returns an error the syscall will fail
+> back to userspace and there'll be an error message at that level.
+> 
+> It's true that having nothing printed in dmesg makes it harder to work
+> out why the syscall failed. But it's a kernel bug if there are unhandled
+> relocations in the kernel-supplied purgatory code, so a user really has
+> no way to do anything about the error even if it is printed.
+> 
+> > "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
+> >
+> >> Baoquan He wrote:
+> >>> On 04/25/22 at 11:11pm, Naveen N. Rao wrote:
+> >>>> kexec_load_purgatory() can fail for many reasons - there is no need to
+> >>>> print an error when encountering unsupported relocations.
+> >>>> This solves a build issue on powerpc with binutils v2.36 and newer [1].
+> >>>> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
+> >>>> symbols") [2], binutils started dropping section symbols that it thought
+> >>> I am not familiar with binutils, while wondering if this exists in other
+> >>> ARCHes except of ppc. Arm64 doesn't have the ARCH override either, do we
+> >>> have problem with it?
+> >>
+> >> I'm not aware of this specific file causing a problem on other architectures -
+> >> perhaps the config options differ enough. There are however more reports of
+> >> similar issues affecting other architectures with the llvm integrated assembler:
+> >> https://github.com/ClangBuiltLinux/linux/issues/981
+> >>
+> >>>
+> >>>> were unused.  This isn't an issue in general, but with kexec_file.c, gcc
+> >>>> is placing kexec_arch_apply_relocations[_add] into a separate
+> >>>> .text.unlikely section and the section symbol ".text.unlikely" is being
+> >>>> dropped. Due to this, recordmcount is unable to find a non-weak symbol
+> >>> But arch_kexec_apply_relocations_add is weak symbol on ppc.
+> >>
+> >> Yes. Note that it is just the section symbol that gets dropped. The section is
+> >> still present and will continue to hold the symbols for the functions
+> >> themselves.
+> >
+> > So we have a case where binutils thinks it is doing something useful
+> > and our kernel specific tool gets tripped up by it.
+> 
+> It's not just binutils, the LLVM assembler has the same behavior.
+> 
+> > Reading the recordmcount code it looks like it is finding any symbol
+> > within a section but ignoring weak symbols.  So I suspect the only
+> > remaining symbol in the section is __weak and that confuses
+> > recordmcount.
+> >
+> > Does removing the __weak annotation on those functions fix the build
+> > error?  If so we can restructure the kexec code to simply not use __weak
+> > symbols.
+> >
+> > Otherwise the fix needs to be in recordmcount or binutils, and we should
+> > loop whoever maintains recordmcount in to see what they can do.
+> 
+> It seems that recordmcount is not really maintained anymore now that x86
+> uses objtool?
+> 
+> There've been several threads about fixing recordmcount, but none of
+> them seem to have lead to a solution.
+> 
+> These weak symbol vs recordmcount problems have been worked around going
+> back as far as 2020:
 
-Signed-off-by: Vivek Kumar <quic_vivekuma@quicinc.com>
-Signed-off-by: Prasanna Kumar <quic_kprasan@quicinc.com>
----
- drivers/irqchip/irq-gic-v3.c | 138 ++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 136 insertions(+), 2 deletions(-)
+It gives me feeling that llvm or recordmcount should make adjustment,
+but not innocent kernel code, if there are a lot of places reported.
+I am curious how llvm or recordmcount dev respond to this.
 
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 2be8dea..442d32f 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -29,6 +29,10 @@
- #include <asm/smp_plat.h>
- #include <asm/virt.h>
- 
-+#include <linux/syscore_ops.h>
-+#include <linux/suspend.h>
-+#include <linux/notifier.h>
-+
- #include "irq-gic-common.h"
- 
- #define GICD_INT_NMI_PRI	(GICD_INT_DEF_PRI & ~0x80)
-@@ -56,6 +60,14 @@ struct gic_chip_data {
- 	bool			has_rss;
- 	unsigned int		ppi_nr;
- 	struct partition_desc	**ppi_descs;
-+#ifdef CONFIG_HIBERNATION
-+	unsigned int enabled_irqs[32];
-+	unsigned int active_irqs[32];
-+	unsigned int irq_edg_lvl[64];
-+	unsigned int ppi_edg_lvl;
-+	unsigned int enabled_sgis;
-+	unsigned int pending_sgis;
-+#endif
- };
- 
- static struct gic_chip_data gic_data __read_mostly;
-@@ -170,6 +182,9 @@ static enum gic_intid_range get_intid_range(struct irq_data *d)
- 	return __get_intid_range(d->hwirq);
- }
- 
-+static void gic_dist_init(void);
-+static void gic_cpu_init(void);
-+
- static inline unsigned int gic_irq(struct irq_data *d)
- {
- 	return d->hwirq;
-@@ -828,7 +843,7 @@ static bool gic_has_group0(void)
- 	return val != 0;
- }
- 
--static void __init gic_dist_init(void)
-+static void gic_dist_init(void)
- {
- 	unsigned int i;
- 	u64 affinity;
-@@ -1399,6 +1414,120 @@ static void gic_cpu_pm_init(void)
- static inline void gic_cpu_pm_init(void) { }
- #endif /* CONFIG_CPU_PM */
- 
-+#ifdef CONFIG_PM
-+#ifdef CONFIG_HIBERNATION
-+extern int in_suspend;
-+static bool hibernation;
-+
-+static int gic_suspend_notifier(struct notifier_block *nb,
-+				unsigned long event,
-+				void *dummy)
-+{
-+	if (event == PM_HIBERNATION_PREPARE)
-+		hibernation = true;
-+	else if (event == PM_POST_HIBERNATION)
-+		hibernation = false;
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block gic_notif_block = {
-+	.notifier_call = gic_suspend_notifier,
-+};
-+
-+static void gic_hibernation_suspend(void)
-+{
-+	int i;
-+	void __iomem *base = gic_data.dist_base;
-+	void __iomem *rdist_base = gic_data_rdist_sgi_base();
-+
-+	gic_data.enabled_sgis = readl_relaxed(rdist_base + GICD_ISENABLER);
-+	gic_data.pending_sgis = readl_relaxed(rdist_base + GICD_ISPENDR);
-+	/* Store edge level for PPIs by reading GICR_ICFGR1 */
-+	gic_data.ppi_edg_lvl = readl_relaxed(rdist_base + GICR_ICFGR0 + 4);
-+
-+	for (i = 0; i * 32 < GIC_LINE_NR; i++) {
-+		gic_data.enabled_irqs[i] = readl_relaxed(base +
-+						GICD_ISENABLER + i * 4);
-+		gic_data.active_irqs[i] = readl_relaxed(base +
-+						GICD_ISPENDR + i * 4);
-+	}
-+
-+	for (i = 2; i < GIC_LINE_NR / 16; i++)
-+		gic_data.irq_edg_lvl[i] = readl_relaxed(base +
-+						GICD_ICFGR + i * 4);
-+}
-+#endif
-+
-+static int gic_suspend(void)
-+{
-+#ifdef CONFIG_HIBERNATION
-+	if (unlikely(hibernation))
-+		gic_hibernation_suspend();
-+#endif
-+	return 0;
-+}
-+
-+void gic_resume(void)
-+{
-+#ifdef CONFIG_HIBERNATION
-+	int i;
-+	void __iomem *base = gic_data.dist_base;
-+	void __iomem *rdist_base = gic_data_rdist_sgi_base();
-+
-+	/*
-+	 * in_suspend is defined in hibernate.c and will be 0 during
-+	 * hibernation restore case. Also it willl be 0 for suspend to ram case
-+	 * and similar cases. Underlying code will not get executed in regular
-+	 * cases and will be executed only for hibernation restore.
-+	 */
-+	if (unlikely((in_suspend == 0 && hibernation))) {
-+		pr_info("Re-initializing gic in hibernation restore\n");
-+		gic_dist_init();
-+		gic_cpu_init();
-+		/* Activate and enable SGIs and PPIs */
-+		writel_relaxed(gic_data.enabled_sgis,
-+			       rdist_base + GICD_ISENABLER);
-+		writel_relaxed(gic_data.pending_sgis,
-+			       rdist_base + GICD_ISPENDR);
-+		/* Restore edge and level triggers for PPIs from GICR_ICFGR1 */
-+		writel_relaxed(gic_data.ppi_edg_lvl,
-+			       rdist_base + GICR_ICFGR0 + 4);
-+
-+		/* Restore edge and level triggers */
-+		for (i = 2; i < GIC_LINE_NR / 16; i++)
-+			writel_relaxed(gic_data.irq_edg_lvl[i],
-+					base + GICD_ICFGR + i * 4);
-+		gic_dist_wait_for_rwp();
-+
-+		/* Activate and enable interrupts from backup */
-+		for (i = 0; i * 32 < GIC_LINE_NR; i++) {
-+			writel_relaxed(gic_data.active_irqs[i],
-+				       base + GICD_ISPENDR + i * 4);
-+
-+			writel_relaxed(gic_data.enabled_irqs[i],
-+				       base + GICD_ISENABLER + i * 4);
-+		}
-+		gic_dist_wait_for_rwp();
-+	}
-+#endif
-+}
-+EXPORT_SYMBOL_GPL(gic_resume);
-+
-+static struct syscore_ops gic_syscore_ops = {
-+	.suspend = gic_suspend,
-+	.resume = gic_resume,
-+};
-+
-+static void gic_syscore_init(void)
-+{
-+	register_syscore_ops(&gic_syscore_ops);
-+}
-+
-+#else
-+static inline void gic_syscore_init(void) { }
-+void gic_resume(void) { }
-+#endif
-+
- static struct irq_chip gic_chip = {
- 	.name			= "GICv3",
- 	.irq_mask		= gic_mask_irq,
-@@ -1887,6 +2016,7 @@ static int __init gic_init_bases(void __iomem *dist_base,
- 	gic_cpu_init();
- 	gic_smp_init();
- 	gic_cpu_pm_init();
-+	gic_syscore_init();
- 
- 	if (gic_dist_supports_lpis()) {
- 		its_init(handle, &gic_data.rdists, gic_data.domain);
-@@ -2092,7 +2222,11 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
- 			     redist_stride, &node->fwnode);
- 	if (err)
- 		goto out_unmap_rdist;
--
-+#ifdef CONFIG_HIBERNATION
-+	err = register_pm_notifier(&gic_notif_block);
-+	if (err)
-+		goto out_unmap_rdist;
-+#endif
- 	gic_populate_ppi_partitions(node);
- 
- 	if (static_branch_likely(&supports_deactivate_key))
--- 
-2.7.4
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/elfcore.h?id=6e7b64b9dd6d96537d816ea07ec26b7dedd397b9
+> 
+> cheers
+> 
 

@@ -2,64 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476F552BE02
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8678152BDF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239118AbiEROwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S239126AbiEROwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239031AbiEROwB (ORCPT
+        with ESMTP id S239127AbiEROwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:52:01 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1539613CA2D;
-        Wed, 18 May 2022 07:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aUbk6KbikG/NrB2A/Jq5RScJLrcT2oDE1hZbmG6RHrI=; b=UwEgvS7IC3JI6fwDjXuFCqElmc
-        xoJNxTuW/eYzUiacfls+oUD5ZMhEvayGh9YqVMOr+Nl8ZEDyGKvB4u22r5GcDUQUvji1XPLcHCl3B
-        diM411NwYpZSW/xqHheCVHiZc4Q3tf1miJzatG2FR0YWS1WdIUL0gDpDSgWjDDO8onzUvVUucgNq0
-        6fkXiuDjY69MlZdD7CJdmvpy0KdKZ3Sw+sz4Zj7DnpRstQZIDlNcAjYX357nPLh83HigrYnQw9vtX
-        /1UAuLMK3jYTWzanmHkQuU/ZzUqC4eoAmwyVtT11KEtUDuYmw/AQZB6MrT7AUOZzbEFORrMNgdwny
-        kjDCoXig==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrL1p-00G3Uc-Nl; Wed, 18 May 2022 14:51:57 +0000
-Date:   Wed, 18 May 2022 14:51:57 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     ChenXiaoSong <chenxiaosong2@huawei.com>
-Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, liuyongqiang13@huawei.com,
-        yi.zhang@huawei.com, zhangxiaoxu5@huawei.com
-Subject: Re: [PATCH -next] fuse: return the more nuanced writeback error on
- close()
-Message-ID: <YoUIDcOmfJ5lppu3@zeniv-ca.linux.org.uk>
-References: <20220518145729.2488102-1-chenxiaosong2@huawei.com>
+        Wed, 18 May 2022 10:52:49 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91341A0ADC
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:52:45 -0700 (PDT)
+Received: from mail-yb1-f175.google.com ([209.85.219.175]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MhUHt-1nMyQp14y3-00ebQO for <linux-kernel@vger.kernel.org>; Wed, 18 May
+ 2022 16:52:44 +0200
+Received: by mail-yb1-f175.google.com with SMTP id j2so4180564ybu.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:52:44 -0700 (PDT)
+X-Gm-Message-State: AOAM533inz20813j880Djc67thqjrow53+SAa45KblNlUWlePAYzm37q
+        HnocaLMlffT9Iqe6Q6mpQPdFr0Wf/lBJbtj669c=
+X-Google-Smtp-Source: ABdhPJxP7e/nEbt8Sasz1ATmrn7JsoRoyZGZHFy6NnNuI493m7yBWtmmAYkI1h0VyER/USaUS+yft+DAg0EBkOlvd/U=
+X-Received: by 2002:a25:5e09:0:b0:64d:8543:627d with SMTP id
+ s9-20020a255e09000000b0064d8543627dmr8502ybb.394.1652885563133; Wed, 18 May
+ 2022 07:52:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518145729.2488102-1-chenxiaosong2@huawei.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220518141542.531148-1-michael@walle.cc>
+In-Reply-To: <20220518141542.531148-1-michael@walle.cc>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 18 May 2022 15:52:41 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a01B2uEP7=AkVBG5FYdfMHyReFP=120Ay3+s2EV9kO5Uw@mail.gmail.com>
+Message-ID: <CAK8P3a01B2uEP7=AkVBG5FYdfMHyReFP=120Ay3+s2EV9kO5Uw@mail.gmail.com>
+Subject: Re: [PATCH] ARM: configs: enable support for Kontron KSwitch D10
+To:     Michael Walle <michael@walle.cc>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SoC Team <soc@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:dceuxfYyY9PQqDjF9QmMXOADxfpUfVnyFLJfdznjrzCAVwFbYtz
+ xLZe0YGkNWIWMuDk1mQ9+utMcJd5HhHUOXpa8qzw90313XynDqCGfMcrWyWqVRus6oIojzH
+ R3N9PKpkto7vzDu7mZxKgUCAKnXi2r4GE/P8hsJgjk+uiAvG1Ci0+WQpfFgDVxYbbQ6P1zP
+ bbq/tHnMHQwUVgm1VQ70A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xJ1UTy5eGkA=:raNrygb62t0iILrZHp7fS6
+ G8ujiYzGB07LCPvfp3mFJ6Q5qpD90TCfnLsNYq7iSEbqa50Ed0phZs2beQ/5iPWl4GFJ5sMnG
+ N21DLC41hXTCB7NAljM2xV1hsrqVKjSnUfW0tNSQ6FJxp2HhJkGOp7pxQIsGXaXfBLP3QzlBi
+ VlM65fCZyvU21E/fZ5yPJS9Bcv1Xd+87/QE8FVFSx4TEJLX5/XXeYMMqGmvMI9KkpZxRzw38z
+ 6wMWfVcGHeolu2O35+KlfbIffJKuEzd4NDxEj3kZs00k2oNP/v8vZwk3aUcoIXdIx1wSwzU9h
+ J9e5Ov+Lu10E2XfttykCpjYUeI/UiOWXFCvFHgBm0LK8YqDTMRASJ43YPuMOmUoczopQp3aoJ
+ HOvZtuNfa+DbibQoGt9DONe65ysefuVAUHnyGr1K1wJMovWd5e0LY5xECZiPCxEx1rFCv2wo+
+ aERxWZTRLBMsPgbCVOk5F2WenDmnWZY1yET83uPJhXewIHvoPXJltUsse/cjLPea/1uKUe/wx
+ cTSoTDGA1ybQI4TEllwxUDfV//PS98ya74/S14BN4taEBtt0MRFGZ4ncZno7/3yOtIBwO31BP
+ 0yfgY4ZsmoJ4qJA8WzHnqtOo7+jN2BY57Uas/7FhgUAaKLanYDsSTpH4rKottHFjhxil94tjJ
+ hfxEGQZ19phl7am07c/ShTckVKrwc6N7fcdnbwDbvEI6B/Lu8F/L+ZHLR9wlPdDzztkvfSLYk
+ IlKgGfOMgHskyL29aBvSpQMTH7bWo43+OXTn0DSdIb8H4QUAUcfMgY/wRVYLkgFwSUGcRwfXK
+ YY1jq4pDHa7d9cM/QQf7LPsjZSlTshzfDPohKy7EmM5l/goaej5zldKJqfG9pmc7UDA4SsSa6
+ EdRSYFQe3zy1THuV6Jhr0/W3O6AVp9c1Nk2F+pp8Y=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 10:57:29PM +0800, ChenXiaoSong wrote:
+On Wed, May 18, 2022 at 3:15 PM Michael Walle <michael@walle.cc> wrote:
+>
+> The Kontron KSwitch D10 is based on a Microchip LAN9668 SoC. It is a
+> managed ethernet network switch with either 8 copper ports or 6 copper
+> ports and 2 SFP cages.
+>
+> Enable all required kconfig symbols, either as module where possible or
+> compiled-in where it is not possible.
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+> FWIW, there will be a board in our lab in KernelCI using this config.
 
-> +	/* return more nuanced writeback errors */
->  	if (err)
-> -		return err;
-> +		return filemap_check_wb_err(file->f_mapping, 0);
->  
->  	err = 0;
+The patch looks ok to me, but normally I'd expect it to go through the
+platform maintainer tree unless there is a reason not to. Adding the at91
+maintainers to Cc here.
 
-As an aside, what the hell is that err = 0 about?  Before or after
-that patch, that is - "let's make err zero, in case it had somehow
-magically changed ceased to be so since if (err) bugger_off just above"?
+It's also a bit late for 5.19, but if everyone agrees, I can add the patch
+to the arm/late branch.
+
+       Arnd

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A9652C798
+	by mail.lfdr.de (Postfix) with ESMTP id 6F56052C799
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiERXdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 19:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S231430AbiERXdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 19:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiERXdO (ORCPT
+        with ESMTP id S231374AbiERXdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 19:33:14 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C683C66C96;
-        Wed, 18 May 2022 16:33:13 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id r30so4754175wra.13;
-        Wed, 18 May 2022 16:33:13 -0700 (PDT)
+        Wed, 18 May 2022 19:33:16 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D670614D31;
+        Wed, 18 May 2022 16:33:14 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id t6so4792797wra.4;
+        Wed, 18 May 2022 16:33:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=tPbG+1Qsh5nbAzaiZ8E/pw1mS5ghkz1deStVQwXqkP4=;
-        b=VGx115cjLF+9JtQTO0M/Lx7jnhO4p03qIpnSdOE2KVl7vxxeYJVK2X5ZzA7yvUv0ur
-         xqm0VeAv67/JQtCQgEDee0y7tlGRr7Ixxe5+ViQutEgQeZeNYXlrYEf5c3xZOUB3Hd/l
-         QBA0aas54guBiLOl4xXwaUraYBlfmn1Pt0JF5aBxhiFgFSYlWxfvZBouDoVJ3PcQgI1Y
-         Nwcc8L77SG82PVtThUiPjS1tzr/MaaUngdlSdwxyIRItD+x91p5JKRPsXdc8QYCh1Fbw
-         Xq2CB6g/gHrgeXPZ56PMsTlLjE5r0l3cyqvW89gMikJ/3qG4kE3Ps2dFZe8YSq3Ys/17
-         HZ0Q==
+        bh=o3G9z8T78DTVnGIhhir4CiLyiUwFhPexNUSMPntUVWo=;
+        b=cPyTooRLhSLuj4xtKEF+jqq05kUgSoP1/SoepWsIb42B23Nn+toWC9ie4Bhw5xdETM
+         TGW6MNWUcosF15M5vEf9kh41fmBFqQC26h8O9sx18ZJ1tLbfLkVC1YKx4tDVRSNz0xD4
+         ilIAwbgGThFwD2TGTVm6vA4nEJaXmteCdLoIj4Bpe52m6Y6YnJEKfhBZukrfrE6NJugE
+         cfFLSwRHXDanuANwkl8jx+179uR0WEe7v+0LjYnFBl4uzDiNrS7kPQwk7JxDFSRPYVyS
+         PeF2FPmB0VKNmau4XdHADfVmi7zY1ksyD53iYl4lETvmtpvOiMIC7Zqgi/gyGlDU4fnR
+         TvNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tPbG+1Qsh5nbAzaiZ8E/pw1mS5ghkz1deStVQwXqkP4=;
-        b=Vm+YHmCb6Zbx61j2v7WLbgcjli1zZ5jqW0PogIrxMtmbL7bqVenwQWo7q+0E1brE3A
-         qyBWLLC0T23WRzdB0Xc//1Bn//tGcPNmvxcaYs7dhQrBlcgcd2brGx+ChLz3nTctwbWC
-         n0XHLgdVXd8fPKwCE0yfuy11fD6Z+SA4NL+zW095RVIWsdPXq+eZlzakFTDA700TyHJk
-         k4VvA2rp1ZGCiPfPjdEd4+IRv9noKNpj0P10hNquFqhHIvpWBqs/GPJMBHvASEzUtMeP
-         52KJRmWTorXyOmQGhAPMXNdYt6SmOSiuGEYbZSC1QD7YJRfdjOivFYIcZbV/IbG2OmDM
-         iK7w==
-X-Gm-Message-State: AOAM533aug/6apL0PmVP653ZpTLH1KPDJOQEdov+YLnptAI7+g+Pedvi
-        SgcmNSV8nJ3L51BLXHnB6y9NpPyPONM=
-X-Google-Smtp-Source: ABdhPJzqihmw4n6FOdPzo7A6p0tJo0zukMbN/45Svsp6+TcDeaV6CrpCCK1wVn2iJ59bOG1ZpBaV1g==
-X-Received: by 2002:adf:f001:0:b0:20d:22b:183c with SMTP id j1-20020adff001000000b0020d022b183cmr1538233wro.313.1652916792084;
-        Wed, 18 May 2022 16:33:12 -0700 (PDT)
+        bh=o3G9z8T78DTVnGIhhir4CiLyiUwFhPexNUSMPntUVWo=;
+        b=3prX4I05xeq5HtduVxnVO2yzoF0GfWZh4FPQ4dVGJS3EGfbCiAMjVvCN0ZihE9h2ee
+         DcgCFK396f33KDhAy9Fnxx2rCnglpdbPZOhQJOviMQ2O9UIaiNQsUxHOeMwGeZyjAYct
+         ctp7T15dIZmmobkbB2Bx0NXTRHAX7w+KPhcwq8Hsarv7L8j7oFOcq0st47Tf7G3eV6dJ
+         jEfRcJ9sElsAcGZiTCk8DT+5XgWyAR5HPt9fllABpUx5zryTdFyMr5CkKQVsMLiSe95T
+         hICVT7Hyl1FXfOfvGwLCZ7YO7RcXqE3NujhNwK9nXzjuAvQF9gigZ21HnMnfXmCG+Qv5
+         K3XA==
+X-Gm-Message-State: AOAM532vnEg8Kco4swTwHF3pcgdGDOfPQzW87GUCRxGjwAX0nwRW2VB8
+        dcrb5ZKRzBhAQfFIJ3WEfuU=
+X-Google-Smtp-Source: ABdhPJwyBZdPuWSVpQ3TXkUHx8UnAbrjTQmm5q5gHUpjnyDq+SevbOrKWD4RXJBrhJ0oQRGAhJVxnw==
+X-Received: by 2002:a5d:6dab:0:b0:20c:84b1:5d4e with SMTP id u11-20020a5d6dab000000b0020c84b15d4emr1597515wrs.470.1652916793270;
+        Wed, 18 May 2022 16:33:13 -0700 (PDT)
 Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id j25-20020adfa799000000b0020d042efd11sm3217476wrc.61.2022.05.18.16.33.10
+        by smtp.googlemail.com with ESMTPSA id j25-20020adfa799000000b0020d042efd11sm3217476wrc.61.2022.05.18.16.33.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 16:33:11 -0700 (PDT)
+        Wed, 18 May 2022 16:33:12 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -59,9 +59,9 @@ To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Manivannan Sadhasivam <mani@kernel.org>,
         linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/2] dt-bindings: mtd: partitions: Document new dynamic-partition nodes
-Date:   Thu, 19 May 2022 01:32:57 +0200
-Message-Id: <20220518233258.5483-2-ansuelsmth@gmail.com>
+Subject: [PATCH v4 2/2] mtd: core: introduce of support for dynamic partitions
+Date:   Thu, 19 May 2022 01:32:58 +0200
+Message-Id: <20220518233258.5483-3-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220518233258.5483-1-ansuelsmth@gmail.com>
 References: <20220518233258.5483-1-ansuelsmth@gmail.com>
@@ -77,103 +77,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document new dynamic-partition nodes used to provide an OF node for
-partition registred at runtime by parsers. This is required for nvmem
-system to declare and detect nvmem-cells.
+We have many parser that register mtd partitions at runtime. One example
+is the cmdlinepart or the smem-part parser where the compatible is defined
+in the dts and the partitions gets detected and registered by the
+parser. This is problematic for the NVMEM subsystem that requires an OF node
+to detect NVMEM cells.
 
-With these special partitions, the reg / offset is not required.
-The label binding is used to match the partition allocated by the
-parser at runtime and the parser will provide reg and offset of the mtd.
+To fix this problem, introduce an additional logic that will try to
+assign an OF node to the MTD if declared.
 
-NVMEM will use the data from the parser and provide the NVMEM cells
-declared in the DTS, "connecting" the dynamic partition with a
-static declaration of cells in them.
+On MTD addition, it will be checked if the MTD has an OF node and if
+not declared will check if a partition with the same label is
+declared in DTS. If an exact match is found, the partition dynamically
+allocated by the parser will have a connected OF node.
+
+The NVMEM subsystem will detect the OF node and register any NVMEM cells
+declared statically in the DTS.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- .../mtd/partitions/dynamic-partition.yaml     | 57 +++++++++++++++++++
- .../mtd/partitions/qcom,smem-part.yaml        |  4 ++
- 2 files changed, 61 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mtd/partitions/dynamic-partition.yaml
+ drivers/mtd/mtdcore.c | 49 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mtd/partitions/dynamic-partition.yaml b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partition.yaml
-new file mode 100644
-index 000000000000..f57d7b9cae7f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mtd/partitions/dynamic-partition.yaml
-@@ -0,0 +1,57 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mtd/partitions/dynamic-partition.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Dynamic Partition
-+
-+description: |
-+  This binding describes a single flash partition that is dynamically allocated
-+  by a dedicated parser that is not a fixed-partition parser.
-+
-+  Each child of the parser partition node is then compared and if a match with
-+  the provided label is found then the OF node is assigned.
-+
-+  These special partition definition can be used to give a dynamic partition
-+  an OF node to declare NVMEM cells. An example is declaring the partition
-+  label and all the NVMEM cells in it. The parser will detect the correct reg
-+  and offset and the NVMEM will register the cells in it based on the data
-+  extracted by the parser.
-+
-+maintainers:
-+  - Ansuel Smith <ansuelsmth@gmail.com>
-+
-+properties:
-+  label:
-+    description: The label / name for the partition assigned by the parser at
-+      runtime. This is needed for sybsystem like NVMEM to define cells and
-+      register with this OF node.
-+
-+required:
-+  - label
-+
-+additionalProperties: true
-+
-+examples:
-+  - |
-+    flash {
-+      partitions {
-+        compatible = "qcom,smem-part";
-+
-+        partition-art {
-+          compatible = "nvmem-cells";
-+          #address-cells = <1>;
-+          #size-cells = <1>;
-+          label = "0:art";
-+
-+          macaddr_art_0: macaddr@0 {
-+            reg = <0x0 0x6>;
-+          };
-+
-+          macaddr_art_6: macaddr@6 {
-+            reg = <0x6 0x6>;
-+          };
-+        };
-+      };
-+    };
-diff --git a/Documentation/devicetree/bindings/mtd/partitions/qcom,smem-part.yaml b/Documentation/devicetree/bindings/mtd/partitions/qcom,smem-part.yaml
-index cf3f8c1e035d..b6fa25949fe2 100644
---- a/Documentation/devicetree/bindings/mtd/partitions/qcom,smem-part.yaml
-+++ b/Documentation/devicetree/bindings/mtd/partitions/qcom,smem-part.yaml
-@@ -19,6 +19,10 @@ properties:
-   compatible:
-     const: qcom,smem-part
+diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+index 7731796024e0..807194efb580 100644
+--- a/drivers/mtd/mtdcore.c
++++ b/drivers/mtd/mtdcore.c
+@@ -546,6 +546,54 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
+ 	return 0;
+ }
  
-+patternProperties:
-+  "^partition-[0-9a-z]+$":
-+    $ref: dynamic-partition.yaml#
++static void mtd_check_of_node(struct mtd_info *mtd)
++{
++	struct device_node *partitions, *parent_dn, *mtd_dn = NULL;
++	struct mtd_info *parent;
++	const char *mtd_name;
++	bool found = false;
++	int plen;
 +
- required:
-   - compatible
- 
++	/* Check if MTD already has a device node */
++	if (dev_of_node(&mtd->dev))
++		return;
++
++	/* Check if a partitions node exist */
++	parent = mtd->parent;
++	parent_dn = dev_of_node(&parent->dev);
++	if (!parent_dn)
++		return;
++
++	partitions = of_get_child_by_name(parent_dn, "partitions");
++	if (!partitions)
++		goto exit_parent;
++
++	/* Search if a partition is defined with the same name */
++	for_each_child_of_node(partitions, mtd_dn) {
++		/* Skip partition with no label */
++		mtd_name = of_get_property(mtd_dn, "label", &plen);
++		if (!mtd_name)
++			continue;
++
++		if (!strncmp(mtd->name, mtd_name, plen)) {
++			found = true;
++			break;
++		}
++	}
++
++	if (!found)
++		goto exit_partitions;
++
++	/* Set of_node only for nvmem */
++	if (of_device_is_compatible(mtd_dn, "nvmem-cells"))
++		mtd_set_of_node(mtd, mtd_dn);
++
++exit_partitions:
++	of_node_put(partitions);
++exit_parent:
++	of_node_put(parent_dn);
++}
++
+ /**
+  *	add_mtd_device - register an MTD device
+  *	@mtd: pointer to new MTD device info structure
+@@ -651,6 +699,7 @@ int add_mtd_device(struct mtd_info *mtd)
+ 	mtd->dev.devt = MTD_DEVT(i);
+ 	dev_set_name(&mtd->dev, "mtd%d", i);
+ 	dev_set_drvdata(&mtd->dev, mtd);
++	mtd_check_of_node(mtd);
+ 	of_node_get(mtd_get_of_node(mtd));
+ 	error = device_register(&mtd->dev);
+ 	if (error)
 -- 
 2.34.1
 

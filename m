@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF5D52BDBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B7B52BE7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238815AbiEROn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
+        id S238830AbiEROof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238755AbiEROnw (ORCPT
+        with ESMTP id S238821AbiEROoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:43:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1388C18AAA7;
-        Wed, 18 May 2022 07:43:51 -0700 (PDT)
-Received: from kwepemi500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3FzB1sntzQkCL;
-        Wed, 18 May 2022 22:40:54 +0800 (CST)
+        Wed, 18 May 2022 10:44:23 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECE71D500C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:44:21 -0700 (PDT)
+Received: from kwepemi500006.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3G2R5H4nzhZ2S;
+        Wed, 18 May 2022 22:43:43 +0800 (CST)
 Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- kwepemi500007.china.huawei.com (7.221.188.207) with Microsoft SMTP Server
+ kwepemi500006.china.huawei.com (7.221.188.68) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 18 May 2022 22:43:48 +0800
+ 15.1.2375.24; Wed, 18 May 2022 22:44:19 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600015.china.huawei.com
  (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 22:43:48 +0800
+ 2022 22:44:18 +0800
 From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <miklos@szeredi.hu>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+To:     <hubcap@omnibond.com>
+CC:     <devel@lists.orangefs.org>, <linux-kernel@vger.kernel.org>,
         <chenxiaosong2@huawei.com>, <liuyongqiang13@huawei.com>,
         <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
-Subject: [PATCH -next] fuse: return the more nuanced writeback error on close()
-Date:   Wed, 18 May 2022 22:57:29 +0800
-Message-ID: <20220518145729.2488102-1-chenxiaosong2@huawei.com>
+Subject: [PATCH -next] orangefs: return the more nuanced writeback error on close()
+Date:   Wed, 18 May 2022 22:57:59 +0800
+Message-ID: <20220518145759.2488632-1-chenxiaosong2@huawei.com>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -64,24 +64,28 @@ writeback error -(file->f_mapping->wb_err & MAX_ERRNO).
 
 Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
 ---
- fs/fuse/file.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/orangefs/file.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index f18d14d5fea1..4a0add7f0a17 100644
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -488,8 +488,9 @@ static int fuse_flush(struct file *file, fl_owner_t id)
- 	inode_unlock(inode);
+diff --git a/fs/orangefs/file.c b/fs/orangefs/file.c
+index 86810e5d7914..5c9f0ad7e317 100644
+--- a/fs/orangefs/file.c
++++ b/fs/orangefs/file.c
+@@ -545,10 +545,10 @@ static int orangefs_flush(struct file *file, fl_owner_t id)
+ 	int r;
  
- 	err = filemap_check_errors(file->f_mapping);
-+	/* return more nuanced writeback errors */
- 	if (err)
--		return err;
-+		return filemap_check_wb_err(file->f_mapping, 0);
+ 	r = filemap_write_and_wait_range(file->f_mapping, 0, LLONG_MAX);
+-	if (r > 0)
+-		return 0;
+-	else
+-		return r;
++	/* get more nuanced writeback errors */
++	if (r)
++		r = filemap_check_wb_err(file->f_mapping, 0);
++	return r;
+ }
  
- 	err = 0;
- 	if (fm->fc->no_flush)
+ /** ORANGEFS implementation of VFS file operations */
 -- 
 2.31.1
 

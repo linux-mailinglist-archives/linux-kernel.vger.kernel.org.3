@@ -2,185 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB9452B6A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AA152B77A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbiERJaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S234253AbiERJ3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234248AbiERJaJ (ORCPT
+        with ESMTP id S234179AbiERJ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:30:09 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 02:29:56 PDT
-Received: from esa18.fujitsucc.c3s2.iphmx.com (esa18.fujitsucc.c3s2.iphmx.com [216.71.158.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2EA18B22
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1652866197; x=1684402197;
-  h=from:to:cc:subject:date:message-id:
-   content-transfer-encoding:mime-version;
-  bh=MOARR3nI+Pj58nuRJ1oXWz6o0YFddfpe0JHm+y0OZ44=;
-  b=oRnKmdO3Z8mejbdoIvObcSdgM9DWXXfKdZiR05o3d4SR2JB34eau0Qh7
-   9o+srTx+mme8QAAvmnehPy3ZrN3TfLLzttQ7oSWQ1j2HLNknboLqBRwxY
-   e40N98Wi8vhE+t8VoYdwS6hjaEBgnKiC8mQ6rI99Af6SuYpVz4rSeBTX9
-   J1NJIAMioYZHAryXYv7YoKLKgas1ATcG+b3DK05Z9g7yuU75XSBa9eRX2
-   ggvGZSDo4e4cFObJFwgfSUMIX82kNyo40rnZLaQEEQOhnMXDaaj2BMFRS
-   juMG5Anjhm8s+xudogXF6nQhWJebNfGK0A8lNdabl1f0EE/LT282FDi5F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="57392295"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647270000"; 
-   d="scan'208";a="57392295"
-Received: from mail-tycjpn01lp2168.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.168])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 18:28:49 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lOy+S1mxMykZUmkFHOzvrRSjCVIwtx3u0foe/nxM8BOnftm8i5KFDQnPnZQK54gtRndJqlJyNiPEtKj/bz/GfBrm3pWtes8Rn5CdrcS2mH9g1AmNYf58d22Fy4r51wMo10vXhzOdH1CX+JD7GkrbKkZr0bHst51IbcTRzg7wUYIWhQDSv9x4VXcSm4Eb/pf9CBfg+qvr4rumbcu3+a65JLmCKJ4ARsV8+RqZYpxzd4I9psUnevB5Su3t4j7Uyd8vVSxxuwfxogASNgATRCVPOZdrVjhntC4ExvhCVmWkBvlgviV6QlLKVOhqXaAAm22Y5ydiLtEFdurrICb2ZeeeuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MOARR3nI+Pj58nuRJ1oXWz6o0YFddfpe0JHm+y0OZ44=;
- b=h0ihy2ad0Q7KRP7MSqzPRTaywAL/3yq/+e7W3lXMqruOJaumL7R40mp1uZUXxjq/cNON6fiX+H1wyIWpLnvBmg9ihovvQ9Au+k9y9uAVv1lJRQDxWNdeH289jrrmLwZEyfULZekNWdY78hy2+I0XPFRMT8VuVexW7WNTDFAbmCBS/r4NesgmtM0pZM8zo5NPXDnYhbTPkRubIqXQn5j+ir8CqvlbslNLNJ3VmI51IYN0iT5LwBe5KPKOJSb3w9O90mYSMnFnMMs0BOBHAh90NB4VVnCrVouuhMEfZuveraNLuxUqqCWtKYRJ2WoZSRVOB27UEjtNaQ9BK9yA/aXJGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MOARR3nI+Pj58nuRJ1oXWz6o0YFddfpe0JHm+y0OZ44=;
- b=pqqfaVnwv6NTW3q10nrtqvdJIJ6PCs4ma8aF0NcuXxJGXf5nucQgciYYP5/1BwteURN2+joWIElB/l4YPAeYXRbz1nK6AcaCVAdFo1neMEpBNQzdciQj1vqmGf0pZuosuFYe3Ng0IRMRw8aaasD5IlyGupmXrZfoqULu561ATnY=
-Received: from OSBPR01MB4600.jpnprd01.prod.outlook.com (2603:1096:604:7e::12)
- by TY2PR01MB5129.jpnprd01.prod.outlook.com (2603:1096:404:11a::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.17; Wed, 18 May
- 2022 09:28:46 +0000
-Received: from OSBPR01MB4600.jpnprd01.prod.outlook.com
- ([fe80::f44e:cb18:cb18:e247]) by OSBPR01MB4600.jpnprd01.prod.outlook.com
- ([fe80::f44e:cb18:cb18:e247%4]) with mapi id 15.20.5273.014; Wed, 18 May 2022
- 09:28:45 +0000
-From:   "nakamura.shun@fujitsu.com" <nakamura.shun@fujitsu.com>
-To:     'Jiri Olsa' <olsajiri@gmail.com>
-CC:     "'peterz@infradead.org'" <peterz@infradead.org>,
-        "'mingo@redhat.com'" <mingo@redhat.com>,
-        "'acme@kernel.org'" <acme@kernel.org>,
-        "'mark.rutland@arm.com'" <mark.rutland@arm.com>,
-        "'alexander.shishkin@linux.intel.com'" 
-        <alexander.shishkin@linux.intel.com>,
-        "'jolsa@redhat.com'" <jolsa@redhat.com>,
-        "'namhyung@kernel.org'" <namhyung@kernel.org>,
-        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
-        "'linux-perf-users@vger.kernel.org'" 
-        <linux-perf-users@vger.kernel.org>
-Subject: Re: [PATCH 0/7] libperf: Add interface for overflow check of sampling
- events
-Thread-Topic: Re: [PATCH 0/7] libperf: Add interface for overflow check of
- sampling events
-Thread-Index: Adhql+qIcS4TlJL7Rmm0mhE+FWh7sg==
-Date:   Wed, 18 May 2022 09:28:45 +0000
-Message-ID: <OSBPR01MB4600D5DA317696E3DAACC3CFF7D19@OSBPR01MB4600.jpnprd01.prod.outlook.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5879eb43-fe19-40ec-201f-08da38b0ce66
-x-ms-traffictypediagnostic: TY2PR01MB5129:EE_
-x-microsoft-antispam-prvs: <TY2PR01MB51298FC58E2B19EA3E5A15F9F7D19@TY2PR01MB5129.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ENBLQVRMecqKOmySPkQygIaeNg6htJ9B43XXq8VoWP1231Tzf2P9rTzQU/fyx5Pul1q9+6ms0Ot8IL2pjMsGp6T4YziSobFUprpAKyVWgmtTSD42LznzK6oVU6l1916wtoYetIQ/lny0iyuRFimcD19DU6v5HmiEkVsZhlDmBrIA+h6gwv5hAhlMfUo3uuNJm1JTc6dxHJrqt/IL9yn73UCDzkGtLQxdKNgg7sKTxpWNeGM+4N/UALS4X/ywYKPYAAMsYDt10iXUWMg2Z/weWK/RdswKSnQgegd4NRFTFTgp5TyYXk0BGMmocbMAzI2QZOeVzkcNo5JtBCdIDhMPW+/3zG3LsL/lX0Vu/cL/qZ2yM/n2ryf5Jx+ee3MUFogvPPqY8L+miMfeTM5r21JvJPwbskxchOA0V2fwALDzFuYO/6Ob0IdVT/Ee8gHaXdJsv6Xqa1UEhVeaKg4Fn+Z4bjtpB9y9rZeAwTjLInozWok77Vlh0GB1QU0yqO0rCGUKGeybCjCrLvOUY8BDc7RrV3pKZAU7z6/bxpICF9KCVKNWJJZVrvBG7utF8flHD0bX/0iD0Mciak9ghUbQLO0Rnnp1rGFFmtJxqfnhDdc+5MWj4Ruw7TIQXHObL1lra7qLx4Lyrn6hloHKtIZSzBUMmrXWd89dFNrlLv8GlxFh0L6TEfhXK64DdU9BCDQGfvWwQSpgXo8ZMS9i3R916fxzRA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB4600.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(64756008)(38100700002)(38070700005)(66476007)(122000001)(4326008)(82960400001)(8676002)(86362001)(66946007)(5660300002)(66446008)(7416002)(76116006)(55016003)(6506007)(54906003)(8936002)(508600001)(85182001)(71200400001)(33656002)(83380400001)(186003)(316002)(66556008)(9686003)(26005)(7696005)(2906002)(52536014)(6916009)(4744005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?R1I2K2J1bzlnaldtMU56d1dZaENoVG9UKzNrbmxQdEMvclhwaVE0Rk9N?=
- =?iso-2022-jp?B?QlJ2UzlXYUg0WWF1RXFIQ21NUnhwRitEcUNIdUorVnBuWjhwd3dpNzF0?=
- =?iso-2022-jp?B?aHVRSWFXWDVMLzRxM0ZZUVpicDlVS0Mza0twRnV4RHI2eklRL2NPcVJv?=
- =?iso-2022-jp?B?c2greHIyZzhMaVkyL3B6V09EeGtJUzFDaFRHdzIxNktvK3k2T09obDRs?=
- =?iso-2022-jp?B?ZTV3OVlsUjZDQzZpSXBaUlZ5and6VjFUZ2xOOHV0Z09JY08ydmhjcWxG?=
- =?iso-2022-jp?B?eGVsd0ZnOWxyN2w1Y1BwMm9ldkl3T3ZycCthcXdFTlcxVlZGNHh5Q0hz?=
- =?iso-2022-jp?B?KzBNbFJPd3c3ZmxSYWRIOU1UVTZUbVlLYnRjRVNySDQ2anpKZkpjK3ll?=
- =?iso-2022-jp?B?U3pMWUxud0RnbS9kaUMvQjQ0TmhuWnRScTQ5dWIxZGwrZGsvRDNvcWpu?=
- =?iso-2022-jp?B?TnFRTTdqazl3am4vZ3p2aGZwRE1lckUzeUg0Y3V0OFZydDIwQ3RESzdy?=
- =?iso-2022-jp?B?dmVUU2VrTEtOQStsRi9zSEFiVXFsZzZCcFRzQTM2L2ZxSnNIbCtNRFNY?=
- =?iso-2022-jp?B?VFV0M2xhM0dPejdIakhVcTZVck9mVTcxMnZqR01WUXJGcTJCcnQrdlo1?=
- =?iso-2022-jp?B?WmtOYlV0eW5iZlY0dE94WnNmM1NGNHlVeWNYWURWNHhjQzdicExOSVBu?=
- =?iso-2022-jp?B?ZWV6eGlPWDhXSndIN1ZkZUZTNStUMThzNW0ySW9kVVJVSEJmanNJTzFu?=
- =?iso-2022-jp?B?aCtKVWFKOHV3NmZtTEZaZWYvTXVPc0hGdDZ0d29BcU4xbTMzcnkyNWpE?=
- =?iso-2022-jp?B?UURBWHhYMy9mOTJFSms5cnhQMGkxQXFlMyt3Z09tcWRRTWM5dTFhZ2RU?=
- =?iso-2022-jp?B?RFVtekJNMEFKWG1iU25WL3pkWmp0KzhIS1pyTHZEbFBJTzVicTM0TEE2?=
- =?iso-2022-jp?B?MElkNlVuS2JMN0lhMEdMZ0J1WWJkRitaQXo0YTYxdnBBWC96S0xsemhN?=
- =?iso-2022-jp?B?eWU1NUY2QndyTXIxdklYdzJhTjFrNEtBOXk3UCtNVGF2dHQwNG5QNkw1?=
- =?iso-2022-jp?B?bk1JV3VuZUZ3RTZKRTNPOW9VaGJMSXpFVmxUalR2b1FMVS8wSVFTZldO?=
- =?iso-2022-jp?B?bGJrU2RpSEFUanNkcjRSYWVOaEtISmZZS3Fzc1d5dUVBZ3h4S1BvTks2?=
- =?iso-2022-jp?B?YjUvQXJEeDR4UW5xRjhpMzNFK2I3MFdNNnNiVi9ld3FTUWRFVW9Gd0pK?=
- =?iso-2022-jp?B?RmVpOXgraGc0NDhTOStvcURFTDFKcCt0K2FXV3FDejdLUnRLZU9pR05q?=
- =?iso-2022-jp?B?N1BReHJIV1NMdXZXRGpOVG1nYU0zS25IRE56VHZXOEFjUldpZkZaeEJ2?=
- =?iso-2022-jp?B?eVVqMG1ZQktVN2duYWYrYW5CeUhPOFBiK1ZpTlBmZlAzZk9WTjVTZGxs?=
- =?iso-2022-jp?B?Vzkzb0JHQW5VUS8vcXAwdDJZTnUxSm82WnNaREE3bE1MQytPNXpOOXVh?=
- =?iso-2022-jp?B?S0pEWk56dzVLU1ZmNjFHZjlZK1FjNE0rektiZzlRa1dmTE5UUE1hQ0Fs?=
- =?iso-2022-jp?B?WnlNa3ZPQUttU2NJcndEcjdET0hMbTEwTC93V2E1cGxoUmJwdnh3cjNt?=
- =?iso-2022-jp?B?dEFPRW10TVNpQ1JYYjVyWWgyb1hVM0RvYXlSMzV3elZiMmVYVnBrOUto?=
- =?iso-2022-jp?B?V29qUFArYXV2bVpBM0gvNUtKNVF5THlBQk5iYW02TXZhUzh1TnRGZkEz?=
- =?iso-2022-jp?B?N0RoaU45NWFDdkhjamVPd1Yrb1VZWk53dWNLSURoM2FwNHp6dFc4Z1NO?=
- =?iso-2022-jp?B?U1FKUkp5Yi9wMm0vdXloMUdZcTBQV0Z6aHpXUkpvMENXaVFsRlFRK3Zy?=
- =?iso-2022-jp?B?bjhVZktzNWJ1dUhGYVJlaE4yRFZDYlcvVHlSdUZ3WDM2Wmd4WUZPaUdl?=
- =?iso-2022-jp?B?Qlc5SVFCVXNyR1A2cmd3RndrZ3NnekZzMVZtdmpHeDVoYWhqTjd3Z1ZY?=
- =?iso-2022-jp?B?aEkySTl1TldCNlJ0TUpNQUVmYjJZRXUrTzZKK3hhNWprOG5mNjhsWGRC?=
- =?iso-2022-jp?B?Q0NGNk5RZHFGdUsxNkJxZlhFN0psc3RzKzJUQVgrSjlxK0xFcGxNR0xi?=
- =?iso-2022-jp?B?TnZXakppM0pJdUZLN3NXdDBCeFZHdXlrYUlQWTlINldxVzdGNEl2ck91?=
- =?iso-2022-jp?B?SWxnNmplNjFtZ2J3b1pHbWVCWU12c3RxTHdvUWY0enNsVG5PaGpDSk0x?=
- =?iso-2022-jp?B?NGlFWUVKWGw4MFhmUjNHL05Ed0RDSEVYSVR4cTNTV1J4TlJ6K1B3QnI5?=
- =?iso-2022-jp?B?UjdZQ3JMMzYxaFRhVXhGcFFscGM4RUFzbitkYTYvbEYzd1YvNVFVb3lH?=
- =?iso-2022-jp?B?Y0QxNmw2S0ZoRkk5YmgwRmJid1VSa0xVZTIyOXZHNURQTVovdFJJUEx1?=
- =?iso-2022-jp?B?YTk2aEdlWnpkblo0dHE1KzRNRit0bjFjWjM0R0FyelArWVdBeEFiQTJR?=
- =?iso-2022-jp?B?ZUJkazltKzB4VUtIRXlYRURjdUtYSmZNYS8ranNmZ1Y3MVhQMThjS3VK?=
- =?iso-2022-jp?B?WkpYK0xjQT0=?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 18 May 2022 05:29:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CAD939A4;
+        Wed, 18 May 2022 02:29:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB8D9B81EF6;
+        Wed, 18 May 2022 09:29:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3214C385A5;
+        Wed, 18 May 2022 09:29:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652866169;
+        bh=mxYfw+GinqAjrXTEOeZE9mJTILflufdqzdNKepyHGvs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WnuDNuac+vgJ5XGYkmYhG9vNk3/I6KnCpiWaFtwNmTHgasum5pAR9I1Ia8/AVt6DN
+         F3NuWnnkUTtKb9iOCd3/oC5u/Am6hb7Kg3DyrmvwrHrqkFFCcrYF1K62y+uJaM3Deg
+         rpfqlGmc4TCKfQaB7wVFZQqjMtEj8LqJWUrYIWrhoClQs6eTv/AGwqPTkCTM5NSHlb
+         cN8+C18E4CAWIF4nXhVX20/3ZV1YHMEzIXYds4gOYHvqg4joiG39+Kjp8tbbiglhX8
+         Cx/Mho/xgs/KvziMEuryCU+NLzLcbSlWPQvSyC0y/LHz17ajEWeXM9VDOT2qFu4yo1
+         euk6Iv9GMxRcg==
+Date:   Wed, 18 May 2022 14:59:24 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        dmitry.baryshkov@linaro.org, bjorn.andersson@linaro.org,
+        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] phy/qcom: add regulator_set_load to edp/dp phy
+Message-ID: <YoS8dMAhD9h+CtJa@matsya>
+References: <1652808360-9830-1-git-send-email-quic_khsieh@quicinc.com>
+ <1652808360-9830-2-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB4600.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5879eb43-fe19-40ec-201f-08da38b0ce66
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2022 09:28:45.4389
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5+JBDwZirPxYHceJgedJB4lgINXpuiCY0Fh5kyh46/0C1iY9WrZ2tPky2KMOt5nYVaArn9OmDTH4OXRVmLd19/6htyAU1/zWoIf7ouKYFBg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB5129
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652808360-9830-2-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jirka.
+On 17-05-22, 10:25, Kuogee Hsieh wrote:
 
->This patch series adds interface for overflow check of sampling events
->to libperf.
->
->First patch move 'open_flags' from tools/perf to evsel::open_flags.
->
->Second patch introduce perf_{evsel, evlist}__open_opt() with extensible
->structure opts.
->
->Third patch add support for overflow handling of sampling events.
->
->Fourth patch adds a interface to check overflowed events.
->
->Fifth patch adds a interface to perform IOC_REFRESH and IOC_PERIOD.
->
->Sixth and seventh patch adds tests.
->
-Do you have any comments?
-If nothing else, I will rebase the patch to 5.18-rc7 and post the v2 patch.
+pls use the correct subsystem tag, "phy: xxx" in this case
 
-Best Regards
-Shunsuke
+> This patch add regulator_set_load() to both eDP and DP phy driver
+> to have totally control regulators.
 
+Can you explain what is meant by "totally control regulators"
+
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/phy/qualcomm/phy-qcom-edp.c | 25 +++++++++++++++++++++----
+>  drivers/phy/qualcomm/phy-qcom-qmp.c | 24 ++++++++++++++++++++++++
+>  2 files changed, 45 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c b/drivers/phy/qualcomm/phy-qcom-edp.c
+> index cacd32f..9b55095 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
+> @@ -87,17 +87,24 @@ struct qcom_edp {
+>  
+>  	struct clk_bulk_data clks[2];
+>  	struct regulator_bulk_data supplies[2];
+> +	int enable_load[2];
+> +	int disable_load[2];
+>  };
+>  
+>  static int qcom_edp_phy_init(struct phy *phy)
+>  {
+>  	struct qcom_edp *edp = phy_get_drvdata(phy);
+>  	int ret;
+> +	int num_consumers = ARRAY_SIZE(edp->supplies);
+> +	int i;
+>  
+> -	ret = regulator_bulk_enable(ARRAY_SIZE(edp->supplies), edp->supplies);
+> +	ret = regulator_bulk_enable(num_consumers, edp->supplies);
+>  	if (ret)
+>  		return ret;
+>  
+> +	for (i = num_consumers - 1; i >= 0; --i)
+> +		regulator_set_load(edp->supplies[i].consumer, edp->enable_load[i]);
+> +
+>  	ret = clk_bulk_prepare_enable(ARRAY_SIZE(edp->clks), edp->clks);
+>  	if (ret)
+>  		goto out_disable_supplies;
+> @@ -425,9 +432,15 @@ static int qcom_edp_phy_power_off(struct phy *phy)
+>  static int qcom_edp_phy_exit(struct phy *phy)
+>  {
+>  	struct qcom_edp *edp = phy_get_drvdata(phy);
+> +	int num_consumers = ARRAY_SIZE(edp->supplies);
+> +	int i;
+>  
+>  	clk_bulk_disable_unprepare(ARRAY_SIZE(edp->clks), edp->clks);
+> -	regulator_bulk_disable(ARRAY_SIZE(edp->supplies), edp->supplies);
+> +
+> +	for (i = num_consumers - 1; i >= 0; --i)
+> +		regulator_set_load(edp->supplies[i].consumer, edp->disable_load[i]);
+> +
+> +	regulator_bulk_disable(num_consumers, edp->supplies);
+>  
+>  	return 0;
+>  }
+> @@ -633,8 +646,12 @@ static int qcom_edp_phy_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	edp->supplies[0].supply = "vdda-phy";
+> -	edp->supplies[1].supply = "vdda-pll";
+> +	edp->supplies[0].supply = "vdda-1p2";
+> +	edp->supplies[1].supply = "vdda-0p9";
+
+These are documented in bindings, so cannot be removed, Reminder binding
+is an ABI
+ 
+You have not documented the new names either...
+
+> +	edp->enable_load[0] = 21800;	/* 1.2 V */
+> +	edp->enable_load[1] = 36000;	/* 1.2 V */
+> +	edp->disable_load[0] = 4;	/* 0.9 V */
+> +	edp->disable_load[1] = 4;	/* 10.9V */
+
+is that correct, 10.9V?
+
+>  	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(edp->supplies), edp->supplies);
+>  	if (ret)
+>  		return ret;
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> index b144ae1..c589231 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+
+This is a different driver, so should be a different patch!
+
+> @@ -3130,6 +3130,8 @@ struct qmp_phy_cfg {
+>  	int num_resets;
+>  	/* regulators to be requested */
+>  	const char * const *vreg_list;
+> +	const unsigned int *vreg_enable_load;
+> +	const unsigned int *vreg_disable_load;
+>  	int num_vregs;
+>  
+>  	/* array of registers with different offsets */
+> @@ -3346,6 +3348,14 @@ static const char * const qmp_phy_vreg_l[] = {
+>  	"vdda-phy", "vdda-pll",
+>  };
+>  
+> +static const unsigned int qmp_phy_vreg_enable_load[] = {
+> +	21800, 36000
+> +};
+> +
+> +static const unsigned int qmp_phy_vreg_disable_load[] = {
+> +	4, 32
+> +};
+> +
+>  static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
+>  	.type			= PHY_TYPE_USB3,
+>  	.nlanes			= 1,
+> @@ -4072,6 +4082,8 @@ static const struct qmp_phy_cfg sm8250_usb3phy_cfg = {
+>  	.reset_list		= msm8996_usb3phy_reset_l,
+>  	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+>  	.vreg_list		= qmp_phy_vreg_l,
+> +	.vreg_enable_load	= qmp_phy_vreg_enable_load,
+> +	.vreg_disable_load	= qmp_phy_vreg_disable_load,
+>  	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+>  	.regs			= qmp_v4_usb3phy_regs_layout,
+>  
+> @@ -4139,6 +4151,8 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
+>  	.reset_list		= msm8996_usb3phy_reset_l,
+>  	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+>  	.vreg_list		= qmp_phy_vreg_l,
+> +	.vreg_enable_load	= qmp_phy_vreg_enable_load,
+> +	.vreg_disable_load	= qmp_phy_vreg_disable_load,
+>  	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+>  	.regs			= qmp_v4_usb3phy_regs_layout,
+>  
+> @@ -5015,6 +5029,11 @@ static int qcom_qmp_phy_com_init(struct qmp_phy *qphy)
+>  		goto err_reg_enable;
+>  	}
+>  
+> +	if (cfg->vreg_enable_load) {
+> +		for (i = cfg->num_vregs - 1; i >= 0; --i)
+> +			regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_enable_load[i]);
+> +	}
+> +
+>  	for (i = 0; i < cfg->num_resets; i++) {
+>  		ret = reset_control_assert(qmp->resets[i]);
+>  		if (ret) {
+> @@ -5116,6 +5135,11 @@ static int qcom_qmp_phy_com_exit(struct qmp_phy *qphy)
+>  
+>  	clk_bulk_disable_unprepare(cfg->num_clks, qmp->clks);
+>  
+> +	if (cfg->vreg_disable_load[i]) {
+> +		for (i = cfg->num_vregs - 1; i >= 0; --i)
+> +			regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_disable_load[i]);
+> +	}
+> +
+>  	regulator_bulk_disable(cfg->num_vregs, qmp->vregs);
+>  
+>  	mutex_unlock(&qmp->phy_mutex);
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+
+-- 
+~Vinod

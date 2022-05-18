@@ -2,258 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8513252C662
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4110D52C666
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiERWht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 18:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S230103AbiERWit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 18:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiERWhq (ORCPT
+        with ESMTP id S230088AbiERWip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 18:37:46 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3773E7DE2E
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:37:43 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id u15so3412235pfi.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aFRU12DTpolAuGFmkxAhHBmEQsELfp0+L3UbPiDUDic=;
-        b=fIA1tDQePC+WwhmrT2D2/WLcjuLa1rmtZQEy6T74alcSgoC+3JBHVOI7GA0bzW2bwO
-         0sFSJJ6eC08nG9ML6l+hhrEJD5ka6gOlolbvaO0Os8KZASDLodw296ToE9sFLEZ4JSRe
-         tv5bdKYjSPUEhdUYu1eGDgAh/PbnqTvjopYkIuXp9bJ/iRp9hLFuQD7jO+o9ZcIMN+DZ
-         wNH58WZli0Sixu/mgV8sfjJfE+GaV27Ely440N3JmIemb9N9LAgH9wQqIWDBrnODD02+
-         9Jjq0GVNbu3YKjIDc3D5JDyIEB2SNhVpQoDAEU7OsL/zBnJMNqpN83m+KKR5BKUH7tnP
-         jNpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aFRU12DTpolAuGFmkxAhHBmEQsELfp0+L3UbPiDUDic=;
-        b=ndM4XXXVXV8nAUKb/G/ECTTfrvOK8r0i8/Pvwr+ZFcue8ILTw4X26eWHFL7pR9HpkD
-         FYwUpYOb1lNLOoitAnBtAJt2Dzmf8wtUpCa9TAExJuXMGCmWe1fiph9h0az9+1te1/ag
-         9LA4PQZMVzo2ZUta51iTVPk8wehsID7jnIGqG68t2XOHVKIodtVGPryM2KB6eOfmjrwn
-         bXB7zLZWDapBgme9L0IAtSPwEUM7Pan8crtEolep9K5u340Ik7q1ihc8udetDGc6fOb8
-         XhDoWfLm4oW75Cnx73RTB301MgyCGd4Arfs8P+/dWgKNBrnSEPUh4K9J3csc+gp2Oh/1
-         lFxw==
-X-Gm-Message-State: AOAM533FzBldKBzNh0+VKyhAAwPQO6zBA77Sl0q5y94vuH9oC2ZS9CY5
-        fxe5rroQHNSa7hiQFLGfT0kCYg==
-X-Google-Smtp-Source: ABdhPJx62VoZDlNYuHhcZzwHSLIChJL/iVEygcBtpNRtatDiQ1p6HcxgC7GBcLWLbgO8k5Q67US7vw==
-X-Received: by 2002:a63:5510:0:b0:3db:8bb3:6059 with SMTP id j16-20020a635510000000b003db8bb36059mr1349343pgb.328.1652913462627;
-        Wed, 18 May 2022 15:37:42 -0700 (PDT)
-Received: from yoga (pat_11.qualcomm.com. [192.35.156.11])
-        by smtp.gmail.com with ESMTPSA id i65-20020a62c144000000b0050dc762816bsm2513004pfg.69.2022.05.18.15.37.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 15:37:41 -0700 (PDT)
-Date:   Wed, 18 May 2022 15:37:34 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] phy: qcom-qmp: Add USB3 5NM QMP UNI registers
-Message-ID: <YoV1Lv02q2jB1ptd@yoga>
-References: <20220513225348.1671639-1-bjorn.andersson@linaro.org>
- <20220513225348.1671639-3-bjorn.andersson@linaro.org>
- <YoN5k0tNXDhwS9rC@matsya>
- <YoN6lLF6ffu4Jhgo@matsya>
+        Wed, 18 May 2022 18:38:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B168187209;
+        Wed, 18 May 2022 15:38:44 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24ILmTaJ022038;
+        Wed, 18 May 2022 22:38:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=cWTccgEFni0SxdgeQnDGBy9L1Zho1qh6R/OThU17sl8=;
+ b=ZOZcebrJGbgwHxCcYecMtKnjvK4wLXM9H04DjFyVCjX3ux0bJgJlOKB7ZnmbAu2cnL0b
+ pHTobF0gikeR9oo+GUGFJh7ytrxzP8nKyyd2VO1bdD5bi/ggvsiEZkqBjrr8+3oAyswW
+ g6nooA2efPDT45R51URRzKY7JaU944KOYKDjpKIYifat4B6N7zdDCUrtS/gopBvGtt+A
+ rae5DRO4L7qh/wSJf0DzfJwHYuEQSL8HhK0MiGIYWszZHXi4fwaCovtM8xBlu7nxICTV
+ L9U7BDa+reXdgayM4Kjf/qgkmEDXemte+07rre1yQ4UIfTRmOK9/2lghvaYbyUHR3Kzj sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g591s0ykk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 22:38:36 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IMMZVP002682;
+        Wed, 18 May 2022 22:38:36 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g591s0yjf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 22:38:36 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IMcIbm028428;
+        Wed, 18 May 2022 22:38:33 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429e9my-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 22:38:33 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IMcU6f22020420
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 22:38:30 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 755844C050;
+        Wed, 18 May 2022 22:38:30 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D2AB64C044;
+        Wed, 18 May 2022 22:38:25 +0000 (GMT)
+Received: from vajain21.in.ibm.com (unknown [9.43.77.53])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Wed, 18 May 2022 22:38:25 +0000 (GMT)
+Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Thu, 19 May 2022 04:08:24 +0530
+From:   Vaibhav Jain <vaibhav@linux.ibm.com>
+To:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Vaibhav Jain <vaibhav@linux.ibm.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
+Date:   Thu, 19 May 2022 04:08:15 +0530
+Message-Id: <20220518223815.809858-1-vaibhav@linux.ibm.com>
+X-Mailer: git-send-email 2.35.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: WW_Zj-4Qv0pvqo8tFz9-I-3xNtkXyPAI
+X-Proofpoint-ORIG-GUID: dBh774JKVVFITszzeWAwa8USh6ZJW1U6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoN6lLF6ffu4Jhgo@matsya>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 clxscore=1011
+ mlxlogscore=999 bulkscore=0 priorityscore=1501 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205180125
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 17 May 03:36 PDT 2022, Vinod Koul wrote:
+[1] Provides a way for user-space to trigger proactive reclaim by introducing
+a write-only memcg file 'memory.reclaim'. However reclaim stats like number
+of pages scanned and reclaimed is still not directly available to the
+user-space.
 
-> On 17-05-22, 16:01, Vinod Koul wrote:
-> > On 13-05-22, 15:53, Bjorn Andersson wrote:
-> > > Add all registers defines from qcom,usb3-5nm-qmp-uni.h of the msm-5.4
-> > > kernel. Offsets are adjusted to be relative to each sub-block, as we
-> > > describe the individual pieces in the upstream kernel and "5NM" are
-> > > injected in the defines to not collide with existing constants.
-> > > 
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > >  .../phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h  | 617 ++++++++++++++++++
-> > >  1 file changed, 617 insertions(+)
-> > >  create mode 100644 drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
-> > > 
-> > > diff --git a/drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h b/drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
-> > > new file mode 100644
-> > > index 000000000000..b912e50825f9
-> > > --- /dev/null
-> > > +++ b/drivers/phy/qualcomm/phy-qcom-usb3-5nm-qmp-uni.h
-> > > @@ -0,0 +1,617 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > +/*
-> > > + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> > 
-> > should this be 2022 or add Linaro one for 2022..?
-> > 
-> > > + */
-> > > +
-> > > +#ifndef PHY_QCOM_USB3_5NM_QMP_UNI_H_
-> > > +#define PHY_QCOM_USB3_5NM_QMP_UNI_H_
-> > > +
-> > > +/* Module: USB3_UNI_PHY_QSERDES_COM_QSERDES_COM_PCIE_USB3_UNI_QMP_PLL */
-> > > +#define USB3_5NM_UNI_QSERDES_COM_ATB_SEL1			0x000
-> > > +#define USB3_5NM_UNI_QSERDES_COM_ATB_SEL2			0x004
-> > > +#define USB3_5NM_UNI_QSERDES_COM_FREQ_UPDATE			0x008
-> > > +#define USB3_5NM_UNI_QSERDES_COM_BG_TIMER			0x00c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_EN_CENTER			0x010
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_ADJ_PER1			0x014
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_ADJ_PER2			0x018
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_PER1			0x01c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_PER2			0x020
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE1_MODE0		0x024
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE2_MODE0		0x028
-> 
-> this seems to be QSERDES_V3_COM_* uptill now...
-> 
+This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
+readable which returns the number of pages scanned / reclaimed during the
+reclaim process from 'struct vmpressure' associated with each memcg. This should
+let user-space asses how successful proactive reclaim triggered from memcg
+'memory.reclaim' was ?
 
-Yes, some of these will be the same across several different versions of
-QMP phys.
+With the patch following command flow is expected:
 
-It takes me quite a bit of time trying to puzzle in missing entries in
-the right place in the existing sets of defines. So the proposal here is
-to use the generated files that exists for many of the QMP variants
-downstream.
+ # echo "1M" > memory.reclaim
 
-An example of this is that I got the USB combo phy for sc8280xp wrong,
-because I couldn't copy paste the initialization sequence from the
-downstream dts and we have mangled the names in the header file. So
-either we just use the generated downstream file, or I will have to
-spend a bunch of time trying to figure out which register(s) I got
-wrong.
+ # cat memory.reclaim
+   scanned 76
+   reclaimed 32
 
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE3_MODE0		0x02c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE1_MODE1		0x030
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE2_MODE1		0x034
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SSC_STEP_SIZE3_MODE1		0x038
-> > > +#define USB3_5NM_UNI_QSERDES_COM_POST_DIV			0x03c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_POST_DIV_MUX			0x040
-> > > +#define USB3_5NM_UNI_QSERDES_COM_BIAS_EN_CLKBUFLR_EN		0x044
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CLK_ENABLE1			0x048
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SYS_CLK_CTRL			0x04c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SYSCLK_BUF_ENABLE		0x050
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLL_EN				0x054
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLL_IVCO			0x058
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CMN_IETRIM			0x05c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CMN_IPTRIM			0x060
-> > > +#define USB3_5NM_UNI_QSERDES_COM_EP_CLOCK_DETECT_CTRL		0x064
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SYSCLK_DET_COMP_STATUS		0x068
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CLK_EP_DIV_MODE0		0x06c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CLK_EP_DIV_MODE1		0x070
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CP_CTRL_MODE0			0x074
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CP_CTRL_MODE1			0x078
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLL_RCTRL_MODE0		0x07c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLL_RCTRL_MODE1		0x080
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLL_CCTRL_MODE0		0x084
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLL_CCTRL_MODE1		0x088
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLL_CNTRL			0x08c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_BIAS_EN_CTRL_BY_PSM		0x090
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SYSCLK_EN_SEL			0x094
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CML_SYSCLK_SEL			0x098
-> > > +#define USB3_5NM_UNI_QSERDES_COM_RESETSM_CNTRL			0x09c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_RESETSM_CNTRL2			0x0a0
-> > > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP_EN			0x0a4
-> > > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP_CFG			0x0a8
-> > > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP1_MODE0		0x0ac
-> > > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP2_MODE0		0x0b0
-> > > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP1_MODE1		0x0b4
-> > > +#define USB3_5NM_UNI_QSERDES_COM_LOCK_CMP2_MODE1		0x0b8
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MODE0		0x0bc
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MSB_MODE0		0x0c0
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MODE1		0x0c4
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DEC_START_MSB_MODE1		0x0c8
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START1_MODE0		0x0cc
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START2_MODE0		0x0d0
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START3_MODE0		0x0d4
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START1_MODE1		0x0d8
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START2_MODE1		0x0dc
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DIV_FRAC_START3_MODE1		0x0e0
-> > > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_INITVAL		0x0e4
-> > > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_EN			0x0e8
-> > > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN0_MODE0		0x0ec
-> > > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN1_MODE0		0x0f0
-> > > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN0_MODE1		0x0f4
-> > > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_GAIN1_MODE1		0x0f8
-> > > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_P_PATH_GAIN0		0x0fc
-> > > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_P_PATH_GAIN1		0x100
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCOCAL_DEADMAN_CTRL		0x104
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_CTRL			0x108
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MAP			0x10c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE1_MODE0		0x110
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE2_MODE0		0x114
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE1_MODE1		0x118
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE2_MODE1		0x11c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_INITVAL1		0x120
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_INITVAL2		0x124
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MINVAL1		0x128
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MINVAL2		0x12c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MAXVAL1		0x130
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_MAXVAL2		0x134
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_TIMER1		0x138
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_TUNE_TIMER2		0x13c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CMN_STATUS			0x140
-> > > +#define USB3_5NM_UNI_QSERDES_COM_RESET_SM_STATUS		0x144
-> > > +#define USB3_5NM_UNI_QSERDES_COM_RESTRIM_CODE_STATUS		0x148
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLLCAL_CODE1_STATUS		0x14c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLLCAL_CODE2_STATUS		0x150
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CLK_SELECT			0x154
-> > > +#define USB3_5NM_UNI_QSERDES_COM_HSCLK_SEL			0x158
-> > > +#define USB3_5NM_UNI_QSERDES_COM_HSCLK_HS_SWITCH_SEL		0x15c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_INTEGLOOP_BINCODE_STATUS	0x160
-> > > +#define USB3_5NM_UNI_QSERDES_COM_PLL_ANALOG			0x164
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CORECLK_DIV_MODE0		0x168
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CORECLK_DIV_MODE1		0x16c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SW_RESET			0x170
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CORE_CLK_EN			0x174
-> > > +#define USB3_5NM_UNI_QSERDES_COM_C_READY_STATUS			0x178
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CMN_CONFIG			0x17c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CMN_RATE_OVERRIDE		0x180
-> > > +#define USB3_5NM_UNI_QSERDES_COM_SVS_MODE_CLK_SEL		0x184
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS0			0x188
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS1			0x18c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS2			0x190
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS3			0x194
-> > > +#define USB3_5NM_UNI_QSERDES_COM_DEBUG_BUS_SEL			0x198
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CMN_MISC1			0x19c
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CMN_MODE			0x1a0
-> > > +#define USB3_5NM_UNI_QSERDES_COM_CMN_MODE_CONTD			0x1a4
-> > > +#define USB3_5NM_UNI_QSERDES_COM_VCO_DC_LEVEL_CTRL		0x1a8
-> > > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE1_MODE0	0x1ac
-> > > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE0	0x1b0
-> > > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE1_MODE1	0x1b4
-> > > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_CMP_CODE2_MODE1	0x1b8
-> > > +#define USB3_5NM_UNI_QSERDES_COM_BIN_VCOCAL_HSCLK_SEL		0x1bc
-> > > +#define USB3_5NM_UNI_QSERDES_COM_RESERVED_1			0x1c0
-> > > +#define USB3_5NM_UNI_QSERDES_COM_MODE_OPERATION_STATUS		0x1c4
-> 
-> these are offset now...
-> 
+[1]:  https://lore.kernel.org/r/20220425190040.2475377-1-yosryahmed@google.com
 
-Not sure I see what you mean?
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Yosry Ahmed <yosryahmed@google.com>
+Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+---
+ Documentation/admin-guide/cgroup-v2.rst | 15 ++++++++++++---
+ mm/memcontrol.c                         | 14 ++++++++++++++
+ 2 files changed, 26 insertions(+), 3 deletions(-)
 
-> Any reason why this should be 5NM and not use the VX convention we
-> have...?
-> 
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 27ebef2485a3..44610165261d 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -1209,18 +1209,27 @@ PAGE_SIZE multiple when read back.
+ 	utility is limited to providing the final safety net.
+ 
+   memory.reclaim
+-	A write-only nested-keyed file which exists for all cgroups.
++	A nested-keyed file which exists for all cgroups.
+ 
+-	This is a simple interface to trigger memory reclaim in the
+-	target cgroup.
++	This is a simple interface to trigger memory reclaim and retrieve
++	reclaim stats in the target cgroup.
+ 
+ 	This file accepts a single key, the number of bytes to reclaim.
+ 	No nested keys are currently supported.
+ 
++	Reading the file returns number of pages scanned and number of
++	pages reclaimed from the memcg. This information fetched from
++	vmpressure info associated with each cgroup.
++
+ 	Example::
+ 
+ 	  echo "1G" > memory.reclaim
+ 
++	  cat memory.reclaim
++
++	  scanned 78
++	  reclaimed 30
++
+ 	The interface can be later extended with nested keys to
+ 	configure the reclaim behavior. For example, specify the
+ 	type of memory to reclaim from (anon, file, ..).
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 2e2bfbed4717..9e43580a8726 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -6423,6 +6423,19 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
+ 	return nbytes;
+ }
+ 
++static int memory_reclaim_show(struct seq_file *m, void *v)
++{
++	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
++	struct vmpressure *vmpr = memcg_to_vmpressure(memcg);
++
++	spin_lock(&vmpr->sr_lock);
++	seq_printf(m, "scanned %lu\nreclaimed %lu\n",
++		   vmpr->scanned, vmpr->reclaimed);
++	spin_unlock(&vmpr->sr_lock);
++
++	return 0;
++}
++
+ static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+ 			      size_t nbytes, loff_t off)
+ {
+@@ -6525,6 +6538,7 @@ static struct cftype memory_files[] = {
+ 		.name = "reclaim",
+ 		.flags = CFTYPE_NS_DELEGATABLE,
+ 		.write = memory_reclaim,
++		.seq_show  = memory_reclaim_show,
+ 	},
+ 	{ }	/* terminate */
+ };
+-- 
+2.35.1
 
-The downstream file is named "5nm" and not V5, so this was simply an
-attempt to reduce the effort spent maintaining these defines.
-
-Regards,
-Bjorn

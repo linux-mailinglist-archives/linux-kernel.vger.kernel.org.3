@@ -2,105 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EDF52C26C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1277352C275
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241405AbiERS3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S241429AbiERSaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241389AbiERS3C (ORCPT
+        with ESMTP id S241408AbiERSaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:29:02 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1024205241
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:29:00 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id a38so23767pgl.9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:29:00 -0700 (PDT)
+        Wed, 18 May 2022 14:30:30 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A9C2268A7;
+        Wed, 18 May 2022 11:30:29 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id e78so5114772ybc.12;
+        Wed, 18 May 2022 11:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=rs+hYjREIGQRrA6fYOwB+iDuVdssLJ9+QtiHFV7DjL0=;
-        b=56li6rLC4mQzRo0A2kXqCOMihPnh37A1HauoHxo4CjJMMuRdOwMf25S0Gg0mhW4H1V
-         9oOovgGOyX26iKhdSLr17ZDHUilwvfRWItX4kYjWxDcZeJLKtWZdFg1s7NiWZdD+GyVM
-         KJttKiC4l1M5erBf0kwMAuhlpCYSJef4Ht1zQqWzfQh9U259WzwAbZy7OglBSEw1Kkt5
-         I8zIKarbcikHCK0RFMumk20d6U4SinIwA/pHFrpQj3jVTbbDOPe4Z+fN1BJJD+DxEI+B
-         O7cWYnGGR+LQ4+Smr495r3EMtIZ9/Hrn5EVFhO1s214IbW9ifIzL2RKvXS2XHrYOVgOA
-         InyA==
+        bh=Bf0jmikkZt6khZjmZ+vQTYW/X5n5hIhO7K0m1yFYmMA=;
+        b=DQrs0jTpZ1vGSeqz7AYb5bKh1GiP4TZvutQH5ZOx/53NncCrtyYXWc9qsPCc+v8nsT
+         6lijKkPTj1fMN1w1jnhxD9GkWA6svUP3mn/xt/TKC5fyKafJpL1Q1ESGOElx62VBHo6r
+         isYoLighMpLY0WRY46APIdrvR6L/7bE4jDLIAXWiBqCUwt2Iq/9E1+nqEo024ASniG1Q
+         uWUJuCccB1qLN+pQj9yBUpSKstdgp7rUxYpS4KwAyMwOy3bjEhE/cncdl9xuNzo8a0Dq
+         +Sm0AjiBxpDZAP84N7f2dHEMgXMO7AUkffY2KV5lt63GcJSHM/5L7M4n5pMAiHSfO+kH
+         z6HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=rs+hYjREIGQRrA6fYOwB+iDuVdssLJ9+QtiHFV7DjL0=;
-        b=Oj3XBD01MWaL4w5+awgpQA0uIveY52GpqFJ640Y9qs8Div6lBtiZpPXuJMJHajvIL3
-         IX2PHu6i1hivRdHiP/ruiGH7TlCELSnDA2GEhCYfw7wID24a6AVL9gOv5Y76WNlXgh91
-         drSUobGdXo8QDvF5byr94TcdC30lYi0ttVjZTaIlSrSEGnf4cxs2rWpn4TLyvuSHhZTr
-         jRXt5o0pbQWrHK1ZmQ2jj7kQCTGydTcm6RrNwTBJC9e5g0TClEW19GiHn9rRJ4bza3YG
-         v8ia8MZjF5UGENEZVaEOWo5PJdOAcBTNnpex9/0eu9rxjRCH5Ys4rtDNvmN3I5zhmY2P
-         JUVw==
-X-Gm-Message-State: AOAM532EgD6KZpITCXy8rK3IYIgw9N31Qq8IL2tgzQtFXE3jT/yFJ8uR
-        w4yPGWruk3rIRdzY3PsKkRrjgAtj7npzwYHARbNXBw==
-X-Google-Smtp-Source: ABdhPJwMwJen2kHUljMxLGhfJo+EhmxX/T4W59DWfSThgOD6IYw6SPZuTRmwpc9boSVZhrVVAKPtxD2J9ln9cKQkELQ=
-X-Received: by 2002:a63:e648:0:b0:3f2:7ade:8f86 with SMTP id
- p8-20020a63e648000000b003f27ade8f86mr670271pgj.40.1652898540353; Wed, 18 May
- 2022 11:29:00 -0700 (PDT)
+        bh=Bf0jmikkZt6khZjmZ+vQTYW/X5n5hIhO7K0m1yFYmMA=;
+        b=jA2EkbSa4AVoLYuh4Oo/tDg9nCFn9wxEGhGZlsYvOUBCuYktBGnXZR9lHJolIp6NQV
+         U89C2S2r1/gHILaTnBzTydBb4RU6ZOrvk+c9i+7mSAZXNgyvuYQAst6R3GWy3C6zBHo2
+         XDX77Mvy1le8IeCxpdLZ9Jp+UDZgn3TxNbb5mqvYafrWUrwSQDLazt/+mhaL9f1HzJic
+         HflMbazZjx8I0h3FPhLnSujEgnU4qVLX1UlwMtt0TBTHdPbX3C7yqkTFVoh4BYCllFOK
+         33lmwdm5ITw+HLscaOZkOc9hKPpS5Mn4enDeO5Vfg/PP53XgIiDwoH8Sa9OOVJ97CiuE
+         4enA==
+X-Gm-Message-State: AOAM531ANjeGlz5k/D8hdV4WoxDeuAIYMEhe9HK+bCeYoXgLn8J2Qsf9
+        skPGMUkQdkPAbdqjbTNaDg4xb/cR/VfVGUguslU=
+X-Google-Smtp-Source: ABdhPJwa8QmUvXVgKqdigNG0HwCeALivqCUbq0/SWjT0HH4A9ZF+Ly+39iqLY7/VD2e+bS7AHJBXjdU1WWmvfIWoSn0=
+X-Received: by 2002:a5b:246:0:b0:619:5651:3907 with SMTP id
+ g6-20020a5b0246000000b0061956513907mr958340ybp.190.1652898628394; Wed, 18 May
+ 2022 11:30:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAKgze5YDD02AsrF0yESv2sptZ4qxyTMgCDmnOKcbQWjKQsJRsw@mail.gmail.com>
- <YnUYLDjIThbIz/Uf@zn.tnic> <6d90c832-af4a-7ed6-4f72-dae08bb69c37@intel.com>
- <CAPcyv4i73m6iPPfJE9CBdxf-OWGXahvGqvh6G-pqVO=3LB6ktQ@mail.gmail.com>
- <47140A56-D3F8-4292-B355-5F92E3BA9F67@alien8.de> <6abea873-52a2-f506-b21b-4b567bee1874@intel.com>
- <FDABC5C8-B80A-4977-9F97-5A8FC47F69D6@alien8.de> <4bc56567-e2ce-40ec-19ab-349c8de8d969@intel.com>
- <CE52D65A-C9F4-408D-B18A-72D87495A433@alien8.de> <CAD2FfiHe3hCSNHEA0mSWPbH4LEWhj+FgxkhO83U1GgYEJR6wrw@mail.gmail.com>
- <YoSlzqSGLrQ+jdnD@zn.tnic>
-In-Reply-To: <YoSlzqSGLrQ+jdnD@zn.tnic>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Wed, 18 May 2022 11:28:49 -0700
-Message-ID: <CAPcyv4jv52nv=Q=gm783ysU8D56iHzh9-UJrqqkgUve0f_kyZw@mail.gmail.com>
-Subject: Re: [PATCH v8 0/8] x86: Show in sysfs if a memory node is able to do encryption
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Richard Hughes <hughsient@gmail.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Martin Fernandez <martin.fernandez@eclypsium.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, daniel.gutson@eclypsium.com,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
+References: <20220511183210.5248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220511183210.5248-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdUiq3svPa+OMmG70HP-3h4gKV6puoT8QUm3WgPw+e4i=A@mail.gmail.com>
+In-Reply-To: <CAMuHMdUiq3svPa+OMmG70HP-3h4gKV6puoT8QUm3WgPw+e4i=A@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 18 May 2022 19:30:02 +0100
+Message-ID: <CA+V-a8uzaHr=gQ+b8JeqdsibKqQtiqGqVaxkeauu+6o-V3ki6g@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] gpio: gpiolib: Add ngirq member to struct gpio_irq_chip
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, X86 ML <x86@kernel.org>,
-        "Schofield, Alison" <alison.schofield@intel.com>,
-        alex.bazhaniuk@eclypsium.com, Greg KH <gregkh@linuxfoundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        "Huang, Kai" <kai.huang@intel.com>
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 12:53 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Mon, May 16, 2022 at 09:39:06AM +0100, Richard Hughes wrote:
-> > This is still something consumers need; at the moment users have no
-> > idea if data is *actually* being encrypted.
->
-> As it was already pointed out - that's in /proc/cpuinfo.
+Hi Geert,
 
-For TME you still need to compare it against the EFI memory map as
-there are exclusion ranges for things like persistent memory. Given
-that persistent memory can be forced into volatile "System RAM"
-operation by various command line options and driver overrides, you
-need to at least trim the assumptions of what is encrypted to the
-default "conventional memory" conveyed by platform firmware / BIOS.
+Thank you for the review.
+
+On Thu, May 12, 2022 at 8:29 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Wed, May 11, 2022 at 8:32 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > Supported GPIO IRQs by the chip is not always equal to the number of GPIO
+> > pins. For example on Renesas RZ/G2L SoC where it has GPIO0-122 pins but at
+> > a give point a maximum of only 32 GPIO pins can be used as IRQ lines in
+> > the IRQC domain.
+> >
+> > This patch adds ngirq member to struct gpio_irq_chip and passes this as a
+> > size to irq_domain_create_hierarchy()/irq_domain_create_simple() if it is
+> > being set in the driver otherwise fallbacks to using ngpio.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Thanks for your patch!
+>
+> > --- a/drivers/gpio/gpiolib.c
+> > +++ b/drivers/gpio/gpiolib.c
+> > @@ -1221,7 +1221,7 @@ static int gpiochip_hierarchy_add_domain(struct gpio_chip *gc)
+> >         gc->irq.domain = irq_domain_create_hierarchy(
+> >                 gc->irq.parent_domain,
+> >                 0,
+> > -               gc->ngpio,
+> > +               gc->irq.ngirq ?: gc->ngpio,
+> >                 gc->irq.fwnode,
+> >                 &gc->irq.child_irq_domain_ops,
+> >                 gc);
+> > @@ -1574,7 +1574,7 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
+> >         } else {
+> >                 /* Some drivers provide custom irqdomain ops */
+> >                 gc->irq.domain = irq_domain_create_simple(fwnode,
+> > -                       gc->ngpio,
+> > +                       gc->irq.ngirq ?: gc->ngpio,
+> >                         gc->irq.first,
+> >                         gc->irq.domain_ops ?: &gpiochip_domain_ops,
+> >                         gc);
+>
+> OK.
+>
+> gpiochip_irqchip_remove() does:
+>
+>         /* Remove all IRQ mappings and delete the domain */
+>         if (gc->irq.domain) {
+>                 unsigned int irq;
+>
+>                 for (offset = 0; offset < gc->ngpio; offset++) {
+>                        if (!gpiochip_irqchip_irq_valid(gc, offset))
+>
+> Hence it relies on gc->irq.valid_mask, which I think is OK in general.
+>
+Agreed.
+
+>                                 continue;
+>
+>                         irq = irq_find_mapping(gc->irq.domain, offset);
+>                         irq_dispose_mapping(irq);
+>                 }
+>
+>                 irq_domain_remove(gc->irq.domain);
+>
+>         }
+>
+> > --- a/include/linux/gpio/driver.h
+> > +++ b/include/linux/gpio/driver.h
+> > @@ -51,6 +51,14 @@ struct gpio_irq_chip {
+> >          */
+> >         const struct irq_domain_ops *domain_ops;
+> >
+> > +       /**
+> > +        * @ngirq:
+> > +        *
+> > +        * The number of GPIO IRQ's handled by this IRQ domain; usually is
+> > +        * equal to ngpio.
+>
+> "If not set, ngpio will be used."
+>
+sure will update the comment.
+
+Cheers,
+Prabhakar
+
+> > +        */
+> > +       u16 ngirq;
+> > +
+> >  #ifdef CONFIG_IRQ_DOMAIN_HIERARCHY
+> >         /**
+> >          * @fwnode:
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

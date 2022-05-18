@@ -2,280 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9C052C249
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25EDF52C26C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241339AbiERS1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S241405AbiERS3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234057AbiERS11 (ORCPT
+        with ESMTP id S241389AbiERS3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:27:27 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AE91CEED7;
-        Wed, 18 May 2022 11:27:25 -0700 (PDT)
+        Wed, 18 May 2022 14:29:02 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1024205241
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:29:00 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id a38so23767pgl.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:29:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652898445; x=1684434445;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=b8tRQsCHtzmgJoCqviRRMmkqm8bIh2NyvIijPhk0qDw=;
-  b=CrMVGbdVwH+xLGlya1cPJ4iPFSq4HuOBofbupRWDqptVdqB4NhnGWoAd
-   Yom4TOZe+7B/gmiU4lrp017Ztd0dfhK4YhYKL5cO7RrVQDL6C6k3H0Mas
-   hzt/UsoiA0aLah22muMpVavfkloDU5eMOClqTk/X4EoCdwUY/DeDhXsFk
-   E=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 May 2022 11:27:25 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:27:23 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 11:27:25 -0700
-Received: from [10.110.42.114] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 18 May
- 2022 11:27:23 -0700
-Message-ID: <fccdd789-81a7-c1c8-8d46-2eee33fc7fb1@quicinc.com>
-Date:   Wed, 18 May 2022 11:27:22 -0700
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rs+hYjREIGQRrA6fYOwB+iDuVdssLJ9+QtiHFV7DjL0=;
+        b=56li6rLC4mQzRo0A2kXqCOMihPnh37A1HauoHxo4CjJMMuRdOwMf25S0Gg0mhW4H1V
+         9oOovgGOyX26iKhdSLr17ZDHUilwvfRWItX4kYjWxDcZeJLKtWZdFg1s7NiWZdD+GyVM
+         KJttKiC4l1M5erBf0kwMAuhlpCYSJef4Ht1zQqWzfQh9U259WzwAbZy7OglBSEw1Kkt5
+         I8zIKarbcikHCK0RFMumk20d6U4SinIwA/pHFrpQj3jVTbbDOPe4Z+fN1BJJD+DxEI+B
+         O7cWYnGGR+LQ4+Smr495r3EMtIZ9/Hrn5EVFhO1s214IbW9ifIzL2RKvXS2XHrYOVgOA
+         InyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rs+hYjREIGQRrA6fYOwB+iDuVdssLJ9+QtiHFV7DjL0=;
+        b=Oj3XBD01MWaL4w5+awgpQA0uIveY52GpqFJ640Y9qs8Div6lBtiZpPXuJMJHajvIL3
+         IX2PHu6i1hivRdHiP/ruiGH7TlCELSnDA2GEhCYfw7wID24a6AVL9gOv5Y76WNlXgh91
+         drSUobGdXo8QDvF5byr94TcdC30lYi0ttVjZTaIlSrSEGnf4cxs2rWpn4TLyvuSHhZTr
+         jRXt5o0pbQWrHK1ZmQ2jj7kQCTGydTcm6RrNwTBJC9e5g0TClEW19GiHn9rRJ4bza3YG
+         v8ia8MZjF5UGENEZVaEOWo5PJdOAcBTNnpex9/0eu9rxjRCH5Ys4rtDNvmN3I5zhmY2P
+         JUVw==
+X-Gm-Message-State: AOAM532EgD6KZpITCXy8rK3IYIgw9N31Qq8IL2tgzQtFXE3jT/yFJ8uR
+        w4yPGWruk3rIRdzY3PsKkRrjgAtj7npzwYHARbNXBw==
+X-Google-Smtp-Source: ABdhPJwMwJen2kHUljMxLGhfJo+EhmxX/T4W59DWfSThgOD6IYw6SPZuTRmwpc9boSVZhrVVAKPtxD2J9ln9cKQkELQ=
+X-Received: by 2002:a63:e648:0:b0:3f2:7ade:8f86 with SMTP id
+ p8-20020a63e648000000b003f27ade8f86mr670271pgj.40.1652898540353; Wed, 18 May
+ 2022 11:29:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/2] phy/qcom: add regulator_set_load to edp/dp phy
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1652892186-22346-1-git-send-email-quic_khsieh@quicinc.com>
- <1652892186-22346-2-git-send-email-quic_khsieh@quicinc.com>
- <CAA8EJpr9znfxLK+kDstMFFk3V8goyaceGXi4sDc9ghz4eryXMg@mail.gmail.com>
- <c5decaeb-2e88-ef23-ce6c-50d3d853766b@quicinc.com>
- <42b0034f-0be1-2951-d6a6-bf0a51cf0fc2@linaro.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <42b0034f-0be1-2951-d6a6-bf0a51cf0fc2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAKgze5YDD02AsrF0yESv2sptZ4qxyTMgCDmnOKcbQWjKQsJRsw@mail.gmail.com>
+ <YnUYLDjIThbIz/Uf@zn.tnic> <6d90c832-af4a-7ed6-4f72-dae08bb69c37@intel.com>
+ <CAPcyv4i73m6iPPfJE9CBdxf-OWGXahvGqvh6G-pqVO=3LB6ktQ@mail.gmail.com>
+ <47140A56-D3F8-4292-B355-5F92E3BA9F67@alien8.de> <6abea873-52a2-f506-b21b-4b567bee1874@intel.com>
+ <FDABC5C8-B80A-4977-9F97-5A8FC47F69D6@alien8.de> <4bc56567-e2ce-40ec-19ab-349c8de8d969@intel.com>
+ <CE52D65A-C9F4-408D-B18A-72D87495A433@alien8.de> <CAD2FfiHe3hCSNHEA0mSWPbH4LEWhj+FgxkhO83U1GgYEJR6wrw@mail.gmail.com>
+ <YoSlzqSGLrQ+jdnD@zn.tnic>
+In-Reply-To: <YoSlzqSGLrQ+jdnD@zn.tnic>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 18 May 2022 11:28:49 -0700
+Message-ID: <CAPcyv4jv52nv=Q=gm783ysU8D56iHzh9-UJrqqkgUve0f_kyZw@mail.gmail.com>
+Subject: Re: [PATCH v8 0/8] x86: Show in sysfs if a memory node is able to do encryption
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Richard Hughes <hughsient@gmail.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Martin Fernandez <martin.fernandez@eclypsium.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, daniel.gutson@eclypsium.com,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, X86 ML <x86@kernel.org>,
+        "Schofield, Alison" <alison.schofield@intel.com>,
+        alex.bazhaniuk@eclypsium.com, Greg KH <gregkh@linuxfoundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 18, 2022 at 12:53 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Mon, May 16, 2022 at 09:39:06AM +0100, Richard Hughes wrote:
+> > This is still something consumers need; at the moment users have no
+> > idea if data is *actually* being encrypted.
+>
+> As it was already pointed out - that's in /proc/cpuinfo.
 
-On 5/18/2022 10:52 AM, Dmitry Baryshkov wrote:
-> On 18/05/2022 20:36, Kuogee Hsieh wrote:
->>
->> On 5/18/2022 10:12 AM, Dmitry Baryshkov wrote:
->>> On Wed, 18 May 2022 at 19:43, Kuogee Hsieh <quic_khsieh@quicinc.com> 
->>> wrote:
->>>> This patch add regulator_set_load() to both eDP and DP phy driver
->>>> to have totally control regulators.
->>>>
->>>> Changes in v2:
->>>> -- no regulator_set_laod() before disable regulator
->>>>
->>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>> ---
->>>>   drivers/phy/qualcomm/phy-qcom-edp.c | 25 +++++++++++++++++++++----
->>>>   drivers/phy/qualcomm/phy-qcom-qmp.c | 13 +++++++++++++
->>> Split into -edp and -qmp part.
->>>
->>>>   2 files changed, 34 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c 
->>>> b/drivers/phy/qualcomm/phy-qcom-edp.c
->>>> index cacd32f..9b55095 100644
->>>> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
->>>> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
->>>> @@ -87,17 +87,24 @@ struct qcom_edp {
->>>>
->>>>          struct clk_bulk_data clks[2];
->>>>          struct regulator_bulk_data supplies[2];
->>>> +       int enable_load[2];
->>>> +       int disable_load[2];
->>> As noticed in the review of the previous patch, disable_load is 
->>> unnecessary.
->>>
->>>>   };
->>>>
->>>>   static int qcom_edp_phy_init(struct phy *phy)
->>>>   {
->>>>          struct qcom_edp *edp = phy_get_drvdata(phy);
->>>>          int ret;
->>>> +       int num_consumers = ARRAY_SIZE(edp->supplies);
->>>> +       int i;
->>>>
->>>> -       ret = regulator_bulk_enable(ARRAY_SIZE(edp->supplies), 
->>>> edp->supplies);
->>>> +       ret = regulator_bulk_enable(num_consumers, edp->supplies);
->>>>          if (ret)
->>>>                  return ret;
->>>>
->>>> +       for (i = num_consumers - 1; i >= 0; --i)
->>>> + regulator_set_load(edp->supplies[i].consumer, edp->enable_load[i]);
->>>> +
->>>>          ret = clk_bulk_prepare_enable(ARRAY_SIZE(edp->clks), 
->>>> edp->clks);
->>>>          if (ret)
->>>>                  goto out_disable_supplies;
->>>> @@ -425,9 +432,15 @@ static int qcom_edp_phy_power_off(struct phy 
->>>> *phy)
->>>>   static int qcom_edp_phy_exit(struct phy *phy)
->>>>   {
->>>>          struct qcom_edp *edp = phy_get_drvdata(phy);
->>>> +       int num_consumers = ARRAY_SIZE(edp->supplies);
->>>> +       int i;
->>>>
->>>> clk_bulk_disable_unprepare(ARRAY_SIZE(edp->clks), edp->clks);
->>>> -       regulator_bulk_disable(ARRAY_SIZE(edp->supplies), 
->>>> edp->supplies);
->>>> +
->>>> +       for (i = num_consumers - 1; i >= 0; --i)
->>>> + regulator_set_load(edp->supplies[i].consumer, edp->disable_load[i]);
->>>> +
->>>> +       regulator_bulk_disable(num_consumers, edp->supplies);
->>>>
->>>>          return 0;
->>>>   }
->>>> @@ -633,8 +646,12 @@ static int qcom_edp_phy_probe(struct 
->>>> platform_device *pdev)
->>>>          if (ret)
->>>>                  return ret;
->>>>
->>>> -       edp->supplies[0].supply = "vdda-phy";
->>>> -       edp->supplies[1].supply = "vdda-pll";
->>>> +       edp->supplies[0].supply = "vdda-1p2";
->>>> +       edp->supplies[1].supply = "vdda-0p9";
->>> NAK, You can not randomly change supply names.
->>
->> if you do no change here, then we have to change dtsi.
->>
->> They are not match.
->
-> Where is no match? I don't see any in-kernel dtsi using them.
-
-my mistake, we did not pull in Doug's patch at our internal release 
-where i run my test.
-
-
->
->
->>>> +       edp->enable_load[0] = 21800;    /* 1.2 V */
->>>> +       edp->enable_load[1] = 36000;    /* 1.2 V */
->>>> +       edp->disable_load[0] = 4;       /* 0.9 V */
->>>> +       edp->disable_load[1] = 4;       /* 10.9V */
->>> Again, 10.9V here. Kuogee. Have you read the review points?
->> I have read it. but forget to make  change at edp file.
->>>
->>>>          ret = devm_regulator_bulk_get(dev, 
->>>> ARRAY_SIZE(edp->supplies), edp->supplies);
->>>>          if (ret)
->>>>                  return ret;
->>>> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c 
->>>> b/drivers/phy/qualcomm/phy-qcom-qmp.c
->>>> index b144ae1..0a4c8a8 100644
->>>> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
->>>> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
->>>> @@ -3130,6 +3130,7 @@ struct qmp_phy_cfg {
->>>>          int num_resets;
->>>>          /* regulators to be requested */
->>>>          const char * const *vreg_list;
->>>> +       const unsigned int *vreg_enable_load;
->>>>          int num_vregs;
->>>>
->>>>          /* array of registers with different offsets */
->>>> @@ -3346,6 +3347,10 @@ static const char * const qmp_phy_vreg_l[] = {
->>>>          "vdda-phy", "vdda-pll",
->>>>   };
->>>>
->>>> +static const unsigned int qmp_phy_vreg_enable_load[] = {
->>>> +       21800, 36000
->>>> +};
->>>> +
->>>>   static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
->>>>          .type                   = PHY_TYPE_USB3,
->>>>          .nlanes                 = 1,
->>>> @@ -4072,6 +4077,7 @@ static const struct qmp_phy_cfg 
->>>> sm8250_usb3phy_cfg = {
->>>>          .reset_list             = msm8996_usb3phy_reset_l,
->>>>          .num_resets             = 
->>>> ARRAY_SIZE(msm8996_usb3phy_reset_l),
->>>>          .vreg_list              = qmp_phy_vreg_l,
->>>> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
->>>>          .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
->>>>          .regs                   = qmp_v4_usb3phy_regs_layout,
->>>>
->>>> @@ -4139,6 +4145,7 @@ static const struct qmp_phy_cfg 
->>>> sm8250_dpphy_cfg = {
->>>>          .reset_list             = msm8996_usb3phy_reset_l,
->>>>          .num_resets             = 
->>>> ARRAY_SIZE(msm8996_usb3phy_reset_l),
->>>>          .vreg_list              = qmp_phy_vreg_l,
->>>> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
->
-> So, you apply this change only to the sm8250 (sc7280) config. Are you 
-> sure that both of them have the same requirement?
->
-> Also there are other DP phy instances (sc8180x, sc7180). Do they have 
-> to be extended too?
->
->>>>          .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
->>>>          .regs                   = qmp_v4_usb3phy_regs_layout,
->>>>
->>>> @@ -5008,6 +5015,11 @@ static int qcom_qmp_phy_com_init(struct 
->>>> qmp_phy *qphy)
->>>>                  return 0;
->>>>          }
->>>>
->>>> +       if (cfg->vreg_enable_load) {
->>>> +               for (i = cfg->num_vregs - 1; i >= 0; --i)
->>> What's the point of iterating the list backwards?
->>
->> do no  know,
->>
->> I just follow the order from regulator_bulk_enable()
->
-> regulator_bulk_enable() iterates the list in the ascending order.
->
->>
->>>
->>>> + regulator_set_load(qmp->vregs[i].consumer, 
->>>> cfg->vreg_enable_load[i]);
->>>> +       }
->>>> +
->>>>          /* turn on regulator supplies */
->>>>          ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
->>>>          if (ret) {
->>>> @@ -5116,6 +5128,7 @@ static int qcom_qmp_phy_com_exit(struct 
->>>> qmp_phy *qphy)
->>>>
->>>>          clk_bulk_disable_unprepare(cfg->num_clks, qmp->clks);
->>>>
->>>> +       /* no minimum load set required before disable regulator */
->>> No otneed for the comment.
->>>
->>>> regulator_bulk_disable(cfg->num_vregs, qmp->vregs);
->>>>
->>>>          mutex_unlock(&qmp->phy_mutex);
->>>> -- 
->>>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
->>>> Forum,
->>>> a Linux Foundation Collaborative Project
->>>>
->>>
->
->
+For TME you still need to compare it against the EFI memory map as
+there are exclusion ranges for things like persistent memory. Given
+that persistent memory can be forced into volatile "System RAM"
+operation by various command line options and driver overrides, you
+need to at least trim the assumptions of what is encrypted to the
+default "conventional memory" conveyed by platform firmware / BIOS.

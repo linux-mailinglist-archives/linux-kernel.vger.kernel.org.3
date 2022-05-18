@@ -2,126 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1932E52B644
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D1252B5F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbiERJH2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 May 2022 05:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
+        id S233805AbiERJHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbiERJHW (ORCPT
+        with ESMTP id S233798AbiERJHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:07:22 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC30E15C0;
-        Wed, 18 May 2022 02:07:21 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id 126so1000349qkm.4;
-        Wed, 18 May 2022 02:07:21 -0700 (PDT)
+        Wed, 18 May 2022 05:07:38 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49ABB111BA6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:07:36 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id d15so2475875lfk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:07:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wcrsvOrOm+mRa378F80R7USaGzcRNkSgm1WTWIJU7Qs=;
+        b=dOowfJdUkCgdm+X0sjpkSjkrWinBHywOfRCJNbbQg4ZKVRGegBTMgRLgdR+HsHFGKZ
+         r4xFbL1vipCRMWGmh9nB0S8FKnGjgZbtewcVMVPp2bWC2O5toghr+ux4gKsXPzoghRsL
+         WUOnQv3yOcw7YQOVrDk5ku5tDcNRyvk2u7JzYf93lhPHoYGlKPeYZMMpRm5144bV2zcT
+         WKvj/zSILDcgH344tlgTJ/s606MgwrrA+qjyxf8zFhmnLzroOMdt5L3scY4FFq/gcHxV
+         O3nplaMJWPnZBHVE3SMXQM6BNUvxKU0DNP0ZV6fdaX6iLjwlISaAEUpqQ6h78DIHQUHc
+         rK+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OPdrAjKOyQOcWm67dROL4azSD7nDXBVBpZGGGZKL78E=;
-        b=hc8oIs7ZyO4XjHkBTDGVbQzPHanenkTdGJUfqI4BTIaRvM327ffexnDSBbMTHNuMFz
-         X5QW31F2xiS9aNNH+JERnjqVzs08OxIjWoYIqQyHiS3VuPVlWSqYXcPYKT0izg+lCANM
-         7JAuD7tSP8HSqhWIN8e0La6lOwaZgIW55vfzbbTEGokLmxTsFY4ItXhrNDBy4uQK3IrL
-         VE/TuOSvParetHD6r/yTq2khJUEZ2SR8PQB1aTfdShTCfiJSmw++F8u0UNEMW7C41aac
-         PdM+mCzBScII+jEYCvNSr4DHSFIXBJaywJcFxYVoqkH2O6OwNp5wKOC8dGbY94ubaatE
-         WI/A==
-X-Gm-Message-State: AOAM532QRjgPrgJjMei5Jkc2pyLd6ZgWFPzKLRBLYON2vPwW4S2K19Nv
-        egu/kQDC9XTIiDzIjvZm1gZ7qGY1gKb9OQ==
-X-Google-Smtp-Source: ABdhPJwOxaIdhXrkfIK0RJfFWGAOJ/OzQlp4CncqNBYYOjYKJqVCx6BuNuNCFIMH7fGI/cpTPASMdw==
-X-Received: by 2002:a37:6549:0:b0:69f:a625:fe2b with SMTP id z70-20020a376549000000b0069fa625fe2bmr19052577qkb.132.1652864840806;
-        Wed, 18 May 2022 02:07:20 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id d21-20020ac800d5000000b002f39b99f697sm864460qtg.49.2022.05.18.02.07.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 02:07:20 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f83983782fso17146067b3.6;
-        Wed, 18 May 2022 02:07:20 -0700 (PDT)
-X-Received: by 2002:a81:2143:0:b0:2fb:1274:247e with SMTP id
- h64-20020a812143000000b002fb1274247emr29579131ywh.384.1652864840147; Wed, 18
- May 2022 02:07:20 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=wcrsvOrOm+mRa378F80R7USaGzcRNkSgm1WTWIJU7Qs=;
+        b=yROmjkG2C80i0VBQ/DrAiFuf6iDlkMkWEdpTNhko0eaokQY/LDL+iuBUJUWnj6v9Wj
+         8CafjokjQyEEJS4pMdkq3/78yJoDEMrviTKB46Rs2GOyrtMgT0VrWMBLIGsvoXOSdr1y
+         73R/hzQYdQb5idxhf9ugLJAJcVhC07tm2930UAE14HAw8P9i2x1+2VUD0aL3UvSI+Y0g
+         QP6o/scqFnalzbvuvms6fB+Q3PtB8R9W5yzfTe9AAOpad1DVT1GIsCf4NXf1ReeT9+Yj
+         3purFGMjBZet8FZ1gyp5c0ViBB33AO6k6oh9maN/w0HDsbiuv1g9AaTlGobpLTEGKtVX
+         ipQg==
+X-Gm-Message-State: AOAM532LHQPCw+/r9TZB/C8bqcwu3OkJCQtPeMST78mEGdp0TczWRWaG
+        4htUo6LfZuFtrowuqSoQNNrvyIQLWWjPyvLHToWS6Q==
+X-Google-Smtp-Source: ABdhPJzAelqtBPGCxXlfVN3acRhTDjVF3HlQ8kO0+AOIyERK7gjO1Z1UPKDGisPXmDCihnikdsCzfF2/c2VeEisQqRI=
+X-Received: by 2002:a05:6512:168d:b0:471:6cb9:c20f with SMTP id
+ bu13-20020a056512168d00b004716cb9c20fmr19895367lfb.229.1652864854579; Wed, 18
+ May 2022 02:07:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516115627.66363-1-guozhengkui@vivo.com>
-In-Reply-To: <20220516115627.66363-1-guozhengkui@vivo.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 18 May 2022 11:07:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWH1rdP22VnhR_h601tm+DDo7+sGdXR-6NQx0B-jGoZ1A@mail.gmail.com>
-Message-ID: <CAMuHMdWH1rdP22VnhR_h601tm+DDo7+sGdXR-6NQx0B-jGoZ1A@mail.gmail.com>
-Subject: Re: [PATCH linux-next] net: smc911x: replace ternary operator with min()
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        zhengkui_guo@outlook.com
+References: <20220308205000.27646-1-mike.leach@linaro.org> <20220308205000.27646-9-mike.leach@linaro.org>
+ <71c11820-433d-755d-0eb4-797313d693f9@huawei.com>
+In-Reply-To: <71c11820-433d-755d-0eb4-797313d693f9@huawei.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Wed, 18 May 2022 10:07:23 +0100
+Message-ID: <CAJ9a7ViS-nxhmzRs6LwHSqPzHSo11inZ+066aKe116ESr6ufvw@mail.gmail.com>
+Subject: Re: [PATCH 08/10] coresight: Remove legacy Trace ID allocation mechanism
+To:     "liuqi (BA)" <liuqi115@huawei.com>
+Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guo,
+Hi
 
-On Mon, May 16, 2022 at 10:36 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
-> Fix the following coccicheck warning:
+On Tue, 17 May 2022 at 04:56, liuqi (BA) <liuqi115@huawei.com> wrote:
 >
-> drivers/net/ethernet/smsc/smc911x.c:483:20-22: WARNING opportunity for min()
+> Hi Mike,
 >
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-
-Thanks for your patch, which is now commit 5ff0348b7f755aac ("net:
-smc911x: replace ternary operator with min()") in net-next/master.
-
-> --- a/drivers/net/ethernet/smsc/smc911x.c
-> +++ b/drivers/net/ethernet/smsc/smc911x.c
-> @@ -480,7 +480,7 @@ static void smc911x_hardware_send_pkt(struct net_device *dev)
->         SMC_SET_TX_FIFO(lp, cmdB);
+> On 2022/3/9 4:49, Mike Leach wrote:
+> > This static 'cpu * 2 + seed' was outdated and broken for systems with high
+> > core counts (>46).
+> >
+> > This has been replaced by a dynamic allocation system.
+> >
+> > Signed-off-by: Mike Leach <mike.leach@linaro.org>
+> > ---
+> >   include/linux/coresight-pmu.h | 12 ------------
+> >   1 file changed, 12 deletions(-)
 >
->         DBG(SMC_DEBUG_PKTS, dev, "Transmitted packet\n");
-> -       PRINT_PKT(buf, len <= 64 ? len : 64);
-> +       PRINT_PKT(buf, min(len, 64));
-
-Unfortunately you forgot to test-compile this with
-ENABLE_SMC_DEBUG_PKTS=1, which triggers:
-
-        drivers/net/ethernet/smsc/smc911x.c: In function
-‘smc911x_hardware_send_pkt’:
-        include/linux/minmax.h:20:28: error: comparison of distinct
-pointer types lacks a cast [-Werror]
-           20 |  (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-              |                            ^~
-        drivers/net/ethernet/smsc/smc911x.c:483:17: note: in expansion
-of macro ‘min’
-          483 |  PRINT_PKT(buf, min(len, 64));
-
-"len" is "unsigned int", while "64" is "(signed) int".
-
-I have sent a fix
-https://lore.kernel.org/r/ca032d4122fc70d3a56a524e5944a8eff9a329e8.1652864652.git.geert+renesas@glider.be/
-
+> Seems coresight_get_trace_id() in tools/include/linux/coresight-pmu.h
+> need to be deleted too.
 >
->         /* Send pkt via PIO or DMA */
->  #ifdef SMC_USE_DMA
+> Thanks,
+> Qi
+>
 
-Gr{oetje,eeting}s,
+Agreed - I'll sort it for the next release.
 
-                        Geert
+Thanks
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Mike
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> >
+> > diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
+> > index 4ac5c081af93..bb4eb4de3c77 100644
+> > --- a/include/linux/coresight-pmu.h
+> > +++ b/include/linux/coresight-pmu.h
+> > @@ -8,7 +8,6 @@
+> >   #define _LINUX_CORESIGHT_PMU_H
+> >
+> >   #define CORESIGHT_ETM_PMU_NAME "cs_etm"
+> > -#define CORESIGHT_ETM_PMU_SEED  0x10
+> >
+> >   /*
+> >    * Below are the definition of bit offsets for perf option, and works as
+> > @@ -32,15 +31,4 @@
+> >   #define ETM4_CFG_BIT_RETSTK 12
+> >   #define ETM4_CFG_BIT_VMID_OPT       15
+> >
+> > -static inline int coresight_get_trace_id(int cpu)
+> > -{
+> > -     /*
+> > -      * A trace ID of value 0 is invalid, so let's start at some
+> > -      * random value that fits in 7 bits and go from there.  Since
+> > -      * the common convention is to have data trace IDs be I(N) + 1,
+> > -      * set instruction trace IDs as a function of the CPU number.
+> > -      */
+> > -     return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
+> > -}
+> > -
+> >   #endif
+> >
+> _______________________________________________
+> CoreSight mailing list -- coresight@lists.linaro.org
+> To unsubscribe send an email to coresight-leave@lists.linaro.org
+
+
+
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

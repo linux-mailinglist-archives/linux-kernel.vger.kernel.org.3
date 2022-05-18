@@ -2,61 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C315F52B92D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00C252B91A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235867AbiERLtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        id S235927AbiERLwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235801AbiERLtO (ORCPT
+        with ESMTP id S235939AbiERLwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:49:14 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DDD179C20;
-        Wed, 18 May 2022 04:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652874552; x=1684410552;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XoTcRvBEP7DM1Xn0CK6ikwtWQeUDutphMprr9lkGIho=;
-  b=IJtNxgPenMe/gQwbUulMjZYg1oE/0v8Zo8sXK27DKHB85FX1Q7wseHYg
-   9gyBGSXr86ZTw/YWi1av2SkrgxRaftU2XgvtDrDmTzGl0bERtZPQ8YqsD
-   TcnTJIkpVYfryuFnkKIwj5/i0mEhjML3W7t7ipIQ3YJ0e6T0vpXdx9pTA
-   Hnx4zok3F0zTHPZkCPNcFWsxQoM+c84UX0n8jQymwDzms1F/438Z2Ookb
-   lzJVoicm+uwlUUnqDX8VbNEx04dVTpz9UQwPL8N176IZzbI+NsPeEIJPv
-   LU6vfse6D7gX36poBjDHbi9giw/wnSzgj7X+epiLhAkLf4DPSxAHrxGKu
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="164583740"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 May 2022 04:49:11 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 18 May 2022 04:49:11 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 18 May 2022 04:49:09 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v3 2/2] nvmem: microchip-otpc: add support
-Date:   Wed, 18 May 2022 14:51:29 +0300
-Message-ID: <20220518115129.908787-3-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220518115129.908787-1-claudiu.beznea@microchip.com>
-References: <20220518115129.908787-1-claudiu.beznea@microchip.com>
+        Wed, 18 May 2022 07:52:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFF83614D;
+        Wed, 18 May 2022 04:52:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4380B81F4C;
+        Wed, 18 May 2022 11:52:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D8B5C385A5;
+        Wed, 18 May 2022 11:52:46 +0000 (UTC)
+Message-ID: <aaa42afe-2edc-cde9-c689-7df5f91dae09@xs4all.nl>
+Date:   Wed, 18 May 2022 13:52:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3] media: Add P010 video format
+Content-Language: en-US
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20220517091419.248265-1-benjamin.gaignard@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220517091419.248265-1-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,396 +48,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Microchip OTP controller available on SAMA7G5. The OTPC
-controls the access to a non-volatile memory. The memory behind OTPC is
-organized into packets, packets are composed by a fixed length header
-(4 bytes long) and a variable length payload (payload length is available
-in the header). When software request the data at an offset in memory
-the OTPC will return (via header + data registers) the whole packet that
-has a word at that offset. For the OTP memory layout like below:
+Hi Benjamin,
 
-offset  OTP Memory layout
+On 5/17/22 11:14, Benjamin Gaignard wrote:
+> P010 is a YUV format with 16-bits per pixel with interleaved UV.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> ---
+> version 3:
+> - remove LE suffix
+> - rebased on media_tree_master branch
+> 
+>  .../media/v4l/pixfmt-yuv-planar.rst           | 53 +++++++++++++++++++
+>  drivers/media/v4l2-core/v4l2-common.c         |  1 +
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
+>  include/uapi/linux/videodev2.h                |  1 +
+>  4 files changed, 56 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> index 8dff5906639b..fc2fc17cb371 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
+> @@ -109,6 +109,13 @@ All components are stored with the same number of bits per component.
+>        - Cb, Cr
+>        - No
+>        - 16x16 tiles
+> +    * - V4L2_PIX_FMT_P010
+> +      - 'P010'
+> +      - 16
+> +      - 4:2:0
+> +      - Cb, Cr
+> +      - No
+> +      - Linear
+>      * - V4L2_PIX_FMT_NV16
+>        - 'NV16'
+>        - 8
+> @@ -171,6 +178,7 @@ horizontally.
+>  .. _V4L2-PIX-FMT-NV21:
+>  .. _V4L2-PIX-FMT-NV12M:
+>  .. _V4L2-PIX-FMT-NV21M:
+> +.. _V4L2-PIX-FMT-P010:
+>  
+>  NV12, NV21, NV12M and NV21M
+>  ---------------------------
+> @@ -519,6 +527,51 @@ number of lines as the luma plane.
+>        - Cb\ :sub:`33`
+>        - Cr\ :sub:`33`
+>  
+> +.. _V4L2_PIX_FMT_P010:
+> +
+> +P010
+> +----
+> +
+> +Like NV12 with 16 bits per component, data in the 10 high bits, zeros in the 6 low bits, arranged in little endian order
 
-         .           .
-         .    ...    .
-         .           .
-0x0E     +-----------+	<--- packet X
-         | header  X |
-0x12     +-----------+
-         | payload X |
-0x16     |           |
-         |           |
-0x1A     |           |
-         +-----------+
-         .           .
-         .    ...    .
-         .           .
+Missing period at the end of the sentence.
 
-if user requests data at address 0x16 the data started at 0x0E will be
-returned by controller. User will be able to fetch the whole packet
-starting at 0x0E (or parts of the packet) via proper registers. The same
-packet will be returned if software request the data at offset 0x0E or
-0x12 or 0x1A.
+I would also say that this has 10 bits per component. The remainder is padding
+and it's just how it is stored, but precision-wise this format has just 10 bits.
 
-The OTP will be populated by Microchip with at least 2 packets first one
-being boot configuration packet and the 2nd one being temperature
-calibration packet. The packet order will be preserved b/w different chip
-revisions but the packet sizes may change.
+> +
+> +.. flat-table:: Sample 4x4 P010 Image
+> +    :header-rows:  0
+> +    :stub-columns: 0
+> +
+> +    * - start + 0:
+> +      - Y'\ :sub:`00`
+> +      - Y'\ :sub:`01`
+> +      - Y'\ :sub:`02`
+> +      - Y'\ :sub:`03`
+> +    * - start + 8:
+> +      - Y'\ :sub:`10`
+> +      - Y'\ :sub:`11`
+> +      - Y'\ :sub:`12`
+> +      - Y'\ :sub:`13`
+> +    * - start + 16:
+> +      - Y'\ :sub:`20`
+> +      - Y'\ :sub:`21`
+> +      - Y'\ :sub:`22`
+> +      - Y'\ :sub:`23`
+> +    * - start + 24:
+> +      - Y'\ :sub:`30`
+> +      - Y'\ :sub:`31`
+> +      - Y'\ :sub:`32`
+> +      - Y'\ :sub:`33`
+> +    * - start + 32:
+> +      - Cb\ :sub:`00`
+> +      - Cr\ :sub:`00`
+> +      - Cb\ :sub:`01`
+> +      - Cr\ :sub:`01`
+> +    * - start + 40:
+> +      - Cb\ :sub:`10`
+> +      - Cr\ :sub:`10`
+> +      - Cb\ :sub:`11`
+> +      - Cr\ :sub:`11`
+> +
+> +.. raw:: latex
+> +
+> +    \endgroup
+>  
+>  Fully Planar YUV Formats
+>  ========================
+> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> index df34b2a283bc..1e38ad8906a2 100644
+> --- a/drivers/media/v4l2-core/v4l2-common.c
+> +++ b/drivers/media/v4l2-core/v4l2-common.c
+> @@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+>  		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+>  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+>  		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> +		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+>  
+>  		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+>  		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index e2636539c9db..857a4e0d74a1 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1305,6 +1305,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
+>  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
+>  	case V4L2_PIX_FMT_NV42:		descr = "Y/CrCb 4:4:4"; break;
+> +	case V4L2_PIX_FMT_P010:		descr = "16-bit Y/CrCb 4:2:0"; break;
 
-For the above reasons and to keep the same software able to work on all
-chip variants the read function of the driver is working with a packet
-id instead of an offset in OTP memory.
+So this becomes 10-bit as well (also conform a similar format like FMT_Y10).
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- MAINTAINERS                    |   8 +
- drivers/nvmem/Kconfig          |   7 +
- drivers/nvmem/Makefile         |   2 +
- drivers/nvmem/microchip-otpc.c | 288 +++++++++++++++++++++++++++++++++
- 4 files changed, 305 insertions(+)
- create mode 100644 drivers/nvmem/microchip-otpc.c
+>  	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/CbCr 4:2:0 (4x4 Linear)"; break;
+>  	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/CbCr 4:2:0 (16x16 Linear)"; break;
+>  	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/CbCr 4:2:0 (32x32 Linear)"; break;
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 6d465dc443b7..311f106bbdf5 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -601,6 +601,7 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
+>  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
+>  #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
+> +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 16  Y/CbCr 4:2:0 16-bit per pixel */
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1bf57fd937b5..cf3ae2025f20 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12953,6 +12953,14 @@ S:	Supported
- F:	Documentation/devicetree/bindings/mtd/atmel-nand.txt
- F:	drivers/mtd/nand/raw/atmel/*
- 
-+MICROCHIP OTPC DRIVER
-+M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Supported
-+F:	Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
-+F:	drivers/nvmem/microchip-otpc.c
-+F:	dt-bindings/nvmem/microchip,sama7g5-otpc.h
-+
- MICROCHIP PWM DRIVER
- M:	Claudiu Beznea <claudiu.beznea@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 967d0084800e..d72d879a6d34 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -107,6 +107,13 @@ config MTK_EFUSE
- 	  This driver can also be built as a module. If so, the module
- 	  will be called efuse-mtk.
- 
-+config MICROCHIP_OTPC
-+	tristate "Microchip OTPC support"
-+	depends on ARCH_AT91 || COMPILE_TEST
-+	help
-+	  This driver enable the OTP controller available on Microchip SAMA7G5
-+	  SoCs. It controlls the access to the OTP memory connected to it.
-+
- config NVMEM_NINTENDO_OTP
- 	tristate "Nintendo Wii and Wii U OTP Support"
- 	depends on WII || COMPILE_TEST
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index 00e136a0a123..c710b64f9fe4 100644
---- a/drivers/nvmem/Makefile
-+++ b/drivers/nvmem/Makefile
-@@ -67,3 +67,5 @@ obj-$(CONFIG_NVMEM_SUNPLUS_OCOTP)	+= nvmem_sunplus_ocotp.o
- nvmem_sunplus_ocotp-y		:= sunplus-ocotp.o
- obj-$(CONFIG_NVMEM_APPLE_EFUSES)	+= nvmem-apple-efuses.o
- nvmem-apple-efuses-y 		:= apple-efuses.o
-+obj-$(CONFIG_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
-+nvmem-microchip-otpc-y		:= microchip-otpc.o
-diff --git a/drivers/nvmem/microchip-otpc.c b/drivers/nvmem/microchip-otpc.c
-new file mode 100644
-index 000000000000..436e0dc4f337
---- /dev/null
-+++ b/drivers/nvmem/microchip-otpc.c
-@@ -0,0 +1,288 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * OTP Memory controller
-+ *
-+ * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
-+ *
-+ * Author: Claudiu Beznea <claudiu.beznea@microchip.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/iopoll.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-provider.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+#define MCHP_OTPC_CR			(0x0)
-+#define MCHP_OTPC_CR_READ		BIT(6)
-+#define MCHP_OTPC_MR			(0x4)
-+#define MCHP_OTPC_MR_ADDR		GENMASK(31, 16)
-+#define MCHP_OTPC_AR			(0x8)
-+#define MCHP_OTPC_SR			(0xc)
-+#define MCHP_OTPC_SR_READ		BIT(6)
-+#define MCHP_OTPC_HR			(0x20)
-+#define MCHP_OTPC_HR_SIZE		GENMASK(15, 8)
-+#define MCHP_OTPC_DR			(0x24)
-+
-+#define MCHP_OTPC_NAME			"mchp-otpc"
-+#define MCHP_OTPC_SIZE			(11 * 1024)
-+
-+/**
-+ * struct mchp_otpc - OTPC private data structure
-+ * @base: base address
-+ * @dev: struct device pointer
-+ * @packets: list of packets in OTP memory
-+ * @npackets: number of packets in OTP memory
-+ */
-+struct mchp_otpc {
-+	void __iomem *base;
-+	struct device *dev;
-+	struct list_head packets;
-+	u32 npackets;
-+};
-+
-+/**
-+ * struct mchp_otpc_packet - OTPC packet data structure
-+ * @list: list head
-+ * @id: packet ID
-+ * @offset: packet offset (in words) in OTP memory
-+ */
-+struct mchp_otpc_packet {
-+	struct list_head list;
-+	u32 id;
-+	u32 offset;
-+};
-+
-+static struct mchp_otpc_packet *mchp_otpc_id_to_packet(struct mchp_otpc *otpc,
-+						       u32 id)
-+{
-+	struct mchp_otpc_packet *packet;
-+
-+	if (id >= otpc->npackets)
-+		return NULL;
-+
-+	list_for_each_entry(packet, &otpc->packets, list) {
-+		if (packet->id == id)
-+			return packet;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int mchp_otpc_prepare_read(struct mchp_otpc *otpc,
-+				  unsigned int offset)
-+{
-+	u32 tmp;
-+
-+	/* Set address. */
-+	tmp = readl_relaxed(otpc->base + MCHP_OTPC_MR);
-+	tmp &= ~MCHP_OTPC_MR_ADDR;
-+	tmp |= FIELD_PREP(MCHP_OTPC_MR_ADDR, offset);
-+	writel_relaxed(tmp, otpc->base + MCHP_OTPC_MR);
-+
-+	/* Set read. */
-+	tmp = readl_relaxed(otpc->base + MCHP_OTPC_CR);
-+	tmp |= MCHP_OTPC_CR_READ;
-+	writel_relaxed(tmp, otpc->base + MCHP_OTPC_CR);
-+
-+	/* Wait for packet to be transferred into temporary buffers. */
-+	return read_poll_timeout(readl_relaxed, tmp, !(tmp & MCHP_OTPC_SR_READ),
-+				 10000, 2000, false, otpc->base + MCHP_OTPC_SR);
-+}
-+
-+/*
-+ * OTPC memory is organized into packets. Each packets contains a header and
-+ * a payload. Header is 4 bytes long and contains the size of the payload.
-+ * Payload size varies. The memory footprint is something as follows:
-+ *
-+ * Memory offset  Memory footprint     Packet ID
-+ * -------------  ----------------     ---------
-+ *
-+ * 0x0            +------------+   <-- packet 0
-+ *                | header  0  |
-+ * 0x4            +------------+
-+ *                | payload 0  |
-+ *                .            .
-+ *                .    ...     .
-+ *                .            .
-+ * offset1        +------------+   <-- packet 1
-+ *                | header  1  |
-+ * offset1 + 0x4  +------------+
-+ *                | payload 1  |
-+ *                .            .
-+ *                .    ...     .
-+ *                .            .
-+ * offset2        +------------+   <-- packet 2
-+ *                .            .
-+ *                .    ...     .
-+ *                .            .
-+ * offsetN        +------------+   <-- packet N
-+ *                | header  N  |
-+ * offsetN + 0x4  +------------+
-+ *                | payload N  |
-+ *                .            .
-+ *                .    ...     .
-+ *                .            .
-+ *                +------------+
-+ *
-+ * where offset1, offset2, offsetN depends on the size of payload 0, payload 1,
-+ * payload N-1.
-+ *
-+ * The access to memory is done on a per packet basis: the control registers
-+ * need to be updated with an offset address (within a packet range) and the
-+ * data registers will be update by controller with information contained by
-+ * that packet. E.g. if control registers are updated with any address within
-+ * the range [offset1, offset2) the data registers are updated by controller
-+ * with packet 1. Header data is accessible though MCHP_OTPC_HR register.
-+ * Payload data is accessible though MCHP_OTPC_DR and MCHP_OTPC_AR registers.
-+ * There is no direct mapping b/w the offset requested by software and the
-+ * offset returned by hardware.
-+ *
-+ * For this, the read function will return the first requested bytes in the
-+ * packet. The user will have to be aware of the memory footprint before doing
-+ * the read request.
-+ */
-+static int mchp_otpc_read(void *priv, unsigned int off, void *val,
-+			  size_t bytes)
-+{
-+	struct mchp_otpc *otpc = priv;
-+	struct mchp_otpc_packet *packet;
-+	u32 *buf = val;
-+	u32 offset;
-+	size_t len = 0;
-+	int ret, payload_size;
-+
-+	/*
-+	 * We reach this point with off being multiple of stride = 4 to
-+	 * be able to cross the subsystem. Inside the driver we use continuous
-+	 * unsigned integer numbers for packet id, thus devide off by 4
-+	 * before passing it to mchp_otpc_id_to_packet().
-+	 */
-+	packet = mchp_otpc_id_to_packet(otpc, off / 4);
-+	if (!packet)
-+		return -EINVAL;
-+	offset = packet->offset;
-+
-+	while (len < bytes) {
-+		ret = mchp_otpc_prepare_read(otpc, offset);
-+		if (ret)
-+			return ret;
-+
-+		/* Read and save header content. */
-+		*buf++ = readl_relaxed(otpc->base + MCHP_OTPC_HR);
-+		len += sizeof(*buf);
-+		offset++;
-+		if (len >= bytes)
-+			break;
-+
-+		/* Read and save payload content. */
-+		payload_size = FIELD_GET(MCHP_OTPC_HR_SIZE, *(buf - 1));
-+		writel_relaxed(0UL, otpc->base + MCHP_OTPC_AR);
-+		do {
-+			*buf++ = readl_relaxed(otpc->base + MCHP_OTPC_DR);
-+			len += sizeof(*buf);
-+			offset++;
-+			payload_size--;
-+		} while (payload_size >= 0 && len < bytes);
-+	}
-+
-+	return 0;
-+}
-+
-+static int mchp_otpc_init_packets_list(struct mchp_otpc *otpc, u32 *size)
-+{
-+	struct mchp_otpc_packet *packet;
-+	u32 word, word_pos = 0, id = 0, npackets = 0, payload_size;
-+	int ret;
-+
-+	INIT_LIST_HEAD(&otpc->packets);
-+	*size = 0;
-+
-+	while (*size < MCHP_OTPC_SIZE) {
-+		ret = mchp_otpc_prepare_read(otpc, word_pos);
-+		if (ret)
-+			return ret;
-+
-+		word = readl_relaxed(otpc->base + MCHP_OTPC_HR);
-+		payload_size = FIELD_GET(MCHP_OTPC_HR_SIZE, word);
-+		if (!payload_size)
-+			break;
-+
-+		packet = devm_kzalloc(otpc->dev, sizeof(*packet), GFP_KERNEL);
-+		if (!packet)
-+			return -ENOMEM;
-+
-+		packet->id = id++;
-+		packet->offset = word_pos;
-+		INIT_LIST_HEAD(&packet->list);
-+		list_add_tail(&packet->list, &otpc->packets);
-+
-+		/* Count size by adding header and paload sizes. */
-+		*size += 4 * (payload_size + 1);
-+		/* Next word: this packet (header, payload) position + 1. */
-+		word_pos += payload_size + 2;
-+
-+		npackets++;
-+	}
-+
-+	otpc->npackets = npackets;
-+
-+	return 0;
-+}
-+
-+static struct nvmem_config mchp_nvmem_config = {
-+	.name = MCHP_OTPC_NAME,
-+	.type = NVMEM_TYPE_OTP,
-+	.read_only = true,
-+	.word_size = 4,
-+	.stride = 4,
-+	.reg_read = mchp_otpc_read,
-+};
-+
-+static int mchp_otpc_probe(struct platform_device *pdev)
-+{
-+	struct nvmem_device *nvmem;
-+	struct mchp_otpc *otpc;
-+	u32 size;
-+	int ret;
-+
-+	otpc = devm_kzalloc(&pdev->dev, sizeof(*otpc), GFP_KERNEL);
-+	if (!otpc)
-+		return -ENOMEM;
-+
-+	otpc->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(otpc->base))
-+		return PTR_ERR(otpc->base);
-+
-+	otpc->dev = &pdev->dev;
-+	ret = mchp_otpc_init_packets_list(otpc, &size);
-+	if (ret)
-+		return ret;
-+
-+	mchp_nvmem_config.dev = otpc->dev;
-+	mchp_nvmem_config.size = size;
-+	mchp_nvmem_config.priv = otpc;
-+	nvmem = devm_nvmem_register(&pdev->dev, &mchp_nvmem_config);
-+
-+	return PTR_ERR_OR_ZERO(nvmem);
-+}
-+
-+static const struct of_device_id __maybe_unused mchp_otpc_ids[] = {
-+	{ .compatible = "microchip,sama7g5-otpc", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, mchp_otpc_ids);
-+
-+static struct platform_driver mchp_otpc_driver = {
-+	.probe = mchp_otpc_probe,
-+	.driver = {
-+		.name = MCHP_OTPC_NAME,
-+		.of_match_table = of_match_ptr(mchp_otpc_ids),
-+	},
-+};
-+module_platform_driver(mchp_otpc_driver);
-+
-+MODULE_AUTHOR("Claudiu Beznea <claudiu.beznea@microchip.com>");
-+MODULE_DESCRIPTION("Microchip SAMA7G5 OTPC driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+Ditto.
 
+>  
+>  /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
+>  #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
+
+Regards,
+
+	Hans

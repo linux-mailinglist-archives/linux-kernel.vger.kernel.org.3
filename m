@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB0652B6DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4672D52B75B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234904AbiERKFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S234961AbiERKFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 06:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234879AbiERKFR (ORCPT
+        with ESMTP id S234905AbiERKFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:05:17 -0400
+        Wed, 18 May 2022 06:05:18 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB84A6FA2E;
-        Wed, 18 May 2022 03:05:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665B06FD1E;
+        Wed, 18 May 2022 03:05:16 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id D048F1F44E0B
+        with ESMTPSA id A22551F44E0C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652868314;
-        bh=+xTyEZ131wWMOMNxSY33aVPVZoxl3tqtIBcQv4cQtYw=;
+        s=mail; t=1652868315;
+        bh=CgNYAOaieQLCVcum8jYWv0FFa/H0G4zrGj0sGsj1tXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D1vp+/AwIas/9dOAytAhqaGYFF/9ac9nRiYcMReBB49LkaAcP31lRYdpULf1VS1SF
-         cEjTybeVHaZFAHgwxqh11jciQsrb28ENTeg8dN5Q/7YFOCncRGirCbQGQpDMVg1q0M
-         HUZQZcn6afPA0ez9BITloBRac7pIwBiFAEo02wOsBn+jVRBFzUEeMpFoqM9pCp2llZ
-         osCTplyIdDD0KUAgaGhqpaRNs4n20bmze5pCBC9YDjnGHNsheMqmDzOa3UvAmA6V24
-         uGMk40rfjHouEFuxGi0ku4uD2F9dygsDLroKK1o6+NPYQxLNQEjvW0dzA4VGw6f0wZ
-         +8Gj0vRtIV0Yw==
+        b=Lw4BXx+IXXpqyGnKTcZJ+TzvAy2GKcWKGRMwM8M2YBgjEbsWaAOg4nJ9XTSvoLQFA
+         86oNbpCfeOTV63tQBrWVgimKhCAoTxh3KCT0ag+K0S8XrIwTV8gpvp1sFjuHlTdU9J
+         LuRN81wM2gzOhkGwOiRMIQip2x3PUN2wQOUldy1dUJEIB7dUCYGGp4nu/T8RU2Xsc+
+         2nQSu8PxGF5c1Qw+hQao48aTBDNpH1z/7nh92whr0Y9M6aloXma0tO9zs+B+ZvYtp2
+         D0GHZaKblsArfMPWeacJF630dsruE4SOeqTh2DaPklTyQBvcGAK7JDQD806SciPc2+
+         0Vto/RgYVJiHg==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     yong.wu@mediatek.com
@@ -39,9 +39,9 @@ Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski@linaro.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 4/7] arm64: dts: mediatek: mt8173: Add mediatek,infracfg phandle for IOMMU
-Date:   Wed, 18 May 2022 12:05:00 +0200
-Message-Id: <20220518100503.37279-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 5/7] arm64: dts: mediatek: mt2712e: Add mediatek,infracfg phandle for IOMMU
+Date:   Wed, 18 May 2022 12:05:01 +0200
+Message-Id: <20220518100503.37279-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220518100503.37279-1-angelogioacchino.delregno@collabora.com>
 References: <20220518100503.37279-1-angelogioacchino.delregno@collabora.com>
@@ -68,21 +68,29 @@ the iommu node.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8173.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/mediatek/mt2712e.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-index 40d7b47fc52e..825a3c670373 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-@@ -588,6 +588,7 @@ iommu: iommu@10205000 {
- 			interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_LOW>;
- 			clocks = <&infracfg CLK_INFRA_M4U>;
- 			clock-names = "bclk";
-+			mediatek,infracfg = <&infracfg>;
- 			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>,
- 					 <&larb3>, <&larb4>, <&larb5>;
- 			#iommu-cells = <1>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+index 623eb3beabf2..4797537cb368 100644
+--- a/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt2712e.dtsi
+@@ -329,6 +329,7 @@ iommu0: iommu@10205000 {
+ 		interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&infracfg CLK_INFRA_M4U>;
+ 		clock-names = "bclk";
++		mediatek,infracfg = <&infracfg>;
+ 		mediatek,larbs = <&larb0>, <&larb1>, <&larb2>,
+ 				 <&larb3>, <&larb6>;
+ 		#iommu-cells = <1>;
+@@ -346,6 +347,7 @@ iommu1: iommu@1020a000 {
+ 		interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_LOW>;
+ 		clocks = <&infracfg CLK_INFRA_M4U>;
+ 		clock-names = "bclk";
++		mediatek,infracfg = <&infracfg>;
+ 		mediatek,larbs = <&larb4>, <&larb5>, <&larb7>;
+ 		#iommu-cells = <1>;
+ 	};
 -- 
 2.35.1
 

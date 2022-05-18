@@ -2,94 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E97652BDE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E88F52BDBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237264AbiEROSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S238571AbiEROVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238531AbiEROSf (ORCPT
+        with ESMTP id S238551AbiEROVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:18:35 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3B73AA56
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:18:32 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id i17so1890382pla.10
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:18:32 -0700 (PDT)
+        Wed, 18 May 2022 10:21:18 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686CC1C103;
+        Wed, 18 May 2022 07:21:16 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bq30so3941235lfb.3;
+        Wed, 18 May 2022 07:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T44LQa+tdsY81YlsoTWuqbGpazoxA7x1xvqJtgBP6xE=;
-        b=go3PVx9FclHV6pgT6zHtT7zmaO1mJ5PjOJvCAeLu9EiQYLH7kXa76SiCzXbMJ/Pc9I
-         v1RFay5+sXS4oFntyH6SyyiME9Gx1fWwRUl911czo4wteRqYWdWIWDdDCYpInHF84P0I
-         doTTQRmg2Cc5FpfLx3vjccpDLUB7bbvU5ELOrELtdR0qMRIkvjSQhp4DDvUQ4BDXPCV2
-         OiQfZIeYIQxPXwtcgkFWgv89MrtrVWurO5k/0B0v01Rxeq2xdxUxbAPYw6SLjiiUSkay
-         aFz+SANF/fmUqPid7YfsErfB/y+Tnndtyf7pikTWOCWmjsFhl7C5dKUK6iYTi1Z9xYNd
-         4EQg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OgF7hB842Xb1tcpu/exVm00l5yNp9b+2bCf12T/zGxc=;
+        b=e7RUpvLPw1/sKoLVxVoOxzKi3xQRj3PpyVvr333lxyBp/yvOTfwmgKKAHFDm9CshR4
+         NvheW1Z+C/naejxdGvSKLOi7EaEmLYVb2fq254kes7ntQmFcbqCtIH7qgqj0uBlSjewP
+         y3nmYCWY/Wo+7Dyt53yvbAI8H+jCSAP4XJ3P9S/ukSPyKuJY5V2guFPrT2FPhT+LnyX7
+         WmVSTfkIGQgIo6m+LzUYb6iGOdDEWE6hyXuTeyFNzIl1y0R/Tw+BXAbPiVjjc6NEcHA9
+         v0l0cm1kMLgAuH/fG6sa1VdNDaE/61nnECZLz+KEkuIIK2tJpo86oiYElEkpUKfImlF3
+         sLyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T44LQa+tdsY81YlsoTWuqbGpazoxA7x1xvqJtgBP6xE=;
-        b=tFQFNMU5xY9Y3q8kt11BE8qAeO5QNqpEWCpE+WOgk5Aq/+yDHBUeQ2XizYCbPz5qVh
-         n1JGjnC2KiS/6AN2oHAuDgeS0EsasFmYOAUbMQP17p12AyHz4pDoY7gTypE7iaNIHO4B
-         zl8fOW4FqrXROGi+pg1c09W4gq+HLHG9sxObDq19jbFASGOwBtDGNHGbq6th+twohZlx
-         5dLzMzzG1tO80v5O1kWgqKIiBiBrwkG+TRSNRayyf6bdt3ucz4E/WHWV6GQchjDxo/5n
-         fFN8Lh8WtymPcNDtXcYjuB1a7RJ9N7V9z9HmXImecQqBxJV5UA3YtPjzEknbIJ9NDHmw
-         zKQQ==
-X-Gm-Message-State: AOAM533/nZO+mCwxz5lpgTIZFhuWkT8l+5NUCB8qxg15J0MEqtPqFZ8z
-        3+Qr4xLOtk9R0PB22G3zp1c0UA==
-X-Google-Smtp-Source: ABdhPJwQu3SVjNWFT45b9vXM/YfdGGG/pE9YS2sSmuAsLQbMrLbbGupNQ159s6hqz5+JeqOZ84YWMw==
-X-Received: by 2002:a17:902:f60e:b0:158:5c4d:d9b0 with SMTP id n14-20020a170902f60e00b001585c4dd9b0mr28068707plg.63.1652883512083;
-        Wed, 18 May 2022 07:18:32 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b0015e8d4eb228sm1774898plg.114.2022.05.18.07.18.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 07:18:31 -0700 (PDT)
-Date:   Wed, 18 May 2022 14:18:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH v3 04/34] KVM: x86: hyper-v: Handle
- HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
-Message-ID: <YoUAM9UtfQlGOZxl@google.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
- <20220414132013.1588929-5-vkuznets@redhat.com>
- <165aea185dfef1eba9ba0f4fd1c3a95361c41396.camel@redhat.com>
- <877d6juqkw.fsf@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OgF7hB842Xb1tcpu/exVm00l5yNp9b+2bCf12T/zGxc=;
+        b=VQiaBrrk+NcVIYdFLa68mOTJuAGuULjH2pPhsFC1MMVJ/gAvtrgeIr9FwdcqUj/ZJg
+         xtfuwqAYfPb3Avxfa3A4triB3CFfOpcKZxSYDYeFrgLDKYBHamTXLaj4pWGEDtdcSGfs
+         fFZY2oyVVsAh6ab+hp0c7hHea5Rgp1gl983faAq1+GuHHsh5Hm8BYDS+rL3aWw7whOeF
+         qA8iAIekakIEWfzEZzvqJDD50vVy3X3QdASvFI7U5+XCZwBcByqXRjnyEX10D05Ad3Lw
+         tAoKKFuprUokM1g/+D1OK0wUZXE/3gQH68vwNZ62zBsrW2Baoc9ll8eOdcgTsbxSTzsv
+         WPQQ==
+X-Gm-Message-State: AOAM532+iv+YwxbOzbyZR8IorFeF4/ou2wiOUIj9d3DWvlKKAiD1xa5s
+        1hwp0ApHMklMogukx0Sh0rDhM3suLATia+VINUo=
+X-Google-Smtp-Source: ABdhPJwBXTEz06RJoigcTFP/EBVz+helwZx8NYWmO9cAOVwwvhieqj9DYnDaTZICu64zreOkTLHGIXwQvCu7H+MnSEg=
+X-Received: by 2002:ac2:550f:0:b0:477:bc6e:9bcc with SMTP id
+ j15-20020ac2550f000000b00477bc6e9bccmr1697600lfk.279.1652883674662; Wed, 18
+ May 2022 07:21:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877d6juqkw.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220516115846.58328-1-max.oss.09@gmail.com> <20220516115846.58328-12-max.oss.09@gmail.com>
+ <CAOMZO5DhTNDHLt_VZoWqD5dMBHq3rvJ+0j8-4xHHThyqheqcgQ@mail.gmail.com>
+In-Reply-To: <CAOMZO5DhTNDHLt_VZoWqD5dMBHq3rvJ+0j8-4xHHThyqheqcgQ@mail.gmail.com>
+From:   Max Krummenacher <max.oss.09@gmail.com>
+Date:   Wed, 18 May 2022 16:21:03 +0200
+Message-ID: <CAEHkU3Xtm9gk6xXr586M3pm4tPpFA-fGn+QyKXfF+Cqqa8VK8g@mail.gmail.com>
+Subject: Re: [PATCH v1 11/17] ARM: dts: imx6q-apalis: Add ov5640 mipi csi camera
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022, Vitaly Kuznetsov wrote:
-> Maxim Levitsky <mlevitsk@redhat.com> writes:
-> > Or if using kfifo, then it can contain plain u64 items, which is even more natural.
-> >
-> 
-> In the next version I switch to fifo and get rid of 'flush_all' entries
-> but instead of a boolean I use a 'magic' value of '-1' in GVA. This way
-> we don't need to synchronize with the reader and add any special
-> handling for the flag.
+Hi Fabio
 
-Isn't -1 theoretically possible?  Or is wrapping not allowed?  E.g. requesting a
-flush for address=0xfffffffffffff000, count = 0xfff will yield -1 and doesn't
-create any illegal addresses in the process.
+On Mon, May 16, 2022 at 2:08 PM Fabio Estevam <festevam@gmail.com> wrote:
+>
+> Hi Max,
+>
+> On Mon, May 16, 2022 at 8:59 AM Max Krummenacher <max.oss.09@gmail.com> wrote:
+> >
+> > From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+> >
+> > The Apalis iMX6 modules allow connecting a mipi-csi video input.
+> > Add support for our OV5640 camera module but have it disabled.
+> > This allows to enable it in an overlay per the current system
+> > configuration.
+> >
+> > Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+> > Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> > ---
+> >
+> >  arch/arm/boot/dts/imx6qdl-apalis.dtsi | 67 ++++++++++++++++++++++++++-
+> >  1 file changed, 66 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+> > index 506d040ea37a..0d1004eede62 100644
+> > --- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+> > +++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+> > @@ -29,6 +29,12 @@
+> >                 status = "disabled";
+> >         };
+> >
+> > +       clk_ov5640_osc: clk_ov5640_osc_int {
+>
+> Node names should have "-", not "_"
+
+Ups, missed that one. Will fix it in V2. Thanks.
+
+>
+> clk_ov5640_osc: clk-ov5640-osc
+>
+> Also, no need for the _int suffix.
+>
+> Just curious: is ov5640 mipi support functional?
+>
+> I recalled that I had issues in getting Gstreamer pipeline to capture
+> from the ov5640 mipi.
+>
+> There were some errors related to LP-11 during the start of the capture.
+
+In my (limited) testing I saw no issues that the camera would not come up.
+It takes 2 to 3 seconds until the pipeline is running but I noted no hickups.
+I did this with setting the resolution to 640x480 and 1920x1080 which
+probably would not relate to the LP-11 issue you mention.
+
+I.e. I set up the v4l2 pipeline and start capture to the screen as follows:
+```
+media-ctl -l "'ov5640 1-003c':0 -> 'imx6-mipi-csi2':0[1]"
+media-ctl -l "'imx6-mipi-csi2':2 -> 'ipu1_csi1':0[1]"
+media-ctl -l "'ipu1_csi1':2 -> 'ipu1_csi1 capture':0[1]"
+media-ctl -V "'ov5640 1-003c':0 [fmt:UYVY2X8/640x480 field:none]"
+media-ctl -V "'imx6-mipi-csi2':2 [fmt:UYVY2X8/640x480 field:none]"
+media-ctl -V "'ipu1_csi1':2 [fmt:AYUV32/640x480 field:none]"
+gst-launch-1.0 v4l2src device='/dev/video0' ! videoconvert ! waylandsink
+```
+
+Max

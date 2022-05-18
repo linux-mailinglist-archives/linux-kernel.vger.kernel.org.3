@@ -2,448 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D54D52BDE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8810F52BE2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238945AbiEROq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
+        id S238970AbiEROqi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 May 2022 10:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238923AbiEROqR (ORCPT
+        with ESMTP id S238819AbiEROqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:46:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAE4E4BFEE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:46:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652885173;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1wFCT6qvo7E9AAX8qea1C7UYQwI/qfj/Rp5PsIGMAc0=;
-        b=iNx+Ars7H6QTbtY/7ru+ao8nu6qd7Jvu5HVLXHC/Q8ijIvzPrcWngrWaQpaYG3MHb6b9Si
-        Am4DWKm1C6VsK32omDYmK5lZfmwUUZeyuHoH0o8YmhIeQnA9KwCAdxBUUNpRy4lV1sz4Py
-        vSFQOXyh9LRi60rtnwL1VZGvwnCOop4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-cps-y_YJPy2gM4UQGNBRLw-1; Wed, 18 May 2022 10:46:07 -0400
-X-MC-Unique: cps-y_YJPy2gM4UQGNBRLw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 273E338349AA;
-        Wed, 18 May 2022 14:46:07 +0000 (UTC)
-Received: from localhost (unknown [10.72.47.117])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2E9DB40C1244;
-        Wed, 18 May 2022 14:46:05 +0000 (UTC)
-From:   Xiubo Li <xiubli@redhat.com>
-To:     jlayton@kernel.org, idryomov@gmail.com, viro@zeniv.linux.org.uk
-Cc:     willy@infradead.org, vshankar@redhat.com,
-        ceph-devel@vger.kernel.org, arnd@arndb.de, mcgrof@kernel.org,
-        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v4 2/2] ceph: wait the first reply of inflight async unlink
-Date:   Wed, 18 May 2022 22:45:45 +0800
-Message-Id: <20220518144545.246604-3-xiubli@redhat.com>
-In-Reply-To: <20220518144545.246604-1-xiubli@redhat.com>
-References: <20220518144545.246604-1-xiubli@redhat.com>
+        Wed, 18 May 2022 10:46:30 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97AD60055;
+        Wed, 18 May 2022 07:46:27 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id p139so4027713ybc.11;
+        Wed, 18 May 2022 07:46:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3SGArFKDihyEBXlF8/XNeAemrWMKKpCb4khL75HityU=;
+        b=HrXu/4Fqb4W++p3J0fMDguI6mvmaCrke9hjmQ1eoi/2R98qPueBWcsLRSm5BqSo/BF
+         QJOXQDhgbaFRgyHI4yhPOWKp4hP0A6/DXgg9OXVIr3nnwz0fAII5PlTpZtyto/8Vf532
+         7QjMFr1ufUSuUa7gXJ3688wxdRBeKybAfBPyAB6N/DDuzkxhgEAAvSeIweuHJYM0MCk7
+         qkLCFHarG8VuOivefQvE8VSZoxG+EiOeFrMw70rtuC1F8SGY/JwXsrqhM5ZaJ5NtjnrS
+         c4fdD2RTI3GYKSE5x1ZOa135V9jz8pIdRi1j7Hz1qU+eb2Tpz9tdo95qsTPEHRHW7gvx
+         EBRQ==
+X-Gm-Message-State: AOAM531kJ23JIubbfkweBw7gzmgI2ZBCygEQBsuHBdNrKkginRuRra9p
+        fx1jV5hCTZqyznsm6x/iiBywQpbbySFlK8i6YpA=
+X-Google-Smtp-Source: ABdhPJzrRXyFkOYYP+knWo30LGdADGmZZVDFFkLi378Dx+GKoFEryYPjgFz2aAoFwQStjD/27f3Wowem4YVwVmdPLVU=
+X-Received: by 2002:a25:d687:0:b0:64e:3a41:8d5 with SMTP id
+ n129-20020a25d687000000b0064e3a4108d5mr3149496ybg.622.1652885186733; Wed, 18
+ May 2022 07:46:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 18 May 2022 16:46:15 +0200
+Message-ID: <CAJZ5v0jhWs-8ChHddebTZcaH6kA05sLEMsXM9Op7kHWAQDxeYA@mail.gmail.com>
+Subject: Re: [PATCH v8 00/27] Introduce power-off+restart call chain API
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In async unlink case the kclient won't wait for the first reply
-from MDS and just drop all the links and unhash the dentry and then
-succeeds immediately.
+On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> Problem
+> -------
+>
+> SoC devices require power-off call chaining functionality from kernel.
+> We have a widely used restart chaining provided by restart notifier API,
+> but nothing for power-off.
+>
+> Solution
+> --------
+>
+> Introduce new API that provides call chains support for all restart and
+> power-off modes. The new API is designed with simplicity and extensibility
+> in mind.
+>
+> This is a third attempt to introduce the new API. First was made by
+> Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+> In fact the work didn't stop and recently arm_pm_restart() was removed
+> from v5.14 kernel, which was a part of preparatory work started by
+> Guenter Roeck.
+>
+> Adoption plan
+> -------------
+>
+> This patchset introduces the new API. It also converts multiple drivers
+> and arch code to the new API to demonstrate how it all looks in practice,
+> removing the pm_power_off_prepare global variable.
+>
+> The plan is:
+>
+> 1. Merge the new API and convert arch code to use do_kernel_power_off().
+>    For now the new API will co-exist with the older API.
+>
+> 2. Convert all drivers and platform code to the new API.
+>
+> 3. Remove obsoleted pm_power_off and pm_power_off_prepare variables.
+>
+> Results
+> -------
+>
+> 1. Devices can be powered off properly.
+>
+> 2. Global variables are removed from drivers.
+>
+> 3. Global pm_power_off and pm_power_off_prepare callback variables are
+> removed once all users are converted to the new API. The latter callback
+> is removed by patch #24 of this series.
+>
+> 4. Ambiguous call chain ordering is prohibited for non-default priorities.
+>
+> Changelog:
+>
+> v8: - Reworked sys-off handler like was suggested by Rafael Wysocki in
+>       the comments to v7.
+>
+>     - The struct sys-off handler now is private to kernel/reboot.c and
+>       new API is simplified.
+>
+>     - There is a single sys-off API function for all handler types.
+>       Users shall pass the required sys-off mode type (restart, power-off
+>       and etc).
+>
+>     - There is single struct sys_off_data callback argument for all
+>       handler modes.
+>
+>     - User's callback now must return NOTIFY_DONE or NOTIFY_STOP.
+>
+>     - The default priority level is zero now.
+>
+>     - Multiple handlers now allowed to be registered at the default
+>       priority level.
+>
+>     - Power-off call chain is atomic now, like the restart chain.
+>
+>     - kernel/reboot.c changes are split up into several logical patches.
+>
+>     - Added r-b from Michał Mirosław to unmodified patches from v7.
+>
+>     - Added acks that were missing in v7 by accident.
 
-For any new create/link/rename,etc requests followed by using the
-same file names we must wait for the first reply of the inflight
-unlink request, or the MDS possibly will fail these following
-requests with -EEXIST if the inflight async unlink request was
-delayed for some reasons.
+The v8 looks much better than the previous versions to me.
 
-And the worst case is that for the none async openc request it will
-successfully open the file if the CDentry hasn't been unlinked yet,
-but later the previous delayed async unlink request will remove the
-CDenty. That means the just created file is possiblly deleted later
-by accident.
+I actually don't really have any comments on it except for the minor
+remark regarding patch [1/27] sent separately.
 
-We need to wait for the inflight async unlink requests to finish
-when creating new files/directories by using the same file names.
+Please just send an update of that one patch and I will queue up the
+series for 5.19.
 
-URL: https://tracker.ceph.com/issues/55332
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Xiubo Li <xiubli@redhat.com>
----
- fs/ceph/dir.c        | 70 +++++++++++++++++++++++++++++++++++++++---
- fs/ceph/file.c       |  4 +++
- fs/ceph/mds_client.c | 73 ++++++++++++++++++++++++++++++++++++++++++++
- fs/ceph/mds_client.h |  1 +
- fs/ceph/super.c      |  3 ++
- fs/ceph/super.h      | 19 +++++++++---
- 6 files changed, 160 insertions(+), 10 deletions(-)
+However, I'm going to send a pull request with it in the second half
+of the merge window, after the majority of the other changes in the
+subsystems touched by it have been integrated.
 
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index eae417d71136..01e7facef9b2 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -856,6 +856,10 @@ static int ceph_mknod(struct user_namespace *mnt_userns, struct inode *dir,
- 	if (ceph_snap(dir) != CEPH_NOSNAP)
- 		return -EROFS;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_quota_is_max_files_exceeded(dir)) {
- 		err = -EDQUOT;
- 		goto out;
-@@ -918,6 +922,10 @@ static int ceph_symlink(struct user_namespace *mnt_userns, struct inode *dir,
- 	if (ceph_snap(dir) != CEPH_NOSNAP)
- 		return -EROFS;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_quota_is_max_files_exceeded(dir)) {
- 		err = -EDQUOT;
- 		goto out;
-@@ -968,9 +976,13 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 	struct ceph_mds_client *mdsc = ceph_sb_to_mdsc(dir->i_sb);
- 	struct ceph_mds_request *req;
- 	struct ceph_acl_sec_ctx as_ctx = {};
--	int err = -EROFS;
-+	int err;
- 	int op;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_snap(dir) == CEPH_SNAPDIR) {
- 		/* mkdir .snap/foo is a MKSNAP */
- 		op = CEPH_MDS_OP_MKSNAP;
-@@ -980,6 +992,7 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 		dout("mkdir dir %p dn %p mode 0%ho\n", dir, dentry, mode);
- 		op = CEPH_MDS_OP_MKDIR;
- 	} else {
-+		err = -EROFS;
- 		goto out;
- 	}
- 
-@@ -1037,6 +1050,10 @@ static int ceph_link(struct dentry *old_dentry, struct inode *dir,
- 	struct ceph_mds_request *req;
- 	int err;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_snap(dir) != CEPH_NOSNAP)
- 		return -EROFS;
- 
-@@ -1071,9 +1088,27 @@ static int ceph_link(struct dentry *old_dentry, struct inode *dir,
- static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
- 				 struct ceph_mds_request *req)
- {
-+	struct dentry *dentry = req->r_dentry;
-+	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
-+	struct ceph_dentry_info *di = ceph_dentry(dentry);
- 	int result = req->r_err ? req->r_err :
- 			le32_to_cpu(req->r_reply_info.head->result);
- 
-+	if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
-+		pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
-+			__func__, dentry, dentry);
-+
-+	spin_lock(&fsc->async_unlink_conflict_lock);
-+	hash_del_rcu(&di->hnode);
-+	spin_unlock(&fsc->async_unlink_conflict_lock);
-+
-+	spin_lock(&dentry->d_lock);
-+	di->flags &= ~CEPH_DENTRY_ASYNC_UNLINK;
-+	wake_up_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT);
-+	spin_unlock(&dentry->d_lock);
-+
-+	synchronize_rcu();
-+
- 	if (result == -EJUKEBOX)
- 		goto out;
- 
-@@ -1081,7 +1116,7 @@ static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
- 	if (result) {
- 		int pathlen = 0;
- 		u64 base = 0;
--		char *path = ceph_mdsc_build_path(req->r_dentry, &pathlen,
-+		char *path = ceph_mdsc_build_path(dentry, &pathlen,
- 						  &base, 0);
- 
- 		/* mark error on parent + clear complete */
-@@ -1089,13 +1124,13 @@ static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
- 		ceph_dir_clear_complete(req->r_parent);
- 
- 		/* drop the dentry -- we don't know its status */
--		if (!d_unhashed(req->r_dentry))
--			d_drop(req->r_dentry);
-+		if (!d_unhashed(dentry))
-+			d_drop(dentry);
- 
- 		/* mark inode itself for an error (since metadata is bogus) */
- 		mapping_set_error(req->r_old_inode->i_mapping, result);
- 
--		pr_warn("ceph: async unlink failure path=(%llx)%s result=%d!\n",
-+		pr_warn("async unlink failure path=(%llx)%s result=%d!\n",
- 			base, IS_ERR(path) ? "<<bad>>" : path, result);
- 		ceph_mdsc_free_path(path, pathlen);
- 	}
-@@ -1180,6 +1215,8 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
- 
- 	if (try_async && op == CEPH_MDS_OP_UNLINK &&
- 	    (req->r_dir_caps = get_caps_for_async_unlink(dir, dentry))) {
-+		struct ceph_dentry_info *di = ceph_dentry(dentry);
-+
- 		dout("async unlink on %llu/%.*s caps=%s", ceph_ino(dir),
- 		     dentry->d_name.len, dentry->d_name.name,
- 		     ceph_cap_string(req->r_dir_caps));
-@@ -1187,6 +1224,16 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
- 		req->r_callback = ceph_async_unlink_cb;
- 		req->r_old_inode = d_inode(dentry);
- 		ihold(req->r_old_inode);
-+
-+		spin_lock(&dentry->d_lock);
-+		di->flags |= CEPH_DENTRY_ASYNC_UNLINK;
-+		spin_unlock(&dentry->d_lock);
-+
-+		spin_lock(&fsc->async_unlink_conflict_lock);
-+		hash_add_rcu(fsc->async_unlink_conflict, &di->hnode,
-+			     dentry->d_name.hash);
-+		spin_unlock(&fsc->async_unlink_conflict_lock);
-+
- 		err = ceph_mdsc_submit_request(mdsc, dir, req);
- 		if (!err) {
- 			/*
-@@ -1198,6 +1245,15 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
- 		} else if (err == -EJUKEBOX) {
- 			try_async = false;
- 			ceph_mdsc_put_request(req);
-+
-+			spin_lock(&dentry->d_lock);
-+			di->flags &= ~CEPH_DENTRY_ASYNC_UNLINK;
-+			spin_unlock(&dentry->d_lock);
-+
-+			spin_lock(&fsc->async_unlink_conflict_lock);
-+			hash_del_rcu(&di->hnode);
-+			spin_unlock(&fsc->async_unlink_conflict_lock);
-+
- 			goto retry;
- 		}
- 	} else {
-@@ -1237,6 +1293,10 @@ static int ceph_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 	    (!ceph_quota_is_same_realm(old_dir, new_dir)))
- 		return -EXDEV;
- 
-+	err = ceph_wait_on_conflict_unlink(new_dentry);
-+	if (err)
-+		return err;
-+
- 	dout("rename dir %p dentry %p to dir %p dentry %p\n",
- 	     old_dir, old_dentry, new_dir, new_dentry);
- 	req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
-diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-index 8c8226c0feac..f039e799f5f4 100644
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -740,6 +740,10 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
- 	if (dentry->d_name.len > NAME_MAX)
- 		return -ENAMETOOLONG;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (flags & O_CREAT) {
- 		if (ceph_quota_is_max_files_exceeded(dir))
- 			return -EDQUOT;
-diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-index e8c87dea0551..ffe52b7c6cbc 100644
---- a/fs/ceph/mds_client.c
-+++ b/fs/ceph/mds_client.c
-@@ -655,6 +655,79 @@ static void destroy_reply_info(struct ceph_mds_reply_info_parsed *info)
- 	free_pages((unsigned long)info->dir_entries, get_order(info->dir_buf_size));
- }
- 
-+/*
-+ * In async unlink case the kclient won't wait for the first reply
-+ * from MDS and just drop all the links and unhash the dentry and then
-+ * succeeds immediately.
-+ *
-+ * For any new create/link/rename,etc requests followed by using the
-+ * same file names we must wait for the first reply of the inflight
-+ * unlink request, or the MDS possibly will fail these following
-+ * requests with -EEXIST if the inflight async unlink request was
-+ * delayed for some reasons.
-+ *
-+ * And the worst case is that for the none async openc request it will
-+ * successfully open the file if the CDentry hasn't been unlinked yet,
-+ * but later the previous delayed async unlink request will remove the
-+ * CDenty. That means the just created file is possiblly deleted later
-+ * by accident.
-+ *
-+ * We need to wait for the inflight async unlink requests to finish
-+ * when creating new files/directories by using the same file names.
-+ */
-+int ceph_wait_on_conflict_unlink(struct dentry *dentry)
-+{
-+	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
-+	struct dentry *pdentry = dentry->d_parent;
-+	struct dentry *udentry, *found = NULL;
-+	struct ceph_dentry_info *di;
-+	struct qstr dname;
-+	u32 hash = dentry->d_name.hash;
-+	int err;
-+
-+	dname.name = dentry->d_name.name;
-+	dname.len = dentry->d_name.len;
-+
-+	rcu_read_lock();
-+	hash_for_each_possible_rcu(fsc->async_unlink_conflict, di,
-+				   hnode, hash) {
-+		udentry = di->dentry;
-+
-+		spin_lock(&udentry->d_lock);
-+		if (udentry->d_name.hash != hash)
-+			goto next;
-+		if (unlikely(udentry->d_parent != pdentry))
-+			goto next;
-+		if (!hash_hashed(&di->hnode))
-+			goto next;
-+
-+		if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
-+			pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
-+				__func__, dentry, dentry);
-+
-+		if (d_compare(pdentry, udentry, &dname))
-+			goto next;
-+
-+		spin_unlock(&udentry->d_lock);
-+		found = dget(udentry);
-+		break;
-+next:
-+		spin_unlock(&udentry->d_lock);
-+	}
-+	rcu_read_unlock();
-+
-+	if (likely(!found))
-+		return 0;
-+
-+	dout("%s dentry %p:%pd conflict with old %p:%pd\n", __func__,
-+	     dentry, dentry, found, found);
-+
-+	err = wait_on_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT,
-+			  TASK_KILLABLE);
-+	dput(found);
-+	return err;
-+}
-+
- 
- /*
-  * sessions
-diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
-index 33497846e47e..d1ae679c52c3 100644
---- a/fs/ceph/mds_client.h
-+++ b/fs/ceph/mds_client.h
-@@ -582,6 +582,7 @@ static inline int ceph_wait_on_async_create(struct inode *inode)
- 			   TASK_INTERRUPTIBLE);
- }
- 
-+extern int ceph_wait_on_conflict_unlink(struct dentry *dentry);
- extern u64 ceph_get_deleg_ino(struct ceph_mds_session *session);
- extern int ceph_restore_deleg_ino(struct ceph_mds_session *session, u64 ino);
- #endif
-diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-index b73b4f75462c..6542b71f8627 100644
---- a/fs/ceph/super.c
-+++ b/fs/ceph/super.c
-@@ -816,6 +816,9 @@ static struct ceph_fs_client *create_fs_client(struct ceph_mount_options *fsopt,
- 	if (!fsc->cap_wq)
- 		goto fail_inode_wq;
- 
-+	hash_init(fsc->async_unlink_conflict);
-+	spin_lock_init(&fsc->async_unlink_conflict_lock);
-+
- 	spin_lock(&ceph_fsc_lock);
- 	list_add_tail(&fsc->metric_wakeup, &ceph_fsc_list);
- 	spin_unlock(&ceph_fsc_lock);
-diff --git a/fs/ceph/super.h b/fs/ceph/super.h
-index 506d52633627..251e726ec628 100644
---- a/fs/ceph/super.h
-+++ b/fs/ceph/super.h
-@@ -19,6 +19,7 @@
- #include <linux/security.h>
- #include <linux/netfs.h>
- #include <linux/fscache.h>
-+#include <linux/hashtable.h>
- 
- #include <linux/ceph/libceph.h>
- 
-@@ -99,6 +100,8 @@ struct ceph_mount_options {
- 	char *mon_addr;
- };
- 
-+#define CEPH_ASYNC_CREATE_CONFLICT_BITS 8
-+
- struct ceph_fs_client {
- 	struct super_block *sb;
- 
-@@ -124,6 +127,9 @@ struct ceph_fs_client {
- 	struct workqueue_struct *inode_wq;
- 	struct workqueue_struct *cap_wq;
- 
-+	DECLARE_HASHTABLE(async_unlink_conflict, CEPH_ASYNC_CREATE_CONFLICT_BITS);
-+	spinlock_t async_unlink_conflict_lock;
-+
- #ifdef CONFIG_DEBUG_FS
- 	struct dentry *debugfs_dentry_lru, *debugfs_caps;
- 	struct dentry *debugfs_congestion_kb;
-@@ -281,7 +287,8 @@ struct ceph_dentry_info {
- 	struct dentry *dentry;
- 	struct ceph_mds_session *lease_session;
- 	struct list_head lease_list;
--	unsigned flags;
-+	struct hlist_node hnode;
-+	unsigned long flags;
- 	int lease_shared_gen;
- 	u32 lease_gen;
- 	u32 lease_seq;
-@@ -290,10 +297,12 @@ struct ceph_dentry_info {
- 	u64 offset;
- };
- 
--#define CEPH_DENTRY_REFERENCED		1
--#define CEPH_DENTRY_LEASE_LIST		2
--#define CEPH_DENTRY_SHRINK_LIST		4
--#define CEPH_DENTRY_PRIMARY_LINK	8
-+#define CEPH_DENTRY_REFERENCED		(1 << 0)
-+#define CEPH_DENTRY_LEASE_LIST		(1 << 1)
-+#define CEPH_DENTRY_SHRINK_LIST		(1 << 2)
-+#define CEPH_DENTRY_PRIMARY_LINK	(1 << 3)
-+#define CEPH_DENTRY_ASYNC_UNLINK_BIT	(4)
-+#define CEPH_DENTRY_ASYNC_UNLINK	(1 << CEPH_DENTRY_ASYNC_UNLINK_BIT)
- 
- struct ceph_inode_xattrs_info {
- 	/*
--- 
-2.36.0.rc1
-
+> v7: - Rebased on a recent linux-next. Dropped the recently removed
+>       NDS32 architecture. Only SH and x86 arches left un-acked.
+>
+>     - Added acks from Thomas Bogendoerfer and Krzysztof Kozlowski
+>       to the MIPS and memory/emif patches respectively.
+>
+>     - Made couple minor cosmetic improvements to the new API.
+>
+>     - A month ago I joined Collabora and continuing to work on this series
+>       on the company's time, so changed my email address to collabora.com
+>
+> v6: - Rebased on a recent linux-next.
+>
+>     - Made minor couple cosmetic changes.
+>
+> v5: - Dropped patches which cleaned up notifier/reboot headers, as was
+>       requested by Rafael Wysocki.
+>
+>     - Dropped WARN_ON() from the code, as was requested by Rafael Wysocki.
+>       Replaced it with pr_err() appropriately.
+>
+>     - Dropped *_notifier_has_unique_priority() functions and added
+>       *_notifier_chain_register_unique_prio() instead, as was suggested
+>       by Michał Mirosław and Rafael Wysocki.
+>
+>     - Dropped export of blocking_notifier_call_chain_is_empty() symbol,
+>       as was suggested by Rafael Wysocki.
+>
+>     - Michał Mirosław suggested that will be better to split up patch
+>       that adds the new API to ease reviewing, but Rafael Wysocki asked
+>       not add more patches, so I kept it as a single patch.
+>
+>     - Added temporary "weak" stub for pm_power_off() which fixes linkage
+>       failure once symbol is removed from arch/* code. Previously I missed
+>       this problem because was only compile-testing object files.
+>
+> v4: - Made a very minor improvement to doc comments, clarifying couple
+>       default values.
+>
+>     - Corrected list of emails recipient by adding Linus, Sebastian,
+>       Philipp and more NDS people. Removed bouncing emails.
+>
+>     - Added acks that were given to v3.
+>
+> v3: - Renamed power_handler to sys_off_handler as was suggested by
+>       Rafael Wysocki.
+>
+>     - Improved doc-comments as was suggested by Rafael Wysocki. Added more
+>       doc-comments.
+>
+>     - Implemented full set of 180 patches which convert whole kernel in
+>       accordance to the plan, see link [1] above. Slightly adjusted API to
+>       better suit for the remaining converted drivers.
+>
+>       * Added unregister_sys_off_handler() that is handy for a couple old
+>         platform drivers.
+>
+>       * Dropped devm_register_trivial_restart_handler(), 'simple' variant
+>         is enough to have.
+>
+>     - Improved "Add atomic/blocking_notifier_has_unique_priority()" patch,
+>       as was suggested by Andy Shevchenko. Also replaced down_write() with
+>       down_read() and factored out common notifier_has_unique_priority().
+>
+>     - Added stop_chain field to struct restart_data and reboot_prep_data
+>       after discovering couple drivers wanting that feature.
+>
+>     - Added acks that were given to v2.
+>
+> v2: - Replaced standalone power-off call chain demo-API with the combined
+>       power-off+restart API because this is what drivers want. It's a more
+>       comprehensive solution.
+>
+>     - Converted multiple drivers and arch code to the new API. Suggested by
+>       Andy Shevchenko. I skimmed through the rest of drivers, verifying that
+>       new API suits them. The rest of the drivers will be converted once we
+>       will settle on the new API, otherwise will be too many patches here.
+>
+>     - v2 API doesn't expose notifier to users and require handlers to
+>       have unique priority. Suggested by Guenter Roeck.
+>
+>     - v2 API has power-off chaining disabled by default and require
+>       drivers to explicitly opt-in to the chaining. This preserves old
+>       behaviour for existing drivers once they are converted to the new
+>       API.
+>
+> Dmitry Osipenko (27):
+>   notifier: Add atomic_notifier_call_chain_is_empty()
+>   notifier: Add blocking/atomic_notifier_chain_register_unique_prio()
+>   kernel/reboot: Introduce sys-off handler API
+>   kernel/reboot: Wrap legacy power-off callbacks into sys-off handlers
+>   kernel/reboot: Add do_kernel_power_off()
+>   kernel/reboot: Add stub for pm_power_off
+>   kernel/reboot: Add kernel_can_power_off()
+>   kernel/reboot: Add register_platform_power_off()
+>   ARM: Use do_kernel_power_off()
+>   csky: Use do_kernel_power_off()
+>   riscv: Use do_kernel_power_off()
+>   arm64: Use do_kernel_power_off()
+>   parisc: Use do_kernel_power_off()
+>   xen/x86: Use do_kernel_power_off()
+>   powerpc: Use do_kernel_power_off()
+>   m68k: Switch to new sys-off handler API
+>   sh: Use do_kernel_power_off()
+>   x86: Use do_kernel_power_off()
+>   ia64: Use do_kernel_power_off()
+>   mips: Use do_kernel_power_off()
+>   memory: emif: Use kernel_can_power_off()
+>   ACPI: power: Switch to sys-off handler API
+>   regulator: pfuze100: Use devm_register_sys_off_handler()
+>   reboot: Remove pm_power_off_prepare()
+>   soc/tegra: pmc: Use sys-off handler API to power off Nexus 7 properly
+>   kernel/reboot: Add devm_register_power_off_handler()
+>   kernel/reboot: Add devm_register_restart_handler()
+>
+>  arch/arm/kernel/reboot.c               |   4 +-
+>  arch/arm64/kernel/process.c            |   3 +-
+>  arch/csky/kernel/power.c               |   6 +-
+>  arch/ia64/kernel/process.c             |   4 +-
+>  arch/m68k/emu/natfeat.c                |   3 +-
+>  arch/m68k/include/asm/machdep.h        |   1 -
+>  arch/m68k/kernel/process.c             |   5 +-
+>  arch/m68k/kernel/setup_mm.c            |   1 -
+>  arch/m68k/kernel/setup_no.c            |   1 -
+>  arch/m68k/mac/config.c                 |   4 +-
+>  arch/mips/kernel/reset.c               |   3 +-
+>  arch/parisc/kernel/process.c           |   4 +-
+>  arch/powerpc/kernel/setup-common.c     |   4 +-
+>  arch/powerpc/xmon/xmon.c               |   3 +-
+>  arch/riscv/kernel/reset.c              |  12 +-
+>  arch/sh/kernel/reboot.c                |   3 +-
+>  arch/x86/kernel/reboot.c               |   4 +-
+>  arch/x86/xen/enlighten_pv.c            |   4 +-
+>  drivers/acpi/sleep.c                   |  16 +-
+>  drivers/memory/emif.c                  |   2 +-
+>  drivers/regulator/pfuze100-regulator.c |  42 ++-
+>  drivers/soc/tegra/pmc.c                |  87 +++++--
+>  include/linux/notifier.h               |   7 +
+>  include/linux/pm.h                     |   1 -
+>  include/linux/reboot.h                 |  91 +++++++
+>  kernel/notifier.c                      | 101 +++++--
+>  kernel/reboot.c                        | 347 ++++++++++++++++++++++++-
+>  27 files changed, 639 insertions(+), 124 deletions(-)
+>
+> --
+> 2.35.1
+>

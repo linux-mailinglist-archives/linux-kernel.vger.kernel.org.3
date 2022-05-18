@@ -2,86 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC89952AEF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BF752AEF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbiERAEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 20:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
+        id S232281AbiERAFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 20:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbiERAEA (ORCPT
+        with ESMTP id S232253AbiERAFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 20:04:00 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B8F53B75
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:03:58 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id z126so402120qkb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:03:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rc9GkWPYwi9LjqP/Z5LP2qV70hypQrqBkulyuMgMrFs=;
-        b=GyE4RctcHXmpHwWg3/vj2qWS+pJOYVc0XqsDwxjK94QvKCHOXSGP/2QEz3efBSZWCT
-         H4CvW8XL8GdJD0msOv980Gooh7AC3Wc3CqvDGXkdaAZXz39Q2u71SvyoZF8Up253bzYS
-         goKPZggFYA5z1F44SkDR7jfLk29BeY2pWCidXYNEdOeZjC2/oakC7+Gq0sP5tsLHG1yE
-         d9LvRHW6oha2Pe+/oGMstHAI4nBRZIAsffa/V5J3qdtwwlSlKeyoeF8WUySB0HRtRYzq
-         wXI3kIw/DmdcurybnglIzcCy+Hp68JRkm+PLhCRG4lF2og5VUx9yYeONNJVENCk5isn5
-         wT7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rc9GkWPYwi9LjqP/Z5LP2qV70hypQrqBkulyuMgMrFs=;
-        b=X2IWoUAw8sNm8/orSnN0RZgprrpOHhx7UCXFxFgL254cgv19njGDCYbHjGfiAufcA5
-         ehUiRZK+wlo4qTHrqOHleEP+B+mdZfdz48ZN/+W6kDHXIYdFHmmkoddI4SVxd+oDEUW+
-         8bJml6wVvwqDcPOzQXDsnxkA2HIoCwcXJbz+8p7QocXH3eUzDS51PvOprXQHeF35DGcl
-         00NlOg5s1w1lQZgctTfrmFOkjGy0rCYJGl6TrNc5GTerC5/+hrdftOx/EZbUeHiO53w0
-         bbAsB9nEoW/DrKnmiilqYJByye1BHpYMIkrqjTEyHzDH3z3tHjSJBPlnXlKgxavdRpjq
-         L7aw==
-X-Gm-Message-State: AOAM533iQbciYIJY94MlPANlXP1VioxNBIt6fHchMKKm00FZfWZbOBPp
-        eAd6GxbRVPDjZbP81trOfGba6g==
-X-Google-Smtp-Source: ABdhPJx1uUSvOMA2ilddaCy47Ot+FFkFnYYMTPmBJEHO9pSg/n8gspCmeg+o5fLHgqBtvEqimUFbsQ==
-X-Received: by 2002:a05:620a:42:b0:6a0:c64c:35ae with SMTP id t2-20020a05620a004200b006a0c64c35aemr18539952qkt.607.1652832237634;
-        Tue, 17 May 2022 17:03:57 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id n7-20020ac81e07000000b002f39b99f6bfsm262039qtl.89.2022.05.17.17.03.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 17:03:57 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nr7AS-008EVK-0v; Tue, 17 May 2022 21:03:56 -0300
-Date:   Tue, 17 May 2022 21:03:56 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Long Li <longli@microsoft.com>
-Cc:     Ajay Sharma <sharmaajay@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: [PATCH 05/12] net: mana: Set the DMA device max page size
-Message-ID: <20220518000356.GO63055@ziepe.ca>
-References: <1652778276-2986-1-git-send-email-longli@linuxonhyperv.com>
- <1652778276-2986-6-git-send-email-longli@linuxonhyperv.com>
- <20220517145949.GH63055@ziepe.ca>
- <PH7PR21MB3263EFA8F624F681C3B57636CECE9@PH7PR21MB3263.namprd21.prod.outlook.com>
- <20220517193515.GN63055@ziepe.ca>
- <PH7PR21MB3263C44368F02B8AF8521C4ACECE9@PH7PR21MB3263.namprd21.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR21MB3263C44368F02B8AF8521C4ACECE9@PH7PR21MB3263.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Tue, 17 May 2022 20:05:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B1B4F9D6
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:05:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B210E6144A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9DD7C385B8;
+        Wed, 18 May 2022 00:05:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652832303;
+        bh=002uA/OhCvgSuCBXwvu+tXYkgZTTOLcnGkvUEQBf7LI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AutC+nYSX1aPAKJulnJ4OmrJOn8VnWdcmA+sOROdyQgX/TybUILLrdH3kxIaGCHX5
+         Ak+dBVPuBTzcWumqSUQgIsKtQt+6p2NaOD2ar62iQN9xTsjSdtgjyYar6UR9z1ps8T
+         PTr1NHeSSdrRzbHwWFKHRW6bvGb0b2xzsjS/jWeA=
+Date:   Tue, 17 May 2022 17:05:02 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     willy@infradead.org, songmuchun@bytedance.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH] mm: pvmw: check possible huge PMD map by
+ transhuge_vma_suitable()
+Message-Id: <20220517170502.cf4433f5cd1e69f27305cf19@linux-foundation.org>
+In-Reply-To: <20220513191705.457775-1-shy828301@gmail.com>
+References: <20220513191705.457775-1-shy828301@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,49 +53,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 08:04:58PM +0000, Long Li wrote:
-> > Subject: Re: [PATCH 05/12] net: mana: Set the DMA device max page size
-> > 
-> > On Tue, May 17, 2022 at 07:32:51PM +0000, Long Li wrote:
-> > > > Subject: Re: [PATCH 05/12] net: mana: Set the DMA device max page
-> > > > size
-> > > >
-> > > > On Tue, May 17, 2022 at 02:04:29AM -0700, longli@linuxonhyperv.com
-> > wrote:
-> > > > > From: Long Li <longli@microsoft.com>
-> > > > >
-> > > > > The system chooses default 64K page size if the device does not
-> > > > > specify the max page size the device can handle for DMA. This do
-> > > > > not work well when device is registering large chunk of memory in
-> > > > > that a large page size is more efficient.
-> > > > >
-> > > > > Set it to the maximum hardware supported page size.
-> > > >
-> > > > For RDMA devices this should be set to the largest segment size an
-> > > > ib_sge can take in when posting work. It should not be the page size
-> > > > of MR. 2M is a weird number for that, are you sure it is right?
-> > >
-> > > Yes, this is the maximum page size used in hardware page tables.
-> > 
-> > As I said, it should be the size of the sge in the WQE, not the "hardware page
-> > tables"
-> 
-> This driver uses the following code to figure out the largest page
-> size for memory registration with hardware:
-> 
-> page_sz = ib_umem_find_best_pgsz(mr->umem, PAGE_SZ_BM, iova);
-> 
-> In this function, mr->umem is created with ib_dma_max_seg_size() as
-> its max segment size when creating its sgtable.
->
-> The purpose of setting DMA page size to 2M is to make sure this
-> function returns the largest possible MR size that the hardware can
-> take. Otherwise, this function will return 64k: the default DMA
-> size.
+On Fri, 13 May 2022 12:17:05 -0700 Yang Shi <shy828301@gmail.com> wrote:
 
-As I've already said, you are supposed to set the value that limits to
-ib_sge and *NOT* the value that is related to
-ib_umem_find_best_pgsz. It is usually 2G because the ib_sge's
-typically work on a 32 bit length.
+> IIUC PVMW checks if the vma is possibly huge PMD mapped by
+> transparent_hugepage_active() and "pvmw->nr_pages >= HPAGE_PMD_NR".
+> 
+> Actually pvmw->nr_pages is returned by compound_nr() or
+> folio_nr_pages(), so the page should be THP as long as "pvmw->nr_pages
+> >= HPAGE_PMD_NR".  And it is guaranteed THP is allocated for valid VMA
+> in the first place.  But it may be not PMD mapped if the VMA is file
+> VMA and it is not properly aligned.  The transhuge_vma_suitable()
+> is used to do such check, so replace transparent_hugepage_active() to
+> it, which is too heavy and overkilling.
 
-Jason
+I messed with the changelog a bit.  The function is called
+page_vma_mapped_walk(), so let's call it that.
+
+This patch has been in the trees since May 12, which isn't terribly
+long.  Does anyone feel up to a reviewed-by?
+
+Thanks.
+
+From: Yang Shi <shy828301@gmail.com>
+Subject: mm/page_vma_mapped.c: check possible huge PMD map with transhuge_vma_suitable()
+Date: Fri, 13 May 2022 12:17:05 -0700
+
+IIUC page_vma_mapped_walk() checks if the vma is possibly huge PMD mapped
+with transparent_hugepage_active() and "pvmw->nr_pages >= HPAGE_PMD_NR".
+
+Actually pvmw->nr_pages is returned by compound_nr() or folio_nr_pages(),
+so the page should be THP as long as "pvmw->nr_pages >= HPAGE_PMD_NR". 
+And it is guaranteed THP is allocated for valid VMA in the first place. 
+But it may be not PMD mapped if the VMA is file VMA and it is not properly
+aligned.  The transhuge_vma_suitable() is used to do such check, so
+replace transparent_hugepage_active() to it, which is too heavy and
+overkilling.
+
+Link: https://lkml.kernel.org/r/20220513191705.457775-1-shy828301@gmail.com
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Muchun Song <songmuchun@bytedance.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+ include/linux/huge_mm.h |    8 ++++++--
+ mm/page_vma_mapped.c    |    2 +-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+--- a/include/linux/huge_mm.h~mm-pvmw-check-possible-huge-pmd-map-by-transhuge_vma_suitable
++++ a/include/linux/huge_mm.h
+@@ -117,8 +117,10 @@ extern struct kobj_attribute shmem_enabl
+ extern unsigned long transparent_hugepage_flags;
+ 
+ static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+-		unsigned long haddr)
++		unsigned long addr)
+ {
++	unsigned long haddr;
++
+ 	/* Don't have to check pgoff for anonymous vma */
+ 	if (!vma_is_anonymous(vma)) {
+ 		if (!IS_ALIGNED((vma->vm_start >> PAGE_SHIFT) - vma->vm_pgoff,
+@@ -126,6 +128,8 @@ static inline bool transhuge_vma_suitabl
+ 			return false;
+ 	}
+ 
++	haddr = addr & HPAGE_PMD_MASK;
++
+ 	if (haddr < vma->vm_start || haddr + HPAGE_PMD_SIZE > vma->vm_end)
+ 		return false;
+ 	return true;
+@@ -342,7 +346,7 @@ static inline bool transparent_hugepage_
+ }
+ 
+ static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+-		unsigned long haddr)
++		unsigned long addr)
+ {
+ 	return false;
+ }
+--- a/mm/page_vma_mapped.c~mm-pvmw-check-possible-huge-pmd-map-by-transhuge_vma_suitable
++++ a/mm/page_vma_mapped.c
+@@ -243,7 +243,7 @@ restart:
+ 			 * cleared *pmd but not decremented compound_mapcount().
+ 			 */
+ 			if ((pvmw->flags & PVMW_SYNC) &&
+-			    transparent_hugepage_active(vma) &&
++			    transhuge_vma_suitable(vma, pvmw->address) &&
+ 			    (pvmw->nr_pages >= HPAGE_PMD_NR)) {
+ 				spinlock_t *ptl = pmd_lock(mm, pvmw->pmd);
+ 
+_
+

@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED7652BBC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC2552BC84
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237641AbiERNTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
+        id S237652AbiERNTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237631AbiERNTE (ORCPT
+        with ESMTP id S237637AbiERNTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:19:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 476DFD808A
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:19:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652879941;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2DQALIgDOHGNkvengitHc0v197uadYCpWLUueswTRnU=;
-        b=HN+rdHQ4Yc75aKuj7J7px3oMaxv4d2MZiSLg2QMemhaZbAODlnCz2xF76YnMY7wLzTNplv
-        z13GuTJJUSwNiKjUySMz5D4o3PYPfN8BIaRf+F17fMeTjHrmH+Iu9HUoZMqQho4pQ/SgGv
-        6z3W4OGusry+zrgpHhkcZZeeEJI/Djs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-Tss1-yDPNfiFC43WVtTzsg-1; Wed, 18 May 2022 09:18:58 -0400
-X-MC-Unique: Tss1-yDPNfiFC43WVtTzsg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AF95C38035A5;
-        Wed, 18 May 2022 13:18:57 +0000 (UTC)
-Received: from T590 (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2A87A1410F36;
-        Wed, 18 May 2022 13:18:50 +0000 (UTC)
-Date:   Wed, 18 May 2022 21:18:45 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Liu Xiaodong <xiaodong.liu@intel.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Harris James R <james.r.harris@intel.com>,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, ming.lei@redhat.com
-Subject: Re: [PATCH V2 0/1] ubd: add io_uring based userspace block driver
-Message-ID: <YoTyNVccpIYDpx9q@T590>
-References: <20220517055358.3164431-1-ming.lei@redhat.com>
- <20220518063808.GA168577@storage2.sh.intel.com>
+        Wed, 18 May 2022 09:19:34 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D2A1157F6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:19:32 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id v10so2098992pgl.11
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lKZB/6RoNEosL1ZhhmdbCbJfaDZXTaYhcWk4wRoTqMQ=;
+        b=TiZdooj/E3kGV+m+IxCHD//i1RFktljM4yI8thLxPLyttdCBD2pBRVy7gdWTxNfkdY
+         MIjn5bmaUDce3ZkI4A8aN4Pdl+3MRqua4jF5FHfFXsiofGpZwDYiLJyNSNsdqMKrLAVm
+         /qYtqby/etpEIQQub4ftdleYWh+d3048sBGe63NY9+ficUbuADiprl137BLlintNcq2v
+         A802YuD/nvdQCEodGIgt2Lxdd6aAO90Penhum1XMmJXCCci0/hwAK1evFeqpxOh1mky1
+         3We60ppHBCx+SUjtjg30CX6iBDLw3IwowCK+TuqDKyOR9GjLaPqG8eIZHAjHkbVmW5D/
+         PhbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lKZB/6RoNEosL1ZhhmdbCbJfaDZXTaYhcWk4wRoTqMQ=;
+        b=E90oxGp3nI3oZiOYHLhidvarwz4l826+AuE2CRRJqp7YMve0mUWZJrIZ8ZvyNZc0/q
+         UMiq0v+Nsu0DzzF+rh22NCSb8VwViXlFxt8CjXdmOhUHv5RgWi9qacIFxI3yCo+IFY3P
+         vv+ER0D3DyJqVFrb/RGfU5Av3ge/YcQZLHJRWFZoNMl42FozS48V+I6qsPAnBZCOqz7X
+         ze65dX5wF+S7bZVp1cot5s8f67YW+08vMwCa8MeY22QpPnqrTB3dmglsAfsNKMXiaasy
+         crrThuV9gnLXxcxmOa7xA7WNCtTiCiA3+6RLeuZ3kaAEKI9owDMaS2hJcJHyNdBpowQ+
+         Rk5Q==
+X-Gm-Message-State: AOAM530yf1tNEQc4qTfgiyTKm4AHD/5Ol0JK1cxE5APl0bz9ZfJ23Ry/
+        7ktkyqxs6zdy25OgEhsBQd9B
+X-Google-Smtp-Source: ABdhPJzzQNNyHE5cV8P7ycPwOWKLxudFG57eELbtV3RDyDz7x8L67cxSujGCQ0pczbQTtKmXHHLCpg==
+X-Received: by 2002:a05:6a00:f8b:b0:518:137a:112c with SMTP id ct11-20020a056a000f8b00b00518137a112cmr5629794pfb.8.1652879971672;
+        Wed, 18 May 2022 06:19:31 -0700 (PDT)
+Received: from localhost.localdomain ([117.217.181.192])
+        by smtp.gmail.com with ESMTPSA id b5-20020a170903228500b0015e8d4eb27esm1663908plh.200.2022.05.18.06.19.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 06:19:31 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     bhelgaas@google.com, lorenzo.pieralisi@arm.com, kbusch@kernel.org,
+        hch@lst.de
+Cc:     linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        svarbanov@mm-sol.com, bjorn.andersson@linaro.org, axboe@fb.com,
+        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
+        quic_nitirawa@quicinc.com, vidyas@nvidia.com, sagi@grimberg.me,
+        linux-pm@vger.kernel.org, rafael@kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 0/3] PCI: Notify PCI drivers about powerdown during suspend
+Date:   Wed, 18 May 2022 18:49:10 +0530
+Message-Id: <20220518131913.26974-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518063808.GA168577@storage2.sh.intel.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,95 +74,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Liu,
+Hi,
 
-On Wed, May 18, 2022 at 02:38:08AM -0400, Liu Xiaodong wrote:
-> On Tue, May 17, 2022 at 01:53:57PM +0800, Ming Lei wrote:
-> > Hello Guys,
-> > 
-> > ubd driver is one kernel driver for implementing generic userspace block
-> > device/driver, which delivers io request from ubd block device(/dev/ubdbN) into
-> > ubd server[1] which is the userspace part of ubd for communicating
-> > with ubd driver and handling specific io logic by its target module.
-> > 
-> > Another thing ubd driver handles is to copy data between user space buffer
-> > and request/bio's pages, or take zero copy if mm is ready for support it in
-> > future. ubd driver doesn't handle any IO logic of the specific driver, so
-> > it is small/simple, and all io logics are done by the target code in ubdserver.
-> > 
-> > The above two are main jobs done by ubd driver.
-> 
-> Hi, Lei
-> 
-> Your UBD implementation looks great. Its io_uring based design is interesting
-> and brilliant.
-> Towards the purpose of userspace block device, last year,
-> VDUSE initialized by Yongji is going to do a similar work. But VDUSE is under
-> vdpa. VDUSE will present a virtio-blk device to other userspace process
-> like containers, while serving virtio-blk req also by an userspace target.
-> https://lists.linuxfoundation.org/pipermail/iommu/2021-June/056956.html 
-> 
-> I've been working and thinking on serving RUNC container by SPDK efficiently.
-> But this work requires a new proper userspace block device module in kernel.
-> The highlevel design idea for userspace block device implementations
-> should be that: Using ring for IO request, so client and target can exchange
-> req/resp quickly in batch; Map bounce buffer between kernel and userspace
-> target, so another extra IO data copy like NBD can be avoid. (Oh, yes, SPDK
-> needs this kernel module has some more minor functions)
-> 
-> UBD and VDUSE are both implemented in this way, while of course each of
-> them has specific features and advantages.
-> 
-> Not like UBD which is straightforward and starts from scratch, VDUSE is
-> embedded in virtio framework. So its implementation is more complicated, but
-> all virtio frontend utilities can be leveraged.
-> When considering security/permission issues, feels UBD would be easier to
-> solve them.
+This series adds support for notifying the PCI drivers like NVMe about the
+transition of PCI devices into powerdown mode during system suspend.
 
-Stefan Hajnoczi and I are discussing related security/permission
-issues, can you share more details in your case?
+Background
+----------
 
-> 
-> So my questions are:
-> 1. what do you think about the purpose overlap between UBD and VDUSE?
+On Qcom SC7280 based Chrome platforms, the RPMh will turn off the power to all
+PCIe devices during system suspend for aggressive powersaving. Currently, there
+is no way for the PCI device drivers to learn about this situation. Some of the
+drivers assume that the power will be retained and some others assume that the
+power may be taken down.
 
-Sorry, I am not familiar with VDUSE, motivation of ubd is just to make one
-high performance generic userspace block driver. ubd driver(kernel part) is
-just responsible for communication and copying data between userspace buffers
-and kernel io request pages, and the ubdsrv(userspace) target handles io
-logic.
+We faced the issue with NVMe PCI driver, where the driver expects the NVMe
+device to be in APST (Autonomous Power State Transition) state for power saving
+during system suspend. So when the power goes down, the NVMe driver fails to
+bringup the device during resume.
 
-> 2. Could UBD be implemented with SPDK friendly functionalities? (mainly about
-> io data mapping, since HW devices in SPDK need to access the mapped data
-> buffer. Then, in function ubdsrv.c/ubdsrv_init_io_bufs(),
-> "addr = mmap(,,,,dev->cdev_fd,)",
+Previous work
+-------------
 
-No, that code is actually for supporting zero copy.
+We tried to fix this issue in a couple of ways:
 
-But each request's buffer is allocated by ubdsrv and definitely available for any
-target, please see loop_handle_io_async() which handles IO from /dev/ubdbN about
-how to use the buffer. Fro READ, the target code needs to implement READ
-logic and fill data to the buffer, then the buffer will be copied to
-kernel io request pages; for WRITE, the target code needs to use the buffer to handle
-WRITE and the buffer has been updated with kernel io request.
+1. The NVMe PCI driver checks for the existence of "StorageD3Enable" ACPI
+property in the suspend path. If the property is found, the driver assumes that
+the device may go to poweroff state and shutdowns the device accordingly.
 
-> SPDK needs to know the PA of "addr".
+As like the ACPI based systems, we also tried to get the support in place for
+DT based systems. But that didn't get accepted:
+https://lore.kernel.org/all/Yl+6V3pWuyRYuVV8@infradead.org/T/
 
-What is PA? and why?
+2. Keith Busch proposed a module params based approach. The parameter when set,
+will allow the driver to support APST during suspend. Absence of that parameter
+will let the driver shutdown the device.
 
-Userspace can only see VM of each buffer. 
+This also did not get accepted:
+https://lore.kernel.org/linux-nvme/20220201165006.3074615-1-kbusch@kernel.org/
 
-> Also memory pointed by "addr" should be pinned all the time.)
+Proposal
+--------
 
-The current implementation only pins pages when copying data between
-userspace buffers and kernel io request pages. But I plan to support
-three pin behavior:
+Christoph suggested to add a notification in the PCI/PM core to let the NVMe
+driver know that the device will go into powerdown state during suspend.
+https://lore.kernel.org/all/Yg0wklcJ3ed76Jbk@infradead.org/
 
-- never (current behavior, just pin pages when copying pages)
-- lazy (pin pages until the request is idle for enough time)
-- always (all pages in userpace VM are pinned during the device lifetime)
+Hence in this series, a "suspend_poweroff" flag is introduced in the host bridge
+struct. When this flag is set by the PCI RC drivers, the PCI device driver like
+NVMe can shutdown the device during suspend.
 
+In the coming days, the usage of this flag could be extended to other PCI
+drivers as well.
 
-Thanks, 
-Ming
+In this series, the system suspend/resume support is also added to the Qcom
+PCIe RC driver for SC7280. During the suspend time, the RC driver will put the
+device into D3cold and recover it during resume. So even though RPMh is cutting
+off the power to PCIe domain, it is necessary to put the device in D3cold by
+the PCIe RC driver for proper working.
+
+Testing
+-------
+
+This series has been tested on SC7280 IDP board connected to a NVMe PCI device.
+
+Thanks,
+Mani
+
+Manivannan Sadhasivam (2):
+  PCI: Add a flag to notify PCI drivers about powerdown during suspend
+  nvme-pci: Make use of "suspend_poweroff" flag during system suspend
+
+Prasad Malisetty (1):
+  PCI: qcom: Add system PM support
+
+ drivers/nvme/host/pci.c                |   3 +-
+ drivers/pci/controller/dwc/pcie-qcom.c | 108 +++++++++++++++++++++++++
+ include/linux/pci.h                    |   2 +
+ 3 files changed, 112 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
 

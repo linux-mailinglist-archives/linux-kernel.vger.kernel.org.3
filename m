@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF2952B2CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF8A52B2E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbiERHFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
+        id S231744AbiERHJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbiERHFe (ORCPT
+        with ESMTP id S231713AbiERHJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:05:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B977CA308F
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:05:32 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nrDkF-0000CF-AS; Wed, 18 May 2022 09:05:19 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1EB3B80F3A;
-        Wed, 18 May 2022 07:05:18 +0000 (UTC)
-Date:   Wed, 18 May 2022 09:05:17 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     kernel test robot <lkp@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
-Subject: Re: drivers/net/can/spi/mcp251xfd/mcp251xfd.h:481:34: warning: field
- hw_tx_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' is less aligned than
- 'struct mcp251xfd_hw_tx_obj_raw' and is usually due to ...
-Message-ID: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
-References: <202205181414.n8QRDe8k-lkp@intel.com>
+        Wed, 18 May 2022 03:09:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0175EBCE95
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:09:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7A4CB81E91
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBCF5C385AA;
+        Wed, 18 May 2022 07:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652857755;
+        bh=5VOCG6D7WIJ+aptpFBTKRAjSL5vE+/rVyHeXhlnHmuo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mCDVzWkIzB5296VRCBwWDjhnnI6AHpE8Oz3xvcwgGItJaDFFprY0SiAENX9e2eD8y
+         fNHpHFVPH1/x2Trt/GPuW0OA4XamPZAa8d43KXAEXdk1R6Kz3lDk5aZH1Uhz9pu6lV
+         QyH39GovNr+oznN7Ua8c5oP3rLN00DY3+Lve1cio=
+Date:   Wed, 18 May 2022 09:09:12 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, rafael@kernel.org,
+        mchehab+huawei@kernel.org, eugenis@google.com, tony.luck@intel.com,
+        pcc@google.com, peterz@infradead.org, marcos@orca.pet,
+        conor.dooley@microchip.com, nicolas.ferre@microchip.com,
+        marcan@marcan.st, linus.walleij@linaro.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 1/8] drivers: base: Add hardware prefetch control core
+ driver
+Message-ID: <YoSbmA+5m1Le0XGe@kroah.com>
+References: <20220518063032.2377351-1-tarumizu.kohei@fujitsu.com>
+ <20220518063032.2377351-2-tarumizu.kohei@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cujgf6c2mizwls7v"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202205181414.n8QRDe8k-lkp@intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220518063032.2377351-2-tarumizu.kohei@fujitsu.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,127 +59,252 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 18, 2022 at 03:30:25PM +0900, Kohei Tarumizu wrote:
+> Adds a register/unregister function to provide sysfs interface to
+> control CPU's hardware prefetch behavior. It creates the
+> "prefetch_control" sysfs directory and some attributes.
+> 
+> Attributes are hardware dependent, so it must be implemented for each
+> hardware. If CPU has a hardware prefetch behavior, call this function
+> to create sysfs.
+> 
+> Following patches add support for A64FX and x86.
+> 
+> Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+> ---
+>  drivers/base/pfctl.c  | 180 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/pfctl.h |  14 ++++
+>  2 files changed, 194 insertions(+)
+>  create mode 100644 drivers/base/pfctl.c
+>  create mode 100644 include/linux/pfctl.h
+> 
+> diff --git a/drivers/base/pfctl.c b/drivers/base/pfctl.c
+> new file mode 100644
+> index 000000000000..08ee8faaf277
+> --- /dev/null
+> +++ b/drivers/base/pfctl.c
+> @@ -0,0 +1,180 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Hardware prefetch control support via sysfs.
+> + *
+> + * Copyright 2022 FUJITSU LIMITED
+> + *
+> + * See Documentation/ABI/testing/sysfs-devices-system-cpu for more information.
+> + */
+> +
+> +#include <linux/cacheinfo.h>
+> +#include <linux/cpu.h>
+> +#include <linux/device.h>
+> +#include <linux/pfctl.h>
+> +#include <linux/slab.h>
+> +
+> +#ifdef pr_fmt
+> +#undef pr_fmt
+> +#endif
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +const struct pfctl_group *pgroups;
+> +enum cpuhp_state hp_online;
+> +
+> +static struct device_attribute **
+> +get_pfctl_attribute(unsigned int level, enum cache_type type)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; pgroups[i].attrs; i++)
+> +		if ((level == pgroups[i].level) && (type == pgroups[i].type))
+> +			return pgroups[i].attrs;
+> +
+> +	return NULL;
+> +}
+> +
+> +static int remove_pfctl_attr(struct device *index_dev, void *data)
+> +{
+> +	struct cacheinfo *leaf = dev_get_drvdata(index_dev);
+> +	struct device_attribute **attrs;
+> +	struct device *pfctl_dev;
+> +	int i;
+> +
+> +	attrs = get_pfctl_attribute(leaf->level, leaf->type);
+> +	if (!attrs)
+> +		return 0;
+> +
+> +	pfctl_dev = device_find_child_by_name(index_dev, "prefetch_control");
+> +	if (!pfctl_dev)
+> +		return 0;
+> +
+> +	for (i = 0; attrs[i]; i++)
+> +		device_remove_file(pfctl_dev, attrs[i]);
 
---cujgf6c2mizwls7v
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This feels wrong, attributes should be groups and be automatically added
+and removed by the driver core that way.  Not as lists of attributes
+like this, as that will race and be wrong.
 
-On 18.05.2022 14:45:33, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   210e04ff768142b96452030c4c2627512b30ad95
-> commit: eb79a267c9b3e608e7762a1b221428f37ace3aa3 can: mcp251xfd: rename a=
-ll remaining occurrence to mcp251xfd
-> date:   1 year, 8 months ago
-> config: arm-randconfig-c002-20220518 (https://download.01.org/0day-ci/arc=
-hive/20220518/202205181414.n8QRDe8k-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853f=
-a8ee225edf2d0de94b0dcbd31bea916e825e)
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git/commit/?id=3Deb79a267c9b3e608e7762a1b221428f37ace3aa3
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/=
-git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout eb79a267c9b3e608e7762a1b221428f37ace3aa3
->         # save the config file
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross=20
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All warnings (new ones prefixed by >>):
->=20
-> >> drivers/net/can/spi/mcp251xfd/mcp251xfd.h:481:34: warning: field hw_tx=
-_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h:479:2)' is less aligned than 'struct mcp251xfd_hw=
-_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unna=
-med at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' being packed, whic=
-h can lead to unaligned accesses [-Wunaligned-access]
->                    struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->                                                   ^
->    drivers/net/can/spi/mcp251xfd/mcp251xfd.h:485:34: warning: field hw_tx=
-_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h:483:2)' is less aligned than 'struct mcp251xfd_hw=
-_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unna=
-med at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:483:2)' being packed, whic=
-h can lead to unaligned accesses [-Wunaligned-access]
->                    struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->                                                   ^
->    drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c:511:1: warning: unused =
-function 'mcp251xfd_chip_set_mode_nowait' [-Wunused-function]
->    mcp251xfd_chip_set_mode_nowait(const struct mcp251xfd_priv *priv,
->    ^
->    3 warnings generated.
-> --
-> >> drivers/net/can/spi/mcp251xfd/mcp251xfd.h:481:34: warning: field hw_tx=
-_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h:479:2)' is less aligned than 'struct mcp251xfd_hw=
-_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unna=
-med at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' being packed, whic=
-h can lead to unaligned accesses [-Wunaligned-access]
->                    struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->                                                   ^
->    drivers/net/can/spi/mcp251xfd/mcp251xfd.h:485:34: warning: field hw_tx=
-_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/=
-spi/mcp251xfd/mcp251xfd.h:483:2)' is less aligned than 'struct mcp251xfd_hw=
-_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unna=
-med at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:483:2)' being packed, whic=
-h can lead to unaligned accesses [-Wunaligned-access]
->                    struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->                                                   ^
->    2 warnings generated.
->=20
->=20
-> vim +481 drivers/net/can/spi/mcp251xfd/mcp251xfd.h
->=20
->    477=09
->    478	union mcp251xfd_tx_obj_load_buf {
->    479		struct __packed {
->    480			struct mcp251xfd_buf_cmd cmd;
->  > 481			struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->    482		} nocrc;
->    483		struct __packed {
->    484			struct mcp251xfd_buf_cmd_crc cmd;
->    485			struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
->    486			__be16 crc;
->    487		} crc;
->    488	} ____cacheline_aligned;
->    489
+Use a list of attribute groups please.
 
-The structure layout is intentional as it describes the hardware
-messages on the SPI bus. The functions accessing these structs use
-appropriate put_unaligned_*() functions.
+> +
+> +	device_unregister(pfctl_dev);
+> +	put_device(pfctl_dev);
+> +
+> +	pfctl_dev = NULL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int create_pfctl_attr(struct device *index_dev, void *data)
+> +{
+> +	struct cacheinfo *leaf = dev_get_drvdata(index_dev);
+> +	struct device_attribute **attrs;
+> +	struct device *pfctl_dev;
+> +	int i, err;
+> +
+> +	attrs = get_pfctl_attribute(leaf->level, leaf->type);
+> +	if (!attrs)
+> +		return 0;
+> +
+> +	pfctl_dev = cpu_device_create(index_dev, NULL, NULL,
+> +				      "prefetch_control");
+> +	if (IS_ERR(pfctl_dev))
+> +		return PTR_ERR(pfctl_dev);
+> +
+> +	for (i = 0; attrs[i]; i++) {
+> +		err = device_create_file(pfctl_dev, attrs[i]);
 
-How to properly annotate these structs to silence the warnings?
+You just raced with userspace and lost :(
 
-Marc
+Please use attribute groups instead of manually adding files after the
+device is created and userspace is notified that it was present.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+That also makes your clean up logic much simpler (i.e. none as the drive
+core did it for you already.)
 
---cujgf6c2mizwls7v
-Content-Type: application/pgp-signature; name="signature.asc"
+> +		if (err) {
+> +			while (--i >= 0)
+> +				device_remove_file(pfctl_dev, attrs[i]);
+> +
+> +			device_unregister(pfctl_dev);
+> +			pfctl_dev = NULL;
+> +
+> +			return err;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int pfctl_online(unsigned int cpu)
+> +{
+> +	struct device *cpu_dev = get_cpu_device(cpu);
+> +	struct device *cache_dev;
+> +	int ret;
+> +
+> +	cache_dev = device_find_child_by_name(cpu_dev, "cache");
+> +	if (!cache_dev)
+> +		return -ENODEV;
+> +
+> +	ret = device_for_each_child(cache_dev, NULL, create_pfctl_attr);
+> +	if (ret < 0)
+> +		device_for_each_child(cache_dev, NULL, remove_pfctl_attr);
+> +
+> +	put_device(cache_dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int pfctl_prepare_down(unsigned int cpu)
+> +{
+> +	struct device *cpu_dev = get_cpu_device(cpu);
+> +	struct device *cache_dev;
+> +
+> +	cache_dev = device_find_child_by_name(cpu_dev, "cache");
+> +	if (!cache_dev)
+> +		return 0;
+> +
+> +	device_for_each_child(cache_dev, NULL, remove_pfctl_attr);
+> +
+> +	put_device(cache_dev);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * pfctl_register_attrs - register a Hardware Prefetch Control attributes
+> + * @pfctl_groups: pfctl_groups contains device attribute group to control the
+> + *                hardware prefetch register.
+> + *
+> + * Note: Call this function after the cache device is initialized because it
+> + * requires access to the cache device. (e.g. Call at the late_initcall)
+> + *
+> + * Context: Any context.
+> + * Return: 0 on success, negative error code on failure.
+> + */
+> +int pfctl_register_attrs(const struct pfctl_group *pfctl_groups)
+> +{
+> +	int ret;
+> +
+> +	if (pgroups)
+> +		return -EEXIST;
+> +
+> +	pgroups = pfctl_groups;
+> +
+> +	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "base/pfctl:online",
+> +				pfctl_online, pfctl_prepare_down);
+> +	if (ret < 0) {
+> +		pr_err("failed to register hotplug callbacks\n");
+> +		pgroups = NULL;
+> +		return ret;
+> +	}
+> +
+> +	hp_online = ret;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(pfctl_register_attrs);
+> +
+> +/**
+> + * pfctl_unregister_attrs - unregister the Hardware Prefetch Control driver
+> + * @pfctl_groups: Used to verify that this function is called by the same driver
+> + *                that called pfctl_register_attrs.
+> + *
+> + * Context: Any context.
+> + * Return: nothing.
+> + */
+> +void pfctl_unregister_attrs(const struct pfctl_group *pfctl_groups)
+> +{
+> +	if (!pgroups || (pfctl_groups != pgroups))
+> +		return;
+> +
+> +	cpuhp_remove_state(hp_online);
+> +
+> +	pgroups = NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(pfctl_unregister_attrs);
+> diff --git a/include/linux/pfctl.h b/include/linux/pfctl.h
+> new file mode 100644
+> index 000000000000..ecdab78be09f
+> --- /dev/null
+> +++ b/include/linux/pfctl.h
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_PFCTL_H
+> +#define _LINUX_PFCTL_H
+> +
+> +struct pfctl_group {
+> +	unsigned int		level;
+> +	enum cache_type		type;
+> +	struct device_attribute	**attrs;
 
------BEGIN PGP SIGNATURE-----
+Attribute groups please.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKEmqsACgkQrX5LkNig
-010wJAf/chPXIiNCGy6KFLiLZz5cZUSKN6WyTQN1q4bmbJppDkFfg+dEjoMedGWL
-KPH0TdZ9AtWFRFDZzmGrPgBVcnoXD0Hi7Hb1ISIJFZjf7XBDXvePoFY0+6JikS6w
-AwbMsLZMHBByU9kMOz5NobPyBDaWKcc78dLZARD+vrHhwzQ5C8mITuHHGeQU995N
-Q83dbx/7dqK6DIfM4draFFYetB4UWmaUS3aBDs0SB7+hX4+8ts9KHdlCm0k/7FXU
-607UgLU7Lukwxprd3lGf54HEDAt2fazhseZri8rIaXKOznpjLSOvt0PNUvsQrAEh
-5HqZC4V3MqeqIurSCde5uCv2B9sgww==
-=THh8
------END PGP SIGNATURE-----
+> +};
+> +
+> +int pfctl_register_attrs(const struct pfctl_group *pfctl_groups);
+> +void pfctl_unregister_attrs(const struct pfctl_group *pfctl_groups);
 
---cujgf6c2mizwls7v--
+Why do you think this needs to be in the driver core?  Why isn't this
+just a normal cpu driver?
+
+thanks,
+
+greg k-h

@@ -2,115 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B7752B186
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67C352B18C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiEREcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 00:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
+        id S229876AbiEREds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 00:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiEREcK (ORCPT
+        with ESMTP id S229847AbiEREdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 00:32:10 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7850CD0;
-        Tue, 17 May 2022 21:32:07 -0700 (PDT)
-X-UUID: f93d8a7ec43a430d9e92ab4a41ceb90c-20220518
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:1a3431a6-9d98-4d9c-ad33-682530c15756,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:20,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:25
-X-CID-META: VersionHash:2a19b09,CLOUDID:f6ad95e2-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:3,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: f93d8a7ec43a430d9e92ab4a41ceb90c-20220518
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1251744058; Wed, 18 May 2022 12:31:59 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 18 May 2022 12:31:57 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 18 May 2022 12:31:57 +0800
-Message-ID: <8edc3b72195ecf82369a6c040c70e5b97e7c718a.camel@mediatek.com>
-Subject: Re: [PATCH v6 3/4] drm/mediatek: Add mt8186 dsi compatible to
- mtk_dsi.c
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <jitao.shi@mediatek.com>,
-        <xinlei.lee@mediatek.com>, <airlied@linux.ie>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Wed, 18 May 2022 12:31:57 +0800
-In-Reply-To: <20220504091923.2219-4-rex-bc.chen@mediatek.com>
-References: <20220504091923.2219-1-rex-bc.chen@mediatek.com>
-         <20220504091923.2219-4-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 18 May 2022 00:33:38 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268FF1130;
+        Tue, 17 May 2022 21:33:36 -0700 (PDT)
+Received: from [172.24.65.115] (edu241124.nat.uni-leipzig.de [139.18.241.124])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 4DAF361EA192A;
+        Wed, 18 May 2022 06:33:34 +0200 (CEST)
+Message-ID: <564c41fe-08cc-9c19-1506-c7b501458251@molgen.mpg.de>
+Date:   Wed, 18 May 2022 06:33:33 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v9 2/3] dt-bindings: edac: nuvoton: add NPCM memory
+ controller
+Content-Language: en-US
+To:     Medad Young <medadyoung@gmail.com>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-edac <linux-edac@vger.kernel.org>
+References: <20220510031056.1657-1-ctcchien@nuvoton.com>
+ <20220510031056.1657-3-ctcchien@nuvoton.com>
+ <8d46eeb8-7926-f842-6105-1975a5adc3fe@molgen.mpg.de>
+ <CAHpyw9cvrEKMUpRBWYWp9hDZgA8ALHBkNAQr6ZDqjj4uH-MRTQ@mail.gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <CAHpyw9cvrEKMUpRBWYWp9hDZgA8ALHBkNAQr6ZDqjj4uH-MRTQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Rex:
+Dear Medad,
 
-On Wed, 2022-05-04 at 17:19 +0800, Rex-BC Chen wrote:
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
+
+Am 16.05.22 um 04:30 schrieb Medad Young:
+
+> Paul Menzel 於 2022年5月10日 週二 下午2:14寫道：
+
+>> Am 10.05.22 um 05:10 schrieb Medad CChien:
+>>> Document devicetree bindings for the Nuvoton BMC NPCM memory controller.
+>>>
+>>> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>> ---
+>>>    .../edac/nuvoton,npcm-memory-controller.yaml  | 61 +++++++++++++++++++
+>>>    1 file changed, 61 insertions(+)
+>>>    create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+>>> new file mode 100644
+>>> index 000000000000..6f37211796a3
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+>>> @@ -0,0 +1,61 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Nuvoton NPCM Memory Controller
+>>> +
+>>> +maintainers:
+>>> +  - Medad CChien <ctcchien@nuvoton.com>
+>>
+>> Just a side note, that in my experience functional like
+>> <linux-npcm-memory-controller@nuvoton.com> instead of personal addresses
+>> are useful, as you can configure on your side, who to deliver messages
+>> to. For example, if you are on sick leave or vacation, you just
+>> configure to deliver the message to a colleague of yours (or they get
+>> messages in the first place anyway).
+>>
+>> Maybe you can bring that up at Nuvoton.
 > 
-> Add the compatible because use different cmdq addresses in mt8186.
+> I understand, but we do not have group email  address.
+> so maybe I should add more maintainers?
 
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
+If there are actually more maintainers, responsible and knowledgeable 
+for that driver, than yes, these should be added (until you get a 
+function address set up).
 
-> 
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> index ccb0511b9cd5..b13fd0317e96 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -1155,6 +1155,12 @@ static const struct mtk_dsi_driver_data
-> mt8183_dsi_driver_data = {
->  	.has_size_ctl = true,
->  };
->  
-> +static const struct mtk_dsi_driver_data mt8186_dsi_driver_data = {
-> +	.reg_cmdq_off = 0xd00,
-> +	.has_shadow_ctl = true,
-> +	.has_size_ctl = true,
-> +};
-> +
->  static const struct of_device_id mtk_dsi_of_match[] = {
->  	{ .compatible = "mediatek,mt2701-dsi",
->  	  .data = &mt2701_dsi_driver_data },
-> @@ -1162,6 +1168,8 @@ static const struct of_device_id
-> mtk_dsi_of_match[] = {
->  	  .data = &mt8173_dsi_driver_data },
->  	{ .compatible = "mediatek,mt8183-dsi",
->  	  .data = &mt8183_dsi_driver_data },
-> +	{ .compatible = "mediatek,mt8186-dsi",
-> +	  .data = &mt8186_dsi_driver_data },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(of, mtk_dsi_of_match);
 
+Kind regards,
+
+Paul

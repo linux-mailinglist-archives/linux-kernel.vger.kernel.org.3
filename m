@@ -2,491 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748EB52B08A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF60152B092
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234354AbiERCrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 22:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S234359AbiERCvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 22:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiERCrL (ORCPT
+        with ESMTP id S234384AbiERCvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 22:47:11 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01F22EA01;
-        Tue, 17 May 2022 19:47:09 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id nr2-20020a17090b240200b001df2b1bfc40so4290583pjb.5;
-        Tue, 17 May 2022 19:47:09 -0700 (PDT)
+        Tue, 17 May 2022 22:51:10 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5F414D1F
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 19:51:07 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id q4so506640plr.11
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 19:51:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wjphVhXltrWVFPJcdTT1qGXxr098ifBJ0lSPsQoKQVI=;
-        b=pgin2JPd2OaYsl3KJSCTrCOkz9Ghmt6K/ay3M/5qh7zC6TashCCZn5TLtYB5BpgOZV
-         XspMD5MT64iMsm0cKd9NwKkvdyJ9RSGajrgAgGL0NuMBNlCKfK8qSlpUOD6PtK/dIdhW
-         AHcDHxVI0d7izQDmDeGbDgXqTswglOrG3zk5ssORQRuj8o77DA8cAeSpeUYeSydfDSsM
-         hyUj/PbTnKmARm+CtSVyQQFfaEztdPLSK82Dtb0RzBP72vo9j1UPgIOET0GZtPn0ViF+
-         ihLBCmjOPbEq8rYSIbV7rDVbeQzyED7UQcvHbmYAS+Uo47eeSPAHAyaOD5JRoh6cnXNi
-         7CXw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Muu06nupwh+dYqU+u10ilHsVeZYqZAWfb+sLHhJaZYQ=;
+        b=ljs3G+HiMoygvaVR8Rt7yJ2Nd2WzhNi6OfQtUHYlF+8Pgs/b2GvbZnI7x+Dq+QGqBt
+         Kzb+XR5XQpjqvT76n7BLmu7joPqIHyAgx8e6EtRtvq5ldgL7hlkWuZJbKoYkDIF97rk9
+         0qhlXzFcES2PbUrlPoflHkEPbrEDy5+i6ITDkCtJOxgNOGWSQ3i9HQ07vJB4NgRoTfUu
+         4qRr0rBE3lT/S54N1vqnnI4TmDJ8z9p/Vnrq0P04HB/PqiiHNtD6vwEaB8WXmvJgvu9d
+         2IVXrQgdaMpiLL3vwCsY61R13y6WjVXffD6cQ9uaFhnQAl//Z3joXktTuakmw2pvZlCD
+         rOOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wjphVhXltrWVFPJcdTT1qGXxr098ifBJ0lSPsQoKQVI=;
-        b=u64KsqGioUZe7KUn1KGWodmB7R97MaAIAIQu3MvN3DH+kwTd3Bh6OYfINISMwKzcPT
-         KYrEQeXAPzJtyG86875c0CKQqMbU906ib5o9JdcwrxcrvrSsa2cpqiFkQ+dN7VyJqKTS
-         5lhxwFXnhrlOYGRFSNvw24JB/cRq387nFy38FX1I6+ra9nSLSk6v7z0ua5VXuMwwYokh
-         GZUO1wh7WEOfPAikfvMX5oj1x4163TK6l1mcnfm1rOsnoPe4PtSBVguwY4D6Ramwag5O
-         IbOgpuIDNFW7xBsumadpg9EJ0UE/inWc0lPdgQtRb44SdCCbNne2VdVduEKKDY7mmkwv
-         pu+g==
-X-Gm-Message-State: AOAM531wg/2Rf3lsPKim+9RCfJ/vD2JVZCMWdE7OPudnLtKrq/DS3+/2
-        647xOHp1L8GiBX5jFN1j93Wu9D+CSDo=
-X-Google-Smtp-Source: ABdhPJwBHZlX1KrN2bbaFgCfTj8r9aNIesVS8y2PFisnugjLlPEdYiDI/Wd9A5Xw8E1tDNwZ2TRdHw==
-X-Received: by 2002:a17:902:c714:b0:161:64fa:97b6 with SMTP id p20-20020a170902c71400b0016164fa97b6mr15288829plp.40.1652842029167;
-        Tue, 17 May 2022 19:47:09 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id cp16-20020a170902e79000b0015e8d4eb2c2sm297941plb.268.2022.05.17.19.47.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 19:47:07 -0700 (PDT)
-Message-ID: <62845e2b.1c69fb81.cbf4a.1200@mx.google.com>
-X-Google-Original-Message-ID: <20220518024705.GA1663661@cgel.zte@gmail.com>
-Date:   Wed, 18 May 2022 02:47:06 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, ammarfaizi2@gnuweeb.org,
-        oleksandr@natalenko.name, willy@infradead.org, linux-mm@kvack.org,
-        corbet@lwn.net, linux-kernel@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
-        Hugh Dickins <hughd@google.com>, linux-api@vger.kernel.org
-Subject: Re: [PATCH] mm/ksm: introduce ksm_enabled for each process
-References: <20220517092701.1662641-1-xu.xin16@zte.com.cn>
- <YoOrdh85+AqJH8w1@dhcp22.suse.cz>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Muu06nupwh+dYqU+u10ilHsVeZYqZAWfb+sLHhJaZYQ=;
+        b=6vjAaBAbXhBVpJj7naKZt4IouHdGCa3JK/2EjtOCQJcOayF58WWrafJy7ZOrXi/yFY
+         41NET6Ly6qRVg32G8LNB6CiRqwJrG9x3ly5V7ez3sLHk97RjszO/Xh+T9VGBOUFKWzL/
+         Pl2Z/Wx1A+zmnxg4zBPC0eUT39EHczVI7+LuJCbeYi7ybwDLQYiHaOpgljnqef0MbBvj
+         RVtkHwPC0VHiLmZXhGZyqz00A9h+2B4SKUmcVJU2RnlCQYTIahS2mpknjTfXr0+R+qQz
+         WckHXyqET7gto4EegXti4ZgUxNlYNst5BwfJyf1TLtY4o7XNaDYk1CXYenh2o9ZhJQwX
+         EaGQ==
+X-Gm-Message-State: AOAM533eg+szHiRwhCslfeeAUSwUKS0JRFtpHfbNGL0nwMHw15NXwV3b
+        AVUp0TAn1KVEnv4rNe6wo6h2WQ==
+X-Google-Smtp-Source: ABdhPJzRum1Bupggi4Of/+lsrd4ap5QtiRlPTR/TLJWmPoJF7yht4wCozlydHu58gRr18QghdxKAKw==
+X-Received: by 2002:a17:90b:1b0d:b0:1dc:672e:c8c2 with SMTP id nu13-20020a17090b1b0d00b001dc672ec8c2mr28480250pjb.96.1652842266979;
+        Tue, 17 May 2022 19:51:06 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id h67-20020a62de46000000b0050dc7628191sm468755pfg.107.2022.05.17.19.50.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 May 2022 19:51:06 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
+        joannekoong@fb.com, geliang.tang@suse.com
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        wangdongdong.6@bytedance.com, cong.wang@bytedance.com,
+        zhouchengming@bytedance.com, zhoufeng.zf@bytedance.com,
+        yosryahmed@google.com
+Subject: [PATCH bpf-next v2] selftests/bpf: fix some bugs in map_lookup_percpu_elem testcase
+Date:   Wed, 18 May 2022 10:50:53 +0800
+Message-Id: <20220518025053.20492-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoOrdh85+AqJH8w1@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 04:04:38PM +0200, Michal Hocko wrote:
-> [CCing Hugh and linux-api]
-> 
-> On Tue 17-05-22 09:27:01, cgel.zte@gmail.com wrote:
-> > From: xu xin <xu.xin16@zte.com.cn>
-> > 
-> > For now, if we want to use KSM to merge pages of some apps, we have to
-> > explicitly call madvise() in application code, which means installed
-> > apps on OS needs to be uninstall and source code needs to be modified.
-> > It is very inconvenient because sometimes users or app developers are not
-> > willing to modify their app source codes for any reasons.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Hello, Michal.
-> 
-> Would it help to allow external control by process_madvise?
->
+comments from Andrii Nakryiko, details in here:
+https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/
 
-Maybe, but it will be much more complicated to achieve this by
-process_madvise(). process_madvise works on a serires of VMAs in
-essential, So all the eligible VMAs have to be traversed. The problem
-about this has been discussed in [1],[2].
-[1]https://lore.kernel.org/lkml/1835064.A2aMcgg3dW@natalenko.name/
-[2]https://lore.kernel.org/lkml/20220513133210.9dd0a4216bd8baaa1047562c@linux-foundation.org/
-> > So to use KSM more flexibly, we provide a new proc file "ksm_enabled" under
-> > /proc/<pid>/. We can pass parameter into this file with one of three values
-> > as follows:
-> > 
-> > 	always:
-> > 		force all anonymous and eligible VMAs of this process to be
-> > 		scanned by ksmd.
-> > 	madvise:
-> > 		the default state, unless user code call madvise, ksmd
-> > 		doesn't scan this process.
-> > 	never:
-> > 		this process will never be scanned by ksmd and no merged
-> > 		pages occurred in this process.
-> > 
-> > With this patch, we can control KSM with ``/proc/<pid>/ksm_enabled``
-> > based on every process. KSM for each process can be entirely disabled
-> > (mostly for debugging purposes) or only enabled inside MADV_MERGEABLE
-> > regions (to avoid the risk of consuming more cpu resources to scan for
-> > ksmd) or enabled entirely for a process.
-> 
-> I am not really familiar with KSM much but I am wondering whether the
-> proc based interface is really the best fit. We have a very similar
-> concern with THP where processes would like to override the global setup
-> and that has been done with prctl interface. Is there any reason why
-> this should be any different?
-> 
-At least for now, I can't find a simpler implementation than proc file,
-unless we add a new syscall used for changing another process mm's flag
-in user space.
+use /* */ instead of //
+use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
+use 8 bytes for value size
+fix memory leak
+use ASSERT_EQ instead of ASSERT_OK
+add bpf_loop to fetch values on each possible CPU
 
-Speaking to THP, the interactive UI of KSM is relatively simpler because
-KSM dosen't have global knob like THP. OTOH, THP trades space for time
-(consume memory) while KSM trades time for space (save memory), so THP
-tends to be enabled system wide while KSM not.
+Fixes: ed7c13776e20c74486b0939a3c1de984c5efb6aa ("selftests/bpf: add test case for bpf_map_lookup_percpu_elem")
+Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+---
+v1->v2: Addressed comments from Yonghong Song.
+- Adjust the code format
+more details can be seen from here:
+https://lore.kernel.org/lkml/80ab09cf-6072-a75a-082d-2721f6f907ef@fb.com/T/
 
-> Another question I have is about the interaction of the per-process
-> tunable with any explicit madvise calls. AFAICS you have made this knob
-> per mm but the actual implementation currently relies on the per-vma
-> flags. That means that one can explicitly disallow merging by madvise
-> for a range. Is it wise to override that by a per-process knob? I mean
-> there might be a very good reason why a particular memory ranges should
-> never be merged but a per-process knob could easily ignore that hint
-> from the application. Or am I just confuse?
-For now, there is no any hints for letting KSM never merge some memory
-ranges.
+ .../bpf/prog_tests/map_lookup_percpu_elem.c   | 50 +++++++++------
+ .../bpf/progs/test_map_lookup_percpu_elem.c   | 62 ++++++++++++-------
+ 2 files changed, 71 insertions(+), 41 deletions(-)
 
-> 
-> [I am keeping the rest of the email for reference]
-> 
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+index 58b24c2112b0..f987c9278912 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+@@ -1,30 +1,38 @@
+-// SPDX-License-Identifier: GPL-2.0
+-// Copyright (c) 2022 Bytedance
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2022 Bytedance */
+ 
+ #include <test_progs.h>
+-
+ #include "test_map_lookup_percpu_elem.skel.h"
+ 
+-#define TEST_VALUE  1
+-
+ void test_map_lookup_percpu_elem(void)
+ {
+ 	struct test_map_lookup_percpu_elem *skel;
+-	int key = 0, ret;
+-	int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+-	int *buf;
++	__u64 key = 0, sum;
++	int ret, i;
++	int nr_cpus = libbpf_num_possible_cpus();
++	__u64 *buf;
+ 
+-	buf = (int *)malloc(nr_cpus*sizeof(int));
++	buf = (__u64 *)malloc(nr_cpus*sizeof(__u64));
+ 	if (!ASSERT_OK_PTR(buf, "malloc"))
+ 		return;
+-	memset(buf, 0, nr_cpus*sizeof(int));
+-	buf[0] = TEST_VALUE;
+ 
+-	skel = test_map_lookup_percpu_elem__open_and_load();
+-	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
+-		return;
++	for (i = 0; i < nr_cpus; i++)
++		buf[i] = i;
++	sum = (nr_cpus-1)*nr_cpus/2;
++
++	skel = test_map_lookup_percpu_elem__open();
++	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
++		goto exit;
++
++	skel->rodata->nr_cpus = nr_cpus;
++
++	ret = test_map_lookup_percpu_elem__load(skel);
++	if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
++		goto cleanup;
++
+ 	ret = test_map_lookup_percpu_elem__attach(skel);
+-	ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
++	if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach"))
++		goto cleanup;
+ 
+ 	ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
+ 	ASSERT_OK(ret, "percpu_array_map update");
+@@ -37,10 +45,14 @@ void test_map_lookup_percpu_elem(void)
+ 
+ 	syscall(__NR_getuid);
+ 
+-	ret = skel->bss->percpu_array_elem_val == TEST_VALUE &&
+-	      skel->bss->percpu_hash_elem_val == TEST_VALUE &&
+-	      skel->bss->percpu_lru_hash_elem_val == TEST_VALUE;
+-	ASSERT_OK(!ret, "bpf_map_lookup_percpu_elem success");
++	test_map_lookup_percpu_elem__detach(skel);
++
++	ASSERT_EQ(skel->bss->percpu_array_elem_sum, sum, "percpu_array lookup percpu elem");
++	ASSERT_EQ(skel->bss->percpu_hash_elem_sum, sum, "percpu_hash lookup percpu elem");
++	ASSERT_EQ(skel->bss->percpu_lru_hash_elem_sum, sum, "percpu_lru_hash lookup percpu elem");
+ 
++cleanup:
+ 	test_map_lookup_percpu_elem__destroy(skel);
++exit:
++	free(buf);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+index 5d4ef86cbf48..57e875d6e6e0 100644
+--- a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
++++ b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+@@ -1,52 +1,70 @@
+-// SPDX-License-Identifier: GPL-2.0
+-// Copyright (c) 2022 Bytedance
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2022 Bytedance */
+ 
+ #include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ 
+-int percpu_array_elem_val = 0;
+-int percpu_hash_elem_val = 0;
+-int percpu_lru_hash_elem_val = 0;
++__u64 percpu_array_elem_sum = 0;
++__u64 percpu_hash_elem_sum = 0;
++__u64 percpu_lru_hash_elem_sum = 0;
++const volatile int nr_cpus;
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+ 	__uint(max_entries, 1);
+ 	__type(key, __u32);
+-	__type(value, __u32);
++	__type(value, __u64);
+ } percpu_array_map SEC(".maps");
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_PERCPU_HASH);
+ 	__uint(max_entries, 1);
+-	__type(key, __u32);
+-	__type(value, __u32);
++	__type(key, __u64);
++	__type(value, __u64);
+ } percpu_hash_map SEC(".maps");
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
+ 	__uint(max_entries, 1);
+-	__type(key, __u32);
+-	__type(value, __u32);
++	__type(key, __u64);
++	__type(value, __u64);
+ } percpu_lru_hash_map SEC(".maps");
+ 
++struct read_percpu_elem_ctx {
++	void *map;
++	__u64 sum;
++};
++
++static int read_percpu_elem_callback(__u32 index, struct read_percpu_elem_ctx *ctx)
++{
++	__u64 key = 0;
++	__u64 *value;
++
++	value = bpf_map_lookup_percpu_elem(ctx->map, &key, index);
++	if (value)
++		ctx->sum += *value;
++	return 0;
++}
++
+ SEC("tp/syscalls/sys_enter_getuid")
+ int sysenter_getuid(const void *ctx)
+ {
+-	__u32 key = 0;
+-	__u32 cpu = 0;
+-	__u32 *value;
++	struct read_percpu_elem_ctx map_ctx;
+ 
+-	value = bpf_map_lookup_percpu_elem(&percpu_array_map, &key, cpu);
+-	if (value)
+-		percpu_array_elem_val = *value;
++	map_ctx.map = &percpu_array_map;
++	map_ctx.sum = 0;
++	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
++	percpu_array_elem_sum = map_ctx.sum;
+ 
+-	value = bpf_map_lookup_percpu_elem(&percpu_hash_map, &key, cpu);
+-	if (value)
+-		percpu_hash_elem_val = *value;
++	map_ctx.map = &percpu_hash_map;
++	map_ctx.sum = 0;
++	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
++	percpu_hash_elem_sum = map_ctx.sum;
+ 
+-	value = bpf_map_lookup_percpu_elem(&percpu_lru_hash_map, &key, cpu);
+-	if (value)
+-		percpu_lru_hash_elem_val = *value;
++	map_ctx.map = &percpu_lru_hash_map;
++	map_ctx.sum = 0;
++	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
++	percpu_lru_hash_elem_sum = map_ctx.sum;
+ 
+ 	return 0;
+ }
+-- 
+2.20.1
 
-Sync with you.
-
-happy to see your reply.
-> > Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> > Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
-> > Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
-> > Reviewed-by: wangyong <wang.yong12@zte.com.cn>
-> > Reviewed-by: Yunkai Zhang <zhang.yunkai@zte.com.cn>
-> > Reviewed-by: Jiang Xuexin <jiang.xuexin@zte.com.cn>
-> > Signed-off-by: CGEL <cgel.zte@gmail.com>
-> > ---
-> >  Documentation/admin-guide/mm/ksm.rst |  24 ++++++-
-> >  Documentation/filesystems/proc.rst   |  14 ++++
-> >  fs/proc/base.c                       | 102 ++++++++++++++++++++++++++-
-> >  include/linux/ksm.h                  |   5 ++
-> >  include/linux/mm_types.h             |  10 +++
-> >  mm/ksm.c                             |  35 ++++++++-
-> >  6 files changed, 185 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
-> > index b244f0202a03..91326198e37f 100644
-> > --- a/Documentation/admin-guide/mm/ksm.rst
-> > +++ b/Documentation/admin-guide/mm/ksm.rst
-> > @@ -32,7 +32,7 @@ are swapped back in: ksmd must rediscover their identity and merge again).
-> >  Controlling KSM with madvise
-> >  ============================
-> >  
-> > -KSM only operates on those areas of address space which an application
-> > +KSM can operate on those areas of address space which an application
-> >  has advised to be likely candidates for merging, by using the madvise(2)
-> >  system call::
-> >  
-> > @@ -70,6 +70,28 @@ Applications should be considerate in their use of MADV_MERGEABLE,
-> >  restricting its use to areas likely to benefit.  KSM's scans may use a lot
-> >  of processing power: some installations will disable KSM for that reason.
-> >  
-> > +Controlling KSM with procfs
-> > +===========================
-> > +We can also control KSM with ``/proc/<pid>/ksm_enabled`` based on every
-> > +process. KSM for each process can be entirely disabled (mostly for
-> > +debugging purposes) or only enabled inside MADV_MERGEABLE regions (to avoid
-> > +the risk of consuming more cpu resources to scan for ksmd) or enabled entirely
-> > +for a process. This can be achieved with one of::
-> > +
-> > +    echo always > /proc/<pid>/ksm_enabled
-> > +    echo madvise > /proc/<pid>/ksm_enabled
-> > +    echo never > /proc/<pid>/ksm_enabled
-> > +
-> > +always:
-> > +        force all anonymous and eligible VMAs of this process to be scanned
-> > +        by ksmd.
-> > +madvise:
-> > +        the default state, unless user code call madvise, ksmd doesn't scan
-> > +        this process.
-> > +never:
-> > +        this process will never be scanned by ksmd and no merged pages
-> > +	occurred in this process.
-> > +
-> >  .. _ksm_sysfs:
-> >  
-> >  KSM daemon sysfs interface
-> > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> > index 1bc91fb8c321..ea7e08a1c143 100644
-> > --- a/Documentation/filesystems/proc.rst
-> > +++ b/Documentation/filesystems/proc.rst
-> > @@ -47,6 +47,7 @@ fixes/update part 1.1  Stefani Seibold <stefani@seibold.net>    June 9 2009
-> >    3.10  /proc/<pid>/timerslack_ns - Task timerslack value
-> >    3.11	/proc/<pid>/patch_state - Livepatch patch operation state
-> >    3.12	/proc/<pid>/arch_status - Task architecture specific information
-> > +  3.13  /proc/<pid>/ksm_enabled - Controlling KSM based on process
-> >  
-> >    4	Configuring procfs
-> >    4.1	Mount options
-> > @@ -2140,6 +2141,19 @@ AVX512_elapsed_ms
-> >    the task is unlikely an AVX512 user, but depends on the workload and the
-> >    scheduling scenario, it also could be a false negative mentioned above.
-> >  
-> > +3.13 /proc/<pid>/ksm_enabled - Controlling KSM based on process
-> > +---------------------------------------------------------------
-> > +When CONFIG_KSM is enabled, this file can be used to specify how this
-> > +process's anonymous memory gets involved in KSM scanning.
-> > +
-> > +If writing "always" to this file, it will force all anonymous and eligible
-> > +VMAs of this process to be scanned by ksmd.
-> > +
-> > +If writing "madvise" to this file, turn to the default state, unless user
-> > +code call madvise, ksmd doesn't scan this process.
-> > +
-> > +If writing "never" to this file, this process will never be scanned by ksmd.
-> > +
-> >  Chapter 4: Configuring procfs
-> >  =============================
-> >  
-> > diff --git a/fs/proc/base.c b/fs/proc/base.c
-> > index 617816168748..760ceeab4aa1 100644
-> > --- a/fs/proc/base.c
-> > +++ b/fs/proc/base.c
-> > @@ -96,6 +96,7 @@
-> >  #include <linux/time_namespace.h>
-> >  #include <linux/resctrl.h>
-> >  #include <linux/cn_proc.h>
-> > +#include <linux/ksm.h>
-> >  #include <trace/events/oom.h>
-> >  #include "internal.h"
-> >  #include "fd.h"
-> > @@ -3171,7 +3172,104 @@ static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *
-> >  
-> >  	return 0;
-> >  }
-> > -#endif /* CONFIG_KSM */
-> > +
-> > +static int ksm_enabled_show(struct seq_file *m, void *v)
-> > +{
-> > +	struct inode *inode = m->private;
-> > +	struct mm_struct *mm;
-> > +	struct task_struct *task = get_proc_task(inode);
-> > +
-> > +	if (!task)
-> > +		return -ESRCH;
-> > +
-> > +	mm = get_task_mm(task);
-> > +	if (mm) {
-> > +		if (mm->ksm_enabled == KSM_PROC_ALWAYS)
-> > +			seq_puts(m, "[always] madvise never\n");
-> > +		else if (mm->ksm_enabled == KSM_PROC_MADVISE)
-> > +			seq_puts(m, "always [madvise] never\n");
-> > +		else
-> > +			seq_puts(m, "always madvise [never]\n");
-> > +		mmput(mm);
-> > +	}
-> > +
-> > +	put_task_struct(task);
-> > +	return 0;
-> > +}
-> > +
-> > +static ssize_t ksm_enabled_write(struct file *file, const char __user *buf,
-> > +								size_t count, loff_t *ppos)
-> > +{
-> > +	struct task_struct *task;
-> > +	struct mm_struct *mm;
-> > +	char buffer[PROC_NUMBUF];
-> > +	int value;
-> > +	int err = 0;
-> > +	long str_len;
-> > +
-> > +	if (count > sizeof(buffer) - 1)
-> > +		count = sizeof(buffer) - 1;
-> > +	str_len = strncpy_from_user(buffer, buf, count);
-> > +	if (str_len < 0)
-> > +		return -EFAULT;
-> > +	buffer[str_len - 1] = '\0';
-> > +
-> > +	if (!strcmp("always", buffer))
-> > +		value = KSM_PROC_ALWAYS;
-> > +	else if (!strcmp("madvise", buffer))
-> > +		value = KSM_PROC_MADVISE;
-> > +	else if (!strcmp("never", buffer))
-> > +		value = KSM_PROC_NEVER;
-> > +	else
-> > +		return -EINVAL;
-> > +
-> > +	task = get_proc_task(file_inode(file));
-> > +	if (!task)
-> > +		return -ESRCH;
-> > +	mm = get_task_mm(task);
-> > +	if (!mm)
-> > +		goto out_put_task;
-> > +
-> > +	if (mm->ksm_enabled != value) {
-> > +		if (mmap_write_lock_killable(mm)) {
-> > +			err = -EINTR;
-> > +			goto out_mmput;
-> > +		}
-> > +		if (value == KSM_PROC_NEVER)
-> > +			mm->ksm_enabled = value;
-> > +		else {
-> > +			/*
-> > +			 * No matter whether it's KSM_PROC_ALWAYS or KSM_PROC_MADVISE, we need
-> > +			 * to recheck mm->flags to guarantee that this mm is in ksm_scan.
-> > +			 */
-> > +			if (!test_bit(MMF_VM_MERGEABLE, &mm->flags))
-> > +				err = __ksm_enter(mm);
-> > +			if (!err)
-> > +				mm->ksm_enabled = value;
-> > +		}
-> > +		mmap_write_unlock(mm);
-> > +	}
-> > +
-> > +out_mmput:
-> > +	mmput(mm);
-> > +out_put_task:
-> > +	put_task_struct(task);
-> > +	return err < 0 ? err : count;
-> > +}
-> > +
-> > +static int ksm_enabled_open(struct inode *inode, struct file *filp)
-> > +{
-> > +	return single_open(filp, ksm_enabled_show, inode);
-> > +}
-> > +
-> > +static const struct file_operations proc_pid_ksm_enabled_operations = {
-> > +	.open       = ksm_enabled_open,
-> > +	.read		= seq_read,
-> > +	.write		= ksm_enabled_write,
-> > +	.llseek		= seq_lseek,
-> > +	.release	= single_release,
-> > +};
-> > +#endif /*CONFIG_KSM */
-> >  
-> >  #ifdef CONFIG_STACKLEAK_METRICS
-> >  static int proc_stack_depth(struct seq_file *m, struct pid_namespace *ns,
-> > @@ -3306,6 +3404,7 @@ static const struct pid_entry tgid_base_stuff[] = {
-> >  #endif
-> >  #ifdef CONFIG_KSM
-> >  	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
-> > +	REG("ksm_enabled", S_IRUGO|S_IWUSR, proc_pid_ksm_enabled_operations),
-> >  #endif
-> >  };
-> >  
-> > @@ -3642,6 +3741,7 @@ static const struct pid_entry tid_base_stuff[] = {
-> >  #endif
-> >  #ifdef CONFIG_KSM
-> >  	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
-> > +	REG("ksm_enabled", S_IRUGO|S_IWUSR, proc_pid_ksm_enabled_operations),
-> >  #endif
-> >  };
-> >  
-> > diff --git a/include/linux/ksm.h b/include/linux/ksm.h
-> > index 0b4f17418f64..29d23d208b54 100644
-> > --- a/include/linux/ksm.h
-> > +++ b/include/linux/ksm.h
-> > @@ -19,6 +19,11 @@ struct stable_node;
-> >  struct mem_cgroup;
-> >  
-> >  #ifdef CONFIG_KSM
-> > +
-> > +#define KSM_PROC_MADVISE	0
-> > +#define KSM_PROC_ALWAYS		1
-> > +#define KSM_PROC_NEVER		2
-> > +
-> >  int ksm_madvise(struct vm_area_struct *vma, unsigned long start,
-> >  		unsigned long end, int advice, unsigned long *vm_flags);
-> >  int __ksm_enter(struct mm_struct *mm);
-> > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> > index 417ef1519475..29fd4c84d08c 100644
-> > --- a/include/linux/mm_types.h
-> > +++ b/include/linux/mm_types.h
-> > @@ -649,6 +649,16 @@ struct mm_struct {
-> >  		 * merging.
-> >  		 */
-> >  		unsigned long ksm_merging_pages;
-> > +
-> > +		/*
-> > +		 * Represent the state of this mm involing in KSM, with 3 states:
-> > +		 * 1) KSM_PROC_ALWAYS:  force all anonymous VMAs of this process to
-> > +		 *						be scanned.
-> > +		 * 2) KSM_PROC_MADVISE: the default state, unless user code call
-> > +		 *						madvise, don't scan this process.
-> > +		 * 3) KSM_PROC_NEVER: never be involed in KSM.
-> > +		 */
-> > +		int ksm_enabled;
-> >  #endif
-> >  	} __randomize_layout;
-> >  
-> > diff --git a/mm/ksm.c b/mm/ksm.c
-> > index 26da7f813f23..90cc8eda8bca 100644
-> > --- a/mm/ksm.c
-> > +++ b/mm/ksm.c
-> > @@ -334,6 +334,35 @@ static void __init ksm_slab_free(void)
-> >  	mm_slot_cache = NULL;
-> >  }
-> >  
-> > +static bool vma_scannable(struct vm_area_struct *vma)
-> > +{
-> > +	unsigned long vm_flags = vma->vm_flags;
-> > +	struct mm_struct *mm = vma->vm_mm;
-> > +
-> > +	if (mm->ksm_enabled == KSM_PROC_NEVER ||
-> > +			(!(vma->vm_flags & VM_MERGEABLE) &&
-> > +			mm->ksm_enabled != KSM_PROC_ALWAYS))
-> > +		return false;
-> > +
-> > +	if (vm_flags & (VM_SHARED	| VM_MAYSHARE	|
-> > +			VM_PFNMAP	| VM_IO | VM_DONTEXPAND |
-> > +			VM_HUGETLB	| VM_MIXEDMAP))
-> > +		return false;       /* just ignore this vma*/
-> > +
-> > +	if (vma_is_dax(vma))
-> > +		return false;
-> > +#ifdef VM_SAO
-> > +	if (vm_flags & VM_SAO)
-> > +		return false;
-> > +#endif
-> > +#ifdef VM_SPARC_ADI
-> > +	if (vm_flags & VM_SPARC_ADI)
-> > +		return false;
-> > +#endif
-> > +
-> > +	return true;
-> > +}
-> > +
-> >  static __always_inline bool is_stable_node_chain(struct stable_node *chain)
-> >  {
-> >  	return chain->rmap_hlist_len == STABLE_NODE_CHAIN;
-> > @@ -523,7 +552,7 @@ static struct vm_area_struct *find_mergeable_vma(struct mm_struct *mm,
-> >  	if (ksm_test_exit(mm))
-> >  		return NULL;
-> >  	vma = vma_lookup(mm, addr);
-> > -	if (!vma || !(vma->vm_flags & VM_MERGEABLE) || !vma->anon_vma)
-> > +	if (!vma || !vma_scannable(vma) || !vma->anon_vma)
-> >  		return NULL;
-> >  	return vma;
-> >  }
-> > @@ -990,7 +1019,7 @@ static int unmerge_and_remove_all_rmap_items(void)
-> >  		for_each_vma(vmi, vma) {
-> >  			if (ksm_test_exit(mm))
-> >  				break;
-> > -			if (!(vma->vm_flags & VM_MERGEABLE) || !vma->anon_vma)
-> > +			if (!vma_scannable(vma) || !vma->anon_vma)
-> >  				continue;
-> >  			err = unmerge_ksm_pages(vma,
-> >  						vma->vm_start, vma->vm_end);
-> > @@ -2300,7 +2329,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
-> >  		goto no_vmas;
-> >  
-> >  	for_each_vma(vmi, vma) {
-> > -		if (!(vma->vm_flags & VM_MERGEABLE))
-> > +		if (!vma_scannable(vma))
-> >  			continue;
-> >  		if (ksm_scan.address < vma->vm_start)
-> >  			ksm_scan.address = vma->vm_start;
-> > -- 
-> > 2.25.1
-> 
-> -- 
-> Michal Hocko
-> SUSE Labs

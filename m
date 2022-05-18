@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D212652AFED
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F0452AFF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiERBcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
+        id S233659AbiERBem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbiERBcS (ORCPT
+        with ESMTP id S230153AbiERBei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:32:18 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACA735858
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:32:17 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id h186so805533pgc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:32:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=xNnxAHcC3RUWM23wBpMAK8Y3L4EOTebAASEZluO85cE=;
-        b=k2hnY/uiyT6WSSX6lxbaW0qn5bcT12bgoL8VXXked6tMGBGzLgQJs7Oe7Ys2h5K7Xf
-         YEszS+nJLBhHDEwuXYcLnFJzch8DPZjWPY9KpBzu6Koq7N/fI8jXZQ79Qn8byopnFSmF
-         1n2nhjhBwPqGgZjKgZYdpYRz1zPMlZwSvDmrXFXrhnDDPUQKtieYV2cOV7bGifIpJEez
-         +pENNh/hdzYuWIFMlS/432DXZoE+hoqz+NKM2fEFmmAvZ6e98hrtoQYalbDp5llI91p1
-         aOt8wgtCo/kWgg6DOOSx6Yw7WdvNHHC9bPkFPK9qa4B6H4POMyPPmkgIEuNtxlrisPLQ
-         fAqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=xNnxAHcC3RUWM23wBpMAK8Y3L4EOTebAASEZluO85cE=;
-        b=2TXEgOBTQBms/N58CNtd0apCktEsYy6olp4yp4Z+DLvCQFvnxbIL+sFiHVQ0EaqAFj
-         BGa4z6vPIwpBBpJtfoWsgD7EtWUYi/M9DjMj9HhlP8bTSP2F4ljBNq4W5IQGu6bFADjx
-         2l0myUIpmO8tY2WP1QlRMDqh1Tm0OuzV6Zb4z36Erl+6se5nG3KDJoIujKpQqoZ7TjMD
-         POOQWgzoHYKl3dWFojPkzl5Y1CIT1DEH0smOPMPG177L8AFYuIldXrL2HpKUC1qKZlgW
-         8k8+DA4/+N+5FZUrfR3wKz8+R5RDdkO4hsh01maoRIHaj3y811SLLM2GsRYVbMEJsHQs
-         weYQ==
-X-Gm-Message-State: AOAM533E5xZ4czgp3vormCdhVO957mhiNjol9T2g81lN2ym+Vrh34iRU
-        vxGj8UxzRMeoS6KHTO66OKESji5C9iBR9w==
-X-Google-Smtp-Source: ABdhPJyyDuelEUIgMnKTcepZxWuBNvDevo2UbPMfYVCqGTACvkXJz5NUXazb0suHLh1CYjIKrN/Iqw==
-X-Received: by 2002:a63:dd14:0:b0:3d8:204c:2f29 with SMTP id t20-20020a63dd14000000b003d8204c2f29mr21542866pgg.512.1652837536250;
-        Tue, 17 May 2022 18:32:16 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 20-20020a170902ee5400b00161946a7104sm253558plo.86.2022.05.17.18.32.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 18:32:15 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tj@kernel.org, qiulaibin@huawei.com
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220301123919.2381579-1-qiulaibin@huawei.com>
-References: <20220301123919.2381579-1-qiulaibin@huawei.com>
-Subject: Re: [PATCH -next v2] blk-throttle: Set BIO_THROTTLED when bio has been throttled
-Message-Id: <165283753506.124778.6326413719734024023.b4-ty@kernel.dk>
-Date:   Tue, 17 May 2022 19:32:15 -0600
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 17 May 2022 21:34:38 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D545738BD7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:34:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VDYa6oI_1652837670;
+Received: from localhost(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VDYa6oI_1652837670)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 18 May 2022 09:34:31 +0800
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+To:     mick@ics.forth.gr, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        akpm@linux-foundation.org, wangkefeng.wang@huawei.com,
+        rppt@kernel.org, david@redhat.com, wangborong@cdjrlc.com,
+        twd2.me@gmail.com, seanjc@google.com, alex@ghiti.fr,
+        petr.pavlu@suse.com, atishp@rivosinc.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        jianghuaming.jhm@alibaba-inc.com, guoren@kernel.org,
+        heiko@sntech.de, Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: [PATCH v3] RISC-V: Mark IORESOURCE_EXCLUSIVE for reserved mem instead of IORESOURCE_BUSY
+Date:   Wed, 18 May 2022 09:34:28 +0800
+Message-Id: <20220518013428.1338983-1-xianting.tian@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Mar 2022 20:39:19 +0800, Laibin Qiu wrote:
-> 1.In current process, all bio will set the BIO_THROTTLED flag
-> after __blk_throtl_bio().
-> 
-> 2.If bio needs to be throttled, it will start the timer and
-> stop submit bio directly. Bio will submit in
-> blk_throtl_dispatch_work_fn() when the timer expires.But in
-> the current process, if bio is throttled. The BIO_THROTTLED
-> will be set to bio after timer start. If the bio has been
-> completed, it may cause use-after-free blow.
-> 
-> [...]
+Commit 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+marked IORESOURCE_BUSY for reserved memory, which caused resource map
+failed in subsequent operations of related driver, so remove the
+IORESOURCE_BUSY flag. In order to prohibit userland mapping reserved
+memory, mark IORESOURCE_EXCLUSIVE for it.
 
-Applied, thanks!
+The code to reproduce the issue,
+dts:
+        mem0: memory@a0000000 {
+                reg = <0x0 0xa0000000 0 0x1000000>;
+                no-map;
+        };
 
-[1/1] blk-throttle: Set BIO_THROTTLED when bio has been throttled
-      commit: 5a011f889b4832aa80c2a872a5aade5c48d2756f
+        &test {
+                status = "okay";
+                memory-region = <&mem0>;
+        };
 
-Best regards,
+code:
+        np = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
+        ret = of_address_to_resource(np, 0, &r);
+        base = devm_ioremap_resource(&pdev->dev, &r);
+        // base = -EBUSY
+
+Fixes: 00ab027a3b82 ("RISC-V: Add kernel image sections to the resource tree")
+Reported-by: Huaming Jiang <jianghuaming.jhm@alibaba-inc.com>
+Reviewed-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+Co-developed-by: Nick Kossifidis <mick@ics.forth.gr>
+Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+---
+Changes from v2:
+- Fix typo in commit message: casued -> caused
+- Remove Reviewed-by of Nick Kossifidis, who didn't give Reviewed-by actually
+- Add Co-developed-by of Nick
+
+Changes from v1:
+- Mark reserved memory as IORESOURCE_EXCLUSIVE, suggested by Nick
+---
+ arch/riscv/kernel/setup.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 834eb652a7b9..e0a00739bd13 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -189,7 +189,7 @@ static void __init init_resources(void)
+ 		res = &mem_res[res_idx--];
+ 
+ 		res->name = "Reserved";
+-		res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
++		res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+ 		res->start = __pfn_to_phys(memblock_region_reserved_base_pfn(region));
+ 		res->end = __pfn_to_phys(memblock_region_reserved_end_pfn(region)) - 1;
+ 
+@@ -214,7 +214,7 @@ static void __init init_resources(void)
+ 
+ 		if (unlikely(memblock_is_nomap(region))) {
+ 			res->name = "Reserved";
+-			res->flags = IORESOURCE_MEM | IORESOURCE_BUSY;
++			res->flags = IORESOURCE_MEM | IORESOURCE_EXCLUSIVE;
+ 		} else {
+ 			res->name = "System RAM";
+ 			res->flags = IORESOURCE_SYSTEM_RAM | IORESOURCE_BUSY;
 -- 
-Jens Axboe
-
+2.17.1
 

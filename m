@@ -2,179 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3514252BBD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03CF52BC8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237522AbiERMrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S236648AbiERMrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238507AbiERMrR (ORCPT
+        with ESMTP id S237401AbiERMrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:47:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65E221BB9B4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652877929;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q7e2eynh2lki6aaMuNiuQ3yDCBpivZWLlTQmPRG6dxE=;
-        b=H8DHTdFWC9rGTS9ZgGqr1nc7pXrYD4vaJTwjamlpkxzN4i8QF2zElEvxqiM/P20Av/M+87
-        cu+qbRRSZFvnEEYY/f/VKFrPl0ci8nyF4vpeG6Wy+FmPOBBjo8oRJwaRWGq0/gV4ubdAQw
-        ePeScNyKzoGa68cedlRK27a7ztzhKWs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-656-cnRowkt-PIydbbyHKJWn5A-1; Wed, 18 May 2022 08:45:24 -0400
-X-MC-Unique: cnRowkt-PIydbbyHKJWn5A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 996B9100DDF4;
-        Wed, 18 May 2022 12:45:23 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 609EA4010E4E;
-        Wed, 18 May 2022 12:45:21 +0000 (UTC)
-Message-ID: <aabc24621b95f627d3f8a8875074c06097f4ec8e.camel@redhat.com>
-Subject: Re: [PATCH v3 13/34] KVM: nSVM: Keep track of Hyper-V
- hv_vm_id/hv_vp_id
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 18 May 2022 15:45:20 +0300
-In-Reply-To: <874k1nuiw8.fsf@redhat.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
-         <20220414132013.1588929-14-vkuznets@redhat.com>
-         <30b0e63c0a2d3c3c40edb47af6d80e452f1e69fa.camel@redhat.com>
-         <874k1nuiw8.fsf@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 18 May 2022 08:47:21 -0400
+Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [81.169.146.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C174A1BDAC4;
+        Wed, 18 May 2022 05:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652877930;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=DALuquiPTpvakZ1hsawCfe1qGQYKJ9d3gJZOL4yRbi8=;
+    b=I1+RBVUa8+5UKOMUJ7PRni8lMXTd8Grq9ftk0o0fZiHn90/WTNWd5Ra3/0hJYTkTdN
+    vs4ncegtSSOEjLjbXPod2389zZSu2PcokzwYA63a1OxmUjFzlUPS2Gj6pK5s3uJn1UY4
+    mXPVtZ1YEdXZ4IzE94fa1zlDxTmxFogra9qG65e8myFUPkj/uIBn0BCMRUn8dJfXMJJK
+    gPmcYFjbijLxJwf2CRZfn2/kQqa1/m3WRrHwou4Lj52fAhCdVg/ZURWLfrNurVRYMRtC
+    XycNcyX6w1YxOlLOrLG9sjD2bKvRwr5FzEnBZhCb1O1TTycIoUD5rk1nVBNZfEc4fHY/
+    Ozww==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cff:5b00::b82]
+    by smtp.strato.de (RZmta 47.45.0 AUTH)
+    with ESMTPSA id R0691fy4ICjTHPh
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 18 May 2022 14:45:29 +0200 (CEST)
+Message-ID: <b76ed65a-cc3d-ae75-e764-9ce627dcb4c4@hartkopp.net>
+Date:   Wed, 18 May 2022 14:45:24 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: Device Drivers: (was: Re: [PATCH v3 3/4] can: skb:: move
+ can_dropped_invalid_skb and can_skb_headroom_valid to skb.c)
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Max Staudt <max@enpas.org>, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <CAMZ6RqKZMHXB7rQ70GrXcVE7x7kytAAGfE+MOpSgWgWgp0gD2g@mail.gmail.com>
+ <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
+ <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
+ <20220517104545.eslountqjppvcnz2@pengutronix.de>
+ <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
+ <20220517141404.578d188a.max@enpas.org>
+ <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
+ <20220517143921.08458f2c.max@enpas.org>
+ <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
+ <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
+ <20220518121226.inixzcttub6iuwll@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <20220518121226.inixzcttub6iuwll@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-18 at 14:25 +0200, Vitaly Kuznetsov wrote:
-> Maxim Levitsky <mlevitsk@redhat.com> writes:
+
+
+On 18.05.22 14:12, Marc Kleine-Budde wrote:
+> On 18.05.2022 21:03:37, Vincent MAILHOL wrote:
+>> On a different topic, why are all the CAN devices
+>> under "Networking support" and not "Device Drivers" in menuconfig
+>> like everything else? Would it make sense to move our devices
+>> under the "Device Drivers" section?
 > 
-> > On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
-> > > Similar to nSVM, KVM needs to know L2's VM_ID/VP_ID and Partition
-> > > assist page address to handle L2 TLB flush requests.
-> > > 
-> > > Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> > > ---
-> > >  arch/x86/kvm/svm/hyperv.h | 16 ++++++++++++++++
-> > >  arch/x86/kvm/svm/nested.c |  2 ++
-> > >  2 files changed, 18 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
-> > > index 7d6d97968fb9..8cf702fed7e5 100644
-> > > --- a/arch/x86/kvm/svm/hyperv.h
-> > > +++ b/arch/x86/kvm/svm/hyperv.h
-> > > @@ -9,6 +9,7 @@
-> > >  #include <asm/mshyperv.h>
-> > >  
-> > >  #include "../hyperv.h"
-> > > +#include "svm.h"
-> > >  
-> > >  /*
-> > >   * Hyper-V uses the software reserved 32 bytes in VMCB
-> > > @@ -32,4 +33,19 @@ struct hv_enlightenments {
-> > >   */
-> > >  #define VMCB_HV_NESTED_ENLIGHTENMENTS VMCB_SW
-> > >  
-> > > +static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
-> > > +{
-> > > +	struct vcpu_svm *svm = to_svm(vcpu);
-> > > +	struct hv_enlightenments *hve =
-> > > +		(struct hv_enlightenments *)svm->nested.ctl.reserved_sw;
-> > 
-> > Small nitpick:
-> > 
-> > Can we use this as an opportunity to rename the 'reserved_sw' to \
-> > 'hv_enlightenments' or something, because that is what it is?
-> > 
-> > Also the reserved_sw is an array, which is confusing, since from first look,
-> > it looks like we have a pointer dereference here.
-> > 
+> ACK
 > 
-> Well, that's what it is in Hyper-V world and so far we didn't give it
-> another meaning in KVM but in theory it is not impossible, e.g. we can
-> use this area to speed up nested KVM on KVM.
-> 
-> AMD calls this "Reserved for Host usage" so we can probably rename it to 
-> 'reserved_host' but I'm not sure it's worth the hassle...
 
-This is a very good piece of information. If AMD calls it like that,
-than let it be.
+Bluetooth did it that way too. But I feel the same.
+When we clean up the CAN drivers moving the CAN driver selection to 
+drivers/net/Kconfig would make sense.
 
-It is probably not worth it to rename the field then, but I think it
-is might be worth it to add this info as a comment to the KVM.
+ACK
 
-Also it might be worth it to add some wrapper function for
-'struct hv_enlightenments *hve = (struct hv_enlightenments *)svm->nested.ctl.reserved_sw;'
-(+ check if this area is valid - currently it is copied only when 'kvm_hv_hypercall_enabled == true').
-
-Both would be a very low priority items to be honest.
-
-Thanks,
 Best regards,
-	MaxiMm Levitsky
-
-
-> 
-> > 
-> > > +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> > > +
-> > > +	if (!hv_vcpu)
-> > > +		return;
-> > > +
-> > > +	hv_vcpu->nested.pa_page_gpa = hve->partition_assist_page;
-> > > +	hv_vcpu->nested.vm_id = hve->hv_vm_id;
-> > > +	hv_vcpu->nested.vp_id = hve->hv_vp_id;
-> > > +}
-> > > +
-> > >  #endif /* __ARCH_X86_KVM_SVM_HYPERV_H__ */
-> > > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> > > index bed5e1692cef..2d1a76343404 100644
-> > > --- a/arch/x86/kvm/svm/nested.c
-> > > +++ b/arch/x86/kvm/svm/nested.c
-> > > @@ -826,6 +826,8 @@ int nested_svm_vmrun(struct kvm_vcpu *vcpu)
-> > >  
-> > >  	svm->nested.nested_run_pending = 1;
-> > >  
-> > > +	nested_svm_hv_update_vm_vp_ids(vcpu);
-> > > +
-> > >  	if (enter_svm_guest_mode(vcpu, vmcb12_gpa, vmcb12, true))
-> > >  		goto out_exit_err;
-> > >  
-> > 
-> > That won't work after migration, since this won't be called
-> > if we migrate with nested guest running.
-> > 
-> > 
-> > I think that nested_svm_hv_update_vm_vp_ids should be called 
-> > from enter_svm_guest_mode.
-> > 
-> 
-> Oh that's a good one, thanks! This could've been a hard to debug issue.
-> 
-
+Oliver
 

@@ -2,88 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F84052C78E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFC152C792
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiERXco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 19:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S231390AbiERXdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 19:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiERXck (ORCPT
+        with ESMTP id S231254AbiERXdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 19:32:40 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157A91666B3;
-        Wed, 18 May 2022 16:32:39 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id p4so4827293lfg.4;
-        Wed, 18 May 2022 16:32:38 -0700 (PDT)
+        Wed, 18 May 2022 19:33:14 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2B1B41EC;
+        Wed, 18 May 2022 16:33:12 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id u3so4796308wrg.3;
+        Wed, 18 May 2022 16:33:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=+LGXPC/nc5jPsFNWeFnV3sMHcGrlhqWcYZ7LdmbKRk8=;
-        b=YTHEh7mTOmNtdzt4vQbdAc2SgEofQ268qYKBDuNf/dOC6SxLJE063CXRsT7pOhKL1B
-         EGVemTL1TLKqWYa9CSGx5cbFZ4E9T+4Of+1+hsq50kvDC4VGTl+vLzagzw/9FIiMD3mD
-         68EtqA8PUsGWxuwkNjJN7CN0F5dYVrBn60wH/8QkhglC7NjT1tcsmpDa3P1fOxbvWmqJ
-         GGo/O2fedbOeYWcu0CSzqlUmHH69ulzsmxE4XTaT3WZenUfYjq66nFfHk9uJYHgiBNez
-         3SGwnSe2PpE/fxhUokfLiy6EqKaSwofgOGt66tG6Ex/mFSOaAX1KZIwwHiS95tMT+i/l
-         kFrg==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VOEp7RuGCpmLRx/E7Nt8xZm5egHCz2H71jctvM4CMtU=;
+        b=qhgQtSrVoznPTJ+ZFRprLIIpBY1SHJija0hAAQY7o8uCU9zz94MDCktqqv5uFqE0QO
+         lND1XzQt3XTi6Wg/NitNHyJ37tyTHPof5jSDZ4mXKEBkiAWSIizlX5q7+k5QjnwTIyBQ
+         Dx3jfJvFbGIRekI6xdigOTfL/arroPyf6YQ2cAJ9Dv30zr5NJWa7aP7sBPJ+QoIzlzpZ
+         EO3ur7ts9JMdZUE9aQBViZme7sVO0cNLJUGhH+9R55Fv7hTV5PvEiIqW+4bGqLlzQ/MA
+         pEee1RnbjTADgtrT3C4AAgKvfs4Kg/bJxsEf1JOp/4OekCIO2nZO/6/DB+RZWucI0vTM
+         0CkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=+LGXPC/nc5jPsFNWeFnV3sMHcGrlhqWcYZ7LdmbKRk8=;
-        b=XRWmeA9h/jW7mB0+0mHxKHMmhGYGAGvXdfR0metNHui3bHYfSZqa3uTsDb+LnawV2m
-         CK0MaQcz6sf3ZJs58qMf4ZlwXdtck9NzTOfDra7dTMybDYlScKulycredohOXT0yWH5v
-         ycHsNvYLjzwCbZJaWJgslfESZ6G0bo0xVDpmK5atEYnro1qC9NDOtVIniQjOT+HigdYP
-         MOSLRU+D2NyZtQl968ZH9ntcAaY2ITKjakR9/18d6oM4QsNWv3nDcqfudiMQiNKiLcNR
-         KxM7DAObE67iqtimkJbPshNrdRLakeTnt/jZBzpkPu9O1c84GHVT3IyjajmgIcc+Ghwi
-         NJKA==
-X-Gm-Message-State: AOAM530l4q6yZQrDcMIn+p+zEMONV6Vbz0MxBWLldUmLVpyLCsvVnwnr
-        u4POMkObXQAV9xWhqU5RJHZp8aKCOJw=
-X-Google-Smtp-Source: ABdhPJwjk0UvPnxiWmUdMMDJvHCgF0t+PGqTImMMJx2jyaDgM9Se5UhDGarsoLtoC23AOueCaP89SQ==
-X-Received: by 2002:a19:494b:0:b0:476:5917:b67 with SMTP id l11-20020a19494b000000b0047659170b67mr1293318lfj.452.1652916757237;
-        Wed, 18 May 2022 16:32:37 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id 189-20020a2e09c6000000b00253b5bb829esm358776ljj.98.2022.05.18.16.32.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 16:32:36 -0700 (PDT)
-Subject: Re: [PATCH V2 5/7] dt-bindings: Add xen,dev-domid property
- description for xen-grant DMA ops
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     xen-devel <xen-devel@lists.xenproject.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jason Wang <jasowang@redhat.com>,
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VOEp7RuGCpmLRx/E7Nt8xZm5egHCz2H71jctvM4CMtU=;
+        b=WqDplRgVQ5UTv2tP7VyU3q/JNHBFZIhwbxtWY3dyfPBEW7EymvP21g3p680IaU1wG1
+         cpvNgmpuBJgDfDmI6lulbW5pgQJ65dQiJsnJL/c3DkZu3grigscd/+3fSkcoHnj/tIiK
+         XoLtctxIV7E3qHHuHDE+WphI+DXDB2sdlrZaH+VQVlooO7DjnoNOCUWhWxQGkhcD2VvY
+         BU+d1R9ZJuX57gxmgHwA950prWigMbP1NXudCFmNOaqOdwO0ezLEdH3GaHNHDEQlZr9i
+         VEzUx0GgJ9OgLXrut72im/LJZWdeySWR15EUPj3IEn3J0+mIEWXw/qNFJ83qcEfzorXS
+         ZY5A==
+X-Gm-Message-State: AOAM530XYXFjyMlX/rdfuleZ3MCTBb7PKDlu0vYB8UXNdA88/uT3owCi
+        WMxyf3cgh9nr55xg/bSdl6c=
+X-Google-Smtp-Source: ABdhPJxnhCEpQNzOwxft4SfMBdFkTWxgzGUXIdSBsEze3n6hW95e9mj6mnEnEYKXsw1PeBxB8A2Axg==
+X-Received: by 2002:a5d:5342:0:b0:20d:597:3953 with SMTP id t2-20020a5d5342000000b0020d05973953mr1581233wrv.310.1652916790893;
+        Wed, 18 May 2022 16:33:10 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id j25-20020adfa799000000b0020d042efd11sm3217476wrc.61.2022.05.18.16.33.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 16:33:10 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
- <1651947548-4055-6-git-send-email-olekstysh@gmail.com>
- <CAK8P3a2cAnXr8TDDYTiFxTWzQxa67sGnYDQRRD+=Q8_cSb1mEw@mail.gmail.com>
- <56e8c32d-6771-7179-005f-26ca58555659@gmail.com>
- <CAK8P3a1YhkEZ8gcbXHEa5Bwx-4VVRJO8SUHf8=RNWRsc2Yo-+A@mail.gmail.com>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <460a746c-6b61-214b-4653-44a1430e314d@gmail.com>
-Date:   Thu, 19 May 2022 02:32:35 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] Add nvmem support for dynamic partitions
+Date:   Thu, 19 May 2022 01:32:56 +0200
+Message-Id: <20220518233258.5483-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a1YhkEZ8gcbXHEa5Bwx-4VVRJO8SUHf8=RNWRsc2Yo-+A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,107 +75,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This very small series comes to fix the very annyoing problem of
+partitions declared by parser at runtime NOT supporting nvmem cells
+definition.
 
-On 18.05.22 19:39, Arnd Bergmann wrote:
+The current implementation is very generic. The idea is to provide an of
+node if defined for everyone and not strictly limit this to nvmem stuff.
+But still the actual change is done only for nvmem-cells mtd. (just to
+make sure) This can totally change by removing the compatible check.
 
+The idea here is that a user can still use these dynamic parsers
+instead of declaring a fixed-partition and also declare how nvmem-cells
+are defined for the partition.
+This live with the assumption that dynamic partition have always the
+same name and they are known. (this is the case for smem-part partition
+that would require a bootloader reflash to change and for parsers like
+cmdlinepart where the name is always the same.)
+With this assumption, it's easy to fix this problem. Just introduce a
+new partition node that will declare just these special partition.
+Mtdcore then will check if these special declaration are present and
+connect the dynamic partition with the OF node present in the dts. Nvmem
+will automagically fin the OF node and cells will be works based on the
+data provided by the parser.
 
-Hello Arnd
+The initial idea was to create a special nvmem driver with a special
+compatible where a user would declare the mtd partition name and this
+driver would search it and register the nvmem cells but that became
+difficult really fast, mtd notifier system is problematic for this kind
+of stuff. So here is the better implementation. A variant of this is
+already tested on openwrt where we have devices that use cmdlinepart.
+(that current variant have defined in the dts the exact copy of
+cmdlinepart in the fixed-partition scheme and we patched the cmdlinepart
+parser to scan this fixed-partition node (that is ignored as cmdlinepart
+have priority) and connect the dynamic partition with the dts node)
 
+I provided an example of this in the documentation commit.
+In short it's needed to add to the partitions where the compatible parser
+is declared, a partition with just the label declared (instead of the reg).
+Then declare some nvmem-cells and it will all work at runtime.
+Mtdcore will check if a node with the same label is present and assign an
+OF node to the MTD.
 
-> On Wed, May 18, 2022 at 5:06 PM Oleksandr <olekstysh@gmail.com> wrote:
->> On 18.05.22 17:32, Arnd Bergmann wrote:
->>> On Sat, May 7, 2022 at 7:19 PM Oleksandr Tyshchenko <olekstysh@gmail.com> wrote:
->>>    This would mean having a device
->>> node for the grant-table mechanism that can be referred to using the 'iommus'
->>> phandle property, with the domid as an additional argument.
->> I assume, you are speaking about something like the following?
->>
->>
->> xen_dummy_iommu {
->>      compatible = "xen,dummy-iommu";
->>      #iommu-cells = <1>;
->> };
->>
->> virtio@3000 {
->>      compatible = "virtio,mmio";
->>      reg = <0x3000 0x100>;
->>      interrupts = <41>;
->>
->>      /* The device is located in Xen domain with ID 1 */
->>      iommus = <&xen_dummy_iommu 1>;
->> };
-> Right, that's that's the idea,
+I currently tested this on my device that have smem-part and the
+gmac driver use nvmem to get the mac-address. This works correctly and
+the same address is provided.
 
-thank you for the confirmation
+v4:
+- Make it simple. No suffix. Make label mandatory again.
+- Update Documentation with new implementation.
+- Rename files to a better and correct name
+v3:
+- Fix warning from bot (function not declared as static)
+- Updated code to support also node name
+- Made partition label optional
+v2:
+- Simplify this. Drop dynamic-partition
+- Fix problem with parser with ko
+- Do not pollude mtd_get_of_node
+- Fix problem with Documentation
 
+Ansuel Smith (2):
+  dt-bindings: mtd: partitions: Document new dynamic-partition nodes
+  mtd: core: introduce of support for dynamic partitions
 
-
->   except I would not call it a 'dummy'.
->  From the perspective of the DT, this behaves just like an IOMMU,
-> even if the exact mechanism is different from most hardware IOMMU
-> implementations.
-
-well, agree
-
-
->
->>> It does not quite fit the model that Linux currently uses for iommus,
->>> as that has an allocator for dma_addr_t space
->> yes (# 3/7 adds grant-table based allocator)
->>
->>
->>> , but it would think it's
->>> conceptually close enough that it makes sense for the binding.
->> Interesting idea. I am wondering, do we need an extra actions for this
->> to work in Linux guest (dummy IOMMU driver, etc)?
-> It depends on how closely the guest implementation can be made to
-> resemble a normal iommu. If you do allocate dma_addr_t addresses,
-> it may actually be close enough that you can just turn the grant-table
-> code into a normal iommu driver and change nothing else.
-
-Unfortunately, I failed to find a way how use grant references at the 
-iommu_ops level (I mean to fully pretend that we are an IOMMU driver). I 
-am not too familiar with that, so what is written below might be wrong 
-or at least not precise.
-
-The normal IOMMU driver in Linux doesn’t allocate DMA addresses by 
-itself, it just maps (IOVA-PA) what was requested to be mapped by the 
-upper layer. The DMA address allocation is done by the upper layer 
-(DMA-IOMMU which is the glue layer between DMA API and IOMMU API 
-allocates IOVA for PA?). But, all what we need here is just to allocate 
-our specific grant-table based DMA addresses (DMA address = grant 
-reference + offset in the page), so let’s say we need an entity to take 
-a physical address as parameter and return a DMA address (what actually 
-commit #3/7 is doing), and that’s all. So working at the dma_ops layer 
-we get exactly what we need, with the minimal changes to guest 
-infrastructure. In our case the Xen itself acts as an IOMMU.
-
-Assuming that we want to reuse the IOMMU infrastructure somehow for our 
-needs. I think, in that case we will likely need to introduce a new 
-specific IOVA allocator (alongside with a generic one) to be hooked up 
-by the DMA-IOMMU layer if we run on top of Xen. But, even having the 
-specific IOVA allocator to return what we indeed need (DMA address = 
-grant reference + offset in the page) we will still need the specific 
-minimal required IOMMU driver to be present in the system anyway in 
-order to track the mappings(?) and do nothing with them, returning a 
-success (this specific IOMMU driver should have all mandatory callbacks 
-implemented).
-
-I completely agree, it would be really nice to reuse generic IOMMU 
-bindings rather than introducing Xen specific property if what we are 
-trying to implement in current patch series fits in the usage of 
-"iommus" in Linux more-less. But, if we will have to add more 
-complexity/more components to the code for the sake of reusing device 
-tree binding, this raises a question whether that’s worthwhile.
-
-Or I really missed something?
-
-
->
->          Arnd
+ .../mtd/partitions/dynamic-partition.yaml     | 57 +++++++++++++++++++
+ .../mtd/partitions/qcom,smem-part.yaml        |  4 ++
+ drivers/mtd/mtdcore.c                         | 49 ++++++++++++++++
+ 3 files changed, 110 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mtd/partitions/dynamic-partition.yaml
 
 -- 
-Regards,
-
-Oleksandr Tyshchenko
+2.34.1
 

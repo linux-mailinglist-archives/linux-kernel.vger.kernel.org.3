@@ -2,63 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE2B52C3CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1424F52C3E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242106AbiERTwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 15:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S242151AbiERTyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 15:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242086AbiERTw0 (ORCPT
+        with ESMTP id S231796AbiERTyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 15:52:26 -0400
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E341F16D5D1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 12:52:23 -0700 (PDT)
-Received: by mail-qk1-f170.google.com with SMTP id bs17so2351783qkb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 12:52:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5q8BLVP39pZEp8vGRlvu+IzyMqb+h/dIvWxZHWF016Q=;
-        b=Q9GC79T/P96mMBftqYaeHmEiNtVD0xcPB1RfmbdbEzYUZOHgMNFOBzMr6QLlvBUi5k
-         K/veBn0ZQMMuDP4Wpw+1dRPlV+OREh22ihdj/N54gGfacUBSPm7CBN+RjjBZMursYPG4
-         GbN4DPLNnk+mR0XjZatvAxSHR/HfonAiX8LJt6SOtB/CkXm05pwSodnEikisJE39sil8
-         Iod67fIYSWcJdyda0+rqWnKpxv5P/njec9qth+fTKfx/ZL2piT291VI9SpsJ6RyOWvI5
-         p9IgooYQGvhgIeeH2lvZItBzIZQIZkWTJTPTi5QMrh1my/++btKklxdSabOKxo+1L6lN
-         L8bA==
-X-Gm-Message-State: AOAM530xyX0omhQ/ovF7sj1yWObP5ayKMQqcd9Mlem/B5YS06B8/2kyS
-        mftM7ebYupnB/hz6GuQNbDCv
-X-Google-Smtp-Source: ABdhPJz+loleNUpSkL24UZnw62lRUrWDSpvJvcEqGe/agg83EaEuWmL7sM3wULnBU3C166gM6OZGPg==
-X-Received: by 2002:a05:620a:414b:b0:6a0:5c30:66fb with SMTP id k11-20020a05620a414b00b006a05c3066fbmr826967qko.53.1652903543069;
-        Wed, 18 May 2022 12:52:23 -0700 (PDT)
-Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
-        by smtp.gmail.com with ESMTPSA id v14-20020a05622a188e00b002f8f406338fsm87014qtc.42.2022.05.18.12.52.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 12:52:22 -0700 (PDT)
-Date:   Wed, 18 May 2022 15:52:21 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Alasdair Kergon <agk@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>, dm-devel@redhat.com,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] dm: Add verity helpers for LoadPin
-Message-ID: <YoVOdYHJd/LbYIaE@redhat.com>
-References: <20220517233457.1123309-1-mka@chromium.org>
- <20220517163437.v4.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
+        Wed, 18 May 2022 15:54:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D961C227068
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 12:54:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D783B821B6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 19:54:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C90C385A5;
+        Wed, 18 May 2022 19:54:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652903647;
+        bh=NAw6yMZMyT9wtBj2t7tOiCo+kQWlnlgTWV8i+F17lww=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dbNR79tjZqH5c6pKdPmFbgCGwNfdGaRV/zmkbuxH30EiUccdQrZdQUXaHEjSPcx65
+         fFaYkW/LBPkHH5qnKebhNszY9bmhIm3y9Et7R/e8eoWCvqZbnjfDIlUEwx9tEy1P65
+         QCu5rP4rdW60w/L4iaBGLmdZK/YYh0AIWDoNoRG4=
+Date:   Wed, 18 May 2022 21:54:03 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chris Down <chris@chrisdown.name>
+Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        kernel-team@fb.com
+Subject: Re: [RFC PATCH] printk: console: Allow each console to have its own
+ loglevel
+Message-ID: <YoVO23+fvsNPnpKh@kroah.com>
+References: <YoUBh5BSsURDO71Z@chrisdown.name>
+ <YoUR6RlzkCNG7BU0@kroah.com>
+ <YoVM+KbdyJm8RSSr@chrisdown.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220517163437.v4.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <YoVM+KbdyJm8RSSr@chrisdown.name>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,155 +54,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17 2022 at  7:34P -0400,
-Matthias Kaehlcke <mka@chromium.org> wrote:
+On Wed, May 18, 2022 at 08:46:00PM +0100, Chris Down wrote:
+> Greg Kroah-Hartman writes:
+> > >  .../admin-guide/kernel-parameters.txt         |  18 +-
+> > >  .../admin-guide/per-console-loglevel.rst      | 116 ++++++
+> > 
+> > All sysfs attributes need to be documented in Documentation/ABI/ so that
+> > the automated tools can properly pick them up and check them.  Please
+> > don't bury them in some other random Documentation file.
+> 
+> Ack.
+> 
+> > > +static ssize_t loglevel_show(struct device *dev, struct device_attribute *attr,
+> > > +			     char *buf)
+> > > +{
+> > > +	struct console *con = container_of(dev, struct console, classdev);
+> > > +
+> > > +	if (con->flags & CON_LOGLEVEL)
+> > > +		return sprintf(buf, "%d\n", con->level);
+> > > +	else
+> > > +		return sprintf(buf, "unset\n");
+> > 
+> > sysfs_emit() is your friend, always use it please.  For all of the sysfs
+> > attributes.
+> 
+> Ack.
+> 
+> > > +static struct attribute *console_sysfs_attrs[] = {
+> > > +	&dev_attr_loglevel.attr,
+> > > +	&dev_attr_effective_loglevel_source.attr,
+> > > +	&dev_attr_effective_loglevel.attr,
+> > > +	&dev_attr_enabled.attr,
+> > > +	NULL,
+> > > +};
+> > > +
+> > > +ATTRIBUTE_GROUPS(console_sysfs);
+> > 
+> > Thanks for using an attribute group properly, that's nice to see.
+> 
+> Hah, I have no idea what I'm doing with the device model in general, but at
+> least I vaguely know how to keep the code tidy ;-)
+> 
+> > > +static void console_classdev_release(struct device *dev)
+> > > +{
+> > > +	struct console *con = container_of(dev, struct console, classdev);
+> > > +
+> > > +	/*
+> > > +	 * `struct console' objects are statically allocated (or at the very
+> > > +	 * least managed outside of our lifecycle), nothing to do. Just set a
+> > > +	 * flag so that we know we are no longer waiting for anyone and can
+> > > +	 * return control in unregister_console().
+> > > +	 */
+> > > +	con->flags &= ~CON_CLASSDEV_ACTIVE;
+> > > +}
+> > 
+> > The old documentation rules said I could complain about this a lot, so
+> > I'll be nice here just say "this is not ok at all."  You have a dynamic
+> > object, properly free the memory here please.  class objects can NOT be
+> > static, sorry.  If you are doing that here, it is really wrong and
+> > broken and will cause problems when you try to remove the device from
+> > the system.
+> 
+> Let me check I understand you correctly. The class is:
+> 
+>     static struct class *console_class;
+>     [...]
+>     console_class = class_create(THIS_MODULE, "console");
+> 
+> Which exists within printk.c. This class exists to contain all consoles
+> which present themselves over the lifetime of the kernel.
+> 
+> console_classdev_release is the release for a single console's "classdev"
+> object, rather than the release of the class itself.
 
-> LoadPin limits loading of kernel modules, firmware and certain
-> other files to a 'pinned' file system (typically a read-only
-> rootfs). To provide more flexibility LoadPin is being extended
-> to also allow loading these files from trusted dm-verity
-> devices. For that purpose LoadPin can be provided with a list
-> of verity root digests that it should consider as trusted.
-> 
-> Add a bunch of helpers to allow LoadPin to check whether a DM
-> device is a trusted verity device. The new functions broadly
-> fall in two categories: those that need access to verity
-> internals (like the root digest), and the 'glue' between
-> LoadPin and verity. The new file dm-verity-loadpin.c contains
-> the glue functions.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> 
-> Changes in v4:
-> - a trusted verity device must have a single target of
->   type 'verity'
-> - share list of verity digests with loadpin, deleted
->   dm_verity_loadpin_set_trusted_root_digests()
-> - dm_verity_loadpin_is_md_trusted() is now dm_verity_loadpin_is_sb_trusted(),
->   it receives a super_block instead of mapped_device. Updated kernel doc.
-> - changed struct trusted_root_digest to have an unsized
->   u8 array instead of a pointer
-> - extend 'dm-verity-objs' instead of 'dm-mod-objs'
-> 
-> Changes in v3:
-> - none
-> 
-> Changes in v2:
-> - none
-> 
->  drivers/md/Makefile               |  6 +++
->  drivers/md/dm-verity-loadpin.c    | 74 +++++++++++++++++++++++++++++++
->  drivers/md/dm-verity-target.c     | 33 ++++++++++++++
->  drivers/md/dm-verity.h            |  4 ++
->  include/linux/dm-verity-loadpin.h | 27 +++++++++++
->  5 files changed, 144 insertions(+)
->  create mode 100644 drivers/md/dm-verity-loadpin.c
->  create mode 100644 include/linux/dm-verity-loadpin.h
-> 
-> diff --git a/drivers/md/Makefile b/drivers/md/Makefile
-> index 0454b0885b01..71771901c823 100644
-> --- a/drivers/md/Makefile
-> +++ b/drivers/md/Makefile
-> @@ -108,6 +108,12 @@ ifeq ($(CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG),y)
->  dm-verity-objs			+= dm-verity-verify-sig.o
->  endif
->  
-> +ifeq ($(CONFIG_DM_VERITY),y)
-> +ifeq ($(CONFIG_SECURITY_LOADPIN),y)
-> +dm-verity-objs			+= dm-verity-loadpin.o
-> +endif
-> +endif
-> +
->  ifeq ($(CONFIG_DM_AUDIT),y)
->  dm-mod-objs			+= dm-audit.o
->  endif
-> diff --git a/drivers/md/dm-verity-loadpin.c b/drivers/md/dm-verity-loadpin.c
-> new file mode 100644
-> index 000000000000..3226fbe4a1fe
-> --- /dev/null
-> +++ b/drivers/md/dm-verity-loadpin.c
-> @@ -0,0 +1,74 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/list.h>
-> +#include <linux/kernel.h>
-> +#include <linux/dm-verity-loadpin.h>
-> +
-> +#include "dm.h"
-> +#include "dm-verity.h"
-> +
-> +#define DM_MSG_PREFIX	"verity-loadpin"
-> +
-> +LIST_HEAD(loadpin_trusted_verity_root_digests);
-> +
-> +static bool is_trusted_verity_target(struct dm_target *ti)
-> +{
-> +	u8 *root_digest;
-> +	unsigned int digest_size;
-> +	struct trusted_root_digest *trd;
-> +	bool trusted = false;
-> +
-> +	if (!dm_is_verity_target(ti))
-> +		return false;
-> +
-> +	if (dm_verity_get_root_digest(ti, &root_digest, &digest_size))
-> +		return false;
-> +
-> +	list_for_each_entry(trd, &loadpin_trusted_verity_root_digests, node) {
-> +		if ((trd->len == digest_size) &&
-> +		    !memcmp(trd->data, root_digest, digest_size)) {
-> +			trusted = true;
-> +			break;
-> +		}
-> +	}
-> +
-> +	kfree(root_digest);
-> +
-> +	return trusted;
-> +}
-> +
-> +/*
-> + * Determines whether the file system of a superblock is located on
-> + * a verity device that is trusted by LoadPin.
-> + */
-> +bool dm_verity_loadpin_is_sb_trusted(struct super_block *sb)
-> +{
-> +	struct mapped_device *md;
-> +	struct dm_table *table;
-> +	struct dm_target *ti;
-> +	int srcu_idx;
-> +	bool trusted = false;
-> +
-> +	if (list_empty(&loadpin_trusted_verity_root_digests))
-> +		return false;
-> +
-> +	md = dm_get_md(sb->s_bdev->bd_dev);
-> +	if (!md)
-> +		return false;
-> +
-> +	table = dm_get_live_table(md, &srcu_idx);
-> +
-> +	if (dm_table_get_num_targets(table) != 1)
-> +		goto out;
-> +
-> +	ti = dm_table_get_target(table, 0);
-> +
-> +	if (is_trusted_verity_target(ti))
-> +		trusted = true;
-> +
-> +out:
-> +	dm_put_live_table(md, srcu_idx);
-> +	dm_put(md);
-> +
-> +	return trusted;
-> +}
+Yes.
 
-Not seeing why passing a super_block a block layer interface was
-chosen.
+> If you're talking about properly freeing the memory, I suppose it should
+> happen by doing something like the following in unregister_console():
+> 
+>     if (!console_drivers)
+>         /* free the class object under console lock */
+> 
+> ...right? Let me know if I'm misunderstanding you.
 
-Please pass the super_block's block_device and rename to
-dm_verity_loadpin_is_bdev_trusted()
+You can't do that as the driver core should now be managing the
+lifespace of that object.  You can't "know" when the object's memory is
+to be freed EXCEPT in the release function.
 
-Thanks,
-Mike
+So free it there please.
+
+Or do not tie the lifepan of the console class device object to the
+console object, and keep it separate.  I don't remember exactly how you
+tied them together here, sorry.
+
+> Any suggestions you have here are more than welcome, I'm definitely not that
+> familiar with the device/class API.
+> 
+> > > +static void console_register_device(struct console *new)
+> > > +{
+> > > +	/*
+> > > +	 * We might be called from register_console() before the class is
+> > > +	 * registered. If that happens, we'll take care of it in
+> > > +	 * printk_late_init.
+> > 
+> > If so, is the device properly registered there as well?  I missed that
+> > logic...
+> 
+> We call console_register_device() on all previously known consoles at
+> late_initcall() time. Or were you thinking of something else?
+
+I do not know, you say the class device will be created as some other
+time.  I didn't know when that time was as I only saw one place it was
+created here.  And you errored out early here.
+
+> > > +	 */
+> > > +	if (IS_ERR_OR_NULL(console_class))
+> > > +		return;
+> > > +
+> > > +	new->flags |= CON_CLASSDEV_ACTIVE;
+> > > +	device_initialize(&new->classdev);
+> > > +	dev_set_name(&new->classdev, "%s", new->name);
+> > > +	new->classdev.release = console_classdev_release;
+> > > +	new->classdev.class = console_class;
+> > > +	if (WARN_ON(device_add(&new->classdev)))
+> > 
+> > What is with these random WARN_ON() stuff?  Don't do that, just handle
+> > the error and move on properly.  Systems with panic_on_warn() should not
+> > fail from stuff like this, that's rude to cause them to reboot.
+> 
+> Oh, that's fair enough, I hadn't thought of that. Ack.
+> 
+> > > +	console_class = class_create(THIS_MODULE, "console");
+> > > +	if (!WARN_ON(IS_ERR(console_class)))
+> > > +		console_class->dev_groups = console_sysfs_groups;
+> > 
+> > Do you ever free the class?
+> 
+> Currently no. What do you think about the above proposal to do it once the
+> console driver list is exhausted?
+
+If the code can never be unloaded, no, don't worry about it.
+
+thanks.
+
+greg k-h

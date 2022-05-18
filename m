@@ -2,116 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD2E52B8D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E18452B8CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235633AbiERL0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:26:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
+        id S235405AbiERLWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235694AbiERL0E (ORCPT
+        with ESMTP id S235324AbiERLWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:26:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA03011448;
-        Wed, 18 May 2022 04:26:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 18 May 2022 07:22:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6085615E4B8;
+        Wed, 18 May 2022 04:22:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 543261F921;
-        Wed, 18 May 2022 11:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652873159;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lzGqbB6W/4jJjPwTJUIMVwsso9o7Blm3R0BLht7tMSI=;
-        b=f+6VssfOQNjRrpyZABnQm1ZJYRE361ARv7x8KnF355SG32w2Ax34yCjoPPRxBuaxVPOhV0
-        Hm2GPKSqAIMqMPuMHudFaV8I6u1zYTIBm+V8pf1FMVTZ06nuyGcQe22FmaqLCGQumpQEZZ
-        K6tTLvqVreUvJqYmDXQeMKL/Vw9ntF8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652873159;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lzGqbB6W/4jJjPwTJUIMVwsso9o7Blm3R0BLht7tMSI=;
-        b=sT0MzHwKutP4nbHRSXKZbIYvCH0qzaHplxeoyZZgFfGo8b8tDBuCsoErL2HuIA/5bv5Z2G
-        TGabJCLWnc1UxcCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F0BAF13A6D;
-        Wed, 18 May 2022 11:25:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 38XzOcbXhGL8TgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Wed, 18 May 2022 11:25:58 +0000
-Date:   Wed, 18 May 2022 13:21:40 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Pankaj Raghav <p.raghav@samsung.com>
-Cc:     dsterba@suse.cz, axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        pankydev8@gmail.com, dsterba@suse.com, hch@lst.de,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, jiangbo.365@bytedance.com,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH v4 07/13] btrfs: zoned: use generic btrfs zone helpers to
- support npo2 zoned devices
-Message-ID: <20220518112140.GI18596@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Pankaj Raghav <p.raghav@samsung.com>,
-        axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        pankydev8@gmail.com, dsterba@suse.com, hch@lst.de,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, jiangbo.365@bytedance.com,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, dm-devel@redhat.com,
-        Luis Chamberlain <mcgrof@kernel.org>
-References: <20220516165416.171196-1-p.raghav@samsung.com>
- <CGME20220516165428eucas1p1374b5f9592db3ca6a6551aff975537ce@eucas1p1.samsung.com>
- <20220516165416.171196-8-p.raghav@samsung.com>
- <20220517123008.GC18596@twin.jikos.cz>
- <2b169f03-11d6-9989-84cb-821d67eb6cae@samsung.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8AE260B84;
+        Wed, 18 May 2022 11:22:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166F6C385A5;
+        Wed, 18 May 2022 11:22:30 +0000 (UTC)
+Message-ID: <f83e6b7e-8cb7-67b4-3e20-82bd9ff9a6a0@xs4all.nl>
+Date:   Wed, 18 May 2022 13:22:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2b169f03-11d6-9989-84cb-821d67eb6cae@samsung.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v4] media: imx-jpeg: Encoder support to set jpeg quality
+Content-Language: en-US
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        mirela.rabulea@oss.nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220422015320.14600-1-ming.qian@nxp.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220422015320.14600-1-ming.qian@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 11:40:22AM +0200, Pankaj Raghav wrote:
-> On 2022-05-17 14:30, David Sterba wrote:
-> > On Mon, May 16, 2022 at 06:54:10PM +0200, Pankaj Raghav wrote:
-> >> @@ -1108,14 +1101,14 @@ int btrfs_reset_device_zone(struct btrfs_device *device, u64 physical,
-> >>  int btrfs_ensure_empty_zones(struct btrfs_device *device, u64 start, u64 size)
-> >>  {
-> >>  	struct btrfs_zoned_device_info *zinfo = device->zone_info;
-> >> -	const u8 shift = zinfo->zone_size_shift;
-> >> -	unsigned long begin = start >> shift;
-> >> -	unsigned long end = (start + size) >> shift;
-> >> +	unsigned long begin = bdev_zone_no(device->bdev, start >> SECTOR_SHIFT);
-> >> +	unsigned long end =
-> >> +		bdev_zone_no(device->bdev, (start + size) >> SECTOR_SHIFT);
-> > 
-> > There are unsinged long types here though I'd rather see u64, better for
-> > a separate patch. Fixed width types are cleaner here and in the zoned
-> > code as there's always some conversion to/from sectors.
-> > 
-> Ok. I will probably send a separate patch to convert them to fix width
-> types. Is it ok if I do it as a separate patch instead of including it
-> in this series?
+Hi Ming,
 
-Yes, it's a cleanup for later, not directly introduced or affecting this
-patchset. I've checked zoned.c, in btrfs_ensure_empty_zones it's the
-only instance so it's not some widespread problem.
+On 4/22/22 03:53, Ming Qian wrote:
+> Implement V4L2_CID_JPEG_COMPRESSION_QUALITY
+> to set jpeg quality
+> 
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> ---
+> v4
+> - put the changelog in wrong place in v3
+> v3
+> - put this v3 information below the --- line
+> v2
+> - free ctrl handler if error is set and return error
+> 
+>  .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c | 11 +++-
+>  .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h |  1 +
+>  .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 57 +++++++++++++++++++
+>  .../media/platform/nxp/imx-jpeg/mxc-jpeg.h    |  2 +
+>  4 files changed, 68 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
+> index 29c604b1b179..c482228262a3 100644
+> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
+> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
+> @@ -100,9 +100,6 @@ void mxc_jpeg_enc_mode_conf(struct device *dev, void __iomem *reg)
+>  
+>  	/* all markers and segments */
+>  	writel(0x3ff, reg + CAST_CFG_MODE);
+> -
+> -	/* quality factor */
+> -	writel(0x4b, reg + CAST_QUALITY);
+>  }
+>  
+>  void mxc_jpeg_enc_mode_go(struct device *dev, void __iomem *reg)
+> @@ -114,6 +111,14 @@ void mxc_jpeg_enc_mode_go(struct device *dev, void __iomem *reg)
+>  	writel(0x140, reg + CAST_MODE);
+>  }
+>  
+> +void mxc_jpeg_enc_set_quality(struct device *dev, void __iomem *reg, u8 quality)
+> +{
+> +	dev_dbg(dev, "CAST Encoder Quality %d...\n", quality);
+> +
+> +	/* quality factor */
+> +	writel(quality, reg + CAST_QUALITY);
+> +}
+> +
+>  void mxc_jpeg_dec_mode_go(struct device *dev, void __iomem *reg)
+>  {
+>  	dev_dbg(dev, "CAST Decoder GO...\n");
+> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+> index ae70d3a0dc24..356e40140987 100644
+> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+> @@ -119,6 +119,7 @@ int mxc_jpeg_enable(void __iomem *reg);
+>  void wait_frmdone(struct device *dev, void __iomem *reg);
+>  void mxc_jpeg_enc_mode_conf(struct device *dev, void __iomem *reg);
+>  void mxc_jpeg_enc_mode_go(struct device *dev, void __iomem *reg);
+> +void mxc_jpeg_enc_set_quality(struct device *dev, void __iomem *reg, u8 quality);
+>  void mxc_jpeg_dec_mode_go(struct device *dev, void __iomem *reg);
+>  int mxc_jpeg_get_slot(void __iomem *reg);
+>  u32 mxc_jpeg_get_offset(void __iomem *reg, int slot);
+> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> index 0c3a1efbeae7..1bd245ba00e2 100644
+> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+> @@ -624,6 +624,7 @@ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
+>  	    ctx->enc_state == MXC_JPEG_ENC_CONF) {
+>  		ctx->enc_state = MXC_JPEG_ENCODING;
+>  		dev_dbg(dev, "Encoder config finished. Start encoding...\n");
+> +		mxc_jpeg_enc_set_quality(dev, reg, ctx->jpeg_quality);
+>  		mxc_jpeg_enc_mode_go(dev, reg);
+>  		goto job_unlock;
+>  	}
+> @@ -1563,6 +1564,51 @@ static void mxc_jpeg_set_default_params(struct mxc_jpeg_ctx *ctx)
+>  	}
+>  }
+>  
+> +static int mxc_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct mxc_jpeg_ctx *ctx =
+> +		container_of(ctrl->handler, struct mxc_jpeg_ctx, ctrl_handler);
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_JPEG_COMPRESSION_QUALITY:
+> +		ctx->jpeg_quality = ctrl->val;
+> +		break;
+> +	default:
+> +		dev_err(ctx->mxc_jpeg->dev, "Invalid control, id = %d, val = %d\n",
+> +			ctrl->id, ctrl->val);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_ctrl_ops mxc_jpeg_ctrl_ops = {
+> +	.s_ctrl = mxc_jpeg_s_ctrl,
+> +};
+> +
+> +static void mxc_jpeg_encode_ctrls(struct mxc_jpeg_ctx *ctx)
+> +{
+> +	v4l2_ctrl_new_std(&ctx->ctrl_handler, &mxc_jpeg_ctrl_ops,
+> +			  V4L2_CID_JPEG_COMPRESSION_QUALITY, 1, 100, 1, 75);
+> +}
+> +
+> +static int mxc_jpeg_ctrls_setup(struct mxc_jpeg_ctx *ctx)
+> +{
+> +	v4l2_ctrl_handler_init(&ctx->ctrl_handler, 2);
+> +
+> +	if (ctx->mxc_jpeg->mode == MXC_JPEG_ENCODE)
+> +		mxc_jpeg_encode_ctrls(ctx);
+> +
+> +	if (ctx->ctrl_handler.error) {
+> +		int err = ctx->ctrl_handler.error;
+> +
+> +		v4l2_ctrl_handler_free(&ctx->ctrl_handler);
+> +		return err;
+> +	}
+> +
+> +	return v4l2_ctrl_handler_setup(&ctx->ctrl_handler);
+
+If v4l2_ctrl_handler_setup() fails, then v4l2_ctrl_handler_free() is never called.
+The mxc_jpeg_open() function assumes that mxc_jpeg_ctrls_setup() either returns
+0 or an error, and that on error it has freed any allocated memory.
+
+So this needs to be fixed.
+
+Regards,
+
+	Hans
+
+> +}
+> +
+>  static int mxc_jpeg_open(struct file *file)
+>  {
+>  	struct mxc_jpeg_dev *mxc_jpeg = video_drvdata(file);
+> @@ -1594,6 +1640,12 @@ static int mxc_jpeg_open(struct file *file)
+>  		goto error;
+>  	}
+>  
+> +	ret = mxc_jpeg_ctrls_setup(ctx);
+> +	if (ret) {
+> +		dev_err(ctx->mxc_jpeg->dev, "failed to setup mxc jpeg controls\n");
+> +		goto err_ctrls_setup;
+> +	}
+> +	ctx->fh.ctrl_handler = &ctx->ctrl_handler;
+>  	mxc_jpeg_set_default_params(ctx);
+>  	ctx->slot = MXC_MAX_SLOTS; /* slot not allocated yet */
+>  
+> @@ -1605,6 +1657,8 @@ static int mxc_jpeg_open(struct file *file)
+>  
+>  	return 0;
+>  
+> +err_ctrls_setup:
+> +	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+>  error:
+>  	v4l2_fh_del(&ctx->fh);
+>  	v4l2_fh_exit(&ctx->fh);
+> @@ -1962,6 +2016,8 @@ static int mxc_jpeg_subscribe_event(struct v4l2_fh *fh,
+>  		return v4l2_event_subscribe(fh, sub, 0, NULL);
+>  	case V4L2_EVENT_SOURCE_CHANGE:
+>  		return v4l2_src_change_event_subscribe(fh, sub);
+> +	case V4L2_EVENT_CTRL:
+> +		return v4l2_ctrl_subscribe_event(fh, sub);
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -2035,6 +2091,7 @@ static int mxc_jpeg_release(struct file *file)
+>  	else
+>  		dev_dbg(dev, "Release JPEG encoder instance on slot %d.",
+>  			ctx->slot);
+> +	v4l2_ctrl_handler_free(&ctx->ctrl_handler);
+>  	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+>  	v4l2_fh_del(&ctx->fh);
+>  	v4l2_fh_exit(&ctx->fh);
+> diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
+> index 9ae56e6e0fbe..9c9da32b2125 100644
+> --- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
+> +++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.h
+> @@ -96,6 +96,8 @@ struct mxc_jpeg_ctx {
+>  	unsigned int			slot;
+>  	unsigned int			source_change;
+>  	bool				header_parsed;
+> +	struct v4l2_ctrl_handler	ctrl_handler;
+> +	u8				jpeg_quality;
+>  };
+>  
+>  struct mxc_jpeg_slot_data {

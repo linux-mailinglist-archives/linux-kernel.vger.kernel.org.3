@@ -2,242 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5665F52B617
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752FD52B5FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbiERJQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S233998AbiERJQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiERJQG (ORCPT
+        with ESMTP id S233888AbiERJQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:16:06 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9A313F26
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:16:00 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220518091556euoutp02a4a36051c14f07cf96febf732bd286c7~wKEjc8ibI1940819408euoutp02s
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:15:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220518091556euoutp02a4a36051c14f07cf96febf732bd286c7~wKEjc8ibI1940819408euoutp02s
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652865356;
-        bh=02PK4+O2aeQtWtkRiTGgprSK3KlsrzpSAGa3d80mXIM=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=gUja4oS7OFTsP2qwuSrmJmQNPvc50DYV2ysUtrCcbb3gvVzrGlbDMGw+rCl2TQ7J0
-         J7+YME5J95OveXfGvseZFreoJR2wK4ljZtOSDyThXF6rQ/2A380KSK3PqGcPVS6EFd
-         83mFHzIIixEjW1LecVG/wvdZxomhv9YdUujv8Zs8=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220518091556eucas1p23fa8121f563bd4cdb43b27949f0bacba~wKEi8vgjM1876518765eucas1p2c;
-        Wed, 18 May 2022 09:15:56 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 92.DD.10009.B49B4826; Wed, 18
-        May 2022 10:15:56 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220518091555eucas1p16a9ead30703054b30e76c2227cd4f629~wKEid_GJl2284822848eucas1p1W;
-        Wed, 18 May 2022 09:15:55 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220518091555eusmtrp1e75ce65f06f2fb713ae2679ccd687280~wKEidEsht1304613046eusmtrp1J;
-        Wed, 18 May 2022 09:15:55 +0000 (GMT)
-X-AuditID: cbfec7f2-e7fff70000002719-42-6284b94b8d52
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 72.98.09522.B49B4826; Wed, 18
-        May 2022 10:15:55 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220518091555eusmtip2b2f3d735ee7a617445733660bddd54a0~wKEiS6z1b0225002250eusmtip2Y;
-        Wed, 18 May 2022 09:15:55 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.7) by CAMSVWEXC01.scsc.local
-        (106.1.227.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 18 May
-        2022 10:15:53 +0100
-Message-ID: <717a2c83-0678-9310-4c75-9ad5da0472f6@samsung.com>
-Date:   Wed, 18 May 2022 11:15:52 +0200
+        Wed, 18 May 2022 05:16:32 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C9813FA7;
+        Wed, 18 May 2022 02:16:31 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id t6so1783093wra.4;
+        Wed, 18 May 2022 02:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AJ/PeRbastM8KtwKP00d5Dtpk6YYbHWpbi26hK6kis8=;
+        b=Sb6MUDzpI3Do12SoVOog4trxfn9HkOWzjeJE76NDXkSoA5+fRAmSg1quRuL0EaHHMq
+         m6AxmVYU7qZ4kUOuIhQsD2r+4H7X/eY9MdaLsZClCj+chZ/DoiVRhX9q9MC9cVk+qB2u
+         rKLz50JW6LMpRFFumwP9Jdf2NLUMxYBb39/m7I1paORnMA76t7UYktiptr2D7kQNW9fM
+         Ilp+EyfIAquY2zUojfnFJBq50LF3ol0dyv8ykoL/ce1uU9ZpB3AJf2RGUb5yvijmFIHy
+         vhOOAZG3Pzx1dZuw2baXFhCQfbnqUvTEPayqaYHkt2lviWQdjqQoRKNEAeblCa+BKcYt
+         CR+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AJ/PeRbastM8KtwKP00d5Dtpk6YYbHWpbi26hK6kis8=;
+        b=a4XKxsy+u8fWQHs+030ujNOLIKQvfKHQcOX5dwthkazViDlEgysV0a+cQHNED8iIOe
+         bDsguvUsALfhzx9cyDVL49kyb8mGRtFc27P7t70/k6rNDXX6Ttv0KEGo9M/E/xIcWfv0
+         TXd8Gr4rJKBn7/gVF779S5tIAA+jzZ8WgsyaoD2Cel8PUaPrc1XsAPWQFyOxq3pU3jkg
+         gYGI8yeGAPEfrxTWVIobtniHX6+aDcunIgKcRX+0tJAIFQL3g+p3YiV+pvFzMeBsg+Tk
+         WSSW7jIjNl5gihA/1jM8Jj1QHItbWGLsOxa9DFlABgPrEbKlPApUTl823LDCW6Ng/n7g
+         fb3g==
+X-Gm-Message-State: AOAM530syC9Z2OKC14XH7X+G15H2l2UwDbGPgYNPdTUObMl9n7NHkoWr
+        /W7Jj4EG1aQF+tKtiEnpsv6vg65sFt4=
+X-Google-Smtp-Source: ABdhPJwEWT0S1cQNRyp2Os4DAQEhukNT425BpsOswVM115DyQwaHDTQ4H/1aAl9xuumtGy5hK18drg==
+X-Received: by 2002:a05:6000:1a45:b0:20e:6164:d86c with SMTP id t5-20020a0560001a4500b0020e6164d86cmr1405752wry.561.1652865390262;
+        Wed, 18 May 2022 02:16:30 -0700 (PDT)
+Received: from [192.168.0.36] ([5.225.216.194])
+        by smtp.gmail.com with ESMTPSA id p18-20020a05600c1d9200b00397122e63b6sm1227595wms.29.2022.05.18.02.16.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 02:16:29 -0700 (PDT)
+Message-ID: <ad4aac8a-ef1b-d4eb-7045-a46bd39ad3fc@gmail.com>
+Date:   Wed, 18 May 2022 11:16:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.8.1
-Subject: Re: [PATCH v4 08/13] btrfs:zoned: make sb for npo2 zone devices
- align with sb log offsets
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/8] dt-bindings: iommu: mediatek: Add mediatek,infracfg
+ phandle
 Content-Language: en-US
-To:     <dsterba@suse.cz>
-CC:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
-        <pankydev8@gmail.com>, <dsterba@suse.com>, <hch@lst.de>,
-        <linux-nvme@lists.infradead.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-btrfs@vger.kernel.org>, <jiangbo.365@bytedance.com>,
-        <linux-block@vger.kernel.org>, <gost.dev@samsung.com>,
-        <linux-kernel@vger.kernel.org>, <dm-devel@redhat.com>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <20220517124257.GD18596@twin.jikos.cz>
-Content-Type: text/plain; charset="UTF-8"
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
+Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
+ <20220517132107.195932-2-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220517132107.195932-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.7]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (106.1.227.71) To
-        CAMSVWEXC01.scsc.local (106.1.227.71)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIKsWRmVeSWpSXmKPExsWy7djP87o+O1uSDHbdYLRYfbefzeL32fPM
-        FnvfzWa1uPCjkcli8e/vLBYrVx9lsug58IHFYu8tbYtLj1ewW+zZe5LF4vKuOWwW85c9ZbdY
-        c/MpiwOvx78Ta9g8ds66y+5x+Wypx+Yl9R67bzYARVrvs3q833eVzWP9lqssHmcWHGH3+LxJ
-        LoArissmJTUnsyy1SN8ugStjX/MjtoLFChXnvs5jbWBcINnFyMkhIWAisfHvUdYuRi4OIYEV
-        jBLbO2+yQzhfGCWW3VvHAuF8ZpQ48echO0zLmjOXmSASyxkl7s8+zQ5X9fT1QyhnDaPEiw33
-        gPo5OHgF7CQWLNcD6WYRUJXYMqeXFcTmFRCUODnzCQuILSoQITFt1hk2kHJhgRSJHSuLQMLM
-        AuISt57MZwKxRQREJS7tXwF2EbPASyaJ47+PsYPUswloSTR2gh3HKWAs0XDwAjtEr6ZE6/bf
-        ULa8xPa3c5ghHlCUuLnyF9gqCYFkiQ0zwyDClzgl7j0KhbBdJCYfWMMKYQtLvDq+Bep3GYnT
-        k3tYIOxqiac3fjODnCMh0MIo0b9zPdRMa4m+MzkQNY4Sl759ZoYI80nceCsIcQ2fxKRt05kn
-        MKrOQgqHWUgenoXkgVlIHljAyLKKUTy1tDg3PbXYMC+1XK84Mbe4NC9dLzk/dxMjMNWd/nf8
-        0w7Gua8+6h1iZOJgPMQowcGsJMLLmNuSJMSbklhZlVqUH19UmpNafIhRmoNFSZw3OXNDopBA
-        emJJanZqakFqEUyWiYNTqoGpcsfk6tJ7W67wfGafVl50gely/u6izlUf3/82Nb169KSz/4TH
-        Zrb8a9wb/L7G+D7ZVmttd8cu2jfghIxryJv+rZw8Jpwv4g1cGc7tvWy71PtYcPPcb2uKN3P0
-        /hTZ6T6lZuWs3/uPrD5/tH+a2JTzF3ZmSLLplTT8kp7w927P1uUnUtrm839V1j4tsHR1wbcz
-        VdM+La5rvsHj88Kre9lvC40Tzv++vLHOLzuQbHL9V6jtpg0sTaIHjpgF8FToRKyaIXNOnJtF
-        cq6Y6KoPqxg+1O/fLq5SM0E6XNKxb8Hy670nrKZlTxJrMbgsGaC3dXVhlN5WBh7Z2Y+jr8Vr
-        tv3jaevV53/E1BXrsC52fYSPEktxRqKhFnNRcSIAGQTGuOQDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgleLIzCtJLcpLzFFi42I5/e/4PV3vnS1JBg9fyFmsvtvPZvH77Hlm
-        i73vZrNaXPjRyGSx+Pd3FouVq48yWfQc+MBisfeWtsWlxyvYLfbsPclicXnXHDaL+cueslus
-        ufmUxYHX49+JNWweO2fdZfe4fLbUY/OSeo/dNxuAIq33WT3e77vK5rF+y1UWjzMLjrB7fN4k
-        F8AVpWdTlF9akqqQkV9cYqsUbWhhpGdoaaFnZGKpZ2hsHmtlZKqkb2eTkpqTWZZapG+XoJex
-        r/kRW8FihYpzX+exNjAukOxi5OSQEDCRWHPmMlMXIxeHkMBSRokdDd1sEAkZiU9XPrJD2MIS
-        f651sUEUfWSUaDr8EapjDaPE6a4zQBkODl4BO4kFy/VAGlgEVCW2zOllBbF5BQQlTs58wgJi
-        iwpESDzYfRYsLiyQIvHo02wwm1lAXOLWk/lMILaIgKjEpf0rWCDmv2CUeN36jR3EYRZ4ySRx
-        /PcxdpBlbAJaEo2dYNdxChhLNBy8wA4xSFOidftvKFteYvvbOcwQHyhK3Fz5C+xOCYFkib+3
-        wicwis5Cct4sJGfMQjJpFpJJCxhZVjGKpJYW56bnFhvqFSfmFpfmpesl5+duYgQmiW3Hfm7e
-        wTjv1Ue9Q4xMHIyHGCU4mJVEeBlzW5KEeFMSK6tSi/Lji0pzUosPMZoCw2gis5Rocj4wTeWV
-        xBuaGZgamphZGphamhkrifN6FnQkCgmkJ5akZqemFqQWwfQxcXBKNTDN5TY72SWRv227Oh/f
-        oYt8Uzln1+y2P3i2dL9whL+KznKXMvHlqx93vpbITjjZtC/pS2HDy49sL0X5pBqeSdzeyJv/
-        qCF5X9mLuh8bE9eXKFyqToxlUf1yW/1fR3HKjEatnhN/n66WNU31ORK97u3GyL7XTt8fr77h
-        8/s0Cxdf/Cuh84HcHtMr1r64eb69pivIwGTm4wyVU1fvHvrDEiFaGTJl+qTJpSlrS1fcVeiK
-        5f0/59vpK+wvbcOc5hv83N+7mPP3aWWmixJ3fwo/2Wj3WHLFsscc7x9P1p+fsHHz6bfKshE3
-        t7T1cAdwNjHKv28Ped6dmLw8vWKaKdvprWplGyaczJgv8PtmoknDmS03lFiKMxINtZiLihMB
-        g5KR95sDAAA=
-X-CMS-MailID: 20220518091555eucas1p16a9ead30703054b30e76c2227cd4f629
-X-Msg-Generator: CA
-X-RootMTR: 20220516165429eucas1p272c8b4325a488675f08f2d7016aa6230
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220516165429eucas1p272c8b4325a488675f08f2d7016aa6230
-References: <20220516165416.171196-1-p.raghav@samsung.com>
-        <CGME20220516165429eucas1p272c8b4325a488675f08f2d7016aa6230@eucas1p2.samsung.com>
-        <20220516165416.171196-9-p.raghav@samsung.com>
-        <20220517124257.GD18596@twin.jikos.cz>
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-17 14:42, David Sterba wrote:
-> On Mon, May 16, 2022 at 06:54:11PM +0200, Pankaj Raghav wrote:
->> Superblocks for zoned devices are fixed as 2 zones at 0, 512GB and 4TB.
->> These are fixed at these locations so that recovery tools can reliably
->> retrieve the superblocks even if one of the mirror gets corrupted.
->>
->> power of 2 zone sizes align at these offsets irrespective of their
->> value but non power of 2 zone sizes will not align.
->>
->> To make sure the first zone at mirror 1 and mirror 2 align, write zero
->> operation is performed to move the write pointer of the first zone to
->> the expected offset. This operation is performed only after a zone reset
->> of the first zone, i.e., when the second zone that contains the sb is FULL.
-> 
-> Is it a good idea to do the "write zeros", instead of a plain "set write
-> pointer"? I assume setting write pointer is instant, while writing
-> potentially hundreds of megabytes may take significiant time. As the
-> functions may be called from random contexts, the increased time may
-> become a problem.
-> 
-Unfortunately it is not possible to just move the WP in zoned devices.
-The only alternative that I could use is to do write zeroes which are
-natively supported by some devices such as ZNS. It would be nice to know
-if someone had a better solution to this instead of doing write zeroes
-in zoned devices.
 
->> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
->> ---
->>  fs/btrfs/zoned.c | 68 ++++++++++++++++++++++++++++++++++++++++++++----
->>  1 file changed, 63 insertions(+), 5 deletions(-)
->>
->> diff --git a/fs/btrfs/zoned.c b/fs/btrfs/zoned.c
->> index 3023c871e..805aeaa76 100644
->> --- a/fs/btrfs/zoned.c
->> +++ b/fs/btrfs/zoned.c
->> @@ -760,11 +760,44 @@ int btrfs_check_mountopts_zoned(struct btrfs_fs_info *info)
->>  	return 0;
->>  }
->>  
->> +static int fill_sb_wp_offset(struct block_device *bdev, struct blk_zone *zone,
->> +			     int mirror, u64 *wp_ret)
->> +{
->> +	u64 offset = 0;
->> +	int ret = 0;
->> +
->> +	ASSERT(!is_power_of_two_u64(zone->len));
->> +	ASSERT(zone->wp == zone->start);
->> +	ASSERT(mirror != 0);
+
+On 17/05/2022 15:21, AngeloGioacchino Del Regno wrote:
+> Add property "mediatek,infracfg" to let the mtk_iommu driver retrieve
+> a phandle to the infracfg syscon instead of performing a per-soc
+> compatible lookup.
 > 
-> This could simply accept 0 as the mirror offset too, the calculation is
-> trivial.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>   Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml | 4 ++++
+>   1 file changed, 4 insertions(+)
 > 
-Ok. I will fix it up!
->> +
->> +	switch (mirror) {
->> +	case 1:
->> +		div64_u64_rem(BTRFS_SB_LOG_FIRST_OFFSET >> SECTOR_SHIFT,
->> +			      zone->len, &offset);
->> +		break;
->> +	case 2:
->> +		div64_u64_rem(BTRFS_SB_LOG_SECOND_OFFSET >> SECTOR_SHIFT,
->> +			      zone->len, &offset);
->> +		break;
->> +	}
->> +
->> +	ret =  blkdev_issue_zeroout(bdev, zone->start, offset, GFP_NOFS, 0);
->> +	if (ret)
->> +		return ret;
->> +
->> +		/*
->> +		 * Non po2 zone sizes will not align naturally at
->> +		 * mirror 1 (512GB) and mirror 2 (4TB). The wp of the
->> +		 * 1st zone in those superblock mirrors need to be
->> +		 * moved to align at those offsets.
->> +		 */
-> 
-> Please move this comment to the helper fill_sb_wp_offset itself, there
-> it's more discoverable.
-> 
-Ok.
->> +		is_sb_offset_write_req =
->> +			(zones_empty || (reset_zone_nr == 0)) && mirror &&
->> +			!is_power_of_2(zones[0].len);
-> 
-> Accepting 0 as the mirror number would also get rid of this wild
-> expression substituting and 'if'.
-> 
->>  
->>  		if (reset && reset->cond != BLK_ZONE_COND_EMPTY) {
->>  			ASSERT(sb_zone_is_full(reset));
->> @@ -795,6 +846,13 @@ static int sb_log_location(struct block_device *bdev, struct blk_zone *zones,
->>  			reset->cond = BLK_ZONE_COND_EMPTY;
->>  			reset->wp = reset->start;
->>  		}
->> +
->> +		if (is_sb_offset_write_req) {
-> 
-> And get rid of the conditional. The point of supporting both po2 and
-> nonpo2 is to hide any implementation details to wrappers as much as
-> possible.
-> 
-Alright. I will move the logic to the wrapper instead of having the
-conditional in this function.
->> +			ret = fill_sb_wp_offset(bdev, &zones[0], mirror, &wp);
->> +			if (ret)
->> +				return ret;
->> +		}
->> +
->>  	} else if (ret != -ENOENT) {
->>  		/*
->>  		 * For READ, we want the previous one. Move write pointer to
-Thanks for your comments.
+> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> index 2ae3bbad7f1a..78c72c22740b 100644
+> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
+> @@ -101,6 +101,10 @@ properties:
+>       items:
+>         - const: bclk
+>   
+> +  mediatek,infracfg:
+> +    $ref: "/schemas/types.yaml#/definitions/phandle"
+> +    description: The phandle to the mediatek infracfg syscon
+> +
+>     mediatek,larbs:
+>       $ref: /schemas/types.yaml#/definitions/phandle-array
+>       minItems: 1
+
+I think we can squash patch 7 in here. Same holds for pericfg
+
+Regards,
+Matthias

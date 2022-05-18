@@ -2,212 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380C952B513
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615D652B4FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233112AbiERI2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S233150AbiERI3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232879AbiERI2f (ORCPT
+        with ESMTP id S233040AbiERI3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:28:35 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8950C1157E3;
-        Wed, 18 May 2022 01:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652862512; x=1684398512;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5CA8FtuEdlmAndh2dvdGmeNEcE6jVfqnArBWtfSrmrA=;
-  b=T77Ti53zY/cDro6twKpVk6a3ZYDPZrftjEvM7kSkp7WtVhjr9y0vL96h
-   zyynd+J5uz0rMxptYFR+qu/u25bkhfiahlOVuYZ68KDm92qiadTI1Z6TH
-   bGw1Q1OJlL3BH8YCztZU7eSDtFZtWMKDEVsTvrccDEm2z63brOET92W4j
-   nhi6FZdQ2d1YFSoDcR1rvzGsyLzx1QkB/J4TW5U6R86DHlfAFiwtEIhD2
-   eOdQ0Wh3LnrARM0D8R8NwSObMMrJgNsxVgM8eSS8xlPOopBJbe5XWOvO3
-   s8IvVMYbodQ44zSjJB0JEDHx1S2vY57rhTfpB6pcz8/4vtFGtfvV6RrR3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="357962971"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="357962971"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:28:32 -0700
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="523408190"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:28:25 -0700
-Date:   Wed, 18 May 2022 16:28:17 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        Sean Christopherson <seanjc@google.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the guest
- and/or host changes apic id/base from the defaults.
-Message-ID: <20220518082811.GA8765@gao-cwp>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
- <20220427200314.276673-3-mlevitsk@redhat.com>
+        Wed, 18 May 2022 04:29:08 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D6B129EDC;
+        Wed, 18 May 2022 01:29:02 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B3692C0003;
+        Wed, 18 May 2022 08:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652862541;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NlIcAIfMVoOYvEtRo6Y7sDw80J8H5Asrq5W676I+ZIY=;
+        b=hZvXa/hx1psoDuOQFjEyl/yioMON23FcQdUZSzeMOtlIPgecU8iKY3RSGSpxH4IKSZhac+
+        HODp6gBIRfPOTZa0I/N/UomGqDuokBldquZyB4xF1VG+NWiCfNq8tXvPVNMpkUomuafM1i
+        AKdNdJ5VOcsJtu+65Fu6bMjQvLw/f4e798kfP0Wd9l3BOzv0FHQUJP3zLoUAeuCP0JiS31
+        dKjn8KfaCYIg3EalEb0a10izQbg99gyy0nGOW6gSzccY9x/qh+lBlOM9FR0iCkSi/j+ZWF
+        +ICGbm+l3bOOQNHQ332soUs0naiH4btAmci3DJXK2q2zww4bI2oSwg3NMa1ggg==
+Date:   Wed, 18 May 2022 10:28:59 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Medad Young <medadyoung@gmail.com>
+Cc:     Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, a.zummo@towertech.it,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFTING <KFTING@nuvoton.com>, ctcchien@nuvoton.com,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] RTC: nuvoton: Add NCT3018Y real time clock driver
+Message-ID: <YoSuS+nFJoD4+oKM@mail.local>
+References: <20220517092927.19537-1-ctcchien@nuvoton.com>
+ <20220517092927.19537-4-ctcchien@nuvoton.com>
+ <YoPzaSc/8BBVWWsB@mail.local>
+ <CAHpyw9fw54hQrsPa4psbUs2VfBqHj+gMKDceL2N5k8_jU+434w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427200314.276673-3-mlevitsk@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHpyw9fw54hQrsPa4psbUs2VfBqHj+gMKDceL2N5k8_jU+434w@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 11:02:57PM +0300, Maxim Levitsky wrote:
->Neither of these settings should be changed by the guest and it is
->a burden to support it in the acceleration code, so just inhibit
->it instead.
->
->Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
->
->Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
->---
-> arch/x86/include/asm/kvm_host.h |  3 +++
-> arch/x86/kvm/lapic.c            | 25 ++++++++++++++++++++++---
-> arch/x86/kvm/lapic.h            |  8 ++++++++
-> 3 files changed, 33 insertions(+), 3 deletions(-)
->
->diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
->index 63eae00625bda..636df87542555 100644
->--- a/arch/x86/include/asm/kvm_host.h
->+++ b/arch/x86/include/asm/kvm_host.h
->@@ -1070,6 +1070,8 @@ enum kvm_apicv_inhibit {
-> 	APICV_INHIBIT_REASON_ABSENT,
-> 	/* AVIC is disabled because SEV doesn't support it */
-> 	APICV_INHIBIT_REASON_SEV,
->+	/* APIC ID and/or APIC base was changed by the guest */
->+	APICV_INHIBIT_REASON_RO_SETTINGS,
-
-You need to add it to check_apicv_inhibit_reasons as well.
-
-> };
+On 18/05/2022 11:11:00+0800, Medad Young wrote:
+> > > +config RTC_DRV_NCT3018Y
+> > > +     tristate "Nuvoton Real Time Clock"
+> >
+> > This definitively needs a better description
 > 
-> struct kvm_arch {
->@@ -1258,6 +1260,7 @@ struct kvm_arch {
-> 	hpa_t	hv_root_tdp;
-> 	spinlock_t hv_root_tdp_lock;
-> #endif
->+	bool apic_id_changed;
+> OK, I will add a better description.
 
-What's the value of this boolean? No one reads it.
+To be clear, this needs at least the part number
 
-> };
-> 
-> struct kvm_vm_stat {
->diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
->index 66b0eb0bda94e..8996675b3ef4c 100644
->--- a/arch/x86/kvm/lapic.c
->+++ b/arch/x86/kvm/lapic.c
->@@ -2038,6 +2038,19 @@ static void apic_manage_nmi_watchdog(struct kvm_lapic *apic, u32 lvt0_val)
-> 	}
-> }
-> 
->+static void kvm_lapic_check_initial_apic_id(struct kvm_lapic *apic)
->+{
->+	if (kvm_apic_has_initial_apic_id(apic))
->+		return;
->+
->+	pr_warn_once("APIC ID change is unsupported by KVM");
+> > > +     tm->tm_wday = buf[6] & 0x07;
+> > > +     tm->tm_mday = bcd2bin(buf[7] & 0x3F);
+> > > +     tm->tm_mon = bcd2bin(buf[8] & 0x1F) - 1 ; /* rtc mn 1-12 */
+> > > +     tm->tm_year = bcd2bin(buf[9]) + 100;
+> > > +
+> > > +     dev_dbg(&client->dev, "%s:s=%d, m=%d, hr=%d, md=%d, m=%d, yr=%d, wd=%d\n",
+> > > +             __func__, tm->tm_sec, tm->tm_min, tm->tm_hour, tm->tm_mday, tm->tm_mon,
+> > > +             tm->tm_year, tm->tm_wday);
+> > > +
 
-It is misleading because changing xAPIC ID is supported by KVM; it just
-isn't compatible with APICv. Probably this pr_warn_once() should be
-removed.
+I forgot but this dev_dbg is not particularily useful as we have
+tracepoint in the core. However, if you want to keep it, please use
+%ptR.
 
->+
->+	kvm_set_apicv_inhibit(apic->vcpu->kvm,
->+			APICV_INHIBIT_REASON_RO_SETTINGS);
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static int nct3018y_rtc_set_time(struct device *dev, struct rtc_time *tm)
+> > > +{
+> > > +     struct i2c_client *client = to_i2c_client(dev);
+> > > +     unsigned char buf[10] = {0};
+> > > +     int err;
+> > > +
+> > > +     dev_dbg(&client->dev, "%s:s=%d, m=%d, hr=%d, md=%d, m=%d, yr=%d, wd=%d\n",
+> > > +             __func__, tm->tm_sec, tm->tm_min, tm->tm_hour, tm->tm_mday, tm->tm_mon,
+> > > +             tm->tm_year, tm->tm_wday);
 
-The indentation here looks incorrect to me.
-	kvm_set_apicv_inhibit(apic->vcpu->kvm,
-			      APICV_INHIBIT_REASON_RO_SETTINGS);
+Ditto
 
->+
->+	apic->vcpu->kvm->arch.apic_id_changed = true;
->+}
->+
-> static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
-> {
-> 	int ret = 0;
->@@ -2046,9 +2059,11 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+> > > +
+> > > +     err = nct3018y_read_block_data(client, NCT3018Y_REG_CTRL, 1, buf);
+> > > +     if (err)
+> > > +             return err;
+> > > +
+> > > +     if (!(buf[0] & NCT3018Y_BIT_TWO)) {
+> > > +             dev_err(&client->dev,
+> > > +                     " TWO is not set.\n");
+> >
+> > This is not useful, what is TWO?
 > 
-> 	switch (reg) {
-> 	case APIC_ID:		/* Local APIC ID */
->-		if (!apic_x2apic_mode(apic))
->+		if (!apic_x2apic_mode(apic)) {
->+
-> 			kvm_apic_set_xapic_id(apic, val >> 24);
->-		else
->+			kvm_lapic_check_initial_apic_id(apic);
->+		} else
-> 			ret = 1;
-> 		break;
+> TWO stands for Time Registers Write Ownership
+> for NCT3018Y, driver needs to set this bit before writing to other registers
 > 
->@@ -2335,8 +2350,11 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
-> 			     MSR_IA32_APICBASE_BASE;
-> 
-> 	if ((value & MSR_IA32_APICBASE_ENABLE) &&
->-	     apic->base_address != APIC_DEFAULT_PHYS_BASE)
->+	     apic->base_address != APIC_DEFAULT_PHYS_BASE) {
->+		kvm_set_apicv_inhibit(apic->vcpu->kvm,
->+				APICV_INHIBIT_REASON_RO_SETTINGS);
-> 		pr_warn_once("APIC base relocation is unsupported by KVM");
->+	}
-> }
-> 
-> void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
->@@ -2649,6 +2667,7 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
-> 		}
-> 	}
-> 
->+	kvm_lapic_check_initial_apic_id(vcpu->arch.apic);
-> 	return 0;
-> }
-> 
->diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
->index 4e4f8a22754f9..b9c406d383080 100644
->--- a/arch/x86/kvm/lapic.h
->+++ b/arch/x86/kvm/lapic.h
->@@ -252,4 +252,12 @@ static inline u8 kvm_xapic_id(struct kvm_lapic *apic)
-> 	return kvm_lapic_get_reg(apic, APIC_ID) >> 24;
-> }
-> 
->+static inline bool kvm_apic_has_initial_apic_id(struct kvm_lapic *apic)
->+{
->+	if (apic_x2apic_mode(apic))
->+		return true;
 
-I suggest warning of x2apic mode:
-	if (WARN_ON_ONCE(apic_x2apic_mode(apic)))
+Can't you simply set it forcefully here instead of erroring out?
 
-Because it is weird that callers care about initial apic id when apic is
-in x2apic mode.
+> >
+> > > +             return -EINVAL;
+> > > +     }
+> > > +
+> > > +     /* hours, minutes and seconds */
+> > > +     buf[NCT3018Y_REG_SC] = bin2bcd(tm->tm_sec);
+> > > +     buf[NCT3018Y_REG_MN] = bin2bcd(tm->tm_min);
+> > > +     buf[NCT3018Y_REG_HR] = bin2bcd(tm->tm_hour);
+> > > +     buf[NCT3018Y_REG_DW] = tm->tm_wday & 0x07;
+> > > +     buf[NCT3018Y_REG_DM] = bin2bcd(tm->tm_mday);
+> > > +
+> > > +     /* month, 1 - 12 */
+> > > +     buf[NCT3018Y_REG_MO] = bin2bcd(tm->tm_mon+1);
+> > > +
+> > > +     /* year and century */
+> >
+> > Were is the century?
+> 
+> I will update the comment, for there is no century.
+> 
+> >
+> > > +     buf[NCT3018Y_REG_YR] = bin2bcd(tm->tm_year - 100);
+> > > +
+> > > +     return nct3018y_write_block_data(client, NCT3018Y_REG_SC, 10, buf);
+
+So this overwrites the alarm which is something you must not do.
+
+> > > +     buf[0] = bin2bcd(tm->time.tm_sec);
+> > > +     buf[1] = bin2bcd(tm->time.tm_min);
+> > > +     buf[2] = bin2bcd(tm->time.tm_hour);
+> > > +
+> > > +     err = nct3018y_write_block_data(client, NCT3018Y_REG_SCA, 1, buf);
+> > > +     if (err)
+> > > +             return err;
+> >
+> >
+> > Writing byte per byte opens a huge window for a race condition here.
+> >
+> 
+> I write byte per byte,
+> because these three registers are not continuous
+> 
+
+Right, I did see it and then forgot.
+
+> > > +     nct3018y->rtc = devm_rtc_allocate_device(&client->dev);
+> > > +     if (IS_ERR(nct3018y->rtc))
+> > > +             return PTR_ERR(nct3018y->rtc);
+> > > +
+> > > +     nct3018y->rtc->ops = &nct3018y_rtc_ops;
+> > > +     nct3018y->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> > > +     nct3018y->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> > > +     nct3018y->rtc->set_start_time = true;
+> >
+> > Do you have a good reason to set set_start_time here?
+> >
+> 
+> Sorry, I am new here.
+> I just follow other drivers.
+> so you think I should not set set_start_time, right?
+> 
+
+There are very few drivers that needs it, when they used to window the
+dates they support back to 1970 which is not something you seem to care
+about.
+
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

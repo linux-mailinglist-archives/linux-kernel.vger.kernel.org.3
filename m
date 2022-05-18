@@ -2,98 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF81352B56C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B03352B573
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbiERIpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S233550AbiERIqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiERIpk (ORCPT
+        with ESMTP id S233522AbiERIqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:45:40 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C277E133277;
-        Wed, 18 May 2022 01:45:39 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id k30so1650804wrd.5;
-        Wed, 18 May 2022 01:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cajtq/WCCYY+Uzv177x/wTfPz35hSuCd8u3Ec2e4AOQ=;
-        b=aHTdStFe5NRbSQREHiQSU+A6Q7nqKkqfDryBo32bfI2egWwMPE0X3YHRWU9Kjrmxk+
-         7MFCPuN24HBjFAKgkvcySKE7dAPrUYtYeqAj7NyFaSzjNqmnygt8YuqP+BeNryvLs1M0
-         Oh2RU3o1tXXrye7A22ihl1SNcHD74N6fXtHIlEAKjLusGQx1V/MJOQA1QVXD4i+/n7rv
-         2WoKzuKW72yUpasATnk9zqBPDl6pXC6ozrSAblkZMISNuCfxY1tWzdD4WzMogLGkxS3J
-         0GVwlwnZNKoZ0vTwtgd0QyJYyiWulCqqhQKNM1pU+xFClwPETPxBfJVvYnR6KjlTjqaK
-         wQUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cajtq/WCCYY+Uzv177x/wTfPz35hSuCd8u3Ec2e4AOQ=;
-        b=Twl97t+FLmyOq2zWzFtY2sRwqHmKXxHQz+dJv7cBi0cGP4/5caFMuUjff/ZguUVEGZ
-         1xkHUmgOyitUblDtw/9VO4gTtGgyCPw0WuFEsU8dUN9RtQ5y0OTx2gEm6dBENnCCEBzZ
-         HKIUGHUFiYl5P1labVqxB+lNb0N+BzWPNRRxyrrsh0nPX87isk0+C2iqzmhXto6ZysRI
-         I8LphDrYUK4GS7MydkiggDz2v2VFj4CzCG4gItLUHAmUQNvuDnm9CrhDtVEoMyydPoG4
-         hBeHh2dPZJ+O8zIpcRjEePbumCaR3GP05wik76mYC1a3HyOt+UQAmCXKK/k8dbiisdf7
-         dsAA==
-X-Gm-Message-State: AOAM531Y88KsUooUSSUtEbbr8bDFSks3q1jL9nxNOoPh503lasoaiWNp
-        wAT4oQ2XO9VN6hf9uOBJZGE=
-X-Google-Smtp-Source: ABdhPJy+jzxaUQm1PdxdFGCsAK/RXRQls9XoisZOu97pRzrOPADdNoGvXXMtH5aa16qydr9vPPjWPQ==
-X-Received: by 2002:a05:6000:2a2:b0:20c:734f:d38a with SMTP id l2-20020a05600002a200b0020c734fd38amr22705633wry.417.1652863538304;
-        Wed, 18 May 2022 01:45:38 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id d28-20020adfa41c000000b0020e5b4ebaecsm1431579wra.4.2022.05.18.01.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 01:45:37 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powercap: intel_rapl: remove redundant store to value after multiply
-Date:   Wed, 18 May 2022 09:45:36 +0100
-Message-Id: <20220518084536.508514-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 18 May 2022 04:46:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF5E1DA51;
+        Wed, 18 May 2022 01:46:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87426B81ED4;
+        Wed, 18 May 2022 08:46:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D80E1C385A5;
+        Wed, 18 May 2022 08:45:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652863560;
+        bh=+KBdOkPfbel0JzOuikwQH/7ZizZgZt7pXPZZW85THGU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JGF0Xb7n3sMBtHUMYuvZERKmhsUVg5ez+M5MQIopoIVrf+b6UJ7cS+8mg4Mi6i5sU
+         wzg1fK2L14iMvS6spnjgiEYWgdH9AKJajTQmsQj3YvT2LpleID1h1xMQK75F7bK/FE
+         3Q2l+XwoXIZHWk3msAEu49265DrKikP7IQmL4R+Y=
+Date:   Wed, 18 May 2022 10:45:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        zbr@ioremap.net, jdelvare@suse.com, linux@roeck-us.net
+Subject: Re: [PATCH -next] drivers: w1: drop unnecessary memset() in
+ w1_master_release()
+Message-ID: <YoSyRQbX/oH3UhFw@kroah.com>
+References: <20220518080136.2686030-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518080136.2686030-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to store the result of the multiply back to variable value
-after the multiplication. The store is redundant, replace *= with just *.
+On Wed, May 18, 2022 at 04:01:36PM +0800, Yang Yingliang wrote:
+> It's unnecessary to use memset() in w1_master_release() before
+> the memory is freed, so remove it.
+> 
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>  drivers/w1/w1.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+> index f2ae2e563dc5..f4d1499bb853 100644
+> --- a/drivers/w1/w1.c
+> +++ b/drivers/w1/w1.c
+> @@ -73,7 +73,6 @@ static void w1_master_release(struct device *dev)
+>  	struct w1_master *md = dev_to_w1_master(dev);
+>  
+>  	dev_dbg(dev, "%s: Releasing %s.\n", __func__, md->name);
+> -	memset(md, 0, sizeof(struct w1_master) + sizeof(struct w1_bus_master));
+>  	kfree(md);
+>  }
+>  
+> -- 
+> 2.25.1
+> 
 
-Cleans up clang scan build warning:
-warning: Although the value stored to 'value' is used in the enclosing
-expression, the value is never actually read from 'value'
-[deadcode.DeadStores]
+Hi,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/powercap/intel_rapl_common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 83da499dd6ec..70e38278986d 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -1010,7 +1010,7 @@ static u64 rapl_compute_time_window_atom(struct rapl_package *rp, u64 value,
- 	 * where time_unit is default to 1 sec. Never 0.
- 	 */
- 	if (!to_raw)
--		return (value) ? value *= rp->time_unit : rp->time_unit;
-+		return (value) ? value * rp->time_unit : rp->time_unit;
- 
- 	value = div64_u64(value, rp->time_unit);
- 
--- 
-2.36.1
+You are receiving this message because of the following common error(s)
+as indicated below:
 
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

@@ -2,76 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BA652B058
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE2E52B05C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbiERB6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S234116AbiERB7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234076AbiERB6q (ORCPT
+        with ESMTP id S232050AbiERB72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:58:46 -0400
-Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0804F340C6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=j23IKT8AReeydsEeJtOMrkt6EF8d6kyrYRtSyXUiq64=; b=QiacaCmmX72WLCEwp4mJWLgQkl
-        WBDDDMyVrQvQPO3rLcU8gb4rFcX7QDR5SkbU8rt1Z64UqB3PZTuSf8ZCIVioNk3VmJk1426lWv5IA
-        Ietp4fomDkXKbdEtiJpvNb9g+qwrG7MVcS6pzH7L6O0iH55JMUq3wxbC83YEXlucJKiUjM0WDUk+W
-        bxHl1P/XkNZzmtHRkRktR8dc7FA8m2H+CqrHQ9aCpvIpLWoAxOu6MS8g4alDS4AZWwkScPkTED4BW
-        3ONiBlRom1bEO4nwyiNDPHF/sj8xPDJpM5pH9rGHhNyaCYii/XGS98bI+fA4lhRjGBYx2MywdZouL
-        hWUB/f3g==;
-Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nr8xU-00FtoS-Ci; Wed, 18 May 2022 01:58:40 +0000
-Date:   Wed, 18 May 2022 01:58:40 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
-Cc:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
-Message-ID: <YoRS0L0ywSZkflq7@zeniv-ca.linux.org.uk>
-References: <20220517223806.2299-1-hdanton@sina.com>
- <000000000000be329205df3cf252@google.com>
- <YoQohxAFD3EPujRC@zeniv-ca.linux.org.uk>
- <YoRFAoe99ob/YzD5@zeniv-ca.linux.org.uk>
- <YoRHfB7lEGUwQBGU@zeniv-ca.linux.org.uk>
+        Tue, 17 May 2022 21:59:28 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D929054BFF;
+        Tue, 17 May 2022 18:59:26 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id l16so1069009oil.6;
+        Tue, 17 May 2022 18:59:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0ErEGE8/dmj2Azoe4zkAGcu/VtrcYAyL6ETVQstf758=;
+        b=3CAoHwb8NNRNHbjfkoFx+Gb5VwXefeh5LsK2iaDhWRG9DOCWXAwoHj16Mx+GhBohqf
+         exXE9pJrZnb1hkYIZ90LYkJKS3IWrf+KiXQkt/aIFivPcgJTKh3p1gkm/1WgF0eF/bx7
+         f+410wFdNL5shUQSQD+DRodUzFqbejhfnSlQqV7LCaFXQPZwOqGrd9YVYZUERj4djVAQ
+         5ySI93OVTJUzneijWWFGOmn81uZC0diYLcWihJrPnfl+B9unUoPSUfqVnW3p047n4sa1
+         0EcPOmenj6yCpSqB7RO99orrmz7M1gCQfxSQGMH10kc8hcnFcOn9CwezCoZX2+XUzimf
+         Un7g==
+X-Gm-Message-State: AOAM530TxRiu7znxZLLWqUy4eAxSO0343HXFaIhK+AAxj+7B/ud5APdl
+        zbSTQnWMvf+be6AhlSiiww==
+X-Google-Smtp-Source: ABdhPJxyOQdpLuVw0xV36ku25ipTMD9vCUe8gXTwtgNZHLBeoLqKQEkvCVw7bsG7o+hu5caGfwojpQ==
+X-Received: by 2002:a05:6808:2017:b0:326:a252:8abf with SMTP id q23-20020a056808201700b00326a2528abfmr11755597oiw.143.1652839166212;
+        Tue, 17 May 2022 18:59:26 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a3-20020a056870374300b000e686d13889sm423835oak.35.2022.05.17.18.59.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 18:59:25 -0700 (PDT)
+Received: (nullmailer pid 2069205 invoked by uid 1000);
+        Wed, 18 May 2022 01:59:24 -0000
+Date:   Tue, 17 May 2022 20:59:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v4 05/12] dt-bindings: net: dsa: add bindings
+ for Renesas RZ/N1 Advanced 5 port switch
+Message-ID: <20220518015924.GC2049643-robh@kernel.org>
+References: <20220509131900.7840-1-clement.leger@bootlin.com>
+ <20220509131900.7840-6-clement.leger@bootlin.com>
+ <20220511152221.GA334055-robh@kernel.org>
+ <20220511153337.deqxawpbbk3actxf@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoRHfB7lEGUwQBGU@zeniv-ca.linux.org.uk>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220511153337.deqxawpbbk3actxf@skbuf>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:10:20AM +0000, Al Viro wrote:
-> On Wed, May 18, 2022 at 12:59:46AM +0000, Al Viro wrote:
-> > On Tue, May 17, 2022 at 10:58:15PM +0000, Al Viro wrote:
-> > > On Tue, May 17, 2022 at 03:49:07PM -0700, syzbot wrote:
-> > > > Hello,
-> > > > 
-> > > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > > > WARNING in mntput_no_expire
-> > > 
-> > > Obvious question: which filesystem it is?
+On Wed, May 11, 2022 at 06:33:37PM +0300, Vladimir Oltean wrote:
+> On Wed, May 11, 2022 at 10:22:21AM -0500, Rob Herring wrote:
+> > > +patternProperties:
+> > > +  "^ethernet-ports$":
 > > 
-> > FWIW, can't reproduce here - at least not with C reproducer +
-> > -rc7^ kernel + .config from report + debian kvm image (bullseye,
-> > with systemd shite replaced with sysvinit, which might be relevant).
+> > Move to 'properties', not a pattern.
 > > 
-> > In case systemd-specific braindamage is needed to reproduce it...
-> > Hell knows; at least mount --make-rshared / doesn't seem to suffice.
+> > With that,
+> > 
+> > Reviewed-by: Rob Herring <robh@kernel.org>
 > 
-> ... doesn't reproduce with genuine systemd either.  FWIW, 4-way SMP
-> setup here.
+> Even if it should have been "^(ethernet-)?ports$"?
 
-OK, reproduced...
+Why? Allowing 'ports' is for existing users. New ones don't need the 
+variability and should use just 'ethernet-ports'.
+
+Rob

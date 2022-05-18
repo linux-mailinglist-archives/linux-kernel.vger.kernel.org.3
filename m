@@ -2,242 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66E852BCB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0FC052BBF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238306AbiERNtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        id S238080AbiERNkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238316AbiERNs5 (ORCPT
+        with ESMTP id S238056AbiERNj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:48:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9091C5F84
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:48:55 -0700 (PDT)
+        Wed, 18 May 2022 09:39:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18171BE11D;
+        Wed, 18 May 2022 06:39:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 569D561877
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:48:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCACC385A5;
-        Wed, 18 May 2022 13:48:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5296DB820BF;
+        Wed, 18 May 2022 13:39:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9E96C385A5;
+        Wed, 18 May 2022 13:39:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652881734;
-        bh=t6vg+AoJ0E/H4BIJrucLZJ9ullbTIosE8DLPtOShRiI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=A5m7V2RR7OaTSXjEbCi0zHLOpTXq014TbTQrThaWs7sZQkB4KopsSg44PV+J1FcRF
-         65G05Yc3HBJkk72obmrCiet/bP4Cond4kGDPPXt1X+olgn9mWkPUHFhaY/9GX7YVSN
-         5a+16PuyNn+LSovrK2HaxAewVJA9hcDFXCKsFTU1aDN3ML7qFSrdNdJlNYlyZ3tJXS
-         Vju/zt+JZ4P2cmDLgBlL251w/3mGRwSeuzBTzJXCVPFHJ8oh952fgX/16fGGo13NLp
-         LGNueXSChNUxnM1+UKEhjfuPkXzj0N+RcH94e7rM/2aGRUBolvEpDyx/Msb0yvYJIv
-         gGMzkb1vmq92w==
-Date:   Wed, 18 May 2022 22:48:49 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Jeff Xie <xiehuan09@gmail.com>, rostedt@goodmis.org,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org, mingo@redhat.com,
-        mhiramat@kernel.org, zanussi@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 1/4] trace: Add trace any kernel object
-Message-Id: <20220518224849.b195cc2380fde43c593d79c5@kernel.org>
-In-Reply-To: <202205130923.SJJN7oez-lkp@intel.com>
-References: <20220512170008.1301613-2-xiehuan09@gmail.com>
-        <202205130923.SJJN7oez-lkp@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        s=k20201202; t=1652881195;
+        bh=YAGu07lD7nk9Sec8Z4RqDJGNVMRvtX91QuhoK9EteBM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qBhRzGBkhJ/WS21W8UymKR/Yj7C9/5Idf0bT5jKtz2m/7qX77Ydy3/D/Gxt8mpFAy
+         m7Gn+S6iy7zsm/GjIuSiU5gYw/mQHit5V4radJO3h6m0NTmPcjR+sxljfoKN/zCRsn
+         gLo0ACR7qA1u9iAjrB+Yw5DroprSEp96IOtSkJPmxN5JTuO2iTv7ki6DofkfRFdJss
+         DwK2WK13qd4UTb65ZRR13MQedDzJIYWleNj5RI/J7Cn9rJdMMwFprNq6gWogWl2HmX
+         dDjSgKkTOwo+xaOfo9hILAgFvEW9QbTfTvUxOLuca4HAMquqajnPjg4tIBzoIgIFQj
+         mZRdk6/KEVTvw==
+Date:   Wed, 18 May 2022 08:49:20 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Lin Yujun <linyujun809@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, johnny.chenyi@huawei.com,
+        chenjiahao16@huawei.com, chenlifu@huawei.com,
+        lizhengyu3@huawei.com, liaochang1@huawei.com, wangzhu9@huawei.com,
+        xuyihang@huawei.com, chris.zjh@huawei.com, zouyipeng@huawei.com
+Subject: Re: [PATCH -next] x86/events:Use struct_size() helper in kzalloc()
+Message-ID: <20220518134920.GA8361@embeddedor>
+References: <20220518131626.109123-1-linyujun809@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518131626.109123-1-linyujun809@huawei.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff,
+On Wed, May 18, 2022 at 09:16:26PM +0800, Lin Yujun wrote:
+> Replace sizeof() with struct_size() to avoid potential integer
+> or heap overflow.
 
-Can you fix these errors, since these looks real bugs.
+This is not exactly what the patch does.
 
-Thank you,
+Your patch is replacing the open-coded calculation of the total amount
+of memory to be allocated for rapl_pmus with struct_size().
 
-On Fri, 13 May 2022 10:01:48 +0800
-kernel test robot <lkp@intel.com> wrote:
+> 
+> Also, address the following sparse warnings:
+> arch/x86/events/rapl.c:685:16: warning: using sizeof on a
+> flexible structure
 
-> Hi Jeff,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on rostedt-trace/for-next]
-> [also build test WARNING on v5.18-rc6 next-20220512]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220513-010820
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-> config: i386-randconfig-c001 (https://download.01.org/0day-ci/archive/20220513/202205130923.SJJN7oez-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 9519dacab7b8afd537811fc2abaceb4d14f4e16a)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/3c91aa291a0fe8b28b02a14827b0c4ca3ebda601
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jeff-Xie/trace-Introduce-objtrace-trigger-to-trace-the-kernel-object/20220513-010820
->         git checkout 3c91aa291a0fe8b28b02a14827b0c4ca3ebda601
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/trace/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    kernel/trace/trace_object.c:259:13: error: incompatible function pointer types initializing 'int (*)(struct seq_file *, struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'int (struct seq_file *, struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
->            .print                  = trace_object_trigger_print,
->                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/trace/trace_object.c:260:12: error: incompatible function pointer types initializing 'int (*)(struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'int (struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
->            .init                   = event_object_trigger_init,
->                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/trace/trace_object.c:261:12: error: incompatible function pointer types initializing 'void (*)(struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'void (struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
->            .free                   = trace_object_trigger_free,
->                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/trace/trace_object.c:266:13: error: incompatible function pointer types initializing 'int (*)(struct seq_file *, struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'int (struct seq_file *, struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
->            .print                  = trace_object_trigger_print,
->                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/trace/trace_object.c:267:12: error: incompatible function pointer types initializing 'int (*)(struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'int (struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
->            .init                   = event_object_trigger_init,
->                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
->    kernel/trace/trace_object.c:268:12: error: incompatible function pointer types initializing 'void (*)(struct event_trigger_ops *, struct event_trigger_data *)' with an expression of type 'void (struct event_trigger_data *)' [-Werror,-Wincompatible-function-pointer-types]
->            .free                   = trace_object_trigger_free,
->                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-> >> kernel/trace/trace_object.c:335:61: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
->                    pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
->                                                         ~~~                  ^~~~~~~~~~~~~~
->                                                         %u
->    include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
->            printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
->                                   ~~~     ^~~~~~~~~~~
->    include/linux/printk.h:446:60: note: expanded from macro 'printk'
->    #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
->                                                        ~~~    ^~~~~~~~~~~
->    include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
->                    _p_func(_fmt, ##__VA_ARGS__);                           \
->                            ~~~~    ^~~~~~~~~~~
->    kernel/trace/trace_object.c:356:3: error: implicit declaration of function 'event_trigger_unregister' [-Werror,-Wimplicit-function-declaration]
->                    event_trigger_unregister(cmd_ops, file, glob+1, trigger_data);
->                    ^
->    kernel/trace/trace_object.c:356:3: note: did you mean 'event_trigger_register'?
->    kernel/trace/trace.h:1650:12: note: 'event_trigger_register' declared here
->    extern int event_trigger_register(struct event_command *cmd_ops,
->               ^
->    kernel/trace/trace_object.c:370:64: error: too few arguments to function call, expected 7, have 4
->            ret = event_trigger_register(cmd_ops, file, glob, trigger_data);
->                  ~~~~~~~~~~~~~~~~~~~~~~                                  ^
->    kernel/trace/trace.h:1650:12: note: 'event_trigger_register' declared here
->    extern int event_trigger_register(struct event_command *cmd_ops,
->               ^
->    1 warning and 8 errors generated.
-> 
-> 
-> vim +335 kernel/trace/trace_object.c
-> 
->    296	
->    297	static int
->    298	event_object_trigger_parse(struct event_command *cmd_ops,
->    299			       struct trace_event_file *file,
->    300			       char *glob, char *cmd, char *param_and_filter)
->    301	{
->    302		struct event_trigger_data *trigger_data;
->    303		struct objtrace_trigger_data *obj_data;
->    304		struct ftrace_event_field *field;
->    305		char *objtrace_cmd, *arg;
->    306		char *param, *filter;
->    307		int ret;
->    308		bool remove;
->    309	
->    310		remove = event_trigger_check_remove(glob);
->    311	
->    312		/*
->    313		 * separate the param and the filter:
->    314		 * objtrace:add:OBJ[:COUNT] [if filter]
->    315		 */
->    316		ret = event_trigger_separate_filter(param_and_filter, &param, &filter, true);
->    317		if (ret)
->    318			return ret;
->    319	
->    320		objtrace_cmd = strsep(&param, ":");
->    321		if (!objtrace_cmd || strcmp(objtrace_cmd, "add")) {
->    322			pr_err("error objtrace command\n");
->    323			return -EINVAL;
->    324		}
->    325	
->    326		arg = strsep(&param, ":");
->    327		if (!arg)
->    328			return -EINVAL;
->    329	
->    330		field = trace_find_event_field(file->event_call, arg);
->    331		if (!field)
->    332			return -EINVAL;
->    333	
->    334		if (field->size != sizeof(void *)) {
->  > 335			pr_err("the size of the %s should be:%ld\n", field->name, sizeof(void *));
->    336			return -EINVAL;
->    337		}
->    338	
->    339		if (remove && !field_exist(file, cmd_ops, field->name))
->    340			return -EINVAL;
->    341	
->    342		obj_data = kzalloc(sizeof(*obj_data), GFP_KERNEL);
->    343		if (!obj_data)
->    344			return -ENOMEM;
->    345	
->    346		obj_data->field = field;
->    347		obj_data->tr = file->tr;
->    348		snprintf(obj_data->objtrace_cmd, OBJTRACE_CMD_LEN, objtrace_cmd);
->    349	
->    350		trigger_data = event_trigger_alloc(cmd_ops, cmd, param, obj_data);
->    351		if (!trigger_data) {
->    352			kfree(obj_data);
->    353			return -ENOMEM;
->    354		}
->    355		if (remove) {
->    356			event_trigger_unregister(cmd_ops, file, glob+1, trigger_data);
->    357			kfree(obj_data);
->    358			kfree(trigger_data);
->    359			return 0;
->    360		}
->    361	
->    362		ret = event_trigger_parse_num(param, trigger_data);
->    363		if (ret)
->    364			goto out_free;
->    365	
->    366		ret = event_trigger_set_filter(cmd_ops, file, filter, trigger_data);
->    367		if (ret < 0)
->    368			goto out_free;
->    369	
->    370		ret = event_trigger_register(cmd_ops, file, glob, trigger_data);
->    371		if (ret)
->    372			goto out_free;
->    373	
->    374		return ret;
->    375	
->    376	 out_free:
->    377		event_trigger_reset_filter(cmd_ops, trigger_data);
->    378		kfree(obj_data);
->    379		kfree(trigger_data);
->    380		return ret;
->    381	}
->    382	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+This does not address this warning because struct_size()
+still make use of sizeof on the struct-with-flex-array,
+internally.
 
+So, the mention to the sparse warning should be removed from
+this changelog text.
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+> 
+> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
+> ---
+>  arch/x86/events/rapl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+> index 77e3a47af5ad..c7e79f0ac04f 100644
+> --- a/arch/x86/events/rapl.c
+> +++ b/arch/x86/events/rapl.c
+> @@ -685,7 +685,7 @@ static int __init init_rapl_pmus(void)
+>  	int maxdie = topology_max_packages() * topology_max_die_per_package();
+>  	size_t size;
+>  
+> -	size = sizeof(*rapl_pmus) + maxdie * sizeof(struct rapl_pmu *);
+> +	size = struct_size(rapl_pmus, pmus, maxdie);
+>  	rapl_pmus = kzalloc(size, GFP_KERNEL);
+
+It seems that in this case, size could be entirely replaced by
+struct_size().
+
+Thanks
+--
+Gustavo

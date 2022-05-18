@@ -2,158 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5E252B0E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 05:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC49952B0ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 05:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiERDtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 23:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
+        id S229575AbiERDwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 23:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiERDs7 (ORCPT
+        with ESMTP id S229590AbiERDw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 23:48:59 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECE7A30AF
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 20:48:55 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id j24so848366wrb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 20:48:55 -0700 (PDT)
+        Tue, 17 May 2022 23:52:29 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB0C84A31
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 20:52:26 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id x12so1017962pgj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 20:52:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4JYs9ujmgM+C4dNGsGcuiGQ+uGcv46nKJhVscrSEdyc=;
-        b=Ai/cv780zL6Dn+9TTJdlYAlIIqSL/7ILMsKW/TBlPXsB1K9iBO3NddqQvRthwBu0mU
-         8XqHkC0tYu7C29VR7QuBzvh/Q10Er2eC2bI5lZOyUZXOoFTOaIOTDrw4LUHwWDNou4h0
-         Rnm8jnmx3FtuUsR8nbPTi+mFkiYSej4kNukfFZcPhjOG6dS9BcEKnXxLjfhJIA4J/Uxr
-         m39rXywrx/dmnfKr3jSlT39iZrNYBixauiM2l2UrQL+1Fovrhjd5NFzUn+AfxWL+xiBX
-         H0RK+840CB2h4Lg9CwgFPLc3e62fh+IMzl8/gJuBYKcJ65jbe3Dm/HZgFWTpmnqE+yKM
-         wyUQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=G71rbip7/LLYSXlMxn5Fb4jLrk7Bgah6j7mSed9BosI=;
+        b=sS7XbaBcd1qpF0aCh0W2Jwgv70gwT4Ug0J3sCEDc1Q9lDkS++RyzbRyStmZ5YOO0BX
+         XjJWDmUc1oenXcbEW1kpShGyImvl9t80wsK6WmFP7pxQM703lalbo7lhC5+/6KX6QpAP
+         4yaz6x5yJEyrqqIXwfQwo2lMu+XDzA3Cf1ZZ+RcfmAa4R14tslDJg1kj8SiKysAd1LSD
+         XTtOQ1BalipuNZ5Mknq4zLt/Ye+g5JUi+EMYjR8yJtbHSa0vCBIJ2jiDij9GhP2b1fOX
+         FvJiGQF644dAnQOBJ2XOYOms9j4vrlnnm/R8lh5nFLdDOEW1Zei1VlX/8uxH7R1oQcgT
+         GjLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4JYs9ujmgM+C4dNGsGcuiGQ+uGcv46nKJhVscrSEdyc=;
-        b=YpBb87nBsd4kO5NrvDs8H4XskXW5o9XMtz+asyT0U8ILXluwKMHdlnOIPqodhXDuJD
-         Ja8HATgrr2Ph8aW1h7O85cxrDgYEyXS740rWLcO+wt95Y4zPZZVtH1J9wvjewzH0mFK8
-         UIAavLFL2BGVGScSE51hXreQ31DVcWbbeLjOC+sMzdgzosdAI6ZPr6v855+856CgMyqi
-         jg2gnT89/Vi7tceUDbYSd9Y2yY2r2jBwuqqplE1gDfifeIE61OZJOx/wtgU0ZFumgUBt
-         u2YSHTYm4LsLvdQ/VPTL2XuTMgWQKD3uMr0CCm7SMOEeDtXqL6HLhy0qoVzPAj84d4hr
-         qhAw==
-X-Gm-Message-State: AOAM533ErH4iixDo10us8V4U1jwBQPNveFNqGmVnTeVhKjA6hQFIwW+K
-        GBhD7ZjrbJxqmslcXUmLqr/6TFyjpJNuSostpV3Bnw==
-X-Google-Smtp-Source: ABdhPJx1an0zbKi5aCIuzObOxcygx3WowhwJBUcvgNAUe1kM/D6tAZ+En6I1j0F3aNxXM3oiqpY79lHmWl4l+IAYEn4=
-X-Received: by 2002:a05:6000:78b:b0:20d:101b:2854 with SMTP id
- bu11-20020a056000078b00b0020d101b2854mr8232457wrb.300.1652845733419; Tue, 17
- May 2022 20:48:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=G71rbip7/LLYSXlMxn5Fb4jLrk7Bgah6j7mSed9BosI=;
+        b=HBGIS3OKIHouzcNlI2uolep8riK/DB6xW7uk6aWUBvuWvS6bkUcCbCoSo75La961Gi
+         QEJGx/mYAlkzMZzyJoLfm2B5Ha3G5Q+rTjz/NO2hKIA7EjE+nxyHRFPw5K+XkvKGdTbX
+         3SvNi/4Gl/L6VCa+4JowZDWO7qHHyeck92BQ6st8sQsEdtzHxqvXhb6EDF9siWGP7hf6
+         /XLFvz962R2ogWFYuvTMbCu1Q14MRyXXFmpFrKkxSbT6QvjRDFT6ZYwinIFLdwVTc0z6
+         jYsYYwGzmye6jX4RgkdxfEh1sQQqKAoFmrUqxUjRacOW1nz/Xm9h6ez2Rl+KiXNv3z8G
+         q2EA==
+X-Gm-Message-State: AOAM532fVJlbKPp82CIU7uWCW+r0jTwVzsRatQ1X0Biobf2Wde3arrzN
+        y3SKeg+zlvbNoqoqrvKmHxBF
+X-Google-Smtp-Source: ABdhPJyn0zWz/SCS7bu223+7utEv5bkwaN8Pb4hOqt4M5DSib9uBdw4PMShPcABUrkoa8U5FuQRDLg==
+X-Received: by 2002:a05:6a00:170a:b0:50d:3e40:9e0 with SMTP id h10-20020a056a00170a00b0050d3e4009e0mr25613004pfc.48.1652845945391;
+        Tue, 17 May 2022 20:52:25 -0700 (PDT)
+Received: from thinkpad ([117.207.31.8])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170903228c00b0015e8d4eb29csm377690plh.230.2022.05.17.20.52.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 20:52:24 -0700 (PDT)
+Date:   Wed, 18 May 2022 09:22:11 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, linux-nvme@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jens Axboe <axboe@fb.com>,
+        Veerabhadrarao Badiganti <quic_vbadigan@quicinc.com>,
+        quic_krichai@quicinc.com, Nitin Rawat <quic_nitirawa@quicinc.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Andy Gross <agross@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rajat Jain <rajatja@google.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        Rama Krishna <quic_ramkri@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: Re: [PATCH 2/3] PCI: dwc: qcom: Set suspend_poweroff flag for SC7280
+Message-ID: <20220518035211.GA4791@thinkpad>
+References: <20220517151134.GB4528@thinkpad>
+ <20220517171857.GA1083896@bhelgaas>
 MIME-Version: 1.0
-References: <20220513040519.1499333-1-irogers@google.com> <20220513040519.1499333-5-irogers@google.com>
- <CAM9d7ciD=uH7rNSmK5oJEksPYsagwpQA1J-MC3N0RpzLaakscg@mail.gmail.com>
-In-Reply-To: <CAM9d7ciD=uH7rNSmK5oJEksPYsagwpQA1J-MC3N0RpzLaakscg@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 17 May 2022 20:48:41 -0700
-Message-ID: <CAP-5=fWBDBHcsWOkVzC-r51grgTrbqJOHrZCpym6nHEUiFVV8g@mail.gmail.com>
-Subject: Re: [PATCH 4/7] perf test: Basic mmap use skip
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
-        Carsten Haitzler <carsten.haitzler@arm.com>,
-        Marco Elver <elver@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220517171857.GA1083896@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 8:43 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Thu, May 12, 2022 at 9:05 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > If opening the first event fails for basic mmap it is more likely
-> > permission related that a true error. Mark the test as skip in this
-> > case and add a skip reason.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/tests/mmap-basic.c | 22 ++++++++++++++++++++--
-> >  1 file changed, 20 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/perf/tests/mmap-basic.c b/tools/perf/tests/mmap-basic.c
-> > index c3c17600f29c..32f0a63fa157 100644
-> > --- a/tools/perf/tests/mmap-basic.c
-> > +++ b/tools/perf/tests/mmap-basic.c
-> > @@ -31,7 +31,7 @@
-> >   */
-> >  static int test__basic_mmap(struct test_suite *test __maybe_unused, int subtest __maybe_unused)
-> >  {
-> > -       int err = -1;
-> > +       int err = TEST_FAIL;
-> >         union perf_event *event;
-> >         struct perf_thread_map *threads;
-> >         struct perf_cpu_map *cpus;
-> > @@ -83,6 +83,14 @@ static int test__basic_mmap(struct test_suite *test __maybe_unused, int subtest
-> >                 evsels[i] = evsel__newtp("syscalls", name);
-> >                 if (IS_ERR(evsels[i])) {
-> >                         pr_debug("evsel__new(%s)\n", name);
-> > +                       if (i == 0) {
-> > +                               /*
-> > +                                * Failure to open first event is more likely
-> > +                                * related to permissions so flag the failure as
-> > +                                * a skip.
-> > +                                */
-> > +                               err = TEST_SKIP;
->
-> This is not about perf_event_open() but it accesses
-> tracefs to get the type number of the trace event.
->
-> The evsel__newtp() seems to return the errno in a
-> negative number.  It'd be better to check if it's
-> -EACCES actually.
+On Tue, May 17, 2022 at 12:18:57PM -0500, Bjorn Helgaas wrote:
+> [+cc Prasad, Andy, Rob, Krzysztof, Rajat, Saheed, Rama, Stephen,
+> Dmitry, Kalle for connection to https://lore.kernel.org/lkml/CAE-0n53ho2DX2rqQMvvKAuDCfsWW62TceTaNPzv5Mn_NQ-U6dA@mail.gmail.com/T/]
+> 
+> Subject line convention for this file is "PCI: qcom:" (not "PCI: dwc:
+> qcom:").
+> 
+> Find this from "git log --oneline drivers/pci/controller/dwc/pcie-qcom.c".
+> 
+> On Tue, May 17, 2022 at 08:41:34PM +0530, Manivannan Sadhasivam wrote:
+> > On Mon, May 16, 2022 at 03:19:50PM -0500, Bjorn Helgaas wrote:
+> > > On Fri, May 13, 2022 at 04:30:26PM +0530, Manivannan Sadhasivam wrote:
+> > > > For aggressive power saving on SC7280 SoCs, the power for the
+> > > > PCI devices will be taken off during system suspend. Hence,
+> > > > notify the same to the PCI device drivers using
+> > > > "suspend_poweroff" flag so that the drivers can prepare the PCI
+> > > > devices to handle the poweroff and recover them during resume.
+> > > 
+> > > No doubt "power ... will be taken off during system suspend" is
+> > > true, but this isn't very informative.  Is this a property of
+> > > SC7280?  A choice made by the SC7280 driver?  Why is this not
+> > > applicable to other systems?
+> > 
+> > The SC7280's RPMh firmware is cutting off the PCIe power domain
+> > during system suspend. And as I explained in previous patch, the RC
+> > driver itself may put the devices in D3cold conditionally on this
+> > platform. The reason is to save power as this chipset is being used
+> > in Chromebooks.
+> 
+> It looks like this should be squashed into the patch you mentioned:
+> https://lore.kernel.org/lkml/CAE-0n53ho2DX2rqQMvvKAuDCfsWW62TceTaNPzv5Mn_NQ-U6dA@mail.gmail.com/T/
+> 
+> If Prasad's patch is applied without this, devices will be powered
+> off, but nvme will not be prepared for it.  Apparently something would
+> be broken in that case?
+> 
 
-Thanks, done in v2.
+Yes, but Prasad's patch is not yet reviewed so likely not get merged until
+further respins.
 
-Ian
+> Also, I think this patch should be reordered so the nvme driver is
+> prepared for suspend_poweroff before the qcom driver starts setting
+> it.  Otherwise there's a window where qcom sets suspend_poweroff and
+> powers off devices, but nvme doesn't know about it, and I assume
+> something will be broken in that case?
+> 
 
-> Thanks,
-> Namhyung
->
->
-> > +                       }
-> >                         goto out_delete_evlist;
-> >                 }
-> >
-> > @@ -166,4 +174,14 @@ static int test__basic_mmap(struct test_suite *test __maybe_unused, int subtest
-> >         return err;
-> >  }
-> >
-> > -DEFINE_SUITE("Read samples using the mmap interface", basic_mmap);
-> > +static struct test_case tests__basic_mmap[] = {
-> > +       TEST_CASE_REASON("Read samples using the mmap interface",
-> > +                        basic_mmap,
-> > +                        "permissions"),
-> > +       {       .name = NULL, }
-> > +};
-> > +
-> > +struct test_suite suite__basic_mmap = {
-> > +       .desc = "Read samples using the mmap interface",
-> > +       .test_cases = tests__basic_mmap,
-> > +};
-> > --
-> > 2.36.0.550.gb090851708-goog
-> >
+As per my understanding, patches in a series should not have build dependency
+but they may depend on each other for functionality.
+
+But I don't have any issue in reordering the patches. Will do.
+
+> Please mention RPMh in the commit log, along with the specific
+> connection with system suspend, i.e., what OS action enables RPMh to
+> cut power.
+> 
+
+Okay, will do.
+
+Thanks,
+Mani
+
+> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > > ---
+> > > >  drivers/pci/controller/dwc/pcie-qcom.c | 6 ++++++
+> > > >  1 file changed, 6 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > > > index 6ab90891801d..4b0ad2827f8f 100644
+> > > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > > > @@ -199,6 +199,7 @@ struct qcom_pcie_cfg {
+> > > >  	unsigned int has_ddrss_sf_tbu_clk:1;
+> > > >  	unsigned int has_aggre0_clk:1;
+> > > >  	unsigned int has_aggre1_clk:1;
+> > > > +	unsigned int suspend_poweroff:1;
+> > > >  };
+> > > >  
+> > > >  struct qcom_pcie {
+> > > > @@ -1220,6 +1221,10 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+> > > >  	if (pcie->cfg->pipe_clk_need_muxing)
+> > > >  		clk_set_parent(res->pipe_clk_src, res->ref_clk_src);
+> > > >  
+> > > > +	/* Indicate PCI device drivers that the power will be taken off during system suspend */
+> > > > +	if (pcie->cfg->suspend_poweroff)
+> > > > +		pci->pp.bridge->suspend_poweroff = true;
+> > > > +
+> > > >  	ret = clk_bulk_prepare_enable(res->num_clks, res->clks);
+> > > >  	if (ret < 0)
+> > > >  		goto err_disable_regulators;
+> > > > @@ -1548,6 +1553,7 @@ static const struct qcom_pcie_cfg sc7280_cfg = {
+> > > >  	.ops = &ops_1_9_0,
+> > > >  	.has_tbu_clk = true,
+> > > >  	.pipe_clk_need_muxing = true,
+> > > > +	.suspend_poweroff = true,
+> > > >  };
+> > > >  
+> > > >  static const struct dw_pcie_ops dw_pcie_ops = {
+> > > > -- 
+> > > > 2.25.1
+> > > > 
+> > 
+> > -- 
+> > மணிவண்ணன் சதாசிவம்
+
+-- 
+மணிவண்ணன் சதாசிவம்

@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E7952C25F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0306952C280
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241504AbiERSg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S241535AbiERSlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241296AbiERSg4 (ORCPT
+        with ESMTP id S241489AbiERSkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:36:56 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796321C345C;
-        Wed, 18 May 2022 11:36:55 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id q135so5154018ybg.10;
-        Wed, 18 May 2022 11:36:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z+wFB5Fdlp80HPZ0rDBxYUuhgX0VkiUoP9qDKbx3W6U=;
-        b=i6uC2Gh7/Iu4IYcfm/izqjPXBLaBPFh9F7S/XxDzPCmeusV+g95LEEU2TxZ5+Eybcn
-         vSzevKbVChVrkixF3JhT34XLebrh3DBiRdNizqnmoccc/nzrX0H+Ex8ugdsNGzIh/3mp
-         DURbMuGpIoI7NC9lUr37VzbvjkZDgfAUGnfu5dUJGaQnxnp+qHdXtIKe6ZGFOdDoWxUD
-         taiDR28BLZGYDqhf0KXaaSv1F61XaDLid7rjBpqWmRBCp9r4fm4agcJmke60LmtzsERZ
-         Qdk63z7GJw7R0h4N0rg79sOYS+UIrCGEEr46NyYvPgb2cHD7dn6HAE+GYbmg6lnG42D6
-         4u9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z+wFB5Fdlp80HPZ0rDBxYUuhgX0VkiUoP9qDKbx3W6U=;
-        b=2jCpqcCFrCNOBNUdtDqBlJeqvsuFg+OVf4NK7iayON38XOFpdngItq3YRP79ABpxfa
-         AsEJkxN2xpTqlPjchWkYDenJFLRaDDHGiYTAxSigpKbsmdK1vQAU0SxwmrdtRFYp+29J
-         OAJV0ArGfrEwy0HC8q6oRvNF7YR5gl+aNLLJqVBOHhAi7czTGEoSNBK605Jh963objFn
-         7rqumDaz5B8WIkcpFbrtTN76WdqVDCZDSH9pURkYIKXgpwLzz1RGLXZX8CihN+AM5Lbe
-         i1yaD2xFZkI4ld2eCgNR/xtOJFWwFOQw8mxvEh30lhErmICX1aAaThBQ/6CAJqYjcFRD
-         abQQ==
-X-Gm-Message-State: AOAM530kcWi3LG7rSlhuAX9heYXd0QRjYy5lqE7s1tNRxb/PTEkO186a
-        O4sXFVvRa3rIv4k8T6dOpTE1ucMkb+GP0BVK4BU=
-X-Google-Smtp-Source: ABdhPJxomAexeHpFDfrCohF3Dr3KktAL/UvFbfVdhyWtHW79Q4HxbdlPH0duXEI0EhEhmuUukOhmCshmVdmPlacd24s=
-X-Received: by 2002:a05:6902:1407:b0:64a:ecc7:aa2 with SMTP id
- z7-20020a056902140700b0064aecc70aa2mr937661ybu.645.1652899014699; Wed, 18 May
- 2022 11:36:54 -0700 (PDT)
+        Wed, 18 May 2022 14:40:52 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A23CDBB
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652899249; x=1684435249;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4WtiDK54AT5D3xJgbES/KqYOfqBsw80Ux8SMTshx1Sk=;
+  b=VWLiWaEUwQiCYpTlGyPo42/ClISZ8jfdmDM/+OjI1SvlwD5Hg8AH/Z+D
+   4UGFeJfL1RdrHD3qRpdXYfHMVlpLtcntelwR3NXm3fO39/KxVvbOkkfjb
+   COdKmv099OxcbdqfgtTvD8+qVwKxa3EJGyjh6+wtQR7XYgSRL7lzbDvMC
+   7O/scRrvmHf3+NXRlOHX2yQQY9crtZDag4Cf1MqwDEW0jkfM8zEat0mnT
+   rcRKqLqtubVpuh9A8gXwSSNJOYmrnJZOFT5gRD73bwIG25bXuu6QUMhW4
+   Vxdp+BZi8bPa/nksAy5CEz4EbcqdMdyTekxsxXLtpQ3V3FfnqDmxmcSeO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="270663372"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="270663372"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:38:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="597972314"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 18 May 2022 11:38:44 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrOZI-0002W0-5H;
+        Wed, 18 May 2022 18:38:44 +0000
+Date:   Thu, 19 May 2022 02:38:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [hare-scsi-devel:auth.v12 10/11] <command-line>: warning: format
+ '%lu' expects argument of type 'long unsigned int', but argument 9 has type
+ 'size_t' {aka 'unsigned int'}
+Message-ID: <202205190200.Z1ecsIW1-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220511183210.5248-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220511183210.5248-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <CACRpkdYQAsam_v0XHm-A_trbyifj1pBQq5N+zc9KVw1vXVTYUw@mail.gmail.com>
-In-Reply-To: <CACRpkdYQAsam_v0XHm-A_trbyifj1pBQq5N+zc9KVw1vXVTYUw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 18 May 2022 19:36:28 +0100
-Message-ID: <CA+V-a8v_bCtoipKXyYoHsSku0-AbABi6Wj0RsHrj7_Sk4MUJyg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] gpio: gpiolib: Add ngirq member to struct gpio_irq_chip
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git auth.v12
+head:   94e00927012f48bfff384a6e5e40d8e6a34a1ae5
+commit: e858b89b4b9d5cbe4d533c16feaf4c5bfca10e5b [10/11] nvmet-auth: Diffie-Hellman key exchange support
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220519/202205190200.Z1ecsIW1-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=e858b89b4b9d5cbe4d533c16feaf4c5bfca10e5b
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel auth.v12
+        git checkout e858b89b4b9d5cbe4d533c16feaf4c5bfca10e5b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/nvme/target/
 
-Thank you for the review.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Fri, May 13, 2022 at 9:47 PM Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> On Wed, May 11, 2022 at 8:32 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> > Supported GPIO IRQs by the chip is not always equal to the number of GPIO
-> > pins. For example on Renesas RZ/G2L SoC where it has GPIO0-122 pins but at
-> > a give point a maximum of only 32 GPIO pins can be used as IRQ lines in
-> > the IRQC domain.
-> >
-> > This patch adds ngirq member to struct gpio_irq_chip and passes this as a
-> > size to irq_domain_create_hierarchy()/irq_domain_create_simple() if it is
-> > being set in the driver otherwise fallbacks to using ngpio.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> As Geert says, I think you can just use .valid_mask for this,
-> what do you say?
->
-I don't think Geert is suggesting that. The .valid_mask option is one
-time setting but what I need is something dynamic i.e. out of 392 GPIO
-pins any 32 can be used as an interrupt pin. Also with this patch we
-also save on memory [0].
+All warnings (new ones prefixed by >>):
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/kernel/irq/irqdomain.c?h=next-20220518#n153
+   drivers/nvme/target/fabrics-cmd-auth.c: In function 'nvmet_auth_challenge':
+>> <command-line>: warning: format '%lu' expects argument of type 'long unsigned int', but argument 9 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
+   drivers/nvme/target/fabrics-cmd-auth.c:7:21: note: in expansion of macro 'KBUILD_MODNAME'
+       7 | #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+         |                     ^~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:29: note: in expansion of macro 'pr_fmt'
+     134 |                 func(&id, ##__VA_ARGS__);               \
+         |                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:152:9: note: in expansion of macro '__dynamic_func_call'
+     152 |         __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
+     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:570:9: note: in expansion of macro 'dynamic_pr_debug'
+     570 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~
+   drivers/nvme/target/fabrics-cmd-auth.c:371:9: note: in expansion of macro 'pr_debug'
+     371 |         pr_debug("%s: ctrl %d qid %d seq %d transaction %d hl %d dhvlen %lu\n",
+         |         ^~~~~~~~
 
-Cheers,
-Prabhakar
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F10F52BCB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEC152BC62
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbiERMty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S236852AbiERMun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236691AbiERMtu (ORCPT
+        with ESMTP id S236836AbiERMuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:49:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C294E18DAC3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:49:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652878186;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ud+EoewnZynIABdLMtBZtAj7r2i0k69OeMeQkGeRK8k=;
-        b=FerM3AaQf4sOabJ6AbxkBUzVic7OrT3xI5qr0rc2RHclIwOMF+929wSHNzNcTwDSLKSWrj
-        iipYnDh9jPGoEhPJk31dKHSQZNXlIPOQNFI9WVvgrMCKF/UBtVIMXTUOGLsRfACNUqgzDl
-        ahK9HPAtBBQBo+mGnuik0/8/xqyXiH8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-449-y84T1USJP3O-JM7cwBbXYA-1; Wed, 18 May 2022 08:49:43 -0400
-X-MC-Unique: y84T1USJP3O-JM7cwBbXYA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C1C429DD9B4;
-        Wed, 18 May 2022 12:49:43 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C65C42026D6A;
-        Wed, 18 May 2022 12:49:40 +0000 (UTC)
-Message-ID: <57aa037a77ba8d8e182d8c77233c5954dd2fa2d9.camel@redhat.com>
-Subject: Re: [PATCH v3 14/34] KVM: x86: Introduce .post_hv_l2_tlb_flush()
- nested hook
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Date:   Wed, 18 May 2022 15:49:39 +0300
-In-Reply-To: <871qwrui3o.fsf@redhat.com>
-References: <20220414132013.1588929-1-vkuznets@redhat.com>
-         <20220414132013.1588929-15-vkuznets@redhat.com>
-         <deae695da02d7f22dcfa4635eec53ab61baf9026.camel@redhat.com>
-         <871qwrui3o.fsf@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 18 May 2022 08:50:40 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB3819CEF6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:50:38 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h14so2579924wrc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:50:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=YnjPuDtKehEZ16N5Zgmn2x7hmWmqmy/nCxinGtILWX0=;
+        b=giTUBGlRB+fUVZOLF3htTWzZv7+nmc9HNpIKQ0Rwi0wrWmfDKnom2uwKtt/TZYW39+
+         SgG65dBpgkgFT5ZHXVQjELnqDAGxJzLC3nu3ZxjQXlOY2PQmbHw4yG1ENR4Mqf2QrOBJ
+         ovFLN2gmDNOykIooiyrEbk6sdge/oNzuItouxxYex/JOtME65M3uK8T4Tv4U/jRPUkAu
+         7mNZVmShMDmjmepP7FFUlkLFYCUc3ibMz3roizOzGPcrjctenTZ+zSgYEIEGxpcCdQLJ
+         DLtt0XC3QfhDCwa9LVUUQtOS4gWX/9TZgU4cpOAHApqpixey+hoX2Sg7Vt3Hccc2OVz9
+         u/3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=YnjPuDtKehEZ16N5Zgmn2x7hmWmqmy/nCxinGtILWX0=;
+        b=XS72Tiq85lHJPk1chUfu6mW+hBgneqq2gnw8ND3tEsUGu7INyfNhB5M40vxts/R8YB
+         8GKs8K/A4YJTLHcioK1Rwa7Sg5wxssTxjnMWMtaomBHgPrK7qt9Iy4XPDnrVA8gq9BYN
+         ZTMFvK+z59WkQrr7ANhs/4Oi59S2VSFCqxHcRX0HfPZ87A8dxTBIOyksWXJw824quQpv
+         ISYfv8ZWI7dwQMYigF5najBlCj5RjxX2I3JEtoGNuXHoftpCVME7Ix+Zt60ltGW5yAp/
+         xG6dMvcPso7EMwVKljpBa2VW+CYWNGZ3mXSQBdsZOLOpVrMTpbGIztvFR/b8tV7Hfqyd
+         Atrg==
+X-Gm-Message-State: AOAM531Os1lqd9+CdIVBFrs5uVZ4j9yI3NFVPSnH26kB3ULr1X7QnjLs
+        y4ing+XWOcSldcaUQlkIhreHmg==
+X-Google-Smtp-Source: ABdhPJz1FvaiCtH5RJjqWdRc78yrpCUCxFafFi08XdY7lxorlichdoskdg9JTqOymv6Rmhyg0rWOvQ==
+X-Received: by 2002:a05:6000:793:b0:20c:c809:9af1 with SMTP id bu19-20020a056000079300b0020cc8099af1mr22342778wrb.370.1652878236544;
+        Wed, 18 May 2022 05:50:36 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id r3-20020a1c2b03000000b003942a244f39sm5277111wmr.18.2022.05.18.05.50.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 05:50:35 -0700 (PDT)
+Date:   Wed, 18 May 2022 13:50:34 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
+Message-ID: <YoTrmjuct3ctvFim@google.com>
+References: <YoOJ/T4QRKC+fAZE@google.com>
+ <97cba3e1-4ef7-0a17-8456-e0787d6702c6@kernel.dk>
+ <YoOT7Cyobsed5IE3@google.com>
+ <d503d5ff-4bc5-2bd0-00d3-cd7b0a0724cb@kernel.dk>
+ <YoOW2+ov8KF1YcYF@google.com>
+ <3d271554-9ddc-07ad-3ff8-30aba31f8bf2@kernel.dk>
+ <YoOcYR15Jhkw2XwL@google.com>
+ <f34c85cc-71a5-59d4-dd7a-cc07e2af536c@kernel.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f34c85cc-71a5-59d4-dd7a-cc07e2af536c@kernel.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,150 +79,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-18 at 14:43 +0200, Vitaly Kuznetsov wrote:
-> Maxim Levitsky <mlevitsk@redhat.com> writes:
-> 
-> > On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
-> > > Hyper-V supports injecting synthetic L2->L1 exit after performing
-> > > L2 TLB flush operation but the procedure is vendor specific.
-> > > Introduce .post_hv_l2_tlb_flush() nested hook for it.
-> > > 
-> > > Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> > > ---
-> > >  arch/x86/include/asm/kvm_host.h |  1 +
-> > >  arch/x86/kvm/Makefile           |  3 ++-
-> > >  arch/x86/kvm/svm/hyperv.c       | 11 +++++++++++
-> > >  arch/x86/kvm/svm/hyperv.h       |  2 ++
-> > >  arch/x86/kvm/svm/nested.c       |  1 +
-> > >  arch/x86/kvm/vmx/evmcs.c        |  4 ++++
-> > >  arch/x86/kvm/vmx/evmcs.h        |  1 +
-> > >  arch/x86/kvm/vmx/nested.c       |  1 +
-> > >  8 files changed, 23 insertions(+), 1 deletion(-)
-> > >  create mode 100644 arch/x86/kvm/svm/hyperv.c
-> > > 
-> > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > > index 8b2a52bf26c0..ce62fde5f4ff 100644
-> > > --- a/arch/x86/include/asm/kvm_host.h
-> > > +++ b/arch/x86/include/asm/kvm_host.h
-> > > @@ -1558,6 +1558,7 @@ struct kvm_x86_nested_ops {
-> > >  	int (*enable_evmcs)(struct kvm_vcpu *vcpu,
-> > >  			    uint16_t *vmcs_version);
-> > >  	uint16_t (*get_evmcs_version)(struct kvm_vcpu *vcpu);
-> > > +	void (*post_hv_l2_tlb_flush)(struct kvm_vcpu *vcpu);
-> > >  };
-> > >  
-> > >  struct kvm_x86_init_ops {
-> > > diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-> > > index 30f244b64523..b6d53b045692 100644
-> > > --- a/arch/x86/kvm/Makefile
-> > > +++ b/arch/x86/kvm/Makefile
-> > > @@ -25,7 +25,8 @@ kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
-> > >  			   vmx/evmcs.o vmx/nested.o vmx/posted_intr.o
-> > >  kvm-intel-$(CONFIG_X86_SGX_KVM)	+= vmx/sgx.o
-> > >  
-> > > -kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o svm/sev.o
-> > > +kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o \
-> > > +			   svm/sev.o svm/hyperv.o
-> > >  
-> > >  ifdef CONFIG_HYPERV
-> > >  kvm-amd-y		+= svm/svm_onhyperv.o
-> > > diff --git a/arch/x86/kvm/svm/hyperv.c b/arch/x86/kvm/svm/hyperv.c
-> > > new file mode 100644
-> > > index 000000000000..c0749fc282fe
-> > > --- /dev/null
-> > > +++ b/arch/x86/kvm/svm/hyperv.c
-> > > @@ -0,0 +1,11 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * AMD SVM specific code for Hyper-V on KVM.
-> > > + *
-> > > + * Copyright 2022 Red Hat, Inc. and/or its affiliates.
-> > > + */
-> > > +#include "hyperv.h"
-> > > +
-> > > +void svm_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu)
-> > > +{
-> > > +}
-> > > diff --git a/arch/x86/kvm/svm/hyperv.h b/arch/x86/kvm/svm/hyperv.h
-> > > index 8cf702fed7e5..a2b0d7580b0d 100644
-> > > --- a/arch/x86/kvm/svm/hyperv.h
-> > > +++ b/arch/x86/kvm/svm/hyperv.h
-> > > @@ -48,4 +48,6 @@ static inline void nested_svm_hv_update_vm_vp_ids(struct kvm_vcpu *vcpu)
-> > >  	hv_vcpu->nested.vp_id = hve->hv_vp_id;
-> > >  }
-> > >  
-> > > +void svm_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu);
-> > > +
-> > >  #endif /* __ARCH_X86_KVM_SVM_HYPERV_H__ */
-> > > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> > > index 2d1a76343404..de3f27301b5c 100644
-> > > --- a/arch/x86/kvm/svm/nested.c
-> > > +++ b/arch/x86/kvm/svm/nested.c
-> > > @@ -1665,4 +1665,5 @@ struct kvm_x86_nested_ops svm_nested_ops = {
-> > >  	.get_nested_state_pages = svm_get_nested_state_pages,
-> > >  	.get_state = svm_get_nested_state,
-> > >  	.set_state = svm_set_nested_state,
-> > > +	.post_hv_l2_tlb_flush = svm_post_hv_l2_tlb_flush,
-> > >  };
-> > > diff --git a/arch/x86/kvm/vmx/evmcs.c b/arch/x86/kvm/vmx/evmcs.c
-> > > index 87e3dc10edf4..e390e67496df 100644
-> > > --- a/arch/x86/kvm/vmx/evmcs.c
-> > > +++ b/arch/x86/kvm/vmx/evmcs.c
-> > > @@ -437,3 +437,7 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
-> > >  
-> > >  	return 0;
-> > >  }
-> > > +
-> > > +void vmx_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu)
-> > > +{
-> > > +}
-> > > diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-> > > index 8d70f9aea94b..b120b0ead4f3 100644
-> > > --- a/arch/x86/kvm/vmx/evmcs.h
-> > > +++ b/arch/x86/kvm/vmx/evmcs.h
-> > > @@ -244,5 +244,6 @@ int nested_enable_evmcs(struct kvm_vcpu *vcpu,
-> > >  			uint16_t *vmcs_version);
-> > >  void nested_evmcs_filter_control_msr(u32 msr_index, u64 *pdata);
-> > >  int nested_evmcs_check_controls(struct vmcs12 *vmcs12);
-> > > +void vmx_post_hv_l2_tlb_flush(struct kvm_vcpu *vcpu);
-> > >  
-> > >  #endif /* __KVM_X86_VMX_EVMCS_H */
-> > > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> > > index ee88921c6156..cc6c944b5815 100644
-> > > --- a/arch/x86/kvm/vmx/nested.c
-> > > +++ b/arch/x86/kvm/vmx/nested.c
-> > > @@ -6850,4 +6850,5 @@ struct kvm_x86_nested_ops vmx_nested_ops = {
-> > >  	.write_log_dirty = nested_vmx_write_pml_buffer,
-> > >  	.enable_evmcs = nested_enable_evmcs,
-> > >  	.get_evmcs_version = nested_get_evmcs_version,
-> > > +	.post_hv_l2_tlb_flush = vmx_post_hv_l2_tlb_flush,
-> > >  };
+On Tue, 17 May 2022, Jens Axboe wrote:
+
+> On 5/17/22 7:00 AM, Lee Jones wrote:
+> > On Tue, 17 May 2022, Jens Axboe wrote:
 > > 
-> > I think that the name of the function is misleading, since it is not called
-> > after each L2 HV tlb flush, but only after a flush which needs to inject
-> > that synthetic VM exit.
+> >> On 5/17/22 6:36 AM, Lee Jones wrote:
+> >>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>
+> >>>> On 5/17/22 6:24 AM, Lee Jones wrote:
+> >>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>>>
+> >>>>>> On 5/17/22 5:41 AM, Lee Jones wrote:
+> >>>>>>> Good afternoon Jens, Pavel, et al.,
+> >>>>>>>
+> >>>>>>> Not sure if you are presently aware, but there appears to be a
+> >>>>>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
+> >>>>>>> in Stable v5.10.y.
+> >>>>>>>
+> >>>>>>> The full sysbot report can be seen below [0].
+> >>>>>>>
+> >>>>>>> The C-reproducer has been placed below that [1].
+> >>>>>>>
+> >>>>>>> I had great success running this reproducer in an infinite loop.
+> >>>>>>>
+> >>>>>>> My colleague reverse-bisected the fixing commit to:
+> >>>>>>>
+> >>>>>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
+> >>>>>>>   Author: Jens Axboe <axboe@kernel.dk>
+> >>>>>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
+> >>>>>>>
+> >>>>>>>        io-wq: have manager wait for all workers to exit
+> >>>>>>>
+> >>>>>>>        Instead of having to wait separately on workers and manager, just have
+> >>>>>>>        the manager wait on the workers. We use an atomic_t for the reference
+> >>>>>>>        here, as we need to start at 0 and allow increment from that. Since the
+> >>>>>>>        number of workers is naturally capped by the allowed nr of processes,
+> >>>>>>>        and that uses an int, there is no risk of overflow.
+> >>>>>>>
+> >>>>>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> >>>>>>>
+> >>>>>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
+> >>>>>>>     1 file changed, 22 insertions(+), 8 deletions(-)
+> >>>>>>
+> >>>>>> Does this fix it:
+> >>>>>>
+> >>>>>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
+> >>>>>> Author: Jens Axboe <axboe@kernel.dk>
+> >>>>>> Date:   Fri Mar 5 12:59:30 2021 -0700
+> >>>>>>
+> >>>>>>     io-wq: fix race in freeing 'wq' and worker access
+> >>>>>>
+> >>>>>> Looks like it didn't make it into 5.10-stable, but we can certainly
+> >>>>>> rectify that.
+> >>>>>
+> >>>>> Thanks for your quick response Jens.
+> >>>>>
+> >>>>> This patch doesn't apply cleanly to v5.10.y.
+> >>>>
+> >>>> This is probably why it never made it into 5.10-stable :-/
+> >>>
+> >>> Right.  It doesn't apply at all unfortunately.
+> >>>
+> >>>>> I'll have a go at back-porting it.  Please bear with me.
+> >>>>
+> >>>> Let me know if you into issues with that and I can help out.
+> >>>
+> >>> I think the dependency list is too big.
+> >>>
+> >>> Too much has changed that was never back-ported.
+> >>>
+> >>> Actually the list of patches pertaining to fs/io-wq.c alone isn't so
+> >>> bad, I did start to back-port them all but some of the big ones have
+> >>> fs/io_uring.c changes incorporated and that list is huge (256 patches
+> >>> from v5.10 to the fixing patch mentioned above).
+> >>
+> >> The problem is that 5.12 went to the new worker setup, and this patch
+> >> landed after that even though it also applies to the pre-native workers.
+> >> Hence the dependency chain isn't really as long as it seems, probably
+> >> just a few patches backporting the change references and completions.
+> >>
+> >> I'll take a look this afternoon.
 > > 
-> > I think something like 'inject_synthetic_l2_hv_tlb_flush_vmexit' 
-> > (not a good name IMHO, but you get the idea) would be better.
-> > 
+> > Thanks Jens.  I really appreciate it.
 > 
-> Naming is hard indeed,
+> Can you see if this helps? Untested...
 
-Indeed :-)
+What base does this apply against please?
 
-https://www.monkeyuser.com/2019/_/
+I tried Mainline and v5.10.116 and both failed.
 
-
+> diff --git a/fs/io-wq.c b/fs/io-wq.c
+> index 3d5fc76b92d0..35af489bcaf6 100644
+> --- a/fs/io-wq.c
+> +++ b/fs/io-wq.c
+> @@ -125,6 +125,9 @@ struct io_wq {
+>  	refcount_t refs;
+>  	struct completion done;
+>  
+> +	atomic_t worker_refs;
+> +	struct completion worker_done;
+> +
+>  	struct hlist_node cpuhp_node;
+>  
+>  	refcount_t use_refs;
+> @@ -250,8 +253,8 @@ static void io_worker_exit(struct io_worker *worker)
+>  	raw_spin_unlock_irq(&wqe->lock);
+>  
+>  	kfree_rcu(worker, rcu);
+> -	if (refcount_dec_and_test(&wqe->wq->refs))
+> -		complete(&wqe->wq->done);
+> +	if (atomic_dec_and_test(&wqe->wq->worker_refs))
+> +		complete(&wqe->wq->worker_done);
+>  }
+>  
+>  static inline bool io_wqe_run_queue(struct io_wqe *wqe)
+> @@ -695,9 +698,13 @@ static bool create_io_worker(struct io_wq *wq, struct io_wqe *wqe, int index)
+>  	worker->wqe = wqe;
+>  	spin_lock_init(&worker->lock);
+>  
+> +	atomic_inc(&wq->worker_refs);
+> +
+>  	worker->task = kthread_create_on_node(io_wqe_worker, worker, wqe->node,
+>  				"io_wqe_worker-%d/%d", index, wqe->node);
+>  	if (IS_ERR(worker->task)) {
+> +		if (atomic_dec_and_test(&wq->worker_refs))
+> +			complete(&wq->worker_done);
+>  		kfree(worker);
+>  		return false;
+>  	}
+> @@ -717,7 +724,6 @@ static bool create_io_worker(struct io_wq *wq, struct io_wqe *wqe, int index)
+>  	if (index == IO_WQ_ACCT_UNBOUND)
+>  		atomic_inc(&wq->user->processes);
+>  
+> -	refcount_inc(&wq->refs);
+>  	wake_up_process(worker->task);
+>  	return true;
+>  }
+> @@ -822,17 +828,18 @@ static int io_wq_manager(void *data)
+>  		task_work_run();
+>  
+>  out:
+> -	if (refcount_dec_and_test(&wq->refs)) {
+> -		complete(&wq->done);
+> -		return 0;
+> -	}
+>  	/* if ERROR is set and we get here, we have workers to wake */
+> -	if (test_bit(IO_WQ_BIT_ERROR, &wq->state)) {
+> -		rcu_read_lock();
+> -		for_each_node(node)
+> -			io_wq_for_each_worker(wq->wqes[node], io_wq_worker_wake, NULL);
+> -		rcu_read_unlock();
+> -	}
+> +	rcu_read_lock();
+> +	for_each_node(node)
+> +		io_wq_for_each_worker(wq->wqes[node], io_wq_worker_wake, NULL);
+> +	rcu_read_unlock();
+> +
+> +	if (atomic_read(&wq->worker_refs))
+> +		wait_for_completion(&wq->worker_done);
+> +
+> +	if (refcount_dec_and_test(&wq->refs))
+> +		complete(&wq->done);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -1135,6 +1142,9 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
+>  
+>  	init_completion(&wq->done);
+>  
+> +	init_completion(&wq->worker_done);
+> +	atomic_set(&wq->worker_refs, 0);
+> +
+>  	wq->manager = kthread_create(io_wq_manager, wq, "io_wq_manager");
+>  	if (!IS_ERR(wq->manager)) {
+>  		wake_up_process(wq->manager);
+> @@ -1179,11 +1189,6 @@ static void __io_wq_destroy(struct io_wq *wq)
+>  	if (wq->manager)
+>  		kthread_stop(wq->manager);
+>  
+> -	rcu_read_lock();
+> -	for_each_node(node)
+> -		io_wq_for_each_worker(wq->wqes[node], io_wq_worker_wake, NULL);
+> -	rcu_read_unlock();
+> -
+>  	wait_for_completion(&wq->done);
+>  
+>  	for_each_node(node)
 > 
-> hv_inject_synthetic_vmexit_post_tlb_flush()
-
-Looks great!
-
-Best regards,
-	Maxim Levitsky
-
-> 
-> seems to be accurate.
 > 
 
-
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

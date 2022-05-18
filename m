@@ -2,62 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4C052AF20
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A28C52AF23
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbiERAYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 20:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
+        id S232509AbiERAYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 20:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiERAYM (ORCPT
+        with ESMTP id S232457AbiERAYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 20:24:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBC927143
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652833451; x=1684369451;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7qwjNURLH96k8OodZXRELKGcwQadNPgkQYc8CUOJ7lk=;
-  b=FQgie5XnCHCfCDk5Dq4IookcjaNfwZyS37GvtkxnqM7eQ06xkpjL0Y3m
-   Q9aKhsczFFfRxgOeK8I2BJ/FGLCT1pfBr8lQXBXiFHZlTgrvLAmq3cm5Y
-   cGbWrR5bt5f8QeoIlpdPweyUyieWj/tf1Lce0dFJQwOaiq45sYFDpblTk
-   BT3DHmf+GDS/QtpzyPTCpIcMgO3To6p663wB8zBkgHi7LQ9kEy5KmHH3Y
-   +KxgsSJCeYF2ozTjFMBCkn/rBwlUDcQA45DLkeKvU6cKz4DAPc1e6gBzw
-   GBXoIm701xHYrIEp4r5n0A3Atrz5rHqIltf5Mwsvz7eU9OSMExWt6v5YE
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251295141"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="251295141"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 17:24:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="605609135"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 17 May 2022 17:24:09 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nr7U0-0001bN-TM;
-        Wed, 18 May 2022 00:24:08 +0000
-Date:   Wed, 18 May 2022 08:23:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Subject: [broonie-ci:v2_20220509_cezary_rojewski_asoc_intel_avs_driver_core_and_pcm_operations
- 173/174] sound/soc/intel/avs/trace.c:19:6: error: redefinition of
- 'trace_avs_msg_payload'
-Message-ID: <202205180850.lKsZGoOE-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 17 May 2022 20:24:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563D127143;
+        Tue, 17 May 2022 17:24:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0C1BB81D9D;
+        Wed, 18 May 2022 00:24:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E5DC385B8;
+        Wed, 18 May 2022 00:24:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1652833484;
+        bh=IqdtSbJNm+VCuGfNAw8HzsuQPLkmpT4BhAuMLtG+vDI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vhDZhQ93mCmb4YxS1mh5DEHHIcUSZbxx4FRPaLVghQFUuACIEem5vS0qa46A1JKZi
+         a14rGVLnWHkOEKmkq1nnAYQENCzmQKAD9lqyHEfMWXg14bN0oFYkUAJ9VmLHZsK/zL
+         mNWuy+13jtxf2UCabEYHHbwSU7jhlcDty3FRiM1w=
+Date:   Tue, 17 May 2022 17:24:43 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        void@manifault.com, cgroups@vger.kernel.org, hannes@cmpxchg.org,
+        kernel-team@fb.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, mhocko@kernel.org, shakeelb@google.com,
+        tj@kernel.org, Richard Palethorpe <rpalethorpe@suse.de>
+Subject: Re: [PATCH 4/4] selftests: memcg: Remove protection from top level
+ memcg
+Message-Id: <20220517172443.3e524a8319c693ab24c5f22e@linux-foundation.org>
+In-Reply-To: <Yn6qrHHS935ppX98@carbon>
+References: <20220512174452.tr34tuh4k5jm6qjs@dev0025.ash9.facebook.com>
+        <20220513171811.730-1-mkoutny@suse.com>
+        <20220513171811.730-5-mkoutny@suse.com>
+        <Yn6qrHHS935ppX98@carbon>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,46 +59,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git v2_20220509_cezary_rojewski_asoc_intel_avs_driver_core_and_pcm_operations
-head:   2629dade5628ba54905160bd1898278223458fd3
-commit: a76300c1425077cd9eeadf30353ed1794717a135 [173/174] ASoC: Intel: avs: Event tracing
-config: alpha-randconfig-r036-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180850.lKsZGoOE-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=a76300c1425077cd9eeadf30353ed1794717a135
-        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
-        git fetch --no-tags broonie-ci v2_20220509_cezary_rojewski_asoc_intel_avs_driver_core_and_pcm_operations
-        git checkout a76300c1425077cd9eeadf30353ed1794717a135
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash sound/soc/intel/avs/
+On Fri, 13 May 2022 11:59:56 -0700 Roman Gushchin <roman.gushchin@linux.dev=
+> wrote:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On Fri, May 13, 2022 at 07:18:11PM +0200, Michal Koutny wrote:
+> > The reclaim is triggered by memory limit in a subtree, therefore the
+> > testcase does not need configured protection against external reclaim.
+> >=20
+> > Also, correct/deduplicate respective comments
+> >=20
+> > Signed-off-by: Michal Koutn=FD <mkoutny@suse.com>
+> > ---
+> >  tools/testing/selftests/cgroup/test_memcontrol.c | 12 ++++--------
+> >  1 file changed, 4 insertions(+), 8 deletions(-)
+> >=20
+> > diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/t=
+esting/selftests/cgroup/test_memcontrol.c
+> > index 9ffacf024bbd..9d370aafd799 100644
+> > --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> > +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > @@ -247,7 +247,7 @@ static int cg_test_proc_killed(const char *cgroup)
+> > =20
+> >  /*
+> >   * First, this test creates the following hierarchy:
+> > - * A       memory.min =3D 50M,  memory.max =3D 200M
+> > + * A       memory.min =3D 0,    memory.max =3D 200M
+> >   * A/B     memory.min =3D 50M,  memory.current =3D 50M
+> >   * A/B/C   memory.min =3D 75M,  memory.current =3D 50M
+> >   * A/B/D   memory.min =3D 25M,  memory.current =3D 50M
+> > @@ -257,7 +257,7 @@ static int cg_test_proc_killed(const char *cgroup)
+> >   * Usages are pagecache, but the test keeps a running
+> >   * process in every leaf cgroup.
+> >   * Then it creates A/G and creates a significant
+> > - * memory pressure in it.
+> > + * memory pressure in A.
+> >   *
+> >   * A/B    memory.current ~=3D 50M
+> >   * A/B/C  memory.current ~=3D 29M
+> > @@ -335,8 +335,6 @@ static int test_memcg_min(const char *root)
+> >  			      (void *)(long)fd);
+> >  	}
+> > =20
+> > -	if (cg_write(parent[0], "memory.min", "50M"))
+> > -		goto cleanup;
+> >  	if (cg_write(parent[1], "memory.min", "50M"))
+> >  		goto cleanup;
+> >  	if (cg_write(children[0], "memory.min", "75M"))
+> > @@ -404,8 +402,8 @@ static int test_memcg_min(const char *root)
+> > =20
+> >  /*
+> >   * First, this test creates the following hierarchy:
+> > - * A       memory.low =3D 50M,  memory.max =3D 200M
+> > - * A/B     memory.low =3D 50M,  memory.current =3D 50M
+> > + * A       memory.low =3D 0,    memory.max =3D 200M
+> > + * A/B     memory.low =3D 50M,  memory.current =3D ...
+>=20
+> Can you, please, just remove "memory.current =3D ...", it's not
+> because obvious what "..." means here.
+>=20
 
-All errors (new ones prefixed by >>):
+You mean this?
 
->> sound/soc/intel/avs/trace.c:19:6: error: redefinition of 'trace_avs_msg_payload'
-      19 | void trace_avs_msg_payload(const void *data, size_t size)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   In file included from sound/soc/intel/avs/trace.c:12:
-   sound/soc/intel/avs/trace.h:41:20: note: previous definition of 'trace_avs_msg_payload' with type 'void(const void *, size_t)' {aka 'void(const void *, long unsigned int)'}
-      41 | static inline void trace_avs_msg_payload(const void *data, size_t size) {};
-         |                    ^~~~~~~~~~~~~~~~~~~~~
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c~selftests-memcg-remo=
+ve-protection-from-top-level-memcg-fix
++++ a/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -403,15 +403,14 @@ cleanup:
+ /*
+  * First, this test creates the following hierarchy:
+  * A       memory.low =3D 0,    memory.max =3D 200M
+- * A/B     memory.low =3D 50M,  memory.current =3D ...
++ * A/B     memory.low =3D 50M
+  * A/B/C   memory.low =3D 75M,  memory.current =3D 50M
+  * A/B/D   memory.low =3D 25M,  memory.current =3D 50M
+  * A/B/E   memory.low =3D 0,    memory.current =3D 50M
+  * A/B/F   memory.low =3D 500M, memory.current =3D 0
+  *
+  * Usages are pagecache.
+- * Then it creates A/G an creates a significant
+- * memory pressure in it.
++ * Then it creates A/G and creates significant memory pressure in it.
+  *
+  * Then it checks actual memory usages and expects that:
+  * A/B    memory.current ~=3D 50M
+_
 
+(includes gratuitous comment cleanup)
 
-vim +/trace_avs_msg_payload +19 sound/soc/intel/avs/trace.c
+I assume your comment in
+https://lkml.kernel.org/r/Yn6pBPq+lAXm9NG8@carbon can be addressed in a
+later patch.
 
-    13	
-    14	#define BYTES_PER_LINE 16
-    15	#define MAX_CHUNK_SIZE ((PAGE_SIZE - 150) /* Place for trace header */	\
-    16				/ (2 * BYTES_PER_LINE + 4) /* chars per line */	\
-    17				* BYTES_PER_LINE)
-    18	
-  > 19	void trace_avs_msg_payload(const void *data, size_t size)
+I'm not sure what to amke of https://lkml.kernel.org/r/Yn6pWPodGPlz+D8G@car=
+bon
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Do we feel this series needs more work before merging it up?
+

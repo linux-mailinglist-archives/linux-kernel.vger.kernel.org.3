@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC3852C682
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D5B52C68A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiERWq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 18:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S230153AbiERWrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 18:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiERWq0 (ORCPT
+        with ESMTP id S230026AbiERWrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 18:46:26 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5B07DE23;
-        Wed, 18 May 2022 15:46:25 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id q135so6093612ybg.10;
-        Wed, 18 May 2022 15:46:25 -0700 (PDT)
+        Wed, 18 May 2022 18:47:03 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CF2131291
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:47:02 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id bd25-20020a05600c1f1900b0039485220e16so3108977wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:47:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=r48GKaexilEZNN+sQI3f0KxD7Fc9KKp25yevrNkJt6M=;
-        b=Uzpo+Wgkuo7R9nwjoHz1Ywf5spGLvNmVK+Xc6NxnoGeZGsW9V8khu/KycVadRKaXiy
-         iq3kVj+dY8e4KMrH8HSV5JV/KPPFunpcLjWea7QhqBHGggAcffOYB2Frt9evVt/HhO2Y
-         0mulST3hR6HRg4ftUvKogatrBdZfVpv2crnQuJml1ybZmKZl2IRfEam1UbH4Fx5sR9GC
-         ARYrsqhHqqY40hR95yK83uSNwJfkOYJoQDmM5Axo3wMICESqCKQ1dVYgAzqypMr8X8FG
-         a5E6revze3QNx75jZgt2mFBXg70+yGgDA1RC+Xd+9z9CclvEK2CPPj8s4XAUsjliPJZa
-         p1fg==
+        bh=r+OwTFSdR2gyZK543TiqztKo53GHODJ6up3IJF4FH3Q=;
+        b=CY2hT2cxVOa7I78OfBysSpF9QWMDtFJDTVA6Kviy4R8WS6Q+xuv7RL32PUKyj08vHJ
+         W9YxtXiwKZFnDQs2tR6hUO4o3ocvYURJJyKo9nVHOMS51dxTMtOawzWdYQUZc+xBm6Xn
+         LjDh1ZVIU4bzckrIbwCaO2p6u36PePUrb9MC6CInbOZrHQzPNs0oGYvcLJVgkMjakB0O
+         OyUW3U5sDbP6PPxnF1K1q50LHcNxbExmQcgU9RT3jr8z9akdx8x3L3Rm5vAZqD/2PuDR
+         E4ZJU/fHyBOTenVywrCMzIWtJbM98O67Au4c5ciSUf15NW1AAOCRuPMnv5L6YAtQgMQE
+         SCMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=r48GKaexilEZNN+sQI3f0KxD7Fc9KKp25yevrNkJt6M=;
-        b=Msogf2aF+VwbXxeH/WG8iErOR5qsUImIkPLZWVWm/SUkDE34iatdYRJKZ2Sq5/lvRL
-         x+0Ws6VO3q7RvlTaHGwXHDMmEV87bhdkDwpkII0aCEWtF5K8gQmsy+5XKnzFyGm88oMA
-         gMgrQlTZZkkZFetLO3nCLimWMKyEHN0Ro5II+hRVVXRh3VnDzVoSLlzzR65Y5F6keczR
-         m4vi+AyegTVj2WESP+pQk8XpVeP5MEjmGQ9QMQVZ5EPmMXgxwzJIrcWrfYBQFnv82sa4
-         BMoCDiYeClw7cfq+q6piVFkGRcz+OzdHpjSYrD1hKq2rtI+x8vT86vd0/l0aidJScwHN
-         ftJQ==
-X-Gm-Message-State: AOAM533uiE6pa45OCBjpfJ9MtgkwszDnX2ERq8NOBjtI2CEDxNv9Mb8e
-        6Zs3zT8+NWeKIfCzmZY2ONT4IulRce7wpzp/PBFKhiEl
-X-Google-Smtp-Source: ABdhPJye/mYo5nOX2hmyGqdD1Ru3j/LwxF30VPrIqOSRotDqSuRuVEvHLiMrmLPSBPHAaE7iXLfqSf7LfaQf75CdokM=
-X-Received: by 2002:a25:748b:0:b0:64d:b0ec:2c68 with SMTP id
- p133-20020a25748b000000b0064db0ec2c68mr1790213ybc.173.1652913984223; Wed, 18
- May 2022 15:46:24 -0700 (PDT)
+        bh=r+OwTFSdR2gyZK543TiqztKo53GHODJ6up3IJF4FH3Q=;
+        b=XF6fIU0fDXkZ1uOv6rNwCNg+FFXcehTWAnJx/ZCfoUQzVzQKLFOb8YfR5NWkhFckKF
+         O1HaXiQ5dhH7ZQy2c2L4fc0l7njDPUotVDMysXfOeGyU/mhhhzg+MEG9zwMre0Hys46T
+         sxDh3St4vP1rY412lx5f2VGJjQX12PGW07YLqw1zzG6G7dtbhbVsn5KKNEDl+FA4DhYl
+         qBfjt3eP1pGnZUtzk3ySxDrvePhyrFGq7h09v/Z8cySxB20HTkXQOQIW8BWoqJusIysN
+         Jl1xCOWmhF1VshEtIdkr2JiriFVhGb+MZduy0UzI5gAmGui/f+ml4xiPZ7qba4+4PDnr
+         ZrDQ==
+X-Gm-Message-State: AOAM533o13j75lcgxuSrOuZfoyGtO+3VXKf32TtrHVpfmOIDVVAGB1Gz
+        kpai3bAO7ae4kK5a2SSEbYubzQ1NnzQVTRHhtw0PHQ==
+X-Google-Smtp-Source: ABdhPJxKqoB9/iLAS1FfPSmYtqbu9F561aCoMfcSeQltohNa5RLDczPdtqjlZNYM0PtMB+QNjrD1JMn7fmP6e3RI6PY=
+X-Received: by 2002:a05:600c:1c84:b0:394:5de0:2475 with SMTP id
+ k4-20020a05600c1c8400b003945de02475mr1268968wms.27.1652914020870; Wed, 18 May
+ 2022 15:47:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220415104951.27104-1-linux@fw-web.de> <20220415104951.27104-2-linux@fw-web.de>
- <11363549.CDJkKcVGEf@phil>
-In-Reply-To: <11363549.CDJkKcVGEf@phil>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Wed, 18 May 2022 18:46:12 -0400
-Message-ID: <CAMdYzYqOEzNqwwRWx2U85uBBXtkz3OfVEWXDS-YCGmFg8Z7q5Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] arm64: dts: rockchip: set display regulators to
- always-on on BPI-R2-Pro
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220518223815.809858-1-vaibhav@linux.ibm.com>
+In-Reply-To: <20220518223815.809858-1-vaibhav@linux.ibm.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 18 May 2022 15:46:24 -0700
+Message-ID: <CAJD7tkZSgRs6T60Gv4dZR5xBemxgCB_2s8hz8zB0F_nakN5aTQ@mail.gmail.com>
+Subject: Re: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
+To:     Vaibhav Jain <vaibhav@linux.ibm.com>
+Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Shakeel Butt <shakeelb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,63 +76,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 2:47 PM Heiko Stuebner <heiko@sntech.de> wrote:
+On Wed, May 18, 2022 at 3:38 PM Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
 >
-> Am Freitag, 15. April 2022, 12:49:49 CEST schrieb Frank Wunderlich:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > Set display related regulators to always-on on Banana PI R2 Pro
-> > board.
+> [1] Provides a way for user-space to trigger proactive reclaim by introducing
+> a write-only memcg file 'memory.reclaim'. However reclaim stats like number
+> of pages scanned and reclaimed is still not directly available to the
+> user-space.
 >
-> Hmm, I'd expect some sort of explanation for the "why" here.
-> It looks like both the gpu patch as well as the vop patch do
-> reference the relevant regulators for the gpu+hdmi nodes,
-> so in theory this shouldn't be necessary anymore?
+> This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
+> readable which returns the number of pages scanned / reclaimed during the
+> reclaim process from 'struct vmpressure' associated with each memcg. This should
+> let user-space asses how successful proactive reclaim triggered from memcg
+> 'memory.reclaim' was ?
 
-I agree the hdmi power nodes don't need to be always on, if the hdmi
-driver is handling them correctly. Unfortunately the gpu power supply
-needs to stay always on until the issues with power-domains not being
-regulator aware is resolved. Otherwise we run into issues like the one
-mentioned in Lee's email, and issues where the gpu-regulator gets shut
-down and we start getting mmu faults.
+Isn't this a racy read? struct vmpressure can be changed between the
+write and read by other reclaim operations, right?
+
+I was actually planning to send a patch that does not updated
+vmpressure for user-controller reclaim, similar to how PSI is handled.
+
+The interface currently returns -EBUSY if the entire amount was not
+reclaimed, so isn't this enough to figure out if it was successful or
+not? If not, we can store the scanned / reclaim counts of the last
+memory.reclaim invocation for the sole purpose of memory.reclaim
+reads. Maybe it is actually more intuitive to users to just read the
+amount of memory read? In a format that is similar to the one written?
+
+i.e
+echo "10M" > memory.reclaim
+cat memory.reclaim
+9M
 
 >
-> >
-> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> > ---
-> >  arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-> > index 2700fb18a3bc..0950f9659bb4 100644
-> > --- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-> > @@ -225,6 +225,7 @@ regulator-state-mem {
-> >
-> >                       vdd_gpu: DCDC_REG2 {
-> >                               regulator-name = "vdd_gpu";
-> > +                             regulator-always-on;
-> >                               regulator-init-microvolt = <900000>;
-> >                               regulator-initial-mode = <0x2>;
-> >                               regulator-min-microvolt = <500000>;
-> > @@ -274,6 +275,7 @@ regulator-state-mem {
-> >
-> >                       vdda0v9_image: LDO_REG1 {
-> >                               regulator-name = "vdda0v9_image";
-> > +                             regulator-always-on;
-> >                               regulator-min-microvolt = <900000>;
-> >                               regulator-max-microvolt = <900000>;
-> >
-> > @@ -369,6 +371,7 @@ regulator-state-mem {
-> >
-> >                       vcca1v8_image: LDO_REG9 {
-> >                               regulator-name = "vcca1v8_image";
-> > +                             regulator-always-on;
-> >                               regulator-min-microvolt = <1800000>;
-> >                               regulator-max-microvolt = <1800000>;
-> >
-> >
+> With the patch following command flow is expected:
 >
+>  # echo "1M" > memory.reclaim
 >
+>  # cat memory.reclaim
+>    scanned 76
+>    reclaimed 32
 >
+> [1]:  https://lore.kernel.org/r/20220425190040.2475377-1-yosryahmed@google.com
+>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Yosry Ahmed <yosryahmed@google.com>
+> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+> ---
+>  Documentation/admin-guide/cgroup-v2.rst | 15 ++++++++++++---
+>  mm/memcontrol.c                         | 14 ++++++++++++++
+>  2 files changed, 26 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 27ebef2485a3..44610165261d 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1209,18 +1209,27 @@ PAGE_SIZE multiple when read back.
+>         utility is limited to providing the final safety net.
+>
+>    memory.reclaim
+> -       A write-only nested-keyed file which exists for all cgroups.
+> +       A nested-keyed file which exists for all cgroups.
+>
+> -       This is a simple interface to trigger memory reclaim in the
+> -       target cgroup.
+> +       This is a simple interface to trigger memory reclaim and retrieve
+> +       reclaim stats in the target cgroup.
+>
+>         This file accepts a single key, the number of bytes to reclaim.
+>         No nested keys are currently supported.
+>
+> +       Reading the file returns number of pages scanned and number of
+> +       pages reclaimed from the memcg. This information fetched from
+> +       vmpressure info associated with each cgroup.
+> +
+>         Example::
+>
+>           echo "1G" > memory.reclaim
+>
+> +         cat memory.reclaim
+> +
+> +         scanned 78
+> +         reclaimed 30
+> +
+>         The interface can be later extended with nested keys to
+>         configure the reclaim behavior. For example, specify the
+>         type of memory to reclaim from (anon, file, ..).
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 2e2bfbed4717..9e43580a8726 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -6423,6 +6423,19 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
+>         return nbytes;
+>  }
+>
+> +static int memory_reclaim_show(struct seq_file *m, void *v)
+> +{
+> +       struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
+> +       struct vmpressure *vmpr = memcg_to_vmpressure(memcg);
+> +
+> +       spin_lock(&vmpr->sr_lock);
+> +       seq_printf(m, "scanned %lu\nreclaimed %lu\n",
+> +                  vmpr->scanned, vmpr->reclaimed);
+> +       spin_unlock(&vmpr->sr_lock);
+> +
+> +       return 0;
+> +}
+> +
+>  static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
+>                               size_t nbytes, loff_t off)
+>  {
+> @@ -6525,6 +6538,7 @@ static struct cftype memory_files[] = {
+>                 .name = "reclaim",
+>                 .flags = CFTYPE_NS_DELEGATABLE,
+>                 .write = memory_reclaim,
+> +               .seq_show  = memory_reclaim_show,
+>         },
+>         { }     /* terminate */
+>  };
+> --
+> 2.35.1
 >

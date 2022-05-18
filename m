@@ -2,88 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A64C52B1A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D5C52B19F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiEREuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 00:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
+        id S230029AbiEREuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 00:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229980AbiEREuF (ORCPT
+        with ESMTP id S230010AbiEREul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 00:50:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0AA13D6A;
-        Tue, 17 May 2022 21:50:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 18 May 2022 00:50:41 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1490513E3E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 21:50:38 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DBD74B81E69;
-        Wed, 18 May 2022 04:50:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5431CC385A9;
-        Wed, 18 May 2022 04:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652849401;
-        bh=u2H9VRIASmuOkwRABMwQGnZy+J18WWjGktMWeppxl6A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KrRwAvSJS16JQnbgfSX15LKWLMUQhjT1/7ervFHXd+0uCupIqz7pxYEJNz3JgmFlO
-         N7zL39moQed7uguI8NO5z0zjC7hX536W0vXJXIh88NIIt8lGAP+KI0YdOSmLj5snWO
-         YIX8lx4Kmq4oYuJa+Qz7ntWKKM7XjPAKR4lYFxIAv2gpoZ2e6qT/3QuS9ko4Y2TaHe
-         bC9AuGO1lHMDcDnz/5Z6CdoERJAUvqk99vHsOMoer2/6ZX0McYL2n7NoDHRPMo1LQ5
-         E7O4j1sHdLjDq8PJRJ19OFCuJDNqXrvQY05sPKgMkUuHFftQIKsRRK4Zz5G0rxuYjB
-         K7JAxicez3haw==
-Date:   Wed, 18 May 2022 07:49:53 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Mark Bloch <mbloch@nvidia.com>
-Cc:     Rohit Sajan Kumar <rohit.sajan.kumar@oracle.com>,
-        "matanb@mellanox.com" <matanb@mellanox.com>,
-        "dledford@redhat.com" <dledford@redhat.com>,
-        "sean.hefty@intel.com" <sean.hefty@intel.com>,
-        "hal.rosenstock@gmail.com" <hal.rosenstock@gmail.com>,
-        Manjunath Patil <manjunath.b.patil@oracle.com>,
-        Rama Nichanamatlu <rama.nichanamatlu@oracle.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L30t33mDSz4xVP;
+        Wed, 18 May 2022 14:50:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652849436;
+        bh=LNLCsDkug1r3kbDai+5TpbpwIL81Sv0gHUxwzASZmbE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=kW2YFNy6Mydz+OYZr3o72Pk6e8jcaOqaS4BhdS8uSWLiEn9PZpa7vpwkALAOyPog8
+         UW5WkzqvTIHaTUHky6hhvCbL6o4qIDreX25VuFfk5x1pzkEUhloYFNFsr5gmQ8VnPN
+         cjIivInaZnZ/wqO8YgTCpRLyMfYhRMqsZtJ+GeqPoN6lBpd9isvAGSH8Zpp+UzjLIb
+         HkGjENzvewWhBq42NbX/3UVxAgywDSpd+CmNpuQGB112pt4GuqEgXBzuw5UZVpNv4M
+         TLqM2j4Cnchw8HUHHJV+LZUUmQNfj7xMbxsex2HAeEMrTqirY/vQvbDUPG6V7Z8hei
+         tyO05KtVFELtA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     YueHaibing <yuehaibing@huawei.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net/mlx5: Add sysfs entry for vhca to
- /sys/class/infiniband/mlx5
-Message-ID: <YoR68a8aN5Ld5Jv7@unreal>
-References: <1652137257-5614-1-git-send-email-rohit.sajan.kumar@oracle.com>
- <BYAPR10MB2997DF974EF3631A2E69CA3CDCCA9@BYAPR10MB2997.namprd10.prod.outlook.com>
- <Yn85iFNS96yO2ISD@unreal>
- <d37309bd-c7e0-8e15-bae9-9341f4f9192d@nvidia.com>
+Subject: Re: [PATCH -next] powerpc/book3e: Fix build error
+In-Reply-To: <8b169642-5d32-4135-93a7-4969515d1ab0@huawei.com>
+References: <20220517094830.27560-1-yuehaibing@huawei.com>
+ <0e8b7931-9bfb-1948-c141-c4e612ba0fe6@csgroup.eu>
+ <8b169642-5d32-4135-93a7-4969515d1ab0@huawei.com>
+Date:   Wed, 18 May 2022 14:50:34 +1000
+Message-ID: <87sfp7o351.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d37309bd-c7e0-8e15-bae9-9341f4f9192d@nvidia.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 15, 2022 at 10:36:07AM +0300, Mark Bloch wrote:
-> 
-> 
-> On 5/14/2022 08:09, Leon Romanovsky wrote:
-> > On Fri, May 13, 2022 at 05:46:16PM +0000, Rohit Sajan Kumar wrote:
-> >> Hey,
-> >>
-> >> Sending this as a gentle reminder to review the patch sent earlier this week which can be found in this email chain.
-> > 
-> > Patches that sent in HTML format, to wrong addresses and not visible
-> > in patchworks/ML, without target net-next/rdma-next/e.t.c., with wrong
-> > title are generally ignored.
-> > 
-> > Why vhca_id that returned from MLX5_IB_METHOD_QUERY_PORT is not enough?
-> 
-> The driver returns that only when in switchdev mode.
-> I don't see why that can't be changed but that's the state today.
+YueHaibing <yuehaibing@huawei.com> writes:
+> On 2022/5/17 18:45, Christophe Leroy wrote:
+>> Le 17/05/2022 =C3=A0 11:48, YueHaibing a =C3=A9crit=C2=A0:
+>>> arch/powerpc/mm/nohash/fsl_book3e.c: In function =E2=80=98relocate_init=
+=E2=80=99:
+>>> arch/powerpc/mm/nohash/fsl_book3e.c:348:2: error: implicit declaration =
+of function =E2=80=98early_get_first_memblock_info=E2=80=99 [-Werror=3Dimpl=
+icit-function-declaration]
+>>>    early_get_first_memblock_info(__va(dt_ptr), &size);
+>>>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>>
+>>> Add missing include file linux/of_fdt.h to fix this.
+>>>
+>>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>>=20
+>> Thats for fixing that.
+>>=20
+>> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>=20
+>> It means we don't have any defconfig for 32 bits booke with=20
+>> CONFIG_RELOCATABLE ?
+>
+> Indeed, there is no defconfig with CONFIG_RELOCATABLE under arch/powerpc/=
+configs
 
-My guess is that it is not needed outside of switchdev mode. This is why
-I would like to know why current solution is not enough.
+It's selected by CRASH_DUMP, which is in ppc64_defconfig.
 
-Thanks
+But it's not enabled in corenet32_smp_defconfig which is what I build,
+or any of the other 85xx configs.
+
+I guess it should be, I think it's true that RELOCATABLE=3Dy exercises
+more interesting code paths?
+
+cheers

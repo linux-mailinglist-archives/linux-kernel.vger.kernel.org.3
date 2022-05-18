@@ -2,168 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCBD52C22C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186B952C20C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241467AbiERS0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S241480AbiERS0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241366AbiERS0F (ORCPT
+        with ESMTP id S241446AbiERS0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:26:05 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452F17CDE7;
-        Wed, 18 May 2022 11:26:03 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id y20so2108011qvx.3;
-        Wed, 18 May 2022 11:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nfgYoWCNYtN7yDfm2+d3s9VvRbNwsmq2M10lbEvV91w=;
-        b=BU4UhCSBQmodnhlemcE31H7c2P5bS4uD95BTXf+A6pZjh/XS3tC1t1En3GecHCtM0t
-         mXQzgOkt6y2dhDUY4NaqxzkRzFnNMxFB4vbJUXChGiDaCeCFkzu5wJklFunrx/hsoTT4
-         DDRXS8UCcvLanVCmZV8nJjMyto4R6qqi3P1Tm23y4csTS2oY7xthDULzOf5X+hnuKGaJ
-         X03is8tUWDjhmeZkDo6Ma0u3ZEmvm5T17uAkkGtZd6pAO5HEFbHOq5jKBTJEThCQyV8/
-         EMQVr/w2ANjh/ZxHtdzRLqqlA8lxcIh0UiG47/f0dRuTjnFXUSDrVFyIgBdYSFOEHDqo
-         hfLg==
+        Wed, 18 May 2022 14:26:15 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3FB163F6D;
+        Wed, 18 May 2022 11:26:13 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-f1eafa567cso409349fac.8;
+        Wed, 18 May 2022 11:26:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nfgYoWCNYtN7yDfm2+d3s9VvRbNwsmq2M10lbEvV91w=;
-        b=jEkzD9UEu6pILcZi/1ENbeJH4Hq/TWjVTgnaXOVX4TUzZpm+WdgRLN9Vdy/muXFNuY
-         uWzTT9Lv6ga4Zio3pFFppxWsVtOesA0B6NeRFFtov4GAeNI2ydW19QY89Y6ASDrGjjLn
-         F3OAqfRYH0/6nEnwy47LL7bYssq7cMOMdaBsHXIHDT7tWluqBcezOxRpD+ZfYXKhdcV/
-         Ie5kZRoj6v49L2kcTU5OY+d1/k0ddDnk9hlJDoutsF8i/hiB9Ja5qehR/LaKLQ906j8c
-         5MP1gb/fmECdQLiir5Uj0smk+IbPAKuNGGBHEcKWMY09CUim7oqK3HC3lYDgvjqeOK/O
-         31ZQ==
-X-Gm-Message-State: AOAM532XZ59VtOhDzBX4Jv/UX92XQMdB08L+J31totlxfI2bZdJaicUv
-        cV7Aw3gwk43uJDSkjGOqLYEGA8iPGgaeRffX/lk=
-X-Google-Smtp-Source: ABdhPJxjdpnM2ndfyB5ODLWDF8yv7yrQbec+TF3B+bzIAyN+RclUCT2TptIXCHT028RbwipcOB7Y/r3VopoJQUn8u/U=
-X-Received: by 2002:a05:6214:48f:b0:461:d4fe:4eed with SMTP id
- ay15-20020a056214048f00b00461d4fe4eedmr859981qvb.48.1652898362364; Wed, 18
- May 2022 11:26:02 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZWZ7C/lhWG2oI1miVY3LMoG5gzpA7R0lnj8FHo4aXdI=;
+        b=3JTprWOUgf1WZgfSwNLmfnSyd8TK8cc+ENcPkbVOGBWapQHISmKOV+33RPG1gl6H/Q
+         Fc+qOW0yHOwpECODnI40BUmA0xi153jMHc2Z1GzLIWxrG2hWV6w91qZEdYYTLkL7LkDm
+         IaKPfy4jelrZxVsnJRlpbyGK96i1BsH6NRSeuTJ1to+NvUedV6inQXQUlbSe2Ak/9F5L
+         YHlgK+mPYjJUSOsvkRNTQmEUwTmiWjVN7q4wrvcWfUYdS63J8qaV7StQWR4RQR/s5xBj
+         DZp7NE14TdHiIFhtkwrVEl/XI44O+MUvn3NDWiawyoyrFQGi5NvHioO/g12yp2fjGC6q
+         gvQQ==
+X-Gm-Message-State: AOAM5301IVXxMZ26DqhhpkzVFW8Wp14csID6lL7if5oJUmO9i2wc02tY
+        3NlhHVM2D0MiYYVJgB1LvA==
+X-Google-Smtp-Source: ABdhPJy3uudsBcvneIRwvZe8xIbN0zJdv/ouIeOaWcfxym37QioDFrURrrXjGAKGF+I9+13Rp+d3XQ==
+X-Received: by 2002:a05:6870:15ce:b0:e9:894f:d9ce with SMTP id k14-20020a05687015ce00b000e9894fd9cemr477654oad.121.1652898372430;
+        Wed, 18 May 2022 11:26:12 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w4-20020a056830060400b0060603221234sm1017418oti.4.2022.05.18.11.26.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 11:26:11 -0700 (PDT)
+Received: (nullmailer pid 3640827 invoked by uid 1000);
+        Wed, 18 May 2022 18:26:10 -0000
+Date:   Wed, 18 May 2022 13:26:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     ChiaWei Wang <chiawei_wang@aspeedtech.com>
+Cc:     "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "jk@codeconstruct.com.au" <jk@codeconstruct.com.au>,
+        "a.kartashev@yadro.com" <a.kartashev@yadro.com>,
+        "patrick.rudolph@9elements.com" <patrick.rudolph@9elements.com>,
+        "dphadke@linux.microsoft.com" <dphadke@linux.microsoft.com>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: aspeed: Add eSPI controller
+Message-ID: <20220518182610.GI3302100-robh@kernel.org>
+References: <20220516005412.4844-1-chiawei_wang@aspeedtech.com>
+ <20220516005412.4844-2-chiawei_wang@aspeedtech.com>
+ <20220517183154.GA1352926-robh@kernel.org>
+ <HK0PR06MB3779B567DE70F859E28F66C991D19@HK0PR06MB3779.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220517205341.536587-1-robimarko@gmail.com> <20220517205341.536587-4-robimarko@gmail.com>
- <d60f32dc-a9f5-95ad-245e-6b9521d73fce@somainline.org> <CAOX2RU7jCdggA8y1cE4sfZLw_niDUNkG8pkJ=d=5mM1BbrrBQA@mail.gmail.com>
-In-Reply-To: <CAOX2RU7jCdggA8y1cE4sfZLw_niDUNkG8pkJ=d=5mM1BbrrBQA@mail.gmail.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Wed, 18 May 2022 20:25:51 +0200
-Message-ID: <CAOX2RU4wVXvm93Z5u1hEEUxn4S2YDGHVq_89Z7b-ryf0t7iJSg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] regulator: qcom_spmi: Add support for PMP8074 regulators
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        lgirdwood@gmail.com, broonie@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <HK0PR06MB3779B567DE70F859E28F66C991D19@HK0PR06MB3779.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022 at 19:31, Robert Marko <robimarko@gmail.com> wrote:
->
-> On Wed, 18 May 2022 at 15:42, Konrad Dybcio
-> <konrad.dybcio@somainline.org> wrote:
-> >
-> >
-> > On 17/05/2022 22:53, Robert Marko wrote:
-> > > PMP8074 is a companion PMIC for the Qualcomm IPQ8074 WiSoC-s.
+On Wed, May 18, 2022 at 12:15:10AM +0000, ChiaWei Wang wrote:
+> Hi Rob,
+> 
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: Wednesday, May 18, 2022 2:32 AM
+> > 
+> > On Mon, May 16, 2022 at 08:54:09AM +0800, Chia-Wei Wang wrote:
+> > > Add dt-bindings for Aspeed eSPI controller
 > > >
-> > > It features 5 HF-SMPS and 13 LDO regulators.
-> > >
-> > > This commit adds support for S3 and S4 HF-SMPS buck regulators of
-> > > the HFS430 type and LDO11 of the HT_P150 type.
-> > > S3 is the CPU cluster voltage supply, S4 supplies the UBI32 NPU cores
-> > > and LDO11 is the SDIO/eMMC I/O voltage regulator required for high speeds.
-> > >
-> > > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > > Signed-off-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
 > > > ---
-> > >   drivers/regulator/qcom_spmi-regulator.c | 8 ++++++++
-> > >   1 file changed, 8 insertions(+)
+> > >  .../devicetree/bindings/soc/aspeed/espi.yaml  | 162
+> > > ++++++++++++++++++
+> > 
+> > bindings/spi/ includes SPI slaves. Is there a reason this doesn't fit there?
+> 
+> eSPI resues the timing and electrical specification of SPI but runs completely different protocol.
+> Only the flash channel is related to SPI and the other 3 channels are for EC/BMC/SIO.
+> Therefore, an eSPI driver does not fit into the SPI model.
+> 
+> > 
+> > >  1 file changed, 162 insertions(+)
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/soc/aspeed/espi.yaml
 > > >
-> > > diff --git a/drivers/regulator/qcom_spmi-regulator.c b/drivers/regulator/qcom_spmi-regulator.c
-> > > index 38bbc70241ae..696b088aae40 100644
-> > > --- a/drivers/regulator/qcom_spmi-regulator.c
-> > > +++ b/drivers/regulator/qcom_spmi-regulator.c
-> > > @@ -2137,6 +2137,13 @@ static const struct spmi_regulator_data pms405_regulators[] = {
-> > >       { }
-> > >   };
-> > >
-> > > +static const struct spmi_regulator_data pmp8074_regulators[] = {
-> >
-> > Please sort the struct alphabletically.
->
-> Hi,
-> Will fixup in v3.
->
-> >
-> >
-> > > +     { "s3", 0x1a00, "vdd_s3"},
-> > > +     { "s4", 0x1d00, "vdd_s4"},
-> > > +     { "l11", 0x4a00, "vdd_l10_l11_l12_l13"},
-> >
-> > Are the other regulators somehow not controllable through SPMI? Please
-> > leave a comment if that's the case.
->
-> No, they are all controllable via SPMI as far as I know.
-> Though the output table completely leaves out L7, L9, and L10.
-> L5 and L6 are specified as Ebuck-4 subtypes (0x3d), while L10 is not
-> listed at all (0x34).
-
-Ok, I dug a bit further and L5/6 are HT_P600 and are easily supportable.
-L10 is an HT_P50 type but it's listed as unused and left disabled, I don't know
-its supported output voltage range.
-
-Regards,
-Robert
-
-> These are not currently supported and I don't have enough information
-> to support them.
-> L1, L2, L3, L4, L7, L8, L9, L11, L12, and L13 appear to have their
-> subtype already supported.
-> L1, L2, L3, L8, L9 subtype (0x32)
-> L4 subtype (0x30)
-> L7, L11, L12, L13 subtype (0x35)
->
-> S3, S4, and L11 are the most important ones.
-> >
-> >
-> > > +     { }
-> > > +};
+> > > diff --git a/Documentation/devicetree/bindings/soc/aspeed/espi.yaml
+> > > b/Documentation/devicetree/bindings/soc/aspeed/espi.yaml
+> > > new file mode 100644
+> > > index 000000000000..aa91ec8caf6a
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/soc/aspeed/espi.yaml
+> > > @@ -0,0 +1,162 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) # #
+> > > +Copyright (c) 2021 Aspeed Technology Inc.
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: "http://devicetree.org/schemas/soc/aspeed/espi.yaml#"
+> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 > > > +
-> > >   static const struct of_device_id qcom_spmi_regulator_match[] = {
-> > >       { .compatible = "qcom,pm8004-regulators", .data = &pm8004_regulators },
-> > >       { .compatible = "qcom,pm8005-regulators", .data = &pm8005_regulators },
-> > > @@ -2150,6 +2157,7 @@ static const struct of_device_id qcom_spmi_regulator_match[] = {
-> > >       { .compatible = "qcom,pm660-regulators", .data = &pm660_regulators },
-> > >       { .compatible = "qcom,pm660l-regulators", .data = &pm660l_regulators },
-> > >       { .compatible = "qcom,pms405-regulators", .data = &pms405_regulators },
-> > > +     { .compatible = "qcom,pmp8074-regulators", .data = &pmp8074_regulators },
-> >
-> > Please sort the compatible too.
->
-> Will fixup in v3.
->
-> Regards,
-> Robert
-> >
-> >
-> > Konrad
-> >
-> > >       { }
-> > >   };
-> > >   MODULE_DEVICE_TABLE(of, qcom_spmi_regulator_match);
-> > >
+> > > +title: Aspeed eSPI Controller
+> > > +
+> > > +maintainers:
+> > > +  - Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+> > > +  - Ryan Chen <ryan_chen@aspeedtech.com>
+> > > +
+> > > +description:
+> > > +  Aspeed eSPI controller implements a slave side eSPI endpoint device
+> > > +  supporting the four eSPI channels, namely peripheral, virtual wire,
+> > > +  out-of-band, and flash.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    items:
+> > > +      - enum:
+> > > +          - aspeed,ast2500-espi
+> > > +          - aspeed,ast2600-espi
+> > > +      - const: simple-mfd
+> > > +      - const: syscon
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  "#address-cells":
+> > > +    const: 1
+> > > +
+> > > +  "#size-cells":
+> > > +    const: 1
+> > > +
+> > > +  ranges: true
+> > > +
+> > > +patternProperties:
+> > > +  "^espi-ctrl@[0-9a-f]+$":
+> > > +    type: object
+> > > +
+> > > +    description: Control of the four basic eSPI channels
+> > > +
+> > > +    properties:
+> > > +      compatible:
+> > > +        items:
+> > > +          - enum:
+> > > +              - aspeed,ast2500-espi-ctrl
+> > > +              - aspeed,ast2600-espi-ctrl
+> > > +
+> > > +      interrupts:
+> > > +        maxItems: 1
+> > > +
+> > > +      clocks:
+> > > +        maxItems: 1
+> > > +
+> > > +      perif,memcyc-enable:
+> > 
+> > What vendor is 'perif'?
+> 
+> It refers to the eSPI peripheral channel.
+
+The convention for properties is <vendor-prefix>,<property-name>. Fix 
+your property names to follow this. 
+
+> 
+> > 
+> > > +        type: boolean
+> > > +        description: Enable memory cycle over eSPI peripheral channel
+> > > +
+> > > +      perif,memcyc-src-addr:
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > +        description: The Host side address to be decoded into the
+> > > + memory cycle over eSPI peripheral channel
+> > > +
+> > > +      perif,memcyc-size:
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > +        description: The size of the memory region allocated for the
+> > memory cycle over eSPI peripheral channel
+> > > +        minimum: 65536
+> > 
+> > This region is defined by the h/w or just some carveout of system memory? In
+> > the former, perhaps this should be part of 'reg'. In the latter case, use a
+> > /reserved-memory node and memory-region here.
+> 
+> The region is going to be allocated at runtime phase.
+> It is a kind of shared memory between Host and BMC.
+
+Use /reserved-memory.
+
+> 
+> > 
+> > > +
+> > > +      perif,dma-mode:
+> > > +        type: boolean
+> > > +        description: Enable DMA support for eSPI peripheral channel
+> > > +
+> > > +      oob,dma-mode:
+> > 
+> > What vendor is 'oob'?
+> 
+> It refers to the eSPI out-of-band channel.
+> 
+> > 
+> > > +        type: boolean
+> > > +        description: Enable DMA support for eSPI out-of-band channel
+> > > +
+> > > +      oob,dma-tx-desc-num:
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > +        minimum: 2
+> > > +        maximum: 1023
+> > > +        description: The number of TX descriptors available for eSPI
+> > > + OOB DMA engine
+> > > +
+> > > +      oob,dma-rx-desc-num:
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > +        minimum: 2
+> > > +        maximum: 1023
+> > > +        description: The number of RX descriptors available for eSPI
+> > > + OOB DMA engine
+> > > +
+> > > +      flash,dma-mode:
+> > > +        type: boolean
+> > > +        description: Enable DMA support for eSPI flash channel
+> > 
+> > Why does this need to be in DT. It's configuration.
+> 
+> The property is used to decide the operation mode (i.e. FIFO or DMA) of the eSPI flash channel.
+> Is it a wrong idea to use the DTS property for?
+> 
+> > 
+> > > +
+> > > +      flash,safs-mode:
+> > > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > > +        enum: [ 0, 1, 2 ]
+> > > +        default: 0
+> > > +        description: Slave-Attached-Sharing-Flash mode, 0->Mix,
+> > > + 1->SW, 2->HW
+> > > +
+> > > +    dependencies:
+> > > +      perif,memcyc-src-addr: [ "perif,memcyc-enable" ]
+> > > +      perif,memcyc-size: [ "perif,memcyc-enable" ]
+> > > +      oob,dma-tx-desc-num: [ "oob,dma-mode" ]
+> > > +      oob,dma-rx-desc-num: [ "oob,dma-mode" ]
+> > > +
+> > > +    required:
+> > > +      - compatible
+> > > +      - interrupts
+> > > +      - clocks
+> > > +
+> > > +  "^espi-mmbi@[0-9a-f]+$":
+> > > +    type: object
+> > > +
+> > > +    description: Control of the PCH-BMC data exchange over eSPI
+> > > + peripheral memory cycle
+> > > +
+> > > +    properties:
+> > > +      compatible:
+> > > +        const: aspeed,ast2600-espi-mmbi
+> > > +
+> > > +      interrupts:
+> > > +        maxItems: 1
+> > > +
+> > > +    required:
+> > > +      - compatible
+> > > +      - interrupts
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - "#address-cells"
+> > > +  - "#size-cells"
+> > > +  - ranges
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > +    #include <dt-bindings/clock/ast2600-clock.h>
+> > > +
+> > > +    espi: espi@1e6ee000 {
+> > > +        compatible = "aspeed,ast2600-espi", "simple-mfd", "syscon";
+> > > +        reg = <0x1e6ee000 0x1000>;
+> > > +
+> > > +        #address-cells = <1>;
+> > > +        #size-cells = <1>;
+> > > +        ranges = <0x0 0x1e6ee000 0x1000>;
+> > > +
+> > > +        espi_ctrl: espi-ctrl@0 {
+> > > +            compatible = "aspeed,ast2600-espi-ctrl";
+> > > +            reg = <0x0 0x800>;
+> > > +            interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
+> > > +            clocks = <&syscon ASPEED_CLK_GATE_ESPICLK>;
+> > > +        };
+> > > +
+> > > +        espi_mmbi: espi-mmbi@800 {
+> > > +            compatible = "aspeed,ast2600-espi-mmbi";
+> > > +            reg = <0x800 0x50>;
+> > > +            interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
+> > > +        };
+> > 
+> > Why do you need these child nodes? Are the subblocks somehow useful on
+> > their own or reuseable in another configuration? If not, looks like this could all
+> > be 1 node.
+> 
+> espi-mmbi has individual function and control registers.
+> However, espi-mmbi is also a feature extended based on the memory cycle of eSPI peripheral channel.
+> Thereby, it has dependency on the eSPI channel initialization conducted by espi-ctrl.
+> The scenario is similar to the lpc-ctrl and other lpc-xxx drivers of Aspeed SoCs.
+
+Doesn't LPC have independent downstream devices like a bus? Is this a 
+bus where the ESPI controls access to MMBI and espi-ctrl devices? If so, 
+then the devices need their own binding and descriptions. But it doesn't 
+really look like that to me given the limited description.
+
+Rob

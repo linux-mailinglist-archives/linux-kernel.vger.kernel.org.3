@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B3652B979
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FCA52B9C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236017AbiERL4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37196 "EHLO
+        id S236059AbiERL4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235966AbiERL4T (ORCPT
+        with ESMTP id S235878AbiERL4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:56:19 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B71E9E;
-        Wed, 18 May 2022 04:56:17 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id dk23so3308118ejb.8;
-        Wed, 18 May 2022 04:56:17 -0700 (PDT)
+        Wed, 18 May 2022 07:56:20 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E47CF45
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 04:56:18 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id tk15so3319851ejc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 04:56:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bDVhsYhcH84aV3iRdTGGmIFJ0IE7KSrLpx2SeKM1fdE=;
-        b=lH9VMsyVl8qTRJwQvmr3mFQlz3jrJ3x40HwM5yg7Pta0C5oBdhVDXKcw6gWcXZkXVT
-         wfQk/CbUTB2/rlsKyJlTDFhF/WE1M1nnUVeDmMReRXIfWmuy8QLD+nn86GHVrseWLkqH
-         VGUwTtdA/wMHQk3kO+B3VGKLtO9taH1NkqijqBC9aKSYcJ5dI9jChu5zm2GzbnwfO9ra
-         z31S+FZKexYikA9yKw28U+OOjyz6EucQL+J3tWlwnns0ss5FNaESXB70/ZM9eCGGkIfH
-         OtObyA1fPXzluO2G/b8UlByYFjmmhdwkkpzdnGG5/HY+jmJN/z0OqKhlvKcjM/w1HXnu
-         JFEA==
+        bh=b1dlEPWVrVXPU9+OpPy+DjsXYyATJBO85j2ZJWlY2iE=;
+        b=TiI4GaMGCOCddV8HiwnOPd+gCJrAzBja0E8iUAqdeogfrF97bB9p2YgK5SmMjS+dHe
+         hULnBAFx1ZiHmqCIRYB/YCeauOMyPq6gkykmrA6TbbF6ThxF86HbBWx2PpLbwf6hr919
+         cMhrjO2ci5BLTIlmhJCQ/wgDkY31t+Av8D1Jm9PkwQ9AVrNR+OroorbOt0Ym0WBb/10t
+         Kxo8lIZrGU4MnUYhi0DTFrTkWEPCANMNwIroHtvKLrE94MUGt+DtPIy/3xQkQsWJMHlu
+         0BawCST4HeH4l7tjEgVLCJXDtVtEtSBDQg0xJLyEwEeb0x0qXtdeXNmw8T4qjtomgtFB
+         470A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bDVhsYhcH84aV3iRdTGGmIFJ0IE7KSrLpx2SeKM1fdE=;
-        b=3lFIgIv5lQA1LGkMGKXdrFgo8EEIsk+5nPeZF8v3E6QHD5dXekkAFyfAhe9+lsRPGm
-         1DR6RwA2DiP7yylnLvdu39eGR8pXAqhBE+6N/QDnGn+Tv7T0TGu1+yjjnMY7XbJJ78/K
-         sJjkrJsQ9OZ2v9TIIhfmpAy2NLmZpPft1NIj6hbq2pffzDl75aVUcmsl5U+NwLIiQa5G
-         Q+OpcP68vue+cW7/rk81OBGoy0/mYZvdBQIoUAf+2aD3ONhpLjJH9ro9rrArPwVFMlmS
-         o/n6bKJEUbzxv8O81YVhNzUYzHf3k2RnUWAlEtACtgk+8AlXPm8fgTobDfcwSqdPapZS
-         mi9g==
-X-Gm-Message-State: AOAM532yvZsazL84XfDnq0+51TldgDiexue920fYxt/YCW0spdp0u1/d
-        TqI+dcpYTJFDOkgGOhpgArs=
-X-Google-Smtp-Source: ABdhPJzzkEqdp3Q+ON2NhyqKQVUmBjrQFHhrDta4Qq8v8UNA5ECXxP9dmsraf+dBf51ngGrUihZCpA==
-X-Received: by 2002:a17:907:1c8e:b0:6f4:e24f:20e0 with SMTP id nb14-20020a1709071c8e00b006f4e24f20e0mr23516272ejc.227.1652874975853;
-        Wed, 18 May 2022 04:56:15 -0700 (PDT)
+        bh=b1dlEPWVrVXPU9+OpPy+DjsXYyATJBO85j2ZJWlY2iE=;
+        b=Prn6hCkhAYHmSo0DnX6JFok9RLJ9M8VcF7ZbW2wN9ezZ4K5wW+wsHMiTnMCi8IpmG2
+         EACCClpwYJ/Ck/eoEaMc7jGiIjmz4ouyVggDJcGNVDQL0yEa6uw52Jz1Zg6OMATKwe4S
+         NKA8gIxVKFWMHUlSPxq5lh6MPCIHMJuYKz0+V9QthFvnhWrSnVShITHFdcjELi+2wjbW
+         rQafTpeD7DVAD1OHILcH5CdBbGbYyCC3PBigUBe4GBMxeA5an64SPIqvMpXTtMigVPXM
+         WNzDIC6d8o9oNo2E10KJjtnYvUvp6MQbehcipFz6uPUlmFT2MRhytrKqUtbBjxJWwvll
+         gnsA==
+X-Gm-Message-State: AOAM533Y92ARysKjeqnEfruZqM2xgFTTF3J8iNfRhVyRmbaUrAUT/3TA
+        moWtbbwkg+NOAMind9rdLZ0=
+X-Google-Smtp-Source: ABdhPJwRW8Qy/kDVW3sedgwCmFrhZm2ha7NIB6DPX7bqZVmgNOIrDmk3X7+B9X5LnQadvHmbSyWwXA==
+X-Received: by 2002:a17:907:3d91:b0:6f5:2b6a:ef55 with SMTP id he17-20020a1709073d9100b006f52b6aef55mr24549365ejc.352.1652874976966;
+        Wed, 18 May 2022 04:56:16 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id dq20-20020a170907735400b006f5294986besm873999ejc.111.2022.05.18.04.56.15
+        by smtp.gmail.com with ESMTPSA id dq20-20020a170907735400b006f5294986besm873999ejc.111.2022.05.18.04.56.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 04:56:15 -0700 (PDT)
+        Wed, 18 May 2022 04:56:16 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
 Cc:     Marek Vasut <marex@denx.de>,
@@ -58,16 +58,12 @@ Cc:     Marek Vasut <marex@denx.de>,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Nikita Kiryanov <nikita@compulab.co.il>,
-        Rob Herring <robh+dt@kernel.org>,
         Sam Ravnborg <sam@ravnborg.org>,
         Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/3] dt-bindings: display: startek,startek-kd050c: allow bus-format property
-Date:   Wed, 18 May 2022 13:55:39 +0200
-Message-Id: <20220518115541.38407-3-max.oss.09@gmail.com>
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/3] drm/panel: simple: add bus-format support for panel-dpi
+Date:   Wed, 18 May 2022 13:55:40 +0200
+Message-Id: <20220518115541.38407-4-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220518115541.38407-1-max.oss.09@gmail.com>
 References: <20220518115541.38407-1-max.oss.09@gmail.com>
@@ -85,31 +81,94 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Allow to specify the optional bus-format property newly added to
-panel-dpi.
+Evaluate the device tree bus-format property to set bus_format for
+a 'panel-dpi' panel. Additionally infer the bpc value from the
+given bus-format.
+
+Valid values for bus-format are found in:
+<include/dt-bindings/display/dt-media-bus-format.h>
+
+This completes the addition of panel-dpi to completely specify
+a panel-simple panel from the device tree.
 
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
 ---
 
 Changes in v2:
-- New commit
+    None
 
- .../bindings/display/panel/startek,startek-kd050c.yaml           | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/panel/panel-simple.c | 43 ++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/startek,startek-kd050c.yaml b/Documentation/devicetree/bindings/display/panel/startek,startek-kd050c.yaml
-index fd668640afd1..05306713044e 100644
---- a/Documentation/devicetree/bindings/display/panel/startek,startek-kd050c.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/startek,startek-kd050c.yaml
-@@ -19,6 +19,7 @@ properties:
-       - {} # panel-dpi, but not listed here to avoid false select
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index a34f4198a534..090c60abb014 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -21,6 +21,7 @@
+  * DEALINGS IN THE SOFTWARE.
+  */
  
-   backlight: true
-+  bus-format: true
-   enable-gpios: true
-   height-mm: true
-   label: true
++#include <dt-bindings/display/dt-media-bus-format.h>
+ #include <linux/delay.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/module.h>
+@@ -453,6 +454,7 @@ static int panel_dpi_probe(struct device *dev,
+ 	struct panel_desc *desc;
+ 	unsigned int bus_flags;
+ 	struct videomode vm;
++	u32 bus_format;
+ 	int ret;
+ 
+ 	np = dev->of_node;
+@@ -477,6 +479,47 @@ static int panel_dpi_probe(struct device *dev,
+ 	of_property_read_u32(np, "width-mm", &desc->size.width);
+ 	of_property_read_u32(np, "height-mm", &desc->size.height);
+ 
++	if (!of_property_read_u32(np, "bus-format", &bus_format)) {
++		/* infer bpc from bus-format */
++		switch (bus_format) {
++		case DT_MEDIA_BUS_FMT_RGB565_1X16:
++			desc->bus_format = MEDIA_BUS_FMT_RGB565_1X16;
++			desc->bpc = 6;
++			break;
++		case DT_MEDIA_BUS_FMT_RGB666_1X18:
++			desc->bus_format = MEDIA_BUS_FMT_RGB666_1X18;
++			desc->bpc = 6;
++			break;
++		case DT_MEDIA_BUS_FMT_RGB666_1X24_CPADHI:
++			desc->bus_format = MEDIA_BUS_FMT_RGB666_1X24_CPADHI;
++			desc->bpc = 6;
++			break;
++		case DT_MEDIA_BUS_FMT_BGR888_1X24:
++			desc->bus_format = MEDIA_BUS_FMT_BGR888_1X24;
++			desc->bpc = 8;
++			break;
++		case DT_MEDIA_BUS_FMT_GBR888_1X24:
++			desc->bus_format = MEDIA_BUS_FMT_GBR888_1X24;
++			desc->bpc = 8;
++			break;
++		case DT_MEDIA_BUS_FMT_RBG888_1X24:
++			desc->bus_format = MEDIA_BUS_FMT_RBG888_1X24;
++			desc->bpc = 8;
++			break;
++		case DT_MEDIA_BUS_FMT_RGB888_1X24:
++			desc->bus_format = MEDIA_BUS_FMT_RGB888_1X24;
++			desc->bpc = 8;
++			break;
++		case DT_MEDIA_BUS_FMT_RGB888_1X32_PADHI:
++			desc->bus_format = MEDIA_BUS_FMT_RGB888_1X32_PADHI;
++			desc->bpc = 8;
++			break;
++		default:
++			dev_err(dev, "%pOF: unknown bus-format property\n", np);
++			return -EINVAL;
++		}
++	}
++
+ 	/* Extract bus_flags from display_timing */
+ 	bus_flags = 0;
+ 	vm.flags = timing->flags;
 -- 
 2.20.1
 

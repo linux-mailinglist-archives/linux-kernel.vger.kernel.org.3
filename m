@@ -2,112 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8FE52C2E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AE552C2FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241761AbiERTBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 15:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S241774AbiERTCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 15:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241739AbiERTBn (ORCPT
+        with ESMTP id S241745AbiERTBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 15:01:43 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40416172;
-        Wed, 18 May 2022 12:01:41 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id v65so3782892oig.10;
-        Wed, 18 May 2022 12:01:41 -0700 (PDT)
+        Wed, 18 May 2022 15:01:55 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AFB3526C;
+        Wed, 18 May 2022 12:01:54 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id r188-20020a1c44c5000000b003946c466c17so3699459wma.4;
+        Wed, 18 May 2022 12:01:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rBZnRO68NWo3V5gqiqABKmLdz8NjuPd3CbKCN2Cz/cM=;
+        b=gKUIj8Ge35wSfOVwEdHduPahXbAzwGd8SskUVAoHshrofyjcZoeby0X7wFdYx7u1q8
+         MnbWe7PLjcF5/CnGMS41f9DC53DH+5qoAeYYlIkqoytoWRxweNxNTiGES5owVyfgnGie
+         YGyCANJ7NxqfnedK2/FbZJJA8f7z83WKsux1pm01qs71XM2H3r4LnuBhTmcDUYP574qX
+         DRuaxngNaxTLeBEnEQfIf6fnYRfNWn0LzBXBugzHN6JXFO578ctmVEH1QFd4iL3GVvp1
+         8Ocn4Ab8dpl4tfiIKOf+dt9ZFVFi87cX/21EU4X2wVXZ2eZhJoCLJ9emamYoWlfOHgr/
+         7YtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+        h=x-gm-message-state:message-id:date:from:to:subject:references
          :mime-version:content-disposition:in-reply-to;
-        bh=W1XfWqeHpHGKyhVP3IjfibSa08w3m2F+W7eDqY4BJWk=;
-        b=V/Yev3t0+beAmlOxWv0ychQV7VG8yI/ylThTnBcZANR85FtqbOyCOft6Xl3h8J5+ny
-         W8V713iSU2Mcv8CK8ldkTfacqbcTzoRz0pMijY+Fd0N4Q5uig9Bz7EneHcRG2P0jkfyt
-         RuWZWOGFMjw80ZfLZA6bFFqImT28xhA5eoouYL/2dT3UPaiMRv3xWJu2KjyPK5Le9bG8
-         gyP4rONH2z3K3YKokzc/mKgema+GAkkQjbg5vswgnAQS8ST5u++F6XcmCisx+TYkEBZ/
-         196M0/uCj/rMv8MoKRZgmGUvOJe0L0jQYP9OodLmKSjLyBNU5FqBY9YSu+7hj0rIO7OX
-         y2ew==
-X-Gm-Message-State: AOAM533O6O5KrZNn2YsOzJ8eRaXwxci5aR0i3qrP+mgVCi4pfr0y7bx2
-        o0LTD6sia5xlmLa9n4xRBA==
-X-Google-Smtp-Source: ABdhPJx3AzWeH2RaB6ps124qilIE5vWBwX7O/ALy20cDqO3YYIi/EaVezZ+64QB+NVsfp9WTsgjsUw==
-X-Received: by 2002:a05:6808:f08:b0:327:d194:cfa4 with SMTP id m8-20020a0568080f0800b00327d194cfa4mr659065oiw.158.1652900500974;
-        Wed, 18 May 2022 12:01:40 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j7-20020a4a92c7000000b0035eb4e5a6b8sm1237331ooh.14.2022.05.18.12.01.39
+        bh=rBZnRO68NWo3V5gqiqABKmLdz8NjuPd3CbKCN2Cz/cM=;
+        b=OSQUdR76ItnigVy+EurODJLDQ2yNsd7FJN35UzXo04Dhz1HGws8woOctDabjQ6AV+f
+         vlhtussuScpY8ahnBdDoSahQ/VIbBRCYnP3gwBg1sASb8q67C4nmkh6vhmYFAWSoASEx
+         uu+hK39e6cJvMTNVoOuzsQO8iB/BT0ycmdz8vdiHoC8KHTu/GqyDzLO/NU0tHEKvRtjc
+         Z2tmLaC/nNz34r5BQZN5Aeq+fWSVzKQx8eZh8uU+FT16VLYSyiZeHYQy8l+8zCqekoCi
+         AYjKcTFgtjkXM8vC433UYb493vdtMCZnStltfZmFk6+OYSxCjTsVF9JnTUqFermlZneT
+         R0lg==
+X-Gm-Message-State: AOAM532vO52rROScO6qffjUD+MPMV6uvkMaoddjJr/yCkDoZb+loGo0z
+        GUXtQMyvvJHO1XtJGOn9NL0=
+X-Google-Smtp-Source: ABdhPJwFABL9st5eY1kCZPAqEZTG5BH2l111z7uQRFbd2WAbEua6u8ho/o92KmJ7E6hl6JcXlsiVqg==
+X-Received: by 2002:a05:600c:354a:b0:394:8fa4:73bc with SMTP id i10-20020a05600c354a00b003948fa473bcmr1186452wmq.37.1652900512510;
+        Wed, 18 May 2022 12:01:52 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id c14-20020a05600c0a4e00b003942a244ec4sm2527846wmq.9.2022.05.18.12.01.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 12:01:40 -0700 (PDT)
-Received: (nullmailer pid 3699883 invoked by uid 1000);
-        Wed, 18 May 2022 19:01:39 -0000
-Date:   Wed, 18 May 2022 14:01:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     max.krummenacher@toradex.com, Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 02/17] Revert "ARM: dts: imx6qdl-apalis: Avoid
- underscore in node name"
-Message-ID: <20220518190139.GB3685644-robh@kernel.org>
-References: <20220516115846.58328-1-max.oss.09@gmail.com>
- <20220516115846.58328-3-max.oss.09@gmail.com>
+        Wed, 18 May 2022 12:01:52 -0700 (PDT)
+Message-ID: <628542a0.1c69fb81.8800.d06a@mx.google.com>
+X-Google-Original-Message-ID: <YoVCnbKs3xgDNnzT@Ansuel-xps.>
+Date:   Wed, 18 May 2022 21:01:49 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] dt-bindings: mtd: qcom_nandc: document
+ qcom,boot-pages binding
+References: <20220518184256.21238-1-ansuelsmth@gmail.com>
+ <20220518184256.21238-3-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516115846.58328-3-max.oss.09@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220518184256.21238-3-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 01:58:30PM +0200, Max Krummenacher wrote:
-> From: Max Krummenacher <max.krummenacher@toradex.com>
+On Wed, May 18, 2022 at 08:42:56PM +0200, Ansuel Smith wrote:
+> Document new qcom,boot-pages binding used to apply special
+> read/write configuration to boot pages.
 > 
-> The STMPE MFD device binding requires the child node to have a fixed
-> name, i.e. with '_', not '-'. Otherwise the stmpe_adc, stmpe_touchscreen
-> drivers will not be probed.
+> QCOM apply a special configuration where spare data is not protected
+> by ECC for some special pages (used for boot partition). Add
+> Documentation on how to declare these special pages.
 > 
-> Fixes: 56086b5e804f ("ARM: dts: imx6qdl-apalis: Avoid underscore in node name")
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > ---
+>  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 26 +++++++++++++++++++
+>  1 file changed, 26 insertions(+)
 > 
->  arch/arm/boot/dts/imx6qdl-apalis.dtsi | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-> index bd763bae596b..da919d0544a8 100644
-> --- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-> +++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-> @@ -315,7 +315,7 @@
->  		/* ADC conversion time: 80 clocks */
->  		st,sample-time = <4>;
+> diff --git a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> index 84ad7ff30121..3b8244db2ae8 100644
+> --- a/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
+> @@ -102,6 +102,30 @@ allOf:
+>              - const: rx
+>              - const: cmd
 >  
-> -		stmpe_touchscreen: stmpe-touchscreen {
-> +		stmpe_touchscreen: stmpe_touchscreen {
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,ipq8074-nand
 
-In any case, the correct name would have been 'touchscreen' and 'adc'.
+Ignore this revision, this is wrong since this should be ipq8064...
+Will resend tomorrow v4 with this fixed. 
 
->  			compatible = "st,stmpe-ts";
->  			/* 8 sample average control */
->  			st,ave-ctrl = <3>;
-> @@ -332,7 +332,7 @@
->  			st,touch-det-delay = <5>;
->  		};
+> +
+> +    then:
+> +      properties:
+> +        qcom,boot-pages:
+> +          $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +          items:
+> +            items:
+> +              - description: offset
+> +              - description: size
+> +          description:
+> +            Some special page used by boot partition have spare data
+> +            not protected by ECC. Use this to declare these special page
+> +            by defining first the offset and then the size.
+> +
+> +            It's in the form of <offset1 size1 offset2 size2 offset3 ...>
+> +
+> +            Refer to the ipq8064 example on how to use this special binding.
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -135,6 +159,8 @@ examples:
+>          nand-ecc-strength = <4>;
+>          nand-bus-width = <8>;
 >  
-> -		stmpe_adc: stmpe-adc {
-> +		stmpe_adc: stmpe_adc {
->  			compatible = "st,stmpe-adc";
->  			/* forbid to use ADC channels 3-0 (touch) */
->  			st,norequest-mask = <0x0F>;
+> +        qcom,boot-pages = <0x0 0x58a0000>;
+> +
+>          partitions {
+>            compatible = "fixed-partitions";
+>            #address-cells = <1>;
 > -- 
-> 2.20.1
+> 2.34.1
 > 
+
+-- 
+	Ansuel

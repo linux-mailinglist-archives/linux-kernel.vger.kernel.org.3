@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F80352BE6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F206952BF63
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239327AbiERPY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S239280AbiERP1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239273AbiERPYJ (ORCPT
+        with ESMTP id S229496AbiERP1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:24:09 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE78719C3A7
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:24:07 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id r6-20020a1c2b06000000b00396fee5ebc9so1242903wmr.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iwFDpDzsgkZxnKVg9aJTc5E9Q138Iv8GSg56Yqm0AM4=;
-        b=cJPHEbefsOrS36AeKT5jTO5oHzqeCDUnv2YSZEO97zuos5lW1FIKIQg3jR6psxYH/Y
-         iIXamqrwCBesaePVbnXKabA2SUTQlVsjMCnYunoQujOeo+BmKN4ydxzUGg1SuR0iz3rA
-         LnsLEjPOsjWrOCVxVykoux8FWi4X9pFlLDMvlyEfp3iM2pg7XpxkjqM9Wx6UuK8+npN8
-         8Jr3vTAwtKwk0XLe8QVq2htYXMsXrGv7rWzz4unJsIx6HdVu8jDTMhl27UTK6zo9mkEr
-         qi6xWf+b/7OqAWVEHtTQdfe2EjjJXitNxVqleo20j9m7KvPdEA4Ls7KrEgVW78ayvjto
-         Cvuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iwFDpDzsgkZxnKVg9aJTc5E9Q138Iv8GSg56Yqm0AM4=;
-        b=Tm82LTv2N8rJnMFgi1z075Gnp/m8J6KfTGI5WYVYx80TFrKK2LKBYKO9xpkvYOc4A5
-         eWP+tioGSqsQaZXaLQW4qxU94i1wcMIBM6+2sJk/wmIRGuTvTljLHzkcaPXl0vargWoc
-         EyB3Iy29c2P27mcvaR7RQSMJHTj6zMOcUw0PwQXKLWhS/WnmbJJVLEvlfhr2n9p4bVFv
-         G0TcF2w9Oc2u1Bvv2pSrssWAEXsC1Lmc5etHdgUWsk+8kFXY9FdN8IEDI3YMu/mp/7hq
-         PCNbPMK+0+dCDOqhsA7sGPjFCXyX0ZH31nJL9RS2n6yq9Gw1sX4kx1RZLHjGYJpaIOOe
-         TyJA==
-X-Gm-Message-State: AOAM530kjMJIRT3YDyDDFDySrZ0NXHmhwCDza1FyfRS26klhS/Qtg34K
-        9SxnixlQYcO25P5JpRdSXduu+N+G+dwZq1By
-X-Google-Smtp-Source: ABdhPJzDD6Dg3zhbXuh1z8Drpc7WSNtxsx/KqISxAJMjOoonZ3gZNA4LRvb3POgg8EWVepm3Vkls5A==
-X-Received: by 2002:a7b:c445:0:b0:397:28d3:d9cf with SMTP id l5-20020a7bc445000000b0039728d3d9cfmr452230wmi.116.1652887445896;
-        Wed, 18 May 2022 08:24:05 -0700 (PDT)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id v9-20020a056000144900b0020c5253d8d8sm2975319wrx.36.2022.05.18.08.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 08:24:05 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        stable@vger.kernel.org, Jan Jablonsky <jjablonsky@snapchat.com>
-Subject: [PATCH] misc: fastrpc: fix list iterator in fastrpc_req_mem_unmap_impl
-Date:   Wed, 18 May 2022 16:23:53 +0100
-Message-Id: <20220518152353.13058-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        Wed, 18 May 2022 11:27:08 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFB11A15ED;
+        Wed, 18 May 2022 08:27:07 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IFJ5HU000585;
+        Wed, 18 May 2022 15:27:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=wE2LYh2sEtLSMPKhd0EVOuSmjypjOjypIy29tD6qvvs=;
+ b=OCPBHgwaeK62t/LHciVUuUxZAjhkKijLkLvAIK5CwW7F6EJCrx1OhfqLTJfhdx96LmSH
+ 0vO5MCuir7QNUQYjJEgxWCTiTiTEbXmRJgzyPCp70VvzZ0Rqem70Go9z5jiEvgR5eVS7
+ 7tXXVGMpbQ+BH1KzgV8cnhUdVmb+41a33yjwu+TmXHp00cGeJLZDNaDF5lMAgjhWjETv
+ wgoUVptVy40AsZYAKXksBxb2gUO1sPj0xnwvRdJgZOSOcfDjpyQzDn1Nz5CgRxODHiMH
+ 3fsGjDmhA3yspYOC40EgYwudTYoNRyYAiuMBcTLC1ewB/X/7cOtvezpZo01fPIorxThc MA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g53b984ss-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 15:27:06 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IFKLkC009110;
+        Wed, 18 May 2022 15:27:05 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g53b984s8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 15:27:05 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IFIYIm001392;
+        Wed, 18 May 2022 15:27:04 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3g2428mst2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 15:27:03 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IFR0cS49545522
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 15:27:00 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7C7FC52051;
+        Wed, 18 May 2022 15:27:00 +0000 (GMT)
+Received: from [9.171.79.88] (unknown [9.171.79.88])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id DF19C5204E;
+        Wed, 18 May 2022 15:26:59 +0000 (GMT)
+Message-ID: <f9cb28d5-2aa5-f902-53ab-592b08672c62@de.ibm.com>
+Date:   Wed, 18 May 2022 17:26:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v9 0/3] s390x: KVM: CPU Topology
+Content-Language: en-US
+To:     Pierre Morel <pmorel@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        frankja@linux.ibm.com, cohuck@redhat.com, david@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com
+References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+In-Reply-To: <20220506092403.47406-1-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fjdry2CXO57rowDGk2wdqOGCIiF4aZV3
+X-Proofpoint-ORIG-GUID: sXt_FmLSgnLPexwHI_l9YDVRtXlDwL80
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_05,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ suspectscore=0 priorityscore=1501 phishscore=0 lowpriorityscore=0
+ mlxlogscore=645 spamscore=0 clxscore=1011 impostorscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205180089
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is another instance of incorrect use of list iterator and
-checking it for NULL.
+Pierre,
 
-The list iterator value 'map' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty (in this case, the
-check 'if (!map) {' will always be false and never exit as expected).
-
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'map' as a dedicated pointer to
-point to the found element.
-
-Without this patch, Kernel crashes with below trace:
-
-Unable to handle kernel access to user memory outside uaccess routines
- at virtual address 0000ffff7fb03750
-...
-Call trace:
- fastrpc_map_create+0x70/0x290 [fastrpc]
- fastrpc_req_mem_map+0xf0/0x2dc [fastrpc]
- fastrpc_device_ioctl+0x138/0xc60 [fastrpc]
- __arm64_sys_ioctl+0xa8/0xec
- invoke_syscall+0x48/0x114
- el0_svc_common.constprop.0+0xd4/0xfc
- do_el0_svc+0x28/0x90
- el0_svc+0x3c/0x130
- el0t_64_sync_handler+0xa4/0x130
- el0t_64_sync+0x18c/0x190
-Code: 14000016 f94000a5 eb05029f 54000260 (b94018a6)
----[ end trace 0000000000000000 ]---
-
-Cc: stable@vger.kernel.org
-Fixes: 5c1b97c7d7b7 ("misc: fastrpc: add support for FASTRPC_IOCTL_MEM_MAP/UNMAP")
-Reported-by: Jan Jablonsky <jjablonsky@snapchat.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/misc/fastrpc.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 4bdc8e0df657..93ebd174d848 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -1748,17 +1748,18 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
- static int fastrpc_req_mem_unmap_impl(struct fastrpc_user *fl, struct fastrpc_mem_unmap *req)
- {
- 	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
--	struct fastrpc_map *map = NULL, *m;
-+	struct fastrpc_map *map = NULL, *iter, *m;
- 	struct fastrpc_mem_unmap_req_msg req_msg = { 0 };
- 	int err = 0;
- 	u32 sc;
- 	struct device *dev = fl->sctx->dev;
- 
- 	spin_lock(&fl->lock);
--	list_for_each_entry_safe(map, m, &fl->maps, node) {
--		if ((req->fd < 0 || map->fd == req->fd) && (map->raddr == req->vaddr))
-+	list_for_each_entry_safe(iter, m, &fl->maps, node) {
-+		if ((req->fd < 0 || iter->fd == req->fd) && (iter->raddr == req->vaddr)) {
-+			map = iter;
- 			break;
--		map = NULL;
-+		}
- 	}
- 
- 	spin_unlock(&fl->lock);
--- 
-2.21.0
-
+please use "KVM: s390x:" and not "s390x: KVM:" for future series.

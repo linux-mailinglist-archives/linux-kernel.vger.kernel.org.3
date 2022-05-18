@@ -2,242 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C66252BF41
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14CA52BF48
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239689AbiERQH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
+        id S239862AbiERQI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239797AbiERQHy (ORCPT
+        with ESMTP id S239832AbiERQIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:07:54 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C5F132A3E;
-        Wed, 18 May 2022 09:07:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652890073; x=1684426073;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lIMZKXFl8g4Cv2pg9aGtn7TJPKfW12wIqpWtwiAWWWQ=;
-  b=uAuw7XjIPAQnwN+V7Mun+wlqWqhIIipZeAtWL04gHY5rx9mAHvjf7jO5
-   XMxzFpgXGdh6dwsgEpTU5qt4qDFwKYc7bNmoHZlEownfGTrXbhgflaK/h
-   XvJy5U5HGIzBFO7A1RqswzvFsjk7AE2tC0xxpx18oxx/tra+Wb5oY1BCc
-   8=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 May 2022 09:07:52 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 09:07:52 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 09:07:52 -0700
-Received: from [10.110.42.114] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 18 May
- 2022 09:07:50 -0700
-Message-ID: <a2dda832-3aa0-a6da-85c9-2a8827e1feae@quicinc.com>
-Date:   Wed, 18 May 2022 09:07:48 -0700
+        Wed, 18 May 2022 12:08:53 -0400
+Received: from sender4-of-o58.zoho.com (sender4-of-o58.zoho.com [136.143.188.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8E91A90E0;
+        Wed, 18 May 2022 09:08:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1652890116; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=SHWYSj3vP18G5NmXOxNXIupnb6HsLS+Tl6jdk2lXFYpahwCsKyJqusJ2gge7/hhjNnMQqGsBLC4oWChcNLQpLqx5UzrFW9NBjzHb1hnE9wR4NccotDshQ9gQ5hT6VWBIZRbNRECy2Fqwo/DGdMw7YGRZtr+f8m/IypaiE5+4SqY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1652890116; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=+cZ8XYAv852N9d08qbeG4+9NAK/ObtkEi2g545fJNrA=; 
+        b=IPdiVJ97XjPuU5eA4WZMVK8n0ejwdvCeLPAuIRbKV8a+EtgUq3+gqlKHbVm7c+2WGb/ZpG2MZrYNPcq4J/G1kGnIVu5ZFh3qVcqHe93AMn8DLC618ZvOZit6iKO6at3ON+aVH+ZdfFQqQ5tWKqeE+KqDHGjJK+Hro9/Ntih+89k=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
+        dmarc=pass header.from=<linux@mniewoehner.de>
+Received: from z3r0.lan (185.31.62.161 [185.31.62.161]) by mx.zohomail.com
+        with SMTPS id 1652890114575405.4934181638498; Wed, 18 May 2022 09:08:34 -0700 (PDT)
+Message-ID: <be1f990324293fd09ae29b07a9d1bdcbf6a21bd5.camel@mniewoehner.de>
+Subject: Re: [PATCH v4 5/6] tpm, tpm_tis: Move irq test from tpm_tis_send()
+ to tpm_tis_probe_irq_single()
+From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukas@wunner.de, p.rosenberger@kunbus.com,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+In-Reply-To: <878ac60b87ae558c32a018076545135278da08ca.camel@kernel.org>
+References: <20220509080559.4381-1-LinoSanfilippo@gmx.de>
+         <20220509080559.4381-6-LinoSanfilippo@gmx.de> <YnvRrT19Pe2SPDNe@kernel.org>
+         <34f47a0c-5c2d-1cdc-fb97-03666a5e1918@gmx.de> <YoKPCKarZiKRWa4b@kernel.org>
+         <0378b8ac-22c6-b1ba-0fd7-dae8fa15cb81@gmx.de>
+         <e968ea8a4f4b1af5df58ef96870ff9599b125eca.camel@mniewoehner.de>
+         <878ac60b87ae558c32a018076545135278da08ca.camel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Wed, 18 May 2022 18:08:30 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 1/2] phy/qcom: add regulator_set_load to edp/dp phy
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <daniel@ffwll.ch>, <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>,
-        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1652808360-9830-1-git-send-email-quic_khsieh@quicinc.com>
- <1652808360-9830-2-git-send-email-quic_khsieh@quicinc.com>
- <YoS8dMAhD9h+CtJa@matsya>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <YoS8dMAhD9h+CtJa@matsya>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.2 
+Content-Transfer-Encoding: base64
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+T24gV2VkLCAyMDIyLTA1LTE4IGF0IDA0OjI2ICswMzAwLCBKYXJra28gU2Fra2luZW4gd3JvdGU6
+Cj4gT24gVHVlLCAyMDIyLTA1LTE3IGF0IDIwOjE5ICswMjAwLCBNaWNoYWVsIE5pZXfDtmhuZXIg
+d3JvdGU6Cj4gPiBIaSBndXlzLAo+ID4gCj4gPiAKPiA+IE9uIE1vbiwgMjAyMi0wNS0xNiBhdCAy
+MjoyNSArMDIwMCwgTGlubyBTYW5maWxpcHBvIHdyb3RlOgo+ID4gPiBPbiAxNi4wNS4yMiBhdCAx
+OTo1MSwgSmFya2tvIFNha2tpbmVuIHdyb3RlOgo+ID4gPiA+IE9uIFdlZCwgTWF5IDExLCAyMDIy
+IGF0IDA5OjU2OjU5UE0gKzAyMDAsIExpbm8gU2FuZmlsaXBwbyB3cm90ZToKPiA+ID4gPiA+IE9u
+IDExLjA1LjIyIGF0IDE3OjA5LCBKYXJra28gU2Fra2luZW4gd3JvdGU6Cj4gPiA+ID4gPiA+IE9u
+IE1vbiwgTWF5IDA5LCAyMDIyIGF0IDEwOjA1OjU4QU0gKzAyMDAsIExpbm8gU2FuZmlsaXBwbyB3
+cm90ZToKPiA+ID4gPiA+ID4gPiBGcm9tOiBMaW5vIFNhbmZpbGlwcG8gPGwuc2FuZmlsaXBwb0Br
+dW5idXMuY29tPgo+ID4gPiA+ID4gPiA+IAo+ID4gPiA+ID4gPiA+IFRoZXJlIGlzIG5vIG5lZWQg
+dG8gY2hlY2sgZm9yIHRoZSBpcnEgdGVzdCBjb21wbGV0aW9uIGF0IGVhY2ggZGF0YQo+ID4gPiA+
+ID4gPiA+IHRyYW5zbWlzc2lvbiBkdXJpbmcgdGhlIGRyaXZlciBsaXZldGltZS4gSW5zdGVhZCBk
+byB0aGUgY2hlY2sgb25seQo+ID4gPiA+ID4gPiA+IG9uY2UgYXQKPiA+ID4gPiA+ID4gPiBkcml2
+ZXIgc3RhcnR1cC4KPiA+ID4gPiA+ID4gPiAKPiA+ID4gPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBM
+aW5vIFNhbmZpbGlwcG8gPGwuc2FuZmlsaXBwb0BrdW5idXMuY29tPgo+ID4gPiA+ID4gPiA+IC0t
+LQo+ID4gPiA+ID4gPiA+IMKgZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuYyB8IDY4ICsr
+KysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0KPiA+ID4gPiA+ID4gPiAtLS0tCj4gPiA+ID4gPiA+
+ID4gLQo+ID4gPiA+ID4gPiA+IMKgMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMoKyksIDQ2
+IGRlbGV0aW9ucygtKQo+ID4gPiA+ID4gPiA+IAo+ID4gPiA+ID4gPiA+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCj4gPiA+ID4gPiA+ID4gYi9kcml2ZXJzL2No
+YXIvdHBtL3RwbV90aXNfY29yZS5jCj4gPiA+ID4gPiA+ID4gaW5kZXggYmRmZGUxY2Q3MWZlLi40
+YzY1NzE4ZmViN2QgMTAwNjQ0Cj4gPiA+ID4gPiA+ID4gLS0tIGEvZHJpdmVycy9jaGFyL3RwbS90
+cG1fdGlzX2NvcmUuYwo+ID4gPiA+ID4gPiA+ICsrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rp
+c19jb3JlLmMKPiA+ID4gPiA+ID4gPiBAQCAtNDMyLDcgKzQzMiw3IEBAIHN0YXRpYyB2b2lkIGRp
+c2FibGVfaW50ZXJydXB0cyhzdHJ1Y3QgdHBtX2NoaXAKPiA+ID4gPiA+ID4gPiAqY2hpcCkKPiA+
+ID4gPiA+ID4gPiDCoCAqIHRwbS5jIGNhbiBza2lwIHBvbGxpbmcgZm9yIHRoZSBkYXRhIHRvIGJl
+IGF2YWlsYWJsZSBhcyB0aGUKPiA+ID4gPiA+ID4gPiBpbnRlcnJ1cHQgaXMKPiA+ID4gPiA+ID4g
+PiDCoCAqIHdhaXRlZCBmb3IgaGVyZQo+ID4gPiA+ID4gPiA+IMKgICovCj4gPiA+ID4gPiA+ID4g
+LXN0YXRpYyBpbnQgdHBtX3Rpc19zZW5kX21haW4oc3RydWN0IHRwbV9jaGlwICpjaGlwLCBjb25z
+dCB1OAo+ID4gPiA+ID4gPiA+ICpidWYsCj4gPiA+ID4gPiA+ID4gc2l6ZV90IGxlbikKPiA+ID4g
+PiA+ID4gPiArc3RhdGljIGludCB0cG1fdGlzX3NlbmQoc3RydWN0IHRwbV9jaGlwICpjaGlwLCB1
+OCAqYnVmLCBzaXplX3QKPiA+ID4gPiA+ID4gPiBsZW4pCj4gPiA+ID4gPiA+ID4gwqB7Cj4gPiA+
+ID4gPiA+ID4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCB0cG1fdGlzX2RhdGEgKnByaXYgPSBkZXZf
+Z2V0X2RydmRhdGEoJmNoaXAtPmRldik7Cj4gPiA+ID4gPiA+ID4gwqDCoMKgwqDCoMKgwqDCoGlu
+dCByYzsKPiA+ID4gPiA+ID4gPiBAQCAtNDY1LDMwICs0NjUsNiBAQCBzdGF0aWMgaW50IHRwbV90
+aXNfc2VuZF9tYWluKHN0cnVjdCB0cG1fY2hpcAo+ID4gPiA+ID4gPiA+ICpjaGlwLCBjb25zdCB1
+OCAqYnVmLCBzaXplX3QgbGVuKQo+ID4gPiA+ID4gPiA+IMKgwqDCoMKgwqDCoMKgwqByZXR1cm4g
+cmM7Cj4gPiA+ID4gPiA+ID4gwqB9Cj4gPiA+ID4gPiA+ID4gCj4gPiA+ID4gPiA+ID4gLXN0YXRp
+YyBpbnQgdHBtX3Rpc19zZW5kKHN0cnVjdCB0cG1fY2hpcCAqY2hpcCwgdTggKmJ1Ziwgc2l6ZV90
+Cj4gPiA+ID4gPiA+ID4gbGVuKQo+ID4gPiA+ID4gPiA+IC17Cj4gPiA+ID4gPiA+ID4gLcKgwqDC
+oMKgwqDCoMKgaW50IHJjLCBpcnE7Cj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgc3RydWN0
+IHRwbV90aXNfZGF0YSAqcHJpdiA9IGRldl9nZXRfZHJ2ZGF0YSgmY2hpcC0+ZGV2KTsKPiA+ID4g
+PiA+ID4gPiAtCj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgaWYgKCEoY2hpcC0+ZmxhZ3Mg
+JiBUUE1fQ0hJUF9GTEFHX0lSUSkgfHwKPiA+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCB0ZXN0X2JpdChUUE1fVElTX0lSUVRFU1RfT0ssICZwcml2LT5pcnF0ZXN0X2ZsYWdzKSkK
+PiA+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHRwbV90
+aXNfc2VuZF9tYWluKGNoaXAsIGJ1ZiwgbGVuKTsKPiA+ID4gPiA+ID4gPiAtCj4gPiA+ID4gPiA+
+ID4gLcKgwqDCoMKgwqDCoMKgLyogVmVyaWZ5IHJlY2VpcHQgb2YgdGhlIGV4cGVjdGVkIElSUSAq
+Lwo+ID4gPiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoGlycSA9IHByaXYtPmlycTsKPiA+ID4gPiA+
+ID4gPiAtwqDCoMKgwqDCoMKgwqBwcml2LT5pcnEgPSAwOwo+ID4gPiA+ID4gPiA+IC3CoMKgwqDC
+oMKgwqDCoGNoaXAtPmZsYWdzICY9IH5UUE1fQ0hJUF9GTEFHX0lSUTsKPiA+ID4gPiA+ID4gPiAt
+wqDCoMKgwqDCoMKgwqByYyA9IHRwbV90aXNfc2VuZF9tYWluKGNoaXAsIGJ1ZiwgbGVuKTsKPiA+
+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqBwcml2LT5pcnEgPSBpcnE7Cj4gPiA+ID4gPiA+ID4g
+LcKgwqDCoMKgwqDCoMKgY2hpcC0+ZmxhZ3MgfD0gVFBNX0NISVBfRkxBR19JUlE7Cj4gPiA+ID4g
+PiA+ID4gLcKgwqDCoMKgwqDCoMKgaWYgKCF0ZXN0X2JpdChUUE1fVElTX0lSUVRFU1RfT0ssICZw
+cml2LT5pcnF0ZXN0X2ZsYWdzKSkKPiA+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgdHBtX21zbGVlcCgxKTsKPiA+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqBpZiAo
+IXRlc3RfYml0KFRQTV9USVNfSVJRVEVTVF9PSywgJnByaXYtPmlycXRlc3RfZmxhZ3MpKQo+ID4g
+PiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkaXNhYmxlX2ludGVycnVw
+dHMoY2hpcCk7Cj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgc2V0X2JpdChUUE1fVElTX0lS
+UVRFU1RfT0ssICZwcml2LT5pcnF0ZXN0X2ZsYWdzKTsKPiA+ID4gPiA+ID4gPiAtwqDCoMKgwqDC
+oMKgwqByZXR1cm4gcmM7Cj4gPiA+ID4gPiA+ID4gLX0KPiA+ID4gPiA+ID4gPiAtCj4gPiA+ID4g
+PiA+ID4gwqBzdHJ1Y3QgdGlzX3ZlbmRvcl9kdXJhdGlvbnNfb3ZlcnJpZGUgewo+ID4gPiA+ID4g
+PiA+IMKgwqDCoMKgwqDCoMKgwqB1MzIgZGlkX3ZpZDsKPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKg
+wqDCoMKgc3RydWN0IHRwbTFfdmVyc2lvbiB2ZXJzaW9uOwo+ID4gPiA+ID4gPiA+IEBAIC03NTks
+NTEgKzczNSw1NCBAQCBzdGF0aWMgaW50IHRwbV90aXNfcHJvYmVfaXJxX3NpbmdsZShzdHJ1Y3QK
+PiA+ID4gPiA+ID4gPiB0cG1fY2hpcCAqY2hpcCwgdTMyIGludG1hc2ssCj4gPiA+ID4gPiA+ID4g
+Cj4gPiA+ID4gPiA+ID4gwqDCoMKgwqDCoMKgwqDCoHJjID0gdHBtX3Rpc19yZWFkOChwcml2LCBU
+UE1fSU5UX1ZFQ1RPUihwcml2LT5sb2NhbGl0eSksCj4gPiA+ID4gPiA+ID4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAmb3JpZ2luYWxfaW50X3Zl
+Yyk7Cj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgaWYgKHJjIDwgMCkKPiA+ID4gPiA+ID4g
+PiArwqDCoMKgwqDCoMKgwqBpZiAocmMgPCAwKSB7Cj4gPiA+ID4gPiA+ID4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoGRpc2FibGVfaW50ZXJydXB0cyhjaGlwKTsKPiA+ID4gPiA+ID4g
+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiByYzsKPiA+ID4gPiA+ID4g
+PiArwqDCoMKgwqDCoMKgwqB9Cj4gPiA+ID4gPiA+ID4gCj4gPiA+ID4gPiA+ID4gwqDCoMKgwqDC
+oMKgwqDCoHJjID0gdHBtX3Rpc193cml0ZTgocHJpdiwgVFBNX0lOVF9WRUNUT1IocHJpdi0+bG9j
+YWxpdHkpLAo+ID4gPiA+ID4gPiA+IGlycSk7Cj4gPiA+ID4gPiA+ID4gwqDCoMKgwqDCoMKgwqDC
+oGlmIChyYyA8IDApCj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oHJldHVybiByYzsKPiA+ID4gPiA+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+Z290byBvdXRfZXJyOwo+ID4gPiA+ID4gPiA+IAo+ID4gPiA+ID4gPiA+IMKgwqDCoMKgwqDCoMKg
+wqByYyA9IHRwbV90aXNfcmVhZDMyKHByaXYsIFRQTV9JTlRfU1RBVFVTKHByaXYtPmxvY2FsaXR5
+KSwKPiA+ID4gPiA+ID4gPiAmaW50X3N0YXR1cyk7Cj4gPiA+ID4gPiA+ID4gwqDCoMKgwqDCoMKg
+wqDCoGlmIChyYyA8IDApCj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoHJldHVybiByYzsKPiA+ID4gPiA+ID4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgZ290byBvdXRfZXJyOwo+ID4gPiA+ID4gPiA+IAo+ID4gPiA+ID4gPiA+IMKgwqDCoMKgwqDC
+oMKgwqAvKiBDbGVhciBhbGwgZXhpc3RpbmcgKi8KPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDC
+oMKgcmMgPSB0cG1fdGlzX3dyaXRlMzIocHJpdiwgVFBNX0lOVF9TVEFUVVMocHJpdi0+bG9jYWxp
+dHkpLAo+ID4gPiA+ID4gPiA+IGludF9zdGF0dXMpOwo+ID4gPiA+ID4gPiA+IMKgwqDCoMKgwqDC
+oMKgwqBpZiAocmMgPCAwKQo+ID4gPiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqByZXR1cm4gcmM7Cj4gPiA+ID4gPiA+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGdvdG8gb3V0X2VycjsKPiA+ID4gPiA+ID4gPiAKPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKg
+wqDCoMKgLyogVHVybiBvbiAqLwo+ID4gPiA+ID4gPiA+IMKgwqDCoMKgwqDCoMKgwqByYyA9IHRw
+bV90aXNfd3JpdGUzMihwcml2LCBUUE1fSU5UX0VOQUJMRShwcml2LT5sb2NhbGl0eSksCj4gPiA+
+ID4gPiA+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgaW50bWFzayB8IFRQTV9HTE9CQUxfSU5UX0VOQUJMRSk7Cj4gPiA+ID4gPiA+ID4g
+wqDCoMKgwqDCoMKgwqDCoGlmIChyYyA8IDApCj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoHJldHVybiByYzsKPiA+ID4gPiA+ID4gPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgZ290byBvdXRfZXJyOwo+ID4gPiA+ID4gPiA+IAo+ID4gPiA+ID4gPiA+
+IMKgwqDCoMKgwqDCoMKgwqBjbGVhcl9iaXQoVFBNX1RJU19JUlFURVNUX09LLCAmcHJpdi0+aXJx
+dGVzdF9mbGFncyk7Cj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgY2hpcC0+ZmxhZ3MgfD0g
+VFBNX0NISVBfRkxBR19JUlE7Cj4gPiA+ID4gPiA+ID4gCj4gPiA+ID4gPiA+ID4gwqDCoMKgwqDC
+oMKgwqDCoC8qIEdlbmVyYXRlIGFuIGludGVycnVwdCBieSBoYXZpbmcgdGhlIGNvcmUgY2FsbCB0
+aHJvdWdoCj4gPiA+ID4gPiA+ID4gdG8KPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgICog
+dHBtX3Rpc19zZW5kCj4gPiA+ID4gPiA+ID4gwqDCoMKgwqDCoMKgwqDCoCAqLwo+ID4gPiA+ID4g
+PiA+IMKgwqDCoMKgwqDCoMKgwqByYyA9IHRwbV90aXNfZ2VuX2ludGVycnVwdChjaGlwKTsKPiA+
+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHJjIDwgMCkKPiA+ID4gPiA+ID4gPiAtwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJjOwo+ID4gPiA+ID4gPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBnb3RvIG91dF9lcnI7Cj4gPiA+ID4gPiA+ID4gCj4g
+PiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgLyogdHBtX3Rpc19zZW5kIHdpbGwgZWl0aGVyIGNv
+bmZpcm0gdGhlIGludGVycnVwdCBpcwo+ID4gPiA+ID4gPiA+IHdvcmtpbmcKPiA+ID4gPiA+ID4g
+PiBvciBpdAo+ID4gPiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoCAqIHdpbGwgY2FsbCBkaXNhYmxl
+X2lycSB3aGljaCB1bmRvZXMgYWxsIG9mIHRoZSBhYm92ZS4KPiA+ID4gPiA+ID4gPiAtwqDCoMKg
+wqDCoMKgwqAgKi8KPiA+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqBpZiAoIShjaGlwLT5mbGFn
+cyAmIFRQTV9DSElQX0ZMQUdfSVJRKSkgewo+ID4gPiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqByYyA9IHRwbV90aXNfd3JpdGU4KHByaXYsIG9yaWdpbmFsX2ludF92ZWMs
+Cj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgVFBNX0lOVF9WRUNUT1IocHJpdi0+bG9jYWxpdHkpKTsKPiA+
+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJjIDwgMCkKPiA+
+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oHJldHVybiByYzsKPiA+ID4gPiA+ID4gPiArwqDCoMKgwqDCoMKgwqB0cG1fbXNsZWVwKDEpOwo+
+ID4gPiA+ID4gPiA+IAo+ID4gPiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqByZXR1cm4gMTsKPiA+ID4gPiA+ID4gPiAtwqDCoMKgwqDCoMKgwqB9Cj4gPiA+ID4gPiA+ID4g
+K8KgwqDCoMKgwqDCoMKgLyogVmVyaWZ5IHJlY2VpcHQgb2YgdGhlIGV4cGVjdGVkIElSUSAqLwo+
+ID4gPiA+ID4gPiA+ICvCoMKgwqDCoMKgwqDCoGlmICghdGVzdF9iaXQoVFBNX1RJU19JUlFURVNU
+X09LLCAmcHJpdi0+aXJxdGVzdF9mbGFncykpCj4gPiA+ID4gPiA+ID4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoGdvdG8gb3V0X2VycjsKPiA+ID4gPiA+ID4gPiArCj4gPiA+ID4gPiA+
+ID4gK8KgwqDCoMKgwqDCoMKgY2hpcC0+ZmxhZ3MgfD0gVFBNX0NISVBfRkxBR19JUlE7Cj4gPiA+
+ID4gPiA+ID4gCj4gPiA+ID4gPiA+ID4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+ID4gPiA+
+ID4gPiA+ICsKPiA+ID4gPiA+ID4gPiArb3V0X2VycjoKPiA+ID4gPiAKPiA+ID4gPiBSZW5hbWUg
+dGhpcyBhcyBqdXN0ICdlcnInLgo+ID4gPiA+IAo+ID4gPiA+ID4gPiA+ICvCoMKgwqDCoMKgwqDC
+oGRpc2FibGVfaW50ZXJydXB0cyhjaGlwKTsKPiA+ID4gPiA+ID4gPiArwqDCoMKgwqDCoMKgwqB0
+cG1fdGlzX3dyaXRlOChwcml2LCBvcmlnaW5hbF9pbnRfdmVjLAo+ID4gPiA+ID4gPiA+IFRQTV9J
+TlRfVkVDVE9SKHByaXYtCj4gPiA+ID4gPiA+ID4gPiBsb2NhbGl0eSkpOwo+ID4gPiA+ID4gPiA+
+ICsKPiA+ID4gPiA+ID4gPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gcmM7Cj4gPiA+ID4gPiA+ID4g
+wqB9Cj4gPiA+ID4gPiA+ID4gCj4gPiA+ID4gPiA+ID4gwqAvKiBUcnkgdG8gZmluZCB0aGUgSVJR
+IHRoZSBUUE0gaXMgdXNpbmcuIFRoaXMgaXMgZm9yIGxlZ2FjeSB4ODYKPiA+ID4gPiA+ID4gPiBz
+eXN0ZW1zIHRoYXQKPiA+ID4gPiA+ID4gPiBAQCAtMTA3NSwxMiArMTA1NCw5IEBAIGludCB0cG1f
+dGlzX2NvcmVfaW5pdChzdHJ1Y3QgZGV2aWNlICpkZXYsCj4gPiA+ID4gPiA+ID4gc3RydWN0IHRw
+bV90aXNfZGF0YSAqcHJpdiwgaW50IGlycSwKPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoGlmIChpcnEpIHsKPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0cG1fdGlzX3Byb2JlX2lycV9zaW5nbGUo
+Y2hpcCwgaW50bWFzaywKPiA+ID4gPiA+ID4gPiBJUlFGX1NIQVJFRCwKPiA+ID4gPiA+ID4gPiDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaXJxKTsKPiA+ID4gPiA+ID4g
+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICghKGNo
+aXAtPmZsYWdzICYgVFBNX0NISVBfRkxBR19JUlEpKSB7Cj4gPiA+ID4gPiA+ID4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoIShjaGlwLT5mbGFncyAm
+IFRQTV9DSElQX0ZMQUdfSVJRKSkKPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2X2VycigmY2hpcC0+
+ZGV2LCBGV19CVUcKPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCJUUE0gaW50
+ZXJydXB0IG5vdAo+ID4gPiA+ID4gPiA+IHdvcmtpbmcsCj4gPiA+ID4gPiA+ID4gcG9sbGluZyBp
+bnN0ZWFkXG4iKTsKPiA+ID4gPiA+ID4gPiAtCj4gPiA+ID4gPiA+ID4gLcKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGlzYWJsZV9p
+bnRlcnJ1cHRzKGNoaXApOwo+ID4gPiA+ID4gPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gPiA+ID4gPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgfSBlbHNlIHsKPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB0cG1fdGlzX3Byb2JlX2lycShjaGlwLCBpbnRtYXNr
+KTsKPiA+ID4gPiA+ID4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoH0KPiA+ID4g
+PiA+ID4gPiAtLQo+ID4gPiA+ID4gPiA+IDIuMzYuMAo+ID4gPiA+ID4gPiA+IAo+ID4gPiA+ID4g
+PiAKPiA+ID4gPiA+ID4gRm9yIG1lIHRoaXMgbG9va3MganVzdCBjb2RlIHNodWZmbGluZy4KPiA+
+ID4gPiA+ID4gCj4gPiA+ID4gPiA+IEkgZG9uJ3QgZGlzYWdyZWUgYnV0IGNoYW5naW5nIHdvcmtp
+bmcgY29kZSB3aXRob3V0IGFjdHVhbCBzZW1hbnRpY2FsCj4gPiA+ID4gPiA+IHJlYXNvbnMgbmVp
+dGhlciBtYWtlcyBzZW5zZS4KPiA+ID4gPiA+ID4gCj4gPiA+ID4gPiA+IEJSLCBKYXJra28KPiA+
+ID4gPiA+ID4gCj4gPiA+ID4gPiAKPiA+ID4gPiA+IFdlbGwgdGhlIHNlbWFudGljYWwgcmVhc29u
+IGZvciB0aGlzIGNoYW5nZSBpcyB0aGF0IHRoZSBjaGVjayBmb3IgaXJxCj4gPiA+ID4gPiB0ZXN0
+Cj4gPiA+ID4gPiBjb21wbGV0aW9uCj4gPiA+ID4gPiBvbmx5IGhhcyB0byBiZSBkb25lIG9uY2Ug
+Zm9yIHRoZSBkcml2ZXIgbGl2ZXRpbWUuIFRoZXJlIGlzIG5vIHBvaW50IGluCj4gPiA+ID4gPiBk
+b2luZyBpdAo+ID4gPiA+ID4gb3ZlciBhbmQgb3ZlciBhZ2FpbiBmb3IgZWFjaCB0cmFuc21pc3Np
+b24uCj4gPiA+ID4gPiBTbyB0aGUgY29kZSBpcyBub3Qgc2ltcGx5IHNodWZmbGVkIGFyb3VuZCwg
+aXQgaXMgc2hpZnRlZCB0byBhIHBsYWNlCj4gPiA+ID4gPiB3aGVyZQo+ID4gPiA+ID4gaXQgaXMg
+b25seQo+ID4gPiA+ID4gZXhlY3V0ZWQgb25jZS4KPiA+ID4gPiA+IAo+ID4gPiA+ID4gVGhpcyBp
+cyBub3QgYSBidWdmaXggYnV0IGl0IGlzIGNsZWFybHkgYW4gaW1wcm92ZW1lbnQvY2xlYW51cC4g
+QXMgZmFyCj4gPiA+ID4gPiBhcyBJCj4gPiA+ID4gPiB1bmRlcnN0b29kCj4gPiA+ID4gPiBmcm9t
+IHlvdXIgY29tbWVudHMgb24gdGhlIGVhcmxpZXIgdmVyc2lvbnMgb2YgdGhpcyBwYXRjaCBzZXQg
+Y2xlYW51cHMKPiA+ID4gPiA+IGFyZQo+ID4gPiA+ID4gYWxzbyBvayBhcwo+ID4gPiA+ID4gbG9u
+ZyBhcyB0aGV5IGFyZSBub3QgaW50ZXJtaXhlZCB3aXRoIGJ1Z2ZpeGVzLgo+ID4gPiA+IAo+ID4g
+PiA+IFRoZSBwYXRjaCBkb2VzIG5vdCBkbyBhbnl0aGluZyBwYXJ0aWN1bGFyeSB1c2VmdWwgSU1I
+Ty4gVGhlcmUncyBubwo+ID4gPiA+IHN0aW11bHVzIHRvIGRvIHRoaXMgY2hhbmdlLgo+ID4gPiA+
+IAo+ID4gCj4gPiBJIGRvbid0IGFncmVlLiBJTUhPIHByZXZlbnRpbmcgdXNlbGVzcyBhY3Rpb25z
+IChsaWtlIGNoZWNraW5nIHRoZSBpbnRlcnJ1cHQKPiA+IGFnYWluIGFuZCBhZ2FpbikgKmlzKiB1
+c2VmdWwgYW5kIEkgdGhpbmsgaXQncyByZWFzb24gZW5vdWdoLgo+IAo+IFNob3cgbWUgdGhlIHRl
+c3QgZGF0YSB0byBiYWNrIHRoaXMgdXAuCgpXaHkgZG8geW91IG5lZWQgdGVzdCBkYXRhIGFzIGFu
+IGFyZ3VtZW50IGZvciBub3QgZG9pbmcgdXNlbGVzcyBhY3Rpb25zPyBvLk8KCj4gCj4gQlIsIEph
+cmtrbwoK
 
-On 5/18/2022 2:29 AM, Vinod Koul wrote:
-> On 17-05-22, 10:25, Kuogee Hsieh wrote:
->
-> pls use the correct subsystem tag, "phy: xxx" in this case
->
->> This patch add regulator_set_load() to both eDP and DP phy driver
->> to have totally control regulators.
-> Can you explain what is meant by "totally control regulators"
-
-Original regulator_set_load() is done by DP controller.
-
-This patch has moved regulator_set_load() from DP controller to DP phy.
-
-Therefore DP phy has total control of both vdda-phy and vda-pll regulators.
-
-
->
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/phy/qualcomm/phy-qcom-edp.c | 25 +++++++++++++++++++++----
->>   drivers/phy/qualcomm/phy-qcom-qmp.c | 24 ++++++++++++++++++++++++
->>   2 files changed, 45 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c b/drivers/phy/qualcomm/phy-qcom-edp.c
->> index cacd32f..9b55095 100644
->> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
->> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
->> @@ -87,17 +87,24 @@ struct qcom_edp {
->>   
->>   	struct clk_bulk_data clks[2];
->>   	struct regulator_bulk_data supplies[2];
->> +	int enable_load[2];
->> +	int disable_load[2];
->>   };
->>   
->>   static int qcom_edp_phy_init(struct phy *phy)
->>   {
->>   	struct qcom_edp *edp = phy_get_drvdata(phy);
->>   	int ret;
->> +	int num_consumers = ARRAY_SIZE(edp->supplies);
->> +	int i;
->>   
->> -	ret = regulator_bulk_enable(ARRAY_SIZE(edp->supplies), edp->supplies);
->> +	ret = regulator_bulk_enable(num_consumers, edp->supplies);
->>   	if (ret)
->>   		return ret;
->>   
->> +	for (i = num_consumers - 1; i >= 0; --i)
->> +		regulator_set_load(edp->supplies[i].consumer, edp->enable_load[i]);
->> +
->>   	ret = clk_bulk_prepare_enable(ARRAY_SIZE(edp->clks), edp->clks);
->>   	if (ret)
->>   		goto out_disable_supplies;
->> @@ -425,9 +432,15 @@ static int qcom_edp_phy_power_off(struct phy *phy)
->>   static int qcom_edp_phy_exit(struct phy *phy)
->>   {
->>   	struct qcom_edp *edp = phy_get_drvdata(phy);
->> +	int num_consumers = ARRAY_SIZE(edp->supplies);
->> +	int i;
->>   
->>   	clk_bulk_disable_unprepare(ARRAY_SIZE(edp->clks), edp->clks);
->> -	regulator_bulk_disable(ARRAY_SIZE(edp->supplies), edp->supplies);
->> +
->> +	for (i = num_consumers - 1; i >= 0; --i)
->> +		regulator_set_load(edp->supplies[i].consumer, edp->disable_load[i]);
->> +
->> +	regulator_bulk_disable(num_consumers, edp->supplies);
->>   
->>   	return 0;
->>   }
->> @@ -633,8 +646,12 @@ static int qcom_edp_phy_probe(struct platform_device *pdev)
->>   	if (ret)
->>   		return ret;
->>   
->> -	edp->supplies[0].supply = "vdda-phy";
->> -	edp->supplies[1].supply = "vdda-pll";
->> +	edp->supplies[0].supply = "vdda-1p2";
->> +	edp->supplies[1].supply = "vdda-0p9";
-> These are documented in bindings, so cannot be removed, Reminder binding
-> is an ABI
->   
-> You have not documented the new names either...
->
->> +	edp->enable_load[0] = 21800;	/* 1.2 V */
->> +	edp->enable_load[1] = 36000;	/* 1.2 V */
->> +	edp->disable_load[0] = 4;	/* 0.9 V */
->> +	edp->disable_load[1] = 4;	/* 10.9V */
-> is that correct, 10.9V?
->
->>   	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(edp->supplies), edp->supplies);
->>   	if (ret)
->>   		return ret;
->> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
->> index b144ae1..c589231 100644
->> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
->> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-> This is a different driver, so should be a different patch!
->
->> @@ -3130,6 +3130,8 @@ struct qmp_phy_cfg {
->>   	int num_resets;
->>   	/* regulators to be requested */
->>   	const char * const *vreg_list;
->> +	const unsigned int *vreg_enable_load;
->> +	const unsigned int *vreg_disable_load;
->>   	int num_vregs;
->>   
->>   	/* array of registers with different offsets */
->> @@ -3346,6 +3348,14 @@ static const char * const qmp_phy_vreg_l[] = {
->>   	"vdda-phy", "vdda-pll",
->>   };
->>   
->> +static const unsigned int qmp_phy_vreg_enable_load[] = {
->> +	21800, 36000
->> +};
->> +
->> +static const unsigned int qmp_phy_vreg_disable_load[] = {
->> +	4, 32
->> +};
->> +
->>   static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
->>   	.type			= PHY_TYPE_USB3,
->>   	.nlanes			= 1,
->> @@ -4072,6 +4082,8 @@ static const struct qmp_phy_cfg sm8250_usb3phy_cfg = {
->>   	.reset_list		= msm8996_usb3phy_reset_l,
->>   	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
->>   	.vreg_list		= qmp_phy_vreg_l,
->> +	.vreg_enable_load	= qmp_phy_vreg_enable_load,
->> +	.vreg_disable_load	= qmp_phy_vreg_disable_load,
->>   	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
->>   	.regs			= qmp_v4_usb3phy_regs_layout,
->>   
->> @@ -4139,6 +4151,8 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
->>   	.reset_list		= msm8996_usb3phy_reset_l,
->>   	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
->>   	.vreg_list		= qmp_phy_vreg_l,
->> +	.vreg_enable_load	= qmp_phy_vreg_enable_load,
->> +	.vreg_disable_load	= qmp_phy_vreg_disable_load,
->>   	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
->>   	.regs			= qmp_v4_usb3phy_regs_layout,
->>   
->> @@ -5015,6 +5029,11 @@ static int qcom_qmp_phy_com_init(struct qmp_phy *qphy)
->>   		goto err_reg_enable;
->>   	}
->>   
->> +	if (cfg->vreg_enable_load) {
->> +		for (i = cfg->num_vregs - 1; i >= 0; --i)
->> +			regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_enable_load[i]);
->> +	}
->> +
->>   	for (i = 0; i < cfg->num_resets; i++) {
->>   		ret = reset_control_assert(qmp->resets[i]);
->>   		if (ret) {
->> @@ -5116,6 +5135,11 @@ static int qcom_qmp_phy_com_exit(struct qmp_phy *qphy)
->>   
->>   	clk_bulk_disable_unprepare(cfg->num_clks, qmp->clks);
->>   
->> +	if (cfg->vreg_disable_load[i]) {
->> +		for (i = cfg->num_vregs - 1; i >= 0; --i)
->> +			regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_disable_load[i]);
->> +	}
->> +
->>   	regulator_bulk_disable(cfg->num_vregs, qmp->vregs);
->>   
->>   	mutex_unlock(&qmp->phy_mutex);
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project

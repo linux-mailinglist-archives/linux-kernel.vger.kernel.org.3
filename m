@@ -2,63 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27C352C1CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E5252C1CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241251AbiERSAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S241154AbiERRvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiERSAw (ORCPT
+        with ESMTP id S241132AbiERRvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:00:52 -0400
+        Wed, 18 May 2022 13:51:17 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F709344F3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:00:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E93A622534
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:51:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652896848;
+        s=mimecast20190719; t=1652896274;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uRSjnnvJryZVWYf6M7LCjtH2BWC65H+7nO7Y0CFrMDg=;
-        b=RBCjTQNsSVdM43ZqmneBENDB95UPtS20Xz0WLmflAtWiVCxY1j+418omB6xfnkGCmsd0P+
-        /YPPPJUM2E0JbjP3A8VMeEs4XGC30ZQsEdeYwHq94v5rZ78Bp8h0nhv7X1ICca42h8mBEn
-        1tb8SmfQKXWfa51urVqkB2p4T6wvRuQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=49hW2Lgkit3FFJ0TGEQAkc/9Izoyz7QsMkLjDXmi4AY=;
+        b=fzpt5aMYtzcQUknWNpFa6KdePQOcD7ZS5BqxJzhnhXL7ywqj9ZDUECE/qWLwVllipcz1yK
+        e8NJNFnN3FEOXyGDtZloOKf1QFXogkeHDKZCDULswOlT9adcQKvEJ3VIH9aik7v6myq4t7
+        hNZWAXNyvEWzTwbhiCjY7pgv8z63Rak=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-115-bbdNzgP6OZ2MpwAnUHp3YA-1; Wed, 18 May 2022 14:00:45 -0400
-X-MC-Unique: bbdNzgP6OZ2MpwAnUHp3YA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8ABAD185A7BA;
-        Wed, 18 May 2022 18:00:44 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 476E6492C14;
-        Wed, 18 May 2022 18:00:44 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 2433D41C3A1F; Wed, 18 May 2022 14:44:44 -0300 (-03)
-Date:   Wed, 18 May 2022 14:44:44 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
-Message-ID: <YoUwjHqPEHASOGkh@fuller.cnet>
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
- <20220517233507.GA423@qian>
- <YoUsMIlWvczo3J24@fuller.cnet>
+ us-mta-219-c-Hi_WEaMG-hMiKPX-hTbA-1; Wed, 18 May 2022 13:51:13 -0400
+X-MC-Unique: c-Hi_WEaMG-hMiKPX-hTbA-1
+Received: by mail-io1-f72.google.com with SMTP id n5-20020a056602340500b0065a9f426e7aso716153ioz.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:51:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=49hW2Lgkit3FFJ0TGEQAkc/9Izoyz7QsMkLjDXmi4AY=;
+        b=DwHowxCq5o2J96OVvN4FmDVmSxN1hEbBkMDzmlXXHaoO190AR+R9MhIfUJZmABRUTQ
+         dtgIh4rl0wpGDxlLVulQtjMrx410nLv9/Q03lEg9Gn47PGHRP+49qwwAPec76x+Wd4Z8
+         yag3rwBO1AStUD3FZOvcQb1uRp+fm+1OJ90wyHQF5a6x2wF8KJLNSfy3FyxJa4nYk5PA
+         uKRpR3QXGfQ3xRWMe+t98yhUg3lK2aVutKpjTvg8vsZ3Vfqj88T6LKGUKkG5KAVVOCE8
+         9e+YAhuj48YmyXbqJGKnuFc3QuKsNLhR2wrij9bkzHRRqDwGF1s8Trx/b8Cl7A87ZJ/X
+         ipVg==
+X-Gm-Message-State: AOAM530Yn7voCSBKfSfPpM7C8sYcw9VxNUEQd9KZNduNGXjzKbym1MV0
+        fE1nTSgg7MTBpErWdQO6SzXYt7neVBv6JQbp8x3JpgFYwTAUKnW+jEGI2bVvbrPD9vWrxlwc0Ux
+        ckrB7hpM2n0iT1hEz1QVb1Mo+
+X-Received: by 2002:a05:6638:dc7:b0:32b:a483:16b8 with SMTP id m7-20020a0566380dc700b0032ba48316b8mr423070jaj.66.1652896272819;
+        Wed, 18 May 2022 10:51:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy4yot0L8H1GFnxd+jBFDsw6Yt7jnmhEuw0qSATO4iI9tLeFnhC04lgVq81N4r1GIYOBFpfHg==
+X-Received: by 2002:a05:6638:dc7:b0:32b:a483:16b8 with SMTP id m7-20020a0566380dc700b0032ba48316b8mr423057jaj.66.1652896272606;
+        Wed, 18 May 2022 10:51:12 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id g15-20020a92dd8f000000b002cf5aae6645sm727757iln.2.2022.05.18.10.51.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 10:51:12 -0700 (PDT)
+Date:   Wed, 18 May 2022 11:51:10 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Yi Liu <yi.l.liu@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kvm/vfio: Fix potential deadlock problem in vfio
+Message-ID: <20220518115110.23a0e929.alex.williamson@redhat.com>
+In-Reply-To: <20220517023441.4258-1-wanjiabing@vivo.com>
+References: <20220517023441.4258-1-wanjiabing@vivo.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoUsMIlWvczo3J24@fuller.cnet>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,86 +80,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 02:26:08PM -0300, Marcelo Tosatti wrote:
-> On Tue, May 17, 2022 at 07:35:07PM -0400, Qian Cai wrote:
-> > On Thu, May 12, 2022 at 09:50:37AM +0100, Mel Gorman wrote:
-> > > Changelog since v2
-> > > o More conversions from page->lru to page->[pcp_list|buddy_list]
-> > > o Additional test results in changelogs
-> > > 
-> > > Changelog since v1
-> > > o Fix unsafe RT locking scheme
-> > > o Use spin_trylock on UP PREEMPT_RT
-> > > 
-> > > This series has the same intent as Nicolas' series "mm/page_alloc: Remote
-> > > per-cpu lists drain support" -- avoid interference of a high priority
-> > > task due to a workqueue item draining per-cpu page lists. While many
-> > > workloads can tolerate a brief interruption, it may be cause a real-time
-> > > task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
-> > > the draining in non-deterministic.
-> > > 
-> > > Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
-> > > The local_lock on its own prevents migration and the IRQ disabling protects
-> > > from corruption due to an interrupt arriving while a page allocation is
-> > > in progress. The locking is inherently unsafe for remote access unless
-> > > the CPU is hot-removed.
-> > > 
-> > > This series adjusts the locking. A spinlock is added to struct
-> > > per_cpu_pages to protect the list contents while local_lock_irq continues
-> > > to prevent migration and IRQ reentry. This allows a remote CPU to safely
-> > > drain a remote per-cpu list.
-> > > 
-> > > This series is a partial series. Follow-on work should allow the
-> > > local_irq_save to be converted to a local_irq to avoid IRQs being
-> > > disabled/enabled in most cases. Consequently, there are some TODO comments
-> > > highlighting the places that would change if local_irq was used. However,
-> > > there are enough corner cases that it deserves a series on its own
-> > > separated by one kernel release and the priority right now is to avoid
-> > > interference of high priority tasks.
-> > 
-> > Reverting the whole series fixed an issue that offlining a memory
-> > section blocking for hours on today's linux-next tree.
-> > 
-> >  __wait_rcu_gp
-> >  synchronize_rcu at kernel/rcu/tree.c:3915
-> >  lru_cache_disable at mm/swap.c:886
-> >  __alloc_contig_migrate_range at mm/page_alloc.c:9078
-> >  isolate_single_pageblock at mm/page_isolation.c:405
-> >  start_isolate_page_range
-> >  offline_pages
-> >  memory_subsys_offline
-> >  device_offline
-> >  online_store
-> >  dev_attr_store
-> >  sysfs_kf_write
-> >  kernfs_fop_write_iter
-> >  new_sync_write
-> >  vfs_write
-> >  ksys_write
-> >  __arm64_sys_write
-> >  invoke_syscall
-> >  el0_svc_common.constprop.0
-> >  do_el0_svc
-> >  el0_svc
-> >  el0t_64_sync_handler
-> >  el0t_64_sync
-> > 
-> > For full disclosure, I have also reverted the commit 0d523026abd4
-> > ("mm/page_alloc: fix tracepoint mm_page_alloc_zone_locked()"), so the
-> > series can be reverted cleanly. But, I can't see how the commit
-> > 0d523026abd4 could cause this issue at all.
-> 
-> Hi Qian,
-> 
-> The issue is probably due to lack of the following:
-> 
-> https://lore.kernel.org/linux-mm/YmrWK%2FKoU1zrAxPI@fuller.cnet/
-> 
-> Can you please give the patch on the URL a try? 
-> 
-> Thanks!
+On Tue, 17 May 2022 10:34:41 +0800
+Wan Jiabing <wanjiabing@vivo.com> wrote:
 
-Oops, sorry don't think the above URL has anything to do with this
-problem.
+> Fix following coccicheck warning:
+> ./virt/kvm/vfio.c:258:1-7: preceding lock on line 236
+> 
+> If kvm_vfio_file_iommu_group() failed, code would goto err_fdput with
+> mutex_lock acquired and then return ret. It might cause potential
+> deadlock. Move mutex_unlock bellow err_fdput tag to fix it. 
+> 
+> Fixes: d55d9e7a45721 ("kvm/vfio: Store the struct file in the kvm_vfio_group")
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  virt/kvm/vfio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/virt/kvm/vfio.c b/virt/kvm/vfio.c
+> index 8f9f7fffb96a..ce1b01d02c51 100644
+> --- a/virt/kvm/vfio.c
+> +++ b/virt/kvm/vfio.c
+> @@ -252,8 +252,8 @@ static int kvm_vfio_group_set_spapr_tce(struct kvm_device *dev,
+>  		break;
+>  	}
+>  
+> -	mutex_unlock(&kv->lock);
+>  err_fdput:
+> +	mutex_unlock(&kv->lock);
+>  	fdput(f);
+>  	return ret;
+>  }
 
+Applied to vfio next branch for v5.19.  Thanks!
+
+Alex
 

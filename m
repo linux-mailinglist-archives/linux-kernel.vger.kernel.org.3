@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B963C52C597
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 23:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75C252C5A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 23:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243200AbiERVeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 17:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S243237AbiERVgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 17:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243183AbiERVeU (ORCPT
+        with ESMTP id S243226AbiERVgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 17:34:20 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E0A2370E5;
-        Wed, 18 May 2022 14:34:19 -0700 (PDT)
-Received: from zn.tnic (p200300ea97465796329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:5796:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D229E1EC053F;
-        Wed, 18 May 2022 23:34:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1652909653;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=c41NaJmVmHFZHCOhh+O6Ca1I/+Z3sEzcffT/LbNeE3M=;
-        b=KxJWwcwjsFBbZOli2xs8Izbkovahw8hIfgf/y1HORYrtp7bvWPLXkD4JPPT3DkR2H31uvx
-        mLvjnse6hkI0oC0Fx8vBhDzsUPG5jhTBi3eTj6BDdqQ/5IcM/diu9KOOh9dbjcwYXqZWUA
-        FY+aHvKL4cTdtfTFcFkE1BlYmQCo1Pw=
-Date:   Wed, 18 May 2022 23:34:09 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        X86 ML <x86@kernel.org>
-Subject: Re: linux-next: Tree for May 18
- (arch/x86/kernel/cpu/microcode/intel.o)
-Message-ID: <YoVlwN/IeVXoMaq1@zn.tnic>
-References: <20220518202934.730a8aba@canb.auug.org.au>
- <8ead0da9-9545-b10d-e3db-7df1a1f219e4@infradead.org>
+        Wed, 18 May 2022 17:36:45 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D5C1312B6;
+        Wed, 18 May 2022 14:36:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652909804; x=1684445804;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=LKucHnSVE5Vnuk0DrUdSsCLARrJ4f522LxKAEPpDS9Y=;
+  b=xeTChQp//zQWIm1/6hwRiCJknLVCAzCAJ2QeoP9pj4JYtAL1hGnkuqDS
+   pIJTmAuxjdh2bDUgoZcM2fGhQfGLXu37HzhhhFNo1GX2qasOd4tjTb+00
+   +hcA/5GkkxHORXvUgoOk/2IpsfaIbifs3/2zuqGQMRQ7PPE1kgBxHekA6
+   A=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 18 May 2022 14:36:43 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 14:36:42 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 18 May 2022 14:36:42 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 18 May 2022 14:36:41 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/3] eDP/DP Phy vdda realted function
+Date:   Wed, 18 May 2022 14:36:27 -0700
+Message-ID: <1652909790-16245-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8ead0da9-9545-b10d-e3db-7df1a1f219e4@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,44 +66,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 02:05:28PM -0700, Randy Dunlap wrote:
-> on x86_64:
-> 
-> CONFIG_PROCESSOR_SELECT=y
-> # CONFIG_CPU_SUP_INTEL is not set   <<<<<
-> CONFIG_CPU_SUP_AMD=y
-> # CONFIG_CPU_SUP_HYGON is not set
-> CONFIG_CPU_SUP_CENTAUR=y
-> CONFIG_CPU_SUP_ZHAOXIN=y
-> 
-> CONFIG_MICROCODE=y
-> CONFIG_MICROCODE_INTEL=y   <<<<<
-> CONFIG_MICROCODE_AMD=y
+1) add regulator_set_load() to eDP phy
+2) add regulator_set_load() to DP phy
+3) remove vdda related function out of eDP/DP controller
 
-Hmm:
+Kuogee Hsieh (3):
+  phy/qualcomm: add regulator_set_load to edp phy
+  phy/qualcomm: add regulator_set_load to dp phy
+  drm/msm/dp: delete vdda regulator related functions from eDP/DP
+    controller
 
-$ grep -E "(PROCESSOR_SELECT|CPU_SUP|MICROCODE)" .config
-CONFIG_PROCESSOR_SELECT=y
-# CONFIG_CPU_SUP_INTEL is not set
-CONFIG_CPU_SUP_AMD=y
-# CONFIG_CPU_SUP_HYGON is not set
-CONFIG_CPU_SUP_CENTAUR=y
-CONFIG_CPU_SUP_ZHAOXIN=y
-CONFIG_MICROCODE=y
-CONFIG_MICROCODE_INTEL=y
-CONFIG_MICROCODE_AMD=y
-CONFIG_MICROCODE_OLD_INTERFACE=y
-
-that builds fine here on tip/master. Or is it linux-next specific? I'd
-hope not.
-
-Can you send me your whole .config pls and how exactly you reproduce it,
-i.e., on which tree?
-
-Thx.
+ drivers/gpu/drm/msm/dp/dp_parser.c  | 14 ------
+ drivers/gpu/drm/msm/dp/dp_parser.h  |  6 ---
+ drivers/gpu/drm/msm/dp/dp_power.c   | 95 +------------------------------------
+ drivers/phy/qualcomm/phy-qcom-edp.c | 10 +++-
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 12 +++++
+ 5 files changed, 23 insertions(+), 114 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-https://people.kernel.org/tglx/notes-about-netiquette

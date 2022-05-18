@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D9752BADC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE7D52BA19
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236516AbiERMWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
+        id S237240AbiERMfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236475AbiERMWn (ORCPT
+        with ESMTP id S237167AbiERMea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:22:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36C691207CE
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652876561;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MlM2AUQc/4YaS8YQ+3153zXGMb60UOH0oHzcHsTkB/k=;
-        b=QqJStpI4kMr2yObFurxqvdUw/hBas3uCRxtAc9cwoXqPxyKoB/A5YhzE/C3SlecVptR0Pu
-        g3O4cE7lUK+r39t1Y9dXbb5gHjywGHMapBgiyIp+9XVrwjbhWyso56jnSbgAAKKrUQ8rKS
-        N1oG3jRJtQiJd5QKXJAr/maYUb+C0Kk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-73-rBBidYBlPCKRs_9PNwSsAw-1; Wed, 18 May 2022 08:22:38 -0400
-X-MC-Unique: rBBidYBlPCKRs_9PNwSsAw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C6271C01B24;
-        Wed, 18 May 2022 12:22:37 +0000 (UTC)
-Received: from asgard.redhat.com (unknown [10.36.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3AC8F2166B40;
-        Wed, 18 May 2022 12:22:34 +0000 (UTC)
-Date:   Wed, 18 May 2022 14:22:31 +0200
-From:   Eugene Syromiatnikov <esyr@redhat.com>
-To:     Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v3 2/2] bpf_trace: bail out from
- bpf_kprobe_multi_link_attach when in compat
-Message-ID: <47cbdb76178a112763a3766a03d8cc51842fcab0.1652876188.git.esyr@redhat.com>
-References: <cover.1652876187.git.esyr@redhat.com>
+        Wed, 18 May 2022 08:34:30 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFBD195BC7;
+        Wed, 18 May 2022 05:30:02 -0700 (PDT)
+Received: from mail-yw1-f178.google.com ([209.85.128.178]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N5FxN-1nhQlJ2bp7-011BPq; Wed, 18 May 2022 14:24:48 +0200
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2ef5380669cso22085547b3.9;
+        Wed, 18 May 2022 05:24:48 -0700 (PDT)
+X-Gm-Message-State: AOAM5338/s/qHA3UKNQFolakTnjREpT0yWd1L53JIUD9VgvzOjXDe+CQ
+        VF2bavNxYvWWJJ6wFDNC8LEeVmvFWmFc7ViQPaY=
+X-Google-Smtp-Source: ABdhPJxZRkGXRvX53ymOSUVaooG3HpMXOKVV13GaKLQVQtT/IdcwmlHH1YBCPp9l/07/fkfwXAFHJLin8SwdOcL4H+U=
+X-Received: by 2002:a81:456:0:b0:2fe:dee5:fbbc with SMTP id
+ 83-20020a810456000000b002fedee5fbbcmr20659765ywe.249.1652876687402; Wed, 18
+ May 2022 05:24:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1652876187.git.esyr@redhat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220518065639.2432213-1-gerg@linux-m68k.org> <20220518065639.2432213-3-gerg@linux-m68k.org>
+In-Reply-To: <20220518065639.2432213-3-gerg@linux-m68k.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 18 May 2022 13:24:50 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2DNKEj2T9fr_tch=WGWvVT0rG5Pbi8J04dAAxtwEZj7w@mail.gmail.com>
+Message-ID: <CAK8P3a2DNKEj2T9fr_tch=WGWvVT0rG5Pbi8J04dAAxtwEZj7w@mail.gmail.com>
+Subject: Re: [PATCH 2/3] m68k: removed unused "mach_get_ss"
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:mkFA0VxBtWgHqqY2a8Z1cBSEYRjG9fUF5O9c/Y3vHbkiETmf2/+
+ JTbY5ziAptpkM6nHfC4uXHwKGN9cKKDX3rUTLjscXyW818j704TsgxyNKGZnr2rU4hOuXG2
+ knxebAYyuvoNqpjsa0KqjU3btasyUwxJ1DWo+pb9bCHf8U2G9Mn7CsCEh5SGQicrJI8sFWO
+ xoYRtaXTE/vJ21L1+qxsw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:elFAfiDWLBs=:9whmihggJ4h6kYZB2znNdn
+ ZUyxM9J2Uy3PkOw7ozqRJ3zY6mPjAX38FSFQWkqjeBZbbDtNOOPzfvisgOaJ5j1dF1k5Jl5mq
+ nSbMisOe4I7g9T9wj5YUPPfXSYfSYVcLcgFob9yHDXD7jutYgDaYmAkTJy+X2auJprhtRSS7T
+ uhJMXIpL3jb246P3ySYsViVIuh8xHLC0k5i8IJwEMVRu2rv5I4fAc2+1iIDCqwsxd4HoQJgF/
+ ZODOBSWhXp8FdDXckpkViAxnYvkzcH6duHtr7f9Uj+RZmMcyJGr0h2uJt6UIltfp1tYgKrtNv
+ 44vJN76rGtv4HIu5TuD6LuwInDJKYdmxB6Ude5IxSuCOcOWjVKb6BY+9ND4BPFPDcg2v5Wath
+ e+KCYj+D62yQ56O1hCFAGIGL4bM3CNkuLyvvi/L7ijOZvrk2zOXv0re4n3yQAFxdGbniFtsnT
+ /Og0N+hFwl2yoT7QEAdHhUJvy5wQJlfmV6A70qTpop/OEeWgaCwQFKFTGENL7AnAKtdBWgJhf
+ F9IykRFLl/y1xISgXIX+udSXMoDqf+XIeZP5DejQVi6HgFaZd/7sdTGRBXmKfyLtyjtYmTz9b
+ Ya4IsrsRVAo2fTsCNeilJbzu2hMZC9NRF3CROjfrRJ2LMmkShIbSPuB4uYn+4LgpOXGa83JGj
+ wZOIYeTq6HcyHkzP3hcPMnt6TXzpyfCqyZ3Av2HWH9pRwpvQtMSqSGVZb/PzWjJyDZDb3tfD2
+ 0xDh+ygETdvGQkON+VBytRtNFzla3HXMhQvkFU51HiTuM66oTsbJRbfhvnP314keTafJ12e1v
+ f1AQWCMcrv3otEX7B5007rDmIAHPhq1GGpFj6k8R0lZOYH73nxj4gpEr/IjAxgTGmE/hNIxLB
+ xooDDk0st5ahNM+TCKGQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,30 +67,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since bpf_kprobe_multi_link_attach doesn't support 32-bit kernels
-for whatever reason, having it enabled for compat processes on 64-bit
-kernels makes even less sense due to discrepances in the type sizes
-that it does not handle.
+On Wed, May 18, 2022 at 7:56 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
+>
+> The m68k machine helper function "mach_get_ss" function pointer is
+> set for some machines, but ultimately never used anywhere. Remove it.
+>
+> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
 
-Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
----
- kernel/trace/bpf_trace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Good catch!
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 212faa4..2f83489 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2412,7 +2412,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 	int err;
- 
- 	/* no support for 32bit archs yet */
--	if (sizeof(u64) != sizeof(void *))
-+	if (sizeof(u64) != sizeof(void *) || in_compat_syscall())
- 		return -EOPNOTSUPP;
- 
- 	if (prog->expected_attach_type != BPF_TRACE_KPROBE_MULTI)
--- 
-2.1.4
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

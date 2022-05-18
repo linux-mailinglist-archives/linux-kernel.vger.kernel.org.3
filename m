@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8ED552BF3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B3452BF66
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239373AbiERPbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
+        id S239367AbiERPbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239360AbiERPbl (ORCPT
+        with ESMTP id S239369AbiERPbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 May 2022 11:31:41 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5953A73E
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:31:39 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id tk15so4548664ejc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BsKITgJe0n74ro4jmQWlnQSOXtIrCCeeoRj5fvJvlc0=;
-        b=QbX9x8QYId9IYqLSJLz7B0lNYR5Ysq9SBtezIFgF9MxRuFFhgUQb08yofIQ91NjF6T
-         j8BNWfBXTMUcqev9dUOJvjngjgkinx9SiYS0zg/d9CVznombWSAUvvOCZa/PuaVB3gwN
-         1uqYIsQhnkwLB7akZjsrIp2VfWC1BcVGVCaD0AAVV3T+AUJkM9grUxrjgGOUlcbpCJ7Q
-         IeWC5F8GO0y6JSidBbBMapnVKYFFwBBW9XUYgsKDbR2gGqbLYPKMNNiaZDRzEa24wDKr
-         j8pNn6PckGBWkyQaarY2OOp8IP9hmqxUkTcK3KmWub42D4ReKkPddXGxFnJ7tv5ZqaV9
-         jJsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BsKITgJe0n74ro4jmQWlnQSOXtIrCCeeoRj5fvJvlc0=;
-        b=WozQ/mV4x4qJc8tKjG6i78kpE8WgtDljdmfuAHafLW4lwhaYVjIt3zNzubVXn07fbq
-         QjydCXSGDJeoNrui1weGC2OW+iacDp+I8y6/2vABTRl6VGj9oywF9cVYxyyNlPZcKuT1
-         34pLd8BCZ7Q2K9aBOKjC1C3NGjWN8mKsIRBx1gHxAE2mCj59gnAo8nGl29HvTG16z23/
-         fGTXj/6TwGGfNINRP2Odaflz2WHkai3RQhrqfEJ2QQQuSKOSElkyjMSbVUBQLA3mv8gh
-         CpappneBNngkd5BT6mzhYdTLwqTbC7dg0MHT3oHns6eDz931P4+UP/mJ0HiwPQyU/jS1
-         XpoA==
-X-Gm-Message-State: AOAM5324IJuS58cKWj9n4fOmXrFG5+uFsZ83Z5amLp101dbSOYibzG64
-        XVkuseZxiAOLPe5ee+cxrvoUW4TFSw7l4o1abOOKPw==
-X-Google-Smtp-Source: ABdhPJypdAwNsHGSQOCFoNHLEpvFi/jgA+FFF6DbVWnbkiIb+knGUAlhkoYYf6uCpI4qtHTl6NSZOVNx73Y9TpbSvCE=
-X-Received: by 2002:a17:907:2cc7:b0:6fa:7356:f411 with SMTP id
- hg7-20020a1709072cc700b006fa7356f411mr118908ejc.369.1652887898099; Wed, 18
- May 2022 08:31:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com>
-In-Reply-To: <20220518073232.526443-1-davidgow@google.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 18 May 2022 08:31:27 -0700
-Message-ID: <CAGS_qxrOUYC5iycS436Rb-gEoEnYDa2OJLkQhEVXcDN0BEJ4YA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Marco Elver <elver@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
-        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1D43DA66
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:31:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EC9760EB4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:31:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC19C385A9;
+        Wed, 18 May 2022 15:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652887899;
+        bh=OuxNgGxuC8k9qTUF84n1SDE8XsbTIsF7YoOsLOokWpo=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=C+jbe9kq/ZfdNiNJB7MDYELx2RFMn5Cv0J4SWq6IDFGYwN/d8S0ZkczRFlBglIAfJ
+         8Ht1omNUyWTsuEUXZG+skRcS6RCMLRoe6EtwhG92bEDn/HUlhh9hFAer3NRPh24bdy
+         tiOWneEL5x88lhgTVobIIqMm14IFXyJ+SnCNok3ENiHK7JcyO4+OfVaozOucSTxKFC
+         A2H5mSD9na8lX0ielBqm4dJ9gBhgMECCxsS3nBCcJYTrtG0CHSbhh0ky0ar1A+B8/2
+         54eHtPEc4/N4A0YtF3dDRXrP/p7rgwrGM6fAxGIP1n4Jo13+a/ZNXlHIYmDLIxPNNH
+         1i5i4/VU206eQ==
+Message-ID: <adf7fca9aab320abc7a0c364b3e99709e0d99548.camel@kernel.org>
+Subject: Re: [PATCH 21/21] rcu/context_tracking: Merge dynticks counter and
+ context tracking states
+From:   nicolas saenz julienne <nsaenz@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Phil Auld <pauld@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yu Liao <liaoyu15@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 18 May 2022 17:31:32 +0200
+In-Reply-To: <20220503100051.2799723-22-frederic@kernel.org>
+References: <20220503100051.2799723-1-frederic@kernel.org>
+         <20220503100051.2799723-22-frederic@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 12:32 AM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> Add a new QEMU config for kunit_tool, x86_64-smp, which provides an
-> 8-cpu SMP setup. No other kunit_tool configurations provide an SMP
-> setup, so this is the best bet for testing things like KCSAN, which
-> require a multicore/multi-cpu system.
->
-> The choice of 8 CPUs is pretty arbitrary: it's enough to get tests like
-> KCSAN to run with a nontrivial number of worker threads, while still
-> working relatively quickly on older machines.
->
+On Tue, 2022-05-03 at 12:00 +0200, Frederic Weisbecker wrote:
 
-Since it's arbitrary, I somewhat prefer the idea of leaving up
-entirely to the caller
-i.e.
-$ kunit.py run --kconfig_add=CONFIG_SMP=y --qemu_args '-smp 8'
+[...]
 
-We could add CONFIG_SMP=y to the default qemu_configs/*.py and do
-$ kunit.py run --qemu_args '-smp 8'
-but I'd prefer the first, even if it is more verbose.
+> diff --git a/include/linux/context_tracking_state.h b/include/linux/conte=
+xt_tracking_state.h
+> index edd9f8f5b753..0841435620cf 100644
+> --- a/include/linux/context_tracking_state.h
+> +++ b/include/linux/context_tracking_state.h
+> @@ -10,12 +10,20 @@
+>  #define DYNTICK_IRQ_NONIDLE	((LONG_MAX / 2) + 1)
+> =20
+>  enum ctx_state {
+> -	CONTEXT_DISABLED =3D -1,	/* returned by ct_state() if unknown */
+> -	CONTEXT_KERNEL =3D 0,
+> -	CONTEXT_USER,
+> -	CONTEXT_GUEST,
+> +	CONTEXT_DISABLED	=3D -1,	/* returned by ct_state() if unknown */
+> +	CONTEXT_KERNEL		=3D 0,
+> +	CONTEXT_IDLE		=3D 1,
+> +	CONTEXT_USER		=3D 2,
+> +	CONTEXT_GUEST		=3D 3,
+> +	CONTEXT_MAX		=3D 4,
+>  };
+> =20
+> +/* Even value for idle, else odd. */
+> +#define RCU_DYNTICKS_IDX CONTEXT_MAX
+> +
+> +#define CT_STATE_MASK (CONTEXT_MAX - 1)
+> +#define CT_DYNTICKS_MASK (~CT_STATE_MASK)
 
-Marco, does this seem reasonable from your perspective?
+Nit: These macros only work as long as we don't introduce new contexts. It'=
+s
+maybe worth a comment.
 
-I think that a new --qemu_args would be generically useful for adhoc
-use and light enough that people won't need to add qemu_configs much.
-E.g. I can see people wanting multiple NUMA nodes, a specific -cpu, and so on.
+Regards,
+
+--=20
+Nicol=C3=A1s S=C3=A1enz

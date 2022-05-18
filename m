@@ -2,80 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC6652C7ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6984652C835
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbiERXtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 19:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
+        id S231866AbiERXyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 19:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiERXtL (ORCPT
+        with ESMTP id S229925AbiERXxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 19:49:11 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE642A466;
-        Wed, 18 May 2022 16:49:10 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id o190so4088309iof.10;
-        Wed, 18 May 2022 16:49:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ud+QA/ARNed/7Sysp4Ba2/DDtJgmT6FrhKuZQJZLqrg=;
-        b=l29nhmTHoc9j7TYGNASTOi+cL2GLBndh8TsCxn9kX8Eyxa4sleln5MwyxEWSmFmVNr
-         vljsPinYr27p/4LcBNS1YokKyqjPDg3YjkjRAOzuu4C0rzVSpgMRfPlKpWJIz/ACva/O
-         Tn0rfYWMmZC495TdqCqmyPV2ZDxRLkUWJgC1mL/SsuoRgzYIjsSp2xk9WhxYih6QJ4HS
-         hlKZwKBe6Waksmq3BsadTaTaGWKJsilF5ElRy71Bsn8FEWDdCzANRm23T9vzmRkJJGE1
-         gncXaUmpRUB73h/3jqMZ1/5tA2IZ9Az84eCUXIsabjaAenZaOx1MJb+GOtHpr+TuiHSP
-         BU9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ud+QA/ARNed/7Sysp4Ba2/DDtJgmT6FrhKuZQJZLqrg=;
-        b=fpP0uFjO6ZgjoI5zIQuOt61e/nXTqdk4MPl4gJLVLeRcoT85OW++jylpZSlIt3r2w6
-         /7pnd6cqm0ytFPk36OlAnfXJpyFx3uMrUCMAKa9+n0eF6qzzC1wQy47mMODDMOZjA6Rz
-         RZGmjXf3HRAFVZ6WLqlqsrI9v25Tp2estpgH3fVjLP9eMeVBCW5K6J+EPbm0XW2AzKUC
-         tGN1dmE98p+ID2OfTH52h6SdfCPVXyJI2lB6YHDYK5d9zipctSr0e2h2RUwffIVXxGOu
-         A7BzdqRsIgL/ZHwDpCvKfF+XYLKOS8god/nGMCG867+hdK+Xw+HfN5flJ045MEdHvzHx
-         LRsA==
-X-Gm-Message-State: AOAM531LtHrBLuqvjdmAQWGkawOQ7e33mINhy37RJiuFlig8GaV4wXj4
-        mdtF/ypx2JeVVSchMnOzNJ/Xpp92r1aPZK5d+Ac=
-X-Google-Smtp-Source: ABdhPJw5qkxuPtMpH2uETRks3QQuEQgahrcY5gcUHWem8GX3VmXTH+P0XONkKC6w7rX3lS2U51Dr8Qq3dnA0XveFol8=
-X-Received: by 2002:a05:6638:33a1:b0:32b:8e2b:f9ba with SMTP id
- h33-20020a05663833a100b0032b8e2bf9bamr1104425jav.93.1652917750301; Wed, 18
- May 2022 16:49:10 -0700 (PDT)
+        Wed, 18 May 2022 19:53:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B4860A96;
+        Wed, 18 May 2022 16:53:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26E76B81C03;
+        Wed, 18 May 2022 23:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76052C385A9;
+        Wed, 18 May 2022 23:53:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652918008;
+        bh=urChUY7g9muzenao6Op/35xCF3MRcXpVDil5q1s0Oy4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OV61lWEayn3LYEHqqYjdbT4rDnSYkojA/uBcYiviKrLQosTqoljlBxdyQuag4D38t
+         QD3252d92imOW+XVDTj0qjrOJ+PoJ1FHyjBnZPYlsp6uvQj29AfMW/W9l/rAHYKyz1
+         EIhGcaMmM0JN4aG/HcXCFiYrX6jbcm36zLqiheYnoEV/n8g93nWWuHGTHlbljGZIyW
+         DwtikEg30uOxeLh6dEvCADQkuEKd5jCOvDNzz3suRYVpoI0hAgf8LBxjbIdG8fLEMv
+         52a1BO/Ce+DjZrrYEzZcYdQZR3Zhx1bno/f/yNbVWXKZAiVyJNYG5rA6eoaqmksXog
+         K4HSm1NvPH8FA==
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
+Subject: [RFC PATCH v2 0/7] make statx() return I/O alignment information
+Date:   Wed, 18 May 2022 16:50:04 -0700
+Message-Id: <20220518235011.153058-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <cover.1652772731.git.esyr@redhat.com> <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
- <YoNnAgDsIWef82is@krava> <20220517123050.GA25149@asgard.redhat.com>
- <YoP/eEMqAn3sVFXf@krava> <7c5e64f2-f2cf-61b7-9231-fc267bf0f2d8@fb.com>
- <YoTXiAk1EpZ0rLKE@krava> <20220518123022.GA5425@asgard.redhat.com>
-In-Reply-To: <20220518123022.GA5425@asgard.redhat.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 18 May 2022 16:48:59 -0700
-Message-ID: <CAEf4BzbRYT4ykpxzXKGQ03REoVRKm_q8=oVEVCXfE+4zVDb=8A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in kprobe_multi.addrs
-To:     Eugene Syromiatnikov <esyr@redhat.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Yonghong Song <yhs@fb.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,71 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 5:30 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
->
-> On Wed, May 18, 2022 at 01:24:56PM +0200, Jiri Olsa wrote:
-> > On Tue, May 17, 2022 at 02:34:55PM -0700, Yonghong Song wrote:
-> > > On 5/17/22 1:03 PM, Jiri Olsa wrote:
-> > > > On Tue, May 17, 2022 at 02:30:50PM +0200, Eugene Syromiatnikov wrote:
-> > > > > On Tue, May 17, 2022 at 11:12:34AM +0200, Jiri Olsa wrote:
-> > > > > > On Tue, May 17, 2022 at 09:36:47AM +0200, Eugene Syromiatnikov wrote:
-> > > > > > > With the interface as defined, it is impossible to pass 64-bit kernel
-> > > > > > > addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
-> > > > > > > which severly limits the useability of the interface, change the ABI
-> > > > > > > to accept an array of u64 values instead of (kernel? user?) longs.
-> > > > > > > Interestingly, the rest of the libbpf infrastructure uses 64-bit values
-> > > > > > > for kallsyms addresses already, so this patch also eliminates
-> > > > > > > the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
-> > > > > >
-> > > > > > so the problem is when we have 32bit user sace on 64bit kernel right?
-> > > > > >
-> > > > > > I think we should keep addrs as longs in uapi and have kernel to figure out
-> > > > > > if it needs to read u32 or u64, like you did for symbols in previous patch
-> > > > >
-> > > > > No, it's not possible here, as addrs are kernel addrs and not user space
-> > > > > addrs, so user space has to explicitly pass 64-bit addresses on 64-bit
-> > > > > kernels (or have a notion whether it is running on a 64-bit
-> > > > > or 32-bit kernel, and form the passed array accordingly, which is against
-> > > > > the idea of compat layer that tries to abstract it out).
-> > > >
-> > > > hum :-\ I'll need to check on compat layer.. there must
-> > > > be some other code doing this already somewhere, right?
-> >
-> > so the 32bit application running on 64bit kernel using libbpf won't
-> > work at the moment, right? because it sees:
-> >
-> >   bpf_kprobe_multi_opts::addrs as its 'unsigned long'
-> >
-> > which is 4 bytes and it needs to put there 64bits kernel addresses
-> >
-> > if we force the libbpf interface to use u64, then we should be fine
->
-> Yes, that's correct.
->
-> > > I am not familiar with all these compatibility thing. But if we
-> > > have 64-bit pointer for **syms, maybe we could also have
-> > > 64-bit pointer for *syms for consistency?
-> >
-> > right, perhaps we could have one function to read both syms and addrs arrays
->
-> The distinction here it that syms are user space pointers (so they are
-> naturally 32-bit for 32-bit applications) and addrs are kernel-space
-> pointers (so they may be 64-bit even when the application is 32-bit).
-> Nothing prevents from changing the interface so that syms is an array
-> of 64-bit values treated as user space pointers, of course.
->
-> > > > > > we'll need to fix also bpf_kprobe_multi_cookie_swap because it assumes
-> > > > > > 64bit user space pointers
-> >
-> > if we have both addresses and cookies 64 then this should be ok
-> >
-> > > > > >
-> > > > > > would be gret if we could have selftest for this
-> >
-> > let's add selftest for this
->
-> Sure, I'll try to write one.
->
+This patchset makes the statx() system call return I/O alignment
+information, roughly following the design that was suggested at
+https://lore.kernel.org/linux-fsdevel/20220120071215.123274-1-ebiggers@kernel.org/T/#u
 
-Not sure how you can do that without having extra test_progs variant
-that's running in compat mode?
+This feature solves two problems: (a) it allows userspace to determine
+when a file supports direct I/O, and with what alignment restrictions;
+and (b) it allows userspace to determine the optimum I/O alignment for a
+file.  For more details, see patch 1.
+
+This is an RFC.  I'd greatly appreciate any feedback on the UAPI, as
+that obviously needs to be gotten right from the beginning.  E.g., does
+the proposed set of fields make sense?  Am I including the right
+information in stx_offset_align_optimal?
+
+Patch 1 adds the VFS support for STATX_IOALIGN.  The remaining patches
+wire it up to ext4 and f2fs.  Support for other filesystems can be added
+later.  We could also support this on block device files; however, since
+block device nodes have different inodes from the block devices
+themselves, it wouldn't apply to statx("/dev/$foo") but rather just to
+'fd = open("/dev/foo"); statx(fd)'.  I'm unsure how useful that would be.
+
+Note, f2fs has one corner case where DIO reads are allowed but not DIO
+writes.  The proposed statx fields can't represent this.  My proposal
+(patch 5) is to just eliminate this case, as it seems much too weird.
+But I'd appreciate any feedback on that part.
+
+This patchset applies to v5.18-rc7.
+
+No changes since v1, which I sent a few months ago; I'm resending this
+because people seem interested in it again
+(https://lore.kernel.org/r/20220518171131.3525293-1-kbusch@fb.com).
+
+Eric Biggers (7):
+  statx: add I/O alignment information
+  fscrypt: change fscrypt_dio_supported() to prepare for STATX_IOALIGN
+  ext4: support STATX_IOALIGN
+  f2fs: move f2fs_force_buffered_io() into file.c
+  f2fs: don't allow DIO reads but not DIO writes
+  f2fs: simplify f2fs_force_buffered_io()
+  f2fs: support STATX_IOALIGN
+
+ fs/crypto/inline_crypt.c  | 48 +++++++++++++++---------------
+ fs/ext4/ext4.h            |  1 +
+ fs/ext4/file.c            | 10 +++----
+ fs/ext4/inode.c           | 31 ++++++++++++++++++++
+ fs/f2fs/f2fs.h            | 45 -----------------------------
+ fs/f2fs/file.c            | 61 ++++++++++++++++++++++++++++++++++++++-
+ fs/stat.c                 |  3 ++
+ include/linux/fscrypt.h   |  7 ++---
+ include/linux/stat.h      |  3 ++
+ include/uapi/linux/stat.h |  9 ++++--
+ 10 files changed, 136 insertions(+), 82 deletions(-)
+
+
+base-commit: 42226c989789d8da4af1de0c31070c96726d990c
+-- 
+2.36.1
+

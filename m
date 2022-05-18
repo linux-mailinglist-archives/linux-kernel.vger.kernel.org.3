@@ -2,221 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33C552C0AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91BD952C004
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240229AbiERQ3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
+        id S240312AbiERQ3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240112AbiERQ13 (ORCPT
+        with ESMTP id S240242AbiERQ2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:27:29 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE7BA30B5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:27:27 -0700 (PDT)
+        Wed, 18 May 2022 12:28:43 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416021F6392
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:28:38 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id f9so4956424ejc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:28:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652891247; x=1684427247;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9ct5rUyFTf0yi2HTXDPN5qQLoFF6S7TELmBqsKJ2GXU=;
-  b=QI5kATLUFYSeqpAF1e2lTarzE/j3m5xc0y5CuO7+eSdm20CJdiCcbKJT
-   JrWC6NAMdVF5U7jjuIlZXQXXWq4EDO6TwfvZwz88EWxLyk26nFYhKl8P5
-   EZ5lVMq9kts98z8SjVtl4y7ri7VKJw7g7+WDVbwfb2YhMsBiObNT07HX4
-   s=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 May 2022 09:27:27 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 09:27:25 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 09:27:26 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 18 May
- 2022 09:27:25 -0700
-Date:   Wed, 18 May 2022 12:27:22 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     Mel Gorman <mgorman@techsingularity.net>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
-Message-ID: <YoUealVA1bMaSH2l@qian>
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
- <20220517233507.GA423@qian>
- <20220518125152.GQ3441@techsingularity.net>
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2T+/PPPf7+3b/P3u/Ojh1mw+Ir4CRwarSeghbRqZSCk=;
+        b=QuThysBNWbtYdQLwKisRzSxHxXH2bzmhew7tpYNn0YQij0/qm5bugUhw1P0L0CuRQW
+         c5VhBk8AjuJ0fbt2Rb4VLeJiSzpr7dHyYjrGSKUvAmIX8AGcGAmATXyYqmxGKvERkTNp
+         +DgB9wEfUYQWynFiTPs9Bw6eureGsDCgSW+inCCV2CjbhYph0jM645LG3EL6UakYEPu6
+         i2J9N47cWHmb5rAy8b2URfuXo3EnkMBK/V3N/fMlpLoziPPV6h8MjLfjzRaK4qbbTUeW
+         F3dz/Ys5Fl00cjXwavdGR+nhonhP8upRA85Ze7/GEtSs5iS0O+1a5jF6GeXQKOaRbwUv
+         HQeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2T+/PPPf7+3b/P3u/Ojh1mw+Ir4CRwarSeghbRqZSCk=;
+        b=Zx7ifzygV0ueGKbJY5SdBhJmD5gb/II1qFyu0fq3vaV7NVRPH7GRDNlFUVvcGHCyhc
+         JZaexsE9tOgU/QLRrSu8fw6oeXnumbWb4KU3wrOIaZTL7qjnwqwnPlqW/rXbsUSHafok
+         Njn8J//DrPxiELBiiSMSh/HibwhzkX1lsGsmCn3NiwS8Eb/XuNHznboi6RTOTmEbRGS5
+         4L+9FM5yOtGopBSzPh22zmJKItFDFgZ7e1JPTf+0aUDNzpUwRPk26g852uzxttBcY7hh
+         BUulN4gK1zGx5ZC39rQ3shBo+pey+Hz3Rs1g4mOcPWMVMprpEh853KhOAsPjFk137Ghs
+         ERtw==
+X-Gm-Message-State: AOAM530vcizxAcXEvqBP1EJ9V+Nv7K8oDnRw5LF8g1BjOUNbC9ce5vy1
+        bb/spNiKAqA4qu8Y9+xI6o7Efzczk1+bzGfXg6rePg==
+X-Google-Smtp-Source: ABdhPJwfTAyvrsh1V2tpQziGWOESnnWRABmgdgov0Bjz1bFQmUI/Ipdka8Fnsrwfv3vc5GdV65SWiZgMGi4hW4LezMo=
+X-Received: by 2002:a17:907:9711:b0:6f4:6989:6afb with SMTP id
+ jg17-20020a170907971100b006f469896afbmr397884ejc.618.1652891316548; Wed, 18
+ May 2022 09:28:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220518125152.GQ3441@techsingularity.net>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220518091814.2028579-1-tzungbi@kernel.org> <20220518091814.2028579-4-tzungbi@kernel.org>
+In-Reply-To: <20220518091814.2028579-4-tzungbi@kernel.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Wed, 18 May 2022 09:28:25 -0700
+Message-ID: <CABXOdTfHKgj+c4oA-EaVqRjaNmFn4i_GDEpEqdexvV0L=dNmXg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] platform/chrome: cros_ec_proto: update
+ cros_ec_check_result() comment
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:51:52PM +0100, Mel Gorman wrote:
-> On Tue, May 17, 2022 at 07:35:07PM -0400, Qian Cai wrote:
-> > On Thu, May 12, 2022 at 09:50:37AM +0100, Mel Gorman wrote:
-> > > Changelog since v2
-> > > o More conversions from page->lru to page->[pcp_list|buddy_list]
-> > > o Additional test results in changelogs
-> > > 
-> > > Changelog since v1
-> > > o Fix unsafe RT locking scheme
-> > > o Use spin_trylock on UP PREEMPT_RT
-> > > 
-> > > This series has the same intent as Nicolas' series "mm/page_alloc: Remote
-> > > per-cpu lists drain support" -- avoid interference of a high priority
-> > > task due to a workqueue item draining per-cpu page lists. While many
-> > > workloads can tolerate a brief interruption, it may be cause a real-time
-> > > task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
-> > > the draining in non-deterministic.
-> > > 
-> > > Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
-> > > The local_lock on its own prevents migration and the IRQ disabling protects
-> > > from corruption due to an interrupt arriving while a page allocation is
-> > > in progress. The locking is inherently unsafe for remote access unless
-> > > the CPU is hot-removed.
-> > > 
-> > > This series adjusts the locking. A spinlock is added to struct
-> > > per_cpu_pages to protect the list contents while local_lock_irq continues
-> > > to prevent migration and IRQ reentry. This allows a remote CPU to safely
-> > > drain a remote per-cpu list.
-> > > 
-> > > This series is a partial series. Follow-on work should allow the
-> > > local_irq_save to be converted to a local_irq to avoid IRQs being
-> > > disabled/enabled in most cases. Consequently, there are some TODO comments
-> > > highlighting the places that would change if local_irq was used. However,
-> > > there are enough corner cases that it deserves a series on its own
-> > > separated by one kernel release and the priority right now is to avoid
-> > > interference of high priority tasks.
-> > 
-> > Reverting the whole series fixed an issue that offlining a memory
-> > section blocking for hours on today's linux-next tree.
-> > 
-> >  __wait_rcu_gp
-> >  synchronize_rcu at kernel/rcu/tree.c:3915
-> >  lru_cache_disable at mm/swap.c:886
-> >  __alloc_contig_migrate_range at mm/page_alloc.c:9078
-> >  isolate_single_pageblock at mm/page_isolation.c:405
-> >  start_isolate_page_range
-> >  offline_pages
-> >  memory_subsys_offline
-> >  device_offline
-> >  online_store
-> >  dev_attr_store
-> >  sysfs_kf_write
-> >  kernfs_fop_write_iter
-> >  new_sync_write
-> >  vfs_write
-> >  ksys_write
-> >  __arm64_sys_write
-> >  invoke_syscall
-> >  el0_svc_common.constprop.0
-> >  do_el0_svc
-> >  el0_svc
-> >  el0t_64_sync_handler
-> >  el0t_64_sync
-> > 
-> > For full disclosure, I have also reverted the commit 0d523026abd4
-> > ("mm/page_alloc: fix tracepoint mm_page_alloc_zone_locked()"), so the
-> > series can be reverted cleanly. But, I can't see how the commit
-> > 0d523026abd4 could cause this issue at all.
-> 
-> This is halting in __lru_add_drain_all where it calls synchronize_rcu
-> before the drain even happens. It's also an LRU drain and not PCP which
-> is what the series affects and the allocator doesn't use rcu. In a KVM
-> machine, I can do
-> 
-> $ for BANK in `(for i in {1..20}; do echo $((RANDOM%416)); done) | sort -n  | uniq`; do BEFORE=`cat /sys/devices/system/memory/memory$BANK/online`; echo 0 > /sys/devices/system/memory/memory$BANK/online; AFTER=`cat /sys/devices/system/memory/memory$BANK/online`; printf "%4d %d -> %d\n" $BANK $BEFORE $AFTER; done
->    3 1 -> 0
->   57 1 -> 0
->   74 1 -> 0
->   93 1 -> 0
->  101 1 -> 0
->  128 1 -> 0
->  133 1 -> 0
->  199 1 -> 0
->  223 1 -> 0
->  225 1 -> 0
->  229 1 -> 0
->  243 1 -> 0
->  263 1 -> 0
->  300 1 -> 0
->  309 1 -> 0
->  329 1 -> 0
->  355 1 -> 0
->  365 1 -> 0
->  372 1 -> 0
->  383 1 -> 0
-> 
-> It offlines 20 sections although after several attempts free -m starts
-> reporting negative used memory so there is a bug of some description.
-> How are you testing this exactly? Is it every time or intermittent? Are
-> you confident that reverting the series makes the problem go away?
+On Wed, May 18, 2022 at 2:18 AM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
+>
+> At first glance, cros_ec_check_result() is quite like cros_ec_map_error().
+> They check for `ec_msg->result` and return corresponding errors.  However,
+> as calling from `pkt_xfer` and `cmd_xfer`, cros_ec_check_result() should
+> not report furthermore errors.  -EAGAIN is the only exception.
+>
+> See [1][2][3] for some known userland programs' code.  The return code
+> from ioctl only denotes the EC communication status.  Userland programs
+> would further analyze the `result` in struct cros_ec_command* for
+> follow-up actions (e.g. [4]).
+>
+> To clarify, update the function comment.
+>
+> [1]: https://crrev.com/54400e93a75ef440a83d6eaac2cec066daf99cf0/util/comm-dev.c#154
+> [2]: https://crrev.com/fe32670a89bf59e1aff84bba9dd3295657b85e9b/cros_ec_dev.c#296
+> [3]: https://crrev.com/4e19eb1d89de0422ff1bbd3f7260b131c761098c/drivers/google/cros_ec_dev.c#120
+> [4]: https://crrev.com/54400e93a75ef440a83d6eaac2cec066daf99cf0/util/comm-dev.c#164
+>
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+> Changes from previous version:
+> (https://patchwork.kernel.org/project/chrome-platform/patch/20220517082817.1591526-1-tzungbi@kernel.org/)
+> - Update the link of [3].
 
-Cc'ing Paul. Either reverting this series or Paul's 3 patches below from
-today's linux-next tree fixed the issue.
+The patch should be marked as v2 if there is a previous version. Other
+than that,
 
-ca52639daa5b rcu-tasks: Drive synchronous grace periods from calling task
-89ad98e93ce8 rcu-tasks: Move synchronize_rcu_tasks_generic() down
-0d90e7225fb1 rcu-tasks: Split rcu_tasks_one_gp() from rcu_tasks_kthread()
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-It was reproduced by running this script below on an arm64 server. I can
-reproduce it every time within 5 attempts. I noticed that when it happens,
-we have a few rcu kthreads all are stuck in this line,
-
-        rcuwait_wait_event(&rtp->cbs_wait,
-                           (needgpcb = rcu_tasks_need_gpcb(rtp)),
-                           TASK_IDLE);
-
-rcu_tasks_kthread
-rcu_tasks_rude_kthread
-[rcu_tasks_trace_kthread
-
-
-#!/usr/bin/env python3
-# SPDX-License-Identifier: GPL-2.0
-
-import os
-import re
-import subprocess
-
-
-def mem_iter():
-    base_dir = '/sys/devices/system/memory/'
-    for curr_dir in os.listdir(base_dir):
-        if re.match(r'memory\d+', curr_dir):
-            yield base_dir + curr_dir
-
-
-if __name__ == '__main__':
-    print('- Try to remove each memory section and then add it back.')
-    for mem_dir in mem_iter():
-        status = f'{mem_dir}/online'
-        if open(status).read().rstrip() == '1':
-            # This could expectedly fail due to many reasons.
-            section = os.path.basename(mem_dir)
-            print(f'- Try to remove {section}.')
-            proc = subprocess.run([f'echo 0 | sudo tee {status}'], shell=True)
-            if proc.returncode == 0:
-                print(f'- Try to add {section}.')
-                subprocess.check_call([f'echo 1 | sudo tee {status}'], shell=True)
-
+>
+>  drivers/platform/chrome/cros_ec_proto.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+> index 01ab58b3269b..13ced9d2dd71 100644
+> --- a/drivers/platform/chrome/cros_ec_proto.c
+> +++ b/drivers/platform/chrome/cros_ec_proto.c
+> @@ -204,9 +204,12 @@ EXPORT_SYMBOL(cros_ec_prepare_tx);
+>   * @msg: Message to check.
+>   *
+>   * This is used by ChromeOS EC drivers to check the ec_msg->result for
+> - * errors and to warn about them.
+> + * EC_RES_IN_PROGRESS and to warn about them.
+>   *
+> - * Return: 0 on success or negative error code.
+> + * The function should not check for furthermore error codes.  Otherwise,
+> + * it would break the ABI.
+> + *
+> + * Return: -EAGAIN if ec_msg->result == EC_RES_IN_PROGRESS.  Otherwise, 0.
+>   */
+>  int cros_ec_check_result(struct cros_ec_device *ec_dev,
+>                          struct cros_ec_command *msg)
+> --
+> 2.36.0.550.gb090851708-goog
+>

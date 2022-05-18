@@ -2,139 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B3E52BF83
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5749452BF5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239394AbiERPjP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 May 2022 11:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S239464AbiERPji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbiERPjK (ORCPT
+        with ESMTP id S239376AbiERPjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:39:10 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B9C9BAEE;
-        Wed, 18 May 2022 08:39:08 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id eq14so1787916qvb.4;
-        Wed, 18 May 2022 08:39:08 -0700 (PDT)
+        Wed, 18 May 2022 11:39:31 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9275A88B7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:39:29 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id z2so4615183ejj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mZSb0554f2n8IO9cffG87Gnp2j/skjs0bnuEFWLNgIY=;
+        b=WHvW2VBAWCKNirykCIyA6YptIU6wNsv9VCGN8wOYMmKaMjRzSeTzXVb1yHCgJS+KT7
+         1iBphXfPCXXOwa29DMSIMcAMmGjG8XAxYg0yESaZ83dzWTSHThvUF7Awts9WtGe1UXkQ
+         u+KC4dhFZQIfEZT5XqXaYWB0g9xywDTEvSxLMidkGpJW8RvyqiIbXdoIe8VuclRnRBe6
+         Zyi83obCclcurYrIGkGydvwcoHGmgg4wOe9VeN/cl6Y9X7AiFpBJUPlA0XAX6OJytvOC
+         hoGJ15W7z3GtBPR8QN/WDMIjmt9VCNCvTSRfHoHe2/LswP0YKhOYhCPyslKJ8vbjxb2x
+         Gniw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3x933ygnjXaKQtWyRvufRAEop/BHqYeq9sDh5XL4g5E=;
-        b=V9klkk0U6Sw1NhPbNbpAmsiXhUfJSIKrBDMllDPYIW0YNEl2tRUGOkUARyHLYEbnka
-         m8+Mo4cS1wrOv6BH0j+uxqKCH0FaYcNIodiMlYF51+LUbuGqK4zoUuSxfONINgTOd/jO
-         5obcHPc/GTkXKYZp9/EKss6RzuI5KnWSz2bUO5M7qYnrjwGH8pBl+J4t6DinL0kw5a4Y
-         gLllFJYFcG0cRjGsdV8VR7JkxFMNr1Jo0eQATIYBGbmKbsHbjUA3Bc3+PO9+KtCOYElT
-         uGnC/YziplO8uXgF379lO5LssmR1eqZXFZ+yMO+A3v7Ju+61C/A6lt5vDDXole+37ZKm
-         A1VQ==
-X-Gm-Message-State: AOAM532qEyY23yvuoBtRDhFwt2+wWfB3jDOlXtCDtV2DrO4avimkbx0z
-        e80qYFERl/JuMGBrySlPCwdyH3Bpw4sqTw==
-X-Google-Smtp-Source: ABdhPJw+2IDKkM4sXXUBpnnh73GXpP/pz4u1fF2SzQOKI4JcGYeBDH0nM0xjTTvvQI8TP48ADmXbmg==
-X-Received: by 2002:a05:6214:3e1:b0:461:f0b1:6b12 with SMTP id cf1-20020a05621403e100b00461f0b16b12mr326200qvb.122.1652888347444;
-        Wed, 18 May 2022 08:39:07 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id h25-20020ac87459000000b002f39b99f6c4sm1383095qtr.94.2022.05.18.08.39.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 08:39:06 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id o80so4371522ybg.1;
-        Wed, 18 May 2022 08:39:06 -0700 (PDT)
-X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
- bu5-20020a056902090500b0064a2089f487mr251266ybb.202.1652888346221; Wed, 18
- May 2022 08:39:06 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=mZSb0554f2n8IO9cffG87Gnp2j/skjs0bnuEFWLNgIY=;
+        b=doldLuu3O/PUMGM6E8f6ZtRe4q62Sc3fsd97QcoGUWYZ3zcBcR3LFi96+kFE6YrNts
+         MNuEyVTC7gPTdKGj3liU98OP6gtiB9u8JlYcJN0UjYBO9NludZ09ofRoFI24Hi5ZbQPC
+         jTqPLtseL3FsWutRDZVp2YAHxOOCsK1dVVNLT6YTjmxWvxfjuG0FWlZdI0j8LFUjapMY
+         vVbjjzbC9amrc10ufsSHB1F9Xoyc0GS13TIOVajjVz5FqNcYNjhkhR+tmejbIsivS55R
+         PxukU0SEYgGV64UFRpaHR4us4KT2uwmJIK5Jj0lddnNs+i2URwv6SFuD1S88wzgqos2R
+         iaSg==
+X-Gm-Message-State: AOAM532Ommsr3T+hGxPV0kzWuTGnd7/oPfRHDXqREon+R+aupiz1kifu
+        hIHPYZ5lvWQVdAZ/oTh1/Mths8SGrS8KkeYI2PtA6g==
+X-Google-Smtp-Source: ABdhPJzYpWouIziad7D8nl6r5roTQa4hx5zFTiFU4Z1KMkPe481kLhzDmKMeDJHNd638PlKuV4hsYIx8MUM4+EatzPk=
+X-Received: by 2002:a17:907:1c06:b0:6df:b257:cbb3 with SMTP id
+ nc6-20020a1709071c0600b006dfb257cbb3mr139397ejc.631.1652888367981; Wed, 18
+ May 2022 08:39:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516115627.66363-1-guozhengkui@vivo.com> <CAMuHMdWH1rdP22VnhR_h601tm+DDo7+sGdXR-6NQx0B-jGoZ1A@mail.gmail.com>
- <20220518083344.0886bd6f@kernel.org>
-In-Reply-To: <20220518083344.0886bd6f@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 18 May 2022 17:38:54 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU+3DcpgHbytt47MNcGtfVOe+CVXcptM7=WUTWCcHq8vA@mail.gmail.com>
-Message-ID: <CAMuHMdU+3DcpgHbytt47MNcGtfVOe+CVXcptM7=WUTWCcHq8vA@mail.gmail.com>
-Subject: Re: [PATCH linux-next] net: smc911x: replace ternary operator with min()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Guo Zhengkui <guozhengkui@vivo.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        zhengkui_guo@outlook.com
+References: <20220518073232.526443-1-davidgow@google.com> <CAGS_qxrOUYC5iycS436Rb-gEoEnYDa2OJLkQhEVXcDN0BEJ4YA@mail.gmail.com>
+ <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
+In-Reply-To: <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 18 May 2022 08:39:16 -0700
+Message-ID: <CAGS_qxr4vTSEtcGGFyoZibga2Q_Avp9pFD78GOA3W9o6F9RVRQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
+To:     Marco Elver <elver@google.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
+        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
-
-On Wed, May 18, 2022 at 5:33 PM Jakub Kicinski <kuba@kernel.org> wrote:
-> On Wed, 18 May 2022 11:07:08 +0200 Geert Uytterhoeven wrote:
-> > On Mon, May 16, 2022 at 10:36 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
-> > > Fix the following coccicheck warning:
-> > >
-> > > drivers/net/ethernet/smsc/smc911x.c:483:20-22: WARNING opportunity for min()
-> > >
-> > > Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> >
-> > Thanks for your patch, which is now commit 5ff0348b7f755aac ("net:
-> > smc911x: replace ternary operator with min()") in net-next/master.
-> >
-> > > --- a/drivers/net/ethernet/smsc/smc911x.c
-> > > +++ b/drivers/net/ethernet/smsc/smc911x.c
-> > > @@ -480,7 +480,7 @@ static void smc911x_hardware_send_pkt(struct net_device *dev)
-> > >         SMC_SET_TX_FIFO(lp, cmdB);
-> > >
-> > >         DBG(SMC_DEBUG_PKTS, dev, "Transmitted packet\n");
-> > > -       PRINT_PKT(buf, len <= 64 ? len : 64);
-> > > +       PRINT_PKT(buf, min(len, 64));
-> >
-> > Unfortunately you forgot to test-compile this with
-> > ENABLE_SMC_DEBUG_PKTS=1, which triggers:
-> >
-> >         drivers/net/ethernet/smsc/smc911x.c: In function
-> > ‘smc911x_hardware_send_pkt’:
-> >         include/linux/minmax.h:20:28: error: comparison of distinct
-> > pointer types lacks a cast [-Werror]
-> >            20 |  (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-> >               |                            ^~
-> >         drivers/net/ethernet/smsc/smc911x.c:483:17: note: in expansion
-> > of macro ‘min’
-> >           483 |  PRINT_PKT(buf, min(len, 64));
-> >
-> > "len" is "unsigned int", while "64" is "(signed) int".
+On Wed, May 18, 2022 at 8:36 AM Marco Elver <elver@google.com> wrote:
 >
-> Ah, damn. I did double check that the build test actually compiles
-> smc911x.o 'cause this patch looked suspicious. Didn't realize that
-> more than allmodconfig is needed to trigger this :/
+> On Wed, 18 May 2022 at 17:31, Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > On Wed, May 18, 2022 at 12:32 AM 'David Gow' via KUnit Development
+> > <kunit-dev@googlegroups.com> wrote:
+> > >
+> > > Add a new QEMU config for kunit_tool, x86_64-smp, which provides an
+> > > 8-cpu SMP setup. No other kunit_tool configurations provide an SMP
+> > > setup, so this is the best bet for testing things like KCSAN, which
+> > > require a multicore/multi-cpu system.
+> > >
+> > > The choice of 8 CPUs is pretty arbitrary: it's enough to get tests like
+> > > KCSAN to run with a nontrivial number of worker threads, while still
+> > > working relatively quickly on older machines.
+> > >
+> >
+> > Since it's arbitrary, I somewhat prefer the idea of leaving up
+> > entirely to the caller
+> > i.e.
+> > $ kunit.py run --kconfig_add=CONFIG_SMP=y --qemu_args '-smp 8'
+> >
+> > We could add CONFIG_SMP=y to the default qemu_configs/*.py and do
+> > $ kunit.py run --qemu_args '-smp 8'
+> > but I'd prefer the first, even if it is more verbose.
+> >
+> > Marco, does this seem reasonable from your perspective?
 >
-> How do you enable ENABLE_SMC_DEBUG_PKTS? You edit the source?
-
-Yes you do.
-
-To avoid missing stuff like this in the future, my fix also includes
-a change to the dummy PRINT_PKT(), so you don't have to enable
-ENABLE_SMC_DEBUG_PKTS anymore to trigger the issue.
-
-> > I have sent a fix
-> > https://lore.kernel.org/r/ca032d4122fc70d3a56a524e5944a8eff9a329e8.1652864652.git.geert+renesas@glider.be/
+> Either way works. But I wouldn't mind a sane default though, where
+> that default can be overridden with custom number of CPUs.
 >
-> Thanks a lot!
 
-Gr{oetje,eeting}s,
+Ack.
+Let me clean up what I have for --qemu_args and send it out for discussion.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+One downside I see to adding more qemu_configs is that --arch now
+becomes more kunit-specific.
+Before, a user could assume "oh, it's just what I pass in to make ARCH=...".
+This new "--arch=x86_64-smp" violates that. I don't personally see it
+being that confusing, but I still worry.

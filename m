@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4AD52C747
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB39952C750
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbiERXB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 19:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
+        id S230391AbiERXG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 19:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiERXBy (ORCPT
+        with ESMTP id S230125AbiERXGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 19:01:54 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960CF939F4;
-        Wed, 18 May 2022 16:01:52 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id er5so4836230edb.12;
-        Wed, 18 May 2022 16:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6ioRF++yogDTNZJ4Kl3hvJYBh4fkIppK/Wa57zbKnxE=;
-        b=dZLYTjgfXvGKrcOJgLdfrcVQmXdbl01y9E2zS2V173AVk0nf87RVXghCqbt/Xf0U3/
-         vs6pOnG88lU9fIFy8G6c3EEngJRmatjEmdB4p7wAybYQAhqZLV8gVmm7C5wWHj+DdbnZ
-         NMvuNYbe+pBaddVyIEc24Zg44oNutQMtXcUOcW7ykeZaKu0XD0tdehGPnYWWcLs6PCys
-         WEOBzd5BL6YkfXOYTpaHPgrhmpMYntvAu39qWo9njGmHzNhLSQDXgY3eLF1rb+/NVqR6
-         4M776LXs0ZDSWkPF+cTalP1idtJNOuApECnawb+wu5esJH9Hdmo6uMXdhLEVAAWiEjsm
-         KFhQ==
+        Wed, 18 May 2022 19:06:52 -0400
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F810149173;
+        Wed, 18 May 2022 16:06:51 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id f10so3500090pjs.3;
+        Wed, 18 May 2022 16:06:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6ioRF++yogDTNZJ4Kl3hvJYBh4fkIppK/Wa57zbKnxE=;
-        b=JUUnv9Kek7JRPZ81WEzIWYMGPEdKk7lIfeozJEUQ9/Vts/8AzpBVXDaCiLHTkuT5/C
-         YTbX88S0bsVrk+vhx8tnbNFXuUHXJf+CCJC1MAaFL1JuZcNAo+RzRAreIDjkQg1rAgop
-         hwGy+Mdfh8ww8cf9BzFSi+Cf6hublDDwP8p+1UoCTixNBFzK1GbPFfuqJM9gpwGNvFIz
-         IhBRIpUY/ykIbEMmsRFNvLB6EhsfwEusxbDon8AeWMXa29NH5t/Gjub+2kQ5B1x7muD1
-         OwxpECYBRlBZPu07lJi6j4YO7G8u/wT6QepdxvYV5JeN9uZPOqnmq13hKLazupgRXyoS
-         farQ==
-X-Gm-Message-State: AOAM531I/Ux4xuNzkCkEIx6YZh3+vwxpyh/2UWIpl+oI3jaWo0x8xGe0
-        shrm1liiTIxG4HjKfO2GMGY=
-X-Google-Smtp-Source: ABdhPJxHfBudDsDKkD0pf8fegVDmKf0xMeiiqzGZrY8gNJ3s++1QVHB8ti+ABqmq90TYEULVO6oLPA==
-X-Received: by 2002:a05:6402:1248:b0:42a:cc7d:2c22 with SMTP id l8-20020a056402124800b0042acc7d2c22mr2253203edw.284.1652914911103;
-        Wed, 18 May 2022 16:01:51 -0700 (PDT)
-Received: from localhost (92.40.203.120.threembb.co.uk. [92.40.203.120])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170906738d00b006f3ef214e0dsm1467626ejl.115.2022.05.18.16.01.49
+        bh=M2OU/ev/wtDvqHYNj5hP9zKluj3H/LLJ6QYPls9G5Tw=;
+        b=She1oSRkXAOR2vDYrAltVV/WB7OxYOBeezghF/surT4V49JqBCK9Nh/jSmT8WqsquH
+         7W6X8Jf+MKZfvjkXW3wVAjITl9fhJhtC+L+4dpkUvApsFZeyDnxT18dYRubYRRVTrBL7
+         BN2UbupOH3kN1JjNdoLa9w/S+E1YS0vxSYJUY938W4hxOgRH0IqlvxGOwhdLHbJWYJQj
+         rsfaAQVJz9FY/gXNt2XBQDPE92DpqgCshwTEz+W98ALbI6eWdmQmwrIsvx8fp2vKUNHA
+         dM3w9iMxU9a3hLr5n9/eKj8JbYWxCOioFOi6zYowocS4h2MbZa5SS1fLSymGij4O/DmJ
+         Edcg==
+X-Gm-Message-State: AOAM533NybFLfg2ehZTJbYlNPlb4sJ+1RExNY12cBNfWio6Cu7+LGqeU
+        5IEOwkiXieziWpob0glETJI=
+X-Google-Smtp-Source: ABdhPJxrRrwxuaXVXZU5unUYT2Wp/ah35BZYv61mf/nd9Yr//ww7daRstQvEvrGocfyzbj6E/VCrbQ==
+X-Received: by 2002:a17:90a:9282:b0:1dc:4a1b:ea55 with SMTP id n2-20020a17090a928200b001dc4a1bea55mr1854383pjo.24.1652915210525;
+        Wed, 18 May 2022 16:06:50 -0700 (PDT)
+Received: from garbanzo (136-24-173-63.cab.webpass.net. [136.24.173.63])
+        by smtp.gmail.com with ESMTPSA id t1-20020a17090340c100b0015e8d4eb271sm2130390pld.187.2022.05.18.16.06.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 16:01:50 -0700 (PDT)
-Date:   Thu, 19 May 2022 00:02:48 +0100
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     dan.carpenter@oracle.com, devicetree@vger.kernel.org,
-        krzk+dt@kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        mturquette@baylibre.com, paul@crapouillou.net, robh+dt@kernel.org,
-        tsbogend@alpha.franken.de
-Subject: Re: [PATCH v5 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000
- SoCs
-Message-ID: <YoV7GKiaosmX6QnQ@localhost>
-References: <20220412122750.279058-1-aidanmacdonald.0x0@gmail.com>
- <20220412122750.279058-3-aidanmacdonald.0x0@gmail.com>
- <20220518204734.89090C34113@smtp.kernel.org>
+        Wed, 18 May 2022 16:06:49 -0700 (PDT)
+Date:   Wed, 18 May 2022 16:06:46 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Pankaj Raghav <p.raghav@samsung.com>, axboe@kernel.dk,
+        pankydev8@gmail.com, gost.dev@samsung.com,
+        damien.lemoal@opensource.wdc.com, jiangbo.365@bytedance.com,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        dm-devel@redhat.com, dsterba@suse.com, linux-btrfs@vger.kernel.org
+Subject: Re: [dm-devel] [PATCH v4 00/13] support non power of 2 zoned devices
+Message-ID: <20220518230646.5xx6dpo4helwyqcv@garbanzo>
+References: <CGME20220516165418eucas1p2be592d9cd4b35f6b71d39ccbe87f3fef@eucas1p2.samsung.com>
+ <20220516165416.171196-1-p.raghav@samsung.com>
+ <20220517081048.GA13947@lst.de>
+ <YoPAnj9ufkt5nh1G@mit.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220518204734.89090C34113@smtp.kernel.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YoPAnj9ufkt5nh1G@mit.edu>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:47:32PM -0700, Stephen Boyd wrote:
-> Quoting Aidan MacDonald (2022-04-12 05:27:50)
-> > The TCU clock gate on X1000 wasn't requested by the driver and could
-> > be gated automatically later on in boot, which prevents timers from
-> > running and breaks PWM.
+On Tue, May 17, 2022 at 11:34:54AM -0400, Theodore Ts'o wrote:
+> On Tue, May 17, 2022 at 10:10:48AM +0200, Christoph Hellwig wrote:
+> > I'm a little surprised about all this activity.
 > > 
-> > Add a workaround to support old device trees that don't specify the
-> > "tcu" clock gate. In this case the kernel will print a warning and
-> > attempt to continue without the clock, which is wrong, but it could
-> > work if "clk_ignore_unused" is in the kernel arguments.
-> > 
-> > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> > ---
+> > I though the conclusion at LSF/MM was that for Linux itself there
+> > is very little benefit in supporting this scheme.  It will massively
+> > fragment the supported based of devices and applications, while only
+> > having the benefit of supporting some Samsung legacy devices.
 > 
-> Can I take just this one patch through clk tree without the dts part?
-> dts snippets go through soc trees.
+> FWIW,
+> 
+> That wasn't my impression from that LSF/MM session, but once the
+> videos become available, folks can decide for themselves.
 
-Yeah. The patches can go through in any order but they both need to be
-merged to fix the bug -- each on its own should not change any behavior.
+Agreed, contrary to conventional storage devices, with the zone storage
+ecosystem we simply have a requirement of zone drive replacements matching
+zone size. That requirement exists for po2 or npo2. The work in this patch
+set proves that supporting npo2 was in the end straight forward. As the one
+putting together the BoF I can say that there were no sticking points raised
+to move forward with this when the topic came up. So I am very surprised to
+hear about any other perceived conclusion.
 
-Regards,
-Aidan
+  Luis

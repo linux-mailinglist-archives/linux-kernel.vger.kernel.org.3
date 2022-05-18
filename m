@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6718352BF85
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 153EC52BF6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239391AbiERPcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S239404AbiERPdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239357AbiERPcu (ORCPT
+        with ESMTP id S239380AbiERPdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:32:50 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF2E6F483;
-        Wed, 18 May 2022 08:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1652887964; bh=jtNi2NeVOSeOeSM5DRWYGfIc1hN3q1pdVPN90ETCm+A=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RoAKEdx/QcKNiph+1XEKZGmCQ4RZfWI4ZvsH5WBQAjZHNQfUAB5hWlLlwlwzz3ciS
-         jrf6A3XZxVf1lTA8gKK2LFycBV7sWrjBp2jpNfLCG6ZM/1u93N4dzdpSjhcel4f/K3
-         j7NqEEFaNt4AeCr8aNTFKuzoaquam0O0ok7vvTZw=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 668A860691;
-        Wed, 18 May 2022 23:32:44 +0800 (CST)
-Message-ID: <e02d11bd-d516-12bd-8a29-80458e8206fa@xen0n.name>
-Date:   Wed, 18 May 2022 23:32:43 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V11 02/22] Documentation/zh_CN: Add basic LoongArch
- documentations
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
+        Wed, 18 May 2022 11:33:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AAB772E25
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652887986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=If23kdHTceSEYKXKE6Rbf1RvUnlpNNaxoB7vfIUd8FM=;
+        b=aWOLf4maGRSUpbYlOrOp9FSFQWd7uD3ciyw5zz63nJUcpnHxkXhoMZKVVEyxnlqVlsAwJF
+        6mc7OuE8b7/NSTT0ANpNRgV1s1GeSG+kT116+/8PcTxpCkaef4GXDrw/r8hRNJtyuG88Aj
+        9SFb7pAUjNwfj2U4Q5FAYIYWYJjEt48=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-548-K0KnTpSeOhWpeDS4sxYX2Q-1; Wed, 18 May 2022 11:33:05 -0400
+X-MC-Unique: K0KnTpSeOhWpeDS4sxYX2Q-1
+Received: by mail-wm1-f69.google.com with SMTP id q128-20020a1c4386000000b003942fe15835so1006219wma.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:33:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=If23kdHTceSEYKXKE6Rbf1RvUnlpNNaxoB7vfIUd8FM=;
+        b=qbdq6pNaV48yA2UbRqZwuA22GL8KAfeQhOg8CE8rPhzlrY9VsxKuPItCc/VTVYiSW/
+         AZ7tJaiACnL7EvIFlNxFF2L4jSjZ/4PBZOQ//Kj2+FXUgiqG5G9uosPsjUkmMokr48BG
+         9rMwibcyVdmqfYhXa2lQfgepwzkwoGWkdDK+LUkbdIqRmjaJU6txE3hFSEMAaWU9HDey
+         r6d+WPJH5EusDn8wUf93ICPxRM189UsqRENCkC2IRlRse0rVIWaDFfgG7QvhLvmaTgfQ
+         7jXu2YihXTaADO28287twkO/i8dFSZ/mE0gPr/7jCAyAPeU04GKHvYsoId+B5gTFCW/5
+         9GlQ==
+X-Gm-Message-State: AOAM531chip3vqhNMYYlvbosPqI+Y/KWHkM/S1+t+iyNGWQnnvaWru1s
+        vcR93szpM+hNE+g9eTO0yLpZzUYXkqS2KxqcvStKIxswP/ZdrDRtA/SCSFxV+2iLbXsJ0TxaVX/
+        wxGhLU0K0sUVtnPKn2rTIF367
+X-Received: by 2002:a05:6000:1f17:b0:20e:6626:5ac7 with SMTP id bv23-20020a0560001f1700b0020e66265ac7mr198651wrb.489.1652887984216;
+        Wed, 18 May 2022 08:33:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyC4QL3ss4tcNj+kCaydzyjvNMiNzbn7Wsw9jiEksWluXaxD1xLX0ocCIhgrevOhkRnOBUXiA==
+X-Received: by 2002:a05:6000:1f17:b0:20e:6626:5ac7 with SMTP id bv23-20020a0560001f1700b0020e66265ac7mr198628wrb.489.1652887984025;
+        Wed, 18 May 2022 08:33:04 -0700 (PDT)
+Received: from ?IPv6:2a0c:5a80:1d02:ba00:f4f8:7394:c8:7ddf? ([2a0c:5a80:1d02:ba00:f4f8:7394:c8:7ddf])
+        by smtp.gmail.com with ESMTPSA id p3-20020a1c2903000000b003942a244ed7sm1947897wmp.28.2022.05.18.08.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 08:33:03 -0700 (PDT)
+Message-ID: <6690c4c7119839a784d0d96523e832a10e04fcca.camel@redhat.com>
+Subject: Re: [PATCH 00/21] rcu/context-tracking: Merge RCU eqs-dynticks
+ counter to context tracking v2
+From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Phil Auld <pauld@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alex Shi <alexs@kernel.org>
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-3-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220518092619.1269111-3-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Yu Liao <liaoyu15@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 18 May 2022 17:33:02 +0200
+In-Reply-To: <20220503100051.2799723-1-frederic@kernel.org>
+References: <20220503100051.2799723-1-frederic@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/22 17:25, Huacai Chen wrote:
-> Add some basic documentation (zh_CN version) for LoongArch. LoongArch is
-> a new RISC ISA, which is a bit like MIPS or RISC-V. LoongArch includes a
-> reduced 32-bit version (LA32R), a standard 32-bit version (LA32S) and a
-> 64-bit version (LA64).
->
-> Reviewed-by: Alex Shi <alexs@kernel.org>
-> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+On Tue, 2022-05-03 at 12:00 +0200, Frederic Weisbecker wrote:
+> This mixes up the RCU dynticks counter and the context tracking state
+> updates into a single atomic instruction. This may serve several
+> purposes:
+>=20
+> 1) Improve CPU isolation with deferring some disturbances until sensitive
+>    userspace workload completes and goes to the kernel. This can take
+>    several forms, for example smp_call_function_housekeeping() or
+>    on_each_housekeeping_cpu() to enqueue and execute work on all
+>    housekeeping CPUs. Then an atomic operation on ct->state can defer
+>    the work on nohz_full CPUs until they run in kernel (or IPI them
+>    if they are in kernel mode), see this proposal by Peter:
+>    https://lore.kernel.org/all/20210929151723.162004989@infradead.org/#r
+>=20
+> 2) Unearth sysidle (https://git.kernel.org/pub/scm/linux/kernel/git/paulm=
+ck/linux-rcu.git/commit/?h=3Dsysidle.2017.05.11a&id=3Dfe5ac724d81a3c7803e60=
+c2232718f212f3f38d4)
+>    This feature allowed to shutdown the tick on the last housekeeping
+>    CPU once the rest of the system is fully idle. We needed some proper
+>    fully ordered context tracking for that.
+>=20
+> Inspired by Peterz: https://lore.kernel.org/all/20210929151723.162004989@=
+infradead.org
+>=20
+> Passed 100 hours of TREE01.
+>=20
 > ---
->   Documentation/translations/zh_CN/index.rst    |   1 +
->   .../translations/zh_CN/loongarch/features.rst |   8 +
->   .../translations/zh_CN/loongarch/index.rst    |  26 ++
->   .../zh_CN/loongarch/introduction.rst          | 351 ++++++++++++++++++
->   .../zh_CN/loongarch/irq-chip-model.rst        | 167 +++++++++
->   5 files changed, 553 insertions(+)
->   create mode 100644 Documentation/translations/zh_CN/loongarch/features.rst
->   create mode 100644 Documentation/translations/zh_CN/loongarch/index.rst
->   create mode 100644 Documentation/translations/zh_CN/loongarch/introduction.rst
->   create mode 100644 Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
 
-Most of my comments back in v10 have been addressed, and the text now 
-reads much better than previously.
+For the whole series:
 
-Reviewed-by: WANG Xuerui <git@xen0n.name>
+Reviewed-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Tested-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+
+Thanks!
+
+--=20
+Nicol=C3=A1s S=C3=A1enz
 

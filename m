@@ -2,84 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6EA52BC0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA7E52BC9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238537AbiEROMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
+        id S238549AbiEROOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238524AbiEROMl (ORCPT
+        with ESMTP id S238524AbiEROOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:12:41 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57811A492A;
-        Wed, 18 May 2022 07:12:39 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id u30so3859672lfm.9;
-        Wed, 18 May 2022 07:12:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=zUpra34RHpxyR0Ls3UM9NaIwGbYcisrFEnw8bjZ1+nY=;
-        b=pyUBTpeyMaggkxd4bHlKItfgOSbzEa6zzDLbSMbbVWbXDHlxl6M7pzMumi64afvyYP
-         k/h49AGTStKVVKax+VEoTLbr85i7u5VjBFXxnd85wPhRAvoPXv8ms98ptCoDu6wAMKRw
-         1WT6BaloTu/JPWlqn9v1z4MCeQJnGZyLGByJO7MtTLr7qebyPt0v8yoGcxhmpX/QvfLQ
-         JN3kL8smxfOGZqC4Bsj0XqjKrHLTjov0TkbKHvf4/L0zVjtlxYA6Eo2tra8FlawDvL+l
-         BCrjPpLoQtrzbSkMc2k5L8fenGmWJLBk9sp8gtZOQZ/YO3Ls77mv+tX3eWFyLyqW5zRt
-         77PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=zUpra34RHpxyR0Ls3UM9NaIwGbYcisrFEnw8bjZ1+nY=;
-        b=HtQ7kF1EMT9CqYXgMSqmJSlTIcrkavaNwtEqKrcYfQS3goQ/bZB55/JQ4OWcwiQ3Hn
-         /q9R8ZQqax0jVKpeEuQpCSX0UKA8+rZYOSnyIzBCNvvso0DjxpNk1vx0H55BYxmmYLa0
-         9ExuR21+qQb0uUhKagjkaGxkuKOqS4Yf8Ij0D1Dj7fElj8fw9ZSMhX/0oqfC1Sw2SMU6
-         fpg6nDSqlfd6aXeZR4NIaDp0aexMhEq9ktngtQRSxqjmZxduwc0Yfn+reBCdMtU39CwX
-         7i73eMZsf//3Retd4Ou8HByhTjuV+NH4Yb2ctVT9BW9rwRAwH889Lsw69MphJCJs6RNQ
-         1Oag==
-X-Gm-Message-State: AOAM531HGI/LOw08cDmuxUQNI/NsIhIdSdCuy+x33DljxAry5nrH6I0N
-        26fxgzVOCxQQZyvKwUh1RHA=
-X-Google-Smtp-Source: ABdhPJzp2tFmfVthOY9fdufPSFAz0WW8seYKWhdyy781iXWupDbYQ/8o7UbHzRqy48Qzm/hT285VZg==
-X-Received: by 2002:a05:6512:31c3:b0:473:e6ef:368d with SMTP id j3-20020a05651231c300b00473e6ef368dmr20602037lfe.141.1652883157723;
-        Wed, 18 May 2022 07:12:37 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id v8-20020ac25608000000b0047255d211absm221374lfd.218.2022.05.18.07.12.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 07:12:37 -0700 (PDT)
-Subject: Re: [PATCH V2 5/7] dt-bindings: Add xen,dev-domid property
- description for xen-grant DMA ops
-To:     Rob Herring <robh@kernel.org>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-Cc:     xen-devel@lists.xenproject.org,
-        virtualization@lists.linux-foundation.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com>
- <1651947548-4055-6-git-send-email-olekstysh@gmail.com>
- <20220517002750.GA3638680-robh@kernel.org>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <fa3be245-ac3c-5637-13a1-3197e78c874d@gmail.com>
-Date:   Wed, 18 May 2022 17:12:35 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 18 May 2022 10:14:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D053C1C9AF6;
+        Wed, 18 May 2022 07:14:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8BC5B23A;
+        Wed, 18 May 2022 07:14:35 -0700 (PDT)
+Received: from [10.57.82.55] (unknown [10.57.82.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC9843F73D;
+        Wed, 18 May 2022 07:14:32 -0700 (PDT)
+Message-ID: <7a17256d-cad0-bd94-02e7-f8adaa959654@arm.com>
+Date:   Wed, 18 May 2022 15:14:26 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220517002750.GA3638680-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 00/20] perf vendors events arm64: Multiple Arm CPUs
+Content-Language: en-GB
+To:     John Garry <john.garry@huawei.com>,
+        Nick Forrington <nick.forrington@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>
+References: <20220510104758.64677-1-nick.forrington@arm.com>
+ <f523b0fe-1262-c1e5-c587-15842ccf0fcf@arm.com>
+ <28509191-3a45-de6d-f5bc-a8e7331c0a9e@huawei.com>
+ <5773b630-8159-1eba-481a-1bf3c406c055@arm.com>
+ <cf7d8003-9700-880f-0e46-ff40e6348bb1@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <cf7d8003-9700-880f-0e46-ff40e6348bb1@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,175 +63,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 17.05.22 03:27, Rob Herring wrote:
-
-Hello Rob, all
-
-
-> On Sat, May 07, 2022 at 09:19:06PM +0300, Oleksandr Tyshchenko wrote:
->> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+On 2022-05-18 14:48, John Garry wrote:
+> On 18/05/2022 13:32, Robin Murphy wrote:
+>>> If we were to add to arm32/arm then the common event numbers and 
+>>> maybe other JSONs in future would need to be duplicated.
+>>>
+>>> Would there be any reason to add to arm32/arm apart to from being 
+>>> strictly proper? Maybe if lots of other 32b support for other vendors 
+>>> came along then it could make sense (to separate them out).
 >>
->> Introduce Xen specific binding for the virtualized device (e.g. virtio)
->> to be used by Xen grant DMA-mapping layer in the subsequent commit.
+>> That's the heart of the question, really. At best it seems 
+>> unnecessarily confusing as-is. 
+> 
+> I think it comes down to the first core supported was TX2 and the build 
+> system relies on the target arch to decide which arch from 
+> pmu-events/arch to compile.
+> 
+>> AFAICS either the naming isn't functional, wherein it would 
+>> potentially make the most sense to rename the whole thing 
+>> "pmu-events/arch/arm" if it's merely for categorising Arm 
+>> architectures in general, or it is actually tied to the host triplet, 
+>> in which case the above patches are most likely useless.
+> 
+> Today ARCH=arm has no pmu-events support. I think that it should be easy 
+> to add plumbing for that. It becomes more tricky with supporting a 
+> single "arm" folder.
+> 
+> But then do people really care enough about pmu-events for these 32b 
+> cores? Until now, it seems not.
+> 
 >>
->> This binding indicates that Xen grant mappings scheme needs to be
->> enabled for the device which DT node contains that property and specifies
->> the ID of Xen domain where the corresponding backend resides. The ID
->> (domid) is used as an argument to the grant mapping APIs.
->>
->> This is needed for the option to restrict memory access using Xen grant
->> mappings to work which primary goal is to enable using virtio devices
->> in Xen guests.
->>
->> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->> ---
->> Changes RFC -> V1:
->>     - update commit subject/description and text in description
->>     - move to devicetree/bindings/arm/
->>
->> Changes V1 -> V2:
->>     - update text in description
->>     - change the maintainer of the binding
->>     - fix validation issue
->>     - reference xen,dev-domid.yaml schema from virtio/mmio.yaml
->> ---
->>   .../devicetree/bindings/arm/xen,dev-domid.yaml     | 37 ++++++++++++++++++++++
->>   Documentation/devicetree/bindings/virtio/mmio.yaml |  7 ++++
->>   2 files changed, 44 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->> new file mode 100644
->> index 00000000..750e89e
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/arm/xen,dev-domid.yaml
->> @@ -0,0 +1,37 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/arm/xen,dev-domid.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Xen specific binding for virtualized devices (e.g. virtio)
->> +
->> +maintainers:
->> +  - Stefano Stabellini <sstabellini@kernel.org>
->> +
->> +select: true
-> Omit. No need to apply this on every single node.
+>> I'd agree that there doesn't seem much point in trying to separate 
+>> things along relatively arbitrary lines if it *isn't* functionally 
+>> necessary - the PMUv2 common events look to be a straightforward 
+>> subset of the PMUv3 ones, but then there's Cortex-A32 anyway, plus 
+>> most of the already-supported CPUs could equally run an AArch32 perf 
+>> tool as well.
+> 
+> Sure, we should have these 32b cores supported for ARCH=arm if they are 
+> supported for ARCH=arm64. But then does it even make sense to have A7 
+> support in arch/arm64?
 
-ok, will do
+That's what I'm getting at. If it is tied to the build target as you've 
+said above, then there is no point in an AArch64 perf tool including 
+data for CPUs on which that tool cannot possibly run; it's simply a 
+waste of space.
 
+If there is interest in plumbing in support on AArch32 builds as well, 
+then I'd still be inclined to have a single arch/arm events directory, 
+and either do some build-time path munging or just symlink an arch/arm64 
+sibling back to it. Yes, technically there are AArch64-only CPUs whose 
+data would then be redundant when building for AArch32, but those are 
+such a minority that it seems like an entirely reasonable compromise.
 
->
->> +
->> +description:
->> +  This binding indicates that Xen grant mappings need to be enabled for
->> +  the device, and it specifies the ID of the domain where the corresponding
->> +  device (backend) resides. The property is required to restrict memory
->> +  access using Xen grant mappings.
->> +
->> +properties:
->> +  xen,dev-domid:
-> I kind of think 'dev' is redundant. Is there another kind of domid
-> possible?
-
-
-In general, yes. It is driver(frontend) domid. But, at least for now, I 
-don't see why we will need an additional property for that.
-
-
->   Maybe xen,backend-domid or just xen,domid? I don't know Xen
-> too well, so ultimately up to you all.
-
-xen,domid sounds ambiguous to me.
-
-xen,backend-domid sounds perfectly fine to me, I even think it fits better.
-
-
-
-Stefano, Juergen, would you be happy with new xen,backend-domid name?
-
-If yes, Stefano could you please clarify, would you be OK if I retained 
-your R-b tags (for all patches in current series which touch that 
-property) after doing such renaming?
-
-
-
-
->
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      The domid (domain ID) of the domain where the device (backend) is running.
->> +
->> +additionalProperties: true
->> +
->> +examples:
->> +  - |
->> +    virtio@3000 {
->> +            compatible = "virtio,mmio";
->> +            reg = <0x3000 0x100>;
->> +            interrupts = <41>;
->> +
->> +            /* The device is located in Xen domain with ID 1 */
->> +            xen,dev-domid = <1>;
->> +    };
->> diff --git a/Documentation/devicetree/bindings/virtio/mmio.yaml b/Documentation/devicetree/bindings/virtio/mmio.yaml
->> index 10c22b5..29a0932 100644
->> --- a/Documentation/devicetree/bindings/virtio/mmio.yaml
->> +++ b/Documentation/devicetree/bindings/virtio/mmio.yaml
->> @@ -13,6 +13,9 @@ description:
->>     See https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=virtio for
->>     more details.
->>   
->> +allOf:
->> +  - $ref: /schemas/arm/xen,dev-domid.yaml#
->> +
->>   properties:
->>     compatible:
->>       const: virtio,mmio
->> @@ -33,6 +36,10 @@ properties:
->>       description: Required for devices making accesses thru an IOMMU.
->>       maxItems: 1
->>   
->> +  xen,dev-domid:
->> +    description: Required when Xen grant mappings need to be enabled for device.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
-> No need to define the type again nor describe it again.
->
-> Instead, just change additionalProperties to unevaluateProperties in
-> this doc. The diff is the latter takes $ref's into account.
-
-ok, will do. Could you please clarify, shall I use?
-
-unevaluatedProperties: false
-
-or
-
-unevaluatedProperties:
-
-type: object
-
-
-I am not too familiar with this stuff. Both variants seem to pass 
-validation.
-
-
-Thank you.
-
-
->
->> +
->>   required:
->>     - compatible
->>     - reg
->> -- 
->> 2.7.4
->>
->>
--- 
-Regards,
-
-Oleksandr Tyshchenko
-
+Thanks,
+Robin.

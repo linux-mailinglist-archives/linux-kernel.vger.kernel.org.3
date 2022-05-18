@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22A652B36A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EFA52B338
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbiERHTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
+        id S232054AbiERHTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231947AbiERHS5 (ORCPT
+        with ESMTP id S232050AbiERHTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:18:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F24ED7AA;
-        Wed, 18 May 2022 00:18:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 18 May 2022 03:19:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29441116D7;
+        Wed, 18 May 2022 00:19:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8CC0621B07;
-        Wed, 18 May 2022 07:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652858334; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a12qY+sPuxs2cWzp1uE0NRguEiWR66+TeprLZ3z/42M=;
-        b=y5CkAmqEURf6tbAXLxZImR9md35Mqe2TrmGYTWbzWpXOSSE1zJFdJYGfzFAydhjYEvABl8
-        Fwf7no+A0zLDdX6gdf4kqG4CRYR8j9mMMGSA6aebGp9UhU6C7Rear/1CCeGDX2Kdaprrdv
-        uomZz+hEh0usMCSNnnQedbqwvhmJoG8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652858334;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a12qY+sPuxs2cWzp1uE0NRguEiWR66+TeprLZ3z/42M=;
-        b=+hBZirRiOLIhDfieYUv9yDrFJQ3+SyFh1pSv8IPBNhHByP5VVxm8siMkF41FCjMwK5h4Ly
-        HenVKb1LduOtMlDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4B8DC133F5;
-        Wed, 18 May 2022 07:18:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id oPTCD96dhGJdSgAAMHmgww
-        (envelope-from <mliska@suse.cz>); Wed, 18 May 2022 07:18:54 +0000
-Message-ID: <e3cf25ce-740a-c9eb-0d30-41230672b67c@suse.cz>
-Date:   Wed, 18 May 2022 09:18:53 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32053612B7;
+        Wed, 18 May 2022 07:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 667EAC385AA;
+        Wed, 18 May 2022 07:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652858348;
+        bh=UXWz6D3Zwmn9H6FOYGxCt9ZshmaaEUHF1r8ufbfHFmM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FY69pe6QTiP3ifpkkLUY1UXmEMze6rlhPtyljVRTXLKJGOdTDeCXIVboNHgmUyUVr
+         cyuHxNJryle2KK1G/6XBkY7wW7JsI32SJyoIgNhhVzLETyWdyf9NizTi9dFe7I/kBf
+         a8N50aaaqVSxvFZMeQV3kDOo7vhSC279ZuqQJQ7hKNRvqFFQHqOMVtXn/ox61tLedT
+         0WEqJ3ewLfrnLHTm8lD31rfj6ZsiGLhvo38o2cPp/pD/fOeAIDXsjsN+hWVrclXxFd
+         ZGQwJyN6w+C0NTGewwXDYUoiWHjpLyD5YWpCPnphpegrg6IheF68c5Vjl8r4cXDm/1
+         JffpS2BmJZRGA==
+Date:   Wed, 18 May 2022 15:19:04 +0800
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Benson Leung <bleung@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH 1/2] platform/chrome: Use tables for values lists of
+ ChromeOS ACPI sysfs ABI
+Message-ID: <YoSd6NQBvX41y7Fb@google.com>
+References: <20220518031750.21923-1-bagasdotme@gmail.com>
+ <20220518031750.21923-2-bagasdotme@gmail.com>
+ <YoRp/49OA9tqMd9N@google.com>
+ <2816e961-08f9-407b-e8f8-b63f844d864c@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
-Subject: [PATCH v2] eth: sun: cassini: remove dead code
-To:     kuba@kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com,
-        linux-kernel@vger.kernel.org, mliska@suse.cz,
-        netdev@vger.kernel.org, pabeni@redhat.com
-References: <20220517185035.4ee3dd8e@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20220517185035.4ee3dd8e@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2816e961-08f9-407b-e8f8-b63f844d864c@gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes the following GCC warning:
+On Wed, May 18, 2022 at 01:50:26PM +0700, Bagas Sanjaya wrote:
+> On 5/18/22 10:37, Tzung-Bi Shih wrote:
+> > On Wed, May 18, 2022 at 10:17:50AM +0700, Bagas Sanjaya wrote:
+> >>  What:		/sys/bus/platform/devices/GGL0001:*/CHSW
+> >>  Date:		May 2022
+> >>  KernelVersion:	5.19
+> >>  Description:
+> >>  		This file shows the switch position for the Chrome OS specific
+> >> -		hardware switches.
+> >> -		  * 0   - No changes.
+> >> -		  * 2   - Recovery button was pressed when firmware booted.
+> >> -		  * 4   - Recovery button was pressed when EC firmware booted.
+> >> -		  * 32  - Developer switch was enabled when firmware booted.
+> >> -		  * 512 - Firmware write protection was disabled when firmware
+> >> -			  booted.
+> >> +		hardware switches when the firmare is booted.
+> > 
+> > s/firmare/firmware/.
+> > 
+> > Could you fix it in v2 and also Cc to <chrome-platform@lists.linux.dev>?
+> 
+> OK, but regarding the schedule, we are on -rc7 (official mainline release
+> will be imminent). Maybe I can send the v2 immediately, or should I wait
+> for a day?
 
-drivers/net/ethernet/sun/cassini.c:1316:29: error: comparison between two arrays [-Werror=array-compare]
-drivers/net/ethernet/sun/cassini.c:3783:34: error: comparison between two arrays [-Werror=array-compare]
+I think either way is fine.  The patch introduced the sphinx warning is still
+in chrome-platform's for-next branch[1].  And it should send to mainline when 
+the next merge window opens.
 
-Note that 2 arrays should be compared by comparing of their addresses:
-note: use ‘&cas_prog_workaroundtab[0] == &cas_prog_null[0]’ to compare the addresses
-
-Signed-off-by: Martin Liska <mliska@suse.cz>
----
- drivers/net/ethernet/sun/cassini.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/sun/cassini.c b/drivers/net/ethernet/sun/cassini.c
-index b04a6a7bf566..435dc00d04e5 100644
---- a/drivers/net/ethernet/sun/cassini.c
-+++ b/drivers/net/ethernet/sun/cassini.c
-@@ -1313,7 +1313,7 @@ static void cas_init_rx_dma(struct cas *cp)
- 	writel(val, cp->regs + REG_RX_PAGE_SIZE);
- 
- 	/* enable the header parser if desired */
--	if (CAS_HP_FIRMWARE == cas_prog_null)
-+	if (&CAS_HP_FIRMWARE[0] == &cas_prog_null[0])
- 		return;
- 
- 	val = CAS_BASE(HP_CFG_NUM_CPU, CAS_NCPUS > 63 ? 0 : CAS_NCPUS);
-@@ -3780,7 +3780,7 @@ static void cas_reset(struct cas *cp, int blkflag)
- 
- 	/* program header parser */
- 	if ((cp->cas_flags & CAS_FLAG_TARGET_ABORT) ||
--	    (CAS_HP_ALT_FIRMWARE == cas_prog_null)) {
-+	    (&CAS_HP_ALT_FIRMWARE[0] == &cas_prog_null[0])) {
- 		cas_load_firmware(cp, CAS_HP_FIRMWARE);
- 	} else {
- 		cas_load_firmware(cp, CAS_HP_ALT_FIRMWARE);
--- 
-2.36.1
-
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git/commit/?h=for-next&id=0a4cad9c11ad46662ede48d94f08ecb7cd9f6916

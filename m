@@ -2,125 +2,433 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26C452B587
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7711D52B54D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbiERIxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
+        id S233580AbiERIxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbiERIxH (ORCPT
+        with ESMTP id S233533AbiERIxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:53:07 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922843467A
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:53:05 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id bx33so1666312ljb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fBjJyFH8sXSyFWd7Z+l2eetv8x/giv4M4DnMxkIMcdI=;
-        b=cezYN/54uwp401iZm2wviNOMyJq8YW8GnuhGTcKzr+80Ubn4/x8YgkkbPeybNJyGty
-         Eom5EzKnHoSX8rrNyy9vABq5+8UKzIydpFBz12hOxCsUWtVcv/3nsoeXQC6oWUafmAPi
-         0NQTOh1yzdwZHiEqmRECvR+1WuzibquI82nOC+PglVuN6eXSyLGUVlUfQwiqeE7bwekp
-         XCjd3Lo3K3MPS8VcDUjfSCyq5yqHhNx1LnfDaojed4nLf1EykDrmNNyqv+66NULYaSss
-         wYDAE/PgoYcq9hRgQd7fhs4xgwCYlJAqHb0alSfNKSWuSyEWSJrgJzcf+oVs1WFDAMEU
-         stKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fBjJyFH8sXSyFWd7Z+l2eetv8x/giv4M4DnMxkIMcdI=;
-        b=F1j7GYNmva2LLxWfYAYbd6ltCOtWShjW9RaXqmH5Bptj6wbgvJZDWPhgKiWRx3MElk
-         gZ6ltIJAT0P92yLHnVFBf4I2eLWehakJ5pgD3UhsAtC0Z77fTXhfgmzwFEhwqqZtPdgl
-         TXiL71Dzjzv1BAETvnGJ6aELMr8CTIdNsWROpSl+qSK5hVlWJ5OI6O79JSy/tGV/hkdH
-         UMggwq/q8VaHA/zwaZmCGOra+c5cJK0Le7zF6/xRa+W50zJiDYhKLp8ALgRWfj6NlaKX
-         ZCilzLPn8KA1sVcjctNvPwTTt/RWNNjtIP54RHAmegoEzXCsbi8NJCkiyTLHF1p8Ctl0
-         EUsA==
-X-Gm-Message-State: AOAM530YcohDIK2WqatO2hIV5jMEYskq8Rj+gcQBEJxyasJqH7dsjeqi
-        3htZqZ8oLR9H+aZWdGTXyCShS1Q8/9/YBxwb5wtQcA==
-X-Google-Smtp-Source: ABdhPJxbqSr9Qqsjk0zyFVPQZy3Fi77TFOlOqJFgxI5ws2ajUa+93wA9kO/j+w1syMPAbzbkUGsiZ7FWTG7ULtquuHg=
-X-Received: by 2002:a2e:87d0:0:b0:250:76dd:3bdf with SMTP id
- v16-20020a2e87d0000000b0025076dd3bdfmr16003686ljj.33.1652863983580; Wed, 18
- May 2022 01:53:03 -0700 (PDT)
+        Wed, 18 May 2022 04:53:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B724ECF9;
+        Wed, 18 May 2022 01:53:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F5BE616CC;
+        Wed, 18 May 2022 08:53:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8261DC385AA;
+        Wed, 18 May 2022 08:53:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652863997;
+        bh=H/5ntHjb/CsEBDhGei0Gk5pizBTwb1XxKoA3Imvo2kA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VzNpL1tcXJQ+IpIzuH55duJbGIJC836lAnKneP2WScykNe0xhXuyhm7pXKSNeTYZ1
+         DbHMy0aZdXtPB+PNr0dlRIKMi4kJ4uIPuBHIG0vgKVUx6WveOSU85cbMlw3cqn+a3/
+         Oh0Ov5R99ItBsrChrxVROPFFnmruvt2Z8cb0bvyM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.15.41
+Date:   Wed, 18 May 2022 10:53:12 +0200
+Message-Id: <16528639938379@kroah.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220512123428.fq3wofedp6oiotd4@ppc.localdomain>
- <20220516094726.b5rrsjg7rvei2od5@ppc.localdomain> <20220517170817.94ca21558bbe035ae06bf6fa@linux-foundation.org>
-In-Reply-To: <20220517170817.94ca21558bbe035ae06bf6fa@linux-foundation.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 18 May 2022 10:52:51 +0200
-Message-ID: <CACT4Y+ZkDJmoaT5ks8cmhzaNhhgaLYAhvzx+5q3yzKQEW1LZ5A@mail.gmail.com>
-Subject: Re: [PATCH] mm/mempolicy: fix uninit-value in mpol_rebind_policy()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Wang Cheng <wanngchenng@gmail.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot+ad1b8c404f0959c4bfcc@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022 at 02:08, Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Mon, 16 May 2022 17:47:26 +0800 Wang Cheng <wanngchenng@gmail.com> wrote:
->
-> >
-> > ...
-> >
-> > This patch seems to fix below bug too.
-> > KMSAN: uninit-value in mpol_rebind_mm (2)
-> > https://syzkaller.appspot.com/bug?id=f2fecd0d7013f54ec4162f60743a2b28df40926b
-> >
-> > The uninit-value is pol->w.cpuset_mems_allowed in mpol_rebind_policy().
-> > When syzkaller reproducer runs to the beginning of mpol_new(),
-> >
-> >           mpol_new() mm/mempolicy.c
-> >         do_mbind() mm/mempolicy.c
-> >       kernel_mbind() mm/mempolicy.c
-> >
-> > `mode` is 1(MPOL_PREFERRED), nodes_empty(*nodes) is `true` and `flags`
-> > is 0. Then
-> >
-> >       mode = MPOL_LOCAL;
-> >       ...
-> >       policy->mode = mode;
-> >       policy->flags = flags;
-> >
-> > will be executed. So in mpol_set_nodemask(),
-> >
-> >           mpol_set_nodemask() mm/mempolicy.c
-> >         do_mbind()
-> >       kernel_mbind()
-> >
-> > pol->mode is 4(MPOL_LOCAL), that `nodemask` in `pol` is not initialized,
-> > which will be accessed in mpol_rebind_policy().
->
-> Thanks, I added the above to the changelog and I plan to import the
-> result into mm-stable later this week.
->
-> > IIUC, "#syz fix: mm/mempolicy: fix uninit-value in mpol_rebind_policy()"
-> > could be sent to syzbot+ad1b8c404f0959c4bfcc@syzkaller.appspotmail.com
-> > to attach the fixing commit to the bug. WDYT?
->
-> Could be.  The "syz fix" isn't a thing I've paid much attention to.
-> I'll start doing so ;)
+I'm announcing the release of the 5.15.41 kernel.
 
-Yes, we can send:
+All users of the 5.15 kernel series must upgrade.
 
-#syz fix: mm/mempolicy: fix uninit-value in mpol_rebind_policy()
+The updated 5.15.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-to syzbot+ad1b8c404f0959c4bfcc@syzkaller.appspotmail.com
-and now it should be reflected at:
-https://syzkaller.appspot.com/bug?extid=ad1b8c404f0959c4bfcc
+thanks,
 
-and the bug will be closed when the fix is merged everywhere.
+greg k-h
+
+------------
+
+ Makefile                                             |    2 
+ arch/arm/include/asm/io.h                            |    3 +
+ arch/arm/mm/ioremap.c                                |    8 +++
+ arch/arm64/include/asm/io.h                          |    4 +
+ arch/arm64/kernel/Makefile                           |    4 +
+ arch/arm64/kernel/vdso/Makefile                      |    3 -
+ arch/arm64/kernel/vdso32/Makefile                    |    3 -
+ arch/arm64/mm/ioremap.c                              |    8 +++
+ arch/powerpc/kvm/book3s_32_sr.S                      |   26 +++++++++--
+ arch/s390/Makefile                                   |   10 ++++
+ arch/x86/mm/init_64.c                                |    5 +-
+ drivers/base/firmware_loader/main.c                  |   17 +++++++
+ drivers/dma-buf/dma-buf.c                            |    8 +--
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c            |    8 ---
+ drivers/gpu/drm/nouveau/nouveau_backlight.c          |    9 ++-
+ drivers/gpu/drm/nouveau/nvkm/engine/device/tegra.c   |    2 
+ drivers/gpu/drm/vc4/vc4_hdmi.c                       |    1 
+ drivers/gpu/drm/vmwgfx/vmwgfx_cmd.c                  |   13 +++--
+ drivers/gpu/drm/vmwgfx/vmwgfx_drv.h                  |    8 +++
+ drivers/gpu/drm/vmwgfx/vmwgfx_fb.c                   |    2 
+ drivers/gpu/drm/vmwgfx/vmwgfx_fence.c                |   28 +++++++++---
+ drivers/gpu/drm/vmwgfx/vmwgfx_irq.c                  |   26 +++++++----
+ drivers/gpu/drm/vmwgfx/vmwgfx_kms.c                  |    8 ++-
+ drivers/hwmon/Kconfig                                |    2 
+ drivers/hwmon/f71882fg.c                             |    5 +-
+ drivers/hwmon/tmp401.c                               |   11 ++++
+ drivers/infiniband/hw/irdma/cm.c                     |    7 ---
+ drivers/interconnect/core.c                          |    8 +++
+ drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c         |   30 ++++++++++++
+ drivers/net/dsa/bcm_sf2.c                            |    3 +
+ drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c |    4 -
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c       |    4 +
+ drivers/net/ethernet/chelsio/cxgb4/t4_hw.c           |   10 ++--
+ drivers/net/ethernet/intel/i40e/i40e_main.c          |   27 ++++++-----
+ drivers/net/ethernet/intel/ice/ice.h                 |    1 
+ drivers/net/ethernet/intel/ice/ice_idc.c             |   25 +++++++---
+ drivers/net/ethernet/intel/ice/ice_main.c            |    2 
+ drivers/net/ethernet/intel/ice/ice_ptp.c             |   10 +++-
+ drivers/net/ethernet/mediatek/mtk_ppe.c              |    2 
+ drivers/net/ethernet/mscc/ocelot_flower.c            |    5 +-
+ drivers/net/ethernet/mscc/ocelot_vcap.c              |    9 +++
+ drivers/net/ethernet/pensando/ionic/ionic_bus_pci.c  |    3 -
+ drivers/net/ethernet/sfc/ef10.c                      |    5 ++
+ drivers/net/ethernet/sfc/efx_channels.c              |   21 ++++-----
+ drivers/net/ethernet/sfc/ptp.c                       |   14 +++++-
+ drivers/net/ethernet/sfc/ptp.h                       |    1 
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c        |   15 ------
+ drivers/net/phy/micrel.c                             |    5 +-
+ drivers/net/phy/phy.c                                |    7 ++-
+ drivers/net/phy/sfp.c                                |   12 ++++-
+ drivers/net/wireless/intel/iwlwifi/iwl-dbg-tlv.c     |    2 
+ drivers/net/wireless/mac80211_hwsim.c                |    3 +
+ drivers/platform/surface/aggregator/core.c           |    2 
+ drivers/s390/net/ctcm_mpc.c                          |    6 --
+ drivers/s390/net/ctcm_sysfs.c                        |    5 +-
+ drivers/s390/net/lcs.c                               |    7 +--
+ drivers/slimbus/qcom-ctrl.c                          |    4 -
+ drivers/tty/n_gsm.c                                  |   13 +++--
+ drivers/tty/serial/8250/8250_mtk.c                   |   22 +++++----
+ drivers/tty/serial/digicolor-usart.c                 |    5 --
+ drivers/tty/serial/fsl_lpuart.c                      |   18 +++----
+ drivers/usb/class/cdc-wdm.c                          |    1 
+ drivers/usb/gadget/function/f_uvc.c                  |   32 ++++++++++++-
+ drivers/usb/gadget/function/uvc.h                    |    2 
+ drivers/usb/gadget/function/uvc_v4l2.c               |    3 -
+ drivers/usb/host/xhci-mtk-sch.c                      |   16 +++---
+ drivers/usb/serial/option.c                          |    4 +
+ drivers/usb/serial/pl2303.c                          |    1 
+ drivers/usb/serial/pl2303.h                          |    1 
+ drivers/usb/serial/qcserial.c                        |    2 
+ drivers/usb/typec/tcpm/tcpci.c                       |    2 
+ drivers/usb/typec/tcpm/tcpci_mt6360.c                |   26 +++++++++++
+ drivers/video/fbdev/efifb.c                          |    9 +++
+ drivers/video/fbdev/simplefb.c                       |    8 +++
+ drivers/video/fbdev/vesafb.c                         |    8 +++
+ fs/ceph/file.c                                       |   16 +++++-
+ fs/file_table.c                                      |    1 
+ fs/fs-writeback.c                                    |    4 +
+ fs/gfs2/bmap.c                                       |   11 ++--
+ fs/nfs/fs_context.c                                  |    2 
+ fs/proc/fd.c                                         |   23 +++++++++
+ include/linux/netdev_features.h                      |    4 -
+ include/linux/sunrpc/clnt.h                          |    1 
+ include/net/inet_hashtables.h                        |    2 
+ include/net/secure_seq.h                             |    4 -
+ include/net/tc_act/tc_pedit.h                        |    1 
+ include/trace/events/sunrpc.h                        |    1 
+ include/uapi/linux/virtio_ids.h                      |   14 +++---
+ kernel/cgroup/cpuset.c                               |    7 ++-
+ lib/dim/net_dim.c                                    |   44 +++++++++----------
+ mm/huge_memory.c                                     |    7 ++-
+ mm/memory-failure.c                                  |   15 ------
+ net/batman-adv/fragmentation.c                       |   11 ++++
+ net/core/secure_seq.c                                |   16 ++++--
+ net/ipv4/inet_hashtables.c                           |   42 +++++++++++-------
+ net/ipv4/ping.c                                      |   15 +++++-
+ net/ipv4/route.c                                     |    1 
+ net/ipv6/inet6_hashtables.c                          |    4 -
+ net/mac80211/mlme.c                                  |    6 ++
+ net/netlink/af_netlink.c                             |    1 
+ net/sched/act_pedit.c                                |   26 +++++++++--
+ net/smc/smc_rx.c                                     |    4 -
+ net/sunrpc/auth_gss/gss_rpc_upcall.c                 |    1 
+ net/sunrpc/clnt.c                                    |   33 ++++++++++++++
+ net/sunrpc/xprt.c                                    |    7 ---
+ net/sunrpc/xprtsock.c                                |   16 +++++-
+ net/tls/tls_device.c                                 |    3 +
+ sound/soc/codecs/max98090.c                          |    5 +-
+ sound/soc/soc-ops.c                                  |   18 +++++++
+ sound/soc/sof/sof-pci-dev.c                          |    5 ++
+ tools/testing/selftests/vm/Makefile                  |   10 ++--
+ 111 files changed, 741 insertions(+), 296 deletions(-)
+
+Adrian-Ken Rueegsegger (1):
+      x86/mm: Fix marking of unused sub-pmd ranges
+
+Ajit Kumar Pandey (1):
+      ASoC: SOF: Fix NULL pointer exception in sof_pci_probe callback
+
+Alex Deucher (1):
+      Revert "drm/amd/pm: keep the BACO feature enabled for suspend"
+
+Alexander Graf (1):
+      KVM: PPC: Book3S PR: Enable MSR_DR for switch_mmu_context()
+
+Alexandra Winter (3):
+      s390/ctcm: fix variable dereferenced before check
+      s390/ctcm: fix potential memory leak
+      s390/lcs: fix variable dereferenced before check
+
+Andreas Gruenbacher (1):
+      gfs2: Fix filesystem block deallocation for short writes
+
+AngeloGioacchino Del Regno (2):
+      serial: 8250_mtk: Fix UART_EFR register address
+      serial: 8250_mtk: Fix register address for XON/XOFF character
+
+Ashish Mhetre (1):
+      iommu: arm-smmu: disable large page mappings for Nvidia arm-smmu
+
+Camel Guo (1):
+      hwmon: (tmp401) Add OF device ID table
+
+Charan Teja Reddy (1):
+      dma-buf: call dma_buf_stats_setup after dmabuf is in valid list
+
+ChiYuan Huang (1):
+      usb: typec: tcpci_mt6360: Update for BMC PHY setting
+
+Christophe JAILLET (1):
+      drm/nouveau: Fix a potential theorical leak in nouveau_get_backlight_name()
+
+Chunfeng Yun (1):
+      usb: xhci-mtk: fix fs isoc's transfer error
+
+Dan Aloni (1):
+      nfs: fix broken handling of the softreval mount option
+
+Dan Vacura (1):
+      usb: gadget: uvc: allow for application to cleanly shutdown
+
+Daniel Starke (2):
+      tty: n_gsm: fix buffer over-read in gsm_dlci_data()
+      tty: n_gsm: fix mux activation issues in gsm_config()
+
+Duoming Zhou (1):
+      RDMA/irdma: Fix deadlock in irdma_cleanup_cm_core()
+
+Eric Dumazet (2):
+      netlink: do not reset transport header in netlink_recvmsg()
+      tcp: resalt the secret every 10 seconds
+
+Ethan Yang (1):
+      USB: serial: qcserial: add support for Sierra Wireless EM7590
+
+Fabio Estevam (2):
+      net: phy: micrel: Do not use kszphy_suspend/resume for KSZ8061
+      net: phy: micrel: Pass .probe for KS8737
+
+Florian Fainelli (2):
+      net: bcmgenet: Check for Wake-on-LAN interrupt probe deferral
+      net: dsa: bcm_sf2: Fix Wake-on-LAN with mac_link_down()
+
+Francesco Dolcini (1):
+      net: phy: Fix race condition on link status change
+
+Greg Kroah-Hartman (1):
+      Linux 5.15.41
+
+Guangguan Wang (1):
+      net/smc: non blocking recvmsg() return -EAGAIN when no data and signal_pending
+
+Guenter Roeck (1):
+      iwlwifi: iwl-dbg: Use del_timer_sync() before freeing
+
+Hui Tang (1):
+      drm/vc4: hdmi: Fix build error for implicit function declaration
+
+Indan Zupancic (1):
+      fsl_lpuart: Don't enable interrupts too early
+
+Ivan Vecera (1):
+      ice: Fix race during aux device (un)plugging
+
+Javier Martinez Canillas (4):
+      fbdev: simplefb: Cleanup fb_info in .fb_destroy rather than .remove
+      fbdev: efifb: Cleanup fb_info in .fb_destroy rather than .remove
+      fbdev: vesafb: Cleanup fb_info in .fb_destroy rather than .remove
+      fbdev: efifb: Fix a use-after-free due early fb_info cleanup
+
+Jeff Layton (1):
+      ceph: fix setting of xattrs on async created inodes
+
+Jesse Brandeburg (1):
+      dim: initialize all struct fields
+
+Ji-Ze Hong (Peter Hong) (1):
+      hwmon: (f71882fg) Fix negative temperature
+
+Jiapeng Chong (1):
+      sfc: Use swap() instead of open coding it
+
+Jing Xia (1):
+      writeback: Avoid skipping inode writeback
+
+Joel Savitz (1):
+      selftests: vm: Makefile: rename TARGETS to VMTARGETS
+
+Joey Gouly (1):
+      arm64: vdso: fix makefile dependency on vdso.so
+
+Johannes Berg (1):
+      mac80211_hwsim: call ieee80211_tx_prepare_skb under RCU protection
+
+Kalesh Singh (1):
+      procfs: prevent unprivileged processes accessing fdinfo dir
+
+Kees Cook (1):
+      net: chelsio: cxgb4: Avoid potential negative array offset
+
+Lokesh Dhoundiyal (1):
+      ipv4: drop dst in multicast routing path
+
+Manikanta Pubbisetty (1):
+      mac80211: Reset MBSSID parameters upon connection
+
+Manuel Ullmann (1):
+      net: atlantic: always deep reset on pm op, fixing up my null deref regression
+
+Mark Brown (3):
+      ASoC: max98090: Reject invalid values in custom control put()
+      ASoC: max98090: Generate notifications on changes for custom control
+      ASoC: ops: Validate input values in snd_soc_put_volsw_range()
+
+Matthew Hagan (1):
+      net: sfp: Add tx-fault workaround for Huawei MA5671A SFP ONT
+
+Maxim Mikityanskiy (1):
+      tls: Fix context leak on tls_device_down
+
+Maximilian Luz (1):
+      platform/surface: aggregator: Fix initialization order when compiling as builtin module
+
+Miaoqian Lin (1):
+      slimbus: qcom: Fix IRQ check in qcom_slim_probe
+
+Michael Tretter (1):
+      usb: gadget: uvc: rename function to be more consistent
+
+Michal Michalik (1):
+      ice: fix PTP stale Tx timestamps cleanup
+
+Mike Rapoport (1):
+      arm[64]/memremap: don't abuse pfn_valid() to ensure presence of linear map
+
+Naoya Horiguchi (1):
+      mm/hwpoison: use pr_err() instead of dump_page() in get_any_page()
+
+Nicolas Dichtel (1):
+      ping: fix address binding wrt vrf
+
+Paolo Abeni (1):
+      net/sched: act_pedit: really ensure the skb is writable
+
+Randy Dunlap (1):
+      hwmon: (ltq-cputemp) restrict it to SOC_XWAY
+
+Robin Murphy (1):
+      drm/nouveau/tegra: Stop using iommu_present()
+
+Scott Chen (1):
+      USB: serial: pl2303: add device id for HP LM930 Display
+
+Sergey Ryazanov (1):
+      usb: cdc-wdm: fix reading stuck on device close
+
+Shravya Kumbham (1):
+      net: emaclite: Don't advertise 1000BASE-T and do auto negotiation
+
+Shunsuke Mie (1):
+      virtio: fix virtio transitional ids
+
+Stephen Boyd (1):
+      interconnect: Restore sync state by ignoring ipa-virt in provider count
+
+Sven Eckelmann (1):
+      batman-adv: Don't skb_split skbuffs with frag_list
+
+Sven Schnelle (1):
+      s390: disable -Warray-bounds
+
+Sven Schwermer (2):
+      USB: serial: option: add Fibocom L610 modem
+      USB: serial: option: add Fibocom MA510 modem
+
+Taehee Yoo (2):
+      net: sfc: fix memory leak due to ptp channel
+      net: sfc: ef10: fix memory leak in efx_ef10_mtd_probe()
+
+Tariq Toukan (1):
+      net: Fix features skip in for_each_netdev_feature()
+
+Thiébaud Weksteen (1):
+      firmware_loader: use kernel credentials when reading firmware
+
+Trond Myklebust (2):
+      SUNRPC: Ensure that the gssproxy client can start in a connected state
+      SUNRPC: Ensure we flush any closed sockets before xs_xprt_free()
+
+Uwe Kleine-König (1):
+      usb: typec: tcpci: Don't skip cleanup in .remove() on error
+
+Vladimir Oltean (4):
+      net: mscc: ocelot: fix last VCAP IS1/IS2 filter persisting in hardware when deleted
+      net: mscc: ocelot: fix VCAP IS2 filters matching on both lookups
+      net: mscc: ocelot: restrict tc-trap actions to VCAP IS2 lookup 0
+      net: mscc: ocelot: avoid corrupting hardware counters when moving VCAP filters
+
+Waiman Long (1):
+      cgroup/cpuset: Remove cpus_allowed/mems_allowed setup in cpuset_init_smp()
+
+Willy Tarreau (6):
+      secure_seq: use the 64 bits of the siphash for port offset calculation
+      tcp: use different parts of the port_offset for index and offset
+      tcp: add small random increments to the source port
+      tcp: dynamically allocate the perturb table used by source ports
+      tcp: increase source port perturb table to 2^16
+      tcp: drop the hash_32() part from the index calculation
+
+Xiaomeng Tong (1):
+      i40e: i40e_main: fix a missing check on list iterator
+
+Xu Yu (2):
+      Revert "mm/memory-failure.c: skip huge_zero_page in memory_failure()"
+      mm/huge_memory: do not overkill when splitting huge_zero_page
+
+Yang Yingliang (3):
+      ionic: fix missing pci_release_regions() on error in ionic_probe()
+      net: ethernet: mediatek: ppe: fix wrong size passed to memset()
+      tty/serial: digicolor: fix possible null-ptr-deref in digicolor_uart_probe()
+
+Zack Rusin (3):
+      drm/vmwgfx: Fix fencing on SVGAv3
+      drm/vmwgfx: Disable command buffers on svga3 without gbobjects
+      drm/vmwgfx: Initialize drm_mode_fb_cmd2
+

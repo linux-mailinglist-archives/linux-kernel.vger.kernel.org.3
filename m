@@ -2,223 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD4952BF51
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37E952BF9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239744AbiERPwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S239737AbiERPvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239593AbiERPwP (ORCPT
+        with ESMTP id S239593AbiERPvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:52:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A4F1C83EB;
-        Wed, 18 May 2022 08:52:14 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IFElLE013025;
-        Wed, 18 May 2022 15:51:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=AM2xQGtGTyOcD/kklWCco7altrVDggH1p+vQaapH7mo=;
- b=T2ePE/cKae/zGG6w7B//p2Yn8/83O8IzvH9b+/SMHSVBgtU/W2em6bWJnjDN+OvSdE22
- v49QGUfrleazDI8lm7x6JbzWynp2B7sxZGIpPNceAeC87ETuvzyLoiSM5jdNLAo3sik4
- aoPxdbnAd62H3u5XRRLFmWRTgeXxc47Vypv5IKhLr6ZLfPeCgi325IwHIBj4Pfq5PCgK
- g5LE95Evhazk8M2WPNV2bjqva1p2PY22IHOGMTw9coZLoet5vVXTAi4awlw+YkBn/hJ8
- XSTH2Ngy84eeW0uO+8uVztgoEm+dsPDFyVnQwzmrKqLau0ecoFBJE5cWSkQGXa7faacx /g== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5392rx8q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 15:51:29 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IFnZUG003184;
-        Wed, 18 May 2022 15:51:28 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma02wdc.us.ibm.com with ESMTP id 3g2429wger-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 15:51:28 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IFpSlm12779816
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 15:51:28 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40BC3AE060;
-        Wed, 18 May 2022 15:51:28 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48FE9AE05F;
-        Wed, 18 May 2022 15:51:27 +0000 (GMT)
-Received: from [9.163.6.139] (unknown [9.163.6.139])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 15:51:27 +0000 (GMT)
-Message-ID: <6d517473-9ac4-8a58-64c5-1c27ecd6f95f@linux.ibm.com>
-Date:   Wed, 18 May 2022 10:51:26 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v2 0/2] iio: humidity: si7020: Check device property for
- skipping reset in probe
+        Wed, 18 May 2022 11:51:41 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2073.outbound.protection.outlook.com [40.107.100.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D716D1BE11C;
+        Wed, 18 May 2022 08:51:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DNK4EStW9zZ4m1gYAtuHAmq4OcONA9LExasdaBNDrpr1DNa8D5ZMmnK8PXJHTl39P2cSWX9FtjvA1il3lxl5IgLCDe+ijlHL46/tbfkVagW8vqb2RFrSV2Iryl7S9LBXzRKqH+eO/FWNO0JUUB63+zWMybOWHFYgWBHcO3HV2FpEaYTKX1AMqN0DdNoMfDJ3CXwec13ROtwaz4WCuhIebSETQ1jsI3OqXRsZuXVN+UpOtGQYKxA1zwkvuGyJBfPHeCK+3kMZG5foK6tGDmYH9WG+oeGyzfPSgQaRlYXbFdd3HKpUtS8onPDuMnOZmnVXp47BM1x5bhXtd0yTwnxg8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YMgK8aQjXqU3M4XHbxlduLXqQLhIXMpQDr/DIkwNNfU=;
+ b=SFel1T1MRfJhl8PYgQINxZfwXsPjrHhpYgUIjO67ixRpH48pqAa4tAgEES4WzbmhqTW/tTPzhVnxIIUZ7+OfdeastOv/XQpH8m+zfK17mn2w4KMGn0AmJz9K/p7UbcGbxgas6HHMDLqglX1bUsiqEEJ7onkbMSEGKocOZJ8nlD2uim3WmUTcb4VYt5gqdYA9kJOtC/xl93V3Kn/JMtbPjuyNja7L29jIHdjnQVcF0A2LT/0QwXfdVl0XZGuwc60pAImctdlBAPLPRAtkMi0YDFqEgVG11/57d4ghNv6U7pCY5DXA/MaifUehBN0Gv1Tw3xVg1KAJfndLo0K9Y2LWoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YMgK8aQjXqU3M4XHbxlduLXqQLhIXMpQDr/DIkwNNfU=;
+ b=kz7gzG8gqfUDT+IfPbNtCB+znNuxJvduPK+K5M1Xtzlkvp8WVM/17Pa74WT5wX0NG0tfh14MO0W/Tr/FVni7uYHYGn3CRijH9GdIuEFVmBO/+4JibTKSuY9kFEhAOxGDH/4SohUghW7AnFNrKeVl9AMGt/DYWooekrsai9i2Bcs=
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com (2603:10b6:806:1fb::24)
+ by DM6PR02MB4219.namprd02.prod.outlook.com (2603:10b6:5:98::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Wed, 18 May
+ 2022 15:51:37 +0000
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::94f0:32be:367b:1798]) by SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::94f0:32be:367b:1798%7]) with mapi id 15.20.5273.014; Wed, 18 May 2022
+ 15:51:37 +0000
+From:   Radhey Shyam Pandey <radheys@xilinx.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Harini Katakam <harinik@xilinx.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>
+Subject: RE: [RFC net-next] dt-bindings: net: xilinx: document xilinx emaclite
+ driver binding
+Thread-Topic: [RFC net-next] dt-bindings: net: xilinx: document xilinx
+ emaclite driver binding
+Thread-Index: AQHYZh7/W5aBkbqlHkqbu5HcsW4/mq0j0VEAgAD/x+A=
+Date:   Wed, 18 May 2022 15:51:37 +0000
+Message-ID: <SA1PR02MB85603BDDF6DD3D8182A74915C7D19@SA1PR02MB8560.namprd02.prod.outlook.com>
+References: <1652373596-5994-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+ <20220518003240.GA1942137-robh@kernel.org>
+In-Reply-To: <20220518003240.GA1942137-robh@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Eddie James <eajames@linux.ibm.com>
-To:     Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
-        devicetree@vger.kernel.org
-Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        lars@metafoo.de, miltonm@us.ibm.com, linux-i2c@vger.kernel.org
-References: <20220512162020.33450-1-eajames@linux.ibm.com>
- <20220512174859.000042b6@Huawei.com>
- <4fd44316-689e-1b72-d483-2c617d2a455d@linux.ibm.com>
- <20220513174531.00007b9b@Huawei.com>
- <b2761479-50fe-0dce-62a2-3beff5cdef9d@axentia.se>
- <20220514144318.309be1ec@jic23-huawei>
- <0569bb70-e2dc-de85-268d-30ee7c9491fb@axentia.se>
- <bbeaa4b6-1412-dfac-a6ef-dbcd9f1e3f5c@linux.ibm.com>
-In-Reply-To: <bbeaa4b6-1412-dfac-a6ef-dbcd9f1e3f5c@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Kg_7SlHu9GjMAyDKOhMjl65LN9NYtQPe
-X-Proofpoint-ORIG-GUID: Kg_7SlHu9GjMAyDKOhMjl65LN9NYtQPe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_05,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- suspectscore=0 bulkscore=0 spamscore=0 priorityscore=1501 adultscore=0
- malwarescore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205180092
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5555ac54-b326-4d32-02c1-08da38e64a8b
+x-ms-traffictypediagnostic: DM6PR02MB4219:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <DM6PR02MB42193BB995F51525B2BCD363C7D19@DM6PR02MB4219.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yM4bKUUiYsZlixHSB7/0ID7YRnlnf5qrG6Mx1uAzk15Mwre+THW+5f3ygUMae04O0ReWnTkQ52JC2ofUlCAG8p2v/VCRn2Q79wgOc+BhvDnSjYMjtiosthtRmvpLzDqu3qQwfSxui+gMMghwNRv2cJswgIPJGdg6KjQ1gCLVHU2HVdJ+PeqJ5bSWVLVstuWNk179U+JE2i41AX29FkCQxFeuj2N3JcEeN77jQTVxlVoyIkNdQQfco7wIIMrAcBXN8z3JGtoGY4Rz25qua0B/2Wt9SuoZ5InPrBlzROTSn056YBR3/Mv7/puSxEySA9WAowHqdxMaVRbQIhTXXl0CRPzRk3UyQLC/tpJLN4gG2aNc2AmK5atjw/zOefDTQ3SmsGS3yk+1ua5exmoSo/lsy4J2OrpvgqZbfZS71iN99c+MxvML4dEgFZljTSifhJpAh9WpjXnsKIjYnAPzV+NALEgRlr3PceMFld6mohULjUtsO6GbXpAUaNg8iIYTVjsfD0HFVzsNQu8Zwfkfja7o8WwqNUDTkq5VGn1CoP7/2cL6kjjBfEPGz5AbYEal2bbzv+TNIPpPzbCFyy0K2xTI8HSsUMTSK0IAId6Sqa6kF2uXmasxM6OuFACRuPvAAy3JVS4bxvFzpqUgUjyKe/uujmRbsNtltN7bH48No2Q9RKFnybmOwm/0H/frQiMV6ophvYlX0R/vbnPhdKTWYLeMm8FhtdsF48OUbEur3J6XQKQoVleVdyHOWdMUTym3+zURHmvh5L0i4dFNTCd8PbWJQnTyVWcqnzuJZZFbfu1EkG9YVAZVR4FL/FJz0Q4mt/2jxSSae0CCpgZmkQXCWG98NA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR02MB8560.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(66476007)(5660300002)(7416002)(86362001)(9686003)(8676002)(66446008)(76116006)(4326008)(52536014)(64756008)(66556008)(122000001)(38100700002)(6916009)(54906003)(33656002)(8936002)(38070700005)(316002)(55016003)(53546011)(508600001)(6506007)(966005)(83380400001)(186003)(71200400001)(107886003)(7696005)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?153MjGMb+jXK6Xk95kPrU3gzeZMYQSG2XyJNT9QToZULkGmfLyORr+td3Lax?=
+ =?us-ascii?Q?EYQY9OpiW3s648CKWjKOWQQ9s2PIJlpo/OhOV3WhtXL+R9hvZl0He4fYd7tZ?=
+ =?us-ascii?Q?gY2RaxPhcv34cMubbVdlK4xSF0A4F/rWsdyZYyx2ka0JTNkcQDRXMiMtrVSX?=
+ =?us-ascii?Q?TjrsenYfSyOAgFfC7J3m0ebaiDHhcrp0DYeZKf20FX16WD52Rh4kpuFOdGNw?=
+ =?us-ascii?Q?ep64O7VtZ4bdLhIibKQbBZHdOVxCV6QOCpHVylUmxDVmCwrLrYldYSoMUCzh?=
+ =?us-ascii?Q?GuNUs3XYN6tV71M7o8nq5ImSXJ3f71ugxJGH+a38QR5Z37Qt66x3GN53njER?=
+ =?us-ascii?Q?/65h5r0FOXCVWEyzP81so1GsSC8Wcvjb20OF71j0udOVWNjr7RAmDzztXrX9?=
+ =?us-ascii?Q?O0cVVW+cy45W89tmF5Fm13Jt5Dwdk7bE/MTXZj4zTpUq+F3l/eWiy+iQRsH7?=
+ =?us-ascii?Q?kfA6JeFvS060YagZywUviYlUSobzrKhWGGLxgEvBpBOFzcNPbgvqsN9sq2RC?=
+ =?us-ascii?Q?h817F+ShNA6bIsvqjSmwa+PILlciWmYJeRxABSf9LOoIca6924dXJ7HtkmEW?=
+ =?us-ascii?Q?A+U2fWT41CxmmZa7mM1ZMBlFmuOQzDsb3J2zh6K9tLPD45zB3kG4F5GANEc/?=
+ =?us-ascii?Q?Zh4DTO2F9kOveWDib4p6ZxwcBm3lbXLV6626xwYP+pXI/vH/GhhjQMx1DZ0X?=
+ =?us-ascii?Q?u6SEPIhcng19pkwWBaF9mIC8P1Owim/p6sBoRHJ1T53cN5+spxqfPt6XAIw0?=
+ =?us-ascii?Q?nTzIGoLoqSmOT/hAJF60bRVbxBimRiNv6ayI6bBpZka0RUuS/c42LaQZQaJO?=
+ =?us-ascii?Q?z68rSYMotcjLSwfIQ3OjpgRqVB5dQTaq/lVDIBvGrB5gGO17nEgs2qMYXz3i?=
+ =?us-ascii?Q?uGrlCwvFnuvWYAwi4lNqc9q07NlZa+b62XIX3TlLw6U1rMSoPRi0iWPy70Ez?=
+ =?us-ascii?Q?FKNq4OgHpFKNAuQr9+XFvzCY8Nbc/JQnjp9NSF3o5h5NsGmik8kO9Z80QHl5?=
+ =?us-ascii?Q?nAFntjZulHSr3w7pW3oQuZpcVumTX6wvweS8krWmYH9CRgIU3Qodg/axbuK9?=
+ =?us-ascii?Q?CZgZoTi4BB7xFiuZ0Zb3njVlzbZp35mN3l1hVjf0fEC/8ML7oVM6zCA3tKDV?=
+ =?us-ascii?Q?kU1505F1kM5mD8cuARP/VEKgCwF5UkitHGG2mZB0qfhX1L3T2o1spEEY7Q/Y?=
+ =?us-ascii?Q?NIlPptgjinPpNPLgKeHkqD7sjW/IYt5F3RBfu9Iw/Wwj5BJC8lfme+sV6WHX?=
+ =?us-ascii?Q?zGdzxrwOjZe4FW2P82RlaBdhCz6aJeXAD/8US+33aSPV5grkeHaA49tTmEKI?=
+ =?us-ascii?Q?eZ1PZ3w9sCtnaGsVgv0PWs0Z3k7//nNBwAI1GjFtH7mLKnI3NDeIz5SCptyO?=
+ =?us-ascii?Q?N1yo8ADWrfxxIw2HaOL7wXZX7Bo0fXPVJOGpBw757YIf+oTXuvO0BDldPlTh?=
+ =?us-ascii?Q?0n6ipNzMrZ0xzJKroJqA0PiT8/gKeMIt/ShP0l3tq+uyZT1/ahzZBQRSe7bz?=
+ =?us-ascii?Q?mWRW8O9IawZU6zllmlnlKBD07T5YIb9Odd/9HOsI5cy6Svk5H0Sf0d8HOgYH?=
+ =?us-ascii?Q?DKPEmGkZodVJa8SEsuQ2iPy/rU4gi11iz60P8Ugv8UEHHFHMq/vBJTauVpBl?=
+ =?us-ascii?Q?bhuttwpLTFsVjQ2dIFLViQxSP7DIzKPoIA6UZges8xx30AS5XVgYOrovb4Ey?=
+ =?us-ascii?Q?Gxr5SYeCPlP1E2z5xijv0ookdhiK92qhRfD93u5VzS/I+yS+54AxL0PzRFXg?=
+ =?us-ascii?Q?xOOz6LvQ4VCSyGkX4nPHjc+s90lt/TR8642JQ7pRq4r260PbIOywTELkI7mL?=
+x-ms-exchange-antispam-messagedata-1: 78zCmErWNsYeDQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR02MB8560.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5555ac54-b326-4d32-02c1-08da38e64a8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2022 15:51:37.0448
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: maZ6mv4U0gVmhC5RKB3/UoF0wndwo4IWWOlST+iLEHtmJXMt8vDOIqcGYtxnFNibPGJeDJXxj57rm5/eQrul0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4219
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Wednesday, May 18, 2022 6:03 AM
+> To: Radhey Shyam Pandey <radheys@xilinx.com>
+> Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> pabeni@redhat.com; krzysztof.kozlowski+dt@linaro.org; Harini Katakam
+> <harinik@xilinx.com>; netdev@vger.kernel.org; devicetree@vger.kernel.org;
+> linux-kernel@vger.kernel.org; git <git@xilinx.com>
+> Subject: Re: [RFC net-next] dt-bindings: net: xilinx: document xilinx ema=
+clite
+> driver binding
+>=20
+> On Thu, May 12, 2022 at 10:09:56PM +0530, Radhey Shyam Pandey wrote:
+> > Add basic description for the xilinx emaclite driver DT bindings.
+> >
+> > Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> > ---
+> >  .../bindings/net/xlnx,emaclite.yaml           | 60 +++++++++++++++++++
+> >  1 file changed, 60 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+> > b/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+> > new file mode 100644
+> > index 000000000000..a3e2a0e89b24
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/xlnx,emaclite.yaml
+> > @@ -0,0 +1,60 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/xlnx,emaclite.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Xilinx Emaclite Ethernet controller
+> > +
+> > +maintainers:
+> > +  - Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> > +  - Harini Katakam <harini.katakam@xilinx.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - xlnx,opb-ethernetlite-1.01.a
+> > +      - xlnx,opb-ethernetlite-1.01.b
+> > +      - xlnx,xps-ethernetlite-1.00.a
+> > +      - xlnx,xps-ethernetlite-2.00.a
+> > +      - xlnx,xps-ethernetlite-2.01.a
+> > +      - xlnx,xps-ethernetlite-3.00.a
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  phy-handle: true
+> > +
+> > +  local-mac-address: true
+> > +
+> > +  xlnx,tx-ping-pong:
+> > +    type: boolean
+> > +    description: hardware supports tx ping pong buffer.
+> > +
+> > +  xlnx,rx-ping-pong:
+> > +    type: boolean
+> > +    description: hardware supports rx ping pong buffer.
+>=20
+> Are these based on IP version or configuration of IP?
 
-On 5/18/22 10:28, Eddie James wrote:
->
-> On 5/14/22 10:02, Peter Rosin wrote:
->> 2022-05-14 at 15:43, Jonathan Cameron wrote:
->>> On Sat, 14 May 2022 00:48:51 +0200
->>> Peter Rosin <peda@axentia.se> wrote:
->>>
->>>> Hi!
->>>>
->>>> 2022-05-13 at 18:45, Jonathan Cameron wrote:
->>>>> On Thu, 12 May 2022 12:08:07 -0500
->>>>> Eddie James <eajames@linux.ibm.com> wrote:
->>>>>> On 5/12/22 11:48, Jonathan Cameron wrote:
->>>>>>> On Thu, 12 May 2022 11:20:18 -0500
->>>>>>> Eddie James <eajames@linux.ibm.com> wrote:
->>>>>>>> I2C commands issued after the SI7020 is starting up or after reset
->>>>>>>> can potentially upset the startup sequence. Therefore, the host
->>>>>>>> needs to wait for the startup sequence to finish before issuing
->>>>>>>> further i2c commands. This is impractical in cases where the 
->>>>>>>> SI7020
->>>>>>>> is on a shared bus or behind a mux, which may switch channels at
->>>>>>>> any time (generating I2C traffic). Therefore, check for a device
->>>>>>>> property that indicates that the driver should skip resetting the
->>>>>>>> device when probing.
->>>>>>> Why not lock the bus?  It's not ideal, but then not resetting 
->>>>>>> and hence
->>>>>>> potentially ending up in an unknown state isn't great either.
->>>>>>
->>>>>> Agreed, but locking the bus doesn't work in the case where the 
->>>>>> chip is
->>>>>> behind a mux. The mux core driver deselects the mux immediately 
->>>>>> after
->>>>>> the transfer to reset the si7020, causing some i2c traffic, 
->>>>>> breaking the
->>>>>> si7020. So it would also be a requirement to configure the mux to 
->>>>>> idle
->>>>>> as-is... That's why I went with the optional skipping of the reset.
->>>>>> Maybe I should add the bus lock too?
->>>>> +Cc Peter and linux-i2c for advice as we should resolve any potential
->>>>> issue with the mux side of things rather than hiding it in the driver
->>>>> (if possible!)
->>>> IIUC, the chip in question cannot handle *any* action on the I2C bus
->>>> for 15ms (or so) after a "soft reset", or something bad<tm> happens
->>>> (or at least may happen).
->>>>
->>>> If that's the case, then providing a means of skipping the reset is
->>>> insufficient. If you don't lock the bus, you would need to *always*
->>>> skip the reset, because you don't know for certain if something else
->>>> does I2C xfers.
->>>>
->>>> So, in order to make the soft reset not be totally dangerous even in
->>>> a normal non-muxed environment, the bus must be locked for the 15ms.
->>>>
->>>> However, Eddie is correct in that the I2C mux code may indeed do its
->>>> muxing xfer right after the soft reset command. There is currently
->>>> no way to avoid that muxing xfer. However, it should be noted that
->>>> there are ways to mux an I2C bus without using xfers on the bus
->>>> itself, so it's not problematic for *all* mux variants.
->>>>
->>>> It can be debated if the problem should be worked around with extra
->>>> dt properties like this, or if a capability should be added to delay
->>>> a trailing muxing xfer.
->>>>
->>>> I bet there are other broken chips that have drivers that do in fact
->>>> lock the bus to give the chip a break, but then it all stumbles
->>>> because of the unexpected noise if there's a (wrong kind of) mux in
->>>> the mix.
->>> Ok, so for now I think we need the bus lock for the reset + either
->>> a work around similar to this series, or additions to the i2c mux code
->>> to stop it doing a muxing xfer if the bus is locked?
->> I think there might be cases where it might be valid to restore the mux
->> directly after an xfer even if the mux is externally locked prior to the
->> muxed xfer. But I'm not sure? In any case, it will be a bit convoluted
->> for the mux code to remember that it might need to restore the mux
->> later. And it will get even hairier when multiple levels of muxing is
->> considered...
->>
->> Maybe some kind of hook/callback that could be installed temporarily on
->> the I2C adapter that is called right after the "real" xfer, where the
->> driver could then make the needed mdelay call?
->>
->> I.e.
->> 1. lock the bus
->> 2. install this new hook/callback
->> 3. do an unlocked xfer, get notified and call mdelay
->> 5. uninstall the hook/callback
->> 6. unlock the bus
->>
->> The hook/callback could be uninstalled automatically on unlock, then
->> you would not need to handle multiple notifications. But then again,
->> there is probably some existing framework that should be used that
->> handles all than neatly and efficiently.
->
->
-> Hm, interesting. Sounds a bit complicated, though very flexible. For a 
-> less flexible, but less complex, approch, we could add a i2c_msg flag 
-> that says to do a delay in the core? And then si7020 could just submit 
-> a couple of raw messages rather than smbus... What do you think?
-
-
-Um, nevermind... that would require changes in all the bus drivers. I'll 
-look into implementing the hook/callback.
-
-Thanks,
-
-Eddie
-
-
->
->
-> Thanks,
->
-> Eddie
->
->
->
->>
->> Me waves hand a bit...
->>
->> Cheers,
->> Peter
->
->
+These properties doesn't depend on IP version and are=20
+related to IP configuration.
+=20
+>=20
+> Rob

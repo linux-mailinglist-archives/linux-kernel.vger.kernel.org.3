@@ -2,254 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAB952BF5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D50752BF39
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239435AbiERPeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S239445AbiERPes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239440AbiERPeG (ORCPT
+        with ESMTP id S239437AbiERPep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:34:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3553C74DD2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:34:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B952C60EE8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:34:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4616C385A5;
-        Wed, 18 May 2022 15:34:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652888044;
-        bh=CrxDIobWqttmdT5cm4vjy6h3mdwjF9Q6VWe/epgLZHM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yuh/JtqH3IR8WNMREeGR5h+IMWajPpyPTpdb/sVfMA1uWiLSWr68mZsdxA0uDxi8K
-         +fi82sT4eQ0ZZOAAHecVJMrwJpsH0BakUSCyA8RCbVjvR/RpdvRqm+GJW9PrXKk4wP
-         r4HiJIP/Cqt8BcvE0kATvZIKK1sYAhDR4g2lWk8M=
-Date:   Wed, 18 May 2022 17:34:01 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chris Down <chris@chrisdown.name>
-Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        kernel-team@fb.com
-Subject: Re: [RFC PATCH] printk: console: Allow each console to have its own
- loglevel
-Message-ID: <YoUR6RlzkCNG7BU0@kroah.com>
-References: <YoUBh5BSsURDO71Z@chrisdown.name>
+        Wed, 18 May 2022 11:34:45 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8407523F
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:34:43 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id m1so2136058plx.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FR9qyGtEo59tSbFrJbMFBVFHC4OKA2OLIt+JMoIDPvM=;
+        b=RtS3h7w6VWloSj64YgK8YxUYZKqX5IVbhO1MmjCN7A70qZVqpfOQ5786Qw2V3fGfbs
+         OWncq6hdYddmMJ/3fDGm+d9VcRRwoGPORUnyl8GonyRs79stfm/aB9WYjYBBNT7WtF5g
+         ohiFV9BU32FC/iyhTxUM5ImlaBnS14jdf1RkmAF7J8R3o0iXbFMsKT7Tq6Pg+JwVSrhA
+         Y5WdbKNUMGd+640+L/r//U7KhZ4ktkMrfIf/Hry9lgq8OTicFUuwW7b98pXWzyHvLj7M
+         eWhHL1TE14JiYXauOLvzcQQRBacVOYh8D1HEz8Y+8q67pkSCYm9ea3svHKzyMDpsV8XH
+         +eDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FR9qyGtEo59tSbFrJbMFBVFHC4OKA2OLIt+JMoIDPvM=;
+        b=oSKrqM5bojIVMuZpu5n4jiJWC9iPOA5dFS7zO2BjdDI9NHJ5+qNlmR1P5uFoEZ+mzz
+         lDm6+BFJLncKOd2cX2umscsL0OgqTwPI7Cy6lf+82LTV0VssUmdSkaUmhzQDx1/opaYa
+         9bEy9x9/hniadkqLrZDYaULhxxboFf4kxatoSEjgdMRqTweIB9qwyQnmeBgnY0oE16wB
+         DBNCT1wduRiS6uKU6USePRABfXOZYpzqgla9tO4imYRzwm3QTzDqgI8mR98nDSVAmq6s
+         4nCQT8y17zhvfqIIJAK4gp4oyUFyQgRYuToiH1Tpp/qJrMcvLnWaBu4YZkizBRv+SYKt
+         PJTA==
+X-Gm-Message-State: AOAM531XV9jVMIlpI3oSBeEGavcaxj0KYokhIR2T08UXpULSKVsMdP3s
+        ZCiq1W+fQp0MIqpiq2YkUNZRcQ==
+X-Google-Smtp-Source: ABdhPJzyykcy3MUxSxpp0AlR8glBuhiHrygpxmJfu0hexllbVvSOfHMABHxBTUyB4oFrQ3Vi0ZV1RA==
+X-Received: by 2002:a17:90a:a82:b0:1da:3763:5cf5 with SMTP id 2-20020a17090a0a8200b001da37635cf5mr81975pjw.55.1652888083156;
+        Wed, 18 May 2022 08:34:43 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id m5-20020a17090b068500b001df99ceff43sm2888402pjz.36.2022.05.18.08.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 08:34:42 -0700 (PDT)
+Date:   Wed, 18 May 2022 15:34:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Suleiman Souhlal <suleiman@google.com>
+Cc:     Wei Zhang <zhanwei@google.com>, Sangwhan Moon <sxm@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Jing Zhang <jingzhangos@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH 0/2] KVM: x86: Fix incorrect VM-exit profiling
+Message-ID: <YoUSDmKrE6ryO4XB@google.com>
+References: <20220412195846.3692374-1-zhanwei@google.com>
+ <YnmqgFkhqWklrQIw@google.com>
+ <CAN86XOYNpzEUN0aL9g=_GQFz5zdXX9Pvcs_TDmBVyJZDTfXREg@mail.gmail.com>
+ <YnwRld0aH8489+XQ@google.com>
+ <CAN86XOZdW7aZXhSU2=gP5TrRQc8wLmtTQui0J2kwhchp2pnbeQ@mail.gmail.com>
+ <CABCjUKCCc2irAnJrGWfKAnXJj-pb=YNL4F0uAEr-c0LMX22_hw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoUBh5BSsURDO71Z@chrisdown.name>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CABCjUKCCc2irAnJrGWfKAnXJj-pb=YNL4F0uAEr-c0LMX22_hw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 03:24:07PM +0100, Chris Down wrote:
-> [Once the goals of this patch are generally agreed upon, it can be split
-> out further with more detailed changelogs if desired.]
+On Wed, May 18, 2022, Suleiman Souhlal wrote:
+> On Tue, May 17, 2022 at 4:30 AM Wei Zhang <zhanwei@google.com> wrote:
+> >
+> > > Please don't top-post.  From https://people.kernel.org/tglx/notes-about-netiquette:
+> >
+> > Ah, I didn't know this should be avoided. Thanks for the info!
+> >
+> > > My preference would be to find a more complete, KVM-specific solution.  The
+> > > profiling stuff seems like it's a dead end, i.e. will always be flawed in some
+> > > way.  If this cleanup didn't require a new hypercall then I wouldn't care, but
+> > > I don't love having to extend KVM's guest/host ABI for something that ideally
+> > > will become obsolete sooner than later.
+> >
+> > I also feel that adding a new hypercall is too much here. A
+> > KVM-specific solution is definitely better, and the eBPF based
+> > approach you mentioned sounds like the ultimate solution (at least for
+> > inspecting exit reasons).
+> >
+> > +Suleiman What do you think? The on-going work Sean described sounds
+> > promising, perhaps we should put this patch aside for the time being.
+> 
+> I'm ok with that.
+> That said, the advantage of the current solution is that it already
+> exists and is very easy to use, by anyone, without having to write any
+> code. The proposed solution doesn't sound like it will be as easy.
 
-Some driver model comments first, I'll let others argue if this is a
-good idea overall or not...
-
-> ---
->  .../admin-guide/kernel-parameters.txt         |  18 +-
->  .../admin-guide/per-console-loglevel.rst      | 116 ++++++
-
-All sysfs attributes need to be documented in Documentation/ABI/ so that
-the automated tools can properly pick them up and check them.  Please
-don't bury them in some other random Documentation file.
-
-> +static ssize_t loglevel_show(struct device *dev, struct device_attribute *attr,
-> +			     char *buf)
-> +{
-> +	struct console *con = container_of(dev, struct console, classdev);
-> +
-> +	if (con->flags & CON_LOGLEVEL)
-> +		return sprintf(buf, "%d\n", con->level);
-> +	else
-> +		return sprintf(buf, "unset\n");
-
-sysfs_emit() is your friend, always use it please.  For all of the sysfs
-attributes.
-
-> +static struct attribute *console_sysfs_attrs[] = {
-> +	&dev_attr_loglevel.attr,
-> +	&dev_attr_effective_loglevel_source.attr,
-> +	&dev_attr_effective_loglevel.attr,
-> +	&dev_attr_enabled.attr,
-> +	NULL,
-> +};
-> +
-> +ATTRIBUTE_GROUPS(console_sysfs);
-
-Thanks for using an attribute group properly, that's nice to see.
-
-> +static void console_classdev_release(struct device *dev)
-> +{
-> +	struct console *con = container_of(dev, struct console, classdev);
-> +
-> +	/*
-> +	 * `struct console' objects are statically allocated (or at the very
-> +	 * least managed outside of our lifecycle), nothing to do. Just set a
-> +	 * flag so that we know we are no longer waiting for anyone and can
-> +	 * return control in unregister_console().
-> +	 */
-> +	con->flags &= ~CON_CLASSDEV_ACTIVE;
-> +}
-
-The old documentation rules said I could complain about this a lot, so
-I'll be nice here just say "this is not ok at all."  You have a dynamic
-object, properly free the memory here please.  class objects can NOT be
-static, sorry.  If you are doing that here, it is really wrong and
-broken and will cause problems when you try to remove the device from
-the system.
-
-
-> +
-> +static void console_register_device(struct console *new)
-> +{
-> +	/*
-> +	 * We might be called from register_console() before the class is
-> +	 * registered. If that happens, we'll take care of it in
-> +	 * printk_late_init.
-
-If so, is the device properly registered there as well?  I missed that
-logic...
-
-> +	 */
-> +	if (IS_ERR_OR_NULL(console_class))
-> +		return;
-> +
-> +	new->flags |= CON_CLASSDEV_ACTIVE;
-> +	device_initialize(&new->classdev);
-> +	dev_set_name(&new->classdev, "%s", new->name);
-> +	new->classdev.release = console_classdev_release;
-> +	new->classdev.class = console_class;
-> +	if (WARN_ON(device_add(&new->classdev)))
-
-What is with these random WARN_ON() stuff?  Don't do that, just handle
-the error and move on properly.  Systems with panic_on_warn() should not
-fail from stuff like this, that's rude to cause them to reboot.
-
-
-> +		put_device(&new->classdev);
-> +}
-> +
->  /*
->   * This is called by register_console() to try to match
->   * the newly registered console with any of the ones selected
-> @@ -2951,6 +3220,10 @@ static int try_enable_preferred_console(struct console *newcon,
->  			if (newcon->index < 0)
->  				newcon->index = c->index;
->  
-> +			if (c->flags & CON_LOGLEVEL)
-> +				newcon->level = c->level;
-> +			newcon->flags |= c->flags;
-> +
->  			if (_braille_register_console(newcon, c))
->  				return 0;
->  
-> @@ -3118,6 +3391,7 @@ void register_console(struct console *newcon)
->  		console_seq = syslog_seq;
->  		mutex_unlock(&syslog_lock);
->  	}
-> +	console_register_device(newcon);
->  	console_unlock();
->  	console_sysfs_notify();
->  
-> @@ -3188,6 +3462,7 @@ int unregister_console(struct console *console)
->  		console_drivers->flags |= CON_CONSDEV;
->  
->  	console->flags &= ~CON_ENABLED;
-> +	device_unregister(&console->classdev);
->  	console_unlock();
->  	console_sysfs_notify();
->  
-> @@ -3200,6 +3475,14 @@ int unregister_console(struct console *console)
->  	console->flags &= ~CON_ENABLED;
->  	console_unlock();
->  
-> +	/*
-> +	 * Wait for anyone holding the classdev open to close it so that we
-> +	 * don't remove the module prematurely. Once classdev refcnt is 0,
-> +	 * CON_CLASSDEV_ACTIVE will be unset in console_classdev_release.
-> +	 */
-> +	while (console->flags & CON_CLASSDEV_ACTIVE)
-> +		schedule_timeout_uninterruptible(msecs_to_jiffies(1));
-> +
->  	return res;
->  }
->  EXPORT_SYMBOL(unregister_console);
-> @@ -3247,6 +3530,10 @@ void __init console_init(void)
->   * To mitigate this problem somewhat, only unregister consoles whose memory
->   * intersects with the init section. Note that all other boot consoles will
->   * get unregistered when the real preferred console is registered.
-> + *
-> + * Early consoles will also have been registered before we had the
-> + * infrastructure to put them into /sys/class/console, so make sure they get
-> + * set up now that we're ready.
->   */
->  static int __init printk_late_init(void)
->  {
-> @@ -3280,6 +3567,14 @@ static int __init printk_late_init(void)
->  					console_cpu_notify, NULL);
->  	WARN_ON(ret < 0);
->  	printk_sysctl_init();
-> +
-> +	console_class = class_create(THIS_MODULE, "console");
-> +	if (!WARN_ON(IS_ERR(console_class)))
-> +		console_class->dev_groups = console_sysfs_groups;
-
-Do you ever free the class?
-
-> +
-> +	for_each_console(con)
-> +		console_register_device(con);
-> +
->  	return 0;
->  }
->  late_initcall(printk_late_init);
-> diff --git a/kernel/printk/sysctl.c b/kernel/printk/sysctl.c
-> index c228343eeb97..28660ce90453 100644
-> --- a/kernel/printk/sysctl.c
-> +++ b/kernel/printk/sysctl.c
-> @@ -7,9 +7,12 @@
->  #include <linux/printk.h>
->  #include <linux/capability.h>
->  #include <linux/ratelimit.h>
-> +#include <linux/console.h>
->  #include "internal.h"
->  
->  static const int ten_thousand = 10000;
-> +static const int min_loglevel = LOGLEVEL_EMERG;
-> +static const int max_loglevel = LOGLEVEL_DEBUG + 1;
->  
->  static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
->  				void *buffer, size_t *lenp, loff_t *ppos)
-> @@ -20,13 +23,71 @@ static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
->  	return proc_dointvec_minmax(table, write, buffer, lenp, ppos);
->  }
->  
-> +static int printk_sysctl_deprecated(struct ctl_table *table, int write,
-> +				    void __user *buffer, size_t *lenp,
-> +				    loff_t *ppos)
-> +{
-> +	int res = proc_dointvec(table, write, buffer, lenp, ppos);
-> +
-> +	if (write)
-> +		pr_warn_ratelimited(
-> +			"printk: The kernel.printk sysctl is deprecated and will be removed soon. Use kernel.force_console_loglevel, kernel.default_message_loglevel, kernel.minimum_console_loglevel, or kernel.default_console_loglevel instead.\n"
-
-Please define "soon".
-
-thanks,
-
-greg k-h
+My goal/hope is to make the eBPF approach just as easy by providing/building a
+library of KVM eBPF programs in tools/ so that doing common things like profiling
+VM-Exits doesn't require reinventing the wheel.  And those programs could be used
+(and thus implicitly tested) by KVM selftests to verify the kernel functionality.

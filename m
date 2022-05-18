@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D50752BF39
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8604452BEF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239445AbiERPes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S239454AbiERPfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239437AbiERPep (ORCPT
+        with ESMTP id S239438AbiERPfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:34:45 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8407523F
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:34:43 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id m1so2136058plx.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:34:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FR9qyGtEo59tSbFrJbMFBVFHC4OKA2OLIt+JMoIDPvM=;
-        b=RtS3h7w6VWloSj64YgK8YxUYZKqX5IVbhO1MmjCN7A70qZVqpfOQ5786Qw2V3fGfbs
-         OWncq6hdYddmMJ/3fDGm+d9VcRRwoGPORUnyl8GonyRs79stfm/aB9WYjYBBNT7WtF5g
-         ohiFV9BU32FC/iyhTxUM5ImlaBnS14jdf1RkmAF7J8R3o0iXbFMsKT7Tq6Pg+JwVSrhA
-         Y5WdbKNUMGd+640+L/r//U7KhZ4ktkMrfIf/Hry9lgq8OTicFUuwW7b98pXWzyHvLj7M
-         eWhHL1TE14JiYXauOLvzcQQRBacVOYh8D1HEz8Y+8q67pkSCYm9ea3svHKzyMDpsV8XH
-         +eDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FR9qyGtEo59tSbFrJbMFBVFHC4OKA2OLIt+JMoIDPvM=;
-        b=oSKrqM5bojIVMuZpu5n4jiJWC9iPOA5dFS7zO2BjdDI9NHJ5+qNlmR1P5uFoEZ+mzz
-         lDm6+BFJLncKOd2cX2umscsL0OgqTwPI7Cy6lf+82LTV0VssUmdSkaUmhzQDx1/opaYa
-         9bEy9x9/hniadkqLrZDYaULhxxboFf4kxatoSEjgdMRqTweIB9qwyQnmeBgnY0oE16wB
-         DBNCT1wduRiS6uKU6USePRABfXOZYpzqgla9tO4imYRzwm3QTzDqgI8mR98nDSVAmq6s
-         4nCQT8y17zhvfqIIJAK4gp4oyUFyQgRYuToiH1Tpp/qJrMcvLnWaBu4YZkizBRv+SYKt
-         PJTA==
-X-Gm-Message-State: AOAM531XV9jVMIlpI3oSBeEGavcaxj0KYokhIR2T08UXpULSKVsMdP3s
-        ZCiq1W+fQp0MIqpiq2YkUNZRcQ==
-X-Google-Smtp-Source: ABdhPJzyykcy3MUxSxpp0AlR8glBuhiHrygpxmJfu0hexllbVvSOfHMABHxBTUyB4oFrQ3Vi0ZV1RA==
-X-Received: by 2002:a17:90a:a82:b0:1da:3763:5cf5 with SMTP id 2-20020a17090a0a8200b001da37635cf5mr81975pjw.55.1652888083156;
-        Wed, 18 May 2022 08:34:43 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m5-20020a17090b068500b001df99ceff43sm2888402pjz.36.2022.05.18.08.34.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 08:34:42 -0700 (PDT)
-Date:   Wed, 18 May 2022 15:34:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Suleiman Souhlal <suleiman@google.com>
-Cc:     Wei Zhang <zhanwei@google.com>, Sangwhan Moon <sxm@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Jing Zhang <jingzhangos@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH 0/2] KVM: x86: Fix incorrect VM-exit profiling
-Message-ID: <YoUSDmKrE6ryO4XB@google.com>
-References: <20220412195846.3692374-1-zhanwei@google.com>
- <YnmqgFkhqWklrQIw@google.com>
- <CAN86XOYNpzEUN0aL9g=_GQFz5zdXX9Pvcs_TDmBVyJZDTfXREg@mail.gmail.com>
- <YnwRld0aH8489+XQ@google.com>
- <CAN86XOZdW7aZXhSU2=gP5TrRQc8wLmtTQui0J2kwhchp2pnbeQ@mail.gmail.com>
- <CABCjUKCCc2irAnJrGWfKAnXJj-pb=YNL4F0uAEr-c0LMX22_hw@mail.gmail.com>
+        Wed, 18 May 2022 11:35:03 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8326979381;
+        Wed, 18 May 2022 08:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1652888100; bh=fz89MzLACE4JJirQHkbb4IhP7LGZ1kQfeXobpNq8y0k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZDfLtLq+5w6gVLpfjLZOfemZN83Kx6qCDrSb8GgFlWoir2tqtFJRhchMMKRGGsS1R
+         zcWyUHb10lyNGcvcJJJn4bwFp8Xa6YZiHPbGEGgH/YuqeeDuMp2fkKJgZdA/KrxLsk
+         Cf6omGzJdaJIsxe/tHH3vULA87HQ7UEaIilEu5WU=
+Received: from [192.168.9.172] (unknown [101.88.28.48])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 0E43A60694;
+        Wed, 18 May 2022 23:35:00 +0800 (CST)
+Message-ID: <7e13c3f8-5f2c-3787-fb71-20a946a6a8e1@xen0n.name>
+Date:   Wed, 18 May 2022 23:34:59 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABCjUKCCc2irAnJrGWfKAnXJj-pb=YNL4F0uAEr-c0LMX22_hw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0a1
+Subject: Re: [PATCH V11 01/22] Documentation: LoongArch: Add basic
+ documentations
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
+ <20220518092619.1269111-2-chenhuacai@loongson.cn>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20220518092619.1269111-2-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022, Suleiman Souhlal wrote:
-> On Tue, May 17, 2022 at 4:30 AM Wei Zhang <zhanwei@google.com> wrote:
-> >
-> > > Please don't top-post.  From https://people.kernel.org/tglx/notes-about-netiquette:
-> >
-> > Ah, I didn't know this should be avoided. Thanks for the info!
-> >
-> > > My preference would be to find a more complete, KVM-specific solution.  The
-> > > profiling stuff seems like it's a dead end, i.e. will always be flawed in some
-> > > way.  If this cleanup didn't require a new hypercall then I wouldn't care, but
-> > > I don't love having to extend KVM's guest/host ABI for something that ideally
-> > > will become obsolete sooner than later.
-> >
-> > I also feel that adding a new hypercall is too much here. A
-> > KVM-specific solution is definitely better, and the eBPF based
-> > approach you mentioned sounds like the ultimate solution (at least for
-> > inspecting exit reasons).
-> >
-> > +Suleiman What do you think? The on-going work Sean described sounds
-> > promising, perhaps we should put this patch aside for the time being.
-> 
-> I'm ok with that.
-> That said, the advantage of the current solution is that it already
-> exists and is very easy to use, by anyone, without having to write any
-> code. The proposed solution doesn't sound like it will be as easy.
+On 5/18/22 17:25, Huacai Chen wrote:
+> Add some basic documentation for LoongArch. LoongArch is a new RISC ISA,
+> which is a bit like MIPS or RISC-V. LoongArch includes a reduced 32-bit
+> version (LA32R), a standard 32-bit version (LA32S) and a 64-bit version
+> (LA64).
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>   Documentation/arch.rst                     |   1 +
+>   Documentation/loongarch/features.rst       |   3 +
+>   Documentation/loongarch/index.rst          |  21 ++
+>   Documentation/loongarch/introduction.rst   | 387 +++++++++++++++++++++
+>   Documentation/loongarch/irq-chip-model.rst | 168 +++++++++
+>   5 files changed, 580 insertions(+)
+>   create mode 100644 Documentation/loongarch/features.rst
+>   create mode 100644 Documentation/loongarch/index.rst
+>   create mode 100644 Documentation/loongarch/introduction.rst
+>   create mode 100644 Documentation/loongarch/irq-chip-model.rst
 
-My goal/hope is to make the eBPF approach just as easy by providing/building a
-library of KVM eBPF programs in tools/ so that doing common things like profiling
-VM-Exits doesn't require reinventing the wheel.  And those programs could be used
-(and thus implicitly tested) by KVM selftests to verify the kernel functionality.
+This feels much better now; I feel it's acceptable from a random 
+community member's perspective. Thanks for incorporating my comments and 
+tweaks!
+
+Reviewed-by: WANG Xuerui <git@xen0n.name>
+

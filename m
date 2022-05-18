@@ -2,286 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C1852B40E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23DB52B3DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbiERHlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
+        id S232258AbiERHlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbiERHlE (ORCPT
+        with ESMTP id S232243AbiERHlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:41:04 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28ADF1167
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=P7RoC/DyaIBUrw0WHH4NMmGnt1nOfh1Pg+yXcFOgWnU=; b=lNeeEe/zv0xRJzXzZCgkW4nl7X
-        MRkoYGewdzu4v3wqsrsRmdcllxK/gNjROyXeJ0gnj3FlxyiLIP1TbwRanSg0tG7T2nbJEwH5ODJJm
-        yKdg6SpX4RHN7uyfaoBhfUsTxPmGcEczUVjpgYYtBwKvWvqieYCo31EnlRa/ZbGZfyge9MPVlLXAj
-        A/hlmn8u4NKM5NLcfoV77mm4Gi+cPLmJdqCDxqLavBk2izYbzmu+ElSzhY37YoruurdIxEr61KnwX
-        JGCPQ+LtEzfjwb7Xe2e2y6Bc3bDoElqdq9jSRDvUjYg6gpeLaTvSUYogQtUo6RSsO1r+TvcjJofSc
-        DiHkkVig==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrEIW-001Tr2-MJ; Wed, 18 May 2022 07:40:45 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 85A6098119B; Wed, 18 May 2022 09:40:42 +0200 (CEST)
-Date:   Wed, 18 May 2022 09:40:42 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com
-Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
-Message-ID: <20220518074042.GA10117@worktop.programming.kicks-ass.net>
-References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
- <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
- <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
- <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
- <20220518012429.4zqzarvwsraxivux@treble>
+        Wed, 18 May 2022 03:41:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4465857B1A;
+        Wed, 18 May 2022 00:41:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C043B6145E;
+        Wed, 18 May 2022 07:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B80BDC385A5;
+        Wed, 18 May 2022 07:41:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652859689;
+        bh=LuxVNvlkv4g7heSuZDIJVco2E3/VP9SZoe1bQ0sW5e0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TAjScpgZ6/CKIAUIqnUeYLg6ACPm8EOmiBIQa4yLyZ2780QXd93RgJJ9gCy9TrDiH
+         /FZ/mfZjxt/ADBbhP9mpz2h5EwFq+WbdW+8PbG0EAYQ4Qgj8LAGRFccG5xXCgHs0Kb
+         3CpCKlvqqy4djxdJaXo+BNYZx9VmVoiap2CAvH0k=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.9.315
+Date:   Wed, 18 May 2022 09:41:24 +0200
+Message-Id: <165285968418999@kroah.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518012429.4zqzarvwsraxivux@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 06:24:29PM -0700, Josh Poimboeuf wrote:
-> On Tue, May 17, 2022 at 05:42:04PM +0200, Peter Zijlstra wrote:
-> > +	for (;;) {
-> > +		symtab_data = elf_getdata(s, symtab_data);
-> > +		if (t)
-> > +			shndx_data = elf_getdata(t, shndx_data);
-> >  
-> > -	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
-> > -	elf_dirty_reloc_sym(elf, sym);
-> > +		if (!symtab_data) {
-> > +			if (!idx) {
-> > +				void *buf;
-> 
-> I'm confused by whatever this is doing, how is !symtab_data possible,
-> i.e. why would symtab not have data?
-> 
-> >  elf_create_section_symbol(struct elf *elf, struct section *sec)
-> >  {
-> >  	struct section *symtab, *symtab_shndx;
-> > -	Elf_Data *shndx_data = NULL;
-> > -	struct symbol *sym;
-> > -	Elf32_Word shndx;
-> > +	Elf32_Word first_non_local, new;
-> > +	struct symbol *sym, *old;
-> > +	int size;
-> > +
-> > +	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
-> > +		size = sizeof(Elf32_Sym);
-> > +	else
-> > +		size = sizeof(Elf64_Sym);
-> 
-> This should probably be called 'entsize' and I think you can just get it
-> from symtab->sh.sh_entsize.
-> 
-> > +	/*
-> > +	 * Either way, we added a LOCAL symbol.
-> > +	 */
-> > +	symtab->sh.sh_info += 1;
-> > +
-> >  	elf_add_symbol(elf, sym);
-> 
-> Not sure if it matters here, but elf_add_symbol() doesn't set sym->alias
-> and sym->pv_target, and both of those are unconditionally initialized in
-> read_symbols().  Should elf_add_symbol() be changed to initialize them?
+I'm announcing the release of the 4.9.315 kernel.
 
+All users of the 4.9 kernel series must upgrade.
 
+The updated 4.9.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.9.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -374,6 +374,9 @@ static void elf_add_symbol(struct elf *e
- 	struct list_head *entry;
- 	struct rb_node *pnode;
+thanks,
 
-+	INIT_LIST_HEAD(&sym->pv_target);
-+	sym->alias = sym;
-+
- 	sym->type = GELF_ST_TYPE(sym->sym.st_info);
- 	sym->bind = GELF_ST_BIND(sym->sym.st_info);
+greg k-h
 
-@@ -438,8 +441,6 @@ static int read_symbols(struct elf *elf)
- 			return -1;
- 		}
- 		memset(sym, 0, sizeof(*sym));
--		INIT_LIST_HEAD(&sym->pv_target);
--		sym->alias = sym;
+------------
 
- 		sym->idx = i;
+ Makefile                              |    2 +-
+ drivers/hwmon/f71882fg.c              |    5 +++--
+ drivers/net/ethernet/sfc/ef10.c       |    5 +++++
+ drivers/net/wireless/mac80211_hwsim.c |    3 +++
+ drivers/s390/net/ctcm_mpc.c           |    6 +-----
+ drivers/s390/net/ctcm_sysfs.c         |    5 +++--
+ drivers/s390/net/lcs.c                |    7 ++++---
+ drivers/tty/serial/digicolor-usart.c  |    2 +-
+ drivers/usb/class/cdc-wdm.c           |    1 +
+ drivers/usb/serial/option.c           |    4 ++++
+ drivers/usb/serial/pl2303.c           |    1 +
+ drivers/usb/serial/pl2303.h           |    1 +
+ drivers/usb/serial/qcserial.c         |    2 ++
+ include/linux/netdev_features.h       |    4 ++--
+ net/ipv4/ping.c                       |   12 +++++++++++-
+ net/ipv4/route.c                      |    1 +
+ net/netlink/af_netlink.c              |    1 -
+ sound/soc/codecs/max98090.c           |    5 ++++-
+ sound/soc/soc-ops.c                   |   18 +++++++++++++++++-
+ 19 files changed, 65 insertions(+), 20 deletions(-)
 
-@@ -604,7 +605,8 @@ static void elf_dirty_reloc_sym(struct e
+Alexandra Winter (3):
+      s390/ctcm: fix variable dereferenced before check
+      s390/ctcm: fix potential memory leak
+      s390/lcs: fix variable dereferenced before check
 
- /*
-  * The libelf API is terrible; gelf_update_sym*() takes a data block relative
-- * index value. As such, iterate the data blocks and adjust index until it fits.
-+ * index value, *NOT* the symbol index. As such, iterate the data blocks and
-+ * adjust index until it fits.
-  *
-  * If no data block is found, allow adding a new data block provided the index
-  * is only one past the end.
-@@ -613,14 +615,10 @@ static int elf_update_symbol(struct elf
- 			     struct section *symtab_shndx, struct symbol *sym)
- {
- 	Elf_Data *symtab_data = NULL, *shndx_data = NULL;
-+	Elf64_Xword entsize = symtab->sh.sh_entsize;
- 	Elf32_Word shndx = sym->sec->idx;
- 	Elf_Scn *s, *t = NULL;
--	int size, idx = sym->idx;
--
--	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
--		size = sizeof(Elf32_Sym);
--	else
--		size = sizeof(Elf64_Sym);
-+	int max_idx, idx = sym->idx;
+Eric Dumazet (1):
+      netlink: do not reset transport header in netlink_recvmsg()
 
- 	s = elf_getscn(elf->elf, symtab->idx);
- 	if (!s) {
-@@ -637,11 +635,14 @@ static int elf_update_symbol(struct elf
- 	}
+Ethan Yang (1):
+      USB: serial: qcserial: add support for Sierra Wireless EM7590
 
- 	for (;;) {
-+		/* get next data descriptor for the relevant sections */
- 		symtab_data = elf_getdata(s, symtab_data);
- 		if (t)
- 			shndx_data = elf_getdata(t, shndx_data);
+Greg Kroah-Hartman (1):
+      Linux 4.9.315
 
-+		/* end-of-list */
- 		if (!symtab_data) {
-+			/* if @idx == 0, it's the next contiguous entry, create it */
- 			if (!idx) {
- 				void *buf;
+Ji-Ze Hong (Peter Hong) (1):
+      hwmon: (f71882fg) Fix negative temperature
 
-@@ -649,53 +650,60 @@ static int elf_update_symbol(struct elf
- 				if (t)
- 					shndx_data = elf_newdata(t);
+Johannes Berg (1):
+      mac80211_hwsim: call ieee80211_tx_prepare_skb under RCU protection
 
--				buf = calloc(1, size);
-+				buf = calloc(1, entsize);
- 				if (!buf) {
- 					WARN("malloc");
- 					return -1;
- 				}
+Lokesh Dhoundiyal (1):
+      ipv4: drop dst in multicast routing path
 
- 				symtab_data->d_buf = buf;
--				symtab_data->d_size = size;
-+				symtab_data->d_size = entsize;
- 				symtab_data->d_align = 1;
- 				symtab_data->d_type = ELF_T_SYM;
+Mark Brown (3):
+      ASoC: max98090: Reject invalid values in custom control put()
+      ASoC: max98090: Generate notifications on changes for custom control
+      ASoC: ops: Validate input values in snd_soc_put_volsw_range()
 
--				symtab->sh.sh_size += size;
-+				symtab->sh.sh_size += entsize;
- 				symtab->changed = true;
+Nicolas Dichtel (1):
+      ping: fix address binding wrt vrf
 
- 				if (t) {
- 					shndx_data->d_buf = &sym->sec->idx;
- 					shndx_data->d_size = sizeof(Elf32_Word);
--					shndx_data->d_align = 4;
-+					shndx_data->d_align = sizeof(Elf32_Word);
- 					shndx_data->d_type = ELF_T_WORD;
+Scott Chen (1):
+      USB: serial: pl2303: add device id for HP LM930 Display
 
--					symtab_shndx->sh.sh_size += 4;
-+					symtab_shndx->sh.sh_size += sizeof(Elf32_Word);
- 					symtab_shndx->changed = true;
- 				}
+Sergey Ryazanov (1):
+      usb: cdc-wdm: fix reading stuck on device close
 
- 				break;
- 			}
+Sven Schwermer (2):
+      USB: serial: option: add Fibocom L610 modem
+      USB: serial: option: add Fibocom MA510 modem
 
-+			/* we don't do holes in symbol tables */
- 			WARN("index out of range");
- 			return -1;
- 		}
+Taehee Yoo (1):
+      net: sfc: ef10: fix memory leak in efx_ef10_mtd_probe()
 
-+		/* empty blocks should not happen */
- 		if (!symtab_data->d_size) {
- 			WARN("zero size data");
- 			return -1;
- 		}
+Tariq Toukan (1):
+      net: Fix features skip in for_each_netdev_feature()
 
--		if (idx * size < symtab_data->d_size)
-+		/* is this the right block? */
-+		max_idx = symtab_data->d_size / entsize;
-+		if (idx < max_idx)
- 			break;
-
--		idx -= symtab_data->d_size / size;
-+		/* adjust index and try again */
-+		idx -= max_idx;
- 	}
-
-+	/* something went side-ways */
- 	if (idx < 0) {
- 		WARN("negative index");
- 		return -1;
- 	}
-
-+	/* setup extended section index magic and write the symbol */
- 	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
- 		sym->sym.st_shndx = shndx;
- 		if (!shndx_data)
-@@ -720,14 +728,8 @@ static struct symbol *
- elf_create_section_symbol(struct elf *elf, struct section *sec)
- {
- 	struct section *symtab, *symtab_shndx;
--	Elf32_Word first_non_local, new;
-+	Elf32_Word first_non_local, new_idx;
- 	struct symbol *sym, *old;
--	int size;
--
--	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
--		size = sizeof(Elf32_Sym);
--	else
--		size = sizeof(Elf64_Sym);
-
- 	symtab = find_section_by_name(elf, ".symtab");
- 	if (symtab) {
-@@ -752,16 +754,15 @@ elf_create_section_symbol(struct elf *el
- 	// st_value 0
- 	// st_size 0
-
--	new = symtab->sh.sh_size / size;
--
- 	/*
- 	 * Move the first global symbol, as per sh_info, into a new, higher
- 	 * symbol index. This fees up a spot for a new local symbol.
- 	 */
- 	first_non_local = symtab->sh.sh_info;
-+	new_idx = symtab->sh.sh_size / symtab->sh.sh_entsize;
- 	old = find_symbol_by_index(elf, first_non_local);
- 	if (old) {
--		old->idx = new;
-+		old->idx = new_idx;
-
- 		hlist_del(&old->hash);
- 		elf_hash_add(symbol, &old->hash, old->idx);
-@@ -773,10 +774,10 @@ elf_create_section_symbol(struct elf *el
- 			return NULL;
- 		}
-
--		new = first_non_local;
-+		new_idx = first_non_local;
- 	}
-
--	sym->idx = new;
-+	sym->idx = new_idx;
- 	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
- 		WARN("elf_update_symbol");
- 		return NULL;
+Yang Yingliang (1):
+      tty/serial: digicolor: fix possible null-ptr-deref in digicolor_uart_probe()
 

@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FA252B1CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 07:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8354B52B1DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 07:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbiERFUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 01:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S230194AbiERFVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 01:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiERFUP (ORCPT
+        with ESMTP id S230064AbiERFVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 01:20:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCEBAE7C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 22:20:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1F9CB81E87
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99320C385A9;
-        Wed, 18 May 2022 05:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652851212;
-        bh=kiCvi3Y9Ruk6NeR5nmbUThhYrDaGmZQ0zGHEkPrP7hk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VcEQFdZ4Gfu2ZYOMzrv+U/PbOJdX3S4kDh9BBdHa4oPgwzwT+8r1TuMi45zYVgZSY
-         X1aJBkGt9HL28d6iyCDUaJIx7GHz7p76eDmES5zZsw6gdITQjgQ5K6fLShKRqrfP5L
-         994NywM0QMg4RNVaxw36qnKL3zHvP4k2Ryn0DRchv/+tDyyW6lgcLbbdy2nTpa/+nW
-         Ei4E0cEs1LRIKkEfiW2a7upvXX43KClff0uOXoh3OY0R+X4/JH/5TdqRT6iS8CBa9K
-         c52zR9XW9UhAGx/XUhlhJ/0UDrmgIl/khWsdh50uZ+O4d5WIqI8Rub6vRdHYV85Php
-         v5Z0I4YIpM9ww==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7E413F03939;
-        Wed, 18 May 2022 05:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 18 May 2022 01:21:07 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B26B7675;
+        Tue, 17 May 2022 22:21:01 -0700 (PDT)
+Received: from [192.168.254.32] (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A176F20F723C;
+        Tue, 17 May 2022 22:21:00 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A176F20F723C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1652851261;
+        bh=o0vyCBNAOdiHYLtLQVXIulmCFovvwRiMlG6V6/ir+XQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dduhAoIO5h5goH6KFnOW40LKYnUUq77E3cYyJ8WcHevT9sOFnL/ZniN1kUUOC3HdG
+         tPbWOC9e+tAiU4/7qasJ81dFUBm1FlOOc3EdmjJk3/bWC6jwxhdWXTHAQZHWqJtiBF
+         p+affec2gENxKSLDJVLJ9MOkD9sZAI8HwAOWTVv4=
+Message-ID: <b6651093-6f2c-f279-71e7-4b31ef80e0c1@linux.microsoft.com>
+Date:   Wed, 18 May 2022 00:20:59 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/7] platform/chrome: get rid of BUG_ON()
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165285121251.18618.3566824062986806050.git-patchwork-notify@kernel.org>
-Date:   Wed, 18 May 2022 05:20:12 +0000
-References: <20220513044143.1045728-1-tzungbi@kernel.org>
-In-Reply-To: <20220513044143.1045728-1-tzungbi@kernel.org>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     bleung@chromium.org, groeck@chromium.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v14 1/7] arm64: Split unwind_init()
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <f460a35f88195413bcf7305e5083480aab3ca858>
+ <20220413140528.3815-1-madvenka@linux.microsoft.com>
+ <20220413140528.3815-2-madvenka@linux.microsoft.com>
+ <YnqrqI/Xdq9RMwoc@sirena.org.uk>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YnqrqI/Xdq9RMwoc@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-21.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,41 +58,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Thanks!
 
-This series was applied to chrome-platform/linux.git (for-next)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
-
-On Fri, 13 May 2022 12:41:36 +0800 you wrote:
-> The series gets rid of BUG_ON()s in drivers/platform/chrome/.  Most of them
-> can be replaced by returning proper return code.
+On 5/10/22 13:15, Mark Brown wrote:
+> On Wed, Apr 13, 2022 at 09:05:22AM -0500, madvenka@linux.microsoft.com wrote:
+>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>> unwind_init() is currently a single function that initializes all of the
+>> unwind state. Split it into the following functions and call them
+>> appropriately:
 > 
-> The 2nd patch makes callers of cros_ec_prepare_tx() to take care of the
-> return code.
-> 
-> The 3rd patch turns cros_ec_prepare_tx() to return error code if any.
-> 
-> [...]
-
-Here is the summary with links:
-  - [v2,1/7] platform/chrome: cros_ec_proto: drop unneeded BUG_ON() in prepare_packet()
-    https://git.kernel.org/chrome-platform/c/42701e7c0cd2
-  - [v2,2/7] platform/chrome: correct cros_ec_prepare_tx() usage
-    https://git.kernel.org/chrome-platform/c/71d3ae7fb640
-  - [v2,3/7] platform/chrome: cros_ec_proto: drop BUG_ON() in cros_ec_prepare_tx()
-    https://git.kernel.org/chrome-platform/c/c2dcb1b06053
-  - [v2,4/7] platform/chrome: cros_ec_proto: drop BUG_ON() in cros_ec_get_host_event()
-    https://git.kernel.org/chrome-platform/c/20a264c97bc8
-  - [v2,5/7] platform/chrome: cros_ec_i2c: drop BUG_ON() in cros_ec_pkt_xfer_i2c()
-    https://git.kernel.org/chrome-platform/c/8bff946c4199
-  - [v2,6/7] platform/chrome: cros_ec_spi: drop unneeded BUG_ON()
-    https://git.kernel.org/chrome-platform/c/ddec8e9e90ce
-  - [v2,7/7] platform/chrome: cros_ec_spi: drop BUG_ON() if `din` isn't large enough
-    https://git.kernel.org/chrome-platform/c/bbd43a37ec7a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> Reviewed-by: Mark Brown <broonie@kernel.org>

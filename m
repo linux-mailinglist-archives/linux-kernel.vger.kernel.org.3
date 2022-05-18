@@ -2,73 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5DF52B77E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6795752B767
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234676AbiERJsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
+        id S234444AbiERJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233911AbiERJsF (ORCPT
+        with ESMTP id S234414AbiERJgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:48:05 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300C920BD7;
-        Wed, 18 May 2022 02:48:00 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C348A1A0D8B;
-        Wed, 18 May 2022 11:47:58 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7D2DA1A0D87;
-        Wed, 18 May 2022 11:47:58 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id D76A5180031E;
-        Wed, 18 May 2022 17:47:56 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, festevam@gmail.com
-Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: [RFC 2/2] PCI: imx6: Support more than Gen2 speed link mode
-Date:   Wed, 18 May 2022 17:35:28 +0800
-Message-Id: <1652866528-13220-2-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1652866528-13220-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1652866528-13220-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 18 May 2022 05:36:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAA81A388
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:36:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 077F71FA46;
+        Wed, 18 May 2022 09:36:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652866585; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aius02DgTUuGeviB9+AqIcI4nipIhT22GK6S5UOA+yk=;
+        b=IGWN2FNyGugiWSTqY0TKEiH0PjlVIrFtILuJWLkI3JZqqk7ZPr3Vmf9WJBhsxqpbckNsko
+        5pkIhPqUPnXeuEm5TJJXDrMtkqj/lqtP/P2ovef0GT5Xhzi3JbnvXqopUSnK/Jo0IaKgmE
+        rm46zXSPSKYeHZIIBSLyOYSppGu4MKQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652866585;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aius02DgTUuGeviB9+AqIcI4nipIhT22GK6S5UOA+yk=;
+        b=cfZ0vuRJZ3OqDPhUWukfWa1/F/xF37L3NLfwq2u+KS2bqFZejO7ddpruwkMwfgmnJz7iQn
+        bj1Hg0tgfxCQHHDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C60FC133F5;
+        Wed, 18 May 2022 09:36:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rdr3Khe+hGJJEQAAMHmgww
+        (envelope-from <osalvador@suse.de>); Wed, 18 May 2022 09:36:23 +0000
+Date:   Wed, 18 May 2022 11:36:21 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, vbabka@suse.cz,
+        dhowells@redhat.com, neilb@suse.de, apopple@nvidia.com,
+        david@redhat.com, surenb@google.com, peterx@redhat.com,
+        naoya.horiguchi@nec.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/15] mm/swap: print bad swap offset entry in
+ get_swap_device
+Message-ID: <YoS+FZMvUJcnhJhk@localhost.localdomain>
+References: <20220509131416.17553-1-linmiaohe@huawei.com>
+ <20220509131416.17553-6-linmiaohe@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509131416.17553-6-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support more than Gen2 speed link mode, since i.MX8MP PCIe supports up
-to Gen3 link speed.
+On Mon, May 09, 2022 at 09:14:06PM +0800, Miaohe Lin wrote:
+> If offset exceeds the si->max, print bad swap offset entry to help debug
+> the unexpected case.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
----
- drivers/pci/controller/dwc/pci-imx6.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 30641d2dda14..37012f9a33a0 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -809,8 +809,8 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
- 
- 	dw_pcie_wait_for_link(pci);
- 
--	if (pci->link_gen == 2) {
--		/* Allow Gen2 mode after the link is up. */
-+	if (pci->link_gen > 1) {
-+		/* Allow faster modes after the link is up. */
- 		dw_pcie_dbi_ro_wr_en(pci);
- 		tmp = dw_pcie_readl_dbi(pci, offset + PCI_EXP_LNKCAP);
- 		tmp &= ~PCI_EXP_LNKCAP_SLS;
+> ---
+>  mm/swapfile.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 0aee6286d6a7..d4b81ca887c0 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -1272,6 +1272,7 @@ struct swap_info_struct *get_swap_device(swp_entry_t entry)
+>  out:
+>  	return NULL;
+>  put_out:
+> +	pr_err("%s: %s%08lx\n", __func__, Bad_offset, entry.val);
+>  	percpu_ref_put(&si->users);
+>  	return NULL;
+>  }
+> -- 
+> 2.23.0
+> 
+> 
+
 -- 
-2.25.1
-
+Oscar Salvador
+SUSE Labs

@@ -2,55 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE1E52C11A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932ED52C178
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241191AbiERRoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
+        id S241200AbiERRon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241077AbiERRof (ORCPT
+        with ESMTP id S241077AbiERRom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:44:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE0966FA8;
-        Wed, 18 May 2022 10:44:33 -0700 (PDT)
-Received: from zn.tnic (p200300ea974657d0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57d0:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 482851EC064D;
-        Wed, 18 May 2022 19:44:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1652895868;
+        Wed, 18 May 2022 13:44:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1887F69B43
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652895880;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=BSrK6ISkCDs9DDx3yHsim7FQBme+cBGtrIf8vV2CXP4=;
-        b=QgCtwW8BgIpZDZ4SVm1lnqK7AQshTGtATAdfZqSJsD/6Kkg3SYkhtLYKOWwFVftsJ8D5fe
-        3VZQm4soeBvt0bQkhY1d9gG8wq2efOLGJ6Wf3PfaeZX9APZ44EtemhKfjBi64QOsfbRvvj
-        xSlR4mBGiMXGqg9F469FxEY6wyydLdw=
-Date:   Wed, 18 May 2022 19:44:27 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Medad CChien <medadyoung@gmail.com>
-Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        mchehab@kernel.org, robh+dt@kernel.org, benjaminfair@google.com,
-        yuenn@google.com, venture@google.com, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        ctcchien@nuvoton.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: Re: [PATCH v9 1/3] ARM: dts: nuvoton: Add memory controller node
-Message-ID: <YoUwe6Tj4Uh6ukc8@zn.tnic>
-References: <20220510031056.1657-1-ctcchien@nuvoton.com>
- <20220510031056.1657-2-ctcchien@nuvoton.com>
+         in-reply-to:in-reply-to:references:references;
+        bh=Dzen8Tfphka+V9v1rHHzLeFthFMVB9wbjOwentfjkpk=;
+        b=b6v/Ku5vefSiHCUKyn9BLFjvA5wboI9knYphU2asZsrEbLNaonk4piKtMl4qYk4G/NJBLB
+        Y1FsPA8zdjFTFNfA064l0NIMrWqBQJGb07SghDQ9nLvW91un78+XWAhx8TLJZSLtaqYsXX
+        IN5jc4VdxP2hh0+ip2JbR+X8MA7WU2Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-296-tP__qQLGPtai9qnYDgv2xQ-1; Wed, 18 May 2022 13:44:35 -0400
+X-MC-Unique: tP__qQLGPtai9qnYDgv2xQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5567B811E78;
+        Wed, 18 May 2022 17:44:35 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.16.154])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 476FC2026D6A;
+        Wed, 18 May 2022 17:44:35 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 0949F2208FA; Wed, 18 May 2022 13:44:35 -0400 (EDT)
+Date:   Wed, 18 May 2022 13:44:34 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Dharmendra Singh <dharamhans87@gmail.com>
+Cc:     miklos@szeredi.hu, linux-fsdevel@vger.kernel.org,
+        fuse-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        bschubert@ddn.com, Dharmendra Singh <dsingh@ddn.com>
+Subject: Re: [PATCH v5 1/3] FUSE: Avoid lookups in fuse create
+Message-ID: <YoUwgoAHiywYzvpK@redhat.com>
+References: <20220517100744.26849-1-dharamhans87@gmail.com>
+ <20220517100744.26849-2-dharamhans87@gmail.com>
+ <YoUvrSdh4B0rKy78@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510031056.1657-2-ctcchien@nuvoton.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <YoUvrSdh4B0rKy78@redhat.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,68 +65,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:10:54AM +0800, Medad CChien wrote:
-> ECC must be configured in the BootBlock header.
-> Then, you can read error counts via the EDAC kernel framework.
+On Wed, May 18, 2022 at 01:41:02PM -0400, Vivek Goyal wrote:
+> On Tue, May 17, 2022 at 03:37:42PM +0530, Dharmendra Singh wrote:
 > 
-> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> ---
->  arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 7 +++++++
->  1 file changed, 7 insertions(+)
+> [..]
+> > diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> > index d6ccee961891..bebe4be3f1cb 100644
+> > --- a/include/uapi/linux/fuse.h
+> > +++ b/include/uapi/linux/fuse.h
+> > @@ -301,6 +301,7 @@ struct fuse_file_lock {
+> >   * FOPEN_CACHE_DIR: allow caching this directory
+> >   * FOPEN_STREAM: the file is stream-like (no file position at all)
+> >   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
+> > + * FOPEN_FILE_CREATED: the file was actually created
+> >   */
+> >  #define FOPEN_DIRECT_IO		(1 << 0)
+> >  #define FOPEN_KEEP_CACHE	(1 << 1)
+> > @@ -308,6 +309,7 @@ struct fuse_file_lock {
+> >  #define FOPEN_CACHE_DIR		(1 << 3)
+> >  #define FOPEN_STREAM		(1 << 4)
+> >  #define FOPEN_NOFLUSH		(1 << 5)
+> > +#define FOPEN_FILE_CREATED	(1 << 6)
+> >  
+> >  /**
+> >   * INIT request/reply flags
+> > @@ -537,6 +539,7 @@ enum fuse_opcode {
+> >  	FUSE_SETUPMAPPING	= 48,
+> >  	FUSE_REMOVEMAPPING	= 49,
+> >  	FUSE_SYNCFS		= 50,
+> > +	FUSE_CREATE_EXT		= 51,
 > 
-> diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> index 3696980a3da1..ba542b26941e 100644
-> --- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> +++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> @@ -106,6 +106,13 @@
->  		interrupt-parent = <&gic>;
->  		ranges;
->  
-> +		mc: memory-controller@f0824000 {
-> +			compatible = "nuvoton,npcm750-memory-controller";
-> +			reg = <0x0 0xf0824000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +			status = "disabled";
-> +		};
-> +
->  		rstc: rstc@f0801000 {
->  			compatible = "nuvoton,npcm750-reset";
->  			reg = <0xf0801000 0x70>;
-> -- 
+> I am wondering if we really have to introduce a new opcode for this. Both
+> FUSE_CREATE and FUSE_CREATE_EXT prepare and send fuse_create_in{} and
+> expect fuse_entry_out and fuse_open_out in response. So no new structures
+> are being added. Only thing FUSE_CREATE_EXT does extra is that it also
+> reports back whether file was actually created or not.
+> 
+> May be instead of adding an new fuse_opcode, we could simply add a
+> new flag which we send in fuse_create_in and that reqeusts to report
+> if file was created or not. This is along the lines of
+> FUSE_OPEN_KILL_SUIDGID.
+> 
+> So say, a new flag FUSE_OPEN_REPORT_CREATE flag. Which we will set in
+> fuse_create_in->open_flags. If file server sees this flag is set, it
+> knows that it needs to set FOPEN_FILE_CREATED flag in response.
+> 
+> To me creating a new flag FUSE_OPEN_REPORT_CREATE seems better instead
+> of adding a new opcode.
 
-Please integrate scripts/checkpatch.pl into your patch creation
-workflow. Some of the warnings/errors *actually* make sense.
+Actually I take that back. If we were to use a flag, then we will have to
+do feature negotiation in advance at init time and only then we can set
+FUSE_OPEN_REPORT_CREATE. But we are relying on no new feature bit instead
+-ENOSYS will be returned if server does not support FUSE_CREATE_EXT.
+So adding a new opcode is better.
 
-In this case:
+Thanks
+Vivek
 
-WARNING: DT compatible string "nuvoton,npcm750-memory-controller" appears un-documented -- check ./Documentation/devicetree/bindings/
-#35: FILE: arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi:110:
-+                       compatible = "nuvoton,npcm750-memory-controller";
-
-For that I'm guessing patch 2 needs to go first in the series.
-
-In any case, the first two need an ACK from devicetree folks.
-
-WARNING: From:/Signed-off-by: email address mismatch: 'From: Medad CChien <medadyoung@gmail.com>' != 'Signed-off-by: Medad CChien <ctcchien@nuvoton.com>'
-
-For this one I wasn't sure so I had to ask: I guess it kinda makes sense
-to have the From: be the same as your SOB email. I.e., make sure the
-right authorship and SOB is maintained even when sending from machines
-with broken email setups.
-
-And that you can fix very easily: just add in your .git/config:
-
-[user]
-        name = Medad CChien
-        email = ctcchien@nuvoton.com
-
-and git would use that as the author and also slap a From: at the
-beginning of the patch with the correct name and email address.
-
-HTH.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

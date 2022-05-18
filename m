@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE2C52B8D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F122B52B90A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235716AbiERLaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
+        id S235685AbiERLdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235643AbiERL34 (ORCPT
+        with ESMTP id S235636AbiERLdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:29:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E101778A8;
-        Wed, 18 May 2022 04:29:55 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IBOs2m016543;
-        Wed, 18 May 2022 11:29:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=0EciM2JOStnqa7conOmfeN1U3vKQZFHvrLdmVzuLBUk=;
- b=lkrAr7oPP61U5vpzE2lSKvsJx/FVB4lPNeqjp0CexhhHGevAEH4aUhvIsBL7SFp6X8sj
- UKRgQQEPl+4+cnCXIzgIq9SrSX7DA4FKGy58SRCCuZQSWPHLZIyjPxB+BWsZ6yg9jmmS
- RDY/eUfjsLxT/ySmu/5GzSaoNveeWLmt0EgxPvE/x+L3KNILvWQVzwO5iVAqy/mVITwg
- /S7wqiW0xrCoRS2vEnzgXssapY4QwpY0uzwaIoO87I7x0HOP5XZOBQn/QGsgaJgNLEjM
- DxnvxWJiXzTbHJmYSp9Hx46UskLiD6bD90cTajYqIeI2f2W+Sp6oGhhVRLSgZhS/CypZ BQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4yw6r29u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 11:29:40 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IBPnB8023788;
-        Wed, 18 May 2022 11:29:38 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4yw6r28k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 11:29:38 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IB854f028911;
-        Wed, 18 May 2022 11:29:36 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjdmg9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 11:29:36 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IBFfBX52232570
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 11:15:41 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27C75A404D;
-        Wed, 18 May 2022 11:29:33 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5FCAEA4040;
-        Wed, 18 May 2022 11:29:32 +0000 (GMT)
-Received: from osiris (unknown [9.145.54.247])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 18 May 2022 11:29:32 +0000 (GMT)
-Date:   Wed, 18 May 2022 13:29:31 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
-        stable@vger.kernel.org, Philipp Rudo <prudo@linux.ibm.com>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 4/4] kexec, KEYS, s390: Make use of built-in and
- secondary keyring for signature verification
-Message-ID: <YoTYm6Fo1vBUuJGu@osiris>
-References: <20220512070123.29486-1-coxu@redhat.com>
- <20220512070123.29486-5-coxu@redhat.com>
+        Wed, 18 May 2022 07:33:22 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2048.outbound.protection.outlook.com [40.107.100.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B7B5C863;
+        Wed, 18 May 2022 04:33:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GC9HUhSfywyXRVSfDwbPgKHEAQI1cismEuNi7mQXI7yAKRC88JeDK4IeCueQsVtd9e0TLgCE4JKzMWKpngHNagPsZtYqQPUlBYjAx2TSJqTpK4TPKLNNGHyzctbBzTIx7SbdSSKgcl4D5GQrOOUoUXs9RifzaEZpNG7QHtqK6BW4OPKE2QaLuqKDHrsewya1ZuKFZF4rshfy74u8Jqb0vuCTeUhJ7yLwudUd8nwxXfKxeZtk+/lkwppo/nDUzq1BAOZZG9fKVvo1ZeJ3JD7zi1jhR9xorytE7JQHAHiN891+oEh85NRUoilCPHilqzu1Fr6ExmEqs6m+J4oQgIqYAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+BHrt2PwNc4HD1YS0zv9n5DUDu9DqfPfSfExlo/19N8=;
+ b=URpGe3fiB/pZgzrUG782eJ2FeiIA2y6OIzsh5ggrN27Aht8rf/7b1cbg2w77tdEL73OdAm9KJmn506yRRZKnKa85g21MLzoNtEm3IdCzsMC0yDTE2Ul948hHVyLykk4SmR1yU1akY3e3g5R3cTOBarAXBAKDMx2rqeENHmbb8X7LjO1hHgLE2SQcz56MyIBn3HPNq/SECXNLNMmiDYpPUghHCEXvkl1c2/zn6PLFgbbDjyPJKM0rGjqsGUpOM/26xDxlGPnNU5HiPUfdYLNP3NI3IHUr7NKZOYzs8wv+lTPyRjzm7GnyT5334M+E67W3/nwYx31OLaNkdOzhFEBdWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=microchip.com smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+BHrt2PwNc4HD1YS0zv9n5DUDu9DqfPfSfExlo/19N8=;
+ b=d5GKNPFGSheKvbR6LFE8t8fnMw3tQldeGXTkGJ6Xu70ZLW1yWvVXD2+Re8boTLmDyYoRBMS1Gzkb0j7Egz9Fc3KuODqQNxQ4XZqrXCXTiXZTrdIlkx/zlf14whAWkTVBKdUCBxCwTGTuJt9liA8wvtrZJNeKAwZgekXm7lI9PBQ=
+Received: from BN9PR03CA0873.namprd03.prod.outlook.com (2603:10b6:408:13c::8)
+ by DM5PR02MB2860.namprd02.prod.outlook.com (2603:10b6:3:113::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Wed, 18 May
+ 2022 11:33:17 +0000
+Received: from BN1NAM02FT014.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:13c:cafe::fe) by BN9PR03CA0873.outlook.office365.com
+ (2603:10b6:408:13c::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13 via Frontend
+ Transport; Wed, 18 May 2022 11:33:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT014.mail.protection.outlook.com (10.13.2.131) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5273.14 via Frontend Transport; Wed, 18 May 2022 11:33:17 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Wed, 18 May 2022 04:33:15 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Wed, 18 May 2022 04:33:15 -0700
+Envelope-to: nicolas.ferre@microchip.com,
+ davem@davemloft.net,
+ richardcochran@gmail.com,
+ claudiu.beznea@microchip.com,
+ kuba@kernel.org,
+ edumazet@google.com,
+ pabeni@redhat.com,
+ netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ harinikatakamlinux@gmail.com
+Received: from [10.140.6.13] (port=41766 helo=xhdharinik40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <harini.katakam@xilinx.com>)
+        id 1nrHvW-000DlO-M7; Wed, 18 May 2022 04:33:15 -0700
+From:   Harini Katakam <harini.katakam@xilinx.com>
+To:     <nicolas.ferre@microchip.com>, <davem@davemloft.net>,
+        <richardcochran@gmail.com>, <claudiu.beznea@microchip.com>,
+        <kuba@kernel.org>, <edumazet@google.com>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <michal.simek@xilinx.com>, <harinikatakamlinux@gmail.com>,
+        <harini.katakam@xilinx.com>, <radhey.shyam.pandey@xilinx.com>
+Subject: [PATCH net v2 0/2] Macb PTP one step fix
+Date:   Wed, 18 May 2022 17:03:08 +0530
+Message-ID: <20220518113310.28132-1-harini.katakam@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512070123.29486-5-coxu@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: QZ2aRxCw1ojqOWeZzANhIM2N8TBQebSk
-X-Proofpoint-ORIG-GUID: IjCvJ7YuMN2ii3itPe7V6ahbqtuLjERA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_04,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=905 phishscore=0 spamscore=0 bulkscore=0 mlxscore=0
- priorityscore=1501 impostorscore=0 clxscore=1011 malwarescore=0
- adultscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2205180059
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 23996aec-8671-4488-cf54-08da38c233f5
+X-MS-TrafficTypeDiagnostic: DM5PR02MB2860:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR02MB28604AF78337625B65F347C2C9D19@DM5PR02MB2860.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HCQPPGMOs9WOeZ6LgGDq7O7P0Px3swwNWqxLm9tCREh5rr+l0RBEqO0asHtDaZlpFevDoW7pG6ZhBXq/0QLCjUGSFi0Uj+HEPTyf4cqu4gLioqBYFPwSEZ+Ytgls7p7BKaHV2nNVdaNGfHmHlS08YWtRUOMqTvKGm49TSNOdsB6n2i1U3u6CoydgvvGXT7qHNdOI7X5MwD9uavSEKeUJSfGNtNcpwmKBu7iFzC0n47K09+XmnCGyDAKRfywq+s2ZcCYz5OYwqbvo9b6SGqMsyz/lXYwmoF1R6GEIKIGMj41l+iRpLTPjkqjRAIK5FPKRLZFIl9I/Favz+LjkN7Yt9+qBwBTy33zrrl8v2QdsU7MM2zEgtDcJ3YyhFbh6crTD4yKyiZPKFFdndXyepKh036rijVzPev8D+HpZvMjvw0QttUYcnELWs8eSuz+G3bqbp0bcZhb16wGEcy0oXDIuFc0cxxhGp4+3X/j+/lwooU7zB5aFf0WRy1lv/2Tdy1iucsfTKeoZpEHVP5l6LezuJJwWvWX3u8pDCRh2frJ2i59Cb3rPz3Yy6NPu7GJ1xE7jWch2O5lku4UbLjwotHtWDCNEkQnvjwLvvy8DahxtQNEBY+lDwyulNjP6dJhL3wyRyCph9x+QfU0q87FLBN208X5E0ZJx9u1M/wg3W+CiofXmuzqjepBpl6TGVLjlZzUGwan/CJIbomZzzNJPvCDRv+GrzQTKYD3wfy7iMtc6lQm5jdJVxGsMV9QLI42/uvmmAOoawkA4v2rZ39Lc1C+BJNybts2L6BPRoWEaIadDiJA=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(2616005)(82310400005)(1076003)(336012)(47076005)(110136005)(356005)(54906003)(4744005)(8676002)(107886003)(4326008)(70586007)(6666004)(70206006)(7636003)(7696005)(5660300002)(186003)(2906002)(7416002)(40460700003)(83380400001)(8936002)(36860700001)(26005)(9786002)(426003)(316002)(36756003)(44832011)(966005)(508600001)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 11:33:17.1498
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23996aec-8671-4488-cf54-08da38c233f5
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT014.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB2860
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,32 +115,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 12, 2022 at 03:01:23PM +0800, Coiby Xu wrote:
-> From: Michal Suchanek <msuchanek@suse.de>
-> 
-> commit e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
-> adds support for KEXEC_SIG verification with keys from platform keyring
-> but the built-in keys and secondary keyring are not used.
-> 
-> Add support for the built-in keys and secondary keyring as x86 does.
-> 
-> Fixes: e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
-> Cc: stable@vger.kernel.org
-> Cc: Philipp Rudo <prudo@linux.ibm.com>
-> Cc: kexec@lists.infradead.org
-> Cc: keyrings@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> Reviewed-by: "Lee, Chun-Yi" <jlee@suse.com>
-> Acked-by: Baoquan He <bhe@redhat.com>
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
-> ---
->  arch/s390/kernel/machine_kexec_file.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
+Split from "Macb PTP updates" series
+https://lore.kernel.org/netdev/20220517135525.GC3344@hoboy.vegasvil.org/T/
+- Fix Macb PTP one step.
+- Add common twoStepflag field definition.
 
-As far as I can tell this doesn't have any dependency to the other
-patches in this series, so should I pick this up for the s390 tree, or
-how will this go upstream?
+Harini Katakam (2):
+  include: ptp: Add common two step flag mask
+  net: macb: Fix PTP one step sync support
 
-In any case:
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+ drivers/net/ethernet/cadence/macb_main.c | 41 +++++++++++++++++++++---
+ drivers/net/ethernet/cadence/macb_ptp.c  |  4 ++-
+ include/linux/ptp_classify.h             |  3 ++
+ 3 files changed, 43 insertions(+), 5 deletions(-)
+
+-- 
+2.17.1
+

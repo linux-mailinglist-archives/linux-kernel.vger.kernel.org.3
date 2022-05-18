@@ -2,166 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F9152C097
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790BD52C0C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240663AbiERQ4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S240524AbiERQzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240586AbiERQyk (ORCPT
+        with ESMTP id S240550AbiERQzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:54:40 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF479201394;
-        Wed, 18 May 2022 09:54:36 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id 90so1053905uam.8;
-        Wed, 18 May 2022 09:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=olguYhICHMpk2ctYiMxEpCHQEQIGnr/VO6tDtpsZhI4=;
-        b=evhgvtGZikjzHZh4O3xNSDiWD6D3AEmA1+RNqZ2K5y0E2agNcv001H7iUC3Zhd8+dF
-         L4xGeCtgjofqz9ru806hEF2EtlPJMeUmYAaDejjxeSZJCUafH4+sg7a6axt5Xc1aSkVN
-         0AYRnM1mUmxpN1t3BPNGjm7fZA7kvI6pJ0CasVvL/VmhZJUxi602KGVb96aBlAeKSrE2
-         nPCz2PvfbwOnEQG9Lem5EsX2Wa7e/ugBA29UDPJV+7aqd1ZALnWg50DJJvQ/83dareaC
-         CBLSBAaYaNewA3NqSn+pbBd2vkd1MCvptA67T+4OeyQBXNdrXdhV9QcK8gpbaCD1luUP
-         riXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=olguYhICHMpk2ctYiMxEpCHQEQIGnr/VO6tDtpsZhI4=;
-        b=Ed1fUtRpaIqhP0+KvUeYYMbu7hCxOtn4a4jFSAY+eJfnu0f7d0UcLriTtheUXWWfCn
-         k+hZIseC5TkE/JdEF5YpElkZoSIxCE8UzwLipJP6Fkt8qcECu3xEWov4rXSSCLK/Is9S
-         UNew9iEAZmGlNLHFqdhZQ1JGqP+rLTyoHKB2ogSlmXbCPWOlBEi4/aq0+4DkDBlbb8A0
-         bHrTDJ75DrgtZBFnT8CGfDcLgoddi/A9ydqf7cYsHqMKtKyRwjBpFs1iAJ0DcpoB8ir8
-         FUaTFobc2it+EiGFYq2BF3OENL2gPTKRW2Q0SmpWo908dWGjSonAaXMEJc7tWJW77M7n
-         uo4A==
-X-Gm-Message-State: AOAM532xxouWGlEdrCxGWmFtwjiFxh7tBU0AT3z9PYf0u2+ZXzp3MutY
-        XJB8LOUU5ubX6tEmX7WqywKzlF9/d0pQWeaI1EE=
-X-Google-Smtp-Source: ABdhPJxpr0Ba9x+SyqQxWYIRxlCA23EeQik362azVIbx1zBWRraLxOhiRXdlHoXPu29Z75Xqghi+NXJQGEDikvRW/88=
-X-Received: by 2002:ab0:72d5:0:b0:368:aad4:5ef8 with SMTP id
- g21-20020ab072d5000000b00368aad45ef8mr373535uap.27.1652892876048; Wed, 18 May
- 2022 09:54:36 -0700 (PDT)
+        Wed, 18 May 2022 12:55:06 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FC120139F;
+        Wed, 18 May 2022 09:55:03 -0700 (PDT)
+Received: from zn.tnic (p200300ea974657d0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57d0:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0D0B91EC0662;
+        Wed, 18 May 2022 18:54:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652892898;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=VRqk2XIoU7DZRwVUIljwCiK2hOhwF82JGe05ccrqLHs=;
+        b=VdStjWamEkAkYJl9mJxAmXz92e10LyHTx1AJvOom9HYGFhboLq6yvG9+uJUYYVvob0b2f1
+        A0XLo/FtsIGFpVvLfJ0M0wlhZ1Uo1n1TxIYtflwCeDvSR3kKKM6lQwgKFKqLiPZuCuUjXh
+        pGmFMe+pHPBi2c6jzQAW4WC0xP+HDn4=
+Date:   Wed, 18 May 2022 18:54:53 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Lin Yujun <linyujun809@huawei.com>, mingo@redhat.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        johnny.chenyi@huawei.com, chenjiahao16@huawei.com,
+        chenlifu@huawei.com, lizhengyu3@huawei.com, liaochang1@huawei.com,
+        wangzhu9@huawei.com, xuyihang@huawei.com, chris.zjh@huawei.com,
+        zouyipeng@huawei.com
+Subject: Re: [PATCH -next] x86/events:Use struct_size() helper in kzalloc()
+Message-ID: <YoUk3RSi7aSCnDyW@zn.tnic>
+References: <20220518131626.109123-1-linyujun809@huawei.com>
+ <20220518134920.GA8361@embeddedor>
+ <YoT6tHWbBOchi29i@hirez.programming.kicks-ass.net>
+ <20220518160345.GA43938@embeddedor>
 MIME-Version: 1.0
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-15-chenhuacai@loongson.cn> <87ilq294mg.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87ilq294mg.fsf@email.froward.int.ebiederm.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Thu, 19 May 2022 00:54:24 +0800
-Message-ID: <CAAhV-H5Aov1NVsbNWZa9psPhBiNssYWWEzNOyLooeXGKsYxN+w@mail.gmail.com>
-Subject: Re: [PATCH V11 14/22] LoongArch: Add signal handling support
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220518160345.GA43938@embeddedor>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Eric,
+On Wed, May 18, 2022 at 11:03:45AM -0500, Gustavo A. R. Silva wrote:
+> Naming it flex_struct_size() would be more informative?
 
-On Thu, May 19, 2022 at 12:40 AM Eric W. Biederman
-<ebiederm@xmission.com> wrote:
->
-> Huacai Chen <chenhuacai@loongson.cn> writes:
->
-> > Add ucontext/sigcontext definition and signal handling support for
-> > LoongArch.
-> >
-> > Cc: Eric Biederman <ebiederm@xmission.com>
-> > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  arch/loongarch/include/uapi/asm/sigcontext.h |  44 ++
-> >  arch/loongarch/include/uapi/asm/signal.h     |  13 +
-> >  arch/loongarch/include/uapi/asm/ucontext.h   |  35 ++
-> >  arch/loongarch/kernel/signal.c               | 566 +++++++++++++++++++
-> >  4 files changed, 658 insertions(+)
-> >  create mode 100644 arch/loongarch/include/uapi/asm/sigcontext.h
-> >  create mode 100644 arch/loongarch/include/uapi/asm/signal.h
-> >  create mode 100644 arch/loongarch/include/uapi/asm/ucontext.h
-> >  create mode 100644 arch/loongarch/kernel/signal.c
-> >
-> > diff --git a/arch/loongarch/include/uapi/asm/sigcontext.h b/arch/loongarch/include/uapi/asm/sigcontext.h
-> > new file mode 100644
-> > index 000000000000..be3d3c6ac83e
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/uapi/asm/sigcontext.h
-> > @@ -0,0 +1,44 @@
-> > +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-> > +/*
-> > + * Author: Hanlu Li <lihanlu@loongson.cn>
-> > + *         Huacai Chen <chenhuacai@loongson.cn>
-> > + *
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +#ifndef _UAPI_ASM_SIGCONTEXT_H
-> > +#define _UAPI_ASM_SIGCONTEXT_H
-> > +
-> > +#include <linux/types.h>
-> > +#include <linux/posix_types.h>
-> > +
-> > +/* FP context was used */
-> > +#define SC_USED_FP           (1 << 0)
-> > +/* Address error was due to memory load */
-> > +#define SC_ADDRERR_RD                (1 << 30)
-> > +/* Address error was due to memory store */
-> > +#define SC_ADDRERR_WR                (1 << 31)
-> > +
-> > +struct sigcontext {
-> > +     __u64   sc_pc;
-> > +     __u64   sc_regs[32];
-> > +     __u32   sc_flags;
-> > +     __u64   sc_extcontext[0] __attribute__((__aligned__(16)));
-> > +};
-> > +
-> > +#define CONTEXT_INFO_ALIGN   16
-> > +struct _ctxinfo {
-> > +     __u32   magic;
-> > +     __u32   size;
-> > +     __u64   padding;        /* padding to 16 bytes */
-> > +};
->
-> This is probably something I a missing but what is struct _ctxinfo and
-> why is it in a uapi header?
->
-> I don't see anything else in the uapi implementation using it.
-This is used by get_ctx_through_ctxinfo() in signal.c and I think
-similar function is also needed by userspace.
+Not use it at all if it makes the code less readable.
 
-Its name is once before called context_info but conflict with another
-software, then I want to use ctx_info but conflict with another kernel
-struct. :(
->
-> Symbols that start with an underscore "_" are reserved and should not
-> be used in general, and especially not in uapi header files.
-Then, maybe we can use sctx_info here?
+-- 
+Regards/Gruss,
+    Boris.
 
-Huacai
->
-> Eric
+https://people.kernel.org/tglx/notes-about-netiquette

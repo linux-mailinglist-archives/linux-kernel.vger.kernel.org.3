@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE11C52BD43
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8252752BCEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237945AbiERNZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        id S237811AbiERNZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237864AbiERNZm (ORCPT
+        with ESMTP id S237707AbiERNZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:25:42 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E609C1BB98D;
-        Wed, 18 May 2022 06:25:33 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id x143so2112768pfc.11;
-        Wed, 18 May 2022 06:25:33 -0700 (PDT)
+        Wed, 18 May 2022 09:25:21 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5301BA8ED;
+        Wed, 18 May 2022 06:25:20 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id i68so190535qke.11;
+        Wed, 18 May 2022 06:25:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iGkM7zUZyNWulbks1XJcMQ2LSpgiie/fhoc/MtFlX9o=;
-        b=cF/XiRy74wYu5lz/Dni+EhUhHJBswgr9RMmobHZfZEKjlBesOH04xehd+2BBm/J9TU
-         n2sHNRnAc0KL/jo0zWnPS3HX2VuRvtIWZhnHg92iKmCKhj0tfzZZpz0fxw4+aXLIFf1W
-         Vh9GKcfwxRNhfhItZTLpse+sWSMQhqmVUHTQsgip4rswdWAwLXJCCiWkwdjaPeUfAf+O
-         TgLv6i19EWAZTuELYajfyXEMCqVGBXdYw8FinKGs6QESlAKIvV7F8t24a+Jk5G0UA8Yy
-         S/xW8sgLecBdrf23fx5PcY/fbD8WUX6T+0klo0wvDJu2XQHiTigc0mlOtZdcglbOBCHy
-         c1CQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YdtG+Oh5rA118xynE6nPINrtJ9nv4r0UKABUGrkGLPI=;
+        b=nYS26kpkZXfBGMHF6KyW6cqwtWJ5gMbM+VtS1jLuEi2BdO/CHkPcjYbF3jgwZxYBAv
+         gIc8xm57N1sl9u5IjwbWuOxrFLRhC1nRq8RajcADa5fRtQrsw9SgrOsFSSO9Dhdeyrk7
+         pqE81P3TQikJGEnMPQ6CToW6oqF0wF482qrbch63Wx77e9wUmwoeFk4QUi7/zB/eOOQM
+         es0P6wMax1HuuBBcSM3II9r+McXiIkSVrxXa4OXYJOdstd02xFOGKdITbSAasss3ncdF
+         TuWALsNkrZWBFTdKO+ZQembLF2KWCOF020H6fRTiKS0F6JuYIk/MQDCiz3zna8TdqZG+
+         uIug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iGkM7zUZyNWulbks1XJcMQ2LSpgiie/fhoc/MtFlX9o=;
-        b=Cro/ofcF9ajEn3Ry9hl0jRhXmh00xKFrRAPhHgI492epzK36bPzcyOfOOAi3Bqa//U
-         ZH4rOCSa9mKin48FLPey+JQo3U9k7GwjOMmX57IJszPjI/4vod+TukjGHNxpugNzcfBx
-         mIbCkRRlKd70e+UhLsGvSvlFSNt1Jwx04vIM75goUQZM+557tdNIZtjC7wP1uMrI/SzN
-         0fZzBgKtrmJNrWHwq88GlDEgbFWq9smOCkCm1KJOzFRPv5sDU9ekAt0G2r8DHlvLIlvy
-         9zPxQfz47ohPXOgz4XIDF/R7ZlCXzrEt+amDRoPGpbF6LMnyJm4bn/Qn5zLn7HsHsyRK
-         gJzg==
-X-Gm-Message-State: AOAM531j+peO2zZc8gEU0HBKs8vdA+VIdLyhHJiAljig6NIZQIDkYEu7
-        SbFC8m4R73flJRKadPq1Cug=
-X-Google-Smtp-Source: ABdhPJzSXdtQtLfVYHMbN9XtxWkaFDm7YQhKqYNRpw01GYLVHrDYpluSBpy2zPFzFPU6yfFKFZtVgA==
-X-Received: by 2002:a63:2023:0:b0:3f5:e1e7:74e3 with SMTP id g35-20020a632023000000b003f5e1e774e3mr4890315pgg.377.1652880333318;
-        Wed, 18 May 2022 06:25:33 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.117])
-        by smtp.gmail.com with ESMTPSA id s13-20020a17090302cd00b0015e8d4eb244sm1625549plk.142.2022.05.18.06.25.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 06:25:33 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: [PATCH RESEND v3 06/11] KVM: x86/pmu: Drop "u8 ctrl, int idx" for reprogram_fixed_counter()
-Date:   Wed, 18 May 2022 21:25:07 +0800
-Message-Id: <20220518132512.37864-7-likexu@tencent.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220518132512.37864-1-likexu@tencent.com>
-References: <20220518132512.37864-1-likexu@tencent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YdtG+Oh5rA118xynE6nPINrtJ9nv4r0UKABUGrkGLPI=;
+        b=lzwLWPH9lPFpD6zJOuhd+TwiKwyOhCG59LAhHSlWyu82s8sFllTTAFpEiy7I5wjUEp
+         h0ixn1Q4fKyYVCipWXDobnCytck0DS6LmoNn6CEIKCNPXpjLUDaN5xY3U4AaHYGU0Kif
+         m/mdLe8UZAazOwTl5pdf6p7UrYSvYN0u7DD4AqD9XRvewbhuWSvYH13Ou3hJ2FjbSYCW
+         RM8F78FuWxku+H9D+pEUO4Mm9FI0JBsqZtRp5UiGjLNB2Ntnt7fZku38YriH/HLuO/sR
+         DYlNr/61e7v23fx+dc+5jMwBqeITTJfiz9SNJNGPDLp7WW9iyFQCMV7M/OUfoyRFc3Uy
+         yEHw==
+X-Gm-Message-State: AOAM530tQ4WEPNOhYwiGWf1okjPn3QJwPrvbIQTMQu2h1F1pLtQ7kyQm
+        E9PuYl2jiV5C1PBZoh2IrKdOkU7X2xb9HlygPwU=
+X-Google-Smtp-Source: ABdhPJyhLZWSZhcq2uRhpyaWCutF+RT3RE2uwuCUEUvW0wPBozfJ4+bEpziZ+uU99WBw3k645UCQ9oHw0WnVx48q77I=
+X-Received: by 2002:a05:620a:e18:b0:67d:7fcb:6244 with SMTP id
+ y24-20020a05620a0e1800b0067d7fcb6244mr19961682qkm.42.1652880319465; Wed, 18
+ May 2022 06:25:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220517205341.536587-1-robimarko@gmail.com> <2905b9ae-df66-eb12-60fd-306ea2d3d626@linaro.org>
+In-Reply-To: <2905b9ae-df66-eb12-60fd-306ea2d3d626@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Wed, 18 May 2022 15:25:08 +0200
+Message-ID: <CAOX2RU4dH-iUMY8yebEEgdJRqm37AHBMH135YkNsnDJMPZCbPg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: regulator: qcom,spmi-regulator:
+ Convert to dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,103 +73,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Wed, 18 May 2022 at 14:58, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 17/05/2022 22:53, Robert Marko wrote:
+> > Convert the bindings of Qualcomm SPMI regulators to DT schema.
+> >
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+>
+>
+> > +$id: http://devicetree.org/schemas/regulator/qcom,spmi-regulator.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm SPMI Regulators
+> > +
+> > +maintainers:
+> > +  - Robert Marko <robimarko@gmail.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - qcom,pm660-regulators
+> > +      - qcom,pm660l-regulators
+> > +      - qcom,pm8004-regulators
+> > +      - qcom,pm8005-regulators
+> > +      - qcom,pm8226-regulators
+> > +      - qcom,pm8841-regulators
+> > +      - qcom,pm8916-regulators
+> > +      - qcom,pm8941-regulators
+> > +      - qcom,pm8950-regulators
+> > +      - qcom,pm8994-regulators
+> > +      - qcom,pmi8994-regulators
+> > +      - qcom,pms405-regulators
+> > +
+> > +  interrupts: true
+> > +
+> > +  interrupt-names: true
+>
+> I think we misunderstood each other. Old bindings indeed did not require
+> the interrupts, although if present they should be always defined.
+> Therefore here you should specify number of items and their names.
 
-Since afrer reprogram_fixed_counter() is called, it's bound to assign
-the requested fixed_ctr_ctrl to pmu->fixed_ctr_ctrl, this assignment step
-can be moved forward (the stale value for diff is saved extra early),
-thus simplifying the passing of parameters.
+Yeah, I think we are misunderstanding each other.
 
-No functional change intended.
+Old text-based bindings specified the interrupts, but no naming or
+number was enforced,
+so I looked into the driver to see what is going on.
+Only pm8941 has interrupts defined in the driver and DTS, so I added
+those based on compatible
+matching, the same as with supplies.
+My logic was that it was only valid for interrupts to be described if
+PM8941 was used as describing
+interrupts for other regulator models will do nothing.
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/kvm/pmu.c           | 13 ++++++-------
- arch/x86/kvm/pmu.h           |  2 +-
- arch/x86/kvm/vmx/pmu_intel.c | 16 ++++++++--------
- 3 files changed, 15 insertions(+), 16 deletions(-)
-
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index cbffa060976e..131fbab612ca 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -319,8 +319,11 @@ void reprogram_gp_counter(struct kvm_pmc *pmc)
- }
- EXPORT_SYMBOL_GPL(reprogram_gp_counter);
- 
--void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int idx)
-+void reprogram_fixed_counter(struct kvm_pmc *pmc)
- {
-+	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
-+	int idx = pmc->idx - INTEL_PMC_IDX_FIXED;
-+	u8 ctrl = fixed_ctrl_field(pmu->fixed_ctr_ctrl, idx);
- 	unsigned en_field = ctrl & 0x3;
- 	bool pmi = ctrl & 0x8;
- 
-@@ -350,12 +353,8 @@ void reprogram_counter(struct kvm_pmc *pmc)
- {
- 	if (pmc_is_gp(pmc))
- 		reprogram_gp_counter(pmc);
--	else {
--		int idx = pmc->idx - INTEL_PMC_IDX_FIXED;
--		u8 ctrl = fixed_ctrl_field(pmc_to_pmu(pmc)->fixed_ctr_ctrl, idx);
--
--		reprogram_fixed_counter(pmc, ctrl, idx);
--	}
-+	else
-+		reprogram_fixed_counter(pmc);
- }
- EXPORT_SYMBOL_GPL(reprogram_counter);
- 
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index 56204f5a545d..8d7912978249 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -173,7 +173,7 @@ static inline void kvm_init_pmu_capability(void)
- }
- 
- void reprogram_gp_counter(struct kvm_pmc *pmc);
--void reprogram_fixed_counter(struct kvm_pmc *pmc, u8 ctrl, int fixed_idx);
-+void reprogram_fixed_counter(struct kvm_pmc *pmc);
- void reprogram_counter(struct kvm_pmc *pmc);
- 
- void kvm_pmu_deliver_pmi(struct kvm_vcpu *vcpu);
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 2bfca470d5fd..5e10a1ef435d 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -37,23 +37,23 @@ static int fixed_pmc_events[] = {1, 0, 7};
- 
- static void reprogram_fixed_counters(struct kvm_pmu *pmu, u64 data)
- {
-+	struct kvm_pmc *pmc;
-+	u8 old_fixed_ctr_ctrl = pmu->fixed_ctr_ctrl;
- 	int i;
- 
-+	pmu->fixed_ctr_ctrl = data;
- 	for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
- 		u8 new_ctrl = fixed_ctrl_field(data, i);
--		u8 old_ctrl = fixed_ctrl_field(pmu->fixed_ctr_ctrl, i);
--		struct kvm_pmc *pmc;
--
--		pmc = get_fixed_pmc(pmu, MSR_CORE_PERF_FIXED_CTR0 + i);
-+		u8 old_ctrl = fixed_ctrl_field(old_fixed_ctr_ctrl, i);
- 
- 		if (old_ctrl == new_ctrl)
- 			continue;
- 
--		__set_bit(INTEL_PMC_IDX_FIXED + i, pmu->pmc_in_use);
--		reprogram_fixed_counter(pmc, new_ctrl, i);
--	}
-+		pmc = get_fixed_pmc(pmu, MSR_CORE_PERF_FIXED_CTR0 + i);
- 
--	pmu->fixed_ctr_ctrl = data;
-+		__set_bit(INTEL_PMC_IDX_FIXED + i, pmu->pmc_in_use);
-+		reprogram_fixed_counter(pmc);
-+	}
- }
- 
- static struct kvm_pmc *intel_pmc_idx_to_pmc(struct kvm_pmu *pmu, int pmc_idx)
--- 
-2.36.1
-
+Regards,
+Robert
+>
+> Rest looks ok
+>
+>
+> Best regards,
+> Krzysztof

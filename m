@@ -2,61 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE9352B607
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1932E52B644
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbiERJFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
+        id S233793AbiERJH2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 May 2022 05:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233672AbiERJE4 (ORCPT
+        with ESMTP id S233763AbiERJHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:04:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A513F13CA32
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jeoGfrVB7Bpv0u+w3Y874xRP67KrBby4lHXLwJR1flk=; b=yjEDfPLh9UkgcAuWDWFRi20RbP
-        aaKhJK/0YM5ZgzJr3OBWCSlLbB174ui7Bjprt03Wj/L9XOnXfKoJuZ5IZdcNFc5hhqvnxorcnLq7l
-        kEjsQjxGQYQK5Y6cXPRwFJqgp7e4vgtsK/TGvoTgrY76s8BMnQQKBQu2M5mMmqQKAPpXQe0KerAOj
-        nCqgCEY1cBl1rcTW2ypvqNYye0a+8IhjBcS2cUQnu4TwG6UFs7NG1wSutjaC9ONRZDRRrLGiVKMdu
-        VPBnjgqAz7gC0F1B4+BD1Etkp9/0W4ZI9UY1SUjXUISQoK9nLJhkYkuPdmC6vrQtLNgkFRdk8zTUR
-        iZc5g1kA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrFbn-000jJx-Ce; Wed, 18 May 2022 09:04:43 +0000
-Date:   Wed, 18 May 2022 02:04:43 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Donghai Qiao <dqiao@redhat.com>
-Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
-        peterz@infradead.org, heying24@huawei.com,
-        andriy.shevchenko@linux.intel.com, axboe@kernel.dk,
-        rdunlap@infradead.org, tglx@linutronix.de, gor@linux.ibm.com,
-        donghai.w.qiao@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/11] smp: cross CPU call interface
-Message-ID: <YoS2q9a1o123hIGi@infradead.org>
-References: <20220517180326.997129-1-dqiao@redhat.com>
+        Wed, 18 May 2022 05:07:22 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC30E15C0;
+        Wed, 18 May 2022 02:07:21 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id 126so1000349qkm.4;
+        Wed, 18 May 2022 02:07:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=OPdrAjKOyQOcWm67dROL4azSD7nDXBVBpZGGGZKL78E=;
+        b=hc8oIs7ZyO4XjHkBTDGVbQzPHanenkTdGJUfqI4BTIaRvM327ffexnDSBbMTHNuMFz
+         X5QW31F2xiS9aNNH+JERnjqVzs08OxIjWoYIqQyHiS3VuPVlWSqYXcPYKT0izg+lCANM
+         7JAuD7tSP8HSqhWIN8e0La6lOwaZgIW55vfzbbTEGokLmxTsFY4ItXhrNDBy4uQK3IrL
+         VE/TuOSvParetHD6r/yTq2khJUEZ2SR8PQB1aTfdShTCfiJSmw++F8u0UNEMW7C41aac
+         PdM+mCzBScII+jEYCvNSr4DHSFIXBJaywJcFxYVoqkH2O6OwNp5wKOC8dGbY94ubaatE
+         WI/A==
+X-Gm-Message-State: AOAM532QRjgPrgJjMei5Jkc2pyLd6ZgWFPzKLRBLYON2vPwW4S2K19Nv
+        egu/kQDC9XTIiDzIjvZm1gZ7qGY1gKb9OQ==
+X-Google-Smtp-Source: ABdhPJwOxaIdhXrkfIK0RJfFWGAOJ/OzQlp4CncqNBYYOjYKJqVCx6BuNuNCFIMH7fGI/cpTPASMdw==
+X-Received: by 2002:a37:6549:0:b0:69f:a625:fe2b with SMTP id z70-20020a376549000000b0069fa625fe2bmr19052577qkb.132.1652864840806;
+        Wed, 18 May 2022 02:07:20 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id d21-20020ac800d5000000b002f39b99f697sm864460qtg.49.2022.05.18.02.07.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 02:07:20 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f83983782fso17146067b3.6;
+        Wed, 18 May 2022 02:07:20 -0700 (PDT)
+X-Received: by 2002:a81:2143:0:b0:2fb:1274:247e with SMTP id
+ h64-20020a812143000000b002fb1274247emr29579131ywh.384.1652864840147; Wed, 18
+ May 2022 02:07:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517180326.997129-1-dqiao@redhat.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220516115627.66363-1-guozhengkui@vivo.com>
+In-Reply-To: <20220516115627.66363-1-guozhengkui@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 18 May 2022 11:07:08 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWH1rdP22VnhR_h601tm+DDo7+sGdXR-6NQx0B-jGoZ1A@mail.gmail.com>
+Message-ID: <CAMuHMdWH1rdP22VnhR_h601tm+DDo7+sGdXR-6NQx0B-jGoZ1A@mail.gmail.com>
+Subject: Re: [PATCH linux-next] net: smc911x: replace ternary operator with min()
+To:     Guo Zhengkui <guozhengkui@vivo.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        zhengkui_guo@outlook.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I still haven't seen any good rationale for this.  It causes massive
-churn just to have more complicated interface (and thus more code)
-than before.  What is the benefit?
+Hi Guo,
 
-I'm also not sure what is formal about this interface, or why it
-should be formal.  IPIs should be rare, and we'd better off looking
-for instances we can remove entirely.
+On Mon, May 16, 2022 at 10:36 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
+> Fix the following coccicheck warning:
+>
+> drivers/net/ethernet/smsc/smc911x.c:483:20-22: WARNING opportunity for min()
+>
+> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
+
+Thanks for your patch, which is now commit 5ff0348b7f755aac ("net:
+smc911x: replace ternary operator with min()") in net-next/master.
+
+> --- a/drivers/net/ethernet/smsc/smc911x.c
+> +++ b/drivers/net/ethernet/smsc/smc911x.c
+> @@ -480,7 +480,7 @@ static void smc911x_hardware_send_pkt(struct net_device *dev)
+>         SMC_SET_TX_FIFO(lp, cmdB);
+>
+>         DBG(SMC_DEBUG_PKTS, dev, "Transmitted packet\n");
+> -       PRINT_PKT(buf, len <= 64 ? len : 64);
+> +       PRINT_PKT(buf, min(len, 64));
+
+Unfortunately you forgot to test-compile this with
+ENABLE_SMC_DEBUG_PKTS=1, which triggers:
+
+        drivers/net/ethernet/smsc/smc911x.c: In function
+‘smc911x_hardware_send_pkt’:
+        include/linux/minmax.h:20:28: error: comparison of distinct
+pointer types lacks a cast [-Werror]
+           20 |  (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+              |                            ^~
+        drivers/net/ethernet/smsc/smc911x.c:483:17: note: in expansion
+of macro ‘min’
+          483 |  PRINT_PKT(buf, min(len, 64));
+
+"len" is "unsigned int", while "64" is "(signed) int".
+
+I have sent a fix
+https://lore.kernel.org/r/ca032d4122fc70d3a56a524e5944a8eff9a329e8.1652864652.git.geert+renesas@glider.be/
+
+>
+>         /* Send pkt via PIO or DMA */
+>  #ifdef SMC_USE_DMA
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

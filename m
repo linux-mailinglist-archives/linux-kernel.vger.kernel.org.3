@@ -2,135 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BDC52C2BF
+	by mail.lfdr.de (Postfix) with ESMTP id 7038852C2C0
 	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241583AbiERSpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
+        id S241510AbiERSqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241550AbiERSpt (ORCPT
+        with ESMTP id S241655AbiERSqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:45:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BEDE65DB
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 11:45:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A827C618C4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 18:45:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69F82C34113;
-        Wed, 18 May 2022 18:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652899545;
-        bh=BagzOTYZWCGSwt0tBoax0Ts+NwQ5tB79VYsdhAHbds4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=pMJlSrxH3S//KP5N794tKqWKYBIZxNC6S/ejwsxrZN8rTUXu2JkoFh4rQdPAiX5MY
-         DjZGXOf2/i/f/7N0TnU5HlBwFH7xKkex0i/5RKCpR7bJOjpdTyW4jEIZAoLluUALY3
-         MRIvsc7tquW6QgQP1gnrzR13pBZSWcoTGeNF8hBTgvI6uxtAHZ1EvQiEQJTsAFL7YM
-         KJzr/Mic+FGYEAOWs2VGx1K7eOJ9ZLfrIPAz68oMDjMtec1wGou8piBBUoOE3CLsvO
-         CIZPFeJoEhzR4curzPpB+gyZyemdubXvhe5/cc3MvN6ZV4bYcC3uMv92ShQtYSBZK0
-         v9V01CFk7ZSdA==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>,
-        Jessica Clarke <jrtc27@jrtc27.com>
-Subject: [PATCH] riscv: Fix ALT_THEAD_PMA's asm parameters
-Date:   Wed, 18 May 2022 11:45:29 -0700
-Message-Id: <20220518184529.454008-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Wed, 18 May 2022 14:46:08 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44164248CF;
+        Wed, 18 May 2022 11:46:07 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-f189b07f57so3917271fac.1;
+        Wed, 18 May 2022 11:46:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pKIi5KmcpwiUvvttWh4e21qCKlHTXQLcc0WGZMCMfyo=;
+        b=lMpy8WOaer/+IC0gTQTUz+pndHdr7nl3nN8K7If4VmXJuG8J+LfohhW+MIO2MlF9TO
+         +eEnjmFpOkfzgk9MkfiDCNqqhANJlUpa8nP0l+NtXoFSKJvlPh6ar3IK+j/wWdXLc9Nx
+         NoA1aAyKQ4s7OEHGKPSgjybhtv0SEZraWv0bOoU0f1ocqOl1GW0V6Wa9dSlwRwW5mh+2
+         0LdzMghRsJ2CSbLj2kFfDKJv8RR+UBtGxAkGYv+u4uWYL7r1u/3ms/6qyWG5P2d6CINM
+         j3sgF4DsNP0eYdPS6m6hvyeQ3wbeEP/elXJbXfotVt+g7FqY8NEbmOitlPdf71Ne+nyG
+         XCGQ==
+X-Gm-Message-State: AOAM531IQ1zPENyzCyNUun4fYYclcCb8hhThQPewgp5XTPHh+ZjZVnfa
+        nxeR+Ynn5F+0Cp8Q9yFl9g==
+X-Google-Smtp-Source: ABdhPJzCbZpysYPkJ/ZU+Q27by+oDlv1fIMc02MZVxt6o5neKQP74ZuGayT1T/hdza+xq9Rr6yMpGw==
+X-Received: by 2002:a05:6871:69e:b0:f1:cbce:6ac4 with SMTP id l30-20020a056871069e00b000f1cbce6ac4mr889356oao.286.1652899566551;
+        Wed, 18 May 2022 11:46:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e21-20020a9d63d5000000b00605da994088sm1030657otl.2.2022.05.18.11.46.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 11:46:05 -0700 (PDT)
+Received: (nullmailer pid 3673824 invoked by uid 1000);
+        Wed, 18 May 2022 18:46:04 -0000
+Date:   Wed, 18 May 2022 13:46:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com,
+        joro@8bytes.org, will@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/8] iommu: mtk_iommu: Lookup phandle to retrieve syscon
+ to infracfg
+Message-ID: <20220518184604.GK3302100-robh@kernel.org>
+References: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
+ <20220517132107.195932-3-angelogioacchino.delregno@collabora.com>
+ <16fb07d9-28d8-5c73-1eb5-ec13544d22e5@arm.com>
+ <b003c37c-0f2d-31f6-6a74-4e1f0f4a1ccb@collabora.com>
+ <a063199a-72dd-d2ab-10bb-7130697c5611@arm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a063199a-72dd-d2ab-10bb-7130697c5611@arm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit a35707c3d850 ("riscv: add memory-type errata for T-Head"),
-builds with LLVM's integrated assembler fail like:
+On Wed, May 18, 2022 at 12:07:58PM +0100, Robin Murphy wrote:
+> On 2022-05-18 09:29, AngeloGioacchino Del Regno wrote:
+> > Il 17/05/22 16:12, Robin Murphy ha scritto:
+> > > On 2022-05-17 14:21, AngeloGioacchino Del Regno wrote:
+> > > > This driver will get support for more SoCs and the list of infracfg
+> > > > compatibles is expected to grow: in order to prevent getting this
+> > > > situation out of control and see a long list of compatible strings,
+> > > > add support to retrieve a handle to infracfg's regmap through a
+> > > > new "mediatek,infracfg" phandle.
+> > > > 
+> > > > In order to keep retrocompatibility with older devicetrees, the old
+> > > > way is kept in place, but also a dev_warn() was added to advertise
+> > > > this change in hope that the user will see it and eventually update
+> > > > the devicetree if this is possible.
+> > > > 
+> > > > Signed-off-by: AngeloGioacchino Del Regno
+> > > > <angelogioacchino.delregno@collabora.com>
+> > > > ---
+> > > >   drivers/iommu/mtk_iommu.c | 40 +++++++++++++++++++++++++--------------
+> > > >   1 file changed, 26 insertions(+), 14 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> > > > index 71b2ace74cd6..cfaaa98d2b50 100644
+> > > > --- a/drivers/iommu/mtk_iommu.c
+> > > > +++ b/drivers/iommu/mtk_iommu.c
+> > > > @@ -1134,22 +1134,34 @@ static int mtk_iommu_probe(struct
+> > > > platform_device *pdev)
+> > > >       data->protect_base = ALIGN(virt_to_phys(protect),
+> > > > MTK_PROTECT_PA_ALIGN);
+> > > >       if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_4GB_MODE)) {
+> > > > -        switch (data->plat_data->m4u_plat) {
+> > > > -        case M4U_MT2712:
+> > > > -            p = "mediatek,mt2712-infracfg";
+> > > > -            break;
+> > > > -        case M4U_MT8173:
+> > > > -            p = "mediatek,mt8173-infracfg";
+> > > > -            break;
+> > > > -        default:
+> > > > -            p = NULL;
+> > > > +        infracfg =
+> > > > syscon_regmap_lookup_by_phandle(dev->of_node,
+> > > > "mediatek,infracfg");
+> > > > +        if (IS_ERR(infracfg)) {
+> > > > +            dev_warn(dev, "Cannot find phandle to mediatek,infracfg:"
+> > > > +                      " Please update your devicetree.\n");
+> > > 
+> > > Is this really a dev_warn-level problem? There's no functional
+> > > impact, given that we can't stop supporting the original binding any
+> > > time soon, if ever, so I suspect this is more likely to just annoy
+> > > users and CI systems than effect any significant change.
+> > > 
+> > 
+> > The upstream devicetrees were updated to use the new handle and this is
+> > a way to
+> > warn about having outdated DTs... besides, I believe that CIs will
+> > always get the
+> > devicetree from the same tree that the kernel was compiled from (hence
+> > no message
+> > will be thrown).
+> > 
+> > In any case, if you think that a dev_info would be more appropriate, I
+> > can change
+> > that no problem.
+> 
+> If there's some functional impact from using the old binding vs. the new one
+> then it's reasonable to inform the user of that (as we do in arm-smmu, for
+> example).
+> 
+> However if you change an established binding for non-functional reasons,
+> then you get to support both bindings, and it's not the end user's problem
+> at all. There seems to be zero reason to update an existing DTB for this
+> difference alone, so TBH I don't think it deserves a message at all.
 
-  In file included from arch/riscv/kernel/asm-offsets.c:10:
-  In file included from ./include/linux/mm.h:29:
-  In file included from ./include/linux/pgtable.h:6:
-  In file included from ./arch/riscv/include/asm/pgtable.h:114:
-  ./arch/riscv/include/asm/pgtable-64.h:210:2: error: invalid input constraint '0' in asm
-          ALT_THEAD_PMA(prot_val);
-          ^
-  ./arch/riscv/include/asm/errata_list.h:88:4: note: expanded from macro 'ALT_THEAD_PMA'
-          : "0"(_val),                                                    \
-            ^
+It's also not the kernel's job to validate the DT. It's horrible at it 
+and we have something else now.
 
-This was reported upstream to LLVM where Jessica pointed out a couple of
-issues with the existing implementation of ALT_THEAD_PMA:
-
-* t3 is modified but not listed in the clobbers list.
-
-* "+r"(_val) marks _val as both an input and output of the asm but then
-  "0"(_val) marks _val as an input matching constraint, which does not
-  make much sense in this situation, as %1 is not actually used in the
-  asm and matching constraints are designed to be used for different
-  inputs that need to use the same register.
-
-Drop the matching contraint and shift all the operands by one, as %1 is
-unused, and mark t3 as clobbered. This resolves the build error and goes
-not cause any problems with GNU as.
-
-Fixes: a35707c3d850 ("riscv: add memory-type errata for T-Head")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1641
-Link: https://github.com/llvm/llvm-project/issues/55514
-Link: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html
-Suggested-by: Jessica Clarke <jrtc27@jrtc27.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/riscv/include/asm/errata_list.h | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-index 9e2888dbb5b1..416ead0f9a65 100644
---- a/arch/riscv/include/asm/errata_list.h
-+++ b/arch/riscv/include/asm/errata_list.h
-@@ -75,20 +75,20 @@ asm volatile(ALTERNATIVE(						\
- 	"nop\n\t"							\
- 	"nop\n\t"							\
- 	"nop",								\
--	"li      t3, %2\n\t"						\
--	"slli    t3, t3, %4\n\t"					\
-+	"li      t3, %1\n\t"						\
-+	"slli    t3, t3, %3\n\t"					\
- 	"and     t3, %0, t3\n\t"					\
- 	"bne     t3, zero, 2f\n\t"					\
--	"li      t3, %3\n\t"						\
--	"slli    t3, t3, %4\n\t"					\
-+	"li      t3, %2\n\t"						\
-+	"slli    t3, t3, %3\n\t"					\
- 	"or      %0, %0, t3\n\t"					\
- 	"2:",  THEAD_VENDOR_ID,						\
- 		ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)		\
- 	: "+r"(_val)							\
--	: "0"(_val),							\
--	  "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
-+	: "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),		\
- 	  "I"(_PAGE_PMA_THEAD >> ALT_THEAD_PBMT_SHIFT),			\
--	  "I"(ALT_THEAD_PBMT_SHIFT))
-+	  "I"(ALT_THEAD_PBMT_SHIFT)					\
-+	: "t3")
- #else
- #define ALT_THEAD_PMA(_val)
- #endif
-
-base-commit: 93c0651617a62a69717299f1464dda798af8bebb
--- 
-2.36.1
-
+Rob

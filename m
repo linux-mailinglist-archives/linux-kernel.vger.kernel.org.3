@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED91952B716
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE9D52B793
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbiERJvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
+        id S234639AbiERJvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbiERJuz (ORCPT
+        with ESMTP id S234772AbiERJvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:50:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D78F2C138;
-        Wed, 18 May 2022 02:50:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 18 May 2022 05:51:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CF31DCC
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652867470;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pupdpoaT7DKq0S5N7tQSpmk4iGUsYQRiyblwUNHccVQ=;
+        b=NnoiOdaUvtQ+zgtImsm0gvubPiwXpROVay7NsC884k4lYdldWJL5/qufSzC0oosPXMmte7
+        WlCAMH9NT+4CkeoSBNoCR8RgOH7iBvrq+9au8rvm4Vc19ZekxhuRVRUaBE5AGoDYGDNK2J
+        yp5M9xDXciv+i+rNkiHqLZk+We0pOpM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-296-LCdLCQR_MumfhsQ9UQEI-g-1; Wed, 18 May 2022 05:51:09 -0400
+X-MC-Unique: LCdLCQR_MumfhsQ9UQEI-g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51975B81EFB;
-        Wed, 18 May 2022 09:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28623C34113;
-        Wed, 18 May 2022 09:50:44 +0000 (UTC)
-Message-ID: <a08d95f2-1861-98fc-5a6a-d9400e5dca30@xs4all.nl>
-Date:   Wed, 18 May 2022 11:50:43 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 127FE185A7B2;
+        Wed, 18 May 2022 09:51:09 +0000 (UTC)
+Received: from T590 (ovpn-8-29.pek2.redhat.com [10.72.8.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A47B2C15D58;
+        Wed, 18 May 2022 09:51:02 +0000 (UTC)
+Date:   Wed, 18 May 2022 17:50:56 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     tj@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next v2 1/2] blk-throttle: fix that io throttle can only
+ work for single bio
+Message-ID: <YoTBgJhhA14r61ZX@T590>
+References: <20220518072751.1188163-1-yukuai3@huawei.com>
+ <20220518072751.1188163-2-yukuai3@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 11/20] media: s5p-mfc: Add support for UHD encoding.
-Content-Language: en-US
-To:     Smitha T Murthy <smitha.t@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        jernej.skrabec@gmail.com, benjamin.gaignard@collabora.com,
-        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
-        david.plowman@raspberrypi.com, mark.rutland@arm.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
-        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, linux-fsd@tesla.com
-References: <20220517125548.14746-1-smitha.t@samsung.com>
- <CGME20220517125625epcas5p3a5d6e217570e2e2f4e11b4c099d45767@epcas5p3.samsung.com>
- <20220517125548.14746-12-smitha.t@samsung.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20220517125548.14746-12-smitha.t@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518072751.1188163-2-yukuai3@huawei.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,63 +63,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Smitha,
-
-On 5/17/22 14:55, Smitha T Murthy wrote:
-> MFC driver had restriction on max resolution of 1080p,
-> updated it for UHD. Added corresponding support to
-> set recommended profile and level for H264 in UHD scenario.
+On Wed, May 18, 2022 at 03:27:50PM +0800, Yu Kuai wrote:
+> commit 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
+> introduce a new problem, for example:
 > 
-> Cc: linux-fsd@tesla.com
-> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+> [root@localhost ~]# echo "8:0 1024" > /sys/fs/cgroup/blkio/blkio.throttle.write_bps_device
+> [root@localhost ~]# echo $$ > /sys/fs/cgroup/blkio/cgroup.procs
+> [root@localhost ~]# dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
+> [1] 620
+> [root@localhost ~]# dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
+> [2] 626
+> [root@localhost ~]# 1+0 records in
+> 1+0 records out
+> 10240 bytes (10 kB, 10 KiB) copied, 10.0038 s, 1.0 kB/s1+0 records in
+> 1+0 records out
+> 
+> 10240 bytes (10 kB, 10 KiB) copied, 9.23076 s, 1.1 kB/s
+> -> the second bio is issued after 10s instead of 20s.
+> 
+> This is because if some bios are already queued, current bio is queued
+> directly and the flag 'BIO_THROTTLED' is set. And later, when former
+> bios are dispatched, this bio will be dispatched without waiting at all,
+> this is due to tg_with_in_bps_limit() return 0 for this bio.
+> 
+> In order to fix the problem, don't skip flaged bio in
+> tg_with_in_bps_limit(), and for the problem that split bio can be
+> double accounted, compensate the over-accounting in __blk_throtl_bio().
+> 
+> Fixes: 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 > ---
->  drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c |  4 ++--
->  .../media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c  | 12 ++++++++++++
->  2 files changed, 14 insertions(+), 2 deletions(-)
+>  block/blk-throttle.c | 24 ++++++++++++++++++------
+>  1 file changed, 18 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-> index 456edcfebba7..9b624f17e32b 100644
-> --- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-> +++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_enc.c
-> @@ -1630,8 +1630,8 @@ static int vidioc_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
->  			return -EINVAL;
->  		}
+> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> index 447e1b8722f7..6f69859eae23 100644
+> --- a/block/blk-throttle.c
+> +++ b/block/blk-throttle.c
+> @@ -811,7 +811,7 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
+>  	unsigned int bio_size = throtl_bio_data_size(bio);
 >  
-> -		v4l_bound_align_image(&pix_fmt_mp->width, 8, 1920, 1,
-> -			&pix_fmt_mp->height, 4, 1080, 1, 0);
-> +		v4l_bound_align_image(&pix_fmt_mp->width, 8, 3840, 1,
-> +			&pix_fmt_mp->height, 4, 2160, 1, 0);
-
-Is this supported by older MFC versions as well? This seems to enable UHD support
-for all MFC versions.
-
-Regards,
-
-	Hans
-
->  	} else {
->  		mfc_err("invalid buf type\n");
->  		return -EINVAL;
-> diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
-> index 7db7945ea80f..2b6d6259a209 100644
-> --- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
-> +++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
-> @@ -1127,6 +1127,18 @@ static int s5p_mfc_set_enc_params_h264(struct s5p_mfc_ctx *ctx)
->  	reg |= ((p->num_b_frame & 0x3) << 16);
->  	writel(reg, mfc_regs->e_gop_config);
+>  	/* no need to throttle if this bio's bytes have been accounted */
+> -	if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
+> +	if (bps_limit == U64_MAX) {
+>  		if (wait)
+>  			*wait = 0;
+>  		return true;
+> @@ -921,11 +921,8 @@ static void throtl_charge_bio(struct throtl_grp *tg, struct bio *bio)
+>  	unsigned int bio_size = throtl_bio_data_size(bio);
 >  
-> +	/* UHD encoding case */
-> +	if ((ctx->img_width == 3840) && ctx->img_height == 2160) {
-> +		if (p_h264->level < 51) {
-> +			mfc_debug(2, "Set Level 5.1 for UHD\n");
-> +			p_h264->level = 51;
-> +		}
-> +		if (p_h264->profile != 0x2) {
-> +			mfc_debug(2, "Set High profile for UHD\n");
-> +			p_h264->profile = 0x2;
-> +		}
-> +	}
+>  	/* Charge the bio to the group */
+> -	if (!bio_flagged(bio, BIO_THROTTLED)) {
+> -		tg->bytes_disp[rw] += bio_size;
+> -		tg->last_bytes_disp[rw] += bio_size;
+> -	}
+> -
+> +	tg->bytes_disp[rw] += bio_size;
+> +	tg->last_bytes_disp[rw] += bio_size;
+>  	tg->io_disp[rw]++;
+>  	tg->last_io_disp[rw]++;
+>  
+> @@ -2121,6 +2118,21 @@ bool __blk_throtl_bio(struct bio *bio)
+>  			tg->last_low_overflow_time[rw] = jiffies;
+>  		throtl_downgrade_check(tg);
+>  		throtl_upgrade_check(tg);
 > +
->  	/* profile & level */
->  	reg = 0;
->  	/** level */
+> +		/*
+> +		 * re-entered bio has accounted bytes already, so try to
+> +		 * compensate previous over-accounting. However, if new
+> +		 * slice is started, just forget it.
+> +		 */
+> +		if (bio_flagged(bio, BIO_THROTTLED)) {
+> +			unsigned int bio_size = throtl_bio_data_size(bio);
+> +
+> +			if (tg->bytes_disp[rw] >= bio_size)
+> +				tg->bytes_disp[rw] -= bio_size;
+> +			if (tg->last_bytes_disp[rw] > bio_size)
+> +				tg->last_bytes_disp[rw] -= bio_size;
+
+The above check should be:
+			if (tg->last_bytes_disp[rw] >= bio_size)
+
+Otherwise, this patch looks fine for me.
+
+
+Thanks,
+Ming
+

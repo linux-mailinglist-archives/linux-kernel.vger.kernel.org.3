@@ -2,133 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E228052C2AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8CC52C2CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241659AbiERSsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S241673AbiERSx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241612AbiERSsg (ORCPT
+        with ESMTP id S241646AbiERSx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:48:36 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE07229FE8;
-        Wed, 18 May 2022 11:48:35 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id kq17so5544461ejb.4;
-        Wed, 18 May 2022 11:48:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=V4xR0AH3E5rQf6McW3p2A8uOfbIfUKeQrN91C/yMV50=;
-        b=bu0INzU1N8Nq8qn8T3l6q6vvb7+NFEg8a/ZYrgXd8RUy0a+s7qDzenAV9LWfhiCJ29
-         rl1dwChQVQAea9HEFPR/j3YRj797Onghk/jZYeVlzn0iBhBp6GFbh3pB+UJEoGvzIE2i
-         iG3Ry46uUgg8baoYHi1pHQdwmPEUqmlvu2RJfupuApI/MMH8hkSJ6sw04QlzxTz1tT89
-         E+RAiova/yzsw5g86Cz9XexD8pJs6+osHjAWyqg5bjTbPdKElADeaHOPn0AboFX1THS3
-         kUfqHWE49sc1hu8WVZhWBLEWWFWbvKVpOuq87LPjpDlC/Wna37OO32MNqho4el8nw021
-         pH1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V4xR0AH3E5rQf6McW3p2A8uOfbIfUKeQrN91C/yMV50=;
-        b=7qQ2DK3kFfUriLIeQYCKcF6LcErSmX5ZGaipMZ5sbGTxyJCwzgwHfYgwPCEFKjfbwG
-         /4vV6P0Mm/MpLIbFYCIHJFh5AN80Ye4kLYZQvc+IZw6b/bxU/9DYnZpzgj/0VcQr1Awo
-         B0EJ5xezPVgeO8pxXLLVpAYs3A3NIj9h+sw9V5GNrIyHraa3QeCgGwrzZp8qS2j91hMV
-         Py9U7zuW5gl7BshYfx4xGjSuwbT+cWjE1juSC33f3VnIp+rVpbQFG1eJ8pOfugUTgS4o
-         2w/tP5VLjd91sDwK9wQOu/jZQle2YJAcyuu6tfLZcEfZtmkMuCKD75+o4mD7GutAf06I
-         uP8g==
-X-Gm-Message-State: AOAM530YtKWALLTsih3aXkIhnOkyXyVGaR7xkuOEGe1koJnaF9lYVqJk
-        3tw1psYPu6CaPleYYlGqLUc=
-X-Google-Smtp-Source: ABdhPJz7WZDSsUusvhmfV4oySw45GZQAcTr6VqaiHZ2OKoZOxLiykjHjD1FCAa0jg84KstFaBa9NJg==
-X-Received: by 2002:a17:907:7e85:b0:6f4:78f1:75b5 with SMTP id qb5-20020a1709077e8500b006f478f175b5mr913202ejc.54.1652899713856;
-        Wed, 18 May 2022 11:48:33 -0700 (PDT)
-Received: from fedora.robimarko.hr ([188.252.220.143])
-        by smtp.googlemail.com with ESMTPSA id q18-20020aa7cc12000000b0042aa40e76cbsm1702662edt.80.2022.05.18.11.48.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 11:48:33 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@somainline.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v4 6/6] arm64: dts: qcom: Add PMP8074 DTSI
-Date:   Wed, 18 May 2022 20:48:25 +0200
-Message-Id: <20220518184825.1034976-6-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220518184825.1034976-1-robimarko@gmail.com>
-References: <20220518184825.1034976-1-robimarko@gmail.com>
+        Wed, 18 May 2022 14:53:26 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167FA1F90E0;
+        Wed, 18 May 2022 11:53:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652900005; x=1684436005;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2hqguD+cz1/iZKLkowNHSUq5raydVYd0Hdqyf7PUieI=;
+  b=mbvReICNSesHetVAzcE2eue9K+kZWz0YDZRrZLnBuSrp9MHWvSTDU3fW
+   glRPOf14XekZ+yd78AJtiV0WmtqgbQ7NJzZY0SbefQ99iqNUdEmaTjFJU
+   PAYT5fITmx/ITtxZ2kQUwK9rqug2zvzVvLHzqvUHlW09XGl7pAWP4npu7
+   LvRv82PUe/hbo/Ba3zKxlNDdSS3xVdvF3oXahGPjpSveZ/ONKV0/3DDQs
+   xuUTFAErDizdEH3VT0RNkSeF7zF/xWynqmc5DTN8yYl7etclvqn0ab37v
+   MAMRcFi55FlLvBegi0WCfXe/HYNvwo0v1E2DpyEg8A5+SV7uCaosCGxwr
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="271975090"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="271975090"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:48:36 -0700
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="545621407"
+Received: from cmhseih-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.195.218])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:48:34 -0700
+Message-ID: <41e7d536f72accbcbd2c782f1a5f18d0546098fb.camel@linux.intel.com>
+Subject: Re: hid-sensor-hub 001F:8087:0AC2.0002: timeout waiting for
+ response from ISHTP device
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Jiri Kosina <jikos@kernel.org>, Even Xu <even.xu@intel.com>,
+        Zhang Lixu <lixu.zhang@intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Dell.Client.Kernel@dell.com
+Date:   Wed, 18 May 2022 11:48:34 -0700
+In-Reply-To: <82e9a41c-552a-07e2-7caa-a14913cd34f4@molgen.mpg.de>
+References: <289be79b-8fbb-d171-a1e5-5d8218dff39d@molgen.mpg.de>
+         <8833ba2600208a05940943636a3bd8b6af6a9fe4.camel@linux.intel.com>
+         <dff3d94c-93be-2b31-35c6-35a7886f3680@molgen.mpg.de>
+         <8fc40ebb2fbcecb1ab2f5ea156bf9ec10aff06bf.camel@linux.intel.com>
+         <82e9a41c-552a-07e2-7caa-a14913cd34f4@molgen.mpg.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PMP8074 is a companion PMIC to the Qualcomm IPQ8074 series that is
-controlled via SPMI.
+Hi Paul,
 
-Since we now have support for the regulators inside of it add DTSI
-for it.
+On Wed, 2022-05-18 at 20:06 +0200, Paul Menzel wrote:
+> Dear Srinivas,
+> 
+> 
+> Am 18.05.22 um 17:39 schrieb srinivas pandruvada:
+> 
+> > Attached a diff. Please use git apply and build kernel. And attach
+> > dmesg. I want to see where did it fail.
+> 
+> As written, the device is used in production by a user, so I am not 
+> sure, if I can get the device to test self-built Linux kernel images
+> to 
+> debug this issue. It would really be better to get access to such a 
+> device from Dell or in some Intel lab.
+> 
+Let me try to get one.
+You described some firmware version. Where did you see that? Do you
+mean BIOS version?
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/pmp8074.dtsi | 38 +++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/pmp8074.dtsi
+Thanks,
+Srinivas
 
-diff --git a/arch/arm64/boot/dts/qcom/pmp8074.dtsi b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
-new file mode 100644
-index 000000000000..0bda4997720b
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <dt-bindings/spmi/spmi.h>
-+
-+&spmi_bus {
-+	pmic@1 {
-+		compatible ="qcom,spmi-pmic";
-+		reg = <0x1 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		regulators {
-+			compatible = "qcom,pmp8074-regulators";
-+
-+			s3: s3 {
-+				regulator-name = "vdd_s3";
-+				regulator-min-microvolt = <592000>;
-+				regulator-max-microvolt = <1064000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			s4: s4 {
-+				regulator-name = "vdd_s4";
-+				regulator-min-microvolt = <712000>;
-+				regulator-max-microvolt = <992000>;
-+				regulator-always-on;
-+				regulator-boot-on;
-+			};
-+
-+			l11: l11 {
-+				regulator-name = "l11";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+			};
-+		};
-+	};
-+};
--- 
-2.36.1
+
+> 
+> Kind regards,
+> 
+> Paul
 

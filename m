@@ -2,82 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEE152C08E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFBD52C037
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240718AbiERRFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        id S240753AbiERRGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240706AbiERRFO (ORCPT
+        with ESMTP id S240752AbiERRGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:05:14 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E66B20B554
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:05:13 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id p26so3841707eds.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:05:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yGAntEp7VsrLOr9oJK5iuS5kORmPqq6P0c1ahFe/D8o=;
-        b=NOHuR58P7UEw77Nstwjd1anEL7123NzoKqqXJhWJ93UpmIdu/IBnFdHCznT249ezIm
-         UUxZ4ViAQmjrDqR2b4SYAHEgwjjSa+JDxBTVFW7lKT3pSLZ8t4BwcEWh2N+JT2hSIgkj
-         wYT/SbAq37iUlVSvKsOvhCjSZB0Tgqd7D0pmMsBSnDy1wtwdFeracZFXkRpumUoq9gOL
-         Qlz5TUTRFVm5K+y7l2OTYvxl4azvGVq4ot2pU7BqimzIcf3it6UbBmgU3LgbFbnl1G1z
-         +4oEX/zUYVIy2bB3n7fJrHw2AtoLoSr+jMu2uEIZA1QxQBgrjIsgoA6Yy8w/s9O2kEjL
-         WLIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yGAntEp7VsrLOr9oJK5iuS5kORmPqq6P0c1ahFe/D8o=;
-        b=j3oAbdwlCfvcPCzRB4T10qjV2SrkcHzjaO+WBSRo6JwxEQTkauCptm7JAF8+UIX7NS
-         qRLEtNXNIg3a523SmXlIWB6RzAKI6WjhCZVUWNJQGdaZMRvF7vAQ4Jv61Ay8ULG9HOox
-         rNvLBJem6SptUJOSa9JftkHsAQwsNfN2POmQ7KFke5T4AjF8xLEeTSUurxoKGtblw23v
-         qyjaexX8IPrqKdZMymhZ6rRZ1COpKIZvmvdYhHPCtyHQa9bYwxEnPZIN7fIfsDgBn+M2
-         nDd6PtaRFtHnwi+mRTo3OQiodHYraVplTV2nTn6ucExsmETpkwQhF4p9ijBPpBkWQDvB
-         ipjQ==
-X-Gm-Message-State: AOAM532vAmR8s+Rw9lCnr+0jNGvqhr/6Nj29Y32a8l1OVn23fvyx/TvL
-        QFm1J3Dzmnu2fpydX2pWAXIV5UmohLm5mbMu7+yRDw==
-X-Google-Smtp-Source: ABdhPJyRynvfcdjaYd0uH0UVh6xTRNO4SHqkECs5n73xe/7fWJ5XV4uKzmGvFQGUoT7N6Iu/8CjQikRk5Xc+3bT14Ac=
-X-Received: by 2002:a05:6402:3787:b0:42a:ea83:ad25 with SMTP id
- et7-20020a056402378700b0042aea83ad25mr754096edb.233.1652893511663; Wed, 18
- May 2022 10:05:11 -0700 (PDT)
+        Wed, 18 May 2022 13:06:31 -0400
+Received: from outbound-smtp47.blacknight.com (outbound-smtp47.blacknight.com [46.22.136.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886DA3982A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:06:29 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp47.blacknight.com (Postfix) with ESMTPS id B42E2FA978
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 18:06:27 +0100 (IST)
+Received: (qmail 17228 invoked from network); 18 May 2022 17:06:27 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 18 May 2022 17:06:27 -0000
+Date:   Wed, 18 May 2022 18:06:25 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/4] sched/numa: Adjust imb_numa_nr to a better
+ approximation of memory channels
+Message-ID: <20220518170625.GT3441@techsingularity.net>
+References: <20220511143038.4620-1-mgorman@techsingularity.net>
+ <20220511143038.4620-5-mgorman@techsingularity.net>
+ <20220518094112.GE10117@worktop.programming.kicks-ass.net>
+ <20220518111539.GP3441@techsingularity.net>
+ <YoT9D0YGlWwHQMQi@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com> <CAGS_qxrOUYC5iycS436Rb-gEoEnYDa2OJLkQhEVXcDN0BEJ4YA@mail.gmail.com>
- <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com> <CAGS_qxr4vTSEtcGGFyoZibga2Q_Avp9pFD78GOA3W9o6F9RVRQ@mail.gmail.com>
-In-Reply-To: <CAGS_qxr4vTSEtcGGFyoZibga2Q_Avp9pFD78GOA3W9o6F9RVRQ@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 18 May 2022 10:05:00 -0700
-Message-ID: <CAGS_qxqb+pKeKBVxzFFTss5QLSWo6nVAajwQTMB2fWbMnMHvgg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
-To:     Marco Elver <elver@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
-        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <YoT9D0YGlWwHQMQi@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 8:39 AM Daniel Latypov <dlatypov@google.com> wrote:
-> > Either way works. But I wouldn't mind a sane default though, where
-> > that default can be overridden with custom number of CPUs.
-> >
->
-> Ack.
-> Let me clean up what I have for --qemu_args and send it out for discussion.
+On Wed, May 18, 2022 at 04:05:03PM +0200, Peter Zijlstra wrote:
+> On Wed, May 18, 2022 at 12:15:39PM +0100, Mel Gorman wrote:
+> 
+> > I'm not aware of how it can be done in-kernel on a cross architectural
+> > basis. Reading through the arch manual, it states how many channels are
+> > in a given processor family and it's available during memory check errors
+> > (apparently via the EDAC driver). It's sometimes available via PMUs but
+> > I couldn't find a place where it's generically available for topology.c
+> > that would work on all x86-64 machines let alone every other architecture.
+> 
+> So provided it is something we want (below) we can always start an arch
+> interface and fill it out where needed.
+> 
 
-Sent out as https://lore.kernel.org/linux-kselftest/20220518170124.2849497-1-dlatypov@google.com
+It could start with a function with a fixed value that architectures
+can override but it might be a deep rabbit hole to discover and wire
+it all up.  The most straight-forward would be based on CPU family and
+model but time consuming to maintain. It gets fuzzy if it's something
+like PowerKVM where channel details are hidden. It could be a deep
+rabbit hole.
+
+> > It's not even clear if SMBIOS was parsed in early boot whether
+> 
+> We can always rebuild topology / update variables slightly later in
+> boot.
+> 
+> > it's a
+> > good idea. It could result in difference imbalance thresholds for each
+> > NUMA domain or weird corner cases where assymetric NUMA node populations
+> > would result in run-to-run variance that are difficult to analyse.
+> 
+> Yeah, maybe. OTOH having a magic value that's guestimated based on
+> hardware of the day is something that'll go bad any moment as well.
+> 
+> I'm not too worried about run-to-run since people don't typically change
+> DIMM population over a reboot, but yes, there's always going to be
+> corner cases. Same with a fixed value though, that's also going to be
+> wrong.
+> 
+
+By run-to-run, I mean just running the same workload in a loop and
+not rebooting between runs. If there are differences in how nodes are
+populated, there will be some run-to-run variance based purely on what
+node the workload started on because they will have different "allowed
+imbalance" thresholds.
+
+I'm running the tests to recheck exactly how much impact this patch has
+on the peak performance. It takes a few hours so I won't have anything
+until tomorrow.
+
+Initially "get peak performance" and "stabilise run-to-run variances"
+were my objectives. This series only aimed at the peak performance for a
+finish as allowed NUMA imbalance was not the sole cause of the problem.
+I still haven't spent time figuring out why c6f886546cb8 ("sched/fair:
+Trigger the update of blocked load on newly idle cpu") made such a big
+difference to variability.
+
+-- 
+Mel Gorman
+SUSE Labs

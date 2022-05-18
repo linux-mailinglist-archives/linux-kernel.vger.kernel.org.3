@@ -2,53 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E967952B6AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB9452B6A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234655AbiERJnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S234260AbiERJaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234589AbiERJmZ (ORCPT
+        with ESMTP id S234248AbiERJaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:42:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D10CBA989;
-        Wed, 18 May 2022 02:42:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D644961797;
-        Wed, 18 May 2022 09:42:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD8BC385A5;
-        Wed, 18 May 2022 09:42:10 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        WANG Xuerui <git@xen0n.name>
-Subject: [PATCH V11 16/22] LoongArch: Add misc common routines
-Date:   Wed, 18 May 2022 17:26:13 +0800
-Message-Id: <20220518092619.1269111-17-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220518092619.1269111-1-chenhuacai@loongson.cn>
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
+        Wed, 18 May 2022 05:30:09 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 02:29:56 PDT
+Received: from esa18.fujitsucc.c3s2.iphmx.com (esa18.fujitsucc.c3s2.iphmx.com [216.71.158.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2EA18B22
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:29:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1652866197; x=1684402197;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=MOARR3nI+Pj58nuRJ1oXWz6o0YFddfpe0JHm+y0OZ44=;
+  b=oRnKmdO3Z8mejbdoIvObcSdgM9DWXXfKdZiR05o3d4SR2JB34eau0Qh7
+   9o+srTx+mme8QAAvmnehPy3ZrN3TfLLzttQ7oSWQ1j2HLNknboLqBRwxY
+   e40N98Wi8vhE+t8VoYdwS6hjaEBgnKiC8mQ6rI99Af6SuYpVz4rSeBTX9
+   J1NJIAMioYZHAryXYv7YoKLKgas1ATcG+b3DK05Z9g7yuU75XSBa9eRX2
+   ggvGZSDo4e4cFObJFwgfSUMIX82kNyo40rnZLaQEEQOhnMXDaaj2BMFRS
+   juMG5Anjhm8s+xudogXF6nQhWJebNfGK0A8lNdabl1f0EE/LT282FDi5F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="57392295"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647270000"; 
+   d="scan'208";a="57392295"
+Received: from mail-tycjpn01lp2168.outbound.protection.outlook.com (HELO JPN01-TYC-obe.outbound.protection.outlook.com) ([104.47.23.168])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 18:28:49 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lOy+S1mxMykZUmkFHOzvrRSjCVIwtx3u0foe/nxM8BOnftm8i5KFDQnPnZQK54gtRndJqlJyNiPEtKj/bz/GfBrm3pWtes8Rn5CdrcS2mH9g1AmNYf58d22Fy4r51wMo10vXhzOdH1CX+JD7GkrbKkZr0bHst51IbcTRzg7wUYIWhQDSv9x4VXcSm4Eb/pf9CBfg+qvr4rumbcu3+a65JLmCKJ4ARsV8+RqZYpxzd4I9psUnevB5Su3t4j7Uyd8vVSxxuwfxogASNgATRCVPOZdrVjhntC4ExvhCVmWkBvlgviV6QlLKVOhqXaAAm22Y5ydiLtEFdurrICb2ZeeeuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MOARR3nI+Pj58nuRJ1oXWz6o0YFddfpe0JHm+y0OZ44=;
+ b=h0ihy2ad0Q7KRP7MSqzPRTaywAL/3yq/+e7W3lXMqruOJaumL7R40mp1uZUXxjq/cNON6fiX+H1wyIWpLnvBmg9ihovvQ9Au+k9y9uAVv1lJRQDxWNdeH289jrrmLwZEyfULZekNWdY78hy2+I0XPFRMT8VuVexW7WNTDFAbmCBS/r4NesgmtM0pZM8zo5NPXDnYhbTPkRubIqXQn5j+ir8CqvlbslNLNJ3VmI51IYN0iT5LwBe5KPKOJSb3w9O90mYSMnFnMMs0BOBHAh90NB4VVnCrVouuhMEfZuveraNLuxUqqCWtKYRJ2WoZSRVOB27UEjtNaQ9BK9yA/aXJGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MOARR3nI+Pj58nuRJ1oXWz6o0YFddfpe0JHm+y0OZ44=;
+ b=pqqfaVnwv6NTW3q10nrtqvdJIJ6PCs4ma8aF0NcuXxJGXf5nucQgciYYP5/1BwteURN2+joWIElB/l4YPAeYXRbz1nK6AcaCVAdFo1neMEpBNQzdciQj1vqmGf0pZuosuFYe3Ng0IRMRw8aaasD5IlyGupmXrZfoqULu561ATnY=
+Received: from OSBPR01MB4600.jpnprd01.prod.outlook.com (2603:1096:604:7e::12)
+ by TY2PR01MB5129.jpnprd01.prod.outlook.com (2603:1096:404:11a::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.17; Wed, 18 May
+ 2022 09:28:46 +0000
+Received: from OSBPR01MB4600.jpnprd01.prod.outlook.com
+ ([fe80::f44e:cb18:cb18:e247]) by OSBPR01MB4600.jpnprd01.prod.outlook.com
+ ([fe80::f44e:cb18:cb18:e247%4]) with mapi id 15.20.5273.014; Wed, 18 May 2022
+ 09:28:45 +0000
+From:   "nakamura.shun@fujitsu.com" <nakamura.shun@fujitsu.com>
+To:     'Jiri Olsa' <olsajiri@gmail.com>
+CC:     "'peterz@infradead.org'" <peterz@infradead.org>,
+        "'mingo@redhat.com'" <mingo@redhat.com>,
+        "'acme@kernel.org'" <acme@kernel.org>,
+        "'mark.rutland@arm.com'" <mark.rutland@arm.com>,
+        "'alexander.shishkin@linux.intel.com'" 
+        <alexander.shishkin@linux.intel.com>,
+        "'jolsa@redhat.com'" <jolsa@redhat.com>,
+        "'namhyung@kernel.org'" <namhyung@kernel.org>,
+        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+        "'linux-perf-users@vger.kernel.org'" 
+        <linux-perf-users@vger.kernel.org>
+Subject: Re: [PATCH 0/7] libperf: Add interface for overflow check of sampling
+ events
+Thread-Topic: Re: [PATCH 0/7] libperf: Add interface for overflow check of
+ sampling events
+Thread-Index: Adhql+qIcS4TlJL7Rmm0mhE+FWh7sg==
+Date:   Wed, 18 May 2022 09:28:45 +0000
+Message-ID: <OSBPR01MB4600D5DA317696E3DAACC3CFF7D19@OSBPR01MB4600.jpnprd01.prod.outlook.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5879eb43-fe19-40ec-201f-08da38b0ce66
+x-ms-traffictypediagnostic: TY2PR01MB5129:EE_
+x-microsoft-antispam-prvs: <TY2PR01MB51298FC58E2B19EA3E5A15F9F7D19@TY2PR01MB5129.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ENBLQVRMecqKOmySPkQygIaeNg6htJ9B43XXq8VoWP1231Tzf2P9rTzQU/fyx5Pul1q9+6ms0Ot8IL2pjMsGp6T4YziSobFUprpAKyVWgmtTSD42LznzK6oVU6l1916wtoYetIQ/lny0iyuRFimcD19DU6v5HmiEkVsZhlDmBrIA+h6gwv5hAhlMfUo3uuNJm1JTc6dxHJrqt/IL9yn73UCDzkGtLQxdKNgg7sKTxpWNeGM+4N/UALS4X/ywYKPYAAMsYDt10iXUWMg2Z/weWK/RdswKSnQgegd4NRFTFTgp5TyYXk0BGMmocbMAzI2QZOeVzkcNo5JtBCdIDhMPW+/3zG3LsL/lX0Vu/cL/qZ2yM/n2ryf5Jx+ee3MUFogvPPqY8L+miMfeTM5r21JvJPwbskxchOA0V2fwALDzFuYO/6Ob0IdVT/Ee8gHaXdJsv6Xqa1UEhVeaKg4Fn+Z4bjtpB9y9rZeAwTjLInozWok77Vlh0GB1QU0yqO0rCGUKGeybCjCrLvOUY8BDc7RrV3pKZAU7z6/bxpICF9KCVKNWJJZVrvBG7utF8flHD0bX/0iD0Mciak9ghUbQLO0Rnnp1rGFFmtJxqfnhDdc+5MWj4Ruw7TIQXHObL1lra7qLx4Lyrn6hloHKtIZSzBUMmrXWd89dFNrlLv8GlxFh0L6TEfhXK64DdU9BCDQGfvWwQSpgXo8ZMS9i3R916fxzRA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB4600.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(64756008)(38100700002)(38070700005)(66476007)(122000001)(4326008)(82960400001)(8676002)(86362001)(66946007)(5660300002)(66446008)(7416002)(76116006)(55016003)(6506007)(54906003)(8936002)(508600001)(85182001)(71200400001)(33656002)(83380400001)(186003)(316002)(66556008)(9686003)(26005)(7696005)(2906002)(52536014)(6916009)(4744005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?R1I2K2J1bzlnaldtMU56d1dZaENoVG9UKzNrbmxQdEMvclhwaVE0Rk9N?=
+ =?iso-2022-jp?B?QlJ2UzlXYUg0WWF1RXFIQ21NUnhwRitEcUNIdUorVnBuWjhwd3dpNzF0?=
+ =?iso-2022-jp?B?aHVRSWFXWDVMLzRxM0ZZUVpicDlVS0Mza0twRnV4RHI2eklRL2NPcVJv?=
+ =?iso-2022-jp?B?c2greHIyZzhMaVkyL3B6V09EeGtJUzFDaFRHdzIxNktvK3k2T09obDRs?=
+ =?iso-2022-jp?B?ZTV3OVlsUjZDQzZpSXBaUlZ5and6VjFUZ2xOOHV0Z09JY08ydmhjcWxG?=
+ =?iso-2022-jp?B?eGVsd0ZnOWxyN2w1Y1BwMm9ldkl3T3ZycCthcXdFTlcxVlZGNHh5Q0hz?=
+ =?iso-2022-jp?B?KzBNbFJPd3c3ZmxSYWRIOU1UVTZUbVlLYnRjRVNySDQ2anpKZkpjK3ll?=
+ =?iso-2022-jp?B?U3pMWUxud0RnbS9kaUMvQjQ0TmhuWnRScTQ5dWIxZGwrZGsvRDNvcWpu?=
+ =?iso-2022-jp?B?TnFRTTdqazl3am4vZ3p2aGZwRE1lckUzeUg0Y3V0OFZydDIwQ3RESzdy?=
+ =?iso-2022-jp?B?dmVUU2VrTEtOQStsRi9zSEFiVXFsZzZCcFRzQTM2L2ZxSnNIbCtNRFNY?=
+ =?iso-2022-jp?B?VFV0M2xhM0dPejdIakhVcTZVck9mVTcxMnZqR01WUXJGcTJCcnQrdlo1?=
+ =?iso-2022-jp?B?WmtOYlV0eW5iZlY0dE94WnNmM1NGNHlVeWNYWURWNHhjQzdicExOSVBu?=
+ =?iso-2022-jp?B?ZWV6eGlPWDhXSndIN1ZkZUZTNStUMThzNW0ySW9kVVJVSEJmanNJTzFu?=
+ =?iso-2022-jp?B?aCtKVWFKOHV3NmZtTEZaZWYvTXVPc0hGdDZ0d29BcU4xbTMzcnkyNWpE?=
+ =?iso-2022-jp?B?UURBWHhYMy9mOTJFSms5cnhQMGkxQXFlMyt3Z09tcWRRTWM5dTFhZ2RU?=
+ =?iso-2022-jp?B?RFVtekJNMEFKWG1iU25WL3pkWmp0KzhIS1pyTHZEbFBJTzVicTM0TEE2?=
+ =?iso-2022-jp?B?MElkNlVuS2JMN0lhMEdMZ0J1WWJkRitaQXo0YTYxdnBBWC96S0xsemhN?=
+ =?iso-2022-jp?B?eWU1NUY2QndyTXIxdklYdzJhTjFrNEtBOXk3UCtNVGF2dHQwNG5QNkw1?=
+ =?iso-2022-jp?B?bk1JV3VuZUZ3RTZKRTNPOW9VaGJMSXpFVmxUalR2b1FMVS8wSVFTZldO?=
+ =?iso-2022-jp?B?bGJrU2RpSEFUanNkcjRSYWVOaEtISmZZS3Fzc1d5dUVBZ3h4S1BvTks2?=
+ =?iso-2022-jp?B?YjUvQXJEeDR4UW5xRjhpMzNFK2I3MFdNNnNiVi9ld3FTUWRFVW9Gd0pK?=
+ =?iso-2022-jp?B?RmVpOXgraGc0NDhTOStvcURFTDFKcCt0K2FXV3FDejdLUnRLZU9pR05q?=
+ =?iso-2022-jp?B?N1BReHJIV1NMdXZXRGpOVG1nYU0zS25IRE56VHZXOEFjUldpZkZaeEJ2?=
+ =?iso-2022-jp?B?eVVqMG1ZQktVN2duYWYrYW5CeUhPOFBiK1ZpTlBmZlAzZk9WTjVTZGxs?=
+ =?iso-2022-jp?B?Vzkzb0JHQW5VUS8vcXAwdDJZTnUxSm82WnNaREE3bE1MQytPNXpOOXVh?=
+ =?iso-2022-jp?B?S0pEWk56dzVLU1ZmNjFHZjlZK1FjNE0rektiZzlRa1dmTE5UUE1hQ0Fs?=
+ =?iso-2022-jp?B?WnlNa3ZPQUttU2NJcndEcjdET0hMbTEwTC93V2E1cGxoUmJwdnh3cjNt?=
+ =?iso-2022-jp?B?dEFPRW10TVNpQ1JYYjVyWWgyb1hVM0RvYXlSMzV3elZiMmVYVnBrOUto?=
+ =?iso-2022-jp?B?V29qUFArYXV2bVpBM0gvNUtKNVF5THlBQk5iYW02TXZhUzh1TnRGZkEz?=
+ =?iso-2022-jp?B?N0RoaU45NWFDdkhjamVPd1Yrb1VZWk53dWNLSURoM2FwNHp6dFc4Z1NO?=
+ =?iso-2022-jp?B?U1FKUkp5Yi9wMm0vdXloMUdZcTBQV0Z6aHpXUkpvMENXaVFsRlFRK3Zy?=
+ =?iso-2022-jp?B?bjhVZktzNWJ1dUhGYVJlaE4yRFZDYlcvVHlSdUZ3WDM2Wmd4WUZPaUdl?=
+ =?iso-2022-jp?B?Qlc5SVFCVXNyR1A2cmd3RndrZ3NnekZzMVZtdmpHeDVoYWhqTjd3Z1ZY?=
+ =?iso-2022-jp?B?aEkySTl1TldCNlJ0TUpNQUVmYjJZRXUrTzZKK3hhNWprOG5mNjhsWGRC?=
+ =?iso-2022-jp?B?Q0NGNk5RZHFGdUsxNkJxZlhFN0psc3RzKzJUQVgrSjlxK0xFcGxNR0xi?=
+ =?iso-2022-jp?B?TnZXakppM0pJdUZLN3NXdDBCeFZHdXlrYUlQWTlINldxVzdGNEl2ck91?=
+ =?iso-2022-jp?B?SWxnNmplNjFtZ2J3b1pHbWVCWU12c3RxTHdvUWY0enNsVG5PaGpDSk0x?=
+ =?iso-2022-jp?B?NGlFWUVKWGw4MFhmUjNHL05Ed0RDSEVYSVR4cTNTV1J4TlJ6K1B3QnI5?=
+ =?iso-2022-jp?B?UjdZQ3JMMzYxaFRhVXhGcFFscGM4RUFzbitkYTYvbEYzd1YvNVFVb3lH?=
+ =?iso-2022-jp?B?Y0QxNmw2S0ZoRkk5YmgwRmJid1VSa0xVZTIyOXZHNURQTVovdFJJUEx1?=
+ =?iso-2022-jp?B?YTk2aEdlWnpkblo0dHE1KzRNRit0bjFjWjM0R0FyelArWVdBeEFiQTJR?=
+ =?iso-2022-jp?B?ZUJkazltKzB4VUtIRXlYRURjdUtYSmZNYS8ranNmZ1Y3MVhQMThjS3VK?=
+ =?iso-2022-jp?B?WkpYK0xjQT0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB4600.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5879eb43-fe19-40ec-201f-08da38b0ce66
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2022 09:28:45.4389
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5+JBDwZirPxYHceJgedJB4lgINXpuiCY0Fh5kyh46/0C1iY9WrZ2tPky2KMOt5nYVaArn9OmDTH4OXRVmLd19/6htyAU1/zWoIf7ouKYFBg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB5129
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,805 +160,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add some misc common routines for LoongArch, including: asm-offsets
-routines, futex functions, i/o memory access functions, frame-buffer
-functions, procfs information display, etc.
+Hi, Jirka.
 
-Reviewed-by: WANG Xuerui <git@xen0n.name>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/include/asm/asm-offsets.h |   5 +
- arch/loongarch/include/asm/fb.h          |  23 ++
- arch/loongarch/include/asm/futex.h       | 107 ++++++++++
- arch/loongarch/include/asm/io.h          | 129 ++++++++++++
- arch/loongarch/kernel/asm-offsets.c      | 254 +++++++++++++++++++++++
- arch/loongarch/kernel/io.c               |  94 +++++++++
- arch/loongarch/kernel/proc.c             | 122 +++++++++++
- 7 files changed, 734 insertions(+)
- create mode 100644 arch/loongarch/include/asm/asm-offsets.h
- create mode 100644 arch/loongarch/include/asm/fb.h
- create mode 100644 arch/loongarch/include/asm/futex.h
- create mode 100644 arch/loongarch/include/asm/io.h
- create mode 100644 arch/loongarch/kernel/asm-offsets.c
- create mode 100644 arch/loongarch/kernel/io.c
- create mode 100644 arch/loongarch/kernel/proc.c
+>This patch series adds interface for overflow check of sampling events
+>to libperf.
+>
+>First patch move 'open_flags' from tools/perf to evsel::open_flags.
+>
+>Second patch introduce perf_{evsel, evlist}__open_opt() with extensible
+>structure opts.
+>
+>Third patch add support for overflow handling of sampling events.
+>
+>Fourth patch adds a interface to check overflowed events.
+>
+>Fifth patch adds a interface to perform IOC_REFRESH and IOC_PERIOD.
+>
+>Sixth and seventh patch adds tests.
+>
+Do you have any comments?
+If nothing else, I will rebase the patch to 5.18-rc7 and post the v2 patch.
 
-diff --git a/arch/loongarch/include/asm/asm-offsets.h b/arch/loongarch/include/asm/asm-offsets.h
-new file mode 100644
-index 000000000000..d9ad88d293e7
---- /dev/null
-+++ b/arch/loongarch/include/asm/asm-offsets.h
-@@ -0,0 +1,5 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#include <generated/asm-offsets.h>
-diff --git a/arch/loongarch/include/asm/fb.h b/arch/loongarch/include/asm/fb.h
-new file mode 100644
-index 000000000000..3116bde8772d
---- /dev/null
-+++ b/arch/loongarch/include/asm/fb.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_FB_H_
-+#define _ASM_FB_H_
-+
-+#include <linux/fb.h>
-+#include <linux/fs.h>
-+#include <asm/page.h>
-+
-+static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
-+				unsigned long off)
-+{
-+	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
-+}
-+
-+static inline int fb_is_primary_device(struct fb_info *info)
-+{
-+	return 0;
-+}
-+
-+#endif /* _ASM_FB_H_ */
-diff --git a/arch/loongarch/include/asm/futex.h b/arch/loongarch/include/asm/futex.h
-new file mode 100644
-index 000000000000..b27d55f92db7
---- /dev/null
-+++ b/arch/loongarch/include/asm/futex.h
-@@ -0,0 +1,107 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_FUTEX_H
-+#define _ASM_FUTEX_H
-+
-+#include <linux/futex.h>
-+#include <linux/uaccess.h>
-+#include <asm/barrier.h>
-+#include <asm/compiler.h>
-+#include <asm/errno.h>
-+
-+#define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)		\
-+{									\
-+	__asm__ __volatile__(						\
-+	"1:	ll.w	%1, %4 # __futex_atomic_op\n"		\
-+	"	" insn	"				\n"	\
-+	"2:	sc.w	$t0, %2				\n"	\
-+	"	beq	$t0, $zero, 1b			\n"	\
-+	"3:						\n"	\
-+	"	.section .fixup,\"ax\"			\n"	\
-+	"4:	li.w	%0, %6				\n"	\
-+	"	b	3b				\n"	\
-+	"	.previous				\n"	\
-+	"	.section __ex_table,\"a\"		\n"	\
-+	"	"__UA_ADDR "\t1b, 4b			\n"	\
-+	"	"__UA_ADDR "\t2b, 4b			\n"	\
-+	"	.previous				\n"	\
-+	: "=r" (ret), "=&r" (oldval),				\
-+	  "=ZC" (*uaddr)					\
-+	: "0" (0), "ZC" (*uaddr), "Jr" (oparg),			\
-+	  "i" (-EFAULT)						\
-+	: "memory", "t0");					\
-+}
-+
-+static inline int
-+arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
-+{
-+	int oldval = 0, ret = 0;
-+
-+	pagefault_disable();
-+
-+	switch (op) {
-+	case FUTEX_OP_SET:
-+		__futex_atomic_op("move $t0, %z5", ret, oldval, uaddr, oparg);
-+		break;
-+	case FUTEX_OP_ADD:
-+		__futex_atomic_op("add.w $t0, %1, %z5", ret, oldval, uaddr, oparg);
-+		break;
-+	case FUTEX_OP_OR:
-+		__futex_atomic_op("or	$t0, %1, %z5", ret, oldval, uaddr, oparg);
-+		break;
-+	case FUTEX_OP_ANDN:
-+		__futex_atomic_op("and	$t0, %1, %z5", ret, oldval, uaddr, ~oparg);
-+		break;
-+	case FUTEX_OP_XOR:
-+		__futex_atomic_op("xor	$t0, %1, %z5", ret, oldval, uaddr, oparg);
-+		break;
-+	default:
-+		ret = -ENOSYS;
-+	}
-+
-+	pagefault_enable();
-+
-+	if (!ret)
-+		*oval = oldval;
-+
-+	return ret;
-+}
-+
-+static inline int
-+futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr, u32 oldval, u32 newval)
-+{
-+	int ret = 0;
-+	u32 val = 0;
-+
-+	if (!access_ok(uaddr, sizeof(u32)))
-+		return -EFAULT;
-+
-+	__asm__ __volatile__(
-+	"# futex_atomic_cmpxchg_inatomic			\n"
-+	"1:	ll.w	%1, %3					\n"
-+	"	bne	%1, %z4, 3f				\n"
-+	"	or	$t0, %z5, $zero				\n"
-+	"2:	sc.w	$t0, %2					\n"
-+	"	beq	$zero, $t0, 1b				\n"
-+	"3:							\n"
-+	"	.section .fixup,\"ax\"				\n"
-+	"4:	li.d	%0, %6					\n"
-+	"	b	3b					\n"
-+	"	.previous					\n"
-+	"	.section __ex_table,\"a\"			\n"
-+	"	"__UA_ADDR "\t1b, 4b				\n"
-+	"	"__UA_ADDR "\t2b, 4b				\n"
-+	"	.previous					\n"
-+	: "+r" (ret), "=&r" (val), "=" GCC_OFF_SMALL_ASM() (*uaddr)
-+	: GCC_OFF_SMALL_ASM() (*uaddr), "Jr" (oldval), "Jr" (newval),
-+	  "i" (-EFAULT)
-+	: "memory", "t0");
-+
-+	*uval = val;
-+
-+	return ret;
-+}
-+
-+#endif /* _ASM_FUTEX_H */
-diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
-new file mode 100644
-index 000000000000..884599739b36
---- /dev/null
-+++ b/arch/loongarch/include/asm/io.h
-@@ -0,0 +1,129 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_IO_H
-+#define _ASM_IO_H
-+
-+#define ARCH_HAS_IOREMAP_WC
-+
-+#include <linux/compiler.h>
-+#include <linux/kernel.h>
-+#include <linux/types.h>
-+
-+#include <asm/addrspace.h>
-+#include <asm/bug.h>
-+#include <asm/byteorder.h>
-+#include <asm/cpu.h>
-+#include <asm/page.h>
-+#include <asm/pgtable-bits.h>
-+#include <asm/string.h>
-+
-+/*
-+ * On LoongArch, I/O ports mappring is following:
-+ *
-+ *              |         ....          |
-+ *              |-----------------------|
-+ *              | pci io ports(64K~32M) |
-+ *              |-----------------------|
-+ *              | isa io ports(0  ~16K) |
-+ * PCI_IOBASE ->|-----------------------|
-+ *              |         ....          |
-+ */
-+#define PCI_IOBASE	((void __iomem *)(vm_map_base + (2 * PAGE_SIZE)))
-+#define PCI_IOSIZE	SZ_32M
-+#define ISA_IOSIZE	SZ_16K
-+#define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
-+
-+/*
-+ * Change "struct page" to physical address.
-+ */
-+#define page_to_phys(page)	((phys_addr_t)page_to_pfn(page) << PAGE_SHIFT)
-+
-+extern void __init __iomem *early_ioremap(u64 phys_addr, unsigned long size);
-+extern void __init early_iounmap(void __iomem *addr, unsigned long size);
-+
-+#define early_memremap early_ioremap
-+#define early_memunmap early_iounmap
-+
-+static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
-+					 unsigned long prot_val)
-+{
-+	if (prot_val == _CACHE_CC)
-+		return (void __iomem *)(unsigned long)(CACHE_BASE + offset);
-+	else
-+		return (void __iomem *)(unsigned long)(UNCACHE_BASE + offset);
-+}
-+
-+/*
-+ * ioremap -   map bus memory into CPU space
-+ * @offset:    bus address of the memory
-+ * @size:      size of the resource to map
-+ *
-+ * ioremap performs a platform specific sequence of operations to
-+ * make bus memory CPU accessible via the readb/readw/readl/writeb/
-+ * writew/writel functions and the other mmio helpers. The returned
-+ * address is not guaranteed to be usable directly as a virtual
-+ * address.
-+ */
-+#define ioremap(offset, size)					\
-+	ioremap_prot((offset), (size), _CACHE_SUC)
-+
-+/*
-+ * ioremap_wc - map bus memory into CPU space
-+ * @offset:     bus address of the memory
-+ * @size:       size of the resource to map
-+ *
-+ * ioremap_wc performs a platform specific sequence of operations to
-+ * make bus memory CPU accessible via the readb/readw/readl/writeb/
-+ * writew/writel functions and the other mmio helpers. The returned
-+ * address is not guaranteed to be usable directly as a virtual
-+ * address.
-+ *
-+ * This version of ioremap ensures that the memory is marked uncachable
-+ * but accelerated by means of write-combining feature. It is specifically
-+ * useful for PCIe prefetchable windows, which may vastly improve a
-+ * communications performance. If it was determined on boot stage, what
-+ * CPU CCA doesn't support WUC, the method shall fall-back to the
-+ * _CACHE_SUC option (see cpu_probe() method).
-+ */
-+#define ioremap_wc(offset, size)				\
-+	ioremap_prot((offset), (size), _CACHE_WUC)
-+
-+/*
-+ * ioremap_cache -  map bus memory into CPU space
-+ * @offset:	    bus address of the memory
-+ * @size:	    size of the resource to map
-+ *
-+ * ioremap_cache performs a platform specific sequence of operations to
-+ * make bus memory CPU accessible via the readb/readw/readl/writeb/
-+ * writew/writel functions and the other mmio helpers. The returned
-+ * address is not guaranteed to be usable directly as a virtual
-+ * address.
-+ *
-+ * This version of ioremap ensures that the memory is marked cachable by
-+ * the CPU.  Also enables full write-combining.	 Useful for some
-+ * memory-like regions on I/O busses.
-+ */
-+#define ioremap_cache(offset, size)				\
-+	ioremap_prot((offset), (size), _CACHE_CC)
-+
-+static inline void iounmap(const volatile void __iomem *addr)
-+{
-+}
-+
-+#define mmiowb() asm volatile ("dbar 0" ::: "memory")
-+
-+/*
-+ * String version of I/O memory access operations.
-+ */
-+extern void __memset_io(volatile void __iomem *dst, int c, size_t count);
-+extern void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count);
-+extern void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count);
-+#define memset_io(c, v, l)     __memset_io((c), (v), (l))
-+#define memcpy_fromio(a, c, l) __memcpy_fromio((a), (c), (l))
-+#define memcpy_toio(c, a, l)   __memcpy_toio((c), (a), (l))
-+
-+#include <asm-generic/io.h>
-+
-+#endif /* _ASM_IO_H */
-diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
-new file mode 100644
-index 000000000000..3531e3c60a6e
---- /dev/null
-+++ b/arch/loongarch/kernel/asm-offsets.c
-@@ -0,0 +1,254 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * asm-offsets.c: Calculate pt_regs and task_struct offsets.
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#include <linux/types.h>
-+#include <linux/sched.h>
-+#include <linux/mm.h>
-+#include <linux/kbuild.h>
-+#include <linux/suspend.h>
-+#include <asm/cpu-info.h>
-+#include <asm/ptrace.h>
-+#include <asm/processor.h>
-+
-+void output_ptreg_defines(void)
-+{
-+	COMMENT("LoongArch pt_regs offsets.");
-+	OFFSET(PT_R0, pt_regs, regs[0]);
-+	OFFSET(PT_R1, pt_regs, regs[1]);
-+	OFFSET(PT_R2, pt_regs, regs[2]);
-+	OFFSET(PT_R3, pt_regs, regs[3]);
-+	OFFSET(PT_R4, pt_regs, regs[4]);
-+	OFFSET(PT_R5, pt_regs, regs[5]);
-+	OFFSET(PT_R6, pt_regs, regs[6]);
-+	OFFSET(PT_R7, pt_regs, regs[7]);
-+	OFFSET(PT_R8, pt_regs, regs[8]);
-+	OFFSET(PT_R9, pt_regs, regs[9]);
-+	OFFSET(PT_R10, pt_regs, regs[10]);
-+	OFFSET(PT_R11, pt_regs, regs[11]);
-+	OFFSET(PT_R12, pt_regs, regs[12]);
-+	OFFSET(PT_R13, pt_regs, regs[13]);
-+	OFFSET(PT_R14, pt_regs, regs[14]);
-+	OFFSET(PT_R15, pt_regs, regs[15]);
-+	OFFSET(PT_R16, pt_regs, regs[16]);
-+	OFFSET(PT_R17, pt_regs, regs[17]);
-+	OFFSET(PT_R18, pt_regs, regs[18]);
-+	OFFSET(PT_R19, pt_regs, regs[19]);
-+	OFFSET(PT_R20, pt_regs, regs[20]);
-+	OFFSET(PT_R21, pt_regs, regs[21]);
-+	OFFSET(PT_R22, pt_regs, regs[22]);
-+	OFFSET(PT_R23, pt_regs, regs[23]);
-+	OFFSET(PT_R24, pt_regs, regs[24]);
-+	OFFSET(PT_R25, pt_regs, regs[25]);
-+	OFFSET(PT_R26, pt_regs, regs[26]);
-+	OFFSET(PT_R27, pt_regs, regs[27]);
-+	OFFSET(PT_R28, pt_regs, regs[28]);
-+	OFFSET(PT_R29, pt_regs, regs[29]);
-+	OFFSET(PT_R30, pt_regs, regs[30]);
-+	OFFSET(PT_R31, pt_regs, regs[31]);
-+	OFFSET(PT_CRMD, pt_regs, csr_crmd);
-+	OFFSET(PT_PRMD, pt_regs, csr_prmd);
-+	OFFSET(PT_EUEN, pt_regs, csr_euen);
-+	OFFSET(PT_ECFG, pt_regs, csr_ecfg);
-+	OFFSET(PT_ESTAT, pt_regs, csr_estat);
-+	OFFSET(PT_ERA, pt_regs, csr_era);
-+	OFFSET(PT_BVADDR, pt_regs, csr_badvaddr);
-+	OFFSET(PT_ORIG_A0, pt_regs, orig_a0);
-+	DEFINE(PT_SIZE, sizeof(struct pt_regs));
-+	BLANK();
-+}
-+
-+void output_task_defines(void)
-+{
-+	COMMENT("LoongArch task_struct offsets.");
-+	OFFSET(TASK_STATE, task_struct, __state);
-+	OFFSET(TASK_THREAD_INFO, task_struct, stack);
-+	OFFSET(TASK_FLAGS, task_struct, flags);
-+	OFFSET(TASK_MM, task_struct, mm);
-+	OFFSET(TASK_PID, task_struct, pid);
-+	DEFINE(TASK_STRUCT_SIZE, sizeof(struct task_struct));
-+	BLANK();
-+}
-+
-+void output_thread_info_defines(void)
-+{
-+	COMMENT("LoongArch thread_info offsets.");
-+	OFFSET(TI_TASK, thread_info, task);
-+	OFFSET(TI_FLAGS, thread_info, flags);
-+	OFFSET(TI_TP_VALUE, thread_info, tp_value);
-+	OFFSET(TI_CPU, thread_info, cpu);
-+	OFFSET(TI_PRE_COUNT, thread_info, preempt_count);
-+	OFFSET(TI_REGS, thread_info, regs);
-+	DEFINE(_THREAD_SIZE, THREAD_SIZE);
-+	DEFINE(_THREAD_MASK, THREAD_MASK);
-+	DEFINE(_IRQ_STACK_SIZE, IRQ_STACK_SIZE);
-+	DEFINE(_IRQ_STACK_START, IRQ_STACK_START);
-+	BLANK();
-+}
-+
-+void output_thread_defines(void)
-+{
-+	COMMENT("LoongArch specific thread_struct offsets.");
-+	OFFSET(THREAD_REG01, task_struct, thread.reg01);
-+	OFFSET(THREAD_REG03, task_struct, thread.reg03);
-+	OFFSET(THREAD_REG22, task_struct, thread.reg22);
-+	OFFSET(THREAD_REG23, task_struct, thread.reg23);
-+	OFFSET(THREAD_REG24, task_struct, thread.reg24);
-+	OFFSET(THREAD_REG25, task_struct, thread.reg25);
-+	OFFSET(THREAD_REG26, task_struct, thread.reg26);
-+	OFFSET(THREAD_REG27, task_struct, thread.reg27);
-+	OFFSET(THREAD_REG28, task_struct, thread.reg28);
-+	OFFSET(THREAD_REG29, task_struct, thread.reg29);
-+	OFFSET(THREAD_REG30, task_struct, thread.reg30);
-+	OFFSET(THREAD_REG31, task_struct, thread.reg31);
-+	OFFSET(THREAD_CSRCRMD, task_struct,
-+	       thread.csr_crmd);
-+	OFFSET(THREAD_CSRPRMD, task_struct,
-+	       thread.csr_prmd);
-+	OFFSET(THREAD_CSREUEN, task_struct,
-+	       thread.csr_euen);
-+	OFFSET(THREAD_CSRECFG, task_struct,
-+	       thread.csr_ecfg);
-+
-+	OFFSET(THREAD_SCR0, task_struct, thread.scr0);
-+	OFFSET(THREAD_SCR1, task_struct, thread.scr1);
-+	OFFSET(THREAD_SCR2, task_struct, thread.scr2);
-+	OFFSET(THREAD_SCR3, task_struct, thread.scr3);
-+
-+	OFFSET(THREAD_EFLAGS, task_struct, thread.eflags);
-+
-+	OFFSET(THREAD_FPU, task_struct, thread.fpu);
-+
-+	OFFSET(THREAD_BVADDR, task_struct, \
-+	       thread.csr_badvaddr);
-+	OFFSET(THREAD_ECODE, task_struct, \
-+	       thread.error_code);
-+	OFFSET(THREAD_TRAPNO, task_struct, thread.trap_nr);
-+	BLANK();
-+}
-+
-+void output_thread_fpu_defines(void)
-+{
-+	OFFSET(THREAD_FPR0, loongarch_fpu, fpr[0]);
-+	OFFSET(THREAD_FPR1, loongarch_fpu, fpr[1]);
-+	OFFSET(THREAD_FPR2, loongarch_fpu, fpr[2]);
-+	OFFSET(THREAD_FPR3, loongarch_fpu, fpr[3]);
-+	OFFSET(THREAD_FPR4, loongarch_fpu, fpr[4]);
-+	OFFSET(THREAD_FPR5, loongarch_fpu, fpr[5]);
-+	OFFSET(THREAD_FPR6, loongarch_fpu, fpr[6]);
-+	OFFSET(THREAD_FPR7, loongarch_fpu, fpr[7]);
-+	OFFSET(THREAD_FPR8, loongarch_fpu, fpr[8]);
-+	OFFSET(THREAD_FPR9, loongarch_fpu, fpr[9]);
-+	OFFSET(THREAD_FPR10, loongarch_fpu, fpr[10]);
-+	OFFSET(THREAD_FPR11, loongarch_fpu, fpr[11]);
-+	OFFSET(THREAD_FPR12, loongarch_fpu, fpr[12]);
-+	OFFSET(THREAD_FPR13, loongarch_fpu, fpr[13]);
-+	OFFSET(THREAD_FPR14, loongarch_fpu, fpr[14]);
-+	OFFSET(THREAD_FPR15, loongarch_fpu, fpr[15]);
-+	OFFSET(THREAD_FPR16, loongarch_fpu, fpr[16]);
-+	OFFSET(THREAD_FPR17, loongarch_fpu, fpr[17]);
-+	OFFSET(THREAD_FPR18, loongarch_fpu, fpr[18]);
-+	OFFSET(THREAD_FPR19, loongarch_fpu, fpr[19]);
-+	OFFSET(THREAD_FPR20, loongarch_fpu, fpr[20]);
-+	OFFSET(THREAD_FPR21, loongarch_fpu, fpr[21]);
-+	OFFSET(THREAD_FPR22, loongarch_fpu, fpr[22]);
-+	OFFSET(THREAD_FPR23, loongarch_fpu, fpr[23]);
-+	OFFSET(THREAD_FPR24, loongarch_fpu, fpr[24]);
-+	OFFSET(THREAD_FPR25, loongarch_fpu, fpr[25]);
-+	OFFSET(THREAD_FPR26, loongarch_fpu, fpr[26]);
-+	OFFSET(THREAD_FPR27, loongarch_fpu, fpr[27]);
-+	OFFSET(THREAD_FPR28, loongarch_fpu, fpr[28]);
-+	OFFSET(THREAD_FPR29, loongarch_fpu, fpr[29]);
-+	OFFSET(THREAD_FPR30, loongarch_fpu, fpr[30]);
-+	OFFSET(THREAD_FPR31, loongarch_fpu, fpr[31]);
-+
-+	OFFSET(THREAD_FCSR, loongarch_fpu, fcsr);
-+	OFFSET(THREAD_FCC,  loongarch_fpu, fcc);
-+	OFFSET(THREAD_VCSR, loongarch_fpu, vcsr);
-+	BLANK();
-+}
-+
-+void output_mm_defines(void)
-+{
-+	COMMENT("Size of struct page");
-+	DEFINE(STRUCT_PAGE_SIZE, sizeof(struct page));
-+	BLANK();
-+	COMMENT("Linux mm_struct offsets.");
-+	OFFSET(MM_USERS, mm_struct, mm_users);
-+	OFFSET(MM_PGD, mm_struct, pgd);
-+	OFFSET(MM_CONTEXT, mm_struct, context);
-+	BLANK();
-+	DEFINE(_PGD_T_SIZE, sizeof(pgd_t));
-+	DEFINE(_PMD_T_SIZE, sizeof(pmd_t));
-+	DEFINE(_PTE_T_SIZE, sizeof(pte_t));
-+	BLANK();
-+	DEFINE(_PGD_T_LOG2, PGD_T_LOG2);
-+#ifndef __PAGETABLE_PMD_FOLDED
-+	DEFINE(_PMD_T_LOG2, PMD_T_LOG2);
-+#endif
-+	DEFINE(_PTE_T_LOG2, PTE_T_LOG2);
-+	BLANK();
-+	DEFINE(_PGD_ORDER, PGD_ORDER);
-+#ifndef __PAGETABLE_PMD_FOLDED
-+	DEFINE(_PMD_ORDER, PMD_ORDER);
-+#endif
-+	DEFINE(_PTE_ORDER, PTE_ORDER);
-+	BLANK();
-+	DEFINE(_PMD_SHIFT, PMD_SHIFT);
-+	DEFINE(_PGDIR_SHIFT, PGDIR_SHIFT);
-+	BLANK();
-+	DEFINE(_PTRS_PER_PGD, PTRS_PER_PGD);
-+	DEFINE(_PTRS_PER_PMD, PTRS_PER_PMD);
-+	DEFINE(_PTRS_PER_PTE, PTRS_PER_PTE);
-+	BLANK();
-+	DEFINE(_PAGE_SHIFT, PAGE_SHIFT);
-+	DEFINE(_PAGE_SIZE, PAGE_SIZE);
-+	BLANK();
-+}
-+
-+void output_sc_defines(void)
-+{
-+	COMMENT("Linux sigcontext offsets.");
-+	OFFSET(SC_REGS, sigcontext, sc_regs);
-+	OFFSET(SC_PC, sigcontext, sc_pc);
-+	BLANK();
-+}
-+
-+void output_signal_defines(void)
-+{
-+	COMMENT("Linux signal numbers.");
-+	DEFINE(_SIGHUP, SIGHUP);
-+	DEFINE(_SIGINT, SIGINT);
-+	DEFINE(_SIGQUIT, SIGQUIT);
-+	DEFINE(_SIGILL, SIGILL);
-+	DEFINE(_SIGTRAP, SIGTRAP);
-+	DEFINE(_SIGIOT, SIGIOT);
-+	DEFINE(_SIGABRT, SIGABRT);
-+	DEFINE(_SIGFPE, SIGFPE);
-+	DEFINE(_SIGKILL, SIGKILL);
-+	DEFINE(_SIGBUS, SIGBUS);
-+	DEFINE(_SIGSEGV, SIGSEGV);
-+	DEFINE(_SIGSYS, SIGSYS);
-+	DEFINE(_SIGPIPE, SIGPIPE);
-+	DEFINE(_SIGALRM, SIGALRM);
-+	DEFINE(_SIGTERM, SIGTERM);
-+	DEFINE(_SIGUSR1, SIGUSR1);
-+	DEFINE(_SIGUSR2, SIGUSR2);
-+	DEFINE(_SIGCHLD, SIGCHLD);
-+	DEFINE(_SIGPWR, SIGPWR);
-+	DEFINE(_SIGWINCH, SIGWINCH);
-+	DEFINE(_SIGURG, SIGURG);
-+	DEFINE(_SIGIO, SIGIO);
-+	DEFINE(_SIGSTOP, SIGSTOP);
-+	DEFINE(_SIGTSTP, SIGTSTP);
-+	DEFINE(_SIGCONT, SIGCONT);
-+	DEFINE(_SIGTTIN, SIGTTIN);
-+	DEFINE(_SIGTTOU, SIGTTOU);
-+	DEFINE(_SIGVTALRM, SIGVTALRM);
-+	DEFINE(_SIGPROF, SIGPROF);
-+	DEFINE(_SIGXCPU, SIGXCPU);
-+	DEFINE(_SIGXFSZ, SIGXFSZ);
-+	BLANK();
-+}
-diff --git a/arch/loongarch/kernel/io.c b/arch/loongarch/kernel/io.c
-new file mode 100644
-index 000000000000..cb85bda5a6ad
---- /dev/null
-+++ b/arch/loongarch/kernel/io.c
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#include <linux/export.h>
-+#include <linux/types.h>
-+#include <linux/io.h>
-+
-+/*
-+ * Copy data from IO memory space to "real" memory space.
-+ */
-+void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
-+{
-+	while (count && !IS_ALIGNED((unsigned long)from, 8)) {
-+		*(u8 *)to = __raw_readb(from);
-+		from++;
-+		to++;
-+		count--;
-+	}
-+
-+	while (count >= 8) {
-+		*(u64 *)to = __raw_readq(from);
-+		from += 8;
-+		to += 8;
-+		count -= 8;
-+	}
-+
-+	while (count) {
-+		*(u8 *)to = __raw_readb(from);
-+		from++;
-+		to++;
-+		count--;
-+	}
-+}
-+EXPORT_SYMBOL(__memcpy_fromio);
-+
-+/*
-+ * Copy data from "real" memory space to IO memory space.
-+ */
-+void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count)
-+{
-+	while (count && !IS_ALIGNED((unsigned long)to, 8)) {
-+		__raw_writeb(*(u8 *)from, to);
-+		from++;
-+		to++;
-+		count--;
-+	}
-+
-+	while (count >= 8) {
-+		__raw_writeq(*(u64 *)from, to);
-+		from += 8;
-+		to += 8;
-+		count -= 8;
-+	}
-+
-+	while (count) {
-+		__raw_writeb(*(u8 *)from, to);
-+		from++;
-+		to++;
-+		count--;
-+	}
-+}
-+EXPORT_SYMBOL(__memcpy_toio);
-+
-+/*
-+ * "memset" on IO memory space.
-+ */
-+void __memset_io(volatile void __iomem *dst, int c, size_t count)
-+{
-+	u64 qc = (u8)c;
-+
-+	qc |= qc << 8;
-+	qc |= qc << 16;
-+	qc |= qc << 32;
-+
-+	while (count && !IS_ALIGNED((unsigned long)dst, 8)) {
-+		__raw_writeb(c, dst);
-+		dst++;
-+		count--;
-+	}
-+
-+	while (count >= 8) {
-+		__raw_writeq(qc, dst);
-+		dst += 8;
-+		count -= 8;
-+	}
-+
-+	while (count) {
-+		__raw_writeb(c, dst);
-+		dst++;
-+		count--;
-+	}
-+}
-+EXPORT_SYMBOL(__memset_io);
-diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
-new file mode 100644
-index 000000000000..d25592a29196
---- /dev/null
-+++ b/arch/loongarch/kernel/proc.c
-@@ -0,0 +1,122 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#include <linux/delay.h>
-+#include <linux/kernel.h>
-+#include <linux/sched.h>
-+#include <linux/seq_file.h>
-+#include <asm/bootinfo.h>
-+#include <asm/cpu.h>
-+#include <asm/cpu-features.h>
-+#include <asm/idle.h>
-+#include <asm/processor.h>
-+#include <asm/time.h>
-+
-+/*
-+ * No lock; only written during early bootup by CPU 0.
-+ */
-+static RAW_NOTIFIER_HEAD(proc_cpuinfo_chain);
-+
-+int __ref register_proc_cpuinfo_notifier(struct notifier_block *nb)
-+{
-+	return raw_notifier_chain_register(&proc_cpuinfo_chain, nb);
-+}
-+
-+int proc_cpuinfo_notifier_call_chain(unsigned long val, void *v)
-+{
-+	return raw_notifier_call_chain(&proc_cpuinfo_chain, val, v);
-+}
-+
-+static int show_cpuinfo(struct seq_file *m, void *v)
-+{
-+	unsigned long n = (unsigned long) v - 1;
-+	unsigned int version = cpu_data[n].processor_id & 0xff;
-+	unsigned int fp_version = cpu_data[n].fpu_vers;
-+	struct proc_cpuinfo_notifier_args proc_cpuinfo_notifier_args;
-+
-+	/*
-+	 * For the first processor also print the system type
-+	 */
-+	if (n == 0)
-+		seq_printf(m, "system type\t\t: %s\n\n", get_system_type());
-+
-+	seq_printf(m, "processor\t\t: %ld\n", n);
-+	seq_printf(m, "package\t\t\t: %d\n", cpu_data[n].package);
-+	seq_printf(m, "core\t\t\t: %d\n", cpu_data[n].core);
-+	seq_printf(m, "CPU Family\t\t: %s\n", __cpu_family[n]);
-+	seq_printf(m, "Model Name\t\t: %s\n", __cpu_full_name[n]);
-+	seq_printf(m, "CPU Revision\t\t: 0x%02x\n", version);
-+	seq_printf(m, "FPU Revision\t\t: 0x%02x\n", fp_version);
-+	seq_printf(m, "CPU MHz\t\t\t: %llu.%02llu\n",
-+		      cpu_clock_freq / 1000000, (cpu_clock_freq / 10000) % 100);
-+	seq_printf(m, "BogoMIPS\t\t: %llu.%02llu\n",
-+		      (lpj_fine * cpu_clock_freq / const_clock_freq) / (500000/HZ),
-+		      ((lpj_fine * cpu_clock_freq / const_clock_freq) / (5000/HZ)) % 100);
-+	seq_printf(m, "TLB Entries\t\t: %d\n", cpu_data[n].tlbsize);
-+	seq_printf(m, "Address Sizes\t\t: %d bits physical, %d bits virtual\n",
-+		      cpu_pabits + 1, cpu_vabits + 1);
-+
-+	seq_printf(m, "ISA\t\t\t:");
-+	if (cpu_has_loongarch32)
-+		seq_printf(m, " loongarch32");
-+	if (cpu_has_loongarch64)
-+		seq_printf(m, " loongarch64");
-+	seq_printf(m, "\n");
-+
-+	seq_printf(m, "Features\t\t:");
-+	if (cpu_has_cpucfg)	seq_printf(m, " cpucfg");
-+	if (cpu_has_lam)	seq_printf(m, " lam");
-+	if (cpu_has_ual)	seq_printf(m, " ual");
-+	if (cpu_has_fpu)	seq_printf(m, " fpu");
-+	if (cpu_has_lsx)	seq_printf(m, " lsx");
-+	if (cpu_has_lasx)	seq_printf(m, " lasx");
-+	if (cpu_has_complex)	seq_printf(m, " complex");
-+	if (cpu_has_crypto)	seq_printf(m, " crypto");
-+	if (cpu_has_lvz)	seq_printf(m, " lvz");
-+	if (cpu_has_lbt_x86)	seq_printf(m, " lbt_x86");
-+	if (cpu_has_lbt_arm)	seq_printf(m, " lbt_arm");
-+	if (cpu_has_lbt_mips)	seq_printf(m, " lbt_mips");
-+	seq_printf(m, "\n");
-+
-+	seq_printf(m, "Hardware Watchpoint\t: %s",
-+		      cpu_has_watch ? "yes, " : "no\n");
-+	if (cpu_has_watch) {
-+		seq_printf(m, "iwatch count: %d, dwatch count: %d\n",
-+		      cpu_data[n].watch_ireg_count, cpu_data[n].watch_dreg_count);
-+	}
-+
-+	proc_cpuinfo_notifier_args.m = m;
-+	proc_cpuinfo_notifier_args.n = n;
-+
-+	raw_notifier_call_chain(&proc_cpuinfo_chain, 0,
-+				&proc_cpuinfo_notifier_args);
-+
-+	seq_printf(m, "\n");
-+
-+	return 0;
-+}
-+
-+static void *c_start(struct seq_file *m, loff_t *pos)
-+{
-+	unsigned long i = *pos;
-+
-+	return i < NR_CPUS ? (void *)(i + 1) : NULL;
-+}
-+
-+static void *c_next(struct seq_file *m, void *v, loff_t *pos)
-+{
-+	++*pos;
-+	return c_start(m, pos);
-+}
-+
-+static void c_stop(struct seq_file *m, void *v)
-+{
-+}
-+
-+const struct seq_operations cpuinfo_op = {
-+	.start	= c_start,
-+	.next	= c_next,
-+	.stop	= c_stop,
-+	.show	= show_cpuinfo,
-+};
--- 
-2.27.0
+Best Regards
+Shunsuke
 

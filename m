@@ -2,154 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDC552B2E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D794352B2EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbiERGvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
+        id S231678AbiERGwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbiERGvW (ORCPT
+        with ESMTP id S231902AbiERGv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:51:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994E612AD5;
-        Tue, 17 May 2022 23:51:05 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24I6fjc5016984;
-        Wed, 18 May 2022 06:51:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=mime-version : date :
- from : to : subject : reply-to : in-reply-to : references : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=NbY09xWXg9+yIVklR6/+BeWHEQALFJnWz2JOVSnd4iI=;
- b=e0RbybpdloMudrc7yxVmWiX0gmf/MUTsHuH0YO4omh7EV1qzSLzDVSN3db4qh+H1/3Kc
- J8tImjE7lf4BHRPu9w0ya5t2LAEpvgA0BU22U2AIkfzQZ6av9nmhk3k1HnG/Lwar+4Rj
- gre56subsB7uoIc3NRMYMuT3Jpcv3oFpf90MbUQyNECZ6h+F+m2yZ149DDredHpxOcUK
- TEf5r3SOhtfFBaFb0kXxjX0W8VXwaeabGy54uflEweDHg1Fn3gnpNovSKKvSLuG1LoBU
- la/A1Z72vKBBp4OfdElgLRQo4arF3AKJq2NNe+FBkeyzuII1nKUaCKCmS2niiB1G5C1e hg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4urmg68h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 06:51:00 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24I6hg0h032084;
-        Wed, 18 May 2022 06:51:00 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4urmg67s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 06:51:00 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24I6Wp99026748;
-        Wed, 18 May 2022 06:50:59 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma05wdc.us.ibm.com with ESMTP id 3g242aarun-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 06:50:59 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24I6owP64916092
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 06:50:58 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 45C6FB2071;
-        Wed, 18 May 2022 06:50:58 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C17F6B2064;
-        Wed, 18 May 2022 06:50:57 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.10.229.42])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 06:50:57 +0000 (GMT)
+        Wed, 18 May 2022 02:51:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061BC255
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:51:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1EBC821B95;
+        Wed, 18 May 2022 06:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652856684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QZ3xSzAbpENpHAyFUOE8ygTqPn5djDgy0iBJKdjMqII=;
+        b=NilKRIim5KBXGg2kwSJPHd8hVvDi2Nb6kBJh4CjXVJLsfc9J7IhMJn8zL4mO6FMrDI1cgY
+        ZoBSbTNT9Ii9EIaJ/lovkIln3jcpF1Sa4GyCJE77e/mF0P4ATgmGat5hh0P8F/s12U4oST
+        aKfH6aaL++D8pEtZS9UqDJpa4XLJ9o0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AC30513A6D;
+        Wed, 18 May 2022 06:51:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Iq0AKGuXhGKTPgAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 18 May 2022 06:51:23 +0000
+Message-ID: <bdfca03d-66e7-44b4-0c79-d0558437e432@suse.com>
+Date:   Wed, 18 May 2022 08:51:23 +0200
 MIME-Version: 1.0
-Date:   Wed, 18 May 2022 08:50:57 +0200
-From:   Harald Freudenberger <freude@linux.ibm.com>
-To:     undisclosed-recipients:;
-Subject: Re: [PATCH] s390/crypto: fix scatterwalk_unmap() callers in AES-GCM
-Reply-To: freude@linux.ibm.com
-In-Reply-To: <YoPi5eH+oFJ2anQh@osiris>
-References: <20220517143047.3054498-1-jannh@google.com>
- <YoPi5eH+oFJ2anQh@osiris>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <96f311d4cb0b95752cfefd424fe0f7c3@linux.ibm.com>
-X-Sender: freude@linux.ibm.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: _Q5VPIp3Opuw5KPtLJUfChcbSSX-ACeZ
-X-Proofpoint-ORIG-GUID: 7WCvDsC_mOUQCbivMcFgd3xmxSfWo3pt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_02,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- phishscore=0 mlxlogscore=779 clxscore=1015 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180035
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] x86: xen: remove STACK_FRAME_NON_STANDARD from xen_cpuid
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Maximilian Heyne <mheyne@amazon.de>
+Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org
+References: <20220517162425.100567-1-mheyne@amazon.de>
+ <20220517164229.ixz7fqxwrxwmiizn@treble>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220517164229.ixz7fqxwrxwmiizn@treble>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------74x0OnXh0yd7AIWTKDFPGdV2"
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-17 20:01, Heiko Carstens wrote:
-> On Tue, May 17, 2022 at 04:30:47PM +0200, Jann Horn wrote:
->> The argument of scatterwalk_unmap() is supposed to be the void* that 
->> was
->> returned by the previous scatterwalk_map() call.
->> The s390 AES-GCM implementation was instead passing the pointer to the
->> struct scatter_walk.
->> 
->> This doesn't actually break anything because scatterwalk_unmap() only 
->> uses
->> its argument under CONFIG_HIGHMEM and ARCH_HAS_FLUSH_ON_KUNMAP.
->> 
->> Note that I have not tested this patch in any way, not even 
->> compile-tested
->> it.
->> 
->> Fixes: bf7fa038707c ("s390/crypto: add s390 platform specific aes gcm 
->> support.")
->> Signed-off-by: Jann Horn <jannh@google.com>
->> ---
->> IDK which tree this has to go through - s390 or crypto?
->> maybe s390 is better, since they can actually test it?
->> 
->>  arch/s390/crypto/aes_s390.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> This can go via the s390 tree, however I'd like to have an ACK from
-> Harald, who wrote the original code.
-> 
->> diff --git a/arch/s390/crypto/aes_s390.c b/arch/s390/crypto/aes_s390.c
->> index 54c7536f2482..1023e9d43d44 100644
->> --- a/arch/s390/crypto/aes_s390.c
->> +++ b/arch/s390/crypto/aes_s390.c
->> @@ -701,7 +701,7 @@ static inline void 
->> _gcm_sg_unmap_and_advance(struct gcm_sg_walk *gw,
->>  					     unsigned int nbytes)
->>  {
->>  	gw->walk_bytes_remain -= nbytes;
->> -	scatterwalk_unmap(&gw->walk);
->> +	scatterwalk_unmap(gw->walk_ptr);
->>  	scatterwalk_advance(&gw->walk, nbytes);
->>  	scatterwalk_done(&gw->walk, 0, gw->walk_bytes_remain);
->>  	gw->walk_ptr = NULL;
->> @@ -776,7 +776,7 @@ static int gcm_out_walk_go(struct gcm_sg_walk *gw, 
->> unsigned int minbytesneeded)
->>  		goto out;
->>  	}
->> 
->> -	scatterwalk_unmap(&gw->walk);
->> +	scatterwalk_unmap(gw->walk_ptr);
->>  	gw->walk_ptr = NULL;
->> 
->>  	gw->ptr = gw->buf;
->> 
->> base-commit: 42226c989789d8da4af1de0c31070c96726d990c
->> --
->> 2.36.0.550.gb090851708-goog
->> 
-Give me a chance to test this and when the testcases all pass, I'll give 
-a green light....
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------74x0OnXh0yd7AIWTKDFPGdV2
+Content-Type: multipart/mixed; boundary="------------CCXoDBa40f5JJDFmJ1SLT0DL";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Maximilian Heyne <mheyne@amazon.de>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Message-ID: <bdfca03d-66e7-44b4-0c79-d0558437e432@suse.com>
+Subject: Re: [PATCH] x86: xen: remove STACK_FRAME_NON_STANDARD from xen_cpuid
+References: <20220517162425.100567-1-mheyne@amazon.de>
+ <20220517164229.ixz7fqxwrxwmiizn@treble>
+In-Reply-To: <20220517164229.ixz7fqxwrxwmiizn@treble>
+
+--------------CCXoDBa40f5JJDFmJ1SLT0DL
+Content-Type: multipart/mixed; boundary="------------JZLfEJinIuvVgpen3Kze5FMZ"
+
+--------------JZLfEJinIuvVgpen3Kze5FMZ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+T24gMTcuMDUuMjIgMTg6NDIsIEpvc2ggUG9pbWJvZXVmIHdyb3RlOg0KPiBPbiBUdWUsIE1h
+eSAxNywgMjAyMiBhdCAwNDoyNDoyNVBNICswMDAwLCBNYXhpbWlsaWFuIEhleW5lIHdyb3Rl
+Og0KPj4gU2luY2UgY29tbWl0IDRkNjVhZGZjZDExOSAoIng4NjogeGVuOiBpbnNuOiBEZWNv
+ZGUgWGVuIGFuZCBLVk0NCj4+IGVtdWxhdGUtcHJlZml4IHNpZ25hdHVyZSIpLCBvYmp0b29s
+IGlzIGFibGUgdG8gY29ycmVjdGx5IHBhcnNlIHRoZQ0KPj4gcHJlZml4ZWQgaW5zdHJ1Y3Rp
+b24gaW4geGVuX2NwdWlkIGFuZCBlbWl0IGNvcnJlY3Qgb3JjIHVud2luZA0KPj4gaW5mb3Jt
+YXRpb24uIEhlbmNlLCBtYXJraW5nIHRoZSBmdW5jdGlvbiBhcyBTVEFDS0ZSQU1FX05PTl9T
+VEFOREFSRCBpcw0KPj4gbm8gbG9uZ2VyIG5lZWRlZC4NCj4+DQo+PiBUaGlzIGNvbW1pdCBp
+cyBiYXNpY2FsbHkgYSByZXZlcnQgb2YgY29tbWl0IDk4M2JiNmQyNTRjNyAoIng4Ni94ZW46
+IE1hcmsNCj4+IHhlbl9jcHVpZCgpIHN0YWNrIGZyYW1lIGFzIG5vbi1zdGFuZGFyZCIpLg0K
+Pj4NCj4+IFNpZ25lZC1vZmYtYnk6IE1heGltaWxpYW4gSGV5bmUgPG1oZXluZUBhbWF6b24u
+ZGU+DQo+PiBDQzogSm9zaCBQb2ltYm9ldWYgPGpwb2ltYm9lQGtlcm5lbC5vcmc+DQo+Pg0K
+Pj4gY3I6IGh0dHBzOi8vY29kZS5hbWF6b24uY29tL3Jldmlld3MvQ1ItNjk2NDUwODANCj4g
+ICAgICAgIF5eXl5eDQo+IA0KPiBUaGlzIGxvb2tzIGxpa2UgYW4gaW50ZXJuYWwgYW1hem9u
+IGxpbmsgYW5kIHNob3VsZCBiZSByZW1vdmVkLg0KPiBPdGhlcndpc2UsIGxvb2tzIGdvb2Qg
+dG8gbWUuDQoNCkNhbiBiZSBkb25lIHdoaWxlIGNvbW1pdHRpbmcuDQoNClJldmlld2VkLWJ5
+OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQoNCg0KSnVlcmdlbg0K
+--------------JZLfEJinIuvVgpen3Kze5FMZ
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------JZLfEJinIuvVgpen3Kze5FMZ--
+
+--------------CCXoDBa40f5JJDFmJ1SLT0DL--
+
+--------------74x0OnXh0yd7AIWTKDFPGdV2
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB4BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKEl2sFAwAAAAAACgkQsN6d1ii/Ey/A
+7wf2KDlTnSiyyI8o5vega9yByUIpmzyC52POyc67sYCwjK5eGs3q8izbF2JgTZotA2STLQniX9R/
+KxHE8Jhfo4tTLiUnDpljoPzEn6VVuJkgeGAYDWJqOhYlr7OteqJZIOhD/Z07jI9MatbKjRqe+aRj
+TD9BOJg6W/r0uAWdGBc9B0HFPTKxi7+P6LMgCvbPzeRlDl/H9bjX1kCHvnXlIjvrd59UQ76S1eRg
+rrsxUapIDsQ0Kcj+Ei/TB5qcGeZuAoGUr1Lq3/y+BdocxdMMYD+pJ2dPKfj6t2VpIvSztgyrQ0gl
++3EUwPWeeNis6ODa+H4GU/IvXYeX6yq23FjGfyMS
+=mleQ
+-----END PGP SIGNATURE-----
+
+--------------74x0OnXh0yd7AIWTKDFPGdV2--

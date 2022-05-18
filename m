@@ -2,153 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736AD52BC61
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1A452BBDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237070AbiERMwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
+        id S237042AbiERMwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236836AbiERMwA (ORCPT
+        with ESMTP id S236970AbiERMwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:52:00 -0400
-Received: from outbound-smtp25.blacknight.com (outbound-smtp25.blacknight.com [81.17.249.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB3218E19
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:51:57 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
-        by outbound-smtp25.blacknight.com (Postfix) with ESMTPS id 90070CAB78
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:51:55 +0100 (IST)
-Received: (qmail 19066 invoked from network); 18 May 2022 12:51:55 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 18 May 2022 12:51:54 -0000
-Date:   Wed, 18 May 2022 13:51:52 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
-Message-ID: <20220518125152.GQ3441@techsingularity.net>
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
- <20220517233507.GA423@qian>
+        Wed, 18 May 2022 08:52:40 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6582981C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:52:38 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id fw21-20020a17090b129500b001df9f62edd6so2329008pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Paq8+juUmf29mMyi5gCCd5Y45Od4vCB9lL+wMXjxOSk=;
+        b=DgEoxygYWB0mUsY9mFozlZTqMN1tuXA5NiYKwrlhiQuoZji9hJBt409DoKhAF3kDZJ
+         XhK87gzl7cRiC/OKg3bnjS3P9aXGhniV4dfTuO8p1hgxlaPYU/an6v1MwybqodxZ1TB+
+         VfIEsurmvcbIzOHFkvmqtTWFZlcNLBWtgpXV/6JUx4Mt+SALlHXjIcrbmuquugOibRSG
+         99mHOHZwSf5UwXSJgJK86YpditQ4MsAR/ZoGPAx5J9g5fu8kyHvhkO7K2LQB6GHJc6dC
+         t8/kDDs1rcUtX3N6zw7VVbQxBG8IkIXt5UIzHw0ASt3JdALRRQv9xUBCQLvmnvpqU1Gf
+         bCdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Paq8+juUmf29mMyi5gCCd5Y45Od4vCB9lL+wMXjxOSk=;
+        b=7W4UvXCM9Oo1VrwG3FWvy3a2rJw80NUM30S7NG8iot7t8M7wuAnivVcte6lJbDpQjA
+         yOn+et/reiDrtW4CAfALDUpAHVFj5dG4KcjdqJ2QMZAMILhO4aEf97WAEb2WoN/Zv2dr
+         PestCajGRcmF9tlj5SrRLTkWEcBSaSmhkKB3IOv189JwpO7AU39TbmopaBMvnEL6r7+L
+         EsXecRdhNiBqcxsC6371355QYyI/0l+8J64Ij3hc3gwv2+SEMp0t+QbW9m+nbOv0UE+m
+         uXYUtmAYJRJU6MkR49ev+Syn2HTnPJ9taeaIof1axPmulbx9AVvSWgQIeuzQXT3lyse9
+         HPrA==
+X-Gm-Message-State: AOAM533fauUO/l2OjiSQO6V300W9NP73t5d8w4MkhiZGZqioeImLAuW6
+        Ef/ndzjYH4SMCCZHIULhRqVTZg==
+X-Google-Smtp-Source: ABdhPJwGEMa8l0i8Pa/bGNiulCfnfPbTevW/vQoJFvr5yVOo1zzO3LnauW/S0C+XIFnKZl6wvmBM4g==
+X-Received: by 2002:a17:903:22cd:b0:161:be20:577 with SMTP id y13-20020a17090322cd00b00161be200577mr4312482plg.54.1652878358347;
+        Wed, 18 May 2022 05:52:38 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id d13-20020a65620d000000b003f61c311e79sm447063pgv.56.2022.05.18.05.52.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 05:52:37 -0700 (PDT)
+Message-ID: <b7dc2992-e2d6-8e76-f089-b33561f8471f@kernel.dk>
+Date:   Wed, 18 May 2022 06:52:36 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20220517233507.GA423@qian>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
+Content-Language: en-US
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <YoOJ/T4QRKC+fAZE@google.com>
+ <97cba3e1-4ef7-0a17-8456-e0787d6702c6@kernel.dk>
+ <YoOT7Cyobsed5IE3@google.com>
+ <d503d5ff-4bc5-2bd0-00d3-cd7b0a0724cb@kernel.dk>
+ <YoOW2+ov8KF1YcYF@google.com>
+ <3d271554-9ddc-07ad-3ff8-30aba31f8bf2@kernel.dk>
+ <YoOcYR15Jhkw2XwL@google.com>
+ <f34c85cc-71a5-59d4-dd7a-cc07e2af536c@kernel.dk>
+ <YoTrmjuct3ctvFim@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YoTrmjuct3ctvFim@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 07:35:07PM -0400, Qian Cai wrote:
-> On Thu, May 12, 2022 at 09:50:37AM +0100, Mel Gorman wrote:
-> > Changelog since v2
-> > o More conversions from page->lru to page->[pcp_list|buddy_list]
-> > o Additional test results in changelogs
-> > 
-> > Changelog since v1
-> > o Fix unsafe RT locking scheme
-> > o Use spin_trylock on UP PREEMPT_RT
-> > 
-> > This series has the same intent as Nicolas' series "mm/page_alloc: Remote
-> > per-cpu lists drain support" -- avoid interference of a high priority
-> > task due to a workqueue item draining per-cpu page lists. While many
-> > workloads can tolerate a brief interruption, it may be cause a real-time
-> > task runnning on a NOHZ_FULL CPU to miss a deadline and at minimum,
-> > the draining in non-deterministic.
-> > 
-> > Currently an IRQ-safe local_lock protects the page allocator per-cpu lists.
-> > The local_lock on its own prevents migration and the IRQ disabling protects
-> > from corruption due to an interrupt arriving while a page allocation is
-> > in progress. The locking is inherently unsafe for remote access unless
-> > the CPU is hot-removed.
-> > 
-> > This series adjusts the locking. A spinlock is added to struct
-> > per_cpu_pages to protect the list contents while local_lock_irq continues
-> > to prevent migration and IRQ reentry. This allows a remote CPU to safely
-> > drain a remote per-cpu list.
-> > 
-> > This series is a partial series. Follow-on work should allow the
-> > local_irq_save to be converted to a local_irq to avoid IRQs being
-> > disabled/enabled in most cases. Consequently, there are some TODO comments
-> > highlighting the places that would change if local_irq was used. However,
-> > there are enough corner cases that it deserves a series on its own
-> > separated by one kernel release and the priority right now is to avoid
-> > interference of high priority tasks.
+On 5/18/22 6:50 AM, Lee Jones wrote:
+> On Tue, 17 May 2022, Jens Axboe wrote:
 > 
-> Reverting the whole series fixed an issue that offlining a memory
-> section blocking for hours on today's linux-next tree.
+>> On 5/17/22 7:00 AM, Lee Jones wrote:
+>>> On Tue, 17 May 2022, Jens Axboe wrote:
+>>>
+>>>> On 5/17/22 6:36 AM, Lee Jones wrote:
+>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+>>>>>
+>>>>>> On 5/17/22 6:24 AM, Lee Jones wrote:
+>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+>>>>>>>
+>>>>>>>> On 5/17/22 5:41 AM, Lee Jones wrote:
+>>>>>>>>> Good afternoon Jens, Pavel, et al.,
+>>>>>>>>>
+>>>>>>>>> Not sure if you are presently aware, but there appears to be a
+>>>>>>>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
+>>>>>>>>> in Stable v5.10.y.
+>>>>>>>>>
+>>>>>>>>> The full sysbot report can be seen below [0].
+>>>>>>>>>
+>>>>>>>>> The C-reproducer has been placed below that [1].
+>>>>>>>>>
+>>>>>>>>> I had great success running this reproducer in an infinite loop.
+>>>>>>>>>
+>>>>>>>>> My colleague reverse-bisected the fixing commit to:
+>>>>>>>>>
+>>>>>>>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
+>>>>>>>>>   Author: Jens Axboe <axboe@kernel.dk>
+>>>>>>>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
+>>>>>>>>>
+>>>>>>>>>        io-wq: have manager wait for all workers to exit
+>>>>>>>>>
+>>>>>>>>>        Instead of having to wait separately on workers and manager, just have
+>>>>>>>>>        the manager wait on the workers. We use an atomic_t for the reference
+>>>>>>>>>        here, as we need to start at 0 and allow increment from that. Since the
+>>>>>>>>>        number of workers is naturally capped by the allowed nr of processes,
+>>>>>>>>>        and that uses an int, there is no risk of overflow.
+>>>>>>>>>
+>>>>>>>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>>>>>>>>>
+>>>>>>>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
+>>>>>>>>>     1 file changed, 22 insertions(+), 8 deletions(-)
+>>>>>>>>
+>>>>>>>> Does this fix it:
+>>>>>>>>
+>>>>>>>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
+>>>>>>>> Author: Jens Axboe <axboe@kernel.dk>
+>>>>>>>> Date:   Fri Mar 5 12:59:30 2021 -0700
+>>>>>>>>
+>>>>>>>>     io-wq: fix race in freeing 'wq' and worker access
+>>>>>>>>
+>>>>>>>> Looks like it didn't make it into 5.10-stable, but we can certainly
+>>>>>>>> rectify that.
+>>>>>>>
+>>>>>>> Thanks for your quick response Jens.
+>>>>>>>
+>>>>>>> This patch doesn't apply cleanly to v5.10.y.
+>>>>>>
+>>>>>> This is probably why it never made it into 5.10-stable :-/
+>>>>>
+>>>>> Right.  It doesn't apply at all unfortunately.
+>>>>>
+>>>>>>> I'll have a go at back-porting it.  Please bear with me.
+>>>>>>
+>>>>>> Let me know if you into issues with that and I can help out.
+>>>>>
+>>>>> I think the dependency list is too big.
+>>>>>
+>>>>> Too much has changed that was never back-ported.
+>>>>>
+>>>>> Actually the list of patches pertaining to fs/io-wq.c alone isn't so
+>>>>> bad, I did start to back-port them all but some of the big ones have
+>>>>> fs/io_uring.c changes incorporated and that list is huge (256 patches
+>>>>> from v5.10 to the fixing patch mentioned above).
+>>>>
+>>>> The problem is that 5.12 went to the new worker setup, and this patch
+>>>> landed after that even though it also applies to the pre-native workers.
+>>>> Hence the dependency chain isn't really as long as it seems, probably
+>>>> just a few patches backporting the change references and completions.
+>>>>
+>>>> I'll take a look this afternoon.
+>>>
+>>> Thanks Jens.  I really appreciate it.
+>>
+>> Can you see if this helps? Untested...
 > 
->  __wait_rcu_gp
->  synchronize_rcu at kernel/rcu/tree.c:3915
->  lru_cache_disable at mm/swap.c:886
->  __alloc_contig_migrate_range at mm/page_alloc.c:9078
->  isolate_single_pageblock at mm/page_isolation.c:405
->  start_isolate_page_range
->  offline_pages
->  memory_subsys_offline
->  device_offline
->  online_store
->  dev_attr_store
->  sysfs_kf_write
->  kernfs_fop_write_iter
->  new_sync_write
->  vfs_write
->  ksys_write
->  __arm64_sys_write
->  invoke_syscall
->  el0_svc_common.constprop.0
->  do_el0_svc
->  el0_svc
->  el0t_64_sync_handler
->  el0t_64_sync
+> What base does this apply against please?
 > 
-> For full disclosure, I have also reverted the commit 0d523026abd4
-> ("mm/page_alloc: fix tracepoint mm_page_alloc_zone_locked()"), so the
-> series can be reverted cleanly. But, I can't see how the commit
-> 0d523026abd4 could cause this issue at all.
+> I tried Mainline and v5.10.116 and both failed.
 
-This is halting in __lru_add_drain_all where it calls synchronize_rcu
-before the drain even happens. It's also an LRU drain and not PCP which
-is what the series affects and the allocator doesn't use rcu. In a KVM
-machine, I can do
-
-$ for BANK in `(for i in {1..20}; do echo $((RANDOM%416)); done) | sort -n  | uniq`; do BEFORE=`cat /sys/devices/system/memory/memory$BANK/online`; echo 0 > /sys/devices/system/memory/memory$BANK/online; AFTER=`cat /sys/devices/system/memory/memory$BANK/online`; printf "%4d %d -> %d\n" $BANK $BEFORE $AFTER; done
-   3 1 -> 0
-  57 1 -> 0
-  74 1 -> 0
-  93 1 -> 0
- 101 1 -> 0
- 128 1 -> 0
- 133 1 -> 0
- 199 1 -> 0
- 223 1 -> 0
- 225 1 -> 0
- 229 1 -> 0
- 243 1 -> 0
- 263 1 -> 0
- 300 1 -> 0
- 309 1 -> 0
- 329 1 -> 0
- 355 1 -> 0
- 365 1 -> 0
- 372 1 -> 0
- 383 1 -> 0
-
-It offlines 20 sections although after several attempts free -m starts
-reporting negative used memory so there is a bug of some description.
-How are you testing this exactly? Is it every time or intermittent? Are
-you confident that reverting the series makes the problem go away?
+It's against 5.10.116, so that's puzzling. Let me double check I sent
+the right one...
 
 -- 
-Mel Gorman
-SUSE Labs
+Jens Axboe
+

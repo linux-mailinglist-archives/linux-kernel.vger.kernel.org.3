@@ -2,159 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5804E52BE0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC4A52BDC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239003AbiERPB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S239065AbiERPDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239000AbiERPAs (ORCPT
+        with ESMTP id S239043AbiERPDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:00:48 -0400
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F031CB60;
-        Wed, 18 May 2022 08:00:45 -0700 (PDT)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-edf3b6b0f2so3009081fac.9;
-        Wed, 18 May 2022 08:00:45 -0700 (PDT)
+        Wed, 18 May 2022 11:03:51 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4410C1DE556;
+        Wed, 18 May 2022 08:03:50 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id y7so2902248ejr.13;
+        Wed, 18 May 2022 08:03:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DIU6nbXTAiAMQ/3SVzqxTbsO2euyVD3quCdWwb6E3nA=;
+        b=hgY1QL+wrUYK+LW+M54xhYQFTwEP4IRsM0Mco4O9DObO2rtCLqAlHBidMaXWSbpmMi
+         3Oa87JQXe0SqLcqDByMzvK+a0Tyse1PppKxDLAl4FYsygwkP6Kbwxyd4ie1nVYlbvdGX
+         IhhiYPD+Jgysiu/kkjSRm8Oe/qWjf7lJYtKAD2Z6icwz8j3fe4s9xpmPJ2YekV9JExgG
+         l1Qj5Lt2KTyAoSWdBr9vdPnGTG62z6faKRLWxttT0nsjnxUIJtQIvWey4WreqNri999G
+         rMkJm3q30orS5dkGdXZLCNttmr6EPm/BY3LsknjeTOXd8oK6oykweUVgPNUa+WH+uB8A
+         5Iyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tNv/PU3tpajgz+UZuLUwR95zZoInh5OzZr+nVYDtcCU=;
-        b=ds+RP170LBJB6cBzfH0le5srnFUAOViYRgbiOh3iZsH5Z2wlGebTpIiEQH4lN8DF4y
-         L5/EMgytiho8x0PpzBRt8PxzKNU/1FZxJBpTV/iFy7Ximyq50hgVkLgcQCYDwz2aAKJ1
-         02JEdwpcQwtv146TI6hwK1eyCwgCCBVWsV5mN4g3CrXt1X/Ml7fEirilZw+w0liChCHK
-         MpNS2zEuwhBPM7/vvRQUIaqyQblTd11RDOOOackCNTp8JMNDWx7SmqkCODkZwksVisWD
-         drhvQ7XNrQMwLIWhwsl6duY5AUr1FCQtZpq4/k3UUGbZ8bm8xVM6BMhRHq7Fk+IWCPj+
-         /m+Q==
-X-Gm-Message-State: AOAM531OzdF52Lw/S+4ePIgy+QuJMyKsyPoO++DkOwjA8UhB10vvmYa0
-        riOoajlY4aGMdJZxefPpkg==
-X-Google-Smtp-Source: ABdhPJyRe4CU5O9j0kpuzpFKOPgxid6P7iM041ZOnMA/NGI/Vn3rvf2JlToxgf4DKzpy0RyfOOjBMQ==
-X-Received: by 2002:a05:6870:ab0b:b0:ee:1ce2:82a0 with SMTP id gu11-20020a056870ab0b00b000ee1ce282a0mr283434oab.94.1652886044776;
-        Wed, 18 May 2022 08:00:44 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r39-20020a05687108a700b000f1bc45ba21sm999317oaq.14.2022.05.18.08.00.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 08:00:44 -0700 (PDT)
-Received: (nullmailer pid 3306455 invoked by uid 1000);
-        Wed, 18 May 2022 15:00:43 -0000
-Date:   Wed, 18 May 2022 10:00:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     matthew.gerlach@linux.intel.com
-Cc:     dinguyen@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH v4 1/3] dt-bindings: soc: add bindings for Intel HPS Copy
- Engine
-Message-ID: <20220518150043.GA3302100-robh@kernel.org>
-References: <20220508142624.491045-1-matthew.gerlach@linux.intel.com>
- <20220508142624.491045-2-matthew.gerlach@linux.intel.com>
- <Ynq52E93mcTXcw9H@robh.at.kernel.org>
- <alpine.DEB.2.22.394.2205101452530.885823@rhweight-WRK1>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DIU6nbXTAiAMQ/3SVzqxTbsO2euyVD3quCdWwb6E3nA=;
+        b=4PvuAV+Z2S6EpZSEJme/2NP/DLe2rH7/I9TzOmaUgbCirIDJIgRmh+Q6Jd3xSIJgKT
+         hGHIulskPgDxWqCZ+e8cNxx+o5obiEs4tPJrZw3VzsvEOGqBLrX3EUREGXXs6zdGSFJi
+         4TovsRQHIcVDIUOMjrZm35abe5pgt5lg0eeucTKYCkJl92tFNBWHmn1NVrKy2nVyQtW3
+         qMYHKH1OJ36GvPG7e/gLJ8frN3zO0oRsdJevrffbeu7zgsPPHWPcRbFu31cv7MublW66
+         sC77OMrDlOkhH7t+E/o7jC1nXxaaqVlloDIcai7nhrZfw/62vb1JdNZYog8JQkPPl0vu
+         xAHA==
+X-Gm-Message-State: AOAM532gRytwbgLowojC+oC0vbMdOfUUtCXXeXlDmVbZwtVSQxO0eKwt
+        /VwH2rqL9XTkvJpf/JZhPfW/7QXj7XTkQ9NjFVs=
+X-Google-Smtp-Source: ABdhPJxpb/ukSW3BtDrH/mQU2isMxd4g390WY6v6LQsg3UqFwHJueUlapMsF+ouMRujJ/pebfVVWjFa6dw09jDekpJU=
+X-Received: by 2002:a17:907:6d8a:b0:6fe:1b36:dfcc with SMTP id
+ sb10-20020a1709076d8a00b006fe1b36dfccmr19071735ejc.579.1652886228719; Wed, 18
+ May 2022 08:03:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2205101452530.885823@rhweight-WRK1>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220509050953.11005-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220509050953.11005-5-prabhakar.mahadev-lad.rj@bp.renesas.com> <CACRpkdafrkyQjmyoa4CAJXJ8JdT3owapq10=yBQLyPp0EwO6AQ@mail.gmail.com>
+In-Reply-To: <CACRpkdafrkyQjmyoa4CAJXJ8JdT3owapq10=yBQLyPp0EwO6AQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 18 May 2022 17:03:07 +0200
+Message-ID: <CAHp75VdFuV_vSvJMjuOn9+CewXXJjfxOYw6gVhmX_gwSC2R6mg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] gpio: gpiolib: Add ngirq member to struct gpio_irq_chip
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022 at 03:23:23PM -0700, matthew.gerlach@linux.intel.com wrote:
-> 
-> 
-> On Tue, 10 May 2022, Rob Herring wrote:
-> 
-> > On Sun, May 08, 2022 at 07:26:22AM -0700, matthew.gerlach@linux.intel.com wrote:
-> > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > 
-> > > Add device tree bindings documentation for the Intel Hard
-> > > Processor System (HPS) Copy Engine.
-> > > 
-> > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > ---
-> > > v4:
-> > >   - move from soc to soc/intel/
-> > > 
-> > > v3:
-> > >   - remove unused label
-> > >   - move from misc to soc
-> > >   - remove 0x from #address-cells/#size-cells values
-> > >   - change hps_cp_eng@0 to dma-controller@0
-> > >   - remote inaccurate 'items:' tag
-> > > ---
-> > >  .../soc/intel/intel,hps-copy-engine.yaml      | 51 +++++++++++++++++++
-> > >  1 file changed, 51 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml b/Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml
-> > > new file mode 100644
-> > > index 000000000000..8634865015cd
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/soc/intel/intel,hps-copy-engine.yaml
-> > > @@ -0,0 +1,51 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +# Copyright (C) 2022, Intel Corporation
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: "http://devicetree.org/schemas/soc/intel/intel,hps-copy-engine.yaml#"
-> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > > +
-> > > +title: Intel HPS Copy Engine
-> > > +
-> > > +maintainers:
-> > > +  - Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > +
-> > > +description: |
-> > > +  The Intel Hard Processor System (HPS) Copy Engine is an IP block used to copy
-> > > +  a bootable image from host memory to HPS DDR.  Additionally, there is a
-> > > +  register the HPS can use to indicate the state of booting the copied image as
-> > > +  well as a keep-a-live indication to the host.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: intel,hps-copy-engine
-> > > +
-> > > +  '#dma-cells':
-> > > +    const: 1
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    bus@80000000 {
-> > > +        compatible = "simple-bus";
-> > > +        reg = <0x80000000 0x60000000>,
-> > > +              <0xf9000000 0x00100000>;
-> > > +        reg-names = "axi_h2f", "axi_h2f_lw";
-> > 
-> > A simple-bus doesn't have regs because it is simple. If you have
-> > registers, then you need a specific compatible. You can have
-> > 'simple-bus' as a fallback if the bus is completely setup by firmware
-> > and the OS never needs to configure/manage it.
-> 
-> The hardware I'm trying to describe above is the connection from the HPS/SOC
-> to the FPGA.  There are two ranges of physical addresses with this
-> connection referred to as the "HPS to FPGA bridge" and the "Lightweight HPS
-> to FPGA bridge".  Device tree subnodes of bus@80000000 are IP blocks in the
-> FPGA.  The IP blocks may be connected to one or both of the
-> physical address ranges.  Since these physical address ranges are not registers
-> of the bus@80000000, the field names, reg and reg-names, are probably wrong.
-> Should the reg field above really be ranges?
+On Sat, May 14, 2022 at 4:14 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Mon, May 9, 2022 at 7:10 AM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> > Supported GPIO IRQs by the chip is not always equal to the number of GPIO
+> > pins. For example on Renesas RZ/G2L SoC where it has GPIO0-122 pins but at
+> > a give point a maximum of only 32 GPIO pins can be used as IRQ lines in
+> > the IRQC domain.
+> >
+> > This patch adds ngirq member to struct gpio_irq_chip and passes this as a
+> > size to irq_domain_create_hierarchy()/irq_domain_create_simple() if it is
+> > being set in the driver otherwise fallbacks to using ngpio.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Yes, sound likes it should be.
+> As mentioned in some other patch, try to use .valid_mask for this instead.
 
-Rob
+I have not been Cc'ed, but briefly reading I agree with Linus.
+
+-- 
+With Best Regards,
+Andy Shevchenko

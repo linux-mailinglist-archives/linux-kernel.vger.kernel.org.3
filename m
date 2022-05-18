@@ -2,157 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA4152B065
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A3052B067
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234159AbiERCLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 22:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
+        id S234176AbiERCPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 22:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234104AbiERCLs (ORCPT
+        with ESMTP id S234104AbiERCPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 22:11:48 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12A952B3B
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 19:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652839906; x=1684375906;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sDi1b/n6+eMEJdLkZx6KM/2L6PvkOIYVb/LPTYgoEPo=;
-  b=O2CV7xh1ah7INqbAdzXZ31EfgnuiJfMExXL70VMUOL3QYBhb2JgMxqAx
-   klZUUhPTyWI55DTm8oZmfHd4jdxMK1Ve0W1du9AKjlwbMEUPtscLZmp1g
-   sAVbQ4vbD1wKGpXhomy8GjKzwsEviviHcm0RcJWk2KVRI1LMPHiGnqFhx
-   vQnzqb4odjuNwj+NxzwEim1oYtpx81TkYkLYlYD/yW6Al0m4wvtIZTNwq
-   +xDoRtfd9K9hyQb5Pccx2343UwleGIUag7gI1pgrG9hIxGtzD3WMlxQ+a
-   1T0gYmfWV/rvfAZLtdWgSEWU+leHuQIe+y/fbWCkvOMbkwh9snHGkIcFO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="253479338"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="253479338"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 19:11:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="700362894"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 17 May 2022 19:11:12 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nr99b-0001gz-FB;
-        Wed, 18 May 2022 02:11:11 +0000
-Date:   Wed, 18 May 2022 10:10:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: [linux-stable-rc:linux-5.4.y 2248/3625]
- drivers/gpu/drm/i915/gt/intel_gt.c:335:2: error: format string is not a
- string literal (potentially insecure)
-Message-ID: <202205180933.FHJdKHSI-lkp@intel.com>
+        Tue, 17 May 2022 22:15:39 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4511527F5;
+        Tue, 17 May 2022 19:15:38 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id p26so1211059eds.5;
+        Tue, 17 May 2022 19:15:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JXMeiZpRbqebPZ+WeJXkCP47PB5pNo1slb1wa7BPK2k=;
+        b=mk8kGwEoLJif3jaisTdRKRB+jlaFmXApaTdep/q0RL3f4bf8Vj1yNPDdzmYnLwwT7u
+         r7Js1Zi+0Bd9/xwWBJwoIcYsOPZYYIFsfRIoPIGzFCeZIuTlOIOGCLMMfnrfhXCUmctC
+         eJqlZm7fOltVHkajDvwjIUoJWoEp4I85jRnYx86YHXrmi/Ew3xu/c7AYPEX0LZLjfjN6
+         uOgk2ctY0FdlHMoAZJ3mYQzRTiiTMbHv7YLjaHCteAa7M3ukGuJ5hf0eTdqdwZsic+Di
+         EJIQeOZgSjenh454VidOcQRB6EN1IZFJpCWFi+OF3yXAO978k87Kg6IsDbBJbYTRXcdi
+         MAVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JXMeiZpRbqebPZ+WeJXkCP47PB5pNo1slb1wa7BPK2k=;
+        b=DHxkATajn04ERcq+bmrCLxLldb5JIAiO5VvDn8K1Mcm3zkMRGkjMUYEP2GFAZwpmY+
+         CpqXlbuG3JVE6a4PoYcz07oDER6sS/EJUm/qrE0hd8ve4j58EVxykaeldJNiwKzfKmab
+         vBNS2GqOUgrl/jLyR3iIbrPL5FNybWI6bKI1v6WwksS8ewNpwbpPjuZMSzKqdewvg5Nc
+         gaK2wNbkk1FjOxDsEIzU3zrq3ysvddGDDRZJf+IBAA591D3aw4Ko/uAhYOdPUY2tH0QU
+         66xc96yzr1KhVgCrMlUXzdCJTgEJiEUtNjYlmYbQQbKhKM0qxKJAOFmc7u61f2FyEbYo
+         tqwQ==
+X-Gm-Message-State: AOAM531epalYzzbpfOOmzjUiKlRE0OkpIYp13lrBPNV4LGhKtv3jYIN/
+        ovFhNtloSj84SjyQgVPx7Cfv5EszkoXbuEYUGOw=
+X-Google-Smtp-Source: ABdhPJxsAIt9BR8uYZ8idf3uHt7ruusnp/3WSeEmVHtW7Zy7fJ0q3KYw6taXz+0C/GKpQXtilkfRO+boEEMzU7qe1m8=
+X-Received: by 2002:a50:ccd5:0:b0:42a:64da:64c8 with SMTP id
+ b21-20020a50ccd5000000b0042a64da64c8mr19994078edj.196.1652840137332; Tue, 17
+ May 2022 19:15:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220517081008.294325-1-imagedong@tencent.com>
+ <20220517081008.294325-2-imagedong@tencent.com> <20220517181457.04c37147@kernel.org>
+In-Reply-To: <20220517181457.04c37147@kernel.org>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Wed, 18 May 2022 10:15:25 +0800
+Message-ID: <CADxym3aqSsS2WAKyHYUXvKs45zdj-4rZu8a5QYoJUf5u+fpWkA@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 1/9] net: skb: introduce __DEFINE_SKB_DROP_REASON()
+ to simply the code
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Martin Lau <kafai@fb.com>, Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Hao Peng <flyingpeng@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-head:   25f2e99af01b5b7328f55bbadab563cb26478289
-commit: 1b5553c79d52f17e735cd924ff2178a2409e6d0b [2248/3625] drm/i915: Flush TLBs before releasing backing store
-config: x86_64-randconfig-r031-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180933.FHJdKHSI-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=1b5553c79d52f17e735cd924ff2178a2409e6d0b
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc linux-5.4.y
-        git checkout 1b5553c79d52f17e735cd924ff2178a2409e6d0b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+On Wed, May 18, 2022 at 9:15 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue, 17 May 2022 16:10:00 +0800 menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > It is annoying to add new skb drop reasons to 'enum skb_drop_reason'
+> > and TRACE_SKB_DROP_REASON in trace/event/skb.h, and it's easy to forget
+> > to add the new reasons we added to TRACE_SKB_DROP_REASON.
+> >
+> > TRACE_SKB_DROP_REASON is used to convert drop reason of type number
+> > to string. For now, the string we passed to user space is exactly the
+> > same as the name in 'enum skb_drop_reason' with a 'SKB_DROP_REASON_'
+> > prefix. So why not make them togather by define a macro?
+> >
+> > Therefore, introduce __DEFINE_SKB_DROP_REASON() and use it for 'enum
+> > skb_drop_reason' definition and string converting.
+> >
+> > Now, what should we with the document for the reasons? How about follow
+> > __BPF_FUNC_MAPPER() and make these document togather?
+>
+> Hi, I know BPF does this but I really find the definition-by-macro
+> counter productive :(
+>
+> kdoc will no longer work right because the parser will not see
+> the real values. cscope and other code indexers will struggle
+> to find definitions.
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yeah, I found this problem too. My autocomplete in vscode never helps
+me anymore after I use this macro.
 
-All errors (new ones prefixed by >>):
+> Did you investigate using auto-generation? Kernel already generates
+> a handful of headers. Maybe with a little script we could convert
+> the enum into the string thing at build time?
+>
 
->> drivers/gpu/drm/i915/gt/intel_gt.c:335:2: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-           GEM_TRACE("\n");
-           ^~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/i915_gem.h:68:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:716:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kernel.h:730:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/gt/intel_gt.c:335:2: note: treat the string as an argument to avoid this
-   drivers/gpu/drm/i915/i915_gem.h:68:24: note: expanded from macro 'GEM_TRACE'
-   #define GEM_TRACE(...) trace_printk(__VA_ARGS__)
-                          ^
-   include/linux/kernel.h:716:3: note: expanded from macro 'trace_printk'
-                   do_trace_printk(fmt, ##__VA_ARGS__);    \
-                   ^
-   include/linux/kernel.h:730:30: note: expanded from macro 'do_trace_printk'
-                   __trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);   \
-                                              ^
-   1 error generated.
+Oh, I forgot about auto-generation, it seems it's a better choice.
+I'll try to use auto-generation.
 
+> Also let's use this opportunity to move the enum to a standalone
+> header, it's getting huge.
+>
+> Probably worth keeping this rework separate from the TCP patches.
+> Up to you which one you'd like to get done first.
 
-vim +335 drivers/gpu/drm/i915/gt/intel_gt.c
+Ok, I'll make the enum in a standalone header in the separated
+series.
 
-   297	
-   298	void intel_gt_invalidate_tlbs(struct intel_gt *gt)
-   299	{
-   300		static const i915_reg_t gen8_regs[] = {
-   301			[RENDER_CLASS]			= GEN8_RTCR,
-   302			[VIDEO_DECODE_CLASS]		= GEN8_M1TCR, /* , GEN8_M2TCR */
-   303			[VIDEO_ENHANCEMENT_CLASS]	= GEN8_VTCR,
-   304			[COPY_ENGINE_CLASS]		= GEN8_BTCR,
-   305		};
-   306		static const i915_reg_t gen12_regs[] = {
-   307			[RENDER_CLASS]			= GEN12_GFX_TLB_INV_CR,
-   308			[VIDEO_DECODE_CLASS]		= GEN12_VD_TLB_INV_CR,
-   309			[VIDEO_ENHANCEMENT_CLASS]	= GEN12_VE_TLB_INV_CR,
-   310			[COPY_ENGINE_CLASS]		= GEN12_BLT_TLB_INV_CR,
-   311		};
-   312		struct drm_i915_private *i915 = gt->i915;
-   313		struct intel_uncore *uncore = gt->uncore;
-   314		struct intel_engine_cs *engine;
-   315		enum intel_engine_id id;
-   316		const i915_reg_t *regs;
-   317		unsigned int num = 0;
-   318	
-   319		if (I915_SELFTEST_ONLY(gt->awake == -ENODEV))
-   320			return;
-   321	
-   322		if (INTEL_GEN(i915) == 12) {
-   323			regs = gen12_regs;
-   324			num = ARRAY_SIZE(gen12_regs);
-   325		} else if (INTEL_GEN(i915) >= 8 && INTEL_GEN(i915) <= 11) {
-   326			regs = gen8_regs;
-   327			num = ARRAY_SIZE(gen8_regs);
-   328		} else if (INTEL_GEN(i915) < 8) {
-   329			return;
-   330		}
-   331	
-   332		if (WARN_ONCE(!num, "Platform does not implement TLB invalidation!"))
-   333			return;
-   334	
- > 335		GEM_TRACE("\n");
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thans!
+Menglong Dong

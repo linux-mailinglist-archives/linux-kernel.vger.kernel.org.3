@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834D252B40F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CBE52B404
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbiERHtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
+        id S232577AbiERHtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbiERHt0 (ORCPT
+        with ESMTP id S232570AbiERHtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:49:26 -0400
+        Wed, 18 May 2022 03:49:36 -0400
 Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA991207DE;
-        Wed, 18 May 2022 00:49:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51841207F2;
+        Wed, 18 May 2022 00:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652860166; x=1684396166;
+  t=1652860175; x=1684396175;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=2p+D/WdtUzo7ZNUrDbOnD9yJq+2AeopkckDysa1nz80=;
-  b=tQCfcPvOz6bnrV7muXGxEVPBWt6WJvrrfLTOEre3u2lkQ8TkOCcAx2t7
-   XiPj5NJhPPDSdAuaysQOrwJlpYhFBcyE6zrOytBeO5iUKxnCE400PPXo/
-   yNShTkQSMcSyekk99XrTz2cqTZQFozC8BfhqwJiwcvL9mT0Qeq/09ywMk
-   0=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 May 2022 00:49:25 -0700
+  bh=99lVhG/h33c7dvn7i8VK817/c8neC8rVGDsrRyn9LtQ=;
+  b=hziupHJXDuE1SsLmTiu5/jMaI/SkNdo/9lvNqRxcvhM1piLfW0Pb8Xq6
+   bh+tRMO6G4rfhSTzrpEre1ZPbVWw70ReNx1GJdryyqVOdmZjEVh3bI3sE
+   7Ak/8oqQIKTO0XpQjdz2/59rQdj+Tw9Cv9hkGtyl3zFxEAwclVmqMEC0G
+   Q=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 May 2022 00:49:34 -0700
 X-QCInternal: smtphost
 Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:49:25 -0700
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:49:33 -0700
 Received: from blr-ubuntu-185.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 00:49:17 -0700
+ 15.2.986.22; Wed, 18 May 2022 00:49:25 -0700
 From:   Vivek Kumar <quic_vivekuma@quicinc.com>
 To:     <corbet@lwn.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
         <tglx@linutronix.de>, <maz@kernel.org>, <axboe@kernel.dk>,
@@ -50,9 +50,9 @@ CC:     <len.brown@intel.com>, <pavel@ucw.cz>, <paulmck@kernel.org>,
         <quic_svaddagi@quicinc.com>,
         Vivek Kumar <quic_vivekuma@quicinc.com>,
         Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: [RFC 3/6] block: gendisk: Add a new genhd capability flag
-Date:   Wed, 18 May 2022 13:18:38 +0530
-Message-ID: <1652860121-24092-4-git-send-email-quic_vivekuma@quicinc.com>
+Subject: [RFC 4/6] mm: swap: Add randomization check for swapon/off calls
+Date:   Wed, 18 May 2022 13:18:39 +0530
+Message-ID: <1652860121-24092-5-git-send-email-quic_vivekuma@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
 References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
@@ -71,46 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new genhd capability flag to serialize offsets
-for swap partition. This flag is enabled for the gendisk of
-the block device which will be used for saving the snapshot
-of the hibernation image, based on a kernel parameter
-"noswap_randomize". Serializing offset in swap partition
-helps in improving hibernation resume time from bootloader.
+Add addtional check on swapon/swapoff sycalls to disable
+randomization of swap offsets if GENHD_FL_NO_RANDOMIZE
+flag is passed.
 
 Signed-off-by: Vivek Kumar <quic_vivekuma@quicinc.com>
 Signed-off-by: Prasanna Kumar <quic_kprasan@quicinc.com>
 ---
- include/linux/blkdev.h | 1 +
- kernel/power/swap.c    | 3 +++
- 2 files changed, 4 insertions(+)
+ mm/swapfile.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 1b24c1f..be094e7 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -92,6 +92,7 @@ enum {
- 	GENHD_FL_REMOVABLE			= 1 << 0,
- 	GENHD_FL_HIDDEN				= 1 << 1,
- 	GENHD_FL_NO_PART			= 1 << 2,
-+	GENHD_FL_NO_RANDOMIZE			= 1 << 3,
- };
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 1c3d5b9..a3eeab6 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -2474,7 +2474,8 @@ SYSCALL_DEFINE1(swapoff, const char __user *, specialfile)
+ 	if (p->flags & SWP_CONTINUED)
+ 		free_swap_count_continuations(p);
  
- enum {
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 8d5c811..0a40eda 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1526,6 +1526,9 @@ int swsusp_check(void)
- 					    FMODE_READ | FMODE_EXCL, &holder);
- 	if (!IS_ERR(hib_resume_bdev)) {
- 		set_blocksize(hib_resume_bdev, PAGE_SIZE);
-+		if (noswap_randomize)
-+			hib_resume_bdev->bd_disk->flags |=
-+					GENHD_FL_NO_RANDOMIZE;
- 		clear_page(swsusp_header);
- 		error = hib_submit_io(REQ_OP_READ, 0,
- 					swsusp_resume_block,
+-	if (!p->bdev || !bdev_nonrot(p->bdev))
++	if (!p->bdev || (p->bdev->bd_disk->flags & GENHD_FL_NO_RANDOMIZE)
++			|| !bdev_nonrot(p->bdev))
+ 		atomic_dec(&nr_rotate_swap);
+ 
+ 	mutex_lock(&swapon_mutex);
+@@ -3065,7 +3066,8 @@ SYSCALL_DEFINE2(swapon, const char __user *, specialfile, int, swap_flags)
+ 	if (p->bdev && p->bdev->bd_disk->fops->rw_page)
+ 		p->flags |= SWP_SYNCHRONOUS_IO;
+ 
+-	if (p->bdev && bdev_nonrot(p->bdev)) {
++	if (p->bdev && !(p->bdev->bd_disk->flags & GENHD_FL_NO_RANDOMIZE) &&
++				bdev_nonrot(p->bdev)) {
+ 		int cpu;
+ 		unsigned long ci, nr_cluster;
+ 
 -- 
 2.7.4
 

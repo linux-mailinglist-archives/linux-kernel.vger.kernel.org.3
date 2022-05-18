@@ -2,69 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4AB52C1A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094E252C193
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241051AbiERRgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S240943AbiERRhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240955AbiERRgU (ORCPT
+        with ESMTP id S240945AbiERRhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:36:20 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4E45DE7E;
-        Wed, 18 May 2022 10:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652895378; x=1684431378;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4lEZS7ZjpuLroh1r56uWxsc7hOKN9/qPtTtqeb2mxMw=;
-  b=fmFWM+dGSnvvCjlbBGIBQRKlj4+r3KzEC61PnYQu2w44RGMsYdbG0RGi
-   hBHruHIRBezXd1WuNo/lI+sZMuKWbk1aDikAw8OqzhjTj1kv49EPLkLR2
-   QccoMBzjcS2XjCS4vaNUGklFm5C/ZOIpXCt9MAR5oJBYFEUMk+oMZVDam
-   c=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 May 2022 10:36:17 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 10:36:16 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 10:36:16 -0700
-Received: from [10.110.42.114] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 18 May
- 2022 10:36:15 -0700
-Message-ID: <c5decaeb-2e88-ef23-ce6c-50d3d853766b@quicinc.com>
-Date:   Wed, 18 May 2022 10:36:14 -0700
+        Wed, 18 May 2022 13:37:06 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 891AA11E1E3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:37:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CB6723A;
+        Wed, 18 May 2022 10:37:04 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1BC3F3F718;
+        Wed, 18 May 2022 10:37:03 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     joro@8bytes.org, will@kernel.org
+Cc:     iommu@lists.linux-foundation.org, john.garry@huawei.com,
+        hch@lst.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] iommu/dma: Add config for PCI SAC address trick
+Date:   Wed, 18 May 2022 18:36:59 +0100
+Message-Id: <ef8abf1c6b0839e39b272738fc7bc4d9699c8bcb.1652895419.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.35.3.dirty
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/2] phy/qcom: add regulator_set_load to edp/dp phy
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1652892186-22346-1-git-send-email-quic_khsieh@quicinc.com>
- <1652892186-22346-2-git-send-email-quic_khsieh@quicinc.com>
- <CAA8EJpr9znfxLK+kDstMFFk3V8goyaceGXi4sDc9ghz4eryXMg@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAA8EJpr9znfxLK+kDstMFFk3V8goyaceGXi4sDc9ghz4eryXMg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,169 +41,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+For devices stuck behind a conventional PCI bus, saving extra cycles at
+33MHz is probably fairly significant. However since native PCI Express
+is now the norm for high-performance devices, the optimisation to always
+prefer 32-bit addresses for the sake of avoiding DAC is starting to look
+rather anachronistic. Technically 32-bit addresses do have shorter TLPs
+on PCIe, but unless the device is saturating its link bandwidth with
+small transfers it seems unlikely that the difference is appreciable.
 
-On 5/18/2022 10:12 AM, Dmitry Baryshkov wrote:
-> On Wed, 18 May 2022 at 19:43, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->> This patch add regulator_set_load() to both eDP and DP phy driver
->> to have totally control regulators.
->>
->> Changes in v2:
->> -- no regulator_set_laod() before disable regulator
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/phy/qualcomm/phy-qcom-edp.c | 25 +++++++++++++++++++++----
->>   drivers/phy/qualcomm/phy-qcom-qmp.c | 13 +++++++++++++
-> Split into -edp and -qmp part.
->
->>   2 files changed, 34 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c b/drivers/phy/qualcomm/phy-qcom-edp.c
->> index cacd32f..9b55095 100644
->> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
->> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
->> @@ -87,17 +87,24 @@ struct qcom_edp {
->>
->>          struct clk_bulk_data clks[2];
->>          struct regulator_bulk_data supplies[2];
->> +       int enable_load[2];
->> +       int disable_load[2];
-> As noticed in the review of the previous patch, disable_load is unnecessary.
->
->>   };
->>
->>   static int qcom_edp_phy_init(struct phy *phy)
->>   {
->>          struct qcom_edp *edp = phy_get_drvdata(phy);
->>          int ret;
->> +       int num_consumers = ARRAY_SIZE(edp->supplies);
->> +       int i;
->>
->> -       ret = regulator_bulk_enable(ARRAY_SIZE(edp->supplies), edp->supplies);
->> +       ret = regulator_bulk_enable(num_consumers, edp->supplies);
->>          if (ret)
->>                  return ret;
->>
->> +       for (i = num_consumers - 1; i >= 0; --i)
->> +               regulator_set_load(edp->supplies[i].consumer, edp->enable_load[i]);
->> +
->>          ret = clk_bulk_prepare_enable(ARRAY_SIZE(edp->clks), edp->clks);
->>          if (ret)
->>                  goto out_disable_supplies;
->> @@ -425,9 +432,15 @@ static int qcom_edp_phy_power_off(struct phy *phy)
->>   static int qcom_edp_phy_exit(struct phy *phy)
->>   {
->>          struct qcom_edp *edp = phy_get_drvdata(phy);
->> +       int num_consumers = ARRAY_SIZE(edp->supplies);
->> +       int i;
->>
->>          clk_bulk_disable_unprepare(ARRAY_SIZE(edp->clks), edp->clks);
->> -       regulator_bulk_disable(ARRAY_SIZE(edp->supplies), edp->supplies);
->> +
->> +       for (i = num_consumers - 1; i >= 0; --i)
->> +               regulator_set_load(edp->supplies[i].consumer, edp->disable_load[i]);
->> +
->> +       regulator_bulk_disable(num_consumers, edp->supplies);
->>
->>          return 0;
->>   }
->> @@ -633,8 +646,12 @@ static int qcom_edp_phy_probe(struct platform_device *pdev)
->>          if (ret)
->>                  return ret;
->>
->> -       edp->supplies[0].supply = "vdda-phy";
->> -       edp->supplies[1].supply = "vdda-pll";
->> +       edp->supplies[0].supply = "vdda-1p2";
->> +       edp->supplies[1].supply = "vdda-0p9";
-> NAK, You can not randomly change supply names.
+What definitely is appreciable, however, is that the IOVA allocator
+doesn't behave all that well once the 32-bit space starts getting full.
+As DMA working sets get bigger, this optimisation increasingly backfires
+and adds considerable overhead to the dma_map path for use-cases like
+high-bandwidth networking. We've increasingly bandaged the allocator
+in attempts to mitigate this, but it remains fundamentally at odds with
+other valid requirements to try as hard as possible to satisfy a request
+within the given limit; what we really need is to just avoid this odd
+notion of a speculative allocation when it isn't beneficial anyway.
 
-if you do no change here, then we have to change dtsi.
+Unfortunately that's where things get awkward... Having been present on
+x86 for 15 years or so now, it turns out there are systems which fail to
+properly define the upper limit of usable IOVA space for certain devices
+and this trick was the only thing letting them work OK. I had a similar
+ulterior motive for a couple of early arm64 systems when originally
+adding it to iommu-dma, but those really should now be fixed with proper
+firmware bindings, and other arm64 users really need it out of the way,
+so let's just leave it default-on for x86.
 
-They are not match.
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+ drivers/iommu/Kconfig     | 24 ++++++++++++++++++++++++
+ drivers/iommu/dma-iommu.c |  2 +-
+ 2 files changed, 25 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
+index c79a0df090c0..bf9b295f1c89 100644
+--- a/drivers/iommu/Kconfig
++++ b/drivers/iommu/Kconfig
+@@ -144,6 +144,30 @@ config IOMMU_DMA
+ 	select IRQ_MSI_IOMMU
+ 	select NEED_SG_DMA_LENGTH
+ 
++config IOMMU_DMA_PCI_SAC_OPT
++	bool "Enable 64-bit legacy PCI optimisation by default"
++	depends on IOMMU_DMA
++	default X86
++	help
++	  Enable by default an IOMMU optimisation for 64-bit legacy PCI devices,
++	  wherein the DMA API layer will always first try to allocate a 32-bit
++	  DMA address suitable for a single address cycle, before falling back
++	  to allocating from the full usable address range. If your system has
++	  64-bit legacy PCI devices in 32-bit slots where using dual address
++	  cycles reduces DMA throughput significantly, this optimisation may be
++	  beneficial to overall performance.
++
++	  If you have a modern PCI Express based system, it should usually be
++	  safe to say "n" here and avoid the potential extra allocation overhead.
++	  However, beware that this optimisation has also historically papered
++	  over bugs where the IOMMU address range above 32 bits is not fully
++	  usable. If device DMA problems and/or IOMMU faults start occurring
++	  with IOMMU translation enabled after disabling this option, it is
++	  likely a sign of a latent driver or firmware/BIOS bug.
++
++	  If this option is not set, the optimisation can be enabled at
++	  boot time with the "iommu.forcedac=0" command-line argument.
++
+ # Shared Virtual Addressing
+ config IOMMU_SVA
+ 	bool
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 09f6e1c0f9c0..c8d409d3f861 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -66,7 +66,7 @@ struct iommu_dma_cookie {
+ };
+ 
+ static DEFINE_STATIC_KEY_FALSE(iommu_deferred_attach_enabled);
+-bool iommu_dma_forcedac __read_mostly;
++bool iommu_dma_forcedac __read_mostly = !IS_ENABLED(CONFIG_IOMMU_DMA_PCI_SAC_OPT);
+ 
+ static int __init iommu_dma_forcedac_setup(char *str)
+ {
+-- 
+2.35.3.dirty
 
-
->
->> +       edp->enable_load[0] = 21800;    /* 1.2 V */
->> +       edp->enable_load[1] = 36000;    /* 1.2 V */
->> +       edp->disable_load[0] = 4;       /* 0.9 V */
->> +       edp->disable_load[1] = 4;       /* 10.9V */
-> Again, 10.9V here. Kuogee. Have you read the review points?
-I have read it. but forget to make  change at edp file.
->
->>          ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(edp->supplies), edp->supplies);
->>          if (ret)
->>                  return ret;
->> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
->> index b144ae1..0a4c8a8 100644
->> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
->> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
->> @@ -3130,6 +3130,7 @@ struct qmp_phy_cfg {
->>          int num_resets;
->>          /* regulators to be requested */
->>          const char * const *vreg_list;
->> +       const unsigned int *vreg_enable_load;
->>          int num_vregs;
->>
->>          /* array of registers with different offsets */
->> @@ -3346,6 +3347,10 @@ static const char * const qmp_phy_vreg_l[] = {
->>          "vdda-phy", "vdda-pll",
->>   };
->>
->> +static const unsigned int qmp_phy_vreg_enable_load[] = {
->> +       21800, 36000
->> +};
->> +
->>   static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
->>          .type                   = PHY_TYPE_USB3,
->>          .nlanes                 = 1,
->> @@ -4072,6 +4077,7 @@ static const struct qmp_phy_cfg sm8250_usb3phy_cfg = {
->>          .reset_list             = msm8996_usb3phy_reset_l,
->>          .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
->>          .vreg_list              = qmp_phy_vreg_l,
->> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
->>          .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
->>          .regs                   = qmp_v4_usb3phy_regs_layout,
->>
->> @@ -4139,6 +4145,7 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
->>          .reset_list             = msm8996_usb3phy_reset_l,
->>          .num_resets             = ARRAY_SIZE(msm8996_usb3phy_reset_l),
->>          .vreg_list              = qmp_phy_vreg_l,
->> +       .vreg_enable_load       = qmp_phy_vreg_enable_load,
->>          .num_vregs              = ARRAY_SIZE(qmp_phy_vreg_l),
->>          .regs                   = qmp_v4_usb3phy_regs_layout,
->>
->> @@ -5008,6 +5015,11 @@ static int qcom_qmp_phy_com_init(struct qmp_phy *qphy)
->>                  return 0;
->>          }
->>
->> +       if (cfg->vreg_enable_load) {
->> +               for (i = cfg->num_vregs - 1; i >= 0; --i)
-> What's the point of iterating the list backwards?
-
-do no  know,
-
-I just follow the order from regulator_bulk_enable()
-
->
->> +                       regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_enable_load[i]);
->> +       }
->> +
->>          /* turn on regulator supplies */
->>          ret = regulator_bulk_enable(cfg->num_vregs, qmp->vregs);
->>          if (ret) {
->> @@ -5116,6 +5128,7 @@ static int qcom_qmp_phy_com_exit(struct qmp_phy *qphy)
->>
->>          clk_bulk_disable_unprepare(cfg->num_clks, qmp->clks);
->>
->> +       /* no minimum load set required before disable regulator */
-> No otneed for the comment.
->
->>          regulator_bulk_disable(cfg->num_vregs, qmp->vregs);
->>
->>          mutex_unlock(&qmp->phy_mutex);
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
->

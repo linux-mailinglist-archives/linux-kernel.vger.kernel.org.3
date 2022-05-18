@@ -2,153 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B7752B078
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50F352B080
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiERC01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 22:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S234275AbiERChk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 22:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232012AbiERC0Y (ORCPT
+        with ESMTP id S232506AbiERChh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 22:26:24 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17A7DF83
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 19:26:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L2xgb17Rlz4xLR;
-        Wed, 18 May 2022 12:26:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1652840780;
-        bh=u8hjBqGeDsxKY2xXutPvYF6jcmzD6hAUIg/lOJ1zE0U=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=NZ9E0WAMwihSqFIlV6+kygWjO/bVYwjUWYZSRzf13YUZn7xwIO7IoXV3VnaUTh8U0
-         +vJiNI9d2Ol0LEP8I3pbk3cpFWlCHDUXDksWvXwxXAfwuwlFNKnDkjRxxJtu0Aei38
-         z8CjsZAIP/UGUiXO513L8HJew7vSnaaU09wT1Sq08CzwPAUu+7GnB6W4Z8RDA3fo1h
-         PzjM3mxTP94UnOuhwiQcNZLI7tjXMtLVSX+RFZDlWCsQXMbiZy0WPY2SQa+3B6H9zW
-         EVnjj7yjhW8DYrBpW4ZeyA5wEsMsImbxmHX22LLlP/5M/2lRQp49KeCAyvJtm0462V
-         pBk+8//8CjxGQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Baoquan He <bhe@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] kexec_file: Drop pr_err in weak implementations of
- arch_kexec_apply_relocations[_add]
-In-Reply-To: <8735h8b2f1.fsf@email.froward.int.ebiederm.org>
-References: <20220425174128.11455-1-naveen.n.rao@linux.vnet.ibm.com>
- <YoNqJ/MOSIVwKP/o@MiWiFi-R3L-srv>
- <1652782155.56t7mah8ib.naveen@linux.ibm.com>
- <8735h8b2f1.fsf@email.froward.int.ebiederm.org>
-Date:   Wed, 18 May 2022 12:26:15 +1000
-Message-ID: <87v8u3o9tk.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 22:37:37 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1DAF3541BC;
+        Tue, 17 May 2022 19:37:34 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id ADC4D1E80D72;
+        Wed, 18 May 2022 10:31:08 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0HRLVRu_izNp; Wed, 18 May 2022 10:31:05 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 61A3B1E80D71;
+        Wed, 18 May 2022 10:31:05 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     rostedt@goodmis.org
+Cc:     mingo@redhat.com, linux@armlinux.org.uk, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH v2] ftrace: Remove return value of ftrace_arch_modify_*()
+Date:   Wed, 18 May 2022 10:36:40 +0800
+Message-Id: <20220518023639.4065-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+In-Reply-To: <20220517101351.273b385f@gandalf.local.home>
+References: <20220517101351.273b385f@gandalf.local.home>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Eric W. Biederman" <ebiederm@xmission.com> writes:
-> Looking at this the pr_err is absolutely needed.  If an unsupported case
-> winds up in the purgatory blob and the code can't handle it things
-> will fail silently much worse later.
+All instances of the function ftrace_arch_modify_prepare() and
+  ftrace_arch_modify_post_process() return zero. There's no point in
+  checking their return value. Just have them be void functions.
 
-It won't fail later, it will fail the syscall.
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ arch/arm/kernel/ftrace.c   |  6 ++----
+ arch/riscv/kernel/ftrace.c |  6 ++----
+ arch/s390/kernel/ftrace.c  |  3 +--
+ arch/x86/kernel/ftrace.c   |  6 ++----
+ include/linux/ftrace.h     |  4 ++--
+ kernel/trace/ftrace.c      | 16 ++++------------
+ 6 files changed, 13 insertions(+), 28 deletions(-)
 
-sys_kexec_file_load()
-  kimage_file_alloc_init()
-    kimage_file_prepare_segments()
-      arch_kexec_kernel_image_load()
-        kexec_image_load_default()
-          image->fops->load()
-            elf64_load()        # powerpc
-            bzImage64_load()    # x86
-              kexec_load_purgatory()
-                kexec_apply_relocations()
+diff --git a/arch/arm/kernel/ftrace.c b/arch/arm/kernel/ftrace.c
+index 83cc068586bc..a0b6d1e3812f 100644
+--- a/arch/arm/kernel/ftrace.c
++++ b/arch/arm/kernel/ftrace.c
+@@ -79,16 +79,14 @@ static unsigned long __ref adjust_address(struct dyn_ftrace *rec,
+ 	return (unsigned long)&ftrace_regs_caller_from_init;
+ }
+ 
+-int ftrace_arch_code_modify_prepare(void)
++void ftrace_arch_code_modify_prepare(void)
+ {
+-	return 0;
+ }
+ 
+-int ftrace_arch_code_modify_post_process(void)
++void ftrace_arch_code_modify_post_process(void)
+ {
+ 	/* Make sure any TLB misses during machine stop are cleared. */
+ 	flush_tlb_all();
+-	return 0;
+ }
+ 
+ static unsigned long ftrace_call_replace(unsigned long pc, unsigned long addr,
+diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+index 4716f4cdc038..2086f6585773 100644
+--- a/arch/riscv/kernel/ftrace.c
++++ b/arch/riscv/kernel/ftrace.c
+@@ -12,16 +12,14 @@
+ #include <asm/patch.h>
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
+-int ftrace_arch_code_modify_prepare(void) __acquires(&text_mutex)
++void ftrace_arch_code_modify_prepare(void) __acquires(&text_mutex)
+ {
+ 	mutex_lock(&text_mutex);
+-	return 0;
+ }
+ 
+-int ftrace_arch_code_modify_post_process(void) __releases(&text_mutex)
++void ftrace_arch_code_modify_post_process(void) __releases(&text_mutex)
+ {
+ 	mutex_unlock(&text_mutex);
+-	return 0;
+ }
+ 
+ static int ftrace_check_current_call(unsigned long hook_pos,
+diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
+index 1852d46babb1..416b5a94353d 100644
+--- a/arch/s390/kernel/ftrace.c
++++ b/arch/s390/kernel/ftrace.c
+@@ -225,14 +225,13 @@ void arch_ftrace_update_code(int command)
+ 	ftrace_modify_all_code(command);
+ }
+ 
+-int ftrace_arch_code_modify_post_process(void)
++void ftrace_arch_code_modify_post_process(void)
+ {
+ 	/*
+ 	 * Flush any pre-fetched instructions on all
+ 	 * CPUs to make the new code visible.
+ 	 */
+ 	text_poke_sync_lock();
+-	return 0;
+ }
+ 
+ #ifdef CONFIG_MODULES
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 1e31c7d21597..73d2719ed12c 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -37,7 +37,7 @@
+ 
+ static int ftrace_poke_late = 0;
+ 
+-int ftrace_arch_code_modify_prepare(void)
++void ftrace_arch_code_modify_prepare(void)
+     __acquires(&text_mutex)
+ {
+ 	/*
+@@ -47,10 +47,9 @@ int ftrace_arch_code_modify_prepare(void)
+ 	 */
+ 	mutex_lock(&text_mutex);
+ 	ftrace_poke_late = 1;
+-	return 0;
+ }
+ 
+-int ftrace_arch_code_modify_post_process(void)
++void ftrace_arch_code_modify_post_process(void)
+     __releases(&text_mutex)
+ {
+ 	/*
+@@ -61,7 +60,6 @@ int ftrace_arch_code_modify_post_process(void)
+ 	text_poke_finish();
+ 	ftrace_poke_late = 0;
+ 	mutex_unlock(&text_mutex);
+-	return 0;
+ }
+ 
+ static const char *ftrace_nop_replace(void)
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 4816b7e11047..a5f74f6e7e4e 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -449,8 +449,8 @@ static inline void stack_tracer_enable(void) { }
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ 
+-int ftrace_arch_code_modify_prepare(void);
+-int ftrace_arch_code_modify_post_process(void);
++void ftrace_arch_code_modify_prepare(void);
++void ftrace_arch_code_modify_post_process(void);
+ 
+ enum ftrace_bug_type {
+ 	FTRACE_BUG_UNKNOWN,
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 4f1d2f5e7263..35a899f136fe 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -2707,18 +2707,16 @@ ftrace_nop_initialize(struct module *mod, struct dyn_ftrace *rec)
+  * archs can override this function if they must do something
+  * before the modifying code is performed.
+  */
+-int __weak ftrace_arch_code_modify_prepare(void)
++void __weak ftrace_arch_code_modify_prepare(void)
+ {
+-	return 0;
+ }
+ 
+ /*
+  * archs can override this function if they must do something
+  * after the modifying code is performed.
+  */
+-int __weak ftrace_arch_code_modify_post_process(void)
++void __weak ftrace_arch_code_modify_post_process(void)
+ {
+-	return 0;
+ }
+ 
+ void ftrace_modify_all_code(int command)
+@@ -2804,12 +2802,7 @@ void __weak arch_ftrace_update_code(int command)
+ 
+ static void ftrace_run_update_code(int command)
+ {
+-	int ret;
+-
+-	ret = ftrace_arch_code_modify_prepare();
+-	FTRACE_WARN_ON(ret);
+-	if (ret)
+-		return;
++	ftrace_arch_code_modify_prepare();
+ 
+ 	/*
+ 	 * By default we use stop_machine() to modify the code.
+@@ -2819,8 +2812,7 @@ static void ftrace_run_update_code(int command)
+ 	 */
+ 	arch_ftrace_update_code(command);
+ 
+-	ret = ftrace_arch_code_modify_post_process();
+-	FTRACE_WARN_ON(ret);
++	ftrace_arch_code_modify_post_process();
+ }
+ 
+ static void ftrace_run_modify_code(struct ftrace_ops *ops, int command,
+-- 
+2.18.2
 
-Which does:
-
-	if (relsec->sh_type == SHT_RELA)
-		ret = arch_kexec_apply_relocations_add(pi, section,
-						       relsec, symtab);
-	else if (relsec->sh_type == SHT_REL)
-		ret = arch_kexec_apply_relocations(pi, section,
-						   relsec, symtab);
-	if (ret)
-		return ret;
-
-And that error is bubbled all the way back up. So as long as
-arch_kexec_apply_relocations() returns an error the syscall will fail
-back to userspace and there'll be an error message at that level.
-
-It's true that having nothing printed in dmesg makes it harder to work
-out why the syscall failed. But it's a kernel bug if there are unhandled
-relocations in the kernel-supplied purgatory code, so a user really has
-no way to do anything about the error even if it is printed.
-
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
->
->> Baoquan He wrote:
->>> On 04/25/22 at 11:11pm, Naveen N. Rao wrote:
->>>> kexec_load_purgatory() can fail for many reasons - there is no need to
->>>> print an error when encountering unsupported relocations.
->>>> This solves a build issue on powerpc with binutils v2.36 and newer [1].
->>>> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
->>>> symbols") [2], binutils started dropping section symbols that it thought
->>> I am not familiar with binutils, while wondering if this exists in other
->>> ARCHes except of ppc. Arm64 doesn't have the ARCH override either, do we
->>> have problem with it?
->>
->> I'm not aware of this specific file causing a problem on other architectures -
->> perhaps the config options differ enough. There are however more reports of
->> similar issues affecting other architectures with the llvm integrated assembler:
->> https://github.com/ClangBuiltLinux/linux/issues/981
->>
->>>
->>>> were unused.  This isn't an issue in general, but with kexec_file.c, gcc
->>>> is placing kexec_arch_apply_relocations[_add] into a separate
->>>> .text.unlikely section and the section symbol ".text.unlikely" is being
->>>> dropped. Due to this, recordmcount is unable to find a non-weak symbol
->>> But arch_kexec_apply_relocations_add is weak symbol on ppc.
->>
->> Yes. Note that it is just the section symbol that gets dropped. The section is
->> still present and will continue to hold the symbols for the functions
->> themselves.
->
-> So we have a case where binutils thinks it is doing something useful
-> and our kernel specific tool gets tripped up by it.
-
-It's not just binutils, the LLVM assembler has the same behavior.
-
-> Reading the recordmcount code it looks like it is finding any symbol
-> within a section but ignoring weak symbols.  So I suspect the only
-> remaining symbol in the section is __weak and that confuses
-> recordmcount.
->
-> Does removing the __weak annotation on those functions fix the build
-> error?  If so we can restructure the kexec code to simply not use __weak
-> symbols.
->
-> Otherwise the fix needs to be in recordmcount or binutils, and we should
-> loop whoever maintains recordmcount in to see what they can do.
-
-It seems that recordmcount is not really maintained anymore now that x86
-uses objtool?
-
-There've been several threads about fixing recordmcount, but none of
-them seem to have lead to a solution.
-
-These weak symbol vs recordmcount problems have been worked around going
-back as far as 2020:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/include/linux/elfcore.h?id=6e7b64b9dd6d96537d816ea07ec26b7dedd397b9
-
-cheers

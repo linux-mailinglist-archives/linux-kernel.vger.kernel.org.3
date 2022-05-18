@@ -2,133 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56B952B85F
+	by mail.lfdr.de (Postfix) with ESMTP id 2E24E52B85D
 	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235349AbiERLGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
+        id S235364AbiERLIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235307AbiERLGb (ORCPT
+        with ESMTP id S235307AbiERLIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:06:31 -0400
-Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 071676440;
-        Wed, 18 May 2022 04:06:27 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Wed, 18 May 2022 19:05:59
- +0800 (GMT+08:00)
-X-Originating-IP: [124.236.130.193]
-Date:   Wed, 18 May 2022 19:05:59 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, gregkh@linuxfoundation.org,
-        alexander.deucher@amd.com, broonie@kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net v2] NFC: hci: fix sleep in atomic context bugs in
- nfc_hci_hcp_message_tx
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <bb566eb7-c571-9a51-af51-78e36412fbfc@linaro.org>
-References: <20220517105526.114421-1-duoming@zju.edu.cn>
- <2ce7a871-3e55-ae50-955c-bf04a443aba3@linaro.org>
- <71c24f38.1a1f4.180d29ff1fd.Coremail.duoming@zju.edu.cn>
- <68ccef70-ef30-8f53-6ec5-17ce5815089c@linaro.org>
- <454a29ba.1b9b1.180d576985b.Coremail.duoming@zju.edu.cn>
- <bb566eb7-c571-9a51-af51-78e36412fbfc@linaro.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Wed, 18 May 2022 07:08:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E12C232EDD;
+        Wed, 18 May 2022 04:08:05 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7C1423A;
+        Wed, 18 May 2022 04:08:05 -0700 (PDT)
+Received: from [10.57.82.55] (unknown [10.57.82.55])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A23F23F718;
+        Wed, 18 May 2022 04:08:03 -0700 (PDT)
+Message-ID: <a063199a-72dd-d2ab-10bb-7130697c5611@arm.com>
+Date:   Wed, 18 May 2022 12:07:58 +0100
 MIME-Version: 1.0
-Message-ID: <670b87a9.1d1aa.180d6d8952e.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgC3PiEX04RidO1nAA--.10469W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQOAVZdtZwY3gABss
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/8] iommu: mtk_iommu: Lookup phandle to retrieve syscon
+ to infracfg
+Content-Language: en-GB
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
+Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
+ <20220517132107.195932-3-angelogioacchino.delregno@collabora.com>
+ <16fb07d9-28d8-5c73-1eb5-ec13544d22e5@arm.com>
+ <b003c37c-0f2d-31f6-6a74-4e1f0f4a1ccb@collabora.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <b003c37c-0f2d-31f6-6a74-4e1f0f4a1ccb@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpEYXRlOiBXZWQsIDE4IE1heSAyMDIyIDExOjM5OjI3ICswMjAwIEtyenlzenRvZiB3
-cm90ZToKCj4gPj4gVGhlcmUgaXMuCj4gPj4KPiA+PiBuZmNfaGNpX2ZhaWx1cmUgLT4gc3BpbiBs
-b2NrIC0+IG5mY19kcml2ZXJfZmFpbHVyZSAtPiBuZmNfdGFyZ2V0c19mb3VuZAo+ID4+IC0+IGRl
-dmljZV9sb2NrCj4gPj4KPiA+PiBJIGZvdW5kIGl0IGp1c3QgYnkgYSB2ZXJ5IHF1aWNrIGxvb2ss
-IHNvIEkgc3VzcGVjdCB0aGVyZSBhcmUgc2V2ZXJhbAo+ID4+IG90aGVyIHBsYWNlcywgbm90IHJl
-YWxseSBjaGVja2VkLgo+ID4gCj4gPiBJIGFncmVlIHdpdGggeW91LCB0aGUgc3Bpbl9sb2NrIGlz
-IG5vdCBhIGdvb2Qgc29sdXRpb24gdG8gdGhpcyBwcm9ibGVtLiBUaGVyZSBpcyBhbm90aGVyIHNv
-bHV0aW9uOgo+ID4gCj4gPiBXZSBjb3VsZCBwdXQgdGhlIG5mY19oY2lfc2VuZF9ldmVudCgpIG9m
-IHN0MjFuZmNhX3NlX3d0X3RpbWVvdXQoKSBpbiBhIHdvcmsgaXRlbSwgdGhlbiwgdXNpbmcKPiA+
-IHNjaGVkdWxlX3dvcmsoKSBpbiBzdDIxbmZjYV9zZV93dF90aW1lb3V0KCkgdG8gZXhlY3V0ZSB0
-aGUgd29yayBpdGVtLiBUaGUgc2NoZWR1bGVfd29yaygpIHdpbGwKPiA+IHdha2UgdXAgYW5vdGhl
-ciBrZXJuZWwgdGhyZWFkIHdoaWNoIGlzIGluIHByb2Nlc3MgY29udGV4dCB0byBleGVjdXRlIHRo
-ZSBib3R0b20gaGFsZiBvZiB0aGUgaW50ZXJydXB0LCAKPiA+IHNvIGl0IGFsbG93cyBzbGVlcC4K
-PiA+IAo+ID4gVGhlIGZvbGxvd2luZyBpcyB0aGUgZGV0YWlscy4KPiAKPiBZZXMsIHRoaXMgc2Vl
-bXMgZ29vZCBzb2x1dGlvbi4gWW91IG1pZ2h0IGFsc28gbmVlZCB0byBhZGQKPiBjYW5jZWxfd29y
-a19zeW5jIHRvIGFsbCBwbGFjZXMgcmVtb3ZpbmcgdGhlIHRpbWVyLgoKVGhhbmtzIGZvciB5b3Vy
-IGFwcHJvdmFsLgoKVGhlcmUgYXJlIHR3byBkZWxfdGltZXJfc3luYygpIGZ1bmN0aW9ucyByZWxh
-dGVkIHdpdGggYndpX3RpbWVyIHRpbWVyLgpJIG5lZ2xlY3Qgb25lIHNpdGUgaW4gc3QyMW5mY2Ff
-YXBkdV9yZWFkZXJfZXZlbnRfcmVjZWl2ZWQoKSwgSSBhZGQKY2FuY2VsX3dvcmtfc3luYygpIGlu
-IGl0IHRoaXMgdGltZS4gCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZmMvc3QyMW5mY2Evc2UuYyBi
-L2RyaXZlcnMvbmZjL3N0MjFuZmNhL3NlLmMKaW5kZXggYzkyMmYxMGQwZDcuLjdlMjEzZjhkZGM5
-IDEwMDY0NAotLS0gYS9kcml2ZXJzL25mYy9zdDIxbmZjYS9zZS5jCisrKyBiL2RyaXZlcnMvbmZj
-L3N0MjFuZmNhL3NlLmMKQEAgLTI0MSw3ICsyNDEsNyBAQCBpbnQgc3QyMW5mY2FfaGNpX3NlX2lv
-KHN0cnVjdCBuZmNfaGNpX2RldiAqaGRldiwgdTMyIHNlX2lkeCwKIH0KIEVYUE9SVF9TWU1CT0wo
-c3QyMW5mY2FfaGNpX3NlX2lvKTsKCi1zdGF0aWMgdm9pZCBzdDIxbmZjYV9zZV93dF90aW1lb3V0
-KHN0cnVjdCB0aW1lcl9saXN0ICp0KQorc3RhdGljIHZvaWQgc3QyMW5mY2Ffc2Vfd3Rfd29yayhz
-dHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspCiB7CiAgICAgICAgLyogCiAgICAgICAgICogTm8gYW5z
-d2VyIGZyb20gdGhlIHNlY3VyZSBlbGVtZW50CkBAIC0yNTQsOCArMjU0LDkgQEAgc3RhdGljIHZv
-aWQgc3QyMW5mY2Ffc2Vfd3RfdGltZW91dChzdHJ1Y3QgdGltZXJfbGlzdCAqdCkKICAgICAgICAg
-Ki8KICAgICAgICAvKiBoYXJkd2FyZSByZXNldCBtYW5hZ2VkIHRocm91Z2ggVkNDX1VJQ0NfT1VU
-IHBvd2VyIHN1cHBseSAqLwogICAgICAgIHU4IHBhcmFtID0gMHgwMTsKLSAgICAgICBzdHJ1Y3Qg
-c3QyMW5mY2FfaGNpX2luZm8gKmluZm8gPSBmcm9tX3RpbWVyKGluZm8sIHQsCi0gICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzZV9pbmZvLmJ3aV90aW1l
-cik7CisgICAgICAgc3RydWN0IHN0MjFuZmNhX2hjaV9pbmZvICppbmZvID0gY29udGFpbmVyX29m
-KHdvcmssCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0
-cnVjdCBzdDIxbmZjYV9oY2lfaW5mbywKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgc2VfaW5mby50aW1lb3V0X3dvcmspOwoKICAgICAgICBpbmZvLT5zZV9p
-bmZvLmJ3aV9hY3RpdmUgPSBmYWxzZTsKIApAQCAtMjcxLDYgKzI3MiwxMyBAQCBzdGF0aWMgdm9p
-ZCBzdDIxbmZjYV9zZV93dF90aW1lb3V0KHN0cnVjdCB0aW1lcl9saXN0ICp0KQogICAgICAgIGlu
-Zm8tPnNlX2luZm8uY2IoaW5mby0+c2VfaW5mby5jYl9jb250ZXh0LCBOVUxMLCAwLCAtRVRJTUUp
-OwogfQoKK3N0YXRpYyB2b2lkIHN0MjFuZmNhX3NlX3d0X3RpbWVvdXQoc3RydWN0IHRpbWVyX2xp
-c3QgKnQpCit7CisgICAgICAgc3RydWN0IHN0MjFuZmNhX2hjaV9pbmZvICppbmZvID0gZnJvbV90
-aW1lcihpbmZvLCB0LCBzZV9pbmZvLmJ3aV90aW1lcik7CisKKyAgICAgICBzY2hlZHVsZV93b3Jr
-KCZpbmZvLT5zZV9pbmZvLnRpbWVvdXRfd29yayk7Cit9CisKIHN0YXRpYyB2b2lkIHN0MjFuZmNh
-X3NlX2FjdGl2YXRpb25fdGltZW91dChzdHJ1Y3QgdGltZXJfbGlzdCAqdCkKIHsKICAgICAgICBz
-dHJ1Y3Qgc3QyMW5mY2FfaGNpX2luZm8gKmluZm8gPSBmcm9tX3RpbWVyKGluZm8sIHQsCkBAIC0z
-NjAsNiArMzY4LDcgQEAgaW50IHN0MjFuZmNhX2FwZHVfcmVhZGVyX2V2ZW50X3JlY2VpdmVkKHN0
-cnVjdCBuZmNfaGNpX2RldiAqaGRldiwKICAgICAgICBzd2l0Y2ggKGV2ZW50KSB7CiAgICAgICAg
-Y2FzZSBTVDIxTkZDQV9FVlRfVFJBTlNNSVRfREFUQToKICAgICAgICAgICAgICAgIGRlbF90aW1l
-cl9zeW5jKCZpbmZvLT5zZV9pbmZvLmJ3aV90aW1lcik7CisgICAgICAgICAgICAgICBjYW5jZWxf
-d29ya19zeW5jKCZpbmZvLT5zZV9pbmZvLnRpbWVvdXRfd29yayk7CiAgICAgICAgICAgICAgICBp
-bmZvLT5zZV9pbmZvLmJ3aV9hY3RpdmUgPSBmYWxzZTsKICAgICAgICAgICAgICAgIHIgPSBuZmNf
-aGNpX3NlbmRfZXZlbnQoaGRldiwgU1QyMU5GQ0FfREVWSUNFX01HTlRfR0FURSwKICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBTVDIxTkZDQV9FVlRfU0VfRU5EX09GX0FQRFVfVFJBTlNG
-RVIsIE5VTEwsIDApOwpAQCAtMzg5LDYgKzM5OCw3IEBAIHZvaWQgc3QyMW5mY2Ffc2VfaW5pdChz
-dHJ1Y3QgbmZjX2hjaV9kZXYgKmhkZXYpCiAgICAgICAgc3RydWN0IHN0MjFuZmNhX2hjaV9pbmZv
-ICppbmZvID0gbmZjX2hjaV9nZXRfY2xpZW50ZGF0YShoZGV2KTsKCiAgICAgICAgaW5pdF9jb21w
-bGV0aW9uKCZpbmZvLT5zZV9pbmZvLnJlcV9jb21wbGV0aW9uKTsKKyAgICAgICBJTklUX1dPUkso
-JmluZm8tPnNlX2luZm8udGltZW91dF93b3JrLCBzdDIxbmZjYV9zZV93dF93b3JrKTsKICAgICAg
-ICAvKiBpbml0aWFsaXplIHRpbWVycyAqLwogICAgICAgIHRpbWVyX3NldHVwKCZpbmZvLT5zZV9p
-bmZvLmJ3aV90aW1lciwgc3QyMW5mY2Ffc2Vfd3RfdGltZW91dCwgMCk7CiAgICAgICAgaW5mby0+
-c2VfaW5mby5id2lfYWN0aXZlID0gZmFsc2U7CkBAIC00MTYsNiArNDI2LDcgQEAgdm9pZCBzdDIx
-bmZjYV9zZV9kZWluaXQoc3RydWN0IG5mY19oY2lfZGV2ICpoZGV2KQogICAgICAgIGlmIChpbmZv
-LT5zZV9pbmZvLnNlX2FjdGl2ZSkKICAgICAgICAgICAgICAgIGRlbF90aW1lcl9zeW5jKCZpbmZv
-LT5zZV9pbmZvLnNlX2FjdGl2ZV90aW1lcik7CgorICAgICAgIGNhbmNlbF93b3JrX3N5bmMoJmlu
-Zm8tPnNlX2luZm8udGltZW91dF93b3JrKTsKICAgICAgICBpbmZvLT5zZV9pbmZvLmJ3aV9hY3Rp
-dmUgPSBmYWxzZTsKICAgICAgICBpbmZvLT5zZV9pbmZvLnNlX2FjdGl2ZSA9IGZhbHNlOwogfQpk
-aWZmIC0tZ2l0IGEvZHJpdmVycy9uZmMvc3QyMW5mY2Evc3QyMW5mY2EuaCBiL2RyaXZlcnMvbmZj
-L3N0MjFuZmNhL3N0MjFuZmNhLmgKaW5kZXggY2I2YWQ5MTZiZTkuLmFlNjc3MWNjOTg5IDEwMDY0
-NAotLS0gYS9kcml2ZXJzL25mYy9zdDIxbmZjYS9zdDIxbmZjYS5oCisrKyBiL2RyaXZlcnMvbmZj
-L3N0MjFuZmNhL3N0MjFuZmNhLmgKQEAgLTE0MSw2ICsxNDEsNyBAQCBzdHJ1Y3Qgc3QyMW5mY2Ff
-c2VfaW5mbyB7CgogICAgICAgIHNlX2lvX2NiX3QgY2I7CiAgICAgICAgdm9pZCAqY2JfY29udGV4
-dDsKKyAgICAgICBzdHJ1Y3Qgd29ya19zdHJ1Y3QgdGltZW91dF93b3JrOwogfTsKCiBzdHJ1Y3Qg
-c3QyMW5mY2FfaGNpX2luZm8gewoKSWYgeW91IHRoaW5rIHRoaXMgc29sdXRpb24gaXMgb2ssIEkg
-d2lsbCBzZW5kICJQQVRDSCB2MyIuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQo=
+On 2022-05-18 09:29, AngeloGioacchino Del Regno wrote:
+> Il 17/05/22 16:12, Robin Murphy ha scritto:
+>> On 2022-05-17 14:21, AngeloGioacchino Del Regno wrote:
+>>> This driver will get support for more SoCs and the list of infracfg
+>>> compatibles is expected to grow: in order to prevent getting this
+>>> situation out of control and see a long list of compatible strings,
+>>> add support to retrieve a handle to infracfg's regmap through a
+>>> new "mediatek,infracfg" phandle.
+>>>
+>>> In order to keep retrocompatibility with older devicetrees, the old
+>>> way is kept in place, but also a dev_warn() was added to advertise
+>>> this change in hope that the user will see it and eventually update
+>>> the devicetree if this is possible.
+>>>
+>>> Signed-off-by: AngeloGioacchino Del Regno 
+>>> <angelogioacchino.delregno@collabora.com>
+>>> ---
+>>>   drivers/iommu/mtk_iommu.c | 40 +++++++++++++++++++++++++--------------
+>>>   1 file changed, 26 insertions(+), 14 deletions(-)
+>>>
+>>> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+>>> index 71b2ace74cd6..cfaaa98d2b50 100644
+>>> --- a/drivers/iommu/mtk_iommu.c
+>>> +++ b/drivers/iommu/mtk_iommu.c
+>>> @@ -1134,22 +1134,34 @@ static int mtk_iommu_probe(struct 
+>>> platform_device *pdev)
+>>>       data->protect_base = ALIGN(virt_to_phys(protect), 
+>>> MTK_PROTECT_PA_ALIGN);
+>>>       if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_4GB_MODE)) {
+>>> -        switch (data->plat_data->m4u_plat) {
+>>> -        case M4U_MT2712:
+>>> -            p = "mediatek,mt2712-infracfg";
+>>> -            break;
+>>> -        case M4U_MT8173:
+>>> -            p = "mediatek,mt8173-infracfg";
+>>> -            break;
+>>> -        default:
+>>> -            p = NULL;
+>>> +        infracfg = syscon_regmap_lookup_by_phandle(dev->of_node, 
+>>> "mediatek,infracfg");
+>>> +        if (IS_ERR(infracfg)) {
+>>> +            dev_warn(dev, "Cannot find phandle to mediatek,infracfg:"
+>>> +                      " Please update your devicetree.\n");
+>>
+>> Is this really a dev_warn-level problem? There's no functional impact, 
+>> given that we can't stop supporting the original binding any time 
+>> soon, if ever, so I suspect this is more likely to just annoy users 
+>> and CI systems than effect any significant change.
+>>
+> 
+> The upstream devicetrees were updated to use the new handle and this is 
+> a way to
+> warn about having outdated DTs... besides, I believe that CIs will 
+> always get the
+> devicetree from the same tree that the kernel was compiled from (hence 
+> no message
+> will be thrown).
+> 
+> In any case, if you think that a dev_info would be more appropriate, I 
+> can change
+> that no problem.
+
+If there's some functional impact from using the old binding vs. the new 
+one then it's reasonable to inform the user of that (as we do in 
+arm-smmu, for example).
+
+However if you change an established binding for non-functional reasons, 
+then you get to support both bindings, and it's not the end user's 
+problem at all. There seems to be zero reason to update an existing DTB 
+for this difference alone, so TBH I don't think it deserves a message at 
+all.
+
+>>> +            /*
+>>> +             * Legacy devicetrees will not specify a phandle to
+>>> +             * mediatek,infracfg: in that case, we use the older
+>>> +             * way to retrieve a syscon to infra.
+>>> +             *
+>>> +             * This is for retrocompatibility purposes only, hence
+>>> +             * no more compatibles shall be added to this.
+>>> +             */
+>>> +            switch (data->plat_data->m4u_plat) {
+>>> +            case M4U_MT2712:
+>>> +                p = "mediatek,mt2712-infracfg";
+>>> +                break;
+>>> +            case M4U_MT8173:
+>>> +                p = "mediatek,mt8173-infracfg";
+>>> +                break;
+>>> +            default:
+>>> +                p = NULL;
+>>> +            }
+>>> +
+>>> +            infracfg = syscon_regmap_lookup_by_compatible(p);
+>>
+>> Would it not make sense to punt this over to the same mechanism as for 
+>> pericfg, such that it simplifies down to something like:
+>>
+>>      if (IS_ERR(infracfg) && plat_data->infracfg) {
+>>          infracfg = 
+>> syscon_regmap_lookup_by_compatible(plat_data->infracfg);
+>>          ...
+>>      }
+>>
+>> ?
+>>
+>> TBH if we're still going to have a load of per-SoC data in the driver 
+>> anyway then I don't see that we really gain much by delegating one 
+>> aspect of it to DT, but meh. I would note that with the phandle 
+>> approach, you still need some *other* flag in the driver to know 
+>> whether a phandle is expected to be present or not, whereas a NULL vs. 
+>> non-NULL string is at least neatly self-describing.
+>>
+> 
+> That would be possible but, as Yong also pointed out, we should try to 
+> reduce the
+> per-SoC data in the driver by commonizing as much as possible, because 
+> this driver
+> supports a very long list of SoCs (even though they're not all 
+> upstreamed yet),
+> and the list is going to grow even more with time: this is also why I 
+> have changed
+> the MT8195 pericfg regmap lookup with a phandle like I've done for infra.
+
+That's fair enough, but it's not what the commit message says. The "long 
+list of compatible strings" complaint could be addressed at face value 
+by refactoring without changing the DT binding at all.
+
+However, I didn't think I'd have to point out why that argument doesn't 
+apply to existing SoCs which we have to support with the original 
+binding too; take another look at the switch statement above and have a 
+think...
+
+If we have to maintain infracfg compatible data *somewhere* in the 
+driver, which we do, then it seems more logical to keep it with the rest 
+of the data rather than scattered through the code, that's the main 
+point I wanted to make here.
+
+> There would also be another way, which would imply adding a generic 
+> compatible
+> "mediatek,infracfg" to the infra syscon node, but I really don't like 
+> that for
+> more than one reason, one of which is that this poses an issue, for 
+> which it's
+> not guaranteed that the registers are in infracfg and not infracfg_ao (even
+> though the offsets are the same), so then we would be back to ground zero.
+
+No, we still have to support the existing binding in the context of the 
+existing binding. There *are* some reasonable arguments for moving 
+future SoCs to the phandle binding, they just haven't been presented in 
+these patches ;)
+
+Thanks,
+Robin.

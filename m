@@ -2,47 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B588C52BC65
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 683A852BBE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238466AbiEROHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        id S238476AbiEROHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238446AbiEROH0 (ORCPT
+        with ESMTP id S238446AbiEROHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:07:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEC66A072;
-        Wed, 18 May 2022 07:07:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16105618D8;
-        Wed, 18 May 2022 14:07:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20A89C385A9;
-        Wed, 18 May 2022 14:07:23 +0000 (UTC)
-Date:   Wed, 18 May 2022 10:07:21 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Cc:     <arnd@arndb.de>, <catalin.marinas@arm.com>,
-        <gregkh@linuxfoundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <maz@kernel.org>, <quic_psodagud@quicinc.com>,
-        <quic_tsoni@quicinc.com>, <will@kernel.org>,
-        Prasad Sodagudi <psodagud@codeaurora.org>
-Subject: Re: [PATCHv14 5/9] lib: Add register read/write tracing support
-Message-ID: <20220518100721.18fb5876@gandalf.local.home>
-In-Reply-To: <9827bae40f6f319f294d06859c9e3c7442f067f2.1651663123.git.quic_saipraka@quicinc.com>
-References: <cover.1651663123.git.quic_saipraka@quicinc.com>
-        <9827bae40f6f319f294d06859c9e3c7442f067f2.1651663123.git.quic_saipraka@quicinc.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 18 May 2022 10:07:38 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9531B6A06C;
+        Wed, 18 May 2022 07:07:36 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id w123so2754323oiw.5;
+        Wed, 18 May 2022 07:07:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=44Xgt+EUBiutauBulnIHgR1NZC7VLz+1d73CrLpoSuA=;
+        b=EE+Ok5Q3AOQEWrEsMLQ8bJwxLj5JWKC0uRQavySm46LGHksaEXSJblszKsh1MvsIVQ
+         sDPRJcb4u60eXiklTNwE2U+LD49Wb+WD9qcumnXXeQJnMUEh+Cprmc8yCFMWDDAx/laZ
+         tSGFznxKpbQzHqnKFUn6Obmd3DZeEhLOmDwgdK5v2kgO5opVsh+5I61QnC6uyCbqRb+P
+         h2C/Fnjhf4h05p6b5Q8AMg4jSgBqBTEFQHak8Fh8GP7YqlfCZ9bfj2PBgjyDMGe6fFi6
+         v1tCilE06OSMQ2Ap/40R6GV7SfyLOFpw0XtrB50yxlMyw4CFBhcTVnu1K1CJBROjIYsQ
+         b0Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=44Xgt+EUBiutauBulnIHgR1NZC7VLz+1d73CrLpoSuA=;
+        b=UvfdYzjaYNc11S6u5pZoZfkmF/3HNP2jxVLuKGEQJVMnQoa+MW2GEQ9MMyNUkY+Beh
+         AJpCWk83cmRQY4KVLLhvTmXGxF4/jWaTrcZFs6dwjsmiOCYMNDifYk5+KFYPK9li20xS
+         I3SHfizt58K4XB+7BEYZbGDv8wUdG2Y5uQxWmsq2AetTH6L5VtSQVKmamYrygKvX0Upd
+         ehPXl40FAFzdPuIBdGINGXEMmozi8gmLC0CB6IeIoJEn/d8pfDWxvdTFKjmek3jL1CtO
+         vMtAieiQ+SjClo9GEne2eV1BVxLd+zbZGfKub0UnjOOscpAb1yylTb/hTGdtM7gbZI31
+         IeWw==
+X-Gm-Message-State: AOAM531toroo+wgroA7WY1g/hs9utoSpfBOQK+aNJ7lyFbD/R5UHexPd
+        CroNBrkDLgVB6sXEVvuT00Y=
+X-Google-Smtp-Source: ABdhPJyXPBsJSPb3qsIt30kakP/1viqje/dN0om/JEDZ69uJP4Erfc4CCzg7BfUTauTabr0j1dC5fA==
+X-Received: by 2002:a05:6808:23d2:b0:326:979a:46f3 with SMTP id bq18-20020a05680823d200b00326979a46f3mr12917oib.207.1652882855862;
+        Wed, 18 May 2022 07:07:35 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v8-20020a056830140800b0060603221267sm782203otp.55.2022.05.18.07.07.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 07:07:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <47c64195-6629-ba2b-4533-b0fe37518da0@roeck-us.net>
+Date:   Wed, 18 May 2022 07:07:31 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-doc-tw-discuss@lists.sourceforge.net,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-btrfs <linux-btrfs@vger.kernel.org>
+References: <20220228103142.3301082-1-arnd@kernel.org>
+ <20220516131023.GA2329080@roeck-us.net> <YoJSF8T5K9pPx3Ap@kroah.com>
+ <9510474d-5555-42b3-5a9c-90e3078df499@roeck-us.net>
+ <CAK8P3a1GmRqPTXFCoLH9h1sP76a-bVRsGYP-YvczoXM4Na3OVQ@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [greybus-dev] Re: [PATCH] [v2] Kbuild: move to -std=gnu11
+In-Reply-To: <CAK8P3a1GmRqPTXFCoLH9h1sP76a-bVRsGYP-YvczoXM4Na3OVQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,196 +96,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 4 May 2022 16:58:24 +0530
-Sai Prakash Ranjan <quic_saipraka@quicinc.com> wrote:
+On 5/18/22 00:46, Arnd Bergmann wrote:
+> On Mon, May 16, 2022 at 3:19 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On 5/16/22 06:31, Greg KH wrote:
+>>> On Mon, May 16, 2022 at 06:10:23AM -0700, Guenter Roeck wrote:
+>>>> On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
+>>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>>>
+>>>>> During a patch discussion, Linus brought up the option of changing
+>>>>> the C standard version from gnu89 to gnu99, which allows using variable
+>>>>> declaration inside of a for() loop. While the C99, C11 and later standards
+>>>>> introduce many other features, most of these are already available in
+>>>>> gnu89 as GNU extensions as well.
+>>>>
+>>>> The downside is that backporting affected patches to older kernel branches
+>>>> now fails with error messages such as
+>>>>
+>>>> mm/kfence/core.c: In function ‘kfence_init_pool’:
+>>>> mm/kfence/core.c:595:2: error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
+>>>>
+>>>> Just something to keep in mind when writing patches.
+>>>
+>>> I just ran across this very issue on this commit.  It's an easy fixup
+>>> for 5.17.y to make this work, so I did that in my tree.  If this gets to
+>>> be too much, we might need to reconsider adding c11 to older stable
+>>> kernels.
+>>>
+>>
+>> I think I'll do just that for ChromeOS; I don't want to have to deal
+>> with the backports, and we are using recent compilers anyway.
+> 
+> I think it would be better not to have the --std=gnu11 change in the older
+> stable kernels by default, as this has introduced build warnings and other
+> smaller issues, as well as raising the minimum compiler version.
+> 
+> The users that are stuck on older kernels for some reason tend to
+> overlap with those on older compilers. One example here is Android,
+> which used to ship with a gcc-4.9 build as the only non-clang toolchain,
+> and was using this for building their kernels. If someone wants to
+> pull in stable updates into an older Android, this would fail with
+> -std=gnu11. Others may be in the same situation.
+> 
+> Changing some of the 5.x stable branches to -std=gnu11 is probably
+> less of a problem, but I would not know where to draw the line exactly.
+> Maybe check with the Android team to see what the newest kernel is
+> that they expect to be built with the old gcc-4.9.
+> 
 
-> +#include <linux/tracepoint.h>
-> +
-> +DECLARE_EVENT_CLASS(rwmmio_rw_template,
-> +
-> +	TP_PROTO(unsigned long caller, u64 val, u8 width, volatile void __iomem *addr),
-> +
-> +	TP_ARGS(caller, val, width, addr),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(unsigned long, caller)
-> +		__field(unsigned long, addr)
-> +		__field(u64, val)
-> +		__field(u8, width)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->caller = caller;
-> +		__entry->val = val;
-> +		__entry->addr = (unsigned long)(void *)addr;
-> +		__entry->width = width;
-> +	),
-> +
-> +	TP_printk("%pS width=%d val=%#llx addr=%#lx",
-> +		(void *)(unsigned long)__entry->caller, __entry->width,
+I don't think they still build anything with gcc. We (ChromeOS) only
+need it for test builds of chromeos-4.4 (sigh), and that will hopefully
+be gone in a couple of months.
 
-__entry->caller is already defined as "unsigned long", why the extra
-typecast?
+We already enabled -std=gnu11 in chromeos-5.10 and chromeos-5.15.
+We'll see if that is possible with chromeos-5.4 as well.
+We won't bother with older kernel branches, but those should not
+get many patches from upstream outside stable release merges,
+so it is less of a problem.
 
-> +		__entry->val, __entry->addr)
-> +);
-> +
-> +DEFINE_EVENT(rwmmio_rw_template, rwmmio_write,
-> +	TP_PROTO(unsigned long caller, u64 val, u8 width, volatile void __iomem *addr),
-> +	TP_ARGS(caller, val, width, addr)
-> +);
-> +
-> +DEFINE_EVENT(rwmmio_rw_template, rwmmio_post_write,
-> +	TP_PROTO(unsigned long caller, u64 val, u8 width, volatile void __iomem *addr),
-> +	TP_ARGS(caller, val, width, addr)
-> +);
-> +
-> +TRACE_EVENT(rwmmio_read,
-> +
-> +	TP_PROTO(unsigned long caller, u8 width, const volatile void __iomem *addr),
-> +
-> +	TP_ARGS(caller, width, addr),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(unsigned long, caller)
-> +		__field(unsigned long, addr)
-> +		__field(u8, width)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->caller = caller;
-> +		__entry->addr = (unsigned long)(void *)addr;
-> +		__entry->width = width;
-> +	),
-> +
-> +	TP_printk("%pS width=%d addr=%#lx",
-> +		 (void *)(unsigned long)__entry->caller, __entry->width, __entry->addr)
-
-
-Same here.
-
-> +);
-> +
-> +TRACE_EVENT(rwmmio_post_read,
-> +
-> +	TP_PROTO(unsigned long caller, u64 val, u8 width, const volatile void __iomem *addr),
-> +
-> +	TP_ARGS(caller, val, width, addr),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(unsigned long, caller)
-> +		__field(unsigned long, addr)
-> +		__field(u64, val)
-> +		__field(u8, width)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->caller = caller;
-> +		__entry->val = val;
-> +		__entry->addr = (unsigned long)(void *)addr;
-> +		__entry->width = width;
-> +	),
-> +
-> +	TP_printk("%pS width=%d val=%#llx addr=%#lx",
-> +		 (void *)(unsigned long)__entry->caller, __entry->width,
-
-And here.
-
-> +		 __entry->val, __entry->addr)
-> +);
-> +
-> +#endif /* _TRACE_RWMMIO_H */
-> +
-> +#include <trace/define_trace.h>
-> diff --git a/lib/Kconfig b/lib/Kconfig
-> index 087e06b4cdfd..5e2fd075724f 100644
-> --- a/lib/Kconfig
-> +++ b/lib/Kconfig
-> @@ -118,6 +118,13 @@ config INDIRECT_IOMEM_FALLBACK
->  	  mmio accesses when the IO memory address is not a registered
->  	  emulated region.
->  
-> +config TRACE_MMIO_ACCESS
-> +	bool "Register read/write tracing"
-> +	depends on TRACING && ARCH_HAVE_TRACE_MMIO_ACCESS
-> +	help
-> +	  Create tracepoints for MMIO read/write operations. These trace events
-> +	  can be used for logging all MMIO read/write operations.
-> +
->  source "lib/crypto/Kconfig"
->  
->  config CRC_CCITT
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 6b9ffc1bd1ee..3df7d24e65d2 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -151,6 +151,8 @@ lib-y += logic_pio.o
->  
->  lib-$(CONFIG_INDIRECT_IOMEM) += logic_iomem.o
->  
-> +obj-$(CONFIG_TRACE_MMIO_ACCESS) += trace_readwrite.o
-> +
->  obj-$(CONFIG_GENERIC_HWEIGHT) += hweight.o
->  
->  obj-$(CONFIG_BTREE) += btree.o
-> diff --git a/lib/trace_readwrite.c b/lib/trace_readwrite.c
-> new file mode 100644
-> index 000000000000..88637038b30c
-> --- /dev/null
-> +++ b/lib/trace_readwrite.c
-> @@ -0,0 +1,47 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Register read and write tracepoints
-> + *
-> + * Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/ftrace.h>
-> +#include <linux/module.h>
-> +#include <asm-generic/io.h>
-> +
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/rwmmio.h>
-> +
-> +#ifdef CONFIG_TRACE_MMIO_ACCESS
-> +void log_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
-
-Where's the header file that defines these functions? I would think it
-should be in this patch as well.
-
--- Steve
-
-
-> +		    unsigned long caller_addr)
-> +{
-> +	trace_rwmmio_write(caller_addr, val, width, addr);
-> +}
-> +EXPORT_SYMBOL_GPL(log_write_mmio);
-> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_write);
-> +
-> +void log_post_write_mmio(u64 val, u8 width, volatile void __iomem *addr,
-> +			 unsigned long caller_addr)
-> +{
-> +	trace_rwmmio_post_write(caller_addr, val, width, addr);
-> +}
-> +EXPORT_SYMBOL_GPL(log_post_write_mmio);
-> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_post_write);
-> +
-> +void log_read_mmio(u8 width, const volatile void __iomem *addr,
-> +		   unsigned long caller_addr)
-> +{
-> +	trace_rwmmio_read(caller_addr, width, addr);
-> +}
-> +EXPORT_SYMBOL_GPL(log_read_mmio);
-> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_read);
-> +
-> +void log_post_read_mmio(u64 val, u8 width, const volatile void __iomem *addr,
-> +			unsigned long caller_addr)
-> +{
-> +	trace_rwmmio_post_read(caller_addr, val, width, addr);
-> +}
-> +EXPORT_SYMBOL_GPL(log_post_read_mmio);
-> +EXPORT_TRACEPOINT_SYMBOL_GPL(rwmmio_post_read);
-> +#endif /* CONFIG_TRACE_MMIO_ACCESS */
-
+Guenter

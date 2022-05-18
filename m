@@ -2,65 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD9152B6D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD5E52B76C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234270AbiERJcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
+        id S234353AbiERJeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234248AbiERJcn (ORCPT
+        with ESMTP id S234337AbiERJdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:32:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA607A5AA9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:32:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652866360;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7J31Q2VN0OgQuZCLhh0JlKV/aqwl61ASdmry7dAHvIs=;
-        b=Go9tbbKhpfpfrpUJXASw/XFOF8Ugm5VBnzNnL2/dR7S9IL4adAgF+lUmoe3/+v4hPVfMBr
-        /lmSGURAqwE4jJZxwYhe+PT9hXAk4012cSsrh6jwsQlhZbnIoulH95fAAYVsQ+dTGC6JPJ
-        UGDEMny8qBdpSUKk5mrvzadIyEL2GwQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-480-SjHa4HwlNGmAnBzPSKmHsA-1; Wed, 18 May 2022 05:32:36 -0400
-X-MC-Unique: SjHa4HwlNGmAnBzPSKmHsA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F0D2829DD9AA;
-        Wed, 18 May 2022 09:32:35 +0000 (UTC)
-Received: from localhost (dhcp-192-194.str.redhat.com [10.33.192.194])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AD6101410DD5;
-        Wed, 18 May 2022 09:32:35 +0000 (UTC)
-From:   Cornelia Huck <cohuck@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>, mst@redhat.com,
-        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, peterz@infradead.org, paulmck@kernel.org,
-        maz@kernel.org, pasic@linux.ibm.com, eperezma@redhat.com,
-        lulu@redhat.com, sgarzare@redhat.com, xuanzhuo@linux.alibaba.com,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH V5 6/9] virtio-ccw: implement synchronize_cbs()
-In-Reply-To: <20220518035951.94220-7-jasowang@redhat.com>
-Organization: Red Hat GmbH
-References: <20220518035951.94220-1-jasowang@redhat.com>
- <20220518035951.94220-7-jasowang@redhat.com>
-User-Agent: Notmuch/0.34 (https://notmuchmail.org)
-Date:   Wed, 18 May 2022 11:32:33 +0200
-Message-ID: <87tu9nfaoe.fsf@redhat.com>
+        Wed, 18 May 2022 05:33:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6023EAFAF4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:33:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 210931042;
+        Wed, 18 May 2022 02:33:53 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9DD953F66F;
+        Wed, 18 May 2022 02:33:51 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH v2 0/8] arch_topology: Updates to add socket support and fix cluster ids
+Date:   Wed, 18 May 2022 10:33:17 +0100
+Message-Id: <20220518093325.2070336-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,109 +46,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18 2022, Jason Wang <jasowang@redhat.com> wrote:
+Hi All,
 
-> This patch tries to implement the synchronize_cbs() for ccw. For the
-> vring_interrupt() that is called via virtio_airq_handler(), the
-> synchronization is simply done via the airq_info's lock. For the
-> vring_interrupt() that is called via virtio_ccw_int_handler(), a per
-> device rwlock is introduced ans used in the synchronization method.
+This series intends to fix some discrepancies we have in the CPU topology
+parsing from the device tree /cpu-map node. Also this diverges from the
+behaviour on a ACPI enabled platform. The expectation is that both DT
+and ACPI enabled systems must present consistent view of the CPU topology.
 
-s/ans/and/
+Currently we assign generated cluster count as the physical package identifier
+for each CPU which is wrong. The device tree bindings for CPU topology supports
+sockets to infer the socket or physical package identifier for a given CPU.
+Also we don't check if all the cores/threads belong to the same cluster before
+updating their sibling masks which is fine as we don't set the cluster id yet.
 
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Halil Pasic <pasic@linux.ibm.com>
-> Cc: Cornelia Huck <cohuck@redhat.com>
-> Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
-> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
-> ---
->  drivers/s390/virtio/virtio_ccw.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
-> index d35e7a3f7067..22d36594bcdd 100644
-> --- a/drivers/s390/virtio/virtio_ccw.c
-> +++ b/drivers/s390/virtio/virtio_ccw.c
-> @@ -62,6 +62,7 @@ struct virtio_ccw_device {
->  	unsigned int revision; /* Transport revision */
->  	wait_queue_head_t wait_q;
->  	spinlock_t lock;
-> +	rwlock_t irq_lock;
->  	struct mutex io_lock; /* Serializes I/O requests */
->  	struct list_head virtqueues;
->  	bool is_thinint;
-> @@ -984,6 +985,27 @@ static const char *virtio_ccw_bus_name(struct virtio_device *vdev)
->  	return dev_name(&vcdev->cdev->dev);
->  }
->  
-> +static void virtio_ccw_synchronize_cbs(struct virtio_device *vdev)
-> +{
-> +	struct virtio_ccw_device *vcdev = to_vc_device(vdev);
-> +	struct airq_info *info = vcdev->airq_info;
-> +
-> +	if (info) {
-> +		/*
-> +		 * Synchronize with the vring_interrupt() with airq indicator
+These changes also assigns the cluster identifier as parsed from the device tree
+cluster nodes within /cpu-map without support for nesting of the clusters.
+Finally, it also add support for socket nodes in /cpu-map. With this the
+parsing of exact same information from ACPI PPTT and /cpu-map DT node
+aligns well.
 
-Maybe
+The only exception is that the last level cache id information can be
+inferred from the same ACPI PPTT while we need to parse CPU cache nodes
+in the device tree.
 
-/*
- * This device uses adapter interrupts: synchronize with
- * vring_interrupt() called by virtio_airq_handler() via the indicator
- * area lock.
- */
+P.S: I have not cc-ed Greg and Rafael so that all the users of arch_topology
+agree with the changes first before we include them.
 
-> +		 */
-> +		write_lock_irq(&info->lock);
-> +		write_unlock_irq(&info->lock);
-> +	} else {
-> +		/*
-> +		 * Synchronize with the vring_interrupt() called by
-> +		 * virtio_ccw_int_handler().
+v1[1]->v2:
+	- Updated ID validity check include all non-negative value
+	- Added support to get the device node for the CPU's last level cache
+	- Added support to build llc_sibling on DT platforms
 
-/*
- * This device uses classic interrupts: synchronize with
- * vring_interrupt() called by virtio_ccw_int_handler() via the
- * per-device irq_lock.
- */
+[1] https://lore.kernel.org/lkml/20220513095559.1034633-1-sudeep.holla@arm.com
 
-> +		 */
-> +		write_lock_irq(&vcdev->irq_lock);
-> +		write_unlock_irq(&vcdev->irq_lock);
-> +	}
-> +}
-> +
->  static const struct virtio_config_ops virtio_ccw_config_ops = {
->  	.get_features = virtio_ccw_get_features,
->  	.finalize_features = virtio_ccw_finalize_features,
-> @@ -995,6 +1017,7 @@ static const struct virtio_config_ops virtio_ccw_config_ops = {
->  	.find_vqs = virtio_ccw_find_vqs,
->  	.del_vqs = virtio_ccw_del_vqs,
->  	.bus_name = virtio_ccw_bus_name,
-> +	.synchronize_cbs = virtio_ccw_synchronize_cbs,
->  };
->  
->  
-> @@ -1106,6 +1129,8 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
->  			vcdev->err = -EIO;
->  	}
->  	virtio_ccw_check_activity(vcdev, activity);
-> +	/* Local interrupt should be disabled at this time */
+Sudeep Holla (8):
+  arch_topology: Don't set cluster identifier as physical package identifier
+  arch_topology: Set thread sibling cpumask only within the cluster
+  arch_topology: Set cluster identifier in each core/thread from /cpu-map
+  arch_topology: Add support for parsing sockets in /cpu-map
+  arch_topology: Check for non-negative value rather than -1 for IDs validity
+  arch_topology: Avoid parsing through all the CPUs once a outlier CPU is found
+  of: base: add support to get the device node for the CPU's last level cache
+  arch_topology: Add support to build llc_sibling on DT platforms
 
-/* Interrupts are disabled here. */
+ drivers/base/arch_topology.c  | 75 +++++++++++++++++++++++++++--------
+ drivers/of/base.c             | 33 +++++++++++----
+ include/linux/arch_topology.h |  1 +
+ include/linux/of.h            |  1 +
+ 4 files changed, 85 insertions(+), 25 deletions(-)
 
-?
-
-Interrupts enabled here would surely be a bug.
-
-> +	read_lock(&vcdev->irq_lock);
->  	for_each_set_bit(i, indicators(vcdev),
->  			 sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
->  		/* The bit clear must happen before the vring kick. */
+--
+2.36.1
 

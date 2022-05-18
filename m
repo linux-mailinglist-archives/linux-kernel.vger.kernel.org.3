@@ -2,137 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAEC52B269
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7610952B262
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiERGan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        id S231431AbiERGbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiERGal (ORCPT
+        with ESMTP id S230512AbiERGb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:30:41 -0400
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B04172AC3
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:30:38 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowAA3PZGDkoRi2FJxCA--.25107S2;
-        Wed, 18 May 2022 14:30:29 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     dan.carpenter@oracle.com
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, straube.linux@gmail.com,
-        fmdefrancesco@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] staging: r8188eu: add check for kzalloc
-Date:   Wed, 18 May 2022 14:30:24 +0800
-Message-Id: <20220518063024.514280-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 18 May 2022 02:31:28 -0400
+Received: from esa7.hc1455-7.c3s2.iphmx.com (esa7.hc1455-7.c3s2.iphmx.com [139.138.61.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FAA65DF
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:31:24 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="51998538"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647270000"; 
+   d="scan'208";a="51998538"
+Received: from unknown (HELO oym-r1.gw.nic.fujitsu.com) ([210.162.30.89])
+  by esa7.hc1455-7.c3s2.iphmx.com with ESMTP; 18 May 2022 15:31:21 +0900
+Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
+        by oym-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 19A296C969
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:31:21 +0900 (JST)
+Received: from yto-om4.fujitsu.com (yto-om4.o.css.fujitsu.com [10.128.89.165])
+        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id 3B2E5E0CDB
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:31:20 +0900 (JST)
+Received: from cn-r05-10.example.com (n3235113.np.ts.nmh.cs.fujitsu.co.jp [10.123.235.113])
+        by yto-om4.fujitsu.com (Postfix) with ESMTP id AC5054007E8A3;
+        Wed, 18 May 2022 15:31:19 +0900 (JST)
+From:   Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+To:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, gregkh@linuxfoundation.org,
+        rafael@kernel.org, mchehab+huawei@kernel.org, eugenis@google.com,
+        tony.luck@intel.com, pcc@google.com, peterz@infradead.org,
+        marcos@orca.pet, conor.dooley@microchip.com,
+        nicolas.ferre@microchip.com, marcan@marcan.st,
+        linus.walleij@linaro.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     tarumizu.kohei@fujitsu.com
+Subject: [PATCH v4 0/8] Add hardware prefetch control driver for A64FX and x86
+Date:   Wed, 18 May 2022 15:30:24 +0900
+Message-Id: <20220518063032.2377351-1-tarumizu.kohei@fujitsu.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowAA3PZGDkoRi2FJxCA--.25107S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrW5Jw1kuw4ftFyUArW3Awb_yoW5Ary7pF
-        s5u34rCFsYvr12kr4DKF1UAry3ua4rGFyUtFyxtwn09FyIyF1UGryYy3WYvr4fZrs29wn8
-        Kr92g34Uua1DCFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
-        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As kzalloc() may return null pointer, it should be better to
-check the return value and return error if fails in order
-to avoid dereference of null pointer.
-Moreover, the return value of rtw_alloc_hwxmits() should also
-be dealt with.
+This patch series add sysfs interface to control CPU's hardware
+prefetch behavior for performance tuning from userspace for the
+processor A64FX and x86 (on supported CPU).
 
-Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog
+Changes from v3: https://lore.kernel.org/lkml/20220420030223.689259-1-tarumizu.kohei@fujitsu.com/
+  - remove hardware-dependent code from core driver
+    (driver/base/pfctl.c)
+  - simplifies implementation of register bit operations
+  - extract the pseudo_lock patch as a separate patch
+    https://lore.kernel.org/lkml/20220518045517.2066518-1-tarumizu.kohei@fujitsu.com/
 
-v1 -> v2:
+[Background]
+============
+A64FX and some Intel processors have implementation-dependent register
+for controlling CPU's hardware prefetch behavior. A64FX has
+IMP_PF_STREAM_DETECT_CTRL_EL0[1], and Intel processors have MSR 0x1a4
+(MSR_MISC_FEATURE_CONTROL)[2]. These registers cannot be accessed from
+userspace.
 
-*Change 1. Make rtw_alloc_hwxmits() return -ENOMEM on failure
-and zero on success.
----
- drivers/staging/r8188eu/core/rtw_xmit.c    | 11 +++++++++--
- drivers/staging/r8188eu/include/rtw_xmit.h |  2 +-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+[1]https://github.com/fujitsu/A64FX/tree/master/doc/
+   A64FX_Specification_HPC_Extension_v1_EN.pdf
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index c2a550e7250e..0b3bcfbf22f7 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -178,7 +178,10 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	pxmitpriv->free_xmit_extbuf_cnt = num_xmit_extbuf;
- 
--	rtw_alloc_hwxmits(padapter);
-+	res = rtw_alloc_hwxmits(padapter);
-+	if (res)
-+		goto exit;
-+
- 	rtw_init_hwxmits(pxmitpriv->hwxmits, pxmitpriv->hwxmit_entry);
- 
- 	for (i = 0; i < 4; i++)
-@@ -1474,7 +1477,7 @@ s32 rtw_xmit_classifier(struct adapter *padapter, struct xmit_frame *pxmitframe)
- 	return res;
- }
- 
--void rtw_alloc_hwxmits(struct adapter *padapter)
-+int rtw_alloc_hwxmits(struct adapter *padapter)
- {
- 	struct hw_xmit *hwxmits;
- 	struct xmit_priv *pxmitpriv = &padapter->xmitpriv;
-@@ -1482,6 +1485,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
- 	pxmitpriv->hwxmit_entry = HWXMIT_ENTRY;
- 
- 	pxmitpriv->hwxmits = kzalloc(sizeof(struct hw_xmit) * pxmitpriv->hwxmit_entry, GFP_KERNEL);
-+	if (!pxmitpriv->hwxmits)
-+		return -ENOMEM;
- 
- 	hwxmits = pxmitpriv->hwxmits;
- 
-@@ -1498,6 +1503,8 @@ void rtw_alloc_hwxmits(struct adapter *padapter)
- 		hwxmits[3] .sta_queue = &pxmitpriv->bk_pending;
- 	} else {
- 	}
-+
-+	return 0;
- }
- 
- void rtw_free_hwxmits(struct adapter *padapter)
-diff --git a/drivers/staging/r8188eu/include/rtw_xmit.h b/drivers/staging/r8188eu/include/rtw_xmit.h
-index b2df1480d66b..e73632972900 100644
---- a/drivers/staging/r8188eu/include/rtw_xmit.h
-+++ b/drivers/staging/r8188eu/include/rtw_xmit.h
-@@ -341,7 +341,7 @@ s32 rtw_txframes_sta_ac_pending(struct adapter *padapter,
- void rtw_init_hwxmits(struct hw_xmit *phwxmit, int entry);
- s32 _rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter);
- void _rtw_free_xmit_priv(struct xmit_priv *pxmitpriv);
--void rtw_alloc_hwxmits(struct adapter *padapter);
-+int rtw_alloc_hwxmits(struct adapter *padapter);
- void rtw_free_hwxmits(struct adapter *padapter);
- s32 rtw_xmit(struct adapter *padapter, struct sk_buff **pkt);
- 
+[2]https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html
+    Volume 4
+
+The advantage of using this is improved performance. As an example of
+performance improvements, the results of running the Stream benchmark
+on the A64FX are described in section [Merit].
+
+For MSR 0x1a4, it is also possible to change the value from userspace
+via the MSR driver. However, using MSR driver is not recommended, so
+it needs a proper kernel interface[3].
+
+[3]https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/about/
+
+For these reasons, we provide a new proper kernel interface to control
+both IMP_PF_STREAM_DETECT_CTRL_EL0 and MSR 0x1a4.
+
+[Overall design]
+================
+The source code for this driver is divided into common parts
+(driver/base/pfctl.c) and hardware dependent parts
+(arch/x86/kernel/cpu/x86-pfctl.c and drivers/soc/fujitsu/a64fx-pfctl.c).
+Architecture parts is described hardware-dependent processing. It must
+create attributes for a specific cache level/type.
+Common part is described hardware-independent processing. It create
+sysfs using the attributes from architecture part.
+
+This driver creates "prefetch_control" directory and some attributes
+in every CPU's cache/indexX directory, if CPU supports hardware
+prefetch control behavior.
+
+Detailed description of this sysfs interface is in
+Documentation/ABI/testing/sysfs-devices-system-cpu (patch8).
+
+This driver needs cache sysfs directory and cache level/type
+information. In ARM processor, these information can be obtained
+from registers even without ACPI PPTT.
+We add processing to create a cache/index directory using only the
+information from the register if the machine does not support ACPI
+PPTT and Kconfig for hardware prefetch control (CONFIG_HWPF_CONTROL)
+is true in patch5.
+This action caused a problem and is described in [Known problem].
+
+[Examples]
+==========
+This section provides an example of using this sysfs interface at the
+x86's model of INTEL_FAM6_BROADWELL_X.
+
+This model has the following register specifications:
+
+[0]    L2 Hardware Prefetcher Disable (R/W)
+[1]    L2 Adjacent Cache Line Prefetcher Disable (R/W)
+[2]    DCU Hardware Prefetcher Disable (R/W)
+[3]    DCU IP Prefetcher Disable (R/W)
+[63:4] Reserved
+
+In this case, index0 (L1d cache) corresponds to bit[2,3] and index2
+(L2 cache) corresponds to bit [0,1]. A list of attribute files of
+index0 and index2 in CPU1 at BROADWELL_X is following:
+
+```
+# ls /sys/devices/system/cpu/cpu1/cache/index0/prefetch_control/
+
+hardware_prefetcher_enable
+ip_prefetcher_enable
+
+# ls /sys/devices/system/cpu/cpu1/cache/index2/prefetch_control/
+
+adjacent_cache_line_prefetcher_enable
+hardware_prefetcher_enable
+```
+
+If user would like to disable the setting of "L2 Adjacent Cache Line
+Prefetcher Disable (R/W)" in CPU1, do the following:
+
+```
+# echo 0 >
+# /sys/devices/system/cpu/cpu1/cache/index2/prefetch_control/adjacent_cache_line_prefetcher_enable
+```
+
+In another example, a list of index0 at A64FX is following:
+
+```
+# ls /sys/devices/system/cpu/cpu1/cache/index0/prefetch_control/
+
+stream_detect_prefetcher_dist
+stream_detect_prefetcher_enable
+stream_detect_prefetcher_strength
+stream_detect_prefetcher_strength_available
+```
+
+[Patch organizations]
+=====================
+This patch series add hardware prefetch control core driver for A64FX
+and x86. Also, we add support for A64FX and BROADWELL_X at x86.
+
+- patch1: Add hardware prefetch core driver
+
+  Adds a register/unregister function to provide sysfs interface to
+  control CPU's hardware prefetch behavior. It creates the
+  "prefetch_control" sysfs directory and some attributes.
+
+- patch2: Add Kconfig/Makefile to build hardware prefetch control core
+  driver
+
+- patch3: Add support for A64FX
+
+  Adds module init/exit code to create sysfs attributes for A64FX with
+  "stream_detect_prefetcher_enable", "stream_detect_prefetcher_strong"
+  and "stream_detect_prefetcher_dist".
+
+- patch4: Add Kconfig/Makefile to build driver for A64FX
+
+- patch5: Create cache sysfs directory without ACPI PPTT for hardware
+  prefetch control
+
+  Hardware Prefetch control driver needs cache sysfs directory and cache
+  level/type information. In ARM processor, these information can be
+  obtained from register(CLIDR_EL1) even without PPTT. Therefore, we
+  set the cpu_map_populated to true to create cache sysfs directory, if
+  the machine doesn't have PPTT.
+
+- patch6: Add support for x86
+
+  Adds module init/exit code to create sysfs attributes for x86 with
+  "hardware_prefetcher_enable", "ip_prefetcher_enable" and
+  "adjacent_cache_line_prefetcher_enable".
+
+- patch7: Add Kconfig/Makefile to build driver for x86
+
+- patch8: Add documentation for the new sysfs interface
+
+[Known problem]
+===============
+- `lscpu` command terminates with -ENOENT because cache/index directory
+  is exists but shared_cpu_map file does not exist. This is due to
+  patch5, which creates a cache/index directory containing only level
+  and type without ACPI PPTT.
+
+[Merit]
+=======
+For reference, here is the result of STREAM Triad when tuning with
+the "s file in L1 and L2 cache on A64FX.
+
+| dist combination  | Pattern A   | Pattern B   |
+|-------------------|-------------|-------------|
+| L1:256,  L2:1024  | 234505.2144 | 114600.0801 |
+| L1:1536, L2:1024  | 279172.8742 | 118979.4542 |
+| L1:256,  L2:10240 | 247716.7757 | 127364.1533 |
+| L1:1536, L2:10240 | 283675.6625 | 125950.6847 |
+
+In pattern A, we set the size of the array to 174720, which is about
+half the size of the L1d cache. In pattern B, we set the size of the
+array to 10485120, which is about twice the size of the L2 cache.
+
+In pattern A, a change of dist at L1 has a larger effect. On the other
+hand, in pattern B, the change of dist at L2 has a larger effect.
+As described above, the optimal dist combination depends on the
+characteristics of the application. Therefore, such a sysfs interface
+is useful for performance tuning.
+
+Best regards,
+Kohei Tarumizu
+
+Kohei Tarumizu (8):
+  drivers: base: Add hardware prefetch control core driver
+  drivers: base: Add Kconfig/Makefile to build hardware prefetch control
+    core driver
+  soc: fujitsu: Add hardware prefetch control support for A64FX
+  soc: fujitsu: Add Kconfig/Makefile to build hardware prefetch control
+    driver
+  arm64: Create cache sysfs directory without ACPI PPTT for hardware
+    prefetch control
+  x86: Add hardware prefetch control support for x86
+  x86: Add Kconfig/Makefile to build hardware prefetch control driver
+  docs: ABI: Add sysfs documentation interface of hardware prefetch
+    control driver
+
+ .../ABI/testing/sysfs-devices-system-cpu      |  98 +++++
+ MAINTAINERS                                   |   8 +
+ arch/arm64/kernel/cacheinfo.c                 |  29 ++
+ arch/x86/Kconfig                              |   6 +
+ arch/x86/kernel/cpu/Makefile                  |   2 +
+ arch/x86/kernel/cpu/x86-pfctl.c               | 258 ++++++++++++
+ drivers/base/Kconfig                          |   9 +
+ drivers/base/Makefile                         |   1 +
+ drivers/base/pfctl.c                          | 180 +++++++++
+ drivers/soc/Kconfig                           |   1 +
+ drivers/soc/Makefile                          |   1 +
+ drivers/soc/fujitsu/Kconfig                   |  11 +
+ drivers/soc/fujitsu/Makefile                  |   2 +
+ drivers/soc/fujitsu/a64fx-pfctl.c             | 373 ++++++++++++++++++
+ include/linux/pfctl.h                         |  14 +
+ 15 files changed, 993 insertions(+)
+ create mode 100644 arch/x86/kernel/cpu/x86-pfctl.c
+ create mode 100644 drivers/base/pfctl.c
+ create mode 100644 drivers/soc/fujitsu/Kconfig
+ create mode 100644 drivers/soc/fujitsu/Makefile
+ create mode 100644 drivers/soc/fujitsu/a64fx-pfctl.c
+ create mode 100644 include/linux/pfctl.h
+
 -- 
-2.25.1
+2.27.0
 

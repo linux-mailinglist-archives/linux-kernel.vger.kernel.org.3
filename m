@@ -2,117 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9189152AFC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9E452AFCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbiERBRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
+        id S233407AbiERBRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbiERBRT (ORCPT
+        with ESMTP id S233421AbiERBRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:17:19 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488162BB3C
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:17:18 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id k30so554416wrd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:17:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=66BpVpX1hmsXLIKfSSFdSpdl5oqz90D5jwxwG9o6mz4=;
-        b=xRYWEaCNYX3CRkGbSb4Lw1NbuD1fUhSJXWVeeeS+fYrLui8cAamp3GLZ5IrJmOwlHL
-         cIwxRHBDy2EYZaX5HQlzo5cHlmXO4fc6AkevIifcdVt3aqG/EefBANpLhfO/IgGNThLi
-         XXLG+lLTKSGbegkuAdO/g7AGpPVLaAUdZSBWcy+FO+q+hMmllMvXwCPop9daonKuHsTB
-         tglkvTKV9qIWdLh0wlZz6dVSqg1zMF7WsuVzxKms+6AHzX2isFrEv75VOukGFsUyZy5D
-         pNTnRKdGNlqV7iWjgnlst45h2wwejrXC1qf/n4xNGqx+LtpHMX4qYW1fo7tfBm8x3pQy
-         1pRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=66BpVpX1hmsXLIKfSSFdSpdl5oqz90D5jwxwG9o6mz4=;
-        b=5CUzIztVDqj2aTE6ARKMn+XMLZRwBiOpoJLxPG2/wRQmnxZK8MFvUea17T63TWgzsj
-         OjAF+Vxi5D+kLhRPVtCwWhjgHJvO/9CgJM6hzXxu82Kjhmqi/8F8anOlF3zATVN8ZwQ2
-         d49L5tXxiE1+MD4Xgk8UXkhW3b0o3ldbKw+EuEQZpgaPV+EVsbtXmqKMt1cEouxCvIKd
-         DOOM9lAlthyDeFUTfSrY8kix/qkM2xKLvMLOYbZ7JTSBoFkcjyQE3DsqXH0KTPrj019m
-         tpOgD2+qeopXQjLIjyFi7S/CRmobak8JtgsPQBZ7IMxjUHeRxARnndHTARmfW5NbdmKp
-         ZC2A==
-X-Gm-Message-State: AOAM532c+rYdPP7oyFULHezMxJTpzj5rDOaz1QkcOBVBsTMCfdPcfiQy
-        5TUn+WPUB+bJt3eK8fik8U4EuzJCBXK9UVDOmN39
-X-Google-Smtp-Source: ABdhPJwgGJ20dTMB4rX7QcbmClGxzMeLSl+5R1372QnAoz8I90LnDWXFMl7B7wWxBi+NGEuc+n5MNXshqKaGIp7Rhoc=
-X-Received: by 2002:a5d:5888:0:b0:20c:9868:9d94 with SMTP id
- n8-20020a5d5888000000b0020c98689d94mr19998482wrf.433.1652836636768; Tue, 17
- May 2022 18:17:16 -0700 (PDT)
+        Tue, 17 May 2022 21:17:32 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67E62FFF4;
+        Tue, 17 May 2022 18:17:26 -0700 (PDT)
+Received: from kwepemi100008.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2w781N17zhZ6w;
+        Wed, 18 May 2022 09:16:36 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100008.china.huawei.com (7.221.188.57) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 09:17:24 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 09:17:24 +0800
+Subject: Re: [PATCH -next v2 2/2] block, bfq: make bfq_has_work() more
+ accurate
+To:     Paolo Valente <paolo.valente@linaro.org>, Jan Kara <jack@suse.cz>
+CC:     Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220513023507.2625717-1-yukuai3@huawei.com>
+ <20220513023507.2625717-3-yukuai3@huawei.com>
+ <20220516095620.ge5gxmwrnbanfqea@quack3.lan>
+ <740D270D-8723-4399-82CC-26CD861843D7@linaro.org>
+ <22FEB802-2872-45A7-8ED8-2DE7D0D5E6CD@linaro.org>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <54d06657-a5e2-a94d-c9af-2f10900e7f32@huawei.com>
+Date:   Wed, 18 May 2022 09:17:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20220503183750.1977-1-duguoweisz@gmail.com>
-In-Reply-To: <20220503183750.1977-1-duguoweisz@gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 17 May 2022 21:17:06 -0400
-Message-ID: <CAHC9VhRfRKS_-A6LGhgMp06wsvHtRj6ZaiQWp8c7U_LXozTeYg@mail.gmail.com>
-Subject: Re: [PATCH] fsnotify: add generic perm check for unlink/rmdir
-To:     Guowei Du <duguoweisz@gmail.com>
-Cc:     jack@suse.cz, amir73il@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        jmorris@namei.org, serge@hallyn.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        keescook@chromium.org, anton@enomsg.org, ccross@android.com,
-        tony.luck@intel.com, selinux@vger.kernel.org,
-        duguowei <duguowei@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <22FEB802-2872-45A7-8ED8-2DE7D0D5E6CD@linaro.org>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 3, 2022 at 2:38 PM Guowei Du <duguoweisz@gmail.com> wrote:
->
-> From: duguowei <duguowei@xiaomi.com>
->
-> For now, there have been open/access/open_exec perms for file operation,
-> so we add new perms check with unlink/rmdir syscall. if one app deletes
-> any file/dir within pubic area, fsnotify can sends fsnotify_event to
-> listener to deny that, even if the app have right dac/mac permissions.
->
-> Signed-off-by: duguowei <duguowei@xiaomi.com>
-> ---
->  fs/notify/fsnotify.c             |  2 +-
->  include/linux/fs.h               |  2 ++
->  include/linux/fsnotify.h         | 16 ++++++++++++++++
->  include/linux/fsnotify_backend.h |  6 +++++-
->  security/security.c              | 12 ++++++++++--
->  security/selinux/hooks.c         |  4 ++++
->  6 files changed, 38 insertions(+), 4 deletions(-)
+ÔÚ 2022/05/17 23:06, Paolo Valente Ð´µÀ:
+> 
+> 
+>> Il giorno 17 mag 2022, alle ore 16:21, Paolo Valente <paolo.valente@linaro.org> ha scritto:
+>>
+>>
+>>
+>>> Il giorno 16 mag 2022, alle ore 11:56, Jan Kara <jack@suse.cz> ha scritto:
+>>>
+>>> On Fri 13-05-22 10:35:07, Yu Kuai wrote:
+>>>> bfq_has_work() is using busy_queues currently, which is not accurate
+>>>> because bfq_queue is busy doesn't represent that it has requests. Since
+>>>> bfqd aready has a counter 'queued' to record how many requests are in
+>>>> bfq, use it instead of busy_queues.
+>>>>
+>>
+>> The number of requests queued is not equal to the number of busy
+>> queues (it is >=).
+> 
+> No, sorry. It is actually != in general.
+Hi, Paolo
 
-...
+I'm aware that number of requests queued is not equal to the number of
+busy queues, and that is the motivation of this patch.
 
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index e9e959343de9..f0780f0eb903 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -1801,8 +1801,12 @@ static int may_create(struct inode *dir,
->  }
->
->  #define MAY_LINK       0
-> +#ifndef MAY_UNLINK
->  #define MAY_UNLINK     1
-> +#endif
-> +#ifndef MAY_RMDIR
->  #define MAY_RMDIR      2
-> +#endif
+> 
+> In particular, if queued == 0 but there are busy queues (although
+> still waiting for I/O to arrive), then responding that there is no
+> work caused blk-mq to stop asking, and hence an I/O freeze.  IOW I/O
+> eventually arrives for a busy queue, but blk-mq does not ask for a new
+> request any longer.  But maybe things have changed around bfq since
+> then.
 
-In the future if you run into a symbol collision here I would prefer
-if you renamed the SELinux constants to something like SEL_MAY_LINK,
-etc.
+The problem is that if queued == 0 while there are busy queues, is there
+any point to return true in bfq_has_work() ? IMO, it will only cause
+unecessary run queue. And if new request arrives,
+blk_mq_sched_insert_request() will trigger a run queue.
 
--- 
-paul-moore.com
+Thanks,
+Kuai
+> 
+> Paolo
+> 
+>>   If this patch is based on this assumption then
+>> unfortunately it is wrong :(
+>>
+>> Paolo
+>>
+>>>> Noted that bfq_has_work() can be called with 'bfqd->lock' held, thus the
+>>>> lock can't be held in bfq_has_work() to protect 'bfqd->queued'.
+>>>>
+>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>>
+>>> Looks good. Feel free to add:
+>>>
+>>> Reviewed-by: Jan Kara <jack@suse.cz>
+>>>
+>>> 								Honza
+>>>
+>>>> ---
+>>>> block/bfq-iosched.c | 16 ++++++++++++----
+>>>> 1 file changed, 12 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>>>> index 61750696e87f..740dd83853a6 100644
+>>>> --- a/block/bfq-iosched.c
+>>>> +++ b/block/bfq-iosched.c
+>>>> @@ -2210,7 +2210,11 @@ static void bfq_add_request(struct request *rq)
+>>>>
+>>>> 	bfq_log_bfqq(bfqd, bfqq, "add_request %d", rq_is_sync(rq));
+>>>> 	bfqq->queued[rq_is_sync(rq)]++;
+>>>> -	bfqd->queued++;
+>>>> +	/*
+>>>> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', however, it
+>>>> +	 * may be read without holding the lock in bfq_has_work().
+>>>> +	 */
+>>>> +	WRITE_ONCE(bfqd->queued, bfqd->queued + 1);
+>>>>
+>>>> 	if (RB_EMPTY_ROOT(&bfqq->sort_list) && bfq_bfqq_sync(bfqq)) {
+>>>> 		bfq_check_waker(bfqd, bfqq, now_ns);
+>>>> @@ -2402,7 +2406,11 @@ static void bfq_remove_request(struct request_queue *q,
+>>>> 	if (rq->queuelist.prev != &rq->queuelist)
+>>>> 		list_del_init(&rq->queuelist);
+>>>> 	bfqq->queued[sync]--;
+>>>> -	bfqd->queued--;
+>>>> +	/*
+>>>> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', however, it
+>>>> +	 * may be read without holding the lock in bfq_has_work().
+>>>> +	 */
+>>>> +	WRITE_ONCE(bfqd->queued, bfqd->queued - 1);
+>>>> 	elv_rb_del(&bfqq->sort_list, rq);
+>>>>
+>>>> 	elv_rqhash_del(q, rq);
+>>>> @@ -5063,11 +5071,11 @@ static bool bfq_has_work(struct blk_mq_hw_ctx *hctx)
+>>>> 	struct bfq_data *bfqd = hctx->queue->elevator->elevator_data;
+>>>>
+>>>> 	/*
+>>>> -	 * Avoiding lock: a race on bfqd->busy_queues should cause at
+>>>> +	 * Avoiding lock: a race on bfqd->queued should cause at
+>>>> 	 * most a call to dispatch for nothing
+>>>> 	 */
+>>>> 	return !list_empty_careful(&bfqd->dispatch) ||
+>>>> -		bfq_tot_busy_queues(bfqd) > 0;
+>>>> +		READ_ONCE(bfqd->queued);
+>>>> }
+>>>>
+>>>> static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
+>>>> -- 
+>>>> 2.31.1
+>>>>
+>>> -- 
+>>> Jan Kara <jack@suse.com>
+>>> SUSE Labs, CR
+>>
+> 
+> .
+> 

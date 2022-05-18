@@ -2,230 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E6152B0CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 05:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B350352B0CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 05:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiERDb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 23:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S229446AbiERDco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 23:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiERDbx (ORCPT
+        with ESMTP id S229695AbiERDcT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 23:31:53 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FEB814B0;
-        Tue, 17 May 2022 20:31:50 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id y13so546402eje.2;
-        Tue, 17 May 2022 20:31:50 -0700 (PDT)
+        Tue, 17 May 2022 23:32:19 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A744984A37
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 20:32:13 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id n10so737766pjh.5
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 20:32:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CRUVZxUiPFa++e0erHqoMtj4bXpVQNsrlJ20yGYjhvc=;
-        b=UwonYpJJCOJV4Rl7KWzUFXn0d60C4PgqizzRx0Ah9Shb0qiH5aqP83U/u+FcVa5Wfq
-         O/hMSFCfmDK31AJ9JXapppG2PLQBbVA6nFgL0Y+z2AUvXvfw8xzLsHhVxx7sDmLfTLrx
-         FIb9S/lQLvRvSCRBJ3CSgRw56hvNYE1DYskMaNFJSgLaEQuqsP17dWNUri3tmaHzzQH5
-         sOkr1XsYK0vRGLqcoihOHwP6JVEqWhwvjgVHeV+w0BQHD3uFtrcyzdoJMq8YrRF/AMLg
-         dWj4rUi0c2iEgqxCLv6d1am3njz7IVZP7jrt+jtALdyHMcHGoHA5fp8vpUe8x7V9+6LT
-         iT7w==
+        d=wistron-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wD+3DPNBHWrSJJ39pUpfwVdR2mdxSqgxqlbfe6iw9bw=;
+        b=m8WkiVFktvNXSIHh1KGJVdB+Ip5AYaNs2JShyN2RHc9iArQOJOR6MqrVjLbkoJxXJy
+         RncGUbxUyy26NYHWR6KB9xqnt3znuO4rkPd7FRMGtMQVdqXeE701EMaJlz216voyGrJy
+         P8N02NUY6MpTAtsPF6oUFBqZBOYY9WFCxZ699qYsVKVwGJludoUMYk53pbm3ZtZ3YCny
+         GP6gtGdu4GiXgGoYmD6qjufKxFZchfX9yyypjVmAGjnNJbNU1oeWrkHgeD8dDuAHuQ17
+         kJE6RnPsuERrVqUSg4JtAeASHmRbx5M3hdvjQ4Iw72R/fp4aRxV3+MtF7vSmr1B2VJDL
+         C71w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CRUVZxUiPFa++e0erHqoMtj4bXpVQNsrlJ20yGYjhvc=;
-        b=vUl3XH4yEAAEFL0eON/Vb1oTDXF9wzPoIc3YN8SPgjcFkA7x8RjPrks0q4qMx2+UON
-         j9B5iiV/cwti9GDkT1lUNSe/+LdqFh4WkF8dR0rirG3FVyFM19ph9rV45iBq3lzAzYRM
-         IcQI/lRv659xfXl5xhQCcHtggF4PUdfyJj3B3xvx9Q3QKrUzLJhC9lMJE0/2aQtVWZnc
-         jLjQdU3Wgs+p4YPyfkVqB7YGSrIfcjsqu+KNxHkoxjWASPhVyHU/ih2XmESt1k5KViCB
-         gwKlf/9zhD1V/9P147FQTqrKqQEm8UlvvNtyUhTE0VOAYl8CCFJ3626CN5JaF+UwWsFc
-         G8EQ==
-X-Gm-Message-State: AOAM530z6yNQgPjLhnMP//29vY75DBdYtOk9Jxm8xbwGfUOULB+nAgNU
-        yqxTwsLHEW09mD7xVHcSQQEXt6toZmILPofLnW4=
-X-Google-Smtp-Source: ABdhPJzZesTdsqqQsPaLv5+45A2/zx0v+IlanzmxIY6npSHLfR6XsED9IFJz3gtqYpZ8pLNTrrgG8bmj/AiRbKAvETw=
-X-Received: by 2002:a17:907:7ea7:b0:6f4:7a72:da92 with SMTP id
- qb39-20020a1709077ea700b006f47a72da92mr22032393ejc.348.1652844709009; Tue, 17
- May 2022 20:31:49 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wD+3DPNBHWrSJJ39pUpfwVdR2mdxSqgxqlbfe6iw9bw=;
+        b=Ovxi/g3esZCubnCxxu4Wg5L4bwrroqkNVQfJ4+ZeJ6VSi40uXEV2O6bqVSVR+ZAGrJ
+         LU4dK58JSP7QeLVJNbL/qc3M37AxE7dvkk1wdjrZVvtGD1xIfvor6qjDBWwRqjVbrSgS
+         qtE2wgzOZrwljMdvpVKQ88EQXVZvi+sieiXDqJ1IslvYbOQDytMimBMFHxJPzWUdxy5N
+         GPeMXFOyxadsP6t82+Ukv0ANYmeI/unslOq5Il18K2rIGY/y+lLaDfaeruiFkNf17ite
+         xImha00RwcW/XcSWo/uL0rgP4cXr2YJ+klhAaMZcverOVv6bt+Io9UUJMMK2WfRUg24H
+         5Lvg==
+X-Gm-Message-State: AOAM530xHcykxHxJhkYIHKs6ZdAkyZLBgUEUqI5NIKJ6IlLf28HQ8q/B
+        bdYhV6mZfR74Hsz9jHYRoCT2vg==
+X-Google-Smtp-Source: ABdhPJxKW0jludrYLG24IuREpgAjLIpTyD+PrhktiytETgjGu+NC3itR7uJWXwdrGV/tUL+hvtLhjA==
+X-Received: by 2002:a17:90a:4413:b0:1cd:2d00:9d0b with SMTP id s19-20020a17090a441300b001cd2d009d0bmr28344830pjg.81.1652844729779;
+        Tue, 17 May 2022 20:32:09 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:46a:5f5b:1ac3:6bcc:2a83:347b])
+        by smtp.gmail.com with ESMTPSA id bp18-20020a17090b0c1200b001df2538c61dsm365931pjb.23.2022.05.17.20.32.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 20:32:09 -0700 (PDT)
+From:   Terry Chen <terry_chen@wistron.corp-partner.google.com>
+To:     alsa-devel@alsa-project.org
+Cc:     cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
+        liam.r.girdwood@linux.intel.com, yang.jie@linux.intel.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        brent.lu@intel.com, cujomalainey@chromium.org,
+        seanpaul@chromium.org, terry_chen@wistron.corp-partner.google.com,
+        casey.g.bowman@intel.com,
+        mark_hsieh@wistron.corp-partner.google.com,
+        vamshi.krishna.gopal@intel.com, mac.chiang@intel.com,
+        kai.vehmanen@linux.intel.com, linux-kernel@vger.kernel.org
+Subject: [v7] FROMLIST: ASoC: Intel: sof_cs42l42: adding support for ADL configuration and BT offload audio
+Date:   Wed, 18 May 2022 11:32:00 +0800
+Message-Id: <20220518033200.1471841-1-terry_chen@wistron.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220517034107.92194-1-imagedong@tencent.com> <CAADnVQLRmv107zFL-dgB07Mf8NmR0TCAC9eG9aZ1O4DG3=ityw@mail.gmail.com>
-In-Reply-To: <CAADnVQLRmv107zFL-dgB07Mf8NmR0TCAC9eG9aZ1O4DG3=ityw@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Wed, 18 May 2022 11:31:37 +0800
-Message-ID: <CADxym3bLXhgCK-BO6JL3OVbVdC9Tsc0k_LqMRBbXA7eOpUtdYQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: add access control for map
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alan Maguire <alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 12:58 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, May 16, 2022 at 8:44 PM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > Hello,
-> >
-> > I have a idea about the access control of eBPF map, could you help
-> > to see if it works?
-> >
-> > For now, only users with the CAP_SYS_ADMIN or CAP_BPF have the right
-> > to access the data in eBPF maps. So I'm thinking, are there any way
-> > to control the access to the maps, just like what we do to files?
->
-> The bpf objects pinned in bpffs should always be accessible
-> as files regardless of sysctl or cap-s.
->
-> > Therefore, we can decide who have the right to read the map and who
-> > can write.
-> >
-> > I think it is useful in some case. For example, I made a eBPF-based
-> > network statistics program, and the information is stored in an array
-> > map. And I want all users can read the information in the map, without
-> > changing the capacity of them. As the information is iunsensitive,
-> > normal users can read it. This make publish-consume mode possible,
-> > the eBPF program is publisher and the user space program is consumer.
->
-> Right. It is a choice of the bpf prog which data expose in the map.
->
-> > So this aim can be achieve, if we can control the access of maps as a
-> > file. There are many ways I thought, and I choosed one to implement:
-> >
-> > While pining the map, add the inode that is created to a list on the
-> > map. root can change the permission of the inode through the pin path.
-> > Therefore, we can try to find the inode corresponding to current user
-> > namespace in the list, and check whether user have permission to read
-> > or write.
-> >
-> > The steps can be:
-> >
-> > 1. create the map with BPF_F_UMODE flags, which imply that enable
-> >    access control in this map.
-> > 2. load and pin the map on /sys/fs/bpf/xxx.
-> > 3. change the umode of /sys/fs/bpf/xxx with 'chmod 744 /sys/fs/bpf/xxx',
-> >    therefor all user can read the map.
->
-> This behavior should be available by default.
-> Only sysctl was preventing it. It's being fixed by
-> the following patch. Please take a look at:
-> https://patchwork.kernel.org/project/netdevbpf/patch/1652788780-25520-2-git-send-email-alan.maguire@oracle.com/
->
-> Does it solve your use case?
+To be able to do  driver data for adl_mx98360a_cs4242 which supports
+two max98360a speaker amplifiers on SSP1 and cs42l42 headphone codec
+on SSP0 running on ADL platform. Also add the capability to machine driver
+of creating DAI Link for BT offload. Although BT offload always uses SSP2
+port but we reserve the flexibility to assign the port number in macro.
 
-Yeah, it seems this patch gives another way: give users all access to
-bpf commands (except map_create and prog_load). Therefore, users
-that have the access to the pin path have corresponding r/w of the
-eBPF object. This patch can cover my case.
+Signed-off-by: Terry Chen <terry_chen@wistron.corp-partner.google.com>
+---
+ sound/soc/intel/boards/sof_cs42l42.c          | 86 ++++++++++++++++++-
+ .../intel/common/soc-acpi-intel-adl-match.c   |  7 ++
+ 2 files changed, 89 insertions(+), 4 deletions(-)
 
-However, this seems to give users too much permission (or the
-access check is not enough?) I have do a test:
+diff --git a/sound/soc/intel/boards/sof_cs42l42.c b/sound/soc/intel/boards/sof_cs42l42.c
+index ce78c18798876..56bae2185904b 100644
+--- a/sound/soc/intel/boards/sof_cs42l42.c
++++ b/sound/soc/intel/boards/sof_cs42l42.c
+@@ -41,8 +41,13 @@
+ #define SOF_CS42L42_DAILINK_MASK		(GENMASK(24, 10))
+ #define SOF_CS42L42_DAILINK(link1, link2, link3, link4, link5) \
+ 	((((link1) | ((link2) << 3) | ((link3) << 6) | ((link4) << 9) | ((link5) << 12)) << SOF_CS42L42_DAILINK_SHIFT) & SOF_CS42L42_DAILINK_MASK)
+-#define SOF_MAX98357A_SPEAKER_AMP_PRESENT	BIT(25)
+-#define SOF_MAX98360A_SPEAKER_AMP_PRESENT	BIT(26)
++#define SOF_BT_OFFLOAD_PRESENT			BIT(25)
++#define SOF_CS42L42_SSP_BT_SHIFT		26
++#define SOF_CS42L42_SSP_BT_MASK			(GENMASK(28, 26))
++#define SOF_CS42L42_SSP_BT(quirk)	\
++	(((quirk) << SOF_CS42L42_SSP_BT_SHIFT) & SOF_CS42L42_SSP_BT_MASK)
++#define SOF_MAX98357A_SPEAKER_AMP_PRESENT	BIT(29)
++#define SOF_MAX98360A_SPEAKER_AMP_PRESENT	BIT(30)
+ 
+ enum {
+ 	LINK_NONE = 0,
+@@ -50,6 +55,7 @@ enum {
+ 	LINK_SPK = 2,
+ 	LINK_DMIC = 3,
+ 	LINK_HDMI = 4,
++	LINK_BT = 5,
+ };
+ 
+ /* Default: SSP2 */
+@@ -278,6 +284,13 @@ static struct snd_soc_dai_link_component dmic_component[] = {
+ 	}
+ };
+ 
++static struct snd_soc_dai_link_component dummy_component[] = {
++	{
++		.name = "snd-soc-dummy",
++		.dai_name = "snd-soc-dummy-dai",
++	}
++};
++
+ static int create_spk_amp_dai_links(struct device *dev,
+ 				    struct snd_soc_dai_link *links,
+ 				    struct snd_soc_dai_link_component *cpus,
+@@ -467,9 +480,50 @@ static int create_hdmi_dai_links(struct device *dev,
+ 	return -ENOMEM;
+ }
+ 
++static int create_bt_offload_dai_links(struct device *dev,
++				       struct snd_soc_dai_link *links,
++				       struct snd_soc_dai_link_component *cpus,
++				       int *id, int ssp_bt)
++{
++	/* bt offload */
++	if (!(sof_cs42l42_quirk & SOF_BT_OFFLOAD_PRESENT))
++		return 0;
++
++	links[*id].name = devm_kasprintf(dev, GFP_KERNEL, "SSP%d-BT",
++					 ssp_bt);
++	if (!links[*id].name)
++		goto devm_err;
++
++	links[*id].id = *id;
++	links[*id].codecs = dummy_component;
++	links[*id].num_codecs = ARRAY_SIZE(dummy_component);
++	links[*id].platforms = platform_component;
++	links[*id].num_platforms = ARRAY_SIZE(platform_component);
++
++	links[*id].dpcm_playback = 1;
++	links[*id].dpcm_capture = 1;
++	links[*id].no_pcm = 1;
++	links[*id].cpus = &cpus[*id];
++	links[*id].num_cpus = 1;
++
++	links[*id].cpus->dai_name = devm_kasprintf(dev, GFP_KERNEL,
++						   "SSP%d Pin",
++						   ssp_bt);
++	if (!links[*id].cpus->dai_name)
++		goto devm_err;
++
++	(*id)++;
++
++	return 0;
++
++devm_err:
++	return -ENOMEM;
++}
++
+ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
+ 							  int ssp_codec,
+ 							  int ssp_amp,
++							  int ssp_bt,
+ 							  int dmic_be_num,
+ 							  int hdmi_num)
+ {
+@@ -522,6 +576,14 @@ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
+ 				goto devm_err;
+ 			}
+ 			break;
++		case LINK_BT:
++			ret = create_bt_offload_dai_links(dev, links, cpus, &id, ssp_bt);
++			if (ret < 0) {
++				dev_err(dev, "fail to create bt offload dai links, ret %d\n",
++					ret);
++				goto devm_err;
++			}
++			break;
+ 		case LINK_NONE:
+ 			/* caught here if it's not used as terminator in macro */
+ 		default:
+@@ -543,7 +605,7 @@ static int sof_audio_probe(struct platform_device *pdev)
+ 	struct snd_soc_acpi_mach *mach;
+ 	struct sof_card_private *ctx;
+ 	int dmic_be_num, hdmi_num;
+-	int ret, ssp_amp, ssp_codec;
++	int ret, ssp_bt, ssp_amp, ssp_codec;
+ 
+ 	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+ 	if (!ctx)
+@@ -568,6 +630,9 @@ static int sof_audio_probe(struct platform_device *pdev)
+ 
+ 	dev_dbg(&pdev->dev, "sof_cs42l42_quirk = %lx\n", sof_cs42l42_quirk);
+ 
++	ssp_bt = (sof_cs42l42_quirk & SOF_CS42L42_SSP_BT_MASK) >>
++			SOF_CS42L42_SSP_BT_SHIFT;
++
+ 	ssp_amp = (sof_cs42l42_quirk & SOF_CS42L42_SSP_AMP_MASK) >>
+ 			SOF_CS42L42_SSP_AMP_SHIFT;
+ 
+@@ -578,9 +643,11 @@ static int sof_audio_probe(struct platform_device *pdev)
+ 
+ 	if (sof_cs42l42_quirk & SOF_SPEAKER_AMP_PRESENT)
+ 		sof_audio_card_cs42l42.num_links++;
++	if (sof_cs42l42_quirk & SOF_BT_OFFLOAD_PRESENT)
++		sof_audio_card_cs42l42.num_links++;
+ 
+ 	dai_links = sof_card_dai_links_create(&pdev->dev, ssp_codec, ssp_amp,
+-					      dmic_be_num, hdmi_num);
++					      ssp_bt, dmic_be_num, hdmi_num);
+ 	if (!dai_links)
+ 		return -ENOMEM;
+ 
+@@ -621,6 +688,17 @@ static const struct platform_device_id board_ids[] = {
+ 					SOF_CS42L42_SSP_AMP(1)) |
+ 					SOF_CS42L42_DAILINK(LINK_HP, LINK_DMIC, LINK_HDMI, LINK_SPK, LINK_NONE),
+ 	},
++	{
++		.name = "adl_mx98360a_cs4242",
++		.driver_data = (kernel_ulong_t)(SOF_CS42L42_SSP_CODEC(0) |
++					SOF_SPEAKER_AMP_PRESENT |
++					SOF_MAX98360A_SPEAKER_AMP_PRESENT |
++					SOF_CS42L42_SSP_AMP(1) |
++					SOF_CS42L42_NUM_HDMIDEV(4) |
++					SOF_BT_OFFLOAD_PRESENT |
++					SOF_CS42L42_SSP_BT(2)) |
++					SOF_CS42L42_DAILINK(LINK_HP, LINK_DMIC, LINK_HDMI, LINK_SPK, LINK_BT),
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(platform, board_ids);
+diff --git a/sound/soc/intel/common/soc-acpi-intel-adl-match.c b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
+index 7c8cd00457f81..311adeb3afbc4 100644
+--- a/sound/soc/intel/common/soc-acpi-intel-adl-match.c
++++ b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
+@@ -384,6 +384,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
+ 		.sof_fw_filename = "sof-adl.ri",
+ 		.sof_tplg_filename = "sof-adl-cs35l41.tplg",
+ 	},
++	{
++		.id = "10134242",
++		.drv_name = "adl_mx98360a_cs4242",
++		.machine_quirk = snd_soc_acpi_codec_list,
++		.quirk_data = &adl_max98360a_amp,
++		.sof_tplg_filename = "sof-adl-max98360a-rt5682.tplg",
++	},
+ 	{},
+ };
+ EXPORT_SYMBOL_GPL(snd_soc_acpi_intel_adl_machines);
+-- 
+2.25.1
 
-1. load a ebpf program of type cgroup and pin it on
-   /sys/fs/bpf/post_bind as root.
-2. give users access to read /sys/fs/bpf/post_bind
-3. Now, all users can attach or detach the eBPF program
-   to /sys/fs/cgroup/, who have only read access to the ebpf
-   and the cgroup.
-
-I think there are many such cases. Is this fine?
-
->
-> > @@ -542,14 +557,26 @@ int bpf_obj_get_user(const char __user *pathname, int flags)
-> >         if (IS_ERR(raw))
-> >                 return PTR_ERR(raw);
-> >
-> > -       if (type == BPF_TYPE_PROG)
-> > +       if (type != BPF_TYPE_MAP && !bpf_capable())
-> > +               return -EPERM;
->
-> obj_get already implements normal ACL style access to files.
-> Let's not fragment this security model with extra cap checks.
->
-
-Yeah, my way is too rough.
-
-> > +
-> > +       switch (type) {
-> > +       case BPF_TYPE_PROG:
-> >                 ret = bpf_prog_new_fd(raw);
-> > -       else if (type == BPF_TYPE_MAP)
-> > +               break;
-> > +       case BPF_TYPE_MAP:
-> > +               if (bpf_map_permission(raw, f_flags)) {
-> > +                       bpf_any_put(raw, type);
-> > +                       return -EPERM;
-> > +               }
->
-> bpf_obj_do_get() already does such check.
->
-
-With the patch you mentioned above, now bpf_obj_do_get()
-can do this job, as normal users can also get there too.
-
-> > +int bpf_map_permission(struct bpf_map *map, int flags)
-> > +{
-> > +       struct bpf_map_inode *map_inode;
-> > +       struct user_namespace *ns;
-> > +
-> > +       if (capable(CAP_SYS_ADMIN))
-> > +               return 0;
-> > +
-> > +       if (!(map->map_flags & BPF_F_UMODE))
-> > +               return -1;
-> > +
-> > +       rcu_read_lock();
-> > +       list_for_each_entry_rcu(map_inode, &map->inode_list, list) {
-> > +               ns = map_inode->inode->i_sb->s_user_ns;
-> > +               if (ns == current_user_ns())
-> > +                       goto found;
-> > +       }
-> > +       rcu_read_unlock();
-> > +       return -1;
-> > +found:
-> > +       rcu_read_unlock();
-> > +       return inode_permission(ns, map_inode->inode, ACC_MODE(flags));
-> > +}
->
-> See path_permission() in bpf_obj_do_get().
->
-> >  static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
-> > @@ -3720,9 +3757,6 @@ static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
-> >             attr->open_flags & ~BPF_OBJ_FLAG_MASK)
-> >                 return -EINVAL;
-> >
-> > -       if (!capable(CAP_SYS_ADMIN))
-> > -               return -EPERM;
-> > -
->
-> This part we cannot relax.
-> What you're trying to do is to bypass path checks
-> by pointing at a map with its ID only.
-> That contradicts to your official goal in the cover letter.
->
-> bpf_map_get_fd_by_id() has to stay cap_sys_admin only.
-> Exactly for the reason that bpf subsystem has file ACL style.
-> fd_by_id is a debug interface used by tools like bpftool and
-> root admin that needs to see the system as a whole.
-> Normal tasks/processes need to use bpffs and pin files with
-> correct permissions to pass maps from one process to another.
-> Or use FD passing kernel facilities.
-
-Yeah, this part is not necessary for me either. Without this
-part, the current code already can do what I wanted.
-
-Thanks
-Menglong Dong

@@ -2,283 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CE052C04E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C77652C085
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240421AbiERQne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S240390AbiERQnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240401AbiERQnY (ORCPT
+        with ESMTP id S240334AbiERQnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:43:24 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1E271DA1;
-        Wed, 18 May 2022 09:43:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652892203; x=1684428203;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=HWRBR0+UgN1qn8UzjMrMhlumkaHTOr4lbZ2cBy/KxG0=;
-  b=NMjqzpcWOaDws/9VFhS+zcW0/ixNgM6qR5WcPmlMwyGTYBksthP4xEkD
-   brwxrKGEmAjJjywlDcrxJsFAuKxRyf79pPXloOoprN0r9Z4ZQnEax+IkD
-   CXdInObDRAjrnphMehGZaXObYzGyL9goCLuC/boK4MJOmfZFUFDdyNkRS
-   s=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 18 May 2022 09:43:22 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 09:43:21 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 09:43:21 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 09:43:20 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/2] drm/msm/dp: delete vdda regulator related functions from eDP/DP controller
-Date:   Wed, 18 May 2022 09:43:06 -0700
-Message-ID: <1652892186-22346-3-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1652892186-22346-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1652892186-22346-1-git-send-email-quic_khsieh@quicinc.com>
+        Wed, 18 May 2022 12:43:13 -0400
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5152D60AB7;
+        Wed, 18 May 2022 09:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=Juc744IBDe0/YlnjwfVrcCw9F1+WRXzjcPzfaEDrEQs=; b=u95C2A0MeWd+0tomPwWSEfB5Vx
+        odYGsMh6kbUIWaOqxhRSdu76ciEwYQrqo3YTYW3y4s9PwYR/crfV++hRzQ6+eiwHnfnurAiAtyYyB
+        FthrILmgkwA0QCV5u1x0Yfx7vG5f1dungjyRGRZk3rOthSqpeSmcP3XHUzB3dx1tnZ5NGUo9wvdt1
+        1ouqD+oUS2l51PXGtMtNUHR7pOpfRnynPsZtB3+PWkcCpi2AvSZFgy9Mi2mcZGwVIUQCaReX2hVk2
+        pC/xsN9ZiDMqL6yGhVV3Q0ie0IN0GYsBXlGk53wV9gARinfmX6e6jZDWi4okMXYHGtHcqnh9pvS/k
+        /qBnPgFQ==;
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrMlS-00G4od-SG; Wed, 18 May 2022 16:43:11 +0000
+Date:   Wed, 18 May 2022 16:43:10 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [git pull] a couple of fixes
+Message-ID: <YoUiHhz1NsTbN5Vo@zeniv-ca.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vdda regulators are related to both eDP and DP phy so that it should be
-managed at eDP and DP phy driver instead of controller. This patch remove
-vdda regulators related functions out of eDP/DP controller.
+	vhost race fix + percpu_ref_init-caused cgroup double-free fix
+(the latter had manifested as buggered struct mount refcounting -
+those are also using percpu data structures, but anything that does
+percpu allocations could be hit)
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_parser.c | 14 ------
- drivers/gpu/drm/msm/dp/dp_parser.h |  6 ---
- drivers/gpu/drm/msm/dp/dp_power.c  | 95 +-------------------------------------
- 3 files changed, 2 insertions(+), 113 deletions(-)
+The following changes since commit feb9c5e19e913b53cb536a7aa7c9f20107bb51ec:
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
-index 8f9fed9..4ef2130 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.c
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.c
-@@ -22,14 +22,6 @@
- #define DP_DEFAULT_P0_OFFSET	0x1000
- #define DP_DEFAULT_P0_SIZE	0x0400
- 
--static const struct dp_regulator_cfg sdm845_dp_reg_cfg = {
--	.num = 2,
--	.regs = {
--		{"vdda-1p2", 21800, 4 },	/* 1.2 V */
--		{"vdda-0p9", 36000, 32 },	/* 0.9 V */
--	},
--};
--
- static void __iomem *dp_ioremap(struct platform_device *pdev, int idx, size_t *len)
- {
- 	struct resource *res;
-@@ -298,12 +290,6 @@ static int dp_parser_parse(struct dp_parser *parser)
- 	if (rc)
- 		return rc;
- 
--	/* Map the corresponding regulator information according to
--	 * version. Currently, since we only have one supported platform,
--	 * mapping the regulator directly.
--	 */
--	parser->regulator_cfg = &sdm845_dp_reg_cfg;
--
- 	return 0;
- }
- 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
-index 3a4d797..b56b4d7 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.h
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.h
-@@ -101,11 +101,6 @@ struct dp_reg_entry {
- 	int disable_load;
- };
- 
--struct dp_regulator_cfg {
--	int num;
--	struct dp_reg_entry regs[DP_DEV_REGULATOR_MAX];
--};
--
- /**
-  * struct dp_parser - DP parser's data exposed to clients
-  *
-@@ -121,7 +116,6 @@ struct dp_parser {
- 	struct dp_pinctrl pinctrl;
- 	struct dp_io io;
- 	struct dp_display_data disp_data;
--	const struct dp_regulator_cfg *regulator_cfg;
- 	u32 max_dp_lanes;
- 	struct drm_bridge *next_bridge;
- 
-diff --git a/drivers/gpu/drm/msm/dp/dp_power.c b/drivers/gpu/drm/msm/dp/dp_power.c
-index d9e0117..b52ac1d 100644
---- a/drivers/gpu/drm/msm/dp/dp_power.c
-+++ b/drivers/gpu/drm/msm/dp/dp_power.c
-@@ -20,82 +20,10 @@ struct dp_power_private {
- 	struct clk *link_clk_src;
- 	struct clk *pixel_provider;
- 	struct clk *link_provider;
--	struct regulator_bulk_data supplies[DP_DEV_REGULATOR_MAX];
- 
- 	struct dp_power dp_power;
- };
- 
--static void dp_power_regulator_disable(struct dp_power_private *power)
--{
--	struct regulator_bulk_data *s = power->supplies;
--	const struct dp_reg_entry *regs = power->parser->regulator_cfg->regs;
--	int num = power->parser->regulator_cfg->num;
--	int i;
--
--	DBG("");
--	for (i = num - 1; i >= 0; i--)
--		if (regs[i].disable_load >= 0)
--			regulator_set_load(s[i].consumer,
--					   regs[i].disable_load);
--
--	regulator_bulk_disable(num, s);
--}
--
--static int dp_power_regulator_enable(struct dp_power_private *power)
--{
--	struct regulator_bulk_data *s = power->supplies;
--	const struct dp_reg_entry *regs = power->parser->regulator_cfg->regs;
--	int num = power->parser->regulator_cfg->num;
--	int ret, i;
--
--	DBG("");
--	for (i = 0; i < num; i++) {
--		if (regs[i].enable_load >= 0) {
--			ret = regulator_set_load(s[i].consumer,
--						 regs[i].enable_load);
--			if (ret < 0) {
--				pr_err("regulator %d set op mode failed, %d\n",
--					i, ret);
--				goto fail;
--			}
--		}
--	}
--
--	ret = regulator_bulk_enable(num, s);
--	if (ret < 0) {
--		pr_err("regulator enable failed, %d\n", ret);
--		goto fail;
--	}
--
--	return 0;
--
--fail:
--	for (i--; i >= 0; i--)
--		regulator_set_load(s[i].consumer, regs[i].disable_load);
--	return ret;
--}
--
--static int dp_power_regulator_init(struct dp_power_private *power)
--{
--	struct regulator_bulk_data *s = power->supplies;
--	const struct dp_reg_entry *regs = power->parser->regulator_cfg->regs;
--	struct platform_device *pdev = power->pdev;
--	int num = power->parser->regulator_cfg->num;
--	int i, ret;
--
--	for (i = 0; i < num; i++)
--		s[i].supply = regs[i].name;
--
--	ret = devm_regulator_bulk_get(&pdev->dev, num, s);
--	if (ret < 0) {
--		pr_err("%s: failed to init regulator, ret=%d\n",
--						__func__, ret);
--		return ret;
--	}
--
--	return 0;
--}
--
- static int dp_power_clk_init(struct dp_power_private *power)
- {
- 	int rc = 0;
-@@ -318,21 +246,10 @@ int dp_power_client_init(struct dp_power *dp_power)
- 
- 	pm_runtime_enable(&power->pdev->dev);
- 
--	rc = dp_power_regulator_init(power);
--	if (rc) {
--		DRM_ERROR("failed to init regulators %d\n", rc);
--		goto error;
--	}
--
- 	rc = dp_power_clk_init(power);
--	if (rc) {
-+	if (rc)
- 		DRM_ERROR("failed to init clocks %d\n", rc);
--		goto error;
--	}
--	return 0;
- 
--error:
--	pm_runtime_disable(&power->pdev->dev);
- 	return rc;
- }
- 
-@@ -365,22 +282,15 @@ int dp_power_init(struct dp_power *dp_power, bool flip)
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
- 	pm_runtime_get_sync(&power->pdev->dev);
--	rc = dp_power_regulator_enable(power);
--	if (rc) {
--		DRM_ERROR("failed to enable regulators, %d\n", rc);
--		goto exit;
--	}
- 
- 	rc = dp_power_clk_enable(dp_power, DP_CORE_PM, true);
- 	if (rc) {
- 		DRM_ERROR("failed to enable DP core clocks, %d\n", rc);
--		goto err_clk;
-+		goto exit;
- 	}
- 
- 	return 0;
- 
--err_clk:
--	dp_power_regulator_disable(power);
- exit:
- 	pm_runtime_put_sync(&power->pdev->dev);
- 	return rc;
-@@ -393,7 +303,6 @@ int dp_power_deinit(struct dp_power *dp_power)
- 	power = container_of(dp_power, struct dp_power_private, dp_power);
- 
- 	dp_power_clk_enable(dp_power, DP_CORE_PM, false);
--	dp_power_regulator_disable(power);
- 	pm_runtime_put_sync(&power->pdev->dev);
- 	return 0;
- }
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+  Merge tag 'for_linus' of git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost (2022-05-10 11:15:05 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git fixes
+
+for you to fetch changes up to fb4554c2232e44d595920f4d5c66cf8f7d13f9bc:
+
+  Fix double fget() in vhost_net_set_backend() (2022-05-18 12:33:51 -0400)
+
+----------------------------------------------------------------
+Al Viro (2):
+      percpu_ref_init(): clean ->percpu_count_ref on failure
+      Fix double fget() in vhost_net_set_backend()
+
+ drivers/vhost/net.c   | 15 +++++++--------
+ lib/percpu-refcount.c |  1 +
+ 2 files changed, 8 insertions(+), 8 deletions(-)

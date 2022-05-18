@@ -2,106 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D58852C3F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3C352C3F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242286AbiERUA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 16:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S242304AbiERUCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 16:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242276AbiERUAZ (ORCPT
+        with ESMTP id S242284AbiERUCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 16:00:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93E10227825
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652904023;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aS7gQ5qpFeKUv7/KfR+Cnnmeed9eVIGi0Wg+eyJp4Fg=;
-        b=DVKbEtQAoG29VWe0sk6PDmx7z37TsxseOtSv5Tltz5097mwWR6dGgWRqaU97WzOxwUpTA7
-        DGAhdpcys3tB5fgjgROKHxtRZr15aSW0rlEo1ZdQ1gW31juGDG0ROgf+/RPJVJKP97R7GE
-        WqYwtAdXsJ40SSZCTTo5Hc6clw3G0yU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-31-HEMs9FENPBm7CP3UBs-DXA-1; Wed, 18 May 2022 16:00:18 -0400
-X-MC-Unique: HEMs9FENPBm7CP3UBs-DXA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C54F818019D7;
-        Wed, 18 May 2022 20:00:17 +0000 (UTC)
-Received: from asgard.redhat.com (unknown [10.36.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D5051492C14;
-        Wed, 18 May 2022 20:00:13 +0000 (UTC)
-Date:   Wed, 18 May 2022 22:00:10 +0200
-From:   Eugene Syromiatnikov <esyr@redhat.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf v3 1/2] bpf_trace: check size for overflow in
- bpf_kprobe_multi_link_attach
-Message-ID: <20220518200010.GA29226@asgard.redhat.com>
-References: <cover.1652876187.git.esyr@redhat.com>
- <39c4a91f2867684dc51c5395d26cb56ffe9d995d.1652876188.git.esyr@redhat.com>
- <412bf136-6a5b-f442-1e84-778697e2b694@fb.com>
+        Wed, 18 May 2022 16:02:05 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1F814CDF4;
+        Wed, 18 May 2022 13:02:04 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id z3so1603536pgn.4;
+        Wed, 18 May 2022 13:02:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uqfL2s98jH1KESGEpAYrkz2to9znSXHw/vJwfe+b5DQ=;
+        b=YPVYxFEAxbX9obB0FWsDGjJXZ/xxu0R1tZCQ++6jkOoiO9v559/ECYd0+e/O2SnKIk
+         DbDtz5cgKxPzpnH+uyTvilV8s6IbwTs4inX3uNdgLPM27TDRwtSHqzOkWpM4ch8gryT6
+         AndZRKGF8eXDvaO0E1zoLXJPNO6Ebt5P/rxP9ZuAXcMrgVMTjvDJF86e5CEcHX8KrPw/
+         zt7qqK+70VExBruwYUmRAm7vJNPaBCZEsnDJLYVUSF6gdpChcgPc4WS0zJ2AW2KogD1E
+         d1OEEibKD/Kdsl7l97xR9MOMSbaCdf0VI39+UCXcEtWW6z7FeXiHJvzIqe/8nYP79cFt
+         BP4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uqfL2s98jH1KESGEpAYrkz2to9znSXHw/vJwfe+b5DQ=;
+        b=2En9iPS6t7TBhlgS9QdWKz15xTbMhNLwmlgY0Ted32tLEvC26Z6CToQIHWTP3njExN
+         6hg5JD3JYAoHQtA4qvWIiRyyr+uoTNgaHHGygfdBlolygesCK8NKLuf2iqaDr/tWQMzI
+         YP+uem6eR7xcEjRx1mkLsC9oOV9IZsnYCtmLtYrO4YgPKNRz1+I0WJEjY6aeSgZbKbh8
+         DchQnSUf1+ZOHWbpqzshYsffUYEzNdDqMjngiHsl0/8momU717xw/Ctx6lOiArvy1L1X
+         NKtI8rLR/Tn8wiEylyufH9UcNeZYmJgRTNuDrMouwTFrPaYgWBB10yztzMyXuS+/mcpv
+         TYyg==
+X-Gm-Message-State: AOAM5337I5O/aV2yXATZHhUIuyX5fi3VtDlYBgcp2AJTXhuWojSJknCJ
+        LuDOp2TKzu3qhagOHVEevL0=
+X-Google-Smtp-Source: ABdhPJyr9iaeXPnDbGCFTOGnkaD+p+nR2I1pLBS5V7XERkYPJllYvgGbkhSs6RXFm2TYStgbhdRVbQ==
+X-Received: by 2002:a65:6919:0:b0:3f6:111c:42d0 with SMTP id s25-20020a656919000000b003f6111c42d0mr881634pgq.449.1652904123979;
+        Wed, 18 May 2022 13:02:03 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id e11-20020a17090a9a8b00b001df4c27e5a5sm3961678pjp.35.2022.05.18.13.02.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 13:02:03 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Anand Gore <anand.gore@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        florian.fainelli@broadcom.com, kursad.oney@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, soc@kernel.org
+Subject: Re: [PATCH 1/3] ARM: dts: add dts files for bcmbca soc 63178
+Date:   Wed, 18 May 2022 13:02:01 -0700
+Message-Id: <20220518200201.323063-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220516103801.1.If6875f219ec3c728983c6aec498ef67b43cef8b7@changeid>
+References: <20220516173808.1391482-1-anand.gore@broadcom.com> <20220516103801.1.If6875f219ec3c728983c6aec498ef67b43cef8b7@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <412bf136-6a5b-f442-1e84-778697e2b694@fb.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 09:34:22AM -0700, Yonghong Song wrote:
-> On 5/18/22 5:22 AM, Eugene Syromiatnikov wrote:
-> >-	size = cnt * sizeof(*syms);
-> >+	if (check_mul_overflow(cnt, (u32)sizeof(*syms), &size))
-> >+		return -EOVERFLOW;
+On Mon, 16 May 2022 10:38:06 -0700, Anand Gore <anand.gore@broadcom.com> wrote:
+> Add dts for ARMv7 based broadband SoC BCM63178. bcm63178.dtsi is the
+> SoC description dts header and bcm963178.dts is a simple dts file for
+> Broadcom BCM963178 Reference board that only enable the UART port.
 > 
-> In mm/util.c kvmalloc_node(), we have
-> 
->         /* Don't even allow crazy sizes */
->         if (unlikely(size > INT_MAX)) {
->                 WARN_ON_ONCE(!(flags & __GFP_NOWARN));
->                 return NULL;
->         }
-> 
-> Basically the maximum size to be allocated in INT_MAX.
-> 
-> Here, we have 'size' as u32, which means if the size is 0xffff0000,
-> the check_mul_overflow will return false (no overflow) but
-> kvzalloc will still have a warning.
-> 
-> I think we should change the type of 'size' to be 'int' which
-> should catch the above case and be consistent with
-> what kvmalloc_node() intends to warn.
+> Signed-off-by: Anand Gore <anand.gore@broadcom.com>
+> ---
 
-Huh, it's a bitmore complicated as check_mul_overflow requires types to
-match; what do you think about
-
-+	if (check_mul_overflow(cnt, (u32)sizeof(*syms), &size) || size > INT_MAX)
-
-?
-
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
+Florian

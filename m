@@ -2,207 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BE552C664
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1EB52C66F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiERWih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 18:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S230138AbiERWk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 18:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiERWie (ORCPT
+        with ESMTP id S230088AbiERWkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 18:38:34 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6346987204
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:38:32 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a23so4169096ljd.9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7gdFSEosSAzTBXsu35THTpPMw3mGz0j3zFfiuE2MhAY=;
-        b=DBCDYEj9O79QGw1FqBTNKBN+UG/9b8MI+aWVV/QwexN4gbJ2Amb3SPW+GCbUY5i3+N
-         SgYOwJHat25fpLjb6YVNE2HgjKIRAfAC09GzTJhO8vnLvQa+7yhkGDObb4amXFRV1Kyw
-         +Cw+laGn/BdFpRqa7l8fZp9kbEtzow+apOaSmIEp4/S+6l/SK6aCTFPHQwQDhWe9mY8D
-         Md2X1lcXvFI6DY3j8QVa0t7FPC9yHcAdGEwIxC/cjgZaMcT4mRr41hc6BU9r2FO8zojX
-         nsum4g2gea72U9JYJVhZdK/3nJIIKkAH8NO3jVj8DR+RTBDjtSlKAdY0KKnyeWNDnBaA
-         NVzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7gdFSEosSAzTBXsu35THTpPMw3mGz0j3zFfiuE2MhAY=;
-        b=FvuVkhMYMhCfIZJdTt6C1y5f6mYkLZdt99CrNBtQk9S+DZetuN/9VVuzxB1YartPUo
-         /pBYzVX9ZqCNagFFoQ1TU7HiMpzeln6wPitzV4wkX8tuDq0F9OF1H2YehTSljaUuEoHr
-         dnctkIiyc92salhMoA05LNKpcfdzXIdy0QjRmuvx7T1CRaXkI1AavJa4MWlJar5J5486
-         DT64TnDVmKtLAgKAZu7Pmj+B1wNVLtiz2U0Nq5EKBgLsBLq4HtRz+RGvUZh42S94Hpu5
-         XBRS8h9PcHGDhWwUsQtl/AW39T8XxyMZ9eDchOJs01vDAAZMMP9Cbq56pvpgi9Hl46N6
-         PmIw==
-X-Gm-Message-State: AOAM531AJWSH3lM68Y8v7ftsZSSGi6NjgmVoFO+zwBT4aCcslaJGmI0q
-        31wxz+gz5bmJwqu2hbik1cXvdBIk7idVAwUTUqcRAg==
-X-Google-Smtp-Source: ABdhPJxIvkMHr6Wdqc9RtIs7R9Iciobl7SAFqpROG3q5kajc4MrpS/iRKSLKPONXjr32ZMmvkbRxQg1q/DnFVMkdTfY=
-X-Received: by 2002:a2e:a7c8:0:b0:24f:700a:4df5 with SMTP id
- x8-20020a2ea7c8000000b0024f700a4df5mr916472ljp.472.1652913510399; Wed, 18 May
- 2022 15:38:30 -0700 (PDT)
+        Wed, 18 May 2022 18:40:24 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBD8199B36;
+        Wed, 18 May 2022 15:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=GgPwDRKqmwh+3nf8RK2HuPZBwmSHU5n4+PACGphCjCg=; b=hxTeOn0zISLG/VnFdZjRUun7ad
+        JB1mLXvP1pVAyPEim1QmiD9im2kAd+8Xi5EKsDP2fr/Ov7vLEokFCRIhMWQqfm8gr5mNxf6qeM403
+        dudw54WQaqkhBnQfmbY2aXxC98A2hkbaIgmhti6JfcMYGCTAoYgpXBF15I4JgajJMmq1kVPQIQyP5
+        bLzHNgEXdnsqatZzgCfnsVZz9PzIgZ0jTOigGIXLxfhj4cnDHKvy9ujhGfZ+lq8RY06nuYWTXKZ1S
+        rFysqISE6RLID0/CHQZaBwRnlCHmYZ95yVU1N86QO0pNia+wELr3oxHi4d/LW3+nB3ncUUGgWaWR8
+        NscroP8A==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrSKv-001fuK-Vu; Wed, 18 May 2022 22:40:10 +0000
+Message-ID: <65f17e84-83e4-c33a-1718-fbb5841cef46@infradead.org>
+Date:   Wed, 18 May 2022 15:40:06 -0700
 MIME-Version: 1.0
-References: <20220516210954.1660716-5-ndesaulniers@google.com> <202205180917.RNpZaxIl-lkp@intel.com>
-In-Reply-To: <202205180917.RNpZaxIl-lkp@intel.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 18 May 2022 15:38:18 -0700
-Message-ID: <CAKwvOdmkd2PxvMUZA=A-72eATGDZkqDj--Bv1W+Xt_K_LWdROA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] ARM: pass -march= only to compiler
-To:     David Spickett <david.spickett@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: linux-next: Tree for May 18
+ (arch/x86/kernel/cpu/microcode/intel.o)
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, Tony Luck <tony.luck@intel.com>
+References: <20220518202934.730a8aba@canb.auug.org.au>
+ <8ead0da9-9545-b10d-e3db-7df1a1f219e4@infradead.org>
+ <YoVlwN/IeVXoMaq1@zn.tnic>
+ <df5ed1d0-6304-89b8-ad68-0cf6a59d8614@infradead.org>
+ <YoVzUxSwhoim9TOX@zn.tnic>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <YoVzUxSwhoim9TOX@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lore thread, for context:
-https://lore.kernel.org/llvm/20220516210954.1660716-1-ndesaulniers@google.com/
-
-On Tue, May 17, 2022 at 6:26 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Nick,
->
-> I love your patch! Yet something to improve:
->
-> [auto build test ERROR on 0ac824f379fba2c2b17b75fd5ada69cd68c66348]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Nick-Desaulniers/pass-march-only-to-compiler/20220517-051756
-> base:   0ac824f379fba2c2b17b75fd5ada69cd68c66348
-> config: arm-randconfig-r026-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180917.RNpZaxIl-lkp@intel.com/config)
-
-^ looks like this is a THUMB2 build.
-
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm cross compiling tool for clang build
->         # apt-get install binutils-arm-linux-gnueabi
->         # https://github.com/intel-lab-lkp/linux/commit/6da98100eed87e4316be5ec584fe415134f25a3e
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Nick-Desaulniers/pass-march-only-to-compiler/20220517-051756
->         git checkout 6da98100eed87e4316be5ec584fe415134f25a3e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All errors (new ones prefixed by >>):
->
-> >> arch/arm/crypto/poly1305-core.S:16:1: error: target does not support ARM mode
->    .code 32
->    ^
-
-It looks like arch/arm/crypto/poly1305-core.S has a preprocessor guard
-for __thumb2__.
-
-My change changes the command line from:
-
-from:
-$(CC) ... -march=armv7-m ...
-to:
-$(CC ... -Wa,-march=armv7-m ...
-
-(where ... contains `-mthumb -Wa,-mthumb` for BOTH).
-
-$ arm-linux-gnueabi-gcc -march=armv7-m -mthumb -dM -E - < /dev/null | grep thumb
-#define __thumb2__ 1
-#define __thumb__ 1
-$ arm-linux-gnueabi-gcc -Wa,-march=armv7-m -mthumb -dM -E - <
-/dev/null | grep thumb
-#define __thumb__ 1
-$ clang --target=arm-linux-gnueabi -march=armv7-m -mthumb -dM -E - <
-/dev/null | grep thumb
-#define __thumb2__ 1
-#define __thumb__ 1
-$ clang --target=arm-linux-gnueabi -Wa,-march=armv7-m -mthumb -dM -E -
-< /dev/null | grep thumb
-#define __thumb__ 1
-$
-
-(so it seems that the preprocessor definition of `__thumb2__` is
-dependent on `-march=`, not `-Wa,-march=`).
-
-David, we might have a very subtle bug in clang:
-
-$ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m
--Wa,-march=armv7-m -x assembler-with-cpp
--Wunused-command-line-argument - < /dev/null -dM -E
-<prints a bunch of preprocessor defines, but no instance of
--Wunused-command-line-argument>
-$ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m
--Wa,-march=armv7-m -x assembler-with-cpp
--Wunused-command-line-argument - < /dev/null -dM -c
-clang-15: warning: argument unused during compilation:
-'-march=armv7-m' [-Wunused-command-line-argument]
-
-That seems weird because -c vs -E have different behaviors regarding
--Wunused-command-line-argument, and it seems like for `-x
-assembler-with-cpp` that the -march= flag without -Wa, prefix *is*
-expected to control the behavior of certain preprocessor defines like
-`__thumb2__`.
-
-Perhaps a more straightforward test case:
-```asm
-@ x.S
-@ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m \
-@   -Wa,-march=armv7-m -Wunused-command-line-argument x.S -c
-.syntax unified
-.text
-foo:
-  movs r0, #__thumb2__
-```
-
-$ clang --target=arm-linux-gnueabi -mthumb -Wa,-mthumb -march=armv7-m
--Wa,-march=armv7-m -Wunused-command-line-argument x.S -c
-clang-15: warning: argument unused during compilation:
-'-march=armv7-m' [-Wunused-command-line-argument]
-
-$ llvm-objdump -dr x.o | tail -n 2
-00000000 <foo>:
-       0: 01 20        movs r0, #1
-
-Obviously that warning about `-Wunused-command-line-argument` is
-incorrect; the value of `__thumb2__` comes from the preprocessor and
-is controlled by `-march=armv7-m`. It can't be simultaneously "unused"
-and used to define particular preprocessor directives.
-
-Using the above command line invocation without `-march=armv7-m`
-produces the assembler-time failure:
-/tmp/x-03ab60.s:10:3: error: unsupported relocation on symbol
-  movs r0, #__thumb2__
-  ^
-because __thumb2__ is not defined.
-
-(perhaps `#ifundef __thumb2__ #error "oops" #endif` would be simpler yet).
 
 
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
->
+On 5/18/22 15:29, Borislav Petkov wrote:
+> On Wed, May 18, 2022 at 02:54:45PM -0700, Randy Dunlap wrote:
+>>
+>>
+>> On 5/18/22 14:34, Borislav Petkov wrote:
+>>> On Wed, May 18, 2022 at 02:05:28PM -0700, Randy Dunlap wrote:
+>>>> on x86_64:
+>>>>
+>>>> CONFIG_PROCESSOR_SELECT=y
+>>>> # CONFIG_CPU_SUP_INTEL is not set   <<<<<
+>>>> CONFIG_CPU_SUP_AMD=y
+>>>> # CONFIG_CPU_SUP_HYGON is not set
+>>>> CONFIG_CPU_SUP_CENTAUR=y
+>>>> CONFIG_CPU_SUP_ZHAOXIN=y
+>>>>
+>>>> CONFIG_MICROCODE=y
+>>>> CONFIG_MICROCODE_INTEL=y   <<<<<
+>>>> CONFIG_MICROCODE_AMD=y
+>>>
+>>> Hmm:
+>>>
+>>> $ grep -E "(PROCESSOR_SELECT|CPU_SUP|MICROCODE)" .config
+>>> CONFIG_PROCESSOR_SELECT=y
+>>> # CONFIG_CPU_SUP_INTEL is not set
+>>> CONFIG_CPU_SUP_AMD=y
+>>> # CONFIG_CPU_SUP_HYGON is not set
+>>> CONFIG_CPU_SUP_CENTAUR=y
+>>> CONFIG_CPU_SUP_ZHAOXIN=y
+>>> CONFIG_MICROCODE=y
+>>> CONFIG_MICROCODE_INTEL=y
+>>> CONFIG_MICROCODE_AMD=y
+>>> CONFIG_MICROCODE_OLD_INTERFACE=y
+>>>
+>>> that builds fine here on tip/master. Or is it linux-next specific? I'd
+>>> hope not.
+>>>
+>>> Can you send me your whole .config pls and how exactly you reproduce it,
+>>> i.e., on which tree?
+>>
+>> This is linux-next-20220518. config file is attached.
+> 
+> Ah, got it, that's the IFS thing which uses microcode loader functions.
+> 
+> I think this below but will do more poking tomorrow on a fresh head.
+> 
 
+Thanks. If you like this patch, you can add
 
---
-Thanks,
-~Nick Desaulniers
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+to it.
+
+> 
+> ---
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 60e9be91250e..ba1e509d11bb 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1321,7 +1321,6 @@ config X86_REBOOTFIXUPS
+>  config MICROCODE
+>  	bool "CPU microcode loading support"
+>  	default y
+> -	depends on CPU_SUP_AMD || CPU_SUP_INTEL
+>  	help
+>  	  If you say Y here, you will be able to update the microcode on
+>  	  Intel and AMD processors. The Intel support is for the IA32 family,
+> @@ -1341,7 +1340,7 @@ config MICROCODE
+>  
+>  config MICROCODE_INTEL
+>  	bool "Intel microcode loading support"
+> -	depends on MICROCODE
+> +	depends on CPU_SUP_INTEL && MICROCODE
+>  	default MICROCODE
+>  	help
+>  	  This options enables microcode patch loading support for Intel
+> @@ -1353,7 +1352,7 @@ config MICROCODE_INTEL
+>  
+>  config MICROCODE_AMD
+>  	bool "AMD microcode loading support"
+> -	depends on MICROCODE
+> +	depends on CPU_SUP_AMD && MICROCODE
+>  	help
+>  	  If you select this option, microcode patch loading support for AMD
+>  	  processors will be enabled.
+> diff --git a/drivers/platform/x86/intel/ifs/Kconfig b/drivers/platform/x86/intel/ifs/Kconfig
+> index d84491cfb0db..aaaa5503951d 100644
+> --- a/drivers/platform/x86/intel/ifs/Kconfig
+> +++ b/drivers/platform/x86/intel/ifs/Kconfig
+> @@ -1,6 +1,6 @@
+>  config INTEL_IFS
+>  	tristate "Intel In Field Scan"
+> -	depends on X86 && 64BIT && SMP
+> +	depends on CPU_SUP_INTEL && 64BIT && SMP
+>  	select INTEL_IFS_DEVICE
+>  	help
+>  	  Enable support for the In Field Scan capability in select
+> 
+> 
+
+-- 
+~Randy

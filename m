@@ -2,53 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140D152C824
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DABDD52C7F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiERXyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 19:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
+        id S231530AbiERXvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 19:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbiERXxf (ORCPT
+        with ESMTP id S231521AbiERXvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 19:53:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B999BAFC;
-        Wed, 18 May 2022 16:53:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 463A4B8225C;
-        Wed, 18 May 2022 23:53:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A28C3411C;
-        Wed, 18 May 2022 23:53:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652918012;
-        bh=mHfaNK/yqtCaO/YT1VZcqJFlQSMjauSczWDdIigQbH4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X9OLn4uN0IO4WyRABB3ByikS4qWBMsqFglNa8PeQ72cZC0adZSBvyLrplspqEtJRX
-         mZxZJWuw2e0+J9G4KOg8g+NuMV3eMDe6MRLVhA2PXNtqgJ/22jaYPwmRJBuar7XPkV
-         BZMEX5DB0YvhDEVWNjqSNgnIYGirlIO+VpWpNzNKoRiCPTwZ013i1D1hEWsq+odUQ0
-         jqK5EGlKizkZblHmj0qlIhshRQvVwH+kkUcnm3PZiENEHBLFjoXOZL42G3moRRaLxh
-         iMIuOcvo/Xjrlh0wnusnqJd4zv9t2f8C4dAh8KR9Ee024Rmn8spgTVzaebA0uQzBKl
-         AGm4vyf4h8/Mg==
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-xfs@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>
-Subject: [RFC PATCH v2 7/7] f2fs: support STATX_IOALIGN
-Date:   Wed, 18 May 2022 16:50:11 -0700
-Message-Id: <20220518235011.153058-8-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220518235011.153058-1-ebiggers@kernel.org>
-References: <20220518235011.153058-1-ebiggers@kernel.org>
+        Wed, 18 May 2022 19:51:10 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1C4443C3;
+        Wed, 18 May 2022 16:51:10 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id h85so4085910iof.12;
+        Wed, 18 May 2022 16:51:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eZMy8FDicN73C5tBewEMmRPhbsoqs/BvzITBNIcg4lI=;
+        b=bV2eHwNLaIIZcJFPpOhwoDKvUVHSKNvsV3qUcXiyyqVoT8vgw1YA11pOl7Bef67Id9
+         8IO6ageKx63UxY6rCNMgWsGjAznrDkga9bVN/S8kwLW996syy6yrDkcE0kQeacQxi/kO
+         4cGJ92W2Rj5SiytU3ldGj84lom/BNkwQNvAjR2WoFYz43iD+icaNfwoFdBwNjEuw+fBA
+         zRsz9UN0GGB0Ha4Mve0m1k6fyEZBA9G1L4TH3XZkQVcMaYEpTapirL4uHeBj2EnESxAM
+         Rjpj1dX0ucmssHN5zAkytrdqtkN6GYmfjZHvfYJmbjtG1iDlkjZI764iUeEYarO5a9Mf
+         lTTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eZMy8FDicN73C5tBewEMmRPhbsoqs/BvzITBNIcg4lI=;
+        b=nyudBD4Q+FeYV30HNveB0aVwDOdUPZN0EckwfwNA7C5+XQsfNeBzXI38QaghFxozVh
+         lyNKlfGyTu6NI79jqkSj9zV+kEVjAfq0+IseYSM6uE+oVrtfitS1eryA2Ydvx3H+XqJd
+         PcOYAUXzzOwFrB7GbScGWvFTrdiJi+6AsMX4a3O9KhxUEDg1nliK8MnETuMfvFimVql8
+         zWCqp9qsg6BXILfrSQvRCZzlX+dJ9FQ6IGkifEcS/PhP2ndojw5wyn3PfNvjeRaSCcnT
+         KlxmBP/Wer1QUMuoYwco63qczWPfO7V4UadErkY/NEUPQf7DGs+Pdp3SOYeHaBUp9smv
+         KSHg==
+X-Gm-Message-State: AOAM532shANTwKZuFAlng0h7F76i/PMpNUKcOmqjKz3bUjKy7hlvx3OB
+        QkQnSt8IlInP2XO0spAD0k8EBZ94JyNJ/zIksbTKUvUE
+X-Google-Smtp-Source: ABdhPJz7ng3xuusKTxdtSpX9mM929lMyQ9CPvg13/lfQd4CkqrUJZ2b2BA5I+eMO0wcjxqx/5T37CPMTNoDE+0KAbX0=
+X-Received: by 2002:a05:6638:450a:b0:32e:1bd1:735f with SMTP id
+ bs10-20020a056638450a00b0032e1bd1735fmr1129586jab.145.1652917869480; Wed, 18
+ May 2022 16:51:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
+References: <cover.1652772731.git.esyr@redhat.com> <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
+In-Reply-To: <6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 18 May 2022 16:50:58 -0700
+Message-ID: <CAEf4BzYNa0F21ydMLvmeGZWzvO_o5Fh0Af0zwWGNxMh6emQTSg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/4] bpf_trace: pass array of u64 values in kprobe_multi.addrs
+To:     Eugene Syromiatnikov <esyr@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,65 +80,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+On Tue, May 17, 2022 at 12:37 AM Eugene Syromiatnikov <esyr@redhat.com> wrote:
+>
+> With the interface as defined, it is impossible to pass 64-bit kernel
+> addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
+> which severly limits the useability of the interface, change the ABI
+> to accept an array of u64 values instead of (kernel? user?) longs.
+> Interestingly, the rest of the libbpf infrastructure uses 64-bit values
+> for kallsyms addresses already, so this patch also eliminates
+> the sym_addr cast in tools/lib/bpf/libbpf.c:resolve_kprobe_multi_cb().
+>
+> Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
+> Fixes: 5117c26e877352bc ("libbpf: Add bpf_link_create support for multi kprobes")
+> Fixes: ddc6b04989eb0993 ("libbpf: Add bpf_program__attach_kprobe_multi_opts function")
+> Fixes: f7a11eeccb111854 ("selftests/bpf: Add kprobe_multi attach test")
+> Fixes: 9271a0c7ae7a9147 ("selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts")
+> Fixes: 2c6401c966ae1fbe ("selftests/bpf: Add kprobe_multi bpf_cookie test")
+> Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+> ---
+>  kernel/trace/bpf_trace.c                           | 25 ++++++++++++++++++----
 
-Add support for STATX_IOALIGN to f2fs, so that I/O alignment information
-is exposed to userspace in a consistent and easy-to-use way.
+kernel changes should go into a separate patch (and seems like they
+logically fit together with patch #3, no?)
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- fs/f2fs/file.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+>  tools/lib/bpf/bpf.h                                |  2 +-
+>  tools/lib/bpf/libbpf.c                             |  8 +++----
+>  tools/lib/bpf/libbpf.h                             |  2 +-
+>  .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
+>  .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  8 +++----
+>  6 files changed, 32 insertions(+), 15 deletions(-)
+>
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index c32f7722ba6b0..f89a190949c59 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -835,6 +835,21 @@ static bool f2fs_force_buffered_io(struct inode *inode)
- 	return false;
- }
- 
-+/* Return the maximum value of io_opt across all the filesystem's devices. */
-+static unsigned int f2fs_max_io_opt(struct inode *inode)
-+{
-+	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-+	int io_opt = 0;
-+	int i;
-+
-+	if (!f2fs_is_multi_device(sbi))
-+		return bdev_io_opt(sbi->sb->s_bdev);
-+
-+	for (i = 0; i < sbi->s_ndevs; i++)
-+		io_opt = max(io_opt, bdev_io_opt(FDEV(i).bdev));
-+	return io_opt;
-+}
-+
- int f2fs_getattr(struct user_namespace *mnt_userns, const struct path *path,
- 		 struct kstat *stat, u32 request_mask, unsigned int query_flags)
- {
-@@ -851,6 +866,22 @@ int f2fs_getattr(struct user_namespace *mnt_userns, const struct path *path,
- 		stat->btime.tv_nsec = fi->i_crtime.tv_nsec;
- 	}
- 
-+	/*
-+	 * Return the I/O alignment information if requested.  We only return
-+	 * this information when requested, since on encrypted files it might
-+	 * take a fair bit of work to get if the file wasn't opened recently.
-+	 */
-+	if ((request_mask & STATX_IOALIGN) && S_ISREG(inode->i_mode)) {
-+		unsigned int bsize = i_blocksize(inode);
-+
-+		stat->result_mask |= STATX_IOALIGN;
-+		if (!f2fs_force_buffered_io(inode)) {
-+			stat->mem_align_dio = bsize;
-+			stat->offset_align_dio = bsize;
-+		}
-+		stat->offset_align_optimal = max(f2fs_max_io_opt(inode), bsize);
-+	}
-+
- 	flags = fi->i_flags;
- 	if (flags & F2FS_COMPR_FL)
- 		stat->attributes |= STATX_ATTR_COMPRESSED;
--- 
-2.36.1
-
+[...]

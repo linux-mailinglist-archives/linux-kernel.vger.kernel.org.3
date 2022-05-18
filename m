@@ -2,125 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA9752B428
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2437D52B47C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbiERH7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S232833AbiERISP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbiERH7c (ORCPT
+        with ESMTP id S232820AbiERISM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:59:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4561712719B;
-        Wed, 18 May 2022 00:59:31 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L350f4WXkzQk9h;
-        Wed, 18 May 2022 15:56:34 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+        Wed, 18 May 2022 04:18:12 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB49798588
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:18:09 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id 5D2ED206BF;
+        Wed, 18 May 2022 10:12:39 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fIlEGlifOAuS; Wed, 18 May 2022 10:12:38 +0200 (CEST)
+Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id E545A206B0;
+        Wed, 18 May 2022 10:12:38 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout2.secunet.com (Postfix) with ESMTP id DFD8C80004A;
+        Wed, 18 May 2022 10:12:38 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 18 May 2022 15:59:28 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ 15.1.2375.24; Wed, 18 May 2022 10:12:38 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 15:59:28 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <keescook@chromium.org>, <viro@zeniv.linux.org.uk>,
-        <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <chengzhihao1@huawei.com>,
-        <yukuai3@huawei.com>
-Subject: [PATCH -next] exec: Remove redundant check in do_open_execat/uselib
-Date:   Wed, 18 May 2022 16:12:27 +0800
-Message-ID: <20220518081227.1278192-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+ 2022 10:12:38 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 1466E3182D02; Wed, 18 May 2022 10:12:38 +0200 (CEST)
+Date:   Wed, 18 May 2022 10:12:38 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: af_key: add check for pfkey_broadcast in function
+ pfkey_process
+Message-ID: <20220518081238.GT680067@gauss3.secunet.de>
+References: <20220517094231.414168-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220517094231.414168-1-jiasheng@iscas.ac.cn>
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a false positive WARNON happening in execve(2)/uselib(2)
-syscalls with concurrent noexec-remount.
+On Tue, May 17, 2022 at 05:42:31PM +0800, Jiasheng Jiang wrote:
+> If skb_clone() returns null pointer, pfkey_broadcast() will
+> return error.
+> Therefore, it should be better to check the return value of
+> pfkey_broadcast() and return error if fails.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-       execveat                           remount
-do_open_execat(path/bin)
-  do_filp_open
-    path_openat
-      do_open
-        may_open
-          path_noexec() // PASS
-	                            remount(path->mnt, MS_NOEXEC)
-WARNON(path_noexec(&file->f_path)) // path_noexec() checks fail
-
-Since may_open() has already checked the same conditions, fix it by
-removing 'S_ISREG' and 'path_noexec' check in do_open_execat()/uselib(2).
-
-Fixes: 0fd338b2d2cdf8 ("exec: move path_noexec() check earlier")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- fs/exec.c | 22 +---------------------
- 1 file changed, 1 insertion(+), 21 deletions(-)
-
-diff --git a/fs/exec.c b/fs/exec.c
-index e3e55d5e0be1..0f8ea7e9e03c 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -141,16 +141,6 @@ SYSCALL_DEFINE1(uselib, const char __user *, library)
- 	if (IS_ERR(file))
- 		goto out;
- 
--	/*
--	 * may_open() has already checked for this, so it should be
--	 * impossible to trip now. But we need to be extra cautious
--	 * and check again at the very end too.
--	 */
--	error = -EACCES;
--	if (WARN_ON_ONCE(!S_ISREG(file_inode(file)->i_mode) ||
--			 path_noexec(&file->f_path)))
--		goto exit;
--
- 	fsnotify_open(file);
- 
- 	error = -ENOEXEC;
-@@ -169,7 +159,7 @@ SYSCALL_DEFINE1(uselib, const char __user *, library)
- 			break;
- 	}
- 	read_unlock(&binfmt_lock);
--exit:
-+
- 	fput(file);
- out:
-   	return error;
-@@ -919,16 +909,6 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
- 	if (IS_ERR(file))
- 		goto out;
- 
--	/*
--	 * may_open() has already checked for this, so it should be
--	 * impossible to trip now. But we need to be extra cautious
--	 * and check again at the very end too.
--	 */
--	err = -EACCES;
--	if (WARN_ON_ONCE(!S_ISREG(file_inode(file)->i_mode) ||
--			 path_noexec(&file->f_path)))
--		goto exit;
--
- 	err = deny_write_access(file);
- 	if (err)
- 		goto exit;
--- 
-2.31.1
-
+Applied, thanks!

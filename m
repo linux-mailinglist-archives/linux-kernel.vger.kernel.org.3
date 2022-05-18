@@ -2,206 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E24E52B85D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A9252B84D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235364AbiERLIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S235331AbiERLMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235307AbiERLIH (ORCPT
+        with ESMTP id S235314AbiERLMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:08:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E12C232EDD;
-        Wed, 18 May 2022 04:08:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7C1423A;
-        Wed, 18 May 2022 04:08:05 -0700 (PDT)
-Received: from [10.57.82.55] (unknown [10.57.82.55])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A23F23F718;
-        Wed, 18 May 2022 04:08:03 -0700 (PDT)
-Message-ID: <a063199a-72dd-d2ab-10bb-7130697c5611@arm.com>
-Date:   Wed, 18 May 2022 12:07:58 +0100
+        Wed, 18 May 2022 07:12:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247BD13B8E6;
+        Wed, 18 May 2022 04:12:05 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id CF70521BAB;
+        Wed, 18 May 2022 11:12:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652872323; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bJwKG57RWDGJ1oMgfPTV0ZpppuDp60feAI7THcn80qg=;
+        b=r231nlMXw62fATk7CPdCROZZTQ20E8sitKi38zs3Chx6LiZr2iYGUeeiaF/YgP2Ju29VyU
+        0Im/WLSyje62i+2DF7fao/ni8B3ztKxy2jkOQmxEg2iYQoMtBwN5R5FY5cig59EudImraw
+        HDXozxs8xCL83DwUcf8bJVbUNjbqgs8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652872323;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bJwKG57RWDGJ1oMgfPTV0ZpppuDp60feAI7THcn80qg=;
+        b=BSmCor0MSvUg7LYlmUKzkFU94em8BdUF89+848BnkZvKU9/SChV6NYICOTcN5AK5tbTp3S
+        9jMU6T/ljtXbLIDg==
+Received: from quack3.suse.cz (unknown [10.163.43.118])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id AEFC22C141;
+        Wed, 18 May 2022 11:12:03 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 6E7C0A062F; Wed, 18 May 2022 13:12:02 +0200 (CEST)
+Date:   Wed, 18 May 2022 13:12:02 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Christian Brauner <brauner@kernel.org>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Matthew Bobrowski <repnop@google.com>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] sparse: fix incorrect fmode_t casts
+Message-ID: <20220518111202.33qkxrfui7o7bb2o@quack3.lan>
+References: <YoNDA0SOFjyoFlJS@infradead.org>
+ <86e82d40-0952-e76f-aac5-53abe48ec770@openvz.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 2/8] iommu: mtk_iommu: Lookup phandle to retrieve syscon
- to infracfg
-Content-Language: en-GB
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
-Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
- <20220517132107.195932-3-angelogioacchino.delregno@collabora.com>
- <16fb07d9-28d8-5c73-1eb5-ec13544d22e5@arm.com>
- <b003c37c-0f2d-31f6-6a74-4e1f0f4a1ccb@collabora.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <b003c37c-0f2d-31f6-6a74-4e1f0f4a1ccb@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86e82d40-0952-e76f-aac5-53abe48ec770@openvz.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-18 09:29, AngeloGioacchino Del Regno wrote:
-> Il 17/05/22 16:12, Robin Murphy ha scritto:
->> On 2022-05-17 14:21, AngeloGioacchino Del Regno wrote:
->>> This driver will get support for more SoCs and the list of infracfg
->>> compatibles is expected to grow: in order to prevent getting this
->>> situation out of control and see a long list of compatible strings,
->>> add support to retrieve a handle to infracfg's regmap through a
->>> new "mediatek,infracfg" phandle.
->>>
->>> In order to keep retrocompatibility with older devicetrees, the old
->>> way is kept in place, but also a dev_warn() was added to advertise
->>> this change in hope that the user will see it and eventually update
->>> the devicetree if this is possible.
->>>
->>> Signed-off-by: AngeloGioacchino Del Regno 
->>> <angelogioacchino.delregno@collabora.com>
->>> ---
->>>   drivers/iommu/mtk_iommu.c | 40 +++++++++++++++++++++++++--------------
->>>   1 file changed, 26 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
->>> index 71b2ace74cd6..cfaaa98d2b50 100644
->>> --- a/drivers/iommu/mtk_iommu.c
->>> +++ b/drivers/iommu/mtk_iommu.c
->>> @@ -1134,22 +1134,34 @@ static int mtk_iommu_probe(struct 
->>> platform_device *pdev)
->>>       data->protect_base = ALIGN(virt_to_phys(protect), 
->>> MTK_PROTECT_PA_ALIGN);
->>>       if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_4GB_MODE)) {
->>> -        switch (data->plat_data->m4u_plat) {
->>> -        case M4U_MT2712:
->>> -            p = "mediatek,mt2712-infracfg";
->>> -            break;
->>> -        case M4U_MT8173:
->>> -            p = "mediatek,mt8173-infracfg";
->>> -            break;
->>> -        default:
->>> -            p = NULL;
->>> +        infracfg = syscon_regmap_lookup_by_phandle(dev->of_node, 
->>> "mediatek,infracfg");
->>> +        if (IS_ERR(infracfg)) {
->>> +            dev_warn(dev, "Cannot find phandle to mediatek,infracfg:"
->>> +                      " Please update your devicetree.\n");
->>
->> Is this really a dev_warn-level problem? There's no functional impact, 
->> given that we can't stop supporting the original binding any time 
->> soon, if ever, so I suspect this is more likely to just annoy users 
->> and CI systems than effect any significant change.
->>
+On Wed 18-05-22 13:49:07, Vasily Averin wrote:
+> Fixes sparce warnings:
+> fs/notify/fanotify/fanotify_user.c:267:63: sparse:
+>  warning: restricted fmode_t degrades to integer
+> fs/notify/fanotify/fanotify_user.c:1351:28: sparse:
+>  warning: restricted fmode_t degrades to integer
+> fs/proc/base.c:2240:25: sparse: warning: cast to restricted fmode_t
+> fs/proc/base.c:2297:42: sparse: warning: cast from restricted fmode_t
+> fs/proc/base.c:2394:48: sparse: warning: cast from restricted fmode_t
+> fs/open.c:1024:21: sparse: warning: restricted fmode_t degrades to integer
 > 
-> The upstream devicetrees were updated to use the new handle and this is 
-> a way to
-> warn about having outdated DTs... besides, I believe that CIs will 
-> always get the
-> devicetree from the same tree that the kernel was compiled from (hence 
-> no message
-> will be thrown).
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+
+Feel free to add:
+
+Acked-by: Jan Kara <jack@suse.cz>
+
+for the fanotify bits.
+
+								Honza
+
+> ---
+> v2:
+>  1) use __FMODE_NONOTIFY instead of FMODE_NONOTIFY
+>  2) introduced fmode_instantiate_de/encode helpers
+>       thanks Christoph Hellwig for the hints
+> ---
+>  fs/notify/fanotify/fanotify_user.c |  4 ++--
+>  fs/open.c                          |  2 +-
+>  fs/proc/base.c                     | 21 ++++++++++++++++-----
+>  3 files changed, 19 insertions(+), 8 deletions(-)
 > 
-> In any case, if you think that a dev_info would be more appropriate, I 
-> can change
-> that no problem.
-
-If there's some functional impact from using the old binding vs. the new 
-one then it's reasonable to inform the user of that (as we do in 
-arm-smmu, for example).
-
-However if you change an established binding for non-functional reasons, 
-then you get to support both bindings, and it's not the end user's 
-problem at all. There seems to be zero reason to update an existing DTB 
-for this difference alone, so TBH I don't think it deserves a message at 
-all.
-
->>> +            /*
->>> +             * Legacy devicetrees will not specify a phandle to
->>> +             * mediatek,infracfg: in that case, we use the older
->>> +             * way to retrieve a syscon to infra.
->>> +             *
->>> +             * This is for retrocompatibility purposes only, hence
->>> +             * no more compatibles shall be added to this.
->>> +             */
->>> +            switch (data->plat_data->m4u_plat) {
->>> +            case M4U_MT2712:
->>> +                p = "mediatek,mt2712-infracfg";
->>> +                break;
->>> +            case M4U_MT8173:
->>> +                p = "mediatek,mt8173-infracfg";
->>> +                break;
->>> +            default:
->>> +                p = NULL;
->>> +            }
->>> +
->>> +            infracfg = syscon_regmap_lookup_by_compatible(p);
->>
->> Would it not make sense to punt this over to the same mechanism as for 
->> pericfg, such that it simplifies down to something like:
->>
->>      if (IS_ERR(infracfg) && plat_data->infracfg) {
->>          infracfg = 
->> syscon_regmap_lookup_by_compatible(plat_data->infracfg);
->>          ...
->>      }
->>
->> ?
->>
->> TBH if we're still going to have a load of per-SoC data in the driver 
->> anyway then I don't see that we really gain much by delegating one 
->> aspect of it to DT, but meh. I would note that with the phandle 
->> approach, you still need some *other* flag in the driver to know 
->> whether a phandle is expected to be present or not, whereas a NULL vs. 
->> non-NULL string is at least neatly self-describing.
->>
+> diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+> index 9b32b76a9c30..2bec3b612618 100644
+> --- a/fs/notify/fanotify/fanotify_user.c
+> +++ b/fs/notify/fanotify/fanotify_user.c
+> @@ -264,7 +264,7 @@ static int create_fd(struct fsnotify_group *group, struct path *path,
+>  	 * originally opened O_WRONLY.
+>  	 */
+>  	new_file = dentry_open(path,
+> -			       group->fanotify_data.f_flags | FMODE_NONOTIFY,
+> +			       group->fanotify_data.f_flags | __FMODE_NONOTIFY,
+>  			       current_cred());
+>  	if (IS_ERR(new_file)) {
+>  		/*
+> @@ -1348,7 +1348,7 @@ SYSCALL_DEFINE2(fanotify_init, unsigned int, flags, unsigned int, event_f_flags)
+>  	    (!(fid_mode & FAN_REPORT_NAME) || !(fid_mode & FAN_REPORT_FID)))
+>  		return -EINVAL;
+>  
+> -	f_flags = O_RDWR | FMODE_NONOTIFY;
+> +	f_flags = O_RDWR | __FMODE_NONOTIFY;
+>  	if (flags & FAN_CLOEXEC)
+>  		f_flags |= O_CLOEXEC;
+>  	if (flags & FAN_NONBLOCK)
+> diff --git a/fs/open.c b/fs/open.c
+> index 1315253e0247..386c52e4c3b1 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -1021,7 +1021,7 @@ inline struct open_how build_open_how(int flags, umode_t mode)
+>  inline int build_open_flags(const struct open_how *how, struct open_flags *op)
+>  {
+>  	u64 flags = how->flags;
+> -	u64 strip = FMODE_NONOTIFY | O_CLOEXEC;
+> +	u64 strip = __FMODE_NONOTIFY | O_CLOEXEC;
+>  	int lookup_flags = 0;
+>  	int acc_mode = ACC_MODE(flags);
+>  
+> diff --git a/fs/proc/base.c b/fs/proc/base.c
+> index c1031843cc6a..b8ed41eb5784 100644
+> --- a/fs/proc/base.c
+> +++ b/fs/proc/base.c
+> @@ -2233,11 +2233,21 @@ static const struct inode_operations proc_map_files_link_inode_operations = {
+>  	.setattr	= proc_setattr,
+>  };
+>  
+> +static fmode_t fmode_instantiate_decode(const void *ptr)
+> +{
+> +	return (__force fmode_t)(unsigned long)ptr;
+> +}
+> +
+> +static void *fmode_instantiate_encode(fmode_t fmode)
+> +{
+> +	return (void *)(__force unsigned long)fmode;
+> +}
+> +
+>  static struct dentry *
+>  proc_map_files_instantiate(struct dentry *dentry,
+>  			   struct task_struct *task, const void *ptr)
+>  {
+> -	fmode_t mode = (fmode_t)(unsigned long)ptr;
+> +	fmode_t mode = fmode_instantiate_decode(ptr);
+>  	struct proc_inode *ei;
+>  	struct inode *inode;
+>  
+> @@ -2292,10 +2302,11 @@ static struct dentry *proc_map_files_lookup(struct inode *dir,
+>  	if (!vma)
+>  		goto out_no_vma;
+>  
+> -	if (vma->vm_file)
+> -		result = proc_map_files_instantiate(dentry, task,
+> -				(void *)(unsigned long)vma->vm_file->f_mode);
+> +	if (vma->vm_file) {
+> +		void *ptr = fmode_instantiate_encode(vma->vm_file->f_mode);
+>  
+> +		result = proc_map_files_instantiate(dentry, task, ptr);
+> +	}
+>  out_no_vma:
+>  	mmap_read_unlock(mm);
+>  out_put_mm:
+> @@ -2391,7 +2402,7 @@ proc_map_files_readdir(struct file *file, struct dir_context *ctx)
+>  				      buf, len,
+>  				      proc_map_files_instantiate,
+>  				      task,
+> -				      (void *)(unsigned long)p->mode))
+> +				      (void *)(__force unsigned long)p->mode))
+>  			break;
+>  		ctx->pos++;
+>  	}
+> -- 
+> 2.31.1
 > 
-> That would be possible but, as Yong also pointed out, we should try to 
-> reduce the
-> per-SoC data in the driver by commonizing as much as possible, because 
-> this driver
-> supports a very long list of SoCs (even though they're not all 
-> upstreamed yet),
-> and the list is going to grow even more with time: this is also why I 
-> have changed
-> the MT8195 pericfg regmap lookup with a phandle like I've done for infra.
-
-That's fair enough, but it's not what the commit message says. The "long 
-list of compatible strings" complaint could be addressed at face value 
-by refactoring without changing the DT binding at all.
-
-However, I didn't think I'd have to point out why that argument doesn't 
-apply to existing SoCs which we have to support with the original 
-binding too; take another look at the switch statement above and have a 
-think...
-
-If we have to maintain infracfg compatible data *somewhere* in the 
-driver, which we do, then it seems more logical to keep it with the rest 
-of the data rather than scattered through the code, that's the main 
-point I wanted to make here.
-
-> There would also be another way, which would imply adding a generic 
-> compatible
-> "mediatek,infracfg" to the infra syscon node, but I really don't like 
-> that for
-> more than one reason, one of which is that this poses an issue, for 
-> which it's
-> not guaranteed that the registers are in infracfg and not infracfg_ao (even
-> though the offsets are the same), so then we would be back to ground zero.
-
-No, we still have to support the existing binding in the context of the 
-existing binding. There *are* some reasonable arguments for moving 
-future SoCs to the phandle binding, they just haven't been presented in 
-these patches ;)
-
-Thanks,
-Robin.
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

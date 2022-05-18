@@ -2,164 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B556052B777
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3110252B75D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234815AbiERKFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
+        id S234833AbiERKEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 06:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234732AbiERKE7 (ORCPT
+        with ESMTP id S234821AbiERKEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:04:59 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11A8663E6;
-        Wed, 18 May 2022 03:04:56 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6F3FBFF817;
-        Wed, 18 May 2022 10:04:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652868295;
+        Wed, 18 May 2022 06:04:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F1055F8CB
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652868242;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=q7m8azLqYxqw7exPiKwgRaIReLLbq6ltOL8jkRp0nlI=;
-        b=nL+GqAVXrAO7B3g8JVROmVVyCKbDKBByNZl/NoWgXswcrfz+/eW1k7H9Obk2ZeASUbEREJ
-        0o8xljT9DvNrAzupsqYy+CFEMAz0Ec3LndbkgMGD1IDg0qW8qVMP5pIs0EdXj+jCVc3KFq
-        xVTTjXnQH5xmn9xR4TZ/zlUMVty4mGq8DZ5HjaTgLH0sVr0N3bGYNG+aPcop/sdP8SIQzc
-        Q8fPXaAvm/+72BBhaua5YhhEjc2C06es7bgGCt1pDfZNsgeqXNLL3x3iyzIJ/uxHpIWAiq
-        1KVWtuKbYHpw9H5dcXyeRgTT4mqi0qUAiaIlY6UOIahlLFwAw5kspTSZuizoHw==
-Date:   Wed, 18 May 2022 12:03:40 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Thomas Petazzoni <thomas.petazonni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH 1/3] of: always populate a root node
-Message-ID: <20220518120340.61e8e11a@fixe.home>
-In-Reply-To: <30bb7968-06fb-308c-a5f0-df316dfb240e@gmail.com>
-References: <20220427094502.456111-1-clement.leger@bootlin.com>
-        <20220427094502.456111-2-clement.leger@bootlin.com>
-        <YnEx5/ni1ddIFCj9@robh.at.kernel.org>
-        <d356acbe-daff-1c66-6511-aab97a171c82@gmail.com>
-        <20220517093729.214c33a3@fixe.home>
-        <30bb7968-06fb-308c-a5f0-df316dfb240e@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-pc-linux-gnu)
+        bh=vHBgBjMyseW/Lrzc/9+U6d8EH43uYJQ4y4ogp1VkNaE=;
+        b=ZF09MPX0YvD8tHQkgOf+PrEcyV0a+x4SxNYt8eH8fgNiWWNL5BIdBEMDh/bjhDLHF588QS
+        zSkMhd/bn/Z1c10tEl60QoJBm3OQYhkdcwcOlz1kDueE67JP4qVS1Z9/WoI62BUFzxEvwr
+        TNG/ugJxd1DAfmECIVffSihnrnSR9PI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-357--aai4pw_MguMuKxj32vTXg-1; Wed, 18 May 2022 06:03:58 -0400
+X-MC-Unique: -aai4pw_MguMuKxj32vTXg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2CEB1C04B40;
+        Wed, 18 May 2022 10:03:57 +0000 (UTC)
+Received: from localhost (dhcp-192-194.str.redhat.com [10.33.192.194])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6F3AE492C3B;
+        Wed, 18 May 2022 10:03:57 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>, mst@redhat.com,
+        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Cc:     tglx@linutronix.de, peterz@infradead.org, paulmck@kernel.org,
+        maz@kernel.org, pasic@linux.ibm.com, eperezma@redhat.com,
+        lulu@redhat.com, sgarzare@redhat.com, xuanzhuo@linux.alibaba.com,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH V5 7/9] virtio: allow to unbreak virtqueue
+In-Reply-To: <20220518035951.94220-8-jasowang@redhat.com>
+Organization: Red Hat GmbH
+References: <20220518035951.94220-1-jasowang@redhat.com>
+ <20220518035951.94220-8-jasowang@redhat.com>
+User-Agent: Notmuch/0.34 (https://notmuchmail.org)
+Date:   Wed, 18 May 2022 12:03:56 +0200
+Message-ID: <87r14rf983.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 17 May 2022 11:03:41 -0400,
-Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
+On Wed, May 18 2022, Jason Wang <jasowang@redhat.com> wrote:
 
-> On 5/17/22 02:37, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Le Mon, 16 May 2022 23:11:03 -0400,
-> > Frank Rowand <frowand.list@gmail.com> a =C3=A9crit :
-> >  =20
-> >> On 5/3/22 08:45, Rob Herring wrote: =20
-> >>> On Wed, Apr 27, 2022 at 11:45:00AM +0200, Cl=C3=A9ment L=C3=A9ger wro=
-te:   =20
-> >>>> When enabling CONFIG_OF on a platform where of_root is not populated=
- by
-> >>>> firmware, we end up without a root node. In order to apply overlays =
-and
-> >>>> create subnodes of the root node, we need one. This commit creates an
-> >>>> empty root node if not present.   =20
-> >>>
-> >>> The existing unittest essentially does the same thing for running the=
-=20
-> >>> tests on non-DT systems. It should be modified to use this support=20
-> >>> instead. Maybe that's just removing the unittest code that set of_roo=
-t.
-> >>>
-> >>> I expect Frank will have some comments.   =20
-> >>
-> >> My preference would be for unflatten_and_copy_device_tree() to
-> >> use a compiled in FDT that only contains a root node, in the
-> >> case that no valid device tree is found (in other words,
-> >> "if (!initial_boot_params)". =20
-> >=20
-> > Ok, so basically, instead of creating the root node manually, you
-> > expect a device-tree which contains the following to be builtin the
-> > kernel and unflattened if needed:
-> >=20
-> > / {
-> >=20
-> > }; =20
->=20
-> Yes.  If you agree with this I can create a patch to implement it.  I thi=
-nk
-> it is useful even stand alone from the rest of the series.
+> This patch allows the new introduced __virtio_break_device() to
+> unbreak the virtqueue.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Halil Pasic <pasic@linux.ibm.com>
+> Cc: Cornelia Huck <cohuck@redhat.com>
+> Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+> Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Signed-off-by: Jason Wang <jasowang@redhat.com>
+> ---
+>  drivers/virtio/virtio_ring.c | 21 +++++++++++++++++++++
+>  include/linux/virtio.h       |  1 +
+>  2 files changed, 22 insertions(+)
+>
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index cfb028ca238e..5b7df7c455f0 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -2397,6 +2397,27 @@ void virtio_break_device(struct virtio_device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(virtio_break_device);
+>  
+> +/*
+> + * This should allow the device to be used by the driver. You may
+> + * need to grab appropriate locks to flush. This should only be used
 
-If you want to implement this, feel free to do so, I'll (at least) be
-able to test it.
+Hm, to flush what?
 
->=20
-> >=20
-> > Maybe "chosen" and "aliases" nodes should also be provided as empty
-> > nodes since the unittest are creating them anyway and the core DT code
-> > also uses them. =20
->=20
-> No. Unittest does not create both of them (I'm pretty sure, but I'm not
-> going to double check).  If I recall correctly, unittest adds a property
-> in one of those two nodes, and thus implicitly creates the node if not
-> already present.  Unittest does populate internal pointers to those two
-> nodes if the nodes are present (otherwise the pointers will have the
-> value of null).  There is no need for the nodes to be present if empty.
+> + * in some specific case e.g (probing and restoring). Driver should
+> + * not call this directly.
 
-Acked, makes sense.
+Maybe "This function should only be called by the core, not directly by
+the driver."?
 
-Cl=C3=A9ment
+> + */
+> +void __virtio_unbreak_device(struct virtio_device *dev)
+> +{
+> +	struct virtqueue *_vq;
+> +
+> +	spin_lock(&dev->vqs_list_lock);
+> +	list_for_each_entry(_vq, &dev->vqs, list) {
+> +		struct vring_virtqueue *vq = to_vvq(_vq);
+> +
+> +		/* Pairs with READ_ONCE() in virtqueue_is_broken(). */
+> +		WRITE_ONCE(vq->broken, false);
+> +	}
+> +	spin_unlock(&dev->vqs_list_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(__virtio_unbreak_device);
+> +
+>  dma_addr_t virtqueue_get_desc_addr(struct virtqueue *_vq)
+>  {
+>  	struct vring_virtqueue *vq = to_vvq(_vq);
 
->=20
-> -Frank
->=20
-> >=20
-> > Thanks,
-> >=20
-> > Cl=C3=A9ment
-> >  =20
-> >>
-> >> unflatten_and_copy_device_tree() calls unittest_unflatten_overlay_base=
-()
-> >> after unflattening the device tree passed into the booting kernel.  Th=
-is
-> >> step is needed for a specific portion of the unittests.
-> >>
-> >> I'm still looking at the bigger picture of using overlays for the PCIe
-> >> card, so more comments will be coming about that bigger picture.
-> >>
-> >> -Frank
-> >> =20
-> >=20
-> >  =20
->=20
-
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com

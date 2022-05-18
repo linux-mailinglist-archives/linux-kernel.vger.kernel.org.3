@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7922B52B2A8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D71652B2B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbiERGpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
+        id S231542AbiERGq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiERGpJ (ORCPT
+        with ESMTP id S231539AbiERGqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:45:09 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35174DE338
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:45:08 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id x3-20020a056e021bc300b002d13f8bad89so738562ilv.18
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:45:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=bbNknpHMvvRBOmWc8Xg3T+LYindwAK7z0wniwQ/gaIk=;
-        b=Czh9u47BpXuE+Mge9zyNWkQ5Zy1BqRj/bUPw3GlfqUJNVkgZbI1jKJXwgk2GIzMG2D
-         CpDj3Vsx4g+llho6Mygq/uL+8sG8faIinCqmZfFMSoL7f9a1t1tcV2+AzPXU35WzGsIk
-         HChWgQf+Tfk3mA48D/YtgHx1/StW6g8eFaDRVZbBGTOcPPBjqU/TX5C837g9my2D81lE
-         suZwlWX2bDNaemUowT5BUliFCs0pWKMFJglsI9moYOtiHPWREZWFarLNriTBKZkqggZv
-         NXVP/GgetzzURm5M8rPDBidBCEMacKrwzNxsiyv6CvFfvdAUjWMwkKlAf3/XP26hG7LX
-         G3Lw==
-X-Gm-Message-State: AOAM531Xgae4+1D8rV+mNvJxnlaO6gzXvi/WB3/ZK+oJ9QlQwmV0Qndx
-        fjDG9hXlLdIUaWjmNm/Irjbsnp14+Gp8VhbR2Ko5PX2btA3X
-X-Google-Smtp-Source: ABdhPJx/0yH3kyKaF/QZJcNSwH2Q3v9poWe68iePLJnroqJoqiM3lg/+Ivn7R++RLGMwx4HPQb03JnaMFcFY3BVcNv/q30v9cauc
+        Wed, 18 May 2022 02:46:25 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957B113CCE
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:46:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652856383; x=1684392383;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eFg/OiSzC+FbPf82f+mKznpjNGbY+1W6OsvZJl8tgKA=;
+  b=cgr5TL8Pd/LYxQGw0Cbz6ztfXGLzKx3DQQAWdj1XOnOu+wFGzAAohlvt
+   6od4uH60bjqFyICIJcvwW61fdAFhQzN0e26nTAyyJhu7PNiWXRXqhhXA7
+   6wCq763+vQzz04eO3G/Hb+/sIqGA74Uj2Os61kVK+TkBjg36CZsXPRovH
+   2I02z/Gv3f6xCD/ir6iMPMYy5wZE+X0LaOY0i8tpsNQhMjIfPW0p4V0tM
+   SmJZU08M+iG/ip36cJRwAprMc6GByB6kJC4uBOmGbvhuSu896NxPS59ec
+   3lATdI2oTPU1wmEMDk7Vkw65AYW8LsznJpbwlaRTXDSyRx03S15NMSKBK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271460235"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="271460235"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 23:46:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="660994892"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 May 2022 23:46:21 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrDRs-0001t1-D4;
+        Wed, 18 May 2022 06:46:20 +0000
+Date:   Wed, 18 May 2022 14:45:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: drivers/net/can/spi/mcp251xfd/mcp251xfd.h:481:34: warning: field
+ hw_tx_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' is less aligned than
+ 'struct mcp251xfd_hw_tx_obj_raw' and is usually due to ...
+Message-ID: <202205181414.n8QRDe8k-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:3711:b0:32b:ca0b:8a32 with SMTP id
- k17-20020a056638371100b0032bca0b8a32mr14405686jav.267.1652856307625; Tue, 17
- May 2022 23:45:07 -0700 (PDT)
-Date:   Tue, 17 May 2022 23:45:07 -0700
-In-Reply-To: <YoSRPP1n26hmDuzn@zeniv-ca.linux.org.uk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000014b2d605df43994d@google.com>
-Subject: Re: [syzbot] WARNING in mntput_no_expire (3)
-From:   syzbot <syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +64,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   210e04ff768142b96452030c4c2627512b30ad95
+commit: eb79a267c9b3e608e7762a1b221428f37ace3aa3 can: mcp251xfd: rename all remaining occurrence to mcp251xfd
+date:   1 year, 8 months ago
+config: arm-randconfig-c002-20220518 (https://download.01.org/0day-ci/archive/20220518/202205181414.n8QRDe8k-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eb79a267c9b3e608e7762a1b221428f37ace3aa3
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout eb79a267c9b3e608e7762a1b221428f37ace3aa3
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reported-and-tested-by: syzbot+5b1e53987f858500ec00@syzkaller.appspotmail.com
+All warnings (new ones prefixed by >>):
 
-Tested on:
+>> drivers/net/can/spi/mcp251xfd/mcp251xfd.h:481:34: warning: field hw_tx_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' is less aligned than 'struct mcp251xfd_hw_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+                   struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+                                                  ^
+   drivers/net/can/spi/mcp251xfd/mcp251xfd.h:485:34: warning: field hw_tx_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:483:2)' is less aligned than 'struct mcp251xfd_hw_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:483:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+                   struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+                                                  ^
+   drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c:511:1: warning: unused function 'mcp251xfd_chip_set_mode_nowait' [-Wunused-function]
+   mcp251xfd_chip_set_mode_nowait(const struct mcp251xfd_priv *priv,
+   ^
+   3 warnings generated.
+--
+>> drivers/net/can/spi/mcp251xfd/mcp251xfd.h:481:34: warning: field hw_tx_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' is less aligned than 'struct mcp251xfd_hw_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:479:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+                   struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+                                                  ^
+   drivers/net/can/spi/mcp251xfd/mcp251xfd.h:485:34: warning: field hw_tx_obj within 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:483:2)' is less aligned than 'struct mcp251xfd_hw_tx_obj_raw' and is usually due to 'struct mcp251xfd_tx_obj_load_buf::(unnamed at drivers/net/can/spi/mcp251xfd/mcp251xfd.h:483:2)' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+                   struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+                                                  ^
+   2 warnings generated.
 
-commit:         a9171431 percpu_ref_init(): clean ->percpu_count_ref o..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git proposed-fix
-kernel config:  https://syzkaller.appspot.com/x/.config?x=79caa0035f59d385
-dashboard link: https://syzkaller.appspot.com/bug?extid=5b1e53987f858500ec00
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+vim +481 drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+
+   477	
+   478	union mcp251xfd_tx_obj_load_buf {
+   479		struct __packed {
+   480			struct mcp251xfd_buf_cmd cmd;
+ > 481			struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+   482		} nocrc;
+   483		struct __packed {
+   484			struct mcp251xfd_buf_cmd_crc cmd;
+   485			struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+   486			__be16 crc;
+   487		} crc;
+   488	} ____cacheline_aligned;
+   489	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

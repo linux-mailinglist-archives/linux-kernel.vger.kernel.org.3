@@ -2,155 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040CC52BA20
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F95552BB18
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236784AbiERMcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
+        id S236536AbiERM17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236553AbiERM3R (ORCPT
+        with ESMTP id S236482AbiERM1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:29:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D34C170657;
-        Wed, 18 May 2022 05:27:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFB9CB81F40;
-        Wed, 18 May 2022 12:27:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 396B4C36AE2;
-        Wed, 18 May 2022 12:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652876870;
-        bh=0/NFO8cYx8eV49vuYrkyZNzByuqpxYe0Qj+VfRawypc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bCjqESaz4VEECBYwOXmzdci2iUXr3v3KcGBDcWFrdP15Hob4UnyxpOWzKKF4qkAA5
-         k7mB93r0A1lOxEN4C1zZCOmOD15mwztAABzRyej9Y+pxdJ/JtsxxfP1tZ3muHMS4ze
-         9LA1BcYnqR/4hPndVfCMidfamFMLIuEG+Iu6/DSNtV22CNg1Dj8KYyS6VZc6fIwpOu
-         EEqPJ+s6qExQWHVoTtJVEMoN6r+SOmaKNcbCW7EP2bwgQkb+0yMjwJQrt/Z0AcgaNs
-         A1Xr0AIFOXE8lM6lxqANFUMp6YKepdUTTFMyxcPWcTojplM0Q3KveumfTC9iJKruq3
-         KG58VGmDeVv3Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Schspa Shi <schspa@gmail.com>,
-        syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
-        jannh@google.com, Julia.Lawall@inria.fr, jj251510319013@gmail.com,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 23/23] usb: gadget: fix race when gadget driver register via ioctl
-Date:   Wed, 18 May 2022 08:26:36 -0400
-Message-Id: <20220518122641.342120-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220518122641.342120-1-sashal@kernel.org>
-References: <20220518122641.342120-1-sashal@kernel.org>
+        Wed, 18 May 2022 08:27:16 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AE1AFAC7;
+        Wed, 18 May 2022 05:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=QJsVQym+xL0e9ZE8cs4o3sRq3C2RnAjl/FhXvupRFQ0=; b=D/Bh+Gmzw2BN6pBNp567gS2D0/
+        VKxeDUt7MYxt68TtoX3genmgLQ2oeiNNKiP0kGjaIGmiJfJjrDvbEDObjF99Cs6dMhZ6RnHqXVH7+
+        ssMEbATCPWp8/NOivDUP4Rv4NAL42rgZGvDejwV1CjptmTPve2x2GjNuMuzzwvPD0tOg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nrIld-003K4e-Dv; Wed, 18 May 2022 14:27:05 +0200
+Date:   Wed, 18 May 2022 14:27:05 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Vivek Kumar <quic_vivekuma@quicinc.com>
+Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, axboe@kernel.dk,
+        rafael@kernel.org, akpm@linux-foundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com,
+        pavel@ucw.cz, paulmck@kernel.org, bp@suse.de,
+        keescook@chromium.org, songmuchun@bytedance.com,
+        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
+        pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org,
+        tsoni@quicinc.com, quic_psodagud@quicinc.com,
+        quic_svaddagi@quicinc.com,
+        Prasanna Kumar <quic_kprasan@quicinc.com>
+Subject: Re: [RFC 4/6] mm: swap: Add randomization check for swapon/off calls
+Message-ID: <YoTmGREvHTpTeeUH@lunn.ch>
+References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
+ <1652860121-24092-5-git-send-email-quic_vivekuma@quicinc.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652860121-24092-5-git-send-email-quic_vivekuma@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Schspa Shi <schspa@gmail.com>
+On Wed, May 18, 2022 at 01:18:39PM +0530, Vivek Kumar wrote:
+> Add addtional check on swapon/swapoff sycalls to disable
+> randomization of swap offsets if GENHD_FL_NO_RANDOMIZE
+> flag is passed.
 
-[ Upstream commit 5f0b5f4d50fa0faa8c76ef9d42a42e8d43f98b44 ]
+Is there already a flag in the image header which tells you if the
+image is randomozied or not? I assume the bootloader needs to know,
+doing a linear read of a randomized image is not going to end well.
 
-The usb_gadget_register_driver can be called multi time by to
-threads via USB_RAW_IOCTL_RUN ioctl syscall, which will lead
-to multiple registrations.
-
-Call trace:
-  driver_register+0x220/0x3a0 drivers/base/driver.c:171
-  usb_gadget_register_driver_owner+0xfb/0x1e0
-    drivers/usb/gadget/udc/core.c:1546
-  raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:513 [inline]
-  raw_ioctl+0x1883/0x2730 drivers/usb/gadget/legacy/raw_gadget.c:1220
-  ioctl USB_RAW_IOCTL_RUN
-
-This routine allows two processes to register the same driver instance
-via ioctl syscall. which lead to a race condition.
-
-Please refer to the following scenarios.
-
-           T1                                  T2
-------------------------------------------------------------------
-usb_gadget_register_driver_owner
-  driver_register                    driver_register
-    driver_find                       driver_find
-    bus_add_driver                    bus_add_driver
-      priv alloced                     <context switch>
-      drv->p = priv;
-      <schedule out>
-      kobject_init_and_add // refcount = 1;
-   //couldn't find an available UDC or it's busy
-   <context switch>
-                                       priv alloced
-                                       drv->priv = priv;
-                                       kobject_init_and_add
-                                         ---> refcount = 1 <------
-                                       // register success
-                                       <context switch>
-===================== another ioctl/process ======================
-                                      driver_register
-                                       driver_find
-                                        k = kset_find_obj()
-                                         ---> refcount = 2 <------
-                                        <context out>
-   driver_unregister
-   // drv->p become T2's priv
-   ---> refcount = 1 <------
-   <context switch>
-                                        kobject_put(k)
-                                         ---> refcount = 0 <------
-                                        return priv->driver;
-                                        --------UAF here----------
-
-There will be UAF in this scenario.
-
-We can fix it by adding a new STATE_DEV_REGISTERING device state to
-avoid double register.
-
-Reported-by: syzbot+dc7c3ca638e773db07f6@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/all/000000000000e66c2805de55b15a@google.com/
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
-Signed-off-by: Schspa Shi <schspa@gmail.com>
-Link: https://lore.kernel.org/r/20220508150247.38204-1-schspa@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/gadget/legacy/raw_gadget.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index d86c3a36441e..3427ce37a5c5 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -145,6 +145,7 @@ enum dev_state {
- 	STATE_DEV_INVALID = 0,
- 	STATE_DEV_OPENED,
- 	STATE_DEV_INITIALIZED,
-+	STATE_DEV_REGISTERING,
- 	STATE_DEV_RUNNING,
- 	STATE_DEV_CLOSED,
- 	STATE_DEV_FAILED
-@@ -508,6 +509,7 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-+	dev->state = STATE_DEV_REGISTERING;
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
- 	ret = usb_gadget_probe_driver(&dev->driver);
--- 
-2.35.1
-
+      Andrew

@@ -2,92 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332F652BA5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D4352B99D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236573AbiERM0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S236280AbiERMNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236532AbiERM0O (ORCPT
+        with ESMTP id S236244AbiERMMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:26:14 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146B523158
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:26:12 -0700 (PDT)
-Received: from mail-yb1-f176.google.com ([209.85.219.176]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MqK2d-1nVyQT2pzn-00nUHC; Wed, 18 May 2022 14:26:10 +0200
-Received: by mail-yb1-f176.google.com with SMTP id i11so3333506ybq.9;
-        Wed, 18 May 2022 05:26:10 -0700 (PDT)
-X-Gm-Message-State: AOAM532zG8E9QxeoYTjizOUDigvxGU9HqUSHGI1jRTih85ajn3BHMHGI
-        rQaScaRoTZF6W4B1Tmy1TWo6QeP0dssL3tGArYY=
-X-Google-Smtp-Source: ABdhPJzmVlopyCfoOGgm87Os5G3QW/G9c0usDcCbEYvhYj8aqb9XG0oZHtflqu+F8nKb6UZfd6bLOqHBJIobSYwhMHY=
-X-Received: by 2002:a25:5e09:0:b0:64d:8543:627d with SMTP id
- s9-20020a255e09000000b0064d8543627dmr16981158ybb.394.1652876769340; Wed, 18
- May 2022 05:26:09 -0700 (PDT)
+        Wed, 18 May 2022 08:12:39 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2482314B644;
+        Wed, 18 May 2022 05:12:38 -0700 (PDT)
+Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3BgN3BVPzXdYf;
+        Wed, 18 May 2022 20:12:00 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 20:12:36 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
+ 2022 20:12:35 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <josef@toxicpanda.com>, <axboe@kernel.dk>, <ming.lei@redhat.com>
+CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next v2 1/6] nbd: call genl_unregister_family() first in nbd_cleanup()
+Date:   Wed, 18 May 2022 20:26:13 +0800
+Message-ID: <20220518122618.1702997-2-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220518122618.1702997-1-yukuai3@huawei.com>
+References: <20220518122618.1702997-1-yukuai3@huawei.com>
 MIME-Version: 1.0
-References: <20220518065639.2432213-1-gerg@linux-m68k.org> <20220518065639.2432213-2-gerg@linux-m68k.org>
-In-Reply-To: <20220518065639.2432213-2-gerg@linux-m68k.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 18 May 2022 13:26:12 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1gd6ggDgKu66bQ-qQ-K4g60uLo5VOuO5gOKsO99Bi0dw@mail.gmail.com>
-Message-ID: <CAK8P3a1gd6ggDgKu66bQ-qQ-K4g60uLo5VOuO5gOKsO99Bi0dw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] m68knommu: fix undefined reference to `mach_get_rtc_pll'
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:YNRhJGh9ToQapzUXgx/DrsuWRXMLxTSWN594wMBabhiJEIaIoeS
- JbVnnNCMNLEfckiqGecFNadSlbPCCyil7i90xj/Ayg/wvjd9DnNZByNqkwqcF+78UZvfp+A
- hLt0dPABrkdEMHvsT8NuRiJSbCPhdJqFhjA9MbCFzDpc2muSQeDdkYL0K9ECfL0FwRh9zu5
- +NHv+1iNt7lKbOGCSTyeA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:m388vcAbaoA=:kPUqBJp/V1dAvNOh2cwLo3
- 3DqU9MK3vhP0prNuzaGr+zso7z16bMQ6qbRDYRGXw5sGoVfstBckcR1Mk25TzgODrQgHmCX5i
- eAbVKI1PRklHay72FzRSRRh37x37IQ9MQ/31zV3lN2M5zefdOqYStwgfiASAmq114MG7NiNWl
- 3/j5G6jdYx/72DR1i2nbTVULyAYq+Bpbn0ujya0uJsV+PDDF3xquBu6tthstos0FGXzAokfKe
- aQnz2xbYB7FEyjMy8OMy4tL6jOMm/yOuYCE1NKUUCl3ML6go/yDeajjrmMkBZtjOmIxEeaRqJ
- YhldK4my9kLUzp7wPbyNUANEY6pR1BbheFaOSWzu3/y8gc6qoxkuHeyTI4+O1CoKmdStefTac
- F3UCbVIWH5wxM2O8Wr489yaCx8UHtzQRCZfKsX772VbprgnK/pVp5fIw6LJgLapSyR/nV4ghR
- Ihtm4xPwz9lp5iZSsA7wEOPWiv6TBxcRv1zc9M4xf3XTAiqYhAdJ0OfqjIYFy43k/s5XbIQSg
- JFncuPvIdLTB1F15tEr2pVyz1SmqmFg31Zx+kogj/MzyOXxWzOhXJl99GVLGFCfmP8r19WVMV
- fizGd94sKrr3S241aDiVvhl8UQjWZd9Gk7kh1NjHsGXdX/O2ymuIHuuzkK1KJL3K9dsVxQ2b8
- Oi0GQ0VOlPhXkFXYUM4apgHGqycICP+IU5DdIHYoRkoGmumrIjncAUT277AcboMaywAW2z5X7
- SdwO4dKKOYzxMx6DNIwRhDPHhBsdcl3r5EsvLstzUDG0TIr0Y0Ljkf/wuDMAhH9JeaMthR+1w
- k4EiiAB6V5NbNswnucISuulS4VA3D1wXyU/puliY1h3Q1V8pQLp5Q1QOo0aOxUGOePWMiotq5
- HVGW0JB+T2tM1Vz5aQvNVuFl1JWlyGINgcL3196N4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 7:56 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
->
-> Configuring for a nommu classic m68k target and enabling the generic rtc
-> driver (CONFIG_RTC_DRV_GENERIC) will result in the following compile
-> error:
->
->    m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
->    time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
->    m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
->    m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
->
-> There is no definitions of "mach_set_rtc_pll" and "mach_get_rtc_pll" in the
-> nommu code paths. Move these definitions and the associated "mach_hwclk",
-> so that they are around their use case in time.c. This means they will
-> always be defined on the builds that require them, and not on those that
-> cannot use them - such as ColdFire (both with and without MMU enabled).
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+Otherwise there may be race between module removal and the handling of
+netlink command, which can lead to the oops as shown below:
 
-Right, this seems to be the best solution
+  BUG: kernel NULL pointer dereference, address: 0000000000000098
+  Oops: 0002 [#1] SMP PTI
+  CPU: 1 PID: 31299 Comm: nbd-client Tainted: G            E     5.14.0-rc4
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+  RIP: 0010:down_write+0x1a/0x50
+  Call Trace:
+   start_creating+0x89/0x130
+   debugfs_create_dir+0x1b/0x130
+   nbd_start_device+0x13d/0x390 [nbd]
+   nbd_genl_connect+0x42f/0x748 [nbd]
+   genl_family_rcv_msg_doit.isra.0+0xec/0x150
+   genl_rcv_msg+0xe5/0x1e0
+   netlink_rcv_skb+0x55/0x100
+   genl_rcv+0x29/0x40
+   netlink_unicast+0x1a8/0x250
+   netlink_sendmsg+0x21b/0x430
+   ____sys_sendmsg+0x2a4/0x2d0
+   ___sys_sendmsg+0x81/0xc0
+   __sys_sendmsg+0x62/0xb0
+   __x64_sys_sendmsg+0x1f/0x30
+   do_syscall_64+0x3b/0xc0
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+  Modules linked in: nbd(E-)
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ drivers/block/nbd.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index ac8b045c777c..a73e853f5833 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -2528,6 +2528,12 @@ static void __exit nbd_cleanup(void)
+ 	struct nbd_device *nbd;
+ 	LIST_HEAD(del_list);
+ 
++	/*
++	 * Unregister netlink interface prior to waiting
++	 * for the completion of netlink commands.
++	 */
++	genl_unregister_family(&nbd_genl_family);
++
+ 	nbd_dbg_close();
+ 
+ 	mutex_lock(&nbd_index_mutex);
+@@ -2546,7 +2552,6 @@ static void __exit nbd_cleanup(void)
+ 	destroy_workqueue(nbd_del_wq);
+ 
+ 	idr_destroy(&nbd_index_idr);
+-	genl_unregister_family(&nbd_genl_family);
+ 	unregister_blkdev(NBD_MAJOR, "nbd");
+ }
+ 
+-- 
+2.31.1
+

@@ -2,91 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D0152B29C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECFF52B2B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbiERGnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S231410AbiERGnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbiERGng (ORCPT
+        with ESMTP id S231247AbiERGnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:43:36 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 3AF151DA68
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:43:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=QqUT63+lVdVPLayOPSpvAYh9oQVOVeBSUyqI0pU89dU=; b=s
-        CjLQmnAVjtEEiXx8ljxJpqLF7jay2G0sp/WBT8qiaJNj4DlB6jlbNZIgSxFlzOt7
-        wSfTMs8TYV2IoP4CYa9aQo67usrzsQZmBQpar7ekU5EoWvUsF+VV1LFyFbSUGjwW
-        9QYnByNB76G2VzIXVhhUaR6ua5BbJ753cu54DjVVhU=
-Received: from localhost (unknown [10.129.21.144])
-        by front01 (Coremail) with SMTP id 5oFpogDHzaV5lYRiupBaBw--.38611S2;
-        Wed, 18 May 2022 14:43:05 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, jic23@kernel.org,
-        lars@metafoo.de
-Cc:     linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, fuyq@stu.pku.edu.cn,
-        Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: [PATCH] iio: vadc: Fix potential dereference of NULL pointer
-Date:   Tue, 17 May 2022 23:43:00 -0700
-Message-Id: <1652856180-100582-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: 5oFpogDHzaV5lYRiupBaBw--.38611S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtr43ZF1xurWrZrW3AF47Arb_yoWfWrbEk3
-        Wvqw1xXasakrWUCr4jkr4xWr98KFyUWrn5Xw1jvas3KasxJFs3AasFyr4Iyr47Aa1kZ3WD
-        Grs8G3sYkFWakjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb4xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
-        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
-        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK
-        82IY6x8ErcxFaVAv8VWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
-        UU=
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEJBlPy7vIULQAHsO
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 18 May 2022 02:43:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDCF1DA68
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:43:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45AB1617C4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:43:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9204C385A9;
+        Wed, 18 May 2022 06:43:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652856199;
+        bh=296csENr6RY1hKFoBASlhcf97nf1BLor5PsmVeI8xsc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LC3iKAXJcsz/eChz3vlTOEWReW68KMrjC8Tlt1FcueQIls4LvhltiDa/XNCmRZGoo
+         3YoUAdzgJl5Tx2DuqBIX59p8JRXaEvGgoZyVuHUzRZLS6FYaf3oy1ah0svqZI57yrE
+         Akv2RPJHdaDEO95qppXO9ZPVatX7Vm5SQ2afw/JY=
+Date:   Wed, 18 May 2022 08:43:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, rafael@kernel.org,
+        mchehab+huawei@kernel.org, eugenis@google.com, tony.luck@intel.com,
+        pcc@google.com, peterz@infradead.org, marcos@orca.pet,
+        conor.dooley@microchip.com, nicolas.ferre@microchip.com,
+        marcan@marcan.st, linus.walleij@linaro.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 6/8] x86: Add hardware prefetch control support for x86
+Message-ID: <YoSVglItX1PhveEP@kroah.com>
+References: <20220518063032.2377351-1-tarumizu.kohei@fujitsu.com>
+ <20220518063032.2377351-7-tarumizu.kohei@fujitsu.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518063032.2377351-7-tarumizu.kohei@fujitsu.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of vadc_get_channel() needs to be checked
-to avoid use of NULL pointer, which is followed by
-the caller 'vadc_do_conversion' of function 'vadc_configure'.
-Fix this by adding the null pointer check on prop
-in function 'vadc_configure'.
+On Wed, May 18, 2022 at 03:30:30PM +0900, Kohei Tarumizu wrote:
+> +/*
+> + * Returns the cpu number of the cpu_device(/sys/devices/system/cpu/cpuX)
+> + * in the ancestor directory of prefetch_control.
+> + *
+> + * When initializing this driver, it is verified that the cache directory exists
+> + * under cpuX device. Therefore, the third level up from prefetch_control is
+> + * cpuX device as shown below.
+> + *
+> + * /sys/devices/system/cpu/cpuX/cache/indexX/prefetch_control
+> + */
+> +static inline unsigned int pfctl_dev_get_cpu(struct device *pfctl_dev)
+> +{
+> +	return pfctl_dev->parent->parent->parent->id;
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
----
- drivers/iio/adc/qcom-spmi-vadc.c | 3 +++
- 1 file changed, 3 insertions(+)
+As much fun as it is to see a function like this, that is not ok, and
+never guaranteed to keep working, sorry.  Please find the device
+properly, never assume a specific driver model topology as they are
+guaranteed to break over time and never supposed to be static like this.
 
-diff --git a/drivers/iio/adc/qcom-spmi-vadc.c b/drivers/iio/adc/qcom-spmi-vadc.c
-index 34202ba..d99bd72 100644
---- a/drivers/iio/adc/qcom-spmi-vadc.c
-+++ b/drivers/iio/adc/qcom-spmi-vadc.c
-@@ -210,6 +210,9 @@ static int vadc_configure(struct vadc_priv *vadc,
- 	u8 decimation, mode_ctrl;
- 	int ret;
- 
-+	if (!prop)
-+		return -ENODEV;
-+
- 	/* Mode selection */
- 	mode_ctrl = (VADC_OP_MODE_NORMAL << VADC_OP_MODE_SHIFT) |
- 		     VADC_ADC_TRIM_EN | VADC_AMUX_TRIM_EN;
--- 
-2.7.4
 
+
+> +}
+> +
+> +static ssize_t
+> +pfctl_show(struct device *pfctl_dev, struct device_attribute *attr, char *buf)
+> +{
+> +	unsigned int cpu = pfctl_dev_get_cpu(pfctl_dev);
+> +	struct x86_pfctl_attr *xa;
+> +	u64 val;
+> +
+> +	xa = container_of(attr, struct x86_pfctl_attr, attr);
+> +
+> +	rdmsrl_on_cpu(cpu, MSR_MISC_FEATURE_CONTROL, &val);
+> +	return sysfs_emit(buf, "%d\n", val & xa->mask ? 0 : 1);
+> +}
+> +
+> +struct write_info {
+> +	u64 mask;
+> +	bool enable;
+> +};
+> +
+> +/*
+> + * wrmsrl() in this patch is only done inside of an interrupt-disabled region
+> + * to avoid a conflict of write access from other drivers,
+> + */
+> +static void pfctl_write(void *info)
+> +{
+> +	struct write_info *winfo = info;
+> +	u64 reg;
+> +
+> +	reg = 0;
+> +	rdmsrl(MSR_MISC_FEATURE_CONTROL, reg);
+> +
+> +	if (winfo->enable)
+> +		reg &= ~winfo->mask;
+> +	else
+> +		reg |= winfo->mask;
+> +
+> +	wrmsrl(MSR_MISC_FEATURE_CONTROL, reg);
+> +}
+> +
+> +/*
+> + * MSR_MISC_FEATURE_CONTROL has "core" scope, so define the lock to avoid a
+> + * conflict of write access from different logical processors in the same core.
+> + */
+> +static DEFINE_MUTEX(pfctl_mutex);
+> +
+> +static ssize_t
+> +pfctl_store(struct device *pfctl_dev, struct device_attribute *attr,
+> +	    const char *buf, size_t size)
+> +{
+> +	unsigned int cpu = pfctl_dev_get_cpu(pfctl_dev);
+> +	struct x86_pfctl_attr *xa;
+> +	struct write_info info;
+> +
+> +	xa = container_of(attr, struct x86_pfctl_attr, attr);
+> +	info.mask = xa->mask;
+> +
+> +	if (strtobool(buf, &info.enable) < 0)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&pfctl_mutex);
+> +	smp_call_function_single(cpu, pfctl_write, &info, true);
+> +	mutex_unlock(&pfctl_mutex);
+> +
+> +	return size;
+> +}
+> +
+> +#define PFCTL_ATTR(_name, _level, _bit)					\
+> +	struct x86_pfctl_attr attr_l##_level##_##_name = {		\
+> +		.attr = __ATTR(_name, 0600, pfctl_show, pfctl_store),	\
+> +		.mask = BIT_ULL(_bit), }
+> +
+> +static PFCTL_ATTR(hardware_prefetcher_enable,			1, 2);
+> +static PFCTL_ATTR(hardware_prefetcher_enable,			2, 0);
+> +static PFCTL_ATTR(ip_prefetcher_enable,				1, 3);
+> +static PFCTL_ATTR(adjacent_cache_line_prefetcher_enable,	2, 1);
+> +
+> +static struct device_attribute *l1_attrs[] __ro_after_init = {
+
+How do you know attributes are to be marked read only after init?  Do
+other parts of the kernel do that?  I don't think the driver core
+guarantees that at all.
+
+thanks,
+
+greg k-h

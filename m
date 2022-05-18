@@ -2,65 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D884452B762
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804BD52B748
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234681AbiERJnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S234582AbiERJns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbiERJly (ORCPT
+        with ESMTP id S234659AbiERJn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:41:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D920B0D3D;
-        Wed, 18 May 2022 02:41:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3CEE21FB1D;
-        Wed, 18 May 2022 09:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652866912; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gvqmwd32pWfeTd+pQbb+XvmLC36shUm4oEYSUHUH/4s=;
-        b=VmbfWJ8JScNoKhmKbR4C9ZO64MZdKjOsfSFQ9u0TxeoN8yIcQbA8bSGDJAJiyjMeuWQkFm
-        bVjYMG/RGdqHikQV42UWgAuICyP0T1Rvn2DdLgPgwfWZKBN0A2esT9qSwLHxeZg+cP6ZSj
-        yhMwCwkyLfABT42xMpYxYSNy3CUExGA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F03E9133F5;
-        Wed, 18 May 2022 09:41:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qcvsOF+/hGLGFAAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 18 May 2022 09:41:51 +0000
-Message-ID: <642471c7-f717-2ef4-1d6d-6fabf57db08f@suse.com>
-Date:   Wed, 18 May 2022 11:41:51 +0200
+        Wed, 18 May 2022 05:43:26 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4F013275A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:42:46 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id e28so1285169wra.10
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=gQeDrLBWkTthIjKLMPftLueNJFyuc1zAuTQfNmleBh8=;
+        b=YhQ42338sEPxyQWIPPpsfEgsH63XcEroBX/csmLaXpqSyPeUunLrRnEL40ild6uR7Y
+         xT5zTjkzOyvJ0Z4QqhWop5dD1JqLRXSO95t8pGzTND97qGEJwifuOdsd95tC9ywkKuke
+         wYRtuWIdZ87VUjWjIEqGrBIYUwpUVjaCXK43kO7LpeBjHfWykkXXm9vGN0s+C+3DtjZ5
+         7qhGx9xI05dhgde69gPCMuxlgGSjkudx5ygNe7/YKjWeBuPQ2zLR+Gbe8vYWrZ+Q5SfP
+         ReECSngKQ9+d59vSspRrH3xG5U7AFDZhF/KiJkAxdJX3AT9ByRAedLsUuImFHqfPkH3r
+         4acQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=gQeDrLBWkTthIjKLMPftLueNJFyuc1zAuTQfNmleBh8=;
+        b=sDvbwpBQGnc1u92qb9KD37wvvgFj0vsM49cfbQ+BKMOvMWTWg39Jvq5AC+2DzRHfUp
+         cbXWWY108Sgf7fGsg8YWipdO8mHNtN8pHxvadXXqxlDTPbENGjA32NvPF1oYp89Gq7wg
+         gp65+n8QKEVbeg1FWfA1oY9Z3b0rAS7sVLXiDUe57fRnlCZ8Km58uVuhUddgNogHCNmB
+         D3oCEC2rW75ZpboPnqBT+SQIQNQDNlOS+Skd/gjlk17mhWkpml4dpVC5/6riCdbQzszg
+         IzDAKDGeN2UL77PNGG+ADGykeMwOG31PW85FbxXV10pQdRZ4zSaPoaAggYEXUu84WiuJ
+         loyQ==
+X-Gm-Message-State: AOAM5307QxExJeRTAYgB+xfrWdLYoehQxez06Zq9qAgTZOXA4HKYv1WV
+        yljdrEr+TzGi+EKLhsfmvd0vFA==
+X-Google-Smtp-Source: ABdhPJx+qYdbNUGfgI+n6Dl/d8Yo4rdszaJhtt5MqE1x5NeYcp7yxPz7hQTDzoYkS0z1LmOVy4cTyg==
+X-Received: by 2002:a5d:6041:0:b0:20d:8e4:7bb8 with SMTP id j1-20020a5d6041000000b0020d08e47bb8mr11908908wrt.652.1652866964698;
+        Wed, 18 May 2022 02:42:44 -0700 (PDT)
+Received: from localhost ([193.117.214.243])
+        by smtp.gmail.com with ESMTPSA id y21-20020a7bcd95000000b0039489e1bbd6sm3808025wmj.47.2022.05.18.02.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 02:42:44 -0700 (PDT)
+Date:   Wed, 18 May 2022 10:42:43 +0100
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        dietmar.eggemann@arm.com, sudeep.holla@arm.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        devel@acpica.org
+Subject: Re: [PATCH v2 1/5] ACPI: CPPC: Check _OSC for flexible address space
+Message-ID: <20220518094243.6oxbdmf226jvqoef@viresh-thinkpad>
+References: <20220518090901.2724518-1-pierre.gondois@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 15/21] xen/tpmfront: use xenbus_setup_ring() and
- xenbus_teardown_ring()
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     xen-devel@lists.xenproject.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-References: <20220505081640.17425-1-jgross@suse.com>
- <20220505081640.17425-16-jgross@suse.com> <YnWh6P7kBtPa2aTA@kernel.org>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <YnWh6P7kBtPa2aTA@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------40zZX2QheKufpfo6R9R2UDWP"
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220518090901.2724518-1-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,116 +77,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------40zZX2QheKufpfo6R9R2UDWP
-Content-Type: multipart/mixed; boundary="------------TgxGHQPVJJUkPuHCpNDyxMvE";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: xen-devel@lists.xenproject.org, linux-integrity@vger.kernel.org,
- linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
- Jason Gunthorpe <jgg@ziepe.ca>
-Message-ID: <642471c7-f717-2ef4-1d6d-6fabf57db08f@suse.com>
-Subject: Re: [PATCH v3 15/21] xen/tpmfront: use xenbus_setup_ring() and
- xenbus_teardown_ring()
-References: <20220505081640.17425-1-jgross@suse.com>
- <20220505081640.17425-16-jgross@suse.com> <YnWh6P7kBtPa2aTA@kernel.org>
-In-Reply-To: <YnWh6P7kBtPa2aTA@kernel.org>
+On 18-05-22, 11:08, Pierre Gondois wrote:
+> ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
+>   Starting with ACPI Specification 6.2, all _CPC registers can be in
+>   PCC, System Memory, System IO, or Functional Fixed Hardware address
+>   spaces. OSPM support for this more flexible register space scheme is
+>   indicated by the “Flexible Address Space for CPPC Registers” _OSC bit
+> 
+> Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
+> - PCC or Functional Fixed Hardware address space if defined
+> - SystemMemory address space (NULL register) if not defined
+> 
+> Add the corresponding _OSC bit and check it when parsing _CPC objects.
+> 
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/acpi/bus.c       | 18 ++++++++++++++++++
+>  drivers/acpi/cppc_acpi.c |  9 +++++++++
+>  include/linux/acpi.h     |  2 ++
+>  3 files changed, 29 insertions(+)
 
---------------TgxGHQPVJJUkPuHCpNDyxMvE
-Content-Type: multipart/mixed; boundary="------------GyGKEkcibCyskU997scHLe0C"
+It would be much useful to get a cover letter for this series with
+what you have changed since the previous version. It is almost
+impossible to find that out otherwise.
 
---------------GyGKEkcibCyskU997scHLe0C
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-T24gMDcuMDUuMjIgMDA6MzIsIEphcmtrbyBTYWtraW5lbiB3cm90ZToNCj4gT24gVGh1LCBN
-YXkgMDUsIDIwMjIgYXQgMTA6MTY6MzRBTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IFNpbXBsaWZ5IHRwbWZyb250J3MgcmluZyBjcmVhdGlvbiBhbmQgcmVtb3ZhbCB2aWEg
-eGVuYnVzX3NldHVwX3JpbmcoKQ0KPj4gYW5kIHhlbmJ1c190ZWFyZG93bl9yaW5nKCkuDQo+
-Pg0KPj4gU2lnbmVkLW9mZi1ieTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0K
-PiANCj4gUGxlYXNlIGFkZCB0byB0aGUgY29tbWl0IG1lc3NhZ2Ugd2h5IHRoZXNlIHByb3Zp
-ZGUgYW4gZXF1aXZhbGVudA0KPiBmdW5jdGlvbmFsaXR5Lg0KDQpXb3VsZCB5b3UgYmUgZmlu
-ZSB3aXRoOg0KDQogICBTaW1wbGlmeSB0cG1mcm9udCdzIHJpbmcgY3JlYXRpb24gYW5kIHJl
-bW92YWwgdmlhIHhlbmJ1c19zZXR1cF9yaW5nKCkNCiAgIGFuZCB4ZW5idXNfdGVhcmRvd25f
-cmluZygpLCB3aGljaCBhcmUgcHJvdmlkZWQgZXhhY3RseSBmb3IgdGhlIHVzZQ0KICAgcGF0
-dGVybiBhcyBzZWVuIGluIHRoaXMgZHJpdmVyLg0KDQoNCkp1ZXJnZW4NCg==
---------------GyGKEkcibCyskU997scHLe0C
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------GyGKEkcibCyskU997scHLe0C--
-
---------------TgxGHQPVJJUkPuHCpNDyxMvE--
-
---------------40zZX2QheKufpfo6R9R2UDWP
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKEv18FAwAAAAAACgkQsN6d1ii/Ey+Q
-Gwf/ehwm6jUVpEx0+yC4NILAFBiMMpghweN7oXV0/HJir7zTTMMijxvTV8f7AbuBIcmB8vARGnsl
-WuftbUX84JXnTdadLZBDwu1GlMoopubDJdB7Y5Q3XVPEovNvsQYh/ImQ3Jlyj9UYz2mcFTTZ0sUk
-BJZeDn+vzF8sOnlLGcGwHPVCuBLLZlKqngtEoEHMpbpR0JKGR4+TzVnxrftnG9w8PYKuhgV/5X/v
-cKGD4Na6ulAuKU73AdUaaf21oxr0ptm9ZU66c1bA29Ttg9j01pBsc3u5qLldjrDXmViT0KwvVkVQ
-WbqyphGjTYqwCTcGorFhmvnbqGc3RLvoNYDA3vr8bg==
-=vI4g
------END PGP SIGNATURE-----
-
---------------40zZX2QheKufpfo6R9R2UDWP--
+-- 
+viresh

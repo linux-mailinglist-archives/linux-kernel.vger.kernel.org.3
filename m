@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A14652B450
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A976452B426
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbiERH7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S232915AbiERH7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbiERH7R (ORCPT
+        with ESMTP id S232891AbiERH7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 May 2022 03:59:17 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74F12DE1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:59:14 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id j24so1482062wrb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:59:14 -0700 (PDT)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625571207E6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:59:15 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id h5so325382wrb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cr9IuqWtBo466Tia/00HMR/yH/z82IE9n6W3kz9q2kk=;
-        b=UZMxd0RalgViWp21dea+ESesYp/kKT9ZVbvLTtlj8Rht3kSJW6HqrcGEEXPwUskqqN
-         rJyuGGQTE+C/W/SaM2lAyWsdtw8rdtoRoWTvf2Q6rvvz9Z0XEic9YEbbFpo2sj9d53cF
-         nyXSs5HotYKKP5nfWw77fWODsom/CNHECnsOPHeDKNQaprdx2OgwWjoX3OJsRNpjO50h
-         Bxjy/4xeTibxRcpPJA2DB5TIorlWQwBuiIqcSUKrbQRSCN42JTDC4l6i4UrP4SZd+S2y
-         jx8fYqUROIObvSLP7IFrCIghf7bjwRsDEf8MChj5bepSOg7sKtkBZ0kDSeS5mfq6yLBM
-         giJg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dds68n4eVAqNb9Nh1GkmgUmrWiZNicCAFfz37bcPi/E=;
+        b=q0S94H1GhZQls0QplGXXaQ20xyUhPJfSw9jx5Z1yMH4JNQDn2qssApG6YIhSC1Ahcl
+         H//p6eK6yYHKF1mQCiWr5xMditxAExDaHTPHhjYdKpAP6mj+fBp5/4sczfa2Cw9/A5Se
+         O3z+eoS/q5Y1ymj92c+ivFjdF4mUYtghiB3iVIGWIAV/Mlw7DCc6JVlJek/HwFN+fvMk
+         8owS92GwrYaNr+e/mJFp+fywqy2sZDTd6P66ONYa5JRYMkgRk0shA6mWCBnD+//UnpIx
+         P5I2FZkLKWZdCnkzEedKx1IqaiO9os3cDWOE1+7Hxq0n/LFz4ogFuZNx5v0Oj4UJVD0J
+         1LWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cr9IuqWtBo466Tia/00HMR/yH/z82IE9n6W3kz9q2kk=;
-        b=Euv2/dEIZFRiWhvNVKyDIM1onZs93mMCP3lb1yvVnFA6cG/NGYUoFwiwBFV66V5JiM
-         To89E2OTUT5TjKCAVuuvi/9rxX7oIBH4DyRRFQ1RwI1jl9tfSdRjCFwo7FswYDDA7hSF
-         G7/BmC01qO6sDKdTop14ze1xbxdUzUdCdtp/ez7rAMU2r01fM3r0/W13vnOsMQmhfPNW
-         UrSyPdli7QXQUB0r9XEOdbQt3mrcV+TGY/WV5agvZLRqhwfVCAQq9wuG1kIVF1/SAzME
-         aZpiUlH4Yp0nGB4cjyFGY6Jb3B5Fyn1CYaUo2Ucp0nu2sa75QwbZ5SwXT6Mv8t7DR6m8
-         2vNQ==
-X-Gm-Message-State: AOAM533v0bIV5fG2wifrvze8EtM98daxygB7LQ7DG3fxLJjzMJyskSW+
-        a4SVPZsnUaIshhudrUwocJY/CQ==
-X-Google-Smtp-Source: ABdhPJzVX7UQ3EXyOePlliPc9lSitJsKhoncu56QgpwvrEr4emm+cTnz8pUVLNqTQZB6AhsP9jKuug==
-X-Received: by 2002:a05:6000:715:b0:20c:5a15:9409 with SMTP id bs21-20020a056000071500b0020c5a159409mr22138319wrb.146.1652860753188;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dds68n4eVAqNb9Nh1GkmgUmrWiZNicCAFfz37bcPi/E=;
+        b=tVS460cpgR62HrJp5S6XuweFjPHPB9qwO5WzU55sXepsgXYm+QhzSrl1SpjA2kXUWO
+         i5u0qNX4ccSPdKQsqkhjAoSbH7AVg6FJw9kiLRjxVgvu0MV5Yz7l6Lr0PrdLx4eh2v6N
+         GvnJnZUfTCJcv/eymJiNfWmoWWvtW/CBSJtVgJDD92ErFA5BUTVM/z+n+rmR98yBJwQg
+         fx1zWy4jvFk4M6ixRtIMoGsmdedrZCmSS8WRe1jCUj/NCuHJv5owW6+Yh5IUpPSd/jqM
+         +FcKHPzLT0Rqwvq7sQP8mLRe1QNyg5MiiIqqlEnfasSSejsUxXQCGa3HyXujIU2nVrk7
+         LLdQ==
+X-Gm-Message-State: AOAM531F0kVagxAHvlQ5nCauFo16IpUagdwhOMY2GZ2SbNE5rfv7Avr5
+        KCKAVr1RARv9S42TMTOFytj/EQ==
+X-Google-Smtp-Source: ABdhPJwXGZwgKt2xBN/YHUpTFYOWitejVIgIv8v5y8RaS6IUg2o89e7OYU3thoshzpsYoCAbw7r/OQ==
+X-Received: by 2002:a05:6000:15c1:b0:20c:5825:f043 with SMTP id y1-20020a05600015c100b0020c5825f043mr21710401wry.261.1652860753963;
         Wed, 18 May 2022 00:59:13 -0700 (PDT)
 Received: from groot.home ([2a01:cb19:85e6:1900:bda6:8356:4db1:4539])
-        by smtp.gmail.com with ESMTPSA id ay1-20020a05600c1e0100b0039706782e06sm1041300wmb.33.2022.05.18.00.59.12
+        by smtp.gmail.com with ESMTPSA id ay1-20020a05600c1e0100b0039706782e06sm1041300wmb.33.2022.05.18.00.59.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 00:59:12 -0700 (PDT)
+        Wed, 18 May 2022 00:59:13 -0700 (PDT)
 From:   Mattijs Korpershoek <mkorpershoek@baylibre.com>
 To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
@@ -58,10 +58,12 @@ Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
         linux-input@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Subject: [PATCH v2 0/2] Input: mt6779-keypad - fix hw code logic and row/col selection
-Date:   Wed, 18 May 2022 09:59:07 +0200
-Message-Id: <20220518075909.180629-1-mkorpershoek@baylibre.com>
+Subject: [PATCH v2 1/2] Input: mt6779-keypad - fix hardware code mapping
+Date:   Wed, 18 May 2022 09:59:08 +0200
+Message-Id: <20220518075909.180629-2-mkorpershoek@baylibre.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220518075909.180629-1-mkorpershoek@baylibre.com>
+References: <20220518075909.180629-1-mkorpershoek@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,36 +75,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This serie is the first follow-up on the mt6779-keypad in
-order to enable it on the MediaTek mt8183-pumpkin board.
+In mt6779_keypad_irq_handler(), we
+1. Read a hardware code from KPD_MEM1 -> KPD_MEM5
+2. Use that hardware code to compute columns/rows for the standard
+   keyboard matrix.
 
-To fully enable it on mt8183-pumpkin, we still need:
-* double key support
-* dts changes
+According to the (non-public) datasheet, the
+map between the hardware code and the cols/rows is:
 
-To ease up reviewing, I preferred sending this first.
+        |(0)  |(1)  |(2)
+    ----*-----*-----*-----
+        |     |     |
+        |(9)  |(10) |(11)
+    ----*-----*-----*-----
+        |     |     |
+        |(18) |(19) |(20)
+    ----*-----*-----*-----
+        |     |     |
 
-The first patch fixes a logic bug based on the (non-public) datasheet
-I have.
-The second patch configures the keypad correctly in order to not
-report bogus values.
+This brings us to another formula:
+-> row = code / 9;
+-> col = code % 3;
 
-Thank you,
-Mattijs
+Implement this mapping in bitnr_to_col_row() to fetch the
+correct input event from keypad->input_dev->keycode and report that
+back to userspace.
 
-v2 -> v1:
-* Simplified SEL_COL/ROW_MASK macros as suggested by Dmitry
-* Added Angelo's Reviewed-by on patch 1
+Fixes: f28af984e771 ("Input: mt6779-keypad - add MediaTek keypad driver")
+Co-developed-by: Fabien Parent <fparent@baylibre.com>
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/input/keyboard/mt6779-keypad.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-Mattijs Korpershoek (2):
-  Input: mt6779-keypad - fix hardware code mapping
-  Input: mt6779-keypad - implement row/column selection
-
- drivers/input/keyboard/mt6779-keypad.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
-
-
-base-commit: db02d07308ba7e94347ca037a662b3a1b1afe8c4
+diff --git a/drivers/input/keyboard/mt6779-keypad.c b/drivers/input/keyboard/mt6779-keypad.c
+index 2e7c9187c10f..23360de20da5 100644
+--- a/drivers/input/keyboard/mt6779-keypad.c
++++ b/drivers/input/keyboard/mt6779-keypad.c
+@@ -36,6 +36,19 @@ static const struct regmap_config mt6779_keypad_regmap_cfg = {
+ 	.max_register = 36,
+ };
+ 
++/*
++ * | hardware key code | col0 | col1 | col2|
++ * | ----------------- | -----| ---- | --- |
++ * | row0              | 0    | 1    | 2   |
++ * | row1              | 9    | 10   | 11  |
++ * | row2              | 18   | 19   | 20  |
++ */
++static void bitnr_to_col_row(int bit_nr, int *col, int *row)
++{
++	*row = bit_nr / 9;
++	*col = bit_nr % 3;
++}
++
+ static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
+ {
+ 	struct mt6779_keypad *keypad = dev_id;
+@@ -61,8 +74,7 @@ static irqreturn_t mt6779_keypad_irq_handler(int irq, void *dev_id)
+ 		if (bit_nr % 32 >= 16)
+ 			continue;
+ 
+-		row = bit_nr / 32;
+-		col = bit_nr % 32;
++		bitnr_to_col_row(bit_nr, &col, &row);
+ 		scancode = MATRIX_SCAN_CODE(row, col, row_shift);
+ 		/* 1: not pressed, 0: pressed */
+ 		pressed = !test_bit(bit_nr, new_state);
 -- 
 2.34.1
 

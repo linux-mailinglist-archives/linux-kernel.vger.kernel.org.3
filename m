@@ -2,163 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C751A52AFE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C28D52AFEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233635AbiERBaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
+        id S233639AbiERBb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbiERB36 (ORCPT
+        with ESMTP id S230446AbiERBbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:29:58 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EE354690
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:29:57 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-f1d5464c48so873427fac.6
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:29:57 -0700 (PDT)
+        Tue, 17 May 2022 21:31:55 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F4C31DF4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:31:54 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id ev18so532794pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uMFc8C/CfVChmB1k26kuQbqCm1tMkQ9Uj/R/VPJ8nN4=;
-        b=K9IM4iqhrgC99GwHjRJavKT4ovzTwZsP4J81tTZ5GLRGhVcKqkKMimqYmOakkBmwu/
-         vf4681g3GRq3Xc2cfKiHiZt8ac27ctn7HZkgvLZtJtd19qJgE1REzPAeCaglz2Xsjm+Z
-         hpMSUgV30i6zW6HEspZ7jjooAlYGKfmPs04nRKRSdGPTkS/2Awa2hINB5530zcO8XLy3
-         TcmmtYkyOyFxSdpMCkodIXLG5zYsMC1GQqwtKogb7Xi6F138TeSGHbvI07V/fy4W5w7u
-         Y4sJY1mnfaOUa9cf+kv1/qNYe6r8PPM8C+7SXI8haCw+PNtdyhyOWviTEfduyTxkU6IS
-         9LhQ==
+        d=wistron-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=52vKA3gssnnR6Gyus/GHqY4Ot6Hu+NqJX0uPk7m1q5E=;
+        b=v5w75utNrvJE25dmsvXVA/utY8oiqnYCn5VojdZmngWQkB4eiLDCDZgRoygKlhLSIw
+         hbzl0+r/iKbYqneF5mE6EQj28Y2Ek+SsFTD1G+UkZ/KAkl7QzVtejPC3ajNJlKpILfVp
+         s56ahJSeADJ4ii2i7LeY034gXb0NBTVZhxD533Erd2jlXHQ4ohZMZz8STPIGMnw2klO4
+         P1mvbffvWdV6MFTdb3biXVGrqMZ661YpbUWQ13iCTAHa/BE7Su+Zwtd02lJwUxbZFc7h
+         MpzrqDhJpoOdq6M1pkvrklzeq2hVXwZg0S5EHqmMkf0JEzcUeHd9EjhWvnADpk9xTuMS
+         xtNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uMFc8C/CfVChmB1k26kuQbqCm1tMkQ9Uj/R/VPJ8nN4=;
-        b=3HIlWworqJVkWftznX+BSqu1wrfreADX24lXZpUZame+YIeaUvTTpTAW2Dm+wHqlwa
-         ncRdSL4LU1WNj353uuo4iPPYtnEX4hMwYfoCwF6DzDDh7eH3NAOMC5vXijb2H4fHa4qT
-         6UdjrnAaZngA8VDeN+/jIvPBRJBrCgjibGibdfHs7/dAZs5NnFTnWXzhiFCFJbpNjA40
-         2cphqMEszsogmGPXC5wS/eDFnsFbN6yNUgVQmHdgP3UbLwREaM4CS8uAOg+RTHfyt6Ku
-         ZVkzBJq8i0w4c8zIJ18gx1FH7HfgEtDPfzwcEAfvUlWjko2uOOTX4mDWq0YQF6BP5GGh
-         MBww==
-X-Gm-Message-State: AOAM531Y9cs9hP7gkRTSBtKBexsi1mFNvIUQFVYISXA7XagCnnOZzpYs
-        Qm4tiJWGI1bPbBZ6FC9cwuW3Dc6DVeSi6swbW4R8i9dH54I3EA==
-X-Google-Smtp-Source: ABdhPJzNj+puwrlY5bUzMRluwrnkTBWJQoBc0wq0pyeFNojVxIMVZFlYdEDqASc4NByzegTuU+oM31viHdBBm9GT1+E=
-X-Received: by 2002:a05:6870:8a0b:b0:f1:8e74:261f with SMTP id
- p11-20020a0568708a0b00b000f18e74261fmr9260911oaq.276.1652837396518; Tue, 17
- May 2022 18:29:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=52vKA3gssnnR6Gyus/GHqY4Ot6Hu+NqJX0uPk7m1q5E=;
+        b=UWtRV9KeTEFIBfdW65PVonZfngHj/26gqoz6M7ved0bkZDZuwyvyldN5ZxoY20/SS5
+         cexyegNcsX8d+qZn8q87vew3ipv7I1QWBsf1ChII798lhs7S9Bd+2YisykLniOqes3A0
+         vpB+wsu8kdNR93X7FBn30xdu97sVoDGIgLYLNInbwZS9aweDEwkNMFci7zCNXh+SnCNi
+         uAiVT7JpxzcZebY18hrh9Ds9s7vUyaOCNqyrj9G8jvFLkewO1MEeTX9q0Sa6XuhBUYEQ
+         tq/zE8yBQ+Is4YkHEODoS2Y68nZzxAvWWWCUt+8B7Ide29MjiG2ZstoJCjRaDub8l5N8
+         yHcw==
+X-Gm-Message-State: AOAM532kwaqR3oB9aBIgqxax1L/4bhapffrHybTPHZrOaF+avKkk79ok
+        AOY2gPZrMEBMpEJlrOX8ZNssBw==
+X-Google-Smtp-Source: ABdhPJyDcwQspPj2Q3EZOglj8askUL1YO+XtAvztB+eFuMON9Q4CsE8xgnUtIdI0LiNDzGHkjebHAA==
+X-Received: by 2002:a17:90b:3884:b0:1dc:5838:1bea with SMTP id mu4-20020a17090b388400b001dc58381beamr38607025pjb.90.1652837513577;
+        Tue, 17 May 2022 18:31:53 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:46a:5f5b:e562:e04a:dd56:162e])
+        by smtp.gmail.com with ESMTPSA id u6-20020a170903124600b0015e8d4eb1f1sm260171plh.59.2022.05.17.18.31.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 18:31:53 -0700 (PDT)
+From:   Terry Chen <terry_chen@wistron.corp-partner.google.com>
+To:     alsa-devel@alsa-project.org
+Cc:     cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
+        liam.r.girdwood@linux.intel.com, yang.jie@linux.intel.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        brent.lu@intel.com, cujomalainey@chromium.org,
+        seanpaul@chromium.org, terry_chen@wistron.corp-partner.google.com,
+        casey.g.bowman@intel.com,
+        mark_hsieh@wistron.corp-partner.google.com,
+        vamshi.krishna.gopal@intel.com, mac.chiang@intel.com,
+        kai.vehmanen@linux.intel.com, linux-kernel@vger.kernel.org
+Subject: [v6] FROMLIST: ASoC: Intel: sof_cs42l42: adding support for ADL configuration and BT offload audio
+Date:   Wed, 18 May 2022 09:31:40 +0800
+Message-Id: <20220518013140.1467326-1-terry_chen@wistron.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220517175225.65283-1-schspa@gmail.com> <YoP1LSSzgg9sHJDW@google.com>
-In-Reply-To: <YoP1LSSzgg9sHJDW@google.com>
-From:   Schspa Shi <schspa@gmail.com>
-Date:   Wed, 18 May 2022 09:29:45 +0800
-Message-ID: <CAMA88TqDQH4c-wohARJbXN-jUHZYtFaFpbJ3dLzxG_HxvGuj5A@mail.gmail.com>
-Subject: Re: [PATCH] binder: fix atomic sleep when get extended error
-To:     Carlos Llamas <cmllamas@google.com>
-Cc:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
-        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
-        hridya@google.com, surenb@google.com, linux-kernel@vger.kernel.org,
-        syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Carlos Llamas <cmllamas@google.com> writes:
+To be able to do  driver data for adl_mx98360a_cs4242 which supports
+two max98360a speaker amplifiers on SSP1 and cs42l42 headphone codec
+on SSP0 running on ADL platform. Also add the capability to machine driver
+of creating DAI Link for BT offload. Although BT offload always uses SSP2
+port but we reserve the flexibility to assign the port number in macro.
 
-> On Wed, May 18, 2022 at 01:52:25AM +0800, Schspa Shi wrote:
->> binder_inner_proc_lock(thread->proc) is a spin lock, copy_to_user can't
->> be called with in this lock.
->>
->> Copy it as a local variable, and check the id to make sure the user space
->> gets the latest error message
->>
->> Reported-by: syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com
->> Fixes: bd32889e841c ("binder: add BINDER_GET_EXTENDED_ERROR ioctl")
->> Signed-off-by: Schspa Shi <schspa@gmail.com>
->> ---
->>  drivers/android/binder.c | 13 ++++++++++---
->>  1 file changed, 10 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
->> index d9253b2a7bd9..5f2e1fa3da74 100644
->> --- a/drivers/android/binder.c
->> +++ b/drivers/android/binder.c
->> @@ -5163,13 +5163,20 @@ static int binder_ioctl_get_extended_error(struct binder_thread *thread,
->>                                         void __user *ubuf)
->>  {
->>      struct binder_extended_error *ee = &thread->ee;
->> +    struct binder_extended_error eeb;
->>
->>      binder_inner_proc_lock(thread->proc);
->> -    if (copy_to_user(ubuf, ee, sizeof(*ee))) {
->> -            binder_inner_proc_unlock(thread->proc);
->> +retry:
->> +    eeb = *ee;
->> +    binder_inner_proc_unlock(thread->proc);
->> +    if (copy_to_user(ubuf, &eeb, sizeof(eeb)))
->>              return -EFAULT;
->> -    }
->>
->> +    binder_inner_proc_lock(thread->proc);
->> +    if (eeb.id != ee->id) {
->> +            /* retry to get newest error info */
->> +            goto retry;
->> +    }
->>      ee->id = 0;
->>      ee->command = BR_OK;
->>      ee->param = 0;
->> --
->> 2.24.3 (Apple Git-128)
->>
->
-> Oops! Thank you for your patch. In this case the local copy would be
-> enough, no need for the retry logic as this is already taken care of.
-> You could also leverage the binder_set_extended_error() to reset the
-> thread->ee. Would you mind sending these updates? I was thinking
-> something like this:
+Signed-off-by: Terry Chen <terry_chen@wistron.corp-partner.google.com>
+(am from https://patchwork.kernel.org/patch/12845884/)
+(also found at https://lore.kernel.org/r/20220511075522.1764114-1-terry_chen@wistron.corp-partner.google.com)
 
-Yes, I have sent a v2 patch for this, please review it.
+---
+ sound/soc/intel/boards/sof_cs42l42.c          | 92 ++++++++++++++++++-
+ .../intel/common/soc-acpi-intel-adl-match.c   |  7 ++
+ 2 files changed, 95 insertions(+), 4 deletions(-)
 
+diff --git a/sound/soc/intel/boards/sof_cs42l42.c b/sound/soc/intel/boards/sof_cs42l42.c
+index ce78c18798876..2efffc7933479 100644
+--- a/sound/soc/intel/boards/sof_cs42l42.c
++++ b/sound/soc/intel/boards/sof_cs42l42.c
+@@ -41,8 +41,13 @@
+ #define SOF_CS42L42_DAILINK_MASK		(GENMASK(24, 10))
+ #define SOF_CS42L42_DAILINK(link1, link2, link3, link4, link5) \
+ 	((((link1) | ((link2) << 3) | ((link3) << 6) | ((link4) << 9) | ((link5) << 12)) << SOF_CS42L42_DAILINK_SHIFT) & SOF_CS42L42_DAILINK_MASK)
+-#define SOF_MAX98357A_SPEAKER_AMP_PRESENT	BIT(25)
+-#define SOF_MAX98360A_SPEAKER_AMP_PRESENT	BIT(26)
++#define SOF_BT_OFFLOAD_PRESENT			BIT(25)
++#define SOF_CS42L42_SSP_BT_SHIFT		26
++#define SOF_CS42L42_SSP_BT_MASK			(GENMASK(28, 26))
++#define SOF_CS42L42_SSP_BT(quirk)	\
++	(((quirk) << SOF_CS42L42_SSP_BT_SHIFT) & SOF_CS42L42_SSP_BT_MASK)
++#define SOF_MAX98357A_SPEAKER_AMP_PRESENT	BIT(29)
++#define SOF_MAX98360A_SPEAKER_AMP_PRESENT	BIT(30)
+ 
+ enum {
+ 	LINK_NONE = 0,
+@@ -50,6 +55,7 @@ enum {
+ 	LINK_SPK = 2,
+ 	LINK_DMIC = 3,
+ 	LINK_HDMI = 4,
++	LINK_BT = 5,
+ };
+ 
+ /* Default: SSP2 */
+@@ -278,6 +284,13 @@ static struct snd_soc_dai_link_component dmic_component[] = {
+ 	}
+ };
+ 
++static struct snd_soc_dai_link_component dummy_component[] = {
++	{
++		.name = "snd-soc-dummy",
++		.dai_name = "snd-soc-dummy-dai",
++	}
++};
++
+ static int create_spk_amp_dai_links(struct device *dev,
+ 				    struct snd_soc_dai_link *links,
+ 				    struct snd_soc_dai_link_component *cpus,
+@@ -467,9 +480,56 @@ static int create_hdmi_dai_links(struct device *dev,
+ 	return -ENOMEM;
+ }
+ 
++static int create_bt_offload_dai_links(struct device *dev,
++				       struct snd_soc_dai_link *links,
++				       struct snd_soc_dai_link_component *cpus,
++				       int *id, int ssp_bt)
++{
++	int ret = 0;
++
++	/* bt offload */
++	if (!(sof_cs42l42_quirk & SOF_BT_OFFLOAD_PRESENT))
++		return 0;
++
++	links[*id].name = devm_kasprintf(dev, GFP_KERNEL, "SSP%d-BT",
++					 ssp_bt);
++	if (!links[*id].name) {
++		ret = -ENOMEM;
++		goto devm_err;
++	}
++
++	links[*id].id = *id;
++	links[*id].codecs = dummy_component;
++	links[*id].num_codecs = ARRAY_SIZE(dummy_component);
++	links[*id].platforms = platform_component;
++	links[*id].num_platforms = ARRAY_SIZE(platform_component);
++
++	links[*id].dpcm_playback = 1;
++	links[*id].dpcm_capture = 1;
++	links[*id].no_pcm = 1;
++	links[*id].cpus = &cpus[*id];
++	links[*id].num_cpus = 1;
++
++	links[*id].cpus->dai_name = devm_kasprintf(dev, GFP_KERNEL,
++						   "SSP%d Pin",
++						   ssp_bt);
++	if (!links[*id].cpus->dai_name) {
++		ret = -ENOMEM;
++		goto devm_err;
++	}
++
++	(*id)++;
++
++	return 0;
++
++devm_err:
++	return ret;
++}
++
+ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
+ 							  int ssp_codec,
+ 							  int ssp_amp,
++							  int ssp_bt,
+ 							  int dmic_be_num,
+ 							  int hdmi_num)
+ {
+@@ -522,6 +582,14 @@ static struct snd_soc_dai_link *sof_card_dai_links_create(struct device *dev,
+ 				goto devm_err;
+ 			}
+ 			break;
++		case LINK_BT:
++			ret = create_bt_offload_dai_links(dev, links, cpus, &id, ssp_bt);
++			if (ret < 0) {
++				dev_err(dev, "fail to create bt offload dai links, ret %d\n",
++					ret);
++				goto devm_err;
++			}
++			break;
+ 		case LINK_NONE:
+ 			/* caught here if it's not used as terminator in macro */
+ 		default:
+@@ -543,7 +611,7 @@ static int sof_audio_probe(struct platform_device *pdev)
+ 	struct snd_soc_acpi_mach *mach;
+ 	struct sof_card_private *ctx;
+ 	int dmic_be_num, hdmi_num;
+-	int ret, ssp_amp, ssp_codec;
++	int ret, ssp_bt, ssp_amp, ssp_codec;
+ 
+ 	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+ 	if (!ctx)
+@@ -568,6 +636,9 @@ static int sof_audio_probe(struct platform_device *pdev)
+ 
+ 	dev_dbg(&pdev->dev, "sof_cs42l42_quirk = %lx\n", sof_cs42l42_quirk);
+ 
++	ssp_bt = (sof_cs42l42_quirk & SOF_CS42L42_SSP_BT_MASK) >>
++			SOF_CS42L42_SSP_BT_SHIFT;
++
+ 	ssp_amp = (sof_cs42l42_quirk & SOF_CS42L42_SSP_AMP_MASK) >>
+ 			SOF_CS42L42_SSP_AMP_SHIFT;
+ 
+@@ -578,9 +649,11 @@ static int sof_audio_probe(struct platform_device *pdev)
+ 
+ 	if (sof_cs42l42_quirk & SOF_SPEAKER_AMP_PRESENT)
+ 		sof_audio_card_cs42l42.num_links++;
++	if (sof_cs42l42_quirk & SOF_BT_OFFLOAD_PRESENT)
++		sof_audio_card_cs42l42.num_links++;
+ 
+ 	dai_links = sof_card_dai_links_create(&pdev->dev, ssp_codec, ssp_amp,
+-					      dmic_be_num, hdmi_num);
++					      ssp_bt, dmic_be_num, hdmi_num);
+ 	if (!dai_links)
+ 		return -ENOMEM;
+ 
+@@ -621,6 +694,17 @@ static const struct platform_device_id board_ids[] = {
+ 					SOF_CS42L42_SSP_AMP(1)) |
+ 					SOF_CS42L42_DAILINK(LINK_HP, LINK_DMIC, LINK_HDMI, LINK_SPK, LINK_NONE),
+ 	},
++	{
++		.name = "adl_mx98360a_cs4242",
++		.driver_data = (kernel_ulong_t)(SOF_CS42L42_SSP_CODEC(0) |
++					SOF_SPEAKER_AMP_PRESENT |
++					SOF_MAX98360A_SPEAKER_AMP_PRESENT |
++					SOF_CS42L42_SSP_AMP(1) |
++					SOF_CS42L42_NUM_HDMIDEV(4) |
++					SOF_BT_OFFLOAD_PRESENT |
++					SOF_CS42L42_SSP_BT(2)) |
++					SOF_CS42L42_DAILINK(LINK_HP, LINK_DMIC, LINK_HDMI, LINK_SPK, LINK_BT),
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(platform, board_ids);
+diff --git a/sound/soc/intel/common/soc-acpi-intel-adl-match.c b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
+index 7c8cd00457f81..311adeb3afbc4 100644
+--- a/sound/soc/intel/common/soc-acpi-intel-adl-match.c
++++ b/sound/soc/intel/common/soc-acpi-intel-adl-match.c
+@@ -384,6 +384,13 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_adl_machines[] = {
+ 		.sof_fw_filename = "sof-adl.ri",
+ 		.sof_tplg_filename = "sof-adl-cs35l41.tplg",
+ 	},
++	{
++		.id = "10134242",
++		.drv_name = "adl_mx98360a_cs4242",
++		.machine_quirk = snd_soc_acpi_codec_list,
++		.quirk_data = &adl_max98360a_amp,
++		.sof_tplg_filename = "sof-adl-max98360a-rt5682.tplg",
++	},
+ 	{},
+ };
+ EXPORT_SYMBOL_GPL(snd_soc_acpi_intel_adl_machines);
+-- 
+2.25.1
 
->
->  drivers/android/binder.c | 15 ++++++---------
->  1 file changed, 6 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
-> index 83facfa1a5c3..f92021cd384b 100644
-> --- a/drivers/android/binder.c
-> +++ b/drivers/android/binder.c
-> @@ -5163,19 +5163,16 @@ static int binder_ioctl_get_freezer_info(
->  static int binder_ioctl_get_extended_error(struct binder_thread *thread,
->                                          void __user *ubuf)
->  {
-> -     struct binder_extended_error *ee = &thread->ee;
-> +     struct binder_extended_error ee;
->
->       binder_inner_proc_lock(thread->proc);
-> -     if (copy_to_user(ubuf, ee, sizeof(*ee))) {
-> -             binder_inner_proc_unlock(thread->proc);
-> -             return -EFAULT;
-> -     }
-> -
-> -     ee->id = 0;
-> -     ee->command = BR_OK;
-> -     ee->param = 0;
-> +     ee = thread->ee;
-> +     binder_set_extended_error(&thread->ee, 0, BR_OK, 0);
->       binder_inner_proc_unlock(thread->proc);
->
-> +     if (copy_to_user(ubuf, &ee, sizeof(ee)))
-> +             return -EFAULT;
-> +
->       return 0;
->  }
-
---
-BRs
-Schspa Shi

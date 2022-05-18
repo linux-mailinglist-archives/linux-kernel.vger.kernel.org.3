@@ -2,65 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3FD52B70F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035F452B7F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbiERKMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
+        id S235032AbiERKSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 06:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234980AbiERKLs (ORCPT
+        with ESMTP id S235003AbiERKSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:11:48 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B3323BE8;
-        Wed, 18 May 2022 03:11:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652868707; x=1684404707;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fb/5ARR3YO8OMuxywWGPResY3kOWVu7cT520bf4RQsA=;
-  b=ZRF4xmiSvVHNy/lyauhaFg1KM9QfKfLZoYugICHPLc9ZFakiA6+nbNEA
-   QLnNMNICUmVS4LsHbi/LbufwSM7/RN4vMvFDisMMrJck2eH8Jh9GsuLAv
-   798PPSLzCRT/rYqgORuut0e9RLj4DNXSu+RVOvH4tTFA5NbW1Vm+ex/wR
-   ssh0veNnrl+sj0r7/za4e4jIy4cwIcvtc6LLNdYqGE84UFfKuNY6M02jh
-   /+RwHDc6l6uFntfQ3EBiYslZ3BonIHJZxX9SNYtgQac4S34YKwxu8ZZ0w
-   KWgpElmDt/bHUcUI4ZCHhesoJxagMjO8e4Fl2WeqGGX4XGmOEKUyfD+yz
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="252114448"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="252114448"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 03:11:47 -0700
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="639193497"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 03:11:44 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 18 May 2022 13:11:42 +0300
-Date:   Wed, 18 May 2022 13:11:42 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2 1/2] pinctrl: intel: make irq_chip immutable
-Message-ID: <YoTGXmxTMFTBgwy9@lahna>
-References: <20220517163820.86768-1-andriy.shevchenko@linux.intel.com>
- <YoR/QXuS+VlLVWto@lahna>
- <YoSyTq2908EptTGd@smile.fi.intel.com>
- <YoS6EkfU1TdggKS/@lahna>
- <CAHp75VenknSRSUkGj9rKfzw2q1Mm-+zRrzAmcYRLdK1GJHDoHw@mail.gmail.com>
+        Wed, 18 May 2022 06:18:08 -0400
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EED26C5E71;
+        Wed, 18 May 2022 03:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cZPVs
+        Or4D2HpzvBj2K42jmApGOIRDJcYSuWdf3m0z9Y=; b=PsZVc0CnMULrq5QPJEOjM
+        ksYFCmLvVRSQJrX6EW0MEMgyllyzIy9rmMGqfDF/AAI9/edAtyRurbhWU6eAEZ2+
+        yvuJIbvEeBSTizLOrMM7hfXTU2ar9tE/vI3zRitgEK+goGE+kp/R9Oumm9WGGSvi
+        dSJpgvyzHMmTvGRBnSe1bo=
+Received: from DESKTOP-B1R4FVG.localdomain (unknown [218.201.129.20])
+        by smtp13 (Coremail) with SMTP id EcCowACXG6mlx4RimzKrDA--.63720S2;
+        Wed, 18 May 2022 18:17:09 +0800 (CST)
+From:   qianfanguijin@163.com
+To:     linux-sunxi@lists.linux.dev
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Evgeny Boger <boger@wirenboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, qianfan Zhao <qianfanguijin@163.com>
+Subject: [PATCH v4 0/2] ARM: sun8i-r40: Enable usb otg support
+Date:   Wed, 18 May 2022 18:17:04 +0800
+Message-Id: <20220518101706.26869-1-qianfanguijin@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VenknSRSUkGj9rKfzw2q1Mm-+zRrzAmcYRLdK1GJHDoHw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowACXG6mlx4RimzKrDA--.63720S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF4ftFy3XrykXFWDZrWUArb_yoW5Xr13pF
+        W7XrZ3Gw1kt34fJay3ZayUWa13Aa95ZayjyFs7tFy8Ar13ur4DA3WDKrZ0ga4DWr9xX3y7
+        Kw1kJr1fK3Z0gF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRpT5LUUUUU=
+X-Originating-IP: [218.201.129.20]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiQhoF7VaECZPW+AABsX
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,54 +59,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 12:05:38PM +0200, Andy Shevchenko wrote:
-> On Wed, May 18, 2022 at 11:19 AM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> > On Wed, May 18, 2022 at 11:46:06AM +0300, Andy Shevchenko wrote:
-> > > On Wed, May 18, 2022 at 08:08:17AM +0300, Mika Westerberg wrote:
-> > > > On Tue, May 17, 2022 at 07:38:19PM +0300, Andy Shevchenko wrote:
-> > > > > +static const struct irq_chip intel_gpio_irq_chip = {
-> > > > > + .name           = "intel-gpio",
-> > > > > + .irq_ack        = intel_gpio_irq_ack,
-> > > > > + .irq_mask       = intel_gpio_irq_mask,
-> > > > > + .irq_unmask     = intel_gpio_irq_unmask,
-> > > > > + .irq_set_type   = intel_gpio_irq_type,
-> > > > > + .irq_set_wake   = intel_gpio_irq_wake,
-> > > > > + .flags          = IRQCHIP_MASK_ON_SUSPEND | IRQCHIP_IMMUTABLE,
-> > > > > + GPIOCHIP_IRQ_RESOURCE_HELPERS,
-> > > > > +};
-> > > >
-> > > > You still have the inconsistent alignment here.
-> > >
-> > > I'm not sure what problem do you see.
-> >
-> > I mean the tab alignment you use:
-> >
-> >         .name           = "intel-gpio",
-> >         .irq_ack        = intel_gpio_irq_ack,
-> >         .irq_mask       = intel_gpio_irq_mask,
-> >         .irq_unmask     = intel_gpio_irq_unmask,
-> >         .irq_set_type   = intel_gpio_irq_type,
-> >         .irq_set_wake   = intel_gpio_irq_wake,
-> >
-> > All the other struct initializations in the driver use this style (and I
-> > prefer it too):
-> >
-> >         .name = "intel-gpio",
-> >         .irq_ack = intel_gpio_irq_ack,
-> >         .irq_mask = intel_gpio_irq_mask,
-> >         .irq_unmask = intel_gpio_irq_unmask,
-> >         .irq_set_type = intel_gpio_irq_type,
-> >         .irq_set_wake = intel_gpio_irq_wake,
-> >
-> > Hope this explains.
-> 
-> Yes, thanks!
-> 
-> Okay, can you give your conditional Ack if there are no other
-> comments? I will fix it locally.
+From: qianfan Zhao <qianfanguijin@163.com>
 
-Sure. There was typo also in the second patch $subject, please fix it
-too while you apply them. For both,
+History:
+=======
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+v4(2022-05-18):
+- Enable both musb and OHCI/EHCI support
+
+Tests:
+======
+
+All test cases were tested on bananapi-m2-ultra.
+
+1. USB DEVICE(ping test)
+
+Enable usb gadget rndis network, ping m2u on ubuntu host:
+
+➜  ~ ping 192.168.200.2
+PING 192.168.200.2 (192.168.200.2) 56(84) bytes of data.
+64 bytes from 192.168.200.2: icmp_seq=1 ttl=64 time=0.544 ms
+64 bytes from 192.168.200.2: icmp_seq=2 ttl=64 time=0.269 ms
+64 bytes from 192.168.200.2: icmp_seq=3 ttl=64 time=0.300 ms
+64 bytes from 192.168.200.2: icmp_seq=4 ttl=64 time=0.295 ms
+64 bytes from 192.168.200.2: icmp_seq=5 ttl=64 time=0.283 ms
+64 bytes from 192.168.200.2: icmp_seq=6 ttl=64 time=0.226 ms
+64 bytes from 192.168.200.2: icmp_seq=7 ttl=64 time=0.246 ms
+64 bytes from 192.168.200.2: icmp_seq=8 ttl=64 time=0.204 ms
+64 bytes from 192.168.200.2: icmp_seq=9 ttl=64 time=0.302 ms
+64 bytes from 192.168.200.2: icmp_seq=10 ttl=64 time=0.249 ms
+64 bytes from 192.168.200.2: icmp_seq=11 ttl=64 time=0.459 ms
+64 bytes from 192.168.200.2: icmp_seq=12 ttl=64 time=0.232 ms
+64 bytes from 192.168.200.2: icmp_seq=13 ttl=64 time=0.275 ms
+64 bytes from 192.168.200.2: icmp_seq=14 ttl=64 time=0.243 ms
+
+2. USB HOST(OHCI)
+
+Connect an usb serial port on OTG port, nex t is the kernel log:
+
+[   27.824137] usb 2-1: new full-speed USB device number 2 using ohci-platform
+[   28.865504] cdc_acm 2-1:1.0: ttyACM0: USB ACM device
+[   29.565509] cdc_acm 2-1:1.2: ttyACM1: USB ACM device
+
+3. USB HOST(EHCI)
+
+Connect an usb storage on OTG port, next is the kernel log:
+
+[   17.754147] usb 1-1: new high-speed USB device number 2 using ehci-platform
+[   17.955995] usb-storage 1-1:1.0: USB Mass Storage device detected
+[   18.024497] scsi host1: usb-storage 1-1:1.0
+[   19.035091] scsi 1:0:0:0: Direct-Access     General  USB Flash Disk   1.0  PQ: 0 ANSI: 2
+[   19.049717] sd 1:0:0:0: [sda] 7831552 512-byte logical blocks: (4.01 GB/3.73 GiB)
+[   19.060873] sd 1:0:0:0: [sda] Write Protect is off
+[   19.071018] sd 1:0:0:0: [sda] No Caching mode page found
+[   19.076437] sd 1:0:0:0: [sda] Assuming drive cache: write through
+[   19.093566]  sda: sda1
+[   19.103492] sd 1:0:0:0: [sda] Attached SCSI removable disk
+
+issues:
+=======
+
+The system power often turned off when I plugged an usb device into the OTG port.
+It's not clear why.
+
+qianfan Zhao (2):
+  ARM: dts: sun8i-r40: Add USB0_OTG/HOST support
+  ARM: dts: bananapi-m2-ultra: Enable USB0_OTG and HOST support
+
+ .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  | 39 +++++++++++++++++++
+ arch/arm/boot/dts/sun8i-r40.dtsi              | 34 ++++++++++++++++
+ 2 files changed, 73 insertions(+)
+
+-- 
+2.25.1
+

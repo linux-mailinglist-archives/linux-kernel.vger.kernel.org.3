@@ -2,70 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F95552BB18
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7670D52BA8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236536AbiERM17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:27:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        id S236847AbiERMcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236482AbiERM1Q (ORCPT
+        with ESMTP id S236709AbiERM3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:27:16 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AE1AFAC7;
-        Wed, 18 May 2022 05:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=QJsVQym+xL0e9ZE8cs4o3sRq3C2RnAjl/FhXvupRFQ0=; b=D/Bh+Gmzw2BN6pBNp567gS2D0/
-        VKxeDUt7MYxt68TtoX3genmgLQ2oeiNNKiP0kGjaIGmiJfJjrDvbEDObjF99Cs6dMhZ6RnHqXVH7+
-        ssMEbATCPWp8/NOivDUP4Rv4NAL42rgZGvDejwV1CjptmTPve2x2GjNuMuzzwvPD0tOg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nrIld-003K4e-Dv; Wed, 18 May 2022 14:27:05 +0200
-Date:   Wed, 18 May 2022 14:27:05 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vivek Kumar <quic_vivekuma@quicinc.com>
-Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, axboe@kernel.dk,
-        rafael@kernel.org, akpm@linux-foundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com,
-        pavel@ucw.cz, paulmck@kernel.org, bp@suse.de,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org,
-        tsoni@quicinc.com, quic_psodagud@quicinc.com,
-        quic_svaddagi@quicinc.com,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: Re: [RFC 4/6] mm: swap: Add randomization check for swapon/off calls
-Message-ID: <YoTmGREvHTpTeeUH@lunn.ch>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
- <1652860121-24092-5-git-send-email-quic_vivekuma@quicinc.com>
+        Wed, 18 May 2022 08:29:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB43C170675;
+        Wed, 18 May 2022 05:27:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EF9E61610;
+        Wed, 18 May 2022 12:27:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8ADC34100;
+        Wed, 18 May 2022 12:27:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652876876;
+        bh=Q6WGn+T2IYOJX+pYvJtK4Xq4x5ALfQD1/9ZqxdvFrkU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HuTI6Uz//aFPyA8Z6jvOUA/F2E1YVjroJA8yMngxLg69X1DztYVoiH5ycJ1rOLyJI
+         X5ucyTU2Sw0RTiBzfNcEKmcJqF/FPXg9olOCXUrE6r+rFFmvo5y16wNpC8sWQMML0H
+         5cKDjOi5nHfxttgWgKuUw3Z6eody4i0XuXZSsO3M370k7Q6iEOV6v4ACAkrbnYRF79
+         c689G7prdPnESW7p9t1x76ugYHpCyTWc7S6BvYrGNYO3xC41cU9l1/F9asZRlnF+d0
+         uCGwkWUoGm06sBBvI3WyCHvZV/xdBI5ihbmFQgEScWEw7bCifWI1/t1RXK4Ko26bNH
+         50ASbj+/yEdbw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Brian Bunker <brian@purestorage.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Krishna Kant <krishna.kant@purestorage.com>,
+        Seamus Connor <sconnor@purestorage.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        mwilck@suse.com, dan.carpenter@oracle.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 01/17] scsi: scsi_dh_alua: Properly handle the ALUA transitioning state
+Date:   Wed, 18 May 2022 08:27:35 -0400
+Message-Id: <20220518122753.342758-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652860121-24092-5-git-send-email-quic_vivekuma@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:18:39PM +0530, Vivek Kumar wrote:
-> Add addtional check on swapon/swapoff sycalls to disable
-> randomization of swap offsets if GENHD_FL_NO_RANDOMIZE
-> flag is passed.
+From: Brian Bunker <brian@purestorage.com>
 
-Is there already a flag in the image header which tells you if the
-image is randomozied or not? I assume the bootloader needs to know,
-doing a linear read of a randomized image is not going to end well.
+[ Upstream commit 6056a92ceb2a7705d61df7ec5370548e96aee258 ]
 
-      Andrew
+The handling of the ALUA transitioning state is currently broken. When a
+target goes into this state, it is expected that the target is allowed to
+stay in this state for the implicit transition timeout without a path
+failure. The handler has this logic, but it gets skipped currently.
+
+When the target transitions, there is in-flight I/O from the initiator. The
+first of these responses from the target will be a unit attention letting
+the initiator know that the ALUA state has changed.  The remaining
+in-flight I/Os, before the initiator finds out that the portal state has
+changed, will return not ready, ALUA state is transitioning. The portal
+state will change to SCSI_ACCESS_STATE_TRANSITIONING. This will lead to all
+new I/O immediately failing the path unexpectedly. The path failure happens
+in less than a second instead of the expected successes until the
+transition timer is exceeded.
+
+Allow I/Os to continue while the path is in the ALUA transitioning
+state. The handler already takes care of a target that stays in the
+transitioning state for too long by changing the state to ALUA state
+standby once the transition timeout is exceeded at which point the path
+will fail.
+
+Link: https://lore.kernel.org/r/CAHZQxy+4sTPz9+pY3=7VJH+CLUJsDct81KtnR2be8ycN5mhqTg@mail.gmail.com
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Acked-by: Krishna Kant <krishna.kant@purestorage.com>
+Acked-by: Seamus Connor <sconnor@purestorage.com>
+Signed-off-by: Brian Bunker <brian@purestorage.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/device_handler/scsi_dh_alua.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
+index 37d06f993b76..1d9be771f3ee 100644
+--- a/drivers/scsi/device_handler/scsi_dh_alua.c
++++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+@@ -1172,9 +1172,8 @@ static blk_status_t alua_prep_fn(struct scsi_device *sdev, struct request *req)
+ 	case SCSI_ACCESS_STATE_OPTIMAL:
+ 	case SCSI_ACCESS_STATE_ACTIVE:
+ 	case SCSI_ACCESS_STATE_LBA:
+-		return BLK_STS_OK;
+ 	case SCSI_ACCESS_STATE_TRANSITIONING:
+-		return BLK_STS_AGAIN;
++		return BLK_STS_OK;
+ 	default:
+ 		req->rq_flags |= RQF_QUIET;
+ 		return BLK_STS_IOERR;
+-- 
+2.35.1
+

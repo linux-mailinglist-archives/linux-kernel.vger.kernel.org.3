@@ -2,113 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5749452BF5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 918A752BF5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239464AbiERPji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
+        id S239379AbiERPjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239376AbiERPjb (ORCPT
+        with ESMTP id S239341AbiERPjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:39:31 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9275A88B7
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:39:29 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id z2so4615183ejj.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mZSb0554f2n8IO9cffG87Gnp2j/skjs0bnuEFWLNgIY=;
-        b=WHvW2VBAWCKNirykCIyA6YptIU6wNsv9VCGN8wOYMmKaMjRzSeTzXVb1yHCgJS+KT7
-         1iBphXfPCXXOwa29DMSIMcAMmGjG8XAxYg0yESaZ83dzWTSHThvUF7Awts9WtGe1UXkQ
-         u+KC4dhFZQIfEZT5XqXaYWB0g9xywDTEvSxLMidkGpJW8RvyqiIbXdoIe8VuclRnRBe6
-         Zyi83obCclcurYrIGkGydvwcoHGmgg4wOe9VeN/cl6Y9X7AiFpBJUPlA0XAX6OJytvOC
-         hoGJ15W7z3GtBPR8QN/WDMIjmt9VCNCvTSRfHoHe2/LswP0YKhOYhCPyslKJ8vbjxb2x
-         Gniw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mZSb0554f2n8IO9cffG87Gnp2j/skjs0bnuEFWLNgIY=;
-        b=doldLuu3O/PUMGM6E8f6ZtRe4q62Sc3fsd97QcoGUWYZ3zcBcR3LFi96+kFE6YrNts
-         MNuEyVTC7gPTdKGj3liU98OP6gtiB9u8JlYcJN0UjYBO9NludZ09ofRoFI24Hi5ZbQPC
-         jTqPLtseL3FsWutRDZVp2YAHxOOCsK1dVVNLT6YTjmxWvxfjuG0FWlZdI0j8LFUjapMY
-         vVbjjzbC9amrc10ufsSHB1F9Xoyc0GS13TIOVajjVz5FqNcYNjhkhR+tmejbIsivS55R
-         PxukU0SEYgGV64UFRpaHR4us4KT2uwmJIK5Jj0lddnNs+i2URwv6SFuD1S88wzgqos2R
-         iaSg==
-X-Gm-Message-State: AOAM532Ommsr3T+hGxPV0kzWuTGnd7/oPfRHDXqREon+R+aupiz1kifu
-        hIHPYZ5lvWQVdAZ/oTh1/Mths8SGrS8KkeYI2PtA6g==
-X-Google-Smtp-Source: ABdhPJzYpWouIziad7D8nl6r5roTQa4hx5zFTiFU4Z1KMkPe481kLhzDmKMeDJHNd638PlKuV4hsYIx8MUM4+EatzPk=
-X-Received: by 2002:a17:907:1c06:b0:6df:b257:cbb3 with SMTP id
- nc6-20020a1709071c0600b006dfb257cbb3mr139397ejc.631.1652888367981; Wed, 18
- May 2022 08:39:27 -0700 (PDT)
+        Wed, 18 May 2022 11:39:24 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC83A5A81;
+        Wed, 18 May 2022 08:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652888363; x=1684424363;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version;
+  bh=8WND9E2GnGDv0ic+SbtV8f4+YwokzKLYteBSsNrOeuI=;
+  b=GAaBJx643bMeEt1h9obiks2aBOONhQ848W47IpiJdBB0s5JtSlquxi0X
+   huZnWthChw67hde9NRHbw60ayCM0OQCHowgJVoF1MZ4c5amDRxxFipcUq
+   GiYxyZC41ahLxhuji/lDGX9zQNi/xld2U3rjFWwg2ICE8DdAv8/mFoWgN
+   Zc4jTPSskuGEpi2XYH4XG8FO8ijP7nMmKQaTvQUvYY6SaBkkh2Z3qvL9U
+   iviqr/2vclL44WbBW9PC4hRPHhEyPNQA1tzFQxyjFfmOuSi8Yq3vdPIWU
+   fTtCXD70UuI+qaw603Cr+6l42y+W4S4i/5CIpZVZbiRYldSTXnQxOHpoT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="253779492"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="diff'?scan'208";a="253779492"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 08:39:22 -0700
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="diff'?scan'208";a="673494949"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 08:39:22 -0700
+Message-ID: <8fc40ebb2fbcecb1ab2f5ea156bf9ec10aff06bf.camel@linux.intel.com>
+Subject: Re: hid-sensor-hub 001F:8087:0AC2.0002: timeout waiting for
+ response from ISHTP device
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Jiri Kosina <jikos@kernel.org>, Even Xu <even.xu@intel.com>,
+        Zhang Lixu <lixu.zhang@intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Dell.Client.Kernel@dell.com
+Date:   Wed, 18 May 2022 08:39:21 -0700
+In-Reply-To: <dff3d94c-93be-2b31-35c6-35a7886f3680@molgen.mpg.de>
+References: <289be79b-8fbb-d171-a1e5-5d8218dff39d@molgen.mpg.de>
+         <8833ba2600208a05940943636a3bd8b6af6a9fe4.camel@linux.intel.com>
+         <dff3d94c-93be-2b31-35c6-35a7886f3680@molgen.mpg.de>
+Content-Type: multipart/mixed; boundary="=-fSLorNTvZrztzG+RVRp9"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com> <CAGS_qxrOUYC5iycS436Rb-gEoEnYDa2OJLkQhEVXcDN0BEJ4YA@mail.gmail.com>
- <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
-In-Reply-To: <CANpmjNPSm8eZX7nAJyMts-4XdYB2ChXK17HApUpoHN-SOo7fRA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 18 May 2022 08:39:16 -0700
-Message-ID: <CAGS_qxr4vTSEtcGGFyoZibga2Q_Avp9pFD78GOA3W9o6F9RVRQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: Add x86_64-smp architecture for SMP testing
-To:     Marco Elver <elver@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>, kunit-dev@googlegroups.com,
-        kasan-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 8:36 AM Marco Elver <elver@google.com> wrote:
->
-> On Wed, 18 May 2022 at 17:31, Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > On Wed, May 18, 2022 at 12:32 AM 'David Gow' via KUnit Development
-> > <kunit-dev@googlegroups.com> wrote:
-> > >
-> > > Add a new QEMU config for kunit_tool, x86_64-smp, which provides an
-> > > 8-cpu SMP setup. No other kunit_tool configurations provide an SMP
-> > > setup, so this is the best bet for testing things like KCSAN, which
-> > > require a multicore/multi-cpu system.
-> > >
-> > > The choice of 8 CPUs is pretty arbitrary: it's enough to get tests like
-> > > KCSAN to run with a nontrivial number of worker threads, while still
-> > > working relatively quickly on older machines.
-> > >
-> >
-> > Since it's arbitrary, I somewhat prefer the idea of leaving up
-> > entirely to the caller
-> > i.e.
-> > $ kunit.py run --kconfig_add=CONFIG_SMP=y --qemu_args '-smp 8'
-> >
-> > We could add CONFIG_SMP=y to the default qemu_configs/*.py and do
-> > $ kunit.py run --qemu_args '-smp 8'
-> > but I'd prefer the first, even if it is more verbose.
-> >
-> > Marco, does this seem reasonable from your perspective?
->
-> Either way works. But I wouldn't mind a sane default though, where
-> that default can be overridden with custom number of CPUs.
->
 
-Ack.
-Let me clean up what I have for --qemu_args and send it out for discussion.
+--=-fSLorNTvZrztzG+RVRp9
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-One downside I see to adding more qemu_configs is that --arch now
-becomes more kunit-specific.
-Before, a user could assume "oh, it's just what I pass in to make ARCH=...".
-This new "--arch=x86_64-smp" violates that. I don't personally see it
-being that confusing, but I still worry.
+Hi Paul,
+
+Attached a diff. Please use git apply and build kernel. And attach
+dmesg. I want to see where did it fail.
+
+Thanks,
+Srinivas
+
+On Wed, 2022-05-18 at 06:07 +0200, Paul Menzel wrote:
+> Dear Srinivas,
+> 
+> 
+> Thank you for your reply.
+> 
+> Am 13.05.22 um 01:07 schrieb srinivas pandruvada:
+> 
+> > On Thu, 2022-05-12 at 17:01 +0200, Paul Menzel wrote:
+> 
+> > > On the Dell XPS 13 9310, firmware 2.2.0 04/06/2021, with Debian
+> > > sid/unstable, Linux 5.17.3 logs a lot of the messages below:
+> > > 
+> > >       timeout waiting for response from ISHTP device
+> > > 
+> > > Please find the output of `dmesg` attached.
+> > > 
+> > It seems that sensor FW is not responding after resume.
+> > 
+> > What is
+> > # cat /sys/power/mem_sleep
+> 
+>      $ cat /sys/power/mem_sleep
+>      [s2idle]
+> 
+> 
+> Kind regards,
+> 
+> Paul
+> 
+> 
+> PS: I think, Intel should have a Dell XPS 13 9310 available in some
+> test 
+> labs. If not, Dell (Cc) should be able to provide access to one.
+
+
+--=-fSLorNTvZrztzG+RVRp9
+Content-Disposition: attachment; filename="ish_debug_1.diff"
+Content-Type: text/x-patch; name="ish_debug_1.diff"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaGlkL2ludGVsLWlzaC1oaWQvaXBjL3BjaS1pc2guYyBiL2Ry
+aXZlcnMvaGlkL2ludGVsLWlzaC1oaWQvaXBjL3BjaS1pc2guYwppbmRleCA4ZTlkOTQ1MGNiODMu
+LjViODExZmE4ZjE1YiAxMDA2NDQKLS0tIGEvZHJpdmVycy9oaWQvaW50ZWwtaXNoLWhpZC9pcGMv
+cGNpLWlzaC5jCisrKyBiL2RyaXZlcnMvaGlkL2ludGVsLWlzaC1oaWQvaXBjL3BjaS1pc2guYwpA
+QCAtMjYzLDYgKzI2Myw5IEBAIHN0YXRpYyB2b2lkIF9fbWF5YmVfdW51c2VkIGlzaF9yZXN1bWVf
+aGFuZGxlcihzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspCiAJc3RydWN0IHBjaV9kZXYgKnBkZXYg
+PSB0b19wY2lfZGV2KGlzaF9yZXN1bWVfZGV2aWNlKTsKIAlzdHJ1Y3QgaXNodHBfZGV2aWNlICpk
+ZXYgPSBwY2lfZ2V0X2RydmRhdGEocGRldik7CiAJdWludDMyX3QgZndzdHMgPSBkZXYtPm9wcy0+
+Z2V0X2Z3X3N0YXR1cyhkZXYpOworCXN0cnVjdCBkZXZpY2UgKmRldmljZSA9ICZwZGV2LT5kZXY7
+CisKKwlkZXZfaW5mbyhkZXZpY2UsICIlcyBzdXNwZW5kX2ZsYWc6JWQgZndfc3RhdHVzOiV4XG4i
+LCBfX2Z1bmNfXywgZGV2LT5zdXNwZW5kX2ZsYWcsIElQQ19JU19JU0hfSUxVUChmd3N0cykpOwog
+CiAJaWYgKGlzaF9zaG91bGRfbGVhdmVfZDBpMyhwZGV2KSAmJiAhZGV2LT5zdXNwZW5kX2ZsYWcK
+IAkJCSYmIElQQ19JU19JU0hfSUxVUChmd3N0cykpIHsKQEAgLTI4Myw4ICsyODYsMTAgQEAgc3Rh
+dGljIHZvaWQgX19tYXliZV91bnVzZWQgaXNoX3Jlc3VtZV9oYW5kbGVyKHN0cnVjdCB3b3JrX3N0
+cnVjdCAqd29yaykKIAkJICogSWYgdGhlIGZsYWcgaXMgbm90IGNsZWFyZWQsIHNvbWV0aGluZyBp
+cyB3cm9uZyB3aXRoIElTSCBGVy4KIAkJICogU28gb24gcmVzdW1lLCBuZWVkIHRvIGdvIHRocm91
+Z2ggaW5pdCBzZXF1ZW5jZSBhZ2Fpbi4KIAkJICovCi0JCWlmIChkZXYtPnJlc3VtZV9mbGFnKQor
+CQlpZiAoZGV2LT5yZXN1bWVfZmxhZykgeworCQkJZGV2X2luZm8oZGV2aWNlLCAiJXMgcmVzdW1l
+X2ZsYWc6JWQgd2lsbCBjYWxsIGlzaF9pbml0XG4iLCBfX2Z1bmNfXywgZGV2LT5yZXN1bWVfZmxh
+Zyk7CiAJCQlpc2hfaW5pdChkZXYpOworCQl9CiAJfSBlbHNlIHsKIAkJLyoKIAkJICogUmVzdW1l
+IGZyb20gdGhlIEQzLCBmdWxsIHJlYm9vdCBvZiBJU0ggcHJvY2Vzc29yIHdpbGwgaGFwcGVuLApA
+QCAtMzA3LDcgKzMxMiw5IEBAIHN0YXRpYyBpbnQgX19tYXliZV91bnVzZWQgaXNoX3N1c3BlbmQo
+c3RydWN0IGRldmljZSAqZGV2aWNlKQogCXN0cnVjdCBwY2lfZGV2ICpwZGV2ID0gdG9fcGNpX2Rl
+dihkZXZpY2UpOwogCXN0cnVjdCBpc2h0cF9kZXZpY2UgKmRldiA9IHBjaV9nZXRfZHJ2ZGF0YShw
+ZGV2KTsKIAorCWRldl9pbmZvKGRldmljZSwgIiVzXG4iLCBfX2Z1bmNfXyk7CiAJaWYgKGlzaF9z
+aG91bGRfZW50ZXJfZDBpMyhwZGV2KSkgeworCQlkZXZfaW5mbyhkZXZpY2UsICIlcyBzdXNwZW5k
+X2ZsYWc6JWRcbiIsIF9fZnVuY19fLCBkZXYtPnN1c3BlbmRfZmxhZyk7CiAJCS8qCiAJCSAqIElm
+IHByZXZpb3VzIHN1c3BlbmQgaGFzbid0IGJlZW4gYXNud2VyZWQgdGhlbiBJU0ggaXMgbGlrZWx5
+CiAJCSAqIGRlYWQsIGRvbid0IGF0dGVtcHQgbmVzdGVkIG5vdGlmaWNhdGlvbgpAQCAtMzI2LDEy
+ICszMzMsMTQgQEAgc3RhdGljIGludCBfX21heWJlX3VudXNlZCBpc2hfc3VzcGVuZChzdHJ1Y3Qg
+ZGV2aWNlICpkZXZpY2UpCiAJCQkJCW1zZWNzX3RvX2ppZmZpZXMoMjUpKTsKIAogCQlpZiAoZGV2
+LT5zdXNwZW5kX2ZsYWcpIHsKKwkJCWRldl9pbmZvKGRldmljZSwgIiVzIHN1c3BlbmRfZmxhZzol
+ZCBGVyBoYWx0ZWRcbiIsIF9fZnVuY19fLCBkZXYtPnN1c3BlbmRfZmxhZyk7CiAJCQkvKgogCQkJ
+ICogSXQgbG9va3MgbGlrZSBGVyBoYWx0LCBjbGVhciB0aGUgRE1BIGJpdCwgYW5kIHB1dAogCQkJ
+ICogSVNIIGludG8gRDMsIGFuZCBGVyB3b3VsZCByZXNldCBvbiByZXN1bWUuCiAJCQkgKi8KIAkJ
+CWlzaF9kaXNhYmxlX2RtYShkZXYpOwogCQl9IGVsc2UgeworCQkJZGV2X2luZm8oZGV2aWNlLCAi
+JXMgc3VzcGVuZF9mbGFnOiVkIFMwaXggc3VzcGVuZGVkXG4iLCBfX2Z1bmNfXywgZGV2LT5zdXNw
+ZW5kX2ZsYWcpOwogCQkJLyoKIAkJCSAqIFNhdmUgc3RhdGUgc28gUENJIGNvcmUgd2lsbCBrZWVw
+IHRoZSBkZXZpY2UgYXQgRDAsCiAJCQkgKiB0aGUgSVNIIHdvdWxkIGVudGVyIEQwaTMK
+
+
+--=-fSLorNTvZrztzG+RVRp9--
+

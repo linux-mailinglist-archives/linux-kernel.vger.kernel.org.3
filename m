@@ -2,140 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC86152C286
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1CD52C28A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241479AbiERSkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
+        id S241544AbiERSnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241280AbiERSj6 (ORCPT
+        with ESMTP id S241539AbiERSnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:39:58 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B641DB588;
-        Wed, 18 May 2022 11:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652899197; x=1684435197;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=M/oKhYTcnY4myTpFoegzGHopmAVVEEzgyLwyapl7tQQ=;
-  b=gjifRWwVI7atM6NqpjKQjmIIKSpRRAvJjla4cCLFkc5/c5LeqQwiOPmq
-   KraYXLAeeWMDecMyFyPbwEQmu6QVzhfBD4Hd4SB08h24jDQYLaRJLuxx7
-   pjF7eRU/yHmf59EaRXYMnU/rPUSBRa4MX9HccnwP6e0fyZfpvttn1MxNX
-   wsT4o+PKpfOs/kDGJwK7KvG9kE3pe3tj9IL21ilIWyXUDj82f3hAkVyOv
-   FoLIc49hjSoHw+0zgbbwnHXDI2/dseCwKpZMheoqbvy+0sSrLVbq4Q7Jd
-   aoB2iW2VBrHyQVI1D40EAELe/wapHYj7LJYfbfUmg35oiJeXyUNI+eKym
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="269425271"
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="269425271"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:38:14 -0700
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="569686074"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 11:38:14 -0700
-Date:   Wed, 18 May 2022 11:42:04 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     iommu@lists.linux-foundation.org,
-        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
-        Joerg Roedel <joro@8bytes.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>, vkoul@kernel.org,
-        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        Raj Ashok <ashok.raj@intel.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v3 1/4] iommu/vt-d: Implement domain ops for
- attach_dev_pasid
-Message-ID: <20220518114204.4d251b41@jacob-builder>
-In-Reply-To: <20220511182908.GK49344@nvidia.com>
-References: <20220510210704.3539577-1-jacob.jun.pan@linux.intel.com>
-        <20220510210704.3539577-2-jacob.jun.pan@linux.intel.com>
-        <20220510232121.GP49344@nvidia.com>
-        <20220510172309.3c4e7512@jacob-builder>
-        <20220511115427.GU49344@nvidia.com>
-        <20220511082958.79d5d8ee@jacob-builder>
-        <20220511161237.GB49344@nvidia.com>
-        <20220511100216.7615e288@jacob-builder>
-        <20220511170025.GF49344@nvidia.com>
-        <20220511102521.6b7c578c@jacob-builder>
-        <20220511182908.GK49344@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 18 May 2022 14:43:09 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375B420D26D;
+        Wed, 18 May 2022 11:43:08 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so3673583wme.5;
+        Wed, 18 May 2022 11:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=629EuCNPVzAl5BBiBBvqoC7bqwWqe2HUHf+13KFi4EU=;
+        b=N7x9i4oKZ4spJf0nC2xpourbHxhcMVu1vA8uxqp5db6agGtadWpvfKgcSZy22+razd
+         khZ0cUQWoy5hjWYylmTD1NFHpSGizMg6fRaNDnQm2QlQ+aEarO4QJ32JZyYRTsyngtjX
+         6dPEhuvVZUaye94Mqb90L+BRJwrvfHuiMaoC17GrGBnJ8e3R8mVi8MjvFDOMlUePZCD9
+         0VfRzgsQox21clqN0799qYokGk+yT8mwnpyR3Uc1sSL1Bz8Dp3HffTJ+w0+tkV0l2T78
+         rPoQT5NzN3z6Mn088Dl9UpHyCbOjYnttWzROnXrzuHSba7O4XP3RKFmu83NAVelwIKkC
+         xTyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=629EuCNPVzAl5BBiBBvqoC7bqwWqe2HUHf+13KFi4EU=;
+        b=E5xBz0gefq7ItEmEWuw28CaIGSI8Mo+UyFoKPqNxHwzpf2j53A5nKO3JzjaQKdKsNn
+         cRTkQi89aujPYD/WUYzkUC79PXLc1RQAbrSKUmu3XTvnl9ymksyKvOl7/NIwvVRuNMmE
+         qKlLw/zzvYBJMEbrapoLPVEOZhqHFi2eI5p9ftnfnDybk3KGhPYbRy2coj1UPWDYCqTU
+         rUo87VJ2oSjeWreYtA7zB0uf1nAf3pNJeNW42CMr6cD55Ak/znrc2H4YfB/9nsJ42+oK
+         y1HD8zR570G/FR3vcIisCyJqE/uH6vKMhyUUd2OzFIQiYKZuhjqveio2tW0LqO9af4+V
+         CAaw==
+X-Gm-Message-State: AOAM532rbira6jZwiK82CKE6WHfic4g6HSDQB5YLpLUhdM0KCUGIjPi5
+        vbiYDAkgMygzfcTJQSgQDgVhNfS1XNc=
+X-Google-Smtp-Source: ABdhPJwv3JxgSmNPpRs7CVBBT2W/2LDoLrHtng0kDykKkolE2BmoGPlfR5Iwtvh5hNhPGcBkeIxznw==
+X-Received: by 2002:a7b:cb84:0:b0:382:a9b9:2339 with SMTP id m4-20020a7bcb84000000b00382a9b92339mr1137496wmi.91.1652899386459;
+        Wed, 18 May 2022 11:43:06 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id q9-20020adf9dc9000000b0020d02ddf4d5sm2768546wre.5.2022.05.18.11.43.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 11:43:05 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [PATCH v3 0/2] Add support for unprotected spare data page
+Date:   Wed, 18 May 2022 20:42:54 +0200
+Message-Id: <20220518184256.21238-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+Some background about this.
+On original qsdk ipq8064 based firmware there was a big separation from
+boot partition and user partition. With boot partition we refer to
+partition used to init the router (bootloader, spm firmware and other
+internal stuff) With user partition we refer to linux partition and data
+partition not used to init the router.
+When someone had to write to these boot partition a special mode was
+needed, to switch the nand driver to this special configuration.
 
-On Wed, 11 May 2022 15:29:08 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
+Upstream version of the nandc driver totally dropped this and the result
+is that if someone try to read data from these partition a CRC warning
+is printed and if someone try to write that (if for example someone
+wants to replace the bootloader) result is a broken system as the data
+is badly written.
 
-> On Wed, May 11, 2022 at 10:25:21AM -0700, Jacob Pan wrote:
-> > Hi Jason,
-> > 
-> > On Wed, 11 May 2022 14:00:25 -0300, Jason Gunthorpe <jgg@nvidia.com>
-> > wrote: 
-> > > On Wed, May 11, 2022 at 10:02:16AM -0700, Jacob Pan wrote:  
-> > > > > > If not global, perhaps we could have a list of pasids (e.g.
-> > > > > > xarray) attached to the device_domain_info. The TLB flush logic
-> > > > > > would just go through the list w/o caring what the PASIDs are
-> > > > > > for. Does it make sense to you?      
-> > > > > 
-> > > > > Sort of, but we shouldn't duplicate xarrays - the group already
-> > > > > has this xarray - need to find some way to allow access to it
-> > > > > from the driver.
-> > > > >     
-> > > > I am not following,  here are the PASIDs for devTLB flush which is
-> > > > per device. Why group?    
-> > > 
-> > > Because group is where the core code stores it.  
-> > I see, with singleton group. I guess I can let dma-iommu code call
-> > 
-> > iommu_attach_dma_pasid {
-> > 	iommu_attach_device_pasid();
-> > Then the PASID will be stored in the group xa.  
-> 
-> Yes, again, the dma-iommu should not be any different from the normal
-> unmanaged path. At this point there is no longer any difference, we
-> should not invent new ones.
-> 
-> > The flush code can retrieve PASIDs from device_domain_info.device ->
-> > group -> pasid_array.  Thanks for pointing it out, I missed the new
-> > pasid_array.  
-> 
-> Yes.. It seems inefficient to iterate over that xarray multiple times
-> on the flush hot path, but maybe there is little choice. Try to use
-> use the xas iterators under the xa_lock spinlock..
-> 
-xas_for_each takes a max range, here we don't really have one. So I posted
-v4 w/o using the xas advanced API. Please let me know if you have
-suggestions.
-xa_for_each takes RCU read lock, it should be fast for tlb flush, right? The
-worst case maybe over flush when we have stale data but should be very rare.
+This series comes to fix this.
 
-> The challenge will be accessing the group xa in the first place, but
-> maybe the core code can gain a function call to return a pointer to
-> that XA or something..
-> 
-I added a helper function to find the matching DMA API PASID in v4.
+A user can declare offset and size of these special partition using the
+qcom,boot-pages binding.
 
+An initial implementation of this assumed that the boot-pages started
+from the start of the nand but we discover that some device have backup
+of these special partition and we can have situation where we have this
+partition scheme
+- APPSBL (require special mode)
+- APPSBLENV (doesn't require special mode)
+- ART
+- APPSBLBK (back of APPSBL require special mode)
+- APPSBLENVBK (back of APPSBLENV doesn't require special mode)
+With this configuration we need to declare sparse boot page and we can't
+assume boot-pages always starts from the start of the nand.
 
-Thanks,
+A user can use this form to declare sparse boot pages
+qcom,boot-pages = <0x0 0x0c80000 0x0c80000 0x0500000>;
 
-Jacob
+The driver internally will parse this array, convert it to nand pages
+and check internally on every read/write if this special configuration
+should used for that page or the normal one.
+
+The reason for all of this is that qcom FOR SOME REASON, disable ECC for
+spare data only for these boot partition and we need to reflect this
+special configuration to mute these warning and to permit actually
+writing to these pages.
+
+v3:
+- Fix typo in Docmunetation commit desription
+- Add items description for uint32-matrix
+v2:
+- Add fixes from Krzysztof in Documentation
+
+Ansuel Smith (2):
+  mtd: nand: raw: qcom_nandc: add support for unprotected spare data
+    pages
+  dt-bindings: mtd: qcom_nandc: document qcom,boot-pages binding
+
+ .../devicetree/bindings/mtd/qcom,nandc.yaml   |  26 +++
+ drivers/mtd/nand/raw/qcom_nandc.c             | 148 +++++++++++++++++-
+ 2 files changed, 169 insertions(+), 5 deletions(-)
+
+-- 
+2.34.1
+

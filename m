@@ -2,43 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC3052B196
+	by mail.lfdr.de (Postfix) with ESMTP id F13F352B199
 	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiEREjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 00:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S229964AbiEREjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 00:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiEREjU (ORCPT
+        with ESMTP id S229904AbiEREjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 00:39:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A06472CDD8
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 21:39:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7C8FE1042;
-        Tue, 17 May 2022 21:39:18 -0700 (PDT)
-Received: from [10.163.34.194] (unknown [10.163.34.194])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE93D3F66F;
-        Tue, 17 May 2022 21:39:15 -0700 (PDT)
-Message-ID: <de0788c0-a5a8-cf5b-5f20-eb9e99cd62ca@arm.com>
-Date:   Wed, 18 May 2022 10:09:12 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] arm64: Expand the static memblock memory table
-Content-Language: en-US
-To:     Zhou Guanghui <zhouguanghui1@huawei.com>,
-        akpm@linux-foundation.org, rppt@kernel.org, will@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, xuqiang36@huawei.com
-References: <20220517114309.10228-1-zhouguanghui1@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220517114309.10228-1-zhouguanghui1@huawei.com>
+        Wed, 18 May 2022 00:39:43 -0400
+X-Greylist: delayed 152422 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 May 2022 21:39:37 PDT
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CF1ED3BA65;
+        Tue, 17 May 2022 21:39:37 -0700 (PDT)
+Received: by ajax-webmail-mail-app4 (Coremail) ; Wed, 18 May 2022 12:39:20
+ +0800 (GMT+08:00)
+X-Originating-IP: [124.236.130.193]
+Date:   Wed, 18 May 2022 12:39:20 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, gregkh@linuxfoundation.org,
+        alexander.deucher@amd.com, broonie@kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: Re: [PATCH net v2] NFC: hci: fix sleep in atomic context bugs
+ in nfc_hci_hcp_message_tx
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <68ccef70-ef30-8f53-6ec5-17ce5815089c@linaro.org>
+References: <20220517105526.114421-1-duoming@zju.edu.cn>
+ <2ce7a871-3e55-ae50-955c-bf04a443aba3@linaro.org>
+ <71c24f38.1a1f4.180d29ff1fd.Coremail.duoming@zju.edu.cn>
+ <68ccef70-ef30-8f53-6ec5-17ce5815089c@linaro.org>
+Content-Transfer-Encoding: base64
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+MIME-Version: 1.0
+Message-ID: <454a29ba.1b9b1.180d576985b.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cS_KCgC3PiF5eIRi60FkAA--.9848W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgcOAVZdtZv64AAAs1
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,134 +56,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhou,
-
-A small nit.
-
-This changes generic memblock to accommodate arm64 specific scenario.
-Keeping the subject line as 'mm/memblock: ...' might be better.
-
-On 5/17/22 17:13, Zhou Guanghui wrote:
-> In a system using HBM, a multi-bit ECC error occurs, and the BIOS
-> saves the corresponding area (for example, 2 MB). When the system
-> restarts next time, these areas are isolated and not reported or
-> reported as EFI_UNUSABLE_MEMORY. Both of them lead to an increase
-
-Which cases dont get reported rather than as EFI_UNUSABLE_MEMORY ? Is
-this supported on arm64 platform via mainline kernel ?
-
-> in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads to
-> a larger number of memblocks.
-> 
-> For example, if the EFI_UNUSABLE_MEMORY type is reported:
-> ...
-> memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-> memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-> memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
-> memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-> memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-> memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-> memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
-> memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
-> memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-> memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
-> memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-> memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
-> memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-> memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
-
-Got it.
-
-> ...
-> 
-> If the size of the init memblock regions is exceeded before the
-> array size can be resized, the excess memory will be lost.
-
-Could you please elaborate more on why additional memblock regions can
-not be accommodated via memblock array resizing ?
-
-> 
-> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
-> ---
->  arch/arm64/include/asm/memory.h |  9 +++++++++
->  mm/memblock.c                   | 14 +++++++++-----
->  2 files changed, 18 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-> index 0af70d9abede..eda61c0389c4 100644
-> --- a/arch/arm64/include/asm/memory.h
-> +++ b/arch/arm64/include/asm/memory.h
-> @@ -364,6 +364,15 @@ void dump_mem_limit(void);
->  # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
->  #endif
->  
-> +/*
-> + * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
-> + * memory block into multiple parts. As a result, the number of memory regions
-> + * is large.
-> + */
-> +#ifdef CONFIG_EFI
-
-Could not memblock regions tagged with MEMBLOCK_NOMAP flag not present
-on non-EFI systems ? Just wondering, are there not some other scenarios
-which will also require expanded static memblock array.
-
-> +#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
-> +#endif
-> +
->  #include <asm-generic/memory_model.h>
->  
->  #endif /* __ASM_MEMORY_H */
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index e4f03a6e8e56..7c63571a69d7 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -29,6 +29,10 @@
->  # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
->  #endif
->  
-> +#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
-> +#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
-> +#endif
-
-Why create an additional macro INIT_MEMBLOCK_MEMORY_REGIONS ? Why cannot
-INIT_MEMBLOCK_REGIONS be defined in the platform directly like the other
-macro INIT_MEMBLOCK_RESERVED_REGIONS ?
-
-> +
->  /**
->   * DOC: memblock overview
->   *
-> @@ -55,9 +59,9 @@
->   * the allocator metadata. The "memory" and "reserved" types are nicely
->   * wrapped with struct memblock. This structure is statically
->   * initialized at build time. The region arrays are initially sized to
-> - * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
-> - * for "reserved". The region array for "physmem" is initially sized to
-> - * %INIT_PHYSMEM_REGIONS.
-> + * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
-> + * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
-> + * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
->   * The memblock_allow_resize() enables automatic resizing of the region
->   * arrays during addition of new regions. This feature should be used
->   * with care so that memory allocated for the region array will not
-> @@ -102,7 +106,7 @@ unsigned long min_low_pfn;
->  unsigned long max_pfn;
->  unsigned long long max_possible_pfn;
->  
-> -static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
-> +static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
->  static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
->  #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
->  static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
-> @@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
->  struct memblock memblock __initdata_memblock = {
->  	.memory.regions		= memblock_memory_init_regions,
->  	.memory.cnt		= 1,	/* empty dummy entry */
-> -	.memory.max		= INIT_MEMBLOCK_REGIONS,
-> +	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
->  	.memory.name		= "memory",
->  
->  	.reserved.regions	= memblock_reserved_init_regions,
-
-- Anshuman
+SGVsbG8sCgpPbiBUdWUsIDE3IE1heSAyMDIyIDE3OjI4OjUxICswMjAwIEtyenlzenRvZiB3cm90
+ZToKCj4gPj4+IFRoZXJlIGFyZSBzbGVlcCBpbiBhdG9taWMgY29udGV4dCBidWdzIHdoZW4gdGhl
+IHJlcXVlc3QgdG8gc2VjdXJlCj4gPj4+IGVsZW1lbnQgb2Ygc3QyMW5mY2EgaXMgdGltZW91dC4g
+VGhlIHJvb3QgY2F1c2UgaXMgdGhhdCBremFsbG9jIGFuZAo+ID4+PiBhbGxvY19za2Igd2l0aCBH
+RlBfS0VSTkVMIHBhcmFtZXRlciBhbmQgbXV0ZXhfbG9jayBhcmUgY2FsbGVkIGluCj4gPj4+IHN0
+MjFuZmNhX3NlX3d0X3RpbWVvdXQgd2hpY2ggaXMgYSB0aW1lciBoYW5kbGVyLiBUaGUgY2FsbCB0
+cmVlIHNob3dzCj4gPj4+IHRoZSBleGVjdXRpb24gcGF0aHMgdGhhdCBjb3VsZCBsZWFkIHRvIGJ1
+Z3M6Cj4gPj4+Cj4gPj4+ICAgIChJbnRlcnJ1cHQgY29udGV4dCkKPiA+Pj4gc3QyMW5mY2Ffc2Vf
+d3RfdGltZW91dAo+ID4+PiAgIG5mY19oY2lfc2VuZF9ldmVudAo+ID4+PiAgICAgbmZjX2hjaV9o
+Y3BfbWVzc2FnZV90eAo+ID4+PiAgICAgICBremFsbG9jKC4uLiwgR0ZQX0tFUk5FTCkgLy9tYXkg
+c2xlZXAKPiA+Pj4gICAgICAgYWxsb2Nfc2tiKC4uLiwgR0ZQX0tFUk5FTCkgLy9tYXkgc2xlZXAK
+PiA+Pj4gICAgICAgbXV0ZXhfbG9jaygpIC8vbWF5IHNsZWVwCj4gPj4+Cj4gPj4+IFRoaXMgcGF0
+Y2ggY2hhbmdlcyBhbGxvY2F0aW9uIG1vZGUgb2Yga3phbGxvYyBhbmQgYWxsb2Nfc2tiIGZyb20K
+PiA+Pj4gR0ZQX0tFUk5FTCB0byBHRlBfQVRPTUlDIGFuZCBjaGFuZ2VzIG11dGV4X2xvY2sgdG8g
+c3Bpbl9sb2NrIGluCj4gPj4+IG9yZGVyIHRvIHByZXZlbnQgYXRvbWljIGNvbnRleHQgZnJvbSBz
+bGVlcGluZy4KPiA+Pj4KPiA+Pj4gRml4ZXM6IDIxMzBmYjk3ZmVjZiAoIk5GQzogc3QyMW5mY2E6
+IEFkZGluZyBzdXBwb3J0IGZvciBzZWN1cmUgZWxlbWVudCIpCj4gPj4+IFNpZ25lZC1vZmYtYnk6
+IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1LmNuPgoKPiA+IFRoZSBuZmNfaGNpX2hjcF9t
+ZXNzYWdlX3R4KCkgaXMgY2FsbGVkIGJ5IGJvdGggcHJvY2VzcyBjb250ZXh0KGhjaV9kZXZfdXAg
+YW5kIHNvIG9uKQo+ID4gYW5kIGludGVycnVwdCBjb250ZXh0KHN0MjFuZmNhX3NlX3d0X3RpbWVv
+dXQoKSkuIFRoZSBwcm9jZXNzIGNvbnRleHQoaGNpX2Rldl91cCBhbmQgc28gb24pCj4gPiBjYWxs
+cyBkZXZpY2VfbG9jaywgYnV0IEkgdGhpbmsgY2FsbGluZyBzcGluX2xvY2soKSB3aXRoaW4gZGV2
+aWNlX2xvY2soKSBpcyBvay4gVGhlcmUgaXMKPiA+IG5vIGRldmljZV9sb2NrKCkgY2FsbGVkIHdp
+dGhpbiBzcGluX2xvY2soKS4gCj4gCj4gVGhlcmUgaXMuCj4gCj4gbmZjX2hjaV9mYWlsdXJlIC0+
+IHNwaW4gbG9jayAtPiBuZmNfZHJpdmVyX2ZhaWx1cmUgLT4gbmZjX3RhcmdldHNfZm91bmQKPiAt
+PiBkZXZpY2VfbG9jawo+IAo+IEkgZm91bmQgaXQganVzdCBieSBhIHZlcnkgcXVpY2sgbG9vaywg
+c28gSSBzdXNwZWN0IHRoZXJlIGFyZSBzZXZlcmFsCj4gb3RoZXIgcGxhY2VzLCBub3QgcmVhbGx5
+IGNoZWNrZWQuCgpJIGFncmVlIHdpdGggeW91LCB0aGUgc3Bpbl9sb2NrIGlzIG5vdCBhIGdvb2Qg
+c29sdXRpb24gdG8gdGhpcyBwcm9ibGVtLiBUaGVyZSBpcyBhbm90aGVyIHNvbHV0aW9uOgoKV2Ug
+Y291bGQgcHV0IHRoZSBuZmNfaGNpX3NlbmRfZXZlbnQoKSBvZiBzdDIxbmZjYV9zZV93dF90aW1l
+b3V0KCkgaW4gYSB3b3JrIGl0ZW0sIHRoZW4sIHVzaW5nCnNjaGVkdWxlX3dvcmsoKSBpbiBzdDIx
+bmZjYV9zZV93dF90aW1lb3V0KCkgdG8gZXhlY3V0ZSB0aGUgd29yayBpdGVtLiBUaGUgc2NoZWR1
+bGVfd29yaygpIHdpbGwKd2FrZSB1cCBhbm90aGVyIGtlcm5lbCB0aHJlYWQgd2hpY2ggaXMgaW4g
+cHJvY2VzcyBjb250ZXh0IHRvIGV4ZWN1dGUgdGhlIGJvdHRvbSBoYWxmIG9mIHRoZSBpbnRlcnJ1
+cHQsIApzbyBpdCBhbGxvd3Mgc2xlZXAuCgpUaGUgZm9sbG93aW5nIGlzIHRoZSBkZXRhaWxzLgoK
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmZjL3N0MjFuZmNhL3NlLmMgYi9kcml2ZXJzL25mYy9zdDIx
+bmZjYS9zZS5jCmluZGV4IGM5MjJmMTBkMGQ3Li4xZTk4NDY3ZGJmNyAxMDA2NDQKLS0tIGEvZHJp
+dmVycy9uZmMvc3QyMW5mY2Evc2UuYworKysgYi9kcml2ZXJzL25mYy9zdDIxbmZjYS9zZS5jCkBA
+IC0yNDEsNyArMjQxLDcgQEAgaW50IHN0MjFuZmNhX2hjaV9zZV9pbyhzdHJ1Y3QgbmZjX2hjaV9k
+ZXYgKmhkZXYsIHUzMiBzZV9pZHgsCiB9CiBFWFBPUlRfU1lNQk9MKHN0MjFuZmNhX2hjaV9zZV9p
+byk7Cgotc3RhdGljIHZvaWQgc3QyMW5mY2Ffc2Vfd3RfdGltZW91dChzdHJ1Y3QgdGltZXJfbGlz
+dCAqdCkKK3N0YXRpYyB2b2lkIHN0MjFuZmNhX3NlX3d0X3dvcmsoc3RydWN0IHdvcmtfc3RydWN0
+ICp3b3JrKQogewogICAgICAgIC8qIAogICAgICAgICAqIE5vIGFuc3dlciBmcm9tIHRoZSBzZWN1
+cmUgZWxlbWVudApAQCAtMjU0LDggKzI1NCw5IEBAIHN0YXRpYyB2b2lkIHN0MjFuZmNhX3NlX3d0
+X3RpbWVvdXQoc3RydWN0IHRpbWVyX2xpc3QgKnQpCiAgICAgICAgICovCiAgICAgICAgLyogaGFy
+ZHdhcmUgcmVzZXQgbWFuYWdlZCB0aHJvdWdoIFZDQ19VSUNDX09VVCBwb3dlciBzdXBwbHkgKi8K
+ICAgICAgICB1OCBwYXJhbSA9IDB4MDE7Ci0gICAgICAgc3RydWN0IHN0MjFuZmNhX2hjaV9pbmZv
+ICppbmZvID0gZnJvbV90aW1lcihpbmZvLCB0LAotICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgc2VfaW5mby5id2lfdGltZXIpOworICAgICAgIHN0cnVj
+dCBzdDIxbmZjYV9oY2lfaW5mbyAqaW5mbyA9IGNvbnRhaW5lcl9vZih3b3JrLAorICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3Qgc3QyMW5mY2FfaGNp
+X2luZm8sCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNl
+X2luZm8udGltZW91dF93b3JrKTsKCiAgICAgICAgaW5mby0+c2VfaW5mby5id2lfYWN0aXZlID0g
+ZmFsc2U7CiAKQEAgLTI3MSw2ICsyNzIsMTMgQEAgc3RhdGljIHZvaWQgc3QyMW5mY2Ffc2Vfd3Rf
+dGltZW91dChzdHJ1Y3QgdGltZXJfbGlzdCAqdCkKICAgICAgICBpbmZvLT5zZV9pbmZvLmNiKGlu
+Zm8tPnNlX2luZm8uY2JfY29udGV4dCwgTlVMTCwgMCwgLUVUSU1FKTsKIH0KCitzdGF0aWMgdm9p
+ZCBzdDIxbmZjYV9zZV93dF90aW1lb3V0KHN0cnVjdCB0aW1lcl9saXN0ICp0KQoreworICAgICAg
+IHN0cnVjdCBzdDIxbmZjYV9oY2lfaW5mbyAqaW5mbyA9IGZyb21fdGltZXIoaW5mbywgdCwgc2Vf
+aW5mby5id2lfdGltZXIpOworCisgICAgICAgc2NoZWR1bGVfd29yaygmaW5mby0+c2VfaW5mby50
+aW1lb3V0X3dvcmspOworfQorCiBzdGF0aWMgdm9pZCBzdDIxbmZjYV9zZV9hY3RpdmF0aW9uX3Rp
+bWVvdXQoc3RydWN0IHRpbWVyX2xpc3QgKnQpCiB7CiAgICAgICAgc3RydWN0IHN0MjFuZmNhX2hj
+aV9pbmZvICppbmZvID0gZnJvbV90aW1lcihpbmZvLCB0LApAQCAtMzg5LDYgKzM5Nyw3IEBAIHZv
+aWQgc3QyMW5mY2Ffc2VfaW5pdChzdHJ1Y3QgbmZjX2hjaV9kZXYgKmhkZXYpCiAgICAgICAgc3Ry
+dWN0IHN0MjFuZmNhX2hjaV9pbmZvICppbmZvID0gbmZjX2hjaV9nZXRfY2xpZW50ZGF0YShoZGV2
+KTsKCiAgICAgICAgaW5pdF9jb21wbGV0aW9uKCZpbmZvLT5zZV9pbmZvLnJlcV9jb21wbGV0aW9u
+KTsKKyAgICAgICBJTklUX1dPUksoJmluZm8tPnNlX2luZm8udGltZW91dF93b3JrLCBzdDIxbmZj
+YV9zZV93dF93b3JrKTsKICAgICAgICAvKiBpbml0aWFsaXplIHRpbWVycyAqLwogICAgICAgIHRp
+bWVyX3NldHVwKCZpbmZvLT5zZV9pbmZvLmJ3aV90aW1lciwgc3QyMW5mY2Ffc2Vfd3RfdGltZW91
+dCwgMCk7CiAgICAgICAgaW5mby0+c2VfaW5mby5id2lfYWN0aXZlID0gZmFsc2U7CkBAIC00MTYs
+NiArNDI1LDcgQEAgdm9pZCBzdDIxbmZjYV9zZV9kZWluaXQoc3RydWN0IG5mY19oY2lfZGV2ICpo
+ZGV2KQogICAgICAgIGlmIChpbmZvLT5zZV9pbmZvLnNlX2FjdGl2ZSkKICAgICAgICAgICAgICAg
+IGRlbF90aW1lcl9zeW5jKCZpbmZvLT5zZV9pbmZvLnNlX2FjdGl2ZV90aW1lcik7CgorICAgICAg
+IGNhbmNlbF93b3JrX3N5bmMoJmluZm8tPnNlX2luZm8udGltZW91dF93b3JrKTsKICAgICAgICBp
+bmZvLT5zZV9pbmZvLmJ3aV9hY3RpdmUgPSBmYWxzZTsKICAgICAgICBpbmZvLT5zZV9pbmZvLnNl
+X2FjdGl2ZSA9IGZhbHNlOwogfQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZmMvc3QyMW5mY2Evc3Qy
+MW5mY2EuaCBiL2RyaXZlcnMvbmZjL3N0MjFuZmNhL3N0MjFuZmNhLmgKaW5kZXggY2I2YWQ5MTZi
+ZTkuLmFlNjc3MWNjOTg5IDEwMDY0NAotLS0gYS9kcml2ZXJzL25mYy9zdDIxbmZjYS9zdDIxbmZj
+YS5oCisrKyBiL2RyaXZlcnMvbmZjL3N0MjFuZmNhL3N0MjFuZmNhLmgKQEAgLTE0MSw2ICsxNDEs
+NyBAQCBzdHJ1Y3Qgc3QyMW5mY2Ffc2VfaW5mbyB7CgogICAgICAgIHNlX2lvX2NiX3QgY2I7CiAg
+ICAgICAgdm9pZCAqY2JfY29udGV4dDsKKyAgICAgICBzdHJ1Y3Qgd29ya19zdHJ1Y3QgdGltZW91
+dF93b3JrOwogfTsKCiBzdHJ1Y3Qgc3QyMW5mY2FfaGNpX2luZm8gewoKRG8geW91IHRoaW5rIHRo
+aXMgc29sdXRpb24gaXMgYmV0dGVyPwoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UK

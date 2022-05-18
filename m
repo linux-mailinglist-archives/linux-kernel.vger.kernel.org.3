@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8193452C12F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93DE52C140
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241020AbiERR0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
+        id S241129AbiERRaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241022AbiERRZ6 (ORCPT
+        with ESMTP id S241081AbiERRaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:25:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00D0515A3E1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:25:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652894756;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1WCkVPu890CUqv7zkicLIU9/u8yZ1yze5Jtj6/5oVwc=;
-        b=AxkUjT7/RFxgYTVNHrdPXmXhHDNhdQApKS0xSyqqYpKig7Tn07Romv7kLFg5nx73HkWaWj
-        LtkHpj9vxErO/jbPtYwsiVY6ZAoJbGXDU3ZVm4/maZE7yvj8DdH2432GBAMm5x94XEseKD
-        O49yFyi/G+LMj0KAeawVZ2sWAvNsTrM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-128-w5xu3Rk9PdKSdUlpL5wKYQ-1; Wed, 18 May 2022 13:25:53 -0400
-X-MC-Unique: w5xu3Rk9PdKSdUlpL5wKYQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42B24101AA4D;
-        Wed, 18 May 2022 17:25:53 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 33E87400D277;
-        Wed, 18 May 2022 17:25:51 +0000 (UTC)
-Message-ID: <4884cd0232880cde91b9d068182ce035a7734df2.camel@redhat.com>
-Subject: Re: [PATCH v5 16/17] KVM: x86: nSVM: always intercept x2apic msrs
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Wed, 18 May 2022 20:25:50 +0300
-In-Reply-To: <92fb7b8962e1da874dde2789f0d9c1f3887a63dc.camel@redhat.com>
-References: <20220518162652.100493-1-suravee.suthikulpanit@amd.com>
-         <20220518162652.100493-17-suravee.suthikulpanit@amd.com>
-         <92fb7b8962e1da874dde2789f0d9c1f3887a63dc.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 18 May 2022 13:30:00 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F56719FF43;
+        Wed, 18 May 2022 10:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652894999; x=1684430999;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FjJ+9xSrC3MzYALAqvbVXtyf2yB1lnVWdTlBlRcSlBc=;
+  b=ycjzq0C/pLYzMmGGHYZKA7RiBrWB+24+r6xjmgMxWdMs9tLCtUu2HOeq
+   uMyI3r/xqCsJYADkgYI5IGJ8fxwW4w9z6rtSOa8oFL6EcIJRVCTKmdxKB
+   +lE1yzIlpwRRiS60FBb5ips9dR0cljxb1qSxtbZwZ7r+UmUcxyu3z+XxV
+   c=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 May 2022 10:29:59 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 10:29:58 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 18 May 2022 10:29:58 -0700
+Received: from [10.110.42.114] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 18 May
+ 2022 10:29:57 -0700
+Message-ID: <98295144-2e05-674b-4983-5f1738480c86@quicinc.com>
+Date:   Wed, 18 May 2022 10:29:55 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 0/2] eDP/DP Phy vdda realted function
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1652892186-22346-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAA8EJpqq4fxxgY0mj0JBans3GE-HAuad4Zsf7Ntwy1WW3bHbTQ@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAA8EJpqq4fxxgY0mj0JBans3GE-HAuad4Zsf7Ntwy1WW3bHbTQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,70 +72,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-18 at 20:18 +0300, Maxim Levitsky wrote:
-> On Wed, 2022-05-18 at 11:26 -0500, Suravee Suthikulpanit wrote:
-> > From: Maxim Levitsky <mlevitsk@redhat.com>
-> > 
-> > As a preparation for x2avic, this patch ensures that x2apic msrs
-> > are always intercepted for the nested guest.
-> > 
-> > Reviewed-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> > Tested-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/kvm/svm/nested.c | 5 +++++
-> >  arch/x86/kvm/svm/svm.h    | 9 +++++++++
-> >  2 files changed, 14 insertions(+)
-> > 
-> > diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> > index f209c1ca540c..b61f8939c210 100644
-> > --- a/arch/x86/kvm/svm/nested.c
-> > +++ b/arch/x86/kvm/svm/nested.c
-> > @@ -230,6 +230,11 @@ static bool nested_svm_vmrun_msrpm(struct vcpu_svm *svm)
-> >  			break;
-> >  
-> >  		p      = msrpm_offsets[i];
-> > +
-> > +		/* x2apic msrs are intercepted always for the nested guest */
-> > +		if (is_x2apic_msrpm_offset(p))
-> > +			continue;
-> > +
-> >  		offset = svm->nested.ctl.msrpm_base_pa + (p * 4);
-> >  
-> >  		if (kvm_vcpu_read_guest(&svm->vcpu, offset, &value, 4))
-> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> > index 818817b11f53..309445619756 100644
-> > --- a/arch/x86/kvm/svm/svm.h
-> > +++ b/arch/x86/kvm/svm/svm.h
-> > @@ -517,6 +517,15 @@ static inline bool nested_npt_enabled(struct vcpu_svm *svm)
-> >  	return svm->nested.ctl.nested_ctl & SVM_NESTED_CTL_NP_ENABLE;
-> >  }
-> >  
-> > +static inline bool is_x2apic_msrpm_offset(u32 offset)
-> > +{
-> > +	/* 4 msrs per u8, and 4 u8 in u32 */
-> > +	u32 msr = offset * 16;
-> > +
-> > +	return (msr >= APIC_BASE_MSR) &&
-> > +	       (msr < (APIC_BASE_MSR + 0x100));
-> > +}
-> > +
-> >  /* svm.c */
-> >  #define MSR_INVALID				0xffffffffU
-> >  
-> 
-> Just one thing, this patch should be earlier in the series (or even first one),
-> to avoid having a commit window where the problem exists, where malicious
-> L1 can get access to L0's apic msrs this way.
-> 
-> Best regards,
-> 	Maxim Levitsky
 
-Besides this, I guess I currently don't see anything else seriously wrong with this patch
-series.
+On 5/18/2022 10:16 AM, Dmitry Baryshkov wrote:
+> On Wed, 18 May 2022 at 19:43, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>> 1) add regulator_set_load() to eDP/DP phy
+>> 2) remove vdda related function out of eDP/DP controller
+> These patches touch two subsystems and have a dependency between them.
+> How do we merge them?
 
-Hopefully I didn't miss anything serious.
+currently, both phy and controller are vote for regulator. The last vote 
+will just increase count.
 
-Best regards,
-	Maxim Levitsky
+Therefore the dependency should be very loose.
 
+
+>> Kuogee Hsieh (2):
+>>    phy/qcom: add regulator_set_load to edp/dp phy
+>>    drm/msm/dp: delete vdda regulator related functions from eDP/DP
+>>      controller
+>>
+>>   drivers/gpu/drm/msm/dp/dp_parser.c  | 14 ------
+>>   drivers/gpu/drm/msm/dp/dp_parser.h  |  6 ---
+>>   drivers/gpu/drm/msm/dp/dp_power.c   | 95 +------------------------------------
+>>   drivers/phy/qualcomm/phy-qcom-edp.c | 25 ++++++++--
+>>   drivers/phy/qualcomm/phy-qcom-qmp.c | 13 +++++
+>>   5 files changed, 36 insertions(+), 117 deletions(-)
+>>
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
+>

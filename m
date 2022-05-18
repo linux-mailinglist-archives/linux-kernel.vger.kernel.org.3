@@ -2,119 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA7E52BC9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1181852BD7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238549AbiEROOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
+        id S237609AbiEROQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238524AbiEROOh (ORCPT
+        with ESMTP id S231321AbiEROQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:14:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D053C1C9AF6;
-        Wed, 18 May 2022 07:14:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8BC5B23A;
-        Wed, 18 May 2022 07:14:35 -0700 (PDT)
-Received: from [10.57.82.55] (unknown [10.57.82.55])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC9843F73D;
-        Wed, 18 May 2022 07:14:32 -0700 (PDT)
-Message-ID: <7a17256d-cad0-bd94-02e7-f8adaa959654@arm.com>
-Date:   Wed, 18 May 2022 15:14:26 +0100
+        Wed, 18 May 2022 10:16:00 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684CC62E2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:15:53 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 9D2BB2222E;
+        Wed, 18 May 2022 16:15:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1652883350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SSJAzEBLTF3cVsOUo7/c6hXKoi6NTUJx6rBT9EjOfwk=;
+        b=FgO7IsmjnS6x1oPNQ1KEGDU2vZvEMPA0z7mSqHidCrBEBT8XMJDzDLLZPQFSOQGvLfA/Hr
+        Vyc9GHX4vbYSIVvYbrrHaGYlJ/AFMLEIHFq6QOaD4LHlEyBk32J/rTI+2FpAneA46eoWNR
+        vaOjVpk5RM4nZB9IbZqOfpu6zWrBnV8=
+From:   Michael Walle <michael@walle.cc>
+To:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org, Michael Walle <michael@walle.cc>
+Subject: [PATCH] ARM: configs: enable support for Kontron KSwitch D10
+Date:   Wed, 18 May 2022 16:15:42 +0200
+Message-Id: <20220518141542.531148-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 00/20] perf vendors events arm64: Multiple Arm CPUs
-Content-Language: en-GB
-To:     John Garry <john.garry@huawei.com>,
-        Nick Forrington <nick.forrington@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>
-References: <20220510104758.64677-1-nick.forrington@arm.com>
- <f523b0fe-1262-c1e5-c587-15842ccf0fcf@arm.com>
- <28509191-3a45-de6d-f5bc-a8e7331c0a9e@huawei.com>
- <5773b630-8159-1eba-481a-1bf3c406c055@arm.com>
- <cf7d8003-9700-880f-0e46-ff40e6348bb1@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <cf7d8003-9700-880f-0e46-ff40e6348bb1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-18 14:48, John Garry wrote:
-> On 18/05/2022 13:32, Robin Murphy wrote:
->>> If we were to add to arm32/arm then the common event numbers and 
->>> maybe other JSONs in future would need to be duplicated.
->>>
->>> Would there be any reason to add to arm32/arm apart to from being 
->>> strictly proper? Maybe if lots of other 32b support for other vendors 
->>> came along then it could make sense (to separate them out).
->>
->> That's the heart of the question, really. At best it seems 
->> unnecessarily confusing as-is. 
-> 
-> I think it comes down to the first core supported was TX2 and the build 
-> system relies on the target arch to decide which arch from 
-> pmu-events/arch to compile.
-> 
->> AFAICS either the naming isn't functional, wherein it would 
->> potentially make the most sense to rename the whole thing 
->> "pmu-events/arch/arm" if it's merely for categorising Arm 
->> architectures in general, or it is actually tied to the host triplet, 
->> in which case the above patches are most likely useless.
-> 
-> Today ARCH=arm has no pmu-events support. I think that it should be easy 
-> to add plumbing for that. It becomes more tricky with supporting a 
-> single "arm" folder.
-> 
-> But then do people really care enough about pmu-events for these 32b 
-> cores? Until now, it seems not.
-> 
->>
->> I'd agree that there doesn't seem much point in trying to separate 
->> things along relatively arbitrary lines if it *isn't* functionally 
->> necessary - the PMUv2 common events look to be a straightforward 
->> subset of the PMUv3 ones, but then there's Cortex-A32 anyway, plus 
->> most of the already-supported CPUs could equally run an AArch32 perf 
->> tool as well.
-> 
-> Sure, we should have these 32b cores supported for ARCH=arm if they are 
-> supported for ARCH=arm64. But then does it even make sense to have A7 
-> support in arch/arm64?
+The Kontron KSwitch D10 is based on a Microchip LAN9668 SoC. It is a
+managed ethernet network switch with either 8 copper ports or 6 copper
+ports and 2 SFP cages.
 
-That's what I'm getting at. If it is tied to the build target as you've 
-said above, then there is no point in an AArch64 perf tool including 
-data for CPUs on which that tool cannot possibly run; it's simply a 
-waste of space.
+Enable all required kconfig symbols, either as module where possible or
+compiled-in where it is not possible.
 
-If there is interest in plumbing in support on AArch32 builds as well, 
-then I'd still be inclined to have a single arch/arm events directory, 
-and either do some build-time path munging or just symlink an arch/arm64 
-sibling back to it. Yes, technically there are AArch64-only CPUs whose 
-data would then be redundant when building for AArch32, but those are 
-such a minority that it seems like an entirely reasonable compromise.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+FWIW, there will be a board in our lab in KernelCI using this config.
 
-Thanks,
-Robin.
+ arch/arm/configs/multi_v7_defconfig | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 547918170f1f..a858ba971340 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -17,6 +17,7 @@ CONFIG_SOC_SAMA5D2=y
+ CONFIG_SOC_SAMA5D3=y
+ CONFIG_SOC_SAMA5D4=y
+ CONFIG_SOC_SAMA7G5=y
++CONFIG_SOC_LAN966=y
+ CONFIG_ARCH_BCM=y
+ CONFIG_ARCH_BCM_CYGNUS=y
+ CONFIG_ARCH_BCM_HR2=y
+@@ -277,6 +278,7 @@ CONFIG_MV643XX_ETH=y
+ CONFIG_MVNETA=y
+ CONFIG_PXA168_ETH=m
+ CONFIG_KS8851=y
++CONFIG_LAN966X_SWITCH=m
+ CONFIG_R8169=y
+ CONFIG_SH_ETH=y
+ CONFIG_SMSC911X=y
+@@ -287,6 +289,7 @@ CONFIG_TI_CPSW=y
+ CONFIG_TI_CPSW_SWITCHDEV=y
+ CONFIG_TI_CPTS=y
+ CONFIG_XILINX_EMACLITE=y
++CONFIG_SFP=m
+ CONFIG_BROADCOM_PHY=y
+ CONFIG_ICPLUS_PHY=y
+ CONFIG_MARVELL_PHY=y
+@@ -294,6 +297,7 @@ CONFIG_AT803X_PHY=y
+ CONFIG_ROCKCHIP_PHY=y
+ CONFIG_DP83867_PHY=y
+ CONFIG_USB_BRCMSTB=m
++CONFIG_MDIO_MSCC_MIIM=m
+ CONFIG_USB_PEGASUS=y
+ CONFIG_USB_RTL8152=m
+ CONFIG_USB_LAN78XX=m
+@@ -430,6 +434,7 @@ CONFIG_I2C_CROS_EC_TUNNEL=m
+ CONFIG_I2C_SLAVE_EEPROM=y
+ CONFIG_SPI=y
+ CONFIG_SPI_ATMEL=m
++CONFIG_SPI_ATMEL_QUADSPI=m
+ CONFIG_SPI_BCM2835=y
+ CONFIG_SPI_BCM2835AUX=y
+ CONFIG_SPI_CADENCE=y
+@@ -459,6 +464,8 @@ CONFIG_SPMI=y
+ CONFIG_PTP_1588_CLOCK=y
+ CONFIG_PINCTRL_AS3722=y
+ CONFIG_PINCTRL_STMFX=y
++CONFIG_PINCTRL_MICROCHIP_SGPIO=y
++CONFIG_PINCTRL_OCELOT=y
+ CONFIG_PINCTRL_PALMAS=y
+ CONFIG_PINCTRL_OWL=y
+ CONFIG_PINCTRL_S500=y
+@@ -517,6 +524,7 @@ CONFIG_CHARGER_TPS65090=y
+ CONFIG_SENSORS_ARM_SCMI=y
+ CONFIG_SENSORS_ASPEED=m
+ CONFIG_SENSORS_IIO_HWMON=y
++CONFIG_SENSORS_LAN966X=m
+ CONFIG_SENSORS_LM90=y
+ CONFIG_SENSORS_LM95245=y
+ CONFIG_SENSORS_NTC_THERMISTOR=m
+@@ -1018,6 +1026,7 @@ CONFIG_CROS_EC_SPI=m
+ CONFIG_COMMON_CLK_MAX77686=y
+ CONFIG_COMMON_CLK_RK808=m
+ CONFIG_COMMON_CLK_SCMI=y
++CONFIG_COMMON_CLK_LAN966X=y
+ CONFIG_COMMON_CLK_S2MPS11=m
+ CONFIG_CLK_RASPBERRYPI=y
+ CONFIG_COMMON_CLK_QCOM=y
+@@ -1145,6 +1154,7 @@ CONFIG_PWM_SUN4I=y
+ CONFIG_PWM_TEGRA=y
+ CONFIG_PWM_VT8500=y
+ CONFIG_KEYSTONE_IRQ=y
++CONFIG_RESET_MCHP_SPARX5=y
+ CONFIG_PHY_SUN4I_USB=y
+ CONFIG_PHY_SUN9I_USB=y
+ CONFIG_PHY_HIX5HD2_SATA=y
+@@ -1152,6 +1162,7 @@ CONFIG_PHY_BERLIN_SATA=y
+ CONFIG_PHY_BERLIN_USB=y
+ CONFIG_PHY_BRCM_USB=m
+ CONFIG_PHY_MMP3_USB=m
++CONFIG_PHY_LAN966X_SERDES=m
+ CONFIG_PHY_CPCAP_USB=m
+ CONFIG_PHY_QCOM_APQ8064_SATA=m
+ CONFIG_PHY_QCOM_USB_HS=y
+-- 
+2.30.2
+

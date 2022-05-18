@@ -2,69 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105EE52C1BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E417552C1EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241195AbiERRva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S241165AbiERRvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241165AbiERRv1 (ORCPT
+        with ESMTP id S241248AbiERRvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:51:27 -0400
+        Wed, 18 May 2022 13:51:36 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A112A34B87
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:51:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DC3036E3D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:51:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652896282;
+        s=mimecast20190719; t=1652896292;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uJ+xSRnSFvEGswaWNolRShdcOC68wGWylvI087e+KjY=;
-        b=JxWePoxMQQdLIZCAlzuX3XJA+V59E1GBtBurv0ojyygs69Lk+yUf7V7WoyWO1QAdrgsC90
-        7iePVwwnhH/I+9unPf0miIpF92Lzdik446ZlvyaqsL9UicJf5tw/M3IYKhmpSpMhCPDKAN
-        oG3OrQCBexCHY/W+YS4qaHGWL1G0uCY=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Nk8FG1zVlK+b3cf8Z9HOHSMj2oGGXMKoRhmwTtaFzXg=;
+        b=awERrsvg2MQ7E8oIgWuNDW/kZKqWrIBF6PrRGZVzV4+10W+nH3cYSaVRb67yYpJolUiWak
+        vW7MxRUGmu/ItWoQynaVBrXZzy1AwS2Gs/DojJIMpMpgPZft1ReCia6f+K9iqXTQ88Kboh
+        OJNjH8eBuz2GZ+xGRmQIP/95NzGXjXM=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659-NTzRWrkRNMq9icOsRnM6Ew-1; Wed, 18 May 2022 13:51:21 -0400
-X-MC-Unique: NTzRWrkRNMq9icOsRnM6Ew-1
-Received: by mail-io1-f71.google.com with SMTP id m205-20020a6b3fd6000000b006586ca958d2so655541ioa.22
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:51:21 -0700 (PDT)
+ us-mta-477-y3otTXqAOsa-YtugL3UC7g-1; Wed, 18 May 2022 13:51:31 -0400
+X-MC-Unique: y3otTXqAOsa-YtugL3UC7g-1
+Received: by mail-io1-f69.google.com with SMTP id i66-20020a6bb845000000b00657bac76fb4so673129iof.15
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:51:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:organization:mime-version:content-transfer-encoding;
-        bh=uJ+xSRnSFvEGswaWNolRShdcOC68wGWylvI087e+KjY=;
-        b=Ftzdu5Dkxbd6QnhaFfTzpbm1zEJaoa5ASFhsuyfkjSY2svCJRHUja1vLAzjr+cbkSg
-         hUYc14SUYmtDtWhour8z8QajxL/C3FsvIGLzO0XeZDzhHJArSHCha+T6MaAfdLIuuxQG
-         gaOyQpsQZQjsSQcG6CXMRGF6HYUSiKgK0SuMLVofEWBV40dnhP88INGqZC77S2n+2xST
-         Lf3DCfR1dmgijR3VrFcBcjtP/20GuhCTi/QwuwozRSkYt2+7epVunUUMILdi5uxALhNY
-         9AALqPghZBsXp92fhrzeLKSJJoAmvX3/DLgXNeSNXoitr6kJZSg4kntxH+qnHF64Vigg
-         1seQ==
-X-Gm-Message-State: AOAM531f5//8ugwsqPpW+ollsqEGQZtdFiO8EJxxs2Iegpap/0MWV8sp
-        89C6bK9ZTnfiJVG1bID79eovBFAXYVeXWTZNT2CgsykrZFcrDCx2Etghh6aW5mZYVrSZaLp/BO3
-        Dw7LXrrnoCl2sDjPnDP19JwYr
-X-Received: by 2002:a05:6638:14d3:b0:32b:66f8:75a7 with SMTP id l19-20020a05663814d300b0032b66f875a7mr404981jak.114.1652896281092;
-        Wed, 18 May 2022 10:51:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyb4BOk5OcdiFkqhrazR4KqwiZOKrgrLN0MLNaJZAn1o52qCQjbcEGjldKQvBXAMqZP6cTqlQ==
-X-Received: by 2002:a05:6638:14d3:b0:32b:66f8:75a7 with SMTP id l19-20020a05663814d300b0032b66f875a7mr404968jak.114.1652896280897;
-        Wed, 18 May 2022 10:51:20 -0700 (PDT)
+        bh=Nk8FG1zVlK+b3cf8Z9HOHSMj2oGGXMKoRhmwTtaFzXg=;
+        b=qk7uod/OabqVGZFRM5tsF12nv17Tvm87wshNa7lal27fb1hiC81KcWSBJIPZDwS2Xw
+         b3SUUKqdpe+IO0Kt5TYdlcrTcfZIUJOnPiN+NZmo0G9M+/lx6zMRxLApuGgG7wDLlhx1
+         8WW3ZeJJpMe21dV7JdLBG0M1QEyHHgYwI2EEm6i0lBFiktklfVV2q3kJEk9kdIVBmF3K
+         vBmzm2i+iiNNhZOFVfTwRK+RDQPiaLHqZbrlMFcXFNkXEXHPAwomd1bDcgkt3X/oIUrb
+         gxDPRu/ADx7XoUctiWKJ4M8V8zS2KlXwZEAHIn9ia2LOX8Qr+63BTkKDpiaUcUTA7fG8
+         nScg==
+X-Gm-Message-State: AOAM530WyLx8hr48dcr6D30TzJShO7PnzL8BMZG25zCHoj/IjvfYsdfA
+        0m8CFKylQzMAl5T8+Rk2jdIKLuZK6pyemt9KHP12sBSx7iHa+xY6vYQ1bK38p9k/OkpJv3p7Zpa
+        74XDS1pZcERdZEtVyxq9zd2vF
+X-Received: by 2002:a05:6e02:170b:b0:2cf:970f:6050 with SMTP id u11-20020a056e02170b00b002cf970f6050mr502307ill.5.1652896290456;
+        Wed, 18 May 2022 10:51:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyvGIXeh5ZKDwW8XXL/TqH2zn8XMIgmzLTRYqD89L8R+HvJolPMaoY0IBC9xwKmkIM5aMFVTw==
+X-Received: by 2002:a05:6e02:170b:b0:2cf:970f:6050 with SMTP id u11-20020a056e02170b00b002cf970f6050mr502296ill.5.1652896290223;
+        Wed, 18 May 2022 10:51:30 -0700 (PDT)
 Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id o4-20020a02b804000000b0032e529ace22sm21448jam.174.2022.05.18.10.51.20
+        by smtp.gmail.com with ESMTPSA id d15-20020a02a48f000000b0032b3a7817bdsm31618jam.129.2022.05.18.10.51.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 10:51:20 -0700 (PDT)
-Date:   Wed, 18 May 2022 11:51:19 -0600
+        Wed, 18 May 2022 10:51:29 -0700 (PDT)
+Date:   Wed, 18 May 2022 11:51:29 -0600
 From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Thomas Huth <thuth@redhat.com>
-Cc:     kvm@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] include/uapi/linux/vfio.h: Fix trivial typo - _IORW
- should be _IOWR instead
-Message-ID: <20220518115119.2e618c39.alex.williamson@redhat.com>
-In-Reply-To: <20220516101202.88373-1-thuth@redhat.com>
-References: <20220516101202.88373-1-thuth@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v5 0/4] vfio/pci: power management changes
+Message-ID: <20220518115129.72beddcd.alex.williamson@redhat.com>
+In-Reply-To: <20220518111612.16985-1-abhsahu@nvidia.com>
+References: <20220518111612.16985-1-abhsahu@nvidia.com>
 Organization: Red Hat
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -79,40 +86,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 16 May 2022 12:12:02 +0200
-Thomas Huth <thuth@redhat.com> wrote:
+On Wed, 18 May 2022 16:46:08 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
-> There is no macro called _IORW, so use _IOWR in the comment instead.
+> Currently, there is very limited power management support available
+> in the upstream vfio-pci driver. If there is no user of vfio-pci device,
+> then it will be moved into D3Hot state. Similarly, if we enable the
+> runtime power management for vfio-pci device in the guest OS, then the
+> device is being runtime suspended (for linux guest OS) and the PCI
+> device will be put into D3hot state (in function
+> vfio_pm_config_write()). If the D3cold state can be used instead of
+> D3hot, then it will help in saving maximum power. The D3cold state can't
+> be possible with native PCI PM. It requires interaction with platform
+> firmware which is system-specific. To go into low power states
+> (including D3cold), the runtime PM framework can be used which
+> internally interacts with PCI and platform firmware and puts the device
+> into the lowest possible D-States.
 > 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  include/uapi/linux/vfio.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> This patch series registers the vfio-pci driver with runtime
+> PM framework and uses the same for moving the physical PCI
+> device to go into the low power state for unused idle devices.
+> There will be separate patch series that will add the support
+> for using runtime PM framework for used idle devices.
 > 
-> diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-> index fea86061b44e..733a1cddde30 100644
-> --- a/include/uapi/linux/vfio.h
-> +++ b/include/uapi/linux/vfio.h
-> @@ -643,7 +643,7 @@ enum {
->  };
->  
->  /**
-> - * VFIO_DEVICE_GET_PCI_HOT_RESET_INFO - _IORW(VFIO_TYPE, VFIO_BASE + 12,
-> + * VFIO_DEVICE_GET_PCI_HOT_RESET_INFO - _IOWR(VFIO_TYPE, VFIO_BASE + 12,
->   *					      struct vfio_pci_hot_reset_info)
->   *
->   * Return: 0 on success, -errno on failure:
-> @@ -770,7 +770,7 @@ struct vfio_device_ioeventfd {
->  #define VFIO_DEVICE_IOEVENTFD		_IO(VFIO_TYPE, VFIO_BASE + 16)
->  
->  /**
-> - * VFIO_DEVICE_FEATURE - _IORW(VFIO_TYPE, VFIO_BASE + 17,
-> + * VFIO_DEVICE_FEATURE - _IOWR(VFIO_TYPE, VFIO_BASE + 17,
->   *			       struct vfio_device_feature)
->   *
->   * Get, set, or probe feature data of the device.  The feature is selected
+> The current PM support was added with commit 6eb7018705de ("vfio-pci:
+> Move idle devices to D3hot power state") where the following point was
+> mentioned regarding D3cold state.
+> 
+>  "It's tempting to try to use D3cold, but we have no reason to inhibit
+>   hotplug of idle devices and we might get into a loop of having the
+>   device disappear before we have a chance to try to use it."
+> 
+> With the runtime PM, if the user want to prevent going into D3cold then
+> /sys/bus/pci/devices/.../d3cold_allowed can be set to 0 for the
+> devices where the above functionality is required instead of
+> disallowing the D3cold state for all the cases.
+> 
+> The BAR access needs to be disabled if device is in D3hot state.
+> Also, there should not be any config access if device is in D3cold
+> state. For SR-IOV, the PF power state should be higher than VF's power
+> state.
+> 
+> * Changes in v5
+> 
+> - Rebased over https://github.com/awilliam/linux-vfio/tree/next.
+> - Renamed vfio_pci_lock_and_set_power_state() to
+>   vfio_lock_and_set_power_state() and made it static.
+> - Inside vfio_pci_core_sriov_configure(), protected setting of
+>   power state and sriov enablement with 'memory_lock'.
+> - Removed CONFIG_PM macro use since it is not needed with current
+>   code.
 
 Applied to vfio next branch for v5.19.  Thanks!
 
 Alex
+
+> * Changes in v4
+>   (https://lore.kernel.org/lkml/20220517100219.15146-1-abhsahu@nvidia.com)
+> 
+> - Rebased over https://github.com/awilliam/linux-vfio/tree/next.
+> - Split the patch series into 2 parts. This part contains the patches
+>   for using runtime PM for unused idle device.
+> - Used the 'pdev->current_state' for checking if the device in D3 state.
+> - Adds the check in __vfio_pci_memory_enabled() function itself instead
+>   of adding power state check at each caller.
+> - Make vfio_pci_lock_and_set_power_state() global since it is needed
+>   in different files.
+> - Used vfio_pci_lock_and_set_power_state() instead of
+>   vfio_pci_set_power_state() before pci_enable_sriov().
+> - Inside vfio_pci_core_sriov_configure(), handled both the cases
+>   (the device is in low power state with and without user).
+> - Used list_for_each_entry_continue_reverse() in
+>   vfio_pci_dev_set_pm_runtime_get().
+> 
+> * Changes in v3
+>   (https://lore.kernel.org/lkml/20220425092615.10133-1-abhsahu@nvidia.com)
+> 
+> - Rebased patches on v5.18-rc3.
+> - Marked this series as PATCH instead of RFC.
+> - Addressed the review comments given in v2.
+> - Removed the limitation to keep device in D0 state if there is any
+>   access from host side. This is specific to NVIDIA use case and
+>   will be handled separately.
+> - Used the existing DEVICE_FEATURE IOCTL itself instead of adding new
+>   IOCTL for power management.
+> - Removed all custom code related with power management in runtime
+>   suspend/resume callbacks and IOCTL handling. Now, the callbacks
+>   contain code related with INTx handling and few other stuffs and
+>   all the PCI state and platform PM handling will be done by PCI core
+>   functions itself.
+> - Add the support of wake-up in main vfio layer itself since now we have
+>   more vfio/pci based drivers.
+> - Instead of assigning the 'struct dev_pm_ops' in individual parent
+>   driver, now the vfio_pci_core tself assigns the 'struct dev_pm_ops'. 
+> - Added handling of power management around SR-IOV handling.
+> - Moved the setting of drvdata in a separate patch.
+> - Masked INTx before during runtime suspended state.
+> - Changed the order of patches so that Fix related things are at beginning
+>   of this patch series.
+> - Removed storing the power state locally and used one new boolean to
+>   track the d3 (D3cold and D3hot) power state 
+> - Removed check for IO access in D3 power state.
+> - Used another helper function vfio_lock_and_set_power_state() instead
+>   of touching vfio_pci_set_power_state().
+> - Considered the fixes made in
+>   https://lore.kernel.org/lkml/20220217122107.22434-1-abhsahu@nvidia.com
+>   and updated the patches accordingly.
+> 
+> * Changes in v2
+>   (https://lore.kernel.org/lkml/20220124181726.19174-1-abhsahu@nvidia.com)
+> 
+> - Rebased patches on v5.17-rc1.
+> - Included the patch to handle BAR access in D3cold.
+> - Included the patch to fix memory leak.
+> - Made a separate IOCTL that can be used to change the power state from
+>   D3hot to D3cold and D3cold to D0.
+> - Addressed the review comments given in v1.
+> 
+> * v1
+>   https://lore.kernel.org/lkml/20211115133640.2231-1-abhsahu@nvidia.com/
+> 
+> Abhishek Sahu (4):
+>   vfio/pci: Invalidate mmaps and block the access in D3hot power state
+>   vfio/pci: Change the PF power state to D0 before enabling VFs
+>   vfio/pci: Virtualize PME related registers bits and initialize to zero
+>   vfio/pci: Move the unused device into low power state with runtime PM
+> 
+>  drivers/vfio/pci/vfio_pci_config.c |  56 ++++++++-
+>  drivers/vfio/pci/vfio_pci_core.c   | 178 ++++++++++++++++++++---------
+>  2 files changed, 178 insertions(+), 56 deletions(-)
+> 
 

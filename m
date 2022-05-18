@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F7452C4A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D013352C4C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242822AbiERUwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 16:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        id S242844AbiERUwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 16:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242688AbiERUv6 (ORCPT
+        with ESMTP id S242824AbiERUwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 16:51:58 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1B76AA55
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:51:57 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-f18e6ff0f6so4266124fac.11
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:51:57 -0700 (PDT)
+        Wed, 18 May 2022 16:52:30 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAA6703D7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:52:29 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id ds11so3231935pjb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:52:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=EkJ7c6TDFhhKRa+OTrT6l5LgL8a5FN7wmT5Y/mVgOBY=;
-        b=Mz/2VNmF/Qm8XBKO6jjH1wqNziZBqj3x/FvlMJSGBhS8qVox7pMhMTd1dQTEc7+Ko4
-         UC0w0+n72k87GmLubXCiTT29p5zwoYExdtWWSM1UBnvP/F7TG1YnWvF3Nejy5yHG7Yw2
-         LA4Aqe/62+afm1veBCNg10hLbltcuXqnLE3Dg=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JdZIuTph6UyHc31PT+qjqiT2mFpJXzwSW3A0E2kkk14=;
+        b=l6mXHPZ8kLkUr01yIVK7kTj9ucJerjGFd/bqcupBpvRXBwxOdeBzE5zT6RVMwd8u4E
+         sC0/NglDQlS/lhU3q42plTVqpLXzUj3C+VZnvIfnkZHhA0WHHhVbnsO+8k/o1L0UHw3C
+         kZNzqTvntvbqL3/Kndl6KwJ37HothSnV3Yjt8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=EkJ7c6TDFhhKRa+OTrT6l5LgL8a5FN7wmT5Y/mVgOBY=;
-        b=H7vZm4rVEL6JlHzeKhFJjfGNoIaKADGoVcgDgNuMIX6zo7eVuRCD9rn6XH4PhH0fsy
-         kdDdVsqW7Y5mgEScq1ZLhgUX15FIKvoBuQMvtxQkAPGVroVv8+dGIAdppZ/aoWIPvjAq
-         8s7S5cbCbKyReHRP1z8GtFkBYHeerxAr2lCbC0I/NdMmNEw6YkhtS4dWEfsIf6H976hn
-         t0wJ7AZJ5gwv5FgvvY8lsxZu5W8rGPhHDWqbLIQp7yiy+HNm6y9BKYw/jEFiO9jsQQJ4
-         0LOonOXhvY0Z48d++lnE4vhNoLqYU1Y8ZYNbsUy2nauN7CUenDkLZpIFZJe04LSpbqRP
-         9gjQ==
-X-Gm-Message-State: AOAM530kGv/fgb8z+cEXDjc4oDmMwYezDk0kLgHTpx3+lMhqMGqiwRCT
-        haoJp3lqEG6NrbDwa8q5MZlUlyNfxJWT62TAPdaF4A==
-X-Google-Smtp-Source: ABdhPJzgJw3GN2UAR/UMlvVpHQSaAwYbNIOCn2Obfjno00YjCblW9KW9QVE/gAlCwH22JwjiaD+tCtmZTlvXU0isFu0=
-X-Received: by 2002:a05:6870:240d:b0:f1:b878:e97c with SMTP id
- n13-20020a056870240d00b000f1b878e97cmr739706oap.193.1652907116977; Wed, 18
- May 2022 13:51:56 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 18 May 2022 13:51:55 -0700
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JdZIuTph6UyHc31PT+qjqiT2mFpJXzwSW3A0E2kkk14=;
+        b=kss8crMElztKQmnbud6/9OHcbTYxR9T6Hi9U0LrTYheKeodR/2ps+FRiSEywb9j/7Q
+         RUTzMBpN5CqoRmeH97dhmhhLD41JiRNgaEcfwgDcbA6dNuUrZ4fCrnP43LttYsmuEft3
+         krJFFnsQiP3X0C1SizKpOmGT8UAWfV4Y0/9dkCd6rdzJZGZa1AqhvGhWzqKoxrMovJ8T
+         EdRXR3Lbs+/5YFN20Zsi2u/7NtjzyAos7/ZAEDDAvpM6A2hiGfk12MvpoaApvzRdojxN
+         oPdHuT1DwFnIpVpPtP374gJaSC1jGY5DXxujshSNJf2TpUP5NYzcDqHkHemzf7OpQCrP
+         2QZQ==
+X-Gm-Message-State: AOAM531roq8i00f9BHjb7FdGbQAkPDm316PfMpU+eNuVy/HqPEdfHtn4
+        6ySOD5isQtC23WXHVmmr9ZV3IQ==
+X-Google-Smtp-Source: ABdhPJyfbFurc2t5nNorjX8j4XvMSTJXoOkSFTxMmka5GQS12jpwqvlP573UO+U/alR1uyBkZJnLzQ==
+X-Received: by 2002:a17:902:ab05:b0:15f:3aad:6269 with SMTP id ik5-20020a170902ab0500b0015f3aad6269mr1406840plb.23.1652907148568;
+        Wed, 18 May 2022 13:52:28 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170902684d00b001617caa6018sm2129295pln.25.2022.05.18.13.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 13:52:28 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Christophe de Dinechin <dinechin@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v3 0/2] bitmap: Fix return values to be unsigned
+Date:   Wed, 18 May 2022 13:52:21 -0700
+Message-Id: <20220518205223.2908736-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <1652905444-10130-2-git-send-email-quic_khsieh@quicinc.com>
-References: <1652905444-10130-1-git-send-email-quic_khsieh@quicinc.com> <1652905444-10130-2-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 18 May 2022 13:51:55 -0700
-Message-ID: <CAE-0n533Rf55ypeCY=A4dpxzdviUO3G9NFS41nceds6ZVFt-BQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] phy/qualcomm: add regulator_set_load to edp phy
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dianders@chromium.org, dmitry.baryshkov@linaro.org,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2115; h=from:subject; bh=R70ghsDwLBHQo1RRRo9DWKGhDdbuR9zdciwAOltQcnA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBihVyG48xTNUqEa/a4+0ugW4c/ps2zrLR217f3cGJJ ehgAUCGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYoVchgAKCRCJcvTf3G3AJmzCD/ 43KZtI5qRRC/cvoZhHofnH4as6tIBmLWw+Jdcw3p3oKnD7VyiSNF4lZT1+jFyqB58drt2mk3kc08+2 O+LtUQxAYT5exlzi70GL+KZNC199WiN6x/I/607llY6Zk7laiO9rzw6KYD6iF6fJrQ70KSphFbcQIh TvdCTapMzL7+wd3GSM4Cminbw6ShBcLZnaPk6R25olHHWmjQISr9HOg6pwx1trf6PnW/ckesIGWnBx /z7m4dJZgPAT+fN9A98vtaYEw/ivP2s9nCNSiYExVym6GBVsT5FwwZmMd6PTb1EW2IrLyK5Ft/vVaa 5f/bKJnDErY9P1xchVW8OzPrhbKVCAV/9zB8+qqTVdELYdLBoTcP4tQAWKBE4KbrWZfglTdjn8loQg i7EUTfJAWpJcGsMGxuDH9b/sZcH0vqOhe6QDxccJhqidD5dz+o6vroFdDkzKSYveba+nNZRhLthhQh jTrRScsC7poPlor+D9iJHtN6PJsukP394n/19Kvm2aGQYgDFHD3P5NuWLSJiy8RGkHJSFeCfDb1XTk pYDoO03S1k/GCtDjehodu5Z1Rb9AF7A64XHS5ZnONB/RzY6inLGaIyAmelZTnwaYwwi5E2DBq7IkiG UBq8qw5FYsK4CLqCzVAVBvENHmrztFaAuZ3Qs6zjIYlk2g2BukRBhCdxtsHA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,38 +74,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Should subject be "phy: qcom:" prefix?
+Hi,
 
-Quoting Kuogee Hsieh (2022-05-18 13:24:02)
-> This patch add regulator_set_load() before enable regulator at
-> eDP phy driver.
->
-> Changes in v3:
-> -- no regulator_set_load before disable regulator
-> -- no supply name string change at probe
-> -- split into two patches
+v1: https://lore.kernel.org/lkml/20220517035411.31144-1-keescook@chromium.org
+v2: https://lore.kernel.org/lkml/20220517212234.868181-1-keescook@chromium.org
+v3:
+ - Update missed int variable to unsigned int
+ - Update tools/ bitmaps code to match
+ - Adjust whitespace a bit
 
-These don't go here because this isn't a drm patch.
+Rationale repeated from the last patch:
 
->
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-edp.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/phy/qualcomm/phy-qcom-edp.c b/drivers/phy/qualcomm/phy-qcom-edp.c
-> index cacd32f..00b6726 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-edp.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-edp.c
-> @@ -635,6 +641,8 @@ static int qcom_edp_phy_probe(struct platform_device *pdev)
->
->         edp->supplies[0].supply = "vdda-phy";
->         edp->supplies[1].supply = "vdda-pll";
-> +       edp->enable_load[0] = 21800;    /* 1.2 V */
-> +       edp->enable_load[1] = 36000;    /* 1.2 V */
+Both nodemask and bitmap routines had mixed return values that provided
+potentially signed results that could never happen. This was leading to
+the compiler getting confusing about the range of possible return values
+(it was thinking things could be negative where they could not be). Fix
+all the nodemask and bitmap routines that should be returning unsigned
+(or bool) values. Silences GCC 12 warnings:
 
-What does the comment mean? This is the load for 1.2V supply? Can we
-have that sort of comment instead of "1.2 V"?
+ mm/swapfile.c: In function ‘setup_swap_info’:
+ mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds of ‘struct plist_node[]’ [-Werror=array-bounds]
+  2291 |                                 p->avail_lists[i].prio = 1;
+       |                                 ~~~~~~~~~~~~~~^~~
+ In file included from mm/swapfile.c:16:
+ ./include/linux/swap.h:292:27: note: while referencing ‘avail_lists’
+   292 |         struct plist_node avail_lists[]; /*
+       |                           ^~~~~~~~~~~
 
->         ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(edp->supplies), edp->supplies);
->         if (ret)
+
+I note that Alexey and Rasmus have touched on this area in the past,
+fixing up node ids to be unsigned:
+
+ce0725f78a56 ("numa: make "nr_online_nodes" unsigned int")
+b9726c26dc21 ("numa: make "nr_node_ids" unsigned int")
+33c4fa8c6763 ("linux/nodemask.h: update bitmap wrappers to take unsigned int")
+
+-Kees
+
+
+Kees Cook (2):
+  bitmap: Fix return values to be unsigned
+  nodemask: Fix return values to be unsigned
+
+ include/linux/bitmap.h       | 25 ++++++++++++------------
+ include/linux/nodemask.h     | 38 ++++++++++++++++++------------------
+ lib/bitmap.c                 | 30 ++++++++++++++--------------
+ lib/nodemask.c               |  4 ++--
+ tools/include/linux/bitmap.h | 17 ++++++++--------
+ tools/lib/bitmap.c           | 20 +++++++++----------
+ 6 files changed, 68 insertions(+), 66 deletions(-)
+
+-- 
+2.32.0
+

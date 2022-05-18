@@ -2,84 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F6952C656
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6273852C65B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiERWff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 18:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
+        id S230042AbiERWgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 18:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiERWfd (ORCPT
+        with ESMTP id S229603AbiERWge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 18:35:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009341FD876
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:35:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 18 May 2022 18:36:34 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBC64ECCB;
+        Wed, 18 May 2022 15:36:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89DAC6167D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:35:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6802C385A5;
-        Wed, 18 May 2022 22:35:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652913331;
-        bh=JsNUGeYCd9jl73VaIgc6JuqYsiBSisQYXVe0o/Ol3wg=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=KRV9qLcS8wCMGeqf4/VCUWDoXMQvZqsQNGFoU8yhXC7DAs7tO5jVMRSwU3X24XB3m
-         viK843eqIrxzcULosTdfEHqYfFuPDc8SnE6eP8q0A/STIAuq5l9VpWLKpAPrUDzTbX
-         jH/QIdoL31KWjFbEfmJp5TUUyz5MoHOx06bJEIUoRbBLs+9RgQAnxw/ylkL2qbTa7k
-         umDIundqGtIhM+IoO6gFT7CdZIkLqaarONAMVYdrt9R/tHAOJiv+j3Nb91XjTZtNSU
-         TipO4kOkEyBi4+8ExPY2+A+20jbb39HUbezHHDazLgw4JVz0GQFeieoGmJTJ6LVwxc
-         pyXk4SvcilYzw==
-Date:   Wed, 18 May 2022 15:35:30 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [PATCH] f2fs: decompress data without workqueue
-Message-ID: <YoV0sm9W+2A644PZ@google.com>
-References: <20220518175547.3284875-1-jaegeuk@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L3SWr2vmXz4xVM;
+        Thu, 19 May 2022 08:36:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652913387;
+        bh=caT6jEYUNwfBW50T3+33ARca6ETe9j5GqS/aXUUr1AE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qQMSfNC30Tq3ei9+dT1sAmYh0aHvuUlcvO5IOuH75E5U94d09oiaMeYu0cybtv2m0
+         T1u75Dg0z9eCpdnzNEuV5NKXDTEigZeWEPVw2IQdUJV/T/Nkf1FQz0N/2KKBoauvPm
+         GVfXjzaAHbJCEEj+D49SscX5u3nt0VpOL/qTgJJbP+YWT0VVjCPuYA1zfJlDbvB7JR
+         ul4kzXIeE9fxBkkqQRnhflNMDiRjcKyB0Aw7ewo95189vaMpuALonAg2fZtXvjxpQr
+         Dp10x8H7QhF6xe0/OqtmCxqFla5nmN1IWbh80KI6xK50rXYiZsSQCBLocYfXA5hZh9
+         u05/efLpuXAcQ==
+Date:   Thu, 19 May 2022 08:36:21 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH V11 00/22] arch: Add basic LoongArch support
+Message-ID: <20220519083621.4f81cac9@canb.auug.org.au>
+In-Reply-To: <CAK8P3a15oQNZvST56v0AvtC1oZP4iDHy-QMLwZuDAg30gq-+4A@mail.gmail.com>
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
+        <CAK8P3a15oQNZvST56v0AvtC1oZP4iDHy-QMLwZuDAg30gq-+4A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518175547.3284875-1-jaegeuk@kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/+ysQkiTEflTmaoBUlaX9AyU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please hold any test, since this patch has a bug.
+--Sig_/+ysQkiTEflTmaoBUlaX9AyU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 05/18, Jaegeuk Kim wrote:
-> Let's decompress data under the same context to avoid workqueue delay.
-> 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> ---
->  fs/f2fs/data.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> index 54a7a8ad994d..37aa7ac5d463 100644
-> --- a/fs/f2fs/data.c
-> +++ b/fs/f2fs/data.c
-> @@ -285,10 +285,12 @@ static void f2fs_read_end_io(struct bio *bio)
->  		return;
->  	}
->  
-> -	if (ctx && (ctx->enabled_steps & (STEP_DECRYPT | STEP_DECOMPRESS))) {
-> +	if (ctx && (ctx->enabled_steps & STEP_DECRYPT)) {
->  		INIT_WORK(&ctx->work, f2fs_post_read_work);
->  		queue_work(ctx->sbi->post_read_wq, &ctx->work);
->  	} else {
-> +		if (ctx && (ctx->enabled_steps & STEP_DECOMPRESS))
-> +			f2fs_handle_step_decompress(ctx);
->  		f2fs_verify_and_finish_bio(bio);
->  	}
->  }
-> -- 
-> 2.36.1.124.g0e6072fb45-goog
+Hi Arnd,
+
+On Wed, 18 May 2022 14:42:07 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Wed, May 18, 2022 at 10:25 AM Huacai Chen <chenhuacai@loongson.cn> wro=
+te:
+> >
+> > LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> > LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> > version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> > boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> > are already added in the next revision of ACPI Specification (current
+> > revision is 6.4).
+> >
+> > This patchset is adding basic LoongArch support in mainline kernel, we
+> > can see a complete snapshot here:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongs=
+on.git/log/?h=3Dloongarch-next =20
+>=20
+> Stephen, can you add this branch to the linux-next tree?
+
+Added from today.  I have called it "loongarch" and it will be merged
+among the other architecture trees after the asm-generic tree.
+Currently Huacai Chen is the only contact listed.
+
+I note that there is no new entry in MAINTAINERS in this tree.
+
+> I see there are still comments coming in, but at some point this has
+> to just be considered good enough that any further changes can be address=
+ed
+> with patches on top rather than rebasing.
+
+That should be fine.
+
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+ysQkiTEflTmaoBUlaX9AyU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKFdOYACgkQAVBC80lX
+0Gxj6AgAih0bFdl2KpBa8AsehwFxTb/5dJyOjHgyZfF8LC5pOt1Qp7KNd18c+iXk
+hB8/hl0SHl3TRUb1k2YKxjYIb1pG0KDkZcPysDBNKYleOSMbhyvpHSTLAJQ2zZHb
+m0x922HSgva7cX/xrEqL3XZCVzOYBsfXzVfn/Mm6+5PT+SaniI7sv5wMuVS1vs2O
+yjlmyHSz9/RENRFmbjJoHvILB2WDgR4MGry4X+CrpsAe5kWB17JpyNnUid01HYib
+ViKwomFBgAEL3T+GC/UTXgtWJEAJWlRlewneSoGh51aMGdQFYTM82++CBjVi5WSP
+kD0cIIMLHRvJMzL2GHWHijQnuRcx2w==
+=w4jJ
+-----END PGP SIGNATURE-----
+
+--Sig_/+ysQkiTEflTmaoBUlaX9AyU--

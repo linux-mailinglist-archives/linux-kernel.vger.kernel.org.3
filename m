@@ -2,156 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C679C52C010
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F9152C097
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240542AbiERQy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S240663AbiERQ4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240464AbiERQyZ (ORCPT
+        with ESMTP id S240586AbiERQyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:54:25 -0400
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2DC201339;
-        Wed, 18 May 2022 09:54:24 -0700 (PDT)
-Received: by mail-oo1-f45.google.com with SMTP id q73-20020a4a334c000000b0035eb110dd0dso516595ooq.10;
-        Wed, 18 May 2022 09:54:24 -0700 (PDT)
+        Wed, 18 May 2022 12:54:40 -0400
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF479201394;
+        Wed, 18 May 2022 09:54:36 -0700 (PDT)
+Received: by mail-ua1-x92f.google.com with SMTP id 90so1053905uam.8;
+        Wed, 18 May 2022 09:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=olguYhICHMpk2ctYiMxEpCHQEQIGnr/VO6tDtpsZhI4=;
+        b=evhgvtGZikjzHZh4O3xNSDiWD6D3AEmA1+RNqZ2K5y0E2agNcv001H7iUC3Zhd8+dF
+         L4xGeCtgjofqz9ru806hEF2EtlPJMeUmYAaDejjxeSZJCUafH4+sg7a6axt5Xc1aSkVN
+         0AYRnM1mUmxpN1t3BPNGjm7fZA7kvI6pJ0CasVvL/VmhZJUxi602KGVb96aBlAeKSrE2
+         nPCz2PvfbwOnEQG9Lem5EsX2Wa7e/ugBA29UDPJV+7aqd1ZALnWg50DJJvQ/83dareaC
+         CBLSBAaYaNewA3NqSn+pbBd2vkd1MCvptA67T+4OeyQBXNdrXdhV9QcK8gpbaCD1luUP
+         riXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LtkWw6fSMloB5/PDUQGj9Fdz71VUuBNVm04fOD0zRWU=;
-        b=xe+cpXTDIB/gVIQhZlok/rYgQg8PjyTp/BewG14AMf1EoVX+t3dL2fBC9MfNeKqYm/
-         lZItObf+r686lf4JSbKQhTtlY+Y4Cc2YbU2VEI2wiy2OB5Luf4GzpKsE2kziUx1mjSU3
-         5bvBDe/OXTQLAiKlHn9nQ+oNZvgFFoMVSK3ASPq/JUETfue6NsFBsjz5mkEy4OzYpkAg
-         T21JK+sttSTAVxHSmyBl6Luc8upg6IQwOUbqk5W+/QA8yEnpSdroYeNH4TK9xXgK9+bH
-         5h8+kCFl8WYzqJ6NrtsKotnMYmmXQO24Wd281UIXG2imS78b5IfIaJSwZihPjGjbk6XP
-         J5uA==
-X-Gm-Message-State: AOAM533WFvZpcci9S4nrEvwEMpIwY2OKFuS5HP7X5MnCLB30newKYJBh
-        WOWA2V2lDCWkcfDmc07aig==
-X-Google-Smtp-Source: ABdhPJywLKeAaJqcZXkFmnZxmhvPb8KJmZF/4AP/8kXOBXaQ9XEpghDsect82HnXuwtczswZegMMkQ==
-X-Received: by 2002:a4a:a50d:0:b0:35e:d7d1:c7dc with SMTP id v13-20020a4aa50d000000b0035ed7d1c7dcmr252191ook.27.1652892863324;
-        Wed, 18 May 2022 09:54:23 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o82-20020aca4155000000b00326e2284976sm950613oia.15.2022.05.18.09.54.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 09:54:22 -0700 (PDT)
-Received: (nullmailer pid 3489723 invoked by uid 1000);
-        Wed, 18 May 2022 16:54:21 -0000
-Date:   Wed, 18 May 2022 11:54:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Peter Maydell <peter.maydell@linaro.org>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ross Burton <ross.burton@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCH] of/fdt: Ignore disabled memory nodes
-Message-ID: <20220518165421.GF3302100-robh@kernel.org>
-References: <20220517101410.3493781-1-andre.przywara@arm.com>
- <20220517153444.GA1057027-robh@kernel.org>
- <CAFEAcA8sE8Rj0GmF71ox4BdDr0UcaS4QwiLUVUUFH5oj+hDhfA@mail.gmail.com>
- <CAL_JsqLRvEn2E7cpTzQJRCJ=aeLjUtKhDimWat=nPtm3QP+cfA@mail.gmail.com>
- <CAFEAcA_DRoJmnFdyEEcSvCxtPYignZFqQFnHyWkcpyijCBSrCg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=olguYhICHMpk2ctYiMxEpCHQEQIGnr/VO6tDtpsZhI4=;
+        b=Ed1fUtRpaIqhP0+KvUeYYMbu7hCxOtn4a4jFSAY+eJfnu0f7d0UcLriTtheUXWWfCn
+         k+hZIseC5TkE/JdEF5YpElkZoSIxCE8UzwLipJP6Fkt8qcECu3xEWov4rXSSCLK/Is9S
+         UNew9iEAZmGlNLHFqdhZQ1JGqP+rLTyoHKB2ogSlmXbCPWOlBEi4/aq0+4DkDBlbb8A0
+         bHrTDJ75DrgtZBFnT8CGfDcLgoddi/A9ydqf7cYsHqMKtKyRwjBpFs1iAJ0DcpoB8ir8
+         FUaTFobc2it+EiGFYq2BF3OENL2gPTKRW2Q0SmpWo908dWGjSonAaXMEJc7tWJW77M7n
+         uo4A==
+X-Gm-Message-State: AOAM532xxouWGlEdrCxGWmFtwjiFxh7tBU0AT3z9PYf0u2+ZXzp3MutY
+        XJB8LOUU5ubX6tEmX7WqywKzlF9/d0pQWeaI1EE=
+X-Google-Smtp-Source: ABdhPJxpr0Ba9x+SyqQxWYIRxlCA23EeQik362azVIbx1zBWRraLxOhiRXdlHoXPu29Z75Xqghi+NXJQGEDikvRW/88=
+X-Received: by 2002:ab0:72d5:0:b0:368:aad4:5ef8 with SMTP id
+ g21-20020ab072d5000000b00368aad45ef8mr373535uap.27.1652892876048; Wed, 18 May
+ 2022 09:54:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFEAcA_DRoJmnFdyEEcSvCxtPYignZFqQFnHyWkcpyijCBSrCg@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
+ <20220518092619.1269111-15-chenhuacai@loongson.cn> <87ilq294mg.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87ilq294mg.fsf@email.froward.int.ebiederm.org>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 19 May 2022 00:54:24 +0800
+Message-ID: <CAAhV-H5Aov1NVsbNWZa9psPhBiNssYWWEzNOyLooeXGKsYxN+w@mail.gmail.com>
+Subject: Re: [PATCH V11 14/22] LoongArch: Add signal handling support
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 08:19:47PM +0100, Peter Maydell wrote:
-> On Tue, 17 May 2022 at 18:48, Rob Herring <robh@kernel.org> wrote:
+Hi, Eric,
+
+On Thu, May 19, 2022 at 12:40 AM Eric W. Biederman
+<ebiederm@xmission.com> wrote:
+>
+> Huacai Chen <chenhuacai@loongson.cn> writes:
+>
+> > Add ucontext/sigcontext definition and signal handling support for
+> > LoongArch.
 > >
-> > On Tue, May 17, 2022 at 11:54 AM Peter Maydell <peter.maydell@linaro.org> wrote:
-> > >
-> > > On Tue, 17 May 2022 at 16:34, Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > On Tue, May 17, 2022 at 11:14:10AM +0100, Andre Przywara wrote:
-> > > > > When we boot a machine using a devicetree, the generic DT code goes
-> > > > > through all nodes with a 'device_type = "memory"' property, and collects
-> > > > > all memory banks mentioned there. However it does not check for the
-> > > > > status property, so any nodes which are explicitly "disabled" will still
-> > > > > be added as a memblock.
-> > > > > This ends up badly for QEMU, when booting with secure firmware on
-> > > > > arm/arm64 machines, because QEMU adds a node describing secure-only
-> > > > > memory:
-> > > > > ===================
-> > > > >       secram@e000000 {
-> > > >
-> > > > BTW, 'memory' is the correct node name.
-> > >
-> > > We already have a 'memory' node, which is for the NS
-> > > memory. This one's for the secure-only RAM block,
-> > > which is why I gave it a name that hopefully helps in
-> > > spotting that when a human is reading the DT.
+> > Cc: Eric Biederman <ebiederm@xmission.com>
+> > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  arch/loongarch/include/uapi/asm/sigcontext.h |  44 ++
+> >  arch/loongarch/include/uapi/asm/signal.h     |  13 +
+> >  arch/loongarch/include/uapi/asm/ucontext.h   |  35 ++
+> >  arch/loongarch/kernel/signal.c               | 566 +++++++++++++++++++
+> >  4 files changed, 658 insertions(+)
+> >  create mode 100644 arch/loongarch/include/uapi/asm/sigcontext.h
+> >  create mode 100644 arch/loongarch/include/uapi/asm/signal.h
+> >  create mode 100644 arch/loongarch/include/uapi/asm/ucontext.h
+> >  create mode 100644 arch/loongarch/kernel/signal.c
 > >
-> > You can do: secram: memory@e000000 {
-> >
-> > Where 'secram' is only a source level label until overlays come into
-> > the picture.
-> 
-> We generate the DTB with libfdt, so source-only information
-> isn't something we can put in, I think. (The quoted DT fragment
-> in this patch's commit message is the result of decompiling
-> the runtime generated DT binary blob with dtc.)
+> > diff --git a/arch/loongarch/include/uapi/asm/sigcontext.h b/arch/loongarch/include/uapi/asm/sigcontext.h
+> > new file mode 100644
+> > index 000000000000..be3d3c6ac83e
+> > --- /dev/null
+> > +++ b/arch/loongarch/include/uapi/asm/sigcontext.h
+> > @@ -0,0 +1,44 @@
+> > +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+> > +/*
+> > + * Author: Hanlu Li <lihanlu@loongson.cn>
+> > + *         Huacai Chen <chenhuacai@loongson.cn>
+> > + *
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#ifndef _UAPI_ASM_SIGCONTEXT_H
+> > +#define _UAPI_ASM_SIGCONTEXT_H
+> > +
+> > +#include <linux/types.h>
+> > +#include <linux/posix_types.h>
+> > +
+> > +/* FP context was used */
+> > +#define SC_USED_FP           (1 << 0)
+> > +/* Address error was due to memory load */
+> > +#define SC_ADDRERR_RD                (1 << 30)
+> > +/* Address error was due to memory store */
+> > +#define SC_ADDRERR_WR                (1 << 31)
+> > +
+> > +struct sigcontext {
+> > +     __u64   sc_pc;
+> > +     __u64   sc_regs[32];
+> > +     __u32   sc_flags;
+> > +     __u64   sc_extcontext[0] __attribute__((__aligned__(16)));
+> > +};
+> > +
+> > +#define CONTEXT_INFO_ALIGN   16
+> > +struct _ctxinfo {
+> > +     __u32   magic;
+> > +     __u32   size;
+> > +     __u64   padding;        /* padding to 16 bytes */
+> > +};
+>
+> This is probably something I a missing but what is struct _ctxinfo and
+> why is it in a uapi header?
+>
+> I don't see anything else in the uapi implementation using it.
+This is used by get_ctx_through_ctxinfo() in signal.c and I think
+similar function is also needed by userspace.
 
-Given the runtime aspect with overlays, it's conceivable that libfdt 
-could support setting labels some day and then dts output maintaining 
-them.
+Its name is once before called context_info but conflict with another
+software, then I want to use ctx_info but conflict with another kernel
+struct. :(
+>
+> Symbols that start with an underscore "_" are reserved and should not
+> be used in general, and especially not in uapi header files.
+Then, maybe we can use sctx_info here?
 
-We could also consider a standard node name such as 'secure-memory'. 
-It's a whole can of worms though on how secure vs. non-secure memory 
-(and other things) are represented.
-
-> > > I'm not really sure to what extent node names in device trees are
-> > > "this is just an identifying textual label" and to what extent
-> > > they are "this is really ABI and you need to follow the standard",
-> > > though -- nothing in practice seems to care what they are,
-> > > suggesting the "textual label" theory, but some bits of tooling
-> > > complain if you do things like forget the address value or use the
-> > > same address for two different nodes, suggesting the "really ABI"
-> > > theory.
-> >
-> > Node names are supposed to follow the class of device and there's a
-> > list of established names in the spec.
-> >
-> > Sometimes it's ABI and sometimes not. Much of it is just good hygiene.
-> > memory nodes are also special because 'device_type' is used to
-> > identify them, but device_type is generally deprecated for FDT as its
-> > meaning in OpenFirmware doesn't apply (it defines what callable
-> > methods exist). We could use the nodename (without unit address)
-> > instead, but that would fail in some cases as other names have been
-> > used.
-> 
-> This seems kind of odd to me as a design, compared to
-
-Design? I wish. Evolution.
-
-> "have the node have a property that says what it is
-> and let the name of the node just be, well, its name"
-> (especially since 'device_type' and 'compatible' look an
-> awful lot like "this is the property that tells you what this
-> node actually is".)
-> Are we just stuck with what we have for historical reasons ?
-
-Yes. If we were designing this, we'd probably have 'compatible = 
-"memory"'. We're likely just stuck with things how they are. Mostly node 
-names haven't been an ABI and we're just trying to be consistent in 
-naming and use of unit-addresses.
-
-Rob
+Huacai
+>
+> Eric

@@ -2,269 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E93B552B835
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE95C52B842
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbiERKr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50354 "EHLO
+        id S235302AbiERLD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235146AbiERKrx (ORCPT
+        with ESMTP id S235271AbiERLDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:47:53 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D477E90CCC;
-        Wed, 18 May 2022 03:47:51 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IAKZxj013497;
-        Wed, 18 May 2022 10:47:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=a6QBUi0AHQA+C2I98hT+CKa0i+amRKFGVmLjhD5CvTY=;
- b=S46wlk35wfN8YRtmjz8DIYMBPr+TXFlJTxn0TzLAaUV2IHvi1yM5z8QmlyQxP0WJU3ZC
- h/mPBrV7Ws5NpOk0KbWkXyAsSOZeU5HUaYqM6O5+AZT596cesGN2eFa6hc/2sfmYjYjB
- r8vIXhX0sOAK+EggUpfGgYcnhfv84YqPSiSv2nQC9hb1VeKwRGEZJdM1iv7IY4ap/IEn
- UWAH5ZecGDUSSN1+o4HONOGlTInWYdR82QPqnjqsQKSOJyyd1DtqNnuvG4ss15C3kntt
- Wu7eRyWhU6s4/L7ZePtEron+3ytFh0iqY+md5qStAXMIF+3GSCw5DkRscMypgusqHWKV VA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4xybruem-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 10:47:51 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IALWAW019839;
-        Wed, 18 May 2022 10:47:50 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4xybrue5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 10:47:50 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IAlabt017562;
-        Wed, 18 May 2022 10:47:48 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3g2429djxk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 10:47:48 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IAlj3P46793088
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 10:47:45 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47DC8A405B;
-        Wed, 18 May 2022 10:47:45 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 862C7A4054;
-        Wed, 18 May 2022 10:47:44 +0000 (GMT)
-Received: from [9.171.22.150] (unknown [9.171.22.150])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 10:47:44 +0000 (GMT)
-Message-ID: <93c07dce-a64a-fa1a-f70c-9db22ca53f68@linux.ibm.com>
-Date:   Wed, 18 May 2022 12:51:33 +0200
+        Wed, 18 May 2022 07:03:24 -0400
+X-Greylist: delayed 556 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 04:03:19 PDT
+Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8DE50166D7C;
+        Wed, 18 May 2022 04:03:18 -0700 (PDT)
+Received: from localhost.localdomain (unknown [183.157.163.156])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCXfUwv0IRiHWB1AA--.24950S4;
+        Wed, 18 May 2022 18:53:36 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     krzysztof.kozlowski@linaro.org, dan.carpenter@oracle.com,
+        cyeaa@connect.ust.hk, rikard.falkeborn@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v0] nfc: pn533: Fix buggy cleanup order
+Date:   Wed, 18 May 2022 18:53:21 +0800
+Message-Id: <20220518105321.32746-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 3/3] s390x: KVM: resetting the Topology-Change-Report
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
-        nrb@linux.ibm.com
-References: <20220506092403.47406-1-pmorel@linux.ibm.com>
- <20220506092403.47406-4-pmorel@linux.ibm.com>
- <76fd0c11-5b9b-0032-183b-54db650f13b1@redhat.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <76fd0c11-5b9b-0032-183b-54db650f13b1@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gWM6D2RUNeri6TMwnWSmYV-0XgbZd999
-X-Proofpoint-ORIG-GUID: pR25ogm1zAWtbYYs3loDU5iJEGD5d6Nv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_03,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 impostorscore=0 spamscore=0
- phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180059
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cC_KCgCXfUwv0IRiHWB1AA--.24950S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF1rGw4ftr1rZw1UAF1UWrg_yoW8Zr4xp3
+        9Iva4ayw4kJr4jkF4DWw4kX343Gan7JFyxKr4xGw4Uurn5JF1UJFWftFyjqayxJrWkGr43
+        ArZ5Wr98KFZ8AF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUym14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+        14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When removing the pn533 device (i2c or USB), there is a logic error. The
+original code first cancels the worker (flush_delayed_work) and then
+destroys the workqueue (destroy_workqueue), leaving the timer the last
+one to be deleted (del_timer). This result in a possible race condition
+in a multi-core preempt-able kernel. That is, if the cleanup
+(pn53x_common_clean) is concurrently run with the timer handler
+(pn533_listen_mode_timer), the timer can queue the poll_work to the
+already destroyed workqueue, causing use-after-free.
 
+This patch reorder the cleanup: it uses the del_timer_sync to make sure
+the handler is finished before the routine will destroy the workqueue.
+Note that the timer cannot be activated by the worker again.
 
-On 5/12/22 11:31, David Hildenbrand wrote:
-> On 06.05.22 11:24, Pierre Morel wrote:
->> During a subsystem reset the Topology-Change-Report is cleared.
->> Let's give userland the possibility to clear the MTCR in the case
->> of a subsystem reset.
->>
->> To migrate the MTCR, let's give userland the possibility to
->> query the MTCR state.
->>
->> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
->> ---
->>   arch/s390/include/uapi/asm/kvm.h |  5 ++
->>   arch/s390/kvm/kvm-s390.c         | 79 ++++++++++++++++++++++++++++++++
->>   2 files changed, 84 insertions(+)
->>
->> diff --git a/arch/s390/include/uapi/asm/kvm.h b/arch/s390/include/uapi/asm/kvm.h
->> index 7a6b14874d65..abdcf4069343 100644
->> --- a/arch/s390/include/uapi/asm/kvm.h
->> +++ b/arch/s390/include/uapi/asm/kvm.h
->> @@ -74,6 +74,7 @@ struct kvm_s390_io_adapter_req {
->>   #define KVM_S390_VM_CRYPTO		2
->>   #define KVM_S390_VM_CPU_MODEL		3
->>   #define KVM_S390_VM_MIGRATION		4
->> +#define KVM_S390_VM_CPU_TOPOLOGY	5
->>   
->>   /* kvm attributes for mem_ctrl */
->>   #define KVM_S390_VM_MEM_ENABLE_CMMA	0
->> @@ -171,6 +172,10 @@ struct kvm_s390_vm_cpu_subfunc {
->>   #define KVM_S390_VM_MIGRATION_START	1
->>   #define KVM_S390_VM_MIGRATION_STATUS	2
->>   
->> +/* kvm attributes for cpu topology */
->> +#define KVM_S390_VM_CPU_TOPO_MTR_CLEAR	0
->> +#define KVM_S390_VM_CPU_TOPO_MTR_SET	1
->> +
->>   /* for KVM_GET_REGS and KVM_SET_REGS */
->>   struct kvm_regs {
->>   	/* general purpose regs for s390 */
->> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->> index c8bdce31464f..80a1244f0ead 100644
->> --- a/arch/s390/kvm/kvm-s390.c
->> +++ b/arch/s390/kvm/kvm-s390.c
->> @@ -1731,6 +1731,76 @@ static void kvm_s390_sca_set_mtcr(struct kvm *kvm)
->>   	ipte_unlock(kvm);
->>   }
->>   
->> +/**
->> + * kvm_s390_sca_clear_mtcr
->> + * @kvm: guest KVM description
->> + *
->> + * Is only relevant if the topology facility is present,
->> + * the caller should check KVM facility 11
->> + *
->> + * Updates the Multiprocessor Topology-Change-Report to signal
->> + * the guest with a topology change.
->> + */
->> +static void kvm_s390_sca_clear_mtcr(struct kvm *kvm)
->> +{
->> +	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
->> +
->> +	ipte_lock(kvm);
->> +	sca->utility  &= ~SCA_UTILITY_MTCR;
-> 
-> 
-> One space too much.
-> 
-> sca->utility &= ~SCA_UTILITY_MTCR;
-> 
->> +	ipte_unlock(kvm);
->> +}
->> +
->> +static int kvm_s390_set_topology(struct kvm *kvm, struct kvm_device_attr *attr)
->> +{
->> +	if (!test_kvm_facility(kvm, 11))
->> +		return -ENXIO;
->> +
->> +	switch (attr->attr) {
->> +	case KVM_S390_VM_CPU_TOPO_MTR_SET:
->> +		kvm_s390_sca_set_mtcr(kvm);
->> +		break;
->> +	case KVM_S390_VM_CPU_TOPO_MTR_CLEAR:
->> +		kvm_s390_sca_clear_mtcr(kvm);
->> +		break;
->> +	}
->> +	return 0;
->> +}
->> +
->> +/**
->> + * kvm_s390_sca_get_mtcr
->> + * @kvm: guest KVM description
->> + *
->> + * Is only relevant if the topology facility is present,
->> + * the caller should check KVM facility 11
->> + *
->> + * reports to QEMU the Multiprocessor Topology-Change-Report.
->> + */
->> +static int kvm_s390_sca_get_mtcr(struct kvm *kvm)
->> +{
->> +	struct bsca_block *sca = kvm->arch.sca; /* SCA version doesn't matter */
->> +	int val;
->> +
->> +	ipte_lock(kvm);
->> +	val = !!(sca->utility & SCA_UTILITY_MTCR);
->> +	ipte_unlock(kvm);
->> +
->> +	return val;
->> +}
->> +
->> +static int kvm_s390_get_topology(struct kvm *kvm, struct kvm_device_attr *attr)
->> +{
->> +	int mtcr;
-> 
-> I think we prefer something like u16 when copying to user space.
+static void pn533_wq_poll(struct work_struct *work)
+...
+ rc = pn533_send_poll_frame(dev);
+ if (rc)
+   return;
 
-I come back here.
-I think I prefer to keep the int.
+ if (cur_mod->len == 0 && dev->poll_mod_count > 1)
+   mod_timer(&dev->listen_timer, ...);
 
-the u16 is more than the MTCR but the entire utility field, so what 
-should I do:
+That is, the mod_timer can be called only when pn533_send_poll_frame()
+returns no error, which is impossible because the device is detaching
+and the lower driver should return ENODEV code.
 
-rename the function to kvm_s390_get_sca_utility() ?
-and then should I modify the KVM_S390_VM_CPU_TOPOLOGY
-to KVM_S390_VM_SCA_UTILITY ?
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+ drivers/nfc/pn533/pn533.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-I do not like that, I do not think we should report/handle more 
-information than expected/needed.
-
-I can mask the MTCR bit and return a u16 with bit 0 (0x8000) set
-but I find this a little weird
-
-I admit an int is may be not optimal.
-logically I should report a bool but I do not like to report a bool 
-through the UAPI.
-
-The more I think about it the more I think an int is OK.
-Or in the case we want to spare memory space I can create a flag in a 
-u16 but it should theoretically be different than the firmware MTCR bit. 
-Could be 0x0001.
-But still, it is only to leave during the copy_to_user where the copy of 
-an int may be as good or better than the copy of a u16.
-
-So any more opinion on this?
-
-Regards,
-Pierre
-
-> 
->> +
->> +	if (!test_kvm_facility(kvm, 11))
->> +		return -ENXIO;
->> +
->> +	mtcr = kvm_s390_sca_get_mtcr(kvm);
->> +	if (copy_to_user((void __user *)attr->addr, &mtcr, sizeof(mtcr)))
->> +		return -EFAULT;
->> +
->> +	return 0;
->> +}
-> 
-> You should probably add documentation, and document that only the last
-> bit (0x1) has a meaning.
-> 
-> Apart from that LGTM.
-> 
-
+diff --git a/drivers/nfc/pn533/pn533.c b/drivers/nfc/pn533/pn533.c
+index a491db46e3bd..a0532647b040 100644
+--- a/drivers/nfc/pn533/pn533.c
++++ b/drivers/nfc/pn533/pn533.c
+@@ -2787,13 +2787,14 @@ void pn53x_common_clean(struct pn533 *priv)
+ {
+ 	struct pn533_cmd *cmd, *n;
+ 
++	/* delete the timer before cleanup the worker */
++	del_timer_sync(&priv->listen_timer);
++
+ 	flush_delayed_work(&priv->poll_work);
+ 	destroy_workqueue(priv->wq);
+ 
+ 	skb_queue_purge(&priv->resp_q);
+ 
+-	del_timer(&priv->listen_timer);
+-
+ 	list_for_each_entry_safe(cmd, n, &priv->cmd_queue, queue) {
+ 		list_del(&cmd->queue);
+ 		kfree(cmd);
 -- 
-Pierre Morel
-IBM Lab Boeblingen
+2.35.1
+

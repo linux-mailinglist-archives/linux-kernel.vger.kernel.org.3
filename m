@@ -2,73 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D8C52B2A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ABB52B2FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbiERGsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
+        id S231927AbiERGvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbiERGsk (ORCPT
+        with ESMTP id S231639AbiERGuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:48:40 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5EC19FAD;
-        Tue, 17 May 2022 23:48:38 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L33Sg4bgTzgYGJ;
-        Wed, 18 May 2022 14:47:15 +0800 (CST)
-Received: from [10.67.110.112] (10.67.110.112) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 18 May 2022 14:48:36 +0800
-Subject: Re: [PATCH -next] cgroup: Make cgroup_debug static
-To:     Tejun Heo <tj@kernel.org>
-CC:     <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>,
-        <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220517112523.243386-1-xiujianfeng@huawei.com>
- <YoPWJZ+RJmlvBLwV@slm.duckdns.org>
-From:   xiujianfeng <xiujianfeng@huawei.com>
-Message-ID: <c099059c-2953-232d-3d53-e8863c221cb0@huawei.com>
-Date:   Wed, 18 May 2022 14:48:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Wed, 18 May 2022 02:50:19 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557FA23BFA;
+        Tue, 17 May 2022 23:50:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652856609; x=1684392609;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qLSSlJQUcJ7Jk5kyK0nA+TPrGxree8c3irzJ5UAVEoI=;
+  b=fvZ86t9nKG2FzoVmnfT/jjPlUlhxc9Ag4PEOQH4NWiQX0XPZtYlv82Um
+   Nh8+1+xvgS250c8FyN9gAQbh8C2YzhUFK2qB+hVgsDD3KfBJ4ukHEEDmP
+   B6kZyHYEaQ3vfoYxkcG+UPTHCeQ6pncX2K6YVF066jjlLMQMpKj2A59d5
+   dBe8q04YzRCcT0pO4WGFIasFw7fmRaZT/S5yZ57pzaMul1paCWC99yqqO
+   BNkWlQBRXaAQa1Llj1VZazqhfQBI2hAYbZpw91M+NhlJO0ud7oYQmFuHP
+   FI6DYFVwwxYRQkwoH/f8e7WIxdhG1nQg/ou7ykGxJEJYJqS/H7PfNt56+
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="357920239"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="357920239"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 23:50:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="817295163"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
+  by fmsmga006.fm.intel.com with ESMTP; 17 May 2022 23:50:06 -0700
+From:   tien.sung.ang@intel.com
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ang Tien Sung <tien.sung.ang@intel.com>
+Subject: [PATCH] fpga: altera-cvp: Truncated bitstream error support
+Date:   Wed, 18 May 2022 14:48:44 +0800
+Message-Id: <20220518064844.2694651-1-tien.sung.ang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YoPWJZ+RJmlvBLwV@slm.duckdns.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.112]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Ang Tien Sung <tien.sung.ang@intel.com>
 
-在 2022/5/18 1:06, Tejun Heo 写道:
-> On Tue, May 17, 2022 at 07:25:23PM +0800, Xiu Jianfeng wrote:
->> Make cgroup_debug static since it's only used in cgroup.c
->>
->> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> The only thing it does is gating CFTYPE_DEBUG which isn't used anymore.
-> Can you remove both CFTYPE_DEBUG and cgroup_debug() instead?
+To support the error handling of a truncated bitstream sent.
+The current AIB CvP firmware is not capable of handling a
+data stream smaller than 4096bytes. The firmware's limitation
+causes a hung-up as it's DMA engine waits forever for the
+completion of the instructed 4096bytes.
+To resolve this design limitation, both firmware and CvP
+driver made several changes. At the CvP driver, we just
+have to ensure that anything lesser than 4096bytes are
+padded with extra bytes. The CvP will then, initiate the
+tear-down by clearing the START_XFER and CVP_CONFIG bits.
+We should also check for CVP_ERROR during the CvP completion.
+A send_buf which is always 4096bytes is used to copy the
+data during every transaction.
 
-It's ok to me, but I found CFTYPE_DEBUG is still used in cpuset subsys,
+Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
+---
+ drivers/fpga/altera-cvp.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-   .name = "cpus.subpartitions",
-   .seq_show = cpuset_common_seq_show,
-   .private = FILE_SUBPARTS_CPULIST,
-   .flags = CFTYPE_DEBUG,
+diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
+index 4ffb9da537d8..80edcfb5e5fc 100644
+--- a/drivers/fpga/altera-cvp.c
++++ b/drivers/fpga/altera-cvp.c
+@@ -81,6 +81,7 @@ struct altera_cvp_conf {
+ 	u8			numclks;
+ 	u32			sent_packets;
+ 	u32			vsec_offset;
++	u8			*send_buf;
+ 	const struct cvp_priv	*priv;
+ };
+ 
+@@ -453,7 +454,11 @@ static int altera_cvp_write(struct fpga_manager *mgr, const char *buf,
+ 		}
+ 
+ 		len = min(conf->priv->block_size, remaining);
+-		altera_cvp_send_block(conf, data, len);
++		/* Copy the requested host data into the transmit buffer */
++
++		memcpy(conf->send_buf, data, len);
++		altera_cvp_send_block(conf, (const u32 *)conf->send_buf,
++		conf->priv->block_size);
+ 		data += len / sizeof(u32);
+ 		done += len;
+ 		remaining -= len;
+@@ -492,10 +497,13 @@ static int altera_cvp_write_complete(struct fpga_manager *mgr,
+ 	if (ret)
+ 		return ret;
+ 
+-	/* STEP 16 - check CVP_CONFIG_ERROR_LATCHED bit */
+-	altera_read_config_dword(conf, VSE_UNCOR_ERR_STATUS, &val);
+-	if (val & VSE_UNCOR_ERR_CVP_CFG_ERR) {
+-		dev_err(&mgr->dev, "detected CVP_CONFIG_ERROR_LATCHED!\n");
++	/*
++	 * STEP 16 - If bitstream error (truncated/miss-matched),
++	 * we shall exit here.
++	 */
++	ret = altera_read_config_dword(conf, VSE_CVP_STATUS, &val);
++	if (ret || (val & VSE_CVP_STATUS_CFG_ERR)) {
++		dev_err(&mgr->dev, "CVP_CONFIG_ERROR!\n");
+ 		return -EPROTO;
+ 	}
+ 
+@@ -661,6 +669,12 @@ static int altera_cvp_probe(struct pci_dev *pdev,
+ 
+ 	pci_set_drvdata(pdev, mgr);
+ 
++	/* Allocate the 4096 block size transmit buffer */
++	conf->send_buf = devm_kzalloc(&pdev->dev, conf->priv->block_size, GFP_KERNEL);
++	if (!conf->send_buf) {
++		ret = -ENOMEM;
++		goto err_unmap;
++	}
+ 	return 0;
+ 
+ err_unmap:
+-- 
+2.25.1
 
-if remove CFTYPE_DEBUG and cgroup_debug,  cpus.subpartitions will be 
-showed by default,  is this ok?
-
->
-> Thanks.
->

@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A20552C082
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF67052C05E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240640AbiERRDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S240713AbiERRDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240616AbiERRDG (ORCPT
+        with ESMTP id S240720AbiERRDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:03:06 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBFD1A15F9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:03:05 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.lan)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nrN4d-0001Pv-Q5; Wed, 18 May 2022 19:02:59 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     palmer@dabbelt.com, paul.walmsley@sifive.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, mick@ics.forth.gr,
-        samuel@sholland.org, cmuellner@linux.com, philipp.tomsich@vrull.eu,
-        hch@lst.de, Heiko Stuebner <heiko@sntech.de>,
-        kernel test robot <yujie.liu@intel.com>
-Subject: [PATCH 4/4] riscv: fix dependency for t-head errata
-Date:   Wed, 18 May 2022 19:02:54 +0200
-Message-Id: <20220518170254.3178923-5-heiko@sntech.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220518170254.3178923-1-heiko@sntech.de>
-References: <20220518170254.3178923-1-heiko@sntech.de>
+        Wed, 18 May 2022 13:03:22 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735C71A7D03;
+        Wed, 18 May 2022 10:03:19 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id oe17-20020a17090b395100b001df77d29587so6231111pjb.2;
+        Wed, 18 May 2022 10:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PZ3XZrh23YKpTQBXyyyesP7NAmJ1EfYKnoyuawcBqe0=;
+        b=KmBqcA1c47T3IqI7qZnw1e+G/2uUP/yPiBVthOYegGBYFrAV2UMc5bEMEgTV6HgsWp
+         t8IkHzeKyzZPhYfaWgyvHcdIJQVOAXJLzN0+itYeOk9GovPH+YSIUgZEDWZAou4QOkzk
+         YDJPG7mP7PXJtPo3gRnGq38utyS6abWidyBu7oi+CHp72goeRhVSqbkmhk4fVaRM1trU
+         3A6G6h3ZNAvNBedbycotR2kbrX1yI8Tw482ONL+6eQ2Ks8SOJ9KJHljlVNpoq8pIqPBm
+         U0NydR6B5CUyEWH2xtrHCC4N8SP7xcoXylwoXoqjkFx1QO1b4+cWX+w34V9fTyTD360m
+         lovw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=PZ3XZrh23YKpTQBXyyyesP7NAmJ1EfYKnoyuawcBqe0=;
+        b=4+nXFEDfXFn8G8WzQQZtEDviKnXsUE69G8fVbWgU5x2TK+ddVFoIQerWBnQ61uNa4G
+         tUD9nYjA7MENXEXnjN0vTuSYvHmWOpW864Ij3gOs3oV3PTgWz4knme52/wHwuhICTFiy
+         WfHim9AqMHKts5tfHJ4BoqtPpYgc8d1J+UqBDvp4NLpIySbyD0O/UF69/SgrEjpQKbwK
+         YD6Epwwql/dgDB1wtXmHQs7XtcGO57ADyF8Zvv3JpeOERH4k/BHPMUJcPARXgn2+gsP3
+         1FYA9E0pWV3AmGANcpODSK03fD0Azmflp8u6+nxU5ljl57EDt9MnEuThNCtBK9Sj63x8
+         lULw==
+X-Gm-Message-State: AOAM531+SSxpKCLvnzL9g2r6cuMizLSjt2Wj1XJNsZbpm5oc2nCpmnVb
+        W1pWSNiRPCc+jTIos2Uxyq0=
+X-Google-Smtp-Source: ABdhPJxMUPGzRXnZWP6WUfxo7HXCyZ/M7IlOcVmCdD9RGsk+j1KdJGr0BLqQ+wNNEPdDJdJ5Al6k2A==
+X-Received: by 2002:a17:90b:4c48:b0:1dc:a631:e353 with SMTP id np8-20020a17090b4c4800b001dca631e353mr391634pjb.218.1652893398720;
+        Wed, 18 May 2022 10:03:18 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:62fc])
+        by smtp.gmail.com with ESMTPSA id m12-20020a170902768c00b0015e8d4eb1fcsm1957970pll.70.2022.05.18.10.03.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 10:03:18 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 18 May 2022 07:03:16 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] cgroup: Make cgroup_debug static
+Message-ID: <YoUm1C9ozORHfFk1@slm.duckdns.org>
+References: <20220517112523.243386-1-xiujianfeng@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517112523.243386-1-xiujianfeng@huawei.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-alternatives only work correctly on non-xip-kernels and while the
-selected alternative-symbol has the correct dependency the symbol
-selecting it also needs that dependency.
+On Tue, May 17, 2022 at 07:25:23PM +0800, Xiu Jianfeng wrote:
+> Make cgroup_debug static since it's only used in cgroup.c
+> 
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-So add the missing dependency to the T-Head errata Kconfig symbol.
+Applied to cgroup/for-5.19.
 
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
----
- arch/riscv/Kconfig.erratas | 1 +
- 1 file changed, 1 insertion(+)
+Thanks.
 
-diff --git a/arch/riscv/Kconfig.erratas b/arch/riscv/Kconfig.erratas
-index ebfcd5cc6eaf..457ac72c9b36 100644
---- a/arch/riscv/Kconfig.erratas
-+++ b/arch/riscv/Kconfig.erratas
-@@ -35,6 +35,7 @@ config ERRATA_SIFIVE_CIP_1200
- 
- config ERRATA_THEAD
- 	bool "T-HEAD errata"
-+	depends on !XIP_KERNEL
- 	select RISCV_ALTERNATIVE
- 	help
- 	  All T-HEAD errata Kconfig depend on this Kconfig. Disabling
 -- 
-2.35.1
-
+tejun

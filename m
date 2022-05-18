@@ -2,114 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACEC52AF8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5599052AF96
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbiERBCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
+        id S233184AbiERBED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233077AbiERBCP (ORCPT
+        with ESMTP id S233139AbiERBD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:02:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2396325
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:02:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1103B819D2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:02:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28C7C34116;
-        Wed, 18 May 2022 01:02:10 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mQPCCfqG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652835729;
+        Tue, 17 May 2022 21:03:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 440555401C
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652835836;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EwK9iYZioy8uS/wkcAol0jY2RzNpH6Zi8zhygVBATws=;
-        b=mQPCCfqGYJZ1T6m0TR++PjXuliDZHnpU9ww5bi2lk9dGsIecY3ESl8StVGLNqIyC8/zgKw
-        6GEsTssVuTiMvMFLN3dH0qVSI6m5un8/ahjn6/+1YDjC9c4sefYJFqwbHqRCcj/06RXb/b
-        /ZpLJTqySAIJKm63TzcIPsVnsxosALk=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3b5780c0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 18 May 2022 01:02:08 +0000 (UTC)
-Date:   Wed, 18 May 2022 03:02:05 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Filipe Manana <fdmanana@suse.com>,
-        Vadim Galitsin <vadim.galitsyn@oracle.com>
-Subject: Re: [patch 0/3] x86/fpu: Prevent FPU state corruption
-Message-ID: <YoRFjTIzMYZu8Hq8@zx2c4.com>
-References: <20220501192740.203963477@linutronix.de>
- <YnKeag3Ulg0NR58Q@zx2c4.com>
+        bh=9x2ImgRb6JiiWOcKdqNJTdgrbDsN6gv1+sN/DiujmeI=;
+        b=hTBSkVBpdfmYl+/5V/osEoiLjdeo7irLKauc+DFyPGWNKGOGWajQFXQmatJV6ki0N0fjqa
+        fJUJx5RZwJv3xgkcFjmrzr2YysAV5sNQ2lWvHqyNVZaK2txwzrHHy+t+Yib7MDggbL8KC7
+        o/EGasriOgUykA+O4xbDW/Hqmz0bAlk=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-398-u1ZCUe0AOT69Aaev7wZwDg-1; Tue, 17 May 2022 21:03:52 -0400
+X-MC-Unique: u1ZCUe0AOT69Aaev7wZwDg-1
+Received: by mail-pj1-f71.google.com with SMTP id z11-20020a17090a468b00b001dc792e8660so313969pjf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:03:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=9x2ImgRb6JiiWOcKdqNJTdgrbDsN6gv1+sN/DiujmeI=;
+        b=wMMqibu3UfKMQmVy18baCDyhfgGaoqOf76OJF4ZDQAFkToj7Mfo5RPgdQ5eEjr+tam
+         FNfSom/KMjUkVzdm1oaWnk+5Nwp+ZtBCEDtrUExr2rO/u1wMe5zJDBFwKMKge4E2rnLy
+         XjCGkvWtoKOAYd3sErsnJv3wJdn/hxH6QMWUGZDyItF2oA3MGxNK7rkc+kDdaL5d+W6L
+         c7Hw6e2IDEWIm+lohwLBCFbr1pg2o8gi1AQbBdIT5E4LwGwGUSjUnfREelSOipkdMxm8
+         d1hCg8761sYVvo3IePqGM8sDfLJfrNThYwmLmvKzkGmER2Z6DIIacV8crXLPZFzD+o8y
+         7Bsw==
+X-Gm-Message-State: AOAM532Z5OHQcqzH0whYjwOdmcVtWSDwbyzYGuq/+uw90GS/YuZMJs8A
+        xICU4pMLBlHpQRrLMDEZYufxJjQOjaL9Ra0MfIDfh71MSTDcH4sN9AP3Yb70btRpGtDZ6YEMIrG
+        l3hEBel1CF9ZvI/c+QsG2xi2e
+X-Received: by 2002:a63:1d42:0:b0:3ed:6b3d:c52d with SMTP id d2-20020a631d42000000b003ed6b3dc52dmr16746013pgm.295.1652835831202;
+        Tue, 17 May 2022 18:03:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyppbvBjtek7vEiI0QwxGuQYIG67ZQO++TbEncsJOLajE9N12wwbpkr93VWwAtchDRR3dKYog==
+X-Received: by 2002:a63:1d42:0:b0:3ed:6b3d:c52d with SMTP id d2-20020a631d42000000b003ed6b3dc52dmr16745999pgm.295.1652835830931;
+        Tue, 17 May 2022 18:03:50 -0700 (PDT)
+Received: from [10.72.12.136] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902ee4c00b0015e8d4eb1besm246751plo.8.2022.05.17.18.03.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 18:03:25 -0700 (PDT)
+Subject: Re: [PATCH v3 2/2] ceph: wait the first reply of inflight async
+ unlink
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     jlayton@kernel.org, viro@zeniv.linux.org.uk, idryomov@gmail.com,
+        vshankar@redhat.com, ceph-devel@vger.kernel.org,
+        dchinner@redhat.com, hch@lst.de, arnd@arndb.de, mcgrof@kernel.org,
+        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20220517125549.148429-1-xiubli@redhat.com>
+ <20220517125549.148429-3-xiubli@redhat.com>
+ <YoOy40sGQv4DjmAq@casper.infradead.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <acf2457a-a984-d490-2833-be7cfd25c729@redhat.com>
+Date:   Wed, 18 May 2022 09:03:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YnKeag3Ulg0NR58Q@zx2c4.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YoOy40sGQv4DjmAq@casper.infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Thomas,
 
-On Wed, May 04, 2022 at 05:40:26PM +0200, Jason A. Donenfeld wrote:
-> Hi Thomas,
-> 
-> On Sun, May 01, 2022 at 09:31:42PM +0200, Thomas Gleixner wrote:
-> > The recent changes in the random code unearthed a long standing FPU state
-> > corruption due do a buggy condition for granting in-kernel FPU usage.
->  
-> Thanks for working that out. I've been banging my head over [1] for a
-> few days now trying to see if it's a mis-bisect or a real thing. I'll
-> ask Larry to retry with this patchset.
+On 5/17/22 10:36 PM, Matthew Wilcox wrote:
+> On Tue, May 17, 2022 at 08:55:49PM +0800, Xiubo Li wrote:
+>> +int ceph_wait_on_conflict_unlink(struct dentry *dentry)
+>> +{
+>> +	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
+>> +	struct dentry *pdentry = dentry->d_parent;
+>> +	struct dentry *udentry, *found = NULL;
+>> +	struct ceph_dentry_info *di;
+>> +	struct qstr dname;
+>> +	u32 hash = dentry->d_name.hash;
+>> +	int err;
+>> +
+>> +	dname.name = dentry->d_name.name;
+>> +	dname.len = dentry->d_name.len;
+>> +
+>> +	rcu_read_lock();
+>> +	hash_for_each_possible_rcu(fsc->async_unlink_conflict, di,
+>> +				   hnode, hash) {
+>> +		udentry = di->dentry;
+>> +
+>> +		spin_lock(&udentry->d_lock);
+>> +		if (udentry->d_name.hash != hash)
+>> +			goto next;
+>> +		if (unlikely(udentry->d_parent != pdentry))
+>> +			goto next;
+>> +		if (!hash_hashed(&di->hnode))
+>> +			goto next;
+>> +
+>> +		if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
+>> +			pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
+>> +				__func__, dentry, dentry);
+>> +
+>> +		if (d_compare(pdentry, udentry, &dname))
+>> +			goto next;
+>> +
+>> +		spin_unlock(&udentry->d_lock);
+>> +		found = dget(udentry);
+>> +		break;
+>> +next:
+>> +		spin_unlock(&udentry->d_lock);
+>> +	}
+>> +	rcu_read_unlock();
+>> +
+>> +	if (likely(!found))
+>> +		return 0;
+>> +
+>> +	dout("%s dentry %p:%pd conflict with old %p:%pd\n", __func__,
+>> +	     dentry, dentry, found, found);
+>> +
+>> +	err = wait_on_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT,
+>> +			  TASK_INTERRUPTIBLE);
+> Do you really want to use TASK_INTERRUPTIBLE here?  If the window is
+> resized and you get a SIGWINCH, or a timer goes off and you get a
+> SIGALRM, you want to return -EINTR?  I would suggest that TASK_KILLABLE
+> is probably the semantics that you want.
+>
+Sounds reasonable.  I will switch to use the TASK_KILLABLE.
 
-So, Larry's debugging was inconsistent and didn't result in anything I
-could piece together into basic cause and effect. But luckily Vadim, who
-maintains the VirtualBox drivers for Oracle, was able to reproduce the
-issue and was able to conduct some real debugging. I've CC'd him here.
-From talking with Vadim, here are some findings thus far:
+@Jeff
 
-  - Certain Linux guest processes crash under high load.
-  - Windows kernel guest panics.
+I just copied this code from ceph_wait_on_async_create(). BTW, do we 
+have any other consideration that we must use the TASK_INTERRUPTIBLE there ?
 
-Observation: the Windows kernel uses SSSE3 in their kernel all over the
-place, generated by the compiler.
+Thanks.
 
-  - Moving the mouse around helps induce the crash.
+-- Xiubo
 
-Observation: add_input_randomness() -> .. -> kernel_fpu_begin() -> blake2s_compress().
-
-  - The problem exhibits itself in rc7, so this patchset does not fix
-    the issue.
-  - Applying https://xn--4db.cc/ttEUSvdC fixes the issue.
-
-Observation: the problem is definitely related to using the FPU in a
-hard IRQ.
-
-I went reading KVM to get some idea of why KVM does *not* have this
-problem, and it looks like there's some careful code there about doing
-xsave and such around IRQs. So my current theory is that VirtualBox's
-VMM just forgot to do this, and until now this bug went unnoticed.
-
-Since VirtualBox is out of tree (and extremely messy of a codebase), and
-this appears to be an out of tree module problem rather than a kernel
-problem, I'm inclined to think that there's not much for us to do, at
-least until we receive information to the contrary of this presumption.
-
-But in case you do want to do something proactively, I don't have any
-objections to just disabling the FPU in hard IRQ for 5.18. And in 5.19,
-add_input_randomness() isn't going to hit that path anyway. But also,
-doing nothing and letting the VirtualBox people figure out their bug
-would be fine with me too. Either way, just wanted to give you a heads
-up.
-
-Jason

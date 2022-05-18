@@ -2,277 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C643152C08F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A2652C08C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240455AbiERQsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
+        id S240487AbiERQs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240519AbiERQsf (ORCPT
+        with ESMTP id S240453AbiERQsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:48:35 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE23D8AE7C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:48:34 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IGfkUK011224;
-        Wed, 18 May 2022 16:48:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=E/KJiJDZWVaEZCn40lud7/8o1j+K/VJuslMugUXGBiM=;
- b=D5zEioSJUJ8vkCIdHAi4TDMrK4U4XhfCug2DAIR8zX2OuVMUWSkyZzjuHfI9rSIy4+kd
- eZW5F8gvD7juFBW6sa+H1otOJkWbEYfdbJjNMTmOTaHkeZYyvd2uTlie9W6LoCH9oibf
- WR3TAjr4ZPnezjeWet/7ZJAzZ7ExG57LcBJIZcN6KkbEZHbCRC0dTSuquzjlHgb0OUbv
- Q9vmO0p/8zwSyf0egtDUEON6stpzye+4ZEvtTeCoVcs3f7AfzC/RJNEAanP4oAjROO+Q
- xq28LrMILcO/84fKEJdjmkWUcQZCtIak3rX30jfzRelFaQLFMkO/ns9bGPLgPBKoDznm PQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g54hyg4ns-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 16:48:21 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IGgE5E012824;
-        Wed, 18 May 2022 16:48:20 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g54hyg4mv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 16:48:20 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IGXlaw012021;
-        Wed, 18 May 2022 16:48:18 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma01fra.de.ibm.com with ESMTP id 3g2428vvps-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 16:48:18 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IGmFSV48824774
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 16:48:15 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B77D04C046;
-        Wed, 18 May 2022 16:48:15 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C1E74C044;
-        Wed, 18 May 2022 16:48:15 +0000 (GMT)
-Received: from localhost (unknown [9.43.19.36])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 16:48:15 +0000 (GMT)
-Date:   Wed, 18 May 2022 22:18:13 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] kexec_file: Drop pr_err in weak implementations of
- arch_kexec_apply_relocations[_add]
-To:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Baoquan He <bhe@redhat.com>, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <20220425174128.11455-1-naveen.n.rao@linux.vnet.ibm.com>
-        <YoNqJ/MOSIVwKP/o@MiWiFi-R3L-srv>
-        <1652782155.56t7mah8ib.naveen@linux.ibm.com>
-        <8735h8b2f1.fsf@email.froward.int.ebiederm.org>
-        <87v8u3o9tk.fsf@mpe.ellerman.id.au>
-        <875ym2aoc7.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <875ym2aoc7.fsf@email.froward.int.ebiederm.org>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1652892300.1k6kqwc17y.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: XO4RXk88ZrBBP6VnIK7Xps7fUVZDizXw
-X-Proofpoint-GUID: x_NDsOGiwNsBgH-jBOd0QAcoHw3VvYLa
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 18 May 2022 12:48:25 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B258D84A29
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:48:23 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id oe17-20020a17090b395100b001df77d29587so6190579pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=a/nioQD6LDBjjZNelJ71Lr4Cech0R4yZAq15sbuZJCc=;
+        b=jeUGHyeLcHxjHkIIKYZBSEirqL6+qcT+SwaKdSDH0eEuWJX91z8H+/NwOyFm6Q/3sg
+         L9XrfogqRU3oI6TnKgiJeHgrGw/oGUbpLfVj3kV+oLdnjWkaqqa+CybKP/FbOvy6F6IL
+         rluB6UJhiQou1qwfVR+KdqqKcIz4w0sEumbGOiWOpSUME/YbUFIDrk//wtIR8X9N1Jm4
+         NoDF8h/+RCgyROH58JFUlONkcnXtlIgRGqgWS0Jr9Wt4GrykPJjgvLd1ygMncVXda1mG
+         rfViXBsfd8QYhpJJ3lk8Is4meGwXFAnxnTZ0OKw7eHzYV0K2t1q7aYsfC3i03hntXNgU
+         GTGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=a/nioQD6LDBjjZNelJ71Lr4Cech0R4yZAq15sbuZJCc=;
+        b=mO4vXLjTt3Ct7+dDIl/yNVVvABOUrF5bGDRhXBLfEGsw01c62ZhafbrfSpK8KT8ZES
+         MEF0+lhO5Wam6HnDBt70fnTaeJ0kOTO47Z0zw74KMNvzd6y2+ZNdOoVPsTEnYZVwW72i
+         UisxT5uQa0jKSlfeACMqoJ6N+XcVwgdgV5o/jPNF+6x6z3p8Gj9ed20ZLpirf4cVtLOG
+         0JOPYpKpqRavSpre90GFHPwQlXOOhrFGn7MieAe3KLQzWS3EMTmiOyl25qOHkBdkXLkV
+         th6pJf3uY/JmbnqQbgFSkWEcWJXW3BnM+HDH7XnoDwUmoyrqceYLCwevtm1d0t5jJcJl
+         9xXQ==
+X-Gm-Message-State: AOAM533GWGqZBIy745QHhGm+9h1esN1EKhsYnwrTJn0R/A7jzIE1JTvU
+        HnP+89WyFU+ZtVBuEEyKeNR5sQ==
+X-Google-Smtp-Source: ABdhPJzGXQOlhE+1fEGAQ/pp1W/iTllR26Rke7t+R8GImSuPPuWzP7SqD51y8AElUN1y20JLBSwO9A==
+X-Received: by 2002:a17:902:d502:b0:161:bc5f:7b2d with SMTP id b2-20020a170902d50200b00161bc5f7b2dmr285451plg.140.1652892503221;
+        Wed, 18 May 2022 09:48:23 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id r15-20020aa7988f000000b0050dc76281c4sm2226246pfl.158.2022.05.18.09.48.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 09:48:22 -0700 (PDT)
+Message-ID: <317701e1-20a7-206f-92cd-cd36d436eee2@linaro.org>
+Date:   Wed, 18 May 2022 09:48:21 -0700
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- bulkscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
- spamscore=0 adultscore=0 clxscore=1015 phishscore=0 mlxlogscore=999
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180099
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] cgroup: don't queue css_release_work if one already
+ pending
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>
+Cc:     cgroups@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+e42ae441c3b10acf9e9d@syzkaller.appspotmail.com
+References: <20220412192459.227740-1-tadeusz.struk@linaro.org>
+ <20220414164409.GA5404@blackbody.suse.cz> <YmHwOAdGY2Lwl+M3@slm.duckdns.org>
+ <20220422100400.GA29552@blackbody.suse.cz>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <20220422100400.GA29552@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric W. Biederman wrote:
-> Michael Ellerman <mpe@ellerman.id.au> writes:
->=20
->> "Eric W. Biederman" <ebiederm@xmission.com> writes:
->>> Looking at this the pr_err is absolutely needed.  If an unsupported case
->>> winds up in the purgatory blob and the code can't handle it things
->>> will fail silently much worse later.
->>
->> It won't fail later, it will fail the syscall.
->>
->> sys_kexec_file_load()
->>   kimage_file_alloc_init()
->>     kimage_file_prepare_segments()
->>       arch_kexec_kernel_image_load()
->>         kexec_image_load_default()
->>           image->fops->load()
->>             elf64_load()        # powerpc
->>             bzImage64_load()    # x86
->>               kexec_load_purgatory()
->>                 kexec_apply_relocations()
->>
->> Which does:
->>
->> 	if (relsec->sh_type =3D=3D SHT_RELA)
->> 		ret =3D arch_kexec_apply_relocations_add(pi, section,
->> 						       relsec, symtab);
->> 	else if (relsec->sh_type =3D=3D SHT_REL)
->> 		ret =3D arch_kexec_apply_relocations(pi, section,
->> 						   relsec, symtab);
->> 	if (ret)
->> 		return ret;
->>
->> And that error is bubbled all the way back up. So as long as
->> arch_kexec_apply_relocations() returns an error the syscall will fail
->> back to userspace and there'll be an error message at that level.
->>
->> It's true that having nothing printed in dmesg makes it harder to work
->> out why the syscall failed. But it's a kernel bug if there are unhandled
->> relocations in the kernel-supplied purgatory code, so a user really has
->> no way to do anything about the error even if it is printed.
->=20
-> Good point.  I really hadn't noticed the error code in there when I
-> looked.
->=20
-> I still don't think changing the functionality of the code because of
-> a tool issue is the right solution.
+On 4/22/22 04:05, Michal Koutný wrote:
+> On Thu, Apr 21, 2022 at 02:00:56PM -1000, Tejun Heo <tj@kernel.org> wrote:
+>> If this is the case, we need to hold an extra reference to be put by the
+>> css_killed_work_fn(), right?
+> 
+> I looked into it a bit more lately and found that there already is such
+> a fuse in kill_css() [1].
+> 
+> At the same type syzbots stack trace demonstrates the fuse is
+> ineffective
+> 
+>> css_release+0xae/0xc0 kernel/cgroup/cgroup.c:5146                    (**)
+>> percpu_ref_put_many include/linux/percpu-refcount.h:322 [inline]
+>> percpu_ref_put include/linux/percpu-refcount.h:338 [inline]
+>> percpu_ref_call_confirm_rcu lib/percpu-refcount.c:162 [inline]        (*)
+>> percpu_ref_switch_to_atomic_rcu+0x5a2/0x5b0 lib/percpu-refcount.c:199
+>> rcu_do_batch+0x4f8/0xbc0 kernel/rcu/tree.c:2485
+>> rcu_core+0x59b/0xe30 kernel/rcu/tree.c:2722
+>> rcu_core_si+0x9/0x10 kernel/rcu/tree.c:2735
+>> __do_softirq+0x27e/0x596 kernel/softirq.c:305
+> 
+> (*) this calls css_killed_ref_fn confirm_switch
+> (**) zero references after confirmed kill?
+> 
+> So, I was also looking at the possible race with css_free_rwork_fn()
+> (from failed css_create()) but that would likely emit a warning from
+> __percpu_ref_exit().
+> 
+> So, I still think there's something fishy (so far possible only via
+> artificial ENOMEM injection) that needs an explanation...
 
-Ok.
+I can't reliably reproduce this issue on neither mainline nor v5.10, where
+syzbot originally found it. It still triggers for syzbot though.
 
->=20
->=20
->>> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
->>>
->>>> Baoquan He wrote:
->>>>> On 04/25/22 at 11:11pm, Naveen N. Rao wrote:
->>>>>> kexec_load_purgatory() can fail for many reasons - there is no need =
-to
->>>>>> print an error when encountering unsupported relocations.
->>>>>> This solves a build issue on powerpc with binutils v2.36 and newer [=
-1].
->>>>>> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
->>>>>> symbols") [2], binutils started dropping section symbols that it tho=
-ught
->>>>> I am not familiar with binutils, while wondering if this exists in ot=
-her
->>>>> ARCHes except of ppc. Arm64 doesn't have the ARCH override either, do=
- we
->>>>> have problem with it?
->>>>
->>>> I'm not aware of this specific file causing a problem on other archite=
-ctures -
->>>> perhaps the config options differ enough. There are however more repor=
-ts of
->>>> similar issues affecting other architectures with the llvm integrated =
-assembler:
->>>> https://github.com/ClangBuiltLinux/linux/issues/981
->>>>
->>>>>
->>>>>> were unused.  This isn't an issue in general, but with kexec_file.c,=
- gcc
->>>>>> is placing kexec_arch_apply_relocations[_add] into a separate
->>>>>> .text.unlikely section and the section symbol ".text.unlikely" is be=
-ing
->>>>>> dropped. Due to this, recordmcount is unable to find a non-weak symb=
-ol
->>>>> But arch_kexec_apply_relocations_add is weak symbol on ppc.
->>>>
->>>> Yes. Note that it is just the section symbol that gets dropped. The se=
-ction is
->>>> still present and will continue to hold the symbols for the functions
->>>> themselves.
->>>
->>> So we have a case where binutils thinks it is doing something useful
->>> and our kernel specific tool gets tripped up by it.
->>
->> It's not just binutils, the LLVM assembler has the same behavior.
->>
->>> Reading the recordmcount code it looks like it is finding any symbol
->>> within a section but ignoring weak symbols.  So I suspect the only
->>> remaining symbol in the section is __weak and that confuses
->>> recordmcount.
->>>
->>> Does removing the __weak annotation on those functions fix the build
->>> error?  If so we can restructure the kexec code to simply not use __weak
->>> symbols.
->>>
->>> Otherwise the fix needs to be in recordmcount or binutils, and we should
->>> loop whoever maintains recordmcount in to see what they can do.
->>
->> It seems that recordmcount is not really maintained anymore now that x86
->> uses objtool?
->>
->> There've been several threads about fixing recordmcount, but none of
->> them seem to have lead to a solution.
->=20
-> That is unfortunate.
->=20
->> These weak symbol vs recordmcount problems have been worked around going
->> back as far as 2020:
->>
->>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/com=
-mit/include/linux/elfcore.h?id=3D6e7b64b9dd6d96537d816ea07ec26b7dedd397b9
->=20
-> I am more than happy to adopt the kind of solution that was adopted
-> there in elfcore.h and simply get rid of __weak symbols in the kexec
-> code.
->=20
-> Using __weak symbols is really not the common kernel way of doing
-> things.  Using __weak symbols introduces a bit of magic in how the
-> kernel gets built that is unnecessary.
->=20
-> Can someone verify that deleting __weak is enough to get powerpc to
-> build?  AKA:
->=20
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 8347fc158d2b..7f4ca8dbe26f 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -117,7 +117,7 @@ int __weak arch_kexec_kernel_verify_sig(struct kimage=
- *image, void *buf,
->   *
->   * Return: 0 on success, negative errno on error.
->   */
-> -int __weak
-> +int
->  arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shdr *se=
-ction,
->                                  const Elf_Shdr *relsec, const Elf_Shdr *=
-symtab)
->  {
-> @@ -134,7 +134,7 @@ arch_kexec_apply_relocations_add(struct purgatory_inf=
-o *pi, Elf_Shdr *section,
->   *
->   * Return: 0 on success, negative errno on error.
->   */
-> -int __weak
-> +int
->  arch_kexec_apply_relocations(struct purgatory_info *pi, Elf_Shdr *sectio=
-n,
->                              const Elf_Shdr *relsec, const Elf_Shdr *symt=
-ab)
->  {
-
-Yes, dropping the __weak attribute allows recordmcount to emit a=20
-relocation using those symbols, so that resolves the problem.
-
->=20
-> If that change is verified to work a proper patch that keeps x86 and
-> s390 building that have actual implementations should not be too
-> difficult to write.
-
-Sure, I will post a patch for that.
-
-
+-- 
 Thanks,
-Naveen
-
+Tadeusz

@@ -2,155 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 683A852BBE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F51752BC6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238476AbiEROHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S238467AbiEROH6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 May 2022 10:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238446AbiEROHi (ORCPT
+        with ESMTP id S238454AbiEROHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:07:38 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9531B6A06C;
-        Wed, 18 May 2022 07:07:36 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id w123so2754323oiw.5;
-        Wed, 18 May 2022 07:07:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=44Xgt+EUBiutauBulnIHgR1NZC7VLz+1d73CrLpoSuA=;
-        b=EE+Ok5Q3AOQEWrEsMLQ8bJwxLj5JWKC0uRQavySm46LGHksaEXSJblszKsh1MvsIVQ
-         sDPRJcb4u60eXiklTNwE2U+LD49Wb+WD9qcumnXXeQJnMUEh+Cprmc8yCFMWDDAx/laZ
-         tSGFznxKpbQzHqnKFUn6Obmd3DZeEhLOmDwgdK5v2kgO5opVsh+5I61QnC6uyCbqRb+P
-         h2C/Fnjhf4h05p6b5Q8AMg4jSgBqBTEFQHak8Fh8GP7YqlfCZ9bfj2PBgjyDMGe6fFi6
-         v1tCilE06OSMQ2Ap/40R6GV7SfyLOFpw0XtrB50yxlMyw4CFBhcTVnu1K1CJBROjIYsQ
-         b0Rg==
+        Wed, 18 May 2022 10:07:50 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93D616ABC3;
+        Wed, 18 May 2022 07:07:47 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id q135so3829078ybg.10;
+        Wed, 18 May 2022 07:07:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=44Xgt+EUBiutauBulnIHgR1NZC7VLz+1d73CrLpoSuA=;
-        b=UvfdYzjaYNc11S6u5pZoZfkmF/3HNP2jxVLuKGEQJVMnQoa+MW2GEQ9MMyNUkY+Beh
-         AJpCWk83cmRQY4KVLLhvTmXGxF4/jWaTrcZFs6dwjsmiOCYMNDifYk5+KFYPK9li20xS
-         I3SHfizt58K4XB+7BEYZbGDv8wUdG2Y5uQxWmsq2AetTH6L5VtSQVKmamYrygKvX0Upd
-         ehPXl40FAFzdPuIBdGINGXEMmozi8gmLC0CB6IeIoJEn/d8pfDWxvdTFKjmek3jL1CtO
-         vMtAieiQ+SjClo9GEne2eV1BVxLd+zbZGfKub0UnjOOscpAb1yylTb/hTGdtM7gbZI31
-         IeWw==
-X-Gm-Message-State: AOAM531toroo+wgroA7WY1g/hs9utoSpfBOQK+aNJ7lyFbD/R5UHexPd
-        CroNBrkDLgVB6sXEVvuT00Y=
-X-Google-Smtp-Source: ABdhPJyXPBsJSPb3qsIt30kakP/1viqje/dN0om/JEDZ69uJP4Erfc4CCzg7BfUTauTabr0j1dC5fA==
-X-Received: by 2002:a05:6808:23d2:b0:326:979a:46f3 with SMTP id bq18-20020a05680823d200b00326979a46f3mr12917oib.207.1652882855862;
-        Wed, 18 May 2022 07:07:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056830140800b0060603221267sm782203otp.55.2022.05.18.07.07.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 07:07:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <47c64195-6629-ba2b-4533-b0fe37518da0@roeck-us.net>
-Date:   Wed, 18 May 2022 07:07:31 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QXYjMoct8jHy31FBakzpCRkd+Wppn/IEAU7MUWDLFiQ=;
+        b=ez7/MlI9wDfj0ZG4XcHSkTTmgGiS1z4ymcAOkW8ECwRYScqYUhIuQErX3vSsWkVWog
+         ejaoKVEqdTaB/dmYjvk5LZBx+4t5+AFJd5DLZOFCBHaCW2wKaaLpckiMMxqViVs/uH6H
+         LCYahL9gSDi945NaE/yrP9PqwzV6KcNb+502szV+/wljE1tU/mkQw4SyVvpNIZnMTIgC
+         4XqwAqkj51s+ZpkiaUpsFFGFhzj6cYjvZ8gntD/s23URYs5mhIJo5gMYNAzH8SvOXxkw
+         +GEVHfqliQtdWz498NlEyv4SipQpyIFYRLRGphj33Y+m5ksFfEjBRuZI6vUNFVci6LTM
+         mICw==
+X-Gm-Message-State: AOAM532ziQC1zWv5inqa8dT97GKr4nwcJinEOkQQBrtvVq29tZ5uv1qz
+        lHzqNcnRbHK1FbBj0TViFAcKoV8KyPnAsrO1qsapGOicK2iX4A==
+X-Google-Smtp-Source: ABdhPJyLHZ2AgpCh9R3fj0oOs2ey9AP1V4nx8RS0AvuWHKgetRwnyrtQBOZTyg/mJL52a1rIhFf17NbJc7JTUGB6SYg=
+X-Received: by 2002:a25:e093:0:b0:64d:6c85:6bc6 with SMTP id
+ x141-20020a25e093000000b0064d6c856bc6mr18989580ybg.500.1652882866975; Wed, 18
+ May 2022 07:07:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs <linux-btrfs@vger.kernel.org>
-References: <20220228103142.3301082-1-arnd@kernel.org>
- <20220516131023.GA2329080@roeck-us.net> <YoJSF8T5K9pPx3Ap@kroah.com>
- <9510474d-5555-42b3-5a9c-90e3078df499@roeck-us.net>
- <CAK8P3a1GmRqPTXFCoLH9h1sP76a-bVRsGYP-YvczoXM4Na3OVQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [greybus-dev] Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-In-Reply-To: <CAK8P3a1GmRqPTXFCoLH9h1sP76a-bVRsGYP-YvczoXM4Na3OVQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+References: <20220517060821.akuqbqxro34tj7x6@pengutronix.de>
+ <CAMZ6RqJ3sXYUOpw7hEfDzj14H-vXK_i+eYojBk2Lq=h=7cm7Jg@mail.gmail.com>
+ <20220517104545.eslountqjppvcnz2@pengutronix.de> <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
+ <20220517141404.578d188a.max@enpas.org> <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
+ <20220517143921.08458f2c.max@enpas.org> <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
+ <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
+ <43768ff7-71f8-a6c3-18f8-28609e49eedd@hartkopp.net> <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
+In-Reply-To: <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 18 May 2022 23:07:35 +0900
+Message-ID: <CAMZ6RqJqeNjAtoDWADHsWocgbSXqQixcebJBhiBFS8BVeKCb3g@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
+ can_skb_headroom_valid to skb.c
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Max Staudt <max@enpas.org>, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/22 00:46, Arnd Bergmann wrote:
-> On Mon, May 16, 2022 at 3:19 PM Guenter Roeck <linux@roeck-us.net> wrote:
->> On 5/16/22 06:31, Greg KH wrote:
->>> On Mon, May 16, 2022 at 06:10:23AM -0700, Guenter Roeck wrote:
->>>> On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
->>>>> From: Arnd Bergmann <arnd@arndb.de>
->>>>>
->>>>> During a patch discussion, Linus brought up the option of changing
->>>>> the C standard version from gnu89 to gnu99, which allows using variable
->>>>> declaration inside of a for() loop. While the C99, C11 and later standards
->>>>> introduce many other features, most of these are already available in
->>>>> gnu89 as GNU extensions as well.
->>>>
->>>> The downside is that backporting affected patches to older kernel branches
->>>> now fails with error messages such as
->>>>
->>>> mm/kfence/core.c: In function ‘kfence_init_pool’:
->>>> mm/kfence/core.c:595:2: error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
->>>>
->>>> Just something to keep in mind when writing patches.
->>>
->>> I just ran across this very issue on this commit.  It's an easy fixup
->>> for 5.17.y to make this work, so I did that in my tree.  If this gets to
->>> be too much, we might need to reconsider adding c11 to older stable
->>> kernels.
->>>
->>
->> I think I'll do just that for ChromeOS; I don't want to have to deal
->> with the backports, and we are using recent compilers anyway.
-> 
-> I think it would be better not to have the --std=gnu11 change in the older
-> stable kernels by default, as this has introduced build warnings and other
-> smaller issues, as well as raising the minimum compiler version.
-> 
-> The users that are stuck on older kernels for some reason tend to
-> overlap with those on older compilers. One example here is Android,
-> which used to ship with a gcc-4.9 build as the only non-clang toolchain,
-> and was using this for building their kernels. If someone wants to
-> pull in stable updates into an older Android, this would fail with
-> -std=gnu11. Others may be in the same situation.
-> 
-> Changing some of the 5.x stable branches to -std=gnu11 is probably
-> less of a problem, but I would not know where to draw the line exactly.
-> Maybe check with the Android team to see what the newest kernel is
-> that they expect to be built with the old gcc-4.9.
-> 
+On Wed. 18 May 2022 à 22:32, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 18.05.2022 15:10:44, Oliver Hartkopp wrote:
+> > On 18.05.22 14:03, Vincent MAILHOL wrote:
+> > > I didn't think this would trigger such a passionate discussion!
+> >
+> > :-D
+> >
+> > Maybe your change was the drop that let the bucket run over ;-)
+>
+> It's so trivial that everybody feels the urge to say something. :D
+>
+> > > > But e.g. the people that are running Linux instances in a cloud only
+> > > > using vcan and vxcan would not need to carry the entire infrastructure
+> > > > of CAN hardware support and rx-offload.
+> > >
+> > > Are there really some people running custom builds of the Linux kernel
+> > > in a cloud environment? The benefit of saving a few kilobytes by not
+> > > having to carry the entire CAN hardware infrastructure is blown away
+> > > by the cost of having to maintain a custom build.
+> >
+> > When looking to the current Kconfig and Makefile content in
+> > drivers/net/can(/dev) there is also some CONFIG_CAN_LEDS which "depends on
+> > BROKEN" and builds a leds.o from a non existing leds.c ?!?
+> >
+> > Oh leds.c is in drivers/net/can/leds.c but not in drivers/net/can/dev/leds.c
+> > where it could build ... ?
+> >
+> > So what I would suggest is that we always build a can-dev.ko when a CAN
+> > driver is needed.
+> >
+> > Then we have different options that may be built-in:
+> >
+> > 1. netlink hw config interface
+> > 2. bitrate calculation
+> > 3. rx-offload
+> > 4. leds
+> >
+> > E.g. having the netlink interface without bitrate calculation does not make
+> > sense to me too.
+>
+> ACK
+>
+> > > I perfectly follow the idea to split rx-offload. Integrators building
+> > > some custom firmware for an embedded device might want to strip out
+> > > any unneeded piece. But I am not convinced by this same argument when
+> > > applied to v(x)can.
+> >
+> > It does. I've seen CAN setups (really more than one or two!) in VMs and
+> > container environments that are fed by Ethernet tunnels - sometimes also in
+> > embedded devices.
 
-I don't think they still build anything with gcc. We (ChromeOS) only
-need it for test builds of chromeos-4.4 (sigh), and that will hopefully
-be gone in a couple of months.
+Are those VM running custom builds of the kernel in which all the CAN
+hardware devices have been removed? Also, isn't it hard to keep those
+up to date with all the kernel security patches?
 
-We already enabled -std=gnu11 in chromeos-5.10 and chromeos-5.15.
-We'll see if that is possible with chromeos-5.4 as well.
-We won't bother with older kernel branches, but those should not
-get many patches from upstream outside stable release merges,
-so it is less of a problem.
+> > > A two level split (with or without rx-offload) is what makes the most
+> > > sense to me.
+> > >
+> > > Regardless, having the three level split is not harmful. And because
+> > > there seems to be a consensus on that, I am fine to continue in this
+> > > direction.
+> >
+> > Thanks!
+> >
+> > Should we remove the extra option for the bitrate calculation then?
+>
+> +1
 
-Guenter
+I can imagine people wanting to ship a product with the bitrate
+calculation removed. For example, an infotainment unit designed for
+one specific vehicle platform (i.e. baudrate is fixed). In that case,
+the integrator might decide to remove bittiming calculation and
+hardcode all hand calculated bittiming parameters instead.
+
+So that one, I prefer to keep it. I just didn't mention it in my
+previous message because it was already splitted out.
+
+> > And what about the LEDS support depending on BROKEN?
+> > That was introduced by commit 30f3b42147ba6f ("can: mark led trigger as
+> > broken") from Uwe as it seems there were some changes in 2018.
+>
+> There's a proper generic LED trigger now for network devices. So remove
+> LED triggers, too.
+
+Yes, the broken LED topic also popped-up last year:
+
+https://lore.kernel.org/linux-can/20210906143057.zrpor5fkh67uqwi2@pengutronix.de/
+
+I am OK to add one patch to the series for LED removal. Just some
+heads-up: I will take my time, it will definitely not be ready for the
+v5.19 merge window. And I also expect that there will be at least one
+more round of discussion.
+
+While I am at it, anything else to add to the wish list before I start
+to working it?

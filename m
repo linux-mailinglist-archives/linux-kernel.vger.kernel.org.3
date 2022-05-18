@@ -2,198 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775C352BC5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220C352BCF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237874AbiERNaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S237962AbiERNbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238049AbiERN3t (ORCPT
+        with ESMTP id S237896AbiERNbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:29:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0164C1A359B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652880542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WcMQ1jNwCWloTdpOHWUHdU6u3lkdhIdHHgvKjDKaJhQ=;
-        b=BkiNZUDvd5+Uvr6ZB6TLe1z7GEKJmTAENtFTijTBYOnkH1WyL9Djy8yIrJWHquqYSlJMfP
-        Tw5qNGrersurt4DZygF3PXhXGGYZal+KWrGjNcrhECPsPKOOQxoG/Cb3XnnsxODShpc+NF
-        tc5BYKtdASqU7Ou8LHQ8KIh+6Pf4acA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-331-PWzgkEwWPLmtbfnu11grTA-1; Wed, 18 May 2022 09:28:58 -0400
-X-MC-Unique: PWzgkEwWPLmtbfnu11grTA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7CFFD18E0044;
-        Wed, 18 May 2022 13:28:58 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 723CF400E118;
-        Wed, 18 May 2022 13:28:58 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 24IDSwo0014628;
-        Wed, 18 May 2022 09:28:58 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 24IDSvJx014624;
-        Wed, 18 May 2022 09:28:58 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Wed, 18 May 2022 09:28:57 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Peter Zijlstra <peterz@infradead.org>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] objtool: fix objtool regression on x32 systems
-In-Reply-To: <20220516212517.GP76023@worktop.programming.kicks-ass.net>
-Message-ID: <alpine.LRH.2.02.2205180813200.22292@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2205161041260.11556@file01.intranet.prod.int.rdu2.redhat.com> <YoJwtCeVzYUm6Uhg@hirez.programming.kicks-ass.net> <alpine.LRH.2.02.2205161145070.30905@file01.intranet.prod.int.rdu2.redhat.com>
- <20220516212517.GP76023@worktop.programming.kicks-ass.net>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Wed, 18 May 2022 09:31:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF5233A21
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:31:43 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24ICrwKi029894;
+        Wed, 18 May 2022 13:31:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=pp1;
+ bh=n6RkeiMlQ3Uwhku+S25hPN1Cub1ZH5SPR80xoV8sWuU=;
+ b=WJe52TKWf1J42lS0D43OJSBc/nI5BVpWlQn4iF383xDFUecmEZi4QGMSZlv30l/VZ03D
+ aVACAJ+GmmcD7d2kmwq8DydeqS/bl0waIE/XRrebT1O5M9lGJ2jyzHLSE1TbSxSsnLRn
+ LKyYmfIiUCvY/Y9i5bGrtWGSDpiCMqANtLkdrf0f45xhpNQwFE32PMZSE3EvqXttOqTb
+ 5xMZAve+u2yRRPRou0RZXvbdjSv1AUflZtijhQnHYEuoNEqCTFxXLcj+aydjkp/1KvMk
+ B1dIVwCj88g/vULqCpVdDjDkA6AzCGb7NwrJ2kb2wYIbIOHFeNVAOq503MGw5loHXoQL +Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g516w118c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 13:31:32 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24ICt2tr031943;
+        Wed, 18 May 2022 13:31:31 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g516w117p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 13:31:31 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IDS4uu025015;
+        Wed, 18 May 2022 13:31:30 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3g4j3ggvm2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 13:31:29 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IDVRGC50397616
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 13:31:27 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AAD674C044;
+        Wed, 18 May 2022 13:31:27 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0394A4C040;
+        Wed, 18 May 2022 13:31:27 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.145.2.119])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 18 May 2022 13:31:26 +0000 (GMT)
+Date:   Wed, 18 May 2022 16:31:24 +0300
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Jaewon Kim <jaewon31.kim@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jaewon Kim <jaewon31.kim@samsung.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Subject: Re: [RFC PATCH] page_ext: create page extension for all memblock
+ memory regions
+Message-ID: <YoT1LMALyqTUtg6e@linux.ibm.com>
+References: <CGME20220509073953epcas1p127f2d36186316642068c92c5d9dee1c4@epcas1p1.samsung.com>
+ <20220509074330.4822-1-jaewon31.kim@samsung.com>
+ <20220516173321.67402b7f09eacc43d4e476f4@linux-foundation.org>
+ <YoNcBG6kQnmLZ3Z9@linux.ibm.com>
+ <CAJrd-UuzTh-0Ee9+rMRES9onP_EkvJS-VpPP66J4M4n0Ku0ZWA@mail.gmail.com>
+ <YoObTJcBUjeW+2l2@linux.ibm.com>
+ <CAJrd-UtYqEMy+Yr9gP0v0dZ3HZ=fCHe67dTRe=5YtLWrbmd1UQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJrd-UtYqEMy+Yr9gP0v0dZ3HZ=fCHe67dTRe=5YtLWrbmd1UQ@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Nlli5OUDCpmZiJzO56rGlCzzAPJZJknA
+X-Proofpoint-ORIG-GUID: eEVS-yoS7Asvof-tlx0K-lQ7ipnKIgOP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_04,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ spamscore=0 adultscore=0 phishscore=0 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205180076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Mon, 16 May 2022, Peter Zijlstra wrote:
-
-> On Mon, May 16, 2022 at 11:56:21AM -0400, Mikulas Patocka wrote:
-> > 
-> > With this patch, the compiled kernel works. With kernels 5.17 or older, it 
-> > also works. I bisected it and the breakage is caused by the commit 
-> > 4abff6d48dbc.
+On Tue, May 17, 2022 at 10:10:20PM +0900, Jaewon Kim wrote:
+> 64
+> 59
 > 
-> Sure; but it works doesn't mean there aren't more latent issues. ILP32
-> hosted (cross) builds just aren't a thing I've ever considered. If we
-> really want to go support that then we should at least audit the whole
-> thing.
+> 2022년 5월 17일 (화) 오후 9:55, Mike Rapoport <rppt@linux.ibm.com>님이 작성:
+> >
+> > On Tue, May 17, 2022 at 08:38:18PM +0900, Jaewon Kim wrote:
+> > > Hello Mike Rapoport
+> > > Thank you for your comment.
+> > >
+> > > Oh really? Could you point out the code or the commit regarding 'all
+> > > struct pages in any section should be valid and
+> > > properly initialized' ?
+> >
+> > There were several commits that refactored the memory map initialization,
+> > freeing of the unused memory map and abuse of pfn_valid() as a substitute
+> > of "is memory valid" semantics.
+> >
+> > > Actually I am using v5.10 based source tree on an arm64 device.
+> >
+> > Then most probably your change is not relevant for the upstream kernel.
+> > Did you observe any issues with page_ext initialization on v5.18-rcN
+> > kernels?
 > 
-> A quick look seems to suggest at least all the 'offset' fields should be
-> u64 or something. The only reason that works is because -mcmodel=kernel
-> keeps everything in the 2G range to make s32 immediates work. But it
-> isn't right.
+> Actually I observed only 59 sections were initialized for page_ext and
+> missed 5 sections.
+> It should be totally 64 sections * 128 MB = 8,192 MB
 
-There are many 'offset' variables and its hard to determine which should 
-be 64-bit. Would it be possible to commit this patch, so that kernel 5.18 
-can be compiled on x32 distributions? And you can do code refactoring in 
-the next merge window.
+Does this happen with v5.10 based kernel or with v5.18-rcN based kernel? 
 
-Mikulas
+> > > I tried to look up and found the following commit in v5.16-rc1, did
+> > > you mean this?
+> > > 3de360c3fdb3 arm64/mm: drop HAVE_ARCH_PFN_VALID
+> >
+> > Yes, this is one of those commits.
+> >
+> > > I guess memblock_is_memory code in pfn_valid in arch/arm64/mm/init.c, v5.10
+> > > might affect the page_ext_init.
+> >
+> > Yes. In 5.10 the pfn_valid() test in page_ext_init() will skip an entire
+> > section if the first pfn in that section is not memory that can be mapped
+> > in the linear map.
+> >
+> > But again, this should be fixed in the latest kernels.
+> 
+> Great! Thank you for your explanation.
+> I will check it someday later when I use the latest kernel on our devices.
+> The next version on our devices seems to be v5.15 though.
+> 
+> Thank you
+> Jaewon Kim
 
-
-From: Mikulas Patocka <mpatocka@redhat.com>
-
-The patch 4abff6d48dbc ("objtool: Fix code relocs vs weak symbols") makes
-the kernel unbootable.  The patch c087c6e7b551 ("objtool: Fix type of
-reloc::addend") attempts to fix it by replacing 'int' with 'long'.
-
-However, we may be running on a system with x32 ABI and 'long' on x32 is
-32-bit, thus the patch c087c6e7b551 doesn't really change anything and we
-still end up with miscompiled kernel.  This patch replaces 'long' with
-'s64', so that the 64-bit kernel is correctly compiled on a x32 system.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Fixes: 4abff6d48dbc ("objtool: Fix code relocs vs weak symbols")
-Fixes: c087c6e7b551 ("objtool: Fix type of reloc::addend")
-
----
- tools/objtool/check.c               |    9 +++++----
- tools/objtool/elf.c                 |    2 +-
- tools/objtool/include/objtool/elf.h |    4 ++--
- 3 files changed, 8 insertions(+), 7 deletions(-)
-
-Index: linux-2.6/tools/objtool/check.c
-===================================================================
---- linux-2.6.orig/tools/objtool/check.c	2022-05-18 13:51:22.000000000 +0200
-+++ linux-2.6/tools/objtool/check.c	2022-05-18 13:52:37.000000000 +0200
-@@ -6,6 +6,7 @@
- #include <string.h>
- #include <stdlib.h>
- #include <sys/mman.h>
-+#include <inttypes.h>
- 
- #include <arch/elf.h>
- #include <objtool/builtin.h>
-@@ -560,12 +561,12 @@ static int add_dead_ends(struct objtool_
- 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
- 			insn = find_last_insn(file, reloc->sym->sec);
- 			if (!insn) {
--				WARN("can't find unreachable insn at %s+0x%lx",
-+				WARN("can't find unreachable insn at %s+0x%"PRIx64,
- 				     reloc->sym->sec->name, reloc->addend);
- 				return -1;
- 			}
- 		} else {
--			WARN("can't find unreachable insn at %s+0x%lx",
-+			WARN("can't find unreachable insn at %s+0x%"PRIx64,
- 			     reloc->sym->sec->name, reloc->addend);
- 			return -1;
- 		}
-@@ -595,12 +596,12 @@ reachable:
- 		else if (reloc->addend == reloc->sym->sec->sh.sh_size) {
- 			insn = find_last_insn(file, reloc->sym->sec);
- 			if (!insn) {
--				WARN("can't find reachable insn at %s+0x%lx",
-+				WARN("can't find reachable insn at %s+0x%"PRIx64,
- 				     reloc->sym->sec->name, reloc->addend);
- 				return -1;
- 			}
- 		} else {
--			WARN("can't find reachable insn at %s+0x%lx",
-+			WARN("can't find reachable insn at %s+0x%"PRIx64,
- 			     reloc->sym->sec->name, reloc->addend);
- 			return -1;
- 		}
-Index: linux-2.6/tools/objtool/elf.c
-===================================================================
---- linux-2.6.orig/tools/objtool/elf.c	2022-05-18 13:51:22.000000000 +0200
-+++ linux-2.6/tools/objtool/elf.c	2022-05-18 13:51:22.000000000 +0200
-@@ -546,7 +546,7 @@ static struct section *elf_create_reloc_
- 						int reltype);
- 
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
--		  unsigned int type, struct symbol *sym, long addend)
-+		  unsigned int type, struct symbol *sym, s64 addend)
- {
- 	struct reloc *reloc;
- 
-Index: linux-2.6/tools/objtool/include/objtool/elf.h
-===================================================================
---- linux-2.6.orig/tools/objtool/include/objtool/elf.h	2022-05-18 13:51:22.000000000 +0200
-+++ linux-2.6/tools/objtool/include/objtool/elf.h	2022-05-18 13:51:22.000000000 +0200
-@@ -73,7 +73,7 @@ struct reloc {
- 	struct symbol *sym;
- 	unsigned long offset;
- 	unsigned int type;
--	long addend;
-+	s64 addend;
- 	int idx;
- 	bool jump_table_start;
- };
-@@ -135,7 +135,7 @@ struct elf *elf_open_read(const char *na
- struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
- 
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
--		  unsigned int type, struct symbol *sym, long addend);
-+		  unsigned int type, struct symbol *sym, s64 addend);
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
- 			  unsigned long offset, unsigned int type,
- 			  struct section *insn_sec, unsigned long insn_off);
-
+-- 
+Sincerely yours,
+Mike.

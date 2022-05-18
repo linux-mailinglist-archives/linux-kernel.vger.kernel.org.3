@@ -2,67 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B4652C153
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D0F52C0DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240878AbiERRbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:31:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
+        id S240802AbiERRKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240935AbiERRbG (ORCPT
+        with ESMTP id S240748AbiERRKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:31:06 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FEF263A;
-        Wed, 18 May 2022 10:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652895065; x=1684431065;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BoOLoJEyDFfO0iEr6PodmlZMpo8kGeXxw5b90DAP5hw=;
-  b=TBqUJeRom2Lj1jRLQlnWIhxLqM927SA0zG36dbuUsF4sHd46tcB5/YEN
-   uXlEbIphLnpa1SyBr3kNb2QpOQQMMcPNLAF/npBDDvej+GhIAxddQD1CM
-   32aDGeVqbH+l3q2fBmRQyW8IB8oaTMlYMRIeTkdXBBQbbzcrJzYEppWhU
-   lVmh6KVnTMnlY7NKgxz7NnwO0TBoOy8YoMId8iIW89KyZLE/iE6g22YvN
-   MhEWI5owS9uycYW30tEyE9FvgRQqP6Dy52/ubFI3royfztdKJJrS8qcwt
-   YCLc93eQ1BH2XJdEOPgfVDKg1Nwnr/vkmwvbAP0gBgbtlXHev2Qxv9XwB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="332407527"
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="332407527"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 10:08:59 -0700
-X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
-   d="scan'208";a="605989915"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 10:08:56 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 79AFF20387;
-        Wed, 18 May 2022 20:08:53 +0300 (EEST)
-Date:   Wed, 18 May 2022 20:08:53 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe CORNU <philippe.cornu@foss.st.com>
-Subject: Re: [PATCH] media: stm32-dcmi: add support of 1X16 serial pixel
- formats variant
-Message-ID: <YoUoJRzStCnzhxUK@paasikivi.fi.intel.com>
-References: <20220516092048.264036-1-hugues.fruchet@foss.st.com>
- <20220516150237.v3xt7onp2lpmellw@uno.localdomain>
+        Wed, 18 May 2022 13:10:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6D11BF19A;
+        Wed, 18 May 2022 10:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=X4cQhgsNH4NMM2gDMe6qhYgR1Uuo0IffIvWkryvfqfA=; b=gxYr0KWCY0yOaJHClLCtZS+DOS
+        HcbT78QpS1dxcVsUI0zMSTSYWi3JDk6/qHIJhef/D+3ZhBl/jNprF8Y4KocA1xkzvW1cD/pqALThT
+        odMSJEQm0EHRRzhuYx4zpM4hTEfgqO3qAn6GCU4xjPDv/GHxVUA9B3NAo7aX8373g7jX9Ov7t21u6
+        kR6nzQKA8YK8Ur7qacr6v2c940Q6eZb2iFRXDkUWA9Xhk+KFRw5ki75RTrZi9f7DGfRkU9IFeGnzC
+        nWWcFsLwIVSK0jFiaMKy/H+NUjy0mYORO2aI3b+brUWMbdOF/s6htUbfS+1s+4g04bPZpXxhFAnIO
+        cI8gPicw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrNB2-00ByS7-QC; Wed, 18 May 2022 17:09:36 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CC833980E1C; Wed, 18 May 2022 19:09:34 +0200 (CEST)
+Date:   Wed, 18 May 2022 19:09:34 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, mcgrof@kernel.org,
+        torvalds@linux-foundation.org, rick.p.edgecombe@intel.com,
+        kernel-team@fb.com
+Subject: Re: [PATCH bpf-next 2/5] x86/alternative: introduce text_poke_set
+Message-ID: <20220518170934.GG10117@worktop.programming.kicks-ass.net>
+References: <20220516054051.114490-1-song@kernel.org>
+ <20220516054051.114490-3-song@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220516150237.v3xt7onp2lpmellw@uno.localdomain>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20220516054051.114490-3-song@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,28 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacopo,
+On Sun, May 15, 2022 at 10:40:48PM -0700, Song Liu wrote:
+> Introduce a memset like API for text_poke. This will be used to fill the
+> unused RX memory with illegal instructions.
 
-On Mon, May 16, 2022 at 05:02:37PM +0200, Jacopo Mondi wrote:
-> Hi Hugues,
-> 
-> On Mon, May 16, 2022 at 11:20:48AM +0200, Hugues Fruchet wrote:
-> > From: Hugues Fruchet <hugues.fruchet@st.com>
-> >
-> > Add support of 1X16 serial pixel formats in order to support
-> > CSI-2 camera sensor exposing 1x16 pixel formats only.
-> >
-> > Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
-> 
-> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-> 
-> Sakari, if you're sending a new pull request for the ov5640 series,
-> could you include this one as otherwise dcmi would be broken when used
-> with that sensor.
+FWIW, you're going to use it to set INT3 (0xCC), that's not an illegal
+instruction. INTO (0xCE) would be an illegal instruction (in 64bit
+mode).
 
-Just took this into my tree, with your refreshed ov5640 set.
 
-Thanks!
+> +	return addr;
+> +}
+> +
+> +/**
+> + * text_poke_set - memset into (an unused part of) RX memory
+> + * @addr: address to modify
+> + * @c: the byte to fill the area with
+> + * @len: length to copy, could be more than 2x PAGE_SIZE
+> + *
+> + * Not safe against concurrent execution; useful for JITs to dump
+> + * new code blocks into unused regions of RX memory. Can be used in
+> + * conjunction with synchronize_rcu_tasks() to wait for existing
+> + * execution to quiesce after having made sure no existing functions
+> + * pointers are live.
 
--- 
-Sakari Ailus
+That comment suffers from copy-pasta and needs an update because it
+clearly isn't correct.
+
+> + */
+
+Other than that, seems fine.
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>

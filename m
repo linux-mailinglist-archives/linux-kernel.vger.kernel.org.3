@@ -2,89 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E4B52B586
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0963B52B552
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233453AbiERIjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S233468AbiERIj6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 18 May 2022 04:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiERIjr (ORCPT
+        with ESMTP id S233424AbiERIjv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:39:47 -0400
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686B91F62A;
-        Wed, 18 May 2022 01:39:46 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id a76so940065qkg.12;
-        Wed, 18 May 2022 01:39:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sIQU7p2ddRP23ZVcbOH+vqsGdR+AZ+Y5lRt/vXJkT38=;
-        b=sDGn8KUY7E/Ex4kXjg2hTbY7T79HvccZEi8ZFXd80Z9E7C4nZ6j2P8uJarsuIUta3D
-         wlyWixCaHS0k6Cx1ux6tkGjW7A3wz3f+UVXECG2PSaEf3HaOCoBajZBYur7+v3HWs2qF
-         h4GTcwA89FrnxqmdZw0khDS8kbk5Asg9xHEyT0D89QipAlFS80lyscedJofnsC3ME7i2
-         JJvNodofk3FmMR2DrNBIYMkmrReOSSrHcbq2sGk/3Iryyb0zkoAoVEfp5lZje6iypSoa
-         1FniCeS/wC9C5JAIIfwfv58X2WYfq4lFS4Omhn72wkd3DWU++p+VZRfnk8VjCXyc14bg
-         lVzQ==
-X-Gm-Message-State: AOAM531EPYiBonzwn4vVgX5imSyTRc+7TiC4oNHBsG5lpW1TR5CHKKNY
-        Z2sWcwDG6WUuwD/6rDzoxAa8O032CmLYnQ==
-X-Google-Smtp-Source: ABdhPJwOhnuSTqxs7mHRQQza0kR4i3jLi39tD802CY0K4NMBzt0aebaubdXi4FltuNILUzUnz0zN0g==
-X-Received: by 2002:a05:620a:254c:b0:6a2:e7dc:25e3 with SMTP id s12-20020a05620a254c00b006a2e7dc25e3mr10932837qko.63.1652863185443;
-        Wed, 18 May 2022 01:39:45 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id g12-20020ac8070c000000b002f39b99f69csm825426qth.54.2022.05.18.01.39.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 01:39:44 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2ff39b44b06so16079137b3.13;
-        Wed, 18 May 2022 01:39:44 -0700 (PDT)
-X-Received: by 2002:a0d:f002:0:b0:2fe:cfba:d597 with SMTP id
- z2-20020a0df002000000b002fecfbad597mr21222453ywe.502.1652863184044; Wed, 18
- May 2022 01:39:44 -0700 (PDT)
+        Wed, 18 May 2022 04:39:51 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1EBFB00
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:39:49 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-79-NduRNFJ4Pp-5rcXrHSSEXw-1; Wed, 18 May 2022 09:39:46 +0100
+X-MC-Unique: NduRNFJ4Pp-5rcXrHSSEXw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Wed, 18 May 2022 09:39:45 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Wed, 18 May 2022 09:39:45 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Kirill A. Shutemov'" <kirill.shutemov@linux.intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@intel.com" <dave.hansen@intel.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>
+CC:     "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] x86/tdx: Handle load_unaligned_zeropad() page-cross to a
+ shared page
+Thread-Topic: [PATCH] x86/tdx: Handle load_unaligned_zeropad() page-cross to a
+ shared page
+Thread-Index: AQHYagMRu09I4StjsUmLP0Gmi9Ue260kTo+g
+Date:   Wed, 18 May 2022 08:39:45 +0000
+Message-ID: <70df6e274d4a40e78f11ef93521edab6@AcuMS.aculab.com>
+References: <20220517153021.11116-1-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20220517153021.11116-1-kirill.shutemov@linux.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220518065639.2432213-1-gerg@linux-m68k.org> <20220518065639.2432213-3-gerg@linux-m68k.org>
-In-Reply-To: <20220518065639.2432213-3-gerg@linux-m68k.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 18 May 2022 10:39:32 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVWDgwOkA7vydeytRViigr82bMSAEPVQ=r-qsgF=hs_RQ@mail.gmail.com>
-Message-ID: <CAMuHMdVWDgwOkA7vydeytRViigr82bMSAEPVQ=r-qsgF=hs_RQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] m68k: removed unused "mach_get_ss"
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 8:56 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
-> The m68k machine helper function "mach_get_ss" function pointer is
-> set for some machines, but ultimately never used anywhere. Remove it.
->
-> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+From: Kirill A. Shutemov
+> Sent: 17 May 2022 16:30
+> 
+> load_unaligned_zeropad() can lead to unwanted loads across page boundaries.
+> The unwanted loads are typically harmless. But, they might be made to
+> totally unrelated or even unmapped memory. load_unaligned_zeropad()
+> relies on exception fixup (#PF, #GP and now #VE) to recover from these
+> unwanted loads.
+> 
+> In TDX guest the second page can be shared page and VMM may configure it
+> to trigger #VE.
+> 
+> Kernel assumes that #VE on a shared page is MMIO access and tries to
+> decode instruction to handle it. In case of load_unaligned_zeropad() it
+> may result in confusion as it is not MMIO access.
+> 
+> Check fixup table before trying to handle MMIO.
 
-Yep, this became unused since commit 084b3600e2d98ebb ("char/genrtc:
-remove m68k support").
+Is it best to avoid that all happening by avoiding mapping
+'normal memory' below anything that isn't normal memory.
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Even on a normal system it is potentially possibly that the
+second page might be MMIO and reference a target that doesn't
+want to see non-word sized reads.
+(Or the first location might be a fifo and the read consumes
+some data.)
 
+In that case the cpu won't fault the access, but the hardware
+access might have rather unexpected side effects.
 
-Gr{oetje,eeting}s,
+Now the way MMIO pages are allocated probably makes that
+impossible - but load_unaligned_zeropad() relies on
+it not happening or not breaking anything.
 
-                        Geert
+	David
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

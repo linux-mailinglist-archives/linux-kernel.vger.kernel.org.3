@@ -2,108 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5682E52BEAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845FA52BE16
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239166AbiERPKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S239185AbiERPKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239087AbiERPKE (ORCPT
+        with ESMTP id S239087AbiERPKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:10:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33D91DFD89
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:10:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5642A61958
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:10:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B80C385A9;
-        Wed, 18 May 2022 15:09:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652886601;
-        bh=SIvbxlSGGzkgi9tVz1CdkOJ99ZWAfRB8ApyV15kUEX4=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=u9aDk5HhIQ3k47ScSvMLrgb6tbQ8Hoqhs5CpqaQoAz0V4nc/sU//r1N0F8wF2Zna7
-         FkURu8/kROwW5SGQ+y0WudFSMKiCMf3iQ5WjTKiZQjrFq40wHsaObsZ/XZg7wYFwRd
-         8Sy39KgSwbBvZ9PHHox+qDtgfxROf3tFZdf4fBqG70mmMj2jbB0IIGiRgJLQnfcA0m
-         r3RvGM/cKdAff0SESwBN2Lgs7BDq8pQhFlc4IsXFDcQHaXeQlQAttAJfnSe1+7qPjc
-         UiKb6GmlQjNpH2AKiqNYNo1Uuqq82Vrq6dYpu/R5xbcCYreq6kh9hiPgxKwZDBp+Y2
-         hczqQ/QYUGitA==
-Message-ID: <372364b33b8d4b93908c3822e18f7d295de2ede9.camel@kernel.org>
-Subject: Re: [PATCH 20/21] context_tracking: Convert state to atomic_t
-From:   nicolas saenz julienne <nsaenz@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 18 May 2022 17:09:55 +0200
-In-Reply-To: <20220503100051.2799723-21-frederic@kernel.org>
-References: <20220503100051.2799723-1-frederic@kernel.org>
-         <20220503100051.2799723-21-frederic@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        Wed, 18 May 2022 11:10:10 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD11F1DFD9A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:10:08 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so2339330pjf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:10:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DNSWvn36P8Ju40/gmO65ugg5AqpVVXxbcERcQscLzpM=;
+        b=keN5z+JgikftdiPVK5OarD3l3Cy6ZqPF2RrKWaiQQehRNfGPKlqPo13y8OhK52vKhv
+         ztgjk/7nXmm3/cHLh7h4wPrT+Sdo0QRXCsrr5vEO/i7kPmrHEZIl5MCEGYER5kCTNRnt
+         QGZdMfNzb+ExarPWG7ZTlmv9OK/fEuKQTvYNUWDM8Mx3RIHPjzGOw0hzI8P29gx1UGG3
+         lzLaMZ+zNTW5nFV718xLo5qgwS5Sx9Zt4vrgudgDiZWslG9QyJVthaRBqYCrrxIBh4Zi
+         Hli/lsuacSHz6rsqEm1E119KiIlBkovKcckbIXq20ImaRYCKnADdE811yREqtAV/KgeS
+         Yd1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DNSWvn36P8Ju40/gmO65ugg5AqpVVXxbcERcQscLzpM=;
+        b=7iqiI83wmMOWu0Oys7AICeepI0GielonQ1Kam2a5b5jBMlYMVMeW/lpJXwmX90I+VP
+         T1VLEYN+pBEq1wtSeV2XOklGcLKiDvMGSnNd1QW4Ju3fI6EnYvUWuof4ATGSm8DnA4Cb
+         SZvvWtxgNvlQVCDaCcCckHmgZ++anKOWRzvwP9BsL4nmSGLfr98Wgg03cayQwA8FUNVy
+         TiIdTOhhD4hvwZFujUq4I7tA5hHRAI3WMwSyHEhXkgyJtaAUbyV9WJTDyNcgmWjedRVX
+         X389qKDgl1fMM+WFiyai5hOVvvyM9YuMS352rTsdvgNYlNTsaXysbGHH7Uz4/wXSLnpe
+         bNuQ==
+X-Gm-Message-State: AOAM5327ZxRpAsuHKpxqA+riBwt2PqoRypBGYBTYp3yH2W7HA3kyEI+d
+        BXK2dY+0K7uBYYqTpVTvz6e3oIaoT2R80zrxj9qJJQ==
+X-Google-Smtp-Source: ABdhPJwrWMLrAJXitNfkt95jrVfZNkFp0Q/OnWv5We5nfD18OxwBhx5MJM9kkXxi5ci1Przmkq5A6gBEnei8CDeVzu0=
+X-Received: by 2002:a17:90b:3a81:b0:1df:109f:ceed with SMTP id
+ om1-20020a17090b3a8100b001df109fceedmr427956pjb.237.1652886607934; Wed, 18
+ May 2022 08:10:07 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <f6625cd8-90f9-6d48-50f6-7bb052bf479f@openvz.org>
+In-Reply-To: <f6625cd8-90f9-6d48-50f6-7bb052bf479f@openvz.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 18 May 2022 08:09:55 -0700
+Message-ID: <CALvZod4XdLTXhcKrV0nRK5PqdMt4+y4qGzfUdZfHUuwWHxU2tA@mail.gmail.com>
+Subject: Re: [PATCH v3] tracing: add 'accounted' entry into output of
+ allocation tracepoints
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>, kernel@openvz.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Michal Hocko <mhocko@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-05-03 at 12:00 +0200, Frederic Weisbecker wrote:
+On Tue, May 17, 2022 at 11:24 PM Vasily Averin <vvs@openvz.org> wrote:
+>
+> Slab caches marked with SLAB_ACCOUNT force accounting for every
+> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
+> Unfortunately, at the moment this flag is not visible in ftrace output,
+> and this makes it difficult to analyze the accounted allocations.
+>
+> This patch adds boolean "allocated" entry into trace output,
+> and set it to 'true' for calls used __GFP_ACCOUNT flag and
+> for allocations from caches marked with SLAB_ACCOUNT.
+>
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
 
-[...]
-
-> +/**
-> + * ct_state() - return the current context tracking state if known
-> + *
-> + * Returns the current cpu's context tracking state if context tracking
-> + * is enabled.  If context tracking is disabled, returns
-> + * CONTEXT_DISABLED.  This should be used primarily for debugging.
-> + */
-> +static __always_inline int ct_state(void)
-> +{
-> +	int ret;
-> +
-> +	if (!context_tracking_enabled())
-> +		return CONTEXT_DISABLED;
-> +
-> +	preempt_disable();
-> +	ret =3D __ct_state();
-> +	preempt_enable();
-> +
-> +	return ret;
-> +}
-> +
-
-I can't see any use for this function with preemption enabled. You can't tr=
-ust
-the data due to CPU migration and it could be a source of bugs in the futur=
-e.
-Wouldn't it make more sense to move the burden into the callers? They all D=
-TRT,
-plus, this_cpu_ptr() will spew warnings if someone shows up and doesn't com=
-ply.
-
-Regards,
-
---=20
-Nicol=C3=A1s S=C3=A1enz
+Acked-by: Shakeel Butt <shakeelb@google.com>

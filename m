@@ -2,210 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A22252C0B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA7852C08A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240330AbiERQer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S240367AbiERQg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240208AbiERQen (ORCPT
+        with ESMTP id S240526AbiERQga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:34:43 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458631B776D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:34:42 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id j24so3495224wrb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=xAOohEZien8Q5pI9ff0to291LHxkqtD9uRCi4y7JwVU=;
-        b=vNYoWpUDGiiAOtTCwXgIZEAeloWS0FuvvM/74rLIV0eQuZm/F9YQXomV2qYCiDxnho
-         AMG5/iE4kmp/Z9zWoud0T0tuvVmkJE31v6zDIe9t/ANQ1tsYoCV1Rgc3Yo+lC4nqfagt
-         GU/GAhbGxtVCpYvk4EzSCyir6wPpqhznqLM3etWq96wDvoO/EngdC2E0VoEBp0WuWrCN
-         qUbq3fyVSDnTLd3NWws/taceGgDr05YNQy7UXlo3N7bALFHJSZTv++QBgF003akgUVug
-         ciWUNkjMlubZh1YX6+dnvFhwP08Q8X/QAM5nv8aq2xt9VhKCv1cicqQYFWGCBjgQpalK
-         EDCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=xAOohEZien8Q5pI9ff0to291LHxkqtD9uRCi4y7JwVU=;
-        b=e1NX282C9NNxOEe1TCwo2Js6F2aW7HKHkLpTbqaaYn+oxWkhSHC2luHrKGu7WZ6brB
-         ANnjl51o5hw53exPXV0j9sMl5s3g5DI/yDa0jb4g9C027U7hcRnmxO/EFs1JpIrBR/yl
-         UReEtF5J6TN73KDQ4Vngnq1yfK1KXS9YRuB7Q38bE+lRIpk50cqwgFHNF8hYUjPTk8a6
-         m42GV1VK1/nAjZnO3s4ZCTIrJEnwPaYPHivh6rOD7PmXzc5DyhIL/gPG3Pru7ywFvujF
-         Up3ahi60CBVB5890WqdQMeyH0vUybE1gd9h9tqfAbKx2Bg73iN54V1ld3/CwE+qZDXdU
-         iyBA==
-X-Gm-Message-State: AOAM533s+yF0v0g+2jsqYmmWlQxZqbpF23r3G3Lj6W2u2ShJs1fd2VRg
-        8IqdDU9npRIAmIJgPTP7J8f7mg==
-X-Google-Smtp-Source: ABdhPJx41CwyvJGgDp3rKk1MqgtoQPkT3q9OpvsPYVWXX1hqWexMZN+Zkvt+lYCFhs4ofl5uyCAxwQ==
-X-Received: by 2002:a05:6000:1866:b0:20d:2834:5155 with SMTP id d6-20020a056000186600b0020d28345155mr459637wri.101.1652891680807;
-        Wed, 18 May 2022 09:34:40 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id j10-20020adfa78a000000b0020c5253d8fcsm2836584wrc.72.2022.05.18.09.34.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 09:34:40 -0700 (PDT)
-Date:   Wed, 18 May 2022 17:34:38 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
-Message-ID: <YoUgHjHn+UFvj0o1@google.com>
-References: <YoOcYR15Jhkw2XwL@google.com>
- <f34c85cc-71a5-59d4-dd7a-cc07e2af536c@kernel.dk>
- <YoTrmjuct3ctvFim@google.com>
- <b7dc2992-e2d6-8e76-f089-b33561f8471f@kernel.dk>
- <f821d544-78d5-a227-1370-b5f0895fb184@kernel.dk>
- <06710b30-fec8-b593-3af4-1318515b41d8@kernel.dk>
- <YoUNQlzU0W4ShA85@google.com>
- <49609b89-f2f0-44b3-d732-dfcb4f73cee1@kernel.dk>
- <YoUTPIVOhLlnIO04@google.com>
- <1e64d20a-42cc-31cd-0fd8-2718dd8b1f31@kernel.dk>
+        Wed, 18 May 2022 12:36:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C84D205C6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:36:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652891789; x=1684427789;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nfxk6QHzxTv2778lb7oSutOL+8TQsowLGTPneGlEfdk=;
+  b=np1D3I2P8vPJU91+uO9KSc4MtyVPqitXnHHMGgUq8J2YNJtiNhCsG/az
+   U2h2bSUBA1yodBowRjvDP+uNsPSOErfwk8CmHZQvopOYQ0j7/KlvjWA2n
+   hIut5T+YIfTNArKd61QCMFxbWNjNfo1qh2fi6i53xP0R4SiS360GIT+bi
+   jSTdtuHdGxbeKmQLxaH3pfdWQEjRlcb0gV1CJFuPWO0Qrn8Wjs8saQNWV
+   bjMt1wawr4/pIubll45Vk5mHBtWIQLH7TUoHAEsg4T0TAcuCl1fBdzdbm
+   coYv7AcLkvCiD+P11+imZ0K4c9CJTjLbtGqXBf4RTgGUy97iNwjpAJnhE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="259332717"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="259332717"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 09:34:21 -0700
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="605971356"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 09:34:21 -0700
+Date:   Wed, 18 May 2022 09:34:48 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Stephane Eranian <eranian@google.com>,
+        linux-kernel@vger.kernel.org, babu.moger@amd.com, x86@kernel.org
+Subject: Re: [PATCH v2] x86/resctrl: Fix zero cbm for AMD in cbm_validate
+Message-ID: <YoUgKB5svdI/blZa@fyu1.sc.intel.com>
+References: <20220517001234.3137157-1-eranian@google.com>
+ <YoPOWC0waMuSlvI6@fyu1.sc.intel.com>
+ <5a634c10-103e-6f3e-e51b-db26b2bc90a5@intel.com>
+ <YoPa5L2jNYl/sFhw@fyu1.sc.intel.com>
+ <0077efdf-ab64-2924-c290-cd940977b818@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1e64d20a-42cc-31cd-0fd8-2718dd8b1f31@kernel.dk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0077efdf-ab64-2924-c290-cd940977b818@intel.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022, Jens Axboe wrote:
+Hi, Babu,
 
-> On 5/18/22 09:39, Lee Jones wrote:
-> > On Wed, 18 May 2022, Jens Axboe wrote:
-> > 
-> >> On 5/18/22 9:14 AM, Lee Jones wrote:
-> >>> On Wed, 18 May 2022, Jens Axboe wrote:
+On Tue, May 17, 2022 at 11:10:40AM -0700, Reinette Chatre wrote:
+> On 5/17/2022 10:27 AM, Fenghua Yu wrote:
+> > On Tue, May 17, 2022 at 09:49:22AM -0700, Reinette Chatre wrote:
+> >> On 5/17/2022 9:33 AM, Fenghua Yu wrote:
+> >>> On Mon, May 16, 2022 at 05:12:34PM -0700, Stephane Eranian wrote:
+> >>>> AMD supports cbm with no bits set as reflected in rdt_init_res_defs_amd() by:
+> >>> ...
+> >>>> @@ -107,6 +107,10 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
+> >>>>  	first_bit = find_first_bit(&val, cbm_len);
+> >>>>  	zero_bit = find_next_zero_bit(&val, cbm_len, first_bit);
+> >>>>  
+> >>>> +	/* no need to check bits if arch supports no bits set */
+> >>>> +	if (r->cache.arch_has_empty_bitmaps && val == 0)
+> >>>> +		goto done;
+> >>>> +
+> >>>>  	/* Are non-contiguous bitmaps allowed? */
+> >>>>  	if (!r->cache.arch_has_sparse_bitmaps &&
+> >>>>  	    (find_next_bit(&val, cbm_len, zero_bit) < cbm_len)) {
+> >>>> @@ -119,7 +123,7 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
+> >>>>  				    r->cache.min_cbm_bits);
+> >>>>  		return false;
+> >>>>  	}
+> >>>> -
+> >>>> +done:
+> >>>>  	*data = val;
+> >>>>  	return true;
+> >>>>  }
 > >>>
-> >>>> On 5/18/22 6:54 AM, Jens Axboe wrote:
-> >>>>> On 5/18/22 6:52 AM, Jens Axboe wrote:
-> >>>>>> On 5/18/22 6:50 AM, Lee Jones wrote:
-> >>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
-> >>>>>>>
-> >>>>>>>> On 5/17/22 7:00 AM, Lee Jones wrote:
-> >>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
-> >>>>>>>>>
-> >>>>>>>>>> On 5/17/22 6:36 AM, Lee Jones wrote:
-> >>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
-> >>>>>>>>>>>
-> >>>>>>>>>>>> On 5/17/22 6:24 AM, Lee Jones wrote:
-> >>>>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>> On 5/17/22 5:41 AM, Lee Jones wrote:
-> >>>>>>>>>>>>>>> Good afternoon Jens, Pavel, et al.,
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>> Not sure if you are presently aware, but there appears to be a
-> >>>>>>>>>>>>>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
-> >>>>>>>>>>>>>>> in Stable v5.10.y.
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>> The full sysbot report can be seen below [0].
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>> The C-reproducer has been placed below that [1].
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>> I had great success running this reproducer in an infinite loop.
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>> My colleague reverse-bisected the fixing commit to:
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
-> >>>>>>>>>>>>>>>   Author: Jens Axboe <axboe@kernel.dk>
-> >>>>>>>>>>>>>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>        io-wq: have manager wait for all workers to exit
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>        Instead of having to wait separately on workers and manager, just have
-> >>>>>>>>>>>>>>>        the manager wait on the workers. We use an atomic_t for the reference
-> >>>>>>>>>>>>>>>        here, as we need to start at 0 and allow increment from that. Since the
-> >>>>>>>>>>>>>>>        number of workers is naturally capped by the allowed nr of processes,
-> >>>>>>>>>>>>>>>        and that uses an int, there is no risk of overflow.
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
-> >>>>>>>>>>>>>>>     1 file changed, 22 insertions(+), 8 deletions(-)
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>> Does this fix it:
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
-> >>>>>>>>>>>>>> Author: Jens Axboe <axboe@kernel.dk>
-> >>>>>>>>>>>>>> Date:   Fri Mar 5 12:59:30 2021 -0700
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>     io-wq: fix race in freeing 'wq' and worker access
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>> Looks like it didn't make it into 5.10-stable, but we can certainly
-> >>>>>>>>>>>>>> rectify that.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> Thanks for your quick response Jens.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> This patch doesn't apply cleanly to v5.10.y.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> This is probably why it never made it into 5.10-stable :-/
-> >>>>>>>>>>>
-> >>>>>>>>>>> Right.  It doesn't apply at all unfortunately.
-> >>>>>>>>>>>
-> >>>>>>>>>>>>> I'll have a go at back-porting it.  Please bear with me.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> Let me know if you into issues with that and I can help out.
-> >>>>>>>>>>>
-> >>>>>>>>>>> I think the dependency list is too big.
-> >>>>>>>>>>>
-> >>>>>>>>>>> Too much has changed that was never back-ported.
-> >>>>>>>>>>>
-> >>>>>>>>>>> Actually the list of patches pertaining to fs/io-wq.c alone isn't so
-> >>>>>>>>>>> bad, I did start to back-port them all but some of the big ones have
-> >>>>>>>>>>> fs/io_uring.c changes incorporated and that list is huge (256 patches
-> >>>>>>>>>>> from v5.10 to the fixing patch mentioned above).
-> >>>>>>>>>>
-> >>>>>>>>>> The problem is that 5.12 went to the new worker setup, and this patch
-> >>>>>>>>>> landed after that even though it also applies to the pre-native workers.
-> >>>>>>>>>> Hence the dependency chain isn't really as long as it seems, probably
-> >>>>>>>>>> just a few patches backporting the change references and completions.
-> >>>>>>>>>>
-> >>>>>>>>>> I'll take a look this afternoon.
-> >>>>>>>>>
-> >>>>>>>>> Thanks Jens.  I really appreciate it.
-> >>>>>>>>
-> >>>>>>>> Can you see if this helps? Untested...
-> >>>>>>>
-> >>>>>>> What base does this apply against please?
-> >>>>>>>
-> >>>>>>> I tried Mainline and v5.10.116 and both failed.
-> >>>>>>
-> >>>>>> It's against 5.10.116, so that's puzzling. Let me double check I sent
-> >>>>>> the right one...
-> >>>>>
-> >>>>> Looks like I sent the one from the wrong directory, sorry about that.
-> >>>>> This one should be better:
-> >>>>
-> >>>> Nope, both are the right one. Maybe your mailer is mangling the patch?
-> >>>> I'll attach it gzip'ed here in case that helps.
+> >>> Isn't it AMD supports 0 minimal CBM bits? Then should set its min_cbm_bits as 0.
+> >>> Is the following patch a better fix? I don't have AMD machine and cannot
+> >>> test the patch.
 > >>>
-> >>> Okay, that applied, thanks.
-> >>>
-> >>> Unfortunately, I am still able to crash the kernel in the same way.
+> >>> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+> >>> index 6055d05af4cc..031d77dd982d 100644
+> >>> --- a/arch/x86/kernel/cpu/resctrl/core.c
+> >>> +++ b/arch/x86/kernel/cpu/resctrl/core.c
+> >>> @@ -909,6 +909,7 @@ static __init void rdt_init_res_defs_amd(void)
+> >>>  			r->cache.arch_has_sparse_bitmaps = true;
+> >>>  			r->cache.arch_has_empty_bitmaps = true;
+> >>>  			r->cache.arch_has_per_cpu_cfg = true;
+> >>> +			r->cache.min_cbm_bits = 0;
+> >>>  		} else if (r->rid == RDT_RESOURCE_MBA) {
+> >>>  			hw_res->msr_base = MSR_IA32_MBA_BW_BASE;
+> >>>  			hw_res->msr_update = mba_wrmsr_amd;
 > >>
-> >> Alright, maybe it's not enough. I can't get your reproducer to crash,
-> >> unfortunately. I'll try on a different box.
+> >> That is actually what Stephane's V1 [1] did and I proposed that
+> >> he fixes it with (almost) what he has in V2 (I think the check
+> >> can be moved earlier before any bits are searched for).
+> >>
+> >> The reasons why I proposed this change are:
+> >> - min_cbm_bits is a value that is exposed to user space and from the
+> >>   time AMD was supported this has always been 1 for those systems. I
+> >>   do not know how user space uses this value and unless I can be certain
+> >>   making this 0 will not affect user space I would prefer not to
+> >>   make such a change.
 > > 
-> > You need to have fuzzing and kasan enabled.
+> > But a user visible mismatch is created by the V2 patch:
 > 
-> I do have kasan enabled. What's fuzzing?
+> No. V2 does not create a user visible change, it restores original behavior.
+> 
+> > User queries min_cbm_bits and finds it is 1 but turns out 0 can be written
+> > to the schemata.
+> > 
+> > Is it an acceptable behavior? Shouldn't user read right min_cbm_bits (0)
+> > on AMD?
+> 
+> Original AMD enabling set min_cbm_bits as 1 while also supporting 0 to
+> be written to schemata file. Supporting 0 to be written to schemata file
+> was unintentionally broken during one of the MPAM prep patches. This
+> patch fixes that.
+> 
+> You are proposing a change to original AMD support that impacts user
+> space API while I find fixing to restore original behavior to
+> be the safest option. Perhaps Babu could pick the preferred solution
+> and I would step aside if you prefer to go with (an improved) V1.
 
-CONFIG_KCOV
+Is it OK for you to set min_cbm_bits to 0 on AMD?
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks.
+
+-Fenghua

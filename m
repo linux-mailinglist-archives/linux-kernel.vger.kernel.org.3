@@ -2,97 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA1852BD15
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39D752BC13
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238427AbiEROFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S238436AbiEROFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbiEROFP (ORCPT
+        with ESMTP id S231747AbiEROFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:05:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A07819CB68
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:05:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QYe8TgPSWi5eG10guqlupNGuWjRTxdPb1zxB8kIjdog=; b=E6FxV5oI3JIAvai5YDO1B3iuXf
-        jdlF0lYmKxW9TEzTlGfO7weZa17G5O8HZwjEkvT+j5fyh5Klo/0WgjLUeFMd9noiB6krv/ha+ueE5
-        F8Dg/KlS1j2tcXMdqa6+OX0OT+vnY/vNxKHeHesMhmMMY8IOF4+DHt0IbKCFbPl4u170BsOgaTuyp
-        YBgHxeHNJbsFLXbNSuqAOwuAN1QLNtHJIi3Xd2CIGDoXFDmMy3qX+9NVyXhpmEe1JhvQIRCqH7nHN
-        vdvr5EPSJeIsSppZ2/aXLyG7oitnjlmJwWGrMdMiFRaq7r2zJnDGCa/cFE0+ku6PIx1ZCNwwqwm4u
-        51VWGxIQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrKIS-001YaT-6C; Wed, 18 May 2022 14:05:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C0AAE30047E;
-        Wed, 18 May 2022 16:05:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 857CA202391E4; Wed, 18 May 2022 16:05:03 +0200 (CEST)
-Date:   Wed, 18 May 2022 16:05:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] sched/numa: Adjust imb_numa_nr to a better
- approximation of memory channels
-Message-ID: <YoT9D0YGlWwHQMQi@hirez.programming.kicks-ass.net>
-References: <20220511143038.4620-1-mgorman@techsingularity.net>
- <20220511143038.4620-5-mgorman@techsingularity.net>
- <20220518094112.GE10117@worktop.programming.kicks-ass.net>
- <20220518111539.GP3441@techsingularity.net>
+        Wed, 18 May 2022 10:05:43 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B09187DAC;
+        Wed, 18 May 2022 07:05:42 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2fee9fe48c2so25773907b3.3;
+        Wed, 18 May 2022 07:05:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Pg9cHDfOmQbKA6sIGv2JPMMr6K3pv/vo5Tu+jGJ0f+A=;
+        b=e6/AhQfYrT8846Hg+aIPVzaVNoSL5XsanMKp811Mrs9WvxdjaycBT017rBix3zEiGm
+         TlvUgokaIm0K6peenTPOV5Ao6qQL5/D+u/4MWTUKSpxKnpuBEt3BR9axyNsMFMyrZj+v
+         ey+zthjQY63V86f9OZHFh+GpFlqMdOfccOiv7C+pzQJbWG3tRMkDFCQqFYLfcODly9NM
+         j7Pkzpo9rEAIxXDdu+xQeuP5y7iE7HC9oidLejvRrPNl8OgpjI2UoXjr4ItMpnam5NUy
+         JJapsiATGADzMGfya24pgCtEJo/LSp/aPzQpJvTvuErsZhuoYCREpg4lcUHMH9s3UJ/t
+         oBJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Pg9cHDfOmQbKA6sIGv2JPMMr6K3pv/vo5Tu+jGJ0f+A=;
+        b=DprFq9kExwc1QyirZTH8cVen0FMwZX/+VB3wgJdYlnUeKkcbQZjxoHbKB0mgxtHL76
+         u0U3IeABez4ad89gOohTBIdJrO9+p4z80hnZ+nUWr4457VkdrNPQq4apnYnpJOq8X4fq
+         Bmyl3ema0O6rxWHywqpL2+IndzZB9JiUfT/EFXd88ibVl1GSJrDTkMBmAk7rDE2qNfNf
+         lBz+yDuho5+FnluLxiuLeMU7lyN8owmfDhRkeRfU+0UOdJRBhoQ1pxcntgqya1mUC0mu
+         mpmBaMfqE34jul1h9IdfDzt2/oVoMcncrh3EbIT2ESaIZNiUSqkOKPxHgbON1biFlIMm
+         Tv0g==
+X-Gm-Message-State: AOAM532JNqRBOko1nzcERMNRMCErb4ZBfLrX+UeBtdoAlZUArOh40pff
+        HqFK+Tz71/DZDXZ3thPqc8aGkq8eAoWQ2q/IY78=
+X-Google-Smtp-Source: ABdhPJxEmLouzj7heJFGZupA9PDoDM88xPg6Yc39MR+Z8uhjn/4fz1Pwv8qxww7dqmcsrzi9Z+H4+RDs0k2WOPNJi4I=
+X-Received: by 2002:a81:4f0b:0:b0:2ff:2770:c267 with SMTP id
+ d11-20020a814f0b000000b002ff2770c267mr8566295ywb.212.1652882741213; Wed, 18
+ May 2022 07:05:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518111539.GP3441@techsingularity.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1652712771.git.siyanteng@loongson.cn> <b0c1324d1d63846d700ab354446a6deaf30754c0.1652712771.git.siyanteng@loongson.cn>
+ <8735h8vu0x.fsf@meer.lwn.net>
+In-Reply-To: <8735h8vu0x.fsf@meer.lwn.net>
+From:   yanteng si <siyanteng01@gmail.com>
+Date:   Wed, 18 May 2022 22:05:29 +0800
+Message-ID: <CAEensMzjCR+LWXw-xS95xMOea20yxUJ8c-f7EmYgP7EkpUePaw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] MAINTAINERS: Become the docs/zh_CN maintainer
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Yanteng Si <siyanteng@loongson.cn>, Alex Shi <alexs@kernel.org>,
+        Alex Shi <seakeel@gmail.com>, Wu XiangCheng <bobwxc@email.cn>,
+        Yeechou Tang <tangyeechou@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 12:15:39PM +0100, Mel Gorman wrote:
+Jonathan Corbet <corbet@lwn.net> =E4=BA=8E2022=E5=B9=B45=E6=9C=8818=E6=97=
+=A5=E5=91=A8=E4=B8=89 03:28=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Yanteng Si <siyanteng@loongson.cn> writes:
+>
+> > It's time to become a maintainer of Chinese documentation, and Yanteng'=
+s plan
+> > is to help everyone with the utmost enthusiasm and patience.
+> >
+> > Signed-off-by: Yanteng Si <siyanteng@loongson.cn>
+> > Reviewed-by: Alex Shi <alexs@kernel.org>
+> > ---
+> >  MAINTAINERS | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 9ce78f2275dc..ff1364d9f7cc 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -4649,6 +4649,7 @@ F:      Documentation/dev-tools/checkpatch.rst
+> >
+> >  CHINESE DOCUMENTATION
+> >  M:   Alex Shi <alexs@kernel.org>
+> > +M:   Yanteng Si <siyanteng@loongson.cn>
+> >  S:   Maintained
+> >  F:   Documentation/translations/zh_CN/
+>
+> I've applied this.  I am curious, though: what is your sense for what
+> being designated a "maintainer" means?  Do you envision something beyond
+> reviewing patches (for which an "R:" entry would be most appropriate)?
+>
+> In any case, you help with the documentation is appreciated!
 
-> I'm not aware of how it can be done in-kernel on a cross architectural
-> basis. Reading through the arch manual, it states how many channels are
-> in a given processor family and it's available during memory check errors
-> (apparently via the EDAC driver). It's sometimes available via PMUs but
-> I couldn't find a place where it's generically available for topology.c
-> that would work on all x86-64 machines let alone every other architecture.
+Jonathan Corbet, Alex Shi, and guys in the mail list.
 
-So provided it is something we want (below) we can always start an arch
-interface and fill it out where needed.
+We, all kernel developers who love Chinese documentation, are now
+involved in a very interesting project: the localization of kernel
+documentation into Chinese.
 
-> It's not even clear if SMBIOS was parsed in early boot whether
+For a long time, we have been working on translating as much of the
+English documentation into Chinese as possible, while neglecting to
+maintain the growing amount of Chinese documentation, which is
+becoming progressively more difficult to maintain. It's not just the
+quantity that is difficult, but also the time. For example, if a
+document is not updated in a timely manner, developers who have
+difficulty with English will get old or even wrong guidelines, which
+is not only a waste of time and effort for developers, but may also
+result in the kernel not getting the code contributed by developers in
+a timely manner.
 
-We can always rebuild topology / update variables slightly later in
-boot.
+During the translation, we found ourselves disagree on the translation
+of some terms from time to time, especially on terms being translated
+into Chinese for the first time; and sometimes it might not be easy to
+reach agreement on such circumstances and provide a translation that
+is trustworthy, up-to-date, and elegant in a short time.
 
-> it's a
-> good idea. It could result in difference imbalance thresholds for each
-> NUMA domain or weird corner cases where assymetric NUMA node populations
-> would result in run-to-run variance that are difficult to analyse.
+At the same time, I've noticed that the translating kernel
+documentations is a great entry point to  many newbies, which is a
+good thing, but adds to the burden of reviewing Chinese documentation
+patches, as most of them tend to have great enthusiasm but are
+unfamiliar with the patch creation and submission process. Of course,
+we have very detailed documentation guidelines and they are translated
+into Chinese, but they still need some help from us in their practice
+process.
 
-Yeah, maybe. OTOH having a magic value that's guestimated based on
-hardware of the day is something that'll go bad any moment as well.
+But that is the past. And now we are looking only to the future.
 
-I'm not too worried about run-to-run since people don't typically change
-DIMM population over a reboot, but yes, there's always going to be
-corner cases. Same with a fixed value though, that's also going to be
-wrong.
+I will do my best to keep all the Chinese documentation as up-to-date
+as the English documentation, and I will keep an eye on the latest
+changes to each original document and quickly sync them to the Chinese
+documentation. At the same time, I will work to move forward with a
+plan to produce a glossary of terms, and to revise the current
+documentation where a single English word is translated into multiple
+Chinese words. Finally, I will provide every developer with as much
+help as I can with my utmost enthusiasm and patience.
 
 
+Thanks,
+Yanteng

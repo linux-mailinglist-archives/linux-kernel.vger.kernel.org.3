@@ -2,98 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8A352BE39
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5682E52BEAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239159AbiERPJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        id S239166AbiERPKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239087AbiERPJ0 (ORCPT
+        with ESMTP id S239087AbiERPKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:09:26 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAC2195EAD;
-        Wed, 18 May 2022 08:09:24 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 373EDC0003;
-        Wed, 18 May 2022 15:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652886563;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FLdoGJYGG/Ago8Jd5bcv62TJ96wqqFhxKMXBejyBWDI=;
-        b=UW4pbngg4rU1zBTrYkx+RdpTzLmADSmoeA/zt9lRkipX7zw/Thx8eeWh/CzZtqdoB9H7mh
-        M5gOyUbguyPaKEUrvhjjA0CiqUAsQ1NdOsrRjBxSshNGRbrchPbBATK9f7GNE12cd4FM44
-        Yyh9rK8Auz9S7tyHL6J4aVHW/RnW1egC7BgqLkRUM1OTLegHRjAigWbyBKNdupjGDFC271
-        ZMeg0C/xaaYLc8rt471NfYIocCdb6fSOgH+kjAIzbt+A9qXvpGNCM889n4k4zQlajENa24
-        4FBSM3Ffu0B+oQSA3sT9V42eUBZmAU9zDc0di6/NEQLAXgboFalmkR/r5ZYjsw==
-Date:   Wed, 18 May 2022 17:09:20 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] rtc: rzn1: initialize val in rzn1_rtc_set_offset
-Message-ID: <20220518170920.4db16990@xps-13>
-In-Reply-To: <20220518134747.3215597-1-trix@redhat.com>
-References: <20220518134747.3215597-1-trix@redhat.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Wed, 18 May 2022 11:10:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33D91DFD89
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:10:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5642A61958
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:10:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B80C385A9;
+        Wed, 18 May 2022 15:09:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652886601;
+        bh=SIvbxlSGGzkgi9tVz1CdkOJ99ZWAfRB8ApyV15kUEX4=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=u9aDk5HhIQ3k47ScSvMLrgb6tbQ8Hoqhs5CpqaQoAz0V4nc/sU//r1N0F8wF2Zna7
+         FkURu8/kROwW5SGQ+y0WudFSMKiCMf3iQ5WjTKiZQjrFq40wHsaObsZ/XZg7wYFwRd
+         8Sy39KgSwbBvZ9PHHox+qDtgfxROf3tFZdf4fBqG70mmMj2jbB0IIGiRgJLQnfcA0m
+         r3RvGM/cKdAff0SESwBN2Lgs7BDq8pQhFlc4IsXFDcQHaXeQlQAttAJfnSe1+7qPjc
+         UiKb6GmlQjNpH2AKiqNYNo1Uuqq82Vrq6dYpu/R5xbcCYreq6kh9hiPgxKwZDBp+Y2
+         hczqQ/QYUGitA==
+Message-ID: <372364b33b8d4b93908c3822e18f7d295de2ede9.camel@kernel.org>
+Subject: Re: [PATCH 20/21] context_tracking: Convert state to atomic_t
+From:   nicolas saenz julienne <nsaenz@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Phil Auld <pauld@redhat.com>,
+        Alex Belits <abelits@marvell.com>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yu Liao <liaoyu15@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Uladzislau Rezki <uladzislau.rezki@sony.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 18 May 2022 17:09:55 +0200
+In-Reply-To: <20220503100051.2799723-21-frederic@kernel.org>
+References: <20220503100051.2799723-1-frederic@kernel.org>
+         <20220503100051.2799723-21-frederic@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 2022-05-03 at 12:00 +0200, Frederic Weisbecker wrote:
 
-trix@redhat.com wrote on Wed, 18 May 2022 09:47:47 -0400:
+[...]
 
-> The clang build fails with
-> rtc-rzn1.c:291:3: error: variable 'val' is uninitialized when used here [=
--Werror,-Wuninitialized]
->   val |=3D RZN1_RTC_SUBU_DEV;
->   ^~~
->=20
-> The val variable in rzn1_rtc_set_offset() is never initialized so
-> the series of |=3D operations in the function will start with a
-> garbage value.  So initialize val to 0.
->=20
-> Fixes: be4a11cf98af ("rtc: rzn1: Add oscillator offset support")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/rtc/rtc-rzn1.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/rtc/rtc-rzn1.c b/drivers/rtc/rtc-rzn1.c
-> index 980ade8c9601..0b4bf6e43464 100644
-> --- a/drivers/rtc/rtc-rzn1.c
-> +++ b/drivers/rtc/rtc-rzn1.c
-> @@ -272,7 +272,7 @@ static int rzn1_rtc_set_offset(struct device *dev, lo=
-ng offset)
->  	struct rzn1_rtc *rtc =3D dev_get_drvdata(dev);
->  	unsigned int steps;
->  	int stepsh, stepsl;
-> -	u32 val;
-> +	u32 val =3D 0;
+> +/**
+> + * ct_state() - return the current context tracking state if known
+> + *
+> + * Returns the current cpu's context tracking state if context tracking
+> + * is enabled.  If context tracking is disabled, returns
+> + * CONTEXT_DISABLED.  This should be used primarily for debugging.
+> + */
+> +static __always_inline int ct_state(void)
+> +{
+> +	int ret;
+> +
+> +	if (!context_tracking_enabled())
+> +		return CONTEXT_DISABLED;
+> +
+> +	preempt_disable();
+> +	ret =3D __ct_state();
+> +	preempt_enable();
+> +
+> +	return ret;
+> +}
+> +
 
-Actually reviewing this makes me realize I mixed two variables
-together:
-- val here and below should be renamed to something like "subu" or
-  and indeed initialized to 0 here.
-- a "ctl2" u32 should be introduced and be used instead of "val" in the
-  readl_poll_timeout() call.
+I can't see any use for this function with preemption enabled. You can't tr=
+ust
+the data due to CPU migration and it could be a source of bugs in the futur=
+e.
+Wouldn't it make more sense to move the burden into the callers? They all D=
+TRT,
+plus, this_cpu_ptr() will spew warnings if someone shows up and doesn't com=
+ply.
 
-Thanks,
-Miqu=C3=A8l
+Regards,
+
+--=20
+Nicol=C3=A1s S=C3=A1enz

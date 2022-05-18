@@ -2,92 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D5C52B19F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4084452B1A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiEREuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 00:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        id S230025AbiEREvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 00:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiEREul (ORCPT
+        with ESMTP id S229982AbiEREvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 00:50:41 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1490513E3E
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 21:50:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 18 May 2022 00:51:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9873A183A4;
+        Tue, 17 May 2022 21:51:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L30t33mDSz4xVP;
-        Wed, 18 May 2022 14:50:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1652849436;
-        bh=LNLCsDkug1r3kbDai+5TpbpwIL81Sv0gHUxwzASZmbE=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 318816170D;
+        Wed, 18 May 2022 04:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 069B1C385A9;
+        Wed, 18 May 2022 04:51:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652849509;
+        bh=mddUWqFjVahApHjz2992Fu3x2eZivf5CIBAVp5SQNug=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=kW2YFNy6Mydz+OYZr3o72Pk6e8jcaOqaS4BhdS8uSWLiEn9PZpa7vpwkALAOyPog8
-         UW5WkzqvTIHaTUHky6hhvCbL6o4qIDreX25VuFfk5x1pzkEUhloYFNFsr5gmQ8VnPN
-         cjIivInaZnZ/wqO8YgTCpRLyMfYhRMqsZtJ+GeqPoN6lBpd9isvAGSH8Zpp+UzjLIb
-         HkGjENzvewWhBq42NbX/3UVxAgywDSpd+CmNpuQGB112pt4GuqEgXBzuw5UZVpNv4M
-         TLqM2j4Cnchw8HUHHJV+LZUUmQNfj7xMbxsex2HAeEMrTqirY/vQvbDUPG6V7Z8hei
-         tyO05KtVFELtA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     YueHaibing <yuehaibing@huawei.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
-        "paulus@samba.org" <paulus@samba.org>
-Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] powerpc/book3e: Fix build error
-In-Reply-To: <8b169642-5d32-4135-93a7-4969515d1ab0@huawei.com>
-References: <20220517094830.27560-1-yuehaibing@huawei.com>
- <0e8b7931-9bfb-1948-c141-c4e612ba0fe6@csgroup.eu>
- <8b169642-5d32-4135-93a7-4969515d1ab0@huawei.com>
-Date:   Wed, 18 May 2022 14:50:34 +1000
-Message-ID: <87sfp7o351.fsf@mpe.ellerman.id.au>
+        b=JRLyl9Z80DWdm5zcHmW/P5eCLNtKApwbNCLboSBg6NDegSDCpd5p6G1T954fvo/A8
+         tCMAmc2Sgj1M+yjs+ss8jtJnR/AHDq6sTC6rnmwdT/EZ7qlSapUx7WNccXcHWBhNhS
+         v807gVmISMU16DXFVIuHjLrlE52K9U0qaFM79S197LAcktQIwq0nvpvRISFQRD0Z9W
+         OCkq7GDdFMsbaBmBXniaLpl9+WYmCS4wPYIxLRN4oOzZBias59GRrOEMFKhLIrHJIx
+         98sseOtfNCRY2Wl10cwK4PJqv5lfwry0Ag+kDWQXIy9Z0OOf9H3jRgJe61Ex6wIM9T
+         bP05FbFmJMuTg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Rameshkumar Sundaram <quic_ramess@quicinc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the wireless-next tree
+In-Reply-To: <20220517200024.3bc972ed@canb.auug.org.au> (Stephen Rothwell's
+        message of "Tue, 17 May 2022 20:00:24 +1000")
+References: <20220517200024.3bc972ed@canb.auug.org.au>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Wed, 18 May 2022 07:51:43 +0300
+Message-ID: <877d6j4f4w.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-YueHaibing <yuehaibing@huawei.com> writes:
-> On 2022/5/17 18:45, Christophe Leroy wrote:
->> Le 17/05/2022 =C3=A0 11:48, YueHaibing a =C3=A9crit=C2=A0:
->>> arch/powerpc/mm/nohash/fsl_book3e.c: In function =E2=80=98relocate_init=
-=E2=80=99:
->>> arch/powerpc/mm/nohash/fsl_book3e.c:348:2: error: implicit declaration =
-of function =E2=80=98early_get_first_memblock_info=E2=80=99 [-Werror=3Dimpl=
-icit-function-declaration]
->>>    early_get_first_memblock_info(__va(dt_ptr), &size);
->>>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>
->>> Add missing include file linux/of_fdt.h to fix this.
->>>
->>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->>=20
->> Thats for fixing that.
->>=20
->> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->>=20
->> It means we don't have any defconfig for 32 bits booke with=20
->> CONFIG_RELOCATABLE ?
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+
+> Hi all,
 >
-> Indeed, there is no defconfig with CONFIG_RELOCATABLE under arch/powerpc/=
-configs
+> After merging the wireless-next tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> include/net/cfg80211.h:1188: warning: bad line: attribute is present
+> in beacon data or not.
+>
+> Introduced by commit
+>
+>   3d48cb74816d ("nl80211: Parse NL80211_ATTR_HE_BSS_COLOR as a part of
+> nl80211_parse_beacon")
 
-It's selected by CRASH_DUMP, which is in ppc64_defconfig.
+Thanks for the report, Johannes fixed it in this commit:
 
-But it's not enabled in corenet32_smp_defconfig which is what I build,
-or any of the other 85xx configs.
+https://git.kernel.org/wireless/wireless-next/c/ee0e2f51e211
 
-I guess it should be, I think it's true that RELOCATABLE=3Dy exercises
-more interesting code paths?
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-cheers
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

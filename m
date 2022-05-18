@@ -2,114 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D0E52B70D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC40652B71A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234326AbiERJbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S234280AbiERJci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234274AbiERJaw (ORCPT
+        with ESMTP id S234300AbiERJcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:30:52 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A97A5F9C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:30:43 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id i23so1811192ljb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=pEuG856eNrPsEk24LF5334+ERuSyEbx0udXSOjyyo+A=;
-        b=jadEy/jwRZ8a/utyj7rT19tioRyAuF1iVtBo/+XjTN2yD0RdlZHtiF3DGgFlKWMtKJ
-         D90u8Ym3Wpyw4sshRoIAE2UtdzchOB3LXtGiEVO1HwGcumHK6c9eSdg4F9Xm2RlCaV92
-         mzmV0YqOt8ZXetvXzlxy+epqZSBQ7T+ii1rfgcSO1IqCPUFKRkYtg69bkrCzmQqoKVcO
-         xa+4V9hL6OH9jqmAqTMvOqaHizpC/VnOoEk4QxCzgfHRvpOH6f7CgsyO4aoXLvazbR6J
-         Jq5z4Yn9Lrsv+J9jQHQtcVbPhmGQSHddCbQ1cYtgeT4KWnXg1SoMaDGmZpeNkv97/83j
-         vtJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=pEuG856eNrPsEk24LF5334+ERuSyEbx0udXSOjyyo+A=;
-        b=HOLwRmcpGVM3XU5x8lJLTt/vASnmA2ILOjMrh5twz1DqvHc3+a+yaBl3MeIE/TxDTR
-         1AX8EeoCTWax++U2y3nyoVvat5f2VIPTc4Gq1jLAle/dWvsFTtmKkG9fs5DIhwSYkcRX
-         LNrjcKDJH5TnHrjzDjdSNuLoJ/A5guJ15Gsdb8Ogf7ItN5vyb+D1W/Kk5As9PUqvu1lu
-         cRJ7XyJxBAGWJXP+2uL5JXEq7RvfCDR+C4nEv42DPUMqYPGmcLt3EsYqp1SYFrLmpS/6
-         8mH6r9OfDHP5+en3GqeDYygcP1fr0EZeALGrU0uvh9Gep3f/4h4/aG67KvzP5bp8vzRp
-         PUmw==
-X-Gm-Message-State: AOAM5309LqX9d6VGj59KeMvRwrX09k+2/8z/BLHDBGLme0/zQERcPT19
-        IhChhRg3E99sOfCnUeS3xgdoJw==
-X-Google-Smtp-Source: ABdhPJyosrAxGczRVd6cfbCathJEWKApPLYPS9ky7y9dpYiREXQPMjHhIba3HPS92kh/mgUeLQdcqg==
-X-Received: by 2002:a05:651c:893:b0:249:4023:3818 with SMTP id d19-20020a05651c089300b0024940233818mr17392024ljq.44.1652866241430;
-        Wed, 18 May 2022 02:30:41 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id w13-20020a05651204cd00b00473f03f22a3sm154234lfq.58.2022.05.18.02.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 02:30:40 -0700 (PDT)
-Message-ID: <74b97963-3937-66fd-18e2-29278a99d706@linaro.org>
-Date:   Wed, 18 May 2022 11:30:39 +0200
+        Wed, 18 May 2022 05:32:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1785C9E9C1
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WwG+aMK92zqBm4TaHVu6Z9jHdMGFIVZd9uJHvsK5LN0=; b=J5H1rzgmaKs8OKBAmhMBwVCEgg
+        FoHwdHH8muQicHQwMlWSEC3vyA6SbC8z7VW4CHH2wBvhWvvb74o2YTDcrU6zlSPck1udP22eFa015
+        y7iPp+/wIXboH9znjNQ4HjVjE+IB/kIWeuNBqa+LA3GBQpzrGbmRoJzMLsIx4p7OjRflFEFI715t0
+        7FW3jo8Epn3lz9HA8zGLpR9mZk8EQsv3IU99kFKC/uves6XQ1bDrR7olyX7Wtr0QTGxk1egla/Z+x
+        YUVRUX+/o5U2yggcpQl4nRKvSSuboM2l81U0NRwbGcJZ1S4Xigxj1xAsYYUAs7oo+Q/t253iEcx8y
+        41nqNPdg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrG2A-00Bdvk-Lw; Wed, 18 May 2022 09:31:58 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 20991980DFF; Wed, 18 May 2022 11:31:56 +0200 (CEST)
+Date:   Wed, 18 May 2022 11:31:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/4] sched/numa: Apply imbalance limitations consistently
+Message-ID: <20220518093156.GD10117@worktop.programming.kicks-ass.net>
+References: <20220511143038.4620-1-mgorman@techsingularity.net>
+ <20220511143038.4620-4-mgorman@techsingularity.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/6] dt-bindings: arm: mt8186: Set #clock-cells as
- required property
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sboyd@kernel.org, chun-jie.chen@mediatek.com,
-        rex-bc.chen@mediatek.com, wenst@chromium.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220517101514.21639-1-angelogioacchino.delregno@collabora.com>
- <20220517101514.21639-3-angelogioacchino.delregno@collabora.com>
- <1cec6a09-9d80-99e7-ccc4-c918c6be7dbb@linaro.org>
- <5100b851-6787-fed8-a40f-7e6e64a123d8@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <5100b851-6787-fed8-a40f-7e6e64a123d8@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511143038.4620-4-mgorman@techsingularity.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2022 11:24, AngeloGioacchino Del Regno wrote:
-> Il 17/05/22 16:34, Krzysztof Kozlowski ha scritto:
->> On 17/05/2022 12:15, AngeloGioacchino Del Regno wrote:
->>> This is a clock-controller binding, so it needs #clock-cells, or
->>> it would be of no use: add that to the list of required properties.
->>>
->>> Fixes: f113a51aa2cf ("dt-bindings: ARM: MediaTek: Add new document bindings of MT8186 clock")
->>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>> ---
->>>   .../devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml  | 1 +
->>
->> If these are clock controllers and new bindings, why they were added to
->> "arm" directory? arm is only for top-level stuff, not for devices.
->>
->> In the future please put your bindings in respective subsystem matching
->> the hardware. Fallback is soc directory, not arm.
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
-> 
-> Hello Krzysztof,
-> 
-> I agree with you about these bindings belonging to the clock directory.
-> Should I add a patch to this series that moves all of the mtxxxx-clock
-> and mtxxxx-sys-clock yaml files to the clock directory?
+On Wed, May 11, 2022 at 03:30:37PM +0100, Mel Gorman wrote:
 
-They should not be added there, but no need to shuffle things around...
+> @@ -9108,6 +9108,24 @@ static inline bool allow_numa_imbalance(int running, int imb_numa_nr)
+>  	return running <= imb_numa_nr;
+>  }
+>  
+> +#define NUMA_IMBALANCE_MIN 2
+> +
+> +static inline long adjust_numa_imbalance(int imbalance,
+> +				int dst_running, int imb_numa_nr)
+> +{
+> +	if (!allow_numa_imbalance(dst_running, imb_numa_nr))
+> +		return imbalance;
+> +
+> +	/*
+> +	 * Allow a small imbalance based on a simple pair of communicating
+> +	 * tasks that remain local when the destination is lightly loaded.
+> +	 */
+> +	if (imbalance <= NUMA_IMBALANCE_MIN)
+> +		return 0;
+> +
+> +	return imbalance;
+> +}
+
+> @@ -9334,24 +9356,6 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
+>  	}
+>  }
+>  
+> -#define NUMA_IMBALANCE_MIN 2
+> -
+> -static inline long adjust_numa_imbalance(int imbalance,
+> -				int dst_running, int imb_numa_nr)
+> -{
+> -	if (!allow_numa_imbalance(dst_running, imb_numa_nr))
+> -		return imbalance;
+> -
+> -	/*
+> -	 * Allow a small imbalance based on a simple pair of communicating
+> -	 * tasks that remain local when the destination is lightly loaded.
+> -	 */
+> -	if (imbalance <= NUMA_IMBALANCE_MIN)
+> -		return 0;
+> -
+> -	return imbalance;
+> -}
+
+If we're going to move that one up and remove the only other caller of
+allow_numa_imbalance() we might as well move it up further still and
+fold the functions.
+
+Hmm?
+
+(Although I do wonder about that 25% figure in the comment; that doesn't
+seem to relate to any actual code anymore)
+
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -1536,8 +1536,29 @@ struct task_numa_env {
+
+ static unsigned long cpu_load(struct rq *rq);
+ static unsigned long cpu_runnable(struct rq *rq);
+-static inline long adjust_numa_imbalance(int imbalance,
+-					int dst_running, int imb_numa_nr);
++
++#define NUMA_IMBALANCE_MIN 2
++
++static inline long
++adjust_numa_imbalance(int imbalance, int dst_running, int imb_numa_nr)
++{
++	/*
++	 * Allow a NUMA imbalance if busy CPUs is less than 25% of the domain.
++	 * This is an approximation as the number of running tasks may not be
++	 * related to the number of busy CPUs due to sched_setaffinity.
++	 */
++	if (dst_running > imb_numa_nr)
++		return imbalance;
++
++	/*
++	 * Allow a small imbalance based on a simple pair of communicating
++	 * tasks that remain local when the destination is lightly loaded.
++	 */
++	if (imbalance <= NUMA_IMBALANCE_MIN)
++		return 0;
++
++	return imbalance;
++}
+
+ static inline enum
+ numa_type numa_classify(unsigned int imbalance_pct,
+@@ -9099,16 +9120,6 @@ static bool update_pick_idlest(struct sc
+ }
+
+ /*
+- * Allow a NUMA imbalance if busy CPUs is less than 25% of the domain.
+- * This is an approximation as the number of running tasks may not be
+- * related to the number of busy CPUs due to sched_setaffinity.
+- */
+-static inline bool allow_numa_imbalance(int running, int imb_numa_nr)
+-{
+-	return running <= imb_numa_nr;
+-}
+-
+-/*
+  * find_idlest_group() finds and returns the least busy CPU group within the
+  * domain.
+  *
+@@ -9245,8 +9256,12 @@ find_idlest_group(struct sched_domain *s
+ 			 * allowed. If there is a real need of migration,
+ 			 * periodic load balance will take care of it.
+ 			 */
+-			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, sd->imb_numa_nr))
++			imbalance = abs(local_sgs.idle_cpus - idlest_sgs.idle_cpus);
++			if (!adjust_numa_imbalance(imbalance,
++						   local_sgs.sum_nr_running + 1,
++						   sd->imb_numa_nr)) {
+ 				return NULL;
++			}
+ 		}
+
+ 		/*
+@@ -9334,24 +9349,6 @@ static inline void update_sd_lb_stats(st
+ 	}
+ }
+
+-#define NUMA_IMBALANCE_MIN 2
+-
+-static inline long adjust_numa_imbalance(int imbalance,
+-				int dst_running, int imb_numa_nr)
+-{
+-	if (!allow_numa_imbalance(dst_running, imb_numa_nr))
+-		return imbalance;
+-
+-	/*
+-	 * Allow a small imbalance based on a simple pair of communicating
+-	 * tasks that remain local when the destination is lightly loaded.
+-	 */
+-	if (imbalance <= NUMA_IMBALANCE_MIN)
+-		return 0;
+-
+-	return imbalance;
+-}
+-
+ /**
+  * calculate_imbalance - Calculate the amount of imbalance present within the
+  *			 groups of a given sched_domain during load balance.
+@@ -9436,7 +9433,7 @@ static inline void calculate_imbalance(s
+ 			 */
+ 			env->migration_type = migrate_task;
+ 			lsub_positive(&nr_diff, local->sum_nr_running);
+-			env->imbalance = nr_diff >> 1;
++			env->imbalance = nr_diff;
+ 		} else {
+
+ 			/*
+@@ -9444,16 +9441,20 @@ static inline void calculate_imbalance(s
+ 			 * idle cpus.
+ 			 */
+ 			env->migration_type = migrate_task;
+-			env->imbalance = max_t(long, 0, (local->idle_cpus -
+-						 busiest->idle_cpus) >> 1);
++			env->imbalance = max_t(long, 0,
++					       (local->idle_cpus - busiest->idle_cpus));
+ 		}
+
+ 		/* Consider allowing a small imbalance between NUMA groups */
+ 		if (env->sd->flags & SD_NUMA) {
+ 			env->imbalance = adjust_numa_imbalance(env->imbalance,
+-				local->sum_nr_running + 1, env->sd->imb_numa_nr);
++							       local->sum_nr_running + 1,
++							       env->sd->imb_numa_nr);
+ 		}
+
++		/* Number of tasks to move to restore balance */
++		env->imbalance >>= 1;
++
+ 		return;
+ 	}
 
 
-Best regards,
-Krzysztof

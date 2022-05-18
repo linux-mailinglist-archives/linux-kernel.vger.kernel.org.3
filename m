@@ -2,126 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F28C52B649
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD0052B631
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbiERJUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
+        id S234139AbiERJVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbiERJUm (ORCPT
+        with ESMTP id S234122AbiERJUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:20:42 -0400
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B8614A273;
-        Wed, 18 May 2022 02:20:40 -0700 (PDT)
-Received: by mail-qv1-f50.google.com with SMTP id j3so1094183qvn.0;
-        Wed, 18 May 2022 02:20:40 -0700 (PDT)
+        Wed, 18 May 2022 05:20:53 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AA7C1E
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:20:50 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id f4so2474432lfu.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=GKJLCH2lJWrU2y3uKn5XDixssi7wgR5jkODsM9EB1WA=;
+        b=Odo5DWfp+MrJB0QFt2qllzGHNv+mP66gEbUZQ66kHh5rk1i71AFZprQh5DiyMyEscm
+         pFfRHga1dvqYdzCepLnwOxoSJ12effeuj7jvpjiH16q1JM18dr06wrP/vZDM6waqFwwz
+         sMQodP7FgEFh7ky6GFzZNoVUPW2ZYS2o2vIxqO+0sSJNhpn6g5c0fH9T5rMsrRp8Lxfc
+         4WAEZnkSk96nUh4BaONd+4sRiBl32YXL0Br+kbZYg1kcN9ZtV1h+cPDnUnscrCrGQKnr
+         leEYbtO5ZjSOCdzy07iiEvtCYHu++k65ink7pxYTEq7Z7hwJuBa1SHQ6+V800jTv6uPF
+         zXGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pk6C9SrDQ3eeugkFD/p41tFZX2e6B2Jxpeux48HKyjk=;
-        b=txygStwlYzljOucCJZDWHrYPe2S90mdB6G6H35gZk+ggu88Fm4ov4HY50BIBKX5tXj
-         t5pfPyI1rs8vfhWp0MO5ujqQmHKKXGdNAcgRN97F86Fs2hX//0b+lcqw/P5ebeBMugXl
-         +u9D3BXraVAuBllAQu/omkx1YnNqxvS+6IdOBfzmcqa3HoOMEXePT1IuqcTpP4e1v6Nm
-         5CZq8+GYu+cIhE+Nr9GZTV+h5bSyAxD81Cn2dEscpE0wLIx0BLU/aHSCrR1TlKCY+ypp
-         hJlKwWqYofIGaXgUGvsui5rko9PZA9pXZwXfjaq9DkUmCy/9Uoj2wUXrtHS7sf7dt7ce
-         f4og==
-X-Gm-Message-State: AOAM533EEShWSkZ12vJQWGGxoWjIbGEzeecZmm903i/VbIIgjSX6Xx2A
-        RWW9mTzHDjo5lTVN3p9VosT1C+77Fx8MUA==
-X-Google-Smtp-Source: ABdhPJzL9mKxNsJYRdeyMnlRDcSOLImMy6jmoiFs3WXk8FIPEEUQtdz5MA/fVE9TSAfB1bHVCn6X/A==
-X-Received: by 2002:a0c:b392:0:b0:461:e7fa:2c0f with SMTP id t18-20020a0cb392000000b00461e7fa2c0fmr2222224qve.114.1652865639862;
-        Wed, 18 May 2022 02:20:39 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id c2-20020ae9ed02000000b006a04256022bsm1184189qkg.107.2022.05.18.02.20.39
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=GKJLCH2lJWrU2y3uKn5XDixssi7wgR5jkODsM9EB1WA=;
+        b=rkV9zIRnZM7c4I+fcXsRmicOALZbQx1cnX/Q3U6b9663XoGFY/j+OGQr6bFwYMeYvt
+         ShhaYvTcjxQH3U87J3U43AdcCuibbkGH8RIxn8XDdUVbzvmmo1B0XbIRCpxGcgHuFpj6
+         uMjNrInRuAys8EMD8KdUSPK8o9CMpVTmubxZfaAAgUmZA8iNspfji/bX3Q0Gj3lgPgNQ
+         KEUmtP5Z6EkwAjo5xdfM9J6aq4FqS/3naEqKj24RDJbK1iHb1JuY1SBe7gIDsBm/jkMQ
+         G2/HkwZQxH8qH+mn4s4KoMP9aSIfTqS+0kd30eVc9ZZDPnlcSYWbTibUHtS8QKANZUAM
+         xgpw==
+X-Gm-Message-State: AOAM531anI6VVX6VRJrCHCmNVmGG7oHKMQZVJQ7FSLgbzsQziqMCGq9d
+        ci0BNsPmzR+AGYUxBbrBqnGafVhadTKn+A==
+X-Google-Smtp-Source: ABdhPJx2wFEOdKyym5d0YXSY1LH/uqQ/mNNRcYU8PMfA6Lp/xFIGrjVNUyXaYv+0lRMynIMXDQYp9g==
+X-Received: by 2002:a05:6512:22d4:b0:477:be45:3667 with SMTP id g20-20020a05651222d400b00477be453667mr427543lfu.659.1652865649229;
+        Wed, 18 May 2022 02:20:49 -0700 (PDT)
+Received: from [192.168.43.196] ([185.174.128.243])
+        by smtp.gmail.com with ESMTPSA id b19-20020ac25633000000b00477b086308dsm153328lff.27.2022.05.18.02.20.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 02:20:39 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id f16so2646417ybk.2;
-        Wed, 18 May 2022 02:20:39 -0700 (PDT)
-X-Received: by 2002:a25:4289:0:b0:64d:746f:5311 with SMTP id
- p131-20020a254289000000b0064d746f5311mr16654046yba.89.1652865639143; Wed, 18
- May 2022 02:20:39 -0700 (PDT)
+        Wed, 18 May 2022 02:20:48 -0700 (PDT)
+Message-ID: <7de7721b-d090-6400-9a74-30ecb696761b@openvz.org>
+Date:   Wed, 18 May 2022 12:20:46 +0300
 MIME-Version: 1.0
-References: <20220518065639.2432213-1-gerg@linux-m68k.org> <20220518065639.2432213-4-gerg@linux-m68k.org>
-In-Reply-To: <20220518065639.2432213-4-gerg@linux-m68k.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 18 May 2022 11:20:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWADK4d-OxKYdnRvbtVsGtbZ_+vF2D70S-5hXNt0rqg9w@mail.gmail.com>
-Message-ID: <CAMuHMdWADK4d-OxKYdnRvbtVsGtbZ_+vF2D70S-5hXNt0rqg9w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] m68knommu: fix 68000 CPU link with no platform selected
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH v2] io_uring: fix sparce warnings about __kernel_rwf_t casts
+To:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@infradead.org>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, io-uring@vger.kernel.org
+References: <YoHu+HvaDcIpC7gI@infradead.org>
+Content-Language: en-US
+In-Reply-To: <YoHu+HvaDcIpC7gI@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg.
+sparse generates follwong warnings:
+fs/io_uring.c: note: in included file (through include/trace/perf.h,
+include/trace/define_trace.h, include/trace/events/io_uring.h):
+./include/trace/events/io_uring.h:488:1: sparse:
+ warning: incorrect type in assignment (different base types)
+    expected unsigned int [usertype] op_flags
+    got restricted __kernel_rwf_t const [usertype] rw_flags
+fs/io_uring.c:3164:23: sparse:
+ warning: incorrect type in assignment (different base types)
+    expected unsigned int [usertype] flags
+    got restricted __kernel_rwf_t
+fs/io_uring.c:3769:48: sparse:
+ warning: incorrect type in argument 2 (different base types)
+    expected restricted __kernel_rwf_t [usertype] flags
+    got unsigned int [usertype] flags
 
-On Wed, May 18, 2022 at 8:56 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
-> If building for a nommu m68k classic CPU and no platform (board) is
-> selected then the final link fails with:
->
->      LD      vmlinux.o
->    m68k-linux-ld: cannot find arch/m68k/kernel/head.o: No such file or directory
->    make: *** [Makefile:1158: vmlinux] Error 1
->
-> Not selecting a platform is ok, that is a generic 68000 system build.
-> All of the platform selections are for 68328 variants.
->
-> The underlying problem is that the CPU config option (CONFIG_M68000)
-> ends up not being set, it is currently only selected by one of the
-> platform choices.
->
-> Change CONFIG_M68000 so that it is always enabled for the nommu m68k
-> classic configuration.
->
-> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+__kernel_rwf_t type is bitwise and requires __force attribute for casts.
 
-Thanks for your patch!
+To fix the warnings, the patch changes the type of fields in the
+corresponding structures: poll32_events and rw_flags are neighbours
+in the same union.
 
-> --- a/arch/m68k/Kconfig.cpu
-> +++ b/arch/m68k/Kconfig.cpu
-> @@ -37,7 +37,7 @@ endchoice
->  if M68KCLASSIC
->
->  config M68000
-> -       bool
-> +       def_bool y
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+v2: updated according to comments by Christoph Hellwig
+---
+ fs/io_uring.c                   | 2 +-
+ include/trace/events/io_uring.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-And then the selects can be removed, too, as the symbol is now always
-enabled?
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 91de361ea9ab..e2a40c58654c 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -585,7 +585,7 @@ struct io_rw {
+ 	struct kiocb			kiocb;
+ 	u64				addr;
+ 	u32				len;
+-	u32				flags;
++	rwf_t				flags;
+ };
+ 
+ struct io_connect {
+diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_uring.h
+index cddf5b6fbeb4..34839f30caee 100644
+--- a/include/trace/events/io_uring.h
++++ b/include/trace/events/io_uring.h
+@@ -520,7 +520,7 @@ TRACE_EVENT(io_uring_req_failed,
+ 		__entry->off		= sqe->off;
+ 		__entry->addr		= sqe->addr;
+ 		__entry->len		= sqe->len;
+-		__entry->op_flags	= sqe->rw_flags;
++		__entry->op_flags	= sqe->poll32_events;
+ 		__entry->buf_index	= sqe->buf_index;
+ 		__entry->personality	= sqe->personality;
+ 		__entry->file_index	= sqe->file_index;
+-- 
+2.31.1
 
-I'm wondering how to handle this when another nommu-m68k-classic
-platform shows up (again, cfr. the removed 68360 support) , that
-would need a different head.S?  Of course that's something to be
-solved later...
-
->         depends on !MMU
->         select CPU_HAS_NO_BITFIELDS
->         select CPU_HAS_NO_CAS
-
-Note that mmu-m68k-classic (e.g. CONFIG_MMU=y + allnonfig) has the
-same problem.  That config does need other fixes too.  E.g. I have
-a local patch to make sure NR_IRQS is never zero, but never got to
-solve the missing head.o problem in an acceptable way.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

@@ -2,90 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8077E52BE75
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B70C52BE07
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238769AbiEROie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S238728AbiEROjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239131AbiEROiP (ORCPT
+        with ESMTP id S238681AbiEROjG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:38:15 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F351A0AFF;
-        Wed, 18 May 2022 07:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1652884691;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:From:References:Cc:To:Subject:Date:Message-ID:Cc:Date:
-    From:Subject:Sender;
-    bh=iAPOxwQHkDLBQcb12htFH/Vr1ZP7IJAj6M1OS0HtT3I=;
-    b=UTEVJT3cstfdTUGxp6L0UbG2e4mUTxSjmwrxZGeDcIUcbYx0A5kZFo1TtNWdwrck8A
-    0jYrUQQG+nJtNtvTVlMY8/zmeepcIUx2CpjesnCnzop5arGtqZrIaZgaUg49AQ29GmaQ
-    WpndAp0SeVb/2PkK1P/gphBBu0WeR0thbcIXseSItQJwwaA738RT4P7GlZTykoEvFRS+
-    wPVo8r9abxZGYwPaM5ASqpXG1ixCOAV3rf8jrDJrH5C/r9IvGNFjHIOB8zxpcDe1kNmZ
-    hlZvkzrmK1Zv9cJBizvEoH83CpvzEEz2/9II6DzBtVV0rgTuSKkSkyDbPNnsxLuVF8hh
-    xCwA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdBqPeOuh2krLEWFUg=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPV6:2a00:6020:1cff:5b00::b82]
-    by smtp.strato.de (RZmta 47.45.0 AUTH)
-    with ESMTPSA id R0691fy4IEcBHoO
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 18 May 2022 16:38:11 +0200 (CEST)
-Message-ID: <482fd87a-df5a-08f7-522b-898d68c3b04a@hartkopp.net>
-Date:   Wed, 18 May 2022 16:38:10 +0200
+        Wed, 18 May 2022 10:39:06 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C58F1C0F19;
+        Wed, 18 May 2022 07:39:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652884745; x=1684420745;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UUIPLdOolmuMVgiLBbElltq3r2rvu+uGXiWi7YQ1CF4=;
+  b=cJHc8zsCWxn4wDUMq71MLG/cS6iZe9bAv6kavX3kmM/tfJD6F28XtC5R
+   DnNKIk161U2SlFD1xnzFRr7mWwhGzAnoepYHe2w0e+v8Dkd7AbJz9dA+t
+   VKPaFKl3uJy9awiGpm/STvrF0GaqBDYYTxyIqqiKMeZjZsiB3ejit1ZtD
+   JjkXab/ZbBGKk+aT2ycKLaHAiv/ByaAEszwakn5HkY4vFifPqa7Cggn6T
+   tKEIpwCerr4y4S9V7lbMG6pdR1T1VlBG8ms8grRVdgg/27qv8ZH91yDQV
+   EJV2cc4o3ed2/9sYGRGGVW7XmVf+D795U0n41ip7L/y/8tis4zE+NDV4H
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="332321833"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="332321833"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 07:39:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="714455498"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmsmga001.fm.intel.com with ESMTP; 18 May 2022 07:39:04 -0700
+From:   kan.liang@linux.intel.com
+To:     acme@kernel.org, mingo@redhat.com, irogers@google.com,
+        jolsa@kernel.org, namhyung@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     peterz@infradead.org, zhengjun.xing@linux.intel.com,
+        adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH V3 0/4] Several perf metrics topdown related fixes
+Date:   Wed, 18 May 2022 07:38:56 -0700
+Message-Id: <20220518143900.1493980-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Max Staudt <max@enpas.org>, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
- <20220517141404.578d188a.max@enpas.org>
- <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
- <20220517143921.08458f2c.max@enpas.org>
- <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
- <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
- <43768ff7-71f8-a6c3-18f8-28609e49eedd@hartkopp.net>
- <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
- <CAMZ6RqJqeNjAtoDWADHsWocgbSXqQixcebJBhiBFS8BVeKCb3g@mail.gmail.com>
- <3dbe135e-d13c-5c5d-e7e4-b9c13b820fb8@hartkopp.net>
- <20220518143613.2a7alnw6vtkw7ct2@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-In-Reply-To: <20220518143613.2a7alnw6vtkw7ct2@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Kan Liang <kan.liang@linux.intel.com>
 
+The Patch 1 is a follow-up patch for Ian's ("Fix topdown event weak
+grouping")[1].
 
-On 18.05.22 16:36, Marc Kleine-Budde wrote:
-> On 18.05.2022 16:33:58, Oliver Hartkopp wrote:
+The patch 2 is to fix the perf metrics topdown events in a mixed group.
+It reuses the function introduced in [1].
+Patch 1 & 2 should be on top of [1].
 
->> I would suggest to remove the Kconfig entry but not all the code inside the
->> drivers, so that a volunteer can convert the LED support based on the
->> existing trigger points in the drivers code later.
-> 
-> The generic netdev LED trigger code doesn't need any support in the
-> netdev driver.
+The patch 3 & 4 are to fix other perf metrics topdown related issues.
+They can be merged separately.
 
-Oh! Yes, then it could be removed. Sorry for not looking that deep into it.
+[1]: https://lore.kernel.org/all/20220517052724.283874-2-irogers@google.com/
 
-Best,
-Oliver
+Changes since V2:
+- Add more comments for the evsel__sys_has_perf_metrics() and
+  topdown_sys_has_perf_metrics()
+- Remove the uncessary evsel->core.leader->nr_members = 0; in patch 2.
+  The value has been updated in the new evsel__remove_from_group().
+- Add Reviewed-by from Ian for patch 4
+
+Changes since V1:
+- Add comments for the evsel__sys_has_perf_metrics() and
+  topdown_sys_has_perf_metrics()
+- Factor out evsel__remove_from_group()
+- Add Reviewed-by from Ian for patch 3
+
+Kan Liang (4):
+  perf evsel: Fixes topdown events in a weak group for the hybrid
+    platform
+  perf stat: Always keep perf metrics topdown events in a group
+  perf parse-events: Support different format of the topdown event name
+  perf parse-events: Move slots event for the hybrid platform too
+
+ tools/perf/arch/x86/util/evlist.c  |  7 ++++---
+ tools/perf/arch/x86/util/evsel.c   | 23 +++++++++++++++++++++--
+ tools/perf/arch/x86/util/topdown.c | 25 +++++++++++++++++++++++++
+ tools/perf/arch/x86/util/topdown.h |  7 +++++++
+ tools/perf/builtin-stat.c          |  7 ++-----
+ tools/perf/util/evlist.c           |  6 +-----
+ tools/perf/util/evsel.c            | 13 +++++++++++--
+ tools/perf/util/evsel.h            |  2 +-
+ 8 files changed, 72 insertions(+), 18 deletions(-)
+ create mode 100644 tools/perf/arch/x86/util/topdown.h
+
+-- 
+2.35.1
+

@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D776B52B95F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3759C52B9AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236067AbiERMA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
+        id S236032AbiERMAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236082AbiERMAs (ORCPT
+        with ESMTP id S236003AbiERMAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:00:48 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46FF17EC24
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 05:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652875238; x=1684411238;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WSHYkAR+Y/Y+J1/L7sMqFG8zyvb2KyZc7KeydJa4rlY=;
-  b=gh4kXC2TyOvZ0OcwvpA3WJjjpXMRinsN2VwlxE2nOnyhCoSP6NtEak4/
-   SYdoCbvmuK+eSjhVTTNGpN9JksJoC0B0p2y9JN0f56DHbM1grEXL9cw1D
-   PIV9k08rYGkA5xoknK6QVFsj74L6uShq78TdgA5rbu7ZID26T+OgohB8k
-   XtjU/ETitOKIgYDxsMVI7PTsaxwBoNPuF828Px9iSVTCHnjNsWerGXgIR
-   A6wxYqPawnrATUH2S4qeUPaePbday4jY//kBr8nYkj/AN2dEpTLU49JhM
-   GK+2X9o2JQ263Gd9QFcB92Dd9/ubGP9cFMFSpdglC7sa8oFTDeyHQGijc
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271585323"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="271585323"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 05:00:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="661115225"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 May 2022 05:00:32 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrILw-00029N-0G;
-        Wed, 18 May 2022 12:00:32 +0000
-Date:   Wed, 18 May 2022 20:00:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 43/51] ERROR: modpost:
- "rcu_tasks_trace_qs_blkd" [kernel/torture.ko] undefined!
-Message-ID: <202205181919.oILbHBZa-lkp@intel.com>
+        Wed, 18 May 2022 08:00:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4896179C3C;
+        Wed, 18 May 2022 05:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 332A4614B4;
+        Wed, 18 May 2022 12:00:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8735CC34118;
+        Wed, 18 May 2022 12:00:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652875214;
+        bh=prUwp4E7V9IqxGo2vLtfvwGH/+/rsuiX2MvcewChBaE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=i7m91DSfQUhHrotPzC2zUO6JFWSK4j2P0qREhgPmtYe1F0wo9UCm/0fbMRdC+V0It
+         1KEtIkqDYQF6cOfQsg4jNUd6fdpOqLR+/uzfl0YuqWq4qYYr67bkWg0rDsfv+tHZgZ
+         5E8xQsSPRV8NyKzKVRlk1aMshVfEOSABKZMuRIX+sidb70LdVNmPs+8h3IUXqx4djL
+         OTV8MSFUepsBEYBUG7NZpbJSEa6IQCvjO2LkBdTjK1uF1I+zC7VE2cb+j94eNvl/aa
+         qaDMTV5VD6WvmKGpk/StKQmGc0AkBxXZ2FI1DBHLBnRF5cEXq1xf/uAcsvvACm0wlM
+         eq/oxOL8ZfRcw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 64174F03935;
+        Wed, 18 May 2022 12:00:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: af_key: add check for pfkey_broadcast in function
+ pfkey_process
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165287521440.18230.13162864201621058008.git-patchwork-notify@kernel.org>
+Date:   Wed, 18 May 2022 12:00:14 +0000
+References: <20220517094231.414168-1-jiasheng@iscas.ac.cn>
+In-Reply-To: <20220517094231.414168-1-jiasheng@iscas.ac.cn>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,30 +60,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-head:   9a9671fb7a3966dfc7dc67f6aa80acdfe185d72d
-commit: 7c98805ebf93263213dac7b52846d73cebe983f3 [43/51] tasks-rcu: Track blocked RCU Tasks Trace readers
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220518/202205181919.oILbHBZa-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/7c98805ebf93263213dac7b52846d73cebe983f3
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
-        git checkout 7c98805ebf93263213dac7b52846d73cebe983f3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+Hello:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This patch was applied to netdev/net.git (master)
+by Steffen Klassert <steffen.klassert@secunet.com>:
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+On Tue, 17 May 2022 17:42:31 +0800 you wrote:
+> If skb_clone() returns null pointer, pfkey_broadcast() will
+> return error.
+> Therefore, it should be better to check the return value of
+> pfkey_broadcast() and return error if fails.
+> 
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> 
+> [...]
 
->> ERROR: modpost: "rcu_tasks_trace_qs_blkd" [kernel/torture.ko] undefined!
->> ERROR: modpost: "rcu_tasks_trace_qs_blkd" [kernel/rcu/rcuscale.ko] undefined!
+Here is the summary with links:
+  - net: af_key: add check for pfkey_broadcast in function pfkey_process
+    https://git.kernel.org/netdev/net/c/4dc2a5a8f675
 
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

@@ -2,49 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FD752B369
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7D352B360
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiERHOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S232151AbiERH2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiERHOT (ORCPT
+        with ESMTP id S232115AbiERH2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:14:19 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7CC108AB8;
-        Wed, 18 May 2022 00:14:11 -0700 (PDT)
-Received: from kwepemi100023.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L34320FdzzhZ90;
-        Wed, 18 May 2022 15:13:34 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100023.china.huawei.com (7.221.188.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 18 May 2022 15:14:09 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 15:14:08 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <tj@kernel.org>, <axboe@kernel.dk>, <ming.lei@redhat.com>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v2 2/2] blk-throttle: fix io hung due to configuration updates
-Date:   Wed, 18 May 2022 15:27:51 +0800
-Message-ID: <20220518072751.1188163-3-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220518072751.1188163-1-yukuai3@huawei.com>
-References: <20220518072751.1188163-1-yukuai3@huawei.com>
+        Wed, 18 May 2022 03:28:22 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823D56A027
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:28:20 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id g16so1481245lja.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=G8aT1X87JNBdCI8skihL4Aci/WonpChvYF5exTqGUGQ=;
+        b=jkmeGMT7U6r3ipXxlaZNQziLbo1jfUcG+l8wzWGpMtwVkbEsSh+Nv0S8o3o3Xx6uex
+         1u+X36202XBACe4QDg4YsC2xPZB/cSlRPOwnTfKonKkfZuHuRrHIGWA+CE0qvVp9n+BG
+         xNwOlrA3kMuPW/BCw62OZeoye0svLMaWUsOZFJIK2HTRxf1sJ4qjH+Yfz7WjkzxbroI+
+         YJ4z+XelEGgBlQ8o1F3RGuxFsjfXgiAndFVM383dBD0EsheUvSAku6sbueRRrDeyZMTb
+         STdFI3EHz0Wnd8K+jVqUChm0AGaS5X5YPxJi+QFnjBQJ8+wBQaWgSAmJDdOcHUqP+Xla
+         h78Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=G8aT1X87JNBdCI8skihL4Aci/WonpChvYF5exTqGUGQ=;
+        b=worTKwZOh7rDOi66ofyYkxf/uV4vHAGczUJSKd0w1EoRweBkndgNQWWaZo/S5gsL4R
+         Mzo2uI9ZeQMCZfpWuKIIHS0yqShADcBA1RC27HwrLND/74ugYP8z9vxJ2SGjCTj/WHkh
+         UpINvwb9f4cdvLEOHf3i38PvDwN2Wk9qdXa028SyZWJopFXnbEa0QK2E/qYlwm56RsRS
+         VDKM5Q/JPyh23LbNres0vzzH4dv6Wd8t3SM46lryWRMkPSbT1KkqEvMowLUUda23b6v0
+         zoNJa6IT0kcEWmzvwvtMXYCj6hbn5rID0BjievGo06JBnyT2VoVeNn2owV8JOmOOCQ2H
+         ecVg==
+X-Gm-Message-State: AOAM5321SpQu9BiSoRnYBYy61KoYh58ddLC1JQIoT73UQ2wi1qRbzwu7
+        dTiALueeWVrTB7eipD/GieJ2KQ==
+X-Google-Smtp-Source: ABdhPJzQpIHYBfZIO+VNiBxbykGultqVVrcygi6gkVr7zCu6FvKyQHoW1r4bEz9pT8ZZfsJ63NoVow==
+X-Received: by 2002:a2e:b8cc:0:b0:24f:501b:af80 with SMTP id s12-20020a2eb8cc000000b0024f501baf80mr16351009ljp.328.1652858898881;
+        Wed, 18 May 2022 00:28:18 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id z15-20020ac2418f000000b0047255d211c0sm119884lfh.239.2022.05.18.00.28.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 00:28:18 -0700 (PDT)
+Message-ID: <a197ed7f-6115-4407-6931-f37b719587be@linaro.org>
+Date:   Wed, 18 May 2022 09:28:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHv2 2/6] thermal: exynos: Reorder the gpu clock
+ initialization for exynos5420 SoC
+Content-Language: en-US
+To:     Anand Moon <linux.amoon@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+References: <20220515064126.1424-1-linux.amoon@gmail.com>
+ <20220515064126.1424-3-linux.amoon@gmail.com>
+ <68969550-e18b-3c27-d449-1478b314e129@linaro.org>
+ <CANAwSgRBpm9gybfUWZbu3-eXLTYkpTZ=s3fmhpNyQcuj7+xdOA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CANAwSgRBpm9gybfUWZbu3-eXLTYkpTZ=s3fmhpNyQcuj7+xdOA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,157 +87,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If new configuration is submitted while a bio is throttled, then new
-waiting time is recaculated regardless that the bio might aready wait
-for some time:
+On 17/05/2022 20:43, Anand Moon wrote:
+> Hi Krzysztof,
+> 
+> On Sun, 15 May 2022 at 15:11, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 15/05/2022 08:41, Anand Moon wrote:
+>>> Reorder the tmu_gpu clock initialization for exynos5422 SoC.
+>>
+>> Why?
+> It just code reorder
 
-tg_conf_updated
- throtl_start_new_slice
-  tg_update_disptime
-  throtl_schedule_next_dispatch
+I know what it is. I asked why. The answer in English to question "Why"
+is starting with "Because".
 
-Then io hung can be triggered by always submmiting new configuration
-before the throttled bio is dispatched.
+You repeated again the argument what are you doing to my question "Why
+are you doing it".
 
-Fix the problem by respecting the time that throttled bio aready waited.
-In order to do that, instead of start new slice in tg_conf_updated(),
-just update 'bytes_disp' and 'io_disp' based on the new configuration.
+It was the same before, many, many times. It's a waste of reviewers
+time, because you receive a review and you do not implement the feedback.
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/blk-throttle.c | 64 +++++++++++++++++++++++++++++++++++---------
- 1 file changed, 51 insertions(+), 13 deletions(-)
+>>
+>>>
+>>> Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
+>>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+>>> ---
+>>> v1: split the changes and improve the commit messages
+>>> ---
+>>>  drivers/thermal/samsung/exynos_tmu.c | 43 ++++++++++++++--------------
+>>>  1 file changed, 21 insertions(+), 22 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+>>> index 75b3afadb5be..1ef90dc52c08 100644
+>>> --- a/drivers/thermal/samsung/exynos_tmu.c
+>>> +++ b/drivers/thermal/samsung/exynos_tmu.c
+>>> @@ -1044,42 +1044,41 @@ static int exynos_tmu_probe(struct platform_device *pdev)
+>>>               dev_err(&pdev->dev, "Failed to get clock\n");
+>>>               ret = PTR_ERR(data->clk);
+>>>               goto err_sensor;
+>>> -     }
+>>> -
+>>> -     data->clk_sec = devm_clk_get(&pdev->dev, "tmu_triminfo_apbif");
+>>> -     if (IS_ERR(data->clk_sec)) {
+>>> -             if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
+>>> -                     dev_err(&pdev->dev, "Failed to get triminfo clock\n");
+>>> -                     ret = PTR_ERR(data->clk_sec);
+>>> -                     goto err_sensor;
+>>> -             }
+>>>       } else {
+>>> -             ret = clk_prepare_enable(data->clk_sec);
+>>> +             ret = clk_prepare_enable(data->clk);
+>>
+>> This looks a bit odd. The clock was before taken unconditionally, not
+>> within "else" branch...
+> 
+> The whole *clk_sec*  ie tmu_triminfo_apbif clock enable is being moved
+> down to the switch case.
+> tmu_triminfo_apbif  clock is not used by Exynos4412 and Exynos5433 and
+> Exynos7 SoC.
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 6f69859eae23..1c3dfd3d3d9a 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -1271,7 +1271,42 @@ static int tg_print_conf_uint(struct seq_file *sf, void *v)
- 	return 0;
- }
- 
--static void tg_conf_updated(struct throtl_grp *tg, bool global)
-+static u64 throtl_update_bytes_disp(u64 dispatched, u64 new_limit,
-+				    u64 old_limit)
-+{
-+	if (new_limit == old_limit)
-+		return dispatched;
-+
-+	if (new_limit == U64_MAX)
-+		return 0;
-+
-+	return dispatched * new_limit / old_limit;
-+}
-+
-+static u32 throtl_update_io_disp(u32 dispatched, u32 new_limit, u32 old_limit)
-+{
-+	if (new_limit == old_limit)
-+		return dispatched;
-+
-+	if (new_limit == UINT_MAX)
-+		return 0;
-+
-+	return dispatched * new_limit / old_limit;
-+}
-+
-+static void throtl_update_slice(struct throtl_grp *tg, u64 *old_limits)
-+{
-+	tg->bytes_disp[READ] = throtl_update_bytes_disp(tg->bytes_disp[READ],
-+			tg_bps_limit(tg, READ), old_limits[0]);
-+	tg->bytes_disp[WRITE] = throtl_update_bytes_disp(tg->bytes_disp[WRITE],
-+			tg_bps_limit(tg, WRITE), old_limits[1]);
-+	tg->io_disp[READ] = throtl_update_io_disp(tg->io_disp[READ],
-+			tg_iops_limit(tg, READ), (u32)old_limits[2]);
-+	tg->io_disp[WRITE] = throtl_update_io_disp(tg->io_disp[WRITE],
-+			tg_iops_limit(tg, WRITE), (u32)old_limits[3]);
-+}
-+
-+static void tg_conf_updated(struct throtl_grp *tg, u64 *old_limits, bool global)
- {
- 	struct throtl_service_queue *sq = &tg->service_queue;
- 	struct cgroup_subsys_state *pos_css;
-@@ -1310,16 +1345,7 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
- 				parent_tg->latency_target);
- 	}
- 
--	/*
--	 * We're already holding queue_lock and know @tg is valid.  Let's
--	 * apply the new config directly.
--	 *
--	 * Restart the slices for both READ and WRITES. It might happen
--	 * that a group's limit are dropped suddenly and we don't want to
--	 * account recently dispatched IO with new low rate.
--	 */
--	throtl_start_new_slice(tg, READ);
--	throtl_start_new_slice(tg, WRITE);
-+	throtl_update_slice(tg, old_limits);
- 
- 	if (tg->flags & THROTL_TG_PENDING) {
- 		tg_update_disptime(tg);
-@@ -1327,6 +1353,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
- 	}
- }
- 
-+static void tg_get_limits(struct throtl_grp *tg, u64 *limits)
-+{
-+	limits[0] = tg_bps_limit(tg, READ);
-+	limits[1] = tg_bps_limit(tg, WRITE);
-+	limits[2] = tg_iops_limit(tg, READ);
-+	limits[3] = tg_iops_limit(tg, WRITE);
-+}
-+
- static ssize_t tg_set_conf(struct kernfs_open_file *of,
- 			   char *buf, size_t nbytes, loff_t off, bool is_u64)
- {
-@@ -1335,6 +1369,7 @@ static ssize_t tg_set_conf(struct kernfs_open_file *of,
- 	struct throtl_grp *tg;
- 	int ret;
- 	u64 v;
-+	u64 old_limits[4];
- 
- 	ret = blkg_conf_prep(blkcg, &blkcg_policy_throtl, buf, &ctx);
- 	if (ret)
-@@ -1347,13 +1382,14 @@ static ssize_t tg_set_conf(struct kernfs_open_file *of,
- 		v = U64_MAX;
- 
- 	tg = blkg_to_tg(ctx.blkg);
-+	tg_get_limits(tg, old_limits);
- 
- 	if (is_u64)
- 		*(u64 *)((void *)tg + of_cft(of)->private) = v;
- 	else
- 		*(unsigned int *)((void *)tg + of_cft(of)->private) = v;
- 
--	tg_conf_updated(tg, false);
-+	tg_conf_updated(tg, old_limits, false);
- 	ret = 0;
- out_finish:
- 	blkg_conf_finish(&ctx);
-@@ -1523,6 +1559,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
- 	struct blkg_conf_ctx ctx;
- 	struct throtl_grp *tg;
- 	u64 v[4];
-+	u64 old_limits[4];
- 	unsigned long idle_time;
- 	unsigned long latency_time;
- 	int ret;
-@@ -1533,6 +1570,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
- 		return ret;
- 
- 	tg = blkg_to_tg(ctx.blkg);
-+	tg_get_limits(tg, old_limits);
- 
- 	v[0] = tg->bps_conf[READ][index];
- 	v[1] = tg->bps_conf[WRITE][index];
-@@ -1624,7 +1662,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
- 			tg->td->limit_index = LIMIT_LOW;
- 	} else
- 		tg->td->limit_index = LIMIT_MAX;
--	tg_conf_updated(tg, index == LIMIT_LOW &&
-+	tg_conf_updated(tg, old_limits, index == LIMIT_LOW &&
- 		tg->td->limit_valid[LIMIT_LOW]);
- 	ret = 0;
- out_finish:
--- 
-2.31.1
+This is not the answer. Why are you preparing data->clk within else{}
+branch?
 
+
+Best regards,
+Krzysztof

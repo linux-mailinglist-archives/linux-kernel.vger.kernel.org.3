@@ -2,56 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9E452AFCA
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F33F52AFCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbiERBRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S233464AbiERBSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233421AbiERBRc (ORCPT
+        with ESMTP id S233445AbiERBSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:17:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67E62FFF4;
-        Tue, 17 May 2022 18:17:26 -0700 (PDT)
-Received: from kwepemi100008.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2w781N17zhZ6w;
-        Wed, 18 May 2022 09:16:36 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100008.china.huawei.com (7.221.188.57) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 18 May 2022 09:17:24 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 18 May 2022 09:17:24 +0800
-Subject: Re: [PATCH -next v2 2/2] block, bfq: make bfq_has_work() more
- accurate
-To:     Paolo Valente <paolo.valente@linaro.org>, Jan Kara <jack@suse.cz>
-CC:     Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220513023507.2625717-1-yukuai3@huawei.com>
- <20220513023507.2625717-3-yukuai3@huawei.com>
- <20220516095620.ge5gxmwrnbanfqea@quack3.lan>
- <740D270D-8723-4399-82CC-26CD861843D7@linaro.org>
- <22FEB802-2872-45A7-8ED8-2DE7D0D5E6CD@linaro.org>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <54d06657-a5e2-a94d-c9af-2f10900e7f32@huawei.com>
-Date:   Wed, 18 May 2022 09:17:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 17 May 2022 21:18:09 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796FB443EC
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:18:08 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id m1so467221qkn.10
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zXB3stC8a3X2zk+f7WkrlT4Wp9/qyMy9VfllxGNmaGo=;
+        b=nKKrO3FFEhdIwa4SqWQwSokkUlU4h2iIH+Vn0LAiheZdjIEh3ZEoi2aSgnxFsyQqd8
+         opjb5W3cbSQIPijzdJ8IwgAvBpnFrxyYKWYTlBLmox7fAL/qnSTv8wKIIdV4rw3NeFfQ
+         IT1+i7DEaPZiZhp+zNiUn413+nWKu3oxIuGIlELhm4U7f9LjKbc31mSjDx0XDR0m1jFN
+         xOpEBW0t/sqlIbKIeRGzMGRSokYDxVKhT0cUFcp8A2gq11cpjSqWISiQIAMEPyEYhNoJ
+         Xaoupunz4nXE/6g1olTlKfyBNlHrvKLjcozO7JSeXpuSP2uXnjrPAqr9VD8DEu1wS07v
+         8zKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zXB3stC8a3X2zk+f7WkrlT4Wp9/qyMy9VfllxGNmaGo=;
+        b=4ub10ajBPxPtg/wCLUwQ71h2cXbn1ogl4XBcfF/Ng+5E8fD+vlAAR2ZVLx0ml07gS6
+         HcjDaI5Cz1bO84fFC83MW2PyJO0prcoCjU5Ydy7jjGQgYClHKeONvAEMJcEp3zIvOQl/
+         Dq/jKkrNl/MrQIdJSGpPLXZkiQKyiO/WSKe7MH35VSQ6UHiHAIAZP/NCbpoTMfsr3lii
+         gJURt7nVwt2H84xLW9mjfX9wQGqbmghPiWQ6uXqvz6gv15I1sWPu7VfTiV4sKfpRfvGl
+         K1h0RmHe8+xkDgew/l2ZJ3+46oRhzhaELseOFxHwC9/6xShxJR8On582l/9VRrjiN3gJ
+         sFLg==
+X-Gm-Message-State: AOAM533h2eS9UXDD4Vu+H3q7aeL3o9jTdcSVgPcc2DE9kbfeccdpYHTr
+        woQ3m+zy16QcAv8wf9dyQ3Y=
+X-Google-Smtp-Source: ABdhPJy8S1N3yTy7GgsNcharYnQM9ywR6OfvQVmmTEv8rVuRgiyFpCyOGF5+zKnqBfWOTBcveXIJqA==
+X-Received: by 2002:a05:620a:440e:b0:6a0:6353:f440 with SMTP id v14-20020a05620a440e00b006a06353f440mr18232849qkp.79.1652836687594;
+        Tue, 17 May 2022 18:18:07 -0700 (PDT)
+Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id j3-20020ac84c83000000b002f39b99f69dsm364267qtv.55.2022.05.17.18.18.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 17 May 2022 18:18:07 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     gregkh@linuxfoundation.org, arve@android.com, tkjos@android.com,
+        maco@android.com, joel@joelfernandes.org, brauner@kernel.org,
+        hridya@google.com, surenb@google.com, cmllamas@google.com
+Cc:     linux-kernel@vger.kernel.org, schspa@gmail.com,
+        syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com
+Subject: [PATCH v2] binder: fix atomic sleep when get extended error
+Date:   Wed, 18 May 2022 09:17:54 +0800
+Message-Id: <20220518011754.49348-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-In-Reply-To: <22FEB802-2872-45A7-8ED8-2DE7D0D5E6CD@linaro.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,120 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/05/17 23:06, Paolo Valente Ð´µÀ:
-> 
-> 
->> Il giorno 17 mag 2022, alle ore 16:21, Paolo Valente <paolo.valente@linaro.org> ha scritto:
->>
->>
->>
->>> Il giorno 16 mag 2022, alle ore 11:56, Jan Kara <jack@suse.cz> ha scritto:
->>>
->>> On Fri 13-05-22 10:35:07, Yu Kuai wrote:
->>>> bfq_has_work() is using busy_queues currently, which is not accurate
->>>> because bfq_queue is busy doesn't represent that it has requests. Since
->>>> bfqd aready has a counter 'queued' to record how many requests are in
->>>> bfq, use it instead of busy_queues.
->>>>
->>
->> The number of requests queued is not equal to the number of busy
->> queues (it is >=).
-> 
-> No, sorry. It is actually != in general.
-Hi, Paolo
+binder_inner_proc_lock(thread->proc) is a spin lock, copy_to_user can't
+be called with in this lock.
 
-I'm aware that number of requests queued is not equal to the number of
-busy queues, and that is the motivation of this patch.
+Copy it as a local variable to fix it.
 
-> 
-> In particular, if queued == 0 but there are busy queues (although
-> still waiting for I/O to arrive), then responding that there is no
-> work caused blk-mq to stop asking, and hence an I/O freeze.  IOW I/O
-> eventually arrives for a busy queue, but blk-mq does not ask for a new
-> request any longer.  But maybe things have changed around bfq since
-> then.
+Reported-by: syzbot+46fff6434a7f968ecb39@syzkaller.appspotmail.com
+Fixes: bd32889e841c ("binder: add BINDER_GET_EXTENDED_ERROR ioctl")
+Signed-off-by: Schspa Shi <schspa@gmail.com>
 
-The problem is that if queued == 0 while there are busy queues, is there
-any point to return true in bfq_has_work() ? IMO, it will only cause
-unecessary run queue. And if new request arrives,
-blk_mq_sched_insert_request() will trigger a run queue.
+---
 
-Thanks,
-Kuai
-> 
-> Paolo
-> 
->>   If this patch is based on this assumption then
->> unfortunately it is wrong :(
->>
->> Paolo
->>
->>>> Noted that bfq_has_work() can be called with 'bfqd->lock' held, thus the
->>>> lock can't be held in bfq_has_work() to protect 'bfqd->queued'.
->>>>
->>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->>>
->>> Looks good. Feel free to add:
->>>
->>> Reviewed-by: Jan Kara <jack@suse.cz>
->>>
->>> 								Honza
->>>
->>>> ---
->>>> block/bfq-iosched.c | 16 ++++++++++++----
->>>> 1 file changed, 12 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
->>>> index 61750696e87f..740dd83853a6 100644
->>>> --- a/block/bfq-iosched.c
->>>> +++ b/block/bfq-iosched.c
->>>> @@ -2210,7 +2210,11 @@ static void bfq_add_request(struct request *rq)
->>>>
->>>> 	bfq_log_bfqq(bfqd, bfqq, "add_request %d", rq_is_sync(rq));
->>>> 	bfqq->queued[rq_is_sync(rq)]++;
->>>> -	bfqd->queued++;
->>>> +	/*
->>>> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', however, it
->>>> +	 * may be read without holding the lock in bfq_has_work().
->>>> +	 */
->>>> +	WRITE_ONCE(bfqd->queued, bfqd->queued + 1);
->>>>
->>>> 	if (RB_EMPTY_ROOT(&bfqq->sort_list) && bfq_bfqq_sync(bfqq)) {
->>>> 		bfq_check_waker(bfqd, bfqq, now_ns);
->>>> @@ -2402,7 +2406,11 @@ static void bfq_remove_request(struct request_queue *q,
->>>> 	if (rq->queuelist.prev != &rq->queuelist)
->>>> 		list_del_init(&rq->queuelist);
->>>> 	bfqq->queued[sync]--;
->>>> -	bfqd->queued--;
->>>> +	/*
->>>> +	 * Updating of 'bfqd->queued' is protected by 'bfqd->lock', however, it
->>>> +	 * may be read without holding the lock in bfq_has_work().
->>>> +	 */
->>>> +	WRITE_ONCE(bfqd->queued, bfqd->queued - 1);
->>>> 	elv_rb_del(&bfqq->sort_list, rq);
->>>>
->>>> 	elv_rqhash_del(q, rq);
->>>> @@ -5063,11 +5071,11 @@ static bool bfq_has_work(struct blk_mq_hw_ctx *hctx)
->>>> 	struct bfq_data *bfqd = hctx->queue->elevator->elevator_data;
->>>>
->>>> 	/*
->>>> -	 * Avoiding lock: a race on bfqd->busy_queues should cause at
->>>> +	 * Avoiding lock: a race on bfqd->queued should cause at
->>>> 	 * most a call to dispatch for nothing
->>>> 	 */
->>>> 	return !list_empty_careful(&bfqd->dispatch) ||
->>>> -		bfq_tot_busy_queues(bfqd) > 0;
->>>> +		READ_ONCE(bfqd->queued);
->>>> }
->>>>
->>>> static struct request *__bfq_dispatch_request(struct blk_mq_hw_ctx *hctx)
->>>> -- 
->>>> 2.31.1
->>>>
->>> -- 
->>> Jan Kara <jack@suse.com>
->>> SUSE Labs, CR
->>
-> 
-> .
-> 
+Changelog:
+v1 -> v2:
+        - Remove the retry as Carlos Llamas adviced.
+        - Use binder_set_extended_error to reset the error info.
+---
+ drivers/android/binder.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index d9253b2a7bd9..1a6b7a8c8346 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -5162,19 +5162,16 @@ static int binder_ioctl_get_freezer_info(
+ static int binder_ioctl_get_extended_error(struct binder_thread *thread,
+ 					   void __user *ubuf)
+ {
+-	struct binder_extended_error *ee = &thread->ee;
++	struct binder_extended_error ee;
+ 
+ 	binder_inner_proc_lock(thread->proc);
+-	if (copy_to_user(ubuf, ee, sizeof(*ee))) {
+-		binder_inner_proc_unlock(thread->proc);
+-		return -EFAULT;
+-	}
+-
+-	ee->id = 0;
+-	ee->command = BR_OK;
+-	ee->param = 0;
++	ee = thread->ee;
++	binder_set_extended_error(&thread->ee, 0, BR_OK, 0);
+ 	binder_inner_proc_unlock(thread->proc);
+ 
++	if (copy_to_user(ubuf, &ee, sizeof(ee)))
++		return -EFAULT;
++
+ 	return 0;
+ }
+ 
+-- 
+2.24.3 (Apple Git-128)
+

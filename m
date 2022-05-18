@@ -2,162 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D4652C4AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D3D52C4BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242777AbiERUpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 16:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S242662AbiERUq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 16:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242734AbiERUpa (ORCPT
+        with ESMTP id S242646AbiERUq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 16:45:30 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673AF78908
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:45:29 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id bq30so5682035lfb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yZJJPAZDkDqR7UoeGKaC6qUbpF8wvLcJmxmRJ8kYOSU=;
-        b=i+FtS1BM+D5y1Fijev4TprJqlINgopPryrnYc3eI6KH1HzKaxQQqr0voU6ZpMOGKv1
-         HmhzABK4RSTo3+zqOytKGeu8fgmUxsk+DnBWCyp2jEJpRzn2OrEsvlH5ZwanpF1UVsCv
-         7jpzINan8lrclloeNnX9ohq+oRKKFzXhjqbRqmLLBMrGZyU7PLFmaMfOFkSYwONUsZlE
-         zadkzm2Vn+/5danHpEmCddVSLy6WFBPBcZsybyx6pk68M7WjscnNfqGopIHAXXkRKk41
-         MQkaGVfEN1oCsCqAI9edLvMJ9OXhS0J6cnlSLWwzuHVJ7QoubRxmasZ/pwwfnfrNRUTV
-         acZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yZJJPAZDkDqR7UoeGKaC6qUbpF8wvLcJmxmRJ8kYOSU=;
-        b=dUhO3JVG5WdtWnO78rPJHSWT9gAZb+rdQcAi+FwH+QhLr5hx/us+iTUQs+huqS47V0
-         jBrMkCBIl6XSqzjPuUONa9RZ46t3Ivs0rXl26K7WK74e2pgjqCebq5zd0d4N8VJE6wuC
-         2o0l9y3TbKKOY0wIbxk6CWe2Itq9RrXPd+5fh9GcaulDMR5ddBiJjV/zn++EYmK5aYH8
-         vafRnCm/BgfxeeLtWQRYWIX6xQZ/LTbBYMbykjVb5NK98eLFhoOYdQMA1z7LCXCo9QI1
-         mytwXdME7Tkg0SUD1N+EBXAokoy9Uu/wPQ2pPpk7R2tgRDO4c+DgQNoTzQA2NwJf7jXM
-         vKwg==
-X-Gm-Message-State: AOAM532rEWwogDsjreqVtHyCYBz8At+0nsHO4OuGZfB2xFC7W8I2yv2R
-        /lWtmKcJBCpn76RLxCTp7kkYoIDtYXs+0GsrF6WVJA==
-X-Google-Smtp-Source: ABdhPJzEuMLqq/YYkPJUgoDmG+EduOgOoFxh5PSOdtGXfVwKSqpQ0R2rlP/M7Z0qDdr7a4AlDOaaEEA/hCVff3/7Axk=
-X-Received: by 2002:a05:6512:1105:b0:477:b97f:4971 with SMTP id
- l5-20020a056512110500b00477b97f4971mr883037lfg.87.1652906727396; Wed, 18 May
- 2022 13:45:27 -0700 (PDT)
+        Wed, 18 May 2022 16:46:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B3815AB30;
+        Wed, 18 May 2022 13:46:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C902F61A2D;
+        Wed, 18 May 2022 20:46:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E23C34115;
+        Wed, 18 May 2022 20:46:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652906815;
+        bh=wxBHX72sHl+LEUlCxgMe6qdSdNWO4yWjzaf8BXQa58w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SwMVC5PK9op5GgVoA7nvGZ9qVDqF+kJPD369O70gwrGGpJZwm6bUZwjt37KfBRfOx
+         v2HNpNI4F7I1EuskoPhlwV0gFBwvAWXIAlWDoVkBqcuQdC4J4iq2CNujo1K4Y7Z3zw
+         82KntzB9E8o+4P6vLhDkfZdWtfJxLWrLfFc9oVMRdIJPTrspMdmZf0JDEzvUcKQ2ZA
+         +YtWwVXGfG48rIFCuWFI/BvqJDU9rsxXrrOKSgqAFxO8wG6hu02Ou16vvrGtP9hikV
+         s1x+5/4cRA081Ln+Xf3mC36LRIzLUPhzNPgi7BxL7YK4svN52JT/7XOqnCnlbkcXLv
+         JJiSmZn7czQXg==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-f189b07f57so4314543fac.1;
+        Wed, 18 May 2022 13:46:55 -0700 (PDT)
+X-Gm-Message-State: AOAM531HupqGY2XpyFku3doqhsptbDjIfFTSzUlpxIaH6n6BLgizG47c
+        2MWer0C8ln71+PL2WD0RM8Xk9jDHY7t/39FODz4=
+X-Google-Smtp-Source: ABdhPJz2MYP+He80fkGa5Pjiu8XRsth/Yff4J4ZSPDZpZ55pGzX2uFy2pYwk6SLJOp71WzV/bU0wb1D2q2f7Dl3ipaA=
+X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
+ s37-20020a056870eaa500b000da0b3f2b45mr1230174oap.228.1652906814349; Wed, 18
+ May 2022 13:46:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518184529.454008-1-nathan@kernel.org>
-In-Reply-To: <20220518184529.454008-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 18 May 2022 13:45:15 -0700
-Message-ID: <CAKwvOdk3HZkiZwtp1+xZULbm8BkOjdCQxPqsOHDJ5CboVy5ONw@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Fix ALT_THEAD_PMA's asm parameters
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Jessica Clarke <jrtc27@jrtc27.com>
+References: <20220517101410.3493781-1-andre.przywara@arm.com>
+ <20220517153444.GA1057027-robh@kernel.org> <CAFEAcA8sE8Rj0GmF71ox4BdDr0UcaS4QwiLUVUUFH5oj+hDhfA@mail.gmail.com>
+ <CAL_JsqLRvEn2E7cpTzQJRCJ=aeLjUtKhDimWat=nPtm3QP+cfA@mail.gmail.com>
+ <CAFEAcA_DRoJmnFdyEEcSvCxtPYignZFqQFnHyWkcpyijCBSrCg@mail.gmail.com>
+ <20220518165421.GF3302100-robh@kernel.org> <CAFEAcA80B2aGdaxK2pm7AK84KK_UqwD-KCMKtK6b8fF41MeKRg@mail.gmail.com>
+In-Reply-To: <CAFEAcA80B2aGdaxK2pm7AK84KK_UqwD-KCMKtK6b8fF41MeKRg@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 18 May 2022 22:46:42 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFgyg7CFNoPomeucN4BCCo-PMO8w8smjmxFWKRvOY0ePg@mail.gmail.com>
+Message-ID: <CAMj1kXFgyg7CFNoPomeucN4BCCo-PMO8w8smjmxFWKRvOY0ePg@mail.gmail.com>
+Subject: Re: [PATCH] of/fdt: Ignore disabled memory nodes
+To:     Peter Maydell <peter.maydell@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ross Burton <ross.burton@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 11:45 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Wed, 18 May 2022 at 19:54, Peter Maydell <peter.maydell@linaro.org> wrote:
 >
-> After commit a35707c3d850 ("riscv: add memory-type errata for T-Head"),
-> builds with LLVM's integrated assembler fail like:
+> On Wed, 18 May 2022 at 17:54, Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Tue, May 17, 2022 at 08:19:47PM +0100, Peter Maydell wrote:
+> > > We generate the DTB with libfdt, so source-only information
+> > > isn't something we can put in, I think. (The quoted DT fragment
+> > > in this patch's commit message is the result of decompiling
+> > > the runtime generated DT binary blob with dtc.)
+> >
+> > Given the runtime aspect with overlays, it's conceivable that libfdt
+> > could support setting labels some day and then dts output maintaining
+> > them.
+> >
+> > We could also consider a standard node name such as 'secure-memory'.
+> > It's a whole can of worms though on how secure vs. non-secure memory
+> > (and other things) are represented.
 >
->   In file included from arch/riscv/kernel/asm-offsets.c:10:
->   In file included from ./include/linux/mm.h:29:
->   In file included from ./include/linux/pgtable.h:6:
->   In file included from ./arch/riscv/include/asm/pgtable.h:114:
->   ./arch/riscv/include/asm/pgtable-64.h:210:2: error: invalid input constraint '0' in asm
->           ALT_THEAD_PMA(prot_val);
->           ^
->   ./arch/riscv/include/asm/errata_list.h:88:4: note: expanded from macro 'ALT_THEAD_PMA'
->           : "0"(_val),                                                    \
->             ^
+> Mmm. We put in the very basic parts years ago in
+> Documentation/devicetree/bindings/arm/secure.txt
+> which is (and has remained) generally sufficient for the QEMU->Trusted
+> Firmware-> maybe uboot->Linux stack, which is pretty much the only use
+> case I think. (My intention when we wrote that up was that memory
+> that's S-only would be indicated the same way as S-only devices,
+> with the secure-status and status properties.)
 >
-> This was reported upstream to LLVM where Jessica pointed out a couple of
-> issues with the existing implementation of ALT_THEAD_PMA:
+> > > Are we just stuck with what we have for historical reasons ?
+> >
+> > Yes. If we were designing this, we'd probably have 'compatible =
+> > "memory"'. We're likely just stuck with things how they are. Mostly node
+> > names haven't been an ABI and we're just trying to be consistent in
+> > naming and use of unit-addresses.
 >
-> * t3 is modified but not listed in the clobbers list.
->
-> * "+r"(_val) marks _val as both an input and output of the asm but then
->   "0"(_val) marks _val as an input matching constraint, which does not
->   make much sense in this situation, as %1 is not actually used in the
->   asm and matching constraints are designed to be used for different
->   inputs that need to use the same register.
->
-> Drop the matching contraint and shift all the operands by one, as %1 is
-
-s/contraint/constraint/
-
-Thanks for the fix!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> unused, and mark t3 as clobbered. This resolves the build error and goes
-> not cause any problems with GNU as.
->
-> Fixes: a35707c3d850 ("riscv: add memory-type errata for T-Head")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1641
-> Link: https://github.com/llvm/llvm-project/issues/55514
-> Link: https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html
-> Suggested-by: Jessica Clarke <jrtc27@jrtc27.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  arch/riscv/include/asm/errata_list.h | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> index 9e2888dbb5b1..416ead0f9a65 100644
-> --- a/arch/riscv/include/asm/errata_list.h
-> +++ b/arch/riscv/include/asm/errata_list.h
-> @@ -75,20 +75,20 @@ asm volatile(ALTERNATIVE(                                           \
->         "nop\n\t"                                                       \
->         "nop\n\t"                                                       \
->         "nop",                                                          \
-> -       "li      t3, %2\n\t"                                            \
-> -       "slli    t3, t3, %4\n\t"                                        \
-> +       "li      t3, %1\n\t"                                            \
-> +       "slli    t3, t3, %3\n\t"                                        \
->         "and     t3, %0, t3\n\t"                                        \
->         "bne     t3, zero, 2f\n\t"                                      \
-> -       "li      t3, %3\n\t"                                            \
-> -       "slli    t3, t3, %4\n\t"                                        \
-> +       "li      t3, %2\n\t"                                            \
-> +       "slli    t3, t3, %3\n\t"                                        \
->         "or      %0, %0, t3\n\t"                                        \
->         "2:",  THEAD_VENDOR_ID,                                         \
->                 ERRATA_THEAD_PBMT, CONFIG_ERRATA_THEAD_PBMT)            \
->         : "+r"(_val)                                                    \
-> -       : "0"(_val),                                                    \
-> -         "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),              \
-> +       : "I"(_PAGE_MTMASK_THEAD >> ALT_THEAD_PBMT_SHIFT),              \
->           "I"(_PAGE_PMA_THEAD >> ALT_THEAD_PBMT_SHIFT),                 \
-> -         "I"(ALT_THEAD_PBMT_SHIFT))
-> +         "I"(ALT_THEAD_PBMT_SHIFT)                                     \
-> +       : "t3")
->  #else
->  #define ALT_THEAD_PMA(_val)
->  #endif
->
-> base-commit: 93c0651617a62a69717299f1464dda798af8bebb
-> --
-> 2.36.1
+> So, do you think it's worthwhile/a good idea for me to rename
+> the DT node that QEMU is currently calling "secmem" to be
+> "memory" ? My default is "leave it as it is", for economy of
+> effort reasons :-) -- but it's an easy enough change to make.
+> Though EDK2's dtb reading code just looks for the first
+> "memory" node and assumes it's the big one, so changing the node
+> name would make us reliant on the order of the two nodes in the
+> DTB unless we fixed EDK2 (which we should probably do anyway, tbh).
 >
 
-
--- 
-Thanks,
-~Nick Desaulniers
+Agreed. The referenced code is only one of two implementations (one
+for the firmware version that executes in place from NOR flash, and
+one for the version that executes from DRAM), which don't follow the
+same strategy (the other one enumerates all device_type="memory" nodes
+in the tree, and picks the one with the lowest starting address, but
+also ignores status properties or node names). The PrePi version
+linked here should simply choose the node that covers its own image in
+memory. The XIP version uses a stack in DRAM, so it could do something
+similar.

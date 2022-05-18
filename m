@@ -2,154 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B37752C3F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBA352C3EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 22:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242229AbiERUEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 16:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
+        id S242241AbiERUEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 16:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242109AbiERUE3 (ORCPT
+        with ESMTP id S242215AbiERUEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 16:04:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2CCC1611DB
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:04:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652904267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cg+jK1C7VyPf51yeEPplXxbPfgA1BVLN1iSf3puxwqE=;
-        b=HxFySj2lQYt4DE2Ay7fxS06X1/z7+wGiMdJ35ThNvjW02zESv11m9VvddpFEh/zOCnuueK
-        pU4MMPsbwjYQAvjhzR//WmTOUNQk5g94JxiglEhE/2EcktDwQohef4cAXzTs1f75KdKGt/
-        xTYQ26ya3nwXNRQSS8pm6n2D/0f8HjA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-455-VnHplXE5Pdytuyy6-DrgUg-1; Wed, 18 May 2022 16:04:24 -0400
-X-MC-Unique: VnHplXE5Pdytuyy6-DrgUg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 18 May 2022 16:04:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7240A1EE0BE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 13:04:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 536B42800885;
-        Wed, 18 May 2022 20:04:05 +0000 (UTC)
-Received: from asgard.redhat.com (unknown [10.36.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EDFB3492C14;
-        Wed, 18 May 2022 20:04:01 +0000 (UTC)
-Date:   Wed, 18 May 2022 22:03:58 +0200
-From:   Eugene Syromiatnikov <esyr@redhat.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf v3 2/2] bpf_trace: bail out from
- bpf_kprobe_multi_link_attach when in compat
-Message-ID: <20220518200358.GB29226@asgard.redhat.com>
-References: <cover.1652876187.git.esyr@redhat.com>
- <47cbdb76178a112763a3766a03d8cc51842fcab0.1652876188.git.esyr@redhat.com>
- <7bbb4a95-0d12-2a8f-9503-2613d774eaaa@fb.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07CB261993;
+        Wed, 18 May 2022 20:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E0CC385A5;
+        Wed, 18 May 2022 20:04:48 +0000 (UTC)
+Date:   Wed, 18 May 2022 16:04:47 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     YoPOhRctb8wwbmY5@carbon, Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v3] tracing: add 'accounted' entry into output of
+ allocation tracepoints
+Message-ID: <20220518160447.20a7b96f@gandalf.local.home>
+In-Reply-To: <f6625cd8-90f9-6d48-50f6-7bb052bf479f@openvz.org>
+References: <f6625cd8-90f9-6d48-50f6-7bb052bf479f@openvz.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7bbb4a95-0d12-2a8f-9503-2613d774eaaa@fb.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 09:55:05AM -0700, Yonghong Song wrote:
-> 
-> 
-> On 5/18/22 5:22 AM, Eugene Syromiatnikov wrote:
-> >Since bpf_kprobe_multi_link_attach doesn't support 32-bit kernels
-> >for whatever reason, having it enabled for compat processes on 64-bit
-> >kernels makes even less sense due to discrepances in the type sizes
-> >that it does not handle.
-> 
-> If I understand correctly, the reason is due to
-> in libbpf we have
-> struct bpf_link_create_opts {
->         size_t sz; /* size of this struct for forward/backward compatibility
-> */
->         __u32 flags;
->         union bpf_iter_link_info *iter_info;
->         __u32 iter_info_len;
->         __u32 target_btf_id;
->         union {
->                 struct {
->                         __u64 bpf_cookie;
->                 } perf_event;
->                 struct {
->                         __u32 flags;
->                         __u32 cnt;
->                         const char **syms;
->                         const unsigned long *addrs;
->                         const __u64 *cookies;
->                 } kprobe_multi;
->         };
->         size_t :0;
-> };
-> 
-> Note that we have `const unsigned long *addrs;`
-> 
-> If we have 32-bit user space application and 64bit kernel,
-> and we will have userspace 32-bit pointers and kernel as
-> 64bit pointers and current kernel doesn't handle 32-bit
-> user pointer properly.
-> 
-> Consider this may involve libbpf uapi change, maybe
-> we should change "const unsigned long *addrs;" to
-> "const __u64 *addrs;" considering we haven't freeze
-> libbpf UAPI yet.
-> 
-> Otherwise, we stick to current code with this patch,
-> it will make it difficult to support 32-bit app with
-> 64-bit kernel for kprobe_multi in the future due to
-> uapi issues.
-> 
-> WDYT?
+On Wed, 18 May 2022 09:24:51 +0300
+Vasily Averin <vvs@openvz.org> wrote:
 
-As 32 bit arches are "unsupported" currently, the change would be more
-a semantic one rather then practical;  I don't mind having it here (basically,
-the tools/* part of [1]), though (assuming it is still possible to get it
-in 5.18).
+FYI, the subject should be something like: mm/tracing:
 
-[1] https://lore.kernel.org/lkml/6ef675aeeea442fa8fc168cd1cb4e4e474f65a3f.1652772731.git.esyr@redhat.com/
+Because "tracing:" is reserved for tracing infrastructure updates.
 
-> >
-> >Fixes: 0dcac272540613d4 ("bpf: Add multi kprobe link")
-> >Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
-> >---
-> >  kernel/trace/bpf_trace.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> >diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> >index 212faa4..2f83489 100644
-> >--- a/kernel/trace/bpf_trace.c
-> >+++ b/kernel/trace/bpf_trace.c
-> >@@ -2412,7 +2412,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> >  	int err;
-> >  	/* no support for 32bit archs yet */
-> >-	if (sizeof(u64) != sizeof(void *))
-> >+	if (sizeof(u64) != sizeof(void *) || in_compat_syscall())
-> >  		return -EOPNOTSUPP;
-> >  	if (prog->expected_attach_type != BPF_TRACE_KPROBE_MULTI)
+> Slab caches marked with SLAB_ACCOUNT force accounting for every
+> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
+> Unfortunately, at the moment this flag is not visible in ftrace output,
+> and this makes it difficult to analyze the accounted allocations.
 > 
+> This patch adds boolean "allocated" entry into trace output,
+> and set it to 'true' for calls used __GFP_ACCOUNT flag and
+> for allocations from caches marked with SLAB_ACCOUNT.
+> 
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> ---
+> v3:
+>  1) rework kmem_cache_alloc* tracepoints once again,
+>     added struct kmem_cache argument into existing templates,
+> 	thanks to Matthew Wilcox
+>  2) updated the corresponding ding trace_* calls
+>  3) added boolean "allocated" entry into trace output,
+> 	thanks to Roman
+>  4) updated patch subject and description
+> 
+> v2:
+>  1) handle kmem_cache_alloc_node(), thanks to Shakeel
+>  2) rework kmem_cache_alloc* tracepoints to use cachep instead
+>     of current cachep->*size parameters.
+>     NB: kmem_cache_alloc_node tracepoint in SLOB cannot use cachep,
+>         and therefore it was replaced by kmalloc_node.
+> ---
+> Now kmem tracing output looks like this:
+> 
+> kmem_cache_alloc:     (getname_flags.part.0+0x2c) call_site=getname_flags.part.0+0x2c ptr=0xffff8fff022e9000 bytes_req=4096 bytes_alloc=4096 gfp_flags=GFP_KERNEL accounted=false
+> kmalloc:              (alloc_bprm+0x32) call_site=alloc_bprm+0x32 ptr=0xffff8fff2b408a00 bytes_req=416 bytes_alloc=512 gfp_flags=GFP_KERNEL|__GFP_ZERO accounted=false
+> kmem_cache_alloc:     (mm_alloc+0x16) call_site=mm_alloc+0x16 ptr=0xffff8fff0894d500 bytes_req=1048 bytes_alloc=1088 gfp_flags=GFP_KERNEL accounted=true
+> mm_page_alloc:        page=0xffffffffa4ab8d42 pfn=0x12ad72 order=1 migratetype=0 gfp_flags=GFP_USER|__GFP_ZERO|__GFP_ACCOUNT
+> kmem_cache_alloc:     (vm_area_alloc+0x1a) call_site=vm_area_alloc+0x1a ptr=0xffff8fff2af27000 bytes_req=200 bytes_alloc=200 gfp_flags=GFP_KERNEL accounted=true
+> ---
+>  include/trace/events/kmem.h | 38 +++++++++++++++++++++++--------------
+>  mm/slab.c                   | 10 +++++-----
+>  mm/slab_common.c            |  9 ++++-----
+>  mm/slob.c                   |  8 ++++----
+>  mm/slub.c                   | 20 +++++++++----------
+>  5 files changed, 47 insertions(+), 38 deletions(-)
+> 
+> diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
+> index 71c141804222..5bfeb6f276f1 100644
+> --- a/include/trace/events/kmem.h
+> +++ b/include/trace/events/kmem.h
+> @@ -13,11 +13,12 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+>  
+>  	TP_PROTO(unsigned long call_site,
+>  		 const void *ptr,
+> +		 struct kmem_cache *s,
+>  		 size_t bytes_req,
+>  		 size_t bytes_alloc,
+>  		 gfp_t gfp_flags),
+>  
+> -	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags),
+> +	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags),
+>  
+>  	TP_STRUCT__entry(
+>  		__field(	unsigned long,	call_site	)
+> @@ -25,6 +26,7 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+>  		__field(	size_t,		bytes_req	)
+>  		__field(	size_t,		bytes_alloc	)
+>  		__field(	unsigned long,	gfp_flags	)
+> +		__field(	bool,		accounted	)
+>  	),
+>  
+>  	TP_fast_assign(
+> @@ -33,42 +35,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+>  		__entry->bytes_req	= bytes_req;
+>  		__entry->bytes_alloc	= bytes_alloc;
+>  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
+> +		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
+> +					  (s && s->flags & SLAB_ACCOUNT);
 
+Now you could make this even faster in the fast path and save just the
+s->flags.
+
+	__entry->sflags = s ? s->flags : 0;
+
+>  	),
+>  
+> -	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
+> +	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s accounted=%s",
+>  		(void *)__entry->call_site,
+>  		__entry->ptr,
+>  		__entry->bytes_req,
+>  		__entry->bytes_alloc,
+> -		show_gfp_flags(__entry->gfp_flags))
+> +		show_gfp_flags(__entry->gfp_flags),
+> +		__entry->accounted ? "true" : "false")
+
+And then have: "accounted=%s":
+
+		(__entry->gfp_flags & __GFP_ACCOUNT) ||
+		(__entry->sflags & SLAB_ACCOUNT) ? "true" : "false"
+
+
+-- Steve
+
+>  );
+>  

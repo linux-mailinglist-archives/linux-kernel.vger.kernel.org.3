@@ -2,76 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D2D52BD65
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A6252BBD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238267AbiERNym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
+        id S237634AbiERNSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238395AbiERNy2 (ORCPT
+        with ESMTP id S236559AbiERNSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:54:28 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1831C7666;
-        Wed, 18 May 2022 06:54:08 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3DwB0mhqzhZBc;
-        Wed, 18 May 2022 21:53:14 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 21:54:02 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v5 6/6] selftests/bpf: Fix trivial typo in fentry_fexit.c
-Date:   Wed, 18 May 2022 09:16:38 -0400
-Message-ID: <20220518131638.3401509-7-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220518131638.3401509-1-xukuohai@huawei.com>
-References: <20220518131638.3401509-1-xukuohai@huawei.com>
+        Wed, 18 May 2022 09:18:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9247B0A64;
+        Wed, 18 May 2022 06:18:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79712B82032;
+        Wed, 18 May 2022 13:18:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D865C385AA;
+        Wed, 18 May 2022 13:18:12 +0000 (UTC)
+Message-ID: <adb0c664-a662-4823-9e54-0daab22932a0@linux-m68k.org>
+Date:   Wed, 18 May 2022 23:18:09 +1000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] m68knommu: fix 68000 CPU link with no platform
+ selected
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux/m68k <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20220518065639.2432213-1-gerg@linux-m68k.org>
+ <20220518065639.2432213-4-gerg@linux-m68k.org>
+ <CAMuHMdWADK4d-OxKYdnRvbtVsGtbZ_+vF2D70S-5hXNt0rqg9w@mail.gmail.com>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <CAMuHMdWADK4d-OxKYdnRvbtVsGtbZ_+vF2D70S-5hXNt0rqg9w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,29 +51,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "ipv6" word in assertion message should be "fentry_fexit".
+Hi Geert,
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- tools/testing/selftests/bpf/prog_tests/fentry_fexit.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 18/5/22 19:20, Geert Uytterhoeven wrote:
+> Hi Greg.
+> 
+> On Wed, May 18, 2022 at 8:56 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
+>> If building for a nommu m68k classic CPU and no platform (board) is
+>> selected then the final link fails with:
+>>
+>>       LD      vmlinux.o
+>>     m68k-linux-ld: cannot find arch/m68k/kernel/head.o: No such file or directory
+>>     make: *** [Makefile:1158: vmlinux] Error 1
+>>
+>> Not selecting a platform is ok, that is a generic 68000 system build.
+>> All of the platform selections are for 68328 variants.
+>>
+>> The underlying problem is that the CPU config option (CONFIG_M68000)
+>> ends up not being set, it is currently only selected by one of the
+>> platform choices.
+>>
+>> Change CONFIG_M68000 so that it is always enabled for the nommu m68k
+>> classic configuration.
+>>
+>> Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
+> 
+> Thanks for your patch!
+> 
+>> --- a/arch/m68k/Kconfig.cpu
+>> +++ b/arch/m68k/Kconfig.cpu
+>> @@ -37,7 +37,7 @@ endchoice
+>>   if M68KCLASSIC
+>>
+>>   config M68000
+>> -       bool
+>> +       def_bool y
+> 
+> And then the selects can be removed, too, as the symbol is now always
+> enabled?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-index 130f5b82d2e6..e3c139bde46e 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-@@ -28,8 +28,8 @@ void test_fentry_fexit(void)
- 
- 	prog_fd = fexit_skel->progs.test1.prog_fd;
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--	ASSERT_OK(err, "ipv6 test_run");
--	ASSERT_OK(topts.retval, "ipv6 test retval");
-+	ASSERT_OK(err, "fentry_fexit test_run");
-+	ASSERT_OK(topts.retval, "fentry_fexit test retval");
- 
- 	fentry_res = (__u64 *)fentry_skel->bss;
- 	fexit_res = (__u64 *)fexit_skel->bss;
--- 
-2.30.2
+Yes, I think that would be the case.
 
+
+> I'm wondering how to handle this when another nommu-m68k-classic
+> platform shows up (again, cfr. the removed 68360 support) , that
+> would need a different head.S?  Of course that's something to be
+> solved later...
+
+Yes, indeed. I am kinda kicking that can down the road :-)
+
+It probably doesn't make a lot of sense to be able to select
+multiple platform types in this specific nommu m68k classic setup.
+The startup config code does not support probing of platform type,
+it has hard coded #if conditionals that mean it only supports a
+single platform selection anyway.
+
+Anyway, a problem to deal with when we have more choices here.
+
+
+>>          depends on !MMU
+>>          select CPU_HAS_NO_BITFIELDS
+>>          select CPU_HAS_NO_CAS
+> 
+> Note that mmu-m68k-classic (e.g. CONFIG_MMU=y + allnonfig) has the
+> same problem.  That config does need other fixes too.  E.g. I have
+> a local patch to make sure NR_IRQS is never zero, but never got to
+> solve the missing head.o problem in an acceptable way.
+
+Yep, ok.
+
+Regards
+Greg
+
+
+
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds

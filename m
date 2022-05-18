@@ -2,178 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D842552B930
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AAE552B968
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235887AbiERLyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S236008AbiERL4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235810AbiERLyn (ORCPT
+        with ESMTP id S235958AbiERL4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:54:43 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782D642A1C;
-        Wed, 18 May 2022 04:54:36 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L3B9b2Vr5zCskK;
-        Wed, 18 May 2022 19:49:39 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
- (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 19:54:33 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-ext4@vger.kernel.org>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yebin10@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH] ext4: fix bug_on in __es_tree_search
-Date:   Wed, 18 May 2022 20:08:16 +0800
-Message-ID: <20220518120816.1541863-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 18 May 2022 07:56:19 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A308D2BD2;
+        Wed, 18 May 2022 04:56:14 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id f9so3417645ejc.0;
+        Wed, 18 May 2022 04:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oF+fUnzGRmCla6wkP2ZWWEZ7GzfOYIjKQWRL+xL61A4=;
+        b=ZhOdUoZvH+KX2I9nBjZp3CtDu3nBvOk3p9ODvo5x1oIeBFD5fYyBJONJC9otmNNT6e
+         toOCz1jR42Z4SpnKfNTHRZTqqTDFB1wGQQ+JNFAKKgC/UVWR1mAl3IIZCgJ3522FLH0t
+         7MfwtDN5RlpMHFeXqqe2u3GnNDOWSPkG3WYjXV2ZQ/djEf/FL+8kct1Vt97X9Hj6HFBL
+         R3gcv5yzbA7wkOfxzw/yJAVqnIbsr9rWHcRA3wk4lGLElIrBj9FKLETjF44MX0lk2YN/
+         Ia+7Hny0BlRYxo6a/C7Jqg0tWqLdEh9KD+8H3i9+QLMIH1AqS7vEQvTZvZ2C0k/shZ1f
+         7JDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oF+fUnzGRmCla6wkP2ZWWEZ7GzfOYIjKQWRL+xL61A4=;
+        b=U5jkzJ77gyW2p0OBBvGklBlBr09T1iLwhHpfQFbhaYO4SqjW5XWB9x9xVDJQc523uX
+         u0zdYRXWm3GROFhTQiiqSqrJWmbyTcN/cjqjB5Natxt0sme2ZqXaTpoAK2qoGgLloeF6
+         suHwvqyIOWAAWBzevzBB73sG7fXVCZ7/kHyn/WEffRvDG9YDjLVXyj/tRa/bO1qYKf5+
+         UoktSQ2hvy5fFGNAq+KPE1qcmQoLrYH6C3IjnUhnrUTq6SETjA4KFQ37jGdX/NCeLLj8
+         OjbJuWgYwBG5MoZ7QVIfhdAJp/PPVGmo9wf2dT95h+6qzQkysfc5VxWnQ37wKRIQS7xy
+         50Mw==
+X-Gm-Message-State: AOAM531VrrrJk6sBIdk5GtMOnMCY6TsFhwQhErCGnHyVNgV+CdO6jQay
+        wazcKfx5UArBWCa7kvXzZ7k=
+X-Google-Smtp-Source: ABdhPJyrMnKyVZWMc4n6Os+y/tg06UNnOrohRbv7mLb78lVsDCcAwXxErgbNu4RxUJjh76agRgw/2w==
+X-Received: by 2002:a17:907:d89:b0:6f5:be3:b06d with SMTP id go9-20020a1709070d8900b006f50be3b06dmr23900488ejc.74.1652874973392;
+        Wed, 18 May 2022 04:56:13 -0700 (PDT)
+Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
+        by smtp.gmail.com with ESMTPSA id dq20-20020a170907735400b006f5294986besm873999ejc.111.2022.05.18.04.56.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 04:56:12 -0700 (PDT)
+From:   Max Krummenacher <max.oss.09@gmail.com>
+To:     max.krummenacher@toradex.com
+Cc:     Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Nikita Kiryanov <nikita@compulab.co.il>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] drm/panel: simple: add bus-format support for panel-dpi
+Date:   Wed, 18 May 2022 13:55:37 +0200
+Message-Id: <20220518115541.38407-1-max.oss.09@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hulk Robot reported a BUG_ON:
-==================================================================
-kernel BUG at fs/ext4/extents_status.c:199!
-[...]
-RIP: 0010:ext4_es_end fs/ext4/extents_status.c:199 [inline]
-RIP: 0010:__es_tree_search+0x1e0/0x260 fs/ext4/extents_status.c:217
-[...]
-Call Trace:
- ext4_es_cache_extent+0x109/0x340 fs/ext4/extents_status.c:766
- ext4_cache_extents+0x239/0x2e0 fs/ext4/extents.c:561
- ext4_find_extent+0x6b7/0xa20 fs/ext4/extents.c:964
- ext4_ext_map_blocks+0x16b/0x4b70 fs/ext4/extents.c:4384
- ext4_map_blocks+0xe26/0x19f0 fs/ext4/inode.c:567
- ext4_getblk+0x320/0x4c0 fs/ext4/inode.c:980
- ext4_bread+0x2d/0x170 fs/ext4/inode.c:1031
- ext4_quota_read+0x248/0x320 fs/ext4/super.c:6257
- v2_read_header+0x78/0x110 fs/quota/quota_v2.c:63
- v2_check_quota_file+0x76/0x230 fs/quota/quota_v2.c:82
- vfs_load_quota_inode+0x5d1/0x1530 fs/quota/dquot.c:2368
- dquot_enable+0x28a/0x330 fs/quota/dquot.c:2490
- ext4_quota_enable fs/ext4/super.c:6137 [inline]
- ext4_enable_quotas+0x5d7/0x960 fs/ext4/super.c:6163
- ext4_fill_super+0xa7c9/0xdc00 fs/ext4/super.c:4754
- mount_bdev+0x2e9/0x3b0 fs/super.c:1158
- mount_fs+0x4b/0x1e4 fs/super.c:1261
-[...]
-==================================================================
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Above issue may happen as follows:
--------------------------------------
-ext4_fill_super
- ext4_enable_quotas
-  ext4_quota_enable
-   ext4_iget
-    __ext4_iget
-     ext4_ext_check_inode
-      ext4_ext_check
-       __ext4_ext_check
-        ext4_valid_extent_entries
-         Check for overlapping extents does't take effect
-   dquot_enable
-    vfs_load_quota_inode
-     v2_check_quota_file
-      v2_read_header
-       ext4_quota_read
-        ext4_bread
-         ext4_getblk
-          ext4_map_blocks
-           ext4_ext_map_blocks
-            ext4_find_extent
-             ext4_cache_extents
-              ext4_es_cache_extent
-               ext4_es_cache_extent
-                __es_tree_search
-                 ext4_es_end
-                  BUG_ON(es->es_lblk + es->es_len < es->es_lblk)
 
-The error ext4 extents is as follows:
-0af3 0300 0400 0000 00000000    extent_header
-00000000 0100 0000 12000000     extent1
-00000000 0100 0000 18000000     extent2
-02000000 0400 0000 14000000     extent3
+Commit 4a1d0dbc8332 ("drm/panel: simple: add panel-dpi support") added
+support for defining a panel from device tree provided data.
 
-In the ext4_valid_extent_entries function,
-if prev is 0, no error is returned even if lblock<=prev.
-This was intended to skip the check on the first extent, but
-in the error image above, prev=0+1-1=0 when checking the second extent,
-so even though lblock<=prev, the function does not return an error.
-As a result, bug_ON occurs in __es_tree_search and the system panics.
+However support for setting the bus format is missing, so that with
+the current implementation a 'panel-dpi' panel can only be used
+if the driver of the display interface connected can cope with a
+missing bus_format.
 
-To solve this problem, we only need to check that:
-1. The lblock of the first extent is not less than 0.
-2. The lblock of the next extent  is not less than
-   the next block of the previous extent.
-The same applies to extent_idx.
+This patch series defines the new property bus-format and adds it to
+the panel-dpi implementation.
 
-Fixes: 5946d089379a ("ext4: check for overlapping extents in ext4_valid_extent_entries()")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
- fs/ext4/extents.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Check initial discussions [1] and [2].
+[1] https://lore.kernel.org/all/20220201110717.3585-1-cniedermaier@dh-electronics.com/
+[2] https://lore.kernel.org/all/20220222084723.14310-1-max.krummenacher@toradex.com/
 
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index e473fde6b64b..86ba0db20968 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -372,7 +372,7 @@ static int ext4_valid_extent_entries(struct inode *inode,
- {
- 	unsigned short entries;
- 	ext4_lblk_t lblock = 0;
--	ext4_lblk_t prev = 0;
-+	ext4_lblk_t cur = 0;
- 
- 	if (eh->eh_entries == 0)
- 		return 1;
-@@ -396,11 +396,11 @@ static int ext4_valid_extent_entries(struct inode *inode,
- 
- 			/* Check for overlapping extents */
- 			lblock = le32_to_cpu(ext->ee_block);
--			if ((lblock <= prev) && prev) {
-+			if (lblock < cur) {
- 				*pblk = ext4_ext_pblock(ext);
- 				return 0;
- 			}
--			prev = lblock + ext4_ext_get_actual_len(ext) - 1;
-+			cur = lblock + ext4_ext_get_actual_len(ext);
- 			ext++;
- 			entries--;
- 		}
-@@ -420,13 +420,13 @@ static int ext4_valid_extent_entries(struct inode *inode,
- 
- 			/* Check for overlapping index extents */
- 			lblock = le32_to_cpu(ext_idx->ei_block);
--			if ((lblock <= prev) && prev) {
-+			if (lblock < cur) {
- 				*pblk = ext4_idx_pblock(ext_idx);
- 				return 0;
- 			}
- 			ext_idx++;
- 			entries--;
--			prev = lblock;
-+			cur = lblock + 1;
- 		}
- 	}
- 	return 1;
+
+Changes in v2:
+    - Fix errors found by dt_binding_check
+
+Max Krummenacher (3):
+  dt-bindings: display: add new bus-format property for panel-dpi
+  dt-bindings: display: startek,startek-kd050c: allow bus-format
+    property
+  drm/panel: simple: add bus-format support for panel-dpi
+
+ .../bindings/display/panel/panel-dpi.yaml     | 11 +++++
+ .../display/panel/startek,startek-kd050c.yaml |  1 +
+ drivers/gpu/drm/panel/panel-simple.c          | 43 +++++++++++++++++++
+ .../dt-bindings/display/dt-media-bus-format.h | 23 ++++++++++
+ 4 files changed, 78 insertions(+)
+ create mode 100644 include/dt-bindings/display/dt-media-bus-format.h
+
 -- 
-2.31.1
+2.20.1
 

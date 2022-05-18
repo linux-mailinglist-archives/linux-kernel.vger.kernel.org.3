@@ -2,77 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2437D52B47C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1F952B47A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbiERISP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S232741AbiERIOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232820AbiERISM (ORCPT
+        with ESMTP id S232680AbiERIOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:18:12 -0400
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB49798588
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:18:09 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 5D2ED206BF;
-        Wed, 18 May 2022 10:12:39 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fIlEGlifOAuS; Wed, 18 May 2022 10:12:38 +0200 (CEST)
-Received: from mailout2.secunet.com (mailout2.secunet.com [62.96.220.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id E545A206B0;
-        Wed, 18 May 2022 10:12:38 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout2.secunet.com (Postfix) with ESMTP id DFD8C80004A;
-        Wed, 18 May 2022 10:12:38 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 18 May 2022 10:12:38 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 10:12:38 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 1466E3182D02; Wed, 18 May 2022 10:12:38 +0200 (CEST)
-Date:   Wed, 18 May 2022 10:12:38 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: af_key: add check for pfkey_broadcast in function
- pfkey_process
-Message-ID: <20220518081238.GT680067@gauss3.secunet.de>
-References: <20220517094231.414168-1-jiasheng@iscas.ac.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220517094231.414168-1-jiasheng@iscas.ac.cn>
-X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 18 May 2022 04:14:19 -0400
+X-Greylist: delayed 138834 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 01:14:14 PDT
+Received: from azure-sdnproxy-1.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5508F880D8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:14:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=uGJhjE0VdQZaCtd5P8DjiImSj+n7K+Kp/VzkVHM4y8g=; b=N
+        jJJo8O/wqMmlgm1EBVxj3S+q34kGyjSNBqbagtYoPsOQCnakD89Jbj6EM0PELZXP
+        RJOQ1cmHAf6CW3B2S1LCl/f+20WxRQh23f6jQ84S0yGDYQTfDnSyUjdzT2iqM0A3
+        U4GR7XfLW58RzkBa15orkLJZGGk8c8v7PDFa7sj9IY=
+Received: from localhost (unknown [10.129.21.144])
+        by front01 (Coremail) with SMTP id 5oFpogCnr7eHqoRix3JcBw--.41772S2;
+        Wed, 18 May 2022 16:12:55 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, gregkh@linuxfoundation.org,
+        felipe.balbi@linux.intel.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        fuyq@stu.pku.edu.cn, Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] usb: cdns3:  Fix potential dereference of NULL pointer
+Date:   Wed, 18 May 2022 01:12:50 -0700
+Message-Id: <1652861570-102489-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 5oFpogCnr7eHqoRix3JcBw--.41772S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XFWkAFyxCr4rJw13XF18Xwb_yoWktrg_Cw
+        4UurZrKFW5X34UZw4DG34fG348KFsrX3WkJFsrta43CayUKr4kArW8Zr95CF1xZa18Kr1k
+        Aw1rKa1fCFsxJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK
+        6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x
+        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+        CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwEJBlPy7vIULQAJsA
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 05:42:31PM +0800, Jiasheng Jiang wrote:
-> If skb_clone() returns null pointer, pfkey_broadcast() will
-> return error.
-> Therefore, it should be better to check the return value of
-> pfkey_broadcast() and return error if fails.
-> 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+The return value of cdns3_gadget_ep_alloc_request()
+needs to be checked to avoid use of NULL pointer
+in case of an allocation failure.
 
-Applied, thanks!
+Fixes: 7733f6c32e36f ("usb: cdns3: Add Cadence USB3 DRD Driver")
+
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 5d8c982..7be328e 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -2568,6 +2568,10 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
+ 		struct cdns3_request *priv_req;
+ 
+ 		zlp_request = cdns3_gadget_ep_alloc_request(ep, GFP_ATOMIC);
++		if (!zlp_request) {
++			ret = -ENOMEM;
++			goto err;
++		}
+ 		zlp_request->buf = priv_dev->zlp_buf;
+ 		zlp_request->length = 0;
+ 
+@@ -2578,7 +2582,7 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
+ 			priv_ep->name);
+ 		ret = __cdns3_gadget_ep_queue(ep, zlp_request, gfp_flags);
+ 	}
+-
++err:
+ 	spin_unlock_irqrestore(&priv_dev->lock, flags);
+ 	return ret;
+ }
+-- 
+2.7.4
+

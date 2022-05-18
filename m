@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D8E52AF1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4C052AF20
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbiERARH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 20:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        id S232442AbiERAYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 20:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbiERARA (ORCPT
+        with ESMTP id S229524AbiERAYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 20:17:00 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025C537A1D
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:16:59 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 2-20020a631542000000b003f5f09dd8c0so331983pgv.17
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=5YuCWLet/PPts9g4RSdVal6LTdb/KAIKbqIvcb+vduY=;
-        b=dA/qIleBSlZrZBhR7t57h+6p/ZhZLnqSXMaXUXu9jhDey23Igr2eYKnVrjc9gKwmr0
-         gFbDHINheRaVvWwg1bcNtFrvGhHJpC7VCRW/PVvwyN0mxmYErJsWJk7RUDpAQDKa2rZJ
-         ICqG3XwJDV9mOi6Vnwke9oDgWXScDvseqk51ny/CoGNvVel6lmhsVWblT40ComgXwh6l
-         zE7pOMFLOUMwoqhG76YKVubmdeoW1pVNVf5zByuX+ex9rVNPDXBQs70UWjIEvxwPV72A
-         nRKqKyAs2spHVJogw1NY+76kPvH0k4gfRmb0IqXIFC9mzt4eebl7PVJhlBZ55UO3ZePz
-         aGpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=5YuCWLet/PPts9g4RSdVal6LTdb/KAIKbqIvcb+vduY=;
-        b=VoFkoFv2JiWAUisYXEYOawOm8PnzSrKTgSMyOGTV3YaicaXVdR386kULVZI4ZHA2YM
-         bXftJ0kF8S+mFpusmBfNBb/cHxcm6FvicCUkSfYN9kZERgpAuXrNeDklQ2HBVwNQ2OmV
-         BybxFUKZf7zrjG99d28INqk4dymSoHQUHQwjBaJHIsH09kXTiLlpJhp3Y4t2lBPpvIMX
-         ztv25Gi5klQnF6QaokZVOJjAiTnqkk7mmbafRXsEe2YDqukpcb88+6B6v+Pz9W39lqmq
-         4kSg7RdWwFLC02njIx1YbqpYlY4EIOt9AXV3XeNWfKIG5pQfHAJYX0w+ARBJLiBxNCpV
-         r2GA==
-X-Gm-Message-State: AOAM5334VsLd+AFV3V+PA0cc0c0Z9ROsIhbel08qGqnaepKzPbejBAJV
-        CQiXwv+menfQarKvO3UvfeGvv2sFMbE=
-X-Google-Smtp-Source: ABdhPJxCHwscxVux3DXDPYVIjUJRhP48xvpihTLk7ont3PQnsFHZ4oYLJBoczxVPH4z+ghGchclueiLqaOg=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:bc86:b0:161:5f4e:d7d0 with SMTP id
- bb6-20020a170902bc8600b001615f4ed7d0mr16123631plb.119.1652833018477; Tue, 17
- May 2022 17:16:58 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 18 May 2022 00:16:47 +0000
-In-Reply-To: <20220518001647.1291448-1-seanjc@google.com>
-Message-Id: <20220518001647.1291448-4-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220518001647.1291448-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH v2 3/3] x86/virt: Fold __cpu_emergency_vmxoff() into its sole caller
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 May 2022 20:24:12 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBC927143
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652833451; x=1684369451;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7qwjNURLH96k8OodZXRELKGcwQadNPgkQYc8CUOJ7lk=;
+  b=FQgie5XnCHCfCDk5Dq4IookcjaNfwZyS37GvtkxnqM7eQ06xkpjL0Y3m
+   Q9aKhsczFFfRxgOeK8I2BJ/FGLCT1pfBr8lQXBXiFHZlTgrvLAmq3cm5Y
+   cGbWrR5bt5f8QeoIlpdPweyUyieWj/tf1Lce0dFJQwOaiq45sYFDpblTk
+   BT3DHmf+GDS/QtpzyPTCpIcMgO3To6p663wB8zBkgHi7LQ9kEy5KmHH3Y
+   +KxgsSJCeYF2ozTjFMBCkn/rBwlUDcQA45DLkeKvU6cKz4DAPc1e6gBzw
+   GBXoIm701xHYrIEp4r5n0A3Atrz5rHqIltf5Mwsvz7eU9OSMExWt6v5YE
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="251295141"
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="251295141"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 17:24:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
+   d="scan'208";a="605609135"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 17 May 2022 17:24:09 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nr7U0-0001bN-TM;
+        Wed, 18 May 2022 00:24:08 +0000
+Date:   Wed, 18 May 2022 08:23:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Cezary Rojewski <cezary.rojewski@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Subject: [broonie-ci:v2_20220509_cezary_rojewski_asoc_intel_avs_driver_core_and_pcm_operations
+ 173/174] sound/soc/intel/avs/trace.c:19:6: error: redefinition of
+ 'trace_avs_msg_payload'
+Message-ID: <202205180850.lKsZGoOE-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fold __cpu_emergency_vmxoff() into cpu_emergency_vmxoff(), its sole
-remaining caller, to discourage crash/emergency code from handling VMX
-but not SVM.  The behavior of VMX and SVM is so similar that it's highly
-unlikely that there will be a scenario where VMX needs to be disabled,
-but SVM can be left enabled.  In other words, during a crash and/or
-emergency reboot, funnel all virtualization teardown sequences through
-cpu_crash_disable_virtualization().
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git v2_20220509_cezary_rojewski_asoc_intel_avs_driver_core_and_pcm_operations
+head:   2629dade5628ba54905160bd1898278223458fd3
+commit: a76300c1425077cd9eeadf30353ed1794717a135 [173/174] ASoC: Intel: avs: Event tracing
+config: alpha-randconfig-r036-20220516 (https://download.01.org/0day-ci/archive/20220518/202205180850.lKsZGoOE-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git/commit/?id=a76300c1425077cd9eeadf30353ed1794717a135
+        git remote add broonie-ci https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git
+        git fetch --no-tags broonie-ci v2_20220509_cezary_rojewski_asoc_intel_avs_driver_core_and_pcm_operations
+        git checkout a76300c1425077cd9eeadf30353ed1794717a135
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash sound/soc/intel/avs/
 
-No functional change intended.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/virtext.h | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/arch/x86/include/asm/virtext.h b/arch/x86/include/asm/virtext.h
-index 8757078d4442..a9414ef5269e 100644
---- a/arch/x86/include/asm/virtext.h
-+++ b/arch/x86/include/asm/virtext.h
-@@ -60,22 +60,12 @@ static inline int cpu_vmx_enabled(void)
- 	return __read_cr4() & X86_CR4_VMXE;
- }
- 
--/** Disable VMX if it is enabled on the current CPU
-- *
-- * You shouldn't call this if cpu_has_vmx() returns 0.
-- */
--static inline void __cpu_emergency_vmxoff(void)
--{
--	if (cpu_vmx_enabled())
--		cpu_vmxoff();
--}
--
- /** Disable VMX if it is supported and enabled on the current CPU
-  */
- static inline void cpu_emergency_vmxoff(void)
- {
--	if (cpu_has_vmx())
--		__cpu_emergency_vmxoff();
-+	if (cpu_has_vmx() && cpu_vmx_enabled())
-+		cpu_vmxoff();
- }
- 
- 
+>> sound/soc/intel/avs/trace.c:19:6: error: redefinition of 'trace_avs_msg_payload'
+      19 | void trace_avs_msg_payload(const void *data, size_t size)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   In file included from sound/soc/intel/avs/trace.c:12:
+   sound/soc/intel/avs/trace.h:41:20: note: previous definition of 'trace_avs_msg_payload' with type 'void(const void *, size_t)' {aka 'void(const void *, long unsigned int)'}
+      41 | static inline void trace_avs_msg_payload(const void *data, size_t size) {};
+         |                    ^~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/trace_avs_msg_payload +19 sound/soc/intel/avs/trace.c
+
+    13	
+    14	#define BYTES_PER_LINE 16
+    15	#define MAX_CHUNK_SIZE ((PAGE_SIZE - 150) /* Place for trace header */	\
+    16				/ (2 * BYTES_PER_LINE + 4) /* chars per line */	\
+    17				* BYTES_PER_LINE)
+    18	
+  > 19	void trace_avs_msg_payload(const void *data, size_t size)
+
 -- 
-2.36.0.550.gb090851708-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824FE52B270
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA5452B25E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiERG1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S231193AbiERG15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbiERG1a (ORCPT
+        with ESMTP id S230512AbiERG1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:27:30 -0400
+        Wed, 18 May 2022 02:27:53 -0400
 Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF7BD9EB9
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:27:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390E6D8099
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:27:48 -0700 (PDT)
 Received: by mail-pj1-x102f.google.com with SMTP id ds11so1099615pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:27:28 -0700 (PDT)
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:27:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZTyFHE2cz+h0U321aUqbYjcSf8Z4cJcvd5lyDcw/ys0=;
-        b=aUG1sGuOr3P+P+SZqoPdfwwfcWgnRch2ZckkTTZpNsgi17cECqFGVaDSZqx22Q5+7B
-         4BbobRgQ8qpqSBVivroFE23BGd94aKkCuYHBV2UZtld7UpXDH8vW3p9HtVC6VZqbvH2D
-         DNaLT2HBBjcSfl49TcKvL1YgYAM2Gpu4iaoKISnbflTJ/W45qIonGuovvpFxUFC5lg3u
-         HJHCaY+iI+lnk1UKVdtZ37BrLvOSf8cae+66i7DaKAEf2+EpRuDfzmBpcnyDNSHDxcHJ
-         mL/TPKAK/RLg9E2gtAKy8Y6PmyyKVYzYVygCylfDO575e+id6pbDJGhqi1iu0t59tnCi
-         uq2w==
+        d=ozlabs-ru.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=75xfyRYdtbbnySXqxmJnPbT1F8O/OC516UJoNDb3t+I=;
+        b=rU4jPYNN5+avyZvAhBPhq7YZ6GjdV3WB7hpSv3vUe8rapXH3vJwLu4MUdpNlxV7Vc7
+         AV8lrXHmL8UpJxDY3siQzlIi1kvlEXBUds9/aloM3MCUVjIMrI4iBAGYA3gy0JSQINos
+         J2NLdYng7g+nuuokCoIgmaPM+rIZ4qqyHTrVrqikCReYskpXMfmVSw50Tuf7ydEKBM2g
+         PUMz0bT1ksqn8xtF4/6i6km4yBy40ueQ2nK1Qg8YPCIwQ/sBVS9ZuWg1r+69cmGh3Cvg
+         9pioG246hcisDKCTphyRZWV73OSMQekwe7OZpLnVyClkygpRM+XSdD6zw+4AQbzOaROG
+         Zvcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ZTyFHE2cz+h0U321aUqbYjcSf8Z4cJcvd5lyDcw/ys0=;
-        b=CMG5+x74gAg2ReHJHaIyJJ5wTCdVU5ftzrvlNZO2y+DH7dWigFtheFelQ65iGo6WFk
-         qkUP+uykOmxrZLehuRSRmpVMfCIZPQxcAdfGQR+M92TwuhPgGDMQobP4YaboeVmwIoRj
-         9vkMhsXyaRMBkMrNpLUF6FQbaG9bOSwG8hpeZ/fZ4pMu190IvVN45d653Cqx5+7FNV/L
-         mv4kUZ34bLMOJkyU6c5zLKBmWtSNxAStxA4DsAfICJZgeWJ+GAY/c2iGJ6JFspqSpxPD
-         Fnh7bfSq5JwT6pcnGRHz45yhYKP9iUSC03AdRYDb1H/hz6GYEZk/oghTwD1VHXX6r1ks
-         kLeg==
-X-Gm-Message-State: AOAM531bXN/B3TDU6ANVF6utSHEmeNsmt8VBHyB4zFAfRIAffp6jiQsz
-        lbnFyNW4kItPAxDYBNIA0oMWqQ==
-X-Google-Smtp-Source: ABdhPJxxesNLUzNTFhsvyxKlpWxUyou6xrEE+r8VIxCxIODGMJTZHbr79ZNg9EuqaRDwq0ESX8kDeA==
-X-Received: by 2002:a17:902:aa06:b0:158:f13b:4859 with SMTP id be6-20020a170902aa0600b00158f13b4859mr26082683plb.141.1652855247724;
-        Tue, 17 May 2022 23:27:27 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id x21-20020a1709027c1500b001613dfe1678sm701896pll.273.2022.05.17.23.27.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 May 2022 23:27:27 -0700 (PDT)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH] bpf: avoid grabbing spin_locks of all cpus when no free elems
-Date:   Wed, 18 May 2022 14:27:15 +0800
-Message-Id: <20220518062715.27809-1-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        bh=75xfyRYdtbbnySXqxmJnPbT1F8O/OC516UJoNDb3t+I=;
+        b=DKM3IpDPSd7THxzT5YQkbxTWhbMejWhjdEpEXtFrmnrhtD+L/7wvBIBAkQk9sSCtzW
+         6nyAeVDAIsInxTPCo12Sa/JeqVt6uH1NluNVzEL/VERt35PWK+vuM9OPWa9u55XTszkw
+         NAuXz/q/Zwm0iHnM3MtW0TAseyoNFCOH28EIDg44E8zFKE/pL82IqOscncGvCZJm69/Y
+         nVm4z9t5keFe2k0eIS4g3uOhCKJ816ygYg/d/3XFrYeEJ3j0KSImbUWVDZtXjuwUYs3t
+         Aazifko4hX94pk6F3085m4Newzg/IDS3LyI8xHpfVUKRn36j6wD7NCgpl/6HHxrv6RPe
+         YFrg==
+X-Gm-Message-State: AOAM531J+Ix7e7+krWjb5LQ7VFhCTiWASYnU49JT12Ix1w3vy+B9DNY9
+        3mkQ4psmb3U0/qDUKDC5eP3VTA==
+X-Google-Smtp-Source: ABdhPJw8YU30pDANG+wArZ1ct34zmOOlVc4nOxwpHMfezBscu5qQRFfree+bbOiz/rSK3BWzuNhG2w==
+X-Received: by 2002:a17:90b:4f87:b0:1dd:100b:7342 with SMTP id qe7-20020a17090b4f8700b001dd100b7342mr39908296pjb.64.1652855267956;
+        Tue, 17 May 2022 23:27:47 -0700 (PDT)
+Received: from [10.61.2.177] (110-175-254-242.static.tpgi.com.au. [110.175.254.242])
+        by smtp.gmail.com with ESMTPSA id g3-20020a62f943000000b0050dc762815dsm895132pfm.55.2022.05.17.23.27.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 23:27:47 -0700 (PDT)
+Message-ID: <0d4bb0fa-10c6-3f5a-34c8-293144b3fdbb@ozlabs.ru>
+Date:   Wed, 18 May 2022 16:27:41 +1000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101
+ Thunderbird/100.0
+Subject: Re: [PATCH kernel] KVM: PPC: Make KVM_CAP_IRQFD_RESAMPLE platform
+ dependent
+Content-Language: en-US
+To:     kvm-ppc@vger.kernel.org
+Cc:     x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>
+References: <20220504074807.3616813-1-aik@ozlabs.ru>
+From:   Alexey Kardashevskiy <aik@ozlabs.ru>
+In-Reply-To: <20220504074807.3616813-1-aik@ozlabs.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,292 +80,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-We encountered bad case on big system with 96 CPUs that
-alloc_htab_elem() would last for 1ms. The reason is that after the
-prealloc hashtab has no free elems, when trying to update, it will still
-grab spin_locks of all cpus. If there are multiple update users, the
-competition is very serious.
 
-So this patch add is_empty in pcpu_freelist_head to check freelist
-having free or not. If having, grab spin_lock, or check next cpu's
-freelist.
+On 5/4/22 17:48, Alexey Kardashevskiy wrote:
+> When introduced, IRQFD resampling worked on POWER8 with XICS. However
+> KVM on POWER9 has never implemented it - the compatibility mode code
+> ("XICS-on-XIVE") misses the kvm_notify_acked_irq() call and the native
+> XIVE mode does not handle INTx in KVM at all.
+> 
+> This moved the capability support advertising to platforms and stops
+> advertising it on XIVE, i.e. POWER9 and later.
+> 
+> Signed-off-by: Alexey Kardashevskiy <aik@ozlabs.ru>
+> ---
+> 
+> 
+> Or I could move this one together with KVM_CAP_IRQFD. Thoughts?
 
-Before patch: hash_map performance
-./map_perf_test 1
-0:hash_map_perf pre-alloc 975345 events per sec
-4:hash_map_perf pre-alloc 855367 events per sec
-12:hash_map_perf pre-alloc 860862 events per sec
-8:hash_map_perf pre-alloc 849561 events per sec
-3:hash_map_perf pre-alloc 849074 events per sec
-6:hash_map_perf pre-alloc 847120 events per sec
-10:hash_map_perf pre-alloc 845047 events per sec
-5:hash_map_perf pre-alloc 841266 events per sec
-14:hash_map_perf pre-alloc 849740 events per sec
-2:hash_map_perf pre-alloc 839598 events per sec
-9:hash_map_perf pre-alloc 838695 events per sec
-11:hash_map_perf pre-alloc 845390 events per sec
-7:hash_map_perf pre-alloc 834865 events per sec
-13:hash_map_perf pre-alloc 842619 events per sec
-1:hash_map_perf pre-alloc 804231 events per sec
-15:hash_map_perf pre-alloc 795314 events per sec
 
-hash_map the worst: no free
-./map_perf_test 2048
-6:worse hash_map_perf pre-alloc 28628 events per sec
-5:worse hash_map_perf pre-alloc 28553 events per sec
-11:worse hash_map_perf pre-alloc 28543 events per sec
-3:worse hash_map_perf pre-alloc 28444 events per sec
-1:worse hash_map_perf pre-alloc 28418 events per sec
-7:worse hash_map_perf pre-alloc 28427 events per sec
-13:worse hash_map_perf pre-alloc 28330 events per sec
-14:worse hash_map_perf pre-alloc 28263 events per sec
-9:worse hash_map_perf pre-alloc 28211 events per sec
-15:worse hash_map_perf pre-alloc 28193 events per sec
-12:worse hash_map_perf pre-alloc 28190 events per sec
-10:worse hash_map_perf pre-alloc 28129 events per sec
-8:worse hash_map_perf pre-alloc 28116 events per sec
-4:worse hash_map_perf pre-alloc 27906 events per sec
-2:worse hash_map_perf pre-alloc 27801 events per sec
-0:worse hash_map_perf pre-alloc 27416 events per sec
-3:worse hash_map_perf pre-alloc 28188 events per sec
+Ping?
 
-ftrace trace
+> 
+> ---
+>   arch/arm64/kvm/arm.c       | 3 +++
+>   arch/mips/kvm/mips.c       | 3 +++
+>   arch/powerpc/kvm/powerpc.c | 6 ++++++
+>   arch/riscv/kvm/vm.c        | 3 +++
+>   arch/s390/kvm/kvm-s390.c   | 3 +++
+>   arch/x86/kvm/x86.c         | 3 +++
+>   virt/kvm/kvm_main.c        | 1 -
+>   7 files changed, 21 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 523bc934fe2f..092f0614bae3 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -210,6 +210,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_SET_GUEST_DEBUG:
+>   	case KVM_CAP_VCPU_ATTRIBUTES:
+>   	case KVM_CAP_PTP_KVM:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +	case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>   		r = 1;
+>   		break;
+>   	case KVM_CAP_SET_GUEST_DEBUG2:
+> diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+> index a25e0b73ee70..0f3de470a73e 100644
+> --- a/arch/mips/kvm/mips.c
+> +++ b/arch/mips/kvm/mips.c
+> @@ -1071,6 +1071,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_READONLY_MEM:
+>   	case KVM_CAP_SYNC_MMU:
+>   	case KVM_CAP_IMMEDIATE_EXIT:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +	case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>   		r = 1;
+>   		break;
+>   	case KVM_CAP_NR_VCPUS:
+> diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+> index 875c30c12db0..87698ffef3be 100644
+> --- a/arch/powerpc/kvm/powerpc.c
+> +++ b/arch/powerpc/kvm/powerpc.c
+> @@ -591,6 +591,12 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   		break;
+>   #endif
+>   
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +	case KVM_CAP_IRQFD_RESAMPLE:
+> +		r = !xive_enabled();
+> +		break;
+> +#endif
+> +
+>   	case KVM_CAP_PPC_ALLOC_HTAB:
+>   		r = hv_enabled;
+>   		break;
+> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+> index c768f75279ef..b58579b386bb 100644
+> --- a/arch/riscv/kvm/vm.c
+> +++ b/arch/riscv/kvm/vm.c
+> @@ -63,6 +63,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_READONLY_MEM:
+>   	case KVM_CAP_MP_STATE:
+>   	case KVM_CAP_IMMEDIATE_EXIT:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +	case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>   		r = 1;
+>   		break;
+>   	case KVM_CAP_NR_VCPUS:
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 156d1c25a3c1..85e093fc8d13 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -564,6 +564,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_SET_GUEST_DEBUG:
+>   	case KVM_CAP_S390_DIAG318:
+>   	case KVM_CAP_S390_MEM_OP_EXTENSION:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +	case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>   		r = 1;
+>   		break;
+>   	case KVM_CAP_SET_GUEST_DEBUG2:
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 0c0ca599a353..a0a7b769483d 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4273,6 +4273,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>   	case KVM_CAP_SYS_ATTRIBUTES:
+>   	case KVM_CAP_VAPIC:
+>   	case KVM_CAP_ENABLE_CAP:
+> +#ifdef CONFIG_HAVE_KVM_IRQFD
+> +	case KVM_CAP_IRQFD_RESAMPLE:
+> +#endif
+>   		r = 1;
+>   		break;
+>   	case KVM_CAP_EXIT_HYPERCALL:
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 70e05af5ebea..885e72e668a5 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -4293,7 +4293,6 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>   #endif
+>   #ifdef CONFIG_HAVE_KVM_IRQFD
+>   	case KVM_CAP_IRQFD:
+> -	case KVM_CAP_IRQFD_RESAMPLE:
+>   #endif
+>   	case KVM_CAP_IOEVENTFD_ANY_LENGTH:
+>   	case KVM_CAP_CHECK_EXTENSION_VM:
 
-0)               |  htab_map_update_elem() {
-0)   0.198 us    |    migrate_disable();
-0)               |    _raw_spin_lock_irqsave() {
-0)   0.157 us    |      preempt_count_add();
-0)   0.538 us    |    }
-0)   0.260 us    |    lookup_elem_raw();
-0)               |    alloc_htab_elem() {
-0)               |      __pcpu_freelist_pop() {
-0)               |        _raw_spin_lock() {
-0)   0.152 us    |          preempt_count_add();
-0)   0.352 us    |          native_queued_spin_lock_slowpath();
-0)   1.065 us    |        }
-		 |	  ...
-0)               |        _raw_spin_unlock() {
-0)   0.254 us    |          preempt_count_sub();
-0)   0.555 us    |        }
-0) + 25.188 us   |      }
-0) + 25.486 us   |    }
-0)               |    _raw_spin_unlock_irqrestore() {
-0)   0.155 us    |      preempt_count_sub();
-0)   0.454 us    |    }
-0)   0.148 us    |    migrate_enable();
-0) + 28.439 us   |  }
-
-The test machine is 16C, trying to get spin_lock 17 times, in addition
-to 16c, there is an extralist.
-
-after patch: hash_map performance
-./map_perf_test 1
-0:hash_map_perf pre-alloc 969348 events per sec
-10:hash_map_perf pre-alloc 906526 events per sec
-11:hash_map_perf pre-alloc 904557 events per sec
-9:hash_map_perf pre-alloc 902384 events per sec
-15:hash_map_perf pre-alloc 912287 events per sec
-14:hash_map_perf pre-alloc 905689 events per sec
-12:hash_map_perf pre-alloc 903680 events per sec
-13:hash_map_perf pre-alloc 902631 events per sec
-8:hash_map_perf pre-alloc 875369 events per sec
-4:hash_map_perf pre-alloc 862808 events per sec
-1:hash_map_perf pre-alloc 857218 events per sec
-2:hash_map_perf pre-alloc 852875 events per sec
-5:hash_map_perf pre-alloc 846497 events per sec
-6:hash_map_perf pre-alloc 828467 events per sec
-3:hash_map_perf pre-alloc 812542 events per sec
-7:hash_map_perf pre-alloc 805336 events per sec
-
-hash_map worst: no free
-./map_perf_test 2048
-7:worse hash_map_perf pre-alloc 391104 events per sec
-4:worse hash_map_perf pre-alloc 388073 events per sec
-5:worse hash_map_perf pre-alloc 387038 events per sec
-1:worse hash_map_perf pre-alloc 386546 events per sec
-0:worse hash_map_perf pre-alloc 384590 events per sec
-11:worse hash_map_perf pre-alloc 379378 events per sec
-10:worse hash_map_perf pre-alloc 375480 events per sec
-12:worse hash_map_perf pre-alloc 372394 events per sec
-6:worse hash_map_perf pre-alloc 367692 events per sec
-3:worse hash_map_perf pre-alloc 363970 events per sec
-9:worse hash_map_perf pre-alloc 364008 events per sec
-8:worse hash_map_perf pre-alloc 363759 events per sec
-2:worse hash_map_perf pre-alloc 360743 events per sec
-14:worse hash_map_perf pre-alloc 361195 events per sec
-13:worse hash_map_perf pre-alloc 360276 events per sec
-15:worse hash_map_perf pre-alloc 360057 events per sec
-0:worse hash_map_perf pre-alloc 378177 events per sec
-
-ftrace trace
-0)               |  htab_map_update_elem() {
-0)   0.317 us    |    migrate_disable();
-0)               |    _raw_spin_lock_irqsave() {
-0)   0.260 us    |      preempt_count_add();
-0)   1.803 us    |    }
-0)   0.276 us    |    lookup_elem_raw();
-0)               |    alloc_htab_elem() {
-0)   0.586 us    |      __pcpu_freelist_pop();
-0)   0.945 us    |    }
-0)               |    _raw_spin_unlock_irqrestore() {
-0)   0.160 us    |      preempt_count_sub();
-0)   0.972 us    |    }
-0)   0.657 us    |    migrate_enable();
-0)   8.669 us    |  }
-
-It can be seen that after adding this patch, the map performance is
-almost not degraded, and when free=0, first check is_empty instead of
-directly acquiring spin_lock.
-
-As for why to add is_empty instead of directly judging head->first, my
-understanding is this, head->first is frequently modified during updating
-map, which will lead to invalid other cpus's cache, and is_empty is after
-freelist having no free elems will be changed, the performance will be
-better.
-
-Co-developed-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- kernel/bpf/percpu_freelist.c | 68 ++++++++++++++++++++++++------------
- kernel/bpf/percpu_freelist.h |  1 +
- 2 files changed, 46 insertions(+), 23 deletions(-)
-
-diff --git a/kernel/bpf/percpu_freelist.c b/kernel/bpf/percpu_freelist.c
-index 3d897de89061..abc148c8cae1 100644
---- a/kernel/bpf/percpu_freelist.c
-+++ b/kernel/bpf/percpu_freelist.c
-@@ -16,9 +16,11 @@ int pcpu_freelist_init(struct pcpu_freelist *s)
- 
- 		raw_spin_lock_init(&head->lock);
- 		head->first = NULL;
-+		head->is_empty = true;
- 	}
- 	raw_spin_lock_init(&s->extralist.lock);
- 	s->extralist.first = NULL;
-+	s->extralist.is_empty = true;
- 	return 0;
- }
- 
-@@ -32,6 +34,8 @@ static inline void pcpu_freelist_push_node(struct pcpu_freelist_head *head,
- {
- 	node->next = head->first;
- 	head->first = node;
-+	if (head->is_empty)
-+		head->is_empty = false;
- }
- 
- static inline void ___pcpu_freelist_push(struct pcpu_freelist_head *head,
-@@ -130,14 +134,18 @@ static struct pcpu_freelist_node *___pcpu_freelist_pop(struct pcpu_freelist *s)
- 	orig_cpu = cpu = raw_smp_processor_id();
- 	while (1) {
- 		head = per_cpu_ptr(s->freelist, cpu);
--		raw_spin_lock(&head->lock);
--		node = head->first;
--		if (node) {
--			head->first = node->next;
-+		if (!head->is_empty) {
-+			raw_spin_lock(&head->lock);
-+			node = head->first;
-+			if (node) {
-+				head->first = node->next;
-+				if (!head->first)
-+					head->is_empty = true;
-+				raw_spin_unlock(&head->lock);
-+				return node;
-+			}
- 			raw_spin_unlock(&head->lock);
--			return node;
- 		}
--		raw_spin_unlock(&head->lock);
- 		cpu = cpumask_next(cpu, cpu_possible_mask);
- 		if (cpu >= nr_cpu_ids)
- 			cpu = 0;
-@@ -146,11 +154,16 @@ static struct pcpu_freelist_node *___pcpu_freelist_pop(struct pcpu_freelist *s)
- 	}
- 
- 	/* per cpu lists are all empty, try extralist */
--	raw_spin_lock(&s->extralist.lock);
--	node = s->extralist.first;
--	if (node)
--		s->extralist.first = node->next;
--	raw_spin_unlock(&s->extralist.lock);
-+	if (!s->extralist.is_empty) {
-+		raw_spin_lock(&s->extralist.lock);
-+		node = s->extralist.first;
-+		if (node) {
-+			s->extralist.first = node->next;
-+			if (!s->extralist.first)
-+				s->extralist.is_empty = true;
-+		}
-+		raw_spin_unlock(&s->extralist.lock);
-+	}
- 	return node;
- }
- 
-@@ -164,14 +177,18 @@ ___pcpu_freelist_pop_nmi(struct pcpu_freelist *s)
- 	orig_cpu = cpu = raw_smp_processor_id();
- 	while (1) {
- 		head = per_cpu_ptr(s->freelist, cpu);
--		if (raw_spin_trylock(&head->lock)) {
--			node = head->first;
--			if (node) {
--				head->first = node->next;
-+		if (!head->is_empty) {
-+			if (raw_spin_trylock(&head->lock)) {
-+				node = head->first;
-+				if (node) {
-+					head->first = node->next;
-+					if (!head->first)
-+						head->is_empty = true;
-+					raw_spin_unlock(&head->lock);
-+					return node;
-+				}
- 				raw_spin_unlock(&head->lock);
--				return node;
- 			}
--			raw_spin_unlock(&head->lock);
- 		}
- 		cpu = cpumask_next(cpu, cpu_possible_mask);
- 		if (cpu >= nr_cpu_ids)
-@@ -181,12 +198,17 @@ ___pcpu_freelist_pop_nmi(struct pcpu_freelist *s)
- 	}
- 
- 	/* cannot pop from per cpu lists, try extralist */
--	if (!raw_spin_trylock(&s->extralist.lock))
--		return NULL;
--	node = s->extralist.first;
--	if (node)
--		s->extralist.first = node->next;
--	raw_spin_unlock(&s->extralist.lock);
-+	if (!s->extralist.is_empty) {
-+		if (!raw_spin_trylock(&s->extralist.lock))
-+			return NULL;
-+		node = s->extralist.first;
-+		if (node) {
-+			s->extralist.first = node->next;
-+			if (!s->extralist.first)
-+				s->extralist.is_empty = true;
-+		}
-+		raw_spin_unlock(&s->extralist.lock);
-+	}
- 	return node;
- }
- 
-diff --git a/kernel/bpf/percpu_freelist.h b/kernel/bpf/percpu_freelist.h
-index 3c76553cfe57..9e4545631ed5 100644
---- a/kernel/bpf/percpu_freelist.h
-+++ b/kernel/bpf/percpu_freelist.h
-@@ -9,6 +9,7 @@
- struct pcpu_freelist_head {
- 	struct pcpu_freelist_node *first;
- 	raw_spinlock_t lock;
-+	bool is_empty;
- };
- 
- struct pcpu_freelist {
 -- 
-2.20.1
-
+Alexey

@@ -2,193 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1662852B11D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5203552B124
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbiEREJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 00:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S229708AbiEREJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 00:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiEREIu (ORCPT
+        with ESMTP id S229631AbiEREJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 00:08:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DF92153500
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 21:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652846847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z9yRM9cvhik+MrOqst9aIIa+hZTiZ1DUmhjVomIZNlk=;
-        b=MZ/QXUl/05H1cwH12HOssyBN2WBhVyXbjPHCcG6GWsjuZtmuSMdrA30w0zMETt7ZrcPHBh
-        A6LJdP3TeLBE0A+Sa+g8JDgpbq9+xjfENFSQU/OMNDOQnVbbxVQfvfrWFht5TLkmE/8pt7
-        Pd/6bjPmAPsl1HR6qdG2eShAqFJEOLQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-216-gpGBb33fP6OpfmsjGjyVOw-1; Wed, 18 May 2022 00:07:23 -0400
-X-MC-Unique: gpGBb33fP6OpfmsjGjyVOw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 18 May 2022 00:09:10 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9FD154B03;
+        Tue, 17 May 2022 21:07:36 -0700 (PDT)
+Received: from [172.24.65.115] (edu241124.nat.uni-leipzig.de [139.18.241.124])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1E494185A7B2;
-        Wed, 18 May 2022 04:07:23 +0000 (UTC)
-Received: from T590 (ovpn-8-29.pek2.redhat.com [10.72.8.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7DF06492C14;
-        Wed, 18 May 2022 04:07:17 +0000 (UTC)
-Date:   Wed, 18 May 2022 12:07:12 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next] blk-throttle: delay the setting of 'BIO_THROTTLED'
- to when throttle is done
-Message-ID: <YoRw8J1Y/bzxVsSR@T590>
-References: <20220517134909.2910251-1-yukuai3@huawei.com>
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id EC97161EA192A;
+        Wed, 18 May 2022 06:07:34 +0200 (CEST)
+Message-ID: <dff3d94c-93be-2b31-35c6-35a7886f3680@molgen.mpg.de>
+Date:   Wed, 18 May 2022 06:07:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517134909.2910251-1-yukuai3@huawei.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: hid-sensor-hub 001F:8087:0AC2.0002: timeout waiting for response
+ from ISHTP device
+Content-Language: en-US
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Jiri Kosina <jikos@kernel.org>, Even Xu <even.xu@intel.com>,
+        Zhang Lixu <lixu.zhang@intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Dell.Client.Kernel@dell.com
+References: <289be79b-8fbb-d171-a1e5-5d8218dff39d@molgen.mpg.de>
+ <8833ba2600208a05940943636a3bd8b6af6a9fe4.camel@linux.intel.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <8833ba2600208a05940943636a3bd8b6af6a9fe4.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 09:49:09PM +0800, Yu Kuai wrote:
-> commit 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
-> introduce a new problem, for example:
+Dear Srinivas,
+
+
+Thank you for your reply.
+
+Am 13.05.22 um 01:07 schrieb srinivas pandruvada:
+
+> On Thu, 2022-05-12 at 17:01 +0200, Paul Menzel wrote:
+
+>> On the Dell XPS 13 9310, firmware 2.2.0 04/06/2021, with Debian
+>> sid/unstable, Linux 5.17.3 logs a lot of the messages below:
+>>
+>>       timeout waiting for response from ISHTP device
+>>
+>> Please find the output of `dmesg` attached.
+>>
+> It seems that sensor FW is not responding after resume.
 > 
-> [root@localhost ~]# echo "8:0 1024" > /sys/fs/cgroup/blkio/blkio.throttle.write_bps_device
-> [root@localhost ~]# echo $$ > /sys/fs/cgroup/blkio/cgroup.procs
-> [root@localhost ~]# dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
-> [1] 620
-> [root@localhost ~]# dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
-> [2] 626
-> [root@localhost ~]# 1+0 records in
-> 1+0 records out
-> 10240 bytes (10 kB, 10 KiB) copied, 10.0038 s, 1.0 kB/s1+0 records in
-> 1+0 records out
-> 
-> 10240 bytes (10 kB, 10 KiB) copied, 9.23076 s, 1.1 kB/s
-> -> the second bio is issued after 10s instead of 20s.
-> 
-> This is because if some bios are already queued, current bio is queued
-> directly and the flag 'BIO_THROTTLED' is set. And later, when former
-> bios are dispatched, this bio will be dispatched without waiting at all,
-> this is due to tg_with_in_bps_limit() will return 0 if the flag is set.
-> 
-> Instead of setting the flag when bio starts throttle, delay to when
-> throttle is done to fix the problem.
-> 
-> Fixes: 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  block/blk-throttle.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> index 447e1b8722f7..f952f2d942ff 100644
-> --- a/block/blk-throttle.c
-> +++ b/block/blk-throttle.c
-> @@ -811,7 +811,7 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
->  	unsigned int bio_size = throtl_bio_data_size(bio);
->  
->  	/* no need to throttle if this bio's bytes have been accounted */
-> -	if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
-> +	if (bps_limit == U64_MAX) {
+> What is
+> # cat /sys/power/mem_sleep
 
-This way may double account bio size for re-entered split bio.
+     $ cat /sys/power/mem_sleep
+     [s2idle]
 
 
->  		if (wait)
->  			*wait = 0;
->  		return true;
-> @@ -1226,8 +1226,10 @@ static void blk_throtl_dispatch_work_fn(struct work_struct *work)
->  
->  	spin_lock_irq(&q->queue_lock);
->  	for (rw = READ; rw <= WRITE; rw++)
-> -		while ((bio = throtl_pop_queued(&td_sq->queued[rw], NULL)))
-> +		while ((bio = throtl_pop_queued(&td_sq->queued[rw], NULL))) {
-> +			bio_set_flag(bio, BIO_THROTTLED);
->  			bio_list_add(&bio_list_on_stack, bio);
-> +		}
->  	spin_unlock_irq(&q->queue_lock);
->  
->  	if (!bio_list_empty(&bio_list_on_stack)) {
-> @@ -2134,7 +2136,8 @@ bool __blk_throtl_bio(struct bio *bio)
->  			}
->  			break;
->  		}
-> -
-> +		/* this bio will be issued directly */
-> +		bio_set_flag(bio, BIO_THROTTLED);
->  		/* within limits, let's charge and dispatch directly */
->  		throtl_charge_bio(tg, bio);
+Kind regards,
 
-Marking BIO_THROTTLED before throtle_charge_bio() causes the bio
-bytes not be charged.
-
-Another simple way is to compensate for previous extra bytes accounting,
-something like the following patch:
+Paul
 
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 139b2d7a99e2..44773d2ba257 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -810,8 +810,7 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
- 	unsigned long jiffy_elapsed, jiffy_wait, jiffy_elapsed_rnd;
- 	unsigned int bio_size = throtl_bio_data_size(bio);
- 
--	/* no need to throttle if this bio's bytes have been accounted */
--	if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
-+	if (bps_limit == U64_MAX) {
- 		if (wait)
- 			*wait = 0;
- 		return true;
-@@ -921,10 +920,8 @@ static void throtl_charge_bio(struct throtl_grp *tg, struct bio *bio)
- 	unsigned int bio_size = throtl_bio_data_size(bio);
- 
- 	/* Charge the bio to the group */
--	if (!bio_flagged(bio, BIO_THROTTLED)) {
--		tg->bytes_disp[rw] += bio_size;
--		tg->last_bytes_disp[rw] += bio_size;
--	}
-+	tg->bytes_disp[rw] += bio_size;
-+	tg->last_bytes_disp[rw] += bio_size;
- 
- 	tg->io_disp[rw]++;
- 	tg->last_io_disp[rw]++;
-@@ -2125,6 +2122,20 @@ bool __blk_throtl_bio(struct bio *bio)
- 		if (sq->nr_queued[rw])
- 			break;
- 
-+		/*
-+		 * re-entered bio has accounted bytes already, so try to
-+		 * compensate previous over-accounting. However, if new
-+		 * slice is started, just forget it
-+		 */
-+		if (bio_flagged(bio, BIO_THROTTLED)) {
-+			unsigned int bio_size = throtl_bio_data_size(bio);
-+
-+			if (tg->bytes_disp[rw] >= bio_size)
-+				tg->bytes_disp[rw] -= bio_size;
-+			if (tg->last_bytes_disp[rw] - bio_size)
-+				tg->last_bytes_disp[rw] -= bio_size;
-+		}
-+
- 		/* if above limits, break to queue */
- 		if (!tg_may_dispatch(tg, bio, NULL)) {
- 			tg->last_low_overflow_time[rw] = jiffies;
-
-Thanks,
-Ming
-
+PS: I think, Intel should have a Dell XPS 13 9310 available in some test 
+labs. If not, Dell (Cc) should be able to provide access to one.

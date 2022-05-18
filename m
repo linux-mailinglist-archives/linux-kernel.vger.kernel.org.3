@@ -2,86 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E15952AF8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACEC52AF8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233100AbiERBAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
+        id S233111AbiERBCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbiERBAO (ORCPT
+        with ESMTP id S233077AbiERBCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:00:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B435401C;
-        Tue, 17 May 2022 18:00:13 -0700 (PDT)
+        Tue, 17 May 2022 21:02:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2396325
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 18:02:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54D60615D1;
-        Wed, 18 May 2022 01:00:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AEC3AC34117;
-        Wed, 18 May 2022 01:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652835612;
-        bh=hRSWUQy2B7VTjDHpomlTwwG+3bjN81RQApR4V7eOuLc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bhAvssdfzzxmHC69e8r1n8ZmS6JewH/6LGOWa0BL/9IPmuyMabUc/Lowsi46l1UhJ
-         QWZxcJZEpXk8rw3uNi7XNdNMDRWp7rIvXMlMvqAGXJGS+lajsNf5eIFAxQtbBL+X0Z
-         /N9gXE78FfhvSZ4O0Ia3BOZFoWckv3Cx49u4wpBmMYqu+gBxHLX2jW+qXDNiPPWdfW
-         DJjaK8i62eeRRxmLm1tw8tkCSGQfJEPTOyf2cIWnbA8bRPkZ+TPfJdpMU9K8+WgniT
-         mpKPfFCD7wF7jYz9NdzGt8Aw3gROsngrO7qfmjabNE6owmFlJS8LozONFYh0875dqq
-         2JfzdVPw3EZ9g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93164F0389D;
-        Wed, 18 May 2022 01:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1103B819D2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:02:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28C7C34116;
+        Wed, 18 May 2022 01:02:10 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mQPCCfqG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652835729;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EwK9iYZioy8uS/wkcAol0jY2RzNpH6Zi8zhygVBATws=;
+        b=mQPCCfqGYJZ1T6m0TR++PjXuliDZHnpU9ww5bi2lk9dGsIecY3ESl8StVGLNqIyC8/zgKw
+        6GEsTssVuTiMvMFLN3dH0qVSI6m5un8/ahjn6/+1YDjC9c4sefYJFqwbHqRCcj/06RXb/b
+        /ZpLJTqySAIJKm63TzcIPsVnsxosALk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3b5780c0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 18 May 2022 01:02:08 +0000 (UTC)
+Date:   Wed, 18 May 2022 03:02:05 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Filipe Manana <fdmanana@suse.com>,
+        Vadim Galitsin <vadim.galitsyn@oracle.com>
+Subject: Re: [patch 0/3] x86/fpu: Prevent FPU state corruption
+Message-ID: <YoRFjTIzMYZu8Hq8@zx2c4.com>
+References: <20220501192740.203963477@linutronix.de>
+ <YnKeag3Ulg0NR58Q@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v6 1/2] ptp: ptp_clockmatrix: Add PTP_CLK_REQ_EXTTS
- support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165283561259.28988.13999615912204869168.git-patchwork-notify@kernel.org>
-Date:   Wed, 18 May 2022 01:00:12 +0000
-References: <1652712427-14703-1-git-send-email-min.li.xe@renesas.com>
-In-Reply-To: <1652712427-14703-1-git-send-email-min.li.xe@renesas.com>
-To:     Min Li <min.li.xe@renesas.com>
-Cc:     richardcochran@gmail.com, lee.jones@linaro.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YnKeag3Ulg0NR58Q@zx2c4.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hey Thomas,
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 16 May 2022 10:47:06 -0400 you wrote:
-> Use TOD_READ_SECONDARY for extts to keep TOD_READ_PRIMARY
-> for gettime and settime exclusively. Before this change,
-> TOD_READ_PRIMARY was used for both extts and gettime/settime,
-> which would result in changing TOD read/write triggers between
-> operations. Using TOD_READ_SECONDARY would make extts
-> independent of gettime/settime operation
+On Wed, May 04, 2022 at 05:40:26PM +0200, Jason A. Donenfeld wrote:
+> Hi Thomas,
 > 
-> [...]
+> On Sun, May 01, 2022 at 09:31:42PM +0200, Thomas Gleixner wrote:
+> > The recent changes in the random code unearthed a long standing FPU state
+> > corruption due do a buggy condition for granting in-kernel FPU usage.
+>  
+> Thanks for working that out. I've been banging my head over [1] for a
+> few days now trying to see if it's a mis-bisect or a real thing. I'll
+> ask Larry to retry with this patchset.
 
-Here is the summary with links:
-  - [net,v6,1/2] ptp: ptp_clockmatrix: Add PTP_CLK_REQ_EXTTS support
-    https://git.kernel.org/netdev/net-next/c/bec67592521e
-  - [net,v6,2/2] ptp: ptp_clockmatrix: return -EBUSY if phase pull-in is in progress
-    https://git.kernel.org/netdev/net-next/c/7c7dcd66c5e0
+So, Larry's debugging was inconsistent and didn't result in anything I
+could piece together into basic cause and effect. But luckily Vadim, who
+maintains the VirtualBox drivers for Oracle, was able to reproduce the
+issue and was able to conduct some real debugging. I've CC'd him here.
+From talking with Vadim, here are some findings thus far:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  - Certain Linux guest processes crash under high load.
+  - Windows kernel guest panics.
 
+Observation: the Windows kernel uses SSSE3 in their kernel all over the
+place, generated by the compiler.
 
+  - Moving the mouse around helps induce the crash.
+
+Observation: add_input_randomness() -> .. -> kernel_fpu_begin() -> blake2s_compress().
+
+  - The problem exhibits itself in rc7, so this patchset does not fix
+    the issue.
+  - Applying https://xn--4db.cc/ttEUSvdC fixes the issue.
+
+Observation: the problem is definitely related to using the FPU in a
+hard IRQ.
+
+I went reading KVM to get some idea of why KVM does *not* have this
+problem, and it looks like there's some careful code there about doing
+xsave and such around IRQs. So my current theory is that VirtualBox's
+VMM just forgot to do this, and until now this bug went unnoticed.
+
+Since VirtualBox is out of tree (and extremely messy of a codebase), and
+this appears to be an out of tree module problem rather than a kernel
+problem, I'm inclined to think that there's not much for us to do, at
+least until we receive information to the contrary of this presumption.
+
+But in case you do want to do something proactively, I don't have any
+objections to just disabling the FPU in hard IRQ for 5.18. And in 5.19,
+add_input_randomness() isn't going to hit that path anyway. But also,
+doing nothing and letting the VirtualBox people figure out their bug
+would be fine with me too. Either way, just wanted to give you a heads
+up.
+
+Jason

@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13F352B199
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD0452B1A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 06:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiEREjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 00:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
+        id S229987AbiERErC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 00:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiEREjn (ORCPT
+        with ESMTP id S229991AbiEREqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 00:39:43 -0400
-X-Greylist: delayed 152422 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 May 2022 21:39:37 PDT
-Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CF1ED3BA65;
-        Tue, 17 May 2022 21:39:37 -0700 (PDT)
-Received: by ajax-webmail-mail-app4 (Coremail) ; Wed, 18 May 2022 12:39:20
- +0800 (GMT+08:00)
-X-Originating-IP: [124.236.130.193]
-Date:   Wed, 18 May 2022 12:39:20 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, gregkh@linuxfoundation.org,
-        alexander.deucher@amd.com, broonie@kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: Re: [PATCH net v2] NFC: hci: fix sleep in atomic context bugs
- in nfc_hci_hcp_message_tx
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <68ccef70-ef30-8f53-6ec5-17ce5815089c@linaro.org>
-References: <20220517105526.114421-1-duoming@zju.edu.cn>
- <2ce7a871-3e55-ae50-955c-bf04a443aba3@linaro.org>
- <71c24f38.1a1f4.180d29ff1fd.Coremail.duoming@zju.edu.cn>
- <68ccef70-ef30-8f53-6ec5-17ce5815089c@linaro.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Wed, 18 May 2022 00:46:54 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C3727FE2;
+        Tue, 17 May 2022 21:46:52 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso939804pjg.0;
+        Tue, 17 May 2022 21:46:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Lh4QMEy0OYa/w9VsWX5Dd9zfgcDyoyYIzCZd6cD6mMk=;
+        b=k0WF2lHm6tKfnP37cQJzLYSNbraqLzHmDa8jDHPYIyE7djMLYvBzPT7tacbBhqQRi+
+         7BcRdzKM/sn6eFiexTnXji1VZby9f4xy7GQzeRa4sQMcD1MM+QeXFVN4iTAMGDjvlk3T
+         aW5c0OfVQUSoznfDG1C+PCMMZjBoCIfnRMmYnK3IYmqTojCIcu9zRsDit0iyNy7zrlys
+         DTDzPdx99wjQa+C0yxgE16TC6QLzPSWfZtwUXrN+l3U3tL1kpkFciObgCDcw3qwo/2CH
+         IppRUQINh4l9aEoM475GDDCOsMPEy7F2BnF1ugJWFc3J2LDj18zWQs5/9ds+f2e88Pke
+         +2cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Lh4QMEy0OYa/w9VsWX5Dd9zfgcDyoyYIzCZd6cD6mMk=;
+        b=IFuO2UpyLkCmlYKRGPc8w4vN8q9UQkJOUfrGxu3tkwpD/RslOJKfSTvS2ib2Q3264B
+         8dacsxvlzBog1cJQcjIuAsI4UfM0U5wQ5JEIMdHt1Q6RlaxgsAfGEbd93m/59Be0a6zt
+         HyhsJsh67/pj7IfmlQqt7Lvy+qe3Mq5jrEcOYfcfuhB1qjMmqj/mM/IXK0v78kASeHLl
+         EMjs4/29UQBYaYHXOSuvOtdxfNih2wCWRKXiuNyhX8ZN6yftiugImELFIEWjpcEJAFUv
+         eIkqUDFDT5ygaftT1OUUZxwkJUOn+xw36e5scWlRVCCpi9OBo71lrxQsMLwQa1B8WIcH
+         fFdA==
+X-Gm-Message-State: AOAM530S8oqhAilkxw6AsRnIFGG6Ia5yNv1d/rquEmNQqyd+O5xlYILu
+        ShrFpSKYhlQd4faEwHs6PbOC4VlAmBE=
+X-Google-Smtp-Source: ABdhPJwACyIGzYZX2CTl///3kAuULdPIzgssDNaZ9f52Hh9IG0S2/PD3RUL93C728N/EEGYNVJcXaw==
+X-Received: by 2002:a17:903:124b:b0:15e:84d0:ded6 with SMTP id u11-20020a170903124b00b0015e84d0ded6mr24919023plh.141.1652849212005;
+        Tue, 17 May 2022 21:46:52 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:556b:348:b181:320f])
+        by smtp.gmail.com with ESMTPSA id f16-20020a170902ab9000b0016191b843e2sm477040plr.235.2022.05.17.21.46.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 21:46:50 -0700 (PDT)
+Date:   Tue, 17 May 2022 21:46:47 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH] Input: gpio-keys - Cancel delayed work only in case of
+ GPIO
+Message-ID: <YoR6N2ACf3TZr1P5@google.com>
+References: <20220513132500.32395-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Message-ID: <454a29ba.1b9b1.180d576985b.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cS_KCgC3PiF5eIRi60FkAA--.9848W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgcOAVZdtZv64AAAs1
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220513132500.32395-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,85 +75,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUdWUsIDE3IE1heSAyMDIyIDE3OjI4OjUxICswMjAwIEtyenlzenRvZiB3cm90
-ZToKCj4gPj4+IFRoZXJlIGFyZSBzbGVlcCBpbiBhdG9taWMgY29udGV4dCBidWdzIHdoZW4gdGhl
-IHJlcXVlc3QgdG8gc2VjdXJlCj4gPj4+IGVsZW1lbnQgb2Ygc3QyMW5mY2EgaXMgdGltZW91dC4g
-VGhlIHJvb3QgY2F1c2UgaXMgdGhhdCBremFsbG9jIGFuZAo+ID4+PiBhbGxvY19za2Igd2l0aCBH
-RlBfS0VSTkVMIHBhcmFtZXRlciBhbmQgbXV0ZXhfbG9jayBhcmUgY2FsbGVkIGluCj4gPj4+IHN0
-MjFuZmNhX3NlX3d0X3RpbWVvdXQgd2hpY2ggaXMgYSB0aW1lciBoYW5kbGVyLiBUaGUgY2FsbCB0
-cmVlIHNob3dzCj4gPj4+IHRoZSBleGVjdXRpb24gcGF0aHMgdGhhdCBjb3VsZCBsZWFkIHRvIGJ1
-Z3M6Cj4gPj4+Cj4gPj4+ICAgIChJbnRlcnJ1cHQgY29udGV4dCkKPiA+Pj4gc3QyMW5mY2Ffc2Vf
-d3RfdGltZW91dAo+ID4+PiAgIG5mY19oY2lfc2VuZF9ldmVudAo+ID4+PiAgICAgbmZjX2hjaV9o
-Y3BfbWVzc2FnZV90eAo+ID4+PiAgICAgICBremFsbG9jKC4uLiwgR0ZQX0tFUk5FTCkgLy9tYXkg
-c2xlZXAKPiA+Pj4gICAgICAgYWxsb2Nfc2tiKC4uLiwgR0ZQX0tFUk5FTCkgLy9tYXkgc2xlZXAK
-PiA+Pj4gICAgICAgbXV0ZXhfbG9jaygpIC8vbWF5IHNsZWVwCj4gPj4+Cj4gPj4+IFRoaXMgcGF0
-Y2ggY2hhbmdlcyBhbGxvY2F0aW9uIG1vZGUgb2Yga3phbGxvYyBhbmQgYWxsb2Nfc2tiIGZyb20K
-PiA+Pj4gR0ZQX0tFUk5FTCB0byBHRlBfQVRPTUlDIGFuZCBjaGFuZ2VzIG11dGV4X2xvY2sgdG8g
-c3Bpbl9sb2NrIGluCj4gPj4+IG9yZGVyIHRvIHByZXZlbnQgYXRvbWljIGNvbnRleHQgZnJvbSBz
-bGVlcGluZy4KPiA+Pj4KPiA+Pj4gRml4ZXM6IDIxMzBmYjk3ZmVjZiAoIk5GQzogc3QyMW5mY2E6
-IEFkZGluZyBzdXBwb3J0IGZvciBzZWN1cmUgZWxlbWVudCIpCj4gPj4+IFNpZ25lZC1vZmYtYnk6
-IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUuZWR1LmNuPgoKPiA+IFRoZSBuZmNfaGNpX2hjcF9t
-ZXNzYWdlX3R4KCkgaXMgY2FsbGVkIGJ5IGJvdGggcHJvY2VzcyBjb250ZXh0KGhjaV9kZXZfdXAg
-YW5kIHNvIG9uKQo+ID4gYW5kIGludGVycnVwdCBjb250ZXh0KHN0MjFuZmNhX3NlX3d0X3RpbWVv
-dXQoKSkuIFRoZSBwcm9jZXNzIGNvbnRleHQoaGNpX2Rldl91cCBhbmQgc28gb24pCj4gPiBjYWxs
-cyBkZXZpY2VfbG9jaywgYnV0IEkgdGhpbmsgY2FsbGluZyBzcGluX2xvY2soKSB3aXRoaW4gZGV2
-aWNlX2xvY2soKSBpcyBvay4gVGhlcmUgaXMKPiA+IG5vIGRldmljZV9sb2NrKCkgY2FsbGVkIHdp
-dGhpbiBzcGluX2xvY2soKS4gCj4gCj4gVGhlcmUgaXMuCj4gCj4gbmZjX2hjaV9mYWlsdXJlIC0+
-IHNwaW4gbG9jayAtPiBuZmNfZHJpdmVyX2ZhaWx1cmUgLT4gbmZjX3RhcmdldHNfZm91bmQKPiAt
-PiBkZXZpY2VfbG9jawo+IAo+IEkgZm91bmQgaXQganVzdCBieSBhIHZlcnkgcXVpY2sgbG9vaywg
-c28gSSBzdXNwZWN0IHRoZXJlIGFyZSBzZXZlcmFsCj4gb3RoZXIgcGxhY2VzLCBub3QgcmVhbGx5
-IGNoZWNrZWQuCgpJIGFncmVlIHdpdGggeW91LCB0aGUgc3Bpbl9sb2NrIGlzIG5vdCBhIGdvb2Qg
-c29sdXRpb24gdG8gdGhpcyBwcm9ibGVtLiBUaGVyZSBpcyBhbm90aGVyIHNvbHV0aW9uOgoKV2Ug
-Y291bGQgcHV0IHRoZSBuZmNfaGNpX3NlbmRfZXZlbnQoKSBvZiBzdDIxbmZjYV9zZV93dF90aW1l
-b3V0KCkgaW4gYSB3b3JrIGl0ZW0sIHRoZW4sIHVzaW5nCnNjaGVkdWxlX3dvcmsoKSBpbiBzdDIx
-bmZjYV9zZV93dF90aW1lb3V0KCkgdG8gZXhlY3V0ZSB0aGUgd29yayBpdGVtLiBUaGUgc2NoZWR1
-bGVfd29yaygpIHdpbGwKd2FrZSB1cCBhbm90aGVyIGtlcm5lbCB0aHJlYWQgd2hpY2ggaXMgaW4g
-cHJvY2VzcyBjb250ZXh0IHRvIGV4ZWN1dGUgdGhlIGJvdHRvbSBoYWxmIG9mIHRoZSBpbnRlcnJ1
-cHQsIApzbyBpdCBhbGxvd3Mgc2xlZXAuCgpUaGUgZm9sbG93aW5nIGlzIHRoZSBkZXRhaWxzLgoK
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmZjL3N0MjFuZmNhL3NlLmMgYi9kcml2ZXJzL25mYy9zdDIx
-bmZjYS9zZS5jCmluZGV4IGM5MjJmMTBkMGQ3Li4xZTk4NDY3ZGJmNyAxMDA2NDQKLS0tIGEvZHJp
-dmVycy9uZmMvc3QyMW5mY2Evc2UuYworKysgYi9kcml2ZXJzL25mYy9zdDIxbmZjYS9zZS5jCkBA
-IC0yNDEsNyArMjQxLDcgQEAgaW50IHN0MjFuZmNhX2hjaV9zZV9pbyhzdHJ1Y3QgbmZjX2hjaV9k
-ZXYgKmhkZXYsIHUzMiBzZV9pZHgsCiB9CiBFWFBPUlRfU1lNQk9MKHN0MjFuZmNhX2hjaV9zZV9p
-byk7Cgotc3RhdGljIHZvaWQgc3QyMW5mY2Ffc2Vfd3RfdGltZW91dChzdHJ1Y3QgdGltZXJfbGlz
-dCAqdCkKK3N0YXRpYyB2b2lkIHN0MjFuZmNhX3NlX3d0X3dvcmsoc3RydWN0IHdvcmtfc3RydWN0
-ICp3b3JrKQogewogICAgICAgIC8qIAogICAgICAgICAqIE5vIGFuc3dlciBmcm9tIHRoZSBzZWN1
-cmUgZWxlbWVudApAQCAtMjU0LDggKzI1NCw5IEBAIHN0YXRpYyB2b2lkIHN0MjFuZmNhX3NlX3d0
-X3RpbWVvdXQoc3RydWN0IHRpbWVyX2xpc3QgKnQpCiAgICAgICAgICovCiAgICAgICAgLyogaGFy
-ZHdhcmUgcmVzZXQgbWFuYWdlZCB0aHJvdWdoIFZDQ19VSUNDX09VVCBwb3dlciBzdXBwbHkgKi8K
-ICAgICAgICB1OCBwYXJhbSA9IDB4MDE7Ci0gICAgICAgc3RydWN0IHN0MjFuZmNhX2hjaV9pbmZv
-ICppbmZvID0gZnJvbV90aW1lcihpbmZvLCB0LAotICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgc2VfaW5mby5id2lfdGltZXIpOworICAgICAgIHN0cnVj
-dCBzdDIxbmZjYV9oY2lfaW5mbyAqaW5mbyA9IGNvbnRhaW5lcl9vZih3b3JrLAorICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3Qgc3QyMW5mY2FfaGNp
-X2luZm8sCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNl
-X2luZm8udGltZW91dF93b3JrKTsKCiAgICAgICAgaW5mby0+c2VfaW5mby5id2lfYWN0aXZlID0g
-ZmFsc2U7CiAKQEAgLTI3MSw2ICsyNzIsMTMgQEAgc3RhdGljIHZvaWQgc3QyMW5mY2Ffc2Vfd3Rf
-dGltZW91dChzdHJ1Y3QgdGltZXJfbGlzdCAqdCkKICAgICAgICBpbmZvLT5zZV9pbmZvLmNiKGlu
-Zm8tPnNlX2luZm8uY2JfY29udGV4dCwgTlVMTCwgMCwgLUVUSU1FKTsKIH0KCitzdGF0aWMgdm9p
-ZCBzdDIxbmZjYV9zZV93dF90aW1lb3V0KHN0cnVjdCB0aW1lcl9saXN0ICp0KQoreworICAgICAg
-IHN0cnVjdCBzdDIxbmZjYV9oY2lfaW5mbyAqaW5mbyA9IGZyb21fdGltZXIoaW5mbywgdCwgc2Vf
-aW5mby5id2lfdGltZXIpOworCisgICAgICAgc2NoZWR1bGVfd29yaygmaW5mby0+c2VfaW5mby50
-aW1lb3V0X3dvcmspOworfQorCiBzdGF0aWMgdm9pZCBzdDIxbmZjYV9zZV9hY3RpdmF0aW9uX3Rp
-bWVvdXQoc3RydWN0IHRpbWVyX2xpc3QgKnQpCiB7CiAgICAgICAgc3RydWN0IHN0MjFuZmNhX2hj
-aV9pbmZvICppbmZvID0gZnJvbV90aW1lcihpbmZvLCB0LApAQCAtMzg5LDYgKzM5Nyw3IEBAIHZv
-aWQgc3QyMW5mY2Ffc2VfaW5pdChzdHJ1Y3QgbmZjX2hjaV9kZXYgKmhkZXYpCiAgICAgICAgc3Ry
-dWN0IHN0MjFuZmNhX2hjaV9pbmZvICppbmZvID0gbmZjX2hjaV9nZXRfY2xpZW50ZGF0YShoZGV2
-KTsKCiAgICAgICAgaW5pdF9jb21wbGV0aW9uKCZpbmZvLT5zZV9pbmZvLnJlcV9jb21wbGV0aW9u
-KTsKKyAgICAgICBJTklUX1dPUksoJmluZm8tPnNlX2luZm8udGltZW91dF93b3JrLCBzdDIxbmZj
-YV9zZV93dF93b3JrKTsKICAgICAgICAvKiBpbml0aWFsaXplIHRpbWVycyAqLwogICAgICAgIHRp
-bWVyX3NldHVwKCZpbmZvLT5zZV9pbmZvLmJ3aV90aW1lciwgc3QyMW5mY2Ffc2Vfd3RfdGltZW91
-dCwgMCk7CiAgICAgICAgaW5mby0+c2VfaW5mby5id2lfYWN0aXZlID0gZmFsc2U7CkBAIC00MTYs
-NiArNDI1LDcgQEAgdm9pZCBzdDIxbmZjYV9zZV9kZWluaXQoc3RydWN0IG5mY19oY2lfZGV2ICpo
-ZGV2KQogICAgICAgIGlmIChpbmZvLT5zZV9pbmZvLnNlX2FjdGl2ZSkKICAgICAgICAgICAgICAg
-IGRlbF90aW1lcl9zeW5jKCZpbmZvLT5zZV9pbmZvLnNlX2FjdGl2ZV90aW1lcik7CgorICAgICAg
-IGNhbmNlbF93b3JrX3N5bmMoJmluZm8tPnNlX2luZm8udGltZW91dF93b3JrKTsKICAgICAgICBp
-bmZvLT5zZV9pbmZvLmJ3aV9hY3RpdmUgPSBmYWxzZTsKICAgICAgICBpbmZvLT5zZV9pbmZvLnNl
-X2FjdGl2ZSA9IGZhbHNlOwogfQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZmMvc3QyMW5mY2Evc3Qy
-MW5mY2EuaCBiL2RyaXZlcnMvbmZjL3N0MjFuZmNhL3N0MjFuZmNhLmgKaW5kZXggY2I2YWQ5MTZi
-ZTkuLmFlNjc3MWNjOTg5IDEwMDY0NAotLS0gYS9kcml2ZXJzL25mYy9zdDIxbmZjYS9zdDIxbmZj
-YS5oCisrKyBiL2RyaXZlcnMvbmZjL3N0MjFuZmNhL3N0MjFuZmNhLmgKQEAgLTE0MSw2ICsxNDEs
-NyBAQCBzdHJ1Y3Qgc3QyMW5mY2Ffc2VfaW5mbyB7CgogICAgICAgIHNlX2lvX2NiX3QgY2I7CiAg
-ICAgICAgdm9pZCAqY2JfY29udGV4dDsKKyAgICAgICBzdHJ1Y3Qgd29ya19zdHJ1Y3QgdGltZW91
-dF93b3JrOwogfTsKCiBzdHJ1Y3Qgc3QyMW5mY2FfaGNpX2luZm8gewoKRG8geW91IHRoaW5rIHRo
-aXMgc29sdXRpb24gaXMgYmV0dGVyPwoKQmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UK
+Hi Lad,
+
+On Fri, May 13, 2022 at 02:25:00PM +0100, Lad Prabhakar wrote:
+> gpio_keys module can either accept gpios or interrupts. The module
+> initializes delayed work in case of gpios only and not for interrupts,
+> so make sure cancel_delayed_work_sync() is called only when bdata->gpiod
+> is true.
+...
+> diff --git a/drivers/input/keyboard/gpio_keys.c b/drivers/input/keyboard/gpio_keys.c
+> index d75a8b179a8a..ec9d50ddda42 100644
+> --- a/drivers/input/keyboard/gpio_keys.c
+> +++ b/drivers/input/keyboard/gpio_keys.c
+> @@ -133,7 +133,7 @@ static void gpio_keys_quiesce_key(void *data)
+>  		hrtimer_cancel(&bdata->release_timer);
+>  	if (bdata->debounce_use_hrtimer)
+>  		hrtimer_cancel(&bdata->debounce_timer);
+> -	else
+> +	else if (bdata->gpiod)
+>  		cancel_delayed_work_sync(&bdata->work);
+
+We already have a check for bdata->gpiod a couple lines above. I think
+the chunk should look like this:
+
+	if (!bdata->gpiod)
+		hrtimer_cancel(&bdata->release_timer);
+	else if (bdata->debounce_use_hrtimer)
+		hrtimer_cancel(&bdata->debounce_timer);
+	else
+		cancel_delayed_work_sync(&bdata->work);
+
+since we use debounce timer/work only when we deal with gpio-backed
+keys.
+
+Thanks.
+
+-- 
+Dmitry

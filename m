@@ -2,105 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E482052C5E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0264552C607
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiERWE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 18:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S229743AbiERWOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 18:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiERWEM (ORCPT
+        with ESMTP id S229524AbiERWOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 18:04:12 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C452170645
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 14:58:07 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so3391073pjq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 14:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=O6yf2UWZ8UN4B5Ub+KLJ0wguRQoH13rthoX40EwQxbo=;
-        b=XS2ixMtUp73NCca0e0habAj613bG4zp1rmlTrH+gl7A85yjlbIUOiH0wfYvbvnFtIw
-         /L3msYZXEtynOWif0uAYutzY8ZgueMLHd1QLZCVyAM6m2oFjrR1YgNbh38bNELyslbSO
-         SOXD3DC1BzIC0c2NzOyabSxBDXE6chM3pyoqY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=O6yf2UWZ8UN4B5Ub+KLJ0wguRQoH13rthoX40EwQxbo=;
-        b=WHV/b8CzAKcRCuwRoFZc7F1gJc0CWN/9lMBw8fLoTpKQVPep44FWhy0+GSOkvhyuJo
-         Kntz9CNdBl348ajQTfVh5/KRQlvtic27ieMB1GEETAiubSJNVbUMD9bi4OhSl8cWrJ4f
-         P0YWvgSDlwbD44GzZWCsLPip46ZfdRV5rKUOG9BvL5Od6zCk/XGXxO295Ne5Gq66Vlxl
-         ZGoIecEAwjqu53TSxnEoxktaAquK8/99hfgeAJ3NtxuKqCCP+3M2sIU6o0dNIQCH4Q58
-         wQoliPbDo5CkISsJDus4lbtQmHidKPSXvtHG8qsqwqM9V0DXGR/5dxrcuQZyFltAN2QX
-         lz3w==
-X-Gm-Message-State: AOAM532AtP/euJ2CIDHwYZKE6JcSXQZJ68zcq9sA0yB3qGbKIXv+T6Z9
-        UOjSSZhLowtkwWe8khjMEN6qsg==
-X-Google-Smtp-Source: ABdhPJykCL7NHtfW0xHLWbjA+irKGLbxQ0C+OMsnrlCtOZB9EkfXmI8s27QTLCiH6juOQOkBpqRK9Q==
-X-Received: by 2002:a17:902:c947:b0:15e:b73a:63d1 with SMTP id i7-20020a170902c94700b0015eb73a63d1mr1625210pla.67.1652911087178;
-        Wed, 18 May 2022 14:58:07 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n21-20020a63f815000000b003c14af50628sm2026326pgh.64.2022.05.18.14.58.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 14:58:06 -0700 (PDT)
-Date:   Wed, 18 May 2022 14:58:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        keyrings@vger.kernel.org, Adam Langley <agl@google.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] sign-file: Convert API usage to support OpenSSL v3
-Message-ID: <202205181457.01A586D25E@keescook>
-References: <20220518215129.264872-1-keescook@chromium.org>
+        Wed, 18 May 2022 18:14:02 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B162013B7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:14:00 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:60424)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nrRva-003Y9P-Hy; Wed, 18 May 2022 16:13:58 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38702 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nrRvZ-002wWx-3I; Wed, 18 May 2022 16:13:58 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        kexec@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com>
+Date:   Wed, 18 May 2022 16:59:37 -0500
+In-Reply-To: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com> (Naveen
+        N. Rao's message of "Wed, 18 May 2022 23:48:28 +0530")
+Message-ID: <87ee0q7b92.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518215129.264872-1-keescook@chromium.org>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nrRvZ-002wWx-3I;;;mid=<87ee0q7b92.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19j5afT7cfR1QMALWtaSChY2lnR9xJRogY=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ******;"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 740 ms - load_scoreonly_sql: 0.12 (0.0%),
+        signal_user_changed: 14 (1.9%), b_tie_ro: 12 (1.6%), parse: 1.88
+        (0.3%), extract_message_metadata: 21 (2.9%), get_uri_detail_list: 4.8
+        (0.7%), tests_pri_-1000: 17 (2.3%), tests_pri_-950: 1.68 (0.2%),
+        tests_pri_-900: 1.37 (0.2%), tests_pri_-90: 245 (33.1%), check_bayes:
+        243 (32.8%), b_tokenize: 13 (1.8%), b_tok_get_all: 10 (1.4%),
+        b_comp_prob: 3.4 (0.5%), b_tok_touch_all: 211 (28.5%), b_finish: 1.19
+        (0.2%), tests_pri_0: 414 (55.9%), check_dkim_signature: 1.00 (0.1%),
+        check_dkim_adsp: 3.7 (0.5%), poll_dns_idle: 1.01 (0.1%), tests_pri_10:
+        4.5 (0.6%), tests_pri_500: 13 (1.8%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] kexec_file: Drop weak attribute from
+ arch_kexec_apply_relocations[_add]
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 02:51:29PM -0700, Kees Cook wrote:
-> OpenSSL's ENGINE API is deprecated in OpenSSL v3.0, along with some
-> other functions. Remove the ENGINE use and a macro work-around for
-> ERR_get_error_line().
-> 
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: David Woodhouse <dwmw2@infradead.org>
-> Cc: Eric Biggers <ebiggers@kernel.org>
-> Cc: Shuah Khan <skhan@linuxfoundation.org>
-> Cc: Salvatore Bonaccorso <carnil@debian.org>
-> Cc: keyrings@vger.kernel.org
-> Suggested-by: Adam Langley <agl@google.com>
-> Co-developed-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> v1: https://lore.kernel.org/lkml/20211005161833.1522737-1-lee.jones@linaro.org/
-> v2: https://lore.kernel.org/lkml/Yicwb+Ceiu8JjVIS@google.com/
-> v3:
->  - Eliminate all the build warnings with OpenSSL 3
->  - Fully remove ENGINE usage, if it can be optional, just drop it.
-> ---
->  scripts/sign-file.c | 49 ++++++++++-----------------------------------
->  1 file changed, 11 insertions(+), 38 deletions(-)
-> 
-> diff --git a/scripts/sign-file.c b/scripts/sign-file.c
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
 
-Eh, this only fixes sign-file.c. Fixes are still needed for
-extract-cert.c...
+> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
+> symbols") [1], binutils (v2.36+) started dropping section symbols that
+> it thought were unused.  This isn't an issue in general, but with
+> kexec_file.c, gcc is placing kexec_arch_apply_relocations[_add] into a
+> separate .text.unlikely section and the section symbol ".text.unlikely"
+> is being dropped. Due to this, recordmcount is unable to find a non-weak
+> symbol in .text.unlikely to generate a relocation record against.
+>
+> Address this by dropping the weak attribute from these functions:
+> - arch_kexec_apply_relocations() is not overridden by any architecture
+>   today, so just drop the weak attribute.
+> - arch_kexec_apply_relocations_add() is only overridden by x86 and s390.
+>   Retain the function prototype for those and move the weak
+>   implementation into the header as a static inline for other
+>   architectures.
+>
+> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
 
--- 
-Kees Cook
+Any chance you can also get machine_kexec_post_load,
+crash_free_reserved_phys_range, arch_kexec_protect_protect_crashkres,
+arch_kexec_unprotect_crashkres, arch_kexec_kernel_image_probe,
+arch_kexec_kernel_image_probe, arch_kimage_file_post_load_cleanup,
+arch_kexec_kernel_verify_sig, and arch_kexec_locate_mem_hole as well.
+
+That is everything in kexec that uses a __weak symbol.  If we can't
+count on them working we might as well just get rid of the rest
+preemptively.
+
+Could you also address Andrews concerns by using a Kconfig symbol that
+the architectures that implement the symbol can select.
+
+I don't want to ask too much of a volunteer but if you are willing
+addressing both of those would be a great help.
+
+Eric
+
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> ---
+>  include/linux/kexec.h | 28 ++++++++++++++++++++++++----
+>  kernel/kexec_file.c   | 19 +------------------
+>  2 files changed, 25 insertions(+), 22 deletions(-)
+>
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 58d1b58a971e34..e656f981f43a73 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -193,10 +193,6 @@ void *kexec_purgatory_get_symbol_addr(struct kimage *image, const char *name);
+>  int arch_kexec_kernel_image_probe(struct kimage *image, void *buf,
+>  				  unsigned long buf_len);
+>  void *arch_kexec_kernel_image_load(struct kimage *image);
+> -int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+> -				     Elf_Shdr *section,
+> -				     const Elf_Shdr *relsec,
+> -				     const Elf_Shdr *symtab);
+>  int arch_kexec_apply_relocations(struct purgatory_info *pi,
+>  				 Elf_Shdr *section,
+>  				 const Elf_Shdr *relsec,
+> @@ -229,6 +225,30 @@ extern int crash_exclude_mem_range(struct crash_mem *mem,
+>  				   unsigned long long mend);
+>  extern int crash_prepare_elf64_headers(struct crash_mem *mem, int kernel_map,
+>  				       void **addr, unsigned long *sz);
+> +
+> +#if defined(CONFIG_X86_64) || defined(CONFIG_S390)
+> +int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+> +				     Elf_Shdr *section,
+> +				     const Elf_Shdr *relsec,
+> +				     const Elf_Shdr *symtab);
+> +#else
+> +/*
+> + * arch_kexec_apply_relocations_add - apply relocations of type RELA
+> + * @pi:		Purgatory to be relocated.
+> + * @section:	Section relocations applying to.
+> + * @relsec:	Section containing RELAs.
+> + * @symtab:	Corresponding symtab.
+> + *
+> + * Return: 0 on success, negative errno on error.
+> + */
+> +static inline int
+> +arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shdr *section,
+> +				 const Elf_Shdr *relsec, const Elf_Shdr *symtab)
+> +{
+> +	pr_err("RELA relocation unsupported.\n");
+> +	return -ENOEXEC;
+> +}
+> +#endif /* CONFIG_X86_64 || CONFIG_S390 */
+>  #endif /* CONFIG_KEXEC_FILE */
+>  
+>  #ifdef CONFIG_KEXEC_ELF
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 8347fc158d2b96..6bae253b4d315e 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -108,23 +108,6 @@ int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+>  }
+>  #endif
+>  
+> -/*
+> - * arch_kexec_apply_relocations_add - apply relocations of type RELA
+> - * @pi:		Purgatory to be relocated.
+> - * @section:	Section relocations applying to.
+> - * @relsec:	Section containing RELAs.
+> - * @symtab:	Corresponding symtab.
+> - *
+> - * Return: 0 on success, negative errno on error.
+> - */
+> -int __weak
+> -arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shdr *section,
+> -				 const Elf_Shdr *relsec, const Elf_Shdr *symtab)
+> -{
+> -	pr_err("RELA relocation unsupported.\n");
+> -	return -ENOEXEC;
+> -}
+> -
+>  /*
+>   * arch_kexec_apply_relocations - apply relocations of type REL
+>   * @pi:		Purgatory to be relocated.
+> @@ -134,7 +117,7 @@ arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shdr *section,
+>   *
+>   * Return: 0 on success, negative errno on error.
+>   */
+> -int __weak
+> +int
+>  arch_kexec_apply_relocations(struct purgatory_info *pi, Elf_Shdr *section,
+>  			     const Elf_Shdr *relsec, const Elf_Shdr *symtab)
+>  {
+>
+> base-commit: ef1302160bfb19f804451d0e919266703501c875

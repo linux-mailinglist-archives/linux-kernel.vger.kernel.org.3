@@ -2,151 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708B052C021
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C6352C04B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240554AbiERQvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
+        id S240591AbiERQ5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240551AbiERQvp (ORCPT
+        with ESMTP id S240573AbiERQ5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:51:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCEF9E9F2;
-        Wed, 18 May 2022 09:51:44 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IGO5D7019721;
-        Wed, 18 May 2022 16:51:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=kZmuOQk3nB0k0QQUHtuVyv6VXcOPkjCgoM1V8L0+TvY=;
- b=PrksPn0W3hOiWQTtNYA6q3tuCzNvWy5D0jfh5fXMu7Lw3RdQI5p8BxL5W8Xq7isn0B5O
- 8xWPymE9J0ZU81db+pokLEG6ZLRSoep41GmDsvD0eGHw3DVdzLt7ukj+YKMRlhh5EqJ7
- 7hGjOrhH8mE3oc1OzuJB+M5URxLWSt/GwA2fuS/jRbnYCFtn5zxYFG9PHlZd3XsZxhqH
- qS1Pp7hQOTuyXXqv6RGQ3v1rd3dbI2RbATgPVTDksouB2k2zotnr0q3I1pR9X7PNxHwg
- 43QUrXe9LcfbDE2lpDJCQfbd/ShyPIPRGxROmU2tVMFJWrYY1+47+otEO4sEnJF8xUXq xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g549rrrxt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 16:51:43 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24IGSPfm008382;
-        Wed, 18 May 2022 16:51:43 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g549rrrx9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 16:51:43 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24IGXFdl022179;
-        Wed, 18 May 2022 16:51:41 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3g2428vv5n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 16:51:41 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24IGpbSS46858650
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 16:51:38 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E476542041;
-        Wed, 18 May 2022 16:51:37 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30A314203F;
-        Wed, 18 May 2022 16:51:37 +0000 (GMT)
-Received: from [9.171.6.188] (unknown [9.171.6.188])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 16:51:37 +0000 (GMT)
-Message-ID: <5de8d8c2-100d-f935-667c-1090ee31277d@linux.ibm.com>
-Date:   Wed, 18 May 2022 18:55:26 +0200
+        Wed, 18 May 2022 12:57:11 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBA1B8BE8;
+        Wed, 18 May 2022 09:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652893030; x=1684429030;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z/CTK7bNBAIerAtCFC6veGQRng0kyr18RgfO+QSHa/g=;
+  b=Y9l53pMFDiTdYdDYE6FL2tJC4axgvYfJ9aQ7EcFl+q2IFybBaJAmOzZd
+   mdTg2Xrmdhp5YHZBIicidP0eUkMviPda+Y42k/5E94Dgjs+0qQNfr14fg
+   zLr9WrkqoO9W7vsxmb3oDtHG8/RL5uDRCw0Xv4XFwZejp4tMEpK1JJlE5
+   6UM2XQ1TWQ3QgthwOxsWUWv2mYU/jp99Z05znctVuP9gPyslEr9V/16/I
+   Qy5Pt+Et20WAFcdCYVIdyIcaXe2tAcQCTILmgE02YBZwNzdPm763ZML8E
+   ww4fFR9i3mkk59f2lHW1JHGgvhPGNvIcuKvGAAqzSTisQ3rhr9z66/GZs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="271468778"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="271468778"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 09:56:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="639365223"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 18 May 2022 09:56:41 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrMyX-0002QL-2k;
+        Wed, 18 May 2022 16:56:41 +0000
+Date:   Thu, 19 May 2022 00:55:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-wireless@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Neo Jou <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: Re: [PATCH 07/10] rtw88: Add rtw8723du chipset support
+Message-ID: <202205190028.z15SPbJx-lkp@intel.com>
+References: <20220518082318.3898514-8-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v9 3/3] s390x: KVM: resetting the Topology-Change-Report
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, cohuck@redhat.com, thuth@redhat.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, wintera@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-References: <20220506092403.47406-1-pmorel@linux.ibm.com>
- <20220506092403.47406-4-pmorel@linux.ibm.com>
- <76fd0c11-5b9b-0032-183b-54db650f13b1@redhat.com>
- <20220512115250.2e20bfdf@p-imbrenda>
- <70a7d93c-c1b1-fa72-0eb4-02e3e2235f94@redhat.com>
- <bae4e416-b0e9-31c6-c9d0-df6b5a5fd46f@linux.ibm.com>
- <cfe448f7-0b4e-680d-46a7-33ad25a4c09b@redhat.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <cfe448f7-0b4e-680d-46a7-33ad25a4c09b@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: W5fS3N71cLrX1I_e6-quxj7Z0L_xZDmt
-X-Proofpoint-GUID: uu-AwpmzG2aQew89jZnaju95wJ-pORKx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
- mlxscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=792 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180099
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518082318.3898514-8-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Sascha,
+
+I love your patch! Perhaps something to improve:
+
+[auto build test WARNING on wireless-next/main]
+[also build test WARNING on wireless/main v5.18-rc7 next-20220518]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sascha-Hauer/RTW88-Add-support-for-USB-variants/20220518-162621
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220519/202205190028.z15SPbJx-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0a06adba364ef264404e3c7ae111a71f0d74c5a9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Sascha-Hauer/RTW88-Add-support-for-USB-variants/20220518-162621
+        git checkout 0a06adba364ef264404e3c7ae111a71f0d74c5a9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/wireless/realtek/rtw88/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wireless/realtek/rtw88/util.c:119:6: warning: no previous prototype for 'rtw_collect_sta_iter' [-Wmissing-prototypes]
+     119 | void rtw_collect_sta_iter(void *data, struct ieee80211_sta *sta)
+         |      ^~~~~~~~~~~~~~~~~~~~
+>> drivers/net/wireless/realtek/rtw88/util.c:165:6: warning: no previous prototype for 'rtw_collect_vif_iter' [-Wmissing-prototypes]
+     165 | void rtw_collect_vif_iter(void *data, u8 *mac, struct ieee80211_vif *vif)
+         |      ^~~~~~~~~~~~~~~~~~~~
 
 
-On 5/18/22 16:33, David Hildenbrand wrote:
-> On 16.05.22 16:21, Pierre Morel wrote:
->>
->>
->> On 5/12/22 12:01, David Hildenbrand wrote:
->>>>>
->>>>> I think we prefer something like u16 when copying to user space.
->>>>
->>>> but then userspace also has to expect a u16, right?
->>>
->>> Yep.
->>>
->>
->> Yes but in fact, inspired by previous discussion I had on the VFIO
->> interface, that is the reason why I did prefer an int.
->> It is much simpler than a u16 and the definition of a bit.
->>
->> Despite a bit in a u16 is what the s3990 achitecture proposes I thought
->> we could make it easier on the KVM/QEMU interface.
->>
->> But if the discussion stops here, I will do as you both propose change
->> to u16 in KVM and userland and add the documentation for the interface.
-> 
-> In general, we pass via the ABI fixed-sized values -- u8, u16, u32, u64
-> ... instead of int. Simply because sizeof(int) is in theory variable
-> (e.g., 32bit vs 64bit).
-> 
-> Take a look at arch/s390/include/uapi/asm/kvm.h and you won't find any
-> usage of int or bool.
-> 
-> Having that said, I'll let the maintainers decide. Using e.g., u8 is
-> just the natural thing to do on a Linux ABI, but we don't really support
-> 32 bit ... maybe we'll support 128bit at one point? ;)
-> 
+vim +/rtw_collect_sta_iter +119 drivers/net/wireless/realtek/rtw88/util.c
 
-OK then I use u16 with a flag in case we get something in the utilities 
-which is related to the topology in the future.
-
-Thanks,
-Pierre
+1c99f6652d3fbb Sascha Hauer 2022-05-18  118  
+1c99f6652d3fbb Sascha Hauer 2022-05-18 @119  void rtw_collect_sta_iter(void *data, struct ieee80211_sta *sta)
+1c99f6652d3fbb Sascha Hauer 2022-05-18  120  {
+1c99f6652d3fbb Sascha Hauer 2022-05-18  121  	struct rtw_iter_stas_data *iter_stas = data;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  122  	struct rtw_stas_entry *stas_entry;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  123  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  124  	stas_entry = kmalloc(sizeof(*stas_entry), GFP_ATOMIC);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  125  	if (!stas_entry)
+1c99f6652d3fbb Sascha Hauer 2022-05-18  126  		return;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  127  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  128  	stas_entry->sta = sta;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  129  	list_add_tail(&stas_entry->list, &iter_stas->list);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  130  }
+1c99f6652d3fbb Sascha Hauer 2022-05-18  131  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  132  void rtw_iterate_stas(struct rtw_dev *rtwdev,
+1c99f6652d3fbb Sascha Hauer 2022-05-18  133  		      void (*iterator)(void *data,
+1c99f6652d3fbb Sascha Hauer 2022-05-18  134  				       struct ieee80211_sta *sta),
+1c99f6652d3fbb Sascha Hauer 2022-05-18  135  				       void *data)
+1c99f6652d3fbb Sascha Hauer 2022-05-18  136  {
+1c99f6652d3fbb Sascha Hauer 2022-05-18  137  	struct rtw_iter_stas_data iter_data;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  138  	struct rtw_stas_entry *sta_entry, *tmp;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  139  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  140  	iter_data.rtwdev = rtwdev;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  141  	INIT_LIST_HEAD(&iter_data.list);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  142  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  143  	ieee80211_iterate_stations_atomic(rtwdev->hw, rtw_collect_sta_iter,
+1c99f6652d3fbb Sascha Hauer 2022-05-18  144  					  &iter_data);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  145  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  146  	list_for_each_entry_safe(sta_entry, tmp, &iter_data.list,
+1c99f6652d3fbb Sascha Hauer 2022-05-18  147  				 list) {
+1c99f6652d3fbb Sascha Hauer 2022-05-18  148  		list_del_init(&sta_entry->list);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  149  		iterator(data, sta_entry->sta);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  150  		kfree(sta_entry);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  151  	}
+1c99f6652d3fbb Sascha Hauer 2022-05-18  152  }
+1c99f6652d3fbb Sascha Hauer 2022-05-18  153  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  154  struct rtw_vifs_entry {
+1c99f6652d3fbb Sascha Hauer 2022-05-18  155  	struct list_head list;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  156  	struct ieee80211_vif *vif;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  157  	u8 mac[ETH_ALEN];
+1c99f6652d3fbb Sascha Hauer 2022-05-18  158  };
+1c99f6652d3fbb Sascha Hauer 2022-05-18  159  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  160  struct rtw_iter_vifs_data {
+1c99f6652d3fbb Sascha Hauer 2022-05-18  161  	struct rtw_dev *rtwdev;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  162  	struct list_head list;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  163  };
+1c99f6652d3fbb Sascha Hauer 2022-05-18  164  
+1c99f6652d3fbb Sascha Hauer 2022-05-18 @165  void rtw_collect_vif_iter(void *data, u8 *mac, struct ieee80211_vif *vif)
+1c99f6652d3fbb Sascha Hauer 2022-05-18  166  {
+1c99f6652d3fbb Sascha Hauer 2022-05-18  167  	struct rtw_iter_vifs_data *iter_stas = data;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  168  	struct rtw_vifs_entry *vifs_entry;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  169  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  170  	vifs_entry = kmalloc(sizeof(*vifs_entry), GFP_ATOMIC);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  171  	if (!vifs_entry)
+1c99f6652d3fbb Sascha Hauer 2022-05-18  172  		return;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  173  
+1c99f6652d3fbb Sascha Hauer 2022-05-18  174  	vifs_entry->vif = vif;
+1c99f6652d3fbb Sascha Hauer 2022-05-18  175  	ether_addr_copy(vifs_entry->mac, mac);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  176  	list_add_tail(&vifs_entry->list, &iter_stas->list);
+1c99f6652d3fbb Sascha Hauer 2022-05-18  177  }
+1c99f6652d3fbb Sascha Hauer 2022-05-18  178  
 
 -- 
-Pierre Morel
-IBM Lab Boeblingen
+0-DAY CI Kernel Test Service
+https://01.org/lkp

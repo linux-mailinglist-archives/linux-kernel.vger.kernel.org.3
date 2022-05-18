@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE7E52BD03
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7734352BCBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237595AbiERNJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S237606AbiERNJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237448AbiERNJk (ORCPT
+        with ESMTP id S237448AbiERNJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:09:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5F741FAF;
-        Wed, 18 May 2022 06:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ju+39W+MjqK0PaJ3zrGj+hf6cLDd05VvDhYO8wadxW4=; b=lQyS21gGKOGmli7n7NsiTm9LSV
-        4/6EjxnCsiP1GkaKgZ6zFQy4qB8VMuS2mMmR0/NsEZjxdUH/F3AOfCEyihO2oCGGl+B1sAXmcTMLL
-        3bvcfP++pICulIArauX1aVTRcFI4kFB8ZvqlkTF02rlZhzcIu1zEOHgfCHiiL64mPk/uARPfD3FXI
-        FHrfn5uQZ8DgJh76MSlY0EPHejJQZg/5dkbkk4BTqB1Slvbq9Mdu6Okejpe/yfnRvcX+2KvWMs1Hi
-        t25/J1lSDPxKk8Pzs8hOciB8g6psEZlzdMqOzWqsg8Ge9g6QOhGopvf3tPHZGT96DApZN4jyrjGNX
-        PHHBUxCA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrJQi-002E94-A3; Wed, 18 May 2022 13:09:32 +0000
-Date:   Wed, 18 May 2022 06:09:32 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Vivek Kumar <quic_vivekuma@quicinc.com>
-Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, axboe@kernel.dk,
-        rafael@kernel.org, akpm@linux-foundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com,
-        pavel@ucw.cz, paulmck@kernel.org, bp@suse.de,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org,
-        tsoni@quicinc.com, quic_psodagud@quicinc.com,
-        quic_svaddagi@quicinc.com,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: Re: [RFC 5/6] Hibernate: Add check for pte_valid in saveable page
-Message-ID: <YoTwDOot4Ww9JhdS@infradead.org>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
- <1652860121-24092-6-git-send-email-quic_vivekuma@quicinc.com>
+        Wed, 18 May 2022 09:09:58 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D133117B851
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:09:56 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652879394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nSL1VQXqpZd0642FdZ4Hh+Wwgy2znoxK/NkE70FKucE=;
+        b=vpWWbTn2+Qyhoa8rsTdRFpwkyH1IZp3/1KYQYA6U+D9wd/CL1snBLVLc6qCATpFmNRS/yj
+        rirrwQCl9tWNNlYSlmnn4VFkZtW1a7jyTmJo0AnkUU5mQFgScdqfaRAWzgoVt4+28EDL0q
+        UPjR4FvtgnSHLUQF3lTKeYRNf/JHJYDu2Q2hVzjmq1sgWGAQvcPbbzboJXaLfYCCoApogb
+        hAq8BFObpoESWuWbe8YeXWVJsuOJBvSRUn8Kru4cRVL+Ry5z12QQadF85KP6RveB82ABbk
+        LvxTuFpLMM1vqG1iO3Vfm7vhJR+or0RFkFMUuXMYC+vceM9HKlqNQTQndcyBaw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652879394;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nSL1VQXqpZd0642FdZ4Hh+Wwgy2znoxK/NkE70FKucE=;
+        b=Vs++B3BoYyxtqvIxD+PRh6GrtBXsD+uTbGmF+HJTVD3vlRwP9CnqNPUAjbThd3p4YZWtoX
+        paYiR6jP8lDpPNCg==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Filipe Manana <fdmanana@suse.com>,
+        Vadim Galitsin <vadim.galitsyn@oracle.com>
+Subject: Re: [patch 0/3] x86/fpu: Prevent FPU state corruption
+In-Reply-To: <YoRFjTIzMYZu8Hq8@zx2c4.com>
+References: <20220501192740.203963477@linutronix.de>
+ <YnKeag3Ulg0NR58Q@zx2c4.com> <YoRFjTIzMYZu8Hq8@zx2c4.com>
+Date:   Wed, 18 May 2022 15:09:54 +0200
+Message-ID: <87fsl7j8bh.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652860121-24092-6-git-send-email-quic_vivekuma@quicinc.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,13 +57,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:18:40PM +0530, Vivek Kumar wrote:
-> Add check for pte_valid in saveable page after being checked for
-> the rest. This is required as PTE is removed for pages allocated
-> with dma_alloc_coherent with DMA_ATTR_NO_KERNEL_MAPPING flag set.
-> This patch makes sure that these pages are not considered for
-> snapshot.
+On Wed, May 18 2022 at 03:02, Jason A. Donenfeld wrote:
+> On Wed, May 04, 2022 at 05:40:26PM +0200, Jason A. Donenfeld wrote:
+>> On Sun, May 01, 2022 at 09:31:42PM +0200, Thomas Gleixner wrote:
+>> > The recent changes in the random code unearthed a long standing FPU state
+>> > corruption due do a buggy condition for granting in-kernel FPU usage.
+>>  
+>> Thanks for working that out. I've been banging my head over [1] for a
+>> few days now trying to see if it's a mis-bisect or a real thing. I'll
+>> ask Larry to retry with this patchset.
+>
+> So, Larry's debugging was inconsistent and didn't result in anything I
+> could piece together into basic cause and effect. But luckily Vadim, who
+> maintains the VirtualBox drivers for Oracle, was able to reproduce the
+> issue and was able to conduct some real debugging. I've CC'd him here.
+> From talking with Vadim, here are some findings thus far:
+>
+>   - Certain Linux guest processes crash under high load.
+>   - Windows kernel guest panics.
+>
+> Observation: the Windows kernel uses SSSE3 in their kernel all over the
+> place, generated by the compiler.
+>
+>   - Moving the mouse around helps induce the crash.
+>
+> Observation: add_input_randomness() -> .. -> kernel_fpu_begin() -> blake2s_compress().
+>
+>   - The problem exhibits itself in rc7, so this patchset does not fix
+>     the issue.
+>   - Applying https://xn--4db.cc/ttEUSvdC fixes the issue.
+>
+> Observation: the problem is definitely related to using the FPU in a
+> hard IRQ.
+>
+> I went reading KVM to get some idea of why KVM does *not* have this
+> problem, and it looks like there's some careful code there about doing
+> xsave and such around IRQs. So my current theory is that VirtualBox's
+> VMM just forgot to do this, and until now this bug went unnoticed.
 
-I don't think we ever remove kernel PTEs for DMA_ATTR_NO_KERNEL_MAPPING.
-If the allocation did come from highmem they never had one to start
-with.  The logic here looks a bit fishy to me.
+That's a very valid assumption. I audited all places which fiddle with
+FPU in Linus tree and with the fix applied they're all safe.
+
+> Since VirtualBox is out of tree (and extremely messy of a codebase), and
+> this appears to be an out of tree module problem rather than a kernel
+> problem, I'm inclined to think that there's not much for us to do, at
+> least until we receive information to the contrary of this presumption.
+
+Agreed in all points.
+
+> But in case you do want to do something proactively, I don't have any
+> objections to just disabling the FPU in hard IRQ for 5.18. And in 5.19,
+> add_input_randomness() isn't going to hit that path anyway. But also,
+> doing nothing and letting the VirtualBox people figure out their bug
+> would be fine with me too. Either way, just wanted to give you a heads
+> up.
+
+That virtualborx bug has to be fixed in any case as this problem exists
+forever and there have been drivers using FPU in hard interrupt context
+in the past sporadically, so it's sheer luck that this didn't explode
+before. AFAICT all of this has been moved to softirq context over the
+years, so the random code is probably the sole in hard interrupt user in
+mainline today.
+
+In the interest of users we should probably bite the bullet and just
+disable hard interrupt FPU usage upstream and Cc stable. The stable
+kernel updates probably reach users faster.
+
+Thanks,
+
+        tglx
+
+

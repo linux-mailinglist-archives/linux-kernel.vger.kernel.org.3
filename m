@@ -2,129 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B7E52B57F
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15C852B571
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbiERI6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
+        id S233692AbiERI7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233688AbiERI6x (ORCPT
+        with ESMTP id S233527AbiERI7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:58:53 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9025D13CA3B;
-        Wed, 18 May 2022 01:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652864327; x=1684400327;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xR5ju/m+J7LrQ2NG96ZPR+tRwF+afBBK3BjNI5wn7n4=;
-  b=keH05FyVsuyBYS/g6Lkp6aZWjz8B0/3do5lA8Ha86hH7s0YZIYyU9u0A
-   LyjXqRwwzsz6/NVxB9ftqmwzB8egsIXGGfKY2czvH3u7p7E/z7A9aRu5J
-   FSsr3SKX9Qj4lHscOnAidR+SrC+pu6Pe7Or0TEXTS4sDpjnjs9msXos2T
-   EabAnVZ8ppm2rvzZVcqwfBlY7Sf7Onejazh3bJloGh5vq9VPZEZKgVpHY
-   KMOkKjtXOc9BXJkadKOskHg7deWL6tHkF8luGlZ2wK2UqgJegoIFFrhDc
-   xFK7IYuch6ZnqBxpEeyOoCoXSW4PiMGx6B7vBknqxcQYC9w+PLtOvBIOE
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="334615033"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="334615033"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:58:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="605789798"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 18 May 2022 01:58:25 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrFVh-0001zV-1B;
-        Wed, 18 May 2022 08:58:25 +0000
-Date:   Wed, 18 May 2022 16:58:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Cc:     kbuild-all@lists.01.org, linux-security-module@vger.kernel.org,
-        dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, Song Liu <song@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: Re: [PATCH v4 2/3] LoadPin: Enable loading from trusted dm-verity
- devices
-Message-ID: <202205181616.3eTP2DaC-lkp@intel.com>
-References: <20220517163437.v4.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid>
+        Wed, 18 May 2022 04:59:32 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6F1BC0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:59:29 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id m6so1733683ljb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1y20d2CkjJ3jV4BDulmfhtq8qKaxqCZFrmrXAIB+XD0=;
+        b=lYs8a06s5W6554IOwemmktHw2Qj5CfAUIZhIT2E+OE44gBV/5786+YtkRATyQQ4mYr
+         /kiVrZYhZNpLIUcsGWBzrF7ChPr8bq3YKOSiIyumqo+o1KsdhtTw8qKlnyS5TT/U0DlG
+         0I2Hl0g9Q0TR1p6vbpcy0EuFU8eRSRCO564r6uKReY6sOUNE0kAHyQD5gq9u14h/gPwl
+         VLIvDW4iXZChyLXnV5iujtTQsHK9rouvU5xGiXsY3AV4LjPD6T+zeseDMww4pzzXEaYO
+         2VOJHZzyE8YYgU1+PMy4raxst2SEd3O3qlBVfcEE3WYQOM4zT/GY+W19LAG4nESx+pP/
+         WuRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1y20d2CkjJ3jV4BDulmfhtq8qKaxqCZFrmrXAIB+XD0=;
+        b=vRA2u3AMtQRYiE4xGWjm8Lot8BWKcuffUKpdttV1EQpROq5q5JiNXA8KWYh50Xzi+y
+         i55MKgDm7NIW6souyjQZ5AiWOWfAh6hzmTxm+eWqmpaUJyfPbW6SImvPtnPYGob9RS+/
+         MGXgE6z13KCc/2JihH8oV17RJlOmPcD7cQ8GXgjYyspmP0gjFXyDQ6KHAsLo7yriLiAA
+         ZsIAFH0+Gw8EfzYkAPQfYJnWYrkK1ZKZeqXBjQsLXv2iGqDeivuM9yhMQSLNIIcytEiT
+         MEXOc+oygFl23RZ7Zke0CTmFmCDyxz9D3PaoZI3YUmNNGID2JyaDeIdk7vkVvjymb7Yx
+         eGqg==
+X-Gm-Message-State: AOAM5337NU/8k00Pqqi3ESb5t6FylItcTtmnhL2l0kPFZ0kOh+LojdzR
+        Pb+8LAQA1RtRjbHvDX+McX/uDRi4qVNWKvaNaw6S6Q==
+X-Google-Smtp-Source: ABdhPJxXjb3v2/Ccvr3eOeS8iH8Knna0ewodJR+LkWEtAXj3IdH+Ge/0l35WxMLukpO8wXjS/aRMIAXGWhOvIBXO2t4=
+X-Received: by 2002:a2e:8603:0:b0:250:cf53:7f46 with SMTP id
+ a3-20020a2e8603000000b00250cf537f46mr16307079lji.47.1652864366092; Wed, 18
+ May 2022 01:59:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517163437.v4.2.I01c67af41d2f6525c6d023101671d7339a9bc8b5@changeid>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220517210532.1506591-1-liu3101@purdue.edu> <CACT4Y+Z+HtUttrd+btEWLj5Nut4Gv++gzCOL3aDjvRTNtMDEvg@mail.gmail.com>
+In-Reply-To: <CACT4Y+Z+HtUttrd+btEWLj5Nut4Gv++gzCOL3aDjvRTNtMDEvg@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 18 May 2022 10:59:14 +0200
+Message-ID: <CACT4Y+bAGVLU5QEUeQEHth6SZDOSzy0CRKEJQioC0oKHSPaAbA@mail.gmail.com>
+Subject: Re: [PATCH] kcov: fix race caused by unblocked interrupt
+To:     Congyu Liu <liu3101@purdue.edu>
+Cc:     andreyknvl@gmail.com, kasan-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
+On Wed, 18 May 2022 at 10:56, Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Tue, 17 May 2022 at 23:05, Congyu Liu <liu3101@purdue.edu> wrote:
+> >
+> > Some code runs in interrupts cannot be blocked by `in_task()` check.
+> > In some unfortunate interleavings, such interrupt is raised during
+> > serializing trace data and the incoming nested trace functionn could
+> > lead to loss of previous trace data. For instance, in
+> > `__sanitizer_cov_trace_pc`, if such interrupt is raised between
+> > `area[pos] = ip;` and `WRITE_ONCE(area[0], pos);`, then trace data in
+> > `area[pos]` could be replaced.
+> >
+> > The fix is done by adding a flag indicating if the trace buffer is being
+> > updated. No modification to trace buffer is allowed when the flag is set.
+>
+> Hi Congyu,
+>
+> What is that interrupt code? What interrupts PCs do you see in the trace.
+> I would assume such early interrupt code should be in asm and/or not
+> instrumented. The presence of instrumented traced interrupt code is
+> problematic for other reasons (add random stray coverage to the
+> trace). So if we make it not traced, it would resolve both problems at
+> once and without the fast path overhead that this change adds.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on device-mapper-dm/for-next]
-[also build test WARNING on song-md/md-next kees/for-next/pstore linus/master v5.18-rc7 next-20220517]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthias-Kaehlcke/LoadPin-Enable-loading-from-trusted-dm-verity-devices/20220518-073635
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220518/202205181616.3eTP2DaC-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/755e5d82e4d054b2b58a54c94681080cc8cb4582
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Matthias-Kaehlcke/LoadPin-Enable-loading-from-trusted-dm-verity-devices/20220518-073635
-        git checkout 755e5d82e4d054b2b58a54c94681080cc8cb4582
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash security/loadpin/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from security/loadpin/loadpin.c:21:
-   include/linux/dm-verity-loadpin.h:22:1: error: expected identifier or '(' before '{' token
-      22 | {
-         | ^
->> include/linux/dm-verity-loadpin.h:21:20: warning: 'dm_verity_loadpin_is_sb_trusted' used but never defined
-      21 | static inline bool dm_verity_loadpin_is_sb_trusted(struct super_block *sb);
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Also thinking if reordering `area[pos] = ip;` and `WRITE_ONCE(area[0], pos);`
+will resolve the problem without adding fast path overhead.
+However, not instrumenting early interrupt code still looks more preferable.
 
 
-vim +/dm_verity_loadpin_is_sb_trusted +21 include/linux/dm-verity-loadpin.h
-
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  17  
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  18  #if IS_ENABLED(CONFIG_SECURITY_LOADPIN) && IS_BUILTIN(CONFIG_DM_VERITY)
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  19  bool dm_verity_loadpin_is_sb_trusted(struct super_block *sb);
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  20  #else
-afd03270f57b8c Matthias Kaehlcke 2022-05-17 @21  static inline bool dm_verity_loadpin_is_sb_trusted(struct super_block *sb);
-afd03270f57b8c Matthias Kaehlcke 2022-05-17 @22  {
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  23  	return false;
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  24  }
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  25  #endif
-afd03270f57b8c Matthias Kaehlcke 2022-05-17  26  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ > Signed-off-by: Congyu Liu <liu3101@purdue.edu>
+> > ---
+> >  include/linux/sched.h |  3 +++
+> >  kernel/kcov.c         | 16 ++++++++++++++++
+> >  2 files changed, 19 insertions(+)
+> >
+> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > index a8911b1f35aa..d06cedd9595f 100644
+> > --- a/include/linux/sched.h
+> > +++ b/include/linux/sched.h
+> > @@ -1408,6 +1408,9 @@ struct task_struct {
+> >
+> >         /* Collect coverage from softirq context: */
+> >         unsigned int                    kcov_softirq;
+> > +
+> > +       /* Flag of if KCOV area is being written: */
+> > +       bool                            kcov_writing;
+> >  #endif
+> >
+> >  #ifdef CONFIG_MEMCG
+> > diff --git a/kernel/kcov.c b/kernel/kcov.c
+> > index b3732b210593..a595a8ad5d8a 100644
+> > --- a/kernel/kcov.c
+> > +++ b/kernel/kcov.c
+> > @@ -165,6 +165,8 @@ static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_stru
+> >          */
+> >         if (!in_task() && !(in_serving_softirq() && t->kcov_softirq))
+> >                 return false;
+> > +       if (READ_ONCE(t->kcov_writing))
+> > +               return false;
+> >         mode = READ_ONCE(t->kcov_mode);
+> >         /*
+> >          * There is some code that runs in interrupts but for which
+> > @@ -201,12 +203,19 @@ void notrace __sanitizer_cov_trace_pc(void)
+> >                 return;
+> >
+> >         area = t->kcov_area;
+> > +
+> > +       /* Prevent race from unblocked interrupt. */
+> > +       WRITE_ONCE(t->kcov_writing, true);
+> > +       barrier();
+> > +
+> >         /* The first 64-bit word is the number of subsequent PCs. */
+> >         pos = READ_ONCE(area[0]) + 1;
+> >         if (likely(pos < t->kcov_size)) {
+> >                 area[pos] = ip;
+> >                 WRITE_ONCE(area[0], pos);
+> >         }
+> > +       barrier();
+> > +       WRITE_ONCE(t->kcov_writing, false);
+> >  }
+> >  EXPORT_SYMBOL(__sanitizer_cov_trace_pc);
+> >
+> > @@ -230,6 +239,10 @@ static void notrace write_comp_data(u64 type, u64 arg1, u64 arg2, u64 ip)
+> >         area = (u64 *)t->kcov_area;
+> >         max_pos = t->kcov_size * sizeof(unsigned long);
+> >
+> > +       /* Prevent race from unblocked interrupt. */
+> > +       WRITE_ONCE(t->kcov_writing, true);
+> > +       barrier();
+> > +
+> >         count = READ_ONCE(area[0]);
+> >
+> >         /* Every record is KCOV_WORDS_PER_CMP 64-bit words. */
+> > @@ -242,6 +255,8 @@ static void notrace write_comp_data(u64 type, u64 arg1, u64 arg2, u64 ip)
+> >                 area[start_index + 3] = ip;
+> >                 WRITE_ONCE(area[0], count + 1);
+> >         }
+> > +       barrier();
+> > +       WRITE_ONCE(t->kcov_writing, false);
+> >  }
+> >
+> >  void notrace __sanitizer_cov_trace_cmp1(u8 arg1, u8 arg2)
+> > @@ -335,6 +350,7 @@ static void kcov_start(struct task_struct *t, struct kcov *kcov,
+> >         t->kcov_size = size;
+> >         t->kcov_area = area;
+> >         t->kcov_sequence = sequence;
+> > +       t->kcov_writing = false;
+> >         /* See comment in check_kcov_mode(). */
+> >         barrier();
+> >         WRITE_ONCE(t->kcov_mode, mode);
+> > --
+> > 2.34.1
+> >

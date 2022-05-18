@@ -2,104 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFC552B46C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA9752B428
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbiERIKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S232946AbiERH7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232697AbiERIKQ (ORCPT
+        with ESMTP id S232896AbiERH7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:10:16 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077BA25EBC;
-        Wed, 18 May 2022 01:10:15 -0700 (PDT)
-Received: from zn.tnic (p200300ea974657d0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9746:57d0:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 385BC1EC054C;
-        Wed, 18 May 2022 10:10:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1652861410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=OU2r3ndLVLZSWGk/2sjKDH+rpFBxg12x0Rgx+8y4HgM=;
-        b=e2FTJ+QaJQ8Ao+EsjaQTEozFWCOYTpSdLqG6Ll38gR7gX0/1ndoQiVGhQkF14aDsSTuSSe
-        8DijoeDr+Z3gw9rGRzvDrVuCk5cNfiThrHsOcwq//5JhUp0O/HMfetcRdWrfVIQPWQ4JUC
-        8ZiY3AmOMzTa+W4+KlV3XqqFgGaTBGY=
-Date:   Wed, 18 May 2022 10:10:05 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, muralidhara.mk@amd.com,
-        naveenkrishna.chatradhi@amd.com
-Subject: Re: [PATCH 06/18] EDAC/amd64: Add prep_chip_selects() into pvt->ops
-Message-ID: <YoSp3cSoAo4SkkfQ@zn.tnic>
-References: <20220509145534.44912-1-yazen.ghannam@amd.com>
- <20220509145534.44912-7-yazen.ghannam@amd.com>
+        Wed, 18 May 2022 03:59:32 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4561712719B;
+        Wed, 18 May 2022 00:59:31 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L350f4WXkzQk9h;
+        Wed, 18 May 2022 15:56:34 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 15:59:28 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
+ 2022 15:59:28 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <keescook@chromium.org>, <viro@zeniv.linux.org.uk>,
+        <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <chengzhihao1@huawei.com>,
+        <yukuai3@huawei.com>
+Subject: [PATCH -next] exec: Remove redundant check in do_open_execat/uselib
+Date:   Wed, 18 May 2022 16:12:27 +0800
+Message-ID: <20220518081227.1278192-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220509145534.44912-7-yazen.ghannam@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 02:55:22PM +0000, Yazen Ghannam wrote:
-> From: Muralidhara M K <muralidhara.mk@amd.com>
-> 
-> GPU Nodes will need to set the number of available Chip Selects, i.e.
-> Base and Mask values, differently than existing systems. A function
-> pointer should be used rather than introduce another branching condition.
+There is a false positive WARNON happening in execve(2)/uselib(2)
+syscalls with concurrent noexec-remount.
 
-Yeah, it looks to me like all that detection logic should be split
-eventually. Looking at read_mc_regs(), it has
+       execveat                           remount
+do_open_execat(path/bin)
+  do_filp_open
+    path_openat
+      do_open
+        may_open
+          path_noexec() // PASS
+	                            remount(path->mnt, MS_NOEXEC)
+WARNON(path_noexec(&file->f_path)) // path_noexec() checks fail
 
-        if (pvt->umc) {
-                __read_mc_regs_df(pvt);
+Since may_open() has already checked the same conditions, fix it by
+removing 'S_ISREG' and 'path_noexec' check in do_open_execat()/uselib(2).
 
-                goto skip;
-        }
+Fixes: 0fd338b2d2cdf8 ("exec: move path_noexec() check earlier")
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+---
+ fs/exec.c | 22 +---------------------
+ 1 file changed, 1 insertion(+), 21 deletions(-)
 
-at the top, then a whole bunch of legacy stuff and then at the skip
-label some common stuff...
-
-Another thing you could consider is to have common functionality carved
-out into helpers with "common" in the name and then call those from both
-UMC and DCT paths. Perhaps that'll help keep the init paths sane. That
-is, short of splitting this driver.
-
-We did the splitting for Intel and there we have a common, librarized
-code which gets linked into a couple of drivers. You don't have to do
-this too - just putting it out there as an alternative.
-
-The per-family function pointers design could be good too, if done
-right. The advantage being, you have a single driver for all, yadda
-yadda...
-
-> Prepare for this by adding prep_chip_selects() to pvt->ops and set it
-> as needed based on currently supported systems.
-> 
-> Use a "umc" prefix for modern systems, since these use Unified Memory
-> Controllers (UMCs).
-> 
-> Use a "dct" prefix for newly-defined legacy functions, since these
-> systems use DRAM Controllers (DCTs).
-> 
-> Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
-> Signed-off-by: Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>
-
-What does Naveen's SOB mean here? Co-developed-by perhaps?
-
+diff --git a/fs/exec.c b/fs/exec.c
+index e3e55d5e0be1..0f8ea7e9e03c 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -141,16 +141,6 @@ SYSCALL_DEFINE1(uselib, const char __user *, library)
+ 	if (IS_ERR(file))
+ 		goto out;
+ 
+-	/*
+-	 * may_open() has already checked for this, so it should be
+-	 * impossible to trip now. But we need to be extra cautious
+-	 * and check again at the very end too.
+-	 */
+-	error = -EACCES;
+-	if (WARN_ON_ONCE(!S_ISREG(file_inode(file)->i_mode) ||
+-			 path_noexec(&file->f_path)))
+-		goto exit;
+-
+ 	fsnotify_open(file);
+ 
+ 	error = -ENOEXEC;
+@@ -169,7 +159,7 @@ SYSCALL_DEFINE1(uselib, const char __user *, library)
+ 			break;
+ 	}
+ 	read_unlock(&binfmt_lock);
+-exit:
++
+ 	fput(file);
+ out:
+   	return error;
+@@ -919,16 +909,6 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
+ 	if (IS_ERR(file))
+ 		goto out;
+ 
+-	/*
+-	 * may_open() has already checked for this, so it should be
+-	 * impossible to trip now. But we need to be extra cautious
+-	 * and check again at the very end too.
+-	 */
+-	err = -EACCES;
+-	if (WARN_ON_ONCE(!S_ISREG(file_inode(file)->i_mode) ||
+-			 path_noexec(&file->f_path)))
+-		goto exit;
+-
+ 	err = deny_write_access(file);
+ 	if (err)
+ 		goto exit;
 -- 
-Regards/Gruss,
-    Boris.
+2.31.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

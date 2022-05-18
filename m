@@ -2,107 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6795752B767
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED8D52B71C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234444AbiERJgw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:36:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S234490AbiERJhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234414AbiERJgd (ORCPT
+        with ESMTP id S234393AbiERJgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:36:33 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAA81A388
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:36:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 077F71FA46;
-        Wed, 18 May 2022 09:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652866585; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aius02DgTUuGeviB9+AqIcI4nipIhT22GK6S5UOA+yk=;
-        b=IGWN2FNyGugiWSTqY0TKEiH0PjlVIrFtILuJWLkI3JZqqk7ZPr3Vmf9WJBhsxqpbckNsko
-        5pkIhPqUPnXeuEm5TJJXDrMtkqj/lqtP/P2ovef0GT5Xhzi3JbnvXqopUSnK/Jo0IaKgmE
-        rm46zXSPSKYeHZIIBSLyOYSppGu4MKQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652866585;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aius02DgTUuGeviB9+AqIcI4nipIhT22GK6S5UOA+yk=;
-        b=cfZ0vuRJZ3OqDPhUWukfWa1/F/xF37L3NLfwq2u+KS2bqFZejO7ddpruwkMwfgmnJz7iQn
-        bj1Hg0tgfxCQHHDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C60FC133F5;
-        Wed, 18 May 2022 09:36:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rdr3Khe+hGJJEQAAMHmgww
-        (envelope-from <osalvador@suse.de>); Wed, 18 May 2022 09:36:23 +0000
-Date:   Wed, 18 May 2022 11:36:21 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, vbabka@suse.cz,
-        dhowells@redhat.com, neilb@suse.de, apopple@nvidia.com,
-        david@redhat.com, surenb@google.com, peterx@redhat.com,
-        naoya.horiguchi@nec.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/15] mm/swap: print bad swap offset entry in
- get_swap_device
-Message-ID: <YoS+FZMvUJcnhJhk@localhost.localdomain>
-References: <20220509131416.17553-1-linmiaohe@huawei.com>
- <20220509131416.17553-6-linmiaohe@huawei.com>
+        Wed, 18 May 2022 05:36:42 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40ADB82DF;
+        Wed, 18 May 2022 02:36:39 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 15D181F4245A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652866598;
+        bh=w9vxsEMxP8ZOb1eaXm6eHhoM0t+W1qSfwTk8Rrym1/g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=c12qUofxh1jcKvqyHR90xzkya+PqzExM/e5MgMle18x752R4y1/rC4ESRDslCQlwZ
+         SwhCSmFXQ4/IqXkTyfoAxCps9XzbvmOSWc2TxvDjntf34scgiliCXPNDbjak+o9CEb
+         6wSqHXthviknwmxGuCpKNpgzgxNgc7IlwYn5QU0otRY+Xrbfibs/OjVfBcT5kQ1AKv
+         TyQRNpbIY1F2RntBe8d+94OCR+rlyZ5lOUrt+S7xL7VhAP1NnFz6sG3remSt0MW4Q1
+         S/8Af3A6QYjs5wDyM7ZH0kQSn2G8wuUrprno3WAXk3vFM1XOoZa7xPyjdutKg99k7n
+         2GTp+7ttCH+vw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, sboyd@kernel.org,
+        chun-jie.chen@mediatek.com, rex-bc.chen@mediatek.com,
+        wenst@chromium.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski@linaro.org
+Subject: [PATCH v2 0/2] dt-bindings: arm: MediaTek: Fix clock bindings
+Date:   Wed, 18 May 2022 11:36:29 +0200
+Message-Id: <20220518093631.25491-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509131416.17553-6-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 09, 2022 at 09:14:06PM +0800, Miaohe Lin wrote:
-> If offset exceeds the si->max, print bad swap offset entry to help debug
-> the unexpected case.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+As per Rob Herring's review [1] on my mt6795 clocks bindings patches, for
+which I've used the already upstreamed ones as a base, it was found that
+these bindings have some issues.
+This series is addressing the issues that were found by Rob on my series,
+which are present on all of the already merged bindings.
 
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
+[1]: https://patchwork.kernel.org/project/linux-mediatek/patch/20220513165050.500831-5-angelogioacchino.delregno@collabora.com/#24859953
 
-> ---
->  mm/swapfile.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 0aee6286d6a7..d4b81ca887c0 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1272,6 +1272,7 @@ struct swap_info_struct *get_swap_device(swp_entry_t entry)
->  out:
->  	return NULL;
->  put_out:
-> +	pr_err("%s: %s%08lx\n", __func__, Bad_offset, entry.val);
->  	percpu_ref_put(&si->users);
->  	return NULL;
->  }
-> -- 
-> 2.23.0
-> 
-> 
+Changes in v2:
+ - Squashed patches as suggested
+
+AngeloGioacchino Del Regno (2):
+  dt-bindings: arm: mtk-clock: Remove unnecessary 'items' and fix
+    formatting
+  dt-bindings: arm: mtk-clock: Set #clock-cells as required property
+
+ .../arm/mediatek/mediatek,mt8186-clock.yaml   | 29 ++++-----
+ .../mediatek/mediatek,mt8186-sys-clock.yaml   |  1 +
+ .../arm/mediatek/mediatek,mt8192-clock.yaml   | 46 +++++++--------
+ .../mediatek/mediatek,mt8192-sys-clock.yaml   |  1 +
+ .../arm/mediatek/mediatek,mt8195-clock.yaml   | 59 ++++++++++---------
+ .../mediatek/mediatek,mt8195-sys-clock.yaml   |  1 +
+ 6 files changed, 71 insertions(+), 66 deletions(-)
 
 -- 
-Oscar Salvador
-SUSE Labs
+2.35.1
+

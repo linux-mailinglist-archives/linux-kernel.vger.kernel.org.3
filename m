@@ -2,165 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D77C52BF73
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7A952BF5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239772AbiERP4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S239779AbiERP4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239766AbiERPz6 (ORCPT
+        with ESMTP id S239849AbiERP4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:55:58 -0400
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC9021AB;
-        Wed, 18 May 2022 08:55:54 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id s12-20020a0568301e0c00b00605f30530c2so1625271otr.9;
-        Wed, 18 May 2022 08:55:54 -0700 (PDT)
+        Wed, 18 May 2022 11:56:12 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095003D1E8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:56:11 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r71so2570126pgr.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qWXKTxpMjmn1u6F63OBGUz8tILVO6jaTHdWT2R8iYlg=;
+        b=eBaghM2dqTUIVv/7a2pxqIjSQL1Ktx2k9P6YqlUuVPZm2g5J8JNomOwqnfQufns4XX
+         EkbC6Ht6q3Fl76dyOSK61FlnvJDZJJyMXoICbSld7XnACBvxHAd3sZqXbyrOAUx8VxZV
+         Wxp0k/pkWhPgpQTw3Nufa/nCelbz5bgxvtzTtcWYrNcyVbYiXUkjh++XNiw8AUHfJgqx
+         uxRfBFqLeQoJxXExhfJpce/LhRiPIjwXFrlPOJlXMFRHFvXmwSoBfUWcNk0BQLh9litq
+         S0uKGx7PYGr6wsD5SrY4WHHMRNu7wiTpqLvuKvgBGptl3Qve+CjsXQnx11zkp8MuBFMA
+         NpMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=pL9sXlkxO4wUxq+I5961tw5THWjp2m8gWvZxMl5uTTs=;
-        b=RL9/c3i+0A9E+zy69T9HBDzadzzlYVGGcrzdaqkbV8GvBu1o6y9zQmXinjBydOndQq
-         COZGi0bjdjbLkgArzoEPv4yhd0ZGNXvqwPVLgeJoCx1qO6vwSnUfeZpd6dOg2SJ4Ypce
-         C+1hgcwLMHZQ73G3/ndj3kroNZV8nqJlJCHwqqR0RQQxt3wskxajac1SSdXrujqFII00
-         CdcSORKWxasGWGoz6wyAsaMIvFPk2qh0e0yc8aRK9zInU7TNFTRZKB8ZMDf2isS34Cch
-         XHzbqGKEoH5bSBMlxv9bK30piLGKEdrLc5Q9Z9xgEMKsHISgKqMjAHEENwLPqFA6c3j/
-         /TPQ==
-X-Gm-Message-State: AOAM5331HbV7kzCOkQk+0uHyiS+hG227hJU946VZjMXZLc7QMADQwGnZ
-        MobdFSwx1vd9rxoGyY3C5A==
-X-Google-Smtp-Source: ABdhPJxiry19r1K5KnHA2+Vc2jieYBIM7bIX3w1IUZHtsbb6TFULxR9rOzLG/JZJSgpOalKPbr31YA==
-X-Received: by 2002:a05:6830:2387:b0:606:4470:133 with SMTP id l7-20020a056830238700b0060644700133mr120520ots.133.1652889353575;
-        Wed, 18 May 2022 08:55:53 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i131-20020acaea89000000b00325cda1ffbasm846556oih.57.2022.05.18.08.55.52
+        bh=qWXKTxpMjmn1u6F63OBGUz8tILVO6jaTHdWT2R8iYlg=;
+        b=RUJJquF7CG9lvI+WnejjJ95CvCUZH0c1ogRW3TmEe9jGN8r0lV1363YmlO1EzsQDFT
+         4LiHSysVWXMFXHTOHwFs2MLqc5jsF0Mip6dAU16SbWrqZQaNHPEelHU6f9yfqGi0MeSZ
+         bT48Kz4obrzjIJminGTMRVHji+HtNJfIolMBa2BBR936UpC3FvRnuCYhCxeOb6sGGkz5
+         sl5XepILB6ord2HJWarTuQsZj4lZM3WhIG/k7UEFp6GTXFLpJTOb23vmGFfRebMwtbqq
+         wFl9PkPYfgfpZwmTZIWZ+Wdlht7Z6wKi2sJY0hJpsyuoNDqpjvbmMPQZZTdKL9FmWp/b
+         aBew==
+X-Gm-Message-State: AOAM532nLBukyaR3YN/wfyv4isytAVy9yU0xF+NfBTT3miWbDWA131A6
+        JtAQSHgW4iB+FnNVXzwfas1lpw==
+X-Google-Smtp-Source: ABdhPJxSEJX/gDr7F2yeujTeOEbh2dCd+3p9S2SawsVfH6UMPR5YU1kkRbp4HL/UBle/+eRE4D2uKA==
+X-Received: by 2002:a05:6a00:2444:b0:4fd:db81:cbdd with SMTP id d4-20020a056a00244400b004fddb81cbddmr381800pfj.32.1652889370308;
+        Wed, 18 May 2022 08:56:10 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h8-20020a654688000000b003f60df4a5d5sm1449792pgr.54.2022.05.18.08.56.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 08:55:52 -0700 (PDT)
-Received: (nullmailer pid 3393244 invoked by uid 1000);
-        Wed, 18 May 2022 15:55:51 -0000
-Date:   Wed, 18 May 2022 10:55:51 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Vinod Koul <vkoul@kernel.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Subject: Re: Re: [RFC v3 1/5] dt-bindings: phy: rockchip: add PCIe v3 phy
-Message-ID: <20220518155551.GB3302100-robh@kernel.org>
-References: <20220514115946.8858-1-linux@fw-web.de>
- <20220514115946.8858-2-linux@fw-web.de>
- <1652570081.002742.3276245.nullmailer@robh.at.kernel.org>
- <trinity-02ad648c-f6f8-4383-b389-a0578d5a02d2-1652615387162@3c-app-gmx-bap15>
- <20220516173537.GA2942634-robh@kernel.org>
- <9496CAFB-6CB6-4BDA-A539-3A6E1B562299@public-files.de>
+        Wed, 18 May 2022 08:56:09 -0700 (PDT)
+Date:   Wed, 18 May 2022 15:56:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [RFC PATCH v3 01/19] KVM: x86: document AVIC/APICv inhibit
+ reasons
+Message-ID: <YoUXFmh9vef4CC+8@google.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+ <20220427200314.276673-2-mlevitsk@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9496CAFB-6CB6-4BDA-A539-3A6E1B562299@public-files.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220427200314.276673-2-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 09:21:31PM +0200, Frank Wunderlich wrote:
-> Am 16. Mai 2022 19:35:37 MESZ schrieb Rob Herring <robh@kernel.org>:
-> >On Sun, May 15, 2022 at 01:49:47PM +0200, Frank Wunderlich wrote:
-> >> Hi
-> >> 
-> >> > Gesendet: Sonntag, 15. Mai 2022 um 01:14 Uhr
-> >> > Von: "Rob Herring" <robh@kernel.org>
-> >> 
-> >> > On Sat, 14 May 2022 13:59:42 +0200, Frank Wunderlich wrote:
+On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> These days there are too many AVIC/APICv inhibit
+> reasons, and it doesn't hurt to have some documentation
+> for them.
+
+Please wrap at ~75 chars.
+
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
-> >Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
-> >> > >
-> >> >
-> >> > My bot found errors running 'make DT_CHECKER_FLAGS=-m
-> >dt_binding_check'
-> >> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >> >
-> >> > yamllint warnings/errors:
-> >> >
-> >> > dtschema/dtc warnings/errors:
-> >> >
-> >/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml:
-> >properties:clock-names: 'oneOf' conditional failed, one must be fixed:
-> >> > 	[{'const': 'refclk_m'}, {'const': 'refclk_n'}, {'const': 'pclk'}]
-> >is too long
-> >> > 	[{'const': 'refclk_m'}, {'const': 'refclk_n'}, {'const': 'pclk'}]
-> >is too short
-> >> > 	False schema does not allow 3
-> >> > 	1 was expected
-> >> > 	3 is greater than the maximum of 2
-> >> > 	hint: "minItems" is only needed if less than the "items" list
-> >length
-> >> > 	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-> >> >
-> >/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml:
-> >ignoring, error in schema: properties: clock-names
-> >> >
-> >Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.example.dtb:0:0:
-> >/example-0/phy@fe8c0000: failed to match any schema with compatible:
-> >['rockchip,rk3568-pcie3-phy']
-> >> 
-> >> seems this is fixed when i remove the "minItems: 3" from clock names 
-> >> (which is already fixed length because of the list).
-> >
-> >Yes.
-> >
-> >> needed to change type of lane-map to this:
-> >> 
-> >> $ref: /schemas/types.yaml#/definitions/uint8-array
-> >
-> >Why? That's not a standard property though, so needs a 'rockchip' 
-> >prefix. Though maybe a common property would be appropriate here.
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index f164c6c1514a4..63eae00625bda 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1046,14 +1046,29 @@ struct kvm_x86_msr_filter {
+>  };
+>  
+>  enum kvm_apicv_inhibit {
+> +	/* APICv/AVIC is disabled by module param and/or not supported in hardware */
+
+Rather than tag every one as APICv vs. AVIC, what about reorganizing the enums so
+that the common vs. AVIC flags are bundled together?  And then the redundant info
+in the comments about "XYZ is inhibited" can go away too, i.e. the individual
+comments can focus on explaining what triggers the inhibit (and for some, why that
+action is incompatible with APIC virtualization).
+
+E.g.
+	/***************************************************************/
+	/* INHIBITs are relevant to both Intel's APICv and AMD's AVIC. */
+	/***************************************************************/
+
+	/* APIC/AVIC is unsupported and/or disabled via module param. */
+	APICV_INHIBIT_REASON_DISABLE,
+
+	/* The local APIC is not in-kernel.  See KVM_CREATE_IRQCHIP. */
+	APICV_INHIBIT_REASON_ABSENT,
+
+	/*
+	 * At least one IRQ vector is configured for HyperV's AutoEOI, which
+	 * requires manually injecting the IRQ to do EOI on behalf of the guest.
+	 */
+	APICV_INHIBIT_REASON_HYPERV,
+	
+
+	/**********************************************/
+	/* INHIBITs relevant only to AMD's AVIC. */
+	/**********************************************/
+
+>  	APICV_INHIBIT_REASON_DISABLE,
+> +	/* APICv/AVIC is inhibited because AutoEOI feature is being used by a HyperV guest*/
+>  	APICV_INHIBIT_REASON_HYPERV,
+> +	/* AVIC is inhibited on a CPU because it runs a nested guest */
+>  	APICV_INHIBIT_REASON_NESTED,
+> +	/* AVIC is inhibited due to wait for an irq window (AVIC doesn't support this) */
+>  	APICV_INHIBIT_REASON_IRQWIN,
+> +	/*
+> +	 * AVIC is inhibited because i8254 're-inject' mode is used
+> +	 * which needs EOI intercept which AVIC doesn't support
+> +	 */
+>  	APICV_INHIBIT_REASON_PIT_REINJ,
+> +	/* AVIC is inhibited because the guest has x2apic in its CPUID*/
+>  	APICV_INHIBIT_REASON_X2APIC,
+> +	/* AVIC/APICv is inhibited because KVM_GUESTDBG_BLOCKIRQ was enabled */
+>  	APICV_INHIBIT_REASON_BLOCKIRQ,
+> +	/*
+> +	 * AVIC/APICv is inhibited because the guest didn't yet
+
+s/guest/userspace
+
+> +	 * enable kernel/split irqchip
+> +	 */
+>  	APICV_INHIBIT_REASON_ABSENT,
+> +	/* AVIC is disabled because SEV doesn't support it */
+>  	APICV_INHIBIT_REASON_SEV,
+>  };
+>  
+> -- 
+> 2.26.3
 > 
-> Originally it was a bool property named "rockchip,bifurcation" and we 
-> changed it (after comments) to be a more generic property "lane-map" 
-> that can be re-used on other vendors/controllers/phys.
-
-Fair enough. The type needs to be defined in a common binding though. 
-phy/phy-provider.yaml in dtschema probably.
-
-We already have clock-lanes and data-lanes for other serdes interfaces. 
-Maybe data-lanes works here?
-
-> Driver reads as u8 array and range is small enough for u8 even if 
-> used for larger controllers (e.g. PCIe x16).
-
-Not arguing that it shouldn't be, just confused how the type was related 
-to warnings.
-
-> 
-> >> then it looks clean for it....
-> >> 
-> >> -m causes many errors unrelated to this schema-file even if i pass
-> >>
-> >DT_SCHEMA_FILES=Documentation/devicetree/bindings/phy/rockchip,pcie3-phy.yaml
-> >
-> >The fix is fixing the remaining 40 or so '-m' errors.
-> 
-> So now clean for you(r bot), too? Did only get a bunch of other unrelated messages.
-
-No, the bot does a baseline build and extracts the diff in warnings. 
-Still too many warnings popping up frequently... :(
-
-Rob

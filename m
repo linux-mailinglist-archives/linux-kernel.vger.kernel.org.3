@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108B852C014
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7A852C0A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240000AbiERQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S240007AbiERQRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239976AbiERQQn (ORCPT
+        with ESMTP id S239971AbiERQRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:16:43 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092ACA76D4
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:16:41 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a23-20020a17090acb9700b001df4e9f4870so2564175pju.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=27J+LsUtyeeYy/GvJkk2tphV2jBbsCOsrmpZjooJvdA=;
-        b=WsFMsQRAqPFYtDRXv1eq/d16y4WXmvGrQzz4CAO9ARgrPBnZudm/BdIonig9LJyFcm
-         x6L1zSSnkCAOWz2YA0yASGUB+S/LnV93goRZsCwFI/c0oM6Wt6HovjUhwpPIhHwnAmgf
-         0UULa2rgpV/0NpYuJBZ1n9Y7Z3J0NyCqw3cQu4ZP70oCUpqlb8b8MsNZ0F22EDY2ZbA3
-         5E1hyQWNsllEe7cLvGs3pzHDGEMwvrxA4n0ilcZn7OsnEXZa9Xik24fr3nohv7oQ4WX1
-         CW6+uDBt2U+dmO+Q5ct+H8Au3VCnLrnBY51f3Z4vRidqf2HwVg5OVps7L3et5gtGQ2aA
-         EKFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=27J+LsUtyeeYy/GvJkk2tphV2jBbsCOsrmpZjooJvdA=;
-        b=KqbdwOCGfod8n1bo2nrNrHDZNkoPISnWr6llifjLn5WvsVjJt08mZ5uRNaEjyWi+dm
-         tT6dqFC7k4GDmqrAJzmwnNbpAQ3jjciukBOrtTG2vQTRqQG+YbPQcOk2r/j10vfT0jYa
-         vC+dkhvkmFcwkoiVhwqbpQFOyHspmjGRDt0b+kT848wb+X3iKEVlu8+Zl34xPQ3OfZFv
-         6NeKoQMy/f98sdn+bCUHj10cHJQrDQo9GEa/ZEEClHwbBe9BWfERo99pprvrGdR0YJ1C
-         96G4Ovy2O/9YXXEa8fn2TjqCJ/JJQcI/YzAKFQdGoVh1Y+cVm3EGi9MOamgdRVp9aHQo
-         Lf5A==
-X-Gm-Message-State: AOAM531VOpYpdbf6yzRkc7OX+J5oRFZ7NEaYDbXYALXHetNAoskYqGXs
-        psskEXEgcGDLzYmmJ7eC0z16nw==
-X-Google-Smtp-Source: ABdhPJzlMzaxzyxYIp0EtYqROS3OrIc3ty0dMgOLbrexh3oQF/2zOIfjp3/5KS2qx0kdvnbCWlOOjg==
-X-Received: by 2002:a17:90a:7441:b0:1df:5f54:502c with SMTP id o1-20020a17090a744100b001df5f54502cmr770638pjk.129.1652890600319;
-        Wed, 18 May 2022 09:16:40 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170902e9c400b0015e8d4eb264sm1893016plk.174.2022.05.18.09.16.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 09:16:39 -0700 (PDT)
-Date:   Wed, 18 May 2022 16:16:35 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     John Allen <john.allen@amd.com>
-Cc:     Yang Weijiang <weijiang.yang@intel.com>, pbonzini@redhat.com,
-        jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yu.c.zhang@linux.intel.com
-Subject: Re: [PATCH v15 07/14] KVM: VMX: Emulate reads and writes to CET MSRs
-Message-ID: <YoUb4/iP+X+xgsfQ@google.com>
-References: <20210203113421.5759-1-weijiang.yang@intel.com>
- <20210203113421.5759-8-weijiang.yang@intel.com>
- <YoUW4Oh0eRL9um5m@dell9853host>
+        Wed, 18 May 2022 12:17:32 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CE717707E
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:17:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3737FCE21AE
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 16:17:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F140C385A5;
+        Wed, 18 May 2022 16:17:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652890647;
+        bh=dmIZ4Nql4iIBiLdds0xyVW1A/Xf8DpSW87Riaa/jSn0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jCo8ns3RJzooC9MrZspB4ZE24hbQ43csw2DVuEEk4WxhSfaJgll3XQ5Cib00iRTzE
+         8IwB5gI1ZOYGJFWB+VeSsEWSqeqA1T2trHsLXXlmMkjx5PvinxZgjpEnf3z7gLzZpf
+         ubqm2S37FbwZtu2i1I7mcfM82SaCxT+nEiKn8ViA6qcfx3vg2QJUOIBFmLwq95gqGD
+         9OdtqmfQqzlhf2zB5FhiFTkOkGQmjQRQLLVNSyCaH5H0F7TAgUXxa3R+5wh5u+zJFS
+         myB50Ehr1m94KuBTpPxhmWoy8AKKC5YGJr6N0c78Ucw9PShwNpI6qQjw/TOcvejYo2
+         1N2l67jZ1JmoA==
+Date:   Wed, 18 May 2022 09:17:25 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
+Message-ID: <20220518161725.2bkzavre2bg4xu72@treble>
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+ <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+ <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
+ <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
+ <20220518012429.4zqzarvwsraxivux@treble>
+ <YoSEXii2v0ob/8db@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YoUW4Oh0eRL9um5m@dell9853host>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YoSEXii2v0ob/8db@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022, John Allen wrote:
-> On Wed, Feb 03, 2021 at 07:34:14PM +0800, Yang Weijiang wrote:
-> > +	case MSR_IA32_PL0_SSP ... MSR_IA32_PL3_SSP:
-> > +		if (!cet_is_ssp_msr_accessible(vcpu, msr_info))
-> > +			return 1;
-> > +		if ((data & GENMASK(2, 0)) || is_noncanonical_address(data, vcpu))
+On Wed, May 18, 2022 at 07:30:06AM +0200, Peter Zijlstra wrote:
+> On Tue, May 17, 2022 at 06:24:29PM -0700, Josh Poimboeuf wrote:
+> > On Tue, May 17, 2022 at 05:42:04PM +0200, Peter Zijlstra wrote:
+> > > +	for (;;) {
+> > > +		symtab_data = elf_getdata(s, symtab_data);
+> > > +		if (t)
+> > > +			shndx_data = elf_getdata(t, shndx_data);
+> > >  
+> > > +		if (!symtab_data) {
+> > > +			if (!idx) {
+> > > +				void *buf;
+> > 
+> > I'm confused by whatever this is doing, how is !symtab_data possible,
+> > i.e. why would symtab not have data?
 > 
-> Sorry to revive this old thread. I'm working on the corresponding SVM
-> bits for shadow stack and I noticed the above check. Why isn't this
-> GENMASK(1, 0)? The *SSP MSRs should be a 4-byte aligned canonical
-> address meaning that just bits 1 and 0 should always be zero. I was
-> looking through the previous versions of the set and found that this
-> changed between versions 11 and 12, but I don't see any discussion
-> related to this on the list.
+> Elf_Data *elf_getdata(Elf_Scn *scn, Elf_Data *data);
+> 
+> is an iterator, if @data is null it will return the first element, which
+> you then feed into @data the next time to get the next element, once it
+> returns NULL, you've found the end.
+> 
+> In our specific case, we iterate the data sections, if idx fits inside
+> the current section, we good, otherwise we lower idx by however many did
+> fit and try the next.
 
-Huh.  I'm not entirely sure what to make of the SDM's wording:
+Ok, I think I see.  But why are there multiple data blocks to begin
+with?  It's because of a previous call to elf_newdata() right?
 
-  The linear address written must be aligned to 8 bytes and bits 2:0 must be 0
-  (hardware requires bits 1:0 to be 0).
+If so then I don't see how it would "fit" in an existing data block,
+since each block should already be full.  Or... is the hole the one you
+just made, by moving the old symbol out?
 
-Looking at the rest of the CET stuff, I believe requiring 8-byte alignment is
-correct, and that the "hardware requires" blurb is trying to call out that the
-SSP stored in hardware will always be 4-byte aligned but not necessarily 8-byte
-aligned in order to play nice with 32-bit/compatibility mode.  But "base" addresses
-that come from software, e.g. via MSRs and whatnot, must always be 8-byte aligned.
+If so, the function seems weirdly generalized for the two distinct cases
+and the loop seems unnecessary.  When adding a symbol at the end, just
+use elf_newdata().  When adding a symbol in the middle, the hole should
+be in the first data block.
+
+-- 
+Josh

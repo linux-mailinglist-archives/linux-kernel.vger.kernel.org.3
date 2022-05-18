@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEEF52B342
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A9652B357
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231898AbiERHNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
+        id S231990AbiERHPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232021AbiERHMz (ORCPT
+        with ESMTP id S232038AbiERHPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:12:55 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3BEFD37D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:12:54 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id h8so1424754ljb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:12:54 -0700 (PDT)
+        Wed, 18 May 2022 03:15:14 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2B1111B9B
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:15:12 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id h8so1430495ljb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=NveFr5oBdZT2Fkapk4waWiUJsOPRpM4f+u8efBiPzeQ=;
-        b=jHCADS67u2w6WRnpiH2hmQWcjZWcwTMZZjEIbjk41nZTH8+Nsr+9N5zM9OcExsaL+Y
-         BeAm9bdsVUFE+6qQ1MmIXg1TDc8CxdE8TTYWo70EgZNbJJTqrqKRK43IyaB3tH3U7NF5
-         EenS5AdVoX4/m8uzW93oDsVkWRU8MLEvKkOoyjBjtrlGTU3og1dQRnHqJvZPxNDIdUWq
-         A30VNj/6Q0WDYvh72IEPo70Hgod0q3+8Ho3/f0wuK2zm8lwq5vT0eQFo4VQ2TXTfPXUz
-         5pWI0ooLijSbS3Gi4r5Z4ymhjnRFe8kyfFqwmrkLv9INIhu1f/W15DZ9hZalW3rsuWqM
-         AVBQ==
+        bh=gxNp7wo0EZOb9E1oU3VMuWuT9HM6AfJUFpl0839G+5s=;
+        b=tKXG6V85D2IceWP9CGx1Vc1gGzqurlyZq7Oah63v/H7nSicVwXlhdnL588nU1vOKcB
+         xzu9ZZllIl8ae9KUaRi0UpDLfZCZWB0bbqLDdOMlzeusYmZkHfOuxDC0qJAvvxRrHIyG
+         uqrc/xMkLN942zfAiH4pYrzsaJgq/AbAaMjvLiqLeAjR3nCJ/YpSndJec3HJ/fUbobra
+         kNMrylw8k4PYqTt4eq70W8h2IB/hUNAEuW9Ey3e8hmGKVRagJE9dGPpeAFocatr9fm20
+         F6MDGl37XtMVV3P20vp3flUxfUTzOad2mIjAKMb+a7gMHFZ9PBvJ2iY37+bOPnSmTnFx
+         +gAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=NveFr5oBdZT2Fkapk4waWiUJsOPRpM4f+u8efBiPzeQ=;
-        b=4Yv521HIvIRkGBVcgoH9O9n7uixLin+ty9E273aTOlI2+GiC1VPJdoAWtLR7Bru2fV
-         Vd98HZf2FsJSl+hVLYZ8hjDrCc5ZDPLBUNhfC9lFY1SxtbN33pf47HhjEPVmMsbALI6h
-         0SuZoZMo/XWuDpO2uQNqqYP1Tw9Wz3OrhP/QfTzACXKIaUqrMRGKi2MPk5OS4tfOKC1Y
-         SqHpB4Ef0PwvJ9n6m13EP4PfahllZn1NKt1B8lNZB4IGlSAQ2EndX/GQIKcyN9nhqbE0
-         BPnjATRO7IQ9f68wdd2QawU4fY2OD2o0YqAz/eIu7/yiflY8X0gy93fNEspXVsz8fRIZ
-         cWUQ==
-X-Gm-Message-State: AOAM532dzpcFhFPHCnnR/WkFXsF/kXiSxRSJWI3n0xQb586aiVv76w7P
-        eKDNkQ0PMmdzl/jzXzhwj6mCRQ==
-X-Google-Smtp-Source: ABdhPJyoK2bfuMo1CXXcarmkwOAqt7fwbBO3No8og5UbwTMiGQcp9fvBYCPobo/etj3vprsEM4qU5Q==
-X-Received: by 2002:a05:651c:23b:b0:24f:1286:c321 with SMTP id z27-20020a05651c023b00b0024f1286c321mr16139121ljn.521.1652857972902;
-        Wed, 18 May 2022 00:12:52 -0700 (PDT)
+        bh=gxNp7wo0EZOb9E1oU3VMuWuT9HM6AfJUFpl0839G+5s=;
+        b=7SMbZlgPaamT2ZGEksbiiS9S1lrMRd2Ew6rztjJNgJfEzFkCe7ELCqXrOPEfa/NYUg
+         htpgKncpCWIjaL5gMtJeCOqZiCptx2nPsD+b6KubTGV4bQ+5jSy2+Xu81fW20eQEoyIi
+         KPBsLKICund0/yGhpz6QyNxv0reXwkbVkaoiUcoUz4a/BIeqEoqXybpqeM0aRTqnJlsP
+         CA7kvbYP3T6HosX8d7Wrk/Dl6ZEvNxokhhXafUOGwYZDb6oB/fx4Mfmprhy8DH2kDghw
+         F2QqudADpqaRov1CMtdnXx++VLIX0zLQZEbgdYgD+J6Sv3uRHEtF1ZR8ghtSnnlPqBCR
+         b7pQ==
+X-Gm-Message-State: AOAM533rk1bPJtNPRfCyJeuy6MLzPJAUOWq1jk6vIlryjG5jk/+zg1r+
+        bYP0SbrT4L6AFOro3suKaIvO8g==
+X-Google-Smtp-Source: ABdhPJwURjJVQZqzoLW8bTWlGprlMgYzVTATCzQl9kCMuCP3oIFU+YXs2kBOcrsE0DtsAebLjZHIxw==
+X-Received: by 2002:a2e:96d3:0:b0:24f:11ea:2118 with SMTP id d19-20020a2e96d3000000b0024f11ea2118mr16352095ljj.316.1652858110428;
+        Wed, 18 May 2022 00:15:10 -0700 (PDT)
 Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id a7-20020ac25207000000b0047255d2110esm122512lfl.61.2022.05.18.00.12.51
+        by smtp.gmail.com with ESMTPSA id v9-20020a197409000000b0047255d21101sm123190lfe.48.2022.05.18.00.15.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 00:12:52 -0700 (PDT)
-Message-ID: <a4666047-4c07-a9ca-440f-1735da76c5fa@linaro.org>
-Date:   Wed, 18 May 2022 09:12:51 +0200
+        Wed, 18 May 2022 00:15:09 -0700 (PDT)
+Message-ID: <02e9ba1a-852b-b2b9-209e-4c819f86dc34@linaro.org>
+Date:   Wed, 18 May 2022 09:15:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH 2/4] dmaengine: sprd-dma: Remove unneeded ERROR check
- before clk_disable_unprepare
+Subject: Re: [PATCH 3/4] dmaengine: ste_dma40: Remove unneeded ERROR and NULL
+ check in ste_dma40
 Content-Language: en-US
 To:     Wan Jiabing <wanjiabing@vivo.com>, Vinod Koul <vkoul@kernel.org>,
         Orson Zhai <orsonzhai@gmail.com>,
@@ -65,14 +65,14 @@ To:     Wan Jiabing <wanjiabing@vivo.com>, Vinod Koul <vkoul@kernel.org>,
         dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 References: <20220516084139.8864-1-wanjiabing@vivo.com>
- <20220516084139.8864-3-wanjiabing@vivo.com>
+ <20220516084139.8864-4-wanjiabing@vivo.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220516084139.8864-3-wanjiabing@vivo.com>
+In-Reply-To: <20220516084139.8864-4-wanjiabing@vivo.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,13 +81,48 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 16/05/2022 10:41, Wan Jiabing wrote:
-> clk_disable_unprepare() already checks ERROR by using IS_ERR_OR_NULL.
-> Remove unneeded ERROR check for sdev->ashb_clk.
+> clk_put() already checks ERROR by using IS_ERR.
+> clk_disable_unprepare() already checks NULL by using IS_ERR_OR_NULL.
+> Remove unneeded NULL check for clk_ret and ERROR check for clk.
 > 
 > Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  drivers/dma/ste_dma40.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/dma/ste_dma40.c b/drivers/dma/ste_dma40.c
+> index e1827393143f..7d1bf4ae4495 100644
+> --- a/drivers/dma/ste_dma40.c
+> +++ b/drivers/dma/ste_dma40.c
+> @@ -3119,7 +3119,7 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
+>  	clk = clk_get(&pdev->dev, NULL);
+>  	if (IS_ERR(clk)) {
+>  		d40_err(&pdev->dev, "No matching clock found\n");
+> -		goto check_prepare_enabled;
+> +		goto disable_unprepare;
 
+This should be rather return PTR_ERR. No need to jump to labels which
+are not relevant (even if harmless) for this case. It's a confusing code.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  	}
+>  
+>  	clk_ret = clk_prepare_enable(clk);
+> @@ -3305,12 +3305,10 @@ static struct d40_base * __init d40_hw_detect_init(struct platform_device *pdev)
+>  	iounmap(virtbase);
+>   release_region:
+>  	release_mem_region(res->start, resource_size(res));
+> - check_prepare_enabled:
+> -	if (!clk_ret)
+>   disable_unprepare:
+> -		clk_disable_unprepare(clk);
+> -	if (!IS_ERR(clk))
+> -		clk_put(clk);
+> +	clk_disable_unprepare(clk);
+> +	clk_put(clk);
+> +
+>  	return NULL;
+>  }
+>  
 
 
 Best regards,

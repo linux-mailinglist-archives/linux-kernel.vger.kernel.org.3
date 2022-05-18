@@ -2,40 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0481D52B2E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2284652B2D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbiERG5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S231688AbiERG5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbiERG5E (ORCPT
+        with ESMTP id S231661AbiERG5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:57:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED36713E3F;
-        Tue, 17 May 2022 23:56:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A21F2B81E9F;
-        Wed, 18 May 2022 06:56:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D319C385A5;
-        Wed, 18 May 2022 06:56:53 +0000 (UTC)
-From:   Greg Ungerer <gerg@linux-m68k.org>
-To:     linux-m68k@vger.kernel.org
-Cc:     geert@linux-m68k.org, linux-kernel@vger.kernel.org, arnd@arndb.de,
-        Greg Ungerer <gerg@linux-m68k.org>
-Subject: [PATCH 3/3] m68knommu: fix 68000 CPU link with no platform selected
-Date:   Wed, 18 May 2022 16:56:39 +1000
-Message-Id: <20220518065639.2432213-4-gerg@linux-m68k.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220518065639.2432213-1-gerg@linux-m68k.org>
-References: <20220518065639.2432213-1-gerg@linux-m68k.org>
+        Wed, 18 May 2022 02:57:44 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173A42AE1E
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:57:43 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id f10so1126012pjs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=H2/5LhVK5LQwWafqLqKW0LuSdW+8K8rE6sXyLUjvZ20=;
+        b=g8OwWZUT6pVOSmhJMcD1IuJuzUFlb9xjGHTLOsfk/1ziY8+i9QNUa7qTP59l0kzQJf
+         x6QpmgHJ6dDAolq1OUfgu+FJixdEmNuYFINVmdIUaDkq5LdWiVP72dRSBynUpBWOWh6k
+         z08HVW2D2Tyx7ZhplteluRHtLu+/1TRHnSTmK809D3r8/Bfy/JA19dC5bXyuiZrwHkX+
+         dfASEAHuUuDTkqI7QZYsGBKhZdM5ox6g56rpTmKYsVuK66F0P+Z416ESomTkzcDZRkQG
+         UPKc6cGdOmbE3QQzWi9q/q65aJGvTPVeN5YYMZ4RSCpZMkh1Cx4WtmyFA0KAMaV9Deq1
+         bw6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=H2/5LhVK5LQwWafqLqKW0LuSdW+8K8rE6sXyLUjvZ20=;
+        b=UAkW1m+vZnnoXkn7vFEN5XXLswJeU1cc40AqV2n4C9C6podChFx2bYR5xRVn9ueLng
+         A2GcMtd3RyKksZIt9x2JxzTpiiR9vN3JffBh7VJUHMepzKVVgD/vzMtXe2ar0HmN3mEY
+         vKXUdgulPbtJD5Bpdk2qUhGNsZFy313/ussqaDP7PmT++sfzdvmiqzNLOmZJjrHNVyHs
+         17yVoeK1GFyHSNqWlC6uF6Zeeiz3AWZAYlvIj+FqM6DcnW+o01ZfiGtSANuUJWg8Jhvd
+         RvZqPIMGdXdufQ4DOqX1kWXhSEU23Pux0NODXF8wtyQwVztyXGcsdklRBVnWGCnfMHYu
+         dJzA==
+X-Gm-Message-State: AOAM530UGmFlRpr9LB+2/WFyeUjwGMPuzt7yZzzvjOXuhYw9NXlm6gZJ
+        OTEmNDeBb40mXcj2B33CTCJJxw==
+X-Google-Smtp-Source: ABdhPJxJlbhzV5O2GMcems2e9XBxlBAxVC0LqUD20RvDEwvEbfGmCERRxT6PGUhhJfXKbPvMh+1lJA==
+X-Received: by 2002:a17:902:7483:b0:161:80be:cd37 with SMTP id h3-20020a170902748300b0016180becd37mr12249891pll.138.1652857062477;
+        Tue, 17 May 2022 23:57:42 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id i132-20020a62878a000000b0050dc762813fsm1018256pfe.25.2022.05.17.23.57.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 23:57:42 -0700 (PDT)
+Message-ID: <6ae715b3-96b1-2b42-4d1a-5267444d586b@bytedance.com>
+Date:   Wed, 18 May 2022 14:57:35 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [External] Re: [PATCH] bpf: avoid grabbing spin_locks of all cpus
+ when no free elems
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>
+References: <20220518062715.27809-1-zhoufeng.zf@bytedance.com>
+ <CAADnVQ+x-A87Z9_c+3vuRJOYm=gCOBXmyCJQ64CiCNukHS6FpA@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CAADnVQ+x-A87Z9_c+3vuRJOYm=gCOBXmyCJQ64CiCNukHS6FpA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,41 +85,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If building for a nommu m68k classic CPU and no platform (board) is
-selected then the final link fails with:
+在 2022/5/18 下午2:32, Alexei Starovoitov 写道:
+> On Tue, May 17, 2022 at 11:27 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>
+>> We encountered bad case on big system with 96 CPUs that
+>> alloc_htab_elem() would last for 1ms. The reason is that after the
+>> prealloc hashtab has no free elems, when trying to update, it will still
+>> grab spin_locks of all cpus. If there are multiple update users, the
+>> competition is very serious.
+>>
+>> So this patch add is_empty in pcpu_freelist_head to check freelist
+>> having free or not. If having, grab spin_lock, or check next cpu's
+>> freelist.
+>>
+>> Before patch: hash_map performance
+>> ./map_perf_test 1
+>> 0:hash_map_perf pre-alloc 975345 events per sec
+>> 4:hash_map_perf pre-alloc 855367 events per sec
+>> 12:hash_map_perf pre-alloc 860862 events per sec
+>> 8:hash_map_perf pre-alloc 849561 events per sec
+>> 3:hash_map_perf pre-alloc 849074 events per sec
+>> 6:hash_map_perf pre-alloc 847120 events per sec
+>> 10:hash_map_perf pre-alloc 845047 events per sec
+>> 5:hash_map_perf pre-alloc 841266 events per sec
+>> 14:hash_map_perf pre-alloc 849740 events per sec
+>> 2:hash_map_perf pre-alloc 839598 events per sec
+>> 9:hash_map_perf pre-alloc 838695 events per sec
+>> 11:hash_map_perf pre-alloc 845390 events per sec
+>> 7:hash_map_perf pre-alloc 834865 events per sec
+>> 13:hash_map_perf pre-alloc 842619 events per sec
+>> 1:hash_map_perf pre-alloc 804231 events per sec
+>> 15:hash_map_perf pre-alloc 795314 events per sec
+>>
+>> hash_map the worst: no free
+>> ./map_perf_test 2048
+>> 6:worse hash_map_perf pre-alloc 28628 events per sec
+>> 5:worse hash_map_perf pre-alloc 28553 events per sec
+>> 11:worse hash_map_perf pre-alloc 28543 events per sec
+>> 3:worse hash_map_perf pre-alloc 28444 events per sec
+>> 1:worse hash_map_perf pre-alloc 28418 events per sec
+>> 7:worse hash_map_perf pre-alloc 28427 events per sec
+>> 13:worse hash_map_perf pre-alloc 28330 events per sec
+>> 14:worse hash_map_perf pre-alloc 28263 events per sec
+>> 9:worse hash_map_perf pre-alloc 28211 events per sec
+>> 15:worse hash_map_perf pre-alloc 28193 events per sec
+>> 12:worse hash_map_perf pre-alloc 28190 events per sec
+>> 10:worse hash_map_perf pre-alloc 28129 events per sec
+>> 8:worse hash_map_perf pre-alloc 28116 events per sec
+>> 4:worse hash_map_perf pre-alloc 27906 events per sec
+>> 2:worse hash_map_perf pre-alloc 27801 events per sec
+>> 0:worse hash_map_perf pre-alloc 27416 events per sec
+>> 3:worse hash_map_perf pre-alloc 28188 events per sec
+>>
+>> ftrace trace
+>>
+>> 0)               |  htab_map_update_elem() {
+>> 0)   0.198 us    |    migrate_disable();
+>> 0)               |    _raw_spin_lock_irqsave() {
+>> 0)   0.157 us    |      preempt_count_add();
+>> 0)   0.538 us    |    }
+>> 0)   0.260 us    |    lookup_elem_raw();
+>> 0)               |    alloc_htab_elem() {
+>> 0)               |      __pcpu_freelist_pop() {
+>> 0)               |        _raw_spin_lock() {
+>> 0)   0.152 us    |          preempt_count_add();
+>> 0)   0.352 us    |          native_queued_spin_lock_slowpath();
+>> 0)   1.065 us    |        }
+>>                   |        ...
+>> 0)               |        _raw_spin_unlock() {
+>> 0)   0.254 us    |          preempt_count_sub();
+>> 0)   0.555 us    |        }
+>> 0) + 25.188 us   |      }
+>> 0) + 25.486 us   |    }
+>> 0)               |    _raw_spin_unlock_irqrestore() {
+>> 0)   0.155 us    |      preempt_count_sub();
+>> 0)   0.454 us    |    }
+>> 0)   0.148 us    |    migrate_enable();
+>> 0) + 28.439 us   |  }
+>>
+>> The test machine is 16C, trying to get spin_lock 17 times, in addition
+>> to 16c, there is an extralist.
+> Is this with small max_entries and a large number of cpus?
+>
+> If so, probably better to fix would be to artificially
+> bump max_entries to be 4x of num_cpus.
+> Racy is_empty check still wastes the loop.
 
-     LD      vmlinux.o
-   m68k-linux-ld: cannot find arch/m68k/kernel/head.o: No such file or directory
-   make: *** [Makefile:1158: vmlinux] Error 1
+This hash_map worst testcase with 16 CPUs, map's max_entries is 1000.
 
-Not selecting a platform is ok, that is a generic 68000 system build.
-All of the platform selections are for 68328 variants.
+This is the test case I constructed, it is to fill the map on purpose, 
+and then
 
-The underlying problem is that the CPU config option (CONFIG_M68000)
-ends up not being set, it is currently only selected by one of the
-platform choices.
+continue to update, just to reproduce the problem phenomenon.
 
-Change CONFIG_M68000 so that it is always enabled for the nommu m68k
-classic configuration.
+The bad case we encountered with 96 CPUs, map's max_entries is 10240.
 
-Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
----
- arch/m68k/Kconfig.cpu | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
-index 16ea9a67723c..ed719a855e6a 100644
---- a/arch/m68k/Kconfig.cpu
-+++ b/arch/m68k/Kconfig.cpu
-@@ -37,7 +37,7 @@ endchoice
- if M68KCLASSIC
- 
- config M68000
--	bool
-+	def_bool y
- 	depends on !MMU
- 	select CPU_HAS_NO_BITFIELDS
- 	select CPU_HAS_NO_CAS
--- 
-2.25.1
 

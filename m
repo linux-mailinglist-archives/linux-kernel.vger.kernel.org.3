@@ -2,323 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D9B52C620
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DC352C628
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 00:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiERWR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 18:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
+        id S229827AbiERWSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 18:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiERWRW (ORCPT
+        with ESMTP id S229612AbiERWSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 18:17:22 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFDF209B7C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:17:19 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id pq9-20020a17090b3d8900b001df622bf81dso3420491pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 15:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=C2WFVPsp+4BRnXL9oBXMdWVd/NuHNl85GJ1MmguRHWw=;
-        b=gb6NiFA3jCc/HtwWGBfRHDPZ+zzFR3jToqq2wnc3cvmreH077FPhqyEXomb24roMMA
-         Ksac+M+cFeuHI0A2DDIHlT519KfrOpcGv+VV6ftSxwwSmdmpIpFquGeosRlGLao8vXtD
-         t48YNltBGBb66WyvTTjM7yAgUfQEN3NH+KbeA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=C2WFVPsp+4BRnXL9oBXMdWVd/NuHNl85GJ1MmguRHWw=;
-        b=5vYHT1Qbe7FbKCdXvcLxTK6sNt3nxldxbTe4XpdHJI98p4R4bFjLCZgJHEI87btzhQ
-         pIjwH0kmaDCSPltQT8+5p4kT2FJJBJLdRwnvn+V9ob081JO0KnhbybjArQiliCLWt8ZA
-         vRKyq7efTmnAvJe0ZhwWtqho8VX+cyB8MINwtDMfMlP5jMnpT5XfWEiaghJG/Em+2+5y
-         016xJtwUFstUf+y89JVjJ74eQRkMLz2ZAr7kJSQTwooJ4eD6XjrIvmov06E2ac/iAlN0
-         RECKgZlcNP0P+vEqH7wGaYH9FPpB4EW72+rL/A6Joskm1v/cKfzWICtUYoPONjyk0GFo
-         Idaw==
-X-Gm-Message-State: AOAM5316vk8KASaFD9/N2ooXMnWc2SDi6Bz/MKRTzU9BrrSUOoAlE/R/
-        YC9DupbHFnkYrOhYe0MNnS7tkw==
-X-Google-Smtp-Source: ABdhPJxkLsE36Kq2JcCUoiWV2ClSYG7H68DZOk0Dnd5ufVpjZfzcSk9Zz5AbXiW59SdIpTBHz/LAmw==
-X-Received: by 2002:a17:902:ec92:b0:161:7e29:6f9d with SMTP id x18-20020a170902ec9200b001617e296f9dmr1458536plg.157.1652912238747;
-        Wed, 18 May 2022 15:17:18 -0700 (PDT)
-Received: from [10.136.13.180] ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id ji15-20020a170903324f00b001616e13fccdsm2195161plb.221.2022.05.18.15.17.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 15:17:17 -0700 (PDT)
-Message-ID: <81878a67-21f1-fee8-1add-f381bc8b05df@broadcom.com>
-Date:   Wed, 18 May 2022 15:17:07 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sebastian Reichel <sre@kernel.org>,
+        Wed, 18 May 2022 18:18:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2423C209B7B;
+        Wed, 18 May 2022 15:18:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B592261624;
+        Wed, 18 May 2022 22:18:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0345C385A9;
+        Wed, 18 May 2022 22:18:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652912312;
+        bh=1BE7QoEPoRv0SPcn20p4AnFm8hcFxjR8MT1AIyyGM5E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=eWelHZ0gWDLOdAb4yIc8otFLq/7/SstVjEPMrNM5OY/ixhWrfGsLoOJrA7cqGaUc+
+         OOT5LJFUhIh39Uadm23ojBqe1kIz33mRCBucZOj7kwEw89qf9l8rJfsZyL00MEg8fw
+         EBMDxY0/0QDdEvOnzrGp5EAIq4hielcEeJFD33evSn0R05BHwx7yLaEBlyPRMMjzBA
+         dgWHntw69PJYQFVW0xsALZ6gdsFX//zK3JfsSKSlfc4UPynE0zoilgGi3pRS2622Kb
+         8gPrWUiA3mkQuKBpCVNc/ye/2FLPe1/lq47+1fyLWxioFrTVfZ0mI/OUJd/A3JRGU/
+         H9KOU66/TWDsA==
+Date:   Wed, 18 May 2022 17:18:30 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Cyril Brulebois <kibi@debian.org>,
+        Jim Quinlan <jim2101024@gmail.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, james.dutton@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Desmond yan <desmond.yan@broadcom.com>
-Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dexuan Cui <decui@microsoft.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        zhenwei pi <pizhenwei@bytedance.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
- <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
- <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-In-Reply-To: <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000dfa72105df509efa"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
+ linkup
+Message-ID: <20220518221830.GA12467@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518194211.20143-1-jim2101024@gmail.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000dfa72105df509efa
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+[+to Cyril]
 
-Hi Guilherme,
+Cyril, if you have a chance to test this and verify that it fixes the
+regression, we may still be able to squeeze this into v5.18.
 
-+Desmond
+I can add the Reported-by and Tested-by tags myself.
 
-On 2022-05-17 09:42, Guilherme G. Piccoli wrote:
-> On 17/05/2022 10:57, Petr Mladek wrote:
->> [...]
->>>>> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
->>>>> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
->>>>> @@ -1446,7 +1446,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->>>> [... snip ...]
->>>> It seems to reset some hardware or so. IMHO, it should go into the
->>>> pre-reboot list.
->>>
->>> Mixed feelings here, I'm looping Broadcom maintainers to comment.
->>> (CC Scott and Broadcom list)
->>>
->>> I'm afraid it breaks kdump if this device is not reset beforehand - it's
->>> a doorbell write, so not high risk I think...
->>>
->>> But in case the not-reset device can be probed normally in kdump kernel,
->>> then I'm fine in moving this to the reboot list! I don't have the HW to
->>> test myself.
->>
->> Good question. Well, it if has to be called before kdump then
->> even "hypervisor" list is a wrong place because is not always
->> called before kdump.
+On Wed, May 18, 2022 at 03:42:11PM -0400, Jim Quinlan wrote:
+> commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
 > 
-> Agreed! I'll defer that to Scott and Broadcom folks to comment.
-> If it's not strictly necessary, I'll happily move it to the reboot list.
+> introduced a regression on the PCIe RPi4 Compute Module.  If the PCIe
+> endpoint node described in [2] was missing, no linkup would be attempted,
+> and subsequent accesses would cause a panic because this particular PCIe HW
+> causes a CPU abort on illegal accesses (instead of returning 0xffffffff).
 > 
-> If necessary, we could use the machine_crash_kexec() approach, but we'll
-> fall into the case arm64 doesn't support it and I'm not sure if this
-> device is available for arm - again a question for the maintainers.
-We register to the panic notifier so that we can kill the VK card ASAP
-to stop DMAing things over to the host side.  If it is not notified then
-memory may not be frozen when kdump is occurring.
-Notifying the card on panic is also needed to allow for any type of 
-reset to occur.
-
-So, the only thing preventing moving the notifier later is the chance
-that memory is modified while kdump is occurring.  Or, if DMA is 
-disabled before kdump already then this wouldn't be an issue and the 
-notification to the card (to allow for clean resets) can be done later.
+> We fix this by allowing the DT endpoint subnode to be missing.  This is
+> important for platforms like the CM4 which have a standard PCIe socket and
+> the endpoint device is unknown.
 > 
+> Please do not accept this commit until someone with a CM4 has tested
+> this solution; I have only emulated the problem and fix on different
+> platform.
 > 
->>   [...]
->>>>> --- a/drivers/power/reset/ltc2952-poweroff.c
->>>>> +++ b/drivers/power/reset/ltc2952-poweroff.c
->>> [...]
->>> This is setting a variable only, and once it's set (data->kernel_panic
->>> is the bool's name), it just bails out the IRQ handler and a timer
->>> setting - this timer seems kinda tricky, so bailing out ASAP makes sense
->>> IMHO.
->>
->> IMHO, the timer informs the hardware that the system is still alive
->> in the middle of panic(). If the timer is not working then the
->> hardware (chip) will think that the system frozen in panic()
->> and will power off the system. See the comments in
->> drivers/power/reset/ltc2952-poweroff.c:
->> [.... snip ...]
->> IMHO, we really have to keep it alive until we reach the reboot stage.
->>
->> Another question is how it actually works when the interrupts are
->> disabled during panic() and the timer callbacks are not handled.
+> Note that a bisection identified
 > 
-> Agreed here! Guess I can move this one the reboot list, fine by me.
-> Unless PM folks think otherwise.
+> commit 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
 > 
+> as the first failing commit.  This commit is a regression, but is unrelated
+> and was fixed by a subsequent commit in the original patchset.
 > 
->> [...]
->>> Disagree here, I'm CCing Florian for information.
->>>
->>> This notifier preserves RAM so it's *very interesting* if we have
->>> kmsg_dump() for example, but maybe might be also relevant in case kdump
->>> kernel is configured to store something in a persistent RAM (then,
->>> without this notifier, after kdump reboots the system data would be lost).
->>
->> I see. It is actually similar problem as with
->> drivers/firmware/google/gsmi.c.
->>
->> I does similar things like kmsg_dump() so it should be called in
->> the same location (after info notifier list and before kdump).
->>
->> A solution might be to put it at these notifiers at the very
->> end of the "info" list or make extra "dump" notifier list.
+> [1] https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> [2] Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
 > 
-> Here I still disagree. I've commented in the other response thread
-> (about Google gsmi) about the semantics of the hypervisor list, but
-> again: this list should contain callbacks that
+> Fixes: 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+> Fixes: 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> ---
+>  drivers/pci/controller/pcie-brcmstb.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> (a) Should run early, _by default_ before a kdump;
-> (b) Communicate with the firmware/hypervisor in a "low-risk" way;
+> diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+> index ba5c120816b2..adca74e235cb 100644
+> --- a/drivers/pci/controller/pcie-brcmstb.c
+> +++ b/drivers/pci/controller/pcie-brcmstb.c
+> @@ -540,16 +540,18 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
+>  
+>  static int brcm_pcie_add_bus(struct pci_bus *bus)
+>  {
+> -	struct device *dev = &bus->dev;
+>  	struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
+>  	int ret;
+>  
+> -	if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
+> +	/* Only busno==1 requires us to linkup */
+> +	if ((int)bus->number != 1)
+>  		return 0;
+>  
+>  	ret = pci_subdev_regulators_add_bus(bus);
+> -	if (ret)
+> +	if (ret) {
+> +		pcie->refusal_mode = true;
+>  		return ret;
+> +	}
+>  
+>  	/* Grab the regulators for suspend/resume */
+>  	pcie->sr = bus->dev.driver_data;
 > 
-> Imagine a scenario where users configure kdump kernel to save something
-> in a persistent form in DRAM - it'd be like a late pstore, in the next
-> kernel. This callback enables that, it's meant to inform FW "hey, panic
-> happened, please from now on don't clear the RAM in the next FW-reboot".
-> I don't see a reason to postpone that - let's see if the maintainers
-> have an opinion.
+> base-commit: ef1302160bfb19f804451d0e919266703501c875
+> prerequisite-patch-id: 23a425390a4226bd70bbff459148c80f5e28379c
+> prerequisite-patch-id: e3f2875124b46b2b1cf9ea28883bf0c864b79479
+> prerequisite-patch-id: 9cdd706ee2038c7b393c4d65ff76a1873df1ca03
+> prerequisite-patch-id: 332ac90be6e4e4110e27bdd1caaff212c129f547
+> prerequisite-patch-id: 32a74f87cbfe9e8d52c34a4edeee6d271925665a
+> prerequisite-patch-id: f57cdf7ec7080bb8c95782bc7c3ec672db8ec1ce
+> prerequisite-patch-id: 18dc9236aed47f708f5c854afd832f3c80be5ea7
+> prerequisite-patch-id: dd147c6854c4ca12a9a8bd4f5714968a59d60e4e
+> -- 
+> 2.17.1
 > 
-> Cheers,
-> 
-> 
-> Guilherme
-
---000000000000dfa72105df509efa
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-cRe0CRXA7ypOJSgxO/nOOyQoaJxT7CGg1npOeSpPjEuc3fE4xum3l0nvU85hj6MlKZu43hokdBh0
-D0nLyyhEwlR3AC/msdff/UGbM/JR9vk812RP4m/aNWZFJwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRpzY290dC5icmFuZGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUOhjEpl04Sz9dh5MI82E1
-V39lM/owDQYJKoZIhvcNAQELBQADggEBAA7Rlypx/esz/iq1yA4+KW7uwV/aBY344BWcXt6I+SNK
-VwFBgFWfLj5vaEud9TVv2fPSiaHJo0umemOJk+43QD+bsoqmgcFXd21PrOt7Jjs+jjVED9VC5kJq
-S4NNKUkS+BqijJwSegtVygrc/atrIlJbjI21q4qpemUo5fgwqCNm++BmBGTI8yA09vtGSNDRN42k
-lLX9hl3iEj5SBgkQqCbbnoE+ZjjKfqt7ED166WhgyQWNrl39yLcvLj+JRUB3RuvXKZjH0NQEEBII
-wZBDSkyneykLt3CBNIhSCTxKM6OWxVp936ALSa5K9FNy00TeWSpokR6NmzaW8VD/EjTgvqAxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgx9oXSJpKniO4dS
-Gk8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIILFBbO32At0jlQYmvDlBzxxKfke
-QfIJzMrdu2nIpFihMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDUxODIyMTcxOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBIc7nOZb/W3CkCvD0kf3LJMsgwBiUyTBcOQHeudvIMXgiB
-QQ8+U0c03geY7pr3oC9UDTjRSIF1RwJcP3BwheBLJu7kfHK3jy1JiouqgOLb3cV+n/v8R/+Xc+Q9
-MlWFHGJrAD9gPOMrvJ1KMqx0CFXaz0l8rlyXDGV6s+r8X1jt1rnbjZIGoBbGOP0+bObjxE+1Gdyd
-bQJRFfYVGChsqzAPm+mOmOBOafJhgclqEhJSTDfXRiL12HGLyzWipIAmcAo0FrSMyjIkYTvnPG2n
-n3uZVbKScFO51F6GoCOYWwE5SK0CHfHOWXk8TRl9CTBHlWCZR0XRAfCmijeVCq6/xT0J
---000000000000dfa72105df509efa--

@@ -2,82 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4B652B308
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDC552B2E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbiERGux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37030 "EHLO
+        id S231610AbiERGvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbiERGup (ORCPT
+        with ESMTP id S231859AbiERGvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:50:45 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08882314E;
-        Tue, 17 May 2022 23:50:32 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso1166626pjg.0;
-        Tue, 17 May 2022 23:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dJi7DyL08jLb0JerJmEdQTHN+3oTFu1F6uZ7CfAP2l8=;
-        b=QoWjQpN4B1ybyGss5uqphvodb+BZPe7VNEv34NpKZEOkctrmfA7J/H+MPSjRNAigod
-         jQB14L5lTX9KRToUQEi5L9UsCtPf3xyp4GOoV5vdEAeoyqfiq7+ZFVhFia1ExbBTi1FB
-         Cjs8dDBhqoB6HeB+B7mTUBTfdBg29YYKDu/WDjRSIJYob9fOxiD1xKWw1sSsu4317HSv
-         tDYtU0W73ehiMsPR1k05QaMPrxEi3OcUc0gSRUGEHB1MmAPcT5CsTFDRETFGAmCrxrUc
-         7L6Z3u1GwltF9nBr7MSB9a37E5tOtvWeElzsBWeV63MQtl0P4D13Q5Ymnbk+wxDaZnfq
-         pBSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dJi7DyL08jLb0JerJmEdQTHN+3oTFu1F6uZ7CfAP2l8=;
-        b=3YpTeux8Q2YxrFWfhnE77gl5Em3lxNFM/1PLce8i7CCcXqHfQ4c/QqRV32zv/mqEQ9
-         aLG3g8exBEUHPD04f7iaOwgp0QHWH3cW/DoTtO3d+WSusV+g+UGEQXGH+BYujryOCPia
-         Hx0fSAqFlKNr2U6/Oh3Fteqa9bqpVcZyJXYPI+WsAczB1sVpZUOoohsNpjPza88H1knR
-         aK96D4wp9PHNJhwVq++xd67nAkQA89WCPi0ikASeAXT01/HagEz6oN4R6fPLAEvOeVrs
-         HmoKBy5G4A54cMpn7GO06Ttxv+fYc2PszNveU2J3rvgzA1DRtWo0+B39omPEhJ58PgG8
-         5D8w==
-X-Gm-Message-State: AOAM533jVz8Tk+FinGvKkwr/TvENfxFNmQwrHjMumQuaPG2BNBRpyDzN
-        jKLEzopQLwL6+SnOYNrhZEo=
-X-Google-Smtp-Source: ABdhPJweIjKiVSRSYmEAghlVfkmU36X6uzXxS/q8JyZMABQpv9hL8DzRYEz3YmZnwUQMuLfEN7PmKA==
-X-Received: by 2002:a17:902:82c7:b0:161:4936:f068 with SMTP id u7-20020a17090282c700b001614936f068mr19888302plz.145.1652856632366;
-        Tue, 17 May 2022 23:50:32 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-19.three.co.id. [180.214.232.19])
-        by smtp.gmail.com with ESMTPSA id q9-20020a170902a3c900b00161b50c3db4sm786019plb.94.2022.05.17.23.50.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 23:50:31 -0700 (PDT)
-Message-ID: <2816e961-08f9-407b-e8f8-b63f844d864c@gmail.com>
-Date:   Wed, 18 May 2022 13:50:26 +0700
+        Wed, 18 May 2022 02:51:22 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994E612AD5;
+        Tue, 17 May 2022 23:51:05 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24I6fjc5016984;
+        Wed, 18 May 2022 06:51:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=mime-version : date :
+ from : to : subject : reply-to : in-reply-to : references : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=NbY09xWXg9+yIVklR6/+BeWHEQALFJnWz2JOVSnd4iI=;
+ b=e0RbybpdloMudrc7yxVmWiX0gmf/MUTsHuH0YO4omh7EV1qzSLzDVSN3db4qh+H1/3Kc
+ J8tImjE7lf4BHRPu9w0ya5t2LAEpvgA0BU22U2AIkfzQZ6av9nmhk3k1HnG/Lwar+4Rj
+ gre56subsB7uoIc3NRMYMuT3Jpcv3oFpf90MbUQyNECZ6h+F+m2yZ149DDredHpxOcUK
+ TEf5r3SOhtfFBaFb0kXxjX0W8VXwaeabGy54uflEweDHg1Fn3gnpNovSKKvSLuG1LoBU
+ la/A1Z72vKBBp4OfdElgLRQo4arF3AKJq2NNe+FBkeyzuII1nKUaCKCmS2niiB1G5C1e hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4urmg68h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 06:51:00 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24I6hg0h032084;
+        Wed, 18 May 2022 06:51:00 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4urmg67s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 06:51:00 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24I6Wp99026748;
+        Wed, 18 May 2022 06:50:59 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma05wdc.us.ibm.com with ESMTP id 3g242aarun-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 06:50:59 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24I6owP64916092
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 May 2022 06:50:58 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45C6FB2071;
+        Wed, 18 May 2022 06:50:58 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C17F6B2064;
+        Wed, 18 May 2022 06:50:57 +0000 (GMT)
+Received: from ltc.linux.ibm.com (unknown [9.10.229.42])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 18 May 2022 06:50:57 +0000 (GMT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] platform/chrome: Use tables for values lists of
- ChromeOS ACPI sysfs ABI
-Content-Language: en-US
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     linux-doc@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Benson Leung <bleung@google.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220518031750.21923-1-bagasdotme@gmail.com>
- <20220518031750.21923-2-bagasdotme@gmail.com> <YoRp/49OA9tqMd9N@google.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <YoRp/49OA9tqMd9N@google.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 18 May 2022 08:50:57 +0200
+From:   Harald Freudenberger <freude@linux.ibm.com>
+To:     undisclosed-recipients:;
+Subject: Re: [PATCH] s390/crypto: fix scatterwalk_unmap() callers in AES-GCM
+Reply-To: freude@linux.ibm.com
+In-Reply-To: <YoPi5eH+oFJ2anQh@osiris>
+References: <20220517143047.3054498-1-jannh@google.com>
+ <YoPi5eH+oFJ2anQh@osiris>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <96f311d4cb0b95752cfefd424fe0f7c3@linux.ibm.com>
+X-Sender: freude@linux.ibm.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: _Q5VPIp3Opuw5KPtLJUfChcbSSX-ACeZ
+X-Proofpoint-ORIG-GUID: 7WCvDsC_mOUQCbivMcFgd3xmxSfWo3pt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_02,2022-05-17_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ phishscore=0 mlxlogscore=779 clxscore=1015 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205180035
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,29 +93,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/22 10:37, Tzung-Bi Shih wrote:
-> On Wed, May 18, 2022 at 10:17:50AM +0700, Bagas Sanjaya wrote:
->>  What:		/sys/bus/platform/devices/GGL0001:*/CHSW
->>  Date:		May 2022
->>  KernelVersion:	5.19
->>  Description:
->>  		This file shows the switch position for the Chrome OS specific
->> -		hardware switches.
->> -		  * 0   - No changes.
->> -		  * 2   - Recovery button was pressed when firmware booted.
->> -		  * 4   - Recovery button was pressed when EC firmware booted.
->> -		  * 32  - Developer switch was enabled when firmware booted.
->> -		  * 512 - Firmware write protection was disabled when firmware
->> -			  booted.
->> +		hardware switches when the firmare is booted.
+On 2022-05-17 20:01, Heiko Carstens wrote:
+> On Tue, May 17, 2022 at 04:30:47PM +0200, Jann Horn wrote:
+>> The argument of scatterwalk_unmap() is supposed to be the void* that 
+>> was
+>> returned by the previous scatterwalk_map() call.
+>> The s390 AES-GCM implementation was instead passing the pointer to the
+>> struct scatter_walk.
+>> 
+>> This doesn't actually break anything because scatterwalk_unmap() only 
+>> uses
+>> its argument under CONFIG_HIGHMEM and ARCH_HAS_FLUSH_ON_KUNMAP.
+>> 
+>> Note that I have not tested this patch in any way, not even 
+>> compile-tested
+>> it.
+>> 
+>> Fixes: bf7fa038707c ("s390/crypto: add s390 platform specific aes gcm 
+>> support.")
+>> Signed-off-by: Jann Horn <jannh@google.com>
+>> ---
+>> IDK which tree this has to go through - s390 or crypto?
+>> maybe s390 is better, since they can actually test it?
+>> 
+>>  arch/s390/crypto/aes_s390.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> s/firmare/firmware/.
+> This can go via the s390 tree, however I'd like to have an ACK from
+> Harald, who wrote the original code.
 > 
-> Could you fix it in v2 and also Cc to <chrome-platform@lists.linux.dev>?
-
-OK, but regarding the schedule, we are on -rc7 (official mainline release
-will be imminent). Maybe I can send the v2 immediately, or should I wait
-for a day?
-
--- 
-An old man doll... just what I always wanted! - Clara
+>> diff --git a/arch/s390/crypto/aes_s390.c b/arch/s390/crypto/aes_s390.c
+>> index 54c7536f2482..1023e9d43d44 100644
+>> --- a/arch/s390/crypto/aes_s390.c
+>> +++ b/arch/s390/crypto/aes_s390.c
+>> @@ -701,7 +701,7 @@ static inline void 
+>> _gcm_sg_unmap_and_advance(struct gcm_sg_walk *gw,
+>>  					     unsigned int nbytes)
+>>  {
+>>  	gw->walk_bytes_remain -= nbytes;
+>> -	scatterwalk_unmap(&gw->walk);
+>> +	scatterwalk_unmap(gw->walk_ptr);
+>>  	scatterwalk_advance(&gw->walk, nbytes);
+>>  	scatterwalk_done(&gw->walk, 0, gw->walk_bytes_remain);
+>>  	gw->walk_ptr = NULL;
+>> @@ -776,7 +776,7 @@ static int gcm_out_walk_go(struct gcm_sg_walk *gw, 
+>> unsigned int minbytesneeded)
+>>  		goto out;
+>>  	}
+>> 
+>> -	scatterwalk_unmap(&gw->walk);
+>> +	scatterwalk_unmap(gw->walk_ptr);
+>>  	gw->walk_ptr = NULL;
+>> 
+>>  	gw->ptr = gw->buf;
+>> 
+>> base-commit: 42226c989789d8da4af1de0c31070c96726d990c
+>> --
+>> 2.36.0.550.gb090851708-goog
+>> 
+Give me a chance to test this and when the testcases all pass, I'll give 
+a green light....

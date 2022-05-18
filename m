@@ -2,41 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B66C52B6E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54A552B72B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234634AbiERJmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S234555AbiERJjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234615AbiERJke (ORCPT
+        with ESMTP id S234556AbiERJjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:40:34 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984D714A27A;
-        Wed, 18 May 2022 02:40:01 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L37H213JpzhZHF;
-        Wed, 18 May 2022 17:39:10 +0800 (CST)
-Received: from huawei.com (10.67.174.96) by canpemm500005.china.huawei.com
- (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 17:39:59 +0800
-From:   Zhang Jianhua <chris.zjh@huawei.com>
-To:     <ebiggers@kernel.org>, <tytso@mit.edu>
-CC:     <linux-fscrypt@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] fs-verity: Use struct_size() helper in fsverity_ioctl_measure()
-Date:   Wed, 18 May 2022 17:38:29 +0800
-Message-ID: <20220518093829.2248801-1-chris.zjh@huawei.com>
-X-Mailer: git-send-email 2.31.0
+        Wed, 18 May 2022 05:39:32 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E86D12B004
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:39:30 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d15so2610103lfk.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xt6cx7jfdtIzxFo8xURtsGgmnzna5Y1WbrzL+0I9i88=;
+        b=WdPPOTLZEmP6fLpXhxUCY+FLR0re9MImuXhfUpZuwAp6zbSPxLr9o/TgQAipysxVbr
+         erLdjvEzsUZ2JUNRQl7E2cFyxpMdNeKAlMNN/NckLhBlbhuDZUb4SIhoCEAYu74RBLNB
+         M7S6+ykzn5Zru4xrCcZEv60+FqmjKlBKlvA93LKNGsTXJs5KFUvlnW+Z5Tgt4xY+gpIw
+         xbH8qUlPxCLx852Z//f6lt6CsxAfmJ/3eunpiX+H7KOOKs3kKwG6EfdVuu9ErPAxOiEQ
+         8tnnjBpyyZRTj2LWqjVtUn3WdNqn1gDa/JDI/OtKR4DfFT0mHaclzxv8gO31H+v9m0Iv
+         ICYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xt6cx7jfdtIzxFo8xURtsGgmnzna5Y1WbrzL+0I9i88=;
+        b=eQk8v91nH5NoipPM9xFOL9+y4w8vbXrWyTWhSvP/lEcwlyRK9uWjQ5thx5j5CE/akw
+         +5iHEIaQx8n3tglnPxSbc2WhN82zyOLnY4qIixe+Z1FEmBkTWHCkmlhR3D9R1wUOKFCO
+         mNGAfM3pAEXMkU+RSYLMF+BRgCDpGI5VPya31YuJvV1diu6YasLjc4wgfAjTje02Utro
+         SYRYj/x0keMG++mAWRqCU1ZFM4iRcmvG4+cxJUaTe0JiHg3X6aj7CDfc6WUC/EpdO2F2
+         JJK2oIGYkyc+TzDzIqVekZ8U6DNKpg0zW8bclaKehuk8E7NbbQI1rR9zvzy0HtTvPiSG
+         YJHQ==
+X-Gm-Message-State: AOAM5312pt1N856r+WpJ54iKSYFXANIH/3ojLlOH2sdH5eBBV0ejxwbb
+        WQ6q4asrtd1t/ij1PRotoAR/PQ==
+X-Google-Smtp-Source: ABdhPJwqm4lmlIPHLTfO667Gwmm+iuswyu2QPgkfJ+MIsx6YbSKKBtyBjeDJy2jgXwhjUL9H3h/uyQ==
+X-Received: by 2002:a05:6512:3a86:b0:472:6287:6994 with SMTP id q6-20020a0565123a8600b0047262876994mr19830525lfu.16.1652866768962;
+        Wed, 18 May 2022 02:39:28 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id s9-20020a056512214900b0047255d21163sm153402lfr.146.2022.05.18.02.39.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 02:39:28 -0700 (PDT)
+Message-ID: <bb566eb7-c571-9a51-af51-78e36412fbfc@linaro.org>
+Date:   Wed, 18 May 2022 11:39:27 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.96]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH net v2] NFC: hci: fix sleep in atomic context bugs in
+ nfc_hci_hcp_message_tx
+Content-Language: en-US
+To:     duoming@zju.edu.cn
+Cc:     linux-kernel@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, gregkh@linuxfoundation.org,
+        alexander.deucher@amd.com, broonie@kernel.org,
+        netdev@vger.kernel.org
+References: <20220517105526.114421-1-duoming@zju.edu.cn>
+ <2ce7a871-3e55-ae50-955c-bf04a443aba3@linaro.org>
+ <71c24f38.1a1f4.180d29ff1fd.Coremail.duoming@zju.edu.cn>
+ <68ccef70-ef30-8f53-6ec5-17ce5815089c@linaro.org>
+ <454a29ba.1b9b1.180d576985b.Coremail.duoming@zju.edu.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <454a29ba.1b9b1.180d576985b.Coremail.duoming@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,45 +81,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version,
-in order to avoid any potential type mistakes or integer overflows that,
-in the worst scenario, could lead to heap overflows.
+On 18/05/2022 06:39, duoming@zju.edu.cn wrote:
+>> There is.
+>>
+>> nfc_hci_failure -> spin lock -> nfc_driver_failure -> nfc_targets_found
+>> -> device_lock
+>>
+>> I found it just by a very quick look, so I suspect there are several
+>> other places, not really checked.
+> 
+> I agree with you, the spin_lock is not a good solution to this problem. There is another solution:
+> 
+> We could put the nfc_hci_send_event() of st21nfca_se_wt_timeout() in a work item, then, using
+> schedule_work() in st21nfca_se_wt_timeout() to execute the work item. The schedule_work() will
+> wake up another kernel thread which is in process context to execute the bottom half of the interrupt, 
+> so it allows sleep.
+> 
+> The following is the details.
 
-Also, address the following sparse warnings:
-fs/verity/measure.c:48:9: warning: using sizeof on a flexible structure
-fs/verity/measure.c:52:38: warning: using sizeof on a flexible structure
+Yes, this seems good solution. You might also need to add
+cancel_work_sync to all places removing the timer.
 
-Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
----
- fs/verity/measure.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/fs/verity/measure.c b/fs/verity/measure.c
-index e99c00350c28..4a388116d0de 100644
---- a/fs/verity/measure.c
-+++ b/fs/verity/measure.c
-@@ -27,6 +27,7 @@ int fsverity_ioctl_measure(struct file *filp, void __user *_uarg)
- 	const struct fsverity_info *vi;
- 	const struct fsverity_hash_alg *hash_alg;
- 	struct fsverity_digest arg;
-+	size_t arg_size = struct_size(&arg, digest, 0);
- 
- 	vi = fsverity_get_info(inode);
- 	if (!vi)
-@@ -44,11 +45,11 @@ int fsverity_ioctl_measure(struct file *filp, void __user *_uarg)
- 	if (arg.digest_size < hash_alg->digest_size)
- 		return -EOVERFLOW;
- 
--	memset(&arg, 0, sizeof(arg));
-+	memset(&arg, 0, arg_size);
- 	arg.digest_algorithm = hash_alg - fsverity_hash_algs;
- 	arg.digest_size = hash_alg->digest_size;
- 
--	if (copy_to_user(uarg, &arg, sizeof(arg)))
-+	if (copy_to_user(uarg, &arg, arg_size))
- 		return -EFAULT;
- 
- 	if (copy_to_user(uarg->digest, vi->file_digest, hash_alg->digest_size))
--- 
-2.31.0
-
+Best regards,
+Krzysztof

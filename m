@@ -2,645 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CDC52B562
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B39852B54C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233502AbiERIsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S233613AbiERIlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233479AbiERIsh (ORCPT
+        with ESMTP id S233610AbiERIlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:48:37 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BADB1356A5;
-        Wed, 18 May 2022 01:48:36 -0700 (PDT)
+        Wed, 18 May 2022 04:41:45 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FCA4D9D1;
+        Wed, 18 May 2022 01:41:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652863716; x=1684399716;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2GDY2c51kZJp9bM1Jz9wHapDjhEWRNUTkwTgop0u5wQ=;
-  b=gIdDLiE6CVx1uB16AOdzYGbKjxddDVwY9mjVxUo/csRnj3pbnZfgTlqF
-   5W1IxyGD1XyIncoOkTv2jrO9Q9AQ0/EjpvfLW8QmUe9sWBsp1bXVPcy6o
-   KrzQeH93Iwgcrqnz7TBNuxx1my/00WbdHR7HlxNI/bXOP45t57Uq26J2w
-   kQ30Pd1MLxitfaD7TAMZs/r3Mg3UF0Pjh0M2TgKCQA5pqRJyn1dbdM2Wf
-   7vh6HrFJwTyosFXScRXBhhegxDjKfSoSe98TyV5kLFj9b1TjoceX7OaOq
-   hbLMYZsrz0wtQhKy8jFVKE9NIiOmL3ju7Dl6Fu8SwT3VtieH8q1brUBWo
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271257728"
+  t=1652863304; x=1684399304;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=TpsCICryPUcT3JfqRs7jrqTjzL2NlM8lKbag+c3j9Mo=;
+  b=H6gdIjjcUDyOgyXuGTMZUe68kePA5ykr9R3DJDBUbDlrHPIS068nAFtM
+   40kBpNrNla+abe2lRaM2zg/Z5506NWVPoxrMuKgUyhES3QpKXPXgy/3D6
+   esid0BEHMdsjbLegys+aHUOTLcv+0sTuJVYe5OdTkEAYVei8NmPa4J7kY
+   zbGktoL4xxKJeCBV2OLyKRqHtax1PO48fDx3j/QyonyHJsHMvOItUD2Jp
+   3TYOxTrx8yCDOr4iGaEIAmdgoDWJsvIlmTV+7YaH9DDDG9pNIwQTc19Bz
+   dAU5exlVMtyGqBbT8p1tXjUJ6EYDDHirQPkXHOwtlUXMKSiOrvBKCl9N9
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="334607037"
 X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="271257728"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:48:35 -0700
+   d="scan'208";a="334607037"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:41:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="597661313"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 18 May 2022 01:48:32 -0700
-Date:   Wed, 18 May 2022 16:40:59 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, lee.jones@linaro.org,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        trix@redhat.com, marpagan@redhat.com, lgoncalv@redhat.com,
-        matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com
-Subject: Re: [PATCH v20 5/5] fpga: m10bmc-sec: add max10 secure update
-  functions
-Message-ID: <20220518084059.GB55267@yilunxu-OptiPlex-7050>
-References: <20220516234941.592886-1-russell.h.weight@intel.com>
- <20220516234941.592886-6-russell.h.weight@intel.com>
- <20220517094824.GC40711@yilunxu-OptiPlex-7050>
- <4886d75f-f055-accf-9df0-c6e12f901a51@intel.com>
+   d="scan'208";a="545336200"
+Received: from orsmsx605.amr.corp.intel.com ([10.22.229.18])
+  by orsmga006.jf.intel.com with ESMTP; 18 May 2022 01:41:43 -0700
+Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
+ ORSMSX605.amr.corp.intel.com (10.22.229.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 18 May 2022 01:41:43 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 18 May 2022 01:41:42 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 18 May 2022 01:41:42 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.44) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 18 May 2022 01:41:37 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FZMkW0UItq8TVa04GPvihnKNiwmC39cY3vNo1uZBe2cyv5S0I6zGQfEOe7xnyYrfHn1XEZklnON0jQL00AqkLnTAnD9RL3Huwjx5Rh3XHhdyt2p56kSKCKqdUBiLqmdTDE8c6g0oa9vTH0ptTf8GKm2M1V8HhKzWXAwFZRxWi7bwpi+yXcXXm97OKzyWtUm8BR3ocTMh8ELRnjdJ4dPSRWqWt9i9UkSZY0Px6iqgFwzSS2nBhdratLi4RczqCBJk+FKEbOpAr2cNsPUHzC3hsZZ/eNZ2WP9fDYTkRdS1wuqJoTgeUxO5J/SDeI4MbGZHBCBKusRxe6+9G4UZaZ2Akw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mQaQznnzSpXuIWKHAE2RwrJTXra7XkZS1NaLrtw126k=;
+ b=MtSZn/JhZL6ailApWsCZfCtHLvO197sV+/HZgoG/74QC8M0cYGy6muwWTyKYuZhpBaB6pRJwvhHpXY+BDr0zZ8cmE3Sc6S0wtTgKgCE4Y1I8F3u+XyUNpaJsjU2fRygt5HPxO/qBmILZenZj81Cm5dkHII1WyQRq2pD8mK4oLemcOyjwQXvOxP8hn4L8AKQS78RV5uRbZ4FtSC+GVbKtLKlvcmSGSdCrMrqvRRPcYTmyXFvGJEmoiOCxR59cuAmXaguaKHFeBAmiV/0fSDqCvhe+WO0C+Y20lJ8I6n7DHiDlhBHzeA/1lCLSGQxyFnYXDDmufxkP6BLLBiF58E10cQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3180.namprd11.prod.outlook.com (2603:10b6:5:9::13) by
+ BY5PR11MB4402.namprd11.prod.outlook.com (2603:10b6:a03:1c9::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.17; Wed, 18 May
+ 2022 08:41:35 +0000
+Received: from DM6PR11MB3180.namprd11.prod.outlook.com
+ ([fe80::b1fa:393c:9fb6:6871]) by DM6PR11MB3180.namprd11.prod.outlook.com
+ ([fe80::b1fa:393c:9fb6:6871%5]) with mapi id 15.20.5250.018; Wed, 18 May 2022
+ 08:41:34 +0000
+Message-ID: <002e5ec2-478d-ca10-5a71-5390dfb69173@intel.com>
+Date:   Wed, 18 May 2022 10:41:22 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.0
+Subject: Re: [PATCH 04/20] media: s5p-mfc: Rename IS_MFCV10 macro
+Content-Language: en-US
+To:     Smitha T Murthy <smitha.t@samsung.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <m.szyprowski@samsung.com>, <mchehab@kernel.org>,
+        <hverkuil-cisco@xs4all.nl>, <ezequiel@vanguardiasur.com.ar>,
+        <jernej.skrabec@gmail.com>, <benjamin.gaignard@collabora.com>,
+        <stanimir.varbanov@linaro.org>, <dillon.minfei@gmail.com>,
+        <david.plowman@raspberrypi.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <andi@etezian.org>,
+        <alim.akhtar@samsung.com>, <aswani.reddy@samsung.com>,
+        <pankaj.dubey@samsung.com>, <linux-fsd@tesla.com>
+References: <20220517125548.14746-1-smitha.t@samsung.com>
+ <CGME20220517125601epcas5p47dfcac0c5e0c412eb0c335759c51c941@epcas5p4.samsung.com>
+ <20220517125548.14746-5-smitha.t@samsung.com>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20220517125548.14746-5-smitha.t@samsung.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AS9PR07CA0012.eurprd07.prod.outlook.com
+ (2603:10a6:20b:46c::17) To DM6PR11MB3180.namprd11.prod.outlook.com
+ (2603:10b6:5:9::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4886d75f-f055-accf-9df0-c6e12f901a51@intel.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6581f67f-056c-4c90-ff9b-08da38aa36fd
+X-MS-TrafficTypeDiagnostic: BY5PR11MB4402:EE_
+X-Microsoft-Antispam-PRVS: <BY5PR11MB440223AD9010E43A3EE9BB6DEBD19@BY5PR11MB4402.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: E2qXNowjpDVanWZKOHl8dLgLNws2Iw7W+czYhrPXekzuI/c7MIIIB90eIuc81MM561vSBKLMZbRjvwkdobXA5+R020iuYRimUWxVy6rQozQVZ0UsOVqt1H83BLNqjRKXmuMoCcR+rJ8cpmiYb8dRxoATjSPtOXyCeeplHRM7fRI3cK8V0W719qU3Pco4YHRQTq/QE+22la59TJRcmLG4UQHGOPnrXUBALp5JeRJFTOukK5fz/OP7a6RLH6r8To7ctbOSi7k0F0qyrrsxIVoeZYN90yOVUG1uJh7/Ozhqkz+i3QcvrN43h26j54lbq4lU/XoEOfGE3f9dO2+oFr8ZAmm/2CFNXQk8AllEaV0Tt4QHkDxDYE1ObUV25WzKKc5EbvALkyfCMb5YJIeVhJ2saWHINlxQI2Ko4VRI45Il2CUzBSqm9donf7V/OpJ29wYaM2yndMaV7uHYdWlwFd/PbC/qVNfjNAg0ULiB0ZkvUbaW8nUf3YyRz43icl2p4JqtImXINPbpE8oojbf85mBQ98/VBrkM1DFloRf7uJfTY7wDnq8GhFCTQUlrlp8Z1pzJRtvoeWaeobQtHrVjRB5SfkjBi95IAx/vu/E7z1P+uSmhFgH8BUVX7N5nBGlCauB59AW7h9g96RVIapAt0wnB80Oaby8YEkN6xc3SkfOyB3UsrQlyAonkCmK8mfQfHh+3Sb2SbKJh32xhf1Ezu6BXvhnbMKf8dYc95uXvI4LpK0o=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3180.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(44832011)(36756003)(4326008)(66946007)(66556008)(66476007)(7416002)(8936002)(5660300002)(508600001)(8676002)(2616005)(6486002)(31696002)(26005)(53546011)(6506007)(83380400001)(86362001)(82960400001)(38100700002)(2906002)(6666004)(36916002)(186003)(31686004)(6512007)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VjVENmJ3cTU4djZPU0NlbDA0VXd1Z0paczY0MEM4bUx2MXZpeVhPbkxSQ2VB?=
+ =?utf-8?B?YzZlTktuSlo1bGdGUVNpSlprMXNZZDJzdmFKNmhWWVZpb0daVEp1VmxIMzdQ?=
+ =?utf-8?B?b1lkRW5pWTJpbFIyYk9JeVJkQTFuL0pLQ1IzY0ZmRHlmaDZuRWhjcWhVa1Mz?=
+ =?utf-8?B?N3dtTHRURUVWajJjTWVDRVNOaHdsOXdBcGk1MWJiL3hFZnZEV0ZxYzFnSG83?=
+ =?utf-8?B?cHpuUkdBTHU5aS9JQXV6VmhlSERtOVZGM3ZOVWpSNjJGNEhxaVJibnVlSEUr?=
+ =?utf-8?B?SjZjN0w4UXVZSG9aZlVCMmpaQzZhZzJFSDhPalU3OEtmdmNLUTBReG4rT21J?=
+ =?utf-8?B?d0NVcmRnNDlFb09LQ1RiZ2VnRm03ZmtjOVY5eExRWERoaFdqa1ZxeDlxbklj?=
+ =?utf-8?B?SERxcklrMlhwdElhdDcrSW10aW13Yml2YU52bExuMjRpRGRHcFBjNU1VU21E?=
+ =?utf-8?B?QmthYzgvdGlMWDVKTldUamhzWDlTbUkyN2kzVFdGT2lzT0JlQTZ0YldIMEpH?=
+ =?utf-8?B?a2xzVTR6LzVkak1OamhTYVRRQW9KT0pvMUJBVzlER3pPU0FYZTRsMVpZc0l5?=
+ =?utf-8?B?TE9HaTZUZVJLdXFRbk96TytIV1JPYVlFWGlSbUxPcE9rTUZFaWNlb2c2VDVT?=
+ =?utf-8?B?eXc2TWo4dFlGZVZFdDFERStqamw1V0NiK1lJN3BqSXV2NnArNGZNU1E0MHhM?=
+ =?utf-8?B?dlppa0gwZTFuWWxBU2c2WDlEdUtndXVhblRLYWlhbWJQc3lMdGZ6eUFwamp2?=
+ =?utf-8?B?dEpOdUhST2ZpaE4vYmNNSmRIQVhpMWRPNkY4dUF6ZkJuV0JPWlJuenZ2cjJZ?=
+ =?utf-8?B?dDBObHNOT3pKVGJUcnc2ZVBnNkZNb09MU1dwVlNwUDFaOGRrSTdLaUpCNlhP?=
+ =?utf-8?B?ejVWYXZjZmtPdjYvRVdVbDdhVVNKdEpFcjJLeEM5eDRjdkszajQ0T0haNUcr?=
+ =?utf-8?B?MEtsNW8vQ0JCZVVjVGd2RExKbUkxeDcwOUI3RlF5SWJoTWxPTHZWOUJXeURj?=
+ =?utf-8?B?TXlDQklGM1VRU2FpNTVCa0tvYi9MVmZHYzZMNEZrY3liblhkbEZCbER2Mk91?=
+ =?utf-8?B?dzA1aFNqeFE2eW91SGRTVzI0TmY1eEJLTk9MVGdFZ0JoVmZaT3N5WEYvZ3dD?=
+ =?utf-8?B?SFZyWks4NTlwbklTUnZrTWFtQmsyNGdxek0zN1NBK1dSaHJrTDE0Sk9vbldC?=
+ =?utf-8?B?RFFjTUdleXdISEd4Wi90Vjhzc3hYUlg4NmF4N2Y3RHplbEszSS9uVlpZVE02?=
+ =?utf-8?B?UnNxakZDQUtyc3VSbUlXZlVIL3NzbnBkUHZNbTk3ZGV4cFVYNDFGdmtUVnBE?=
+ =?utf-8?B?RDNvblk5NEZVYWZzRWpzclJLaGYvZzBxcTRydVRHejRhU08xT01VZi8reWxy?=
+ =?utf-8?B?SWlTWkU0WGZocUFPS3dZdWNXWFVBdzErTW1VcUZaZkN6K0RxazZuTkQrOUxD?=
+ =?utf-8?B?VlVKalgzLy90eEVuWEdxQmV6bzFlNlRIV2lNbHBnUDRYNGVsZGZNRFlKT0ZQ?=
+ =?utf-8?B?VkZZbEoyYVNGbVZsdW1FWnlISGxzYjMzdWNieW1tRFhVdmYrbXBHdVc4eVV1?=
+ =?utf-8?B?S1hVYjA5TDduTW94L3gwcjIzUVkxZFMzVFF5MVVXU1NHUWlkemdSbVZHbWVi?=
+ =?utf-8?B?YUN3djYvaWNUdkFDRTNUaDRwQm45dytaeHJPU3F3Q2lKZFJjbXB2NVRaM3ps?=
+ =?utf-8?B?a1lSd3lQRGJORnJhTEtSRVNacERmWkVFcUZyWGQ0Mi9jQWFnV015RGNGZ0lT?=
+ =?utf-8?B?bEwwN2ZmNGZ4U3ZOLyswa25RSXR0SUFJY0JJTXZmL0ZILzlhSktWb3hHTVhi?=
+ =?utf-8?B?dGtXczN6N1czdnd4R3RxU3AvcXZ0Uk1HakcwcXpzcEsyVlcrcEwwUXJuTWNE?=
+ =?utf-8?B?RjlTZHdybmJ2aUpNZmpSMTJQSnZiQkFZOVpMd2pSWjBqUWNOZU1YcTZSUU1l?=
+ =?utf-8?B?bzZndnpXQ0xMU3BaUXFUNmFlY0t0R3R2NnRnUVdaMHEzdDIrRndmYXl0aGRi?=
+ =?utf-8?B?NTRyYjNTeHk2VnR1ME55OExVYkx2NDRrOUJtZmMvd0lrNVZQcXY1MHBoK2R2?=
+ =?utf-8?B?UGFUeG9DOFB3cG5ad3dyMFpGUGVRUTVjdXNHWTRRdWxkUkcxWS8wYkYrajlr?=
+ =?utf-8?B?VFE4Tk1lNHc2U0xmcWppTDhGN1MvMlFQSE41T1ozSUtCOTJvNGZkM2labHh2?=
+ =?utf-8?B?TTBoRjNuWlVzT1Q0ZnlCZ3JmcE5oNm5jU2kyY2hpNjhZK3VOazVvSnFLYllZ?=
+ =?utf-8?B?VGtpYmJDSGNkNDlKZ2xQQnN6emJvQk5zeVd3YTY1Q2swdHdsbzFkUGQyNFZO?=
+ =?utf-8?B?anZVZmRES0JNSjBhWW5IMFdQbzNlWjdGYjVnOU5QMXFzSElrTFpyR1lxWjlu?=
+ =?utf-8?Q?FMKNpRa2rqGaLaps=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6581f67f-056c-4c90-ff9b-08da38aa36fd
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3180.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 08:41:34.8307
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sqVZONho5dBArtTHJmOx9cWQZ8Dv4kpCyi3xZpqs0yqtpZmCOrPWJuW+pwAhLCLf6fydgAHWcIm4tMiYTkd0tQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4402
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 01:16:42PM -0700, Russ Weight wrote:
-> 
-> 
-> On 5/17/22 02:48, Xu Yilun wrote:
-> > On Mon, May 16, 2022 at 04:49:41PM -0700, Russ Weight wrote:
-> >> Create firmware upload ops and call the Firmware Upload support of the
-> >> Firmware Loader subsystem to enable FPGA image uploads for secure
-> >> updates of BMC images, FPGA images, etc.
-> >>
-> >> Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> >> ---
-> >> v20:
-> >>   - No change.
-> >> v19:
-> >>   - Change "card bmc" naming back to "m10 bmc" naming to be consistent
-> >>     with the parent driver.
-> >> v18:
-> >>   - Moved the firmware_upload_register() function here from an earlier
-> >>     patch since this is where the required ops are provided.
-> >>   - Moved the bmc_sec_remove() function here from an earlier patch to
-> >>     unregister the firmware driver and do cleanup.
-> >> v17:
-> >>   - Change "m10bmc" in symbol names to "cardbmc" to reflect the fact that the
-> >>     future devices will not necessarily use the MAX10.
-> >>   - Change from image_load class driver to the new firmware_upload 
-> >>     functionality of the firmware_loader.
-> >>   - fw_upload_ops functions will return "enum fw_upload_err" data types
-> >>     instead of integer values.
-> >> v16:
-> >>   - Use 0 instead of FPGA_IMAGE_ERR_NONE to indicate success.
-> >>   - The size alignment check was moved from the FPGA Image Load framework
-> >>     to the prepare() op.
-> >>   - Added cancel_request boolean flag to struct m10bmc_sec.
-> >>   - Moved the RSU cancellation logic from m10bmc_sec_cancel() to a new
-> >>     rsu_cancel() function.
-> >>   - The m10bmc_sec_cancel() function ONLY sets the cancel_request flag.
-> >>     The cancel_request flag is checked at the beginning of the
-> >>     m10bmc_sec_write() and m10bmc_sec_poll_complete() functions.
-> >>   - Adapt to changed prototypes for the prepare() and write() ops. The
-> >>     m10bmc_sec_write_blk() function has been renamed to
-> >>     m10bmc_sec_write().
-> >>   - Created a cleanup() op, m10bmc_sec_cleanup(), to attempt to cancel an
-> >>     ongoing op during when exiting the update process.
-> >> v15:
-> >>   - Adapted to changes in the FPGA Image Load framework:
-> >>     (1) All enum types (progress and errors) are now type u32
-> >>     (2) m10bmc_sec_write_blk() adds *blk_size and max_size parameters
-> >>         and uses *blk_size as provided by the caller.
-> >>     (3) m10bmc_sec_poll_complete() no long checks the driver_unload
-> >>         flag.
-> >> v14:
-> >>   - Changed symbol names to reflect the renaming of the Security Manager
-> >>     Class driver to FPGA Image Load.
-> >> v13:
-> >>   - No change
-> >> v12:
-> >>   - Updated Date and KernelVersion fields in ABI documentation
-> >>   - Removed size parameter from the write_blk() op. m10bmc_sec_write_blk()
-> >>     no longer has a size parameter, and the block size is determined
-> >>     in this (the lower-level) driver.
-> >> v11:
-> >>   - No change
-> >> v10:
-> >>   - No change
-> >> v9:
-> >>   - No change
-> >> v8:
-> >>   - Previously patch 5/6, otherwise no change
-> >> v7:
-> >>   - No change
-> >> v6:
-> >>   - Changed (size / stride) calculation to ((size + stride - 1) / stride)
-> >>     to ensure that the proper count is passed to regmap_bulk_write().
-> >>   - Removed unnecessary call to rsu_check_complete() in
-> >>     m10bmc_sec_poll_complete() and changed while loop to
-> >>     do/while loop.
-> >> v5:
-> >>   - No change
-> >> v4:
-> >>   - No change
-> >> v3:
-> >>   - Changed: iops -> sops, imgr -> smgr, IFPGA_ -> FPGA_, ifpga_ to fpga_
-> >>   - Changed "MAX10 BMC Secure Engine driver" to "MAX10 BMC Secure Update
-> >>     driver"
-> >>   - Removed wrapper functions (m10bmc_raw_*, m10bmc_sys_*). The
-> >>     underlying functions are now called directly.
-> >>   - Changed calling functions of functions that return "enum fpga_sec_err"
-> >>     to check for (ret != FPGA_SEC_ERR_NONE) instead of (ret)
-> >> v2:
-> >>   - Reworked the rsu_start_done() function to make it more readable
-> >>   - Reworked while-loop condition/content in rsu_prog_ready()
-> >>   - Minor code cleanup per review comments
-> >>   - Added a comment to the m10bmc_sec_poll_complete() function to
-> >>     explain the context (could take 30+ minutes to complete).
-> >>   - Added m10bmc_ prefix to functions in m10bmc_iops structure
-> >>   - Moved MAX10 BMC address and function definitions to a separate
-> >>     patch.
-> >> ---
-> >>  drivers/fpga/intel-m10-bmc-sec-update.c | 377 ++++++++++++++++++++++++
-> >>  1 file changed, 377 insertions(+)
-> >>
-> >> diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
-> >> index 6c39adc6492d..a4dc5f47e398 100644
-> >> --- a/drivers/fpga/intel-m10-bmc-sec-update.c
-> >> +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
-> >> @@ -17,8 +17,14 @@
-> >>  struct m10bmc_sec {
-> >>  	struct device *dev;
-> >>  	struct intel_m10bmc *m10bmc;
-> >> +	struct fw_upload *fwl;
-> >> +	char *fw_name;
-> >> +	u32 fw_name_id;
-> >> +	bool cancel_request;
-> >>  };
-> >>  
-> >> +static DEFINE_XARRAY_ALLOC(fw_upload_xa);
-> >> +
-> >>  /* Root Entry Hash (REH) support */
-> >>  #define REH_SHA256_SIZE		32
-> >>  #define REH_SHA384_SIZE		48
-> >> @@ -179,9 +185,349 @@ static const struct attribute_group *m10bmc_sec_attr_groups[] = {
-> >>  	NULL,
-> >>  };
-> >>  
-> >> +static void log_error_regs(struct m10bmc_sec *sec, u32 doorbell)
-> >> +{
-> >> +	u32 auth_result;
-> >> +
-> >> +	dev_err(sec->dev, "RSU error status: 0x%08x\n", doorbell);
-> >> +
-> >> +	if (!m10bmc_sys_read(sec->m10bmc, M10BMC_AUTH_RESULT, &auth_result))
-> >> +		dev_err(sec->dev, "RSU auth result: 0x%08x\n", auth_result);
-> >> +}
-> >> +
-> >> +static enum fw_upload_err rsu_check_idle(struct m10bmc_sec *sec)
-> >> +{
-> >> +	u32 doorbell;
-> >> +	int ret;
-> >> +
-> >> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> >> +	if (ret)
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +
-> >> +	if (rsu_prog(doorbell) != RSU_PROG_IDLE &&
-> >> +	    rsu_prog(doorbell) != RSU_PROG_RSU_DONE) {
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_BUSY;
-> >> +	}
-> >> +
-> >> +	return FW_UPLOAD_ERR_NONE;
-> >> +}
-> >> +
-> >> +static inline bool rsu_start_done(u32 doorbell)
-> >> +{
-> >> +	u32 status, progress;
-> >> +
-> >> +	if (doorbell & DRBL_RSU_REQUEST)
-> >> +		return false;
-> >> +
-> >> +	status = rsu_stat(doorbell);
-> >> +	if (status == RSU_STAT_ERASE_FAIL || status == RSU_STAT_WEAROUT)
-> >> +		return true;
-> >> +
-> >> +	progress = rsu_prog(doorbell);
-> >> +	if (progress != RSU_PROG_IDLE && progress != RSU_PROG_RSU_DONE)
-> >> +		return true;
-> >> +
-> >> +	return false;
-> >> +}
-> >> +
-> >> +static enum fw_upload_err rsu_update_init(struct m10bmc_sec *sec)
-> >> +{
-> >> +	u32 doorbell, status;
-> >> +	int ret;
-> >> +
-> >> +	ret = regmap_update_bits(sec->m10bmc->regmap,
-> >> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> >> +				 DRBL_RSU_REQUEST | DRBL_HOST_STATUS,
-> >> +				 DRBL_RSU_REQUEST |
-> >> +				 FIELD_PREP(DRBL_HOST_STATUS,
-> >> +					    HOST_STATUS_IDLE));
-> >> +	if (ret)
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +
-> >> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> >> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> >> +				       doorbell,
-> >> +				       rsu_start_done(doorbell),
-> >> +				       NIOS_HANDSHAKE_INTERVAL_US,
-> >> +				       NIOS_HANDSHAKE_TIMEOUT_US);
-> >> +
-> >> +	if (ret == -ETIMEDOUT) {
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_TIMEOUT;
-> >> +	} else if (ret) {
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +	}
-> >> +
-> >> +	status = rsu_stat(doorbell);
-> >> +	if (status == RSU_STAT_WEAROUT) {
-> >> +		dev_warn(sec->dev, "Excessive flash update count detected\n");
-> >> +		return FW_UPLOAD_ERR_WEAROUT;
-> >> +	} else if (status == RSU_STAT_ERASE_FAIL) {
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_HW_ERROR;
-> >> +	}
-> >> +
-> >> +	return FW_UPLOAD_ERR_NONE;
-> >> +}
-> >> +
-> >> +static enum fw_upload_err rsu_prog_ready(struct m10bmc_sec *sec)
-> >> +{
-> >> +	unsigned long poll_timeout;
-> >> +	u32 doorbell, progress;
-> >> +	int ret;
-> >> +
-> >> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> >> +	if (ret)
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +
-> >> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_PREP_TIMEOUT_MS);
-> >> +	while (rsu_prog(doorbell) == RSU_PROG_PREPARE) {
-> >> +		msleep(RSU_PREP_INTERVAL_MS);
-> >> +		if (time_after(jiffies, poll_timeout))
-> >> +			break;
-> >> +
-> >> +		ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> >> +		if (ret)
-> >> +			return FW_UPLOAD_ERR_RW_ERROR;
-> >> +	}
-> >> +
-> >> +	progress = rsu_prog(doorbell);
-> >> +	if (progress == RSU_PROG_PREPARE) {
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_TIMEOUT;
-> >> +	} else if (progress != RSU_PROG_READY) {
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_HW_ERROR;
-> >> +	}
-> >> +
-> >> +	return FW_UPLOAD_ERR_NONE;
-> >> +}
-> >> +
-> >> +static enum fw_upload_err rsu_send_data(struct m10bmc_sec *sec)
-> >> +{
-> >> +	u32 doorbell;
-> >> +	int ret;
-> >> +
-> >> +	ret = regmap_update_bits(sec->m10bmc->regmap,
-> >> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> >> +				 DRBL_HOST_STATUS,
-> >> +				 FIELD_PREP(DRBL_HOST_STATUS,
-> >> +					    HOST_STATUS_WRITE_DONE));
-> >> +	if (ret)
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +
-> >> +	ret = regmap_read_poll_timeout(sec->m10bmc->regmap,
-> >> +				       M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> >> +				       doorbell,
-> >> +				       rsu_prog(doorbell) != RSU_PROG_READY,
-> >> +				       NIOS_HANDSHAKE_INTERVAL_US,
-> >> +				       NIOS_HANDSHAKE_TIMEOUT_US);
-> >> +
-> >> +	if (ret == -ETIMEDOUT) {
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_TIMEOUT;
-> >> +	} else if (ret) {
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +	}
-> >> +
-> >> +	switch (rsu_stat(doorbell)) {
-> >> +	case RSU_STAT_NORMAL:
-> >> +	case RSU_STAT_NIOS_OK:
-> >> +	case RSU_STAT_USER_OK:
-> >> +	case RSU_STAT_FACTORY_OK:
-> >> +		break;
-> >> +	default:
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_HW_ERROR;
-> >> +	}
-> >> +
-> >> +	return FW_UPLOAD_ERR_NONE;
-> >> +}
-> >> +
-> >> +static int rsu_check_complete(struct m10bmc_sec *sec, u32 *doorbell)
-> >> +{
-> >> +	if (m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, doorbell))
-> >> +		return -EIO;
-> >> +
-> >> +	switch (rsu_stat(*doorbell)) {
-> >> +	case RSU_STAT_NORMAL:
-> >> +	case RSU_STAT_NIOS_OK:
-> >> +	case RSU_STAT_USER_OK:
-> >> +	case RSU_STAT_FACTORY_OK:
-> >> +		break;
-> >> +	default:
-> >> +		return -EINVAL;
-> >> +	}
-> >> +
-> >> +	switch (rsu_prog(*doorbell)) {
-> >> +	case RSU_PROG_IDLE:
-> >> +	case RSU_PROG_RSU_DONE:
-> >> +		return 0;
-> >> +	case RSU_PROG_AUTHENTICATING:
-> >> +	case RSU_PROG_COPYING:
-> >> +	case RSU_PROG_UPDATE_CANCEL:
-> >> +	case RSU_PROG_PROGRAM_KEY_HASH:
-> >> +		return -EAGAIN;
-> >> +	default:
-> >> +		return -EINVAL;
-> >> +	}
-> >> +}
-> >> +
-> >> +static enum fw_upload_err rsu_cancel(struct m10bmc_sec *sec)
-> >> +{
-> >> +	u32 doorbell;
-> >> +	int ret;
-> >> +
-> >> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> >> +	if (ret)
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +
-> >> +	if (rsu_prog(doorbell) != RSU_PROG_READY)
-> >> +		return FW_UPLOAD_ERR_BUSY;
-> >> +
-> >> +	ret = regmap_update_bits(sec->m10bmc->regmap,
-> >> +				 M10BMC_SYS_BASE + M10BMC_DOORBELL,
-> >> +				 DRBL_HOST_STATUS,
-> >> +				 FIELD_PREP(DRBL_HOST_STATUS,
-> >> +					    HOST_STATUS_ABORT_RSU));
-> >> +	if (ret)
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +
-> >> +	return FW_UPLOAD_ERR_CANCELED;
-> >> +}
-> >> +
-> >> +static enum fw_upload_err m10bmc_sec_prepare(struct fw_upload *fwl,
-> >> +					     const u8 *data, u32 size)
-> >> +{
-> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> >> +	u32 ret;
-> >> +
-> >> +	sec->cancel_request = false;
-> >> +
-> >> +	if (!size || size & 0x3 || size > M10BMC_STAGING_SIZE)
-> > Why the size should be 4 bytes aligned? I assume this relates to max10
-> > register stride. If so, I suggest we don't use instant number here.
-> 
-> This check was not related to stride. All of the image files for these
-> devices are 4-byte aligned. I suppose there is no reason to enforce this
-> as the BMC will detect if a secure image is invalid. I can remove this
-> check.
-> 
-> >> +		return FW_UPLOAD_ERR_INVALID_SIZE;
-> >> +
-> >> +	ret = rsu_check_idle(sec);
-> >> +	if (ret != FW_UPLOAD_ERR_NONE)
-> >> +		return ret;
-> >> +
-> >> +	ret = rsu_update_init(sec);
-> >> +	if (ret != FW_UPLOAD_ERR_NONE)
-> >> +		return ret;
-> >> +
-> >> +	ret = rsu_prog_ready(sec);
-> >> +	if (ret != FW_UPLOAD_ERR_NONE)
-> >> +		return ret;
-> >> +
-> >> +	if (sec->cancel_request)
-> >> +		return rsu_cancel(sec);
-> >> +
-> >> +	return FW_UPLOAD_ERR_NONE;
-> >> +}
-> >> +
-> >> +#define WRITE_BLOCK_SIZE 0x4000	/* Default write-block size is 0x4000 bytes */
-> >> +
-> >> +static enum fw_upload_err m10bmc_sec_write(struct fw_upload *fwl, const u8 *data,
-> >> +					   u32 offset, u32 size, u32 *written)
-> >> +{
-> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> >> +	unsigned int stride = regmap_get_reg_stride(sec->m10bmc->regmap);
-> > reverse xmax tree please.
-> OK - I'll fix it.
-> >
-> >> +	u32 blk_size, doorbell;
-> >> +	int ret;
-> >> +
-> >> +	if (sec->cancel_request)
-> >> +		return rsu_cancel(sec);
-> >> +
-> >> +	ret = m10bmc_sys_read(sec->m10bmc, M10BMC_DOORBELL, &doorbell);
-> >> +	if (ret) {
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_HW_ERROR;
-> >> +	}
-> >> +
-> >> +	blk_size = min_t(u32, WRITE_BLOCK_SIZE, size);
-> >> +	ret = regmap_bulk_write(sec->m10bmc->regmap,
-> >> +				M10BMC_STAGING_BASE + offset,
-> >> +				(void *)data + offset,
-> >> +				(blk_size + stride - 1) / stride);
-> > You mean to DIV_ROUND_UP the write size here? So you may write more
-> > bytes than required?
-> >
-> > Also possible to access out of bounds for 'data', is it?
-> 
-> All of the writes, except possibly the last write, will be of size
-> WRITE_BLOCK_SIZE, which is page aligned. Only the last write could
-> potentially round up on the stride. We have already verified that
-> the data written will fit in the staging area (in the prepare function),
-> so additional bytes to complete the stride will not exceed the staging
-> area which is the target for these writes.
 
-Is it possible the source memory - 'data' be accessed out of bounds?
 
-> 
-> >> +
-> >> +	if (ret)
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +
-> >> +	*written = blk_size;
-> >> +	return FW_UPLOAD_ERR_NONE;
-> >> +}
-> >> +
-> >> +static enum fw_upload_err m10bmc_sec_poll_complete(struct fw_upload *fwl)
-> >> +{
-> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> >> +	unsigned long poll_timeout;
-> >> +	u32 doorbell, result;
-> >> +	int ret;
-> >> +
-> >> +	if (sec->cancel_request)
-> >> +		return rsu_cancel(sec);
-> >> +
-> >> +	result = rsu_send_data(sec);
-> >> +	if (result != FW_UPLOAD_ERR_NONE)
-> >> +		return result;
-> >> +
-> >> +	poll_timeout = jiffies + msecs_to_jiffies(RSU_COMPLETE_TIMEOUT_MS);
-> >> +	do {
-> >> +		msleep(RSU_COMPLETE_INTERVAL_MS);
-> >> +		ret = rsu_check_complete(sec, &doorbell);
-> >> +	} while (ret == -EAGAIN && !time_after(jiffies, poll_timeout));
-> >> +
-> >> +	if (ret == -EAGAIN) {
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_TIMEOUT;
-> >> +	} else if (ret == -EIO) {
-> >> +		return FW_UPLOAD_ERR_RW_ERROR;
-> >> +	} else if (ret) {
-> >> +		log_error_regs(sec, doorbell);
-> >> +		return FW_UPLOAD_ERR_HW_ERROR;
-> >> +	}
-> >> +
-> >> +	return FW_UPLOAD_ERR_NONE;
-> >> +}
-> >> +
-> >> +/*
-> >> + * m10bmc_sec_cancel() may be called asynchronously with an on-going update.
-> >> + * All other functions are called sequentially in a single thread. To avoid
-> >> + * contention on register accesses, m10bmc_sec_cancel() must only update
-> >> + * the cancel_request flag. Other functions will check this flag and handle
-> >> + * the cancel request synchronously.
-> >> + */
-> >> +static void m10bmc_sec_cancel(struct fw_upload *fwl)
-> >> +{
-> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> >> +
-> >> +	sec->cancel_request = true;
-> > Do we need some atomic_xx functions to ensure concurrent correctness?
-> 
-> In the context of an update, this is once-written and only if the secure update
-> is cancelled. We are only checking true vs false so I don't think atomicity
-> is an issue. Do you recommend that I use atomic_read() and atomic_write() for
+On 17.05.2022 14:55, Smitha T Murthy wrote:
+> Renames macro IS_MFCV10 to IS_MFCV10_PLUS so that the MFCv10
+> code can be resued for MFCv12 support. Since some part of MFCv10
+> specific code holds good for MFCv12 also.
+>
+> Cc: linux-fsd@tesla.com
+> Signed-off-by: Smitha T Murthy <smitha.t@samsung.com>
+> ---
+>   .../platform/samsung/s5p-mfc/s5p_mfc_common.h |  4 +--
+>   .../platform/samsung/s5p-mfc/s5p_mfc_ctrl.c   |  2 +-
+>   .../platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c | 28 +++++++++----------
+>   3 files changed, 17 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h
+> index 5304f42c8c72..ae266d8518d1 100644
+> --- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h
+> +++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_common.h
+> @@ -774,8 +774,8 @@ void s5p_mfc_cleanup_queue(struct list_head *lh, struct vb2_queue *vq);
+>   #define IS_MFCV6_PLUS(dev)	(dev->variant->version >= 0x60 ? 1 : 0)
+>   #define IS_MFCV7_PLUS(dev)	(dev->variant->version >= 0x70 ? 1 : 0)
+>   #define IS_MFCV8_PLUS(dev)	(dev->variant->version >= 0x80 ? 1 : 0)
+> -#define IS_MFCV10(dev)		(dev->variant->version >= 0xA0 ? 1 : 0)
+> -#define FW_HAS_E_MIN_SCRATCH_BUF(dev) (IS_MFCV10(dev))
+> +#define IS_MFCV10_PLUS(dev)	(dev->variant->version >= 0xA0 ? 1 : 0)
 
-I see the flag is set false on prepare. So if cancel is not allowed in
-prepare phase, there will be no concurrent writing problem.
+The " ? 1 : 0" part of the macro is redundant, you can remove it here 
+and in other IS_MFC*_PLUS macros.
 
-Now there seems a problem that cancel_request is allowed to be set during
-prepare phase, but may be overriden by its initialization to false in
-prepare(). Could we just prevent cancel in prepare phase in framework?
-This is not all about the atomicity for cancel_request but also helps
-solve the concern.
+> +#define FW_HAS_E_MIN_SCRATCH_BUF(dev) (IS_MFCV10_PLUS(dev))
+>   
+>   #define MFC_V5_BIT	BIT(0)
+>   #define MFC_V6_BIT	BIT(1)
+> diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
+> index 72d70984e99a..ffe9f7e79eca 100644
+> --- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
+> +++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_ctrl.c
+> @@ -236,7 +236,7 @@ int s5p_mfc_init_hw(struct s5p_mfc_dev *dev)
+>   	else
+>   		mfc_write(dev, 0x3ff, S5P_FIMV_SW_RESET);
+>   
+> -	if (IS_MFCV10(dev))
+> +	if (IS_MFCV10_PLUS(dev))
+>   		mfc_write(dev, 0x0, S5P_FIMV_MFC_CLOCK_OFF_V10);
+>   
+>   	mfc_debug(2, "Will now wait for completion of firmware transfer\n");
+> diff --git a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
+> index 8227004f6746..728d255e65fc 100644
+> --- a/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
+> +++ b/drivers/media/platform/samsung/s5p-mfc/s5p_mfc_opr_v6.c
+> @@ -72,9 +72,9 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   			  ctx->luma_size, ctx->chroma_size, ctx->mv_size);
+>   		mfc_debug(2, "Totals bufs: %d\n", ctx->total_dpb_count);
+>   	} else if (ctx->type == MFCINST_ENCODER) {
+> -		if (IS_MFCV10(dev)) {
+> +		if (IS_MFCV10_PLUS(dev))
+>   			ctx->tmv_buffer_size = 0;
+> -		} else if (IS_MFCV8_PLUS(dev))
+> +		else if (IS_MFCV8_PLUS(dev))
+>   			ctx->tmv_buffer_size = S5P_FIMV_NUM_TMV_BUFFERS_V6 *
+>   			ALIGN(S5P_FIMV_TMV_BUFFER_SIZE_V8(mb_width, mb_height),
+>   			S5P_FIMV_TMV_BUFFER_ALIGN_V6);
+> @@ -82,7 +82,7 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   			ctx->tmv_buffer_size = S5P_FIMV_NUM_TMV_BUFFERS_V6 *
+>   			ALIGN(S5P_FIMV_TMV_BUFFER_SIZE_V6(mb_width, mb_height),
+>   			S5P_FIMV_TMV_BUFFER_ALIGN_V6);
+> -		if (IS_MFCV10(dev)) {
+> +		if (IS_MFCV10_PLUS(dev)) {
+>   			lcu_width = S5P_MFC_LCU_WIDTH(ctx->img_width);
+>   			lcu_height = S5P_MFC_LCU_HEIGHT(ctx->img_height);
+>   			if (ctx->codec_mode != S5P_FIMV_CODEC_HEVC_ENC) {
+> @@ -133,7 +133,7 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   	switch (ctx->codec_mode) {
+>   	case S5P_MFC_CODEC_H264_DEC:
+>   	case S5P_MFC_CODEC_H264_MVC_DEC:
+> -		if (IS_MFCV10(dev))
+> +		if (IS_MFCV10_PLUS(dev))
+>   			mfc_debug(2, "Use min scratch buffer size\n");
+>   		else if (IS_MFCV8_PLUS(dev))
+>   			ctx->scratch_buf_size =
+> @@ -152,7 +152,7 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   			(ctx->mv_count * ctx->mv_size);
+>   		break;
+>   	case S5P_MFC_CODEC_MPEG4_DEC:
+> -		if (IS_MFCV10(dev))
+> +		if (IS_MFCV10_PLUS(dev))
+>   			mfc_debug(2, "Use min scratch buffer size\n");
+>   		else if (IS_MFCV7_PLUS(dev)) {
+>   			ctx->scratch_buf_size =
+> @@ -172,7 +172,7 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   		break;
+>   	case S5P_MFC_CODEC_VC1RCV_DEC:
+>   	case S5P_MFC_CODEC_VC1_DEC:
+> -		if (IS_MFCV10(dev))
+> +		if (IS_MFCV10_PLUS(dev))
+>   			mfc_debug(2, "Use min scratch buffer size\n");
+>   		else
+>   			ctx->scratch_buf_size =
+> @@ -189,7 +189,7 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   		ctx->bank2.size = 0;
+>   		break;
+>   	case S5P_MFC_CODEC_H263_DEC:
+> -		if (IS_MFCV10(dev))
+> +		if (IS_MFCV10_PLUS(dev))
+>   			mfc_debug(2, "Use min scratch buffer size\n");
+>   		else
+>   			ctx->scratch_buf_size =
+> @@ -201,7 +201,7 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   		ctx->bank1.size = ctx->scratch_buf_size;
+>   		break;
+>   	case S5P_MFC_CODEC_VP8_DEC:
+> -		if (IS_MFCV10(dev))
+> +		if (IS_MFCV10_PLUS(dev))
+>   			mfc_debug(2, "Use min scratch buffer size\n");
+>   		else if (IS_MFCV8_PLUS(dev))
+>   			ctx->scratch_buf_size =
+> @@ -230,7 +230,7 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   			DEC_VP9_STATIC_BUFFER_SIZE;
+>   		break;
+>   	case S5P_MFC_CODEC_H264_ENC:
+> -		if (IS_MFCV10(dev)) {
+> +		if (IS_MFCV10_PLUS(dev)) {
+>   			mfc_debug(2, "Use min scratch buffer size\n");
+>   			ctx->me_buffer_size =
+>   			ALIGN(ENC_V100_H264_ME_SIZE(mb_width, mb_height), 16);
+> @@ -254,7 +254,7 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   		break;
+>   	case S5P_MFC_CODEC_MPEG4_ENC:
+>   	case S5P_MFC_CODEC_H263_ENC:
+> -		if (IS_MFCV10(dev)) {
+> +		if (IS_MFCV10_PLUS(dev)) {
+>   			mfc_debug(2, "Use min scratch buffer size\n");
+>   			ctx->me_buffer_size =
+>   				ALIGN(ENC_V100_MPEG4_ME_SIZE(mb_width,
+> @@ -273,7 +273,7 @@ static int s5p_mfc_alloc_codec_buffers_v6(struct s5p_mfc_ctx *ctx)
+>   		ctx->bank2.size = 0;
+>   		break;
+>   	case S5P_MFC_CODEC_VP8_ENC:
+> -		if (IS_MFCV10(dev)) {
+> +		if (IS_MFCV10_PLUS(dev)) {
+>   			mfc_debug(2, "Use min scratch buffer size\n");
+>   			ctx->me_buffer_size =
+>   				ALIGN(ENC_V100_VP8_ME_SIZE(mb_width, mb_height),
+> @@ -452,7 +452,7 @@ static void s5p_mfc_dec_calc_dpb_size_v6(struct s5p_mfc_ctx *ctx)
+>   
+>   	if (ctx->codec_mode == S5P_MFC_CODEC_H264_DEC ||
+>   			ctx->codec_mode == S5P_MFC_CODEC_H264_MVC_DEC) {
+> -		if (IS_MFCV10(dev)) {
+> +		if (IS_MFCV10_PLUS(dev)) {
+>   			ctx->mv_size = S5P_MFC_DEC_MV_SIZE_V10(ctx->img_width,
+>   					ctx->img_height);
+>   		} else {
+> @@ -668,7 +668,7 @@ static int s5p_mfc_set_enc_ref_buffer_v6(struct s5p_mfc_ctx *ctx)
+>   
+>   	mfc_debug(2, "Buf1: %p (%d)\n", (void *)buf_addr1, buf_size1);
+>   
+> -	if (IS_MFCV10(dev)) {
+> +	if (IS_MFCV10_PLUS(dev)) {
+>   		/* start address of per buffer is aligned */
+>   		for (i = 0; i < ctx->pb_count; i++) {
+>   			writel(buf_addr1, mfc_regs->e_luma_dpb + (4 * i));
+> @@ -2455,7 +2455,7 @@ const struct s5p_mfc_regs *s5p_mfc_init_regs_v6_plus(struct s5p_mfc_dev *dev)
+>   	R(e_h264_options, S5P_FIMV_E_H264_OPTIONS_V8);
+>   	R(e_min_scratch_buffer_size, S5P_FIMV_E_MIN_SCRATCH_BUFFER_SIZE_V8);
+>   
+> -	if (!IS_MFCV10(dev))
+> +	if (!IS_MFCV10_PLUS(dev))
+>   		goto done;
+>   
+>   	/* Initialize registers used in MFC v10 only.
 
-Thanks,
-Yilun
-
-> the cancel_request flag?
-> 
-> >
-> >> +}
-> >> +
-> >> +static void m10bmc_sec_cleanup(struct fw_upload *fwl)
-> >> +{
-> >> +	struct m10bmc_sec *sec = fwl->dd_handle;
-> >> +
-> >> +	(void)rsu_cancel(sec);
-> >> +}
-> >> +
-> >> +static const struct fw_upload_ops m10bmc_ops = {
-> >> +	.prepare = m10bmc_sec_prepare,
-> >> +	.write = m10bmc_sec_write,
-> >> +	.poll_complete = m10bmc_sec_poll_complete,
-> >> +	.cancel = m10bmc_sec_cancel,
-> >> +	.cleanup = m10bmc_sec_cleanup,
-> >> +};
-> >> +
-> >>  #define SEC_UPDATE_LEN_MAX 32
-> >>  static int m10bmc_sec_probe(struct platform_device *pdev)
-> >>  {
-> >> +	char buf[SEC_UPDATE_LEN_MAX];
-> >> +	struct fw_upload *fwl;
-> >> +	unsigned int len, ret;
-> > Why the ret is unsigned int?
-> I will change it to int.
-> 
-> >
-> >>  	struct m10bmc_sec *sec;
-> >>  
-> >>  	sec = devm_kzalloc(&pdev->dev, sizeof(*sec), GFP_KERNEL);
-> >> @@ -192,6 +538,36 @@ static int m10bmc_sec_probe(struct platform_device *pdev)
-> >>  	sec->m10bmc = dev_get_drvdata(pdev->dev.parent);
-> >>  	dev_set_drvdata(&pdev->dev, sec);
-> >>  
-> >> +	ret = xa_alloc(&fw_upload_xa, &sec->fw_name_id, sec,
-> >> +		       xa_limit_32b, GFP_KERNEL);
-> >> +	if (ret)
-> >> +		return ret;
-> >> +
-> >> +	len = scnprintf(buf, SEC_UPDATE_LEN_MAX, "secure-update%d",
-> >> +			sec->fw_name_id);
-> >> +	sec->fw_name = kmemdup_nul(buf, len, GFP_KERNEL);
-> > Should we check this memory allocation?
-> Yes! - I'll add a check.
-> 
-> Thanks for the review.
-> - Russ
-> >
-> > Thanks,
-> > Yilun
-> >
-> >> +
-> >> +	fwl = firmware_upload_register(THIS_MODULE, sec->dev, sec->fw_name,
-> >> +				       &m10bmc_ops, sec);
-> >> +	if (IS_ERR(fwl)) {
-> >> +		dev_err(sec->dev, "Firmware Upload driver failed to start\n");
-> >> +		kfree(sec->fw_name);
-> >> +		xa_erase(&fw_upload_xa, sec->fw_name_id);
-> >> +		return PTR_ERR(fwl);
-> >> +	}
-> >> +
-> >> +	sec->fwl = fwl;
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static int m10bmc_sec_remove(struct platform_device *pdev)
-> >> +{
-> >> +	struct m10bmc_sec *sec = dev_get_drvdata(&pdev->dev);
-> >> +
-> >> +	firmware_upload_unregister(sec->fwl);
-> >> +	kfree(sec->fw_name);
-> >> +	xa_erase(&fw_upload_xa, sec->fw_name_id);
-> >> +
-> >>  	return 0;
-> >>  }
-> >>  
-> >> @@ -205,6 +581,7 @@ MODULE_DEVICE_TABLE(platform, intel_m10bmc_sec_ids);
-> >>  
-> >>  static struct platform_driver intel_m10bmc_sec_driver = {
-> >>  	.probe = m10bmc_sec_probe,
-> >> +	.remove = m10bmc_sec_remove,
-> >>  	.driver = {
-> >>  		.name = "intel-m10bmc-sec-update",
-> >>  		.dev_groups = m10bmc_sec_attr_groups,
-> >> -- 
-> >> 2.25.1

@@ -2,157 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C51952B578
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D9852B588
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbiERI5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S233684AbiERI6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233828AbiERI5n (ORCPT
+        with ESMTP id S233671AbiERI6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:57:43 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E20DC63521
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:57:21 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-217-skH9mqn1NleUlRQcWSwz0g-1; Wed, 18 May 2022 09:57:03 +0100
-X-MC-Unique: skH9mqn1NleUlRQcWSwz0g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Wed, 18 May 2022 09:57:02 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Wed, 18 May 2022 09:57:02 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Kees Cook' <keescook@chromium.org>,
-        Jeff Layton <jlayton@kernel.org>
-CC:     David Howells <dhowells@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: RE: new __write_overflow_field compiler warning
-Thread-Topic: new __write_overflow_field compiler warning
-Thread-Index: AQHYajA5Vkx3nTlfB0iLe277f3HQ5q0kU3pA
-Date:   Wed, 18 May 2022 08:57:02 +0000
-Message-ID: <82867919b4954e659b110bd54f1521f1@AcuMS.aculab.com>
-References: <d2ad3a3d7bdd794c6efb562d2f2b655fb67756b9.camel@kernel.org>
- <202205171327.78B12807@keescook>
-In-Reply-To: <202205171327.78B12807@keescook>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 18 May 2022 04:58:04 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23D511E1F8;
+        Wed, 18 May 2022 01:57:51 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id j24so1722451wrb.1;
+        Wed, 18 May 2022 01:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=++E55hZspdAJCzLSvywdQwQZHF/X7XZ809bGoexAor0=;
+        b=TbEBnTQyjTjmMJGUkj0b1r7ZVmt/I8cv3MPj5q2tE98vHgWKXx9QWyMUCkHT1KADXj
+         d44XzQdhEK2uz1FDpC7AQ+xMZyNMm7KsEiatXddFjP91uxdA+23xn+Cp9RNnVryUz6n2
+         6x0CnwddbxOriaiZQpw6qkTwhYgem6uPeAtDhpj5fdSyVYVsL5Rz4f5TnkYR99z9Frc7
+         uAih2nnl+Ueen9DTcmxLiEkY+wIKsNW8uDkIw0Ay9gzF19042wua5mJC1Al3uwLr5G//
+         FX1Wggd9aCTQuo5xSinFo3owiJp4HbS1S9JKqRupXECVQk/+08eb3+N8z34TVfLX5X9/
+         N5Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=++E55hZspdAJCzLSvywdQwQZHF/X7XZ809bGoexAor0=;
+        b=dKxGuOBT/kgvVttlCG71RI5zJvDAFrHbi3fCnzkDq80WVV/HWe036Hzaj7AaQQb86d
+         m9WM28Io3xKQhASi5LOd7OsrcTihL1YCjeqV7/SFs5r6xgbnUtvC/2ozZW76xG+R8XN2
+         2qtLS5Ef/Iw+hdzHwBic3HHYX+YiXAPgFRxGYdb+IKsCCMeBETufHbPGJ9pie9LKu74w
+         OgWUlfqsg2kfCYguLuBExGpJVEZsiVeFYpdwfR3V1Udu57PSnVPrZQUdRNspEXSPNFv3
+         WkeMHpK5EJjZcvIX18xXjE9N8xu/rVCxXTA9AYr/lgZ3wHm4BHxwPlYXwnt9xt0taL5h
+         x/4Q==
+X-Gm-Message-State: AOAM530Uuz5AWGkuQ1EmwE31VcObCHI4Kz5nZDEyd0rzAegxyPs3Qd4f
+        QyEuo5DmsQ/XMomU//rMRp8=
+X-Google-Smtp-Source: ABdhPJyf8iGn1AjGKhe2Bk+FqNmSXn1bIBjrmjHO9QH4qwtHNlMhe+/NgIr1/THeuCi7eCetcKw95A==
+X-Received: by 2002:adf:eac9:0:b0:20d:cdd:a719 with SMTP id o9-20020adfeac9000000b0020d0cdda719mr10296156wrn.0.1652864270017;
+        Wed, 18 May 2022 01:57:50 -0700 (PDT)
+Received: from localhost.localdomain (52.pool85-60-27.dynamic.orange.es. [85.60.27.52])
+        by smtp.gmail.com with ESMTPSA id bi22-20020a05600c3d9600b003942a244f33sm3742630wmb.12.2022.05.18.01.57.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 01:57:49 -0700 (PDT)
+From:   Carlos Fernandez <carlos.escuin@gmail.com>
+X-Google-Original-From: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+To:     pabeni@redhat.com, carlos.fernandez@technica-engineering.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net v2] Retrieve MACSec-XPN attributes before offloading
+Date:   Wed, 18 May 2022 10:57:45 +0200
+Message-Id: <20220518085745.7022-1-carlos.fernandez@technica-engineering.de>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220506105540.9868-1-carlos.fernandez@technica-engineering.de>
+References: <20220506105540.9868-1-carlos.fernandez@technica-engineering.de>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogS2VlcyBDb29rDQo+IFNlbnQ6IDE3IE1heSAyMDIyIDIxOjU0DQo+IA0KPiBPbiBUdWUs
-IE1heSAxNywgMjAyMiBhdCAwMjowMzo1MlBNIC0wNDAwLCBKZWZmIExheXRvbiB3cm90ZToNCj4g
-PiBIaSBLZWVzLA0KPiANCj4gSGkhDQo+IA0KPiA+IEknbSBob3BpbmcgeW91IGNhbiBoZWxwIHdp
-dGggdGhpcy4gSSByZWNlbnRseSB1cGRhdGVkIHRvIEZlZG9yYSAzNiwNCj4gPiB3aGljaCBoYXMg
-Z2NjIHYxMiwgYW5kIEkndmUgc3RhcnRlZCBzZWVpbmcgdGhpcyB3YXJuaW5nIHBvcCB1cCB3aGVu
-DQo+ID4gY29tcGlsaW5nIHRoZSBjZXBoLmtvOg0KPiA+DQo+ID4gSW4gZmlsZSBpbmNsdWRlZCBm
-cm9tIC4vaW5jbHVkZS9saW51eC9zdHJpbmcuaDoyNTMsDQo+ID4gICAgICAgICAgICAgICAgICBm
-cm9tIC4vaW5jbHVkZS9saW51eC9jZXBoL2NlcGhfZGVidWcuaDo3LA0KPiA+ICAgICAgICAgICAg
-ICAgICAgZnJvbSBmcy9jZXBoL2lub2RlLmM6MjoNCj4gPiBJbiBmdW5jdGlvbiDigJhmb3J0aWZ5
-X21lbXNldF9jaGvigJksDQo+ID4gICAgIGlubGluZWQgZnJvbSDigJhuZXRmc19pX2NvbnRleHRf
-aW5pdOKAmSBhdCAuL2luY2x1ZGUvbGludXgvbmV0ZnMuaDozMjY6MiwNCj4gPiAgICAgaW5saW5l
-ZCBmcm9tIOKAmGNlcGhfYWxsb2NfaW5vZGXigJkgYXQgZnMvY2VwaC9pbm9kZS5jOjQ2MzoyOg0K
-PiA+IC4vaW5jbHVkZS9saW51eC9mb3J0aWZ5LXN0cmluZy5oOjI0MjoyNTogd2FybmluZzogY2Fs
-bCB0byDigJhfX3dyaXRlX292ZXJmbG93X2ZpZWxk4oCZIGRlY2xhcmVkIHdpdGgNCj4gYXR0cmli
-dXRlIHdhcm5pbmc6IGRldGVjdGVkIHdyaXRlIGJleW9uZCBzaXplIG9mIGZpZWxkICgxc3QgcGFy
-YW1ldGVyKTsgbWF5YmUgdXNlIHN0cnVjdF9ncm91cCgpPyBbLQ0KPiBXYXR0cmlidXRlLXdhcm5p
-bmddDQo+ID4gICAyNDIgfCAgICAgICAgICAgICAgICAgICAgICAgICBfX3dyaXRlX292ZXJmbG93
-X2ZpZWxkKHBfc2l6ZV9maWVsZCwgc2l6ZSk7DQo+ID4gICAgICAgfCAgICAgICAgICAgICAgICAg
-ICAgICAgICBefn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCj4gPg0K
-PiA+IFRoaXMgZG9lc24ndCBzZWVtIHRvIGhhcHBlbiB3aXRoIGdjYyB2MTEuIEl0IGxvb2tzIGxp
-a2UgdGhlIGNvZGUgaXMNCj4gPiBkb2luZyB0aGUgcmlnaHQgdGhpbmcuIElzIHRoZXJlIHNvbWV0
-aGluZyB3ZSBuZWVkIHRvIGZpeCBob3cgdGhlIG5ldGZzDQo+ID4gY29udGV4dCBnZXRzIGluaXRp
-YWxpemVkIG9yIGlzIHRoaXMgYSBjb21waWxlciBwcm9ibGVtPw0KPiA+DQo+ID4gRldJVzogSSdt
-IHVzaW5nOg0KPiA+DQo+ID4gICAgIGdjYyAoR0NDKSAxMi4xLjEgMjAyMjA1MDcgKFJlZCBIYXQg
-MTIuMS4xLTEpDQo+IA0KPiBZZWFoLCBHQ0MgMTIgZ290ICJzbWFydGVyIiBhYm91dCBob3cgZGVl
-cGx5IGl0IGNhbiBhbmFseXplIG9iamVjdCBzaXplcy4NCj4gVXN1YWxseSwgdGhpcyBoYXMgYmVl
-biBoZWxwZnVsLiBPdGhlciB0aW1lcywgaXQncyBhIGJpdCB3ZWlyZGVyLCBsaWtlDQo+IGhlcmUu
-DQo+IA0KPiBTbyB0aGlzIGlzIHJlc29sdmluZyB0bzoNCj4gDQo+IHN0YXRpYyBpbmxpbmUgdm9p
-ZCBuZXRmc19pX2NvbnRleHRfaW5pdChzdHJ1Y3QgaW5vZGUgKmlub2RlLA0KPiAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qgc3RydWN0IG5ldGZzX3JlcXVlc3Rf
-b3BzICpvcHMpDQo+IHsNCj4gICAgICAgICBzdHJ1Y3QgbmV0ZnNfaV9jb250ZXh0ICpjdHggPSBu
-ZXRmc19pX2NvbnRleHQoaW5vZGUpOw0KPiANCj4gICAgICAgICBtZW1zZXQoY3R4LCAwLCBzaXpl
-b2YoKmN0eCkpOw0KPiAuLi4NCj4gDQo+IEluIHRoZSBzZW5zZSB0aGF0IHRoZSBjb21waWxlciBp
-cyBoYXZpbmcgdHJvdWJsZSB1bmRlcnN0YW5kaW5nIHRoaXMNCj4gb2JqZWN0LCBpdCdzIGR1ZSB0
-byB0aGUgc2FtZSAidW5leHBlY3RlZCIgbWFuaXB1bGF0aW9ucyB0aGF0IG1hbmlmZXN0IGluDQo+
-IG90aGVyIGFyZWFzIChyYW5kc3RydWN0KSB3aGljaCBnb3QgZml4ZWQgcmVjZW50bHk6DQo+IGh0
-dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAyMjA1MDMyMDU1MDMuMzA1NDE3My0yLWtlZXNj
-b29rQGNocm9taXVtLm9yZy8NCj4gDQo+IEJ1dCBpdCBzZWVtcyByYW5kc3RydWN0IGlzIGhhcHB5
-IHRvIGxvb2sgdGhlIG90aGVyIHdheSBoZXJlIGFmdGVyIHRoZQ0KPiAodm9pZCAqKSBjYXN0LCB3
-aGVyZSBhcyBfX2J1aWx0aW5fb2JqZWN0X3NpemUoKSAodGhlIHdvcmstaG9yc2Ugb2YgdGhlDQo+
-IG1lbWNweSBjaGVja2luZykgaXMgbm90LiBIbXBmLg0KPiANCj4gSWdub3JpbmcgdGhlIGxpbmtl
-ZCBjaGFuZ2UgYWJvdmUgKHdoaWNoIGRvZXNuJ3QgY2hhbmdlIHRoZSB3YXJuaW5nDQo+IGhlcmUp
-LCBHQ0MgaXMgZWZmZWN0aXZlbHkgc2VlaW5nOg0KPiANCj4gc3RhdGljIGlubGluZSB2b2lkIG5l
-dGZzX2lfY29udGV4dF9pbml0KHN0cnVjdCBpbm9kZSAqaW5vZGUsDQo+ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBjb25zdCBzdHJ1Y3QgbmV0ZnNfcmVxdWVzdF9vcHMg
-Km9wcykNCj4gew0KPiAJc3RydWN0IG5ldGZzX2lfY29udGV4dCAqY3R4ID0gKHN0cnVjdCBuZXRm
-c19pX2NvbnRleHQgKikoaW5vZGUgKyAxKTsNCj4gDQo+IAlpZiAoX19idWlsdGluX29iamVjdF9z
-aXplKGN0eCwgMSkgPCBzaXplb2YoKmN0eCkpDQo+IAkJX193cml0ZV9vdmVyZmxvd19maWVsZCgu
-Li4pDQo+IA0KPiBBbmQgX19idWlsdGluX29iamVjdF9zaXplKCkgc2VlICJjdHgiIGFzIHBvaW50
-aW5nIHBhc3QgdGhlIGVuZCBvZiBhIHNpbmdsZQ0KPiAic3RydWN0IGlub2RlIiAoaS5lLiB0aGVy
-ZSBhcmUgemVybyBieXRlcyBsZWZ0IGluIHRoZSBvcmlnaW5hbA0KPiBzdHJ1Y3R1cmUpLg0KPiAN
-Cj4gSG93ZXZlciwgSSB0aGluayB3ZSBjYW4gc29sdmUgYm90aCB0aGUgRk9SVElGWSBhbmQgdGhl
-IHJhbmRzdHJ1Y3QNCj4gY29uY2VybnMgYnkgd3JhcHBpbmcgdGhlIGNvbnZlcnNpb25zIGluIGNv
-bnRhaW5lcl9vZigpLiBUaGlzIHBhc3NlcyBmb3INCj4gbWUgd2l0aCAtbmV4dCAoaS5lLiBvbiB0
-b3Agb2YgdGhlIGFib3ZlIGxpbmtlZCBjaGFuZ2UpOg0KPiANCj4gZGlmZiAtLWdpdCBhL2luY2x1
-ZGUvbGludXgvbmV0ZnMuaCBiL2luY2x1ZGUvbGludXgvbmV0ZnMuaA0KPiBpbmRleCAwYzMzYjcx
-NWNiZmQuLmNjZTVhOWI1M2E4YSAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51eC9uZXRmcy5o
-DQo+ICsrKyBiL2luY2x1ZGUvbGludXgvbmV0ZnMuaA0KPiBAQCAtMjg2LDYgKzI4NiwxNyBAQCBl
-eHRlcm4gdm9pZCBuZXRmc19wdXRfc3VicmVxdWVzdChzdHJ1Y3QgbmV0ZnNfaW9fc3VicmVxdWVz
-dCAqc3VicmVxLA0KPiAgCQkJCSBib29sIHdhc19hc3luYywgZW51bSBuZXRmc19zcmVxX3JlZl90
-cmFjZSB3aGF0KTsNCj4gIGV4dGVybiB2b2lkIG5ldGZzX3N0YXRzX3Nob3coc3RydWN0IHNlcV9m
-aWxlICopOw0KPiANCj4gKy8qDQo+ICsgKiBUaGUgc3RydWN0IG5ldGZzX2lfY29udGV4dCBpbnN0
-YW5jZSBtdXN0IGFsd2F5cyBmb2xsb3cgdGhlIFZGUyBpbm9kZSwNCj4gKyAqIGJ1dCBleGlzdGlu
-ZyB1c2VycyB3YW50IHRvIGF2b2lkIGEgc3Vic3RydWN0dXJlIG5hbWUgc3BhY2UsIHNvIGp1c3QN
-Cj4gKyAqIHVzZSB0aGlzIGludGVybmFsbHkgdG8gcGVyZm9ybSB0aGUgbmVlZGVkIGNvbnRhaW5l
-cl9vZigpIG9mZnNldA0KPiArICogY2FzdGluZywgd2hpY2ggd2lsbCBrZWVwIGJvdGggRk9SVElG
-WV9TT1VSQ0UgYW5kIHJhbmRzdHJ1Y3QgaGFwcHkuDQo+ICsgKi8NCj4gK3N0cnVjdCBuZXRmc19p
-X2NfcGFpciB7DQo+ICsJc3RydWN0IGlub2RlIGlub2RlOw0KPiArCXN0cnVjdCBuZXRmc19pX2Nv
-bnRleHQgY3R4Ow0KPiArfTsNCj4gKw0KPiAgLyoqDQo+ICAgKiBuZXRmc19pX2NvbnRleHQgLSBH
-ZXQgdGhlIG5ldGZzIGlub2RlIGNvbnRleHQgZnJvbSB0aGUgaW5vZGUNCj4gICAqIEBpbm9kZTog
-VGhlIGlub2RlIHRvIHF1ZXJ5DQo+IEBAIC0yOTUsNyArMzA2LDcgQEAgZXh0ZXJuIHZvaWQgbmV0
-ZnNfc3RhdHNfc2hvdyhzdHJ1Y3Qgc2VxX2ZpbGUgKik7DQo+ICAgKi8NCj4gIHN0YXRpYyBpbmxp
-bmUgc3RydWN0IG5ldGZzX2lfY29udGV4dCAqbmV0ZnNfaV9jb250ZXh0KHN0cnVjdCBpbm9kZSAq
-aW5vZGUpDQo+ICB7DQo+IC0JcmV0dXJuICh2b2lkICopaW5vZGUgKyBzaXplb2YoKmlub2RlKTsN
-Cj4gKwlyZXR1cm4gJmNvbnRhaW5lcl9vZihpbm9kZSwgc3RydWN0IG5ldGZzX2lfY19wYWlyLCBp
-bm9kZSktPmN0eDsNCj4gIH0NCj4gDQo+ICAvKioNCj4gQEAgLTMwNyw3ICszMTgsNyBAQCBzdGF0
-aWMgaW5saW5lIHN0cnVjdCBuZXRmc19pX2NvbnRleHQgKm5ldGZzX2lfY29udGV4dChzdHJ1Y3Qg
-aW5vZGUgKmlub2RlKQ0KPiAgICovDQo+ICBzdGF0aWMgaW5saW5lIHN0cnVjdCBpbm9kZSAqbmV0
-ZnNfaW5vZGUoc3RydWN0IG5ldGZzX2lfY29udGV4dCAqY3R4KQ0KPiAgew0KPiAtCXJldHVybiAo
-dm9pZCAqKWN0eCAtIHNpemVvZihzdHJ1Y3QgaW5vZGUpOw0KPiArCXJldHVybiAmY29udGFpbmVy
-X29mKGN0eCwgc3RydWN0IG5ldGZzX2lfY19wYWlyLCBjdHgpLT5pbm9kZTsNCj4gIH0NCj4gDQo+
-ICAvKioNCg0KVGhhdCBpcyB1bnJlYWRhYmxlIGNyYXAuDQpDYW4ndCB0aGUgY29tcGlsZXIgYmUg
-Zml4ZWQgc28gdGhhdCBpdCBkb2Vzbid0IG9iamVjdCB0bw0KYSB2ZXJ5IGNvbW1vbiBjb25zdHJ1
-Y3QuDQoNCkFyZSB5b3Ugc3VyZSB0aGUgY29tcGlsZXIgaXNuJ3QgcmV0dXJuaW5nIGEgc2l6ZSBv
-ZiAwDQp3aGVuIGl0IGRvZXNuJ3Qga25vdyB0aGUgc2l6ZSAtIGFzIHdlbGwgYXMgd2hlbiBpdCBr
-bm93cyB0aGUNCnNpemUgaXMgMC4NCldoaWNoIHdvdWxkIG1lYW4gdGhhdCBhbGwgdGhlIGNoZWNr
-cyBpbiB0aGUga2VybmVsIGhlYWRlcnMNCmFyZSBqdXN0IHdyb25nLg0KDQppcyBpdCBlbm91Z2gg
-dG8gcmVwbGFjZToNCj4gCXN0cnVjdCBuZXRmc19pX2NvbnRleHQgKmN0eCA9IChzdHJ1Y3QgbmV0
-ZnNfaV9jb250ZXh0ICopKGlub2RlICsgMSk7DQp3aXRoDQoJY3R4ID0gKHZvaWQgKikobG9uZyko
-aW5vZGUgKyAxKTsNCm9yOg0KCWN0eCA9ICh2b2lkICopKChsb25nKWlub2RlICsgc2l6ZW9mICpp
-bm9kZSk7DQoNCkZhaWxpbmcgdGhhdCBhZGQgc3RydWN0X2FmdGVyKCkgYW5kIHN0cnVjdF9iZWZv
-cmUoKQ0KZGVmaW5pdGlvbnMgc29tZXdoZXJlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBB
-ZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMs
-IE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+When MACsec offloading is used with XPN, before mdo_add_rxsa
+and mdo_add_txsa functions are called, the key salt is not
+copied to the macsec context struct. Offloaded phys will need
+this data when performing offloading.
+
+Fix by copying salt and id to context struct before calling the
+offloading functions.
+
+Fixes: 48ef50fa866a ("macsec: Netlink support of XPN cipher suites")
+Signed-off-by: Carlos Fernandez <carlos.fernandez@technica-engineering.de>
+---
+ drivers/net/macsec.c | 30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
+index 832f09ac075e..4f2bd3d722c3 100644
+--- a/drivers/net/macsec.c
++++ b/drivers/net/macsec.c
+@@ -1804,6 +1804,14 @@ static int macsec_add_rxsa(struct sk_buff *skb, struct genl_info *info)
+ 
+ 	rx_sa->sc = rx_sc;
+ 
++	if (secy->xpn) {
++		rx_sa->ssci = nla_get_ssci(tb_sa[MACSEC_SA_ATTR_SSCI]);
++		nla_memcpy(rx_sa->key.salt.bytes, tb_sa[MACSEC_SA_ATTR_SALT],
++			   MACSEC_SALT_LEN);
++	}
++
++	nla_memcpy(rx_sa->key.id, tb_sa[MACSEC_SA_ATTR_KEYID], MACSEC_KEYID_LEN);
++
+ 	/* If h/w offloading is available, propagate to the device */
+ 	if (macsec_is_offloaded(netdev_priv(dev))) {
+ 		const struct macsec_ops *ops;
+@@ -1826,13 +1834,6 @@ static int macsec_add_rxsa(struct sk_buff *skb, struct genl_info *info)
+ 			goto cleanup;
+ 	}
+ 
+-	if (secy->xpn) {
+-		rx_sa->ssci = nla_get_ssci(tb_sa[MACSEC_SA_ATTR_SSCI]);
+-		nla_memcpy(rx_sa->key.salt.bytes, tb_sa[MACSEC_SA_ATTR_SALT],
+-			   MACSEC_SALT_LEN);
+-	}
+-
+-	nla_memcpy(rx_sa->key.id, tb_sa[MACSEC_SA_ATTR_KEYID], MACSEC_KEYID_LEN);
+ 	rcu_assign_pointer(rx_sc->sa[assoc_num], rx_sa);
+ 
+ 	rtnl_unlock();
+@@ -2046,6 +2047,14 @@ static int macsec_add_txsa(struct sk_buff *skb, struct genl_info *info)
+ 	if (assoc_num == tx_sc->encoding_sa && tx_sa->active)
+ 		secy->operational = true;
+ 
++	if (secy->xpn) {
++		tx_sa->ssci = nla_get_ssci(tb_sa[MACSEC_SA_ATTR_SSCI]);
++		nla_memcpy(tx_sa->key.salt.bytes, tb_sa[MACSEC_SA_ATTR_SALT],
++			   MACSEC_SALT_LEN);
++	}
++
++	nla_memcpy(tx_sa->key.id, tb_sa[MACSEC_SA_ATTR_KEYID], MACSEC_KEYID_LEN);
++
+ 	/* If h/w offloading is available, propagate to the device */
+ 	if (macsec_is_offloaded(netdev_priv(dev))) {
+ 		const struct macsec_ops *ops;
+@@ -2068,13 +2077,6 @@ static int macsec_add_txsa(struct sk_buff *skb, struct genl_info *info)
+ 			goto cleanup;
+ 	}
+ 
+-	if (secy->xpn) {
+-		tx_sa->ssci = nla_get_ssci(tb_sa[MACSEC_SA_ATTR_SSCI]);
+-		nla_memcpy(tx_sa->key.salt.bytes, tb_sa[MACSEC_SA_ATTR_SALT],
+-			   MACSEC_SALT_LEN);
+-	}
+-
+-	nla_memcpy(tx_sa->key.id, tb_sa[MACSEC_SA_ATTR_KEYID], MACSEC_KEYID_LEN);
+ 	rcu_assign_pointer(tx_sc->sa[assoc_num], tx_sa);
+ 
+ 	rtnl_unlock();
+-- 
+2.25.1
 

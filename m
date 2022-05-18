@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058C952B36E
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D37C52B34C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbiERHMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S232016AbiERHMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbiERHLw (ORCPT
+        with ESMTP id S231931AbiERHML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:11:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD7C562D9;
-        Wed, 18 May 2022 00:11:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB1C061015;
-        Wed, 18 May 2022 07:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 251FBC385AA;
-        Wed, 18 May 2022 07:11:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652857910;
-        bh=xDbFE0Spprs2U7YdvsBPOl3T/7s5OHB5kC9BUHYJM5M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fVjUbeFnVy0czhU9IiRCJ6R9/fkwFedj0n94TbXUjcx3oKtrPLYYdjMOtD6mNQl19
-         pToz0TS63rzpTYOBrWbAQbJl+70nW7wcMozQ0gHRFu7CFSScBNEz+vpEpFnPd5yFQj
-         +cfnk3MUCan9Vat9EkyUFdRTm6dnUqCaO+17Xm6Kp0V2hHYrpXMFE3mtKsBeITDwfH
-         QpZ1/qrzDnPHD+T7JNaCODO495SnPwL1fDaI5X12Dgd037sdFLfdFXiv86b0RfpfJ1
-         uKxqF7qfOKQZ80+CdlaikAQujCMinn6+tMY2NYwmBfjqiNH2DjV9NCzgRlVzz1Xqu2
-         B3o1+CNKCCgbQ==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nrDqV-00C64y-97; Wed, 18 May 2022 08:11:47 +0100
+        Wed, 18 May 2022 03:12:11 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC009E0F9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:12:08 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id f4so1965868lfu.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:12:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=Lfj5OmdOY55KHgcwKvO3b5AfZ3EYYjLorTp93VLd7p8=;
+        b=jcj5HiuvL8X+P6hCwA9QfLbXNAcANZ96gfAhSR+AhceTo+Mvuigsa/pzHdQFlqIdGe
+         5mN2JufMO+gg8CJ8N3uMzVWk8R26kbYb4kLcPIZl6uoi/L5QyeXur+cqYBQA2rUZu6oT
+         hkphMcpE0dxOSjy6pMwjlNekFUqB1wDJz1hq/k/RlTBK9wafKXxqCa39oAATTVVtMsJW
+         dtla7KaPB0W8fftcPVcYdgqCI3K9vbErIwe+4Hp2WNNPbKDhxdATx8GFhRinV5AzHoka
+         ob3Z9XYAFQz/jHovET9R6zP5E+NmZVKW7HGx4OXFuA9GN+2zM9kOrZmSsafqrxUU4xUs
+         PdFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Lfj5OmdOY55KHgcwKvO3b5AfZ3EYYjLorTp93VLd7p8=;
+        b=cBxRazSM4WxzXLvoN8nnYZJewwvz73byAsMM8SUEFIS4sTbwUKwpgTwxJLMloB2j9y
+         pxUNFuQhhuraB12w7dpRsz8VVYRNEfUFCMxmh6xWMnC5nzVl9K7wrLW0Oo2eD+V9r7CB
+         jb7mjoxo7AthNcyCKZDTc9HDIzF43tH/R/69OgHmNnQZwglYe6vrZdwttqCIH6rRkWda
+         UN3n7P2pYQWvkkm32cUXxtl8II7HBL6G/Cb5zTLhl+3i3vc2LSBIyIMKdaFQoN4nRXV0
+         9r/h+8Y9LNCWKPuEc/OR9oQoU6Hi1/jTboRAyKJq6AlKMlxMydFRFskhHL6IpDTO8ciw
+         +nHg==
+X-Gm-Message-State: AOAM530SV6fDpy7QwEH213xRCEh0KNkemEnbzYotfzikvhOWEXZV6zIG
+        egq5RI8++rMLUX01MwL9pxB1Bg==
+X-Google-Smtp-Source: ABdhPJxD+zNWMqHTLYyHj0yaHaelXapgrsiCCT2XBorrDJgmEDzlkh+h38uDJAAoAERZQWA84ePKEg==
+X-Received: by 2002:a05:6512:3e1b:b0:472:5f64:e1d9 with SMTP id i27-20020a0565123e1b00b004725f64e1d9mr19001904lfv.489.1652857927034;
+        Wed, 18 May 2022 00:12:07 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id w8-20020ac254a8000000b004779f2ce1e7sm121483lfk.53.2022.05.18.00.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 00:12:06 -0700 (PDT)
+Message-ID: <c7c49632-b4b6-6252-76b5-d3aa45b08339@linaro.org>
+Date:   Wed, 18 May 2022 09:12:05 +0200
 MIME-Version: 1.0
-Date:   Wed, 18 May 2022 08:11:47 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, robert.marko@sartura.hr,
-        vadym.kochan@plvision.eu, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 2/3] arm64: dts: marvell: Add Armada 98DX2530 SoC and
- RD-AC5X board
-In-Reply-To: <1b29abc6-7428-1528-864f-2a246332f72b@alliedtelesis.co.nz>
-References: <20220512042501.3339775-1-chris.packham@alliedtelesis.co.nz>
- <20220512042501.3339775-3-chris.packham@alliedtelesis.co.nz>
- <87wnermc9c.wl-maz@kernel.org>
- <5c01f20a-acd3-da15-081d-7cf878f8a77a@alliedtelesis.co.nz>
- <a69eaf73-8c3c-dfd7-16e5-70460c68877e@alliedtelesis.co.nz>
- <87mtfh6c58.wl-maz@kernel.org>
- <db5c3366-ac81-261b-ff32-3ccf94a930f6@alliedtelesis.co.nz>
- <87mtfgmzgx.wl-maz@kernel.org>
- <1b29abc6-7428-1528-864f-2a246332f72b@alliedtelesis.co.nz>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <157c3bb57a0cf5e153b9b98fb42bad06@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: Chris.Packham@alliedtelesis.co.nz, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com, kostap@marvell.com, robert.marko@sartura.hr, vadym.kochan@plvision.eu, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/4] dmaengine: ep93xx_dma: Remove unneeded ERROR check
+ before clk_put
+Content-Language: en-US
+To:     Wan Jiabing <wanjiabing@vivo.com>, Vinod Koul <vkoul@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220516084139.8864-1-wanjiabing@vivo.com>
+ <20220516084139.8864-2-wanjiabing@vivo.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220516084139.8864-2-wanjiabing@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,134 +80,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-05-17 23:56, Chris Packham wrote:
-> On 17/05/22 18:42, Marc Zyngier wrote:
->> On Mon, 16 May 2022 22:56:44 +0100,
->> Chris Packham <Chris.Packham@alliedtelesis.co.nz> wrote:
->>>>>>> Please fix your firmware to program CNTFRQ_EL0, and
->>>>>>> remove this useless property.
->>>>>> I'm kind of at the mercy of what Marvell have provided for ATF. I 
->>>>>> am
->>>>>> working on the bootloader portion in parallel and am getting 
->>>>>> things
->>>>>> ready for submitting the u-boot support upstream. I was hoping to
->>>>>> leave ATF alone I can at least see if they haven't fixed this 
->>>>>> already
->>>>>> (the original dtsi I started with was fairly old) and if they 
->>>>>> haven't
->>>>>> I'll raise it via their support system.
->>>>> Seems to work fine without the clock so I'll drop it.
->>>> Thanks. If you can, please verify that this is set on both CPUs (I
->>>> have seen plenty of firmware only setting it on CPU0 in the past).
->>> The arch_timer interrupts are counting up on both CPUs and things
->>> generally seem to be getting scheduled (I don't have much of a 
->>> userland
->>> at the moment so it's not exactly a stress test). Do you think that 
->>> is
->>> sufficient to say the clock property is unnecessary and whatever
->>> firmware I have is working as expected.
->> No, the counter always count, and CNTFRQ_EL0 is only an indication of
->> the frequency for SW to find out. You can directly read CNTFRQ_EL0
->> from userspace on each CPU and find whether they have the same value.
+On 16/05/2022 10:41, Wan Jiabing wrote:
+> clk_put() already uses !clk and IS_ERR(clk) to check ERROR or NULL.
+> Remove unneeded ERROR or NULL check for edmac->clk.
 > 
-> Here's my test program
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  drivers/dma/ep93xx_dma.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> $ cat CNTFRQ_EL0.c
-> #include <stdio.h>
-> #include <stdint.h>
-> #include <inttypes.h>
-> 
-> int main(int argc, char *argv[])
-> {
->          uint64_t val;
-> 
->          asm volatile("mrs %0, CNTFRQ_EL0" : "=r" (val));
->          printf("CNTFRQ_EL0 = %" PRIu64 "\n", val);
-> 
->          return 0;
-> }
-> 
-> And running on the RD-AC5X board
-> 
-> [root@linuxbox tmp]# taskset 0x1 ./CNTFRQ_EL0
-> CNTFRQ_EL0 = 25000000
-> [root@linuxbox tmp]# taskset 0x2 ./CNTFRQ_EL0
-> CNTFRQ_EL0 = 25000000
+> diff --git a/drivers/dma/ep93xx_dma.c b/drivers/dma/ep93xx_dma.c
+> index 971ff5f9ae84..60dc7b3f3d0d 100644
+> --- a/drivers/dma/ep93xx_dma.c
+> +++ b/drivers/dma/ep93xx_dma.c
+> @@ -1398,8 +1398,7 @@ static int __init ep93xx_dma_probe(struct platform_device *pdev)
+>  	if (unlikely(ret)) {
+>  		for (i = 0; i < edma->num_channels; i++) {
+>  			struct ep93xx_dma_chan *edmac = &edma->channels[i];
+> -			if (!IS_ERR_OR_NULL(edmac->clk))
+> -				clk_put(edmac->clk);
+> +			clk_put(edmac->clk);
 
-Great. So the DT attribute was only cargo-culted by MRVL,
-and they don't realise what that's for...
+clk_put() which calls __clk_put() seems to print warning on IS_ERR, so
+this does not look equivalent code.
 
-Thanks for going the extra mile and checking this!
 
-> 
->> 
->>>>>>> You are also missing a PPI for the EL2 virtual timer which is 
->>>>>>> present
->>>>>>> on any ARMv8.1+ CPU (and since this system is using A55, it 
->>>>>>> definitely
->>>>>>> has it).
->>>>>>> 
->>>>>>> [...]
->>>>>> Will add.
->>>>> I assume you're talking about the 5th PPI per the
->>>>> timer/arm,arch_timer.yaml ("hypervisor virtual timer irq").
->>>> Indeed.
->>>> 
->>>>> Helpfully
->>>>> Marvell don't include the PPI interrupt numbers in their datasheet. 
->>>>> But
->>>>> then I also notice that none of the other boards that have a
->>>>> "arm,armv8-timer" provide a 5th interrupt either, have I 
->>>>> misunderstood
->>>>> something?
->>>> This was only recently added to the DT binding, but the interrupt
->>>> definitely exist at the CPU level for anything that implements 
->>>> ARMv8.1
->>>> and up. AFAIK, the M1 is the only machine to expose this interrupt 
->>>> in
->>>> DT, but this doesn't mean the interrupt doesn't exist on all the 
->>>> other
->>>> systems that have the same architecture revision.
->>>> 
->>>> If you have contacts in Marvell, maybe try and find out whether they
->>>> have simply decided not to wire the interrupt (I wouldn't be
->>>> surprised). In this case, please add a comment.
->>> I've reached out via their customer support portal. So far they just
->>> want to know why I'm refusing to use their out of date SDK (maybe I
->>> should direct them at some of Jon Corbet's presentations :P).
->> The fact that they are asking is already saying everything there is to
->> know, sadly...
->> 
->>> These integrated chips are sometimes a bit problematic because the
->>> support goes via the Switching group but these questions are really
->>> about IP blocks that have been taken from the SoC group. It may take 
->>> a
->>> while before I get a response from someone that actually knows the
->>> internals.
->> Fair enough. Until then, please drop a comment in the DT indicating
->> that the fate of this PPI is unknown. If you eventually find out, just
->> add it to the DT (it is easy to add things, much harder to remove
->> them).
-> 
-> I'll include the following in the next round
-> 
-> diff --git a/arch/arm64/boot/dts/marvell/armada-98dx25xx.dtsi
-> b/arch/arm64/boot/dts/marvell/armada-98dx25xx.dtsi
-> index 88edc741c008..7a3693a2ad04 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-98dx25xx.dtsi
-> +++ b/arch/arm64/boot/dts/marvell/armada-98dx25xx.dtsi
-> @@ -63,6 +63,7 @@ timer {
->                               <GIC_PPI 8 IRQ_TYPE_LEVEL_HIGH>,
->                               <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>,
->                               <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
-> +                            /* PPI for EL2 virtual timer is 
-> undocumented */
->          };
-> 
->          pmu {
-
-Looks good, thank you.
-
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Best regards,
+Krzysztof

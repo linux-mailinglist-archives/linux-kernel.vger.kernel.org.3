@@ -2,108 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171D652BE3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D40752BDC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 17:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238847AbiEROym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 10:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
+        id S238973AbiEROz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 10:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238758AbiEROyi (ORCPT
+        with ESMTP id S238860AbiEROzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 10:54:38 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F2A1BDD93;
-        Wed, 18 May 2022 07:54:37 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id f4so4045005lfu.12;
-        Wed, 18 May 2022 07:54:37 -0700 (PDT)
+        Wed, 18 May 2022 10:55:22 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD54A4616A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:55:20 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id bo5so2382251pfb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 07:55:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SMb8zkMkHCIlccAQjA5BajELKr84CtL4aU+80NzrBEg=;
-        b=b+IM7oTc+2Sg5GtM8rqGckVb60cRnoSyUWNrDUSq4WjyFV8SDg7k8lhDYocGihdoyF
-         jla9SwofdDpAh/1+ibGoHv8JZtjTmeVtJ69fOJvdYIH8UdWjqYcABZOEQIQaKwJljqvg
-         S0I2/Tb3YWbJD4VhCT0dqYI4mSN1DkmWa1hqHkas9cmuc6guuk8cru65jz/4zJRtOrZI
-         2CSRTJzjhDwTjUftG5R8ayIBFUlnrJySdVaU9ZUzegc+tc+t5Boc2t3hGy5hpihgcS6J
-         lABvT3wr01VlL9q/uk+pUWTg0XrVe+bG7Oqp4kk+YfmqgtJWWoqhrTJq5gkC2IbfYIiY
-         Ns2Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=o7tY6ZcRmC6gYAakiOEfUJCGVoPD3Xvj9BL1UezKdDA=;
+        b=VPhKTi9d8w7lwf065MCuP6kWcomDghzJDkfvBQwDM9ND2AbNAeIZk20nTc63vu6Mos
+         wag31H9GOQNSydzbC5RipG22vzckeEC+ITBUZzqhHq7mDWtPnoKq5jo2cTUqWpLKrTe4
+         WRkoKwzSZ6uhDh9PaswEQCSHJIPI22M/PAjIqhjrXaGjT3XGB75hvtpifewTVXtoWVmn
+         iJ0qdKOWoGkCWpDZrLhex/I5t0AlklSTgtp4IWxeJ0JihjReGg8FJ+USEvlJmqa8Esfi
+         i6NlWqbaVKThA/yt171mlYyO0TUSCPiXvO14Ex5U20QOp72xCVt484SU7jhaoMdIof0b
+         LBwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SMb8zkMkHCIlccAQjA5BajELKr84CtL4aU+80NzrBEg=;
-        b=dedHj8z+qV7+s10GNrDzg8OSw/i/h5LjHipa7B/HU3XSQAepmy+769fDT34uAGiv7A
-         e29wGEk1ytXcnO8FgC40/gSr5PPPq/aAiYrGGhPVHKVweh63UGPW2j9d0L8mwm+wDkTi
-         3JqxEHsygSk1jQKlE1f0hSOsEvvQA3oCebuPhxgmC9YGHSj8zDVKYiZDln8AyXBMfzg+
-         Jk7r+kqjy5X9ODuT3HJ27Fb+Z+uydBJVkSjby2mzfLXeEB5O7KDM0Ftqu3nz/juhrkNf
-         3diWTXMBF3fkns99gMRNrbCTjfRP/KpSYAl8uXz7/Mszz4Q7jMPDi67lYVXHHBCfC9ux
-         w/FA==
-X-Gm-Message-State: AOAM531qkhTMEeL+cp8qIgUQaigq0ssuHaQfIk2NKAhfnPyY4QNN7rtD
-        koLjxiugURba44dGk3u38So+rH4MXqPCdBLeSg4=
-X-Google-Smtp-Source: ABdhPJwrn1b0ZbIHFlR6mnNjQUgmrl6lpUFPZY9C5H3RcIBSs9kLt9EgLSPIfRQpIVj27/3sQlUuczGBv4Cs704NTLc=
-X-Received: by 2002:a05:6512:3d15:b0:477:65d7:7635 with SMTP id
- d21-20020a0565123d1500b0047765d77635mr16383955lfv.656.1652885676135; Wed, 18
- May 2022 07:54:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o7tY6ZcRmC6gYAakiOEfUJCGVoPD3Xvj9BL1UezKdDA=;
+        b=cr9ZYUahui1v6pj9c1A5Vf0YqcboQYBolfNLdq1oBbIlppzUWyBuJVkLt3gbje6lW0
+         kVcm4HCIYgli3UZaDOvW22aTxxqEyHM+nkIKJ1byDEC+h+Gb2HM9LT07r4xEcQiq6Vxf
+         XvmhSCAC82CZUgosPU9LbAUUpod2owB6gdpD1UkJeLMEqQui/eMcnU/PkiXrl7xNiujk
+         nRCe/o9yshERtdEH+lc8kjMxBtNhp/QggsuasNl7xOyuqsCGc5nvZgp4ylxKue+r/B1U
+         VeFoQoA12KwUIsq3xkfFo3n8csCPRTjVTT6Z10w9UmECtQO/TdIfW8G1f1pzoHrjKdTF
+         7+tg==
+X-Gm-Message-State: AOAM530P/4qqBJ7ISWSBjM6yM+SH70KeohMZY9SvXo4nB67RwDA25Q0f
+        rr3x8bTj5FIDGEtCUTPd/GRZUQ==
+X-Google-Smtp-Source: ABdhPJysEejWXF06hcE4vW/aCi2q+cxS02x/9DLbVEAvnOwBC9SO7Q3PrJUwsB/1bty7W3/d06HCcQ==
+X-Received: by 2002:a05:6a00:2908:b0:4fa:9297:f631 with SMTP id cg8-20020a056a00290800b004fa9297f631mr93240pfb.3.1652885720016;
+        Wed, 18 May 2022 07:55:20 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id jh1-20020a170903328100b0015e8d4eb269sm1781608plb.179.2022.05.18.07.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 07:55:19 -0700 (PDT)
+Date:   Wed, 18 May 2022 14:55:15 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 04/34] KVM: x86: hyper-v: Handle
+ HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
+Message-ID: <YoUI03NDdMPYTiSO@google.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-5-vkuznets@redhat.com>
+ <165aea185dfef1eba9ba0f4fd1c3a95361c41396.camel@redhat.com>
+ <877d6juqkw.fsf@redhat.com>
+ <YoUAM9UtfQlGOZxl@google.com>
+ <87y1yyucis.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20220516115846.58328-1-max.oss.09@gmail.com> <20220516115846.58328-12-max.oss.09@gmail.com>
- <CAOMZO5DhTNDHLt_VZoWqD5dMBHq3rvJ+0j8-4xHHThyqheqcgQ@mail.gmail.com>
- <CAEHkU3Xtm9gk6xXr586M3pm4tPpFA-fGn+QyKXfF+Cqqa8VK8g@mail.gmail.com> <CAOMZO5C+6Hoh8Sq4eZp+pp-0ktroz9MJw2-cD5eZEhBZGx+Wfw@mail.gmail.com>
-In-Reply-To: <CAOMZO5C+6Hoh8Sq4eZp+pp-0ktroz9MJw2-cD5eZEhBZGx+Wfw@mail.gmail.com>
-From:   Max Krummenacher <max.oss.09@gmail.com>
-Date:   Wed, 18 May 2022 16:54:24 +0200
-Message-ID: <CAEHkU3Ue5FaiKsc8BSyfpAyKjsP27PML1AwEqa_VN4V+kZPD5w@mail.gmail.com>
-Subject: Re: [PATCH v1 11/17] ARM: dts: imx6q-apalis: Add ov5640 mipi csi camera
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y1yyucis.fsf@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabio
-
-On Wed, May 18, 2022 at 4:25 PM Fabio Estevam <festevam@gmail.com> wrote:
->
-> Hi Max,
->
-> On Wed, May 18, 2022 at 11:21 AM Max Krummenacher <max.oss.09@gmail.com> wrote:
->
-> > In my (limited) testing I saw no issues that the camera would not come up.
-> > It takes 2 to 3 seconds until the pipeline is running but I noted no hickups.
-> > I did this with setting the resolution to 640x480 and 1920x1080 which
-> > probably would not relate to the LP-11 issue you mention.
+On Wed, May 18, 2022, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Wed, May 18, 2022, Vitaly Kuznetsov wrote:
+> >> Maxim Levitsky <mlevitsk@redhat.com> writes:
+> >> > Or if using kfifo, then it can contain plain u64 items, which is even more natural.
+> >> >
+> >> 
+> >> In the next version I switch to fifo and get rid of 'flush_all' entries
+> >> but instead of a boolean I use a 'magic' value of '-1' in GVA. This way
+> >> we don't need to synchronize with the reader and add any special
+> >> handling for the flag.
 > >
-> > I.e. I set up the v4l2 pipeline and start capture to the screen as follows:
->
-> Just curious: which baseboard did you use to test the ov5640 camera?
->
-> Most likely there was an issue with the customer's baseboard that
-> prevented the camera capture to start.
+> > Isn't -1 theoretically possible?  Or is wrapping not allowed?  E.g. requesting a
+> > flush for address=0xfffffffffffff000, count = 0xfff will yield -1 and doesn't
+> > create any illegal addresses in the process.
+> >
+> 
+> Such an error would just lead to KVM flushing the whole guest address
+> space instead of flushing 4096 pages starting with 0xfffffffffffff000
+> but over-flushing is always architecturally correct, isn't it?
 
-I used an 'Apalis Evaluation Board' with an 'Apalis iMX6 Mezannine V2.0A'.
-Now I did retry and it works equally well on an 'Ixora V1.1A'
-
-Note that in the beginning the camera module required the SoM to provide
-a 24MHz clock. The V1.1B HW version then got its local oscillator and the
-clock input no longer requires a clock. That may or may not have been the
-issue your customer saw.
-
-Max
+Oh, duh.  Yeah, flushing everything is totally ok.  Maybe just add a comment above
+the #define for the magic value calling out that corner case and why it's ok?

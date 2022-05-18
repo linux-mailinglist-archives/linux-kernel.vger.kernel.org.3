@@ -2,376 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0C052BF00
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8EE52BF4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239574AbiERPpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
+        id S239660AbiERPsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239537AbiERPpo (ORCPT
+        with ESMTP id S239534AbiERPsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:45:44 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56876119079;
-        Wed, 18 May 2022 08:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1652888737; bh=Om0TvvfZzKXnezHTr/L0fKaxDxcqGftrI6yheMSfiao=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hP7kf/hfG3rwtVx7SrAuy4xBxaAqDMNPUQGciNcacVXxOWy6ZQ4wptR8dwnIXg4a8
-         F8LU9li1Rn7d68yh8WnqpDDT7Oq4ToZumRPde7meiOCOQl58QD1+ztDYY1QPjGGl1g
-         9qxb+0o64g1Unk80lkoqtcTAW9rALWAY0xPw1mjQ=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 40AB460694;
-        Wed, 18 May 2022 23:45:37 +0800 (CST)
-Message-ID: <bfc3a1b2-af80-c619-09fc-9d0972b87bf4@xen0n.name>
-Date:   Wed, 18 May 2022 23:45:37 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V11 06/22] LoongArch: Add CPU definition headers
+        Wed, 18 May 2022 11:48:00 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2053.outbound.protection.outlook.com [40.107.236.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7F4187059;
+        Wed, 18 May 2022 08:47:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VqrRdj/kznvIP4kD173OCUitQ8LAoKPdvK3jlvpw/uxeOx6odQWW+pxp0N0Pjyk1ZO2vWrUo80OwUihwJFlGFtRL0m4eWC3vrnf43+vn7/GFHDYi9sfBgc7Q7BD9VpujMRnhv3A0xWAmQZrMYmC9B65MaUOFwD1z0xqeuuu/ZOyuRmF1ow4OGyrOMf2xudriYH6YUuEl//i/0MStlUmp5b8SvaduPK+hMz5IjVIl0x4vZBVJrSBMFQw0Zt92ChNWHtRwfldbPXL2QhymFBsAUtbr5YALlhloQTrQtOOXskESsmFd0oOiGFaLASqaQoEfx8VkiH0afrpiTqtAoITLiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zCCfNTr6mGiAOmNOj9t66ZDhAuSCzAvWbIx7AhVj+gw=;
+ b=ngeMEokm2SJ3/mF8Fy+OsjkUwjOKWXbvkN6ImxZH6lZoIxfsspe3iEGPomhd8EsJOEvf2vdi9gZe0pK9wdSEXKhkoBZWEaxBEjh1jjR/XL+Ou8G0rExaIEWRx1I7YOYVOhLfm+hxBKRHxjxDq5WvUvhim9DVhTN6fnlPTdgVba53JlaR4FMtjiVDcfvEzIzSsfaGEs+TpNNAC0mj0IbGVlQ3pBvZ0OEtGeZhj8BJSHCig+7aI/pyL6B9ySJrEf+zaU38LCr6zAVO3eTsKFApwIGQb8ZZTA1b4jOesHCm71ryLkwxoAj1IBi6Mvy5MkiyXx70IIx6cJuSksa+zgMuCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zCCfNTr6mGiAOmNOj9t66ZDhAuSCzAvWbIx7AhVj+gw=;
+ b=iOyylhpRC+IR0ivS64gSa2XiObZEMma/eNNfhgTE7aytKSYwq87P8Mhrsvh1zGWbuu222RUbVV0fxX2DQ0BshiPQYhGCnWIKbzdzXa06G2UG38z/im7jJLlf2T86zDbCG82WUDkYCM9bMgQRAKIzGUflKfTNcYCEpRTu6UbfmaQ=
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com (2603:10b6:806:1fb::24)
+ by SN6PR02MB4752.namprd02.prod.outlook.com (2603:10b6:805:8f::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.14; Wed, 18 May
+ 2022 15:47:53 +0000
+Received: from SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::94f0:32be:367b:1798]) by SA1PR02MB8560.namprd02.prod.outlook.com
+ ([fe80::94f0:32be:367b:1798%7]) with mapi id 15.20.5273.014; Wed, 18 May 2022
+ 15:47:53 +0000
+From:   Radhey Shyam Pandey <radheys@xilinx.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Harini Katakam <harinik@xilinx.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        git <git@xilinx.com>
+Subject: RE: [RFC net-next] dt-bindings: net: xilinx: document xilinx emaclite
+ driver binding
+Thread-Topic: [RFC net-next] dt-bindings: net: xilinx: document xilinx
+ emaclite driver binding
+Thread-Index: AQHYZh7/W5aBkbqlHkqbu5HcsW4/mq0cgV4AgAhO+ZA=
+Date:   Wed, 18 May 2022 15:47:53 +0000
+Message-ID: <SA1PR02MB856027DD26AAB5C38C345BBAC7D19@SA1PR02MB8560.namprd02.prod.outlook.com>
+References: <1652373596-5994-1-git-send-email-radhey.shyam.pandey@xilinx.com>
+ <8b441f8f-7aa2-0fab-9b90-6618a1e8c899@linaro.org>
+In-Reply-To: <8b441f8f-7aa2-0fab-9b90-6618a1e8c899@linaro.org>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-7-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220518092619.1269111-7-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a26a1026-f4bf-4fcd-ab12-08da38e5c52f
+x-ms-traffictypediagnostic: SN6PR02MB4752:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <SN6PR02MB475216D31C1BFB1591CEA53CC7D19@SN6PR02MB4752.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KPb0Or1/JDZxJXMi+zw542CZKq+qLOD06XsRtyLApHxBm2pWZffoat2bsyxmPf6W/sejuRTMvINeEASx/MzFeRh9HFEG0+lb5rzvqUqBtje4r/+p5PjBILGrOk9CNvBeRM+vk3cEjixfUQES90oLQATMZKrTmLEiUCmoB9qdaDXQRncag6E+aaa5GY2igU3jY+hfA+Gi4TF5hzMVhGrG0blN5dBiO1+MMIgscY/ev2XO8o6lyHzN+r3VBUjU4NUC/x5MMof6ORinQBNd8NwewL9hCvGv5FzKBjuJTL9QNoRFFbA6HdkDsEHd/Io1zAWaOs/aCxiUUABZ1l5AzCLqPZaWeP0F2XXk6qoFAlgv4qBuenrvVZsUuv3IA926izfnLigEZe+PastlrxC798XWwaPVziSqso46xfl6G8TgzjLsAOjY1JacwcohxAk4m/d9WtASNL6x6m7iNhxDb1chyZEivOCQkGsLoqFeXizeCjJlf9afSlm0kaZo1fANUN/Ple1pVkSElRPIqokZVKfOYZHsc5dogIdGSTWHeLjQfP2ZM8D6vz4CE/vIMLBipkFwGl6TkgA6bvYsGfJFHzXOCf6SZHF+C5My8s/8OaRCjK0NNKW+ZTUk/VnTlaFerUjlthXsoCEzdO4oiqpvJqxZdnqHZv7PC2WZQ6NaBtnyxVPBfRUMvJus3lv+UcMTH85kMWtpsG4rkpDzrgGf0X5RdcuGODDbHypvr1DXm9A0NGQxRlFqMbZZDtVyKA+kWKLRFsIlbKSL+SwCb6wPj6FmpsglY+XC8k11RKl8JGVPd/DOk1lcVjpphgKuTowAw9n458EJHsFv+g9y7AxuztqtBg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR02MB8560.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(66446008)(64756008)(8676002)(38070700005)(186003)(66946007)(86362001)(4326008)(76116006)(8936002)(508600001)(53546011)(52536014)(71200400001)(110136005)(54906003)(55016003)(33656002)(5660300002)(66476007)(7416002)(38100700002)(7696005)(6636002)(2906002)(107886003)(316002)(83380400001)(122000001)(6506007)(966005)(9686003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dndWS1llNEErNW5sWHIzSmVTZWhTbFR1eWtBZ29taUpIM3FaWlVwZGR6ZjNh?=
+ =?utf-8?B?ZHRiVjcrTDVmZ29HZWdwZ0Y1SjJScGNHR2pCMlZzek45NTZyVkVhK2dwcEE2?=
+ =?utf-8?B?cC83MExJaUk0SmZ3TnBkVmUzdzd3bUpGNmRLdzc0SkVoNlduUmh4NnJ3ZEdD?=
+ =?utf-8?B?Z2g4ZVRWeG00anZkakgxczNuTGVqRm1yRFp1TThidlNxS2dBU2V4VDdNa2NR?=
+ =?utf-8?B?RlludEdhcklMVDZ2TkRrc3p3UGpJWkRScENJSGNDYTI0TmpjeHlST2JENlNX?=
+ =?utf-8?B?cksxR0g0RVVQNmRqNnVXNzlCUFJEZGE2TVorVllRVFdKOElnR2JGbDRSNEJS?=
+ =?utf-8?B?eFdERngrbHNqMHN3b21UbnZJOGpmWG0xckxqL1prcmxtK3orTndZclZOL3RR?=
+ =?utf-8?B?YVZ0YXBnQjZWaU84Sm04MEZLVWRHdFkzNFoySGxySjhZb2xoWTBCOWhvemdD?=
+ =?utf-8?B?eFNZZE1Wa2lHTDdNQmNxd3V6SzJNNmpzdXczOHJuZ3JOR3Zaekx3VXR6ajdp?=
+ =?utf-8?B?SnFSL2JTbjU4YUpGSlI0Tm93bWxzSGVyc2RqS2hCK0lEL1pBdG04WWhZYXZn?=
+ =?utf-8?B?ZWl0ZHhQaHJ4UFJhcktoaVNYelM5MW5sY2NMbnoyVnRjRkxKZEV3S3VqQUNX?=
+ =?utf-8?B?MTlWbmlQT3dNWEl6VUdhUnpBWFVRWlkyNDlhc245S1E1MDRTRVloOUsxaE5E?=
+ =?utf-8?B?OHM3YSt0ZDB0citJQ05wczUxRzF5NHdqMjNkVmJzdEMvbEFiaXVHOWpnOVNj?=
+ =?utf-8?B?WVZ6VXZIa2U4QlFRelBrWWxHMVJuMnZySlFydjM3dUtaS1FDM1dFZFNSMk1s?=
+ =?utf-8?B?WlFZQ25aV1VZZC9XQk1RNHBEVU1oUzd2a080OTRyR3I3aHAzc09QZ2JvaDhL?=
+ =?utf-8?B?WkZkWnBHL0FZMTFYL1pFSHFyZFdGTTZXNG80MjBlNG9VMlB2WVkyYXZjeitt?=
+ =?utf-8?B?TkpYV0ZYS3AzZEtDRlN6RnB4U1B4NkxwamhOdzJSN1F6cG5XdTRqY0JxOTZa?=
+ =?utf-8?B?aWg5cTV5Qy91T1pzUWF2bTkySkdkWDJvNzdkVjd1dnI2NGV2Yy9WdlZETEhz?=
+ =?utf-8?B?Vk1BZS9DZzRiRUdrcnFUZVREMWdYVWdFVWkyR0NWaHFXS2h3R2VCLzRWcmI4?=
+ =?utf-8?B?THZpOXJ5R2VQMUhUdmQrNDJidW5ZSDZvR3ZZaGVYNlc4d010TzJHTlFWUm9R?=
+ =?utf-8?B?QUF6aW1EUno0a3N6T2xMR1pKaG9LOWhmSDFHVmdHNjlzeHpLelk0VDRFend4?=
+ =?utf-8?B?VzVGMUo3K0RMbnlPaFlFUkhSSTJDdUJkRnRtb2pFeWhqclQxckhvTS9IVW1S?=
+ =?utf-8?B?RTB5QXh4M0ZHZFk2VDFYQWNuMDlDNjc0T2MvZ3JTVEl5NnE5cm50ckp4Nkdm?=
+ =?utf-8?B?VnRPNEVWY2xLR3Y5U05xM0s1WGNOZW9vRjJ1UFk1ekluMDUzWWg0c1ZGRVBw?=
+ =?utf-8?B?OUFlVXc1ZVlXN1hhNTVmMEsrS2pPWmRTZm9kODFITW5uejlJNmt1eVR6L2xO?=
+ =?utf-8?B?eEE0a0hxbGluRjNBcElNREhabHFIVVZRWXZMUC9VTVhMQ2g2eFNqVlJBbHZB?=
+ =?utf-8?B?b0lGcXdHMG1pY0NBUEdLVk1rRVFVejJyakZXYkREUExVNVd1aWRacDNMd05U?=
+ =?utf-8?B?eStDcmxSajNJN25FVjkzYWc2NEdWT3RYV1RKK0hKOEFpZXU0cjY4K3g0M0U5?=
+ =?utf-8?B?cTE0NXYxS2RvNmZxQXZzVSt5Nk91b1krYzVsS0poNjVyS1hjSk1oK0ZNdlFi?=
+ =?utf-8?B?MHhoNCtLRWhQeCtudlNvTlRuM2lycitIZlh3ci9RU0VNYmYvRE1jczhvUDEz?=
+ =?utf-8?B?dTRueUl0TDFmQk9TNkQ3ZVBRbDlrUVVaMFJiU3ZpaWJsU0ZON0U3Y1dyUFNp?=
+ =?utf-8?B?SjFIblBMeXVwa09odloySlZYNXJ0U01nZitWamVhejFRckNueWo2YjlhSmtO?=
+ =?utf-8?B?SjFUUWovVktYUmpEU0o1VHJOTEVHM3VtdGRBUDZybEdzeUYwMUN1ZEw1ZFRt?=
+ =?utf-8?B?SXcxWU1MY3dtSU50Mnh6OVNPeDZrVmFIclMyY0tNZFprb1JnRXhEQXdMbWtn?=
+ =?utf-8?B?Vnk4MVlwSHNtK25KbGY3Q0pwWjE3YWFtQmQyZ1ZqN3VnM05TQ09IdnVIV2s1?=
+ =?utf-8?B?S2ozY2phMzYyWmtrQnNUMGhUa0dHbDUwdU9WZnFkWS9HbDYwRGZ5Q0x1aXZz?=
+ =?utf-8?B?U1p3eGN4SjZ6SXRPTjFGdjJiSkNsYUkzL2JnSkFyN2txUG16ZldUMWxwdEN2?=
+ =?utf-8?B?SnV5TktVdDkzVDVnUnFEWm1jOW9lbENyT0pZUWRGemw1OGlWaUJ6bkNjMFBM?=
+ =?utf-8?B?RGExU1hYWitGdk0xZU9DZjBOakdXWFl0QUluMExCaVA2ZGVJS2dhTlBobVlk?=
+ =?utf-8?Q?jEklgXm1Q7eqD/9bMFoAs/sYsvncrizB+hEFdLe8k3t6E?=
+x-ms-exchange-antispam-messagedata-1: YNU7KIfOubFUzQ==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR02MB8560.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a26a1026-f4bf-4fcd-ab12-08da38e5c52f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2022 15:47:53.2779
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: J70sFLAdlB3sqjP037lWcN1Ip/ZnR7nOQxI0HolG3HODZe4FHv4a4qE62R5fMutMhqNBmi24M/zNfkAhSHlR0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4752
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/22 17:26, Huacai Chen wrote:
-> Add common headers (CPU definition and address space layout) for basic
-> LoongArch support.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   arch/loongarch/include/asm/addrspace.h    |  112 ++
->   arch/loongarch/include/asm/cpu-features.h |   73 +
->   arch/loongarch/include/asm/cpu-info.h     |  116 ++
->   arch/loongarch/include/asm/cpu.h          |  127 ++
->   arch/loongarch/include/asm/fpregdef.h     |   53 +
->   arch/loongarch/include/asm/loongarch.h    | 1519 +++++++++++++++++++++
->   arch/loongarch/include/asm/loongson.h     |  153 +++
->   arch/loongarch/include/asm/regdef.h       |   41 +
->   8 files changed, 2194 insertions(+)
->   create mode 100644 arch/loongarch/include/asm/addrspace.h
->   create mode 100644 arch/loongarch/include/asm/cpu-features.h
->   create mode 100644 arch/loongarch/include/asm/cpu-info.h
->   create mode 100644 arch/loongarch/include/asm/cpu.h
->   create mode 100644 arch/loongarch/include/asm/fpregdef.h
->   create mode 100644 arch/loongarch/include/asm/loongarch.h
->   create mode 100644 arch/loongarch/include/asm/loongson.h
->   create mode 100644 arch/loongarch/include/asm/regdef.h
->
-> [snip]
->
-> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-> new file mode 100644
-> index 000000000000..2be0efe93875
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/loongarch.h
-> @@ -0,0 +1,1519 @@
->
-> [snip]
->
-> +
-> +/* FPU register names */
-> +#define LOONGARCH_FCSR0	$r0
-> +#define LOONGARCH_FCSR1	$r1
-> +#define LOONGARCH_FCSR2	$r2
-> +#define LOONGARCH_FCSR3	$r3
-Why not reuse the definitions in <asm/fpregdef.h>?
-> +
-> +/* FPU Status Register Values */
-> +#define FPU_CSR_RSVD	0xe0e0fce0
-> +
-> +/*
-> + * X the exception cause indicator
-> + * E the exception enable
-> + * S the sticky/flag bit
-> + */
-> +#define FPU_CSR_ALL_X	0x1f000000
-> +#define FPU_CSR_INV_X	0x10000000
-> +#define FPU_CSR_DIV_X	0x08000000
-> +#define FPU_CSR_OVF_X	0x04000000
-> +#define FPU_CSR_UDF_X	0x02000000
-> +#define FPU_CSR_INE_X	0x01000000
-> +
-> +#define FPU_CSR_ALL_S	0x001f0000
-> +#define FPU_CSR_INV_S	0x00100000
-> +#define FPU_CSR_DIV_S	0x00080000
-> +#define FPU_CSR_OVF_S	0x00040000
-> +#define FPU_CSR_UDF_S	0x00020000
-> +#define FPU_CSR_INE_S	0x00010000
-> +
-> +#define FPU_CSR_ALL_E	0x0000001f
-> +#define FPU_CSR_INV_E	0x00000010
-> +#define FPU_CSR_DIV_E	0x00000008
-> +#define FPU_CSR_OVF_E	0x00000004
-> +#define FPU_CSR_UDF_E	0x00000002
-> +#define FPU_CSR_INE_E	0x00000001
-> +
-> +/* Bits 8 and 9 of FPU Status Register specify the rounding mode */
-> +#define FPU_CSR_RM	0x300
-> +#define FPU_CSR_RN	0x000	/* nearest */
-> +#define FPU_CSR_RZ	0x100	/* towards zero */
-> +#define FPU_CSR_RU	0x200	/* towards +Infinity */
-> +#define FPU_CSR_RD	0x300	/* towards -Infinity */
-> +
-> +#define read_fcsr(source)	\
-> +({	\
-> +	unsigned int __res;	\
-> +\
-> +	__asm__ __volatile__(	\
-> +	"	movfcsr2gr	%0, "__stringify(source)" \n"	\
-> +	: "=r" (__res));	\
-> +	__res;	\
-> +})
-> +
-> +#define write_fcsr(dest, val) \
-> +do {	\
-> +	__asm__ __volatile__(	\
-> +	"	movgr2fcsr	%0, "__stringify(dest)"	\n"	\
-> +	: : "r" (val));	\
-> +} while (0)
-> +
-> +#endif /* _ASM_LOONGARCH_H */
-> diff --git a/arch/loongarch/include/asm/loongson.h b/arch/loongarch/include/asm/loongson.h
-> new file mode 100644
-> index 000000000000..db4992ae6a6c
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/loongson.h
-> @@ -0,0 +1,153 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Author: Huacai Chen <chenhuacai@loongson.cn>
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#ifndef __ASM_LOONGSON_H
-> +#define __ASM_LOONGSON_H
-> +
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/irq.h>
-> +#include <linux/pci.h>
-> +#include <asm/addrspace.h>
-> +#include <asm/bootinfo.h>
-> +
-> +extern const struct plat_smp_ops loongson3_smp_ops;
-> +
-> +#define LOONGSON_REG(x) \
-> +	(*(volatile u32 *)((char *)TO_UNCACHE(LOONGSON_REG_BASE) + (x)))
-> +
-> +#define LOONGSON_LIO_BASE	0x18000000
-> +#define LOONGSON_LIO_SIZE	0x00100000	/* 1M */
-> +#define LOONGSON_LIO_TOP	(LOONGSON_LIO_BASE+LOONGSON_LIO_SIZE-1)
-> +
-> +#define LOONGSON_BOOT_BASE	0x1c000000
-> +#define LOONGSON_BOOT_SIZE	0x02000000	/* 32M */
-> +#define LOONGSON_BOOT_TOP	(LOONGSON_BOOT_BASE+LOONGSON_BOOT_SIZE-1)
-> +
-> +#define LOONGSON_REG_BASE	0x1fe00000
-> +#define LOONGSON_REG_SIZE	0x00100000	/* 1M */
-> +#define LOONGSON_REG_TOP	(LOONGSON_REG_BASE+LOONGSON_REG_SIZE-1)
-> +
-> +/* GPIO Regs - r/w */
-> +
-> +#define LOONGSON_GPIODATA		LOONGSON_REG(0x11c)
-> +#define LOONGSON_GPIOIE			LOONGSON_REG(0x120)
-> +#define LOONGSON_REG_GPIO_BASE          (LOONGSON_REG_BASE + 0x11c)
-> +
-> +#define MAX_PACKAGES 16
-> +
-> +/* Chip Config registor of each physical cpu package */
-"register" -- same below
-> +extern u64 loongson_chipcfg[MAX_PACKAGES];
-> +#define LOONGSON_CHIPCFG(id) (*(volatile u32 *)(loongson_chipcfg[id]))
-> +
-> +/* Chip Temperature registor of each physical cpu package */
-> +extern u64 loongson_chiptemp[MAX_PACKAGES];
-> +#define LOONGSON_CHIPTEMP(id) (*(volatile u32 *)(loongson_chiptemp[id]))
-> +
-> +/* Freq Control register of each physical cpu package */
-> +extern u64 loongson_freqctrl[MAX_PACKAGES];
-> +#define LOONGSON_FREQCTRL(id) (*(volatile u32 *)(loongson_freqctrl[id]))
-> +
-> +#define xconf_readl(addr) readl(addr)
-> +#define xconf_readq(addr) readq(addr)
-> +
-> +static inline void xconf_writel(u32 val, volatile void __iomem *addr)
-> +{
-> +	asm volatile (
-> +	"	st.w	%[v], %[hw], 0	\n"
-> +	"	ld.b	$r0, %[hw], 0	\n"
-> +	:
-> +	: [hw] "r" (addr), [v] "r" (val)
-> +	);
-> +}
-> +
-> +static inline void xconf_writeq(u64 val64, volatile void __iomem *addr)
-> +{
-> +	asm volatile (
-> +	"	st.d	%[v], %[hw], 0	\n"
-> +	"	ld.b	$r0, %[hw], 0	\n"
-> +	:
-> +	: [hw] "r" (addr),  [v] "r" (val64)
-> +	);
-> +}
-> +
-> +/* ============== LS7A registers =============== */
-> +#define LS7A_PCH_REG_BASE		0x10000000UL
-> +/* LPC regs */
-> +#define LS7A_LPC_REG_BASE		(LS7A_PCH_REG_BASE + 0x00002000)
-> +/* CHIPCFG regs */
-> +#define LS7A_CHIPCFG_REG_BASE		(LS7A_PCH_REG_BASE + 0x00010000)
-> +/* MISC reg base */
-> +#define LS7A_MISC_REG_BASE		(LS7A_PCH_REG_BASE + 0x00080000)
-> +/* ACPI regs */
-> +#define LS7A_ACPI_REG_BASE		(LS7A_MISC_REG_BASE + 0x00050000)
-> +/* RTC regs */
-> +#define LS7A_RTC_REG_BASE		(LS7A_MISC_REG_BASE + 0x00050100)
-> +
-> +#define LS7A_DMA_CFG			(volatile void *)TO_UNCACHE(LS7A_CHIPCFG_REG_BASE + 0x041c)
-> +#define LS7A_DMA_NODE_SHF		8
-> +#define LS7A_DMA_NODE_MASK		0x1F00
-> +
-> +#define LS7A_INT_MASK_REG		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x020)
-> +#define LS7A_INT_EDGE_REG		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x060)
-> +#define LS7A_INT_CLEAR_REG		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x080)
-> +#define LS7A_INT_HTMSI_EN_REG		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x040)
-> +#define LS7A_INT_ROUTE_ENTRY_REG	(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x100)
-> +#define LS7A_INT_HTMSI_VEC_REG		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x200)
-> +#define LS7A_INT_STATUS_REG		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x3a0)
-> +#define LS7A_INT_POL_REG		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x3e0)
-> +#define LS7A_LPC_INT_CTL		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x2000)
-> +#define LS7A_LPC_INT_ENA		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x2004)
-> +#define LS7A_LPC_INT_STS		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x2008)
-> +#define LS7A_LPC_INT_CLR		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x200c)
-> +#define LS7A_LPC_INT_POL		(volatile void *)TO_UNCACHE(LS7A_PCH_REG_BASE + 0x2010)
-> +
-> +#define LS7A_PMCON_SOC_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x000)
-> +#define LS7A_PMCON_RESUME_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x004)
-> +#define LS7A_PMCON_RTC_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x008)
-> +#define LS7A_PM1_EVT_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x00c)
-> +#define LS7A_PM1_ENA_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x010)
-> +#define LS7A_PM1_CNT_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x014)
-> +#define LS7A_PM1_TMR_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x018)
-> +#define LS7A_P_CNT_REG			(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x01c)
-> +#define LS7A_GPE0_STS_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x028)
-> +#define LS7A_GPE0_ENA_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x02c)
-> +#define LS7A_RST_CNT_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x030)
-> +#define LS7A_WD_SET_REG			(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x034)
-> +#define LS7A_WD_TIMER_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x038)
-> +#define LS7A_THSENS_CNT_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x04c)
-> +#define LS7A_GEN_RTC_1_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x050)
-> +#define LS7A_GEN_RTC_2_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x054)
-> +#define LS7A_DPM_CFG_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x400)
-> +#define LS7A_DPM_STS_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x404)
-> +#define LS7A_DPM_CNT_REG		(volatile void *)TO_UNCACHE(LS7A_ACPI_REG_BASE + 0x408)
-> +
-> +typedef enum {
-> +	ACPI_PCI_HOTPLUG_STATUS	= 1 << 1,
-> +	ACPI_CPU_HOTPLUG_STATUS	= 1 << 2,
-> +	ACPI_MEM_HOTPLUG_STATUS	= 1 << 3,
-> +	ACPI_POWERBUTTON_STATUS	= 1 << 8,
-> +	ACPI_RTC_WAKE_STATUS	= 1 << 10,
-> +	ACPI_PCI_WAKE_STATUS	= 1 << 14,
-> +	ACPI_ANY_WAKE_STATUS	= 1 << 15,
-> +} AcpiEventStatusBits;
-> +
-> +#define HT1LO_OFFSET		0xe0000000000UL
-> +
-> +/* PCI Configuration Space Base */
-> +#define MCFG_EXT_PCICFG_BASE		0xefe00000000UL
-> +
-> +/* REG ACCESS*/
-> +#define ls7a_readb(addr)	(*(volatile unsigned char  *)TO_UNCACHE(addr))
-> +#define ls7a_readw(addr)	(*(volatile unsigned short *)TO_UNCACHE(addr))
-> +#define ls7a_readl(addr)	(*(volatile unsigned int   *)TO_UNCACHE(addr))
-> +#define ls7a_readq(addr)	(*(volatile unsigned long  *)TO_UNCACHE(addr))
-> +#define ls7a_writeb(val, addr)	*(volatile unsigned char  *)TO_UNCACHE(addr) = (val)
-> +#define ls7a_writew(val, addr)	*(volatile unsigned short *)TO_UNCACHE(addr) = (val)
-> +#define ls7a_writel(val, addr)	*(volatile unsigned int   *)TO_UNCACHE(addr) = (val)
-> +#define ls7a_writeq(val, addr)	*(volatile unsigned long  *)TO_UNCACHE(addr) = (val)
-> +
-> +#endif /* __ASM_LOONGSON_H */
-> diff --git a/arch/loongarch/include/asm/regdef.h b/arch/loongarch/include/asm/regdef.h
-> new file mode 100644
-> index 000000000000..49a374c2612c
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/regdef.h
-> @@ -0,0 +1,41 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +#ifndef _ASM_REGDEF_H
-> +#define _ASM_REGDEF_H
-> +
-> +#define zero	$r0	/* wired zero */
-> +#define ra	$r1	/* return address */
-> +#define tp	$r2
-> +#define sp	$r3	/* stack pointer */
-> +#define a0	$r4	/* argument registers, a0/a1 reused as v0/v1 for return value */
-> +#define a1	$r5
-> +#define a2	$r6
-> +#define a3	$r7
-> +#define a4	$r8
-> +#define a5	$r9
-> +#define a6	$r10
-> +#define a7	$r11
-> +#define t0	$r12	/* caller saved */
-> +#define t1	$r13
-> +#define t2	$r14
-> +#define t3	$r15
-> +#define t4	$r16
-> +#define t5	$r17
-> +#define t6	$r18
-> +#define t7	$r19
-> +#define t8	$r20
-> +#define u0	$r21
-> +#define fp	$r22	/* frame pointer */
-> +#define s0	$r23	/* callee saved */
-> +#define s1	$r24
-> +#define s2	$r25
-> +#define s3	$r26
-> +#define s4	$r27
-> +#define s5	$r28
-> +#define s6	$r29
-> +#define s7	$r30
-> +#define s8	$r31
-> +
-> +#endif /* _ASM_REGDEF_H */
-
-Apart from the minor nits:
-
-Reviewed-by: WANG Xuerui <git@xen0n.name>
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tp
+IDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+DQo+IFNlbnQ6IEZyaWRheSwgTWF5IDEz
+LCAyMDIyIDI6MjMgUE0NCj4gVG86IFJhZGhleSBTaHlhbSBQYW5kZXkgPHJhZGhleXNAeGlsaW54
+LmNvbT47IGRhdmVtQGRhdmVtbG9mdC5uZXQ7DQo+IGVkdW1hemV0QGdvb2dsZS5jb207IGt1YmFA
+a2VybmVsLm9yZzsgcGFiZW5pQHJlZGhhdC5jb207DQo+IHJvYmgrZHRAa2VybmVsLm9yZzsga3J6
+eXN6dG9mLmtvemxvd3NraStkdEBsaW5hcm8ub3JnOyBIYXJpbmkgS2F0YWthbQ0KPiA8aGFyaW5p
+a0B4aWxpbnguY29tPg0KPiBDYzogbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgZGV2aWNldHJlZUB2
+Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJuZWwub3JnOyBnaXQgPGdp
+dEB4aWxpbnguY29tPg0KPiBTdWJqZWN0OiBSZTogW1JGQyBuZXQtbmV4dF0gZHQtYmluZGluZ3M6
+IG5ldDogeGlsaW54OiBkb2N1bWVudCB4aWxpbnggZW1hY2xpdGUNCj4gZHJpdmVyIGJpbmRpbmcN
+Cj4gDQo+IE9uIDEyLzA1LzIwMjIgMTg6MzksIFJhZGhleSBTaHlhbSBQYW5kZXkgd3JvdGU6DQo+
+ID4gQWRkIGJhc2ljIGRlc2NyaXB0aW9uIGZvciB0aGUgeGlsaW54IGVtYWNsaXRlIGRyaXZlciBE
+VCBiaW5kaW5ncy4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFJhZGhleSBTaHlhbSBQYW5kZXkg
+PHJhZGhleS5zaHlhbS5wYW5kZXlAeGlsaW54LmNvbT4NCj4gPiAtLS0NCj4gPiAgLi4uL2JpbmRp
+bmdzL25ldC94bG54LGVtYWNsaXRlLnlhbWwgICAgICAgICAgIHwgNjAgKysrKysrKysrKysrKysr
+KysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNjAgaW5zZXJ0aW9ucygrKQ0KPiA+ICBjcmVhdGUg
+bW9kZSAxMDA2NDQNCj4gPiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvbmV0L3hs
+bngsZW1hY2xpdGUueWFtbA0KPiANCj4gV2h5IGlzIHRoaXMgUkZDPyBEbyB5b3UgZXhwZWN0IERU
+IG1haW50YWluZXJzIHJldmlldyBvciBub3Q/IE1heWJlIHRoZXJlIGlzDQo+IG5vIHBvaW50IGZv
+ciB1cyB0byByZXZpZXcgc29tZXRoaW5nIHdoaWNoIGlzIG5vdCBnb2luZyB0byBiZSBhcHBsaWVk
+Pw0KDQpJIGludGVudGlvbmFsbHkgbWFkZSBpdCBSRkMgc28gdGhhdCBhbGwgYXNwZWN0cyBhcmUg
+cmV2aWV3ZWQgYXMgdGhpcyBkcml2ZXIgZGlkbid0DQpoYWQgYW4gZXhpc3RpbmcgYmluZGluZy4g
+SSB3aWxsIHNlbmQgb3V0IG5leHQgdmVyc2lvbiB3aXRoIGJlbG93IGNvbW1lbnQgDQphZGRyZXNz
+ZWQuIFRoYW5rcyENCj4gDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZp
+Y2V0cmVlL2JpbmRpbmdzL25ldC94bG54LGVtYWNsaXRlLnlhbWwNCj4gPiBiL0RvY3VtZW50YXRp
+b24vZGV2aWNldHJlZS9iaW5kaW5ncy9uZXQveGxueCxlbWFjbGl0ZS55YW1sDQo+ID4gbmV3IGZp
+bGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAwMDAuLmEzZTJhMGU4OWIyNA0KPiA+
+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
+Z3MvbmV0L3hsbngsZW1hY2xpdGUueWFtbA0KPiA+IEBAIC0wLDAgKzEsNjAgQEANCj4gPiArIyBT
+UERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjAtb25seSBPUiBCU0QtMi1DbGF1c2UpICVZ
+QU1MIDEuMg0KPiA+ICstLS0NCj4gPiArJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2NoZW1h
+cy9uZXQveGxueCxlbWFjbGl0ZS55YW1sIw0KPiA+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJl
+ZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4gPiArDQo+ID4gK3RpdGxlOiBYaWxpbngg
+RW1hY2xpdGUgRXRoZXJuZXQgY29udHJvbGxlcg0KPiA+ICsNCj4gPiArbWFpbnRhaW5lcnM6DQo+
+ID4gKyAgLSBSYWRoZXkgU2h5YW0gUGFuZGV5IDxyYWRoZXkuc2h5YW0ucGFuZGV5QHhpbGlueC5j
+b20+DQo+ID4gKyAgLSBIYXJpbmkgS2F0YWthbSA8aGFyaW5pLmthdGFrYW1AeGlsaW54LmNvbT4N
+Cj4gPiArDQo+IA0KPiBZb3Ugc2hvdWxkIGluY2x1ZGUgZXRoZXJuZXQgY29udHJvbGxlciBzY2hl
+bWEuDQo+IA0KPiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAgICBl
+bnVtOg0KPiA+ICsgICAgICAtIHhsbngsb3BiLWV0aGVybmV0bGl0ZS0xLjAxLmENCj4gPiArICAg
+ICAgLSB4bG54LG9wYi1ldGhlcm5ldGxpdGUtMS4wMS5iDQo+ID4gKyAgICAgIC0geGxueCx4cHMt
+ZXRoZXJuZXRsaXRlLTEuMDAuYQ0KPiA+ICsgICAgICAtIHhsbngseHBzLWV0aGVybmV0bGl0ZS0y
+LjAwLmENCj4gPiArICAgICAgLSB4bG54LHhwcy1ldGhlcm5ldGxpdGUtMi4wMS5hDQo+ID4gKyAg
+ICAgIC0geGxueCx4cHMtZXRoZXJuZXRsaXRlLTMuMDAuYQ0KPiA+ICsNCj4gPiArICByZWc6DQo+
+ID4gKyAgICBtYXhJdGVtczogMQ0KPiA+ICsNCj4gPiArICBpbnRlcnJ1cHRzOg0KPiA+ICsgICAg
+bWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgcGh5LWhhbmRsZTogdHJ1ZQ0KPiA+ICsNCj4gPiAr
+ICBsb2NhbC1tYWMtYWRkcmVzczogdHJ1ZQ0KPiA+ICsNCj4gPiArICB4bG54LHR4LXBpbmctcG9u
+ZzoNCj4gPiArICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArICAgIGRlc2NyaXB0aW9uOiBoYXJkd2Fy
+ZSBzdXBwb3J0cyB0eCBwaW5nIHBvbmcgYnVmZmVyLg0KPiA+ICsNCj4gPiArICB4bG54LHJ4LXBp
+bmctcG9uZzoNCj4gPiArICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArICAgIGRlc2NyaXB0aW9uOiBo
+YXJkd2FyZSBzdXBwb3J0cyByeCBwaW5nIHBvbmcgYnVmZmVyLg0KPiA+ICsNCj4gPiArcmVxdWly
+ZWQ6DQo+ID4gKyAgLSBjb21wYXRpYmxlDQo+ID4gKyAgLSByZWcNCj4gPiArICAtIGludGVycnVw
+dHMNCj4gPiArICAtIHBoeS1oYW5kbGUNCj4gPiArDQo+ID4gK2FkZGl0aW9uYWxQcm9wZXJ0aWVz
+OiBmYWxzZQ0KPiA+ICsNCj4gPiArZXhhbXBsZXM6DQo+ID4gKyAgLSB8DQo+ID4gKyAgICBheGlf
+ZXRoZXJuZXRsaXRlXzE6IGV0aGVybmV0QDQwZTAwMDAwIHsNCj4gPiArICAgICAgICAgICAgY29t
+cGF0aWJsZSA9ICJ4bG54LHhwcy1ldGhlcm5ldGxpdGUtMy4wMC5hIjsNCj4gDQo+IDQtc3BhY2Ug
+aW5kZW50YXRpb24gZm9yIERUUywgcGxlYXNlLg0KPiANCj4gPiArICAgICAgICAgICAgaW50ZXJy
+dXB0LXBhcmVudCA9IDwmYXhpX2ludGNfMT47DQo+ID4gKyAgICAgICAgICAgIGludGVycnVwdHMg
+PSA8MSAwPjsNCj4gPiArICAgICAgICAgICAgbG9jYWwtbWFjLWFkZHJlc3MgPSBbMDAgMGEgMzUg
+MDAgMDAgMDBdOw0KPiA+ICsgICAgICAgICAgICBwaHktaGFuZGxlID0gPCZwaHkwPjsNCj4gPiAr
+ICAgICAgICAgICAgcmVnID0gPDB4NDBlMDAwMDAgMHgxMDAwMD47DQo+ID4gKyAgICAgICAgICAg
+IHhsbngscngtcGluZy1wb25nOw0KPiA+ICsgICAgICAgICAgICB4bG54LHR4LXBpbmctcG9uZzsN
+Cj4gPiArICAgIH07DQo+IA0KPiANCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YNCg==

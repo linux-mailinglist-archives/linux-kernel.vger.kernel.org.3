@@ -2,172 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44D652B6E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3A452B733
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234691AbiERJqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
+        id S234601AbiERJrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234922AbiERJqT (ORCPT
+        with ESMTP id S234904AbiERJqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 18 May 2022 05:46:19 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13340B1C
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5062B29B
         for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:46:09 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24I9gi64006451;
-        Wed, 18 May 2022 09:45:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=QQVA55xALZqqZ0+UCK4bbILmJo0n4KksKg2EVFGHGDc=;
- b=O2XfT2w/1QSCq2fRsAeHDD4Lny+5Gr1CjxkRjxnEKhfvxEw+zWL8x2ZTWlcbGyjuzKcY
- 560KMV4uKAPGrP+aG+cckHCeWw1vjjpT4mEdwMfKiepjCjxe+8aB30fowMNV2d5LW2jm
- zOxOcgKJbNLoq9RinCKSNyFlaICVxNg1xHQ0G7qkvPPKg6ehgTP9Pon+FxYUikUrgPvZ
- gVuJl/ajoycDn1fDVSUNSWJjpgKei8mYf2xzkjB04vdHFmCvTaRtIUvYPQB0j64hAMpn
- esH6k2Qm9zD7/ljWsvQVN8HCQmQ7NULIsboWLzyCAJiLlWTxlcJPCreselHQUBUsMwTn iA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g4xdh8238-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 09:45:47 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24I9gbcq020274;
-        Wed, 18 May 2022 09:45:45 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3g2429dfwh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 May 2022 09:45:45 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24I9jh6A42336578
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 May 2022 09:45:43 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E45CAE04D;
-        Wed, 18 May 2022 09:45:43 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D830EAE045;
-        Wed, 18 May 2022 09:45:42 +0000 (GMT)
-Received: from localhost (unknown [9.43.19.36])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 18 May 2022 09:45:42 +0000 (GMT)
-Date:   Wed, 18 May 2022 15:15:40 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v3 19/25] powerpc/ftrace: Minimise number of #ifdefs
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <cover.1652074503.git.christophe.leroy@csgroup.eu>
-        <18ce6708d6f8c71d87436f9c6019f04df4125128.1652074503.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <18ce6708d6f8c71d87436f9c6019f04df4125128.1652074503.git.christophe.leroy@csgroup.eu>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1652866821.cdcfe8bs78.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -xXV3WEQRZy-1nk7o9MuDv6wx1WAzkTW
-X-Proofpoint-ORIG-GUID: -xXV3WEQRZy-1nk7o9MuDv6wx1WAzkTW
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E84AE2187D;
+        Wed, 18 May 2022 09:46:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652867165; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UZiL2iT23ofTS/HVXmTv3k1ijrjRXrReMfjhRCC71q4=;
+        b=gJipXj5lDe/gSgpXQvCeFxkBHzYwCgb7e0R6rDQphJXFAe5U2yjgxyEzkYaUkOEZugnCvn
+        B5Qwt0RYl3ldokm5KKrZvX3ULSkbbcO8ocSxYbK4mhvjrGAHHyxEirI/NG13XC4DwygfEL
+        Pk5OWsot6Ip97IfKoto8c8yskdTOtSg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652867165;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UZiL2iT23ofTS/HVXmTv3k1ijrjRXrReMfjhRCC71q4=;
+        b=MlLhLrcp9eSx/ih9hGRG9t5yHHnm5bbU0Auvo4oC5P/Tk0ZfXA3WQWQ8Cm52Sjs83KbbHP
+        Hh+wlaQn+/WblBBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D4B30133F5;
+        Wed, 18 May 2022 09:46:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id OgfmMFzAhGJjFwAAMHmgww
+        (envelope-from <osalvador@suse.de>); Wed, 18 May 2022 09:46:04 +0000
+Date:   Wed, 18 May 2022 11:46:02 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, vbabka@suse.cz,
+        dhowells@redhat.com, neilb@suse.de, apopple@nvidia.com,
+        david@redhat.com, surenb@google.com, peterx@redhat.com,
+        naoya.horiguchi@nec.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/15] mm/swap: make page_swapcount and
+ __lru_add_drain_all
+Message-ID: <YoTAWjTV7Yj8FulM@localhost.localdomain>
+References: <20220509131416.17553-1-linmiaohe@huawei.com>
+ <20220509131416.17553-9-linmiaohe@huawei.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-18_03,2022-05-17_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
- adultscore=0 clxscore=1011 suspectscore=0 malwarescore=0 mlxlogscore=928
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205180052
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509131416.17553-9-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
-> A lot of #ifdefs can be replaced by IS_ENABLED()
->=20
-> Do so.
->=20
-> This requires to have kernel_toc_addr() defined at all time
-> as well as PPC_INST_LD_TOC and PPC_INST_STD_LR.
->=20
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On Mon, May 09, 2022 at 09:14:09PM +0800, Miaohe Lin wrote:
+> Make page_swapcount and __lru_add_drain_all static. They are only used
+> within the file now.
+> 
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+
+I think the commit message is missing the "static" word.
+
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+
 > ---
-> v2: Moved the setup of pop outside of the big if()/else() in __ftrace_mak=
-e_nop()
-> ---
->  arch/powerpc/include/asm/code-patching.h |   2 -
->  arch/powerpc/include/asm/module.h        |   2 -
->  arch/powerpc/include/asm/sections.h      |  24 +--
->  arch/powerpc/kernel/trace/ftrace.c       | 182 +++++++++++------------
->  4 files changed, 103 insertions(+), 107 deletions(-)
->=20
+>  include/linux/swap.h | 7 -------
+>  mm/swap.c            | 2 +-
+>  mm/swapfile.c        | 2 +-
+>  3 files changed, 2 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index 999c7d79c2d5..8772132d21dc 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -490,7 +490,6 @@ int swap_type_of(dev_t device, sector_t offset);
+>  int find_first_swap(dev_t *device);
+>  extern unsigned int count_swap_pages(int, int);
+>  extern sector_t swapdev_block(int, pgoff_t);
+> -extern int page_swapcount(struct page *);
+>  extern int __swap_count(swp_entry_t entry);
+>  extern int __swp_swapcount(swp_entry_t entry);
+>  extern int swp_swapcount(swp_entry_t entry);
+> @@ -562,12 +561,6 @@ static inline void put_swap_page(struct page *page, swp_entry_t swp)
+>  {
+>  }
+>  
+> -
+> -static inline int page_swapcount(struct page *page)
+> -{
+> -	return 0;
+> -}
+> -
+>  static inline int __swap_count(swp_entry_t entry)
+>  {
+>  	return 0;
+> diff --git a/mm/swap.c b/mm/swap.c
+> index 7e320ec08c6a..6d2c37f781f8 100644
+> --- a/mm/swap.c
+> +++ b/mm/swap.c
+> @@ -748,7 +748,7 @@ static void lru_add_drain_per_cpu(struct work_struct *dummy)
+>   * Calling this function with cpu hotplug locks held can actually lead
+>   * to obscure indirect dependencies via WQ context.
+>   */
+> -inline void __lru_add_drain_all(bool force_all_cpus)
+> +static inline void __lru_add_drain_all(bool force_all_cpus)
+>  {
+>  	/*
+>  	 * lru_drain_gen - Global pages generation number
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 7b4c99ca2aea..133e03fea104 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -1430,7 +1430,7 @@ void swapcache_free_entries(swp_entry_t *entries, int n)
+>   * This does not give an exact answer when swap count is continued,
+>   * but does include the high COUNT_CONTINUED flag to allow for that.
+>   */
+> -int page_swapcount(struct page *page)
+> +static int page_swapcount(struct page *page)
+>  {
+>  	int count = 0;
+>  	struct swap_info_struct *p;
+> -- 
+> 2.23.0
+> 
+> 
 
-<snip>
-
-> @@ -710,6 +707,9 @@ void arch_ftrace_update_code(int command)
->=20
->  #ifdef CONFIG_PPC64
->  #define PACATOC offsetof(struct paca_struct, kernel_toc)
-> +#else
-> +#define PACATOC 0
-> +#endif
-
-This conflicts with my fix for the ftrace init tramp:
-https://patchwork.ozlabs.org/project/linuxppc-dev/patch/20220516071422.4637=
-38-1-naveen.n.rao@linux.vnet.ibm.com/
-
-It probably makes sense to retain #ifdef CONFIG_PPC64, so that we can=20
-get rid of the PACATOC. Here is an incremental diff:
-
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace=
-/ftrace.c
-index da1a2f8ebb72f3..28169a1ccc7377 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -701,11 +701,6 @@ void arch_ftrace_update_code(int command)
- }
-=20
- #ifdef CONFIG_PPC64
--#define PACATOC offsetof(struct paca_struct, kernel_toc)
--#else
--#define PACATOC 0
--#endif
--
- extern unsigned int ftrace_tramp_text[], ftrace_tramp_init[];
-=20
- void ftrace_free_init_tramp(void)
-@@ -724,7 +719,7 @@ int __init ftrace_dyn_arch_init(void)
- 	int i;
- 	unsigned int *tramp[] =3D { ftrace_tramp_text, ftrace_tramp_init };
- 	u32 stub_insns[] =3D {
--		PPC_RAW_LD(_R12, _R13, PACATOC),
-+		PPC_RAW_LD(_R12, _R13, offsetof(struct paca_struct, kernel_toc)),
- 		PPC_RAW_ADDIS(_R12, _R12, 0),
- 		PPC_RAW_ADDI(_R12, _R12, 0),
- 		PPC_RAW_MTCTR(_R12),
-@@ -733,9 +728,6 @@ int __init ftrace_dyn_arch_init(void)
- 	unsigned long addr;
- 	long reladdr;
-=20
--	if (IS_ENABLED(CONFIG_PPC32))
--		return 0;
--
- 	addr =3D ppc_global_function_entry((void *)FTRACE_REGS_ADDR);
- 	reladdr =3D addr - kernel_toc_addr();
-=20
-@@ -754,6 +746,7 @@ int __init ftrace_dyn_arch_init(void)
-=20
- 	return 0;
- }
-+#endif
-=20
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
-=20
-
-- Naveen
+-- 
+Oscar Salvador
+SUSE Labs

@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE57952B4D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380C952B513
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiERI1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S233112AbiERI2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233192AbiERI1f (ORCPT
+        with ESMTP id S232879AbiERI2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:27:35 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FFF1157C8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:27:22 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id h5so441424wrb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 01:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EjqmNzNHU62tbGWEmGCSZ/quQcHD8ef7lqrbwmVPudg=;
-        b=l0KEje+nRrOVaYyABLHpk/z7KT6s2EzSKaWTOvSZjAdbPwkFb6/+OsoW2dHRIrb4Rs
-         MHfuy2yQx/EsZT0D/AqfHL2hZEw7DKuvSr40QZYcYiNnQ/z9ENrQ7HqkYHZ/DK1O8k8R
-         QQ6WMyrc3XW//fZyijLHTBHrn5zPGiDk0OAJxIfDzLJJmJa50V25x3qpbxzJh00t8cNV
-         TQhVJX2HZ7uYczoOeYS6THjh/QK0IcLJQ+P4KuaZzkC/RZk0bcwVpxx4q3REARP5SLPB
-         Md28A1GdYJxHXtWSDtGTSSCTh/H5MVqAVpkGR50V/JfX6fosGF2ESLexvdLXNd9uxkDY
-         hMMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EjqmNzNHU62tbGWEmGCSZ/quQcHD8ef7lqrbwmVPudg=;
-        b=X23SzQXqjj6ya/eZJrFv5sHr2i9h7z7roQj0pOcIhfvojyYxmjUKUN43n6HmzXknCA
-         qzB8QrsDavHfHa5bA7DRMwPPg2cb8pL+PbN6niB9Wd+OlhR98Dec2zJmCQbFUe5TNwqw
-         /DeWVz7xelSMhO9wpYKlchE0TfdtTtPSwDWweqpSkdo28EjLr0QK49bsq5wK0+xRizmd
-         ztoc6ftZxfarPKSk/CBUIM95G2cHQGPn+ANLP6AL+kEu2w8Nq6pl2ieaeiKiTDR2JWRU
-         3anUECQB0qSxuoXRLhJszLx+2ioTI/WDhthXceBHtMDu/0xOoQMX+0WBXQgbs6e6Zxfb
-         M78A==
-X-Gm-Message-State: AOAM531uG4N8za3C9rQRtuCLGosFoOCfKpu7vadbusAh9BssQIywv8wS
-        xT7O9X+/2QiIGo9zdaC4gt45cg==
-X-Google-Smtp-Source: ABdhPJzsQmvAd0aRM2QlN6e8UT8l1YW2ynIkGdTxBw24pZOfbRtG8tLNrRz+RztnCqXbypwm6Sypcw==
-X-Received: by 2002:a05:6000:2a2:b0:20c:734f:d38a with SMTP id l2-20020a05600002a200b0020c734fd38amr22637848wry.417.1652862439796;
-        Wed, 18 May 2022 01:27:19 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:8ba:b9c:a451:5abb? ([2a01:e34:ed2f:f020:8ba:b9c:a451:5abb])
-        by smtp.googlemail.com with ESMTPSA id v13-20020a05600c214d00b003942a244ed1sm1087483wml.22.2022.05.18.01.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 01:27:19 -0700 (PDT)
-Message-ID: <783127cf-79cf-90f2-4200-30db56a1fd7c@linaro.org>
-Date:   Wed, 18 May 2022 10:27:16 +0200
+        Wed, 18 May 2022 04:28:35 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8950C1157E3;
+        Wed, 18 May 2022 01:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652862512; x=1684398512;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5CA8FtuEdlmAndh2dvdGmeNEcE6jVfqnArBWtfSrmrA=;
+  b=T77Ti53zY/cDro6twKpVk6a3ZYDPZrftjEvM7kSkp7WtVhjr9y0vL96h
+   zyynd+J5uz0rMxptYFR+qu/u25bkhfiahlOVuYZ68KDm92qiadTI1Z6TH
+   bGw1Q1OJlL3BH8YCztZU7eSDtFZtWMKDEVsTvrccDEm2z63brOET92W4j
+   nhi6FZdQ2d1YFSoDcR1rvzGsyLzx1QkB/J4TW5U6R86DHlfAFiwtEIhD2
+   eOdQ0Wh3LnrARM0D8R8NwSObMMrJgNsxVgM8eSS8xlPOopBJbe5XWOvO3
+   s8IvVMYbodQ44zSjJB0JEDHx1S2vY57rhTfpB6pcz8/4vtFGtfvV6RrR3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="357962971"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="357962971"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:28:32 -0700
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="523408190"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 01:28:25 -0700
+Date:   Wed, 18 May 2022 16:28:17 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        Sean Christopherson <seanjc@google.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the guest
+ and/or host changes apic id/base from the defaults.
+Message-ID: <20220518082811.GA8765@gao-cwp>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+ <20220427200314.276673-3-mlevitsk@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v9 1/2] dt-bindings: thermal: k3-j72xx: Add VTM bindings
- documentation
-Content-Language: en-US
-To:     Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rui.zhang@intel.com,
-        amitk@kernel.org, kristo@kernel.org
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org, vigneshr@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220517172920.10857-1-j-keerthy@ti.com>
- <20220517172920.10857-2-j-keerthy@ti.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220517172920.10857-2-j-keerthy@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427200314.276673-3-mlevitsk@redhat.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,103 +83,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Apr 27, 2022 at 11:02:57PM +0300, Maxim Levitsky wrote:
+>Neither of these settings should be changed by the guest and it is
+>a burden to support it in the acceleration code, so just inhibit
+>it instead.
+>
+>Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
+>
+>Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+>---
+> arch/x86/include/asm/kvm_host.h |  3 +++
+> arch/x86/kvm/lapic.c            | 25 ++++++++++++++++++++++---
+> arch/x86/kvm/lapic.h            |  8 ++++++++
+> 3 files changed, 33 insertions(+), 3 deletions(-)
+>
+>diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>index 63eae00625bda..636df87542555 100644
+>--- a/arch/x86/include/asm/kvm_host.h
+>+++ b/arch/x86/include/asm/kvm_host.h
+>@@ -1070,6 +1070,8 @@ enum kvm_apicv_inhibit {
+> 	APICV_INHIBIT_REASON_ABSENT,
+> 	/* AVIC is disabled because SEV doesn't support it */
+> 	APICV_INHIBIT_REASON_SEV,
+>+	/* APIC ID and/or APIC base was changed by the guest */
+>+	APICV_INHIBIT_REASON_RO_SETTINGS,
 
-Hi Krzysztof,
+You need to add it to check_apicv_inhibit_reasons as well.
 
-I would like to pick this series, does the DT bindings have your blessing ?
-
-
-On 17/05/2022 19:29, Keerthy wrote:
-> Add VTM bindings documentation. In the Voltage Thermal
-> Management Module(VTM), K3 J72XX supplies a voltage
-> reference and a temperature sensor feature that are gathered in the band
-> gap voltage and temperature sensor (VBGAPTS) module. The band
-> gap provides current and voltage reference for its internal
-> circuits and other analog IP blocks. The analog-to-digital
-> converter (ADC) produces an output value that is proportional
-> to the silicon temperature.
+> };
 > 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->   .../bindings/thermal/ti,j72xx-thermal.yaml    | 63 +++++++++++++++++++
->   1 file changed, 63 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> struct kvm_arch {
+>@@ -1258,6 +1260,7 @@ struct kvm_arch {
+> 	hpa_t	hv_root_tdp;
+> 	spinlock_t hv_root_tdp_lock;
+> #endif
+>+	bool apic_id_changed;
+
+What's the value of this boolean? No one reads it.
+
+> };
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> new file mode 100644
-> index 000000000000..c74f124ebfc0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments J72XX VTM (DTS) binding
-> +
-> +maintainers:
-> +  - Keerthy <j-keerthy@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,j721e-vtm
-> +      - ti,j7200-vtm
-> +
-> +  reg:
-> +    items:
-> +      - description: VTM cfg1 register space
-> +      - description: VTM cfg2 register space
-> +      - description: VTM efuse register space
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - power-domains
-> +  - "#thermal-sensor-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +    wkup_vtm0: thermal-sensor@42040000 {
-> +        compatible = "ti,j721e-vtm";
-> +        reg = <0x42040000 0x350>,
-> +              <0x42050000 0x350>,
-> +              <0x43000300 0x10>;
-> +        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> +
-> +    mpu_thermal: mpu-thermal {
-> +        polling-delay-passive = <250>; /* milliseconds */
-> +        polling-delay = <500>; /* milliseconds */
-> +        thermal-sensors = <&wkup_vtm0 0>;
-> +
-> +        trips {
-> +            mpu_crit: mpu-crit {
-> +                temperature = <125000>; /* milliCelsius */
-> +                hysteresis = <2000>; /* milliCelsius */
-> +                type = "critical";
-> +            };
-> +        };
-> +    };
-> +...
+> struct kvm_vm_stat {
+>diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+>index 66b0eb0bda94e..8996675b3ef4c 100644
+>--- a/arch/x86/kvm/lapic.c
+>+++ b/arch/x86/kvm/lapic.c
+>@@ -2038,6 +2038,19 @@ static void apic_manage_nmi_watchdog(struct kvm_lapic *apic, u32 lvt0_val)
+> 	}
+> }
+> 
+>+static void kvm_lapic_check_initial_apic_id(struct kvm_lapic *apic)
+>+{
+>+	if (kvm_apic_has_initial_apic_id(apic))
+>+		return;
+>+
+>+	pr_warn_once("APIC ID change is unsupported by KVM");
 
+It is misleading because changing xAPIC ID is supported by KVM; it just
+isn't compatible with APICv. Probably this pr_warn_once() should be
+removed.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>+
+>+	kvm_set_apicv_inhibit(apic->vcpu->kvm,
+>+			APICV_INHIBIT_REASON_RO_SETTINGS);
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+The indentation here looks incorrect to me.
+	kvm_set_apicv_inhibit(apic->vcpu->kvm,
+			      APICV_INHIBIT_REASON_RO_SETTINGS);
+
+>+
+>+	apic->vcpu->kvm->arch.apic_id_changed = true;
+>+}
+>+
+> static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+> {
+> 	int ret = 0;
+>@@ -2046,9 +2059,11 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+> 
+> 	switch (reg) {
+> 	case APIC_ID:		/* Local APIC ID */
+>-		if (!apic_x2apic_mode(apic))
+>+		if (!apic_x2apic_mode(apic)) {
+>+
+> 			kvm_apic_set_xapic_id(apic, val >> 24);
+>-		else
+>+			kvm_lapic_check_initial_apic_id(apic);
+>+		} else
+> 			ret = 1;
+> 		break;
+> 
+>@@ -2335,8 +2350,11 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
+> 			     MSR_IA32_APICBASE_BASE;
+> 
+> 	if ((value & MSR_IA32_APICBASE_ENABLE) &&
+>-	     apic->base_address != APIC_DEFAULT_PHYS_BASE)
+>+	     apic->base_address != APIC_DEFAULT_PHYS_BASE) {
+>+		kvm_set_apicv_inhibit(apic->vcpu->kvm,
+>+				APICV_INHIBIT_REASON_RO_SETTINGS);
+> 		pr_warn_once("APIC base relocation is unsupported by KVM");
+>+	}
+> }
+> 
+> void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
+>@@ -2649,6 +2667,7 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
+> 		}
+> 	}
+> 
+>+	kvm_lapic_check_initial_apic_id(vcpu->arch.apic);
+> 	return 0;
+> }
+> 
+>diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+>index 4e4f8a22754f9..b9c406d383080 100644
+>--- a/arch/x86/kvm/lapic.h
+>+++ b/arch/x86/kvm/lapic.h
+>@@ -252,4 +252,12 @@ static inline u8 kvm_xapic_id(struct kvm_lapic *apic)
+> 	return kvm_lapic_get_reg(apic, APIC_ID) >> 24;
+> }
+> 
+>+static inline bool kvm_apic_has_initial_apic_id(struct kvm_lapic *apic)
+>+{
+>+	if (apic_x2apic_mode(apic))
+>+		return true;
+
+I suggest warning of x2apic mode:
+	if (WARN_ON_ONCE(apic_x2apic_mode(apic)))
+
+Because it is weird that callers care about initial apic id when apic is
+in x2apic mode.

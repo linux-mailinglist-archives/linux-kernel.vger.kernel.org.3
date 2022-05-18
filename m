@@ -2,134 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236C752B3C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB09552B3FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbiERHqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S232466AbiERHsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbiERHqu (ORCPT
+        with ESMTP id S232417AbiERHsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:46:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA950165BD;
-        Wed, 18 May 2022 00:46:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E1C1B81EC1;
-        Wed, 18 May 2022 07:46:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362CDC34118;
-        Wed, 18 May 2022 07:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652860005;
-        bh=KUl7JvGgqkc1DfGhPQMhcKNc6+xW1iqiAC34dWUYIYI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dkK2VuiRazUYy/0raeMMGlNR4Tax1p2NGjBr/nBjKum21oFxmslWmUCU0VzoRu+cO
-         HmrzPveZdQjdv+cTPBR2V9tak/jiomNUfYBj5sw2dX2dKoC9xH7uM57L8jH4xYiIuM
-         08YqMdtOguRYHRonbNsRBlTLvM52Q+3TpvkwtUExXHPUUphUHyK569lWDbMs10HDjU
-         DyH3Js5U9VM/fgDmVN0asWG655mirLaZZDwLq2xvJajzBmBVBbWSRTWp5U0pCUQtsS
-         fyTFbdmkyAv0lZigt1Yr/42MgLcInpjxDL0ApYmAeUaT9QZgryC0kOix45ZHLnTsUi
-         zGfw+Eb+H8wvA==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2fee010f509so14978097b3.11;
-        Wed, 18 May 2022 00:46:45 -0700 (PDT)
-X-Gm-Message-State: AOAM530UikuK8/lBMYbxrkcX4CWLjCqv0vKRM1/+WSkWIIezy26JRWRm
-        0yD6bdVCRNHTy2+CCBvOglHafjI+rEsUr+uV6lA=
-X-Google-Smtp-Source: ABdhPJyhm2Dj408LoUWWmvAqhkBhAYE1RnSkeixOEh3zciq1RMr7OwAYsEs1iONJHOBW1KRcCiA1jSuvrZOus+J3c4c=
-X-Received: by 2002:a0d:cd06:0:b0:2f8:f39c:4cfc with SMTP id
- p6-20020a0dcd06000000b002f8f39c4cfcmr29636586ywd.495.1652860004199; Wed, 18
- May 2022 00:46:44 -0700 (PDT)
+        Wed, 18 May 2022 03:48:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20E0011E4A7;
+        Wed, 18 May 2022 00:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aexzG6QT7OwxTkVV+awVYjuMAu3L2V7mGlqxPgNrxYU=; b=EeO0qMprxdclZ/T8O5w4wRGgBl
+        yK0/SLxrtiPXqvDFHbKQtiWVdp64UUltfCI1iRQnDWSYMd3RlVxHG9ta+pJwcJCSTA/mKQE15m0lq
+        erOEmg0Id8OWhU5wRqbxttRf+G8qjAbJZM5s/iK87aHb2mOwadXq9j5/qaxRJ2yjAzP6ANeXODmGd
+        U+YNi9VopdTaZoHirm7hf0+1oivBlF9vpqLLI8c+suSdyS0GXyVhx5rjrdFfa5Jg3vYrksBV+MEkI
+        04rYnOCMwrm+a1zIiUk4IyLU+z3bDUxaENtVN4TbyAFLQHxTwu91d2cZ8qIWq8G/p5d+e9e5Rs7rn
+        XOdHS+KQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrEPR-000EBP-Sb; Wed, 18 May 2022 07:47:53 +0000
+Date:   Wed, 18 May 2022 00:47:53 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     jgg@nvidia.com, alex.williamson@redhat.com, cohuck@redhat.com,
+        borntraeger@linux.ibm.com, jjherne@linux.ibm.com,
+        akrowiak@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, hch@infradead.org,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] vfio: remove VFIO_GROUP_NOTIFY_SET_KVM
+Message-ID: <YoSkqWl7YkqYksG5@infradead.org>
+References: <20220517180851.166538-1-mjrosato@linux.ibm.com>
+ <20220517180851.166538-2-mjrosato@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220228103142.3301082-1-arnd@kernel.org> <20220516131023.GA2329080@roeck-us.net>
- <YoJSF8T5K9pPx3Ap@kroah.com> <9510474d-5555-42b3-5a9c-90e3078df499@roeck-us.net>
-In-Reply-To: <9510474d-5555-42b3-5a9c-90e3078df499@roeck-us.net>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 18 May 2022 08:46:45 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1GmRqPTXFCoLH9h1sP76a-bVRsGYP-YvczoXM4Na3OVQ@mail.gmail.com>
-Message-ID: <CAK8P3a1GmRqPTXFCoLH9h1sP76a-bVRsGYP-YvczoXM4Na3OVQ@mail.gmail.com>
-Subject: Re: [greybus-dev] Re: [PATCH] [v2] Kbuild: move to -std=gnu11
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>, Hu Haowen <src.res@email.cn>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-btrfs <linux-btrfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517180851.166538-2-mjrosato@linux.ibm.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 3:19 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 5/16/22 06:31, Greg KH wrote:
-> > On Mon, May 16, 2022 at 06:10:23AM -0700, Guenter Roeck wrote:
-> >> On Mon, Feb 28, 2022 at 11:27:43AM +0100, Arnd Bergmann wrote:
-> >>> From: Arnd Bergmann <arnd@arndb.de>
-> >>>
-> >>> During a patch discussion, Linus brought up the option of changing
-> >>> the C standard version from gnu89 to gnu99, which allows using variab=
-le
-> >>> declaration inside of a for() loop. While the C99, C11 and later stan=
-dards
-> >>> introduce many other features, most of these are already available in
-> >>> gnu89 as GNU extensions as well.
-> >>
-> >> The downside is that backporting affected patches to older kernel bran=
-ches
-> >> now fails with error messages such as
-> >>
-> >> mm/kfence/core.c: In function =E2=80=98kfence_init_pool=E2=80=99:
-> >> mm/kfence/core.c:595:2: error: =E2=80=98for=E2=80=99 loop initial decl=
-arations are only allowed in C99 or C11 mode
-> >>
-> >> Just something to keep in mind when writing patches.
-> >
-> > I just ran across this very issue on this commit.  It's an easy fixup
-> > for 5.17.y to make this work, so I did that in my tree.  If this gets t=
-o
-> > be too much, we might need to reconsider adding c11 to older stable
-> > kernels.
-> >
->
-> I think I'll do just that for ChromeOS; I don't want to have to deal
-> with the backports, and we are using recent compilers anyway.
+With this the release_work in gvt can go away as well:
 
-I think it would be better not to have the --std=3Dgnu11 change in the olde=
-r
-stable kernels by default, as this has introduced build warnings and other
-smaller issues, as well as raising the minimum compiler version.
-
-The users that are stuck on older kernels for some reason tend to
-overlap with those on older compilers. One example here is Android,
-which used to ship with a gcc-4.9 build as the only non-clang toolchain,
-and was using this for building their kernels. If someone wants to
-pull in stable updates into an older Android, this would fail with
--std=3Dgnu11. Others may be in the same situation.
-
-Changing some of the 5.x stable branches to -std=3Dgnu11 is probably
-less of a problem, but I would not know where to draw the line exactly.
-Maybe check with the Android team to see what the newest kernel is
-that they expect to be built with the old gcc-4.9.
-
-         Arnd
+diff --git a/drivers/gpu/drm/i915/gvt/gvt.h b/drivers/gpu/drm/i915/gvt/gvt.h
+index 633acfcf76bf2..aee1a45da74bc 100644
+--- a/drivers/gpu/drm/i915/gvt/gvt.h
++++ b/drivers/gpu/drm/i915/gvt/gvt.h
+@@ -227,7 +227,6 @@ struct intel_vgpu {
+ 	struct mutex cache_lock;
+ 
+ 	struct notifier_block iommu_notifier;
+-	struct work_struct release_work;
+ 	atomic_t released;
+ 
+ 	struct kvm_page_track_notifier_node track_node;
+diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
+index b317ae4cc7d2d..917617d7599a9 100644
+--- a/drivers/gpu/drm/i915/gvt/kvmgt.c
++++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
+@@ -228,8 +228,6 @@ static void intel_gvt_cleanup_vgpu_type_groups(struct intel_gvt *gvt)
+ 	}
+ }
+ 
+-static void intel_vgpu_release_work(struct work_struct *work);
+-
+ static void gvt_unpin_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
+ 		unsigned long size)
+ {
+@@ -850,8 +848,9 @@ static void intel_vgpu_release_msi_eventfd_ctx(struct intel_vgpu *vgpu)
+ 	}
+ }
+ 
+-static void __intel_vgpu_release(struct intel_vgpu *vgpu)
++static void intel_vgpu_close_device(struct vfio_device *vfio_dev)
+ {
++	struct intel_vgpu *vgpu = vfio_dev_to_vgpu(vfio_dev);
+ 	struct drm_i915_private *i915 = vgpu->gvt->gt->i915;
+ 	int ret;
+ 
+@@ -880,19 +879,6 @@ static void __intel_vgpu_release(struct intel_vgpu *vgpu)
+ 	vgpu->attached = false;
+ }
+ 
+-static void intel_vgpu_close_device(struct vfio_device *vfio_dev)
+-{
+-	__intel_vgpu_release(vfio_dev_to_vgpu(vfio_dev));
+-}
+-
+-static void intel_vgpu_release_work(struct work_struct *work)
+-{
+-	struct intel_vgpu *vgpu =
+-		container_of(work, struct intel_vgpu, release_work);
+-
+-	__intel_vgpu_release(vgpu);
+-}
+-
+ static u64 intel_vgpu_get_bar_addr(struct intel_vgpu *vgpu, int bar)
+ {
+ 	u32 start_lo, start_hi;
+@@ -1639,7 +1625,6 @@ static int intel_vgpu_probe(struct mdev_device *mdev)
+ 		return PTR_ERR(vgpu);
+ 	}
+ 
+-	INIT_WORK(&vgpu->release_work, intel_vgpu_release_work);
+ 	vfio_init_group_dev(&vgpu->vfio_device, &mdev->dev,
+ 			    &intel_vgpu_dev_ops);
+ 

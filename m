@@ -2,64 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FE552AF3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE5E52AF40
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 02:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbiERAiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 20:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
+        id S232699AbiERAjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 20:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbiERAiq (ORCPT
+        with ESMTP id S232654AbiERAjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 20:38:46 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48ACB3701A
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:38:45 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id r190-20020a632bc7000000b003c6222b2192so364381pgr.11
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 17:38:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=LGbbxigQqvj2d1gNOUXULeQzWXDgRFfQt5JUWxbBJtI=;
-        b=OLr0GTsKpYz7DOVNUyHdtfSO9gvBn+Z3wfyVlTwgKqGeATz80J9Z0nXGu3jtfbXU4C
-         E2E7qEXlOCws6x0G0V268v0nYIKI0LjAzdl2Jbqptqlgn17OoTsCIaFE72Fw6oMkfHwe
-         UuGe6UaDcCow9I1rrSFDOv+9cE7Da9pH3Oh8YY/kM13dq8HGNAA0xz2Ii90qYCNW1GzI
-         eEu8GSOC0xV8TuFqom/F2BqL2Ut7VEOoeD9V943bj6s78JP8i9zkO0YPsxyrCSWxodHK
-         jJNkJcsJnha6p2XIa/vsa6E1b+XcSOh6S4O56hJmVL6AkjrKR67DWN9ZGWac+7OIoV4t
-         SHUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=LGbbxigQqvj2d1gNOUXULeQzWXDgRFfQt5JUWxbBJtI=;
-        b=L3RsuRvp+2Xy21dCPjsN3i0cmKK6k0K6sJxT554FmmwSj6vwJnZjC2iV8szFBj9I3A
-         04eXiULyIXPGE9iRndDXSFcnTCn/u/FbKyXTP3aspOzjzH0xQYHKkxphtUhLyo05B2p2
-         TAcuT0Zbmv7Kw6jcsb4owzcT7//UQ8/Ysf1sxI/3eay4Q4WDLG0A9fGeao04iL0IgIlT
-         NyaQ7YoazCINEERoJCc1wkG9u6hUt5itsIRzUiGeOaNwS8lyo7dChseO4vsPHD1p0hUd
-         NabcOpS2RWJkJRDE3q/6VtOiX4Kz7zjiSmFtxOwyA4R1KZcRAJmZAV/WX0V5tw1TG6vh
-         0i+w==
-X-Gm-Message-State: AOAM533PPNutwRyyyslIplzl9ZG4x/0xxyD5fg3f69L1+LnAGf44fopa
-        WGBf8eQwVEelVVd261PlqBKo5WouD0A=
-X-Google-Smtp-Source: ABdhPJz5lZewEaYbNOGPXWgqz8o5dYa+s4DyyMYyBpvVTxq2pp+sRl4AS0w8RYm8QAU8eRP8KAMrrEKlqlM=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:8d83:b0:1dd:258c:7c55 with SMTP id
- d3-20020a17090a8d8300b001dd258c7c55mr63468pjo.1.1652834324479; Tue, 17 May
- 2022 17:38:44 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 18 May 2022 00:38:42 +0000
-Message-Id: <20220518003842.1341782-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-Subject: [PATCH] KVM: Free new dirty bitmap if creating a new memslot fails
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+8606b8a9cc97a63f1c87@syzkaller.appspotmail.com,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Tue, 17 May 2022 20:39:20 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBBE36E0C;
+        Tue, 17 May 2022 17:39:18 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L2vGW4rrtzgYCj;
+        Wed, 18 May 2022 08:37:55 +0800 (CST)
+Received: from dggpemm500004.china.huawei.com (7.185.36.219) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 08:39:16 +0800
+Received: from [10.174.177.69] (10.174.177.69) by
+ dggpemm500004.china.huawei.com (7.185.36.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 08:39:16 +0800
+Message-ID: <356ba1b6-7979-a767-2501-0a96b653c860@huawei.com>
+Date:   Wed, 18 May 2022 08:39:16 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v2] blk-throttle: Set BIO_THROTTLED when bio has
+ been throttled
+To:     Jens Axboe <axboe@kernel.dk>
+CC:     <tj@kernel.org>, <cgroups@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>
+References: <20220301123919.2381579-1-qiulaibin@huawei.com>
+ <Yh92UQ9/bxe6EcWe@T590>
+From:   QiuLaibin <qiulaibin@huawei.com>
+In-Reply-To: <Yh92UQ9/bxe6EcWe@T590>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.69]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500004.china.huawei.com (7.185.36.219)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,75 +56,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a goof in kvm_prepare_memory_region() where KVM fails to free the
-new memslot's dirty bitmap during a CREATE action if
-kvm_arch_prepare_memory_region() fails.  The logic is supposed to detect
-if the bitmap was allocated and thus needs to be freed, versus if the
-bitmap was inherited from the old memslot and thus needs to be kept.  If
-there is no old memslot, then obviously the bitmap can't have been
-inherited
+friendly ping....
 
-The bug was exposed by commit 86931ff7207b ("KVM: x86/mmu: Do not create
-SPTEs for GFNs that exceed host.MAXPHYADDR"), which made it trivally easy
-for syzkaller to trigger failure during kvm_arch_prepare_memory_region(),
-but the bug can be hit other ways too, e.g. due to -ENOMEM when
-allocating x86's memslot metadata.
-
-The backtrace from kmemleak:
-
-  __vmalloc_node_range+0xb40/0xbd0 mm/vmalloc.c:3195
-  __vmalloc_node mm/vmalloc.c:3232 [inline]
-  __vmalloc+0x49/0x50 mm/vmalloc.c:3246
-  __vmalloc_array mm/util.c:671 [inline]
-  __vcalloc+0x49/0x70 mm/util.c:694
-  kvm_alloc_dirty_bitmap virt/kvm/kvm_main.c:1319
-  kvm_prepare_memory_region virt/kvm/kvm_main.c:1551
-  kvm_set_memslot+0x1bd/0x690 virt/kvm/kvm_main.c:1782
-  __kvm_set_memory_region+0x689/0x750 virt/kvm/kvm_main.c:1949
-  kvm_set_memory_region virt/kvm/kvm_main.c:1962
-  kvm_vm_ioctl_set_memory_region virt/kvm/kvm_main.c:1974
-  kvm_vm_ioctl+0x377/0x13a0 virt/kvm/kvm_main.c:4528
-  vfs_ioctl fs/ioctl.c:51
-  __do_sys_ioctl fs/ioctl.c:870
-  __se_sys_ioctl fs/ioctl.c:856
-  __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:856
-  do_syscall_x64 arch/x86/entry/common.c:50
-  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-And the relevant sequence of KVM events:
-
-  ioctl(3, KVM_CREATE_VM, 0)              = 4
-  ioctl(4, KVM_SET_USER_MEMORY_REGION, {slot=0,
-                                        flags=KVM_MEM_LOG_DIRTY_PAGES,
-                                        guest_phys_addr=0x10000000000000,
-                                        memory_size=4096,
-                                        userspace_addr=0x20fe8000}
-       ) = -1 EINVAL (Invalid argument)
-
-Fixes: 244893fa2859 ("KVM: Dynamically allocate "new" memslots from the get-go")
-Cc: stable@vger.kernel.org
-Reported-by: syzbot+8606b8a9cc97a63f1c87@syzkaller.appspotmail.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- virt/kvm/kvm_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 6d971fb1b08d..5ab12214e18d 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1560,7 +1560,7 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
- 	r = kvm_arch_prepare_memory_region(kvm, old, new, change);
- 
- 	/* Free the bitmap on failure if it was allocated above. */
--	if (r && new && new->dirty_bitmap && old && !old->dirty_bitmap)
-+	if (r && new && new->dirty_bitmap && (!old || !old->dirty_bitmap))
- 		kvm_destroy_dirty_bitmap(new);
- 
- 	return r;
-
-base-commit: b28cb0cd2c5e80a8c0feb408a0e4b0dbb6d132c5
--- 
-2.36.0.550.gb090851708-goog
-
+在 2022/3/2 21:51, Ming Lei 写道:
+> On Tue, Mar 01, 2022 at 08:39:19PM +0800, Laibin Qiu wrote:
+>> 1.In current process, all bio will set the BIO_THROTTLED flag
+>> after __blk_throtl_bio().
+>>
+>> 2.If bio needs to be throttled, it will start the timer and
+>> stop submit bio directly. Bio will submit in
+>> blk_throtl_dispatch_work_fn() when the timer expires.But in
+>> the current process, if bio is throttled. The BIO_THROTTLED
+>> will be set to bio after timer start. If the bio has been
+>> completed, it may cause use-after-free blow.
+>>
+>> BUG: KASAN: use-after-free in blk_throtl_bio+0x12f0/0x2c70
+>> Read of size 2 at addr ffff88801b8902d4 by task fio/26380
+> 
+> After the queue lock is released, the bio can be dispatched & completed,
+> so it shouldn't be touched after lock release:
+> 
+> Reviewed-by: Ming Lei <ming.lei@redhat.com>
+> 
+> Thanks,
+> Ming
+> 
+> .

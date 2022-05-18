@@ -2,95 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6828E52B7E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6E252B80B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235114AbiERKew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
+        id S235160AbiERKiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 06:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234980AbiERKes (ORCPT
+        with ESMTP id S231126AbiERKiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:34:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AA4426F8;
-        Wed, 18 May 2022 03:34:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CCF723A;
-        Wed, 18 May 2022 03:34:46 -0700 (PDT)
-Received: from [192.168.1.11] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB1DF3F718;
-        Wed, 18 May 2022 03:34:43 -0700 (PDT)
-Message-ID: <16566ef8-15d3-bf1b-37f2-c0b94b0493bc@arm.com>
-Date:   Wed, 18 May 2022 12:34:24 +0200
+        Wed, 18 May 2022 06:38:16 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B70B30F79
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:38:14 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id p22so2823879lfo.10
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:38:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0NTxAn+6T8w9hdTIq5Cgi6wlBNu0iH0H7rw7aIi/4xE=;
+        b=WE8yOgYWIlCFKn3BmxelqQ8z0cjjx62N+D1DFq8X+98cqbZTXiEMtmqZTl+O8LPO/t
+         EJDO25DHuNUV6zVcMgrSPZFpwWIH0h9N2cP2iF5r/4ZHoIcYz+HTbn/6oKHhQuHK71FJ
+         eWOe9VCbBhz+/8uFkOeaFbdQ81U57R6OTPx9tWfM5ZLcnnwOavLSyPx+tGNobR51hSHx
+         SBjt+92sKXxmpeob6HIMIjkCrSVQH5owrdCyWKRq7NPccPwnYO0srHWn76K4R/u0rmMQ
+         T+zDYZNEBos+1sKtzK+yj97clDWQwwweh3VXgy2GxkZhM8PZdIpZprmioB9+Basswh/U
+         y1EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0NTxAn+6T8w9hdTIq5Cgi6wlBNu0iH0H7rw7aIi/4xE=;
+        b=PsrGHNQO1lyaooullnmZhko934kK9Iet9nPgbrlSA1XlJR9m3Dj2TQOhBnzrBxHICx
+         HNwxJ2boXj3xKJa+C7p0aszorlt5Pi7VlfTYJBeA5DxhLJTiBKsXV4+WndN6Mbb4eX3f
+         Os+4qShwn3abyiZO4sm1AqIcMvjB+rSVjQiORvBnwj52YKaWdetpBMXczIHZZhiFqarH
+         24k/71u5JoFmoAcH4jpnACHsTJcWs0M3dUsrk4H+x6g1+6nPyPfmjq8YB0KpD9TSPN5R
+         tyLftZbAf2kEVt28EDm+mZ5WaGObwt255sJT6kDzM72uQuv/ZCJsITI3+HHUqu6p/sqD
+         il7A==
+X-Gm-Message-State: AOAM531Wq7H0euIrYeBiXekREM2/2dZ0c9/pKHmL7vD4kj/FFkF8OM3n
+        OuCY9L12st287OADGEJZMYuDDPPC7NtBUBQOEzp4uQ==
+X-Google-Smtp-Source: ABdhPJz95Pu6mvN7sneb+w+UwiN7N58yqxFti8Y9pz/wc22jLoKypJHa7M7XEU7IipN2UYUFTw4c20WWjuV+BG7fvX8=
+X-Received: by 2002:a19:e303:0:b0:477:b578:7df3 with SMTP id
+ a3-20020a19e303000000b00477b5787df3mr2420941lfh.54.1652870292902; Wed, 18 May
+ 2022 03:38:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 1/5] ACPI: CPPC: Check _OSC for flexible address space
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
-        dietmar.eggemann@arm.com, sudeep.holla@arm.com,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        devel@acpica.org
-References: <20220518090901.2724518-1-pierre.gondois@arm.com>
- <20220518094243.6oxbdmf226jvqoef@viresh-thinkpad>
-From:   Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20220518094243.6oxbdmf226jvqoef@viresh-thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220518100841.1497391-1-fam.zheng@bytedance.com> <20220518102140.GF10117@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220518102140.GF10117@worktop.programming.kicks-ass.net>
+From:   "Feiran Zheng ." <fam.zheng@bytedance.com>
+Date:   Wed, 18 May 2022 11:38:02 +0100
+Message-ID: <CAG+v+Kb5ON2-49t8ZZwH2jT31Jvi+F_HYW0gQ3ss040GKdp0Zw@mail.gmail.com>
+Subject: Re: [External] Re: [RFC PATCH] sched: Enable root level cgroup
+ bandwidth control
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        zhouchengming@bytedance.com,
+        Vincent Guittot <vincent.guittot@linaro.org>, fam@euphon.net,
+        Mel Gorman <mgorman@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        songmuchun@bytedance.com, Juri Lelli <juri.lelli@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 18, 2022 at 11:21 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, May 18, 2022 at 11:08:41AM +0100, Fam Zheng wrote:
+> > In the data center there sometimes comes a need to throttle down a
+> > server,
+>
+> Why?
 
-
-On 5/18/22 11:42, Viresh Kumar wrote:
-> On 18-05-22, 11:08, Pierre Gondois wrote:
->> ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
->>    Starting with ACPI Specification 6.2, all _CPC registers can be in
->>    PCC, System Memory, System IO, or Functional Fixed Hardware address
->>    spaces. OSPM support for this more flexible register space scheme is
->>    indicated by the “Flexible Address Space for CPPC Registers” _OSC bit
->>
->> Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
->> - PCC or Functional Fixed Hardware address space if defined
->> - SystemMemory address space (NULL register) if not defined
->>
->> Add the corresponding _OSC bit and check it when parsing _CPC objects.
->>
->> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
->> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
->> ---
->>   drivers/acpi/bus.c       | 18 ++++++++++++++++++
->>   drivers/acpi/cppc_acpi.c |  9 +++++++++
->>   include/linux/acpi.h     |  2 ++
->>   3 files changed, 29 insertions(+)
-> 
-> It would be much useful to get a cover letter for this series with
-> what you have changed since the previous version. It is almost
-> impossible to find that out otherwise.
-> 
-
-Yes indeed, sorry for that, the changelog is:
-v2:
-[1/5] ACPI: CPPC: Check _OSC for flexible address space
-- Renamed OSC_SB_CPC_FLEXIBLE_ADR_SP to OSC_SB_CPC_FLEXIBLE_ADR_SPACE
-[3/5] ACPI: CPPC: Assume no transition latency if no PCCT
-and
-[4/5] cpufreq: CPPC: Enable fast_switch
-- Renamed CPC_IN_SIO to CPC_IN_SYSTEM_IO
-- Renamed CPC_IN_SM to CPC_IN_SYSTEM_MEMORY
-
-or do you prefer to have the serie re-submitted ?
-
-Regards,
-Pierre
+For economical reasons there can be over-provisioning in DC power
+supply (UPS capacity etc) because the utilization expectation of the
+racks is not maximum value. But the workload can be client driven,
+depending on how many users are online, and in the end the power
+supply may overload and trip itself. To avoid that, upon a threshold,
+some servers need to be brought down or throttled. The latter is
+obviously going to be much more smooth.

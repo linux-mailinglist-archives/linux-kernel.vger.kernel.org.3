@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EFE52C2B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E228052C2AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 20:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241637AbiERSsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 14:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39288 "EHLO
+        id S241659AbiERSsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 14:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241608AbiERSsf (ORCPT
+        with ESMTP id S241612AbiERSsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 14:48:35 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BC2229FDB;
-        Wed, 18 May 2022 11:48:34 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i19so5479664eja.11;
-        Wed, 18 May 2022 11:48:34 -0700 (PDT)
+        Wed, 18 May 2022 14:48:36 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE07229FE8;
+        Wed, 18 May 2022 11:48:35 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id kq17so5544461ejb.4;
+        Wed, 18 May 2022 11:48:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NpQYDqqTMKvAHgyQOKIaDAZVZin4gTd/M2O8Q7thQ0s=;
-        b=C/g80f+yE3wm8L1b/YcCR4YzUOOkxD/a4V12I0qORZyUVQsw4dCO2psu4vvIJcZjWG
-         u6WEvf1fpJ1pGSit3uA/oUghm/6O9vQvtZRUSUj/XTMf4mDUxltk/wZ6z+uR/JqobWco
-         88PGqJ5heWSoFmnKnuTZCb/bTuzCSCYPeexK9gwud9o1+yozPpXIQgzQfSRSTKYJCdz6
-         WJk0WkJZZhCdg1/btK+Gt1Yx7gXOVzGajaqlumuhK1IuBO7pbN9+Mpj3CE2qvUP7B2YV
-         O6Gj4pPqQq4IhE7a1q7zilPb/oFgTELXwDEp5mMC/8sGkLaauojcJ4+73RmgYmsF4Kmq
-         8SPw==
+        bh=V4xR0AH3E5rQf6McW3p2A8uOfbIfUKeQrN91C/yMV50=;
+        b=bu0INzU1N8Nq8qn8T3l6q6vvb7+NFEg8a/ZYrgXd8RUy0a+s7qDzenAV9LWfhiCJ29
+         rl1dwChQVQAea9HEFPR/j3YRj797Onghk/jZYeVlzn0iBhBp6GFbh3pB+UJEoGvzIE2i
+         iG3Ry46uUgg8baoYHi1pHQdwmPEUqmlvu2RJfupuApI/MMH8hkSJ6sw04QlzxTz1tT89
+         E+RAiova/yzsw5g86Cz9XexD8pJs6+osHjAWyqg5bjTbPdKElADeaHOPn0AboFX1THS3
+         kUfqHWE49sc1hu8WVZhWBLEWWFWbvKVpOuq87LPjpDlC/Wna37OO32MNqho4el8nw021
+         pH1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NpQYDqqTMKvAHgyQOKIaDAZVZin4gTd/M2O8Q7thQ0s=;
-        b=FrgWnTNabD/KVbQocSWEx7d8betuXldebv5lq1qsRZmOnKDzn4WsE47XaPPpzB3Y1i
-         yoT/gF9My6j30ZdFkdnI3naBrQZHU/DxdFKhDU1n+79SG4PH+aaT+NyI5QPZvEO0gxtm
-         HHpzrsBFzVkrwgYm6HyOY2vgFrEyTdzo94E55VgLzLi4WwUfNZGizjZl6l2LUTvkIleL
-         kvhQUDH1Jg9l/lcwtj54gGUmIABW+DofMxJIf+yRp/8sOVQq1W1w4k8KAiLFYwVOJOsK
-         x0Hnryl1O5aoVwS2AAvW0fF3DJtphnvm3iBJc5Fk9kirm9WlzEqK+0sH7sNOKLrl6ebZ
-         p05g==
-X-Gm-Message-State: AOAM533R/h4lm9xfOlJEG1/B760pKWUQxjmtRO8c6TxDHF5McUIdoL3a
-        VD6CgV8qkvHEtVxui++Odc0=
-X-Google-Smtp-Source: ABdhPJwoNQj/GqGAIrPTIuqi2EISFzwVV3g0nRMP/jCZJcNPAXcKEcA6MWcvr7wgllAJxCEHoeXPqw==
-X-Received: by 2002:a17:907:1c21:b0:6f4:7a8a:d6a2 with SMTP id nc33-20020a1709071c2100b006f47a8ad6a2mr904546ejc.288.1652899712819;
-        Wed, 18 May 2022 11:48:32 -0700 (PDT)
+        bh=V4xR0AH3E5rQf6McW3p2A8uOfbIfUKeQrN91C/yMV50=;
+        b=7qQ2DK3kFfUriLIeQYCKcF6LcErSmX5ZGaipMZ5sbGTxyJCwzgwHfYgwPCEFKjfbwG
+         /4vV6P0Mm/MpLIbFYCIHJFh5AN80Ye4kLYZQvc+IZw6b/bxU/9DYnZpzgj/0VcQr1Awo
+         B0EJ5xezPVgeO8pxXLLVpAYs3A3NIj9h+sw9V5GNrIyHraa3QeCgGwrzZp8qS2j91hMV
+         Py9U7zuW5gl7BshYfx4xGjSuwbT+cWjE1juSC33f3VnIp+rVpbQFG1eJ8pOfugUTgS4o
+         2w/tP5VLjd91sDwK9wQOu/jZQle2YJAcyuu6tfLZcEfZtmkMuCKD75+o4mD7GutAf06I
+         uP8g==
+X-Gm-Message-State: AOAM530YtKWALLTsih3aXkIhnOkyXyVGaR7xkuOEGe1koJnaF9lYVqJk
+        3tw1psYPu6CaPleYYlGqLUc=
+X-Google-Smtp-Source: ABdhPJz7WZDSsUusvhmfV4oySw45GZQAcTr6VqaiHZ2OKoZOxLiykjHjD1FCAa0jg84KstFaBa9NJg==
+X-Received: by 2002:a17:907:7e85:b0:6f4:78f1:75b5 with SMTP id qb5-20020a1709077e8500b006f478f175b5mr913202ejc.54.1652899713856;
+        Wed, 18 May 2022 11:48:33 -0700 (PDT)
 Received: from fedora.robimarko.hr ([188.252.220.143])
-        by smtp.googlemail.com with ESMTPSA id q18-20020aa7cc12000000b0042aa40e76cbsm1702662edt.80.2022.05.18.11.48.31
+        by smtp.googlemail.com with ESMTPSA id q18-20020aa7cc12000000b0042aa40e76cbsm1702662edt.80.2022.05.18.11.48.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 11:48:32 -0700 (PDT)
+        Wed, 18 May 2022 11:48:33 -0700 (PDT)
 From:   Robert Marko <robimarko@gmail.com>
 To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
         broonie@kernel.org, robh+dt@kernel.org,
@@ -55,9 +55,9 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         konrad.dybcio@somainline.org
 Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v4 5/6] regulator: qcom_spmi: Add support for PMP8074 regulators
-Date:   Wed, 18 May 2022 20:48:24 +0200
-Message-Id: <20220518184825.1034976-5-robimarko@gmail.com>
+Subject: [PATCH v4 6/6] arm64: dts: qcom: Add PMP8074 DTSI
+Date:   Wed, 18 May 2022 20:48:25 +0200
+Message-Id: <20220518184825.1034976-6-robimarko@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220518184825.1034976-1-robimarko@gmail.com>
 References: <20220518184825.1034976-1-robimarko@gmail.com>
@@ -73,73 +73,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PMP8074 is a companion PMIC for the Qualcomm IPQ8074 WiSoC-s.
+PMP8074 is a companion PMIC to the Qualcomm IPQ8074 series that is
+controlled via SPMI.
 
-It features 5 HF-SMPS and 13 LDO regulators.
-
-HF-SMPS regulators are Buck HFS430 regulators.
-L1, L2 and L3 are HT_N1200_ST subtype LDO regulators.
-L4 is HT_N300_ST subtype LDO regulator.
-L5 and L6 are HT_P600 subtype LDO regulators.
-L7, L11, L12 and L13 are HT_P150 subtype LDO regulators.
-L10 is HT_P50 subtype LDO regulator.
-
-This commit adds support for all of the buck regulators and LDO-s except
-for L10 as I dont have documentation on its output voltage range.
-
-S3 is the CPU cluster voltage supply, S4 supplies the UBI32 NPU cores
-and L11 is the SDIO/eMMC I/O voltage regulator required for high speeds.
+Since we now have support for the regulators inside of it add DTSI
+for it.
 
 Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
-Changes in v4:
-* Add remaining regulators, minus L11
-* Sort structure and compatible
----
- drivers/regulator/qcom_spmi-regulator.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ arch/arm64/boot/dts/qcom/pmp8074.dtsi | 38 +++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/pmp8074.dtsi
 
-diff --git a/drivers/regulator/qcom_spmi-regulator.c b/drivers/regulator/qcom_spmi-regulator.c
-index ad9ad9f4be8e..a2d0292a92fd 100644
---- a/drivers/regulator/qcom_spmi-regulator.c
-+++ b/drivers/regulator/qcom_spmi-regulator.c
-@@ -2139,6 +2139,28 @@ static const struct spmi_regulator_data pm8005_regulators[] = {
- 	{ }
- };
- 
-+static const struct spmi_regulator_data pmp8074_regulators[] = {
-+	{ "s1", 0x1400, "vdd_s1"},
-+	{ "s2", 0x1700, "vdd_s2"},
-+	{ "s3", 0x1a00, "vdd_s3"},
-+	{ "s4", 0x1d00, "vdd_s4"},
-+	{ "s5", 0x2000, "vdd_s5"},
-+	{ "l1", 0x4000, "vdd_l1_l2"},
-+	{ "l2", 0x4100, "vdd_l1_l2"},
-+	{ "l3", 0x4200, "vdd_l3_l8"},
-+	{ "l4", 0x4300, "vdd_l4"},
-+	{ "l5", 0x4400, "vdd_l5_l6_l15"},
-+	{ "l6", 0x4500, "vdd_l5_l6_l15"},
-+	{ "l7", 0x4600, "vdd_l7"},
-+	{ "l8", 0x4700, "vdd_l3_l8"},
-+	{ "l9", 0x4800, "vdd_l9"},
-+	/* l10 is currently unsupported HT_P50 */
-+	{ "l11", 0x4a00, "vdd_l10_l11_l12_l13"},
-+	{ "l12", 0x4b00, "vdd_l10_l11_l12_l13"},
-+	{ "l13", 0x4c00, "vdd_l10_l11_l12_l13"},
-+	{ }
-+};
+diff --git a/arch/arm64/boot/dts/qcom/pmp8074.dtsi b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
+new file mode 100644
+index 000000000000..0bda4997720b
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/pmp8074.dtsi
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
- static const struct spmi_regulator_data pms405_regulators[] = {
- 	{ "s3", 0x1a00, "vdd_s3"},
- 	{ }
-@@ -2156,6 +2178,7 @@ static const struct of_device_id qcom_spmi_regulator_match[] = {
- 	{ .compatible = "qcom,pmi8994-regulators", .data = &pmi8994_regulators },
- 	{ .compatible = "qcom,pm660-regulators", .data = &pm660_regulators },
- 	{ .compatible = "qcom,pm660l-regulators", .data = &pm660l_regulators },
-+	{ .compatible = "qcom,pmp8074-regulators", .data = &pmp8074_regulators },
- 	{ .compatible = "qcom,pms405-regulators", .data = &pms405_regulators },
- 	{ }
- };
++#include <dt-bindings/spmi/spmi.h>
++
++&spmi_bus {
++	pmic@1 {
++		compatible ="qcom,spmi-pmic";
++		reg = <0x1 SPMI_USID>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		regulators {
++			compatible = "qcom,pmp8074-regulators";
++
++			s3: s3 {
++				regulator-name = "vdd_s3";
++				regulator-min-microvolt = <592000>;
++				regulator-max-microvolt = <1064000>;
++				regulator-always-on;
++				regulator-boot-on;
++			};
++
++			s4: s4 {
++				regulator-name = "vdd_s4";
++				regulator-min-microvolt = <712000>;
++				regulator-max-microvolt = <992000>;
++				regulator-always-on;
++				regulator-boot-on;
++			};
++
++			l11: l11 {
++				regulator-name = "l11";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++			};
++		};
++	};
++};
 -- 
 2.36.1
 

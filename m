@@ -2,56 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7946952BA12
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619B952B9A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236467AbiERM1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S236292AbiERMNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236406AbiERM0x (ORCPT
+        with ESMTP id S236268AbiERMMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:26:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71676CF50;
-        Wed, 18 May 2022 05:26:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B3B2B81F40;
-        Wed, 18 May 2022 12:26:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4EDCC34117;
-        Wed, 18 May 2022 12:26:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652876808;
-        bh=1qHNBJuS77VJ2N1x92VkPHw4z8C7RONAALqWccL52UU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z4z2XHuJFE/3wF4nYro8xqKbUELOaklH6EaYI1sPShRXIxdPbcK3h/Bvgu3xLiwv8
-         LQx9bxRGFhNh8U6Qi3FWZQaoLHV+Qeao8nU0dQw5OthZQ2h+FR1Ob56qhsTIVuTL4j
-         /zzubgmkqCd4ZDwPyyuVSzqwpU6fD3fvxMxXflyAxc/NvmMXmKWyY7nqHoe25pS2Z+
-         3yoHcbf158kS1A3cO6Sy87ZkWtwrtxv2jLfbYsftqo0lDIN3NN/WCdN8OPcsi7TeNB
-         p2xQJKU7t61JNVMbo7TPKtp+9/0O/bgheIyJseCXCm/j93KeWQGjq5YnvakXy8/7UT
-         fGqQfDYUFnh0A==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Felix Fietkau <nbd@nbd.name>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sasha Levin <sashal@kernel.org>, johannes@sipsolutions.net,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 03/23] mac80211: fix rx reordering with non explicit / psmp ack policy
-Date:   Wed, 18 May 2022 08:26:16 -0400
-Message-Id: <20220518122641.342120-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220518122641.342120-1-sashal@kernel.org>
-References: <20220518122641.342120-1-sashal@kernel.org>
+        Wed, 18 May 2022 08:12:49 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A9E14B67E;
+        Wed, 18 May 2022 05:12:40 -0700 (PDT)
+Received: from kwepemi100017.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3Bg856V3zhZ9t;
+        Wed, 18 May 2022 20:11:48 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100017.china.huawei.com (7.221.188.163) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 20:12:38 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
+ 2022 20:12:37 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <josef@toxicpanda.com>, <axboe@kernel.dk>, <ming.lei@redhat.com>
+CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next v2 4/6] nbd: fix io hung while disconnecting device
+Date:   Wed, 18 May 2022 20:26:16 +0800
+Message-ID: <20220518122618.1702997-5-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220518122618.1702997-1-yukuai3@huawei.com>
+References: <20220518122618.1702997-1-yukuai3@huawei.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,36 +53,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+In our tests, "qemu-nbd" triggers a io hung:
 
-[ Upstream commit 5e469ed9764d4722c59562da13120bd2dc6834c5 ]
+INFO: task qemu-nbd:11445 blocked for more than 368 seconds.
+      Not tainted 5.18.0-rc3-next-20220422-00003-g2176915513ca #884
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:qemu-nbd        state:D stack:    0 pid:11445 ppid:     1 flags:0x00000000
+Call Trace:
+ <TASK>
+ __schedule+0x480/0x1050
+ ? _raw_spin_lock_irqsave+0x3e/0xb0
+ schedule+0x9c/0x1b0
+ blk_mq_freeze_queue_wait+0x9d/0xf0
+ ? ipi_rseq+0x70/0x70
+ blk_mq_freeze_queue+0x2b/0x40
+ nbd_add_socket+0x6b/0x270 [nbd]
+ nbd_ioctl+0x383/0x510 [nbd]
+ blkdev_ioctl+0x18e/0x3e0
+ __x64_sys_ioctl+0xac/0x120
+ do_syscall_64+0x35/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fd8ff706577
+RSP: 002b:00007fd8fcdfebf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000040000000 RCX: 00007fd8ff706577
+RDX: 000000000000000d RSI: 000000000000ab00 RDI: 000000000000000f
+RBP: 000000000000000f R08: 000000000000fbe8 R09: 000055fe497c62b0
+R10: 00000002aff20000 R11: 0000000000000246 R12: 000000000000006d
+R13: 0000000000000000 R14: 00007ffe82dc5e70 R15: 00007fd8fcdff9c0
 
-When the QoS ack policy was set to non explicit / psmp ack, frames are treated
-as not being part of a BA session, which causes extra latency on reordering.
-Fix this by only bypassing reordering for packets with no-ack policy
+"qemu-ndb -d" will call ioctl 'NBD_DISCONNECT' first, however, following
+message was found:
 
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Link: https://lore.kernel.org/r/20220420105038.36443-1-nbd@nbd.name
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+block nbd0: Send disconnect failed -32
+
+Which indicate that something is wrong with the server. Then,
+"qemu-nbd -d" will call ioctl 'NBD_CLEAR_SOCK', however ioctl can't clear
+requests after commit 2516ab1543fd("nbd: only clear the queue on device
+teardown"). And in the meantime, request can't complete through timeout
+because nbd_xmit_timeout() will always return 'BLK_EH_RESET_TIMER', which
+means such request will never be completed in this situation.
+
+Now that the flag 'NBD_CMD_INFLIGHT' can make sure requests won't
+complete multiple times, switch back to call nbd_clear_sock() in
+nbd_clear_sock_ioctl(), so that inflight requests can be cleared.
+
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- net/mac80211/rx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/block/nbd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
-index 48d9553dafe3..7e2404fd85b6 100644
---- a/net/mac80211/rx.c
-+++ b/net/mac80211/rx.c
-@@ -1405,8 +1405,7 @@ static void ieee80211_rx_reorder_ampdu(struct ieee80211_rx_data *rx,
- 		goto dont_reorder;
- 
- 	/* not part of a BA session */
--	if (ack_policy != IEEE80211_QOS_CTL_ACK_POLICY_BLOCKACK &&
--	    ack_policy != IEEE80211_QOS_CTL_ACK_POLICY_NORMAL)
-+	if (ack_policy == IEEE80211_QOS_CTL_ACK_POLICY_NOACK)
- 		goto dont_reorder;
- 
- 	/* new, potentially un-ordered, ampdu frame - process it */
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index a0d0910dae2a..ec736cc52134 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -1429,7 +1429,7 @@ static int nbd_start_device_ioctl(struct nbd_device *nbd)
+ static void nbd_clear_sock_ioctl(struct nbd_device *nbd,
+ 				 struct block_device *bdev)
+ {
+-	sock_shutdown(nbd);
++	nbd_clear_sock(nbd);
+ 	__invalidate_device(bdev, true);
+ 	nbd_bdev_reset(nbd);
+ 	if (test_and_clear_bit(NBD_RT_HAS_CONFIG_REF,
 -- 
-2.35.1
+2.31.1
 

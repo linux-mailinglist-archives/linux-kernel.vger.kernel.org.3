@@ -2,46 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28C952BEEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308DD52BF3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239503AbiERPkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 11:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
+        id S239529AbiERPk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 11:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239494AbiERPjw (ORCPT
+        with ESMTP id S239478AbiERPkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 11:39:52 -0400
-Received: from outbound-smtp03.blacknight.com (outbound-smtp03.blacknight.com [81.17.249.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168B9163F66
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 08:39:50 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
-        by outbound-smtp03.blacknight.com (Postfix) with ESMTPS id 5FA68C0AF9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 16:39:49 +0100 (IST)
-Received: (qmail 812 invoked from network); 18 May 2022 15:39:49 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 18 May 2022 15:39:49 -0000
-Date:   Wed, 18 May 2022 16:39:47 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/4] sched/numa: Apply imbalance limitations consistently
-Message-ID: <20220518153947.GS3441@techsingularity.net>
-References: <20220511143038.4620-1-mgorman@techsingularity.net>
- <20220511143038.4620-4-mgorman@techsingularity.net>
- <20220518093156.GD10117@worktop.programming.kicks-ass.net>
- <20220518104652.GO3441@techsingularity.net>
- <YoT7xtVc0f3DVCKL@hirez.programming.kicks-ass.net>
+        Wed, 18 May 2022 11:40:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800B32CE11;
+        Wed, 18 May 2022 08:40:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 26C1121B7D;
+        Wed, 18 May 2022 15:40:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652888447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lUuJK4eL9+OrReBYOWwXyTY//4zqDis40btPse6/uis=;
+        b=FI5Sy3NWkxOrgF+oYW8rHSuu2CTrRYidOfq7exPfxbLF4Qkrsd1N8W/xnoeEyD2pIq03Iy
+        75Y0dEF6IU3IyPEy/u1XmdxrAQybITgPqa3eVA2Lle1Xs6B5mJzje0n5/56J+/t1UioIh1
+        oIKfIkBBwT/U06IqQASwRYrKecBO6jQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EAB0413A6D;
+        Wed, 18 May 2022 15:40:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id w3xROH4ThWJDUgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 18 May 2022 15:40:46 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     cgroups@vger.kernel.org, linux-mm@kvack.org
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Richard Palethorpe <rpalethorpe@suse.de>
+Subject: [PATCH 0/4] memcontrol selftests fixups
+Date:   Wed, 18 May 2022 17:40:33 +0200
+Message-Id: <20220518154037.18819-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <YoT7xtVc0f3DVCKL@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,27 +64,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 03:59:34PM +0200, Peter Zijlstra wrote:
-> On Wed, May 18, 2022 at 11:46:52AM +0100, Mel Gorman wrote:
-> 
-> > > (Although I do wonder about that 25% figure in the comment; that doesn't
-> > > seem to relate to any actual code anymore)
-> > > 
-> > 
-> > You're right, by the end of the series it's completely inaccurate and
-> > currently it's not accurate if there are multiple LLCs per node. I
-> > adjusted the wording to "Allow a NUMA imbalance if busy CPUs is less
-> > than the maximum threshold. Above this threshold, individual tasks may
-> > be contending for both memory bandwidth and any shared HT resources."
-> > 
-> 
-> Looks good. Meanwhile I saw a 0-day complaint that this regresses
-> something something unixbench by a bit. Do we care enough? I suppose
-> this is one of those trade-off patches again, win some, loose some.
+Hello.
 
-I think it's a trade-off. I made a more complete response to the 0-day
-people at https://lore.kernel.org/all/20220518152258.GR3441@techsingularity.net/
+I'm just flushing the simple patches to make memcontrol selftests check the
+events behavior we had consensus about (test_memcg_low fails). (I've dropped to
+goto macros for now.)
+
+(test_memcg_reclaim, test_memcg_swap_max fail for me now but it's present
+even before the refactoring.)
+
+The only bigger change is adjustment of the protected values to make tests
+succeed with the given tolerance.
+
+It's based on mm-stable [1] commit e240ac52f7da. AFAIC, the fixup and partial
+reverts may be folded into respective commits.
+Let me know if it should be (re)based on something else.
+
+Thanks,
+Michal
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/log/tools/testing/selftests/cgroup?h=mm-stable
+
+Michal Koutný (4):
+  selftests: memcg: Fix compilation
+  selftests: memcg: Expect no low events in unprotected sibling
+  selftests: memcg: Adjust expected reclaim values of protected cgroups
+  selftests: memcg: Remove protection from top level memcg
+
+ .../selftests/cgroup/test_memcontrol.c        | 59 +++++++++----------
+ 1 file changed, 29 insertions(+), 30 deletions(-)
 
 -- 
-Mel Gorman
-SUSE Labs
+2.35.3
+

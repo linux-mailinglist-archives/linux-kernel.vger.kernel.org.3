@@ -2,65 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D1252B5F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375A552B583
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbiERJHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S233815AbiERI5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbiERJHi (ORCPT
+        with ESMTP id S233734AbiERI50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:07:38 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49ABB111BA6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:07:36 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id d15so2475875lfk.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:07:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wcrsvOrOm+mRa378F80R7USaGzcRNkSgm1WTWIJU7Qs=;
-        b=dOowfJdUkCgdm+X0sjpkSjkrWinBHywOfRCJNbbQg4ZKVRGegBTMgRLgdR+HsHFGKZ
-         r4xFbL1vipCRMWGmh9nB0S8FKnGjgZbtewcVMVPp2bWC2O5toghr+ux4gKsXPzoghRsL
-         WUOnQv3yOcw7YQOVrDk5ku5tDcNRyvk2u7JzYf93lhPHoYGlKPeYZMMpRm5144bV2zcT
-         WKvj/zSILDcgH344tlgTJ/s606MgwrrA+qjyxf8zFhmnLzroOMdt5L3scY4FFq/gcHxV
-         O3nplaMJWPnZBHVE3SMXQM6BNUvxKU0DNP0ZV6fdaX6iLjwlISaAEUpqQ6h78DIHQUHc
-         rK+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wcrsvOrOm+mRa378F80R7USaGzcRNkSgm1WTWIJU7Qs=;
-        b=yROmjkG2C80i0VBQ/DrAiFuf6iDlkMkWEdpTNhko0eaokQY/LDL+iuBUJUWnj6v9Wj
-         8CafjokjQyEEJS4pMdkq3/78yJoDEMrviTKB46Rs2GOyrtMgT0VrWMBLIGsvoXOSdr1y
-         73R/hzQYdQb5idxhf9ugLJAJcVhC07tm2930UAE14HAw8P9i2x1+2VUD0aL3UvSI+Y0g
-         QP6o/scqFnalzbvuvms6fB+Q3PtB8R9W5yzfTe9AAOpad1DVT1GIsCf4NXf1ReeT9+Yj
-         3purFGMjBZet8FZ1gyp5c0ViBB33AO6k6oh9maN/w0HDsbiuv1g9AaTlGobpLTEGKtVX
-         ipQg==
-X-Gm-Message-State: AOAM532LHQPCw+/r9TZB/C8bqcwu3OkJCQtPeMST78mEGdp0TczWRWaG
-        4htUo6LfZuFtrowuqSoQNNrvyIQLWWjPyvLHToWS6Q==
-X-Google-Smtp-Source: ABdhPJzAelqtBPGCxXlfVN3acRhTDjVF3HlQ8kO0+AOIyERK7gjO1Z1UPKDGisPXmDCihnikdsCzfF2/c2VeEisQqRI=
-X-Received: by 2002:a05:6512:168d:b0:471:6cb9:c20f with SMTP id
- bu13-20020a056512168d00b004716cb9c20fmr19895367lfb.229.1652864854579; Wed, 18
- May 2022 02:07:34 -0700 (PDT)
+        Wed, 18 May 2022 04:57:26 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A768E13FAB;
+        Wed, 18 May 2022 01:57:05 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L36Dh1kP4zCsmj;
+        Wed, 18 May 2022 16:52:04 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 16:56:59 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
+ 2022 16:56:58 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>
+CC:     <haijun.liu@mediatek.com>, <chandrashekar.devegowda@intel.com>,
+        <ricardo.martinez@linux.intel.com>, <loic.poulain@linaro.org>,
+        <davem@davemloft.net>, <kuba@kernel.org>
+Subject: [PATCH -next] net: wwan: t7xx: use GFP_ATOMIC under spin lock in t7xx_cldma_gpd_set_next_ptr()
+Date:   Wed, 18 May 2022 17:07:38 +0800
+Message-ID: <20220518090738.2694556-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220308205000.27646-1-mike.leach@linaro.org> <20220308205000.27646-9-mike.leach@linaro.org>
- <71c11820-433d-755d-0eb4-797313d693f9@huawei.com>
-In-Reply-To: <71c11820-433d-755d-0eb4-797313d693f9@huawei.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Wed, 18 May 2022 10:07:23 +0100
-Message-ID: <CAJ9a7ViS-nxhmzRs6LwHSqPzHSo11inZ+066aKe116ESr6ufvw@mail.gmail.com>
-Subject: Re: [PATCH 08/10] coresight: Remove legacy Trace ID allocation mechanism
-To:     "liuqi (BA)" <liuqi115@huawei.com>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,73 +53,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Sometimes t7xx_cldma_gpd_set_next_ptr() is called under spin lock,
+so add a parameter in t7xx_cldma_gpd_set_next_ptr() to make if it
+use GFP_ATOMIC flag.
 
-On Tue, 17 May 2022 at 04:56, liuqi (BA) <liuqi115@huawei.com> wrote:
->
-> Hi Mike,
->
-> On 2022/3/9 4:49, Mike Leach wrote:
-> > This static 'cpu * 2 + seed' was outdated and broken for systems with high
-> > core counts (>46).
-> >
-> > This has been replaced by a dynamic allocation system.
-> >
-> > Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> > ---
-> >   include/linux/coresight-pmu.h | 12 ------------
-> >   1 file changed, 12 deletions(-)
->
-> Seems coresight_get_trace_id() in tools/include/linux/coresight-pmu.h
-> need to be deleted too.
->
-> Thanks,
-> Qi
->
+Fixes: 39d439047f1d ("net: wwan: t7xx: Add control DMA interface")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/net/wwan/t7xx/t7xx_hif_cldma.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-Agreed - I'll sort it for the next release.
-
-Thanks
-
-Mike
-
-> >
-> > diff --git a/include/linux/coresight-pmu.h b/include/linux/coresight-pmu.h
-> > index 4ac5c081af93..bb4eb4de3c77 100644
-> > --- a/include/linux/coresight-pmu.h
-> > +++ b/include/linux/coresight-pmu.h
-> > @@ -8,7 +8,6 @@
-> >   #define _LINUX_CORESIGHT_PMU_H
-> >
-> >   #define CORESIGHT_ETM_PMU_NAME "cs_etm"
-> > -#define CORESIGHT_ETM_PMU_SEED  0x10
-> >
-> >   /*
-> >    * Below are the definition of bit offsets for perf option, and works as
-> > @@ -32,15 +31,4 @@
-> >   #define ETM4_CFG_BIT_RETSTK 12
-> >   #define ETM4_CFG_BIT_VMID_OPT       15
-> >
-> > -static inline int coresight_get_trace_id(int cpu)
-> > -{
-> > -     /*
-> > -      * A trace ID of value 0 is invalid, so let's start at some
-> > -      * random value that fits in 7 bits and go from there.  Since
-> > -      * the common convention is to have data trace IDs be I(N) + 1,
-> > -      * set instruction trace IDs as a function of the CPU number.
-> > -      */
-> > -     return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
-> > -}
-> > -
-> >   #endif
-> >
-> _______________________________________________
-> CoreSight mailing list -- coresight@lists.linaro.org
-> To unsubscribe send an email to coresight-leave@lists.linaro.org
-
-
-
+diff --git a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
+index 0c52801ed0de..1fa9bb763831 100644
+--- a/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
++++ b/drivers/net/wwan/t7xx/t7xx_hif_cldma.c
+@@ -91,9 +91,12 @@ static void t7xx_cldma_gpd_set_next_ptr(struct cldma_gpd *gpd, dma_addr_t next_p
+ }
+ 
+ static int t7xx_cldma_alloc_and_map_skb(struct cldma_ctrl *md_ctrl, struct cldma_request *req,
+-					size_t size)
++					size_t size, bool is_atomic)
+ {
+-	req->skb = __dev_alloc_skb(size, GFP_KERNEL);
++	if (is_atomic)
++		req->skb = __dev_alloc_skb(size, GFP_ATOMIC);
++	else
++		req->skb = __dev_alloc_skb(size, GFP_KERNEL);
+ 	if (!req->skb)
+ 		return -ENOMEM;
+ 
+@@ -174,7 +177,7 @@ static int t7xx_cldma_gpd_rx_from_q(struct cldma_queue *queue, int budget, bool
+ 		spin_unlock_irqrestore(&queue->ring_lock, flags);
+ 		req = queue->rx_refill;
+ 
+-		ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, queue->tr_ring->pkt_size);
++		ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, queue->tr_ring->pkt_size, false);
+ 		if (ret)
+ 			return ret;
+ 
+@@ -402,7 +405,7 @@ static struct cldma_request *t7xx_alloc_rx_request(struct cldma_ctrl *md_ctrl, s
+ 	if (!req->gpd)
+ 		goto err_free_req;
+ 
+-	val = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, pkt_size);
++	val = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, pkt_size, false);
+ 	if (val)
+ 		goto err_free_pool;
+ 
+@@ -801,7 +804,7 @@ static int t7xx_cldma_clear_rxq(struct cldma_ctrl *md_ctrl, int qnum)
+ 		if (req->skb)
+ 			continue;
+ 
+-		ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, rxq->tr_ring->pkt_size);
++		ret = t7xx_cldma_alloc_and_map_skb(md_ctrl, req, rxq->tr_ring->pkt_size, true);
+ 		if (ret)
+ 			break;
+ 
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+2.25.1
+

@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DD552B804
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A5F52B7E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbiERKTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 06:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        id S235132AbiERKVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 06:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235055AbiERKTn (ORCPT
+        with ESMTP id S235044AbiERKVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 06:19:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9ABBFE7332
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 03:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652869178;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aL2OYkpkQZKWTo+sPUOc1vZdR03lCBjmbztTEGxy9Ao=;
-        b=alLkdEedozksfoeTzHGat9/R5LE2/l0sl2VzHvi5t8q2/LfzLicgDxJdL7493mVzUm177n
-        nBagxF6rD+hfCLswsFdmvQ0fO28Ju7XOxkl2++O+EFZW5n2AqsTvrIkosq+Q/tS1BzROSk
-        7gXH5BDg+/rWBMX08fguviK3gIjhTo8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-602-IqTzRmmsOtStrwezIiw9Og-1; Wed, 18 May 2022 06:19:34 -0400
-X-MC-Unique: IqTzRmmsOtStrwezIiw9Og-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8C84C3C1618C;
-        Wed, 18 May 2022 10:19:33 +0000 (UTC)
-Received: from localhost (ovpn-13-59.pek2.redhat.com [10.72.13.59])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4848C40C1421;
-        Wed, 18 May 2022 10:19:31 +0000 (UTC)
-Date:   Wed, 18 May 2022 18:19:28 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        akpm@linux-foundation.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dave Young <dyoung@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        David Vernet <void@manifault.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH 0/2] Expose kallsyms data in vmcoreinfo note
-Message-ID: <YoTIMEPAxLF9t2eo@MiWiFi-R3L-srv>
-References: <20220517000508.777145-1-stephen.s.brennan@oracle.com>
+        Wed, 18 May 2022 06:21:09 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7F7245AF;
+        Wed, 18 May 2022 03:21:07 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id p189so855335wmp.3;
+        Wed, 18 May 2022 03:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eUUlK8gFbeLL/gYwSjFGB469B2p9AZAbiDBrzDvrtBo=;
+        b=fsf86z7GL8uF7oZ5/oy9mXJ6AULhTE6lCbK45kPP/MAeFwfZ93zHQhHHqEo/CFsHsf
+         VwnnkepekExon2JWjTKDoW77pOOFU/NTFA7VcM9vSy1ZhcOddPr/ZcUfD6qV7xZzxcYI
+         iSTe4Dp9qLyqM2t5VrPqBbdkptiRvF5YZZHKduRHT3B4LlHjCAkFrl2H6yyK/9ZOfhk6
+         /7Qt7rhvuloB47St1MzDb0d3NnR/2JOBJlGVUKIH8NHzAn7kQlJUBdeAfEQqYIW0jl6m
+         QDZqYuGnkLOPCFkJ4P+aHqRO6ZtrbCu/mIMd2VI3kUxhlMS57qHtl8csewvsxZ3cL5t/
+         QvfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eUUlK8gFbeLL/gYwSjFGB469B2p9AZAbiDBrzDvrtBo=;
+        b=XB/iMeivhP5YEpQsOKMjsnNyVWGwEUwg/8uwEHwsWN/Ta7ahcTt4MNYNDZF6LCjCHX
+         ZaqnS0fn4nCU3r3EA8ZQnPbEnruVIqEnufV6Z9ICDHtz8vC6j2Ef+f1/LLMqeXH2UDTS
+         5AAiKX9ZKQdK8GXXOX7CksWsQvwr7+WckN8/9FFaDkygE09kJq1OYsoNEEDAILUAGAU/
+         YH4BlPejmuDhhvnS2R6kmz0MCRXNC8H8tQZRoZKcwWNK2hwqgTZoBjLdXEUwS1Iy8JPs
+         cwkj2Ck/krjHMaXYi/TgiIIiiWFDNb1tXmGmUfFKB/WCTYHkEmF1GA5fv58twWbiiqMf
+         YsdQ==
+X-Gm-Message-State: AOAM531bRhB+yh2b10qy6bApX6ENopujVdTYgi7gvYk1xGbHEu3rThWr
+        OI43c0N3qChHktbJCPQEaOUvhoCjGqM8cGiy
+X-Google-Smtp-Source: ABdhPJw0Vi8wDw1/SK4QCP1kbEUaMv4b2Gmx0J3BodCQOZvKsbN5fZv2CUpVSJGGsMFA+UDfXbzX8g==
+X-Received: by 2002:a05:600c:3490:b0:394:5616:ac78 with SMTP id a16-20020a05600c349000b003945616ac78mr25610460wmq.80.1652869265875;
+        Wed, 18 May 2022 03:21:05 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id v9-20020a056000144900b0020c5253d8d8sm2039780wrx.36.2022.05.18.03.21.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 03:21:04 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Michael Reed <mdr@sgi.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: qla1280: remove redundant variable toke
+Date:   Wed, 18 May 2022 11:21:03 +0100
+Message-Id: <20220518102103.514701-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517000508.777145-1-stephen.s.brennan@oracle.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/16/22 at 05:05pm, Stephen Brennan wrote:
-> The kernel can be configured to contain a lot of introspection or
-> debugging information built-in, such as ORC for unwinding stack traces,
-> BTF for type information, and of course kallsyms. Debuggers could use
-> this information to navigate a core dump or live system, but they need
-> to be able to find it.
-> 
-> This patch series adds the necessary symbols into vmcoreinfo, which
-> would allow a debugger to find and interpret the kallsyms table. Using
-> the kallsyms data, the debugger can then lookup any symbol, allowing it
-> to find ORC, BTF, or any other useful data.
-> 
-> This would allow a live kernel, or core dump, to be debugged without
-> any DWARF debuginfo. This is useful for many cases: the debuginfo may
-> not have been generated, or you may not want to deploy the large files
-> everywhere you need them.
-> 
-> I've demonstrated a proof of concept for this at LSF/MM+BPF during a
-> lighting talk. Using a work-in-progress branch of the drgn debugger, and
-> an extended set of BTF generated by a patched version of dwarves, I've
-> been able to open a core dump without any DWARF info and do basic tasks
-> such as enumerating slab caches, block devices, tasks, and doing
-> backtraces. I hope this series can be a first step toward a new
-> possibility of "DWARFless debugging".
+Variable toke is being assigned a value that is never read. The variable
+is redundant, remove it.
 
-Thanks. Seems no reason to reject, even though I haven't tried drgn.
-And hope it has no security issue, e.g info leakage, at least I don't
-see it has. So,
+Cleans up clang scan build warning:
+warning: Although the value stored to 'toke' is used in the enclosing
+expression, the value is never actually read from 'toke'
+[deadcode.DeadStores]
 
-Acked-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/scsi/qla1280.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/qla1280.c b/drivers/scsi/qla1280.c
+index 0ab595c0870a..1e7f4d138e06 100644
+--- a/drivers/scsi/qla1280.c
++++ b/drivers/scsi/qla1280.c
+@@ -4037,7 +4037,6 @@ qla1280_setup(char *s)
+ {
+ 	char *cp, *ptr;
+ 	unsigned long val;
+-	int toke;
+ 
+ 	cp = s;
+ 
+@@ -4052,7 +4051,7 @@ qla1280_setup(char *s)
+ 		} else
+ 			val = simple_strtoul(ptr, &ptr, 0);
+ 
+-		switch ((toke = qla1280_get_token(cp))) {
++		switch (qla1280_get_token(cp)) {
+ 		case TOKEN_NVRAM:
+ 			if (!val)
+ 				driver_setup.no_nvram = 1;
+-- 
+2.35.1
 

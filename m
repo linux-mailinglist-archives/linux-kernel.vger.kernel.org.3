@@ -2,174 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D26A52B042
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BA352B046
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 03:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234006AbiERBzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 21:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S234043AbiERBzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 21:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233969AbiERBzi (ORCPT
+        with ESMTP id S233998AbiERBzp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 21:55:38 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FF054BDC;
-        Tue, 17 May 2022 18:55:35 -0700 (PDT)
-X-UUID: 220dc296169e4cf399570465aad54c37-20220518
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:3324cc5a-4676-45a4-afec-ce54a28106ca,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:7e718ee2-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 220dc296169e4cf399570465aad54c37-20220518
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <jianjun.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1859978881; Wed, 18 May 2022 09:55:30 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 18 May 2022 09:55:29 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 18 May 2022 09:55:29 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 18 May 2022 09:55:28 +0800
-Message-ID: <7a10b1d7fc294093f26555a8b5a8748a3c0e1c9f.camel@mediatek.com>
-Subject: Re: [PATCH v2] PCI: mediatek-gen3: Print LTSSM state when PCIe link
- down
-From:   Jianjun Wang <jianjun.wang@mediatek.com>
-To:     Ryder Lee <ryder.lee@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Rob Herring" <robh@kernel.org>,
-        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jieyy.yang@mediatek.com>,
-        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
-        <jian.yang@mediatek.com>
-Date:   Wed, 18 May 2022 09:55:28 +0800
-In-Reply-To: <32f5308e629cef3692c57c4c55442b0f2f25634f.camel@mediatek.com>
-References: <20220329030715.7975-1-jianjun.wang@mediatek.com>
-         <32f5308e629cef3692c57c4c55442b0f2f25634f.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 17 May 2022 21:55:45 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0C638D;
+        Tue, 17 May 2022 18:55:40 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Wed, 18 May
+ 2022 09:55:38 +0800
+Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Wed, 18 May
+ 2022 09:55:38 +0800
+Message-ID: <bf354eb3-2149-5faa-8ada-baa4b2f4ad09@meizu.com>
+Date:   Wed, 18 May 2022 09:55:37 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] RDMA: remove null check after call container_of()
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+CC:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        "Leon Romanovsky" <leon@kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1652751208-23211-1-git-send-email-baihaowen@meizu.com>
+ <20220517121646.GE63055@ziepe.ca>
+ <142a9c03-574f-adcf-bc4d-bb2a25c01e88@wanadoo.fr>
+ <20220517180303.GK63055@ziepe.ca>
+From:   baihaowen <baihaowen@meizu.com>
+In-Reply-To: <20220517180303.GK63055@ziepe.ca>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maintainers,
+在 2022/5/18 上午2:03, Jason Gunthorpe 写道:
+> On Tue, May 17, 2022 at 07:54:38PM +0200, Christophe JAILLET wrote:
+>> Le 17/05/2022 à 14:16, Jason Gunthorpe a écrit :
+>>> On Tue, May 17, 2022 at 09:33:28AM +0800, Haowen Bai wrote:
+>>>> container_of() will never return NULL, so remove useless code.
+>>> It is confusing here, but it can be null.
+>> Hi,
+>>
+>> out of curiosity, can you elaborate how it can be NULL?
+> It is guarented/required that that container_of is a 0 offset. The
+> normal usage of the ib_alloc_device macro:
+>
+> #define ib_alloc_device(drv_struct, member)                                    \
+> 	container_of(_ib_alloc_device(sizeof(struct drv_struct) +              \
+> 				      BUILD_BUG_ON_ZERO(offsetof(              \
+> 					      struct drv_struct, member))),    \
+> 		     struct drv_struct, member)
+>
+> Enforces this property with a BUILD_BUG_ON
+>
+> So, if the input pointer to container_of is reliably NULL or ERR_PTR
+> then the output pointer will be the same.
+>
+> The rvt code here open codes the call because it is a mid-layer and
+> the sizeof() calculation above is not correct for it.
+>
+> Jason
+Thank you for the explanation.   : )
 
-Gentle ping for this patch, if there is anything I can do to get this
-patch merged, please let me know.
-
-Thanks.
-
-On Fri, 2022-04-22 at 14:33 +0800, Jianjun Wang wrote:
-> Hi Maintainers,
-> 
-> Just gentle ping for this patch, if there is anything I can do to get
-> this patch merged, please let me know.
-> 
-> Thanks.
-> 
-> On Tue, 2022-03-29 at 11:07 +0800, Jianjun Wang wrote:
-> > Print current LTSSM state when PCIe link down instead of the
-> > register
-> > value, make it easier to get the link status.
-> > 
-> > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
-> > ---
-> > Changes in v2:
-> > Print both of the register value and the LTSSM state.
-> > ---
-> >  drivers/pci/controller/pcie-mediatek-gen3.c | 41
-> > ++++++++++++++++++++-
-> >  1 file changed, 40 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c
-> > b/drivers/pci/controller/pcie-mediatek-gen3.c
-> > index 6745076a02b9..c24e03c198b7 100644
-> > --- a/drivers/pci/controller/pcie-mediatek-gen3.c
-> > +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-> > @@ -153,6 +153,37 @@ struct mtk_gen3_pcie {
-> >  	DECLARE_BITMAP(msi_irq_in_use, PCIE_MSI_IRQS_NUM);
-> >  };
-> >  
-> > +/* LTSSM state in PCIE_LTSSM_STATUS_REG bit[28:24] */
-> > +static const char *const ltssm_str[] = {
-> > +	"detect.quiet",			/* 0x00 */
-> > +	"detect.active",		/* 0x01 */
-> > +	"polling.active",		/* 0x02 */
-> > +	"polling.compliance",		/* 0x03 */
-> > +	"polling.configuration",	/* 0x04 */
-> > +	"config.linkwidthstart",	/* 0x05 */
-> > +	"config.linkwidthaccept",	/* 0x06 */
-> > +	"config.lanenumwait",		/* 0x07 */
-> > +	"config.lanenumaccept",		/* 0x08 */
-> > +	"config.complete",		/* 0x09 */
-> > +	"config.idle",			/* 0x0A */
-> > +	"recovery.receiverlock",	/* 0x0B */
-> > +	"recovery.equalization",	/* 0x0C */
-> > +	"recovery.speed",		/* 0x0D */
-> > +	"recovery.receiverconfig",	/* 0x0E */
-> > +	"recovery.idle",		/* 0x0F */
-> > +	"L0",				/* 0x10 */
-> > +	"L0s",				/* 0x11 */
-> > +	"L1.entry",			/* 0x12 */
-> > +	"L1.idle",			/* 0x13 */
-> > +	"L2.idle",			/* 0x14 */
-> > +	"L2.transmitwake",		/* 0x15 */
-> > +	"disable",			/* 0x16 */
-> > +	"loopback.entry",		/* 0x17 */
-> > +	"loopback.active",		/* 0x18 */
-> > +	"loopback.exit",		/* 0x19 */
-> > +	"hotreset",			/* 0x1A */
-> > +};
-> > +
-> >  /**
-> >   * mtk_pcie_config_tlp_header() - Configure a configuration TLP
-> > header
-> >   * @bus: PCI bus to query
-> > @@ -327,8 +358,16 @@ static int mtk_pcie_startup_port(struct
-> > mtk_gen3_pcie *pcie)
-> >  				 !!(val & PCIE_PORT_LINKUP), 20,
-> >  				 PCI_PM_D3COLD_WAIT * USEC_PER_MSEC);
-> >  	if (err) {
-> > +		const char *ltssm_state;
-> > +		int ltssm_index;
-> > +
-> >  		val = readl_relaxed(pcie->base +
-> > PCIE_LTSSM_STATUS_REG);
-> > -		dev_err(pcie->dev, "PCIe link down, ltssm reg val:
-> > %#x\n", val);
-> > +		ltssm_index = PCIE_LTSSM_STATE(val);
-> > +		ltssm_state = ltssm_index >= ARRAY_SIZE(ltssm_str) ?
-> > +			      "Unknown state" : ltssm_str[ltssm_index];
-> > +		dev_err(pcie->dev,
-> > +			"PCIe link down, current ltssm state: %s
-> > (%#x)\n",
-> > +			ltssm_state, val);
-> >  		return err;
-> >  	}
-> >  
-> 
-> 
+-- 
+Haowen Bai
 

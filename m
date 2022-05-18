@@ -2,95 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F12B52BEEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1C252BF92
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 18:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239903AbiERQBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S239929AbiERQDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239718AbiERQBu (ORCPT
+        with ESMTP id S239876AbiERQDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:01:50 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3101F149AA0;
-        Wed, 18 May 2022 09:01:49 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2ec42eae76bso29306507b3.10;
-        Wed, 18 May 2022 09:01:49 -0700 (PDT)
+        Wed, 18 May 2022 12:03:34 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C01170F0C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:03:33 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so3444094wme.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:03:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uJ8x3A3SUh3hnIZHUc6rKyMmPbJB4WADynnntPJs/B0=;
+        b=CFxKqA/ZOWiK2KBTxEXLxhszvMD6eEl28C9EC52rsAOz9y7u1qFvR5NbNXHFkojhXI
+         L2oleUu6PJlNSNAXR+tZ40UR+65+zx3QkrDapDy9Fbqle4L55rwhjEWAEoAEhe3jnEZM
+         Y+VewS4gm1Bcurjijqv5eRljKfCWFj84ltnVA5EgeJPZneEIh+cKnCHbhA/6upMndLOG
+         A270E1nf9QDhDzvXKn+6Qe5xjXRcvox2oUTGuQp9wW8RsHYqdDTPRy275gqhzUd4PSFs
+         Bh0VxypunuqM7GyZ1TAJKm9TPHAK3yNuRksX8fFC0GizRiIehoQbZGtSHqCYugxA8++h
+         60AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=exZDVy0fXYEUjJOxnnEOEY7L5w0sPe9Rc4hUPUbdQGk=;
-        b=sa9JJ91Drnl/h/V6aFyJaghUpVrkHHilaVs8lqLifbeZtMuIRau+S0JLzQd8qcLFsQ
-         WA/7/M836dhgu8bFIb9YIuLVHONKkay0njTTWDdSiiMs0cnA2hRqev3tn0NGUXLam2aM
-         gB/TtHvq+6ch2PorgvIKvTu5eVgn2PLrcCGveDbc1GiGl4EKeJ32rao0OLRN1+uh9IBG
-         biebRNp8uQ04OH/by6sROMIrnb0GDTZK7rPoSKfEiYGdrU5Fg6GkuUmfqWd3QSoG3HSN
-         jsR7uED6iEfRccCWpIVd1GZqAzRg2xPUGAeKPqpNbkctoCII6xbaRqIKt9XTyBiLAWm8
-         lzGA==
-X-Gm-Message-State: AOAM533cwyvfr4XiyRgaaljGjGU8N8yd5dtIButz0BhMgPisocbr6Gs8
-        qhXBAQ5b9mdNxD/T1/xHjB308FIyq706QzbSc1FgpZzgW8Xlig==
-X-Google-Smtp-Source: ABdhPJwTRLxPjlziJXAcADX0e0mcHrERe93V6DdVLqohRvtfXMxTR2hhhAnek8Ds9RpGjME0IHcem5bgFmCogVvrlAQ=
-X-Received: by 2002:a81:140e:0:b0:2fe:c3a3:5b19 with SMTP id
- 14-20020a81140e000000b002fec3a35b19mr91778ywu.392.1652889708371; Wed, 18 May
- 2022 09:01:48 -0700 (PDT)
+        bh=uJ8x3A3SUh3hnIZHUc6rKyMmPbJB4WADynnntPJs/B0=;
+        b=baNc+xEsBd26NOhw9UFHsBp13JNh6gS18ykghsULOZ2YudHjQqmIcZUMV5WakoqIOS
+         ewayQsaLI9pVtDU97CHp1rzJ9eaH//h3OA9nSAcCqtd83KdO5cDUxsE1HX8TOEAqzq7e
+         TygHc8EO2V8yUjdrLcj44U8XafNE5RdCQCHqzfzhMer15jRo9uiqEmRkHl93rWXMNXHZ
+         BRWW94NhHf+jIgFbAsNPMbwcO8Mju1lCzPbPSyk45bbmCmRoQ2Vgc7Wu0ObXt6x85pug
+         no93Ak7l5U+sl0snYogq9vOLNGWxSmYiaSZuNjgHhMvf7jQ80nwciWyBOo4JhQWkuC1P
+         Qmmg==
+X-Gm-Message-State: AOAM532Tywi/qVCJzXI+tG0AaDfP/JHaR1vwhkvba6zxAzs6y5tyZAdC
+        Hmx0Wfahdr31Ll5wS+QcPb90I8tmxZyy45HOxVeW
+X-Google-Smtp-Source: ABdhPJzVkBLylwaOZnnE42Ze2+ZD83Vb86r4fTxzPJH20bRDkwa1kPO33WF2FFIPJZRBjsneeGByTg/CPobPZKy0ryo=
+X-Received: by 2002:a05:600c:3487:b0:397:ca9:c98b with SMTP id
+ a7-20020a05600c348700b003970ca9c98bmr596753wmq.51.1652889811850; Wed, 18 May
+ 2022 09:03:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <e054f6d4-7ed1-98ac-8364-425f4ef0f760@hartkopp.net>
- <20220517141404.578d188a.max@enpas.org> <20220517122153.4r6n6kkbdslsa2hv@pengutronix.de>
- <20220517143921.08458f2c.max@enpas.org> <0b505b1f-1ee4-5a2c-3bbf-6e9822f78817@hartkopp.net>
- <CAMZ6RqJ0iCsHT-D5VuYQ9fk42ZEjHStU1yW0RfX1zuJpk5rVtQ@mail.gmail.com>
- <43768ff7-71f8-a6c3-18f8-28609e49eedd@hartkopp.net> <20220518132811.xfmwms2cu3bfxgrp@pengutronix.de>
- <CAMZ6RqJqeNjAtoDWADHsWocgbSXqQixcebJBhiBFS8BVeKCb3g@mail.gmail.com>
- <3dbe135e-d13c-5c5d-e7e4-b9c13b820fb8@hartkopp.net> <20220518143613.2a7alnw6vtkw7ct2@pengutronix.de>
- <482fd87a-df5a-08f7-522b-898d68c3b04a@hartkopp.net> <899706c6-0aac-b039-4b67-4e509ff0930d@hartkopp.net>
- <CAMZ6RqJ5hXwE5skJLxRVAH4-RB8UkXmQdZWW_z=jj+bXzJZY=Q@mail.gmail.com> <20220518174803.010db67d.max@enpas.org>
-In-Reply-To: <20220518174803.010db67d.max@enpas.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 19 May 2022 01:01:36 +0900
-Message-ID: <CAMZ6RqJzNQfS1YAEWWPmXLpTu_hKVKxswWsjmWsPU7jaUVmJGw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] can: skb:: move can_dropped_invalid_skb and
- can_skb_headroom_valid to skb.c
-To:     Max Staudt <max@enpas.org>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
+References: <20220518092137.141626-1-gongruiqi1@huawei.com>
+ <CAHC9VhTj365p3SJvX+8eBqRO3wddnj0sXtRDp=jEhSdADwiGrg@mail.gmail.com> <6e2534c3-9af1-0c84-96ac-79075f79ab39@huawei.com>
+In-Reply-To: <6e2534c3-9af1-0c84-96ac-79075f79ab39@huawei.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 18 May 2022 12:03:21 -0400
+Message-ID: <CAHC9VhQRPqyMrja5L+8VTb-dsUrmb1cJq+wrQ5GyA5NupPLfZg@mail.gmail.com>
+Subject: Re: [PATCH] selinux: add __randomize_layout to selinux_audit_data
+To:     Gong Ruiqi <gongruiqi1@huawei.com>
+Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Kees Cook <keescook@chromium.org>, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 19 May 2022 at 00:52, Max Staudt <max@enpas.org> wrote:
-> On Thu, 19 May 2022 00:38:51 +0900
-> Vincent MAILHOL <mailhol.vincent@wanadoo.fr> wrote:
->
-> > On Wed. 18 May 2022 at 23:59, Oliver Hartkopp
-> > <socketcan@hartkopp.net> wrote:
-> > > I can send a patch for this removal too. That's an easy step which
-> > > might get into 5.19 then.
+On Wed, May 18, 2022 at 2:53 AM Gong Ruiqi <gongruiqi1@huawei.com> wrote:
+> On 2022/05/18 9:39, Paul Moore wrote:
+> > On Tue, May 17, 2022 at 9:21 PM GONG, Ruiqi <gongruiqi1@huawei.com> wrote:
+> >>
+> >> Randomize the layout of struct selinux_audit_data as suggested in [1],
+> >> since it contains a pointer to struct selinux_state, an already
+> >> randomized strucure.
+> >>
+> >> [1]: https://github.com/KSPP/linux/issues/188
+> >>
+> >> Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
+> >> ---
+> >>  security/selinux/include/avc.h | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/security/selinux/include/avc.h b/security/selinux/include/avc.h
+> >> index 2b372f98f2d7..5525b94fd266 100644
+> >> --- a/security/selinux/include/avc.h
+> >> +++ b/security/selinux/include/avc.h
+> >> @@ -53,7 +53,7 @@ struct selinux_audit_data {
+> >>         u32 denied;
+> >>         int result;
+> >>         struct selinux_state *state;
+> >> -};
+> >> +} __randomize_layout;
 > >
-> > OK, go ahead. On my side, I will start to work on the other changes
-> > either next week or next next week, depending on my mood.
+> > I'll apologize in advance for the stupid question, but does
 >
-> Any wishes for the next version of can327/elmcan?
+> Not at all :)
+>
+> > __randomize_layout result in any problems when the struct is used in a
+> > trace event?  (see include/trace/events/avc.h)
+>
+> No, as least it doesn't in the testing I did. I believe we can use the
+> struct tagged with __randomize_layout as normal except that 1) it should
+> be initialized with a designated initializer, and 2) pointers to this
+> type can't be cast to/from pointers to another type. Other operations
+> like dereferencing members of the struct (as in
+> include/trace/events/avc.h) shouldn't be a problem.
+>
+> I did a testing to the patch on a qemu vm by running the selinux
+> testsuite with tracing events "avc:selinux_audited" enabled. The
+> testsuite completed successfully and from the tracing log I saw nothing
+> abnormal with my bare eyes. You can do more testing if you want or you
+> have other ideas of how to do so ;)
 
-The only thing I guess would be to remove the check against
-CAN_CTRLMODE_LISTENONLY in your xmit() function. The other things, I
-already commented :)
+That's great, thanks for verifying this.  I was aware of the other
+restrictions but wasn't sure about tracing.  Now I know :)
 
-> Should I wait until your changes are in?
+It's too late to go into selinux/next for this dev cycle, but I'll
+queue this up for selinux/next once the merge window closes.
 
-I do not think you have to wait. There are no real dependencies. You
-might just want to add a note after the --- scissors in the patch that
-there is a weak dependencies on
-https://lore.kernel.org/linux-can/20220514141650.1109542-5-mailhol.vincent@wanadoo.fr/
+Thanks again!
 
-
-Yours sincerely,
-Vincent Mailhol
+-- 
+paul-moore.com

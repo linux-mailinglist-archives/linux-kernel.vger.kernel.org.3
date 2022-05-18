@@ -2,162 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE2B52B084
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0433F52B087
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 04:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbiERCoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 17 May 2022 22:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S234349AbiERCp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 17 May 2022 22:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbiERCoQ (ORCPT
+        with ESMTP id S234315AbiERCpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 17 May 2022 22:44:16 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2131.outbound.protection.outlook.com [40.107.117.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAEE2D1E9;
-        Tue, 17 May 2022 19:44:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=atZx5HRtv5xgbQiD4dR4bdX/Z6935xbNhydkZ3Xj2cX8AmSy1pDOwTGbQTsoAIQJeV4Po9Ybs3mVKlFTws0wghuDYb2UaKO3bxbIAD3Sfdwk3KJjgV8D0xzy51cBhMWZmjHUva0UK/5iIuQ3dmSMSsaC+7unel/kH1olNuflG2QALSdXD/P8uEYLp1iqSopL0ySOMpEKTt0Pn/YcOfS6YhQqFxv41YadEIgdRhTowP/e+1lL+FuZFRWcLxzyDzhU2E77SvPjImJh0DanD5GGadVJe2yA9KfSt25mjjaspR5YdfVwuGDyC6j6ZYcQd+TJ5pMtyqPJvydWnOIBObZpUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H0/QkbkU3yUWmuSPxRUx4FyNzsUL0pouWI+2eCIZAzs=;
- b=bxvun1ymwuVZbLtpaZSI5Z+jF2MNUdG32I1dmTBB33X1cGsPDtfggXPlJ/OsdKphm3mAE7DCtJzuWnukPFSUdepkkUhcHtC6k0hJcSVxyxSfeoTIovh7uztlFhA1AV5UiEaasu/dRlsUDye7bd2gUtbcfNCj+irh27bRHStxWQitD5kTp2+gXOr1pba/8kwSGmUapjRut0ZMaVLopEeHMzicF9+MfTMTFE1abelncE70CPi5eFY72oxQ63XCm7/EfzXzTw1gwtn1M/MwF3PGP7eogbn9+iLt8rGL2QxTGI7LGwwjmNsmV+EPgRWnKAT5SCb26pMUTntqzB80ZlXwfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H0/QkbkU3yUWmuSPxRUx4FyNzsUL0pouWI+2eCIZAzs=;
- b=Dfjggpi/P/VuL0m18VBQEbPlAHc6qy2/5qa+tpA6YFO/1JZ9kLNscGYq7MMWhrNAv51TEvL/lkhws/OSdz652L/3MMQ5mb4CsU+icqtwqu/OaqfX6X6/VGqxOe1dKKK6L5ib9J5WcqKWS5kCWigcaAynsf+gZ6HQjOoy2MHuJn8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- SG2PR06MB3127.apcprd06.prod.outlook.com (2603:1096:4:76::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5250.18; Wed, 18 May 2022 02:44:12 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::ccb7:f612:80b2:64d5]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::ccb7:f612:80b2:64d5%4]) with mapi id 15.20.5250.018; Wed, 18 May 2022
- 02:44:12 +0000
-Message-ID: <b0438374-ff82-e74f-0b83-e0f2b4a99e36@vivo.com>
-Date:   Wed, 18 May 2022 10:44:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/4] dmaengine: sprd-dma: Remove unneeded ERROR check
- before clk_disable_unprepare
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220516084139.8864-1-wanjiabing@vivo.com>
- <20220516084139.8864-3-wanjiabing@vivo.com>
- <214de163-d576-d9be-76f2-3b70eefd6e68@linaro.org>
-From:   Jiabing Wan <wanjiabing@vivo.com>
-Organization: vivo
-In-Reply-To: <214de163-d576-d9be-76f2-3b70eefd6e68@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TYBP286CA0008.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:404:ce::20) To SG2PR06MB3367.apcprd06.prod.outlook.com
- (2603:1096:4:78::19)
+        Tue, 17 May 2022 22:45:20 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA7254688;
+        Tue, 17 May 2022 19:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652841918; x=1684377918;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HkJveV1SObdCl0X5UzbD536bvT+Ssfn5TL+iMP961Dw=;
+  b=fUuqloN3j8tRp/6ynaOqdVJbKjB8u8cI/WNW4IOTmJMObp0lB+Rdsd30
+   A0WDNFhqAKniRfKrMczHTnYS8+O4o8kLtvm7KAfQIAJ+gZgwdLiel/5jm
+   ma9Qv2PM4YQNruQViLycqarRIOKGxYSGJYSkMpCwd3YOTR/J9EYExNgXo
+   FaKpyQzlpTkbN9fb4BM4Ef4vrFFpGDx8xXERMvBu3AKTdmMfn8dRWn1DE
+   vQdX/+w2J9c3EFDJJc3yLZRpZakRC2dJQTqKp1xLDTlw2rW+YwvFtjFgs
+   6vEDwQfVfqPCGH66U/l0P62/QV9R8OcCn2lbYKMThlaYLGLXtD6MzkN0N
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="296729043"
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="296729043"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 19:45:18 -0700
+X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
+   d="scan'208";a="597479183"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.255.31.182]) ([10.255.31.182])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 19:45:13 -0700
+Message-ID: <8f846bfe-af5d-d895-0ee4-a5bbbae1fd06@linux.intel.com>
+Date:   Wed, 18 May 2022 10:45:11 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c9d24693-1778-48c7-3241-08da387849a3
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3127:EE_
-X-Microsoft-Antispam-PRVS: <SG2PR06MB312731B3C421D60EA08BAEC7ABD19@SG2PR06MB3127.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: llH7pu97yjWCFtDSkrlgEARrVRXAqfg4zH1nwOj9y14AC50RpZKL42wBoMzPEv0N95phQ9VFL1pDZzd5TOwCKmgQjBbuCduC6zyqR0xtRLNkIoAtSnEIF4zCJGx5noNZSgmdbDkM6ItrgJiIIDcRbyUXmwoZGckeXZfVVFOo3cbN7quAvw/EzceEyiQKzSWoD9Ahbs3qXmuF41+wM/QmND7Pc9mLTX3V9K7Q6VOd0LIDiSkfoIcX5/Sa3fmC/h/NYnbb2iGyGCeCsg9GxOCETBpekOVe1MfRsGqPTNzw+L8N2bCiKR8UvqmTJ8y3XET7FsqEXvM0jejYmSphjsoBhEvDMOq6VsLsPuDjLDsBvYb75erWPYK45Fs1cZehmN51EkZDrVEFuVL6BXuSt5gw4XWqzstSxkI4Omrm1b7C7XGxFaaj8v7ImDksb5106NSIgqXHZeASXG2mL8qeiM2dN9bBdsxVte9Tr/pcCupL5+RHRhQNsIuQe1VEmHy31iFElugX8zVAI+O0VvMWzpq7qLcmcJqXHmeyPFvLC3vraV2ZFiYngoPcvAhqg+PtclXjfagElnFmbLsI8aVJHzhU1xE1clARMvK0RWP3xdfMp1tSybK9VFb5Tsj2vTMgR9zKlr23T+lmkWOWZLGwNhfi9vBf23GM5ODWqst6SZoWpWcEn1OBEw4cb2KedP3h8pwQWtlwl0DcaJR6ExAp0M+kNI7U9RZ5avkPmmKRBzxSIGgqcb6Sk0PkzCjX/pLnnG9nGo/Qj3Q3MeR6Zl8yPa36L/f3Jz6W30oy0CN5qV8f2+Y=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(6506007)(31696002)(6512007)(26005)(5660300002)(66556008)(66946007)(53546011)(52116002)(36916002)(2906002)(8936002)(186003)(49246003)(6486002)(31686004)(8676002)(66476007)(6666004)(316002)(2616005)(508600001)(36756003)(38100700002)(38350700002)(86362001)(110136005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cGpxYzVpeHlWeGdFcVZwWDJHOC9mSnhkZnRUZUZkKzE1NDQ1Q3VpVjRVT1Mv?=
- =?utf-8?B?K2lRTUkxUkpja3dCK0M2dXFUWnNFU2ZvMUx3STdZRzVrcWQxS0ZRSjc2aElP?=
- =?utf-8?B?VnRjdHh0NGVia2ZRTDU0KzFEUmVrUThmQXJtSXJlUFB4R3hxc2ZlQkRhZ0Iz?=
- =?utf-8?B?Zm9CZ1grd0ZQN1YrblNvanlJZldmQnJqdDVUU1BhVmVaRWxlVXZUUU04MlI3?=
- =?utf-8?B?QW1FekhKK2ZQOHJtbUtNMW1nVWY3dmI0TkRodVdzMmhkNmNOV0xIVngzcmdW?=
- =?utf-8?B?QnBtZ21GYlNwaXo0aEptQVN6ZW9uQXNSMEhhSGxmQXBMMW5ncTBKR3habUdO?=
- =?utf-8?B?NVkya1h0SHZyWW9adi9KbHNwVTRhbmhsRGhWSk80S1NwWnZjVWNHWkZNRG9q?=
- =?utf-8?B?YUprcU12eXdPZHhVb2RHaHNqbFZhVWVqeHBmYzFWNGN0aE9acHR6dG1wZWk1?=
- =?utf-8?B?RmMyTjRaTEM1R2NtNHNYUVNxQXVQdGxKUitVT0dnY3paM212L0g1M09vVTUr?=
- =?utf-8?B?S05hcUQ2OXdTMFV3SVZhLzFndzUrSkpVT01wN08xenJsLzJ1ekRKMEVTSk5E?=
- =?utf-8?B?V1VQMUl3Tkt1N3JXR24vUE1UWnFFeGlpVEJVTVlEa1pwT1BMbCtIeTlGSCtW?=
- =?utf-8?B?bzVBajRmY0M5b081ZXQ2OEUxTDVFd2t1ZFgwUktObkZRQnJEOFFwOG9jWllz?=
- =?utf-8?B?aTFoemRoMGIzUG02S2Q2V3N2cGcyMFFXL05SLzI4S2R5b1JldllYaFk3ekJI?=
- =?utf-8?B?cnZrSFdoUTVTRFhQb0toZ2VwRnVac29OSzN2eEpZUEluWEJUUWUyeEhlQndk?=
- =?utf-8?B?Vld3bXdxMEFRYXJ3VktOMFdEOUxqMmpLL2NUOXVBV01hVFBHUkJaZVR0bGEx?=
- =?utf-8?B?eElNSkhjV3VQM2hCaUZvaUVNU2ZHS0VIL2xRUDZjYThqT2JxQnQyWWdmZ0Fw?=
- =?utf-8?B?TW9ZMnduQ1M1OFhwbWJGTFhkdTVDSGViMVp2TnM4Szlkbk5xaUhzbS9jQytn?=
- =?utf-8?B?RVI5bnFhRmlNa2xNZnkzUnBzNWh3dEtIMmhlOGVwTjdiTitQYWp5aUk5Y2p2?=
- =?utf-8?B?czJUanQveWo0Nm95dm1Gb3dvMWo3R3FoK3JwU1hmWGlCSE4yVmoyZkQ5aHpR?=
- =?utf-8?B?MEtqSE90NnZmeVNlVGQxVlI2MXhvWERYUytnUHpoUlV0RW5jRXVvWTMxTWZz?=
- =?utf-8?B?U09ZeXdCSERlZE0zWEV3N0h2cS95VEdQS1Z5NzlXY3BwdmJkVmx2ZEc3YjQv?=
- =?utf-8?B?cVo0NFFyY2RseWlPVzU5ZElIN1J4eFB5eU1pNzUwT21YUWFqY0Q3a3ArMWxi?=
- =?utf-8?B?elRpYXBWQ2gzcFlnczBCenlNeklNTCttbTZMVXBVdG1qZ1FuWE5oMUZJYVUy?=
- =?utf-8?B?Qk5zNWpOclMrclo1b3dUY3l2Y0tuVExnUlFKcmIxeHRsZkFjRTJpOFZYbmNI?=
- =?utf-8?B?d0RmbGl1K3FBNmQ3c0lkeElBZXRjWExacnJDUjNxK2d2ck1sTnJvUllxWUkv?=
- =?utf-8?B?WWpzUTg0dUcxOW5LWEVaN2FzSGY2VU5xMUZtaXhtMGJrYXY0L2JWM3FkMllq?=
- =?utf-8?B?ZzlQYm5va1Q4VXU2T0J2Rk9FbTFtYnNYNWswSWkwOWpoa1RDdnZxbkJLREpZ?=
- =?utf-8?B?Q1k0TTlidzJ4RE84bkJUaGVZd0E1VEdTOS9QYU9WdVV1VDlTeEVpOHJkOW5n?=
- =?utf-8?B?Rm83ekozcFY0THJMbVVKSkptbEVIRnBaMW9aNXNFb2dNc1dGY05CQ09ZTSts?=
- =?utf-8?B?Y3NkZW5HMElnMDlrUnkxODFjaTVLakNJdTZnRXNGaEhwcVQyUEZxd3dCdjVy?=
- =?utf-8?B?QnNlelRHNW5LTWJZSlRhVmJxckNCR3B2eWdGZm9ZTnZYWUdXYzlPUmYyUTdZ?=
- =?utf-8?B?T1I3dmpCWWJVc2JiWlR2RkVicjhSZkk0L2I2MkF6bDJjTXJtNUUrcjA3Z2tu?=
- =?utf-8?B?UzBZWWxwK1FjTFhRT3k5YVliZXEzWlFtMDB5cEQzVE5CY0xocEdWSjlzdzRt?=
- =?utf-8?B?NklCclJwV1ltUUw1RlVxWHdpOGVzSkNmalQrWlFWN2xZdXNBNytuemhMTjZB?=
- =?utf-8?B?aE9VNUNHdlN5NllEREpVRjIrS2d5RU03Tmd6NkpwOGppaFovV0ExSUd6eG9j?=
- =?utf-8?B?ZTQrN041K3JZR016Q25pYXRqVDY5akY3NFFhQjJIRWtVYzU4SFdGZlBQaXh5?=
- =?utf-8?B?SEw4eTZXdVljVjMzRTZvZkhyd2ZRR1RMcUJ0SUZEY255Si9jTWpUWXlCRTBm?=
- =?utf-8?B?enhMNlhJRzFGVXdteDg3Q0N5d0QrL0hYMlU0UUZQRU9tN2RUZDU1US9vbGRR?=
- =?utf-8?B?alMvOU9ocEIybk5wamJrcHI0TVVqWGZaaUFoU0dwaGxLNC8zUkFnUT09?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9d24693-1778-48c7-3241-08da387849a3
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 02:44:12.3070
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 11YV+ERikADauojpIsh4CpQQ5YRmraFH/qFjzE9JHTVNGeXbT4VCfVYPdfBeW6jtYzCri77x8yZ1ThYrGpDQpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3127
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/5] Revert "perf stat: Support metrics with hybrid
+ events"
+Content-Language: en-US
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     "Liang, Kan" <kan.liang@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Andi Kleen <ak@linux.intel.com>,
+        John Garry <john.garry@huawei.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+References: <20220507053410.3798748-1-irogers@google.com>
+ <20220507053410.3798748-2-irogers@google.com> <YnkTIwiVBEGUJRKn@kernel.org>
+ <b01a66c4-ec4d-ccb7-8ca7-130d93855177@linux.intel.com>
+ <708fab8f-b5c5-8f34-4322-3e337c56b869@linux.intel.com>
+ <CAM9d7cgEc9o9y-fH==avzucigmMVw0AwooGw0eufb2+D568-_g@mail.gmail.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <CAM9d7cgEc9o9y-fH==avzucigmMVw0AwooGw0eufb2+D568-_g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 2022/5/17 23:13, Krzysztof Kozlowski wrote:
-> On 16/05/2022 10:41, Wan Jiabing wrote:
->> clk_disable_unprepare() already checks ERROR by using IS_ERR_OR_NULL.
-> Hmm, maybe I am looking at different sources, but which commit
-> introduced IS_ERR_OR_NULL() check? Where is it in the sources?
->
-In commit 4dff95dc9477a, IS_ERR_OR_NULL check is added in clk_disable() 
-and clk_unprepare().
-And clk_disable_unprepare() just calls clk_disable() and clk_unprepare():
 
-static inline void clk_disable_unprepare(struct clk *clk)
-{
-      clk_disable(clk);
-      clk_unprepare(clk);
-}
->
-> Best regards,
-> Krzysztof
+On 5/18/2022 6:58 AM, Namhyung Kim wrote:
+> Hello,
+> 
+> On Tue, May 10, 2022 at 2:31 AM Xing Zhengjun
+> <zhengjun.xing@linux.intel.com> wrote:
+>>
+>>
+>>
+>> On 5/10/2022 5:55 AM, Liang, Kan wrote:
+>>>
+>>>
+>>> On 5/9/2022 9:12 AM, Arnaldo Carvalho de Melo wrote:
+>>>> Em Fri, May 06, 2022 at 10:34:06PM -0700, Ian Rogers escreveu:
+>>>>> This reverts commit 60344f1a9a597f2e0efcd57df5dad0b42da15e21.
+>>>>
+>>>> I picked this from the cover letter and added to this revert, to justify
+>>>> it:
+>>>>
+>>>> "Hybrid metrics place a PMU at the end of the parse string. This is
+>>>> also where tool events are placed. The behavior of the parse string
+>>>> isn't clear and so revert the change for now."
+>>>>
+>>>
+>>> I think the original patch used a "#" to indicate the PMU name, which
+>>> can be used to distinguish between the tool events and the PMU name.
+>>> To be honest, I'm not sure what's unclear here. Could you please clarify?
+>>>
+>>> With this revert, the issue mentioned in the original patch must be
+>>> broken on ADL. I don't see a replacement fix in this patch series.
+>>> Could you please propose a solution for the issue to replace the #PMU
+>>> name solution?
+>>>
+>>> Thanks,
+>>> Kan
+>>
+>> I am surprised the origin patch is reverted during discussion and though
+>> the discussion still has no conclusion.
+>> Let me introduce the purpose of the origin patch.
+>> For a hybrid system such as ADL, if both the metrics and the formula are
+>> different for the different PMUs, without this patch, the metric and
+>> event parser should work ok, nothing should be special for the hybrid.
+>> In fact, both "cpu_core" and "cpu_atom" may have the same metrics--the
+>> same metric name, even the same formula for the metrics. For example,
+>> both "cpu_core" and "cpu_atom" have metrics "IpBranch" and "IPC", For
+>> "IpBranch", both "cpu_core" and "cpu_atom" has the same metric name and
+>> their formula also is the same, the event name is the same though they
+>> belong to different PMUs. The old metric and event parser can not handle
+>> this kind of metric, that's why we need this patch.
+>>
+>>       "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.ALL_BRANCHES",
+>>       "MetricName": "IpBranch",
+>>       "Unit": "cpu_core"
+>>
+>>       "MetricExpr": "INST_RETIRED.ANY / BR_INST_RETIRED.ALL_BRANCHES",
+>>       "MetricName": "IpBranch",
+>>       "Unit": "cpu_atom"
+>>
+>>
+>>      "MetricExpr": "INST_RETIRED.ANY / CPU_CLK_UNHALTED.THREAD",
+>>      "MetricName": "IPC",
+>>      "Unit": "cpu_core"
+>>
+>>      "MetricExpr": "INST_RETIRED.ANY / CPU_CLK_UNHALTED.CORE",
+>>      "MetricName": "IPC",
+>>      "Unit": "cpu_atom"
+>>
+>> Except for the above two metrics, there are still a lot of similar
+>> metrics, "CPU_Utilization"...
+>>
+>> The original patch expanded the metric group string by adding
+>> "#PMU_name" to indicate the PMU name, which can be used to distinguish
+>> between the tool events and the PMU name, then the metric and event
+>> parser can parse the right PMU for the events.
+>>
+>> With the patch all the ADL metrics can pass, without the patch, a lot of
+>> metrics will fail. I don't think it's a good idea to revert it before
+>> the new solution is proposed.
+> 
+> Just an idea.  Can we add a pmu prefix when it resolves the event
+> for a metric if it has the "Unit"?  It seems we can support something
+> like "cpu_core@INST_RETIRED.ANY@" already..
+> 
+> Or could it be done when creating JSON files?
+> 
+> Thanks,
+> Namhyung
 
-Thanks,
-Wan Jiabing
+Yes, we have ever tested it, and it can work. we are changing the 
+converter tools to implement it, but it still has some issues that need 
+to fix.
 
+-- 
+Zhengjun Xing

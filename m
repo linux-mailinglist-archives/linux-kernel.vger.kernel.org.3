@@ -2,163 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8B352B712
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4442452B6BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 12:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234568AbiERJu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S234580AbiERJuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiERJuW (ORCPT
+        with ESMTP id S234612AbiERJum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:50:22 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921E71EAF3;
-        Wed, 18 May 2022 02:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652867420; x=1684403420;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=HlsVxJEbi0q8ReT8CTFlXFhy+1Vt95FyPmtorkLTKug=;
-  b=FoTcd1U9JN7B0uKc4QyYPduAJ2vV5cG/U/PblHoX27Ru3k7oo07GKF4v
-   8IcO5t9uqhsl99umzbh+47Thx4l2LdwGQdheRDYn1xnNmjWXyxnKgxFV8
-   3qN2CTrnmyztbTl/A4LmolqZVCX5stbI0NuqFOaBW1F0cYagccV8ZXjCx
-   uOuNMylia44qDt3Gj64GTuG9wkQf99Tz+gwSZyIxV6Ol/nz4xVVqw7PIw
-   SQ4F9j4GwtGWJlqm0mk+4PF47mvngOgxU7Vl6qS83uzV7Gxzylpqh/f3D
-   UmxOjAEz+FCnRZrl0VcHMdL9ALn4nll1Cs4T+8C0sAgcqlpV1OmV+cru2
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="173904643"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 May 2022 02:50:19 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 18 May 2022 02:50:19 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Wed, 18 May 2022 02:50:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aRA3qJ5+ENEmJR1MKeC0dduHxXY58VGz5UoZn5DiUJf7re8ogWchRd2u+lqSX6n5jrZUyY/BZtuNzzaSOf0ogu6xqq1J6TY41Ge0c3b/718BdBte7qmGWd5VSvGXr5n+UGZhQpLOc6JjAHSHFBZzW7NGuHlnSEH6VuVXws5nw2caRP4BJLsqAAc6JUnDvlMkibl3S/Yi7axv1AMIT5/EJqwo1OggKVC04u+wtuyzryVkK/3k7hB8XD2X+30LaMaj7ZXOO2m+TihNu05JwssIIcSFsr3/ZGAvpFC6YxCDH667hmuHYls6DGPRZH8QUE+nxAS0BX04zcPrw6mMbXGiLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HlsVxJEbi0q8ReT8CTFlXFhy+1Vt95FyPmtorkLTKug=;
- b=JIMiGqEduq9agZPhFJvDVMsdCO4bNF4PYB5NRURdEJjzRoT8YkGe2H5hzRqR4UTFJzL5l+Pwh2VfoFm++34ubPb7UGtlayvZouRGdgTH8n3SjNYsZ5kBDvt73yKoBgeqJVVbO3bu10BIZtQ94qqPQ6QoSi+1cmS+F7N5FIqG3gm+2sZuarMt4gvEe+GGQY9ZjzMcc7WfzPa6CcgHRGnApEX72r0Pb/UFCNX8/aeHUV7WmwQFnLC1+IZwvI1gzOTeoJLFLxcX81/THrnzfZIhYvDvQ0djVyxG3na1RmledefahD4zaFGxqwUkzcA7NvS5QICuVM+4fV9wbVl2STIzqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HlsVxJEbi0q8ReT8CTFlXFhy+1Vt95FyPmtorkLTKug=;
- b=AU84/HhHOtTE14JKL31LA26ou6KZh8mYeNQwB5wzTmUK9gxUpFvvxjAokJnNPYb+3VIiMx7PIfIiSb5Crs1lPXe9D+6WzjHhuCckOWdVa+Vl9vnI39xRfY00sX6D/8bhn6QruO5110Bxy4VmoCnaEO2RCs+GXbdr924Iae5N788=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by CH0PR11MB5219.namprd11.prod.outlook.com (2603:10b6:610:e2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Wed, 18 May
- 2022 09:50:18 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa%5]) with mapi id 15.20.5273.014; Wed, 18 May 2022
- 09:50:18 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <i@zenithal.me>, <palmer@rivosinc.com>, <paul.walmsley@sifive.com>,
-        <aou@eecs.berkeley.edu>, <heiko@sntech.de>
-CC:     <atishp@rivosinc.com>, <anup@brainfault.org>,
-        <ebiederm@xmission.com>, <keescook@chromium.org>,
-        <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        <mtk.manpages@gmail.com>, <linux-man@vger.kernel.org>,
-        <jiatai2021@iscas.ac.cn>
-Subject: Re: [PATCH -next v2 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing
- from DT
-Thread-Topic: [PATCH -next v2 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing
- from DT
-Thread-Index: AQHYapt67sFvKRb3tEu5VTcaN9/1G60kY7uA
-Date:   Wed, 18 May 2022 09:50:18 +0000
-Message-ID: <3e3891ad-2d31-99a0-bb65-1e6643ff6b96@microchip.com>
-References: <YoS6qRhxGuwHmK7q@Sun> <YoS7bT1B/+JrEn05@Sun>
-In-Reply-To: <YoS7bT1B/+JrEn05@Sun>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e4c9a646-c7d4-48b2-6898-08da38b3d119
-x-ms-traffictypediagnostic: CH0PR11MB5219:EE_
-x-microsoft-antispam-prvs: <CH0PR11MB5219C72BF1096D07B0188B9698D19@CH0PR11MB5219.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RFzgBc9o/K/sI1Y9DmwcdcpkSa6gE8AopbuIfDuGuTPo97MQro2rl9wESQ50pxTOGGtWEvuQc6nKbHC5rND9igOm6ddNajHoIXr3uGjQHZ8apxgvqFmhFFlOd2YaNb7QKOD84RZMzK5luBGcPjVRpKZdJxGS6aBMUaVrYgClMZ83+JCOhXW7WZ/Ci88VajEQqggSalxqHvmjZROv+1GOmiern+XwYMeZu/2rXGtKS1j3/8cTQxEqnRSUtVz42//KBlpOXvy3GKfxKpFnziwaxvzipEqMFnAqTsuIGek8vc1CDCjr1pRZB4gy3nJ0lJdY755O5tkfXZttT6YYCceg3LZcxPMLwVmJL42tzOvr4zIZDiiOvaDVpQkVglITHnrazt1aIMddKZx8qRX55aVGeJGhfL4zrPqS3tbh0+ccCSXbJLkaaL6jIawCfQK4+zAD16UPtLSHGrTZLSzCkgLclFevLkS8BKo7U9vkcTwwPKY3e1IP6+l+Q64hhvbDT8RjGeY8IWxtPSkFEluQf5DzHgZIrj+o4fw5UvGH6XMoSsyGLOQlWyMC/W8GW04LyhtiMJX4QDsPe38Q/mvB19bjxMdDu3qke2C4M3rY0Ku6KU1S0pAbOKc+2jZhKz9VHJpZBLHDZUXy1kkzP/zLXpsGyoX1M/LgOUT23MuiEq+XYFWNFhl1gWvOaaVH2r1iFf/jhsoS8JzbGdMts/ZKAMGY0FF/zU/YLMVBVVzAUd9F+O+E+DHHkY/b1AQ9YZOL0Fieb2GSQJOdjlAL24pyztqzrNG76Ne4g2FaaVCd6YTcuvsl/2KZQs74AbHTgaknXuVhawBSyczlbTV9ct6KSCEU/GSLsegCCvuxC7O6z9+I1IGEsCb5Zp2jDB2Q7nR4PPcy
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6512007)(31686004)(91956017)(76116006)(26005)(5660300002)(186003)(71200400001)(6506007)(36756003)(83380400001)(53546011)(7416002)(8936002)(66946007)(2616005)(64756008)(66556008)(122000001)(54906003)(110136005)(2906002)(508600001)(966005)(6486002)(86362001)(8676002)(31696002)(4326008)(66476007)(66446008)(38100700002)(38070700005)(316002)(781001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d0dtSzVKSW9lRElXd2x3V0hKUVpZdWN0bmxYVDBGNkVRbVo3TkdOUFMzbUxK?=
- =?utf-8?B?S3dJaTJJUVdNWlpmb0RILys0SEN1bGRwOXBOZFNGRjY1UEJ5S2ZwaDhULzRo?=
- =?utf-8?B?SUYvYXc4NlM3dWdyYW1IclZnMnBrcnBvY1dlREI4RDZGY0daZCtVRS80R2JH?=
- =?utf-8?B?cVloNWtjdFRhMHdiVys4MExBcDJUY1poUXFrVlR6SWFiaCtNVm13OTNhLzY3?=
- =?utf-8?B?OXNQK1pjZjhrdkR2ZjJILzFIdDRCMjMyVm13emx2aWFqaHNiVTErNWozZ2l3?=
- =?utf-8?B?NjloK05oY2xWUlo2emJBRXc2UFNBdVdyUUZ5ajhjR213SWFMdkFCaDRFQXhx?=
- =?utf-8?B?cmdmRVhIZDM1dCtjb0N3SkRnUmlJSXZieW1VRTloaXJETWxwNlBXLzVwOVI5?=
- =?utf-8?B?WVlWcXNONnA1di9WdkMwQmZRdUpyeGRHK3ArUXlWMGtFY2pTb3Y1Wng5M2NJ?=
- =?utf-8?B?VWxoK3JPcUlqYy94U1pSRVhUK0NWVk1tWEkyMGxoWHFuTkloNnpncG1GUnE4?=
- =?utf-8?B?VXdPd2YwWUJMZWU0cUtCZjVBTHp3aDlwZFNLd0lyeDl1bXgxc3QrN0owOTJI?=
- =?utf-8?B?UTVveGVBZkEvUFlMLzJRcTlTM2RLNkt6WGFlWlRJSHNac25ETW93MnU5UUha?=
- =?utf-8?B?RjZvbUhWOXNoUHp4STVXTW9PUDQ3THZHV3JvcjFXVnY2aVVBVWRXdHRVclVz?=
- =?utf-8?B?SmNiR2FINnJkRWN1TWtxaUs4RXh5RURiNW5HNTNxamVKZkZqM05BZ1dIOWJq?=
- =?utf-8?B?STVHWWlBaFhJYWg5RUQzMXBnTmJsNDk4SnhiNjAyOXdpSVNnK2VGMVV6ZmJl?=
- =?utf-8?B?Tlk2S2RNWXNnQllRTFlEZ0VTU2IwaWp0VnFKZEdpL3cyZUk1clNxQnlEbEhU?=
- =?utf-8?B?OWhhSWRldTVUWStSaDFNYkY1N00rYzVuam5OQVY0QW92Y28zK2dwRTd5SzVa?=
- =?utf-8?B?ZU9EbXcyVEw3T2ptUjc3dUk4cXVRdGRlRTZEallxM2NoNW1XZStMRGdRbDc1?=
- =?utf-8?B?cUFqT1RhbUJKMnR4RjhZNjRQZXlCYnFNcDl6d1JMV0pTT1l6eHpBNHNma1J3?=
- =?utf-8?B?KzlCYm9RMC9nNmF5eldXeTk2ak1SUGtQRW5tRHNHNE1nYkRWd0VuSDY2YWF3?=
- =?utf-8?B?ZTBFdUdZTEkzM0pMMnpLVytpMXlwVjBxL2FEY2JpN0IwZ21XUnFURVFzakg0?=
- =?utf-8?B?bnBNNmhRQTJTSDZQQTNiSjByY3d4Q0dRYkdVcDJZYzZoeVhzc0hrT3ZISmVx?=
- =?utf-8?B?a2hpTllpTENDcXRyMmNzWnk3Q3JMUHpXR2xhWStRZGI1UW1rdW9QZU5wUjVZ?=
- =?utf-8?B?ZVJ3Y3d5ZkxneGZ4MU0vYTU5M1VGbVQ3Nlp6OVFUQlg2YWV0b1pGaUx0Z3Zt?=
- =?utf-8?B?UnI5OXNadzQyZGFrMzl6NDROdGcydzFYbzlxZk14VkxSWnVUUVlhMlRGYUxa?=
- =?utf-8?B?djdCRExQR0dVMzNqakE1K3RjM0g4eTVyR0l0LzFXSU1YOU9LV2RDbWY2aUxB?=
- =?utf-8?B?QUwvWDlEcXRCZGRTc2VCem9jSlRNZnhlUlI3eXo0SW5VMGYydDJKZzkydlha?=
- =?utf-8?B?L3BCM241T24raW92NE1lQmRVS3laRCs5MkNDd3ZmQjkraXVDaW1MelcyMVJt?=
- =?utf-8?B?aFVUaGk1UHFqa3lRYnZab0M4aW10bHFORVpRbFVQN0tMTFFVYlBobDV5RWJp?=
- =?utf-8?B?UlJEZFZWYk1ueXRLbzJKUGE4M2VOVmdsODllOUw0TWpJc1F4cTV2eW9aY21F?=
- =?utf-8?B?cFExUTRYZldBVjRibWs5dmFHVVZoTmNZc2daREpDSjRtQmxvbGp5eE1NRjVv?=
- =?utf-8?B?NHd1NjZqVTliV1NNMWJPL0FJS2tLWGdIVFFGRko2UWwybUc4QjNxcHo2RDBz?=
- =?utf-8?B?MlJzQlY1TlJLR0UyeWFSNzVEUkkvWmZNc3JKT0FvUHhHWFlkUENpSlVvV2JM?=
- =?utf-8?B?TVcrcHg5TVdPNWNHZW9KRUNVelNQbW1jQzJzd3g2cmhvT1dBRDMrK0V0K0Nk?=
- =?utf-8?B?NmRaRkwyWDZlTS9TSGNMMWRKUzd2RWo1aXZsVlZodmxoZmtQMEU5TFFlY3kx?=
- =?utf-8?B?M2kzcnVJbW9QdGJ4SU1uR21nUkkrL0hSNW9ETm9QM3doaWhwT2kxOHpiT2Fp?=
- =?utf-8?B?ZWFwNjQyK2tVQTJnQkRoTGgwdURXRDZKYTI1OTZxRGdWQVNXVTMzZjI2WEhS?=
- =?utf-8?B?L1VJWmw1MEkyMk5GMmpZVG9HMnE1VXBSbHQzTm5jRUdKdVFzdFQ5cGExcHZP?=
- =?utf-8?B?bHQwNG11VnJ6WloyYzBQMDVQdndsWW0rSkFlUW9PVWZXNHBMMjRqOEg0MXRt?=
- =?utf-8?B?ZlRxM0lSbTluRTZqamV0V3YzcUt3Y3hycGk4OEZmSkM5RFBYK1dzUUhCdm9G?=
- =?utf-8?Q?23RRxwTt7u7qTjy8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7400FE89111B5942B21F82E462F5798A@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 18 May 2022 05:50:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7FA3165AF
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:50:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652867439;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MFPqNngbhurlXb9z2VG6oI79AAlWQ0hNU+ijxe8hQD8=;
+        b=DBMTr/WENYgB8FXfPvyARQwDzWZauUw+7iSVsav4B/3qQWyXfiEfKYi1MK1x5CCJ+vMI/d
+        uw6F7Loj9t3NdpgljjnlXX7gD3wxgHZx1TjlHBnTJS3xx1NhFGBR/ZqafOfAFKn/pDmO46
+        4tmEOcVTQe0aEONvgh2DRqNy29qHDu4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-320-iUSXRWdkNa2yhFYazfRDPw-1; Wed, 18 May 2022 05:50:35 -0400
+X-MC-Unique: iUSXRWdkNa2yhFYazfRDPw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CAD65811E76;
+        Wed, 18 May 2022 09:50:34 +0000 (UTC)
+Received: from starship (unknown [10.40.192.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 23D031410F36;
+        Wed, 18 May 2022 09:50:27 +0000 (UTC)
+Message-ID: <8c78939bf01a98554696add10e17b07631d97a28.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 02/19] KVM: x86: inhibit APICv/AVIC when the
+ guest and/or host changes apic id/base from the defaults.
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        Sean Christopherson <seanjc@google.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Date:   Wed, 18 May 2022 12:50:27 +0300
+In-Reply-To: <20220518082811.GA8765@gao-cwp>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+         <20220427200314.276673-3-mlevitsk@redhat.com>
+         <20220518082811.GA8765@gao-cwp>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4c9a646-c7d4-48b2-6898-08da38b3d119
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2022 09:50:18.4126
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QPPLIksjpqchXEfkAnYbUVq0c8cv0d/Szp9oWzSt6ws1EOdTBGt0SAPALERBg7cJGntEjQ9xGJBrLLHL+Q1w822vY3XHmhOFtE6XusDABEk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5219
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,133 +86,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTgvMDUvMjAyMiAxMDoyNSwgSG9uZ3JlbiAoWmVuaXRoYWwpIFpoZW5nIHdyb3RlOg0KPiBF
-WFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5s
-ZXNzIHlvdSBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IFRoaXMgY29tbWl0IHBhcnNl
-cyBaYi9aayByZWxhdGVkIHN0cmluZyBmcm9tIERUIGFuZA0KPiBvdXRwdXQgdGhlbSBpbiBjcHVp
-bmZvDQoNClNpbWlsYXJseSBoZXJlLCB0aGUgdHlwaWNhbCAidGhpcyBwYXRjaCIgY29tbWVudC4N
-Cg0KPiANCj4gT25lIHRoaW5nIHdvcnRoIG5vdGluZyBpcyB0aGF0IGlmIERUIHByb3ZpZGVzIHpr
-LA0KPiBhbGwgemJrYiwgemJrYywgemJreCBhbmQgemtuLCB6a3IsIHprdCB3b3VsZCBiZSBlbmFi
-bGVkLg0KPiANCj4gTm90ZSB0aGF0IHprIGlzIGEgdmFsaWQgZXh0ZW5zaW9uIG5hbWUgYW5kIHRo
-ZSBjdXJyZW50DQo+IERUIGJpbmRpbmcgc3BlYyBhbGxvd3MgdGhpcy4NCj4gDQo+IFRoaXMgY29t
-bWl0IGFsc28gY2hhbmdlcyB0aGUgbG9naWNhbCBpZCBvZg0KDQoiYWxzbyIgbWFrZXMgaXQgc291
-bmQgbGlrZSB0aGlzIGEgc2VwYXJhdGUgY2hhbmdlPw0KSWYgc28sIHNwbGl0IGl0IGludG8gYW5v
-dGhlciBwYXRjaC4NCg0KPiBleGlzdGluZyBtdWx0aS1sZXR0ZXIgZXh0ZW5zaW9ucyBhbmQgYWRk
-cyBhIHN0YXRlbWVudA0KPiB0aGF0IGluc3RlYWQgb2YgbG9naWNhbCBpZCBjb21wYXRpYmlsaXR5
-LCB0aGUgb3JkZXINCj4gaXMgbmVlZGVkLg0KPiANCj4gVGhlcmUgY3VycmVudGx5IGxhY2tzIGEg
-bWVjaGFuaXNtIHRvIG1lcmdlIHRoZW0gd2hlbg0KPiBwcm9kdWNpbmcgY3B1aW5mby4gTmFtZWx5
-IGlmIHlvdSBwcm92aWRlIGEgcmlzY3YsaXNhDQo+ICJydjY0aW1hZmRjX3prX3prcyIsIHRoZSBj
-cHVpbmZvIG91dHB1dCB3b3VsZCBiZQ0KPiAicnY2NGltYWZkY196YmtiX3pia2NfemJreF96a25k
-X3prbmVfemtuaF96a3JfemtzZWQNCj4gX3prc2hfemt0Ig0KPiANCj4gVGVzdGVkLWJ5OiBKaWF0
-YWkgSGUgPGppYXRhaTIwMjFAaXNjYXMuYWMuY24+DQo+IFNpZ25lZC1vZmYtYnk6IEhvbmdyZW4g
-KFplbml0aGFsKSBaaGVuZyA8aUB6ZW5pdGhhbC5tZT4NCj4gLS0tDQo+ICAgYXJjaC9yaXNjdi9p
-bmNsdWRlL2FzbS9od2NhcC5oIHwgMjAgKysrKysrKysrKysrKysrKysrKy0NCj4gICBhcmNoL3Jp
-c2N2L2tlcm5lbC9jcHUuYyAgICAgICAgfCAxNCArKysrKysrKysrKysrKw0KPiAgIGFyY2gvcmlz
-Y3Yva2VybmVsL2NwdWZlYXR1cmUuYyB8IDMzICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKw0KPiAgIDMgZmlsZXMgY2hhbmdlZCwgNjYgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigt
-KQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gvcmlzY3YvaW5jbHVkZS9hc20vaHdjYXAuaCBiL2Fy
-Y2gvcmlzY3YvaW5jbHVkZS9hc20vaHdjYXAuaA0KPiBpbmRleCA0ZTI0ODY4ODE4NDAuLjAyYzQ1
-NGExMjY4MyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9yaXNjdi9pbmNsdWRlL2FzbS9od2NhcC5oDQo+
-ICsrKyBiL2FyY2gvcmlzY3YvaW5jbHVkZS9hc20vaHdjYXAuaA0KPiBAQCAtNDksOSArNDksMjcg
-QEAgZXh0ZXJuIHVuc2lnbmVkIGxvbmcgZWxmX2h3Y2FwOw0KPiAgICAqIFJJU0NWX0lTQV9FWFRf
-TUFYLiAwLTI1IHJhbmdlIGlzIHJlc2VydmVkIGZvciBzaW5nbGUgbGV0dGVyDQo+ICAgICogZXh0
-ZW5zaW9ucyB3aGlsZSBhbGwgdGhlIG11bHRpLWxldHRlciBleHRlbnNpb25zIHNob3VsZCBkZWZp
-bmUgdGhlIG5leHQNCj4gICAgKiBhdmFpbGFibGUgbG9naWNhbCBleHRlbnNpb24gaWQuDQo+ICsg
-Kg0KPiArICogVGhlIG9yZGVyIG9mIHRoZW0gc2hvdWxkIGJlIG1haW50YWluZWQgYWNjb3JkaW5n
-IHRvIHRoZSByaXNjdi1pc2EtbWFudWFsLg0KPiArICogQXMgdGhpcyBpcyBhbiBpbnRlcm5hbCBB
-UEksIGNoYW5naW5nIHRoZSBpZCBvZiBvbmUgZXh0ZW5zaW9uIGRvZXMNCj4gKyAqIG5vdCBhZmZl
-Y3QgY29tcGF0aWJpbGl0eS4NCj4gICAgKi8NCj4gICBlbnVtIHJpc2N2X2lzYV9leHRfaWQgew0K
-PiAtICAgICAgIFJJU0NWX0lTQV9FWFRfU1NDT0ZQTUYgPSBSSVNDVl9JU0FfRVhUX0JBU0UsDQo+
-ICsgICAgICAgUklTQ1ZfSVNBX0VYVF9aQkEgPSBSSVNDVl9JU0FfRVhUX0JBU0UsDQo+ICsgICAg
-ICAgUklTQ1ZfSVNBX0VYVF9aQkIsDQo+ICsgICAgICAgUklTQ1ZfSVNBX0VYVF9aQkMsDQo+ICsg
-ICAgICAgUklTQ1ZfSVNBX0VYVF9aQktCLA0KPiArICAgICAgIFJJU0NWX0lTQV9FWFRfWkJLQywN
-Cj4gKyAgICAgICBSSVNDVl9JU0FfRVhUX1pCS1gsDQo+ICsgICAgICAgUklTQ1ZfSVNBX0VYVF9a
-QlMsDQo+ICsgICAgICAgUklTQ1ZfSVNBX0VYVF9aS05ELA0KPiArICAgICAgIFJJU0NWX0lTQV9F
-WFRfWktORSwNCj4gKyAgICAgICBSSVNDVl9JU0FfRVhUX1pLTkgsDQo+ICsgICAgICAgUklTQ1Zf
-SVNBX0VYVF9aS1IsDQo+ICsgICAgICAgUklTQ1ZfSVNBX0VYVF9aS1NFRCwNCj4gKyAgICAgICBS
-SVNDVl9JU0FfRVhUX1pLU0gsDQo+ICsgICAgICAgUklTQ1ZfSVNBX0VYVF9aS1QsDQo+ICsgICAg
-ICAgUklTQ1ZfSVNBX0VYVF9TU0NPRlBNRiwNCj4gICAgICAgICAgUklTQ1ZfSVNBX0VYVF9TVlBC
-TVQsDQo+ICAgICAgICAgIFJJU0NWX0lTQV9FWFRfSURfTUFYID0gUklTQ1ZfSVNBX0VYVF9NQVgs
-DQo+ICAgfTsNCj4gZGlmZiAtLWdpdCBhL2FyY2gvcmlzY3Yva2VybmVsL2NwdS5jIGIvYXJjaC9y
-aXNjdi9rZXJuZWwvY3B1LmMNCj4gaW5kZXggNDBjODc3NmFlYzEyLi45ZDJiZWQyYzFhMzcgMTAw
-NjQ0DQo+IC0tLSBhL2FyY2gvcmlzY3Yva2VybmVsL2NwdS5jDQo+ICsrKyBiL2FyY2gvcmlzY3Yv
-a2VybmVsL2NwdS5jDQo+IEBAIC04Nyw2ICs4NywyMCBAQCBpbnQgcmlzY3Zfb2ZfcGFyZW50X2hh
-cnRpZChzdHJ1Y3QgZGV2aWNlX25vZGUgKm5vZGUpDQo+ICAgICogICAgZXh0ZW5zaW9ucyBieSBh
-biB1bmRlcnNjb3JlLg0KPiAgICAqLw0KPiAgIHN0YXRpYyBzdHJ1Y3QgcmlzY3ZfaXNhX2V4dF9k
-YXRhIGlzYV9leHRfYXJyW10gPSB7DQo+ICsgICAgICAgX19SSVNDVl9JU0FfRVhUX0RBVEEoemJh
-LCBSSVNDVl9JU0FfRVhUX1pCQSksDQo+ICsgICAgICAgX19SSVNDVl9JU0FfRVhUX0RBVEEoemJi
-LCBSSVNDVl9JU0FfRVhUX1pCQiksDQo+ICsgICAgICAgX19SSVNDVl9JU0FfRVhUX0RBVEEoemJj
-LCBSSVNDVl9JU0FfRVhUX1pCQyksDQo+ICsgICAgICAgX19SSVNDVl9JU0FfRVhUX0RBVEEoemJr
-YiwgUklTQ1ZfSVNBX0VYVF9aQktCKSwNCj4gKyAgICAgICBfX1JJU0NWX0lTQV9FWFRfREFUQSh6
-YmtjLCBSSVNDVl9JU0FfRVhUX1pCS0MpLA0KPiArICAgICAgIF9fUklTQ1ZfSVNBX0VYVF9EQVRB
-KHpia3gsIFJJU0NWX0lTQV9FWFRfWkJLWCksDQo+ICsgICAgICAgX19SSVNDVl9JU0FfRVhUX0RB
-VEEoemJzLCBSSVNDVl9JU0FfRVhUX1pCUyksDQo+ICsgICAgICAgX19SSVNDVl9JU0FfRVhUX0RB
-VEEoemtuZCwgUklTQ1ZfSVNBX0VYVF9aS05EKSwNCj4gKyAgICAgICBfX1JJU0NWX0lTQV9FWFRf
-REFUQSh6a25lLCBSSVNDVl9JU0FfRVhUX1pLTkUpLA0KPiArICAgICAgIF9fUklTQ1ZfSVNBX0VY
-VF9EQVRBKHprbmgsIFJJU0NWX0lTQV9FWFRfWktOSCksDQo+ICsgICAgICAgX19SSVNDVl9JU0Ff
-RVhUX0RBVEEoemtyLCBSSVNDVl9JU0FfRVhUX1pLUiksDQo+ICsgICAgICAgX19SSVNDVl9JU0Ff
-RVhUX0RBVEEoemtzZWQsIFJJU0NWX0lTQV9FWFRfWktTRUQpLA0KPiArICAgICAgIF9fUklTQ1Zf
-SVNBX0VYVF9EQVRBKHprc2gsIFJJU0NWX0lTQV9FWFRfWktTSCksDQo+ICsgICAgICAgX19SSVND
-Vl9JU0FfRVhUX0RBVEEoemt0LCBSSVNDVl9JU0FfRVhUX1pLVCksDQo+ICAgICAgICAgIF9fUklT
-Q1ZfSVNBX0VYVF9EQVRBKHNzY29mcG1mLCBSSVNDVl9JU0FfRVhUX1NTQ09GUE1GKSwNCj4gICAg
-ICAgICAgX19SSVNDVl9JU0FfRVhUX0RBVEEoc3ZwYm10LCBSSVNDVl9JU0FfRVhUX1NWUEJNVCks
-DQo+ICAgICAgICAgIF9fUklTQ1ZfSVNBX0VYVF9EQVRBKCIiLCBSSVNDVl9JU0FfRVhUX01BWCks
-DQo+IGRpZmYgLS1naXQgYS9hcmNoL3Jpc2N2L2tlcm5lbC9jcHVmZWF0dXJlLmMgYi9hcmNoL3Jp
-c2N2L2tlcm5lbC9jcHVmZWF0dXJlLmMNCj4gaW5kZXggZGVhM2VhMTlkZWVlLi44MDBhN2FlYmNl
-ZDMgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcmlzY3Yva2VybmVsL2NwdWZlYXR1cmUuYw0KPiArKysg
-Yi9hcmNoL3Jpc2N2L2tlcm5lbC9jcHVmZWF0dXJlLmMNCj4gQEAgLTE5OSw2ICsxOTksMzkgQEAg
-dm9pZCBfX2luaXQgcmlzY3ZfZmlsbF9od2NhcCh2b2lkKQ0KPiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgfSBlbHNlIHsNCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU0VUX0lT
-QV9FWFRfTUFQKCJzc2NvZnBtZiIsIFJJU0NWX0lTQV9FWFRfU1NDT0ZQTUYpOw0KPiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInN2cGJtdCIsIFJJU0NW
-X0lTQV9FWFRfU1ZQQk1UKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRf
-SVNBX0VYVF9NQVAoInpiYSIsIFJJU0NWX0lTQV9FWFRfWkJBKTsNCj4gKyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInpiYiIsIFJJU0NWX0lTQV9FWFRfWkJC
-KTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInpi
-YyIsIFJJU0NWX0lTQV9FWFRfWkJDKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBTRVRfSVNBX0VYVF9NQVAoInpicyIsIFJJU0NWX0lTQV9FWFRfWkJTKTsNCj4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInpia2IiLCBSSVNDVl9JU0Ff
-RVhUX1pCS0IpOw0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNFVF9JU0FfRVhU
-X01BUCgiemJrYyIsIFJJU0NWX0lTQV9FWFRfWkJLQyk7DQo+ICsgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgU0VUX0lTQV9FWFRfTUFQKCJ6YmtzIiwgUklTQ1ZfSVNBX0VYVF9aQktYKTsN
-Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInprbmQi
-LCBSSVNDVl9JU0FfRVhUX1pLTkQpOw0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IFNFVF9JU0FfRVhUX01BUCgiemtuZSIsIFJJU0NWX0lTQV9FWFRfWktORSk7DQo+ICsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgU0VUX0lTQV9FWFRfTUFQKCJ6a25oIiwgUklTQ1ZfSVNB
-X0VYVF9aS05IKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VY
-VF9NQVAoInprc2VkIiwgUklTQ1ZfSVNBX0VYVF9aS1NFRCk7DQo+ICsgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgU0VUX0lTQV9FWFRfTUFQKCJ6a3NoIiwgUklTQ1ZfSVNBX0VYVF9aS1NI
-KTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInpr
-ciIsIFJJU0NWX0lTQV9FWFRfWktSKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBTRVRfSVNBX0VYVF9NQVAoInprdCIsIFJJU0NWX0lTQV9FWFRfWktUKTsNCj4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInprbiIsIFJJU0NWX0lTQV9F
-WFRfWkJLQik7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU0VUX0lTQV9FWFRf
-TUFQKCJ6a24iLCBSSVNDVl9JU0FfRVhUX1pCS0MpOw0KPiArICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIFNFVF9JU0FfRVhUX01BUCgiemtuIiwgUklTQ1ZfSVNBX0VYVF9aQktYKTsNCj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInprbiIsIFJJ
-U0NWX0lTQV9FWFRfWktORCk7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgU0VU
-X0lTQV9FWFRfTUFQKCJ6a24iLCBSSVNDVl9JU0FfRVhUX1pLTkUpOw0KPiArICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIFNFVF9JU0FfRVhUX01BUCgiemtuIiwgUklTQ1ZfSVNBX0VYVF9a
-S05IKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAo
-InprcyIsIFJJU0NWX0lTQV9FWFRfWkJLQik7DQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgU0VUX0lTQV9FWFRfTUFQKCJ6a3MiLCBSSVNDVl9JU0FfRVhUX1pCS0MpOw0KPiArICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNFVF9JU0FfRVhUX01BUCgiemtzIiwgUklTQ1Zf
-SVNBX0VYVF9aQktYKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNB
-X0VYVF9NQVAoInprcyIsIFJJU0NWX0lTQV9FWFRfWktTRUQpOw0KPiArICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIFNFVF9JU0FfRVhUX01BUCgiemtzIiwgUklTQ1ZfSVNBX0VYVF9aS1NI
-KTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInpr
-IiwgUklTQ1ZfSVNBX0VYVF9aQktCKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBTRVRfSVNBX0VYVF9NQVAoInprIiwgUklTQ1ZfSVNBX0VYVF9aQktDKTsNCj4gKyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInprIiwgUklTQ1ZfSVNBX0VY
-VF9aQktYKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9N
-QVAoInprIiwgUklTQ1ZfSVNBX0VYVF9aS05EKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInprIiwgUklTQ1ZfSVNBX0VYVF9aS05FKTsNCj4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNBX0VYVF9NQVAoInprIiwgUklTQ1Zf
-SVNBX0VYVF9aS05IKTsNCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTRVRfSVNB
-X0VYVF9NQVAoInprIiwgUklTQ1ZfSVNBX0VYVF9aS1IpOw0KPiArICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIFNFVF9JU0FfRVhUX01BUCgiemsiLCBSSVNDVl9JU0FfRVhUX1pLVCk7DQo+
-ICAgICAgICAgICAgICAgICAgICAgICAgICB9DQo+ICAgI3VuZGVmIFNFVF9JU0FfRVhUX01BUA0K
-PiAgICAgICAgICAgICAgICAgIH0NCj4gLS0NCj4gMi4zNS4xDQo+IA0KPiANCj4gX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4gbGludXgtcmlzY3YgbWFp
-bGluZyBsaXN0DQo+IGxpbnV4LXJpc2N2QGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gaHR0cDovL2xp
-c3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0aW5mby9saW51eC1yaXNjdg0KDQo=
+On Wed, 2022-05-18 at 16:28 +0800, Chao Gao wrote:
+> On Wed, Apr 27, 2022 at 11:02:57PM +0300, Maxim Levitsky wrote:
+> > Neither of these settings should be changed by the guest and it is
+> > a burden to support it in the acceleration code, so just inhibit
+> > it instead.
+> > 
+> > Also add a boolean 'apic_id_changed' to indicate if apic id ever changed.
+> > 
+> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> > ---
+> > arch/x86/include/asm/kvm_host.h |  3 +++
+> > arch/x86/kvm/lapic.c            | 25 ++++++++++++++++++++++---
+> > arch/x86/kvm/lapic.h            |  8 ++++++++
+> > 3 files changed, 33 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 63eae00625bda..636df87542555 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1070,6 +1070,8 @@ enum kvm_apicv_inhibit {
+> > 	APICV_INHIBIT_REASON_ABSENT,
+> > 	/* AVIC is disabled because SEV doesn't support it */
+> > 	APICV_INHIBIT_REASON_SEV,
+> > +	/* APIC ID and/or APIC base was changed by the guest */
+> > +	APICV_INHIBIT_REASON_RO_SETTINGS,
+> 
+> You need to add it to check_apicv_inhibit_reasons as well.
+True, forgot about it.
+
+> 
+> > };
+> > 
+> > struct kvm_arch {
+> > @@ -1258,6 +1260,7 @@ struct kvm_arch {
+> > 	hpa_t	hv_root_tdp;
+> > 	spinlock_t hv_root_tdp_lock;
+> > #endif
+> > +	bool apic_id_changed;
+> 
+> What's the value of this boolean? No one reads it.
+
+I use it in later patches to kill the guest during nested VM entry 
+if it attempts to use nested AVIC after any vCPU changed APIC ID.
+
+I mentioned this boolean in the commit description.
+
+This boolean avoids the need to go over all vCPUs and checking
+if they still have the initial apic id.
+
+In the future maybe we can introduce a more generic 'taint'
+bitmap with various flags like that, indicating that the guest
+did something unexpected.
+
+BTW, the other option in regard to the nested AVIC is just to ignore this issue completely.
+The code itself always uses vcpu_id's, thus regardless of when/how often the guest changes
+its apic ids, my code would just use the initial APIC ID values consistently.
+
+In this case I won't need this boolean.
+
+> 
+> > };
+> > 
+> > struct kvm_vm_stat {
+> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > index 66b0eb0bda94e..8996675b3ef4c 100644
+> > --- a/arch/x86/kvm/lapic.c
+> > +++ b/arch/x86/kvm/lapic.c
+> > @@ -2038,6 +2038,19 @@ static void apic_manage_nmi_watchdog(struct kvm_lapic *apic, u32 lvt0_val)
+> > 	}
+> > }
+> > 
+> > +static void kvm_lapic_check_initial_apic_id(struct kvm_lapic *apic)
+> > +{
+> > +	if (kvm_apic_has_initial_apic_id(apic))
+> > +		return;
+> > +
+> > +	pr_warn_once("APIC ID change is unsupported by KVM");
+> 
+> It is misleading because changing xAPIC ID is supported by KVM; it just
+> isn't compatible with APICv. Probably this pr_warn_once() should be
+> removed.
+
+Honestly since nobody uses this feature, I am not sure if to call this supported,
+I am sure that KVM has more bugs in regard of using non standard APIC ID.
+This warning might hopefuly make someone complain about it if this
+feature is actually used somewhere.
+
+> 
+> > +
+> > +	kvm_set_apicv_inhibit(apic->vcpu->kvm,
+> > +			APICV_INHIBIT_REASON_RO_SETTINGS);
+> 
+> The indentation here looks incorrect to me.
+> 	kvm_set_apicv_inhibit(apic->vcpu->kvm,
+> 			      APICV_INHIBIT_REASON_RO_SETTINGS);
+
+True, will fix.
+
+> 
+> > +
+> > +	apic->vcpu->kvm->arch.apic_id_changed = true;
+> > +}
+> > +
+> > static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+> > {
+> > 	int ret = 0;
+> > @@ -2046,9 +2059,11 @@ static int kvm_lapic_reg_write(struct kvm_lapic *apic, u32 reg, u32 val)
+> > 
+> > 	switch (reg) {
+> > 	case APIC_ID:		/* Local APIC ID */
+> > -		if (!apic_x2apic_mode(apic))
+> > +		if (!apic_x2apic_mode(apic)) {
+> > +
+> > 			kvm_apic_set_xapic_id(apic, val >> 24);
+> > -		else
+> > +			kvm_lapic_check_initial_apic_id(apic);
+> > +		} else
+> > 			ret = 1;
+> > 		break;
+> > 
+> > @@ -2335,8 +2350,11 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
+> > 			     MSR_IA32_APICBASE_BASE;
+> > 
+> > 	if ((value & MSR_IA32_APICBASE_ENABLE) &&
+> > -	     apic->base_address != APIC_DEFAULT_PHYS_BASE)
+> > +	     apic->base_address != APIC_DEFAULT_PHYS_BASE) {
+> > +		kvm_set_apicv_inhibit(apic->vcpu->kvm,
+> > +				APICV_INHIBIT_REASON_RO_SETTINGS);
+> > 		pr_warn_once("APIC base relocation is unsupported by KVM");
+> > +	}
+> > }
+> > 
+> > void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
+> > @@ -2649,6 +2667,7 @@ static int kvm_apic_state_fixup(struct kvm_vcpu *vcpu,
+> > 		}
+> > 	}
+> > 
+> > +	kvm_lapic_check_initial_apic_id(vcpu->arch.apic);
+> > 	return 0;
+> > }
+> > 
+> > diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+> > index 4e4f8a22754f9..b9c406d383080 100644
+> > --- a/arch/x86/kvm/lapic.h
+> > +++ b/arch/x86/kvm/lapic.h
+> > @@ -252,4 +252,12 @@ static inline u8 kvm_xapic_id(struct kvm_lapic *apic)
+> > 	return kvm_lapic_get_reg(apic, APIC_ID) >> 24;
+> > }
+> > 
+> > +static inline bool kvm_apic_has_initial_apic_id(struct kvm_lapic *apic)
+> > +{
+> > +	if (apic_x2apic_mode(apic))
+> > +		return true;
+> 
+> I suggest warning of x2apic mode:
+> 	if (WARN_ON_ONCE(apic_x2apic_mode(apic)))
+> 
+> Because it is weird that callers care about initial apic id when apic is
+> in x2apic mode.
+
+Yes but due to something I don't agree with, but also something that I gave up
+on arguing upon, KVM userspace API kind of supports setting APIC ID != initial apic id,
+even in x2apic mode, and disallowing it, is considered API breakage,
+therefore this case is possible.
+
+This case should still trigger a warning in kvm_lapic_check_initial_apic_id.
+
+Best regards,
+	Maxim Levitsky
+
+
+> 
+
+

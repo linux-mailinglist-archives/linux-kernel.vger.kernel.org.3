@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281C652C368
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4024352C372
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 21:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242014AbiERTaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 15:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
+        id S242022AbiERTaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 15:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241989AbiERTa0 (ORCPT
+        with ESMTP id S242012AbiERTae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 15:30:26 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 832F222DA04;
-        Wed, 18 May 2022 12:30:24 -0700 (PDT)
+        Wed, 18 May 2022 15:30:34 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F979230235;
+        Wed, 18 May 2022 12:30:32 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.91,235,1647270000"; 
-   d="scan'208";a="121409068"
+   d="scan'208";a="120092136"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 19 May 2022 04:30:23 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 19 May 2022 04:30:31 +0900
 Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id B4A394004CF5;
-        Thu, 19 May 2022 04:30:16 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 7743B4004CF5;
+        Thu, 19 May 2022 04:30:24 +0900 (JST)
 From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Marc Zyngier <maz@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -44,9 +44,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Phil Edworthy <phil.edworthy@renesas.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v4 5/7] gpio: gpiolib: Add a check to validate GPIO hwirq
-Date:   Wed, 18 May 2022 20:29:22 +0100
-Message-Id: <20220518192924.20948-6-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 6/7] dt-bindings: pinctrl: renesas,rzg2l-pinctrl: Document the properties to handle GPIO IRQ
+Date:   Wed, 18 May 2022 20:29:23 +0100
+Message-Id: <20220518192924.20948-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220518192924.20948-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20220518192924.20948-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -59,48 +59,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a check to validate GPIO hwirq is always within the range of hwirq_max
-set in the GPIO irq domain.
+Document the required properties to handle GPIO IRQ.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
- drivers/gpio/gpiolib.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../bindings/pinctrl/renesas,rzg2l-pinctrl.yaml  | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 65e344a23c6a..c1de7bb54c13 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1028,6 +1028,7 @@ static void gpiochip_set_hierarchical_irqchip(struct gpio_chip *gc,
- 	 * it is necessary to keep this around.
- 	 */
- 	if (is_fwnode_irqchip(gc->irq.fwnode)) {
-+		struct irq_domain *domain = gc->irq.domain;
- 		int i;
- 		int ret;
+diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+index 52df1b146174..d20ac03507cc 100644
+--- a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+@@ -47,6 +47,17 @@ properties:
+   gpio-ranges:
+     maxItems: 1
  
-@@ -1061,6 +1062,11 @@ static void gpiochip_set_hierarchical_irqchip(struct gpio_chip *gc,
- 					 i, ret);
- 				continue;
- 			}
-+			if (WARN(hwirq >= domain->hwirq_max,
-+				 "error: hwirq 0x%x is too large for %s\n",
-+				 (int)hwirq, domain->name))
-+				continue;
++  interrupt-controller: true
 +
- 			fwspec.fwnode = gc->irq.fwnode;
- 			/* This is the hwirq for the GPIO line side of things */
- 			fwspec.param[0] = hwirq;
-@@ -1436,6 +1442,9 @@ static int gpiochip_to_irq(struct gpio_chip *gc, unsigned int offset)
- 		ret = gc->irq.child_offset_to_irq(gc, offset, &hwirq);
- 		if (ret)
- 			return ret;
-+		if (WARN(hwirq >= domain->hwirq_max,
-+			 "error: hwirq 0x%x is too large for %s\n", (int)hwirq, domain->name))
-+			return -EINVAL;
- 		spec.fwnode = domain->fwnode;
- 		spec.param_count = 2;
- 		spec.param[0] = hwirq;
++  '#interrupt-cells':
++    const: 2
++    description:
++      The first cell contains the global GPIO port index, constructed using the
++      RZG2L_GPIO() helper macro in <dt-bindings/pinctrl/rzg2l-pinctrl.h> and the
++      second cell is used to specify the flag.
++      E.g. "interrupts = <RZG2L_GPIO(43, 0) IRQ_TYPE_EDGE_FALLING>;" if P43_0 is
++      being used as an interrupt.
++
+   clocks:
+     maxItems: 1
+ 
+@@ -110,6 +121,8 @@ required:
+   - gpio-controller
+   - '#gpio-cells'
+   - gpio-ranges
++  - interrupt-controller
++  - '#interrupt-cells'
+   - clocks
+   - power-domains
+   - resets
+@@ -126,6 +139,9 @@ examples:
+             gpio-controller;
+             #gpio-cells = <2>;
+             gpio-ranges = <&pinctrl 0 0 392>;
++            interrupt-controller;
++            #interrupt-cells = <2>;
++            interrupt-parent = <&irqc>;
+             clocks = <&cpg CPG_MOD R9A07G044_GPIO_HCLK>;
+             resets = <&cpg R9A07G044_GPIO_RSTN>,
+                      <&cpg R9A07G044_GPIO_PORT_RESETN>,
 -- 
 2.25.1
 

@@ -2,218 +2,414 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BF852C083
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CB352C072
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240050AbiERQVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 12:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S240137AbiERQ1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 12:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240218AbiERQVZ (ORCPT
+        with ESMTP id S240124AbiERQ1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 12:21:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CCA640E;
-        Wed, 18 May 2022 09:21:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F2D2B82181;
-        Wed, 18 May 2022 16:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C308DC385A5;
-        Wed, 18 May 2022 16:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652890878;
-        bh=mQx13ixPFfWmjCAZU7uaysFnjiR4jCHG6AlzgZSAi/U=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=EcgDfoAWfVDJIKzpQO2IzMSEHrGnMocac6QKzqeRnBW2XjhnFMxshF02q/moTM/tV
-         O3ySnbRmS89B77xq7osKUnXInCdLVNhciQPSH+lueT4SEc/NrrJxD1xY6Ct8kbZmrN
-         x2os08lf3x08Y1Iu8FyFsWA1GhF/OZJ/882UJPvPJf7F4qGa7NYHOFO1llg718jyCv
-         ebpW5r913UKsKMat7BcpxuavdQr2IWiqdrflZrOSOgriA93t6sumY47eLOpPlop43O
-         w8I3+aetWJr3S1NTztdJhFnWN0skMqsXzy9L7IaJvgQkOb7jMaWBuKTXIZO8+u9OCw
-         RODUb2XdO29lw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 609835C042D; Wed, 18 May 2022 09:21:18 -0700 (PDT)
-Date:   Wed, 18 May 2022 09:21:18 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
- rcu_idle_exit noinstr
-Message-ID: <20220518162118.GA2661055@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220515203653.4039075-1-jolsa@kernel.org>
- <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220516114922.GA349949@lothringen>
- <YoN1WULUoKtMKx8v@krava>
+        Wed, 18 May 2022 12:27:22 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8526A417
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652891237; x=1684427237;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lHfq2tpHvPA+3GLAp9TeHYhY5L2guooDUmfyt0Ba3og=;
+  b=XbLcX8EnYnZNNLAUSP09vKMskWpFaB/drfgC2qnHpCmiLNQ0GLJCDB4+
+   A3+zfpK/RwIMOH90Q8XahNBnVZQfZwq2qVUuCJXpq2h/2REneSA641Kd7
+   8Q2A33liqoHc6Mv7j7MEnOFjHI0x4I/cLedSRILnS3ChhldhKWAzGhKPi
+   5ITXF1fvAV84ITH7ti2SUFBigi9IyNGUews4j8xO8NwoahsQ/On1Xp5Ek
+   8XH6EWZPKOrs/OTcoeqswBT9fCTqgI52n4wiUYG21zYJAjnvLByF0k/5K
+   7BMczFjmm4WBygLr5IXsWZCEIqX5SmuWF04ws26cfpgKbtqcd+cOI8Ns7
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="297052764"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="297052764"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 09:23:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="700681608"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 18 May 2022 09:23:40 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrMSZ-0002O9-Ld;
+        Wed, 18 May 2022 16:23:39 +0000
+Date:   Thu, 19 May 2022 00:23:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [frederic-dynticks:rcu/context-tracking-v3 14/21]
+ include/linux/context_tracking_state.h:38:42: error: 'context_tracking'
+ undeclared
+Message-ID: <202205190029.DxLHyh95-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoN1WULUoKtMKx8v@krava>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 12:13:45PM +0200, Jiri Olsa wrote:
-> On Mon, May 16, 2022 at 01:49:22PM +0200, Frederic Weisbecker wrote:
-> > On Sun, May 15, 2022 at 09:25:35PM -0700, Paul E. McKenney wrote:
-> > > On Sun, May 15, 2022 at 10:36:52PM +0200, Jiri Olsa wrote:
-> > > > Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
-> > > > in rcu 'not watching' context and if there's tracer attached to
-> > > > them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
-> > > > warning like:
-> > > > 
-> > > >   [    3.017540] WARNING: suspicious RCU usage
-> > > >   ...
-> > > >   [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
-> > > >   [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
-> > > >   [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
-> > > >   [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
-> > > >   [    3.018371]  fprobe_handler.part.0+0xab/0x150
-> > > >   [    3.018374]  0xffffffffa00080c8
-> > > >   [    3.018393]  ? arch_cpu_idle+0x5/0x10
-> > > >   [    3.018398]  arch_cpu_idle+0x5/0x10
-> > > >   [    3.018399]  default_idle_call+0x59/0x90
-> > > >   [    3.018401]  do_idle+0x1c3/0x1d0
-> > > > 
-> > > > The call path is following:
-> > > > 
-> > > > default_idle_call
-> > > >   rcu_idle_enter
-> > > >   arch_cpu_idle
-> > > >   rcu_idle_exit
-> > > > 
-> > > > The arch_cpu_idle and rcu_idle_exit are the only ones from above
-> > > > path that are traceble and cause this problem on my setup.
-> > > > 
-> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > 
-> > > From an RCU viewpoint:
-> > > 
-> > > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
-> > > 
-> > > [ I considered asking for an instrumentation_on() in rcu_idle_exit(),
-> > > but there is no point given that local_irq_restore() isn't something
-> > > you instrument anyway. ]
-> > 
-> > So local_irq_save() in the beginning of rcu_idle_exit() is unsafe because
-> > it is instrumentable by the function (graph)  tracers and the irqsoff tracer.
-> > 
-> > Also it calls into lockdep that might make use of RCU.
-> > 
-> > That's why rcu_idle_exit() is not noinstr yet. See this patch:
-> > 
-> > https://lore.kernel.org/lkml/20220503100051.2799723-4-frederic@kernel.org/
-> 
-> I see, could we mark it at least with notrace meanwhile?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/context-tracking-v3
+head:   339c667118c84314e759bb67eb0ebd8eb292eafb
+commit: 7d7866ee3fc460499ec37f49666ada28e24d4cb4 [14/21] rcu/context_tracking: Move dynticks counter to context tracking
+config: ia64-buildonly-randconfig-r003-20220518 (https://download.01.org/0day-ci/archive/20220519/202205190029.DxLHyh95-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=7d7866ee3fc460499ec37f49666ada28e24d4cb4
+        git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+        git fetch --no-tags frederic-dynticks rcu/context-tracking-v3
+        git checkout 7d7866ee3fc460499ec37f49666ada28e24d4cb4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/acpi/ drivers/message/fusion/ kernel/rcu/
 
-For the RCU part, how about as follows?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If this approach is reasonable, my guess would be that Frederic will pull
-it into his context-tracking series, perhaps using a revert of this patch
-to maintain sanity in the near term.
+All errors (new ones prefixed by >>):
 
-If this approach is unreasonable, well, that is Murphy for you!
+   In file included from include/asm-generic/percpu.h:7,
+                    from arch/ia64/include/asm/percpu.h:46,
+                    from arch/ia64/include/asm/processor.h:76,
+                    from arch/ia64/include/asm/thread_info.h:12,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/ia64/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from kernel/rcu/update.c:23:
+   include/linux/context_tracking_state.h: In function 'ct_dynticks':
+>> include/linux/context_tracking_state.h:38:42: error: 'context_tracking' undeclared (first use in this function)
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                                          ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/context_tracking_state.h:38:28: note: in expansion of macro 'this_cpu_ptr'
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                            ^~~~~~~~~~~~
+   include/linux/context_tracking_state.h:38:42: note: each undeclared identifier is reported only once for each function it appears in
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                                          ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/context_tracking_state.h:38:28: note: in expansion of macro 'this_cpu_ptr'
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                            ^~~~~~~~~~~~
+   include/linux/context_tracking_state.h: In function 'ct_dynticks_cpu':
+   include/linux/context_tracking_state.h:43:52: error: 'context_tracking' undeclared (first use in this function)
+      43 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                                    ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/context_tracking_state.h:43:39: note: in expansion of macro 'per_cpu_ptr'
+      43 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                       ^~~~~~~~~~~
+   include/linux/context_tracking_state.h: In function 'ct_dynticks_cpu_acquire':
+   include/linux/context_tracking_state.h:49:52: error: 'context_tracking' undeclared (first use in this function)
+      49 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                                    ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/context_tracking_state.h:49:39: note: in expansion of macro 'per_cpu_ptr'
+      49 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                       ^~~~~~~~~~~
+   In file included from arch/ia64/include/asm/pgtable.h:153,
+                    from include/linux/pgtable.h:6,
+                    from arch/ia64/include/asm/uaccess.h:40,
+                    from include/linux/uaccess.h:11,
+                    from arch/ia64/include/asm/sections.h:11,
+                    from include/linux/interrupt.h:21,
+                    from kernel/rcu/update.c:25:
+   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
+   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
+     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+         |                                                ^~~~~~~
+--
+   In file included from include/asm-generic/percpu.h:7,
+                    from arch/ia64/include/asm/percpu.h:46,
+                    from arch/ia64/include/asm/processor.h:76,
+                    from arch/ia64/include/asm/thread_info.h:12,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/ia64/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from kernel/rcu/tree.c:23:
+   include/linux/context_tracking_state.h: In function 'ct_dynticks':
+>> include/linux/context_tracking_state.h:38:42: error: 'context_tracking' undeclared (first use in this function)
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                                          ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/context_tracking_state.h:38:28: note: in expansion of macro 'this_cpu_ptr'
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                            ^~~~~~~~~~~~
+   include/linux/context_tracking_state.h:38:42: note: each undeclared identifier is reported only once for each function it appears in
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                                          ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/context_tracking_state.h:38:28: note: in expansion of macro 'this_cpu_ptr'
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                            ^~~~~~~~~~~~
+   include/linux/context_tracking_state.h: In function 'ct_dynticks_cpu':
+   include/linux/context_tracking_state.h:43:52: error: 'context_tracking' undeclared (first use in this function)
+      43 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                                    ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/context_tracking_state.h:43:39: note: in expansion of macro 'per_cpu_ptr'
+      43 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                       ^~~~~~~~~~~
+   include/linux/context_tracking_state.h: In function 'ct_dynticks_cpu_acquire':
+   include/linux/context_tracking_state.h:49:52: error: 'context_tracking' undeclared (first use in this function)
+      49 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                                    ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/context_tracking_state.h:49:39: note: in expansion of macro 'per_cpu_ptr'
+      49 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                       ^~~~~~~~~~~
+   In file included from arch/ia64/include/asm/pgtable.h:153,
+                    from include/linux/pgtable.h:6,
+                    from arch/ia64/include/asm/uaccess.h:40,
+                    from include/linux/uaccess.h:11,
+                    from arch/ia64/include/asm/sections.h:11,
+                    from include/linux/interrupt.h:21,
+                    from kernel/rcu/tree.c:26:
+   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
+   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
+     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+         |                                                ^~~~~~~
+   In file included from arch/ia64/include/asm/intrinsics.h:11,
+                    from arch/ia64/include/asm/bitops.h:19,
+                    from include/linux/bitops.h:33,
+                    from include/linux/kernel.h:22,
+                    from kernel/rcu/tree.c:21:
+   kernel/rcu/tree.c: In function 'rcu_dynticks_inc':
+>> kernel/rcu/tree.c:270:60: error: 'context_tracking' undeclared (first use in this function)
+     270 |         return arch_atomic_add_return(incby, this_cpu_ptr(&context_tracking.dynticks));
+         |                                                            ^~~~~~~~~~~~~~~~
+   arch/ia64/include/uapi/asm/intrinsics.h:59:31: note: in definition of macro 'ia64_fetchadd'
+      59 |         volatile __typeof__(*(v)) *_v = (v);                                            \
+         |                               ^
+   arch/ia64/include/asm/atomic.h:81:19: note: in expansion of macro 'ia64_fetch_and_add'
+      81 |                 ? ia64_fetch_and_add(__ia64_aar_i, &(v)->counter)       \
+         |                   ^~~~~~~~~~~~~~~~~~
+   kernel/rcu/tree.c:270:16: note: in expansion of macro 'arch_atomic_add_return'
+     270 |         return arch_atomic_add_return(incby, this_cpu_ptr(&context_tracking.dynticks));
+         |                ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:241:9: note: in expansion of macro '__verify_pcpu_ptr'
+     241 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   kernel/rcu/tree.c:270:46: note: in expansion of macro 'this_cpu_ptr'
+     270 |         return arch_atomic_add_return(incby, this_cpu_ptr(&context_tracking.dynticks));
+         |                                              ^~~~~~~~~~~~
+   In file included from <command-line>:
+   kernel/rcu/tree.c: In function 'rcu_dynticks_curr_cpu_in_eqs':
+   kernel/rcu/tree.c:338:49: error: 'context_tracking' undeclared (first use in this function)
+     338 |         return !(arch_atomic_read(this_cpu_ptr(&context_tracking.dynticks)) & 0x1);
+         |                                                 ^~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:332:23: note: in definition of macro '__compiletime_assert'
+     332 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   include/linux/compiler_types.h:352:9: note: in expansion of macro '_compiletime_assert'
+     352 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:36:9: note: in expansion of macro 'compiletime_assert'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:36:28: note: in expansion of macro '__native_word'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                            ^~~~~~~~~~~~~
+   include/asm-generic/rwonce.h:49:9: note: in expansion of macro 'compiletime_assert_rwonce_type'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/ia64/include/asm/atomic.h:24:33: note: in expansion of macro 'READ_ONCE'
+      24 | #define arch_atomic_read(v)     READ_ONCE((v)->counter)
+         |                                 ^~~~~~~~~
+   kernel/rcu/tree.c:338:18: note: in expansion of macro 'arch_atomic_read'
+     338 |         return !(arch_atomic_read(this_cpu_ptr(&context_tracking.dynticks)) & 0x1);
+         |                  ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:241:9: note: in expansion of macro '__verify_pcpu_ptr'
+     241 |         __verify_pcpu_ptr(ptr);                                         \
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   kernel/rcu/tree.c:338:35: note: in expansion of macro 'this_cpu_ptr'
+     338 |         return !(arch_atomic_read(this_cpu_ptr(&context_tracking.dynticks)) & 0x1);
+         |                                   ^~~~~~~~~~~~
+   In file included from include/asm-generic/percpu.h:7,
+                    from arch/ia64/include/asm/percpu.h:46,
+                    from arch/ia64/include/asm/processor.h:76,
+                    from arch/ia64/include/asm/thread_info.h:12,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/ia64/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from kernel/rcu/tree.c:23:
+   kernel/rcu/tree.c: In function 'rcu_eqs_enter':
+   kernel/rcu/tree.c:617:53: error: 'context_tracking' undeclared (first use in this function)
+     617 |         struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+         |                                                     ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   kernel/rcu/tree.c:617:39: note: in expansion of macro 'this_cpu_ptr'
+     617 |         struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+         |                                       ^~~~~~~~~~~~
+   kernel/rcu/tree.c: In function 'rcu_nmi_exit':
+   kernel/rcu/tree.c:747:53: error: 'context_tracking' undeclared (first use in this function)
+     747 |         struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+         |                                                     ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   kernel/rcu/tree.c:747:39: note: in expansion of macro 'this_cpu_ptr'
+     747 |         struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+         |                                       ^~~~~~~~~~~~
+   kernel/rcu/tree.c: In function 'rcu_eqs_exit':
+   kernel/rcu/tree.c:816:53: error: 'context_tracking' undeclared (first use in this function)
+     816 |         struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+         |                                                     ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+--
+   In file included from arch/ia64/include/asm/pgtable.h:153,
+                    from include/linux/pgtable.h:6,
+                    from include/linux/mm.h:29,
+                    from drivers/acpi/osl.c:17:
+   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
+   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
+     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+         |                                                ^~~~~~~
+   In file included from include/asm-generic/percpu.h:7,
+                    from arch/ia64/include/asm/percpu.h:46,
+                    from arch/ia64/include/asm/processor.h:76,
+                    from arch/ia64/include/asm/timex.h:15,
+                    from include/linux/timex.h:65,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/stat.h:19,
+                    from include/linux/module.h:13,
+                    from drivers/acpi/osl.c:14:
+   include/linux/context_tracking_state.h: In function 'ct_dynticks':
+>> include/linux/context_tracking_state.h:38:42: error: 'context_tracking' undeclared (first use in this function)
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                                          ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/context_tracking_state.h:38:28: note: in expansion of macro 'this_cpu_ptr'
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                            ^~~~~~~~~~~~
+   include/linux/context_tracking_state.h:38:42: note: each undeclared identifier is reported only once for each function it appears in
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                                          ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/percpu-defs.h:252:27: note: in expansion of macro 'raw_cpu_ptr'
+     252 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+         |                           ^~~~~~~~~~~
+   include/linux/context_tracking_state.h:38:28: note: in expansion of macro 'this_cpu_ptr'
+      38 |         return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+         |                            ^~~~~~~~~~~~
+   include/linux/context_tracking_state.h: In function 'ct_dynticks_cpu':
+   include/linux/context_tracking_state.h:43:52: error: 'context_tracking' undeclared (first use in this function)
+      43 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                                    ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/context_tracking_state.h:43:39: note: in expansion of macro 'per_cpu_ptr'
+      43 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                       ^~~~~~~~~~~
+   include/linux/context_tracking_state.h: In function 'ct_dynticks_cpu_acquire':
+   include/linux/context_tracking_state.h:49:52: error: 'context_tracking' undeclared (first use in this function)
+      49 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                                    ^~~~~~~~~~~~~~~~
+   include/linux/percpu-defs.h:219:54: note: in definition of macro '__verify_pcpu_ptr'
+     219 |         const void __percpu *__vpp_verify = (typeof((ptr) + 0))NULL;    \
+         |                                                      ^~~
+   include/linux/context_tracking_state.h:49:39: note: in expansion of macro 'per_cpu_ptr'
+      49 |         struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+         |                                       ^~~~~~~~~~~
+   drivers/acpi/osl.c: In function 'acpi_os_vprintf':
+   drivers/acpi/osl.c:157:9: warning: function 'acpi_os_vprintf' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+     157 |         vsprintf(buffer, fmt, args);
+         |         ^~~~~~~~
+..
 
-For the x86 idle part, my feeling is still that the rcu_idle_enter()
-and rcu_idle_exit() need to be pushed deeper into the code.  Perhaps
-an ongoing process as the idle loop continues to be dug deeper?
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for CONTEXT_TRACKING_IDLE
+   Depends on GENERIC_CLOCKEVENTS
+   Selected by
+   - TREE_RCU
 
-							Thanx, Paul
 
-------------------------------------------------------------------------
+vim +/context_tracking +38 include/linux/context_tracking_state.h
 
-commit cd338be719a0a692e0d50e1a8438e1f6c7165d9c
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Tue May 17 21:00:04 2022 -0700
+    34	
+    35	#ifdef CONFIG_CONTEXT_TRACKING_IDLE
+    36	static __always_inline int ct_dynticks(void)
+    37	{
+  > 38		return atomic_read(this_cpu_ptr(&context_tracking.dynticks));
+    39	}
+    40	
 
-    rcu: Apply noinstr to rcu_idle_enter() and rcu_idle_exit()
-    
-    This commit applies the "noinstr" tag to the rcu_idle_enter() and
-    rcu_idle_exit() functions, which are invoked from portions of the idle
-    loop that cannot be instrumented.  These tags require reworking the
-    rcu_eqs_enter() and rcu_eqs_exit() functions that these two functions
-    invoke in order to cause them to use normal assertions rather than
-    lockdep.  In addition, within rcu_idle_exit(), the raw versions of
-    local_irq_save() and local_irq_restore() are used, again to avoid issues
-    with lockdep in uninstrumented code.
-    
-    This patch is based in part on an earlier patch by Jiri Olsa, discussions
-    with Peter Zijlstra and Frederic Weisbecker, earlier changes by Thomas
-    Gleixner, and off-list discussions with Yonghong Song.
-    
-    Link: https://lore.kernel.org/lkml/20220515203653.4039075-1-jolsa@kernel.org/
-    Reported-by: Jiri Olsa <jolsa@kernel.org>
-    Reported-by: Alexei Starovoitov <ast@kernel.org>
-    Reported-by: Andrii Nakryiko <andrii@kernel.org>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-    Reviewed-by: Yonghong Song <yhs@fb.com>
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 222d59299a2af..02233b17cce0e 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -635,8 +635,8 @@ static noinstr void rcu_eqs_enter(bool user)
- 		return;
- 	}
- 
--	lockdep_assert_irqs_disabled();
- 	instrumentation_begin();
-+	lockdep_assert_irqs_disabled();
- 	trace_rcu_dyntick(TPS("Start"), rdp->dynticks_nesting, 0, atomic_read(&rdp->dynticks));
- 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !user && !is_idle_task(current));
- 	rcu_preempt_deferred_qs(current);
-@@ -663,9 +663,9 @@ static noinstr void rcu_eqs_enter(bool user)
-  * If you add or remove a call to rcu_idle_enter(), be sure to test with
-  * CONFIG_RCU_EQS_DEBUG=y.
-  */
--void rcu_idle_enter(void)
-+void noinstr rcu_idle_enter(void)
- {
--	lockdep_assert_irqs_disabled();
-+	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !raw_irqs_disabled());
- 	rcu_eqs_enter(false);
- }
- EXPORT_SYMBOL_GPL(rcu_idle_enter);
-@@ -865,7 +865,7 @@ static void noinstr rcu_eqs_exit(bool user)
- 	struct rcu_data *rdp;
- 	long oldval;
- 
--	lockdep_assert_irqs_disabled();
-+	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !raw_irqs_disabled());
- 	rdp = this_cpu_ptr(&rcu_data);
- 	oldval = rdp->dynticks_nesting;
- 	WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && oldval < 0);
-@@ -900,13 +900,13 @@ static void noinstr rcu_eqs_exit(bool user)
-  * If you add or remove a call to rcu_idle_exit(), be sure to test with
-  * CONFIG_RCU_EQS_DEBUG=y.
-  */
--void rcu_idle_exit(void)
-+void noinstr rcu_idle_exit(void)
- {
- 	unsigned long flags;
- 
--	local_irq_save(flags);
-+	raw_local_irq_save(flags);
- 	rcu_eqs_exit(false);
--	local_irq_restore(flags);
-+	raw_local_irq_restore(flags);
- }
- EXPORT_SYMBOL_GPL(rcu_idle_exit);
- 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

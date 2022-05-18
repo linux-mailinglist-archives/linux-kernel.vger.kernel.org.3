@@ -2,56 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AF552BD1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87BD952BD39
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 16:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237601AbiERNK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 09:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S237483AbiERNKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 09:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237535AbiERNKR (ORCPT
+        with ESMTP id S237589AbiERNKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 09:10:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D26817B851;
-        Wed, 18 May 2022 06:10:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2EE5B82032;
-        Wed, 18 May 2022 13:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7CB1CC36AE2;
-        Wed, 18 May 2022 13:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652879413;
-        bh=yopJBrymAGv8hrzx/cz6109W5zx6EL0S7W74oPz0Wbo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fcSFyseC494l5VnUIljp4rWVTPPPPLOQhkBv1zOWTy60KACoKERcsKD+8fseJ1FZU
-         VVZRYnvGb8VFq8ujyE6MWZF3FhiIApfRd6vP1YACfziuf2s80i5T1JSLcCRsVPqbG2
-         F7UlIhgNfkkzHOQ9BPVwyXns5ato1EqzvfowipptGr0X7IUuqawsw4pCQs20Nh44Fn
-         l1PkKHN+Y+sekcXhnbxum8IqoE40mI8Uf5m5cvVm1CO4iLAMS5rng97kCQWZi6OHa7
-         wyM7sUXFp0X0mMJ2lX/8WdVyVdaTAjMP4TgX+KQTHgemzjhqcZpoaXNq9jU5uRGhPn
-         qhF62JcLIvMdw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5DAA8F03935;
-        Wed, 18 May 2022 13:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 18 May 2022 09:10:39 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4BC1AB794
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:10:25 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id o22so2454908ljp.8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 06:10:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=+b2kJbCQjxe7fZUbjqvLH/wJyCAU5HIJ3JzBSgXlc2g=;
+        b=gDbsIUdII1wcs2EpKhTuW28O+P8cdc+sO8YSXKIAWpvpnedMSMgyr3RgkAAk/DVvht
+         DsyXJ/jT8HQfq7B9CeoMrpIX8KMQgm8TUl0UqaMhmu8W8+EGj3J1+s5Rn6PN8rAGv2K0
+         HNjXPq9JQev89Eko1cdiqxmefanGPoBgDjLwhn/WTXlDO6Fm3tJJvikqeUwkfUCuU85+
+         /58tJF0mMQknDYAfbPtpV/KSZt72teOI9xPgRGIExddQwUpBndzoC+BLjFLfuwJvCPOT
+         /xELk94+zE/s66lxdlvxt6vTrY5zW9m9ADpO7Tlw43FyHTOmwg3zvTfG0bZ5kQIHt+Od
+         M4rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+b2kJbCQjxe7fZUbjqvLH/wJyCAU5HIJ3JzBSgXlc2g=;
+        b=CdgPye28I25BzVghUi1U26a0UgjtXeBh/WP9unpsRf2rVZWjMMzzPJx0F0YQAMXp40
+         dzNxPuLA2iQSnKUg8ij3uhlR6ndEQ6yPCWuVYIq0IdRGIWVr41j64mETCrvvCg/vo9fU
+         NOqBHX+spn+O71d61X5wVQmOPUs7yEixLo1Ah17DPcHC+9TN24PO0gmK0kydHAx93LrW
+         H1bX1kbdb5fHSwAbWZWgU6DOyHTnnIFQbeNdZ2SwoJQBc/TpLWr+rcH/uuNM55IFd3PN
+         iQrnlSXX7GbYnCQIfPgUit/X2aPAHspnocetziBiKdAX1aD0a5QOM2FKulNyoDrYKjcG
+         /new==
+X-Gm-Message-State: AOAM531dqkAcfNxEg5mvseu8uKLK/ymg7y28zd2WkCGuChdq6aMlbhgh
+        vksa75Xpt6I/O+aIVFLmQImeuA==
+X-Google-Smtp-Source: ABdhPJw3ZZEz0IO+p8W0PuSOZYSbEkgk1HzwIbid4bAjfiWrs8DO4UHAy0Em3/ZaTfECsrR9kKjSRw==
+X-Received: by 2002:a2e:a80a:0:b0:24f:3010:8114 with SMTP id l10-20020a2ea80a000000b0024f30108114mr17569964ljq.95.1652879423874;
+        Wed, 18 May 2022 06:10:23 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q12-20020a2eb4ac000000b00250749dab23sm211926ljm.99.2022.05.18.06.10.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 06:10:23 -0700 (PDT)
+Message-ID: <511ca90b-6c82-440f-0363-03ca4a0989e9@linaro.org>
+Date:   Wed, 18 May 2022 15:10:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next v2] net: ethernet: sunplus: add missing of_node_put() in
- spl2sw_mdio_init()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165287941338.26952.5380355560504992321.git-patchwork-notify@kernel.org>
-Date:   Wed, 18 May 2022 13:10:13 +0000
-References: <20220518020812.2626293-1-yangyingliang@huawei.com>
-In-Reply-To: <20220518020812.2626293-1-yangyingliang@huawei.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        wellslutw@gmail.com, andrew@lunn.ch, pabeni@redhat.com,
-        davem@davemloft.net, kuba@kernel.org
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 3/6] dt-bindings: regulator: qcom,spmi-regulator: add
+ PMP8074 PMIC
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220517205341.536587-1-robimarko@gmail.com>
+ <20220517205341.536587-3-robimarko@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220517205341.536587-3-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,29 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 18 May 2022 10:08:12 +0800 you wrote:
-> of_get_child_by_name() returns device node pointer with refcount
-> incremented. The refcount should be decremented before returning
-> from spl2sw_mdio_init().
+On 17/05/2022 22:53, Robert Marko wrote:
+> Document the PMP8074 PMIC compatible.
 > 
-> Fixes: fd3040b9394c ("net: ethernet: Add driver for Sunplus SP7021")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [-next,v2] net: ethernet: sunplus: add missing of_node_put() in spl2sw_mdio_init()
-    https://git.kernel.org/netdev/net-next/c/223153ea6c79
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+> Changes in v3:
+> * Add supply matching
 
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

@@ -2,113 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752FD52B5FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430CF52B5C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 11:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbiERJQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 05:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
+        id S233993AbiERJSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 05:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbiERJQc (ORCPT
+        with ESMTP id S233953AbiERJSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 05:16:32 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C9813FA7;
-        Wed, 18 May 2022 02:16:31 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id t6so1783093wra.4;
-        Wed, 18 May 2022 02:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AJ/PeRbastM8KtwKP00d5Dtpk6YYbHWpbi26hK6kis8=;
-        b=Sb6MUDzpI3Do12SoVOog4trxfn9HkOWzjeJE76NDXkSoA5+fRAmSg1quRuL0EaHHMq
-         m6AxmVYU7qZ4kUOuIhQsD2r+4H7X/eY9MdaLsZClCj+chZ/DoiVRhX9q9MC9cVk+qB2u
-         rKLz50JW6LMpRFFumwP9Jdf2NLUMxYBb39/m7I1paORnMA76t7UYktiptr2D7kQNW9fM
-         Ilp+EyfIAquY2zUojfnFJBq50LF3ol0dyv8ykoL/ce1uU9ZpB3AJf2RGUb5yvijmFIHy
-         vhOOAZG3Pzx1dZuw2baXFhCQfbnqUvTEPayqaYHkt2lviWQdjqQoRKNEAeblCa+BKcYt
-         CR+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AJ/PeRbastM8KtwKP00d5Dtpk6YYbHWpbi26hK6kis8=;
-        b=a4XKxsy+u8fWQHs+030ujNOLIKQvfKHQcOX5dwthkazViDlEgysV0a+cQHNED8iIOe
-         bDsguvUsALfhzx9cyDVL49kyb8mGRtFc27P7t70/k6rNDXX6Ttv0KEGo9M/E/xIcWfv0
-         TXd8Gr4rJKBn7/gVF779S5tIAA+jzZ8WgsyaoD2Cel8PUaPrc1XsAPWQFyOxq3pU3jkg
-         gYGI8yeGAPEfrxTWVIobtniHX6+aDcunIgKcRX+0tJAIFQL3g+p3YiV+pvFzMeBsg+Tk
-         WSSW7jIjNl5gihA/1jM8Jj1QHItbWGLsOxa9DFlABgPrEbKlPApUTl823LDCW6Ng/n7g
-         fb3g==
-X-Gm-Message-State: AOAM530syC9Z2OKC14XH7X+G15H2l2UwDbGPgYNPdTUObMl9n7NHkoWr
-        /W7Jj4EG1aQF+tKtiEnpsv6vg65sFt4=
-X-Google-Smtp-Source: ABdhPJwEWT0S1cQNRyp2Os4DAQEhukNT425BpsOswVM115DyQwaHDTQ4H/1aAl9xuumtGy5hK18drg==
-X-Received: by 2002:a05:6000:1a45:b0:20e:6164:d86c with SMTP id t5-20020a0560001a4500b0020e6164d86cmr1405752wry.561.1652865390262;
-        Wed, 18 May 2022 02:16:30 -0700 (PDT)
-Received: from [192.168.0.36] ([5.225.216.194])
-        by smtp.gmail.com with ESMTPSA id p18-20020a05600c1d9200b00397122e63b6sm1227595wms.29.2022.05.18.02.16.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 02:16:29 -0700 (PDT)
-Message-ID: <ad4aac8a-ef1b-d4eb-7045-a46bd39ad3fc@gmail.com>
-Date:   Wed, 18 May 2022 11:16:28 +0200
+        Wed, 18 May 2022 05:18:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1F21E3C2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 02:18:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4497BCE1F4A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 09:18:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E842C385AA;
+        Wed, 18 May 2022 09:18:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652865511;
+        bh=k+5bOoeP4HkT97sUXYxNDGu/Mgf1f/Xo/QI4gKpyZ8Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LGWlx/5Uae5jMpB1EOF4pSpgE6Fqgc/nCVt+KzblLaxq2Volbi/4UUY/6bvIryHhJ
+         R9BZreIFsvvf3qCayzZ+TLESM5NppAVLbkd0dzyaNnQ7X8HnLqtmHYBGJHTYqM7+ej
+         S3X+AO0i/z+WqY2y+A3oG/34Zi6ta47AtETFzIwdUG8flmYjX3rBdQ2C477m1v4mXo
+         wah9VXooUkD3jqP+q6SxUzPWkQFg98PbtrMED5h89OsT2h5PmON1fqn2ae6Zia/aEF
+         a7ek7g7p5OfocUnqwh3EK+6c1qznifhqmPwgVvp2RwhP+2T9unBneyzqoGYWKT2wv0
+         jdTgvx89tUIfw==
+From:   Tzung-Bi Shih <tzungbi@kernel.org>
+To:     bleung@chromium.org, groeck@chromium.org
+Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        tzungbi@kernel.org, dianders@chromium.org
+Subject: [PATCH 0/4] platform/chrome: cros_ec_proto: add initial Kunit tests
+Date:   Wed, 18 May 2022 17:18:10 +0800
+Message-Id: <20220518091814.2028579-1-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/8] dt-bindings: iommu: mediatek: Add mediatek,infracfg
- phandle
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
-Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220517132107.195932-1-angelogioacchino.delregno@collabora.com>
- <20220517132107.195932-2-angelogioacchino.delregno@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220517132107.195932-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The series adds some early Kunit tests for ChromeOS EC protocol.
+
+The 2nd patch is a refactor.
+
+The 3rd patch updates code comment.
+
+The 1st and 4th patches add Kunit tests.
+
+Use the following example commands to run the Kunit tests:
+$ ./tools/testing/kunit/kunit.py run \
+        --arch=x86_64 \
+        --kconfig_add CONFIG_CHROME_PLATFORMS=y \
+        --kconfig_add CONFIG_CROS_EC=y \
+        cros_ec*
+$ ./tools/testing/kunit/kunit.py run \
+        --arch=arm64 --cross_compile aarch64-linux-gnu- \
+        --kconfig_add CONFIG_CHROME_PLATFORMS=y \
+        --kconfig_add CONFIG_CROS_EC=y \
+        cros_ec*
+
+Tzung-Bi Shih (4):
+  platform/chrome: cros_ec_proto: add Kunit tests for
+    cros_ec_prepare_tx()
+  platform/chrome: cros_ec_proto: factor legacy out from
+    cros_ec_prepare_tx()
+  platform/chrome: cros_ec_proto: update cros_ec_check_result() comment
+  platform/chrome: cros_ec_proto: add Kunit tests for
+    cros_ec_check_result()
+
+ drivers/platform/chrome/Kconfig              |   9 +
+ drivers/platform/chrome/Makefile             |   3 +
+ drivers/platform/chrome/cros_ec_proto.c      |  58 ++---
+ drivers/platform/chrome/cros_ec_proto_test.c | 214 +++++++++++++++++++
+ 4 files changed, 259 insertions(+), 25 deletions(-)
+ create mode 100644 drivers/platform/chrome/cros_ec_proto_test.c
 
 
-On 17/05/2022 15:21, AngeloGioacchino Del Regno wrote:
-> Add property "mediatek,infracfg" to let the mtk_iommu driver retrieve
-> a phandle to the infracfg syscon instead of performing a per-soc
-> compatible lookup.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->   Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> index 2ae3bbad7f1a..78c72c22740b 100644
-> --- a/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> +++ b/Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml
-> @@ -101,6 +101,10 @@ properties:
->       items:
->         - const: bclk
->   
-> +  mediatek,infracfg:
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    description: The phandle to the mediatek infracfg syscon
-> +
->     mediatek,larbs:
->       $ref: /schemas/types.yaml#/definitions/phandle-array
->       minItems: 1
+base-commit: a0e7d2f65fa706a106dae4b52a7cfe48e0ddfdff
+-- 
+2.36.0.550.gb090851708-goog
 
-I think we can squash patch 7 in here. Same holds for pericfg
-
-Regards,
-Matthias

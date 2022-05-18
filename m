@@ -2,115 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC29B52B3C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C1852B40E
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbiERHkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S232341AbiERHlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbiERHkg (ORCPT
+        with ESMTP id S232389AbiERHlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:40:36 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA566118024
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:40:32 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id gg20so1235245pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FxAwdbb/Z2iFz9mmHnLiOpxEpn9tLUeGCl2bRMYRR98=;
-        b=coF2p/xtqq5kbzcw8z4gzgPU4TNTmE5367fdqBh/2EUUAdcDvu58bgq1CV3Vmduw48
-         cfYzCRdFI5K+bKAYN4UbYXjXvv5GXUy720PTldYLLT7R3XiFfkDATOmTturvUS1BJgFk
-         Ls2Vi726DI3gyhqczftszBPB1OGh/6synGEc4RYSFwyzvNKtMLJWQOzB21gdEOLsNB1n
-         pRcMQeeVGCoDVonB/ueqn9qhMpEougAaZLTdRiWHCu/R62yvD6mlmPbxoedKjoLlozr9
-         RZTUmFoNIKE/F3hRjRSrefBDMhgy/gtKI2Luplt216tpNvJeJmKNHgLfd0frchAH2Thv
-         5r1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FxAwdbb/Z2iFz9mmHnLiOpxEpn9tLUeGCl2bRMYRR98=;
-        b=lzuYluG2kkenmSuLh+U2/YRAL5ek8SXvCh2T1U85PIeTvwZF3N90jBriBzG0tdzD0e
-         em85M5jNhGEwH08NdCeqMwOPkGvMSrxmCtA0q1ahKWz49K7lPE20VB22CKdPHJ2MJ8+G
-         FSj4GFENIo3H/Jm/83plQNGm7zSi5WGuIlZGbgIsASU2uOysOoTvdP6TF2gQEHXIOa72
-         B7v9feUD2Q08Owkjp9mU+WLL44p8wB/fxYIo/tUPXjBkXmbp4NL/IC2vomR4sh9hg+tb
-         VDPW8fsD9IHnSEisq8Cr/vpw7FQJETOHJK7VqK1KBu5wJ4V+rvWCp/W34ZG+gvnEn9Jm
-         L4UQ==
-X-Gm-Message-State: AOAM533h38aRzg/c179DfQ54bD4FvBFn0VMLrrEvsiYH4yZKx8y0E45S
-        GrmzqsIJKbAniIJ43h5xeLw=
-X-Google-Smtp-Source: ABdhPJyuknGHZVYZTShNJtstyABeDVn/mGApt/yIW0GYpaFDALyef+05Id2jETX+j4m/cFJpDMbg4g==
-X-Received: by 2002:a17:902:7d89:b0:15e:e999:6b88 with SMTP id a9-20020a1709027d8900b0015ee9996b88mr26201726plm.98.1652859632287;
-        Wed, 18 May 2022 00:40:32 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id d132-20020a621d8a000000b0050dc76281bcsm1096213pfd.150.2022.05.18.00.40.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 00:40:31 -0700 (PDT)
-Message-ID: <6284a2ef.1c69fb81.e53cd.32b2@mx.google.com>
-X-Google-Original-Message-ID: <20220518074030.GA1686385@cgel.zte@gmail.com>
-Date:   Wed, 18 May 2022 07:40:30 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Balbir Singh <bsingharora@gmail.com>
-Cc:     akpm@linux-foundation.org, ammarfaizi2@gnuweeb.org,
-        oleksandr@natalenko.name, willy@infradead.org, linux-mm@kvack.org,
-        corbet@lwn.net, linux-kernel@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>
-Subject: Re: [PATCH] mm/ksm: introduce ksm_enabled for each processg
-References: <20220517092701.1662641-1-xu.xin16@zte.com.cn>
- <YoSZE7Iak3AYA4VE@balbir-desktop>
+        Wed, 18 May 2022 03:41:04 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28ADF1167
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=P7RoC/DyaIBUrw0WHH4NMmGnt1nOfh1Pg+yXcFOgWnU=; b=lNeeEe/zv0xRJzXzZCgkW4nl7X
+        MRkoYGewdzu4v3wqsrsRmdcllxK/gNjROyXeJ0gnj3FlxyiLIP1TbwRanSg0tG7T2nbJEwH5ODJJm
+        yKdg6SpX4RHN7uyfaoBhfUsTxPmGcEczUVjpgYYtBwKvWvqieYCo31EnlRa/ZbGZfyge9MPVlLXAj
+        A/hlmn8u4NKM5NLcfoV77mm4Gi+cPLmJdqCDxqLavBk2izYbzmu+ElSzhY37YoruurdIxEr61KnwX
+        JGCPQ+LtEzfjwb7Xe2e2y6Bc3bDoElqdq9jSRDvUjYg6gpeLaTvSUYogQtUo6RSsO1r+TvcjJofSc
+        DiHkkVig==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrEIW-001Tr2-MJ; Wed, 18 May 2022 07:40:45 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 85A6098119B; Wed, 18 May 2022 09:40:42 +0200 (CEST)
+Date:   Wed, 18 May 2022 09:40:42 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: Re: objtool "no non-local symbols" error with tip of tree LLVM
+Message-ID: <20220518074042.GA10117@worktop.programming.kicks-ass.net>
+References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
+ <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
+ <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
+ <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
+ <20220518012429.4zqzarvwsraxivux@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoSZE7Iak3AYA4VE@balbir-desktop>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220518012429.4zqzarvwsraxivux@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 04:58:27PM +1000, Balbir Singh wrote:
-> On Tue, May 17, 2022 at 09:27:01AM +0000, cgel.zte@gmail.com wrote:
-> > From: xu xin <xu.xin16@zte.com.cn>
-> > 
-> > For now, if we want to use KSM to merge pages of some apps, we have to
-> > explicitly call madvise() in application code, which means installed
-> > apps on OS needs to be uninstall and source code needs to be modified.
-> > It is very inconvenient because sometimes users or app developers are not
-> > willing to modify their app source codes for any reasons.
-> >
+On Tue, May 17, 2022 at 06:24:29PM -0700, Josh Poimboeuf wrote:
+> On Tue, May 17, 2022 at 05:42:04PM +0200, Peter Zijlstra wrote:
+> > +	for (;;) {
+> > +		symtab_data = elf_getdata(s, symtab_data);
+> > +		if (t)
+> > +			shndx_data = elf_getdata(t, shndx_data);
+> >  
+> > -	sym->idx = symtab->sh.sh_size / sizeof(sym->sym);
+> > -	elf_dirty_reloc_sym(elf, sym);
+> > +		if (!symtab_data) {
+> > +			if (!idx) {
+> > +				void *buf;
 > 
-> I thought we got process_madvise in 5.13, doesn't that help solve the
-> problem with extensions to advice and an appropriate wrapper? Granted
-> it might be a little racy with a running process potentially
-> participating in KSM already. 
-
-The reasons why I don't use process_madvise to achieve this include:
-
-1. see https://lore.kernel.org/lkml/1835064.A2aMcgg3dW@natalenko.name/
-
-2. process_madvise is still a kind of madvise. processs_madvise from
-another process overrides the intention of origin app code ifself that
-also calls madvise, which is unrecoverable. For example, if a process "A"
-which madvises just one part of VMAs (not all) as MERGEABLE run on the OS
-already, meanwhile, if another process which doesn't know the information
-of "A" 's MERGEABLE areas, then call process_madvise to advise all VMAs of
-"A" as MERGEABLE, the original MERGEABLE information of "A" calling madivse
-is erasured permanently.
-
-> If we are concerned about KSM, I would assume that we care about long running processes, is that true?
+> I'm confused by whatever this is doing, how is !symtab_data possible,
+> i.e. why would symtab not have data?
 > 
+> >  elf_create_section_symbol(struct elf *elf, struct section *sec)
+> >  {
+> >  	struct section *symtab, *symtab_shndx;
+> > -	Elf_Data *shndx_data = NULL;
+> > -	struct symbol *sym;
+> > -	Elf32_Word shndx;
+> > +	Elf32_Word first_non_local, new;
+> > +	struct symbol *sym, *old;
+> > +	int size;
+> > +
+> > +	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
+> > +		size = sizeof(Elf32_Sym);
+> > +	else
+> > +		size = sizeof(Elf64_Sym);
+> 
+> This should probably be called 'entsize' and I think you can just get it
+> from symtab->sh.sh_entsize.
+> 
+> > +	/*
+> > +	 * Either way, we added a LOCAL symbol.
+> > +	 */
+> > +	symtab->sh.sh_info += 1;
+> > +
+> >  	elf_add_symbol(elf, sym);
+> 
+> Not sure if it matters here, but elf_add_symbol() doesn't set sym->alias
+> and sym->pv_target, and both of those are unconditionally initialized in
+> read_symbols().  Should elf_add_symbol() be changed to initialize them?
 
-Yes, it is.
 
-> Balbir Singh
+
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -374,6 +374,9 @@ static void elf_add_symbol(struct elf *e
+ 	struct list_head *entry;
+ 	struct rb_node *pnode;
+
++	INIT_LIST_HEAD(&sym->pv_target);
++	sym->alias = sym;
++
+ 	sym->type = GELF_ST_TYPE(sym->sym.st_info);
+ 	sym->bind = GELF_ST_BIND(sym->sym.st_info);
+
+@@ -438,8 +441,6 @@ static int read_symbols(struct elf *elf)
+ 			return -1;
+ 		}
+ 		memset(sym, 0, sizeof(*sym));
+-		INIT_LIST_HEAD(&sym->pv_target);
+-		sym->alias = sym;
+
+ 		sym->idx = i;
+
+@@ -604,7 +605,8 @@ static void elf_dirty_reloc_sym(struct e
+
+ /*
+  * The libelf API is terrible; gelf_update_sym*() takes a data block relative
+- * index value. As such, iterate the data blocks and adjust index until it fits.
++ * index value, *NOT* the symbol index. As such, iterate the data blocks and
++ * adjust index until it fits.
+  *
+  * If no data block is found, allow adding a new data block provided the index
+  * is only one past the end.
+@@ -613,14 +615,10 @@ static int elf_update_symbol(struct elf
+ 			     struct section *symtab_shndx, struct symbol *sym)
+ {
+ 	Elf_Data *symtab_data = NULL, *shndx_data = NULL;
++	Elf64_Xword entsize = symtab->sh.sh_entsize;
+ 	Elf32_Word shndx = sym->sec->idx;
+ 	Elf_Scn *s, *t = NULL;
+-	int size, idx = sym->idx;
+-
+-	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
+-		size = sizeof(Elf32_Sym);
+-	else
+-		size = sizeof(Elf64_Sym);
++	int max_idx, idx = sym->idx;
+
+ 	s = elf_getscn(elf->elf, symtab->idx);
+ 	if (!s) {
+@@ -637,11 +635,14 @@ static int elf_update_symbol(struct elf
+ 	}
+
+ 	for (;;) {
++		/* get next data descriptor for the relevant sections */
+ 		symtab_data = elf_getdata(s, symtab_data);
+ 		if (t)
+ 			shndx_data = elf_getdata(t, shndx_data);
+
++		/* end-of-list */
+ 		if (!symtab_data) {
++			/* if @idx == 0, it's the next contiguous entry, create it */
+ 			if (!idx) {
+ 				void *buf;
+
+@@ -649,53 +650,60 @@ static int elf_update_symbol(struct elf
+ 				if (t)
+ 					shndx_data = elf_newdata(t);
+
+-				buf = calloc(1, size);
++				buf = calloc(1, entsize);
+ 				if (!buf) {
+ 					WARN("malloc");
+ 					return -1;
+ 				}
+
+ 				symtab_data->d_buf = buf;
+-				symtab_data->d_size = size;
++				symtab_data->d_size = entsize;
+ 				symtab_data->d_align = 1;
+ 				symtab_data->d_type = ELF_T_SYM;
+
+-				symtab->sh.sh_size += size;
++				symtab->sh.sh_size += entsize;
+ 				symtab->changed = true;
+
+ 				if (t) {
+ 					shndx_data->d_buf = &sym->sec->idx;
+ 					shndx_data->d_size = sizeof(Elf32_Word);
+-					shndx_data->d_align = 4;
++					shndx_data->d_align = sizeof(Elf32_Word);
+ 					shndx_data->d_type = ELF_T_WORD;
+
+-					symtab_shndx->sh.sh_size += 4;
++					symtab_shndx->sh.sh_size += sizeof(Elf32_Word);
+ 					symtab_shndx->changed = true;
+ 				}
+
+ 				break;
+ 			}
+
++			/* we don't do holes in symbol tables */
+ 			WARN("index out of range");
+ 			return -1;
+ 		}
+
++		/* empty blocks should not happen */
+ 		if (!symtab_data->d_size) {
+ 			WARN("zero size data");
+ 			return -1;
+ 		}
+
+-		if (idx * size < symtab_data->d_size)
++		/* is this the right block? */
++		max_idx = symtab_data->d_size / entsize;
++		if (idx < max_idx)
+ 			break;
+
+-		idx -= symtab_data->d_size / size;
++		/* adjust index and try again */
++		idx -= max_idx;
+ 	}
+
++	/* something went side-ways */
+ 	if (idx < 0) {
+ 		WARN("negative index");
+ 		return -1;
+ 	}
+
++	/* setup extended section index magic and write the symbol */
+ 	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
+ 		sym->sym.st_shndx = shndx;
+ 		if (!shndx_data)
+@@ -720,14 +728,8 @@ static struct symbol *
+ elf_create_section_symbol(struct elf *elf, struct section *sec)
+ {
+ 	struct section *symtab, *symtab_shndx;
+-	Elf32_Word first_non_local, new;
++	Elf32_Word first_non_local, new_idx;
+ 	struct symbol *sym, *old;
+-	int size;
+-
+-	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
+-		size = sizeof(Elf32_Sym);
+-	else
+-		size = sizeof(Elf64_Sym);
+
+ 	symtab = find_section_by_name(elf, ".symtab");
+ 	if (symtab) {
+@@ -752,16 +754,15 @@ elf_create_section_symbol(struct elf *el
+ 	// st_value 0
+ 	// st_size 0
+
+-	new = symtab->sh.sh_size / size;
+-
+ 	/*
+ 	 * Move the first global symbol, as per sh_info, into a new, higher
+ 	 * symbol index. This fees up a spot for a new local symbol.
+ 	 */
+ 	first_non_local = symtab->sh.sh_info;
++	new_idx = symtab->sh.sh_size / symtab->sh.sh_entsize;
+ 	old = find_symbol_by_index(elf, first_non_local);
+ 	if (old) {
+-		old->idx = new;
++		old->idx = new_idx;
+
+ 		hlist_del(&old->hash);
+ 		elf_hash_add(symbol, &old->hash, old->idx);
+@@ -773,10 +774,10 @@ elf_create_section_symbol(struct elf *el
+ 			return NULL;
+ 		}
+
+-		new = first_non_local;
++		new_idx = first_non_local;
+ 	}
+
+-	sym->idx = new;
++	sym->idx = new_idx;
+ 	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
+ 		WARN("elf_update_symbol");
+ 		return NULL;
+

@@ -2,113 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F8452BB16
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACEA52BAA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236523AbiERMZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
+        id S236371AbiERM02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236399AbiERMZP (ORCPT
+        with ESMTP id S236527AbiERM0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:25:15 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAC518FF24;
-        Wed, 18 May 2022 05:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652876714; x=1684412714;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=S/LRXJejZvAPg3mhWE1mMw8GrU9PbO2g/1at3Bi1V74=;
-  b=SrbF8KMxZXJNqxQjPTWAL0MqiezjrSDO7w7xbVPnKc/T4ebzjvE3Gulu
-   DFWDpnQfYQf0KTmPVAbmU4ROrgpD8yy2rmyVLow++k/iVv2DOy5Ii82/C
-   ig/wJp8mXWUmDGpoluwwI6MG62iXdHe490SukGPG6Jes2xposc+9VpAaI
-   zNiycU7v4ng1Dp+Q6KHJb1ykz2lqC0SzPtcMqkynYC1d2koTq/63HWoYw
-   2WF1qOg8it+ukLxoCjaTmKkW5Dyi66DxVdpiIwGpwvIog45pVoOCPHQAb
-   +Z5ZxgcVM7eKgBLXG4xIJ9eiIsWepiTjug6P572fw0ZbYCm5EQvnT5hNu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271775335"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="271775335"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 05:25:12 -0700
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="597763855"
-Received: from lgomesba-mobl.ger.corp.intel.com ([10.252.38.97])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 05:25:09 -0700
-Date:   Wed, 18 May 2022 15:25:07 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Peter Korsgaard <jacmet@sunsite.dk>,
-        Sean Anderson <sean.anderson@seco.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/9] serial: uartline: Fix BRKINT clearing
-In-Reply-To: <CAKfKVtFO5z68JwFtGDoHAVVfwXvNnT0B_dGZutCLyu6Vo8tXOQ@mail.gmail.com>
-Message-ID: <3c5532e-c8f1-791d-6c58-ccd1c426432@linux.intel.com>
-References: <20220517110737.37148-1-ilpo.jarvinen@linux.intel.com> <20220517110737.37148-2-ilpo.jarvinen@linux.intel.com> <CAKfKVtFO5z68JwFtGDoHAVVfwXvNnT0B_dGZutCLyu6Vo8tXOQ@mail.gmail.com>
+        Wed, 18 May 2022 08:26:23 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6FD5FF0D;
+        Wed, 18 May 2022 05:26:18 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id 3618C5FD02;
+        Wed, 18 May 2022 15:26:15 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1652876775;
+        bh=sFH5idW86lWQdWvgqVFesZuStLdWb38v0wu7UBLxe5s=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=hZpoRYairtXzQsb9c6qOeMBgrb8K9oiH3VkZuemIMBxs5nKXZXTdbtviPfb4H5iZE
+         1U0jaQnb83VUKUBQrSJ19/alHHVHqV++bFrralWmYqg5pC6/+By+OCM+KRdx5F/jkq
+         5U6WeMTFmEx093VTdDHbY4mxBSsMCXzi9rh0nZAyuWOIABJHJ5I1WGuOkkVMkF3kxd
+         N2TM1n4NBzCjPvQg+00dPGlr3QoouZP0DwTLkblzcc8YCQNeIUSioAPg4fQcY2Ib83
+         +3HyBTbeTVSXF6eRzTQidNzeojsVWkpD1EeQkADFk9vOOe22JdXGsQgybKEufKQMqr
+         lb3sR67M5lemA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 18 May 2022 15:26:13 +0300 (MSK)
+From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
+ driver
+Thread-Topic: [PATCH v1 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
+ driver
+Thread-Index: AQHYVASOybrxT0DjfUWoYWuGUlWOX6z4bouAgAnb/gCAIkALgA==
+Date:   Wed, 18 May 2022 12:25:59 +0000
+Message-ID: <20220518122515.aby5lbb4xusr6pdt@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220419154555.24191-1-ddrokosov@sberdevices.ru>
+ <20220419154555.24191-3-ddrokosov@sberdevices.ru>
+ <20220420115023.00006a25@Huawei.com>
+ <20220426172406.s4h6g7nrpytaq263@CAB-WSD-L081021.sigma.sbrf.ru>
+In-Reply-To: <20220426172406.s4h6g7nrpytaq263@CAB-WSD-L081021.sigma.sbrf.ru>
+Accept-Language: ru-RU, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <AC753801DB3F2E4DBCBE5465066DECA8@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-733060916-1652876712=:1539"
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/05/18 09:28:00 #19466841
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Jonathan,
 
---8323329-733060916-1652876712=:1539
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+I have two items to be discussed about iio_trigger_get().
+Please see my questions below and correct me if I'm wrong.
 
-On Wed, 18 May 2022, Shubhrajyoti Datta wrote:
+On Tue, Apr 26, 2022 at 08:24:10PM +0300, Dmitry Rokosov wrote:
+> > > +							       "%s-new-data",
+> > > +							       indio_dev->name);
+> > > +		if (!msa311->new_data_trig) {
+> > > +			dev_err(&i2c->dev, "cannot allocate new data trig\n");
+> > > +			err =3D -ENOMEM;
+> > > +			goto err_lock_destroy;
+> > > +		}
+> > > +
+> > > +		msa311->new_data_trig->dev.parent =3D &i2c->dev;
+> > > +		msa311->new_data_trig->ops =3D &msa311_new_data_trig_ops;
+> > > +		iio_trigger_set_drvdata(msa311->new_data_trig, indio_dev);
+> > > +		indio_dev->trig =3D msa311->new_data_trig;
+> >=20
+> > This will create a double free if you were to change the trigger.
+> > 		indio_dev->trig =3D iio_trigger_get(trig);
+> >=20
+>=20
+> I didn't take into account other trigger usage.
+> I'll rework this place for the v2.
+>=20
 
-> On Tue, May 17, 2022 at 5:58 PM Ilpo Järvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> >
-> > BRKINT is within c_iflag rather than c_cflag.
-> Nit typo in the subject line.
+The first one problem is module_get() calling for trigger get()
+semantic.
+I've applied iio_trigger_get() function to acquire module refcnt,
+but I've faced with rmmod busy problem. IIO driver module doesn't want to
+stop and unload due to not having zero module refcnt.
+Syscall delete_module() tries to stop module first and after calls
+driver exit() function (which executes devm_* handlers inside, including II=
+O
+trigger unregister). It means we have the chicken or the egg dilemma here.
+Module can't be unloaded until module refcnt is not zero and we can't
+execute IIO trigger unregister (decrease module refcnt) only when module
+refcnt is zero.
+I suppose the possible solution to such a problem is a different semantic
+for internal triggers (inside driver itself) and external drivers (like
+hwtimer trigger). What do you think?
 
-Indeed, good catch. Even after you pointed it out, it was still hard to 
-spot what was wrong with it.
+The second one issue is located in the different IIO drivers. Some modules
+call iio_trigger_get() before iio_trigger_register(), trig->owner is not
+initialized to the right value (THIS_MODULE) and we don't acquire refcnt
+for proper driver object.
+I'm going to send patchset to problem driver set, but I can test only
+buildable status for such modules, are you okay with that?
 
-Thanks.
-
--- 
- i.
-
-> > Cc: Sean Anderson <sean.anderson@seco.com>
-> > Fixes: ea017f5853e9 (tty: serial: uartlite: Prevent changing fixed parameters)
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  drivers/tty/serial/uartlite.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-> > index 007db67292a2..880e2afbb97b 100644
-> > --- a/drivers/tty/serial/uartlite.c
-> > +++ b/drivers/tty/serial/uartlite.c
-> > @@ -321,7 +321,8 @@ static void ulite_set_termios(struct uart_port *port, struct ktermios *termios,
-> >         struct uartlite_data *pdata = port->private_data;
-> >
-> >         /* Set termios to what the hardware supports */
-> > -       termios->c_cflag &= ~(BRKINT | CSTOPB | PARENB | PARODD | CSIZE);
-> > +       termios->c_iflag &= ~BRKINT;
-> > +       termios->c_cflag &= ~(CSTOPB | PARENB | PARODD | CSIZE);
-> >         termios->c_cflag |= pdata->cflags & (PARENB | PARODD | CSIZE);
-> >         tty_termios_encode_baud_rate(termios, pdata->baud, pdata->baud);
-> >
-> > --
-> > 2.30.2
-> >
-> 
-
---8323329-733060916-1652876712=:1539--
+--=20
+Thank you,
+Dmitry

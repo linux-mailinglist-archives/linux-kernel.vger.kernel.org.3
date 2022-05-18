@@ -2,131 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32ABC52B479
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6D252B46D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 10:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232809AbiERIO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 04:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S232814AbiERIPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 04:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232798AbiERIOv (ORCPT
+        with ESMTP id S232800AbiERIP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 04:14:51 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC75E81998;
-        Wed, 18 May 2022 01:14:50 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id m12so1092370plb.4;
-        Wed, 18 May 2022 01:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WoEf2mJXOA2MejlK2DAjiC6YKTbTSAG0lBrKeEx56e8=;
-        b=JnJoLDdO3Cr3yxlTa2CqxnmoSJWnIgeN9bE1GtOXbZrEi3HH/aUCbqqMPQ1XBmuuDJ
-         CufWXNwnV9NyvbwBtELZ+WkzLZdqsS56GMSgC3kQHMqjWqfnT54P/ue6lfRVzzV1rzES
-         wv7OaWRhgrmMWDNDK1pwopJLJlxnEoS5IjKy8hCTeBmUwvvlS+7icQS5kLusciC2wXhC
-         /hjwWCtRUTnnm1EOpgUHfBmvsFlrP2rmD8SQkTzy4+4aCHWzXXDc+KhJObrWWetXXoMe
-         tujFvcq7DTJF0XhdEM/hvgE+S9mIuWOC9YkMxDtHXmov36dPVh6XKcOavrVzsBQbmrbn
-         VAOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WoEf2mJXOA2MejlK2DAjiC6YKTbTSAG0lBrKeEx56e8=;
-        b=yctqLtarydGG2NaEbnYVf0NrsDmlgZR0fh77sHgmTGfmFVcwEk0O+qRM4zawQmyvwM
-         6HJZFQpKKHOwnhIjwt57QLPB1X8GSWeRlWp5/zhIrTaBb+eeHpP784glCtd523E5DG3D
-         NE/xGIwX0GjqIwrLDE2jK4wVW0jtMFqQQqjz4EGVHtAv0JZxoT7G4ilnxcrNnojospqa
-         OCXGgaMIblr84ngWcvIU3GgQHDHnzHCPa/NGfh7KXa9UU7pQl7cbeQyBiIHicFBfhl/v
-         iwhRZVCvtGkXETcYqi9O5iUmjNiW6dONk4pADd/Ja9JDHcqlanrBszzaJkwSWQTelYru
-         YFgQ==
-X-Gm-Message-State: AOAM533sAD50AxoWELYxVok1v1g84M2VLA/tC95/jpwJUsMrIKrN1of8
-        4n7yqOOwaHYCJdxb98hRq4Y=
-X-Google-Smtp-Source: ABdhPJz4fy3tXiRYqOmcuYo/xV2Tcspgny8tZwqZ8dotVRB60Ql+BGevhIlTyHp9NNG1v3J4MWNoaw==
-X-Received: by 2002:a17:90a:4f05:b0:1df:afae:180b with SMTP id p5-20020a17090a4f0500b001dfafae180bmr2507522pjh.80.1652861689818;
-        Wed, 18 May 2022 01:14:49 -0700 (PDT)
-Received: from localhost ([1.157.44.177])
-        by smtp.gmail.com with ESMTPSA id d7-20020a056a00244700b00512ee2f2363sm1290401pfj.99.2022.05.18.01.14.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 01:14:48 -0700 (PDT)
-Date:   Wed, 18 May 2022 18:14:45 +1000
-From:   Balbir Singh <bsingharora@gmail.com>
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>, Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        William Kucharski <william.kucharski@oracle.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Cgroups <cgroups@vger.kernel.org>,
-        Yang Yang <yang.yang29@zte.com.cn>
-Subject: Re: [PATCH] mm/memcg: support control THP behaviour in cgroup
-Message-ID: <YoSq9W995QPM6tWQ@balbir-desktop>
-References: <6275d3e7.1c69fb81.1d62.4504@mx.google.com>
- <YnjmPAToTR0C5o8x@dhcp22.suse.cz>
- <6278fa75.1c69fb81.9c598.f794@mx.google.com>
- <Ynj/l+pyFJxKfcbQ@dhcp22.suse.cz>
- <6279c354.1c69fb81.7f6c1.15e0@mx.google.com>
- <CAHbLzkqztB+NXVcxtd7bVo7onH6AcMJ3JWCAHHqH3OAdbZsMOQ@mail.gmail.com>
- <627b1d39.1c69fb81.fe952.6426@mx.google.com>
- <CALvZod5aqZjUE8BBQZxwHDBuSWOSEAOqW4_xE22Am0sGZZs4sw@mail.gmail.com>
- <YnspVPGOtzlo5n+7@carbon>
- <627b2df5.1c69fb81.4a22.160f@mx.google.com>
+        Wed, 18 May 2022 04:15:28 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FCA81990;
+        Wed, 18 May 2022 01:15:25 -0700 (PDT)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L35Ls2Fqlz6H7nv;
+        Wed, 18 May 2022 16:12:21 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 18 May 2022 10:15:23 +0200
+Received: from [10.47.24.102] (10.47.24.102) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
+ 2022 09:15:22 +0100
+Message-ID: <28509191-3a45-de6d-f5bc-a8e7331c0a9e@huawei.com>
+Date:   Wed, 18 May 2022 09:15:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <627b2df5.1c69fb81.4a22.160f@mx.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 00/20] perf vendors events arm64: Multiple Arm CPUs
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Nick Forrington <nick.forrington@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <acme@kernel.org>
+CC:     Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>
+References: <20220510104758.64677-1-nick.forrington@arm.com>
+ <f523b0fe-1262-c1e5-c587-15842ccf0fcf@arm.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <f523b0fe-1262-c1e5-c587-15842ccf0fcf@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.47.24.102]
+X-ClientProxiedBy: lhreml733-chm.china.huawei.com (10.201.108.84) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 11, 2022 at 03:31:00AM +0000, CGEL wrote:
-> On Tue, May 10, 2022 at 08:11:16PM -0700, Roman Gushchin wrote:
-> > On Tue, May 10, 2022 at 07:47:29PM -0700, Shakeel Butt wrote:
-> > > On Tue, May 10, 2022 at 7:19 PM CGEL <cgel.zte@gmail.com> wrote:
-> > > >
-> > > [...]
-> > > > > > >
-> > > > > > > All controls in cgroup v2 should be hierarchical. This is really
-> > > > > > > required for a proper delegation semantic.
-> > > > > > >
-> > > > > >
-> > > > > > Could we align to the semantic of /sys/fs/cgroup/memory.swappiness?
-> > > > > > Some distributions like Ubuntu is still using cgroup v1.
-> > > > >
-> > > > > Other than enable flag, how would you handle the defrag flag
-> > > > > hierarchically? It is much more complicated.
-> > > >
-> > > > Refer to memory.swappiness for cgroup, this new interface better be independent.
-> > > 
-> > > Let me give my 0.02. I buy the use-case of Admin restricting THPs to
-> > > low priority jobs but I don't think memory controller is the right
-> > > place to enforce that policy. Michal gave one way (prctl()) to enforce
-> > > that policy. Have you explored the BPF way to enforce this policy?
-> > 
-> > +1 for bpf
-> > 
-> > I think these THP hints are too implementation-dependent and unstable to become
-> > a part of cgroup API.
-> >
+On 17/05/2022 15:32, Robin Murphy wrote:
 > 
-> Thanks! If no other suggesting we will submit a bpf version of this patch.
->
+> On 2022-05-10 11:47, Nick Forrington wrote:
+>> Add Performance Monitoring Unit event data for the Arm CPUs listed
+>> below.
+>>
+>> Changesets are dependent due to incremental updates to the common events
+>> file and mapfile.csv.
+>>
+>> Data is sourced from https://github.com/ARM-software/data
+>>
+>> Nick Forrington (20):
+>>    perf vendors events arm64: Arm Cortex-A5
+>>    perf vendors events arm64: Arm Cortex-A7
+>>    perf vendors events arm64: Arm Cortex-A8
+>>    perf vendors events arm64: Arm Cortex-A9
+>>    perf vendors events arm64: Arm Cortex-A15
+>>    perf vendors events arm64: Arm Cortex-A17
+>>    perf vendors events arm64: Arm Cortex-A32
+> 
+> Obligatory question over anything relating to the above CPUs being in an 
+> "arch/arm64" directory... ;)
 
-What is your proposal for BPF? How do you intend to add attach points
-(attach_type) for policy? Is it still going to be per cgroup?
+If we were to add to arm32/arm then the common event numbers and maybe 
+other JSONs in future would need to be duplicated.
 
-Balbir Singh
+Would there be any reason to add to arm32/arm apart to from being 
+strictly proper? Maybe if lots of other 32b support for other vendors 
+came along then it could make sense (to separate them out).
+
+thanks,
+John
+

@@ -2,103 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D58A52B906
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A580D52B909
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 13:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235739AbiERLnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 07:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S235735AbiERLo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 07:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235762AbiERLnL (ORCPT
+        with ESMTP id S232124AbiERLoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 07:43:11 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FF32B1BC;
-        Wed, 18 May 2022 04:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652874189; x=1684410189;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tw6Z4f9Bhax1c/2buQLmzsM9gge//sdJmnyXlU32Rlc=;
-  b=eJQ4XPZTsxO31SOu3CgTf0SfECcc/z4uOMlHSfwXEMihacHB2ZRa0Bnt
-   e/Gqt0EqxjbiE472AUwTMDxungnabNqFGMm5VOk78GIm3bIJgPupwL5+9
-   Qb0Xgri5rvLGyynGh0mAJhn4X0QsOQLfSnMc646emdTj/qD3j3J/tiibK
-   NWGm80XKFNfPj1NvaTKI/41nkeptpIGLNS7KcAvodL2ldyXP6OZr+j/PW
-   1wLUr/6IpQ3Ibiv6EvZqSPotK9VvJDThgWaG8Lu/zY4gOQtNOjAbUt48W
-   J9DcERwFF+FhGzj3/0eTzfy2cuy7lNfwhs9Le3RjfKd561i4eJ3f9mYYl
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="358038747"
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="358038747"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 04:43:09 -0700
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="597743292"
-Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.125])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 04:43:07 -0700
-From:   Zqiang <qiang1.zhang@intel.com>
-To:     paulmck@kernel.org, frederic@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rcu: Add cpu-exp indicator to expedited RCU CPU stall warnings
-Date:   Wed, 18 May 2022 19:43:10 +0800
-Message-Id: <20220518114310.1478091-1-qiang1.zhang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 18 May 2022 07:44:54 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670911796D9;
+        Wed, 18 May 2022 04:44:52 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id c22so1920685pgu.2;
+        Wed, 18 May 2022 04:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=e46I4qIXdzquI9xFD+cV1ACVVNgw+INdEKQ9QEnr4OI=;
+        b=Nh0/Gtjh+a2IoDWF2IsH6LjJsbfFa2ls+RGo/YWXGFgUkeucd2niQ5WCVQPYpf7y/U
+         Cmx7pTzDQ9PP7tNRsnHmU/9qAi3OmK/wmyx0mwTd43+fQjvAPKpQvyRobrqOUIpfYS0F
+         BG2A7C0p12X4zCfzNvUX5A+eLouTQSkWu6dcUMwnQ2ue1CqLrYL2cG3libYJjprTw7Y1
+         YW1N3/mdmXaPY+HtNABFX05KqegIBIotIqJyW45Y/6gv7g3Oi/bfNhZpark+UsHId/tA
+         A5xAUzQaT2R2SzuL34L0HlW73CMoooDFXUTKbqr8g4DPAY7oQY8GzPPfXhe2JfYajuaH
+         fytg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=e46I4qIXdzquI9xFD+cV1ACVVNgw+INdEKQ9QEnr4OI=;
+        b=50S2kJLIdjQLHDyfy9IG6aVH6+HX2GN+et8fyqsdwPhvVIdZJfUY4OhhPsBJCTgHbN
+         KJ+xTFdN+q7wzDOJXlBpKfujEo+0ULwUDDUXPLUYn4/r0ufOzyOvJBdOqPOvJG2TfPeE
+         R9RfkHand7w8do90ozUJfj25gpO/De3swDDrdZ+Vl/lQzlekLijPs9B3WFpO5/D4bCqf
+         sKUF1I+LPCHD8/6FGETHNAXz3LoZlPMMa5tGYyc0aiLIWbx8iBtnAROgamROIrBTSAP8
+         /e4wG81IWT65WH83dUPFiSc/aEhu5fR5QCRZcowoFbJ4e39F7yr7dW2gZMy5mpy2BFmG
+         oe5g==
+X-Gm-Message-State: AOAM530p3Hp+Xc0kwcl4b45Z8CTEiRajrMe+Wfwy79ILDI2gp8TyClhH
+        e1TdwIbi3BzGoU6HQBo6f6k=
+X-Google-Smtp-Source: ABdhPJzYBLHwICpNdU1uIc/fY0ueEsP71iwvxE76n7L9d8J1eiIBw//HBvohkbNgfUiutXbkZMTFNA==
+X-Received: by 2002:a05:6a00:14cf:b0:510:5549:ad8a with SMTP id w15-20020a056a0014cf00b005105549ad8amr27233402pfu.24.1652874291646;
+        Wed, 18 May 2022 04:44:51 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id 23-20020a631557000000b003db8691008esm1332158pgv.12.2022.05.18.04.44.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 04:44:51 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: mcp251xfd: silence clang's -Wunaligned-access warning
+Date:   Wed, 18 May 2022 20:43:57 +0900
+Message-Id: <20220518114357.55452-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
+References: <20220518070517.q53bjzo6lbnq3f2i@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds a "D" indicator to expedited RCU CPU stall warnings.
-when an expedited grace period begins, due to CPU disable interrupt
-time too long, cause the IPI(rcu_exp_handler()) unable to respond in
-time, this debugging id will be showed.
+clang emits a -Wunaligned-access warning on union
+mcp251xfd_tx_ojb_load_buf.
 
-runqemu kvm slirp nographic qemuparams="-m 4096 -smp 4"  bootparams=
-"isolcpus=2,3 nohz_full=2,3 rcu_nocbs=2,3 rcutree.dump_tree=1
-rcutorture.stall_cpu_holdoff=30 rcutorture.stall_cpu=40
-rcutorture.stall_cpu_irqsoff=1 rcutorture.stall_cpu_block=0
-rcutorture.stall_no_softlockup=1" -d
+The reason is that field hw_tx_obj (not declared as packed) is being
+packed right after a 16 bits field inside a packed struct:
 
-rcu_torture_stall start on CPU 1.
-............
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks:
-{ 1-...D } 26467 jiffies s: 13317 root: 0x1/.
-rcu: blocking rcu_node structures (internal RCU debug): l=1:0-1:0x2/.
-Task dump for CPU 1:
-task:rcu_torture_sta state:R  running task     stack:    0 pid:   76
-ppid:     2 flags:0x00004008
+| union mcp251xfd_tx_obj_load_buf {
+| 	struct __packed {
+| 		struct mcp251xfd_buf_cmd cmd;
+| 		  /* ^ 16 bits fields */
+| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+| 		  /* ^ not declared as packed */
+| 	} nocrc;
+| 	struct __packed {
+| 		struct mcp251xfd_buf_cmd_crc cmd;
+| 		struct mcp251xfd_hw_tx_obj_raw hw_tx_obj;
+| 		__be16 crc;
+| 	} crc;
+| } ____cacheline_aligned;
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Starting from LLVM 14, having an unpacked struct nested in a packed
+struct triggers a warning. c.f. [1].
+
+This is a false positive because the field is always being accessed
+with the relevant put_unaligned_*() function. Adding __packed to the
+structure declaration silences the warning.
+
+[1] https://github.com/llvm/llvm-project/issues/55520
+
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- kernel/rcu/tree_exp.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Actually, I do not have llvm 14 installed so I am not able to test
+(this check was introduced in v14). But as explained in [1], adding
+__packed should fix the warning.
 
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 4c7037b50703..f092c7f18a5f 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -637,10 +637,11 @@ static void synchronize_rcu_expedited_wait(void)
- 					continue;
- 				ndetected++;
- 				rdp = per_cpu_ptr(&rcu_data, cpu);
--				pr_cont(" %d-%c%c%c", cpu,
-+				pr_cont(" %d-%c%c%c%c", cpu,
- 					"O."[!!cpu_online(cpu)],
- 					"o."[!!(rdp->grpmask & rnp->expmaskinit)],
--					"N."[!!(rdp->grpmask & rnp->expmaskinitnext)]);
-+					"N."[!!(rdp->grpmask & rnp->expmaskinitnext)],
-+					"D."[!!(rdp->cpu_no_qs.b.exp)]);
- 			}
- 		}
- 		pr_cont(" } %lu jiffies s: %lu root: %#lx/%c\n",
+Because this is a false positive, I did not add a Fixes tag, nor a
+Reported-by: kernel test robot.
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+index 1d43bccc29bf..2b0309fedfac 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+@@ -441,7 +441,7 @@ struct mcp251xfd_hw_tef_obj {
+ /* The tx_obj_raw version is used in spi async, i.e. without
+  * regmap. We have to take care of endianness ourselves.
+  */
+-struct mcp251xfd_hw_tx_obj_raw {
++struct __packed mcp251xfd_hw_tx_obj_raw {
+ 	__le32 id;
+ 	__le32 flags;
+ 	u8 data[sizeof_field(struct canfd_frame, data)];
 -- 
-2.25.1
+2.35.1
 

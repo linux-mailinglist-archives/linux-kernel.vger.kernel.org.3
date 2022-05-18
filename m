@@ -2,193 +2,471 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC07552B23B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A0352B25A
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 08:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiERGVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 02:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
+        id S231276AbiERGZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 02:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiERGVv (ORCPT
+        with ESMTP id S231266AbiERGY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 02:21:51 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEF422B02
-        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1652854906; x=1684390906;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=4vlYyd/sIzvnoYwTdsns4DVmmOHQLwL1K01cfx1B6ls=;
-  b=pyjXP2a+HgSPnWAkaC/1Rc9bDPWIN0xdbjwk/al1QKGWyWakMkRmF4kw
-   CAowuEemxE93RvFLKufWmNn8M3Iy2BAP5c0CBAp2QQBPz1LFdqXy0rO/S
-   Gv3K2b38QGdLy+o2Pf4O4pqe2cL7tT5mec0X3XpesE99u0U7iDK/VdhaH
-   0+CVlFO78t/TrsHIuXLZFNHCbvjXeUYsR/n7mAY78h4nB4pX8vNYozHjK
-   otHIePI7m4uYr7YNhse48c5aQ+JcD29GVIjenY1WRl4OCF/cxiRQ/wulV
-   0ZNmgo9iHcTTKC56jcWwcZdaHhisusRS09Y9rMiHdCdZ8eL4HLHRkfLyU
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="156506894"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2022 23:21:45 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 17 May 2022 23:21:44 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Tue, 17 May 2022 23:21:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PeUCg+uYa64JCQohgCP5jM58E70RZO50I99n+Dex6YaPjYFxBd2vQTWlx3S23hj0Gervk8EDDfun8fpJ5uMiljI4co+r7VLhEhi2KtusjiejsBeO74S5w4nsHefLeT/0+RzKXRtXX5mq7xgnAKu49UHhJHkrBJaePPy7G4dd9KdT5qSFCFUPrwqrbf2boscFBN5g9sbNn8awzyTLFCAN3IlwBuFNM27TXmc/fo/W/FIQUfxqOgiDis6uSvYghQQicDNlPaQuDOLmZH29k4yxjrL3S2SR31M6RuAorEWGPf5hxJfL2CA9gtZPSXB0lMd7D20zaHt98lKLuRuuCkH5TQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4vlYyd/sIzvnoYwTdsns4DVmmOHQLwL1K01cfx1B6ls=;
- b=T6XeY8GhsFKJTRwW6EOAMde1/8LDmp7rDrEWTwOh7pdUZ0JAJfD5cNb/+9tryV4VmXa1KjDx5oh7k+tGSDkYmMVNZboOyM/QwYl1gsVP+NGJOVk1hbqYkoIX1/uXoj+xoMH9vzc+1BuFuSOwZEatBJ4NmVeR560QSO9EqVJ5lTQkWo5RcixjOTLLSfPAftGoUf+ZVyybF3lgp7u+6/mg0XaDOxKdtU6iZx3jgqZF4IybXp0CKpek3oAuYAFLalsTsA11lZUBZeFzEvLJfOmSuiquVKYd338BYbEDRbBF6Bw0Zd1+kpWHKOKLnDSFInukcHVULyFo5AIjy+5gBzgCEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Wed, 18 May 2022 02:24:58 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D40D4104
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:24:56 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id bx33so1283984ljb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 17 May 2022 23:24:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4vlYyd/sIzvnoYwTdsns4DVmmOHQLwL1K01cfx1B6ls=;
- b=dPK20Ilg0kI0EK5wgClwDtAz8fpnLuz7rukJovnd5Kz5SSPib3t+J5JVtNd5zvlPEyilKjVPZN16ZuzpD1XNlDnFCmcpxVOXaXcHHPTArKu9xromqw7uoi3vHfvgufrndCocAVsqXLrZf1Z5ZTM2v1L3wQr/7ZDylPorP7F+zDU=
-Received: from DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) by
- MWHPR11MB1421.namprd11.prod.outlook.com (2603:10b6:300:24::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5273.13; Wed, 18 May 2022 06:21:37 +0000
-Received: from DM4PR11MB6479.namprd11.prod.outlook.com
- ([fe80::5bf:6242:720a:9a19]) by DM4PR11MB6479.namprd11.prod.outlook.com
- ([fe80::5bf:6242:720a:9a19%6]) with mapi id 15.20.5250.018; Wed, 18 May 2022
- 06:21:37 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <peda@axentia.se>, <regressions@leemhuis.info>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>
-CC:     <du@axentia.se>, <Patrice.Vilchez@microchip.com>,
-        <Cristian.Birsan@microchip.com>, <Ludovic.Desroches@microchip.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <gregkh@linuxfoundation.org>, <saravanak@google.com>
-Subject: Re: Regression: memory corruption on Atmel SAMA5D31
-Thread-Topic: Regression: memory corruption on Atmel SAMA5D31
-Thread-Index: AQHYL7i/by/02n1wA0qavxdAEojSfw==
-Date:   Wed, 18 May 2022 06:21:36 +0000
-Message-ID: <14e5ccbe-8275-c316-e3e1-f77461309249@microchip.com>
-References: <13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se>
- <7edb467a-c8b4-fe29-9947-f71c655caa9f@axentia.se>
- <8484ce66-639c-03f5-c5db-3574ea26690c@microchip.com>
- <075a196f-79c2-0d58-15f9-ad5e33e2306b@axentia.se>
- <3beb80ad-d6f8-8c6a-e17d-e40a644bba07@microchip.com>
- <e47c155a-f25d-11b3-3339-b2bf71b886ce@microchip.com>
- <9e24034e-f586-a721-9031-179601a69abb@axentia.se>
- <7214ea3d-1445-c0fb-2620-cdc3d6167bcc@axentia.se>
- <b5c57978-212f-55c4-2f0b-b38a8f157ca3@microchip.com>
- <a024180a-493c-af20-0910-da30dd5fe364@axentia.se>
- <6d9561a4-39e4-3dbe-5fe2-c6f88ee2a4c6@axentia.se>
- <ed24a281-1790-8e24-5f5a-25b66527044b@microchip.com>
- <d563c7ba-6431-2639-9f2a-2e2c6788e625@axentia.se>
- <e5a715c5-ad9f-6fd4-071e-084ab950603e@microchip.com>
- <220ddbef-5592-47b7-5150-4291f9532c6d@axentia.se>
- <6ad73fa2-0ebb-1e96-a45a-b70faca623dd@axentia.se>
- <0879d887-6558-bb9f-a1b9-9220be984380@leemhuis.info>
- <4a1e8827-1ff0-4034-d96e-f561508df432@microchip.com>
- <1a398441-c901-2dae-679e-f0b5b1c43b18@axentia.se>
-In-Reply-To: <1a398441-c901-2dae-679e-f0b5b1c43b18@axentia.se>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 451d9fee-e06d-4ef2-76e4-08da3896a9b7
-x-ms-traffictypediagnostic: MWHPR11MB1421:EE_
-x-microsoft-antispam-prvs: <MWHPR11MB14216F3FA322EA7A652AAB3BF0D19@MWHPR11MB1421.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Yq/uc+gIauinu1D+6dyoc15Boea9QSA7CUslKf1yeasl4FEIM8jdQnyElLprY+J1+UfNGEQIG3mJCDisb4HuJuV4uvS2Vu0AgE1wuSajrU/QBH6UXtsed0QHDWIeiVQYha0O1xV8bXUll1BaDN0q2jTUc1i6Cc7gbhUJIHVcklHaNZd6feRbAsKGacWuPHYSEG9dQOlFTuvvW5NxYG60ci9zPBM7WTXG92V3e+/cxBNykUVAlLrXeiuzMQ3uDHyhqPWOQjhVBzqfM81U1bAstECqBEozUbmX53TZuzoYGf0LmEpUPZoNC5YFo4zciZ3a9hCgCOKhTarkv+SMdB9Wh/VdsyXgrG6ykyU7pc5byTBHrQFHk12pLN/K/CrhnVyPEPsmmb3sUIuV6ECMn8bJ6OZbzoSNxbe399IZ3eILTY1N44hUhgYfD+6v/cdJq2dyoTRqaRiQ6wdi7hPGy3307RS0tBDLBPG+KvLaAHqoOBltXJaAzqfn4YTjcPmJ1brNR7ud6Sy62986/gaacgwaxwR4MBxVT+GQjm6mhIgdyHC9uuXYzapWk2UDGVo6vs3wxu+N4MmjARuEkRmUz1BcS27X/QMOkFa/kQ2F0fZu+ahK0ShJ6WXBz4U0f4d4sOuQzbZ28hRjDfGEpTx8QP0mMdEDsa6SNWat2k8cZOIe/wJCnhh9IDbs1wttvJEr196QLyRYNtCh39oluCCCwBzB51MFp4aFDBG6mlCeMkvOvl0rkewlBMzg7HqFPWhNO8lWOpg2WbO0T796FTd+g5CHGA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6479.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(86362001)(31696002)(5660300002)(54906003)(8936002)(76116006)(66946007)(66556008)(110136005)(186003)(6512007)(4326008)(8676002)(508600001)(6486002)(4744005)(64756008)(66476007)(66446008)(91956017)(6506007)(316002)(53546011)(36756003)(38100700002)(71200400001)(122000001)(38070700005)(31686004)(2906002)(26005)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NkUvL2ZjMEwyUlp5RHVnQUpJc1hvSGdkL3pUS0YyTm5BVU14cWpDKy9VM2Zy?=
- =?utf-8?B?dXVlTmFvVTJmeUt6RFdlSUhsS2J6M2E3NmFpZHZnVElFbXBDaGNBM3BFQlFl?=
- =?utf-8?B?eTV6ckdZVFZHWjE5WEMyWWtYOWhIaCtZUHdocEg0Y2NGU0wrQjFQNUcxWE5G?=
- =?utf-8?B?ZW8rc0ZIam1tT1IvY21tNEZJRHNhTytWazZpamVWZ2Fabkl2bmttUVJEVVY5?=
- =?utf-8?B?c1dXbVZyUTdodk1uUWhQWFhXR1V0enFEeTFiNzFZeG5WbzIySDdmZlNISk40?=
- =?utf-8?B?cjhpeUtHYWZzNktnM0lyR1lSZ0lJTHZEem1SYkFweXJxQXlqNyttY1pOR3Bi?=
- =?utf-8?B?UVdmSHJGcklkZTZjVzFCVG4yelV5RTZvcmJxY1RpN05JZ1RzOGtPRlB5UEg5?=
- =?utf-8?B?MkNUclR4WEl5a1BoelJFWXBDVW8xY3cxNDhnOGI3Smd2RTBzdEx3SVBPdlNp?=
- =?utf-8?B?QUJwWCttdk5WQU8veUt5dGpFdmhUL204WmhrWUZLZE5TaUJvQWVzVHJzS3Nv?=
- =?utf-8?B?MFZOQXprN3U3cENzVmhpenFDOTB6d09jeVdKTVFsYXBIaUZTdUlBbXNQWlZO?=
- =?utf-8?B?U0pESDMwQlBkb1ZlTzc0dVBwaHkxczVkSnkzczN2Z2pOcEloakNQK1hPUTJh?=
- =?utf-8?B?dmJYYVlkekxidm9GYUpGV0dMaUNyVkRRMVVnS2ZoN0FBMk9hQXpuSmpqTndp?=
- =?utf-8?B?MkkyT1NBWkVoNURLM3dEWHFQYjJ4OHQ1Zk0rWXVMVGE5OXpObWRYVUptREk4?=
- =?utf-8?B?dEYyZDZUZGxEblZxZ0dhc3VLKy9JNjVudStiTEVsR1hRN0hlMzlac2ZsUVdT?=
- =?utf-8?B?WGhLbFhvNDVLUlcwaVF3SXZXMnRnaE5WUllDeXI0R2Y5RHNKMXNEQ2pITUt2?=
- =?utf-8?B?bithekNuTkN2SEtQd3ZmNm5kMVQwcTFkUUJEVDVIN09HY2pmT0QyM1p5RzFG?=
- =?utf-8?B?RkwvUTZObEhGd3psMWlaaTN0UUJHL0cvenRXTG5QNUh0NzFIVDRINTc4TUls?=
- =?utf-8?B?UW1tUmJDY1p4U2RsSUQvM1NTTVlJeWZnV0MxQVdNZ2FtMkRkWGt3WFhwU0Yy?=
- =?utf-8?B?UUJwK2c2Nk1HOTFRTTR0SjU4ZDBGREkxckhPd1lLTDFYSnNIbkVVV1JyR2E4?=
- =?utf-8?B?eUY3VkJOcWRiVlJDYjZXVTZDZWhFdlBrSlBqWnpSdlpEd09ib2QwT2R3dDRF?=
- =?utf-8?B?S0hBaGd3UnVrQnVVdUc1S1A2Ri9Gc1hxYVBxYzlOcVFUT2lXcU00VEtOT3FS?=
- =?utf-8?B?WElab2xmcVR1a1A4MHFDdGdBOWpoZzRWSFZ1NlgvSUNpa1FGblRGRDhPYTJu?=
- =?utf-8?B?SlUxM3VHR2tLRkRWeTJRaS9QZDhuZGdvSUhNajNTOXJoVkdZc1BWYlNzKzRy?=
- =?utf-8?B?TXdTQ0EyRkY5My9jNDhmUXhIeXpXK0hQNEVRdEFzczkraGRjdTBSSG5ZZXdj?=
- =?utf-8?B?QTBxb2hDUEpmU1drelFIMllZd2tkRGZRczRnNnhCeENxL214OFVNQndTcmN4?=
- =?utf-8?B?QVREaisyNjVWdnRIU2ZYb3hrczBnOHVnV1UrZ3dNR3hIWGdVbjYxdmx1WkxW?=
- =?utf-8?B?eU03VlpQeGxBWlE3YzZUb2VHNURzbXAwK05mSzdib1EzaGd4ZWRncFdFV2JM?=
- =?utf-8?B?QUNVOStaQ1I4Nzl1M0pVbllSMkx0Vm9odTNJdlRydDl0VUhIMmVCZ25PVGhF?=
- =?utf-8?B?S1dIc0d6Nk1WM0FnQm14VWwyMnJTaHoyajk5RlRwZmZOVGZVSFo1V0c0NDR4?=
- =?utf-8?B?eWtpQUthc21wT3lVWjhYWlNnRm1tZExLT3dCMWl6ditZUEcyZklBc0lpNE9M?=
- =?utf-8?B?SEZPaHRvSkRVMnIwWFJvQnhueDFaUGthVThkLzM3cDNFQlAxZDg5SytxQ0tp?=
- =?utf-8?B?cWlNMDhER202enhJVWNCVWtlR1JJU3g1WWRvUlBtejlKV1p5Slo3SUt0Wklm?=
- =?utf-8?B?UDYvQklkS1NaRlI5bDNOK01FZlVHak5iT1E0bjVNQk5VOG9NUG1XZDJDaWdK?=
- =?utf-8?B?L3Y3S3p1dW9saEhMekQya2J3dUV6b21JTEdCTGJhUFNtNjQvaDZmemFNQmt4?=
- =?utf-8?B?NWYxb1dFdHQxOWxFMHNUdHBOYjZ0bXZYTDlzL013bjZ4RHFnNDNqWlFVUTdS?=
- =?utf-8?B?ZEtqZE8vL3ZLdVBTZXNpNDZFZG4xRkp4RXlxRDVkRGw2cTIzUUtlYmFVemV3?=
- =?utf-8?B?N3lRZUlqck85bzVFdmdRS09QZlFuOUUxMEh1Wm9XR1JlY01pektWYm1Sa3Rs?=
- =?utf-8?B?NlNqU2pTQjg4WEdWMlVNUlpNbTVkWmVUUlEyYXA0Q0VOK0Y4eHZ1NVJSTkMr?=
- =?utf-8?B?V0p4WGJyRStZei9yQkdtTWwrZ1RDMjg3emkwalJkYTBYQ085dW9nYUhmVis1?=
- =?utf-8?Q?1yWHdX1jRXW5Jiog=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F501E830847C934D877093C5FC478B5F@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:reply-to:content-transfer-encoding;
+        bh=Ewk55++Gp6T3M6fiW+YquVxP2Y8LxYJuTsNlyW8yg58=;
+        b=y5TZgbNXfIKFhAeTtAb0TIQmSB0lf7vl88Yz/NTIT1eQVb7lZDFQgK1EebJik0Nq11
+         vmR6wmium6CKW3e0CQFmWkHt8H5fXw2XagvCt80A3cZqfNNGh+lKG8yyTw5tiOo/qMTD
+         Wg3f+d3fAyWSTY/a5k8fGtMbBR1iLmQ73WAYgc98A81sTu0BarkhFdvxwllAmBZ+VugB
+         Jxo04Mi7cQg77UNLfc1xagyWqJ6WSzyzQ3FVKlidx23pTZ1olXBZ+3uzSrpJZPIUQu1X
+         KlmdC27Ed86qEDObW84moEABAyTSdZlJfcn8C8PWitr5hRELqwfak1hkReNUKDfoElZl
+         9h+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:reply-to:content-transfer-encoding;
+        bh=Ewk55++Gp6T3M6fiW+YquVxP2Y8LxYJuTsNlyW8yg58=;
+        b=ZSUGlSTSlkvVQgoPoqy+7pqiQ2v4I4iCBou1VazVEUe4nxrlccG3glKdeAJ8yDjXeO
+         gAUanHM7Sx7SsffPoz3eTidSREHV5o2yopa+sxgqja1pxRqCivxsPypQHQ7PVJOnMpnK
+         5i1uDczx10lcZrW8dvNvQ8VtVxOLFSndQCwMkPLVROFNuF57yXKGj0+PE2zYzmFibe72
+         aay1ehz7eHzKUDv0Ea3lkfUNipWR//w1KBRgQvSGf5wEPA12Ch1dq1DUizMPuUNb5ghR
+         ya2QYZK2DsY4E3X9gY2VcC5JM19TR86lrlf3ejDMNKszandCu++DVPMNe+mt4CRZ5Zll
+         VTcA==
+X-Gm-Message-State: AOAM530OhLi13jM+TYCR+p+4o2YmslpcuSxb0BGPFkK0Bttu+1GTBLgW
+        txXGaEEeixmtw8H/vtqOYv3P3Q==
+X-Google-Smtp-Source: ABdhPJwye7N4TdFIN8h49zvhWdAJKKNU8LM9HWhLYiE44Mgc4w/96poV4HI+BcjSuLzlQgwebeB9Vg==
+X-Received: by 2002:a05:651c:4cb:b0:24f:5201:b2ca with SMTP id e11-20020a05651c04cb00b0024f5201b2camr15854605lji.173.1652855094566;
+        Tue, 17 May 2022 23:24:54 -0700 (PDT)
+Received: from [192.168.43.196] ([185.174.128.243])
+        by smtp.gmail.com with ESMTPSA id q17-20020a2e7511000000b0024f3d1daed1sm107627ljc.89.2022.05.17.23.24.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 23:24:54 -0700 (PDT)
+Message-ID: <f6625cd8-90f9-6d48-50f6-7bb052bf479f@openvz.org>
+Date:   Wed, 18 May 2022 09:24:51 +0300
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6479.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 451d9fee-e06d-4ef2-76e4-08da3896a9b7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2022 06:21:36.9344
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hZSJXesg+ykbteIjrkBDQyhp9glUXB31Ttnoldxs+QYNVE2JxRZyUi21vXzua7PwR/1Hh0O/geC7XqU/2vYRWKvuSQmNJjUUCoHDZ8jS3Iw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1421
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH v3] tracing: add 'accounted' entry into output of allocation
+ tracepoints
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Michal Hocko <mhocko@suse.com>
+Content-Language: en-US
+Reply-To: YoPOhRctb8wwbmY5@carbon
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gNS8xNy8yMiAxNzo1MCwgUGV0ZXIgUm9zaW4gd3JvdGU6DQo+IEVYVEVSTkFMIEVNQUlMOiBE
-byBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhl
-IGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gMjAyMi0wNC0xMSBhdCAwODoyMSwgVHVkb3IuQW1iYXJ1
-c0BtaWNyb2NoaXAuY29tIHdyb3RlOg0KPj4gVGhlcmUgYXJlIHNvbWUgY29uY3VycmVuY3kgYnVn
-cyBpbiB0aGUgYXQtaGRtYWMgKERNQSkgZHJpdmVyLCBJJ20gaGFuZGxpbmcgdGhlbQ0KPj4gYW5k
-IHdpbGwgY29tZSB3aXRoIGEgcmVzb2x1dGlvbi4gRGlzYWJsaW5nIHRoZSBETUEgc2hvd2VkIHRo
-ZSBidWcgaXMgbm8gbW9yZQ0KPj4gcmVwcm9kdWNpYmxlLg0KPiANCj4gQW55IG5ld3M/DQo+IA0K
-DQpJJ20gbm93IGFsbG9jYXRlZCBvbiB0aGlzLCBzbyBJIHN0YXJ0ZWQgbG9va2luZyBhcm91bmQg
-d2hhdCBoYXMgdG8gYmUgZG9uZS4NCkknbSB0aGlua2luZyBvZiB1c2luZyB2aXJ0LWRtYSB0byBt
-YW5hZ2UgdGhlIGNoYW5uZWxzIGFuZCB0aGUgcmVxdWVzdCBxdWV1ZXMuDQpXaWxsIGdldCBiYWNr
-IHRvIHlvdSBhZnRlciBJJ2xsIGhhdmUgc29tZXRoaW5nIHdvcmtpbmcuDQoNCkNoZWVycywNCnRh
-DQo=
+Slab caches marked with SLAB_ACCOUNT force accounting for every
+allocation from this cache even if __GFP_ACCOUNT flag is not passed.
+Unfortunately, at the moment this flag is not visible in ftrace output,
+and this makes it difficult to analyze the accounted allocations.
+
+This patch adds boolean "allocated" entry into trace output,
+and set it to 'true' for calls used __GFP_ACCOUNT flag and
+for allocations from caches marked with SLAB_ACCOUNT.
+
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+v3:
+ 1) rework kmem_cache_alloc* tracepoints once again,
+    added struct kmem_cache argument into existing templates,
+	thanks to Matthew Wilcox
+ 2) updated the corresponding ding trace_* calls
+ 3) added boolean "allocated" entry into trace output,
+	thanks to Roman
+ 4) updated patch subject and description
+
+v2:
+ 1) handle kmem_cache_alloc_node(), thanks to Shakeel
+ 2) rework kmem_cache_alloc* tracepoints to use cachep instead
+    of current cachep->*size parameters.
+    NB: kmem_cache_alloc_node tracepoint in SLOB cannot use cachep,
+        and therefore it was replaced by kmalloc_node.
+---
+Now kmem tracing output looks like this:
+
+kmem_cache_alloc:     (getname_flags.part.0+0x2c) call_site=getname_flags.part.0+0x2c ptr=0xffff8fff022e9000 bytes_req=4096 bytes_alloc=4096 gfp_flags=GFP_KERNEL accounted=false
+kmalloc:              (alloc_bprm+0x32) call_site=alloc_bprm+0x32 ptr=0xffff8fff2b408a00 bytes_req=416 bytes_alloc=512 gfp_flags=GFP_KERNEL|__GFP_ZERO accounted=false
+kmem_cache_alloc:     (mm_alloc+0x16) call_site=mm_alloc+0x16 ptr=0xffff8fff0894d500 bytes_req=1048 bytes_alloc=1088 gfp_flags=GFP_KERNEL accounted=true
+mm_page_alloc:        page=0xffffffffa4ab8d42 pfn=0x12ad72 order=1 migratetype=0 gfp_flags=GFP_USER|__GFP_ZERO|__GFP_ACCOUNT
+kmem_cache_alloc:     (vm_area_alloc+0x1a) call_site=vm_area_alloc+0x1a ptr=0xffff8fff2af27000 bytes_req=200 bytes_alloc=200 gfp_flags=GFP_KERNEL accounted=true
+---
+ include/trace/events/kmem.h | 38 +++++++++++++++++++++++--------------
+ mm/slab.c                   | 10 +++++-----
+ mm/slab_common.c            |  9 ++++-----
+ mm/slob.c                   |  8 ++++----
+ mm/slub.c                   | 20 +++++++++----------
+ 5 files changed, 47 insertions(+), 38 deletions(-)
+
+diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
+index 71c141804222..5bfeb6f276f1 100644
+--- a/include/trace/events/kmem.h
++++ b/include/trace/events/kmem.h
+@@ -13,11 +13,12 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+ 
+ 	TP_PROTO(unsigned long call_site,
+ 		 const void *ptr,
++		 struct kmem_cache *s,
+ 		 size_t bytes_req,
+ 		 size_t bytes_alloc,
+ 		 gfp_t gfp_flags),
+ 
+-	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags),
++	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(	unsigned long,	call_site	)
+@@ -25,6 +26,7 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+ 		__field(	size_t,		bytes_req	)
+ 		__field(	size_t,		bytes_alloc	)
+ 		__field(	unsigned long,	gfp_flags	)
++		__field(	bool,		accounted	)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -33,42 +35,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+ 		__entry->bytes_req	= bytes_req;
+ 		__entry->bytes_alloc	= bytes_alloc;
+ 		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
++		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
++					  (s && s->flags & SLAB_ACCOUNT);
+ 	),
+ 
+-	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
++	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s accounted=%s",
+ 		(void *)__entry->call_site,
+ 		__entry->ptr,
+ 		__entry->bytes_req,
+ 		__entry->bytes_alloc,
+-		show_gfp_flags(__entry->gfp_flags))
++		show_gfp_flags(__entry->gfp_flags),
++		__entry->accounted ? "true" : "false")
+ );
+ 
+ DEFINE_EVENT(kmem_alloc, kmalloc,
+ 
+-	TP_PROTO(unsigned long call_site, const void *ptr,
++	TP_PROTO(unsigned long call_site, const void *ptr, struct kmem_cache *s,
+ 		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
+ 
+-	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
++	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags)
+ );
+ 
+ DEFINE_EVENT(kmem_alloc, kmem_cache_alloc,
+ 
+-	TP_PROTO(unsigned long call_site, const void *ptr,
++	TP_PROTO(unsigned long call_site, const void *ptr, struct kmem_cache *s,
+ 		 size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags),
+ 
+-	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags)
++	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags)
+ );
+ 
+ DECLARE_EVENT_CLASS(kmem_alloc_node,
+ 
+ 	TP_PROTO(unsigned long call_site,
+ 		 const void *ptr,
++		 struct kmem_cache *s,
+ 		 size_t bytes_req,
+ 		 size_t bytes_alloc,
+ 		 gfp_t gfp_flags,
+ 		 int node),
+ 
+-	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node),
++	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node),
+ 
+ 	TP_STRUCT__entry(
+ 		__field(	unsigned long,	call_site	)
+@@ -77,6 +83,7 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
+ 		__field(	size_t,		bytes_alloc	)
+ 		__field(	unsigned long,	gfp_flags	)
+ 		__field(	int,		node		)
++		__field(	bool,		accounted	)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -86,33 +93,36 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
+ 		__entry->bytes_alloc	= bytes_alloc;
+ 		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
+ 		__entry->node		= node;
++		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
++					  (s && s->flags & SLAB_ACCOUNT);
+ 	),
+ 
+-	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d",
++	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d accounted=%s",
+ 		(void *)__entry->call_site,
+ 		__entry->ptr,
+ 		__entry->bytes_req,
+ 		__entry->bytes_alloc,
+ 		show_gfp_flags(__entry->gfp_flags),
+-		__entry->node)
++		__entry->node,
++		__entry->accounted ? "true" : "false")
+ );
+ 
+ DEFINE_EVENT(kmem_alloc_node, kmalloc_node,
+ 
+ 	TP_PROTO(unsigned long call_site, const void *ptr,
+-		 size_t bytes_req, size_t bytes_alloc,
++		 struct kmem_cache *s, size_t bytes_req, size_t bytes_alloc,
+ 		 gfp_t gfp_flags, int node),
+ 
+-	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
++	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node)
+ );
+ 
+ DEFINE_EVENT(kmem_alloc_node, kmem_cache_alloc_node,
+ 
+ 	TP_PROTO(unsigned long call_site, const void *ptr,
+-		 size_t bytes_req, size_t bytes_alloc,
++		 struct kmem_cache *s, size_t bytes_req, size_t bytes_alloc,
+ 		 gfp_t gfp_flags, int node),
+ 
+-	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags, node)
++	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags, node)
+ );
+ 
+ TRACE_EVENT(kfree,
+diff --git a/mm/slab.c b/mm/slab.c
+index 0edb474edef1..e5802445c7d6 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -3492,7 +3492,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *cachep, struct list_lru *lru,
+ {
+ 	void *ret = slab_alloc(cachep, lru, flags, cachep->object_size, _RET_IP_);
+ 
+-	trace_kmem_cache_alloc(_RET_IP_, ret,
++	trace_kmem_cache_alloc(_RET_IP_, ret, cachep,
+ 			       cachep->object_size, cachep->size, flags);
+ 
+ 	return ret;
+@@ -3581,7 +3581,7 @@ kmem_cache_alloc_trace(struct kmem_cache *cachep, gfp_t flags, size_t size)
+ 	ret = slab_alloc(cachep, NULL, flags, size, _RET_IP_);
+ 
+ 	ret = kasan_kmalloc(cachep, ret, size, flags);
+-	trace_kmalloc(_RET_IP_, ret,
++	trace_kmalloc(_RET_IP_, ret, cachep,
+ 		      size, cachep->size, flags);
+ 	return ret;
+ }
+@@ -3606,7 +3606,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *cachep, gfp_t flags, int nodeid)
+ {
+ 	void *ret = slab_alloc_node(cachep, flags, nodeid, cachep->object_size, _RET_IP_);
+ 
+-	trace_kmem_cache_alloc_node(_RET_IP_, ret,
++	trace_kmem_cache_alloc_node(_RET_IP_, ret, cachep,
+ 				    cachep->object_size, cachep->size,
+ 				    flags, nodeid);
+ 
+@@ -3625,7 +3625,7 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
+ 	ret = slab_alloc_node(cachep, flags, nodeid, size, _RET_IP_);
+ 
+ 	ret = kasan_kmalloc(cachep, ret, size, flags);
+-	trace_kmalloc_node(_RET_IP_, ret,
++	trace_kmalloc_node(_RET_IP_, ret, cachep,
+ 			   size, cachep->size,
+ 			   flags, nodeid);
+ 	return ret;
+@@ -3708,7 +3708,7 @@ static __always_inline void *__do_kmalloc(size_t size, gfp_t flags,
+ 	ret = slab_alloc(cachep, NULL, flags, size, caller);
+ 
+ 	ret = kasan_kmalloc(cachep, ret, size, flags);
+-	trace_kmalloc(caller, ret,
++	trace_kmalloc(caller, ret, cachep,
+ 		      size, cachep->size, flags);
+ 
+ 	return ret;
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 2b3206a2c3b5..a345e8600e00 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -25,13 +25,12 @@
+ #include <asm/page.h>
+ #include <linux/memcontrol.h>
+ 
+-#define CREATE_TRACE_POINTS
+-#include <trace/events/kmem.h>
+-
+ #include "internal.h"
+-
+ #include "slab.h"
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/kmem.h>
++
+ enum slab_state slab_state;
+ LIST_HEAD(slab_caches);
+ DEFINE_MUTEX(slab_mutex);
+@@ -967,7 +966,7 @@ EXPORT_SYMBOL(kmalloc_order);
+ void *kmalloc_order_trace(size_t size, gfp_t flags, unsigned int order)
+ {
+ 	void *ret = kmalloc_order(size, flags, order);
+-	trace_kmalloc(_RET_IP_, ret, size, PAGE_SIZE << order, flags);
++	trace_kmalloc(_RET_IP_, ret, NULL, size, PAGE_SIZE << order, flags);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(kmalloc_order_trace);
+diff --git a/mm/slob.c b/mm/slob.c
+index 40ea6e2d4ccd..dbefa0da0dfc 100644
+--- a/mm/slob.c
++++ b/mm/slob.c
+@@ -505,7 +505,7 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
+ 		*m = size;
+ 		ret = (void *)m + minalign;
+ 
+-		trace_kmalloc_node(caller, ret,
++		trace_kmalloc_node(caller, ret, NULL,
+ 				   size, size + minalign, gfp, node);
+ 	} else {
+ 		unsigned int order = get_order(size);
+@@ -514,7 +514,7 @@ __do_kmalloc_node(size_t size, gfp_t gfp, int node, unsigned long caller)
+ 			gfp |= __GFP_COMP;
+ 		ret = slob_new_pages(gfp, order, node);
+ 
+-		trace_kmalloc_node(caller, ret,
++		trace_kmalloc_node(caller, ret, NULL,
+ 				   size, PAGE_SIZE << order, gfp, node);
+ 	}
+ 
+@@ -610,12 +610,12 @@ static void *slob_alloc_node(struct kmem_cache *c, gfp_t flags, int node)
+ 
+ 	if (c->size < PAGE_SIZE) {
+ 		b = slob_alloc(c->size, flags, c->align, node, 0);
+-		trace_kmem_cache_alloc_node(_RET_IP_, b, c->object_size,
++		trace_kmem_cache_alloc_node(_RET_IP_, b, NULL, c->object_size,
+ 					    SLOB_UNITS(c->size) * SLOB_UNIT,
+ 					    flags, node);
+ 	} else {
+ 		b = slob_new_pages(flags, get_order(c->size), node);
+-		trace_kmem_cache_alloc_node(_RET_IP_, b, c->object_size,
++		trace_kmem_cache_alloc_node(_RET_IP_, b, NULL, c->object_size,
+ 					    PAGE_SIZE << get_order(c->size),
+ 					    flags, node);
+ 	}
+diff --git a/mm/slub.c b/mm/slub.c
+index ed5c2c03a47a..9b10591646dd 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3231,7 +3231,7 @@ void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
+ {
+ 	void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
+ 
+-	trace_kmem_cache_alloc(_RET_IP_, ret, s->object_size,
++	trace_kmem_cache_alloc(_RET_IP_, ret, s, s->object_size,
+ 				s->size, gfpflags);
+ 
+ 	return ret;
+@@ -3254,7 +3254,7 @@ EXPORT_SYMBOL(kmem_cache_alloc_lru);
+ void *kmem_cache_alloc_trace(struct kmem_cache *s, gfp_t gfpflags, size_t size)
+ {
+ 	void *ret = slab_alloc(s, NULL, gfpflags, _RET_IP_, size);
+-	trace_kmalloc(_RET_IP_, ret, size, s->size, gfpflags);
++	trace_kmalloc(_RET_IP_, ret, s, size, s->size, gfpflags);
+ 	ret = kasan_kmalloc(s, ret, size, gfpflags);
+ 	return ret;
+ }
+@@ -3266,7 +3266,7 @@ void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t gfpflags, int node)
+ {
+ 	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, s->object_size);
+ 
+-	trace_kmem_cache_alloc_node(_RET_IP_, ret,
++	trace_kmem_cache_alloc_node(_RET_IP_, ret, s,
+ 				    s->object_size, s->size, gfpflags, node);
+ 
+ 	return ret;
+@@ -3280,7 +3280,7 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *s,
+ {
+ 	void *ret = slab_alloc_node(s, NULL, gfpflags, node, _RET_IP_, size);
+ 
+-	trace_kmalloc_node(_RET_IP_, ret,
++	trace_kmalloc_node(_RET_IP_, ret, s,
+ 			   size, s->size, gfpflags, node);
+ 
+ 	ret = kasan_kmalloc(s, ret, size, gfpflags);
+@@ -4409,7 +4409,7 @@ void *__kmalloc(size_t size, gfp_t flags)
+ 
+ 	ret = slab_alloc(s, NULL, flags, _RET_IP_, size);
+ 
+-	trace_kmalloc(_RET_IP_, ret, size, s->size, flags);
++	trace_kmalloc(_RET_IP_, ret, s, size, s->size, flags);
+ 
+ 	ret = kasan_kmalloc(s, ret, size, flags);
+ 
+@@ -4443,7 +4443,7 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
+ 	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+ 		ret = kmalloc_large_node(size, flags, node);
+ 
+-		trace_kmalloc_node(_RET_IP_, ret,
++		trace_kmalloc_node(_RET_IP_, ret, NULL,
+ 				   size, PAGE_SIZE << get_order(size),
+ 				   flags, node);
+ 
+@@ -4457,7 +4457,7 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
+ 
+ 	ret = slab_alloc_node(s, NULL, flags, node, _RET_IP_, size);
+ 
+-	trace_kmalloc_node(_RET_IP_, ret, size, s->size, flags, node);
++	trace_kmalloc_node(_RET_IP_, ret, s, size, s->size, flags, node);
+ 
+ 	ret = kasan_kmalloc(s, ret, size, flags);
+ 
+@@ -4916,7 +4916,7 @@ void *__kmalloc_track_caller(size_t size, gfp_t gfpflags, unsigned long caller)
+ 	ret = slab_alloc(s, NULL, gfpflags, caller, size);
+ 
+ 	/* Honor the call site pointer we received. */
+-	trace_kmalloc(caller, ret, size, s->size, gfpflags);
++	trace_kmalloc(caller, ret, s, size, s->size, gfpflags);
+ 
+ 	return ret;
+ }
+@@ -4932,7 +4932,7 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
+ 	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+ 		ret = kmalloc_large_node(size, gfpflags, node);
+ 
+-		trace_kmalloc_node(caller, ret,
++		trace_kmalloc_node(caller, ret, NULL,
+ 				   size, PAGE_SIZE << get_order(size),
+ 				   gfpflags, node);
+ 
+@@ -4947,7 +4947,7 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
+ 	ret = slab_alloc_node(s, NULL, gfpflags, node, caller, size);
+ 
+ 	/* Honor the call site pointer we received. */
+-	trace_kmalloc_node(caller, ret, size, s->size, gfpflags, node);
++	trace_kmalloc_node(caller, ret, s, size, s->size, gfpflags, node);
+ 
+ 	return ret;
+ }
+-- 
+2.31.1
+

@@ -2,56 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D0952B35D
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D81352B38F
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232132AbiERHVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S232254AbiERHej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbiERHVW (ORCPT
+        with ESMTP id S232249AbiERHeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:21:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5686811A31;
-        Wed, 18 May 2022 00:21:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E81816125B;
-        Wed, 18 May 2022 07:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FAD9C385A5;
-        Wed, 18 May 2022 07:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652858480;
-        bh=Z2Hthqp8KamMwaRyOnQgeWg8sKO8QHlR39SF4zKnXc4=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=nGZxLw/nb7pTaCGz5xDXtFkANXc7mb2cwz2A7XO0Wy57+RabREGGiM5RRSn5mLl/J
-         FL+7390d9tF1niOyIMVnO3S8rB9I1xoYzw/p+58sQttVtFWeZFaMDWKrpa2J0nyhFq
-         cPbpQLBnk/zwGOovIjiw0jyWz2f1IwOBciTzWJA59VJOk+VJyhxYhckmYGshhwChMG
-         mitv8g8ayQhIdlF7tMX3MGcRg+DfaJkZGuakcdP6sgDNSOyyCNwrGLFdj5aSA7qioq
-         vg376YiDQvlIceWdTPYs/Pa4rNP8dqMWqN5kAApXUH5SrVzSVArM+WE6o7vsI2jWKm
-         JgMTyUmiQXc7Q==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] ath11k: Fix pointer dereferenced before checking
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <1652671437-20235-1-git-send-email-baihaowen@meizu.com>
-References: <1652671437-20235-1-git-send-email-baihaowen@meizu.com>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        Haowen Bai <baihaowen@meizu.com>, <ath11k@lists.infradead.org>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <165285847598.17755.2700505085056283549.kvalo@kernel.org>
-Date:   Wed, 18 May 2022 07:21:17 +0000 (UTC)
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Wed, 18 May 2022 03:34:23 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE4DC9EC9;
+        Wed, 18 May 2022 00:34:21 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8FD2D1A0C9B;
+        Wed, 18 May 2022 09:34:20 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 587141A0CBC;
+        Wed, 18 May 2022 09:34:20 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id EEFF0180031F;
+        Wed, 18 May 2022 15:34:18 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     vkoul@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dmaengine: imx-sdma: Fix compile warning 'Function parameter not described'
+Date:   Wed, 18 May 2022 15:21:47 +0800
+Message-Id: <1652858507-12628-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,23 +43,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Haowen Bai <baihaowen@meizu.com> wrote:
+Fix compile warning that 'Function parameter or member not described'
+with 'W=1' option:
 
-> The pointer sspec is dereferencing pointer sar before sar is being
-> null checked. Fix this by assigning sar->sub_specs to sspec only if
-> sar is not NULL, otherwise just NULL. The code has checked sar whether
-> it is NULL or not as below, but use before checking.
-> 
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+There is no description for struct sdma_script_start_addrs, so use /*
+instead of /**
 
-I prefer Baochen's version:
+Add missed description for struct sdma_desc
 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220517004844.2412660-1-quic_bqiang@quicinc.com/
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ drivers/dma/imx-sdma.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Patch set to Superseded.
-
+diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
+index 95367a8a81a5..111beb7138e0 100644
+--- a/drivers/dma/imx-sdma.c
++++ b/drivers/dma/imx-sdma.c
+@@ -188,7 +188,7 @@
+ #define SDMA_DONE0_CONFIG_DONE_SEL	BIT(7)
+ #define SDMA_DONE0_CONFIG_DONE_DIS	BIT(6)
+ 
+-/**
++/*
+  * struct sdma_script_start_addrs - SDMA script start pointers
+  *
+  * start addresses of the different functions in the physical
+@@ -424,6 +424,11 @@ struct sdma_desc {
+  * @data:		specific sdma interface structure
+  * @bd_pool:		dma_pool for bd
+  * @terminate_worker:	used to call back into terminate work function
++ * @terminated:		terminated list
++ * @is_ram_script:	flag for script in ram
++ * @n_fifos_src:	number of source device fifos
++ * @n_fifos_dst:	number of destination device fifos
++ * @sw_done:		software done flag
+  */
+ struct sdma_channel {
+ 	struct virt_dma_chan		vc;
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/1652671437-20235-1-git-send-email-baihaowen@meizu.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+2.17.1
 

@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5A452B98A
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CE352BA28
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 14:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236338AbiERMNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 08:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S236437AbiERM1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 08:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236264AbiERMMt (ORCPT
+        with ESMTP id S236381AbiERM0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 08:12:49 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C374714B669;
-        Wed, 18 May 2022 05:12:39 -0700 (PDT)
-Received: from kwepemi100016.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L3BZQ49YlzCsjp;
-        Wed, 18 May 2022 20:07:42 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100016.china.huawei.com (7.221.188.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 18 May 2022 20:12:37 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 18 May
- 2022 20:12:36 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <josef@toxicpanda.com>, <axboe@kernel.dk>, <ming.lei@redhat.com>
-CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v2 3/6] nbd: don't clear 'NBD_CMD_INFLIGHT' flag if request is not completed
-Date:   Wed, 18 May 2022 20:26:15 +0800
-Message-ID: <20220518122618.1702997-4-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220518122618.1702997-1-yukuai3@huawei.com>
-References: <20220518122618.1702997-1-yukuai3@huawei.com>
+        Wed, 18 May 2022 08:26:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DCF6A025;
+        Wed, 18 May 2022 05:26:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0182361627;
+        Wed, 18 May 2022 12:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40075C34118;
+        Wed, 18 May 2022 12:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652876806;
+        bh=8QN6ZDxAXXalgKOCm82pX3l1ONLJOdJsMwDCWD9vdA4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hOUB6VALnL+eT0kOMTfwrGSsxnAS7UDByL5xy0WVQpCuQSGJKgINE7QXLk5seD2b5
+         2T3Qy5SMMF7avsZaFRzOAxYWycKPkl+WZi234p+3FVWvQqq/W0LVi2mLw0uFAJclNW
+         jJPq8ezD81iQ/cypWcpZGnQ6HbPn3agDTZQ5J65MbIs6+XQHTNHMFQr1nVzlEgt9Pz
+         r7nu+MWV445X4BeV2o5pzcpM5BB2OEECKv8zsuEzgs6DuIcYcVBX9KE0Zn1uKL+TKs
+         +FDDThpUy6dcvihqGg4RRZoKRw3pcJQx8o/mUUGjxNC4TLFPXQ5utn55/pA9bfbaA2
+         /Krncsbr0Kskg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Gleb Chesnokov <Chesnokov.G@raidix.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, njavali@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 02/23] scsi: qla2xxx: Fix missed DMA unmap for aborted commands
+Date:   Wed, 18 May 2022 08:26:15 -0400
+Message-Id: <20220518122641.342120-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220518122641.342120-1-sashal@kernel.org>
+References: <20220518122641.342120-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,71 +60,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Otherwise io will hung because request will only be completed if the
-cmd has the flag 'NBD_CMD_INFLIGHT'.
+From: Gleb Chesnokov <Chesnokov.G@raidix.com>
 
-Fixes: 07175cb1baf4 ("nbd: make sure request completion won't concurrent")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+[ Upstream commit 26f9ce53817a8fd84b69a73473a7de852a24c897 ]
+
+Aborting commands that have already been sent to the firmware can
+cause BUG in qlt_free_cmd(): BUG_ON(cmd->sg_mapped)
+
+For instance:
+
+ - Command passes rdx_to_xfer state, maps sgl, sends to the firmware
+
+ - Reset occurs, qla2xxx performs ISP error recovery, aborts the command
+
+ - Target stack calls qlt_abort_cmd() and then qlt_free_cmd()
+
+ - BUG_ON(cmd->sg_mapped) in qlt_free_cmd() occurs because sgl was not
+   unmapped
+
+Thus, unmap sgl in qlt_abort_cmd() for commands with the aborted flag set.
+
+Link: https://lore.kernel.org/r/AS8PR10MB4952D545F84B6B1DFD39EC1E9DEE9@AS8PR10MB4952.EURPRD10.PROD.OUTLOOK.COM
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Gleb Chesnokov <Chesnokov.G@raidix.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ drivers/scsi/qla2xxx/qla_target.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 2ee1e376d5c4..a0d0910dae2a 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -403,13 +403,14 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
- 	if (!mutex_trylock(&cmd->lock))
- 		return BLK_EH_RESET_TIMER;
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index b109716d44fb..7ab3c9e4d478 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -3837,6 +3837,9 @@ int qlt_abort_cmd(struct qla_tgt_cmd *cmd)
  
--	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
-+	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
- 		mutex_unlock(&cmd->lock);
- 		return BLK_EH_DONE;
- 	}
- 
- 	if (!refcount_inc_not_zero(&nbd->config_refs)) {
- 		cmd->status = BLK_STS_TIMEOUT;
-+		__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
- 		mutex_unlock(&cmd->lock);
- 		goto done;
- 	}
-@@ -478,6 +479,7 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
- 	dev_err_ratelimited(nbd_to_dev(nbd), "Connection timed out\n");
- 	set_bit(NBD_RT_TIMEDOUT, &config->runtime_flags);
- 	cmd->status = BLK_STS_IOERR;
-+	__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
- 	mutex_unlock(&cmd->lock);
- 	sock_shutdown(nbd);
- 	nbd_config_put(nbd);
-@@ -745,7 +747,7 @@ static struct nbd_cmd *nbd_handle_reply(struct nbd_device *nbd, int index,
- 	cmd = blk_mq_rq_to_pdu(req);
- 
- 	mutex_lock(&cmd->lock);
--	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
-+	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
- 		dev_err(disk_to_dev(nbd->disk), "Suspicious reply %d (status %u flags %lu)",
- 			tag, cmd->status, cmd->flags);
- 		ret = -ENOENT;
-@@ -854,8 +856,16 @@ static void recv_work(struct work_struct *work)
- 		}
- 
- 		rq = blk_mq_rq_from_pdu(cmd);
--		if (likely(!blk_should_fake_timeout(rq->q)))
--			blk_mq_complete_request(rq);
-+		if (likely(!blk_should_fake_timeout(rq->q))) {
-+			bool complete;
+ 	spin_lock_irqsave(&cmd->cmd_lock, flags);
+ 	if (cmd->aborted) {
++		if (cmd->sg_mapped)
++			qlt_unmap_sg(vha, cmd);
 +
-+			mutex_lock(&cmd->lock);
-+			complete = __test_and_clear_bit(NBD_CMD_INFLIGHT,
-+							&cmd->flags);
-+			mutex_unlock(&cmd->lock);
-+			if (complete)
-+				blk_mq_complete_request(rq);
-+		}
- 		percpu_ref_put(&q->q_usage_counter);
- 	}
- 
+ 		spin_unlock_irqrestore(&cmd->cmd_lock, flags);
+ 		/*
+ 		 * It's normal to see 2 calls in this path:
 -- 
-2.31.1
+2.35.1
 

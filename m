@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0B752B392
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D789052B3AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 09:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbiERHiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 03:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
+        id S232355AbiERHja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 03:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232286AbiERHiT (ORCPT
+        with ESMTP id S232338AbiERHj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 03:38:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71590D80A8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 00:38:18 -0700 (PDT)
+        Wed, 18 May 2022 03:39:27 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71419115CA2;
+        Wed, 18 May 2022 00:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652859498; x=1684395498;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rK9Kd22X5mr1Q7KtU0cqXcihhnCmtCTuqikltUyWYO8=;
-  b=TNhrGK5f1905/Yc7+y1rwSE2vtTxfM/BsUfHxNrbS5Nhcc9jL11Zt7r0
-   SVB8D/2AZfXkaIRSspFf+qxq+XE7VTwi2y7o2aNGQGE5XhL34JLti2rky
-   WrSe1c31MEcadQh8EgS4gke71sR37EsvJ7KIvtqd7HsCYe0+wk0ss3HzN
-   cIcvESq9k/gBIYSzSDW+xzHfAI0UFwSmhxK4S44r19qNaF+D3yfyErXWL
-   Mnp3cSAorzINtwlewh37GMaT2mAvkFccz6sEOKTpTTdNHt57esaXG1beP
-   /xitwULBDiukE8VjrflulpYlSsuptgNx9z4+ZedmWkJHBxQe3ciZZAoEe
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271227629"
+  t=1652859566; x=1684395566;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Daoi5XaegiVVBVBvMlk587j4GbG+Rc+fXkmJuyrCp4o=;
+  b=fCsHPXhVLyoPbIhrG4/t3grb6BoiU9rJ0iI+ky6AFlffyoqhq3JGFfui
+   fI+AQnYojhtn0HSKrjTmANc5JbAsSmmpeASgbgGmgo9+Uu8PepcLYXeE2
+   WAes+8h31NqO2AbRTgt2idCjaIsNHBC+7+hUa7LO0bfv1qd2jduIAXPaT
+   lIYx8DSwFzYeK1vnuw5gr1rkjVbKokzOVWsHE19hKdWUujl0/4cU0UAG1
+   GFjszjVgDSjYS8GdKC/s7DRTx7/6h92+sp5yOLXJ3EQbbha3H/Vx0AyZ2
+   c61F+FAci441ye2aJnIQz32AdwEuQSGuEEcgab/t68M97OFWrfRPFvIBn
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="270358808"
 X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="271227629"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:38:18 -0700
+   d="scan'208";a="270358808"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:39:14 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,234,1647327600"; 
-   d="scan'208";a="545307262"
-Received: from lenawanx-mobl.ccr.corp.intel.com (HELO [10.255.28.87]) ([10.255.28.87])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:38:10 -0700
-Message-ID: <efab101f-14e2-ab5c-810d-c355aebaad52@linux.intel.com>
-Date:   Wed, 18 May 2022 15:38:08 +0800
+   d="scan'208";a="574939464"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
+  by fmsmga007.fm.intel.com with ESMTP; 18 May 2022 00:39:12 -0700
+From:   tien.sung.ang@intel.com
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com
+Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dinh Nguyen <dinh.nguyen@intel.com>,
+        Ang Tien Sung <tien.sung.ang@intel.com>
+Subject: [PATCH] fpga: altera-cvp: allow interrupt to continue next time
+Date:   Wed, 18 May 2022 15:38:44 +0800
+Message-Id: <20220518073844.2713722-1-tien.sung.ang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Liu Yi L <yi.l.liu@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ning Sun <ning.sun@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Steve Wahl <steve.wahl@hpe.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] x86/boot/tboot: Move tboot_force_iommu() to Intel
- IOMMU
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220514014322.2927339-1-baolu.lu@linux.intel.com>
- <20220514014322.2927339-7-baolu.lu@linux.intel.com>
- <20220516180628.GL1343366@nvidia.com>
- <6cdc43a3-72ba-5360-0827-6915ef563d64@linux.intel.com>
- <20220517111350.GR1343366@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220517111350.GR1343366@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/17 19:13, Jason Gunthorpe wrote:
-> On Tue, May 17, 2022 at 10:05:43AM +0800, Baolu Lu wrote:
->> Hi Jason,
->>
->> On 2022/5/17 02:06, Jason Gunthorpe wrote:
->>>> +static __init int tboot_force_iommu(void)
->>>> +{
->>>> +	if (!tboot_enabled())
->>>> +		return 0;
->>>> +
->>>> +	if (no_iommu || dmar_disabled)
->>>> +		pr_warn("Forcing Intel-IOMMU to enabled\n");
->>> Unrelated, but when we are in the special secure IOMMU modes, do we
->>> force ATS off? Specifically does the IOMMU reject TLPs that are marked
->>> as translated?
->>
->> Good question. From IOMMU point of view, I don't see a point to force
->> ATS off, but trust boot involves lots of other things that I am not
->> familiar with. Anybody else could help to answer?
-> 
-> ATS is inherently not secure, if a rouge device can issue a TLP with
-> the translated bit set then it has unlimited access to host memory.
+From: Dinh Nguyen <dinh.nguyen@intel.com>
 
-Agreed. The current logic is that the platform lets the OS know such
-devices through firmware (ACPI/DT) and OS sets the untrusted flag in
-their device structures. The IOMMU subsystem will disable ATS on devices
-with the untrusted flag set.
+CFG_READY signal/bit may time-out due to firmware not responding
+within the given time-out. This time varies due to numerous
+factors like size of bitstream and others.
+This time-out error does not impact the result of the CvP
+previous transactions. The CvP driver shall then, respond with
+EAGAIN instead Time out error.
 
-There is some discussion about allowing the supervisor users to set the
-trust policy through the sysfs ABI, but I don't think this has happened
-in upstream kernel.
+Signed-off-by: Dinh Nguyen <dinh.nguyen@intel.com>
+Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
+---
+ drivers/fpga/altera-cvp.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-> Many of these trusted iommu scenarios rely on the idea that a rouge
-> device cannot DMA to arbitary system memory.
+diff --git a/drivers/fpga/altera-cvp.c b/drivers/fpga/altera-cvp.c
+index 4ffb9da537d8..d74ff63c61e8 100644
+--- a/drivers/fpga/altera-cvp.c
++++ b/drivers/fpga/altera-cvp.c
+@@ -309,10 +309,22 @@ static int altera_cvp_teardown(struct fpga_manager *mgr,
+ 	/* STEP 15 - poll CVP_CONFIG_READY bit for 0 with 10us timeout */
+ 	ret = altera_cvp_wait_status(conf, VSE_CVP_STATUS_CFG_RDY, 0,
+ 				     conf->priv->poll_time_us);
+-	if (ret)
++	if (ret) {
+ 		dev_err(&mgr->dev, "CFG_RDY == 0 timeout\n");
++		goto error_path;
++	}
+ 
+ 	return ret;
++
++error_path:
++	/* reset CVP_MODE and HIP_CLK_SEL bit */
++	altera_read_config_dword(conf, VSE_CVP_MODE_CTRL, &val);
++	val &= ~VSE_CVP_MODE_CTRL_HIP_CLK_SEL;
++	val &= ~VSE_CVP_MODE_CTRL_CVP_MODE;
++	altera_write_config_dword(conf, VSE_CVP_MODE_CTRL, val);
++
++	return -EAGAIN;
++
+ }
+ 
+ static int altera_cvp_write_init(struct fpga_manager *mgr,
+-- 
+2.25.1
 
-I am not sure whether tboot has the same requirement.
-
-Best regards,
-baolu

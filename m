@@ -2,123 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4925952C12B
-	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA33452C11D
+	for <lists+linux-kernel@lfdr.de>; Wed, 18 May 2022 19:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240821AbiERRSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 13:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
+        id S240832AbiERRTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 13:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240806AbiERRSo (ORCPT
+        with ESMTP id S240806AbiERRTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 13:18:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 390AE20D4E2
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 10:18:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652894322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0BnymVMEzqHt15JHGr551ETl2svdvZxWrL7y2dAiM+Y=;
-        b=WxytxNdNr33eloQgXSbX6+TUKAS/MKgLkiTm8mkYY5qLl7DS1Oh7oLmGAwxaJ5T2EKHTgj
-        ENNSU8wtRIcE8LBgSNY2CT1hzFMH9FwKwh8jzsnMb9zeJUpDoBMztRUgA0J0ijAqCXNfwD
-        VBCY5We9rgplgUqTKpzBV/vKcVy3Kf8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624-NAZMGsfCMHmaHC6yFq_7GQ-1; Wed, 18 May 2022 13:18:36 -0400
-X-MC-Unique: NAZMGsfCMHmaHC6yFq_7GQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D56D38349AD;
-        Wed, 18 May 2022 17:18:34 +0000 (UTC)
-Received: from starship (unknown [10.40.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 943C52166B26;
-        Wed, 18 May 2022 17:18:32 +0000 (UTC)
-Message-ID: <92fb7b8962e1da874dde2789f0d9c1f3887a63dc.camel@redhat.com>
-Subject: Re: [PATCH v5 16/17] KVM: x86: nSVM: always intercept x2apic msrs
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Wed, 18 May 2022 20:18:31 +0300
-In-Reply-To: <20220518162652.100493-17-suravee.suthikulpanit@amd.com>
-References: <20220518162652.100493-1-suravee.suthikulpanit@amd.com>
-         <20220518162652.100493-17-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 18 May 2022 13:19:07 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C5820E089;
+        Wed, 18 May 2022 10:19:06 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id q136so1489054vke.10;
+        Wed, 18 May 2022 10:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/f4APx/MmD2R61Oq/wBqbBZa049BgS6jzCZYyWux6uw=;
+        b=CRqJwsiNKT4sZEtqe3T41FiSRcnJ1GsrN97IRQZ6MZkmYh8ZdRyxXmtb/J94D0H61o
+         UXlXak6BwEHPqc2i+M+cNvc+wf3aNRyAOIpBmDN/fIjJEV8pftJl6kSgPYBN3pEbXwLm
+         bHZfYOVXsV1IfzwhXAWwHXg3ukhgzhZIRxWz8win7ObqSWummoAxcmSlondFXp08DZJ4
+         36/jI0h+mLOLIm+PhHabN6wQrZiXMkSwrSOeuYDSMkhROPYdHF0MW6UVpWeuZPpCZvlr
+         IbfiGH1c3JqN/a2fSTNLxa4MWt7gRYQIbq3e/pyR3zd/D8QZT2xw/TM/14tLWOaQ765P
+         KwNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/f4APx/MmD2R61Oq/wBqbBZa049BgS6jzCZYyWux6uw=;
+        b=O1aPuB+yzs2SpMcIC6TnpWK1K3aSz2LvmHJyOSJWG5tqUp4fHRnbytELoelCawhPQF
+         Y3DohQucUtiSZahGa4OTZ3zWfh0ar74EAKsuuwMUSr83TER2Ge65BnFIIHbBmQcpB2y9
+         R26j7tHY5NdZuFdCGmmU+aFyHeGOfIb3hC7HoMiYuJj7T0QSGOy9f4EaMWM83PpZGZ5T
+         R7T6fchovkBBh1i92x5Qqle2hJ9zZqwDJ18glJAwV+MRt2AUi9qB+xPDwkFIZ4o2gdCr
+         glTqblW0NE510bXkJVm6sd9ANsh+KmoDYKFBPffpy9J0oOJY/sNFXJ243ATgcsToPVzB
+         uU9g==
+X-Gm-Message-State: AOAM5332MF2ifTMHYhBnaX5EiukODiFi0qtqmbHDU8iTPXQSBz1idSo5
+        EsN8ahHjE2WGg79ziOq+LtmBcMlRQ64r2pNqvJ8czkNMIak=
+X-Google-Smtp-Source: ABdhPJzf4sXua4bct76Oyku4J/3wXX8VMl6ys/ENNwkiwS8pSsja0y2cQ4G4/bZEmsVFbs/m4R20xIdtzkR0sQhil10=
+X-Received: by 2002:a05:6122:818:b0:357:26f8:5e73 with SMTP id
+ 24-20020a056122081800b0035726f85e73mr243934vkj.5.1652894345690; Wed, 18 May
+ 2022 10:19:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn> <CAK8P3a15oQNZvST56v0AvtC1oZP4iDHy-QMLwZuDAg30gq-+4A@mail.gmail.com>
+In-Reply-To: <CAK8P3a15oQNZvST56v0AvtC1oZP4iDHy-QMLwZuDAg30gq-+4A@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 19 May 2022 01:18:53 +0800
+Message-ID: <CAAhV-H73Ymi6HVoEoYx6UbfZFeS+VtxUwTVvNzhiyycjVocYOQ@mail.gmail.com>
+Subject: Re: [PATCH V11 00/22] arch: Add basic LoongArch support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-18 at 11:26 -0500, Suravee Suthikulpanit wrote:
-> From: Maxim Levitsky <mlevitsk@redhat.com>
-> 
-> As a preparation for x2avic, this patch ensures that x2apic msrs
-> are always intercepted for the nested guest.
-> 
-> Reviewed-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> Tested-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  arch/x86/kvm/svm/nested.c | 5 +++++
->  arch/x86/kvm/svm/svm.h    | 9 +++++++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index f209c1ca540c..b61f8939c210 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -230,6 +230,11 @@ static bool nested_svm_vmrun_msrpm(struct vcpu_svm *svm)
->  			break;
->  
->  		p      = msrpm_offsets[i];
-> +
-> +		/* x2apic msrs are intercepted always for the nested guest */
-> +		if (is_x2apic_msrpm_offset(p))
-> +			continue;
-> +
->  		offset = svm->nested.ctl.msrpm_base_pa + (p * 4);
->  
->  		if (kvm_vcpu_read_guest(&svm->vcpu, offset, &value, 4))
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 818817b11f53..309445619756 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -517,6 +517,15 @@ static inline bool nested_npt_enabled(struct vcpu_svm *svm)
->  	return svm->nested.ctl.nested_ctl & SVM_NESTED_CTL_NP_ENABLE;
->  }
->  
-> +static inline bool is_x2apic_msrpm_offset(u32 offset)
-> +{
-> +	/* 4 msrs per u8, and 4 u8 in u32 */
-> +	u32 msr = offset * 16;
-> +
-> +	return (msr >= APIC_BASE_MSR) &&
-> +	       (msr < (APIC_BASE_MSR + 0x100));
-> +}
-> +
->  /* svm.c */
->  #define MSR_INVALID				0xffffffffU
->  
+Hi, Arnd,
 
-Just one thing, this patch should be earlier in the series (or even first one),
-to avoid having a commit window where the problem exists, where malicious
-L1 can get access to L0's apic msrs this way.
+On Wed, May 18, 2022 at 9:42 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Wed, May 18, 2022 at 10:25 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >
+> > LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> > LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> > version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> > boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> > are already added in the next revision of ACPI Specification (current
+> > revision is 6.4).
+> >
+> > This patchset is adding basic LoongArch support in mainline kernel, we
+> > can see a complete snapshot here:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
+>
+> Stephen, can you add this branch to the linux-next tree?
+>
+> I see there are still comments coming in, but at some point this has
+> to just be considered good enough that any further changes can be addressed
+> with patches on top rather than rebasing.
+>
+> > V10 -> V11:
+> > 1, Rebased on asm-generic tree;
+>
+> I was expecting that you'd base this on just the spinlock changes from Palmer's
+> tree that are part of the asm-generic tree rather than all of what I have.
+>
+> Can you rebase it once more? If there are conflicts against the h8300 removal
+> series that is also in asm-generic, leaving it on top of that may be
+> easier though.
+Thank you very much, I have rebased the below tree on asm-generic
+tree's spinlock commit 9282d0996936c5fbf877c0d096a3feb45 again, and
+fixed some small problems from Eric and WANG Xuerui's comments in V11.
+https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
 
-Best regards,
-	Maxim Levitsky
-
+Huacai
+>
+>         Arnd

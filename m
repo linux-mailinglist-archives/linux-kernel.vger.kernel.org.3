@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5527752DB35
+	by mail.lfdr.de (Postfix) with ESMTP id A0AF352DB36
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234200AbiESR1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S242781AbiESR1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242634AbiESRZR (ORCPT
+        with ESMTP id S242645AbiESRZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:25:17 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD595A5013;
-        Thu, 19 May 2022 10:25:14 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id n10so5900134pjh.5;
-        Thu, 19 May 2022 10:25:14 -0700 (PDT)
+        Thu, 19 May 2022 13:25:24 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8E6A5014;
+        Thu, 19 May 2022 10:25:17 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id i8so5361723plr.13;
+        Thu, 19 May 2022 10:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=io/JXzBTUQk4XZSNyvTx+ccbiuHm3ThRzq8pqtgnkls=;
-        b=n7JngmyoE82ipNzOKgXY2Db70Xg2ETtdjgIKTaLPnJnUZj7RqY/32C7MLh65YJW9vB
-         iz/naU/m40oekxL1UG80eUUDObsReWUYEFWvNMSHQ31i0paJKyLGSyz+XiPJFBPYPP+o
-         PAhw7CNPHhNzdPRJzLrxKAKuRJXN04zbdh0K+BzSg/CdxwHGRQwx+U/29eTVayAGeNfT
-         ugZDNRanE4OevAqP2+pzE4KsQ1xJ5TUG1cUDhGG8FDKkQU18hkId3W7kw5IPLdJzwlDE
-         h9AcGbbHjXqrdeyBmHeeiWYxfML7UjV0kv8D9PXo+sKJJBAjzvmcE3zcbpbJOBmgulFg
-         E9HA==
+        bh=gy2+5rtVyQSQ3X+3Wrn/m9PvaQt4Dx/XsZuXj5gNKrU=;
+        b=B+r49MDVnM5d0FiWcFCC+mfxqj5H0MKA3XMEXVUTRNEHGFprEwcpGiGffDByit/Ai+
+         jBZ9lsrNPI2UQ5kGuaSo+Z2WQDfmbB6M+wGNoCQMSg6dmUr3T0b2Jbf+OcyHARoBHazw
+         ObAJwwNC+hFSnPi9KlC047SwXWAGFEmSuajobWNYqrN6KoapKKu9KDJy0cwtR7L0C7ko
+         J9vX5Usp6Z8AVWgYa2sb2uwG4cHP0xKRktevbD5cn+7iw5ta3qXqeHIVFTfHMEAGhmDf
+         SLtSHPtudWujNfVnNb+UJirItZ2XwS5nCHrwbXQuAbe3vu/YGbwnmMIYwuK+vgzKEDWG
+         9O6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=io/JXzBTUQk4XZSNyvTx+ccbiuHm3ThRzq8pqtgnkls=;
-        b=qcQcSGPi1vk+lHPL5UrXKdN9ZAmpiEEb6ShyRQiapjWorhuWj+26Ig6vHrxuBO8LT+
-         suXfjmkufnRajk9zM2x5FAa+K4eBhC6wwwqp9G9XhEjZbaQoAMDjbE4AnEJDL/A9EGCD
-         JrJPR5lzU2+000ANsgFVd+2+d56D4L0aP2Q/gc2LwGG761JiZfGP0fFhmm8zX/958l6y
-         3SyZAErIsc2ljpMHLUCY+F1N2twsbo3ciY2jrw6poFSW0MDnsgqQEaSiVUb+xPOiRjcP
-         9tDAvPp7Esvj9iQ9u9X7YUMvBStiBRjKxbndCpxl16Vfmi7gpPSGp/LQF1XUIBgwSqN7
-         LMOA==
-X-Gm-Message-State: AOAM532pAdRUycocNmWe++qXePssXTEBV+Dh25mZQPZx5FnnzXNZnFst
-        LBRbtSYW6Zfg1gCKNSXS5Nr8JfjEOtzk
-X-Google-Smtp-Source: ABdhPJycqfU8mbGxYoOraR7qmIBu84SScDm9vM7ADw0HK604nHc/1qmJ1gzvNgAv2oi8BonybDwaMw==
-X-Received: by 2002:a17:90b:3506:b0:1df:d8b8:6eb3 with SMTP id ls6-20020a17090b350600b001dfd8b86eb3mr4246254pjb.104.1652981113811;
-        Thu, 19 May 2022 10:25:13 -0700 (PDT)
+        bh=gy2+5rtVyQSQ3X+3Wrn/m9PvaQt4Dx/XsZuXj5gNKrU=;
+        b=SoHV4IgvCvBq6vGuOh0v7TawFwRy8GQlUWcYivNAIAPCktsHl2kMk3mkGJM0iRDihf
+         GyHgCARLKh+DZBPtBdaDPdx9DwiQdQi4aJ0JMZZVApPEOszPbjrGTU+rfWBdvUUgMmfd
+         lirpQWJ7h9hLhK5MJnXOnNNFjLyP0kO1XEntJfXrFK0M7Sp7NzU8doQla3y0rsJXLm9e
+         yXZzlyThoB3bbUJ7SChBP2S7OTmYqZm3CTi1dpiMsgT6W0gYaTB4guZYF8z9wGPdPlGJ
+         cuRCsxmZ/KQ4sKYhPuv0+WyNWSbv3qybSaZPj8oH7FYF1252I3sn2j/kxIk/9HPO8Hu8
+         yxNg==
+X-Gm-Message-State: AOAM5311LNAKi3iSUZI3bFxonsxAszEfsCoK7V3EVonTduP/14Sz339y
+        tG0NAl1l3GG+y8VjxF7BGCy88T6ksqDh
+X-Google-Smtp-Source: ABdhPJw4dVRMKUuhKQxwg42jFQsCieCMJQrREs9viGoJuAg8nY1RWFtqTLQb4iB0WD43n5V4Ac29kg==
+X-Received: by 2002:a17:902:a583:b0:15d:197b:9259 with SMTP id az3-20020a170902a58300b0015d197b9259mr5601285plb.51.1652981116633;
+        Thu, 19 May 2022 10:25:16 -0700 (PDT)
 Received: from zaphod.evilpiepirate.org (068-119-229-002.res.spectrum.com. [68.119.229.2])
-        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.25.12
+        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.25.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 10:25:13 -0700 (PDT)
+        Thu, 19 May 2022 10:25:15 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
         pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
         andriy.shevchenko@linux.intel.com, willy@infradead.org
-Subject: [PATCH v2 17/28] vsprintf: Refactor mac_address_string()
-Date:   Thu, 19 May 2022 13:24:10 -0400
-Message-Id: <20220519172421.162394-18-kent.overstreet@gmail.com>
+Subject: [PATCH v2 18/28] vsprintf: time_and_date() no longer takes printf_spec
+Date:   Thu, 19 May 2022 13:24:11 -0400
+Message-Id: <20220519172421.162394-19-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220519172421.162394-1-kent.overstreet@gmail.com>
 References: <20220519172421.162394-1-kent.overstreet@gmail.com>
@@ -71,70 +71,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- - We're attempting to consolidate printf_spec and format string
-   handling in the top level vpr_buf(), this changes mac_address_string() to
-   not take printf_spec
-
- - With the new printbuf helpers there's no need to use a separate stack
-   allocated buffer, so this patch deletes it.
+We're attempting to consolidate printf_spec and format string handling
+in the top level vpr_buf(), this changes time_and_date() to not
+take printf_spec.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- lib/vsprintf.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ lib/vsprintf.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
 diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 62a221522c..76947e0d30 100644
+index 76947e0d30..837a3f967e 100644
 --- a/lib/vsprintf.c
 +++ b/lib/vsprintf.c
-@@ -1233,15 +1233,13 @@ void bitmap_list_string(struct printbuf *out, unsigned long *bitmap,
+@@ -1735,14 +1735,14 @@ void time_str(struct printbuf *out, const struct rtc_time *tm, bool r)
  
  static noinline_for_stack
- void mac_address_string(struct printbuf *out, u8 *addr,
--			struct printf_spec spec, const char *fmt)
-+			const char *fmt)
+ void rtc_str(struct printbuf *out, const struct rtc_time *tm,
+-	     struct printf_spec spec, const char *fmt)
++	     const char *fmt)
  {
--	char mac_addr[sizeof("xx:xx:xx:xx:xx:xx")];
--	char *p = mac_addr;
- 	int i;
- 	char separator;
- 	bool reversed = false;
+ 	bool have_t = true, have_d = true;
+ 	bool raw = false, iso8601_separator = true;
+ 	bool found = true;
+ 	int count = 2;
  
--	if (check_pointer_spec(out, addr, spec))
-+	if (check_pointer(out, addr))
+-	if (check_pointer_spec(out, tm, spec))
++	if (check_pointer(out, tm))
  		return;
  
- 	switch (fmt[1]) {
-@@ -1260,16 +1258,13 @@ void mac_address_string(struct printbuf *out, u8 *addr,
+ 	switch (fmt[count]) {
+@@ -1780,7 +1780,7 @@ void rtc_str(struct printbuf *out, const struct rtc_time *tm,
  
- 	for (i = 0; i < 6; i++) {
- 		if (reversed)
--			p = hex_byte_pack(p, addr[5 - i]);
-+			pr_hex_byte(out, addr[5 - i]);
- 		else
--			p = hex_byte_pack(p, addr[i]);
-+			pr_hex_byte(out, addr[i]);
+ static noinline_for_stack
+ void time64_str(struct printbuf *out, const time64_t time,
+-		struct printf_spec spec, const char *fmt)
++		const char *fmt)
+ {
+ 	struct rtc_time rtc_time;
+ 	struct tm tm;
+@@ -1798,21 +1798,20 @@ void time64_str(struct printbuf *out, const time64_t time,
  
- 		if (fmt[0] == 'M' && i != 5)
--			*p++ = separator;
-+			pr_char(out, separator);
- 	}
--	*p = '\0';
--
--	string_nocheck(out, mac_addr, spec);
+ 	rtc_time.tm_isdst = 0;
+ 
+-	rtc_str(out, &rtc_time, spec, fmt);
++	rtc_str(out, &rtc_time, fmt);
  }
  
  static noinline_for_stack
-@@ -2270,7 +2265,8 @@ void pointer(struct printbuf *out, const char *fmt,
- 	case 'm':			/* Contiguous: 000102030405 */
- 					/* [mM]F (FDDI) */
- 					/* [mM]R (Reverse order; Bluetooth) */
--		return mac_address_string(out, ptr, spec, fmt);
-+		mac_address_string(out, ptr, fmt);
+-void time_and_date(struct printbuf *out,
+-		   void *ptr, struct printf_spec spec,
++void time_and_date(struct printbuf *out, void *ptr,
+ 		   const char *fmt)
+ {
+ 	switch (fmt[1]) {
+ 	case 'R':
+-		return rtc_str(out, (const struct rtc_time *)ptr, spec, fmt);
++		return rtc_str(out, (const struct rtc_time *)ptr, fmt);
+ 	case 'T':
+-		return time64_str(out, *(const time64_t *)ptr, spec, fmt);
++		return time64_str(out, *(const time64_t *)ptr, fmt);
+ 	default:
+-		return error_string_spec(out, "(%pt?)", spec);
++		return error_string(out, "(%pt?)");
+ 	}
+ }
+ 
+@@ -2300,7 +2299,8 @@ void pointer(struct printbuf *out, const char *fmt,
+ 		dentry_name(out, ptr, fmt);
+ 		return do_width_precision(out, prev_pos, spec);
+ 	case 't':
+-		return time_and_date(out, ptr, spec, fmt);
++		time_and_date(out, ptr, fmt);
 +		return do_width_precision(out, prev_pos, spec);
- 	case 'I':			/* Formatted IP supported
- 					 * 4:	1.2.3.4
- 					 * 6:	0001:0203:...:0708
+ 	case 'C':
+ 		return clock(out, ptr, spec, fmt);
+ 	case 'D':
 -- 
 2.36.0
 

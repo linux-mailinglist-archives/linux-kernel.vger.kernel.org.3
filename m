@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CDA52E04F
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8849252E052
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245687AbiESXLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 19:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
+        id S245701AbiESXL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiESXLh (ORCPT
+        with ESMTP id S245694AbiESXLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 19:11:37 -0400
-Received: from mail-4018.proton.ch (mail-4018.proton.ch [185.70.40.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3751EC1EE2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:11:35 -0700 (PDT)
-Date:   Thu, 19 May 2022 23:11:23 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1653001892; x=1653261092;
-        bh=s+PX3ttgd2pqhf/X4X6oI+ne2p0Lx6BzbzmdfFsmb+E=;
-        h=Date:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=P0jXOg7xBd7b1w+1w+YFAYZXxdDQwSRLFCpOewLBpEudkFpgNttzjtSQSY2EjkW5d
-         QyFb82nQWuwPzl+m1GsNkuMS1tCv9B3tMX67z3bVidP32RGGO33ELd5C2Qf42SAmJh
-         xlNQGELN5h6FELEbPlIfGNSWjxYX7kB3ywt1L6fV4IEgvH5jV+mVeWVlTwDoXXrBll
-         syIfjrDzkFg9sFFOPyqNXqPokR5IyL75nxM8HTq5KpSpx2h/vufvedK+sJGi2m9GR4
-         VemUaFxIUHWWTRL4ZPpAi5u8utBWw0Is1SMvB3g/1mv55QvHfYHOESk/mBKXSxpBaf
-         9SGNrfRmHFDLQ==
-From:   Adam Wujek <dev_public@wujek.eu>
-Cc:     Adam Wujek <dev_public@wujek.eu>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Adam Wujek <dev_public@wujek.eu>
-Subject: [PATCH v2] i2c: busses: i2c-cadence: fix message length when receive block message
-Message-ID: <20220519231058.437365-1-dev_public@wujek.eu>
-In-Reply-To: <20220519124946.387373-1-dev_public@wujek.eu>
-References: <20220519124946.387373-1-dev_public@wujek.eu>
-Feedback-ID: 23425257:user:proton
+        Thu, 19 May 2022 19:11:54 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E99A10275E;
+        Thu, 19 May 2022 16:11:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653001913; x=1684537913;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=CYLrqUDrZ80p9ncAy6YURBGJYkxdkslDJ+ojtqW+u54=;
+  b=U7hf4xrQvW0p+r35w04BtuetymUcT2EnDS3zOW2njGaND4srVx5CBF3g
+   BxB9oGXkZUkfVKvfo5wpVQsyZ3XJnpRmJTr3HmqJV4O1pW03+V36eJPbE
+   dBJlHrPjOmFjH1n16qN2RMWykZO5iSNFCBO/134czeZOCMT7kkmi2ZILC
+   I=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 19 May 2022 16:11:53 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 16:11:52 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 19 May 2022 16:11:52 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 19 May 2022 16:11:51 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6 0/3] eDP/DP Phy vdda realted function
+Date:   Thu, 19 May 2022 16:11:39 -0700
+Message-ID: <1653001902-26910-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Needed by hwmon/pmbus_core driver to calculate PEC correctly.
-The hwmon/pmbus_core driver relies on bus drivers to update the message
-length of receive block transfers. Only in this type of smbus transfer
-the length is not known before the transfer is started.
+1) add regulator_set_load() to eDP phy
+2) add regulator_set_load() to DP phy
+3) remove vdda related function out of eDP/DP controller
 
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
----
-Notes:
-    Changes in v2:
-    - fix multiline comment
+Kuogee Hsieh (3):
+  phy: qcom-edp: add regulator_set_load to edp phy
+  phy: qcom-qmp: add regulator_set_load to dp phy
+  drm/msm/dp: delete vdda regulator related functions from eDP/DP
+    controller
 
- drivers/i2c/busses/i2c-cadence.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/msm/dp/dp_parser.c  | 14 ------
+ drivers/gpu/drm/msm/dp/dp_parser.h  |  6 ---
+ drivers/gpu/drm/msm/dp/dp_power.c   | 95 +------------------------------------
+ drivers/phy/qualcomm/phy-qcom-edp.c |  9 +++-
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 16 +++++++
+ 5 files changed, 26 insertions(+), 114 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cade=
-nce.c
-index 805c77143a0f..a679eb390ef5 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -794,6 +794,13 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, s=
-truct i2c_msg *msg,
- =09=09return -ETIMEDOUT;
- =09}
-
-+=09/*
-+=09 * Update message len, as i2c/smbus driver (function
-+=09 * i2c_smbus_xfer_emulated) relies on i2c device drivers to do this.
-+=09 */
-+=09if ((msg->flags & I2C_M_RECV_LEN) && (msg->flags & I2C_M_RD))
-+=09=09msg->len =3D msg->buf[0] + 2; /* add len byte + PEC byte */
-+
- =09cdns_i2c_writereg(CDNS_I2C_IXR_ALL_INTR_MASK,
- =09=09=09  CDNS_I2C_IDR_OFFSET);
-
---
-2.17.1
-
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

@@ -2,108 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959C052D009
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F72B52D00C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236415AbiESKBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S236431AbiESKCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235431AbiESKBp (ORCPT
+        with ESMTP id S235431AbiESKCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:01:45 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE952A709
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:01:43 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id a23so5594472ljd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:01:43 -0700 (PDT)
+        Thu, 19 May 2022 06:02:35 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFEB9155E;
+        Thu, 19 May 2022 03:02:34 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id p74so1592071iod.8;
+        Thu, 19 May 2022 03:02:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6Hbm4yf+el+tFvaYL/Hvdyk+jw+gD0Z8FpjuTi6F8CU=;
-        b=P3L8qPnk9J8q7Zmcw3q2yp9RZ77/2vt5h5v0nFjmLXhTJYpiPjlsnDl5P+8MwP+NSC
-         3PkYgzQ1jAQmLXEabJeL9tzRY1hXakzBjEGyaT7JJXuB8Qw/9N+Ne+AVaudI2MagqZ1v
-         ti1ll9I6Y39tXbMlaqmSqRuRZFcgmfPELczHvDO/aJYVvHzHcfQ35pcnO/g2pOOlgcUw
-         2x3Kxv99LTluz3noQcNDRK3caIScYCxr22H64K6hk0Z+Xbe9RxkdpvKoOVC+0G/B9MVQ
-         bt9A2PyJp7/HWCA1BOLj6EBYnRqE5JbE4ZRS97Ko2wAc9MYnEOXNxUsmhnEOw+IxiIvF
-         aYFA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=4V3FHl6Sp2rspEutBjNH83AvfS51jkWxQNxW2j1ppMU=;
+        b=ebAe34nxtjgbtT9SueCzVUEURo1uYyacCjduzPaw8pjq+GBiBj/gz5dBhXwCHfF08J
+         zSLzDaqN3iTAXRHnGaAoSmOk6xYzLm7lVcID2LiFZHo8aiYMBKHwWvC1FfvppqoQFHfN
+         u381P7T7w6OUe4CsJmhVfAM/bjZVl1+2IV8HlKc6H77p29TjWAn1n7IapkdDkVUT9Fwi
+         oK83FFISwtP6Y/9vxND1TjMD1I1JqwtM8BcGnVewx7QVdwTuvDAVMe4vT3ykc1Ka2i0I
+         aqE0sGrzkMjDfVNUjjwXQlOA+RYjmew9xOc/zWm88U1mASieWFn8vCWMZFS1UdMtwIbA
+         ubRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=6Hbm4yf+el+tFvaYL/Hvdyk+jw+gD0Z8FpjuTi6F8CU=;
-        b=ncT+iklZThPpukT9bg3f3oTk48MYTXPaVf7S12bBT1Q8EmNS3D7LidawWQR2W5InMI
-         4dteLJSCcAOmUoARMJBCB8ll53tga99Rw0SBf93YQ3FnnYk3cFlq4dTFUCLPRrhGBIzS
-         +L3jOBGmIH2Tv8dyqZ4F+4Dugtu2N9yOIIAHoiyo4g+GD4jDGBPmSqHPSoNhsYvOGC56
-         EtpEk/+vICal6xIf6uGUOa2qzml8NXXF4GC6HR4nt30TE0lRJD3FVxdv1d1Zj7kZ7rD5
-         11s5eQatfo1A/yaONsBzlr3Nk895f+RqvwdBnms+AVaiqavFD+GXDpsZ1C3MwsUfp134
-         W3Yg==
-X-Gm-Message-State: AOAM533y33bY6jU5bwXomIutVvdopw7YOAih80gZeZ+IqcpuHEOCcI/A
-        EBm+zNlGCuUJ95M91xsecH81AA==
-X-Google-Smtp-Source: ABdhPJwpGabBICjeLnO2G6OFpyyw8fKv8lMujCQy0oQKn4FP4GwvqoEWRaXCpGPRnFALGTLcUHV5Ig==
-X-Received: by 2002:a2e:bd12:0:b0:250:d1a0:217e with SMTP id n18-20020a2ebd12000000b00250d1a0217emr2182112ljq.310.1652954501959;
-        Thu, 19 May 2022 03:01:41 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id k30-20020a0565123d9e00b00477cbc03a42sm67023lfv.84.2022.05.19.03.01.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 03:01:41 -0700 (PDT)
-Message-ID: <3bb95350-01cc-b15b-3589-16019e3e9105@linaro.org>
-Date:   Thu, 19 May 2022 12:01:40 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=4V3FHl6Sp2rspEutBjNH83AvfS51jkWxQNxW2j1ppMU=;
+        b=jH6riIa/tiP17o4FzLYTO+wM3ks0bF1TRrCKKSlXlJzMOE+aDF5oRTkYy+EBoc0Ob8
+         UZSc0blmEPKd3Lk2geD+oE5EJ9Y2sAE8Mo7SUjYkRy1ZkVp5QVQINItVjGcUZuzfW12l
+         lPEdtzjb13QuAaKfcKH6wmfGGR0FE8NooXyYkNp3B2H0/UU1bxSLEKbNgAmNUaEljYsK
+         bkfCFnKwJz14B8rMNHtvJgyQnK0gOVWQTQDgYO2vedUD1a2lZ/vZ6h3gGe1Vl3gBlYdC
+         62Xamu3i6VJX0WbSVhbub0VjEstomf2YscqwvxOCpDE0JtfiGcP3zHy3C+5JfZUwp2dl
+         IZAA==
+X-Gm-Message-State: AOAM533RAruYKOHOr57K/uap2/GRuxxiDuMjjAwwbRDW7r5Gbvc+YFX8
+        BF34Y0IhHw8+4bXCW3VrLnXBbgUpLDDxAijCGTk=
+X-Google-Smtp-Source: ABdhPJxMClNI3VhTzTuPg/LP/Sxa1eKhxOPBlicSYij2hBbdlTx4PNMn/auuO9yLdfrB+T0XTbYYDJmKzwhWUS8fecs=
+X-Received: by 2002:a05:6638:1308:b0:32b:d5f7:62e6 with SMTP id
+ r8-20020a056638130800b0032bd5f762e6mr2231414jad.52.1652954552359; Thu, 19 May
+ 2022 03:02:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: msm8996-xiaomi-natrium: Add support
- for Xiaomi Mi 5s Plus
-Content-Language: en-US
-To:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Andy Gross <agross@kernel.org>
-Cc:     Alec Su <ae40515@yahoo.com.tw>, bjorn.andersson@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sboyd@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220519074112.25600-1-ae40515@yahoo.com.tw>
- <20220519074112.25600-2-ae40515@yahoo.com.tw>
- <3644ad8a-d5d8-8ea2-b659-029619c64f1f@linaro.org>
- <NqQY5WA6i6jOhK8lZ-YD4kWA57qJCSIGJE6_xAQmOiFJ4a-msHcn7oakouduiLhODYlfWVvgr-E5S6m43Ab6EUFa0ZPYV0kPGeYbVV7zpUI=@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <NqQY5WA6i6jOhK8lZ-YD4kWA57qJCSIGJE6_xAQmOiFJ4a-msHcn7oakouduiLhODYlfWVvgr-E5S6m43Ab6EUFa0ZPYV0kPGeYbVV7zpUI=@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
+In-Reply-To: <CA+icZUUFdsEyNybVORm4x7_bAyoc0zTnudtNdgnTqjvbYXJRYA@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Thu, 19 May 2022 12:01:56 +0200
+Message-ID: <CA+icZUWxyNeZnEBDpDWxGc-qJ-jHwR0rJMBhk1a8StPHRgC6qA@mail.gmail.com>
+Subject: Re: [Linux v5.17.9] -Wdeprecated-declarations warnings with LLVM-14
+ and OpenSSL v3.0.x
+To:     David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>
+Cc:     keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Salvatore Bonaccorso <carnil@debian.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2022 11:57, Yassine Oudjana wrote:
->>
->> There is no such property documented. Either add bindings, or drop.
->>
->>> + qcom,board-id = <47 0>;
->>
->>
->> The same.
-> 
-> These properties are already used in many device trees; they are
-> needed to let the bootloader pick a DTB, but yes they aren't
-> documented currently. devicetree/bindings/arm/qcom.yaml would
-> probably be a good place to put them.
+[ CC Kees and Salvatore ]
 
-Which means each person is using them and not caring about
-documenting... they need to be documented. I am not even sure if they
-should be accepted.
+The Debian kernel-team ships a fix (4 hours young):
 
-The DTS describes hardware, not bootloader specific details. The
-hardware - board - is defined by compatible and bootloader should use
-it. Adding new properties because someone decided "I don't like
-compatibles" is not appropriate.
+commit: 13e234d459c11946efba647c3daf15e03abb0d99
+"sign-file: Convert API usage to support OpenSSL v3"
 
+*untested*
+Regards,
+-Sedat-
 
-Best regards,
-Krzysztof
+[1] https://salsa.debian.org/kernel-team/linux/-/commit/13e234d459c11946efba647c3daf15e03abb0d99
+
+On Thu, May 19, 2022 at 11:55 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> Hi,
+>
+> here, I am on Debian/unstable AMD64.
+>
+> Recently (or still) there is/was a transition to OpenSSL see below link.
+>
+> The warnings look like:
+>
+> 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
+> deprecated [-Wdeprecated-declarations]
+> 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
+> deprecated [-Wdeprecated-declarations]
+> 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
+> is deprecated [-Wdeprecated-declarations]
+> 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
+> [-Wdeprecated-declarations]
+> 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
+> 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
+> deprecated [-Wdeprecated-declarations]
+> 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
+> deprecated [-Wdeprecated-declarations]
+> 395:certs/extract-cert.c:46:14: warning: 'ERR_get_error_line' is
+> deprecated [-Wdeprecated-declarations]
+> 407:certs/extract-cert.c:59:9: warning: 'ERR_get_error_line' is
+> deprecated [-Wdeprecated-declarations]
+> 420:certs/extract-cert.c:124:3: warning: 'ENGINE_load_builtin_engines'
+> is deprecated [-Wdeprecated-declarations]
+> 432:certs/extract-cert.c:126:7: warning: 'ENGINE_by_id' is deprecated
+> [-Wdeprecated-declarations]
+> 444:certs/extract-cert.c:128:7: warning: 'ENGINE_init' is deprecated
+> [-Wdeprecated-declarations]
+> 456:certs/extract-cert.c:133:9: warning: 'ENGINE_ctrl_cmd_string' is
+> deprecated [-Wdeprecated-declarations]
+> 468:certs/extract-cert.c:134:3: warning: 'ENGINE_ctrl_cmd' is
+> deprecated [-Wdeprecated-declarations]
+>
+> More detailed output:
+>
+> 189:scripts/sign-file.c:89:14: warning: 'ERR_get_error_line' is
+> deprecated [-Wdeprecated-declarations]
+> 190-        while ((e = ERR_get_error_line(&file, &line))) {
+> 191-                    ^
+> 192-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
+> been explicitly marked deprecated here
+> 193-OSSL_DEPRECATEDIN_3_0
+> 194-^
+> 195-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> 'OSSL_DEPRECATEDIN_3_0'
+> 196-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> 197-                                                ^
+> 198-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> 'OSSL_DEPRECATED'
+> 199-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> 200-                                                   ^
+> 201:scripts/sign-file.c:102:9: warning: 'ERR_get_error_line' is
+> deprecated [-Wdeprecated-declarations]
+> 202-        while (ERR_get_error_line(&file, &line)) {}
+> 203-               ^
+> 204-/usr/include/openssl/err.h:410:1: note: 'ERR_get_error_line' has
+> been explicitly marked deprecated here
+> 205-OSSL_DEPRECATEDIN_3_0
+> 206-^
+> 207-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> 'OSSL_DEPRECATEDIN_3_0'
+> 208-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> 209-                                                ^
+> 210-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> 'OSSL_DEPRECATED'
+> 211-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> 212-                                                   ^
+> 213:scripts/sign-file.c:142:3: warning: 'ENGINE_load_builtin_engines'
+> is deprecated [-Wdeprecated-declarations]
+> 214-                ENGINE_load_builtin_engines();
+> 215-                ^
+> 216-/usr/include/openssl/engine.h:358:1: note:
+> 'ENGINE_load_builtin_engines' has been explicitly marked deprecated
+> here
+> 217-OSSL_DEPRECATEDIN_3_0 void ENGINE_load_builtin_engines(void);
+> 218-^
+> 219-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> 'OSSL_DEPRECATEDIN_3_0'
+> 220-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> 221-                                                ^
+> 222-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> 'OSSL_DEPRECATED'
+> 223-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> 224-                                                   ^
+> 225:scripts/sign-file.c:144:7: warning: 'ENGINE_by_id' is deprecated
+> [-Wdeprecated-declarations]
+> 226-                e = ENGINE_by_id("pkcs11");
+> 227-                    ^
+> 228-/usr/include/openssl/engine.h:336:1: note: 'ENGINE_by_id' has been
+> explicitly marked deprecated here
+> 229-OSSL_DEPRECATEDIN_3_0 ENGINE *ENGINE_by_id(const char *id);
+> 230-^
+> 231-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> 'OSSL_DEPRECATEDIN_3_0'
+> 232-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> 233-                                                ^
+> 234-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> 'OSSL_DEPRECATED'
+> 235-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> 236-                                                   ^
+> 237-scripts/sign-file.c:   ld.lld -r -o
+> /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/objtool-in.o
+> /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86
+> /special.o /home/dileks/src/linux-kernel/git/tools/objtool/arch/x86/decode.o
+> 238:146:7: warning: 'ENGINE_init' is deprecated [-Wdeprecated-declarations]
+> 239-                if (ENGINE_init(e))
+> 240-                    ^
+> 241-/usr/include/openssl/engine.h:620:1: note: 'ENGINE_init' has been
+> explicitly marked deprecated here
+> 242-OSSL_DEPRECATEDIN_3_0 int ENGINE_init(ENGINE *e);
+> 243-^
+> 244-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> 'OSSL_DEPRECATEDIN_3_0'
+> 245-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> 246-                                                ^
+> 247-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> 'OSSL_DEPRECATED'
+> 248-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> 249-                                                   ^
+> 250:scripts/sign-file.c:151:9: warning: 'ENGINE_ctrl_cmd_string' is
+> deprecated [-Wdeprecated-declarations]
+> 251-                        ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
+> 252-                             ^
+> 253-/usr/include/openssl/engine.h:478:1: note:
+> 'ENGINE_ctrl_cmd_string' has been explicitly marked deprecated here
+> 254-OSSL_DEPRECATEDIN_3_0
+> 255-^
+> 256-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> 'OSSL_DEPRECATEDIN_3_0'
+> 257-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> 258-                                                ^
+> 259-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> 'OSSL_DEPRECATED'
+> 260-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> 261-                                                   ^
+> 262:scripts/sign-file.c:153:17: warning: 'ENGINE_load_private_key' is
+> deprecated [-Wdeprecated-declarations]
+> 263-                private_key = ENGINE_load_private_key(e, private_key_name,
+> 264-                              ^
+> 265-/usr/include/openssl/engine.h:637:1: note:
+> 'ENGINE_load_private_key' has been explicitly marked deprecated here
+> 266-OSSL_DEPRECATEDIN_3_0
+> 267-^
+> 268-/usr/include/openssl/macros.h:182:49: note: expanded from macro
+> 'OSSL_DEPRECATEDIN_3_0'
+> 269-#   define OSSL_DEPRECATEDIN_3_0                OSSL_DEPRECATED(3.0)
+> 270-                                                ^
+> 271-/usr/include/openssl/macros.h:62:52: note: expanded from macro
+> 'OSSL_DEPRECATED'
+> 272-#     define OSSL_DEPRECATED(since) __attribute__((deprecated))
+> 273-
+>
+> Relevant OpenSSL v3.0.3 header files are attached.
+> My kernel-config, too.
+>
+> If you need further information, please let me know.
+>
+> Regards,
+> -Sedat-
+>
+> [1] https://release.debian.org/transitions/html/auto-openssl.html

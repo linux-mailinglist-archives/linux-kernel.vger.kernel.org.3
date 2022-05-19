@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED9252E0AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A401E52E0A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343655AbiESXnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 19:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46432 "EHLO
+        id S1343687AbiESXlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbiESXnB (ORCPT
+        with ESMTP id S232274AbiESXl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 19:43:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136CEB042E;
-        Thu, 19 May 2022 16:43:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1B1461943;
-        Thu, 19 May 2022 23:43:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F9BEC385AA;
-        Thu, 19 May 2022 23:42:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653003780;
-        bh=6JGyfhNXfNm06GnBDot5qMy5WIBj4ipB36DG8PIGeWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PDDeKqV+B8s4g1Gv66ZmQTK/XyaX3H7n7/hVJ9z1x1I3SE8cSo7uEAKJ27J2PvKjW
-         68R61oWOiNwsgwwjDMdoCT11grrtc0Xlsp8L12B0gzJWr6PViSMOsraQAAsSqyS05o
-         wCREsib0UGEoKw2BhZv5rW7X7F1i0J8vsGgniXyc29mJ9tuht1Lx7cKRnQU7E6YXn/
-         mqLTVtoMsdT5x4sRDlHqNHXZY/sIaTryjTuntCXlz04hdJV00c1y+0yFAIVR8zHC8B
-         oCCnThSzW7wqKw90ygLEVR4V1XgAmhTK7HDcrak+yFRGhoZNYYuN7J5TbGjkRxodyf
-         aeQMgM4NJ2Gcg==
-Date:   Fri, 20 May 2022 02:41:21 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        James Bottomley <jejb@linux.ibm.com>, kernel@pengutronix.de,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        David Gstir <david@sigma-star.at>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Andreas Rammhold <andreas@rammhold.de>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Michael Walle <michael@walle.cc>,
-        John Ernberg <john.ernberg@actia.se>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH v10 0/7] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-Message-ID: <YobVoQ+enx0IY4z1@kernel.org>
-References: <20220513145705.2080323-1-a.fatoum@pengutronix.de>
- <YoKZwFkfcl7ixTF4@kernel.org>
- <4d4ecd4b-9683-08a0-7a5f-11a7ff86ea6d@pengutronix.de>
- <c511995075cafb35bfefcbfe6fa6e84aa31c536f.camel@kernel.org>
- <6f6a5524-9661-9a9f-a674-915efa33f6f6@pengutronix.de>
- <YoUJgUbSRVnTfTj/@iki.fi>
+        Thu, 19 May 2022 19:41:28 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E30766ACB
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:41:27 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id q76so6322715pgq.10
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:41:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y9COzyvBIeNRvhVZARn4Tr5Mm1d3dQnhuaiOOZjtkqk=;
+        b=cdNmdwWZwNLhDB9iFg27zK0z/Sw30NLINUvQdUJYod654q4zx/M+3VnWdLwUwLwI1T
+         OD+Eyv+KaBElZHITAvZ/sD57wk23rsKjfxsIdgzqCQ0nlANCer3Gem8sIjNEzYvKPM0b
+         UMb/VxEKb8KyRlguUCWyR1NGbHyCfePpG3fn5XlcAQLauA3vCXhy30tnP1X6LnYlB7lg
+         tV2rcl/BIgp60KT3AsOVrdEdtNLZY6k/rLKl6E0S3MettlmqcX7IYCtHY1ojpra1Vl8B
+         HXIEFEhaYeNljfi6YjWxIHPVL3gBd2aQ17OmYq0lBrVEwVGLc5pnf4wWwBd6hYpDzEY2
+         ytvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y9COzyvBIeNRvhVZARn4Tr5Mm1d3dQnhuaiOOZjtkqk=;
+        b=FEcB++w9OoZDpViM2SyY35xru57Ey8TbKZl56jXCWvqn7194T0Mm+yqby+ibwMUSBW
+         APZfnGl23Yw5oazVqrswjysm86LGzKjtZF0ZFqiwNoyFVHmmCFsd98njIPGInAfh+CFC
+         o+D+96yGM8hxM0ij++TyyKSOAKSBFpyt5IOEkehyhjKcwheALoBic08nG8zvSymx76Yl
+         /vmB6xhhwO2aZ58PaxWk6p6rA1NBvxnWzeESmvQwvP3EcHrJuIKYMjRmKEyXYzCSMyCW
+         s1/7ZjYk9Z6haFoIQcA7n6tmT8KpAeTT7DR7XRplcgpBtoFYYopVcjdPuzB7tJPAMObJ
+         x5qQ==
+X-Gm-Message-State: AOAM532RyKl7HRHgD3nMXQudElVU0IPpV0hvgdqQygNiO419DbLHlmZ1
+        4jvMbRKTlNChEJKnptEGatYMXQ==
+X-Google-Smtp-Source: ABdhPJyUnP4DU2ULl/GilAmOWqdi+HmycYrx10QrXHqJuODoh6QTRIRVzZJ4+S5hFEXuQ5VoYosVZA==
+X-Received: by 2002:a65:480a:0:b0:3c6:e629:3022 with SMTP id h10-20020a65480a000000b003c6e6293022mr5953237pgs.281.1653003686955;
+        Thu, 19 May 2022 16:41:26 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t66-20020a628145000000b005183112db97sm246042pfd.74.2022.05.19.16.41.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 16:41:26 -0700 (PDT)
+Date:   Thu, 19 May 2022 23:41:22 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>
+Subject: Re: [PATCH v9 0/9] IPI virtualization support for VM
+Message-ID: <YobVotf9CJ6dk9zw@google.com>
+References: <20220419153155.11504-1-guang.zeng@intel.com>
+ <2d33b71a-13e5-d377-abc2-c20958526497@redhat.com>
+ <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
+ <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
+ <YoK48P2UrrjxaRrJ@google.com>
+ <20220517135321.GA31556@gao-cwp>
+ <20220517140218.GA569@gao-cwp>
+ <20220519092906.GA3234@gao-cwp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoUJgUbSRVnTfTj/@iki.fi>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220519092906.GA3234@gao-cwp>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 05:58:09PM +0300, Jarkko Sakkinen wrote:
-> On Wed, May 18, 2022 at 06:36:18AM +0200, Ahmad Fatoum wrote:
-> > On 18.05.22 03:08, Jarkko Sakkinen wrote:
-> > > On Tue, 2022-05-17 at 14:44 +0200, Ahmad Fatoum wrote:
-> > >> Hello Herbert,
-> > >>
-> > >> On 16.05.22 20:36, Jarkko Sakkinen wrote:
-> > >>> On Fri, May 13, 2022 at 04:56:58PM +0200, Ahmad Fatoum wrote:
-> > >>> I can probably pick these unless objections?
-> > >>
-> > >> Pankaj has given his Reviewed-by for the CAAM parts he co-maintains,
-> > >> is it ok for this to go in via Jarkko's tree?
-> > >>
-> > >> Note that applying this series on top of jarkko/linux-tpmdd.git has a
-> > >> trivial conflict when merged with herbert/cryptodev-2.6.git:
-> > >> Two independently added Kconfig options need to coexist in
-> > >> drivers/crypto/caam/Kconfig.
-> > >>
-> > >> I can resend my series rebased if needed.
-> > >>
-> > >> Cheers,
-> > >> Ahmad
-> > >>
-> > >>>
-> > >>> BR, Jarkko
-> > >>>
-> > >>
-> > >>
-> > > 
-> > > This came up:
-> > > 
-> > > https://lore.kernel.org/keyrings/0e8da958a222e5c1dccaaf1600b08bdb8705b48e.camel@kernel.org/
-> > 
-> > And it turned out to be a misunderstanding. Or do you think there is still anything
-> > to do there?
-> > 
-> > Thanks,
-> > Ahmad
+On Thu, May 19, 2022, Chao Gao wrote:
+> On Tue, May 17, 2022 at 10:02:23PM +0800, Chao Gao wrote:
+> >+ Maxim
+> >
+> >On Tue, May 17, 2022 at 09:53:26PM +0800, Chao Gao wrote:
+> >>On Mon, May 16, 2022 at 08:49:52PM +0000, Sean Christopherson wrote:
+> >>>Shouldn't we have a solution for the read-only APIC_ID mess before this is merged?
 > 
-> Oops, you're right, sorry.
+> Paolo & Sean,
 > 
-> Yeah, I guess I can pick these patches now.
+> If a solution for read-only APIC ID mess is needed before merging IPIv
+> series, do you think the Maxim's patch [1] after some improvement will
+> suffice? Let us know if there is any gap.
 
-Applied:
+Yep, inhibiting APICv if APIC ID is changed should do the trick, and it's nice and
+simple.  I can't think of any gaps.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=next
-
-BR, Jarkko
+> [1]: https://lore.kernel.org/all/20220427200314.276673-3-mlevitsk@redhat.com/

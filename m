@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E51C52DF5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1226952DF53
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234499AbiESV3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S234753AbiESVbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiESV3m (ORCPT
+        with ESMTP id S234567AbiESVbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:29:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7889C6E8CD
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:29:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B5096182F
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 21:29:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2ADC385B8;
-        Thu, 19 May 2022 21:29:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652995780;
-        bh=A4UO2mkv0gXLuuIYXOlq70yi5YlkbdD2b9NHw2O/2M0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kn2mVWy0gz+IH88Sj26CuNophm3JYrrgTa+fIUGETV9Fv3IiZ29oSD9xQ7zYxVuE8
-         rOrgqKETiCpm3vi2cK84V2+sBSxKoSsXsqoRdJAONK/tyPXmzEJeJdyJJPILUeGdAi
-         YYNgqS8rZIGv+5GTKVa9dVSFAF7OXa9LKDoUzPXdzIY5+t/JYkI8scrldI8Mjbz0+7
-         wkGr+y/beCKgpc7aQDxv7v2WD1GID9eL80cdn+2IkBnbc+ELhXt+qmGopazU1xzapL
-         o1g+TFUnWfDiab6cWPzJWS/0yNXqX2W6MZgqxUKNnQM05BOoOYPoeBD2Zrc5H2PDFU
-         XdcgxU/Rz2Mmw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 05B325C04E0; Thu, 19 May 2022 14:29:40 -0700 (PDT)
-Date:   Thu, 19 May 2022 14:29:39 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, kafai@fb.com, kpsingh@kernel.org
-Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
-Message-ID: <20220519212939.GE1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
- <20220517233507.GA423@qian>
- <20220518125152.GQ3441@techsingularity.net>
- <YoUealVA1bMaSH2l@qian>
- <20220518171503.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
- <YoZGSd6yQL3EP8tk@qian>
- <20220519191524.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <YoaxAMvQwHzDPxyi@qian>
+        Thu, 19 May 2022 17:31:52 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88685A2C4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:31:50 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id t25so11257503lfg.7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uPFf0tNJ9TcAsqzaRoxwP3QEC+KOutDOVLlGLkFc3YE=;
+        b=tEDqIBtGim9VFJUtpQYVVRcVm8mkzCeCKxCMX64+jD42a0rsXZqDazbcKcTPcrZmuu
+         /wTbxDFpuA+6YDQj4Jrb8Sylpc95GlD/7vTEf9uqW1QzbArTxgDbe7RTsO0wTgw78JRF
+         GJlXuicgTXApHoT04Ax0EYCRP/8N+wCDAzABNBNZIYJ2BxrH2qr0Zgzo1HA+ZBGukaIZ
+         JdSop5WnA2JpAkrOmm5eDThPBplyl+kWIVS2+xHkEiNFzvYm/uxT2gL9LVelM7M+iCvv
+         rqSpU+8ebAGjc0Xat0r1y8vN56BvBd2gOsM1sVVAWEtHAkmESpOacDFbPkXpedZo5SI1
+         togA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uPFf0tNJ9TcAsqzaRoxwP3QEC+KOutDOVLlGLkFc3YE=;
+        b=M8nWIYZ9ZzG7bTSxTy/ZdPyfqc5uA6PqfsS3CPDhoy+nzIauYucBKTirQbYB+KilX0
+         9yDtGHGkt1NnAmRrGSeVQRvmF9519not5OBHXKMPTrhOO21P3glau9VBCjJ0IU51+4Rf
+         iC9rFgQzMgUVjYomL+CCTWtDLDoC8h4hY1daRqHBMo3e+g0/vpWIFR7Ukr7Wl+l0qn3Y
+         jiywSN+EcyxtQzjfym0goxvWD3juYN4G50QNMuUP/mOfSVp6QamM50VL5VQohwKRk/ph
+         5ymK/Ao4N4glTlz2IsXg3saBI6Keaz7E6j9hvZ2ZOaZ9yqzZAkMRBZbmqrJIm6T+T6Kh
+         FsYw==
+X-Gm-Message-State: AOAM531+Itzsy7hBhwsscbsw0N+BQQXkB5AAv12bmBmqDJ1IJmQWB6Oa
+        3Ycxj4JbG0953aUQ2AAg9i7ucg==
+X-Google-Smtp-Source: ABdhPJyPhECntn4TKpqgUQQjodV+0kEWuleyBXxpov9qv2MpkiRX31qk6q5CLjQuj5NC4NIlcOTTwA==
+X-Received: by 2002:a19:6005:0:b0:477:bb1a:b2eb with SMTP id u5-20020a196005000000b00477bb1ab2ebmr4689782lfb.335.1652995908990;
+        Thu, 19 May 2022 14:31:48 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id c11-20020a056512104b00b00477ce466e59sm134555lfb.153.2022.05.19.14.31.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 14:31:48 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: [PATCH] HSI: cmt_speech: Pass a pointer to virt_to_page()
+Date:   Thu, 19 May 2022 23:29:43 +0200
+Message-Id: <20220519212943.778610-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoaxAMvQwHzDPxyi@qian>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 05:05:04PM -0400, Qian Cai wrote:
-> On Thu, May 19, 2022 at 12:15:24PM -0700, Paul E. McKenney wrote:
-> > Is the task doing offline_pages()->synchronize_rcu() doing this
-> > repeatedly?  Or is there a stalled RCU grace period?  (From what
-> > I can see, offline_pages() is not doing huge numbers of calls to
-> > synchronize_rcu() in any of its loops, but I freely admit that I do not
-> > know this code.)
-> 
-> Yes, we are running into an endless loop in isolate_single_pageblock().
-> There was a similar issue happened not long ago, so I am wondering if we
-> did not solve it entirely then. Anyway, I will continue the thread over
-> there.
-> 
-> https://lore.kernel.org/all/YoavU%2F+NfQIzQiDF@qian/
+A pointer into virtual memory is represented by a (void *)
+not an u32, so the compiler warns:
 
-I do know that feeling.
+drivers/hsi/clients/cmt_speech.c:1092:35: warning: passing argument
+  1 of 'virt_to_pfn' makes pointer from integer without a cast
+  [-Wint-conversion]
 
-> > Or is it possible that reverting those three patches simply decreases
-> > the probability of failure, rather than eliminating the failure?
-> > Such a decrease could be due to many things, for example, changes to
-> > offsets and sizes of data structures.
-> 
-> Entirely possible. Sorry for the false alarm.
+Fix this with an explicit cast.
 
-Not a problem!
+Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
+Cc: Pavel Machek <pavel@ucw.cz>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/hsi/clients/cmt_speech.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Do you ever see RCU CPU stall warnings?
-> 
-> No.
+diff --git a/drivers/hsi/clients/cmt_speech.c b/drivers/hsi/clients/cmt_speech.c
+index e014ef36d872..8069f795c864 100644
+--- a/drivers/hsi/clients/cmt_speech.c
++++ b/drivers/hsi/clients/cmt_speech.c
+@@ -1089,7 +1089,7 @@ static vm_fault_t cs_char_vma_fault(struct vm_fault *vmf)
+ 	struct cs_char *csdata = vmf->vma->vm_private_data;
+ 	struct page *page;
+ 
+-	page = virt_to_page(csdata->mmap_base);
++	page = virt_to_page((void *)csdata->mmap_base);
+ 	get_page(page);
+ 	vmf->page = page;
+ 
+-- 
+2.35.1
 
-OK, then perhaps a sequence of offline_pages() calls.
-
-Hmmm...  The percpu_up_write() function sets ->block to zero before
-awakening waiters.  Given wakeup latencies, might this allow an only
-somewhat unfortunate sequence of events to allow offline_pages() to
-starve readers?  Or is there something I am missing that prevents this
-from happening?
-
-							Thanx, Paul

@@ -2,85 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981BF52D2FD
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B22DB52D2F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238183AbiESMur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 08:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S238121AbiESMua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 08:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238164AbiESMuk (ORCPT
+        with ESMTP id S235333AbiESMuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 08:50:40 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD258BA57A;
-        Thu, 19 May 2022 05:50:31 -0700 (PDT)
-Date:   Thu, 19 May 2022 12:50:19 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1652964628; x=1653223828;
-        bh=+6dbY/snU3b6uCWUgyekqmraArOZDE0O1Do6Z1g28TA=;
-        h=Date:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:Cc:
-         Date:Subject:Reply-To:Feedback-ID:Message-ID;
-        b=M9q70UMjUe+S50Y/XwA+mERO7Nex8c1Hfssapd9f1q2X5Y8u1lPglwRW4oiT6eSkW
-         XZCXD+90cYbj6MNmAV/e6yY+kIvzw+IqHoNNcBTn8tvm/Ndczy5zpr483sxcdQR2vk
-         0Onx+5I5Dw5zMO4jwGh9OvMeF3sZ1gfhko4sPMjczBMmT8qHjV5mYuZ5av7p/yE++C
-         Cd8C3caxWD5msQw+QTk79j0wbYqIbky4Pet2Y/+71TXc586ADxOC5L9jGKYzUfo0Zn
-         3MlrvVHS6XDpzH0Lk8QUhjmPZanmRUt63X5zNFKRomF/uaNDv3J+BUvxBUzZx1tj5h
-         +cBxBPZDJr1sw==
-From:   Adam Wujek <dev_public@wujek.eu>
-Cc:     Adam Wujek <dev_public@wujek.eu>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Adam Wujek <dev_public@wujek.eu>
-Subject: [PATCH] i2c: busses: i2c-cadence: fix message length when receive block message
-Message-ID: <20220519124946.387373-1-dev_public@wujek.eu>
-Feedback-ID: 23425257:user:proton
+        Thu, 19 May 2022 08:50:21 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF0CBA98C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:50:19 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3qPj11TNzQkLs;
+        Thu, 19 May 2022 20:47:21 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
+ 2022 20:50:15 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <hughd@google.com>
+CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
+        <neilb@suse.de>, <apopple@nvidia.com>, <david@redhat.com>,
+        <surenb@google.com>, <peterx@redhat.com>, <rcampbell@nvidia.com>,
+        <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH v4 0/5] A few fixup patches for mm
+Date:   Thu, 19 May 2022 20:50:25 +0800
+Message-ID: <20220519125030.21486-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Needed by hwmon/pmbus_core driver to correctly calculate PEC.
-The hwmon/pmbus_core driver relies on bus drivers to update the message len=
-gth
-of received block transfers. Only in this type of smbus transfer, in which =
-the
-length is not known before the transfer is started.
+Hi everyone,
+This series contains a few patches to avoid mapping random data if swap
+read fails and fix lost swap bits in unuse_pte. Also we free hwpoison and
+swapin error entry in madvise_free_pte_range and so on. More details can
+be found in the respective changelogs. Thanks!
 
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
 ---
- drivers/i2c/busses/i2c-cadence.c | 5 +++++
- 1 file changed, 5 insertions(+)
+v4:
+  collect Reviewed-by per Naoya and David. Thanks for review!
+  fix infinite loop when swap in shmem error. Thanks Naoya for reporting
+the issue!
+v3:
+  collect Acked-by tag per David
+  remove unneeded pte wrprotect per David
+v2:
+  make the terminology consistent and collect Acked-by tag per David
+  fix lost swap bits in unuse_pte per Peter
+  free hwpoison and swapin error entry per Alistair
+  Many thanks Alistair, David and Peter for review!
+---
+Miaohe Lin (5):
+  mm/swapfile: unuse_pte can map random data if swap read fails
+  mm/swapfile: Fix lost swap bits in unuse_pte()
+  mm/madvise: free hwpoison and swapin error entry in
+    madvise_free_pte_range
+  mm/shmem: fix infinite loop when swap in shmem error at swapoff time
+  mm: filter out swapin error entry in shmem mapping
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cade=
-nce.c
-index 20ac432a37ea..65f1979d4e6f 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -830,6 +830,11 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, s=
-truct i2c_msg *msg,
- =09=09return -ETIMEDOUT;
- =09}
+ include/linux/swap.h    |  7 ++++++-
+ include/linux/swapops.h | 10 ++++++++++
+ mm/madvise.c            | 18 ++++++++++++------
+ mm/memory.c             |  5 ++++-
+ mm/shmem.c              | 39 +++++++++++++++++++++++++++++++++++++++
+ mm/swap_state.c         |  3 +++
+ mm/swapfile.c           | 21 ++++++++++++++++++---
+ 7 files changed, 92 insertions(+), 11 deletions(-)
 
-+=09/* Update message len, as i2c/smbus driver (function
-+=09 * i2c_smbus_xfer_emulated) relies on i2c device drivers to do this */
-+=09if ((msg->flags & I2C_M_RECV_LEN) && (msg->flags & I2C_M_RD))
-+=09=09msg->len =3D msg->buf[0] + 2; /* add len byte + PEC byte */
-+
- =09cdns_i2c_writereg(CDNS_I2C_IXR_ALL_INTR_MASK,
- =09=09=09  CDNS_I2C_IDR_OFFSET);
-
---
-2.17.1
-
+-- 
+2.23.0
 

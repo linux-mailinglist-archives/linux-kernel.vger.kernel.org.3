@@ -2,140 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369BD52C93B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAA252C93D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiESBaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 21:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S232114AbiESBf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 21:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbiESBaS (ORCPT
+        with ESMTP id S230400AbiESBfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 21:30:18 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6248DDFF
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 18:30:17 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id c1so3779107qkf.13
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 18:30:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=Vctvs+yLST0ladkxVngSqvQUozt/YOrV+kKx1mu8aJA=;
-        b=HLVHydgvgbmMDpw1rj4PjhbTGGTqhSOBCKM1afw/p50es6EyWkVCtEGGecQAxyuN/D
-         0odjMkW1hUryO0AvAiAHLmQXlkTJnm6tAv6y1HGh86MuGS4IvK1JVJwNpRfye+MpVDyB
-         oxrT64vf4E2NlfkriEDTVvNoqrqhb+FNvs8bB2LF/hTdfGyPkGnS2YHi5Gc8aYUUjT36
-         7NtkYJykqGQDpatDfRjiSmfoLcVTRtC5jDk6bKhKfbSBkuk4Xsqo4mQKYJoE3uuL/9Rx
-         rN+p8QEK0sETgd7BdwMT/TXWzTPMQ/mjvf1tjgu7OfiSzx+DCeRiPeRyXy8Vsyf+p+TB
-         GsxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=Vctvs+yLST0ladkxVngSqvQUozt/YOrV+kKx1mu8aJA=;
-        b=GY18u7U85r9sb72s73QyWGYxB2eMX/sINwiJA1l2E4oKzgv159Lm4macw/6KEovDYm
-         MV/mAWOs8eVz2UMQnx7v/xvSH7+6i9nkWpzmpldmnMJfhCoT/CfkHA9cAOmiMY4I46r8
-         RlzElQFv8Vf8/gWzTgqGSDi4ZATiUCsSGtF0TX+fPNZnZ+lXd0Gia9S8l9Q446VavqfF
-         2dvmxflzzJqBlbH6RmOcfPzq7pXRhfun/VBhTOnaEp0Y+NcIaTIDoBlGpvxcOnJNKlFS
-         QVR923cQy1j0H3u/C1wQ/OSXmxlxl2UioX2DxJHsmuNbvrFDpBvsY7OZCH/u47xC3aMH
-         CT/Q==
-X-Gm-Message-State: AOAM530adpdvGHhGBS7qIOdc8ZkoeEqldIKQ6pKvlSrhe6JNiCJNxv+U
-        FFiH+4nfyWwiXpex9VCYD4Cd3A==
-X-Google-Smtp-Source: ABdhPJxJH+K2i0AvHY4rT9AU1ucarCVHI0V+Qi/EtshWI9oGclaUc6guPBsrY1vw6csBfv/yLrmnOA==
-X-Received: by 2002:a37:9144:0:b0:69f:789b:7581 with SMTP id t65-20020a379144000000b0069f789b7581mr1617411qkd.773.1652923816375;
-        Wed, 18 May 2022 18:30:16 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id b7-20020a379907000000b0069fcc501851sm496304qke.78.2022.05.18.18.30.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 18:30:15 -0700 (PDT)
-Date:   Wed, 18 May 2022 18:30:03 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        David Hildenbrand <david@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: vma_needs_copy always true for VM_HUGETLB ?
-In-Reply-To: <a7ccd8b2-c659-44c9-cb18-1496f99aa5a8@oracle.com>
-Message-ID: <872b743d-ac21-59a3-bd31-109229f63112@google.com>
-References: <a7ccd8b2-c659-44c9-cb18-1496f99aa5a8@oracle.com>
+        Wed, 18 May 2022 21:35:24 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0139345D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 18:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652924123; x=1684460123;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1fnNyfY+tpW2NgUz39MRpubIN14QdSxh7wgGvcGEjqs=;
+  b=FGwN87dzVvpJT6P/98+1O1JgefkDddVgb9hOB8zSCD/ON+2bumfwZi1P
+   TKUJO3AdBmA3FcMKuQe/6w0NebH+ghiFu4C1SOL03yQrkBt5604jUiq4O
+   wjh13j5YZq/iQaAwTKhqrt3C9qkqRPgXwcaltiB0UlSG09S8l/SgF0ve+
+   Ub45Oj2RUYjssotlrGUOG9lgmnjMADbHJjnamNpIG5NH9yW4C//UEXFtG
+   bwbEAkiS1Pt9jt0tExovcWQSmVTWerRZ34Aft5HtUTfFd11VIgMGcZ9hY
+   Y6Ke//AIlVIvNTbgpUf3ZRQpRel7O/C9qjDliP9Om3BCfWlPtuokzr4o8
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="335017953"
+X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
+   d="scan'208";a="335017953"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 18:35:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
+   d="scan'208";a="673749908"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 18 May 2022 18:35:20 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrV4R-0002tL-ME;
+        Thu, 19 May 2022 01:35:19 +0000
+Date:   Thu, 19 May 2022 09:34:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>, gregkh@linuxfoundation.org,
+        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        straube.linux@gmail.com, dan.carpenter@oracle.com,
+        fmdefrancesco@gmail.com
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        Pavel Skripkin <paskripkin@gmail.com>
+Subject: Re: [PATCH 1/4] staging: r8188eu: add error handling of rtw_read8
+Message-ID: <202205190916.GRvUby7c-lkp@intel.com>
+References: <1a9834b705054dcd0b0be0d929084c44a224abaa.1652911343.git.paskripkin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a9834b705054dcd0b0be0d929084c44a224abaa.1652911343.git.paskripkin@gmail.com>
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022, Mike Kravetz wrote:
+Hi Pavel,
 
-> For most non-anonymous vmas, we do not copy page tables at fork time, but
-> rather lazily populate the tables after fork via faults.  The routine
-> vma_needs_copy() is used to make this decision. For VM_HUGETLB vmas, it always
-> returns true.
+Thank you for the patch! Perhaps something to improve:
 
-"vma_needs_copy()" is *very* recent coinage, not reached Linus yet.
+[auto build test WARNING on staging/staging-testing]
 
-> 
-> Anyone know/remember why?  The code was added more than 15 years ago and
-> my search for why hugetlb vmas were excluded came up empty.
-> 
-> I do not see a reason why VM_HUGETLB is in this list.  Initial testing did
-> not reveal any problems when I removed the VM_HUGETLB check.
-> 
-> FYI - I am looking at the performance of fork and exec (unmap) of processes
-> with very large hugetlb mappings.  Skipping the copy at fork time would
-> certainly speed things up.  Of course, there could some users who would
-> notice if hugetlb page tables are not copied at fork time.  However, this
-> is the behavior for 'normal' mappings.  I am inclined to make hugetlb be
-> 'more normal'.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Skripkin/staging-r8188eu-add-error-handling-of-usb-read-errors/20220519-061342
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git e41f7a5521d7f03dca99e3207633df71740569dd
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220519/202205190916.GRvUby7c-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f8c9bd199a25d7a1d8f6fed1b0d5da9cec1f8faa
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pavel-Skripkin/staging-r8188eu-add-error-handling-of-usb-read-errors/20220519-061342
+        git checkout f8c9bd199a25d7a1d8f6fed1b0d5da9cec1f8faa
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/staging/r8188eu/
 
-Good question, not obvious to me either: but I've found the answer.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The commit was of course Nick's d992895ba2b2 ("[PATCH] Lazy page table
-copies in fork()") in 2.6.14; but it doesn't explain why VM_HUGETLB is
-there in the test, and goes on to be copied.
+All warnings (new ones prefixed by >>):
 
-I haven't re-read through the whole mail thread which led to that
-commit, but I think you'll find the crucial observation comes from
-Andi in https://lore.kernel.org/lkml/200508251756.07849.ak@suse.de/#t
+   drivers/staging/r8188eu/hal/usb_halinit.c: In function '_InitBeaconParameters':
+>> drivers/staging/r8188eu/hal/usb_halinit.c:465:13: warning: variable 'res' set but not used [-Wunused-but-set-variable]
+     465 |         int res;
+         |             ^~~
+--
+   drivers/staging/r8188eu/os_dep/ioctl_linux.c: In function 'rtw_dbg_port':
+>> drivers/staging/r8188eu/os_dep/ioctl_linux.c:3419:32: warning: variable 'res' set but not used [-Wunused-but-set-variable]
+    3419 |                         int i, res;
+         |                                ^~~
 
-"Actually I disabled it for hugetlbfs (... !is_huge...vma). The reason 
-is that lazy faulting for huge pages is still not in mainline."
 
-and indeed, look at the 2.6.13 or 2.6.14 mm/hugetlb.c and you find
-/*
- * We cannot handle pagefaults against hugetlb pages at all.  They cause
- * handle_mm_fault() to try to instantiate regular-sized pages in the
- * hugegpage VMA.  do_page_fault() is supposed to trap this, so BUG is we get
- * this far.
- */
-static struct page *hugetlb_nopage(struct vm_area_struct *vma,
-				unsigned long address, int *unused)
-{
-	BUG();
-	return NULL;
-}
+vim +/res +465 drivers/staging/r8188eu/hal/usb_halinit.c
 
-Oh, and that pretty much still exists to this day, to cover that path
-to a fault; but 2.6.16 implemented hugetlb_no_page(), which is what
-then actually got used to satisfy a hugetlb fault.
+   461	
+   462	static void _InitBeaconParameters(struct adapter *Adapter)
+   463	{
+   464		struct hal_data_8188e *haldata = &Adapter->haldata;
+ > 465		int res;
+   466	
+   467		rtw_write16(Adapter, REG_BCN_CTRL, 0x1010);
+   468	
+   469		/*  TODO: Remove these magic number */
+   470		rtw_write16(Adapter, REG_TBTT_PROHIBIT, 0x6404);/*  ms */
+   471		rtw_write8(Adapter, REG_DRVERLYINT, DRIVER_EARLY_INT_TIME);/*  5ms */
+   472		rtw_write8(Adapter, REG_BCNDMATIM, BCN_DMA_ATIME_INT_TIME); /*  2ms */
+   473	
+   474		/*  Suggested by designer timchen. Change beacon AIFS to the largest number */
+   475		/*  beacause test chip does not contension before sending beacon. by tynli. 2009.11.03 */
+   476		rtw_write16(Adapter, REG_BCNTCFG, 0x660F);
+   477	
+   478		/* FIXME: return an error to caller */
+   479		res = rtw_read8(Adapter, REG_FWHW_TXQ_CTRL + 2, &haldata->RegFwHwTxQCtrl);
+   480		res = rtw_read8(Adapter, REG_TBTT_PROHIBIT + 2, &haldata->RegReg542);
+   481		res = rtw_read8(Adapter, REG_CR + 1, &haldata->RegCR_1);
+   482	}
+   483	
 
-So the reason for fork copying VM_HUGETLB appears to have gone away
-in 2.6.16.
-
-(I haven't a clue on private hugetlb mappings and reservations and
-whether anon_vma means the same on hugetlb, but you know all that.)
-
-Hugh
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,119 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6864D52D18C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9282052D194
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236165AbiESLeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        id S237425AbiESLfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237473AbiESLeH (ORCPT
+        with ESMTP id S231274AbiESLfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:34:07 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5472B41CB
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:34:03 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L3nlW3JTrz1JCKN;
-        Thu, 19 May 2022 19:32:39 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 19:34:01 +0800
-Subject: Re: [PATCH 5/9] revert "mm/z3fold.c: allow __GFP_HIGHMEM in
- z3fold_alloc"
-To:     Vitaly Wool <vitaly.wool@konsulko.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220429064051.61552-1-linmiaohe@huawei.com>
- <20220429064051.61552-6-linmiaohe@huawei.com>
- <CAM4kBBLC4Jo4TAC66XzJBgFZfF5ONgCNT5fPFQjwPJtug+5N8A@mail.gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <a3179291-fe43-1004-c89c-3bcdad26306e@huawei.com>
-Date:   Thu, 19 May 2022 19:34:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Thu, 19 May 2022 07:35:36 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BBCB0A66
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:35:33 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id u23so8633993lfc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:35:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=TCjmGPy0SDboBVIutYmABeJhjmy/yNmOBhY70ZJKm34=;
+        b=u2wKZJYFwKripn4BJEh9JTJClCrPMxeeVAUY/FR2Rp6+zlFZZCfCDf6Wo561rrqIu4
+         P8dDLkJPXHJVZuNYIXmUpYpE+2EM8wusyCcOgFTImIjGzXi3+lv0e5iZHgEZ6Wb0tUvB
+         PCKfOJMAS6SHwuF+evavImIceRY1EPIfJPMfGaEDH7qHXoj4xmgeN8nLql8xfHUbXEO1
+         5pBk+wQlbz8IYX18XZgImAr2t+PpuBYZ340ecUmpDJ1RBnY57g6OAiMlp9naS3z3CtzE
+         Ld/p2RiDERai9j/4wdDec4setIuDv8ZelvbXvT7M6icKCqeDJhyY+s1BGwMaMxrV8I6Z
+         M1rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=TCjmGPy0SDboBVIutYmABeJhjmy/yNmOBhY70ZJKm34=;
+        b=F+qr3qgf3mlzAvogjy+grFlhyL29nIg9dGhHH15EbUWk3FVTzEgR4sDtji4EhRILmW
+         CHTZ1iFcBJ8q73w28XQOCpVEIm1c5hB8CJ9MBFAXmJ3wpzmPQyUN8PrbPuCCjwZm9LLt
+         rb4i52jM12iJfPT57fyU2EcF/YIh749qTe91KYfSb9y+SkqLd4INMIoEuwOG9GHqRFLV
+         98xmY3yrFTCNCp2+5adBclc/09wpIVtwjg58H2wGTHZZY3Jw8ke7/zrLeOXBDpCBHlYx
+         zSnlw8Ntm99bSBd11gXk7EyX59HAX5qrs/AJr0MElU0hElpzA7Sp+KUu63s4hEmUdYfO
+         0/5Q==
+X-Gm-Message-State: AOAM532XK9oUR8ZY7gPhYDyMm3Q9rOcrA7vo7u3iwmrFJy2EPaPYHCUr
+        2T2rgJ9Dmb5vIzHiDnr0A0MFWA==
+X-Google-Smtp-Source: ABdhPJzLH+q3cnn1YgCQYp6QlL4DRa+F5w1aD7hiBWy/faJbh3DSsLSkr1yk1PC6lRxWhrXO47eXSQ==
+X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id p21-20020a056512139500b00446d38279a5mr3034085lfa.210.1652960132258;
+        Thu, 19 May 2022 04:35:32 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id n18-20020a2e9052000000b00253d8962fffsm99317ljg.18.2022.05.19.04.35.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 04:35:31 -0700 (PDT)
+Message-ID: <4d9b29e8-b171-e181-e2a7-2c8c80107ab1@linaro.org>
+Date:   Thu, 19 May 2022 13:35:30 +0200
 MIME-Version: 1.0
-In-Reply-To: <CAM4kBBLC4Jo4TAC66XzJBgFZfF5ONgCNT5fPFQjwPJtug+5N8A@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 6/6] arm64: dts: qcom: Add PMP8074 DTSI
 Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20220518184825.1034976-1-robimarko@gmail.com>
+ <20220518184825.1034976-6-robimarko@gmail.com>
+ <015c60e9-78f6-f0f0-5af0-733a78fbdf65@linaro.org>
+ <CAOX2RU4--VULzvc9NGc4zWV4jpD+riM+9Ff8mqU834a6vQFc5Q@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAOX2RU4--VULzvc9NGc4zWV4jpD+riM+9Ff8mqU834a6vQFc5Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/5/19 15:12, Vitaly Wool wrote:
-> On Fri, Apr 29, 2022 at 8:41 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+On 19/05/2022 13:21, Robert Marko wrote:
+> On Thu, 19 May 2022 at 13:07, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 >>
->> Revert commit f1549cb5ab2b ("mm/z3fold.c: allow __GFP_HIGHMEM in
->> z3fold_alloc").
+>> On 18/05/2022 20:48, Robert Marko wrote:
+>>> PMP8074 is a companion PMIC to the Qualcomm IPQ8074 series that is
+>>> controlled via SPMI.
+>>>
+>>> Since we now have support for the regulators inside of it add DTSI
+>>> for it.
+>>>
+>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/pmp8074.dtsi | 38 +++++++++++++++++++++++++++
 >>
->> z3fold can't support GFP_HIGHMEM page now. page_address is used
->> directly at all places. Moreover, z3fold_header is on per cpu
->> unbuddied list which could be access anytime. So we should rid
->> the support of GFP_HIGHMEM allocation for z3fold.
+>> This file is not referenced by anything, thus not possible to compile
+>> nor verify.
 > 
-> Could you please clarify how kmem_cache is affected here?
+> That is correct, I can include it on HK01 which has an SDHCI controller
+> and thus can consume L11 for VQMMC so that HS200 and higher work.
 
-With this code changes, kmem_cache should be unaffected. HIGHMEM is still not supported for
-kmem_cache just like before but caller ensures __GFP_HIGHMEM is not passed in now. The issue
-I want to fix here is that if z3fold page is allocated from highmem, page_address can't be
-used directly. Did I answer your question? Or don't I get your point?
-
-Thanks!
-
-> 
-> Thanks,
-> Vitaly
-
-Many thanks for your time! :)
+Yes, otherwise this does not have any effect.
 
 > 
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/z3fold.c | 8 +++-----
->>  1 file changed, 3 insertions(+), 5 deletions(-)
->>
->> diff --git a/mm/z3fold.c b/mm/z3fold.c
->> index b3b4e65c107f..5f5d5f1556be 100644
->> --- a/mm/z3fold.c
->> +++ b/mm/z3fold.c
->> @@ -212,10 +212,8 @@ static int size_to_chunks(size_t size)
->>  static inline struct z3fold_buddy_slots *alloc_slots(struct z3fold_pool *pool,
->>                                                         gfp_t gfp)
->>  {
->> -       struct z3fold_buddy_slots *slots;
->> -
->> -       slots = kmem_cache_zalloc(pool->c_handle,
->> -                                (gfp & ~(__GFP_HIGHMEM | __GFP_MOVABLE)));
->> +       struct z3fold_buddy_slots *slots = kmem_cache_zalloc(pool->c_handle,
->> +                                                            gfp);
->>
->>         if (slots) {
->>                 /* It will be freed separately in free_handle(). */
->> @@ -1075,7 +1073,7 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
->>         enum buddy bud;
->>         bool can_sleep = gfpflags_allow_blocking(gfp);
->>
->> -       if (!size)
->> +       if (!size || (gfp & __GFP_HIGHMEM))
->>                 return -EINVAL;
->>
->>         if (size > PAGE_SIZE)
->> --
->> 2.23.0
->>
-> .
-> 
+> I wanted to include the nodes directly in the SoC DTSI and set L11 as VQMMC
+> for SDHCI there as this is a companion PMIC and always present, but
+> the established
+> procedure is for the PMIC to have its own DTSI and then be included per board.
 
+Which was correct suggestion but it is not relevant here. In your
+previous approach your PMIC would be included on every board via SoC
+DTSI. Now your PMIC is not included at all.
+
+
+Best regards,
+Krzysztof

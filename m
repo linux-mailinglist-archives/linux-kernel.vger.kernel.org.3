@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A773852D665
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D119352D66A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239922AbiESOq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S239949AbiESOsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239850AbiESOqy (ORCPT
+        with ESMTP id S239945AbiESOsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:46:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 263A04B1E3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:46:54 -0700 (PDT)
+        Thu, 19 May 2022 10:48:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCE21A3091
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652971613;
+        s=mimecast20190719; t=1652971695;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IYenpcwbemxE/tpiqt4OT+PMDoY+cz7r/DOS2tuXYQI=;
-        b=R+Y1ITuTnpCTOOkL35yKlpu1UXYGH/daEoCJMDizwX+ozNgGaPXgvnKSZ9T8J5vOvoiuAw
-        bPiQ3ResLMzzbEYuRuRuMj8Y2k0AP75nDNRzh0l6lNNHXw+cpZ63LtiyfO/sjTUcnzGd0V
-        u5tLH0/6MBAPQog6Td2aX2Poj5o5B+8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=1OAuMmOz0HL+Uy2U9iB8Am39R1ctikhJNEflzxuIzxs=;
+        b=QalrMAEwjDK4LFUTqGxHia2zsM2+E/YVKLLbpoUEggsY6WiVLNT6qemK98m7iZBOFP/alZ
+        q+bCdPA6vKkX4uo8bth//tGYl/0LtibDQtbjOD1wwHkfLJi9fS3k3IbNX7i4MOwvOU20nB
+        Y1D8qSN84vA2iUk56XyJvj2T9G48Udk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-r29LjJq7MRq-m6C9mffQ-w-1; Thu, 19 May 2022 10:46:52 -0400
-X-MC-Unique: r29LjJq7MRq-m6C9mffQ-w-1
-Received: by mail-wm1-f71.google.com with SMTP id z23-20020a05600c221700b003942fd37764so4601355wml.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:46:51 -0700 (PDT)
+ us-mta-626-uFyvcDDNOjee2iacjecikA-1; Thu, 19 May 2022 10:48:08 -0400
+X-MC-Unique: uFyvcDDNOjee2iacjecikA-1
+Received: by mail-wm1-f72.google.com with SMTP id v126-20020a1cac84000000b00396fe5959d2so2119244wme.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:48:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=IYenpcwbemxE/tpiqt4OT+PMDoY+cz7r/DOS2tuXYQI=;
-        b=bbX7mak5IlH1FlC+1q2UiE+YzhrwuufpkkFuEM8DcPsniNR5PM9zcDYmOTolYktEyS
-         lG7HFmksedTjuiZloyiSP+hjW1eZKNzNWPtkE03rHttJaExFgSG7j7oRCmmCgxeQIq3n
-         riNqcHfKDoKRqMj3Bet03oGz2mrbxFK5+sfZUv4yZsK+X9mIQ+KRYe9sQBY4RhQdBxHy
-         Oc9jBGXVogkvcGznLw7VsMH5CarXrM80b7b29CtHHz4e002DYYL8l7UTyAa2ur+dtELh
-         TXo4+od9zmbx3c4lQDCfb4NPQXuRINB8yMKyKryHlQdVXnwPOMucrsHhH/b/syyL/cYM
-         90vw==
-X-Gm-Message-State: AOAM532hEg1auQiQj4B45hOqfnJiJ0c5sKnSn0Lq1R1VCjp8iE1y4d+M
-        Y2b8n2MH4dq2RaQGA1xH/skWpqR9AvlLoUmq4Vc6LMvLbT9h14yLpKxNqRQOKVAdxugNbtlXz2C
-        qgq7Id7LacxadGa3UouLS1Gdw
-X-Received: by 2002:a5d:674c:0:b0:20d:87e:8d6f with SMTP id l12-20020a5d674c000000b0020d087e8d6fmr4389531wrw.40.1652971611084;
-        Thu, 19 May 2022 07:46:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyr6JwGKaZDuEnW7utGBQ+cruIn2morLnGA2beoQBpy8dow5R22hQX7c9kMilfKrC6KCUQoKg==
-X-Received: by 2002:a5d:674c:0:b0:20d:87e:8d6f with SMTP id l12-20020a5d674c000000b0020d087e8d6fmr4389505wrw.40.1652971610845;
-        Thu, 19 May 2022 07:46:50 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id a7-20020adfbc47000000b0020c635ca28bsm5370388wrh.87.2022.05.19.07.46.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1OAuMmOz0HL+Uy2U9iB8Am39R1ctikhJNEflzxuIzxs=;
+        b=DET/L3BCzlzK4Ztfoks/Jdp6aKR3GJ7Y+XBrHcu//Do0KPejkT25wKWpqgSG4azarT
+         I2seB2/w2qCr5aoG4GcTm8/mw6lFVFMT0yZWPxYEKOrfNLVDNRaP571E8bxnoqDGk3/I
+         iPQ8D6V+z9Kxr4K+sT7kwCd6K/GCGJf+GJLmngj28YDtkNg6S4mxZ8iEiClPmpAlfhEU
+         UxiO3VbmFonjcCDy3rdOVMo0PxiWS4T3N483Gwp6M17bk0ENkODXSQUi7po4/V3DXTrH
+         9AIy9kGZ2raHcLBrmrPZS8zN4qc3szpbo/JpjugaEfFZHy3OKd1KsNV2+RT5CaZALH3x
+         U1aQ==
+X-Gm-Message-State: AOAM530oArWtrJaKZBZ5dZ8wA45Gm5RQwyaO6q3zj6xa3lXpqd0pvrGm
+        bfxQhDFUXrlRX1gD/8CKgU5rTK6CM05n5gez7BKxGASfE98ggRYeZXd0jeBSzfdZYQKgOAqWnIM
+        6os9/ZgPsJuXCLZmSvfWjdvA1
+X-Received: by 2002:a05:600c:198f:b0:394:952d:9a72 with SMTP id t15-20020a05600c198f00b00394952d9a72mr4627437wmq.72.1652971687151;
+        Thu, 19 May 2022 07:48:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwrkzJZYLrUDEogMR26ucPZYo2pitwKWmbuBkCcZMZ+f7N5rGYODtRfu066599B6CWYFRn8fg==
+X-Received: by 2002:a05:600c:198f:b0:394:952d:9a72 with SMTP id t15-20020a05600c198f00b00394952d9a72mr4627423wmq.72.1652971686920;
+        Thu, 19 May 2022 07:48:06 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id 189-20020a1c02c6000000b00397342bcfb7sm787758wmc.46.2022.05.19.07.48.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 07:46:50 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: Re: [PATCH RESEND v12 00/17] KVM: x86/pmu: Add basic support to
- enable guest PEBS via DS
-In-Reply-To: <d7461fd4-f6ec-1a0b-6768-0008a3092add@gmail.com>
-References: <20220411101946.20262-1-likexu@tencent.com>
- <87fsl5u3bg.fsf@redhat.com>
- <e0b96ebd-00ee-ead4-cf35-af910e847ada@gmail.com>
- <d7461fd4-f6ec-1a0b-6768-0008a3092add@gmail.com>
-Date:   Thu, 19 May 2022 16:46:49 +0200
-Message-ID: <874k1ltw9y.fsf@redhat.com>
+        Thu, 19 May 2022 07:48:06 -0700 (PDT)
+Date:   Thu, 19 May 2022 16:48:01 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>
+Cc:     mst@redhat.com, jasowang@redhat.com, linux-kernel@vger.kernel.org,
+        gdawar@xilinx.com, lingshan.zhu@intel.com, kvm@vger.kernel.org,
+        lulu@redhat.com, netdev@vger.kernel.org, lvivier@redhat.com,
+        eli@mellanox.com, virtualization@lists.linux-foundation.org,
+        parav@nvidia.com
+Subject: Re: [PATCH] vdpasim: allow to enable a vq repeatedly
+Message-ID: <20220519144801.m7ioxoa5beo5jzv7@sgarzare-redhat>
+References: <20220519143145.767845-1-eperezma@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220519143145.767845-1-eperezma@redhat.com>
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,44 +82,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like Xu <like.xu.linux@gmail.com> writes:
-
-> On 19/5/2022 9:31 pm, Like Xu wrote:
->> =3D=3D=3D=3D Test Assertion Failure =3D=3D=3D=3D
->>  =C2=A0=C2=A0 lib/x86_64/processor.c:1207: r =3D=3D nmsrs
->>  =C2=A0=C2=A0 pid=3D6702 tid=3D6702 errno=3D7 - Argument list too long
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1=C2=A0=C2=A0=C2=A0 0x000000000040da11: =
-vcpu_save_state at processor.c:1207=20
->> (discriminator 4)
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 2=C2=A0=C2=A0=C2=A0 0x00000000004024e5: =
-main at state_test.c:209 (discriminator 6)
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 3=C2=A0=C2=A0=C2=A0 0x00007f9f48c2d55f: =
-?? ??:0
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 4=C2=A0=C2=A0=C2=A0 0x00007f9f48c2d60b: =
-?? ??:0
->>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 5=C2=A0=C2=A0=C2=A0 0x00000000004026d4: =
-_start at ??:?
->>  =C2=A0=C2=A0 Unexpected result from KVM_GET_MSRS, r: 29 (failed MSR was=
- 0x3f1)
->>=20
->> I don't think any of these failing tests care about MSR_IA32_PEBS_ENABLE
->> in particular, they're just trying to do KVM_GET_MSRS/KVM_SET_MSRS.
+On Thu, May 19, 2022 at 04:31:45PM +0200, Eugenio Pérez wrote:
+>Code must be resilient to enable a queue many times.
 >
-> One of the lessons I learned here is that the members of msrs_to_save_all=
-[]
-> are part of the KVM ABI. We don't add feature-related MSRs until the last
-> step of the KVM exposure feature (in this case, adding MSR_IA32_PEBS_ENAB=
-LE,
-> MSR_IA32_DS_AREA, MSR_PEBS_DATA_CFG to msrs_to_save_all[] should take
-> effect along with exposing the CPUID bits).
+>At the moment the queue is resetting so it's definitely not the expected
+>behavior.
+>
+>Fixes: 2c53d0f64c06 ("vdpasim: vDPA device simulator")
+>Cc: stable@vger.kernel.org
+>Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+>---
+> drivers/vdpa/vdpa_sim/vdpa_sim.c | 5 +++--
+> 1 file changed, 3 insertions(+), 2 deletions(-)
+>
+>diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>index ddbe142af09a..b53cd00ad161 100644
+>--- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+>@@ -355,9 +355,10 @@ static void vdpasim_set_vq_ready(struct vdpa_device *vdpa, u16 idx, bool ready)
+> 	struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
+>
+> 	spin_lock(&vdpasim->lock);
+>-	vq->ready = ready;
+>-	if (vq->ready)
+>+	if (!vq->ready) {
+>+		vq->ready = ready;
+> 		vdpasim_queue_ready(vdpasim, idx);
+>+	}
 
-AFAIR the basic rule here is that whatever gets returned with
-KVM_GET_MSR_INDEX_LIST can be passed to KVM_GET_MSRS and read
-successfully by the host (not necessarily by the guest) so my guess is
-that MSR_IA32_PEBS_ENABLE is now returned in KVM_GET_MSR_INDEX_LIST but
-can't be read with KVM_GET_MSRS. Later, the expectation is that what was
-returned by KVM_GET_MSRS can be set successfully with KVM_SET_MSRS.
+But this way the first time vq->ready is set to true, then it will never 
+be set back to false.
 
---=20
-Vitaly
+Should we leave the assignment out of the block?
+Maybe after the if block to avoid the problem we are fixing.
+
+Thanks,
+Stefano
 

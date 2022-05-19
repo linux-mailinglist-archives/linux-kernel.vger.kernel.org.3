@@ -2,85 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D140B52D0E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C2952D0E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237015AbiESKxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S237003AbiESKyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236980AbiESKxF (ORCPT
+        with ESMTP id S233896AbiESKyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:53:05 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB66CAFB02
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:53:00 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id y7so7663271ejr.13
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=SK+ZQhQjilCrwQiRCpsWW9SDhndydoTzucLtlj/VLJc=;
-        b=gPIiWaFYgShLcBNU6N4flDdxJzPgUZ++17C4r8wwXZxZVaoYGDI3Q9KOb3A1dp7oyR
-         WCH5RJimd9ip29sBifwQpQGsHcexUO6P5Rh0MAtOzz+CjN6p6jU9Zx0MUcz2Cr8OBv+0
-         tlZVPqKkZnKbb+h+lnTFuG+bkdfFELAt9mo7XS4GslhjC+vcY9zm6EuJfTZVf7WHUNqZ
-         Im9olXK9DuB0H8BVCUy/fwGPz+fKOKijEX92ZHkneuiObgP5g6E7dRYiab/fV9amEsYb
-         Ioa+wSR4Y/Pu2oRK3NXWdDzpPKN6XtIqkn/xTd/EhZJycda45TIczaQUqbYqVIIZ8EyJ
-         bUeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=SK+ZQhQjilCrwQiRCpsWW9SDhndydoTzucLtlj/VLJc=;
-        b=fAiUx5Bx5uKhJL/Yxawiz7jHbk/IksD1rjoveFbjyhJJSNOTGfHCgHL0oE2nVzfFyR
-         JqIZJhlX41cSoLs50BRDJAKTJ5CNcqPYnW18E46BlFg/nnPUCIx8HYe84ALsQo/Xk+fw
-         HacMy+O2IMiSmA1HFeRt1RY/mjuh5YdwihXERnT3ILU3YzhGo6mFRBOid3fNpBBY8/IL
-         uDjnvqi2xnUQePMme1/isC/ColIogXWOG3EdbvGFgjbqidbDeuDz/J+rZhgFP3kbpZ4T
-         4P1z7i7VMJI1ylZYxS3AcYmcMcAv3mYIG+pnn9VDmxPcmO77ptdZS+cLfACWPikV9VE5
-         cwHw==
-X-Gm-Message-State: AOAM531lrGnwX7NYEP77k9YlrYg/Uczn3GrK3myErLkUrdYKwTI1S+la
-        Wq2xmopPk3XIoTKutmt2mCpl8IqwTh9M899sjuE=
-X-Google-Smtp-Source: ABdhPJzdTcii+fZ3sVi/0raDZzgVGD3p4CewWGhCev/gM64DynkyaJWeEnS+vfzZQFZVqbvGzbp3AXGpccaAI0b3KTQ=
-X-Received: by 2002:a17:907:98c4:b0:6fe:a1e6:eae5 with SMTP id
- kd4-20020a17090798c400b006fea1e6eae5mr87838ejc.309.1652957579309; Thu, 19 May
- 2022 03:52:59 -0700 (PDT)
+        Thu, 19 May 2022 06:54:15 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FED5AEE2D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:54:14 -0700 (PDT)
+Received: from mail-yb1-f175.google.com ([209.85.219.175]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N1PLB-1nkwmt1TIZ-012pEo for <linux-kernel@vger.kernel.org>; Thu, 19 May
+ 2022 12:54:12 +0200
+Received: by mail-yb1-f175.google.com with SMTP id i187so6119316ybg.6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:54:12 -0700 (PDT)
+X-Gm-Message-State: AOAM531WW2EVVB5H5/6EXSpV/6qQUv6hfEv02a0j0a0w7+fThg6DO34X
+        OlMI03tQiVE7U6PVL8QGCfoa8vt+EoXDZK4Uglk=
+X-Google-Smtp-Source: ABdhPJwjmmfucUyRJLnkiUQUJCU0/cQPFqbnF106r1L1oh8lyoZV1cbnjW2MmK9RXYYq3F1iTcX3iqT9DtlLLB+HQOw=
+X-Received: by 2002:a05:6902:52d:b0:64e:64b:fc10 with SMTP id
+ y13-20020a056902052d00b0064e064bfc10mr3709287ybs.134.1652957651194; Thu, 19
+ May 2022 03:54:11 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab4:a166:0:0:0:0:0 with HTTP; Thu, 19 May 2022 03:52:58
- -0700 (PDT)
-From:   Ajafor simon <chambersajafor1@gmail.com>
-Date:   Thu, 19 May 2022 10:52:58 +0000
-Message-ID: <CAJJ9-BDPvQcLtxqhG3BFV7YG4M+dHK8u=CRDOZpYoghqu8CMTg@mail.gmail.com>
-Subject: =?UTF-8?B?5Lqy54ix55qE6buE77yM?=
-To:     chambersajafor1 <chambersajafor1@gmail.com>
+References: <20220517062929.3109873-1-anshuman.khandual@arm.com>
+ <CAK8P3a3eR-eiY4Y8TNbyQNZiFXoEA8rk5EObZXg-D=JmxjnGCA@mail.gmail.com> <f8b83f8e-eb99-16e4-4e9a-dca58971b437@arm.com>
+In-Reply-To: <f8b83f8e-eb99-16e4-4e9a-dca58971b437@arm.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 19 May 2022 11:53:55 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a0EGC-sBBdW_84WOoehbKAa39oX6gv4gqwkSK8p64PrYg@mail.gmail.com>
+Message-ID: <CAK8P3a0EGC-sBBdW_84WOoehbKAa39oX6gv4gqwkSK8p64PrYg@mail.gmail.com>
+Subject: Re: [PATCH] amba: Drop builtin_amba_driver()
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Wang Kefeng <wangkefeng.wang@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Provags-ID: V03:K1:dcwvQdGl22TVeKQC7H5rOn5rstijAC7zpOWqTZ63JXTLnMsnAMI
+ NBpIZLAkhK9OYJ3jwMC5BvcEdCFMYyGvVGY8fof3HaKU/LilN95cAUOnYL10OetWah8q3xt
+ uNJ5lynyrfGtXlW494GyC8YZAo3CT/qDp10bFpRdn424VlhWOfA1fVaa5KnWrnHV8PALeFp
+ 7kEkVToS97ne6K/RTY6Uw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1DgB+WogRaI=:3gE6QXmEQo0iQBruf8lx//
+ jr94IN1so9EgAn2kf8zUsW6eKKtE76nyekVM8lskAUd2lf29n08wxolZS9I8tdMjp4YzHpWur
+ lOIyPOa6lxQXNasiF2xbYCduenFXYThueL+SzabfNo5SwmVaEHTRxJj16GT9o4v1OEw6gfpPu
+ oPakyh5Xoz1Kflpeu09tpCrQMS/8vtTq8Iu05VFTFWPggLwoVJdS4hlKN9DmoYilxziZMEG3L
+ 1Ni21vlEX00M1PPz9nCgEEmDpI2Q2TIxm/AXzOditqgotylO/zgo/Eeh1H9kkr9P+jciK75oi
+ kXcN09h5uov3uYbQL06Zrj4BvlUz1xgm4Y2m5ybtslmzSIfj8RICIIIfiO94q94BuhFNLP70v
+ DkUkDt4cjNDRXGaiqNh+8t0HbKDgfW01ynKO6BFFI8var3uQps2EJ2hEyPkiMxiWGnG2TrlQ8
+ 3zFRlzklxdu3eTyt85O7dcSKq14U+Fbe6WpGS3818we3XtfNXLg2Rt9Hy7tH+y8dZvurbSpB5
+ EF1sJKHno4UnDSIJH6JzEfN2l8Qq6DdpdfWiGUFdySVv7YFzFMKhNg+v7PoNPRacLImVNPocB
+ VExHLqAQdkVRAXsQAxtoHrPt426N2huXg/681Sghddlm+25jVVi2UJVlJlGbwMIjjST8ze6tL
+ qaBHpgX8Ca52lqQj4CLeo5J1e6Mvw8TrPQ2Y+gkyDK3u/Mt3eAmmmXxjEwY0HHQiT6iLrvxVW
+ rCagpa7Jrzo7gFb2SkzNeO4k6sxCU0Li3erqdg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5Lqy54ix55qE6buE77yMDQoNCue+juWlveeahOS4gOWkqe+8jOaIkeaYr+Wkp+W+i+W4iCBTaW1v
-biBBamFmb3LvvIzopb/pnZ7mtJvnvo7lpJrlk6XnmoTkuIDlkI3ms5Xlvovku47kuJrogIXvvIzv
-vIhFbmfvvIxHZW9yZ2UNCkh1YW5n77yJ55qE56eB5Lq65b6L5biI77yM5pu+5Zyo6KW/6Z2e5rSb
-576O5aSa5ZOl55qE5aOz54mM5byA5Y+R5YWs5Y+45ouF5Lu75om/5YyF5ZWG44CCIDExIOaciCAy
-MSDml6XvvIzku5bnmoTlprvlrZDlkozllK/kuIDnmoTlpbPlhL/lnKjnvo7liKnlnZrlkIjkvJfl
-m73mrbvkuo4NCkNvdmlkLTE577yM5LuW5q275LqO5b+D6ISP55eF5Y+R5L2c77yb5LuO6YKj5Lul
-5ZCO77yM5oiR5LiA55u05Zyo5ZCR6LS15Zu96am75aSa5ZOl5aSn5L2/6aaG6K+i6Zeu5oiR55qE
-5a6i5oi355qE6L+c5Lqy77yM5L2G5Lmf5rKh5pyJ5oiQ5Yqf44CCDQoNCiDmiJHlhrPlrprpgJro
-v4flpJbkuqTkvb/lm6LnlZnoqIDnsL/ov73ouKrku5bnmoTlp5PmsI/vvIzku6Xmib7liLDku5bn
-moTku7vkvZXlrrbluq3miJDlkZjvvIzlm6DmraTmiJHpgJrov4flqpLkvZPmnI3liqHkuI7mgqjo
-gZTns7vjgILnjrDlnKjvvIzmiJHlt7LkuI7mgqjogZTns7vvvIzku6XljY/liqnlvZLov5jmiJHl
-t7LmlYXlrqLmiLfnlZnkuIvnmoTku7flgLwNCjEyNTAg5LiH576O5YWD55qE6LWE6YeR77yM54S2
-5ZCO6K+l6LWE6YeR6KKr6ZO26KGM5Zyo5rSb576O5aSa5ZOl6KW/6Z2e55qE6ZO26KGM5rKh5pS2
-5oiW5a6j5biD5peg5rOV5L2/55So77yM6L+Z56yU5beo6aKd5qy+6aG55bCx5a2Y5pS+5Zyo6YKj
-6YeM44CC5oKo5Y+v5Lul6YCa6L+H5oiR55qE5aSH55So55S15a2Q6YKu5Lu25Zyw5Z2A5LiO5oiR
-6IGU57O75Lul6I635Y+W5pu05aSa6K+m57uG5L+h5oGv77yIbGF3eWVyc2ltb24xQGdtYWlsLmNv
-be+8iQ0KDQoNCuacgOWlveeahOelneemj+OAgg0K5aSn5b6L5biIIFNpbW9uIEFqYWZvciAoRVNR
-KQ0K5rSb576OIOWkmuWTpSDopb/pnZ4NCg==
+On Thu, May 19, 2022 at 4:08 AM Anshuman Khandual
+<anshuman.khandual@arm.com> wrote:
+> On 5/18/22 17:50, Arnd Bergmann wrote:
+> > On Tue, May 17, 2022 at 7:29 AM Anshuman Khandual
+> > <anshuman.khandual@arm.com> wrote:
+> >>
+> >> Drop builtin_amba_driver() which is not used anymore.
+> >
+> > The patch looks correct, but I don't see the purpose. Are you trying
+> > to discourage
+> > having amba drivers as built-in? Otherwise the next time we get an amba
+> > driver that cannot be a loadable module, someone might want to add back the
+> > same macro.
+>
+> Right, then it should be added back. But for now this is just dead code
+> and not being used, hence why keep it ?
+
+I don't care if the function is there or not, the interface does exactly what
+one expects it to do, and it uses no space in the binary, but most likely
+nobody would miss it if it's gone.
+
+However, neither adding nor removing the function by itself to me hits the
+threshold of doing a meaningful change that is an overall improvement, so
+why send a patch?
+
+The original patch that added the function was similar: the coresight drivers
+were written to be loadable modules but Kconfig forced them to be built-in,
+so Paul's cleanup to remove the module bits felt like completely pointless
+churn that just made it harder for Kim to make them modular again.
+
+If you want to remove the macro out of spite for the original change,
+I'm sympathetic with that, but then put this in the patch description ;-)
+
+        Arnd

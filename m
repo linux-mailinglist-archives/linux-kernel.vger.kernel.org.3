@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2D652DBE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9AA852DBEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243340AbiESRvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
+        id S230412AbiESRwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241593AbiESRuw (ORCPT
+        with ESMTP id S243507AbiESRv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:50:52 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C69BA558
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:49:52 -0700 (PDT)
-Received: from [10.10.2.52] (unknown [10.10.2.52])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 189A740755D8;
-        Thu, 19 May 2022 17:49:49 +0000 (UTC)
-Subject: Re: [PATCH] ASoC: max98090: Remove unneeded check in
- max98090_put_enab_tlv()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
-References: <1652980212-21473-1-git-send-email-khoroshilov@ispras.ru>
- <YoZ+dmprwb5Ohto3@sirena.org.uk>
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <fd58c07c-488e-1c90-a755-194f714bbe45@ispras.ru>
-Date:   Thu, 19 May 2022 20:49:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 19 May 2022 13:51:29 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5400D4108;
+        Thu, 19 May 2022 10:50:08 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id c12so7870693eds.10;
+        Thu, 19 May 2022 10:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kysG7peRaXTE3fgA73ZrEonc9KZUQR5unrMXwy4Uj9o=;
+        b=pn44M0nIDsuMrP+dKMwBp+StvLvH/KW2GP14Do100lpmHNtk+ysc58OWASgdR1+akJ
+         fY0LjZS4wLYwueIUHhdLFEl3zov9xTzH//jxST0YUBujUvHDOPrt1kNLVTxTDYxwTRH9
+         oMuMgLwyeckAaUql+UYP0NPb2MrEgFwJWtiU5FAvUauA4HbhRGXS+YtBa/O87HFyd03y
+         TeFsbGQnqNXHycOtiYCsLDPW0J0AklWNJwsiVFMGM1CDmdc7Walm/JjVqv2zsbrmGbj6
+         xHXV+jy/1lYqd7zdwgZvaYvWvh9ht7pIEWOeEyP8a35FaCHx/8UKHceUCyznvYrnb/82
+         sULQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kysG7peRaXTE3fgA73ZrEonc9KZUQR5unrMXwy4Uj9o=;
+        b=BP+tuAIkkHwtTluFFmSzeX4SqCmvlRgYOWrZpM/+Ddam9rpkd0ACZqhFvnt7tFUGub
+         0ox3BEw4VRvIRK0tnqYYHxWVwdAR4UyReO0WD0ZKU4x9vp8dwr7j+AKO/OfM8Zk4WvKL
+         W7hPZXjsEp0T9d1I+TGW1yFtjnVOc4bW8/qLQlhhln/72KH9XM7AP/t1yEPtpz2y0e42
+         1IeYOCjzWxaTQnDEGwSr5Msd+OCwl4yVjY1rncp6BOZcoRlxJuu+W8haSAJDMEST5sG/
+         Tk9ByGG07/Ae4kQoSvo79K4mvQxLRej92BA7qy9DlSgxM5Cz5Hcis33krWsPMD3Xapuv
+         JuMQ==
+X-Gm-Message-State: AOAM531nLSIQd2b+GhGvbMqEOjozkepWtCuyEW/EAZ85LTLpmcl9Ei/g
+        IrEls02J3DiqowdsBP7iZnk=
+X-Google-Smtp-Source: ABdhPJw6pya5WcIeizsK42rhj+Y02NWU0RzLCbDdcr7wWO4603xAXDiNtgA7dkxYpc9hE2OcepQ8tw==
+X-Received: by 2002:a05:6402:254f:b0:427:d23c:ac69 with SMTP id l15-20020a056402254f00b00427d23cac69mr6734176edb.314.1652982607175;
+        Thu, 19 May 2022 10:50:07 -0700 (PDT)
+Received: from skbuf ([188.25.255.186])
+        by smtp.gmail.com with ESMTPSA id r21-20020aa7d595000000b0042aba7ed532sm3043108edq.41.2022.05.19.10.50.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 10:50:06 -0700 (PDT)
+Date:   Thu, 19 May 2022 20:50:05 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, Hauke Mehrtens <hauke@hauke-m.de>
+Subject: Re: [PATCH net v1 1/2] net: dsa: lantiq_gswip: Fix start index in
+ gswip_port_fdb()
+Message-ID: <20220519175005.hoborvhfntq3trar@skbuf>
+References: <20220517194015.1081632-1-martin.blumenstingl@googlemail.com>
+ <20220517194015.1081632-2-martin.blumenstingl@googlemail.com>
+ <20220518114555.piutpdmdzvst2cvu@skbuf>
+ <CAFBinCBZ6dDAgC+ZUAPOwTx5=yVfYBYvODs=v+DQzGzeEOeiDw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <YoZ+dmprwb5Ohto3@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFBinCBZ6dDAgC+ZUAPOwTx5=yVfYBYvODs=v+DQzGzeEOeiDw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.05.2022 20:29, Mark Brown wrote:
-> On Thu, May 19, 2022 at 08:10:12PM +0300, Alexey Khoroshilov wrote:
->> Variable sel is of unsigned int type, so sel < 0 is not required.
->>
->> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On Wed, May 18, 2022 at 07:58:58PM +0200, Martin Blumenstingl wrote:
+> Hi Vladimir,
 > 
->>  	val = (val >> mc->shift) & mask;
->>  
->> -	if (sel < 0 || sel > mc->max)
->> +	if (sel > mc->max)
-> 
-> The check needs to be moved, not removed.  The userspace ABI allows
-> passing in of negative values.
-> 
+> On Wed, May 18, 2022 at 1:45 PM Vladimir Oltean <olteanv@gmail.com> wrote:
+> [...]
+> > The patch, as well as other improvements you might want to bring to the gswip driver
+> > (we have more streamlined support in DSA now for FDB isolation, see ds->fdb_isolation)
+> > is appreciated.
+> Thank you very much for this hint! I was not aware of the
+> ds->fdb_isolation flag and additionally I have some other questions
+> regarding FDB - I'll send these in a separate email though.
+> Also thank you for being quick to review my patches and on top of that
+> providing extra hints!
 
-Would (sel > mc->max) be enough in this case anyway?
-
---
-Alexey
-
+Ok, feel free to ask.
+Please note that there's also this discussion with Alvin about FDB
+isolation and host filtering which hopefully helped to clear some more
+concepts.
+https://lore.kernel.org/all/87wnhbdyee.fsf@bang-olufsen.dk/

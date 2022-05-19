@@ -2,84 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A255E52D589
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C2A52D592
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239281AbiESOEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S239392AbiESOF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236329AbiESOEj (ORCPT
+        with ESMTP id S239328AbiESOFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:04:39 -0400
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738C0387A8;
-        Thu, 19 May 2022 07:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1652969078; x=1684505078;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=0czR4Rztd8M0RS8cqQi+Tten5LECKymhcAxIJzh4FeI=;
-  b=gVx1eoRjNyAo2yy6/kjpb+VTaSjaCgaX/AcWJ97xLvR5JrvSZToWFbC1
-   2sdZW++a5lyjeq2DPq+8RxRmJ6vj7gkyZDUlUifpuHZhk6h+PS8Gq2F7B
-   Dzf4AS557D1U5y4/rOW5uKbT0MWBdO5A1YzBC3x8N5cTPf1Az5lKq2QNO
-   k=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="295878357"
-X-IronPort-AV: E=Sophos;i="5.91,237,1647298800"; 
-   d="scan'208";a="295878357"
-Received: from unknown (HELO mucxv002.muc.infineon.com) ([172.23.11.17])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 16:04:35 +0200
-Received: from MUCSE822.infineon.com (MUCSE822.infineon.com [172.23.29.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv002.muc.infineon.com (Postfix) with ESMTPS;
-        Thu, 19 May 2022 16:04:35 +0200 (CEST)
-Received: from MUCSE807.infineon.com (172.23.29.33) by MUCSE822.infineon.com
- (172.23.29.53) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 19 May
- 2022 16:04:34 +0200
-Received: from [10.160.230.235] (172.23.8.247) by MUCSE807.infineon.com
- (172.23.29.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 19 May
- 2022 16:04:33 +0200
-Message-ID: <0dffeb79-3182-fab1-e25a-aab4107beb6e@infineon.com>
-Date:   Thu, 19 May 2022 16:04:33 +0200
+        Thu, 19 May 2022 10:05:53 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6DA959A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:05:51 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id p12so5298685pfn.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:05:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y986+ZdOckPzlJLXnwDbvrNORPQJ9hBww73y7LpLMPI=;
+        b=cSPr5PM/WyUmap+iM0KLutmdQ44fhG8oUl6rtz2CtZvLyKXw2Ax1ypdwik2OVPGWPZ
+         9OtYgovB/0k2KitlgP6hokdD/5iVBiCSfEQSo8tVa56jYPRvcUeLABUdvrDyZ+y6HsAb
+         8PbDL2S1P5jl+66HzLznx2V1z9a2LoxlWKkVY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y986+ZdOckPzlJLXnwDbvrNORPQJ9hBww73y7LpLMPI=;
+        b=6gLyzbMUY1yFBcjP9l1p2KQqSnyhcg8MftonCNpY0dDwDQ1pYoB2PsPfapiSWeyT2L
+         DHi3JY4fpqWO6+maxGl5VKVAYB3ivWOQyvdd/ebIfyRMlNtnkPKxK32h7xi0R/VfR0Mj
+         wrIBAmV4ib+NLhJVq1gO6HB2OSIFyO44jYW24oFJRfNU2IeDZmubGZRbeqFBzTkxSFoO
+         knKSocxYQjDX/vhQaq/tdRCPvoNqwA7WY5fQlKc5hLvfvCv6t69YV4rkt1frNsJjUM+y
+         g4xrF71Jj7cnrhbRPx5d60VKnRX6ipsyODcM3EfGSi0FN+XdkpE82wwtsZlDbGW44Z/x
+         HqHw==
+X-Gm-Message-State: AOAM5302xPG/l/5YUphiPqM+JDJ4MgNJI0m9agyW77XX+8kphaPIAfE2
+        QhY5Q2r4bmyqRb23959bl2G0Eg==
+X-Google-Smtp-Source: ABdhPJwMigcttytqn51A8Stz9WgyRJpRz32o96ysMbkIOFG3N7lbCf8x6SeG3faP33vhjYsJ7UVViQ==
+X-Received: by 2002:a63:fb02:0:b0:3c1:9513:2e11 with SMTP id o2-20020a63fb02000000b003c195132e11mr4183986pgh.258.1652969150525;
+        Thu, 19 May 2022 07:05:50 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902680700b0015e8d4eb2afsm3855534plk.249.2022.05.19.07.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 07:05:49 -0700 (PDT)
+Date:   Thu, 19 May 2022 07:05:49 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     jlayton@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Steve French <smfrench@gmail.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-doc@vger.kernel.org, v9fs-developer@lists.sourceforge.net,
+        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fsdevek@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] netfs: Fix gcc-12 warning by embedding vfs inode in
+ netfs_i_context
+Message-ID: <202205190704.1DC660E5E@keescook>
+References: <165296786831.3591209.12111293034669289733.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: net: broadcom-bluetooth: Add property
- for autobaud mode
-Content-Language: en-US
-From:   Hakan Jansson <hakan.jansson@infineon.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        <linux-bluetooth@vger.kernel.org>
-References: <cover.1651647576.git.hakan.jansson@infineon.com>
- <64b59ca66cc22e6433a044e7bba2b3e97c810dc2.1651647576.git.hakan.jansson@infineon.com>
- <CACRpkdY3xPcyNcJfdGbSP5rdcUV6hr87yJNDVDGZdRCfN+MqLA@mail.gmail.com>
- <1e8cfbc6-8452-0e87-9713-536d235e5b51@infineon.com>
- <CACRpkda4ByrS8RGAunno_S59+Y2yado4eObzwsVkM2Q=n-B+CQ@mail.gmail.com>
- <d35fff90-ded7-2b1a-0e1a-f2db14cc4d07@infineon.com>
-In-Reply-To: <d35fff90-ded7-2b1a-0e1a-f2db14cc4d07@infineon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE805.infineon.com (172.23.29.31) To
- MUCSE807.infineon.com (172.23.29.33)
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <165296786831.3591209.12111293034669289733.stgit@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,71 +82,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, May 19, 2022 at 02:44:28PM +0100, David Howells wrote:
+> While randstruct was satisfied with using an open-coded "void *" offset
+> cast for the netfs_i_context <-> inode casting, __builtin_object_size() as
+> used by FORTIFY_SOURCE was not as easily fooled.  This was causing the
+> following complaint[1] from gcc v12:
+> 
+> In file included from ./include/linux/string.h:253,
+>                  from ./include/linux/ceph/ceph_debug.h:7,
+>                  from fs/ceph/inode.c:2:
+> In function 'fortify_memset_chk',
+>     inlined from 'netfs_i_context_init' at ./include/linux/netfs.h:326:2,
+>     inlined from 'ceph_alloc_inode' at fs/ceph/inode.c:463:2:
+> ./include/linux/fortify-string.h:242:25: warning: call to '__write_overflow_field' declared with attribute warning:
+> detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+>   242 |                         __write_overflow_field(p_size_field, size);
+>       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Fix this by embedding a struct inode into struct netfs_i_context (which
+> should perhaps be renamed to struct netfs_inode).  The struct inode
+> vfs_inode fields are then removed from the 9p, afs, ceph and cifs inode
+> structs and vfs_inode is then simply changed to "nic.inode" in those
+> filesystems.
+> 
+> Most of the changes were done with:
+> 
+>   perl -p -i -e 's/vfs_inode/nic.inode/'g \
+> 	`git grep -l 'vfs_inode' -- fs/{9p,afs,ceph,cifs}/*.[ch]`
+> 
+> Kees suggested doing it with a pair structure[2] and a special declarator
+> to insert that into the network filesystem's inode wrapper[3], but I think
+> it's cleaner to embed it - and then it doesn't matter if struct
+> randomisation reorders things.
+> 
+> Fixes: bc899ee1c898 ("netfs: Add a netfs inode context")
+> Reported-by: Jeff Layton <jlayton@kernel.org>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Kees Cook <keescook@chromium.org>
+> cc: Jonathan Corbet <corbet@lwn.net>
+> cc: Eric Van Hensbergen <ericvh@gmail.com>
+> cc: Latchesar Ionkov <lucho@ionkov.net>
+> cc: Dominique Martinet <asmadeus@codewreck.org>
+> cc: Christian Schoenebeck <linux_oss@crudebyte.com>
+> cc: Marc Dionne <marc.dionne@auristor.com>
+> cc: Xiubo Li <xiubli@redhat.com>
+> cc: Ilya Dryomov <idryomov@gmail.com>
+> cc: Steve French <smfrench@gmail.com>
+> cc: William Kucharski <william.kucharski@oracle.com>
+> cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+> cc: linux-doc@vger.kernel.org
+> cc: v9fs-developer@lists.sourceforge.net
+> cc: linux-afs@lists.infradead.org
+> cc: ceph-devel@vger.kernel.org
+> cc: linux-cifs@vger.kernel.org
+> cc: samba-technical@lists.samba.org
+> cc: linux-fsdevek@vger.kernel.org
+> cc: linux-hardening@vger.kernel.org
+> Link: https://lore.kernel.org/r/d2ad3a3d7bdd794c6efb562d2f2b655fb67756b9.camel@kernel.org/ [1]
+> Link: https://lore.kernel.org/r/20220517210230.864239-1-keescook@chromium.org/ [2]
+> Link: https://lore.kernel.org/r/20220518202212.2322058-1-keescook@chromium.org/ [3]
 
-I checked the state of this patch on Devicetree Bindings Patchwork and 
-it's marked "Changes Requested". I'd be happy to revise the patch but 
-it's not clear to me what changes are requested. Could you please help 
-guide me how to proceed?
+Works for me! :) Thanks for building the alternative.
 
-Sorry if I'm missing something obvious here.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thanks,
-Håkan
+-Kees
 
-On 5/5/2022 6:16 PM, Hakan Jansson wrote:
->
->
-> On 5/5/2022 4:13 PM, Linus Walleij wrote:
->> I suppose a general flag could be useful but to be honest I don't know
->>> if any other devices besides the ones using the Broadcom driver has any
->>> use for it. You would probably also still want to be able to use
->>> current-speed to set the link speed and end up using both
->>> current-speed=x and current-speed-auto at the same time, which might
->>> look a little confusing?
->> I do not think it is more confusing than being able to use
->> current-speed and brcm,uses-autobaud-mode at the same time.
->>
->>> Please let me know if you'd still prefer "current-speed-auto" over
->>> "brcm,uses-autobaud-mode" and I'll revise the patch and rename it!
->> It actually depends a bit.
->>
->> This:
->>
->>>>> +      The controller should be started in autobaud mode by asserting
->>>>> +      BT_UART_CTS_N (i.e. host RTS) during startup. Only HCI 
->>>>> commands supported
->>>>> +      in autobaud mode should be used until patch FW has been 
->>>>> loaded.
->> sounds a bit vague?
->
-> Yes, perhaps. I was thinking the details could be helpful but I can 
-> see how they might be perceived as vague and confusing. Maybe it would 
-> be better to just leave it at "The controller should be started in 
-> autobaud mode"?
->
->>
->> Does it mean that CTS is asserted, then you send a bit (CTS then goes 
->> low)
->> and then CTS is asserted again when the device is ready to receieve more
->> data? i.e is this some kind of one-bit mode, because it doesn't sound 
->> like
->> it is using CTS as it was used in legacy modems.
->
-> CTS and RTS are actually used in the normal way during communication. 
-> The host will assert its RTS to indicate being ready to receive data 
-> from the controller. This flag just controls whether this happens 
-> before or after the controller is powered on. The controller will 
-> check the initial state of its BT_UART_CTS_N pin (connected to host's 
-> RTS) when starting up. It will enter autobaud mode if the signal is 
-> already asserted.
->
->> Some more explanation of this mode is needed so we can understand if
->> this is something generic or a BRCM-only thing.
->>
->> Yours,
->> Linus Walleij
->
-> Thanks,
-> Håkan
-
+-- 
+Kees Cook

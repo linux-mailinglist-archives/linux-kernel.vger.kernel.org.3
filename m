@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1C352DECD
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F52652DECC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244882AbiESUxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 16:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S244851AbiESUxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 16:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244915AbiESUxj (ORCPT
+        with ESMTP id S234953AbiESUx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 16:53:39 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2001C4339D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 13:53:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652993618; x=1684529618;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=prFT2V92y88ma5B9DL0iH2Zf38zaOjaulan120HspYQ=;
-  b=F8wm4uXJH1kvdEU+VA16Cljqx5xHqo4ZQmpDWsLNcd2g7rl8Exox41Mv
-   ieqoxova+xeAEpWIS2CkkWKr4NGCRxyjMHpZO4JA9uyVn6jd1etu1nQDe
-   LIL0NDCI8pW2Sd2GzP1LJX1yqhyRPPrY4d1U4v+DYlZsPyKTrLPBWUSiL
-   QXCdTMH5rDlS4a4CBe9aDmH9YHPjHKuX60v2Skmg4o+V4DE2cBJkTqtcB
-   mlwYbHlGu2hBgsVILlvSGgaYDPpl7zY2Ylvumy/5xyIfBn5TBAzgG5grI
-   3PhgM3Puy7ULZSoA84Ieiy1Mca2uyKEdzRmzDNyBCFy5OA9/CZJcKIGlw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272504351"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272504351"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 13:53:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="557110670"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 19 May 2022 13:53:35 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrn9L-0003wO-8N;
-        Thu, 19 May 2022 20:53:35 +0000
-Date:   Fri, 20 May 2022 04:52:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Ricardo Ribalda <ribalda@chromium.org>
-Subject: [hverkuil-media-tree:for-v5.20a 23/29] ERROR: modpost:
- "usb_submit_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
-Message-ID: <202205200435.65DKJk2s-lkp@intel.com>
+        Thu, 19 May 2022 16:53:27 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A0610FC6;
+        Thu, 19 May 2022 13:53:24 -0700 (PDT)
+Received: by mail-oi1-f182.google.com with SMTP id v9so3223642oie.5;
+        Thu, 19 May 2022 13:53:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vr35W3paoABM6vUlppihSXBGzo4C7D5+LkOldPnsJ+s=;
+        b=KPqTRh30NiU17Q0Qp+Pc6KAoSKk+wgli+lZe/3wgNucePaGmXc3040IRQtpAYEoMXz
+         EOypjUg34WjUi+RTetmFCoc8tBPhjKiXscP7DSCDGpNwV1p3sCZm6/s9/Uz4atWfKcvB
+         84adZjoWqD08cxwLWCI5WNPoey+WmUAaoJ6TjV9mMXT8fglQ89tbjMLCHKBg9tr+SIHz
+         lddzihsODD5Bb2Gq/ofuc+Kmlet33thFDzHYyK7n2SodG9iLCSdEn84e8PyHcaaiqgra
+         g2m/UJuif9bXhTKmWtQStJuFRumSmqs0AjGMRgf5FUISFgaoZ7CYAFK5qqA0tzNChPhn
+         9VNQ==
+X-Gm-Message-State: AOAM530FVehJZ+7DEapJXT53V1oT8HCuFbMwNPUO64zlDulj72e5HeyQ
+        zBv4MyHrIYk1e9EVZST1Ag==
+X-Google-Smtp-Source: ABdhPJxZNVXs1r0C+wqkhBUfdG8DMxjc8+Bd0W1pj4yhH2bjTCZlQtoNSW+klCTJMiua+T7y8sJhaA==
+X-Received: by 2002:aca:6c5:0:b0:325:5bce:bbc1 with SMTP id 188-20020aca06c5000000b003255bcebbc1mr3824631oig.221.1652993603425;
+        Thu, 19 May 2022 13:53:23 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id dt10-20020a0568705a8a00b000e686d1387csm170976oab.22.2022.05.19.13.53.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 13:53:22 -0700 (PDT)
+Received: (nullmailer pid 2171348 invoked by uid 1000);
+        Thu, 19 May 2022 20:53:21 -0000
+Date:   Thu, 19 May 2022 15:53:21 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Joe Hung <joe_hung@ilitek.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2] dt-bindings: input: touchscreen: ilitek_ts_i2c:
+ Absorb ili2xxx bindings
+Message-ID: <20220519205321.GA2170924-robh@kernel.org>
+References: <0c5f06c9d262c1720b40d068b6eefe58ca406601.1638539806.git.geert+renesas@glider.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <0c5f06c9d262c1720b40d068b6eefe58ca406601.1638539806.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,40 +66,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.20a
-head:   e481d316b60f1d57e770f21dc5398d5dcff13ee6
-commit: 308124c0301a5258078c2ffddd03cf3fb584d792 [23/29] media: stkwebcam: deprecate driver, move to staging
-config: arm64-randconfig-r012-20220519 (https://download.01.org/0day-ci/archive/20220520/202205200435.65DKJk2s-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
-        git fetch --no-tags hverkuil-media-tree for-v5.20a
-        git checkout 308124c0301a5258078c2ffddd03cf3fb584d792
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+On Fri, 03 Dec 2021 14:58:26 +0100, Geert Uytterhoeven wrote:
+> While Linux uses a different driver, the Ilitek
+> ILI210x/ILI2117/ILI2120/ILI251x touchscreen controller Device Tree
+> binding documentation is very similar.
+> 
+>   - Drop the fixed reg value, as some controllers use a different
+>     address,
+>   - Make reset-gpios optional, as it is not always wired.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+> v2:
+>   - Add Reviewed-by.
+> ---
+>  .../bindings/input/ilitek,ili2xxx.txt         | 27 -------------------
+>  .../input/touchscreen/ilitek_ts_i2c.yaml      |  7 +++--
+>  2 files changed, 5 insertions(+), 29 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/input/ilitek,ili2xxx.txt
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "usb_submit_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_set_interface" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_free_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_kill_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_alloc_urb" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_autopm_put_interface" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_autopm_get_interface" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_put_dev" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_put_intf" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
->> ERROR: modpost: "usb_get_intf" [drivers/staging/media/stkwebcam/stkwebcam.ko] undefined!
-WARNING: modpost: suppressed 4 unresolved symbol warnings because there were too many)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Applied, thanks!

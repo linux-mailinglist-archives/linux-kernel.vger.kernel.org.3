@@ -2,88 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE2F52DD10
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB2E52DD14
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241685AbiESStd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33298 "EHLO
+        id S241930AbiESSvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235971AbiESStb (ORCPT
+        with ESMTP id S243401AbiESSvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:49:31 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C336A2050
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:49:30 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id bh5so5546908plb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:49:30 -0700 (PDT)
+        Thu, 19 May 2022 14:51:04 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F1E32ED8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:51:00 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id ay35so1773183wmb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:51:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=01qmh032EmJ/n0ECrOiGeBteM36sTTPd0nlmkRs/6e8=;
-        b=XbHmoB6Z85gi/6T5+gmzQO553YV3GfE10qSwob9ZxdGx48W15or+f9OvG+7s/jBCCR
-         YTuLnidrrSiqN6/+6P7R+zCgLTtx3VLMToQV7ZvSlpmIBb1XdW6F5rsLiEiVoYT7Fjp9
-         YqzYMny4ZA5GghebTDB9sLXLbXFFE/Gc1YULSPYLory7L97oJ5f1+cxPtOrl3MMWoEqq
-         GbN1R0a1cOjMn11U147/AxtwiIc/2MJM2HJkGwpSZOljmRyFzDuugnBWRw0Av780zKLh
-         4mSmnH094cxFZuh9QsiMYWnncBUhDB6RfamcZEBEYPB5nyQ/Ak616ylDL98QqDoqUdTv
-         CkpA==
+        bh=zVrso6fiVQrzi/HfLaD8z5m4C5/B3zTk0qBr6sq01RQ=;
+        b=TAeL8EKap/C4tHWgh3R6CDq5IuLjiax1NyG0DCsREnD0c2fEEEeNHK53qsBzRlpcRC
+         YrWMgaAM/9bgglVUWFjAqiotoiOXyYDAoDcZRGhh9+WlIjfsmJD/2/dqhWImLgBfNPP+
+         49e8Fw2co8BQL8gywjHxhKsLXM20p3zErmicI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=01qmh032EmJ/n0ECrOiGeBteM36sTTPd0nlmkRs/6e8=;
-        b=LAXEjSIwxA1XO2X6QTWLwSsTJHGuuZErRUjaga2yfNxKCVmljNJ7SUIdYSAmvTekdX
-         hLUClqwDHSCclgjZHlmdHaMNWzvRMEF5e52G8CxFksZKxafH4+OhV2SmEvue+7pb4d8o
-         tNlxZEMNYDOJoVAi7unxLHiDnxoCwjOP8zvHfitklykekboamFfOyeKopN5JnKt7S1hz
-         etDJTcJNwT1bXCHHqtoGjcYJMZcOu3KyYcTSfij6IHZACngL9MNkX7NGiBemLE5hTvhS
-         OUHW6mpsNNBdsnaUqQhj5gyJXBiAmo1jmw4pbp6tVgwPbWUyNbsWsrk2I1gPozVbB9va
-         qx0Q==
-X-Gm-Message-State: AOAM532arwf25WO7588b8SuwpYycirbJaxoKZXu4+ymJDC2PwnUFSwaU
-        Rc1pf5jfTxiVfiklJYZgVJkPnQ==
-X-Google-Smtp-Source: ABdhPJxchEn9n4UjBLGu26EPugm+yJbovxNp3OgA5DHh1wxw1Q8rIWTjtTppEehhJjnYsU3PcO65Pg==
-X-Received: by 2002:a17:90b:4f8d:b0:1df:efcb:942b with SMTP id qe13-20020a17090b4f8d00b001dfefcb942bmr1221534pjb.129.1652986169348;
-        Thu, 19 May 2022 11:49:29 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id f16-20020a17090a121000b001dc1950ead5sm136711pja.38.2022.05.19.11.49.28
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zVrso6fiVQrzi/HfLaD8z5m4C5/B3zTk0qBr6sq01RQ=;
+        b=uhzypn6Qbkkl92aT9gxNRaHtKsfupigYd75ZU3dfX+diPRXpvnSrw4k+/kZC5jDto+
+         N5BMZjSQUx6QkWnexL3FdKiRI8BZLviKi1Ky+SUsbrLbNS5ymbzxgEC2oM7nb7ZjWrNP
+         LvwAyiAA7cGeukOEcEqkrU08npe/cpXqJtyvUDimbV+9bSBTiOF3aTvXkMTDrxbldha9
+         0s8LubuNaBtUU+jF0Qv5so2RwVCLoQh8qhfNReqcs+MmQULjk53UyrChcjgS8ATWQqux
+         LZVQGe694aP1LoPZ/rUIbCJ2/TfplfOzderdUUvINi7weB5q9sSf5CGXHJrHtphJRVxV
+         kdOg==
+X-Gm-Message-State: AOAM533yglTjt6B1k+DbnnHhIMj+AuqDRmE1K8KFYKAJT0CTZzLLHxEz
+        PA0pgj1Nr8uaLw8g1bmgeyza+A==
+X-Google-Smtp-Source: ABdhPJxBZeshs+x8J/WZRYu/f5XVSo28i1rMFyazIa8c8iBxTY/lJcS4+qFJpP5fjRv8z+xXq2oBYg==
+X-Received: by 2002:a7b:c4cc:0:b0:394:7d6c:fdf4 with SMTP id g12-20020a7bc4cc000000b003947d6cfdf4mr5578743wmk.163.1652986259580;
+        Thu, 19 May 2022 11:50:59 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-53-154.cust.vodafonedsl.it. [188.217.53.154])
+        by smtp.gmail.com with ESMTPSA id j11-20020adfb30b000000b0020c5253d8fdsm300457wrd.73.2022.05.19.11.50.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 11:49:28 -0700 (PDT)
-Date:   Thu, 19 May 2022 11:49:28 -0700 (PDT)
-X-Google-Original-Date: Thu, 19 May 2022 11:46:23 PDT (-0700)
-Subject:     Re: [RESEND PATCH] riscv: dts: sifive: fu540-c000: align dma node name with dtschema
-In-Reply-To: <5ea0ddc9-c4b1-a2c6-059c-5e47ec076bca@linaro.org>
-CC:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski@canonical.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        krzysztof.kozlowski+dt@linaro.org, aou@eecs.berkeley.edu,
-        robh+dt@kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     krzysztof.kozlowski@linaro.org
-Message-ID: <mhng-090c7f80-bbc5-4e28-b89a-1a0384a305f9@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Thu, 19 May 2022 11:50:59 -0700 (PDT)
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     tommaso.merciai@amarulasolutions.com, michael@amarulasolutions.com,
+        alberto.bianchi@amarulasolutions.com,
+        linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] net: phy: DP83822: enable rgmii mode if phy_interface_is_rgmii
+Date:   Thu, 19 May 2022 20:50:56 +0200
+Message-Id: <20220519185057.1657115-1-tommaso.merciai@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Apr 2022 00:56:39 PDT (-0700), krzysztof.kozlowski@linaro.org wrote:
-> On 07/04/2022 21:38, Krzysztof Kozlowski wrote:
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->>
->> Fixes dtbs_check warnings like:
->>
->>   dma@3000000: $nodename:0: 'dma@3000000' does not match '^dma-controller(@.*)?$'
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->
-> Hi Palmer,
->
-> I already resent this patch, pinged. Can you pick it up?
+RGMII mode can be enable from dp83822 straps, and also writing bit 9
+of register 0x17 - RMII and Status Register (RCSR).
+When phy_interface_is_rgmii rgmii mode must be enabled, same for
+contrary, this prevents malconfigurations of hw straps
 
-Sorry I missed this, it's on fixes.
+References:
+ - https://www.ti.com/lit/gpn/dp83822i p66
+
+Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Suggested-by: Alberto Bianchi <alberto.bianchi@amarulasolutions.com>
+Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+---
+Changes since v1:
+ - Improve commit msg
+ - Add definition of bit 9 reg rcsr (rgmii mode en)
+ - Handle case: phy_interface_is_rgmii is false
+
+ drivers/net/phy/dp83822.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
+index ce17b2af3218..7cb9d084707b 100644
+--- a/drivers/net/phy/dp83822.c
++++ b/drivers/net/phy/dp83822.c
+@@ -94,6 +94,9 @@
+ #define DP83822_WOL_INDICATION_SEL BIT(8)
+ #define DP83822_WOL_CLR_INDICATION BIT(11)
+ 
++/* RCSR bits */
++#define DP83822_RGMII_MODE_EN	BIT(9)
++
+ /* RSCR bits */
+ #define DP83822_RX_CLK_SHIFT	BIT(12)
+ #define DP83822_TX_CLK_SHIFT	BIT(11)
+@@ -408,6 +411,12 @@ static int dp83822_config_init(struct phy_device *phydev)
+ 			if (err)
+ 				return err;
+ 		}
++
++		phy_set_bits_mmd(phydev, DP83822_DEVADDR,
++					MII_DP83822_RCSR, DP83822_RGMII_MODE_EN);
++	} else {
++		phy_clear_bits_mmd(phydev, DP83822_DEVADDR,
++					MII_DP83822_RCSR, DP83822_RGMII_MODE_EN);
+ 	}
+ 
+ 	if (dp83822->fx_enabled) {
+-- 
+2.25.1
+

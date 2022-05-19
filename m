@@ -2,182 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D50A52D1E6
+	by mail.lfdr.de (Postfix) with ESMTP id 88FB052D1E7
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237648AbiESL5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S232024AbiESL45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237593AbiESL4v (ORCPT
+        with ESMTP id S237552AbiESL4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:56:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF2266AF5;
-        Thu, 19 May 2022 04:56:50 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J9njiB014680;
-        Thu, 19 May 2022 11:56:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=7ukxmzai3Of0C2DKPzah5+6xoHT5hdoRomBqRrlp/Yg=;
- b=PhQ7vRDp1w9gdhXqZp8KaLNKu8CUDQ4sgwM+7+27tw1fJ/N35+ENPvK/RoCw0s3SQ//i
- W8T84CWAlVoiEJPHngpb2wsCMzJGOzRUaa59j+MipsTNHEqQmxtPsjGgC2SvlUioP4H/
- 94P8F/u+S0s09OG9M7c26PY2PJpGYOfRUeMjyd/ODkoRxakc4gPGIZCuoXeMpw2coiPt
- ZeqfEzLEebdIbR5fX0bvcHcZO2YUbtUbJQ28PePEMAzgzH8dVznT/CZ002iO2mQ4Td4+
- UvHdTfJVT6VQAlzB6cp/XulprAJNCe10ilIv16GSquIvqLvvRevdfEDT/HQz0KuxG8Kv +g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5kkw2st2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 11:56:35 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24JBlm1O018178;
-        Thu, 19 May 2022 11:56:34 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5kkw2ssb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 11:56:34 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24JBqir1021062;
-        Thu, 19 May 2022 11:56:31 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04fra.de.ibm.com with ESMTP id 3g2428wv05-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 11:56:31 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24JBgYo238273382
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 May 2022 11:42:34 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C5914203F;
-        Thu, 19 May 2022 11:56:28 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D6D3B42041;
-        Thu, 19 May 2022 11:56:25 +0000 (GMT)
-Received: from sig-9-65-82-167.ibm.com (unknown [9.65.82.167])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 19 May 2022 11:56:25 +0000 (GMT)
-Message-ID: <c47299b899da4ad4b6d3ad637022ad82c8ed6ed2.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 4/4] kexec, KEYS, s390: Make use of built-in and
- secondary keyring for signature verification
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Baoquan He <bhe@redhat.com>, Heiko Carstens <hca@linux.ibm.com>,
-        akpm@linux-foundation.org
-Cc:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org,
-        keyrings@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Chun-Yi Lee <jlee@suse.com>, stable@vger.kernel.org,
-        Philipp Rudo <prudo@linux.ibm.com>,
-        linux-security-module@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Date:   Thu, 19 May 2022 07:56:25 -0400
-In-Reply-To: <20220519003902.GE156677@MiWiFi-R3L-srv>
-References: <20220512070123.29486-1-coxu@redhat.com>
-         <20220512070123.29486-5-coxu@redhat.com> <YoTYm6Fo1vBUuJGu@osiris>
-         <20220519003902.GE156677@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: pODijiS05G_BlMkECJ3lUiCw2rg3g4l4
-X-Proofpoint-GUID: oUjdCxRT26f3yTIYGuFU7UbYqUR4xUcJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-19_03,2022-05-19_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 bulkscore=0 adultscore=0
- mlxlogscore=999 clxscore=1011 malwarescore=0 impostorscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205190065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 19 May 2022 07:56:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B759162102
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652961403;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vUzlKZtKtiKnTkl0c+yvVz6DAi0GpJ/ajyiMuXYkKV0=;
+        b=IS24Wpo2LIoBzJbMU9ExPpVT++yOueSUkxkF1cySk838mntHKGwnsV0oVYJQ3rv3f3yqwb
+        deziW2nyodUuz/4eAOCcf9swowTfUNfRQDLP8oTzM1W9rhN8XiNaBtkKAvRcA+7cUiP83f
+        hWen40n8aRy3R3henjuPKY18jm8JTZo=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-632-9wAA94kPPGecafpiWMy8NQ-1; Thu, 19 May 2022 07:56:42 -0400
+X-MC-Unique: 9wAA94kPPGecafpiWMy8NQ-1
+Received: by mail-pl1-f199.google.com with SMTP id o10-20020a170902d4ca00b00161d8033431so1275233plg.20
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:56:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vUzlKZtKtiKnTkl0c+yvVz6DAi0GpJ/ajyiMuXYkKV0=;
+        b=Om9wEZBuGoeNGaTjT9IBjbQ+i5G2JqS7NcMB0ITS14DTuHuevFeOlfSzMowKQf2gsj
+         vLic9RlvwaWevJLf8O7GHTVZOWxtqW6hTZdiXz5DCHdpE37rBveXPAYzd8SR7Ym8hF4g
+         eF9ysz97oyuuG4XXthTHGWD7aAWYrQrwQ29wZ++QDdv0ufrNrY9SzZdb6mW9Cpmqkx/S
+         2p2pDhODWwaiHr7HkBIg4rJvbgcVi49HjjLZ7Kx+uFBLZUK0UpB5XANem0F+xkazNQcm
+         087Luj4UX8N1g5Pwv4s+GwxThtf8o8uAFBdg/BBH+INddrVz5JFfTH/4dMJvc1wGrcGx
+         T2Ag==
+X-Gm-Message-State: AOAM532CL4iW1zKiENWz3lBynk+pLdg0nrBJibq4WBToLN/YicxOmyiA
+        pQDEohHSlO3SyBddLK4CJgLUCrTBW5kh3BiVpASgun3fLgZnugY9Xfi4KQjHQeyi9Tk+FYArQuS
+        P8G17aDlVPxZV60y9rTgG86izy6342uu+z52LdBXZ
+X-Received: by 2002:a17:902:c412:b0:161:af8b:f478 with SMTP id k18-20020a170902c41200b00161af8bf478mr4521227plk.67.1652961401566;
+        Thu, 19 May 2022 04:56:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwaJcMg0BaVxCTdCDQ3mQxkDhNi5bxy54g0yctOXIo/JTNwcXdo8zjGgzXssPr6OROkM+zoGvNENhA/pSXCpxY=
+X-Received: by 2002:a17:902:c412:b0:161:af8b:f478 with SMTP id
+ k18-20020a170902c41200b00161af8bf478mr4521208plk.67.1652961401301; Thu, 19
+ May 2022 04:56:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
+ <YoX7iHddAd4FkQRQ@infradead.org> <YoX904CAFOAfWeJN@kroah.com>
+ <YoYCIhYhzLmhIGxe@infradead.org> <CAO-hwJL4Pj4JaRquoXD1AtegcKnh22_T0Z0VY_peZ8FRko3kZw@mail.gmail.com>
+ <87ee0p951b.fsf@toke.dk>
+In-Reply-To: <87ee0p951b.fsf@toke.dk>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 19 May 2022 13:56:30 +0200
+Message-ID: <CAO-hwJKwj6H0Nc_gqsN5okT2ipLL3H6fqe23_vpO+xC3PnX5uw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 00/17] Introduce eBPF support for HID devices
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc'ing Jarkko, linux-integrity]
+On Thu, May 19, 2022 at 12:43 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@red=
+hat.com> wrote:
+>
+> Benjamin Tissoires <benjamin.tissoires@redhat.com> writes:
+>
+> > On Thu, May 19, 2022 at 10:39 AM Christoph Hellwig <hch@infradead.org> =
+wrote:
+> >>
+> >> On Thu, May 19, 2022 at 10:20:35AM +0200, Greg KH wrote:
+> >> > > are written using a hip new VM?
+> >> >
+> >> > Ugh, don't mention UDI, that's a bad flashback...
+> >>
+> >> But that is very much what we are doing here.
+> >>
+> >> > I thought the goal here was to move a lot of the quirk handling and
+> >> > "fixup the broken HID decriptors in this device" out of kernel .c co=
+de
+> >> > and into BPF code instead, which this patchset would allow.
+> >
+> > Yes, quirks are a big motivation for this work. Right now half of the
+> > HID drivers are less than 100 lines of code, and are just trivial
+> > fixes (one byte in the report descriptor, one key mapping, etc...).
+> > Using eBPF for those would simplify the process from the user point of
+> > view: you drop a "firmware fix" as an eBPF program in your system and
+> > you can continue working on your existing kernel.
+>
+> How do you envision those BPF programs living, and how would they be
+> distributed? (In-tree / out of tree?)
+>
 
-On Thu, 2022-05-19 at 08:39 +0800, Baoquan He wrote:
-> On 05/18/22 at 01:29pm, Heiko Carstens wrote:
-> > On Thu, May 12, 2022 at 03:01:23PM +0800, Coiby Xu wrote:
-> > > From: Michal Suchanek <msuchanek@suse.de>
-> > > 
-> > > commit e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
-> > > adds support for KEXEC_SIG verification with keys from platform keyring
-> > > but the built-in keys and secondary keyring are not used.
-> > > 
-> > > Add support for the built-in keys and secondary keyring as x86 does.
-> > > 
-> > > Fixes: e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
-> > > Cc: stable@vger.kernel.org
-> > > Cc: Philipp Rudo <prudo@linux.ibm.com>
-> > > Cc: kexec@lists.infradead.org
-> > > Cc: keyrings@vger.kernel.org
-> > > Cc: linux-security-module@vger.kernel.org
-> > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> > > Reviewed-by: "Lee, Chun-Yi" <jlee@suse.com>
-> > > Acked-by: Baoquan He <bhe@redhat.com>
-> > > Signed-off-by: Coiby Xu <coxu@redhat.com>
-> > > ---
-> > >  arch/s390/kernel/machine_kexec_file.c | 18 +++++++++++++-----
-> > >  1 file changed, 13 insertions(+), 5 deletions(-)
-> > 
-> > As far as I can tell this doesn't have any dependency to the other
-> > patches in this series, so should I pick this up for the s390 tree, or
-> > how will this go upstream?
-> 
-> Thanks, Heiko.
-> 
-> I want to ask Mimi if this can be taken into KEYS-ENCRYPTED tree.
-> Otherwise I will ask Andrew to help pick this whole series.
-> 
-> Surely, this patch 4 can be taken into s390 seperately since it's
-> independent, both looks good.
+As Greg mentioned in his reply, report descriptors fixups don't do
+much besides changing a memory buffer at probe time. So we can either
+have udev load the program, pin it and forget about it, or we can also
+have the kernel do that for us.
 
-KEYS-ENCRYTPED is a type of key, unrelated to using the .platform,
-.builtin, .machine, or .secondary keyrings.  One of the main reasons
-for this patch set is to use the new ".machine" keyring, which, if
-enabled, is linked to the "secondary" keyring.  However, the only
-reference to the ".machine" keyring is in the cover letter, not any of
-the patch descriptions.  Since this is the basis for the system's
-integrity, this seems like a pretty big omission.
+So I envision the distribution to be hybrid:
+- for plain fixups where no userspace is required, we should
+distribute those programs in the kernel itself, in-tree.
+This series already implements pre-loading of BPF programs for the
+core part of HID-BPF, but I plan on working on some automation of
+pre-loading of these programs from the kernel itself when we need to
+do so.
 
-From patch 2/4:
-"The code in bzImage64_verify_sig makes use of system keyrings
-including
-.buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
-verify signed kernel image as PE file..."
+Ideally, the process would be:
+* user reports a bug
+* developer produces an eBPF program (and maybe compile it if the user
+doesn't have LLVM)
+* user tests/validates the fix without having to recompile anything
+* developer drops the program in-tree
+* some automated magic happens (still unclear exactly how to define
+which HID device needs which eBPF program ATM)
+* when the kernel sees this exact same device (BUS/VID/PID/INTERFACE)
+it loads the fixup
 
-From patch 3/4:
-"This patch allows to verify arm64 kernel image signature using not
-only
-.builtin_trusted_keys but also .platform and .secondary_trusted_keys
-keyring."
+- the other part of the hybrid solution is for when userspace is
+heavily involved (because it exports a new dbus interface for that
+particular feature on this device). We can not really automatically
+preload the BPF program because we might not have the user in front of
+it.
+So in that case, the program would be hosted alongside the
+application, out-of-the-tree, but given that to be able to call kernel
+functions you need to be GPL, some public distribution of the sources
+is required.
 
-From patch 4/4:
-"... with keys from platform keyring but the built-in keys and
-secondary keyring are not used."
-
-This patch set could probably go through KEYS/KEYRINGS_INTEGRITY, but
-it's kind of late to be asking.  Has it been in linux-next?  Should I
-assume this patch set has been fully tested or can we get some "tags"?
-
-thanks,
-
-Mimi
+Cheers,
+Benjamin
 

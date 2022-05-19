@@ -2,133 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1493052DC23
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B911052DC31
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243473AbiESR7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+        id S243490AbiESR75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231908AbiESR7q (ORCPT
+        with ESMTP id S243483AbiESR7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:59:46 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31941D4101
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:59:46 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:36212)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nrkR5-00ENiG-OH; Thu, 19 May 2022 11:59:43 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38802 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nrkR3-006e82-PA; Thu, 19 May 2022 11:59:43 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kexec@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com>
-        <87ee0q7b92.fsf@email.froward.int.ebiederm.org>
-        <YoWySwbszfdZS9LU@MiWiFi-R3L-srv>
-Date:   Thu, 19 May 2022 12:59:17 -0500
-In-Reply-To: <YoWySwbszfdZS9LU@MiWiFi-R3L-srv> (Baoquan He's message of "Thu,
-        19 May 2022 10:58:19 +0800")
-Message-ID: <87bkvt4d56.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 19 May 2022 13:59:52 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12800D9E86
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:59:51 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id a38so2857990pgl.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZG6+lov3cxhj/3dSakUHhK2uNdevz22kJZXDGdoSRa0=;
+        b=HvGK5AoIKlR1DmUqXH/3JrsgrNgbI6CxqpjF7swr+ovrKu9ZKjE7XFxxmYv5z3A4vQ
+         zFvQc+wGmpLaOyrkIJfRysB6FfJmuK3rzqDDq5QwJ8NqQicHM1NYueDGQHY29Zvh8kHv
+         72G71y5GU883B6GtWgxh3517kplrz9FUDcsN/S9p18ysjhsmBWGWVLC6+jrce5mXeS6T
+         hJn8crK4Rfll/pVc0Gv4CF49L5PbbjNKLks6UUXq/cSzeSqtlzT/NQv9bHnwLI+Udrs2
+         SiGoXwNhhOVN26ONktooTtWmXg4Z+AJ3q26Zn8cOCnchPiM8WqoZ8sfHvLkx6kvoibLf
+         jBiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZG6+lov3cxhj/3dSakUHhK2uNdevz22kJZXDGdoSRa0=;
+        b=bwWEHuqWzAinRouZcGbAv2ELvap9assTUBxtCwkTTyVA5cBe9GUvvwX7L0LkNh1dTS
+         PrL8hOFdetTbOgTEtjTkVC1iQ6lr7okdzptIuaawUpgtDgyi/2tWqvcd0YShElHmZuUm
+         NPoeLwrbb4oBAu+4NYSgKGrGAx7eRxu1XqBBFQ6FggPxnfuLfkraYrLWBkd7LfIAKJuA
+         /ss0PrUejPpoprhR+tz4Y48mAlUK9p3NLR9lIGldi9arFmMwoZ1171oGzE7e5spzV5g8
+         mZ1qVyNeTGjtKtHtU5Gg9pk3UEUn8SEyIhtVJja9gcSgvBp+co4Gs9mAObg0eoKuI1mM
+         /34A==
+X-Gm-Message-State: AOAM532q3XaSnvQMfdFnOFmN0qTp3hmSDDkhjM78TnhSDS+hgl18aKVl
+        n6Ci5L0FNMepSt90jCb9EVqNrA==
+X-Google-Smtp-Source: ABdhPJwJrgaenuQoJ3gtMljcMqROuGtxxtaXevg8lRhJyXVzkZRsV/Svi9mn3qMabsx3sZ23y479Zg==
+X-Received: by 2002:a65:554d:0:b0:3c6:3f22:72cd with SMTP id t13-20020a65554d000000b003c63f2272cdmr4900212pgr.283.1652983190330;
+        Thu, 19 May 2022 10:59:50 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id x7-20020a170902b40700b0015e8d4eb254sm4009372plr.158.2022.05.19.10.59.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 10:59:49 -0700 (PDT)
+Date:   Thu, 19 May 2022 17:59:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lei Wang <lei4.wang@intel.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, chenyi.qiang@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: VMX: Read BNDCFGS if not from_vmentry
+Message-ID: <YoaFknp7Swj0DdRw@google.com>
+References: <20220421091331.11196-1-lei4.wang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nrkR3-006e82-PA;;;mid=<87bkvt4d56.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/rSxyKigaHMoSccMUFZ8spyBuVsjtCT6w=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220421091331.11196-1-lei4.wang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ******;Baoquan He <bhe@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1394 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.8 (0.3%), b_tie_ro: 3.3 (0.2%), parse: 1.12
-        (0.1%), extract_message_metadata: 12 (0.8%), get_uri_detail_list: 2.8
-        (0.2%), tests_pri_-1000: 8 (0.6%), tests_pri_-950: 1.07 (0.1%),
-        tests_pri_-900: 0.77 (0.1%), tests_pri_-90: 48 (3.4%), check_bayes: 47
-        (3.4%), b_tokenize: 6 (0.4%), b_tok_get_all: 8 (0.6%), b_comp_prob:
-        1.84 (0.1%), b_tok_touch_all: 28 (2.0%), b_finish: 0.75 (0.1%),
-        tests_pri_0: 1308 (93.8%), check_dkim_signature: 0.40 (0.0%),
-        check_dkim_adsp: 2.8 (0.2%), poll_dns_idle: 0.24 (0.0%), tests_pri_10:
-        1.78 (0.1%), tests_pri_500: 6 (0.4%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH] kexec_file: Drop weak attribute from
- arch_kexec_apply_relocations[_add]
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baoquan He <bhe@redhat.com> writes:
+On Thu, Apr 21, 2022, Lei Wang wrote:
+> In the migration case, if nested state is set after MSR state, the value
+> needs to come from the current MSR value.
+> 
+> Signed-off-by: Lei Wang <lei4.wang@intel.com>
+> Reported-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/nested.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index f18744f7ff82..58a1fa7defc9 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -3381,7 +3381,8 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
+>  	if (!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_DEBUG_CONTROLS))
+>  		vmx->nested.vmcs01_debugctl = vmcs_read64(GUEST_IA32_DEBUGCTL);
+>  	if (kvm_mpx_supported() &&
+> -		!(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS))
+> +	    (!from_vmentry ||
 
-> Hi Eric,
->
-> On 05/18/22 at 04:59pm, Eric W. Biederman wrote:
->> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
->> 
->> > Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
->> > symbols") [1], binutils (v2.36+) started dropping section symbols that
->> > it thought were unused.  This isn't an issue in general, but with
->> > kexec_file.c, gcc is placing kexec_arch_apply_relocations[_add] into a
->> > separate .text.unlikely section and the section symbol ".text.unlikely"
->> > is being dropped. Due to this, recordmcount is unable to find a non-weak
->> > symbol in .text.unlikely to generate a relocation record against.
->> >
->> > Address this by dropping the weak attribute from these functions:
->> > - arch_kexec_apply_relocations() is not overridden by any architecture
->> >   today, so just drop the weak attribute.
->> > - arch_kexec_apply_relocations_add() is only overridden by x86 and s390.
->> >   Retain the function prototype for those and move the weak
->> >   implementation into the header as a static inline for other
->> >   architectures.
->> >
->> > [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
->> 
->> Any chance you can also get machine_kexec_post_load,
->> crash_free_reserved_phys_range, arch_kexec_protect_protect_crashkres,
->> arch_kexec_unprotect_crashkres, arch_kexec_kernel_image_probe,
->> arch_kexec_kernel_image_probe, arch_kimage_file_post_load_cleanup,
->> arch_kexec_kernel_verify_sig, and arch_kexec_locate_mem_hole as well.
->> 
->> That is everything in kexec that uses a __weak symbol.  If we can't
->> count on them working we might as well just get rid of the rest
->> preemptively.
->
-> Is there a new rule that __weak is not suggested in kernel any more?
-> Please help provide a pointer if yes, so that I can learn that.
->
-> In my mind, __weak is very simple and clear as a mechanism to add
-> ARCH related functionality.
+Gah, my bad, this isn't correct either.  The minor issue is that it should check
+vmx->nested.nested_run_pending, not just from_vmentry.  If nested state is restored
+and a VM-Entry is pending, then the MSRs that were saved+restore were L1's MSRs,
+not L2's MSRs.
 
-You should be able to trace the conversation back for all of the details
-but if you can't here is the summary.
+That won't cause problems because the consumption correctly checks nested_run_pending,
+it's just confusing and an unnecessary VMREAD.
 
-There is a tool that some architectures use called recordmcount.  The
-recordmcount looks for a symbol in a section, and ignores all weak
-symbols.  In certain cases sections become so simple there are only weak
-symbols.  At which point recordmcount fails.
+But that's a moot point because vmcs01 will not hold the correct value in the SMM
+case.  Luckily, BNDCFGS is easy to handle because it's unconditionally saved on
+VM-Exit, which means that vmcs12 is guaranteed to hold the correct value for both
+SMM and state restore (without pending entry) because the pseudo-VM-Exit for both
+will always save vmcs02's value into vmcs12.
 
-Which means in practice __weak symbols are unreliable and don't work
-to add ARCH related functionality.
+GUEST_IA32_DEBUGCTL is a much bigger pain because it's conditionally saved on
+exit.   I think the least awful approach would be to save L2's value into
+vmcs01_debugctl prior to the forced exit in vmx_enter_smm(), but that will require
+more changes to the state restore flow.  Grr.
 
-Given that __weak symbols fail randomly I would much rather have simpler
-code that doesn't fail.  It has never been the case that __weak symbols
-have been very common in the kernel.  I expect they are something like
-bool that have been gaining traction.  Still given that __weak symbols
-don't work.  I don't want them.
+I'll send patches for both BNDCFGS and IA32_DEBUGCTL, and will take a careful look
+at the PKS stuff too.  I'm guessing it should follow the BNDCFGS logic.
 
-Eric
+Sorry for the runaround.

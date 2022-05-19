@@ -2,127 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922E352D0EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6AB52D0F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237030AbiESK5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S237100AbiESK5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiESK5E (ORCPT
+        with ESMTP id S237094AbiESK5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:57:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5065C674C8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:57:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EACE41F86A;
-        Thu, 19 May 2022 10:57:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652957821; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8uZD/sZperneDqTPmd/3WdovVji6ii5Xr/81SKEuRI4=;
-        b=SPinQL3l1IrJeHOkOXoaUvW+T4FUNTVr5LsgEoOKh0t0ydiKxpj3mAwY8bV0lpIdi8E+th
-        TxHLIrqz+O4LOnz4G+2x2BE5dpXSD06fCKEmxH/Qkgskm2rY50xwQXAwj76VWu8rJpnSOE
-        iUijMuYueXfTDri4cKSeUZGCOFZTBqQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652957821;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8uZD/sZperneDqTPmd/3WdovVji6ii5Xr/81SKEuRI4=;
-        b=GFdxz3drPlEthQn5HQPEQgVP6OBYVfm5b3mhjwrdQffvVzpeuqVG+jYkjDFiozZEwVethz
-        qAmY/KHBJIMBDpDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C1C3913AF8;
-        Thu, 19 May 2022 10:57:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Q/E6Ln0ihmJdWwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 19 May 2022 10:57:01 +0000
-Message-ID: <5a0c9b7c-3620-3e0f-7510-d0fc3fa6ceda@suse.cz>
-Date:   Thu, 19 May 2022 12:57:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 4/6] mm/page_alloc: Remove unnecessary page == NULL check
- in rmqueue
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
- <20220512085043.5234-5-mgorman@techsingularity.net>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220512085043.5234-5-mgorman@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 19 May 2022 06:57:43 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8FE80AF1E9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+        Message-Id; bh=IM2J7NHYnrpaK9J+N0RQ6liKfpIkzPdy5Vj0scWlvm0=; b=a
+        hFy5lpRObySYXD8/fA9aWHSQuXau41ydyqvj6huPmdyD4vWobGeKcDMQuYxVwVFY
+        YpJC4VfC2K3/XqjRvmrFcztlkmpcQ4t5PgqRpzeizZ6kvMEtcSBFrlSEB2F/vBr4
+        /PVk0bv1h5V5vjcfOf/sNyNdPBL0VAjQcZg6xISHT4=
+Received: from localhost (unknown [10.129.21.144])
+        by front02 (Coremail) with SMTP id 54FpogB3fHiTIoZi47SYBg--.24223S2;
+        Thu, 19 May 2022 18:57:23 +0800 (CST)
+From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
+To:     amitkarwar@gmail.com, ganapathi017@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, arend.vanspriel@broadcom.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, fuyq@stu.pku.edu.cn,
+        Yongzhi Liu <lyz_cs@pku.edu.cn>
+Subject: [PATCH] mwifiex:  Fix potential dereference of NULL pointer
+Date:   Thu, 19 May 2022 03:57:19 -0700
+Message-Id: <1652957839-127949-1-git-send-email-lyz_cs@pku.edu.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: 54FpogB3fHiTIoZi47SYBg--.24223S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw1ftw4rJr4xZFW8Jw1DZFb_yoWDCrX_K3
+        97Za13Gr4UKw18Kw4jyFsxZr9Yyr43XFn7Can3trZ3CFWIv3y3ZrZ5ZFWkJrW3Cw4vvwnx
+        Jr98ta4rJayUXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3AFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_
+        JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK
+        6svPMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_Kr1UJr1l4I8I3I0E4IkC6x
+        0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+        zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+        4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+        CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUF9a9DUUUU
+X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwELBlPy7vJhCwAFsd
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 10:50, Mel Gorman wrote:
-> The VM_BUG_ON check for a valid page can be avoided with a simple
-> change in the flow. The ZONE_BOOSTED_WATERMARK is unlikely in general
-> and even more unlikely if the page allocation failed so mark the
-> branch unlikely.
+If 'card' is not valid, then we need to check the
+field 'adapter' and 'priv_num' to avoid use of NULL
+pointer in function 'mwifiex_get_priv'. Fix this by
+adding the null pointer check on them.
 
-Hm, so that makes a DEBUG_VM config avoid the check. On the other hand,
-it puts it on the path returning from rmqueue_pcplist() for all configs,
-and that should be the fast path. So unless things further change in the
-following patches, it doesn't seem that useful?
+Fixes: 21c5c83ce ("mwifiex: support sysfs initiated device coredump")
 
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> Tested-by: Minchan Kim <minchan@kernel.org>
-> Acked-by: Minchan Kim <minchan@kernel.org>
-> ---
->  mm/page_alloc.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 1c4c54503a5d..b543333dce8f 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -3765,17 +3765,18 @@ struct page *rmqueue(struct zone *preferred_zone,
->  
->  	page = rmqueue_buddy(preferred_zone, zone, order, alloc_flags,
->  							migratetype);
-> -	if (unlikely(!page))
-> -		return NULL;
->  
->  out:
->  	/* Separate test+clear to avoid unnecessary atomics */
-> -	if (test_bit(ZONE_BOOSTED_WATERMARK, &zone->flags)) {
-> +	if (unlikely(test_bit(ZONE_BOOSTED_WATERMARK, &zone->flags))) {
->  		clear_bit(ZONE_BOOSTED_WATERMARK, &zone->flags);
->  		wakeup_kswapd(zone, 0, 0, zone_idx(zone));
->  	}
->  
-> -	VM_BUG_ON_PAGE(page && bad_range(zone, page), page);
-> +	if (unlikely(!page))
-> +		return NULL;
-> +
-> +	VM_BUG_ON_PAGE(bad_range(zone, page), page);
->  	return page;
->  }
->  
+Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+---
+ drivers/net/wireless/marvell/mwifiex/usb.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/wireless/marvell/mwifiex/usb.c b/drivers/net/wireless/marvell/mwifiex/usb.c
+index 8f01fcb..c635206 100644
+--- a/drivers/net/wireless/marvell/mwifiex/usb.c
++++ b/drivers/net/wireless/marvell/mwifiex/usb.c
+@@ -686,6 +686,8 @@ static void mwifiex_usb_coredump(struct device *dev)
+ {
+ 	struct usb_interface *intf = to_usb_interface(dev);
+ 	struct usb_card_rec *card = usb_get_intfdata(intf);
++	if (!card->adapter || !card->adapter->priv_num)
++		return;
+ 
+ 	mwifiex_fw_dump_event(mwifiex_get_priv(card->adapter,
+ 					       MWIFIEX_BSS_ROLE_ANY));
+-- 
+2.7.4
 

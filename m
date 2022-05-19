@@ -2,104 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4140952D1DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D50A52D1E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237627AbiESLzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S237648AbiESL5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237611AbiESLzh (ORCPT
+        with ESMTP id S237593AbiESL4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:55:37 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF5BB82FA;
-        Thu, 19 May 2022 04:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652961335; x=1684497335;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t8Pe4Q+TJHqdH7A97sboo3Z2TolIf8EzWhjhwNv7dsg=;
-  b=Tj+4p/nOQpg9L2ypSsevkuzqvs1kG8dIkLkTpdW27YVIXrwDtmmL87Z1
-   6ASJSKj3dB3HOAMJ+LMRWQYL2ZoVxmw/GDOGmMj5Pz5EEsW11L28fEKpP
-   F21U/0dn8NLlQVs3+I6PjSKgEf4AYWv7qjAhVc2XBfQxVfe0Ji1BCaIqi
-   AHNcnkmc4bvWMHr7Ro6CwOKPH2T80mPYXOD+gQaNR6pdLepL+SCxxF9Su
-   s+JNuseUbcjxnMfm6PgU31BER2lXYLh+PWKWbK3YTyYrrN5tzhSSLvVFh
-   uS/uphX/rUV0xMrTNZvuNd3FiYNug4Aaxix/lWxvlPauImCIAUyTVSkN9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="270988936"
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="270988936"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 04:55:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="556863492"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 19 May 2022 04:55:27 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id E88F0109; Thu, 19 May 2022 14:55:27 +0300 (EEST)
-Date:   Thu, 19 May 2022 14:55:27 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv6 02/15] mm: Add support for unaccepted memory
-Message-ID: <20220519115527.jqzrvsqk4o225m6d@black.fi.intel.com>
-References: <20220517153444.11195-1-kirill.shutemov@linux.intel.com>
- <20220517153444.11195-3-kirill.shutemov@linux.intel.com>
- <972b5335-98df-f7b2-4b4f-53695e684d8b@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <972b5335-98df-f7b2-4b4f-53695e684d8b@amd.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 19 May 2022 07:56:51 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF2266AF5;
+        Thu, 19 May 2022 04:56:50 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J9njiB014680;
+        Thu, 19 May 2022 11:56:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=7ukxmzai3Of0C2DKPzah5+6xoHT5hdoRomBqRrlp/Yg=;
+ b=PhQ7vRDp1w9gdhXqZp8KaLNKu8CUDQ4sgwM+7+27tw1fJ/N35+ENPvK/RoCw0s3SQ//i
+ W8T84CWAlVoiEJPHngpb2wsCMzJGOzRUaa59j+MipsTNHEqQmxtPsjGgC2SvlUioP4H/
+ 94P8F/u+S0s09OG9M7c26PY2PJpGYOfRUeMjyd/ODkoRxakc4gPGIZCuoXeMpw2coiPt
+ ZeqfEzLEebdIbR5fX0bvcHcZO2YUbtUbJQ28PePEMAzgzH8dVznT/CZ002iO2mQ4Td4+
+ UvHdTfJVT6VQAlzB6cp/XulprAJNCe10ilIv16GSquIvqLvvRevdfEDT/HQz0KuxG8Kv +g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5kkw2st2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 11:56:35 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24JBlm1O018178;
+        Thu, 19 May 2022 11:56:34 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5kkw2ssb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 11:56:34 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24JBqir1021062;
+        Thu, 19 May 2022 11:56:31 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 3g2428wv05-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 11:56:31 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24JBgYo238273382
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 11:42:34 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C5914203F;
+        Thu, 19 May 2022 11:56:28 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D6D3B42041;
+        Thu, 19 May 2022 11:56:25 +0000 (GMT)
+Received: from sig-9-65-82-167.ibm.com (unknown [9.65.82.167])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 19 May 2022 11:56:25 +0000 (GMT)
+Message-ID: <c47299b899da4ad4b6d3ad637022ad82c8ed6ed2.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 4/4] kexec, KEYS, s390: Make use of built-in and
+ secondary keyring for signature verification
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Baoquan He <bhe@redhat.com>, Heiko Carstens <hca@linux.ibm.com>,
+        akpm@linux-foundation.org
+Cc:     Coiby Xu <coxu@redhat.com>, kexec@lists.infradead.org,
+        keyrings@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Chun-Yi Lee <jlee@suse.com>, stable@vger.kernel.org,
+        Philipp Rudo <prudo@linux.ibm.com>,
+        linux-security-module@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        "open list:S390" <linux-s390@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Date:   Thu, 19 May 2022 07:56:25 -0400
+In-Reply-To: <20220519003902.GE156677@MiWiFi-R3L-srv>
+References: <20220512070123.29486-1-coxu@redhat.com>
+         <20220512070123.29486-5-coxu@redhat.com> <YoTYm6Fo1vBUuJGu@osiris>
+         <20220519003902.GE156677@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: pODijiS05G_BlMkECJ3lUiCw2rg3g4l4
+X-Proofpoint-GUID: oUjdCxRT26f3yTIYGuFU7UbYqUR4xUcJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-19_03,2022-05-19_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 bulkscore=0 adultscore=0
+ mlxlogscore=999 clxscore=1011 malwarescore=0 impostorscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205190065
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 12:43:15PM +0200, Gupta, Pankaj wrote:
-> If both Intel TDX and AMD SEV-SNP requires the memory to be accepted before
-> it can be used by the guest. In what other use cases (apart from memory
-> hotplug), the lazy memory acceptance will be useful?
+[Cc'ing Jarkko, linux-integrity]
 
-It is nothing to do with hotplug.
+On Thu, 2022-05-19 at 08:39 +0800, Baoquan He wrote:
+> On 05/18/22 at 01:29pm, Heiko Carstens wrote:
+> > On Thu, May 12, 2022 at 03:01:23PM +0800, Coiby Xu wrote:
+> > > From: Michal Suchanek <msuchanek@suse.de>
+> > > 
+> > > commit e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
+> > > adds support for KEXEC_SIG verification with keys from platform keyring
+> > > but the built-in keys and secondary keyring are not used.
+> > > 
+> > > Add support for the built-in keys and secondary keyring as x86 does.
+> > > 
+> > > Fixes: e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
+> > > Cc: stable@vger.kernel.org
+> > > Cc: Philipp Rudo <prudo@linux.ibm.com>
+> > > Cc: kexec@lists.infradead.org
+> > > Cc: keyrings@vger.kernel.org
+> > > Cc: linux-security-module@vger.kernel.org
+> > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > > Reviewed-by: "Lee, Chun-Yi" <jlee@suse.com>
+> > > Acked-by: Baoquan He <bhe@redhat.com>
+> > > Signed-off-by: Coiby Xu <coxu@redhat.com>
+> > > ---
+> > >  arch/s390/kernel/machine_kexec_file.c | 18 +++++++++++++-----
+> > >  1 file changed, 13 insertions(+), 5 deletions(-)
+> > 
+> > As far as I can tell this doesn't have any dependency to the other
+> > patches in this series, so should I pick this up for the s390 tree, or
+> > how will this go upstream?
+> 
+> Thanks, Heiko.
+> 
+> I want to ask Mimi if this can be taken into KEYS-ENCRYPTED tree.
+> Otherwise I will ask Andrew to help pick this whole series.
+> 
+> Surely, this patch 4 can be taken into s390 seperately since it's
+> independent, both looks good.
 
-Any memory has to be accepted before it can be used inside the TDX or
-SEV-SNP guest. It can happen upfront, before kernel gets control (like by
-firmware) or by kernel. The idea is to accept small portion of the memory
-upfront and leave the rest to the kernel. The reason why delaying
-acceptance make sense is boot time. We want the guest to start doing
-useful stuff as fast as possible.
+KEYS-ENCRYTPED is a type of key, unrelated to using the .platform,
+.builtin, .machine, or .secondary keyrings.  One of the main reasons
+for this patch set is to use the new ".machine" keyring, which, if
+enabled, is linked to the "secondary" keyring.  However, the only
+reference to the ".machine" keyring is in the cover letter, not any of
+the patch descriptions.  Since this is the basis for the system's
+integrity, this seems like a pretty big omission.
 
--- 
- Kirill A. Shutemov
+From patch 2/4:
+"The code in bzImage64_verify_sig makes use of system keyrings
+including
+.buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
+verify signed kernel image as PE file..."
+
+From patch 3/4:
+"This patch allows to verify arm64 kernel image signature using not
+only
+.builtin_trusted_keys but also .platform and .secondary_trusted_keys
+keyring."
+
+From patch 4/4:
+"... with keys from platform keyring but the built-in keys and
+secondary keyring are not used."
+
+This patch set could probably go through KEYS/KEYRINGS_INTEGRITY, but
+it's kind of late to be asking.  Has it been in linux-next?  Should I
+assume this patch set has been fully tested or can we get some "tags"?
+
+thanks,
+
+Mimi
+

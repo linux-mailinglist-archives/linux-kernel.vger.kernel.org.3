@@ -2,172 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB8152D5C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E90B52D5CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239602AbiESORY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S239369AbiESOTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239614AbiESORM (ORCPT
+        with ESMTP id S231191AbiESOTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:17:12 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858B566AF5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:17:05 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2f83983782fso58232047b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iYHx5q9vFxG1twHSrXgPuM3RtmqmqfeF+w08Xx1F+50=;
-        b=F1A42Q6w8v/anLZoUpynyHZkvmowjKyElNX0N/ZdpsgitxYvM+W0pvclKCST5/ZewX
-         A4E0VWr3zwJrT/PUFL7Vo5FYEDu8S4dQKE6ZfXppqvMlXhqkWRCfmYiVrT9G60VprHrh
-         AMVUPEPcgPVp5ziQw8q9bLSuIA2q0lXZ/o82hB0eIngGzaFuDqALVh6glNsOGgUdnIVr
-         fI5NGC6N/5vUBNebsQXBXHy1DbhV7mCA/TdmJhoGrpBkhIAGhvMSc5qbB1pCyB6TTn5j
-         41ltJTUT+XXORnV1FQRcGQnD1pkLHwri/vw1GRI6lKoNiXAPwHr6BvXoCkNWPZtWpaSW
-         bWag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iYHx5q9vFxG1twHSrXgPuM3RtmqmqfeF+w08Xx1F+50=;
-        b=CYt0qZyUuw8wzNq8Tv0IVas5TOXjuqOgWaYsmrCTqgJlThtscJnRNS5HWVAPqdvZOn
-         ez65Nh6UG3SQcj2oMjB9t5Y80KE5r0JCz1STF/6thr6PI3SdTwX636fsTLNeY3jRW9/a
-         gSoB9xAmywUH057fx8qRn+Fgyfl9HQ4xlaxJpoiOh/HsUkVBfAoCmXdytNh6w04xP2hk
-         ittX8DhjYPkeyBXlpMVMOJJvagQyTNSGdwsakP1f8MLBGdkYX6CgbucRd1ivjjOaUgiI
-         RYtnTUwvvviM8oUpN+ac6XJv3rQouZUfSo0igIK7gPesqxvPfHJQmJSYsHGxIpJq2iRw
-         p5Fg==
-X-Gm-Message-State: AOAM531OUmrOhSrazo2CxKBvbATyVCGVVb3nt+QxgcAz54rUGnYDLsSO
-        TlKEl6vhAOU1eJ+00WzThw+c28ikV12SnRhHMTg14Q==
-X-Google-Smtp-Source: ABdhPJyN/nGkbfhkIlHqEYMrDUOhX+eTQfoaAsvZataBzL9VQWZ+jA+D+5+P9vFpxG0qupIHnCaIIj4MAvEF6tFie4A=
-X-Received: by 2002:a81:6189:0:b0:2eb:deb5:9f63 with SMTP id
- v131-20020a816189000000b002ebdeb59f63mr4679410ywb.319.1652969824670; Thu, 19
- May 2022 07:17:04 -0700 (PDT)
+        Thu, 19 May 2022 10:19:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4950673795;
+        Thu, 19 May 2022 07:19:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EB4D31650;
+        Thu, 19 May 2022 07:19:12 -0700 (PDT)
+Received: from [10.57.1.211] (unknown [10.57.1.211])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70C0B3F66F;
+        Thu, 19 May 2022 07:19:10 -0700 (PDT)
+Message-ID: <d15bb8a2-2203-cabf-69de-627d0a45efdc@arm.com>
+Date:   Thu, 19 May 2022 15:19:09 +0100
 MIME-Version: 1.0
-References: <20220512163534.2572-1-vincent.guittot@linaro.org> <f1f50c52673aa1873b4a4d3b6b15250d4bf390f9.camel@linux.intel.com>
-In-Reply-To: <f1f50c52673aa1873b4a4d3b6b15250d4bf390f9.camel@linux.intel.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 19 May 2022 16:16:52 +0200
-Message-ID: <CAKfTPtBEHyP202duKwJi+GVNTMza+L_PuK3hmUxcjKnODOuRjw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] Add latency_nice priority
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qais.yousef@arm.com, chris.hyser@oracle.com,
-        valentin.schneider@arm.com, patrick.bellasi@matbug.net,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, joshdon@google.com,
-        len.brown@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 00/11] perf c2c: Support display for Arm64
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+References: <20220508092346.255826-1-leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Like Xu <likexu@tencent.com>, Ian Rogers <irogers@google.com>,
+        Alyssa Ross <hi@alyssa.is>, Kajol Jain <kjain@linux.ibm.com>,
+        Li Huafei <lihuafei1@huawei.com>,
+        German Gomez <german.gomez@arm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ali Saidi <alisaidi@amazon.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220508092346.255826-1-leo.yan@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 at 23:44, Tim Chen <tim.c.chen@linux.intel.com> wrote:
->
-> On Thu, 2022-05-12 at 18:35 +0200, Vincent Guittot wrote:
-> > This patchset restarts the work about adding a latency nice priority to
-> > describe the latency tolerance of cfs tasks.
-> >
-> > The patches [1-4] have been done by Parth:
-> > https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
-> >
-> > I have just rebased and moved the set of latency priority outside the
-> > priority update. I have removed the reviewed tag because the patches
-> > are 2 years old.
-> >
->
-> Vincent,
->
-> Thanks for introducing the feature again, which is much needed.  I am trying
-> to look at the problem again from usage point of view. And wonder if
-> there are ways to make the latency_nice knob easier to use.
->
-> The latency nice value here is relative.  A latency sensitive task
-> may not tell if setting the latency_nice to -5, or to -10 is good enough.
-> It depends on what other tasks are setting their latency_nice value to.
-> What a task does know is what it it doing and its characteristics.
-> For instance for client tasks, we may have categories such as
->
-> Task Category                                   latency_nice_range
-> -------------                                   ------------------
-> urgent                                          -19 to -16
-> media playback                                  -15 to -11
-> interactive (e.g.pressing key)                  -10 to -6
-> normal                                          -5  to  9
-> background                                       10  to 15
-> opportunistic soaker task (sched_idle class)     16 to  20
->
-> And we could allow a task to set attribute of which task category applies
-> to it and the OS can set a default latency nice value in its task category.
-> So a task can just declare itself what kind of task it is, and not worry about
-> actually setting a latency nice value which it may not know
-> what is appopriate.
-> If needed, a task could still adjust its latency nice value within the range to
-> differentiate itself in a task category. And we will prevent
-> a task from seeting inappropriate latency nice value out of the right range.
 
-The description above make sense but I'm not sure this should be put
-as part of the interface but more in the documentation to describe how
-system can make use of nice_latency
->
-> Knowing a task characteristics will also be helpful with other
-> scheduling decisions, like placing a task on a more high performing
-> core in hetero systems.
 
-Ok so you would like a more general interface than an latency
-interface but a way to set some attributes to a task so we can make
-smarter decision
+On 08/05/2022 10:23, Leo Yan wrote:
+> Arm64 Neoverse CPUs supports data source in Arm SPE trace, this allows
+> us to detect cache line contention and transfers.
+> 
+> Unlike x86 architecture, Arm SPE trace data cannot provide 'HITM'
+> snooping flag, Ali Said has a patch set "perf: arm-spe: Decode SPE
+> source and use for perf c2c" [1] which introduces 'peer' flag and
+> synthesizes memory samples with this flag.
+> 
+> Based on patch set [1], this patch set is to finish the second half work
+> to consume the 'peer' flag in perf c2c tool, it adds an extra display
+> 'peer' mode.
+> 
+> Patches 01, 02 and 03 are to support 'N/A' metrics for store operations.
+> 
+> Patches 04 and 05 adds statistics and dimensions for memory samples with
+> peer flag.
+> 
+> Patches 06, 07, 08 are for refactoring, it refines the code with more
+> general naming so this can allow us to easier to extend display modes
+> but not strictly bound to HITM tags.
+> 
+> Patches 09, 10 and 11 are to extend display 'peer' mode, it also updates
+> the document and also changes to use 'peer' mode as default mode on
+> Arm64 arches.
+> 
+> This patch set has been verified for both x86 and Arm64 memory samples.
+> 
+> The display result with x86 memory samples:
+> 
+>   =================================================
+>              Shared Data Cache Line Table          
+>   =================================================
+>   #
+>   #        ----------- Cacheline ----------      Tot  ------- Load Hitm -------    Snoop    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
+>   # Index             Address  Node  PA cnt     Hitm    Total  LclHitm  RmtHitm     Peer  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
+>   # .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
+>   #
+>         0      0x55c8971f0080     0    1967   66.14%      252      252        0        0     6044     3550     2494     2024      470        0      528     2672       78        20      252         0        0         0         0
+>         1      0x55c8971f00c0     0       1   33.86%      129      129        0        0      914      914        0        0        0        0      272      374       52        87      129         0        0         0         0
+> 
+>   =================================================
+>         Shared Cache Line Distribution Pareto      
+>   =================================================
+>   #
+>   #        ----- HITM -----    Snoop  ------- Store Refs ------  --------- Data address ---------                      --------------- cycles ---------------    Total       cpu                                     Shared                               
+>   #   Num  RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt        Code address  rmt hitm  lcl hitm      load      peer  records       cnt                  Symbol             Object              Source:Line  Node
+>   # .....  .......  .......  .......  .......  .......  .......  ..................  ....  ......  ..................  ........  ........  ........  ........  .......  ........  ......................  .................  .......................  ....
+>   #
+>     -------------------------------------------------------------------------------
+>         0        0      252        0     2024      470        0      0x55c8971f0080
+>     -------------------------------------------------------------------------------
+>              0.00%   12.30%    0.00%    0.00%    0.00%    0.00%                 0x0     0       1      0x55c8971ed3e9         0      1313       863         0     1222         3  [.] 0x00000000000013e9  false_sharing.exe  false_sharing.exe[13e9]   0
+>              0.00%    0.79%    0.00%   90.51%    0.00%    0.00%                 0x0     0       1      0x55c8971ed3e2         0      1800       878         0     3029         3  [.] 0x00000000000013e2  false_sharing.exe  false_sharing.exe[13e2]   0
+>              0.00%    0.00%    0.00%    9.49%  100.00%    0.00%                 0x0     0       1      0x55c8971ed3f4         0         0         0         0      662         3  [.] 0x00000000000013f4  false_sharing.exe  false_sharing.exe[13f4]   0
+>              0.00%   86.90%    0.00%    0.00%    0.00%    0.00%                0x20     0       1      0x55c8971ed447         0       141       103         0     1131         2  [.] 0x0000000000001447  false_sharing.exe  false_sharing.exe[1447]   0
+> 
+>     -------------------------------------------------------------------------------
+>         1        0      129        0        0        0        0      0x55c8971f00c0
+>     -------------------------------------------------------------------------------
+>              0.00%  100.00%    0.00%    0.00%    0.00%    0.00%                0x20     0       1      0x55c8971ed455         0        88        94         0      914         2  [.] 0x0000000000001455  false_sharing.exe  false_sharing.exe[1455]   0
+> 
+> 
+> The display result with Arm SPE memory samples:
+> 
+>   =================================================
+>              Shared Data Cache Line Table          
+>   =================================================
+>   #
+>   #        ----------- Cacheline ----------    Snoop  ------- Load Hitm -------    Snoop    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
+>   # Index             Address  Node  PA cnt     Peer    Total  LclHitm  RmtHitm     Peer  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
+>   # .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
+>   #
+>         0      0xaaaac17d6000   N/A       0  100.00%        0        0        0       99    18851    18851        0        0        0        0        0    18752        0         0        0         0        0         0         0
+> 
+>   =================================================
+>         Shared Cache Line Distribution Pareto      
+>   =================================================
+>   #
+>   #        ----- HITM -----    Snoop  ------- Store Refs ------  --------- Data address ---------                      --------------- cycles ---------------    Total       cpu                                    Shared                       
+>   #   Num  RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt        Code address  rmt hitm  lcl hitm      load      peer  records       cnt                  Symbol            Object      Source:Line  Node
+>   # .....  .......  .......  .......  .......  .......  .......  ..................  ....  ......  ..................  ........  ........  ........  ........  .......  ........  ......................  ................  ...............  ....
+>   #
+>     -------------------------------------------------------------------------------
+>         0        0        0       99        0        0        0      0xaaaac17d6000
+>     -------------------------------------------------------------------------------
+>              0.00%    0.00%    6.06%    0.00%    0.00%    0.00%                0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
+>              0.00%    0.00%   93.94%    0.00%    0.00%    0.00%                0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
+> 
 
->
-> I think the missing piece here is a way for a task to declare
-> what kind of task it is.  I think that will make things easier.
->
-> Tim
->
-> > The patches [5-7] use latency nice priority to decide if a cfs task can
-> > preempt the current running task. Patch 5 gives some tests results with
-> > cyclictests and hackbench to highlight the benefit of latency nice
-> > priority for short interactive task or long intensive tasks.
-> >
-> >
-> > Change since v1:
-> > - fix typo
-> > - move some codes in the right patch to make bisect happy
-> > - simplify and fixed how the weight is computed
-> > - added support of sched core patch 7
-> >
-> > Parth Shah (4):
-> >   sched: Introduce latency-nice as a per-task attribute
-> >   sched/core: Propagate parent task's latency requirements to the child
-> >     task
-> >   sched: Allow sched_{get,set}attr to change latency_nice of the task
-> >   sched/core: Add permission checks for setting the latency_nice value
-> >
-> > Vincent Guittot (3):
-> >   sched/fair: Take into account latency nice at wakeup
-> >   sched/fair: Add sched group latency support
-> >   sched/core: support latency nice with sched core
-> >
-> >  include/linux/sched.h            |   3 +
-> >  include/uapi/linux/sched.h       |   4 +-
-> >  include/uapi/linux/sched/types.h |  19 ++++++
-> >  init/init_task.c                 |   1 +
-> >  kernel/sched/core.c              |  90 ++++++++++++++++++++++++++
-> >  kernel/sched/debug.c             |   1 +
-> >  kernel/sched/fair.c              | 105 ++++++++++++++++++++++++++++++-
-> >  kernel/sched/sched.h             |  34 ++++++++++
-> >  tools/include/uapi/linux/sched.h |   4 +-
-> >  9 files changed, 257 insertions(+), 4 deletions(-)
-> >
->
+Hi Leo,
+
+I see that the HITM and Store Refs columns (even N/A) are all 0% on Arm.
+Assuming it's a similar example to the x86 one above, does that mean that
+these are always expected to be 0? If so, should they be removed to avoid
+confusion, or is it just a case of the example not producing any non 0
+data for these columns?
+
+Thanks
+James
+
+> [1] https://lore.kernel.org/lkml/20220504184850.24986-1-alisaidi@amazon.com/
+> 
+> Changes from v1:
+> * Update patches 01, 02 and 03 to support 'N/A' metrics for store
+>   operations, so can align with the patch set [1] for store samples.
+> 
+> 
+> Leo Yan (11):
+>   perf mem: Add stats for store operation with no available memory level
+>   perf c2c: Add dimensions for 'N/A' metrics of store operation
+>   perf c2c: Update documentation for store metric 'N/A'
+>   perf mem: Add statistics for peer snooping
+>   perf c2c: Add dimensions for peer load operations
+>   perf c2c: Use explicit names for display macros
+>   perf c2c: Rename dimension from 'percent_hitm' to
+>     'percent_costly_snoop'
+>   perf c2c: Refactor node header
+>   perf c2c: Sort on peer snooping for load operations
+>   perf c2c: Update documentation for new display option 'peer'
+>   perf c2c: Use 'peer' as default display for Arm64
+> 
+>  tools/perf/Documentation/perf-c2c.txt |  30 ++-
+>  tools/perf/builtin-c2c.c              | 363 ++++++++++++++++++++------
+>  tools/perf/util/mem-events.c          |  14 +-
+>  tools/perf/util/mem-events.h          |   2 +
+>  4 files changed, 323 insertions(+), 86 deletions(-)
+> 

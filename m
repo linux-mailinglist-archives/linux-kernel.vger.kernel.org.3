@@ -2,338 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A446C52CA9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 06:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951BE52CA9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 06:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233397AbiESECu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 00:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33662 "EHLO
+        id S233418AbiESEC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 00:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233374AbiESECq (ORCPT
+        with ESMTP id S233386AbiESECu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 00:02:46 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E877695A29
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 21:02:43 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id k126-20020a1ca184000000b003943fd07180so2036920wme.3
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 21:02:43 -0700 (PDT)
+        Thu, 19 May 2022 00:02:50 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B2395A28
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 21:02:48 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id a3so6963196ybg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 21:02:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3bEkSEMtf8DkmiplRBG+7DvqVZf4Cq2NNRHF6bBPsFg=;
-        b=hFukwMR9m8q3qTAhMS53pI3Qj1HqmbLdvz/MY40PJ7tbBkiYHRkkZF/0o5QReK1dz0
-         UQVvqH4p6iiX5AhMYg8ePHyNf3AVaRnmjQgpi/FFYPCNrPstWhDxBiWS5RT5kL8qtPWQ
-         KTujyomcttCBBMnhGfidHHgNpr0ufvlujOqX7y+z4g+GmiLT2gnGt/2nx3ugPZakKlCl
-         rOVGlDneYv47Hon9sMVZQHTSnacLTVhscOoH039XqSG5UGw3pohT/mrDi7v3oSiwQbIO
-         tt10Ih2KyeE0hC/PVNXCqR5jMDfRzwYaReeneLIfKw3ORcxBfQ5Cqys4UxJshx6UlQ1M
-         EoYQ==
+        bh=Ec1W6nT2Fa0Ou0/ZDO4jx+xuJASI/q5lYcBKqBKZFFc=;
+        b=ptUY8/FL0dNiJSXrRbb1niFvaooiWC5HVZgQ492tk4DZGbdk5+Eon1PX6k92UOOjd8
+         ZZYKmB+Kd89mRKsU60F9xLi0m3Kf+XaBm/7PcKK+z/XizR/LUKW60Hnc39zgzyWkl5YR
+         dZBXtAYJOvkpsmbIM6/iRMdnmkoZWrj3yuMd/KVGXsrU3AV87YoFnmlGuOa6h0NnRVBf
+         onjuk2aF3H/NS6p3sc5a/yi/BKhWD+zuS76T7N3UrH0X97ukmDKuHT2Co/mUuoPAdnyd
+         zWRnbIWbU0D7ONWi319Jg7Pb2Rm0ZzaEmy3dI5aGLxFBTF987ZQuJWb1s/TnI/bTdkZT
+         uNcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3bEkSEMtf8DkmiplRBG+7DvqVZf4Cq2NNRHF6bBPsFg=;
-        b=CYazCj6b+6gALZHczh0JVz8GE7Fg59C6hmxjgeQXLLs9HRFLyNIscccWl03Gu4I53R
-         mqmQb4uEPim3fuVtWgLo8vgBPgn54qIkJgiK3rU58XpoTCEuVeKqqn05bdqbVujp1M0d
-         0ntkfvRpSIroMPaaEEWqIK9fC7U52KU5uvgJJnMWbMgRI+aPt8uPIY22TGT9+5mcvtx3
-         3n4cNTj+G8KTn7Zw+8W6WJcDg4dhL9lpaMxX6hkOzq2iUxJAV92iPhf+GmwkPP8AI2x7
-         eDlV+FRhf59B/iSzWtGFw5jkwyg9/kk/oAr0pB2ewZ3z60DAwtn+uHDsY5Xd02Y4oeFz
-         igFA==
-X-Gm-Message-State: AOAM5306Snt+OLYLjx56bSNilHOviBGwBftjTXnSvDACkpRJemFobNiD
-        nawzQrqKWF+bz448FU+KiCAEsK/ob0NnTi+3GXNeuw==
-X-Google-Smtp-Source: ABdhPJwFK+CAwyQGoMhvKL9gjFI5e2puTUHmC7xfI8uMawI1e5VrQnfJW1JxPBzChmrHmwqHmPkl2SgpYYP7HeyQT28=
-X-Received: by 2002:a05:600c:3482:b0:397:165:3ac3 with SMTP id
- a2-20020a05600c348200b0039701653ac3mr1895242wmq.149.1652932962173; Wed, 18
- May 2022 21:02:42 -0700 (PDT)
+        bh=Ec1W6nT2Fa0Ou0/ZDO4jx+xuJASI/q5lYcBKqBKZFFc=;
+        b=7iadK29L8n5dUnAK0fAb3vRtWEtfpEj7Mzxrk2BERDWzN2Hce3d+HFgZqc14WLMdJA
+         rJQ+kFb02p0GMURasMzIDdrULCpG5diL7KgwXBhhPLR6MFvJz/L4UZMVyC0haUAIPuL2
+         UIX7hqh8sW6+U8ggI4VPrEmPgVgLheb4O6y0szgOHzpCPbroYU5gI7DYa4bIz4Gen1tK
+         aKY1qtaS26GynMq+VT59Y+UEoISYkJ3LMQ/uYhomUVwAjWJ20+F5dAEO2g1OEdx3cSJ7
+         cvAXPvDHesBCU7TN0LfImviN+D+muS2l+b9DsbAghcAdJWzJIkD2sVHWHfb4lhWrXXoG
+         e/bg==
+X-Gm-Message-State: AOAM530K+OwPOjysJOnMPS5BK6D7tEkVK6sgKhk0UCn0nX4knls2BE2a
+        xdNSxg452AuHlqf00eHasyhuXq/+MwWcS/0jhZEBMg==
+X-Google-Smtp-Source: ABdhPJyen02pvKrp9A+FmGz7ZmDAC41QA4mTPwgy5BNSRvkF27t+LvWmKvWhi+BnytTXaDoZmpSMf+coQYGwONrhUE0=
+X-Received: by 2002:a25:da12:0:b0:64b:aca4:f5b3 with SMTP id
+ n18-20020a25da12000000b0064baca4f5b3mr2783110ybf.494.1652932967980; Wed, 18
+ May 2022 21:02:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518224725.742882-1-namhyung@kernel.org> <20220518224725.742882-4-namhyung@kernel.org>
-In-Reply-To: <20220518224725.742882-4-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 18 May 2022 21:02:30 -0700
-Message-ID: <CAP-5=fWfZ_MqiAUx-tdO1C=Dyyzno6FbBp+KGAb_MweXs+N7Jw@mail.gmail.com>
-Subject: Re: [PATCH 3/6] perf record: Implement basic filtering for off-cpu
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Milian Wolff <milian.wolff@kdab.com>, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Blake Jones <blakejones@google.com>
+References: <CA+G9fYuCzU5VZ_nc+6NEdBXJdVCH=J2SB1Na1G_NS_0BNdGYtg@mail.gmail.com>
+In-Reply-To: <CA+G9fYuCzU5VZ_nc+6NEdBXJdVCH=J2SB1Na1G_NS_0BNdGYtg@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 19 May 2022 09:32:36 +0530
+Message-ID: <CA+G9fYu_p0OjaeTjHN6MEnxeRgwZM5TPNsfvxa3P0RCPD7o=JQ@mail.gmail.com>
+Subject: Re: net/ethernet/dec/tulip/eeprom.c:120:40: error: 'struct pci_dev'
+ has no member named 'pdev'; did you mean 'dev'?
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Rolf Eike Beer <eike-kernel@sf-tec.de>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 3:47 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> It should honor cpu and task filtering with -a, -C or -p, -t options.
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/builtin-record.c            |  2 +-
->  tools/perf/util/bpf_off_cpu.c          | 78 +++++++++++++++++++++++---
->  tools/perf/util/bpf_skel/off_cpu.bpf.c | 52 +++++++++++++++--
->  tools/perf/util/off_cpu.h              |  6 +-
->  4 files changed, 123 insertions(+), 15 deletions(-)
->
-> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> index 91f88501412e..7f60d2eac0b4 100644
-> --- a/tools/perf/builtin-record.c
-> +++ b/tools/perf/builtin-record.c
-> @@ -907,7 +907,7 @@ static int record__config_text_poke(struct evlist *evlist)
->
->  static int record__config_off_cpu(struct record *rec)
->  {
-> -       return off_cpu_prepare(rec->evlist);
-> +       return off_cpu_prepare(rec->evlist, &rec->opts.target);
->  }
->
->  static bool record__kcore_readable(struct machine *machine)
-> diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-> index 9ed7aca3f4ac..b5e2d038da50 100644
-> --- a/tools/perf/util/bpf_off_cpu.c
-> +++ b/tools/perf/util/bpf_off_cpu.c
-> @@ -6,6 +6,9 @@
->  #include "util/off_cpu.h"
->  #include "util/perf-hooks.h"
->  #include "util/session.h"
-> +#include "util/target.h"
-> +#include "util/cpumap.h"
-> +#include "util/thread_map.h"
->  #include <bpf/bpf.h>
->
->  #include "bpf_skel/off_cpu.skel.h"
-> @@ -60,8 +63,23 @@ static int off_cpu_config(struct evlist *evlist)
->         return 0;
->  }
->
-> -static void off_cpu_start(void *arg __maybe_unused)
-> +static void off_cpu_start(void *arg)
->  {
-> +       struct evlist *evlist = arg;
-> +
-> +       /* update task filter for the given workload */
-> +       if (!skel->bss->has_cpu && !skel->bss->has_task &&
-> +           perf_thread_map__pid(evlist->core.threads, 0) != -1) {
-> +               int fd;
-> +               u32 pid;
-> +               u8 val = 1;
-> +
-> +               skel->bss->has_task = 1;
-> +               fd = bpf_map__fd(skel->maps.task_filter);
-> +               pid = perf_thread_map__pid(evlist->core.threads, 0);
-> +               bpf_map_update_elem(fd, &pid, &val, BPF_ANY);
-> +       }
-> +
->         skel->bss->enabled = 1;
->  }
->
-> @@ -71,31 +89,75 @@ static void off_cpu_finish(void *arg __maybe_unused)
->         off_cpu_bpf__destroy(skel);
->  }
->
-> -int off_cpu_prepare(struct evlist *evlist)
-> +int off_cpu_prepare(struct evlist *evlist, struct target *target)
->  {
-> -       int err;
-> +       int err, fd, i;
-> +       int ncpus = 1, ntasks = 1;
->
->         if (off_cpu_config(evlist) < 0) {
->                 pr_err("Failed to config off-cpu BPF event\n");
->                 return -1;
->         }
->
-> -       set_max_rlimit();
-> -
-> -       skel = off_cpu_bpf__open_and_load();
-> +       skel = off_cpu_bpf__open();
->         if (!skel) {
->                 pr_err("Failed to open off-cpu BPF skeleton\n");
->                 return -1;
->         }
->
-> +       /* don't need to set cpu filter for system-wide mode */
-> +       if (target->cpu_list) {
-> +               ncpus = perf_cpu_map__nr(evlist->core.user_requested_cpus);
-> +               bpf_map__set_max_entries(skel->maps.cpu_filter, ncpus);
-> +       }
-> +
-> +       if (target__has_task(target)) {
-> +               ntasks = perf_thread_map__nr(evlist->core.threads);
-> +               bpf_map__set_max_entries(skel->maps.task_filter, ntasks);
-> +       }
-> +
-> +       set_max_rlimit();
-> +
-> +       err = off_cpu_bpf__load(skel);
-> +       if (err) {
-> +               pr_err("Failed to load off-cpu skeleton\n");
-> +               goto out;
-> +       }
-> +
-> +       if (target->cpu_list) {
-> +               u32 cpu;
-> +               u8 val = 1;
-> +
-> +               skel->bss->has_cpu = 1;
-> +               fd = bpf_map__fd(skel->maps.cpu_filter);
-> +
-> +               for (i = 0; i < ncpus; i++) {
-> +                       cpu = perf_cpu_map__cpu(evlist->core.user_requested_cpus, i).cpu;
-> +                       bpf_map_update_elem(fd, &cpu, &val, BPF_ANY);
+Hi Rolf Eike Beer,
 
-Perhaps more concise with a for_each:
+On Wed, 18 May 2022 at 19:19, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> The Linux next-20220517 and next-20220518 arch parisc builds failed.
+>
+> Regressions found on parisc:
+>  - gcc-8-defconfig
+>  - gcc-9-defconfig
+>  - gcc-11-defconfig
+>  - gcc-10-defconfig
+>
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=parisc
+> CROSS_COMPILE=hppa-linux-gnu- 'CC=sccache hppa-linux-gnu-gcc'
+> 'HOSTCC=sccache gcc'
+> arch/parisc/kernel/vdso32/Makefile:30: FORCE prerequisite is missing
+> drivers/net/ethernet/dec/tulip/eeprom.c: In function
+> 'tulip_build_fake_mediatable':
+> drivers/net/ethernet/dec/tulip/eeprom.c:120:40: error: 'struct
+> pci_dev' has no member named 'pdev'; did you mean 'dev'?
+>   120 |   tp->mtable = devm_kmalloc(&tp->pdev->pdev, sizeof(struct mediatable) +
+>       |                                        ^~~~
+>       |                                        dev
+> make[6]: *** [scripts/Makefile.build:295:
+> drivers/net/ethernet/dec/tulip/eeprom.o] Error 1
 
-perf_cpu_map__for_each_cpu(cpu, idx, evlist->core.user_requested_cpus)
-  bpf_map_update_elem(fd, &cpu.cpu, &val, BPF_ANY);
+The bisection pointed to
 
-> +               }
-> +       }
-> +
-> +       if (target__has_task(target)) {
-> +               u32 pid;
-> +               u8 val = 1;
-> +
-> +               skel->bss->has_task = 1;
-> +               fd = bpf_map__fd(skel->maps.task_filter);
-> +
-> +               for (i = 0; i < ntasks; i++) {
-> +                       pid = perf_thread_map__pid(evlist->core.threads, i);
-> +                       bpf_map_update_elem(fd, &pid, &val, BPF_ANY);
-> +               }
-> +       }
-> +
->         err = off_cpu_bpf__attach(skel);
->         if (err) {
->                 pr_err("Failed to attach off-cpu BPF skeleton\n");
->                 goto out;
->         }
+first bad commit: [3daebfbeb4555cb0c113aeb88aa469192ee41d89]
+   net: tulip: convert to devres
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+steps to reproduce:
+
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+
+tuxmake --runtime podman --target-arch parisc --toolchain gcc-10
+--kconfig defconfig
+
+> Build log link,
+> https://builds.tuxbuild.com/29HszOsHU1On0kNlZbdJBfNWstp/
 >
-> -       if (perf_hooks__set_hook("record_start", off_cpu_start, NULL) ||
-> -           perf_hooks__set_hook("record_end", off_cpu_finish, NULL)) {
-> +       if (perf_hooks__set_hook("record_start", off_cpu_start, evlist) ||
-> +           perf_hooks__set_hook("record_end", off_cpu_finish, evlist)) {
->                 pr_err("Failed to attach off-cpu skeleton\n");
->                 goto out;
->         }
-> diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> index 5173ed882fdf..78cdcc8ff863 100644
-> --- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> +++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> @@ -49,12 +49,28 @@ struct {
->         __uint(max_entries, MAX_ENTRIES);
->  } off_cpu SEC(".maps");
->
-> +struct {
-> +       __uint(type, BPF_MAP_TYPE_HASH);
-> +       __uint(key_size, sizeof(__u32));
-> +       __uint(value_size, sizeof(__u8));
-> +       __uint(max_entries, 1);
-> +} cpu_filter SEC(".maps");
-> +
-> +struct {
-> +       __uint(type, BPF_MAP_TYPE_HASH);
-> +       __uint(key_size, sizeof(__u32));
-> +       __uint(value_size, sizeof(__u8));
-> +       __uint(max_entries, 1);
-> +} task_filter SEC(".maps");
-> +
->  /* old kernel task_struct definition */
->  struct task_struct___old {
->         long state;
->  } __attribute__((preserve_access_index));
->
->  int enabled = 0;
-> +int has_cpu = 0;
-> +int has_task = 0;
->
->  /*
->   * Old kernel used to call it task_struct->state and now it's '__state'.
-> @@ -74,6 +90,37 @@ static inline int get_task_state(struct task_struct *t)
->         return BPF_CORE_READ(t_old, state);
->  }
->
-> +static inline int can_record(struct task_struct *t, int state)
-> +{
-> +       /* kernel threads don't have user stack */
-> +       if (t->flags & PF_KTHREAD)
-> +               return 0;
-> +
-> +       if (state != TASK_INTERRUPTIBLE &&
-> +           state != TASK_UNINTERRUPTIBLE)
-> +               return 0;
-> +
-> +       if (has_cpu) {
-> +               __u32 cpu = bpf_get_smp_processor_id();
-> +               __u8 *ok;
-> +
-> +               ok = bpf_map_lookup_elem(&cpu_filter, &cpu);
-> +               if (!ok)
-> +                       return 0;
-> +       }
-> +
-> +       if (has_task) {
-> +               __u8 *ok;
-> +               __u32 pid = t->pid;
-> +
-> +               ok = bpf_map_lookup_elem(&task_filter, &pid);
-> +               if (!ok)
-> +                       return 0;
-> +       }
-> +
-> +       return 1;
-> +}
-> +
->  SEC("tp_btf/sched_switch")
->  int on_switch(u64 *ctx)
->  {
-> @@ -92,10 +139,7 @@ int on_switch(u64 *ctx)
->
->         ts = bpf_ktime_get_ns();
->
-> -       if (prev->flags & PF_KTHREAD)
-> -               goto next;
-> -       if (state != TASK_INTERRUPTIBLE &&
-> -           state != TASK_UNINTERRUPTIBLE)
-> +       if (!can_record(prev, state))
->                 goto next;
->
->         stack_id = bpf_get_stackid(ctx, &stacks,
-> diff --git a/tools/perf/util/off_cpu.h b/tools/perf/util/off_cpu.h
-> index 375d03c424ea..f47af0232e55 100644
-> --- a/tools/perf/util/off_cpu.h
-> +++ b/tools/perf/util/off_cpu.h
-> @@ -2,15 +2,17 @@
->  #define PERF_UTIL_OFF_CPU_H
->
->  struct evlist;
-> +struct target;
->  struct perf_session;
->
->  #define OFFCPU_EVENT  "offcpu-time"
->
->  #ifdef HAVE_BPF_SKEL
-> -int off_cpu_prepare(struct evlist *evlist);
-> +int off_cpu_prepare(struct evlist *evlist, struct target *target);
->  int off_cpu_write(struct perf_session *session);
->  #else
-> -static inline int off_cpu_prepare(struct evlist *evlist __maybe_unused)
-> +static inline int off_cpu_prepare(struct evlist *evlist __maybe_unused,
-> +                                 struct target *target __maybe_unused)
->  {
->         return -1;
->  }
 > --
-> 2.36.1.124.g0e6072fb45-goog
->
+> Linaro LKFT
+> https://lkft.linaro.org

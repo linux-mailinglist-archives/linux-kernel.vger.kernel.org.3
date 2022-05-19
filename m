@@ -2,252 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D9052E075
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591E152E074
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343524AbiESXTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 19:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
+        id S1343490AbiESXTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343532AbiESXTq (ORCPT
+        with ESMTP id S234213AbiESXTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 19:19:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC70F74A7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653002385; x=1684538385;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uYjQ/hKu+SjdZ2gVGfOOuy9U6ZT54F6cyI1GN2N+zkA=;
-  b=Qkf6s71giD5o9M6qMWu90gbN4ya0yLwfzfWDAGD+DQl/mXuudzAie1qm
-   qoYvTeZScFwTbwbJT08pg/k2mUDLjxmkZ/+0cqOmSasZ5WIfAG3TzDv+7
-   byQb6ktupmjJYyw4mM1AosHKvjo2CFYp8HzIVFN91RbvXMvSzz5b7q5fJ
-   kbsIPpqYLViv78dcO8sleEmdc4gN5CRRRVl6k0CB59cW9dO0KRThMZO7s
-   vHoileEGvAnnGYYjN+FkbmvqiYWULkjXeE7abmC5VbpnJfJp0xXIeO8qU
-   L3T4gYduYXhw+jC61ZSZnIUrVbHdqSO4YhphAz65fyCeedUZPzHCsxuhe
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="270005169"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="270005169"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 16:19:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="743188562"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 19 May 2022 16:19:43 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrpQl-00042b-6J;
-        Thu, 19 May 2022 23:19:43 +0000
-Date:   Fri, 20 May 2022 07:18:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/build] BUILD SUCCESS
- aeb84412037b89e06f45e382f044da6f200e12f8
-Message-ID: <6286d05b.BAWB0W0W2sujM6aS%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 19 May 2022 19:19:34 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77C3F74A7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:19:33 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o13-20020a17090a9f8d00b001df3fc52ea7so10000022pjp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HkpLX5d+0MkqzwvQ+3AzHLCEwixfF+WafpJiNTDl1Es=;
+        b=CFUdPM7hPWEqCmvntb3hYKm7lunX0hbEt78+UwJQUB3/uulVfQ3Jkhlbx2FjPY1sjS
+         8GBVHdJrYhD+u2PSOY+WnKMBKW5X/djPknhbdSXfcgNbJn1udy7GKyJ/dEg+uyHqS2gA
+         t+HFd+SUX45W7uMf0YnyR+u8mLbhbqWu8W3PpWf/dpiDDItFPh4ehpmDKc/U7MJiflu5
+         x1QscZl0If66fGcoTLjTN3fAu56rICItFmb1fwU2mKZwmS59cKb6SLEa8j0cXNU2SWKc
+         ZuBXAA2KlnPQQ6387jFGK5E4hLUswusf2vAKHmgrecl+oUidaSWkjD0a/fatJAn56ZYW
+         A5rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HkpLX5d+0MkqzwvQ+3AzHLCEwixfF+WafpJiNTDl1Es=;
+        b=Mq5QXaRnx2paop8ME381mcXMycKoaa4b87Qa/icfD+QrWqo14LY6vborn+92z+M3yV
+         C7kRblj4WB8UocN+TGfh/fPqMoURAfYIL3sD6sudAbdWpEIJP/IgtVi1oBxec7WDOWud
+         rI9WKjQY2JI3SI/x/MccrCNHZ/BMi4krDlTOU0/NhULYhb7DhIfsmCr8+86AcUvWtJl/
+         XOJBOZEUZxpHwoqZR9ZCjp/aY8mP1C5vSq0OA6NLeKPwEXQnu6Ch/m7muVTZDI7jKXBx
+         +oU/PVarw+WfC8SVxmoD/8fVoMjNZXiQ1nBf7Ot/BSb8MFVl0IaygZIv8GciwL3yxSEX
+         1NNA==
+X-Gm-Message-State: AOAM532Amhjblg7rPxr2V3iOqlNZNXJZlNmhbYvNh9lWFxt1lvsoXf2D
+        d0ECvaOuWvbmzm5XM2YQZzgA4A==
+X-Google-Smtp-Source: ABdhPJxRXPXhEkrDtQM7lD68+YgXNqr3oKWQQYmLAK3DQ7t1D+O9A2edXs39rm7tiEvPX9tpsPDHig==
+X-Received: by 2002:a17:902:d4c4:b0:161:bfc2:8e83 with SMTP id o4-20020a170902d4c400b00161bfc28e83mr6921147plg.57.1653002373237;
+        Thu, 19 May 2022 16:19:33 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id a5-20020a62d405000000b0050dc7628163sm232437pfh.61.2022.05.19.16.19.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 16:19:32 -0700 (PDT)
+Message-ID: <3553b935-0aca-3d3e-2495-12288f601b53@kernel.dk>
+Date:   Thu, 19 May 2022 17:19:31 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     tytso@mit.edu, hch@lst.de, linux-kernel@vger.kernel.org
+References: <20220519193133.194138-1-axboe@kernel.dk>
+ <YoajCafKmgUbbaY0@zx2c4.com> <a6c843ff-a3d7-ce6a-4e99-70968834a02a@kernel.dk>
+ <YobPB27Ozl7uqUEu@zx2c4.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <YobPB27Ozl7uqUEu@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/build
-branch HEAD: aeb84412037b89e06f45e382f044da6f200e12f8  x86/boot: Wrap literal addresses in absolute_pointer()
+On 5/19/22 5:13 PM, Jason A. Donenfeld wrote:
+> Hi Jens,
+> 
+> On Thu, May 19, 2022 at 02:49:13PM -0600, Jens Axboe wrote:
+>>> There's a lot of attention in random.c devoted to not leaving any output
+>>> around on the stack or in stray buffers. The explicit use of
+>>> copy_to_user() makes it clear that the output isn't being copied
+>>> anywhere other than what's the user's responsibility to cleanup. I'm
+>>> wondering if the switch to copy_to_iter() introduces any buffering or
+>>> gotchas that you might be aware of.
+>>
+>> No, it's just a wrapper around copying to the user memory pointed to by
+>> the iov_iter. No extra buffering or anything like that. So I think it
+>> should be fine in that respect, and it actually cleans up the code a bit
+>> imho since the copy_to_iter() since the return value of "bytes copied"
+>> is easier to work with than the "bytes not copied".
+> 
+> Alright, that's good to hear. So even for kernel->kernel writes, the
+> argument is that what ever buffers are used in the process are the same
+> ones that the user would be hitting anyway by calling write() on the
+> destination if this roundtripped through userspace, so nothing changes?
 
-elapsed time: 728m
-
-configs tested: 167
-configs skipped: 5
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-m68k                          hp300_defconfig
-m68k                             alldefconfig
-openrisc                 simple_smp_defconfig
-sh                         microdev_defconfig
-xtensa                generic_kc705_defconfig
-sh                           se7724_defconfig
-powerpc                     rainier_defconfig
-m68k                            mac_defconfig
-sh                        sh7785lcr_defconfig
-m68k                           sun3_defconfig
-mips                         bigsur_defconfig
-xtensa                    smp_lx200_defconfig
-powerpc                     mpc83xx_defconfig
-riscv                               defconfig
-mips                           ci20_defconfig
-arm                      footbridge_defconfig
-s390                          debug_defconfig
-xtensa                    xip_kc705_defconfig
-xtensa                          iss_defconfig
-s390                             allyesconfig
-sh                           se7705_defconfig
-powerpc                      pcm030_defconfig
-sh                   sh7770_generic_defconfig
-h8300                    h8300h-sim_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                     sequoia_defconfig
-riscv                            allyesconfig
-arm                      jornada720_defconfig
-powerpc64                           defconfig
-mips                       capcella_defconfig
-powerpc                 linkstation_defconfig
-powerpc                        warp_defconfig
-h8300                            allyesconfig
-powerpc                      ppc40x_defconfig
-sh                   secureedge5410_defconfig
-sh                            shmin_defconfig
-mips                  decstation_64_defconfig
-m68k                        stmark2_defconfig
-sh                          landisk_defconfig
-sh                           se7343_defconfig
-sh                            migor_defconfig
-nios2                            alldefconfig
-arm                        mini2440_defconfig
-arc                            hsdk_defconfig
-mips                    maltaup_xpa_defconfig
-arc                      axs103_smp_defconfig
-powerpc                      ep88xc_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                 mpc834x_mds_defconfig
-xtensa                         virt_defconfig
-arm                        keystone_defconfig
-parisc64                            defconfig
-xtensa                       common_defconfig
-m68k                       m5208evb_defconfig
-m68k                       bvme6000_defconfig
-powerpc                      arches_defconfig
-m68k                          sun3x_defconfig
-mips                           gcw0_defconfig
-sh                          sdk7786_defconfig
-mips                 decstation_r4k_defconfig
-um                             i386_defconfig
-mips                         mpc30x_defconfig
-arm                        realview_defconfig
-sh                   rts7751r2dplus_defconfig
-sh                          urquell_defconfig
-ia64                         bigsur_defconfig
-mips                         rt305x_defconfig
-arc                         haps_hs_defconfig
-sh                        sh7757lcr_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220519
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-riscv                             allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc                           allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-powerpc              randconfig-c003-20220519
-x86_64                        randconfig-c007
-riscv                randconfig-c006-20220519
-mips                 randconfig-c004-20220519
-i386                          randconfig-c001
-arm                  randconfig-c002-20220519
-s390                 randconfig-c005-20220519
-powerpc                          g5_defconfig
-hexagon                             defconfig
-mips                     loongson2k_defconfig
-arm                          pxa168_defconfig
-mips                      pic32mzda_defconfig
-mips                malta_qemu_32r6_defconfig
-mips                  cavium_octeon_defconfig
-riscv                          rv32_defconfig
-powerpc                     akebono_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                     tqm8540_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                         shannon_defconfig
-powerpc                       ebony_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                         palmz72_defconfig
-mips                            e55_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220519
-riscv                randconfig-r042-20220519
-hexagon              randconfig-r041-20220519
-s390                 randconfig-r044-20220519
+The source and destination for the copies are exactly the same with the
+change as before, so no changes there. The non-user copy is a different
+helper.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jens Axboe
+

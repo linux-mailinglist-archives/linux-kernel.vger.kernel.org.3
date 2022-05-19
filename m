@@ -2,164 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B8952CFED
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E9A52CFF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236368AbiESJzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60554 "EHLO
+        id S236394AbiESJ5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236362AbiESJzp (ORCPT
+        with ESMTP id S234279AbiESJ5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:55:45 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BD319FB3;
-        Thu, 19 May 2022 02:55:43 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 939DC21B4D;
-        Thu, 19 May 2022 09:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652954142; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RmpoQxYAX55RibJa2N3a7HEDdZ7I5Ic/L3VPlTrRmko=;
-        b=bXtcUbeaNbg8crmPNanaMnYJISwc9FyP0b1FoxZe3cQjf8d6K9TR8pV96h5uy2p3vg9pv2
-        LOe6Brtf+r4SWMZTpeJgH1Hi2bJPQUKsXn3HoJbhb5S5WRJ1H6Fhd+tHWsuWkbTZeqrw96
-        7Lu+oXCBjU7/uxc1gycLjUufXzyXVYY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652954142;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RmpoQxYAX55RibJa2N3a7HEDdZ7I5Ic/L3VPlTrRmko=;
-        b=5wQeqgXsyYBdISfMT/PycsBgIuthy58kjE1cEx8ynBCm7PelOrkzZCaQqjfdT42JbWRcAc
-        shAQMSno/nlEQ7BA==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2E8CE2C142;
-        Thu, 19 May 2022 09:55:42 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id DBAEFA062F; Thu, 19 May 2022 11:55:41 +0200 (CEST)
-Date:   Thu, 19 May 2022 11:55:41 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Richard Guy Briggs <rgb@redhat.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH v3 2/3] fanotify: define struct members to hold response
- decision context
-Message-ID: <20220519095541.ewpxcvgtzvl5y2so@quack3.lan>
-References: <cover.1652730821.git.rgb@redhat.com>
- <1520f08c023d1e919b1a2af161d5a19367b6b4bf.1652730821.git.rgb@redhat.com>
- <CAOQ4uxjV-eNxJ=O_WFTTzspCxXZqpMdh3Fe-N5aB-h1rDr_1hQ@mail.gmail.com>
- <YoWKPcsySt9cJbtB@madcap2.tricolour.ca>
- <CAOQ4uxi+8HUqyGxQBNMqSong92nreOWLKdy9MCrYg8wgW9Dj4g@mail.gmail.com>
+        Thu, 19 May 2022 05:57:12 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D8C92D32;
+        Thu, 19 May 2022 02:57:11 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J9mmV3001105;
+        Thu, 19 May 2022 09:57:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=cKPPLtUhn1Zdq9Oika82pAtq/kD+uaRcTWRlgTUcvuE=;
+ b=ZpDHUadAU6pwtWhT2zKhV4nm6iGq0zAoMYSHrl73AwJTteBFxmJJYaILbI9rtcLcWqBU
+ bIAl6pQAVHsaKYFmRmwUu9fE7CP0+GSveQRjj39PiBoxvCR1+0YgwHNZYmTD1OrmOzu5
+ O2bNplUCc/SwPgB9ggkYMmrICTV+wBkadCYbWkQYDDxHnq7qqWwY4AMOITe+Xd6PXgOZ
+ dglAMLKOzl+eiR9Yhkl6ElvIDu5EZNIRK53EpzHNSsEi3roZHlWTIHE1itLeFHlP8k32
+ 7KyPMKAc0asMSl2i8NUw3UlZa0z9aBgClpna8ftcc8bIQhbJwshLs7nrlHqz7dmgSjsN 5A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5kkc84vh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:57:04 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24J9rDSK011040;
+        Thu, 19 May 2022 09:57:04 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5kkc84us-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:57:04 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24J9qSfk011879;
+        Thu, 19 May 2022 09:57:01 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 3g2429f2fy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:57:01 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24J9uwUg38207958
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 09:56:58 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9518FA405B;
+        Thu, 19 May 2022 09:56:58 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6F66A4054;
+        Thu, 19 May 2022 09:56:53 +0000 (GMT)
+Received: from vajain21.in.ibm.com (unknown [9.43.20.227])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Thu, 19 May 2022 09:56:53 +0000 (GMT)
+Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Thu, 19 May 2022 15:26:52 +0530
+From:   Vaibhav Jain <vaibhav@linux.ibm.com>
+To:     Greg Thelen <gthelen@google.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
+In-Reply-To: <xr937d6ic5qk.fsf@gthelen2.svl.corp.google.com>
+References: <20220518223815.809858-1-vaibhav@linux.ibm.com>
+ <xr937d6ic5qk.fsf@gthelen2.svl.corp.google.com>
+Date:   Thu, 19 May 2022 15:26:52 +0530
+Message-ID: <8735h5hml7.fsf@vajain21.in.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxi+8HUqyGxQBNMqSong92nreOWLKdy9MCrYg8wgW9Dj4g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 52ju57apf4Eux7cGM7kXvW_O-BDPKUUI
+X-Proofpoint-GUID: i_wj5J-0QfvOAm51WZkh71nEImRo5w5x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-19_02,2022-05-19_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ spamscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
+ malwarescore=0 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205190055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 19-05-22 09:03:51, Amir Goldstein wrote:
-> > > > + * size is determined by the extra information type.
-> > > > + *
-> > > > + * If the context type is Rule, then the context following is the rule number
-> > > > + * that triggered the user space decision.
-> > > > + */
-> > > > +
-> > > > +#define FAN_RESPONSE_INFO_NONE         0
-> > > > +#define FAN_RESPONSE_INFO_AUDIT_RULE   1
-> > > > +
-> > > > +union fanotify_response_extra {
-> > > > +       __u32 audit_rule;
-> > > > +};
-> > > > +
-> > > >  struct fanotify_response {
-> > > >         __s32 fd;
-> > > >         __u32 response;
-> > > > +       __u32 extra_info_type;
-> > > > +       union fanotify_response_extra extra_info;
-> > >
-> > > IIRC, Jan wanted this to be a variable size record with info_type and info_len.
-> >
-> > Again, the intent was to make it fixed for now and change it later if
-> > needed, but that was a shortsighted approach...
-> >
-> > I don't see a need for a len in all response types.  _NONE doesn't need
-> > any.  _AUDIT_RULE is known to be 32 bits.  Other types can define their
-> > size and layout as needed, including a len field if it is needed.
-> >
-> 
-> len is part of a common response info header.
-> It is meant to make writing generic code.
-> So Jan's email.
+Hi,
 
-Yes. The reason why I want 'type' + 'len' information for every extra
-response type is so that the code can be layered properly. Fanotify has no
-bussiness in understanding the details of the additional info (or its
-expected length) passed from userspace. That is the knowledge that should
-stay within the subsystem this info is for. So the length of info record
-needs to be passed in the generic info header.
+Thanks for looking into this patch,
 
-To give an example imagine a situation when we'd like to attach two
-different info records to a response, each for a different subsystem. Then
-fanotify has to split response buffer and pass each info to the target
-subsystem or maybe we'd just pass all info to both subsystems and define
-they should ignore info they don't understand but in either case we need to
-have a way to be able to separate different info records without apriori
-knowledge what they actually mean or what is their expected length.
- 
-> > > I don't know if we want to make this flexible enough to allow for multiple
-> > > records in the future like we do in events, but the common wisdom of
-> > > the universe says that if we don't do it, we will need it.
-> >
-> > It did occur to me that this could be used for other than audit, hence
-> > the renaming of the ..."_NONE" macro.
-> >
-> > We should be able in the future to define a type that is extensible or
-> > has multiple records.  We have (2^32) - 2 types left to work with.
-> >
-> 
-> The way this was done when we first introduced event info
-> records was the same. We only allowed one type of record
-> and a single record to begin with, but the format allowed for
-> extending to multiple records.
-> 
-> struct fanotify_event_metadata already had event_len and
-> metadata_len, so that was convenient. Supporting multi
-> records only required that every record has a header with its
-> own len.
-> 
-> As far as I can tell, the case of fanotify_response is different
-> because we have the count argument of write(), which serves
-> as the total response_len.
+Greg Thelen <gthelen@google.com> writes:
 
-Yes.
+> Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
+>
+>> [1] Provides a way for user-space to trigger proactive reclaim by introducing
+>> a write-only memcg file 'memory.reclaim'. However reclaim stats like number
+>> of pages scanned and reclaimed is still not directly available to the
+>> user-space.
+>>
+>> This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
+>> readable which returns the number of pages scanned / reclaimed during the
+>> reclaim process from 'struct vmpressure' associated with each memcg. This should
+>> let user-space asses how successful proactive reclaim triggered from memcg
+>> 'memory.reclaim' was ?
+>>
+>> With the patch following command flow is expected:
+>>
+>>  # echo "1M" > memory.reclaim
+>>
+>>  # cat memory.reclaim
+>>    scanned 76
+>>    reclaimed 32
+>
+> I certainly appreciate the ability for shell scripts to demonstrate
+> cgroup operations with textual interfaces, but such interface seem like
+> they are optimized for ease of use by developers.
+>
+Agree that directly exposing nr_scanned/reclaimed might not be a useful
+for users and certainly looks like a dev interface
 
-> If we ever want to be able to extend the base fanotify_response,
-> add fields to it not as extra info records, then we need to add
-> response_metadata_len to struct fanotify_response, but I think that
-> would be over design.
+> I wonder if for runtime production use an ioctl or netlink interface has
+> been considered for cgroup? I don't think there are any yet, but such
+> approaches seem like a more straightforward ways to get nontrivial
+> input/outputs from a single call (e.g. like this proposal). And they
+> have the benefit of not requiring ascii serialization/parsing overhead.
 
-Yeah, I don't think that will happen. The standard response metadata is
-basically fixed by backward compatibility constraints. If we need to extend
-it in the future, I would prefer the extension to be in a form of an extra
-info record.
+I think to a large degree eBPF and existing static tracepoints in vmscan
+can provide access to these metrics as Shakeel Bhat pointed to earlier.
 
-								Honza
+<snip>
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Cheers
+~ Vaibhav

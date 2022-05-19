@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571B552D36A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE8552D36F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237669AbiESNCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
+        id S238330AbiESNCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237631AbiESNCJ (ORCPT
+        with ESMTP id S238248AbiESNCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:02:09 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C7562BF7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:02:06 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id d15so9003564lfk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:02:06 -0700 (PDT)
+        Thu, 19 May 2022 09:02:32 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9034268304
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:02:30 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ec42eae76bso55612857b3.10
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ZSu0XTILVshJ9x+raeV7MMtJ9MSB+JWGEzTTcAYgGH8=;
-        b=xqED8FRRBUVTJs7yZwduUBlQVzuTT6nBQqS8MK6cY4tL4aSDZSi5uEDOJeQkjNDaPN
-         G8YSKiHjSHkGbcos8Waq3CA5OaE7m3AQ8fcvT8MARoiuiJUfjTxrGZpJmIX5Js3HHQdo
-         xaT6kf/P4GruZnyXpl+5b/UVlDa14h+BGYixzLR9AmpwXeEY82HH1tn4ZzjhwOSsHOE/
-         kujzLJWw5HlwRzqYnhohpDYWZMe9H2ovChf7ZJrWULZD2bzNg0zCMKwbXzY1xJGW+r5G
-         E4B6PuJ45TgHO0NE5Tp/TKHh6LCqbIqQDV3P/+kRu2Gjg03dItAs60osg+4Grcx6zX1f
-         2w/Q==
+        bh=nwW9GjvGuVvrMqwwcAAt0o0nCFOh2lYP7DZh9tX+RXU=;
+        b=rCi77qAOrWXZXrPU46oeu3S+AZt3CX+fRkLyxcIaYFuC6+SZo9Vvc4rIpVp4OWLp/6
+         j3g9Hxe7j8siZcxII/xR6vERekrcgwjihv/pAtnF7+WT8jbr/JN6cSlvEdd+KFNN3EP3
+         2Zo9EPlnS3gnx6azniDW8Bj/vGHX+35zqMqeAoiV9CTamCmAhM1V0jfo1vVnvVSyl1AS
+         3S1NmOv3nhOruowGLwOMK6OyY2XjoypeVz3jCyl2lXgmqiQvXeW82wsCevn74fb2LtXk
+         7CeGK6M6CFNkR6aWGc2q+dxl1oHS3Xi1CNkimPWYi02kb2EX+2LKZuOIpOATJsyzbgcT
+         Gd+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZSu0XTILVshJ9x+raeV7MMtJ9MSB+JWGEzTTcAYgGH8=;
-        b=BfpBfUKAD0BDMRpSXg8qhoc7hBZmXbKx4fJwdTInR0W/UxPlh29Vz7LaWL3WUeksmG
-         u6QqnKe5cGR4BbWimUDZ7L3oHrzfF6eHopdidl7kzNL/nRRgbOYEkRtVLxgkflm3++BX
-         ADKPWlso/X1SnhFWIxdCMqf7CQJpsvSiXIMyiFovauKNy+5XOSMzjtvwa0lkJIMy7ooV
-         F0g6lgdUD5B3klfUQXAj3RXUTMulgtY/qkIsIW/lmtMW8LwF0Mw56yUVFWMD2IvQjibE
-         IsoDKZF+NgWLiuYuA0noOsdmslkFdUKzFwJ2sdGB4O09fdONObNKw1oALyUauS8kZqJv
-         1htg==
-X-Gm-Message-State: AOAM532vlpfOtIQcYAGGqC0P4noFWEShYJ+MBg1scfzYbBmtPy/W8Ebz
-        gXQlRqGRoUpQfpFYDG3iFUYGBKR+RY17Urr4prP2Mw==
-X-Google-Smtp-Source: ABdhPJylwHp+PNUHX0L3veOS1GtM4Mw0E0JPCmgEyCyRHaCw2NGWeTZfPTo+jpC/foRCai/LLqJubn4J1RgwqQDBofA=
-X-Received: by 2002:a05:6512:70b:b0:477:a832:7d07 with SMTP id
- b11-20020a056512070b00b00477a8327d07mr3144930lfs.71.1652965323773; Thu, 19
- May 2022 06:02:03 -0700 (PDT)
+        bh=nwW9GjvGuVvrMqwwcAAt0o0nCFOh2lYP7DZh9tX+RXU=;
+        b=N9xEoOGOBgg3/7N7mdl2CAhzgGN8RYPs3Q6MiwHJ+vaXVkITGXUNJbYo5FmGSZ/sr1
+         U5DKtnYM04xJH6d1SmX0d9owkoJpvzLEMUY78wskXRhnQtbpIfEazKpfYx0cmZvs7UDX
+         BeVnnEzW5nyGk3tMLOHVk3hswvXB/FDc7L5CfF5nS1adeiOcC1gPKMo2G+62hzSiqTs6
+         7en4QSJmWZ5TvBYpr0+41mAfLlGR05B/rJaqVKT2dxkyv+8Km1TVfEPD1dBECJ2GMB9d
+         fQFus174i6xbn4IQQaewJeinsT33gGBWTIIbET+Y034T+5tOeIVw01D6nKirLT/QqoAa
+         DTlg==
+X-Gm-Message-State: AOAM5327O+G8MxEJGai5S5nrd2rVq9ihB3/i2ZGIH0qiHIpaUIGYthMK
+        2lW2pk1JIos+SRZbhXVYWBrrqkn3STWmMHS8SWEE5Q==
+X-Google-Smtp-Source: ABdhPJw9DuDGpqNA9u4Nb3G/ZAoOmBgaLrxNmf9kQecQAG772or2yHzjiqgX4Aov686Gl6icaSEOn1WILYgGKeBvZbY=
+X-Received: by 2002:a0d:e5c6:0:b0:2f8:c866:7af9 with SMTP id
+ o189-20020a0de5c6000000b002f8c8667af9mr4648231ywe.268.1652965349808; Thu, 19
+ May 2022 06:02:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <1652275016-13423-1-git-send-email-quic_mkshah@quicinc.com> <1652275016-13423-2-git-send-email-quic_mkshah@quicinc.com>
-In-Reply-To: <1652275016-13423-2-git-send-email-quic_mkshah@quicinc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 19 May 2022 15:01:27 +0200
-Message-ID: <CAPDyKFoDmTMfGNsvv-DJqrV-xX=nLKfR-fjSOB_1JBbHm+nzqA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: soc: qcom: Update devicetree binding
- document for rpmh-rsc
-To:     Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com,
-        devicetree@vger.kernel.org
+References: <20220508135932.132378-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220508135932.132378-1-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 19 May 2022 15:02:18 +0200
+Message-ID: <CACRpkdau5zM2g8jMDeT2gewaFzq19hyoh+dj061QwbBtk4Kotg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] dt-bindings/pinctrl/arm: qcom: second round of minor
+ cleanups of QCOM PMIC pinctrl
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>, David Heidelberg <david@ixit.cz>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -70,54 +73,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 at 15:17, Maulik Shah <quic_mkshah@quicinc.com> wrote:
->
-> The change documents power-domains property for RSC device.
-> This optional property points to corresponding PM domain node.
->
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+On Sun, May 8, 2022 at 3:59 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Krzysztof Kozlowski (4):
+>   dt-bindings: pinctrl: qcom,pmic-gpio: add 'gpio-reserved-ranges'
 
-Kind regards
-Uffe
+This patch applied to the pinctrl tree on top of the other 4 patches
+concerning bindings from the previous patch set.
 
-
-> ---
->  Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
-> index f5ecf4a..7683cc9 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
-> @@ -110,6 +110,9 @@ properties:
->        - const: drv-2
->        - const: drv-3
->
-> +  power-domains:
-> +    maxItems: 1
-> +
->    bcm-voter:
->      $ref: /schemas/interconnect/qcom,bcm-voter.yaml#
->
-> @@ -162,6 +165,7 @@ examples:
->                            <SLEEP_TCS   3>,
->                            <WAKE_TCS    3>,
->                            <CONTROL_TCS 1>;
-> +        power-domains = <&CLUSTER_PD>;
->        };
->
->    - |
-> @@ -208,6 +212,7 @@ examples:
->                            <SLEEP_TCS   3>,
->                            <WAKE_TCS    3>,
->                            <CONTROL_TCS 0>;
-> +        power-domains = <&CLUSTER_PD>;
->
->          clock-controller {
->              compatible = "qcom,sm8350-rpmh-clk";
-> --
-> 2.7.4
->
+Yours,
+Linus Walleij

@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7BE52CE0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FDA52CE13
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235337AbiESISY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 04:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
+        id S235295AbiESISk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 04:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235315AbiESIRI (ORCPT
+        with ESMTP id S235316AbiESIRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 May 2022 04:17:08 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8296473D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:17:05 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3jP732SdzhZ5n;
-        Thu, 19 May 2022 16:16:27 +0800 (CST)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DBF64BF9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:17:06 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L3jNG0qCPz1JCM2;
+        Thu, 19 May 2022 16:15:42 +0800 (CST)
 Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Thu, 19 May 2022 16:17:04 +0800
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
@@ -33,11 +33,14 @@ To:     <catalin.marinas@arm.com>, <will@kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <linux-mm@kvack.org>, <hch@infradead.org>, <arnd@arndb.de>,
         <anshuman.khandual@arm.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v3 0/6] arm64: Cleanup ioremap() and support ioremap_prot()
-Date:   Thu, 19 May 2022 16:25:46 +0800
-Message-ID: <20220519082552.117736-1-wangkefeng.wang@huawei.com>
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v3 1/6] ARM: mm: kill unused runtime hook arch_iounmap()
+Date:   Thu, 19 May 2022 16:25:47 +0800
+Message-ID: <20220519082552.117736-2-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220519082552.117736-1-wangkefeng.wang@huawei.com>
+References: <20220519082552.117736-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -54,47 +57,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-1. Enhance generic ioremap to make it more useful.
-2. Let's arm64 use GENERIC_IOREMAP to cleanup code.
-3. Support HAVE_IOREMAP_PROT on arm64, which enable generic_access_phys(),
-   it is useful when debug(eg, gdb) via access_process_vm device memory
-   infrastructure.
+Since the following commits,
 
-v3:
-- add cleanup patch to kill ARM's unused arch_iounmap(the naming will be
-  used in GENERIC_IOREMAP) and add comments for arch_ioremap/arch_iounmap
-  hooks, per Anshuman Khandual
-- collect ack/review 
+v5.4
+  commit 59d3ae9a5bf6 ("ARM: remove Intel iop33x and iop13xx support")
+v5.11
+  commit 3e3f354bc383 ("ARM: remove ebsa110 platform")
 
-v2:
-- s/addr/phys_addr in ioremap_prot, suggested by Andrew Morton 
-- rename arch_ioremap/iounmap_check to arch_ioremap/iounmad
-  and change return value, per Christoph Hellwig and Andrew Morton
-- and use 'ifndef arch_ioremap' instead of weak function, per Arnd Bergmann
-- collect ack/review
+The runtime hook arch_iounmap() on ARM is useless, kill arch_iounmap()
+and __iounmap(), and the naming of arch_iounmap will be used in 
+GENERIC_IOREMAP with the later patch.
 
-Kefeng Wang (6):
-  ARM: mm: kill unused runtime hook arch_iounmap()
-  mm: ioremap: Use more sensibly name in ioremap_prot()
-  mm: ioremap: Setup phys_addr of struct vm_struct
-  mm: ioremap: Add arch_ioremap/iounmap()
-  arm64: mm: Convert to GENERIC_IOREMAP
-  arm64: Add HAVE_IOREMAP_PROT support
+Cc: Russell King <linux@armlinux.org.uk>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ arch/arm/include/asm/io.h | 4 +---
+ arch/arm/mm/ioremap.c     | 9 +--------
+ arch/arm/mm/nommu.c       | 9 +--------
+ 3 files changed, 3 insertions(+), 19 deletions(-)
 
- .../features/vm/ioremap_prot/arch-support.txt |  2 +-
- arch/arm/include/asm/io.h                     |  4 +-
- arch/arm/mm/ioremap.c                         |  9 +-
- arch/arm/mm/nommu.c                           |  9 +-
- arch/arm64/Kconfig                            |  2 +
- arch/arm64/include/asm/io.h                   | 20 +++--
- arch/arm64/include/asm/pgtable.h              | 10 +++
- arch/arm64/kernel/acpi.c                      |  2 +-
- arch/arm64/mm/hugetlbpage.c                   | 10 ---
- arch/arm64/mm/ioremap.c                       | 85 +++----------------
- include/asm-generic/io.h                      | 26 +++++-
- mm/ioremap.c                                  | 30 +++++--
- 12 files changed, 88 insertions(+), 121 deletions(-)
-
+diff --git a/arch/arm/include/asm/io.h b/arch/arm/include/asm/io.h
+index 2a0739a2350b..d70727c9968f 100644
+--- a/arch/arm/include/asm/io.h
++++ b/arch/arm/include/asm/io.h
+@@ -139,11 +139,9 @@ extern void __iomem *__arm_ioremap_caller(phys_addr_t, size_t, unsigned int,
+ extern void __iomem *__arm_ioremap_pfn(unsigned long, unsigned long, size_t, unsigned int);
+ extern void __iomem *__arm_ioremap_exec(phys_addr_t, size_t, bool cached);
+ void __arm_iomem_set_ro(void __iomem *ptr, size_t size);
+-extern void __iounmap(volatile void __iomem *addr);
+ 
+ extern void __iomem * (*arch_ioremap_caller)(phys_addr_t, size_t,
+ 	unsigned int, void *);
+-extern void (*arch_iounmap)(volatile void __iomem *);
+ 
+ /*
+  * Bad read/write accesses...
+@@ -399,7 +397,7 @@ void __iomem *ioremap_wc(resource_size_t res_cookie, size_t size);
+ #define ioremap_wc ioremap_wc
+ #define ioremap_wt ioremap_wc
+ 
+-void iounmap(volatile void __iomem *iomem_cookie);
++void iounmap(volatile void __iomem *io_addr);
+ #define iounmap iounmap
+ 
+ void *arch_memremap_wb(phys_addr_t phys_addr, size_t size);
+diff --git a/arch/arm/mm/ioremap.c b/arch/arm/mm/ioremap.c
+index 290702328a33..e376926d6736 100644
+--- a/arch/arm/mm/ioremap.c
++++ b/arch/arm/mm/ioremap.c
+@@ -418,7 +418,7 @@ void *arch_memremap_wb(phys_addr_t phys_addr, size_t size)
+ 						   __builtin_return_address(0));
+ }
+ 
+-void __iounmap(volatile void __iomem *io_addr)
++void iounmap(volatile void __iomem *io_addr)
+ {
+ 	void *addr = (void *)(PAGE_MASK & (unsigned long)io_addr);
+ 	struct static_vm *svm;
+@@ -446,13 +446,6 @@ void __iounmap(volatile void __iomem *io_addr)
+ 
+ 	vunmap(addr);
+ }
+-
+-void (*arch_iounmap)(volatile void __iomem *) = __iounmap;
+-
+-void iounmap(volatile void __iomem *cookie)
+-{
+-	arch_iounmap(cookie);
+-}
+ EXPORT_SYMBOL(iounmap);
+ 
+ #ifdef CONFIG_PCI
+diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
+index 2658f52903da..c42debaded95 100644
+--- a/arch/arm/mm/nommu.c
++++ b/arch/arm/mm/nommu.c
+@@ -230,14 +230,7 @@ void *arch_memremap_wb(phys_addr_t phys_addr, size_t size)
+ 	return (void *)phys_addr;
+ }
+ 
+-void __iounmap(volatile void __iomem *addr)
+-{
+-}
+-EXPORT_SYMBOL(__iounmap);
+-
+-void (*arch_iounmap)(volatile void __iomem *);
+-
+-void iounmap(volatile void __iomem *addr)
++void iounmap(volatile void __iomem *io_addr)
+ {
+ }
+ EXPORT_SYMBOL(iounmap);
 -- 
 2.35.3
 

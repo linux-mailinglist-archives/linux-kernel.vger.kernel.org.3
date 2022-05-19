@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EF052C8A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 02:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE7C52C8AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 02:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiESAb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 20:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S231868AbiESAfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 20:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232027AbiESAbX (ORCPT
+        with ESMTP id S232096AbiESAfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 20:31:23 -0400
+        Wed, 18 May 2022 20:35:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3DE24F37;
-        Wed, 18 May 2022 17:31:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139E819579A;
+        Wed, 18 May 2022 17:35:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B70D617A9;
-        Thu, 19 May 2022 00:31:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEFAC385A9;
-        Thu, 19 May 2022 00:31:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CE58617D4;
+        Thu, 19 May 2022 00:35:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6465C385A9;
+        Thu, 19 May 2022 00:35:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652920280;
-        bh=3Cy63P/EAdXmjShIGXtNXxNCVW7B/ld963oEc5JgL9U=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=ThGa6TJ43IXsE06ntiNexs1XPEru39ZR9yRzZKyss8PDt9zx/p4fxHVMQY1ig0Csn
-         xJ/oWm1xW9X8jg+9JFtKiPeoybs0vyCfAGaagw+Vtl11ofhRzRQe4oKXk4iIjUkzJc
-         Me8t6Jzqvl79uzglQ+ODEPIwITj7+l+oan110Xkdn2d+bLxolZGARs04+TzUZ1/huT
-         6lKDp8GAJdpiUNxLM0toRiW08UyADL55V722Dhm+LJd0LYGUUJo36QeN6ewCjTnLXG
-         RQe75s9/mP5ljd2MzkoZI+iBqUnmqWK3YwWZB/X+qbU2JlrNAzTb+4lQK1s0mgx4tm
-         Sjt1gdGojx5pA==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220412122750.279058-3-aidanmacdonald.0x0@gmail.com>
-References: <20220412122750.279058-1-aidanmacdonald.0x0@gmail.com> <20220412122750.279058-3-aidanmacdonald.0x0@gmail.com>
-Subject: Re: [PATCH v5 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000 SoCs
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        dan.carpenter@oracle.com
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, krzk+dt@kernel.org,
-        mturquette@baylibre.com, paul@crapouillou.net, robh+dt@kernel.org,
-        tsbogend@alpha.franken.de
-Date:   Wed, 18 May 2022 17:31:17 -0700
-User-Agent: alot/0.10
-Message-Id: <20220519003119.DFEFAC385A9@smtp.kernel.org>
+        s=k20201202; t=1652920517;
+        bh=/Tm11RFlNKmtY2ZepP5yUL0xMrhzGYOVHBkmCUnjqsg=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Imtmf12XZ6SN/0fQnIzFMV4ix/W3SoEf9rCkuzXX+1TpPKRliO7krhuH+qi7TYOqp
+         oxiyiQv3m4tgvGWGE/16K6GkgMiqi4JJeIL8lSB4ZyGohayb0swXnKy59+p3unEuAH
+         BTOQKn2vj5hfqQLmmwYq3ONvtqf6OiZ1lIoUl8LXkqefItK2FVp/KSiVIo5ZswXKZ0
+         plu9Kk8R/lvGl/A53gc447sJFo/usYScnOXt0CuQxOqwu5QMiqopnMaBhJ++sbPQLR
+         mbeRiqQAHKxtuiSJowv6Vd+DwlM9yyJBSnYJmVHp1Ka5rHOjzDPHCj8WV0Zia9cRKs
+         Cm1mCplLYPpNg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CE8B8F03935;
+        Thu, 19 May 2022 00:35:17 +0000 (UTC)
+Subject: Re: [GIT PULL] mlx5: last minute fixup
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220518123304-mutt-send-email-mst@kernel.org>
+References: <20220518123304-mutt-send-email-mst@kernel.org>
+X-PR-Tracked-List-Id: Linux virtualization <virtualization.lists.linux-foundation.org>
+X-PR-Tracked-Message-Id: <20220518123304-mutt-send-email-mst@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+X-PR-Tracked-Commit-Id: acde3929492bcb9ceb0df1270230c422b1013798
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: db1fd3fc06420e983c2854c09f0260a66aa8dcc0
+Message-Id: <165292051784.29647.16410056914812712498.pr-tracker-bot@kernel.org>
+Date:   Thu, 19 May 2022 00:35:17 +0000
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        kvm@vger.kernel.org, mst@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, elic@nvidia.com
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,17 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Aidan MacDonald (2022-04-12 05:27:50)
-> The TCU clock gate on X1000 wasn't requested by the driver and could
-> be gated automatically later on in boot, which prevents timers from
-> running and breaks PWM.
->=20
-> Add a workaround to support old device trees that don't specify the
-> "tcu" clock gate. In this case the kernel will print a warning and
-> attempt to continue without the clock, which is wrong, but it could
-> work if "clk_ignore_unused" is in the kernel arguments.
->=20
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
+The pull request you sent on Wed, 18 May 2022 12:33:04 -0400:
 
-Applied to clk-next
+> https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/db1fd3fc06420e983c2854c09f0260a66aa8dcc0
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

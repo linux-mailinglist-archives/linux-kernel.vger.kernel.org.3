@@ -2,71 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3A852D72B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A52D52D731
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240703AbiESPNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
+        id S240729AbiESPOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240561AbiESPMi (ORCPT
+        with ESMTP id S240571AbiESPNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:12:38 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD81DE15D7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:12:29 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id f4so6111578iov.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=13kniv4nVSRdkSAo1CohAXB/QL3EO5C2jWevaBVW0i4=;
-        b=p+fxlW29U7Jzb6Cl/cXawPgTEjWIF51q5kqqtgzzBNsQ0uJNt4p7X4VtAMu8DEjExr
-         i80lZgvqJEptxX++GVRCpzVgGH3BpuID7MRmxdy/FnBZk8JSuOcuRU8M3YzsA6cGr0gl
-         41cxG3Xf6eosI3Jnzx7Iibji47egDZxbQgZTbaBTn88hHyvEchC/B2Xvp7HkFxGSxWrn
-         e1aM2JMWGOCfuQBVOnIvshyEZhk3nLStCqfFYINBjuf+ZTfUUfzVxhfm4kzafP4Sl9Pc
-         asBPObw7h4zp7BTze089HLwDsN7FwKsPsGvCFnvCX1mbMHv6M98nObvT4wsNjOqz8BH3
-         RgWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=13kniv4nVSRdkSAo1CohAXB/QL3EO5C2jWevaBVW0i4=;
-        b=Hgr/pQBBxM1h6Zp+lpxHtB9p/fOxV2fVS9cAQaDsYVc9ix0ynRKXukir7iCRs9QZQp
-         M3paTMDKwaRluu/YWcGqot/l64vLZ61IWPxa8gSuE27j2K4c3Iha+IW5Oy3cYAWzGwop
-         0roo3koYMKCEJi8KREM+WKjssXuy07DQmhR5OKPt1uIpExKUiQz0rknx4CW+pfFxMPSB
-         QwRz9VVHKSRtNLeg8HdSYMU5nukUKJz4BeayURQZyxAQEODhDKAM+vrLOdjNRsqz22rL
-         kV4kSR6A5aHTks+BnbaTlDOo1aYWqgut/c/WsHC/YS1jvOXgtwzUuC7VAw+zMH4MPdHO
-         +yKg==
-X-Gm-Message-State: AOAM532/bca0oWhCTIPqcGLjeBUif//539+C7a2t6nxJvEJVZxdA786k
-        WBP/tpY2WoRfXAQMOudKAgSl8Q==
-X-Google-Smtp-Source: ABdhPJxCrx6nP6zhkA3WFb4u0CZDrl4WuDTl4G1meqRL77moprAT2iD5KXIR3ke8E5+V+woM3wYNEQ==
-X-Received: by 2002:a05:6638:3792:b0:32b:5cd3:50cd with SMTP id w18-20020a056638379200b0032b5cd350cdmr2932737jal.118.1652973149007;
-        Thu, 19 May 2022 08:12:29 -0700 (PDT)
-Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id g6-20020a025b06000000b0032e271a558csm683887jab.168.2022.05.19.08.12.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 08:12:28 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 7/7] net: ipa: save a copy of endpoint default config
-Date:   Thu, 19 May 2022 10:12:17 -0500
-Message-Id: <20220519151217.654890-8-elder@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220519151217.654890-1-elder@linaro.org>
-References: <20220519151217.654890-1-elder@linaro.org>
+        Thu, 19 May 2022 11:13:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DB93EC32A;
+        Thu, 19 May 2022 08:13:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9B8014BF;
+        Thu, 19 May 2022 08:13:43 -0700 (PDT)
+Received: from bogus (unknown [10.57.66.157])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E31403F66F;
+        Thu, 19 May 2022 08:13:40 -0700 (PDT)
+Date:   Thu, 19 May 2022 16:13:34 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Tushar Khandelwal <Tushar.Khandelwal@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/2] mailbox: correct kerneldoc
+Message-ID: <20220519151334.64t5zsudz7dd35im@bogus>
+References: <20220501103428.111286-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220501103428.111286-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,264 +53,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All elements of the default endpoint configuration are used in the
-code when programming an endpoint for use.  But none of the other
-configuration data is ever needed once things are initialized.
+On Sun, May 01, 2022 at 12:34:27PM +0200, Krzysztof Kozlowski wrote:
+> Correct kerneldoc warnings like:
+> 
+>   drivers/mailbox/arm_mhu_db.c:47:
+>     warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>   drivers/mailbox/qcom-ipcc.c:58:
+>     warning: Function parameter or member 'num_chans' not described in 'qcom_ipcc'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/mailbox/arm_mhu_db.c | 2 +-
 
-So rather than saving a pointer to *all* of the configuration data,
-save a copy of only the endpoint configuration portion.
+I thought I had copied it from arm_mhuc.c but apparently not. Anyways,
 
-This will eventually allow endpoint configuration to be modifiable
-at runtime.  But even before that it means we won't keep a pointer
-to configuration data after when no longer needed.
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa_endpoint.c | 52 +++++++++++++++++-----------------
- drivers/net/ipa/ipa_endpoint.h |  2 +-
- drivers/net/ipa/ipa_modem.c    |  2 +-
- 3 files changed, 28 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/net/ipa/ipa_endpoint.c b/drivers/net/ipa/ipa_endpoint.c
-index bc95c71d80fc2..6010990690bb4 100644
---- a/drivers/net/ipa/ipa_endpoint.c
-+++ b/drivers/net/ipa/ipa_endpoint.c
-@@ -333,7 +333,7 @@ static void ipa_endpoint_suspend_aggr(struct ipa_endpoint *endpoint)
- {
- 	struct ipa *ipa = endpoint->ipa;
- 
--	if (!endpoint->config->aggregation)
-+	if (!endpoint->config.aggregation)
- 		return;
- 
- 	/* Nothing to do if the endpoint doesn't have aggregation open */
-@@ -453,7 +453,7 @@ static void ipa_endpoint_init_cfg(struct ipa_endpoint *endpoint)
- 	u32 val = 0;
- 
- 	/* FRAG_OFFLOAD_EN is 0 */
--	if (endpoint->config->checksum) {
-+	if (endpoint->config.checksum) {
- 		enum ipa_version version = endpoint->ipa->version;
- 
- 		if (endpoint->toward_ipa) {
-@@ -502,7 +502,7 @@ ipa_qmap_header_size(enum ipa_version version, struct ipa_endpoint *endpoint)
- 	u32 header_size = sizeof(struct rmnet_map_header);
- 
- 	/* Without checksum offload, we just have the MAP header */
--	if (!endpoint->config->checksum)
-+	if (!endpoint->config.checksum)
- 		return header_size;
- 
- 	if (version < IPA_VERSION_4_5) {
-@@ -544,7 +544,7 @@ static void ipa_endpoint_init_hdr(struct ipa_endpoint *endpoint)
- 	struct ipa *ipa = endpoint->ipa;
- 	u32 val = 0;
- 
--	if (endpoint->config->qmap) {
-+	if (endpoint->config.qmap) {
- 		enum ipa_version version = ipa->version;
- 		size_t header_size;
- 
-@@ -583,11 +583,11 @@ static void ipa_endpoint_init_hdr(struct ipa_endpoint *endpoint)
- static void ipa_endpoint_init_hdr_ext(struct ipa_endpoint *endpoint)
- {
- 	u32 offset = IPA_REG_ENDP_INIT_HDR_EXT_N_OFFSET(endpoint->endpoint_id);
--	u32 pad_align = endpoint->config->rx.pad_align;
-+	u32 pad_align = endpoint->config.rx.pad_align;
- 	struct ipa *ipa = endpoint->ipa;
- 	u32 val = 0;
- 
--	if (endpoint->config->qmap) {
-+	if (endpoint->config.qmap) {
- 		/* We have a header, so we must specify its endianness */
- 		val |= HDR_ENDIANNESS_FMASK;	/* big endian */
- 
-@@ -615,7 +615,7 @@ static void ipa_endpoint_init_hdr_ext(struct ipa_endpoint *endpoint)
- 	 */
- 	if (ipa->version >= IPA_VERSION_4_5) {
- 		/* HDR_TOTAL_LEN_OR_PAD_OFFSET is 0, so MSB is 0 */
--		if (endpoint->config->qmap && !endpoint->toward_ipa) {
-+		if (endpoint->config.qmap && !endpoint->toward_ipa) {
- 			u32 offset;
- 
- 			offset = offsetof(struct rmnet_map_header, pkt_len);
-@@ -640,7 +640,7 @@ static void ipa_endpoint_init_hdr_metadata_mask(struct ipa_endpoint *endpoint)
- 	offset = IPA_REG_ENDP_INIT_HDR_METADATA_MASK_N_OFFSET(endpoint_id);
- 
- 	/* Note that HDR_ENDIANNESS indicates big endian header fields */
--	if (endpoint->config->qmap)
-+	if (endpoint->config.qmap)
- 		val = (__force u32)cpu_to_be32(IPA_ENDPOINT_QMAP_METADATA_MASK);
- 
- 	iowrite32(val, endpoint->ipa->reg_virt + offset);
-@@ -654,8 +654,8 @@ static void ipa_endpoint_init_mode(struct ipa_endpoint *endpoint)
- 	if (!endpoint->toward_ipa)
- 		return;		/* Register not valid for RX endpoints */
- 
--	if (endpoint->config->dma_mode) {
--		enum ipa_endpoint_name name = endpoint->config->dma_endpoint;
-+	if (endpoint->config.dma_mode) {
-+		enum ipa_endpoint_name name = endpoint->config.dma_endpoint;
- 		u32 dma_endpoint_id;
- 
- 		dma_endpoint_id = endpoint->ipa->name_map[name]->endpoint_id;
-@@ -741,14 +741,14 @@ static void ipa_endpoint_init_aggr(struct ipa_endpoint *endpoint)
- 	enum ipa_version version = endpoint->ipa->version;
- 	u32 val = 0;
- 
--	if (endpoint->config->aggregation) {
-+	if (endpoint->config.aggregation) {
- 		if (!endpoint->toward_ipa) {
- 			const struct ipa_endpoint_rx *rx_config;
- 			u32 buffer_size;
- 			bool close_eof;
- 			u32 limit;
- 
--			rx_config = &endpoint->config->rx;
-+			rx_config = &endpoint->config.rx;
- 			val |= u32_encode_bits(IPA_ENABLE_AGGR, AGGR_EN_FMASK);
- 			val |= u32_encode_bits(IPA_GENERIC, AGGR_TYPE_FMASK);
- 
-@@ -947,7 +947,7 @@ static void ipa_endpoint_init_rsrc_grp(struct ipa_endpoint *endpoint)
- 	struct ipa *ipa = endpoint->ipa;
- 	u32 val;
- 
--	val = rsrc_grp_encoded(ipa->version, endpoint->config->resource_group);
-+	val = rsrc_grp_encoded(ipa->version, endpoint->config.resource_group);
- 	iowrite32(val, ipa->reg_virt + offset);
- }
- 
-@@ -960,10 +960,10 @@ static void ipa_endpoint_init_seq(struct ipa_endpoint *endpoint)
- 		return;		/* Register not valid for RX endpoints */
- 
- 	/* Low-order byte configures primary packet processing */
--	val |= u32_encode_bits(endpoint->config->tx.seq_type, SEQ_TYPE_FMASK);
-+	val |= u32_encode_bits(endpoint->config.tx.seq_type, SEQ_TYPE_FMASK);
- 
- 	/* Second byte configures replicated packet processing */
--	val |= u32_encode_bits(endpoint->config->tx.seq_rep_type,
-+	val |= u32_encode_bits(endpoint->config.tx.seq_rep_type,
- 			       SEQ_REP_TYPE_FMASK);
- 
- 	iowrite32(val, endpoint->ipa->reg_virt + offset);
-@@ -1021,13 +1021,13 @@ static void ipa_endpoint_status(struct ipa_endpoint *endpoint)
- 
- 	offset = IPA_REG_ENDP_STATUS_N_OFFSET(endpoint_id);
- 
--	if (endpoint->config->status_enable) {
-+	if (endpoint->config.status_enable) {
- 		val |= STATUS_EN_FMASK;
- 		if (endpoint->toward_ipa) {
- 			enum ipa_endpoint_name name;
- 			u32 status_endpoint_id;
- 
--			name = endpoint->config->tx.status_endpoint;
-+			name = endpoint->config.tx.status_endpoint;
- 			status_endpoint_id = ipa->name_map[name]->endpoint_id;
- 
- 			val |= u32_encode_bits(status_endpoint_id,
-@@ -1051,7 +1051,7 @@ static int ipa_endpoint_replenish_one(struct ipa_endpoint *endpoint,
- 	u32 len;
- 	int ret;
- 
--	buffer_size = endpoint->config->rx.buffer_size;
-+	buffer_size = endpoint->config.rx.buffer_size;
- 	page = dev_alloc_pages(get_order(buffer_size));
- 	if (!page)
- 		return -ENOMEM;
-@@ -1169,7 +1169,7 @@ static void ipa_endpoint_skb_copy(struct ipa_endpoint *endpoint,
- static bool ipa_endpoint_skb_build(struct ipa_endpoint *endpoint,
- 				   struct page *page, u32 len)
- {
--	u32 buffer_size = endpoint->config->rx.buffer_size;
-+	u32 buffer_size = endpoint->config.rx.buffer_size;
- 	struct sk_buff *skb;
- 
- 	/* Nothing to do if there's no netdev */
-@@ -1276,7 +1276,7 @@ static bool ipa_endpoint_status_drop(struct ipa_endpoint *endpoint,
- static void ipa_endpoint_status_parse(struct ipa_endpoint *endpoint,
- 				      struct page *page, u32 total_len)
- {
--	u32 buffer_size = endpoint->config->rx.buffer_size;
-+	u32 buffer_size = endpoint->config.rx.buffer_size;
- 	void *data = page_address(page) + NET_SKB_PAD;
- 	u32 unused = buffer_size - total_len;
- 	u32 resid = total_len;
-@@ -1306,10 +1306,10 @@ static void ipa_endpoint_status_parse(struct ipa_endpoint *endpoint,
- 		 * And if checksum offload is enabled a trailer containing
- 		 * computed checksum information will be appended.
- 		 */
--		align = endpoint->config->rx.pad_align ? : 1;
-+		align = endpoint->config.rx.pad_align ? : 1;
- 		len = le16_to_cpu(status->pkt_len);
- 		len = sizeof(*status) + ALIGN(len, align);
--		if (endpoint->config->checksum)
-+		if (endpoint->config.checksum)
- 			len += sizeof(struct rmnet_map_dl_csum_trailer);
- 
- 		if (!ipa_endpoint_status_drop(endpoint, status)) {
-@@ -1353,7 +1353,7 @@ static void ipa_endpoint_rx_complete(struct ipa_endpoint *endpoint,
- 
- 	/* Parse or build a socket buffer using the actual received length */
- 	page = trans->data;
--	if (endpoint->config->status_enable)
-+	if (endpoint->config.status_enable)
- 		ipa_endpoint_status_parse(endpoint, page, trans->len);
- 	else if (ipa_endpoint_skb_build(endpoint, page, trans->len))
- 		trans->data = NULL;	/* Pages have been consumed */
-@@ -1387,7 +1387,7 @@ void ipa_endpoint_trans_release(struct ipa_endpoint *endpoint,
- 		struct page *page = trans->data;
- 
- 		if (page) {
--			u32 buffer_size = endpoint->config->rx.buffer_size;
-+			u32 buffer_size = endpoint->config.rx.buffer_size;
- 
- 			__free_pages(page, get_order(buffer_size));
- 		}
-@@ -1521,7 +1521,7 @@ static void ipa_endpoint_reset(struct ipa_endpoint *endpoint)
- 	 * All other cases just need to reset the underlying GSI channel.
- 	 */
- 	special = ipa->version < IPA_VERSION_4_0 && !endpoint->toward_ipa &&
--			endpoint->config->aggregation;
-+			endpoint->config.aggregation;
- 	if (special && ipa_endpoint_aggr_active(endpoint))
- 		ret = ipa_endpoint_reset_rx_aggr(endpoint);
- 	else
-@@ -1836,7 +1836,7 @@ static void ipa_endpoint_init_one(struct ipa *ipa, enum ipa_endpoint_name name,
- 	endpoint->channel_id = data->channel_id;
- 	endpoint->endpoint_id = data->endpoint_id;
- 	endpoint->toward_ipa = data->toward_ipa;
--	endpoint->config = &data->endpoint.config;
-+	endpoint->config = data->endpoint.config;
- 
- 	ipa->initialized |= BIT(endpoint->endpoint_id);
- }
-diff --git a/drivers/net/ipa/ipa_endpoint.h b/drivers/net/ipa/ipa_endpoint.h
-index e8d1300a60022..39a12c249f66d 100644
---- a/drivers/net/ipa/ipa_endpoint.h
-+++ b/drivers/net/ipa/ipa_endpoint.h
-@@ -136,7 +136,7 @@ struct ipa_endpoint {
- 	u32 channel_id;
- 	u32 endpoint_id;
- 	bool toward_ipa;
--	const struct ipa_endpoint_config *config;
-+	struct ipa_endpoint_config config;
- 
- 	u32 trans_tre_max;
- 	u32 evt_ring_id;
-diff --git a/drivers/net/ipa/ipa_modem.c b/drivers/net/ipa/ipa_modem.c
-index 7975e324690bb..c8b1c4d9c5073 100644
---- a/drivers/net/ipa/ipa_modem.c
-+++ b/drivers/net/ipa/ipa_modem.c
-@@ -129,7 +129,7 @@ ipa_start_xmit(struct sk_buff *skb, struct net_device *netdev)
- 		goto err_drop_skb;
- 
- 	endpoint = ipa->name_map[IPA_ENDPOINT_AP_MODEM_TX];
--	if (endpoint->config->qmap && skb->protocol != htons(ETH_P_MAP))
-+	if (endpoint->config.qmap && skb->protocol != htons(ETH_P_MAP))
- 		goto err_drop_skb;
- 
- 	/* The hardware must be powered for us to transmit */
 -- 
-2.32.0
-
+Regards,
+Sudeep

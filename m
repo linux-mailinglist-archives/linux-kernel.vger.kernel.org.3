@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5C552CEA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE98152CEA8
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235594AbiESItx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 04:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S235603AbiESIuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 04:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbiESItk (ORCPT
+        with ESMTP id S231838AbiESIuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 04:49:40 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3016A9CF42;
-        Thu, 19 May 2022 01:49:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652950174; x=1684486174;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lWZmcSgWhxQnzMFbbGiVHJHijQBfJKZ/Aeb1nkaJqSo=;
-  b=BOkakh8KL24p6csb7g08ng5Gfzsk0qdKJ/Uv5Nq8+perlg4DDek6JZqa
-   F9F9jqCGX3/czlUdge+66XuP5J/t3bCrEcItVqItC7xnMmDrpAjZRxL82
-   qdqszYmOD8sXtkHV1/y3mXXFJquSkmqKy8yvHR7lIgl9ZrJW1pJBfj4KS
-   8CRKK3n5LZ6Ec4fY7bNDN3UQHHLNQBlZa+tfGI1Vq8fQTpNTd2o9KzPpP
-   ZDp/QpZO7qCXF8tO3XnELEdo8gE/yBBljvmGgszaOSUmY/bxs0n2hW9PX
-   zK5tHVtbjJxBO43Kip+7jpYm13iCFaNQmX7r/khK6QA4lMYDYEfNW/Bmc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="254150315"
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="254150315"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 01:49:33 -0700
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="598443191"
-Received: from yangweij-mobl.ccr.corp.intel.com (HELO [10.255.31.218]) ([10.255.31.218])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 01:49:30 -0700
-Message-ID: <908bc121-ceb8-e296-3397-643733016ecc@intel.com>
-Date:   Thu, 19 May 2022 16:49:22 +0800
+        Thu, 19 May 2022 04:50:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31E009C2E7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:50:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652950238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=p92fXrJQ4gGF6gXdL4rpxaBMAzMtQCdZw00jmCIxVH0=;
+        b=RfvD9ZEbDJQn76vLk72WCqEDr+MJryQolwXrvX16OCmdpHaT32WOCBMnKpuvvZOyk0hSrZ
+        RjD4S7txL+Ky5t6PXYU8SAJFRLk7Qs3BCxj6eLsEUNmee4PHmQcxs0A5YhCaNJSnH6KFZ2
+        MCm3wCuBo3Vu/OwBxs4i2RrloLljDK4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-638-AYYgi-E3OmePuQW2dI8JAw-1; Thu, 19 May 2022 04:50:33 -0400
+X-MC-Unique: AYYgi-E3OmePuQW2dI8JAw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD516802803;
+        Thu, 19 May 2022 08:50:32 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 95948400E114;
+        Thu, 19 May 2022 08:50:31 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] assoc_array: Fix BUG_ON during garbage collect
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     stable@vger.kernel.org,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        keyrings@vger.kernel.org, dhowells@redhat.com,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 19 May 2022 09:50:30 +0100
+Message-ID: <165295023086.3361286.8662079860706628540.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v15 07/14] KVM: VMX: Emulate reads and writes to CET MSRs
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        John Allen <john.allen@amd.com>
-Cc:     pbonzini@redhat.com, jmattson@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yu.c.zhang@linux.intel.com
-References: <20210203113421.5759-1-weijiang.yang@intel.com>
- <20210203113421.5759-8-weijiang.yang@intel.com>
- <YoUW4Oh0eRL9um5m@dell9853host> <YoUb4/iP+X+xgsfQ@google.com>
-From:   "Yang, Weijiang" <weijiang.yang@intel.com>
-In-Reply-To: <YoUb4/iP+X+xgsfQ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,29 +67,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Stephen Brennan <stephen.s.brennan@oracle.com>
 
-On 5/19/2022 12:16 AM, Sean Christopherson wrote:
-> On Wed, May 18, 2022, John Allen wrote:
->> On Wed, Feb 03, 2021 at 07:34:14PM +0800, Yang Weijiang wrote:
->>> +	case MSR_IA32_PL0_SSP ... MSR_IA32_PL3_SSP:
->>> +		if (!cet_is_ssp_msr_accessible(vcpu, msr_info))
->>> +			return 1;
->>> +		if ((data & GENMASK(2, 0)) || is_noncanonical_address(data, vcpu))
->> Sorry to revive this old thread. I'm working on the corresponding SVM
->> bits for shadow stack and I noticed the above check. Why isn't this
->> GENMASK(1, 0)? The *SSP MSRs should be a 4-byte aligned canonical
->> address meaning that just bits 1 and 0 should always be zero. I was
->> looking through the previous versions of the set and found that this
->> changed between versions 11 and 12, but I don't see any discussion
->> related to this on the list.
-> Huh.  I'm not entirely sure what to make of the SDM's wording:
->
->    The linear address written must be aligned to 8 bytes and bits 2:0 must be 0
->    (hardware requires bits 1:0 to be 0).
->
-> Looking at the rest of the CET stuff, I believe requiring 8-byte alignment is
-> correct, and that the "hardware requires" blurb is trying to call out that the
-> SSP stored in hardware will always be 4-byte aligned but not necessarily 8-byte
-> aligned in order to play nice with 32-bit/compatibility mode.  But "base" addresses
-> that come from software, e.g. via MSRs and whatnot, must always be 8-byte aligned.
-Thanks Sean, I cannot agree more ;-)
+A rare BUG_ON triggered in assoc_array_gc:
+
+    [3430308.818153] kernel BUG at lib/assoc_array.c:1609!
+
+Which corresponded to the statement currently at line 1593 upstream:
+
+    BUG_ON(assoc_array_ptr_is_meta(p));
+
+Using the data from the core dump, I was able to generate a userspace
+reproducer[1] and determine the cause of the bug.
+
+[1]: https://github.com/brenns10/kernel_stuff/tree/master/assoc_array_gc
+
+After running the iterator on the entire branch, an internal tree node
+looked like the following:
+
+    NODE (nr_leaves_on_branch: 3)
+      SLOT [0] NODE (2 leaves)
+      SLOT [1] NODE (1 leaf)
+      SLOT [2..f] NODE (empty)
+
+In the userspace reproducer, the pr_devel output when compressing this
+node was:
+
+    -- compress node 0x5607cc089380 --
+    free=0, leaves=0
+    [0] retain node 2/1 [nx 0]
+    [1] fold node 1/1 [nx 0]
+    [2] fold node 0/1 [nx 2]
+    [3] fold node 0/2 [nx 2]
+    [4] fold node 0/3 [nx 2]
+    [5] fold node 0/4 [nx 2]
+    [6] fold node 0/5 [nx 2]
+    [7] fold node 0/6 [nx 2]
+    [8] fold node 0/7 [nx 2]
+    [9] fold node 0/8 [nx 2]
+    [10] fold node 0/9 [nx 2]
+    [11] fold node 0/10 [nx 2]
+    [12] fold node 0/11 [nx 2]
+    [13] fold node 0/12 [nx 2]
+    [14] fold node 0/13 [nx 2]
+    [15] fold node 0/14 [nx 2]
+    after: 3
+
+At slot 0, an internal node with 2 leaves could not be folded into the
+node, because there was only one available slot (slot 0). Thus, the
+internal node was retained. At slot 1, the node had one leaf, and was
+able to be folded in successfully. The remaining nodes had no leaves,
+and so were removed. By the end of the compression stage, there were 14
+free slots, and only 3 leaf nodes. The tree was ascended and then its
+parent node was compressed. When this node was seen, it could not be
+folded, due to the internal node it contained.
+
+The invariant for compression in this function is: whenever
+nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT, the node should contain all
+leaf nodes. The compression step currently cannot guarantee this, given
+the corner case shown above.
+
+To fix this issue, retry compression whenever we have retained a node,
+and yet nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT. This second
+compression will then allow the node in slot 1 to be folded in,
+satisfying the invariant. Below is the output of the reproducer once the
+fix is applied:
+
+    -- compress node 0x560e9c562380 --
+    free=0, leaves=0
+    [0] retain node 2/1 [nx 0]
+    [1] fold node 1/1 [nx 0]
+    [2] fold node 0/1 [nx 2]
+    [3] fold node 0/2 [nx 2]
+    [4] fold node 0/3 [nx 2]
+    [5] fold node 0/4 [nx 2]
+    [6] fold node 0/5 [nx 2]
+    [7] fold node 0/6 [nx 2]
+    [8] fold node 0/7 [nx 2]
+    [9] fold node 0/8 [nx 2]
+    [10] fold node 0/9 [nx 2]
+    [11] fold node 0/10 [nx 2]
+    [12] fold node 0/11 [nx 2]
+    [13] fold node 0/12 [nx 2]
+    [14] fold node 0/13 [nx 2]
+    [15] fold node 0/14 [nx 2]
+    internal nodes remain despite enough space, retrying
+    -- compress node 0x560e9c562380 --
+    free=14, leaves=1
+    [0] fold node 2/15 [nx 0]
+    after: 3
+
+Changes
+=======
+DH:
+ - Use false instead of 0.
+ - Reorder the inserted lines in a couple of places to put retained before
+   next_slot.
+
+ver #2)
+ - Fix typo in pr_devel, correct comparison to "<="
+
+
+Fixes: 3cb989501c26 ("Add a generic associative array implementation.")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Jarkko Sakkinen <jarkko@kernel.org>
+cc: Andrew Morton <akpm@linux-foundation.org>
+cc: keyrings@vger.kernel.org
+Link: https://lore.kernel.org/r/20220511225517.407935-1-stephen.s.brennan@oracle.com/ # v1
+Link: https://lore.kernel.org/r/20220512215045.489140-1-stephen.s.brennan@oracle.com/ # v2
+---
+
+ lib/assoc_array.c |    8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/lib/assoc_array.c b/lib/assoc_array.c
+index 079c72e26493..ca0b4f360c1a 100644
+--- a/lib/assoc_array.c
++++ b/lib/assoc_array.c
+@@ -1461,6 +1461,7 @@ int assoc_array_gc(struct assoc_array *array,
+ 	struct assoc_array_ptr *cursor, *ptr;
+ 	struct assoc_array_ptr *new_root, *new_parent, **new_ptr_pp;
+ 	unsigned long nr_leaves_on_tree;
++	bool retained;
+ 	int keylen, slot, nr_free, next_slot, i;
+ 
+ 	pr_devel("-->%s()\n", __func__);
+@@ -1536,6 +1537,7 @@ int assoc_array_gc(struct assoc_array *array,
+ 		goto descend;
+ 	}
+ 
++retry_compress:
+ 	pr_devel("-- compress node %p --\n", new_n);
+ 
+ 	/* Count up the number of empty slots in this node and work out the
+@@ -1553,6 +1555,7 @@ int assoc_array_gc(struct assoc_array *array,
+ 	pr_devel("free=%d, leaves=%lu\n", nr_free, new_n->nr_leaves_on_branch);
+ 
+ 	/* See what we can fold in */
++	retained = false;
+ 	next_slot = 0;
+ 	for (slot = 0; slot < ASSOC_ARRAY_FAN_OUT; slot++) {
+ 		struct assoc_array_shortcut *s;
+@@ -1602,9 +1605,14 @@ int assoc_array_gc(struct assoc_array *array,
+ 			pr_devel("[%d] retain node %lu/%d [nx %d]\n",
+ 				 slot, child->nr_leaves_on_branch, nr_free + 1,
+ 				 next_slot);
++			retained = true;
+ 		}
+ 	}
+ 
++	if (retained && new_n->nr_leaves_on_branch <= ASSOC_ARRAY_FAN_OUT) {
++		pr_devel("internal nodes remain despite enough space, retrying\n");
++		goto retry_compress;
++	}
+ 	pr_devel("after: %lu\n", new_n->nr_leaves_on_branch);
+ 
+ 	nr_leaves_on_tree = new_n->nr_leaves_on_branch;
+
+

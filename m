@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C293552CA43
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39DF52CA46
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbiESDUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 23:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
+        id S233255AbiESDUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 23:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbiESDUa (ORCPT
+        with ESMTP id S233234AbiESDUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 23:20:30 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE8356C2E
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:20:19 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f8398e99dcso35841757b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:20:19 -0700 (PDT)
+        Wed, 18 May 2022 23:20:40 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871879AE56
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:20:21 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e202-20020a25e7d3000000b0064dc69dfa9cso3263003ybh.16
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:20:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Vw3KOirpyKTYToukj5eB9PrIoaDLrka25Tzs+xxN/h8=;
-        b=Z2zErAYQFBvOZsDLGgCVtdKnayqjrK54AFt8EP2E2Oh158l/ncAdDQG5+nkAH0QlIV
-         w7DnPDdy3FXOINVtVZBSOzvkUEgdfz4/+VoRyMyoOLgsr994CrD1CRg/RdsxA/GvT/Hz
-         bm+Zf9z8iRcc0HpGKykfpNTndP5y04D6WwiZYddS+fKufM6Lx5V09WN5tsvU1ge+HQzY
-         /qhqa3u9ZpQtKhRgjOGtsCLskUfiTO7Em0DfZMhyWFHgyQZhLF2WpF9G8TQvNeRMQtSK
-         +CiaQJsSHY3iz9Kx8ES9aAG0WeS3ryGXwQ4Mkd0cqEVT1HYxMXCyp8t5FehS8WYhnB68
-         Q8bw==
+        bh=dwmBV4G5Hrx+MlkRr6GaHrCf5HeOC3stEpj1wSJ3O8A=;
+        b=o5NjPzUznWE13DNTK0wFIG1NKbT9cGiL1lhWxHLGQ5r4bBD8e+wKWhYW3xk+khrigG
+         p3tBuKe6wk9kILLORw3RjNJgw3fqxOvAEaLz5tmFWYrQen1SMb3WKawQMFJShV1sw045
+         6iL9u6tHbnB4pXOc9c6ABTFFyfysO6NiVWBmEFBu4urYthwKcLYO0JgBZ2O9zSjB5Ts/
+         OdPHakQX8hM2snxYehC8fyLK8FCJQxjZv22U/i+kN81boFVA+QYITEfEXoRMV+OYQVmA
+         T/RiO5aoShu5XWQgrx+lb4PJs44plrEyd0wRRsN4CuB5yPzK+oAWfZ7oVifHOgBeNsB+
+         EuMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Vw3KOirpyKTYToukj5eB9PrIoaDLrka25Tzs+xxN/h8=;
-        b=oyGwJvbKCbGdzGcmIW8ZkFblEaTtLX9wq9fs7IqGXTt5pJcfQS3JDnQIGFaVJmYaYs
-         oRilWo56KeZJYqLJFRUvmeAyLNGV2JpyiOwFRCxIaV2b6VGBDlv2lF6h3r7MO+rdFp03
-         N+n+MpEattdnubPbk2XqcAaShexsxxVIVeaghwVyn86yLFxtAWzYsWPy5L9zxDTTMA9B
-         DDUN3977rorDZ1dNmKMOr4E841rikdmk+RnyGcGOA/drSbDCM1TgoSzbtDZ0tUBeClnG
-         FTZo9w6XjVxhJTWdKKJgiMZT7FjaHw9hM/l6yoVlk6FcKV3CpaTkWYiOP+sIBIkt0/sO
-         XCnQ==
-X-Gm-Message-State: AOAM530+tt48eUgGZ0wQc9rAqHgMGys2VVbtO+r2esN9UcmgmhDxgq6j
-        0B6EX/5wMJxir3kv1aVhtk/nKlQfgGeV
-X-Google-Smtp-Source: ABdhPJyaaIVriNuy73np/4IMrVPFn3NEblefL3EEPUZ7Ayeru4qkvqLGkIUzJ87NJEh8n9bjaM+xtdCjwHRq
+        bh=dwmBV4G5Hrx+MlkRr6GaHrCf5HeOC3stEpj1wSJ3O8A=;
+        b=xumLI3c/W4T9MGBJuz8WSGV9sjh4cZftdqhhxrWoD0etvXbERs1l5ktv6jDxicBSLi
+         1AbzmbRrMFdxvZa1WgdtfAd4X0AUmWC5lshdijMjNJD66zylIpvd9W56iqysir2xvzLh
+         lvbDQrPD/d3IjLUIOYOVGrnCpBIZ19hOCeIQvrZqOQKNYVTqBKIYwSOWlVpckQdTSkxp
+         f2kaDRDLc95F3F5MXhhaeeFZwHc8wPcqoMHtdisj4J6SEDoQqf69JQdBc0Npo9dhRxTl
+         5wfqJthCDJWcSz/bWreDNZe0jKQIQp6LGeEFw95jT+UrKKBJmAXkNf332s/S2oUJJldf
+         x5pg==
+X-Gm-Message-State: AOAM531D8TLOunXEwz6w6TQZxKPg+8PLrkxmdta3IZ6GN5Ez5QHNPZdG
+        J0S+SHqaGav4iThowJbfciPgYdIRtZFU
+X-Google-Smtp-Source: ABdhPJzSCHP7XeMQopIcnWVduwBBs6JvQNIRox8q0b96Ga/SO581j62Doa4cRRTYzHBanNwOkT+LHDHRV6G3
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a233:bf3c:6ac:2a98])
- (user=irogers job=sendgmr) by 2002:a25:2d67:0:b0:64d:a9b9:4954 with SMTP id
- s39-20020a252d67000000b0064da9b94954mr2547523ybe.5.1652930418306; Wed, 18 May
- 2022 20:20:18 -0700 (PDT)
-Date:   Wed, 18 May 2022 20:20:03 -0700
+ (user=irogers job=sendgmr) by 2002:a25:230f:0:b0:64d:76e2:6aa5 with SMTP id
+ j15-20020a25230f000000b0064d76e26aa5mr2481170ybj.116.1652930420577; Wed, 18
+ May 2022 20:20:20 -0700 (PDT)
+Date:   Wed, 18 May 2022 20:20:04 -0700
 In-Reply-To: <20220519032005.1273691-1-irogers@google.com>
-Message-Id: <20220519032005.1273691-4-irogers@google.com>
+Message-Id: <20220519032005.1273691-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20220519032005.1273691-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH 3/5] perf cpumap: Add perf_cpu_map__for_each_idx
+Subject: [PATCH 4/5] perf bpf_counter: Tidy use of CPU map index
 From:   Ian Rogers <irogers@google.com>
 To:     Michael Petlan <mpetlan@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -90,26 +90,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A variant of perf_cpu_map__for_each_cpu that just iterates index values
-without the corresponding load of the CPU.
+BPF counters are typically running across all CPUs and so the CPU map
+index and CPU number are the same. There may be cases with offline CPUs
+where this isn't the case and so ensure the cpu map index for
+perf_counts is going to be a valid index by explicitly iterating over
+the CPU map. This also makes it clearer that users of perf_counts are
+using an index. Collapse some multiple uses of perf_counts into single
+uses.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/perf/include/perf/cpumap.h | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/perf/util/bpf_counter.c | 61 ++++++++++++++++++++---------------
+ 1 file changed, 35 insertions(+), 26 deletions(-)
 
-diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
-index 4a2edbdb5e2b..24de795b09bb 100644
---- a/tools/lib/perf/include/perf/cpumap.h
-+++ b/tools/lib/perf/include/perf/cpumap.h
-@@ -31,4 +31,7 @@ LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_c
- 	     (idx) < perf_cpu_map__nr(cpus);			\
- 	     (idx)++, (cpu) = perf_cpu_map__cpu(cpus, idx))
+diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
+index 3ce8d03cb7ec..d4931f54e1dd 100644
+--- a/tools/perf/util/bpf_counter.c
++++ b/tools/perf/util/bpf_counter.c
+@@ -224,25 +224,25 @@ static int bpf_program_profiler__disable(struct evsel *evsel)
  
-+#define perf_cpu_map__for_each_idx(idx, cpus)				\
-+	for ((idx) = 0; (idx) < perf_cpu_map__nr(cpus); (idx)++)
-+
- #endif /* __LIBPERF_CPUMAP_H */
+ static int bpf_program_profiler__read(struct evsel *evsel)
+ {
+-	// perf_cpu_map uses /sys/devices/system/cpu/online
+-	int num_cpu = evsel__nr_cpus(evsel);
+ 	// BPF_MAP_TYPE_PERCPU_ARRAY uses /sys/devices/system/cpu/possible
+ 	// Sometimes possible > online, like on a Ryzen 3900X that has 24
+ 	// threads but its possible showed 0-31 -acme
+ 	int num_cpu_bpf = libbpf_num_possible_cpus();
+ 	struct bpf_perf_event_value values[num_cpu_bpf];
+ 	struct bpf_counter *counter;
++	struct perf_counts_values *counts;
+ 	int reading_map_fd;
+ 	__u32 key = 0;
+-	int err, cpu;
++	int err, idx, bpf_cpu;
+ 
+ 	if (list_empty(&evsel->bpf_counter_list))
+ 		return -EAGAIN;
+ 
+-	for (cpu = 0; cpu < num_cpu; cpu++) {
+-		perf_counts(evsel->counts, cpu, 0)->val = 0;
+-		perf_counts(evsel->counts, cpu, 0)->ena = 0;
+-		perf_counts(evsel->counts, cpu, 0)->run = 0;
++	perf_cpu_map__for_each_idx(idx, evsel__cpus(evsel)) {
++		counts = perf_counts(evsel->counts, idx, 0);
++		counts->val = 0;
++		counts->ena = 0;
++		counts->run = 0;
+ 	}
+ 	list_for_each_entry(counter, &evsel->bpf_counter_list, list) {
+ 		struct bpf_prog_profiler_bpf *skel = counter->skel;
+@@ -256,10 +256,15 @@ static int bpf_program_profiler__read(struct evsel *evsel)
+ 			return err;
+ 		}
+ 
+-		for (cpu = 0; cpu < num_cpu; cpu++) {
+-			perf_counts(evsel->counts, cpu, 0)->val += values[cpu].counter;
+-			perf_counts(evsel->counts, cpu, 0)->ena += values[cpu].enabled;
+-			perf_counts(evsel->counts, cpu, 0)->run += values[cpu].running;
++		for (bpf_cpu = 0; bpf_cpu < num_cpu_bpf; bpf_cpu++) {
++			idx = perf_cpu_map__idx(evsel__cpus(evsel),
++						(struct perf_cpu){.cpu = bpf_cpu});
++			if (idx == -1)
++				continue;
++			counts = perf_counts(evsel->counts, idx, 0);
++			counts->val += values[bpf_cpu].counter;
++			counts->ena += values[bpf_cpu].enabled;
++			counts->run += values[bpf_cpu].running;
+ 		}
+ 	}
+ 	return 0;
+@@ -621,6 +626,7 @@ static int bperf__read(struct evsel *evsel)
+ 	struct bperf_follower_bpf *skel = evsel->follower_skel;
+ 	__u32 num_cpu_bpf = cpu__max_cpu().cpu;
+ 	struct bpf_perf_event_value values[num_cpu_bpf];
++	struct perf_counts_values *counts;
+ 	int reading_map_fd, err = 0;
+ 	__u32 i;
+ 	int j;
+@@ -639,29 +645,32 @@ static int bperf__read(struct evsel *evsel)
+ 		case BPERF_FILTER_GLOBAL:
+ 			assert(i == 0);
+ 
+-			perf_cpu_map__for_each_cpu(entry, j, all_cpu_map) {
+-				cpu = entry.cpu;
+-				perf_counts(evsel->counts, cpu, 0)->val = values[cpu].counter;
+-				perf_counts(evsel->counts, cpu, 0)->ena = values[cpu].enabled;
+-				perf_counts(evsel->counts, cpu, 0)->run = values[cpu].running;
++			perf_cpu_map__for_each_cpu(entry, j, evsel__cpus(evsel)) {
++				counts = perf_counts(evsel->counts, j, 0);
++				counts->val = values[entry.cpu].counter;
++				counts->ena = values[entry.cpu].enabled;
++				counts->run = values[entry.cpu].running;
+ 			}
+ 			break;
+ 		case BPERF_FILTER_CPU:
+-			cpu = evsel->core.cpus->map[i].cpu;
+-			perf_counts(evsel->counts, i, 0)->val = values[cpu].counter;
+-			perf_counts(evsel->counts, i, 0)->ena = values[cpu].enabled;
+-			perf_counts(evsel->counts, i, 0)->run = values[cpu].running;
++			cpu = perf_cpu_map__cpu(evsel__cpus(evsel), i).cpu;
++			assert(cpu >= 0);
++			counts = perf_counts(evsel->counts, i, 0);
++			counts->val = values[cpu].counter;
++			counts->ena = values[cpu].enabled;
++			counts->run = values[cpu].running;
+ 			break;
+ 		case BPERF_FILTER_PID:
+ 		case BPERF_FILTER_TGID:
+-			perf_counts(evsel->counts, 0, i)->val = 0;
+-			perf_counts(evsel->counts, 0, i)->ena = 0;
+-			perf_counts(evsel->counts, 0, i)->run = 0;
++			counts = perf_counts(evsel->counts, 0, i);
++			counts->val = 0;
++			counts->ena = 0;
++			counts->run = 0;
+ 
+ 			for (cpu = 0; cpu < num_cpu_bpf; cpu++) {
+-				perf_counts(evsel->counts, 0, i)->val += values[cpu].counter;
+-				perf_counts(evsel->counts, 0, i)->ena += values[cpu].enabled;
+-				perf_counts(evsel->counts, 0, i)->run += values[cpu].running;
++				counts->val += values[cpu].counter;
++				counts->ena += values[cpu].enabled;
++				counts->run += values[cpu].running;
+ 			}
+ 			break;
+ 		default:
 -- 
 2.36.1.124.g0e6072fb45-goog
 

@@ -2,205 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA98F52E009
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D98252E00E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245520AbiESWfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 18:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
+        id S241136AbiESWjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 18:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbiESWfP (ORCPT
+        with ESMTP id S232318AbiESWjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 18:35:15 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D225C0387
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:35:13 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so8466314fac.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:35:13 -0700 (PDT)
+        Thu, 19 May 2022 18:39:18 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0782F6A001
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:39:18 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JJxETs029203;
+        Thu, 19 May 2022 22:39:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=d9l1rnaplMW1SOHXRnDeS4+T4lQrqVTAIPogas0FBqE=;
+ b=z6keRvKWnAID2vHjJcxBZgPrS1G82i66oyBkZNEnJITWgelfOkvHN3m1pQv6h2kWIZXk
+ Ai9OK7LIziAiOpisrBWyHeXdsrrRZSqmJwp/zZ5R4Lb6VuqXIHq9xMzwk8z7A7qV71OU
+ sCFe1fZ41KBXxMyNv5IoaGH60l3d2ZKou3SvCQS120MzXq3cOuBhG/wbWaUeralew8aO
+ rQ0kcksaLQCBelzCYTyHJ0LzqyRewlOd4KYhw0atBVGD1168llTCsNbwUWQExEY58vKf
+ cWiNDz5tXoFAA0liYsb6p5G1d6qbh3r35OdMuO9OoU7QT8zu5llrK4Lfr/91d1bKMa+0 bA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24aan99s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 22:39:01 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24JMQ4sK018831;
+        Thu, 19 May 2022 22:39:00 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22vb8r0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 22:39:00 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WOCLxLPfisvor6GSZAP31TJA1VADbOV1/Vthw1ZwOjmHo3hZ9Erp8k3J6ugVC+to1dCv/CI1R0/H/GLwTJkil32+fEnQDX+xAMeAgtPmFUhH09qjRODGlHFWJC3hAs+3UrJMurHYuTM9JOSYZbKf9QKhr3YLJZTlxJTjV81K46S/Msh1RZEjzpb+HQTTKJUNlDAbsc8h+tE/uzmqCkbcjniwIu8f7Lv1IrC2CxPiRAi3XKlwlhCwDzhAq5Gap0cis+6TIV/7L2AeDxiz5/ncVAcZgs5FVwmJjVTWkA/0b2TgVfRzKF07YDNTUbvidbp7Qk/Xlxfu3f06xqL7494Dxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d9l1rnaplMW1SOHXRnDeS4+T4lQrqVTAIPogas0FBqE=;
+ b=SHwEyhinKVu1Eu8e6CZyKi7IuVGNhEZZDXjNcfHtNK7kCQ7qAG/Bq94fpqLfApCso6oGoM2znqaodaF96gLwVPWMA949p+swE3BNVaYtppGLcdm8TLGtxrJeW0lWl6X7MhzgwH8HMMDxTNNh5StHE/rAV1FLg7o3N0zGEAFExpJSVsuRvNurpmwlQyNWjgLf7BPvzdoCWhy1MmeRNx0oAUOZ9cJvgAid9t3J6LCeV+eLRIlsjmja3qiZEhQqQnltgmFTcgp2bF0xhHHVNh6r1ZoxQz/OE/rkOq61S+Sb476pVVcLcqdXlNAv6FXHyewoI8MiIBLb+UDfOAkRajY7oQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=VjlrbV4vJKI8XrHdrvSp11oTKl50bHpTcvsdSZU8U4M=;
-        b=XkI+w/MjL3A6mJl2TFEUT88gLNyZg00mKX8nHV7mXLrN8otWS80SaNXd/6sNN2XUTo
-         oZ+Tp90Cs1lq2W9ocDlCd23qD8CaCLRgFr3Mk8m9L4k0AktuSg7PaUdLtT8S9CHKYj5y
-         caMezmMFbAAhbmPNUrkS5UN0NVPZA+odXJR2g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=VjlrbV4vJKI8XrHdrvSp11oTKl50bHpTcvsdSZU8U4M=;
-        b=A2zC9aVECFkzOMJJdDnc6bPYrvPCgX2Hu+lDwb20Mf+RcQ44t+KPTRJhocpzDVr1pP
-         g29j7icH7jaO91qKu3LGws1YN33BOWnSCe3mjq4Yn2xNsK4H7BNC/cP6+PdH0vPN85Dh
-         xOn4ywPCfTMeo74k2WMMSp1y+u+02ciHjvK1YutrwAU1tsuvjO+XMxDJ/o+3nlnlaIKV
-         9XiLI/Pt50+nkYvlPnm7cnQRaYvZEAhF1HggOAMGJL5w3n16t5E90tuO+5qjfqVTP+TL
-         KLroDO6vkC8h5VEQO4fZzE/c03H2zRLlBGma9KixNW4pNJZsdqW7AcB/Dcwm0oE9lOWS
-         9eWA==
-X-Gm-Message-State: AOAM5335y8jJh2S9Q2HHn/x+5ayN15PE6zKUuyeVBVpEMaahbO5c7P+B
-        xRmYlGARAvzmg8LvNa4huDeE8AwEwiWk88RZbUuLcg==
-X-Google-Smtp-Source: ABdhPJyHbu0BSr9LBi52hxpKPmXOdW1xCXpPhmUrDoe9clR+KRpEObjnicQVOt9bttlw1GiBXVL+iYfOG64eiydGEFw=
-X-Received: by 2002:a05:6870:240d:b0:f1:b878:e97c with SMTP id
- n13-20020a056870240d00b000f1b878e97cmr3776843oap.193.1652999712543; Thu, 19
- May 2022 15:35:12 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 19 May 2022 15:35:11 -0700
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d9l1rnaplMW1SOHXRnDeS4+T4lQrqVTAIPogas0FBqE=;
+ b=h/cgl7+feZ+dONuNBbjqGCzI8O59NvmBXPz8xcShHILyLH22zsjYrkYGCZP2aoVsQKqUgfQKCEIZfT3qDRtbmI/Di92fmJz/ipdiX9gwFUx3HqMXOnGpy4I+h6CZ0bUMnx9EdLv/GRlrCAoK28s9NPnu4SgS2wyaA6kwkzkbBY4=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by DM5PR10MB1820.namprd10.prod.outlook.com (2603:10b6:3:109::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Thu, 19 May
+ 2022 22:38:57 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::e1df:2e42:6674:313e]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::e1df:2e42:6674:313e%7]) with mapi id 15.20.5273.016; Thu, 19 May 2022
+ 22:38:57 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Heiko Carstens <hca@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mapletree-vs-khugepaged
+Thread-Topic: [PATCH] mapletree-vs-khugepaged
+Thread-Index: AQHYWyROtMkVxK19R0i3Z444SV9CtK0GzcYAgBYshMGAACVRAIAF84YAgAAsdgCAAyWOgIAAdxaAgAAP5QA=
+Date:   Thu, 19 May 2022 22:38:56 +0000
+Message-ID: <20220519223848.wp77de6ohc744hek@revolver>
+References: <20220428172040.GA3623323@roeck-us.net> <YmvVkKXJWBoGqWFx@osiris>
+ <yt9dk0apbicu.fsf@linux.ibm.com> <20220513165955.mkg5wvfi4dwpzoer@revolver>
+ <YoOMsmq24FWsWWyr@osiris> <b18d5338-0031-a813-2825-207bea1b84cb@roeck-us.net>
+ <20220519143541.dfzgoubmkboc6kk4@revolver>
+ <28f3958f-dd25-cb1a-0a4c-040e7706ffc7@roeck-us.net>
+In-Reply-To: <28f3958f-dd25-cb1a-0a4c-040e7706ffc7@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6366d10a-b4a0-4300-87ba-08da39e85c49
+x-ms-traffictypediagnostic: DM5PR10MB1820:EE_
+x-microsoft-antispam-prvs: <DM5PR10MB18202C852A990669877EB56FFDD09@DM5PR10MB1820.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Tvjv2P/iTq3/NUL1KY3gdjsaFNM4v3iaehhLYKJ4qya4g5oy6LUDV2MSB7xNZcyF82MIov+LhpP+5JoF/tDXPYx7+wqgsiEbEdZ7brOAfNElnkv3RkS0y0foZT5uJDtSPI8NQPAZr1jPRKmDCfXa5hJ2bvYspCgygvwQ+WYwqWMUH5ybujY21yLsck+6LDMeIlG7hYiqnSHfMYS7mJpQM/6YMpZGDak/DyUeIEoRL4mNQPh7ZFbQ2qeLVEKTMp2aHyaLm2oea+c7zHg4GJjOITzPWRYKmyZUrx0A7MtPzFPN/hvzaj8QZmsP4Az0LNusvGnhp4OTWeYAt0olCM6UekoPaed3mfMlo5ykgCnI0/RIDMSCMMlMaf0TXZCAav+Umm4HDHFBBcGqm7799I4/gfr44DVQ0vr50mO89BU/RuXdHEPfasmqCRTs1fpNXrB+3uREwIJveHT5pwQJDu8GhtYt0wYzYS3RYiKyJ/SsytlRJKwvqtbNf9q53ZHKMBaaq7wz4KBliX+YfFvRvqT7PMpPoE/yMeVgIyWPmcoDMk3vk6sI8t5wWK+omEBKdK2qncFzmuDqb2fl9npRZIvZlKjCmfCXixEzT7x2xI5YOqzJFvTgfutDEL1nvRNsmy6zawXlllY+iPIlNwoYj9ThI4H0xUhFA3o64miJAPUgAsEdN4Gy6jMhRCFkP69JCsZCG/EAAx2GYg6HB6mh2j6mvTjEoQjLMZDqRSRivT6/zapjArRhR0tHwd6FtFQeJ9RdvQXRe6DHKc2ufSbAugrODd5exUCthf5Uj9tya3OjlazisbWubJVTTgELyAWJPE/rdT2vM2980abAyPZC9zob5g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(38070700005)(44832011)(186003)(5660300002)(6506007)(86362001)(91956017)(6486002)(53546011)(8936002)(33716001)(6916009)(508600001)(9686003)(122000001)(54906003)(64756008)(83380400001)(1076003)(66946007)(26005)(966005)(66446008)(76116006)(8676002)(66476007)(4326008)(66556008)(6512007)(71200400001)(2906002)(38100700002)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?STDEShks4PxmltHBbBf77V+VfvqNoHmvF0mZ3/fVqQfkyBy9gM0BFiPs9Bem?=
+ =?us-ascii?Q?CBSl5xEZpgZ1wd62gZv01ktK1y+MxAoQo4JShUB6yERilvxFO9fkqKnyOlpb?=
+ =?us-ascii?Q?m0gcqY2MuDzXsCacPdKCR5SWvvH8RB+CndS9EYOJRZZVZE5hG4LdpjR0XlS/?=
+ =?us-ascii?Q?14p+L+NDS+a27zVLbN+ZkaiMgCErfjEEm9f7BoOrRdb+Z3xmhHdv6D8ayLYz?=
+ =?us-ascii?Q?HpJvDo0FbsotlBr64cPgnFVUehHdlp20Xln/NOlb5lqiuZD7S0W3oAn+N1wc?=
+ =?us-ascii?Q?iyNAwBAXaynHZassCvAG0DuFqhADsYjjMzXUGtvUgXNsZ/0SLMZraUHyU1kD?=
+ =?us-ascii?Q?auGa/qpN5LBrS32tTWxE0bkFrFXNWfB4FE+eqLnYmC8RxALidoS2Q+3yavnD?=
+ =?us-ascii?Q?0TTM8tcQlac8FMpeShwpH5c3GpprmFRo2MGVGqecB5xlMRDFeleYlsTE8fN2?=
+ =?us-ascii?Q?W0TFDfqxFz/7A1CZZeAeQbAw6Hd5L83/aSuN3QUyNjAz+Kw3YnMp8Uwfpz9q?=
+ =?us-ascii?Q?/QotbxyP19S3+MV9dR+5qPBzImWu1dR7WBg/h5qKJWbhLE8nbMGm6EG5ugRQ?=
+ =?us-ascii?Q?cTqo+rZtMugm3B4iFDy0TaAN9X1LZlAY1s7d5V8WLOw7ZJ7zCfnOxD2WR1ru?=
+ =?us-ascii?Q?R3qw4WIhK3LmVOCSUHgpr7+VvqRBtPA1Tnz9tB8Ho1/UExUttt73YzJzKS1+?=
+ =?us-ascii?Q?RfaWYxr5FyPvOqD46oSPRPBDIsT/rBl9pakWscPTbFqp4+vMQZJ01nqq/sxR?=
+ =?us-ascii?Q?/oUkTPfCYuOPTkuLc/subE+nRvdylNcgTACBfkNx6ewXUOIrwTFFGQ1cAOaa?=
+ =?us-ascii?Q?peQnmC01h+IgGglRW/UvWxzzSGmGilUCRiKtTgGRcPF5QP0aef0o0IHVXI0r?=
+ =?us-ascii?Q?chKZIasvL6KFT4fS9imQ9FJp92feT4gZlW7sRCRrYsyzYt/uIdLHz7fWhxHU?=
+ =?us-ascii?Q?hsK4MCSJdbCJ3eFNcSfl0T/8+UQwxb1Kp2n9ThH0MjrLIaXzG27Ua5jZ8UxB?=
+ =?us-ascii?Q?w5GrwfK7O+jsLJdty1ElPBHD50hD+lqgHXoLfos1VCaapSLaAh1XyXIT5xIF?=
+ =?us-ascii?Q?kXaBgxX5PqvWifbZ/3lp4EKnZGDTrWWrtJfE3PnA16ElUF4JJNxE5N1C5FLF?=
+ =?us-ascii?Q?rTUpBkPOGCw+IjoFcZds31Ggj5pKDHfidZlvB+7e6mQHzY0Ld1sDGGZnmHBa?=
+ =?us-ascii?Q?h6wIQOMiIE7zie9ibZMcbOF/jSjgBS9/32dSEE2tsYp5n+0ObVIUqTHZVPRH?=
+ =?us-ascii?Q?S9+aXi6gxB35GzrC6LA0DqTZU6M2pQIv2thR38vN26d08XzCl/+RSNOW26xn?=
+ =?us-ascii?Q?VOj118HjpW41GXaBboJ3RlGoiZz6Qwv567EW4a82sEpxUXfdqNvqqjE6lt8f?=
+ =?us-ascii?Q?zk+bjcQaHXsWSjjXl7c2LXelOFHguwF7OXEZ15V37oNdJ5n1eCHETUjbX1no?=
+ =?us-ascii?Q?ak5mo8p/G+cfT8STR4xwx0iMCmqwJ+cIgmdY23vI/icpfMSMFcSZHRCg6x//?=
+ =?us-ascii?Q?3K0aFIGKCBSZ7Tn+krR/gUI2pjm1B8ZdjDKG5EX5STCfSopIKGICXNnuK9+T?=
+ =?us-ascii?Q?rtFy+HZJY7Tw9UOrBu5FFnbzyLNRMAYXjURNk/OqR+1gyFiRBHaeqxjYAIok?=
+ =?us-ascii?Q?SpbYT2/TE2DAEaLbLS1BJZbiYPedqYPo8Zbyv5zEdJAndU1zj4OrInWeq214?=
+ =?us-ascii?Q?9ADXnh8AB520moEPsULk90yIcGUXgBl8x8CcYkC7UEYwxQnKSWFSBpe+CxP8?=
+ =?us-ascii?Q?LUUaPnighWQTuGb2nfbtcNWH3eFxZxU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C792620C1A7C1049A4096286BAF74918@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <1652978825-5304-3-git-send-email-quic_sibis@quicinc.com>
-References: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com> <1652978825-5304-3-git-send-email-quic_sibis@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 19 May 2022 15:35:11 -0700
-Message-ID: <CAE-0n50iYAUmj6GEdCuOJ1d_SgeeFWtoxqWf7qN=jZ_js4wBcQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] dt-bindings: remoteproc: qcom: Convert SC7280 MSS
- bindings to YAML
-To:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
-Cc:     ohad@wizery.com, agross@kernel.org, mathieu.poirier@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mka@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6366d10a-b4a0-4300-87ba-08da39e85c49
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2022 22:38:56.9708
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ynPwAH8+/BWcWVSgFptQKsHNCMHkBMD5DiAhjPzz4R4cHw8fI6GyM0dhlhLcF/iIuxVPRJX8yCw3yTHnjKyjPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1820
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-19_06:2022-05-19,2022-05-19 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
+ phishscore=0 suspectscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205190121
+X-Proofpoint-ORIG-GUID: 3MZLIY12JkoZ8OOetLCyzDVDdcP1mqHI
+X-Proofpoint-GUID: 3MZLIY12JkoZ8OOetLCyzDVDdcP1mqHI
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Sibi Sankar (2022-05-19 09:47:04)
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
-> new file mode 100644
-> index 000000000000..a936d84eefa6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
-> @@ -0,0 +1,250 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/qcom,sc7280-mss-pil.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SC7280 MSS Peripheral Image Loader
-> +
-> +maintainers:
-> +  - Sibi Sankar <quic_sibis@quicinc.com>
-> +
-> +description:
-> +  This document describes the hardware for a component that loads and boots firmware
-> +  on the Qualcomm Technology Inc. SC7280 Modem Hexagon Core.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sc7280-mss-pil
-> +
-[..]
-> +
-> +  resets:
-> +    items:
-> +      - description: AOSS restart
-> +      - description: PDC reset
-> +
-> +  reset-names:
-> +    items:
-> +      - const: mss_restart
-> +      - const: pdc_reset
-> +
-> +  memory-region:
-> +    maxItems: 2
-> +    description: Phandle reference to the reserved-memory for the MBA region followed
-> +                 by the modem region.
-> +
-> +  firmware-name:
-> +    $ref: /schemas/types.yaml#/definitions/string-array
-> +    maxItems: 2
+* Guenter Roeck <linux@roeck-us.net> [220519 17:42]:
+> On 5/19/22 07:35, Liam Howlett wrote:
+> > * Guenter Roeck <linux@roeck-us.net> [220517 10:32]:
+> >=20
+> > ...
+> > >=20
+> > > Another bisect result, boot failures with nommu targets (arm:mps2-an3=
+85,
+> > > m68k:mcf5208evb). Bisect log is the same for both.
+> > ...
+> > > # first bad commit: [bd773a78705fb58eeadd80e5b31739df4c83c559] nommu:=
+ remove uses of VMA linked list
+> >=20
+> > I cannot reproduce this on my side, even with that specific commit.  Ca=
+n
+> > you point me to the failure log, config file, etc?  Do you still see
+> > this with the fixes I've sent recently?
+> >=20
+>=20
+> This was in linux-next; most recently with next-20220517.
+> I don't know if that was up-to-date with your patches.
+> The problem seems to be memory allocation failures.
+> A sample log is at
+> https://kerneltests.org/builders/qemu-m68k-next/builds/1065/steps/qemubui=
+ldcommand/logs/stdio
+> The log history at
+> https://kerneltests.org/builders/qemu-m68k-next?numbuilds=3D30
+> will give you a variety of logs.
 
-Instead of maxItems can this be
+I did hunt that down.  It looks like it's allocating 512kb and failing.
+I tried the commit you see the failures on and my qemu boots fine.
 
-       items:
-         - description: Name of MBA firmware
-	 - description: Name of modem firmware
+>=20
+> The configuration is derived from m5208evb_defconfig, with initrd
+> and command line embedded in the image. You can see the detailed
+> configuration updates at
+> https://github.com/groeck/linux-build-test/blob/master/rootfs/m68k/run-qe=
+mu-m68k.sh
+>=20
+> Qemu command line is
+>=20
+> qemu-system-m68k -M mcf5208evb -kernel vmlinux \
+>     -cpu m5208 -no-reboot -nographic -monitor none
+>     -append "rdinit=3D/sbin/init console=3DttyS0,115200"
+>=20
+> with initrd from
+> https://github.com/groeck/linux-build-test/blob/master/rootfs/m68k/rootfs=
+-5208.cpio.gz
 
-so that we know the order? Same for 'memory-region' above.
+I'm using buildroot-2022.02.1, so maybe that's the difference?
+Buildroot has the following qemu line:
 
-> +    description:
-> +      The name of the MBA and modem firmware to be loaded for this remote processor.
-> +
-> +  qcom,halt-regs:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+qemu-system-m68k -M mcf5208evb -cpu m5208 -kernel vmlinux -nographic
 
-Should this have maxItems: 1? Or that's implicit from description?
+>=20
+> I use qemu v6.2, but any recent qemu version should work.
+>=20
+> Hope this helps,
+> Guenter
 
-> +    description:
-> +      Phandle reference to a syscon representing TCSR followed by the
-> +      four offsets within syscon for q6, modem, nc and vq6 halt registers.
-> +
-> +  qcom,ext-regs:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-
-Should this have min/maxItems: 2?
-
-> +    description:
-> +      Two phandle references to syscons representing TCSR_REG and TCSR register
-> +      space followed by the two offsets within the syscon to force_clk_en/rscc_disable
-> +      and axim1_clk_off/crypto_clk_off registers respectively.
-> +
-> +  qcom,qaccept-regs:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description:
-> +      Phandle reference to a syscon representing TCSR followed by the
-> +      three offsets within syscon for mdm, cx and axi qaccept registers.
-> +
-> +  qcom,qmp:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Reference to the AOSS side-channel message RAM.
-> +
-> +  qcom,smem-states:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: States used by the AP to signal the Hexagon core
-> +    items:
-> +      - description: Stop the modem
-
-This one did items for a phandle array so I think we should follow the
-same above.
-
-> +
-> +  qcom,smem-state-names:
-> +    description: The names of the state bits used for SMP2P output
-> +    const: stop
-> +
-> +  glink-edge:
-> +    $ref: qcom,glink-edge.yaml#
-> +    description:
-> +      Qualcomm G-Link subnode which represents communication edge, channels
-> +      and devices related to the DSP.
-[..]
-> +        power-domain-names = "cx", "mss";
-> +
-> +        memory-region = <&mba_mem>, <&mpss_mem>;
-> +
-> +        qcom,qmp = <&aoss_qmp>;
-> +
-> +        qcom,smem-states = <&modem_smp2p_out 0>;
-> +        qcom,smem-state-names = "stop";
-> +
-> +        resets = <&aoss_reset AOSS_CC_MSS_RESTART>,
-> +                 <&pdc_reset PDC_MODEM_SYNC_RESET>;
-> +        reset-names = "mss_restart", "pdc_reset";
-> +
-> +        qcom,halt-regs = <&tcsr_mutex 0x23000 0x25000 0x28000 0x33000>;
-> +        qcom,ext-regs = <&tcsr 0x10000 0x10004 &tcsr_mutex 0x26004 0x26008>;
-
-Because it's two items I'd expect:
-	
-	<&tcsr 0x10000 0x10004>, <&tcsr_mutex 0x26004 0x26008>;
-
-> +        qcom,qaccept-regs = <&tcsr_mutex 0x23030 0x23040 0x23020>;
-> +
-> +        glink-edge {
-> +            interrupts-extended = <&ipcc IPCC_CLIENT_MPSS
-> +                                   IPCC_MPROC_SIGNAL_GLINK_QMP
-> +                                   IRQ_TYPE_EDGE_RISING>;
+Thanks for the information.  I will keep digging into it.
+Liam

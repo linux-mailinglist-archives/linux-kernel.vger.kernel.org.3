@@ -2,64 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C7652D939
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A070952D95E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241709AbiESPuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
+        id S236795AbiESPwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241369AbiESPuQ (ORCPT
+        with ESMTP id S241615AbiESPuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:50:16 -0400
+        Thu, 19 May 2022 11:50:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD306005F;
-        Thu, 19 May 2022 08:49:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E19B175AA
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:50:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7942A61C15;
-        Thu, 19 May 2022 15:49:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8D1DC34100;
-        Thu, 19 May 2022 15:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652975356;
-        bh=wRDcSZWRg8F5GYZDzBv0ctTZeIUjFAPm7X9uhNSHFwo=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D116B61BFB
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:50:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA248C34100;
+        Thu, 19 May 2022 15:50:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652975449;
+        bh=k0ngAhg/Z3ZQxhg7rV0/oPwjM35gchHoHZEW1gRBeBA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E8aho+U1muOFpeLWM0FXTi1BWNJEHPMiiyTsSAWPRXoUVn1W9kxdpb8bXWeIqCP0I
-         RgySRFIxpxZGCW+dFeItge4EvYalvRZEg0Cgh0g3od/B0mM9C5I5gHZxlp3zS17szb
-         c5bkgEdd4USnWPTmdrMaQUniW6zDIP6hlmCflaZ35MN1XW370dVNykwsOXVvWL22FT
-         LPl+JL6xj6Fyb+tKDiJN1n9dKwO/T5SCnvCYdekG5eGwwI2FfmR4WyoLQnjiwCQX7B
-         d5cy4ncvffbet63U7dI+bWul3B8lva2Z7pt5x6u6iRvg0XRh4RMHtCp5trBWkacZsd
-         VkXTDxeVKlNHw==
-Date:   Thu, 19 May 2022 16:49:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        calvin.johnson@oss.nxp.com, davem@davemloft.net,
-        edumazet@google.com, hkallweit1@gmail.com,
-        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
-        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
-        wens@csie.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] dt-bindings: net: Add documentation for optional
- regulators
-Message-ID: <YoZm9eabWy/FNKu1@sirena.org.uk>
-References: <20220518200939.689308-1-clabbe@baylibre.com>
- <20220518200939.689308-5-clabbe@baylibre.com>
- <95f3f0a4-17e6-ec5f-6f2f-23a5a4993a44@linaro.org>
- <YoYqmAB3P7fNOSVG@sirena.org.uk>
- <c74b0524-60c6-c3af-e35f-13521ba2b02e@linaro.org>
- <YoYw2lKbgCiDXP0A@lunn.ch>
+        b=cy3munNdMyBLZ1tkla/JwMThbfl4pDGriqW7Dzzq89o31hihdxJgRH08avEQ8BZST
+         LWrIWddTKSpAAWB/xiufwEXbJ7yeyc0bc8L+w8xUJCn9DvsDB8rqouODgXckPrVWDP
+         w22PmmzG3CAKYnc5Y7+KtAG7Rfl/JHcPXYQFsbLA=
+Date:   Thu, 19 May 2022 17:50:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Li Li <dualli@chromium.org>
+Cc:     dualli@google.com, tkjos@google.com, christian@brauner.io,
+        arve@android.com, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, maco@google.com, hridya@google.com,
+        surenb@google.com, joel@joelfernandes.org, kernel-team@android.com
+Subject: Re: [PATCH v1] Binder: add TF_UPDATE_TXN
+Message-ID: <YoZnVrU8Dih+urv6@kroah.com>
+References: <20220519000623.1715899-1-dualli@chromium.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jOI5UhwGK68KoNhN"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoYw2lKbgCiDXP0A@lunn.ch>
-X-Cookie: Some restrictions may apply.
+In-Reply-To: <20220519000623.1715899-1-dualli@chromium.org>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,52 +53,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 18, 2022 at 05:06:23PM -0700, Li Li wrote:
+> From: Li Li <dualli@google.com>
 
---jOI5UhwGK68KoNhN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Note, your subject does not say what TF_UPDATE_TXN is, so it's a bit
+hard to determine what is happening here.  Can you clean that up a bit
+and sumarize what this new addition does?
 
-On Thu, May 19, 2022 at 01:58:18PM +0200, Andrew Lunn wrote:
-> On Thu, May 19, 2022 at 01:33:21PM +0200, Krzysztof Kozlowski wrote:
-> > On 19/05/2022 13:31, Mark Brown wrote:
-> > > On Thu, May 19, 2022 at 11:55:28AM +0200, Krzysztof Kozlowski wrote:
-> > >> On 18/05/2022 22:09, Corentin Labbe wrote:
+> 
+> When the target process is busy, incoming oneway transactions are
+> queued in the async_todo list. If the clients continue sending extra
+> oneway transactions while the target process is frozen, this queue can
+> become too large to accommodate new transactions. That's why binder
+> driver introduced ONEWAY_SPAM_DETECTION to detect this situation. It's
+> helpful to debug the async binder buffer exhausting issue, but the
+> issue itself isn't solved directly.
+> 
+> In real cases applications are designed to send oneway transactions
+> repeatedly, delivering updated inforamtion to the target process.
+> Typical examples are Wi-Fi signal strength and some real time sensor
+> data. Even if the apps might only care about the lastet information,
+> all outdated oneway transactions are still accumulated there until the
+> frozen process is thawed later. For this kind of situations, there's
+> no existing method to skip those outdated transactions and deliver the
+> latest one only.
+> 
+> This patch introduces a new transaction flag TF_UPDATE_TXN. To use it,
+> use apps can set this new flag along with TF_ONE_WAY. When such an
+> oneway transaction is to be queued into the async_todo list of a frozen
+> process, binder driver will check if any previous pending transactions
+> can be superseded by comparing their code, flags and target node. If
+> such an outdated pending transaction is found, the latest transaction
+> will supersede that outdated one. This effectively prevents the async
+> binder buffer running out and saves unnecessary binder read workloads.
+> 
+> Signed-off-by: Li Li <dualli@google.com>
+> ---
+>  drivers/android/binder.c            | 90 ++++++++++++++++++++++++++++-
+>  drivers/android/binder_trace.h      |  4 ++
+>  include/uapi/linux/android/binder.h |  1 +
 
-> > >>> +  regulators:
-> > >>> +    description:
-> > >>> +       List of phandle to regulators needed for the PHY
+How was this tested? 
 
-> > >> I don't understand that... is your PHY defining the regulators or using
-> > >> supplies? If it needs a regulator (as a supply), you need to document
-> > >> supplies, using existing bindings.
+>  3 files changed, 92 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index f3b639e89dd8..153486a32d69 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -2594,6 +2594,60 @@ static int binder_fixup_parent(struct list_head *pf_head,
+>  	return binder_add_fixup(pf_head, buffer_offset, bp->buffer, 0);
+>  }
+>  
+> +/**
+> + * binder_can_update_transaction() - Can a txn be superseded by an updated one?
+> + * @t1: the pending async txn in the frozen process
+> + * @t2: the new async txn to supersede the outdated pending one
+> + *
+> + * Return:  true if t2 can supersede t1
+> + *          false if t2 can not supersede t1
+> + */
+> +static bool binder_can_update_transaction(struct binder_transaction *t1,
+> +					  struct binder_transaction *t2)
+> +{
+> +	if ((t1->flags & t2->flags & (TF_ONE_WAY | TF_UPDATE_TXN))
+> +			!= (TF_ONE_WAY | TF_UPDATE_TXN)
+> +			|| t1->to_proc == NULL || t2->to_proc == NULL)
+> +		return false;
+> +	if (t1->to_proc->tsk == t2->to_proc->tsk && t1->code == t2->code
+> +			&& t1->flags == t2->flags
+> +			&& t1->buffer->pid == t2->buffer->pid
+> +			&& t1->buffer->target_node->ptr
+> +			== t2->buffer->target_node->ptr
+> +			&& t1->buffer->target_node->cookie
+> +			== t2->buffer->target_node->cookie)
 
-> > > They're trying to have a generic driver which works with any random PHY
-> > > so the binding has no idea what supplies it might need.
+Did checkpatch pass this?  Please always use --strict and fix up all the
+issues that it reports as this is not a normal kernel coding style,
+sorry.
 
-> > OK, that makes sense, but then question is why not using existing
-> > naming, so "supplies" and "supply-names"?
+thanks,
 
-> I'm not saying it is not possible, but in general, the names are not
-> interesting. All that is needed is that they are all on, or
-> potentially all off to save power on shutdown. We don't care how many
-> there are, or what order they are enabled.
-
-I think Krzysztof is referring to the name of the property rather than
-the contents of the -names property there.
-
---jOI5UhwGK68KoNhN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKGZvQACgkQJNaLcl1U
-h9BKbAf+IovUQ3DSAoKJdf32JsgeB+o/vNXD8MscsyZm5JvIVj5BOLWLb1emeGJP
-Yp3omFPSMOvlsZtrBEx7Fk4MO/Rt0zWemfEcHAfnPI2yPp0LVZLBEqStTWeQQHab
-DdrMZrX6CDbQojP0q4eYGt24OF/dMIYThDp7XU4GDH4Sy7KXD5SpYGuR5Pe9F2Uy
-KZ/25LSM7z8oKUaMHCx21nUm1bHXbuBiP46PKEX4aiSJ1f+S5WhdlC4PI0ZnUMis
-iC00xj4guPTArs7K9DX8y4AwrjlMOogR5Nqwkl5c8xiZQs2lsMI/HfnctaUdiIe9
-qBKP7Eyse3kVuq04h+CQHDUYTCrBIQ==
-=ZhuD
------END PGP SIGNATURE-----
-
---jOI5UhwGK68KoNhN--
+greg k-h

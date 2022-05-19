@@ -2,225 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF59252CE96
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC2052CECB
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235569AbiESIos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 04:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S235698AbiESI6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 04:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbiESIoe (ORCPT
+        with ESMTP id S229450AbiESI6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 04:44:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB647E1F2;
-        Thu, 19 May 2022 01:44:32 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3jzv3jq6zcbPQ;
-        Thu, 19 May 2022 16:43:07 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 16:44:30 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
- 2022 16:44:29 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <tj@kernel.org>, <axboe@kernel.dk>, <ming.lei@redhat.com>,
-        <geert@linux-m68k.org>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH -next v3 2/2] blk-throttle: fix io hung due to configuration updates
-Date:   Thu, 19 May 2022 16:58:11 +0800
-Message-ID: <20220519085811.879097-3-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220519085811.879097-1-yukuai3@huawei.com>
-References: <20220519085811.879097-1-yukuai3@huawei.com>
+        Thu, 19 May 2022 04:58:17 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79ED79D07B;
+        Thu, 19 May 2022 01:58:16 -0700 (PDT)
+Received: from [192.168.192.153] (unknown [50.126.114.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 133E03F772;
+        Thu, 19 May 2022 08:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1652950695;
+        bh=6Oiy096Izr3Tq4XztfXw7/ZW6D9X51nuLlYFuMD7TmQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=kV/CHRNZ8/8/6TaUJ7JvtwUlZA7u8gYrz5wx3lfB9IsTH7dtAXsVE570QpXwUiX02
+         +j+DQ/CIBUVxEa0lq8el+X/LEjVo9TW3AcU47SBVQihm8HQV9dnVSFyhHVp55mnFgk
+         8ZJtULDrNmGkg91iJret+rjPQZemhhiginYk7CeRCBbJT4Xfyg2sy2jL/g8xaRBjvA
+         nmbJzoasZx8/ythRDbOlRBJSSi4DruV16tviuGClObbaSs2ADk7+c/hntzKr9gA1vn
+         tZGUpk7SMJj48xm9gK/rh5tcw8IIRUx9W4iHiXtWRsNY5l1ItgmxNez69BQkA1t0go
+         kGjY4VKSO5OAg==
+Message-ID: <b217377a-8675-f17f-05d6-695e424b3d4b@canonical.com>
+Date:   Thu, 19 May 2022 01:58:11 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] apparmor: fix reference count leak in aa_pivotroot()
+Content-Language: en-US
+To:     Xin Xiong <xiongx18@fudan.edu.cn>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Seth Arnold <seth.arnold@canonical.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     yuanxzhang@fudan.edu.cn, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>
+References: <20220428033907.1658-1-xiongx18@fudan.edu.cn>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20220428033907.1658-1-xiongx18@fudan.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If new configuration is submitted while a bio is throttled, then new
-waiting time is recaculated regardless that the bio might aready wait
-for some time:
+On 4/27/22 20:39, Xin Xiong wrote:
+> The aa_pivotroot() function has a reference counting bug in a specific
+> path. When aa_replace_current_label() returns on success, the function
+> forgets to decrement the reference count of “target”, which is
+> increased earlier by build_pivotroot(), causing a reference leak.
+> 
+> Fix it by decreasing the refcount of “target” in that path.
+> 
+> Fixes: 2ea3ffb7782a ("apparmor: add mount mediation")
+> Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+> Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
+> Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+> Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
 
-tg_conf_updated
- throtl_start_new_slice
-  tg_update_disptime
-  throtl_schedule_next_dispatch
+thanks I have pulled it into my tree
 
-Then io hung can be triggered by always submmiting new configuration
-before the throttled bio is dispatched.
+Acked-by: John Johansen <john.johansen@canonical.com>
 
-Fix the problem by respecting the time that throttled bio aready waited.
-In order to do that, instead of start new slice in tg_conf_updated(),
-just update 'bytes_disp' and 'io_disp' based on the new configuration.
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/blk-throttle.c | 80 +++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 67 insertions(+), 13 deletions(-)
-
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 0c37be08ff28..aca63148bb83 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -1271,7 +1271,58 @@ static int tg_print_conf_uint(struct seq_file *sf, void *v)
- 	return 0;
- }
- 
--static void tg_conf_updated(struct throtl_grp *tg, bool global)
-+static u64 throtl_update_bytes_disp(u64 dispatched, u64 new_limit,
-+				    u64 old_limit)
-+{
-+	if (new_limit == old_limit)
-+		return dispatched;
-+
-+	if (!dispatched)
-+		return 0;
-+
-+	/*
-+	 * In the case that multiply will overflow, just return 0. It will only
-+	 * let bios to be dispatched earlier.
-+	 */
-+	if (div64_u64(U64_MAX, dispatched) < new_limit)
-+		return 0;
-+
-+	dispatched *= new_limit;
-+	return div64_u64(dispatched, old_limit);
-+}
-+
-+static u32 throtl_update_io_disp(u32 dispatched, u32 new_limit, u32 old_limit)
-+{
-+	if (new_limit == old_limit)
-+		return dispatched;
-+
-+	if (!dispatched)
-+		return 0;
-+
-+	/*
-+	 * In the case that multiply will overflow, just return 0. It will only
-+	 * let bios to be dispatched earlier.
-+	 */
-+	if (UINT_MAX / dispatched < new_limit)
-+		return 0;
-+
-+	dispatched *= new_limit;
-+	return dispatched / old_limit;
-+}
-+
-+static void throtl_update_slice(struct throtl_grp *tg, u64 *old_limits)
-+{
-+	tg->bytes_disp[READ] = throtl_update_bytes_disp(tg->bytes_disp[READ],
-+			tg_bps_limit(tg, READ), old_limits[0]);
-+	tg->bytes_disp[WRITE] = throtl_update_bytes_disp(tg->bytes_disp[WRITE],
-+			tg_bps_limit(tg, WRITE), old_limits[1]);
-+	tg->io_disp[READ] = throtl_update_io_disp(tg->io_disp[READ],
-+			tg_iops_limit(tg, READ), (u32)old_limits[2]);
-+	tg->io_disp[WRITE] = throtl_update_io_disp(tg->io_disp[WRITE],
-+			tg_iops_limit(tg, WRITE), (u32)old_limits[3]);
-+}
-+
-+static void tg_conf_updated(struct throtl_grp *tg, u64 *old_limits, bool global)
- {
- 	struct throtl_service_queue *sq = &tg->service_queue;
- 	struct cgroup_subsys_state *pos_css;
-@@ -1310,16 +1361,7 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
- 				parent_tg->latency_target);
- 	}
- 
--	/*
--	 * We're already holding queue_lock and know @tg is valid.  Let's
--	 * apply the new config directly.
--	 *
--	 * Restart the slices for both READ and WRITES. It might happen
--	 * that a group's limit are dropped suddenly and we don't want to
--	 * account recently dispatched IO with new low rate.
--	 */
--	throtl_start_new_slice(tg, READ);
--	throtl_start_new_slice(tg, WRITE);
-+	throtl_update_slice(tg, old_limits);
- 
- 	if (tg->flags & THROTL_TG_PENDING) {
- 		tg_update_disptime(tg);
-@@ -1327,6 +1369,14 @@ static void tg_conf_updated(struct throtl_grp *tg, bool global)
- 	}
- }
- 
-+static void tg_get_limits(struct throtl_grp *tg, u64 *limits)
-+{
-+	limits[0] = tg_bps_limit(tg, READ);
-+	limits[1] = tg_bps_limit(tg, WRITE);
-+	limits[2] = tg_iops_limit(tg, READ);
-+	limits[3] = tg_iops_limit(tg, WRITE);
-+}
-+
- static ssize_t tg_set_conf(struct kernfs_open_file *of,
- 			   char *buf, size_t nbytes, loff_t off, bool is_u64)
- {
-@@ -1335,6 +1385,7 @@ static ssize_t tg_set_conf(struct kernfs_open_file *of,
- 	struct throtl_grp *tg;
- 	int ret;
- 	u64 v;
-+	u64 old_limits[4];
- 
- 	ret = blkg_conf_prep(blkcg, &blkcg_policy_throtl, buf, &ctx);
- 	if (ret)
-@@ -1347,13 +1398,14 @@ static ssize_t tg_set_conf(struct kernfs_open_file *of,
- 		v = U64_MAX;
- 
- 	tg = blkg_to_tg(ctx.blkg);
-+	tg_get_limits(tg, old_limits);
- 
- 	if (is_u64)
- 		*(u64 *)((void *)tg + of_cft(of)->private) = v;
- 	else
- 		*(unsigned int *)((void *)tg + of_cft(of)->private) = v;
- 
--	tg_conf_updated(tg, false);
-+	tg_conf_updated(tg, old_limits, false);
- 	ret = 0;
- out_finish:
- 	blkg_conf_finish(&ctx);
-@@ -1523,6 +1575,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
- 	struct blkg_conf_ctx ctx;
- 	struct throtl_grp *tg;
- 	u64 v[4];
-+	u64 old_limits[4];
- 	unsigned long idle_time;
- 	unsigned long latency_time;
- 	int ret;
-@@ -1533,6 +1586,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
- 		return ret;
- 
- 	tg = blkg_to_tg(ctx.blkg);
-+	tg_get_limits(tg, old_limits);
- 
- 	v[0] = tg->bps_conf[READ][index];
- 	v[1] = tg->bps_conf[WRITE][index];
-@@ -1624,7 +1678,7 @@ static ssize_t tg_set_limit(struct kernfs_open_file *of,
- 			tg->td->limit_index = LIMIT_LOW;
- 	} else
- 		tg->td->limit_index = LIMIT_MAX;
--	tg_conf_updated(tg, index == LIMIT_LOW &&
-+	tg_conf_updated(tg, old_limits, index == LIMIT_LOW &&
- 		tg->td->limit_valid[LIMIT_LOW]);
- 	ret = 0;
- out_finish:
--- 
-2.31.1
+> ---
+>  security/apparmor/mount.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/security/apparmor/mount.c b/security/apparmor/mount.c
+> index aa6fcfde3051..d0b19ab9137d 100644
+> --- a/security/apparmor/mount.c
+> +++ b/security/apparmor/mount.c
+> @@ -718,6 +718,7 @@ int aa_pivotroot(struct aa_label *label, const struct path *old_path,
+>  			aa_put_label(target);
+>  			goto out;
+>  		}
+> +		aa_put_label(target);
+>  	} else
+>  		/* already audited error */
+>  		error = PTR_ERR(target);
 

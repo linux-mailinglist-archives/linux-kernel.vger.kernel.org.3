@@ -2,296 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9EB152DB15
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437D252DB17
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242561AbiESRWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S237311AbiESRYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242533AbiESRVw (ORCPT
+        with ESMTP id S232770AbiESRX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:21:52 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C051A2041;
-        Thu, 19 May 2022 10:21:48 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2fee9fe48c2so63989807b3.3;
-        Thu, 19 May 2022 10:21:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mlmC7mdiHk3y3UzhrGmbu/7kPD1uiIC2NNz8JwfOZxA=;
-        b=tRWSyBZqrb6psYQO7apxPMGlbsU52Mm0FqxolLLC97MntOzVhzBIeM5AOXY5EViv6T
-         ItLH1uNjmMccRptglTtZxdXMpNpnVl/P/12Iy2+Uz/Djc3/dyos6wkoqgcrlCast46Nu
-         TRi89IzPb4J+2dXdfSJ3JeGGq/WsxAvRTOfZrumeSMvKgDILpTq8DnMCB7wI5adgWELs
-         gQHEzm6xSfzKTGABnBfe9FAkSY29JOTeMwvlIqdF3ADDLCmEM9PVVZvORaYDmkaxtZAR
-         oRMbzH1lRovWIpYiIpgklfIOxA7NeXABS3eayfOFxXepGGIZL2gi0Vi1aLKHhykypLO5
-         owjg==
-X-Gm-Message-State: AOAM531+nZnYp9whESE8t5dAqCcxVeS8f7lRwdVLw+423Vy8j3BrukhE
-        5JL1c36KovazwvPpIeT5A30R5iob7eLRHozYcgg=
-X-Google-Smtp-Source: ABdhPJycMs2gHij2BN7+bvxeJHyIjiHq/vL68Cq4eE2Ub0O7qWymzdujmD/5aE1eS61zXuDNtwNkLmf/a+GXE8ff0AA=
-X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
- m10-20020a81260a000000b002f4ca82a42fmr5905845ywm.149.1652980907686; Thu, 19
- May 2022 10:21:47 -0700 (PDT)
+        Thu, 19 May 2022 13:23:57 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB05DA2041
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652981035; x=1684517035;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rmHlTnocugMXl43hhk1m0uJc87YdMHzmKW4SZgB6Jpc=;
+  b=UlTq3dyicXKgunakgMQuP6iCD1xxTScADaoWXPrP7V7WYK/t78vPuMzg
+   j+6/8vDxbgRURrN0VANfnV/XJzTXfvbCg4338O/TnJ0s9HO7gvUnIgOmi
+   26/EmY4cslUS1uwBN2Fg/pr31KMvHJdgiCRz2XHq/3cfwnseaEs/VoR2j
+   RWMFUDL7I4M8dF5fm2LDAHQK3JeOues92VYjSlg+xpaPmu6U1T5IjU7ub
+   Gm4Thjfn7r7TEEOA3MyZHeLE0aIPhiuPNLZaKL6950Gfh9Mt3/PGwqrPw
+   HwpolBXjtwIjfcbow7kLjkGXJTenY5mMzYIte1Mg/KuAZIPIKTdKpZQiu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="269877593"
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="269877593"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 10:23:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="715093600"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 19 May 2022 10:23:53 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrjsO-0003mn-VX;
+        Thu, 19 May 2022 17:23:52 +0000
+Date:   Fri, 20 May 2022 01:23:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [ammarfaizi2-block:stable/linux-stable-rc/queue/4.19 12/15]
+ drivers/mmc/core/mmc_ops.c:960:13: warning: variable 'timeout' set but not
+ used
+Message-ID: <202205200128.tZ7qf9BZ-lkp@intel.com>
 MIME-Version: 1.0
-References: <6535f2dd-aa2e-21b4-8ac4-7762521f16fc@linaro.org>
-In-Reply-To: <6535f2dd-aa2e-21b4-8ac4-7762521f16fc@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 May 2022 19:21:36 +0200
-Message-ID: <CAJZ5v0h=fPp-JXkji5y07XBdYWWSzAb=sTabaaM3+spCJ1W1Cg@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v5.19-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Keerthy <j-keerthy@ti.com>, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Massimiliano Minella <massimiliano.minella@gmail.com>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 2:53 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> please consider pulling:
->
-> The following changes since commit 7b145802ba545ecf9446ce6d67d6011b73dac0e0:
->
->    thermal: int340x: Mode setting with new OS handshake (2022-05-11
-> 20:08:15 +0200)
->
-> are available in the Git repository at:
->
->    git://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v5.19-rc1
->
-> for you to fetch changes up to ffcb2fc86eb7ebc9f5524525fb57e1cccfbd1fc0:
->
->    thermal: k3_j72xx_bandgap: Add the bandgap driver support (2022-05-19
-> 12:11:53 +0200)
->
-> ----------------------------------------------------------------
-> - Add the new k3 j72xx bangdap driver and the corresponding bindings
-> (Keerthy)
->
-> - Fix the missing of_node_put() in the SC iMX driver at probe timer
-> (Miaoqian Lin)
->
-> - Fix memory leak in __thermal_cooling_device_register() when
-> device_register()
->    fails by calling thermal_cooling_device_destroy_sysfs() (Yang Yingliang)
->
-> - Add sc8180x and sc8280xp compatible string in the DT bindings and lMH
-> support
->    for QCom tsens driver (Bjorn Andersson)
->
-> - Fix OTP Calibration Register values conforming to the documentation on
-> RZ/G2L
->    and bindings documentation for RZ/G2UL (Biju Das)
->
-> - Fix type in kerneldoc description for __thermal_bind_params (Corentin
-> Labbe)
->
-> - Remove unneeded semi colon in libthermal and tools thermal as reported by
->    cocci (Jiapeng Chong)
->
-> - Fix potential NULL dereference in sr_thermal_probe() on Broadcom platform
->    (Zheng Yongjun)
->
-> - Add thermal library and thermal tools to encapsulate the netlink into
-> event
->    based callbacks (Daniel Lezcano)
->
-> - Add change mode ops for the thermal-of sensor (Manaf Meethalavalappu
->    Pallikunhi)
->
-> - Fix non negative value support by preventing the value to be clamp to zero
->    (Stefan Wahren)
->
-> - Add compatible string and DT bindings for MSM8960 tsens driver (Dmitry
->    Baryshkov)
->
-> - Add hwmon support for K3 driver (Massimiliano Minella)
->
-> - Refactor and add multiple generations support for QCom ADC driver (Jishnu
->    Prakash)
->
-> - Use platform_get_irq_optional() to get the interrupt on RCar driver and
->    document Document RZ/V2L bindings (Lad Prabhakar)
->
-> ----------------------------------------------------------------
-> Biju Das (2):
->        dt-bindings: thermal: rzg2l-thermal: Document RZ/G2UL bindings
->        thermal/drivers/rz2gl: Fix OTP Calibration Register values
->
-> Bjorn Andersson (3):
->        thermal/drivers/qcom/lmh: Add sc8180x compatible
->        dt-bindings: thermal: lmh: Add Qualcomm sc8180x compatible
->        dt-bindings: thermal: tsens: Add sc8280xp compatible
->
-> Corentin Labbe (1):
->        thermal: thermal_of: fix typo on __thermal_bind_params
->
-> Daniel Lezcano (4):
->        tools/lib/thermal: Add a thermal library
->        tools/thermal: Add util library
->        tools/thermal: Add a temperature capture tool
->        tools/thermal: Add thermal daemon skeleton
->
-> Dmitry Baryshkov (2):
->        dt-bindings: thermal: qcom-tsens.yaml: add msm8960 compat string
->        thermal/drivers/tsens: Add compat string for the qcom,msm8960
->
-> Jiapeng Chong (2):
->        tools/lib/thermal: remove unneeded semicolon
->        tools/thermal: remove unneeded semicolon
->
-> Jishnu Prakash (4):
->        dt-bindings: thermal: qcom: add PMIC5 Gen2 ADC_TM bindings
->        iio: adc: qcom-vadc-common: add reverse scaling for PMIC5 Gen2 ADC_TM
->        thermal/drivers/qcom: Add support for multiple generations of devices
->        thermal/drivers/qcom: Add support for PMIC5 Gen2 ADCTM
->
-> Keerthy (2):
->        dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
->        thermal: k3_j72xx_bandgap: Add the bandgap driver support
->
-> Lad Prabhakar (2):
->        dt-bindings: thermal: rzg2l-thermal: Document RZ/V2L bindings
->        thermal/drivers/rcar_thermal: Use platform_get_irq_optional() to
-> get the interrupt
->
-> Manaf Meethalavalappu Pallikunhi (1):
->        thermal/drivers/thermal_of: Add change_mode ops support for
-> thermal_of sensor
->
-> Massimiliano Minella (1):
->        thermal/drivers/k3: Add hwmon support
->
-> Miaoqian Lin (1):
->        thermal/drivers/imx_sc_thermal: Fix refcount leak in
-> imx_sc_thermal_probe
->
-> Stefan Wahren (1):
->        thermal/drivers/bcm2711: Don't clamp temperature at zero
->
-> Yang Yingliang (1):
->        thermal/core: Fix memory leak in __thermal_cooling_device_register()
->
-> Zheng Yongjun (1):
->        thermal/drivers/broadcom: Fix potential NULL dereference in
-> sr_thermal_probe
->
->   .../devicetree/bindings/thermal/qcom-lmh.yaml      |   1 +
->   .../bindings/thermal/qcom-spmi-adc-tm5.yaml        | 110 +++-
->   .../devicetree/bindings/thermal/qcom-tsens.yaml    |   5 +-
->   .../devicetree/bindings/thermal/rzg2l-thermal.yaml |   2 +
->   .../bindings/thermal/ti,j72xx-thermal.yaml         |  63 +++
->   MAINTAINERS                                        |   1 +
->   drivers/iio/adc/qcom-vadc-common.c                 |  11 +
->   drivers/thermal/Makefile                           |   2 +-
->   drivers/thermal/broadcom/bcm2711_thermal.c         |   5 +-
->   drivers/thermal/broadcom/sr-thermal.c              |   3 +
->   drivers/thermal/imx_sc_thermal.c                   |   6 +-
->   drivers/thermal/k3_bandgap.c                       |   5 +
->   drivers/thermal/k3_j72xx_bandgap.c                 | 566
-> ++++++++++++++++++++
->   drivers/thermal/qcom/lmh.c                         |   1 +
->   drivers/thermal/qcom/qcom-spmi-adc-tm5.c           | 486 +++++++++++++++--
->   drivers/thermal/qcom/tsens.c                       |   3 +
->   drivers/thermal/rcar_thermal.c                     |  17 +-
->   drivers/thermal/rzg2l_thermal.c                    |  10 +-
->   drivers/thermal/thermal_core.c                     |   1 +
->   drivers/thermal/thermal_of.c                       |  14 +-
->   include/linux/iio/adc/qcom-vadc-common.h           |   2 +
->   include/linux/thermal.h                            |   3 +
->   tools/Makefile                                     |  36 +-
->   tools/lib/thermal/.gitignore                       |   2 +
->   tools/lib/thermal/Build                            |   5 +
->   tools/lib/thermal/Makefile                         | 165 ++++++
->   tools/lib/thermal/commands.c                       | 349 +++++++++++++
->   tools/lib/thermal/events.c                         | 164 ++++++
->   tools/lib/thermal/include/thermal.h                | 142 +++++
->   tools/lib/thermal/libthermal.map                   |  25 +
->   tools/lib/thermal/libthermal.pc.template           |  12 +
->   tools/lib/thermal/sampling.c                       |  75 +++
->   tools/lib/thermal/thermal.c                        | 135 +++++
->   tools/lib/thermal/thermal_nl.c                     | 215 ++++++++
->   tools/lib/thermal/thermal_nl.h                     |  46 ++
->   tools/thermal/lib/Build                            |   3 +
->   tools/thermal/lib/Makefile                         | 158 ++++++
->   tools/thermal/lib/libthermal_tools.pc.template     |  12 +
->   tools/thermal/lib/log.c                            |  77 +++
->   tools/thermal/lib/log.h                            |  31 ++
->   tools/thermal/lib/mainloop.c                       | 120 +++++
->   tools/thermal/lib/mainloop.h                       |  15 +
->   tools/thermal/lib/thermal-tools.h                  |  10 +
->   tools/thermal/lib/uptimeofday.c                    |  40 ++
->   tools/thermal/lib/uptimeofday.h                    |  12 +
->   tools/thermal/thermal-engine/Build                 |   1 +
->   tools/thermal/thermal-engine/Makefile              |  28 +
->   tools/thermal/thermal-engine/thermal-engine.c      | 341 ++++++++++++
->   tools/thermal/thermometer/Build                    |   1 +
->   tools/thermal/thermometer/Makefile                 |  26 +
->   tools/thermal/thermometer/thermometer.8            |  92 ++++
->   tools/thermal/thermometer/thermometer.c            | 572
-> +++++++++++++++++++++
->   tools/thermal/thermometer/thermometer.conf         |   5 +
->   53 files changed, 4173 insertions(+), 59 deletions(-)
->   create mode 100644
-> Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
->   create mode 100644 drivers/thermal/k3_j72xx_bandgap.c
->   create mode 100644 tools/lib/thermal/.gitignore
->   create mode 100644 tools/lib/thermal/Build
->   create mode 100644 tools/lib/thermal/Makefile
->   create mode 100644 tools/lib/thermal/commands.c
->   create mode 100644 tools/lib/thermal/events.c
->   create mode 100644 tools/lib/thermal/include/thermal.h
->   create mode 100644 tools/lib/thermal/libthermal.map
->   create mode 100644 tools/lib/thermal/libthermal.pc.template
->   create mode 100644 tools/lib/thermal/sampling.c
->   create mode 100644 tools/lib/thermal/thermal.c
->   create mode 100644 tools/lib/thermal/thermal_nl.c
->   create mode 100644 tools/lib/thermal/thermal_nl.h
->   create mode 100644 tools/thermal/lib/Build
->   create mode 100644 tools/thermal/lib/Makefile
->   create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
->   create mode 100644 tools/thermal/lib/log.c
->   create mode 100644 tools/thermal/lib/log.h
->   create mode 100644 tools/thermal/lib/mainloop.c
->   create mode 100644 tools/thermal/lib/mainloop.h
->   create mode 100644 tools/thermal/lib/thermal-tools.h
->   create mode 100644 tools/thermal/lib/uptimeofday.c
->   create mode 100644 tools/thermal/lib/uptimeofday.h
->   create mode 100644 tools/thermal/thermal-engine/Build
->   create mode 100644 tools/thermal/thermal-engine/Makefile
->   create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
->   create mode 100644 tools/thermal/thermometer/Build
->   create mode 100644 tools/thermal/thermometer/Makefile
->   create mode 100644 tools/thermal/thermometer/thermometer.8
->   create mode 100644 tools/thermal/thermometer/thermometer.c
->   create mode 100644 tools/thermal/thermometer/thermometer.conf
+tree:   https://github.com/ammarfaizi2/linux-block stable/linux-stable-rc/queue/4.19
+head:   735c11789c15fd96455c15316570d55569afada4
+commit: 200a3e31fe3e70a6b3c3ab587be7ae82c238ad6a [12/15] mmc: core: Specify timeouts for BKOPS and CACHE_FLUSH for eMMC
+config: microblaze-buildonly-randconfig-r001-20220519 (https://download.01.org/0day-ci/archive/20220520/202205200128.tZ7qf9BZ-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/200a3e31fe3e70a6b3c3ab587be7ae82c238ad6a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block stable/linux-stable-rc/queue/4.19
+        git checkout 200a3e31fe3e70a6b3c3ab587be7ae82c238ad6a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/mmc/core/
 
-Pulled and pushed out, thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/mmc/core/mmc_ops.c: In function 'mmc_start_bkops':
+>> drivers/mmc/core/mmc_ops.c:960:13: warning: variable 'timeout' set but not used [-Wunused-but-set-variable]
+     960 |         int timeout;
+         |             ^~~~~~~
+
+
+vim +/timeout +960 drivers/mmc/core/mmc_ops.c
+
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   946  
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   947  /**
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   948   *	mmc_start_bkops - start BKOPS for supported cards
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   949   *	@card: MMC card to start BKOPS
+e5d0e17bb6022d Shawn Lin     2017-07-04   950   *	@from_exception: A flag to indicate if this function was
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   951   *			 called due to an exception raised by the card
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   952   *
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   953   *	Start background operations whenever requested.
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   954   *	When the urgent BKOPS bit is set in a R1 command response
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   955   *	then background operations should be started immediately.
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   956  */
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   957  void mmc_start_bkops(struct mmc_card *card, bool from_exception)
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   958  {
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   959  	int err;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  @960  	int timeout;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   961  	bool use_busy_signal;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   962  
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   963  	if (!card->ext_csd.man_bkops_en || mmc_card_doing_bkops(card))
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   964  		return;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   965  
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   966  	err = mmc_read_bkops_status(card);
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   967  	if (err) {
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   968  		pr_err("%s: Failed to read bkops status: %d\n",
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   969  		       mmc_hostname(card->host), err);
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   970  		return;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   971  	}
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   972  
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   973  	if (!card->ext_csd.raw_bkops_status)
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   974  		return;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   975  
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   976  	if (card->ext_csd.raw_bkops_status < EXT_CSD_BKOPS_LEVEL_2 &&
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   977  	    from_exception)
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   978  		return;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   979  
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   980  	if (card->ext_csd.raw_bkops_status >= EXT_CSD_BKOPS_LEVEL_2) {
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   981  		timeout = MMC_OPS_TIMEOUT_MS;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   982  		use_busy_signal = true;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   983  	} else {
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   984  		timeout = 0;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   985  		use_busy_signal = false;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   986  	}
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   987  
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   988  	mmc_retune_hold(card->host);
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   989  
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   990  	err = __mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
+200a3e31fe3e70 Ulf Hansson   2022-05-17   991  			EXT_CSD_BKOPS_START, 1, MMC_BKOPS_TIMEOUT_MS, 0,
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   992  			use_busy_signal, true, false);
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   993  	if (err) {
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   994  		pr_warn("%s: Error %d starting bkops\n",
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   995  			mmc_hostname(card->host), err);
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   996  		mmc_retune_release(card->host);
+9ca28c5cd967e0 Adrian Hunter 2017-09-22   997  		return;
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   998  	}
+1cf8f7e5af3910 Ulf Hansson   2017-06-09   999  
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1000  	/*
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1001  	 * For urgent bkops status (LEVEL_2 and more)
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1002  	 * bkops executed synchronously, otherwise
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1003  	 * the operation is in progress
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1004  	 */
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1005  	if (!use_busy_signal)
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1006  		mmc_card_set_doing_bkops(card);
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1007  	else
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1008  		mmc_retune_release(card->host);
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1009  }
+cb39f61e9b1e67 Adrian Hunter 2017-09-22  1010  EXPORT_SYMBOL(mmc_start_bkops);
+1cf8f7e5af3910 Ulf Hansson   2017-06-09  1011  
+
+:::::: The code at line 960 was first introduced by commit
+:::::: 1cf8f7e5af3910781a21b84f13a34851aa228fe3 mmc: core: Move mmc bkops functions from core.c to mmc_ops.c
+
+:::::: TO: Ulf Hansson <ulf.hansson@linaro.org>
+:::::: CC: Ulf Hansson <ulf.hansson@linaro.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

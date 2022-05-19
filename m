@@ -2,94 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7097852D754
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C492252D756
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240816AbiESPVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S238719AbiESPWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239671AbiESPVk (ORCPT
+        with ESMTP id S234696AbiESPWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:21:40 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F315D5CA;
-        Thu, 19 May 2022 08:21:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1652973694;
-        bh=+Y4Z/IQnsX+fk6BLy3bmRjeDws9K8BNXDaa4PLSicwE=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=CDDuUvSeEW8eoY/l1jUVBZDU5GW3iacxJYIinJeOcJ4/kPftj2I5X6NX3GZOQx+wI
-         187SwPpR9pY3jCBnUZghj7XYbX8IGG9AaDtg5aw1qqjbIUfYcY62KwYLPdwSHJNnTR
-         NSqkP+MbKvktxDR7NjsOmZmGtavowmw6qws2zC8A=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id C92F41280B05;
-        Thu, 19 May 2022 11:21:34 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id LrKi1AHY0ytP; Thu, 19 May 2022 11:21:34 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1652973694;
-        bh=+Y4Z/IQnsX+fk6BLy3bmRjeDws9K8BNXDaa4PLSicwE=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=CDDuUvSeEW8eoY/l1jUVBZDU5GW3iacxJYIinJeOcJ4/kPftj2I5X6NX3GZOQx+wI
-         187SwPpR9pY3jCBnUZghj7XYbX8IGG9AaDtg5aw1qqjbIUfYcY62KwYLPdwSHJNnTR
-         NSqkP+MbKvktxDR7NjsOmZmGtavowmw6qws2zC8A=
-Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 19 May 2022 11:22:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91F535E76E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:22:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652973720;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oCOOhtQfOiUeAUzQCMYzedVhc/AxXpBqy3Rjtp7VL80=;
+        b=DMi88lMXoW0XK15O4nD/mRIsJecOxSXwDHXaqrK+wAHVPHzYVNsd1m3QD681pFQUIQb1jV
+        p+nTLcSZ84ZqnihzpwWBKKWdLRQrSTh18oY32XXuzXdXZhKIcHSLvZintRLt3xUfXAjvkH
+        muEwI1e3H1tTpUqqMgPHVw3R7XSZpdU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-440-YY1iGLTzPw6ZpLeDJu6pFg-1; Thu, 19 May 2022 11:21:59 -0400
+X-MC-Unique: YY1iGLTzPw6ZpLeDJu6pFg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 9407D128096F;
-        Thu, 19 May 2022 11:21:33 -0400 (EDT)
-Message-ID: <953c45678dc4b59e9e5de0e5c228e2e8a8ac558a.camel@HansenPartnership.com>
-Subject: Re: [PATCH v2] sign-file: Convert API usage to support OpenSSL v3
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Kees Cook <keescook@chromium.org>,
-        David Howells <dhowells@redhat.com>
-Cc:     David Woodhouse <dwmw2@infradead.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        keyrings@vger.kernel.org, Adam Langley <agl@google.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Date:   Thu, 19 May 2022 11:21:32 -0400
-In-Reply-To: <20220518215129.264872-1-keescook@chromium.org>
-References: <20220518215129.264872-1-keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 960F0811E80;
+        Thu, 19 May 2022 15:21:58 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.117])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2FA471121314;
+        Thu, 19 May 2022 15:21:56 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?q?Benoit=20Gr=C3=A9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v9 0/3] x86/PCI: Ignore E820 reservations for bridge windows on future systems
+Date:   Thu, 19 May 2022 17:21:47 +0200
+Message-Id: <20220519152150.6135-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-05-18 at 14:51 -0700, Kees Cook wrote:
-> OpenSSL's ENGINE API is deprecated in OpenSSL v3.0, along with some
-> other functions. Remove the ENGINE use and a macro work-around for
-> ERR_get_error_line().
+Hi All,
 
-What answer was there to Eric Biggers' concern about token support in
-sign-file?
+Here is v9 of my patch to address the E820 reservations vs PCI host bridge
+ranges issue which are causing touchpad and/or thunderbolt issues on many
+different laptop models.
 
-https://lore.kernel.org/lkml/YVyKc51r2tfMmQuO@gmail.com/
+After previous attempts to identify these systems by looking for E820
+reservations covering the entire bridge window, which broke the boot
+on some coreboot based ChromeBooks we are now back to using a bios date
++ DMI quirks based approach.
 
-If you're not doing ephemeral keys (as quite a few kernel builder's
-aren't) you really need a token to protect the signing key.
+Changes in v9:
+- Split making use_e820=false the default for BIOS year >= 2023 out into
+  a separate patch
+- Split the addition of DMI quirks out into a separate patch
+- Add a DMI quirk for the TUXEDO Book XUX7 - Gen12
 
-The other point was that openssl3 hasn't converted most of its own
-engine code to the provider API, so the deprecation is a bit premature
-because it will be a while before provider based token libraries
-appear.  If the goal is simply to not see the warnings, the compile
-flag you need is
+Changes in v8:
+- Change the cut-off for no longer excluding E820 reservations from
+  the bridge window to BIOS year >= 2023 so that this only applies to
+  upcoming systems.
+- Use DMI quirks for existing systems on which excluding E820
+  reservations from the _CRS returned bridge window is an issue.
 
--DOPENSSL_API_COMPAT=0x10100000L
+This is based on top of Bjorn's pci/resource branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=pci/resource
 
-James
+Regards,
 
+Hans
+
+
+Hans de Goede (3):
+  x86/PCI: Add kernel cmdline options to use/ignore E820 reserved
+    regions
+  x86/PCI: Add DMI quirks to ignore E820 reserved regions on some
+    systems
+  x86/PCI: Ignore E820 reserved regions for bridge windows on future
+    systems
+
+ .../admin-guide/kernel-parameters.txt         |   9 ++
+ arch/x86/include/asm/pci_x86.h                |   2 +
+ arch/x86/pci/acpi.c                           | 121 +++++++++++++++++-
+ arch/x86/pci/common.c                         |   8 ++
+ 4 files changed, 138 insertions(+), 2 deletions(-)
+
+-- 
+2.36.0
 

@@ -2,154 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C188252D040
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE8A52D043
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236559AbiESKR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
+        id S236561AbiESKSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiESKRZ (ORCPT
+        with ESMTP id S229541AbiESKSP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:17:25 -0400
-Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id EAAC237003;
-        Thu, 19 May 2022 03:17:21 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [124.236.130.193])
-        by mail-app3 (Coremail) with SMTP id cC_KCgB3HdgZGYZimG+EAA--.40215S2;
-        Thu, 19 May 2022 18:17:09 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     amitkarwar@gmail.com, ganapathi017@gmail.com,
-        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
-        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH net] net: wireless: marvell: mwifiex: fix sleep in atomic context bugs
-Date:   Thu, 19 May 2022 18:16:56 +0800
-Message-Id: <20220519101656.44513-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgB3HdgZGYZimG+EAA--.40215S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr1UWr15KrWktw1rKw43GFg_yoWrGw45pa
-        n8KF93Zw40qrs0k3ykJa1kZF98K3WrKry2kFs7Aw4F9F4fGryrZFyaqFyIgFs8XF4vqa4a
-        vr1qqw13Arn3tFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUbGQ6JUUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgAPAVZdtZxiqAAXsz
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 19 May 2022 06:18:15 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FAF4B1F6;
+        Thu, 19 May 2022 03:18:14 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id DF3511F45A06
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652955492;
+        bh=elCw2GMrP8XUYjnKjTriaCAevspHDdoKTgv83FjGUQU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nAMtX5wELFg2hOQVO1y45d6Jnkm2Xjzqzw8l7ncUlQmQzG2Z9r4PZE8CyUZJ054Dn
+         mKhxljLL5HVBu4OQCCj5dYlsTPL8o6Kxt31hQvZTi5xf5hRutyOSv6X4seoX3kKoMc
+         nYa0Gt0zSDykj76rSHcB8QdkIYrGxsjQxE5swhZ0YH9LOuE9GOChIVowhKKiVGvNLC
+         njiS7HoQiodiUIlaY2e99UZ5o5gpGrN7IayPYU8ZfnShMHgb5ZO12JPKOC/QC4k+mO
+         OS3rz1wd4UfNqcPN9VIRG+R7GxXtz43D5t+SrrkI3CIDroP4r1ag0P4biKVG+/xJDW
+         8U6TDDJhKBV/w==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     robh+dt@kernel.org
+Cc:     jassisinghbrar@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, houlong.wei@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] dt-bindings: mailbox: mtk-gce: Convert txt to json-schema
+Date:   Thu, 19 May 2022 12:18:06 +0200
+Message-Id: <20220519101806.18097-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are sleep in atomic context bugs when uploading device dump
-data on usb interface. The root cause is that the operations that
-may sleep are called in fw_dump_timer_fn which is a timer handler.
-The call tree shows the execution paths that could lead to bugs:
+Convert the mtk-gce documentation from freeform text format to a
+json-schema.
 
-   (Interrupt context)
-fw_dump_timer_fn
-  mwifiex_upload_device_dump
-    dev_coredumpv(..., GFP_KERNEL)
-      dev_coredumpm()
-        kzalloc(sizeof(*devcd), gfp); //may sleep
-        dev_set_name
-          kobject_set_name_vargs
-            kvasprintf_const(GFP_KERNEL, ...); //may sleep
-            kstrdup(s, GFP_KERNEL); //may sleep
-
-This patch moves the operations that may sleep into a work item.
-The work item will run in another kernel thread which is in
-process context to execute the bottom half of the interrupt.
-So it could prevent atomic context from sleeping.
-
-Fixes: f5ecd02a8b20 ("mwifiex: device dump support for usb interface")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/net/wireless/marvell/mwifiex/init.c      | 12 +++++++++++-
- drivers/net/wireless/marvell/mwifiex/main.h      |  1 +
- drivers/net/wireless/marvell/mwifiex/sta_event.c |  1 +
- 3 files changed, 13 insertions(+), 1 deletion(-)
+ .../bindings/mailbox/mediatek,gce-mbox.yaml   | 114 ++++++++++++++++++
+ .../devicetree/bindings/mailbox/mtk-gce.txt   |  82 -------------
+ 2 files changed, 114 insertions(+), 82 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mailbox/mtk-gce.txt
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/init.c b/drivers/net/wireless/marvell/mwifiex/init.c
-index 88c72d1827a..727963d0c82 100644
---- a/drivers/net/wireless/marvell/mwifiex/init.c
-+++ b/drivers/net/wireless/marvell/mwifiex/init.c
-@@ -63,11 +63,19 @@ static void wakeup_timer_fn(struct timer_list *t)
- 		adapter->if_ops.card_reset(adapter);
- }
- 
-+static void fw_dump_work(struct work_struct *work)
-+{
-+	struct mwfiex_adapter *adapter =
-+		container_of(work, struct mwfiex_adapter, devdump_work);
+diff --git a/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
+new file mode 100644
+index 000000000000..750391b4038c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mailbox/mediatek,gce-mbox.yaml
+@@ -0,0 +1,114 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mailbox/mediatek,gce-mbox.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	mwifiex_upload_device_dump(adapter);
-+}
++title: MediaTek Global Command Engine (GCE) mailbox
 +
- static void fw_dump_timer_fn(struct timer_list *t)
- {
- 	struct mwifiex_adapter *adapter = from_timer(adapter, t, devdump_timer);
- 
--	mwifiex_upload_device_dump(adapter);
-+	schedule_work(&adapter->devdump_work);
- }
- 
- /*
-@@ -321,6 +329,7 @@ static void mwifiex_init_adapter(struct mwifiex_adapter *adapter)
- 	adapter->active_scan_triggered = false;
- 	timer_setup(&adapter->wakeup_timer, wakeup_timer_fn, 0);
- 	adapter->devdump_len = 0;
-+	INIT_WORK(&adapter->devdump_work, fw_dump_work);
- 	timer_setup(&adapter->devdump_timer, fw_dump_timer_fn, 0);
- }
- 
-@@ -401,6 +410,7 @@ mwifiex_adapter_cleanup(struct mwifiex_adapter *adapter)
- {
- 	del_timer(&adapter->wakeup_timer);
- 	del_timer_sync(&adapter->devdump_timer);
-+	cancel_work_sync(&adapter->devdump_work);
- 	mwifiex_cancel_all_pending_cmd(adapter);
- 	wake_up_interruptible(&adapter->cmd_wait_q.wait);
- 	wake_up_interruptible(&adapter->hs_activate_wait_q);
-diff --git a/drivers/net/wireless/marvell/mwifiex/main.h b/drivers/net/wireless/marvell/mwifiex/main.h
-index 332dd1c8db3..c8ac2f57f18 100644
---- a/drivers/net/wireless/marvell/mwifiex/main.h
-+++ b/drivers/net/wireless/marvell/mwifiex/main.h
-@@ -900,6 +900,7 @@ struct mwifiex_adapter {
- 	struct work_struct rx_work;
- 	struct workqueue_struct *dfs_workqueue;
- 	struct work_struct dfs_work;
-+	struct work_struct devdump_work;
- 	bool rx_work_enabled;
- 	bool rx_processing;
- 	bool delay_main_work;
-diff --git a/drivers/net/wireless/marvell/mwifiex/sta_event.c b/drivers/net/wireless/marvell/mwifiex/sta_event.c
-index 7d42c5d2dbf..8e28d0107d7 100644
---- a/drivers/net/wireless/marvell/mwifiex/sta_event.c
-+++ b/drivers/net/wireless/marvell/mwifiex/sta_event.c
-@@ -644,6 +644,7 @@ mwifiex_fw_dump_info_event(struct mwifiex_private *priv,
- 
- upload_dump:
- 	del_timer_sync(&adapter->devdump_timer);
-+	cancel_work_sync(&adapter->devdump_work);
- 	mwifiex_upload_device_dump(adapter);
- }
- 
++maintainers:
++  - Houlong Wei <houlong.wei@mediatek.com>
++
++description: |
++  The Global Command Engine (GCE) is used to help read/write registers
++  with critical time limitation, such as updating display configuration
++  during the vblank.
++  The GCE can be used to implement the Command Queue (CMDQ) driver.
++
++properties:
++  compatible:
++    enum:
++      - mediatek,mt6779-gce
++      - mediatek,mt8173-gce
++      - mediatek,mt8183-gce
++      - mediatek,mt8186-gce
++      - mediatek,mt8192-gce
++      - mediatek,mt8195-gce
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: gce
++
++  '#mbox-cells':
++    description: |
++      The first cell describes the mailbox channel, which is the GCE Thread ID;
++      The second cell describes the priority of the GCE thread.
++    const: 2
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - '#mbox-cells'
++
++additionalProperties: false
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          enum:
++            - mediatek,mt8195-gce
++    then:
++      properties:
++        clocks:
++          maxItems: 2
++
++        clock-names:
++          items:
++            - const: gce0
++            - const: gce1
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/clock/mt8173-clk.h>
++    #include <dt-bindings/gce/mt8173-gce.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        gce: mailbox@10212000 {
++            compatible = "mediatek,mt8173-gce";
++            reg = <0 0x10212000 0 0x1000>;
++            interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_LOW>;
++            clocks = <&infracfg CLK_INFRA_GCE>;
++            clock-names = "gce";
++            #mbox-cells = <2>;
++        };
++
++        /* Client device using a GCE Thread */
++        mmsys: syscon@14000000 {
++            compatible = "mediatek,mt8173-mmsys", "syscon";
++            reg = <0 0x14000000 0 0x1000>;
++            mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST>,
++                     <&gce 1 CMDQ_THR_PRIO_HIGHEST>;
++            mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
++            #clock-cells = <1>;
++            #reset-cells = <1>;
++        };
++
++        /* Client device listening to specific GCE Events */
++        mutex: mutex@14020000 {
++            compatible = "mediatek,mt8173-disp-mutex";
++            reg = <0 0x14020000 0 0x1000>;
++            interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_LOW>;
++            power-domains = <&spm 1>;
++            clocks = <&mmsys CLK_MM_MUTEX_32K>;
++            mediatek,gce-events = <CMDQ_EVENT_MUTEX0_STREAM_EOF>,
++                                  <CMDQ_EVENT_MUTEX1_STREAM_EOF>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt b/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
+deleted file mode 100644
+index c2aeba63bd47..000000000000
+--- a/Documentation/devicetree/bindings/mailbox/mtk-gce.txt
++++ /dev/null
+@@ -1,82 +0,0 @@
+-MediaTek GCE
+-===============
+-
+-The Global Command Engine (GCE) is used to help read/write registers with
+-critical time limitation, such as updating display configuration during the
+-vblank. The GCE can be used to implement the Command Queue (CMDQ) driver.
+-
+-CMDQ driver uses mailbox framework for communication. Please refer to
+-mailbox.txt for generic information about mailbox device-tree bindings.
+-
+-Required properties:
+-- compatible: can be "mediatek,mt8173-gce", "mediatek,mt8183-gce",
+-  "mediatek,mt8186-gce", "mediatek,mt8192-gce", "mediatek,mt8195-gce" or
+-  "mediatek,mt6779-gce".
+-- reg: Address range of the GCE unit
+-- interrupts: The interrupt signal from the GCE block
+-- clock: Clocks according to the common clock binding
+-- clock-names: Must be "gce" to stand for GCE clock
+-- #mbox-cells: Should be 2.
+-	<&phandle channel priority>
+-	phandle: Label name of a gce node.
+-	channel: Channel of mailbox. Be equal to the thread id of GCE.
+-	priority: Priority of GCE thread.
+-
+-Required properties for a client device:
+-- mboxes: Client use mailbox to communicate with GCE, it should have this
+-  property and list of phandle, mailbox specifiers.
+-Optional properties for a client device:
+-- mediatek,gce-client-reg: Specify the sub-system id which is corresponding
+-  to the register address, it should have this property and list of phandle,
+-  sub-system specifiers.
+-  <&phandle subsys_number start_offset size>
+-  phandle: Label name of a gce node.
+-  subsys_number: specify the sub-system id which is corresponding
+-                 to the register address.
+-  start_offset: the start offset of register address that GCE can access.
+-  size: the total size of register address that GCE can access.
+-
+-Optional properties for a client mutex node:
+-- mediatek,gce-events: GCE events used by clients. The event numbers are
+-  defined in 'dt-bindings/gce/<chip>-gce.h'.
+-
+-Some vaules of properties are defined in 'dt-bindings/gce/mt8173-gce.h',
+-'dt-bindings/gce/mt8183-gce.h', 'dt-bindings/gce/mt8186-gce.h'
+-'dt-bindings/gce/mt8192-gce.h', 'dt-bindings/gce/mt8195-gce.h' or
+-'dt-bindings/gce/mt6779-gce.h'.
+-Such as sub-system ids, thread priority, event ids.
+-
+-Example:
+-
+-	gce: gce@10212000 {
+-		compatible = "mediatek,mt8173-gce";
+-		reg = <0 0x10212000 0 0x1000>;
+-		interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_LOW>;
+-		clocks = <&infracfg CLK_INFRA_GCE>;
+-		clock-names = "gce";
+-		#mbox-cells = <2>;
+-	};
+-
+-Example for a client device:
+-
+-	mmsys: clock-controller@14000000 {
+-		compatible = "mediatek,mt8173-mmsys";
+-		mboxes = <&gce 0 CMDQ_THR_PRIO_LOWEST>,
+-			 <&gce 1 CMDQ_THR_PRIO_LOWEST>;
+-		mutex-event-eof = <CMDQ_EVENT_MUTEX0_STREAM_EOF
+-				CMDQ_EVENT_MUTEX1_STREAM_EOF>;
+-		mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>,
+-					  <&gce SUBSYS_1401XXXX 0x2000 0x100>;
+-		...
+-	};
+-
+-Example for a client mutex node:
+-	mutex: mutex@14020000 {
+-		compatible = "mediatek,mt8173-disp-mutex";
+-		reg = <0 0x14020000 0 0x1000>;
+-		interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_LOW>;
+-		power-domains = <&scpsys MT8173_POWER_DOMAIN_MM>;
+-		clocks = <&mmsys CLK_MM_MUTEX_32K>;
+-		mediatek,gce-events = <CMDQ_EVENT_MUTEX0_STREAM_EOF>,
+-				      <CMDQ_EVENT_MUTEX1_STREAM_EOF>;
+-	};
 -- 
-2.17.1
+2.35.1
 

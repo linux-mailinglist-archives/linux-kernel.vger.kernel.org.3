@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95DB52D150
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF3E52D156
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233403AbiESLTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        id S237354AbiESLWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236208AbiESLTG (ORCPT
+        with ESMTP id S232529AbiESLWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:19:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2C8B2250;
-        Thu, 19 May 2022 04:18:58 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5FA8B21B3F;
-        Thu, 19 May 2022 11:18:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652959137; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xlBHEoYBfb1KPuoHgDe8/xW0NmuRzgrxMjHDSq311m8=;
-        b=lVsFJVjM95QAf8BtL2346JAPhSEU0ZwWFI66R9OjINDXQSXzGoBgpeOgojzS6pe9iJFQhk
-        vMysbdethLL2TQnCDPjVo0QErCXwHGYaUz+A2RJ5GpzT16ASSsydPX6tsgGIG2GitRVZvO
-        v+t8IfUpmda/FmG9Yn1DNTPfH/LYEZU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652959137;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xlBHEoYBfb1KPuoHgDe8/xW0NmuRzgrxMjHDSq311m8=;
-        b=/mxkD//r/VYRBbyN6BYdva8Vo/reEZ1vWzfK8sTnpO84rr7WI0znDyAtaqAyCfa5hBRXUW
-        D1fISg9+R2VKrBCQ==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4C2A32C141;
-        Thu, 19 May 2022 11:18:57 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id F3780A062F; Thu, 19 May 2022 13:18:56 +0200 (CEST)
-Date:   Thu, 19 May 2022 13:18:56 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
-        tj@kernel.org, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next 7/8] block, bfq: cleanup
- bfq_bfqq_update_budg_for_activation()
-Message-ID: <20220519111856.wvk4oetm7odnkg3w@quack3.lan>
-References: <20220514090522.1669270-1-yukuai3@huawei.com>
- <20220514090522.1669270-8-yukuai3@huawei.com>
+        Thu, 19 May 2022 07:22:10 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AA83EB9F;
+        Thu, 19 May 2022 04:22:09 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id y20so4309976qvx.3;
+        Thu, 19 May 2022 04:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7BdjFDXDnxUjm7j6k5q7Kxu4c2cwbFqYPCxZS6zuqxo=;
+        b=hMKm6jsKzjqEdOGCZHwzBQGiShlBMZDUYRYcrKTYGTi4eL7ik6xnF1uVrU2MqRdwGl
+         4SeGSen+5/FFe+xbHzwlrAWsjksnoMUB4D6g+IaveRs7Kdus1hiyz7Cr0ILUTS/kXzh+
+         4rrAvGPRPCYo/1VHnb2C9sZqA1SL5z8KaAZFNUEodWgnVVmQJfBZQyuP1UfWfBfBOr/7
+         rB9Ppq5D4vDRV0xJaTeaEWc8SZKbR0IkcAW1DweFeOncjiOT5Gzle+D2hr8RkyriIuxr
+         7MtIWxdJH43PLAk+49MXfFdECCTNSXifgWEk4KRwBagsa2GFES1mvH6y5EIxevHzNzoy
+         /stw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7BdjFDXDnxUjm7j6k5q7Kxu4c2cwbFqYPCxZS6zuqxo=;
+        b=JtueDx0gPyep8hsztLa1JRqmdq8/7gdArmYwWQn68skI1NwSRoX7ihqewIEXYjN5AM
+         7pwxKiHSHJmGI+C0sn3NN3Z1Qh/E1iT+P8vqs6r5E/bjGbzSWr6lR/KEdd9D9ielvDMg
+         TbKz7VRhOSxXgwqob6eHs8GLxhlkMmxCCyTqv+KU9YtKKP+N/mBWrJXRFozOyeaNRY9b
+         8+OR9hM8uyp1G6e+vKmyoLRRR8mPl6z+wALEwZW/T6/lUBV2dcZF+SmAJqekH8BJ7jFw
+         TgbXN5JekjbXHHMc+HuOdqMXMniWaS4ArxHo12Hpq886ccEnKQqifMvm4rCBNPSXKSgk
+         5Agg==
+X-Gm-Message-State: AOAM532VIrziIje/XApV77YSA316CGz5ZNDEnitzY/J3mNRpmgnjxib6
+        oIiM71IW5LjKGaPPn06Je5J3DrP9+tTEIYlN7oM=
+X-Google-Smtp-Source: ABdhPJxLhdpP5H29s1X67RNrL/m+5o9e0OA57DOxQ1UYzD82HkG4/G++oXvkN3CyBMkVW6rslRr7hPgK/Q/zvRMRtmg=
+X-Received: by 2002:a05:6214:48f:b0:461:d4fe:4eed with SMTP id
+ ay15-20020a056214048f00b00461d4fe4eedmr3434798qvb.48.1652959328792; Thu, 19
+ May 2022 04:22:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220514090522.1669270-8-yukuai3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220518184825.1034976-1-robimarko@gmail.com> <20220518184825.1034976-6-robimarko@gmail.com>
+ <015c60e9-78f6-f0f0-5af0-733a78fbdf65@linaro.org>
+In-Reply-To: <015c60e9-78f6-f0f0-5af0-733a78fbdf65@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Thu, 19 May 2022 13:21:57 +0200
+Message-ID: <CAOX2RU4--VULzvc9NGc4zWV4jpD+riM+9Ff8mqU834a6vQFc5Q@mail.gmail.com>
+Subject: Re: [PATCH v4 6/6] arm64: dts: qcom: Add PMP8074 DTSI
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 14-05-22 17:05:21, Yu Kuai wrote:
-> It will only be called from bfq_bfqq_handle_idle_busy_switch() in
-> specific code branch, there is no need to precaculate
-> 'bfqq_wants_to_preempt' each time bfq_bfqq_handle_idle_busy_switch()
-> is caleld.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+On Thu, 19 May 2022 at 13:07, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 18/05/2022 20:48, Robert Marko wrote:
+> > PMP8074 is a companion PMIC to the Qualcomm IPQ8074 series that is
+> > controlled via SPMI.
+> >
+> > Since we now have support for the regulators inside of it add DTSI
+> > for it.
+> >
+> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/pmp8074.dtsi | 38 +++++++++++++++++++++++++++
+>
+> This file is not referenced by anything, thus not possible to compile
+> nor verify.
 
-Please see below:
+That is correct, I can include it on HK01 which has an SDHCI controller
+and thus can consume L11 for VQMMC so that HS200 and higher work.
 
-> @@ -1816,14 +1807,6 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
->  		  (bfqq->bic || RQ_BIC(rq)->stably_merged) &&
->  		   (*interactive || soft_rt)));
->  
-> -	/*
-> -	 * Using the last flag, update budget and check whether bfqq
-> -	 * may want to preempt the in-service queue.
-> -	 */
-> -	bfqq_wants_to_preempt =
-> -		bfq_bfqq_update_budg_for_activation(bfqd, bfqq,
-> -						    arrived_in_time);
-> -
->  	/*
->  	 * If bfqq happened to be activated in a burst, but has been
->  	 * idle for much more than an interactive queue, then we
-...
-> @@ -1918,7 +1900,7 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
->  	 * (2) this switch of bfqq to busy changes the scenario.
->  	 */
->  	if (bfqd->in_service_queue &&
-> -	    ((bfqq_wants_to_preempt &&
-> +	    ((bfq_bfqq_update_budg_for_activation(bfqd, bfqq) &&
->  	      bfqq->wr_coeff >= bfqd->in_service_queue->wr_coeff) ||
->  	     bfq_bfqq_higher_class_or_weight(bfqq, bfqd->in_service_queue) ||
->  	     !bfq_better_to_idle(bfqd->in_service_queue)) &&
+I wanted to include the nodes directly in the SoC DTSI and set L11 as VQMMC
+for SDHCI there as this is a companion PMIC and always present, but
+the established
+procedure is for the PMIC to have its own DTSI and then be included per board.
 
-So these changes are actually wrong because
-bfq_bfqq_update_budg_for_activation() relies on
-bfq_bfqq_non_blocking_wait_rq() but bfq_add_bfqq_busy() clears that. And
-bfq_add_bfqq_busy() is called between the place where
-bfq_bfqq_update_budg_for_activation() was called previously and now so your
-patch breaks this logic.
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Regards,
+Robert
+>
+>
+> Best regards,
+> Krzysztof

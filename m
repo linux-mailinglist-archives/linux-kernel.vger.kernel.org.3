@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E2D52CCE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4165452CCEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234794AbiESHZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        id S234814AbiESHZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234709AbiESHYv (ORCPT
+        with ESMTP id S234761AbiESHYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:24:51 -0400
+        Thu, 19 May 2022 03:24:53 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDA887210
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:24:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF82687224
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:24:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652945078; x=1684481078;
+  t=1652945082; x=1684481082;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Plk0plqOguHnq6zJqwBQ6ucbqjFEQFVamoSa6HmPMUw=;
-  b=VAbEy6R9nNsFhHzYS2rEgQG5wZwJQw1Qhuoko+im0jxiDhHMlNYpwwhA
-   WGu4IUrEtq/I8z7Dc/89vRg9q8vCultuAwLjTVWMnqbvIXBegJMQyo1TA
-   kK5Pfix5cOmq9e/bhyHCTFuhTCt0A6V6kW7i0n7yMSVG5FCKIMrik1l3f
-   Z6Zrd3HPlpmqWUXWa41/0g1Rewh2yrArgAERLvOHUxkcdfjs7AAq725+M
-   lZkzL3HepPmR46kKmGVRJv/ohFt3YchXbR4V/kXhnjsITBx9kUdMGbFer
-   rcqOBM5+orSoX9f+YpdW8kNWigv3pf4nrFpwNL6j5yfmcY+JhQxO1iTx6
+  bh=GJH5xTT7hMx/rX/qXAHSoaXpu47CO+TDZwMogQOFMQU=;
+  b=VFnep0XCV110DBCTQgrTQnbDcGWbZhu1rQgPEvO86+vB1VoA3RIqCyeu
+   nPv7DliEubpj+3K6D0hk1hNR0ujlR7fcJ5aA5qT7iKuqcQt/165q5z5z9
+   xeTqwcmVzWFPUSWGM2HJAM0/S3VwDJ0Q4/CaUJghnYtin5oUcyf9z2P0c
+   cjrQFlNCgEf7vLoi77DosW2x6qj/tFPBquQFouo7avRn7OIwTqbJFDoWr
+   1oSS2K4jt4kbmS8I9PMUHAFhwBEUjNiG6ClO3tNN6jOqZx44hok+8vvYw
+   Yb19cUiKxbneGr26lfJv62t52DQ3iOAyOgxO0jt61I4+obyVGIS8pWJRg
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="272195931"
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="272195952"
 X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="272195931"
+   d="scan'208";a="272195952"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 00:24:38 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 00:24:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="714853079"
+   d="scan'208";a="714853087"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 19 May 2022 00:24:34 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 19 May 2022 00:24:38 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -51,9 +51,9 @@ Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
         Jacob jun Pan <jacob.jun.pan@intel.com>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v7 05/10] arm-smmu-v3/sva: Add SVA domain support
-Date:   Thu, 19 May 2022 15:20:42 +0800
-Message-Id: <20220519072047.2996983-6-baolu.lu@linux.intel.com>
+Subject: [PATCH v7 06/10] iommu/sva: Refactoring iommu_sva_bind/unbind_device()
+Date:   Thu, 19 May 2022 15:20:43 +0800
+Message-Id: <20220519072047.2996983-7-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
 References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
@@ -69,101 +69,399 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for domain ops callbacks for an SVA domain.
+The existing iommu SVA interfaces are implemented by calling the SVA
+specific iommu ops provided by the IOMMU drivers. There's no need for
+any SVA specific ops in iommu_ops vector anymore as we can achieve
+this through the generic attach/detach_dev_pasid domain ops.
+
+This refactors the IOMMU SVA interfaces implementation by using the
+set/block_pasid_dev ops and align them with the concept of the SVA
+iommu domain. Put the new SVA code in the sva related file in order
+to make it self-contained.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  4 ++
- .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   | 46 +++++++++++++++++++
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |  6 +++
- 3 files changed, 56 insertions(+)
+ include/linux/iommu.h         |  48 ++++++++------
+ drivers/iommu/iommu-sva-lib.h |   1 +
+ drivers/iommu/iommu-sva-lib.c | 113 ++++++++++++++++++++++++++++++++
+ drivers/iommu/iommu.c         | 119 ++++++++--------------------------
+ 4 files changed, 170 insertions(+), 111 deletions(-)
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index d2ba86470c42..ec77f6a51ff9 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -758,6 +758,10 @@ struct iommu_sva *arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm);
- void arm_smmu_sva_unbind(struct iommu_sva *handle);
- u32 arm_smmu_sva_get_pasid(struct iommu_sva *handle);
- void arm_smmu_sva_notifier_synchronize(void);
-+int arm_smmu_sva_attach_dev_pasid(struct iommu_domain *domain,
-+				  struct device *dev, ioasid_t id);
-+void arm_smmu_sva_detach_dev_pasid(struct iommu_domain *domain,
-+				   struct device *dev, ioasid_t id);
- #else /* CONFIG_ARM_SMMU_V3_SVA */
- static inline bool arm_smmu_sva_supported(struct arm_smmu_device *smmu)
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index e8cf82d46ce1..d9ac5ebe5bbb 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -635,6 +635,7 @@ struct iommu_fwspec {
+  */
+ struct iommu_sva {
+ 	struct device			*dev;
++	refcount_t			users;
+ };
+ 
+ int iommu_fwspec_init(struct device *dev, struct fwnode_handle *iommu_fwnode,
+@@ -677,11 +678,6 @@ int iommu_dev_enable_feature(struct device *dev, enum iommu_dev_features f);
+ int iommu_dev_disable_feature(struct device *dev, enum iommu_dev_features f);
+ bool iommu_dev_feature_enabled(struct device *dev, enum iommu_dev_features f);
+ 
+-struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+-					struct mm_struct *mm);
+-void iommu_sva_unbind_device(struct iommu_sva *handle);
+-u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+-
+ int iommu_device_use_default_domain(struct device *dev);
+ void iommu_device_unuse_default_domain(struct device *dev);
+ 
+@@ -693,6 +689,8 @@ int iommu_set_device_pasid(struct iommu_domain *domain, struct device *dev,
+ 			   ioasid_t pasid);
+ void iommu_block_device_pasid(struct iommu_domain *domain, struct device *dev,
+ 			      ioasid_t pasid);
++struct iommu_domain *
++iommu_get_domain_for_dev_pasid(struct device *dev, ioasid_t pasid);
+ #else /* CONFIG_IOMMU_API */
+ 
+ struct iommu_ops {};
+@@ -1023,21 +1021,6 @@ iommu_dev_disable_feature(struct device *dev, enum iommu_dev_features feat)
+ 	return -ENODEV;
+ }
+ 
+-static inline struct iommu_sva *
+-iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
+-{
+-	return NULL;
+-}
+-
+-static inline void iommu_sva_unbind_device(struct iommu_sva *handle)
+-{
+-}
+-
+-static inline u32 iommu_sva_get_pasid(struct iommu_sva *handle)
+-{
+-	return IOMMU_PASID_INVALID;
+-}
+-
+ static inline struct iommu_fwspec *dev_iommu_fwspec_get(struct device *dev)
  {
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-index f155d406c5d5..6969974ca89e 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-@@ -549,3 +549,49 @@ void arm_smmu_sva_notifier_synchronize(void)
- 	 */
- 	mmu_notifier_synchronize();
+ 	return NULL;
+@@ -1077,6 +1060,12 @@ static inline void iommu_block_device_pasid(struct iommu_domain *domain,
+ 					    struct device *dev, ioasid_t pasid)
+ {
  }
 +
-+int arm_smmu_sva_attach_dev_pasid(struct iommu_domain *domain,
-+				  struct device *dev, ioasid_t id)
++static inline struct iommu_domain *
++iommu_get_domain_for_dev_pasid(struct device *dev, ioasid_t pasid)
 +{
-+	int ret = 0;
-+	struct mm_struct *mm;
-+	struct iommu_sva *handle;
++	return NULL;
++}
+ #endif /* CONFIG_IOMMU_API */
+ 
+ /**
+@@ -1108,6 +1097,10 @@ iommu_sva_alloc_domain(struct bus_type *bus, struct mm_struct *mm);
+ void iommu_sva_free_domain(struct iommu_domain *domain);
+ int iommu_sva_set_domain(struct iommu_domain *domain, struct device *dev,
+ 			 ioasid_t pasid);
++struct iommu_sva *iommu_sva_bind_device(struct device *dev,
++					struct mm_struct *mm);
++void iommu_sva_unbind_device(struct iommu_sva *handle);
++u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+ #else /* CONFIG_IOMMU_SVA */
+ static inline struct iommu_domain *
+ iommu_sva_alloc_domain(struct bus_type *bus, struct mm_struct *mm)
+@@ -1124,6 +1117,21 @@ static inline int iommu_sva_set_domain(struct iommu_domain *domain,
+ {
+ 	return -EINVAL;
+ }
 +
-+	if (domain->type != IOMMU_DOMAIN_SVA)
-+		return -EINVAL;
-+
-+	mm = domain_to_mm(domain);
-+	if (WARN_ON(!mm))
-+		return -ENODEV;
-+
-+	mutex_lock(&sva_lock);
-+	handle = __arm_smmu_sva_bind(dev, mm);
-+	if (IS_ERR(handle))
-+		ret = PTR_ERR(handle);
-+	mutex_unlock(&sva_lock);
-+
-+	return ret;
++static inline struct iommu_sva *
++iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
++{
++	return NULL;
 +}
 +
-+void arm_smmu_sva_detach_dev_pasid(struct iommu_domain *domain,
-+				   struct device *dev, ioasid_t id)
++static inline void iommu_sva_unbind_device(struct iommu_sva *handle)
 +{
-+	struct arm_smmu_bond *bond = NULL, *t;
-+	struct mm_struct *mm = domain_to_mm(domain);
-+	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
-+
-+	mutex_lock(&sva_lock);
-+	list_for_each_entry(t, &master->bonds, list) {
-+		if (t->mm == mm) {
-+			bond = t;
-+			break;
-+		}
-+	}
-+
-+	if (!WARN_ON(!bond) && refcount_dec_and_test(&bond->refs)) {
-+		list_del(&bond->list);
-+		arm_smmu_mmu_notifier_put(bond->smmu_mn);
-+		kfree(bond);
-+	}
-+	mutex_unlock(&sva_lock);
 +}
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 6e2cd082c670..4ad3ca70cf89 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -2858,6 +2858,12 @@ static struct iommu_ops arm_smmu_ops = {
- 	.page_response		= arm_smmu_page_response,
- 	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
- 	.owner			= THIS_MODULE,
-+#ifdef CONFIG_ARM_SMMU_V3_SVA
-+	.sva_domain_ops = &(const struct iommu_domain_ops) {
-+		.set_dev_pasid		= arm_smmu_sva_attach_dev_pasid,
-+		.block_dev_pasid	= arm_smmu_sva_detach_dev_pasid,
-+	},
-+#endif
- 	.default_domain_ops = &(const struct iommu_domain_ops) {
- 		.attach_dev		= arm_smmu_attach_dev,
- 		.map_pages		= arm_smmu_map_pages,
++
++static inline u32 iommu_sva_get_pasid(struct iommu_sva *handle)
++{
++	return IOMMU_PASID_INVALID;
++}
+ #endif /* CONFIG_IOMMU_SVA */
+ 
+ #endif /* __LINUX_IOMMU_H */
+diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva-lib.h
+index 1be21e6b93ec..ebab5a8cb126 100644
+--- a/drivers/iommu/iommu-sva-lib.h
++++ b/drivers/iommu/iommu-sva-lib.h
+@@ -20,6 +20,7 @@ struct iopf_queue;
+ struct iommu_sva_domain {
+ 	struct iommu_domain	domain;
+ 	struct mm_struct	*mm;
++	struct iommu_sva	bond;
+ };
+ 
+ #define to_sva_domain(d) container_of_safe(d, struct iommu_sva_domain, domain)
+diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
+index 210c376f6043..568e0f64edac 100644
+--- a/drivers/iommu/iommu-sva-lib.c
++++ b/drivers/iommu/iommu-sva-lib.c
+@@ -4,6 +4,8 @@
+  */
+ #include <linux/mutex.h>
+ #include <linux/sched/mm.h>
++#include <linux/pci.h>
++#include <linux/pci-ats.h>
+ 
+ #include "iommu-sva-lib.h"
+ 
+@@ -117,3 +119,114 @@ int iommu_sva_set_domain(struct iommu_domain *domain, struct device *dev,
+ 
+ 	return iommu_set_device_pasid(domain, dev, pasid);
+ }
++
++/**
++ * iommu_sva_bind_device() - Bind a process address space to a device
++ * @dev: the device
++ * @mm: the mm to bind, caller must hold a reference to mm_users
++ *
++ * Create a bond between device and address space, allowing the device to access
++ * the mm using the returned PASID. If a bond already exists between @device and
++ * @mm, it is returned and an additional reference is taken. Caller must call
++ * iommu_sva_unbind_device() to release each reference.
++ *
++ * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called first, to
++ * initialize the required SVA features.
++ *
++ * On error, returns an ERR_PTR value.
++ */
++struct iommu_sva *iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
++{
++	struct iommu_sva_domain *sva_domain;
++	struct iommu_domain *domain;
++	ioasid_t max_pasid = 0;
++	int ret = -EINVAL;
++
++	/* Allocate mm->pasid if necessary. */
++	if (!dev->iommu->iommu_dev->pasids)
++		return ERR_PTR(-EOPNOTSUPP);
++
++	if (dev_is_pci(dev)) {
++		max_pasid = pci_max_pasids(to_pci_dev(dev));
++		if (max_pasid < 0)
++			return ERR_PTR(max_pasid);
++	} else {
++		ret = device_property_read_u32(dev, "pasid-num-bits",
++					       &max_pasid);
++		if (ret)
++			return ERR_PTR(ret);
++		max_pasid = (1UL << max_pasid);
++	}
++	max_pasid = min_t(u32, max_pasid, dev->iommu->iommu_dev->pasids);
++	ret = iommu_sva_alloc_pasid(mm, 1, max_pasid - 1);
++	if (ret)
++		return ERR_PTR(ret);
++
++	mutex_lock(&iommu_sva_lock);
++	/* Search for an existing domain. */
++	domain = iommu_get_domain_for_dev_pasid(dev, mm->pasid);
++	if (domain) {
++		sva_domain = to_sva_domain(domain);
++		refcount_inc(&sva_domain->bond.users);
++		goto out_success;
++	}
++
++	/* Allocate a new domain and set it on device pasid. */
++	domain = iommu_sva_alloc_domain(dev->bus, mm);
++	if (IS_ERR(domain)) {
++		ret = PTR_ERR(domain);
++		goto out_unlock;
++	}
++
++	ret = iommu_sva_set_domain(domain, dev, mm->pasid);
++	if (ret)
++		goto out_free_domain;
++	sva_domain = to_sva_domain(domain);
++	sva_domain->bond.dev = dev;
++	refcount_set(&sva_domain->bond.users, 1);
++
++out_success:
++	mutex_unlock(&iommu_sva_lock);
++	return &sva_domain->bond;
++
++out_free_domain:
++	iommu_sva_free_domain(domain);
++out_unlock:
++	mutex_unlock(&iommu_sva_lock);
++
++	return ERR_PTR(ret);
++}
++EXPORT_SYMBOL_GPL(iommu_sva_bind_device);
++
++/**
++ * iommu_sva_unbind_device() - Remove a bond created with iommu_sva_bind_device
++ * @handle: the handle returned by iommu_sva_bind_device()
++ *
++ * Put reference to a bond between device and address space. The device should
++ * not be issuing any more transaction for this PASID. All outstanding page
++ * requests for this PASID must have been flushed to the IOMMU.
++ */
++void iommu_sva_unbind_device(struct iommu_sva *handle)
++{
++	struct device *dev = handle->dev;
++	struct iommu_sva_domain *sva_domain =
++			container_of(handle, struct iommu_sva_domain, bond);
++	ioasid_t pasid = iommu_sva_get_pasid(handle);
++
++	mutex_lock(&iommu_sva_lock);
++	if (refcount_dec_and_test(&sva_domain->bond.users)) {
++		iommu_block_device_pasid(&sva_domain->domain, dev, pasid);
++		iommu_sva_free_domain(&sva_domain->domain);
++	}
++	mutex_unlock(&iommu_sva_lock);
++}
++EXPORT_SYMBOL_GPL(iommu_sva_unbind_device);
++
++u32 iommu_sva_get_pasid(struct iommu_sva *handle)
++{
++	struct iommu_sva_domain *sva_domain =
++			container_of(handle, struct iommu_sva_domain, bond);
++
++	return sva_domain->mm->pasid;
++}
++EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 789816e4b9d6..e49c5a5b8cc1 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -2766,97 +2766,6 @@ bool iommu_dev_feature_enabled(struct device *dev, enum iommu_dev_features feat)
+ }
+ EXPORT_SYMBOL_GPL(iommu_dev_feature_enabled);
+ 
+-/**
+- * iommu_sva_bind_device() - Bind a process address space to a device
+- * @dev: the device
+- * @mm: the mm to bind, caller must hold a reference to it
+- *
+- * Create a bond between device and address space, allowing the device to access
+- * the mm using the returned PASID. If a bond already exists between @device and
+- * @mm, it is returned and an additional reference is taken. Caller must call
+- * iommu_sva_unbind_device() to release each reference.
+- *
+- * iommu_dev_enable_feature(dev, IOMMU_DEV_FEAT_SVA) must be called first, to
+- * initialize the required SVA features.
+- *
+- * On error, returns an ERR_PTR value.
+- */
+-struct iommu_sva *
+-iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
+-{
+-	struct iommu_group *group;
+-	struct iommu_sva *handle = ERR_PTR(-EINVAL);
+-	const struct iommu_ops *ops = dev_iommu_ops(dev);
+-
+-	if (!ops->sva_bind)
+-		return ERR_PTR(-ENODEV);
+-
+-	group = iommu_group_get(dev);
+-	if (!group)
+-		return ERR_PTR(-ENODEV);
+-
+-	/* Ensure device count and domain don't change while we're binding */
+-	mutex_lock(&group->mutex);
+-
+-	/*
+-	 * To keep things simple, SVA currently doesn't support IOMMU groups
+-	 * with more than one device. Existing SVA-capable systems are not
+-	 * affected by the problems that required IOMMU groups (lack of ACS
+-	 * isolation, device ID aliasing and other hardware issues).
+-	 */
+-	if (iommu_group_device_count(group) != 1)
+-		goto out_unlock;
+-
+-	handle = ops->sva_bind(dev, mm);
+-
+-out_unlock:
+-	mutex_unlock(&group->mutex);
+-	iommu_group_put(group);
+-
+-	return handle;
+-}
+-EXPORT_SYMBOL_GPL(iommu_sva_bind_device);
+-
+-/**
+- * iommu_sva_unbind_device() - Remove a bond created with iommu_sva_bind_device
+- * @handle: the handle returned by iommu_sva_bind_device()
+- *
+- * Put reference to a bond between device and address space. The device should
+- * not be issuing any more transaction for this PASID. All outstanding page
+- * requests for this PASID must have been flushed to the IOMMU.
+- */
+-void iommu_sva_unbind_device(struct iommu_sva *handle)
+-{
+-	struct iommu_group *group;
+-	struct device *dev = handle->dev;
+-	const struct iommu_ops *ops = dev_iommu_ops(dev);
+-
+-	if (!ops->sva_unbind)
+-		return;
+-
+-	group = iommu_group_get(dev);
+-	if (!group)
+-		return;
+-
+-	mutex_lock(&group->mutex);
+-	ops->sva_unbind(handle);
+-	mutex_unlock(&group->mutex);
+-
+-	iommu_group_put(group);
+-}
+-EXPORT_SYMBOL_GPL(iommu_sva_unbind_device);
+-
+-u32 iommu_sva_get_pasid(struct iommu_sva *handle)
+-{
+-	const struct iommu_ops *ops = dev_iommu_ops(handle->dev);
+-
+-	if (!ops->sva_get_pasid)
+-		return IOMMU_PASID_INVALID;
+-
+-	return ops->sva_get_pasid(handle);
+-}
+-EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
+-
+ /*
+  * Changes the default domain of an iommu group that has *only* one device
+  *
+@@ -3322,3 +3231,31 @@ void iommu_block_device_pasid(struct iommu_domain *domain, struct device *dev,
+ 
+ 	iommu_group_put(group);
+ }
++
++/*
++ * This is a variant of iommu_get_domain_for_dev(). It returns the existing
++ * domain attached to pasid of a device. It's only for internal use of the
++ * IOMMU subsystem. The caller must take care to avoid any possible
++ * use-after-free case.
++ */
++struct iommu_domain *
++iommu_get_domain_for_dev_pasid(struct device *dev, ioasid_t pasid)
++{
++	struct iommu_domain *domain;
++	struct iommu_group *group;
++
++	if (!pasid_valid(pasid))
++		return NULL;
++
++	group = iommu_group_get(dev);
++	if (!group)
++		return NULL;
++	/*
++	 * The xarray protects its internal state with RCU. Hence the domain
++	 * obtained is either NULL or fully formed.
++	 */
++	domain = xa_load(&group->pasid_array, pasid);
++	iommu_group_put(group);
++
++	return domain;
++}
 -- 
 2.25.1
 

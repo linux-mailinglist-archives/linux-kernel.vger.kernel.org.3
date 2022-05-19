@@ -2,356 +2,492 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E54652D17A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB2A52D17E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237391AbiESL3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50780 "EHLO
+        id S237410AbiESLaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiESL3W (ORCPT
+        with ESMTP id S235135AbiESLac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:29:22 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E76E4CD53;
-        Thu, 19 May 2022 04:29:20 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JAhDLB007597;
-        Thu, 19 May 2022 11:29:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=O3Xnp/cIzP7P3Fq9kkYBnT0KpBfNxk2EVA8eEmfjDsU=;
- b=o0hgANybuPPfk9PF+V8In5HZEeQdiWrg8UBkvzfx8BIgX+XvC58+kz4ykJY0LGirgiSP
- HWBMlg3B4z96bbMqzQBu2JZfAKGilq5X6t1OD3lh28/JQnJj3nLkW1xw2dkaxV/E+UmN
- mf+Ga6cYMbztOgHCRmvUihBnhcMsjLRrFZ54tWtyaWEijLO++1QBn504K1wn0GgFH0RS
- pyrCEAcCDLY+YARc3Do2e3/04FVAjILbknzcjWA3f3T8OTk5Au1E/cmADu97nUndUqlM
- r6ieZbQiEyt2B0luXxcUbWCqmmC9v00INM3snrSkz4MKHwzkb9wqRjPYOIa4Lq2ATaly Ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5mcus06u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 11:29:11 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24JBTBI5028183;
-        Thu, 19 May 2022 11:29:11 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5mcus068-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 11:29:11 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24JBStXE030878;
-        Thu, 19 May 2022 11:29:09 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjf734-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 11:29:09 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24JBT6rh49414406
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 May 2022 11:29:06 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B87284C050;
-        Thu, 19 May 2022 11:29:06 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4C5FD4C046;
-        Thu, 19 May 2022 11:29:02 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.211.122.132])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 19 May 2022 11:29:01 +0000 (GMT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH V2 1/2] powerpc/perf: Add support for caps under sysfs in
- powerpc
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-In-Reply-To: <CAP-5=fWN3Sgyp_hTyYvDrLrnr-7dj6ozERn0tDm5MrU2SEJ2Fg@mail.gmail.com>
-Date:   Thu, 19 May 2022 16:58:58 +0530
-Cc:     maddy@linux.vnet.ibm.com,
-        Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>, disgoel@linux.vnet.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
+        Thu, 19 May 2022 07:30:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EC04F467;
+        Thu, 19 May 2022 04:30:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45E6EB823E2;
+        Thu, 19 May 2022 11:30:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D87FAC385AA;
+        Thu, 19 May 2022 11:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652959828;
+        bh=Sms09XACd7yd8zjKehxBBYAzAuL4Pp8LUqBmSdhiZQU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=MEF165ojs+tXVPIqK9RhYDC0VPX6kqNppki++cdLE6tcZOKXcp97L/v+awZdqsw8p
+         g5alO5qShQWnjzmyILAcy2akllhA7B54x3AuNpBykRyltKiF24kRM2t/MnKN/0yzr7
+         TRoLykrCUze5203IeI+NcbZz56CKdc5nzkA5C5bbf5S4MqFzQ65OfDhmlBP755N7H8
+         kEMPzizOiO6/8+FxRypu5Pv7dLaD7IKqaS4jjMQG3Rhpm85uTUvxpMZpiOH2RbdeEA
+         R+RfdboumZBS4xN49kF4jJg34ZB1Nt1yVD8QouMfXubXizw5S6AkQupfU2TpsLBw6A
+         iKg/vERAq5dZw==
+Message-ID: <f03c8c7ef004ddde6766e43c021183f2d2454d17.camel@kernel.org>
+Subject: Re: [PATCH v5 2/2] ceph: wait the first reply of inflight async
+ unlink
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Xiubo Li <xiubli@redhat.com>, idryomov@gmail.com,
+        viro@zeniv.linux.org.uk
+Cc:     willy@infradead.org, vshankar@redhat.com,
+        ceph-devel@vger.kernel.org, arnd@arndb.de, mcgrof@kernel.org,
+        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Date:   Thu, 19 May 2022 07:30:25 -0400
+In-Reply-To: <20220519101847.87907-3-xiubli@redhat.com>
+References: <20220519101847.87907-1-xiubli@redhat.com>
+         <20220519101847.87907-3-xiubli@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <4D9BD7B3-1FA0-4EFE-A7D9-75BBB84ED308@linux.vnet.ibm.com>
-References: <20220518085502.6914-1-atrajeev@linux.vnet.ibm.com>
- <CAP-5=fWN3Sgyp_hTyYvDrLrnr-7dj6ozERn0tDm5MrU2SEJ2Fg@mail.gmail.com>
-To:     Ian Rogers <irogers@google.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4JXdsjQEl9oCTsorM0lmM6IU_0rPU4v2
-X-Proofpoint-ORIG-GUID: hYOYK1UwVuvAxwKc8g2eGkHAUFOyv_x_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-19_02,2022-05-19_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- phishscore=0 mlxlogscore=999 malwarescore=0 clxscore=1011 mlxscore=0
- priorityscore=1501 suspectscore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205190061
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On 19-May-2022, at 10:12 AM, Ian Rogers <irogers@google.com> wrote:
+On Thu, 2022-05-19 at 18:18 +0800, Xiubo Li wrote:
+> In async unlink case the kclient won't wait for the first reply
+> from MDS and just drop all the links and unhash the dentry and then
+> succeeds immediately.
 >=20
-> On Wed, May 18, 2022 at 1:55 AM Athira Rajeev
-> <atrajeev@linux.vnet.ibm.com> wrote:
->>=20
->> Add caps support under "/sys/bus/event_source/devices/<pmu>/"
->> for powerpc. This directory can be used to expose some of the
->> specific features that powerpc PMU supports to the user.
->> Example: pmu_name. The name of PMU registered will depend on
->> platform, say power9 or power10 or it could be Generic Compat
->> PMU.
->>=20
->> Currently the only way to know which is the registered
->> PMU is from the dmesg logs. But clearing the dmesg will make it
->> difficult to know exact PMU backend used. And even extracting
->> from dmesg will be complicated, as we need  to parse the dmesg
->> logs and add filters for pmu name. Whereas by exposing it via
->> caps will make it easy as we just need to directly read it from
->> the sysfs.
+> For any new create/link/rename,etc requests followed by using the
+> same file names we must wait for the first reply of the inflight
+> unlink request, or the MDS possibly will fail these following
+> requests with -EEXIST if the inflight async unlink request was
+> delayed for some reasons.
 >=20
-> For ARM and x86 in the perf tool this is normally done through a cpuid
-> like function, is there a reason to differ on Power?
+> And the worst case is that for the none async openc request it will
+> successfully open the file if the CDentry hasn't been unlinked yet,
+> but later the previous delayed async unlink request will remove the
+> CDenty. That means the just created file is possiblly deleted later
+> by accident.
 >=20
-> Thanks,
-> Ian
-
-Hi Ian,
-
-Thanks for review. The information from cpuid or cpuinfo will provide
-us the information of the platform/model/machine etc. In case of =
-powerpc,
-we have one case where, though platform points to specific generation of =
-the
-processor, say power9 or power10, the registered PMU could point to
-different one. To be specific, this is named as Generic Compat PMU which
-is a fallback PMU. This gets registered when the distro doesn't have =
-support
-for platform specific PMU. In that case distro will have a Generic
-Compat PMU registered which supports basic features for performance =
-monitoring.
-This information can't be fetched from the cpuid data since that will =
-point
-to current platform.
-
-So the pmu_name exposed via "caps" will be useful to detect the PMU
-registered and also we target to use this information in some of our
-selftests.
-
-Thanks
-Athira
+> We need to wait for the inflight async unlink requests to finish
+> when creating new files/directories by using the same file names.
 >=20
->> Add a caps directory to /sys/bus/event_source/devices/cpu/
->> for power8, power9, power10 and generic compat PMU in respective
->> PMU driver code. Update the pmu_name file under caps folder
->> in core-book3s using "attr_update".
->>=20
->> The information exposed currently:
->> - pmu_name : Underlying PMU name from the driver
->>=20
->> Example result with power9 pmu:
->>=20
->> # ls /sys/bus/event_source/devices/cpu/caps
->> pmu_name
->>=20
->> # cat /sys/bus/event_source/devices/cpu/caps/pmu_name
->> POWER9
->>=20
->> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
->> ---
->> Changelog:
->> v1 -> v2:
->> Move the show function as generic in core-book3s
->> and update show function using sysfs_emit and ppmu->name
->> Added Documention for this ABI in patch 2.
->> Notes: The caps directory is implemented in PMU for other
->> architectures already. Reference commit for x86:
->> commit b00233b53065 ("perf/x86: Export some PMU attributes in caps/ =
-directory")
->>=20
->> arch/powerpc/perf/core-book3s.c        | 31 =
-++++++++++++++++++++++++++
->> arch/powerpc/perf/generic-compat-pmu.c | 10 +++++++++
->> arch/powerpc/perf/power10-pmu.c        | 10 +++++++++
->> arch/powerpc/perf/power8-pmu.c         | 10 +++++++++
->> arch/powerpc/perf/power9-pmu.c         | 10 +++++++++
->> 5 files changed, 71 insertions(+)
->>=20
->> diff --git a/arch/powerpc/perf/core-book3s.c =
-b/arch/powerpc/perf/core-book3s.c
->> index b5b42cf0a703..a208f502a80b 100644
->> --- a/arch/powerpc/perf/core-book3s.c
->> +++ b/arch/powerpc/perf/core-book3s.c
->> @@ -2488,6 +2488,33 @@ static int power_pmu_prepare_cpu(unsigned int =
-cpu)
->>       return 0;
->> }
->>=20
->> +static ssize_t pmu_name_show(struct device *cdev,
->> +               struct device_attribute *attr,
->> +               char *buf)
->> +{
->> +       if (ppmu)
->> +               return sysfs_emit(buf, "%s\n", ppmu->name);
->> +
->> +       return 0;
->> +}
->> +
->> +static DEVICE_ATTR_RO(pmu_name);
->> +
->> +static struct attribute *pmu_caps_attrs[] =3D {
->> +       &dev_attr_pmu_name.attr,
->> +       NULL
->> +};
->> +
->> +static const struct attribute_group pmu_caps_group =3D {
->> +       .name  =3D "caps",
->> +       .attrs =3D pmu_caps_attrs,
->> +};
->> +
->> +static const struct attribute_group *pmu_caps_groups[] =3D {
->> +       &pmu_caps_group,
->> +       NULL,
->> +};
->> +
->> int __init register_power_pmu(struct power_pmu *pmu)
->> {
->>       if (ppmu)
->> @@ -2498,6 +2525,10 @@ int __init register_power_pmu(struct power_pmu =
-*pmu)
->>               pmu->name);
->>=20
->>       power_pmu.attr_groups =3D ppmu->attr_groups;
->> +
->> +       if (ppmu->flags & PPMU_ARCH_207S)
->> +               power_pmu.attr_update =3D pmu_caps_groups;
->> +
->>       power_pmu.capabilities |=3D (ppmu->capabilities & =
-PERF_PMU_CAP_EXTENDED_REGS);
->>=20
->> #ifdef MSR_HV
->> diff --git a/arch/powerpc/perf/generic-compat-pmu.c =
-b/arch/powerpc/perf/generic-compat-pmu.c
->> index f3db88aee4dd..817c69863038 100644
->> --- a/arch/powerpc/perf/generic-compat-pmu.c
->> +++ b/arch/powerpc/perf/generic-compat-pmu.c
->> @@ -151,9 +151,19 @@ static const struct attribute_group =
-generic_compat_pmu_format_group =3D {
->>       .attrs =3D generic_compat_pmu_format_attr,
->> };
->>=20
->> +static struct attribute *generic_compat_pmu_caps_attrs[] =3D {
->> +       NULL
->> +};
->> +
->> +static struct attribute_group generic_compat_pmu_caps_group =3D {
->> +       .name  =3D "caps",
->> +       .attrs =3D generic_compat_pmu_caps_attrs,
->> +};
->> +
->> static const struct attribute_group *generic_compat_pmu_attr_groups[] =
-=3D {
->>       &generic_compat_pmu_format_group,
->>       &generic_compat_pmu_events_group,
->> +       &generic_compat_pmu_caps_group,
->>       NULL,
->> };
->>=20
->> diff --git a/arch/powerpc/perf/power10-pmu.c =
-b/arch/powerpc/perf/power10-pmu.c
->> index c6d51e7093cf..d1adcd9f52e2 100644
->> --- a/arch/powerpc/perf/power10-pmu.c
->> +++ b/arch/powerpc/perf/power10-pmu.c
->> @@ -258,6 +258,15 @@ static const struct attribute_group =
-power10_pmu_format_group =3D {
->>       .attrs =3D power10_pmu_format_attr,
->> };
->>=20
->> +static struct attribute *power10_pmu_caps_attrs[] =3D {
->> +       NULL
->> +};
->> +
->> +static struct attribute_group power10_pmu_caps_group =3D {
->> +       .name  =3D "caps",
->> +       .attrs =3D power10_pmu_caps_attrs,
->> +};
->> +
->> static const struct attribute_group *power10_pmu_attr_groups_dd1[] =3D =
-{
->>       &power10_pmu_format_group,
->>       &power10_pmu_events_group_dd1,
->> @@ -267,6 +276,7 @@ static const struct attribute_group =
-*power10_pmu_attr_groups_dd1[] =3D {
->> static const struct attribute_group *power10_pmu_attr_groups[] =3D {
->>       &power10_pmu_format_group,
->>       &power10_pmu_events_group,
->> +       &power10_pmu_caps_group,
->>       NULL,
->> };
->>=20
->> diff --git a/arch/powerpc/perf/power8-pmu.c =
-b/arch/powerpc/perf/power8-pmu.c
->> index e37b1e714d2b..2518f5375d4a 100644
->> --- a/arch/powerpc/perf/power8-pmu.c
->> +++ b/arch/powerpc/perf/power8-pmu.c
->> @@ -187,9 +187,19 @@ static const struct attribute_group =
-power8_pmu_events_group =3D {
->>       .attrs =3D power8_events_attr,
->> };
->>=20
->> +static struct attribute *power8_pmu_caps_attrs[] =3D {
->> +       NULL
->> +};
->> +
->> +static struct attribute_group power8_pmu_caps_group =3D {
->> +       .name  =3D "caps",
->> +       .attrs =3D power8_pmu_caps_attrs,
->> +};
->> +
->> static const struct attribute_group *power8_pmu_attr_groups[] =3D {
->>       &isa207_pmu_format_group,
->>       &power8_pmu_events_group,
->> +       &power8_pmu_caps_group,
->>       NULL,
->> };
->>=20
->> diff --git a/arch/powerpc/perf/power9-pmu.c =
-b/arch/powerpc/perf/power9-pmu.c
->> index c393e837648e..5c654ce1a417 100644
->> --- a/arch/powerpc/perf/power9-pmu.c
->> +++ b/arch/powerpc/perf/power9-pmu.c
->> @@ -258,9 +258,19 @@ static const struct attribute_group =
-power9_pmu_format_group =3D {
->>       .attrs =3D power9_pmu_format_attr,
->> };
->>=20
->> +static struct attribute *power9_pmu_caps_attrs[] =3D {
->> +       NULL
->> +};
->> +
->> +static struct attribute_group power9_pmu_caps_group =3D {
->> +       .name  =3D "caps",
->> +       .attrs =3D power9_pmu_caps_attrs,
->> +};
->> +
->> static const struct attribute_group *power9_pmu_attr_groups[] =3D {
->>       &power9_pmu_format_group,
->>       &power9_pmu_events_group,
->> +       &power9_pmu_caps_group,
->>       NULL,
->> };
->>=20
->> --
->> 2.31.1
+> URL: https://tracker.ceph.com/issues/55332
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Xiubo Li <xiubli@redhat.com>
+> ---
+>  fs/ceph/dir.c        | 79 +++++++++++++++++++++++++++++++++++++++-----
+>  fs/ceph/file.c       |  6 +++-
+>  fs/ceph/mds_client.c | 75 ++++++++++++++++++++++++++++++++++++++++-
+>  fs/ceph/mds_client.h |  1 +
+>  fs/ceph/super.c      |  3 ++
+>  fs/ceph/super.h      | 19 ++++++++---
+>  6 files changed, 167 insertions(+), 16 deletions(-)
+>=20
+> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+> index eae417d71136..e7e2ebac330d 100644
+> --- a/fs/ceph/dir.c
+> +++ b/fs/ceph/dir.c
+> @@ -856,6 +856,10 @@ static int ceph_mknod(struct user_namespace *mnt_use=
+rns, struct inode *dir,
+>  	if (ceph_snap(dir) !=3D CEPH_NOSNAP)
+>  		return -EROFS;
+> =20
+> +	err =3D ceph_wait_on_conflict_unlink(dentry);
+> +	if (err)
+> +		return err;
+> +
+>  	if (ceph_quota_is_max_files_exceeded(dir)) {
+>  		err =3D -EDQUOT;
+>  		goto out;
+> @@ -918,6 +922,10 @@ static int ceph_symlink(struct user_namespace *mnt_u=
+serns, struct inode *dir,
+>  	if (ceph_snap(dir) !=3D CEPH_NOSNAP)
+>  		return -EROFS;
+> =20
+> +	err =3D ceph_wait_on_conflict_unlink(dentry);
+> +	if (err)
+> +		return err;
+> +
+>  	if (ceph_quota_is_max_files_exceeded(dir)) {
+>  		err =3D -EDQUOT;
+>  		goto out;
+> @@ -968,9 +976,13 @@ static int ceph_mkdir(struct user_namespace *mnt_use=
+rns, struct inode *dir,
+>  	struct ceph_mds_client *mdsc =3D ceph_sb_to_mdsc(dir->i_sb);
+>  	struct ceph_mds_request *req;
+>  	struct ceph_acl_sec_ctx as_ctx =3D {};
+> -	int err =3D -EROFS;
+> +	int err;
+>  	int op;
+> =20
+> +	err =3D ceph_wait_on_conflict_unlink(dentry);
+> +	if (err)
+> +		return err;
+> +
+>  	if (ceph_snap(dir) =3D=3D CEPH_SNAPDIR) {
+>  		/* mkdir .snap/foo is a MKSNAP */
+>  		op =3D CEPH_MDS_OP_MKSNAP;
+> @@ -980,6 +992,7 @@ static int ceph_mkdir(struct user_namespace *mnt_user=
+ns, struct inode *dir,
+>  		dout("mkdir dir %p dn %p mode 0%ho\n", dir, dentry, mode);
+>  		op =3D CEPH_MDS_OP_MKDIR;
+>  	} else {
+> +		err =3D -EROFS;
+>  		goto out;
+>  	}
+> =20
+> @@ -1037,6 +1050,10 @@ static int ceph_link(struct dentry *old_dentry, st=
+ruct inode *dir,
+>  	struct ceph_mds_request *req;
+>  	int err;
+> =20
+> +	err =3D ceph_wait_on_conflict_unlink(dentry);
+> +	if (err)
+> +		return err;
+> +
+>  	if (ceph_snap(dir) !=3D CEPH_NOSNAP)
+>  		return -EROFS;
+> =20
+> @@ -1071,9 +1088,27 @@ static int ceph_link(struct dentry *old_dentry, st=
+ruct inode *dir,
+>  static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
+>  				 struct ceph_mds_request *req)
+>  {
+> +	struct dentry *dentry =3D req->r_dentry;
+> +	struct ceph_fs_client *fsc =3D ceph_sb_to_client(dentry->d_sb);
+> +	struct ceph_dentry_info *di =3D ceph_dentry(dentry);
+>  	int result =3D req->r_err ? req->r_err :
+>  			le32_to_cpu(req->r_reply_info.head->result);
+> =20
+> +	if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
+> +		pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
+> +			__func__, dentry, dentry);
+> +
+> +	spin_lock(&fsc->async_unlink_conflict_lock);
+> +	hash_del_rcu(&di->hnode);
+> +	spin_unlock(&fsc->async_unlink_conflict_lock);
+> +
+> +	spin_lock(&dentry->d_lock);
+> +	di->flags &=3D ~CEPH_DENTRY_ASYNC_UNLINK;
+> +	wake_up_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT);
+> +	spin_unlock(&dentry->d_lock);
+> +
+> +	synchronize_rcu();
+> +
+>  	if (result =3D=3D -EJUKEBOX)
+>  		goto out;
+> =20
+> @@ -1081,7 +1116,7 @@ static void ceph_async_unlink_cb(struct ceph_mds_cl=
+ient *mdsc,
+>  	if (result) {
+>  		int pathlen =3D 0;
+>  		u64 base =3D 0;
+> -		char *path =3D ceph_mdsc_build_path(req->r_dentry, &pathlen,
+> +		char *path =3D ceph_mdsc_build_path(dentry, &pathlen,
+>  						  &base, 0);
+> =20
+>  		/* mark error on parent + clear complete */
+> @@ -1089,13 +1124,13 @@ static void ceph_async_unlink_cb(struct ceph_mds_=
+client *mdsc,
+>  		ceph_dir_clear_complete(req->r_parent);
+> =20
+>  		/* drop the dentry -- we don't know its status */
+> -		if (!d_unhashed(req->r_dentry))
+> -			d_drop(req->r_dentry);
+> +		if (!d_unhashed(dentry))
+> +			d_drop(dentry);
+> =20
+>  		/* mark inode itself for an error (since metadata is bogus) */
+>  		mapping_set_error(req->r_old_inode->i_mapping, result);
+> =20
+> -		pr_warn("ceph: async unlink failure path=3D(%llx)%s result=3D%d!\n",
+> +		pr_warn("async unlink failure path=3D(%llx)%s result=3D%d!\n",
+>  			base, IS_ERR(path) ? "<<bad>>" : path, result);
+>  		ceph_mdsc_free_path(path, pathlen);
+>  	}
+> @@ -1180,6 +1215,8 @@ static int ceph_unlink(struct inode *dir, struct de=
+ntry *dentry)
+> =20
+>  	if (try_async && op =3D=3D CEPH_MDS_OP_UNLINK &&
+>  	    (req->r_dir_caps =3D get_caps_for_async_unlink(dir, dentry))) {
+> +		struct ceph_dentry_info *di =3D ceph_dentry(dentry);
+> +
+>  		dout("async unlink on %llu/%.*s caps=3D%s", ceph_ino(dir),
+>  		     dentry->d_name.len, dentry->d_name.name,
+>  		     ceph_cap_string(req->r_dir_caps));
+> @@ -1187,6 +1224,16 @@ static int ceph_unlink(struct inode *dir, struct d=
+entry *dentry)
+>  		req->r_callback =3D ceph_async_unlink_cb;
+>  		req->r_old_inode =3D d_inode(dentry);
+>  		ihold(req->r_old_inode);
+> +
+> +		spin_lock(&dentry->d_lock);
+> +		di->flags |=3D CEPH_DENTRY_ASYNC_UNLINK;
+> +		spin_unlock(&dentry->d_lock);
+> +
+> +		spin_lock(&fsc->async_unlink_conflict_lock);
+> +		hash_add_rcu(fsc->async_unlink_conflict, &di->hnode,
+> +			     dentry->d_name.hash);
+> +		spin_unlock(&fsc->async_unlink_conflict_lock);
+> +
+>  		err =3D ceph_mdsc_submit_request(mdsc, dir, req);
+>  		if (!err) {
+>  			/*
+> @@ -1195,10 +1242,20 @@ static int ceph_unlink(struct inode *dir, struct =
+dentry *dentry)
+>  			 */
+>  			drop_nlink(inode);
+>  			d_delete(dentry);
+> -		} else if (err =3D=3D -EJUKEBOX) {
+> -			try_async =3D false;
+> -			ceph_mdsc_put_request(req);
+> -			goto retry;
+> +		} else {
+> +			spin_lock(&fsc->async_unlink_conflict_lock);
+> +			hash_del_rcu(&di->hnode);
+> +			spin_unlock(&fsc->async_unlink_conflict_lock);
+> +
+> +			spin_lock(&dentry->d_lock);
+> +			di->flags &=3D ~CEPH_DENTRY_ASYNC_UNLINK;
+> +			spin_unlock(&dentry->d_lock);
+> +
+> +			if (err =3D=3D -EJUKEBOX) {
+> +				try_async =3D false;
+> +				ceph_mdsc_put_request(req);
+> +				goto retry;
+> +			}
+>  		}
+>  	} else {
+>  		set_bit(CEPH_MDS_R_PARENT_LOCKED, &req->r_req_flags);
+> @@ -1237,6 +1294,10 @@ static int ceph_rename(struct user_namespace *mnt_=
+userns, struct inode *old_dir,
+>  	    (!ceph_quota_is_same_realm(old_dir, new_dir)))
+>  		return -EXDEV;
+> =20
+> +	err =3D ceph_wait_on_conflict_unlink(new_dentry);
+> +	if (err)
+> +		return err;
+> +
+>  	dout("rename dir %p dentry %p to dir %p dentry %p\n",
+>  	     old_dir, old_dentry, new_dir, new_dentry);
+>  	req =3D ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index 8c8226c0feac..0f863e1d6ae9 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -569,7 +569,7 @@ static void ceph_async_create_cb(struct ceph_mds_clie=
+nt *mdsc,
+>  		char *path =3D ceph_mdsc_build_path(req->r_dentry, &pathlen,
+>  						  &base, 0);
+> =20
+> -		pr_warn("ceph: async create failure path=3D(%llx)%s result=3D%d!\n",
+> +		pr_warn("async create failure path=3D(%llx)%s result=3D%d!\n",
+>  			base, IS_ERR(path) ? "<<bad>>" : path, result);
+>  		ceph_mdsc_free_path(path, pathlen);
+> =20
+> @@ -740,6 +740,10 @@ int ceph_atomic_open(struct inode *dir, struct dentr=
+y *dentry,
+>  	if (dentry->d_name.len > NAME_MAX)
+>  		return -ENAMETOOLONG;
+> =20
+> +	err =3D ceph_wait_on_conflict_unlink(dentry);
+> +	if (err)
+> +		return err;
+> +
+>  	if (flags & O_CREAT) {
+>  		if (ceph_quota_is_max_files_exceeded(dir))
+>  			return -EDQUOT;
+> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+> index e8c87dea0551..9ea2dcc02710 100644
+> --- a/fs/ceph/mds_client.c
+> +++ b/fs/ceph/mds_client.c
+> @@ -456,7 +456,7 @@ static int ceph_parse_deleg_inos(void **p, void *end,
+>  				dout("added delegated inode 0x%llx\n",
+>  				     start - 1);
+>  			} else if (err =3D=3D -EBUSY) {
+> -				pr_warn("ceph: MDS delegated inode 0x%llx more than once.\n",
+> +				pr_warn("MDS delegated inode 0x%llx more than once.\n",
+>  					start - 1);
+>  			} else {
+>  				return err;
+> @@ -655,6 +655,79 @@ static void destroy_reply_info(struct ceph_mds_reply=
+_info_parsed *info)
+>  	free_pages((unsigned long)info->dir_entries, get_order(info->dir_buf_si=
+ze));
+>  }
+> =20
+> +/*
+> + * In async unlink case the kclient won't wait for the first reply
+> + * from MDS and just drop all the links and unhash the dentry and then
+> + * succeeds immediately.
+> + *
+> + * For any new create/link/rename,etc requests followed by using the
+> + * same file names we must wait for the first reply of the inflight
+> + * unlink request, or the MDS possibly will fail these following
+> + * requests with -EEXIST if the inflight async unlink request was
+> + * delayed for some reasons.
+> + *
+> + * And the worst case is that for the none async openc request it will
+> + * successfully open the file if the CDentry hasn't been unlinked yet,
+> + * but later the previous delayed async unlink request will remove the
+> + * CDenty. That means the just created file is possiblly deleted later
+> + * by accident.
+> + *
+> + * We need to wait for the inflight async unlink requests to finish
+> + * when creating new files/directories by using the same file names.
+> + */
+> +int ceph_wait_on_conflict_unlink(struct dentry *dentry)
+> +{
+> +	struct ceph_fs_client *fsc =3D ceph_sb_to_client(dentry->d_sb);
+> +	struct dentry *pdentry =3D dentry->d_parent;
+> +	struct dentry *udentry, *found =3D NULL;
+> +	struct ceph_dentry_info *di;
+> +	struct qstr dname;
+> +	u32 hash =3D dentry->d_name.hash;
+> +	int err;
+> +
+> +	dname.name =3D dentry->d_name.name;
+> +	dname.len =3D dentry->d_name.len;
+> +
+> +	rcu_read_lock();
+> +	hash_for_each_possible_rcu(fsc->async_unlink_conflict, di,
+> +				   hnode, hash) {
+> +		udentry =3D di->dentry;
+> +
+> +		spin_lock(&udentry->d_lock);
+> +		if (udentry->d_name.hash !=3D hash)
+> +			goto next;
+> +		if (unlikely(udentry->d_parent !=3D pdentry))
+> +			goto next;
+> +		if (!hash_hashed(&di->hnode))
+> +			goto next;
+> +
+> +		if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
+> +			pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
+> +				__func__, dentry, dentry);
+> +
+> +		if (d_compare(pdentry, udentry, &dname))
+> +			goto next;
+> +
+> +		spin_unlock(&udentry->d_lock);
+> +		found =3D dget(udentry);
+> +		break;
+> +next:
+> +		spin_unlock(&udentry->d_lock);
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	if (likely(!found))
+> +		return 0;
+> +
+> +	dout("%s dentry %p:%pd conflict with old %p:%pd\n", __func__,
+> +	     dentry, dentry, found, found);
+> +
+> +	err =3D wait_on_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT,
+> +			  TASK_KILLABLE);
+> +	dput(found);
+> +	return err;
+> +}
+> +
+> =20
+>  /*
+>   * sessions
+> diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
+> index 33497846e47e..d1ae679c52c3 100644
+> --- a/fs/ceph/mds_client.h
+> +++ b/fs/ceph/mds_client.h
+> @@ -582,6 +582,7 @@ static inline int ceph_wait_on_async_create(struct in=
+ode *inode)
+>  			   TASK_INTERRUPTIBLE);
+>  }
+> =20
+> +extern int ceph_wait_on_conflict_unlink(struct dentry *dentry);
+>  extern u64 ceph_get_deleg_ino(struct ceph_mds_session *session);
+>  extern int ceph_restore_deleg_ino(struct ceph_mds_session *session, u64 =
+ino);
+>  #endif
+> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+> index b73b4f75462c..6542b71f8627 100644
+> --- a/fs/ceph/super.c
+> +++ b/fs/ceph/super.c
+> @@ -816,6 +816,9 @@ static struct ceph_fs_client *create_fs_client(struct=
+ ceph_mount_options *fsopt,
+>  	if (!fsc->cap_wq)
+>  		goto fail_inode_wq;
+> =20
+> +	hash_init(fsc->async_unlink_conflict);
+> +	spin_lock_init(&fsc->async_unlink_conflict_lock);
+> +
+>  	spin_lock(&ceph_fsc_lock);
+>  	list_add_tail(&fsc->metric_wakeup, &ceph_fsc_list);
+>  	spin_unlock(&ceph_fsc_lock);
+> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+> index 506d52633627..251e726ec628 100644
+> --- a/fs/ceph/super.h
+> +++ b/fs/ceph/super.h
+> @@ -19,6 +19,7 @@
+>  #include <linux/security.h>
+>  #include <linux/netfs.h>
+>  #include <linux/fscache.h>
+> +#include <linux/hashtable.h>
+> =20
+>  #include <linux/ceph/libceph.h>
+> =20
+> @@ -99,6 +100,8 @@ struct ceph_mount_options {
+>  	char *mon_addr;
+>  };
+> =20
+> +#define CEPH_ASYNC_CREATE_CONFLICT_BITS 8
+> +
+>  struct ceph_fs_client {
+>  	struct super_block *sb;
+> =20
+> @@ -124,6 +127,9 @@ struct ceph_fs_client {
+>  	struct workqueue_struct *inode_wq;
+>  	struct workqueue_struct *cap_wq;
+> =20
+> +	DECLARE_HASHTABLE(async_unlink_conflict, CEPH_ASYNC_CREATE_CONFLICT_BIT=
+S);
+> +	spinlock_t async_unlink_conflict_lock;
+> +
+>  #ifdef CONFIG_DEBUG_FS
+>  	struct dentry *debugfs_dentry_lru, *debugfs_caps;
+>  	struct dentry *debugfs_congestion_kb;
+> @@ -281,7 +287,8 @@ struct ceph_dentry_info {
+>  	struct dentry *dentry;
+>  	struct ceph_mds_session *lease_session;
+>  	struct list_head lease_list;
+> -	unsigned flags;
+> +	struct hlist_node hnode;
+> +	unsigned long flags;
+>  	int lease_shared_gen;
+>  	u32 lease_gen;
+>  	u32 lease_seq;
+> @@ -290,10 +297,12 @@ struct ceph_dentry_info {
+>  	u64 offset;
+>  };
+> =20
+> -#define CEPH_DENTRY_REFERENCED		1
+> -#define CEPH_DENTRY_LEASE_LIST		2
+> -#define CEPH_DENTRY_SHRINK_LIST		4
+> -#define CEPH_DENTRY_PRIMARY_LINK	8
+> +#define CEPH_DENTRY_REFERENCED		(1 << 0)
+> +#define CEPH_DENTRY_LEASE_LIST		(1 << 1)
+> +#define CEPH_DENTRY_SHRINK_LIST		(1 << 2)
+> +#define CEPH_DENTRY_PRIMARY_LINK	(1 << 3)
+> +#define CEPH_DENTRY_ASYNC_UNLINK_BIT	(4)
+> +#define CEPH_DENTRY_ASYNC_UNLINK	(1 << CEPH_DENTRY_ASYNC_UNLINK_BIT)
+> =20
+>  struct ceph_inode_xattrs_info {
+>  	/*
 
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

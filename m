@@ -2,205 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27C852CAA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 06:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B032E52CAB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 06:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233463AbiESEEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 00:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S233505AbiESEHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 00:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbiESEEl (ORCPT
+        with ESMTP id S233483AbiESEH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 00:04:41 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C3E9A98B
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 21:04:40 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id m23so4830266ljc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 21:04:40 -0700 (PDT)
+        Thu, 19 May 2022 00:07:27 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58240B2240;
+        Wed, 18 May 2022 21:07:26 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2ec42eae76bso44575147b3.10;
+        Wed, 18 May 2022 21:07:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=n0WqSjbtSNE0NhAHgkhktuyznGvAC8Z94X7uXLT1JRM=;
-        b=R65X9/wZQ3VbcRybUFv5mw1ZkIK7CbmY/GaBWVAGu+8mz27BQjtGFIrK2bX304qQZ5
-         ZzM7S0FnLJwJjxb274CqqQnWT8IqHvg4ODdbU5+J9BRLxyqwtpLvf3mmWSH3ahNdA+lU
-         c8Efs+pWoo5h5RKep40f2yXNenX29elRD6qaHkDvcyfgx+XTwf8z/lGiwy77I3qJ8iO5
-         Msyv3mSYSCeTng1tDcR7HpxuQ8FE80dO+/pMZwWNWKIv0u0AHR0sUlNTJZCFfQlgalUw
-         I/r05dcAjKfvsyEGSCIo3Ai4sIK0Fr2P+GB5lOX99pziuTLNnr/4EmiI26FETKi49NbO
-         ZRGg==
+        bh=VXXEFVAWdcfsrBLBj8ao5DIb64QepPVvyxaMhKzXSz4=;
+        b=bw96tcbU3b3bKXOLcOF/AgAkk7wRQZDJDDAW9NCIvo1kFnjx0ziKDZV5+njUSSrKHL
+         nMUcqVxWv4O/HOLGLqgSw2tPsLor49noYVmEC2cUOF7sUum+XgVsz/chJvloyE/7Mhpp
+         A6/xy8c41g993gjpNoXpRTxlGrLpRWFlUFjmWQ/JZbOFm8WhFX/m46d+SR19VSr+JqvJ
+         2gGXdgRBUxXf900CZ22iErlthvQIHmWwQtfGwYTgpRVVoPoCmoQKsNiRDAvsHwMfbDZ5
+         EoxNS1V6DGWwOCk4Ip9ckDnlX1RFHZG/PDmPKGA7jHOP/7l/cifjH05BjVLlyJ63oqnW
+         aSCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=n0WqSjbtSNE0NhAHgkhktuyznGvAC8Z94X7uXLT1JRM=;
-        b=8DydK6zMaoXoFfL4iVwU3y7K1zFhOyKBJasQ4ASSlFt582Bw+9yGOv5zLAv8/m/wS/
-         0rHEIGaHYvv94eWFcOVMFao3yrqsFyLQqbQUXYSp+MORL+mPl47TptOchBZDGWTs6R5J
-         PFg6DjCkGh9gpHNDr2xM+CtSDm75Btyqn0qxVil/WGelq9NtJdeS5W9NIb37HPeS+cUB
-         Ui8xa2oQwgDKyJ/rXtIgTLZDZNge1jZ0bflsn4G9iBnCqjFQZteMujNydZfn/KUbY7e7
-         xc6S1Th1n+eJmfAGHn3f8ZJqF4wZ/iAVj0+dVVJ5s80WY1bp6VKJ4hin8kRk6UDRWKCr
-         +DKQ==
-X-Gm-Message-State: AOAM530tX75zTFask/HJ/i4n8YdWyLCFCmVgOpAnS5LbqzbbmDGcFEcU
-        LM0uy2Je0XSN6QLsIk87K+L5UpF+ZsLyWZ0TskWrGjckuVNEbA==
-X-Google-Smtp-Source: ABdhPJz5zh4yFjz2+uzcc9OKuxkhf+RSeDOAf14JMNpky3U/o33GKfx9oY9pcnkFZLayOWUyFgtRpijetQErtJJ0LLc=
-X-Received: by 2002:a05:6000:78b:b0:20d:101b:2854 with SMTP id
- bu11-20020a056000078b00b0020d101b2854mr2110281wrb.300.1652933067274; Wed, 18
- May 2022 21:04:27 -0700 (PDT)
+        bh=VXXEFVAWdcfsrBLBj8ao5DIb64QepPVvyxaMhKzXSz4=;
+        b=DsxFlMOwjrmXNzsr1NbiDgEN+ZZMbCvSGttOVcx4bIZSJmqmvn9pkfKZfiiCNGUwG/
+         SuINhQU+hEFSjPL5LuuL+hS9qR0SCzrW9FL+R5sF2aV78Gwpf7LCZOEgdOuDA2647jcZ
+         XNtqBaIoidh8UcVOjoMJaxANYSsyYUi8hyZxmiGmU/oYFEFytCzU//fIlqwRVkLg24w2
+         vnkRnjpZf2kPYxPC/DRQyVj50EGQPTWWqQ2WUqb2MoSRqBtLWQfP2QL9GGcT5djm5PGE
+         zt7qE4mpBSyb/LrHqPcakokvCodOv2HGRFi6NpeedgLfvZ8OFHo4zFODb3VONQZX05EQ
+         H0dA==
+X-Gm-Message-State: AOAM530RqoQzXbdVT/VVfbBzVBqQUhVhTONWl1eqam94l3KG+ptpoKwB
+        HVCrIZrayn6iJZANpPFMfOifT4M3muGHzPkis4Y=
+X-Google-Smtp-Source: ABdhPJxbJGkHPtjXLEwwOw4PHTO9ghyGHE/Mv303/T+yUZFJOG3isNuJYeet9Pv4Y+XInrhWvxXsWOCPupkmjHSn/Oo=
+X-Received: by 2002:a0d:c101:0:b0:2ff:5824:e8a8 with SMTP id
+ c1-20020a0dc101000000b002ff5824e8a8mr2562737ywd.413.1652933245601; Wed, 18
+ May 2022 21:07:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518224725.742882-1-namhyung@kernel.org> <20220518224725.742882-5-namhyung@kernel.org>
-In-Reply-To: <20220518224725.742882-5-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 18 May 2022 21:04:15 -0700
-Message-ID: <CAP-5=fVUxdKY5Uvi8k=_1kJ8_Qw_PuGbfTY5EbF4j35DxSDFFA@mail.gmail.com>
-Subject: Re: [PATCH 4/6] perf record: Handle argument change in sched_switch
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Milian Wolff <milian.wolff@kdab.com>, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Blake Jones <blakejones@google.com>
+References: <20220518192924.20948-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAHp75VeyU4Ox76wz9VfT8qEKHsE1eAo2iw27Lro1tmjJB0npMg@mail.gmail.com>
+In-Reply-To: <CAHp75VeyU4Ox76wz9VfT8qEKHsE1eAo2iw27Lro1tmjJB0npMg@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 19 May 2022 05:07:00 +0100
+Message-ID: <CA+V-a8tp0T=ojr3hB-QacOvV5sCZ29YXspPzKSSpGHUA8_1XDA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/7] Renesas RZ/G2L IRQC support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 3:47 PM Namhyung Kim <namhyung@kernel.org> wrote:
+On Wed, May 18, 2022 at 10:10 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> Recently sched_switch tracepoint added a new argument for prev_state,
-> but it's hard to handle the change in a BPF program.  Instead, we can
-> check the function prototype in BTF before loading the program.
+> On Wed, May 18, 2022 at 9:29 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> >
+> > Hi All,
+> >
+> > The RZ/G2L Interrupt Controller is a front-end for the GIC found on
+> > Renesas RZ/G2L SoC's with below pins:
+> > - IRQ sense select for 8 external interrupts, mapped to 8 GIC SPI
+> >   interrupts
+> > - GPIO pins used as external interrupt input pins out of GPIOINT0-122 a
+> >   maximum of only 32 can be mapped to 32 GIC SPI interrupts,
+> > - NMI edge select.
+> >
+> >                                                              _____________
+> >                                                              |    GIC     |
+> >                                                              |  ________  |
+> >                                       ____________           | |        | |
+> > NMI --------------------------------->|          |  SPI0-479 | | GIC-600| |
+> >              _______                  |          |------------>|        | |
+> >              |      |                 |          |  PPI16-31 | |        | |
+> >              |      | IRQ0-IRQ7       |   IRQC   |------------>|        | |
+> > P0_P48_4 --->| GPIO |---------------->|          |           | |________| |
+> >              |      |GPIOINT0-122     |          |           |            |
+> >              |      |---------------->| TINT0-31 |           |            |
+> >              |______|                 |__________|           |____________|
+> >
+> > The proposed patches add hierarchical IRQ domain, one in IRQC driver and
+> > another in pinctrl driver. Upon interrupt requests map the interrupt to
+> > GIC. Out of GPIOINT0-122 only 32 can be mapped to GIC SPI, this mapping is
+> > handled by the pinctrl and IRQC driver.
 >
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> Where is the explanation on why valid_mask can't be used instead?
+>
+The .valid_mask option is one time setting but what I need is
+something dynamic i.e. out of 392 GPIO pins any 32 can be used as an
+interrupt pin. Also with this patch we also save on memory here [0].
 
-Acked-by: Ian Rogers <irogers@google.com>
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/kernel/irq/irqdomain.c?h=next-20220518#n153
 
-Thanks,
-Ian
-
-> ---
->  tools/perf/util/bpf_off_cpu.c          | 28 +++++++++++++++++++++
->  tools/perf/util/bpf_skel/off_cpu.bpf.c | 35 ++++++++++++++++++--------
->  2 files changed, 52 insertions(+), 11 deletions(-)
+Cheers,
+Prabhakar
 >
-> diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-> index b5e2d038da50..874856c55101 100644
-> --- a/tools/perf/util/bpf_off_cpu.c
-> +++ b/tools/perf/util/bpf_off_cpu.c
-> @@ -89,6 +89,33 @@ static void off_cpu_finish(void *arg __maybe_unused)
->         off_cpu_bpf__destroy(skel);
->  }
->
-> +/* v5.18 kernel added prev_state arg, so it needs to check the signature */
-> +static void check_sched_switch_args(void)
-> +{
-> +       const struct btf *btf = bpf_object__btf(skel->obj);
-> +       const struct btf_type *t1, *t2, *t3;
-> +       u32 type_id;
-> +
-> +       type_id = btf__find_by_name_kind(btf, "bpf_trace_sched_switch",
-> +                                        BTF_KIND_TYPEDEF);
-> +       if ((s32)type_id < 0)
-> +               return;
-> +
-> +       t1 = btf__type_by_id(btf, type_id);
-> +       if (t1 == NULL)
-> +               return;
-> +
-> +       t2 = btf__type_by_id(btf, t1->type);
-> +       if (t2 == NULL || !btf_is_ptr(t2))
-> +               return;
-> +
-> +       t3 = btf__type_by_id(btf, t2->type);
-> +       if (t3 && btf_is_func_proto(t3) && btf_vlen(t3) == 4) {
-> +               /* new format: pass prev_state as 4th arg */
-> +               skel->rodata->has_prev_state = true;
-> +       }
-> +}
-> +
->  int off_cpu_prepare(struct evlist *evlist, struct target *target)
->  {
->         int err, fd, i;
-> @@ -117,6 +144,7 @@ int off_cpu_prepare(struct evlist *evlist, struct target *target)
->         }
->
->         set_max_rlimit();
-> +       check_sched_switch_args();
->
->         err = off_cpu_bpf__load(skel);
->         if (err) {
-> diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> index 78cdcc8ff863..986d7db6e75d 100644
-> --- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> +++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-> @@ -72,6 +72,8 @@ int enabled = 0;
->  int has_cpu = 0;
->  int has_task = 0;
->
-> +const volatile bool has_prev_state = false;
-> +
->  /*
->   * Old kernel used to call it task_struct->state and now it's '__state'.
->   * Use BPF CO-RE "ignored suffix rule" to deal with it like below:
-> @@ -121,22 +123,13 @@ static inline int can_record(struct task_struct *t, int state)
->         return 1;
->  }
->
-> -SEC("tp_btf/sched_switch")
-> -int on_switch(u64 *ctx)
-> +static int off_cpu_stat(u64 *ctx, struct task_struct *prev,
-> +                       struct task_struct *next, int state)
->  {
->         __u64 ts;
-> -       int state;
->         __u32 stack_id;
-> -       struct task_struct *prev, *next;
->         struct tstamp_data *pelem;
->
-> -       if (!enabled)
-> -               return 0;
-> -
-> -       prev = (struct task_struct *)ctx[1];
-> -       next = (struct task_struct *)ctx[2];
-> -       state = get_task_state(prev);
-> -
->         ts = bpf_ktime_get_ns();
->
->         if (!can_record(prev, state))
-> @@ -180,4 +173,24 @@ int on_switch(u64 *ctx)
->         return 0;
->  }
->
-> +SEC("tp_btf/sched_switch")
-> +int on_switch(u64 *ctx)
-> +{
-> +       struct task_struct *prev, *next;
-> +       int prev_state;
-> +
-> +       if (!enabled)
-> +               return 0;
-> +
-> +       prev = (struct task_struct *)ctx[1];
-> +       next = (struct task_struct *)ctx[2];
-> +
-> +       if (has_prev_state)
-> +               prev_state = (int)ctx[3];
-> +       else
-> +               prev_state = get_task_state(prev);
-> +
-> +       return off_cpu_stat(ctx, prev, next, prev_state);
-> +}
-> +
->  char LICENSE[] SEC("license") = "Dual BSD/GPL";
 > --
-> 2.36.1.124.g0e6072fb45-goog
->
+> With Best Regards,
+> Andy Shevchenko

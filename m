@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F237552DB2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD68352DB24
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242625AbiESR0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
+        id S242856AbiESR0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242640AbiESRZD (ORCPT
+        with ESMTP id S242623AbiESRZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:25:03 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EACAEE07;
-        Thu, 19 May 2022 10:25:01 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so6418786pjb.1;
-        Thu, 19 May 2022 10:25:01 -0700 (PDT)
+        Thu, 19 May 2022 13:25:05 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27049A3093;
+        Thu, 19 May 2022 10:25:03 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id i24so5706065pfa.7;
+        Thu, 19 May 2022 10:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XYDmKGQ68/tcSrl96epbwKIv/5DWUEdmV+ljYHPziEQ=;
-        b=Wp2efo+C3K4Ivu4rvZOFIJAHwQ1ryFWKaVFECGdFWYf87IEmUdHKWbf39P0c8fjElA
-         m2yhaUhZSkZYA8QBoNRgLuBFeyNoxNx7hAqOpTF8naCZgfSkltJUNtVQPwImHyLGcOJi
-         N79mOU+o9K0PoHhwtD9Fe6ei10ET+UKlwvluDjUohaEIP+Yfgsl9gPiw/j1LWL71Mck3
-         tFIw0Ao3/ApVsYMepzbAJdcH5E4lvLlPivsBpMbNGrIRY48dwZFfdeXce0Q5comOVhM7
-         CCpvTcsqpsv/gA2iaEkNGWYJbFQjqfyuFJ8qoBUP82VrPYvkvNccFnLpO1T1P2xPHQMl
-         iTvg==
+        bh=sYyJmhJ1UJuNTKSNkznuVgdOa0YLmomkOmOhYpxJCFI=;
+        b=B1Heee3hxpN0aBQABPk0xvOT+jNBu4aa7AW9HK6xt/c87pzEb/DTZi7S+zuAx7PfOi
+         Ugk+cjgRwVIq0AfPCPScAmiJDJinvCqHIbGwupmjTb3JM3sMnmnbqB79XrgM5gwDVatp
+         DltHbvP8sTARpXH5IhZ3fAthfr4j1lR5OO2INzRNnl9acSGvlZhHf2euPwAZVBTSJ8si
+         CZbQIn3QSEfbI5qbXSHNv2G4GXSdwjhtMOznL6S5rKQFb+CMk73ITxWA1Gez162dP7UI
+         oi9ial8S6TM8MW23ND5h0h8wcA+lsIW4YDX+5lQMe8sJ+MsFwpTlpFAx+9j2yenqSqi4
+         xHPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XYDmKGQ68/tcSrl96epbwKIv/5DWUEdmV+ljYHPziEQ=;
-        b=wZB/YBbxc69xsy4f/NivuDS7aiIJ8Y0tDjpmN80KKZ+7uIYa9QLmc5NlN0BfhyV22D
-         +LtCwQauJx2qgDkWlChk6IqKQoxTl3GO8lyEFDLvZABCQvw4tbb1JDnxi+DQFLdTeRWR
-         7bMXoDuEam7x1k3tSsxubAiKK4wg2jqiNUTfgYWOyhVUbuOPRMGuqAHn7GsHoo7/9AqR
-         l8RoaxVTO63+DQQEvmC/bMOzpSyn3YzllkuR+kD5RFlzVLVNPnfzi8L2m2at1owYZ8Fi
-         aswPKXCe22pZbMPVwlhAO60uRaYSHYtRt4ZWTk09/LTUxexCNRkCubxThJg93TASlb1A
-         rJSA==
-X-Gm-Message-State: AOAM533NsdrB6Sl//EVU2+Kq5WmNUmSfOJAO+Z09DlOzQj3JG2NNM5By
-        b/jj3l5m3puaPyoiGIoNf9eY9sZpoNgS
-X-Google-Smtp-Source: ABdhPJwV/SeCuBwi09/4GacP5ySX3VYfZpArZWbWdS9Qs6GE+kBNtfBoB95oICb/LCleM8twL0QxRQ==
-X-Received: by 2002:a17:90a:f81:b0:1df:91b5:f0e3 with SMTP id 1-20020a17090a0f8100b001df91b5f0e3mr6809170pjz.227.1652981100183;
-        Thu, 19 May 2022 10:25:00 -0700 (PDT)
+        bh=sYyJmhJ1UJuNTKSNkznuVgdOa0YLmomkOmOhYpxJCFI=;
+        b=HHBc+sXsT0fHkYnrEEY3HGC35DqmQ0Mk3iwDPmrZGaQLvAbkYpgC1WolbKR0U86ZZ5
+         HFhrFTJBJKPx4b1SLgXEdrtq6j9oNLbaW4y7Io4aiBJQuSFyu6wI4Q6GC5Au3OsagDeQ
+         t4KficODlqEQV8HFox/VQJEfryuh0N/V332UxYx/jIjIxa+eUBH90I9RfMv6xQv/O1nF
+         5wNRq3b6gPaqJsXHgXjp/ChgyzNIvhflpgHOLqbuXOKQmhgkW44Zj6vvk4i+8M7vsYnI
+         wiC3cDME+A4gY2q6opet644fAy1FeYv97GkfYPb5VGGtiz7Qerq9nDe/NN4BlHtsKVzG
+         HJsQ==
+X-Gm-Message-State: AOAM531aeALEZCBhiEVhH2z+HPphW74l9IlGs565S3AbMK1vBjo8isti
+        SQZCbeG4FRcHVCtiNou3uov+zqngLk54
+X-Google-Smtp-Source: ABdhPJzZY5YP8RElcJziKMe2Pb+9bzOWxPxFDsokqdhQLlpUQtMJ7p36gRVAP/eKYVsQomShn6d3Ew==
+X-Received: by 2002:a63:2c15:0:b0:3f6:6a5f:8f0a with SMTP id s21-20020a632c15000000b003f66a5f8f0amr495864pgs.76.1652981102152;
+        Thu, 19 May 2022 10:25:02 -0700 (PDT)
 Received: from zaphod.evilpiepirate.org (068-119-229-002.res.spectrum.com. [68.119.229.2])
-        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.24.57
+        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.25.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 10:24:59 -0700 (PDT)
+        Thu, 19 May 2022 10:25:01 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
         pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
         andriy.shevchenko@linux.intel.com, willy@infradead.org
-Subject: [PATCH v2 11/28] vsprintf: Lift pr_hex_bytes() out from hex_string()
-Date:   Thu, 19 May 2022 13:24:04 -0400
-Message-Id: <20220519172421.162394-12-kent.overstreet@gmail.com>
+Subject: [PATCH v2 12/28] test_printf: Drop requirement that sprintf not write past nul
+Date:   Thu, 19 May 2022 13:24:05 -0400
+Message-Id: <20220519172421.162394-13-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220519172421.162394-1-kent.overstreet@gmail.com>
 References: <20220519172421.162394-1-kent.overstreet@gmail.com>
@@ -71,102 +71,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This factors pr_hex_bytes(), a new printbuf-style helper, out from
-hex_string and adds it to pretty-printers.c.
+The current test code checks that sprintf never writes past the
+terminating nul. This is a rather strange requirement, completely
+separate from writing past the end of the buffer, which of course we
+can't do: writing anywhere to the buffer passed to snprintf, within size
+of course, should be perfectly fine.
+
+Since this check has no documentation as to where it comes from or what
+depends on it, and it's getting in the way of further refactoring
+(printf_spec handling is right now scattered massively throughout the
+code, and we'd like to consolidate it) - delete it.
+
+Also, many current pretty-printers building up their output on the
+stack, and then copy it to the actual output buffer - by eliminating
+this requirement we can kill those extra buffers.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- include/linux/pretty-printers.h |  1 +
- lib/pretty-printers.c           | 23 +++++++++++++++++++++++
- lib/vsprintf.c                  | 13 ++++---------
- 3 files changed, 28 insertions(+), 9 deletions(-)
+ lib/test_printf.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/include/linux/pretty-printers.h b/include/linux/pretty-printers.h
-index 2e8b6b4426..ded34622e8 100644
---- a/include/linux/pretty-printers.h
-+++ b/include/linux/pretty-printers.h
-@@ -4,6 +4,7 @@
- #ifndef _LINUX_PRETTY_PRINTERS_H
- #define _LINUX_PRETTY_PRINTERS_H
+diff --git a/lib/test_printf.c b/lib/test_printf.c
+index 1e1604ef1a..0804ab788d 100644
+--- a/lib/test_printf.c
++++ b/lib/test_printf.c
+@@ -78,12 +78,6 @@ do_test(int bufsize, const char *expect, int elen,
+ 		return 1;
+ 	}
  
-+void pr_hex_bytes(struct printbuf *, const u8 *, unsigned, unsigned);
- void pr_string_option(struct printbuf *, const char * const[], size_t);
- void pr_bitflags(struct printbuf *, const char * const[], u64);
- 
-diff --git a/lib/pretty-printers.c b/lib/pretty-printers.c
-index d794648ef9..162e6865f9 100644
---- a/lib/pretty-printers.c
-+++ b/lib/pretty-printers.c
-@@ -4,6 +4,29 @@
- #include <linux/kernel.h>
- #include <linux/printbuf.h>
- 
-+/**
-+ * pr_hex_bytes - Print a string of hex bytes, with optional separator
-+ *
-+ * @out: The printbuf to output to
-+ * @addr: Buffer to print
-+ * @nr: Number of bytes to print
-+ * @separator: Optional separator character between each byte
-+ */
-+void pr_hex_bytes(struct printbuf *out, const u8 *addr,
-+		  unsigned nr, unsigned separator)
-+{
-+	unsigned i;
-+
-+	for (i = 0; i < nr; ++i) {
-+		if (separator && i)
-+			pr_char(out, separator);
-+		pr_hex_byte(out, addr[i]);
-+	}
-+
-+	printbuf_nul_terminate(out);
-+}
-+EXPORT_SYMBOL(pr_hex_bytes);
-+
- /**
-  * pr_string_option - Given a list of strings, print out the list and indicate
-  * which option is selected, with square brackets (sysfs style)
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 3f5638d27a..d4293b4a40 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -52,6 +52,7 @@
- #include <asm/byteorder.h>	/* cpu_to_le16 */
- 
- #include <linux/string_helpers.h>
-+#include <linux/pretty-printers.h>
- #include "kstrtox.h"
- 
- static noinline unsigned long long simple_strntoull(const char *startp, size_t max_chars, char **endp, unsigned int base)
-@@ -1107,10 +1108,10 @@ void resource_string(struct printbuf *out, struct resource *res,
- }
- 
- static noinline_for_stack
--void hex_string(struct printbuf *out, u8 *addr,
-+void hex_string(struct printbuf *out, const u8 *addr,
- 		struct printf_spec spec, const char *fmt)
- {
--	int i, len = 1;		/* if we pass '%ph[CDN]', field width remains
-+	int len = 1;		/* if we pass '%ph[CDN]', field width remains
- 				   negative value, fallback to the default */
- 	char separator;
- 
-@@ -1139,13 +1140,7 @@ void hex_string(struct printbuf *out, u8 *addr,
- 	if (spec.field_width > 0)
- 		len = min_t(int, spec.field_width, 64);
- 
--	for (i = 0; i < len; ++i) {
--		__pr_char(out, hex_asc_hi(addr[i]));
--		__pr_char(out, hex_asc_lo(addr[i]));
--
--		if (separator && i != len - 1)
--			__pr_char(out, separator);
+-	if (memchr_inv(test_buffer + written + 1, FILL_CHAR, BUF_SIZE + PAD_SIZE - (written + 1))) {
+-		pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote beyond the nul-terminator\n",
+-			bufsize, fmt);
+-		return 1;
 -	}
-+	pr_hex_bytes(out, addr, len, separator);
- }
- 
- static noinline_for_stack
+-
+ 	if (memcmp(test_buffer, expect, written)) {
+ 		pr_warn("vsnprintf(buf, %d, \"%s\", ...) wrote '%s', expected '%.*s'\n",
+ 			bufsize, fmt, test_buffer, written, expect);
 -- 
 2.36.0
 

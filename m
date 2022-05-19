@@ -2,94 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FBDE52CE55
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDD952CE5B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235376AbiESI3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 04:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        id S235426AbiESIc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 04:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiESI3w (ORCPT
+        with ESMTP id S231171AbiESIc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 04:29:52 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE41B7981A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:29:50 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 9710C419BC;
-        Thu, 19 May 2022 08:29:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1652948988; bh=5kyzTvASw3UKGusahQelKEPBKdXW7kdc8VKMIbe/oIQ=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=ojaiMLekIVlHOaF77Y5cGLw1S8Zx87mKedlKGJR4lKcJGtd2Gt/jm3zxxRfTJCRPc
-         AuGKoRGspVv4G6rAcHktsBWHBlu8NrzGxugEKMA9lXrFhLgpFtYqLxvqz0Pw6FNBN4
-         z82mxtTnRLJbfHDlOPiLIQPhMg96g2x817T1pMDxUfF/Sd13iUVetvxbpj6OpXaybT
-         OcDXNNj0sArUiXh4qPFx+86ftmYBtPs8/iknm/Xxhk/Zin7xSJgQns6G82HLQqB7nd
-         mOlYw7L2ElCF3La1V3XCXee9iP3LgHtqXh0LCikXhFrI8Ktu04Lk06xmoUQxhEM0G1
-         oS9tOR/N7Lj2A==
-Message-ID: <57184edb-8a04-b4bd-969b-bca152375d86@marcan.st>
-Date:   Thu, 19 May 2022 17:29:39 +0900
+        Thu, 19 May 2022 04:32:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F45771A33
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652949144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4zGkqLBS/TAgxZK9Jmx8vQw2RK+jMADwG0s4JnBJWNc=;
+        b=JAJOTCK5kPxCCG/z1wnfZIWQ73ywZKnEXmPfEOHNnazGaD+yGS+vfA8SFlP3H/xZC+KbLf
+        RXe8diBTVuDOKOLCPzKc3B6EmebfYUHRiMoucgat1KoJxXFzpYLyOE978oHVNdgTUEjFAy
+        aoqwGgNvbSfHBfvX5eVZfGMNCp7l6LU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661-3NRaX_l4PnK-hAhDQw8q4g-1; Thu, 19 May 2022 04:32:21 -0400
+X-MC-Unique: 3NRaX_l4PnK-hAhDQw8q4g-1
+Received: by mail-wr1-f70.google.com with SMTP id u17-20020a056000161100b0020cda98f292so1285041wrb.21
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:32:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4zGkqLBS/TAgxZK9Jmx8vQw2RK+jMADwG0s4JnBJWNc=;
+        b=bvFm0PO4FPH44bFMiFfRebqgoJAGxz38cjH9M69StKmmtXQAK+7rTlGDaR3NEXWUhX
+         8pbZNwCoaqS4bipvku86OAvJKsnEqBC8CFJ4MEfXNCHM/HDzFbgnJof/3OhrxgqNnxX2
+         FDT62WZQyDL0stjEhLw2DF2UXerLKbYfdV+jnKD30bepP7uGfSLAVS6Mz7TibNh9nn8y
+         GVnRwfzUxKsSVpsAYgbrPSgc5TZH41SHVEEPQVCIibuksrB4tFo9VJ1EdrU6NO419n56
+         uvN1qJniGVPnIFRre10cKPjW40PhJvbS/pFbzXkY2Of983UCk3QUKUOH1ASIEHj9M/jr
+         g+jw==
+X-Gm-Message-State: AOAM532EUVVm2xI+oB6AqheRpMcGVaVGYOqbn+W22dNLFEm/cYoOVYL3
+        Nc025EdRnNynOZfXnkIUfiEz9VHx6m6SxkF29X5vKoLC2vow8GguooX1mTw1+tDHE136+Fpy62j
+        6QS+CDHqsb3dEKfk8G7dvIFvQ
+X-Received: by 2002:a05:6000:2c2:b0:20c:c6e1:e881 with SMTP id o2-20020a05600002c200b0020cc6e1e881mr2965134wry.333.1652949139810;
+        Thu, 19 May 2022 01:32:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyio4JEWQmgkioPkbNgTt2e70V8qT0vr7F8BBMxVMH/FsBBAQUG715vLlB3cyn0DlqD+bNL7Q==
+X-Received: by 2002:a05:6000:2c2:b0:20c:c6e1:e881 with SMTP id o2-20020a05600002c200b0020cc6e1e881mr2965117wry.333.1652949139611;
+        Thu, 19 May 2022 01:32:19 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id l6-20020adfa386000000b0020cfed0bb7fsm4441801wrb.53.2022.05.19.01.32.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 01:32:18 -0700 (PDT)
+Date:   Thu, 19 May 2022 10:32:13 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     mst@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        peterz@infradead.org, paulmck@kernel.org, maz@kernel.org,
+        pasic@linux.ibm.com, cohuck@redhat.com, eperezma@redhat.com,
+        lulu@redhat.com, xuanzhuo@linux.alibaba.com,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH V5 2/9] virtio: use virtio_reset_device() when possible
+Message-ID: <20220519083213.jwzr272vvkh6ogq4@sgarzare-redhat>
+References: <20220518035951.94220-1-jasowang@redhat.com>
+ <20220518035951.94220-3-jasowang@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v4 0/8] Add hardware prefetch control driver for A64FX and
- x86
-Content-Language: es-ES
-To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>,
-        catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, mchehab+huawei@kernel.org, eugenis@google.com,
-        tony.luck@intel.com, pcc@google.com, peterz@infradead.org,
-        marcos@orca.pet, conor.dooley@microchip.com,
-        nicolas.ferre@microchip.com, linus.walleij@linaro.org,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220518063032.2377351-1-tarumizu.kohei@fujitsu.com>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <20220518063032.2377351-1-tarumizu.kohei@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20220518035951.94220-3-jasowang@redhat.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2022 15.30, Kohei Tarumizu wrote:
-> This patch series add sysfs interface to control CPU's hardware
-> prefetch behavior for performance tuning from userspace for the
-> processor A64FX and x86 (on supported CPU).
-> 
+On Wed, May 18, 2022 at 11:59:44AM +0800, Jason Wang wrote:
+>This allows us to do common extension without duplicating code.
+>
+>Cc: Thomas Gleixner <tglx@linutronix.de>
+>Cc: Peter Zijlstra <peterz@infradead.org>
+>Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>Cc: Marc Zyngier <maz@kernel.org>
+>Cc: Halil Pasic <pasic@linux.ibm.com>
+>Cc: Cornelia Huck <cohuck@redhat.com>
+>Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+>Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+>Cc: linux-s390@vger.kernel.org
+>Reviewed-by: Cornelia Huck <cohuck@redhat.com>
+>Signed-off-by: Jason Wang <jasowang@redhat.com>
+>---
+> drivers/virtio/virtio.c | 4 ++--
+> 1 file changed, 2 insertions(+), 2 deletions(-)
 
-[snip]
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-> In pattern A, a change of dist at L1 has a larger effect. On the other
-> hand, in pattern B, the change of dist at L2 has a larger effect.
-> As described above, the optimal dist combination depends on the
-> characteristics of the application. Therefore, such a sysfs interface
-> is useful for performance tuning.
-
-If this is something to be tuned for specific applications, shouldn't it
-be a prctl or similar and part of process context, so different
-applications can use different settings (or even a single application
-depending on what it's doing)? Especially if writing those sysregs/MSRs
-is cheap.
-
-In particular, configuring things separately for different cores feels
-strange. You'd then have to pin applications to specific cores to get
-the benefits, and wouldn't be able to optimize for multiple applications
-running simultaneously that need different prefetch behavior if they
-share cores.
-
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub

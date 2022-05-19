@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF4352D9A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9176852D9A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241545AbiESP6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:58:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
+        id S241550AbiESP75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238551AbiESP6q (ORCPT
+        with ESMTP id S233730AbiESP7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:58:46 -0400
+        Thu, 19 May 2022 11:59:53 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF08D9E9E2;
-        Thu, 19 May 2022 08:58:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD6F9E9E2;
+        Thu, 19 May 2022 08:59:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6671ACE25D8;
-        Thu, 19 May 2022 15:58:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF23C385AA;
-        Thu, 19 May 2022 15:58:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7B67FCE25D9;
+        Thu, 19 May 2022 15:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6937EC385AA;
+        Thu, 19 May 2022 15:59:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652975922;
-        bh=H5hgmjgqxim+cvpsLbstqaJDE2jglCvDhPW2rIHtuuQ=;
+        s=korg; t=1652975988;
+        bh=8nwqZ3h0TtcSyftFuwGKZD0+/DFI3JpFngKKV0LgKSI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZOGa9PuVEsUF7/C7qPzj6Ius1MG4OsRvVVjiDfvuCSqiIIyjyZwNKL34fxPvzLsAL
-         9i4dOfsKMxJN2sIMqZwpSd+fVf3fbW+3t0mbwUh9tbBmo3ckYPoRszhDrSFPavEY3d
-         TuvdLvg4dJIoROqRjgVxnJi4ACJdfQgolnTTiAg0=
-Date:   Thu, 19 May 2022 17:58:35 +0200
+        b=Jz4f0sdeb4IlP9nc8naFEP1UTMKeNsxRSbr5DOb22WyLxuRzqzU2D3WLJvAuiHGy1
+         /08FBhmSb8OyavxHwzaTnShmLoa8exmJACyIlDO4DP6a6HwXcdU6P3hoz0KBrMbo/z
+         8LoWgIFQHkUItaxr6TTJX4elRERwMyd4d8iW7dcE=
+Date:   Thu, 19 May 2022 17:59:46 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yongzhi Liu <lyz_cs@pku.edu.cn>
-Cc:     pawell@cadence.com, peter.chen@nxp.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, fuyq@stu.pku.edu.cn
-Subject: Re: [PATCH] usb: cdnsp:  Fix potential dereference of NULL pointer
-Message-ID: <YoZpKzT6txHJoAxP@kroah.com>
-References: <1652891743-110930-1-git-send-email-lyz_cs@pku.edu.cn>
+To:     Kushagra Verma <kushagra765@outlook.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB / dwc3: remove the use of -ENOSYS from core.c
+Message-ID: <YoZpcqDCwoXIvI5q@kroah.com>
+References: <HK0PR01MB280106E1D78EF51A5B8ED8BFF8CE9@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1652891743-110930-1-git-send-email-lyz_cs@pku.edu.cn>
+In-Reply-To: <HK0PR01MB280106E1D78EF51A5B8ED8BFF8CE9@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,42 +51,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 09:35:43AM -0700, Yongzhi Liu wrote:
-> The return value of cdnsp_get_transfer_ring()
-> needs to be checked to avoid use of NULL pointer
-> in case of an acquisition failure.
+On Tue, May 17, 2022 at 08:22:00PM +0530, Kushagra Verma wrote:
+> This patch removes the use of -ENOSYS as it is used when users try to call a
+> syscall that doesn't exist. So, we don't need to check if 'ret == -ENOSYS'.
 
-Please use the full 72 columns
+ENOSYS is also used internally in the kernel for other things.
 
 > 
-> Fixes: 3d8290455 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> 
-> Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-
-Please do not put a blank line between "Fixes:" and your signed off by
-line.
-
+> Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
 > ---
->  drivers/usb/cdns3/cdnsp-ring.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/usb/dwc3/core.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-> index 1b14384..9f206b9 100644
-> --- a/drivers/usb/cdns3/cdnsp-ring.c
-> +++ b/drivers/usb/cdns3/cdnsp-ring.c
-> @@ -655,6 +655,8 @@ static int cdnsp_cmd_set_deq(struct cdnsp_device *pdev,
->  	 * to reflect the new position.
->  	 */
->  	ep_ring = cdnsp_get_transfer_ring(pdev, pep, deq_state->stream_id);
-> +	if (!ep_ring)
-> +		return -EINVAL;
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index c78205c5e19f..3c1a877d5183 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1283,7 +1283,7 @@ static int dwc3_core_get_phy(struct dwc3 *dwc)
+>  	dwc->usb2_generic_phy = devm_phy_get(dev, "usb2-phy");
+>  	if (IS_ERR(dwc->usb2_generic_phy)) {
+>  		ret = PTR_ERR(dwc->usb2_generic_phy);
+> -		if (ret == -ENOSYS || ret == -ENODEV)
+> +		if (ret == -ENODEV)
 
-How did you test this?
+Did you validate that no callers can ever set this to ENOSYS?
 
-Don't you need to properly clean up and handle the hardware issues if
-you exit early here?
-
-Without good testing, I am loath to take this.
+Why was this added in the first place?  What commit added it?
 
 thanks,
 

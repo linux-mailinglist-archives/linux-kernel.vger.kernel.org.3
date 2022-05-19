@@ -2,116 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A401E52E0A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 401F252E0AD
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343687AbiESXlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 19:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
+        id S1343658AbiESXnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232274AbiESXl2 (ORCPT
+        with ESMTP id S1343642AbiESXnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 19:41:28 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E30766ACB
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:41:27 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q76so6322715pgq.10
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:41:27 -0700 (PDT)
+        Thu, 19 May 2022 19:43:19 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04FEF11905C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:43:18 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so6505498pjf.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:43:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Y9COzyvBIeNRvhVZARn4Tr5Mm1d3dQnhuaiOOZjtkqk=;
-        b=cdNmdwWZwNLhDB9iFg27zK0z/Sw30NLINUvQdUJYod654q4zx/M+3VnWdLwUwLwI1T
-         OD+Eyv+KaBElZHITAvZ/sD57wk23rsKjfxsIdgzqCQ0nlANCer3Gem8sIjNEzYvKPM0b
-         UMb/VxEKb8KyRlguUCWyR1NGbHyCfePpG3fn5XlcAQLauA3vCXhy30tnP1X6LnYlB7lg
-         tV2rcl/BIgp60KT3AsOVrdEdtNLZY6k/rLKl6E0S3MettlmqcX7IYCtHY1ojpra1Vl8B
-         HXIEFEhaYeNljfi6YjWxIHPVL3gBd2aQ17OmYq0lBrVEwVGLc5pnf4wWwBd6hYpDzEY2
-         ytvw==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:from
+         :subject:content-transfer-encoding;
+        bh=KonITGC8b24pPGJKeGVvyl7Yn0hzGwQOqRY+o+LJZsk=;
+        b=RpxpIDLapZJZlhiqATdf8DiIf+nLRAEvQCq+++X1vi2A9tl7Q8grx12Vza0qIKE58z
+         mi3nSfhxtd+AVX45Y/FQ7bLv+2i7mUd8RIOxaNsMWck9OQRJnEeJCI3MXrgQB6IQVSUS
+         qNgCdNp/X8mDGmQnjgNyYbouExpm/K9Q565gtU1631bOa3oP1rOCqeKTIafBtAKubxge
+         ujTlHShXkLDtbOcN490iUi1QcuDLwGQyy0tPnFrjn8+teLzDzclxWhGceFCZ4hMiaJMm
+         LFBdYQC7GK2L+RRC45DD4E6ar4Gv4YAsNQSbTyxogCWkOEgs31aCXA9hfD1aPfh1dGim
+         H3qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Y9COzyvBIeNRvhVZARn4Tr5Mm1d3dQnhuaiOOZjtkqk=;
-        b=FEcB++w9OoZDpViM2SyY35xru57Ey8TbKZl56jXCWvqn7194T0Mm+yqby+ibwMUSBW
-         APZfnGl23Yw5oazVqrswjysm86LGzKjtZF0ZFqiwNoyFVHmmCFsd98njIPGInAfh+CFC
-         o+D+96yGM8hxM0ij++TyyKSOAKSBFpyt5IOEkehyhjKcwheALoBic08nG8zvSymx76Yl
-         /vmB6xhhwO2aZ58PaxWk6p6rA1NBvxnWzeESmvQwvP3EcHrJuIKYMjRmKEyXYzCSMyCW
-         s1/7ZjYk9Z6haFoIQcA7n6tmT8KpAeTT7DR7XRplcgpBtoFYYopVcjdPuzB7tJPAMObJ
-         x5qQ==
-X-Gm-Message-State: AOAM532RyKl7HRHgD3nMXQudElVU0IPpV0hvgdqQygNiO419DbLHlmZ1
-        4jvMbRKTlNChEJKnptEGatYMXQ==
-X-Google-Smtp-Source: ABdhPJyUnP4DU2ULl/GilAmOWqdi+HmycYrx10QrXHqJuODoh6QTRIRVzZJ4+S5hFEXuQ5VoYosVZA==
-X-Received: by 2002:a65:480a:0:b0:3c6:e629:3022 with SMTP id h10-20020a65480a000000b003c6e6293022mr5953237pgs.281.1653003686955;
-        Thu, 19 May 2022 16:41:26 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t66-20020a628145000000b005183112db97sm246042pfd.74.2022.05.19.16.41.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 16:41:26 -0700 (PDT)
-Date:   Thu, 19 May 2022 23:41:22 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>
-Subject: Re: [PATCH v9 0/9] IPI virtualization support for VM
-Message-ID: <YobVotf9CJ6dk9zw@google.com>
-References: <20220419153155.11504-1-guang.zeng@intel.com>
- <2d33b71a-13e5-d377-abc2-c20958526497@redhat.com>
- <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
- <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
- <YoK48P2UrrjxaRrJ@google.com>
- <20220517135321.GA31556@gao-cwp>
- <20220517140218.GA569@gao-cwp>
- <20220519092906.GA3234@gao-cwp>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:from:subject:content-transfer-encoding;
+        bh=KonITGC8b24pPGJKeGVvyl7Yn0hzGwQOqRY+o+LJZsk=;
+        b=yrUQjyHV/N612ss1hSmtoeEFhaH9hVA0eTGxcFYFHmrXm182GPEgHNcaA9Sz3jWi3s
+         WVVEBYyyELMWxmejGtH+a/X/0B4jylc876TsNsHwuZoKtgseUiZutWCrJN0UZANJQKnN
+         ira3o9gxj8RMFpS3AneqTgz39oGlz1a3sQNmBOPgom1fDe0aZDrpiQ0ieaVRRAI5gGTm
+         TfMPwcdw3i4JVrc5eM+gd3xDZkTumR7F3uvP/qtUUmV8qeaAjxmHdmfbtgLCjVR5TFqY
+         Q15sinyJ7OoyN2a9QxDpadNUvrdVWpiu77xFj04eXSyOX5qYkMkFZVNCPONv/th6tL+X
+         1Anw==
+X-Gm-Message-State: AOAM531Grxg5xPfYI2CC5JruAbeY9lLyIz28GX+rkkZTNMvMSOHn+ZVq
+        F+dt3B1gG88wo0FzKOHC7WkS74h3C52/pg==
+X-Google-Smtp-Source: ABdhPJzhHFe9lJvBKafFKUAY1pRa6T+CtSrKokdXVOQr0cLt53/hZc/fXU1CHWvrIHdmP0hJxcqsQg==
+X-Received: by 2002:a17:902:f78d:b0:14f:ce61:eaf2 with SMTP id q13-20020a170902f78d00b0014fce61eaf2mr7148968pln.124.1653003797430;
+        Thu, 19 May 2022 16:43:17 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id cp25-20020a056a00349900b0050dc76281c0sm220975pfb.154.2022.05.19.16.43.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 16:43:16 -0700 (PDT)
+Message-ID: <f871a510-d262-bc98-757e-204976e1b82c@kernel.dk>
+Date:   Thu, 19 May 2022 17:43:15 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519092906.GA3234@gao-cwp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] random: convert to using fops->write_iter()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022, Chao Gao wrote:
-> On Tue, May 17, 2022 at 10:02:23PM +0800, Chao Gao wrote:
-> >+ Maxim
-> >
-> >On Tue, May 17, 2022 at 09:53:26PM +0800, Chao Gao wrote:
-> >>On Mon, May 16, 2022 at 08:49:52PM +0000, Sean Christopherson wrote:
-> >>>Shouldn't we have a solution for the read-only APIC_ID mess before this is merged?
-> 
-> Paolo & Sean,
-> 
-> If a solution for read-only APIC ID mess is needed before merging IPIv
-> series, do you think the Maxim's patch [1] after some improvement will
-> suffice? Let us know if there is any gap.
+Now that the read side has been converted to fix a regression with
+splice, convert the write side as well to have some symmetry in the
+interface used (and help deprecate ->write()).
 
-Yep, inhibiting APICv if APIC ID is changed should do the trick, and it's nice and
-simple.  I can't think of any gaps.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-> [1]: https://lore.kernel.org/all/20220427200314.276673-3-mlevitsk@redhat.com/
+---
+
+Jason, this has only been booted. I did verify that it seems to take a
+write just fine, but I would appreciate if you could vet this one with
+your testing. Thanks!
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 41ca5966aa4f..3da04068c225 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1283,20 +1283,20 @@ static __poll_t random_poll(struct file *file, poll_table *wait)
+ 	return crng_ready() ? EPOLLIN | EPOLLRDNORM : EPOLLOUT | EPOLLWRNORM;
+ }
+ 
+-static int write_pool(const char __user *ubuf, size_t len)
++static size_t write_pool(struct iov_iter *iter)
+ {
+ 	size_t block_len;
+ 	int ret = 0;
+ 	u8 block[BLAKE2S_BLOCK_SIZE];
+ 
+-	while (len) {
+-		block_len = min(len, sizeof(block));
+-		if (copy_from_user(block, ubuf, block_len)) {
+-			ret = -EFAULT;
++	while (iov_iter_count(iter)) {
++		block_len = min(iov_iter_count(iter), sizeof(block));
++		if (!copy_from_iter(block, block_len, iter)) {
++			if (!ret)
++				ret = -EFAULT;
+ 			goto out;
+ 		}
+-		len -= block_len;
+-		ubuf += block_len;
++		ret += block_len;
+ 		mix_pool_bytes(block, block_len);
+ 		cond_resched();
+ 	}
+@@ -1306,16 +1306,9 @@ static int write_pool(const char __user *ubuf, size_t len)
+ 	return ret;
+ }
+ 
+-static ssize_t random_write(struct file *file, const char __user *ubuf,
+-			    size_t len, loff_t *ppos)
++static ssize_t random_write_iter(struct kiocb *kiocb, struct iov_iter *from)
+ {
+-	int ret;
+-
+-	ret = write_pool(ubuf, len);
+-	if (ret)
+-		return ret;
+-
+-	return (ssize_t)len;
++	return write_pool(from);
+ }
+ 
+ static ssize_t urandom_read_iter(struct kiocb *kiocb, struct iov_iter *to)
+@@ -1373,7 +1366,10 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+ 			return -EINVAL;
+ 		credit_init_bits(ent_count);
+ 		return 0;
+-	case RNDADDENTROPY:
++	case RNDADDENTROPY: {
++		struct iov_iter iter;
++		struct iovec iov;
++
+ 		if (!capable(CAP_SYS_ADMIN))
+ 			return -EPERM;
+ 		if (get_user(ent_count, p++))
+@@ -1382,11 +1378,16 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
+ 			return -EINVAL;
+ 		if (get_user(size, p++))
+ 			return -EFAULT;
+-		retval = write_pool((const char __user *)p, size);
++
++		iov.iov_base = p;
++		iov.iov_len = size;
++		iov_iter_init(&iter, WRITE, &iov, 1, size);
++		retval = write_pool(&iter);
+ 		if (retval < 0)
+ 			return retval;
+ 		credit_init_bits(ent_count);
+ 		return 0;
++		}
+ 	case RNDZAPENTCNT:
+ 	case RNDCLEARPOOL:
+ 		/* No longer has any effect. */
+@@ -1412,7 +1413,7 @@ static int random_fasync(int fd, struct file *filp, int on)
+ 
+ const struct file_operations random_fops = {
+ 	.read_iter = random_read_iter,
+-	.write = random_write,
++	.write_iter = random_write_iter,
+ 	.poll = random_poll,
+ 	.unlocked_ioctl = random_ioctl,
+ 	.compat_ioctl = compat_ptr_ioctl,
+@@ -1423,7 +1424,7 @@ const struct file_operations random_fops = {
+ 
+ const struct file_operations urandom_fops = {
+ 	.read_iter = urandom_read_iter,
+-	.write = random_write,
++	.write_iter = random_write_iter,
+ 	.unlocked_ioctl = random_ioctl,
+ 	.compat_ioctl = compat_ptr_ioctl,
+ 	.fasync = random_fasync,
+
+-- 
+Jens Axboe
+

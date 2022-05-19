@@ -2,125 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED49B52D77E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFAE52D782
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240955AbiESP13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
+        id S240960AbiESP1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240342AbiESP1W (ORCPT
+        with ESMTP id S240957AbiESP1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:27:22 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F2B6FD3D;
-        Thu, 19 May 2022 08:27:21 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id u7so5949855ljd.11;
-        Thu, 19 May 2022 08:27:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=06m0spO/zzT7LU0U7Sp7nFMRUJ5YbpK+1tdhabMSTrg=;
-        b=Av2O2dirj8NHt4uyVji55uosaO+MsQVVdCzMtcCvghVkDNcAvvIUFYCAEvlowBuajK
-         G0oQoe8zLVSV5qD/9QTgpgALw6w0lU+2WQlKsfB2/vJv/qSdWBFKjjTgGAbrttWCvSmo
-         9pIFuhzbzA4lSVIkuJSLMN4rtoZorDILjvT/sewomISmLSxIIZKnraQ+dfbtZVMTRtPa
-         YDyBVQcP8zYVLfkhYe2++N/9kbnhTLW2AYIi4NnfpCy1SCaM+nV0wGpYrZ9ZmP29Trdm
-         kJT8rN7M4bDd3RWuP41mEZZwJOVg59QOBs6rqyk6wdf50Qta+UTQmWKFbNDUkOeXV0GT
-         cdGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=06m0spO/zzT7LU0U7Sp7nFMRUJ5YbpK+1tdhabMSTrg=;
-        b=PLS8hECaTyI13M3LU+JYeK+qgndW1MPsr2ck8yzhIYKx0QQcIzW0y9TncAeda4M5VX
-         Nqo1jBwGLJXHlZeZVGQLh+821WePsqXe+ud5zZPddm16dRQewEnEvgiQxOH9umpsCQne
-         wX9rUmMvX4RVdZ+PKMo0rhpo85q8/uqfWxSUWEDQxQQyd+N12zchuVcNogHux62+Qwh3
-         tKXqBYx/jM9GzaViSkYBohSUgGAMLWf2um1cjJl262S2GHghQztNMoii3lZ3s/HesseP
-         K3wup0BHENlGEmwXuM6JPsZfXPEntzKVV6kh2VVJp1A7EEgPW6Jv4K00p7IfgXfEEHm3
-         pbNw==
-X-Gm-Message-State: AOAM531mCHHMgtCbzfrRg7tuXRMVxMtDWJ65RtMtFd8ir16T6XuG3KMF
-        xjgy7k1VnYDj/5UbHXYx2Yw=
-X-Google-Smtp-Source: ABdhPJycQoMAMgwtFAuDUm9PnuToJ4JHoO7595vkZwzeXp+GxefghHeI2b/2Od+cztFaKe8TnAHULg==
-X-Received: by 2002:a2e:b5d1:0:b0:24f:331d:f9b6 with SMTP id g17-20020a2eb5d1000000b0024f331df9b6mr2988533ljn.302.1652974039835;
-        Thu, 19 May 2022 08:27:19 -0700 (PDT)
-Received: from [192.168.0.110] ([217.115.104.30])
-        by smtp.gmail.com with ESMTPSA id d3-20020a05651221c300b0047255d21155sm318812lft.132.2022.05.19.08.27.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 08:27:19 -0700 (PDT)
-Message-ID: <3da73dd6-24c3-1870-f0bc-f8040826576b@gmail.com>
-Date:   Thu, 19 May 2022 18:27:17 +0300
+        Thu, 19 May 2022 11:27:33 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F86EC3D4;
+        Thu, 19 May 2022 08:27:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 817F5CE2508;
+        Thu, 19 May 2022 15:27:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DC7C385AA;
+        Thu, 19 May 2022 15:27:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652974048;
+        bh=fWzT1RDzL+g/G2pbgJJD/u9obC3MZhKB4yK9conyL8g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KhPlyqr5DQ+2cxzW0xu4vYkoXbmxOHVwbib+1FOdSi4DyM1fdNRJKpkCXmhKC8/sw
+         jNg5Ewr2ACxNFq6z9vUY4tGKAxaJ6wujFNx5o7sLHygM2LxCMvsb+AXZ+kJbtwHbrm
+         TcVxENBVaAuttLzbvtbAahxCC7LXKKuezdvoJFBMa9CL6AZPR13x9yJAJs3w9JdE2M
+         gILeHgLB+1/mYxOpjc9gAt4SIVhmBzql+/b7dKEEToGvpMwDfrRpEtcjpy6FnzQ5iP
+         1yGgwc3aZNTv1BV6VUHo14UYj1DGJ41lfxRRnI3gGhcTloxiboRbNY0M0VvQwEOy+f
+         tiNlDxh+Nzn/g==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nri3i-00CSzu-B2; Thu, 19 May 2022 16:27:26 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-From:   Dmytro Bagrii <dimich.dmb@gmail.com>
-Subject: Re: [PATCH] usb: core: Call disconnect() only if it is provided by
- driver
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220519132900.4392-1-dimich.dmb@gmail.com>
- <YoZKFrzirES9+f39@kroah.com>
-Content-Language: en-US-large
-In-Reply-To: <YoZKFrzirES9+f39@kroah.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 19 May 2022 16:27:26 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vivek Kumar <quic_vivekuma@quicinc.com>
+Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
+        tglx@linutronix.de, axboe@kernel.dk, rafael@kernel.org,
+        akpm@linux-foundation.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org, len.brown@intel.com, pavel@ucw.cz,
+        paulmck@kernel.org, bp@suse.de, keescook@chromium.org,
+        songmuchun@bytedance.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, pasha.tatashin@soleen.com,
+        tabba@google.com, ardb@kernel.org, tsoni@quicinc.com,
+        quic_psodagud@quicinc.com, quic_svaddagi@quicinc.com,
+        Prasanna Kumar <quic_kprasan@quicinc.com>
+Subject: Re: [RFC 1/6] arm64: hibernate: Introduce new entry point to kernel
+In-Reply-To: <1652860121-24092-2-git-send-email-quic_vivekuma@quicinc.com>
+References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
+ <1652860121-24092-2-git-send-email-quic_vivekuma@quicinc.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1d517a7598f7833196ec0c8258816aba@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: quic_vivekuma@quicinc.com, corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de, axboe@kernel.dk, rafael@kernel.org, akpm@linux-foundation.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com, pavel@ucw.cz, paulmck@kernel.org, bp@suse.de, keescook@chromium.org, songmuchun@bytedance.com, rdunlap@infradead.org, damien.lemoal@opensource.wdc.com, pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org, tsoni@quicinc.com, quic_psodagud@quicinc.com, quic_svaddagi@quicinc.com, quic_kprasan@quicinc.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.05.22 16:45, Greg KH wrote:
-> On Thu, May 19, 2022 at 04:29:00PM +0300, Dmytro Bagrii wrote:
->> A driver may use devres allocations. Disconnect handler is not needed in
->> this case. Allow such driver to leave .disconnect field uninitialized in
->> struct usb_driver instead of providing empty stub function.
->>
->> Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
->> ---
->>  drivers/usb/core/driver.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
->> index 355ed33a2179..d7fe440b033c 100644
->> --- a/drivers/usb/core/driver.c
->> +++ b/drivers/usb/core/driver.c
->> @@ -455,7 +455,8 @@ static int usb_unbind_interface(struct device *dev)
->>  	if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
->>  		usb_disable_interface(udev, intf, false);
->>  
->> -	driver->disconnect(intf);
->> +	if (driver->disconnect)
->> +		driver->disconnect(intf);
->>  
->>  	/* Free streams */
->>  	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
->> -- 
->> 2.36.1
->>
+On 2022-05-18 08:48, Vivek Kumar wrote:
+> Introduce a new entry point to hibernated kernel image.
+> This is generally needed when bootloader restores the
+> hibernated image from disc to ddr and passes control
+> to it by turning off the mmu, also initialize this new
+> entry point with cpu_resume which turns on the mmu and
+> then proceeds with restore routines.
 > 
-> What in-kernel driver has this issue and does not have a disconnect
-> callback?
+> Signed-off-by: Vivek Kumar <quic_vivekuma@quicinc.com>
+> Signed-off-by: Prasanna Kumar <quic_kprasan@quicinc.com>
+> ---
+>  arch/arm64/kernel/hibernate.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/arm64/kernel/hibernate.c 
+> b/arch/arm64/kernel/hibernate.c
+> index 6328308..4e294b3 100644
+> --- a/arch/arm64/kernel/hibernate.c
+> +++ b/arch/arm64/kernel/hibernate.c
+> @@ -74,6 +74,14 @@ static struct arch_hibernate_hdr {
+>  	void		(*reenter_kernel)(void);
+> 
+>  	/*
+> +	 * Another entry point if jump to kernel happens with mmu disabled,
+> +	 * generally done when restoring hibernation image from bootloader
+> +	 * context
+> +	 */
+> +
+> +	phys_addr_t	phys_reenter_kernel;
+> +
+> +	/*
+>  	 * We need to know where the __hyp_stub_vectors are after restore to
+>  	 * re-configure el2.
+>  	 */
+> @@ -116,6 +124,7 @@ int arch_hibernation_header_save(void *addr,
+> unsigned int max_size)
+>  	arch_hdr_invariants(&hdr->invariants);
+>  	hdr->ttbr1_el1		= __pa_symbol(swapper_pg_dir);
+>  	hdr->reenter_kernel	= _cpu_resume;
+> +	hdr->phys_reenter_kernel  = __pa(cpu_resume);
+> 
+>  	/* We can't use __hyp_get_vectors() because kvm may still be loaded 
+> */
+>  	if (el2_reset_needed())
 
-I don't see such in-kernel USB drivers yet. I develop an out-of-tree driver
-and use devres for all initialization including controllers registration
-etc. For actions which aren't available with devm_*, e.g. URB allocation i
-use devm_add_action_or_reset() for deinit. I realized my _disconnect()
-function is empty, nothing to do there. All deinitialization is done during
-usb interface release. If i leave .disconnect field uninitialized in struct
-usb_driver, obviously i get NULL pointer dereference bug. Thus i decided
-that allowing a driver not to provide disconnect() is a good idea, as it is
-done for remove() in SPI and I2C subsystems.
+So here, you are creating a new ABI with the bootloader, based on
+a data structure that isn't mean't to be ABI. It means that we
+wouldn't be allowed to ever change this data structure, as this
+would mean having to update the bootloader in sync.
 
+Clearly, this isn't acceptable.
+
+         M.
 -- 
-Best Regards,
-Dmytro Bagrii.
-
-
+Jazz is not dead. It just smells funny...

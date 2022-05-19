@@ -2,102 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458FE52CDC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A8F52CDBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235079AbiESH76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
+        id S233479AbiESIAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 04:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233479AbiESH7y (ORCPT
+        with ESMTP id S235108AbiESIAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:59:54 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F67C3983C;
-        Thu, 19 May 2022 00:59:52 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L3j1l050rz6F9F7;
-        Thu, 19 May 2022 15:59:39 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 09:59:50 +0200
-Received: from [10.47.92.25] (10.47.92.25) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
- 2022 08:59:49 +0100
-Message-ID: <2d73146a-86fc-e0d1-11b9-432c7431d58a@huawei.com>
-Date:   Thu, 19 May 2022 08:59:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH 00/20] perf vendors events arm64: Multiple Arm CPUs
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Nick Forrington <nick.forrington@arm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <acme@kernel.org>
-CC:     Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Andrew Kilroy <andrew.kilroy@arm.com>
-References: <20220510104758.64677-1-nick.forrington@arm.com>
- <f523b0fe-1262-c1e5-c587-15842ccf0fcf@arm.com>
- <28509191-3a45-de6d-f5bc-a8e7331c0a9e@huawei.com>
- <5773b630-8159-1eba-481a-1bf3c406c055@arm.com>
- <cf7d8003-9700-880f-0e46-ff40e6348bb1@huawei.com>
- <7a17256d-cad0-bd94-02e7-f8adaa959654@arm.com>
-In-Reply-To: <7a17256d-cad0-bd94-02e7-f8adaa959654@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.92.25]
-X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 19 May 2022 04:00:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32C83983C;
+        Thu, 19 May 2022 01:00:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C07DC6168D;
+        Thu, 19 May 2022 08:00:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F996C34100;
+        Thu, 19 May 2022 08:00:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652947200;
+        bh=iKXW78pxSl8QpjoS8FErvoGCH4L/pjL+JqIqYVBLIQY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NDg/mHX5CcWMfPFXokoFfMue+AV2uI+MQRwObYZI04jDAAkv7mlCw4z1mI3C3ymqr
+         t4cmJoxon58/O5LcmYTL/84y9kRbsc7On4irBHPLFShCkA36XWD1OuisZnRJmxjbfz
+         HI9MsSfUONNXDkjn6I2V8Po/BIIO5H8qKLHmMUIo/JLWpHT0iN+Sy2DJ/1DxbsallN
+         kRrAW52XK8wHr8v0cnSlZg0sD7U1geJW0C3CfLy7yqvst0lOPsnYaHjU0qk8Bv1tbj
+         1tdGw5h7M/gIMt7rQ2prXz0iHYI06h1+AKg3SwN16lXK7wUVTgmrFE5zzRRpvGi1lm
+         q2r8lcOiCX8jA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nrb4f-00CM9g-JL; Thu, 19 May 2022 08:59:57 +0100
+Date:   Thu, 19 May 2022 08:59:57 +0100
+Message-ID: <87ee0q54w2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Vivek Kumar <quic_vivekuma@quicinc.com>
+Cc:     <corbet@lwn.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <tglx@linutronix.de>, <axboe@kernel.dk>, <rafael@kernel.org>,
+        <akpm@linux-foundation.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-block@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <paulmck@kernel.org>, <bp@suse.de>, <keescook@chromium.org>,
+        <songmuchun@bytedance.com>, <rdunlap@infradead.org>,
+        <damien.lemoal@opensource.wdc.com>, <pasha.tatashin@soleen.com>,
+        <tabba@google.com>, <ardb@kernel.org>, <tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_svaddagi@quicinc.com>,
+        Prasanna Kumar <quic_kprasan@quicinc.com>
+Subject: Re: [RFC 6/6] irqchip/gic-v3: Re-init GIC hardware upon hibernation restore
+In-Reply-To: <1652860121-24092-7-git-send-email-quic_vivekuma@quicinc.com>
+References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
+        <1652860121-24092-7-git-send-email-quic_vivekuma@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_vivekuma@quicinc.com, corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de, axboe@kernel.dk, rafael@kernel.org, akpm@linux-foundation.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com, pavel@ucw.cz, paulmck@kernel.org, bp@suse.de, keescook@chromium.org, songmuchun@bytedance.com, rdunlap@infradead.org, damien.lemoal@opensource.wdc.com, pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org, tsoni@quicinc.com, quic_psodagud@quicinc.com, quic_svaddagi@quicinc.com, quic_kprasan@quicinc.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2022 15:14, Robin Murphy wrote:
->> Sure, we should have these 32b cores supported for ARCH=arm if they 
->> are supported for ARCH=arm64. But then does it even make sense to have 
->> A7 support in arch/arm64?
+Hi Vivek,
+
+On Wed, 18 May 2022 08:48:41 +0100,
+Vivek Kumar <quic_vivekuma@quicinc.com> wrote:
 > 
-> That's what I'm getting at. If it is tied to the build target as you've 
-> said above, then there is no point in an AArch64 perf tool including 
-> data for CPUs on which that tool cannot possibly run; it's simply a 
-> waste of space.
+> Code added in this patch takes backup of different set of
+> registers during hibernation suspend. On receiving hibernation
+> restore callback, it restores register values from backup. This
+> ensures state of hardware to be same just before hibernation and
+> after restore.
 > 
-> If there is interest in plumbing in support on AArch32 builds as well, 
-> then I'd still be inclined to have a single arch/arm events directory, 
-> and either do some build-time path munging or just symlink an arch/arm64 
-> sibling back to it. Yes, technically there are AArch64-only CPUs whose 
-> data would then be redundant when building for AArch32, 
+> Signed-off-by: Vivek Kumar <quic_vivekuma@quicinc.com>
+> Signed-off-by: Prasanna Kumar <quic_kprasan@quicinc.com>
+> ---
+>  drivers/irqchip/irq-gic-v3.c | 138 ++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 136 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> index 2be8dea..442d32f 100644
+> --- a/drivers/irqchip/irq-gic-v3.c
+> +++ b/drivers/irqchip/irq-gic-v3.c
+> @@ -29,6 +29,10 @@
+>  #include <asm/smp_plat.h>
+>  #include <asm/virt.h>
+>  
+> +#include <linux/syscore_ops.h>
+> +#include <linux/suspend.h>
+> +#include <linux/notifier.h>
+> +
+>  #include "irq-gic-common.h"
+>  
+>  #define GICD_INT_NMI_PRI	(GICD_INT_DEF_PRI & ~0x80)
+> @@ -56,6 +60,14 @@ struct gic_chip_data {
+>  	bool			has_rss;
+>  	unsigned int		ppi_nr;
+>  	struct partition_desc	**ppi_descs;
+> +#ifdef CONFIG_HIBERNATION
+> +	unsigned int enabled_irqs[32];
+> +	unsigned int active_irqs[32];
+> +	unsigned int irq_edg_lvl[64];
+> +	unsigned int ppi_edg_lvl;
+> +	unsigned int enabled_sgis;
+> +	unsigned int pending_sgis;
+> +#endif
 
-If size is an issue then we have ways to cut this down, like doing the 
-arch standard events fixup dynamically when running perf tool, or even 
-not describing those events in the JSONs and rely on reading the CPU PMU 
-events folder to learn which of those events are supported.
+This is either way too much, or way too little. Just restoring these
+registers is nowhere near enough, as you are completely ignoring the
+ITS, so this will leave the machine broken for anything that requires
+LPIs.
 
- > but those are
- > such a minority that it seems like an entirely reasonable compromise.
+But If the bootloader is supposed to replace the kernel to put the HW
+in a state where the GIC is usable again, why do we need any of this?
 
-@Nick, Can you drop the 32b core support for arm64? Or, if you really 
-want them, look into ARCH=arm pmu-events support?
+Hibernation relies on a basic promise: the secondary kernel is entered
+with the HW in a reasonable state, and the basic infrastructure
+(specially for stuff that can be only programmed once per boot such as
+the RD tables) is already available. If the bootloader is going to do
+the work of the initial kernel, then it must do it fully, and not
+require this sort of random sprinkling all over the shop.
 
-thanks,
-John
+Effectively, there is an ABI between the primary kernel and the
+secondary, and I don't see why this interface should change to paper
+over what I see as the deficiencies of the bootloader.
+
+Am I missing anything?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

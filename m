@@ -2,118 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC1852CDD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD6252CDD7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235090AbiESICn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 04:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S234421AbiESICw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 04:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235097AbiESICO (ORCPT
+        with ESMTP id S235083AbiESICW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 04:02:14 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF3E5711E;
-        Thu, 19 May 2022 01:02:13 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id o13-20020a17090a9f8d00b001df3fc52ea7so8072720pjp.3;
-        Thu, 19 May 2022 01:02:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3yJKai/GSI12GvKYcBy79Bm3Kne+C3Y1/FfwBn6InA0=;
-        b=lUpcKplBNBAsseV+w7F6nN0KD4nlJAUl1RQRdallDlQrwngsZEeCeHZUYTSXjyTFUc
-         YsXEim9cgXxGDxa0sfNmyOl6LirJYsN+OBlKWD6WzA6LTDv3az8m9fS6YOlDMOQe9eCd
-         iapq+erXJJ43Zne4GbEzqkSI+JpEma/kRtG2LwAoeUZMhHAN19au8KnGEGNAE8VPXAdh
-         qzxyJ/0Z8sTZ6iHknhLW8M4Bl4kNHsWbTJKQxKXSXO/A11ypMcBBHb3Jee4b1+9nyODh
-         MJImMF/s8iTiwpt0I5GW7smg8DKEcLXUH+eo9noNTC2FiTEiPvd8F254ecIeMd3+rSGX
-         JDWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3yJKai/GSI12GvKYcBy79Bm3Kne+C3Y1/FfwBn6InA0=;
-        b=cpeDE/QRfh5MNEF7JxHdY7HvIk/cCwkRZp4w8Yoc6Xib7IXjY46XlxQdAg29jF9nmB
-         fKmGmhrkes2Z+fMvIGQFNccK6bX39CJPCO55sxkwrHKaVzSLTi278TtZNkwB7FhiGh+Z
-         W4JC46pTev3/81g2CYDo+WCyQqQTjNfvJO/tbdirZD+1FvAO9+XrTvxh1VWr2XHXj/b2
-         wy8QAMwl4C8eJjrrNbjU6E9heGOnEXyxLUno5PNB4nS8oiX/Wy5hoc/l1kIq5xwtSDNb
-         NM5ZBvKk8QwZ3IGGQnPThhesN3QFHTXItFAFnqsjoHuRzdkm5NEvAbe8YKn2BS+KVkYE
-         aZeA==
-X-Gm-Message-State: AOAM532tgKLz/mIFjcouSeq32ORZ2ATQIIRA4A5WgblB61RXtbboWqP2
-        eG2Y8cThkpCYPmbCF29vnX4FHg2D+5g=
-X-Google-Smtp-Source: ABdhPJzsw+rFt64D5VXAScc5tgZBDAVE6tCcdwhF942qCujUmJu932Ah37KW2UkQb32431i6ejxGSA==
-X-Received: by 2002:a17:90b:1a8b:b0:1dc:e565:3238 with SMTP id ng11-20020a17090b1a8b00b001dce5653238mr3900587pjb.64.1652947332557;
-        Thu, 19 May 2022 01:02:12 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170903230400b00161955fe0d5sm3358894plh.274.2022.05.19.01.02.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 01:02:11 -0700 (PDT)
-Message-ID: <6285f983.1c69fb81.b0a8b.837f@mx.google.com>
-X-Google-Original-Message-ID: <20220519080210.GA1736367@cgel.zte@gmail.com>
-Date:   Thu, 19 May 2022 08:02:10 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, ammarfaizi2@gnuweeb.org,
-        oleksandr@natalenko.name, willy@infradead.org, linux-mm@kvack.org,
-        corbet@lwn.net, linux-kernel@vger.kernel.org,
-        xu xin <xu.xin16@zte.com.cn>,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>,
-        Yunkai Zhang <zhang.yunkai@zte.com.cn>,
-        Jiang Xuexin <jiang.xuexin@zte.com.cn>,
-        Hugh Dickins <hughd@google.com>, linux-api@vger.kernel.org
-Subject: Re: [PATCH] mm/ksm: introduce ksm_enabled for each process
-References: <20220517092701.1662641-1-xu.xin16@zte.com.cn>
- <YoOrdh85+AqJH8w1@dhcp22.suse.cz>
- <62845e2b.1c69fb81.cbf4a.1200@mx.google.com>
- <YoTiqm4sQCtq8C1C@dhcp22.suse.cz>
- <6285e264.1c69fb81.3f416.71a8@mx.google.com>
- <YoXzQqZ5Yluv8JMa@dhcp22.suse.cz>
+        Thu, 19 May 2022 04:02:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36EF5715F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652947340; x=1684483340;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=not50aQK6RnBtyTWyA+nfAHtvi3ZMcB688IM/wM7jO8=;
+  b=XZ8e0rB/Rx1hUojmv0kzvngOgZnq3u+QPFarc/vRyb8JuWA93XLq722j
+   3MAXn2Mw/JHXHeZLcGnHKhroEWkSK13omtYnM3PM/l6nmER9al/+87A52
+   S/tjJHxVWrFXxoYE1DFohl5IfglhHJOo6k9ByowRoDT6qrSGwz/rhWF16
+   OD2hPEhI0sudwFRPoc5QJsLgX0sndFEk3zzYpWssORHVLtB7eR2Fe7auI
+   qrUzHLbKX16zBYZM7tShpF/KMorWdR6d/79BpiOC1n5yZ+mK4Fp6+oJ7M
+   hKHyFwhQlOlaeGuqd4/hpViIKqbgGkY02VD2tWqBB1Sz+tOOh9zLRv1wP
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="358485916"
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="358485916"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 01:02:20 -0700
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="523962371"
+Received: from tszulist-mobl.ger.corp.intel.com (HELO localhost) ([10.249.146.157])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 01:02:15 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Yipeng Zou <zouyipeng@huawei.com>, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch,
+        alan.previn.teres.alexis@intel.com, vinay.belgaumkar@intel.com
+Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, zouyipeng@huawei.com
+Subject: Re: [PATCH -next] drm/i915: Fix some integer constant macro to
+ unsigned type
+In-Reply-To: <20220519030423.169981-1-zouyipeng@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220519030423.169981-1-zouyipeng@huawei.com>
+Date:   Thu, 19 May 2022 11:02:12 +0300
+Message-ID: <87zgjec5mj.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YoXzQqZ5Yluv8JMa@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 09:35:30AM +0200, Michal Hocko wrote:
-> On Thu 19-05-22 06:23:30, CGEL wrote:
-> > On Wed, May 18, 2022 at 02:12:26PM +0200, Michal Hocko wrote:
-> > > On Wed 18-05-22 02:47:06, CGEL wrote:
-> > > > On Tue, May 17, 2022 at 04:04:38PM +0200, Michal Hocko wrote:
-> > > > > [CCing Hugh and linux-api]
-> > > > > 
-> > > > > On Tue 17-05-22 09:27:01, cgel.zte@gmail.com wrote:
-> > > > > per mm but the actual implementation currently relies on the per-vma
-> > > > > flags. That means that one can explicitly disallow merging by madvise
-> > > > > for a range. Is it wise to override that by a per-process knob? I mean
-> > > > > there might be a very good reason why a particular memory ranges should
-> > > > > never be merged but a per-process knob could easily ignore that hint
-> > > > > from the application. Or am I just confuse?
-> > > > For now, there is no any hints for letting KSM never merge some memory
-> > > > ranges.
-> > > 
-> > > I am not sure I understand. Could you be more specific?
-> > 
-> > Not like THP, KSM doesn't have anything like VM_NOHUGEPAGE, so apps
-> > cann't explicitly disallow merging by madvise. If it is really necessary for
-> > a particular meory ranges of a process to be never merged, we have to submit
-> > one more patch to achieve that.
-> 
-> What about MADV_UNMERGEABLE?
+On Thu, 19 May 2022, Yipeng Zou <zouyipeng@huawei.com> wrote:
+> Build Kernel with gcc 7.5.0 or older, will get some error message:
+>
+> drivers/gpu/drm/i915/display/intel_ddi.c:1915:2: error: case label does not reduce to an integer constant
+>   case PORT_CLK_SEL_WRPLL1:
+>   ^~~~
+> ......
+>
+> Look here : https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic
+> for the details why it happends.
+>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
 
-MADV_UNMERGEABLE and MADV_MERGEABLE usually appear in pairs, MADV_UNMERGEABLE cannot
-appear alone. I mean MADV_UNMERGEABLE is used to unmerges whatever it merged in the
-specifed range, not to disallow merging.
+See
+https://lore.kernel.org/r/20220518113315.1305027-1-jani.nikula@intel.com
 
-> -- 
-> Michal Hocko
-> SUSE Labs
+BR,
+Jani.
+
+> ---
+>  drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h |  4 ++--
+>  .../i915/gt/uc/abi/guc_communication_ctb_abi.h   |  6 +++---
+>  .../gpu/drm/i915/gt/uc/abi/guc_messages_abi.h    | 14 +++++++-------
+>  drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h       | 12 ++++++------
+>  drivers/gpu/drm/i915/i915_reg.h                  | 16 ++++++++--------
+>  5 files changed, 26 insertions(+), 26 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
+> index be9ac47fa9d0..cb16fd0ba8dd 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
+> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
+> @@ -50,8 +50,8 @@
+>  
+>  #define HOST2GUC_SELF_CFG_REQUEST_MSG_LEN		(GUC_HXG_REQUEST_MSG_MIN_LEN + 3u)
+>  #define HOST2GUC_SELF_CFG_REQUEST_MSG_0_MBZ		GUC_HXG_REQUEST_MSG_0_DATA0
+> -#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_KEY		(0xffff << 16)
+> -#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_LEN		(0xffff << 0)
+> +#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_KEY		(0xffffu << 16)
+> +#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_LEN		(0xffffu << 0)
+>  #define HOST2GUC_SELF_CFG_REQUEST_MSG_2_VALUE32		GUC_HXG_REQUEST_MSG_n_DATAn
+>  #define HOST2GUC_SELF_CFG_REQUEST_MSG_3_VALUE64		GUC_HXG_REQUEST_MSG_n_DATAn
+>  
+> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
+> index c9086a600bce..e5c782283309 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
+> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
+> @@ -82,11 +82,11 @@ static_assert(sizeof(struct guc_ct_buffer_desc) == 64);
+>  #define GUC_CTB_HDR_LEN				1u
+>  #define GUC_CTB_MSG_MIN_LEN			GUC_CTB_HDR_LEN
+>  #define GUC_CTB_MSG_MAX_LEN			256u
+> -#define GUC_CTB_MSG_0_FENCE			(0xffff << 16)
+> -#define GUC_CTB_MSG_0_FORMAT			(0xf << 12)
+> +#define GUC_CTB_MSG_0_FENCE			(0xffffu << 16)
+> +#define GUC_CTB_MSG_0_FORMAT			(0xfu << 12)
+>  #define   GUC_CTB_FORMAT_HXG			0u
+>  #define GUC_CTB_MSG_0_RESERVED			(0xf << 8)
+> -#define GUC_CTB_MSG_0_NUM_DWORDS		(0xff << 0)
+> +#define GUC_CTB_MSG_0_NUM_DWORDS		(0xffu << 0)
+>  
+>  /**
+>   * DOC: CTB HXG Message
+> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
+> index 29ac823acd4c..30e3cc06b0b7 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
+> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
+> @@ -40,17 +40,17 @@
+>   */
+>  
+>  #define GUC_HXG_MSG_MIN_LEN			1u
+> -#define GUC_HXG_MSG_0_ORIGIN			(0x1 << 31)
+> +#define GUC_HXG_MSG_0_ORIGIN			(0x1u << 31)
+>  #define   GUC_HXG_ORIGIN_HOST			0u
+>  #define   GUC_HXG_ORIGIN_GUC			1u
+> -#define GUC_HXG_MSG_0_TYPE			(0x7 << 28)
+> +#define GUC_HXG_MSG_0_TYPE			(0x7u << 28)
+>  #define   GUC_HXG_TYPE_REQUEST			0u
+>  #define   GUC_HXG_TYPE_EVENT			1u
+>  #define   GUC_HXG_TYPE_NO_RESPONSE_BUSY		3u
+>  #define   GUC_HXG_TYPE_NO_RESPONSE_RETRY	5u
+>  #define   GUC_HXG_TYPE_RESPONSE_FAILURE		6u
+>  #define   GUC_HXG_TYPE_RESPONSE_SUCCESS		7u
+> -#define GUC_HXG_MSG_0_AUX			(0xfffffff << 0)
+> +#define GUC_HXG_MSG_0_AUX			(0xfffffffu << 0)
+>  #define GUC_HXG_MSG_n_PAYLOAD			(0xffffffff << 0)
+>  
+>  /**
+> @@ -86,7 +86,7 @@
+>  
+>  #define GUC_HXG_REQUEST_MSG_MIN_LEN		GUC_HXG_MSG_MIN_LEN
+>  #define GUC_HXG_REQUEST_MSG_0_DATA0		(0xfff << 16)
+> -#define GUC_HXG_REQUEST_MSG_0_ACTION		(0xffff << 0)
+> +#define GUC_HXG_REQUEST_MSG_0_ACTION		(0xffffu << 0)
+>  #define GUC_HXG_REQUEST_MSG_n_DATAn		GUC_HXG_MSG_n_PAYLOAD
+>  
+>  /**
+> @@ -118,7 +118,7 @@
+>  
+>  #define GUC_HXG_EVENT_MSG_MIN_LEN		GUC_HXG_MSG_MIN_LEN
+>  #define GUC_HXG_EVENT_MSG_0_DATA0		(0xfff << 16)
+> -#define GUC_HXG_EVENT_MSG_0_ACTION		(0xffff << 0)
+> +#define GUC_HXG_EVENT_MSG_0_ACTION		(0xffffu << 0)
+>  #define GUC_HXG_EVENT_MSG_n_DATAn		GUC_HXG_MSG_n_PAYLOAD
+>  
+>  /**
+> @@ -188,8 +188,8 @@
+>   */
+>  
+>  #define GUC_HXG_FAILURE_MSG_LEN			GUC_HXG_MSG_MIN_LEN
+> -#define GUC_HXG_FAILURE_MSG_0_HINT		(0xfff << 16)
+> -#define GUC_HXG_FAILURE_MSG_0_ERROR		(0xffff << 0)
+> +#define GUC_HXG_FAILURE_MSG_0_HINT		(0xfffu << 16)
+> +#define GUC_HXG_FAILURE_MSG_0_ERROR		(0xffffu << 0)
+>  
+>  /**
+>   * DOC: HXG Response
+> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h b/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
+> index 66027a42cda9..70154e522c51 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
+> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
+> @@ -15,20 +15,20 @@
+>  
+>  #define GUC_STATUS			_MMIO(0xc000)
+>  #define   GS_RESET_SHIFT		0
+> -#define   GS_MIA_IN_RESET		  (0x01 << GS_RESET_SHIFT)
+> +#define   GS_MIA_IN_RESET		  (0x01u << GS_RESET_SHIFT)
+>  #define   GS_BOOTROM_SHIFT		1
+> -#define   GS_BOOTROM_MASK		  (0x7F << GS_BOOTROM_SHIFT)
+> -#define   GS_BOOTROM_RSA_FAILED		  (0x50 << GS_BOOTROM_SHIFT)
+> +#define   GS_BOOTROM_MASK		  (0x7Fu << GS_BOOTROM_SHIFT)
+> +#define   GS_BOOTROM_RSA_FAILED		  (0x50u << GS_BOOTROM_SHIFT)
+>  #define   GS_BOOTROM_JUMP_PASSED	  (0x76 << GS_BOOTROM_SHIFT)
+>  #define   GS_UKERNEL_SHIFT		8
+> -#define   GS_UKERNEL_MASK		  (0xFF << GS_UKERNEL_SHIFT)
+> +#define   GS_UKERNEL_MASK		  (0xFFu << GS_UKERNEL_SHIFT)
+>  #define   GS_MIA_SHIFT			16
+> -#define   GS_MIA_MASK			  (0x07 << GS_MIA_SHIFT)
+> +#define   GS_MIA_MASK			  (0x07u << GS_MIA_SHIFT)
+>  #define   GS_MIA_CORE_STATE		  (0x01 << GS_MIA_SHIFT)
+>  #define   GS_MIA_HALT_REQUESTED		  (0x02 << GS_MIA_SHIFT)
+>  #define   GS_MIA_ISR_ENTRY		  (0x04 << GS_MIA_SHIFT)
+>  #define   GS_AUTH_STATUS_SHIFT		30
+> -#define   GS_AUTH_STATUS_MASK		  (0x03 << GS_AUTH_STATUS_SHIFT)
+> +#define   GS_AUTH_STATUS_MASK		  (0x03u << GS_AUTH_STATUS_SHIFT)
+>  #define   GS_AUTH_STATUS_BAD		  (0x01 << GS_AUTH_STATUS_SHIFT)
+>  #define   GS_AUTH_STATUS_GOOD		  (0x02 << GS_AUTH_STATUS_SHIFT)
+>  
+> diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
+> index 9ccb67eec1bd..8c10d66561b0 100644
+> --- a/drivers/gpu/drm/i915/i915_reg.h
+> +++ b/drivers/gpu/drm/i915/i915_reg.h
+> @@ -7566,19 +7566,19 @@ enum skl_power_gate {
+>  #define  PORT_CLK_SEL_LCPLL_810		(2 << 29)
+>  #define  PORT_CLK_SEL_SPLL		(3 << 29)
+>  #define  PORT_CLK_SEL_WRPLL(pll)	(((pll) + 4) << 29)
+> -#define  PORT_CLK_SEL_WRPLL1		(4 << 29)
+> -#define  PORT_CLK_SEL_WRPLL2		(5 << 29)
+> -#define  PORT_CLK_SEL_NONE		(7 << 29)
+> +#define  PORT_CLK_SEL_WRPLL1		(4u << 29)
+> +#define  PORT_CLK_SEL_WRPLL2		(5u << 29)
+> +#define  PORT_CLK_SEL_NONE		(7u << 29)
+>  #define  PORT_CLK_SEL_MASK		(7 << 29)
+>  
+>  /* On ICL+ this is the same as PORT_CLK_SEL, but all bits change. */
+>  #define DDI_CLK_SEL(port)		PORT_CLK_SEL(port)
+>  #define  DDI_CLK_SEL_NONE		(0x0 << 28)
+> -#define  DDI_CLK_SEL_MG			(0x8 << 28)
+> -#define  DDI_CLK_SEL_TBT_162		(0xC << 28)
+> -#define  DDI_CLK_SEL_TBT_270		(0xD << 28)
+> -#define  DDI_CLK_SEL_TBT_540		(0xE << 28)
+> -#define  DDI_CLK_SEL_TBT_810		(0xF << 28)
+> +#define  DDI_CLK_SEL_MG			(0x8u << 28)
+> +#define  DDI_CLK_SEL_TBT_162		(0xCu << 28)
+> +#define  DDI_CLK_SEL_TBT_270		(0xDu << 28)
+> +#define  DDI_CLK_SEL_TBT_540		(0xEu << 28)
+> +#define  DDI_CLK_SEL_TBT_810		(0xFu << 28)
+>  #define  DDI_CLK_SEL_MASK		(0xF << 28)
+>  
+>  /* Transcoder clock selection */
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

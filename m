@@ -2,248 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A22552CF59
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E9752CF61
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236097AbiESJ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
+        id S236012AbiESJ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236098AbiESJ0R (ORCPT
+        with ESMTP id S231765AbiESJ2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:26:17 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D3A5933B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:26:14 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id h5so5127982wrb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:26:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=U7CWZtaUgg241mV7Lt3xruBxG2pYUXKmRKpcYqgh8Eg=;
-        b=PYGkNhuK5Y+VcRxXPEdPFo186tRGpytygwARJKMCJCuk1FziFrVCP7xR5sQnGXSieB
-         mIoebzr9mrYJB764qpt5v/nmO8uasR45/gruqJwN3B0SRu7NLyiVE0Gbm85QkvQzO0G4
-         oNpScDJE7i2dFgmQPo4csIWgV6yf2HUT3GEZBGyapklrVGuCjt6xvyPufVGJh4c7Lekl
-         EiJ99vr+pSgYTsOovJ8NhCM19wm/qsi82LdKBrWLTigt1sWGfz541+KsP11DvakTCDjW
-         FsP1QEuAxDKYIoRLznW/9BpVCGPCRCQsitqpb/4n4nXT7h0hJXnVmA7P5/v2Uht64UY/
-         OCgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=U7CWZtaUgg241mV7Lt3xruBxG2pYUXKmRKpcYqgh8Eg=;
-        b=AJEiwPnf6WwmbTtrEitqjhZciGJkmVY9OpV8nTFbT4XX3NuT0Wt5rmUgmmIvJQg1F8
-         v7VfVxUUajkUzk9AzImPrNG681BjIqJcdzhzqtYVF/2Zchkvm9IHScnDwqywGA/mYUEy
-         R+1uedZFEYTN6y8X74QPD5+D+RgOyY76SJV7aUb0wSYUtHayyDXbf7voGgYhYvMgBKO3
-         Y9+YEDw4dhSjpG10yGPp2JDVzej3kOmayF7IZW5E61pCSQu87FgbJioZxzKVU2aIq68e
-         /uthQV2pbee9bO22PRAsEUHWN7DEoE1xJSbYMEIxe0sKk1hGae0aiDrTLN8/79qS7y2x
-         YJeA==
-X-Gm-Message-State: AOAM531PQfxOtyTI7h192ldPOWLkasQeHPIAhu5qC8LSvuFb7wqeK+j2
-        96MGYBMXeXSuWcpOHm2PEBuWCw==
-X-Google-Smtp-Source: ABdhPJzpigCJ9ZTp35pQMOpSOXDBsHMK2phsvkqXJ9XlfwaT3joEX6NUk0vE/CQ9X3XqRok3v0nKMg==
-X-Received: by 2002:a05:6000:38b:b0:20c:53af:747d with SMTP id u11-20020a056000038b00b0020c53af747dmr3038647wrf.22.1652952373417;
-        Thu, 19 May 2022 02:26:13 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id b5-20020a05600c4e0500b00397243d3dbcsm2592590wmq.31.2022.05.19.02.26.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 02:26:13 -0700 (PDT)
-Date:   Thu, 19 May 2022 10:26:11 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
-Message-ID: <YoYNM0eQPBSUietG@google.com>
-References: <YoTrmjuct3ctvFim@google.com>
- <b7dc2992-e2d6-8e76-f089-b33561f8471f@kernel.dk>
- <f821d544-78d5-a227-1370-b5f0895fb184@kernel.dk>
- <06710b30-fec8-b593-3af4-1318515b41d8@kernel.dk>
- <YoUNQlzU0W4ShA85@google.com>
- <49609b89-f2f0-44b3-d732-dfcb4f73cee1@kernel.dk>
- <YoUTPIVOhLlnIO04@google.com>
- <1e64d20a-42cc-31cd-0fd8-2718dd8b1f31@kernel.dk>
- <YoUgHjHn+UFvj0o1@google.com>
- <38f63cda-b208-0d83-6aec-25115bd1c021@kernel.dk>
+        Thu, 19 May 2022 05:28:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E425FF10
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:28:41 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J9Rgia019896;
+        Thu, 19 May 2022 09:28:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : message-id : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Us/wTEHc1pNDKFsixu7C15Rmob4t3fstlrDv4JPRNqI=;
+ b=TZ9OQbZVdf4/KzGepqqFN47sgCQ5mcFAp8Qs3f1uesfJEOlIWGsh4uH01bXzbAESpVUp
+ P7++5pAwqOZPNbu6v/2aQjkvcetjRbDiPp/m6VZ6iw1EZFl3kG/9eLW95RqULFouhXkU
+ 3MgWYsdXrhflkbcY49lVIYn+fsz0awSf9S+oVvb7/xLQLfGGhShUZut1qNHkGFNp6JaA
+ sZa8wLbbxlFePHkQlLMUHd3FffcASrALjaE+8JIx6zR8OSgAT4IX/fufy2A9d0RZhA3v
+ ALl7IR95rPuR8xKl+T2sioFRzykr9FIr9NesJ9vD18vS8lQTOlOEa80gyqS2Th60EYW3 kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k9j80m1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:28:27 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24J9SQsu022825;
+        Thu, 19 May 2022 09:28:26 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k9j80ke-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:28:26 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24J9D9md032301;
+        Thu, 19 May 2022 09:28:24 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjf15f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:28:24 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24J9SMA943778392
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 09:28:22 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E37B4C04A;
+        Thu, 19 May 2022 09:28:22 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 245BF4C044;
+        Thu, 19 May 2022 09:28:22 +0000 (GMT)
+Received: from localhost (unknown [9.43.24.187])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 19 May 2022 09:28:22 +0000 (GMT)
+Date:   Thu, 19 May 2022 14:58:20 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH] kexec_file: Drop weak attribute from
+ arch_kexec_apply_relocations[_add]
+To:     Baoquan He <bhe@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+References: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com>
+        <87ee0q7b92.fsf@email.froward.int.ebiederm.org>
+        <YoWySwbszfdZS9LU@MiWiFi-R3L-srv>
+In-Reply-To: <YoWySwbszfdZS9LU@MiWiFi-R3L-srv>
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1652951723.o9i6ngwfda.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: raQvea1ubc_0i3LcAh7XWdVHZP2Pjm14
+X-Proofpoint-ORIG-GUID: WhrT_x4KNw1w69x52_JAdnAvHv0PXd0F
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <38f63cda-b208-0d83-6aec-25115bd1c021@kernel.dk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-19_01,2022-05-19_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ malwarescore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
+ mlxlogscore=266 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205190053
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022, Jens Axboe wrote:
+Baoquan He wrote:
+> Hi Eric,
+>=20
+> On 05/18/22 at 04:59pm, Eric W. Biederman wrote:
+>> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
+>>=20
+>> > Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
+>> > symbols") [1], binutils (v2.36+) started dropping section symbols that
+>> > it thought were unused.  This isn't an issue in general, but with
+>> > kexec_file.c, gcc is placing kexec_arch_apply_relocations[_add] into a
+>> > separate .text.unlikely section and the section symbol ".text.unlikely"
+>> > is being dropped. Due to this, recordmcount is unable to find a non-we=
+ak
+>> > symbol in .text.unlikely to generate a relocation record against.
+>> >
+>> > Address this by dropping the weak attribute from these functions:
+>> > - arch_kexec_apply_relocations() is not overridden by any architecture
+>> >   today, so just drop the weak attribute.
+>> > - arch_kexec_apply_relocations_add() is only overridden by x86 and s39=
+0.
+>> >   Retain the function prototype for those and move the weak
+>> >   implementation into the header as a static inline for other
+>> >   architectures.
+>> >
+>> > [1] https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Dd1=
+bcae833b32f1
+>>=20
+>> Any chance you can also get machine_kexec_post_load,
+>> crash_free_reserved_phys_range, arch_kexec_protect_protect_crashkres,
+>> arch_kexec_unprotect_crashkres, arch_kexec_kernel_image_probe,
+>> arch_kexec_kernel_image_probe, arch_kimage_file_post_load_cleanup,
+>> arch_kexec_kernel_verify_sig, and arch_kexec_locate_mem_hole as well.
 
-> On 5/18/22 10:34 AM, Lee Jones wrote:
-> > On Wed, 18 May 2022, Jens Axboe wrote:
-> > 
-> >> On 5/18/22 09:39, Lee Jones wrote:
-> >>> On Wed, 18 May 2022, Jens Axboe wrote:
-> >>>
-> >>>> On 5/18/22 9:14 AM, Lee Jones wrote:
-> >>>>> On Wed, 18 May 2022, Jens Axboe wrote:
-> >>>>>
-> >>>>>> On 5/18/22 6:54 AM, Jens Axboe wrote:
-> >>>>>>> On 5/18/22 6:52 AM, Jens Axboe wrote:
-> >>>>>>>> On 5/18/22 6:50 AM, Lee Jones wrote:
-> >>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
-> >>>>>>>>>
-> >>>>>>>>>> On 5/17/22 7:00 AM, Lee Jones wrote:
-> >>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
-> >>>>>>>>>>>
-> >>>>>>>>>>>> On 5/17/22 6:36 AM, Lee Jones wrote:
-> >>>>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>> On 5/17/22 6:24 AM, Lee Jones wrote:
-> >>>>>>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>> On 5/17/22 5:41 AM, Lee Jones wrote:
-> >>>>>>>>>>>>>>>>> Good afternoon Jens, Pavel, et al.,
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>> Not sure if you are presently aware, but there appears to be a
-> >>>>>>>>>>>>>>>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
-> >>>>>>>>>>>>>>>>> in Stable v5.10.y.
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>> The full sysbot report can be seen below [0].
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>> The C-reproducer has been placed below that [1].
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>> I had great success running this reproducer in an infinite loop.
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>> My colleague reverse-bisected the fixing commit to:
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
-> >>>>>>>>>>>>>>>>>   Author: Jens Axboe <axboe@kernel.dk>
-> >>>>>>>>>>>>>>>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>>        io-wq: have manager wait for all workers to exit
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>>        Instead of having to wait separately on workers and manager, just have
-> >>>>>>>>>>>>>>>>>        the manager wait on the workers. We use an atomic_t for the reference
-> >>>>>>>>>>>>>>>>>        here, as we need to start at 0 and allow increment from that. Since the
-> >>>>>>>>>>>>>>>>>        number of workers is naturally capped by the allowed nr of processes,
-> >>>>>>>>>>>>>>>>>        and that uses an int, there is no risk of overflow.
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> >>>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
-> >>>>>>>>>>>>>>>>>     1 file changed, 22 insertions(+), 8 deletions(-)
-> >>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>> Does this fix it:
-> >>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
-> >>>>>>>>>>>>>>>> Author: Jens Axboe <axboe@kernel.dk>
-> >>>>>>>>>>>>>>>> Date:   Fri Mar 5 12:59:30 2021 -0700
-> >>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>>     io-wq: fix race in freeing 'wq' and worker access
-> >>>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>>> Looks like it didn't make it into 5.10-stable, but we can certainly
-> >>>>>>>>>>>>>>>> rectify that.
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>> Thanks for your quick response Jens.
-> >>>>>>>>>>>>>>>
-> >>>>>>>>>>>>>>> This patch doesn't apply cleanly to v5.10.y.
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>> This is probably why it never made it into 5.10-stable :-/
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> Right.  It doesn't apply at all unfortunately.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>>> I'll have a go at back-porting it.  Please bear with me.
-> >>>>>>>>>>>>>>
-> >>>>>>>>>>>>>> Let me know if you into issues with that and I can help out.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> I think the dependency list is too big.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> Too much has changed that was never back-ported.
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> Actually the list of patches pertaining to fs/io-wq.c alone isn't so
-> >>>>>>>>>>>>> bad, I did start to back-port them all but some of the big ones have
-> >>>>>>>>>>>>> fs/io_uring.c changes incorporated and that list is huge (256 patches
-> >>>>>>>>>>>>> from v5.10 to the fixing patch mentioned above).
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> The problem is that 5.12 went to the new worker setup, and this patch
-> >>>>>>>>>>>> landed after that even though it also applies to the pre-native workers.
-> >>>>>>>>>>>> Hence the dependency chain isn't really as long as it seems, probably
-> >>>>>>>>>>>> just a few patches backporting the change references and completions.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> I'll take a look this afternoon.
-> >>>>>>>>>>>
-> >>>>>>>>>>> Thanks Jens.  I really appreciate it.
-> >>>>>>>>>>
-> >>>>>>>>>> Can you see if this helps? Untested...
-> >>>>>>>>>
-> >>>>>>>>> What base does this apply against please?
-> >>>>>>>>>
-> >>>>>>>>> I tried Mainline and v5.10.116 and both failed.
-> >>>>>>>>
-> >>>>>>>> It's against 5.10.116, so that's puzzling. Let me double check I sent
-> >>>>>>>> the right one...
-> >>>>>>>
-> >>>>>>> Looks like I sent the one from the wrong directory, sorry about that.
-> >>>>>>> This one should be better:
-> >>>>>>
-> >>>>>> Nope, both are the right one. Maybe your mailer is mangling the patch?
-> >>>>>> I'll attach it gzip'ed here in case that helps.
-> >>>>>
-> >>>>> Okay, that applied, thanks.
-> >>>>>
-> >>>>> Unfortunately, I am still able to crash the kernel in the same way.
-> >>>>
-> >>>> Alright, maybe it's not enough. I can't get your reproducer to crash,
-> >>>> unfortunately. I'll try on a different box.
-> >>>
-> >>> You need to have fuzzing and kasan enabled.
-> >>
-> >> I do have kasan enabled. What's fuzzing?
-> > 
-> > CONFIG_KCOV
-> 
-> Ah ok - I don't think that's needed for this.
-> 
-> Looking a bit deeper at this, I'm now convinced your bisect went off the
-> rails at some point. Probably because this can be timing specific.
-> 
-> Can you try with this patch?
-> 
-> 
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 4330603eae35..3ecf71151fb1 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -4252,12 +4252,8 @@ static int io_statx(struct io_kiocb *req, bool force_nonblock)
->  	struct io_statx *ctx = &req->statx;
->  	int ret;
->  
-> -	if (force_nonblock) {
-> -		/* only need file table for an actual valid fd */
-> -		if (ctx->dfd == -1 || ctx->dfd == AT_FDCWD)
-> -			req->flags |= REQ_F_NO_FILE_TABLE;
-> +	if (force_nonblock)
->  		return -EAGAIN;
-> -	}
->  
->  	ret = do_statx(ctx->dfd, ctx->filename, ctx->flags, ctx->mask,
->  		       ctx->buffer);
+I've posted a v2 that uses the approach suggested by Michael, and=20
+something that was in use in kexec already. If you are ok with that=20
+approach, I will take a stab at converting the rest of the functions=20
+that are marked __weak.
 
-This does appear to solve the issue. :)
+>>=20
+>> That is everything in kexec that uses a __weak symbol.  If we can't
+>> count on them working we might as well just get rid of the rest
+>> preemptively.
+>=20
+> Is there a new rule that __weak is not suggested in kernel any more?
+> Please help provide a pointer if yes, so that I can learn that.
 
-Thanks so much for working on this.
+I'm not aware of a move away from __weak in the kernel, in general.=20
+Steven doesn't prefer it for ftrace, and other maintainers may have a=20
+preference.
 
-What are the next steps?
+>=20
+> In my mind, __weak is very simple and clear as a mechanism to add
+> ARCH related functionality.
 
-Are you able to submit this to Stable?
+Notwithstanding the ftrace issue, the other caveat with __weak functions=20
+are that they still make it into the final vmlinux even if they are=20
+overridden. That is, you will have instructions from both the __weak=20
+variant as well as from the overridden variant in the final vmlinux,=20
+which can add up if the weak variants are non-trivial.=20
 
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+
+- Naveen
+

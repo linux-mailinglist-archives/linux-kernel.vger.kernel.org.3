@@ -2,198 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E233D52DF9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0EDC52DF9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245301AbiESVxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S245288AbiESVym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245178AbiESVxP (ORCPT
+        with ESMTP id S238842AbiESVyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:53:15 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3733353E32
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:53:14 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id j24so9024840wrb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TX5ubsOE693MmLyfmpEsKA9kTxG9wuZlKhY/Lmx1Dcg=;
-        b=mMPPPEU4Yx+mtS5aVcwwgLsWwhqGNX6yCnKkNTj4avhRkEw8A6Uq0MGgn3uQNfBa4e
-         vKCS7kRRTVqExk6sdIA7WNd2XVzEBGzO6kLyAOKv+b2hbCz6VpydFzHqeK97GrH1obED
-         DUm111fatIa2ZI2LUM5nXCzufj0xA3ubSlq4VJ8aYUAJR0lPkN5DVMzKQ/gJrn6cj34F
-         odcg+YbyZm37Rud7oZtAmoSRH9hQqreI+3js+Zc+mcbTKeS+u55W21Q2CbVCLpNx+ndK
-         YqGwZpkbe4mSYOv1KvetzgMDp3pD3nmNNlapjgV5N81c47T4qaPui2JXENarJTeGL/Cw
-         m0Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TX5ubsOE693MmLyfmpEsKA9kTxG9wuZlKhY/Lmx1Dcg=;
-        b=4rX65qIeCQ+8UCamFGi/+XJY3T2Yqf+pFgtMvycXHh+pLOUK9p7iZsKdLDEK7PoL6q
-         E3VnAZuXSU+I1CrYO0QGeDYtKALierCsl871L6NQB7gLEdbiNZICbOxcfYpYHwrwoRvy
-         f02cMbFqauQVL36hTso5DavgFHLv9Ql94SRYrQ52e+oMMA/NRtE3RDKpC/a5E75+/FKM
-         32iO8/DwcCcBWg1cRoOH6nuzjqBBakGd8DlSnTSx/GbCI2MhxUV5e3jWnIeyNciqHH6E
-         8ik5LvLbRpVNc19vi0p1a/bnSXXPqreJBA901HbrSwXihkz84kjwhea9dlch3C8PTtY7
-         nN4g==
-X-Gm-Message-State: AOAM532IPbitLmDsaSjMSFleDiqQQX9mum4mXaOfvaKxZ18qQ/PEhI3c
-        Sai4JCUpOiqJT7l+xj60a2IyM5EU0W7X0R9RZI0DIQ==
-X-Google-Smtp-Source: ABdhPJwyK6HC08N5s3/SWMPE4w7rlvJoGjiBpOl0jarvJYl0fFzmbkJPfCqqscfznim8I5RGFl/dzkYSwMyaE/2gLhc=
-X-Received: by 2002:a5d:6c68:0:b0:20c:b69f:cbd0 with SMTP id
- r8-20020a5d6c68000000b0020cb69fcbd0mr6016090wrz.500.1652997192512; Thu, 19
- May 2022 14:53:12 -0700 (PDT)
+        Thu, 19 May 2022 17:54:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189E755379
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652997279; x=1684533279;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/I5NJ+54RWKMStEMU2hGQt0cBAW0ada/XIy6RjOXe6A=;
+  b=E0f7slXccTkeByovYg3DrTZ//Aq6pvh83kQXK2PhxzVFrrOqah7NN3e5
+   YFdNR73eWESBdkvGxKYdJgWjXkq+x/bq9sjhz16ZBPUdwolA3nCzbny+0
+   SOb4I7sSsMB/n6Yw31yIpnGxwmVMMic+S1pU1R29aWOOfecrMLAuUC6HH
+   13K1nMfeas03BfpWGtRSAP2nU7GUO3XnvJQy1Yn5mLLVn9lWSMHLYXCp3
+   lxqn7XhR2wv7iMDVjdpBjPnjnNPrTJ482CG4/o1xfVuA08DUAuNr8hAYN
+   enn+PKDhtDllxjHwfEbXwhypKvnL2jdIX8zmyhUy5vWRfwmRwyKJW3GUb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252284141"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="252284141"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:54:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="701386593"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 19 May 2022 14:54:37 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nro6O-0003yn-G7;
+        Thu, 19 May 2022 21:54:36 +0000
+Date:   Fri, 20 May 2022 05:54:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Florian Westphal <fw@strlen.de>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [netfilter-nf-next:testing 9/12] ld.lld: error: undefined symbol:
+ nf_hook_bpf_create
+Message-ID: <202205200527.2rAxKhM6-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220519214021.3572840-1-kaleshsingh@google.com> <01c1e280-eec4-4f04-553b-670ae1376c33@infradead.org>
-In-Reply-To: <01c1e280-eec4-4f04-553b-670ae1376c33@infradead.org>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Thu, 19 May 2022 14:53:01 -0700
-Message-ID: <CAC_TJvcA8CEG7M1KZpbdTz6_2jZHG0+Ui4Ug5qmbLYiemoLegw@mail.gmail.com>
-Subject: Re: [RFC PATCH] procfs: Add file path and size to /proc/<pid>/fdinfo
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Ioannis Ilkos <ilkos@google.com>,
-        "T.J. Mercier" <tjmercier@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Colin Cross <ccross@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 2:47 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi--
->
-> On 5/19/22 14:40, Kalesh Singh wrote:
-> > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> > index 061744c436d9..ad66d78aca51 100644
-> > --- a/Documentation/filesystems/proc.rst
-> > +++ b/Documentation/filesystems/proc.rst
-> > @@ -1922,13 +1922,16 @@ if precise results are needed.
-> >  3.8  /proc/<pid>/fdinfo/<fd> - Information about opened file
-> >  ---------------------------------------------------------------
-> >  This file provides information associated with an opened file. The regular
-> > -files have at least four fields -- 'pos', 'flags', 'mnt_id' and 'ino'.
-> > +files have at least six fields -- 'pos', 'flags', 'mnt_id', 'ino', 'size',
-> > +and 'path'.
-> > +
-> >  The 'pos' represents the current offset of the opened file in decimal
-> >  form [see lseek(2) for details], 'flags' denotes the octal O_xxx mask the
-> >  file has been created with [see open(2) for details] and 'mnt_id' represents
-> >  mount ID of the file system containing the opened file [see 3.5
-> >  /proc/<pid>/mountinfo for details]. 'ino' represents the inode number of
-> > -the file.
-> > +the file, 'size' represents the size of the file in bytes, and 'path'
-> > +represents the file path.
-> >
-> >  A typical output is::
-> >
-> > @@ -1936,6 +1939,8 @@ A typical output is::
-> >       flags:  0100002
-> >       mnt_id: 19
-> >       ino:    63107
-> > +        size:   0
-> > +        path:   /dev/null
-> >
-> >  All locks associated with a file descriptor are shown in its fdinfo too::
-> >
-> > @@ -1953,6 +1958,8 @@ Eventfd files
-> >       flags:  04002
-> >       mnt_id: 9
-> >       ino:    63107
-> > +        size:   0
-> > +        path:   anon_inode:[eventfd]
-> >       eventfd-count:  5a
-> >
-> >  where 'eventfd-count' is hex value of a counter.
-> > @@ -1966,6 +1973,8 @@ Signalfd files
-> >       flags:  04002
-> >       mnt_id: 9
-> >       ino:    63107
-> > +        size:   0
-> > +        path:   anon_inode:[signalfd]
-> >       sigmask:        0000000000000200
-> >
-> >  where 'sigmask' is hex value of the signal mask associated
-> > @@ -1980,6 +1989,8 @@ Epoll files
-> >       flags:  02
-> >       mnt_id: 9
-> >       ino:    63107
-> > +        size:   0
-> > +        path:   anon_inode:[eventpoll]
-> >       tfd:        5 events:       1d data: ffffffffffffffff pos:0 ino:61af sdev:7
-> >
-> >  where 'tfd' is a target file descriptor number in decimal form,
-> > @@ -1998,6 +2009,8 @@ For inotify files the format is the following::
-> >       flags:  02000000
-> >       mnt_id: 9
-> >       ino:    63107
-> > +        size:   0
-> > +        path:   anon_inode:inotify
-> >       inotify wd:3 ino:9e7e sdev:800013 mask:800afce ignored_mask:0 fhandle-bytes:8 fhandle-type:1 f_handle:7e9e0000640d1b6d
-> >
-> >  where 'wd' is a watch descriptor in decimal form, i.e. a target file
-> > @@ -2021,6 +2034,8 @@ For fanotify files the format is::
-> >       flags:  02
-> >       mnt_id: 9
-> >       ino:    63107
-> > +        size:   0
-> > +        path:   anon_inode:[fanotify]
-> >       fanotify flags:10 event-flags:0
-> >       fanotify mnt_id:12 mflags:40 mask:38 ignored_mask:40000003
-> >       fanotify ino:4f969 sdev:800013 mflags:0 mask:3b ignored_mask:40000000 fhandle-bytes:8 fhandle-type:1 f_handle:69f90400c275b5b4
-> > @@ -2046,6 +2061,8 @@ Timerfd files
-> >       flags:  02
-> >       mnt_id: 9
-> >       ino:    63107
-> > +        size:   0
-> > +        path:   anon_inode:[timerfd]
-> >       clockid: 0
-> >       ticks: 0
-> >       settime flags: 01
-> > @@ -2070,6 +2087,7 @@ DMA Buffer files
-> >       mnt_id: 9
-> >       ino:    63107
-> >       size:   32768
-> > +        path:   /dmabuf:
-> >       count:  2
-> >       exp_name:  system-heap
->
-> All of these added lines should be indented with a tab instead of spaces.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git testing
+head:   4456ac35299c131e2ac26b4dc025b257d810277b
+commit: 11b2910d788799e8c68df305994260fd79a61e10 [9/12] netfilter: add bpf base hook program generator
+config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20220520/202205200527.2rAxKhM6-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git/commit/?id=11b2910d788799e8c68df305994260fd79a61e10
+        git remote add netfilter-nf-next git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git
+        git fetch --no-tags netfilter-nf-next testing
+        git checkout 11b2910d788799e8c68df305994260fd79a61e10
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
 
-Ahh. Thanks for catching it. WIll update in the next version.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
--Kalesh
+All errors (new ones prefixed by >>):
 
->
-> thanks.
-> --
-> ~Randy
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
->
+>> ld.lld: error: undefined symbol: nf_hook_bpf_create
+   >>> referenced by core.c
+   >>>               netfilter/core.o:(nf_hook_entries_grow) in archive net/built-in.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

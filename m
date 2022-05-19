@@ -2,112 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99BF52DF91
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E233D52DF9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245275AbiESVuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
+        id S245301AbiESVxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiESVt4 (ORCPT
+        with ESMTP id S245178AbiESVxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:49:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59407972BA;
-        Thu, 19 May 2022 14:49:55 -0700 (PDT)
-Date:   Thu, 19 May 2022 21:49:51 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652996992;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hV2SaG1IK3wDUfs/GoFvzBuAP14waZ2g55indvNhtwk=;
-        b=DgSoJBY2DsC/lG5hhFyAdVLBkTDxhm879Is5Q9ulbJEGYBwPBnv4fIEUu/GUDAJDIWh3Ne
-        2QBdmIaBVMkzYIy/uJvhWkW0fB/nYavuOSIfTwxtN6wZwKJH/EgC53KADR9c0m5mA4x5Md
-        jAsWN4jc4jAZI+5UHaTfmUeRQ3fXVvhCOO1/7YYTNIPg/Z1fgzUUufXYZfUJ47Rqu8B68Y
-        3J51aLSfF4UhO/UcHgNrCHoIFWOUc8+4sj8zrHN5c1Ky5HqjuOETmY4g/0wAfYVN0OuBWx
-        fxrhOxGOxHVyj7M3sd14SdvH6lIk5fHjZAgWGs4cJsI7QoBtbmipWi0Bk9s9kQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652996992;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hV2SaG1IK3wDUfs/GoFvzBuAP14waZ2g55indvNhtwk=;
-        b=W10vRmFydBMlsHgGA3iFZQRmb0CdxonPKRRanrxxBgFWZmELraBbid5fu4M3rH+tjpdnVE
-        XhvMfSpjCrnL4cAg==
-From:   "tip-bot2 for Uros Bizjak" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] sched/clock: Use try_cmpxchg64 in
- sched_clock_{local,remote}
-Cc:     Uros Bizjak <ubizjak@gmail.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220518184953.3446778-1-ubizjak@gmail.com>
-References: <20220518184953.3446778-1-ubizjak@gmail.com>
+        Thu, 19 May 2022 17:53:15 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3733353E32
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:53:14 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id j24so9024840wrb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TX5ubsOE693MmLyfmpEsKA9kTxG9wuZlKhY/Lmx1Dcg=;
+        b=mMPPPEU4Yx+mtS5aVcwwgLsWwhqGNX6yCnKkNTj4avhRkEw8A6Uq0MGgn3uQNfBa4e
+         vKCS7kRRTVqExk6sdIA7WNd2XVzEBGzO6kLyAOKv+b2hbCz6VpydFzHqeK97GrH1obED
+         DUm111fatIa2ZI2LUM5nXCzufj0xA3ubSlq4VJ8aYUAJR0lPkN5DVMzKQ/gJrn6cj34F
+         odcg+YbyZm37Rud7oZtAmoSRH9hQqreI+3js+Zc+mcbTKeS+u55W21Q2CbVCLpNx+ndK
+         YqGwZpkbe4mSYOv1KvetzgMDp3pD3nmNNlapjgV5N81c47T4qaPui2JXENarJTeGL/Cw
+         m0Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TX5ubsOE693MmLyfmpEsKA9kTxG9wuZlKhY/Lmx1Dcg=;
+        b=4rX65qIeCQ+8UCamFGi/+XJY3T2Yqf+pFgtMvycXHh+pLOUK9p7iZsKdLDEK7PoL6q
+         E3VnAZuXSU+I1CrYO0QGeDYtKALierCsl871L6NQB7gLEdbiNZICbOxcfYpYHwrwoRvy
+         f02cMbFqauQVL36hTso5DavgFHLv9Ql94SRYrQ52e+oMMA/NRtE3RDKpC/a5E75+/FKM
+         32iO8/DwcCcBWg1cRoOH6nuzjqBBakGd8DlSnTSx/GbCI2MhxUV5e3jWnIeyNciqHH6E
+         8ik5LvLbRpVNc19vi0p1a/bnSXXPqreJBA901HbrSwXihkz84kjwhea9dlch3C8PTtY7
+         nN4g==
+X-Gm-Message-State: AOAM532IPbitLmDsaSjMSFleDiqQQX9mum4mXaOfvaKxZ18qQ/PEhI3c
+        Sai4JCUpOiqJT7l+xj60a2IyM5EU0W7X0R9RZI0DIQ==
+X-Google-Smtp-Source: ABdhPJwyK6HC08N5s3/SWMPE4w7rlvJoGjiBpOl0jarvJYl0fFzmbkJPfCqqscfznim8I5RGFl/dzkYSwMyaE/2gLhc=
+X-Received: by 2002:a5d:6c68:0:b0:20c:b69f:cbd0 with SMTP id
+ r8-20020a5d6c68000000b0020cb69fcbd0mr6016090wrz.500.1652997192512; Thu, 19
+ May 2022 14:53:12 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <165299699122.4207.8125991535807221103.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220519214021.3572840-1-kaleshsingh@google.com> <01c1e280-eec4-4f04-553b-670ae1376c33@infradead.org>
+In-Reply-To: <01c1e280-eec4-4f04-553b-670ae1376c33@infradead.org>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Thu, 19 May 2022 14:53:01 -0700
+Message-ID: <CAC_TJvcA8CEG7M1KZpbdTz6_2jZHG0+Ui4Ug5qmbLYiemoLegw@mail.gmail.com>
+Subject: Re: [RFC PATCH] procfs: Add file path and size to /proc/<pid>/fdinfo
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Ioannis Ilkos <ilkos@google.com>,
+        "T.J. Mercier" <tjmercier@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Colin Cross <ccross@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        DRI mailing list <dri-devel@lists.freedesktop.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+On Thu, May 19, 2022 at 2:47 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Hi--
+>
+> On 5/19/22 14:40, Kalesh Singh wrote:
+> > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> > index 061744c436d9..ad66d78aca51 100644
+> > --- a/Documentation/filesystems/proc.rst
+> > +++ b/Documentation/filesystems/proc.rst
+> > @@ -1922,13 +1922,16 @@ if precise results are needed.
+> >  3.8  /proc/<pid>/fdinfo/<fd> - Information about opened file
+> >  ---------------------------------------------------------------
+> >  This file provides information associated with an opened file. The regular
+> > -files have at least four fields -- 'pos', 'flags', 'mnt_id' and 'ino'.
+> > +files have at least six fields -- 'pos', 'flags', 'mnt_id', 'ino', 'size',
+> > +and 'path'.
+> > +
+> >  The 'pos' represents the current offset of the opened file in decimal
+> >  form [see lseek(2) for details], 'flags' denotes the octal O_xxx mask the
+> >  file has been created with [see open(2) for details] and 'mnt_id' represents
+> >  mount ID of the file system containing the opened file [see 3.5
+> >  /proc/<pid>/mountinfo for details]. 'ino' represents the inode number of
+> > -the file.
+> > +the file, 'size' represents the size of the file in bytes, and 'path'
+> > +represents the file path.
+> >
+> >  A typical output is::
+> >
+> > @@ -1936,6 +1939,8 @@ A typical output is::
+> >       flags:  0100002
+> >       mnt_id: 19
+> >       ino:    63107
+> > +        size:   0
+> > +        path:   /dev/null
+> >
+> >  All locks associated with a file descriptor are shown in its fdinfo too::
+> >
+> > @@ -1953,6 +1958,8 @@ Eventfd files
+> >       flags:  04002
+> >       mnt_id: 9
+> >       ino:    63107
+> > +        size:   0
+> > +        path:   anon_inode:[eventfd]
+> >       eventfd-count:  5a
+> >
+> >  where 'eventfd-count' is hex value of a counter.
+> > @@ -1966,6 +1973,8 @@ Signalfd files
+> >       flags:  04002
+> >       mnt_id: 9
+> >       ino:    63107
+> > +        size:   0
+> > +        path:   anon_inode:[signalfd]
+> >       sigmask:        0000000000000200
+> >
+> >  where 'sigmask' is hex value of the signal mask associated
+> > @@ -1980,6 +1989,8 @@ Epoll files
+> >       flags:  02
+> >       mnt_id: 9
+> >       ino:    63107
+> > +        size:   0
+> > +        path:   anon_inode:[eventpoll]
+> >       tfd:        5 events:       1d data: ffffffffffffffff pos:0 ino:61af sdev:7
+> >
+> >  where 'tfd' is a target file descriptor number in decimal form,
+> > @@ -1998,6 +2009,8 @@ For inotify files the format is the following::
+> >       flags:  02000000
+> >       mnt_id: 9
+> >       ino:    63107
+> > +        size:   0
+> > +        path:   anon_inode:inotify
+> >       inotify wd:3 ino:9e7e sdev:800013 mask:800afce ignored_mask:0 fhandle-bytes:8 fhandle-type:1 f_handle:7e9e0000640d1b6d
+> >
+> >  where 'wd' is a watch descriptor in decimal form, i.e. a target file
+> > @@ -2021,6 +2034,8 @@ For fanotify files the format is::
+> >       flags:  02
+> >       mnt_id: 9
+> >       ino:    63107
+> > +        size:   0
+> > +        path:   anon_inode:[fanotify]
+> >       fanotify flags:10 event-flags:0
+> >       fanotify mnt_id:12 mflags:40 mask:38 ignored_mask:40000003
+> >       fanotify ino:4f969 sdev:800013 mflags:0 mask:3b ignored_mask:40000000 fhandle-bytes:8 fhandle-type:1 f_handle:69f90400c275b5b4
+> > @@ -2046,6 +2061,8 @@ Timerfd files
+> >       flags:  02
+> >       mnt_id: 9
+> >       ino:    63107
+> > +        size:   0
+> > +        path:   anon_inode:[timerfd]
+> >       clockid: 0
+> >       ticks: 0
+> >       settime flags: 01
+> > @@ -2070,6 +2087,7 @@ DMA Buffer files
+> >       mnt_id: 9
+> >       ino:    63107
+> >       size:   32768
+> > +        path:   /dmabuf:
+> >       count:  2
+> >       exp_name:  system-heap
+>
+> All of these added lines should be indented with a tab instead of spaces.
 
-Commit-ID:     8491d1bdf5de152f27fc941e2dcdc4e66c950542
-Gitweb:        https://git.kernel.org/tip/8491d1bdf5de152f27fc941e2dcdc4e66c950542
-Author:        Uros Bizjak <ubizjak@gmail.com>
-AuthorDate:    Wed, 18 May 2022 20:49:53 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 19 May 2022 23:46:09 +02:00
+Ahh. Thanks for catching it. WIll update in the next version.
 
-sched/clock: Use try_cmpxchg64 in sched_clock_{local,remote}
+-Kalesh
 
-Use try_cmpxchg64 instead of cmpxchg64 (*ptr, old, new) != old in
-sched_clock_{local,remote}. x86 cmpxchg returns success in ZF flag,
-so this change saves a compare after cmpxchg (and related move
-instruction in front of cmpxchg).
-
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220518184953.3446778-1-ubizjak@gmail.com
----
- kernel/sched/clock.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/sched/clock.c b/kernel/sched/clock.c
-index d9272d9..e374c0c 100644
---- a/kernel/sched/clock.c
-+++ b/kernel/sched/clock.c
-@@ -287,7 +287,7 @@ again:
- 	clock = wrap_max(clock, min_clock);
- 	clock = wrap_min(clock, max_clock);
- 
--	if (cmpxchg64(&scd->clock, old_clock, clock) != old_clock)
-+	if (!try_cmpxchg64(&scd->clock, &old_clock, clock))
- 		goto again;
- 
- 	return clock;
-@@ -349,7 +349,7 @@ again:
- 		val = remote_clock;
- 	}
- 
--	if (cmpxchg64(ptr, old_val, val) != old_val)
-+	if (!try_cmpxchg64(ptr, &old_val, val))
- 		goto again;
- 
- 	return val;
+>
+> thanks.
+> --
+> ~Randy
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

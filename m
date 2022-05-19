@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCAF52DD87
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CB452DD83
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244533AbiESTOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S244476AbiESTNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244359AbiESTNc (ORCPT
+        with ESMTP id S244328AbiESTNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 15:13:32 -0400
+        Thu, 19 May 2022 15:13:25 -0400
 Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1947AFAED;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C69AF1DF;
         Thu, 19 May 2022 12:13:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Cc:To:From:content-disposition;
-        bh=DRCQ7jkTEXAxi00P1wDBuXPsBq4R7e4xvI9iMn5bbys=; b=nfyb9mLWnvWJcMQC/1GZEFY5WB
-        FWBk6feeLzF6+K5QASLBltjwhDCkGL77z8IOht107q41gGCwIk3RnMNbdsye2ytrdBweWRmKTkIn0
-        IsmqFDxC1J/4BqURk3ZdKwORXX98PNbsYT9+Uq4K+ZUJaBjnbnn0cVye0kheJOKVD4U8f2iSPym20
-        Zgnh4pbbTnc4803wOJQE1bD38P0T/nfrUo8zN6OQpLyOLaC2jjrM+DTrxrZ8Ik7UBCPnqProCE7BL
-        lBFh/dz0GvbRYXo3O7lroQhYdbtG8lhp0YBZC65hn95DL4FBXcRIBA9wSkK+SbWat5u+HWzyiBhYa
-        xEovFL4w==;
+        bh=jpnVmJs1KfzZmF3zwWdAWzAxHHjPyHXS6ik10MBhG+A=; b=PIfym8rnKlEZJ4wOsJxYgvHPRj
+        Pw0ovd8XddoS/VUgjOQO9+2I06h0d8AvXWExgV+aWUyigrUt8Ot613BVCJUHFh50jT4guweXddWpR
+        JcGBwrphW9EmqMIOuHMZQ8qL6icNtP2gnDClzUmisVWHCaRP3NokuWbErY5Ppc34Z9NsWqRh7RRgF
+        V2+UQpYvkDSF4k7kf+gy7njuRodsGwY3cxPwpPpe9TdWiKEFb0qxW2aUY66vgw+PARSL/NZbtixgs
+        fG95PWOn1YcoFVXgrvBpmYisH8AZ2yE0vO0nR89GUvomhmVJAk3oSTczS+HBmT1EcaM3y1yV63H84
+        iLCRq8lg==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nrlaJ-002TqQ-5W; Thu, 19 May 2022 13:13:22 -0600
+        id 1nrlaG-002TqU-58; Thu, 19 May 2022 13:13:18 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nrlaE-0004Th-Up; Thu, 19 May 2022 13:13:15 -0600
+        id 1nrlaF-0004Tl-5s; Thu, 19 May 2022 13:13:15 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -41,8 +41,8 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         Martin Oliveira <Martin.Oliveira@eideticom.com>,
         David Sloan <David.Sloan@eideticom.com>,
         Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu, 19 May 2022 13:13:06 -0600
-Message-Id: <20220519191311.17119-11-logang@deltatee.com>
+Date:   Thu, 19 May 2022 13:13:07 -0600
+Message-Id: <20220519191311.17119-12-logang@deltatee.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220519191311.17119-1-logang@deltatee.com>
 References: <20220519191311.17119-1-logang@deltatee.com>
@@ -57,51 +57,72 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v1 10/15] md/raid5-cache: Take struct r5l_log in r5c_log_required_to_flush_cache()
+Subject: [PATCH v1 11/15] md/raid5: Ensure array is suspended for calls to log_exit()
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only call site of r5c_log_required_to_flush_cache() already has
-a log pointer and has already checked that it is writeback. So the
-derference and writeback check is redundant. Just pass the log pointer.
+The raid5-cache code relies on there being no IO in flight when
+log_exit() is called. There are two places where this is not
+guaranteed so add mddev_suspend() and mddev_resume() calls to these
+sites.
+
+The site in raid5_remove_disk() has a comment saying that it is
+called in raid5d and thus cannot wait for pending writes; however that
+does not appear to be correct anymore (if it ever was) as
+raid5_remove_disk() is called from hot_remove_disk() which only
+appears to be called in the md_ioctl(). Thus, the comment is removed,
+as well as the racy check and replaced with calls to suspend/resume.
+
+The site in raid5_change_consistency_policy() is in the error path,
+and another similar call site already has suspend/resume calls just
+below it; so it should be equally safe to make that change here.
 
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 ---
- drivers/md/raid5-cache.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/md/raid5.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-index 0ecff63202f8..f7b402138d16 100644
---- a/drivers/md/raid5-cache.c
-+++ b/drivers/md/raid5-cache.c
-@@ -411,13 +411,9 @@ void r5c_check_cached_full_stripe(struct r5conf *conf)
-  *     (stripe_in_journal_count) * (max_degraded + 1) +
-  *     (group_cnt + 1) * (raid_disks - max_degraded)
-  */
--static sector_t r5c_log_required_to_flush_cache(struct r5conf *conf)
-+static sector_t r5c_log_required_to_flush_cache(struct r5conf *conf,
-+						struct r5l_log *log)
- {
--	struct r5l_log *log = conf->log;
--
--	if (!r5c_is_writeback(conf))
--		return 0;
--
- 	return BLOCK_SECTORS *
- 		((conf->max_degraded + 1) * atomic_read(&log->stripe_in_journal_count) +
- 		 (conf->raid_disks - conf->max_degraded) * (conf->group_cnt + 1));
-@@ -442,7 +438,7 @@ static inline void r5c_update_log_state(struct r5l_log *log)
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index 09e768f2d32c..37fe2af77c93 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -7938,18 +7938,9 @@ static int raid5_remove_disk(struct mddev *mddev, struct md_rdev *rdev)
  
- 	free_space = r5l_ring_distance(log, log->log_start,
- 				       log->last_checkpoint);
--	reclaim_space = r5c_log_required_to_flush_cache(conf);
-+	reclaim_space = r5c_log_required_to_flush_cache(conf, log);
- 	if (free_space < 2 * reclaim_space)
- 		set_bit(R5C_LOG_CRITICAL, &conf->cache_state);
- 	else {
+ 	print_raid5_conf(conf);
+ 	if (test_bit(Journal, &rdev->flags) && conf->log) {
+-		/*
+-		 * we can't wait pending write here, as this is called in
+-		 * raid5d, wait will deadlock.
+-		 * neilb: there is no locking about new writes here,
+-		 * so this cannot be safe.
+-		 */
+-		if (atomic_read(&conf->active_stripes) ||
+-		    atomic_read(&conf->r5c_cached_full_stripes) ||
+-		    atomic_read(&conf->r5c_cached_partial_stripes)) {
+-			return -EBUSY;
+-		}
++		mddev_suspend(mddev);
+ 		log_exit(conf);
++		mddev_resume(mddev);
+ 		return 0;
+ 	}
+ 	if (rdev == rcu_access_pointer(p->rdev))
+@@ -8697,8 +8688,11 @@ static int raid5_change_consistency_policy(struct mddev *mddev, const char *buf)
+ 			err = log_init(conf, NULL, true);
+ 			if (!err) {
+ 				err = resize_stripes(conf, conf->pool_size);
+-				if (err)
++				if (err) {
++					mddev_suspend(mddev);
+ 					log_exit(conf);
++					mddev_resume(mddev);
++				}
+ 			}
+ 		} else
+ 			err = -EINVAL;
 -- 
 2.30.2
 

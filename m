@@ -2,108 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38F652D14E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95DB52D150
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237349AbiESLS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S233403AbiESLTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237301AbiESLSt (ORCPT
+        with ESMTP id S236208AbiESLTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:18:49 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECD7B041A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:18:48 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id u30so8516452lfm.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=atyGWgYrO2SecYohFwMCiN3J3bKDbG49XwpQdrYfUIE=;
-        b=q5wxTuQmIyRFcV2VwJRDDAK/A1pgJB2e6g4V+CpLQM0Y/HDj+x68ULl4LZvWPm6RB9
-         c7ojXx8Tz94aJU6ogJliccvI2cmzqC3OEcjTHdZtJP0sNpp0S1G1BcTSxzgJv5nrLXpG
-         WVs7IqQvorJhIIE1ex42eXckpdD0gQVXf2yOPpE1tsbDDwO9j55Tf8YYZ+Cw7M9z5Mdl
-         LkuFFIdghz/jMb3oZHYe9nYZWnrC4ee2QxtOwERvRo1tWUQlziHgzpYp+PBu4VZcfymR
-         nroggDCx3cf7zPekjpdGhEWopfh3lttqWlFk0OWsz6DkBu9G5NTbCK6dnBwwSdd2twsa
-         0Y+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=atyGWgYrO2SecYohFwMCiN3J3bKDbG49XwpQdrYfUIE=;
-        b=KLuf5nD+CbF8zn7qrQ1i7ursR3p7tVYNnizuh17yGdS8R06ILUkf4TYYc258qyguol
-         aHMADbg9XXyUeviXIypE5y5nBRCY2sOFJ1YCPSsnxB5yXZh1+O8TCjAmkgLSYrWO5dFn
-         iI6vLTQELHlh+Wc8nYQm9pHgOrdfWR8e61EjmrzT/SXdf4ZVAeFqe1pSvcEuCeGc13yw
-         pQDUhChTnsuUfG5ViHv40F6TGS2XhHh4ZLyYnz9sV+CUiaKnJrEdit0pNHf4TUlSQbZm
-         3waZr5S9Xkplr60fmg/JekziuD1avRKIyBXxC8W3RZoeuXoUDkgeKO195xTRpAqD5LKa
-         e7+Q==
-X-Gm-Message-State: AOAM532KJ86QRMz0hoA+Yk1lRRAmjUs4le0DvaGmq+bjHyFOq6kkkGhc
-        Sd6x1QQsYmcPIavD8OYpxOtiOFvre6j9uJ/qBbw/VA==
-X-Google-Smtp-Source: ABdhPJyr/7mZBn65Lxwhnxkm/V33ORzPdJ9mSXzb980IJhKah84Msdv4tK6Whuz1/2Vu1EW10x1fpWstq7BLWrZ56ts=
-X-Received: by 2002:a05:6512:3b84:b0:473:a5e5:165a with SMTP id
- g4-20020a0565123b8400b00473a5e5165amr3010327lfv.417.1652959126436; Thu, 19
- May 2022 04:18:46 -0700 (PDT)
+        Thu, 19 May 2022 07:19:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2C8B2250;
+        Thu, 19 May 2022 04:18:58 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5FA8B21B3F;
+        Thu, 19 May 2022 11:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652959137; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlBHEoYBfb1KPuoHgDe8/xW0NmuRzgrxMjHDSq311m8=;
+        b=lVsFJVjM95QAf8BtL2346JAPhSEU0ZwWFI66R9OjINDXQSXzGoBgpeOgojzS6pe9iJFQhk
+        vMysbdethLL2TQnCDPjVo0QErCXwHGYaUz+A2RJ5GpzT16ASSsydPX6tsgGIG2GitRVZvO
+        v+t8IfUpmda/FmG9Yn1DNTPfH/LYEZU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652959137;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xlBHEoYBfb1KPuoHgDe8/xW0NmuRzgrxMjHDSq311m8=;
+        b=/mxkD//r/VYRBbyN6BYdva8Vo/reEZ1vWzfK8sTnpO84rr7WI0znDyAtaqAyCfa5hBRXUW
+        D1fISg9+R2VKrBCQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4C2A32C141;
+        Thu, 19 May 2022 11:18:57 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id F3780A062F; Thu, 19 May 2022 13:18:56 +0200 (CEST)
+Date:   Thu, 19 May 2022 13:18:56 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next 7/8] block, bfq: cleanup
+ bfq_bfqq_update_budg_for_activation()
+Message-ID: <20220519111856.wvk4oetm7odnkg3w@quack3.lan>
+References: <20220514090522.1669270-1-yukuai3@huawei.com>
+ <20220514090522.1669270-8-yukuai3@huawei.com>
 MIME-Version: 1.0
-References: <000000000000c54420059e4f08ff@google.com> <0000000000009cd20305d3ad7e8d@google.com>
-In-Reply-To: <0000000000009cd20305d3ad7e8d@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 19 May 2022 13:18:35 +0200
-Message-ID: <CACT4Y+baaFENUbUCYq7x6aGXucyhy86Fy8UeFDHWSxDpvbda6Q@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in dev_change_net_namespace
-To:     syzbot <syzbot+830c6dbfc71edc4f0b8f@syzkaller.appspotmail.com>
-Cc:     andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, dsahern@gmail.com,
-        dsahern@kernel.org, ebiederm@xmission.com, edumazet@google.com,
-        eric.dumazet@gmail.com, fw@strlen.de,
-        harshit.m.mogalapalli@oracle.com, hawk@kernel.org,
-        jiri@mellanox.com, johannes.berg@intel.com,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@chromium.org,
-        kuba@kernel.org, leon@kernel.org, linux-kernel@vger.kernel.org,
-        marcelo.leitner@gmail.com, mkubecek@suse.cz,
-        netdev@vger.kernel.org, roopa@cumulusnetworks.com,
-        saiprakash.ranjan@codeaurora.org, songliubraving@fb.com,
-        suzuki.poulose@arm.com, syzkaller-bugs@googlegroups.com,
-        tonymarislogistics@yandex.com, will@kernel.org,
-        yajun.deng@linux.dev, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220514090522.1669270-8-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Dec 2021 at 21:03, syzbot
-<syzbot+830c6dbfc71edc4f0b8f@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit f123cffdd8fe8ea6c7fded4b88516a42798797d0
-> Author: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-> Date:   Mon Nov 29 17:53:27 2021 +0000
->
->     net: netlink: af_netlink: Prevent empty skb by adding a check on len.
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=168acc95b00000
-> start commit:   990f227371a4 Merge tag 's390-5.9-2' of git://git.kernel.or..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=21f0d1d2df6d5fc
-> dashboard link: https://syzkaller.appspot.com/bug?extid=830c6dbfc71edc4f0b8f
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101761e2900000
->
-> If the result looks correct, please mark the issue as fixed by replying with:
->
-> #syz fix: net: netlink: af_netlink: Prevent empty skb by adding a check on len.
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+On Sat 14-05-22 17:05:21, Yu Kuai wrote:
+> It will only be called from bfq_bfqq_handle_idle_busy_switch() in
+> specific code branch, there is no need to precaculate
+> 'bfqq_wants_to_preempt' each time bfq_bfqq_handle_idle_busy_switch()
+> is caleld.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Looks reasonable, let's close the bug:
+Please see below:
 
-#syz fix:
-net: netlink: af_netlink: Prevent empty skb by adding a check on len.
+> @@ -1816,14 +1807,6 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
+>  		  (bfqq->bic || RQ_BIC(rq)->stably_merged) &&
+>  		   (*interactive || soft_rt)));
+>  
+> -	/*
+> -	 * Using the last flag, update budget and check whether bfqq
+> -	 * may want to preempt the in-service queue.
+> -	 */
+> -	bfqq_wants_to_preempt =
+> -		bfq_bfqq_update_budg_for_activation(bfqd, bfqq,
+> -						    arrived_in_time);
+> -
+>  	/*
+>  	 * If bfqq happened to be activated in a burst, but has been
+>  	 * idle for much more than an interactive queue, then we
+...
+> @@ -1918,7 +1900,7 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
+>  	 * (2) this switch of bfqq to busy changes the scenario.
+>  	 */
+>  	if (bfqd->in_service_queue &&
+> -	    ((bfqq_wants_to_preempt &&
+> +	    ((bfq_bfqq_update_budg_for_activation(bfqd, bfqq) &&
+>  	      bfqq->wr_coeff >= bfqd->in_service_queue->wr_coeff) ||
+>  	     bfq_bfqq_higher_class_or_weight(bfqq, bfqd->in_service_queue) ||
+>  	     !bfq_better_to_idle(bfqd->in_service_queue)) &&
+
+So these changes are actually wrong because
+bfq_bfqq_update_budg_for_activation() relies on
+bfq_bfqq_non_blocking_wait_rq() but bfq_add_bfqq_busy() clears that. And
+bfq_add_bfqq_busy() is called between the place where
+bfq_bfqq_update_budg_for_activation() was called previously and now so your
+patch breaks this logic.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

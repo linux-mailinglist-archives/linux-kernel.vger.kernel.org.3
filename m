@@ -2,121 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9282052D194
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602F152D195
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237425AbiESLfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
+        id S237461AbiESLf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiESLfg (ORCPT
+        with ESMTP id S237452AbiESLfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:35:36 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BBCB0A66
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:35:33 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id u23so8633993lfc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:35:33 -0700 (PDT)
+        Thu, 19 May 2022 07:35:55 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B228CDDE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:35:51 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id w14so8543061lfl.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:35:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TCjmGPy0SDboBVIutYmABeJhjmy/yNmOBhY70ZJKm34=;
-        b=u2wKZJYFwKripn4BJEh9JTJClCrPMxeeVAUY/FR2Rp6+zlFZZCfCDf6Wo561rrqIu4
-         P8dDLkJPXHJVZuNYIXmUpYpE+2EM8wusyCcOgFTImIjGzXi3+lv0e5iZHgEZ6Wb0tUvB
-         PCKfOJMAS6SHwuF+evavImIceRY1EPIfJPMfGaEDH7qHXoj4xmgeN8nLql8xfHUbXEO1
-         5pBk+wQlbz8IYX18XZgImAr2t+PpuBYZ340ecUmpDJ1RBnY57g6OAiMlp9naS3z3CtzE
-         Ld/p2RiDERai9j/4wdDec4setIuDv8ZelvbXvT7M6icKCqeDJhyY+s1BGwMaMxrV8I6Z
-         M1rQ==
+        bh=oxibleWjg5piZBF2UIB37tPZ8A10UXKI4apmU+0ZgSE=;
+        b=8EB4pJ5d6ls+vf8cvcPsR22q2RxCetm5Iw2kafSsbt/+95CKUc0uKp5QkBhyrST1rt
+         6lHoRg71vpeaZsk1OKWJUv5oDbc4vDrSGqQayY++4QB2v5fjP99+fSXmZImkVJclh3kD
+         S1+iwmP44Yu9mSMNikOkMHFLdC3dG6TZF/UUW33LiEmsmu7kReeJyjxE4ExaolC+/IpH
+         eH7yaRloZsgKADBBLdppr1XLrzBvtgj/QwFOf1FheHSdwvtFkYTpryFD3a22LKiRtgsl
+         X3bN8EENiOaDuYZghe5I9Doa8KS82H/H0bFJUhUloRLebbtVRhn8zx7Rx4i4I3udKAvb
+         vEVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=TCjmGPy0SDboBVIutYmABeJhjmy/yNmOBhY70ZJKm34=;
-        b=F+qr3qgf3mlzAvogjy+grFlhyL29nIg9dGhHH15EbUWk3FVTzEgR4sDtji4EhRILmW
-         CHTZ1iFcBJ8q73w28XQOCpVEIm1c5hB8CJ9MBFAXmJ3wpzmPQyUN8PrbPuCCjwZm9LLt
-         rb4i52jM12iJfPT57fyU2EcF/YIh749qTe91KYfSb9y+SkqLd4INMIoEuwOG9GHqRFLV
-         98xmY3yrFTCNCp2+5adBclc/09wpIVtwjg58H2wGTHZZY3Jw8ke7/zrLeOXBDpCBHlYx
-         zSnlw8Ntm99bSBd11gXk7EyX59HAX5qrs/AJr0MElU0hElpzA7Sp+KUu63s4hEmUdYfO
-         0/5Q==
-X-Gm-Message-State: AOAM532XK9oUR8ZY7gPhYDyMm3Q9rOcrA7vo7u3iwmrFJy2EPaPYHCUr
-        2T2rgJ9Dmb5vIzHiDnr0A0MFWA==
-X-Google-Smtp-Source: ABdhPJzLH+q3cnn1YgCQYp6QlL4DRa+F5w1aD7hiBWy/faJbh3DSsLSkr1yk1PC6lRxWhrXO47eXSQ==
-X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id p21-20020a056512139500b00446d38279a5mr3034085lfa.210.1652960132258;
-        Thu, 19 May 2022 04:35:32 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id n18-20020a2e9052000000b00253d8962fffsm99317ljg.18.2022.05.19.04.35.31
+        bh=oxibleWjg5piZBF2UIB37tPZ8A10UXKI4apmU+0ZgSE=;
+        b=DDipmUYK3/fgkl2TLerYKGIB8yF0y1PcwdiBSuWHkPUHkZ+LH2H7nqvH6x0BZgopxN
+         eSdCrNMhqJiq8wGoW40CfhOlSpKfLUHQBejJCviAS+Qf/J0JSsS/lbGOhwuA3P3753/G
+         IemrgUOmsFCI5bGozL00QYtqcBA+5JiJGOycPaFma+fThnMsLAgckXcV5kRWPqIyfbBV
+         fEnQ84qYI66EbAMFm2WNTgBT9oKZGg80hTOYu//h4sTjzYC6Mfj2m1GfE8gw2PJDyrvy
+         mT97+7LVKf5qcMeRDujfoaURHPQ7cwRuT6j2TOhIJ9ZQ9xwG3ZnSDrqVGoV1n4qBw0JL
+         6/tQ==
+X-Gm-Message-State: AOAM5335Zbi4PuPZeKroTwKTC2kSLDM2vyGXONPe2RdYid+ieylfhO0N
+        FQZEtZeU4pryJFgSVEhpfFctXA==
+X-Google-Smtp-Source: ABdhPJyBQ4HZaR0d2ga1ci2zALQ/cTNDEyY0EG9kBXrlEqKR9WuzxRCVaJLz8zEcc0SL+lFTe1PQeA==
+X-Received: by 2002:a05:6512:686:b0:473:9d94:372d with SMTP id t6-20020a056512068600b004739d94372dmr3000734lfe.623.1652960150032;
+        Thu, 19 May 2022 04:35:50 -0700 (PDT)
+Received: from [192.168.43.196] ([185.174.128.243])
+        by smtp.gmail.com with ESMTPSA id j5-20020ac253a5000000b0047255d21163sm260922lfh.146.2022.05.19.04.35.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 04:35:31 -0700 (PDT)
-Message-ID: <4d9b29e8-b171-e181-e2a7-2c8c80107ab1@linaro.org>
-Date:   Thu, 19 May 2022 13:35:30 +0200
+        Thu, 19 May 2022 04:35:49 -0700 (PDT)
+Message-ID: <b728f944-e3ae-cdb6-5f02-2fb21466b2fb@openvz.org>
+Date:   Thu, 19 May 2022 14:35:46 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v4 6/6] arm64: dts: qcom: Add PMP8074 DTSI
+Subject: Re: [PATCH v3] tracing: add 'accounted' entry into output of
+ allocation tracepoints
 Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        lgirdwood@gmail.com, broonie@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <20220518184825.1034976-1-robimarko@gmail.com>
- <20220518184825.1034976-6-robimarko@gmail.com>
- <015c60e9-78f6-f0f0-5af0-733a78fbdf65@linaro.org>
- <CAOX2RU4--VULzvc9NGc4zWV4jpD+riM+9Ff8mqU834a6vQFc5Q@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAOX2RU4--VULzvc9NGc4zWV4jpD+riM+9Ff8mqU834a6vQFc5Q@mail.gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     YoPOhRctb8wwbmY5@carbon, Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Michal Hocko <mhocko@suse.com>
+References: <f6625cd8-90f9-6d48-50f6-7bb052bf479f@openvz.org>
+ <20220518160447.20a7b96f@gandalf.local.home>
+From:   Vasily Averin <vvs@openvz.org>
+In-Reply-To: <20220518160447.20a7b96f@gandalf.local.home>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2022 13:21, Robert Marko wrote:
-> On Thu, 19 May 2022 at 13:07, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 18/05/2022 20:48, Robert Marko wrote:
->>> PMP8074 is a companion PMIC to the Qualcomm IPQ8074 series that is
->>> controlled via SPMI.
->>>
->>> Since we now have support for the regulators inside of it add DTSI
->>> for it.
->>>
->>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>> ---
->>>  arch/arm64/boot/dts/qcom/pmp8074.dtsi | 38 +++++++++++++++++++++++++++
->>
->> This file is not referenced by anything, thus not possible to compile
->> nor verify.
+On 5/18/22 23:04, Steven Rostedt wrote:
+> On Wed, 18 May 2022 09:24:51 +0300
+> Vasily Averin <vvs@openvz.org> wrote:
 > 
-> That is correct, I can include it on HK01 which has an SDHCI controller
-> and thus can consume L11 for VQMMC so that HS200 and higher work.
+> FYI, the subject should be something like: mm/tracing:
+> Because "tracing:" is reserved for tracing infrastructure updates.
 
-Yes, otherwise this does not have any effect.
+Thank you for noticing.
 
+>> @@ -33,42 +35,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+>>  		__entry->bytes_req	= bytes_req;
+>>  		__entry->bytes_alloc	= bytes_alloc;
+>>  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
+>> +		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
+>> +					  (s && s->flags & SLAB_ACCOUNT);
 > 
-> I wanted to include the nodes directly in the SoC DTSI and set L11 as VQMMC
-> for SDHCI there as this is a companion PMIC and always present, but
-> the established
-> procedure is for the PMIC to have its own DTSI and then be included per board.
+> Now you could make this even faster in the fast path and save just the
+> s->flags.
+> 
+> 	__entry->sflags = s ? s->flags : 0;
+> 
+>>  	),
+>>  
+>> -	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
+>> +	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s accounted=%s",
+>>  		(void *)__entry->call_site,
+>>  		__entry->ptr,
+>>  		__entry->bytes_req,
+>>  		__entry->bytes_alloc,
+>> -		show_gfp_flags(__entry->gfp_flags))
+>> +		show_gfp_flags(__entry->gfp_flags),
+>> +		__entry->accounted ? "true" : "false")
+> 
+> And then have: "accounted=%s":
+> 
+> 		(__entry->gfp_flags & __GFP_ACCOUNT) ||
+> 		(__entry->sflags & SLAB_ACCOUNT) ? "true" : "false"
 
-Which was correct suggestion but it is not relevant here. In your
-previous approach your PMIC would be included on every board via SoC
-DTSI. Now your PMIC is not included at all.
+Unfortunately this returns back sparse warnings about bitwise gfp_t and slab_flags_t casts.
+Could you please explain why your variant is faster?
 
-
-Best regards,
-Krzysztof
+Thank you,
+	Vasily Averin

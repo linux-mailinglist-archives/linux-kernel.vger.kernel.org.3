@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71AE552D3D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADD052D3E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238684AbiESNXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S238720AbiESNYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235367AbiESNXQ (ORCPT
+        with ESMTP id S231274AbiESNYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:23:16 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CFC7A835
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:23:15 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ch13so9870247ejb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:23:15 -0700 (PDT)
+        Thu, 19 May 2022 09:24:45 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBFAC9EE3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:24:43 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2f863469afbso57254347b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:24:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=u0w8abIetG2abMfdqOSd7Y82vyjnsYTVbT2dM/SJUnQ=;
-        b=kqyqe4kqxe8fIM4wT/Lk+TKu3gZPfVVJL7C4awAbF1WarDBgMnhX/jTNZMl/vxTt85
-         O+Z6wBabc4+ZNCx8n0IHE9REoVXdCMvPJlFCnZZYhFj1hzZxP+8mcqFOUhlVZbDAzPre
-         Kc/q7pYmg1xfxtbb3BFBaHJS52S/wJHPIZsXAseZ8vOuQdzGf7Q8TolTfts249OnHSX2
-         Zvvj5lEJ4vqVz5G0WslC0SbW4MlQrCVSSX7e6+KrAampo/iIcwlgZWo1YulA6XmleJ2q
-         lrwd2wIj2hyi5kx1AWJ3qxAkGhNfEyLpl2qlX5PGPoPvv92sBJrzSyZNuz9JxC/w48oG
-         d3fg==
+        bh=XDtMkOgpFih4yHdm1CIJJjIlVnYhPbgQN+7Cn05E0kc=;
+        b=CHyT/ElZiWt/DL9EarEAaB3niGBxtzIma7d8pW97F6Zqbo1c/5kngZXQPVxegbK08q
+         zjlDs203oXI7INDIqv1PAFrkcVSpCJY9W8RdFw2mmYNWLnQzh9sR5kaZY5CWpYCEoLAb
+         W06SJdSVkrBvR7JX6UhQQU/9pPDVgUi59rpYtgxtoKRmQGVID4sEJRqy4+CNINorW12r
+         Oz3OH74xNmEJiANaddCXK6NU/Z/jPejQ8pkTk9RysSU+BWiDmLEXwT7QUSQoTfTlroR4
+         Np4i6XEW2aZXKQw2qdGsxnv3IWqM9mB0N1M3yUCgYHYttpMu6YEeZA9OK+zyCvf957EY
+         2FLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=u0w8abIetG2abMfdqOSd7Y82vyjnsYTVbT2dM/SJUnQ=;
-        b=G1c5LmAYiF3DmPFr4IPPlsEwucUrwb6WX4iCrIvjrN1kBdl6oZZiogjvhcffwnl6jR
-         8cHrLo0v5CJxjZ3Vm9phn0nVZ+ql36awu5/ebnwPS2DdjS5SA8k1U5QgL9Ry+rCgM0kY
-         /WpJwhSXPAbV+lRVEVMBOMgqUa5Gh58vSabM/wzvSvNcHq1ebk1zfsZj2N93v2scMgsk
-         5zr5y3BpaQu+M3GxR9LcmAlhBsN/gfFJ/cuBgIKkUvMn7sVBKfzWB6qcNMaK/mUZi2I4
-         G4AOFwpKUdnLdEaGpwffTzjFOEZI9j1oAxceSeXDLPtzUcw4fzTNYxO9/0nkn0ceJAtU
-         +gjA==
-X-Gm-Message-State: AOAM533xAd1hukFErm0gv/B3wMf1qAaySDkJfa0bpxCrjNgAzw6kGAOu
-        Rn6Y8y8tqt/h+ONfUYoQJMZQf3ahS17w8HIjIw4=
-X-Google-Smtp-Source: ABdhPJxNRiGcRFJtK3UBMZH041EXrP1arR0vXHoGPqJhbNCeJrxP1aggikIpmh71PFSM0Xke5vQam54J3vaSYyrXjBg=
-X-Received: by 2002:a17:907:7b9f:b0:6f4:d8c5:392c with SMTP id
- ne31-20020a1709077b9f00b006f4d8c5392cmr4265502ejc.652.1652966594102; Thu, 19
- May 2022 06:23:14 -0700 (PDT)
+        bh=XDtMkOgpFih4yHdm1CIJJjIlVnYhPbgQN+7Cn05E0kc=;
+        b=C0RvnFQDohj5wGxhtwWYTIf6X8vmJzBHGlLo2YIbpHHFeMZ709G5N/YiejIBaBauHH
+         ftpRm2vGmO5NWsYIj5MELwhANHaIvCLrp4jZEHz87KosNEENoUNKp3ka9t4/Xt8rEbIT
+         0DuU0UKC7OnsJIj18ZZl7uLNunonFlXPgmP1brrLsVrN04UNwaLYBRKepGT+k+TggzIY
+         DfrjC77XeAn+400T/wQlT+A+7I+UIsg+3NT73XlTIaIsuf65fe22QXeh3sVQilWdRIjr
+         iEfNT+cgWSD63eYnTR5dUJQXnYa4nuSpI0xJxSGqJ5YNMgfSmfX0MSIZ7NNGrEK6s7hv
+         dpIQ==
+X-Gm-Message-State: AOAM532829aeONbIIybiSUdejPxvQCo8dF5r4BTWC4fqOve9FOFMyhqI
+        3YRuyBGlqSGoaec9vzxCOBQUL0lkGvffPZdgYV3mww==
+X-Google-Smtp-Source: ABdhPJxDdX6HrPZUsvJWehE9aj7j6dfVIf2Hl/Kqy7id9secQkgBjh7x9AoMX/NmntFjUqQ8AtWOVXJ1WMpgQgwWZwA=
+X-Received: by 2002:a0d:e2d1:0:b0:2fe:e470:62b0 with SMTP id
+ l200-20020a0de2d1000000b002fee47062b0mr4802912ywe.333.1652966682756; Thu, 19
+ May 2022 06:24:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <1652963808-14515-1-git-send-email-shengjiu.wang@nxp.com>
-In-Reply-To: <1652963808-14515-1-git-send-email-shengjiu.wang@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 19 May 2022 10:23:06 -0300
-Message-ID: <CAOMZO5DtpoH0dLDX3=Sv4UUpX_=66VEZPsJUWQNnYviApfMLKQ@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: fsl_sai: Enable MCTL_MCLK_EN bit for master mode
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     Nicolin Chen <nicoleotsuka@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220518073232.526443-1-davidgow@google.com> <20220518073232.526443-2-davidgow@google.com>
+ <YoS6rthXi9VRXpkg@elver.google.com> <CABVgOSmyApbC7en25ZBr7hLJye0mOnUY5ETR-VVEWmbaXq3bdQ@mail.gmail.com>
+In-Reply-To: <CABVgOSmyApbC7en25ZBr7hLJye0mOnUY5ETR-VVEWmbaXq3bdQ@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 19 May 2022 15:24:06 +0200
+Message-ID: <CANpmjNOdSy6DuO6CYZ4UxhGxqhjzx4tn0sJMbRqo2xRFv9kX6Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kcsan: test: Add a .kunitconfig to run KCSAN tests
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,21 +75,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shengjiu,
-
-On Thu, May 19, 2022 at 9:49 AM Shengjiu Wang <shengjiu.wang@nxp.com> wrote:
-
-> diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
-> index fa950dde5310..dae16a14f177 100644
-> --- a/sound/soc/fsl/fsl_sai.c
-> +++ b/sound/soc/fsl/fsl_sai.c
-> @@ -437,6 +437,12 @@ static int fsl_sai_set_bclk(struct snd_soc_dai *dai, bool tx, u32 freq)
->                                    FSL_SAI_CR2_DIV_MASK | FSL_SAI_CR2_BYP,
->                                    savediv / 2 - 1);
+On Thu, 19 May 2022 at 15:08, David Gow <davidgow@google.com> wrote:
 >
-> +       if (sai->soc_data->max_register >= FSL_SAI_MCTL) {
+> On Wed, May 18, 2022 at 5:21 PM Marco Elver <elver@google.com> wrote:
+> >
+> > On Wed, May 18, 2022 at 03:32PM +0800, David Gow wrote:
+> > > Add a .kunitconfig file, which provides a default, working config for
+> > > running the KCSAN tests. Note that it needs to run on an SMP machine, so
+> > > to run under kunit_tool, the x86_64-smp qemu-based setup should be used:
+> > > ./tools/testing/kunit/kunit.py run --arch=x86_64-smp --kunitconfig=kernel/kcsan
+> > >
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> >
+> > Reviewed-by: Marco Elver <elver@google.com>
+> >
+> > Thanks for adding this.
+> >
+> > > ---
+> > >  kernel/kcsan/.kunitconfig | 20 ++++++++++++++++++++
+> > >  1 file changed, 20 insertions(+)
+> > >  create mode 100644 kernel/kcsan/.kunitconfig
+> > >
+> > > diff --git a/kernel/kcsan/.kunitconfig b/kernel/kcsan/.kunitconfig
+> > > new file mode 100644
+> > > index 000000000000..a8a815b1eb73
+> > > --- /dev/null
+> > > +++ b/kernel/kcsan/.kunitconfig
+> > > @@ -0,0 +1,20 @@
+> > > +# Note that the KCSAN tests need to run on an SMP setup.
+> > > +# Under kunit_tool, this can be done by using the x86_64-smp
+> > > +# qemu-based architecture:
+> > > +# ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan --arch=x86_64-smp
+> > > +
+> > > +CONFIG_KUNIT=y
+> > > +
+> > > +CONFIG_DEBUG_KERNEL=y
+> > > +
+> > > +CONFIG_KCSAN=y
+> > > +CONFIG_KCSAN_KUNIT_TEST=y
+> > > +
+> > > +# Needed for test_barrier_nothreads
+> > > +CONFIG_KCSAN_STRICT=y
+> > > +CONFIG_KCSAN_WEAK_MEMORY=y
+> >
+> > Note, KCSAN_STRICT implies KCSAN_WEAK_MEMORY.
+> >
+> > Also, a bunch of the test cases' outcomes depend on KCSAN's
+> > "strictness". I think to cover the various combinations would be too
+> > complex, but we can just settle on testing KCSAN_STRICT=y.
+>
+> It's definitely possible to either have multiple .kunitconfigs, each
+> of which could have slightly different setups, e.g.:
+> - kernel/kcsan/.kunitconfig (defualt)
+> - kernel/kcsan/strict.kunitconfig (passed explicitly when desired)
+>
+> Equally, if we got rid of KCSAN_STRICT in the .kunitconfig, you could
+> override it with --kconfig_add, e.g.
+> -  ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
+> --arch=x86_64-smp
+> - ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
+> --arch=x86_64-smp --kconfig_add CONFIG_KSCAN_STRICT=y
+>
+> > The end result is the same, but you could drop the
+> > CONFIG_KCSAN_WEAK_MEMORY=y line, and let the latest KCSAN_STRICT
+> > defaults decide (I don't expect them to change any time soon).
+> >
+> > If you want it to be more explicit, it's also fine leaving the
+> > CONFIG_KCSAN_WEAK_MEMORY=y line in.
+>
+> Do you have a preference here? Or to get rid of both and default to
+> the non-strict version mentioned above?
 
-Isn't it a bit fragile to take this decision based on the number of
-SAI registers in the SoC?
+I'd keep it simple for now, and remove both lines i.e. make non-strict
+the default. It's easy to just run with --kconfig_add
+CONFIG_KCSAN_STRICT=y, along with other variations. I know that
+rcutoruture uses KCSAN_STRICT=y by default, so it's already getting
+coverage there. ;-)
 
-What about adding a specific field in soc_data for such a purpose?
+Thanks,
+-- Marco

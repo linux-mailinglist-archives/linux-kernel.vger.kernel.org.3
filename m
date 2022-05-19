@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C8A52CCA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFCF52CC9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233751AbiESHMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S230437AbiESHMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234527AbiESHMP (ORCPT
+        with ESMTP id S234620AbiESHM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:12:15 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C3B5DA3A;
-        Thu, 19 May 2022 00:11:55 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: benjamin.gaignard)
-        with ESMTPSA id 4369D1F4565F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652944313;
-        bh=OEcTyTvXeWneBi8GvH9jsIAxafQtn5PH2MYUYrWug2Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Cxf3+0ccgabzfMua9Rv0yMGRSD7g3lbSqVGAssBI1p7bDyreKENNItr8zEO6dLo3V
-         LKJhyaYazYAn3fP5CsUfXQJUaAWXICsIXDNbl1MkFBUm2/6xKxeOhvuF9VhRpI2XS7
-         6OH/qUZ58KQsrBl4ksLnyaHLaQx/iY6hfZzSKD8odBDjgzmod0tcFQRznLumOBS7TX
-         AU4HSX+IYWvHKHyh7FbakEz8nYDdhYR7hl+V8vTxJgybLr5URV0waQ3kbU20aofR5D
-         MvwHYJR/n9wEpSZYxIxKWkXmVRSre8/ofc9Kx51n3PqJ/ztC96mQgbV7PdK2V70Abx
-         tzHDE0XM9iV0Q==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, gregkh@linuxfoundation.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, heiko@sntech.de, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org
-Cc:     kernel@pengutronix.de, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Subject: [PATCH v6] media: Add P010 video format
-Date:   Thu, 19 May 2022 09:11:46 +0200
-Message-Id: <20220519071146.76119-1-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 19 May 2022 03:12:28 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1A860ABA
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:12:26 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id d137so7443553ybc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FWAr/J4HmuD6FhHb4kDYBZ2K/uqMD4MgkdggSBZ6fPY=;
+        b=eumPdvyYgagzbji2kuY9ZtyStkcXWG1yv4KJh/hoJN55IWpgZO1fkjYF7aDelTQegS
+         dINXV3fLCza0Xg+Dakk5qmag+ZV+nh+GljaBQkvNEjIDr+hq4F50BStF3CRgHs75Socx
+         SB2tMBmEmzyLbBNmuIlmCvqnogij2vbbCHp4I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FWAr/J4HmuD6FhHb4kDYBZ2K/uqMD4MgkdggSBZ6fPY=;
+        b=3CKF1dtW2kfWTaWvRqPXNyTeb6ONp/Ta6pjn4QqW3FAhlnuYrf34g1VIWyEvQr71qa
+         BO1dkE4/Na/dy/NMs/ULR369tGI2ySws+yjUuyky3OfQAW91iyi+BwgX2/qTPDfV8wM6
+         0Re2Nqlj/kxQrOhzPm+Dby9LqGSryGhvXn4DRfqasFn0Q8fBddZZd4obs8ezTo+AUMw9
+         w1CLTi2vUdaE3OjJH0uNIQQHP3jsBBLe55DGDSDks4mP6QO/SE/UMTx+bVX4lVh2BYxl
+         T5B0If+om/Knd6KlWPLWioI0mcvDk/OPPJcExidVpAsZ+fZVp0i8fVkQ4S2PGWDNpUI9
+         6YbQ==
+X-Gm-Message-State: AOAM531FjXZd92L5+v6+1w2mcM9m9c6cexooVqqr+DV2//BYTA6z/BgI
+        bixuvjjqVKap/2cy4pDSfH6vbSNXcK51JFCZdxWkZb/q1IQ=
+X-Google-Smtp-Source: ABdhPJymMQ0FDt9pyHOJfXPZaSal9k7mWPMALlyrlNV6GGHjRuKXDoHiG79Ft8KeONIbhbqf3h3mlHEb/OVG+WTNBx4=
+X-Received: by 2002:a05:6902:703:b0:64f:47d2:2497 with SMTP id
+ k3-20020a056902070300b0064f47d22497mr593ybt.451.1652944345946; Thu, 19 May
+ 2022 00:12:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220429064051.61552-1-linmiaohe@huawei.com> <20220429064051.61552-6-linmiaohe@huawei.com>
+In-Reply-To: <20220429064051.61552-6-linmiaohe@huawei.com>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Thu, 19 May 2022 09:12:14 +0200
+Message-ID: <CAM4kBBLC4Jo4TAC66XzJBgFZfF5ONgCNT5fPFQjwPJtug+5N8A@mail.gmail.com>
+Subject: Re: [PATCH 5/9] revert "mm/z3fold.c: allow __GFP_HIGHMEM in z3fold_alloc"
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,147 +64,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-P010 is a YUV format with 10-bits per component with interleaved UV.
+On Fri, Apr 29, 2022 at 8:41 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> Revert commit f1549cb5ab2b ("mm/z3fold.c: allow __GFP_HIGHMEM in
+> z3fold_alloc").
+>
+> z3fold can't support GFP_HIGHMEM page now. page_address is used
+> directly at all places. Moreover, z3fold_header is on per cpu
+> unbuddied list which could be access anytime. So we should rid
+> the support of GFP_HIGHMEM allocation for z3fold.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
----
-version 6:
-- Replace 'pixel' per 'component' in commit message and fourcc
-  description
+Could you please clarify how kmem_cache is affected here?
 
-version 5:
-- Fix commit message
-- Fix fourcc comment
+Thanks,
+Vitaly
 
-version 4:
-- Fix 10-bits per components wording.
-
-version 3:
-- remove LE suffix
-- rebased on media_tree_master branch
-
- .../media/v4l/pixfmt-yuv-planar.rst           | 54 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-common.c         |  1 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
- include/uapi/linux/videodev2.h                |  1 +
- 4 files changed, 57 insertions(+)
-
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-index 8dff5906639b..a900ff66911a 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-@@ -109,6 +109,13 @@ All components are stored with the same number of bits per component.
-       - Cb, Cr
-       - No
-       - 16x16 tiles
-+    * - V4L2_PIX_FMT_P010
-+      - 'P010'
-+      - 10
-+      - 4:2:0
-+      - Cb, Cr
-+      - Yes
-+      - Linear
-     * - V4L2_PIX_FMT_NV16
-       - 'NV16'
-       - 8
-@@ -171,6 +178,7 @@ horizontally.
- .. _V4L2-PIX-FMT-NV21:
- .. _V4L2-PIX-FMT-NV12M:
- .. _V4L2-PIX-FMT-NV21M:
-+.. _V4L2-PIX-FMT-P010:
- 
- NV12, NV21, NV12M and NV21M
- ---------------------------
-@@ -519,6 +527,52 @@ number of lines as the luma plane.
-       - Cb\ :sub:`33`
-       - Cr\ :sub:`33`
- 
-+.. _V4L2_PIX_FMT_P010:
-+
-+P010
-+----
-+
-+Like NV12 with 10 bits per component, expanded to 16 bits.
-+Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian order.
-+
-+.. flat-table:: Sample 4x4 P010 Image
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - start + 0:
-+      - Y'\ :sub:`00`
-+      - Y'\ :sub:`01`
-+      - Y'\ :sub:`02`
-+      - Y'\ :sub:`03`
-+    * - start + 8:
-+      - Y'\ :sub:`10`
-+      - Y'\ :sub:`11`
-+      - Y'\ :sub:`12`
-+      - Y'\ :sub:`13`
-+    * - start + 16:
-+      - Y'\ :sub:`20`
-+      - Y'\ :sub:`21`
-+      - Y'\ :sub:`22`
-+      - Y'\ :sub:`23`
-+    * - start + 24:
-+      - Y'\ :sub:`30`
-+      - Y'\ :sub:`31`
-+      - Y'\ :sub:`32`
-+      - Y'\ :sub:`33`
-+    * - start + 32:
-+      - Cb\ :sub:`00`
-+      - Cr\ :sub:`00`
-+      - Cb\ :sub:`01`
-+      - Cr\ :sub:`01`
-+    * - start + 40:
-+      - Cb\ :sub:`10`
-+      - Cr\ :sub:`10`
-+      - Cb\ :sub:`11`
-+      - Cr\ :sub:`11`
-+
-+.. raw:: latex
-+
-+    \endgroup
- 
- Fully Planar YUV Formats
- ========================
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index df34b2a283bc..1e38ad8906a2 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
- 		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
- 
- 		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
- 		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index e2636539c9db..536aaeb4df82 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1305,6 +1305,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- 	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
- 	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
- 	case V4L2_PIX_FMT_NV42:		descr = "Y/CrCb 4:4:4"; break;
-+	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CrCb 4:2:0"; break;
- 	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/CbCr 4:2:0 (4x4 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/CbCr 4:2:0 (16x16 Linear)"; break;
- 	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/CbCr 4:2:0 (32x32 Linear)"; break;
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 6d465dc443b7..77bc9e85b8f8 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -601,6 +601,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
- #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
- #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
-+#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 24  Y/CbCr 4:2:0 10-bit per component */
- 
- /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
- #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
--- 
-2.32.0
-
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/z3fold.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>
+> diff --git a/mm/z3fold.c b/mm/z3fold.c
+> index b3b4e65c107f..5f5d5f1556be 100644
+> --- a/mm/z3fold.c
+> +++ b/mm/z3fold.c
+> @@ -212,10 +212,8 @@ static int size_to_chunks(size_t size)
+>  static inline struct z3fold_buddy_slots *alloc_slots(struct z3fold_pool *pool,
+>                                                         gfp_t gfp)
+>  {
+> -       struct z3fold_buddy_slots *slots;
+> -
+> -       slots = kmem_cache_zalloc(pool->c_handle,
+> -                                (gfp & ~(__GFP_HIGHMEM | __GFP_MOVABLE)));
+> +       struct z3fold_buddy_slots *slots = kmem_cache_zalloc(pool->c_handle,
+> +                                                            gfp);
+>
+>         if (slots) {
+>                 /* It will be freed separately in free_handle(). */
+> @@ -1075,7 +1073,7 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
+>         enum buddy bud;
+>         bool can_sleep = gfpflags_allow_blocking(gfp);
+>
+> -       if (!size)
+> +       if (!size || (gfp & __GFP_HIGHMEM))
+>                 return -EINVAL;
+>
+>         if (size > PAGE_SIZE)
+> --
+> 2.23.0
+>

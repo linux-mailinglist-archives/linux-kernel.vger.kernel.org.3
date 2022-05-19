@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D1352D051
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0818A52D05F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236650AbiESKUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
+        id S236671AbiESKVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiESKUq (ORCPT
+        with ESMTP id S236674AbiESKVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:20:46 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590F1BF76
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:20:45 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L3m4z1Chfz6H8Vm;
-        Thu, 19 May 2022 18:17:39 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 12:20:42 +0200
-Received: from [10.47.92.25] (10.47.92.25) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
- 2022 11:20:42 +0100
-Message-ID: <7ced25fb-9048-3df8-a62c-bfcb29176579@huawei.com>
-Date:   Thu, 19 May 2022 11:20:40 +0100
+        Thu, 19 May 2022 06:21:00 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D8CA1A1;
+        Thu, 19 May 2022 03:20:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652955657; x=1684491657;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FatCZH8qt4fgDVYzoY7VrgkzS4VzXbrP3W8FkMBs2z0=;
+  b=VScy/omhTnl5wqLmBajz5G+rjDZSTm6ZuWhtwbjEZ+9K3xoLQmK53uCm
+   4ioNCQRNdVS9gZ5d6dZ4aIeqxI67bQ07sdJNSxDoFaBP6215dpw3BcWLQ
+   +2zzuHIx1IsSBreCIXYyoZOwx4/hXJvnvLvFpH87E4cRVrlboFnwc8847
+   iYaCNB0mvITW2dsZOvDgbWlh/b00Xm5hbsDYi5aFLkGzXcHYQ2BzEjMw9
+   IwHV0jkTheQcr4QaNED36Fz0iWLhJjTlrCMRr76EgSslUIFchM5CBpzpa
+   65kwql20F47GWPiK6p99zchYAfdnh1SN4fGQ9/Nh38DtSd+VGms3rUgEu
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="271832918"
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="271832918"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 03:20:57 -0700
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="570134209"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 03:20:55 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nrdH2-000FaJ-5o;
+        Thu, 19 May 2022 13:20:52 +0300
+Date:   Thu, 19 May 2022 13:20:51 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: designware: introduce a custom scl recovery for
+ SoCFPGA platforms
+Message-ID: <YoYaA5iTin3rzuob@smile.fi.intel.com>
+References: <20220518202217.85803-1-dinguyen@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH] iommu/dma: Add config for PCI SAC address trick
-To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>,
-        <will@kernel.org>
-CC:     <iommu@lists.linux-foundation.org>, <hch@lst.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <ef8abf1c6b0839e39b272738fc7bc4d9699c8bcb.1652895419.git.robin.murphy@arm.com>
-In-Reply-To: <ef8abf1c6b0839e39b272738fc7bc4d9699c8bcb.1652895419.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.92.25]
-X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518202217.85803-1-dinguyen@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,82 +66,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2022 18:36, Robin Murphy wrote:
-> For devices stuck behind a conventional PCI bus, saving extra cycles at
-> 33MHz is probably fairly significant. However since native PCI Express
-> is now the norm for high-performance devices, the optimisation to always
-> prefer 32-bit addresses for the sake of avoiding DAC is starting to look
-> rather anachronistic. Technically 32-bit addresses do have shorter TLPs
-> on PCIe, but unless the device is saturating its link bandwidth with
-> small transfers it seems unlikely that the difference is appreciable.
-> 
-> What definitely is appreciable, however, is that the IOVA allocator
-> doesn't behave all that well once the 32-bit space starts getting full.
-> As DMA working sets get bigger, this optimisation increasingly backfires
-> and adds considerable overhead to the dma_map path for use-cases like
-> high-bandwidth networking. We've increasingly bandaged the allocator
-> in attempts to mitigate this, but it remains fundamentally at odds with
-> other valid requirements to try as hard as possible to satisfy a request
-> within the given limit; what we really need is to just avoid this odd
-> notion of a speculative allocation when it isn't beneficial anyway.
-> 
-> Unfortunately that's where things get awkward... Having been present on
-> x86 for 15 years or so now, it turns out there are systems which fail to
-> properly define the upper limit of usable IOVA space for certain devices
-> and this trick was the only thing letting them work OK. I had a similar
-> ulterior motive for a couple of early arm64 systems when originally
-> adding it to iommu-dma, but those really should now be fixed with proper
-> firmware bindings, and other arm64 users really need it out of the way,
-> so let's just leave it default-on for x86.
-> 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
->   drivers/iommu/Kconfig     | 24 ++++++++++++++++++++++++
->   drivers/iommu/dma-iommu.c |  2 +-
+On Wed, May 18, 2022 at 03:22:16PM -0500, Dinh Nguyen wrote:
+> The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
+> thus cannot be recovered by the default method of by doing a GPIO access.
+> Only a reset of the I2C IP block can a recovery be successful.
 
-It might be worth printing this default value always and not just for 
-when it is set from commandline, like what we do for default domain type 
-and IOTLB invalidation policy
+...
 
->   2 files changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-> index c79a0df090c0..bf9b295f1c89 100644
-> --- a/drivers/iommu/Kconfig
-> +++ b/drivers/iommu/Kconfig
-> @@ -144,6 +144,30 @@ config IOMMU_DMA
->   	select IRQ_MSI_IOMMU
->   	select NEED_SG_DMA_LENGTH
->   
-> +config IOMMU_DMA_PCI_SAC_OPT
-> +	bool "Enable 64-bit legacy PCI optimisation by default"
-> +	depends on IOMMU_DMA
-> +	default X86
+>  #define MODEL_BAIKAL_BT1	BIT(9)
+>  #define MODEL_AMD_NAVI_GPU	BIT(10)
+> +#define MODEL_SOCFPGA		BIT(11)
 
-Do we have a strategy for if and when issues start popping up on other 
-architectures? Is it to simply tell them to just turn this flag on (and 
-also fix your platform)?
+...
 
-> +	help
-> +	  Enable by default an IOMMU optimisation for 64-bit legacy PCI devices,
-> +	  wherein the DMA API layer will always first try to allocate a 32-bit
-> +	  DMA address suitable for a single address cycle, before falling back
-> +	  to allocating from the full usable address range. If your system has
-> +	  64-bit legacy PCI devices in 32-bit slots where using dual address
-> +	  cycles reduces DMA throughput significantly, this optimisation may be
-> +	  beneficial to overall performance.
-> +
-> +	  If you have a modern PCI Express based system, it should usually be
-> +	  safe to say "n" here and avoid the potential extra allocation overhead.
-> +	  However, beware that this optimisation has also historically papered
-> +	  over bugs where the IOMMU address range above 32 bits is not fully
-> +	  usable. If device DMA problems and/or IOMMU faults start occurring
-> +	  with IOMMU translation enabled after disabling this option, it is
-> +	  likely a sign of a latent driver or firmware/BIOS bug.
-> +
-> +	  If this option is not set, the optimisation can be enabled at
-> +	  boot time with the "iommu.forcedac=0" command-line argument.
+> -#define MODEL_MASK		GENMASK(11, 8)
+
+> +#define MODEL_MASK		GENMASK(12, 8)
+
+Why this change is made?
+
+...
+
+> +	switch (dev->flags & MODEL_MASK) {
+> +	case MODEL_SOCFPGA:
+> +		rinfo->recover_bus = i2c_custom_scl_recovery;
+
+_custom_ is too broad, use exact name, i.e.
+
+	i2c_socfpga_scl_recovery
+
+> +		break;
+> +	default:
+> +		rinfo->recover_bus = i2c_generic_scl_recovery;
+> +		break;
+> +	}
+
+...
+
+> +	{ .compatible = "intel,socfpga-i2c", .data = (void *)MODEL_SOCFPGA },
+
 > +
 
-Thanks,
-John
+Stray change.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

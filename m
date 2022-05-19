@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7018252D1A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F82B52D1A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237485AbiESLjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        id S237526AbiESLlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235651AbiESLjp (ORCPT
+        with ESMTP id S237521AbiESLlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:39:45 -0400
+        Thu, 19 May 2022 07:41:04 -0400
 Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE4D5B89C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:39:43 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id b32so5914853ljf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:39:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDED5C361
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:40:58 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id o22so5884294ljp.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iOfmLFZ3K+DihYZeaY4JaBQPQHlZbV1/LG6i7QgQfOU=;
-        b=PKBDIZ6QbHzaRk3BaFBRdDjA6axhknkwwcIWBeJhyktDppSNJxsBdQUEB+CcC8LgFH
-         CIFv7spoYr1ZU/JODgf7yjgAeF2jUWQXrxGyxn5XePY/pDi7I5KzXXE8RCjI18nQBrl8
-         tTQlR5HdQIhiSV1AudRzsxqdiifZdMKOX+MhgfVei18oe706YGERb28lMMDR51YDJ6zS
-         bfoz/PkfMhe0rfN+Q5c02b0ZBHZG7BzRKsGiO+bT4ObN10ZBYYfAmItTIe1Wzr/ojU/O
-         qRWqboob40+n4s/o6urst4Cwt/JaiHFvkkQVprjSBQvwJjxvBd4/HXicffvmK+0QpqeV
-         vOAg==
+        bh=5lQ664e0M0SMZONja0fWEw59Zei2hDvnJr+VN8QUgpc=;
+        b=VWqIRWV6COaXycYLHtWQxHT3HvJyW6RJYZRd7UAAcrZPAKs0EGjXkrcB1hRiZ/Z8qF
+         2bpRDKC1jDqKDpSv2LIW9SlifKSkj4YNnx2y12YEGY+7rHKWjZUpsRHVAO865CQ3jToK
+         5/zDjzhzP6rUv2mhlYL8ukcHuOfiB/A4U026+i0urbhSP2NuTVLjj28X41kV4kUwTV2l
+         bdzNDErcWJ611kde2xti5D7HHIZH3uywfRDmkLAvrkxUZ3pHvC0ehfXqaA/gvWNqkgA9
+         cUFw+80c7x+FHL9oj1+INBpfPmKERLgX21/o/OSMtcsVzo7GUNs9NzpHBP3jMKuwfobG
+         oiyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=iOfmLFZ3K+DihYZeaY4JaBQPQHlZbV1/LG6i7QgQfOU=;
-        b=lXmQFjdwP7TC2iyZOA6l1Bk8ImXZuQEgXyhtvbyRL6ttm9Y3GSZiv9OTYFXJX5U1qt
-         XEurZ7BJL3+oVKs5dsM6XZJUCJKy2bpQr1Lc+WHZw8rVQ7E1QePEPIUF193a0tQYRP7u
-         whc3tN1PDayKbC2bch7fgdbw8A7lOdiwRrpfWdwuXH6bq5vCQJ2DiQLbSWLG1Vwnf2A9
-         B75CzyhqDzH3HMqzfB0svNfeaxK3/O8XDr+K67Epnrb3dardWXbVkWrGxh5U50Yo0gGS
-         WVoz0wOzMl6xng/Jqdt01jUNUxvWMn7EP270BNpT9IW+y4ZAXq5cX/e4jfZZHQrEvYt9
-         a2jg==
-X-Gm-Message-State: AOAM53230cEbZYXgLrRHEeGor1EmJFQnhgqPIj9rgAayhCKk0jWwQPFK
-        8hBQEZsrZxPvMn6H+0yLv5aGuA==
-X-Google-Smtp-Source: ABdhPJyO5AYfHDB9TdggZJ+oTJ607zWhFM3uSaSuligGKEo3FzhyX7xcW8ZFQJB3mhx3CLGcrWpQSQ==
-X-Received: by 2002:a2e:bd8b:0:b0:253:c964:5c4 with SMTP id o11-20020a2ebd8b000000b00253c96405c4mr2406375ljq.371.1652960381311;
-        Thu, 19 May 2022 04:39:41 -0700 (PDT)
-Received: from ?IPV6:2001:470:dd84:abc0::8a5? ([2001:470:dd84:abc0::8a5])
-        by smtp.gmail.com with ESMTPSA id m10-20020a056512358a00b0047255d21152sm262293lfr.129.2022.05.19.04.39.40
+        bh=5lQ664e0M0SMZONja0fWEw59Zei2hDvnJr+VN8QUgpc=;
+        b=O55+rCoP3TFg0v+84LA4rMPU4LYHq4Cg7iCRy5RisE3PfB4bmNj4SqtgKajjfYVFM1
+         c6TVkAGXh3t5ta1M72Ijpuw3CzkgJDzPZSiZa5KIsryE+0+AHpOmckUIHTryrgByxAYf
+         x2bH3Whu0PSZL03Mm+QWZ91aW0+XczdPGIEbr8OhS2Lu7ugFgnWDF5YzP2SJlxmOOYid
+         +ovRtS3kZFT8STFM/CmeD/w5qXnPFiQcQ3iWywwLWF7pCcrYCNn8M7rT7EWeqq0tUNPa
+         MyPdWPMCwIP4FFYUPKOiaegl6jAsB3UJI2GNe+NeOYYb2Y6fQ0XOSQ+acdlEq9SrmKbI
+         Aw5Q==
+X-Gm-Message-State: AOAM532x+mF1Y5CdwF5s5ACItGXugLAIUsgdDJsCWZd5No9nGOPy/Ctm
+        RHrvGBBHmeA62KKC/7IUpICzkg==
+X-Google-Smtp-Source: ABdhPJxKaqfdOURlZcinP+UDYwcSbGH7rfnbL8xCJuEbD2HsjaD1NduLqefMujcrRPJ5ttLbCbd6fQ==
+X-Received: by 2002:a2e:320c:0:b0:253:d704:188b with SMTP id y12-20020a2e320c000000b00253d704188bmr1126303ljy.527.1652960456384;
+        Thu, 19 May 2022 04:40:56 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id f11-20020ac2532b000000b00477cae4880fsm141038lfh.260.2022.05.19.04.40.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 04:39:40 -0700 (PDT)
-Message-ID: <35051bec-98ea-b4c5-f734-06b3f22f3562@linaro.org>
-Date:   Thu, 19 May 2022 14:39:39 +0300
+        Thu, 19 May 2022 04:40:55 -0700 (PDT)
+Message-ID: <049173a1-0fa6-510b-9169-ebe869b8a3b3@linaro.org>
+Date:   Thu, 19 May 2022 13:40:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: Removal of qcom,board-id and qcom,msm-id
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
-        Olof Johansson <olof@lixom.net>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 1/6] ASoC: tegra: Add binding doc for OPE module
+Content-Language: en-US
+To:     Sameer Pujar <spujar@nvidia.com>, broonie@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        thierry.reding@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     jonathanh@nvidia.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <1652895372-29885-1-git-send-email-spujar@nvidia.com>
+ <1652895372-29885-2-git-send-email-spujar@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1652895372-29885-2-git-send-email-spujar@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,56 +79,299 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2022 13:44, Krzysztof Kozlowski wrote:
-> Hi,
+On 18/05/2022 19:36, Sameer Pujar wrote:
+> This patch adds YAML schema for DT bindings of Output Processing
+> Engine (OPE) module. It consists of Parametric Equalizer (PEQ)
+> and Multi Band Dynamic Range Compressor (MBDRC) sub blocks and
+> binding doc for these blocks are added as well. The OPE will be
+> registered as an ASoC component and can be plugged into an audio
+> path as per need via ALSA mixer controls. The DT bindings are
+> applicable on Tegra210 and later SoCs where OPE module is present.
 > 
-> There was an old effort of removal of qcom,board-id and qcom,msm-id
-> properties from Qualcomm SoC-based boards like [1].
+> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
+> ---
+>  .../bindings/sound/nvidia,tegra210-ahub.yaml       |  4 +
+>  .../bindings/sound/nvidia,tegra210-mbdrc.yaml      | 51 ++++++++++++
+>  .../bindings/sound/nvidia,tegra210-ope.yaml        | 91 ++++++++++++++++++++++
+>  .../bindings/sound/nvidia,tegra210-peq.yaml        | 52 +++++++++++++
+>  4 files changed, 198 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra210-mbdrc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml
+>  create mode 100644 Documentation/devicetree/bindings/sound/nvidia,tegra210-peq.yaml
 > 
-> First approach was to document them, which (obviously) was not well
-> received [2] [3] [4].
-> 
-> The solution from Stephen was to encode these in the board compatible,
-> so bootloader can extract that information. That seemed to receive
-> positive comments, at least from Rob. [5]
-> 
-> It was 2015... ~7 years later we are still things doing the same way,
-> still with undocumented properties: qcom,board-id and qcom,msm-id.
-> 
-> 
-> I would like to revive that topic, but before I start doing something
-> pointless - any guidance on last patch from Stephen [5]? Was it ok? Some
-> early NAKs?
+> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml
+> index 6df6f85..1fb93d9 100644
+> --- a/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml
+> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ahub.yaml
+> @@ -110,6 +110,10 @@ patternProperties:
+>      type: object
+>      $ref: nvidia,tegra186-asrc.yaml#
+>  
+> +  '^ope@[0-9a-f]+$':
+> +    type: object
+> +    $ref: nvidia,tegra210-ope.yaml#
+> +
+>  required:
+>    - compatible
+>    - reg
+> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-mbdrc.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-mbdrc.yaml
+> new file mode 100644
+> index 00000000..199712ed
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-mbdrc.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/nvidia,tegra210-mbdrc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Tegra210 MBDRC Device Tree Bindings
 
-I do not quite fancy the idea of using extra tools to process dtb files. 
-At this moment it is possible to concatenate several kernel-generated 
-dtb files together. AOSP developers use this to have an image that boots 
-on both RB3 and RB5 boards.
+s/Device Tree Bindings//
 
-I think that changing compat strings only makes sense if Qualcomm would 
-use such compat strings in future. Otherwise we end up in a position 
-where we have custom bootloaders for the RB3/RB5/etc, but the majority 
-of the board requires extra processing steps.
+and then you have enough space to de-acronym this MBDRC.
 
-So, I think, we should drop the unspecified usid aliases, document the 
-board-id/msm-id/pmic-id properties and stick with them. They might be 
-ugly, but they are expected/processed by the majority of devices present 
-in the wild.
+> +
+> +description: |
+> +  The Multi Band Dynamic Range Compressor (MBDRC) is part of Output
+> +  Processing Engine (OPE) which interfaces with Audio Hub (AHUB) via
+> +  Audio Client Interface (ACIF). MBDRC can be used as a traditional
+> +  single full band or a dual band or a multi band dynamic processor.
+> +
+> +maintainers:
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Mohan Kumar <mkumard@nvidia.com>
+> +  - Sameer Pujar <spujar@nvidia.com>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^mbdrc@[0-9a-f]*$"
 
-> [1]
-> https://elixir.bootlin.com/linux/v5.18-rc7/source/arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts#L14
-> 
-> [2] https://lore.kernel.org/all/7229476.C4So9noUlf@wuerfel/
-> [3]
-> https://lore.kernel.org/all/1450371534-10923-20-git-send-email-mtitinger+renesas@baylibre.com/
-> [4] https://lore.kernel.org/all/20151119153640.GC893@linaro.org/
-> [5]
-> https://lore.kernel.org/all/1448062280-15406-1-git-send-email-sboyd@codeaurora.org/
-> 
-> Best regards,
-> Krzysztof
+Why? We enforce only generic names in shared schemas and this is neither
+shared schema nor is it generic name.
+
+> +
+> +  compatible:
+> +    oneOf:
+> +      - const: nvidia,tegra210-mbdrc
+> +      - items:
+> +          - enum:
+> +              - nvidia,tegra234-mbdrc
+> +              - nvidia,tegra194-mbdrc
+> +              - nvidia,tegra186-mbdrc
+> +          - const: nvidia,tegra210-mbdrc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+
+No need for space
+
+> +    mbdrc@702d8200 {
+
+Generic node name.
+
+> +        compatible = "nvidia,tegra210-mbdrc";
+> +        reg = <0x702d8200 0x200>;
+> +    };
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml
+> new file mode 100644
+> index 00000000..92488fd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml
+> @@ -0,0 +1,91 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/nvidia,tegra210-ope.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Tegra210 OPE Device Tree Bindings
+
+Same comment.
+
+> +
+> +description: |
+> +  The Output Processing Engine (OPE) is one of the AHUB client. It has
+> +  PEQ (Parametric Equalizer) and MBDRC (Multi Band Dynamic Range Compressor)
+> +  sub blocks for data processing.
+> +
+> +maintainers:
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Mohan Kumar <mkumard@nvidia.com>
+> +  - Sameer Pujar <spujar@nvidia.com>
+> +
+> +allOf:
+> +  - $ref: name-prefix.yaml#
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^ope@[0-9a-f]*$"
+
+Same comment.
+
+> +
+> +  compatible:
+> +    oneOf:
+> +      - const: nvidia,tegra210-ope
+> +      - items:
+> +          - enum:
+> +              - nvidia,tegra234-ope
+> +              - nvidia,tegra194-ope
+> +              - nvidia,tegra186-ope
+> +          - const: nvidia,tegra210-ope
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +  ranges: true
+> +
+> +  sound-name-prefix:
+> +    pattern: "^OPE[1-9]$"
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    properties:
+> +      port@0:
+> +        $ref: audio-graph-port.yaml#
+> +        unevaluatedProperties: false
+> +        description: |
+
+No need for |
+
+> +          OPE ACIF (Audio Client Interface) input port. This is connected
+> +          to corresponding ACIF output port on AHUB (Audio Hub).
+> +
+> +      port@1:
+> +        $ref: audio-graph-port.yaml#
+> +        unevaluatedProperties: false
+> +        description: |
+
+Ditto
+
+> +          OPE ACIF output port. This is connected to corresponding ACIF
+> +          input port on AHUB.
+> +
+> +patternProperties:
+> +  '^peq@[0-9a-f]+$':
+> +    type: object
+> +    $ref: nvidia,tegra210-peq.yaml#
+> +
+> +  '^mbdrc@[0-9a-f]+$':
+> +    type: object
+> +    $ref: nvidia,tegra210-mbdrc.yaml#
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+
+Similar to other patch.
+
+> +    ope@702d8000 {
+
+I would suggest generic node name, if it is possible.
+
+> +        compatible = "nvidia,tegra210-ope";
+> +        reg = <0x702d8000 0x100>;
+> +        sound-name-prefix = "OPE1";
+> +    };
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/sound/nvidia,tegra210-peq.yaml b/Documentation/devicetree/bindings/sound/nvidia,tegra210-peq.yaml
+> new file mode 100644
+> index 00000000..0f78746
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/nvidia,tegra210-peq.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/nvidia,tegra210-peq.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Tegra210 PEQ Device Tree Bindings
+
+Ditto
+
+> +
+> +description: |
+> +  The Parametric Equalizer (PEQ) is a cascade of biquad filters with
+> +  each filter tuned based on certain parameters. It can be used to
+> +  equalize the irregularities in the speaker frequency response.
+> +  PEQ sits inside Output Processing Engine (OPE) which interfaces
+> +  with Audio Hub (AHUB) via Audio Client Interface (ACIF).
+> +
+> +maintainers:
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Mohan Kumar <mkumard@nvidia.com>
+> +  - Sameer Pujar <spujar@nvidia.com>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^peq@[0-9a-f]*$"
+
+Ditto
+
+> +
+> +  compatible:
+> +    oneOf:
+> +      - const: nvidia,tegra210-peq
+> +      - items:
+> +          - enum:
+> +              - nvidia,tegra234-peq
+> +              - nvidia,tegra194-peq
+> +              - nvidia,tegra186-peq
+> +          - const: nvidia,tegra210-peq
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+
+Ditto
+
+> +    peq@702d8100 {
+
+Generic node name, so this is "equalizer", I guess?
+
+> +        compatible = "nvidia,tegra210-peq";
+> +        reg = <0x702d8100 0x100>;
+> +    };
+> +
+> +...
 
 
--- 
-With best wishes
-Dmitry
+Best regards,
+Krzysztof

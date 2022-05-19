@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4C152DD31
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3280852DD36
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241883AbiESSxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41368 "EHLO
+        id S244168AbiESSyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244210AbiESSwb (ORCPT
+        with ESMTP id S244336AbiESSyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:52:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C833766C8A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:52:14 -0700 (PDT)
+        Thu, 19 May 2022 14:54:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BAF1157FA
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:53:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46948B8242C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:52:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F556C34100;
-        Thu, 19 May 2022 18:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1652986331;
-        bh=hZUTwgstPmefXYn68fhv3dUuy+vLjWAINx3Yp8d24P4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ajpYm5ghpHHLfN9MHvfGa+lF4OCjo+Og0WWuBq4QCmTWJbC5oli7n8mhGzUSLTCyu
-         EczWQRo+IKAoHhZ0s2gVn1GJDKffv4zTubfCFW7wtHpWxpMZQxvaOR1VDiXwHw2UTU
-         RTxrjtt48l38rs6pPA4pa+cBz+ooIMWWvB45k1zI=
-Date:   Thu, 19 May 2022 11:52:10 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <hch@infradead.org>, <arnd@arndb.de>, <anshuman.khandual@arm.com>
-Subject: Re: [PATCH v3 4/6] mm: ioremap: Add arch_ioremap/iounmap()
-Message-Id: <20220519115210.a6e41d5a997921354400557e@linux-foundation.org>
-In-Reply-To: <20220519082552.117736-5-wangkefeng.wang@huawei.com>
-References: <20220519082552.117736-1-wangkefeng.wang@huawei.com>
-        <20220519082552.117736-5-wangkefeng.wang@huawei.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58244B827DF
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:53:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D72EC385AA;
+        Thu, 19 May 2022 18:53:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652986416;
+        bh=WCYDb2YCgZNItGzE9mrZGS5AiI6n+Xdwc75DdSF177M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wzfGw9NMgh+JvbudQ+oica8GMYGoIonEOhvminkj37RW/0jbG8QIvsOJFRTzmgvT3
+         kIaSJtbFy/fpTaursBqhqbH5ASYqFjPw53IoIujLrdc0ZJfRteO0FfukGEp7/0kUpo
+         JWAsJopmX7vR6CB+A5KNMLb18RMt+wvNOon3z5y4=
+Date:   Thu, 19 May 2022 20:53:33 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Li Li <dualli@chromium.org>
+Cc:     dualli@google.com, tkjos@google.com, christian@brauner.io,
+        arve@android.com, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, maco@google.com, hridya@google.com,
+        surenb@google.com, joel@joelfernandes.org, kernel-team@android.com
+Subject: Re: [PATCH v2] Binder: add TF_UPDATE_TXN to replace outdated txn
+Message-ID: <YoaSLaNVMQIM7vvn@kroah.com>
+References: <YoZnVrU8Dih+urv6@kroah.com>
+ <20220519183454.1660573-1-dualli@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519183454.1660573-1-dualli@chromium.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,68 +54,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 16:25:50 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-
-> Add special hook for architecture to verify or setup addr, size
-> or prot when ioremap() or iounmap(), which will make the generic
-> ioremap more useful.
+On Thu, May 19, 2022 at 11:34:54AM -0700, Li Li wrote:
+> From: Li Li <dualli@google.com>
 > 
->   arch_ioremap() return a pointer,
->     - IS_ERR means return an error
->     - NULL means continue to remap
->     - a non-NULL, non-IS_ERR pointer is directly returned
->   arch_iounmap() return a int value,
->     - 0 means continue to vunmap
->     - error code means skip vunmap and return directly
+> When the target process is busy, incoming oneway transactions are
+> queued in the async_todo list. If the clients continue sending extra
+> oneway transactions while the target process is frozen, this queue can
+> become too large to accommodate new transactions. That's why binder
+> driver introduced ONEWAY_SPAM_DETECTION to detect this situation. It's
+> helpful to debug the async binder buffer exhausting issue, but the
+> issue itself isn't solved directly.
 > 
-> ...
->
-> --- a/include/asm-generic/io.h
-> +++ b/include/asm-generic/io.h
-> @@ -964,6 +964,30 @@ static inline void iounmap(volatile void __iomem *addr)
->  #elif defined(CONFIG_GENERIC_IOREMAP)
->  #include <linux/pgtable.h>
+> In real cases applications are designed to send oneway transactions
+> repeatedly, delivering updated inforamtion to the target process.
+> Typical examples are Wi-Fi signal strength and some real time sensor
+> data. Even if the apps might only care about the lastet information,
+> all outdated oneway transactions are still accumulated there until the
+> frozen process is thawed later. For this kind of situations, there's
+> no existing method to skip those outdated transactions and deliver the
+> latest one only.
+> 
+> This patch introduces a new transaction flag TF_UPDATE_TXN. To use it,
+> use apps can set this new flag along with TF_ONE_WAY. When such an
+> oneway transaction is to be queued into the async_todo list of a frozen
+> process, binder driver will check if any previous pending transactions
+> can be superseded by comparing their code, flags and target node. If
+> such an outdated pending transaction is found, the latest transaction
+> will supersede that outdated one. This effectively prevents the async
+> binder buffer running out and saves unnecessary binder read workloads.
+> 
+> Signed-off-by: Li Li <dualli@google.com>
+> ---
+>  drivers/android/binder.c            | 85 ++++++++++++++++++++++++++++-
+>  drivers/android/binder_trace.h      |  4 ++
+>  include/uapi/linux/android/binder.h |  1 +
+>  3 files changed, 87 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index f3b639e89dd8..bb968cf2f9ec 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -2594,6 +2594,56 @@ static int binder_fixup_parent(struct list_head *pf_head,
+>  	return binder_add_fixup(pf_head, buffer_offset, bp->buffer, 0);
+>  }
 >  
-> +/*
-> + * Arch code can implement the following two special hooks when using GENERIC_IOREMAP
-> + * arch_ioremap() return a pointer,
-> + *   - IS_ERR means return an error
-> + *   - NULL means continue to remap
-> + *   - a non-NULL, non-IS_ERR pointer is returned directly
-> + * arch_iounmap() return a int,
-> + *   - 0 means continue to vunmap
-> + *   - error code means skip vunmap and return directly
+> +/**
+> + * binder_can_update_transaction() - Can a txn be superseded by an updated one?
+> + * @t1: the pending async txn in the frozen process
+> + * @t2: the new async txn to supersede the outdated pending one
+> + *
+> + * Return:  true if t2 can supersede t1
+> + *          false if t2 can not supersede t1
 > + */
-> +#ifndef arch_ioremap
-> +static inline void __iomem *arch_ioremap(phys_addr_t phys_addr, size_t size, unsigned long prot)
+> +static bool binder_can_update_transaction(struct binder_transaction *t1,
+> +					  struct binder_transaction *t2)
 > +{
+> +	if ((t1->flags & t2->flags & (TF_ONE_WAY | TF_UPDATE_TXN)) !=
+> +	    (TF_ONE_WAY | TF_UPDATE_TXN) || !t1->to_proc || !t2->to_proc)
+> +		return false;
+> +	if (t1->to_proc->tsk == t2->to_proc->tsk && t1->code == t2->code &&
+> +	    t1->flags == t2->flags && t1->buffer->pid == t2->buffer->pid &&
+> +	    t1->buffer->target_node->ptr == t2->buffer->target_node->ptr &&
+> +	    t1->buffer->target_node->cookie == t2->buffer->target_node->cookie)
+> +		return true;
+> +	return false;
+> +}
+> +
+> +/**
+> + * binder_find_outdated_transaction_ilocked() - Find the outdated transaction
+> + * @t:		 new async transaction
+> + * @target_list: list to find outdated transaction
+> + *
+> + * Return: the outdated transaction if found
+> + *         NULL if no outdated transacton can be found
+> + *
+> + * Requires the proc->inner_lock to be held.
+> + */
+> +static struct binder_transaction *
+> +binder_find_outdated_transaction_ilocked(struct binder_transaction *t,
+> +					 struct list_head *target_list)
+> +{
+> +	struct binder_work *w;
+> +
+> +	list_for_each_entry(w, target_list, entry) {
+> +		struct binder_transaction *t_queued;
+> +
+> +		if (w->type != BINDER_WORK_TRANSACTION)
+> +			continue;
+> +		t_queued = container_of(w, struct binder_transaction, work);
+> +		if (binder_can_update_transaction(t_queued, t))
+> +			return t_queued;
+> +	}
 > +	return NULL;
 > +}
-
-Maybe should do
-
-	#define arch_ioremap arch_ioremap
-
-here
-
-> +#endif
 > +
-> +#ifndef arch_iounmap
-> +static inline int arch_iounmap(void __iomem *addr)
-> +{
-> +	return 0;
-> +}
+>  /**
+>   * binder_proc_transaction() - sends a transaction to a process and wakes it up
+>   * @t:		transaction to send
+> @@ -2619,6 +2669,7 @@ static int binder_proc_transaction(struct binder_transaction *t,
+>  	struct binder_node *node = t->buffer->target_node;
+>  	bool oneway = !!(t->flags & TF_ONE_WAY);
+>  	bool pending_async = false;
+> +	struct binder_transaction *t_outdated = NULL;
+>  
+>  	BUG_ON(!node);
+>  	binder_node_lock(node);
+> @@ -2646,12 +2697,24 @@ static int binder_proc_transaction(struct binder_transaction *t,
+>  	if (!thread && !pending_async)
+>  		thread = binder_select_thread_ilocked(proc);
+>  
+> -	if (thread)
+> +	if (thread) {
+>  		binder_enqueue_thread_work_ilocked(thread, &t->work);
+> -	else if (!pending_async)
+> +	} else if (!pending_async) {
+>  		binder_enqueue_work_ilocked(&t->work, &proc->todo);
+> -	else
+> +	} else {
+> +		if ((t->flags & TF_UPDATE_TXN) && proc->is_frozen) {
+> +			t_outdated = binder_find_outdated_transaction_ilocked(t,
+> +									      &node->async_todo);
+> +			if (t_outdated) {
+> +				binder_debug(BINDER_DEBUG_TRANSACTION,
+> +					     "txn %d supersedes %d\n",
+> +					     t->debug_id, t_outdated->debug_id);
+> +				list_del_init(&t_outdated->work.entry);
+> +				proc->outstanding_txns--;
+> +			}
+> +		}
+>  		binder_enqueue_work_ilocked(&t->work, &node->async_todo);
+> +	}
+>  
+>  	if (!pending_async)
+>  		binder_wakeup_thread_ilocked(proc, thread, !oneway /* sync */);
+> @@ -2660,6 +2723,22 @@ static int binder_proc_transaction(struct binder_transaction *t,
+>  	binder_inner_proc_unlock(proc);
+>  	binder_node_unlock(node);
+>  
+> +	/*
+> +	 * To reduce potential contention, free the outdated transaction and
+> +	 * buffer after releasing the locks.
+> +	 */
+> +	if (t_outdated) {
+> +		struct binder_buffer *buffer = t_outdated->buffer;
+> +
+> +		t_outdated->buffer = NULL;
+> +		buffer->transaction = NULL;
+> +		trace_binder_transaction_update_buffer_release(buffer);
+> +		binder_transaction_buffer_release(proc, NULL, buffer, 0, 0);
+> +		binder_alloc_free_buf(&proc->alloc, buffer);
+> +		kfree(t_outdated);
+> +		binder_stats_deleted(BINDER_STAT_TRANSACTION);
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/drivers/android/binder_trace.h b/drivers/android/binder_trace.h
+> index 8eeccdc64724..8cc07e6a4273 100644
+> --- a/drivers/android/binder_trace.h
+> +++ b/drivers/android/binder_trace.h
+> @@ -311,6 +311,10 @@ DEFINE_EVENT(binder_buffer_class, binder_transaction_failed_buffer_release,
+>  	TP_PROTO(struct binder_buffer *buffer),
+>  	TP_ARGS(buffer));
+>  
+> +DEFINE_EVENT(binder_buffer_class, binder_transaction_update_buffer_release,
+> +	     TP_PROTO(struct binder_buffer *buffer),
+> +	     TP_ARGS(buffer));
+> +
+>  TRACE_EVENT(binder_update_page_range,
+>  	TP_PROTO(struct binder_alloc *alloc, bool allocate,
+>  		 void __user *start, void __user *end),
+> diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
+> index 11157fae8a8e..0b291b1d29d1 100644
+> --- a/include/uapi/linux/android/binder.h
+> +++ b/include/uapi/linux/android/binder.h
+> @@ -271,6 +271,7 @@ enum transaction_flags {
+>  	TF_STATUS_CODE	= 0x08,	/* contents are a 32-bit status code */
+>  	TF_ACCEPT_FDS	= 0x10,	/* allow replies with file descriptors */
+>  	TF_CLEAR_BUF	= 0x20,	/* clear buffer on txn complete */
+> +	TF_UPDATE_TXN	= 0x40,	/* update the outdated pending async txn */
+>  };
+>  
+>  struct binder_transaction_data {
+> -- 
+> 2.36.1.124.g0e6072fb45-goog
+> 
+> _______________________________________________
+> devel mailing list
+> devel@linuxdriverproject.org
+> http://driverdev.linuxdriverproject.org/mailman/listinfo/driverdev-devel
 
-and here.
+Hi,
 
-It shouldn't matter a lot because this file has inclusion guards. 
-However it seems tidier and perhaps other code will want to know
-whether this was defined.  Dunno.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Otherwise, 
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
-Acked-by: Andrew Morton <akpm@linux-foundation.org>
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-Please take this patch and [2/6] and [3/6] via the appropriate arm tree.
+thanks,
 
+greg k-h's patch email bot

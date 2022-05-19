@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A66A52DEEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396DF52DEE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245007AbiESVFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S244992AbiESVCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiESVFJ (ORCPT
+        with ESMTP id S244987AbiESVCB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:05:09 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7EBED784
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652994308; x=1684530308;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q/iVT6eHGUL7xt25EZCD9Iruv1QN8td0bn1+mXm/2MM=;
-  b=auTvNIBTblJGAcXySRkBRkOmWubNHqjK7L4lGbL/u3GM5XNsA8DwnFsD
-   XrHyNeolV2TjvFbJP1ayPGdzBKRu9S83k+nUTc5lPpmDqVTpXPS4Ij7YM
-   PNlpPsD6H4uZiVwkVYEZbleI1bixAgEgFEoIA4R64cu/UdOo9+xqXvdL2
-   o=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 19 May 2022 14:05:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:05:08 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 19 May 2022 14:05:07 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 19 May
- 2022 14:05:06 -0700
-Date:   Thu, 19 May 2022 17:05:04 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-CC:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, <kafai@fb.com>,
-        <kpsingh@kernel.org>
-Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
-Message-ID: <YoaxAMvQwHzDPxyi@qian>
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
- <20220517233507.GA423@qian>
- <20220518125152.GQ3441@techsingularity.net>
- <YoUealVA1bMaSH2l@qian>
- <20220518171503.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
- <YoZGSd6yQL3EP8tk@qian>
- <20220519191524.GC1790663@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 19 May 2022 17:02:01 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6B0DFF51;
+        Thu, 19 May 2022 14:01:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652994119; x=1684530119;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DYCIsdHXjqyWWTpU5Mo1OkWS4PvlHDtGprxIbJ0rp/g=;
+  b=aUdrFfvwBJ5SODNa+wJ5PQq1p6yyMjfZGSg6+0FGjrdGm2I7kHAI84Ub
+   0K3GMwyxTapONwsjK+NYIOHsySDVWe5ImnQQZEMpkiNtwLooL3Gok5bAt
+   BaSivZ60wirEG5cdWVF7tySDwphVZktYt/tsVBXFmoV/ebFntC+3SRhNH
+   OS9bZ0scEEjTYManyXwnwhD93hdK26Qko1ReyGpnZkWZlZdRrMJfG+ZtH
+   wX0UGgjf0UADtgEw/6wuWoJ184GX4x2U8InODUFSbGPetl5KtbMzNg9YB
+   Ect3JrPMNRFtHwBS14Pn6H00EvwTMuJpcK+OMOlSzI10D9NWOdj+b/I0/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252894617"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="252894617"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:01:53 -0700
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="743129020"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:01:53 -0700
+Date:   Thu, 19 May 2022 14:05:43 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     iommu@lists.linux-foundation.org,
+        LKML <linux-kernel@vger.kernel.org>, dmaengine@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>, vkoul@kernel.org,
+        robin.murphy@arm.com, will@kernel.org, Yi Liu <yi.l.liu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        Raj Ashok <ashok.raj@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v3 1/4] iommu/vt-d: Implement domain ops for
+ attach_dev_pasid
+Message-ID: <20220519140543.1b43ef85@jacob-builder>
+In-Reply-To: <20220518185205.GT1343366@nvidia.com>
+References: <20220510232121.GP49344@nvidia.com>
+        <20220510172309.3c4e7512@jacob-builder>
+        <20220511115427.GU49344@nvidia.com>
+        <20220511082958.79d5d8ee@jacob-builder>
+        <20220511161237.GB49344@nvidia.com>
+        <20220511100216.7615e288@jacob-builder>
+        <20220511170025.GF49344@nvidia.com>
+        <20220511102521.6b7c578c@jacob-builder>
+        <20220511182908.GK49344@nvidia.com>
+        <20220518114204.4d251b41@jacob-builder>
+        <20220518185205.GT1343366@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220519191524.GC1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,27 +82,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 12:15:24PM -0700, Paul E. McKenney wrote:
-> Is the task doing offline_pages()->synchronize_rcu() doing this
-> repeatedly?  Or is there a stalled RCU grace period?  (From what
-> I can see, offline_pages() is not doing huge numbers of calls to
-> synchronize_rcu() in any of its loops, but I freely admit that I do not
-> know this code.)
+Hi Jason,
 
-Yes, we are running into an endless loop in isolate_single_pageblock().
-There was a similar issue happened not long ago, so I am wondering if we
-did not solve it entirely then. Anyway, I will continue the thread over
-there.
+On Wed, 18 May 2022 15:52:05 -0300, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-https://lore.kernel.org/all/YoavU%2F+NfQIzQiDF@qian/
+> On Wed, May 18, 2022 at 11:42:04AM -0700, Jacob Pan wrote:
+> 
+> > > Yes.. It seems inefficient to iterate over that xarray multiple times
+> > > on the flush hot path, but maybe there is little choice. Try to use
+> > > use the xas iterators under the xa_lock spinlock..
+> > >   
+> > xas_for_each takes a max range, here we don't really have one. So I
+> > posted v4 w/o using the xas advanced API. Please let me know if you have
+> > suggestions.  
+> 
+> You are supposed to use ULONG_MAX in cases like that.
+> 
+got it.
+> > xa_for_each takes RCU read lock, it should be fast for tlb flush,
+> > right? The worst case maybe over flush when we have stale data but
+> > should be very rare.  
+> 
+> Not really, xa_for_each walks the tree for every iteration, it is
+> slower than a linked list walk in any cases where the xarray is
+> multi-node. xas_for_each is able to retain a pointer where it is in
+> the tree so each iteration is usually just a pointer increment.
+> 
+Thanks for explaining, yeah if we have to iterate multiple times
+xas_for_each() is better.
 
-> Or is it possible that reverting those three patches simply decreases
-> the probability of failure, rather than eliminating the failure?
-> Such a decrease could be due to many things, for example, changes to
-> offsets and sizes of data structures.
+> The downside is you cannot sleep while doing xas_for_each
+> 
+will do under RCU read lock
 
-Entirely possible. Sorry for the false alarm.
+> > > The challenge will be accessing the group xa in the first place, but
+> > > maybe the core code can gain a function call to return a pointer to
+> > > that XA or something..  
+>  
+> > I added a helper function to find the matching DMA API PASID in v4.  
+> 
+> Again, why are we focused on DMA API? Nothing you build here should be
+> DMA API beyond the fact that the iommu_domain being attached is the
+> default domain.
+The helper is not DMA API specific. Just a domain-PASID look up. Sorry for
+the confusion.
 
-> Do you ever see RCU CPU stall warnings?
+Thanks,
 
-No.
+Jacob

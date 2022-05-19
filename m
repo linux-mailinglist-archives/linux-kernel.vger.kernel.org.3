@@ -2,119 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F28C52CD92
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E4352CD97
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbiESHv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
+        id S232882AbiESHxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235055AbiESHvm (ORCPT
+        with ESMTP id S229741AbiESHwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:51:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35C4248306
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652946699;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ssTWorodC5pMj1HhfpY4c6Y6MlpWFF/JjDikA8vi2Wc=;
-        b=Su6I3zHTsIKxt6PcGf+zL0uTdmbAzlolKAyeuf6CkMMdlUGYH5ocvKrRwlbypwZb2aHEDi
-        CxAEIUwCLICuk3EpyrD0CLbPISlyrZd/b0MGgRQ6pJ1J5uIJQlJzzivVyoQaOkTYAMkvi4
-        LI23RFtZhx76EbNnZghrNZC+fE5CmzI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-327-u23PA9BJOPa_-rAtHZ2msQ-1; Thu, 19 May 2022 03:51:35 -0400
-X-MC-Unique: u23PA9BJOPa_-rAtHZ2msQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88C0A19705A8;
-        Thu, 19 May 2022 07:51:34 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DB2FA40C1421;
-        Thu, 19 May 2022 07:51:32 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] nfs: Fix fscache volume key rendering for endianness
-From:   David Howells <dhowells@redhat.com>
-To:     trond.myklebust@hammerspace.com, anna@kernel.org
-Cc:     Dave Wysochanski <dwysocha@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
-        linux-cachefs@redhat.com, torvalds@linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 19 May 2022 08:51:32 +0100
-Message-ID: <165294669215.3283481.13374322806917745974.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Thu, 19 May 2022 03:52:55 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065FE33E10;
+        Thu, 19 May 2022 00:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nKzj507PnvmU6tWquJarj51kT1ZEzYPrh2E1b2RWop4=; b=ptHscJGRRhul1kYbwzl8G2zpeV
+        E1SoROq9zvUgnbo18b+S0Cc/1rvzYtDDwDzEc2GRGEcTjhEXEI6w3Asz5d+wSBiCJulXsaC8vMv9Y
+        eakSBGp2v3z4wy4IZxZRDvxuIQLyVn1/9XlDJ2p/71n2RfAnsusoRQMu9pCWBEDk+IEKjRlB7zIwR
+        2eky6a3Eh+VVf3R/OiA0nH+ib9UCkx1Fxtg+/4ZCPMe8SC3yAEYIYC7nKSu+/g7ciKFejkdfe0OvM
+        DEmaDYTkversB0KUnIqzaKaUO+/QrIM4qhC2/Eb7N+N9VCM0N1UCs66I7wBLxMUxfnV/+vOfdZeBZ
+        GWfEM9bw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nraxJ-001lp7-Gi; Thu, 19 May 2022 07:52:22 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 196A2980E0B; Thu, 19 May 2022 09:52:21 +0200 (CEST)
+Date:   Thu, 19 May 2022 09:52:20 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Lin Yujun <linyujun809@huawei.com>
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gustavoars@kernel.org, johnny.chenyi@huawei.com,
+        chenjiahao16@huawei.com, chenlifu@huawei.com,
+        lizhengyu3@huawei.com, liaochang1@huawei.com, wangzhu9@huawei.com,
+        xuyihang@huawei.com, chris.zjh@huawei.com, zouyipeng@huawei.com
+Subject: Re: [PATCH -next v2] x86/events:Use struct_size() helper in kzalloc()
+Message-ID: <20220519075220.GD2578@worktop.programming.kicks-ass.net>
+References: <20220519023600.241591-1-linyujun809@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519023600.241591-1-linyujun809@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix fscache volume key rendering for endianness.  Convert the BE numbers in
-the address to host-endian before printing them so that they're consistent
-if the cache is copied between architectures.
+On Thu, May 19, 2022 at 10:36:00AM +0800, Lin Yujun wrote:
+> Make use of the struct_size() helper instead of an open-coded version,
+> in order to avoid any potential type mistakes or integer overflows that,
+> in the worst scenario, could lead to heap overflows.
+> 
+> Signed-off-by: Lin Yujun <linyujun809@huawei.com>
+> ---
+>  arch/x86/events/rapl.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+> index 77e3a47af5ad..8da003e02010 100644
+> --- a/arch/x86/events/rapl.c
+> +++ b/arch/x86/events/rapl.c
+> @@ -683,10 +683,8 @@ static const struct attribute_group *rapl_attr_update[] = {
+>  static int __init init_rapl_pmus(void)
+>  {
+>  	int maxdie = topology_max_packages() * topology_max_die_per_package();
+> -	size_t size;
+>  
+> -	size = sizeof(*rapl_pmus) + maxdie * sizeof(struct rapl_pmu *);
+> -	rapl_pmus = kzalloc(size, GFP_KERNEL);
+> +	rapl_pmus = kzalloc(struct_size(rapl_pmus, pmus, maxdie), GFP_KERNEL);
 
-Question: This change could lead to misidentification of a volume directory
-in the cache on a LE machine (it's unlikely because the port number as well
-as the address numbers all get flipped), but it was introduced in -rc1 in
-this cycle so probably isn't in any distro kernels yet.  Should I add a
-version number to enforce non-matching?
+So I really hate that thing; it's pointless obfuscation. If you're
+really worried about the type confusion, write it like:
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Dave Wysochanski <dwysocha@redhat.com>
-cc: Trond Myklebust <trond.myklebust@hammerspace.com>
-cc: Anna Schumaker <anna@kernel.org>
-cc: Jeff Layton <jlayton@kernel.org>
-cc: linux-nfs@vger.kernel.org
-cc: linux-cachefs@redhat.com
----
+	size = sizeof(*rapl_pmus) + sizeof(rapl_pmus->pmus[0]) * maxdie;
 
- fs/nfs/fscache.c |   14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
-index f73c09a9cf0a..0e5572b192b2 100644
---- a/fs/nfs/fscache.c
-+++ b/fs/nfs/fscache.c
-@@ -54,17 +54,17 @@ static bool nfs_fscache_get_client_key(struct nfs_client *clp,
- 
- 	switch (clp->cl_addr.ss_family) {
- 	case AF_INET:
--		if (!nfs_append_int(key, _len, sin->sin_port) ||
--		    !nfs_append_int(key, _len, sin->sin_addr.s_addr))
-+		if (!nfs_append_int(key, _len, ntohs(sin->sin_port)) ||
-+		    !nfs_append_int(key, _len, ntohl(sin->sin_addr.s_addr)))
- 			return false;
- 		return true;
- 
- 	case AF_INET6:
--		if (!nfs_append_int(key, _len, sin6->sin6_port) ||
--		    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[0]) ||
--		    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[1]) ||
--		    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[2]) ||
--		    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[3]))
-+		if (!nfs_append_int(key, _len, ntohs(sin6->sin6_port)) ||
-+		    !nfs_append_int(key, _len, ntohl(sin6->sin6_addr.s6_addr32[0])) ||
-+		    !nfs_append_int(key, _len, ntohl(sin6->sin6_addr.s6_addr32[1])) ||
-+		    !nfs_append_int(key, _len, ntohl(sin6->sin6_addr.s6_addr32[2])) ||
-+		    !nfs_append_int(key, _len, ntohl(sin6->sin6_addr.s6_addr32[3])))
- 			return false;
- 		return true;
- 
-
-
+or something. Otherwise, just go away.

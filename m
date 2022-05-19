@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF7152DF6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD7652DF75
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245182AbiESVln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S245278AbiESVmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244465AbiESVlW (ORCPT
+        with ESMTP id S245179AbiESVlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:41:22 -0400
+        Thu, 19 May 2022 17:41:24 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0344E40A26
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:41:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A584EA0D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:41:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=66jVoWk+OA85s9ib6uVCg5Wh95Rp51ur8O6i8KwQNnE=; b=DJcr+aw1GwQzMhU+yRZ2IEAMuu
-        8XHLx8RqIkp+uFv5OgMru0jrpLgXEnzyXspCZSJYiYbv6jI3TDzn5Sivpr6pQKAGJOu89WV37HdM0
-        AtXVnemEUpp8ZyWaxgH4gaczPYahAdzW4Q2Bq6YNMHcTq0PP5hc0BzCQA5xcqjdzN41eVZqpy032Y
-        IDlTRYi+E6UryFOD2dtxgue/dc03aN0TSDex/Br6vBhWYiI3yD/lKaPPKqMJPgiLRvm2Pqqp+jCEQ
-        zFaHL+bv0Oc3URS/lSQ6fDy+JYXYRWQgJ3dThj0yJVrO2j7ODdITR+8pr7aQygnMgpVNOHKV79Uf5
-        52ikL+NA==;
+        bh=4Ryv8V/o6iO/NxByO0hQtge0QtXFF+VpHW1PBt63HGE=; b=WBvhQDsCtvUv3fASEBtX4EZBXk
+        u2tcPobZYmRlY6xxZ2I+UCaV/sJheSv+kEXv1F/PR+tvmiMCfUwxOEKu/3BDRz8AQzhSK5iV0b8Wj
+        lyp9minffd1H2Hp100McpbZSi8TdLhffjk3RjtBD2WTOYDUoP2Z/hzNpyZQscToNb1uSIq6FwhlA+
+        ukY0BqtCf8rKa36rePo8M8166lFg8g2YGaYScOpGVO8gZhbKxbONBC/DwieGnDxqFEPogiUZxf3Ok
+        gRcNLjc7SUdihWYWzIF+EkBXd3NHE9fW6i7KxKcAqmU3Vw7PIJ1nT4lVmkdZUUzTVrgqDZZP6bJuM
+        b6MHNE+g==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrntN-0028dl-Cr; Thu, 19 May 2022 21:41:10 +0000
+        id 1nrntN-0028dk-Ck; Thu, 19 May 2022 21:41:10 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1CB8A3002BE;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 211F5300859;
         Thu, 19 May 2022 23:41:07 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 04F812021B5DF; Thu, 19 May 2022 23:41:07 +0200 (CEST)
-Message-ID: <20220519213421.687917982@infradead.org>
+        id 08D862021B1A0; Thu, 19 May 2022 23:41:07 +0200 (CEST)
+Message-ID: <20220519213421.748352112@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 19 May 2022 23:27:52 +0200
+Date:   Thu, 19 May 2022 23:27:53 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     frederic@kernel.org, paulmck@kernel.org, rjw@rjwysocki.net,
         x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         jpoimboe@kernel.org
-Subject: [RFC][PATCH 2/9] x86/idle: Replace x86_idle with a static_call
+Subject: [RFC][PATCH 3/9] cpuidle: Move IRQ state validation
 References: <20220519212750.656413111@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,115 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Typical boot time setup; no need to suffer an indirect call for that.
+Make cpuidle_enter_state() consistent with the s2idle variant and
+verify ->enter() always returns with interrupts disabled.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/kernel/process.c |   50 +++++++++++++++++++++++++---------------------
- 1 file changed, 28 insertions(+), 22 deletions(-)
+ drivers/cpuidle/cpuidle.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -24,6 +24,7 @@
- #include <linux/cpuidle.h>
- #include <linux/acpi.h>
- #include <linux/elf-randomize.h>
-+#include <linux/static_call.h>
- #include <trace/events/power.h>
- #include <linux/hw_breakpoint.h>
- #include <asm/cpu.h>
-@@ -692,7 +693,23 @@ void __switch_to_xtra(struct task_struct
- unsigned long boot_option_idle_override = IDLE_NO_OVERRIDE;
- EXPORT_SYMBOL(boot_option_idle_override);
- 
--static void (*x86_idle)(void);
-+/*
-+ * We use this if we don't have any better idle routine..
-+ */
-+void __cpuidle default_idle(void)
-+{
-+	raw_safe_halt();
-+}
-+#if defined(CONFIG_APM_MODULE) || defined(CONFIG_HALTPOLL_CPUIDLE_MODULE)
-+EXPORT_SYMBOL(default_idle);
-+#endif
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -234,7 +234,11 @@ int cpuidle_enter_state(struct cpuidle_d
+ 	stop_critical_timings();
+ 	if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
+ 		rcu_idle_enter();
 +
-+DEFINE_STATIC_CALL_NULL(x86_idle, default_idle);
+ 	entered_state = target_state->enter(dev, drv, index);
++	if (WARN_ON_ONCE(!irqs_disabled()))
++		raw_local_irq_disable();
 +
-+static bool x86_idle_set(void)
-+{
-+	return !!static_call_query(x86_idle);
-+}
+ 	if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
+ 		rcu_idle_exit();
+ 	start_critical_timings();
+@@ -246,12 +250,8 @@ int cpuidle_enter_state(struct cpuidle_d
+ 	/* The cpu is no longer idle or about to enter idle. */
+ 	sched_idle_set_state(NULL);
  
- #ifndef CONFIG_SMP
- static inline void play_dead(void)
-@@ -715,28 +732,17 @@ void arch_cpu_idle_dead(void)
- /*
-  * Called from the generic idle code.
-  */
--void arch_cpu_idle(void)
--{
--	x86_idle();
--}
+-	if (broadcast) {
+-		if (WARN_ON_ONCE(!irqs_disabled()))
+-			local_irq_disable();
 -
--/*
-- * We use this if we don't have any better idle routine..
-- */
--void __cpuidle default_idle(void)
-+void __cpuidle arch_cpu_idle(void)
- {
--	raw_safe_halt();
-+	static_call(x86_idle)();
- }
--#if defined(CONFIG_APM_MODULE) || defined(CONFIG_HALTPOLL_CPUIDLE_MODULE)
--EXPORT_SYMBOL(default_idle);
--#endif
++	if (broadcast)
+ 		tick_broadcast_exit();
+-	}
  
- #ifdef CONFIG_XEN
- bool xen_set_default_idle(void)
- {
--	bool ret = !!x86_idle;
-+	bool ret = x86_idle_set();
- 
--	x86_idle = default_idle;
-+	static_call_update(x86_idle, default_idle);
- 
- 	return ret;
- }
-@@ -859,20 +865,20 @@ void select_idle_routine(const struct cp
- 	if (boot_option_idle_override == IDLE_POLL && smp_num_siblings > 1)
- 		pr_warn_once("WARNING: polling idle and HT enabled, performance may degrade\n");
- #endif
--	if (x86_idle || boot_option_idle_override == IDLE_POLL)
-+	if (x86_idle_set() || boot_option_idle_override == IDLE_POLL)
- 		return;
- 
- 	if (boot_cpu_has_bug(X86_BUG_AMD_E400)) {
- 		pr_info("using AMD E400 aware idle routine\n");
--		x86_idle = amd_e400_idle;
-+		static_call_update(x86_idle, amd_e400_idle);
- 	} else if (prefer_mwait_c1_over_halt(c)) {
- 		pr_info("using mwait in idle threads\n");
--		x86_idle = mwait_idle;
-+		static_call_update(x86_idle, mwait_idle);
- 	} else if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
- 		pr_info("using TDX aware idle routine\n");
--		x86_idle = tdx_safe_halt;
-+		static_call_update(x86_idle, tdx_safe_halt);
- 	} else
--		x86_idle = default_idle;
-+		static_call_update(x86_idle, default_idle);
- }
- 
- void amd_e400_c1e_apic_setup(void)
-@@ -925,7 +931,7 @@ static int __init idle_setup(char *str)
- 		 * To continue to load the CPU idle driver, don't touch
- 		 * the boot_option_idle_override.
- 		 */
--		x86_idle = default_idle;
-+		static_call_update(x86_idle, default_idle);
- 		boot_option_idle_override = IDLE_HALT;
- 	} else if (!strcmp(str, "nomwait")) {
- 		/*
+ 	if (!cpuidle_state_is_coupled(drv, index))
+ 		local_irq_enable();
 
 

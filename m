@@ -2,105 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1821F52DC0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D6D52DC0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243431AbiESRyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S233941AbiESRzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243460AbiESRxu (ORCPT
+        with ESMTP id S243452AbiESRy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:53:50 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DCDCDA;
-        Thu, 19 May 2022 10:53:45 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gi33so2910061ejc.3;
-        Thu, 19 May 2022 10:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=sgrwK+j2yWEYF7Mxi+16rw3HUhKH66/j3hYzPNTlcSA=;
-        b=Xv+IVeuC6ykZjSTEAJ1vQKfNgthe84KfbhJQv2WeHw56k8pzOVi5p4kyDM0dfdnNgi
-         JlZ27xvO5us6L161Mz8p7WqSOLcqFe/8FxMJMYY6IuEhHmgLd1VT2fMHvaI1tjP4BoBQ
-         9lc07RayOlQ+OXgCbSFc2zzQZsM/YuXKvM0O5ohf7bBJ/3WuAk+YYQRwT2hTr0UcsFWK
-         f+AusIB+ahDRCKvWyjzBn3S3CpYPfair2XHqi96KQVhA0VNWhhpefWnE5vEZjgzStpGB
-         yCFzQucfP+aLdEjaigqOfwlvxkSNhyYVWuOLXDbUf85FvjH3iLkTbEb55YbE11XL4UM9
-         V58Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=sgrwK+j2yWEYF7Mxi+16rw3HUhKH66/j3hYzPNTlcSA=;
-        b=5SPSTtEesYRzp9hWN9m1y1ZaiILYjj7MDk4EnFGttQ1SCYucvZpQJQQDJCCMy8O7cy
-         Uzfs/ZLUCpV9Y3tTIGrj/2OvpsB/JAdonOYVVdiG/xZWnTXD4aLQEFgkhyBFO7syOl8M
-         OKGwZxQ9+L77ZLSMlAwGg6xtHtE59eolGrO1RC6wKlV9WmwUVmWb6EiD73UzMrDTTt6l
-         /LX9w+4WPL82v+k99LBelNMOzHrDJojVM4wpp63rtr7X0qt+p+yupDd69+sK+ak+Ui0D
-         RgbMrlGMO1J8XTAuPrIOAb4pUw/pu+AdPVp04rPc+tATR4mUhIDFQTutps3BEa7RaS9A
-         5PqA==
-X-Gm-Message-State: AOAM530SRlnxL+5VTUGk6qEHqB90pJ3zweoWYbiMVvhySDjZ4x70q6rP
-        6bl00+xeh91zs33ZyLb3MYUZMepYX2w=
-X-Google-Smtp-Source: ABdhPJwCT7BuWabCj+hO3YTl6oimsYDda1ZBuXZU0EaMF92dBAmBSQiNVA3e5WNe4LllDTMiMsIfWw==
-X-Received: by 2002:a17:906:cb97:b0:6f3:c671:a337 with SMTP id mf23-20020a170906cb9700b006f3c671a337mr5288125ejb.93.1652982824048;
-        Thu, 19 May 2022 10:53:44 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170906104400b006f52dbc192bsm2383809ejj.37.2022.05.19.10.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 10:53:43 -0700 (PDT)
-Date:   Thu, 19 May 2022 20:53:41 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v5 01/13] net: dsa: allow port_bridge_join() to
- override extack message
-Message-ID: <20220519175341.fheue7mng3os7hkl@skbuf>
-References: <20220519153107.696864-1-clement.leger@bootlin.com>
- <20220519153107.696864-2-clement.leger@bootlin.com>
+        Thu, 19 May 2022 13:54:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454A95A585
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:54:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB588B8277E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:54:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D432AC385AA;
+        Thu, 19 May 2022 17:54:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652982882;
+        bh=I8tgd+WoWDMrJR4jZEp3jZktha7OhUuqZeTJmNYKX6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d/3aArFJ6c3CEjmZ1AHkWYwCGRmTO7nIwAUeFPSqz8UU8up3BaYwKv2fcjZzF1GDH
+         O3mqj/q3qf/3JlbZTuGwgQXLoZcS/NBefZnBFF4dy69tTvRWSDiK/92ETRjY1xT7E7
+         jC7oR03PmbhgBfky/0b0N/4dLhyrOYr21usdRmudB1jO8WZLpaYQ6+6aIGKfA7ANRj
+         pkpR5JK/FqwO+nOVnvmSfAG2nUnr6K6HhDHc7Hb56hAttQhOzqXl3oQ7WYoSquc5OH
+         LvPEopuwRSthF8B258lLQTEmECBZ+J1vavktEDH0+fq5P8repHA5c7b2c+hKBF/3ra
+         v5lJEzGkpvvSg==
+Date:   Thu, 19 May 2022 18:54:37 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
+Subject: Re: [PATCH] ASoC: max98090: Remove unneeded check in
+ max98090_put_enab_tlv()
+Message-ID: <YoaEXWGEY4s14je+@sirena.org.uk>
+References: <1652980212-21473-1-git-send-email-khoroshilov@ispras.ru>
+ <YoZ+dmprwb5Ohto3@sirena.org.uk>
+ <fd58c07c-488e-1c90-a755-194f714bbe45@ispras.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="25luxRjqlhvCfi1Q"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220519153107.696864-2-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <fd58c07c-488e-1c90-a755-194f714bbe45@ispras.ru>
+X-Cookie: Some restrictions may apply.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 05:30:55PM +0200, Clément Léger wrote:
-> Some drivers might report that they are unable to bridge ports by
-> returning -EOPNOTSUPP, but still wants to override extack message.
-> In order to do so, in dsa_slave_changeupper(), if port_bridge_join()
-> returns -EOPNOTSUPP, check if extack message is set and if so, do not
-> override it.
-> 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+--25luxRjqlhvCfi1Q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, May 19, 2022 at 08:49:48PM +0300, Alexey Khoroshilov wrote:
+> On 19.05.2022 20:29, Mark Brown wrote:
+> > On Thu, May 19, 2022 at 08:10:12PM +0300, Alexey Khoroshilov wrote:
+
+> >> -	if (sel < 0 || sel > mc->max)
+> >> +	if (sel > mc->max)
+
+> > The check needs to be moved, not removed.  The userspace ABI allows
+> > passing in of negative values.
+
+> Would (sel > mc->max) be enough in this case anyway?
+
+Oh, the check won't be working properly - it's just that like I say the
+fix is to move rather than remove it so it's operating on the signed
+value.
+
+--25luxRjqlhvCfi1Q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKGhFwACgkQJNaLcl1U
+h9CrFQf/Spd84BxyW43FtCv+kRymc8xAoxAjmgQI4n2HG3oXiv+WajOLPVB/AWmu
+Ng/gUYtttDs+U2jQbWtkHjO0Q8Y2N6l1z+8+RGnJh//YX6dtSPQDtoS9aJ5w6JTd
+SF9BM02u66EznHe/landjz+0N6cmY6H0QnVuuom1UCuixrB+5xiN1vIacLavIBJ+
+yGHWfM/Jaj8CfwDlv5TBSu/wA0jYbFJzMOQ+B2zeQtcfTqFXvrwKP9miXTE7oQIM
+xaJvVt/NnJTzgUn84dQPg/k4+kn6nBIubCoy01HhBaW+evcRbdoZ4FJsdKWMTKdL
+SvQCgoxRRKWPo1bXaftaPcODCk0ziA==
+=79Ws
+-----END PGP SIGNATURE-----
+
+--25luxRjqlhvCfi1Q--

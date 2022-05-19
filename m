@@ -2,118 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6E752DE0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE7B52DE10
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244387AbiESUF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 16:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        id S244595AbiESUGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 16:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239668AbiESUF0 (ORCPT
+        with ESMTP id S239198AbiESUGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 16:05:26 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1C96D187;
-        Thu, 19 May 2022 13:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652990725; x=1684526725;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IEHkZG7WnYsRxPk999KUKG9YJK49N+7dI0JkiNKtyjQ=;
-  b=G9/LN1REavz5e20kjTk3lOVilakkbnUyB9csrsrWPw70M59KQP1gjGNQ
-   FLgO1CzF66uH7Z8taxj4NmriNVTsz7ZhG6dlKaGs3ZyVLPNizc/THXPTi
-   wl/wHyyJ9vfxn3ABYBEqjvcJ60fwU1hYS+5HLMfxxFN4sxlN3U4+y5bHi
-   /5d7Ske2I+CEkOi+heD3RGFY+DWzzaaGvDjypSAD+ZUNy0Vb5P9fKeh/5
-   AdlBLh97YhJ8v75uFcqkhSRGkg8XUDCznRhf3rWW2fPAZpUuHYcyPsBLd
-   e1CU5VTIqEPscfdaTvvN0vZ1wouPdygsrXT9tzJYXmkRgX0JcT5U89j8H
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252250912"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="252250912"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 13:05:00 -0700
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="627788198"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 13:04:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nrmNo-000GD9-6Q;
-        Thu, 19 May 2022 23:04:28 +0300
-Date:   Thu, 19 May 2022 23:04:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kent Overstreet <kent.overstreet@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
-        pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
-        willy@infradead.org
-Subject: Re: [PATCH v2 22/28] Input/joystick/analog: Convert from seq_buf ->
- printbuf
-Message-ID: <Yoaiy1lc+MCMZFTQ@smile.fi.intel.com>
-References: <20220519172421.162394-1-kent.overstreet@gmail.com>
- <20220519172421.162394-23-kent.overstreet@gmail.com>
+        Thu, 19 May 2022 16:06:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8683464BFD
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 13:06:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 021FF61C33
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 20:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE78C385AA;
+        Thu, 19 May 2022 20:06:29 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UyXaa50y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1652990788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hmADdHULjYqs4wkpWmCIgpha8mSnfTgSG1iLN/3rKFQ=;
+        b=UyXaa50y21jgqcK7zgu6xHZsaJ646nk3IdZMvdNxslgWRs6WiulpdjTMp+4rsk/vDCqBx2
+        hwEirvT/5rfpNseXzX1bv4cvLO3PAbIUHYGyccFmyIrZQfsB66F0+7BEfyXLHdlSnzuoqp
+        CgLHWbjYAI8osAx7NR09b09lakbik+Y=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id cf4f919a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 19 May 2022 20:06:27 +0000 (UTC)
+Date:   Thu, 19 May 2022 22:05:29 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     tytso@mit.edu, hch@lst.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
+Message-ID: <YoajCafKmgUbbaY0@zx2c4.com>
+References: <20220519193133.194138-1-axboe@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220519172421.162394-23-kent.overstreet@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220519193133.194138-1-axboe@kernel.dk>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 01:24:15PM -0400, Kent Overstreet wrote:
-> seq_buf is being deprecated, this converts to printbuf which is similar
-> but heap allocates the string buffer.
+Hi Jens,
+
+On Thu, May 19, 2022 at 01:31:31PM -0600, Jens Axboe wrote:
+> Hi,
 > 
-> This means we have to consider memory allocation context & failure: Here
-> we're in device initialization so GFP_KERNEL should be fine, and also as
-> we're in device initialization returning -ENOMEM is fine.
+> We recently had a failure on a kernel upgrade because splice no longer
+> works on random/urandom. This is due to:
+> 
+> 6e2c7421f02 ("fs: don't allow splice read/write without explicit ops")
 
-...
+Thanks for this. I'd noticed this a few months ago and assumed it has
+just always been that way, and hadn't gotten to looking at what was up.
 
-> +       int ret = 0;
+I'll take a look at these patches in detail when I'm home in a few
+hours, but one thing maybe you can answer more easily than my digging
+is:
 
-Redundant assignment.
+There's a lot of attention in random.c devoted to not leaving any output
+around on the stack or in stray buffers. The explicit use of
+copy_to_user() makes it clear that the output isn't being copied
+anywhere other than what's the user's responsibility to cleanup. I'm
+wondering if the switch to copy_to_iter() introduces any buffering or
+gotchas that you might be aware of.
 
-...
+Also you may need to rebase this on the random.git tree at
+https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
 
-> -		seq_buf_printf(&s, " %d-hat",
-> -			       hweight16(analog->mask & ANALOG_HATS_ALL));
-> +		pr_buf(&buf, " %d-hat",
-> +		       hweight16(analog->mask & ANALOG_HATS_ALL));
-
-Now you may put it on one line here and in similar cases.
-
-...
-
-> +	ret = buf.allocation_failure ? -ENOMEM : 0;
-> +	if (!ret)
-> +		strlcpy(analog->name, buf.buf, sizeof(analog->name));
-> +	printbuf_exit(&buf);
-> +	return ret;
-
-Looks like anti-pattern. On top a bit twisted error code manipulation before
-checking for error codes, but what about
-
-static int printbuf_export(*buf, *out, size)
-{
-	...
-}
-
-	ret = printbuf_export(&buf, analog->name, sizeof(analog->name));
-	printbuf_exit(&buf);
-	return ret;
-
-?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Regards,
+Jason

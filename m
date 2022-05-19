@@ -2,229 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791B452DA72
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77A952DA7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241773AbiESQk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S232721AbiESQoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242136AbiESQkv (ORCPT
+        with ESMTP id S230039AbiESQn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:40:51 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121C1E77
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:40:48 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id k30so8001896wrd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:40:47 -0700 (PDT)
+        Thu, 19 May 2022 12:43:57 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CE559095
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:43:56 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id f10so5811195pjs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=g9gYzxWe5NPTbaNAHgbnlMxkb6BQm0o5fPGCfOasomw=;
-        b=odGYCXlYMgIzbmhlZajrwAIYrVzVwUGAygS7xDgeEP2rU4W9fYXMtAowdDXWjBuBmN
-         N8vUt46PYTxRHIXJUvYhROlIHPsqU+g8ONQJuDAnApcUSeY7b/s6sHKiwpUirq7+VyBb
-         T7moq/nxrXA/AYNVxABM+qr+9lTbgERS0jZv+fu7vIqCofJukIpMY8o8Oe8pKbdNmnKN
-         PonSzsSzBbtH4erc+IOjytHkSynceUJCBS5xGilAl5fN01iDARm7T9xNJsLRhFmiEd/Y
-         SzY4ujloji/i0hf3ldGrjkCz+MwG4nB7+jUg2kfQshpg+oVxpXyaY4KvU73lYn2yOa+7
-         rCvw==
+        bh=221Yw0kf0kWHOuKCBmfC/ycEQMuPJsFgC9zSqVTAwSA=;
+        b=bu8vQ+GWvqJrRdEuq8YVrsfud1b3bQhlBNIuRQm9N4t2Lj3E7ojrr5du8GpLJyVQpt
+         zI6LAgP0cWVNyhkC2dx8jWx3d1dzS6qKn2apfQz90gm0zn8LV2J6jLUuu+darR0d5jp1
+         LpTWI9ig8g7I0oCfkW8terjt+U3QuRwraIIgfyUbQlX7hnu3WzrJLPVhPL16qrotB7X8
+         X0sGHQiLnxPwCuwzmOoubt1yCoAYcRgt5bbtFh+Kh0gFthhZS04NdGml6wCRoLPw4YTT
+         8exX0VVLnNWqt0NnU9LMNUK3s3E1Z3IQqSxPNndBTJ1hO64zu+VRfQofIL4ohxv4FNRK
+         FrmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=g9gYzxWe5NPTbaNAHgbnlMxkb6BQm0o5fPGCfOasomw=;
-        b=H6aeZUgX3oHkIyGPw1ab3gEGoLHqKIUPoeE7aeikGhKrzyHxfE6aVznQCdmX0uhSkI
-         qLDulqb1uag+IJnl6GSsTwofJjOuzMWs5qQph4KpJ1sxQ/7VwfJLQ+6esYkOxOTbfsI8
-         OWLofQ7FA4DOIBgZdImqc7GLNLQjDnCtMT4JWavea1Yw1eAIQGPQHY3aAuTWOFVthCLd
-         xfpcM7SJ3St/T4txNUUYIYd54PUGPmaPCIMV69nC2P/hqbrdCxZYUeYm3S22Bu5pZoni
-         PBxiIzYOYJsNKB4cSm2y4vq7qJMUG96hIWFrbvTMkdhm5dNDVoeiCxfeiCUaiIGE6ego
-         VV0A==
-X-Gm-Message-State: AOAM531cAK2ZuLshWQwmBv38pi3RG806002L2h/mvFzXnJC0YvfdmYSq
-        h8ViwvtdAF8f0As/5/rSHHsKvtCnMmcJvQ==
-X-Google-Smtp-Source: ABdhPJwmsiBN/XwBVe8E5Ys3+WsVkowKP+Je5QRAj4S9lPWo204wsjJqP+iG7dMMB7RDwhMffQZlkw==
-X-Received: by 2002:a5d:4ad1:0:b0:20d:b23:fe1b with SMTP id y17-20020a5d4ad1000000b0020d0b23fe1bmr4752812wrs.579.1652978446569;
-        Thu, 19 May 2022 09:40:46 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id z6-20020a7bc146000000b003942a244ebesm77922wmi.3.2022.05.19.09.40.45
+        bh=221Yw0kf0kWHOuKCBmfC/ycEQMuPJsFgC9zSqVTAwSA=;
+        b=MLk/Ec8NINVDjukt3OHxE/sdh8nnBqBftku4mHrxVdtDz6GBm/RognSaUoJWyGAAdw
+         sXx4cwp5db4iSYIE7LDJNMKfJ03VJLT45JY2WoyIP5FwxQKM56OacQD7QBb3sNWZ5WV0
+         3VpWk/aI68JO3qgMm7xunHgsENl1S+Dlzt18/wlhoBeWwlliVkf8aUYBDwW1LBvUycyc
+         Isgk32VJ0XQL1WZhCItSm3qiXxJzcyo8LpOkVJB7uGCQbDpV0tBDo/Bjj6LOCW2qWMzQ
+         oD626EhZQ1b/l+E7Vk+8xU3F/KiTDn5tx4B0M4mKmGJCtPFswNl1dTaxskEE4KZ8tJQR
+         3rPw==
+X-Gm-Message-State: AOAM530szMUzyiHwG3PXKFe83nZe3S5T0nSrYdw0AO+4/pDpYqTwilu6
+        32a1wZpoV1c6f0Z538d3lCVBng==
+X-Google-Smtp-Source: ABdhPJw2CROjZjF/tfI3pH/231wqbGMtrzoTlXEZCDadRe7+Y7fJupSq7bjozl06CSrvxLG1Gs7+EA==
+X-Received: by 2002:a17:902:b289:b0:161:872d:6f03 with SMTP id u9-20020a170902b28900b00161872d6f03mr5698065plr.30.1652978635790;
+        Thu, 19 May 2022 09:43:55 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id jh9-20020a170903328900b0015e8d4eb1f8sm4027559plb.66.2022.05.19.09.43.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 09:40:46 -0700 (PDT)
-Date:   Thu, 19 May 2022 17:40:21 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 08/10] iommu: Prepare IOMMU domain for IOPF
-Message-ID: <YoZy9fnJlN/RIVY4@myrica>
-References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
- <20220519072047.2996983-9-baolu.lu@linux.intel.com>
+        Thu, 19 May 2022 09:43:55 -0700 (PDT)
+Date:   Thu, 19 May 2022 16:43:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [RFC PATCH v3 06/19] KVM: x86: mmu: add gfn_in_memslot helper
+Message-ID: <YoZzx6f1XBWL3i8F@google.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+ <20220427200314.276673-7-mlevitsk@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519072047.2996983-9-baolu.lu@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220427200314.276673-7-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 03:20:45PM +0800, Lu Baolu wrote:
-> This adds some mechanisms around the iommu_domain so that the I/O page
-> fault handling framework could route a page fault to the domain and
-> call the fault handler from it.
-> 
-> Add pointers to the page fault handler and its private data in struct
-> iommu_domain. The fault handler will be called with the private data
-> as a parameter once a page fault is routed to the domain. Any kernel
-> component which owns an iommu domain could install handler and its
-> private parameter so that the page fault could be further routed and
-> handled.
-> 
-> This also prepares the SVA implementation to be the first consumer of
-> the per-domain page fault handling model.
-> 
-> Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> This is a tiny refactoring, and can be useful to check
+> if a GPA/GFN is within a memslot a bit more cleanly.
+
+This doesn't explain the actual motivation, which is to use the new helper from
+arch code.
+
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 > ---
->  include/linux/iommu.h         |  3 ++
->  drivers/iommu/io-pgfault.c    |  7 ++++
->  drivers/iommu/iommu-sva-lib.c | 65 +++++++++++++++++++++++++++++++++++
->  3 files changed, 75 insertions(+)
+>  include/linux/kvm_host.h | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index e4ce2fe0e144..45f274b2640d 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -100,6 +100,9 @@ struct iommu_domain {
->  	void *handler_token;
->  	struct iommu_domain_geometry geometry;
->  	struct iommu_dma_cookie *iova_cookie;
-> +	enum iommu_page_response_code (*iopf_handler)(struct iommu_fault *fault,
-> +						      void *data);
-> +	void *fault_data;
->  };
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 252ee4a61b58b..12e261559070b 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1580,6 +1580,13 @@ int kvm_request_irq_source_id(struct kvm *kvm);
+>  void kvm_free_irq_source_id(struct kvm *kvm, int irq_source_id);
+>  bool kvm_arch_irqfd_allowed(struct kvm *kvm, struct kvm_irqfd *args);
 >  
->  static inline bool iommu_is_dma_domain(struct iommu_domain *domain)
-> diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
-> index 1df8c1dcae77..aee9e033012f 100644
-> --- a/drivers/iommu/io-pgfault.c
-> +++ b/drivers/iommu/io-pgfault.c
-> @@ -181,6 +181,13 @@ static void iopf_handle_group(struct work_struct *work)
->   * request completes, outstanding faults will have been dealt with by the time
->   * the PASID is freed.
->   *
-> + * Any valid page fault will be eventually routed to an iommu domain and the
-> + * page fault handler installed there will get called. The users of this
-> + * handling framework should guarantee that the iommu domain could only be
-> + * freed after the device has stopped generating page faults (or the iommu
-> + * hardware has been set to block the page faults) and the pending page faults
-> + * have been flushed.
-> + *
->   * Return: 0 on success and <0 on error.
->   */
->  int iommu_queue_iopf(struct iommu_fault *fault, void *cookie)
-> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
-> index 568e0f64edac..317ab8e8c149 100644
-> --- a/drivers/iommu/iommu-sva-lib.c
-> +++ b/drivers/iommu/iommu-sva-lib.c
-> @@ -72,6 +72,69 @@ struct mm_struct *iommu_sva_find(ioasid_t pasid)
->  }
->  EXPORT_SYMBOL_GPL(iommu_sva_find);
->  
-> +/*
-> + * I/O page fault handler for SVA
-> + *
-> + * Copied from io-pgfault.c with mmget_not_zero() added before
-> + * mmap_read_lock().
-
-Comment doesn't really belong here, maybe better in the commit message.
-Apart from that
-
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-
-> + */
-> +static enum iommu_page_response_code
-> +iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
+> +
+> +static inline bool gfn_in_memslot(struct kvm_memory_slot *slot, gfn_t gfn)
 > +{
-> +	vm_fault_t ret;
-> +	struct mm_struct *mm;
-> +	struct vm_area_struct *vma;
-> +	unsigned int access_flags = 0;
-> +	struct iommu_domain *domain = data;
-> +	unsigned int fault_flags = FAULT_FLAG_REMOTE;
-> +	struct iommu_fault_page_request *prm = &fault->prm;
-> +	enum iommu_page_response_code status = IOMMU_PAGE_RESP_INVALID;
-> +
-> +	if (!(prm->flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID))
-> +		return status;
-> +
-> +	mm = domain_to_mm(domain);
-> +	if (IS_ERR_OR_NULL(mm) || !mmget_not_zero(mm))
-> +		return status;
-> +
-> +	mmap_read_lock(mm);
-> +
-> +	vma = find_extend_vma(mm, prm->addr);
-> +	if (!vma)
-> +		/* Unmapped area */
-> +		goto out_put_mm;
-> +
-> +	if (prm->perm & IOMMU_FAULT_PERM_READ)
-> +		access_flags |= VM_READ;
-> +
-> +	if (prm->perm & IOMMU_FAULT_PERM_WRITE) {
-> +		access_flags |= VM_WRITE;
-> +		fault_flags |= FAULT_FLAG_WRITE;
-> +	}
-> +
-> +	if (prm->perm & IOMMU_FAULT_PERM_EXEC) {
-> +		access_flags |= VM_EXEC;
-> +		fault_flags |= FAULT_FLAG_INSTRUCTION;
-> +	}
-> +
-> +	if (!(prm->perm & IOMMU_FAULT_PERM_PRIV))
-> +		fault_flags |= FAULT_FLAG_USER;
-> +
-> +	if (access_flags & ~vma->vm_flags)
-> +		/* Access fault */
-> +		goto out_put_mm;
-> +
-> +	ret = handle_mm_fault(vma, prm->addr, fault_flags, NULL);
-> +	status = ret & VM_FAULT_ERROR ? IOMMU_PAGE_RESP_INVALID :
-> +		IOMMU_PAGE_RESP_SUCCESS;
-> +
-> +out_put_mm:
-> +	mmap_read_unlock(mm);
-> +	mmput(mm);
-> +
-> +	return status;
+> +	return (gfn >= slot->base_gfn && gfn < slot->base_gfn + slot->npages);
 > +}
 > +
+
+Spurious newline.
+
+> +
 >  /*
->   * IOMMU SVA driver-oriented interfaces
->   */
-> @@ -94,6 +157,8 @@ iommu_sva_alloc_domain(struct bus_type *bus, struct mm_struct *mm)
->  	domain = &sva_domain->domain;
->  	domain->type = IOMMU_DOMAIN_SVA;
->  	domain->ops = bus->iommu_ops->sva_domain_ops;
-> +	domain->iopf_handler = iommu_sva_handle_iopf;
-> +	domain->fault_data = domain;
+>   * Returns a pointer to the memslot if it contains gfn.
+>   * Otherwise returns NULL.
+> @@ -1590,12 +1597,13 @@ try_get_memslot(struct kvm_memory_slot *slot, gfn_t gfn)
+>  	if (!slot)
+>  		return NULL;
 >  
->  	return domain;
+> -	if (gfn >= slot->base_gfn && gfn < slot->base_gfn + slot->npages)
+> +	if (gfn_in_memslot(slot, gfn))
+>  		return slot;
+>  	else
+>  		return NULL;
+
+At this point, maybe:
+
+	if (!slot || !gfn_in_memslot(slot, gfn))
+		return NULL;
+
+	return slot;
+
 >  }
+>  
+> +
+>  /*
+>   * Returns a pointer to the memslot that contains gfn. Otherwise returns NULL.
+>   *
 > -- 
-> 2.25.1
+> 2.26.3
 > 

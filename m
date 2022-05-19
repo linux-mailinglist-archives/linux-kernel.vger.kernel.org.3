@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BEB52DCEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F7652DCEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244041AbiESSfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
+        id S244052AbiESShk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232411AbiESSfi (ORCPT
+        with ESMTP id S232411AbiESShe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:35:38 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9435F56F90
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:35:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652985337; x=1684521337;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eXy8i7Ms7pnGUruejXu3xQWWY8IlWM67DQ4+m49di/A=;
-  b=Z7I17IN99mh60Nk3/aUlG65zFFxAyZKiucb1333YXXcAlYQ0Eg/+VnfF
-   UVNnnxK2vtRB7oidC4cNU+FEZUbwZzTXK8RZ0QGeEPhj8mFq4VNjAmgVg
-   Nefagc3HAQDB8TRwKeAukhMnUtzgmbrSmvSaH8jPbS3vVPFohmAl2QqI8
-   pwcyGo04A5JdzOJGiwvgGMFY/oU9mYoOuxjZQqVx5Bdf+n79VAqpU+FWD
-   NR4G9w3ZCR7ag5PLPHc007c6skJTSh708kXZRndLVoYJ2psFTsXe1wx+f
-   uAObKTH77Bm/BYM/d9VNbHNCTTZllZ65V5d2jNcqJRnZPosJdh7FqOCaQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="335371984"
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="335371984"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 11:35:37 -0700
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="606624216"
-Received: from rlsharma-mobl.amr.corp.intel.com (HELO [10.212.180.228]) ([10.212.180.228])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 11:35:36 -0700
-Message-ID: <c75ffa6b-181b-bc4c-9fee-5476cfbc329a@intel.com>
-Date:   Thu, 19 May 2022 11:35:36 -0700
+        Thu, 19 May 2022 14:37:34 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E825FF137A;
+        Thu, 19 May 2022 11:37:32 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2ff155c239bso66078717b3.2;
+        Thu, 19 May 2022 11:37:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yS1kEN+GXXpbhqkK6UqZTr2vL0SVZ2tag5VCxMz5nz0=;
+        b=jmrIfPusZI5fyymMsLl4c3Iq9DmivzrHUNu/I44fgo+jvKx/OWw3eeWc0T1+qJsud1
+         ShqudmELo0J8Efaj06AEY2YokyN8vyIu1lLFknZH6czkZ9h2lDe5iqVC3x1qGkLZEjWl
+         8LaLrAJPYybJDRuxMDUPB4Wi+UMXh69osi4KnRTVvm+2u5qNxWpi6rr0/L54URYq1ulE
+         3I0HptHzxn5KPXnl9QNM11SEPZUu/ttooBkDP5YbeQZU7Ff06xbvlZvRHJSJwVE6jPvu
+         eiQ1vorRNWbUK7BDgVSEl4TeFQVWORBh0OEwJU2I55cBia+kzK1Zo5UStCMGqPIPwbOV
+         XGQQ==
+X-Gm-Message-State: AOAM531JVbuxTJOpuV0lOPcC/tOXQRl1PoGfFlk4AkhcgCWUMj40ka9k
+        Y0HKv1xqEe71id7IrgTOy6LyvoOfAjOs3o1cvAs=
+X-Google-Smtp-Source: ABdhPJxWx4suARB6p5108TodMZoK6QfRDz1CDtEyftKwKTyQe+rLtQu08lC+lkjXIM1zM+NGYEffev9rMGnJpUozft8=
+X-Received: by 2002:a81:91d4:0:b0:2fe:e300:3581 with SMTP id
+ i203-20020a8191d4000000b002fee3003581mr6273739ywg.7.1652985452189; Thu, 19
+ May 2022 11:37:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] x86/tdx: Handle load_unaligned_zeropad() page-cross to a
- shared page
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
-        thomas.lendacky@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220517153021.11116-1-kirill.shutemov@linux.intel.com>
- <e73cb19e-7dab-2fc1-b947-fac70fd607d2@intel.com>
- <20220517174042.v6s7wm3u5j2ebaoq@black.fi.intel.com>
- <c761e774-8014-6fa9-cf21-e7cd8f7aca54@intel.com>
- <20220517201710.ixbpsaga5jzvokvy@black.fi.intel.com>
- <083519ab-752f-9815-7741-22b3fcc03322@intel.com>
- <YoQkTtrMiU2bff9i@google.com> <YoQnQIfX8GuOgKqH@google.com>
- <20220519181958.libitxp2jws4prcr@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220519181958.libitxp2jws4prcr@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220511145704.698189-1-ulf.hansson@linaro.org>
+In-Reply-To: <20220511145704.698189-1-ulf.hansson@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 19 May 2022 20:37:21 +0200
+Message-ID: <CAJZ5v0gaaCYzCYdWhXjn7-S7MyAcDuM4epNp2eOr2_7h-cu4tw@mail.gmail.com>
+Subject: Re: [PATCH 00/14] PM: domains: Various improvements for genpd
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 11:19, Kirill A. Shutemov wrote:
->>>> The SDM has a breakdown:
->>>>
->>>> 	27.2.5 Information for VM Exits Due to Instruction Execution
->>>>
->>>> I didn't realize it came from VMREAD.  I guess I assumed it came from
->>>> some TDX module magic.  Silly me.
->>>>
->>>> The SDM makes it sound like we should be more judicious about using
->>>> 've->instr_len' though.  "All VM exits other than those listed in the
->>>> above items leave this field undefined."  Looking over
->>>> virt_exception_kernel(), we've got five cases from CPU instructions that
->>>> cause unconditional VMEXITs:
->> Ideally, what the SDM says wouldn't matter at all.  The TDX module spec really
->> should be the authorative source in this case, but it just punts to the SDM:
->>
->>   The 32-bit value that would have been saved into the VMCS as VM-exit instruction
->>   length if a legacy VM exit had occurred instead of the virtualization exception.
->>
->> Even if the TDX spec wants to punt to the SDM, it would save a lot of headache and
->> SDM reading if it also said something to the effect of:
->>
->>   The INSTRUCTION_LENGTH and INSTRUCTION_INFORMATION fields are valid for all
->>   #VEs injected by the Intel TDX Module.  The fields are undefined for #VEs
->>   injected by the CPU due to EPT Violations.
-> I initiated update to the spec, but it will take time.
+On Wed, May 11, 2022 at 4:57 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> The main goal with this series is to improve the way genpd deals with its
+> governor(s). Especially it turns allocation of governor related data to be
+> dynamically allocated. It also improves the execution path for runtime-
+> suspend/resume of devices (attached to a genpd of course) and the similar is
+> also done for genpd's power-on/off path.
+>
+> Note that, patch 1->3 have already been sent before in a separate series [1],
+> but for simplicity I have included them here again.
+>
+> Tests/reviews are as usual highly appreciated!
+>
+> Kind regards
+> Ulf Hansson
+>
+> [1]
+> https://www.spinics.net/lists/kernel/msg4335838.html
+>
+> Ulf Hansson (14):
+>   PM: domains: Add GENPD_FLAG_RPM_ALWAYS_ON for the always-on governor
+>   PM: domains: Drop redundant code for genpd always-on governor
+>   PM: domains: Don't check PM_QOS_FLAG_NO_POWER_OFF in genpd
+>   PM: domains: Rename irq_safe_dev_in_no_sleep_domain() in genpd
+>   PM: domains: Skip another warning in irq_safe_dev_in_sleep_domain()
+>   PM: domains: Allocate gpd_timing_data dynamically based on governor
+>   PM: domains: Move the next_wakeup variable into the struct
+>     gpd_timing_data
+>   PM: domains: Measure suspend/resume latencies in genpd based on
+>     governor
+>   PM: domains: Fixup QoS latency measurements for IRQ safe devices in
+>     genpd
+>   PM: domains: Fix initialization of genpd's next_wakeup
+>   PM: domains: Clean up some code in pm_genpd_init() and genpd_remove()
+>   PM: domains: Allocate governor data dynamically based on a genpd
+>     governor
+>   PM: domains: Measure power-on/off latencies in genpd based on a
+>     governor
+>   PM: domains: Trust domain-idle-states from DT to be correct by genpd
+>
+>  drivers/base/power/domain.c          | 201 +++++++++++++++++----------
+>  drivers/base/power/domain_governor.c |  65 +++++----
+>  include/linux/pm_domain.h            |  18 ++-
+>  3 files changed, 173 insertions(+), 111 deletions(-)
+>
+> --
 
-Understood, and thanks for doing that.
+All of the changes made by this series make sense to me, so I've
+queued it for 5.19.
 
-For now, let's just declare what we *expect* the spec will say and show
-it to the folks doing the spec itself.  They will then have a chance to
-balk at our interpretation if we got something wrong.
+Thanks!

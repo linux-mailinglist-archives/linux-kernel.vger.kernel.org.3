@@ -2,102 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3488152DDD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAFD52DDDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244576AbiESTbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S244555AbiESTdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244019AbiESTbj (ORCPT
+        with ESMTP id S234946AbiESTdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 15:31:39 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1130334B96
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:31:39 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id l15so4332311ilh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vcIoxyw5IPPQVSw6b4XvGK3gQ1lftBzGtolvV7OQHCI=;
-        b=XfwZiKCo0naqPksy21hJ+p926M2akt6G2FQMprV62tSEF4WEB7GJcV2rSzrEZxUn6L
-         hfpFYHxILyl961Qn4kJYs5UrQI7FdU3C5PHyJ7yD2tgx+IsAoDF+vpUYiUNWgKkMGjdY
-         /XKTUDwIokP6lijS7ew2sEbwYvP17RdL9qFfYjbg3WzeZdC1baCLkxN1YqeKSt1Y1cAf
-         1MBOlnRBiN2XRCguaOa6PH/enSJwIzZVmIE/Hl0WLyitOCPL634MXf5adOc3WAnmsva3
-         LGnys+XcVkEyhOmAVJvoqpqV+vUxFTteJNRGcmA0N9Fp17ghs39PVlccCP9rvzmm/xjb
-         eq5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vcIoxyw5IPPQVSw6b4XvGK3gQ1lftBzGtolvV7OQHCI=;
-        b=67RIZEzVbx/SJN40lTt7c2Dw7dVADsM6/4FsY5lS1PFp/VRAFVzpeGGhZpxAggNRNG
-         k6pNAIJwHmOnsuessP0HG0R+AsfmZRxtq2c0Gfv6cgp+bMRfzttxCpyrZOPVNh+gKd90
-         r4cVTTwgvfSgv5K7plmmaEcTeVgrrRjQ7gFiNY1wTVEwSlcaqe+Kp9ZXu82LCjYmOmuy
-         IjUwPLQEneRFNApdF4t+mqyqcZb5qtenNvjJ0V+IthN1BMrFD0a2abInwgTFu5xluFZk
-         xUTx5cPV9UHIxzGpPIhJP0GmWfnLj+OWvcEU0HfXJf9Fjnev8siJSwDQSI+sW/Xx05DG
-         vrjg==
-X-Gm-Message-State: AOAM532IiNLZ9+m/VGxzAVhBU0/Pn6c59vAVxPvj2jTuWJbVH85oD36d
-        TnxtUA9UJs+Hcx+kR2Bi43Uvrg==
-X-Google-Smtp-Source: ABdhPJy4IsDX3sjvmACMRTE4zhXyBhPcz7HkL+dbzkEYqOVdpy6tg6lSsSg+CBxJP9NxpsKd3MMVHw==
-X-Received: by 2002:a05:6e02:1c22:b0:2d1:87b:c6a3 with SMTP id m2-20020a056e021c2200b002d1087bc6a3mr3678321ilh.184.1652988698427;
-        Thu, 19 May 2022 12:31:38 -0700 (PDT)
-Received: from m1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id y10-20020a05663824ca00b0032e7456da06sm134390jat.15.2022.05.19.12.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 12:31:37 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     tytso@mit.edu, Jason@zx2c4.com
-Cc:     hch@lst.de, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/2] random: wire up fops->splice_read_iter()
-Date:   Thu, 19 May 2022 13:31:33 -0600
-Message-Id: <20220519193133.194138-3-axboe@kernel.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220519193133.194138-1-axboe@kernel.dk>
-References: <20220519193133.194138-1-axboe@kernel.dk>
+        Thu, 19 May 2022 15:33:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 885705930F
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:33:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652988830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZlRs+bfxWYbBbjnLR2rK0SLWkDzLq4+HCX4OhBU9Tww=;
+        b=hYFP7a8nqhhsDjtO8o2QXtSOFGwzcrUnFkRSiE6tBMDMviu2w1RXcfp67DkcqQ/UnRlfUR
+        9GYA8Ga4DdRyljHTmT3NeSEKHn6UkYEJApFPhFl4oiQGosbbuGb+dz4t0dgfOnaOQrB04u
+        ytyI5wbNGZ8QAI/dxgjObObGYkhttYM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-655-zrJHUk78NhaUxtngxbrHzw-1; Thu, 19 May 2022 15:33:45 -0400
+X-MC-Unique: zrJHUk78NhaUxtngxbrHzw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EDFDB29AA2F2;
+        Thu, 19 May 2022 19:33:44 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.18.71])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D46C0400E895;
+        Thu, 19 May 2022 19:33:44 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 85CC52208FA; Thu, 19 May 2022 15:33:44 -0400 (EDT)
+Date:   Thu, 19 May 2022 15:33:44 -0400
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Dharmendra Singh <dharamhans87@gmail.com>,
+        linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>
+Subject: Re: [PATCH v5 0/3] FUSE: Implement atomic lookup + open/create
+Message-ID: <YoabmCQAWpBY5++X@redhat.com>
+References: <20220517100744.26849-1-dharamhans87@gmail.com>
+ <CAJfpegsDxsMsyfP4a_5H1q91xFtwcEdu9-WBnzWKwjUSrPNdmw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegsDxsMsyfP4a_5H1q91xFtwcEdu9-WBnzWKwjUSrPNdmw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that random/urandom is using read_iter, we can wire it up to using
-the generic splice read handler.
+On Thu, May 19, 2022 at 11:39:01AM +0200, Miklos Szeredi wrote:
+> On Tue, 17 May 2022 at 12:08, Dharmendra Singh <dharamhans87@gmail.com> wrote:
+> >
+> > In FUSE, as of now, uncached lookups are expensive over the wire.
+> > E.g additional latencies and stressing (meta data) servers from
+> > thousands of clients. These lookup calls possibly can be avoided
+> > in some cases. Incoming three patches address this issue.
+> >
+> >
+> > Fist patch handles the case where we are creating a file with O_CREAT.
+> > Before we go for file creation, we do a lookup on the file which is most
+> > likely non-existent. After this lookup is done, we again go into libfuse
+> > to create file. Such lookups where file is most likely non-existent, can
+> > be avoided.
+> 
+> I'd really like to see a bit wider picture...
+> 
+> We have several cases, first of all let's look at plain O_CREAT
+> without O_EXCL (assume that there were no changes since the last
+> lookup for simplicity):
 
-Fixes: 36e2c7421f02 ("fs: don't allow splice read/write without explicit ops")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- drivers/char/random.c | 2 ++
- 1 file changed, 2 insertions(+)
+Hi Miklos,
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 529afd31d549..6da8f1441815 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1647,6 +1647,7 @@ const struct file_operations random_fops = {
- 	.compat_ioctl = compat_ptr_ioctl,
- 	.fasync = random_fasync,
- 	.llseek = noop_llseek,
-+	.splice_read = generic_file_splice_read,
- };
- 
- const struct file_operations urandom_fops = {
-@@ -1656,6 +1657,7 @@ const struct file_operations urandom_fops = {
- 	.compat_ioctl = compat_ptr_ioctl,
- 	.fasync = random_fasync,
- 	.llseek = noop_llseek,
-+	.splice_read = generic_file_splice_read,
- };
- 
- 
--- 
-2.35.1
+Thanks for providing this breakup. There are too many cases here and
+this data helps a lot with that. I feel this should really be captured
+in commit logs to show the current paths and how these have been 
+optimized with ATOMIC_OPEN/CREATE_EXT.
+
+> 
+> [not cached, negative]
+>    ->atomic_open()
+>       LOOKUP
+>       CREATE
+> 
+> [not cached, positive]
+>    ->atomic_open()
+>       LOOKUP
+>    ->open()
+>       OPEN
+> 
+> [cached, negative, validity timeout not expired]
+>    ->d_revalidate()
+>       return 1
+>    ->atomic_open()
+>       CREATE
+> 
+> [cached, negative, validity timeout expired]
+>    ->d_revalidate()
+>       return 0
+>    ->atomic_open()
+>       LOOKUP
+>       CREATE
+> 
+> [cached, positive, validity timeout not expired]
+>    ->d_revalidate()
+>       return 1
+>    ->open()
+>       OPEN
+> 
+> [cached, positive, validity timeout expired]
+>    ->d_revalidate()
+>       LOOKUP
+>       return 1
+>    ->open()
+>       OPEN
+> 
+> (Caveat emptor: I'm just looking at the code and haven't actually
+> tested what happens.)
+> 
+> Apparently in all of these cases we are doing at least one request, so
+> it would make sense to make them uniform:
+> 
+> [not cached]
+>    ->atomic_open()
+>       CREATE_EXT
+> 
+> [cached]
+>    ->d_revalidate()
+>       return 0
+
+So fuse_dentry_revalidate() will return 0 even if timeout has not
+expired (if server supports so called atomic_open()).
+And that will lead to calling d_invalidate() on existing positive dentry
+always. IOW, if I am calling open() on a dentry, dentry will always be
+dropped and a new dentry will always be created from ->atomic_open() path,
+is that right.
+
+I am not sure what does it mean from VFS perspective to always call
+d_invalidate() on a cached positive dentry when open() is called. 
+
+/**
+ * d_invalidate - detach submounts, prune dcache, and drop
+ * @dentry: dentry to invalidate (aka detach, prune and drop)
+ */
+
+Thanks
+Vivek
+
+>    ->atomic_open()
+>       CREATE_EXT
+> 
+> Similarly we can look at the current O_CREAT | O_EXCL cases:
+> 
+> [not cached, negative]
+>    ->atomic_open()
+>       LOOKUP
+>       CREATE
+> 
+> [not cached, positive]
+>    ->atomic_open()
+>       LOOKUP
+>    return -EEXIST
+> 
+> [cached, negative]
+>    ->d_revalidate()
+>       return 0 (see LOOKUP_EXCL check)
+>    ->atomic_open()
+>       LOOKUP
+>       CREATE
+> 
+> [cached, positive]
+>    ->d_revalidate()
+>       LOOKUP
+>       return 1
+>    return -EEXIST
+> 
+> Again we are doing at least one request, so we can unconditionally
+> replace them with CREATE_EXT like the non-O_EXCL case.
+> 
+> 
+> >
+> > Second patch handles the case where we open first time a file/dir
+> > but do a lookup first on it. After lookup is performed we make another
+> > call into libfuse to open the file. Now these two separate calls into
+> > libfuse can be combined and performed as a single call into libfuse.
+> 
+> And here's my analysis:
+> 
+> [not cached, negative]
+>    ->lookup()
+>       LOOKUP
+>    return -ENOENT
+> 
+> [not cached, positive]
+>    ->lookup()
+>       LOOKUP
+>    ->open()
+>       OPEN
+> 
+> [cached, negative, validity timeout not expired]
+>     ->d_revalidate()
+>        return 1
+>     return -ENOENT
+> 
+> [cached, negative, validity timeout expired]
+>    ->d_revalidate()
+>       return 0
+>    ->atomic_open()
+>       LOOKUP
+>    return -ENOENT
+> 
+> [cached, positive, validity timeout not expired]
+>    ->d_revalidate()
+>       return 1
+>    ->open()
+>       OPEN
+> 
+> [cached, positive, validity timeout expired]
+>    ->d_revalidate()
+>       LOOKUP
+>       return 1
+>    ->open()
+>       OPEN
+> 
+> There's one case were no request is sent:  a valid cached negative
+> dentry.   Possibly we can also make this uniform, e.g.:
+> 
+> [not cached]
+>    ->atomic_open()
+>        OPEN_ATOMIC
+> 
+> [cached, negative, validity timeout not expired]
+>     ->d_revalidate()
+>        return 1
+>     return -ENOENT
+> 
+> [cached, negative, validity timeout expired]
+>    ->d_revalidate()
+>       return 0
+>    ->atomic_open()
+>       OPEN_ATOMIC
+> 
+> [cached, positive]
+>    ->d_revalidate()
+>       return 0
+>    ->atomic_open()
+>       OPEN_ATOMIC
+> 
+> It may even make the code simpler to clearly separate the cases where
+> the atomic variants are supported and when not.  I'd also consider
+> merging CREATE_EXT into OPEN_ATOMIC, since a filesystem implementing
+> one will highly likely want to implement the other as well.
+> 
+> Thanks,
+> Miklos
+> 
 

@@ -2,316 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F59652DF62
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9274E52DF6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbiESVhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S240722AbiESVkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbiESVhN (ORCPT
+        with ESMTP id S235218AbiESVke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:37:13 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD2091557
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:37:10 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id h14so8961771wrc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:37:10 -0700 (PDT)
+        Thu, 19 May 2022 17:40:34 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5CB939DF
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:40:33 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2fecc57ec14so55993457b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:40:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=igFDCAFACzy80cjdPLTvsGkRZ9A3jnJmOnHPpcNw6AQ=;
-        b=s1mlqyw+LClysKJmtZpaGc1qPFDsJS9FSwdJSWBvaHLArVo9NI6JlQOjP0YABrycaq
-         sg6/8kMOTDxzifc8mPFa1eu53EVYse2GJI5Fju6w2sUldItyEI4eH2VPGqgeM8KKqWRj
-         U3TeiOGqh4PjhUyq6bznY7GRkYgGx/kEOSP+k7lEHXUZl08zK3ubY3e1RA8jyX4mMNcX
-         c1kRuc5O8ZvKtyXkYu7V6TUIrLYkFBKEgx9Vc8hdsRBnv+GPUZgn1Dw1Am64c4v9w7mM
-         aDPlpioBwu0yrimN8byJsbWRvG4GppzJi3ozETdKpoGdEfpHuNpV9ucp9elJ59nsF04v
-         Qq4Q==
+        h=date:message-id:mime-version:subject:from:cc;
+        bh=zuGBAgFMIoOSwoUwGfoJUnP1fJqCzNy1j+Zti0iP+ZM=;
+        b=IHIAjtp3yuP+65qTq0KG8dpflrO1+4q1eQKEYue6Hu5/7/JvfpRpxvQUs5El0hevSE
+         1tuWFQgcd35rB//lFiwc+bfUwqddQK3/kyWp//JoHUCft6UppiI+gEtisDfWD2K1tCxU
+         C/nVZimKPg7Ayt6s6x1QQnk1gQj0TnjPeC17W7FRGQrsa0gEdxwUBn6HaT7bcseJjgUs
+         0Em1Di29bEHCUQ38GVgzZ+ew189o+OpDCp8CgGHwYiHsXFo7t2OFHNUr1IwIV4Wm/4wO
+         Jez9ria/XhLsKZkm+bCWqOfdzNu7twDuBHPKptuhFf8MIpLxMY4K9O35jsZ2yiyWrgwo
+         ah5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=igFDCAFACzy80cjdPLTvsGkRZ9A3jnJmOnHPpcNw6AQ=;
-        b=rQtEjNIIPIaPiVs68q0j8v7f+z9M6pL2vsnMOhS7iMWmgpzXcXaaVw99iVEkocnnEe
-         73JBKLnLiEKE1V+WKl+mZT2JZWaHxXLJnO/3iMNMzHj2O9s1ao4wTrgBFsIethlX+hsj
-         yvO95xeHgqo0132BNowgFCZnWvphc+2Eg9Iiw8M79WL4mgcdnT2AltgSJUloabzv0cIK
-         CpUNkB6/y243vXt7JxiRylUV3OR46RoKgmth0RmJg8LvpcheVtDbCTqVWdwGdh3GH3Lm
-         MSeRF7DdWxlT5N4BRyl9s/rQ0FZD2e/WE45WaRlhWDCQpBmBOUciAe+9HP9AULZ8Rp55
-         bITg==
-X-Gm-Message-State: AOAM5316m5wizy3zwoJqc7CL21o6QlcZOmRzE/nsi/31ECGgkRhEkEle
-        3ZSiuSUgzBGKOK3NBShl/LjWxqsFR8RCx7aXp9LdWmELLBQ=
-X-Google-Smtp-Source: ABdhPJzg+JjwRXfyzA46Pz2YDobsZJTfHllLLU8F9AooZiDCk/r7ROEPbKuFnlvQGUofweecZaN5Go+Adm83c8fzTHg=
-X-Received: by 2002:adf:e70e:0:b0:20e:7523:f01d with SMTP id
- c14-20020adfe70e000000b0020e7523f01dmr1457509wrm.300.1652996228782; Thu, 19
- May 2022 14:37:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220518085502.6914-1-atrajeev@linux.vnet.ibm.com>
- <CAP-5=fWN3Sgyp_hTyYvDrLrnr-7dj6ozERn0tDm5MrU2SEJ2Fg@mail.gmail.com> <4D9BD7B3-1FA0-4EFE-A7D9-75BBB84ED308@linux.vnet.ibm.com>
-In-Reply-To: <4D9BD7B3-1FA0-4EFE-A7D9-75BBB84ED308@linux.vnet.ibm.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 19 May 2022 14:36:56 -0700
-Message-ID: <CAP-5=fURkncicNEs87=QisBJhPkujRUZ51Z1S4A63fz+SXV6rg@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] powerpc/perf: Add support for caps under sysfs in powerpc
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     maddy@linux.vnet.ibm.com,
-        Nageswara Sastry <rnsastry@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>, disgoel@linux.vnet.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
+        bh=zuGBAgFMIoOSwoUwGfoJUnP1fJqCzNy1j+Zti0iP+ZM=;
+        b=BV8h4i2j4HnPVqhgnyXAHzQ1kD9Ndtvn6i6rQ0teIaWoBGEB+c+3eYvtx5smgieHeA
+         FfEgAoOvkvG5o+yIcE5b2cMnj/edNjEMEFYC3w+ljLnBHsOAazABPnfoQJpcO+g+/6j5
+         jVseqKT5jRr0CQuIUC+lXD7H2hbGCXFY85FvOwPzMTSn6qIwcKu0pzyQruKrG2qtc4PK
+         MJaLeiJF89RPO2q631odYLmoXhLB+bYE9pDWimDJP2wQIVYSOm42nVyeHsgx2GknKpFk
+         EQndMyRZzbrcYokPiOV5CPU5V1/y2pAgaA/bfMEOlsP30Ob0Wu4nHjYFL48uhcfwq9Pe
+         u2aQ==
+X-Gm-Message-State: AOAM531bFzEYLn+ksq6xXltFshPP6FO48G0sF4q4PQxGpJdrBOc/NFX4
+        0kiYv7j26WaqCJ2z9Fu/CqmzBW1sg3qqdNP75A==
+X-Google-Smtp-Source: ABdhPJx4D0SEHOAjIttsmn42abQzuazkEeLC6F+ySQrARTkf0sslpCpaOFkHDaCUqhJIC32vG+HNE2dUVJKb6mGqUg==
+X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:f1b:a195:3f95:6a6f])
+ (user=kaleshsingh job=sendgmr) by 2002:a05:6902:120e:b0:634:6f29:6b84 with
+ SMTP id s14-20020a056902120e00b006346f296b84mr6656617ybu.604.1652996432268;
+ Thu, 19 May 2022 14:40:32 -0700 (PDT)
+Date:   Thu, 19 May 2022 14:40:15 -0700
+Message-Id: <20220519214021.3572840-1-kaleshsingh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
+Subject: [RFC PATCH] procfs: Add file path and size to /proc/<pid>/fdinfo
+From:   Kalesh Singh <kaleshsingh@google.com>
+Cc:     ilkos@google.com, tjmercier@google.com, surenb@google.com,
+        kernel-team@android.com, Kalesh Singh <kaleshsingh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Colin Cross <ccross@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 4:29 AM Athira Rajeev
-<atrajeev@linux.vnet.ibm.com> wrote:
->
-> > On 19-May-2022, at 10:12 AM, Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Wed, May 18, 2022 at 1:55 AM Athira Rajeev
-> > <atrajeev@linux.vnet.ibm.com> wrote:
-> >>
-> >> Add caps support under "/sys/bus/event_source/devices/<pmu>/"
-> >> for powerpc. This directory can be used to expose some of the
-> >> specific features that powerpc PMU supports to the user.
-> >> Example: pmu_name. The name of PMU registered will depend on
-> >> platform, say power9 or power10 or it could be Generic Compat
-> >> PMU.
-> >>
-> >> Currently the only way to know which is the registered
-> >> PMU is from the dmesg logs. But clearing the dmesg will make it
-> >> difficult to know exact PMU backend used. And even extracting
-> >> from dmesg will be complicated, as we need  to parse the dmesg
-> >> logs and add filters for pmu name. Whereas by exposing it via
-> >> caps will make it easy as we just need to directly read it from
-> >> the sysfs.
-> >
-> > For ARM and x86 in the perf tool this is normally done through a cpuid
-> > like function, is there a reason to differ on Power?
-> >
-> > Thanks,
-> > Ian
->
-> Hi Ian,
->
-> Thanks for review. The information from cpuid or cpuinfo will provide
-> us the information of the platform/model/machine etc. In case of powerpc,
-> we have one case where, though platform points to specific generation of the
-> processor, say power9 or power10, the registered PMU could point to
-> different one. To be specific, this is named as Generic Compat PMU which
-> is a fallback PMU. This gets registered when the distro doesn't have support
-> for platform specific PMU. In that case distro will have a Generic
-> Compat PMU registered which supports basic features for performance monitoring.
-> This information can't be fetched from the cpuid data since that will point
-> to current platform.
->
-> So the pmu_name exposed via "caps" will be useful to detect the PMU
-> registered and also we target to use this information in some of our
-> selftests.
+Processes can pin shared memory by keeping a handle to it through a
+file descriptor; for instance dmabufs, memfd, and ashsmem (in Android).
 
-Thanks, I've no problem with the change. Do we need to do a similar
-discovery in the perf tool on old kernels? Perhaps then this
-information could be exposed in the perf list command for self tests.
+In the case of a memory leak, to identify the process pinning the
+memory, userspace needs to:
+  - Iterate the /proc/<pid>/fd/* for each process
+  - Do a readlink on each entry to identify the type of memory from
+    the file path.
+  - stat() each entry to get the size of the memory.
 
-Thanks,
-Ian
+The file permissions on /proc/<pid>/fd/* only allows for the owner
+or root to perform the operations above; and so is not suitable for
+capturing the system-wide state in a production environment.
 
-> Thanks
-> Athira
-> >
-> >> Add a caps directory to /sys/bus/event_source/devices/cpu/
-> >> for power8, power9, power10 and generic compat PMU in respective
-> >> PMU driver code. Update the pmu_name file under caps folder
-> >> in core-book3s using "attr_update".
-> >>
-> >> The information exposed currently:
-> >> - pmu_name : Underlying PMU name from the driver
-> >>
-> >> Example result with power9 pmu:
-> >>
-> >> # ls /sys/bus/event_source/devices/cpu/caps
-> >> pmu_name
-> >>
-> >> # cat /sys/bus/event_source/devices/cpu/caps/pmu_name
-> >> POWER9
-> >>
-> >> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-> >> ---
-> >> Changelog:
-> >> v1 -> v2:
-> >> Move the show function as generic in core-book3s
-> >> and update show function using sysfs_emit and ppmu->name
-> >> Added Documention for this ABI in patch 2.
-> >> Notes: The caps directory is implemented in PMU for other
-> >> architectures already. Reference commit for x86:
-> >> commit b00233b53065 ("perf/x86: Export some PMU attributes in caps/ directory")
-> >>
-> >> arch/powerpc/perf/core-book3s.c        | 31 ++++++++++++++++++++++++++
-> >> arch/powerpc/perf/generic-compat-pmu.c | 10 +++++++++
-> >> arch/powerpc/perf/power10-pmu.c        | 10 +++++++++
-> >> arch/powerpc/perf/power8-pmu.c         | 10 +++++++++
-> >> arch/powerpc/perf/power9-pmu.c         | 10 +++++++++
-> >> 5 files changed, 71 insertions(+)
-> >>
-> >> diff --git a/arch/powerpc/perf/core-book3s.c b/arch/powerpc/perf/core-book3s.c
-> >> index b5b42cf0a703..a208f502a80b 100644
-> >> --- a/arch/powerpc/perf/core-book3s.c
-> >> +++ b/arch/powerpc/perf/core-book3s.c
-> >> @@ -2488,6 +2488,33 @@ static int power_pmu_prepare_cpu(unsigned int cpu)
-> >>       return 0;
-> >> }
-> >>
-> >> +static ssize_t pmu_name_show(struct device *cdev,
-> >> +               struct device_attribute *attr,
-> >> +               char *buf)
-> >> +{
-> >> +       if (ppmu)
-> >> +               return sysfs_emit(buf, "%s\n", ppmu->name);
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static DEVICE_ATTR_RO(pmu_name);
-> >> +
-> >> +static struct attribute *pmu_caps_attrs[] = {
-> >> +       &dev_attr_pmu_name.attr,
-> >> +       NULL
-> >> +};
-> >> +
-> >> +static const struct attribute_group pmu_caps_group = {
-> >> +       .name  = "caps",
-> >> +       .attrs = pmu_caps_attrs,
-> >> +};
-> >> +
-> >> +static const struct attribute_group *pmu_caps_groups[] = {
-> >> +       &pmu_caps_group,
-> >> +       NULL,
-> >> +};
-> >> +
-> >> int __init register_power_pmu(struct power_pmu *pmu)
-> >> {
-> >>       if (ppmu)
-> >> @@ -2498,6 +2525,10 @@ int __init register_power_pmu(struct power_pmu *pmu)
-> >>               pmu->name);
-> >>
-> >>       power_pmu.attr_groups = ppmu->attr_groups;
-> >> +
-> >> +       if (ppmu->flags & PPMU_ARCH_207S)
-> >> +               power_pmu.attr_update = pmu_caps_groups;
-> >> +
-> >>       power_pmu.capabilities |= (ppmu->capabilities & PERF_PMU_CAP_EXTENDED_REGS);
-> >>
-> >> #ifdef MSR_HV
-> >> diff --git a/arch/powerpc/perf/generic-compat-pmu.c b/arch/powerpc/perf/generic-compat-pmu.c
-> >> index f3db88aee4dd..817c69863038 100644
-> >> --- a/arch/powerpc/perf/generic-compat-pmu.c
-> >> +++ b/arch/powerpc/perf/generic-compat-pmu.c
-> >> @@ -151,9 +151,19 @@ static const struct attribute_group generic_compat_pmu_format_group = {
-> >>       .attrs = generic_compat_pmu_format_attr,
-> >> };
-> >>
-> >> +static struct attribute *generic_compat_pmu_caps_attrs[] = {
-> >> +       NULL
-> >> +};
-> >> +
-> >> +static struct attribute_group generic_compat_pmu_caps_group = {
-> >> +       .name  = "caps",
-> >> +       .attrs = generic_compat_pmu_caps_attrs,
-> >> +};
-> >> +
-> >> static const struct attribute_group *generic_compat_pmu_attr_groups[] = {
-> >>       &generic_compat_pmu_format_group,
-> >>       &generic_compat_pmu_events_group,
-> >> +       &generic_compat_pmu_caps_group,
-> >>       NULL,
-> >> };
-> >>
-> >> diff --git a/arch/powerpc/perf/power10-pmu.c b/arch/powerpc/perf/power10-pmu.c
-> >> index c6d51e7093cf..d1adcd9f52e2 100644
-> >> --- a/arch/powerpc/perf/power10-pmu.c
-> >> +++ b/arch/powerpc/perf/power10-pmu.c
-> >> @@ -258,6 +258,15 @@ static const struct attribute_group power10_pmu_format_group = {
-> >>       .attrs = power10_pmu_format_attr,
-> >> };
-> >>
-> >> +static struct attribute *power10_pmu_caps_attrs[] = {
-> >> +       NULL
-> >> +};
-> >> +
-> >> +static struct attribute_group power10_pmu_caps_group = {
-> >> +       .name  = "caps",
-> >> +       .attrs = power10_pmu_caps_attrs,
-> >> +};
-> >> +
-> >> static const struct attribute_group *power10_pmu_attr_groups_dd1[] = {
-> >>       &power10_pmu_format_group,
-> >>       &power10_pmu_events_group_dd1,
-> >> @@ -267,6 +276,7 @@ static const struct attribute_group *power10_pmu_attr_groups_dd1[] = {
-> >> static const struct attribute_group *power10_pmu_attr_groups[] = {
-> >>       &power10_pmu_format_group,
-> >>       &power10_pmu_events_group,
-> >> +       &power10_pmu_caps_group,
-> >>       NULL,
-> >> };
-> >>
-> >> diff --git a/arch/powerpc/perf/power8-pmu.c b/arch/powerpc/perf/power8-pmu.c
-> >> index e37b1e714d2b..2518f5375d4a 100644
-> >> --- a/arch/powerpc/perf/power8-pmu.c
-> >> +++ b/arch/powerpc/perf/power8-pmu.c
-> >> @@ -187,9 +187,19 @@ static const struct attribute_group power8_pmu_events_group = {
-> >>       .attrs = power8_events_attr,
-> >> };
-> >>
-> >> +static struct attribute *power8_pmu_caps_attrs[] = {
-> >> +       NULL
-> >> +};
-> >> +
-> >> +static struct attribute_group power8_pmu_caps_group = {
-> >> +       .name  = "caps",
-> >> +       .attrs = power8_pmu_caps_attrs,
-> >> +};
-> >> +
-> >> static const struct attribute_group *power8_pmu_attr_groups[] = {
-> >>       &isa207_pmu_format_group,
-> >>       &power8_pmu_events_group,
-> >> +       &power8_pmu_caps_group,
-> >>       NULL,
-> >> };
-> >>
-> >> diff --git a/arch/powerpc/perf/power9-pmu.c b/arch/powerpc/perf/power9-pmu.c
-> >> index c393e837648e..5c654ce1a417 100644
-> >> --- a/arch/powerpc/perf/power9-pmu.c
-> >> +++ b/arch/powerpc/perf/power9-pmu.c
-> >> @@ -258,9 +258,19 @@ static const struct attribute_group power9_pmu_format_group = {
-> >>       .attrs = power9_pmu_format_attr,
-> >> };
-> >>
-> >> +static struct attribute *power9_pmu_caps_attrs[] = {
-> >> +       NULL
-> >> +};
-> >> +
-> >> +static struct attribute_group power9_pmu_caps_group = {
-> >> +       .name  = "caps",
-> >> +       .attrs = power9_pmu_caps_attrs,
-> >> +};
-> >> +
-> >> static const struct attribute_group *power9_pmu_attr_groups[] = {
-> >>       &power9_pmu_format_group,
-> >>       &power9_pmu_events_group,
-> >> +       &power9_pmu_caps_group,
-> >>       NULL,
-> >> };
-> >>
-> >> --
-> >> 2.31.1
->
+This issue was addressed for dmabufs by making /proc/*/fdinfo/*
+accessible to a process with PTRACE_MODE_READ_FSCREDS credentials[1]
+To allow the same kind of tracking for other types of shared memory,
+add the following fields to /proc/<pid>/fdinfo/<fd>:
+
+path - This allows identifying the type of memory based on common
+       prefixes: e.g. "/memfd...", "/dmabuf...", "/dev/ashmem..."
+
+       This was not an issued when dmabuf tracking was introduced
+       because the exp_name field of dmabuf fdinfo could be used
+       to distinguish dmabuf fds from other types.
+
+size - To track the amount of memory that is being pinned.
+
+       dmabufs expose size as an additional field in fdinfo. Remove
+       this and make it a common field for all fds.
+
+Access to /proc/<pid>/fdinfo is governed by PTRACE_MODE_READ_FSCREDS
+-- the same as for /proc/<pid>/maps which also exposes the path and
+size for mapped memory regions.
+
+This allows for a system process with PTRACE_MODE_READ_FSCREDS to
+account the pinned per-process memory via fdinfo.
+
+[1] https://lore.kernel.org/lkml/20210308170651.919148-1-kaleshsingh@google.com/
+
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+---
+ Documentation/filesystems/proc.rst | 22 ++++++++++++++++++++--
+ drivers/dma-buf/dma-buf.c          |  1 -
+ fs/proc/fd.c                       |  9 +++++++--
+ 3 files changed, 27 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 061744c436d9..ad66d78aca51 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -1922,13 +1922,16 @@ if precise results are needed.
+ 3.8	/proc/<pid>/fdinfo/<fd> - Information about opened file
+ ---------------------------------------------------------------
+ This file provides information associated with an opened file. The regular
+-files have at least four fields -- 'pos', 'flags', 'mnt_id' and 'ino'.
++files have at least six fields -- 'pos', 'flags', 'mnt_id', 'ino', 'size',
++and 'path'.
++
+ The 'pos' represents the current offset of the opened file in decimal
+ form [see lseek(2) for details], 'flags' denotes the octal O_xxx mask the
+ file has been created with [see open(2) for details] and 'mnt_id' represents
+ mount ID of the file system containing the opened file [see 3.5
+ /proc/<pid>/mountinfo for details]. 'ino' represents the inode number of
+-the file.
++the file, 'size' represents the size of the file in bytes, and 'path'
++represents the file path.
+ 
+ A typical output is::
+ 
+@@ -1936,6 +1939,8 @@ A typical output is::
+ 	flags:	0100002
+ 	mnt_id:	19
+ 	ino:	63107
++        size:   0
++        path:   /dev/null
+ 
+ All locks associated with a file descriptor are shown in its fdinfo too::
+ 
+@@ -1953,6 +1958,8 @@ Eventfd files
+ 	flags:	04002
+ 	mnt_id:	9
+ 	ino:	63107
++        size:   0
++        path:   anon_inode:[eventfd]
+ 	eventfd-count:	5a
+ 
+ where 'eventfd-count' is hex value of a counter.
+@@ -1966,6 +1973,8 @@ Signalfd files
+ 	flags:	04002
+ 	mnt_id:	9
+ 	ino:	63107
++        size:   0
++        path:   anon_inode:[signalfd]
+ 	sigmask:	0000000000000200
+ 
+ where 'sigmask' is hex value of the signal mask associated
+@@ -1980,6 +1989,8 @@ Epoll files
+ 	flags:	02
+ 	mnt_id:	9
+ 	ino:	63107
++        size:   0
++        path:   anon_inode:[eventpoll]
+ 	tfd:        5 events:       1d data: ffffffffffffffff pos:0 ino:61af sdev:7
+ 
+ where 'tfd' is a target file descriptor number in decimal form,
+@@ -1998,6 +2009,8 @@ For inotify files the format is the following::
+ 	flags:	02000000
+ 	mnt_id:	9
+ 	ino:	63107
++        size:   0
++        path:   anon_inode:inotify
+ 	inotify wd:3 ino:9e7e sdev:800013 mask:800afce ignored_mask:0 fhandle-bytes:8 fhandle-type:1 f_handle:7e9e0000640d1b6d
+ 
+ where 'wd' is a watch descriptor in decimal form, i.e. a target file
+@@ -2021,6 +2034,8 @@ For fanotify files the format is::
+ 	flags:	02
+ 	mnt_id:	9
+ 	ino:	63107
++        size:   0
++        path:   anon_inode:[fanotify]
+ 	fanotify flags:10 event-flags:0
+ 	fanotify mnt_id:12 mflags:40 mask:38 ignored_mask:40000003
+ 	fanotify ino:4f969 sdev:800013 mflags:0 mask:3b ignored_mask:40000000 fhandle-bytes:8 fhandle-type:1 f_handle:69f90400c275b5b4
+@@ -2046,6 +2061,8 @@ Timerfd files
+ 	flags:	02
+ 	mnt_id:	9
+ 	ino:	63107
++        size:   0
++        path:   anon_inode:[timerfd]
+ 	clockid: 0
+ 	ticks: 0
+ 	settime flags: 01
+@@ -2070,6 +2087,7 @@ DMA Buffer files
+ 	mnt_id:	9
+ 	ino:	63107
+ 	size:   32768
++        path:   /dmabuf:
+ 	count:  2
+ 	exp_name:  system-heap
+ 
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index b1e25ae98302..d61183ff3c30 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -377,7 +377,6 @@ static void dma_buf_show_fdinfo(struct seq_file *m, struct file *file)
+ {
+ 	struct dma_buf *dmabuf = file->private_data;
+ 
+-	seq_printf(m, "size:\t%zu\n", dmabuf->size);
+ 	/* Don't count the temporary reference taken inside procfs seq_show */
+ 	seq_printf(m, "count:\t%ld\n", file_count(dmabuf->file) - 1);
+ 	seq_printf(m, "exp_name:\t%s\n", dmabuf->exp_name);
+diff --git a/fs/proc/fd.c b/fs/proc/fd.c
+index 913bef0d2a36..a8a968bc58f0 100644
+--- a/fs/proc/fd.c
++++ b/fs/proc/fd.c
+@@ -54,10 +54,15 @@ static int seq_show(struct seq_file *m, void *v)
+ 	if (ret)
+ 		return ret;
+ 
+-	seq_printf(m, "pos:\t%lli\nflags:\t0%o\nmnt_id:\t%i\nino:\t%lu\n",
++	seq_printf(m, "pos:\t%lli\nflags:\t0%o\nmnt_id:\t%i\nino:\t%lu\nsize:\t%zu\n",
+ 		   (long long)file->f_pos, f_flags,
+ 		   real_mount(file->f_path.mnt)->mnt_id,
+-		   file_inode(file)->i_ino);
++		   file_inode(file)->i_ino,
++		   file_inode(file)->i_size);
++
++	seq_puts(m, "path:\t");
++	seq_file_path(m, file, "\n");
++	seq_putc(m, '\n');
+ 
+ 	/* show_fd_locks() never deferences files so a stale value is safe */
+ 	show_fd_locks(m, file, files);
+
+base-commit: b015dcd62b86d298829990f8261d5d154b8d7af5
+-- 
+2.36.1.124.g0e6072fb45-goog
+

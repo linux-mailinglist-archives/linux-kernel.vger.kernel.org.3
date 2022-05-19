@@ -2,239 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A854A52DF9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D600D52DFA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245322AbiESVz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
+        id S235432AbiESV5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243496AbiESVzx (ORCPT
+        with ESMTP id S233223AbiESV5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:55:53 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62385E93
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652997350; x=1684533350;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=2ab3id/8iPR+n/7YC89vmcdwcxlBU+vbcz1+L5Pls1c=;
-  b=Vz6AXPzC41n8MrUsktfdIhpC87XFgYB42+tQJ398f9PYvKsO9LROMZS0
-   ytdvH/AAyzu6JwaNI7drg7+HolzphITVjPDCrqJm/gAKtyYwNvhq8yAFG
-   p5PnUai4s7nKkpiIewTBhAYAIg98v7smzWguq+D4n/sburBMn9i6ZdsAw
-   OQjxB8KEIKTdd7CPC8NWFN0lgNwp4Irpdtklb7bsZ9LGmpHNVN4FY7oeM
-   YhS9uvtIEvu85EVlF5efDUlYY1QeqU1QQrkh3tNYKM6EZ2bi+FomzIty2
-   9ZfvOkKE/e/lW+I0sPQac9Qs/JrhjcbQ3cZObDJFLAmhxEAlhKfj6zJC7
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272091893"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272091893"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:55:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="661929366"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 May 2022 14:55:37 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nro7M-0003yv-HI;
-        Thu, 19 May 2022 21:55:36 +0000
-Date:   Fri, 20 May 2022 05:55:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/sev] BUILD SUCCESS
- 47f33de4aafb2f5e43d480d590a939d0f1d566a9
-Message-ID: <6286bcd1.zXDun8TZ2tyouoFC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 19 May 2022 17:57:03 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F60338A5;
+        Thu, 19 May 2022 14:57:01 -0700 (PDT)
+Date:   Thu, 19 May 2022 21:56:59 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652997420;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xdWuXze9gcxL84bfrGVJBQzWPBrU68xlmX5mr1x0iSs=;
+        b=bZP5qKSBWuUco8qx2FX96jMkP5AFp4uqJr6bhr1C6MUYPY6sF9Hxc4kXViTNIraWAnR1qn
+        sNYBd+WS9ua9NCoN4R6g7Ib6jA4fmMj6RZI4up0K1fsSwJkUlzMWfML1KktGJg5VhQ6BTk
+        pLcdrOIW8aGr3q+Jn2GSW8Xx9olMrX8blYW7e1kuWgsiYujKAXCoNGmKvOuYK7z7Ar3xeQ
+        b3seeTKrUUwYGepWVPYBLt8wt1wOo6xkAHVpOAOAg6nMhu7rnY2w0zSfk2QdWauvz7wjen
+        M5PAuoqPT1Q6w0Jha8pQ1Pn4FORPreO84IRLBaklDVEklaX9weD/rKCB2fJKHw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652997420;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xdWuXze9gcxL84bfrGVJBQzWPBrU68xlmX5mr1x0iSs=;
+        b=/c4IOQQQ4/qMaUlrUypLvick6pgDEU+lyQP0QFjv3zrJAmtFLsAri33jE6rL7qIKTmvn2c
+        SzzV40s31wd45tCg==
+From:   "tip-bot2 for Sandipan Das" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf/x86/amd/core: Fix reloading events for SVM
+Cc:     Like Xu <likexu@tencent.com>, Sandipan Das <sandipan.das@amd.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220518084327.464005-1-sandipan.das@amd.com>
+References: <20220518084327.464005-1-sandipan.das@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Message-ID: <165299741919.4207.12319617114014672063.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sev
-branch HEAD: 47f33de4aafb2f5e43d480d590a939d0f1d566a9  x86/sev: Mark the code returning to user space as syscall gap
+The following commit has been merged into the perf/core branch of tip:
 
-elapsed time: 720m
+Commit-ID:     bae19fdd7e9e759580ac4693d2df3bc23ab415d7
+Gitweb:        https://git.kernel.org/tip/bae19fdd7e9e759580ac4693d2df3bc23ab415d7
+Author:        Sandipan Das <sandipan.das@amd.com>
+AuthorDate:    Wed, 18 May 2022 14:13:27 +05:30
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Thu, 19 May 2022 23:46:14 +02:00
 
-configs tested: 154
-configs skipped: 4
+perf/x86/amd/core: Fix reloading events for SVM
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Commit 1018faa6cf23 ("perf/x86/kvm: Fix Host-Only/Guest-Only
+counting with SVM disabled") addresses an issue in which the
+Host-Only bit in the counter control registers needs to be
+masked off when SVM is not enabled.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-m68k                          hp300_defconfig
-m68k                             alldefconfig
-openrisc                 simple_smp_defconfig
-sh                         microdev_defconfig
-xtensa                generic_kc705_defconfig
-sh                           se7724_defconfig
-powerpc                     rainier_defconfig
-m68k                            mac_defconfig
-sh                        sh7785lcr_defconfig
-m68k                           sun3_defconfig
-mips                         bigsur_defconfig
-xtensa                    smp_lx200_defconfig
-powerpc                     mpc83xx_defconfig
-riscv                               defconfig
-mips                           ci20_defconfig
-x86_64                              defconfig
-xtensa                          iss_defconfig
-sh                           se7705_defconfig
-powerpc                      pcm030_defconfig
-sh                   sh7770_generic_defconfig
-h8300                    h8300h-sim_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                     sequoia_defconfig
-riscv                            allyesconfig
-arm                      jornada720_defconfig
-arm                        realview_defconfig
-ia64                      gensparse_defconfig
-xtensa                       common_defconfig
-powerpc64                           defconfig
-mips                       capcella_defconfig
-powerpc                 linkstation_defconfig
-powerpc                        warp_defconfig
-h8300                            allyesconfig
-sh                   secureedge5410_defconfig
-sh                            shmin_defconfig
-mips                  decstation_64_defconfig
-m68k                        stmark2_defconfig
-sh                          landisk_defconfig
-sh                           se7343_defconfig
-sh                            migor_defconfig
-nios2                            alldefconfig
-arm                        mini2440_defconfig
-arc                            hsdk_defconfig
-mips                    maltaup_xpa_defconfig
-arc                      axs103_smp_defconfig
-xtensa                         virt_defconfig
-arm                        keystone_defconfig
-parisc64                            defconfig
-powerpc                      arches_defconfig
-m68k                          sun3x_defconfig
-mips                           gcw0_defconfig
-mips                         mpc30x_defconfig
-parisc                           alldefconfig
-mips                         rt305x_defconfig
-sh                   rts7751r2dplus_defconfig
-sh                          urquell_defconfig
-ia64                         bigsur_defconfig
-arc                         haps_hs_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220519
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-riscv                             allnoconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                                  kexec
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
+The events need to be reloaded whenever SVM is enabled or
+disabled for a CPU and this requires the PERF_CTL registers
+to be reprogrammed using {enable,disable}_all(). However,
+PerfMonV2 variants of these functions do not reprogram the
+PERF_CTL registers. Hence, the legacy enable_all() function
+should also be called.
 
-clang tested configs:
-powerpc              randconfig-c003-20220519
-x86_64                        randconfig-c007
-riscv                randconfig-c006-20220519
-mips                 randconfig-c004-20220519
-i386                          randconfig-c001
-arm                  randconfig-c002-20220519
-s390                 randconfig-c005-20220519
-powerpc                          g5_defconfig
-hexagon                             defconfig
-mips                     loongson2k_defconfig
-arm                          pxa168_defconfig
-mips                      pic32mzda_defconfig
-mips                malta_qemu_32r6_defconfig
-mips                  cavium_octeon_defconfig
-riscv                          rv32_defconfig
-powerpc                     akebono_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                 mpc836x_rdk_defconfig
-arm                         shannon_defconfig
-powerpc                       ebony_defconfig
-powerpc                 mpc8272_ads_defconfig
-powerpc                     tqm8540_defconfig
-arm                         palmz72_defconfig
-mips                            e55_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20220519
-riscv                randconfig-r042-20220519
-hexagon              randconfig-r041-20220519
-s390                 randconfig-r044-20220519
+Fixes: 9622e67e3980 ("perf/x86/amd/core: Add PerfMonV2 counter control")
+Reported-by: Like Xu <likexu@tencent.com>
+Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220518084327.464005-1-sandipan.das@amd.com
+---
+ arch/x86/events/amd/core.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index 3eee59c..9ac3718 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -1472,6 +1472,24 @@ __init int amd_pmu_init(void)
+ 	return 0;
+ }
+ 
++static inline void amd_pmu_reload_virt(void)
++{
++	if (x86_pmu.version >= 2) {
++		/*
++		 * Clear global enable bits, reprogram the PERF_CTL
++		 * registers with updated perf_ctr_virt_mask and then
++		 * set global enable bits once again
++		 */
++		amd_pmu_v2_disable_all();
++		amd_pmu_enable_all(0);
++		amd_pmu_v2_enable_all(0);
++		return;
++	}
++
++	amd_pmu_disable_all();
++	amd_pmu_enable_all(0);
++}
++
+ void amd_pmu_enable_virt(void)
+ {
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+@@ -1479,8 +1497,7 @@ void amd_pmu_enable_virt(void)
+ 	cpuc->perf_ctr_virt_mask = 0;
+ 
+ 	/* Reload all events */
+-	amd_pmu_disable_all();
+-	x86_pmu_enable_all(0);
++	amd_pmu_reload_virt();
+ }
+ EXPORT_SYMBOL_GPL(amd_pmu_enable_virt);
+ 
+@@ -1497,7 +1514,6 @@ void amd_pmu_disable_virt(void)
+ 	cpuc->perf_ctr_virt_mask = AMD64_EVENTSEL_HOSTONLY;
+ 
+ 	/* Reload all events */
+-	amd_pmu_disable_all();
+-	x86_pmu_enable_all(0);
++	amd_pmu_reload_virt();
+ }
+ EXPORT_SYMBOL_GPL(amd_pmu_disable_virt);

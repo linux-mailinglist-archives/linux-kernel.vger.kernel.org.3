@@ -2,116 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E9A52C9F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE2A52C9FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiESDB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 23:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S231660AbiESDGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 23:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiESDBZ (ORCPT
+        with ESMTP id S233048AbiESDGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 23:01:25 -0400
+        Wed, 18 May 2022 23:06:07 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8825F25286;
-        Wed, 18 May 2022 20:01:22 -0700 (PDT)
-Received: from kwepemi100015.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3ZNr3Q4TzhZDS;
-        Thu, 19 May 2022 11:00:44 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100015.china.huawei.com (7.221.188.125) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A523CA76
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:06:03 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3ZTL6WvgzgY8t;
+        Thu, 19 May 2022 11:04:38 +0800 (CST)
+Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 11:01:20 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 11:01:20 +0800
-Subject: Re: [PATCH -next v2 2/2] blk-throttle: fix io hung due to
- configuration updates
-From:   "yukuai (C)" <yukuai3@huawei.com>
-To:     kernel test robot <lkp@intel.com>, <tj@kernel.org>,
-        <axboe@kernel.dk>, <ming.lei@redhat.com>
-CC:     <kbuild-all@lists.01.org>, <cgroups@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20220518072751.1188163-3-yukuai3@huawei.com>
- <202205182347.tMOOqyfL-lkp@intel.com>
- <84fe296e-6e56-3ca9-73a8-357beb675c6e@huawei.com>
-Message-ID: <3d6878f4-1902-633d-0af2-276831364a4f@huawei.com>
-Date:   Thu, 19 May 2022 11:01:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ 15.1.2375.24; Thu, 19 May 2022 11:06:01 +0800
+Received: from huawei.com (10.67.175.41) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
+ 2022 11:06:01 +0800
+From:   Yipeng Zou <zouyipeng@huawei.com>
+To:     <jani.nikula@linux.intel.com>, <joonas.lahtinen@linux.intel.com>,
+        <rodrigo.vivi@intel.com>, <tvrtko.ursulin@linux.intel.com>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <alan.previn.teres.alexis@intel.com>, <vinay.belgaumkar@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <zouyipeng@huawei.com>
+Subject: [PATCH -next] drm/i915: Fix some integer constant macro to unsigned type
+Date:   Thu, 19 May 2022 11:04:23 +0800
+Message-ID: <20220519030423.169981-1-zouyipeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <84fe296e-6e56-3ca9-73a8-357beb675c6e@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600009.china.huawei.com (7.193.23.164)
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.41]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/05/19 10:11, yukuai (C) 写道:
-> 
-> 
-> 在 2022/05/18 23:52, kernel test robot 写道:
->> Hi Yu,
->>
->> Thank you for the patch! Yet something to improve:
->>
->> [auto build test ERROR on next-20220517]
->>
->> url:    
->> https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/bugfix-for-blk-throttle/20220518-151713 
->>
->> base:    47c1c54d1bcd0a69a56b49473bc20f17b70e5242
->> config: m68k-allyesconfig 
->> (https://download.01.org/0day-ci/archive/20220518/202205182347.tMOOqyfL-lkp@intel.com/config) 
->>
->> compiler: m68k-linux-gcc (GCC) 11.3.0
->> reproduce (this is a W=1 build):
->>          wget 
->> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
->> -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # 
->> https://github.com/intel-lab-lkp/linux/commit/f8345dbaf4ed491742aab29834aff66b4930c087 
->>
->>          git remote add linux-review 
->> https://github.com/intel-lab-lkp/linux
->>          git fetch --no-tags linux-review 
->> Yu-Kuai/bugfix-for-blk-throttle/20220518-151713
->>          git checkout f8345dbaf4ed491742aab29834aff66b4930c087
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 
->> make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>     m68k-linux-ld: block/blk-throttle.o: in function `tg_conf_updated':
->>>> blk-throttle.c:(.text+0x25bc): undefined reference to `__udivdi3'
->>>> m68k-linux-ld: blk-throttle.c:(.text+0x2626): undefined reference to 
->>>> `__udivdi3'
-> Hi,
-> 
-> I'm confused here, the only place that I can relate to this:
-> 
->      return dispatched * new_limit / old_limit;
-> 
-I understand it now. I'm doing (u64 / u64), I should use div64_u64
-> However, I don't understand yet why this is problematic...
->>     `.exit.text' referenced in section `.data' of 
->> sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section 
->> `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
->>
+Build Kernel with gcc 7.5.0 or older, will get some error message:
+
+drivers/gpu/drm/i915/display/intel_ddi.c:1915:2: error: case label does not reduce to an integer constant
+  case PORT_CLK_SEL_WRPLL1:
+  ^~~~
+......
+
+Look here : https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic
+for the details why it happends.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
+---
+ drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h |  4 ++--
+ .../i915/gt/uc/abi/guc_communication_ctb_abi.h   |  6 +++---
+ .../gpu/drm/i915/gt/uc/abi/guc_messages_abi.h    | 14 +++++++-------
+ drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h       | 12 ++++++------
+ drivers/gpu/drm/i915/i915_reg.h                  | 16 ++++++++--------
+ 5 files changed, 26 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
+index be9ac47fa9d0..cb16fd0ba8dd 100644
+--- a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
++++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
+@@ -50,8 +50,8 @@
+ 
+ #define HOST2GUC_SELF_CFG_REQUEST_MSG_LEN		(GUC_HXG_REQUEST_MSG_MIN_LEN + 3u)
+ #define HOST2GUC_SELF_CFG_REQUEST_MSG_0_MBZ		GUC_HXG_REQUEST_MSG_0_DATA0
+-#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_KEY		(0xffff << 16)
+-#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_LEN		(0xffff << 0)
++#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_KEY		(0xffffu << 16)
++#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_LEN		(0xffffu << 0)
+ #define HOST2GUC_SELF_CFG_REQUEST_MSG_2_VALUE32		GUC_HXG_REQUEST_MSG_n_DATAn
+ #define HOST2GUC_SELF_CFG_REQUEST_MSG_3_VALUE64		GUC_HXG_REQUEST_MSG_n_DATAn
+ 
+diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
+index c9086a600bce..e5c782283309 100644
+--- a/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
++++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
+@@ -82,11 +82,11 @@ static_assert(sizeof(struct guc_ct_buffer_desc) == 64);
+ #define GUC_CTB_HDR_LEN				1u
+ #define GUC_CTB_MSG_MIN_LEN			GUC_CTB_HDR_LEN
+ #define GUC_CTB_MSG_MAX_LEN			256u
+-#define GUC_CTB_MSG_0_FENCE			(0xffff << 16)
+-#define GUC_CTB_MSG_0_FORMAT			(0xf << 12)
++#define GUC_CTB_MSG_0_FENCE			(0xffffu << 16)
++#define GUC_CTB_MSG_0_FORMAT			(0xfu << 12)
+ #define   GUC_CTB_FORMAT_HXG			0u
+ #define GUC_CTB_MSG_0_RESERVED			(0xf << 8)
+-#define GUC_CTB_MSG_0_NUM_DWORDS		(0xff << 0)
++#define GUC_CTB_MSG_0_NUM_DWORDS		(0xffu << 0)
+ 
+ /**
+  * DOC: CTB HXG Message
+diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
+index 29ac823acd4c..30e3cc06b0b7 100644
+--- a/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
++++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
+@@ -40,17 +40,17 @@
+  */
+ 
+ #define GUC_HXG_MSG_MIN_LEN			1u
+-#define GUC_HXG_MSG_0_ORIGIN			(0x1 << 31)
++#define GUC_HXG_MSG_0_ORIGIN			(0x1u << 31)
+ #define   GUC_HXG_ORIGIN_HOST			0u
+ #define   GUC_HXG_ORIGIN_GUC			1u
+-#define GUC_HXG_MSG_0_TYPE			(0x7 << 28)
++#define GUC_HXG_MSG_0_TYPE			(0x7u << 28)
+ #define   GUC_HXG_TYPE_REQUEST			0u
+ #define   GUC_HXG_TYPE_EVENT			1u
+ #define   GUC_HXG_TYPE_NO_RESPONSE_BUSY		3u
+ #define   GUC_HXG_TYPE_NO_RESPONSE_RETRY	5u
+ #define   GUC_HXG_TYPE_RESPONSE_FAILURE		6u
+ #define   GUC_HXG_TYPE_RESPONSE_SUCCESS		7u
+-#define GUC_HXG_MSG_0_AUX			(0xfffffff << 0)
++#define GUC_HXG_MSG_0_AUX			(0xfffffffu << 0)
+ #define GUC_HXG_MSG_n_PAYLOAD			(0xffffffff << 0)
+ 
+ /**
+@@ -86,7 +86,7 @@
+ 
+ #define GUC_HXG_REQUEST_MSG_MIN_LEN		GUC_HXG_MSG_MIN_LEN
+ #define GUC_HXG_REQUEST_MSG_0_DATA0		(0xfff << 16)
+-#define GUC_HXG_REQUEST_MSG_0_ACTION		(0xffff << 0)
++#define GUC_HXG_REQUEST_MSG_0_ACTION		(0xffffu << 0)
+ #define GUC_HXG_REQUEST_MSG_n_DATAn		GUC_HXG_MSG_n_PAYLOAD
+ 
+ /**
+@@ -118,7 +118,7 @@
+ 
+ #define GUC_HXG_EVENT_MSG_MIN_LEN		GUC_HXG_MSG_MIN_LEN
+ #define GUC_HXG_EVENT_MSG_0_DATA0		(0xfff << 16)
+-#define GUC_HXG_EVENT_MSG_0_ACTION		(0xffff << 0)
++#define GUC_HXG_EVENT_MSG_0_ACTION		(0xffffu << 0)
+ #define GUC_HXG_EVENT_MSG_n_DATAn		GUC_HXG_MSG_n_PAYLOAD
+ 
+ /**
+@@ -188,8 +188,8 @@
+  */
+ 
+ #define GUC_HXG_FAILURE_MSG_LEN			GUC_HXG_MSG_MIN_LEN
+-#define GUC_HXG_FAILURE_MSG_0_HINT		(0xfff << 16)
+-#define GUC_HXG_FAILURE_MSG_0_ERROR		(0xffff << 0)
++#define GUC_HXG_FAILURE_MSG_0_HINT		(0xfffu << 16)
++#define GUC_HXG_FAILURE_MSG_0_ERROR		(0xffffu << 0)
+ 
+ /**
+  * DOC: HXG Response
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h b/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
+index 66027a42cda9..70154e522c51 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
++++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
+@@ -15,20 +15,20 @@
+ 
+ #define GUC_STATUS			_MMIO(0xc000)
+ #define   GS_RESET_SHIFT		0
+-#define   GS_MIA_IN_RESET		  (0x01 << GS_RESET_SHIFT)
++#define   GS_MIA_IN_RESET		  (0x01u << GS_RESET_SHIFT)
+ #define   GS_BOOTROM_SHIFT		1
+-#define   GS_BOOTROM_MASK		  (0x7F << GS_BOOTROM_SHIFT)
+-#define   GS_BOOTROM_RSA_FAILED		  (0x50 << GS_BOOTROM_SHIFT)
++#define   GS_BOOTROM_MASK		  (0x7Fu << GS_BOOTROM_SHIFT)
++#define   GS_BOOTROM_RSA_FAILED		  (0x50u << GS_BOOTROM_SHIFT)
+ #define   GS_BOOTROM_JUMP_PASSED	  (0x76 << GS_BOOTROM_SHIFT)
+ #define   GS_UKERNEL_SHIFT		8
+-#define   GS_UKERNEL_MASK		  (0xFF << GS_UKERNEL_SHIFT)
++#define   GS_UKERNEL_MASK		  (0xFFu << GS_UKERNEL_SHIFT)
+ #define   GS_MIA_SHIFT			16
+-#define   GS_MIA_MASK			  (0x07 << GS_MIA_SHIFT)
++#define   GS_MIA_MASK			  (0x07u << GS_MIA_SHIFT)
+ #define   GS_MIA_CORE_STATE		  (0x01 << GS_MIA_SHIFT)
+ #define   GS_MIA_HALT_REQUESTED		  (0x02 << GS_MIA_SHIFT)
+ #define   GS_MIA_ISR_ENTRY		  (0x04 << GS_MIA_SHIFT)
+ #define   GS_AUTH_STATUS_SHIFT		30
+-#define   GS_AUTH_STATUS_MASK		  (0x03 << GS_AUTH_STATUS_SHIFT)
++#define   GS_AUTH_STATUS_MASK		  (0x03u << GS_AUTH_STATUS_SHIFT)
+ #define   GS_AUTH_STATUS_BAD		  (0x01 << GS_AUTH_STATUS_SHIFT)
+ #define   GS_AUTH_STATUS_GOOD		  (0x02 << GS_AUTH_STATUS_SHIFT)
+ 
+diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
+index 9ccb67eec1bd..8c10d66561b0 100644
+--- a/drivers/gpu/drm/i915/i915_reg.h
++++ b/drivers/gpu/drm/i915/i915_reg.h
+@@ -7566,19 +7566,19 @@ enum skl_power_gate {
+ #define  PORT_CLK_SEL_LCPLL_810		(2 << 29)
+ #define  PORT_CLK_SEL_SPLL		(3 << 29)
+ #define  PORT_CLK_SEL_WRPLL(pll)	(((pll) + 4) << 29)
+-#define  PORT_CLK_SEL_WRPLL1		(4 << 29)
+-#define  PORT_CLK_SEL_WRPLL2		(5 << 29)
+-#define  PORT_CLK_SEL_NONE		(7 << 29)
++#define  PORT_CLK_SEL_WRPLL1		(4u << 29)
++#define  PORT_CLK_SEL_WRPLL2		(5u << 29)
++#define  PORT_CLK_SEL_NONE		(7u << 29)
+ #define  PORT_CLK_SEL_MASK		(7 << 29)
+ 
+ /* On ICL+ this is the same as PORT_CLK_SEL, but all bits change. */
+ #define DDI_CLK_SEL(port)		PORT_CLK_SEL(port)
+ #define  DDI_CLK_SEL_NONE		(0x0 << 28)
+-#define  DDI_CLK_SEL_MG			(0x8 << 28)
+-#define  DDI_CLK_SEL_TBT_162		(0xC << 28)
+-#define  DDI_CLK_SEL_TBT_270		(0xD << 28)
+-#define  DDI_CLK_SEL_TBT_540		(0xE << 28)
+-#define  DDI_CLK_SEL_TBT_810		(0xF << 28)
++#define  DDI_CLK_SEL_MG			(0x8u << 28)
++#define  DDI_CLK_SEL_TBT_162		(0xCu << 28)
++#define  DDI_CLK_SEL_TBT_270		(0xDu << 28)
++#define  DDI_CLK_SEL_TBT_540		(0xEu << 28)
++#define  DDI_CLK_SEL_TBT_810		(0xFu << 28)
+ #define  DDI_CLK_SEL_MASK		(0xF << 28)
+ 
+ /* Transcoder clock selection */
+-- 
+2.17.1
+

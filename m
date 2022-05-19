@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C493752CCE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0934B52CCEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbiESHZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S234863AbiESHZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbiESHY4 (ORCPT
+        with ESMTP id S234693AbiESHY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:24:56 -0400
+        Thu, 19 May 2022 03:24:59 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1871784A0D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:24:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A018020E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:24:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652945095; x=1684481095;
+  t=1652945098; x=1684481098;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZhVJrH8ZIL7/etGs0byavRR7lBKr0I4+Mu5OuvDVjHU=;
-  b=ApF2/zvGq7koW1vMvoJAZ9akghVa1y9UZ+AlwTd5Qx+nNiMtarfnSCIj
-   HDIOieJgK9rtLhscbsCj3L92DApc37pYGj+fwXGkcmR8YV83cs++kPhad
-   /p8MXEOPX/XyoHc+wai1EZ7IMexZByVxAkgd93NECJdabKYUZ+paZYVEo
-   Qr/dnK0INsBM7oHeuZZp21B+O9NmRZ0+9HXVWerCX4M1U8uJf9wSJfS0R
-   iQE/WB83ualMGon6AZxqG4xBweUwPmQb6r9DpDtC9sq6Fn3zAxMV9WO78
-   gI5DG8Jn4CeiUPt/qxVt+yL4mOuoSlgolM7Y87NtG7UGYI21xpYhfRs15
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="272196011"
+  bh=3VCJyDHv+RURhurVF6s727cvipO7vTDi2523jaNX4yg=;
+  b=asAfGBZsQXUgRe5neT5rUS8EKF+2cdf0TbMicqcW61hc/VMhxRsK9Aq8
+   +JPkewIuDkaC3wyiZg9x0y1xvEiPuom+dLsAuaPgWk06uGgZFie/euhjN
+   eedRYrQWRhTa4Nirb5f8ylykCmFdQNRUe5K5+NHtb5p2sfRNl3v1kNdCn
+   aFtH+9SG5J/M36VnzWHlRmLTqKzlV06xooFhYaAJ9yk0u4isEhmusbSMd
+   +fJdjA9KokVZtekGCjJjCEnQVqWDnqU/skry4Wv5IqQX+2em9KfCXSxQd
+   xgCz5xRXDlzaoUOXF/Zx47qx6X/rDn03If8B6hZ5pf1hekQ+g+JI0+Ugm
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="272196027"
 X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="272196011"
+   d="scan'208";a="272196027"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 00:24:54 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 00:24:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="714853169"
+   d="scan'208";a="714853181"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 19 May 2022 00:24:50 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 19 May 2022 00:24:54 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -52,9 +52,9 @@ Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
         Lu Baolu <baolu.lu@linux.intel.com>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH v7 09/10] iommu: Per-domain I/O page fault handling
-Date:   Thu, 19 May 2022 15:20:46 +0800
-Message-Id: <20220519072047.2996983-10-baolu.lu@linux.intel.com>
+Subject: [PATCH v7 10/10] iommu: Rename iommu-sva-lib.{c,h}
+Date:   Thu, 19 May 2022 15:20:47 +0800
+Message-Id: <20220519072047.2996983-11-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
 References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
@@ -70,117 +70,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tweak the I/O page fault handling framework to route the page faults to
-the domain and call the page fault handler retrieved from the domain.
-This makes the I/O page fault handling framework possible to serve more
-usage scenarios as long as they have an IOMMU domain and install a page
-fault handler in it. Some unused functions are also removed to avoid
-dead code.
-
-The iommu_get_domain_for_dev_pasid() which retrieves attached domain
-for a {device, PASID} pair is used. It will be used by the page fault
-handling framework which knows {device, PASID} reported from the iommu
-driver. We have a guarantee that the SVA domain doesn't go away during
-IOPF handling, because unbind() waits for pending faults with
-iopf_queue_flush_dev() before freeing the domain. Hence, there's no need
-to synchronize life cycle of the iommu domains between the unbind() and
-the interrupt threads.
+Rename iommu-sva-lib.c[h] to iommu-sva.c[h] as it contains all code
+for SVA implementation in iommu core.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- drivers/iommu/io-pgfault.c | 64 +++++---------------------------------
- 1 file changed, 7 insertions(+), 57 deletions(-)
+ drivers/iommu/{iommu-sva-lib.h => iommu-sva.h}  | 0
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 2 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c     | 2 +-
+ drivers/iommu/intel/iommu.c                     | 2 +-
+ drivers/iommu/intel/svm.c                       | 2 +-
+ drivers/iommu/io-pgfault.c                      | 2 +-
+ drivers/iommu/{iommu-sva-lib.c => iommu-sva.c}  | 2 +-
+ drivers/iommu/Makefile                          | 2 +-
+ 8 files changed, 7 insertions(+), 7 deletions(-)
+ rename drivers/iommu/{iommu-sva-lib.h => iommu-sva.h} (100%)
+ rename drivers/iommu/{iommu-sva-lib.c => iommu-sva.c} (99%)
 
+diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva.h
+similarity index 100%
+rename from drivers/iommu/iommu-sva-lib.h
+rename to drivers/iommu/iommu-sva.h
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+index 8290d66569f3..b238b09c4999 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+@@ -10,7 +10,7 @@
+ #include <linux/slab.h>
+ 
+ #include "arm-smmu-v3.h"
+-#include "../../iommu-sva-lib.h"
++#include "../../iommu-sva.h"
+ #include "../../io-pgtable-arm.h"
+ 
+ struct arm_smmu_mmu_notifier {
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+index b74f8964cc13..e1b80b7ac858 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+@@ -31,7 +31,7 @@
+ #include <linux/amba/bus.h>
+ 
+ #include "arm-smmu-v3.h"
+-#include "../../iommu-sva-lib.h"
++#include "../../iommu-sva.h"
+ 
+ static bool disable_bypass = true;
+ module_param(disable_bypass, bool, 0444);
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 10e07d59d4c8..2289939725a7 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -27,7 +27,7 @@
+ #include <linux/tboot.h>
+ 
+ #include "../irq_remapping.h"
+-#include "../iommu-sva-lib.h"
++#include "../iommu-sva.h"
+ #include "pasid.h"
+ #include "cap_audit.h"
+ 
+diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+index e412a442d9a4..2c45579e5e81 100644
+--- a/drivers/iommu/intel/svm.c
++++ b/drivers/iommu/intel/svm.c
+@@ -25,7 +25,7 @@
+ 
+ #include "pasid.h"
+ #include "perf.h"
+-#include "../iommu-sva-lib.h"
++#include "../iommu-sva.h"
+ 
+ static irqreturn_t prq_event_thread(int irq, void *d);
+ static void intel_svm_drain_prq(struct device *dev, u32 pasid);
 diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
-index aee9e033012f..4f24ec703479 100644
+index 4f24ec703479..91b1c6bd01d4 100644
 --- a/drivers/iommu/io-pgfault.c
 +++ b/drivers/iommu/io-pgfault.c
-@@ -69,69 +69,18 @@ static int iopf_complete_group(struct device *dev, struct iopf_fault *iopf,
- 	return iommu_page_response(dev, &resp);
- }
+@@ -11,7 +11,7 @@
+ #include <linux/slab.h>
+ #include <linux/workqueue.h>
  
--static enum iommu_page_response_code
--iopf_handle_single(struct iopf_fault *iopf)
--{
--	vm_fault_t ret;
--	struct mm_struct *mm;
--	struct vm_area_struct *vma;
--	unsigned int access_flags = 0;
--	unsigned int fault_flags = FAULT_FLAG_REMOTE;
--	struct iommu_fault_page_request *prm = &iopf->fault.prm;
--	enum iommu_page_response_code status = IOMMU_PAGE_RESP_INVALID;
--
--	if (!(prm->flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID))
--		return status;
--
--	mm = iommu_sva_find(prm->pasid);
--	if (IS_ERR_OR_NULL(mm))
--		return status;
--
--	mmap_read_lock(mm);
--
--	vma = find_extend_vma(mm, prm->addr);
--	if (!vma)
--		/* Unmapped area */
--		goto out_put_mm;
--
--	if (prm->perm & IOMMU_FAULT_PERM_READ)
--		access_flags |= VM_READ;
--
--	if (prm->perm & IOMMU_FAULT_PERM_WRITE) {
--		access_flags |= VM_WRITE;
--		fault_flags |= FAULT_FLAG_WRITE;
--	}
--
--	if (prm->perm & IOMMU_FAULT_PERM_EXEC) {
--		access_flags |= VM_EXEC;
--		fault_flags |= FAULT_FLAG_INSTRUCTION;
--	}
--
--	if (!(prm->perm & IOMMU_FAULT_PERM_PRIV))
--		fault_flags |= FAULT_FLAG_USER;
--
--	if (access_flags & ~vma->vm_flags)
--		/* Access fault */
--		goto out_put_mm;
--
--	ret = handle_mm_fault(vma, prm->addr, fault_flags, NULL);
--	status = ret & VM_FAULT_ERROR ? IOMMU_PAGE_RESP_INVALID :
--		IOMMU_PAGE_RESP_SUCCESS;
--
--out_put_mm:
--	mmap_read_unlock(mm);
--	mmput(mm);
--
--	return status;
--}
--
- static void iopf_handle_group(struct work_struct *work)
- {
- 	struct iopf_group *group;
-+	struct iommu_domain *domain;
- 	struct iopf_fault *iopf, *next;
- 	enum iommu_page_response_code status = IOMMU_PAGE_RESP_SUCCESS;
+-#include "iommu-sva-lib.h"
++#include "iommu-sva.h"
  
- 	group = container_of(work, struct iopf_group, work);
-+	domain = iommu_get_domain_for_dev_pasid(group->dev,
-+				group->last_fault.fault.prm.pasid);
-+	if (!domain || !domain->iopf_handler)
-+		status = IOMMU_PAGE_RESP_INVALID;
+ /**
+  * struct iopf_queue - IO Page Fault queue
+diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva.c
+similarity index 99%
+rename from drivers/iommu/iommu-sva-lib.c
+rename to drivers/iommu/iommu-sva.c
+index 317ab8e8c149..0e4f7c889f54 100644
+--- a/drivers/iommu/iommu-sva-lib.c
++++ b/drivers/iommu/iommu-sva.c
+@@ -7,7 +7,7 @@
+ #include <linux/pci.h>
+ #include <linux/pci-ats.h>
  
- 	list_for_each_entry_safe(iopf, next, &group->faults, list) {
- 		/*
-@@ -139,7 +88,8 @@ static void iopf_handle_group(struct work_struct *work)
- 		 * faults in the group if there is an error.
- 		 */
- 		if (status == IOMMU_PAGE_RESP_SUCCESS)
--			status = iopf_handle_single(iopf);
-+			status = domain->iopf_handler(&iopf->fault,
-+						      domain->fault_data);
+-#include "iommu-sva-lib.h"
++#include "iommu-sva.h"
  
- 		if (!(iopf->fault.prm.flags &
- 		      IOMMU_FAULT_PAGE_REQUEST_LAST_PAGE))
+ static DEFINE_MUTEX(iommu_sva_lock);
+ static DECLARE_IOASID_SET(iommu_sva_pasid);
+diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
+index 44475a9b3eea..c1763476162b 100644
+--- a/drivers/iommu/Makefile
++++ b/drivers/iommu/Makefile
+@@ -27,6 +27,6 @@ obj-$(CONFIG_FSL_PAMU) += fsl_pamu.o fsl_pamu_domain.o
+ obj-$(CONFIG_S390_IOMMU) += s390-iommu.o
+ obj-$(CONFIG_HYPERV_IOMMU) += hyperv-iommu.o
+ obj-$(CONFIG_VIRTIO_IOMMU) += virtio-iommu.o
+-obj-$(CONFIG_IOMMU_SVA) += iommu-sva-lib.o io-pgfault.o
++obj-$(CONFIG_IOMMU_SVA) += iommu-sva.o io-pgfault.o
+ obj-$(CONFIG_SPRD_IOMMU) += sprd-iommu.o
+ obj-$(CONFIG_APPLE_DART) += apple-dart.o
 -- 
 2.25.1
 

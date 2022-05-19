@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAA752DCB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E92452DCBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243194AbiESS1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
+        id S243883AbiESS2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232608AbiESS13 (ORCPT
+        with ESMTP id S243876AbiESS2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:27:29 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B70366A4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:27:27 -0700 (PDT)
-Received: from [10.10.2.52] (unknown [10.10.2.52])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 2D4D040755E1;
-        Thu, 19 May 2022 18:27:26 +0000 (UTC)
-Subject: Re: [PATCH] ASoC: max98090: Remove unneeded check in
- max98090_put_enab_tlv()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
-References: <1652980212-21473-1-git-send-email-khoroshilov@ispras.ru>
- <YoZ+dmprwb5Ohto3@sirena.org.uk>
- <fd58c07c-488e-1c90-a755-194f714bbe45@ispras.ru>
- <YoaEXWGEY4s14je+@sirena.org.uk>
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <ce6853a9-6789-f151-3193-59b7dd73bd27@ispras.ru>
-Date:   Thu, 19 May 2022 21:27:25 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 19 May 2022 14:28:13 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC09DFF4E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:28:11 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id n10so6027836pjh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xUSkW5L5SdeK9bspy74CxP8gR2AbxFPEz0xW/WWqv9k=;
+        b=bSUhoZQA4ahN4+pYe6LpGRlSy0x5KpiQTbtVKb8LMYt39rQMwD9s3A6Mh0svJOaRPN
+         mUlQC7ospSMi/CtbSQ26ttS233+3xoU/HFn1OOEfKBT33IjnF0agpzRMnUsqexNNmOoO
+         AwE1f7bbcbJ7hnPdJ2VK7sHgCfGPoGlBJCRpw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xUSkW5L5SdeK9bspy74CxP8gR2AbxFPEz0xW/WWqv9k=;
+        b=UfcGzsbIk1odM5u2erdCsqWB8AJNrYjFnPcy4cDrupwAYfuTt52HZPD7ecFAf07f3j
+         1G5TBc/WCrJ9Hax0kmamRQn0xmG7KE0x8tOHwVYvxeZ0eiBMvPYqeNs49rG4UWz8omd2
+         QreOAko73RGJjOuaFMkfq61+PU5GKybpJEudoEnb0SVbiw/OyMnOeM9o6iGzwqOU+8tV
+         JeKz78Y/PMQk5EsBgL63uH0Q2Ph05awQHxxhm+Y2SItdfzG8rYUntf5HBRalU+p+kN/1
+         8px7vB833VkHMLexErpsAX5ImUrjJkBTxkRekDUOEq+xquREQ6TwabikKp2gxmw42vlS
+         kjNQ==
+X-Gm-Message-State: AOAM533EuA39C2aLuAEPysi7NfvqJ/XjbA4jDVepprXw8NGcmg0OcZRY
+        ZYWou9vAC/5zyn+xA2yglcVAJg==
+X-Google-Smtp-Source: ABdhPJxZTGaQEAjUFEyGm7xPppGzbnaxQcp/SSm+5uyz4jGC+ty+Os8lmGRIuTLIVkJUVMv64oGCzQ==
+X-Received: by 2002:a17:903:44e:b0:161:58c6:77e5 with SMTP id iw14-20020a170903044e00b0016158c677e5mr6102404plb.81.1652984890374;
+        Thu, 19 May 2022 11:28:10 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:e229:79ea:227e:d9dd])
+        by smtp.gmail.com with UTF8SMTPSA id t10-20020a17090340ca00b0015e8d4eb29esm3930323pld.232.2022.05.19.11.28.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 11:28:10 -0700 (PDT)
+Date:   Thu, 19 May 2022 11:28:08 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Mike Snitzer <snitzer@redhat.com>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, dm-devel@redhat.com,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        linux-security-module@vger.kernel.org,
+        Milan Broz <gmazyland@gmail.com>
+Subject: Re: [PATCH v5 1/3] dm: Add verity helpers for LoadPin
+Message-ID: <YoaMOEGwWw4wzuct@google.com>
+References: <20220519004754.2174254-1-mka@chromium.org>
+ <20220518174739.v5.1.I3e928575a23481121e73286874c4c2bdb403355d@changeid>
+ <YoZysmcnU6o2scFI@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <YoaEXWGEY4s14je+@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: ru-RU
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YoZysmcnU6o2scFI@redhat.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,59 +77,288 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.05.2022 20:54, Mark Brown wrote:
-> On Thu, May 19, 2022 at 08:49:48PM +0300, Alexey Khoroshilov wrote:
->> On 19.05.2022 20:29, Mark Brown wrote:
->>> On Thu, May 19, 2022 at 08:10:12PM +0300, Alexey Khoroshilov wrote:
+On Thu, May 19, 2022 at 12:39:14PM -0400, Mike Snitzer wrote:
+> On Wed, May 18 2022 at  8:47P -0400,
+> Matthias Kaehlcke <mka@chromium.org> wrote:
 > 
->>>> -	if (sel < 0 || sel > mc->max)
->>>> +	if (sel > mc->max)
+> > LoadPin limits loading of kernel modules, firmware and certain
+> > other files to a 'pinned' file system (typically a read-only
+> > rootfs). To provide more flexibility LoadPin is being extended
+> > to also allow loading these files from trusted dm-verity
+> > devices. For that purpose LoadPin can be provided with a list
+> > of verity root digests that it should consider as trusted.
+> > 
+> > Add a bunch of helpers to allow LoadPin to check whether a DM
+> > device is a trusted verity device. The new functions broadly
+> > fall in two categories: those that need access to verity
+> > internals (like the root digest), and the 'glue' between
+> > LoadPin and verity. The new file dm-verity-loadpin.c contains
+> > the glue functions.
+> > 
+> > Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+> > Acked-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > 
+> > Changes in v5:
+> > - changed dm_verity_loadpin_is_sb_trusted() to
+> >   dm_verity_loadpin_is_bdev_trusted()
+> > - bumped version number to 1.8.1
+> > - deleted bad semicolon in declaration of stub for
+> >   dm_verity_loadpin_is_bdev_trusted()
+> > - added 'Acked-by' tag from Kees
+> > 
+> > Changes in v4:
+> > - a trusted verity device must have a single target of
+> >   type 'verity'
+> > - share list of verity digests with loadpin, deleted
+> >   dm_verity_loadpin_set_trusted_root_digests()
+> > - dm_verity_loadpin_is_md_trusted() is now dm_verity_loadpin_is_sb_trusted(),
+> >   it receives a super_block instead of mapped_device. Updated kernel doc.
+> > - changed struct trusted_root_digest to have an unsized
+> >   u8 array instead of a pointer
+> > - extend 'dm-verity-objs' instead of 'dm-mod-objs'
+> > 
+> > Changes in v3:
+> > - none
+> > 
+> > Changes in v2:
+> > - none
+> > 
+> >  drivers/md/Makefile               |  6 +++
+> >  drivers/md/dm-verity-loadpin.c    | 74 +++++++++++++++++++++++++++++++
+> >  drivers/md/dm-verity-target.c     | 35 ++++++++++++++-
+> >  drivers/md/dm-verity.h            |  4 ++
+> >  include/linux/dm-verity-loadpin.h | 27 +++++++++++
+> >  5 files changed, 145 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/md/dm-verity-loadpin.c
+> >  create mode 100644 include/linux/dm-verity-loadpin.h
+> > 
+> > diff --git a/drivers/md/Makefile b/drivers/md/Makefile
+> > index 0454b0885b01..71771901c823 100644
+> > --- a/drivers/md/Makefile
+> > +++ b/drivers/md/Makefile
+> > @@ -108,6 +108,12 @@ ifeq ($(CONFIG_DM_VERITY_VERIFY_ROOTHASH_SIG),y)
+> >  dm-verity-objs			+= dm-verity-verify-sig.o
+> >  endif
+> >  
+> > +ifeq ($(CONFIG_DM_VERITY),y)
+> > +ifeq ($(CONFIG_SECURITY_LOADPIN),y)
+> > +dm-verity-objs			+= dm-verity-loadpin.o
+> > +endif
+> > +endif
+> > +
+> >  ifeq ($(CONFIG_DM_AUDIT),y)
+> >  dm-mod-objs			+= dm-audit.o
+> >  endif
+> > diff --git a/drivers/md/dm-verity-loadpin.c b/drivers/md/dm-verity-loadpin.c
+> > new file mode 100644
+> > index 000000000000..49616ea93317
+> > --- /dev/null
+> > +++ b/drivers/md/dm-verity-loadpin.c
+> > @@ -0,0 +1,74 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +#include <linux/list.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/dm-verity-loadpin.h>
+> > +
+> > +#include "dm.h"
+> > +#include "dm-verity.h"
+> > +
+> > +#define DM_MSG_PREFIX	"verity-loadpin"
+> > +
+> > +LIST_HEAD(loadpin_trusted_verity_root_digests);
+> > +
+> > +static bool is_trusted_verity_target(struct dm_target *ti)
+> > +{
+> > +	u8 *root_digest;
+> > +	unsigned int digest_size;
+> > +	struct trusted_root_digest *trd;
+> > +	bool trusted = false;
+> > +
+> > +	if (!dm_is_verity_target(ti))
+> > +		return false;
+> > +
+> > +	if (dm_verity_get_root_digest(ti, &root_digest, &digest_size))
+> > +		return false;
+> > +
+> > +	list_for_each_entry(trd, &loadpin_trusted_verity_root_digests, node) {
+> > +		if ((trd->len == digest_size) &&
+> > +		    !memcmp(trd->data, root_digest, digest_size)) {
+> > +			trusted = true;
+> > +			break;
+> > +		}
+> > +	}
+> > +
+> > +	kfree(root_digest);
+> > +
+> > +	return trusted;
+> > +}
+> > +
+> > +/*
+> > + * Determines whether the file system of a superblock is located on
+> > + * a verity device that is trusted by LoadPin.
+> > + */
+> > +bool dm_verity_loadpin_is_bdev_trusted(struct block_device *bdev)
+> > +{
+> > +	struct mapped_device *md;
+> > +	struct dm_table *table;
+> > +	struct dm_target *ti;
+> > +	int srcu_idx;
+> > +	bool trusted = false;
+> > +
+> > +	if (list_empty(&loadpin_trusted_verity_root_digests))
+> > +		return false;
+> > +
+> > +	md = dm_get_md(bdev->bd_dev);
+> > +	if (!md)
+> > +		return false;
+> > +
+> > +	table = dm_get_live_table(md, &srcu_idx);
+> > +
+> > +	if (dm_table_get_num_targets(table) != 1)
+> > +		goto out;
+> > +
+> > +	ti = dm_table_get_target(table, 0);
+> > +
+> > +	if (is_trusted_verity_target(ti))
+> > +		trusted = true;
+> > +
+> > +out:
+> > +	dm_put_live_table(md, srcu_idx);
+> > +	dm_put(md);
+> > +
+> > +	return trusted;
+> > +}
 > 
->>> The check needs to be moved, not removed.  The userspace ABI allows
->>> passing in of negative values.
+> This should have:
+> EXPORT_SYMBOL_GPL(dm_verity_loadpin_is_bdev_trusted);
+
+Actually the export shouldn't be needed as long as LoadPin is the only
+caller:
+
+config SECURITY_LOADPIN_VERITY
+        bool "Allow reading files from certain other filesystems that use dm-verity"
+        depends on DM_VERITY=y && SECURITYFS
+
+LoadPin can't be built as a module, hence for the verity integration to work
+verity needs to be built into the kernel.
+
+> > diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+> > index 80133aae0db3..d6a7903e91e6 100644
+> > --- a/drivers/md/dm-verity-target.c
+> > +++ b/drivers/md/dm-verity-target.c
+> > @@ -19,6 +19,7 @@
+> >  #include <linux/module.h>
+> >  #include <linux/reboot.h>
+> >  #include <linux/scatterlist.h>
+> > +#include <linux/string.h>
+> >  
+> >  #define DM_MSG_PREFIX			"verity"
+> >  
+> > @@ -1310,9 +1311,41 @@ static int verity_ctr(struct dm_target *ti, unsigned argc, char **argv)
+> >  	return r;
+> >  }
+> >  
+> > +/*
+> > + * Check whether a DM target is a verity target.
+> > + */
+> > +bool dm_is_verity_target(struct dm_target *ti)
+> > +{
+> > +	return ti->type->module == THIS_MODULE;
+> > +}
+> > +EXPORT_SYMBOL_GPL(dm_is_verity_target);
 > 
->> Would (sel > mc->max) be enough in this case anyway?
+> Why is this exported?
+
+It's remainder from an early version that I forgot to remove, agreed it's not
+needed.
+
+> > +
+> > +/*
+> > + * Get the root digest of a verity target.
+> > + *
+> > + * Returns a copy of the root digest, the caller is responsible for
+> > + * freeing the memory of the digest.
+> > + */
+> > +int dm_verity_get_root_digest(struct dm_target *ti, u8 **root_digest, unsigned int *digest_size)
+> > +{
+> > +	struct dm_verity *v = ti->private;
+> > +
+> > +	if (!dm_is_verity_target(ti))
+> > +		return -EINVAL;
+> > +
+> > +	*root_digest = kmemdup(v->root_digest, v->digest_size, GFP_KERNEL);
+> > +	if (*root_digest == NULL)
+> > +		return -ENOMEM;
+> > +
+> > +	*digest_size = v->digest_size;
+> > +
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(dm_verity_get_root_digest);
 > 
-> Oh, the check won't be working properly - it's just that like I say the
-> fix is to move rather than remove it so it's operating on the signed
-> value.
+> Why is this exported?
+>
+> Both of these should be internal to dm-verity module.
+
+Agreed, will change.
+
+> Have you built a modular kernel to test?
+
+I didn't, since LoadPin is always builtin and hence verity needs to be builtin
+too for CONFIG_SECURITY_LOADPIN_VERITY.
+
+> >  static struct target_type verity_target = {
+> >  	.name		= "verity",
+> > -	.version	= {1, 8, 0},
+> > +	.version	= {1, 8, 1},
+> >  	.module		= THIS_MODULE,
+> >  	.ctr		= verity_ctr,
+> >  	.dtr		= verity_dtr,
+> > diff --git a/drivers/md/dm-verity.h b/drivers/md/dm-verity.h
+> > index 4e769d13473a..c832cc3e3d24 100644
+> > --- a/drivers/md/dm-verity.h
+> > +++ b/drivers/md/dm-verity.h
+> > @@ -129,4 +129,8 @@ extern int verity_hash(struct dm_verity *v, struct ahash_request *req,
+> >  extern int verity_hash_for_block(struct dm_verity *v, struct dm_verity_io *io,
+> >  				 sector_t block, u8 *digest, bool *is_zero);
+> >  
+> > +extern bool dm_is_verity_target(struct dm_target *ti);
+> > +extern int dm_verity_get_root_digest(struct dm_target *ti, u8 **root_digest,
+> > +				     unsigned int *digest_size);
+> > +
+> >  #endif /* DM_VERITY_H */
+> > diff --git a/include/linux/dm-verity-loadpin.h b/include/linux/dm-verity-loadpin.h
+> > new file mode 100644
+> > index 000000000000..d37146dbb1a8
+> > --- /dev/null
+> > +++ b/include/linux/dm-verity-loadpin.h
+> > @@ -0,0 +1,27 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +#ifndef __LINUX_DM_VERITY_LOADPIN_H
+> > +#define __LINUX_DM_VERITY_LOADPIN_H
+> > +
+> > +#include <linux/list.h>
+> > +
+> > +struct block_device;
+> > +
+> > +extern struct list_head loadpin_trusted_verity_root_digests;
 > 
+> s/loadpin_trusted_verity_root_digests/dm_verity_loadpin_trusted_root_digests/ ?
 
-Do you mean something like this?
+ok
 
-static int max98090_put_enab_tlv(struct snd_kcontrol *kcontrol,
-				struct snd_ctl_elem_value *ucontrol)
-{
-	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
-	struct max98090_priv *max98090 = snd_soc_component_get_drvdata(component);
-	struct soc_mixer_control *mc =
-		(struct soc_mixer_control *)kcontrol->private_value;
-	unsigned int mask = (1 << fls(mc->max)) - 1;
--       unsigned int sel = ucontrol->value.integer.value[0];
-+       int sel_unchecked = ucontrol->value.integer.value[0];
-+       unsigned int sel;
-	unsigned int val = snd_soc_component_read(component, mc->reg);
-	unsigned int *select;
+> > +
+> > +struct trusted_root_digest {
+> > +	struct list_head node;
+> > +	unsigned int len;
+> > +	u8 data[];
+> > +};
+> 
+> s/trusted_root_digest/dm_verity_loadpin_trusted_root_digest/ ?
+> 
+> Long names, but more consistent and informative.
 
-	switch (mc->reg) {
-	case M98090_REG_MIC1_INPUT_LEVEL:
-		select = &(max98090->pa1en);
-		break;
-	case M98090_REG_MIC2_INPUT_LEVEL:
-		select = &(max98090->pa2en);
-		break;
-	case M98090_REG_ADC_SIDETONE:
-		select = &(max98090->sidetone);
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	val = (val >> mc->shift) & mask;
-
--       if (sel < 0 || sel > mc->max)
-+       if (sel_unchecked < 0 || sel_unchecked > mc->max)
-                return -EINVAL;
-+       sel = sel_unchecked;
-
-	*select = sel;
+Sounds good, I'll change it in the next version.

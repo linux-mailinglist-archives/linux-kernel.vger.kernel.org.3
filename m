@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D6252DD76
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA9952DD8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244385AbiESTNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
+        id S244421AbiESTOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243841AbiESTNZ (ORCPT
+        with ESMTP id S244361AbiESTNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 15:13:25 -0400
+        Thu, 19 May 2022 15:13:32 -0400
 Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB14AF303;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2161AFAFF;
         Thu, 19 May 2022 12:13:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Cc:To:From:content-disposition;
-        bh=5THCuTuhB9Pg9vg5D4m+VHayGZUEXqzPFCngvBnB6Js=; b=iCRYgfCvxgb35jDAzhb0ZKLeUp
-        eO9+zkTgEkWF90tHMsTZ3SBgCV66LRy5bKlFi1FvqFiAE7K1vlZE3qTtYq94VJ4ftf21eCXpSmKKy
-        UV/ouRtTN+HCKxP/SKOAHHorYMV0Wj1B0/OUmQ6LxOnsSPoUCDXQd99OwtErGF3aPWKx5la7208Qk
-        bTFK7l+5au4Vo30j3CpEqQ+DdmI8hS8LkOo9uBcvRpfpEAohN5/k8X8qLCV8cpB0TqtFas1D6zVjb
-        cyjzb/3Q7/FYcd7V2N0u+dl0iJwJU+/2qoU0q4EJUniD7djBU9diTmIFVklNjlOSDrE2qgCWGBJCH
-        OhaiEdsA==;
+        bh=sNKnIXj1F99BWmAuKphO7iWl5/fjaKRJgwoKkBx/fsU=; b=s042EOGCpFhBjVHWWx2KCatEzu
+        JMnDribYZ0yf1UnS90S/uOABFusCf7Cuvv4puWqnLQes69nYjz7bRSExeZl6VxfMMj76xUycXhNng
+        15CdiHPnS6caOX4UENBfW6zB9E9RCjNa+v4W8WjQKfFWdgnco+OTL+fSIm4zlylxE81Nn06dn+/sj
+        LAqm7QMXFT774JNB91FMNXGV+14a7lblOwMUAmQQ12Ifd06gr3Zl20ZCLy48YZCg/nBVE4S+xkldZ
+        fSa8y+dMMwQByZfmRu7tiUPOcq4XyJzBpUEThJTYtfG0IZEtLlcQd84MjQsZVV8GEwwg1Fwxq57/q
+        djq09OAA==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nrlaI-002TqR-Vm; Thu, 19 May 2022 13:13:19 -0600
+        id 1nrlaI-002TqT-9E; Thu, 19 May 2022 13:13:18 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nrlaF-0004Tx-Td; Thu, 19 May 2022 13:13:16 -0600
+        id 1nrlaG-0004UD-76; Thu, 19 May 2022 13:13:16 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -41,8 +41,8 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         Martin Oliveira <Martin.Oliveira@eideticom.com>,
         David Sloan <David.Sloan@eideticom.com>,
         Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu, 19 May 2022 13:13:10 -0600
-Message-Id: <20220519191311.17119-15-logang@deltatee.com>
+Date:   Thu, 19 May 2022 13:13:11 -0600
+Message-Id: <20220519191311.17119-16-logang@deltatee.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220519191311.17119-1-logang@deltatee.com>
 References: <20220519191311.17119-1-logang@deltatee.com>
@@ -57,71 +57,47 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v1 14/15] md: Ensure resync is reported after it starts
+Subject: [PATCH v1 15/15] md: Notify sysfs sync_completed in md_reap_sync_thread()
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 07layouts test in mdadm fails on some systems. The failure
-presents itself as the backup file not being removed before the next
-layout is grown into:
+The mdadm test 07layouts randomly produces a kernel hung task deadlock.
+The deadlock is caused by the suspend_lo/suspend_hi files being set by
+the mdadm background process during reshape and not being cleared
+because the process hangs. (Leaving aside the issue of the fragility of
+freezing kernel tasks by buggy userspace processes...)
 
-  mdadm: /dev/md0: cannot create backup file /tmp/md-test-backup:
-      File exists
+When the background mdadm process hangs it, is waiting (without a
+timeout) on a change to the sync_completed file signalling that the
+reshape has completed. The process is woken up a couple times when
+the reshape finishes but it is woken up before MD_RECOVERY_RUNNING
+is cleared so sync_completed_show() reports 0 instead of "none.
 
-This is because the background mdadm process, which is responsible for
-cleaning up this backup file gets into an infinite loop waiting for
-the reshape to start. mdadm checks the mdstat file if a reshape is
-going and, if it is not, it waits for an event on the file or times
-out in 5 seconds. On faster machines, the reshape may complete before
-the 5 seconds times out, and thus the background mdadm process loops
-waiting for a reshape to start that has already occurred.
-
-mdadm reads the mdstat file to start, but mdstat does not report that the
-reshape has begun, even though it has indeed begun. So the mdstat_wait()
-call (in mdadm) which polls on the mdstat file won't ever return until
-timing out.
-
-The reason mdstat reports the reshape has started is due to an issue
-in status_resync(). recovery_active is subtracted from curr_resync which
-will result in a value of zero for the first chunk of reshaped data, and
-the resulting read will report no reshape in progress.
-
-To fix this, if "resync - recovery_active" is zero: force the value to
-be 4 so the code reports a resync in progress.
+To fix this, notify the sysfs file in md_reap_sync_thread() after
+MD_RECOVERY_RUNNING has been cleared. This wakes up mdadm and causes
+it to continue and write to suspend_lo/suspend_hi to allow IO to
+continue.
 
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 ---
- drivers/md/md.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/md/md.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 8273ac5eef06..dbac63c8e35c 100644
+index dbac63c8e35c..54108de46679 100644
 --- a/drivers/md/md.c
 +++ b/drivers/md/md.c
-@@ -8022,10 +8022,18 @@ static int status_resync(struct seq_file *seq, struct mddev *mddev)
- 		if (test_bit(MD_RECOVERY_DONE, &mddev->recovery))
- 			/* Still cleaning up */
- 			resync = max_sectors;
--	} else if (resync > max_sectors)
-+	} else if (resync > max_sectors) {
- 		resync = max_sectors;
--	else
-+	} else {
- 		resync -= atomic_read(&mddev->recovery_active);
-+		if (!resync) {
-+			/*
-+			 * Resync has started, but if it's zero, ensure
-+			 * it is still reported, by forcing it to be 4
-+			 */
-+			resync = 4;
-+		}
-+	}
- 
- 	if (resync == 0) {
- 		if (test_bit(MD_RESYNCING_REMOTE, &mddev->recovery)) {
+@@ -9478,6 +9478,7 @@ void md_reap_sync_thread(struct mddev *mddev, bool reconfig_mutex_held)
+ 	wake_up(&resync_wait);
+ 	/* flag recovery needed just to double check */
+ 	set_bit(MD_RECOVERY_NEEDED, &mddev->recovery);
++	sysfs_notify_dirent_safe(mddev->sysfs_completed);
+ 	sysfs_notify_dirent_safe(mddev->sysfs_action);
+ 	md_new_event();
+ 	if (mddev->event_work.func)
 -- 
 2.30.2
 

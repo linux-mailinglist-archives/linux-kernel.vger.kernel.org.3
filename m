@@ -2,87 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4F552DA5D
+	by mail.lfdr.de (Postfix) with ESMTP id E277352DA5F
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242036AbiESQgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S242059AbiESQiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242061AbiESQgC (ORCPT
+        with ESMTP id S234034AbiESQh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:36:02 -0400
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 11D402CC86
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:35:59 -0700 (PDT)
+        Thu, 19 May 2022 12:37:56 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFBBD8090
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:37:54 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id f2so8029198wrc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        In-Reply-To:References:Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID; bh=fF518Hc8uEuEf9r8ke5GEOjm5Z2WXlFO1tYv
-        q8jSjcQ=; b=PFvkBAqPoDxwCJmm6z1Khpz/B48C4ZkPVwCay8bZY1DVKyOxzMf0
-        UcZ9z7NYGvgVFQ28k4u2iIeQLOd6y84/G0ZzybxzcUPyCJPgdezQ3kirvK7Sm4DS
-        p9a5eKaFhWxY6CvEONL5sSVGzH0cf2lCvsfUJEpXQtRYIUtkca6jS6M=
-Received: by ajax-webmail-front02 (Coremail) ; Fri, 20 May 2022 00:35:35
- +0800 (GMT+08:00)
-X-Originating-IP: [10.129.37.75]
-Date:   Fri, 20 May 2022 00:35:35 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5YiY5rC45b+X?= <lyz_cs@pku.edu.cn>
-To:     "kalle valo" <kvalo@kernel.org>
-Cc:     amitkarwar@gmail.com, ganapathi017@gmail.com,
-        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, arend.vanspriel@broadcom.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] iio: vadc: Fix potential dereference of NULL pointer
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-1ea67e80-64e4-49d5-bd9f-3beeae24b9f2-pku.edu.cn
-In-Reply-To: <87v8u11qvo.fsf@kernel.org>
-References: <1652957674-127802-1-git-send-email-lyz_cs@pku.edu.cn>
- <87v8u11qvo.fsf@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FEdVgqo8LuBqkPaQiJ7UaThEjH5OciLn+zJb0Z2rPec=;
+        b=wVQQ3DB3c+BD0bcw7D2QBZ66EAV+RtMMhfgoSV1qYu6ejuYsQieJ+t3XSlnQCOGSBQ
+         SFDG/MzLIRsjLzCM7RTz3UK8zaOuKBErWKF8jj6WitlEEWOZ0ZpGs+7Cv/57InvZnVzZ
+         6Wy7jAdJ6tRPjCSmt9Km41gF5rpn1qXGNcZTfIStx3vgn69FawRavUSmIHZT3YAjT//p
+         1KjN5IhkNkj/gP/Kkc7FmvDQSFF5ic/mW7CaKwt8VszpmC8FWBccVNRMH+ZKv9Sbs3WD
+         va1C0kITnyDKBLo6uGNFcc1JVQnuzpbwYp2Ee8/SvCrxRHuMdghTG3p80AUqNzH55zFl
+         AtdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FEdVgqo8LuBqkPaQiJ7UaThEjH5OciLn+zJb0Z2rPec=;
+        b=HUqFOmL/GrKwDLKrC2cD+cONtBW6vdfbLewaeAZWVFQi8QJcuuJaATZqwch9ncyJnX
+         mkHo3N/tYRb8kh1MDWybJLDwdOSH6W7N7U3XgA9nOLB9d7fgSP+bQqYhc9StZc3VhFDX
+         L1mRyq0E7m4tqP7NqvWvepZhJ3pheBZ3J1MspXkApn2pXK/j8//mzaej4Xq/+k6+cwtu
+         1rOBBdqhQtRanbQCFwAr9K5l6JB/PKvqaKlmmZs3CaHh1O57r019TaJuK9JdkUpkkyQ9
+         /ucoM6pNZB+KVphRTeIj+GJrID9sUGgTBGPBjAgvrmhVTxvA88ZdOfSMeg5q9EN8KGj6
+         KdkQ==
+X-Gm-Message-State: AOAM533gLt35+dN2CrG1pTMT0dJzP4sjpIkFpO+8H5OixE2KZy6N9i1J
+        1Eqt5ucwOHSFtWBniTxJ2rECmg==
+X-Google-Smtp-Source: ABdhPJzFnceQn5e5Wzw4TmInSFRcAyP5hGwf5JsgXFD4NtjmPGuIub/SlWG/T9DFeKcXM7WqMukowg==
+X-Received: by 2002:a5d:4f0c:0:b0:20e:5906:713d with SMTP id c12-20020a5d4f0c000000b0020e5906713dmr4717226wru.634.1652978273198;
+        Thu, 19 May 2022 09:37:53 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id bg30-20020a05600c3c9e00b003942a244f39sm38873wmb.18.2022.05.19.09.37.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 09:37:52 -0700 (PDT)
+Date:   Thu, 19 May 2022 17:37:28 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 05/10] arm-smmu-v3/sva: Add SVA domain support
+Message-ID: <YoZySINkH/MTudFA@myrica>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-6-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <7e12c127.2a22e.180dd2cb2a3.Coremail.lyz_cs@pku.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: 54FpogBXJOTXcYZifHmeBg--.18762W
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwELBlPy7vKMbgAAsQ
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519072047.2996983-6-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgoKPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2VzLS0tLS0KPiBGcm9tOiAiS2FsbGUgVmFsbyIgPGt2
-YWxvQGtlcm5lbC5vcmc+Cj4gU2VudCBUaW1lOiAyMDIyLTA1LTE5IDIzOjMwOjUxIChUaHVyc2Rh
-eSkKPiBUbzogIllvbmd6aGkgTGl1IiA8bHl6X2NzQHBrdS5lZHUuY24+Cj4gQ2M6IGFtaXRrYXJ3
-YXJAZ21haWwuY29tLCBnYW5hcGF0aGkwMTdAZ21haWwuY29tLCBzaGFydmFyaS5oYXJpc2FuZ2Ft
-QG54cC5jb20sIGh1eGlubWluZzgyMEBnbWFpbC5jb20sIGRhdmVtQGRhdmVtbG9mdC5uZXQsIGVk
-dW1hemV0QGdvb2dsZS5jb20sIGt1YmFAa2VybmVsLm9yZywgcGFiZW5pQHJlZGhhdC5jb20sIGFy
-ZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20sIGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9y
-ZywgbmV0ZGV2QHZnZXIua2VybmVsLm9yZywgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZywg
-ZnV5cUBzdHUucGt1LmVkdS5jbgo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjJdIGlpbzogdmFkYzog
-Rml4IHBvdGVudGlhbCBkZXJlZmVyZW5jZSBvZiBOVUxMIHBvaW50ZXIKPiAKPiBZb25nemhpIExp
-dSA8bHl6X2NzQHBrdS5lZHUuY24+IHdyaXRlczoKPiAKPiA+IFRoZSByZXR1cm4gdmFsdWUgb2Yg
-dmFkY19nZXRfY2hhbm5lbCgpIG5lZWRzIHRvIGJlIGNoZWNrZWQKPiA+IHRvIGF2b2lkIHVzZSBv
-ZiBOVUxMIHBvaW50ZXIuIEZpeCB0aGlzIGJ5IGFkZGluZyB0aGUgbnVsbAo+ID4gcG9pbnRlciBj
-aGVjayBvbiBwcm9wLgo+ID4KPiA+IEZpeGVzOiAwOTE3ZGU5NGMgKCJpaW86IHZhZGM6IFF1YWxj
-b21tIFNQTUkgUE1JQyB2b2x0YWdlIEFEQyBkcml2ZXIiKQo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6
-IFlvbmd6aGkgTGl1IDxseXpfY3NAcGt1LmVkdS5jbj4KPiA+IC0tLQo+ID4gIGRyaXZlcnMvaWlv
-L2FkYy9xY29tLXNwbWktdmFkYy5jIHwgMjMgKysrKysrKysrKysrKysrKysrKysrKy0KPiA+ICAx
-IGZpbGUgY2hhbmdlZCwgMjIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+IAoKSSdtIHNv
-cnJ5IHRvIHNlbmQgdGhpcyB0byBsaW51eC13aXJlbGVzcyBieSBtaXN0YWtlLiBJIHdpbGwgY2F1
-dGlvdXNseSBzdWJtaXQgcGF0Y2hlcyBsYXRlci4KCj4gRGlkIHlvdSBzZW50IHRoaXMgdG8gbGlu
-dXgtd2lyZWxlc3MgYnkgbWlzdGFrZT8KPiAKPiAtLSAKPiBodHRwczovL3BhdGNod29yay5rZXJu
-ZWwub3JnL3Byb2plY3QvbGludXgtd2lyZWxlc3MvbGlzdC8KPiAKPiBodHRwczovL3dpcmVsZXNz
-Lndpa2kua2VybmVsLm9yZy9lbi9kZXZlbG9wZXJzL2RvY3VtZW50YXRpb24vc3VibWl0dGluZ3Bh
-dGNoZXMK
+On Thu, May 19, 2022 at 03:20:42PM +0800, Lu Baolu wrote:
+> Add support for domain ops callbacks for an SVA domain.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+
+(I'll try to take some time next cycle to clean up the driver following
+this change)
+
+> ---
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  4 ++
+>  .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   | 46 +++++++++++++++++++
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |  6 +++
+>  3 files changed, 56 insertions(+)
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> index d2ba86470c42..ec77f6a51ff9 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> @@ -758,6 +758,10 @@ struct iommu_sva *arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm);
+>  void arm_smmu_sva_unbind(struct iommu_sva *handle);
+>  u32 arm_smmu_sva_get_pasid(struct iommu_sva *handle);
+>  void arm_smmu_sva_notifier_synchronize(void);
+> +int arm_smmu_sva_attach_dev_pasid(struct iommu_domain *domain,
+> +				  struct device *dev, ioasid_t id);
+> +void arm_smmu_sva_detach_dev_pasid(struct iommu_domain *domain,
+> +				   struct device *dev, ioasid_t id);
+>  #else /* CONFIG_ARM_SMMU_V3_SVA */
+>  static inline bool arm_smmu_sva_supported(struct arm_smmu_device *smmu)
+>  {
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> index f155d406c5d5..6969974ca89e 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> @@ -549,3 +549,49 @@ void arm_smmu_sva_notifier_synchronize(void)
+>  	 */
+>  	mmu_notifier_synchronize();
+>  }
+> +
+> +int arm_smmu_sva_attach_dev_pasid(struct iommu_domain *domain,
+> +				  struct device *dev, ioasid_t id)
+> +{
+> +	int ret = 0;
+> +	struct mm_struct *mm;
+> +	struct iommu_sva *handle;
+> +
+> +	if (domain->type != IOMMU_DOMAIN_SVA)
+> +		return -EINVAL;
+> +
+> +	mm = domain_to_mm(domain);
+> +	if (WARN_ON(!mm))
+> +		return -ENODEV;
+> +
+> +	mutex_lock(&sva_lock);
+> +	handle = __arm_smmu_sva_bind(dev, mm);
+> +	if (IS_ERR(handle))
+> +		ret = PTR_ERR(handle);
+> +	mutex_unlock(&sva_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +void arm_smmu_sva_detach_dev_pasid(struct iommu_domain *domain,
+> +				   struct device *dev, ioasid_t id)
+> +{
+> +	struct arm_smmu_bond *bond = NULL, *t;
+> +	struct mm_struct *mm = domain_to_mm(domain);
+> +	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+> +
+> +	mutex_lock(&sva_lock);
+> +	list_for_each_entry(t, &master->bonds, list) {
+> +		if (t->mm == mm) {
+> +			bond = t;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (!WARN_ON(!bond) && refcount_dec_and_test(&bond->refs)) {
+> +		list_del(&bond->list);
+> +		arm_smmu_mmu_notifier_put(bond->smmu_mn);
+> +		kfree(bond);
+> +	}
+> +	mutex_unlock(&sva_lock);
+> +}
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> index 6e2cd082c670..4ad3ca70cf89 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -2858,6 +2858,12 @@ static struct iommu_ops arm_smmu_ops = {
+>  	.page_response		= arm_smmu_page_response,
+>  	.pgsize_bitmap		= -1UL, /* Restricted during device attach */
+>  	.owner			= THIS_MODULE,
+> +#ifdef CONFIG_ARM_SMMU_V3_SVA
+> +	.sva_domain_ops = &(const struct iommu_domain_ops) {
+> +		.set_dev_pasid		= arm_smmu_sva_attach_dev_pasid,
+> +		.block_dev_pasid	= arm_smmu_sva_detach_dev_pasid,
+> +	},
+> +#endif
+>  	.default_domain_ops = &(const struct iommu_domain_ops) {
+>  		.attach_dev		= arm_smmu_attach_dev,
+>  		.map_pages		= arm_smmu_map_pages,
+> -- 
+> 2.25.1
+> 

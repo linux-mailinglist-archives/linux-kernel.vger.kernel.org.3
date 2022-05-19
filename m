@@ -2,161 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA4C52DCB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A59852DCB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243214AbiESSZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:25:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S243879AbiESSZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242139AbiESSZL (ORCPT
+        with ESMTP id S240202AbiESSZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:25:11 -0400
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D74EBA9D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:25:08 -0700 (PDT)
-Received: by mail-pl1-f174.google.com with SMTP id c2so5515474plh.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:25:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=yYJ5d8JV3t4O7WcoAyfX+3lgnKWLdKUEPNKkivp4FxE=;
-        b=e1IHQCs5Q3nJV0bY4oSO+IXaVbL7Y2UzjN2MI25ofVqZrXN5ZoRno0kObG88x6dz1d
-         yN36FLr/hqSAAs8NS5FXV6kc8tr1Q2vjZzR0AyUp99NntiRMYKUqn5DUUfMXp2MjpOCr
-         ncNsZ9gCMEaPoK7cWlnty5uw8eH+A5K1MpXdWZI9gMmUU6pVMc83vll3xYOZW+KUyXq0
-         ODtb8Z/yb5JAUk7sGZlIuIF/rL7S2DMOvGIg4DkcSe2VV7ACvxwXNlzdBMH+a+rrd79e
-         5Y9zjIrI2teY69fhZVBEukEgBjZQGTTSrWt0ChY+w/Ar58plNP2T+EcpiZGqNncQ7ENB
-         To8A==
-X-Gm-Message-State: AOAM532q7xIHZMpbGIF+vDPwT05hbHj/2MYzp2BK/rnoVa14/31ye6ji
-        sZc9py3GI9RlaGrKQ8QkkQ80bQ==
-X-Google-Smtp-Source: ABdhPJxJuiO93xsMywzWjqiZThDp7pcpVoqDBgq85ICeMcDEB034hBaCoXLEhaErUk+3R3vaFW18kQ==
-X-Received: by 2002:a17:902:e415:b0:161:d804:dc6c with SMTP id m21-20020a170902e41500b00161d804dc6cmr5341884ple.50.1652984708201;
-        Thu, 19 May 2022 11:25:08 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id 76-20020a63044f000000b003db141a5f26sm3868353pge.1.2022.05.19.11.25.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 11:25:07 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>, cw00.choi@samsung.com
-Cc:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
-In-Reply-To: <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
-References: <20220516004311.18358-1-roger.lu@mediatek.com>
- <CAGXv+5GSdWPZe3fNpBJ_WW0zCL8Skg6fHx9ATxaKU1hyMEt2Ww@mail.gmail.com>
- <7h4k1ndaui.fsf@baylibre.com> <7hy1yzbtb7.fsf@baylibre.com>
- <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
-Date:   Thu, 19 May 2022 11:25:07 -0700
-Message-ID: <7hmtfdbcsc.fsf@baylibre.com>
+        Thu, 19 May 2022 14:25:44 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A1618B;
+        Thu, 19 May 2022 11:25:43 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JFGEGj013060;
+        Thu, 19 May 2022 11:25:43 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=xp8cEqs8XOk0eM1vNqtjTNBka4IX4zJK4ddIrlgLPjs=;
+ b=CnsJC9aLA1NaFs0z001mHyJIIA2EXgzbi1wyN1yJhnGsmwXA/qL7mIWpYnvEy9i9d9Nr
+ ZJ+LMuqZO0iGbwG2cyZ4BAEtRIhMYPbnDv/Rm/l0DRKCxEHD9lAROgke1aKa+ALfhQGB
+ nZazYYVEw2i1fJp8hXNjPk+6uNH580FuzXg= 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g4d829nmj-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 11:25:42 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H4YQXllgR4k8Vdn1pssoyQQEf9rbp9Wxy7dRVryGjhHOD3p2pGuyOtSaQZh/5c7pTBfUs7dnd+AikpzDoMGGaUAXhvM7a4oawWBdUE6+9QlyeW7fTg693PyevCteI4BDijgryd4n5cLsnnOArOgpmvtYXjR9wlheRdzXWpiR133t2WcyrOCUV5HvA9o9KRevpRnRjGAE3GRkjKtcvtDzuti0/iUlMxWr6wWwvf3TbF7pBkCrdPF1SmrtkGNHDuk7iNyLlefxM/W1oJ5cP0mw4bAA32tr17ITK3ktaoxcdvAxw/2uE+dxGp1KkY3e9EcrRRWz27S/nf4sZCtj1MiL+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xp8cEqs8XOk0eM1vNqtjTNBka4IX4zJK4ddIrlgLPjs=;
+ b=Cgt+hwZC98MsAFbO5B3t/eb673P1HFCdwS8JfKHqZRc1/aZ/qf26waazgw5ZpJsymrzzv8yxoN4d4PRUau8ReJSWVg2yw0IpGqzQxBPWZMjUTbEeZS/zAGSa4Nc3Wmz95/7MlMrIevB+a8Yo8K641CRiLZaCQI3oTvMvX2/pkNTyx5LSfjDdce9yz0rFSRz8Pjk0aDd/9JPiApMoE/Gl6sAoDoUExNq5Sg4rvijpUDc2ZS7J9gvk6ggEaY8usQTKaMlj0kBcrz87Mt+cjeA3JYy7PuMIPFbyhv0hcCVjJTOQYcBTdOjytS7Yla4sHgGQ5RZx6zWQ+ZrZ/0OeZMzCtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by BN8PR15MB3412.namprd15.prod.outlook.com (2603:10b6:408:a9::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Thu, 19 May
+ 2022 18:25:39 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::3061:40ff:2ad:33aa]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::3061:40ff:2ad:33aa%5]) with mapi id 15.20.5273.016; Thu, 19 May 2022
+ 18:25:39 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "song@kernel.org" <song@kernel.org>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>
+Subject: Re: [PATCH bpf-next 5/5] bpf: use module_alloc_huge for bpf_prog_pack
+Thread-Topic: [PATCH bpf-next 5/5] bpf: use module_alloc_huge for
+ bpf_prog_pack
+Thread-Index: AQHYaOeMGoBl3hFoL0eR1OYIkVdnbK0jcwCAgAAfoYCAAC+jgIACAzQAgACrl4CAABjOAA==
+Date:   Thu, 19 May 2022 18:25:39 +0000
+Message-ID: <8C89EED6-6531-4144-BDA8-B6519396F67C@fb.com>
+References: <20220516054051.114490-1-song@kernel.org>
+ <20220516054051.114490-6-song@kernel.org>
+ <83a69976cb93e69c5ad7a9511b5e57c402eee19d.camel@intel.com>
+ <68615225-D09D-465A-8EEC-6F81EF074854@fb.com>
+ <dc23afb892846ef41d73a41d58c07f6620cb6312.camel@intel.com>
+ <E0C04599-E7E0-4377-8826-74FA073FC631@fb.com>
+ <d3de84ce7fa62c9e460a49143ffa4709b6351390.camel@intel.com>
+In-Reply-To: <d3de84ce7fa62c9e460a49143ffa4709b6351390.camel@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.80.82.1.1)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 19d647ba-54c6-489e-efe5-08da39c4f9e1
+x-ms-traffictypediagnostic: BN8PR15MB3412:EE_
+x-microsoft-antispam-prvs: <BN8PR15MB3412085EA0A300A02E0CD2DBB3D09@BN8PR15MB3412.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: teszm9Up1AGN83l8nUuZI+lJwFCSJqVi/uwehsnREpgOs7BTQ6DWsL3e9araqHcuVwL2TBisJaUWnZPPNODp2znwnXVpxI9Hz5eUVl0Y/PdjX9LWTjEM14PjtKYOOcz7+SdCTkgTTHB8EcqydiB8w3299M+JWAmqHPhneZQeu+8QyDu0I8W1WZZIwRHW4puAUgmauWFWm8ndG8kRkZPVJ+22IrK/UDIG83JYVHhxkLDj8N2rRo0G1C78zmCQGrgmT3hwVZqSwLsO9R7ovzTMSKuZYpEdIzk303zTULmXC3h/mvpkYcF9jLYXP5wg3l7XF1LrPVg36s7X6tBctPL0kWWrlb18bgHE5OJsV1/zXWU1+JxT6MMRgmxM+xcQear7OPOkEtcKqXVi0Ta0iDa/sk3WcbFLsnyNAmbzkO41y3eKd8lFrSWFY0Rz3Hy7bu/RHixw0b4l3jJJYm1uy0ggDNjjCojMSQQLNO4Ig9jNJeMjomJJ+pcnVfepMnkjyG9y2lh89BFRrIIoqgI7cGobJhnnnY5dVzn29/s6ZUDBZu5ZLPYqNrb0PJ6RvzLYetjwc3ll6mweP0n0SNYCFzJeDTIYyfCHKQmjlA9hHMqmz32lQn+N29zeQR4lccHrG7HtUVDivVUFgzjORgaaFELWZdDyJUJuCF8D3CrsAfjAW+vjOyjCvgMyNy14SyY16A0OZ37OJ/vvSrNmRkElDCTSI1mEa4l5M99UgQAhfVVlPwhSQUEvJFWIliWM8OR5JwNp4WNVzZ5wvIaGVJo9HC2zwQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(76116006)(8676002)(64756008)(66446008)(66476007)(8936002)(508600001)(4326008)(66946007)(122000001)(6506007)(66556008)(36756003)(53546011)(6512007)(54906003)(91956017)(71200400001)(6486002)(2906002)(2616005)(33656002)(6916009)(186003)(316002)(86362001)(83380400001)(38070700005)(38100700002)(5660300002)(14583001)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?m6h/2vPF02xjF9BZ70Z7PzJQM2lD1XFHlkrjTsNbR9L4b8+TOV01iknpS0f0?=
+ =?us-ascii?Q?tY4RHuxjoENvmtpWF8vc0Qm5YmvwDoHwVI613SVtDYUj9OXB5W2o917DxOnM?=
+ =?us-ascii?Q?yMdy2/eHajOPIUhhjzNcGZMBDH/g21+hnoeguvqctvGs8qtPd4dIcTyySMSh?=
+ =?us-ascii?Q?8HT5EWw0XachGxfgrAMcOStunOxujxTJTMpr/GvjHPIyKwXVHQYA99/30T+2?=
+ =?us-ascii?Q?+I5Ikn7kkqQbGTNwrrpOIYO6tNRMychC6foOdwqAKVPQZu7NrXuSOHTT+29T?=
+ =?us-ascii?Q?CHSBvsAbZ08Otg6wWniBuFlk0oKrnlka4Xrr7YRBuCUkZG/qrzD8zNcZln19?=
+ =?us-ascii?Q?jWRfK9a4yp7TqKKXbl3KS7ERtI0ak5daOPdmqw269cQac3agXbkWPTqRgCRm?=
+ =?us-ascii?Q?vjiwIkZd1RSL91yuImi93d8/F8DlPJCVjxqLKo3Q2REV8E81oCi5uT7Ihj57?=
+ =?us-ascii?Q?40/+WlE+DDa9Xf5ub8I8m0LWLXjcI8UJLL0M8b6NmKnCIuBhEYE/SHPMZqOi?=
+ =?us-ascii?Q?1UQcxjpw8ZfA9qvaoyRDyugui5SYRER0N3PuOetiGTZ9K9FmGA08McokEHE7?=
+ =?us-ascii?Q?IfVgYbZwzfklbxfKqVzwml/ivTom3HHPo0jrZqqTQMtbBQ7R2LA4TtwECmtj?=
+ =?us-ascii?Q?fE3q92P409FSleCS26zj3Z9vZ+op8P/TAQPCw0FlPmAAqRUCqysjgOMd4FeB?=
+ =?us-ascii?Q?QsRh4ydsT6vUFHck2wXwQBxGBrIPV4xM+E63r9P7GimvnAw1r2h7L7OX2ZTf?=
+ =?us-ascii?Q?ozZpeCcjcLQMcnmxiYfNEJJLqPf/RArY0Df/o5dz3y/XNeWmGqpRu16bg4L9?=
+ =?us-ascii?Q?rEKRcrtMrEqIhwwOxCEcgNijPXqfGMSF6JO7o9U2mcUt1hh/w3kQ6cF3wkLa?=
+ =?us-ascii?Q?//1SjC+pknayMPNxGYT/HJxzVxTj2GSCWzCwWUHgcEmwmFPRjdWotG0a/I0l?=
+ =?us-ascii?Q?V/VMLH35afVRPOE8bAJxLEIYgi63QqTBS2wz94S5pkOIJjRX+MNsCRPvDK3Z?=
+ =?us-ascii?Q?UPawOEUUoZz+Q7FJ91DO7wpagHywOnLknsnyk9v189uKwagrIDW1gvI+0ptb?=
+ =?us-ascii?Q?CdsETsdpqW998+o2XfhKhvg2grHH9eAvDM20RMdaOxCVoL9bQhhMZ2xtU0OR?=
+ =?us-ascii?Q?XEOkeZz9W6OvOMTBHAHzi6CooZslQO9Yj/dI15fjxfcU4GmKklcgVgx5La1/?=
+ =?us-ascii?Q?0+ofuB7Ag66CoFDvK6uaWEP8U84BxDkiSCPmKAkdTJtqkjPYXg7/GaPOKIzF?=
+ =?us-ascii?Q?dIlXkZYKbx7Sw49y7xNUqWt6ypUyrRg8QmFSavHvkj8QfXUUE3xeHocQMFZY?=
+ =?us-ascii?Q?+AD8B02GvbXHiwaYUs9Ckqjf6CL1EYjzI90z4HsAAGiUjiRPL5oWGI52S+Vv?=
+ =?us-ascii?Q?lZyLd95C/+sCMwHkPXRTeTYcs5nLSyO7AvTt6bBGa0IdLkTBFPdhiV7HaLRm?=
+ =?us-ascii?Q?mZcoAqgpFtQBiFHUttZm4xDK6AVGW89LuiA5650nw3EE/tiG5CwTVBHkfoTl?=
+ =?us-ascii?Q?vD5HuZ8xf6hleLSBMH759LCDwMxVOI/gAnpW3D+ifeIf0VrCPhbJY1Z0sFNJ?=
+ =?us-ascii?Q?S468PaacoFTdT8BskUsdl64f+9EVaf1IvhmFipSCrUYuEwox/VCgvWmAcaim?=
+ =?us-ascii?Q?khPw/du/V0+Wa94roHK/icrGSOoao5LYQmrhh372J0iR85VH0kwZ7+21RbQ8?=
+ =?us-ascii?Q?WwBZ3NmzMa5sK5G0AeGVWDISEn9xjGNj71quot8qhBRBg6FH9kaevXPpCGWC?=
+ =?us-ascii?Q?AB94SgQZW3X2CX6VDW+EQrtZNy2Poy75QrWLCSqO1cZ/UPxtZLe5?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2B52ABCBFD377E49964A4E19178B1658@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19d647ba-54c6-489e-efe5-08da39c4f9e1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2022 18:25:39.4741
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RkA5w1ln6KRxNp8wUe0F7eYeEep4LUU8zLrRPGs0H6+5OKW+ywDQ6JcCrLK237BfeGGNZ3o+KzkRy9//3sGjzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB3412
+X-Proofpoint-GUID: YUcqvisxirbnHpZo1WNRm6pY47QDimqq
+X-Proofpoint-ORIG-GUID: YUcqvisxirbnHpZo1WNRm6pY47QDimqq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-19_06,2022-05-19_03,2022-02-23_01
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chen-Yu Tsai <wenst@chromium.org> writes:
 
-> n Wed, May 18, 2022 at 8:03 AM Kevin Hilman <khilman@kernel.org> wrote:
->>
->> Kevin Hilman <khilman@kernel.org> writes:
->>
->> > Chen-Yu Tsai <wenst@chromium.org> writes:
->> >
->> >> On Mon, May 16, 2022 at 8:43 AM Roger Lu <roger.lu@mediatek.com> wrote:
->> >>>
->> >>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
->> >>> which calculates suitable SVS bank voltages to OPP voltage table.
->> >>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
->> >>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
->> >>>
->> >>> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
->> >>> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
->> >>> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
->> >>>
->> >>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
->> >>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
->> >>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
->> >>>
->> >>> Change since v24:
->> >>> - Rebase to Linux 5.18-rc6
->> >>> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
->> >>> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
->> >>>
->> >>> Test in below environment:
->> >>> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
->> >>> HW: mt8183-Krane
->> >>>
->> >>> [4] https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
->> >>
->> >> I've updated my branch to include all the latest versions of the relevant
->> >> patch series:
->> >>
->> >> - anx7625 DPI bus type series v2 (so the display works)
->> >> - MT8183 thermal series v9 (this seems to have been overlooked by the
->> >> maintainer)
->> >> - MTK SVS driver series v25
->> >> - devfreq: cpu based scaling support to passive governor series v5
->> >> - MTK CCI devfreq series v4
->> >> - MT8183 cpufreq series v7
->> >> - Additional WIP patches for panfrost MTK devfreq
->> >
->> > Thanks for preparing an integration branch Chen-Yu.
->> >
->> > I'm testing this on mt8183-pumpkin with one patch to add the CCI
->> > regulator[1], and the defconfig you posted in a previous rev of this
->> > series, but the CCI driver still causes a fault on boot[2] on my
->> > platform.
->> >
->> > I mentioned in earlier reviews that I think there's potentially a race
->> > between CCI and SVS loading since they are co-dependent.  My hunch is
->> > that this is still not being handled properly.
->>
->> Ah, actually it's crashing when I try to boot the platform with
->> `maxcpus=4` on the cmdline (which I have to do because mt8183-pumpkin is
->> unstable upstream with the 2nd cluster enabled.)
->>
->> The CCI driver should be a bit more robust about detecting
->> available/online CPUs
->
-> This all seems to be handled in the devfreq passive governor.
 
-Well, that's the initial crash.  But the SVS driver will also go through
-its svs_mt8183_banks[] array (including both big & little clusters) and
-try to init SVS, so presumably that will have some problems also if only
-one cluster is enabled.
+> On May 19, 2022, at 9:56 AM, Edgecombe, Rick P <rick.p.edgecombe@intel.com> wrote:
+> 
+> On Thu, 2022-05-19 at 06:42 +0000, Song Liu wrote:
+>> Thinking more on this. Even huge page is not supported, we can
+>> allocate
+>> 2MB worth of 4kB pages and keep using it. This would help direct map
+>> fragmentation. And the code would also be simpler. 
+>> 
+>> Rick, I guess this is inline with some of your ideas?
+> 
+> Yea, that is what I wondering. Potential benefits are just speculative
+> though. There is a memory overhead cost, so it's not free.
 
-> And presumably we'd like to have CCI devfreq running even if just one
-> core was booted.
+Yeah, I had the same concern with memory overhead. The benefit should 
+not exceed 0.2% (when 2MB page is supported), so I think we can use
+4kB pages for now.  
 
-Yes, I assume so also.
+> 
+> As for the other question of whether to fix VM_FLUSH_RESET_PERMS. If
+> there really is an intention to create a more general module_alloc()
+> replacement soon, then I think it is ok to side step it. An optimal
+> replacement might not need it and it could be removed in that case.
+> Let's at least add a WARN about it not working with huge pages though.
 
-> Added Chanwoo for more ideas.
+IIUC, it will take some effort to let kernel modules use a solution 
+like this. But there are some low hanging fruits, like ftrace and BPF
+trampolines. Maybe that's enough to promote a more general solution. 
 
-OK, thanks.
+For the WARN, I guess we need something like this?
 
-Kevin
+diff --git i/include/linux/vmalloc.h w/include/linux/vmalloc.h
+index b159c2789961..5e0d0a60d9d5 100644
+--- i/include/linux/vmalloc.h
++++ w/include/linux/vmalloc.h
+@@ -238,6 +238,7 @@ static inline void set_vm_flush_reset_perms(void *addr)
+ {
+        struct vm_struct *vm = find_vm_area(addr);
+
++       WARN_ON_ONCE(is_vm_area_hugepages(addr));
+        if (vm)
+                vm->flags |= VM_FLUSH_RESET_PERMS;
+ }
+
+
+Thanks,
+Song
+
+> 
+> I also think the benchmarking so far is not sufficient to make the case
+> that huge page mappings help your workload since the direct map splits
+> were also different between the tests. I was expecting it to help
+> though. Others were the ones that asked for that, so just commenting my
+> analysis here.
+

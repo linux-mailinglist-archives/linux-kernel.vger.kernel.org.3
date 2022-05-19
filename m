@@ -2,133 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E85B52E098
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B71752E09E
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343629AbiESXeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 19:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
+        id S1343640AbiESXje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236252AbiESXeL (ORCPT
+        with ESMTP id S236252AbiESXjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 19:34:11 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878D7111BAA;
-        Thu, 19 May 2022 16:34:10 -0700 (PDT)
-Date:   Thu, 19 May 2022 23:34:01 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
-        s=protonmail2; t=1653003248; x=1653262448;
-        bh=LyRrYUAfnrOlxEV8oP2sHMBTRL2yGmI3LgV/g5hKsu8=;
-        h=Date:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:Cc:
-         Date:Subject:Reply-To:Feedback-ID:Message-ID;
-        b=BQFniW+okpJQpTrAkOEd0e0zhN2cK2O27PSxKOCRKV+q2e3MKReFAcsgHJkGDB97h
-         nXB+dYoaeRnc6WBq6XJp3FeEZjqEyTIMdQJIr/V0kzee/FsfOSHbddYXWAABS1UmGO
-         lALsYbL5JATJSrfkkr3o+skIRaVFFrTpoYzjhnpjSVA+TiKekSp76nHHuPHZtHSvSI
-         emq+2bP/Ho/9RPEVuDZiferPRf1rSc6bCe7yMZvmQi3QwODFU+AnLEvXfPd/HDV8pN
-         gB9QLL3b+et/IfQ5ocfTi0YelTDnhrhKYSIsbN3SzUMDHrqq6J6vKi0PtQoN+X0Q8F
-         n6IWXvKx2XOhQ==
-From:   Adam Wujek <dev_public@wujek.eu>
-Cc:     Adam Wujek <dev_public@wujek.eu>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Reply-To: Adam Wujek <dev_public@wujek.eu>
-Subject: [PATCH] hwmon: (pmbus) Check PEC support before reading other registers
-Message-ID: <20220519233334.438621-1-dev_public@wujek.eu>
-Feedback-ID: 23425257:user:proton
+        Thu, 19 May 2022 19:39:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5647ED78E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:39:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F877617FF
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:39:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE52C385AA;
+        Thu, 19 May 2022 23:39:30 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="C1I8xTFf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1653003568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=edjvbY7HX7Lcrbc+aJx5o8Hn+MKLeaVB2jN9HDZFfS8=;
+        b=C1I8xTFfxz9WdxLF7BHNwQYRMHm820W30KjpGT5tD45asjE/7Mm5FF/tXJXCBmz/3gSihm
+        TeXVwRaz0kP5J7s+A+b1NXyipneBaoXKpItUMT/rDY8CtMn1WPO/Xyw4pypV5LpddU09xA
+        F6z2T+piJkJLldQB67E8TKhsn4IFJDo=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 0ad65c0f (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 19 May 2022 23:39:28 +0000 (UTC)
+Date:   Fri, 20 May 2022 01:39:26 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
+Message-ID: <YobVLs3mpEFjJCh3@zx2c4.com>
+References: <20220519193133.194138-1-axboe@kernel.dk>
+ <YoajCafKmgUbbaY0@zx2c4.com>
+ <a6c843ff-a3d7-ce6a-4e99-70968834a02a@kernel.dk>
+ <8e6c98d4-03e9-3eb5-3d4e-b9a9faeb677a@kernel.dk>
+ <YobPfgkzGrNPDDFI@zx2c4.com>
+ <60b82026-9c46-16ea-d9fa-05eb96ae2218@kernel.dk>
+ <CAHmME9rdJ=Pa=KOY6voryiHffWSkRKxC75+Wz-xoQOpowObwWw@mail.gmail.com>
+ <3bcbfde4-3247-b4ff-9a7c-963a9a510703@kernel.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <3bcbfde4-3247-b4ff-9a7c-963a9a510703@kernel.dk>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure that the support of PEC is determined before the read of other
-registers. Otherwise the validation of PEC can trigger an error on the read
-of STATUS_BYTE or STATUS_WORD registers.
+Hi Jens,
 
-The problematic scenario is the following. A device with enabled PEC
-support is up and running and a kernel driver is loaded.
-Then the driver is unloaded (or device unbound), the HW device
-is reconfigured externally (e.g. by i2cset) to advertise itself as not
-supporting PEC. Without the move of the code, at the second load of
-the driver (or bind) the STATUS_BYTE or STATUS_WORD register is always
-read with PEC enabled, which is likely to cause a read error resulting
-with fail of a driver load (or bind).
+On Thu, May 19, 2022 at 05:33:01PM -0600, Jens Axboe wrote:
+> On 5/19/22 5:25 PM, Jason A. Donenfeld wrote:
+> > Hi Jens,
+> > 
+> > On Fri, May 20, 2022 at 1:22 AM Jens Axboe <axboe@kernel.dk> wrote:
+> >> I can certainly do the write side too. To fix this regression, I just
+> >> valued doing read_iter first and I'd hate to hold that up to do the
+> >> write side too. I'll do the write side later today, but let's keep them
+> >> separate.
+> > 
+> > Excellent, thanks. I plan to queue these up all in a row.
+> 
+> Built and tested v2, just sent it out. Note that it deviates from your
+> proposal a bit since with that we lost the
+> 
+> if (!len)
+> 	break;
+> 
+> check, which is kind of important if you ever want to be done :-)
 
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
----
-Notes:
-- This commit extends the fix implemented in the commit:
-  75d2b2b06bd8 hwmon: (pmbus) disable PEC if not enabled
-- The move of the only line:
-  client->flags &=3D ~I2C_CLIENT_PEC;
-  would make the read of STATUS_BYTE and STATUS_WORD registers that follow
-  always without PEC
+Heh, noticed that too, thanks.
 
- drivers/hwmon/pmbus/pmbus_core.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+> I'll do the write_iter side, but as mentioned, I'd prefer to keep it
+> separate from this patchset as this one fixes a real regression that we
+> need to get backported too.
+ 
+No problem. Because of all the flux in random.c lately, I've been
+preparing a massive backports branch, 2 branches actually, so I'll make
+sure this is in there. Backport concern aside, though, I'll look for
+your write_iter patch today. Thanks a bunch for doing this.
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_c=
-ore.c
-index e82af82fe4ca..55153a71c170 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2308,6 +2308,23 @@ static int pmbus_init_common(struct i2c_client *clie=
-nt, struct pmbus_data *data,
- =09struct device *dev =3D &client->dev;
- =09int page, ret;
-
-+=09/*
-+=09 * Figure out if PEC is enabled before accessing any other register.
-+=09 * Make sure PEC is disabled, will be enabled later if needed.
-+=09 */
-+=09client->flags &=3D ~I2C_CLIENT_PEC;
-+
-+=09/* Enable PEC if the controller and bus supports it */
-+=09if (!(data->flags & PMBUS_NO_CAPABILITY)) {
-+=09=09ret =3D i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
-+=09=09if (ret >=3D 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
-+=09=09=09if (i2c_check_functionality(client->adapter,
-+=09=09=09=09=09=09    I2C_FUNC_SMBUS_PEC)) {
-+=09=09=09=09client->flags |=3D I2C_CLIENT_PEC;
-+=09=09=09}
-+=09=09}
-+=09}
-+
- =09/*
- =09 * Some PMBus chips don't support PMBUS_STATUS_WORD, so try
- =09 * to use PMBUS_STATUS_BYTE instead if that is the case.
-@@ -2326,19 +2343,6 @@ static int pmbus_init_common(struct i2c_client *clie=
-nt, struct pmbus_data *data,
- =09=09data->has_status_word =3D true;
- =09}
-
--=09/* Make sure PEC is disabled, will be enabled later if needed */
--=09client->flags &=3D ~I2C_CLIENT_PEC;
--
--=09/* Enable PEC if the controller and bus supports it */
--=09if (!(data->flags & PMBUS_NO_CAPABILITY)) {
--=09=09ret =3D i2c_smbus_read_byte_data(client, PMBUS_CAPABILITY);
--=09=09if (ret >=3D 0 && (ret & PB_CAPABILITY_ERROR_CHECK)) {
--=09=09=09if (i2c_check_functionality(client->adapter, I2C_FUNC_SMBUS_PEC))=
- {
--=09=09=09=09client->flags |=3D I2C_CLIENT_PEC;
--=09=09=09}
--=09=09}
--=09}
--
- =09/*
- =09 * Check if the chip is write protected. If it is, we can not clear
- =09 * faults, and we should not try it. Also, in that case, writes into
---
-2.17.1
-
-
+Jason

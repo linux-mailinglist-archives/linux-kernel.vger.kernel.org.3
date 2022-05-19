@@ -2,129 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C912352CBF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BD752CBF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbiESGbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 02:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S234442AbiESGby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 02:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiESGbL (ORCPT
+        with ESMTP id S230011AbiESGbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 02:31:11 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930D818E15
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:31:08 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L3fxv2s3yzCshV;
-        Thu, 19 May 2022 14:26:11 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 14:31:07 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 14:31:06 +0800
-Message-ID: <741f1974-e357-728b-88b9-bce3ff82d91f@huawei.com>
-Date:   Thu, 19 May 2022 14:31:06 +0800
+        Thu, 19 May 2022 02:31:45 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91B324F2A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:31:42 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id q130so5054698ljb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=naZDnEoCjMXx13Y1+051NuNh/YR239ab6tyhsA1Bwj8=;
+        b=Fbs2aVMU4cPjCMiljTBfCDS6deeUI+7jucOmpU9q1W+ptFqc83lQz0uSgCGSIfrf20
+         zd63SsWiz/mIBngU8Uyjv/hP3q7oFtmI9nu/6pafHtYTWv+r4n91Tj9Sqrp6CncR+FKy
+         jaZLbIPJaqVxGhyA9VApM/3/t8Kjdk3PP4JMCW0OwCNV4ss/2dxkKUGKpl+LJXir6BiJ
+         QrNkWN81erHvWlU3S2mJ4LzepybjkQnwm9A5yEKj0r7XzT10r9XIJFBKG3t/jP7BYqaM
+         87oTIQrxYBFWNAHYHxNaQkr7s5t+6ES8lcNaAHQCtQVUAO82EigJheMXDX1htuZkpxpP
+         Qwnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=naZDnEoCjMXx13Y1+051NuNh/YR239ab6tyhsA1Bwj8=;
+        b=Bv8iLn/kBF3gSca+GRsCgOkk91rek9ZwsVIQ7sUyUXtfCqsFSCCTDRAOILrl6kWXD+
+         E/ms22hbwudoRuWEulYzQd8xVO4PJfr2z8zx3IWR1XIz5mrEkB6ycBrozUZPaLnlJfPw
+         +KSDZjBeYmD/UoNjAsoFvZha/cB6GRvvnUqWH66OFWB75k8/mCXm8FGucXQ5svP6Gn+u
+         pPbwk5YHE9HrkVoYK9Fcjkypb4rAgoA5d+2QXQ5cwVwQuyYzTMbsyNjhXRCE4YxQRVV4
+         XJ1XpDWxwIz8cYGHQbOChtB//COnyyrwu1PygqJJzBC90cxtUGKz92E2axhyjiVxVWYl
+         CkNg==
+X-Gm-Message-State: AOAM5327kDaT7gpz5BcAKAEzA3Gy7F2ayfk9y8dMi3Etwh/5Mf95hTbC
+        wmJX94A87e7qzSFpVC5/zYL7cPqWck87F+AX30u0+A==
+X-Google-Smtp-Source: ABdhPJxZT6ot/IRbzSDhxEEopdx454QnWK1oePLTWm48P9Js7gUl7Na5CK9zAGOuKBgVVFLly+DTXzFkqHk/TayAodY=
+X-Received: by 2002:a05:651c:1612:b0:253:d535:d7c0 with SMTP id
+ f18-20020a05651c161200b00253d535d7c0mr870589ljq.33.1652941901043; Wed, 18 May
+ 2022 23:31:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 resend 4/5] arm64: mm: Convert to GENERIC_IOREMAP
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <akpm@linux-foundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-mm@kvack.org>, <hch@infradead.org>, <arnd@arndb.de>
-References: <20220429103225.75121-5-wangkefeng.wang@huawei.com>
- <20220502032751.21503-1-wangkefeng.wang@huawei.com>
- <25a90892-957c-e5b4-e121-948e85d3caee@arm.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <25a90892-957c-e5b4-e121-948e85d3caee@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <00000000000056758e05d301dd90@google.com>
+In-Reply-To: <00000000000056758e05d301dd90@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 19 May 2022 08:31:29 +0200
+Message-ID: <CACT4Y+bRrWXYGgKdbK3AFQLNUumJbSzujEJ=+37dcDBjzJg72A@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in hci_inquiry_result_with_rssi_evt
+To:     syzbot <syzbot+e3cad3a4e3f03bc00562@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, luiz.von.dentz@intel.com,
+        marcel@holtmann.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        =?UTF-8?Q?Tam=C3=A1s_Koczka?= <poprdi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/5/19 13:34, Anshuman Khandual wrote:
+On Mon, 13 Dec 2021 at 08:17, syzbot
+<syzbot+e3cad3a4e3f03bc00562@syzkaller.appspotmail.com> wrote:
 >
-> On 5/2/22 08:57, Kefeng Wang wrote:
->> Add hook for arm64's special operation when ioremap() and iounmap(),
->> then ioremap_wc/np/cache is converted to use ioremap_prot()
->> from GENERIC_IOREMAP, update the Copyright and kill the unused
->> inclusions.
->>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->> ---
->> v2 resend:
->> - use IOMEM_ERR_PTR to fix sparse warning found by lkp
->>
->>   arch/arm64/Kconfig          |  1 +
->>   arch/arm64/include/asm/io.h | 20 ++++++---
->>   arch/arm64/kernel/acpi.c    |  2 +-
->>   arch/arm64/mm/ioremap.c     | 85 +++++--------------------------------
->>   4 files changed, 27 insertions(+), 81 deletions(-)
->>
->> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> index 20ea89d9ac2f..56673209fdb9 100644
->> --- a/arch/arm64/Kconfig
->> +++ b/arch/arm64/Kconfig
->> @@ -123,6 +123,7 @@ config ARM64
->>   	select GENERIC_CPU_VULNERABILITIES
->>   	select GENERIC_EARLY_IOREMAP
->>   	select GENERIC_IDLE_POLL_SETUP
->> +	select GENERIC_IOREMAP
->>   	select GENERIC_IRQ_IPI
->>   	select GENERIC_IRQ_PROBE
->>   	select GENERIC_IRQ_SHOW
->> diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
->> index 7fd836bea7eb..042fa01940b8 100644
->> --- a/arch/arm64/include/asm/io.h
->> +++ b/arch/arm64/include/asm/io.h
->> @@ -163,13 +163,21 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
->>   /*
->>    * I/O memory mapping functions.
->>    */
->> -extern void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot);
->> -extern void iounmap(volatile void __iomem *addr);
->> -extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
->>   
->> -#define ioremap(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRE))
->> -#define ioremap_wc(addr, size)		__ioremap((addr), (size), __pgprot(PROT_NORMAL_NC))
->> -#define ioremap_np(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRnE))
->> +void __iomem *arch_ioremap(phys_addr_t phys_addr, size_t size, unsigned long prot);
->> +#define arch_ioremap arch_ioremap
->> +
->> +int arch_iounmap(void __iomem *addr);
->> +#define arch_iounmap arch_iounmap
->> +
->> +#define _PAGE_IOREMAP PROT_DEVICE_nGnRE
-> Small nit, should we have a comment here for the above components i.e
-> PAGE_IOREMAP and callbacks arch_ioremap()/arch_iounmap() are required
-> because of enabling GENERIC_IOREMAP ?
-
-There is a comment in  include/asm-generic/io.h:       /* _PAGE_IOREMAP 
-needs to be supplied by the architecture */
-
-so arch's callbacks could not add repeated comments.
-
-
-> Otherwise LGTM.
+> Hello,
 >
-> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Thanks.
-> .
+> syzbot found the following issue on:
+>
+> HEAD commit:    4eee8d0b64ec Add linux-next specific files for 20211208
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=130203e5b00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=20b74d9da4ce1ef1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e3cad3a4e3f03bc00562
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101eb355b00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b8f805b00000
+>
+> The issue was bisected to:
+>
+> commit 3e54c5890c87a30b1019a3de9dab968ff2b21e06
+> Author: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+> Date:   Wed Dec 1 18:55:03 2021 +0000
+>
+>     Bluetooth: hci_event: Use of a function table to handle HCI events
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=150100bab00000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=170100bab00000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=130100bab00000
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+e3cad3a4e3f03bc00562@syzkaller.appspotmail.com
+> Fixes: 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI events")
+
+Presumably this was fixed by Luiz's patch:
+https://github.com/torvalds/linux/commit/72279d17df54d5e4e7910b39c61a3f3464e36633
+
+Let's close on syzbot to get new reports in future:
+
+#syz fix: Bluetooth: hci_event: Rework hci_inquiry_result_with_rssi_evt
+
+
+> Bluetooth: hci0: unexpected cc 0x1001 length: 249 > 9
+> Bluetooth: hci0: unexpected cc 0x0c23 length: 249 > 4
+> Bluetooth: hci0: unexpected cc 0x0c25 length: 249 > 3
+> Bluetooth: hci0: unexpected cc 0x0c38 length: 249 > 2
+> general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+> KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+> CPU: 0 PID: 6545 Comm: kworker/u5:1 Not tainted 5.16.0-rc4-next-20211208-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: hci0 hci_rx_work
+> RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x970 net/bluetooth/hci_event.c:4520
+> Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 88 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <0f> b6 04 02 4c 89 ea 83 e2 07 38 d0 7f 08 84 c0 0f 85 1b 07 00 00
+> RSP: 0018:ffffc90001aafad0 EFLAGS: 00010246
+> RAX: dffffc0000000000 RBX: ffff88807e754000 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff883588a8 RDI: ffff88807e754000
+> RBP: ffff88807e754000 R08: 0000000000000000 R09: 0000000000000000
+> R10: ffffffff88376f27 R11: 0000000000000000 R12: ffff88807015eb40
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffd653f7000 CR3: 0000000071f88000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  hci_event_func net/bluetooth/hci_event.c:6812 [inline]
+>  hci_event_packet+0x817/0xe90 net/bluetooth/hci_event.c:6860
+>  hci_rx_work+0x4fa/0xd30 net/bluetooth/hci_core.c:3817
+>  process_one_work+0x9b2/0x1690 kernel/workqueue.c:2318
+>  worker_thread+0x658/0x11f0 kernel/workqueue.c:2465
+>  kthread+0x405/0x4f0 kernel/kthread.c:345
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 403a15c54e29c5c4 ]---
+> RIP: 0010:hci_inquiry_result_with_rssi_evt+0xbc/0x970 net/bluetooth/hci_event.c:4520
+> Code: 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 88 07 00 00 48 8b 04 24 4c 8b 28 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <0f> b6 04 02 4c 89 ea 83 e2 07 38 d0 7f 08 84 c0 0f 85 1b 07 00 00
+> RSP: 0018:ffffc90001aafad0 EFLAGS: 00010246
+> RAX: dffffc0000000000 RBX: ffff88807e754000 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff883588a8 RDI: ffff88807e754000
+> RBP: ffff88807e754000 R08: 0000000000000000 R09: 0000000000000000
+> R10: ffffffff88376f27 R11: 0000000000000000 R12: ffff88807015eb40
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f2bb803f018 CR3: 000000001d893000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess), 4 bytes skipped:
+>    0:   48 c1 ea 03             shr    $0x3,%rdx
+>    4:   80 3c 02 00             cmpb   $0x0,(%rdx,%rax,1)
+>    8:   0f 85 88 07 00 00       jne    0x796
+>    e:   48 8b 04 24             mov    (%rsp),%rax
+>   12:   4c 8b 28                mov    (%rax),%r13
+>   15:   48 b8 00 00 00 00 00    movabs $0xdffffc0000000000,%rax
+>   1c:   fc ff df
+>   1f:   4c 89 ea                mov    %r13,%rdx
+>   22:   48 c1 ea 03             shr    $0x3,%rdx
+> * 26:   0f b6 04 02             movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+>   2a:   4c 89 ea                mov    %r13,%rdx
+>   2d:   83 e2 07                and    $0x7,%edx
+>   30:   38 d0                   cmp    %dl,%al
+>   32:   7f 08                   jg     0x3c
+>   34:   84 c0                   test   %al,%al
+>   36:   0f 85 1b 07 00 00       jne    0x757
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches

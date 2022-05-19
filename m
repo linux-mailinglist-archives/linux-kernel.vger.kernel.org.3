@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAE852DD8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D6252DD76
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244488AbiESTOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S244385AbiESTNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244332AbiESTNZ (ORCPT
+        with ESMTP id S243841AbiESTNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 May 2022 15:13:25 -0400
 Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AE1AFAFD;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB14AF303;
         Thu, 19 May 2022 12:13:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
         Message-Id:Date:Cc:To:From:content-disposition;
-        bh=iGKyeE3hyk0q9jmoVwSEHBFtpjdddjD8HiW/2+TcCpo=; b=FUexMxuw0kjZzHdkmuIxFkYQnM
-        kSDpO/lp1PyYqiB7qIcmWCT0vUxHaXsjzlBAByiRv3zN3mXW9YyzGQdIDLN7xof6wo78+K3o2Zxp7
-        tTtaOC4uvHA5vonPw6yAN/Wv9dTJE6pUZUzm8DkZTqLniJEymv45m7SNcQZiSRnWyOZJsDWT3lC+3
-        E/KuDIaHYWROJZgutD7d58tWeNgeRAuN/DvR2MGnrpdPt55K5fam/ySh9BAn8zVFPQvALxmFzGvlO
-        X/4zGlSqGnGf6rgsg7/s+24qUpvRw6UUbptjdA14v1nMkLbz0k9HMf3Vac+3dUQTRq5hTNxxCqyxF
-        MOQA+bfA==;
+        bh=5THCuTuhB9Pg9vg5D4m+VHayGZUEXqzPFCngvBnB6Js=; b=iCRYgfCvxgb35jDAzhb0ZKLeUp
+        eO9+zkTgEkWF90tHMsTZ3SBgCV66LRy5bKlFi1FvqFiAE7K1vlZE3qTtYq94VJ4ftf21eCXpSmKKy
+        UV/ouRtTN+HCKxP/SKOAHHorYMV0Wj1B0/OUmQ6LxOnsSPoUCDXQd99OwtErGF3aPWKx5la7208Qk
+        bTFK7l+5au4Vo30j3CpEqQ+DdmI8hS8LkOo9uBcvRpfpEAohN5/k8X8qLCV8cpB0TqtFas1D6zVjb
+        cyjzb/3Q7/FYcd7V2N0u+dl0iJwJU+/2qoU0q4EJUniD7djBU9diTmIFVklNjlOSDrE2qgCWGBJCH
+        OhaiEdsA==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nrlaJ-002TqS-53; Thu, 19 May 2022 13:13:19 -0600
+        id 1nrlaI-002TqR-Vm; Thu, 19 May 2022 13:13:19 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nrlaF-0004Tt-LF; Thu, 19 May 2022 13:13:15 -0600
+        id 1nrlaF-0004Tx-Td; Thu, 19 May 2022 13:13:16 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -41,8 +41,8 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         Martin Oliveira <Martin.Oliveira@eideticom.com>,
         David Sloan <David.Sloan@eideticom.com>,
         Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu, 19 May 2022 13:13:09 -0600
-Message-Id: <20220519191311.17119-14-logang@deltatee.com>
+Date:   Thu, 19 May 2022 13:13:10 -0600
+Message-Id: <20220519191311.17119-15-logang@deltatee.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220519191311.17119-1-logang@deltatee.com>
 References: <20220519191311.17119-1-logang@deltatee.com>
@@ -57,49 +57,71 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v1 13/15] md/raid5-cache: Annotate pslot with __rcu notation
+Subject: [PATCH v1 14/15] md: Ensure resync is reported after it starts
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-radix_tree_lookup_slot() and radix_tree_replace_slot() API expect the
-slot returned and looked up to be marked with __rcu. Otherwise
-sparse warnings are generated:
+The 07layouts test in mdadm fails on some systems. The failure
+presents itself as the backup file not being removed before the next
+layout is grown into:
 
-  drivers/md/raid5-cache.c:2939:23: warning: incorrect type in
-			assignment (different address spaces)
-  drivers/md/raid5-cache.c:2939:23:    expected void **pslot
-  drivers/md/raid5-cache.c:2939:23:    got void [noderef] __rcu **
+  mdadm: /dev/md0: cannot create backup file /tmp/md-test-backup:
+      File exists
+
+This is because the background mdadm process, which is responsible for
+cleaning up this backup file gets into an infinite loop waiting for
+the reshape to start. mdadm checks the mdstat file if a reshape is
+going and, if it is not, it waits for an event on the file or times
+out in 5 seconds. On faster machines, the reshape may complete before
+the 5 seconds times out, and thus the background mdadm process loops
+waiting for a reshape to start that has already occurred.
+
+mdadm reads the mdstat file to start, but mdstat does not report that the
+reshape has begun, even though it has indeed begun. So the mdstat_wait()
+call (in mdadm) which polls on the mdstat file won't ever return until
+timing out.
+
+The reason mdstat reports the reshape has started is due to an issue
+in status_resync(). recovery_active is subtracted from curr_resync which
+will result in a value of zero for the first chunk of reshaped data, and
+the resulting read will report no reshape in progress.
+
+To fix this, if "resync - recovery_active" is zero: force the value to
+be 4 so the code reports a resync in progress.
 
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 ---
- drivers/md/raid5-cache.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/md/md.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/md/raid5-cache.c b/drivers/md/raid5-cache.c
-index 1dbc7c4b9a15..a541d17f84f6 100644
---- a/drivers/md/raid5-cache.c
-+++ b/drivers/md/raid5-cache.c
-@@ -2683,7 +2683,7 @@ int r5c_try_caching_write(struct r5conf *conf,
- 	int i;
- 	struct r5dev *dev;
- 	int to_cache = 0;
--	void **pslot;
-+	void __rcu **pslot;
- 	sector_t tree_index;
- 	int ret;
- 	uintptr_t refcount;
-@@ -2850,7 +2850,7 @@ void r5c_finish_stripe_write_out(struct r5conf *conf,
- 	int i;
- 	int do_wakeup = 0;
- 	sector_t tree_index;
--	void **pslot;
-+	void __rcu **pslot;
- 	uintptr_t refcount;
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index 8273ac5eef06..dbac63c8e35c 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -8022,10 +8022,18 @@ static int status_resync(struct seq_file *seq, struct mddev *mddev)
+ 		if (test_bit(MD_RECOVERY_DONE, &mddev->recovery))
+ 			/* Still cleaning up */
+ 			resync = max_sectors;
+-	} else if (resync > max_sectors)
++	} else if (resync > max_sectors) {
+ 		resync = max_sectors;
+-	else
++	} else {
+ 		resync -= atomic_read(&mddev->recovery_active);
++		if (!resync) {
++			/*
++			 * Resync has started, but if it's zero, ensure
++			 * it is still reported, by forcing it to be 4
++			 */
++			resync = 4;
++		}
++	}
  
- 	if (!log || !test_bit(R5_InJournal, &sh->dev[sh->pd_idx].flags))
+ 	if (resync == 0) {
+ 		if (test_bit(MD_RESYNCING_REMOTE, &mddev->recovery)) {
 -- 
 2.30.2
 

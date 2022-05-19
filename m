@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4FF52DD2D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA7A52DD2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244126AbiESSwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S241372AbiESSwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244135AbiESSwE (ORCPT
+        with ESMTP id S244141AbiESSwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 May 2022 14:52:04 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2134.outbound.protection.outlook.com [40.107.22.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D006E5EBC3;
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2111.outbound.protection.outlook.com [40.107.22.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A113465B;
         Thu, 19 May 2022 11:51:58 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WzMX4PVBp3M1GAL6URx3K8RoVCfhw391XC5YVkW8LEWz3RWuu8tv0kQXsQ6GK/UGU77fFGKyF+Q+I+hsgSNKc4CFqs5MdBMui0aBbVDi6MvfSe5BDH10K6vOWcNP02XHohvoKXPhAT6EnUiXUizGS2afKvBinn5IlJ9rthZleT69dbFLn8tRP7PeDeXUdmbwFdaDeRfmJuLGt7Fl4B8+4a/o2cXbE4cVxhuv22voclr44ZjMTbpeEZ4TUVzDKYziWrYdLfZm+VzsCRgrfMGKDDq3VrmvvIV2LdpO8PMC0mjW2318KYbrjmwqApRYGBPj346rTRO2yaYWAYzv0foEHQ==
+ b=JDFP/sx/juy2FjxsVRy9zH02Ufp1YSDu1qYOHjydPHUyM0uCPPMBE/UrC7fTXmC3F3eGPCb8+d8ZLolTYARx5/nBQ1iZTBRnvTI0hM3fdASJUrjk2AzDe8vv3Xie9xvy8GzN0CM5uoNXL096N36M24W8tgK76SpTU/Dvnm9hqelX7XhtVuyc8X4ltUaqfw+NlX43vcP1EIXSXSkN0BeLZityjeI1wVFE0jjjR3SbK1AKrrnbFnG7PTJvV1im3Ni/kL+ByliLXWRZfX5P9LV1vW/ABmQi9SqWRznOFYdnwAHsOXrAxfTX5ZPy62uUgXZm8XFe5QI+A87F6yaiCeqBQg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C95WrmpzsEvNeDP9qqfswt/Axyd22O0kfW5VZSDWRFY=;
- b=k/Yskhvxd7DgnItT1ty2yl7/40COqI8+2K+eQZMUymiWGhVJH9bPSfw0koYqlijZu5X89EcveQwSajv3g17Zt79LpFE0DJjhPSUxwu44ki8L4m2pMn2W5NuwISlH/kOMftbwDT8Wbm8tzDVBhPblZ2ZN+Yw3mz7B4FnUA+SmnXJS/NbiPGSUg8m44vX+g58Ryinm/jNTHkJlhuwR6/N0/uI3L84boZFbTcMGs9ZqETyrWWA+CL+WIv28f7w2eyNeEp+KlRBYjKfpEZ1bujovRVr65t4BvcbTOZaMg7tkNX3NgyELZVNVTduilfcYrmUe0yb9hwDSJEO9Nl/pmj2eIQ==
+ bh=Od9jMJfS91fPqn1FYncIFoA02CQC63lbj/2QQyAzKK8=;
+ b=c6JfZ3cFgXtfg7dd0D4ZTy3GXZ/NsCniSjbUgOPv+TbHTWFrpspYsG9UOpzjQVUDZRjmLuLNR9jV2e3GUznBVqrvJKOd8lAM3o+6UcBvQF7azDHdwu7p9VcVqcI5QwvxxPuKHbYIZ119X9kmvjADj2kP33rM/7dICJmvcsf6b0QxfMXnyC44vcATta8eLz5rWXcX5zFGgHoLj8JSA4V3qRp7YQa3b4NcEYNr3Bd3cgQ+EGkQzjF3DLaQsTck8gyx2mser6A/aVatccMy1V1f7F1HlFf7GLyVDBAeUywuK+tq4PhrRPvFdYqyDpXmjkZP0957poUanF1hQkXwZPLcVQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=syrmia.com; dmarc=pass action=none header.from=syrmia.com;
  dkim=pass header.d=syrmia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syrmia.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C95WrmpzsEvNeDP9qqfswt/Axyd22O0kfW5VZSDWRFY=;
- b=lxHeJ4sHHAy52rScPW2Z99L268nkORFbKdsnF/gJlRTPnsGgD0mpBwmLYpE1IOSi0SOTGUaz7CyqLS82iP2kzmXqZjQeLU/pwXWSiPZCNu6WFEATEdp5XHZ9hYR5RtKBD5qf0cEuR71H1AHtptHxD7OiVJsFuRd/q4hd6RglimE=
+ bh=Od9jMJfS91fPqn1FYncIFoA02CQC63lbj/2QQyAzKK8=;
+ b=DPs4S5aMc+3jT53WfVExIsuI84pZSdI5kdP4X1XdHoYI7iszoWr5LkdLt4X/Dnu4dNYuIZ1k/dzALg0Dr0A2vG4kIkNf6LOU6Uht56C0AeP68He2XaMgbhbs+y670oRilBGiDf1xaCyWk0mapDD/DqQdZIIXwt5TM/HzeVafbl4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=syrmia.com;
 Received: from VI1PR03MB4208.eurprd03.prod.outlook.com (2603:10a6:803:51::25)
  by AM5PR0301MB2546.eurprd03.prod.outlook.com (2603:10a6:203:a::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.17; Thu, 19 May
- 2022 18:51:48 +0000
+ 2022 18:51:49 +0000
 Received: from VI1PR03MB4208.eurprd03.prod.outlook.com
  ([fe80::b513:6272:f3c5:c709]) by VI1PR03MB4208.eurprd03.prod.outlook.com
  ([fe80::b513:6272:f3c5:c709%7]) with mapi id 15.20.5273.014; Thu, 19 May 2022
- 18:51:48 +0000
+ 18:51:49 +0000
 From:   Dragan Mladjenovic <Dragan.Mladjenovic@syrmia.com>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Cc:     Paul Burton <paulburton@kernel.org>,
-        Chao-ying Fu <cfu@wavecomp.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 09/12] MIPS: pm-cps: Use per-CPU variables as per-CPU, not per-core
-Date:   Thu, 19 May 2022 20:51:22 +0200
-Message-Id: <20220519185125.11686-10-Dragan.Mladjenovic@syrmia.com>
+        Chao-ying Fu <cfu@wavecomp.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 10/12] MIPS: CPS: Introduce struct cluster_boot_config
+Date:   Thu, 19 May 2022 20:51:23 +0200
+Message-Id: <20220519185125.11686-11-Dragan.Mladjenovic@syrmia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220519185125.11686-1-Dragan.Mladjenovic@syrmia.com>
 References: <20220519185125.11686-1-Dragan.Mladjenovic@syrmia.com>
@@ -58,55 +59,55 @@ X-ClientProxiedBy: VI1PR0602CA0016.eurprd06.prod.outlook.com
  (2603:10a6:803:51::25)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 43a7dfa9-c7df-4474-5351-08da39c8a051
+X-MS-Office365-Filtering-Correlation-Id: 60708733-2975-465f-288c-08da39c8a088
 X-MS-TrafficTypeDiagnostic: AM5PR0301MB2546:EE_
-X-Microsoft-Antispam-PRVS: <AM5PR0301MB2546158BAD2D757607BA3780EFD09@AM5PR0301MB2546.eurprd03.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <AM5PR0301MB25464AE87ED1DCD1AE867F5AEFD09@AM5PR0301MB2546.eurprd03.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tzDlOW1Q3kCiC/+qW+O03R/NmVdhEfwE8TxO43EhgT1FjzQ4kPNcrkxibRqkZ06RDdl36WL+OM9YjL1sVeBxa70zMddD/e9sByJCKmnNdc1SdbRbKUTk53GnpOk8tl6pFv+OYcwTUsa3ZyNs0SmxKnx05G1rRa1wzlCMRrxlzAWVVpCgP4rz5YfPiayinHfaEhsJNAnnKa+7l3BH6q/WeYlapAI83aUgRTMBpNJh9OSuDcraXEl+t0aIGrIfF9Sy6/JMaIZKXx81mP9/YDJq6QXOS95o8A1upU/C/cCb+1vwk6Z9WZZFAW+j6VbDdWzizCN7ZryuVfijLdzDpGbkr8xMzOyQvLvbea0TlJSR0R54LpvE/ht2a20NnEqeL6u/Z7jO+5TEBmJ+dgZRoVGEpk/mWe6sSTCuZnKBCccR+zTO+bqfHkRypwq0i127QguaXRB9e/o7CWFDGArHeOZVat4J9MrKvWusEAmv1DKWCH8rdZBF3Z9+7Jvi4syZKGnYFjBmSKrj7fmaWDyOvD85AbHaLOskhcOgjqQWVMAGo6ACe2mKp8tmlv1PCTfvoDmQwdsk3dmNl05aLLczSIM/lYAFmVqN7ZtdJcDiVN+Pg3/LjkOHS0w8gBqLaC2YLu8J1ejDsqICbwRs+ooqJxmMmjyis+NVFZBgKEFwNlMkA4oUWlATXwpdO/j4KSm7Lewr1uTzyiP6vyIluq8yTNavbg==
+X-Microsoft-Antispam-Message-Info: JCUvAg7leZCPt0bBgcl6289jjgI7DXuADEzlPHLFpU728t4Rq97wuz5uf3/IJty1wnAj8SYusKdPqdMm/3wvVCGb82ztGv/Rc5CqPPDM2k/FyjpigPUR48XX90dOF6LXaKF9MdvIu8Z8sEiUmfqBe4wZsPQHIVALb2kD3iX3dk6nwgHxhKhVl+UlXyK2jRDi6f2Hn+ISbHp4+mZyKX3NEwbbRavgPxwVpwbqSV/3b8meBjfs15pyHrwBWfbYCG8vnb/7WTRq9NPaJaYTOEgGyXrKCxYCdfYLs+xl74QOZe98xv1PgETlOsaD8Meu2AZSnD/ubq3qiW/E7jwMp1wLY7RrkBNQIHSs7HZAqciaof7K63JRgXhzcIWvEcSASc0gdj0qMRkwsQXFeIu1+UUGVSPBAp2Xl8Wf4039qHjA3xULoaTmxwEtpRx7p/cBYjDGQHyQ5WXPWRVZwNgi1oAUi8uGk0zRR4yXAzFmcp3bjGwSdIJyNYI4/NN7cKlFgaxuZJnAuecI5o/tl3wrVUOr2HL6sTvQECzMzEX+fbwYoz/SG1KCIEpw0o21iYPoawPWP2S1q5Ncc7G59c4u5dmOwfCRBGznBmH9eB9mzEOfp9AOEoNWxdJ4OkoX5V+YzgWiqCBWeZLE1D5AMSEaBYXq+LIzBc9W+2ffued2fJAa1SEypd/duZnHhiD9yx6AVOQDDZWSxPEPZ0DduKCQnCh4AQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB4208.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(376002)(346002)(366004)(39840400004)(396003)(136003)(5660300002)(66476007)(66556008)(38100700002)(8676002)(38350700002)(4326008)(8936002)(66946007)(83380400001)(6512007)(26005)(86362001)(36756003)(52116002)(316002)(6666004)(41300700001)(2906002)(6916009)(54906003)(6506007)(6486002)(1076003)(2616005)(186003)(508600001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?upDKHsiHeavZXxOlXIJE8C3VUq3Q7/3jBhb2tjnD2x7JI3NZb6KKTWxvOWba?=
- =?us-ascii?Q?ipN+5V3JyV3orRStqNcf9Y0Fxl5oL2mdCK8YksykSM7FP2i9w6VsKLE1/vYZ?=
- =?us-ascii?Q?m4fcuO0CMs/zJB3QaoEWOMP9+MniC6dyRwmueji1Lh38dSZxuAPl6uchCBur?=
- =?us-ascii?Q?c/XJj0DoRHgrG6raAvVxuLef0A7SyGKFs6OH7LNcv2KKWLXEzJRxN9rA3oQh?=
- =?us-ascii?Q?3s/KpHrHqgScqfGXuO3fgjaYoFKbJ05/Rb+t5FwQ5Dwxn01I2x3fNqe5ilxZ?=
- =?us-ascii?Q?6p14C78CKNkY8gv/gVlyezk5MXP2kz2204FBQhH2562RFg4/ehqyl19SINsd?=
- =?us-ascii?Q?JK54ZuwUsjERc0qzqXOVOgIMsVQGImi497+YV9MMuimjnYkb/Vlfd19mwqdq?=
- =?us-ascii?Q?/qKdUxX6LfmykPUeC+EFuSiQvPmy3SsEMSrq7UrquuBV6ZayutJts5w+Tnos?=
- =?us-ascii?Q?X2vnmvlylbu4QxpAjTn4Auc8ZdrxL+DieTPuX7YGbwuXukEFbm1WFLmUNTkw?=
- =?us-ascii?Q?67FgXp9H7tS0QXVL/hXwHWfRJRldnsFtaSWbKElATuF0jGzol5RQOqHQ4XHU?=
- =?us-ascii?Q?EiaTeamy1cq9LK2woujR6JeIf7tCDHyvjs9zeBF5BRWT1AC+zUvJDx3ydhrJ?=
- =?us-ascii?Q?MtBBMKUqBddEMSTi94MKZnYhnjhZtOAA5XqgxXJnVgd43ndESK3sRexnzfrl?=
- =?us-ascii?Q?Ehy3fWlR2MUXwW3OHgkgPmXB2Cla4MIofc38RmeYX6CMwkkxvxjo2IA5JDXA?=
- =?us-ascii?Q?h//dgGLDvaGZzFA3NmnPCOoY2ji4wrYveBqm45tc0qSPWoyvw+rTxKC0LQDN?=
- =?us-ascii?Q?2vznPMucwWOfbhqPFfl2Skq7IfDoWspa6567QbvMoiKaoRx25kC+HT4jVyu4?=
- =?us-ascii?Q?/xxw26JUoYgPRU9thFjI9XCXITgkJfnS2kBtXCwIY2hCrzUKrQXugAL8qRnU?=
- =?us-ascii?Q?gdxOt4TBF3/9/1m8kmyy6UDD7qqcJ4nPH1OWiprVZrmfxLEMRlvdOLoPpplU?=
- =?us-ascii?Q?6U187TdddlnX88xFN/TOQ9Xx3reCxypcDKZfjaMHWdBjq4GjG2rY1NcCZAke?=
- =?us-ascii?Q?OLFaolZkvlLV/BFDV9qm20lC8Z07rQFWrugtH6P9r6O4BPnssC35LhveWgpC?=
- =?us-ascii?Q?EmFL//nDqjVdwvJYt4nlM+Us31OEexJlRIvuwcFm9vdkdoe9JJ+OfA066Tw0?=
- =?us-ascii?Q?jWimK+vsFAke2Wo6e7X/PBYjOF2reuTYZubxryV9Ce1SqVR44mJqJX+jwnHI?=
- =?us-ascii?Q?1o2sFERCtS3c/HM8okBVu7XwIBwwfOAhzC/bL+XiKYEVCCGvnN+e6bKAPW5a?=
- =?us-ascii?Q?7fBiCO2fuhoCWs/gwEuABjJ3e3w6LBbADycCslTgSs/z69Cj/nHlfNwnQtD6?=
- =?us-ascii?Q?AgLqsYnRz5PYnlGag7NpLba5njtAQ7zEqEX4dl1TA8lBh+PqLYZfVTN1iK6B?=
- =?us-ascii?Q?s5eWkHSptNxPYdgNBmmwtCWi7UEzUKEuILe46j4FQjzoTdUH8lu8q4hk+0lE?=
- =?us-ascii?Q?B5Rnvpg6Ab08zDRHqk70JX08uLywswNWRjLlJ8WOxM5ILeQ2PdTlU81DueBm?=
- =?us-ascii?Q?uEhxvgSaP7JEezXhaQNFKThzxTkaGD6UGAyPit7heXE779RSrik7nWbD9zSh?=
- =?us-ascii?Q?Wh5KnRb3LdO3HfnBgksmEjKfKpFnDdzDuB0B7XRk/rbWneCpvEEhGyxmZdVd?=
- =?us-ascii?Q?OQMIPtbCMrAEAV7NE5B3igEP0GMNdwj1CqOX5lxIZMXoFZ8hwPJUpT/tI4jJ?=
- =?us-ascii?Q?J9ui7dNTjImgRFNjwr300hLiMC10h1g=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ha0h/28nlKi50IF8BaqskGIyYjVknUAs3LuLYxeIw2Huydtkjh0lXRVJs42A?=
+ =?us-ascii?Q?yJbbHGQFstsGzyjAzxkPjVoH53zxPPGcRX1zs53FHQ2AgOO6LQxZWKZE8qKB?=
+ =?us-ascii?Q?QYBEdkDgh9Sb3QV24s3Aa1O40ah0JFwMB4lgHu24ZgJvKwZ9Z6E3MNlC8rHn?=
+ =?us-ascii?Q?Pv2kDoIsdjViSVZYzobBYhWJhq8acsvzbNBnRJZW77ZL8MNna0/okO+5pFcm?=
+ =?us-ascii?Q?5qa4gXzEjHU+zSyjLCZcxTOv8mI6zF8AsRwi6xnAMDSG3FotBS97r/gqfAxT?=
+ =?us-ascii?Q?sV41LdfTG4Ez5LaOalqk8cP2NWJ+VX7lccJGEvpGEig8uySduI79ZryjY+N7?=
+ =?us-ascii?Q?TvmsxO22ZrHAbIh7V11XILjISA6shB+ZCNzppYKPwgj5O34sdJSD4AH/kEt/?=
+ =?us-ascii?Q?ce61Z8bj/fYu0wXIIH2mB8o9sQSygLTmceu9YNkGx4wYc5lmcPe+kx7858H8?=
+ =?us-ascii?Q?UGd8nqI1ZfqjXrPJQ03eV6wEqpKcjOaHNXf6ncggpqWYlrZ34uCTWWDvLQ4h?=
+ =?us-ascii?Q?ByMPyDM9kY7MytMDRguI65dKLjWnZqU2aN+jXRqmVa7sMigT+BMIxFUF87hL?=
+ =?us-ascii?Q?xVrB/uzmpv3SarhOp/pw49VkNwIv/+hW+SiHevA8yMt8S++/bFT4ELrNYR2S?=
+ =?us-ascii?Q?JVQcuyxRlRMdGvB9wB8ujwKc+XUuZce2DfzckLpTZvU9mIsJ2ag6znQBu3Tm?=
+ =?us-ascii?Q?4ODuLMjNswE7QjQFp6BLaDhhkK53j0AreOmKazVqzktDdu7Gsj2whuzFnE4z?=
+ =?us-ascii?Q?51etQK/ic/X28nP+DT1/HtXi98gk+yKlMNWX4YOXx4MxqRCdRd5yDuNLMpX6?=
+ =?us-ascii?Q?trdDEOQG/90JXWnGjR1d1Wev+digW3o5N9tRUNcDsEcC6BrjoREpjhJHNLtk?=
+ =?us-ascii?Q?hvynbYbKku/lKr2/JWvyqawnFFq8sB47vBkUj8ieWashezVRHOk/ZIsdbrVU?=
+ =?us-ascii?Q?Oi8t6Lm6+bmoGk8P551YyyUoZRWQc0EwY48zZqVwYcPdg37ggjbMBDSErAjT?=
+ =?us-ascii?Q?gHKGD+lWBHL8qWTYk+kkxpgQeNkGM4F0Jk8BnvRSjy8S3ACICfGb62wHQbc7?=
+ =?us-ascii?Q?eKyD7v7y3Iz2rBvEvmgqv4lDcD3L+RsnfVNXV3avw3hy8GvWF1dsa+0O3zkZ?=
+ =?us-ascii?Q?85dPD1nDCEhYd10VCvw5MoKFglt97Nfywcbh222W/WKyZ70HmlVroiEoeKCi?=
+ =?us-ascii?Q?tB9sM3zKwuVZjJ44kcBqRSrGaIqRDPFm6F01xCuhVJpprLFWEzP7k7BC8LUd?=
+ =?us-ascii?Q?VtgxoER0d6mQPYcjtwesbJ0uX6CxCRgZe4vLLPE6vO3SNhsZi0R6q7sWQ7fV?=
+ =?us-ascii?Q?jrqANzruYvd3cOAmxQ2BQQDLtd2+85c2gvF0Vbuif6y9WG9SOzaSLdY0jaVp?=
+ =?us-ascii?Q?dTEcqPziCrmA87CMFqc0n6xlbcilZCGII/wEsDkuzoA2iKCpTodWAskmkssy?=
+ =?us-ascii?Q?4IBOkh1Df8cXkKOh2LNCXmXBvcynzJGfZSZqRyuCUBe8ZnutzVLPwRYut8hH?=
+ =?us-ascii?Q?oBVqCtpFFhLSJww9U9y6iiyInTiqrVm2A6jpKC/RevuQjt3QXnGeKwP1Lvqb?=
+ =?us-ascii?Q?Kq11ztMMn8QIhn9agEG0OoVVTfEF6OJLFUaUQCUjavUWzJGOK6/eK9U+vnP1?=
+ =?us-ascii?Q?w3C1kKi/pf6SqDoBeBBWovRaogds18TIOZL0hADAsUNnuJeMdV+dpcMa9Gsy?=
+ =?us-ascii?Q?e3oAYr83QfcLcXDUuxPQZbHh/SUbOvdajTpFdHYt8nBY/sLA8GIicY3NvOO7?=
+ =?us-ascii?Q?7XGhBWF3BUtQFpmbEiUOFITX+YMmPV41oG7/JW7lPWSlBH9kMEA4?=
 X-OriginatorOrg: syrmia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43a7dfa9-c7df-4474-5351-08da39c8a051
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60708733-2975-465f-288c-08da39c8a088
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB4208.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 18:51:47.3366
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 18:51:47.6960
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 19214a73-c1ab-4e19-8f59-14bdcb09a66e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uzwZd/l3DsN2FI0pJD48GUML65C/sbhyOmXiTYRfIwHIGhw4oE4akoFBGBv5R5DDNGDIhzkQAGFVsqRojKWrkoXsIJnXMdHdiGJaO4YCwqg=
+X-MS-Exchange-CrossTenant-UserPrincipalName: S+HFUcNVxGhKn3t0De8EhWQBlApUnYezQ37CV38U2i3iu6Z7WXFZpqUa7L5r/U3DuRnN0LK37IUakTauvCypFXhiAJc6qYuZXdVH4wet2uc=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0301MB2546
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -120,114 +121,264 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Paul Burton <paulburton@kernel.org>
 
-The pm-cps code has up until now used per-CPU variables indexed by core,
-rather than CPU number, in order to share data amongst sibling CPUs (ie.
-VPs/threads in a core). This works fine for single cluster systems, but
-with multi-cluster systems a core number is no longer unique in the
-system, leading to sharing between CPUs that are not actually siblings.
-
-Avoid this issue by using per-CPU variables as they are more generally
-used - ie. access them using CPU numbers rather than core numbers.
-Sharing between siblings is then accomplished by:
- - Assigning the same pointer to entries for each sibling CPU for the
-   nc_asm_enter & ready_count variables, which allow this by virtue of
-   being per-CPU pointers.
-
- - Indexing by the first CPU set in a CPUs cpu_sibling_map in the case
-   of pm_barrier, for which we can't use the previous approach because
-   the per-CPU variable is not a pointer.
+In preparation for supporting multi-cluster systems, introduce a struct
+cluster_boot_config as an extra layer in the boot configuration
+maintained by the MIPS Coherent Processing System (CPS) SMP
+implementation. For now only one struct cluster_boot_config will be
+allocated & we'll simply defererence its core_config field to find the
+struct core_boot_config array which we use to boot as usual.
 
 Signed-off-by: Paul Burton <paulburton@kernel.org>
 Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
 
+diff --git a/arch/mips/include/asm/smp-cps.h b/arch/mips/include/asm/smp-cps.h
+index 7e5b9411faee..84a713667be2 100644
+--- a/arch/mips/include/asm/smp-cps.h
++++ b/arch/mips/include/asm/smp-cps.h
+@@ -20,7 +20,11 @@ struct core_boot_config {
+ 	struct vpe_boot_config *vpe_config;
+ };
+ 
+-extern struct core_boot_config *mips_cps_core_bootcfg;
++struct cluster_boot_config {
++	struct core_boot_config *core_config;
++};
++
++extern struct cluster_boot_config *mips_cps_cluster_bootcfg;
+ 
+ extern void mips_cps_core_entry(void);
+ extern void mips_cps_core_init(void);
+diff --git a/arch/mips/kernel/asm-offsets.c b/arch/mips/kernel/asm-offsets.c
+index 04ca75278f02..7d1f032e8275 100644
+--- a/arch/mips/kernel/asm-offsets.c
++++ b/arch/mips/kernel/asm-offsets.c
+@@ -391,6 +391,9 @@ void output_cps_defines(void)
+ {
+ 	COMMENT(" MIPS CPS offsets. ");
+ 
++	OFFSET(CLUSTERBOOTCFG_CORECONFIG, cluster_boot_config, core_config);
++	DEFINE(CLUSTERBOOTCFG_SIZE, sizeof(struct cluster_boot_config));
++
+ 	OFFSET(COREBOOTCFG_VPEMASK, core_boot_config, vpe_mask);
+ 	OFFSET(COREBOOTCFG_VPECONFIG, core_boot_config, vpe_config);
+ 	DEFINE(COREBOOTCFG_SIZE, sizeof(struct core_boot_config));
+diff --git a/arch/mips/kernel/cps-vec.S b/arch/mips/kernel/cps-vec.S
+index 975343240148..f80466f810d4 100644
+--- a/arch/mips/kernel/cps-vec.S
++++ b/arch/mips/kernel/cps-vec.S
+@@ -17,6 +17,10 @@
+ #define GCR_CPC_BASE_OFS	0x0088
+ #define GCR_CL_COHERENCE_OFS	0x2008
+ #define GCR_CL_ID_OFS		0x2028
++#define  CM3_GCR_Cx_ID_CLUSTER_SHF	8
++#define  CM3_GCR_Cx_ID_CLUSTER_MSK	(0xff << 8)
++#define  CM3_GCR_Cx_ID_CORENUM_SHF	0
++#define  CM3_GCR_Cx_ID_CORENUM_MSK	(0xff << 0)
+ 
+ #define CPC_CL_VC_STOP_OFS	0x2020
+ #define CPC_CL_VC_RUN_OFS	0x2028
+@@ -305,13 +309,22 @@ LEAF(mips_cps_core_init)
+  */
+ LEAF(mips_cps_get_bootcfg)
+ 	/* Calculate a pointer to this cores struct core_boot_config */
++	PTR_LA	v0, mips_cps_cluster_bootcfg
++	PTR_L	v0, 0(v0)
+ 	cmgcrb	t0
+ 	lw	t0, GCR_CL_ID_OFS(t0)
++#ifdef CONFIG_CPU_MIPSR6
++	ext	t1, t0, CM3_GCR_Cx_ID_CLUSTER_SHF, 8
++	li	t2, CLUSTERBOOTCFG_SIZE
++	mul	t1, t1, t2
++	PTR_ADDU \
++		v0, v0, t1
++#endif
++	PTR_L	v0, CLUSTERBOOTCFG_CORECONFIG(v0)
++	andi	t0, t0, CM3_GCR_Cx_ID_CORENUM_MSK
+ 	li	t1, COREBOOTCFG_SIZE
+ 	mul	t0, t0, t1
+-	PTR_LA	t1, mips_cps_core_bootcfg
+-	PTR_L	t1, 0(t1)
+-	PTR_ADDU v0, t0, t1
++	PTR_ADDU v0, v0, t0
+ 
+ 	/* Calculate this VPEs ID. If the core doesn't support MT use 0 */
+ 	li	t9, 0
 diff --git a/arch/mips/kernel/pm-cps.c b/arch/mips/kernel/pm-cps.c
-index 9bf60d7d44d3..a7bcf2b814c8 100644
+index a7bcf2b814c8..84e79bd84971 100644
 --- a/arch/mips/kernel/pm-cps.c
 +++ b/arch/mips/kernel/pm-cps.c
-@@ -56,10 +56,7 @@ static DEFINE_PER_CPU_ALIGNED(u32*, ready_count);
- /* Indicates online CPUs coupled with the current CPU */
- static DEFINE_PER_CPU_ALIGNED(cpumask_t, online_coupled);
- 
--/*
-- * Used to synchronize entry to deep idle states. Actually per-core rather
-- * than per-CPU.
-- */
-+/* Used to synchronize entry to deep idle states */
- static DEFINE_PER_CPU_ALIGNED(atomic_t, pm_barrier);
- 
- /* Saved CPU state across the CPS_PM_POWER_GATED state */
-@@ -118,9 +115,10 @@ int cps_pm_enter_state(enum cps_pm_state state)
+@@ -107,12 +107,14 @@ static void coupled_barrier(atomic_t *a, unsigned online)
+ int cps_pm_enter_state(enum cps_pm_state state)
+ {
+ 	unsigned cpu = smp_processor_id();
++	unsigned int cluster = cpu_cluster(&current_cpu_data);
+ 	unsigned core = cpu_core(&current_cpu_data);
+ 	unsigned online, left;
+ 	cpumask_t *coupled_mask = this_cpu_ptr(&online_coupled);
+ 	u32 *core_ready_count, *nc_core_ready_count;
+ 	void *nc_addr;
  	cps_nc_entry_fn entry;
++	struct cluster_boot_config *cluster_cfg;
  	struct core_boot_config *core_cfg;
  	struct vpe_boot_config *vpe_cfg;
-+	atomic_t *barrier;
+ 	atomic_t *barrier;
+@@ -142,7 +144,8 @@ int cps_pm_enter_state(enum cps_pm_state state)
+ 		if (!mips_cps_smp_in_use())
+ 			return -EINVAL;
  
- 	/* Check that there is an entry function for this state */
--	entry = per_cpu(nc_asm_enter, core)[state];
-+	entry = per_cpu(nc_asm_enter, cpu)[state];
- 	if (!entry)
+-		core_cfg = &mips_cps_core_bootcfg[core];
++		cluster_cfg = &mips_cps_cluster_bootcfg[cluster];
++		core_cfg = &cluster_cfg->core_config[core];
+ 		vpe_cfg = &core_cfg->vpe_config[cpu_vpe_id(&current_cpu_data)];
+ 		vpe_cfg->pc = (unsigned long)mips_cps_pm_restore;
+ 		vpe_cfg->gp = (unsigned long)current_thread_info();
+diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
+index bcd6a944b839..360d132bee71 100644
+--- a/arch/mips/kernel/smp-cps.c
++++ b/arch/mips/kernel/smp-cps.c
+@@ -27,7 +27,7 @@
+ static bool threads_disabled;
+ static DECLARE_BITMAP(core_power, NR_CPUS);
+ 
+-struct core_boot_config *mips_cps_core_bootcfg;
++struct cluster_boot_config *mips_cps_cluster_bootcfg;
+ 
+ static int __init setup_nothreads(char *s)
+ {
+@@ -118,9 +118,11 @@ static void __init cps_smp_setup(void)
+ 
+ static void __init cps_prepare_cpus(unsigned int max_cpus)
+ {
+-	unsigned ncores, core_vpes, c, cca;
++	unsigned int nclusters, ncores, core_vpes, c, cl, cca;
+ 	bool cca_unsuitable, cores_limited;
+ 	u32 *entry_code;
++	struct cluster_boot_config *cluster_bootcfg;
++	struct core_boot_config *core_bootcfg;
+ 
+ 	mips_mt_set_cpuoptions();
+ 
+@@ -168,40 +170,54 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
+ 		     (void *)entry_code - (void *)&mips_cps_core_entry);
+ 	__sync();
+ 
+-	/* Allocate core boot configuration structs */
+-	ncores = mips_cps_numcores(0);
+-	mips_cps_core_bootcfg = kcalloc(ncores, sizeof(*mips_cps_core_bootcfg),
+-					GFP_KERNEL);
+-	if (!mips_cps_core_bootcfg) {
+-		pr_err("Failed to allocate boot config for %u cores\n", ncores);
+-		goto err_out;
+-	}
++	/* Allocate cluster boot configuration structs */
++	nclusters = mips_cps_numclusters();
++	mips_cps_cluster_bootcfg = kcalloc(nclusters,
++					   sizeof(*mips_cps_cluster_bootcfg),
++					   GFP_KERNEL);
+ 
+-	/* Allocate VPE boot configuration structs */
+-	for (c = 0; c < ncores; c++) {
+-		core_vpes = core_vpe_count(0, c);
+-		mips_cps_core_bootcfg[c].vpe_config = kcalloc(core_vpes,
+-				sizeof(*mips_cps_core_bootcfg[c].vpe_config),
+-				GFP_KERNEL);
+-		if (!mips_cps_core_bootcfg[c].vpe_config) {
+-			pr_err("Failed to allocate %u VPE boot configs\n",
+-			       core_vpes);
++	for (cl = 0; cl < nclusters; cl++) {
++		/* Allocate core boot configuration structs */
++		ncores = mips_cps_numcores(cl);
++		core_bootcfg = kcalloc(ncores, sizeof(*core_bootcfg),
++					GFP_KERNEL);
++		if (!core_bootcfg)
+ 			goto err_out;
++		mips_cps_cluster_bootcfg[cl].core_config = core_bootcfg;
++
++		/* Allocate VPE boot configuration structs */
++		for (c = 0; c < ncores; c++) {
++			core_vpes = core_vpe_count(cl, c);
++			core_bootcfg[c].vpe_config = kcalloc(core_vpes,
++					sizeof(*core_bootcfg[c].vpe_config),
++					GFP_KERNEL);
++			if (!core_bootcfg[c].vpe_config)
++				goto err_out;
+ 		}
+ 	}
+ 
+ 	/* Mark this CPU as booted */
+-	atomic_set(&mips_cps_core_bootcfg[cpu_core(&current_cpu_data)].vpe_mask,
+-		   1 << cpu_vpe_id(&current_cpu_data));
++	cl = cpu_cluster(&current_cpu_data);
++	c = cpu_core(&current_cpu_data);
++	cluster_bootcfg = &mips_cps_cluster_bootcfg[cl];
++	core_bootcfg = &cluster_bootcfg->core_config[c];
++	atomic_set(&core_bootcfg->vpe_mask, 1 << cpu_vpe_id(&current_cpu_data));
+ 
+ 	return;
+ err_out:
+ 	/* Clean up allocations */
+-	if (mips_cps_core_bootcfg) {
+-		for (c = 0; c < ncores; c++)
+-			kfree(mips_cps_core_bootcfg[c].vpe_config);
+-		kfree(mips_cps_core_bootcfg);
+-		mips_cps_core_bootcfg = NULL;
++	if (mips_cps_cluster_bootcfg) {
++		for (cl = 0; cl < nclusters; cl++) {
++			cluster_bootcfg = &mips_cps_cluster_bootcfg[cl];
++			ncores = mips_cps_numcores(cl);
++			for (c = 0; c < ncores; c++) {
++				core_bootcfg = &cluster_bootcfg->core_config[c];
++				kfree(core_bootcfg->vpe_config);
++			}
++			kfree(mips_cps_cluster_bootcfg[c].core_config);
++		}
++		kfree(mips_cps_cluster_bootcfg);
++		mips_cps_cluster_bootcfg = NULL;
+ 	}
+ 
+ 	/* Effectively disable SMP by declaring CPUs not present */
+@@ -286,17 +302,23 @@ static void boot_core(unsigned int core, unsigned int vpe_id)
+ 
+ static void remote_vpe_boot(void *dummy)
+ {
++	unsigned int cluster = cpu_cluster(&current_cpu_data);
+ 	unsigned core = cpu_core(&current_cpu_data);
+-	struct core_boot_config *core_cfg = &mips_cps_core_bootcfg[core];
++	struct cluster_boot_config *cluster_cfg =
++		&mips_cps_cluster_bootcfg[cluster];
++	struct core_boot_config *core_cfg = &cluster_cfg->core_config[core];
+ 
+ 	mips_cps_boot_vpes(core_cfg, cpu_vpe_id(&current_cpu_data));
+ }
+ 
+ static int cps_boot_secondary(int cpu, struct task_struct *idle)
+ {
++	unsigned int cluster = cpu_cluster(&cpu_data[cpu]);
+ 	unsigned core = cpu_core(&cpu_data[cpu]);
+ 	unsigned vpe_id = cpu_vpe_id(&cpu_data[cpu]);
+-	struct core_boot_config *core_cfg = &mips_cps_core_bootcfg[core];
++	struct cluster_boot_config *cluster_cfg =
++		&mips_cps_cluster_bootcfg[cluster];
++	struct core_boot_config *core_cfg = &cluster_cfg->core_config[core];
+ 	struct vpe_boot_config *vpe_cfg = &core_cfg->vpe_config[vpe_id];
+ 	unsigned long core_entry;
+ 	unsigned int remote;
+@@ -449,12 +471,14 @@ static void cps_kexec_nonboot_cpu(void)
+ static int cps_cpu_disable(void)
+ {
+ 	unsigned cpu = smp_processor_id();
++	struct cluster_boot_config *cluster_cfg;
+ 	struct core_boot_config *core_cfg;
+ 
+ 	if (!cps_pm_support_state(CPS_PM_POWER_GATED))
  		return -EINVAL;
  
-@@ -156,7 +154,7 @@ int cps_pm_enter_state(enum cps_pm_state state)
+-	core_cfg = &mips_cps_core_bootcfg[cpu_core(&current_cpu_data)];
++	cluster_cfg = &mips_cps_cluster_bootcfg[cpu_cluster(&current_cpu_data)];
++	core_cfg = &cluster_cfg->core_config[cpu_core(&current_cpu_data)];
+ 	atomic_sub(1 << cpu_vpe_id(&current_cpu_data), &core_cfg->vpe_mask);
  	smp_mb__after_atomic();
- 
- 	/* Create a non-coherent mapping of the core ready_count */
--	core_ready_count = per_cpu(ready_count, core);
-+	core_ready_count = per_cpu(ready_count, cpu);
- 	nc_addr = kmap_noncoherent(virt_to_page(core_ready_count),
- 				   (unsigned long)core_ready_count);
- 	nc_addr += ((unsigned long)core_ready_count & ~PAGE_MASK);
-@@ -164,7 +162,8 @@ int cps_pm_enter_state(enum cps_pm_state state)
- 
- 	/* Ensure ready_count is zero-initialised before the assembly runs */
- 	WRITE_ONCE(*nc_core_ready_count, 0);
--	coupled_barrier(&per_cpu(pm_barrier, core), online);
-+	barrier = &per_cpu(pm_barrier, cpumask_first(&cpu_sibling_map[cpu]));
-+	coupled_barrier(barrier, online);
- 
- 	/* Run the generated entry code */
- 	left = entry(online, nc_core_ready_count);
-@@ -635,12 +634,14 @@ static void *cps_gen_entry_code(unsigned cpu, enum cps_pm_state state)
- 
- static int cps_pm_online_cpu(unsigned int cpu)
- {
--	enum cps_pm_state state;
--	unsigned core = cpu_core(&cpu_data[cpu]);
-+	unsigned int sibling, core;
- 	void *entry_fn, *core_rc;
-+	enum cps_pm_state state;
-+
-+	core = cpu_core(&cpu_data[cpu]);
- 
- 	for (state = CPS_PM_NC_WAIT; state < CPS_PM_STATE_COUNT; state++) {
--		if (per_cpu(nc_asm_enter, core)[state])
-+		if (per_cpu(nc_asm_enter, cpu)[state])
- 			continue;
- 		if (!test_bit(state, state_support))
- 			continue;
-@@ -652,16 +653,19 @@ static int cps_pm_online_cpu(unsigned int cpu)
- 			clear_bit(state, state_support);
- 		}
- 
--		per_cpu(nc_asm_enter, core)[state] = entry_fn;
-+		for_each_cpu(sibling, &cpu_sibling_map[cpu])
-+			per_cpu(nc_asm_enter, sibling)[state] = entry_fn;
- 	}
- 
--	if (!per_cpu(ready_count, core)) {
-+	if (!per_cpu(ready_count, cpu)) {
- 		core_rc = kmalloc(sizeof(u32), GFP_KERNEL);
- 		if (!core_rc) {
- 			pr_err("Failed allocate core %u ready_count\n", core);
- 			return -ENOMEM;
- 		}
--		per_cpu(ready_count, core) = core_rc;
-+
-+		for_each_cpu(sibling, &cpu_sibling_map[cpu])
-+			per_cpu(ready_count, sibling) = core_rc;
- 	}
- 
- 	return 0;
+ 	set_cpu_online(cpu, false);
 -- 
 2.17.1
 

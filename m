@@ -2,139 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A1E52E02B
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32F452E02F
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245609AbiESW6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 18:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
+        id S241693AbiESXBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbiESW6u (ORCPT
+        with ESMTP id S240556AbiESXA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 18:58:50 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam07on2042.outbound.protection.outlook.com [40.107.95.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276DB8CB2B;
-        Thu, 19 May 2022 15:58:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hydXe9YB03qQ6BNyAErdceE165puc/Bf+FTl19jXJRmML1JYsOHlIPz0ayBx9DFTC6nhjhjTjmyLhYw+tZB4cQFUo/wjLp2zLZ5bh19ctClblUnqn1axMsTi8F2r1xwBiLxRZn+CfMfUUhvT2DephF8C52raoet1OZ53QoLdZthlSq3gDVsNEWGwnhJ6xvHlLjlaXJpNi3kYwW85utVDFF0ii9N1NFUjCDZy1DDe1f1t52NfdIjWZSazdtnH3t/JLl0SnOnWiLJSMz1e7ozjCh7gN9N8mMvDFpAC+yqe+ua2E4j0tzUAk5uqGJVOrzkDd4Wj4GLV5ogyVZQUoBBKyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+6GLug5LJDMfSk9rl+yhehi0twhaH5O+5WCfmfaCQZQ=;
- b=GhzxmIqagTlFV5e3OXbIAIpZMX4ewaFe8oHh90NCSqbVGv/laoCe+7TvatIhh9cDTplolJWmfU3h5Zqs+nATAwRxX9s0ctkAu3G+ZJvqNuEKbEluEkLb9pOdtl1v6eXW1XJo/EpcS1JrFHCy/+P5OwS88/uk8Q5DqY6f8JyweBKRF52cweLgQYs+F/jZc/29dY5SQ8Zm+YqNgtvoJkTvkTNsXboBE83E84naPltPgKLCUy7moPz9ctArwknFq7JwLa8j0uvy7Cgtgl9UcJxPIvHPretA+lStGq5G6xSH0DuojmKee1aNDQcb47Sd4m2y8WtgNuhk6G9jjJxY5Dpa8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+6GLug5LJDMfSk9rl+yhehi0twhaH5O+5WCfmfaCQZQ=;
- b=r1LO93LQH6ZMG7ns01nzrP6uqFShV/uRdPrxOxl+G1csgBjLzf+RDjNPCtKagXvj8ju11zRJ6xZLr9+XDnv8eIEfUyyAU7xfsPxA1iPd1bNmaDDtXN2TM+dKrSRIiHEGn/9wmNMfsfANixjxC55ZrmFQyM6j7pmoVRcC0Yfirgy0h5wJ+UhFQawTYijACH/fvrTbs7lprejkBHglVlQFryB28FDJ0aDb6mNkvuramBAcCWk4UhjaV57QSlteWhzsewpEaL8kpMRWBwILPdcE6PfoDUHDrm6C5UiWfPsaf8qkLrqJo06LIALGjr2s+nMP5qofcWByMUFSWPr+faJ8NQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM4PR12MB6256.namprd12.prod.outlook.com (2603:10b6:8:a3::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5273.14; Thu, 19 May 2022 22:58:47 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::ec2d:9167:1b47:2db2%7]) with mapi id 15.20.5273.014; Thu, 19 May 2022
- 22:58:47 +0000
-Date:   Thu, 19 May 2022 19:58:46 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>
-Cc:     joro@8bytes.org, will@kernel.org, alex.williamson@redhat.com,
-        cohuck@redhat.com, borntraeger@linux.ibm.com,
-        schnelle@linux.ibm.com, gerald.schaefer@linux.ibm.com,
-        farman@linux.ibm.com, iommu@lists.linux-foundation.org,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        Thu, 19 May 2022 19:00:58 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72B6E026
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:00:55 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id o13-20020a17090a9f8d00b001df3fc52ea7so9970208pjp.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:00:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/+cnG0T1VfIcJDi4Tnrthnwsto5lgJAgXz/DN8hILeM=;
+        b=E9ICPWOHq0JDDEynKw8oMU09qUbnljwf2UPOKuvme7k2m0oT7juy2tMyXCboV6z0Lh
+         9sycljyk3NTft1DtA3PpNilaiobcApb+u6c2Qk4y2hu8ia/1wHl4muP/PDNNaJjK9m/4
+         IK0ZSFu8FZ5vG+vqOMAswOwCk+TcIYUkKesBQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/+cnG0T1VfIcJDi4Tnrthnwsto5lgJAgXz/DN8hILeM=;
+        b=1hiGw/VU/vyzKmrygDUbFv/VxTom6R7XFxlSlDFq1D9NOiJmbL/pMztiqYXdozNzBB
+         mjNjO327JW6EO/V8CHJpgQRiWNVYhS8w9X1c9CysnM4Yz9AJ3T6bMvRWc5EDLBCWY70f
+         Dmh6YmLtHS8iFQRSK18lN7S0NV3wb7dfR+QJZZXYXbXGerSfMdtBykB9sPKy/pGJlYFa
+         Ejsp8EibyXStqZVsvBmUpQbj4GGhnRbe2Y+AbCxNqIqDwmzi4NC/qP+lUDUpzZcpM8/y
+         hc6Rjt95mDRHR0sZ3Kq5Tt0zxKabvOYWX2QocKVn6grhYRPbTTaoPLCoqIFB1OkiXkWU
+         NsVA==
+X-Gm-Message-State: AOAM532wjdF2Hz2e9N7N2M6rMeKFl2IOB+UcsLerDOo1BJUypBaTI1Dt
+        vr7qEUxHWcZ3JGznEiSNN/p8GAO00ymIIFvuEvQ=
+X-Google-Smtp-Source: ABdhPJw+ZRz4Jko72uPDZg2ZBv9BBdBcNFqM9VVfrbGvBZTPeeJB4aIvFwTEqu0JM4pnp3rKOYazRA==
+X-Received: by 2002:a17:90a:9311:b0:1dc:8d06:eb1b with SMTP id p17-20020a17090a931100b001dc8d06eb1bmr7490101pjo.41.1653001255156;
+        Thu, 19 May 2022 16:00:55 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:e45f:1f3c:299b:4d86])
+        by smtp.gmail.com with ESMTPSA id m10-20020a056a00080a00b0050dc762819csm202411pfk.118.2022.05.19.16.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 16:00:54 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     swboyd@chromium.org, linux-input@vger.kernel.org, mka@chromium.org,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/s390: tolerate repeat attach_dev calls
-Message-ID: <20220519225846.GD1343366@nvidia.com>
-References: <20220519182929.581898-1-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519182929.581898-1-mjrosato@linux.ibm.com>
-X-ClientProxiedBy: MN2PR12CA0006.namprd12.prod.outlook.com
- (2603:10b6:208:a8::19) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+Subject: [PATCH 1/2] dt-bindings: HID: i2c-hid: elan: Introduce bindings for Elan eKTH6915
+Date:   Thu, 19 May 2022 16:00:02 -0700
+Message-Id: <20220519155925.1.Iedc61f9ef220a89af6a031200a7850a27a440134@changeid>
+X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a3a9a0d4-29b9-49a1-e91b-08da39eb21ed
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6256:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB62564475A5217D2D8B036728C2D09@DM4PR12MB6256.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G/pZC68Bq5fz9r18FpSquvYGDzWfGqWOsU/Fpep2klnB6t2aPVbl7TIZ89Ge+wE8oExolhGWTFqJQE+olOmmCMMJfbazsYOmzSG5yryIhELT+p6mV84WZeRJioubypr1QNB3QptJSZtocXuwk+KdBRHdniXB21Jgw8uAhJyDbvoyV9LL3ce5pJMsvzQFUo1PzxiUSyR5u0YU6mcfTEoO/NBpR0CWlxEi9uTZbspGEdBDEKg6S4E6TDn0X4z630TgamqPyiDGK5EnKoqagtJ60Kxa37Mh/ppmc8D9d59KOfEx7BrpMhQynWMxpdfCFTHiIB/fDovuG/SJk7MoYv0LVRsQrRSyAx2DnBkMsgpMAW+r8HGX9cw8263/DRIVbPMELFjXbrjt1SpFbJazmiV6BTYhw3O5Uu8olFEAm59XkkDzygDa7py9HN4zIShXPbdU7Z12NXwIWBF6w8QxJ10i3P+d/5UAx4UeybhukJDn5PtnhPuoiVaCUFQTCXCCMdQ2vERSt62lUBODfpSq7DT7ne/IqpFTAC/uerJIONTNIP7Czq/UWetTKHwzQqhCaJ3C8SVqZ563Nqze4vFf1V1sewaLXoq4dZZfz+TKbyISi6M3dhawnsJkf9Vz2vEnrh8ajSs43ifx1bTvuDFh+eB4eQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(2906002)(6512007)(8936002)(316002)(86362001)(4744005)(1076003)(7416002)(2616005)(36756003)(26005)(83380400001)(6506007)(508600001)(4326008)(66556008)(66476007)(5660300002)(6916009)(33656002)(186003)(66946007)(38100700002)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cdjsviSfnRnb8f+4TzeuwwON2RqbHQP65bIr3oRhGmbQwWtS7hI9W9NYquUm?=
- =?us-ascii?Q?DpGaSJCVbcPYIemBR5DvKNtExbYkHKft8JXo8I0dznJaAdeZHU8/BB99CHZ1?=
- =?us-ascii?Q?hJ2CYrq0XQS15FZ5QcpsY1eLfpJ9rnsgf3Nc5kSIvYdxWSyg6SOefcofFvcw?=
- =?us-ascii?Q?7LmG8g/lyxADdxLOMqJXzz0YwazgL5OHYyYqtUj0RlVMcZpEPV5w8fcs3lDm?=
- =?us-ascii?Q?9Lolqi7ue5tJkrC8tU3kYkgZGNDFx5ZBXR9NoKRKYtnMHIKUzDGNTFsA5uts?=
- =?us-ascii?Q?XoUMHGxnQkdAXyR0vzGvWUggvpmuFpDEvUTt+YhzOJdZAzTJ48IY73GKswvf?=
- =?us-ascii?Q?ECnEAKG+EhogElIAZjlH3yQwc3ApUKzDKEPdYXxtFvx3OfQJv26xDi/vVLNm?=
- =?us-ascii?Q?t0RK+3oRUi/kc7jWZ9PBzYgyUIZJOiz9wvVJbUQ5MY13mFx4QHCVDb8FnAes?=
- =?us-ascii?Q?mhZTXDQ3vu4U8bLreK/YbSg3Gef9bg1hWJKAeiSXQZ/Cz1D/eEU9g3h51iSa?=
- =?us-ascii?Q?t1A3vxp6b7cgK+X1q1aaP4kK87572Q5sVpO/4HfAkibGRdOljuJePx6dwMXT?=
- =?us-ascii?Q?qyWc4zWW1Jv8ZrL6wdCQWMSYyURQcFie2awJxg84oIjaoM1gz5b9SyXqvQjN?=
- =?us-ascii?Q?m1Xck17Xtt21cu/a6E/VjMl3KQGXP1KiJDs8dNlh2vixO9mHU0i0VZy+oTNr?=
- =?us-ascii?Q?HUiWahOHm6vxtNhdsAH3SnmCbq63UXRapoHVGQqKzVRqYVw0GWyQjbl3kMer?=
- =?us-ascii?Q?ZRK3TslRAFoZhkFbIE9QOESUCaLHQa0AkVFJGW3TI62QSXGHhPgyKvoJqWEY?=
- =?us-ascii?Q?x7LCZlh+L2Ra00xI902VxxfwA1yoWI2BeJOozG/Nkj+sVoYQwRpXdDO+nSw6?=
- =?us-ascii?Q?eTmneRJxUyHgtJNPRQwqB/Ob8pBE4O1GOXtW12T3WFB1xUdGov6DdH612D11?=
- =?us-ascii?Q?0Gvy5Sgo1VHcHM1ScN/pJtzuPnmc5L2E922aXBVv5ChD2oBNwv/5lTkuIWZm?=
- =?us-ascii?Q?hHolAN56WuyoUFckU8nwLIpTYwSNne/jwR29hn8VJGgyi5sjQXF93nF5Ovj/?=
- =?us-ascii?Q?mW4EcRdPjDBzFRmlJlrvyJQgokrCbbbKeZXYkSM+s4pMShJzRdVBFQI7SkSV?=
- =?us-ascii?Q?MMc73ESNytmqDqEZol0FM88nqrAYRXcKPQ0RgMlb/2xljdsdHXbJWVLVqq/m?=
- =?us-ascii?Q?tflkNFg/9Jq3mmNQntqqL8wabeAZHQyOReMXFxc5Icm8djXa21609kA0IWWf?=
- =?us-ascii?Q?896pHmtwFKkrD3QdsAbELLOHe6sqZbuVB0givW0Ojd8uBF83Mou8gENizwOV?=
- =?us-ascii?Q?28/u+qFL/M/LQEOd2tr54P602rs+Mrnq9djodWX7VxVc5vy2w0fWMYKyme0h?=
- =?us-ascii?Q?lQG0i1zf5dh4dRWbBM/bnQph3rySmBwcGqLAZtQ9A/EdFxAh0io+uC656PKL?=
- =?us-ascii?Q?4g34wOD2CjSTzTi0RDyyxzIgbY/Fju1Lfq1mX33lQ10GeVY8J6MDDVm2ryz4?=
- =?us-ascii?Q?mM2HMU/z+WrhaS6HbQAqPkQ2shZoN8drRrOc3Mc3i9ApSOS56oxoaNu+pzub?=
- =?us-ascii?Q?n8JnRIx4P8wonScbU5tCiMm4hBlqrCXRyR1PntMl6GR+lz/j9rxw8murXpFa?=
- =?us-ascii?Q?+NUUjdxeXlsxBalduzLQpZMVLTif8QGPzSAjkCJv8zhblZCdJiOxEpXKjraY?=
- =?us-ascii?Q?Nwmqy69S5loiHaHOzT8rwaHprdp7w1xPhscIsNn0AWSfTmoHz+7bmly1kJtu?=
- =?us-ascii?Q?OzrHu9cNbg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3a9a0d4-29b9-49a1-e91b-08da39eb21ed
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 22:58:47.6934
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iZYBv5ol9bxm4y8DWVi+wbueVhFt1QF7IubX+gb7MdNHNrm1Q0qXNxaX1fUUUiSW
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6256
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 02:29:29PM -0400, Matthew Rosato wrote:
-> Since commit 0286300e6045 ("iommu: iommu_group_claim_dma_owner() must
-> always assign a domain") s390-iommu will get called to allocate multiple
-> unmanaged iommu domains for a vfio-pci device -- however the current
-> s390-iommu logic tolerates only one.  Recognize that multiple domains can
-> be allocated and handle switching between DMA or different iommu domain
-> tables during attach_dev.
-> 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> ---
->  drivers/iommu/s390-iommu.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+Like many i2c-hid touchscreen controllers, the Elan eKTH6915
+controller has a reset gpio. For the Goodix GT7375P touchscreen the
+decision was to add a new binding rather than trying to add a new GPIO
+to the existing i2c-hid binding. We'll follow the lead and do it here,
+too.
 
-Makes senese, thanks
+SIDE NOTE: the Elan eKTH6915 is a touchscreen _controller_ that's
+included as a part on some touchscreens. The reset line isn't truly
+necessary for the functioning of the touchscreen, so it's possible
+that some designs won't have it hooked up and will just guarantee the
+power sequencing requirements with RLC circuits. Thus, we'll mark the
+reset gpio as optional.
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Note that if the reset GPIO isn't used there's actually no true need
+to use the "elan,ekth6915" compatible instead of the "hid-over-i2c" on
+Linux. However:
+- Officially using just "hid-over-i2c" for this device violates the
+  existing "hid-over-i2c" bindings. The bindings say that you're not
+  supposed to use "post-power-on-delay-ms" without specifying a more
+  specific compatible. Currently the Linux driver doesn't enforce
+  this, but it violates the bindings to just use
+  "hid-over-i2c". ...and if you're going to add a more specific
+  compatible anyway, might as well do it right.
+- Using this compatible means we don't need to specify
+  "hid-descr-addr" since it's inferred from the compatible.
+- Using this compatible means that the regulator names match the names
+  on the Elan datasheet (vcc33 / vccio) vs the generic hid-over-i2c
+  (vdd / vddl).
 
-Jason
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ .../bindings/input/elan,ekth6915.yaml         | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/elan,ekth6915.yaml
+
+diff --git a/Documentation/devicetree/bindings/input/elan,ekth6915.yaml b/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
+new file mode 100644
+index 000000000000..05e6f2df604c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
+@@ -0,0 +1,65 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/elan,ekth6915.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Elan eKTH6915 touchscreen controller
++
++maintainers:
++  - Douglas Anderson <dianders@chromium.org>
++
++description:
++  Supports the Elan eKTH6915 touchscreen controller.
++  This touchscreen controller uses the i2c-hid protocol with a reset GPIO.
++
++properties:
++  compatible:
++    items:
++      - const: elan,ekth6915
++
++  reg:
++    const: 0x10
++
++  interrupts:
++    maxItems: 1
++
++  reset-gpios:
++    description: Reset GPIO; not all touchscreens using eKTH6915 hook this up.
++
++  vcc33-supply:
++    description: The 3.3V supply to the touchscreen.
++
++  vccio-supply:
++    description:
++      The IO supply to the touchscreen. Need not be specified if this is the
++      same as the 3.3V supply.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - vcc33-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      ap_ts: touchscreen@10 {
++        compatible = "elan,ekth6915";
++        reg = <0x10>;
++
++        interrupt-parent = <&tlmm>;
++        interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
++
++        reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
++        vcc33-supply = <&pp3300_ts>;
++      };
++    };
+-- 
+2.36.1.124.g0e6072fb45-goog
+

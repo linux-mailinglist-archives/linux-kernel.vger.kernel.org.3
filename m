@@ -2,248 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6555652DD43
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2611052DD48
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244155AbiESS7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
+        id S244239AbiESS7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242316AbiESS7E (ORCPT
+        with ESMTP id S243643AbiESS7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:59:04 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5146ABF45
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:59:02 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id i5so4298824ilv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WtXD347NgGS/+YijWWiRuBafqv4C6u9VlK5CEu8TAEA=;
-        b=eQti3jrkdY7scusFOxnuKhJ5Vf4Z+DDvEqC+qVkSzJirkfUkUo5yo7/PzJFKP1AnQd
-         EOXByCNcv+7E3dhF7/eAZlUtc4Ds73cawnE2aCgg30dI7mHPxjhBBOoH1YSJQFqNtOr1
-         R6LZoXW729dcASQMsmmF3k/+wo+sYd4kz14Sa2qe+rZR083fhb8vmsk7nO+eI7I5+46r
-         B1WqKIZ6hq+/H8JAv3J/ab4RVaL/KfqCAbC/76TQsnKpljZd0qDTXT5ChI6MnY24iwgb
-         lnWLpnhJC+QTbOm2LnMQ7SPKSoLPf/ImHkqspMRV5ORcKQKsElyIaKIG7d4X6ohSIUeO
-         KuBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WtXD347NgGS/+YijWWiRuBafqv4C6u9VlK5CEu8TAEA=;
-        b=sudk3KwsrVcqKkzvhHah6ZIg41nI0ZaxY5oTKOkbDr0XV//IOZDvytt/QohtjyMaXL
-         gjdjYuRp4DGboAc+LNVpWsqJPfsnkXJga6tZCZpQm4JE/CEqdkExq68eAB20or/u8a1n
-         aDEdS9veV/kl7cg/NpfPPRBtNY0R+GcMQ0UgYFc6re+q8GB8COGhg59HXabmNl5Ev1wg
-         IUIUt8iOQ3rM0nBMfdZT+20+nsVwq5CUl6V817/PiJEY6zOLYoTBu7M/1f5ZgB6NW82z
-         bZBL71zeh0G3J2b41ygB+l8mCGF4McTF7Bg9yzRZm7JxLELV8xwIFvvndCLMipz5MfyG
-         XOSQ==
-X-Gm-Message-State: AOAM532tE11FatBdYNO7VyxMxX6V7M5RRPanw8WJOV6sJ8YS3EhcpxEa
-        Uz2YkLmHn1wYyiqflhzjzR/Xfe51lno46YZZQBm0aQ==
-X-Google-Smtp-Source: ABdhPJxroZKPAtKdyjG/WvTdRj8QijwwaYZoKH+fVYQqNh/ZqMiSWs7lA9A9PN2uIxTVX6Z0QHBF2y1TIkugRbTRbhE=
-X-Received: by 2002:a92:da0c:0:b0:2cf:9e8e:d9d8 with SMTP id
- z12-20020a92da0c000000b002cf9e8ed9d8mr3662939ilm.192.1652986741747; Thu, 19
- May 2022 11:59:01 -0700 (PDT)
+        Thu, 19 May 2022 14:59:37 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EE9ABF49;
+        Thu, 19 May 2022 11:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652986776; x=1684522776;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OLDQkJZ+ZvpLDZPw/CW1n9AI9FFsLGC/saBab6KRAO8=;
+  b=I/H+XBGacemcUak+frTuB7Mn/ueUlWzq5FIyNpIeSpE3CVGC/NBClxbR
+   Kjm8TUrxdLUgoQVCd1rviuc3usCXXXwZiigGyKarelw4suPWq8s6M1DTm
+   iJBRBBAYCYhYVV3NfG1aHLAWyk6LNZ1CWrViatrVBAbQX7Rj5SzgxF/JI
+   fWeSS9HsJieT9vRrUhhPu/Te3uJ8ILD51H+KJgHfT30exmbOQGBeUmA5q
+   fYS/LTamPEJjOuDRv0n6eQbIg3BrPy1EjskHhBMIUlOT+P7qbVf5V4hJl
+   dPd23EKKQful+amRXlBt6SmMiG2AUGRIwf44j65r5loLIHuRKuomywZiO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272297163"
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="272297163"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 11:59:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="818133987"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 19 May 2022 11:59:31 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrlMx-0003ro-90;
+        Thu, 19 May 2022 18:59:31 +0000
+Date:   Fri, 20 May 2022 02:58:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     longli@linuxonhyperv.com, "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>
+Cc:     kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, Long Li <longli@microsoft.com>
+Subject: Re: [PATCH 01/12] net: mana: Add support for auxiliary device
+Message-ID: <202205200250.8xo3zYa3-lkp@intel.com>
+References: <1652778276-2986-2-git-send-email-longli@linuxonhyperv.com>
 MIME-Version: 1.0
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-5-axelrasmussen@google.com> <fc320218-bef1-c373-e6a6-afa2f6c4b56c@linuxfoundation.org>
-In-Reply-To: <fc320218-bef1-c373-e6a6-afa2f6c4b56c@linuxfoundation.org>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 19 May 2022 11:58:25 -0700
-Message-ID: <CAJHvVcgiHzHcGr8++TMW4+D0PHJRzwL=B2OGOncWArZnUa0pwg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] userfaultfd: update documentation to describe /dev/userfaultfd
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1652778276-2986-2-git-send-email-longli@linuxonhyperv.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 9:46 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 4/22/22 3:29 PM, Axel Rasmussen wrote:
-> > Explain the different ways to create a new userfaultfd, and how access
-> > control works for each way.
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > ---
-> >   Documentation/admin-guide/mm/userfaultfd.rst | 38 ++++++++++++++++++--
-> >   Documentation/admin-guide/sysctl/vm.rst      |  3 ++
-> >   2 files changed, 39 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-> > index 6528036093e1..4c079b5377d4 100644
-> > --- a/Documentation/admin-guide/mm/userfaultfd.rst
-> > +++ b/Documentation/admin-guide/mm/userfaultfd.rst
-> > @@ -17,7 +17,10 @@ of the ``PROT_NONE+SIGSEGV`` trick.
-> >   Design
-> >   ======
-> >
-> > -Userfaults are delivered and resolved through the ``userfaultfd`` syscall.
->
-> Please keep this sentence in there and rephrase it to indicate how it was
-> done in the past.
->
-> Also explain here why this new approach is better than the syscall approach
-> before getting into the below details.
+Hi,
 
-Hmm, so the old sentence I think was incorrect already. Notifications
-of *the faults* aren't delivered and resolved through the syscall.
-Rather, the syscall just gives you a file descriptor, and then
-notification / resolution of faults happens though the file
-descriptor, not through the syscall. So I think it needs to be
-reworded in any case.
+Thank you for the patch! Perhaps something to improve:
 
-I think the overall structure of the doc as-is makes the most sense as
-well - first explain how this will be used at a very high level, and
-then go into the details (first how to create a userfaultfd, then how
-to use it).
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.18-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-So, in the end I reworded the "Creating a userfaultfd" section, to
-cover the two things you mentioned:
+url:    https://github.com/intel-lab-lkp/linux/commits/longli-linuxonhyperv-com/Introduce-Microsoft-Azure-Network-Adapter-MANA-RDMA-driver/20220517-170632
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 42226c989789d8da4af1de0c31070c96726d990c
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220520/202205200250.8xo3zYa3-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/5c9b22b8d4038fba4019bb1e5bcda9a101d285b7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review longli-linuxonhyperv-com/Introduce-Microsoft-Azure-Network-Adapter-MANA-RDMA-driver/20220517-170632
+        git checkout 5c9b22b8d4038fba4019bb1e5bcda9a101d285b7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/infiniband/hw/ drivers/net/ethernet/microsoft/mana/
 
-- Which is the "older" way and which is the "newer" way
-- What the benefit of the newer way is
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Hopefully this addresses the comment? I can tweak it more if needed.
-In any case, thanks for taking a look at this series!
+All warnings (new ones prefixed by >>):
 
->
-> > +Userspace creates a new userfaultfd, initializes it, and registers one or more
-> > +regions of virtual memory with it. Then, any page faults which occur within the
-> > +region(s) result in a message being delivered to the userfaultfd, notifying
-> > +userspace of the fault.
-> >
-> >   The ``userfaultfd`` (aside from registering and unregistering virtual
-> >   memory ranges) provides two primary functionalities:
-> > @@ -39,7 +42,7 @@ Vmas are not suitable for page- (or hugepage) granular fault tracking
-> >   when dealing with virtual address spaces that could span
-> >   Terabytes. Too many vmas would be needed for that.>
-> > -The ``userfaultfd`` once opened by invoking the syscall, can also be
-> > +The ``userfaultfd``, once created, can also be
->
-> This is sentence is too short and would look odd. Combine the sentences
-> so it renders well in the generated doc.
+>> drivers/net/ethernet/microsoft/mana/mana_en.c:18:5: warning: no previous prototype for 'mana_adev_idx_alloc' [-Wmissing-prototypes]
+      18 | int mana_adev_idx_alloc(void)
+         |     ^~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/microsoft/mana/mana_en.c:23:6: warning: no previous prototype for 'mana_adev_idx_free' [-Wmissing-prototypes]
+      23 | void mana_adev_idx_free(int idx)
+         |      ^~~~~~~~~~~~~~~~~~
 
-Not 100% sure I understood the concern, but I do think it makes sense
-to move "Vmas are not suitable ..." up into the same paragraph with
-the other sentence about scalability. I'll do this in v3 as it looks a
-bit nicer. This leaves the "The userfaultfd, once created, ..." part
-alone, though. I think s/once opened by invoking the syscall/once
-created/ is correct, since there are now various ways to create it. I
-also think that second comma technically should have been there even
-in the previous version.
 
->
-> >   passed using unix domain sockets to a manager process, so the same
-> >   manager process could handle the userfaults of a multitude of
-> >   different processes without them being aware about what is going on
-> > @@ -50,6 +53,37 @@ is a corner case that would currently return ``-EBUSY``).
-> >   API
-> >   ===
-> >
-> > +Creating a userfaultfd
-> > +----------------------
-> > +
-> > +There are two mechanisms to create a userfaultfd. There are various ways to
-> > +restrict this too, since userfaultfds which handle kernel page faults have
-> > +historically been a useful tool for exploiting the kernel.
-> > +
-> > +The first is the userfaultfd(2) syscall. Access to this is controlled in several
-> > +ways:
-> > +
-> > +- By default, the userfaultfd will be able to handle kernel page faults. This
-> > +  can be disabled by passing in UFFD_USER_MODE_ONLY.
-> > +
-> > +- If vm.unprivileged_userfaultfd is 0, then the caller must *either* have
-> > +  CAP_SYS_PTRACE, or pass in UFFD_USER_MODE_ONLY.
-> > +
-> > +- If vm.unprivileged_userfaultfd is 1, then no particular privilege is needed to
-> > +  use this syscall, even if UFFD_USER_MODE_ONLY is *not* set.
-> > +
-> > +Alternatively, userfaultfds can be created by opening /dev/userfaultfd, and
-> > +issuing a USERFAULTFD_IOC_NEW ioctl to this device. Access to this device is
->
-> New ioctl? I thought we are moving away from using ioctls?
+vim +/mana_adev_idx_alloc +18 drivers/net/ethernet/microsoft/mana/mana_en.c
 
-Hmm, looking at alternatives [1] am not sure I see a viable one:
+    17	
+  > 18	int mana_adev_idx_alloc(void)
+    19	{
+    20		return ida_alloc(&mana_adev_ida, GFP_KERNEL);
+    21	}
+    22	
+  > 23	void mana_adev_idx_free(int idx)
+    24	{
+    25		ida_free(&mana_adev_ida, idx);
+    26	}
+    27	
 
-We could have defined a new "userfaultfdfs" filesystem, but it seems
-to me to be overkill for this feature.
-
-We could have used a syscall instead and supported fine-grained access
-control with a new capability, but this approach was rejected [2]
-generally because we prefer to avoid adding capabilities, and this new
-capability's scope (just userfaultfd) was considered too narrow.
-
-So, I'm not sure of another better way to do this. I suppose one could
-argue that the dislike of ioctls outweighs the usefulness of this
-feature, but to me at least the tradeoff seems worth it. :)
-
-[1]: https://www.kernel.org/doc/html/latest/driver-api/ioctl.html#alternatives-to-ioctl
-[2]: https://lkml.org/lkml/2022/2/24/1012
-
->
-> > +controlled via normal filesystem permissions (user/group/mode for example) - no
-> > +additional permission (capability/sysctl) is needed to be able to handle kernel
-> > +faults this way. This is useful because it allows e.g. a specific user or group
-> > +to be able to create kernel-fault-handling userfaultfds, without allowing it
-> > +more broadly, or granting more privileges in addition to that particular ability
-> > +(CAP_SYS_PTRACE). In other words, it allows permissions to be minimized.
-> > +
-> > +Initializing up a userfaultfd
-> > +------------------------
-> > +
->
-> This will generate doc warn very likley - extend the dashes to the
-> entire length of the subtitle.
-
-I'll fix this in v3.
-
->
-> >   When first opened the ``userfaultfd`` must be enabled invoking the
-> >   ``UFFDIO_API`` ioctl specifying a ``uffdio_api.api`` value set to ``UFFD_API`` (or
-> >   a later API version) which will specify the ``read/POLLIN`` protocol
-> > diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-> > index f4804ce37c58..8682d5fbc8ea 100644
-> > --- a/Documentation/admin-guide/sysctl/vm.rst
-> > +++ b/Documentation/admin-guide/sysctl/vm.rst
-> > @@ -880,6 +880,9 @@ calls without any restrictions.
-> >
-> >   The default value is 0.
-> >
-> > +An alternative to this sysctl / the userfaultfd(2) syscall is to create
-> > +userfaultfds via /dev/userfaultfd. See
-> > +Documentation/admin-guide/mm/userfaultfd.rst.
-> >
-> >   user_reserve_kbytes
-> >   ===================
-> >
->
-> thanks,
-> -- Shuah
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

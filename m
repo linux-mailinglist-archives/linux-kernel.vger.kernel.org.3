@@ -2,134 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755A252DF87
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23C452DF8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245209AbiESVpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
+        id S245255AbiESVrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiESVpQ (ORCPT
+        with ESMTP id S229738AbiESVrO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:45:16 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E8C5A2C5;
-        Thu, 19 May 2022 14:45:16 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id e189so8002819oia.8;
-        Thu, 19 May 2022 14:45:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RA+gGY8dLwh8y/CQ41vF54pvIQyZE8P1Ve2JTxLWqzk=;
-        b=komyDIKLLcEAdb2S/E9vT7gRCg4awOj6VLLeL5gQz8pAou0tQ1fmjMobOtMNbtLMXk
-         OiPUvli6Fz2kBCdflelS0IawhAO52s2Vgkmkhzssms83DVJr8UiaGzlk/8DO3li8IRwc
-         7wffbBK6V1XjkevgKLnh53ZdTlMHq2HkWqDn9hGhAPKefmdOl3FEVXVFXuK05lRSaI2f
-         nFwwO+WzrqUSDMHltYMMVuScxwKdNFXH9LaQON3dgyyuL9i0poQSNdaSKiPtXBv7tdxC
-         ScKoz60Vbvx7mN3RKACj+Ud4X1CwO5lKtgodCl3SlP8an5L/Gpw5HtMF6Cx6f0OLojJN
-         TYdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RA+gGY8dLwh8y/CQ41vF54pvIQyZE8P1Ve2JTxLWqzk=;
-        b=Hg42z2zwZTkfOFGq+fpWa+/JTxcwsxobGiEOLqW2cXFMxadkjhAm6gjpVbxpDMxfzE
-         z8/dAF4SVc51ovHubxqJ/WwqUJv/calzTQ0slccBZZ6GPITMVRKBnow8f1vsMVdsB66h
-         5Ot9C4az50DTUM8PcFtQCgSDEVyx3+0U0FI0hIBrpfs+UaZfEc70RU/4XvIbaRWGxCx3
-         TFOMyQesb+5d1ZqL5BoIjAbHx1J7SnL+HMb31KP2H7EpZEGfckFmg3fN3/prKw+6Xcaz
-         XCZh5o0Od/3iM6FrbufK+qvlBHEUHUaMkMmu4zE+t0GOzm9nhoFYk2XTu9xGjgDKJlt7
-         1QfA==
-X-Gm-Message-State: AOAM5308CwwMqZCL5wycAeMggzqjnns++AfLFbjcPk6GAbL8X+VGgALZ
-        gReQZpuH9dmr6PZblqhy8WVmntLRZQDbhgfeYnM=
-X-Google-Smtp-Source: ABdhPJzm2QGhq4vgYnIu1D0JRtdB/L89IXSqIvyNxpYQgAUcoB9gi8LPbyhIy3iD3MGGXlpowsGU57uLffZ5+6lDRCw=
-X-Received: by 2002:a05:6808:2218:b0:326:bd8c:d044 with SMTP id
- bd24-20020a056808221800b00326bd8cd044mr3689489oib.92.1652996715409; Thu, 19
- May 2022 14:45:15 -0700 (PDT)
+        Thu, 19 May 2022 17:47:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DB1972AE;
+        Thu, 19 May 2022 14:47:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=kTddhtx7FQlXKvG8iI5sagS7X5egDOVIA77mbT4W6bA=; b=oMaSk+Uu2RoMnHq5DGwlyqG2Xe
+        E4kWL9Gmeh5HBYegQnrYD8SoQBpxcIZstIvLeERvMwCevBHlzUi+NCA14TbscbWqIDtB95VBtDqZt
+        hT3zM8lFz4qAossLjEzSG8icKJXESPuVbtGoZ7PKVQx8JMmzizOiUxnX6wzXe1kQowXwzIADQulh9
+        tt02U1ClXGfONZjyuY2+HnYbha7f/j2KfyKnU4peXdXFtYpUN3pWJeC7CMMaiN6LauQS/MiIgDv90
+        xD4ReAlBTvEqyetUqtx5f50XAxGOWufktAP9ufITPlC/ngRVfObRHOoaEPg4IJHhcMZ/jIMwvQTVs
+        wc1L47Bw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrnz0-00D7iA-0T; Thu, 19 May 2022 21:46:58 +0000
+Message-ID: <01c1e280-eec4-4f04-553b-670ae1376c33@infradead.org>
+Date:   Thu, 19 May 2022 14:46:51 -0700
 MIME-Version: 1.0
-References: <20220519085530.999726-1-tmricht@linux.ibm.com>
-In-Reply-To: <20220519085530.999726-1-tmricht@linux.ibm.com>
-From:   Namhyung Kim <namhyung@gmail.com>
-Date:   Thu, 19 May 2022 14:45:04 -0700
-Message-ID: <CAM9d7cjjSk-qyA+ZF2YyrJUeaPN8wi7yDzu+ZRbiM4BhjFvg1A@mail.gmail.com>
-Subject: Re: [PATCH] perf/s390: Compiler error on s390 for bench/numa.c
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>, gor@linux.ibm.com,
-        sumanthk@linux.ibm.com, Heiko Carstens <hca@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [RFC PATCH] procfs: Add file path and size to /proc/<pid>/fdinfo
+Content-Language: en-US
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     ilkos@google.com, tjmercier@google.com, surenb@google.com,
+        kernel-team@android.com, Jonathan Corbet <corbet@lwn.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Colin Cross <ccross@google.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20220519214021.3572840-1-kaleshsingh@google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220519214021.3572840-1-kaleshsingh@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 9:27 AM Thomas Richter <tmricht@linux.ibm.com> wrot=
-e:
->
-> The compilation on s390 results in this error:
->
->  # make DEBUG=3Dy bench/numa.o
->  ...
->  bench/numa.c: In function =E2=80=98__bench_numa=E2=80=99:
->  bench/numa.c:1749:81: error: =E2=80=98%d=E2=80=99 directive output may b=
-e truncated
->              writing between 1 and 11 bytes into a region of size between
->              10 and 20 [-Werror=3Dformat-truncation=3D]
->  1749 |        snprintf(tname, sizeof(tname), "process%d:thread%d", p, t)=
-;
->                                                                ^~
->  ...
->  bench/numa.c:1749:64: note: directive argument in the range
->                 [-2147483647, 2147483646]
->  ...
->  #
->
-> The maximum length of the %d replacement is 11 characters because
-> of the negative sign.  Therefore use %u as format conversion.
+Hi--
 
-But their type is int and I'm afraid some compilers might complain
-about it.  Why not just increase the buffer size?
+On 5/19/22 14:40, Kalesh Singh wrote:
+> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> index 061744c436d9..ad66d78aca51 100644
+> --- a/Documentation/filesystems/proc.rst
+> +++ b/Documentation/filesystems/proc.rst
+> @@ -1922,13 +1922,16 @@ if precise results are needed.
+>  3.8	/proc/<pid>/fdinfo/<fd> - Information about opened file
+>  ---------------------------------------------------------------
+>  This file provides information associated with an opened file. The regular
+> -files have at least four fields -- 'pos', 'flags', 'mnt_id' and 'ino'.
+> +files have at least six fields -- 'pos', 'flags', 'mnt_id', 'ino', 'size',
+> +and 'path'.
+> +
+>  The 'pos' represents the current offset of the opened file in decimal
+>  form [see lseek(2) for details], 'flags' denotes the octal O_xxx mask the
+>  file has been created with [see open(2) for details] and 'mnt_id' represents
+>  mount ID of the file system containing the opened file [see 3.5
+>  /proc/<pid>/mountinfo for details]. 'ino' represents the inode number of
+> -the file.
+> +the file, 'size' represents the size of the file in bytes, and 'path'
+> +represents the file path.
+>  
+>  A typical output is::
+>  
+> @@ -1936,6 +1939,8 @@ A typical output is::
+>  	flags:	0100002
+>  	mnt_id:	19
+>  	ino:	63107
+> +        size:   0
+> +        path:   /dev/null
+>  
+>  All locks associated with a file descriptor are shown in its fdinfo too::
+>  
+> @@ -1953,6 +1958,8 @@ Eventfd files
+>  	flags:	04002
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[eventfd]
+>  	eventfd-count:	5a
+>  
+>  where 'eventfd-count' is hex value of a counter.
+> @@ -1966,6 +1973,8 @@ Signalfd files
+>  	flags:	04002
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[signalfd]
+>  	sigmask:	0000000000000200
+>  
+>  where 'sigmask' is hex value of the signal mask associated
+> @@ -1980,6 +1989,8 @@ Epoll files
+>  	flags:	02
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[eventpoll]
+>  	tfd:        5 events:       1d data: ffffffffffffffff pos:0 ino:61af sdev:7
+>  
+>  where 'tfd' is a target file descriptor number in decimal form,
+> @@ -1998,6 +2009,8 @@ For inotify files the format is the following::
+>  	flags:	02000000
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:inotify
+>  	inotify wd:3 ino:9e7e sdev:800013 mask:800afce ignored_mask:0 fhandle-bytes:8 fhandle-type:1 f_handle:7e9e0000640d1b6d
+>  
+>  where 'wd' is a watch descriptor in decimal form, i.e. a target file
+> @@ -2021,6 +2034,8 @@ For fanotify files the format is::
+>  	flags:	02
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[fanotify]
+>  	fanotify flags:10 event-flags:0
+>  	fanotify mnt_id:12 mflags:40 mask:38 ignored_mask:40000003
+>  	fanotify ino:4f969 sdev:800013 mflags:0 mask:3b ignored_mask:40000000 fhandle-bytes:8 fhandle-type:1 f_handle:69f90400c275b5b4
+> @@ -2046,6 +2061,8 @@ Timerfd files
+>  	flags:	02
+>  	mnt_id:	9
+>  	ino:	63107
+> +        size:   0
+> +        path:   anon_inode:[timerfd]
+>  	clockid: 0
+>  	ticks: 0
+>  	settime flags: 01
+> @@ -2070,6 +2087,7 @@ DMA Buffer files
+>  	mnt_id:	9
+>  	ino:	63107
+>  	size:   32768
+> +        path:   /dmabuf:
+>  	count:  2
+>  	exp_name:  system-heap
 
-Thanks,
-Namhyung
+All of these added lines should be indented with a tab instead of spaces.
 
-
->
-> Output after:
->  # make  DEBUG=3Dy bench/numa.o > /dev/null 2>&1; ll bench/numa.o
->  -rw-r--r-- 1 root root 418320 May 19 09:11 bench/numa.o
->  #
->
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> ---
->  tools/perf/bench/numa.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/bench/numa.c b/tools/perf/bench/numa.c
-> index d5289fa58a4f..ff0bfd87afbb 100644
-> --- a/tools/perf/bench/numa.c
-> +++ b/tools/perf/bench/numa.c
-> @@ -1746,7 +1746,7 @@ static int __bench_numa(const char *name)
->                         for (t =3D 0; t < g->p.nr_threads; t++) {
->                                 memset(tname, 0, sizeof(tname));
->                                 td =3D g->threads + p*g->p.nr_threads + t=
-;
-> -                               snprintf(tname, sizeof(tname), "process%d=
-:thread%d", p, t);
-> +                               snprintf(tname, sizeof(tname), "process%u=
-:thread%u", p, t);
->                                 print_res(tname, td->speed_gbs,
->                                         "GB/sec",       "thread-speed", "=
-GB/sec/thread speed");
->                                 print_res(tname, td->system_time_ns / NSE=
-C_PER_SEC,
-> --
-> 2.36.1
->
+thanks.
+-- 
+~Randy

@@ -2,137 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A17852CB7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4B352CB7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233964AbiESF3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 01:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
+        id S233975AbiESFeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 01:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiESF3q (ORCPT
+        with ESMTP id S229833AbiESFeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 01:29:46 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D001145C
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652938184; x=1684474184;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vNJfSjbFT0fZfx23OXyNSXAesiZ6up1NaTEl+zvkJ5k=;
-  b=aPn12FLh3z+ZGZQtGnlrjfzILnSUvqonbVy2FIi2Ynj5yWMiz3/Br8qm
-   zqyY1JsEsyjzO2uhT3vJvrFnnePXSQd3SuPMMMmpmihY7/Y954iIyu43E
-   bt+It8bs/1LDLOKX9QlOOhYCDGz1rs8mhuaIcG1AiPPuFe9J7xal4Fphm
-   Iu4PaKDxI8Rqrut40fNCyGc4vrHySDjRjgYFA/8JgdUZuUTGDzHJ6FVy8
-   6Dj/x2+9MOG3dv+i03HR23ekNWKXLhnebP/amlllVfEf9gldFMFyMEu2f
-   YZ7pkjUfQ3ifop2IgKYCDPj2nbZRY+CI+ydU5H7Bds7NEsx328ICLo1wT
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="271984356"
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="271984356"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 22:29:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="661518272"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 May 2022 22:29:42 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrYjF-00037D-Tt;
-        Thu, 19 May 2022 05:29:41 +0000
-Date:   Thu, 19 May 2022 13:29:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>
-Subject: [jlayton:ceph-netfs-llist 26/51] fs/netfs/output.c:274:32: warning:
- unused variable 'cookie'
-Message-ID: <202205191357.rJyD2yOh-lkp@intel.com>
+        Thu, 19 May 2022 01:34:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EE774B87C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:34:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4330415BF;
+        Wed, 18 May 2022 22:34:20 -0700 (PDT)
+Received: from [10.162.42.8] (unknown [10.162.42.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CD043F66F;
+        Wed, 18 May 2022 22:34:16 -0700 (PDT)
+Message-ID: <25a90892-957c-e5b4-e121-948e85d3caee@arm.com>
+Date:   Thu, 19 May 2022 11:04:14 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 resend 4/5] arm64: mm: Convert to GENERIC_IOREMAP
+Content-Language: en-US
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>, catalin.marinas@arm.com,
+        will@kernel.org, akpm@linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, hch@infradead.org, arnd@arndb.de
+References: <20220429103225.75121-5-wangkefeng.wang@huawei.com>
+ <20220502032751.21503-1-wangkefeng.wang@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220502032751.21503-1-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git ceph-netfs-llist
-head:   33ef80e1351d57c7496e3dfb6974767f4493dd91
-commit: 7bf4565326b2233dacf25020fc700d70a231a694 [26/51] netfs: Dispatch write requests to process a writeback slice
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220519/202205191357.rJyD2yOh-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/commit/?id=7bf4565326b2233dacf25020fc700d70a231a694
-        git remote add jlayton https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git
-        git fetch --no-tags jlayton ceph-netfs-llist
-        git checkout 7bf4565326b2233dacf25020fc700d70a231a694
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   fs/netfs/output.c: In function 'netfs_set_up_write_to_cache':
->> fs/netfs/output.c:274:32: warning: unused variable 'cookie' [-Wunused-variable]
-     274 |         struct fscache_cookie *cookie = netfs_i_cookie(wreq->inode);
-         |                                ^~~~~~
 
 
-vim +/cookie +274 fs/netfs/output.c
+On 5/2/22 08:57, Kefeng Wang wrote:
+> Add hook for arm64's special operation when ioremap() and iounmap(),
+> then ioremap_wc/np/cache is converted to use ioremap_prot()
+> from GENERIC_IOREMAP, update the Copyright and kill the unused
+> inclusions.
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+> v2 resend:
+> - use IOMEM_ERR_PTR to fix sparse warning found by lkp
+> 
+>  arch/arm64/Kconfig          |  1 +
+>  arch/arm64/include/asm/io.h | 20 ++++++---
+>  arch/arm64/kernel/acpi.c    |  2 +-
+>  arch/arm64/mm/ioremap.c     | 85 +++++--------------------------------
+>  4 files changed, 27 insertions(+), 81 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 20ea89d9ac2f..56673209fdb9 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -123,6 +123,7 @@ config ARM64
+>  	select GENERIC_CPU_VULNERABILITIES
+>  	select GENERIC_EARLY_IOREMAP
+>  	select GENERIC_IDLE_POLL_SETUP
+> +	select GENERIC_IOREMAP
+>  	select GENERIC_IRQ_IPI
+>  	select GENERIC_IRQ_PROBE
+>  	select GENERIC_IRQ_SHOW
+> diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
+> index 7fd836bea7eb..042fa01940b8 100644
+> --- a/arch/arm64/include/asm/io.h
+> +++ b/arch/arm64/include/asm/io.h
+> @@ -163,13 +163,21 @@ extern void __memset_io(volatile void __iomem *, int, size_t);
+>  /*
+>   * I/O memory mapping functions.
+>   */
+> -extern void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot);
+> -extern void iounmap(volatile void __iomem *addr);
+> -extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
+>  
+> -#define ioremap(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRE))
+> -#define ioremap_wc(addr, size)		__ioremap((addr), (size), __pgprot(PROT_NORMAL_NC))
+> -#define ioremap_np(addr, size)		__ioremap((addr), (size), __pgprot(PROT_DEVICE_nGnRnE))
+> +void __iomem *arch_ioremap(phys_addr_t phys_addr, size_t size, unsigned long prot);
+> +#define arch_ioremap arch_ioremap
+> +
+> +int arch_iounmap(void __iomem *addr);
+> +#define arch_iounmap arch_iounmap
+> +
+> +#define _PAGE_IOREMAP PROT_DEVICE_nGnRE
 
-   266	
-   267	/*
-   268	 * Set up a op for writing to the cache.
-   269	 */
-   270	static void netfs_set_up_write_to_cache(struct netfs_io_request *wreq)
-   271	{
-   272		struct netfs_cache_resources *cres;
-   273		struct netfs_io_subrequest *subreq;
- > 274		struct fscache_cookie *cookie = netfs_i_cookie(wreq->inode);
-   275		loff_t start = wreq->first * PAGE_SIZE;
-   276		size_t len = (wreq->last - wreq->first + 1) * PAGE_SIZE;
-   277		int ret;
-   278	
-   279		if (!fscache_cookie_enabled(cookie)) {
-   280			clear_bit(NETFS_RREQ_WRITE_TO_CACHE, &wreq->flags);
-   281			return;
-   282		}
-   283	
-   284		_debug("write to cache");
-   285		subreq = netfs_create_write_request(wreq, NETFS_WRITE_TO_CACHE, start, len,
-   286						    netfs_write_to_cache_op_worker);
-   287		if (!subreq)
-   288			return;
-   289	
-   290		cres = &wreq->cache_resources;
-   291		ret = -ENOBUFS;
-   292		if (wreq->netfs_ops->begin_cache_operation)
-   293			ret = wreq->netfs_ops->begin_cache_operation(wreq);
-   294		if (ret < 0) {
-   295			netfs_write_subrequest_terminated(subreq, ret, false);
-   296			return;
-   297		}
-   298	
-   299		ret = cres->ops->prepare_write(cres, &start, &len, i_size_read(wreq->inode),
-   300					       true);
-   301		if (ret < 0) {
-   302			netfs_write_subrequest_terminated(subreq, ret, false);
-   303			return;
-   304		}
-   305	
-   306		netfs_queue_write_request(subreq);
-   307	}
-   308	
+Small nit, should we have a comment here for the above components i.e
+PAGE_IOREMAP and callbacks arch_ioremap()/arch_iounmap() are required
+because of enabling GENERIC_IOREMAP ?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +
+> +#define ioremap_wc(addr, size)		ioremap_prot((addr), (size), PROT_NORMAL_NC)
+> +#define ioremap_np(addr, size)		ioremap_prot((addr), (size), PROT_DEVICE_nGnRnE)
+> +#define ioremap_cache(addr, size) ({							\
+> +	pfn_is_map_memory(__phys_to_pfn(addr)) ?					\
+> +	(void __iomem *)__phys_to_virt(addr) : ioremap_prot(addr, size, PROT_NORMAL);	\
+> +})
+>  
+>  /*
+>   * io{read,write}{16,32,64}be() macros
+> diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
+> index e4dea8db6924..a5a256e3f9fe 100644
+> --- a/arch/arm64/kernel/acpi.c
+> +++ b/arch/arm64/kernel/acpi.c
+> @@ -351,7 +351,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+>  				prot = __acpi_get_writethrough_mem_attribute();
+>  		}
+>  	}
+> -	return __ioremap(phys, size, prot);
+> +	return ioremap_prot(phys, size, pgprot_val(prot));
+>  }
+>  
+>  /*
+> diff --git a/arch/arm64/mm/ioremap.c b/arch/arm64/mm/ioremap.c
+> index b7c81dacabf0..08fc30eb2721 100644
+> --- a/arch/arm64/mm/ioremap.c
+> +++ b/arch/arm64/mm/ioremap.c
+> @@ -1,96 +1,33 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+> -/*
+> - * Based on arch/arm/mm/ioremap.c
+> - *
+> - * (C) Copyright 1995 1996 Linus Torvalds
+> - * Hacked for ARM by Phil Blundell <philb@gnu.org>
+> - * Hacked to allow all architectures to build, and various cleanups
+> - * by Russell King
+> - * Copyright (C) 2012 ARM Ltd.
+> - */
+>  
+> -#include <linux/export.h>
+>  #include <linux/mm.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/io.h>
+>  
+> -#include <asm/fixmap.h>
+> -#include <asm/tlbflush.h>
+> -
+> -static void __iomem *__ioremap_caller(phys_addr_t phys_addr, size_t size,
+> -				      pgprot_t prot, void *caller)
+> +void __iomem *arch_ioremap(phys_addr_t phys_addr, size_t size, unsigned long prot)
+>  {
+> -	unsigned long last_addr;
+> -	unsigned long offset = phys_addr & ~PAGE_MASK;
+> -	int err;
+> -	unsigned long addr;
+> -	struct vm_struct *area;
+> -
+> -	/*
+> -	 * Page align the mapping address and size, taking account of any
+> -	 * offset.
+> -	 */
+> -	phys_addr &= PAGE_MASK;
+> -	size = PAGE_ALIGN(size + offset);
+> +	unsigned long last_addr = phys_addr + size - 1;
+> +	int ret = -EINVAL;
+>  
+> -	/*
+> -	 * Don't allow wraparound, zero size or outside PHYS_MASK.
+> -	 */
+> -	last_addr = phys_addr + size - 1;
+> -	if (!size || last_addr < phys_addr || (last_addr & ~PHYS_MASK))
+> -		return NULL;
+> +	/* Don't allow outside PHYS_MASK */
+> +	if (last_addr & ~PHYS_MASK)
+> +		return IOMEM_ERR_PTR(ret);
+>  
+> -	/*
+> -	 * Don't allow RAM to be mapped.
+> -	 */
+> +	/* Don't allow RAM to be mapped. */
+>  	if (WARN_ON(pfn_is_map_memory(__phys_to_pfn(phys_addr))))
+> -		return NULL;
+> +		return IOMEM_ERR_PTR(ret);
+>  
+> -	area = get_vm_area_caller(size, VM_IOREMAP, caller);
+> -	if (!area)
+> -		return NULL;
+> -	addr = (unsigned long)area->addr;
+> -	area->phys_addr = phys_addr;
+> -
+> -	err = ioremap_page_range(addr, addr + size, phys_addr, prot);
+> -	if (err) {
+> -		vunmap((void *)addr);
+> -		return NULL;
+> -	}
+> -
+> -	return (void __iomem *)(offset + addr);
+> -}
+> -
+> -void __iomem *__ioremap(phys_addr_t phys_addr, size_t size, pgprot_t prot)
+> -{
+> -	return __ioremap_caller(phys_addr, size, prot,
+> -				__builtin_return_address(0));
+> +	return NULL;
+>  }
+> -EXPORT_SYMBOL(__ioremap);
+>  
+> -void iounmap(volatile void __iomem *io_addr)
+> +int arch_iounmap(void __iomem *addr)
+>  {
+> -	unsigned long addr = (unsigned long)io_addr & PAGE_MASK;
+> -
+>  	/*
+>  	 * We could get an address outside vmalloc range in case
+>  	 * of ioremap_cache() reusing a RAM mapping.
+>  	 */
+> -	if (is_vmalloc_addr((void *)addr))
+> -		vunmap((void *)addr);
+> -}
+> -EXPORT_SYMBOL(iounmap);
+> -
+> -void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size)
+> -{
+> -	/* For normal memory we already have a cacheable mapping. */
+> -	if (pfn_is_map_memory(__phys_to_pfn(phys_addr)))
+> -		return (void __iomem *)__phys_to_virt(phys_addr);
+> -
+> -	return __ioremap_caller(phys_addr, size, __pgprot(PROT_NORMAL),
+> -				__builtin_return_address(0));
+> +	return is_vmalloc_addr(addr) ? 0 : -EINVAL;
+>  }
+> -EXPORT_SYMBOL(ioremap_cache);
+>  
+>  /*
+>   * Must be called after early_fixmap_init
+
+Otherwise LGTM.
+
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>

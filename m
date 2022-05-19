@@ -2,147 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D83B52DA75
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A42A52DA4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242142AbiESQlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S241518AbiESQdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241788AbiESQlk (ORCPT
+        with ESMTP id S233862AbiESQdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:41:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 909BA59095
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:41:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25AE21477;
-        Thu, 19 May 2022 09:32:51 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B50B33F718;
-        Thu, 19 May 2022 09:32:50 -0700 (PDT)
-Date:   Thu, 19 May 2022 17:32:49 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 0/8] arch_topology: Updates to add socket support and
- fix cluster ids
-Message-ID: <YoZxKJ6TiAsxTXNl@arm.com>
-References: <20220518093325.2070336-1-sudeep.holla@arm.com>
+        Thu, 19 May 2022 12:33:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCF468304
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:33:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9CF461CAC;
+        Thu, 19 May 2022 16:32:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE9BC385AA;
+        Thu, 19 May 2022 16:32:57 +0000 (UTC)
+Date:   Thu, 19 May 2022 12:32:55 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     YoPOhRctb8wwbmY5@carbon, Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v3] tracing: add 'accounted' entry into output of
+ allocation tracepoints
+Message-ID: <20220519123255.543b8db6@gandalf.local.home>
+In-Reply-To: <e018be81-f4f2-a26f-7c5a-7adddd9c56c4@openvz.org>
+References: <f6625cd8-90f9-6d48-50f6-7bb052bf479f@openvz.org>
+        <20220518160447.20a7b96f@gandalf.local.home>
+        <b728f944-e3ae-cdb6-5f02-2fb21466b2fb@openvz.org>
+        <20220519100348.101d027d@gandalf.local.home>
+        <e018be81-f4f2-a26f-7c5a-7adddd9c56c4@openvz.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518093325.2070336-1-sudeep.holla@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
+On Thu, 19 May 2022 19:29:36 +0300
+Vasily Averin <vvs@openvz.org> wrote:
 
-On Wednesday 18 May 2022 at 10:33:17 (+0100), Sudeep Holla wrote:
-> Hi All,
+> Frankly speaking I vote for performance with both hands.
+> However I'm still would like to avoid new sparse warnings.
+> Christoph Hellwig just recently taught me, "never add '__force' before
+> thinking hard about them", but in this case I would need to use it three times.
 > 
-> This series intends to fix some discrepancies we have in the CPU topology
-> parsing from the device tree /cpu-map node. Also this diverges from the
-> behaviour on a ACPI enabled platform. The expectation is that both DT
-> and ACPI enabled systems must present consistent view of the CPU topology.
+> I found that bitwise typecasts can be avoided by using translation unions. 
 > 
-> Currently we assign generated cluster count as the physical package identifier
-> for each CPU which is wrong. The device tree bindings for CPU topology supports
-> sockets to infer the socket or physical package identifier for a given CPU.
-> Also we don't check if all the cores/threads belong to the same cluster before
-> updating their sibling masks which is fine as we don't set the cluster id yet.
-> 
-> These changes also assigns the cluster identifier as parsed from the device tree
-> cluster nodes within /cpu-map without support for nesting of the clusters.
-> Finally, it also add support for socket nodes in /cpu-map. With this the
-> parsing of exact same information from ACPI PPTT and /cpu-map DT node
-> aligns well.
-> 
-> The only exception is that the last level cache id information can be
-> inferred from the same ACPI PPTT while we need to parse CPU cache nodes
-> in the device tree.
-> 
-> P.S: I have not cc-ed Greg and Rafael so that all the users of arch_topology
-> agree with the changes first before we include them.
-> 
-> v1[1]->v2:
-> 	- Updated ID validity check include all non-negative value
-> 	- Added support to get the device node for the CPU's last level cache
-> 	- Added support to build llc_sibling on DT platforms
-> 
-> [1] https://lore.kernel.org/lkml/20220513095559.1034633-1-sudeep.holla@arm.com
-> 
-> Sudeep Holla (8):
->   arch_topology: Don't set cluster identifier as physical package identifier
->   arch_topology: Set thread sibling cpumask only within the cluster
->   arch_topology: Set cluster identifier in each core/thread from /cpu-map
->   arch_topology: Add support for parsing sockets in /cpu-map
->   arch_topology: Check for non-negative value rather than -1 for IDs validity
->   arch_topology: Avoid parsing through all the CPUs once a outlier CPU is found
->   of: base: add support to get the device node for the CPU's last level cache
->   arch_topology: Add support to build llc_sibling on DT platforms
-> 
+> What do you think about following trick?
 
-Just a recommendation for patch-set structure: it would be best to have
-the following sequence to maintain the same scheduler topology and
-behaviour when partially applying the set (currently testing this on Juno,
-but should be the case for other platforms as well):
+It's really up to you memory management folks. Although I may need to
+update libtraceevent to handle the union case. That may be a bit tricky.
 
-2/8 arch_topology: Set thread sibling cpumask only within the cluster
-5/8 arch_topology: Check for non-negative value rather than -1 for IDs validity
-6/8 arch_topology: Avoid parsing through all the CPUs once a outlier CPU is found
-
---> these are only preparation/cleanup patches and don't affect current
-functionality
-
-7/8 of: base: add support to get the device node for the CPU's last level cache
-8/8 arch_topology: Add support to build llc_sibling on DT platforms
-
---> these will populate llc siblings but this list will be equal to
-core siblings (based on package_id) so nothing changes in the scheduler
-topology. Even if CONFIG_SCHED_CLUSTER=y, we still have cluster_id=-1 so
-nothing will change in that case either, for the patches so far.
-
-1/8 arch_topology: Don't set cluster identifier as physical package identifier
-
---> 1/8 is the trouble maker if it's the first patch as it will result
-in having all CPUs in core_siblings so the topology will be flattened to
-just an MC level for a typical b.L system like Juno. But if you add it after
-all of the above patches, the llc_siblings will contribute to create the same
-MC and DIE levels we expect.
-
-3/8 arch_topology: Set cluster identifier in each core/thread from /cpu-map
-4/8 arch_topology: Add support for parsing sockets in /cpu-map
-
---> Here 3/8 will start creating complications when having clusters in
-DT and we have CONFIG_SCHED_CLUSTER=y. But I'll detail this in a reply
-to that patch. For CONFIG_SCHED_CLUSTER=n the topology and scheduler
-behaviour should be the same as before this set.
-
-Hope it helps,
-Ionela.
-
-
->  drivers/base/arch_topology.c  | 75 +++++++++++++++++++++++++++--------
->  drivers/of/base.c             | 33 +++++++++++----
->  include/linux/arch_topology.h |  1 +
->  include/linux/of.h            |  1 +
->  4 files changed, 85 insertions(+), 25 deletions(-)
-> 
-> --
-> 2.36.1
-> 
-> 
+-- Steve

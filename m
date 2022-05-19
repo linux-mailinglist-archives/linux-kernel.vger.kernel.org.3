@@ -2,201 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CB752DD96
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD0852DDA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243861AbiESTQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
+        id S243869AbiESTVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244564AbiESTQp (ORCPT
+        with ESMTP id S229541AbiESTUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 15:16:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E82AC1ED0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:15:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDADE61B94
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527F9C385AA;
-        Thu, 19 May 2022 19:15:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652987725;
-        bh=s4/8PEowr6J9A6sMspKv3h/ZQDfdqAPMOk72yIHs8DI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=WQo18kYgKjIv52aKNQmzdItSAoKI4qvfucCXcuS+LiC/YZikUd/HQvCUE6onKUDbG
-         SYeXULY2oFnED+53NJBGd7juszKwkW347uuoIgXnefv6X/g3SjiLoAxUkv5lwjxo2B
-         iOcgPb6hAs9KDM72KByPIzPauJ92PCZsp6LC7NrNiKsI9COtpUtdzHaXAa35mjGa2O
-         fIAxN+lOp1sC4c3qvhaR8aA+ObHLgreRlMDuoM7veoEGX6cS0Suupkic65p4nA/+sT
-         loXdLlOj5YzOijZRHxJ5zpRH1hf39OMDoFr3ot5z+M1ggAfEIKclNTFXH00DXb7496
-         MH3AezsAwteIw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DBBF25C04E0; Thu, 19 May 2022 12:15:24 -0700 (PDT)
-Date:   Thu, 19 May 2022 12:15:24 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, kafai@fb.com, kpsingh@kernel.org
-Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
-Message-ID: <20220519191524.GC1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
- <20220517233507.GA423@qian>
- <20220518125152.GQ3441@techsingularity.net>
- <YoUealVA1bMaSH2l@qian>
- <20220518171503.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
- <YoZGSd6yQL3EP8tk@qian>
+        Thu, 19 May 2022 15:20:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDBB12ACE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652988051; x=1684524051;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VG0I81Vi4zkACRITn2gr1QcUsNlLRmFAQtBwtwtd3ZI=;
+  b=lmZOEHRYycKGLigM5GiTuTgD6v+UrNOZ+QK+i65zZ1jcQFBd6+fhOxZ4
+   QMxH7rp5lnCEm7FaXQMEl1LV+eu5tjVUjpAtlifyL6HjooeC3wrV9hpP+
+   HcvjY9r74yQmNOnPTVxx7xb+HNDWgZEIyU+1q+fIhAh1TNY0VWUQsK2t1
+   kOdN4C24LWYQLnoRsSsApVwIMokMHfP3I0KdJ6f5er3CbeB7vqYk2F7zO
+   c3l/8JgFg4NLFXdJYpmpLhiY86cmuL8eR2z25xariAJQJcQsSbTSDsVjZ
+   J9PGwy17492LsMur7GotmGb9TZYz/JKDPV8hz/6NjKTx1RBZdf9iby0TO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272306184"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="272306184"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 12:20:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="661870162"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 May 2022 12:20:33 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrlhH-0003sz-QO;
+        Thu, 19 May 2022 19:20:31 +0000
+Date:   Fri, 20 May 2022 03:19:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+Subject: [hverkuil-media-tree:for-v5.20a 23/29] stk-webcam.c:undefined
+ reference to `usb_free_urb'
+Message-ID: <202205200316.4zqbkVU1-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoZGSd6yQL3EP8tk@qian>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 09:29:45AM -0400, Qian Cai wrote:
-> On Wed, May 18, 2022 at 10:15:03AM -0700, Paul E. McKenney wrote:
-> > So does this python script somehow change the tracing state?  (It does
-> > not look to me like it does, but I could easily be missing something.)
-> 
-> No, I don't think so either. It pretty much just offline memory sections
-> one at a time.
+tree:   git://linuxtv.org/hverkuil/media_tree.git for-v5.20a
+head:   e481d316b60f1d57e770f21dc5398d5dcff13ee6
+commit: 308124c0301a5258078c2ffddd03cf3fb584d792 [23/29] media: stkwebcam: deprecate driver, move to staging
+config: m68k-randconfig-c004-20220519 (https://download.01.org/0day-ci/archive/20220520/202205200316.4zqbkVU1-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add hverkuil-media-tree git://linuxtv.org/hverkuil/media_tree.git
+        git fetch --no-tags hverkuil-media-tree for-v5.20a
+        git checkout 308124c0301a5258078c2ffddd03cf3fb584d792
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-No idea.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > Either way, is there something else waiting for these RCU flavors?
-> > (There should not be.)  Nevertheless, if so, there should be
-> > a synchronize_rcu_tasks(), synchronize_rcu_tasks_rude(), or
-> > synchronize_rcu_tasks_trace() on some other blocked task's stack
-> > somewhere.
-> 
-> There are only three blocked tasks when this happens. The kmemleak_scan()
-> is just the victim waiting for the locks taken by the stucking
-> offline_pages()->synchronize_rcu() task.
+All errors (new ones prefixed by >>):
 
-OK, then I believe that the RCU Tasks flavors were innocent bystanders.
+   m68k-linux-ld: drivers/macintosh/via-cuda.o: in function `cuda_set_rtc_time':
+   via-cuda.c:(.text+0xae2): undefined reference to `rtc_tm_to_time64'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_clean_iso':
+>> stk-webcam.c:(.text+0x648): undefined reference to `usb_free_urb'
+>> m68k-linux-ld: stk-webcam.c:(.text+0x64e): undefined reference to `usb_kill_urb'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_prepare_iso':
+>> stk-webcam.c:(.text+0x111e): undefined reference to `usb_kill_urb'
+>> m68k-linux-ld: stk-webcam.c:(.text+0x12a0): undefined reference to `usb_free_urb'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_start_stream':
+>> stk-webcam.c:(.text+0x1ad2): undefined reference to `usb_submit_urb'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_v4l_dev_release':
+>> stk-webcam.c:(.text+0x1f2): undefined reference to `usb_put_intf'
+>> m68k-linux-ld: stk-webcam.c:(.text+0x1fc): undefined reference to `usb_put_dev'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_camera_probe':
+>> stk-webcam.c:(.text+0xc04): undefined reference to `usb_get_dev'
+>> m68k-linux-ld: stk-webcam.c:(.text+0xc14): undefined reference to `usb_get_intf'
+>> m68k-linux-ld: stk-webcam.c:(.text+0xd84): undefined reference to `usb_put_intf'
+   m68k-linux-ld: stk-webcam.c:(.text+0xd8e): undefined reference to `usb_put_dev'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_isoc_handler':
+   stk-webcam.c:(.text+0x1096): undefined reference to `usb_submit_urb'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_prepare_iso':
+>> stk-webcam.c:(.text+0x1124): undefined reference to `usb_alloc_urb'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_initialise':
+>> stk-webcam.c:(.text+0x1420): undefined reference to `usb_control_msg'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `v4l_stk_open':
+   stk-webcam.c:(.text+0x1500): undefined reference to `usb_control_msg'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_vidioc_reqbufs':
+   stk-webcam.c:(.text+0x15ba): undefined reference to `usb_control_msg'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_vidioc_s_fmt_vid_cap':
+   stk-webcam.c:(.text+0x1862): undefined reference to `usb_control_msg'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_camera_write_reg':
+   stk-webcam.c:(.text+0x18c4): undefined reference to `usb_control_msg'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o:stk-webcam.c:(.text+0x1912): more undefined references to `usb_control_msg' follow
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_start_stream':
+>> stk-webcam.c:(.text+0x1972): undefined reference to `usb_set_interface'
+>> m68k-linux-ld: stk-webcam.c:(.text+0x19ee): undefined reference to `usb_control_msg'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_stop_stream.isra.0':
+   stk-webcam.c:(.text+0x1f58): undefined reference to `usb_control_msg'
+   m68k-linux-ld: stk-webcam.c:(.text+0x1f6c): undefined reference to `usb_kill_urb'
+>> m68k-linux-ld: stk-webcam.c:(.text+0x1f9c): undefined reference to `usb_set_interface'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `v4l_stk_release':
+   stk-webcam.c:(.text+0x204c): undefined reference to `usb_control_msg'
+   m68k-linux-ld: drivers/staging/media/stkwebcam/stk-webcam.o: in function `stk_camera_driver_init':
+>> stk-webcam.c:(.init.text+0x14): undefined reference to `usb_register_driver'
 
-Is the task doing offline_pages()->synchronize_rcu() doing this
-repeatedly?  Or is there a stalled RCU grace period?  (From what
-I can see, offline_pages() is not doing huge numbers of calls to
-synchronize_rcu() in any of its loops, but I freely admit that I do not
-know this code.)
-
-If repeatedly, one workaround is to use synchronize_rcu_expedited()
-instead of synchronize_rcu().  A better fix might be to batch the
-grace periods, so that one RCU grace period serves several page
-offline operations.  An alternative better fix might be to use
-call_rcu() instead of synchronize_rcu().
-
->  task:kmemleak        state:D stack:25824 pid: 1033 ppid:     2 flags:0x00000008
->  Call trace:
->   __switch_to
->   __schedule
->   schedule
->   percpu_rwsem_wait
->   __percpu_down_read
->   percpu_down_read.constprop.0
->   get_online_mems
-
-This is read-acquiring the mem_hotplug_lock.  It looks like offline_pages()
-write-acquires this same lock.
-
->   kmemleak_scan
->   kmemleak_scan_thread
->   kthread
->   ret_from_fork
-> 
->  task:cppc_fie        state:D stack:23472 pid: 1848 ppid:     2 flags:0x00000008
->  Call trace:
->   __switch_to
->   __schedule
->   lockdep_recursion
-> 
->  task:tee             state:D stack:24816 pid:16733 ppid: 16732 flags:0x0000020c
->  Call trace:
->   __switch_to
->   __schedule
->   schedule
->   schedule_timeout
->   __wait_for_common
->   wait_for_completion
->   __wait_rcu_gp
->   synchronize_rcu
-
-So, yes, this is sleeping holding the lock that kmemleak_scan wants to
-acquire.
-
->   lru_cache_disable
->   __alloc_contig_migrate_range
->   isolate_single_pageblock
->   start_isolate_page_range
->   offline_pages
->   memory_subsys_offline
->   device_offline
->   online_store
->   dev_attr_store
->   sysfs_kf_write
->   kernfs_fop_write_iter
->   new_sync_write
->   vfs_write
->   ksys_write
->   __arm64_sys_write
->   invoke_syscall
->   el0_svc_common.constprop.0
->   do_el0_svc
->   el0_svc
->   el0t_64_sync_handler
->   el0t_64_sync
->  
-> > Or maybe something sleeps waiting for an RCU Tasks * callback to
-> > be invoked.  In that case (and in the above case, for that matter),
-> > at least one of these pointers would be non-NULL on some CPU:
-> > 
-> > 1.	rcu_tasks__percpu.cblist.head
-> > 2.	rcu_tasks_rude__percpu.cblist.head
-> > 3.	rcu_tasks_trace__percpu.cblist.head
-> > 
-> > The ->func field of the pointed-to structure contains a pointer to
-> > the callback function, which will help work out what is going on.
-> > (Most likely a wakeup being lost or not provided.)
-> 
-> What would be some of the easy ways to find out those? I can't see anything
-> interesting from the output of sysrq-t.
-
-Again, I believe that these are victims of circumstance.  Though that does
-not explain why revertin those three patches makes things work better.
-
-Or is it possible that reverting those three patches simply decreases
-the probability of failure, rather than eliminating the failure?
-Such a decrease could be due to many things, for example, changes to
-offsets and sizes of data structures.
-
-> > Alternatively, if your system has hundreds of thousands of tasks and
-> > you have attached BPF programs to short-lived socket structures and you
-> > don't yet have the workaround, then you can see hangs.  (I am working on a
-> > longer-term fix.)  In the short term, applying the workaround is the right
-> > thing to do.  (Adding a couple of the BPF guys on CC for their thoughts.)
-> 
-> The system is pretty much idle after a fresh reboot. The only workload is
-> to run the script.
-
-Do you ever see RCU CPU stall warnings?
-
-Could you please trace the offline_pages() function?  Is it really stuck,
-or is it being invoked periodically during the hang?
-
-							Thanx, Paul
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

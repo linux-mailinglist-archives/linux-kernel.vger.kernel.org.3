@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A705E52D76F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503C352D77B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240902AbiESPZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
+        id S240948AbiESP0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240871AbiESPZN (ORCPT
+        with ESMTP id S241000AbiESP0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:25:13 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8C3EC319
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:25:11 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4F56E2000A;
-        Thu, 19 May 2022 15:25:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652973910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BwMzpgQWrXEdEURpnR4VPKCE8aiZ8cfHgenGG21Ic8s=;
-        b=fhShDjCMPwY0vAfSm/1jYDoLbnlUCWpKXve2Nt8slJ8ZQvnRDWkSjHTyblTTZVGSeN6hvm
-        4uLEG3QMQPbA/ScYXhpVo9pCDvx1uti7fKdWcRZ0BbPOplKx/wlEQin9kGkcSIzDY0P/TS
-        //KJDJV20lJ5KtmZddt9j5VQyebooDDlGSTvrXnAPZqsKwwGsrGdOP36MJSdxt9l9M18W6
-        Y26YbjjKmnlHjzXRYi+wDr51QsEaH5LpjTSyDuy2ERQg+7Vo7sBOsJM8oouMgmEBzgKsB3
-        vv0md1cLibwLvQub8w43mBy6c5gcXN7hNOuQ7ShQhuD18PhqLN8kwTB45DvfGQ==
-Date:   Thu, 19 May 2022 17:25:07 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Peng Wu <wupeng58@huawei.com>
-Cc:     <richard@nod.at>, <vigneshr@ti.com>,
-        <christophe.jaillet@wanadoo.fr>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <liwei391@huawei.com>
-Subject: Re: [PATCH] mtd: rawnand: fix drivers probe/remove methods
-Message-ID: <20220519172507.4d9872c3@xps-13>
-In-Reply-To: <20220517060753.26710-1-wupeng58@huawei.com>
-References: <20220517060753.26710-1-wupeng58@huawei.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 19 May 2022 11:26:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D949F33E0E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:26:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99A0CB824E6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9ABC385AA;
+        Thu, 19 May 2022 15:26:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652973968;
+        bh=sjj+mlnWDG2Xdrw+/4hBO5MRvw9CHxqz/fuaCtwbXyo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i/dsq4N7kRmTcuUlDgj7DS/wfYh6C7TjvTKmCbKHG6YD9WsbuAU6HpAFkhwqXRw+0
+         ekPV/lqa+IabiiJgCl644gN/Th+kgSwQvTpnGW0qbx9iudnK0gepFqiGL2iay4iuBD
+         vVt2ZdqLONtp01j+zY4isC4gn9Pi/OEG6YHcBrr8=
+Date:   Thu, 19 May 2022 17:25:17 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chris Down <chris@chrisdown.name>
+Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        kernel-team@fb.com
+Subject: Re: [RFC PATCH] printk: console: Allow each console to have its own
+ loglevel
+Message-ID: <YoZhXe9CZE5o73fG@kroah.com>
+References: <YoUBh5BSsURDO71Z@chrisdown.name>
+ <YoUR6RlzkCNG7BU0@kroah.com>
+ <YoVM+KbdyJm8RSSr@chrisdown.name>
+ <YoVO23+fvsNPnpKh@kroah.com>
+ <YoVWpZKHD7aec0CJ@chrisdown.name>
+ <YoXsAkUgzIjJR90W@kroah.com>
+ <YoZQQwtG12Ypr2IC@chrisdown.name>
+ <YoZVvA5FP4wFLSH9@kroah.com>
+ <YoZdVCfK4T8Ts2oS@chrisdown.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoZdVCfK4T8Ts2oS@chrisdown.name>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, May 19, 2022 at 04:08:04PM +0100, Chris Down wrote:
+> Greg Kroah-Hartman writes:
+> > >  struct console {
+> > >  	char	name[16];
+> > >  	void	(*write)(struct console *, const char *, unsigned);
+> > > @@ -179,9 +173,11 @@ struct console {
+> > >  	void	*data;
+> > >  	struct	 console *next;
+> > >  	int	level;
+> > > -	struct	device classdev;
+> > > +	struct	device *classdev;
+> > 
+> > Ick, no, keep the real structure here.  It can properly handle the
+> > reference counting for the object.  Just correctly clean up in the
+> > release function, not anywhere else.
+> 
+> Sorry, I'm getting more and more confused about what you're asking me to do,
+> and less and less clear on the rationale.
+> 
+> Can you please clarify what "correctly cleaning up" would mean for a
+> non-pointer `struct device'?
+> 
+> Is your concern that...
+> 
+>     register_console(c)
+>         device_initialize(c->d)
+>         device_add(c->d)
+>     unregister_console(c)
+>         device_unregister(c->d)      console_classdev_release(c->d)
+>     register_console(c)
+>         device_initialize(c->d)  <-- classdev was not previously zeroed out
+> 				     in console_classdev_release() and bad 				     things may happen
 
-wupeng58@huawei.com wrote on Tue, 17 May 2022 06:07:53 +0000:
+Note, you can not "recycle" a structure in the driver model.  So when
+the console is unregistered, it should be freed.  When it is registered,
+it should be created.  Perhaps that is the confusion here?
 
-> Driver should call pci_disable_device() if it returns from
-> cafe_nand_probe() with error.
->=20
-> Meanwhile, the driver calls pci_enable_device() in
-> cafe_nand_probe(), but never calls pci_disable_device()
-> during removal.
+thakns,
 
-Please fix the subject prefix, it should be "mtd: ranwnand: cafe:"
-
-Also Fixes/Cc: stable tags might be useful.
-
-> Signed-off-by: Peng Wu <wupeng58@huawei.com>
-> ---
->  drivers/mtd/nand/raw/cafe_nand.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/cafe_nand.c b/drivers/mtd/nand/raw/cafe=
-_nand.c
-> index 9dbf031716a6..af119e376352 100644
-> --- a/drivers/mtd/nand/raw/cafe_nand.c
-> +++ b/drivers/mtd/nand/raw/cafe_nand.c
-> @@ -679,8 +679,10 @@ static int cafe_nand_probe(struct pci_dev *pdev,
->  	pci_set_master(pdev);
-> =20
->  	cafe =3D kzalloc(sizeof(*cafe), GFP_KERNEL);
-> -	if (!cafe)
-> -		return  -ENOMEM;
-> +	if (!cafe) {
-> +		err =3D -ENOMEM;
-> +		goto out_disable_device;
-> +	}
-> =20
->  	mtd =3D nand_to_mtd(&cafe->nand);
->  	mtd->dev.parent =3D &pdev->dev;
-> @@ -801,6 +803,8 @@ static int cafe_nand_probe(struct pci_dev *pdev,
->  	pci_iounmap(pdev, cafe->mmio);
->   out_free_mtd:
->  	kfree(cafe);
-> + out_disable_device:
-> +	pci_disable_device(pdev);
->   out:
->  	return err;
->  }
-> @@ -822,6 +826,7 @@ static void cafe_nand_remove(struct pci_dev *pdev)
->  	pci_iounmap(pdev, cafe->mmio);
->  	dma_free_coherent(&cafe->pdev->dev, 2112, cafe->dmabuf, cafe->dmaaddr);
->  	kfree(cafe);
-> +	pci_disable_device(pdev);
->  }
-> =20
->  static const struct pci_device_id cafe_nand_tbl[] =3D {
-
-
-Thanks,
-Miqu=C3=A8l
+greg k-h

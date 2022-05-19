@@ -2,61 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D462552D098
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D1D52D09C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbiESKcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
+        id S234670AbiESKeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbiESKco (ORCPT
+        with ESMTP id S229773AbiESKeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:32:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCAC41625;
-        Thu, 19 May 2022 03:32:43 -0700 (PDT)
+        Thu, 19 May 2022 06:34:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E989F56FA8;
+        Thu, 19 May 2022 03:34:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C8661A7F;
-        Thu, 19 May 2022 10:32:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8007CC385AA;
-        Thu, 19 May 2022 10:32:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A6A7B82390;
+        Thu, 19 May 2022 10:34:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC9ADC385AA;
+        Thu, 19 May 2022 10:34:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652956362;
-        bh=IToSr7D1OsOQmEo9v4/Bd9h0QuIcI8KL8minv5TWqyM=;
+        s=korg; t=1652956453;
+        bh=F6lMMI9wCT7YEnfx97Rh4IvbWpUerMrAQC7i5+XZHzg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KANpaT1JqM5SZ7RCfAZTaT+yyqyfAw8nDaIHyC8S0tdXUADa830BTYQyEXUHm9BWS
-         a0fPMW4gSs11XQM68Z/Ch0FrVd4fxGz4hbyDR6ImAJa2nZ6QnDXUm4NxhMWpQq+1MI
-         CCGo8cGwIEUUoW/MDQ5ssIh+GO4fi5Q00Lg7zYHk=
-Date:   Thu, 19 May 2022 12:32:35 +0200
+        b=Gsp6LkeWU3bKxfM9+evAMJQEbhaccx7WAas/qFQUx2uoKdez7z8+01aQGrvr4pBHQ
+         kfbBF4NzFCeuaCgkyv/vyAST6IkaweQeDq2ItEwo+mGtZ+oASqRKbAKFJ8iIH6M1ze
+         D9MOqeP3d0BppWUzqI0aTGXRtfiCZc6KwoEw1eLU=
+Date:   Thu, 19 May 2022 12:34:10 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH bpf-next v5 00/17] Introduce eBPF support for HID devices
-Message-ID: <YoYcw5a6EOvVPzay@kroah.com>
-References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
- <YoX7iHddAd4FkQRQ@infradead.org>
- <YoX904CAFOAfWeJN@kroah.com>
- <YoYCIhYhzLmhIGxe@infradead.org>
+To:     Kushagra Verma <kushagra765@outlook.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB / image: Fix spacing issues in
+ mdc800_endpoint_equals()
+Message-ID: <YoYdItGTISO4CxHC@kroah.com>
+References: <HK0PR01MB2801F1EE137B9A5196B225D1F8D09@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoYCIhYhzLmhIGxe@infradead.org>
+In-Reply-To: <HK0PR01MB2801F1EE137B9A5196B225D1F8D09@HK0PR01MB2801.apcprd01.prod.exchangelabs.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,50 +51,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 01:38:58AM -0700, Christoph Hellwig wrote:
-> On Thu, May 19, 2022 at 10:20:35AM +0200, Greg KH wrote:
-> > > are written using a hip new VM?
-> > 
-> > Ugh, don't mention UDI, that's a bad flashback...
+On Thu, May 19, 2022 at 02:42:31PM +0530, Kushagra Verma wrote:
+> This patch fixes the following spacing issues in mdc800_endpoint_equals():
+> 	1. (Removed) Space between function name and opening parenthesis.
+> 	2. (Removed) Space between variable and opening and closing
+>             parenthesis in the return statement.
+> 	3. (Added) Space between 2 function arguments.
 > 
-> But that is very much what we are doing here.
+> This fixes multiple checkpatch warnings for this function.
 > 
-> > I thought the goal here was to move a lot of the quirk handling and
-> > "fixup the broken HID decriptors in this device" out of kernel .c code
-> > and into BPF code instead, which this patchset would allow.
-> > 
-> > So that would just be exception handling.  I don't think you can write a
-> > real HID driver here at all, but I could be wrong as I have not read the
-> > new patchset (older versions of this series could not do that.)
+> Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
+> ---
+>  drivers/usb/image/mdc800.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> And that "exception handling" is most of the driver.
+> diff --git a/drivers/usb/image/mdc800.c b/drivers/usb/image/mdc800.c
+> index fc0e22cc6fda..dc03e0e54fe0 100644
+> --- a/drivers/usb/image/mdc800.c
+> +++ b/drivers/usb/image/mdc800.c
+> @@ -220,12 +220,12 @@ static struct mdc800_data* mdc800;
+>  	The USB Part of the driver
+>  ****************************************************************************/
+>  
+> -static int mdc800_endpoint_equals (struct usb_endpoint_descriptor *a,struct usb_endpoint_descriptor *b)
+> +static int mdc800_endpoint_equals(struct usb_endpoint_descriptor *a, struct usb_endpoint_descriptor *b)
+>  {
+>  	return (
+> -		   ( a->bEndpointAddress == b->bEndpointAddress )
+> -		&& ( a->bmAttributes     == b->bmAttributes     )
+> -		&& ( a->wMaxPacketSize   == b->wMaxPacketSize   )
+> +		   (a->bEndpointAddress == b->bEndpointAddress)
+> +		&& (a->bmAttributes     == b->bmAttributes)
+> +		&& (a->wMaxPacketSize   == b->wMaxPacketSize)
 
-For a number of "small" drivers, yes, that's all there is as the
-hardware is "broken" and needs to be fixed up in order to work properly
-with the hid core code.  An example of that would be hid-samsung.c which
-rewrites the descriptors to be sane and maps the mouse buttons properly.
+As you can see, the original alignments was done for the specific reason
+of making this "pretty".  Your changes really do not help anything here,
+which is the primary reason to make checkpatch cleanup changes.
 
-But that's it, after initialization that driver gets out of the way and
-doesn't actually control anything.  From what I can tell, this patchset
-would allow us to write those "fixup the mappings and reports before the
-HID driver takes over" into ebpf programs.
-
-It would not replace "real" HID drivers like hid-rmi.c that has to
-handle the events and do other "real" work here.
-
-Or I could be reading this code all wrong, Benjamin?
-
-But even if it would allow us to write HID drivers as ebpf, what is
-wrong with that?  It's not a licensing issue (this api is only allowed
-for GPL ebpf programs), it should allow us to move a bunch of in-kernel
-drivers into smaller ebpf programs instead.
-
-It's not like this ebpf HID driver would actually work on any other
-operating system, right?  I guess Microsoft could create a gpl-licensed
-ebpf HID layer as well?  As Windows allows vendors to do all of this
-horrible HID fixups in userspace today anyway, I strongly doubt they
-would go through the effort to add a new api like this for no valid
-reason.
+So I'll leave this alone, sorry.
 
 thanks,
 

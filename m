@@ -2,81 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1C052E066
+	by mail.lfdr.de (Postfix) with ESMTP id A96BB52E067
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245737AbiESXNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 19:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S245755AbiESXOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245759AbiESXNR (ORCPT
+        with ESMTP id S245745AbiESXOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 19:13:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF5810654B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:13:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0F4C6187A
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 23:13:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1F3C385AA;
-        Thu, 19 May 2022 23:13:14 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="oL5ntF+E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1653001993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vg8EgL5l07IptbmY+1AkGLthZNVnNbClGhjWdqOGk8Q=;
-        b=oL5ntF+Efrsww7IVuS+h8SINkOnKYtJ2/IUciuolk53yFFiEp1vs3RMzfODL4RQGRjS4RU
-        4FDBdmNuEYHcldwadDvpO75rotxUS9S7fFjf2JRHA6wElcf6tCAEuwpdzahvGnAndKlspV
-        9Gs5IxLJxt9TWYMdv8njFkWHpv34I6k=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d6184367 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 19 May 2022 23:13:13 +0000 (UTC)
-Date:   Fri, 20 May 2022 01:13:11 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     tytso@mit.edu, hch@lst.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
-Message-ID: <YobPB27Ozl7uqUEu@zx2c4.com>
-References: <20220519193133.194138-1-axboe@kernel.dk>
- <YoajCafKmgUbbaY0@zx2c4.com>
- <a6c843ff-a3d7-ce6a-4e99-70968834a02a@kernel.dk>
+        Thu, 19 May 2022 19:14:21 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582DA10654A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:14:19 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id pq9-20020a17090b3d8900b001df622bf81dso6474345pjb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=Ifu9XbMxFXkI0pV69WeNPHZVkOc6gUGaHcwFj9MqZkY=;
+        b=ZBdqOZJCVsq8ujnPkKNkJojkvJeTyPge3erKoumdZpkmNZvwNiC3l6WAY1k01RyHli
+         yoJCSLmy4tlU144AVHtsSyFtudt/P1ah7qoUsUj5TnPhgLpVI9qQaa5EENN+VEZUjwiJ
+         1maxjEcRKCTCVhSCv/IRvnegC0O07Au+gfX+TE9zpJNIqxPBR7oZfUj4dqwI+jT3jpQ4
+         zYhPb+HkSEU2LnvT5yKuWQqVD9bS54oktPAfU3j4GkxmnV/g7fWMaE8kjzDAOLp3Nk6d
+         AFYO2IiEcBr5CoZMuiznlryqFDZ3nAneW2yguzIcHcIj3k/0XuzidBzos9sE3o0kcqT1
+         hJ+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=Ifu9XbMxFXkI0pV69WeNPHZVkOc6gUGaHcwFj9MqZkY=;
+        b=xciNYfmLJ55KboJ/ZhVcCcuIcs6FUUzihVyKnJ8lMlSgtTor3W1ry1lrOl/KPFMOax
+         zclgqf42BrpI/O4cIgKDSHLQjyl6GxfJble3sH2HudJ6oy9PzqNqW/ymOy/ySYcqIQKt
+         RH1dRodF7sdYV94p016DgrEAUOikAsNtd8IGT8ED97umWcqbfPvvjfPSHyVpK3yQe5zr
+         SfdO1UurwkXHTI0mj0L/jj3nLaTuaemJWMLmL9z1eTxbkVNNNNjo/KvaBlsE37B0HUzw
+         cMH3MfPIGY65Lwjlx4qU7NxAWeBb6UjfjQDXirFEa15tDMllcxwaNgBvd3ozRuD+THnM
+         PXDw==
+X-Gm-Message-State: AOAM530ed5N0n45tGvdRbREJz554sjadyjvZabHpWlOgifx7BugRhfqc
+        yhw4//dXoYFT1BhtjpbL6jzZmw==
+X-Google-Smtp-Source: ABdhPJw/y4RUBTg3R4ufIdLCWSunz/FwodF0VJgzRYBeqzfr8/BTCNvuEkV8iXRJygz96+kN2ZpgsA==
+X-Received: by 2002:a17:90a:8b91:b0:1be:db25:eecd with SMTP id z17-20020a17090a8b9100b001bedb25eecdmr7664876pjn.10.1653002058564;
+        Thu, 19 May 2022 16:14:18 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id cp25-20020a056a00349900b0050dc76281c0sm199087pfb.154.2022.05.19.16.14.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 16:14:18 -0700 (PDT)
+Message-ID: <e9ccb919-1616-f94f-c465-7024011ad8e5@linaro.org>
+Date:   Thu, 19 May 2022 16:14:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a6c843ff-a3d7-ce6a-4e99-70968834a02a@kernel.dk>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+References: <49ac1697-5235-ca2e-2738-f0399c26d718@linaro.org>
+ <20220519122353.eqpnxiaybvobfszb@quack3.lan>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: Re: kernel BUG in ext4_writepages
+In-Reply-To: <20220519122353.eqpnxiaybvobfszb@quack3.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jens,
-
-On Thu, May 19, 2022 at 02:49:13PM -0600, Jens Axboe wrote:
-> > There's a lot of attention in random.c devoted to not leaving any output
-> > around on the stack or in stray buffers. The explicit use of
-> > copy_to_user() makes it clear that the output isn't being copied
-> > anywhere other than what's the user's responsibility to cleanup. I'm
-> > wondering if the switch to copy_to_iter() introduces any buffering or
-> > gotchas that you might be aware of.
+On 5/19/22 05:23, Jan Kara wrote:
+> Hi!
 > 
-> No, it's just a wrapper around copying to the user memory pointed to by
-> the iov_iter. No extra buffering or anything like that. So I think it
-> should be fine in that respect, and it actually cleans up the code a bit
-> imho since the copy_to_iter() since the return value of "bytes copied"
-> is easier to work with than the "bytes not copied".
+> On Tue 10-05-22 15:28:38, Tadeusz Struk wrote:
+>> Syzbot found another BUG in ext4_writepages [1].
+>> This time it complains about inode with inline data.
+>> C reproducer can be found here [2]
+>> I was able to trigger it on 5.18.0-rc6
+>>
+>> [1] https://syzkaller.appspot.com/bug?id=a1e89d09bbbcbd5c4cb45db230ee28c822953984
+>> [2] https://syzkaller.appspot.com/text?tag=ReproC&x=129da6caf00000
+> 
+> Thanks for report. This should be fixed by:
+> 
+> https://lore.kernel.org/all/20220516012752.17241-1-yebin10@huawei.com/
 
-Alright, that's good to hear. So even for kernel->kernel writes, the
-argument is that what ever buffers are used in the process are the same
-ones that the user would be hitting anyway by calling write() on the
-destination if this roundtripped through userspace, so nothing changes?
 
-Jason
+In case of the syzbot bug there is something messed up with PAGE DIRTY flags
+and the way syzbot sets up the write. This is what triggers the crash:
+
+$ ftrace -f ./repro
+...
+[pid  2395] open("./bus", O_RDWR|O_CREAT|O_SYNC|O_NOATIME, 000 <unfinished ...>
+[pid  2395] <... open resumed> )        = 6
+...
+[pid  2395] write(6, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 22 <unfinished ...>
+...
+[pid  2395] <... write resumed> )       = 22
+
+One way I could fix it was to clear the PAGECACHE_TAG_DIRTY on the mapping in
+ext4_try_to_write_inline_data() after the page has been updated:
+
+diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+index 9c076262770d..e4bbb53fa26f 100644
+--- a/fs/ext4/inline.c
++++ b/fs/ext4/inline.c
+@@ -715,6 +715,7 @@ int ext4_try_to_write_inline_data(struct address_space *mapping,
+  			put_page(page);
+  			goto out_up_read;
+  		}
++		__xa_clear_mark(&mapping->i_pages, 0, PAGECACHE_TAG_DIRTY);
+  	}
+  
+  	ret = 1;
+
+Please let me know it if makes sense any I will send a proper patch.
+
+-- 
+Thanks,
+Tadeusz

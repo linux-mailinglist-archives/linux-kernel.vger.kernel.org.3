@@ -2,246 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD6252CDD7
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC4152CDD6
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234421AbiESICw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 04:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S235142AbiESIC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 04:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235083AbiESICW (ORCPT
+        with ESMTP id S235097AbiESICr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 04:02:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36EF5715F
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652947340; x=1684483340;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=not50aQK6RnBtyTWyA+nfAHtvi3ZMcB688IM/wM7jO8=;
-  b=XZ8e0rB/Rx1hUojmv0kzvngOgZnq3u+QPFarc/vRyb8JuWA93XLq722j
-   3MAXn2Mw/JHXHeZLcGnHKhroEWkSK13omtYnM3PM/l6nmER9al/+87A52
-   S/tjJHxVWrFXxoYE1DFohl5IfglhHJOo6k9ByowRoDT6qrSGwz/rhWF16
-   OD2hPEhI0sudwFRPoc5QJsLgX0sndFEk3zzYpWssORHVLtB7eR2Fe7auI
-   qrUzHLbKX16zBYZM7tShpF/KMorWdR6d/79BpiOC1n5yZ+mK4Fp6+oJ7M
-   hKHyFwhQlOlaeGuqd4/hpViIKqbgGkY02VD2tWqBB1Sz+tOOh9zLRv1wP
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="358485916"
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="358485916"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 01:02:20 -0700
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="523962371"
-Received: from tszulist-mobl.ger.corp.intel.com (HELO localhost) ([10.249.146.157])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 01:02:15 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Yipeng Zou <zouyipeng@huawei.com>, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch,
-        alan.previn.teres.alexis@intel.com, vinay.belgaumkar@intel.com
-Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, zouyipeng@huawei.com
-Subject: Re: [PATCH -next] drm/i915: Fix some integer constant macro to
- unsigned type
-In-Reply-To: <20220519030423.169981-1-zouyipeng@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220519030423.169981-1-zouyipeng@huawei.com>
-Date:   Thu, 19 May 2022 11:02:12 +0300
-Message-ID: <87zgjec5mj.fsf@intel.com>
+        Thu, 19 May 2022 04:02:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18C8A57171
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652947365;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mBpdwym2ArG4EquWnWSi2ftom73RXQQa+Rs2uQPWbKQ=;
+        b=LHQMQSUHiRGj6vv9A4x+UN4aJUlN8/oDsWNhfyWtQkmYn625XTwbAD9M2iUO9/kbNohxXF
+        YaxBus9WICDEOR3APB3zXxTJgD48lh5CG1GP43EuKHm1xpWNCjywRuaKMsl6WqIWH/6hxA
+        sOr1mbEJMIr+d7zqDb78A1pANjybjIQ=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-401-LB1Wen_xMT61BggZBw1_KQ-1; Thu, 19 May 2022 04:02:43 -0400
+X-MC-Unique: LB1Wen_xMT61BggZBw1_KQ-1
+Received: by mail-lf1-f70.google.com with SMTP id bt27-20020a056512261b00b004779fd292b1so2303239lfb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:02:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mBpdwym2ArG4EquWnWSi2ftom73RXQQa+Rs2uQPWbKQ=;
+        b=EIF2TZYXYouSODIvLzce6H7vQimPthpukxyR54K16XCj41VNtEpzjGbbF7XCN8IXJx
+         JyZ/U11S9Q36VV6Vc7fe2jp3AEfH2QOGz/ul9DyKK69Xz4jt6ZgGRl3uY9T/9Ne/2eFl
+         HCkzhxDE9yb5Thy69m8smrqpiYrCH55NEckq+PFAsukLJ1nQoScoFLt+OzPoxUXgwmFf
+         Hci7+4xMovRwQAQy5G4y37PkvWyK3pm2wiUIIba6KP4GV0yd83FiD86omboRXjs+Y0qE
+         Ltxb6P0drRghDV+dSfajLrIoJXWt+YWns/LRLuxXWLLuzz7ru2+T17gFlMu6dnyEjLoP
+         LR9Q==
+X-Gm-Message-State: AOAM532bWSkuKuNZCdUD0FGiW/nyjK0B2zMsLZ5OPNzroZoO0V1O+NKe
+        OCs1QrOCv8OHAUdlTzT/nkrkx75tMI3ZnN0rZIPEltOthS1wKagvC71q/H6/j7zVq6NBYJUNHFV
+        5dVul6mSmQzm7C35BjXoqb3SLupK93t/nprgEa0fa
+X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id p21-20020a056512139500b00446d38279a5mr2463624lfa.210.1652947362301;
+        Thu, 19 May 2022 01:02:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwnED6RSEVAGwD+6jZQlEqqnkm9njtiJZnFEYibosooBXmmsa4+cJ2PSgTUPo3sWmsUgAZgWgEnJrDT+wPlxRw=
+X-Received: by 2002:a05:6512:1395:b0:446:d382:79a5 with SMTP id
+ p21-20020a056512139500b00446d38279a5mr2463601lfa.210.1652947362047; Thu, 19
+ May 2022 01:02:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220518035951.94220-1-jasowang@redhat.com> <20220518035951.94220-7-jasowang@redhat.com>
+ <87tu9nfaoe.fsf@redhat.com>
+In-Reply-To: <87tu9nfaoe.fsf@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Thu, 19 May 2022 16:02:30 +0800
+Message-ID: <CACGkMEsiMQ7zDZ6r-q2W=yFqW8WbMEwUc8OFd+o1JzUL-E19Ew@mail.gmail.com>
+Subject: Re: [PATCH V5 6/9] virtio-ccw: implement synchronize_cbs()
+To:     Cornelia Huck <cohuck@redhat.com>
+Cc:     mst <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022, Yipeng Zou <zouyipeng@huawei.com> wrote:
-> Build Kernel with gcc 7.5.0 or older, will get some error message:
+On Wed, May 18, 2022 at 5:32 PM Cornelia Huck <cohuck@redhat.com> wrote:
 >
-> drivers/gpu/drm/i915/display/intel_ddi.c:1915:2: error: case label does not reduce to an integer constant
->   case PORT_CLK_SEL_WRPLL1:
->   ^~~~
-> ......
+> On Wed, May 18 2022, Jason Wang <jasowang@redhat.com> wrote:
 >
-> Look here : https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic
-> for the details why it happends.
+> > This patch tries to implement the synchronize_cbs() for ccw. For the
+> > vring_interrupt() that is called via virtio_airq_handler(), the
+> > synchronization is simply done via the airq_info's lock. For the
+> > vring_interrupt() that is called via virtio_ccw_int_handler(), a per
+> > device rwlock is introduced ans used in the synchronization method.
 >
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
-
-See
-https://lore.kernel.org/r/20220518113315.1305027-1-jani.nikula@intel.com
-
-BR,
-Jani.
-
-> ---
->  drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h |  4 ++--
->  .../i915/gt/uc/abi/guc_communication_ctb_abi.h   |  6 +++---
->  .../gpu/drm/i915/gt/uc/abi/guc_messages_abi.h    | 14 +++++++-------
->  drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h       | 12 ++++++------
->  drivers/gpu/drm/i915/i915_reg.h                  | 16 ++++++++--------
->  5 files changed, 26 insertions(+), 26 deletions(-)
+> s/ans/and/
 >
-> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-> index be9ac47fa9d0..cb16fd0ba8dd 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_actions_abi.h
-> @@ -50,8 +50,8 @@
->  
->  #define HOST2GUC_SELF_CFG_REQUEST_MSG_LEN		(GUC_HXG_REQUEST_MSG_MIN_LEN + 3u)
->  #define HOST2GUC_SELF_CFG_REQUEST_MSG_0_MBZ		GUC_HXG_REQUEST_MSG_0_DATA0
-> -#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_KEY		(0xffff << 16)
-> -#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_LEN		(0xffff << 0)
-> +#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_KEY		(0xffffu << 16)
-> +#define HOST2GUC_SELF_CFG_REQUEST_MSG_1_KLV_LEN		(0xffffu << 0)
->  #define HOST2GUC_SELF_CFG_REQUEST_MSG_2_VALUE32		GUC_HXG_REQUEST_MSG_n_DATAn
->  #define HOST2GUC_SELF_CFG_REQUEST_MSG_3_VALUE64		GUC_HXG_REQUEST_MSG_n_DATAn
->  
-> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
-> index c9086a600bce..e5c782283309 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_communication_ctb_abi.h
-> @@ -82,11 +82,11 @@ static_assert(sizeof(struct guc_ct_buffer_desc) == 64);
->  #define GUC_CTB_HDR_LEN				1u
->  #define GUC_CTB_MSG_MIN_LEN			GUC_CTB_HDR_LEN
->  #define GUC_CTB_MSG_MAX_LEN			256u
-> -#define GUC_CTB_MSG_0_FENCE			(0xffff << 16)
-> -#define GUC_CTB_MSG_0_FORMAT			(0xf << 12)
-> +#define GUC_CTB_MSG_0_FENCE			(0xffffu << 16)
-> +#define GUC_CTB_MSG_0_FORMAT			(0xfu << 12)
->  #define   GUC_CTB_FORMAT_HXG			0u
->  #define GUC_CTB_MSG_0_RESERVED			(0xf << 8)
-> -#define GUC_CTB_MSG_0_NUM_DWORDS		(0xff << 0)
-> +#define GUC_CTB_MSG_0_NUM_DWORDS		(0xffu << 0)
->  
->  /**
->   * DOC: CTB HXG Message
-> diff --git a/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h b/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
-> index 29ac823acd4c..30e3cc06b0b7 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/abi/guc_messages_abi.h
-> @@ -40,17 +40,17 @@
->   */
->  
->  #define GUC_HXG_MSG_MIN_LEN			1u
-> -#define GUC_HXG_MSG_0_ORIGIN			(0x1 << 31)
-> +#define GUC_HXG_MSG_0_ORIGIN			(0x1u << 31)
->  #define   GUC_HXG_ORIGIN_HOST			0u
->  #define   GUC_HXG_ORIGIN_GUC			1u
-> -#define GUC_HXG_MSG_0_TYPE			(0x7 << 28)
-> +#define GUC_HXG_MSG_0_TYPE			(0x7u << 28)
->  #define   GUC_HXG_TYPE_REQUEST			0u
->  #define   GUC_HXG_TYPE_EVENT			1u
->  #define   GUC_HXG_TYPE_NO_RESPONSE_BUSY		3u
->  #define   GUC_HXG_TYPE_NO_RESPONSE_RETRY	5u
->  #define   GUC_HXG_TYPE_RESPONSE_FAILURE		6u
->  #define   GUC_HXG_TYPE_RESPONSE_SUCCESS		7u
-> -#define GUC_HXG_MSG_0_AUX			(0xfffffff << 0)
-> +#define GUC_HXG_MSG_0_AUX			(0xfffffffu << 0)
->  #define GUC_HXG_MSG_n_PAYLOAD			(0xffffffff << 0)
->  
->  /**
-> @@ -86,7 +86,7 @@
->  
->  #define GUC_HXG_REQUEST_MSG_MIN_LEN		GUC_HXG_MSG_MIN_LEN
->  #define GUC_HXG_REQUEST_MSG_0_DATA0		(0xfff << 16)
-> -#define GUC_HXG_REQUEST_MSG_0_ACTION		(0xffff << 0)
-> +#define GUC_HXG_REQUEST_MSG_0_ACTION		(0xffffu << 0)
->  #define GUC_HXG_REQUEST_MSG_n_DATAn		GUC_HXG_MSG_n_PAYLOAD
->  
->  /**
-> @@ -118,7 +118,7 @@
->  
->  #define GUC_HXG_EVENT_MSG_MIN_LEN		GUC_HXG_MSG_MIN_LEN
->  #define GUC_HXG_EVENT_MSG_0_DATA0		(0xfff << 16)
-> -#define GUC_HXG_EVENT_MSG_0_ACTION		(0xffff << 0)
-> +#define GUC_HXG_EVENT_MSG_0_ACTION		(0xffffu << 0)
->  #define GUC_HXG_EVENT_MSG_n_DATAn		GUC_HXG_MSG_n_PAYLOAD
->  
->  /**
-> @@ -188,8 +188,8 @@
->   */
->  
->  #define GUC_HXG_FAILURE_MSG_LEN			GUC_HXG_MSG_MIN_LEN
-> -#define GUC_HXG_FAILURE_MSG_0_HINT		(0xfff << 16)
-> -#define GUC_HXG_FAILURE_MSG_0_ERROR		(0xffff << 0)
-> +#define GUC_HXG_FAILURE_MSG_0_HINT		(0xfffu << 16)
-> +#define GUC_HXG_FAILURE_MSG_0_ERROR		(0xffffu << 0)
->  
->  /**
->   * DOC: HXG Response
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h b/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
-> index 66027a42cda9..70154e522c51 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_guc_reg.h
-> @@ -15,20 +15,20 @@
->  
->  #define GUC_STATUS			_MMIO(0xc000)
->  #define   GS_RESET_SHIFT		0
-> -#define   GS_MIA_IN_RESET		  (0x01 << GS_RESET_SHIFT)
-> +#define   GS_MIA_IN_RESET		  (0x01u << GS_RESET_SHIFT)
->  #define   GS_BOOTROM_SHIFT		1
-> -#define   GS_BOOTROM_MASK		  (0x7F << GS_BOOTROM_SHIFT)
-> -#define   GS_BOOTROM_RSA_FAILED		  (0x50 << GS_BOOTROM_SHIFT)
-> +#define   GS_BOOTROM_MASK		  (0x7Fu << GS_BOOTROM_SHIFT)
-> +#define   GS_BOOTROM_RSA_FAILED		  (0x50u << GS_BOOTROM_SHIFT)
->  #define   GS_BOOTROM_JUMP_PASSED	  (0x76 << GS_BOOTROM_SHIFT)
->  #define   GS_UKERNEL_SHIFT		8
-> -#define   GS_UKERNEL_MASK		  (0xFF << GS_UKERNEL_SHIFT)
-> +#define   GS_UKERNEL_MASK		  (0xFFu << GS_UKERNEL_SHIFT)
->  #define   GS_MIA_SHIFT			16
-> -#define   GS_MIA_MASK			  (0x07 << GS_MIA_SHIFT)
-> +#define   GS_MIA_MASK			  (0x07u << GS_MIA_SHIFT)
->  #define   GS_MIA_CORE_STATE		  (0x01 << GS_MIA_SHIFT)
->  #define   GS_MIA_HALT_REQUESTED		  (0x02 << GS_MIA_SHIFT)
->  #define   GS_MIA_ISR_ENTRY		  (0x04 << GS_MIA_SHIFT)
->  #define   GS_AUTH_STATUS_SHIFT		30
-> -#define   GS_AUTH_STATUS_MASK		  (0x03 << GS_AUTH_STATUS_SHIFT)
-> +#define   GS_AUTH_STATUS_MASK		  (0x03u << GS_AUTH_STATUS_SHIFT)
->  #define   GS_AUTH_STATUS_BAD		  (0x01 << GS_AUTH_STATUS_SHIFT)
->  #define   GS_AUTH_STATUS_GOOD		  (0x02 << GS_AUTH_STATUS_SHIFT)
->  
-> diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
-> index 9ccb67eec1bd..8c10d66561b0 100644
-> --- a/drivers/gpu/drm/i915/i915_reg.h
-> +++ b/drivers/gpu/drm/i915/i915_reg.h
-> @@ -7566,19 +7566,19 @@ enum skl_power_gate {
->  #define  PORT_CLK_SEL_LCPLL_810		(2 << 29)
->  #define  PORT_CLK_SEL_SPLL		(3 << 29)
->  #define  PORT_CLK_SEL_WRPLL(pll)	(((pll) + 4) << 29)
-> -#define  PORT_CLK_SEL_WRPLL1		(4 << 29)
-> -#define  PORT_CLK_SEL_WRPLL2		(5 << 29)
-> -#define  PORT_CLK_SEL_NONE		(7 << 29)
-> +#define  PORT_CLK_SEL_WRPLL1		(4u << 29)
-> +#define  PORT_CLK_SEL_WRPLL2		(5u << 29)
-> +#define  PORT_CLK_SEL_NONE		(7u << 29)
->  #define  PORT_CLK_SEL_MASK		(7 << 29)
->  
->  /* On ICL+ this is the same as PORT_CLK_SEL, but all bits change. */
->  #define DDI_CLK_SEL(port)		PORT_CLK_SEL(port)
->  #define  DDI_CLK_SEL_NONE		(0x0 << 28)
-> -#define  DDI_CLK_SEL_MG			(0x8 << 28)
-> -#define  DDI_CLK_SEL_TBT_162		(0xC << 28)
-> -#define  DDI_CLK_SEL_TBT_270		(0xD << 28)
-> -#define  DDI_CLK_SEL_TBT_540		(0xE << 28)
-> -#define  DDI_CLK_SEL_TBT_810		(0xF << 28)
-> +#define  DDI_CLK_SEL_MG			(0x8u << 28)
-> +#define  DDI_CLK_SEL_TBT_162		(0xCu << 28)
-> +#define  DDI_CLK_SEL_TBT_270		(0xDu << 28)
-> +#define  DDI_CLK_SEL_TBT_540		(0xEu << 28)
-> +#define  DDI_CLK_SEL_TBT_810		(0xFu << 28)
->  #define  DDI_CLK_SEL_MASK		(0xF << 28)
->  
->  /* Transcoder clock selection */
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Will fix.
+
+> >
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Halil Pasic <pasic@linux.ibm.com>
+> > Cc: Cornelia Huck <cohuck@redhat.com>
+> > Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+> > Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> > Cc: linux-s390@vger.kernel.org
+> > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > ---
+> >  drivers/s390/virtio/virtio_ccw.c | 27 +++++++++++++++++++++++++++
+> >  1 file changed, 27 insertions(+)
+> >
+> > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> > index d35e7a3f7067..22d36594bcdd 100644
+> > --- a/drivers/s390/virtio/virtio_ccw.c
+> > +++ b/drivers/s390/virtio/virtio_ccw.c
+> > @@ -62,6 +62,7 @@ struct virtio_ccw_device {
+> >       unsigned int revision; /* Transport revision */
+> >       wait_queue_head_t wait_q;
+> >       spinlock_t lock;
+> > +     rwlock_t irq_lock;
+> >       struct mutex io_lock; /* Serializes I/O requests */
+> >       struct list_head virtqueues;
+> >       bool is_thinint;
+> > @@ -984,6 +985,27 @@ static const char *virtio_ccw_bus_name(struct virtio_device *vdev)
+> >       return dev_name(&vcdev->cdev->dev);
+> >  }
+> >
+> > +static void virtio_ccw_synchronize_cbs(struct virtio_device *vdev)
+> > +{
+> > +     struct virtio_ccw_device *vcdev = to_vc_device(vdev);
+> > +     struct airq_info *info = vcdev->airq_info;
+> > +
+> > +     if (info) {
+> > +             /*
+> > +              * Synchronize with the vring_interrupt() with airq indicator
+>
+> Maybe
+>
+> /*
+>  * This device uses adapter interrupts: synchronize with
+>  * vring_interrupt() called by virtio_airq_handler() via the indicator
+>  * area lock.
+>  */
+>
+
+Fine.
+
+> > +              */
+> > +             write_lock_irq(&info->lock);
+> > +             write_unlock_irq(&info->lock);
+> > +     } else {
+> > +             /*
+> > +              * Synchronize with the vring_interrupt() called by
+> > +              * virtio_ccw_int_handler().
+>
+> /*
+>  * This device uses classic interrupts: synchronize with
+>  * vring_interrupt() called by virtio_ccw_int_handler() via the
+>  * per-device irq_lock.
+>  */
+>
+
+Looks fine.
+
+> > +              */
+> > +             write_lock_irq(&vcdev->irq_lock);
+> > +             write_unlock_irq(&vcdev->irq_lock);
+> > +     }
+> > +}
+> > +
+> >  static const struct virtio_config_ops virtio_ccw_config_ops = {
+> >       .get_features = virtio_ccw_get_features,
+> >       .finalize_features = virtio_ccw_finalize_features,
+> > @@ -995,6 +1017,7 @@ static const struct virtio_config_ops virtio_ccw_config_ops = {
+> >       .find_vqs = virtio_ccw_find_vqs,
+> >       .del_vqs = virtio_ccw_del_vqs,
+> >       .bus_name = virtio_ccw_bus_name,
+> > +     .synchronize_cbs = virtio_ccw_synchronize_cbs,
+> >  };
+> >
+> >
+> > @@ -1106,6 +1129,8 @@ static void virtio_ccw_int_handler(struct ccw_device *cdev,
+> >                       vcdev->err = -EIO;
+> >       }
+> >       virtio_ccw_check_activity(vcdev, activity);
+> > +     /* Local interrupt should be disabled at this time */
+>
+> /* Interrupts are disabled here. */
+>
+> ?
+>
+> Interrupts enabled here would surely be a bug.
+
+Right.
+
+Thanks
+
+>
+> > +     read_lock(&vcdev->irq_lock);
+> >       for_each_set_bit(i, indicators(vcdev),
+> >                        sizeof(*indicators(vcdev)) * BITS_PER_BYTE) {
+> >               /* The bit clear must happen before the vring kick. */
+>
+

@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D600D52DFA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2BD52DFA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235432AbiESV5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S245366AbiESV5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbiESV5D (ORCPT
+        with ESMTP id S233223AbiESV5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:57:03 -0400
+        Thu, 19 May 2022 17:57:10 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F60338A5;
-        Thu, 19 May 2022 14:57:01 -0700 (PDT)
-Date:   Thu, 19 May 2022 21:56:59 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466F535250;
+        Thu, 19 May 2022 14:57:09 -0700 (PDT)
+Date:   Thu, 19 May 2022 21:57:06 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652997420;
+        s=2020; t=1652997427;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xdWuXze9gcxL84bfrGVJBQzWPBrU68xlmX5mr1x0iSs=;
-        b=bZP5qKSBWuUco8qx2FX96jMkP5AFp4uqJr6bhr1C6MUYPY6sF9Hxc4kXViTNIraWAnR1qn
-        sNYBd+WS9ua9NCoN4R6g7Ib6jA4fmMj6RZI4up0K1fsSwJkUlzMWfML1KktGJg5VhQ6BTk
-        pLcdrOIW8aGr3q+Jn2GSW8Xx9olMrX8blYW7e1kuWgsiYujKAXCoNGmKvOuYK7z7Ar3xeQ
-        b3seeTKrUUwYGepWVPYBLt8wt1wOo6xkAHVpOAOAg6nMhu7rnY2w0zSfk2QdWauvz7wjen
-        M5PAuoqPT1Q6w0Jha8pQ1Pn4FORPreO84IRLBaklDVEklaX9weD/rKCB2fJKHw==
+        bh=b+T+amg6kgleAz3R7s9/Nr4n6n7tL5/g0yy6j/puf0o=;
+        b=hZQp0zPGx+qJ6aWkHidFl8ZhaxYAwqxr7Cny74jlN9ZhB7gSBdOtzx0YqsB++7NPlQj+iz
+        zgBT3BjgD8LkPeT7R+n/kgRY1Gt6f4n4qn0BG3B3zw8cxmF7pGC1f0DhNWRZnOUQNNA7fJ
+        Z0fm/HIj3NS9kSF1Bhbs/WH/pNrPtkJoqC1tcSz63OyAcoxR2ERcnfkfYR2jh1WC1ngQY3
+        BlzEXycqprGNt39/hT4fKvjRlrNkqrzfjOj/NAC6ZBsJsJplm9LnyIdU1HWvJsg5SMz8Be
+        WIPv/+Mob33Fo3UZNuTwLldd4MVrFdgJlwtNdDdT0eeYZYXwQBCeONBQVOFkqA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652997420;
+        s=2020e; t=1652997427;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xdWuXze9gcxL84bfrGVJBQzWPBrU68xlmX5mr1x0iSs=;
-        b=/c4IOQQQ4/qMaUlrUypLvick6pgDEU+lyQP0QFjv3zrJAmtFLsAri33jE6rL7qIKTmvn2c
-        SzzV40s31wd45tCg==
-From:   "tip-bot2 for Sandipan Das" <tip-bot2@linutronix.de>
+        bh=b+T+amg6kgleAz3R7s9/Nr4n6n7tL5/g0yy6j/puf0o=;
+        b=bnOnkfD38M0wv4ASFfug+ky140obQcPfkVb2hAxvDdLu/d+rfx9WPsIzZw/1g7ZpYQ32pA
+        vgT05ewAnYNal8Bw==
+From:   "tip-bot2 for Dietmar Eggemann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/amd/core: Fix reloading events for SVM
-Cc:     Like Xu <likexu@tencent.com>, Sandipan Das <sandipan.das@amd.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: sched/core] topology: Remove unused cpu_cluster_mask()
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Barry Song <baohua@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220518084327.464005-1-sandipan.das@amd.com>
-References: <20220518084327.464005-1-sandipan.das@amd.com>
+In-Reply-To: <20220513093433.425163-1-dietmar.eggemann@arm.com>
+References: <20220513093433.425163-1-dietmar.eggemann@arm.com>
 MIME-Version: 1.0
-Message-ID: <165299741919.4207.12319617114014672063.tip-bot2@tip-bot2>
+Message-ID: <165299742675.4207.9389624037232636288.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,83 +66,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/core branch of tip:
+The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     bae19fdd7e9e759580ac4693d2df3bc23ab415d7
-Gitweb:        https://git.kernel.org/tip/bae19fdd7e9e759580ac4693d2df3bc23ab415d7
-Author:        Sandipan Das <sandipan.das@amd.com>
-AuthorDate:    Wed, 18 May 2022 14:13:27 +05:30
+Commit-ID:     991d8d8142cad94f9c5c05db25e67fa83d6f772a
+Gitweb:        https://git.kernel.org/tip/991d8d8142cad94f9c5c05db25e67fa83d6f772a
+Author:        Dietmar Eggemann <dietmar.eggemann@arm.com>
+AuthorDate:    Fri, 13 May 2022 11:34:33 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 19 May 2022 23:46:14 +02:00
+CommitterDate: Thu, 19 May 2022 23:46:13 +02:00
 
-perf/x86/amd/core: Fix reloading events for SVM
+topology: Remove unused cpu_cluster_mask()
 
-Commit 1018faa6cf23 ("perf/x86/kvm: Fix Host-Only/Guest-Only
-counting with SVM disabled") addresses an issue in which the
-Host-Only bit in the counter control registers needs to be
-masked off when SVM is not enabled.
+default_topology[] uses cpu_clustergroup_mask() for the CLS level
+(guarded by CONFIG_SCHED_CLUSTER) which is currently provided by x86
+(arch/x86/kernel/smpboot.c) and arm64 (drivers/base/arch_topology.c).
 
-The events need to be reloaded whenever SVM is enabled or
-disabled for a CPU and this requires the PERF_CTL registers
-to be reprogrammed using {enable,disable}_all(). However,
-PerfMonV2 variants of these functions do not reprogram the
-PERF_CTL registers. Hence, the legacy enable_all() function
-should also be called.
+Fixes: 778c558f49a2c ("sched: Add cluster scheduler level in core and
+related Kconfig for ARM64")
 
-Fixes: 9622e67e3980 ("perf/x86/amd/core: Add PerfMonV2 counter control")
-Reported-by: Like Xu <likexu@tencent.com>
-Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220518084327.464005-1-sandipan.das@amd.com
+Acked-by: Barry Song <baohua@kernel.org>
+Link: https://lore.kernel.org/r/20220513093433.425163-1-dietmar.eggemann@arm.com
 ---
- arch/x86/events/amd/core.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
+ include/linux/topology.h | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 3eee59c..9ac3718 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -1472,6 +1472,24 @@ __init int amd_pmu_init(void)
- 	return 0;
+diff --git a/include/linux/topology.h b/include/linux/topology.h
+index f19bc36..4564faa 100644
+--- a/include/linux/topology.h
++++ b/include/linux/topology.h
+@@ -240,13 +240,6 @@ static inline const struct cpumask *cpu_smt_mask(int cpu)
  }
+ #endif
  
-+static inline void amd_pmu_reload_virt(void)
-+{
-+	if (x86_pmu.version >= 2) {
-+		/*
-+		 * Clear global enable bits, reprogram the PERF_CTL
-+		 * registers with updated perf_ctr_virt_mask and then
-+		 * set global enable bits once again
-+		 */
-+		amd_pmu_v2_disable_all();
-+		amd_pmu_enable_all(0);
-+		amd_pmu_v2_enable_all(0);
-+		return;
-+	}
-+
-+	amd_pmu_disable_all();
-+	amd_pmu_enable_all(0);
-+}
-+
- void amd_pmu_enable_virt(void)
+-#if defined(CONFIG_SCHED_CLUSTER) && !defined(cpu_cluster_mask)
+-static inline const struct cpumask *cpu_cluster_mask(int cpu)
+-{
+-	return topology_cluster_cpumask(cpu);
+-}
+-#endif
+-
+ static inline const struct cpumask *cpu_cpu_mask(int cpu)
  {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-@@ -1479,8 +1497,7 @@ void amd_pmu_enable_virt(void)
- 	cpuc->perf_ctr_virt_mask = 0;
- 
- 	/* Reload all events */
--	amd_pmu_disable_all();
--	x86_pmu_enable_all(0);
-+	amd_pmu_reload_virt();
- }
- EXPORT_SYMBOL_GPL(amd_pmu_enable_virt);
- 
-@@ -1497,7 +1514,6 @@ void amd_pmu_disable_virt(void)
- 	cpuc->perf_ctr_virt_mask = AMD64_EVENTSEL_HOSTONLY;
- 
- 	/* Reload all events */
--	amd_pmu_disable_all();
--	x86_pmu_enable_all(0);
-+	amd_pmu_reload_virt();
- }
- EXPORT_SYMBOL_GPL(amd_pmu_disable_virt);
+ 	return cpumask_of_node(cpu_to_node(cpu));

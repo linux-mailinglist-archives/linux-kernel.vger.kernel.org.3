@@ -2,104 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC2352DC13
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C4052DC19
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243422AbiESRzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        id S242244AbiESR5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243390AbiESRz3 (ORCPT
+        with ESMTP id S234458AbiESR5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:55:29 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2047C59300
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:55:27 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id k126so3306847wme.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:55:27 -0700 (PDT)
+        Thu, 19 May 2022 13:57:10 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88229CEBB6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:57:09 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id p74so2928229iod.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=IcURIzUAaO0hawwQBa3QbU95nABbOKjkzznKXnu7p/M=;
-        b=JWpmXJZ1wlQ3Jru3rS1u9eB8UO05ZEUrunbAL22mtbQEv4+uiHhOI0vbxMeDuqVY0x
-         slBw40ljhv9NRn7gH+uzvSgsWaO1OrExdnCg4qxIVhyEh++rukgXukFP+ydfM0pL2Kr0
-         M8c0TQbyFyZUrRI1cVeSevhx56MMgLy1AN3/c=
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nTvwJwfDzauPQ+of5JXtLLkQatXip/21hHhzryuEKQA=;
+        b=j3LimxuhjsDMbf3h7pgM2pWwYSD4AVDqwr9ip1QCctj49RKDncQaqTHeIyXLl50zzU
+         4LG3je7shHcDY1r8jzTsxpcHjD9pp0lfGzlQqhuk55gzgWRRU5pqfxpRJbcJFKW03pa3
+         LLtD7ehpQwpgyXa+eY0hUTZk4ioiKf7glMqpvtARWpYoJpPWD8StCBp85+mKbJnmGOEO
+         TBKLipGuUQdEgRWPXm1GzIGIFeMe5N0+DDsTrPgxpZj900S2UeEVlLAND2cbavGFIQGt
+         CTjt5zWmLaAZRopYq3odW6ZOoq4jz7+VypCEx0y6zLBALPoGbIsN3k2WOTSsu3sefi7x
+         DLGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IcURIzUAaO0hawwQBa3QbU95nABbOKjkzznKXnu7p/M=;
-        b=N0ivc5hoRvl8FQVEkGZiv/mtzYIAy6pINFBFU1MwWsAu1NqKylnIg8ZKYK56Ez+YOk
-         voXLpGA2xGHPc2Skp0KULT7TsPHG8+j/q9r7dPB8kvvURCQsvwC3LDJfg5VQktISxO2R
-         LkYPve0OCrqr1gUeTzUBI3GHstzLcu6rPxYnhPoN/3LPYTNpvnk3csp4zeAFbvUw3hQB
-         Rs3LBSDxeWDMU0Ojns7RlNLPrNO+0U+vArVHF+aYV3z2NrfFUY8gYw8IPW8PZMnD2CsM
-         aj00Fi4bhGS0+U3ZpgJDcCmpF8P9sihLVsdt8EDy3yiSyYREzKqr1MTCs4b2RIdn+3QL
-         Hakg==
-X-Gm-Message-State: AOAM533/9v3AHprCLkUMQkMFegp1r3WalNrFzqdF9OhbzQcY9DgYQTad
-        J/3GEHdp4fbgyMkH4K3scC88zz1CIBEU5+/o
-X-Google-Smtp-Source: ABdhPJyhZku1aSofMHOAw0WeaouxWQ4Dilpy9tUkJNSKLgbe6lC9ZCWtmCe/t4kaM6umX/2fX8/i7w==
-X-Received: by 2002:a7b:c114:0:b0:394:47d3:693f with SMTP id w20-20020a7bc114000000b0039447d3693fmr5612215wmi.42.1652982926317;
-        Thu, 19 May 2022 10:55:26 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:400::4:c1eb])
-        by smtp.gmail.com with ESMTPSA id q6-20020adfbb86000000b0020c5253d902sm206567wrg.78.2022.05.19.10.55.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 10:55:25 -0700 (PDT)
-Date:   Thu, 19 May 2022 18:55:24 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        kernel-team@fb.com
-Subject: Re: [RFC PATCH] printk: console: Allow each console to have its own
- loglevel
-Message-ID: <YoaEjNrBLjPBtx/p@chrisdown.name>
-References: <YoVM+KbdyJm8RSSr@chrisdown.name>
- <YoVO23+fvsNPnpKh@kroah.com>
- <YoVWpZKHD7aec0CJ@chrisdown.name>
- <YoXsAkUgzIjJR90W@kroah.com>
- <YoZQQwtG12Ypr2IC@chrisdown.name>
- <YoZVvA5FP4wFLSH9@kroah.com>
- <YoZdVCfK4T8Ts2oS@chrisdown.name>
- <YoZhXe9CZE5o73fG@kroah.com>
- <YoZoXOghSuCy9Bi+@chrisdown.name>
- <YoaCN+OH6cG0p1CN@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nTvwJwfDzauPQ+of5JXtLLkQatXip/21hHhzryuEKQA=;
+        b=EzoVKP+WcGUw28xU/OztboPwgEQJ1zgIYOIrWAbj7ky97TlfnDOdRsWK/DjZ8u2HRR
+         2bbNSKY/0xM1F2fO+8ACKFHUyZ/6xlIolKcv3Jwyl2aUQiEb2emmK3WnUe01ccg6zzFF
+         AfeeJeLLqxCTZU23TznwHWn+tRVQ7Mtgkk60ipnSNfLA7yP/Y1Eo6G/d9qI8wCuo9mH+
+         EhuTahpQo5EVsQ+6nAx9IURpMt+fdL3tYg6iQ3/jfKjPHdunvbjB37CnhXko4aFoxSTp
+         SstqRJuWVidI/wC6jEw8ezq61jCdl46mBCt41PxYYm/14/8b3+wJ8HS3/CTN7zUGeXfQ
+         Q7vQ==
+X-Gm-Message-State: AOAM531FZVBztU+FnPREK7IxoBCcotX8BoS9YHEWVq7dCpO3DZcvFyv9
+        3KGDcCTsvIQB+ZL6zvqojRvlBxrpgI4q2kMQe8Nq0w==
+X-Google-Smtp-Source: ABdhPJxLnLPad++snwSrGlFPy2lO2WAmvA7axVeAQ6DyfojYPDblWdyjk16yhcxDogtbfCy3V2mwhAIveq3XhTsBM0Y=
+X-Received: by 2002:a5d:94c2:0:b0:60b:bd34:bb6f with SMTP id
+ y2-20020a5d94c2000000b0060bbd34bb6fmr3044953ior.32.1652983028426; Thu, 19 May
+ 2022 10:57:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YoaCN+OH6cG0p1CN@kroah.com>
-User-Agent: Mutt/2.2.4 (c3baa83e) (2022-04-30)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
+ <20220422212945.2227722-4-axelrasmussen@google.com> <a6f7ff80-ea77-75d0-2454-99d14f164708@linuxfoundation.org>
+In-Reply-To: <a6f7ff80-ea77-75d0-2454-99d14f164708@linuxfoundation.org>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 19 May 2022 10:56:32 -0700
+Message-ID: <CAJHvVciqx17ERazHNLyyFDGV6Fh0K=SyZ78DTO62xL4rqOTdgw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] userfaultfd: selftests: modify selftest to use /dev/userfaultfd
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg Kroah-Hartman writes:
->> So, just to try to come to a solution, here's the lay of the land as I
->> understand it. Currently pretty much all consoles are statically defined
->> (and most of the non-static cases are false positives)
->>
->>     % git grep 'struct console.*=' -- '*.c' | awk '/static/ { print "static"; } !/static/ { print "non-static" }' | sort | uniq -c
->>          15 non-static
->>         105 static
+On Tue, Apr 26, 2022 at 9:16 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
->ah, ok, then we have a problem, and your change to the struct device
->being a pointer is correct.
+> On 4/22/22 3:29 PM, Axel Rasmussen wrote:
+> > We clearly want to ensure both userfaultfd(2) and /dev/userfaultfd keep
+> > working into the future, so just run the test twice, using each
+> > interface.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >   tools/testing/selftests/vm/userfaultfd.c | 31 ++++++++++++++++++++++--
+> >   1 file changed, 29 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+> > index 92a4516f8f0d..12ae742a9981 100644
+> > --- a/tools/testing/selftests/vm/userfaultfd.c
+> > +++ b/tools/testing/selftests/vm/userfaultfd.c
+> > @@ -77,6 +77,9 @@ static int bounces;
+> >   #define TEST_SHMEM  3
+> >   static int test_type;
+> >
+> > +/* test using /dev/userfaultfd, instead of userfaultfd(2) */
+> > +static bool test_dev_userfaultfd;
+> > +
+> >   /* exercise the test_uffdio_*_eexist every ALARM_INTERVAL_SECS */
+> >   #define ALARM_INTERVAL_SECS 10
+> >   static volatile bool test_uffdio_copy_eexist = true;
+> > @@ -383,13 +386,31 @@ static void assert_expected_ioctls_present(uint64_t mode, uint64_t ioctls)
+> >       }
+> >   }
+> >
+> > +static void __userfaultfd_open_dev(void)
+> > +{
+> > +     int fd;
+> > +
+> > +     uffd = -1;
+> > +     fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
+> > +     if (fd < 0)
+> > +             return;
+> > +
+> > +     uffd = ioctl(fd, USERFAULTFD_IOC_NEW,
+> > +                  O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> > +     close(fd);
+> > +}
+> > +
+> >   static void userfaultfd_open(uint64_t *features)
+> >   {
+> >       struct uffdio_api uffdio_api;
+> >
+> > -     uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> > +     if (test_dev_userfaultfd)
+> > +             __userfaultfd_open_dev();
+> > +     else
+> > +             uffd = syscall(__NR_userfaultfd,
+> > +                            O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> >       if (uffd < 0)
+> > -             err("userfaultfd syscall not available in this kernel");
+> > +             err("creating userfaultfd failed");
 >
->That's the problem when you only see a tiny bit of the kernel in a
->patch, sorry for the confusion.
+> This isn't an error as in test failure. This will be a skip because of
+> unmet dependencies. Also if this test requires root access, please check
+> for that and make that a skip as well.
 
-No worries! Just glad we got to the bottom of it :-)
+Testing with the userfaultfd syscall doesn't require any special
+permissions (root or otherwise).
 
->But you still need to free the device structure that is pointed to by
->the device in the release function.  Your release function can not be
->"empty" like your original patch was.
+But testing with /dev/userfaultfd will require access to that device
+node, which is root:root by default, but the system administrator may
+have changed this. In general I think this will only fail due to a)
+lack of kernel support or b) lack of permissions though, so always
+exiting with KSFT_SKIP here seems reasonable. I'll make that change in
+v3.
 
-Great, then I'll implement it like the earlier diff I posted unless you have 
-any objections.
-
-Thanks a lot for your help and advice!
+>
+> >       uffd_flags = fcntl(uffd, F_GETFD, NULL);
+> >
+> >       uffdio_api.api = UFFD_API;
+> > @@ -1698,6 +1719,12 @@ int main(int argc, char **argv)
+> >       }
+> >       printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+> >              nr_pages, nr_pages_per_cpu);
+> > +
+> > +     test_dev_userfaultfd = false;
+> > +     if (userfaultfd_stress())
+> > +             return 1;
+> > +
+> > +     test_dev_userfaultfd = true;
+> >       return userfaultfd_stress();
+> >   }
+> >
+> >
+>
+> thanks,
+> -- Shuah

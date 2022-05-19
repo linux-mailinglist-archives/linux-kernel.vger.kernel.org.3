@@ -2,171 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B2052DADB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6101552DAF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242433AbiESRLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S242454AbiESRLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbiESRLR (ORCPT
+        with ESMTP id S233983AbiESRLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:11:17 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551A2140F4;
-        Thu, 19 May 2022 10:11:16 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id pq9-20020a17090b3d8900b001df622bf81dso5800312pjb.3;
-        Thu, 19 May 2022 10:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=y6OjDxOQRwuvH78XVR01DIVKNTgQ0Q7yKBb/rit7+xA=;
-        b=IHORutaKe4ppK6InBQv0GNjSWd2++frTadPRrNRvVWB2jCYC5jB0D5jY8Pbb+1SAF7
-         H5pyrBufm4yuwxHCDzD6JpuR8PiRjAQOImZeBididWjQ4xxcTQc9zEr4ENFrP22nk/Sa
-         jJS4P7/QutWGHO8kliCLBVpejEDbXsfStJTgXPVzJMYkh/0k8LBcSisjNTW0LK/TBbF3
-         xtojUxtkxnDBqpaeppo+8UobdHaRHpamk7/OeYdk36dJCuyuionJpGusdK/j8d1jCgac
-         t1u8DUanEItM/G2jh82nUhbp01ZeLKNJ6TukEyamQVUcEIf/uE9LCWXN8WXHrXLdoCDn
-         ZvoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=y6OjDxOQRwuvH78XVR01DIVKNTgQ0Q7yKBb/rit7+xA=;
-        b=o8OkqOiGUsm2Xhcv25PMLH36qUkb2klqWji2JCcpiaDQ4UGUp+l0Ipn84Sy0IbZynu
-         b8uqZ+i57cB/ZZEJ62yii6cEyqjJCXp/4Al5lD/WJQ7bmXAb/1GjUvgV9kdP3qga7RhB
-         TIIziYhWX6Y3qulcFw3OymMnh8LfFB/8ICKL+PxgLjPv4qHKOIt+m2U+ailw4bRI5GI2
-         8gpS1IsQcwNJPQ+VAaMM7mMrnpB+BNHM+eGeeq3/SCT8rV6BQ40DBAkky7z/MWYukHa6
-         BQTzHRySY7JY4tstHPvsR6nGaH57PxpjsdLSxXrqI6/1oUpAK3NqWRzP9ADEcfzfhVM7
-         OAjA==
-X-Gm-Message-State: AOAM5326BdUR6joNwgi+10AabcACHfs2N3ohRrQusOzxC2sgWlIJ3xCt
-        3hrEf2jAbnkVhqGxA0sibnM=
-X-Google-Smtp-Source: ABdhPJwX049Tvsbi1cmWaDlUQdXkur0qJSK86fZeYKVHGz+WIa7YMp6J9/E/3e8N6mZ9qjmUiSbipA==
-X-Received: by 2002:a17:90a:5ae1:b0:1db:d0a4:30a4 with SMTP id n88-20020a17090a5ae100b001dbd0a430a4mr6143016pji.128.1652980275734;
-        Thu, 19 May 2022 10:11:15 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id c9-20020a170902b68900b0016162e01553sm3949929pls.168.2022.05.19.10.11.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 10:11:15 -0700 (PDT)
-Message-ID: <c16384a3-d868-11e7-ceed-bc8e7029962a@gmail.com>
-Date:   Thu, 19 May 2022 10:11:13 -0700
+        Thu, 19 May 2022 13:11:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFC5205E2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:11:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 43731CE26EB
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:11:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DEBC385AA;
+        Thu, 19 May 2022 17:11:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652980291;
+        bh=zfXW98jVyxZ6zoL6xNX2NZNkEnIW/L5pHktyNLtrNGo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cOrGLBaZbWRP8x43zWCVXO5PL8CQuf+7D3hYJpKE+C9z6jzbP6BvE6FdaON3CnxWY
+         Bgxjyl7eyd5PvGkGXjqDfsdE/j+hKImVzZ4XR6bPEwfOW5KP8IbHgVfvlgjYoUxQnp
+         mwmbFgIJEBcvRe4D/AxTpgo47XGed4dnuw4GHasj2ECdgdUvCY6t6V1AtTja3n7M37
+         KIStclA/x5L3r5+oZQ7XPzStt1h2gU4MjVer79QFVDp8EaNtuNVOpP8l3k1co+IaZz
+         npBPFCilgTjoKRGFfgmGCjuDC8I2ghCX2U1A7uPSnTo00QWjweh8Kaz84W82HokrmX
+         IjLpTRA1x8cWA==
+Date:   Thu, 19 May 2022 10:11:29 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
+        brgerst@gmail.com, jiangshanlai@gmail.com,
+        Andrew.Cooper3@citrix.com, mark.rutland@arm.com,
+        Borislav Petkov <bp@suse.de>
+Subject: Re: [PATCH 3/6] x86/entry: Use PUSH_AND_CLEAR_REGS for compat
+Message-ID: <20220519171129.enw32izjhxsqc2xm@treble>
+References: <20220506121431.563656641@infradead.org>
+ <20220506121631.293889636@infradead.org>
+ <20220519162411.GA4095576@roeck-us.net>
+ <20220519170009.GL2578@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH net-next v2 2/5] net: dsa: add out-of-band tagging
- protocol
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-References: <20220514150656.122108-1-maxime.chevallier@bootlin.com>
- <20220514150656.122108-3-maxime.chevallier@bootlin.com>
- <20220514224002.vvmd43lnjkbsw2g3@skbuf> <20220517090156.3fde5a8f@pc-20.home>
- <20220519145221.odisjsmjojrpuutp@skbuf>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220519145221.odisjsmjojrpuutp@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220519170009.GL2578@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/19/2022 7:52 AM, Vladimir Oltean wrote:
-> On Tue, May 17, 2022 at 09:01:56AM +0200, Maxime Chevallier wrote:
->> Hi Vlad,
->>
->> On Sat, 14 May 2022 22:40:03 +0000
->> Vladimir Oltean <vladimir.oltean@nxp.com> wrote:
->>
->>> On Sat, May 14, 2022 at 05:06:53PM +0200, Maxime Chevallier wrote:
->>>> This tagging protocol is designed for the situation where the link
->>>> between the MAC and the Switch is designed such that the Destination
->>>> Port, which is usually embedded in some part of the Ethernet
->>>> Header, is sent out-of-band, and isn't present at all in the
->>>> Ethernet frame.
->>>>
->>>> This can happen when the MAC and Switch are tightly integrated on an
->>>> SoC, as is the case with the Qualcomm IPQ4019 for example, where
->>>> the DSA tag is inserted directly into the DMA descriptors. In that
->>>> case, the MAC driver is responsible for sending the tag to the
->>>> switch using the out-of-band medium. To do so, the MAC driver needs
->>>> to have the information of the destination port for that skb.
->>>>
->>>> This out-of-band tagging protocol is using the very beggining of
->>>> the skb headroom to store the tag. The drawback of this approch is
->>>> that the headroom isn't initialized upon allocating it, therefore
->>>> we have a chance that the garbage data that lies there at
->>>> allocation time actually ressembles a valid oob tag. This is only
->>>> problematic if we are sending/receiving traffic on the master port,
->>>> which isn't a valid DSA use-case from the beggining. When dealing
->>>> from traffic to/from a slave port, then the oob tag will be
->>>> initialized properly by the tagger or the mac driver through the
->>>> use of the dsa_oob_tag_push() call.
->>>>
->>>> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
->>>> ---
->>>
->>> Why put the DSA pseudo-header at skb->head rather than push it using
->>> skb_push()? I thought you were going to check for the presence of a
->>> DSA header using something like skb->mac_len == ETH_HLEN + tag len,
->>> but right now it sounds like treating garbage in the headroom as a
->>> valid DSA tag is indeed a potential problem. If you can't sort that
->>> out using information from the header offsets alone, maybe an skb
->>> extension is required?
->>
->> Indeed, I thought of that, the main reason is that pushing/poping in
->> itself is not enough, you also have to move the whole mac_header to
->> leave room for the tag, and then re-set it in it's original location.
->> There's nothing wrong with this, but it looked a bit cumbersome just to
->> insert a dummy tag that gets removed rightaway. Does that make sense ?
+On Thu, May 19, 2022 at 07:00:09PM +0200, Peter Zijlstra wrote:
+> On Thu, May 19, 2022 at 09:24:11AM -0700, Guenter Roeck wrote:
+> > On Fri, May 06, 2022 at 02:14:34PM +0200, Peter Zijlstra wrote:
+> > > Since the upper regs don't exist for ia32 code, preserving them
+> > > doesn't hurt and it simplifies the code.
+> > > 
+> > > This doesn't add any attack surface that would not already be
+> > > available through INT80.
+> > > 
+> > > Notably:
+> > > 
+> > >  - 32bit SYSENTER: didn't clear si, dx, cx.
+> > > 
+> > >  - 32bit SYSCALL, INT80: *do* clear si since the C functions don't
+> > >    take a second argument.
+> > > 
+> > >  - 64bit: didn't clear si since the C functions take a second
+> > >    argument; except the error_entry path might have only one argument,
+> > >    so clearing si was missing here.
+> > > 
+> > > 32b SYSENTER should be clearing all those 3 registers, nothing uses them
+> > > and selftests pass.
+> > > 
+> > > Unconditionally clear rsi since it simplifies code.
+> > > 
+> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > Reviewed-by: Borislav Petkov <bp@suse.de>
+> > 
+> > linux-next (next-20220519) crashes due to this patch when booting
+> > q35:EPYC-Rome in qemu.
 > 
-> You're thinking about inserting a header before the EtherType. But what
-> has been said was to _prepend_ a header, i.e. put it before the Ethernet
-> MAC DA. That way you don't need to move the Ethernet header.
+> Could you try backing out each of the hunks one at a time? They're all
+> more or less independent.
 > 
-> But anyway, too much talk for mostly nothing, see below.
-> 
->> But yes I would really like to get a way to know wether the tag is
->> there or not, I'll dig a bit more to see if I can find a way to get
->> this info from the various skb offsets in a reliable way.
-> 
-> Without an skb extension, this seems like an impossible task to me
-> (which should also answer Florian's request for feedback on the proposal
-> to share skb->cb with GRO, the qdisc, and whomever else there might be
-> in the path between the DSA master and the switch).
+> My bet with this being a #PF on an AMD machine, it's either the SI clear
+> or the SYSCALL change.
 
-Sorry I should have been clearer, the patch series that I pointed Maxime 
-at earlier:
+I think this should fix it:
 
-https://lore.kernel.org/lkml/1438322920.20182.144.camel@edumazet-glaptop2.roam.corp.google.com/T/
-
-was initially accepted only to be reverted later on because on 64-bit 
-host, there was not enough room in skb->cb[] to insert 4 bytes, so it 
-got reverted.
-
-So yes, I think we need to allocate a custom SKB extension if we want to 
-convey the tag, unless we somehow manage to put it in the linear portion 
-of the SKB to avoid using any control buffer or extension.
--- 
-Florian
+diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
+index a97cc78ecb92..29b36e9e4e74 100644
+--- a/arch/x86/entry/calling.h
++++ b/arch/x86/entry/calling.h
+@@ -63,7 +63,7 @@ For 32-bit we have the following conventions - kernel is built with
+  * for assembly code:
+  */
+ 
+-.macro PUSH_REGS rdx=%rdx rax=%rax save_ret=0
++.macro PUSH_REGS rdx=%rdx rcx=%rcx rax=%rax save_ret=0
+ 	.if \save_ret
+ 	pushq	%rsi		/* pt_regs->si */
+ 	movq	8(%rsp), %rsi	/* temporarily store the return address in %rsi */
+@@ -73,7 +73,7 @@ For 32-bit we have the following conventions - kernel is built with
+ 	pushq   %rsi		/* pt_regs->si */
+ 	.endif
+ 	pushq	\rdx		/* pt_regs->dx */
+-	pushq   %rcx		/* pt_regs->cx */
++	pushq   \rcx		/* pt_regs->cx */
+ 	pushq   \rax		/* pt_regs->ax */
+ 	pushq   %r8		/* pt_regs->r8 */
+ 	pushq   %r9		/* pt_regs->r9 */
+@@ -115,8 +115,8 @@ For 32-bit we have the following conventions - kernel is built with
+ 
+ .endm
+ 
+-.macro PUSH_AND_CLEAR_REGS rdx=%rdx rax=%rax save_ret=0
+-	PUSH_REGS rdx=\rdx, rax=\rax, save_ret=\save_ret
++.macro PUSH_AND_CLEAR_REGS rdx=%rdx rcx=%rcx rax=%rax save_ret=0
++	PUSH_REGS rdx=\rdx, rcx=\rcx, rax=\rax, save_ret=\save_ret
+ 	CLEAR_REGS
+ .endm
+ 
+diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
+index ed2be3615b50..2d40dd132442 100644
+--- a/arch/x86/entry/entry_64_compat.S
++++ b/arch/x86/entry/entry_64_compat.S
+@@ -200,7 +200,7 @@ SYM_INNER_LABEL(entry_SYSCALL_compat_safe_stack, SYM_L_GLOBAL)
+ SYM_INNER_LABEL(entry_SYSCALL_compat_after_hwframe, SYM_L_GLOBAL)
+ 	movl	%eax, %eax		/* discard orig_ax high bits */
+ 	pushq	%rax			/* pt_regs->orig_ax */
+-	PUSH_AND_CLEAR_REGS rax=$-ENOSYS
++	PUSH_AND_CLEAR_REGS rax=$-ENOSYS rcx=%rbx
+ 	UNWIND_HINT_REGS
+ 
+ 	movq	%rsp, %rdi

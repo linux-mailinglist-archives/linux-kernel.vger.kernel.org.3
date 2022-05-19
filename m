@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6451852DEF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30F852DEF7
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245046AbiESVJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S245045AbiESVKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245024AbiESVJz (ORCPT
+        with ESMTP id S245034AbiESVKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:09:55 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F467EC3D1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:09:52 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id h29so11207819lfj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:09:52 -0700 (PDT)
+        Thu, 19 May 2022 17:10:01 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CC5ED78E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:09:59 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id w14so11128758lfl.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:09:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jXbTFjb3zv6Lr2RAa1RWm/1oHar9Tb9d6GsMi9amOOc=;
-        b=Jy8PvsL4d22oBicPf8TTbgPq1dxuk0DGy/FKoYVTv2MSzzBD9WLoecijV5o+Z2zTa0
-         cltN8ntE7MhDWgiy7Aag0UdmGo1ndS/bPxfGWAOH7nzXaOE1PUORbdS/8EqO1BDszJeU
-         2SInG+yUk3Vc5EzoYTU94BJmdLs1kmjr2Px4o7Iqc9DHWfwK3wAX95G7e3SUVcft9xHL
-         z0gi5NLMHZ3eUkaV53zOiqi88WV5TSBeKkunko7Wh76HM02ehdcg5yPYwOameBO6SJlV
-         a1QfFe23SBUnsve2B2FfdK71dV17z9PnTYZEMMBnKOph5F6neFTXcmVsjS1Fdx7N+UIg
-         yysw==
+        bh=gzsilJYHRtraqFs7CXN4ot5Uvk/kJihQ5Euha9saQvc=;
+        b=VK2eTAH49wz0IxmTO7BQvsjcYFF+Z/nk0m+iAs6DM1OtL9qs+/UvATk2V8xWjr5hL+
+         0NRbobswDi809mkws3KVXRw9MoXQJgQCApQugeHdJA/zW4Mt5VdTdfM6nGyYxnOWwoAC
+         p7iepSZzQyH9ArBd6Smnp9DRnMNFIjLRFNjeTOMANTeQ8hwW0VjtkDgiCNN4Nfo65MkR
+         3K29+R7Vh/4nw+7ZVTaBXNMGf8wFseXe6/ILmbtOAmEyd1NpC7NuVEga5L+mnGSEniay
+         VsSOYvjRKc39Gjl+fyEMG/zjrP4He3UBMQR7/YP7owrpJXz5NJZoLiTgtRZDx34ibl6T
+         iAdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jXbTFjb3zv6Lr2RAa1RWm/1oHar9Tb9d6GsMi9amOOc=;
-        b=TmbH2mj/sr2peLu6PmDatCIvMpctr16H0v+LzW5u7BIicHVr09jioSOxwXXJCfrEUn
-         Bluh/OQyS6vqX/RztY1+ftDdG0NR9bgj6IsD/LgFmyNbDxc5GNUhAcEmX7h+4IRhVL4P
-         S0szViBIpKvfL6AlqVFVEIfDTL87c5mRjHqETsJ4PybeL/jFxvtnTyR4OLIC8UP9JRus
-         3Li2Y+2c1ru6K6jntNxVRd+bmkViCUf9zBLEDTD2qlCXXXUItL7TiNXeOyanh9TZgKPX
-         EeO68xp8rM7IK8yVwy0HVeEqm4BkhFCpBpwD5Lmj3k29wZCQx2xfHRA4mBX+s2rS8AOf
-         yTvg==
-X-Gm-Message-State: AOAM5326PKuLnkg2P2p6TyspoYANnq8kWvZNKKMkXb3Ak+zIJFXpzuFk
-        Kn6nQVV2+MOmk7O0PK+m8sXLcJ2zZg3wpA==
-X-Google-Smtp-Source: ABdhPJxv6hFzIkUjaKgEyrYtYmTfeRqvVtLCuknvOZOjT4c9GnWTVDUBNUWhVMNfCmbT69ykA/MIaA==
-X-Received: by 2002:a05:6512:25ac:b0:473:c871:d2bb with SMTP id bf44-20020a05651225ac00b00473c871d2bbmr4531337lfb.228.1652994590462;
-        Thu, 19 May 2022 14:09:50 -0700 (PDT)
+        bh=gzsilJYHRtraqFs7CXN4ot5Uvk/kJihQ5Euha9saQvc=;
+        b=oScbpd41bWxuMlwccJ0ccYlojHP+d7081OwKbWidXueHHYXwp1uTaqtgFdu6l0vsX7
+         lD9Og9r8lXXqEu24mp7BraZAHvmLy/zHQScVrHmybddh97/F3fkBJrO4AoDO9RJlEKEA
+         ZzZAcvpDo9BuK0t9T+MB4LDFsnXgcAfEkwEzoFxKRUYbz+WZbOPANGbu/9ExTcvoKGvF
+         zGGWktWGHvC7EEOQIcRVtZOh5rN3jy1pGMDeNcGgaMutKl+Qh5CBHbuS5Ov/z+OTwa52
+         jNmbxO3N+c5I9Cg1s6ovb9sr8Va5pZbM0CGm/mP8V/Fs00GNC7X5pumecLG0ZTnJlG7/
+         mgxA==
+X-Gm-Message-State: AOAM5309tCeGKDNNRCYfiMJQCyWShfdIbLHL7lI5sy9tgVExF0jQ9vPE
+        FiZEhJIpL8mxRzgFIYn81aY=
+X-Google-Smtp-Source: ABdhPJwxsd+V4zySS3zyLDSkPuMX7SfbQ6+bYF7C/5bSNR5gVSXHO8vIkQZaXy76XVUi4C+ZcLI2ng==
+X-Received: by 2002:a05:6512:1151:b0:473:d081:e40e with SMTP id m17-20020a056512115100b00473d081e40emr4760224lfg.186.1652994597679;
+        Thu, 19 May 2022 14:09:57 -0700 (PDT)
 Received: from localhost.localdomain ([46.235.67.4])
-        by smtp.gmail.com with ESMTPSA id b20-20020a056512071400b0047255d2115fsm402266lfs.142.2022.05.19.14.09.49
+        by smtp.gmail.com with ESMTPSA id 4-20020ac24824000000b0047255d211c8sm398973lft.247.2022.05.19.14.09.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 14:09:49 -0700 (PDT)
+        Thu, 19 May 2022 14:09:57 -0700 (PDT)
 From:   Pavel Skripkin <paskripkin@gmail.com>
 To:     gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
         phil@philpotter.co.uk, straube.linux@gmail.com,
         dan.carpenter@oracle.com, fmdefrancesco@gmail.com
 Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         Pavel Skripkin <paskripkin@gmail.com>
-Subject: [PATCH v2 1/4] staging: r8188eu: add error handling of rtw_read8
-Date:   Fri, 20 May 2022 00:09:47 +0300
-Message-Id: <541ab3341093a8f6bff1cf8e8aa0c7e247ff4833.1652994483.git.paskripkin@gmail.com>
+Subject: [PATCH v2 2/4] staging: r8188eu: add error handling of rtw_read16
+Date:   Fri, 20 May 2022 00:09:55 +0300
+Message-Id: <fd10125ab8f4a64572742ec01d3202af2a79b1d0.1652994483.git.paskripkin@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1652994483.git.paskripkin@gmail.com>
 References: <cover.1652994483.git.paskripkin@gmail.com>
@@ -72,1221 +72,277 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rtw_read8() reads data from device via USB API which may fail. In case
+rtw_read16() reads data from device via USB API which may fail. In case
 of any failure previous code returned stack data to callers, which is
 wrong.
 
-Fix it by changing rtw_read8() prototype and prevent caller from
+Fix it by changing rtw_read16() prototype and prevent caller from
 touching random stack data
 
 Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
 ---
 
 Changes since v1:
-	- Fix build error reported by kernel test robot
-	- Fix res/ret confusion in rtl8188e_firmware_download
-	- Fix possible infinity loop in rtl8188e_firmware_download
-	- Undo unrelated white-space Changes
-	- Fix wront return value in c2h_evt_read
+	- Fixed style issue
 
 ---
- drivers/staging/r8188eu/core/rtw_efuse.c      |  13 +-
- drivers/staging/r8188eu/core/rtw_fw.c         |  56 ++++--
- drivers/staging/r8188eu/core/rtw_led.c        |  16 +-
- drivers/staging/r8188eu/core/rtw_mlme_ext.c   |  49 +++++-
- drivers/staging/r8188eu/core/rtw_wlan_util.c  |  20 ++-
- drivers/staging/r8188eu/hal/HalPhyRf_8188e.c  |  18 +-
- drivers/staging/r8188eu/hal/HalPwrSeqCmd.c    |   9 +-
- drivers/staging/r8188eu/hal/hal_com.c         |  27 ++-
- drivers/staging/r8188eu/hal/rtl8188e_cmd.c    |  37 +++-
- drivers/staging/r8188eu/hal/rtl8188e_dm.c     |   6 +-
- .../staging/r8188eu/hal/rtl8188e_hal_init.c   |  69 ++++++--
- drivers/staging/r8188eu/hal/rtl8188e_phycfg.c |  10 +-
- drivers/staging/r8188eu/hal/usb_halinit.c     | 160 ++++++++++++++----
- drivers/staging/r8188eu/hal/usb_ops_linux.c   |   7 +-
- drivers/staging/r8188eu/include/rtw_io.h      |   2 +-
- drivers/staging/r8188eu/os_dep/ioctl_linux.c  |  11 +-
- 16 files changed, 410 insertions(+), 100 deletions(-)
+ .../staging/r8188eu/hal/rtl8188e_hal_init.c   | 21 ++++++++++++---
+ drivers/staging/r8188eu/hal/rtl8188e_phycfg.c |  8 ++++--
+ drivers/staging/r8188eu/hal/usb_halinit.c     | 27 ++++++++++++++++---
+ drivers/staging/r8188eu/hal/usb_ops_linux.c   | 13 ++++++---
+ drivers/staging/r8188eu/include/rtw_io.h      |  2 +-
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c  |  9 ++++---
+ drivers/staging/r8188eu/os_dep/os_intfs.c     |  6 ++++-
+ 7 files changed, 67 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_efuse.c b/drivers/staging/r8188eu/core/rtw_efuse.c
-index 0e0e60638880..a2691c7f96f6 100644
---- a/drivers/staging/r8188eu/core/rtw_efuse.c
-+++ b/drivers/staging/r8188eu/core/rtw_efuse.c
-@@ -28,14 +28,21 @@ ReadEFuseByte(
- 	u32 value32;
- 	u8 readbyte;
- 	u16 retry;
-+	int res;
- 
- 	/* Write Address */
- 	rtw_write8(Adapter, EFUSE_CTRL + 1, (_offset & 0xff));
--	readbyte = rtw_read8(Adapter, EFUSE_CTRL + 2);
-+	res = rtw_read8(Adapter, EFUSE_CTRL + 2, &readbyte);
-+	if (res)
-+		return;
-+
- 	rtw_write8(Adapter, EFUSE_CTRL + 2, ((_offset >> 8) & 0x03) | (readbyte & 0xfc));
- 
- 	/* Write bit 32 0 */
--	readbyte = rtw_read8(Adapter, EFUSE_CTRL + 3);
-+	res = rtw_read8(Adapter, EFUSE_CTRL + 3, &readbyte);
-+	if (res)
-+		return;
-+
- 	rtw_write8(Adapter, EFUSE_CTRL + 3, (readbyte & 0x7f));
- 
- 	/* Check bit 32 read-ready */
-@@ -54,6 +61,8 @@ ReadEFuseByte(
- 	value32 = rtw_read32(Adapter, EFUSE_CTRL);
- 
- 	*pbuf = (u8)(value32 & 0xff);
-+
-+	/* FIXME: return an error to caller */
- }
- 
- /*-----------------------------------------------------------------------------
-diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
-index bf077876ed3d..638dc3ddfbcc 100644
---- a/drivers/staging/r8188eu/core/rtw_fw.c
-+++ b/drivers/staging/r8188eu/core/rtw_fw.c
-@@ -44,18 +44,28 @@ static_assert(sizeof(struct rt_firmware_hdr) == 32);
- static void fw_download_enable(struct adapter *padapter, bool enable)
- {
- 	u8 tmp;
-+	int res;
- 
- 	if (enable) {
- 		/*  MCU firmware download enable. */
--		tmp = rtw_read8(padapter, REG_MCUFWDL);
-+		res = rtw_read8(padapter, REG_MCUFWDL, &tmp);
-+		if (res)
-+			return;
-+
- 		rtw_write8(padapter, REG_MCUFWDL, tmp | 0x01);
- 
- 		/*  8051 reset */
--		tmp = rtw_read8(padapter, REG_MCUFWDL + 2);
-+		res = rtw_read8(padapter, REG_MCUFWDL + 2, &tmp);
-+		if (res)
-+			return;
-+
- 		rtw_write8(padapter, REG_MCUFWDL + 2, tmp & 0xf7);
- 	} else {
- 		/*  MCU firmware download disable. */
--		tmp = rtw_read8(padapter, REG_MCUFWDL);
-+		res = rtw_read8(padapter, REG_MCUFWDL, &tmp);
-+		if (res)
-+			return;
-+
- 		rtw_write8(padapter, REG_MCUFWDL, tmp & 0xfe);
- 
- 		/*  Reserved for fw extension. */
-@@ -125,8 +135,13 @@ static int page_write(struct adapter *padapter, u32 page, u8 *buffer, u32 size)
- {
- 	u8 value8;
- 	u8 u8Page = (u8)(page & 0x07);
-+	int res;
-+
-+	res = rtw_read8(padapter, REG_MCUFWDL + 2, &value8);
-+	if (res)
-+		return _FAIL;
- 
--	value8 = (rtw_read8(padapter, REG_MCUFWDL + 2) & 0xF8) | u8Page;
-+	value8 = (value8 & 0xF8) | u8Page;
- 	rtw_write8(padapter, REG_MCUFWDL + 2, value8);
- 
- 	return block_write(padapter, buffer, size);
-@@ -165,8 +180,12 @@ static int write_fw(struct adapter *padapter, u8 *buffer, u32 size)
- void rtw_reset_8051(struct adapter *padapter)
- {
- 	u8 val8;
-+	int res;
-+
-+	res = rtw_read8(padapter, REG_SYS_FUNC_EN + 1, &val8);
-+	if (res)
-+		return;
- 
--	val8 = rtw_read8(padapter, REG_SYS_FUNC_EN + 1);
- 	rtw_write8(padapter, REG_SYS_FUNC_EN + 1, val8 & (~BIT(2)));
- 	rtw_write8(padapter, REG_SYS_FUNC_EN + 1, val8 | (BIT(2)));
- }
-@@ -239,7 +258,7 @@ static int load_firmware(struct rt_firmware *rtfw, struct device *device)
- int rtl8188e_firmware_download(struct adapter *padapter)
- {
- 	int ret = _SUCCESS;
--	u8 write_fw_retry = 0;
-+	u8 reg;
- 	unsigned long fwdl_timeout;
- 	struct dvobj_priv *dvobj = adapter_to_dvobj(padapter);
- 	struct device *device = dvobj_to_dev(dvobj);
-@@ -269,23 +288,34 @@ int rtl8188e_firmware_download(struct adapter *padapter)
- 
- 	/*  Suggested by Filen. If 8051 is running in RAM code, driver should inform Fw to reset by itself, */
- 	/*  or it will cause download Fw fail. 2010.02.01. by tynli. */
--	if (rtw_read8(padapter, REG_MCUFWDL) & RAM_DL_SEL) { /* 8051 RAM code */
-+	ret = rtw_read8(padapter, REG_MCUFWDL, &reg);
-+	if (ret) {
-+		ret = _FAIL;
-+		goto exit;
-+	}
-+
-+	if (reg & RAM_DL_SEL) { /* 8051 RAM code */
- 		rtw_write8(padapter, REG_MCUFWDL, 0x00);
- 		rtw_reset_8051(padapter);
- 	}
- 
- 	fw_download_enable(padapter, true);
- 	fwdl_timeout = jiffies + msecs_to_jiffies(500);
--	while (1) {
-+	do {
- 		/* reset the FWDL chksum */
--		rtw_write8(padapter, REG_MCUFWDL, rtw_read8(padapter, REG_MCUFWDL) | FWDL_CHKSUM_RPT);
-+		ret = rtw_read8(padapter, REG_MCUFWDL, &reg);
-+		if (ret) {
-+			ret = _FAIL;
-+			continue;
-+		}
- 
--		ret = write_fw(padapter, fw_data, fw_size);
-+		rtw_write8(padapter, REG_MCUFWDL, reg | FWDL_CHKSUM_RPT);
- 
--		if (ret == _SUCCESS ||
--		    (time_after(jiffies, fwdl_timeout) && write_fw_retry++ >= 3))
-+		ret = write_fw(padapter, fw_data, fw_size);
-+		if (ret == _SUCCESS)
- 			break;
--	}
-+	} while (!time_after(jiffies, fwdl_timeout));
-+
- 	fw_download_enable(padapter, false);
- 	if (ret != _SUCCESS)
- 		goto exit;
-diff --git a/drivers/staging/r8188eu/core/rtw_led.c b/drivers/staging/r8188eu/core/rtw_led.c
-index 2f3000428af7..25989acf5259 100644
---- a/drivers/staging/r8188eu/core/rtw_led.c
-+++ b/drivers/staging/r8188eu/core/rtw_led.c
-@@ -35,11 +35,15 @@ static void ResetLedStatus(struct LED_871x *pLed)
- static void SwLedOn(struct adapter *padapter, struct LED_871x *pLed)
- {
- 	u8	LedCfg;
-+	int res;
- 
- 	if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
- 		return;
- 
--	LedCfg = rtw_read8(padapter, REG_LEDCFG2);
-+	res = rtw_read8(padapter, REG_LEDCFG2, &LedCfg);
-+	if (res)
-+		return;
-+
- 	rtw_write8(padapter, REG_LEDCFG2, (LedCfg & 0xf0) | BIT(5) | BIT(6)); /*  SW control led0 on. */
- 	pLed->bLedOn = true;
- }
-@@ -47,15 +51,21 @@ static void SwLedOn(struct adapter *padapter, struct LED_871x *pLed)
- static void SwLedOff(struct adapter *padapter, struct LED_871x *pLed)
- {
- 	u8	LedCfg;
-+	int res;
- 
- 	if (padapter->bSurpriseRemoved || padapter->bDriverStopped)
- 		goto exit;
- 
--	LedCfg = rtw_read8(padapter, REG_LEDCFG2);/* 0x4E */
-+	res = rtw_read8(padapter, REG_LEDCFG2, &LedCfg);/* 0x4E */
-+	if (res)
-+		goto exit;
- 
- 	LedCfg &= 0x90; /*  Set to software control. */
- 	rtw_write8(padapter, REG_LEDCFG2, (LedCfg | BIT(3)));
--	LedCfg = rtw_read8(padapter, REG_MAC_PINMUX_CFG);
-+	res = rtw_read8(padapter, REG_MAC_PINMUX_CFG, &LedCfg);
-+	if (res)
-+		goto exit;
-+
- 	LedCfg &= 0xFE;
- 	rtw_write8(padapter, REG_MAC_PINMUX_CFG, LedCfg);
- exit:
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 848b5051aa13..d4e59fab367c 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -5672,14 +5672,28 @@ unsigned int send_beacon(struct adapter *padapter)
- 
- bool get_beacon_valid_bit(struct adapter *adapter)
- {
-+	int res;
-+	u8 reg;
-+
-+	res = rtw_read8(adapter, REG_TDECTRL + 2, &reg);
-+	if (res)
-+		return false;
-+
- 	/* BIT(16) of REG_TDECTRL = BIT(0) of REG_TDECTRL+2 */
--	return BIT(0) & rtw_read8(adapter, REG_TDECTRL + 2);
-+	return BIT(0) & reg;
- }
- 
- void clear_beacon_valid_bit(struct adapter *adapter)
- {
-+	int res;
-+	u8 reg;
-+
-+	res = rtw_read8(adapter, REG_TDECTRL + 2, &reg);
-+	if (res)
-+		return;
-+
- 	/* BIT(16) of REG_TDECTRL = BIT(0) of REG_TDECTRL+2, write 1 to clear, Clear by sw */
--	rtw_write8(adapter, REG_TDECTRL + 2, rtw_read8(adapter, REG_TDECTRL + 2) | BIT(0));
-+	rtw_write8(adapter, REG_TDECTRL + 2, reg | BIT(0));
- }
- 
- /****************************************************************************
-@@ -6007,7 +6021,8 @@ static void rtw_set_bssid(struct adapter *adapter, u8 *bssid)
- static void mlme_join(struct adapter *adapter, int type)
- {
- 	struct mlme_priv *mlmepriv = &adapter->mlmepriv;
--	u8 retry_limit = 0x30;
-+	u8 retry_limit = 0x30, reg;
-+	int res;
- 
- 	switch (type) {
- 	case 0:
-@@ -6032,7 +6047,11 @@ static void mlme_join(struct adapter *adapter, int type)
- 	case 2:
- 		/* sta add event call back */
- 		/* enable update TSF */
--		rtw_write8(adapter, REG_BCN_CTRL, rtw_read8(adapter, REG_BCN_CTRL) & (~BIT(4)));
-+		res = rtw_read8(adapter, REG_BCN_CTRL, &reg);
-+		if (res)
-+			return;
-+
-+		rtw_write8(adapter, REG_BCN_CTRL, reg & (~BIT(4)));
- 
- 		if (check_fwstate(mlmepriv, WIFI_ADHOC_STATE | WIFI_ADHOC_MASTER_STATE))
- 			retry_limit = 0x7;
-@@ -6753,6 +6772,9 @@ void mlmeext_sta_add_event_callback(struct adapter *padapter, struct sta_info *p
- 
- static void mlme_disconnect(struct adapter *adapter)
- {
-+	int res;
-+	u8 reg;
-+
- 	/* Set RCR to not to receive data frame when NO LINK state */
- 	/* reject all data frames */
- 	rtw_write16(adapter, REG_RXFLTMAP2, 0x00);
-@@ -6761,7 +6783,12 @@ static void mlme_disconnect(struct adapter *adapter)
- 	rtw_write8(adapter, REG_DUAL_TSF_RST, (BIT(0) | BIT(1)));
- 
- 	/* disable update TSF */
--	rtw_write8(adapter, REG_BCN_CTRL, rtw_read8(adapter, REG_BCN_CTRL) | BIT(4));
-+
-+	res = rtw_read8(adapter, REG_BCN_CTRL, &reg);
-+	if (res)
-+		return;
-+
-+	rtw_write8(adapter, REG_BCN_CTRL, reg | BIT(4));
- }
- 
- void mlmeext_sta_del_event_callback(struct adapter *padapter)
-@@ -6818,11 +6845,15 @@ static u8 chk_ap_is_alive(struct sta_info *psta)
- static void rtl8188e_sreset_linked_status_check(struct adapter *padapter)
- {
- 	u32 rx_dma_status =  rtw_read32(padapter, REG_RXDMA_STATUS);
-+	int res;
-+	u8 reg;
- 
- 	if (rx_dma_status != 0x00)
- 		rtw_write32(padapter, REG_RXDMA_STATUS, rx_dma_status);
- 
--	rtw_read8(padapter, REG_FMETHR);
-+	/* FIXME: should this read be removed? */
-+	res = rtw_read8(padapter, REG_FMETHR, &reg);
-+	(void)res;
- }
- 
- void linked_status_chk(struct adapter *padapter)
-@@ -7224,6 +7255,7 @@ u8 disconnect_hdl(struct adapter *padapter, unsigned char *pbuf)
- 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
- 	struct wlan_bssid_ex *pnetwork = (struct wlan_bssid_ex *)(&pmlmeinfo->network);
- 	u8 val8;
-+	int res;
- 
- 	if (is_client_associated_to_ap(padapter))
- 		issue_deauth_ex(padapter, pnetwork->MacAddress, WLAN_REASON_DEAUTH_LEAVING, param->deauth_timeout_ms / 100, 100);
-@@ -7236,7 +7268,10 @@ u8 disconnect_hdl(struct adapter *padapter, unsigned char *pbuf)
- 
- 	if (((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) || ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE)) {
- 		/* Stop BCN */
--		val8 = rtw_read8(padapter, REG_BCN_CTRL);
-+		res = rtw_read8(padapter, REG_BCN_CTRL, &val8);
-+		if (res)
-+			return H2C_DROPPED;
-+
- 		rtw_write8(padapter, REG_BCN_CTRL, val8 & (~(EN_BCN_FUNCTION | EN_TXBCN_RPT)));
- 	}
- 
-diff --git a/drivers/staging/r8188eu/core/rtw_wlan_util.c b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-index 27035eac6e61..f5002c88a5ac 100644
---- a/drivers/staging/r8188eu/core/rtw_wlan_util.c
-+++ b/drivers/staging/r8188eu/core/rtw_wlan_util.c
-@@ -279,8 +279,13 @@ void Restore_DM_Func_Flag(struct adapter *padapter)
- void Set_MSR(struct adapter *padapter, u8 type)
- {
- 	u8 val8;
-+	int res;
- 
--	val8 = rtw_read8(padapter, MSR) & 0x0c;
-+	res = rtw_read8(padapter, MSR, &val8);
-+	if (res)
-+		return;
-+
-+	val8 &= 0x0c;
- 	val8 |= type;
- 	rtw_write8(padapter, MSR, val8);
- }
-@@ -505,7 +510,11 @@ int WMM_param_handler(struct adapter *padapter, struct ndis_802_11_var_ie *pIE)
- 
- static void set_acm_ctrl(struct adapter *adapter, u8 acm_mask)
- {
--	u8 acmctrl = rtw_read8(adapter, REG_ACMHWCTRL);
-+	u8 acmctrl;
-+	int res = rtw_read8(adapter, REG_ACMHWCTRL, &acmctrl);
-+
-+	if (res)
-+		return;
- 
- 	if (acm_mask > 1)
- 		acmctrl = acmctrl | 0x1;
-@@ -763,6 +772,7 @@ void HT_info_handler(struct adapter *padapter, struct ndis_802_11_var_ie *pIE)
- static void set_min_ampdu_spacing(struct adapter *adapter, u8 spacing)
- {
- 	u8 sec_spacing;
-+	int res;
- 
- 	if (spacing <= 7) {
- 		switch (adapter->securitypriv.dot11PrivacyAlgrthm) {
-@@ -784,8 +794,12 @@ static void set_min_ampdu_spacing(struct adapter *adapter, u8 spacing)
- 		if (spacing < sec_spacing)
- 			spacing = sec_spacing;
- 
-+		res = rtw_read8(adapter, REG_AMPDU_MIN_SPACE, &sec_spacing);
-+		if (res)
-+			return;
-+
- 		rtw_write8(adapter, REG_AMPDU_MIN_SPACE,
--			   (rtw_read8(adapter, REG_AMPDU_MIN_SPACE) & 0xf8) | spacing);
-+			   (sec_spacing & 0xf8) | spacing);
- 	}
- }
- 
-diff --git a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
-index b944c8071a3b..a5b7980dfcee 100644
---- a/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
-+++ b/drivers/staging/r8188eu/hal/HalPhyRf_8188e.c
-@@ -463,6 +463,7 @@ void _PHY_SaveADDARegisters(struct adapter *adapt, u32 *ADDAReg, u32 *ADDABackup
- 	}
- }
- 
-+/* FIXME: return an error to caller */
- static void _PHY_SaveMACRegisters(
- 		struct adapter *adapt,
- 		u32 *MACReg,
-@@ -470,9 +471,17 @@ static void _PHY_SaveMACRegisters(
- 	)
- {
- 	u32 i;
-+	int res;
- 
--	for (i = 0; i < (IQK_MAC_REG_NUM - 1); i++)
--		MACBackup[i] = rtw_read8(adapt, MACReg[i]);
-+	for (i = 0; i < (IQK_MAC_REG_NUM - 1); i++) {
-+		u8 reg;
-+
-+		res = rtw_read8(adapt, MACReg[i], &reg);
-+		if (res)
-+			return;
-+
-+		MACBackup[i] = reg;
-+	}
- 
- 	MACBackup[i] = rtw_read32(adapt, MACReg[i]);
- }
-@@ -739,9 +748,12 @@ static void phy_LCCalibrate_8188E(struct adapter *adapt)
- {
- 	u8 tmpreg;
- 	u32 RF_Amode = 0, LC_Cal;
-+	int res;
- 
- 	/* Check continuous TX and Packet TX */
--	tmpreg = rtw_read8(adapt, 0xd03);
-+	res = rtw_read8(adapt, 0xd03, &tmpreg);
-+	if (res)
-+		return;
- 
- 	if ((tmpreg & 0x70) != 0)			/* Deal with contisuous TX case */
- 		rtw_write8(adapt, 0xd03, tmpreg & 0x8F);	/* disable all continuous TX */
-diff --git a/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c b/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
-index 5b91aec6a7e3..fe2fe63dbc18 100644
---- a/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
-+++ b/drivers/staging/r8188eu/hal/HalPwrSeqCmd.c
-@@ -34,6 +34,7 @@ u8 HalPwrSeqCmdParsing(struct adapter *padapter, struct wl_pwr_cfg pwrseqcmd[])
- 	u32 offset = 0;
- 	u32 poll_count = 0; /*  polling autoload done. */
- 	u32 max_poll_count = 5000;
-+	int res;
- 
- 	do {
- 		pwrcfgcmd = pwrseqcmd[aryidx];
-@@ -43,7 +44,9 @@ u8 HalPwrSeqCmdParsing(struct adapter *padapter, struct wl_pwr_cfg pwrseqcmd[])
- 			offset = GET_PWR_CFG_OFFSET(pwrcfgcmd);
- 
- 			/*  Read the value from system register */
--			value = rtw_read8(padapter, offset);
-+			res = rtw_read8(padapter, offset, &value);
-+			if (res)
-+				return false;
- 
- 			value &= ~(GET_PWR_CFG_MASK(pwrcfgcmd));
- 			value |= (GET_PWR_CFG_VALUE(pwrcfgcmd) & GET_PWR_CFG_MASK(pwrcfgcmd));
-@@ -55,7 +58,9 @@ u8 HalPwrSeqCmdParsing(struct adapter *padapter, struct wl_pwr_cfg pwrseqcmd[])
- 			poll_bit = false;
- 			offset = GET_PWR_CFG_OFFSET(pwrcfgcmd);
- 			do {
--				value = rtw_read8(padapter, offset);
-+				res = rtw_read8(padapter, offset, &value);
-+				if (res)
-+					return false;
- 
- 				value &= GET_PWR_CFG_MASK(pwrcfgcmd);
- 				if (value == (GET_PWR_CFG_VALUE(pwrcfgcmd) & GET_PWR_CFG_MASK(pwrcfgcmd)))
-diff --git a/drivers/staging/r8188eu/hal/hal_com.c b/drivers/staging/r8188eu/hal/hal_com.c
-index 910cc07f656c..e9a32dd84a8e 100644
---- a/drivers/staging/r8188eu/hal/hal_com.c
-+++ b/drivers/staging/r8188eu/hal/hal_com.c
-@@ -303,7 +303,9 @@ s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
- 	if (!buf)
- 		goto exit;
- 
--	trigger = rtw_read8(adapter, REG_C2HEVT_CLEAR);
-+	ret = rtw_read8(adapter, REG_C2HEVT_CLEAR, &trigger);
-+	if (ret)
-+		return _FAIL;
- 
- 	if (trigger == C2H_EVT_HOST_CLOSE)
- 		goto exit; /* Not ready */
-@@ -314,13 +316,26 @@ s32 c2h_evt_read(struct adapter *adapter, u8 *buf)
- 
- 	memset(c2h_evt, 0, 16);
- 
--	*buf = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL);
--	*(buf + 1) = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + 1);
-+	ret = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL, buf);
-+	if (ret) {
-+		ret = _FAIL;
-+		goto clear_evt;
-+	}
- 
-+	ret = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL + 1, buf + 1);
-+	if (ret) {
-+		ret = _FAIL;
-+		goto clear_evt;
-+	}
- 	/* Read the content */
--	for (i = 0; i < c2h_evt->plen; i++)
--		c2h_evt->payload[i] = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL +
--						sizeof(*c2h_evt) + i);
-+	for (i = 0; i < c2h_evt->plen; i++) {
-+		ret = rtw_read8(adapter, REG_C2HEVT_MSG_NORMAL +
-+						sizeof(*c2h_evt) + i, c2h_evt->payload + i);
-+		if (ret) {
-+			ret = _FAIL;
-+			goto clear_evt;
-+		}
-+	}
- 
- 	ret = _SUCCESS;
- 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-index 475650dc7301..b01ee1695fee 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-@@ -18,13 +18,18 @@
- 
- static u8 _is_fw_read_cmd_down(struct adapter *adapt, u8 msgbox_num)
- {
--	u8 read_down = false;
-+	u8 read_down = false, reg;
- 	int	retry_cnts = 100;
-+	int res;
- 
- 	u8 valid;
- 
- 	do {
--		valid = rtw_read8(adapt, REG_HMETFR) & BIT(msgbox_num);
-+		res = rtw_read8(adapt, REG_HMETFR, &reg);
-+		if (res)
-+			continue;
-+
-+		valid = reg & BIT(msgbox_num);
- 		if (0 == valid)
- 			read_down = true;
- 	} while ((!read_down) && (retry_cnts--));
-@@ -533,6 +538,8 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *adapt, u8 mstatus)
- 	bool	bcn_valid = false;
- 	u8 DLBcnCount = 0;
- 	u32 poll = 0;
-+	u8 reg;
-+	int res;
- 
- 	if (mstatus == 1) {
- 		/*  We should set AID, correct TSF, HW seq enable before set JoinBssReport to Fw in 88/92C. */
-@@ -547,8 +554,17 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *adapt, u8 mstatus)
- 		/*  Disable Hw protection for a time which revserd for Hw sending beacon. */
- 		/*  Fix download reserved page packet fail that access collision with the protection time. */
- 		/*  2010.05.11. Added by tynli. */
--		rtw_write8(adapt, REG_BCN_CTRL, rtw_read8(adapt, REG_BCN_CTRL) & (~BIT(3)));
--		rtw_write8(adapt, REG_BCN_CTRL, rtw_read8(adapt, REG_BCN_CTRL) | BIT(4));
-+		res = rtw_read8(adapt, REG_BCN_CTRL, &reg);
-+		if (res)
-+			return;
-+
-+		rtw_write8(adapt, REG_BCN_CTRL, reg & (~BIT(3)));
-+
-+		res = rtw_read8(adapt, REG_BCN_CTRL, &reg);
-+		if (res)
-+			return;
-+
-+		rtw_write8(adapt, REG_BCN_CTRL, reg | BIT(4));
- 
- 		if (haldata->RegFwHwTxQCtrl & BIT(6))
- 			bSendBeacon = true;
-@@ -581,8 +597,17 @@ void rtl8188e_set_FwJoinBssReport_cmd(struct adapter *adapt, u8 mstatus)
- 		/*  */
- 
- 		/*  Enable Bcn */
--		rtw_write8(adapt, REG_BCN_CTRL, rtw_read8(adapt, REG_BCN_CTRL) | BIT(3));
--		rtw_write8(adapt, REG_BCN_CTRL, rtw_read8(adapt, REG_BCN_CTRL) & (~BIT(4)));
-+		res = rtw_read8(adapt, REG_BCN_CTRL, &reg);
-+		if (res)
-+			return;
-+
-+		rtw_write8(adapt, REG_BCN_CTRL, reg | BIT(3));
-+
-+		res = rtw_read8(adapt, REG_BCN_CTRL, &reg);
-+		if (res)
-+			return;
-+
-+		rtw_write8(adapt, REG_BCN_CTRL, reg & (~BIT(4)));
- 
- 		/*  To make sure that if there exists an adapter which would like to send beacon. */
- 		/*  If exists, the origianl value of 0x422[6] will be 1, we should check this to */
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_dm.c b/drivers/staging/r8188eu/hal/rtl8188e_dm.c
-index 6d28e3dc0d26..0399872c4546 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_dm.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_dm.c
-@@ -12,8 +12,12 @@
- static void dm_InitGPIOSetting(struct adapter *Adapter)
- {
- 	u8	tmp1byte;
-+	int res;
-+
-+	res = rtw_read8(Adapter, REG_GPIO_MUXCFG, &tmp1byte);
-+	if (res)
-+		return;
- 
--	tmp1byte = rtw_read8(Adapter, REG_GPIO_MUXCFG);
- 	tmp1byte &= (GPIOSEL_GPIO | ~GPIOSEL_ENBT);
- 
- 	rtw_write8(Adapter, REG_GPIO_MUXCFG, tmp1byte);
 diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-index e17375a74f17..e67ecbd1ba79 100644
+index e67ecbd1ba79..6662ebc30f7b 100644
 --- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
 +++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-@@ -13,10 +13,14 @@
- static void iol_mode_enable(struct adapter *padapter, u8 enable)
+@@ -249,11 +249,14 @@ static void efuse_read_phymap_from_txpktbuf(
+ 		hi32 = cpu_to_le32(rtw_read32(adapter, REG_PKTBUF_DBG_DATA_H));
+ 
+ 		if (i == 0) {
++			u16 reg;
++
+ 			/* Although lenc is only used in a debug statement,
+ 			 * do not remove it as the rtw_read16() call consumes
+ 			 * 2 bytes from the EEPROM source.
+ 			 */
+-			rtw_read16(adapter, REG_PKTBUF_DBG_DATA_L);
++			res = rtw_read16(adapter, REG_PKTBUF_DBG_DATA_L, &reg);
++			(void)res;
+ 
+ 			len = le32_to_cpu(lo32) & 0x0000ffff;
+ 
+@@ -355,25 +358,35 @@ int rtl8188e_IOL_exec_cmds_sync(struct adapter *adapter, struct xmit_frame *xmit
+ void rtl8188e_EfusePowerSwitch(struct adapter *pAdapter, u8 PwrState)
  {
- 	u8 reg_0xf0 = 0;
+ 	u16	tmpV16;
 +	int res;
  
- 	if (enable) {
- 		/* Enable initial offload */
--		reg_0xf0 = rtw_read8(padapter, REG_SYS_CFG);
-+		res = rtw_read8(padapter, REG_SYS_CFG, &reg_0xf0);
+ 	if (PwrState) {
+ 		rtw_write8(pAdapter, REG_EFUSE_ACCESS, EFUSE_ACCESS_ON);
+ 
+ 		/*  1.2V Power: From VDDON with Power Cut(0x0000h[15]), defualt valid */
+-		tmpV16 = rtw_read16(pAdapter, REG_SYS_ISO_CTRL);
++		res = rtw_read16(pAdapter, REG_SYS_ISO_CTRL, &tmpV16);
 +		if (res)
 +			return;
 +
- 		rtw_write8(padapter, REG_SYS_CFG, reg_0xf0 | SW_OFFLOAD_EN);
- 
- 		if (!padapter->bFWReady)
-@@ -24,7 +28,10 @@ static void iol_mode_enable(struct adapter *padapter, u8 enable)
- 
- 	} else {
- 		/* disable initial offload */
--		reg_0xf0 = rtw_read8(padapter, REG_SYS_CFG);
-+		res = rtw_read8(padapter, REG_SYS_CFG, &reg_0xf0);
+ 		if (!(tmpV16 & PWC_EV12V)) {
+ 			tmpV16 |= PWC_EV12V;
+ 			rtw_write16(pAdapter, REG_SYS_ISO_CTRL, tmpV16);
+ 		}
+ 		/*  Reset: 0x0000h[28], default valid */
+-		tmpV16 =  rtw_read16(pAdapter, REG_SYS_FUNC_EN);
++		res = rtw_read16(pAdapter, REG_SYS_FUNC_EN, &tmpV16);
 +		if (res)
 +			return;
 +
- 		rtw_write8(padapter, REG_SYS_CFG, reg_0xf0 & ~SW_OFFLOAD_EN);
- 	}
- }
-@@ -34,17 +41,31 @@ static s32 iol_execute(struct adapter *padapter, u8 control)
- 	s32 status = _FAIL;
- 	u8 reg_0x88 = 0;
- 	unsigned long timeout;
-+	int res;
+ 		if (!(tmpV16 & FEN_ELDR)) {
+ 			tmpV16 |= FEN_ELDR;
+ 			rtw_write16(pAdapter, REG_SYS_FUNC_EN, tmpV16);
+ 		}
  
- 	control = control & 0x0f;
--	reg_0x88 = rtw_read8(padapter, REG_HMEBOX_E0);
-+	res = rtw_read8(padapter, REG_HMEBOX_E0, &reg_0x88);
-+	if (res)
-+		return _FAIL;
-+
- 	rtw_write8(padapter, REG_HMEBOX_E0,  reg_0x88 | control);
- 
- 	timeout = jiffies + msecs_to_jiffies(1000);
--	while ((reg_0x88 = rtw_read8(padapter, REG_HMEBOX_E0)) & control &&
--		time_before(jiffies, timeout))
--		;
- 
--	reg_0x88 = rtw_read8(padapter, REG_HMEBOX_E0);
-+	do {
-+		res = rtw_read8(padapter, REG_HMEBOX_E0, &reg_0x88);
-+		if (res)
-+			continue;
-+
-+		if (!(reg_0x88 & control))
-+			break;
-+
-+	} while (time_before(jiffies, timeout));
-+
-+	res = rtw_read8(padapter, REG_HMEBOX_E0, &reg_0x88);
-+	if (res)
-+		return _FAIL;
-+
- 	status = (reg_0x88 & control) ? _FAIL : _SUCCESS;
- 	if (reg_0x88 & control << 4)
- 		status = _FAIL;
-@@ -190,13 +211,18 @@ static void efuse_read_phymap_from_txpktbuf(
- 	u16 dbg_addr = 0;
- 	__le32 lo32 = 0, hi32 = 0;
- 	u16 len = 0, count = 0;
--	int i = 0;
-+	int i = 0, res;
- 	u16 limit = *size;
--
-+	u8 reg;
- 	u8 *pos = content;
- 
--	if (bcnhead < 0) /* if not valid */
--		bcnhead = rtw_read8(adapter, REG_TDECTRL + 1);
-+	if (bcnhead < 0) { /* if not valid */
-+		res = rtw_read8(adapter, REG_TDECTRL + 1, &reg);
+ 		/*  Clock: Gated(0x0008h[5]) 8M(0x0008h[1]) clock from ANA, default valid */
+-		tmpV16 = rtw_read16(pAdapter, REG_SYS_CLKR);
++		res = rtw_read16(pAdapter, REG_SYS_CLKR, &tmpV16);
 +		if (res)
 +			return;
 +
-+		bcnhead = reg;
-+	}
- 
- 	rtw_write8(adapter, REG_PKT_BUFF_ACCESS_CTRL, TXPKT_BUF_SELECT);
- 
-@@ -207,8 +233,16 @@ static void efuse_read_phymap_from_txpktbuf(
- 
- 		rtw_write8(adapter, REG_TXPKTBUF_DBG, 0);
- 		timeout = jiffies + msecs_to_jiffies(1000);
--		while (!rtw_read8(adapter, REG_TXPKTBUF_DBG) && time_before(jiffies, timeout))
-+		do {
-+			res = rtw_read8(adapter, REG_TXPKTBUF_DBG, &reg);
-+			if (res)
-+				continue;
-+
-+			if (reg)
-+				break;
-+
- 			rtw_usleep_os(100);
-+		} while (time_before(jiffies, timeout));
- 
- 		/* data from EEPROM needs to be in LE */
- 		lo32 = cpu_to_le32(rtw_read32(adapter, REG_PKTBUF_DBG_DATA_L));
-@@ -525,10 +559,17 @@ void rtl8188e_SetHalODMVar(struct adapter *Adapter, void *pValue1, bool bSet)
- 
- void hal_notch_filter_8188e(struct adapter *adapter, bool enable)
- {
-+	int res;
-+	u8 reg;
-+
-+	res = rtw_read8(adapter, rOFDM0_RxDSP + 1, &reg);
-+	if (res)
-+		return;
-+
- 	if (enable)
--		rtw_write8(adapter, rOFDM0_RxDSP + 1, rtw_read8(adapter, rOFDM0_RxDSP + 1) | BIT(1));
-+		rtw_write8(adapter, rOFDM0_RxDSP + 1, reg | BIT(1));
- 	else
--		rtw_write8(adapter, rOFDM0_RxDSP + 1, rtw_read8(adapter, rOFDM0_RxDSP + 1) & ~BIT(1));
-+		rtw_write8(adapter, rOFDM0_RxDSP + 1, reg & ~BIT(1));
- }
- 
- /*  */
+ 		if ((!(tmpV16 & LOADER_CLK_EN))  || (!(tmpV16 & ANA8M))) {
+ 			tmpV16 |= (LOADER_CLK_EN | ANA8M);
+ 			rtw_write16(pAdapter, REG_SYS_CLKR, tmpV16);
 diff --git a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-index 4864dafd887b..985339a974fc 100644
+index 985339a974fc..298c3d9bc7be 100644
 --- a/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
 +++ b/drivers/staging/r8188eu/hal/rtl8188e_phycfg.c
-@@ -594,6 +594,7 @@ _PHY_SetBWMode92C(
+@@ -484,13 +484,17 @@ PHY_BBConfig8188E(
+ {
+ 	int	rtStatus = _SUCCESS;
  	struct hal_data_8188e *pHalData = &Adapter->haldata;
- 	u8 regBwOpMode;
- 	u8 regRRSR_RSC;
+-	u32 RegVal;
++	u16 RegVal;
+ 	u8 CrystalCap;
 +	int res;
  
- 	if (Adapter->bDriverStopped)
- 		return;
-@@ -602,8 +603,13 @@ _PHY_SetBWMode92C(
- 	/* 3<1>Set MAC register */
- 	/* 3 */
+ 	phy_InitBBRFRegisterDefinition(Adapter);
  
--	regBwOpMode = rtw_read8(Adapter, REG_BWOPMODE);
--	regRRSR_RSC = rtw_read8(Adapter, REG_RRSR + 2);
-+	res = rtw_read8(Adapter, REG_BWOPMODE, &regBwOpMode);
-+	if (res)
-+		return;
-+
-+	res = rtw_read8(Adapter, REG_RRSR + 2, &regRRSR_RSC);
-+	if (res)
-+		return;
- 
- 	switch (pHalData->CurrentChannelBW) {
- 	case HT_CHANNEL_WIDTH_20:
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index b62ebd011886..5daef0117a5c 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -81,6 +81,7 @@ static void _InitInterrupt(struct adapter *Adapter)
- {
- 	u32 imr, imr_ex;
- 	u8  usb_opt;
-+	int res;
- 
- 	/* HISR write one to clear */
- 	rtw_write32(Adapter, REG_HISR_88E, 0xFFFFFFFF);
-@@ -94,7 +95,9 @@ static void _InitInterrupt(struct adapter *Adapter)
- 	/*  REG_USB_SPECIAL_OPTION - BIT(4) */
- 	/*  0; Use interrupt endpoint to upload interrupt pkt */
- 	/*  1; Use bulk endpoint to upload interrupt pkt, */
--	usb_opt = rtw_read8(Adapter, REG_USB_SPECIAL_OPTION);
-+	res = rtw_read8(Adapter, REG_USB_SPECIAL_OPTION, &usb_opt);
-+	if (res)
-+		return;
- 
- 	if (adapter_to_dvobj(Adapter)->pusbdev->speed == USB_SPEED_HIGH)
- 		usb_opt = usb_opt | (INT_BULK_SEL);
-@@ -363,8 +366,12 @@ static void _InitEDCA(struct adapter *Adapter)
- static void _InitRetryFunction(struct adapter *Adapter)
- {
- 	u8 value8;
-+	int res;
-+
-+	res = rtw_read8(Adapter, REG_FWHW_TXQ_CTRL, &value8);
-+	if (res)
-+		return;
- 
--	value8 = rtw_read8(Adapter, REG_FWHW_TXQ_CTRL);
- 	value8 |= EN_AMPDU_RTY_NEW;
- 	rtw_write8(Adapter, REG_FWHW_TXQ_CTRL, value8);
- 
-@@ -423,9 +430,15 @@ usb_AggSettingRxUpdate(
- {
- 	u8 valueDMA;
- 	u8 valueUSB;
-+	int res;
- 
--	valueDMA = rtw_read8(Adapter, REG_TRXDMA_CTRL);
--	valueUSB = rtw_read8(Adapter, REG_USB_SPECIAL_OPTION);
-+	res = rtw_read8(Adapter, REG_TRXDMA_CTRL, &valueDMA);
-+	if (res)
-+		return;
-+
-+	res = rtw_read8(Adapter, REG_USB_SPECIAL_OPTION, &valueUSB);
-+	if (res)
-+		return;
- 
- 	valueDMA |= RXDMA_AGG_EN;
- 	valueUSB &= ~USB_AGG_EN;
-@@ -449,6 +462,7 @@ static void InitUsbAggregationSetting(struct adapter *Adapter)
- static void _InitBeaconParameters(struct adapter *Adapter)
- {
- 	struct hal_data_8188e *haldata = &Adapter->haldata;
-+	int res;
- 
- 	rtw_write16(Adapter, REG_BCN_CTRL, 0x1010);
- 
-@@ -461,9 +475,11 @@ static void _InitBeaconParameters(struct adapter *Adapter)
- 	/*  beacause test chip does not contension before sending beacon. by tynli. 2009.11.03 */
- 	rtw_write16(Adapter, REG_BCNTCFG, 0x660F);
- 
--	haldata->RegFwHwTxQCtrl = rtw_read8(Adapter, REG_FWHW_TXQ_CTRL + 2);
--	haldata->RegReg542 = rtw_read8(Adapter, REG_TBTT_PROHIBIT + 2);
--	haldata->RegCR_1 = rtw_read8(Adapter, REG_CR + 1);
-+	/* FIXME: return an error to caller */
-+	res = rtw_read8(Adapter, REG_FWHW_TXQ_CTRL + 2, &haldata->RegFwHwTxQCtrl);
-+	res = rtw_read8(Adapter, REG_TBTT_PROHIBIT + 2, &haldata->RegReg542);
-+	res = rtw_read8(Adapter, REG_CR + 1, &haldata->RegCR_1);
-+	(void)res;
- }
- 
- static void _BeaconFunctionEnable(struct adapter *Adapter,
-@@ -514,6 +530,7 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
- 	u16  value16;
- 	u8 txpktbuf_bndy;
- 	u32 status = _SUCCESS;
-+	int res;
- 	struct hal_data_8188e *haldata = &Adapter->haldata;
- 	struct pwrctrl_priv		*pwrctrlpriv = &Adapter->pwrctrlpriv;
- 	struct registry_priv	*pregistrypriv = &Adapter->registrypriv;
-@@ -620,7 +637,10 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
- 
- 	/* Enable TX Report */
- 	/* Enable Tx Report Timer */
--	value8 = rtw_read8(Adapter, REG_TX_RPT_CTRL);
-+	res = rtw_read8(Adapter, REG_TX_RPT_CTRL, &value8);
+ 	/*  Enable BB and RF */
+-	RegVal = rtw_read16(Adapter, REG_SYS_FUNC_EN);
++	res = rtw_read16(Adapter, REG_SYS_FUNC_EN, &RegVal);
 +	if (res)
 +		return _FAIL;
 +
- 	rtw_write8(Adapter,  REG_TX_RPT_CTRL, (value8 | BIT(1) | BIT(0)));
- 	/* Set MAX RPT MACID */
- 	rtw_write8(Adapter,  REG_TX_RPT_CTRL + 1, 2);/* FOR sta mode ,0: bc/mc ,1:AP */
-@@ -714,9 +734,13 @@ static void CardDisableRTL8188EU(struct adapter *Adapter)
+ 	rtw_write16(Adapter, REG_SYS_FUNC_EN, (u16)(RegVal | BIT(13) | BIT(0) | BIT(1)));
+ 
+ 	/*  20090923 Joseph: Advised by Steven and Jenyu. Power sequence before init RF. */
+diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
+index 5daef0117a5c..40d907dd2b58 100644
+--- a/drivers/staging/r8188eu/hal/usb_halinit.c
++++ b/drivers/staging/r8188eu/hal/usb_halinit.c
+@@ -52,6 +52,8 @@ void rtl8188eu_interface_configure(struct adapter *adapt)
+ u32 rtl8188eu_InitPowerOn(struct adapter *adapt)
  {
- 	u8 val8;
- 	struct hal_data_8188e *haldata = &Adapter->haldata;
+ 	u16 value16;
 +	int res;
++
+ 	/*  HW Power on sequence */
+ 	struct hal_data_8188e *haldata = &adapt->haldata;
+ 	if (haldata->bMacPwrCtrlOn)
+@@ -65,7 +67,10 @@ u32 rtl8188eu_InitPowerOn(struct adapter *adapt)
+ 	rtw_write16(adapt, REG_CR, 0x00);  /* suggseted by zhouzhou, by page, 20111230 */
  
- 	/* Stop Tx Report Timer. 0x4EC[Bit1]=b'0 */
--	val8 = rtw_read8(Adapter, REG_TX_RPT_CTRL);
-+	res = rtw_read8(Adapter, REG_TX_RPT_CTRL, &val8);
+ 		/*  Enable MAC DMA/WMAC/SCHEDULE/SEC block */
+-	value16 = rtw_read16(adapt, REG_CR);
++	res = rtw_read16(adapt, REG_CR, &value16);
 +	if (res)
-+		return;
++		return _FAIL;
 +
- 	rtw_write8(Adapter, REG_TX_RPT_CTRL, val8 & (~BIT(1)));
- 
- 	/*  stop rx */
-@@ -727,10 +751,16 @@ static void CardDisableRTL8188EU(struct adapter *Adapter)
- 
- 	/*  2. 0x1F[7:0] = 0		turn off RF */
- 
--	val8 = rtw_read8(Adapter, REG_MCUFWDL);
-+	res = rtw_read8(Adapter, REG_MCUFWDL, &val8);
-+	if (res)
-+		return;
-+
- 	if ((val8 & RAM_DL_SEL) && Adapter->bFWReady) { /* 8051 RAM code */
- 		/*  Reset MCU 0x2[10]=0. */
--		val8 = rtw_read8(Adapter, REG_SYS_FUNC_EN + 1);
-+		res = rtw_read8(Adapter, REG_SYS_FUNC_EN + 1, &val8);
-+		if (res)
-+			return;
-+
- 		val8 &= ~BIT(2);	/*  0x2[10], FEN_CPUEN */
- 		rtw_write8(Adapter, REG_SYS_FUNC_EN + 1, val8);
- 	}
-@@ -740,26 +770,45 @@ static void CardDisableRTL8188EU(struct adapter *Adapter)
- 
- 	/* YJ,add,111212 */
- 	/* Disable 32k */
--	val8 = rtw_read8(Adapter, REG_32K_CTRL);
-+	res = rtw_read8(Adapter, REG_32K_CTRL, &val8);
-+	if (res)
-+		return;
-+
- 	rtw_write8(Adapter, REG_32K_CTRL, val8 & (~BIT(0)));
- 
- 	/*  Card disable power action flow */
- 	HalPwrSeqCmdParsing(Adapter, Rtl8188E_NIC_DISABLE_FLOW);
- 
- 	/*  Reset MCU IO Wrapper */
--	val8 = rtw_read8(Adapter, REG_RSV_CTRL + 1);
-+	res = rtw_read8(Adapter, REG_RSV_CTRL + 1, &val8);
-+	if (res)
-+		return;
-+
- 	rtw_write8(Adapter, REG_RSV_CTRL + 1, (val8 & (~BIT(3))));
--	val8 = rtw_read8(Adapter, REG_RSV_CTRL + 1);
-+
-+	res = rtw_read8(Adapter, REG_RSV_CTRL + 1, &val8);
-+	if (res)
-+		return;
-+
- 	rtw_write8(Adapter, REG_RSV_CTRL + 1, val8 | BIT(3));
- 
- 	/* YJ,test add, 111207. For Power Consumption. */
--	val8 = rtw_read8(Adapter, GPIO_IN);
-+	res = rtw_read8(Adapter, GPIO_IN, &val8);
-+	if (res)
-+		return;
-+
- 	rtw_write8(Adapter, GPIO_OUT, val8);
- 	rtw_write8(Adapter, GPIO_IO_SEL, 0xFF);/* Reg0x46 */
- 
--	val8 = rtw_read8(Adapter, REG_GPIO_IO_SEL);
-+	res = rtw_read8(Adapter, REG_GPIO_IO_SEL, &val8);
-+	if (res)
-+		return;
-+
- 	rtw_write8(Adapter, REG_GPIO_IO_SEL, (val8 << 4));
--	val8 = rtw_read8(Adapter, REG_GPIO_IO_SEL + 1);
-+	res = rtw_read8(Adapter, REG_GPIO_IO_SEL + 1, &val8);
-+	if (res)
-+		return;
-+
- 	rtw_write8(Adapter, REG_GPIO_IO_SEL + 1, val8 | 0x0F);/* Reg0x43 */
- 	rtw_write32(Adapter, REG_BB_PAD_CTRL, 0x00080808);/* set LNA ,TRSW,EX_PA Pin to output mode */
- 	haldata->bMacPwrCtrlOn = false;
-@@ -830,9 +879,13 @@ void ReadAdapterInfo8188EU(struct adapter *Adapter)
- 	struct eeprom_priv *eeprom = &Adapter->eeprompriv;
- 	struct led_priv *ledpriv = &Adapter->ledpriv;
- 	u8 eeValue;
-+	int res;
- 
- 	/* check system boot selection */
--	eeValue = rtw_read8(Adapter, REG_9346CR);
-+	res = rtw_read8(Adapter, REG_9346CR, &eeValue);
-+	if (res)
-+		return;
-+
- 	eeprom->EepromOrEfuse		= (eeValue & BOOT_FROM_EEPROM);
- 	eeprom->bautoload_fail_flag	= !(eeValue & EEPROM_EN);
- 
-@@ -887,12 +940,21 @@ static void hw_var_set_opmode(struct adapter *Adapter, u8 *val)
+ 	value16 |= (HCI_TXDMA_EN | HCI_RXDMA_EN | TXDMA_EN | RXDMA_EN
+ 				| PROTOCOL_EN | SCHEDULE_EN | ENSEC | CALTMR_EN);
+ 	/*  for SDIO - Set CR bit10 to enable 32k calibration. Suggested by SD1 Gimmy. Added by tynli. 2011.08.31. */
+@@ -166,7 +171,14 @@ static void _InitNormalChipRegPriority(struct adapter *Adapter, u16 beQ,
+ 				       u16 bkQ, u16 viQ, u16 voQ, u16 mgtQ,
+ 				       u16 hiQ)
  {
- 	u8 val8;
- 	u8 mode = *((u8 *)val);
+-	u16 value16	= (rtw_read16(Adapter, REG_TRXDMA_CTRL) & 0x7);
++	u16 value16;
 +	int res;
- 
- 	/*  disable Port0 TSF update */
--	rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) | BIT(4));
-+	res = rtw_read8(Adapter, REG_BCN_CTRL, &val8);
++
++	res = rtw_read16(Adapter, REG_TRXDMA_CTRL, &value16);
 +	if (res)
 +		return;
 +
-+	rtw_write8(Adapter, REG_BCN_CTRL, val8 | BIT(4));
++	value16 &= 0x7;
  
- 	/*  set net_type */
--	val8 = rtw_read8(Adapter, MSR) & 0x0c;
-+	res = rtw_read8(Adapter, MSR, &val8);
+ 	value16 |= _TXDMA_BEQ_MAP(beQ)	| _TXDMA_BKQ_MAP(bkQ) |
+ 		   _TXDMA_VIQ_MAP(viQ)	| _TXDMA_VOQ_MAP(voQ) |
+@@ -631,7 +643,10 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
+ 	/*  Hw bug which Hw initials RxFF boundary size to a value which is larger than the real Rx buffer size in 88E. */
+ 	/*  */
+ 	/*  Enable MACTXEN/MACRXEN block */
+-	value16 = rtw_read16(Adapter, REG_CR);
++	res = rtw_read16(Adapter, REG_CR, &value16);
 +	if (res)
-+		return;
++		return _FAIL;
 +
-+	val8 &= 0x0c;
- 	val8 |= mode;
- 	rtw_write8(Adapter, MSR, val8);
+ 	value16 |= (MACTXEN | MACRXEN);
+ 	rtw_write8(Adapter, REG_CR, value16);
  
-@@ -927,14 +989,22 @@ static void hw_var_set_opmode(struct adapter *Adapter, u8 *val)
- 		rtw_write8(Adapter, REG_DUAL_TSF_RST, BIT(0));
+@@ -704,7 +719,11 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
+ 	rtw_write16(Adapter, REG_TX_RPT_TIME, 0x3DF0);
  
- 		/* BIT(3) - If set 0, hw will clr bcnq when tx becon ok/fail or port 0 */
--		rtw_write8(Adapter, REG_MBID_NUM, rtw_read8(Adapter, REG_MBID_NUM) | BIT(3) | BIT(4));
-+		res = rtw_read8(Adapter, REG_MBID_NUM, &val8);
-+		if (res)
-+			return;
-+
-+		rtw_write8(Adapter, REG_MBID_NUM, val8 | BIT(3) | BIT(4));
- 
- 		/* enable BCN0 Function for if1 */
- 		/* don't enable update TSF0 for if1 (due to TSF update when beacon/probe rsp are received) */
- 		rtw_write8(Adapter, REG_BCN_CTRL, (DIS_TSF_UDT0_NORMAL_CHIP | EN_BCN_FUNCTION | BIT(1)));
- 
- 		/* dis BCN1 ATIM  WND if if2 is station */
--		rtw_write8(Adapter, REG_BCN_CTRL_1, rtw_read8(Adapter, REG_BCN_CTRL_1) | BIT(0));
-+		res = rtw_read8(Adapter, REG_BCN_CTRL_1, &val8);
-+		if (res)
-+			return;
-+
-+		rtw_write8(Adapter, REG_BCN_CTRL_1, val8 | BIT(0));
- 	}
- }
- 
-@@ -943,6 +1013,8 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 	struct hal_data_8188e *haldata = &Adapter->haldata;
- 	struct dm_priv	*pdmpriv = &haldata->dmpriv;
- 	struct odm_dm_struct *podmpriv = &haldata->odmpriv;
-+	u8 reg;
-+	int res;
- 
- 	switch (variable) {
- 	case HW_VAR_SET_OPMODE:
-@@ -970,7 +1042,11 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 			/*  Set RRSR rate table. */
- 			rtw_write8(Adapter, REG_RRSR, BrateCfg & 0xff);
- 			rtw_write8(Adapter, REG_RRSR + 1, (BrateCfg >> 8) & 0xff);
--			rtw_write8(Adapter, REG_RRSR + 2, rtw_read8(Adapter, REG_RRSR + 2) & 0xf0);
-+			res = rtw_read8(Adapter, REG_RRSR + 2, &reg);
-+			if (res)
-+				return;
-+
-+			rtw_write8(Adapter, REG_RRSR + 2, reg & 0xf0);
- 
- 			/*  Set RTS initial rate */
- 			while (BrateCfg > 0x1) {
-@@ -994,13 +1070,21 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 				StopTxBeacon(Adapter);
- 
- 			/* disable related TSF function */
--			rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) & (~BIT(3)));
-+			res = rtw_read8(Adapter, REG_BCN_CTRL, &reg);
-+			if (res)
-+				return;
-+
-+			rtw_write8(Adapter, REG_BCN_CTRL, reg & (~BIT(3)));
- 
- 			rtw_write32(Adapter, REG_TSFTR, tsf);
- 			rtw_write32(Adapter, REG_TSFTR + 4, tsf >> 32);
- 
- 			/* enable related TSF function */
--			rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) | BIT(3));
-+			res = rtw_read8(Adapter, REG_BCN_CTRL, &reg);
-+			if (res)
-+				return;
-+
-+			rtw_write8(Adapter, REG_BCN_CTRL, reg | BIT(3));
- 
- 			if (((pmlmeinfo->state & 0x03) == WIFI_FW_ADHOC_STATE) || ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE))
- 				ResumeTxBeacon(Adapter);
-@@ -1016,7 +1100,11 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 			rtw_write16(Adapter, REG_RXFLTMAP2, 0x00);
- 
- 			/* disable update TSF */
--			rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) | BIT(4));
-+			res = rtw_read8(Adapter, REG_BCN_CTRL, &reg);
-+			if (res)
-+				return;
-+
-+			rtw_write8(Adapter, REG_BCN_CTRL, reg | BIT(4));
- 		} else { /* sitesurvey done */
- 			struct mlme_ext_priv	*pmlmeext = &Adapter->mlmeextpriv;
- 			struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
-@@ -1027,11 +1115,19 @@ void SetHwReg8188EU(struct adapter *Adapter, u8 variable, u8 *val)
- 				rtw_write16(Adapter, REG_RXFLTMAP2, 0xFFFF);
- 
- 				/* enable update TSF */
--				rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) & (~BIT(4)));
-+				res = rtw_read8(Adapter, REG_BCN_CTRL, &reg);
-+				if (res)
-+					return;
-+
-+				rtw_write8(Adapter, REG_BCN_CTRL, reg & (~BIT(4)));
- 			} else if ((pmlmeinfo->state & 0x03) == WIFI_FW_AP_STATE) {
- 				rtw_write16(Adapter, REG_RXFLTMAP2, 0xFFFF);
- 				/* enable update TSF */
--				rtw_write8(Adapter, REG_BCN_CTRL, rtw_read8(Adapter, REG_BCN_CTRL) & (~BIT(4)));
-+				res = rtw_read8(Adapter, REG_BCN_CTRL, &reg);
-+				if (res)
-+					return;
-+
-+				rtw_write8(Adapter, REG_BCN_CTRL, reg & (~BIT(4)));
- 			}
- 			rtw_write32(Adapter, REG_RCR, rtw_read32(Adapter, REG_RCR) | RCR_CBSSID_BCN);
- 		}
-@@ -1194,6 +1290,8 @@ void SetBeaconRelatedRegisters8188EUsb(struct adapter *adapt)
- 	struct mlme_ext_priv	*pmlmeext = &adapt->mlmeextpriv;
- 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
- 	u32 bcn_ctrl_reg			= REG_BCN_CTRL;
-+	int res;
-+	u8 reg;
- 	/* reset TSF, enable update TSF, correcting TSF On Beacon */
- 
- 	/* BCN interval */
-@@ -1219,7 +1317,11 @@ void SetBeaconRelatedRegisters8188EUsb(struct adapter *adapt)
- 
- 	ResumeTxBeacon(adapt);
- 
--	rtw_write8(adapt, bcn_ctrl_reg, rtw_read8(adapt, bcn_ctrl_reg) | BIT(1));
-+	res = rtw_read8(adapt, bcn_ctrl_reg, &reg);
+ 	/* enable tx DMA to drop the redundate data of packet */
+-	rtw_write16(Adapter, REG_TXDMA_OFFSET_CHK, (rtw_read16(Adapter, REG_TXDMA_OFFSET_CHK) | DROP_DATA_EN));
++	res = rtw_read16(Adapter, REG_TXDMA_OFFSET_CHK, &value16);
 +	if (res)
-+		return;
++		return _FAIL;
 +
-+	rtw_write8(adapt, bcn_ctrl_reg, reg | BIT(1));
- }
++	rtw_write16(Adapter, REG_TXDMA_OFFSET_CHK, (value16 | DROP_DATA_EN));
  
- void rtl8188eu_init_default_value(struct adapter *adapt)
+ 	/*  2010/08/26 MH Merge from 8192CE. */
+ 	if (pwrctrlpriv->rf_pwrstate == rf_on) {
 diff --git a/drivers/staging/r8188eu/hal/usb_ops_linux.c b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-index d5e674542a78..f399a7fd8b97 100644
+index f399a7fd8b97..7d62f1f3d26e 100644
 --- a/drivers/staging/r8188eu/hal/usb_ops_linux.c
 +++ b/drivers/staging/r8188eu/hal/usb_ops_linux.c
-@@ -94,16 +94,13 @@ static int usb_write(struct intf_hdl *intf, u16 value, void *data, u8 size)
- 	return status;
+@@ -103,16 +103,21 @@ int __must_check rtw_read8(struct adapter *adapter, u32 addr, u8 *data)
+ 	return usb_read(intf, value, data, 1);
  }
  
--u8 rtw_read8(struct adapter *adapter, u32 addr)
-+int __must_check rtw_read8(struct adapter *adapter, u32 addr, u8 *data)
+-u16 rtw_read16(struct adapter *adapter, u32 addr)
++int __must_check rtw_read16(struct adapter *adapter, u32 addr, u16 *data)
  {
  	struct io_priv *io_priv = &adapter->iopriv;
  	struct intf_hdl *intf = &io_priv->intf;
  	u16 value = addr & 0xffff;
--	u8 data;
- 
--	usb_read(intf, value, &data, 1);
--
--	return data;
-+	return usb_read(intf, value, data, 1);
- }
- 
- u16 rtw_read16(struct adapter *adapter, u32 addr)
-diff --git a/drivers/staging/r8188eu/include/rtw_io.h b/drivers/staging/r8188eu/include/rtw_io.h
-index 6910e2b430e2..1198d3850a6d 100644
---- a/drivers/staging/r8188eu/include/rtw_io.h
-+++ b/drivers/staging/r8188eu/include/rtw_io.h
-@@ -220,7 +220,7 @@ void unregister_intf_hdl(struct intf_hdl *pintfhdl);
- void _rtw_attrib_read(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
- void _rtw_attrib_write(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
- 
--u8 rtw_read8(struct adapter *adapter, u32 addr);
-+int __must_check rtw_read8(struct adapter *adapter, u32 addr, u8 *data);
- u16 rtw_read16(struct adapter *adapter, u32 addr);
- u32 rtw_read32(struct adapter *adapter, u32 addr);
- void _rtw_read_mem(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index a802c1e7b456..6e5ee2a74ee4 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -3177,6 +3177,7 @@ static void rtw_set_dynamic_functions(struct adapter *adapter, u8 dm_func)
- {
- 	struct hal_data_8188e *haldata = &adapter->haldata;
- 	struct odm_dm_struct *odmpriv = &haldata->odmpriv;
+-	__le16 data;
++	__le16 le_data;
 +	int res;
  
- 	switch (dm_func) {
- 	case 0:
-@@ -3192,7 +3193,9 @@ static void rtw_set_dynamic_functions(struct adapter *adapter, u8 dm_func)
- 		if (!(odmpriv->SupportAbility & DYNAMIC_BB_DIG)) {
- 			struct rtw_dig *digtable = &odmpriv->DM_DigTable;
+-	usb_read(intf, value, &data, 2);
++	res = usb_read(intf, value, &le_data, 2);
++	if (res)
++		return res;
  
--			digtable->CurIGValue = rtw_read8(adapter, 0xc50);
-+			res = rtw_read8(adapter, 0xc50, &digtable->CurIGValue);
+-	return le16_to_cpu(data);
++	*data = le16_to_cpu(le_data);
++
++	return 0;
+ }
+ 
+ u32 rtw_read32(struct adapter *adapter, u32 addr)
+diff --git a/drivers/staging/r8188eu/include/rtw_io.h b/drivers/staging/r8188eu/include/rtw_io.h
+index 1198d3850a6d..ce3369e33d66 100644
+--- a/drivers/staging/r8188eu/include/rtw_io.h
++++ b/drivers/staging/r8188eu/include/rtw_io.h
+@@ -221,7 +221,7 @@ void _rtw_attrib_read(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
+ void _rtw_attrib_write(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
+ 
+ int __must_check rtw_read8(struct adapter *adapter, u32 addr, u8 *data);
+-u16 rtw_read16(struct adapter *adapter, u32 addr);
++int __must_check rtw_read16(struct adapter *adapter, u32 addr, u16 *data);
+ u32 rtw_read32(struct adapter *adapter, u32 addr);
+ void _rtw_read_mem(struct adapter *adapter, u32 addr, u32 cnt, u8 *pmem);
+ u32 rtw_read_port(struct adapter *adapter, u8 *pmem);
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index 6e5ee2a74ee4..6ed1439b940c 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -3348,6 +3348,7 @@ static int rtw_dbg_port(struct net_device *dev,
+ 
+ 			/* FIXME: is this read necessary? */
+ 			res = rtw_read8(padapter, reg, &val8);
 +			(void)res;
-+			/* FIXME: return an error to caller */
- 		}
- 		odmpriv->SupportAbility = DYNAMIC_ALL_FUNC_ENABLE;
- 		break;
-@@ -3328,8 +3331,9 @@ static int rtw_dbg_port(struct net_device *dev,
- 			u16 reg = arg;
- 			u16 start_value = 0;
- 			u32 write_num = extra_arg;
--			int i;
-+			int i, res;
- 			struct xmit_frame	*xmit_frame;
-+			u8 val8;
- 
- 			xmit_frame = rtw_IOL_accquire_xmit_frame(padapter);
- 			if (!xmit_frame) {
-@@ -3342,7 +3346,8 @@ static int rtw_dbg_port(struct net_device *dev,
- 			if (rtl8188e_IOL_exec_cmds_sync(padapter, xmit_frame, 5000, 0) != _SUCCESS)
- 				ret = -EPERM;
- 
--			rtw_read8(padapter, reg);
-+			/* FIXME: is this read necessary? */
-+			res = rtw_read8(padapter, reg, &val8);
  		}
  			break;
  
+@@ -3356,8 +3357,8 @@ static int rtw_dbg_port(struct net_device *dev,
+ 			u16 reg = arg;
+ 			u16 start_value = 200;
+ 			u32 write_num = extra_arg;
+-
+-			int i;
++			u16 val16;
++			int i, res;
+ 			struct xmit_frame	*xmit_frame;
+ 
+ 			xmit_frame = rtw_IOL_accquire_xmit_frame(padapter);
+@@ -3371,7 +3372,9 @@ static int rtw_dbg_port(struct net_device *dev,
+ 			if (rtl8188e_IOL_exec_cmds_sync(padapter, xmit_frame, 5000, 0) != _SUCCESS)
+ 				ret = -EPERM;
+ 
+-			rtw_read16(padapter, reg);
++			/* FIXME: is this read necessary? */
++			res = rtw_read16(padapter, reg, &val16);
++			(void)res;
+ 		}
+ 			break;
+ 		case 0x08: /* continuous write dword test */
+diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+index 891c85b088ca..d9325ef6ac28 100644
+--- a/drivers/staging/r8188eu/os_dep/os_intfs.c
++++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
+@@ -740,12 +740,16 @@ static void rtw_fifo_cleanup(struct adapter *adapter)
+ {
+ 	struct pwrctrl_priv *pwrpriv = &adapter->pwrctrlpriv;
+ 	u8 trycnt = 100;
++	int res;
+ 
+ 	/* pause tx */
+ 	rtw_write8(adapter, REG_TXPAUSE, 0xff);
+ 
+ 	/* keep sn */
+-	adapter->xmitpriv.nqos_ssn = rtw_read16(adapter, REG_NQOS_SEQ);
++	/* FIXME: return an error to caller */
++	res = rtw_read16(adapter, REG_NQOS_SEQ, &adapter->xmitpriv.nqos_ssn);
++	if (res)
++		return;
+ 
+ 	if (!pwrpriv->bkeepfwalive) {
+ 		/* RX DMA stop */
 -- 
 2.36.1
 

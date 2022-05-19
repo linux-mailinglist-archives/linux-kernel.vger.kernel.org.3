@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B1352CB34
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 06:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE2652CB36
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 06:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbiESElF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 00:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S233743AbiESElj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 00:41:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233764AbiESElC (ORCPT
+        with ESMTP id S233732AbiESElh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 00:41:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9065C661;
-        Wed, 18 May 2022 21:41:01 -0700 (PDT)
+        Thu, 19 May 2022 00:41:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A38B60042;
+        Wed, 18 May 2022 21:41:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22BDD619B9;
-        Thu, 19 May 2022 04:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16E44C385B8;
-        Thu, 19 May 2022 04:41:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C718BB822BF;
+        Thu, 19 May 2022 04:41:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10384C385B8;
+        Thu, 19 May 2022 04:41:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652935260;
-        bh=ydUDPQfiDFXRRUsRJHQC3B3uycrZ1kC9Z7zzJcg/1HE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Us05cmksIJ7DW7J0qyymfrkO8pUQpwexdf3W+0QjTVkBTbg+e7quQlI5eQ3/R84yl
-         xdLE++bqOJ7Bsmxifq8X6NOTcB+cG5/EGawKvvsSdHFZ32m9MzttDnQshSmVT92kP/
-         8BTM9OWJGUYtwk6ewx7tydIOTYpBW/AQJQzH3fcKgrFGgG5T1hefei6jYGo3ES4F2W
-         QOxNv+CeHpbsLlwY6Kwk1teQywwRepeIt+c7PcmZoja3lMvHvTpgRELyQINahjMCUQ
-         0R8L8OXTUbU0ZgFv4mb5Z9gOaxwmQZODjcQbOv+Adx6Cfs4ujU5GcOfQy55gQ9XMa6
-         9s/DH2hrqHaEg==
-Date:   Wed, 18 May 2022 21:40:58 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Harini Katakam <harini.katakam@xilinx.com>
-Cc:     <nicolas.ferre@microchip.com>, <davem@davemloft.net>,
-        <richardcochran@gmail.com>, <claudiu.beznea@microchip.com>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <michal.simek@xilinx.com>, <harinikatakamlinux@gmail.com>,
-        <radhey.shyam.pandey@xilinx.com>
-Subject: Re: [PATCH net v3] net: macb: Fix PTP one step sync support
-Message-ID: <20220518214058.2a964dba@kernel.org>
-In-Reply-To: <20220518170756.7752-1-harini.katakam@xilinx.com>
-References: <20220518170756.7752-1-harini.katakam@xilinx.com>
+        s=k20201202; t=1652935293;
+        bh=MNXiJdMyPXBvGfEmIk8Ms7ae57/nY6VPzmK+0TnBSI0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fbGuHBRLb6LxAJqtP1XUdNdZBg6ThuU7zGlUY1wRApr8g5CGYk4SKk72pBqv95Az6
+         pzGwRuoenC5S9PItgos97THKYPbazI93felMIhFZS6KB9J1+9H8/Pjpsj243temr38
+         DiD847kG1IUMPBL0+F3ZE08VLBJGs0u6POic/x/P4e8zqE7w9zQ8fd14JQQQFhgfqQ
+         Fc7NsnmZtq0PqL9S5XIBhD/kF1wpeTJ1l9NPbOUu+RPvENB9/Pi41WMkHmO2lKpUZ4
+         La9rJzokPQMztfZcCBXgTDuUbOCMXh3bAhIIZOtUpL4s0e0db/2lbitmbLtm32dy/2
+         82dfTa4IB/k3A==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, Mark Zhang <markzhang@nvidia.com>,
+        Patrisious Haddad <phaddad@nvidia.com>
+Subject: [PATCH rdma-next v1 0/2] Add gratuitous ARP support to RDMA-CM
+Date:   Thu, 19 May 2022 07:41:21 +0300
+Message-Id: <cover.1652935014.git.leonro@nvidia.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,19 +53,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 18 May 2022 22:37:56 +0530 Harini Katakam wrote:
-> PTP one step sync packets cannot have CSUM padding and insertion in
-> SW since time stamp is inserted on the fly by HW.
-> In addition, ptp4l version 3.0 and above report an error when skb
-> timestamps are reported for packets that not processed for TX TS
-> after transmission.
-> Add a helper to identify PTP one step sync and fix the above two
-> errors. Add a common mask for PTP header flag field "twoStepflag".
-> Also reset ptp OSS bit when one step is not selected.
-> 
-> Fixes: ab91f0a9b5f4 ("net: macb: Add hardware PTP support")
-> Fixes: 653e92a9175e ("net: macb: add support for padding and fcs computation")
-> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
-> Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+From: Leon Romanovsky <leonro@nvidia.com>
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+Changelog:
+v1: 
+ * Removed special workqueue
+ * Rewrote compare_netdev_and_ip()
+v0: https://lore.kernel.org/all/cover.1649075034.git.leonro@nvidia.com
+
+In this series, Patrisious adds gratuitous ARP support to RDMA-CM, in
+order to speed up migration failover from one node to another.
+
+Thanks
+
+Patrisious Haddad (2):
+  RDMA/core: Add an rb_tree that stores cm_ids sorted by ifindex and
+    remote IP
+  RDMA/core: Add a netevent notifier to cma
+
+ drivers/infiniband/core/cma.c      | 234 +++++++++++++++++++++++++++--
+ drivers/infiniband/core/cma_priv.h |   1 +
+ include/rdma/rdma_cm.h             |   6 +
+ 3 files changed, 229 insertions(+), 12 deletions(-)
+
+-- 
+2.36.1
+

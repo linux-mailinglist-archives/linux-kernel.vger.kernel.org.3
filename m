@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62F852CCCC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D857D52CCF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiESHXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
+        id S234886AbiESHZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiESHXl (ORCPT
+        with ESMTP id S234715AbiESHY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:23:41 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9E7E1D6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:23:40 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id a23so5158579ljd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:23:40 -0700 (PDT)
+        Thu, 19 May 2022 03:24:59 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79488023C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:24:58 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id e78so7506192ybc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:24:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=X+M/rKycNyEYq7mDVzTSNot/YX2q43M/ax40JXZzzrY=;
-        b=UzL10+ibxu0Za8wZRcb3fjPhjV6VyMwfbhItChQRYpBSKGjoQuvAHeRuLzk2gBOcDI
-         f8+QblbVAaEMnOOowRDst7vk+QPOlC9pmCTA1lRNFNdyyO3GzgqqUsNFpV/DcWOmwoMA
-         dFn3FThgLfhdXn3gXYOmxZ/x97tess6zjwjnj8D5zdDdjCtIJDNNwK6Jk8Y9J6BWuIVq
-         qtnY6vc3PonNEO8EJljAim+eBDtaG/4/UUD1W+26t53iFd+3cU8TclHXZPRh0Hg35C5M
-         B2ZQj6JWvlliPmLQviUcRnTkBadC97dT9Pg4RJ9exrfzC1sVLBBadv99md7E7uORfs4i
-         it2A==
+        d=konsulko.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6QjAwwxwtAPBPx+OeTR5L/KL5q3yUlrIq0gFBmYE7r8=;
+        b=MV73efXzQNZHid3RSq8DxrFnQffNHwbjltUA792xVO8th6yvXTPQ0021TSNky6MRS/
+         ELvAlkVAq/K4PV7sXYbiseqyl9svMlpQf0l6Hrgzm7qkEFpPjpBiokBx0oFxJ9EMhIFi
+         zFpRfgXtbZEDPYwRso06NoVufse1OzIx7R4Q0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=X+M/rKycNyEYq7mDVzTSNot/YX2q43M/ax40JXZzzrY=;
-        b=4JRBm6PHMQiHbE2vo7roBb85Tt7FrfGN2QwlXlbLlBv7E3YFb294yoDNI25DbGcXHg
-         vxJUqI/IBujY5oSTjpfF5vtBHMRq0edDoDeOqdI3EUsxU7xN8+hts7i6KV2SnGhRKxxf
-         6tDUjSB4CY3aVlRwK2G4qm/67PQROwgwpo+SE94sPFPoFRYUXivj0x3LFo9GZB47YFfw
-         xeo5w9Mf4WRDmmU9o3fobgj9AEUelFVDOrO/epRgK9oKdVMTD8WhCSJLjcdhk0SiLoZN
-         UiFE+9sfpWx8lyeyenABEo73AnU6qe2GvQCijqpJtMXCGG8fl2Rqy3R8udvtGWqmVE14
-         gRng==
-X-Gm-Message-State: AOAM5309tRY4xPtbD5WKP8LycfsKBtFTI4AL4f0/03dznR0QcQbzdkxl
-        cKHWJ4x9bv6JqHSY06H5b9KNHtmdSpcIj02V
-X-Google-Smtp-Source: ABdhPJxgX9jTZGvt6mG1yVs6UHIRABoohk2r/88VsRZLTWVK1hyx8Q7mYWMhrzwq+AN/+i7TJ9vQEQ==
-X-Received: by 2002:a2e:b6d3:0:b0:24f:3144:6349 with SMTP id m19-20020a2eb6d3000000b0024f31446349mr1792982ljo.50.1652945020122;
-        Thu, 19 May 2022 00:23:40 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f14-20020ac24e4e000000b0047255d2115esm184288lfr.141.2022.05.19.00.23.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 00:23:39 -0700 (PDT)
-Message-ID: <d17e73c7-058f-d269-1737-4152cd85078e@linaro.org>
-Date:   Thu, 19 May 2022 09:23:38 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6QjAwwxwtAPBPx+OeTR5L/KL5q3yUlrIq0gFBmYE7r8=;
+        b=Qp4RUYGOT0mGkF5sTioE/UuBgwKcfs5bQAgEOm3aucbe9BtEOh/M5MEv/+ldVX0J1G
+         fGgMxiz/aCb9TwsWQnb320dOdTPTElf0F73hShgHJqyL9RoWVPH3is8jOG1TlaDd2rIN
+         UqOSsQZdUVRAxvH3jz3RrETLZ04pe5dASwfbhSEzz1YQ/a0AEv8VIKqcQb6SHfP9KTKi
+         5m8vd8auwX0lY/dro/mU2nLkN7XLYHasAw94Jv6gjlOCJTTZim+LNN5vf6ZxtAey69bG
+         +zJPJMVB1Rb4yFFLt9SAcVkCrZHUi687MM3bh6xOZQO+0uVTh3MDkobN0iitqgRx5WdU
+         DP1A==
+X-Gm-Message-State: AOAM533cVdXJK5EHnpeC+/ewBYkiMmFhIkfw0taNa/nWw1risX7s8qBs
+        kISDJ99YxXqgVvbksOKB6WKhV0G1nSYPp/GMrAmVPA==
+X-Google-Smtp-Source: ABdhPJxo7X7HyndWjvS5Xv8GzWtggOsI1vFJxK7ql2rSaufrLJn2KFvOfhB3bkSKLj082fcG8X4a/8OhUocsP01ptDo=
+X-Received: by 2002:a05:6902:f:b0:64d:84a6:2386 with SMTP id
+ l15-20020a056902000f00b0064d84a62386mr2878273ybh.437.1652945097903; Thu, 19
+ May 2022 00:24:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 1/8] clk: qcom: alpha-pll: correct kerneldoc
-Content-Language: en-US
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-References: <20220501103520.111561-1-krzysztof.kozlowski@linaro.org>
- <cce59517-e9f0-2e29-038b-ba2f0faa075f@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cce59517-e9f0-2e29-038b-ba2f0faa075f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220429064051.61552-1-linmiaohe@huawei.com> <20220429064051.61552-9-linmiaohe@huawei.com>
+In-Reply-To: <20220429064051.61552-9-linmiaohe@huawei.com>
+From:   Vitaly Wool <vitaly.wool@konsulko.com>
+Date:   Thu, 19 May 2022 09:24:46 +0200
+Message-ID: <CAM4kBB+xqh0zUJDHUaSNoDUz6nUK11CkPL0XfwEPJMA7xXEKXQ@mail.gmail.com>
+Subject: Re: [PATCH 8/9] mm/z3fold: fix z3fold_reclaim_page races with z3fold_free
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,41 +64,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2022 06:30, Vladimir Zapolskiy wrote:
-> Hi Krzysztof,
-> 
-> On 5/1/22 13:35, Krzysztof Kozlowski wrote:
->> Correct kerneldoc warning:
->>
->>    drivers/clk/qcom/clk-alpha-pll.c:1450:
->>      warning: expecting prototype for clk_lucid_pll_configure(). Prototype was for clk_trion_pll_configure() instead
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>   drivers/clk/qcom/clk-alpha-pll.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
->> index 4406cf609aae..969d98fca5df 100644
->> --- a/drivers/clk/qcom/clk-alpha-pll.c
->> +++ b/drivers/clk/qcom/clk-alpha-pll.c
->> @@ -1439,7 +1439,7 @@ const struct clk_ops clk_alpha_pll_postdiv_fabia_ops = {
->>   EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_fabia_ops);
->>   
->>   /**
->> - * clk_lucid_pll_configure - configure the lucid pll
->> + * clk_trion_pll_configure - configure the lucid pll
->>    *
->>    * @pll: clk alpha pll
->>    * @regmap: register map
-> 
-> this fix is done earlier, unfortunately the inclusion is still pending, in v5 series:
-> 
-> https://lore.kernel.org/linux-clk/20220509090143.4140999-1-vladimir.zapolskiy@linaro.org/
+On Fri, Apr 29, 2022 at 8:40 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>
+> Think about the below scene:
+>
+> CPU1                            CPU2
+> z3fold_reclaim_page             z3fold_free
+>  spin_lock(&pool->lock)          get_z3fold_header -- hold page_lock
+>  kref_get_unless_zero
+>                                  kref_put--zhdr->refcount can be 1 now
+>  !z3fold_page_trylock
+>   kref_put -- zhdr->refcount is 0 now
+>    release_z3fold_page
+>     WARN_ON(!list_empty(&zhdr->buddy)); -- we're on buddy now!
+>     spin_lock(&pool->lock); -- deadlock here!
+>
+> z3fold_reclaim_page might race with z3fold_free and will lead to pool lock
+> deadlock and zhdr buddy non-empty warning. To fix this, defer getting the
+> refcount until page_lock is held just like what __z3fold_alloc does. Note
+> this has the side effect that we won't break the reclaim if we meet a soon
+> to be released z3fold page now.
+>
+> Fixes: dcf5aedb24f8 ("z3fold: stricter locking and more careful reclaim")
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/z3fold.c | 18 +++---------------
+>  1 file changed, 3 insertions(+), 15 deletions(-)
+>
+> diff --git a/mm/z3fold.c b/mm/z3fold.c
+> index 4a3cd2ff15b0..a7769befd74e 100644
+> --- a/mm/z3fold.c
+> +++ b/mm/z3fold.c
+> @@ -519,13 +519,6 @@ static void __release_z3fold_page(struct z3fold_header *zhdr, bool locked)
+>         atomic64_dec(&pool->pages_nr);
+>  }
+>
+> -static void release_z3fold_page(struct kref *ref)
+> -{
+> -       struct z3fold_header *zhdr = container_of(ref, struct z3fold_header,
+> -                                               refcount);
+> -       __release_z3fold_page(zhdr, false);
+> -}
+> -
+>  static void release_z3fold_page_locked(struct kref *ref)
+>  {
+>         struct z3fold_header *zhdr = container_of(ref, struct z3fold_header,
+> @@ -1317,12 +1310,7 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
+>                                 break;
+>                         }
+>
+> -                       if (kref_get_unless_zero(&zhdr->refcount) == 0) {
+> -                               zhdr = NULL;
+> -                               break;
+> -                       }
+>                         if (!z3fold_page_trylock(zhdr)) {
+> -                               kref_put(&zhdr->refcount, release_z3fold_page);
+>                                 zhdr = NULL;
+>                                 continue; /* can't evict at this point */
+>                         }
+> @@ -1333,14 +1321,14 @@ static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
+>                          */
+>                         if (zhdr->foreign_handles ||
+>                             test_and_set_bit(PAGE_CLAIMED, &page->private)) {
+> -                               if (!kref_put(&zhdr->refcount,
+> -                                               release_z3fold_page_locked))
+> -                                       z3fold_page_unlock(zhdr);
+> +                               z3fold_page_unlock(zhdr);
+>                                 zhdr = NULL;
+>                                 continue; /* can't evict such page */
+>                         }
+>                         list_del_init(&zhdr->buddy);
+>                         zhdr->cpu = -1;
+> +                       /* See comment in __z3fold_alloc. */
+> +                       kref_get(&zhdr->refcount);
+>                         break;
+>                 }
 >
 
-I'll skip this one.
-
-
-Best regards,
-Krzysztof
+Reviewed-by: Vitaly Wool <vitaly.wool@konsulko.com>
+> --
+> 2.23.0
+>

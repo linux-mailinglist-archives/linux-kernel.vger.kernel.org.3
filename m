@@ -2,106 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF3E52D156
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD1952D15E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237354AbiESLWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S237377AbiESLXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbiESLWK (ORCPT
+        with ESMTP id S232529AbiESLXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:22:10 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AA83EB9F;
-        Thu, 19 May 2022 04:22:09 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id y20so4309976qvx.3;
-        Thu, 19 May 2022 04:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7BdjFDXDnxUjm7j6k5q7Kxu4c2cwbFqYPCxZS6zuqxo=;
-        b=hMKm6jsKzjqEdOGCZHwzBQGiShlBMZDUYRYcrKTYGTi4eL7ik6xnF1uVrU2MqRdwGl
-         4SeGSen+5/FFe+xbHzwlrAWsjksnoMUB4D6g+IaveRs7Kdus1hiyz7Cr0ILUTS/kXzh+
-         4rrAvGPRPCYo/1VHnb2C9sZqA1SL5z8KaAZFNUEodWgnVVmQJfBZQyuP1UfWfBfBOr/7
-         rB9Ppq5D4vDRV0xJaTeaEWc8SZKbR0IkcAW1DweFeOncjiOT5Gzle+D2hr8RkyriIuxr
-         7MtIWxdJH43PLAk+49MXfFdECCTNSXifgWEk4KRwBagsa2GFES1mvH6y5EIxevHzNzoy
-         /stw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7BdjFDXDnxUjm7j6k5q7Kxu4c2cwbFqYPCxZS6zuqxo=;
-        b=JtueDx0gPyep8hsztLa1JRqmdq8/7gdArmYwWQn68skI1NwSRoX7ihqewIEXYjN5AM
-         7pwxKiHSHJmGI+C0sn3NN3Z1Qh/E1iT+P8vqs6r5E/bjGbzSWr6lR/KEdd9D9ielvDMg
-         TbKz7VRhOSxXgwqob6eHs8GLxhlkMmxCCyTqv+KU9YtKKP+N/mBWrJXRFozOyeaNRY9b
-         8+OR9hM8uyp1G6e+vKmyoLRRR8mPl6z+wALEwZW/T6/lUBV2dcZF+SmAJqekH8BJ7jFw
-         TgbXN5JekjbXHHMc+HuOdqMXMniWaS4ArxHo12Hpq886ccEnKQqifMvm4rCBNPSXKSgk
-         5Agg==
-X-Gm-Message-State: AOAM532VIrziIje/XApV77YSA316CGz5ZNDEnitzY/J3mNRpmgnjxib6
-        oIiM71IW5LjKGaPPn06Je5J3DrP9+tTEIYlN7oM=
-X-Google-Smtp-Source: ABdhPJxLhdpP5H29s1X67RNrL/m+5o9e0OA57DOxQ1UYzD82HkG4/G++oXvkN3CyBMkVW6rslRr7hPgK/Q/zvRMRtmg=
-X-Received: by 2002:a05:6214:48f:b0:461:d4fe:4eed with SMTP id
- ay15-20020a056214048f00b00461d4fe4eedmr3434798qvb.48.1652959328792; Thu, 19
- May 2022 04:22:08 -0700 (PDT)
+        Thu, 19 May 2022 07:23:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F63A43ACE;
+        Thu, 19 May 2022 04:23:11 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id DEC2A1F86B;
+        Thu, 19 May 2022 11:23:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652959389; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4XMs2PfJJxMSCtw3+dlKPeSG6t2757cBDz7HszTEFRA=;
+        b=Jfd0Hdx/+XAXVGBIGSB71o9MzgnDAVNawEmkvzsB+T+4qZBDUKedP7NIIsH/f3dlDVkAL9
+        V/d9Hwzc6lNyQPPI4k4iGdz2i6MYwcLv7yT0IzvKj8xYVgbCBi7jlxsExccAVSguYk/Tf7
+        KT+eG/HIcFZjZQPogPiJhFuV8M8Wk9o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652959389;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4XMs2PfJJxMSCtw3+dlKPeSG6t2757cBDz7HszTEFRA=;
+        b=vjAt2hndsGH5SowgV5vGFGaa5KhU4Trw/9za9vF1e6TlWkxcbRvX5cjD6/s8b6s0zFdx8F
+        0gfrocjMErZCROAw==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C87A02C141;
+        Thu, 19 May 2022 11:23:09 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 841EEA062F; Thu, 19 May 2022 13:23:09 +0200 (CEST)
+Date:   Thu, 19 May 2022 13:23:09 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next 8/8] block, bfq: cleanup
+ bfq_bfqq_handle_idle_busy_switch()
+Message-ID: <20220519112309.nhbulnc5iz424ohl@quack3.lan>
+References: <20220514090522.1669270-1-yukuai3@huawei.com>
+ <20220514090522.1669270-9-yukuai3@huawei.com>
 MIME-Version: 1.0
-References: <20220518184825.1034976-1-robimarko@gmail.com> <20220518184825.1034976-6-robimarko@gmail.com>
- <015c60e9-78f6-f0f0-5af0-733a78fbdf65@linaro.org>
-In-Reply-To: <015c60e9-78f6-f0f0-5af0-733a78fbdf65@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Thu, 19 May 2022 13:21:57 +0200
-Message-ID: <CAOX2RU4--VULzvc9NGc4zWV4jpD+riM+9Ff8mqU834a6vQFc5Q@mail.gmail.com>
-Subject: Re: [PATCH v4 6/6] arm64: dts: qcom: Add PMP8074 DTSI
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        lgirdwood@gmail.com, broonie@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220514090522.1669270-9-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 at 13:07, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 18/05/2022 20:48, Robert Marko wrote:
-> > PMP8074 is a companion PMIC to the Qualcomm IPQ8074 series that is
-> > controlled via SPMI.
-> >
-> > Since we now have support for the regulators inside of it add DTSI
-> > for it.
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/pmp8074.dtsi | 38 +++++++++++++++++++++++++++
->
-> This file is not referenced by anything, thus not possible to compile
-> nor verify.
+On Sat 14-05-22 17:05:22, Yu Kuai wrote:
+> 'wr_or_deserves_wr' is only used in bfq_update_bfqq_wr_on_rq_arrival(),
+> which is only called from bfq_bfqq_handle_idle_busy_switch() in specific
+> code branch, thus there is no need to precaculate 'wr_or_deserves_wr'
+> each time bfq_bfqq_handle_idle_busy_switch() is called.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-That is correct, I can include it on HK01 which has an SDHCI controller
-and thus can consume L11 for VQMMC so that HS200 and higher work.
+With this patch there's the same problem as with the previous one. Some of
+the variables passed to bfq_update_bfqq_wr_on_rq_arrival() (in_burst,
+soft_rt) would actually evaluate differently later in the function.
 
-I wanted to include the nodes directly in the SoC DTSI and set L11 as VQMMC
-for SDHCI there as this is a companion PMIC and always present, but
-the established
-procedure is for the PMIC to have its own DTSI and then be included per board.
+								Honza
 
-Regards,
-Robert
->
->
-> Best regards,
-> Krzysztof
+> ---
+>  block/bfq-iosched.c | 110 +++++++++++++++++++++++++-------------------
+>  1 file changed, 62 insertions(+), 48 deletions(-)
+> 
+> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+> index 1e57d76c8dd3..cea8cb3f5ee2 100644
+> --- a/block/bfq-iosched.c
+> +++ b/block/bfq-iosched.c
+> @@ -1624,15 +1624,65 @@ static unsigned long bfq_smallest_from_now(void)
+>  	return jiffies - MAX_JIFFY_OFFSET;
+>  }
+>  
+> +/*
+> + * bfqq deserves to be weight-raised if:
+> + * - it is sync,
+> + * - it does not belong to a large burst,
+> + * - it has been idle for enough time or is soft real-time,
+> + * - is linked to a bfq_io_cq (it is not shared in any sense),
+> + * - has a default weight (otherwise we assume the user wanted
+> + *   to control its weight explicitly)
+> + *
+> + * Merged bfq_queues are kept out of weight-raising
+> + * (low-latency) mechanisms. The reason is that these queues
+> + * are usually created for non-interactive and
+> + * non-soft-real-time tasks. Yet this is not the case for
+> + * stably-merged queues. These queues are merged just because
+> + * they are created shortly after each other. So they may
+> + * easily serve the I/O of an interactive or soft-real time
+> + * application, if the application happens to spawn multiple
+> + * processes. So let also stably-merged queued enjoy weight
+> + * raising.
+> + */
+> +static bool bfqq_wr_or_deserves_wr(struct bfq_data *bfqd,
+> +				   struct bfq_queue *bfqq,
+> +				   struct request *rq,
+> +				   bool interactive, bool soft_rt)
+> +{
+> +	if (!bfqd->low_latency)
+> +		return false;
+> +
+> +	if (bfqq->wr_coeff > 1)
+> +		return true;
+> +
+> +	if (!bfq_bfqq_sync(bfqq))
+> +		return false;
+> +
+> +	if (!bfqq->bic && !RQ_BIC(rq)->stably_merged)
+> +		return false;
+> +
+> +	if (!interactive && !soft_rt)
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+>  static void bfq_update_bfqq_wr_on_rq_arrival(struct bfq_data *bfqd,
+>  					     struct bfq_queue *bfqq,
+>  					     unsigned int old_wr_coeff,
+> -					     bool wr_or_deserves_wr,
+> -					     bool interactive,
+> -					     bool in_burst,
+> -					     bool soft_rt)
+> -{
+> -	if (old_wr_coeff == 1 && wr_or_deserves_wr) {
+> +					     struct request *rq,
+> +					     bool interactive)
+> +{
+> +	bool in_burst = bfq_bfqq_in_large_burst(bfqq);
+> +	bool soft_rt = bfqd->bfq_wr_max_softrt_rate > 0 &&
+> +		       !BFQQ_TOTALLY_SEEKY(bfqq) &&
+> +		       !in_burst &&
+> +		       time_is_before_jiffies(bfqq->soft_rt_next_start) &&
+> +		       bfqq->dispatched == 0 &&
+> +		       bfqq->entity.new_weight == 40;
+> +
+> +	if (old_wr_coeff == 1 &&
+> +	    bfqq_wr_or_deserves_wr(bfqd, bfqq, rq, interactive, soft_rt)) {
+>  		/* start a weight-raising period */
+>  		if (interactive) {
+>  			bfqq->service_from_wr = 0;
+> @@ -1674,9 +1724,9 @@ static void bfq_update_bfqq_wr_on_rq_arrival(struct bfq_data *bfqd,
+>  		if (interactive) { /* update wr coeff and duration */
+>  			bfqq->wr_coeff = bfqd->bfq_wr_coeff;
+>  			bfqq->wr_cur_max_time = bfq_wr_duration(bfqd);
+> -		} else if (in_burst)
+> +		} else if (in_burst) {
+>  			bfqq->wr_coeff = 1;
+> -		else if (soft_rt) {
+> +		} else if (soft_rt) {
+>  			/*
+>  			 * The application is now or still meeting the
+>  			 * requirements for being deemed soft rt.  We
+> @@ -1768,44 +1818,11 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
+>  					     struct request *rq,
+>  					     bool *interactive)
+>  {
+> -	bool soft_rt, in_burst,	wr_or_deserves_wr,
+> -		idle_for_long_time = bfq_bfqq_idle_for_long_time(bfqd, bfqq);
+> +	bool in_burst = bfq_bfqq_in_large_burst(bfqq);
+> +	bool idle_for_long_time = bfq_bfqq_idle_for_long_time(bfqd, bfqq);
+>  
+> -	/*
+> -	 * bfqq deserves to be weight-raised if:
+> -	 * - it is sync,
+> -	 * - it does not belong to a large burst,
+> -	 * - it has been idle for enough time or is soft real-time,
+> -	 * - is linked to a bfq_io_cq (it is not shared in any sense),
+> -	 * - has a default weight (otherwise we assume the user wanted
+> -	 *   to control its weight explicitly)
+> -	 */
+> -	in_burst = bfq_bfqq_in_large_burst(bfqq);
+> -	soft_rt = bfqd->bfq_wr_max_softrt_rate > 0 &&
+> -		!BFQQ_TOTALLY_SEEKY(bfqq) &&
+> -		!in_burst &&
+> -		time_is_before_jiffies(bfqq->soft_rt_next_start) &&
+> -		bfqq->dispatched == 0 &&
+> -		bfqq->entity.new_weight == 40;
+>  	*interactive = !in_burst && idle_for_long_time &&
+>  		bfqq->entity.new_weight == 40;
+> -	/*
+> -	 * Merged bfq_queues are kept out of weight-raising
+> -	 * (low-latency) mechanisms. The reason is that these queues
+> -	 * are usually created for non-interactive and
+> -	 * non-soft-real-time tasks. Yet this is not the case for
+> -	 * stably-merged queues. These queues are merged just because
+> -	 * they are created shortly after each other. So they may
+> -	 * easily serve the I/O of an interactive or soft-real time
+> -	 * application, if the application happens to spawn multiple
+> -	 * processes. So let also stably-merged queued enjoy weight
+> -	 * raising.
+> -	 */
+> -	wr_or_deserves_wr = bfqd->low_latency &&
+> -		(bfqq->wr_coeff > 1 ||
+> -		 (bfq_bfqq_sync(bfqq) &&
+> -		  (bfqq->bic || RQ_BIC(rq)->stably_merged) &&
+> -		   (*interactive || soft_rt)));
+>  
+>  	/*
+>  	 * If bfqq happened to be activated in a burst, but has been
+> @@ -1840,11 +1857,8 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
+>  		if (time_is_before_jiffies(bfqq->split_time +
+>  					   bfqd->bfq_wr_min_idle_time)) {
+>  			bfq_update_bfqq_wr_on_rq_arrival(bfqd, bfqq,
+> -							 old_wr_coeff,
+> -							 wr_or_deserves_wr,
+> -							 *interactive,
+> -							 in_burst,
+> -							 soft_rt);
+> +							 old_wr_coeff, rq,
+> +							 *interactive);
+>  
+>  			if (old_wr_coeff != bfqq->wr_coeff)
+>  				bfqq->entity.prio_changed = 1;
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

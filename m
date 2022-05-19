@@ -2,199 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2E052E042
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F8A52E045
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245668AbiESXGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 19:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S245675AbiESXIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbiESXGL (ORCPT
+        with ESMTP id S232543AbiESXIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 19:06:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0DCDF93;
-        Thu, 19 May 2022 16:06:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A67DAB828CA;
-        Thu, 19 May 2022 23:06:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BADC34113;
-        Thu, 19 May 2022 23:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653001566;
-        bh=KMqSVGwJXZoPClyc0+dns0g5106HUQ8FYrDrNyZ1+Ss=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fBlEfGZoJUrD9oClATZzZKLN8ZFJlQB8Dxuz5bkukbY+dXdMi2PGWRdrHIrfMtylZ
-         rAm/IQI6ygK94t2HHXYO51oagM4DGsDy6VWUgkZ0YRqX5fb/QlSfRQIB2R6nvprPNd
-         2Db0MBMJTladGran2Xl5jsm6oZEanP6WXFxRWT9G2uDo2fFTWfKp208ptQxqQHTlGR
-         qkd/+Mmx9fTNs0Nu9YOkfWfR5yS5pFsr9CtBeveGBTnqzfiahvMg7wmLh4jlL5lt8r
-         mz8b9uqFZpp/qbZ5cq5VOn9Cr0M1y8iKEEgwhwytFoF4WlY7Q17f6vID4KNjCwS15r
-         +n9QH9f76eLrw==
-Date:   Thu, 19 May 2022 16:06:05 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-xfs@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [RFC PATCH v2 1/7] statx: add I/O alignment information
-Message-ID: <YobNXbYnhBiqniTH@magnolia>
-References: <20220518235011.153058-1-ebiggers@kernel.org>
- <20220518235011.153058-2-ebiggers@kernel.org>
+        Thu, 19 May 2022 19:08:20 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79136D4107
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:08:19 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id d137so11454162ybc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Fxy4QJznUOl4kPhc2AaAegX/3L3vuWRXWE2XSfVA+FE=;
+        b=p/ApH+Gj0UaEr8wl3rL9VS/gxCxvdwU1kJ3NSDovYkqS3BNtKmWi1MJV977SDCeOe+
+         UGHg7PEhlbErqYlBcb04+P4o0vzCnRpIDv9/ip5ZKEHTspQCaRALa86F5aAyphhkJySi
+         JcaEYrW8kXYBBkQvoG9PeTJTZTfwtiP05D41eMd5gFmtCEV75iJ4DNc+NKAF4gzW5agS
+         tM73oezDsXkUIQWvYgOnBh0VliRyg3uJHly3wZlXbY8qV+U+wZXZjHn1Se25d9Lpkyn2
+         YtzaizC+0AJRcKJKwtfFXOizlxyAiCpXZTsonX0TwXvB+eN3R/jEEnXlNPwBRxE+Ws3A
+         3a9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Fxy4QJznUOl4kPhc2AaAegX/3L3vuWRXWE2XSfVA+FE=;
+        b=6rPP1mlZO06IF/A6M9fMT51kUZKFuhZogXStsPGcJiESZwjlVsdmqaKPgxSveXd9wg
+         fsV7AmZkpZFMvNIq6o+qeBWEbFzN4HB6PdmtwBEh9KMDj14w1JwezcVF36DZshnBtIid
+         J/yFlpU5j0gjASAMp4dt9QukCnEXTsuGlpt4YEd9M/ArRkNxy5c8FucYJ2wYbBsgjMe7
+         Yzw5cH+UAQ7ffobCVrrHgvRp4JVRFCEURlVenkMuRqEGxRWygo+nyRIgNVEnTTb1mfUq
+         6As0kDFLDmAB3SfO3mjielLlF9QkmY6a4qfMPmcq8FZVJAnPNuYHZ6xapwsA4C2WSd3O
+         zlBg==
+X-Gm-Message-State: AOAM5314sr0WG1DKGx3ghCzLwGRxdFVBMhFQ8PvCYu1wrCZX/Q06aWjQ
+        DMtYpuDiNsvcTO9eJyICiPSVpyquCntAc732H6qsyQ==
+X-Google-Smtp-Source: ABdhPJydw2am3vqXKXKIErllvbn2szwxWLYEx6vhqZ+/Se7Uq5zTZg0qmx75BsV7+0JkSj4ZFV4eCfGncR0tV8MKrtc=
+X-Received: by 2002:a25:1c0b:0:b0:64d:6b11:6a32 with SMTP id
+ c11-20020a251c0b000000b0064d6b116a32mr7102438ybc.441.1653001698369; Thu, 19
+ May 2022 16:08:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518235011.153058-2-ebiggers@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220516075619.1277152-1-surenb@google.com> <20220519202149.3ywynqhbxlzp6uyn@revolver>
+ <CAJuCfpHeAXSLjrXxgRaTXOEPPipcFq5MhP=uU0wkqeBoPUAcsQ@mail.gmail.com> <20220519225614.r6ey3bl32c3gbih5@revolver>
+In-Reply-To: <20220519225614.r6ey3bl32c3gbih5@revolver>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 19 May 2022 16:08:07 -0700
+Message-ID: <CAJuCfpGtnVdrYs4LW+joxbVg_o6=KuHf18GnyWxyOMYWSjOTQg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] mm: drop oom code from exit_mmap
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "mhocko@suse.com" <mhocko@suse.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "guro@fb.com" <guro@fb.com>,
+        "minchan@kernel.org" <minchan@kernel.org>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kernel-team@android.com" <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 04:50:05PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Traditionally, the conditions for when DIO (direct I/O) is supported
-> were fairly simple: filesystems either supported DIO aligned to the
-> block device's logical block size, or didn't support DIO at all.
-> 
-> However, due to filesystem features that have been added over time (e.g,
-> data journalling, inline data, encryption, verity, compression,
-> checkpoint disabling, log-structured mode), the conditions for when DIO
-> is allowed on a file have gotten increasingly complex.  Whether a
-> particular file supports DIO, and with what alignment, can depend on
-> various file attributes and filesystem mount options, as well as which
-> block device(s) the file's data is located on.
-> 
-> XFS has an ioctl XFS_IOC_DIOINFO which exposes this information to
-> applications.  However, as discussed
-> (https://lore.kernel.org/linux-fsdevel/20220120071215.123274-1-ebiggers@kernel.org/T/#u),
-> this ioctl is rarely used and not known to be used outside of
-> XFS-specific code.  It also was never intended to indicate when a file
-> doesn't support DIO at all, and it only exposes the minimum I/O
-> alignment, not the optimal I/O alignment which has been requested too.
-> 
-> Therefore, let's expose this information via statx().  Add the
-> STATX_IOALIGN flag and three fields associated with it:
-> 
-> * stx_mem_align_dio: the alignment (in bytes) required for user memory
->   buffers for DIO, or 0 if DIO is not supported on the file.
-> 
-> * stx_offset_align_dio: the alignment (in bytes) required for file
->   offsets and I/O segment lengths for DIO, or 0 if DIO is not supported
->   on the file.  This will only be nonzero if stx_mem_align_dio is
->   nonzero, and vice versa.
-> 
-> * stx_offset_align_optimal: the alignment (in bytes) suggested for file
->   offsets and I/O segment lengths to get optimal performance.  This
->   applies to both DIO and buffered I/O.  It differs from stx_blocksize
->   in that stx_offset_align_optimal will contain the real optimum I/O
->   size, which may be a large value.  In contrast, for compatibility
->   reasons stx_blocksize is the minimum size needed to avoid page cache
->   read/write/modify cycles, which may be much smaller than the optimum
->   I/O size.  For more details about the motivation for this field, see
->   https://lore.kernel.org/r/20220210040304.GM59729@dread.disaster.area
+On Thu, May 19, 2022 at 3:56 PM Liam Howlett <liam.howlett@oracle.com> wrote:
+>
+> * Suren Baghdasaryan <surenb@google.com> [220519 17:33]:
+> > On Thu, May 19, 2022 at 1:22 PM Liam Howlett <liam.howlett@oracle.com> wrote:
+> > >
+> > > * Suren Baghdasaryan <surenb@google.com> [220516 03:56]:
+> > > > The primary reason to invoke the oom reaper from the exit_mmap path used
+> > > > to be a prevention of an excessive oom killing if the oom victim exit
+> > > > races with the oom reaper (see [1] for more details). The invocation has
+> > > > moved around since then because of the interaction with the munlock
+> > > > logic but the underlying reason has remained the same (see [2]).
+> > > >
+> > > > Munlock code is no longer a problem since [3] and there shouldn't be
+> > > > any blocking operation before the memory is unmapped by exit_mmap so
+> > > > the oom reaper invocation can be dropped. The unmapping part can be done
+> > > > with the non-exclusive mmap_sem and the exclusive one is only required
+> > > > when page tables are freed.
+> > > >
+> > > > Remove the oom_reaper from exit_mmap which will make the code easier to
+> > > > read. This is really unlikely to make any observable difference although
+> > > > some microbenchmarks could benefit from one less branch that needs to be
+> > > > evaluated even though it almost never is true.
+> > > >
+> > > > [1] 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
+> > > > [2] 27ae357fa82b ("mm, oom: fix concurrent munlock and oom reaper unmap, v3")
+> > > > [3] a213e5cf71cb ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
+> > > >
+> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > > Acked-by: Michal Hocko <mhocko@suse.com>
+> > > > ---
+> > > >  include/linux/oom.h |  2 --
+> > > >  mm/mmap.c           | 31 ++++++++++++-------------------
+> > > >  mm/oom_kill.c       |  2 +-
+> > > >  3 files changed, 13 insertions(+), 22 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/oom.h b/include/linux/oom.h
+> > > > index 2db9a1432511..6cdf0772dbae 100644
+> > > > --- a/include/linux/oom.h
+> > > > +++ b/include/linux/oom.h
+> > > > @@ -106,8 +106,6 @@ static inline vm_fault_t check_stable_address_space(struct mm_struct *mm)
+> > > >       return 0;
+> > > >  }
+> > > >
+> > > > -bool __oom_reap_task_mm(struct mm_struct *mm);
+> > > > -
+> > > >  long oom_badness(struct task_struct *p,
+> > > >               unsigned long totalpages);
+> > > >
+> > > > diff --git a/mm/mmap.c b/mm/mmap.c
+> > > > index 313b57d55a63..ded42150e706 100644
+> > > > --- a/mm/mmap.c
+> > > > +++ b/mm/mmap.c
+> > > > @@ -3105,30 +3105,13 @@ void exit_mmap(struct mm_struct *mm)
+> > > >       /* mm's last user has gone, and its about to be pulled down */
+> > > >       mmu_notifier_release(mm);
+> > > >
+> > > > -     if (unlikely(mm_is_oom_victim(mm))) {
+> > > > -             /*
+> > > > -              * Manually reap the mm to free as much memory as possible.
+> > > > -              * Then, as the oom reaper does, set MMF_OOM_SKIP to disregard
+> > > > -              * this mm from further consideration.  Taking mm->mmap_lock for
+> > > > -              * write after setting MMF_OOM_SKIP will guarantee that the oom
+> > > > -              * reaper will not run on this mm again after mmap_lock is
+> > > > -              * dropped.
+> > > > -              *
+> > > > -              * Nothing can be holding mm->mmap_lock here and the above call
+> > > > -              * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
+> > > > -              * __oom_reap_task_mm() will not block.
+> > > > -              */
+> > > > -             (void)__oom_reap_task_mm(mm);
+> > > > -             set_bit(MMF_OOM_SKIP, &mm->flags);
+> > > > -     }
+> > > > -
+> > > > -     mmap_write_lock(mm);
+> > > > +     mmap_read_lock(mm);
+> > > >       arch_exit_mmap(mm);
+> > >
+> > > arch_exit_mmap() was called under the write lock before, is it safe to
+> > > call it under the read lock?
+> >
+> > Ah, good catch. I missed at least one call chain which I believe would
+> > require arch_exit_mmap() to be called under write lock:
+> >
+> > arch_exit_mmap
+> >     ldt_arch_exit_mmap
+> >         free_ldt_pgtables
+> >             free_pgd_range
+> >
+> > I'll need to check whether arch_exit_mmap() has to be called before
+> > unmap_vmas(). If not, we could move it further down when we hold the
+> > write lock.
+> > Andrew, please remove this patchset from your tree for now until I fix this.
+> >
+> > >
+> > > >
+> > > >       vma = mm->mmap;
+> > > >       if (!vma) {
+> > > >               /* Can happen if dup_mmap() received an OOM */
+> > > > -             mmap_write_unlock(mm);
+> > > > +             mmap_read_unlock(mm);
+> > > >               return;
+> > > >       }
+> > > >
+> > > > @@ -3138,6 +3121,16 @@ void exit_mmap(struct mm_struct *mm)
+> > > >       /* update_hiwater_rss(mm) here? but nobody should be looking */
+> > > >       /* Use -1 here to ensure all VMAs in the mm are unmapped */
+> > > >       unmap_vmas(&tlb, vma, 0, -1);
+> > > > +     mmap_read_unlock(mm);
+> > > > +
+> > > > +     /*
+> > > > +      * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
+> > > > +      * because the memory has been already freed. Do not bother checking
+> > > > +      * mm_is_oom_victim because setting a bit unconditionally is cheaper.
+> > > > +      */
+> > > > +     set_bit(MMF_OOM_SKIP, &mm->flags);
+> > > > +
+> > > > +     mmap_write_lock(mm);
+> > >
+> > > Is there a race here?  We had a VMA but after the read lock was dropped,
+> > > could the oom killer cause the VMA to be invalidated?  I don't think so
+> > > but the comment above about dup_mmap() receiving an OOM makes me
+> > > question it.  The code before kept the write lock from when the VMA was
+> > > found until the end of the mm edits - and it had the check for !vma
+> > > within the block itself.  We are also hiding it from the oom killer
+> > > outside the read lock so it is possible for oom to find it in that
+> > > window, right?
+> >
+> > When I was trying to understand that comment and looked into
+> > dup_mmap() code, my conclusion was that this check was there to
+> > protect us from the case when dup_mmap() gets interrupted and leaves
+> > mm->mmap=NULL. So, in a sense it was not really a race with OOM killer
+> > but an interrupted dup_mmap() case. So, once we checked it above we
+> > don't need to recheck again under write lock. When I asked Michal
+> > about this he was in agreement but it's possible we overlooked some
+> > corner case. If so, please let me know and I can add this check here.
+>
+> I didn't see how it was a problem either, neither of the other entry
+> points modify the vma linked list/tree.
+>
+> >
+> > >
+> > > Could we just unconditionally set the skip bit before taking a write
+> > > lock for the duration of the exit?  I'm probably missing your reason for
+> > > doing it this way.
+> >
+> > That's what I'm doing - unconditionally setting MMF_OOM_SKIP before
+> > taking the write lock. Did I miss something?
+>
+> Sorry, I meant to type "before the read lock".  I think you answered
+> this in the other thread though.  I think you want the oom killer and
+> process_mrelease to be able to run in parallel to the exiting of the
+> task?  If so, is it worth all tasks taking the read lock and then
+> dropping it to allow this rare case?
 
-Hmm.  So I guess this is supposed to be the filesystem's best guess at
-the IO size that will minimize RMW cycles in the entire stack?  i.e. if
-the user does not want RMW of pagecache pages, of file allocation units
-(if COW is enabled), of RAID stripes, or in the storage itself, then it
-should ensure that all IOs are aligned to this value?
+In the usual case the lock should be uncontended, so should not be an
+issue I think.
 
-I guess that means for XFS it's effectively max(pagesize, i_blocksize,
-bdev io_opt, sb_width, and (pretend XFS can reflink the realtime volume)
-the rt extent size)?  I didn't see a manpage update for statx(2) but
-that's mostly what I'm interested in. :)
-
-Looking ahead, it looks like the ext4/f2fs implementations only seem to
-be returning max(i_blocksize, bdev io_opt)?  But not the pagesize?  Did
-I misunderstood this, then?
-
-(The plumbing changes in this patch look ok.)
-
---D
-
-> Note that as with other statx() extensions, if STATX_IOALIGN isn't set
-> in the returned statx struct, then these new fields won't be filled in.
-> This will happen if the filesystem doesn't support STATX_IOALIGN, or if
-> the file isn't a regular file.  (It might be supported on block device
-> files in the future.)  It might also happen if the caller didn't include
-> STATX_IOALIGN in the request mask, since statx() isn't required to
-> return information that wasn't requested.
-> 
-> This commit adds the VFS-level plumbing for STATX_IOALIGN.  Individual
-> filesystems will still need to add code to support it.
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  fs/stat.c                 | 3 +++
->  include/linux/stat.h      | 3 +++
->  include/uapi/linux/stat.h | 9 +++++++--
->  3 files changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/stat.c b/fs/stat.c
-> index 5c2c94464e8b0..9d477218545b8 100644
-> --- a/fs/stat.c
-> +++ b/fs/stat.c
-> @@ -611,6 +611,9 @@ cp_statx(const struct kstat *stat, struct statx __user *buffer)
->  	tmp.stx_dev_major = MAJOR(stat->dev);
->  	tmp.stx_dev_minor = MINOR(stat->dev);
->  	tmp.stx_mnt_id = stat->mnt_id;
-> +	tmp.stx_mem_align_dio = stat->mem_align_dio;
-> +	tmp.stx_offset_align_dio = stat->offset_align_dio;
-> +	tmp.stx_offset_align_optimal = stat->offset_align_optimal;
->  
->  	return copy_to_user(buffer, &tmp, sizeof(tmp)) ? -EFAULT : 0;
->  }
-> diff --git a/include/linux/stat.h b/include/linux/stat.h
-> index 7df06931f25d8..48b8b1ad1567c 100644
-> --- a/include/linux/stat.h
-> +++ b/include/linux/stat.h
-> @@ -50,6 +50,9 @@ struct kstat {
->  	struct timespec64 btime;			/* File creation time */
->  	u64		blocks;
->  	u64		mnt_id;
-> +	u32		mem_align_dio;
-> +	u32		offset_align_dio;
-> +	u32		offset_align_optimal;
->  };
->  
->  #endif
-> diff --git a/include/uapi/linux/stat.h b/include/uapi/linux/stat.h
-> index 1500a0f58041a..f822b23e81091 100644
-> --- a/include/uapi/linux/stat.h
-> +++ b/include/uapi/linux/stat.h
-> @@ -124,9 +124,13 @@ struct statx {
->  	__u32	stx_dev_minor;
->  	/* 0x90 */
->  	__u64	stx_mnt_id;
-> -	__u64	__spare2;
-> +	__u32	stx_mem_align_dio;	/* Memory buffer alignment for direct I/O */
-> +	__u32	stx_offset_align_dio;	/* File offset alignment for direct I/O */
->  	/* 0xa0 */
-> -	__u64	__spare3[12];	/* Spare space for future expansion */
-> +	__u32	stx_offset_align_optimal; /* Optimal file offset alignment for I/O */
-> +	__u32	__spare2;
-> +	/* 0xa8 */
-> +	__u64	__spare3[11];	/* Spare space for future expansion */
->  	/* 0x100 */
->  };
->  
-> @@ -152,6 +156,7 @@ struct statx {
->  #define STATX_BASIC_STATS	0x000007ffU	/* The stuff in the normal stat struct */
->  #define STATX_BTIME		0x00000800U	/* Want/got stx_btime */
->  #define STATX_MNT_ID		0x00001000U	/* Got stx_mnt_id */
-> +#define STATX_IOALIGN		0x00002000U	/* Want/got IO alignment info */
->  
->  #define STATX__RESERVED		0x80000000U	/* Reserved for future struct statx expansion */
->  
-> -- 
-> 2.36.1
-> 
+>
+> >
+> > >
+> > > >       free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
+> > > >       tlb_finish_mmu(&tlb);
+> > > >
+> > > > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> > > > index 49d7df39b02d..36355b162727 100644
+> > > > --- a/mm/oom_kill.c
+> > > > +++ b/mm/oom_kill.c
+> > > > @@ -509,7 +509,7 @@ static DECLARE_WAIT_QUEUE_HEAD(oom_reaper_wait);
+> > > >  static struct task_struct *oom_reaper_list;
+> > > >  static DEFINE_SPINLOCK(oom_reaper_lock);
+> > > >
+> > > > -bool __oom_reap_task_mm(struct mm_struct *mm)
+> > > > +static bool __oom_reap_task_mm(struct mm_struct *mm)
+> > > >  {
+> > > >       struct vm_area_struct *vma;
+> > > >       bool ret = true;
+> > > > --
+> > > > 2.36.0.550.gb090851708-goog
+> > > >
+> > > >
+> > >
+> > > --
+> > > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+> > >
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

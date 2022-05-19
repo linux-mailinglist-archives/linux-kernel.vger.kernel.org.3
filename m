@@ -2,124 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E44C52C91C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E60152C920
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbiESBFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 21:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S232519AbiESBG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 21:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiESBFS (ORCPT
+        with ESMTP id S232437AbiESBGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 21:05:18 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36811CE16;
-        Wed, 18 May 2022 18:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652922317; x=1684458317;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FON4eDfFwoyqPsYBMR3zCyP6L0REBuQlLSooLaoyyGc=;
-  b=f2j+S3kIpG/i65ehqZXWOgRZ5ei2tkD8J8qAXC5vjhdIuKGNblOZFQNl
-   zY5q5BUpNAjp4V6K7L7F9KHVqG26CiOLuDJeT2D+qj/kA/dyPudxsgFYn
-   cCl3c0Whuf4ACHWNyw/HyzESWSzBJmqZyzN+C7Zw6R5UwXLUsf1s7Ue27
-   khAUdgVaQLRl1TwjrQkwdnemNkU2PT7tY01lcnakE4aj3bfTe9PwN/D6Y
-   JoTHF8kfeMT1QM2k8Dm7Yj60SQpqO7xwcukTXv9n7x5fby/zGEmG/7OKO
-   L30kqjsZeDDw/AcqDKUT6VuKExegX3v8RIM7ckHP+W2YDQ+AqrlBMNcFI
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="297264158"
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="297264158"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 18:05:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="523804352"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 18 May 2022 18:05:15 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrUbK-0002qT-A6;
-        Thu, 19 May 2022 01:05:14 +0000
-Date:   Thu, 19 May 2022 09:04:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Uros Bizjak <ubizjak@gmail.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Uros Bizjak <ubizjak@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH] KVM: VMX: Use try_cmpxchg64 in pi_try_set_control
-Message-ID: <202205190852.VUijQkwc-lkp@intel.com>
-References: <20220518134550.2358-1-ubizjak@gmail.com>
+        Wed, 18 May 2022 21:06:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81D73E5C6;
+        Wed, 18 May 2022 18:06:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 367AF617EF;
+        Thu, 19 May 2022 01:06:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E4CC385A9;
+        Thu, 19 May 2022 01:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652922377;
+        bh=A37qzO27clIicOaYiKS+7XcGNtBlcRdGs+YWygQldiE=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=Q1ISrQZMlC7dfffXYF2LojSw8XRR0txL3DlfV3ijVpuPFCDh/xpWfJ6Q9YNmLQ8cB
+         bOt31zuut1LXYk2EWEiMTcHWteKBs6YYiWit2LsoIf1ChT8OWizPh11zvSCt3h37rc
+         o/Zs0vZAQkDgCAEoOZ9RU4XzqV7CBeMeQ6OS1tE2Oi/v4jdEyFVa8wks8VP3oomCZx
+         b3JPlpEn7bEAT2UTulT4f/+xXkBIvh/Q+V0XBeZyUUqfLjcVLHaJtry+VANv/zARhy
+         63U8oicDVdlxmPS2FMniCnbbVrlisTOVkpnnupLhVku1I/gS1D9ONwetqJkxsjSPI7
+         O+hR72zkswG9A==
+Date:   Wed, 18 May 2022 18:06:14 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr <olekstysh@gmail.com>
+cc:     Arnd Bergmann <arnd@arndb.de>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
+        <virtualization@lists.linux-foundation.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [PATCH V2 5/7] dt-bindings: Add xen,dev-domid property description
+ for xen-grant DMA ops
+In-Reply-To: <460a746c-6b61-214b-4653-44a1430e314d@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2205181802310.1905099@ubuntu-linux-20-04-desktop>
+References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com> <1651947548-4055-6-git-send-email-olekstysh@gmail.com> <CAK8P3a2cAnXr8TDDYTiFxTWzQxa67sGnYDQRRD+=Q8_cSb1mEw@mail.gmail.com> <56e8c32d-6771-7179-005f-26ca58555659@gmail.com>
+ <CAK8P3a1YhkEZ8gcbXHEa5Bwx-4VVRJO8SUHf8=RNWRsc2Yo-+A@mail.gmail.com> <460a746c-6b61-214b-4653-44a1430e314d@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518134550.2358-1-ubizjak@gmail.com>
+Content-Type: multipart/mixed; BOUNDARY="8323329-845912708-1652922160=:1905099"
+Content-ID: <alpine.DEB.2.22.394.2205181802530.1905099@ubuntu-linux-20-04-desktop>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Uros,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Thank you for the patch! Yet something to improve:
+--8323329-845912708-1652922160=:1905099
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-ID: <alpine.DEB.2.22.394.2205181802531.1905099@ubuntu-linux-20-04-desktop>
 
-[auto build test ERROR on kvm/master]
-[also build test ERROR on mst-vhost/linux-next linux/master linus/master v5.18-rc7 next-20220518]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Thu, 19 May 2022, Oleksandr wrote:
+> > On Wed, May 18, 2022 at 5:06 PM Oleksandr <olekstysh@gmail.com> wrote:
+> > > On 18.05.22 17:32, Arnd Bergmann wrote:
+> > > > On Sat, May 7, 2022 at 7:19 PM Oleksandr Tyshchenko
+> > > > <olekstysh@gmail.com> wrote:
+> > > >    This would mean having a device
+> > > > node for the grant-table mechanism that can be referred to using the
+> > > > 'iommus'
+> > > > phandle property, with the domid as an additional argument.
+> > > I assume, you are speaking about something like the following?
+> > > 
+> > > 
+> > > xen_dummy_iommu {
+> > >      compatible = "xen,dummy-iommu";
+> > >      #iommu-cells = <1>;
+> > > };
+> > > 
+> > > virtio@3000 {
+> > >      compatible = "virtio,mmio";
+> > >      reg = <0x3000 0x100>;
+> > >      interrupts = <41>;
+> > > 
+> > >      /* The device is located in Xen domain with ID 1 */
+> > >      iommus = <&xen_dummy_iommu 1>;
+> > > };
+> > Right, that's that's the idea,
+> 
+> thank you for the confirmation
+> 
+> 
+> 
+> >   except I would not call it a 'dummy'.
+> >  From the perspective of the DT, this behaves just like an IOMMU,
+> > even if the exact mechanism is different from most hardware IOMMU
+> > implementations.
+> 
+> well, agree
+> 
+> 
+> > 
+> > > > It does not quite fit the model that Linux currently uses for iommus,
+> > > > as that has an allocator for dma_addr_t space
+> > > yes (# 3/7 adds grant-table based allocator)
+> > > 
+> > > 
+> > > > , but it would think it's
+> > > > conceptually close enough that it makes sense for the binding.
+> > > Interesting idea. I am wondering, do we need an extra actions for this
+> > > to work in Linux guest (dummy IOMMU driver, etc)?
+> > It depends on how closely the guest implementation can be made to
+> > resemble a normal iommu. If you do allocate dma_addr_t addresses,
+> > it may actually be close enough that you can just turn the grant-table
+> > code into a normal iommu driver and change nothing else.
+> 
+> Unfortunately, I failed to find a way how use grant references at the
+> iommu_ops level (I mean to fully pretend that we are an IOMMU driver). I am
+> not too familiar with that, so what is written below might be wrong or at
+> least not precise.
+> 
+> The normal IOMMU driver in Linux doesn’t allocate DMA addresses by itself, it
+> just maps (IOVA-PA) what was requested to be mapped by the upper layer. The
+> DMA address allocation is done by the upper layer (DMA-IOMMU which is the glue
+> layer between DMA API and IOMMU API allocates IOVA for PA?). But, all what we
+> need here is just to allocate our specific grant-table based DMA addresses
+> (DMA address = grant reference + offset in the page), so let’s say we need an
+> entity to take a physical address as parameter and return a DMA address (what
+> actually commit #3/7 is doing), and that’s all. So working at the dma_ops
+> layer we get exactly what we need, with the minimal changes to guest
+> infrastructure. In our case the Xen itself acts as an IOMMU.
+> 
+> Assuming that we want to reuse the IOMMU infrastructure somehow for our needs.
+> I think, in that case we will likely need to introduce a new specific IOVA
+> allocator (alongside with a generic one) to be hooked up by the DMA-IOMMU
+> layer if we run on top of Xen. But, even having the specific IOVA allocator to
+> return what we indeed need (DMA address = grant reference + offset in the
+> page) we will still need the specific minimal required IOMMU driver to be
+> present in the system anyway in order to track the mappings(?) and do nothing
+> with them, returning a success (this specific IOMMU driver should have all
+> mandatory callbacks implemented).
+> 
+> I completely agree, it would be really nice to reuse generic IOMMU bindings
+> rather than introducing Xen specific property if what we are trying to
+> implement in current patch series fits in the usage of "iommus" in Linux
+> more-less. But, if we will have to add more complexity/more components to the
+> code for the sake of reusing device tree binding, this raises a question
+> whether that’s worthwhile.
+> 
+> Or I really missed something?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Uros-Bizjak/KVM-VMX-Use-try_cmpxchg64-in-pi_try_set_control/20220518-214709
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git master
-config: i386-debian-10.3-kselftests (https://download.01.org/0day-ci/archive/20220519/202205190852.VUijQkwc-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/2af4f7c4ecfcaedf9b98ba30ee508dc0d9002955
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Uros-Bizjak/KVM-VMX-Use-try_cmpxchg64-in-pi_try_set_control/20220518-214709
-        git checkout 2af4f7c4ecfcaedf9b98ba30ee508dc0d9002955
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+I think Arnd was primarily suggesting to reuse the IOMMU Device Tree
+bindings, not necessarily the IOMMU drivers framework in Linux (although
+that would be an added bonus.)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/x86/kvm/vmx/posted_intr.c: In function 'pi_try_set_control':
->> arch/x86/kvm/vmx/posted_intr.c:45:14: error: implicit declaration of function 'try_cmpxchg64'; did you mean 'try_cmpxchg'? [-Werror=implicit-function-declaration]
-      45 |         if (!try_cmpxchg64(&pi_desc->control, pold, new))
-         |              ^~~~~~~~~~~~~
-         |              try_cmpxchg
-   cc1: some warnings being treated as errors
-
-
-vim +45 arch/x86/kvm/vmx/posted_intr.c
-
-    36	
-    37	static int pi_try_set_control(struct pi_desc *pi_desc, u64 *pold, u64 new)
-    38	{
-    39		/*
-    40		 * PID.ON can be set at any time by a different vCPU or by hardware,
-    41		 * e.g. a device.  PID.control must be written atomically, and the
-    42		 * update must be retried with a fresh snapshot an ON change causes
-    43		 * the cmpxchg to fail.
-    44		 */
-  > 45		if (!try_cmpxchg64(&pi_desc->control, pold, new))
-    46			return -EBUSY;
-    47	
-    48		return 0;
-    49	}
-    50	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I know from previous discussions with you that making the grant table
+fit in the existing IOMMU drivers model is difficult, but just reusing
+the Device Tree bindings seems feasible?
+--8323329-845912708-1652922160=:1905099--

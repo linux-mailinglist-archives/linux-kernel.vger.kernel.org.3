@@ -2,128 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A668452DAB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7501C52DAB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242257AbiESQzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
+        id S242282AbiESQzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241989AbiESQzY (ORCPT
+        with ESMTP id S242263AbiESQzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:55:24 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DAC66C84
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:55:22 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id a9so3566517pgv.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fbRv1nP7pTqnBz+sNfZ4tvpe8QTnEEoJ7rGEyN4925Q=;
-        b=NlEMnrL1wW3fdyUxfE79H9YKA08o4qU+R83BNF4EgYN1cw3zLCwLQRh0UUNy8jsgaW
-         lh5GqvoVBqk+o21K5cK+qXjAuNRBqngjQJpCjNtE0H22z4d7gNLw9px10kbPevPTCOZo
-         cm+d0+5Tl4z0B20qtEo97MXoLONED9j4gMp06GLYi8IioDmsnUosJWwH3R2UXeI50B+Y
-         Dfz9rAnYpYkgl9qP8KnBJnRgCxNPwNbXvT5v7eDKy4noIKvXGL5S6mBSB33tJTkWiaIL
-         eywS3+VPl8lSdoz2EXE2fdPxXfmOKy58HyUzW2znCkVQe921F9Kzhs0rUpz/ac4b69yM
-         G7aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fbRv1nP7pTqnBz+sNfZ4tvpe8QTnEEoJ7rGEyN4925Q=;
-        b=hZ0D3cllyaf/WeKcECiQfYCQio9VnNxgy6BI1XI2ZZMr60cyTYnuJ7FGH40OQ/yFDH
-         oVkDjgynp8njaqvhggOqYE8+l1PUOcVwKeo9PqYiWSFzw15kISq2d24kuYce1EJlU4p7
-         AYOvd3EiM3/bFi1pithpDepCc1ZYdtw141R884tX+r2q3/f2eG1gjaNaoR1+LeavUN9w
-         QtQNpPHk+h7jAhvrZmQED1WbJbZIxlWZaG5Cpx/33BkVOjMpkv9ZzKi/NLTjrRqIi+Zh
-         SU4W/WiHDbrz3c99zRav4Ww1YQ01GU8Q2+9AwIy2qMDkKhyuVwEdSQVM9Wv7tTAsO2Ck
-         +Amg==
-X-Gm-Message-State: AOAM532KtlZpdiHlUVXU8CnqbqLv6uKItlXX4gp5ig+DovcAXT1o/EZ9
-        r1BBejESEqFyETqymw+pDmGxzg==
-X-Google-Smtp-Source: ABdhPJxhTLHIK7S/JfndVkiqYIReuohqOcVCUwV7I1Rl2NWw0SBdey4MuXGnvj/UoimJME0mze89Mg==
-X-Received: by 2002:a63:1347:0:b0:3f2:8963:ca0a with SMTP id 7-20020a631347000000b003f28963ca0amr4750270pgt.424.1652979321995;
-        Thu, 19 May 2022 09:55:21 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id t9-20020aa79389000000b0051829b1595dsm4262274pfe.130.2022.05.19.09.55.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 09:55:21 -0700 (PDT)
-Date:   Thu, 19 May 2022 16:55:18 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [RFC PATCH v3 14/19] KVM: x86: rename .set_apic_access_page_addr
- to reload_apic_access_page
-Message-ID: <YoZ2dh+ZujErT5nk@google.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
- <20220427200314.276673-15-mlevitsk@redhat.com>
+        Thu, 19 May 2022 12:55:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FC5268F92
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:55:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2EFF41477;
+        Thu, 19 May 2022 09:55:32 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C430A3F718;
+        Thu, 19 May 2022 09:55:31 -0700 (PDT)
+Date:   Thu, 19 May 2022 17:55:30 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 3/8] arch_topology: Set cluster identifier in each
+ core/thread from /cpu-map
+Message-ID: <YoZ2gjjS3rbRaJZm@arm.com>
+References: <20220518093325.2070336-1-sudeep.holla@arm.com>
+ <20220518093325.2070336-4-sudeep.holla@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427200314.276673-15-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220518093325.2070336-4-sudeep.holla@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> This will be used on SVM to reload shadow page of the AVIC physid table
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index d2f73ce87a1e3..ad744ab99734c 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9949,12 +9949,12 @@ void kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
->  		kvm_make_all_cpus_request(kvm, KVM_REQ_APIC_PAGE_RELOAD);
+Hi,
+
+As said before, this creates trouble for CONFIG_SCHED_CLUSTER=y.
+The output below is obtained from Juno.
+
+When cluster_id is populated, a new CLS level is created by the scheduler
+topology code. In this case the clusters in DT determine that the cluster
+siblings and llc siblings are the same so the MC scheduler domain will
+be removed and, for Juno, only CLS and DIE will be kept.
+
+root@debian-arm64-buster:/sys/kernel/debug/sched/domains/cpu1# grep . */*
+domain0/busy_factor:16
+domain0/cache_nice_tries:1
+domain0/flags:SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE SD_SHARE_PKG_RESOURCES SD_PREFER_SIBLING
+domain0/imbalance_pct:117
+domain0/max_interval:4
+domain0/max_newidle_lb_cost:14907
+domain0/min_interval:2
+domain0/name:CLS
+domain1/busy_factor:16
+domain1/cache_nice_tries:1
+domain1/flags:SD_BALANCE_NEWIDLE SD_BALANCE_EXEC SD_BALANCE_FORK SD_WAKE_AFFINE SD_ASYM_CPUCAPACITY SD_ASYM_CPUCAPACITY_FULL SD_PREFER_SIBLING
+domain1/imbalance_pct:117
+domain1/max_interval:12
+domain1/max_newidle_lb_cost:11858
+domain1/min_interval:6
+domain1/name:DIE
+
+To be noted that we also get a new flag SD_PREFER_SIBLING for the CLS
+level that is not appropriate. We usually remove it for the child of a
+SD_ASYM_CPUCAPACITY domain, but we don't currently redo this after some
+levels are degenerated. This is a fixable issue.
+
+But looking at the bigger picture, a good question is what is the best
+thing to do when cluster domains and llc domains span the same CPUs?
+
+Possibly it would be best to restrict clusters (which are almost an
+arbitrary concept) to always span a subset of CPUs of the llc domain,
+if llc siblings can be obtained? If those clusters are not properly set
+up in DT to respect this condition, cluster_siblings would need to be
+cleared (or set to the current CPU) so the CLS domain is not created at
+all.
+
+Additionally, should we use cluster information from DT (cluster_id) to
+create an MC level if we don't have llc information, even if
+CONFIG_SCHED_CLUSTER=n?
+
+I currently don't have a very clear picture of how cluster domains and
+llc domains would "live" together in a variety of topologies. I'll try
+other DT topologies to see if there are others that can lead to trouble.
+
+Thanks,
+Ionela.
+
+On Wednesday 18 May 2022 at 10:33:20 (+0100), Sudeep Holla wrote:
+> Let us set the cluster identifier as parsed from the device tree
+> cluster nodes within /cpu-map.
+> 
+> We don't support nesting of clusters yet as there are no real hardware
+> to support clusters of clusters.
+> 
+> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> ---
+>  drivers/base/arch_topology.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 7f5aa655c1f4..bdb6f2a17df0 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -491,7 +491,7 @@ static int __init get_cpu_for_node(struct device_node *node)
 >  }
 >  
-> -static void kvm_vcpu_reload_apic_access_page(struct kvm_vcpu *vcpu)
-> +static void kvm_vcpu_reload_apic_pages(struct kvm_vcpu *vcpu)
+>  static int __init parse_core(struct device_node *core, int package_id,
+> -			     int core_id)
+> +			     int cluster_id, int core_id)
 >  {
->  	if (!lapic_in_kernel(vcpu))
->  		return;
+>  	char name[20];
+>  	bool leaf = true;
+> @@ -507,6 +507,7 @@ static int __init parse_core(struct device_node *core, int package_id,
+>  			cpu = get_cpu_for_node(t);
+>  			if (cpu >= 0) {
+>  				cpu_topology[cpu].package_id = package_id;
+> +				cpu_topology[cpu].cluster_id = cluster_id;
+>  				cpu_topology[cpu].core_id = core_id;
+>  				cpu_topology[cpu].thread_id = i;
+>  			} else if (cpu != -ENODEV) {
+> @@ -528,6 +529,7 @@ static int __init parse_core(struct device_node *core, int package_id,
+>  		}
 >  
-> -	static_call_cond(kvm_x86_set_apic_access_page_addr)(vcpu);
-> +	static_call_cond(kvm_x86_reload_apic_pages)(vcpu);
+>  		cpu_topology[cpu].package_id = package_id;
+> +		cpu_topology[cpu].cluster_id = cluster_id;
+>  		cpu_topology[cpu].core_id = core_id;
+>  	} else if (leaf && cpu != -ENODEV) {
+>  		pr_err("%pOF: Can't get CPU for leaf core\n", core);
+> @@ -537,7 +539,8 @@ static int __init parse_core(struct device_node *core, int package_id,
+>  	return 0;
 >  }
 >  
->  void __kvm_request_immediate_exit(struct kvm_vcpu *vcpu)
-> @@ -10071,7 +10071,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  		if (kvm_check_request(KVM_REQ_LOAD_EOI_EXITMAP, vcpu))
->  			vcpu_load_eoi_exitmap(vcpu);
->  		if (kvm_check_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu))
-> -			kvm_vcpu_reload_apic_access_page(vcpu);
-> +			kvm_vcpu_reload_apic_pages(vcpu);
-
-My vote is to add a new request and new kvm_x86_ops hook instead of piggybacking
-KVM_REQ_APIC_PAGE_RELOAD.  The usage in kvm_arch_mmu_notifier_invalidate_range()
-very subtlies relies on the memslot and vma being allocated/controlled by KVM.
-
-The use in avic_physid_shadow_table_flush_memslot() is too similar in that it
-also deals with memslot changes, but at the same time is _very_ different in that
-it's dealing with user controlled memslots.
+> -static int __init parse_cluster(struct device_node *cluster, int depth)
+> +static int __init
+> +parse_cluster(struct device_node *cluster, int cluster_id, int depth)
+>  {
+>  	char name[20];
+>  	bool leaf = true;
+> @@ -557,7 +560,7 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+>  		c = of_get_child_by_name(cluster, name);
+>  		if (c) {
+>  			leaf = false;
+> -			ret = parse_cluster(c, depth + 1);
+> +			ret = parse_cluster(c, i, depth + 1);
+>  			of_node_put(c);
+>  			if (ret != 0)
+>  				return ret;
+> @@ -581,7 +584,7 @@ static int __init parse_cluster(struct device_node *cluster, int depth)
+>  			}
+>  
+>  			if (leaf) {
+> -				ret = parse_core(c, 0, core_id++);
+> +				ret = parse_core(c, 0, cluster_id, core_id++);
+>  			} else {
+>  				pr_err("%pOF: Non-leaf cluster with core %s\n",
+>  				       cluster, name);
+> @@ -621,7 +624,7 @@ static int __init parse_dt_topology(void)
+>  	if (!map)
+>  		goto out;
+>  
+> -	ret = parse_cluster(map, 0);
+> +	ret = parse_cluster(map, -1, 0);
+>  	if (ret != 0)
+>  		goto out_map;
+>  
+> -- 
+> 2.36.1
+> 
+> 

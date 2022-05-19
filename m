@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA9E52D698
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCA752D69F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240083AbiESO65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S237478AbiESO7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238833AbiESO6s (ORCPT
+        with ESMTP id S240081AbiESO6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:58:48 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D173DD80BB;
-        Thu, 19 May 2022 07:58:43 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 0AADC1F44EC7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652972322;
-        bh=Um2t/mQTT0Dfq5mGxwYI25I8sQfayys0cBiO/aP38w4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LdfZwN5W6GT9WmGChNKa2aESgz37yUfbtnVDS6og+GqOBa53Qwpc+CCVFJtLhuLcq
-         /DAfg6JwEvY1KuxMLzketpMx9FiAKSxxZKKil5+D3iZ+PZKEKmIIYyw43k9ETR03Vu
-         bZ8iSTGJPaNrUjQ4mmCV80y3zhdRym/Ir02fTIzgW9bRRNy8ilj5JzAtDdlDCKYjm9
-         GC8fzeFrtkA/q6MEP5JdryG+TlLCS3lzkn2Rm21/GPtdOi0FwLVCYOE05ySIIukvch
-         v0N58JWyVSHRMyGvzgshdNk41n9pkic10Nh8PYR6GzVowVJjXKpXF2cTDEkQs76GsV
-         LHXLTrnSU0AgA==
-Message-ID: <3f3dd71b-6e5c-4e19-c8d6-ece88c7e0eb4@collabora.com>
-Date:   Thu, 19 May 2022 16:58:39 +0200
+        Thu, 19 May 2022 10:58:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB45D6819;
+        Thu, 19 May 2022 07:58:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B31561A0A;
+        Thu, 19 May 2022 14:58:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AFF1C385AA;
+        Thu, 19 May 2022 14:58:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652972331;
+        bh=1JQxQTlxaZfO+tcIR3YEL38bUDaUxamRUvfS6PQ/nSo=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=kGlGl6s/QiWP392yedpgzZjzPzba4SABKrtwz2wQTX/mc8Om88/7ZnXsBeTkN3ugi
+         x5phwovTpaGoDsD7dwNOCJAOl0fdxh3/x7aGVU4tmY6r6gZnqoRe+yUlsIOhC4XrZ6
+         wYTnoAyd0isAO48/2pi9dZdpEtDpix+N/R7Kh/OS6mhy1O12fmPFwY5LvPAkauMyig
+         1cB9wo4jp0zl5VefTUAYeXTMry8/RgVcOL7HI/geX9Y8Xo/nQeDzoMsyf//BI6fWHr
+         +8L9jH8ZXeywCT1T9jRqIArQkhEM3SlbEcP1D5I8LDXIBmXaoImmeix74N3UoIfOhD
+         JLbldzxT8387Q==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Duoming Zhou <duoming@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, amitkarwar@gmail.com,
+        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net v2] net: wireless: marvell: mwifiex: fix sleep in atomic context bugs
+References: <20220519135345.109936-1-duoming@zju.edu.cn>
+Date:   Thu, 19 May 2022 17:58:47 +0300
+In-Reply-To: <20220519135345.109936-1-duoming@zju.edu.cn> (Duoming Zhou's
+        message of "Thu, 19 May 2022 21:53:45 +0800")
+Message-ID: <87zgjd1sd4.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: pinctrl: Add MediaTek MT6795 pinctrl
- bindings
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sean.wang@kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, nfraprado@collabora.com
-References: <20220517083957.11816-1-angelogioacchino.delregno@collabora.com>
- <20220517083957.11816-2-angelogioacchino.delregno@collabora.com>
- <CACRpkdaj42rcQdX1+dVWyHmexrq4UDQHB0JLHgfREY9kn0zv2A@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CACRpkdaj42rcQdX1+dVWyHmexrq4UDQHB0JLHgfREY9kn0zv2A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,31 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 19/05/22 15:13, Linus Walleij ha scritto:
-> On Tue, May 17, 2022 at 10:40 AM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
-> 
->> Add devicetree and pinfunc bindings for MediaTek Helio X10 MT6795.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-> Patch applied, along with patch 2.
-> 
-> BTW nice work on the X10!!
-> I can see from the feature matrix here:
-> https://wiki.postmarketos.org/wiki/Mediatek
-> that this enables a whole slew of cheapo phones and tablets to be used
-> with PostmarketOS.
-> 
+Duoming Zhou <duoming@zju.edu.cn> writes:
 
-I'm really happy to see that you appreciate this effort!
+> There are sleep in atomic context bugs when uploading device dump
+> data on usb interface. The root cause is that the operations that
+> may sleep are called in fw_dump_timer_fn which is a timer handler.
+> The call tree shows the execution paths that could lead to bugs:
+>
+>    (Interrupt context)
+> fw_dump_timer_fn
+>   mwifiex_upload_device_dump
+>     dev_coredumpv(..., GFP_KERNEL)
+>       dev_coredumpm()
+>         kzalloc(sizeof(*devcd), gfp); //may sleep
+>         dev_set_name
+>           kobject_set_name_vargs
+>             kvasprintf_const(GFP_KERNEL, ...); //may sleep
+>             kstrdup(s, GFP_KERNEL); //may sleep
+>
+> This patch moves the operations that may sleep into a work item.
+> The work item will run in another kernel thread which is in
+> process context to execute the bottom half of the interrupt.
+> So it could prevent atomic context from sleeping.
+>
+> Fixes: f5ecd02a8b20 ("mwifiex: device dump support for usb interface")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 
-Unfortunately though, the PostmarketOS wiki contains just a small subset of
-Helio X10 devices, there's many more around!!
+mwifiex patches go to wireless-next, not net tree.
 
-I'll start the trend with a Sony Xperia M5, hoping that someone else starts
-following up with some more :)))
+> ---
+> Changes in v2:
+>   - Fix compile problem.
 
-Cheers,
-Angelo
+So you don't even compile test your patches? That's bad and in that case
+I'll just directly drop this. We expect that the patches are properly
+tested.
 
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

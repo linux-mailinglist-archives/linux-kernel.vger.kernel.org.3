@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FBD52D131
+	by mail.lfdr.de (Postfix) with ESMTP id 16B5F52D130
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237291AbiESLJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S237276AbiESLKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237168AbiESLJY (ORCPT
+        with ESMTP id S232763AbiESLKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:09:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0DFB0429;
-        Thu, 19 May 2022 04:09:22 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3nCd4PfdzjWwl;
-        Thu, 19 May 2022 19:08:29 +0800 (CST)
-Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+        Thu, 19 May 2022 07:10:05 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5D2B042E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:10:04 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L3n7k23DmzCsmy;
+        Thu, 19 May 2022 19:05:06 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 19:09:20 +0800
-Received: from [10.174.178.120] (10.174.178.120) by
- dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 19:09:19 +0800
-Message-ID: <7058b8d8-c0cb-108e-0db9-2fdf5fb154cf@huawei.com>
-Date:   Thu, 19 May 2022 19:09:18 +0800
+ 15.1.2375.24; Thu, 19 May 2022 19:10:01 +0800
+Subject: Re: [PATCH 4/9] mm/z3fold: throw warning on failure of trylock_page
+ in z3fold_alloc
+To:     Vitaly Wool <vitaly.wool@konsulko.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220429064051.61552-1-linmiaohe@huawei.com>
+ <20220429064051.61552-5-linmiaohe@huawei.com>
+ <CAM4kBB+SKzaFDCodVBZ4UbiFNrqJxAjEjaZCr=7FyW-rd4f39w@mail.gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <28ffb717-a9da-a85f-05a3-300376c3d036@huawei.com>
+Date:   Thu, 19 May 2022 19:10:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 0/2] Add support to relocate kernel image to mirrored
- region
-To:     <ardb@kernel.org>
-CC:     <akpm@linux-foundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <corbet@lwn.net>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <dvhart@infradead.org>, <andy@infradead.org>,
-        <rppt@kernel.org>, <paulmck@kernel.org>, <peterz@infradead.org>,
-        <jroedel@suse.de>, <songmuchun@bytedance.com>, <macro@orcam.me.uk>,
-        <frederic@kernel.org>, <W_Armin@gmx.de>, <john.garry@huawei.com>,
-        <seanjc@google.com>, <tsbogend@alpha.franken.de>,
-        <anshuman.khandual@arm.com>, <chenhuacai@kernel.org>,
-        <david@redhat.com>, <gpiccoli@igalia.com>, <mark.rutland@arm.com>,
-        <wangkefeng.wang@huawei.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-efi@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>, <linux-mm@kvack.org>,
-        <mawupeng1@huawei.com>
-References: <CAMj1kXGSStDgj9ABmUaTLnBmpQFksh3wx4tx=mJohum4GQe3Gg@mail.gmail.com>
- <20220419070150.254377-1-mawupeng1@huawei.com>
- <CAMj1kXHr2RdYSPor1st1ZnL=O42c8N6e=bNG+eFhatfefWLUrw@mail.gmail.com>
- <c65d22b4-f654-21aa-bd5f-d4f8b0939a25@huawei.com>
-From:   mawupeng <mawupeng1@huawei.com>
-In-Reply-To: <c65d22b4-f654-21aa-bd5f-d4f8b0939a25@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.120]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500014.china.huawei.com (7.185.36.153)
+In-Reply-To: <CAM4kBB+SKzaFDCodVBZ4UbiFNrqJxAjEjaZCr=7FyW-rd4f39w@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,93 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/5/7 17:28, mawupeng 写道:
-> 
-> 
-> 在 2022/5/3 17:58, Ard Biesheuvel 写道:
->> On Tue, 19 Apr 2022 at 08:43, Wupeng Ma <mawupeng1@huawei.com> wrote:
->>>
->>> From: Ma Wupeng <mawupeng1@huawei.com>
->>>
->>> Now system image will perfer to be located to mirrored regions both KASLR
->>> on and off.
->>>
+On 2022/5/19 15:10, Vitaly Wool wrote:
+> On Fri, Apr 29, 2022 at 8:40 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
 >>
->> Hello Ma Wupeng,
->>
->> I wonder if we could simplify this as follows:
->> - ignore the non-KASLR case for now, and rely on the bootloader  > load the image into mirrored memory if it exists;
+>> If trylock_page fails, the page won't be non-lru movable page. When this
+>> page is freed via free_z3fold_page, it will trigger bug on PageMovable
+>> check in __ClearPageMovable. Throw warning on failure of trylock_page to
+>> guard against such rare case just as what zsmalloc does.
 > 
-> In grub, memory for static image is allocated via the following path:
-> 
-> grub_cmd_linux
->    kernel = grub_malloc(filelen)
->    kernel_alloc_addr = grub_efi_allocate_any_pages (kernel_alloc_pages)
->    grub_memcpy (kernel_addr, kernel, grub_min(filelen, kernel_size))
->     grub_loader_set (grub_linux_boot, grub_linux_unload, 0)
-> 
-> Can we get memory from mirrored region by the following steps:
-> 1. get memory map by calling grub_efi_get_memory_map()
-> 2. iter all memory map to find a suitable mirrored memory area
-> 3. locate kernel image to this area
-> 
-> So, if kaslr is not enabled
->   - grub will load kernel into mirrored region
-> else
->   - arm64-stub.c will relocate kernel image to mirrored region
-> 
-> Is this feasible?
+> I don't see how this is better than what we currently have. We can
+> check if a page is movable before calling __ClearPageMovable instead.
 
-Is this a feasible proposal to relocate the static kernel image itself
-into more reliable memory?
+Currently the z3fold page (unless headless page) is assumed to be non-lru movable.
+We will always do __ClearPageMovable in free_z3fold_page which will trigger BUG_ON
+!PageMovable now. And do you mean we should do something like below ?
+
+diff --git a/mm/z3fold.c b/mm/z3fold.c
+index f41f8b0d9e9a..a244bb5dcb34 100644
+--- a/mm/z3fold.c
++++ b/mm/z3fold.c
+@@ -417,9 +417,10 @@ static struct z3fold_header *init_z3fold_page(struct page *page, bool headless,
+ /* Resets the struct page fields and frees the page */
+ static void free_z3fold_page(struct page *page, bool headless)
+ {
+-       if (!headless) {
++       if (likely(__PageMovable(page))) {
+                lock_page(page);
+-               __ClearPageMovable(page);
++               if (PageMovable(page))
++                       __ClearPageMovable(page);
+                unlock_page(page);
+        }
+        __free_page(page);
+
+Thanks!
 
 > 
->> - simplify the KASLR case to the below.
+> ~Vitaly
 > 
-> Yes, we can certainly do this. I will remove my code and use yours.
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/z3fold.c | 7 +++----
+>>  1 file changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/mm/z3fold.c b/mm/z3fold.c
+>> index 4e6814c5694f..b3b4e65c107f 100644
+>> --- a/mm/z3fold.c
+>> +++ b/mm/z3fold.c
+>> @@ -1122,10 +1122,9 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
+>>                 __SetPageMovable(page, pool->inode->i_mapping);
+>>                 unlock_page(page);
+>>         } else {
+>> -               if (trylock_page(page)) {
+>> -                       __SetPageMovable(page, pool->inode->i_mapping);
+>> -                       unlock_page(page);
+>> -               }
+>> +               WARN_ON(!trylock_page(page));
+>> +               __SetPageMovable(page, pool->inode->i_mapping);
+>> +               unlock_page(page);
+>>         }
+>>         z3fold_page_lock(zhdr);
+>>
+>> --
+>> 2.23.0
+>>
+> .
 > 
->>
->> I think this is reasonable, because it means we take mirrored memory
->> into account when we decide to move the image anyway, but expect the
->> boot chain to take care of this if there is no need to move the image.
->>
->> -------------8<------------------
->> --- a/drivers/firmware/efi/libstub/randomalloc.c
->> +++ b/drivers/firmware/efi/libstub/randomalloc.c
->> @@ -56,6 +56,7 @@ efi_status_t efi_random_alloc(unsigned long size,
->>                                unsigned long random_seed)
->>   {
->>          unsigned long map_size, desc_size, total_slots = 0, target_slot;
->> +       unsigned long total_mirrored_slots = 0;
->>          unsigned long buff_size;
->>          efi_status_t status;
->>          efi_memory_desc_t *memory_map;
->> @@ -86,8 +87,14 @@ efi_status_t efi_random_alloc(unsigned long size,
->>                  slots = get_entry_num_slots(md, size, ilog2(align));
->>                  MD_NUM_SLOTS(md) = slots;
->>                  total_slots += slots;
->> +               if (md->attribute & EFI_MEMORY_MORE_RELIABLE)
->> +                       total_mirrored_slots += slots;
->>          }
->>
->> +       /* only consider mirrored slots for randomization if any exist */
->> +       if (total_mirrored_slots > 0)
->> +               total_slots = total_mirrored_slots;
->> +
->>          /* find a random number between 0 and total_slots */
->>          target_slot = (total_slots * (u64)(random_seed & U32_MAX)) >> 32;
->>
->> @@ -107,6 +114,10 @@ efi_status_t efi_random_alloc(unsigned long size,
->>                  efi_physical_addr_t target;
->>                  unsigned long pages;
->>
->> +               if (total_mirrored_slots > 0 &&
->> +                   !(md->attribute & EFI_MEMORY_MORE_RELIABLE))
->> +                       continue;
->> +
->>                  if (target_slot >= MD_NUM_SLOTS(md)) {
->>                          target_slot -= MD_NUM_SLOTS(md);
->>                          continue;
->> .
+

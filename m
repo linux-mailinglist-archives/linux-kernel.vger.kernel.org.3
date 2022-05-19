@@ -2,77 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9817752CF8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A1452CF8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236195AbiESJjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S236215AbiESJjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236127AbiESJjf (ORCPT
+        with ESMTP id S236126AbiESJjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:39:35 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5176793A1;
-        Thu, 19 May 2022 02:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652953173; x=1684489173;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zz/XtCzs4Jz68O9hElJ+yP5O0TaZacOcZONwGmR20F0=;
-  b=LWNjI2+47LoyYiaJP1bVKp7iy5CMCk6ywUHywCzq3U0xiMNuNCxP3mUv
-   s/MvfapVMPTKXDP0niC6iIIXhc35UjDMnLJb3xI/T+2KV/aBAlLHNBIJl
-   kx+5kE/UjztMJCvMTB/Wb8+iMlhf8XWFUzHfnE2yFAKjXxLcOdQEGawAS
-   HxdgCYdQDPUV2M9SO15Hm2v8HCiJGy8kjeOgBQD0PM6dLKNKX8vyi5j9G
-   DiVOjzbb56LCaoeYjQ6trS7UyBGj3YmlWgiaKVNlfwfxZYTYFDpXy9i9L
-   e4ktK3a6o8khmBJ60UvNxMauwOU6c3GMi2eMvOk2cGcpPPLhP5lSf45MP
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="259693819"
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="259693819"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 02:39:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="817893177"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by fmsmga006.fm.intel.com with ESMTP; 19 May 2022 02:39:31 -0700
-From:   tien.sung.ang@intel.com
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tien.sung.ang@intel.com
-Subject: Re: [PATCH] fpga: altera-cvp: Truncated bitstream error support
-Date:   Thu, 19 May 2022 17:39:07 +0800
-Message-Id: <20220519093907.2883394-1-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <b0fd6c41-f8a4-bb3a-d05a-2ea17d4ffc80@redhat.com>
-References: <b0fd6c41-f8a4-bb3a-d05a-2ea17d4ffc80@redhat.com>
+        Thu, 19 May 2022 05:39:18 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993F9A30AE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:39:17 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id bo5so4681593pfb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:39:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mLcbwj32rdj40iW44+duGhfUCpi8Xywy8Dql/7GVxog=;
+        b=HRetMmQnRH96uhorno98Hawv3lvxCCBh8FpbHGB10ofuBOLNOJBcvp1mxldyvtB+zg
+         XydyL+DF1kRbyuT9fya2ym6SeIzMUNJ4Pp/TzbGGJIGxDjTXe3yuE6NgmqLXgNzbALzc
+         54hHYss0sACylfqtcs/plm6/83VKJlt/QhqV6fkcidO4ee6Wnh5tWOkKXIGvy97y2tyn
+         5MNxraQBmI8/q4qY+OgE2cf+lhkytVzJetmoFta57CNmu6GGcpoAlsy7XpkbElBeusH3
+         5R8ZfEQVgHgwSU2kX8YQkrUJinddGpFgUMKw8pCbKSlBRYjBmCy9HZtfK6WqPylJABSc
+         JWnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mLcbwj32rdj40iW44+duGhfUCpi8Xywy8Dql/7GVxog=;
+        b=zNBjD4TOqDIT+NcXH9RHBngavs3W09Wb0mYzKtR6RZjSb67MMvO0fh5uIpPdLArf54
+         RzSVSVF8On3Gw6qiJb88aTb6+bd2JyUOIqSCT6gndoGs80dl+RakrdLmCtpapwaWDsVj
+         nXcfMLQ63J0P0ZYAXyHtdStdltOzHmeoYtbyF0mwbaxqGAC7J2koHzKqmwA1Pm47KRGP
+         lfYSGRMyvxBJIFfokuC/TlGymReUzfudxpic0LFPFYQ/0wC/ol3NTe9TV/RgKtlES4g+
+         +ytVRrS5UxtyUSi+30RV+yysOjKk1hl6HxNpyrsGFKzVnkaDyWrkVPXCxqv5sYHo+/U5
+         Gmkg==
+X-Gm-Message-State: AOAM530yW8joO9sG6+RSUU3WGl3w7XNmMF8JG05kZrAq0E4dXuG5xQci
+        L50DVP/pxccTyD7Ie06AA9/ysA==
+X-Google-Smtp-Source: ABdhPJxQu6DtfFjo6+chXKKIZiJGwOJDreDTn7NfBzt4Qr6PeHY8zCMvhS/f3BXs6KmcoJ8grOR6xA==
+X-Received: by 2002:a05:6a00:1ad1:b0:50d:f07a:3eb8 with SMTP id f17-20020a056a001ad100b0050df07a3eb8mr3785680pfv.25.1652953157089;
+        Thu, 19 May 2022 02:39:17 -0700 (PDT)
+Received: from sunil-laptop ([49.206.10.235])
+        by smtp.gmail.com with ESMTPSA id er14-20020a17090af6ce00b001cd4989fecesm5176371pjb.26.2022.05.19.02.39.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 02:39:16 -0700 (PDT)
+Date:   Thu, 19 May 2022 15:09:09 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Abner Chang <abner.chang@hpe.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Sunil V L <sunil.vl@gmail.com>
+Subject: Re: [PATCH V5 1/1] riscv/efi_stub: Add support for
+ RISCV_EFI_BOOT_PROTOCOL
+Message-ID: <20220519093909.GA20599@sunil-laptop>
+References: <20220519051512.136724-1-sunilvl@ventanamicro.com>
+ <20220519051512.136724-2-sunilvl@ventanamicro.com>
+ <CAMj1kXHPXqXndUK408W9kB9VrOy_zXfAaXFiLhzXBs_FVYnXmQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHPXqXndUK408W9kB9VrOy_zXfAaXFiLhzXBs_FVYnXmQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for bringing this up. Yes, you are right that the fpga_mgr sees this
-as an error irrespective of the value. The CvP driver is changed now to just
-indicate the correct error which recommends a retry. To me understanding,
-EAGAIN was this. The fpga manager now looks like is going to return a CvP
-failure in short. 
-A BUSY state does not seem to be able to solve this issue. 
-Even an extended time-out didn't resolve this error state. The current time-out
-is set to 10seconds.   
-However, the main objective is to also handle the error if the CvP firmware
-is not responsive. The error_path flow is to reset the CVP mode and HIP_CLK_SEL bit
-as recommended by the firmware engineers. 
-The flow prescribed here is also an identical copy of working CvP driver 
-which is also owned by Intel. This driver is a downstream driver which is 
-not part of the Linux kernel. We are now porting this differences over to 
-the current upstream CvP driver. 
+On Thu, May 19, 2022 at 10:24:44AM +0200, Ard Biesheuvel wrote:
+> On Thu, 19 May 2022 at 07:15, Sunil V L <sunilvl@ventanamicro.com> wrote:
+> >
+> > This patch adds the support for getting the boot hart ID in
+> > Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL. This protocol
+> > is preferred method over existing DT based solution since it
+> > works irrespective of DT or ACPI.
+> >
+> > The specification of the protocol is hosted at:
+> > https://github.com/riscv-non-isa/riscv-uefi
+> >
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+> 
+> Queued in efi/next, thanks all.
+> 
+> Sunil: I made some minor tweaks for coding style, whitespace etc when
+> applying, please double check that I did not make any mistakes.
+> Thanks.
+
+Yes, it looks good, Ard. Many thanks!
+
+Regards
+Sunil
+> 
+> 
+> > ---
+> >  drivers/firmware/efi/libstub/efistub.h    |  7 +++++
+> >  drivers/firmware/efi/libstub/riscv-stub.c | 31 ++++++++++++++++++-----
+> >  include/linux/efi.h                       |  1 +
+> >  3 files changed, 33 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+> > index edb77b0621ea..87aa66e8ef43 100644
+> > --- a/drivers/firmware/efi/libstub/efistub.h
+> > +++ b/drivers/firmware/efi/libstub/efistub.h
+> > @@ -720,6 +720,13 @@ union efi_tcg2_protocol {
+> >         } mixed_mode;
+> >  };
+> >
+> > +struct riscv_efi_boot_protocol {
+> > +       u64 revision;
+> > +
+> > +       efi_status_t (__efiapi * get_boot_hartid)(struct riscv_efi_boot_protocol *this,
+> > +                                                 unsigned long *boot_hartid);
+> > +};
+> > +
+> >  typedef union efi_load_file_protocol efi_load_file_protocol_t;
+> >  typedef union efi_load_file_protocol efi_load_file2_protocol_t;
+> >
+> > diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
+> > index 9c460843442f..10c59295f379 100644
+> > --- a/drivers/firmware/efi/libstub/riscv-stub.c
+> > +++ b/drivers/firmware/efi/libstub/riscv-stub.c
+> > @@ -21,9 +21,9 @@
+> >  #define MIN_KIMG_ALIGN         SZ_4M
+> >  #endif
+> >
+> > -typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
+> > +typedef void __noreturn (*jump_kernel_func)(unsigned long, unsigned long);
+> >
+> > -static u32 hartid;
+> > +static unsigned long hartid;
+> >
+> >  static int get_boot_hartid_from_fdt(void)
+> >  {
+> > @@ -47,14 +47,33 @@ static int get_boot_hartid_from_fdt(void)
+> >         return 0;
+> >  }
+> >
+> > +static efi_status_t get_boot_hartid_from_efi(void)
+> > +{
+> > +       efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
+> > +       efi_status_t status;
+> > +       struct riscv_efi_boot_protocol *boot_protocol;
+> > +
+> > +       status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
+> > +                            (void **)&boot_protocol);
+> > +       if (status == EFI_SUCCESS) {
+> > +               status = efi_call_proto(boot_protocol,
+> > +                                       get_boot_hartid, &hartid);
+> > +       }
+> > +       return status;
+> > +}
+> > +
+> >  efi_status_t check_platform_features(void)
+> >  {
+> >         int ret;
+> > +       efi_status_t status;
+> >
+> > -       ret = get_boot_hartid_from_fdt();
+> > -       if (ret) {
+> > -               efi_err("/chosen/boot-hartid missing or invalid!\n");
+> > -               return EFI_UNSUPPORTED;
+> > +       status = get_boot_hartid_from_efi();
+> > +       if (status != EFI_SUCCESS) {
+> > +               ret = get_boot_hartid_from_fdt();
+> > +               if (ret) {
+> > +                       efi_err("Failed to get boot hartid!\n");
+> > +                       return EFI_UNSUPPORTED;
+> > +               }
+> >         }
+> >         return EFI_SUCCESS;
+> >  }
+> > diff --git a/include/linux/efi.h b/include/linux/efi.h
+> > index ccd4d3f91c98..9822c730207c 100644
+> > --- a/include/linux/efi.h
+> > +++ b/include/linux/efi.h
+> > @@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
+> >  #define EFI_CONSOLE_OUT_DEVICE_GUID            EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
+> >  #define APPLE_PROPERTIES_PROTOCOL_GUID         EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
+> >  #define EFI_TCG2_PROTOCOL_GUID                 EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
+> > +#define RISCV_EFI_BOOT_PROTOCOL_GUID           EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
+> >  #define EFI_LOAD_FILE_PROTOCOL_GUID            EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
+> >  #define EFI_LOAD_FILE2_PROTOCOL_GUID           EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
+> >  #define EFI_RT_PROPERTIES_TABLE_GUID           EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
+> > --
+> > 2.25.1
+> >

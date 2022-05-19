@@ -2,126 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA71052D563
+	by mail.lfdr.de (Postfix) with ESMTP id 8E91152D562
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239424AbiESN65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S238357AbiESN7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233431AbiESN5O (ORCPT
+        with ESMTP id S237072AbiESN5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:57:14 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAA8640B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:57:13 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id e78so9146664ybc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vpmZe7NIgncmC9N5Bspzg+Tuz94sgQYIdXmKL335178=;
-        b=UbSfSf+cHrp/fqAvzlPIukmPsm2yZAiAzIvOVpTFC1ax3EpfwM1oh2wSpg5QJu7J+Y
-         +US+5PV3p2w9Lt8IAyCkyB+vJ1f9TEabZ/o5Eu7XXSGc6bIhdMuC2rN41u2oiPxLz+Tu
-         X5owoj7sKN/7wfWrDQBfAjjE91h7IGUOjXI696QUHeq71PBqcs16laABCuc8Dk8lapzI
-         4+Xa85Pq9uTRnmi1acqFRRvz3RD0u7r4iTF6wXwyExMv12q+uBI1TVfFg6Ulbq9KVvFv
-         e16jAR3SS+79E//ssCktVATQTCm34b3vG7KwTwc272AxyHogy3MNyKODAiaZOafDsOzP
-         sI4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vpmZe7NIgncmC9N5Bspzg+Tuz94sgQYIdXmKL335178=;
-        b=dRQz6J4cMC08P9tCUMa9/yNg81gwN/oP8vj9Dl1sPC34oBdqleYNDeOfWwVMggAwNN
-         LDjruNVj+YM8nrz0tTS3RsoNu1aTmDUKuN6+dhkGy47AsXPXEFhm9cthl/lUJSMyrXmF
-         F5jBZN+Nj8M6Lv3ziONfuPXJ+mPS6mt8D8e9rCzFwzoR839UcMtROlXKH3qoT8QcDznw
-         jALg6nbG9dG4/xmZhJOjheavfrRIv6YJeK4bivGSKEkHW6MM6H6noQFpK+rnfh9lGh+x
-         6nVR8WbJeycM1PTJn4k7nlHd9yRiUHuqH+f/wLe5lSuvqgZGjvps6wf2gT2eKymJWmVU
-         wCsw==
-X-Gm-Message-State: AOAM531Z2PjKW1lprMO9YohaoGQW81vecq7TUkUH6HMFmd6cA+m7W3YV
-        3a/OJ1MmsX11pULa7XupmENFu2eWR6uId3SxJCB5gQ==
-X-Google-Smtp-Source: ABdhPJxIFrlCfgs+Luh8bEXz8FYlGZLPfAs3RDs44HxhE/iUUxVbiBlJ3RODTc+Pp0h1jzP1dYq4xu31QkqWR3OCQhk=
-X-Received: by 2002:a25:5909:0:b0:64d:f503:33c8 with SMTP id
- n9-20020a255909000000b0064df50333c8mr4443107ybb.241.1652968633018; Thu, 19
- May 2022 06:57:13 -0700 (PDT)
+        Thu, 19 May 2022 09:57:08 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B0838AB;
+        Thu, 19 May 2022 06:56:58 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 63F63240014;
+        Thu, 19 May 2022 13:56:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1652968613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UIKY8sH1X5ECVbyISXl1wSkKulCZceNUKGMFNeLBB58=;
+        b=dH4zG/rLfn5lYbDoNTUtI2jjvNpKLyNMlTWaHhX8zJXuzpS057KPCaTrElRlKJqiztw1SL
+        6cDNU52AmZBbS64wCDX99mR2mee3NMLZsxFm0pTSyhrUPDM1zR69Cx4gbDX6UFV4ANUdht
+        bLkjlOEuRSSXheDO5Nie6fMJwdzagP4oDIAj0ccaT9vmSCsyT425Nk87Yjgob5MxAhEHK7
+        459gkEsdaifm2rqribGwOUl+WFphaRd87RhixGgEnBxFGQ6mkjcYxJ9t0vyL3XOT3sPy62
+        lcNEGBRZL5Acis5qxAzkxQdIPyHvI0nmQZDQHfc0QuQ9LsrcP5b2vTONY2ISZQ==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Richard Cochran <richardcochran@gmail.com>,
+        Horatiu.Vultur@microchip.com, Allan.Nielsen@microchip.com,
+        UNGLinuxDriver@microchip.com
+Subject: [PATCH net-next 0/6] net: Introduce Ethernet Inband Extensions
+Date:   Thu, 19 May 2022 15:56:41 +0200
+Message-Id: <20220519135647.465653-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220512163534.2572-1-vincent.guittot@linaro.org>
- <20220512163534.2572-6-vincent.guittot@linaro.org> <CABk29Ns-3L1S2xuRg15VxzcXJyNpA6nB2A4jdM9eyx0jiWjn+Q@mail.gmail.com>
-In-Reply-To: <CABk29Ns-3L1S2xuRg15VxzcXJyNpA6nB2A4jdM9eyx0jiWjn+Q@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 19 May 2022 15:55:25 +0200
-Message-ID: <CAKfTPtCx_fhud-VsxCi9jS==yGavn7zgRBQyUfzXgbTiX2+77g@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] sched/fair: Take into account latency nice at wakeup
-To:     Josh Don <joshdon@google.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>, parth@linux.ibm.com,
-        Qais Yousef <qais.yousef@arm.com>,
-        "Hyser,Chris" <chris.hyser@oracle.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        Paul Turner <pjt@google.com>, pavel@ucw.cz,
-        Tejun Heo <tj@kernel.org>, Quentin Perret <qperret@google.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 17 May 2022 at 02:54, Josh Don <joshdon@google.com> wrote:
->
-> Hi Vincent,
->
-> On Thu, May 12, 2022 at 9:36 AM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
-> >
-> > Take into account the nice latency priority of a thread when deciding to
-> > preempt the current running thread. We don't want to provide more CPU
-> > bandwidth to a thread but reorder the scheduling to run latency sensitive
-> > task first whenever possible.
-> >
-> > As long as a thread didn't use its bandwidth, it will be able to preempt
-> > the current thread.
-> >
-> > At the opposite, a thread with a low latency priority will preempt current
-> > thread at wakeup only to keep fair CPU bandwidth sharing. Otherwise it will
-> > wait for the tick to get its sched slice.
->
-> Following up from the discussion on the prior series, I'm still not
-> sure why this approach is exclusive of extending the entity placement
-> code; I think both changes together would be useful.
->
-> By only changing the wakeup preemption decision, you're only
-> guaranteeing that the latency-sensitive thing on cpu won't be
-> preempted until the next sched tick, which can occur at any time
-> offset from the wakeup, from 0ns to the length of one tick. If a
+Hello everyone,
 
-In fact, you are ensured to run a minimum time of 3ms at least on >=8
-cores system before tick can preempt you. I considered updating this
-part as well to increase the value for negative weight but didn't do
-it for now. I can have a look
+This series introduces support for Ethernet in-band extensions, a
+mechanism proposed by Cisco as part of the USXGMII spec.
 
-> latency-tolerant task wakes up with a lot of sleeper credit, it would
-> pretty quickly preempt a latency-sensitive task on-cpu, even if it
-> doesn't initially do so due to the above changes to wakeup preemption.
->
-> Adjusting place_entity wouldn't impact cpu bandwidth in steady-state
-> competition between threads of different latency prio, it would only
-> impact slightly at wakeup, in a similar but more consistent manner to
-> the changes above to wakeup_preempt_entity (ie. a task that is not
-> latency sensitive might have to wait a few ticks to preempt a latency
-> sensitive task, even if it was recently sleeping for a while).
+The idea is to leverage the 7 bytes preamble to convey meaningful data,
+in what's called an "extension".
+
+This series adds the QUSGMII mode, which is a quad variant of the
+USXGMII standard, and adds its support in the lan966x driver. In
+QUSGMII, extensions can be used.
+
+The only extension support thus far is the PCH mode, a way to convey
+part of a timestamp into the ethernet preamble. That's a pretty
+straightfoward extension, documented in the Cisco spec. Other extensions
+can exist, each being identified by a 2 bits code in the preamble,
+parsed by the hardware.
+
+We therefore need an API to synchronise which mode is supported by a
+given PHY, then a way to enable it in the PHY, from the MAC's control.
+
+This is done through a new phy_driver callback, .inband_ext_config(),
+that the MAC driver will call to ask a PHY driver to enable a given
+extension.
+
+The PCH mode that is added in this series is used to offload a bit
+the MDIO bus when doing PHY-side timestamping, by conveying the nanoseconds
+part of the timestamp into the preamble. The MAC driver then extracts
+the timestamp (using lan966x's IFH mechanism), puts the nanosecond part
+in the SKB. The RX deferred timestamping then asks the PHY for the rest
+of the timestamp.
+
+Other modes exists, such as Microchip's MCH mode, but this series only
+include PCH since it's simple enough and keeps the code reviewable.
+
+Thanks,
+
+Maxime
+
+Maxime Chevallier (6):
+  net: phy: Introduce QUSGMII PHY mode
+  dt-bindings: net: ethernet-controller: add QUSGMII mode
+  net: lan966x: Add QUSGMII support for lan966x
+  net: phy: Add support for inband extensions
+  net: lan966x: Allow using PCH extension for PTP
+  net: phy: micrel: Add QUSGMII support and PCH extension
+
+ .../bindings/net/ethernet-controller.yaml     |   1 +
+ Documentation/networking/phy.rst              |   9 ++
+ .../ethernet/microchip/lan966x/lan966x_main.c |  14 +--
+ .../ethernet/microchip/lan966x/lan966x_main.h |   6 ++
+ .../microchip/lan966x/lan966x_phylink.c       |   9 +-
+ .../ethernet/microchip/lan966x/lan966x_port.c |  33 ++++--
+ .../ethernet/microchip/lan966x/lan966x_ptp.c  |  93 +++++++++++++++-
+ .../ethernet/microchip/lan966x/lan966x_regs.h |  72 +++++++++++++
+ drivers/net/phy/micrel.c                      | 102 ++++++++++++++++--
+ drivers/net/phy/phy.c                         |  68 ++++++++++++
+ drivers/net/phy/phylink.c                     |   3 +
+ include/linux/phy.h                           |  28 ++++-
+ 12 files changed, 413 insertions(+), 25 deletions(-)
+
+-- 
+2.36.1
+

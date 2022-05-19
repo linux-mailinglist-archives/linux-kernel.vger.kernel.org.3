@@ -2,192 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04FB52DCDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4097F52DCE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243968AbiESSdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S244004AbiESSde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234068AbiESSdK (ORCPT
+        with ESMTP id S234068AbiESSdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:33:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8254646B3F
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:33:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652985189; x=1684521189;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=n+Od0sKsKim5mCbJh1QOz6Wy+mmPXxlDGr1pz+MMTCk=;
-  b=d8LWWgiJ1GmksEDPwWZOGHRCKgugpTYmW0cSiQ7ZOxwl5RbJyQuZOC8J
-   G4QFg3UHggHO7LA7ThwNWRoWukK6RNGBXub81v01D6PDxGS4x0L/isWd0
-   Uiv2zY5wuSNQyfxXLlkU2lo12Hk1yd66Ig7qrCtXWApruDMuAxTOWzNVW
-   gdEaXEFlrJVHXJGmHHf4ze9+23cCs7qb0Ve2oKXzzpkCt11LGyUxMZUkW
-   t/8SLkMOpjn+TRZCcTWE8pW6VXT7tK3jf3M5xddP9OOU0T/IPNFBiKlzY
-   5sOC24uAWiwt3xBjIOhWTz7IEb8vq9mHjdgugwDWf18P6Lq8vAgJsVewP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252213648"
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="252213648"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 11:33:09 -0700
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="606623284"
-Received: from rlsharma-mobl.amr.corp.intel.com (HELO [10.212.180.228]) ([10.212.180.228])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 11:33:08 -0700
-Message-ID: <a9a4ba2f-6cfa-c59f-3921-e94d5c9a6148@intel.com>
-Date:   Thu, 19 May 2022 11:33:08 -0700
+        Thu, 19 May 2022 14:33:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823FF13E21;
+        Thu, 19 May 2022 11:33:30 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JGFltO014988;
+        Thu, 19 May 2022 18:33:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=FzmMrJydP7SjW/h1T8aJMfFDr6sSO5l8oKubCo8nHjg=;
+ b=nTjolHdvK+LKE/W9U6na7yzXN/+FMKxNLlTqIyVFPcGZhZtsQWIDb2cUy9BmLdAQDyZn
+ FzMVh2RF8Io0Y/mZsrmBfHhwpXWshw+QLysSwTzoNaObP/sG6dYXW58QLT+CEn1uKc0F
+ MJQXUnT1PG0Wrnh9NxCJ0O8xinY5BALWPaQr2PlEK4KNfjV1vJzVKSOTw8x/hzqd/l8h
+ ZFmc4sdkXA6X9XqpoIYp1EIQwccdoYMiu4xeIjwBeEhZtEU+0zaDJS9F1CGSUFcjRHjY
+ Eaz3nLVFzELKHWoPX6o/4DAJIuO+jqMxBgHhJIxYuHLusc6AH+KjRchuH72JMSTv2p/w 0w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5rfjv60p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 18:33:20 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24JIDlXX025526;
+        Thu, 19 May 2022 18:33:20 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5rfjv60e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 18:33:20 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24JIWUHY016339;
+        Thu, 19 May 2022 18:33:19 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma04dal.us.ibm.com with ESMTP id 3g3r2fcs4t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 18:33:19 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24JIXIu263308282
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 18:33:18 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 86962112064;
+        Thu, 19 May 2022 18:33:18 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1D7F112061;
+        Thu, 19 May 2022 18:33:15 +0000 (GMT)
+Received: from li-c92d2ccc-254b-11b2-a85c-a700b5bfb098.ibm.com.com (unknown [9.211.37.97])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 19 May 2022 18:33:15 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     jgg@nvidia.com, alex.williamson@redhat.com
+Cc:     cohuck@redhat.com, borntraeger@linux.ibm.com,
+        jjherne@linux.ibm.com, akrowiak@linux.ibm.com, pasic@linux.ibm.com,
+        zhenyuw@linux.intel.com, zhi.a.wang@intel.com, hch@infradead.org,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/1] vfio: remove VFIO_GROUP_NOTIFY_SET_KVM
+Date:   Thu, 19 May 2022 14:33:10 -0400
+Message-Id: <20220519183311.582380-1-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9p4q8YdRssq0xupqY300qb0RYenay28B
+X-Proofpoint-GUID: gsf9CrkNesk4CEtlXrNJky73nDARnE4O
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] x86/tdx: Handle load_unaligned_zeropad() page-cross to a
- shared page
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     seanjc@google.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
-        thomas.lendacky@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220517153021.11116-1-kirill.shutemov@linux.intel.com>
- <e73cb19e-7dab-2fc1-b947-fac70fd607d2@intel.com>
- <20220517174042.v6s7wm3u5j2ebaoq@black.fi.intel.com>
- <c761e774-8014-6fa9-cf21-e7cd8f7aca54@intel.com>
- <20220517201710.ixbpsaga5jzvokvy@black.fi.intel.com>
- <083519ab-752f-9815-7741-22b3fcc03322@intel.com>
- <20220519180739.2xnq7mjpa6hzcbsn@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220519180739.2xnq7mjpa6hzcbsn@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-19_06,2022-05-19_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 impostorscore=0 bulkscore=0 mlxlogscore=431 adultscore=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 mlxscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205190105
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 11:07, Kirill A. Shutemov wrote:
-> On Tue, May 17, 2022 at 03:16:42PM -0700, Dave Hansen wrote:
->> See?  Now everybody that goes and writes a new #VE exception helper has
->> a chance of actually getting this right.  As it stands, if someone adds
->> one more of these, they'll probably get random behavior.  This way, they
->> actually have to choose.  They _might_ even go looking at the SDM.
-> 
-> Okay. See below. Does it match what you had in mind?
+As discussed in this thread:
 
-Looks close.
+https://lore.kernel.org/kvm/20220516172734.GE1343366@nvidia.com/
 
-> BTW, I found a bug in tdx_early_handle_ve(). It didn't update RIP.
-> I don't know how it happend. Maybe got lost on the way upstream.
+Let's remove VFIO_GROUP_NOTIFY_SET_KVM and instead assume the association
+has already been established prior to device_open.  For the types today
+that need a KVM (GVT, vfio-ap) these will fail if a KVM is not found.
+Looking ahead, vfio-pci-zdev will optionally want the KVM association
+(enable hardware assists) but it will not be a hard requirement (still
+want to allow other, non-KVM userspace usage). 
 
-Huh, so refactoring things instead of depending on magic hidden behavior
-helps find bugs?  Interesting.  ;)
+This is built on top of vfio-next and tested with s390x-pci
+(zdev-kvm series) and vfio-ap (GVT changes are compile-tested only)
 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 9955b5a89df8..d2635ac52d9b 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -123,7 +123,7 @@ static u64 __cpuidle __halt(const bool irq_disabled, const bool do_sti)
->  	return __tdx_hypercall(&args, do_sti ? TDX_HCALL_ISSUE_STI : 0);
->  }
->  
-> -static bool handle_halt(void)
-> +static int handle_halt(struct ve_info *ve)
->  {
->  	/*
->  	 * Since non safe halt is mainly used in CPU offlining
-> @@ -134,9 +134,9 @@ static bool handle_halt(void)
->  	const bool do_sti = false;
->  
->  	if (__halt(irq_disabled, do_sti))
-> -		return false;
-> +		return -EIO;
->  
-> -	return true;
-> +	return ve->instr_len;
->  }
+Changes for v3:
+- merge branches under if (device->open_count == 1) (Kevin)
+- move device->open_count-- out from group_rwsem (Kevin)
+- drop null KVM check (Christoph)
+- remove extra kvm_{get,put}_kvm from vfio_ap_ops, it was already getting
+  a reference (Jason)
+- Add comment about kvm reference in vfio.h (Jason)
+- Return -EINVAL if !kvm for vfio-ap (Tony)
 
-Ideally each of these would include a comment about why we can get the
-isntruction length from ve_info.  That "why" is currently a bit weak,
-but it's something like:
+Changes for v2:
+- gvt no longer needs release_work, get rid of it (Christoph)
+- a few compile fixes for gvt
+- update commit to mention fixes gvt oops (Jason)
+- s/down_write/down_read/ in a few spots (Jason)
+- avoid kvm build dependency by holding group read lock over device
+  open/close and put the onus on the driver to obtain a reference if
+  it will actually use the kvm pointer.  Document the requirement,
+  use lockdep_assert to ensure lock is held during register_notifer;
+  today all callers are from driver open_device. 
 
-	/*
-	 * In TDX guests, HLT is configured to cause exits.  Assume that
-	 * the TDX module has provided the "VM-exit instruction length".
-	 */
+Matthew Rosato (1):
+  vfio: remove VFIO_GROUP_NOTIFY_SET_KVM
 
-It would be nice to have some central discussion of this too to explain
-that the TDX documentation is currently lacking here, but we don't need
-to repeat that part in a comment 6 different times.
+ drivers/gpu/drm/i915/gvt/gtt.c        |  4 +-
+ drivers/gpu/drm/i915/gvt/gvt.h        |  3 -
+ drivers/gpu/drm/i915/gvt/kvmgt.c      | 82 ++++++--------------------
+ drivers/s390/crypto/vfio_ap_ops.c     | 35 ++---------
+ drivers/s390/crypto/vfio_ap_private.h |  3 -
+ drivers/vfio/vfio.c                   | 83 ++++++++++-----------------
+ include/linux/vfio.h                  |  6 +-
+ 7 files changed, 57 insertions(+), 159 deletions(-)
 
-...
->  /* Handle the kernel #VE */
-> -static bool virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
-> +static int virt_exception_kernel(struct pt_regs *regs, struct ve_info *ve)
->  {
-
-/*
- * Handle kernel #VEs.  On success, returns the number of
- * bytes RIP should be incremented (>=0) or -errno on error.
- */
-
->  	switch (ve->exit_reason) {
->  	case EXIT_REASON_HLT:
-> -		return handle_halt();
-> +		return handle_halt(ve);
->  	case EXIT_REASON_MSR_READ:
-> -		return read_msr(regs);
-> +		return read_msr(regs, ve);
->  	case EXIT_REASON_MSR_WRITE:
-> -		return write_msr(regs);
-> +		return write_msr(regs, ve);
->  	case EXIT_REASON_CPUID:
-> -		return handle_cpuid(regs);
-> +		return handle_cpuid(regs, ve);
->  	case EXIT_REASON_EPT_VIOLATION:
->  		return handle_mmio(regs, ve);
->  	case EXIT_REASON_IO_INSTRUCTION:
-> -		return handle_io(regs, ve->exit_qual);
-> +		return handle_io(regs, ve);
->  	default:
->  		pr_warn("Unexpected #VE: %lld\n", ve->exit_reason);
-> -		return false;
-> +		return -EIO;
->  	}
->  }
->  
->  bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
->  {
-> -	bool ret;
-> +	int ret;
-
-'ret' is usually used for return values of *this* function.
-
-Let's give it a better name, please.
-
->  	if (user_mode(regs))
->  		ret = virt_exception_user(regs, ve);
->  	else
->  		ret = virt_exception_kernel(regs, ve);
->  
-> +	if (ret < 0)
-> +		return false;
-> +
->  	/* After successful #VE handling, move the IP */
-> -	if (ret)
-> -		regs->ip += ve->instr_len;
-> +	regs->ip += ret;
->  
-> -	return ret;
-> +	return true;
->  }
->  
->  static bool tdx_tlb_flush_required(bool private)
+-- 
+2.27.0
 

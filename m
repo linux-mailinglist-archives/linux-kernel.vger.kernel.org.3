@@ -2,146 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A373352D110
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E2D52D111
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237115AbiESLCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S237140AbiESLC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237223AbiESLCM (ORCPT
+        with ESMTP id S237177AbiESLCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:02:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EBD6830D;
-        Thu, 19 May 2022 04:02:06 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 31578219AD;
-        Thu, 19 May 2022 11:02:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1652958125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5tCaNooOkaDcvcv6PCUEW0LqLLKKJTw0gD9Hod1PSGA=;
-        b=1AiKxwZkumz5PQU0f03qy83y6g+kaSp+rGayk8zPMusm3N8Wdr/Q5KAlIayTsDOHtQJPH8
-        b5Mb+PVSU43rt0QjCZH64AALhnVKpruOI/vz502lYVcgXJbK7vy3ljTXl9+7hviIGhymnY
-        cS7rxy71rZRO+ulqb/iKevjdCJiLGtk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1652958125;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5tCaNooOkaDcvcv6PCUEW0LqLLKKJTw0gD9Hod1PSGA=;
-        b=ROQdBvocG9Mar1VWAg+leJDJ6t6pHEeG84adMFhXpkyUIVsCK7E/LIDZnFXI2HL6hoxVCF
-        oy43O/3EKigTscDA==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2108A2C141;
-        Thu, 19 May 2022 11:02:05 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D17A2A062F; Thu, 19 May 2022 13:02:04 +0200 (CEST)
-Date:   Thu, 19 May 2022 13:02:04 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
-        tj@kernel.org, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH -next 2/8] block, bfq: cleanup __bfq_weights_tree_remove()
-Message-ID: <20220519110204.yf7j65ko5wnmsojr@quack3.lan>
-References: <20220514090522.1669270-1-yukuai3@huawei.com>
- <20220514090522.1669270-3-yukuai3@huawei.com>
+        Thu, 19 May 2022 07:02:51 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1883D5DA5D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:02:46 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id A1BE41F45A4D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652958165;
+        bh=Z+gW0P5sGsUp4ykJPGmElehexTGF1kbDnbejPEKwZ9c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Uevjx3rYjqqSNuK62J8Fbi8xsTvoSJcJPJl2ZQlG7jjH4/zUyWJfKs6jXO21mZkm7
+         ffZiL8xfeFqsx7HmK5ldFXe6YdvanDGgOMevV6vzTgP+xR6B9NBfxQL42v6ig/x2wg
+         VDvGRFlfWCwLh45yn8AwTZKtKUSSGcRBIHRqMJh2Nf/vOILLuIAxk1VtJp6RcQMx+9
+         0B3JAwxsBgVWxX0WaLWzmIGfoa+qiu3C09f6XzrgTsRLyzW6OJfuWHlxuLiE8Ia5ob
+         EFCHEbIBqBsF0usM9p4P3C0X7s/UStj51gkA6nVIfLyWqKt2Vnik/wUnyeyIm5tZx3
+         OhIViF2Smtj6A==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v10] notifier: Add atomic_notifier_call_chain_is_empty()
+Date:   Thu, 19 May 2022 14:02:32 +0300
+Message-Id: <20220519110232.1198823-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220514090522.1669270-3-yukuai3@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 14-05-22 17:05:16, Yu Kuai wrote:
-> It's the same with bfq_weights_tree_remove() now.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Add atomic_notifier_call_chain_is_empty() that returns true if given
+atomic call chain is empty.
 
-Sure. Feel free to add:
+The first user of this new notifier API function will be the kernel
+power-off core code that will support power-off call chains. The core
+code will need to check whether there is a power-off handler registered
+at all in order to decide whether to halt machine or power it off.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
 
-								Honza
+Changelog:
 
-> ---
->  block/bfq-iosched.c | 13 +------------
->  block/bfq-iosched.h |  1 -
->  block/bfq-wf2q.c    |  2 +-
->  3 files changed, 2 insertions(+), 14 deletions(-)
-> 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index bcbe78d71143..1d0141c450c0 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -944,8 +944,7 @@ void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq)
->   * See the comments to the function bfq_weights_tree_add() for considerations
->   * about overhead.
->   */
-> -void __bfq_weights_tree_remove(struct bfq_data *bfqd,
-> -			       struct bfq_queue *bfqq)
-> +void bfq_weights_tree_remove(struct bfq_data *bfqd, struct bfq_queue *bfqq)
->  {
->  	struct rb_root_cached *root;
->  	if (!bfqq->weight_counter)
-> @@ -964,16 +963,6 @@ void __bfq_weights_tree_remove(struct bfq_data *bfqd,
->  	bfq_put_queue(bfqq);
->  }
->  
-> -/*
-> - * Invoke __bfq_weights_tree_remove on bfqq and decrement the number
-> - * of active groups for each queue's inactive parent entity.
-> - */
-> -void bfq_weights_tree_remove(struct bfq_data *bfqd,
-> -			     struct bfq_queue *bfqq)
-> -{
-> -	__bfq_weights_tree_remove(bfqd, bfqq);
-> -}
-> -
->  /*
->   * Return expired entry, or NULL to just start from scratch in rbtree.
->   */
-> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-> index 0a3415abb994..bc54b9824b1e 100644
-> --- a/block/bfq-iosched.h
-> +++ b/block/bfq-iosched.h
-> @@ -933,7 +933,6 @@ void bic_set_bfqq(struct bfq_io_cq *bic, struct bfq_queue *bfqq, bool is_sync);
->  struct bfq_data *bic_to_bfqd(struct bfq_io_cq *bic);
->  void bfq_pos_tree_add_move(struct bfq_data *bfqd, struct bfq_queue *bfqq);
->  void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq);
-> -void __bfq_weights_tree_remove(struct bfq_data *bfqd, struct bfq_queue *bfqq);
->  void bfq_weights_tree_remove(struct bfq_data *bfqd, struct bfq_queue *bfqq);
->  void bfq_bfqq_expire(struct bfq_data *bfqd, struct bfq_queue *bfqq,
->  		     bool compensate, enum bfqq_expiration reason);
-> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-> index ccd227fed1c3..2f3fb45a32c3 100644
-> --- a/block/bfq-wf2q.c
-> +++ b/block/bfq-wf2q.c
-> @@ -790,7 +790,7 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
->  		 * there is a counter associated with the entity).
->  		 */
->  		if (prev_weight != new_weight && bfqq)
-> -			__bfq_weights_tree_remove(bfqd, bfqq);
-> +			bfq_weights_tree_remove(bfqd, bfqq);
->  		entity->weight = new_weight;
->  		/*
->  		 * Add the entity, if it is not a weight-raised queue,
-> -- 
-> 2.31.1
-> 
+v10: - Corrected another doc-comment typo s/atomicnotifier/atomic_notifier/.
+
+v9: - Extended commit message with a usage example.
+
+    - Corrected doc-comment with s/blocking/atomic/.
+
+ include/linux/notifier.h |  2 ++
+ kernel/notifier.c        | 13 +++++++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/include/linux/notifier.h b/include/linux/notifier.h
+index 87069b8459af..95e2440037de 100644
+--- a/include/linux/notifier.h
++++ b/include/linux/notifier.h
+@@ -173,6 +173,8 @@ extern int blocking_notifier_call_chain_robust(struct blocking_notifier_head *nh
+ extern int raw_notifier_call_chain_robust(struct raw_notifier_head *nh,
+ 		unsigned long val_up, unsigned long val_down, void *v);
+ 
++extern bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh);
++
+ #define NOTIFY_DONE		0x0000		/* Don't care */
+ #define NOTIFY_OK		0x0001		/* Suits me */
+ #define NOTIFY_STOP_MASK	0x8000		/* Don't call further */
+diff --git a/kernel/notifier.c b/kernel/notifier.c
+index ba005ebf4730..137b902c985b 100644
+--- a/kernel/notifier.c
++++ b/kernel/notifier.c
+@@ -204,6 +204,19 @@ int atomic_notifier_call_chain(struct atomic_notifier_head *nh,
+ EXPORT_SYMBOL_GPL(atomic_notifier_call_chain);
+ NOKPROBE_SYMBOL(atomic_notifier_call_chain);
+ 
++/**
++ *	atomic_notifier_call_chain_is_empty - Check whether notifier chain is empty
++ *	@nh: Pointer to head of the atomic notifier chain
++ *
++ *	Checks whether notifier chain is empty.
++ *
++ *	Returns true is notifier chain is empty, false otherwise.
++ */
++bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh)
++{
++	return !rcu_access_pointer(nh->head);
++}
++
+ /*
+  *	Blocking notifier chain routines.  All access to the chain is
+  *	synchronized by an rwsem.
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.35.3
+

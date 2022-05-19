@@ -2,96 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B66B852DCC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89B952DCCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243917AbiESS2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
+        id S243924AbiESS35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243895AbiESS2b (ORCPT
+        with ESMTP id S243896AbiESS3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:28:31 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E03CC17B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:28:22 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id q203so6691501iod.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:28:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=ND7f0vx9pZeDMhgR5d9yPNpUzi34XU/+i7olrPBQCuY=;
-        b=YV/qjkXoecsS2oe33P2wBJVytQp5MTWs64Kic5Q17lfWu1L9Ak2YJdLZ4P4iuiad9K
-         COZ9O9ZvugCVGcREEHB0hxB9z3MAuj8zBelSYydaU8xvHymcbQ1ApvBKgSBQsOlLECp0
-         LYV+rwYq1hkXaaEcaV8VSICXBFJu5tSmpai+xnirfZDpxVIzdK3jJqPAKQ/E3Tw9ggAR
-         gTnZUFQ2xP7XxJWZzk3rG1QNNhxPxCtifvpPdxDKQSp/N9TD497gJv6/8ryHh8wAlkOd
-         j2HUGsAoaXnlzXFdWDuKLeu5u86cfsLci1M/EILpIz6ABcmTVZ58cg4Y6ousQOO8+45E
-         OtBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=ND7f0vx9pZeDMhgR5d9yPNpUzi34XU/+i7olrPBQCuY=;
-        b=xpNhWM18QMwwwoWcWthHVYLRG8XG3ZL5Efmg8gy8DBJstVTU52Ynbwt/tbiTOc16wV
-         2g5r2XTMes8JM/umTRBiJweSCJRBcs7ixK54OdRPB5K4u80JBWUj9vXJc5z6MBCFXQa3
-         JKopUmB/IMf2Z0aNfsgzY9NnAE1kV32APmWecKtsTAOZJHAchkbaXQug2LwHb3gwenyz
-         woOMiIeNRuQ6lKV1/VyxJSk1M0yJ/IrYf1mIuf/GKzHm1XDR2T84HPUC5b9zGTe8Wo4U
-         7c1VjMOgfpRRzGs1xEboMOkPOsK2ZaQHJer5EZbBItkW2BT8+34s9ihJBU17Q6t2OD2I
-         tU/g==
-X-Gm-Message-State: AOAM532DqqXTH4tI9kpO+QUIJWrtBOf7CrHWsdo5XxhK8t/0S3LoD8jI
-        c8Dyjor3Z+mzU8a9ldqar6X3Uw==
-X-Google-Smtp-Source: ABdhPJwyRboO1Ja53YC/vxYKpauz0w2zyTeorZnthVC36rGlGpNJwpzh4MC7zHK+OQbTjKDzNmiRGA==
-X-Received: by 2002:a05:6638:d87:b0:32b:abdf:5867 with SMTP id l7-20020a0566380d8700b0032babdf5867mr3348125jaj.216.1652984901976;
-        Thu, 19 May 2022 11:28:21 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id s15-20020a92cb0f000000b002cd7dc16ae4sm1481072ilo.1.2022.05.19.11.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 11:28:21 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     hch@infradead.org, Vasily Averin <vasily.averin@linux.dev>
-Cc:     rostedt@goodmis.org, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        mingo@redhat.com, asml.silence@gmail.com
-In-Reply-To: <6f009241-a63f-ae43-a04b-62841aaef293@openvz.org>
-References: <2eb22fb3-40cc-48f6-8ba9-5faeae0b43ff@kernel.dk> <6f009241-a63f-ae43-a04b-62841aaef293@openvz.org>
-Subject: Re: [PATCH v3] io_uring: fix incorrect __kernel_rwf_t cast
-Message-Id: <165298490113.98310.14692453666034246336.b4-ty@kernel.dk>
-Date:   Thu, 19 May 2022 12:28:21 -0600
+        Thu, 19 May 2022 14:29:48 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92213EC31A;
+        Thu, 19 May 2022 11:29:46 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JHnMi6011493;
+        Thu, 19 May 2022 18:29:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=xrNctW9hVKbrU4W6AMqU2wLjNusMYTB/FYWs1L1y5aQ=;
+ b=jcmKmAuWXdoMkK8OykiBQWPVLx8rf31qjOnBo+YuWvZaKZFn6h6zCiW49Ftu+O9sqd0K
+ 88Z5/Fz+yzzC5rjdgHa86D6KZ5I5ZS6umEM4ojtpRIipIjom6bPSHskQ8vWWA6Y4aOiW
+ 6TUx7GL5h/G9c0sVX2Vptc40cZLECagSeAXDHFxHUVef5+eL7HxQ1CVqrEh5iEpqi8oS
+ QCnOA5Qg1wpMIPEJd1nIBJMykJCFtfeTBbRDYRguEj3rP+L4hpqw/UEF/hvrBGXKyk/t
+ XfHVRu7IUXYYnsaBgcMTzhDzXOp0yCroW8Y+A+J0p6YN4NRLxvDg1YMi8wSjLTME1h0+ WA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5tmkrtff-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 18:29:38 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24JHq8FO020578;
+        Thu, 19 May 2022 18:29:37 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5tmkrtf8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 18:29:37 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24JISpgC008710;
+        Thu, 19 May 2022 18:29:37 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma02wdc.us.ibm.com with ESMTP id 3g242a5k8p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 18:29:37 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24JITaFW23134634
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 18:29:36 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E8FF4136059;
+        Thu, 19 May 2022 18:29:35 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A007B136051;
+        Thu, 19 May 2022 18:29:34 +0000 (GMT)
+Received: from li-c92d2ccc-254b-11b2-a85c-a700b5bfb098.ibm.com.com (unknown [9.211.37.97])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 19 May 2022 18:29:34 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     jgg@nvidia.com, joro@8bytes.org
+Cc:     will@kernel.org, alex.williamson@redhat.com, cohuck@redhat.com,
+        borntraeger@linux.ibm.com, schnelle@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, farman@linux.ibm.com,
+        iommu@lists.linux-foundation.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] iommu/s390: tolerate repeat attach_dev calls
+Date:   Thu, 19 May 2022 14:29:29 -0400
+Message-Id: <20220519182929.581898-1-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: t1RilyYolHsJLOPLBzO2pxdNqh7SgUYc
+X-Proofpoint-ORIG-GUID: gjzwgNJ_9iqSM-ohudG6p3A8_pmMDcsd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-19_05,2022-05-19_03,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ impostorscore=0 malwarescore=0 mlxscore=0 bulkscore=0 clxscore=1011
+ mlxlogscore=999 suspectscore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205190103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 17:30:49 +0300, Vasily Averin wrote:
-> Currently 'make C=1 fs/io_uring.o' generates sparse warning:
-> 
->   CHECK   fs/io_uring.c
-> fs/io_uring.c: note: in included file (through
-> include/trace/trace_events.h, include/trace/define_trace.h, i
-> nclude/trace/events/io_uring.h):
-> ./include/trace/events/io_uring.h:488:1:
->  warning: incorrect type in assignment (different base types)
->     expected unsigned int [usertype] op_flags
->     got restricted __kernel_rwf_t const [usertype] rw_flags
-> 
-> [...]
+Since commit 0286300e6045 ("iommu: iommu_group_claim_dma_owner() must
+always assign a domain") s390-iommu will get called to allocate multiple
+unmanaged iommu domains for a vfio-pci device -- however the current
+s390-iommu logic tolerates only one.  Recognize that multiple domains can
+be allocated and handle switching between DMA or different iommu domain
+tables during attach_dev.
 
-Applied, thanks!
+Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+---
+ drivers/iommu/s390-iommu.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-[1/1] io_uring: fix incorrect __kernel_rwf_t cast
-      commit: 0e7579ca732a39cc377e17509dda9bfc4f6ba78e
-
-Best regards,
+diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+index 3833e86c6e7b..c898bcbbce11 100644
+--- a/drivers/iommu/s390-iommu.c
++++ b/drivers/iommu/s390-iommu.c
+@@ -99,7 +99,7 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 	if (!domain_device)
+ 		return -ENOMEM;
+ 
+-	if (zdev->dma_table) {
++	if (zdev->dma_table && !zdev->s390_domain) {
+ 		cc = zpci_dma_exit_device(zdev);
+ 		if (cc) {
+ 			rc = -EIO;
+@@ -107,6 +107,9 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 		}
+ 	}
+ 
++	if (zdev->s390_domain)
++		zpci_unregister_ioat(zdev, 0);
++
+ 	zdev->dma_table = s390_domain->dma_table;
+ 	cc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
+ 				virt_to_phys(zdev->dma_table));
+@@ -136,7 +139,13 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+ 	return 0;
+ 
+ out_restore:
+-	zpci_dma_init_device(zdev);
++	if (!zdev->s390_domain) {
++		zpci_dma_init_device(zdev);
++	} else {
++		zdev->dma_table = zdev->s390_domain->dma_table;
++		zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
++				   virt_to_phys(zdev->dma_table));
++	}
+ out_free:
+ 	kfree(domain_device);
+ 
+@@ -167,7 +176,7 @@ static void s390_iommu_detach_device(struct iommu_domain *domain,
+ 	}
+ 	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+ 
+-	if (found) {
++	if (found && (zdev->s390_domain == s390_domain)) {
+ 		zdev->s390_domain = NULL;
+ 		zpci_unregister_ioat(zdev, 0);
+ 		zpci_dma_init_device(zdev);
 -- 
-Jens Axboe
-
+2.27.0
 

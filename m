@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B7452DEB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3A452DEB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244833AbiESUtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 16:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
+        id S244850AbiESUuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 16:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244785AbiESUtg (ORCPT
+        with ESMTP id S244855AbiESUt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 16:49:36 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9B38720B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 13:49:33 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id o80so11094117ybg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 13:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DpIUn7t2KpByY+C3exdjmM1g7bDyPkhbaj3F539P5Ug=;
-        b=be4+zMYgHWBD0Fm8gVi2/TF2wY6TpO20KB8n9nn225sOFXquQQ+GoLMQiUSJNsfP6i
-         gmJAonvgLrXHYk9VmEPiweCwS65SJMfIVO5JYuA8w9vKBFLNDlShjOZi+KCXwiynlmG9
-         S8DHJbSI4WMsxIROerIXKHNZkJoZ+WizMBwk6nnEs8nr4zB4sDOemcxFX5uHEjs3hytF
-         Jsxmn+qmKyyz1q+0LMNv6buvXZQ7SrCN29zqwfhIR1UAk2ssVXStQdAqbfDL++oyR1p7
-         HQuUylF8EV12p+x5M82glvEBSmbBj26M0qPJoTrlBWv2hVuehOplhtgYQHtqTGZIsRr8
-         zW6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DpIUn7t2KpByY+C3exdjmM1g7bDyPkhbaj3F539P5Ug=;
-        b=MPJW3jggPR2UsGtylWxxlwOE0kKrfOUsIcq8thu/l3/MlTzYCbPu4GzvTgOBTAZ1Su
-         NIeHDNCRmOiPuO48S02UkvZLz4ACBUXsxnhn8r75D4iz7ARyEN/d/Yayax05u0WhPZaq
-         KF7z6tx0PlvbA5pV/CXh7iJlf1gu4Q0n1NtTAIdRiK1n8mc8GV+nJcc3w7W4sLH5PcNU
-         M+IHyEkEiKmz8kJ5vwLwGoFgHPA9kOHV+8Ky2V0K2aoIBs1c1/FFU2ZVXDwOg8cW7I2s
-         D3HgkA4+4+EM98HpuWPPBk9xq57AGREo2PeJxHAMhlU0Lhq6808W2PjLnhwXBiSmL4tf
-         6ruw==
-X-Gm-Message-State: AOAM533JSAVJ9ut8GrbYPXIgnd3YA5cLNpfgoVHGpjWOFyye2HwYArbG
-        hgrm3bqFV36U2nc8q0cNdHVgCqqNOgS7lHlhhlUm9wrNlXA=
-X-Google-Smtp-Source: ABdhPJzPxhkV/Rn/SuoG3prTwHYeGQr3LSPIIJaKxjOHyoF0SbdUm2tlYi6vaiBt8JFzR0b45ZPy7nHSil3uJWZmlz8=
-X-Received: by 2002:a05:6902:526:b0:64d:b6ab:f91d with SMTP id
- y6-20020a056902052600b0064db6abf91dmr6490609ybs.295.1652993373117; Thu, 19
- May 2022 13:49:33 -0700 (PDT)
+        Thu, 19 May 2022 16:49:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B26C9A994
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 13:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652993390;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=e2HjlNC1qwQJiFQcSJuEqrLE+9qnuNR3e0TAATO92cE=;
+        b=dn8IdnWATQXcHptGjqc3DlD3bdlUoE+i5GYTqy35/gqIx6AELnvMnZOJEoZ1o0mqq99M1e
+        EOUTG9H94LkGbvFhcebI4KPdVdPWIbHALCFd0xazDfVMZbuV0K9VXggYzWBf3IFrkE3Iqu
+        7dsTxJjZZyVGgYhloAawpSPs0hw1icg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-110-ligWn7QfPcu_YJi9ZsYL9g-1; Thu, 19 May 2022 16:49:46 -0400
+X-MC-Unique: ligWn7QfPcu_YJi9ZsYL9g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A4E4185A7BA;
+        Thu, 19 May 2022 20:49:46 +0000 (UTC)
+Received: from dqiao.bos.com (unknown [10.22.35.162])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 243711121314;
+        Thu, 19 May 2022 20:49:45 +0000 (UTC)
+From:   Donghai Qiao <dqiao@redhat.com>
+To:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
+        peterz@infradead.org, heying24@huawei.com,
+        andriy.shevchenko@linux.intel.com, axboe@kernel.dk,
+        rdunlap@infradead.org, tglx@linutronix.de, gor@linux.ibm.com
+Cc:     donghai.w.qiao@gmail.com, linux-kernel@vger.kernel.org,
+        Donghai Qiao <dqiao@redhat.com>
+Subject: [PATCH v4 00/11] smp: cross CPU call interface
+Date:   Thu, 19 May 2022 16:49:32 -0400
+Message-Id: <20220519204943.1079578-1-dqiao@redhat.com>
+Reply-To: dqiao@redhat.com
 MIME-Version: 1.0
-References: <cover.1651647576.git.hakan.jansson@infineon.com>
- <64b59ca66cc22e6433a044e7bba2b3e97c810dc2.1651647576.git.hakan.jansson@infineon.com>
- <CACRpkdY3xPcyNcJfdGbSP5rdcUV6hr87yJNDVDGZdRCfN+MqLA@mail.gmail.com>
- <1e8cfbc6-8452-0e87-9713-536d235e5b51@infineon.com> <CACRpkda4ByrS8RGAunno_S59+Y2yado4eObzwsVkM2Q=n-B+CQ@mail.gmail.com>
- <d35fff90-ded7-2b1a-0e1a-f2db14cc4d07@infineon.com> <0dffeb79-3182-fab1-e25a-aab4107beb6e@infineon.com>
-In-Reply-To: <0dffeb79-3182-fab1-e25a-aab4107beb6e@infineon.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 19 May 2022 22:49:21 +0200
-Message-ID: <CACRpkdaea+35bn-fa0JcfYvi+SMvHUxzmWJHeCHwV82+eodCGw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: net: broadcom-bluetooth: Add property
- for autobaud mode
-To:     Hakan Jansson <hakan.jansson@infineon.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,17 +61,309 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 4:04 PM Hakan Jansson
-<hakan.jansson@infineon.com> wrote:
+The motivation of this patch set is intended to make the existing
+cross CPU call mechanism become a formal interface, more friendly
+to the kernel developers.
 
-> I checked the state of this patch on Devicetree Bindings Patchwork and
-> it's marked "Changes Requested". I'd be happy to revise the patch but
-> it's not clear to me what changes are requested. Could you please help
-> guide me how to proceed?
+For the simplicity self-explanatory less code redundancy and no
+ambiguity, the set of functions below can satisfy any existing
+demand for cross call, at the meantime they still carry over the
+same semantics and the similar parameter lists.
 
-Sorry if it's not clear but I'm essentially requesting that the document
-describe how autobaud mode actually works. The binding documentation
-must help DT authors to know what they should do with this property.
+int smp_call(int cpu, smp_call_func_t func, void *info, unsigned int flags)
 
-Yours,
-Linus Walleij
+int smp_call_cond(int cpu, smp_call_func_t func, void *info,
+                smp_cond_func_t condf, unsigned int flags)
+
+void smp_call_mask(const struct cpumask *mask, smp_call_func_t func,
+                void *info, unsigned int flags)
+
+void smp_call_mask_others(const struct cpumask *mask, smp_call_func_t func,
+                void *info, unsigned int flags)
+
+void smp_call_mask_cond(const struct cpumask *mask, smp_call_func_t func,
+                void *info, smp_cond_func_t condf, unsigned int flags)
+
+int smp_call_csd(int cpu, call_single_data_t *csd, unsigned int flags)
+
+Patch 1: The smp cross call related structures and definitions are
+consolidated from smp.c smp_types.h to smp.h. As a result, smp_types.h
+is deleted from the source tree.
+
+Patch 2: The set of smp_call* functions listed above are defined.
+But the details will be done with the subsequent patches in this set.
+
+Patch 3: Removed SCF_WAIT and SCF_RUN_LOCAL and changed
+smp_call_function_many_cond() accordingly. In order to differentiate
+the cross calls that the local CPU needs to be included from those the
+local CPU needs to be excluded, the interface provides two different
+functions - smp_call_mask() and smp_call_mask_others(). As a result
+of these changes, the on_each_cpu* functions and smp_call_function_many
+smp_call_function will be eliminated with another patch in this series.
+
+Patch 4: Eliminated the percpu global csd_data. Let
+smp_call_function_single() temporarily hook up to smp_call().
+
+Patch 5: Replaced smp_call_function_single_async() with smp_call_csd()
+and also extended smp_call_csd() to support one CPU synchronous cross
+call with preallocated csd structure
+
+Patch 6: irq_work.c and core.c should use the cross interface rather
+than using a unpublished internal function __smp_call_single_queue.
+
+But this change also exposed unpublished types SMP_CALL_TYPE_TTWU and
+SMP_CALL_TYPE_IRQ_WORK. However, this is a temporarily change so that
+all kernel clients can call the interface as the first step. A
+permanent solution should implement new cross call func() for both
+and from there the TTWU and IRQ_WORK types of requests can be processed.
+That way, the special TTWU and IRQ_WORK types will not be visible from
+the cross call interface. Because this needs to change core.s and
+irq_work.c, this should be done with a follow up patch set.
+
+Patch 7: When a caller needs to send a cross call to a preferred CPU,
+the caller should provide the CPU rather than having the cross call
+interface pick up one because interface should do the common job for
+the majority rather than cover every single special cases.
+
+In the scenario of smp_call_function_any(), a preferred CPU is either
+the local CPU or any CPU in the same node or any online CPU as long
+as it is present in cpumask. However, the way of selecting a preferred
+CPU should be done by the caller. Thus, the particular code which
+deal with CPU selection is moved outside of smp_call_function_any()
+and formed a utility function __smp_cpu_nearby() for this purpose.
+So, the function smp_call_function_any() can be replaced with the
+combination of __smp_cpu_nearby() and smp_call(). As a result, the
+function smp_call_function_any() is eliminated.
+
+Patch 8: Eliminated smp_call_function, smp_call_function_many,
+smp_call_function_many_cond, on_each_cpu, on_each_cpu_mask,
+on_each_cpu_cond, on_each_cpu_cond_mask.
+
+Patch 9: Eliminated smp_call_function_single_async.
+
+Patch 10: Eliminated smp_call_function_single.
+
+Patch 11: modify up.c to adopt the same format of cross CPU call.
+
+Note: Each patch in this set depends on its precedent patch only.
+      The kernel can be built and boot if it is patched with any
+      number of patches starting from 1 to 11.
+
+v1 -> v2: Removed 'x' from the function names and change XCALL to
+	  SMP_CALL from the new macros.
+V2 -> v3: Modified the cover-letter since v2;
+	  Addressed the issues that Peter and Thomas have pointed out
+	  previously.
+v3 -> v4: Fixed the assert warnings emitted from __smp_call_mask_cond
+	  which is triggered by callers without preempt_disable()
+	  before calling smp_call_mask_others.
+	  Fixed the "error: 'lush_tlb_all_local' undeclared" error
+	  at arch/parisc/mm/init.c:850:32
+	  Fixed the "variable 'end_paddr' set but not used" issue
+	  at arch/parisc/mm/init.c:623:31
+
+Donghai Qiao (11):
+  smp: consolidate the structure definitions to smp.h
+  smp: the definitions of cross call interface
+  smp: remove SCF_WAIT and SCF_RUN_LOCAL
+  smp: replace smp_call_function_single() with  smp_call()
+  smp: replace smp_call_function_single_async with smp_call_csd
+  smp: use smp_call_csd() from irq_work.c and core.c
+  smp: eliminate smp_call_function_any
+  smp: replace smp_call_function_many_cond with __smp_call_mask_cond
+  smp: replace smp_call_function_single_async with smp_call_csd
+  smp: replace smp_call_function_single() with smp_call
+  smp: up.c to adopt the same format of cross CPU call
+
+ arch/alpha/kernel/process.c                   |   2 +-
+ arch/alpha/kernel/rtc.c                       |   4 +-
+ arch/alpha/kernel/smp.c                       |  13 +-
+ arch/arc/kernel/perf_event.c                  |   2 +-
+ arch/arc/mm/cache.c                           |   2 +-
+ arch/arc/mm/tlb.c                             |  14 +-
+ arch/arm/common/bL_switcher.c                 |   3 +-
+ arch/arm/kernel/machine_kexec.c               |   7 +-
+ arch/arm/kernel/perf_event_v7.c               |  18 +-
+ arch/arm/kernel/smp_tlb.c                     |  25 +-
+ arch/arm/kernel/smp_twd.c                     |   4 +-
+ arch/arm/mach-bcm/bcm_kona_smc.c              |   2 +-
+ arch/arm/mach-mvebu/pmsu.c                    |   4 +-
+ arch/arm/mm/flush.c                           |  10 +-
+ arch/arm/vfp/vfpmodule.c                      |   2 +-
+ arch/arm64/kernel/armv8_deprecated.c          |   4 +-
+ arch/arm64/kernel/perf_event.c                |  16 +-
+ arch/arm64/kernel/topology.c                  |   2 +-
+ arch/arm64/kvm/arm.c                          |   6 +-
+ arch/csky/abiv2/cacheflush.c                  |   2 +-
+ arch/csky/kernel/cpu-probe.c                  |   2 +-
+ arch/csky/kernel/perf_event.c                 |   2 +-
+ arch/csky/kernel/smp.c                        |   2 +-
+ arch/csky/mm/cachev2.c                        |   2 +-
+ arch/ia64/kernel/mca.c                        |   4 +-
+ arch/ia64/kernel/palinfo.c                    |   3 +-
+ arch/ia64/kernel/smp.c                        |  12 +-
+ arch/ia64/kernel/smpboot.c                    |   2 +-
+ arch/ia64/kernel/uncached.c                   |  14 +-
+ arch/mips/cavium-octeon/octeon-irq.c          |   4 +-
+ arch/mips/cavium-octeon/setup.c               |  12 +-
+ arch/mips/kernel/crash.c                      |   6 +-
+ arch/mips/kernel/machine_kexec.c              |   5 +-
+ arch/mips/kernel/perf_event_mipsxx.c          |   7 +-
+ arch/mips/kernel/process.c                    |   2 +-
+ arch/mips/kernel/smp-bmips.c                  |   3 +-
+ arch/mips/kernel/smp-cps.c                    |   8 +-
+ arch/mips/kernel/smp.c                        |  13 +-
+ arch/mips/kernel/sysrq.c                      |   5 +-
+ arch/mips/mm/c-r4k.c                          |   4 +-
+ arch/mips/sibyte/common/cfe.c                 |   5 +-
+ arch/openrisc/kernel/smp.c                    |  15 +-
+ arch/parisc/kernel/cache.c                    |   4 +-
+ arch/parisc/mm/init.c                         |   4 +-
+ arch/powerpc/kernel/dawr.c                    |   8 +-
+ arch/powerpc/kernel/kvm.c                     |   2 +-
+ arch/powerpc/kernel/security.c                |   6 +-
+ arch/powerpc/kernel/smp.c                     |  10 +-
+ arch/powerpc/kernel/sysfs.c                   |  28 +-
+ arch/powerpc/kernel/tau_6xx.c                 |   4 +-
+ arch/powerpc/kernel/watchdog.c                |   4 +-
+ arch/powerpc/kexec/core_64.c                  |   7 +-
+ arch/powerpc/kvm/book3s_64_mmu_hv.c           |   2 +-
+ arch/powerpc/kvm/book3s_hv.c                  |   8 +-
+ arch/powerpc/mm/book3s64/pgtable.c            |   2 +-
+ arch/powerpc/mm/book3s64/radix_tlb.c          |  12 +-
+ arch/powerpc/mm/nohash/tlb.c                  |  11 +-
+ arch/powerpc/mm/slice.c                       |   4 +-
+ arch/powerpc/perf/core-book3s.c               |   2 +-
+ arch/powerpc/perf/imc-pmu.c                   |   2 +-
+ arch/powerpc/platforms/85xx/smp.c             |  14 +-
+ arch/powerpc/platforms/powernv/idle.c         |   2 +-
+ arch/powerpc/platforms/pseries/lparcfg.c      |   2 +-
+ arch/riscv/mm/cacheflush.c                    |   4 +-
+ arch/s390/hypfs/hypfs_diag0c.c                |   2 +-
+ arch/s390/kernel/alternative.c                |   2 +-
+ arch/s390/kernel/perf_cpum_cf.c               |  10 +-
+ arch/s390/kernel/perf_cpum_cf_common.c        |   4 +-
+ arch/s390/kernel/perf_cpum_sf.c               |   4 +-
+ arch/s390/kernel/processor.c                  |   2 +-
+ arch/s390/kernel/smp.c                        |   2 +-
+ arch/s390/kernel/topology.c                   |   2 +-
+ arch/s390/mm/pgalloc.c                        |   2 +-
+ arch/s390/pci/pci_irq.c                       |   4 +-
+ arch/sh/kernel/smp.c                          |  24 +-
+ arch/sh/mm/cache.c                            |   3 +-
+ arch/sparc/include/asm/mman.h                 |   4 +-
+ arch/sparc/kernel/nmi.c                       |  19 +-
+ arch/sparc/kernel/perf_event.c                |   4 +-
+ arch/sparc/kernel/smp_64.c                    |  14 +-
+ arch/sparc/mm/init_64.c                       |   2 +-
+ arch/x86/events/core.c                        |   6 +-
+ arch/x86/events/intel/core.c                  |   4 +-
+ arch/x86/kernel/alternative.c                 |   2 +-
+ arch/x86/kernel/amd_nb.c                      |   2 +-
+ arch/x86/kernel/apic/apic.c                   |   2 +-
+ arch/x86/kernel/apic/vector.c                 |   2 +-
+ arch/x86/kernel/cpu/aperfmperf.c              |   5 +-
+ arch/x86/kernel/cpu/bugs.c                    |   2 +-
+ arch/x86/kernel/cpu/mce/amd.c                 |   4 +-
+ arch/x86/kernel/cpu/mce/core.c                |  12 +-
+ arch/x86/kernel/cpu/mce/inject.c              |  12 +-
+ arch/x86/kernel/cpu/mce/intel.c               |   2 +-
+ arch/x86/kernel/cpu/microcode/core.c          |   4 +-
+ arch/x86/kernel/cpu/mtrr/mtrr.c               |   2 +-
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c     |  14 +-
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c        |   8 +-
+ arch/x86/kernel/cpu/sgx/main.c                |   5 +-
+ arch/x86/kernel/cpu/umwait.c                  |   2 +-
+ arch/x86/kernel/cpu/vmware.c                  |   2 +-
+ arch/x86/kernel/cpuid.c                       |   2 +-
+ arch/x86/kernel/kvm.c                         |   6 +-
+ arch/x86/kernel/ldt.c                         |   2 +-
+ arch/x86/kvm/vmx/vmx.c                        |   3 +-
+ arch/x86/kvm/x86.c                            |  11 +-
+ arch/x86/lib/cache-smp.c                      |   4 +-
+ arch/x86/lib/msr-smp.c                        |  20 +-
+ arch/x86/mm/pat/set_memory.c                  |   4 +-
+ arch/x86/mm/tlb.c                             |  12 +-
+ arch/x86/xen/mmu_pv.c                         |   4 +-
+ arch/x86/xen/smp_pv.c                         |   5 +-
+ arch/x86/xen/suspend.c                        |   4 +-
+ arch/xtensa/kernel/smp.c                      |  29 +-
+ block/blk-mq.c                                |   2 +-
+ drivers/acpi/processor_idle.c                 |   4 +-
+ drivers/char/agp/generic.c                    |   2 +-
+ drivers/clocksource/ingenic-timer.c           |   2 +-
+ drivers/clocksource/mips-gic-timer.c          |   2 +-
+ drivers/cpufreq/acpi-cpufreq.c                |  15 +-
+ drivers/cpufreq/powernow-k8.c                 |   9 +-
+ drivers/cpufreq/powernv-cpufreq.c             |  39 +-
+ drivers/cpufreq/sparc-us2e-cpufreq.c          |   4 +-
+ drivers/cpufreq/sparc-us3-cpufreq.c           |   4 +-
+ drivers/cpufreq/speedstep-ich.c               |   7 +-
+ drivers/cpufreq/tegra194-cpufreq.c            |   8 +-
+ drivers/cpuidle/coupled.c                     |   2 +-
+ drivers/cpuidle/driver.c                      |   8 +-
+ drivers/edac/amd64_edac.c                     |   4 +-
+ drivers/firmware/arm_sdei.c                   |  10 +-
+ drivers/gpu/drm/i915/vlv_sideband.c           |   2 +-
+ drivers/hwmon/fam15h_power.c                  |   2 +-
+ .../hwtracing/coresight/coresight-cpu-debug.c |   3 +-
+ .../coresight/coresight-etm3x-core.c          |  11 +-
+ .../coresight/coresight-etm4x-core.c          |  12 +-
+ .../coresight/coresight-etm4x-sysfs.c         |   2 +-
+ drivers/hwtracing/coresight/coresight-trbe.c  |   6 +-
+ drivers/irqchip/irq-mvebu-pic.c               |   4 +-
+ .../net/ethernet/cavium/liquidio/lio_core.c   |   2 +-
+ drivers/net/ethernet/marvell/mvneta.c         |  34 +-
+ .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |   8 +-
+ drivers/perf/arm_spe_pmu.c                    |  14 +-
+ .../intel/speed_select_if/isst_if_mbox_msr.c  |   4 +-
+ drivers/platform/x86/intel_ips.c              |   4 +-
+ drivers/powercap/intel_rapl_common.c          |   2 +-
+ drivers/powercap/intel_rapl_msr.c             |   2 +-
+ drivers/regulator/qcom_spmi-regulator.c       |   3 +-
+ drivers/soc/fsl/qbman/qman.c                  |   4 +-
+ drivers/soc/fsl/qbman/qman_test_stash.c       |   9 +-
+ drivers/soc/xilinx/xlnx_event_manager.c       |   2 +-
+ drivers/tty/sysrq.c                           |   5 +-
+ drivers/watchdog/booke_wdt.c                  |   8 +-
+ fs/buffer.c                                   |   2 +-
+ include/linux/irq_work.h                      |   2 +-
+ include/linux/smp.h                           | 216 ++++--
+ include/linux/smp_types.h                     |  69 --
+ kernel/cpu.c                                  |   4 +-
+ kernel/debug/debug_core.c                     |   2 +-
+ kernel/events/core.c                          |  10 +-
+ kernel/irq_work.c                             |   4 +-
+ kernel/profile.c                              |   4 +-
+ kernel/rcu/rcutorture.c                       |   3 +-
+ kernel/rcu/tasks.h                            |   4 +-
+ kernel/rcu/tree.c                             |   6 +-
+ kernel/rcu/tree_exp.h                         |   4 +-
+ kernel/relay.c                                |   5 +-
+ kernel/scftorture.c                           |  20 +-
+ kernel/sched/core.c                           |   4 +-
+ kernel/sched/fair.c                           |   2 +-
+ kernel/sched/membarrier.c                     |  10 +-
+ kernel/smp.c                                  | 641 ++++++++----------
+ kernel/time/clockevents.c                     |   2 +-
+ kernel/time/clocksource.c                     |   2 +-
+ kernel/time/hrtimer.c                         |   5 +-
+ kernel/time/tick-common.c                     |   2 +-
+ kernel/trace/ftrace.c                         |  18 +-
+ kernel/trace/ring_buffer.c                    |   7 +-
+ kernel/trace/trace.c                          |  12 +-
+ kernel/trace/trace_events.c                   |   2 +-
+ kernel/up.c                                   |  58 +-
+ mm/kasan/quarantine.c                         |   2 +-
+ mm/mmu_gather.c                               |   5 +-
+ mm/slab.c                                     |   2 +-
+ net/bpf/test_run.c                            |   4 +-
+ net/core/dev.c                                |   2 +-
+ net/iucv/iucv.c                               |  21 +-
+ virt/kvm/kvm_main.c                           |  12 +-
+ 186 files changed, 1160 insertions(+), 991 deletions(-)
+ delete mode 100644 include/linux/smp_types.h
+
+-- 
+2.27.0
+

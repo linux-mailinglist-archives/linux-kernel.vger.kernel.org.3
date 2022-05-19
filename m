@@ -2,117 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B3F52E034
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7411652E037
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243315AbiESXBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 19:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59674 "EHLO
+        id S245638AbiESXCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243647AbiESXBh (ORCPT
+        with ESMTP id S234288AbiESXCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 19:01:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166CC24BC2;
-        Thu, 19 May 2022 16:01:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 19 May 2022 19:02:12 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAC524F3C;
+        Thu, 19 May 2022 16:02:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0798B828B0;
-        Thu, 19 May 2022 23:01:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D794C385AA;
-        Thu, 19 May 2022 23:01:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1653001289;
-        bh=omajtcogrQYaXP4cqKjhNTb/VO5d+uoMyeRqV8OjHds=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U+sFKkAHVZoDq+648Cf2hd05C5GVSTK7z2SZl5k4GbPlQ1Hk/LG3AO8iVNUKPUfS1
-         6lwVDQX4Dd/VcJt/1vvQnOHYWDLSXHTgnbBbWekKhKAhBp+9Xmuty+IF8Z3LCZ+6jE
-         31bxfqyBVH/WApZckKys6FFlOmPsm/y2Gj/aCAgw=
-Date:   Fri, 20 May 2022 01:01:25 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-sgx@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mhocko@suse.com, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org, shakeelb@google.com
-Subject: Re: [PATCH v2] x86/sgx: Set active memcg prior to shmem allocation
-Message-ID: <YobMRaJBS1/FsQQG@kroah.com>
-References: <20220519210445.5310-1-kristen@linux.intel.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L45336NB3z4xD9;
+        Fri, 20 May 2022 09:02:07 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1653001328;
+        bh=rBUXIaYvBaLHaORqdPDKoBqIalDVISEvroC7wciMFRs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DXvGdvxIJGIjqOTTbAb4jqH7yOm6OeRsQWHIOdCZuP1yY09QBvbivWGBVSbCH7ySg
+         gTiydclLD1HGBOe7clVnvzLtKlj5YoVs+phHpkBmKt+gEYyYt6fsP4kfmlspaxElxH
+         M5o/PBjcBX7r8R7ohfhsYTyGrlmLyumnAPjiRQSBRbusYddjyOgs6IIu077TSyuOk8
+         f+WbWyqo051NSmvT1gfYlTJ3IXfFpIsmDlACMaFw3hjg77Yyc8mq/YiqMv1R0qirgu
+         3IzPgoejKCWSvwAkL2H3DeL/X48Sg8oMKz/ESIRwJOiLtyHFtzyr4VeghRJSIO8k40
+         v9T+iUYAEMJ8A==
+Date:   Fri, 20 May 2022 09:02:06 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the pm tree
+Message-ID: <20220520090206.2cf07c2d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519210445.5310-1-kristen@linux.intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/maXGSWe_ezXCDx0N01I=6ek";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 02:04:45PM -0700, Kristen Carlson Accardi wrote:
-> When the system runs out of enclave memory, SGX can reclaim EPC pages
-> by swapping to normal RAM. These backing pages are allocated via a
-> per-enclave shared memory area. Since SGX allows unlimited over
-> commit on EPC memory, the reclaimer thread can allocate a large
-> number of backing RAM pages in response to EPC memory pressure.
-> 
-> When the shared memory backing RAM allocation occurs during
-> the reclaimer thread context, the shared memory is charged to
-> the root memory control group, and the shmem usage of the enclave
-> is not properly accounted for, making cgroups ineffective at
-> limiting the amount of RAM an enclave can consume.
-> 
-> For example, when using a cgroup to launch a set of test
-> enclaves, the kernel does not properly account for 50% - 75% of
-> shmem page allocations on average. In the worst case, when
-> nearly all allocations occur during the reclaimer thread, the
-> kernel accounts less than a percent of the amount of shmem used
-> by the enclave's cgroup to the correct cgroup.
-> 
-> SGX stores a list of mm_structs that are associated with
-> an enclave. Pick one of them during reclaim and charge that
-> mm's memcg with the shmem allocation. The one that gets picked
-> is arbitrary, but this list almost always only has one mm. The
-> cases where there is more than one mm with different memcg's
-> are not worth considering.
-> 
-> Create a new function - sgx_encl_alloc_backing(). This function
-> is used whenever a new backing storage page needs to be
-> allocated. Previously the same function was used for page
-> allocation as well as retrieving a previously allocated page.
-> Prior to backing page allocation, if there is a mm_struct associated
-> with the enclave that is requesting the allocation, it is set
-> as the active memory control group.
-> 
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> ---
-> V1 -> V2:
->  Changed sgx_encl_set_active_memcg() to simply return the correct
->  memcg for the enclave and renamed to sgx_encl_get_mem_cgroup().
-> 
->  Created helper function current_is_ksgxd() to improve readability.
-> 
->  Use mmget_not_zero()/mmput_async() when searching mm_list.
-> 
->  Move call to set_active_memcg() to sgx_encl_alloc_backing() and
->  use mem_cgroup_put() to avoid leaking a memcg reference.
-> 
->  Address review feedback regarding comments and commit log.
-> 
+--Sig_/maXGSWe_ezXCDx0N01I=6ek
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-<formletter>
+Hi all,
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+In commit
 
-</formletter>
+  42d2607d91c4 ("PM / devfreq: passive: Return non-error when not-supported=
+ event is required")
+
+Fixes tag
+
+  Fixes: ce9a0d88d97a ("PM / devfreq: Add cpu based scaling support to pass=
+ive governor")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passiv=
+e governor")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/maXGSWe_ezXCDx0N01I=6ek
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKGzG4ACgkQAVBC80lX
+0Gz4QAgAjzUIAzBDkMMxjT/ImwQZKyITOhl91INMf6vym+ZCv5Zzwv809YHekjOr
+MJuc7zqVLibb+9Y/NP3w9olqVsWzhMDaObpv+1WWTey4jMw1VjKpHsL7+Ems0Kfm
+u3wE1z6SUB/vt5XRQ8enMCNJMrf4uHsorZ6GH5DpvJRllHRcjD9gll/a/Hotxk0o
+XEZJJyynsgEr9LhBE1HJQfpez1c3mrDiTb5Ik4wAKtKLmlMFUdSY4LfIrsvODGn5
+QHVb+/qMKK54FcJA+YKFuoCmO9K0uh5aV3uoUGUTURoArQwZjAwEfIeVpfmiJ069
+EOiE+/TJJ3lFkqVpBmNEFbQee6YGTw==
+=SKjy
+-----END PGP SIGNATURE-----
+
+--Sig_/maXGSWe_ezXCDx0N01I=6ek--

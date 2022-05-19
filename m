@@ -2,102 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EFA52DE89
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0EE952DE8D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244770AbiESUk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 16:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
+        id S244778AbiESUmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 16:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244712AbiESUkX (ORCPT
+        with ESMTP id S243853AbiESUmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 16:40:23 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE75985A8;
-        Thu, 19 May 2022 13:40:21 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id e4so7014462ljb.13;
-        Thu, 19 May 2022 13:40:21 -0700 (PDT)
+        Thu, 19 May 2022 16:42:21 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9984F7A81D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 13:42:19 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id i11so11009805ybq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 13:42:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BgKHPZFZkX1keDz+vV/kymxRnGTruz8H3lBNU7pTNfs=;
-        b=ovnqcE0VKz1g7pMzW4VX9VXubz8TXRJvpEolR0D3INYtMPHJDsg1adbQPWIk5ughAU
-         28bi6qaedeapoSsE9Vv/Xf6hV9ZV3UILP/+oV0gmFwWW0tvPbvHow6ld3Wo1PhebSyzh
-         Wr6KsAK5T2PpC+RqFHnMDMrG/RFMXBz3X1cdiAcHRgK/79tjQtwHbgOWnG6BS105mHDZ
-         3qTtZS+OzgGO0Jo6Af6nchndv91MkyhuHpeHIxJPf2VCLjQyskXM4cBKfWWnMJyIj4sZ
-         mekBtnr0vkKhn9gaft1gZ93D331pk3444aeWbsFjRZLWbPagavYOO/paUt7uwPEFYUIn
-         gpNg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z2okLhz72KUTvla4YyoDTB8A/W8JoxXBQasuMUph8C0=;
+        b=d2ACSNJz5Z8ThxTfbHc462MoLXTn6k5pKJ9S8YoDulcbrtuD12Q7GHSdwteiu3ukqF
+         8jm8K7ARf6N8ex53iZDSVuRkhCCKuPM3siwOeFnm++0kLE32geBnd9BfvESLJGAOjiEx
+         OR4ibZwwOngZDxrb6FIj4vWGc7cVl6ea2yFnW1Y+XnEbhVrwHFuayzfHQ21OYZV8TcVg
+         1/dne1LxTfdLS2mn6T/t8oofcir+h2ipDqF2MJyXJVi6J/c3Zyowqds2/KZpXKnG55qo
+         DWbEU2HpavtgJ7G69pKePU2mXV+TgVs3Xn5a81GpLuMBsCElSG1yF1jX7cnhwb+TYZ5J
+         KL2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BgKHPZFZkX1keDz+vV/kymxRnGTruz8H3lBNU7pTNfs=;
-        b=ZJwvWLk0fHAhHXEjGzA1LE7YSdIFMxwrkPGAeFz0oXuiCSkQcRufBcaMWtXVdPDxH+
-         Rqz0vTFwDGBvHY66px1SidaH6U27NDTaUXYZ0uNd9pBpTqa/hTJE7f2Nx/O4zaKqtP2d
-         XmvzS4Yrz9PPp085AyC6PA+0ciyShzYBtKStDhLocFn1OJJHenYxtSWks84nYbVo8JNA
-         C/qyQNMUbm/Mv9g4iBvX9WHjhNCD9jlIs2no1I8iISJs5gsWUYJ/Ry+7LOSrDQChB09t
-         zjGjDh3IXaP+w1e2I2bdSVJnQyndxNUQ55CYJN/cteZ5WgmJ0CEb5QINiX3+T+KqjB+u
-         AyKQ==
-X-Gm-Message-State: AOAM530i2RHsfTtwMwiLRpuK+qQh9UfGtekQ5bMyNucEfPRvAYi4Ir8q
-        in9LJW4loccm/ZtUCjPD5S0=
-X-Google-Smtp-Source: ABdhPJyMl05hAqXLfEDskvA2Jercr6evZtF13mcYnrmx+6Gca9Kg6RTBkG7TDoEJCiNl4iYXbqwPHg==
-X-Received: by 2002:a2e:a801:0:b0:24a:ff0b:ae7a with SMTP id l1-20020a2ea801000000b0024aff0bae7amr3544106ljq.287.1652992819964;
-        Thu, 19 May 2022 13:40:19 -0700 (PDT)
-Received: from localhost.localdomain ([46.235.67.4])
-        by smtp.gmail.com with ESMTPSA id b9-20020a056512024900b0047255d21148sm394048lfo.119.2022.05.19.13.40.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 13:40:19 -0700 (PDT)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        dan.carpenter@oracle.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>
-Subject: [PATCH] net: ocelot: fix wront time_after usage
-Date:   Thu, 19 May 2022 23:40:17 +0300
-Message-Id: <20220519204017.15586-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z2okLhz72KUTvla4YyoDTB8A/W8JoxXBQasuMUph8C0=;
+        b=ezvxOOdIebMpZY7eE+2EQG0NrC0+RVRIDZ63rPlM8dbqlrYZu32AZlFwi18FwCsP85
+         PEWNQVCVJJxqr2XdMBInJm0y/J4hR5PZKIx886aA7Dja8DM9DL/3kpho68+b6Fekrqwv
+         pR7NAytBIuM/Tt5w5CheZxX2ht/db/W7Icm/AcZ3t+sueiTSOCxQUcY4w5dxMzodXVAZ
+         eJ4C72v+yJTzrKPMI3zw+9MMLlFZtDY3mnQ3WU+GNAqyXxX3SAkMiK7oxDOTheAS8drr
+         zfcavh7RdtP6Kl/flnNpS/vSgsQj3+HxjtpqfR26i9bwxXsYbZ3FaHTHfvkd1tfLbBcQ
+         phmw==
+X-Gm-Message-State: AOAM533bbH2wteGzhp+U807czu39l33IzlF5HaPrnfTGAyg0WYlRcU7r
+        bFHhMLiwfF+pp/TcnIonhebIIEy7zRH9kTe/bxMaKg==
+X-Google-Smtp-Source: ABdhPJxJ/yh/6kwjFetK+yKNj03Si68VL6xzAYIFBlugdZlKFzZHju2VwSEDLPIqRhvMZjc2UyCWKc4FGr1HAakdJJs=
+X-Received: by 2002:a05:6902:18a:b0:64b:30ae:da2a with SMTP id
+ t10-20020a056902018a00b0064b30aeda2amr5956500ybh.314.1652992938667; Thu, 19
+ May 2022 13:42:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220513202159.1550547-1-samitolvanen@google.com>
+ <CA+icZUWr+-HjMvY1VZf+nqjTadxSTDciux0Y5Y-+p_j4o7CmXg@mail.gmail.com>
+ <CABCJKueVcwYishxSoEyn9b1vaGTXdoYWF7VyANPm7V=H+yyfhQ@mail.gmail.com>
+ <CA+icZUUBqz1zTcj61nK=sbkWcSncKYZgR2Qg0FSCWi9un84yLw@mail.gmail.com>
+ <YoPuMhc03hUJxmPs@dev-arch.thelio-3990X> <CA+icZUU0k8UHRiFvV45nr1xY0p3SgaG+MLjJoEnmUCQ8T+WGdg@mail.gmail.com>
+ <Yoan3dgL988r0Mv/@dev-arch.thelio-3990X>
+In-Reply-To: <Yoan3dgL988r0Mv/@dev-arch.thelio-3990X>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Thu, 19 May 2022 13:41:42 -0700
+Message-ID: <CABCJKueRFbzmJaZVj=oSP9mg+93mQrYo-eiX+ZZh0EP34VdE-g@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 00/21] KCFI support
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-hardening@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Accidentally noticed, that this driver is the only user of
-while (timer_after(jiffies...)).
+On Thu, May 19, 2022 at 1:26 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Thu, May 19, 2022 at 11:01:40AM +0200, Sedat Dilek wrote:
+> > On Tue, May 17, 2022 at 8:49 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > I have run kCFI (v1, I haven't had time to test v2) on x86_64 hardware,
+> > > both AMD and Intel. I have only found two failures so far: the i915
+> > > issue that I mention below and a failure in the KVM subsystem, which I
+> > > can see by just running QEMU:
+> > >
+> >
+> > Is there a fix around this issue?
+>
+> No, I mentioned it offhand to Sami in IRC but I never followed up. This
+> failure appears to be introduced by commit f922bd9bf33b ("KVM: Move MMU
+> notifier's mmu_lock acquisition into common helper").
+>
+> Sami, do you want an issue opened around this somewhere?
 
-It looks like typo, because likely this while loop will finish after 1st
-iteration, because time_after() returns true when 1st argument _is after_
-2nd one.
+Yes, please file a bug. The ClangBuiltLinux Github is probably the best place.
 
-Fix it by negating time_after return value inside while loops statement
-
-Fixes: 753a026cfec1 ("net: ocelot: add FDMA support")
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
- drivers/net/ethernet/mscc/ocelot_fdma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/mscc/ocelot_fdma.c b/drivers/net/ethernet/mscc/ocelot_fdma.c
-index dffa597bffe6..4500fed3ce5c 100644
---- a/drivers/net/ethernet/mscc/ocelot_fdma.c
-+++ b/drivers/net/ethernet/mscc/ocelot_fdma.c
-@@ -104,7 +104,7 @@ static int ocelot_fdma_wait_chan_safe(struct ocelot *ocelot, int chan)
- 		safe = ocelot_fdma_readl(ocelot, MSCC_FDMA_CH_SAFE);
- 		if (safe & BIT(chan))
- 			return 0;
--	} while (time_after(jiffies, timeout));
-+	} while (!time_after(jiffies, timeout));
- 
- 	return -ETIMEDOUT;
- }
--- 
-2.36.1
-
+Sami

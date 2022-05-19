@@ -2,139 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6684352D2EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B0D52D2FC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238079AbiESMtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 08:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
+        id S238136AbiESMuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 08:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237337AbiESMtE (ORCPT
+        with ESMTP id S238134AbiESMud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 08:49:04 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66966BA98C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:49:03 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id bs17so4654029qkb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:49:03 -0700 (PDT)
+        Thu, 19 May 2022 08:50:33 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671A1BC6FD
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:50:30 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id ck4so5482165ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZYNVM4/IO7V0fYNlQI5NvKWUT/yRQDy6ZvaTZbyqfac=;
-        b=mJWbE0QEIqGVvxszguDCXk6HwPAW7vSyy5sd3KThi4tH55htbFfVr/pC0ToJ9Wjpa1
-         NMmJnnauuKYVCnsnAXjrwKHeXhHl8ZPuLdHTFaFsHnnnmZs/DR1fBs0GWnkicU365rSs
-         MDd0k6/yu9md8zAjjRbTMI3qMGHSL2wGEXHcaHNOhg7ATegQxyCdQWMpnJjS9kEMrpsw
-         qAf5/l3VqY4vD1G5EoG5q0Ppuy/F+LqgJQy7AHg2mM4GxpxngJov49ELqlDU312VZzAS
-         x0NZG6iAjVCyxWGkBA/EzzSF3qXZiUBc5CNglAFiNWxAi2Te8oEllwRgTQe+Qirgs8yO
-         AkHg==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vRE/oJtdGWdN444bPnrord4cMpAoUxxz8a+T8mrufqA=;
+        b=N4bXORpvmxzJvDMuETcmC63g8ePtxhxyMv7u7BDJcpfMrcfpL8QhERL80OsjtI3tpv
+         gIKsZRpervYUxhOP1C1U1qhYkgOikh/xXxjuSrfHTC6Do/8AHAVA8eq5AKfzgqhPJNXS
+         tVg67vgiAyzU6JLVN3PmghCkb7gaEtgqYLprU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZYNVM4/IO7V0fYNlQI5NvKWUT/yRQDy6ZvaTZbyqfac=;
-        b=voaPEAAF5o+PPJeGF7tjZONrVjAhM8hXM/mOaSPl1QsNjDjAaRYabd+a802/qm6x5q
-         bylsEmlwTVxchMrhlhf+j5nGIuAvz2iWrhkIC9H4Ee+Nz2qIXglCRsQ+uT2z0m9uFn1/
-         wvq13591yNi/O3reQbR1YXHL28YlN6dH9mD85DE7lCtha5zhjHrHkNbqOCAjAOcSonYR
-         L1kMOC8iKLsu52Qri2tFypCchBil8p9pcBQQjXpBWMTrMvPRv3o1wgqbBQI2tiAUF7Sp
-         oh11FKeGWGEx75JEDgSnXVJvSYVMdcyJ4H+z9B5vNDMwkLt2QkME/7ALYaaR2VHLYiv7
-         T1JA==
-X-Gm-Message-State: AOAM532mvCcVD9o49r4sa/2LFHUoJTyMQeKBaDXoaUzYiiCMsK8CMatr
-        SoqzxUGWzDu1VZWiGN9FMfIWeQ==
-X-Google-Smtp-Source: ABdhPJwC7dyR0Qk9BGcWgMtmzQUq9wbfQt5NmHbKY9nEqa9QgAxBxse0MPnEsgUdrJlcKLQUc1t5uA==
-X-Received: by 2002:a37:6883:0:b0:6a3:42ae:e17b with SMTP id d125-20020a376883000000b006a342aee17bmr524511qkc.59.1652964542542;
-        Thu, 19 May 2022 05:49:02 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id p7-20020a37a607000000b0069fc13ce24dsm1250439qke.126.2022.05.19.05.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 05:49:01 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nrfaO-008vEJ-VD; Thu, 19 May 2022 09:49:00 -0300
-Date:   Thu, 19 May 2022 09:49:00 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Long Li <longli@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: [PATCH 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
- Network Adapter
-Message-ID: <20220519124900.GR63055@ziepe.ca>
-References: <1652778276-2986-1-git-send-email-longli@linuxonhyperv.com>
- <1652778276-2986-13-git-send-email-longli@linuxonhyperv.com>
- <20220517152409.GJ63055@ziepe.ca>
- <PH7PR21MB326393A3D6BF619C2A7B4A42CED09@PH7PR21MB3263.namprd21.prod.outlook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vRE/oJtdGWdN444bPnrord4cMpAoUxxz8a+T8mrufqA=;
+        b=jqQnHCUPBdw8cnNdVQWGHUxek3ucWXZj2yQtjrsrHGwVrXJrr7QVIgI6FntlOoprMT
+         36GNBo1rGOs/qnQP4gze1zPqbAwgqsPGu0/L+o4flT6eTGUYXMcCWfQvKnjIZC0V0p+J
+         2FjovEsHM1egGe0qupTOm0dCa8RHsqBemBBkucBeM4z4aoVCgtaag2Fr56f+/y6lENf5
+         M9UioZ+XSwz+Ml2F5Mxwy5RToiDXQUNybVGf1qW2J+Q5rW/1u78Q0VfyfpXGG9zSPUVN
+         /UMtYO+NIIS4Q+g7dJDI+obVr6ZArk4QtdDOkfFFa27bRdaRZujP/lG8LdPFnIDKqQr6
+         x+oQ==
+X-Gm-Message-State: AOAM530Fz25+707wfq/sqb7s6eHEtCaRV3SoXlXK7A+c4aSTW4WojXdC
+        iInqcUWEDVgRvdLcH99L5OpzbKCbWqra9Ncdl0N0iw==
+X-Google-Smtp-Source: ABdhPJyigk/9qiR/DyzziY2RHs7Q1+TAfNZLV9nE6P5Zl0DrH+Z38HOA5BLPFbtuO4a/ughxjMuvbpiYu8tNyTpAujo=
+X-Received: by 2002:a17:907:6e0f:b0:6fe:382a:6657 with SMTP id
+ sd15-20020a1709076e0f00b006fe382a6657mr4117416ejc.192.1652964628871; Thu, 19
+ May 2022 05:50:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR21MB326393A3D6BF619C2A7B4A42CED09@PH7PR21MB3263.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220509105847.8238-1-dharamhans87@gmail.com> <20220509105847.8238-2-dharamhans87@gmail.com>
+In-Reply-To: <20220509105847.8238-2-dharamhans87@gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Thu, 19 May 2022 14:50:17 +0200
+Message-ID: <CAJfpeguEHFTk9u2h8-Le5aQYYPdSdTNY0nUj440YJUR8V3jY-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] Allow non-extending parallel direct writes
+To:     Dharmendra Singh <dharamhans87@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>,
+        Dharmendra Singh <dsingh@ddn.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 05:57:01AM +0000, Long Li wrote:
+On Mon, 9 May 2022 at 12:59, Dharmendra Singh <dharamhans87@gmail.com> wrote:
+>
+> From: Dharmendra Singh <dsingh@ddn.com>
+>
+> In general, as of now, in FUSE, direct writes on the same file are
+> serialized over inode lock i.e we hold inode lock for the full duration
+> of the write request. I could not found in fuse code a comment which
+> clearly explains why this exclusive lock is taken for direct writes.
+> Our guess is some USER space fuse implementations might be relying
+> on this lock for seralization and also it protects for the issues
+> arising due to file size assumption or write failures.  This patch
+> relaxes this exclusive lock in some cases of direct writes.
+>
+> With these changes, we allows non-extending parallel direct writes
+> on the same file with the help of a flag called FOPEN_PARALLEL_WRITES.
+> If this flag is set on the file (flag is passed from libfuse to fuse
+> kernel as part of file open/create), we do not take exclusive lock instead
+> use shared lock so that all non-extending writes can run in parallel.
+>
+> Best practise would be to enable parallel direct writes of all kinds
+> including extending writes as well but we see some issues such as
+> when one write completes and other fails, how we should truncate(if
+> needed) the file if underlying file system does not support holes
+> (For file systems which supports holes, there might be a possibility
+> of enabling parallel writes for all cases).
+>
+> FUSE implementations which rely on this inode lock for serialisation
+> can continue to do so and this is default behaviour i.e no parallel
+> direct writes.
+>
+> Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
+> ---
+>  fs/fuse/file.c            | 45 ++++++++++++++++++++++++++++++++++++---
+>  include/uapi/linux/fuse.h |  2 ++
+>  2 files changed, 44 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> index 829094451774..495138a68306 100644
+> --- a/fs/fuse/file.c
+> +++ b/fs/fuse/file.c
+> @@ -1541,14 +1541,48 @@ static ssize_t fuse_direct_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>         return res;
+>  }
+>
+> +static bool fuse_direct_write_extending_i_size(struct kiocb *iocb,
+> +                                              struct iov_iter *iter)
+> +{
+> +       struct inode *inode = file_inode(iocb->ki_filp);
+> +       loff_t i_size;
+> +       loff_t offset;
+> +       size_t count;
+> +
+> +       if (iocb->ki_flags & IOCB_APPEND)
+> +               return true;
+> +
+> +       offset = iocb->ki_pos;
+> +       count = iov_iter_count(iter);
+> +       i_size = i_size_read(inode);
+> +
+> +       return offset + count <= i_size ? false : true;
+> +}
 
-> > > +
-> > > +	err = ib_copy_from_udata(&ucmd, udata, min(sizeof(ucmd),
-> > > +udata->inlen));
-> > 
-> > Skeptical this min is correct, many other drivers get this wrong.
-> 
-> I think this is correct. This is to prevent user-mode passing more data that may overrun the kernel buffer.
+This could be rewritten in much fewer lines:
 
-And what happens when udata->inlen is, say, 0?
- 
-> > > +	// map to the page indexed by ucontext->doorbell
-> > 
-> > Not kernel style, be sure to run checkpatch and fix the egregious things.
-> > 
-> > > +static void mana_ib_disassociate_ucontext(struct ib_ucontext
-> > > +*ibcontext) { }
-> > 
-> > Does this driver actually support disassociate? Don't define this function if it
-> > doesn't.
-> > 
-> > I didn't see any mmap zapping so I guess it doesn't.
-> 
-> The user-mode deals with zapping.
-> I see the following comments on rdma_umap_priv_init():
-> 
-> /* RDMA drivers supporting disassociation must have their user space designed
->  * to cope in some way with their IO pages going to the zero page. */
-> 
-> Is there any other additional work for the kernel driver to support
-> disassociate? It seems uverbs_user_mmap_disassociate() has done all
-> the zapping when destroying a ucontext.
+static bool fuse_is_extending_write(struct kiocb *iocb, struct iov_iter *iter)
+{
+    struct inode *inode = file_inode(iocb->ki_filp);
 
-Nope, that looks OK then
- 
-> I will open PR to rdma-core. The current version of the driver
-> supports queue pair type IB_QPT_RAW_PACKET. The test case will be
-> limited to querying device and load/unload. Running traffic tests
-> will require DPDK (or other user-mode program making use of
-> IB_QPT_RAW_PACKET).
-> 
-> Is it acceptable to develop test cases for this driver without
-> traffic/data tests?
+    return (iocb->ki_flags & IOCB_APPEND) ||
+        iocb->ki_pos + iov_iter_count(iter) > i_size_read(inode);
+}
 
-I'm not keen on that, even EFA was able to do simple traffic.
 
-Even with RAW_PACKET I would expect the driver to be able to send/recv
-using standard verbs as RAW_PACKET is a common feature.
+> +
+>  static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>  {
+>         struct inode *inode = file_inode(iocb->ki_filp);
+> +       struct file *file = iocb->ki_filp;
+> +       struct fuse_file *ff = file->private_data;
+>         struct fuse_io_priv io = FUSE_IO_PRIV_SYNC(iocb);
+>         ssize_t res;
+> +       bool p_write = ff->open_flags & FOPEN_PARALLEL_WRITES ? true : false;
 
-Jason
+Please just use "bool v = expr" instead of "bool v = expr ? true :
+false" as they are equivalent.
+
+> +       bool exclusive_lock = !p_write ||
+> +                              fuse_direct_write_extending_i_size(iocb, from) ?
+> +                              true : false;
+
+Same.
+
+> +
+> +       /*
+> +        * Take exclusive lock if
+> +        * - parallel writes are disabled.
+> +        * - parallel writes are enabled and i_size is being extended
+> +        * Take shared lock if
+> +        * - parallel writes are enabled but i_size does not extend.
+> +        */
+> +       if (exclusive_lock)
+> +               inode_lock(inode);
+> +       else
+> +               inode_lock_shared(inode);
+>
+> -       /* Don't allow parallel writes to the same file */
+> -       inode_lock(inode);
+>         res = generic_write_checks(iocb, from);
+>         if (res > 0) {
+>                 if (!is_sync_kiocb(iocb) && iocb->ki_flags & IOCB_DIRECT) {
+> @@ -1559,7 +1593,10 @@ static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
+>                         fuse_write_update_attr(inode, iocb->ki_pos, res);
+>                 }
+>         }
+> -       inode_unlock(inode);
+> +       if (exclusive_lock)
+> +               inode_unlock(inode);
+> +       else
+> +               inode_unlock_shared(inode);
+>
+>         return res;
+>  }
+> @@ -2900,7 +2937,9 @@ fuse_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
+>         kref_put(&io->refcnt, fuse_io_release);
+>
+>         if (iov_iter_rw(iter) == WRITE) {
+> +
+
+Unnecessary empty line.
+
+>                 fuse_write_update_attr(inode, pos, ret);
+> +               /* For extending writes we already hold exclusive lock */
+>                 if (ret < 0 && offset + count > i_size)
+>                         fuse_do_truncate(file);
+>         }
+> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
+> index d6ccee961891..ee5379d41906 100644
+> --- a/include/uapi/linux/fuse.h
+> +++ b/include/uapi/linux/fuse.h
+> @@ -301,6 +301,7 @@ struct fuse_file_lock {
+>   * FOPEN_CACHE_DIR: allow caching this directory
+>   * FOPEN_STREAM: the file is stream-like (no file position at all)
+>   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
+> + * FOPEN_PARALLEL_WRITES: Allow concurrent writes on the same inode
+>   */
+>  #define FOPEN_DIRECT_IO                (1 << 0)
+>  #define FOPEN_KEEP_CACHE       (1 << 1)
+> @@ -308,6 +309,7 @@ struct fuse_file_lock {
+>  #define FOPEN_CACHE_DIR                (1 << 3)
+>  #define FOPEN_STREAM           (1 << 4)
+>  #define FOPEN_NOFLUSH          (1 << 5)
+> +#define FOPEN_PARALLEL_WRITES  (1 << 6)
+>
+>  /**
+>   * INIT request/reply flags
+> --
+> 2.17.1
+>

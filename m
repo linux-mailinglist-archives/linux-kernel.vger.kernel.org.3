@@ -2,115 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664F652D73C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CFF52D751
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240632AbiESPQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
+        id S240774AbiESPVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbiESPPx (ORCPT
+        with ESMTP id S236473AbiESPVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:15:53 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD06AEBEA1;
-        Thu, 19 May 2022 08:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Dc2ke5NcQ5lIuFlKoA7A3ChISVicawrM3SfBe9e5al0=; b=tYaeLioJ6Vr4CMOiQCTASxyU0Q
-        AdLcgN5gVnKse0kFX0Qz57VnRgcJ4bCIaxAdJfvKiQ8pUPhUtt19ebmo6wgBNcBSFKIxotA3Zr2pB
-        eI2c2/fwtmhv57UI9F/GCFatDCNKcqAh32hPcIQKq7XmgeR1hBsJTJEY4G+OZGHwxCj98dtjpX03B
-        6bN7outbhnlpLTA5V4csr3OOH5P/jUWJNCFeySXO+yrBsyUIXMOM37GghUqLfsilrTJEUVuk1dHwr
-        wYuYdB3X5eThTakugqrA57+ITmwi9DLEkRdbi96a1M1QJ8A0NQ4EjJ8XarX4StQ+EylGvrr6Rln+O
-        OXEAA/8g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60776)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nrhsF-000476-MW; Thu, 19 May 2022 16:15:36 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nrhsC-0006fR-Bo; Thu, 19 May 2022 16:15:32 +0100
-Date:   Thu, 19 May 2022 16:15:32 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        John Stultz <jstultz@google.com>,
-        Alvin =?utf-8?B?4pS8w6FpcHJhZ2E=?= <alsi@bang-olufsen.dk>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [RFC PATCH net 0/2] Make phylink and DSA wait for PHY driver
- that defers probe
-Message-ID: <YoZfFDdSDLUtn42S@shell.armlinux.org.uk>
-References: <20220513233640.2518337-1-vladimir.oltean@nxp.com>
- <Yn72l3O6yI7YstMf@lunn.ch>
- <20220519145936.3ofmmnrehydba7t6@skbuf>
+        Thu, 19 May 2022 11:21:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396495D1BE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:21:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCF7DB824E4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156FBC385AA;
+        Thu, 19 May 2022 15:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1652973679;
+        bh=AeaOWcAzr5/QRwxntANUGlhKpE9vTR9Yi1H7OmlIku4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uzJyGfWADbxlwQMsNfLQfsR68OouVLiMnUMCkvIWEa2vZ1y6Or2ySvK/aSZ8J3nRI
+         oahf7b14U1ZY7JqY53+4fTRfIEknK9qcy8TEnRT4qEwfcD2GCPY8JhiR8kEh1Q6r91
+         SsBie2gYg/roTAfaVk9iHZZ0YLxdyo4VhW/FQIeE=
+Date:   Thu, 19 May 2022 17:16:20 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Subject: Re: [GIT PULL] extcon next for 5.19
+Message-ID: <YoZfRGwhIkgm2kTX@kroah.com>
+References: <eaab9f4d-06d4-3ddc-3756-69f762bd86e1@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519145936.3ofmmnrehydba7t6@skbuf>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <eaab9f4d-06d4-3ddc-3756-69f762bd86e1@gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 02:59:36PM +0000, Vladimir Oltean wrote:
-> Hi Andrew,
+On Fri, May 13, 2022 at 06:09:53PM +0900, Chanwoo Choi wrote:
+> Dear Greg,
 > 
-> On Sat, May 14, 2022 at 02:23:51AM +0200, Andrew Lunn wrote:
-> > There is a very different approach, which might be simpler.
-> > 
-> > We know polling will always work. And it should be possible to
-> > transition between polling and interrupt at any point, so long as the
-> > phylock is held. So if you get -EPROBE_DEFFER during probe, mark some
-> > state in phydev that there should be an irq, but it is not around yet.
-> > When the phy is started, and phylib starts polling, look for the state
-> > and try getting the IRQ again. If successful, swap to interrupts, if
-> > not, keep polling. Maybe after 60 seconds of polling and trying, give
-> > up trying to find the irq and stick with polling.
+> This is extcon-next pull request for v5.19. I add detailed description of
+> this pull request on below. Please pull extcon with following updates.
 > 
-> That doesn't sound like something that I'd backport to stable kernels.
-> Letting the PHY driver dynamically switch from poll to IRQ mode risks
-> racing with phylink's workqueue, and generally speaking, phylink doesn't
-> seem to be built around the idea that "bool poll" can change after
-> phylink_start().
+> Best Regards,
+> Chanwoo Choi
+> 
+> The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
+> 
+>   Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git tags/extcon-next-for-5.19
 
-I think you're confused. Andrew is merely talking about phylib's
-polling, not phylink's.
+Pulled and pushed out,t hanks.
 
-Phylink's polling is only ever used in two circumstances:
-
-1. In fixed-link mode where we have an interruptless GPIO.
-2. In in-band mode when the PCS specifies it needs to be polled.
-
-This is not used to poll ethernet PHYs - ethernet PHY polling is
-handled entirely by phylib itself.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+greg k-h

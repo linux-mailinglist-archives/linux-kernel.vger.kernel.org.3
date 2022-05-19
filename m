@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC50452DA89
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AC552DA91
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242157AbiESQqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S242168AbiESQrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242149AbiESQqg (ORCPT
+        with ESMTP id S234294AbiESQrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:46:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABBF5C354;
-        Thu, 19 May 2022 09:46:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 231FB1FA90;
-        Thu, 19 May 2022 16:46:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652978794; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ERYUV2kwi2PrxYJcK4bUaEn7oG4ict65od3QwN96zgk=;
-        b=izPide9gHt6StxVJSvjOgcfaBOzm8bPvhHUkQ9+KRHIvRukpecTgScNhnLBheJM4KLWvZl
-        nriJE+zOct0kwoPg1ErV4XpT/9f7vXi7kgeLRsynK1hKtYVNSn0nX18+KExVkV2ffDIkTm
-        0ohH2IGWafBloHIm3e8txAtJe+HDuIs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E27B513456;
-        Thu, 19 May 2022 16:46:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xa5nNml0hmJABwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 19 May 2022 16:46:33 +0000
-Date:   Thu, 19 May 2022 18:46:32 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
-Subject: Re: [PATCH 1/4] memcg: enable accounting for large allocations in
- mem_cgroup_css_alloc
-Message-ID: <20220519164632.GJ16096@blackbody.suse.cz>
-References: <Ynv7+VG+T2y9rpdk@carbon>
- <212f1b74-7d4e-29f2-9e92-2a1820beff61@openvz.org>
+        Thu, 19 May 2022 12:47:33 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5215B88D;
+        Thu, 19 May 2022 09:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652978852; x=1684514852;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=LXflJd7Y5VHLQK0MN/gT14zJ94O0px+SUp5tuELlX4Y=;
+  b=a7lQh8ruUi5PU7MLLuzE8E8FFtoY75MCcPLv2Gp6uUa6Ek4vGcJKTvvP
+   IfYuvwYjpXX+cVaeHUi4bZWZzgpMRppABKqR25XarR/ny2dSnGOP8prHq
+   NBDmLy63vDAQyppmdzsW+pYf/iNSkuX3UF0O5wyyTcW8Ad6gYZuPxaCqg
+   w=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 19 May 2022 09:47:32 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 09:47:31 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 19 May 2022 09:47:31 -0700
+Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 19 May 2022 09:47:27 -0700
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+To:     <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <ohad@wizery.com>, <agross@kernel.org>,
+        <mathieu.poirier@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <mka@chromium.org>, Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH v4 0/3] Add support for proxy interconnect bandwidth votes
+Date:   Thu, 19 May 2022 22:17:02 +0530
+Message-ID: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <212f1b74-7d4e-29f2-9e92-2a1820beff61@openvz.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -68,8 +64,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 06:51:41PM +0300, Vasily Averin <vvs@openvz.org> wrote:
->  mm/memcontrol.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Add proxy interconnect bandwidth votes during modem bootup on SC7280 SoCs.
 
-Reviewed-by: Michal Koutný <mkoutny@suse.com>
+V4:
+ * Remove older bindings [Matthias/Krzysztof]
+ * Convert sc7180/sc7280 to yaml and leave the rest to Sireesh's series
+ * Rebased on v2 of Krzysztof's bindings cleanups
+ * Misc. Fixes [Krzysztof]
+
+V3:
+ * Re-ordered clock list, fixed pdc_sync typo [Rob/Matthias]
+
+V2:
+ * Dropped patch 3 from version 1 [Sub with Bjorn's patch]
+ * Add YAML support [Krzysztof]
+ * Drop interconnect names [Bjorn]
+
+ Depends on:
+ https://lore.kernel.org/lkml/20220517070113.18023-1-krzysztof.kozlowski@linaro.org/
+
+Sibi Sankar (3):
+  arm64: dts: qcom: sc7280: Add proxy interconnect requirements for
+    modem
+  dt-bindings: remoteproc: qcom: Convert SC7280 MSS bindings to YAML
+  dt-bindings: remoteproc: qcom: Convert SC7180 MSS bindings to YAML
+
+ .../devicetree/bindings/remoteproc/qcom,q6v5.txt   |  47 +---
+ .../bindings/remoteproc/qcom,sc7180-mss-pil.yaml   | 236 +++++++++++++++++++
+ .../bindings/remoteproc/qcom,sc7280-mss-pil.yaml   | 250 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |   1 +
+ 4 files changed, 489 insertions(+), 45 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
+
+-- 
+2.7.4
+

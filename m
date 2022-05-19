@@ -2,142 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CE052DBAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C48452DBAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243099AbiESRsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S243126AbiESRrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242755AbiESRsH (ORCPT
+        with ESMTP id S243060AbiESRrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:48:07 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF01AFB32
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:48:06 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J6k19C002261;
-        Thu, 19 May 2022 12:47:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=fYmjIggmqaxp0xE4Jpga+Pd2F4S8iC+s9X3j+VD0f1I=;
- b=inFOC1ayUyESdJz7q/ivoFht5Q06nwkggz0k1QPmo5GgxBXvv0WokPSjgj+OXswZT8yZ
- jEOGj5NQhFhqdfWcvDPgtVoYDxhun9K6A0d6GFBvX1vagXXqz8NRdcFvJCnu14MZMHCm
- sAZRRdZaJXwSVtSu5zVBkU1O9Va/NaD1SUirpzzT2zGU/teHaKn05d484cn9MWYDR/8M
- NKNYT3pbPPuQnraH+maY7YOchAHLCfvSkXVAje003p+xASUUxwAYOeRNK39R2k9TPaP9
- wu5lrq8p4nykkg+iTg9hgy+uPecdLQkjgScsgYKBg5I0oSukEYlKqSqCYWgyLrh3taR/ Mw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3g29u37ted-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 19 May 2022 12:47:53 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
- 2022 18:47:52 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Thu, 19 May 2022 18:47:52 +0100
-Received: from vitaly-Legion-7-16ACHg6.ad.cirrus.com (unknown [198.90.238.59])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id D882D458;
-        Thu, 19 May 2022 17:47:51 +0000 (UTC)
-From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v3 06/17] ALSA: hda: cs35l41: Support reading subsystem id from ACPI
-Date:   Thu, 19 May 2022 18:47:38 +0100
-Message-ID: <20220519174749.15459-7-vitalyr@opensource.cirrus.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220519174749.15459-1-vitalyr@opensource.cirrus.com>
-References: <20220519174749.15459-1-vitalyr@opensource.cirrus.com>
+        Thu, 19 May 2022 13:47:43 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2A1AEE06;
+        Thu, 19 May 2022 10:47:42 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id j28so7849821eda.13;
+        Thu, 19 May 2022 10:47:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=D4k2Cw/q+uLcOmHvMcwyqwODol2Cgrrywr4+z4BP+Lk=;
+        b=NZPGC7mywR1LSs2MSRmrfM4/G/baLwFQDvGchz97c8iZD56lxjV1MSLz6EO9Bmqycp
+         +LBcGEilfziTMQbD51XBtzuvuWcNoiEERJVtKWcodvfdzmv1EzpLIkPNk0gBJhHh5NvV
+         4gN4DeKnyBMxP7bP8BSjAnBu8r71waxkoH8VzneeN4iMmDwkVfdn8GtqA9hxGJg7tAzD
+         9TV2L5UsQ6iO2rZCR9ltcZxgJ5gPzDkSVvgIdIrbphrzFEyNTT0J96t9soeRjz1VoYSN
+         YSj2fJEjzDzOI48NriXmUl2Mm2NNG+yPFkFRxy1v9LCSCRzRcLp8uw9ZSQV88pwBdOMA
+         8VJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=D4k2Cw/q+uLcOmHvMcwyqwODol2Cgrrywr4+z4BP+Lk=;
+        b=rCpy/EKe0yfa3yjzzzt2vbSLiwxJPh0w1i8jyrn8kFHRr2YGeAfux2MgchxVyyVQdc
+         lcPEB6wj1PLxfzAh1TAyZ6QYitpP5rp/QymLoQs2wwmN0ZEF3CF98z5pNKTyyajGCw2j
+         u8YUbYh+dSAX6k/7vwTJW4ecF8/0b9fSFp67ShaLHXb36VU+XnWaOAb6fII2UvIitAr0
+         J1lMmVga55jnEbgk0W9uBz+WZX17v3Vwpwthrf01OzdBMLznTeLikZ1cmDqvhgC+ujUt
+         yiTPXaJ6M62OsaEK6O3uib+PGYJsDR/VuhCXU+EE6OFfPp3vGQZcd6VKshI5YEagXdSG
+         GL+w==
+X-Gm-Message-State: AOAM5306jXqS8wFOzcNnzabaFuWtnYA+DQypwFLQig/w3alxP3EIOUMd
+        HfL5jh3UKO8Pe7H+534qan0=
+X-Google-Smtp-Source: ABdhPJy8cba/ZR+Bc/OsuDsZdhEjG0c3LHE6ylNUPUNaNp+5puwC0FD6yE2qXSimyuSWh4PQ34bkAA==
+X-Received: by 2002:a05:6402:3509:b0:427:e7db:1513 with SMTP id b9-20020a056402350900b00427e7db1513mr6598861edd.407.1652982460989;
+        Thu, 19 May 2022 10:47:40 -0700 (PDT)
+Received: from skbuf ([188.25.255.186])
+        by smtp.gmail.com with ESMTPSA id v2-20020a17090651c200b006f3ef214e20sm2362633ejk.134.2022.05.19.10.47.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 10:47:40 -0700 (PDT)
+Date:   Thu, 19 May 2022 20:47:38 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, Hauke Mehrtens <hauke@hauke-m.de>
+Subject: Re: [PATCH net-next v2 1/2] net: dsa: lantiq_gswip: Fix start index
+ in gswip_port_fdb()
+Message-ID: <20220519174738.bgsxpzu5fh4yz6ij@skbuf>
+References: <20220518220051.1520023-1-martin.blumenstingl@googlemail.com>
+ <20220518220051.1520023-2-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: SVZ0uO2nOIGNr9x7jIFYiJsKymuV-Zys
-X-Proofpoint-ORIG-GUID: SVZ0uO2nOIGNr9x7jIFYiJsKymuV-Zys
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518220051.1520023-2-martin.blumenstingl@googlemail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Binding <sbinding@opensource.cirrus.com>
+On Thu, May 19, 2022 at 12:00:50AM +0200, Martin Blumenstingl wrote:
+> The first N entries in priv->vlans are reserved for managing ports which
+> are not part of a bridge. Use priv->hw_info->max_ports to consistently
+> access per-bridge entries at index 7. Starting at
+> priv->hw_info->cpu_port (6) is harmless in this case because
+> priv->vlan[6].bridge is always NULL so the comparison result is always
+> false (which results in this entry being skipped).
+> 
+> Fixes: 58c59ef9e930c4 ("net: dsa: lantiq: Add Forwarding Database access")
+> Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
 
-On some laptop models, the ACPI contains the unique
-Subsystem ID, and this value should be preferred
-over the value from the HDA driver.
-
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
-Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
----
-
-Changes since v2:
- - No change
- 
- sound/pci/hda/cs35l41_hda.c | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
-
-diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
-index c235b899aa04..81d6f4cf0166 100644
---- a/sound/pci/hda/cs35l41_hda.c
-+++ b/sound/pci/hda/cs35l41_hda.c
-@@ -533,6 +533,36 @@ static int cs35l41_hda_apply_properties(struct cs35l41_hda *cs35l41)
- 	return cs35l41_hda_channel_map(cs35l41->dev, 0, NULL, 1, &hw_cfg->spk_pos);
- }
- 
-+static int cs35l41_get_acpi_sub_string(struct device *dev, struct acpi_device *adev,
-+				       const char **subsysid)
-+{
-+	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-+	union acpi_object *obj;
-+	acpi_status status;
-+	int ret = 0;
-+
-+	status = acpi_evaluate_object(adev->handle, "_SUB", NULL, &buffer);
-+	if (ACPI_SUCCESS(status)) {
-+		obj = buffer.pointer;
-+		if (obj->type == ACPI_TYPE_STRING) {
-+			*subsysid = devm_kstrdup(dev, obj->string.pointer, GFP_KERNEL);
-+			if (*subsysid == NULL) {
-+				dev_err(dev, "Cannot allocate Subsystem ID");
-+				ret = -ENOMEM;
-+			}
-+		} else {
-+			dev_warn(dev, "Warning ACPI _SUB did not return a string\n");
-+			ret = -ENODEV;
-+		}
-+		acpi_os_free(buffer.pointer);
-+	} else {
-+		dev_dbg(dev, "Warning ACPI _SUB failed: %#x\n", status);
-+		ret = -ENODEV;
-+	}
-+
-+	return ret;
-+}
-+
- static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, int id)
- {
- 	struct cs35l41_hw_cfg *hw_cfg = &cs35l41->hw_cfg;
-@@ -552,6 +582,12 @@ static int cs35l41_hda_read_acpi(struct cs35l41_hda *cs35l41, const char *hid, i
- 	physdev = get_device(acpi_get_first_physical_node(adev));
- 	acpi_dev_put(adev);
- 
-+	ret = cs35l41_get_acpi_sub_string(cs35l41->dev, adev, &cs35l41->acpi_subsystem_id);
-+	if (ret)
-+		dev_info(cs35l41->dev, "No Subsystem ID found in ACPI: %d", ret);
-+	else
-+		dev_dbg(cs35l41->dev, "Subsystem ID %s found", cs35l41->acpi_subsystem_id);
-+
- 	property = "cirrus,dev-index";
- 	ret = device_property_count_u32(physdev, property);
- 	if (ret <= 0)
--- 
-2.34.1
-
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>

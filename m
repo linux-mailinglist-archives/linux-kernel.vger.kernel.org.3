@@ -2,91 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1312B52CB8A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BD152CB8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234054AbiESFkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 01:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S234057AbiESFlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 01:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232611AbiESFkr (ORCPT
+        with ESMTP id S231869AbiESFlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 01:40:47 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EBD389;
-        Wed, 18 May 2022 22:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652938846; x=1684474846;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=N95pkwbu4izN6QqsZsdSNkwCyLorSYTPgc1DJCQgzAw=;
-  b=kymqE7XshrKlB7qmXm+2Amdp/Dd/pE2cwO9/rJb8fXwZPfCrcWCMbxMK
-   21L9JpdAHXEiu1lEE1DLBjGBqITQ+aE+7BKdqTyK+lXExuZmbeZP4Pj65
-   dDy83W7k4PJ1yaRTgu8Z3nnr55fqCGYHyihb7NzY1KezJMS/ygFBIN3hC
-   Y=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 May 2022 22:40:45 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 22:40:45 -0700
-Received: from bgodavar-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 18 May 2022 22:40:41 -0700
-From:   Balakrishna Godavarthi <quic_bgodavar@quicinc.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-CC:     <mka@chromium.org>, <linux-bluetooth@vger.kernel.org>,
-        <quic_hemantg@quicinc.com>, <quic_bgodavar@quicinc.com>,
-        <quic_rjliao@quicinc.com>, <mcchou@chromium.org>
-Subject: [PATCH v1] MAINTAINERS: add maintainers for qualcomm uart based BT drivers
-Date:   Thu, 19 May 2022 11:10:24 +0530
-Message-ID: <1652938824-28976-1-git-send-email-quic_bgodavar@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 19 May 2022 01:41:46 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FD39D4FD
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:41:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L3dyX2T4Jz4xD1;
+        Thu, 19 May 2022 15:41:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1652938900;
+        bh=u4WYQ8CLjhh5TCtN+4GxOyinCwBGkUDiWv+9kOIQ2Aw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=El/8FD4sKhUNUJK/ztIhCR4s+G553J0gGwkMOD2jplBk9XzsGORDHXxOIJhHV37r2
+         yfYv6RMpGwebQu+dtSp3my8M1rZWHHFPiIG4/LeXT9q3U2+uOvZxY+eIzu6wkBn+5x
+         rRCl4wmAGx7LmeDlBMPJcSGzOnj0YqK1psC26Jj9iJJHwKH6zHCcUTGghPQZXQFysP
+         mZ7yuKp6REsmelQ2STkkfe3tnpTYUSrJ2U+3CGaHtZhTfzJDDUqpzUYu67sxRe66xD
+         Z9gHAWSSgjrHWS4+4hAXl7GyMJhoODY3j+txgVTjiMQSgb9s9k7gk8t5QqVGKUU5LS
+         N9D4BUJpat9Xw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Eric Biederman <ebiederm@xmission.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org
+Subject: Re: [PATCH] kexec_file: Drop weak attribute from
+ arch_kexec_apply_relocations[_add]
+In-Reply-To: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com>
+References: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com>
+Date:   Thu, 19 May 2022 15:41:39 +1000
+Message-ID: <874k1mnkoc.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding myself and rocky Liao as a maintainers for qualcomm
-uart based bluetooth drivers.
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
+> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
+> symbols") [1], binutils (v2.36+) started dropping section symbols that
+> it thought were unused.  This isn't an issue in general, but with
+> kexec_file.c, gcc is placing kexec_arch_apply_relocations[_add] into a
+> separate .text.unlikely section and the section symbol ".text.unlikely"
+> is being dropped. Due to this, recordmcount is unable to find a non-weak
+> symbol in .text.unlikely to generate a relocation record against.
+>
+> Address this by dropping the weak attribute from these functions:
+> - arch_kexec_apply_relocations() is not overridden by any architecture
+>   today, so just drop the weak attribute.
+> - arch_kexec_apply_relocations_add() is only overridden by x86 and s390.
+>   Retain the function prototype for those and move the weak
+>   implementation into the header as a static inline for other
+>   architectures.
+>
+> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
+>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+> ---
+>  include/linux/kexec.h | 28 ++++++++++++++++++++++++----
+>  kernel/kexec_file.c   | 19 +------------------
+>  2 files changed, 25 insertions(+), 22 deletions(-)
 
-Signed-off-by: Balakrishna Godavarthi <quic_bgodavar@quicinc.com>
----
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+I think it could be cleaner done with the #define foo foo style, see
+patch below. It does have its downsides, but for a simple hook like this
+I think it's not too bad.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 69b597a..22d4d00 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16295,6 +16295,16 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/net/qcom,bam-dmux.yaml
- F:	drivers/net/wwan/qcom_bam_dmux.c
+cheers
+
+
+(only build tested)
+
+diff --git a/arch/s390/include/asm/kexec.h b/arch/s390/include/asm/kexec.h
+index 7f3c9ac34bd8..e818b58ccc43 100644
+--- a/arch/s390/include/asm/kexec.h
++++ b/arch/s390/include/asm/kexec.h
+@@ -74,6 +74,8 @@ void *kexec_file_add_components(struct kimage *image,
+ int arch_kexec_do_relocs(int r_type, void *loc, unsigned long val,
+ 			 unsigned long addr);
  
-+QUALCOMM BLUETOOTH DRIVER
-+M:	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>
-+M:	Rocky Liao <quic_rjliao@quicinc.com>
-+L:	linux-bluetooth@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/net/qualcomm-bluetooth.yaml
-+F:	drivers/bluetooth/btqca.c
-+F:	drivers/bluetooth/btqca.h
-+F:	drivers/bluetooth/hci_qca.c
++#define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
 +
- QUALCOMM CAMERA SUBSYSTEM DRIVER
- M:	Robert Foss <robert.foss@linaro.org>
- M:	Todor Tomov <todor.too@gmail.com>
--- 
-2.7.4
+ #define ARCH_HAS_KIMAGE_ARCH
+ 
+ struct kimage_arch {
+diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
+index 11b7c06e2828..58e3939a350a 100644
+--- a/arch/x86/include/asm/kexec.h
++++ b/arch/x86/include/asm/kexec.h
+@@ -186,6 +186,8 @@ extern int arch_kexec_post_alloc_pages(void *vaddr, unsigned int pages,
+ extern void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages);
+ #define arch_kexec_pre_free_pages arch_kexec_pre_free_pages
+ 
++#define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
++
+ #endif
+ 
+ typedef void crash_vmclear_fn(void);
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 8347fc158d2b..6f07acb59f29 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -108,6 +108,7 @@ int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+ }
+ #endif
+ 
++#ifndef arch_kexec_apply_relocations_add
+ /*
+  * arch_kexec_apply_relocations_add - apply relocations of type RELA
+  * @pi:		Purgatory to be relocated.
+@@ -117,14 +118,16 @@ int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+  *
+  * Return: 0 on success, negative errno on error.
+  */
+-int __weak
++int
+ arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shdr *section,
+ 				 const Elf_Shdr *relsec, const Elf_Shdr *symtab)
+ {
+ 	pr_err("RELA relocation unsupported.\n");
+ 	return -ENOEXEC;
+ }
++#endif
+ 
++#ifndef arch_kexec_apply_relocations
+ /*
+  * arch_kexec_apply_relocations - apply relocations of type REL
+  * @pi:		Purgatory to be relocated.
+@@ -134,13 +137,14 @@ arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shdr *section,
+  *
+  * Return: 0 on success, negative errno on error.
+  */
+-int __weak
++int
+ arch_kexec_apply_relocations(struct purgatory_info *pi, Elf_Shdr *section,
+ 			     const Elf_Shdr *relsec, const Elf_Shdr *symtab)
+ {
+ 	pr_err("REL relocation unsupported.\n");
+ 	return -ENOEXEC;
+ }
++#endif
+ 
+ /*
+  * Free up memory used by kernel, initrd, and command line. This is temporary
 

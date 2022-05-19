@@ -2,89 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4956E52D6C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C1A52D6C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240451AbiESPDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
+        id S232105AbiESPDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240369AbiESPCw (ORCPT
+        with ESMTP id S240319AbiESPC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:02:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D700BEBE8D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:01:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6419CB82564
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FB92C34100;
-        Thu, 19 May 2022 15:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652972498;
-        bh=vxzuV8FswPsZxFpufH17N2JgSjIsyRUE1PuUjqu6Z88=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P6ussOQcoUaP7lZdXMnd6cuA4Ft9G2P0zq+bTtA2hkgqk5au67LheGZznguQyEhXf
-         J1fILX4hM/myjH37Iu+zLroNcvf9FnTJ6dXYGgHoe2RF6lBnZz3xJG/OoidgaJn6Uv
-         nk/Py3GK9MPJMpCAqggrydTCj2CcsPuOSCPWbvPQF6hiNQJF8ADefCDLIT9fOrnHqZ
-         y8mKYYC2nkVE7W/MIUp/4KQySfDPnbk1/t3Oh2x8WC21ByKxLNd1TaZdMAK17HGdOn
-         SfJx5OA9jzrUwVVS9rrSrCvySX480G4xmpGdbCTRU6P5ILfoXm6HltyF3N/WwdmBZI
-         uAr9foz9tx/Ow==
-Date:   Thu, 19 May 2022 17:01:35 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 03/21] rcu: Add a note about noinstr VS unsafe eqs
- functions
-Message-ID: <20220519150135.GA618878@lothringen>
-References: <20220503100051.2799723-1-frederic@kernel.org>
- <20220503100051.2799723-4-frederic@kernel.org>
- <20220519144821.GI2578@worktop.programming.kicks-ass.net>
+        Thu, 19 May 2022 11:02:57 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C018EC323
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:01:49 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id p4so8218648lfg.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:01:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g2iR/GvonzPEkGcOKxVcDjAfsuXSBx9Hn0L+1eWPrSQ=;
+        b=HYAMB4AH5gGz4FKZpC2Pc3mwADJ6aR5PiQjCis0N7SlAr8kC+vXCm5Hzs+VdDUuUx8
+         GtWWXgWyQi9xlLdHQ5SmUrcWRoNb1kVvTwaLJNIaTqno1NCCvCSnr+6tA1XCiZLZbNi1
+         7iV10GDmU+Oz5id5Bf6XxNnO7W+IAVjq1mTWw3jRs6eTeBfRu2v1rXL/FxyUL7BlQMhl
+         y+WChPaYFAr/Rl1/11pqisqSbS9p2yR+ofZ0NreKNON8BDBtcMK7cJZErvyT5TrVGnVl
+         Geig/30uhj0y4d2AU/Mk/BMB639SSrkn93FwJPGkscb/NPyxchmNnzmTvwl7hyDiBec0
+         qiiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g2iR/GvonzPEkGcOKxVcDjAfsuXSBx9Hn0L+1eWPrSQ=;
+        b=Im8PcwiNPjqnuWvyx32dFhxwxi8Yt8pNIFyrQWt986bJTzdZ3zFFUUANPR/KF2Fchn
+         Iwemn/KBrnJE4qS229wQaL9O0BDF/OvbwG/SxvblIgfPq3o/J/WPSQYnrY03BVKaK46K
+         IUGqvfftF2SuOMyC/d8m+D09unsdPD2OM9SjOqkVEu9w8MMq0YDMrMsWQInMobx0IpvF
+         3GOfjq1Prb89sUlNidQlkGg7bQgAS+9cPRA7oR84gY8iVCN02zQ4AuiBwINx5n1RunPc
+         HVPJ7H6ERqjVUcYSKbcI53FH7fTCp3RA4eArQxkqoTTwX+2DM3YYo7uDahICnHXhRZZ3
+         FE8A==
+X-Gm-Message-State: AOAM531L9ooP06uVssvz33YFAqi/ue6IOmpflcGK150ReRxFjsOTViyJ
+        waxpIMaghP1oub3+RecMBv4fDt9QtOxi7xduh+Xe7Q==
+X-Google-Smtp-Source: ABdhPJxw0Qbv9d+Xa7jvzrMcSnlYgfnl0FJGdgzk2/rToRD69bZ1rlXMTUlSZqgE16jOYnli1h1X36nomx5EWTFTuhk=
+X-Received: by 2002:a05:6512:114d:b0:473:b1ba:e589 with SMTP id
+ m13-20020a056512114d00b00473b1bae589mr3804418lfg.206.1652972506965; Thu, 19
+ May 2022 08:01:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519144821.GI2578@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <000000000000367c2205d2549cb9@google.com> <0000000000009fa8ee05d60428f1@google.com>
+ <CAOMGZ=E9Gmv6Fb_pi4p9RhQ_MvJVYs_6rkf37XfG0DYEMFNbNA@mail.gmail.com>
+In-Reply-To: <CAOMGZ=E9Gmv6Fb_pi4p9RhQ_MvJVYs_6rkf37XfG0DYEMFNbNA@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 19 May 2022 17:01:35 +0200
+Message-ID: <CACT4Y+biE2wCBcD6Z4vdVfKRpJMsRWYGjCjiiC+Ho2D91Qv-Qg@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
+To:     Vegard Nossum <vegard.nossum@gmail.com>
+Cc:     syzbot <syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com>,
+        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, "David S. Miller" <davem@davemloft.net>,
+        fgheet255t@gmail.com, hawk@kernel.org, jakub@cloudflare.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        lmb@cloudflare.com, Linux Netdev List <netdev@vger.kernel.org>,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 04:48:21PM +0200, Peter Zijlstra wrote:
-> On Tue, May 03, 2022 at 12:00:33PM +0200, Frederic Weisbecker wrote:
-> > Some RCU functions enter or exit into/from RCU idle mode while using
-> > trace-able and lockdep-aware IRQs (un-)masking. This could be easily
-> > solved with using raw versions of local_irq_*() but we would then
-> > lose some precious debugging informations.
-> > 
-> > Another possible way to solve this may consist in using rude RCU-tasks
-> > in lockdep and irqsoff tracing.
-> > 
-> > In any case and until this get solved, those RCU functions can't get
-> > tagged as noinstr even though they should.
-> 
-> No need to speculate on how to solve it; the generic entry code has
-> alternatives that are good. It's just that reworking your architecture
-> isn't trivial.
+On Mon, 24 Jan 2022 at 12:42, Vegard Nossum <vegard.nossum@gmail.com> wrote:
+>
+> On Thu, 20 Jan 2022 at 15:17, syzbot
+> <syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com> wrote:
+> >
+> > syzbot suspects this issue was fixed by commit:
+> >
+> > commit 218d747a4142f281a256687bb513a135c905867b
+> > Author: John Fastabend <john.fastabend@gmail.com>
+> > Date:   Tue Jan 4 21:46:45 2022 +0000
+> >
+> >     bpf, sockmap: Fix double bpf_prog_put on error case in map_link
+>
+> I can confirm the above commit fixes the issue, but it references a
+> slightly different report. Looks like the only difference is
+> __bpf_prog_put instead of bpf_prog_put:
+>
+> KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
+> KASAN: vmalloc-out-of-bounds Read in bpf_prog_put
+>
+> However, looking at the stack traces for the two bugs shows that
+> __bpf_prog_put() is really the location for both reports, see:
+>
+> https://syzkaller.appspot.com/bug?id=797cd651dd0d9bd921e4fa51b792f5afdc3f390f
+>  kasan_report.cold+0x83/0xdf mm/kasan/report.c:450 mm/kasan/report.c:450
+>  __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
+> kernel/bpf/syscall.c:1812
+>  bpf_prog_put kernel/bpf/syscall.c:1829 [inline]
+>  bpf_prog_put kernel/bpf/syscall.c:1829 [inline] kernel/bpf/syscall.c:1837
+>
+> vs.
+>
+> https://syzkaller.appspot.com/bug?extid=bb73e71cf4b8fd376a4f
+>  kasan_report+0x19a/0x1f0 mm/kasan/report.c:450 mm/kasan/report.c:450
+>  __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
+>  __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
+>  bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
+>
+> Looks to me like the compiler's inlining decision caused syzbot to see
+> __bpf_prog_put() instead of bpf_prog_put(), but I can't tell if it's
+> because it got inlined or because of the .constprop.0 suffix... I
+> guess syzbot skips the [inline] entries when deciding which function
+> to report the bug in?
 
-Speaking of, please have a look at this:
+Not sure if you are still interested in this or not...
+But, yes, it's inline frames that are a problem, ".constprop.0" should
+be stripped.
+syzkaller parses non-symbolized kernel output w/o inlined frames to
+extract the title. This was a very early decision, not sure if it's
+the right one or not. On the other hand using inline frames can cause
+attribution to all the common one-liners.
+Now it's somewhat hard to change b/c if we change it, new crashes will
+be parsed differently and it will cause a storm of duplicates for
+already reported bugs.
 
-https://lore.kernel.org/all/20220518162118.GA2661055@paulmck-ThinkPad-P17-Gen-1/
+
+> In any case:
+>
+> #syz dup: KASAN: vmalloc-out-of-bounds Read in bpf_prog_put
+>
+> Vegard

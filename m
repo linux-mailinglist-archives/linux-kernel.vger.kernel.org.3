@@ -2,117 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9524552D610
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9044852D619
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239741AbiESO3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32846 "EHLO
+        id S239787AbiESOaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239727AbiESO3t (ORCPT
+        with ESMTP id S239777AbiESOay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:29:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B7DA8CCE1
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:29:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652970587;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=skQV/7bpYYCLikiWPou37BZfffdt7LpNOeVYRjZR2lk=;
-        b=Lxzxi2PMwYLFZLEqCLys5KnolOgDSxVmxMiKsM0iMTJmjtY+Kdsi4qX1JVu8omrKwIAIy/
-        D8wJiN80OAcj9lXlYpnkgYpRfn7uZ0qSrasunzRdBYLDgQNTVfsG09OaGFipP8uPq0s1VN
-        7DAKD8gjvIDSX9dxETokbGhrZctZD3c=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-235-ix_0Q5RHOGqm8ZBTQj_rng-1; Thu, 19 May 2022 10:29:46 -0400
-X-MC-Unique: ix_0Q5RHOGqm8ZBTQj_rng-1
-Received: by mail-ed1-f70.google.com with SMTP id s9-20020aa7d789000000b0042ab9d77febso3713887edq.16
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:29:45 -0700 (PDT)
+        Thu, 19 May 2022 10:30:54 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9C31BD
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:30:52 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id v8so7522522lfd.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=v/9u8Imy9wLRfYHBxZ32XU6PyvAPyOYsjrvd7MK9l3c=;
+        b=eaOE6+Y20AmRa6nSUYi7geIR7y/yn/2PASJIV5qzYyDB6uR6xRAVOuFN3V/UnNIH5M
+         26SZQjvVd+k+L58xBa0lL+d/7x36ah8wc87F8UlsMb5wc09DF4Pc5bn1Ue9CNrngxEmQ
+         rujvItsfN8DHXlCNtjEY9sOnjgY9+qPcFxdpugQM+pL8o3a9pjz/zI2ByEpjrazS9jj7
+         RxRiQ2McaC+Q1r0odu1Huw8tyIP9HnMsjz+7KMrlms6HUv3h5dGyFqEn+lOxlHWKHapY
+         fG61sn3MSGPU7p9Zu9P4jkwlQ5oJYJXIZun/HOlHmFqzFhu0XGxWPN44Grct9Rn5NWjz
+         yXUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
          :content-transfer-encoding;
-        bh=skQV/7bpYYCLikiWPou37BZfffdt7LpNOeVYRjZR2lk=;
-        b=wwRCxbe8nquM2pOUK3DcpWe+jFri+633NvytTSVHBdkgzDSF2U/8IZhvgDNHYQuVY6
-         fEX6NMmuPjxhM0LSaYnhdUg2EbGrwAlEqvssf1Ah7gCxP4/0PWwO92PbWP9Qe4rUvmeC
-         mIulFcGlvngi+RjggdEhdOSysHrAtSPWM+PBYL0LjopUtSz+uljSi8cYpTCE2zb/oItP
-         07FwAUw+BNp1kSadShjfKIGrH8olwhX+u6aKoiXe40E5x6LDHRWk+MBq44H24oncx0Ir
-         YkDhIGlyIhegIj2hoownINm0bufkqbccxYR1eWh1c3Jqon4NzxQs0uZx0f8u58o/nB93
-         KD2g==
-X-Gm-Message-State: AOAM531wFYGyNJuVXqvsQMJZok9nXcP/tQ8OoGFOe/krbx4R4nQ2dkd0
-        m8I365K9qOAATusYMPYtMtlsfREjtFTDnGTgc8Q7OfTeCR6n7Uip9jtGX5QOnh6dnGYHRLBabji
-        m0lp/j+Uyy+m6Q5q7sBZAOicl
-X-Received: by 2002:a17:907:6e09:b0:6fe:8b65:357b with SMTP id sd9-20020a1709076e0900b006fe8b65357bmr4556156ejc.492.1652970585072;
-        Thu, 19 May 2022 07:29:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyR6WHxquEyjTqk32bptNw0qJbDMyBekjUeS7a4RWeKtvRRxz2LEG0cbg0e2bJOBOt7i1Z4UQ==
-X-Received: by 2002:a17:907:6e09:b0:6fe:8b65:357b with SMTP id sd9-20020a1709076e0900b006fe8b65357bmr4556142ejc.492.1652970584862;
-        Thu, 19 May 2022 07:29:44 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id b26-20020a170906729a00b006f3ef214e0esm2184208ejl.116.2022.05.19.07.29.44
+        bh=v/9u8Imy9wLRfYHBxZ32XU6PyvAPyOYsjrvd7MK9l3c=;
+        b=oWufFMutDJg38PUoEq7PwuXfjLov8KavqnTliBqaWN6KdgZApz3BrDUtFBkfnB8JIW
+         zi1nYzyT/lWZQLwPGuD7/c4EXhpUZqljOKYilXa8dwdznfn7KOGXBwQqRKRmAFJ2YunB
+         sPifEeURWeJ8nCKep+K888KDY2UKfvNkTHIwhixz8Hb+edKtj/eLgUzurbSE6QUHpFWk
+         KcXbL1oG8/kusUJYMNyVg5gqemUYv0+8e+YOExNVzO0CYJiezIprDu0Ybvrhken2Leve
+         XiRo/UGH88USKzDPNbqI54ABmE4iQgI29xI+Hq/HX9sI+AFY7su5b2kHcUzT2NA4MZLT
+         9Jhw==
+X-Gm-Message-State: AOAM531iJCZMMjqv1pF9jJ8UERA2r5jy2hbGlUMNrt7BfxEExqC2Y+as
+        bFhb+XhUgq5ZGyVn8+Fv9QVwvg==
+X-Google-Smtp-Source: ABdhPJyRZHYDd6kSYR3c0rhv9w4eYdGNQxiFk/lUQ+ZunBiRsQGfvCDxNyRijOiVzLAzMZqW6VekGw==
+X-Received: by 2002:ac2:482f:0:b0:472:47d5:ef32 with SMTP id 15-20020ac2482f000000b0047247d5ef32mr3587303lft.344.1652970650876;
+        Thu, 19 May 2022 07:30:50 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.185])
+        by smtp.gmail.com with ESMTPSA id d25-20020ac24c99000000b00477b624c0a8sm304402lfl.180.2022.05.19.07.30.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 07:29:44 -0700 (PDT)
-Message-ID: <c49dfdf1-c1e8-a9d2-0f31-f190d7b6631f@redhat.com>
-Date:   Thu, 19 May 2022 16:29:43 +0200
+        Thu, 19 May 2022 07:30:50 -0700 (PDT)
+Message-ID: <6f009241-a63f-ae43-a04b-62841aaef293@openvz.org>
+Date:   Thu, 19 May 2022 17:30:49 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v7 1/1] x86/PCI: Ignore E820 reservations for bridge
- windows on newer systems
+ Thunderbird/91.8.1
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH v3] io_uring: fix incorrect __kernel_rwf_t cast
+To:     Christoph Hellwig <hch@infradead.org>, Jens Axboe <axboe@kernel.dk>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+References: <2eb22fb3-40cc-48f6-8ba9-5faeae0b43ff@kernel.dk>
 Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220519141450.GA19225@bhelgaas>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220519141450.GA19225@bhelgaas>
+In-Reply-To: <2eb22fb3-40cc-48f6-8ba9-5faeae0b43ff@kernel.dk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Currently 'make C=1 fs/io_uring.o' generates sparse warning:
 
-On 5/19/22 16:14, Bjorn Helgaas wrote:
-> On Thu, May 19, 2022 at 04:01:48PM +0200, Hans de Goede wrote:
-> 
->> Ok, I'll go and prepare a v9 and I will submit that later today.
-> 
-> Would it be practical to split into three patches?
-> 
->   1) Add command-line args
->   2) Add DMI quirks
->   3) Add date check
-> 
-> It seems easier to assimilate and document in smaller pieces, if
-> that's possible.
+  CHECK   fs/io_uring.c
+fs/io_uring.c: note: in included file (through
+include/trace/trace_events.h, include/trace/define_trace.h, i
+nclude/trace/events/io_uring.h):
+./include/trace/events/io_uring.h:488:1:
+ warning: incorrect type in assignment (different base types)
+    expected unsigned int [usertype] op_flags
+    got restricted __kernel_rwf_t const [usertype] rw_flags
 
-Ack, will do. Note this will cause quite a bit of copy/paste
-in the commit msg to explain why these changes are necessary.
+This happen on cast of sqe->rw_flags which is defined as __kernel_rwf_t,
+this type is bitwise and requires __force attribute for any casts.
+However rw_flags is a member of the union, and its access can be safely
+replaced by using of its neighbours, so let's use poll32_events to fix
+the sparse warning.
 
-Regards,
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+v3:
+  1) fix only hunk in TRACE_EVENT(io_uring_req_failed),
+     rest ones was fixed by Christoph Hellwig already.
+  2) updated patch description
 
-Hans
+v2: updated according to comments by Christoph Hellwig
+
+---
+ include/trace/events/io_uring.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_uring.h
+index 80d2588a090c..6ba87a290a24 100644
+--- a/include/trace/events/io_uring.h
++++ b/include/trace/events/io_uring.h
+@@ -520,7 +520,7 @@ TRACE_EVENT(io_uring_req_failed,
+ 		__entry->off		= sqe->off;
+ 		__entry->addr		= sqe->addr;
+ 		__entry->len		= sqe->len;
+-		__entry->op_flags	= sqe->rw_flags;
++		__entry->op_flags	= sqe->poll32_events;
+ 		__entry->buf_index	= sqe->buf_index;
+ 		__entry->personality	= sqe->personality;
+ 		__entry->file_index	= sqe->file_index;
+-- 
+2.31.1
 

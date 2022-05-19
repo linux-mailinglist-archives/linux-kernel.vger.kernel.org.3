@@ -2,116 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D838252DA25
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1099052DA2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241981AbiESQZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
+        id S242002AbiESQ1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiESQZ1 (ORCPT
+        with ESMTP id S241997AbiESQ1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:25:27 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B91EC1EE2;
-        Thu, 19 May 2022 09:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=CQwUBWNsvvBzsepcIInv96GZu+Y9Fs9IrqHVo2LozcE=; b=RcW2hhpjCtUnjbATXRZWe4Y0iY
-        zARJGjGheRQAFvQECwXaNd9qLFbA+J4TWfPaC7vrpOINDjYwCSljBvnL8BM7v0uSWHfPC1W9Xcsk/
-        55rUl/iYy3kHnvLiJqeqBXP0tMb1e+clQhz0CxNNpjzb6BeD0R8ZpooJzgPoJ+bfxceLc/x3BPc1j
-        toMV7QWUr2h619mN24cQks+fY39q3hmP0SrN5HQEOZTiSx8tBXV/GXx2NLZ1rVm16E3y24HwXCxu1
-        ouvkRN1O2OXMvU9zsgPS0B/VEyrxvODHka8iUPHMxkCCBmU+Nr+Me+gleKv1jha807NwnYLUy6Akn
-        0Cr+j6Vg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60778)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nrixc-0004FA-F2; Thu, 19 May 2022 17:25:12 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nrixa-0006hk-Ks; Thu, 19 May 2022 17:25:10 +0100
-Date:   Thu, 19 May 2022 17:25:10 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v5 05/13] net: pcs: add Renesas MII converter
- driver
-Message-ID: <YoZvZj9sQL2GZAI3@shell.armlinux.org.uk>
-References: <20220519153107.696864-1-clement.leger@bootlin.com>
- <20220519153107.696864-6-clement.leger@bootlin.com>
+        Thu, 19 May 2022 12:27:04 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EEED4117
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:27:01 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id b7so5968937vsq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:user-agent:references:in-reply-to:mime-version:date:message-id
+         :subject:to:cc;
+        bh=D3BsvTGZmL9aXn8JC2DlxbBhxOaQqmVN5f5pOf4WE4o=;
+        b=Wdbve9pVOQfTCQ8qHIZq21Qqz+xsUOAaavE8ZtUJ9EblcqE54EBHnNXjuCxpwYGpor
+         x4JgBbxZg77ZEAnCTT0kqlEZ/o/n17D8A0eVw1bfm2qy1z6ki8Rk1os7osw5nwYQtmDJ
+         dWe7PFxstS5Yi5ZvCBNqRNNi55N7BlBUXf4UbrdAgQFpVWfVo7+Qk0uy/cnuWKCmsn1F
+         B7HDdWZgo2ml5tOL/yDMoTEHgTVr2MA4oll4/SoapPprGkcSufMBge8WouN5+m6vPQ49
+         A+4KWf4Mi66zOuv/wwToUPvT+BZC3ilqbBHUO6PSVKpTz/Hmp8QRDEB6XzvnVrGrAt6Y
+         o6eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:user-agent:references:in-reply-to
+         :mime-version:date:message-id:subject:to:cc;
+        bh=D3BsvTGZmL9aXn8JC2DlxbBhxOaQqmVN5f5pOf4WE4o=;
+        b=4NVsnFMhw5RNxW1vpa8qTatVR+rTM6mjBEwwRfvmlZG8ce7MNpmRe0p+vCeg+vTa4x
+         4rhhKgFJaY0wt3+bOSZoZDPXKVDAsnx4o2kxe+hTNbW0yU1YCUx/i9JaAoXsDrmTvzwk
+         CjhOuqZ5y7FsmgpgBP16e/H/NBwCT85nJvk6c8DYyQG/5tJBvbxrGjfQOEVcuDYqUEOO
+         m5ZHcOjouax+Rkez1F4L6rDRoFAp6B4Vx2reIQDi0tsaIWw6DYKy5Aek1CWROmGXKrg9
+         hex1HNby/dAVVZglavoW7LlXqABdq8Qhbwy40VIzcptiaqMnFA4a5KoTtEDobHZTDGgk
+         dGsA==
+X-Gm-Message-State: AOAM530oUvTHT2xLYis3Rxjlr9ACwyPDitt/x6jfS6x8VaaF04sih1U6
+        WQKNL8HJ4S8gD7LI4PZLKyDsUNEyhzZJvJyURkBQRw==
+X-Google-Smtp-Source: ABdhPJx+NNr1h6VgTuwMD1Bhi8EcRUBgWUvE0krCGgcnnrPzo4cs17ylt6Dfy/iIo/Qh4cdkDItrCl7KQ2kO/HmmW/M=
+X-Received: by 2002:a67:d516:0:b0:335:c0b5:1e5d with SMTP id
+ l22-20020a67d516000000b00335c0b51e5dmr2517279vsj.13.1652977620240; Thu, 19
+ May 2022 09:27:00 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 19 May 2022 09:26:59 -0700
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220327223927.20848-1-granquet@baylibre.com> <20220327223927.20848-19-granquet@baylibre.com>
+ <20220429083933.q3w75q3zuyyuvo4w@houat> <CABnWg9tzhZjrdKT4chkDrY-uH8BMUoxyNLUSwfuG6Sv1J+8ddg@mail.gmail.com>
+ <20220512074446.ihilbbnbuwesxbbg@houat>
+In-Reply-To: <20220512074446.ihilbbnbuwesxbbg@houat>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220519153107.696864-6-clement.leger@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 19 May 2022 09:26:59 -0700
+Message-ID: <CABnWg9tHRc_7VZ1z6NeMEDfQvxam_xOimBnM=hzBUqkhzPOSCA@mail.gmail.com>
+Subject: Re: [PATCH v9 18/22] drm/mediatek: Add mt8195 Embedded DisplayPort driver
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     airlied@linux.ie, angelogioacchino.delregno@collabora.com,
+        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
+        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
+        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
+        p.zabel@pengutronix.de, robh+dt@kernel.org, tzimmermann@suse.de,
+        vkoul@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, markyacoub@google.com,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 12 May 2022 09:44, Maxime Ripard <maxime@cerno.tech> wrote:
+>Hi,
+>
+>On Wed, May 11, 2022 at 05:59:13AM -0700, Guillaume Ranquet wrote:
+>> >> +#include <drm/drm_atomic_helper.h>
+>> >> +#include <drm/drm_bridge.h>
+>> >> +#include <drm/drm_crtc.h>
+>> >> +#include <drm/dp/drm_dp_helper.h>
+>> >> +#include <drm/drm_edid.h>
+>> >> +#include <drm/drm_of.h>
+>> >> +#include <drm/drm_panel.h>
+>> >> +#include <drm/drm_print.h>
+>> >> +#include <drm/drm_probe_helper.h>
+>> >> +#include <linux/arm-smccc.h>
+>> >> +#include <linux/clk.h>
+>> >> +#include <linux/delay.h>
+>> >> +#include <linux/errno.h>
+>> >> +#include <linux/kernel.h>
+>> >> +#include <linux/mfd/syscon.h>
+>> >> +#include <linux/nvmem-consumer.h>
+>> >> +#include <linux/of.h>
+>> >> +#include <linux/of_irq.h>
+>> >> +#include <linux/of_platform.h>
+>> >> +#include <linux/phy/phy.h>
+>> >> +#include <linux/platform_device.h>
+>> >> +#include <linux/pm_runtime.h>
+>> >> +#include <linux/regmap.h>
+>> >> +#include <sound/hdmi-codec.h>
+>> >> +#include <video/videomode.h>
+>> >> +
+>> >> +#include "mtk_dp_reg.h"
+>> >> +
+>> >> +#define MTK_DP_AUX_WAIT_REPLY_COUNT 20
+>> >> +#define MTK_DP_CHECK_SINK_CAP_TIMEOUT_COUNT 3
+>> >> +
+>> >> +//TODO: platform/device data or dts?
+>> >
+>> >DTS :)
+>>
+>> It's probably going to be a platform_data struct for v10...
+>> If I have time, I'll change it to a dts property for v10.
+>
+>I can't really imagine a case where we would need platform_data
+>nowadays. If you have a device tree, then it should be part of the
+>binding.
+>
+>What issue would you like to address by using a platform_data?
+>
 
-On Thu, May 19, 2022 at 05:30:59PM +0200, Clément Léger wrote:
-> Add a PCS driver for the MII converter that is present on the Renesas
-> RZ/N1 SoC. This MII converter is reponsible for converting MII to
-> RMII/RGMII or act as a MII pass-trough. Exposing it as a PCS allows to
-> reuse it in both the switch driver and the stmmac driver. Currently,
-> this driver only allows the PCS to be used by the dual Cortex-A7
-> subsystem since the register locking system is not used.
-> 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+Ok, I'll migrate to dt then. I didn't realize platform_data were depreciated.
 
-Looks much better now, thanks. Only one thing I've spotted is:
+Angelo wants the MAX_LINRATE and MAX_LANES defines to be configurable.
+I imagined platform_data would be more appropriate as (per my understanding) the
+limitation is associated with a specific SoC.
 
-> +static int miic_validate(struct phylink_pcs *pcs, unsigned long *supported,
-> +			 const struct phylink_link_state *state)
-> +{
-> +	if (state->interface == PHY_INTERFACE_MODE_RGMII ||
-> +	    state->interface == PHY_INTERFACE_MODE_RGMII_ID ||
-> +	    state->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
-> +	    state->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
+>> >> +static enum drm_connector_status mtk_dp_bdg_detect(struct drm_bridge *bridge)
+>> >> +{
+>> >> +	return connector_status_connected;
+>> >> +}
+>> >
+>> >I'm not quite sure what's going on there. You seem to have some support
+>> >for HPD interrupts above, but you always report the display as
+>> >connected?
+>> >
+>> >I'd assume that either you don't have HPD support and then always report
+>> >it as connected, or you have HPD support and report the current status
+>> >in detect, but that combination seems weird.
+>>
+>> The HPD logic needs more work, some things have been broken when I split
+>> the driver into three patches eDP - DP - Audio
+>> The assumption at first was that eDP didn't need any HPD handling... but it
+>> seems I was wrong and the eDP driver needs to be reworked.
+>
+>That can be made into a patch of its own if you prefer.
+>
+>You first introduce the driver without status reporting (always
+>returning connected or unknown), and then add the needed bits for HPD.
+>
+>However, that first patch shouldn't contain the interrupt plumbing and
+>so on, it's just confusing.
+>
 
-The above could use:
+After discussing a while with Mediatek, it appears that hot plug detection
+needs to be handled even for eDP... (which is always connected).
+So I'll revert to the split I made earlier in v8 where hot plug detection was
+part of the eDP patch the addition of the External display port was a
+trivial patch [1].
 
-	if (phy_interface_mode_is_rgmii(state->interface) ||
+>> >> +static struct edid *mtk_dp_get_edid(struct drm_bridge *bridge,
+>> >> +				    struct drm_connector *connector)
+>> >> +{
+>> >> +	struct mtk_dp *mtk_dp = mtk_dp_from_bridge(bridge);
+>> >> +	bool enabled = mtk_dp->enabled;
+>> >> +	struct edid *new_edid = NULL;
+>> >> +
+>> >> +	if (!enabled)
+>> >> +		drm_bridge_chain_pre_enable(bridge);
+>> >> +
+>> >> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER, DP_SET_POWER_D0);
+>> >> +	usleep_range(2000, 5000);
+>> >> +
+>> >> +	if (mtk_dp_plug_state(mtk_dp))
+>> >> +		new_edid = drm_get_edid(connector, &mtk_dp->aux.ddc);
+>> >> +
+>> >> +	if (!enabled)
+>> >> +		drm_bridge_chain_post_disable(bridge);
+>> >
+>> >Are you sure we can't get a mode set while get_edid is called?
+>> >
+>> >If we can, then you could end up disabling the device while it's being
+>> >powered on.
+>>
+>> I'm a bit unsure, I need to spend more time in the drm stack to make sure.
+>> I'll get back to you when I have a definitive answer.
+>
+>So, it looks like it's ok.
+>
+>get_edid is your implementation of get_modes, which is called by
+>drm_helper_probe_single_connector_modes
+>
+>https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_probe_helper.c#L416
+>
+>This is the standard implemantion of fill_modes, which is called
+>whenever the get_connector ioctl is called (or similar paths, like
+>drm_client_modeset_probe)
+>
+>drm_helper_probe_single_connector_modes is under the assumption that the
+>mode_config.mutex is held though, and that the big lock. So it should be
+>serialized there.
+>
+>Just for future proofing though, it would be better to use refcounting
+>there. Would runtime_pm work for you there?
+>
 
-Also, as a request to unbind this driver would be disasterous to users,
-I think you should set ".suppress_bind_attrs = true" to prevent the
-sysfs bind/unbind facility being available. This doesn't completely
-solve the problem.
+Thx for looking into this for me.
+Not sure runtime_pm works here as it would only refcount if compiled
+with CONFIG_PM?
+I'd rather use the enabled field as a refcounter instead of a boolean.
 
-Thanks.
+Unless I'm totally missing your point?
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Thx,
+Guillaume.
+
+>> >> +static void mtk_dp_parse_drm_mode_timings(struct mtk_dp *mtk_dp,
+>> >> +					  struct drm_display_mode *mode)
+>> >> +{
+>> >> +	struct mtk_dp_timings *timings = &mtk_dp->info.timings;
+>> >> +
+>> >> +	drm_display_mode_to_videomode(mode, &timings->vm);
+>> >> +	timings->frame_rate = mode->clock * 1000 / mode->htotal / mode->vtotal;
+>> >
+>> >drm_mode_vrefresh()
+>> >
+>> >> +	timings->htotal = mode->htotal;
+>> >> +	timings->vtotal = mode->vtotal;
+>> >> +}
+>> >
+>> >It's not really clear to me why you need to duplicate drm_display_mode
+>> >here?
+>> >
+>> It's saved to be re-used in mtk_dp_set_msa().
+>> It's not ideal, I'll check if I can get the mode directly from mtk_dp_set_msa()
+>
+>Yeah, it looks like mtk_dp_set_msa() uses fairly straightforward values,
+>this will be just as easy with drm_display_mode.
+>
+>Maxime
+
+
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220218145437.18563-17-granquet@baylibre.com/

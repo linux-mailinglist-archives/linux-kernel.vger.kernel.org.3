@@ -2,191 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D1B52DC9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A2252DC9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243799AbiESSTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S243753AbiESSSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243806AbiESSSX (ORCPT
+        with ESMTP id S232692AbiESSSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:18:23 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3CE4EBA98
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:18:21 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5CD0C5C01FC;
-        Thu, 19 May 2022 14:18:19 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 19 May 2022 14:18:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1652984299; x=
-        1653070699; bh=p/ZcdHvmtB8X1rkCDJsKxIe35fAqtqdi3lNcAexvvSo=; b=P
-        gZzioXTTzenseX65+yBfXdA8/uzdM3p94L6iHsPd3BJfqvwcboOTcO/BHCn0T/LN
-        edSz1SM9MB+SyXd3ZTJ6pJRUTGKdZuBuqdUtzWyrDEjdYe+LwXcmvDrlSPpz1ygM
-        38NJpPrU0kx2LeJVMyiQZxVl5BT0XloxnhrTuyi81zJxi6b5XiGdynYyFc2BWGXK
-        vPnsfC0Enf0A0eq3/zJ6WJ+ioxEcvyw8ZVAsKXrUdLRpG7InuX/cIc6tI2TgxtPj
-        VzD2rcpCFGmqTNSYziIEIHvrJItJ5gofJn4gRKch75hk4cBYVBnUrAQOda4mPjhk
-        LH8ofMDuf6VF2id38XPjQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1652984299; x=1653070699; bh=p/ZcdHvmtB8X1rkCDJsKxIe35fAq
-        tqdi3lNcAexvvSo=; b=Evw7E5LD2FXeQTxFHCfso+lRe/JtkQrZYFw5W0mBCzqo
-        MMV46hiPpAQX5q5iDScPgFexHo48yJEkBdfx7h109FGeQ8UAh2eU/L/wNac3P4Mp
-        iRyW0LhqrjDQPnvZUl1LKkNWJIBXbCyfv5m/cq4N0hUXVcXeZH9hq94pU5VAim98
-        9S3jmvi3bhIBMlYDi5ibNeuh9kDidt62ZjpYwuzO9+kTA+AiEC/KLXQR1gv40KSF
-        /WSzmes4KTssmmceM16KeFaPxLqqBEsf+8O7rA0vToKTNm0gIyZFEezl8OJGYrmf
-        n/UyMRRlWzZuq/+weMrtt7+5XIW4UVTkDGmS8+1wBA==
-X-ME-Sender: <xms:6omGYkGbeux4b-4ZA-qTob4PcH-XanARcynrHAL2ybpZRtX4ZJMUXQ>
-    <xme:6omGYtWckp2o4nNzepllyqk8mOkVi6XyrFJ1VEKekSSjW-5kPn_1AJOoNkvfLctss
-    Ub4_mb3dcZk9zw>
-X-ME-Received: <xmr:6omGYuJ8EBLp0RR9Js7tSqZkVqLoiq61-JJG9iHemxspt-YhUkWE2ldBRhwT>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedriedugdduvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepuedthefhtddvffefjeejvdehvdej
-    ieehffehkeekheegleeuleevleduteehteetnecuffhomhgrihhnpehgihhthhhusgdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegu
-    vghmihesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
-X-ME-Proxy: <xmx:6omGYmGkc-Iu38g7NVj8l1LGP7UQNUt9uu7DXYC762occKCqP3goEw>
-    <xmx:6omGYqXnmzTkMWNpp16j0SCXZQp_arxcQwnh3RZiYX1GS3GW4WUGgg>
-    <xmx:6omGYpN7gpszV1ofG5-NptgXkroqLlKf0krVLwxrlKUwR9oVcinrew>
-    <xmx:64mGYjOtj_p8aaEOarmLAwEhbbTMaIFxc9WUDPVPia1G3Q5f6pDDuA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 19 May 2022 14:18:18 -0400 (EDT)
-Date:   Thu, 19 May 2022 14:17:46 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Xen developer discussion <xen-devel@lists.xenproject.org>
-Cc:     Boris Ostrovski <boris.ostrovsky@oracle.com>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Subject: Re: Hang in 5.17.4+ that appears to be due to Xen
-Message-ID: <YoaJ6KB+GRXHG3Mv@itl-email>
-References: <Yn/Tgj1Ehs/BdpHp@itl-email>
- <55436ae1-8255-1898-00df-51261080cd41@suse.com>
+        Thu, 19 May 2022 14:18:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D07A7CFE04
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652984280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CCe4jzkEM21jgBEAbYUjXJxP7mWaBW+jz2xznXdsy+I=;
+        b=RuPr1C3HHVhYWb0EvnMn3BYXswEcW3kqLR0hFm9QGuelLdUSRhygsl8YPmJT38R6W41W+p
+        o+srbXoOjf1eUmoy2o0Ny9iJrcGl5UkiidDNpZXvTs/0o608T385Z7X8FI2RbdyC7PCf3r
+        foOlpv1s+o+cAxb31hBA7hEbGq4bnGw=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-aWlwZmKsMsONuK5n6jZL5Q-1; Thu, 19 May 2022 14:17:59 -0400
+X-MC-Unique: aWlwZmKsMsONuK5n6jZL5Q-1
+Received: by mail-qv1-f72.google.com with SMTP id c9-20020a056214146900b00461c7b83672so4927761qvy.7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:17:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=CCe4jzkEM21jgBEAbYUjXJxP7mWaBW+jz2xznXdsy+I=;
+        b=VF/Kyfvbljy+C5r42ZiUY1P9fE2vs3f02Bp+pU4yyCeKXylA1//GKGLeoyZ9CapvTB
+         ZW7vf2SIEhZqRByvrthg6MGgMhR1Dn5eObrM9rBIvWfzCW+Yy64DS5TkWUKLcfR7mfNA
+         +isTyDzaZ04TPsM/G50q4hcYmeXU8M/bE4no4BXdb9tMDs/5PZ2oUOpoElajf7VR5KVX
+         mXUAbP/TdO220Bz530nM4nIe1OcLZeie/aGNjcFnuSrFu9dkImo/9DojRqT7ldjHVpPp
+         SZQfSyMnhQl8Zufs0cUDoaiiHEsvczQg/MmxgDNgUb2v5YS6GY42CFnbSbO0ziaOUUuj
+         eyaQ==
+X-Gm-Message-State: AOAM533dopLnpWOhT5lwz1jgdUuc5LejfirLhqBQmCZXe5ABxTNlJiKy
+        8C4CGTFpwDr1+wXAvmH2YljROte98J6v+XwyEJL2C/loIMLLdbTZR4BLlGXiYNQDWNC4FQABUGn
+        q4wc0RXSGgeO8p0e3iuypVRCV
+X-Received: by 2002:a05:620a:2943:b0:6a0:11b6:3a71 with SMTP id n3-20020a05620a294300b006a011b63a71mr3954547qkp.719.1652984279151;
+        Thu, 19 May 2022 11:17:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyTwxBQRbW5CXzavBWzZt+6Xg7JO8uFoYY0eybwSqD5ztTjROukyftoK04mSMAGDwdI3zcVSg==
+X-Received: by 2002:a05:620a:2943:b0:6a0:11b6:3a71 with SMTP id n3-20020a05620a294300b006a011b63a71mr3954535qkp.719.1652984278883;
+        Thu, 19 May 2022 11:17:58 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
+        by smtp.gmail.com with ESMTPSA id v64-20020a376143000000b006a32baf67aasm1687002qkb.27.2022.05.19.11.17.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 11:17:58 -0700 (PDT)
+Message-ID: <3ecbe9d60f555266fe09d5a8c657b87d6f7564b8.camel@redhat.com>
+Subject: Re: [PATCH net v3] net: macb: Fix PTP one step sync support
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Harini Katakam <harini.katakam@xilinx.com>,
+        nicolas.ferre@microchip.com, davem@davemloft.net,
+        richardcochran@gmail.com, claudiu.beznea@microchip.com,
+        kuba@kernel.org, edumazet@google.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michal.simek@xilinx.com, harinikatakamlinux@gmail.com,
+        radhey.shyam.pandey@xilinx.com
+Date:   Thu, 19 May 2022 20:17:54 +0200
+In-Reply-To: <20220518170756.7752-1-harini.katakam@xilinx.com>
+References: <20220518170756.7752-1-harini.katakam@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2ArJoZLmXtBnMmHx"
-Content-Disposition: inline
-In-Reply-To: <55436ae1-8255-1898-00df-51261080cd41@suse.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2022-05-18 at 22:37 +0530, Harini Katakam wrote:
+> PTP one step sync packets cannot have CSUM padding and insertion in
+> SW since time stamp is inserted on the fly by HW.
+> In addition, ptp4l version 3.0 and above report an error when skb
+> timestamps are reported for packets that not processed for TX TS
+> after transmission.
+> Add a helper to identify PTP one step sync and fix the above two
+> errors. Add a common mask for PTP header flag field "twoStepflag".
+> Also reset ptp OSS bit when one step is not selected.
+> 
+> Fixes: ab91f0a9b5f4 ("net: macb: Add hardware PTP support")
+> Fixes: 653e92a9175e ("net: macb: add support for padding and fcs computation")
+> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+> Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 
---2ArJoZLmXtBnMmHx
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 19 May 2022 14:17:46 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Juergen Gross <jgross@suse.com>,
-	Xen developer discussion <xen-devel@lists.xenproject.org>
-Cc: Boris Ostrovski <boris.ostrovsky@oracle.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	linux-kernel@vger.kernel.org,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-	DRI Development <dri-devel@lists.freedesktop.org>
-Subject: Re: Hang in 5.17.4+ that appears to be due to Xen
+I'm sorry, but I cut the -net PR to Linus too early for this, so the
+fix will have to wait for a little more (no need to repost!) and even
+more pause will be required for the net-next follow-up.
 
-On Mon, May 16, 2022 at 08:48:17AM +0200, Juergen Gross wrote:
-> On 14.05.22 17:55, Demi Marie Obenour wrote:
-> > In https://github.com/QubesOS/qubes-issues/issues/7481, a user reported
-> > that Xorg locked up when resizing a VM window.  While I do not have the
-> > same hardware the user does and thus cannot reproduce the bug, the stack
-> > trace seems to indicate a deadlock between xen_gntdev and i915.  It
-> > appears that gnttab_unmap_refs_sync() is waiting for i915 to free the
-> > pages, while i915 is waiting for the MMU notifier that called
-> > gnttab_unmap_refs_sync() to return.  Result: deadlock.
-> >=20
-> > The problem appears to be that a mapped grant in PV mode will stay in
-> > the =E2=80=9Cinvalidating=E2=80=9D state until it is freed.  While MMU =
-notifiers are
-> > allowed to sleep, it appears that they cannot wait for the page to be
-> > freed, as is happening here.  That said, I am not very familiar with
-> > this code, so my diagnosis might be incorrect.
->=20
-> All I can say for now is that your patch seems to be introducing a use af=
-ter
-> free issue, as the parameters of the delayed work might get freed now bef=
-ore
-> the delayed work is being executed.
->=20
-> I don't know why this is happening only with rather recent kernels, as the
-> last gntdev changes in this area have been made in kernel 4.13.
->=20
-> I'd suggest to look at i915, as quite some work has happened in the code
-> visible in your stack backtraces rather recently. Maybe it would be possi=
-ble
-> to free the pages in i915 before calling the MMU notifier?
+Sorry for the inconvenince,
 
-Honestly, I would rather fix this in gntdev, regardless of where the
-actual bug lies.  GPU drivers get little testing under Xen, so if
-something like this happens again, it is likely to remain undiscovered
-until a Qubes user files a bug report.  This results in a bad experience
-for Qubes users.  I would much rather code that works on bare metal work
-in Xen dom0 too.  I have had random hangs in the past (with various
-kernel versions) that might be due to similar problems.
+Paolo
 
-Furthermore, similar problems can arise whenever a driver removes an
-MMU notifier on userspace pages that someone else has references to.  It
-is hard for me to see how this is the fault of the driver that removed
-the MMU notifier.  I find it much more plausible that the correct fix is
-on the Xen side: allocate the delayed work parameters on the heap, and
-free them after the work is finished.  This eliminates this entire class
-of bugs.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---2ArJoZLmXtBnMmHx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmKGiegACgkQsoi1X/+c
-IsGnpg/+OOZRF3GOjff1/VSuGntrXoauU8RINbU98Rfv9GpTzq1h6l4EdlqIX7kX
-OFO2d6uVwkuJNFWOu0TWf5Yqz9k/G0fK2q2GUTikDYq3YyTmvUbsClkKBtJVjGxY
-mkHM21nJ/ao7ZET/UyKI8obwWeuC/VHIcTjjB2iKe4sYtltyWd9gfiJweJxt7Nd2
-C/FqerrslTLEz42B/OO31qstbqxuXadl7L6kQhq3CIhtVl+ZEA8/8p92BKaEP/Wp
-Lsv2jkfDGIEmAWvZuEvaTkS19yQCeKq3jBoUgXHuYwSdEIX0A7x+MblengVfqrFv
-ZFYF5TVn7HSziGTVahYm/McAH2kCfmVsSh5DAB8v+k4EyDUsrbaPLSJGZboQsutb
-yUeqSueUV+fPvnD6XyWORtIQvOmeF9ecUWH9AUcWEtDrC1DxCeJADYcmE+RuLYuv
-t3t9OEo2SB55CmS28u9BIYFmlUDDKVvsQ3xUxDR9114HY++Dulj0W1R3ZrW0mWHH
-49OrKp47DvmdaX1OyRhI/3RaPc4u+OTV8Z/1jWL0cHrybsimiTkjySKPXonIaO2E
-emd+UWqLoYAyQLZ+u8alEI5s7IBjeXPcL8VEwh6K7nblCjK3yfqdOCyYRem+1lgx
-JlHonk/YOiLPfZG1xN29p+/vRnzQBaZR28py7GpsVBsniWQQxS4=
-=DHnk
------END PGP SIGNATURE-----
-
---2ArJoZLmXtBnMmHx--

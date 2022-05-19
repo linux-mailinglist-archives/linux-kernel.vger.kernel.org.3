@@ -2,109 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7E752D413
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840D352D418
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239110AbiESNbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        id S238783AbiESNb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235342AbiESNa2 (ORCPT
+        with ESMTP id S239020AbiESNbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:30:28 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5B6C6E5F;
-        Thu, 19 May 2022 06:30:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id wh22so9830200ejb.7;
-        Thu, 19 May 2022 06:30:27 -0700 (PDT)
+        Thu, 19 May 2022 09:31:41 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675FE5F8E0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:31:31 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f16645872fso56782577b3.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:31:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FxJnKg+A99wVrQlkanyVEuJTvEg3la3FckWvtOvAtg8=;
-        b=eGV9t4Pe+aYujMGFP8V0IDDWdxCejL3cCO8g5G473ddA0oijPcfBAQ1rMwL5+k1vE0
-         l7Q8CVUjXYzvQluSlvMZRZPVK/m7TWbafsDriPYjPfg+thoOtRD7P6m07umtB/D6PtQx
-         SpNjlHonsvm9P6cbHKBJo3T93swFgBKlzAIc2giQ2wHjuy0qgJb4icVppOTN2YVFgM8z
-         tbjShMY9PU/Xg6Ry7Qdf9i4GcKcJ+E6qj6fPHl1NjUBiLg+On2KS3EWS04jgDp5tvf06
-         Z9aBx18PZMUO1xwDKabPYtrVc/ReCESlrCMwWAF7kM+pwkjPhnloYJR3Tcg4IhZDDOaC
-         SqYg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3XnxyHbIe0ZBmAsG2JuG+QltijPeIqWVypBFknCicxo=;
+        b=kYS0JcMgRcmEu9/JY4wcwmH4dMjbm8Sf+jBzLXPbQ2DcKYa61Hid4c/wSQNc3/gHuz
+         ZTcY91PpEZjRTvp4ZqgVzZFWsgZJSX3+HsEtmhs8h1lp1/Vx2e2uX6nx5k5DUts9zJ0/
+         O00Y0LTUX/XUt8KCH5mgUqvnIevZHRj+qYEzW0UlpWqgrOSJRDPqno42UHCD6T5dgrzl
+         WeFvMzyhjzW5WTTeTtbDfMC/G18YXDdRqdvzCOO7A5A0Vrh3gf5Q7Oc4Jrd22FDVNuBp
+         Urt0pvnWFqYh3+CkqcrhmtgP3zMDwbNO2z7dilq1bLcoZDSaM9DlI7K9iaJLEy0en/pU
+         J/sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FxJnKg+A99wVrQlkanyVEuJTvEg3la3FckWvtOvAtg8=;
-        b=N5JQ7Y5GVeO02reGjHmejwM0EyGgaTeCwOI0Ewk6OEc5YD9dBDBmNSxhnH3zl3ErVT
-         plqhWSXrdEJkHy7R6SEq/VG0WgFXDXH7b0duxIOhbc59zohR2Ho8KJW4uZm3f7uRxHKw
-         Blo0vpijjfm1pfdv1z4nPVnqDlVGqPNk2SMLR4Uh23C26DicXXmHjEr0XR/l2KUWZElh
-         LfV/cMLFW43H2EUcl+rQhskQCpNhXB0+6hp4LQzdrqnA9p5TD9xco+lYcdYISY07Txgd
-         9HhENvDmio4GU9EnfcNmfFtNeRO+4xf5Ak6CJqQGB+mFpxc8zwOuAnLsTzv2yGZMSDtz
-         nrSw==
-X-Gm-Message-State: AOAM532mvlUJ44WqAykFPiyzP/EbSscCOjRF8hFuHvCxr+dNFv3hvJ0t
-        RP9RZQYZ39GsmQueOXRZBg4=
-X-Google-Smtp-Source: ABdhPJzWqxZpySS2+4NGbY2xj3uJDooRqXB7VLD/8lVf/avrXrbROe4czKYqU614TfSlbKTOVl2rQA==
-X-Received: by 2002:a17:907:9602:b0:6df:e82c:f84 with SMTP id gb2-20020a170907960200b006dfe82c0f84mr4334422ejc.590.1652967026068;
-        Thu, 19 May 2022 06:30:26 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-94-253-165-71.zg.cable.xnet.hr. [94.253.165.71])
-        by smtp.googlemail.com with ESMTPSA id y17-20020a17090614d100b006f3ef214dd4sm2120383ejc.58.2022.05.19.06.30.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 06:30:25 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@somainline.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH v5 7/7] arm64: dts: qcom: ipq8074-hk01: add VQMMC supply
-Date:   Thu, 19 May 2022 15:30:15 +0200
-Message-Id: <20220519133015.484639-7-robimarko@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220519133015.484639-1-robimarko@gmail.com>
-References: <20220519133015.484639-1-robimarko@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3XnxyHbIe0ZBmAsG2JuG+QltijPeIqWVypBFknCicxo=;
+        b=klUJvYtvd0hCM1dipms90ogkUJamz3ktB2aE0v4W0D1ibzgXjFbt78aOkSLgkTaBLV
+         qRy3uSLmuuv1pPOoGVTZFGTLA/aHQCJExf4N0R1xJAjzXIshye7Knlt6jqCn+iGC5R0u
+         2ccVpvS9LEP7uTrhn5l1ZRcBMd9+1L5UdP+tKjhpnXsMkPlLQM04c491E63GZVs1ZSo1
+         3NBiUQkLYYgUxQkKwje5patI0bQrt+U0szbM8ppHFYMWmDcmxBRUbKv9Zq9GcKrEdYOu
+         dK0HgXxUGpVxTDrkcm+eWCvhYjKYwbsg1bQrcSXJjrvORS8nF+sEmUnmnyMIdWsSuUiK
+         AWkA==
+X-Gm-Message-State: AOAM532a91THZ04ivnI5h1VD1ezL4hPq6fHBLiSXRRsuKryiQWLrN8wy
+        Clynung0PzfCjmnWWzBTv5uIW5am3jotFjWfrcf3BA==
+X-Google-Smtp-Source: ABdhPJxC5VgcYmjV4j7I0ElLpLTURx5L6cjrFDYuPYN61Od2Uz1HdmgBoQB10B6ZS0hGShCFD2W6W/brwNh3bVK/s7c=
+X-Received: by 2002:a81:1d48:0:b0:2f1:8ebf:25f3 with SMTP id
+ d69-20020a811d48000000b002f18ebf25f3mr4695844ywd.118.1652967090590; Thu, 19
+ May 2022 06:31:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220519011210.170022-1-robh@kernel.org>
+In-Reply-To: <20220519011210.170022-1-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 19 May 2022 15:31:19 +0200
+Message-ID: <CACRpkdZtUj=_X-uC46CO97GGqKBJR28h1Hoj60iSmMWUYc1LRA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom: Drop 'maxItems' on 'wakeup-parent'
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since now we have control over the PMP8074 PMIC providing various system
-voltages including L11 which provides the SDIO/eMMC I/O voltage set it as
-the SDHCI VQMMC supply.
+On Thu, May 19, 2022 at 3:12 AM Rob Herring <robh@kernel.org> wrote:
 
-This allows SDHCI controller to switch to 1.8V I/O mode and support high
-speed modes like HS200 and HS400.
+> 'wakeup-parent' is a single phandle and not an array, so 'maxItems' is
+> wrong. Drop it.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq8074-hk01.dts | 2 ++
- 1 file changed, 2 insertions(+)
+Patch applied!
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-index b5e1eaa367bf..457cf83a1ed5 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq8074-hk01.dts
-@@ -3,6 +3,7 @@
- /* Copyright (c) 2017, The Linux Foundation. All rights reserved.
-  */
- #include "ipq8074.dtsi"
-+#include "pmp8074.dtsi"
- 
- / {
- 	#address-cells = <0x2>;
-@@ -87,6 +88,7 @@ nand@0 {
- 
- &sdhc_1 {
- 	status = "okay";
-+	vqmmc-supply = <&l11>;
- };
- 
- &qusb_phy_0 {
--- 
-2.36.1
-
+Yours,
+Linus Walleij

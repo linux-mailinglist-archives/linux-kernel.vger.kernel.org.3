@@ -2,257 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E948D52D101
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC94F52D102
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237105AbiESK7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
+        id S237113AbiESK7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiESK7g (ORCPT
+        with ESMTP id S236083AbiESK7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:59:36 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06368AF31D;
-        Thu, 19 May 2022 03:59:35 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 3EE6B1F45A41
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652957973;
-        bh=OvdE5DqVSmf6V3Hh/uC4yUE8G4B1Yfty3nshezlJAsg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nhEwpfQ7OcyAG8+NvJfjAWbHIuJCuFL5Yr8eR25H/8B9s5IY1U+edXuk06f1ZKe1c
-         25CEKVxv7p4eZeLy8/xqr5ylaXy3c1HoIMVo8JUXe2yH+HYwJkm02WtOVNyGtOGMMN
-         dxEP4HtlYhPx3ZarMbWCA8F3yCvqt/NUZyGtjWl45StroWjbtdNxTagU763/LQKm0k
-         x9kPn0yjr3Tf68HhhR0VcI1Df754uiDHzYc1vZzJLrTPaD1KlRs5V4BYVwkD+cf0rA
-         9ZpVByocxPmrgXWWl047AkXiDDr93laTHnrCGc3Q8udVtuPtqpK5NGk01DUxhHhAw2
-         jmZn1m0I1ZWPA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     gregkh@linuxfoundation.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, linux-serial@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH] dt-bindings: serial: mtk-uart: Convert txt to json-schema
-Date:   Thu, 19 May 2022 12:59:28 +0200
-Message-Id: <20220519105928.22826-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 19 May 2022 06:59:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A191FAF32E;
+        Thu, 19 May 2022 03:59:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 54EBB21B54;
+        Thu, 19 May 2022 10:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652957976; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jMNnoNJa2b5+2J40iT0inx4nRccR2PWVfWoFKpUpFbQ=;
+        b=K1to2AvtMDvcqfY6d7f+MZRQJg3j3EXLUKbxDk6DGYgfAw1IOz8sRKa18OWNCDddxM+pRQ
+        ME9XP51iug2ximVhum/LXib4aNLUI5yRyZ3znHP11+0Xo/hKd4fgugpQ73F9O4FU9kVlRH
+        fItMSip5j6K1dCMw5fjDRNeG/EyBHQo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652957976;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jMNnoNJa2b5+2J40iT0inx4nRccR2PWVfWoFKpUpFbQ=;
+        b=Uwk9F1qU36LD4onNKj6zYEBLXpB+98fUh2gawQ0ywGOSkaGSF2HGAgb28Y5vczg6cnAcys
+        I/UTEJuR8PjjFGDQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3DAB32C141;
+        Thu, 19 May 2022 10:59:36 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B499BA062F; Thu, 19 May 2022 12:59:35 +0200 (CEST)
+Date:   Thu, 19 May 2022 12:59:35 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next 1/8] block, bfq: cleanup bfq_weights_tree
+ add/remove apis
+Message-ID: <20220519105935.psejehys7uwlzmmk@quack3.lan>
+References: <20220514090522.1669270-1-yukuai3@huawei.com>
+ <20220514090522.1669270-2-yukuai3@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220514090522.1669270-2-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the mtk-uart documentation from freeform text to a json-schema.
+On Sat 14-05-22 17:05:15, Yu Kuai wrote:
+> They already pass 'bfqd' as the first parameter, there is no need to
+> pass 'bfqd->queue_weights_tree' as another parameter.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../bindings/serial/mediatek,uart.yaml        | 118 ++++++++++++++++++
- .../devicetree/bindings/serial/mtk-uart.txt   |  59 ---------
- 2 files changed, 118 insertions(+), 59 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/serial/mediatek,uart.yaml
- delete mode 100644 Documentation/devicetree/bindings/serial/mtk-uart.txt
+Looks good. Just one nit below:
 
-diff --git a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-new file mode 100644
-index 000000000000..d5a1386162cc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-@@ -0,0 +1,118 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/serial/mediatek,uart.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MediaTek Universal Asynchronous Receiver/Transmitter (UART)
-+
-+maintainers:
-+  - Matthias Brugger <matthias.bgg@gmail.com>
-+
-+allOf:
-+  - $ref: serial.yaml#
-+
-+description: |+
-+  The MediaTek UART is based on the basic 8250 UART and compatible
-+  with 16550A, with enhancements for high speed baud rates and
-+  support for DMA.
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - mediatek,mt2701-uart
-+          - mediatek,mt2712-uart
-+          - mediatek,mt6580-uart
-+          - mediatek,mt6582-uart
-+          - mediatek,mt6589-uart
-+          - mediatek,mt6755-uart
-+          - mediatek,mt6765-uart
-+          - mediatek,mt6779-uart
-+          - mediatek,mt6795-uart
-+          - mediatek,mt6797-uart
-+          - mediatek,mt7622-uart
-+          - mediatek,mt7623-uart
-+          - mediatek,mt7629-uart
-+          - mediatek,mt7986-uart
-+          - mediatek,mt8127-uart
-+          - mediatek,mt8135-uart
-+          - mediatek,mt8173-uart
-+          - mediatek,mt8183-uart
-+          - mediatek,mt8186-uart
-+          - mediatek,mt8192-uart
-+          - mediatek,mt8195-uart
-+          - mediatek,mt8516-uart
-+      - const: mediatek,mt6577-uart
-+
-+  reg:
-+    description: The base address of the UART register bank
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    items:
-+      - description: The clock the baudrate is derived from
-+      - description: The bus clock for register accesses
-+
-+  clock-names:
-+    minItems: 1
-+    items:
-+      - const: baud
-+      - const: bus
-+
-+  dmas:
-+    items:
-+      - description: phandle to TX DMA
-+      - description: phandle to RX DMA
-+
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
-+
-+  interrupts:
-+    minItems: 1
-+    maxItems: 2
-+
-+  interrupt-names:
-+    description:
-+      The UART interrupt and optionally the RX in-band wakeup interrupt.
-+    minItems: 1
-+    items:
-+      - const: uart
-+      - const: wakeup
-+
-+  pinctrl-0: true
-+  pinctrl-1: true
-+
-+  pinctrl-names:
-+    minItems: 1
-+    items:
-+      - const: default
-+      - const: sleep
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    serial@11006000 {
-+        compatible = "mediatek,mt6589-uart", "mediatek,mt6577-uart";
-+        reg = <0x11006000 0x400>;
-+        interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
-+                     <GIC_SPI 52 IRQ_TYPE_EDGE_FALLING>;
-+        interrupt-names = "uart", "wakeup";
-+        clocks = <&uart_clk>, <&bus_clk>;
-+        clock-names = "baud", "bus";
-+        pinctrl-0 = <&uart_pin>;
-+        pinctrl-1 = <&uart_pin_sleep>;
-+        pinctrl-names = "default", "sleep";
-+    };
-diff --git a/Documentation/devicetree/bindings/serial/mtk-uart.txt b/Documentation/devicetree/bindings/serial/mtk-uart.txt
-deleted file mode 100644
-index 113b5d6a2245..000000000000
---- a/Documentation/devicetree/bindings/serial/mtk-uart.txt
-+++ /dev/null
-@@ -1,59 +0,0 @@
--* MediaTek Universal Asynchronous Receiver/Transmitter (UART)
--
--Required properties:
--- compatible should contain:
--  * "mediatek,mt2701-uart" for MT2701 compatible UARTS
--  * "mediatek,mt2712-uart" for MT2712 compatible UARTS
--  * "mediatek,mt6580-uart" for MT6580 compatible UARTS
--  * "mediatek,mt6582-uart" for MT6582 compatible UARTS
--  * "mediatek,mt6589-uart" for MT6589 compatible UARTS
--  * "mediatek,mt6755-uart" for MT6755 compatible UARTS
--  * "mediatek,mt6765-uart" for MT6765 compatible UARTS
--  * "mediatek,mt6779-uart" for MT6779 compatible UARTS
--  * "mediatek,mt6795-uart" for MT6795 compatible UARTS
--  * "mediatek,mt6797-uart" for MT6797 compatible UARTS
--  * "mediatek,mt7622-uart" for MT7622 compatible UARTS
--  * "mediatek,mt7623-uart" for MT7623 compatible UARTS
--  * "mediatek,mt7629-uart" for MT7629 compatible UARTS
--  * "mediatek,mt7986-uart", "mediatek,mt6577-uart" for MT7986 compatible UARTS
--  * "mediatek,mt8127-uart" for MT8127 compatible UARTS
--  * "mediatek,mt8135-uart" for MT8135 compatible UARTS
--  * "mediatek,mt8173-uart" for MT8173 compatible UARTS
--  * "mediatek,mt8183-uart", "mediatek,mt6577-uart" for MT8183 compatible UARTS
--  * "mediatek,mt8186-uart", "mediatek,mt6577-uart" for MT8183 compatible UARTS
--  * "mediatek,mt8192-uart", "mediatek,mt6577-uart" for MT8192 compatible UARTS
--  * "mediatek,mt8195-uart", "mediatek,mt6577-uart" for MT8195 compatible UARTS
--  * "mediatek,mt8516-uart" for MT8516 compatible UARTS
--  * "mediatek,mt6577-uart" for MT6577 and all of the above
--
--- reg: The base address of the UART register bank.
--
--- interrupts:
--  index 0: an interrupt specifier for the UART controller itself
--  index 1: optional, an interrupt specifier with edge sensitivity on Rx pin to
--           support Rx in-band wake up. If one would like to use this feature,
--           one must create an addtional pinctrl to reconfigure Rx pin to normal
--           GPIO before suspend.
--
--- clocks : Must contain an entry for each entry in clock-names.
--  See ../clocks/clock-bindings.txt for details.
--- clock-names:
--  - "baud": The clock the baudrate is derived from
--  - "bus": The bus clock for register accesses (optional)
--
--For compatibility with older device trees an unnamed clock is used for the
--baud clock if the baudclk does not exist. Do not use this for new designs.
--
--Example:
--
--	uart0: serial@11006000 {
--		compatible = "mediatek,mt6589-uart", "mediatek,mt6577-uart";
--		reg = <0x11006000 0x400>;
--		interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_LOW>,
--			     <GIC_SPI 52 IRQ_TYPE_EDGE_FALLING>;
--		clocks = <&uart_clk>, <&bus_clk>;
--		clock-names = "baud", "bus";
--		pinctrl-names = "default", "sleep";
--		pinctrl-0 = <&uart_pin>;
--		pinctrl-1 = <&uart_pin_sleep>;
--	};
+> @@ -945,12 +945,13 @@ void bfq_weights_tree_add(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+>   * about overhead.
+>   */
+>  void __bfq_weights_tree_remove(struct bfq_data *bfqd,
+> -			       struct bfq_queue *bfqq,
+> -			       struct rb_root_cached *root)
+> +			       struct bfq_queue *bfqq)
+>  {
+> +	struct rb_root_cached *root;
+
+Add empty line here please.
+
+>  	if (!bfqq->weight_counter)
+>  		return;
+>  
+> +	root = &bfqd->queue_weights_tree;
+>  	bfqq->weight_counter->num_active--;
+>  	if (bfqq->weight_counter->num_active > 0)
+>  		goto reset_entity_pointer;
+
+Otherwise the patch looks good. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 -- 
-2.35.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,122 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E688A52CA50
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3688152CA54
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbiESDZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 23:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S233172AbiESD1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 23:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiESDZs (ORCPT
+        with ESMTP id S230114AbiESD1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 23:25:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E83111456;
-        Wed, 18 May 2022 20:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OSyE8SOU5BkfOUgGl2faWPnm3KPoXoHKqGtKZbhztWw=; b=DbZp3OmrzgVn17w7AqGMFwsC6v
-        knDkZgFfKC1VBF7bXaGk587Q7AljPclSLmZfD2jMuqB+XZWuFrYqAO160c26bVXOY49UuxCMMOSwQ
-        GEFVGmB7EKICylb73a2XMnX91mbvk13Toizx7FoDiHzVP0Nq5kdqMbUuXuDqv7VbnB+ZRBW+IGhVa
-        Tluj/U+PsDgacmQ+gTcvdEG2PJnkl6/6w/ikUwwK1ciGG2c5VKvYakEm2zYP64mWXGIc7M48zB/ia
-        E3nZY3OlRUCrHTWnO81vc8akdNKd22/aUBCY4MDttHDrGiS9WxOySsVrESIIAYy08MAmvAJgTkgK/
-        lzq3jOpg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrWnF-004s6A-PC; Thu, 19 May 2022 03:25:41 +0000
-Date:   Wed, 18 May 2022 20:25:41 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sysctl: Merge adjacent CONFIG_TREE_RCU blocks
-Message-ID: <YoW4tRf693CSAioE@bombadil.infradead.org>
-References: <a6931221b532ae7a5cf0eb229ace58acee4f0c1a.1652799977.git.geert+renesas@glider.be>
- <20220517155737.GA1790663@paulmck-ThinkPad-P17-Gen-1>
+        Wed, 18 May 2022 23:27:07 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5FE387A8
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:27:06 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso4025229pjg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=DvCDL7qLHs8BtEUJOCe3YyS8st6NCqz/zZeRA1wCMcs=;
+        b=1exOZE9PZibtx7F79PeelNge5roPEynlStGZRREWBc/+lfRew4fgeL9sI/jebZC8n1
+         W3aziSpV7BjjuH6EUHV6DK+gInM8hX1PdOF8HDiW3cCkPQPFBIZp0Tymcm/860mG4LJv
+         YbcvLKyMrLVeJ0+GMpS6NrPZoUuP4middCswHtVqHjZlY+833Ej584a+5QNmi2Se6dWz
+         Ai+mDo2PxyxAg8sxrXYTCIMCpA8WTFGzwBnG96Plz8+xuQhQnbneQa+sdI+5OY5SpbcR
+         T1A6lTHpfg4R5hKnbBexOstX7/Q//8VQDIhGKBRhbSZUrarOwd05ZfGPnLxb9QeikK7Z
+         TsQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DvCDL7qLHs8BtEUJOCe3YyS8st6NCqz/zZeRA1wCMcs=;
+        b=AovbqTGQjnQCB0eQx8O7VKAAJaGHA6t7B1pagblcTWyr/AwrrEP/lXaR9RYzNgH3uE
+         dHyu5wdIa7iCnhelp7jxpfL5ztEdfr3JNVcfh4ZlSQ2iVYOc5cthc2tVE5ONWFzNhqLJ
+         BAyBfkOn8cTgHtsRyHAvneT+AdrVkOtr2AOi5yDiv82UxttsQOWAnxhfy6gWV2iTGkHw
+         0bLrm8t/gQcfNe5E8mP07dL8iqotSJEISaaicvYKcjeufRsU9/TaR3j0iZKscwI4R1+5
+         C4aXe1jqIHSs0+ZJsgtL5M5QHEoR69o8v4E7HscSX3TWq2uN0XMVr72H5+oFnCEGWMrp
+         nt8A==
+X-Gm-Message-State: AOAM532eRbhVHNqAr7YTNsfUrGsdm+vGtLwxc7tPE8y7Ci3ORoYHC6wz
+        u4P/Y5O4Ozdd5jxAy3OkL40tDg==
+X-Google-Smtp-Source: ABdhPJxPK36YqflPnFkLOBUzTk8PKNRY2kI6ZmDVEPjgo4upOyHUWVIR9szL7xBocBGKmy7CsOLC/A==
+X-Received: by 2002:a17:902:c714:b0:161:64fa:97b6 with SMTP id p20-20020a170902c71400b0016164fa97b6mr2804299plp.40.1652930825689;
+        Wed, 18 May 2022 20:27:05 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id j8-20020aa78d08000000b0050dc7628182sm2748973pfe.92.2022.05.18.20.26.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 20:27:05 -0700 (PDT)
+Message-ID: <196f6ae9-f899-16c8-a5d3-a1c771fa9900@bytedance.com>
+Date:   Thu, 19 May 2022 11:26:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220517155737.GA1790663@paulmck-ThinkPad-P17-Gen-1>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [External] Re: [PATCH bpf-next] selftests/bpf: fix some bugs in
+ map_lookup_percpu_elem testcase
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joanne Koong <joannekoong@fb.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        duanxiongchun@bytedance.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        zhouchengming@bytedance.com, Yosry Ahmed <yosryahmed@google.com>
+References: <20220516022453.68420-1-zhoufeng.zf@bytedance.com>
+ <CAEf4BzZ0eRh4ufQnc69B=6WQt_Oy3DNPL-TM-rsUW1KX--SBvQ@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CAEf4BzZ0eRh4ufQnc69B=6WQt_Oy3DNPL-TM-rsUW1KX--SBvQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 08:57:37AM -0700, Paul E. McKenney wrote:
-> On Tue, May 17, 2022 at 05:07:31PM +0200, Geert Uytterhoeven wrote:
-> > There are two adjacent sysctl entries protected by the same
-> > CONFIG_TREE_RCU config symbol.  Merge them into a single block to
-> > improve readability.
-> > 
-> > Use the more common "#ifdef" form while at it.
-> > 
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
-> If you would like me to take this, please let me know.  (The default
-> would be not the upcoming merge window, but the one after that.)
-> 
-> If you would rather send it via some other path:
-> 
-> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+在 2022/5/19 上午8:17, Andrii Nakryiko 写道:
+> On Sun, May 15, 2022 at 7:25 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>
+>> comments from Andrii Nakryiko, details in here:
+>> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/
+>>
+>> use /* */ instead of //
+>> use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
+>> use 8 bytes for value size
+>> fix memory leak
+>> use ASSERT_EQ instead of ASSERT_OK
+>> add bpf_loop to fetch values on each possible CPU
+>>
+>> Fixes: ed7c13776e20c74486b0939a3c1de984c5efb6aa ("selftests/bpf: add test case for bpf_map_lookup_percpu_elem")
+>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>> ---
+>>   .../bpf/prog_tests/map_lookup_percpu_elem.c   | 49 +++++++++------
+>>   .../bpf/progs/test_map_lookup_percpu_elem.c   | 61 ++++++++++++-------
+>>   2 files changed, 70 insertions(+), 40 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>> index 58b24c2112b0..89ca170f1c25 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>> @@ -1,30 +1,39 @@
+>> -// SPDX-License-Identifier: GPL-2.0
+>> -// Copyright (c) 2022 Bytedance
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+> heh, so for SPDX license comment the rule is to use // in .c files :)
+> so keep SPDX as // and all others as /* */
 
-The one that that occurs to me is that while at it, Geert,
-can you also just then follow up with a patch 2/2 which then
-moves the sysctl out to the respective RCU code. If you look
-at linux-nxt kernel/sysctl.c is getting modified heavily with
-time to avoid stuffing everyone's sysctls there because this
-creates merge conflicts, make the file hard to read, and we
-have ways to split this.
+will do. Thanks.
 
-This work started about 2 kernel releases ago and is ongoing,
-it may take 3-4 more before kernel/sysctl.c stop being a kitchen
-sink of everyone's syctls.
+>
+>> +/* Copyright (c) 2022 Bytedance */
+>>
+>>   #include <test_progs.h>
+>>
+>>   #include "test_map_lookup_percpu_elem.skel.h"
+>>
+>> -#define TEST_VALUE  1
+>> -
+>>   void test_map_lookup_percpu_elem(void)
+>>   {
+>>          struct test_map_lookup_percpu_elem *skel;
+>> -       int key = 0, ret;
+>> -       int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+>> -       int *buf;
+>> +       __u64 key = 0, sum;
+>> +       int ret, i;
+>> +       int nr_cpus = libbpf_num_possible_cpus();
+>> +       __u64 *buf;
+>>
+>> -       buf = (int *)malloc(nr_cpus*sizeof(int));
+>> +       buf = (__u64 *)malloc(nr_cpus*sizeof(__u64));
+> no need for casting
 
-Paul, I've been collecting these modifications in a sysctl-next
-tree to avoid merge conflicts, and I try to not do to much per
-kernel release. If you like I can take this in for that tree
-as well, but as you noted, this would be for the next release,
-not the current one which we'll soon enter the merge window for.
+casting means no '(__u64 *)'?
+just like this:
+'buf = malloc(nr_cpus * sizeof(__u64));'
 
-Let me know!
+>
+>>          if (!ASSERT_OK_PTR(buf, "malloc"))
+>>                  return;
+>> -       memset(buf, 0, nr_cpus*sizeof(int));
+>> -       buf[0] = TEST_VALUE;
+>>
+>> -       skel = test_map_lookup_percpu_elem__open_and_load();
+>> -       if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
+>> -               return;
+>> +       for (i=0; i<nr_cpus; i++)
+> spaces between operators
 
-  Luis
-> 
-> > ---
-> >  kernel/sysctl.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > 
-> > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> > index 82bcf5e3009fa377..597069da18148f42 100644
-> > --- a/kernel/sysctl.c
-> > +++ b/kernel/sysctl.c
-> > @@ -2227,7 +2227,7 @@ static struct ctl_table kern_table[] = {
-> >  		.extra1		= SYSCTL_ZERO,
-> >  		.extra2		= SYSCTL_ONE,
-> >  	},
-> > -#if defined(CONFIG_TREE_RCU)
-> > +#ifdef CONFIG_TREE_RCU
-> >  	{
-> >  		.procname	= "panic_on_rcu_stall",
-> >  		.data		= &sysctl_panic_on_rcu_stall,
-> > @@ -2237,8 +2237,6 @@ static struct ctl_table kern_table[] = {
-> >  		.extra1		= SYSCTL_ZERO,
-> >  		.extra2		= SYSCTL_ONE,
-> >  	},
-> > -#endif
-> > -#if defined(CONFIG_TREE_RCU)
-> >  	{
-> >  		.procname	= "max_rcu_stall_to_panic",
-> >  		.data		= &sysctl_max_rcu_stall_to_panic,
-> > -- 
-> > 2.25.1
-> > 
+will do. Thanks.
+
+>
+>> +               buf[i] = i;
+>> +       sum = (nr_cpus-1)*nr_cpus/2;
+> same, please follow kernel code style
+
+will do. Thanks.
+
+>
+>> +
+>> +       skel = test_map_lookup_percpu_elem__open();
+>> +       if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
+>> +               goto exit;
+>> +
+> nit: keep it simple, init skel to NULL and use single cleanup goto
+> label that will destroy skel unconditionally (it deals with NULL just
+> fine)
+
+will do. Thanks.
+
+>> +       skel->rodata->nr_cpus = nr_cpus;
+>> +
+>> +       ret = test_map_lookup_percpu_elem__load(skel);
+>> +       if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
+>> +               goto cleanup;
+>> +
+>>          ret = test_map_lookup_percpu_elem__attach(skel);
+>> -       ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
+>> +       if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach"))
+>> +               goto cleanup;
+>>
+>>          ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
+>>          ASSERT_OK(ret, "percpu_array_map update");
+> [...]
+
+

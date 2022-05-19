@@ -2,128 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9578252D732
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0ABB52D735
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240651AbiESPOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
+        id S240596AbiESPOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240712AbiESPOC (ORCPT
+        with ESMTP id S240577AbiESPOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:14:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C21EC33C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:13:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E13CB8255C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:13:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF83C385AA;
-        Thu, 19 May 2022 15:13:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652973237;
-        bh=/qSDeChNAv8oe7nDJtJ4OauvaBSqyoKSFNDbkvdSOko=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JyruuCxe8g/67py8MJE/0LyeX0+M3b4Z5Jrzh2DF0F5Ixq5biz8JJknzvSjIzH0wZ
-         coWS2N0s26CFBAP8MSciSlS4FH46JUc6jfrvwxUfsKxOASUI/gg5G3DNxNjXvYyK2x
-         E7thJI5OGCnWdcKeVEBjz6Vi+WsgkoLWEiedRTwuUBJlxySeKIUnmvJdtVsukMUu8f
-         hGWPvSxxmjOK0he0yrD0NKI2+WCZ11+EvdbXAQx6bpiK6TtuH8+FkFyojQPfZsitxt
-         DvgxgDBu5xTFIj9B7XP4+28KA4dK38Er/lNVKLsfOAuKmYNrgzaAoeVMsGyR8rO8NR
-         mIniqIA9xVD0g==
-Date:   Thu, 19 May 2022 08:13:55 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2] objtool: Fix symbol creation
-Message-ID: <20220519151355.x7j3xmkelpakw4gx@treble>
-References: <YoK4U9RgQ9N+HhXJ@dev-arch.thelio-3990X>
- <20220516214005.GQ76023@worktop.programming.kicks-ass.net>
- <YoPAZ6JfsF0LrQNc@hirez.programming.kicks-ass.net>
- <YoPCTEYjoPqE4ZxB@hirez.programming.kicks-ass.net>
- <20220518012429.4zqzarvwsraxivux@treble>
- <20220518074152.GB10117@worktop.programming.kicks-ass.net>
- <20220518173604.7gcrjjum6fo2m2ub@treble>
- <YoVuxKGkt0IQ0yjb@hirez.programming.kicks-ass.net>
- <20220519090029.GA6479@worktop.programming.kicks-ass.net>
+        Thu, 19 May 2022 11:14:47 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A774ADFF53;
+        Thu, 19 May 2022 08:14:44 -0700 (PDT)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 19 May 2022 23:14:28
+ +0800 (GMT+08:00)
+X-Originating-IP: [124.236.130.193]
+Date:   Thu, 19 May 2022 23:14:28 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Kalle Valo" <kvalo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, amitkarwar@gmail.com,
+        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net v2] net: wireless: marvell: mwifiex: fix sleep in
+ atomic context bugs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <87zgjd1sd4.fsf@kernel.org>
+References: <20220519135345.109936-1-duoming@zju.edu.cn>
+ <87zgjd1sd4.fsf@kernel.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220519090029.GA6479@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <699e56d5.22006.180dce26e02.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: cC_KCgDHa7jUXoZildCGAA--.11005W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgcPAVZdtZyAcAAHse
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:00:29AM +0200, Peter Zijlstra wrote:
-> Subject: objtool: Fix symbol creation
-> From: Peter Zijlstra <peterz@infradead.org>
-> Date: Tue, 17 May 2022 17:42:04 +0200
-> 
-> Nathan reported objtool failing with the following messages:
-> 
->   warning: objtool: no non-local symbols !?
->   warning: objtool: gelf_update_symshndx: invalid section index
-> 
-> The problem is due to commit 4abff6d48dbc ("objtool: Fix code relocs
-> vs weak symbols") failing to consider the case where an object would
-> have no non-local symbols.
-> 
-> The problem that commit tries to address is adding a STB_LOCAL symbol
-> to the symbol table in light of the ELF spec's requirement that:
-> 
->   In each symbol table, all symbols with STB_LOCAL binding preced the
->   weak and global symbols.  As ``Sections'' above describes, a symbol
->   table section's sh_info section header member holds the symbol table
->   index for the first non-local symbol.
-> 
-> The approach taken is to find this first non-local symbol, move that
-> to the end and then re-use the freed spot to insert a new local symbol
-> and increment sh_info.
-> 
-> Except it never considered the case of object files without global
-> symbols and got a whole bunch of details wrong -- so many in fact that
-> it is a wonder it ever worked :/
-> 
-> Specifically:
-> 
->  - It failed to re-hash the symbol on the new index, so a subsequent
->    find_symbol_by_index() would not find it at the new location and a
->    query for the old location would now return a non-deterministic
->    choice between the old and new symbol.
-> 
->  - It failed to appreciate that the GElf wrappers are not a valid disk
->    format (it works because GElf is basically Elf64 and we only
->    support x86_64 atm.)
-> 
->  - It failed to fully appreciate how horrible the libelf API really is
->    and got the gelf_update_symshndx() call pretty much completely
->    wrong; with the direct consequence that if inserting a second
->    STB_LOCAL symbol would require moving the same STB_GLOBAL symbol
->    again it would completely come unstuck.
-> 
-> Write a new elf_update_symbol() function that wraps all the magic
-> required to update or create a new symbol at a given index.
-> 
-> Specifically, gelf_update_sym*() require an @ndx argument that is
-> relative to the @data argument; this means you have to manually
-> iterate the section data descriptor list and update @ndx.
-> 
-> Fixes: 4abff6d48dbc ("objtool: Fix code relocs vs weak symbols")
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
-
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
-
--- 
-Josh
+SGVsbG8sCgpPbiBUaHUsIDE5IE1heSAyMDIyIDE3OjU4OjQ3ICswMzAwIEthbGxlIFZhbG8gd3Jv
+dGU6Cgo+ID4gVGhlcmUgYXJlIHNsZWVwIGluIGF0b21pYyBjb250ZXh0IGJ1Z3Mgd2hlbiB1cGxv
+YWRpbmcgZGV2aWNlIGR1bXAKPiA+IGRhdGEgb24gdXNiIGludGVyZmFjZS4gVGhlIHJvb3QgY2F1
+c2UgaXMgdGhhdCB0aGUgb3BlcmF0aW9ucyB0aGF0Cj4gPiBtYXkgc2xlZXAgYXJlIGNhbGxlZCBp
+biBmd19kdW1wX3RpbWVyX2ZuIHdoaWNoIGlzIGEgdGltZXIgaGFuZGxlci4KPiA+IFRoZSBjYWxs
+IHRyZWUgc2hvd3MgdGhlIGV4ZWN1dGlvbiBwYXRocyB0aGF0IGNvdWxkIGxlYWQgdG8gYnVnczoK
+PiA+Cj4gPiAgICAoSW50ZXJydXB0IGNvbnRleHQpCj4gPiBmd19kdW1wX3RpbWVyX2ZuCj4gPiAg
+IG13aWZpZXhfdXBsb2FkX2RldmljZV9kdW1wCj4gPiAgICAgZGV2X2NvcmVkdW1wdiguLi4sIEdG
+UF9LRVJORUwpCj4gPiAgICAgICBkZXZfY29yZWR1bXBtKCkKPiA+ICAgICAgICAga3phbGxvYyhz
+aXplb2YoKmRldmNkKSwgZ2ZwKTsgLy9tYXkgc2xlZXAKPiA+ICAgICAgICAgZGV2X3NldF9uYW1l
+Cj4gPiAgICAgICAgICAga29iamVjdF9zZXRfbmFtZV92YXJncwo+ID4gICAgICAgICAgICAga3Zh
+c3ByaW50Zl9jb25zdChHRlBfS0VSTkVMLCAuLi4pOyAvL21heSBzbGVlcAo+ID4gICAgICAgICAg
+ICAga3N0cmR1cChzLCBHRlBfS0VSTkVMKTsgLy9tYXkgc2xlZXAKPiA+Cj4gPiBUaGlzIHBhdGNo
+IG1vdmVzIHRoZSBvcGVyYXRpb25zIHRoYXQgbWF5IHNsZWVwIGludG8gYSB3b3JrIGl0ZW0uCj4g
+PiBUaGUgd29yayBpdGVtIHdpbGwgcnVuIGluIGFub3RoZXIga2VybmVsIHRocmVhZCB3aGljaCBp
+cyBpbgo+ID4gcHJvY2VzcyBjb250ZXh0IHRvIGV4ZWN1dGUgdGhlIGJvdHRvbSBoYWxmIG9mIHRo
+ZSBpbnRlcnJ1cHQuCj4gPiBTbyBpdCBjb3VsZCBwcmV2ZW50IGF0b21pYyBjb250ZXh0IGZyb20g
+c2xlZXBpbmcuCj4gPgo+ID4gRml4ZXM6IGY1ZWNkMDJhOGIyMCAoIm13aWZpZXg6IGRldmljZSBk
+dW1wIHN1cHBvcnQgZm9yIHVzYiBpbnRlcmZhY2UiKQo+ID4gU2lnbmVkLW9mZi1ieTogRHVvbWlu
+ZyBaaG91IDxkdW9taW5nQHpqdS5lZHUuY24+Cj4gCj4gbXdpZmlleCBwYXRjaGVzIGdvIHRvIHdp
+cmVsZXNzLW5leHQsIG5vdCBuZXQgdHJlZS4KPiAKPiA+IC0tLQo+ID4gQ2hhbmdlcyBpbiB2MjoK
+PiA+ICAgLSBGaXggY29tcGlsZSBwcm9ibGVtLgo+IAo+IFNvIHlvdSBkb24ndCBldmVuIGNvbXBp
+bGUgdGVzdCB5b3VyIHBhdGNoZXM/IFRoYXQncyBiYWQgYW5kIGluIHRoYXQgY2FzZQo+IEknbGwg
+anVzdCBkaXJlY3RseSBkcm9wIHRoaXMuIFdlIGV4cGVjdCB0aGF0IHRoZSBwYXRjaGVzIGFyZSBw
+cm9wZXJseQo+IHRlc3RlZC4KCk9rLCBJIHdpbGwgcHJvcGVybHkgdGVzdCB0aGlzIHBhdGNoLgoK
+QmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UgCg==

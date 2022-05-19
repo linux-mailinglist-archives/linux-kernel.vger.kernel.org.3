@@ -2,286 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7A552DF9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F6752DF9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245310AbiESVyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S245326AbiESVyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiESVyj (ORCPT
+        with ESMTP id S243496AbiESVyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:54:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CAF53707
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:54:38 -0700 (PDT)
+        Thu, 19 May 2022 17:54:40 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1442A5534C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:54:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652997278; x=1684533278;
+  t=1652997279; x=1684533279;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IgYYUw6Bz1zf1EN3rBhLQSelRU/yLFG8etbQ6nJeHY0=;
-  b=fV/K0RX2hB1RKmryOkENy+BSwtwV5VNVr/+VNGJ29PjwYIcT0p5TQWi1
-   7cviUcNoJM+i6JXCrkpDzBx2rRfHAVtIWjLcFNO1JVX0VB2VRr/Hn+8p0
-   FxOmqwjMbUWqVLvcxc37WQUVHNiBYbZWtOjJS/vqi2L7NYjnJAPG6hLyd
-   4BIUBy5l3NVCRW/InQB60eBimoh/nuD5bUrENjllTUfsEAK6hSq1TC1sK
-   E0JhJznhvSKNpQ+BJWd/CcfIphvOYNlOVRdFEhcioI1NRGgxNiWfEILob
-   T2ZtvsAWtyDbwp3R1P4MRMODpPtoxt9fL7BQssMtGxSK8j2kUF5Mnm2ZX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="335440876"
+  bh=xKUpO4jRN+eIL8fLkxsRx9WY2vqao2VpSUZhYk5NjLE=;
+  b=KFuw/B3VJXoxlta5xwTqYQ9bkExTt5iiqlRl00jZtmbZ7snqIGHiUXzx
+   PiUY2osTyvNE+3MM9HAi5NX4PZQYAVSsnx1i5Zl0DMTbln5B6ZSMA1D0W
+   N/DdyW3R7D6/mnwfVItMvxtpOkfTuzEV75EcJE300zeMNJx+/AZ9VrUFd
+   nhOxYyQmAXoFH8OS1cRSYQaNXbNtKrZspbh1ZDKT55I2bjtx2AB5yCU/T
+   fjrcfWrnD+6ggm81X4vNoIai0zb3q+Oh2XU2xdVDzKz6eJ9j3VDU96x/d
+   +z6CVkUNTDgW+wEZztNaemlejvJofaXrD36vWshYtR/WdtE4ST8i/ncM0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272091595"
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="335440876"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:54:38 -0700
+   d="scan'208";a="272091595"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:54:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="570448166"
+   d="scan'208";a="818213805"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 19 May 2022 14:54:37 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 19 May 2022 14:54:37 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nro6O-0003yk-Fi;
+        id 1nro6O-0003yi-Ez;
         Thu, 19 May 2022 21:54:36 +0000
-Date:   Fri, 20 May 2022 05:54:03 +0800
+Date:   Fri, 20 May 2022 05:54:04 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [netfilter-nf-next:testing 9/12] net/netfilter/core.c:130:26:
- warning: variable 'hook_bpf_prog' set but not used
-Message-ID: <202205200540.Em86BBF9-lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:context-tracking.2022.05.19a 20/21]
+ kernel/context_tracking.c:500:4: error: call to undeclared function
+ 'ct_kernel_exit'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202205200501.17EQ97Fa-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git testing
-head:   4456ac35299c131e2ac26b4dc025b257d810277b
-commit: 11b2910d788799e8c68df305994260fd79a61e10 [9/12] netfilter: add bpf base hook program generator
-config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220520/202205200540.Em86BBF9-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git context-tracking.2022.05.19a
+head:   6153dca9e37b244684bf472728f5c3688c5b0aca
+commit: 02be5e537043004b7c133565ae473daf19a99e5d [20/21] rcu/context_tracking: Merge dynticks counter and context tracking states
+config: x86_64-randconfig-a001 (https://download.01.org/0day-ci/archive/20220520/202205200501.17EQ97Fa-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project e00cbbec06c08dc616a0d52a20f678b8fbd4e304)
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git/commit/?id=11b2910d788799e8c68df305994260fd79a61e10
-        git remote add netfilter-nf-next git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git
-        git fetch --no-tags netfilter-nf-next testing
-        git checkout 11b2910d788799e8c68df305994260fd79a61e10
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=02be5e537043004b7c133565ae473daf19a99e5d
+        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+        git fetch --no-tags paulmck-rcu context-tracking.2022.05.19a
+        git checkout 02be5e537043004b7c133565ae473daf19a99e5d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/netfilter/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   net/netfilter/core.c: In function 'nf_hook_entries_grow':
->> net/netfilter/core.c:130:26: warning: variable 'hook_bpf_prog' set but not used [-Wunused-but-set-variable]
-     130 |         struct bpf_prog *hook_bpf_prog;
-         |                          ^~~~~~~~~~~~~
-   net/netfilter/core.c: In function '__nf_hook_entries_try_shrink':
->> net/netfilter/core.c:269:26: warning: unused variable 'hook_bpf_prog' [-Wunused-variable]
-     269 |         struct bpf_prog *hook_bpf_prog = NULL;
-         |                          ^~~~~~~~~~~~~
+>> kernel/context_tracking.c:500:4: error: call to undeclared function 'ct_kernel_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           ct_kernel_exit(true, RCU_DYNTICKS_IDX + state);
+                           ^
+   kernel/context_tracking.c:500:4: note: did you mean 'is_kernel_text'?
+   include/linux/kallsyms.h:27:19: note: 'is_kernel_text' declared here
+   static inline int is_kernel_text(unsigned long addr)
+                     ^
+>> kernel/context_tracking.c:607:4: error: call to undeclared function 'ct_kernel_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           ct_kernel_enter(true, RCU_DYNTICKS_IDX - state);
+                           ^
+   2 errors generated.
 
 
-vim +/hook_bpf_prog +130 net/netfilter/core.c
+vim +/ct_kernel_exit +500 kernel/context_tracking.c
 
-   123	
-   124	static struct nf_hook_entries *
-   125	nf_hook_entries_grow(const struct nf_hook_entries *old,
-   126			     const struct nf_hook_ops *reg)
-   127	{
-   128		unsigned int i, alloc_entries, nhooks, old_entries;
-   129		struct nf_hook_ops **orig_ops = NULL;
- > 130		struct bpf_prog *hook_bpf_prog;
-   131		struct nf_hook_ops **new_ops;
-   132		struct nf_hook_entries *new;
-   133		bool inserted = false;
-   134	
-   135		alloc_entries = 1;
-   136		old_entries = old ? old->num_hook_entries : 0;
-   137	
-   138		if (old) {
-   139			orig_ops = nf_hook_entries_get_hook_ops(old);
-   140	
-   141			for (i = 0; i < old_entries; i++) {
-   142				if (orig_ops[i] != &dummy_ops)
-   143					alloc_entries++;
-   144			}
-   145		}
-   146	
-   147		if (alloc_entries > MAX_HOOK_COUNT)
-   148			return ERR_PTR(-E2BIG);
-   149	
-   150		new = allocate_hook_entries_size(alloc_entries);
-   151		if (!new)
-   152			return ERR_PTR(-ENOMEM);
-   153	
-   154		new_ops = nf_hook_entries_get_hook_ops(new);
-   155	
-   156		i = 0;
-   157		nhooks = 0;
-   158		while (i < old_entries) {
-   159			if (orig_ops[i] == &dummy_ops) {
-   160				++i;
-   161				continue;
-   162			}
-   163	
-   164			if (inserted || reg->priority > orig_ops[i]->priority) {
-   165				new_ops[nhooks] = (void *)orig_ops[i];
-   166				new->hooks[nhooks] = old->hooks[i];
-   167				i++;
-   168			} else {
-   169				new_ops[nhooks] = (void *)reg;
-   170				new->hooks[nhooks].hook = reg->hook;
-   171				new->hooks[nhooks].priv = reg->priv;
-   172				inserted = true;
-   173			}
-   174			nhooks++;
-   175		}
-   176	
-   177		if (!inserted) {
-   178			new_ops[nhooks] = (void *)reg;
-   179			new->hooks[nhooks].hook = reg->hook;
-   180			new->hooks[nhooks].priv = reg->priv;
-   181		}
-   182	
-   183		hook_bpf_prog = nf_hook_bpf_create(new);
-   184	
-   185		/* allocate_hook_entries_size() pre-inits ->hook_prog
-   186		 * to a fallback program that calls nf_hook_slow().
-   187		 *
-   188		 * Alternatively we could have nf_hook_entries_grow()
-   189		 * return an error here.
-   190		 */
-   191	#if IS_ENABLED(CONFIG_NF_HOOK_BPF)
-   192		if (hook_bpf_prog) {
-   193			struct bpf_prog *old_prog = NULL;
-   194	
-   195			new->hook_prog = hook_bpf_prog;
-   196	
-   197			if (old)
-   198				old_prog = old->hook_prog;
-   199	
-   200			nf_hook_bpf_change_prog(BPF_DISPATCHER_PTR(nf_hook_base),
-   201						old_prog, hook_bpf_prog);
-   202		}
-   203	#endif
-   204		return new;
-   205	}
-   206	
-   207	static void hooks_validate(const struct nf_hook_entries *hooks)
-   208	{
-   209	#ifdef CONFIG_DEBUG_MISC
-   210		struct nf_hook_ops **orig_ops;
-   211		int prio = INT_MIN;
-   212		size_t i = 0;
-   213	
-   214		orig_ops = nf_hook_entries_get_hook_ops(hooks);
-   215	
-   216		for (i = 0; i < hooks->num_hook_entries; i++) {
-   217			if (orig_ops[i] == &dummy_ops)
-   218				continue;
-   219	
-   220			WARN_ON(orig_ops[i]->priority < prio);
-   221	
-   222			if (orig_ops[i]->priority > prio)
-   223				prio = orig_ops[i]->priority;
-   224		}
-   225	#endif
-   226	}
-   227	
-   228	int nf_hook_entries_insert_raw(struct nf_hook_entries __rcu **pp,
-   229					const struct nf_hook_ops *reg)
-   230	{
-   231		struct nf_hook_entries *new_hooks;
-   232		struct nf_hook_entries *p;
-   233	
-   234		p = rcu_dereference_raw(*pp);
-   235		new_hooks = nf_hook_entries_grow(p, reg);
-   236		if (IS_ERR(new_hooks))
-   237			return PTR_ERR(new_hooks);
-   238	
-   239		hooks_validate(new_hooks);
-   240	
-   241		rcu_assign_pointer(*pp, new_hooks);
-   242	
-   243		BUG_ON(p == new_hooks);
-   244		nf_hook_entries_free(p);
-   245		return 0;
-   246	}
-   247	EXPORT_SYMBOL_GPL(nf_hook_entries_insert_raw);
-   248	
-   249	/*
-   250	 * __nf_hook_entries_try_shrink - try to shrink hook array
-   251	 *
-   252	 * @old -- current hook blob at @pp
-   253	 * @pp -- location of hook blob
-   254	 *
-   255	 * Hook unregistration must always succeed, so to-be-removed hooks
-   256	 * are replaced by a dummy one that will just move to next hook.
-   257	 *
-   258	 * This counts the current dummy hooks, attempts to allocate new blob,
-   259	 * copies the live hooks, then replaces and discards old one.
-   260	 *
-   261	 * return values:
-   262	 *
-   263	 * Returns address to free, or NULL.
-   264	 */
-   265	static void *__nf_hook_entries_try_shrink(struct nf_hook_entries *old,
-   266						  struct nf_hook_entries __rcu **pp)
-   267	{
-   268		unsigned int i, j, skip = 0, hook_entries;
- > 269		struct bpf_prog *hook_bpf_prog = NULL;
-   270		struct nf_hook_entries *new = NULL;
-   271		struct nf_hook_ops **orig_ops;
-   272		struct nf_hook_ops **new_ops;
-   273	
-   274		if (WARN_ON_ONCE(!old))
-   275			return NULL;
-   276	
-   277		orig_ops = nf_hook_entries_get_hook_ops(old);
-   278		for (i = 0; i < old->num_hook_entries; i++) {
-   279			if (orig_ops[i] == &dummy_ops)
-   280				skip++;
-   281		}
-   282	
-   283		/* if skip == hook_entries all hooks have been removed */
-   284		hook_entries = old->num_hook_entries;
-   285		if (skip == hook_entries)
-   286			goto out_assign;
-   287	
-   288		if (skip == 0)
-   289			return NULL;
-   290	
-   291		hook_entries -= skip;
-   292		new = allocate_hook_entries_size(hook_entries);
-   293		if (!new) {
-   294	#if IS_ENABLED(CONFIG_NF_HOOK_BPF)
-   295			struct bpf_prog *old_prog = old->hook_prog;
-   296	
-   297			WRITE_ONCE(old->hook_prog, fallback_nf_hook_slow);
-   298			nf_hook_bpf_change_prog(BPF_DISPATCHER_PTR(nf_hook_base), old_prog, NULL);
-   299	#endif
-   300			return NULL;
-   301		}
-   302	
-   303		new_ops = nf_hook_entries_get_hook_ops(new);
-   304		for (i = 0, j = 0; i < old->num_hook_entries; i++) {
-   305			if (orig_ops[i] == &dummy_ops)
-   306				continue;
-   307			new->hooks[j] = old->hooks[i];
-   308			new_ops[j] = (void *)orig_ops[i];
-   309			j++;
-   310		}
-   311		hooks_validate(new);
-   312	
+   451	
+   452	/**
+   453	 * __ct_user_enter - Inform the context tracking that the CPU is going
+   454	 *		     to enter user or guest space mode.
+   455	 *
+   456	 * This function must be called right before we switch from the kernel
+   457	 * to user or guest space, when it's guaranteed the remaining kernel
+   458	 * instructions to execute won't use any RCU read side critical section
+   459	 * because this function sets RCU in extended quiescent state.
+   460	 */
+   461	void noinstr __ct_user_enter(enum ctx_state state)
+   462	{
+   463		struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+   464		lockdep_assert_irqs_disabled();
+   465	
+   466		/* Kernel threads aren't supposed to go to userspace */
+   467		WARN_ON_ONCE(!current->mm);
+   468	
+   469		if (!context_tracking_recursion_enter())
+   470			return;
+   471	
+   472		if (__ct_state() != state) {
+   473			if (ct->active) {
+   474				/*
+   475				 * At this stage, only low level arch entry code remains and
+   476				 * then we'll run in userspace. We can assume there won't be
+   477				 * any RCU read-side critical section until the next call to
+   478				 * user_exit() or ct_irq_enter(). Let's remove RCU's dependency
+   479				 * on the tick.
+   480				 */
+   481				if (state == CONTEXT_USER) {
+   482					instrumentation_begin();
+   483					trace_user_enter(0);
+   484					vtime_user_enter(current);
+   485					instrumentation_end();
+   486				}
+   487				/*
+   488				 * Other than generic entry implementation, we may be past the last
+   489				 * rescheduling opportunity in the entry code. Trigger a self IPI
+   490				 * that will fire and reschedule once we resume in user/guest mode.
+   491				 */
+   492				rcu_irq_work_resched();
+   493	
+   494				/*
+   495				 * Enter RCU idle mode right before resuming userspace.  No use of RCU
+   496				 * is permitted between this call and rcu_eqs_exit(). This way the
+   497				 * CPU doesn't need to maintain the tick for RCU maintenance purposes
+   498				 * when the CPU runs in userspace.
+   499				 */
+ > 500				ct_kernel_exit(true, RCU_DYNTICKS_IDX + state);
+   501	
+   502				/*
+   503				 * Special case if we only track user <-> kernel transitions for tickless
+   504				 * cputime accounting but we don't support RCU extended quiescent state.
+   505				 * In this we case we don't care about any concurrency/ordering.
+   506				 */
+   507				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
+   508					atomic_set(&ct->state, state);
+   509			} else {
+   510				/*
+   511				 * Even if context tracking is disabled on this CPU, because it's outside
+   512				 * the full dynticks mask for example, we still have to keep track of the
+   513				 * context transitions and states to prevent inconsistency on those of
+   514				 * other CPUs.
+   515				 * If a task triggers an exception in userspace, sleep on the exception
+   516				 * handler and then migrate to another CPU, that new CPU must know where
+   517				 * the exception returns by the time we call exception_exit().
+   518				 * This information can only be provided by the previous CPU when it called
+   519				 * exception_enter().
+   520				 * OTOH we can spare the calls to vtime and RCU when context_tracking.active
+   521				 * is false because we know that CPU is not tickless.
+   522				 */
+   523				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
+   524					/* Tracking for vtime only, no concurrent RCU EQS accounting */
+   525					atomic_set(&ct->state, state);
+   526				} else {
+   527					/*
+   528					 * Tracking for vtime and RCU EQS. Make sure we don't race
+   529					 * with NMIs. OTOH we don't care about ordering here since
+   530					 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
+   531					 * ordered.
+   532					 */
+   533					atomic_add(state, &ct->state);
+   534				}
+   535			}
+   536		}
+   537		context_tracking_recursion_exit();
+   538	}
+   539	EXPORT_SYMBOL_GPL(__ct_user_enter);
+   540	
+   541	/*
+   542	 * FIXME: This function should be noinstr but the below local_irq_restore() is
+   543	 * unsafe because it involves illegal RCU uses through tracing and lockdep. This
+   544	 * must be fixed first.
+   545	 */
+   546	void ct_user_enter(enum ctx_state state)
+   547	{
+   548		unsigned long flags;
+   549	
+   550		/*
+   551		 * Some contexts may involve an exception occuring in an irq,
+   552		 * leading to that nesting:
+   553		 * ct_irq_enter() rcu_eqs_exit(true) rcu_eqs_enter(true) ct_irq_exit()
+   554		 * This would mess up the dyntick_nesting count though. And rcu_irq_*()
+   555		 * helpers are enough to protect RCU uses inside the exception. So
+   556		 * just return immediately if we detect we are in an IRQ.
+   557		 */
+   558		if (in_interrupt())
+   559			return;
+   560	
+   561		local_irq_save(flags);
+   562		__ct_user_enter(state);
+   563		local_irq_restore(flags);
+   564	}
+   565	NOKPROBE_SYMBOL(ct_user_enter);
+   566	EXPORT_SYMBOL_GPL(ct_user_enter);
+   567	
+   568	/**
+   569	 * user_enter_callable() - Unfortunate ASM callable version of user_enter() for
+   570	 * 			   archs that didn't manage to check the context tracking
+   571	 * 			   static key from low level code.
+   572	 *
+   573	 * FIXME: This function should be noinstr but it unsafely calls local_irq_restore(),
+   574	 * involving illegal RCU uses through tracing and lockdep. This must be fixed first.
+   575	 */
+   576	void user_enter_callable(void)
+   577	{
+   578		user_enter();
+   579	}
+   580	NOKPROBE_SYMBOL(user_enter_callable);
+   581	
+   582	/**
+   583	 * __ct_user_exit - Inform the context tracking that the CPU is
+   584	 * 		    exiting user or guest mode and entering the kernel.
+   585	 *
+   586	 * This function must be called after we entered the kernel from user or
+   587	 * guest space before any use of RCU read side critical section. This
+   588	 * potentially include any high level kernel code like syscalls, exceptions,
+   589	 * signal handling, etc...
+   590	 *
+   591	 * This call supports re-entrancy. This way it can be called from any exception
+   592	 * handler without needing to know if we came from userspace or not.
+   593	 */
+   594	void noinstr __ct_user_exit(enum ctx_state state)
+   595	{
+   596		struct context_tracking *ct = this_cpu_ptr(&context_tracking);
+   597	
+   598		if (!context_tracking_recursion_enter())
+   599			return;
+   600	
+   601		if (__ct_state() == state) {
+   602			if (ct->active) {
+   603				/*
+   604				 * Exit RCU idle mode while entering the kernel because it can
+   605				 * run a RCU read side critical section anytime.
+   606				 */
+ > 607				ct_kernel_enter(true, RCU_DYNTICKS_IDX - state);
+   608				if (state == CONTEXT_USER) {
+   609					instrumentation_begin();
+   610					vtime_user_exit(current);
+   611					trace_user_exit(0);
+   612					instrumentation_end();
+   613				}
+   614	
+   615				/*
+   616				 * Special case if we only track user <-> kernel transitions for tickless
+   617				 * cputime accounting but we don't support RCU extended quiescent state.
+   618				 * In this we case we don't care about any concurrency/ordering.
+   619				 */
+   620				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE))
+   621					atomic_set(&ct->state, CONTEXT_KERNEL);
+   622	
+   623			} else {
+   624				if (!IS_ENABLED(CONFIG_CONTEXT_TRACKING_IDLE)) {
+   625					/* Tracking for vtime only, no concurrent RCU EQS accounting */
+   626					atomic_set(&ct->state, CONTEXT_KERNEL);
+   627				} else {
+   628					/*
+   629					 * Tracking for vtime and RCU EQS. Make sure we don't race
+   630					 * with NMIs. OTOH we don't care about ordering here since
+   631					 * RCU only requires RCU_DYNTICKS_IDX increments to be fully
+   632					 * ordered.
+   633					 */
+   634					atomic_sub(state, &ct->state);
+   635				}
+   636			}
+   637		}
+   638		context_tracking_recursion_exit();
+   639	}
+   640	EXPORT_SYMBOL_GPL(__ct_user_exit);
+   641	
 
 -- 
 0-DAY CI Kernel Test Service

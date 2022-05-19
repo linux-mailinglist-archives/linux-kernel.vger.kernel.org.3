@@ -2,119 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121D452C91B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E44C52C91C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiESBEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 21:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
+        id S232414AbiESBFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 21:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiESBEG (ORCPT
+        with ESMTP id S230476AbiESBFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 21:04:06 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4F8CE16;
-        Wed, 18 May 2022 18:04:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L3WpD0q9bz4xLb;
-        Thu, 19 May 2022 11:04:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652922244;
-        bh=/lTfB5Yo9vq8/12Z1ICjN1vGtjSA+U+1BxuwnWU6U+M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tiOsO//6JFfd8vDYysehXupg607QTOzRDMtuIRdfM6Q5G/6wR4cTxydkdFPYHsBXG
-         1LG04CLMDL5+6U80CID5ZD9YpblrswXI7HxgdYDiel/ETr2lV1JEZSt5ViAHKpXxAq
-         Ae+R0er7BbQp8jjrEECXj7h4d4B5siTEZUN5lO9ewOB9+anKIMNMNdc3BLLmqQ9SrF
-         And0YOmV/EdS5sM0wnlOId7OC5T1/WIxb3rgQliG8aIGpOwyRw/qTmvXsaMEblD2jE
-         IbJdC62uJgL6DFmU+pMNN3byX4u/w/4ludiicHVFWCymQSWdV0z2iwOniUzs1eHW4N
-         2f64vyR1aefqw==
-Date:   Thu, 19 May 2022 11:04:03 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Bob Moore <robert.moore@intel.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: linux-next: manual merge of the pm tree with the loongarch tree
-Message-ID: <20220519110403.7e797df7@canb.auug.org.au>
-In-Reply-To: <20220519110008.586bc47f@canb.auug.org.au>
-References: <20220519105448.74a4447e@canb.auug.org.au>
-        <20220519110008.586bc47f@canb.auug.org.au>
+        Wed, 18 May 2022 21:05:18 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36811CE16;
+        Wed, 18 May 2022 18:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652922317; x=1684458317;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FON4eDfFwoyqPsYBMR3zCyP6L0REBuQlLSooLaoyyGc=;
+  b=f2j+S3kIpG/i65ehqZXWOgRZ5ei2tkD8J8qAXC5vjhdIuKGNblOZFQNl
+   zY5q5BUpNAjp4V6K7L7F9KHVqG26CiOLuDJeT2D+qj/kA/dyPudxsgFYn
+   cCl3c0Whuf4ACHWNyw/HyzESWSzBJmqZyzN+C7Zw6R5UwXLUsf1s7Ue27
+   khAUdgVaQLRl1TwjrQkwdnemNkU2PT7tY01lcnakE4aj3bfTe9PwN/D6Y
+   JoTHF8kfeMT1QM2k8Dm7Yj60SQpqO7xwcukTXv9n7x5fby/zGEmG/7OKO
+   L30kqjsZeDDw/AcqDKUT6VuKExegX3v8RIM7ckHP+W2YDQ+AqrlBMNcFI
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="297264158"
+X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
+   d="scan'208";a="297264158"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 18:05:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
+   d="scan'208";a="523804352"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 18 May 2022 18:05:15 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrUbK-0002qT-A6;
+        Thu, 19 May 2022 01:05:14 +0000
+Date:   Thu, 19 May 2022 09:04:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Uros Bizjak <ubizjak@gmail.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Uros Bizjak <ubizjak@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH] KVM: VMX: Use try_cmpxchg64 in pi_try_set_control
+Message-ID: <202205190852.VUijQkwc-lkp@intel.com>
+References: <20220518134550.2358-1-ubizjak@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mPnFcxN/Iq/SvJA1b_FDJJK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518134550.2358-1-ubizjak@gmail.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/mPnFcxN/Iq/SvJA1b_FDJJK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Uros,
 
-Hi all,
+Thank you for the patch! Yet something to improve:
 
-On Thu, 19 May 2022 11:00:08 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Thu, 19 May 2022 10:54:48 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> > =20
->=20
-> >  +	u32 count;
-> >  +};
-> >  +
-> >  +/* LPC Interrupt Controller */
-> >  +
-> >  +struct acpi_madt_lpc_pic {
-> >  +	struct acpi_subtable_header header;
-> >  +	u8 version;
-> >  +	u64 address;
-> >  +	u16 size;
-> >  +	u8 cascade;
-> > ++
-> > + /* 17: OEM data */
-> > +=20
-> > + struct acpi_madt_oem_data {
-> > + 	u8 oem_data[0];
-> >   };
-> >  =20
-> >   /* =20
->=20
-> I missed adding the closing brace after struct acpi_madt_lpc_pic.  I
-> have added that to my resolution now.
+[auto build test ERROR on kvm/master]
+[also build test ERROR on mst-vhost/linux-next linux/master linus/master v5.18-rc7 next-20220518]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Not a good morning :-( I also forgot the comma after
-"ACPI_MADT_TYPE_RESERVED =3D 24".  Added now.
+url:    https://github.com/intel-lab-lkp/linux/commits/Uros-Bizjak/KVM-VMX-Use-try_cmpxchg64-in-pi_try_set_control/20220518-214709
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git master
+config: i386-debian-10.3-kselftests (https://download.01.org/0day-ci/archive/20220519/202205190852.VUijQkwc-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/2af4f7c4ecfcaedf9b98ba30ee508dc0d9002955
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Uros-Bizjak/KVM-VMX-Use-try_cmpxchg64-in-pi_try_set_control/20220518-214709
+        git checkout 2af4f7c4ecfcaedf9b98ba30ee508dc0d9002955
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
---=20
-Cheers,
-Stephen Rothwell
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---Sig_/mPnFcxN/Iq/SvJA1b_FDJJK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+All errors (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+   arch/x86/kvm/vmx/posted_intr.c: In function 'pi_try_set_control':
+>> arch/x86/kvm/vmx/posted_intr.c:45:14: error: implicit declaration of function 'try_cmpxchg64'; did you mean 'try_cmpxchg'? [-Werror=implicit-function-declaration]
+      45 |         if (!try_cmpxchg64(&pi_desc->control, pold, new))
+         |              ^~~~~~~~~~~~~
+         |              try_cmpxchg
+   cc1: some warnings being treated as errors
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKFl4MACgkQAVBC80lX
-0GwXCwf/QS0iiQXgsSu7PcYTldYLsTU1MCJx2VqxYueCfMi51ELhzqiizQtrVuZE
-pU41Mq6lPxvxSNMDtNZQu1UZVZmVfAD6Y8bu5JKdInS3mesUqq5qscS2SXSgNZp0
-dDoa5pi4JL5cpmGdOlCYKUCvvwf46B31toKmnsmUU8c/xeQXfm1teEqZenwE7MWT
-N93HlxXyWur9D6LJyFxYkyYEVNjg0j3QYqRfXc0Qo3QWZDMbCcHF3hr6W4rYuLXm
-yOr0M9PCNmPA87XjR/jaNiLLsyfz4QPz2KCH8ebfDsEidNHtv9Re5alKfmHrB4C4
-Ef2tAO3eAAugABbIblSGbXv2JtaZ0Q==
-=3DpB
------END PGP SIGNATURE-----
 
---Sig_/mPnFcxN/Iq/SvJA1b_FDJJK--
+vim +45 arch/x86/kvm/vmx/posted_intr.c
+
+    36	
+    37	static int pi_try_set_control(struct pi_desc *pi_desc, u64 *pold, u64 new)
+    38	{
+    39		/*
+    40		 * PID.ON can be set at any time by a different vCPU or by hardware,
+    41		 * e.g. a device.  PID.control must be written atomically, and the
+    42		 * update must be retried with a fresh snapshot an ON change causes
+    43		 * the cmpxchg to fail.
+    44		 */
+  > 45		if (!try_cmpxchg64(&pi_desc->control, pold, new))
+    46			return -EBUSY;
+    47	
+    48		return 0;
+    49	}
+    50	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

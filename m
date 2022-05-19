@@ -2,151 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77A952DA7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D7B52DA7E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiESQoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
+        id S234694AbiESQpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiESQn5 (ORCPT
+        with ESMTP id S232767AbiESQpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:43:57 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CE559095
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:43:56 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id f10so5811195pjs.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:43:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=221Yw0kf0kWHOuKCBmfC/ycEQMuPJsFgC9zSqVTAwSA=;
-        b=bu8vQ+GWvqJrRdEuq8YVrsfud1b3bQhlBNIuRQm9N4t2Lj3E7ojrr5du8GpLJyVQpt
-         zI6LAgP0cWVNyhkC2dx8jWx3d1dzS6qKn2apfQz90gm0zn8LV2J6jLUuu+darR0d5jp1
-         LpTWI9ig8g7I0oCfkW8terjt+U3QuRwraIIgfyUbQlX7hnu3WzrJLPVhPL16qrotB7X8
-         X0sGHQiLnxPwCuwzmOoubt1yCoAYcRgt5bbtFh+Kh0gFthhZS04NdGml6wCRoLPw4YTT
-         8exX0VVLnNWqt0NnU9LMNUK3s3E1Z3IQqSxPNndBTJ1hO64zu+VRfQofIL4ohxv4FNRK
-         FrmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=221Yw0kf0kWHOuKCBmfC/ycEQMuPJsFgC9zSqVTAwSA=;
-        b=MLk/Ec8NINVDjukt3OHxE/sdh8nnBqBftku4mHrxVdtDz6GBm/RognSaUoJWyGAAdw
-         sXx4cwp5db4iSYIE7LDJNMKfJ03VJLT45JY2WoyIP5FwxQKM56OacQD7QBb3sNWZ5WV0
-         3VpWk/aI68JO3qgMm7xunHgsENl1S+Dlzt18/wlhoBeWwlliVkf8aUYBDwW1LBvUycyc
-         Isgk32VJ0XQL1WZhCItSm3qiXxJzcyo8LpOkVJB7uGCQbDpV0tBDo/Bjj6LOCW2qWMzQ
-         oD626EhZQ1b/l+E7Vk+8xU3F/KiTDn5tx4B0M4mKmGJCtPFswNl1dTaxskEE4KZ8tJQR
-         3rPw==
-X-Gm-Message-State: AOAM530szMUzyiHwG3PXKFe83nZe3S5T0nSrYdw0AO+4/pDpYqTwilu6
-        32a1wZpoV1c6f0Z538d3lCVBng==
-X-Google-Smtp-Source: ABdhPJw2CROjZjF/tfI3pH/231wqbGMtrzoTlXEZCDadRe7+Y7fJupSq7bjozl06CSrvxLG1Gs7+EA==
-X-Received: by 2002:a17:902:b289:b0:161:872d:6f03 with SMTP id u9-20020a170902b28900b00161872d6f03mr5698065plr.30.1652978635790;
-        Thu, 19 May 2022 09:43:55 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id jh9-20020a170903328900b0015e8d4eb1f8sm4027559plb.66.2022.05.19.09.43.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 09:43:55 -0700 (PDT)
-Date:   Thu, 19 May 2022 16:43:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [RFC PATCH v3 06/19] KVM: x86: mmu: add gfn_in_memslot helper
-Message-ID: <YoZzx6f1XBWL3i8F@google.com>
-References: <20220427200314.276673-1-mlevitsk@redhat.com>
- <20220427200314.276673-7-mlevitsk@redhat.com>
+        Thu, 19 May 2022 12:45:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A8A59095;
+        Thu, 19 May 2022 09:45:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BD65E1FA90;
+        Thu, 19 May 2022 16:45:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652978712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U548y7wH3UcsDxDWZRXnGHjViQr6zgFmh8zCYvycdiI=;
+        b=Cu+15Ol8cSpfF+0sMpGHKwf5JY2TgPwNb4aI2LyBnrGh05KVKNa+xwHCMwRjVuYlVtN6Bg
+        Zuq1AJc8AFOTAzyfDC7Dnd5ePTDhwqfxjdCFXNno+uhJ9zQXO9Zubt7pG/OXW8sl1uxRLg
+        5/Br8Y58aNwYBb6W8ZvgEUQEAygW7Kk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9025613456;
+        Thu, 19 May 2022 16:45:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ghlBIhh0hmKqBgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Thu, 19 May 2022 16:45:12 +0000
+Date:   Thu, 19 May 2022 18:45:11 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
+Subject: Re: [PATCH 4/4] memcg: enable accounting for allocations in
+ alloc_fair_sched_group
+Message-ID: <20220519164511.GI16096@blackbody.suse.cz>
+References: <Ynv7+VG+T2y9rpdk@carbon>
+ <30f5b95a-db87-3924-6ad0-4c302c924ff0@openvz.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220427200314.276673-7-mlevitsk@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <30f5b95a-db87-3924-6ad0-4c302c924ff0@openvz.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 27, 2022, Maxim Levitsky wrote:
-> This is a tiny refactoring, and can be useful to check
-> if a GPA/GFN is within a memslot a bit more cleanly.
+On Fri, May 13, 2022 at 06:52:20PM +0300, Vasily Averin <vvs@openvz.org> wrote:
+>  kernel/sched/fair.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-This doesn't explain the actual motivation, which is to use the new helper from
-arch code.
-
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->  include/linux/kvm_host.h | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 252ee4a61b58b..12e261559070b 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1580,6 +1580,13 @@ int kvm_request_irq_source_id(struct kvm *kvm);
->  void kvm_free_irq_source_id(struct kvm *kvm, int irq_source_id);
->  bool kvm_arch_irqfd_allowed(struct kvm *kvm, struct kvm_irqfd *args);
->  
-> +
-> +static inline bool gfn_in_memslot(struct kvm_memory_slot *slot, gfn_t gfn)
-> +{
-> +	return (gfn >= slot->base_gfn && gfn < slot->base_gfn + slot->npages);
-> +}
-> +
-
-Spurious newline.
-
-> +
->  /*
->   * Returns a pointer to the memslot if it contains gfn.
->   * Otherwise returns NULL.
-> @@ -1590,12 +1597,13 @@ try_get_memslot(struct kvm_memory_slot *slot, gfn_t gfn)
->  	if (!slot)
->  		return NULL;
->  
-> -	if (gfn >= slot->base_gfn && gfn < slot->base_gfn + slot->npages)
-> +	if (gfn_in_memslot(slot, gfn))
->  		return slot;
->  	else
->  		return NULL;
-
-At this point, maybe:
-
-	if (!slot || !gfn_in_memslot(slot, gfn))
-		return NULL;
-
-	return slot;
-
->  }
->  
-> +
->  /*
->   * Returns a pointer to the memslot that contains gfn. Otherwise returns NULL.
->   *
-> -- 
-> 2.26.3
-> 
+Reviewed-by: Michal Koutný <mkoutny@suse.com>

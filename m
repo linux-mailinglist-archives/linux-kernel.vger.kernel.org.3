@@ -2,203 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F1852CB74
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07A152CB77
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233948AbiESFRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 01:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60636 "EHLO
+        id S233955AbiESFSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 01:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiESFRa (ORCPT
+        with ESMTP id S230014AbiESFSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 01:17:30 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6083A3A5F8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:17:28 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id bh5so3799887plb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:17:28 -0700 (PDT)
+        Thu, 19 May 2022 01:18:39 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6DEAFB1D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:18:37 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id y32so7146680lfa.6
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zAUUyXF7zOYAAXxr10cwniZUmfce9SsmSNMPASYnhsg=;
-        b=eYIsG1fMr9NialLjEJm93FuKci9KO0OYOl1IUUfyTHtBVKLLwP8L8g5twIaeGN1v3Y
-         +egpZA31XyzUZ3yHYEApTp9WwcHCBZDuByDN1LUTe4oUl5ZIeJ2VI5Ho11ODmbXpIFUT
-         BFvHwghVmbviJkeSrIykz2lnCJ0XvcWANywlVRH7WOffQADJ9EUIuqhpUuR3/O1KzpCV
-         BvpiLykKvo+5DBPRJOttKdIuDYANYeG4iVyLv4AvPbpyxmW0tKLCaWTTIssOHmLQYnYU
-         237j0O03RU/pNLwPxF1eNunxKzMNLonrrWRjHSGF/oIQoZwmcdQtmZRY9/paQkbXXg2b
-         wY0A==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=axllb5GQqP++J06UNyAiJmRp6CQfVYprVks5whWT5bo=;
+        b=izAK16ZJP5ozUEzyLhMtwLpyzqAcQI2KduMxRpsnDVThZcxACDGD927tVmR9Czk93Y
+         jByIRhqmX1JUXCvn+MfkZjNjhsJYccZXme5EOing8BpT9VxXn6QoUAAPHJv4/Nmt0q4N
+         w7vAKq7WpVgjRHns9BiIvvXBhPVk6BC56ebpWcEKstr9C58RkjxK2G8zi5AyNHuXvFnx
+         5QES/ORD6gZGYsFJCmoMhZtrR0J57QdLahNP4zjttENIefN7bueevlTo5ToWrT6I237a
+         qijE3KFdS7Pw3ZTnkzXkzbE9cNdqoEg9Lq7hd8BgjFKGlYRW07JlATZK/TrPkdCnUr+q
+         4iFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zAUUyXF7zOYAAXxr10cwniZUmfce9SsmSNMPASYnhsg=;
-        b=QcX13iLuxtsQThqimyV1MQ6RZe+zLGhpg4iMNqEDsqzA1IJS0jLuMbIPVQ9zaMP+AT
-         q8g4qVKV1M6TQH1lnUlwCWN6ZBgfZsRNiI4u/4taUbTLKBYihxSjcaDoTNaymu5dbNXl
-         ww4QDuNNfIc4Q6vFVVQPI0w2dlEpNtaAnPuVr50fkz0+LtYfLjHNOrhHwMy86XVPlRBL
-         WkyGfh1tue0S2+SyzW8p0+TbhupDM78ywBnLWBpYN+NwCb3apWlDSpoINuZNYXGygYDE
-         PRF5vVGDNbFxDHsMdqwv5vIVdB0Nib7rWaWJYUW7eQv4g4/RyeBr0z02TmpIOEvByqIt
-         2wjw==
-X-Gm-Message-State: AOAM532RJtvCEdV6bamEt4HbJsKBpRdB7vuaCobQD7g4kk+sKcP2Uq3E
-        6Ov+QzhEIeWIn2xl3xurPe/BLQ==
-X-Google-Smtp-Source: ABdhPJzcgO8ll6kSjyrY8Y1n90kzQWUUiWkAMrTkKPO+8+uxSumaEv0lj6uRSB8qPKkCaLkj4v1dgA==
-X-Received: by 2002:a17:902:7087:b0:161:88a4:db37 with SMTP id z7-20020a170902708700b0016188a4db37mr3053810plk.131.1652937447786;
-        Wed, 18 May 2022 22:17:27 -0700 (PDT)
-Received: from sunil-laptop ([49.206.10.235])
-        by smtp.gmail.com with ESMTPSA id p23-20020a1709027ed700b0015e8da1fb07sm2745664plb.127.2022.05.18.22.17.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 22:17:27 -0700 (PDT)
-Date:   Thu, 19 May 2022 10:47:20 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Abner Chang <abner.chang@hpe.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH V4 1/1] riscv/efi_stub: Add support for
- RISCV_EFI_BOOT_PROTOCOL
-Message-ID: <20220519051720.GA8910@sunil-laptop>
-References: <20220518095646.47548-1-sunilvl@ventanamicro.com>
- <20220518095646.47548-2-sunilvl@ventanamicro.com>
- <CAMj1kXF2N+0zRCNg0Aq9Y8Y35FUaQ1V+swzY__y86sayKW7PPA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=axllb5GQqP++J06UNyAiJmRp6CQfVYprVks5whWT5bo=;
+        b=mVZn5ZM0q3Ji7f7gQdC+19zaDZQ50nUtsoWxxyDvQ+CThxGv51TncL0ynZn+/53dpS
+         9x4+mMR4nndzvVIJbD+Nx3mT8tiVMNi4WA1wO+Ks8VYHk29pkBj6jrkX6GkrjWSyxKuz
+         cQyKlaAMMMaO2A+RUP35OyVKvtP8zx2CvvOdUMImS3TJG4ae1nRcHDW7Z8yQgbBEWV5h
+         VsERWVt89JgbcpI+oivPAayAA6zwXzGgIjE1tpqytHDG3T2Dgdyq4U5mVQpV6lLXmolw
+         30La9JIPfAhEXA2PBoWQYcS9VM2wjfGzQTUyhZjdFb6cSfcE9pILGIQIC4u2FtO6V7AS
+         5kcQ==
+X-Gm-Message-State: AOAM53368J4E2SBzZsFvJOCNhicqiF6fhyASy0R1et8+f42Bo5PxAWdg
+        XluFuiaaGfRWf033r2s0c4DwSpUvHFMJ0rjhWkWMzQ==
+X-Google-Smtp-Source: ABdhPJyYDq726ALmgi3t1wi5/7kN7ID6ifbL3RSeRN35Y1BJu+kseeVPMRg/DzwKNGbujMlUUYWnbV488qXzGZalHoc=
+X-Received: by 2002:a05:6512:3c94:b0:477:ba25:de54 with SMTP id
+ h20-20020a0565123c9400b00477ba25de54mr2041366lfv.137.1652937515208; Wed, 18
+ May 2022 22:18:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXF2N+0zRCNg0Aq9Y8Y35FUaQ1V+swzY__y86sayKW7PPA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <0000000000007f31db05de0638f0@google.com> <00000000000057d2f405defe7e00@google.com>
+ <20220514135010.2528f75eb053a7b38d80584b@linux-foundation.org>
+ <20220516175958.cswumupmeddptzdb@revolver> <20220519020341.rr3s6b4dr7o36cqb@revolver>
+In-Reply-To: <20220519020341.rr3s6b4dr7o36cqb@revolver>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 19 May 2022 07:18:23 +0200
+Message-ID: <CACT4Y+aPh_05ZwVb-yGC-BcDHkB9qcrxh5x_ffmVJJ5u_EU4MA@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in vma_interval_tree_remove
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        syzbot <syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        Michel Lespinasse <michel@lespinasse.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 11:03:44PM +0200, Ard Biesheuvel wrote:
-> On Wed, 18 May 2022 at 11:57, Sunil V L <sunilvl@ventanamicro.com> wrote:
+On Thu, 19 May 2022 at 04:04, Liam Howlett <liam.howlett@oracle.com> wrote:
+>
+> * Liam R. Howlett <Liam.Howlett@Oracle.com> [220516 13:59]:
+> > * Andrew Morton <akpm@linux-foundation.org> [220514 16:50]:
+> > > On Sat, 14 May 2022 13:18:26 -0700 syzbot <syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com> wrote:
+> > >
+> > > > syzbot has found a reproducer for the following issue on:
+> > > >
+> > > > HEAD commit:    1e1b28b936ae Add linux-next specific files for 20220513
+> > > > git tree:       linux-next
+> > > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=11da21b9f00000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=ee1fdd8dcc770a3a169a
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142757f1f00000
+> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cf0966f00000
+> > >
+> > > Thanks.
+> > >
+> > > So it was there on April 28 and it's there now.  Liam, do you think
+> > > anything in the mapletree changes could have perturbed the interval
+> > > tree handling?
 > >
-> > This patch adds the support for getting the boot hart ID in
-> > Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL. This protocol
-> > is preferred method over existing DT based solution since it
-> > works irrespective of DT or ACPI.
+> > It is certainly possible, these two trees are intertwined so much.  One
+> > area that sticks out as a possibility is vma_expand().  I created a
+> > vma_expand() function to handle growing a vma and potentially removing
+> > the next vma.  I do some interval tree modifications in there.
 > >
-> > The specification of the protocol is hosted at:
-> > https://github.com/riscv-non-isa/riscv-uefi
-> >
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-> > ---
-> >  drivers/firmware/efi/libstub/efistub.h    |  7 ++++++
-> >  drivers/firmware/efi/libstub/riscv-stub.c | 29 +++++++++++++++++++----
-> >  include/linux/efi.h                       |  1 +
-> >  3 files changed, 32 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-> > index edb77b0621ea..aced62a0907e 100644
-> > --- a/drivers/firmware/efi/libstub/efistub.h
-> > +++ b/drivers/firmware/efi/libstub/efistub.h
-> > @@ -720,6 +720,13 @@ union efi_tcg2_protocol {
-> >         } mixed_mode;
-> >  };
-> >
-> > +struct riscv_efi_boot_protocol {
-> > +       u64 revision;
-> > +
-> > +       efi_status_t (__efiapi * get_boot_hartid)(struct riscv_efi_boot_protocol *this,
-> > +                                                 size_t *boot_hartid);
-> 
-> size_t is not a EFI type, and your spec uses UINTN here, which is
-> equivalent to 'unsigned long'. However, jump_kernel_func() takes a
-> unsigned int for the hartid. Please clean this up.
-> 
-Thank you Ard. Yes, hartid can be of native length. Have fixed this and
-sent V5. Please check.
+> > I'll add it to my list of items to look at.
+>
+> This was my bug.  I reused a pointer that wasn't reused in this function
+> until I altered the error path in this commit.
+>
+> Please apply this patch to the maple tree series to fix "mm/mmap: use
+> advanced maple tree API for mmap_region()"
 
-Thanks!
-Sunil
-> 
-> > +};
-> > +
-> >  typedef union efi_load_file_protocol efi_load_file_protocol_t;
-> >  typedef union efi_load_file_protocol efi_load_file2_protocol_t;
-> >
-> > diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-> > index 9c460843442f..012504f6f9a4 100644
-> > --- a/drivers/firmware/efi/libstub/riscv-stub.c
-> > +++ b/drivers/firmware/efi/libstub/riscv-stub.c
-> > @@ -23,7 +23,7 @@
-> >
-> >  typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
-> >
-> > -static u32 hartid;
-> > +static size_t hartid;
-> >
-> 
-> and here
-> 
-> >  static int get_boot_hartid_from_fdt(void)
-> >  {
-> > @@ -47,14 +47,33 @@ static int get_boot_hartid_from_fdt(void)
-> >         return 0;
-> >  }
-> >
-> > +static efi_status_t get_boot_hartid_from_efi(void)
-> > +{
-> > +       efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
-> > +       efi_status_t status;
-> > +       struct riscv_efi_boot_protocol *boot_protocol;
-> > +
-> > +       status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
-> > +                            (void **)&boot_protocol);
-> > +       if (status == EFI_SUCCESS) {
-> > +               status = efi_call_proto(boot_protocol,
-> > +                                       get_boot_hartid, &hartid);
-> > +       }
-> > +       return status;
-> > +}
-> > +
-> >  efi_status_t check_platform_features(void)
-> >  {
-> >         int ret;
-> > +       efi_status_t status;
-> >
-> > -       ret = get_boot_hartid_from_fdt();
-> > -       if (ret) {
-> > -               efi_err("/chosen/boot-hartid missing or invalid!\n");
-> > -               return EFI_UNSUPPORTED;
-> > +       status = get_boot_hartid_from_efi();
-> > +       if (status != EFI_SUCCESS) {
-> > +               ret = get_boot_hartid_from_fdt();
-> > +               if (ret) {
-> > +                       efi_err("Failed to get boot hartid!\n");
-> > +                       return EFI_UNSUPPORTED;
-> > +               }
-> >         }
-> >         return EFI_SUCCESS;
-> >  }
-> > diff --git a/include/linux/efi.h b/include/linux/efi.h
-> > index ccd4d3f91c98..9822c730207c 100644
-> > --- a/include/linux/efi.h
-> > +++ b/include/linux/efi.h
-> > @@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
-> >  #define EFI_CONSOLE_OUT_DEVICE_GUID            EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
-> >  #define APPLE_PROPERTIES_PROTOCOL_GUID         EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
-> >  #define EFI_TCG2_PROTOCOL_GUID                 EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
-> > +#define RISCV_EFI_BOOT_PROTOCOL_GUID           EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
-> >  #define EFI_LOAD_FILE_PROTOCOL_GUID            EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
-> >  #define EFI_LOAD_FILE2_PROTOCOL_GUID           EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
-> >  #define EFI_RT_PROPERTIES_TABLE_GUID           EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
-> > --
-> > 2.25.1
-> >
+Please add this tag to the fix:
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ee1fdd8dcc770a3a169a@syzkaller.appspotmail.com

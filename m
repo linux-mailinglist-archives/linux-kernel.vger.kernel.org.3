@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFF852CFB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D42E52CFBD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236289AbiESJt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
+        id S231956AbiESJvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbiESJtx (ORCPT
+        with ESMTP id S236334AbiESJvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:49:53 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BF06D38D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:49:51 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id w14so8100699lfl.13
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:49:51 -0700 (PDT)
+        Thu, 19 May 2022 05:51:24 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92CE3B571
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:51:22 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so4741268pjf.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:51:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3HichTrqN7F9p1vtnqjU5qG7qAFUNf2AyIapQ12NpO8=;
-        b=pj52zUeXesTLyc14JaXUdAxTtMtGZg3T2DIN7nnsHPu4wc7dPGcrZgTVR6iYcfDcEV
-         0KHIB957wnozL49rQMLpSyaoT/OxqPlNgY/1TtBfop9FgGdEidY1e+g3aLmDcE3WyuEf
-         AeJiSSJrjqV+sD3efpF3U55A8l67ZjfE/p/FbYBYzeNWCajdGFi8xZBgMTZBl52SlqjR
-         B/AV/ORXHNl+c7f4YUThrLOVDVfGs5+v0yXM133bZAuzgCPehiDH+ir9f/HT3VhRvbva
-         ABJPXYJczVzo9npFPu0g1whzQBoFZQUH0oXbTk6wfkOz6A68etpse5pby80OUhDfUrQs
-         77PQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Kz0h8AVlhDxqu2fBv10G2DB8irasLWVcOGHbwSABuog=;
+        b=j8zmNa4gMVNlK1u6bsG4t1uiZRogcunLjCd15/qrWM4n/t2ugaS7lRDlEPZ6jY+yIg
+         mTkGGLdzW/XF1HzWzoin/UaQRAH1HC3QmvuecgIwR59XLaQAahzL2pgVCOsQvNZj7cdz
+         VYmF4RqqxQQpgjr2ibTG/yK7t16feYxU3umPw8ojMW425llDHKVO+X5yB6azRO4u6S58
+         UzattIxywCxCfAijShBykl2CXmkGvvOSVCsH94kEZkUjIFlVSSr3OA351Ri9HUtPyFhO
+         1A35o6nL/k3nMH4PSxrKdHRFharWVdXlHgLosiZP6HKazU5lWFSTbsjROPCzR/ueoDD1
+         zBxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3HichTrqN7F9p1vtnqjU5qG7qAFUNf2AyIapQ12NpO8=;
-        b=e8Um4o5f+Khq2eTIqKz77WZdsbMpgTk3gHzjjIHXH+2+CO9lygLUc/OCIXmA27Jnvz
-         IQ279LyT8dm1cEpiVpt2C2TaQ+L2o6adprgcPSMmlXO2olMh1cwwfmnSGK0XiVAGiU2V
-         74aMhGf6hn+GjELMe8ImBsiuYT/VLH12gut54SGWzlfIQNqHwodsb07buJm+gwbUF/+P
-         WaVOVElKdADgYwv3kDGKU2ejY7F33+LvOFs9iBWVVJsZhz0aOEcywY91HyLDuVOVLmhX
-         dPi/hHdAFNTmIyGViBYfmGfxC3lQZK0rh5/y2CuaHgpwf0Gsef12DFFiJRKdI3xfgk5a
-         8fZg==
-X-Gm-Message-State: AOAM530JgwD7se1d5euchME8mcHBZ9liuQi7bY+F+4cJGpsBf6bwfLQg
-        zIe2Ffd/1QBUw+VHOKdcuas+OQ==
-X-Google-Smtp-Source: ABdhPJwbFiP8G5XIBQ8Y6aMcJ9tjLVMxwvS1jPlinGma7O6miaJ7rs+vKHNMkbhuXXrYedSK3N/XsQ==
-X-Received: by 2002:a05:6512:32c1:b0:473:dade:84e8 with SMTP id f1-20020a05651232c100b00473dade84e8mr2704281lfg.652.1652953789533;
-        Thu, 19 May 2022 02:49:49 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id j9-20020ac253a9000000b0047255d210f0sm232517lfh.31.2022.05.19.02.49.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 02:49:48 -0700 (PDT)
-Message-ID: <4183e3fb-6fe2-ed81-2d75-1b3865b191a2@linaro.org>
-Date:   Thu, 19 May 2022 11:49:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 1/3] dt-bindings: phy: qcom,usb-snps-femto-v2: Add phy
- override params bindings
-Content-Language: en-US
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-References: <1652934489-23386-1-git-send-email-quic_kriskura@quicinc.com>
- <1652934489-23386-2-git-send-email-quic_kriskura@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1652934489-23386-2-git-send-email-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Kz0h8AVlhDxqu2fBv10G2DB8irasLWVcOGHbwSABuog=;
+        b=0QekHIhgUfnsASd1fcyDFEKTwYRgHvZZMT//5ROl+glf7b+QRJdtzVl1XW+BZXFXiM
+         TdNpJpVWLFU5+SFebWmA/Aph2TRb3qP+y7QbkSyD2feznT9bl8JFrx0hJ5UKryHj5r/F
+         vh+p5dy/xrmeLgg5QQxRLZ0lzfEnp1J3YEIMc80t07bQkXP83yryWqk9NmvJ+HLebGA3
+         b4Gs4KfOdCTZnanCm9ys6Cz8JIfwhzqTPUJrUgy67OmEjPjpZ3F4Cq3dM4O1dh+iRIPA
+         ETj7QzAydmgCe5XHesCNYHweqHrrZHwGg1hffbY48PjxdhI4iNoK26y0hiCuEuFMRwR2
+         n6dg==
+X-Gm-Message-State: AOAM5319O43CTMUE0xJoasdPmgvTYvNpW42mNAd5t5A0uMgg8oobu7H+
+        rChgP5bQNwU6gSPSVFzFuC2M/s1hQDEFfA==
+X-Google-Smtp-Source: ABdhPJw1fyrbaoYaCvEaPe+05dXjx+wf3KiemTb56WVrxGS0CtEIIiLvyqyF450u94ZVs2dzcF4H8w==
+X-Received: by 2002:a17:90b:1d0b:b0:1df:b3dc:5140 with SMTP id on11-20020a17090b1d0b00b001dfb3dc5140mr4289320pjb.225.1652953882156;
+        Thu, 19 May 2022 02:51:22 -0700 (PDT)
+Received: from Negi ([207.151.52.3])
+        by smtp.gmail.com with ESMTPSA id f186-20020a62dbc3000000b0050dc7628133sm3798073pfg.13.2022.05.19.02.51.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 02:51:21 -0700 (PDT)
+From:   Soumya Negi <soumya.negi97@gmail.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Soumya Negi <soumya.negi97@gmail.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: r8188eu: Remove multiple assignments
+Date:   Thu, 19 May 2022 02:50:11 -0700
+Message-Id: <20220519095012.5619-1-soumya.negi97@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2022 06:28, Krishna Kurapati wrote:
-> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> 
-> Add device tree bindings for SNPS phy tuning parameters.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
+Conform to Linux coding style.
+Issue found by checkpatch:-
+CHECK: multiple assignments should be avoided
 
+Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_br_ext.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
+index e1b3e9d5250b..bca20fe5c983 100644
+--- a/drivers/staging/r8188eu/core/rtw_br_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
+@@ -53,7 +53,8 @@ static unsigned char *__nat25_find_pppoe_tag(struct pppoe_hdr *ph, unsigned shor
+ 	unsigned char *cur_ptr, *start_ptr;
+ 	unsigned short tagLen, tagType;
+ 
+-	start_ptr = cur_ptr = (unsigned char *)ph->tag;
++	start_ptr = (unsigned char *)ph->tag;
++	cur_ptr = (unsigned char *)ph->tag;
+ 	while ((cur_ptr - start_ptr) < ntohs(ph->length)) {
+ 		/*  prevent un-alignment access */
+ 		tagType = (unsigned short)((cur_ptr[0] << 8) + cur_ptr[1]);
+-- 
+2.17.1
 
-
-Best regards,
-Krzysztof

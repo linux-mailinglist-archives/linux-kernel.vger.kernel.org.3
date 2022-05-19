@@ -2,1977 +2,457 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFCA52DA06
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A149952DA17
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241928AbiESQRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        id S241932AbiESQXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232987AbiESQRp (ORCPT
+        with ESMTP id S237446AbiESQXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:17:45 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94218D028A;
-        Thu, 19 May 2022 09:17:42 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-f18e6ff0f6so7337240fac.11;
-        Thu, 19 May 2022 09:17:42 -0700 (PDT)
+        Thu, 19 May 2022 12:23:03 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA79C1EE7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:23:01 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id w19-20020a9d6393000000b0060aeb359ca8so479815otk.6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:23:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gORMm6OJdVYl5zFhscpTFMBZr5DfEQLgPI02Iu1YHCg=;
-        b=LYlTwKLMrmtardf8YJpA33l0fdudTWzYekzOzJr4KVACFIGQKs+PuhKK4ln+vnd4eu
-         WuOng60ek6tZVm4FiNQCDqxJDndLC356nbU3N2yXVQP5UxGGH4wymzmRi+tyzpG1Hebw
-         /oEfY+r9eoKQsqXCBtzJ1Y1nNLffnGkQ5jhBdvsUaPE7hXQbD0kYgQjC59C64OPrDmXv
-         vNfAU0mdtb1+a4y/JZU5SuHpG/g4WIbYKAiCQaPRtUozyAPQRVeuTM+48M/Ux0U+nSyb
-         UUAyP+gAcsIgGjZ1gRIns+9hZjhDlTYkl+UK0ugFyzOP3W8uH6SqLfb3X9bp1xs5m5Em
-         ruVQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FH62jo+EKH6+RD9QF22HzUqg98s8nrMbRi4L1X0I39o=;
+        b=Q5PfGDYn1550gh3IUaPfmMJIE7R/amM5GS+Pf+cehuzH4nFe0MbqaBdHUj/cmeOQZq
+         /9J4V0yXplZ8yQo2YUfXyVZIb0PHeeilNF4tUph+KZuoy8dFvthNSSiZUnFsWJibHWTT
+         FggDJ+BV9Ncxl0K1aZv/7eOcIcU1SFsKuFHyyjESGiZoIX7eWBQmthLAHSt1vr2zBMMs
+         EB27nMwbqGQMdgvSIn32skO/sg3M9T7B7sOCzYbvkm57s0+0ahAxv6sN4g7senlq23F4
+         Ar8ajVk6qqyuafvxkvOORhPUIXzV1WjoBSgtF+32uYFa5jPTjzkA1Vq1KCzsXMaHCZ9n
+         yARw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gORMm6OJdVYl5zFhscpTFMBZr5DfEQLgPI02Iu1YHCg=;
-        b=1LNiT+Lq5GLDPsJBlHnBoF4/hBwWIETwvTVw9Nbj49Y96RW9lO+gtWx2/fdsYLWmiq
-         NU0H7tW7IVjn823WaSG+H6vCYtI37ASIbFxN/GYhMwT8XMjzFXNUzRLsCOGY6JrFfcnn
-         5BQ0eCklNxNcKbndOM4SNbEO4j3sMnqorHven/jMDKZW28da4nsRYzFwj4eHxTlyzIbV
-         cT0iHDBQnrtms2DlQPytCiuVyMryI6bmQlWQ0mmk/xfYr8kHavoG0u15X2CD6NMepYkw
-         jkyPJlSWXIP9GQW8PUC+jxQaayhGpraIWQ0s2kPa23tzS6cABnQmmNFaDQ0cjrmqUKKW
-         iNow==
-X-Gm-Message-State: AOAM531BxRALt2EMjr6C4Suh20aXrt7uRzBRUcQfNa4JYSbTqxRs5S1l
-        vmq1PyGjVmIfik2978MJT8pIljOt16w6yg==
-X-Google-Smtp-Source: ABdhPJxMniU6xc/LSOu4Ok9tyUAuL3foVMaYgfQzu+QaRSkh/NpHsyrMRfxpqk3QzIaYS+MX0YWwtQ==
-X-Received: by 2002:a05:6871:5cd:b0:f1:94a5:bb with SMTP id v13-20020a05687105cd00b000f194a500bbmr3182685oan.71.1652977060906;
-        Thu, 19 May 2022 09:17:40 -0700 (PDT)
-Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id j3-20020a4ab1c3000000b0035eb4e5a6d6sm2261450ooo.44.2022.05.19.09.17.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FH62jo+EKH6+RD9QF22HzUqg98s8nrMbRi4L1X0I39o=;
+        b=M2g94+HflBsCaLreUIsGHyp/fS1ebQv9O4YYKI60oIiv2PAn5bWrA7aGvHxPv/s+Yv
+         967j4Ut1W2YvYNESa3/zZU8fAxbtNkEPp4bJiLwQHguNz/z8jOz5ifvicGZVr0DwZ/lv
+         PzPdwd/hLiW0px5CrTkEMTZ1kFiUTytBkSWvwqGyVYbC0Y/9lP4kfXtgok1TSrCkE0FD
+         Jp9ehX9ZdrvRXIm+osOgwJPLjB/a1qbdf9Rfv0BexWtJBCiM65jI2NeP0kCVjZKVZYVf
+         tNNhMTUI3SUFZr386qVfMc0cIG4j5PW6gulrL1bJ6TxDlbILq66SeWNMBaK/hxTHU5E6
+         LcXg==
+X-Gm-Message-State: AOAM531TxHx/81ucAH+qHBrN/Yn9C61CH6KgMYjy+Bu0ZrPJxv8Vc3pc
+        Io99n4iR1z3LNJKWPHW0estKJw==
+X-Google-Smtp-Source: ABdhPJxCny9lOE2miioKiQa404DPecVP/dLlqgdhKU9ocG+45FV+tw9TBBdTqR89UNQlnrhKLqD3eQ==
+X-Received: by 2002:a05:6830:1219:b0:606:1c66:8441 with SMTP id r25-20020a056830121900b006061c668441mr2208098otp.177.1652977380614;
+        Thu, 19 May 2022 09:23:00 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id f21-20020a9d6c15000000b0060aea5bbc87sm305901otq.18.2022.05.19.09.22.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 09:17:40 -0700 (PDT)
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org, lee.jones@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, zyw@rock-chips.com, zhangqing@rock-chips.com,
-        devicetree@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH] [RESEND, v5] dt-bindings: mfd: rk808: Convert bindings to yaml
-Date:   Thu, 19 May 2022 11:17:31 -0500
-Message-Id: <20220519161731.1168-1-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 19 May 2022 09:23:00 -0700 (PDT)
+Date:   Thu, 19 May 2022 17:22:32 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Subject: Re: [PATCH v7 02/10] iommu: Remove SVM_FLAG_SUPERVISOR_MODE support
+Message-ID: <YoZuyN08ceegG2Sg@myrica>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-3-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220519072047.2996983-3-baolu.lu@linux.intel.com>
+X-TUID: q1Um/XayDwOJ
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Morgan <macromorgan@hotmail.com>
+On Thu, May 19, 2022 at 03:20:39PM +0800, Lu Baolu wrote:
+> The current kernel DMA with PASID support is based on the SVA with a flag
+> SVM_FLAG_SUPERVISOR_MODE. The IOMMU driver binds the kernel memory address
+> space to a PASID of the device. The device driver programs the device with
+> kernel virtual address (KVA) for DMA access. There have been security and
+> functional issues with this approach:
+> 
+> - The lack of IOTLB synchronization upon kernel page table updates.
+>   (vmalloc, module/BPF loading, CONFIG_DEBUG_PAGEALLOC etc.)
+> - Other than slight more protection, using kernel virtual address (KVA)
+>   has little advantage over physical address. There are also no use
+>   cases yet where DMA engines need kernel virtual addresses for in-kernel
+>   DMA.
+> 
+> This removes SVM_FLAG_SUPERVISOR_MODE support from the IOMMU interface.
+> The device drivers are suggested to handle kernel DMA with PASID through
+> the kernel DMA APIs.
+> 
+> The drvdata parameter in iommu_sva_bind_device() and all callbacks is not
+> needed anymore. Cleanup them as well.
+> 
+> Link: https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/
+> Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Convert the rk808 bindings into yaml format. clock-output-names varies
-in maxItems depending on whether or not the clock-cells is 0 or 1. For
-the rk805, rk809, and rk817. This preserves behavior with the existing
-driver handling setting the clock for these specific PMICs. When this
-driver is corrected and the devicetrees updated this logic can be
-removed (since the rk805, rk808, and rk817 only have one actual clock).
+For the SMMU bits
 
-Note this patch was previously sent as a series, all of the patches in
-the series except this one have been committed to mainline.
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/mfd/rk808.txt         | 465 ------------------
- .../bindings/mfd/rockchip,rk805.yaml          | 219 +++++++++
- .../bindings/mfd/rockchip,rk808.yaml          | 257 ++++++++++
- .../bindings/mfd/rockchip,rk809.yaml          | 284 +++++++++++
- .../bindings/mfd/rockchip,rk817.yaml          | 330 +++++++++++++
- .../bindings/mfd/rockchip,rk818.yaml          | 282 +++++++++++
- 6 files changed, 1372 insertions(+), 465 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/mfd/rk808.txt
- create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk805.yaml
- create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk808.yaml
- create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk809.yaml
- create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
- create mode 100644 Documentation/devicetree/bindings/mfd/rockchip,rk818.yaml
+> ---
+>  include/linux/intel-iommu.h                   |  3 +-
+>  include/linux/intel-svm.h                     | 13 -----
+>  include/linux/iommu.h                         |  8 +--
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  5 +-
+>  drivers/dma/idxd/cdev.c                       |  2 +-
+>  drivers/dma/idxd/init.c                       | 24 +-------
+>  .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |  3 +-
 
-diff --git a/Documentation/devicetree/bindings/mfd/rk808.txt b/Documentation/devicetree/bindings/mfd/rk808.txt
-deleted file mode 100644
-index 23a17a6663ec..000000000000
---- a/Documentation/devicetree/bindings/mfd/rk808.txt
-+++ /dev/null
-@@ -1,465 +0,0 @@
--RK8XX Power Management Integrated Circuit
--
--The rk8xx family current members:
--rk805
--rk808
--rk809
--rk817
--rk818
--
--Required properties:
--- compatible: "rockchip,rk805"
--- compatible: "rockchip,rk808"
--- compatible: "rockchip,rk809"
--- compatible: "rockchip,rk817"
--- compatible: "rockchip,rk818"
--- reg: I2C slave address
--- interrupts: the interrupt outputs of the controller.
--- #clock-cells: from common clock binding; shall be set to 1 (multiple clock
--  outputs). See <dt-bindings/clock/rockchip,rk808.h> for clock IDs.
--
--Optional properties:
--- clock-output-names: From common clock binding to override the
--  default output clock name
--- rockchip,system-power-controller: Telling whether or not this pmic is controlling
--  the system power.
--- wakeup-source: Device can be used as a wakeup source.
--
--Optional RK805 properties:
--- vcc1-supply:  The input supply for DCDC_REG1
--- vcc2-supply:  The input supply for DCDC_REG2
--- vcc3-supply:  The input supply for DCDC_REG3
--- vcc4-supply:  The input supply for DCDC_REG4
--- vcc5-supply:  The input supply for LDO_REG1 and LDO_REG2
--- vcc6-supply:  The input supply for LDO_REG3
--
--Optional RK808 properties:
--- vcc1-supply:  The input supply for DCDC_REG1
--- vcc2-supply:  The input supply for DCDC_REG2
--- vcc3-supply:  The input supply for DCDC_REG3
--- vcc4-supply:  The input supply for DCDC_REG4
--- vcc6-supply:  The input supply for LDO_REG1 and LDO_REG2
--- vcc7-supply:  The input supply for LDO_REG3 and LDO_REG7
--- vcc8-supply:  The input supply for SWITCH_REG1
--- vcc9-supply:  The input supply for LDO_REG4 and LDO_REG5
--- vcc10-supply: The input supply for LDO_REG6
--- vcc11-supply: The input supply for LDO_REG8
--- vcc12-supply: The input supply for SWITCH_REG2
--- dvs-gpios:  buck1/2 can be controlled by gpio dvs, this is GPIO specifiers
--  for 2 host gpio's used for dvs. The format of the gpio specifier depends in
--  the gpio controller. If DVS GPIOs aren't present, voltage changes will happen
--  very quickly with no slow ramp time.
--
--Optional shared RK809 and RK817 properties:
--- vcc1-supply:  The input supply for DCDC_REG1
--- vcc2-supply:  The input supply for DCDC_REG2
--- vcc3-supply:  The input supply for DCDC_REG3
--- vcc4-supply:  The input supply for DCDC_REG4
--- vcc5-supply:  The input supply for LDO_REG1, LDO_REG2, LDO_REG3
--- vcc6-supply:  The input supply for LDO_REG4, LDO_REG5, LDO_REG6
--- vcc7-supply:  The input supply for LDO_REG7, LDO_REG8, LDO_REG9
--
--Optional RK809 properties:
--- vcc8-supply:  The input supply for SWITCH_REG1
--- vcc9-supply:  The input supply for DCDC_REG5, SWITCH_REG2
--
--Optional RK817 properties:
--- clocks:	The input clock for the audio codec
--- clock-names:	The clock name for the codec clock. Should be "mclk".
--- #sound-dai-cells: Needed for the interpretation of sound dais. Should be 0.
--
--- vcc8-supply:  The input supply for BOOST
--- vcc9-supply:  The input supply for OTG_SWITCH
--- codec:	The child node for the codec to hold additional properties.
--		If no additional properties are required for the codec, this
--		node can be omitted.
--
--- rockchip,mic-in-differential: Telling if the microphone uses differential
--				mode. Should be under the codec child node.
--
--Optional RK818 properties:
--- vcc1-supply:  The input supply for DCDC_REG1
--- vcc2-supply:  The input supply for DCDC_REG2
--- vcc3-supply:  The input supply for DCDC_REG3
--- vcc4-supply:  The input supply for DCDC_REG4
--- boost-supply: The input supply for DCDC_BOOST
--- vcc6-supply:  The input supply for LDO_REG1 and LDO_REG2
--- vcc7-supply:  The input supply for LDO_REG3, LDO_REG5 and LDO_REG7
--- vcc8-supply:  The input supply for LDO_REG4, LDO_REG6 and LDO_REG8
--- vcc9-supply:  The input supply for LDO_REG9 and SWITCH_REG
--- h_5v-supply:  The input supply for HDMI_SWITCH
--- usb-supply:   The input supply for OTG_SWITCH
--
--Regulators: All the regulators of RK8XX to be instantiated shall be
--listed in a child node named 'regulators'. Each regulator is represented
--by a child node of the 'regulators' node.
--
--	regulator-name {
--		/* standard regulator bindings here */
--	};
--
--Following regulators of the RK805 PMIC regulators are supported. Note that
--the 'n' in regulator name, as in DCDC_REGn or LDOn, represents the DCDC or LDO
--number as described in RK805 datasheet.
--
--	- DCDC_REGn
--		- valid values for n are 1 to 4.
--	- LDO_REGn
--		- valid values for n are 1 to 3
--
--Following regulators of the RK808 PMIC block are supported. Note that
--the 'n' in regulator name, as in DCDC_REGn or LDOn, represents the DCDC or LDO
--number as described in RK808 datasheet.
--
--	- DCDC_REGn
--		- valid values for n are 1 to 4.
--	- LDO_REGn
--		- valid values for n are 1 to 8.
--	- SWITCH_REGn
--		- valid values for n are 1 to 2
--
--Following regulators of the RK809 and RK817 PMIC blocks are supported. Note that
--the 'n' in regulator name, as in DCDC_REGn or LDOn, represents the DCDC or LDO
--number as described in RK809 and RK817 datasheets.
--
--	- DCDC_REGn
--		- valid values for n are 1 to 5 for RK809.
--		- valid values for n are 1 to 4 for RK817.
--	- LDO_REGn
--		- valid values for n are 1 to 9 for RK809.
--		- valid values for n are 1 to 9 for RK817.
--	- SWITCH_REGn
--		- valid values for n are 1 to 2 for RK809.
--	- BOOST for RK817
--	- OTG_SWITCH for RK817
--
--Following regulators of the RK818 PMIC block are supported. Note that
--the 'n' in regulator name, as in DCDC_REGn or LDOn, represents the DCDC or LDO
--number as described in RK818 datasheet.
--
--	- DCDC_REGn
--		- valid values for n are 1 to 4.
--	- LDO_REGn
--		- valid values for n are 1 to 9.
--	- SWITCH_REG
--	- HDMI_SWITCH
--	- OTG_SWITCH
--
--It is necessary to configure three pins for both the RK809 and RK817, the three
--pins are "gpio_ts" "gpio_gt" "gpio_slp".
--	The gpio_gt and gpio_ts pins support the gpio function.
--	The gpio_slp pin is for controlling the pmic states, as below:
--		- reset
--		- power down
--		- sleep
--
--Standard regulator bindings are used inside regulator subnodes. Check
--  Documentation/devicetree/bindings/regulator/regulator.txt
--for more details
--
--Example:
--	rk808: pmic@1b {
--		compatible = "rockchip,rk808";
--		clock-output-names = "xin32k", "rk808-clkout2";
--		interrupt-parent = <&gpio0>;
--		interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&pmic_int &dvs_1 &dvs_2>;
--		dvs-gpios = <&gpio7 11 GPIO_ACTIVE_HIGH>,
--			    <&gpio7 15 GPIO_ACTIVE_HIGH>;
--		reg = <0x1b>;
--		rockchip,system-power-controller;
--		wakeup-source;
--		#clock-cells = <1>;
--
--		vcc8-supply = <&vcc_18>;
--		vcc9-supply = <&vcc_io>;
--		vcc10-supply = <&vcc_io>;
--		vcc12-supply = <&vcc_io>;
--		vddio-supply = <&vccio_pmu>;
--
--		regulators {
--			vdd_cpu: DCDC_REG1 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <750000>;
--				regulator-max-microvolt = <1300000>;
--				regulator-name = "vdd_arm";
--			};
--
--			vdd_gpu: DCDC_REG2 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <850000>;
--				regulator-max-microvolt = <1250000>;
--				regulator-name = "vdd_gpu";
--			};
--
--			vcc_ddr: DCDC_REG3 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-name = "vcc_ddr";
--			};
--
--			vcc_io: DCDC_REG4 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
--				regulator-name = "vcc_io";
--			};
--
--			vccio_pmu: LDO_REG1 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
--				regulator-name = "vccio_pmu";
--			};
--
--			vcc_tp: LDO_REG2 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
--				regulator-name = "vcc_tp";
--			};
--
--			vdd_10: LDO_REG3 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <1000000>;
--				regulator-max-microvolt = <1000000>;
--				regulator-name = "vdd_10";
--			};
--
--			vcc18_lcd: LDO_REG4 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <1800000>;
--				regulator-max-microvolt = <1800000>;
--				regulator-name = "vcc18_lcd";
--			};
--
--			vccio_sd: LDO_REG5 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <1800000>;
--				regulator-max-microvolt = <3300000>;
--				regulator-name = "vccio_sd";
--			};
--
--			vdd10_lcd: LDO_REG6 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <1000000>;
--				regulator-max-microvolt = <1000000>;
--				regulator-name = "vdd10_lcd";
--			};
--
--			vcc_18: LDO_REG7 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <1800000>;
--				regulator-max-microvolt = <1800000>;
--				regulator-name = "vcc_18";
--			};
--
--			vcca_codec: LDO_REG8 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
--				regulator-name = "vcca_codec";
--			};
--
--			vcc_wl: SWITCH_REG1 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-name = "vcc_wl";
--			};
--
--			vcc_lcd: SWITCH_REG2 {
--				regulator-always-on;
--				regulator-boot-on;
--				regulator-name = "vcc_lcd";
--			};
--		};
--	};
--
--	rk817: pmic@20 {
--		compatible = "rockchip,rk817";
--		reg = <0x20>;
--		interrupt-parent = <&gpio0>;
--		interrupts = <RK_PB2 IRQ_TYPE_LEVEL_LOW>;
--		clock-output-names = "rk808-clkout1", "xin32k";
--		clock-names = "mclk";
--		clocks = <&cru SCLK_I2S1_OUT>;
--		pinctrl-names = "default";
--		pinctrl-0 = <&pmic_int>, <&i2s1_2ch_mclk>;
--		wakeup-source;
--		#clock-cells = <1>;
--		#sound-dai-cells = <0>;
--
--		vcc1-supply = <&vccsys>;
--		vcc2-supply = <&vccsys>;
--		vcc3-supply = <&vccsys>;
--		vcc4-supply = <&vccsys>;
--		vcc5-supply = <&vccsys>;
--		vcc6-supply = <&vccsys>;
--		vcc7-supply = <&vccsys>;
--
--		regulators {
--			vdd_logic: DCDC_REG1 {
--				regulator-name = "vdd_logic";
--				regulator-min-microvolt = <950000>;
--				regulator-max-microvolt = <1150000>;
--				regulator-ramp-delay = <6001>;
--				regulator-always-on;
--				regulator-boot-on;
--
--				regulator-state-mem {
--					regulator-on-in-suspend;
--					regulator-suspend-microvolt = <950000>;
--				};
--			};
--
--			vdd_arm: DCDC_REG2 {
--				regulator-name = "vdd_arm";
--				regulator-min-microvolt = <950000>;
--				regulator-max-microvolt = <1350000>;
--				regulator-ramp-delay = <6001>;
--				regulator-always-on;
--				regulator-boot-on;
--
--				regulator-state-mem {
--					regulator-off-in-suspend;
--					regulator-suspend-microvolt = <950000>;
--				};
--			};
--
--			vcc_ddr: DCDC_REG3 {
--				regulator-name = "vcc_ddr";
--				regulator-always-on;
--				regulator-boot-on;
--
--				regulator-state-mem {
--					regulator-on-in-suspend;
--				};
--			};
--
--			vcc_3v3: DCDC_REG4 {
--				regulator-name = "vcc_3v3";
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
--				regulator-always-on;
--				regulator-boot-on;
--
--				regulator-state-mem {
--					regulator-off-in-suspend;
--					regulator-suspend-microvolt = <3300000>;
--				};
--			};
--
--			vcc_1v8: LDO_REG2 {
--				regulator-name = "vcc_1v8";
--				regulator-min-microvolt = <1800000>;
--				regulator-max-microvolt = <1800000>;
--				regulator-always-on;
--				regulator-boot-on;
--
--				regulator-state-mem {
--					regulator-on-in-suspend;
--					regulator-suspend-microvolt = <1800000>;
--				};
--			};
--
--			vdd_1v0: LDO_REG3 {
--				regulator-name = "vdd_1v0";
--				regulator-min-microvolt = <1000000>;
--				regulator-max-microvolt = <1000000>;
--				regulator-always-on;
--				regulator-boot-on;
--
--				regulator-state-mem {
--					regulator-on-in-suspend;
--					regulator-suspend-microvolt = <1000000>;
--				};
--			};
--
--			vcc3v3_pmu: LDO_REG4 {
--				regulator-name = "vcc3v3_pmu";
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
--				regulator-always-on;
--				regulator-boot-on;
--
--				regulator-state-mem {
--					regulator-on-in-suspend;
--					regulator-suspend-microvolt = <3300000>;
--				};
--			};
--
--			vccio_sd: LDO_REG5 {
--				regulator-name = "vccio_sd";
--				regulator-min-microvolt = <1800000>;
--				regulator-max-microvolt = <3300000>;
--				regulator-always-on;
--				regulator-boot-on;
--
--				regulator-state-mem {
--					regulator-on-in-suspend;
--					regulator-suspend-microvolt = <3300000>;
--				};
--			};
--
--			vcc_sd: LDO_REG6 {
--				regulator-name = "vcc_sd";
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
--				regulator-boot-on;
--
--				regulator-state-mem {
--					regulator-on-in-suspend;
--					regulator-suspend-microvolt = <3300000>;
--				};
--			};
--
--			vcc_bl: LDO_REG7 {
--				regulator-name = "vcc_bl";
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
--
--				regulator-state-mem {
--					regulator-off-in-suspend;
--					regulator-suspend-microvolt = <3300000>;
--				};
--			};
--
--			vcc_lcd: LDO_REG8 {
--				regulator-name = "vcc_lcd";
--				regulator-min-microvolt = <2800000>;
--				regulator-max-microvolt = <2800000>;
--
--				regulator-state-mem {
--					regulator-off-in-suspend;
--					regulator-suspend-microvolt = <2800000>;
--				};
--			};
--
--			vcc_cam: LDO_REG9 {
--				regulator-name = "vcc_cam";
--				regulator-min-microvolt = <3000000>;
--				regulator-max-microvolt = <3000000>;
--
--				regulator-state-mem {
--					regulator-off-in-suspend;
--					regulator-suspend-microvolt = <3000000>;
--				};
--			};
--		};
--
--		rk817_codec: codec {
--			rockchip,mic-in-differential;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk805.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk805.yaml
-new file mode 100644
-index 000000000000..4992f71b6fc3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/rockchip,rk805.yaml
-@@ -0,0 +1,219 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/rockchip,rk805.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: RK805 Power Management Integrated Circuit
-+
-+maintainers:
-+  - Chris Zhong <zyw@rock-chips.com>
-+  - Zhang Qing <zhangqing@rock-chips.com>
-+
-+description: |
-+  Rockchip RK805 series PMIC. This device consists of an i2c controlled MFD
-+  that includes multiple switchable regulators.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,rk805
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#clock-cells':
-+    description:
-+      See <dt-bindings/clock/rockchip,rk808.h> for clock IDs.
-+    minimum: 0
-+    maximum: 1
-+
-+  clock-output-names:
-+    description:
-+      From common clock binding to override the default output clock name.
-+
-+  gpio-controller: true
-+
-+  '#gpio-cells':
-+    const: 2
-+
-+  rockchip,system-power-controller:
-+    type: boolean
-+    description:
-+      Telling whether or not this PMIC is controlling the system power.
-+
-+  wakeup-source:
-+    type: boolean
-+    description:
-+      Device can be used as a wakeup source.
-+
-+  vcc1-supply:
-+    description:
-+      The input supply for DCDC_REG1.
-+
-+  vcc2-supply:
-+    description:
-+      The input supply for DCDC_REG2.
-+
-+  vcc3-supply:
-+    description:
-+      The input supply for DCDC_REG3.
-+
-+  vcc4-supply:
-+    description:
-+      The input supply for DCDC_REG4.
-+
-+  vcc5-supply:
-+    description:
-+      The input supply for LDO_REG1 and LDO_REG2.
-+
-+  vcc6-supply:
-+    description:
-+      The input supply for LDO_REG3.
-+
-+  regulators:
-+    type: object
-+    patternProperties:
-+      "^(DCDC_REG[1-4]|LDO_REG[1-3])$":
-+        type: object
-+        $ref: ../regulator/regulator.yaml#
-+    unevaluatedProperties: false
-+
-+allOf:
-+  - if:
-+      properties:
-+        '#clock-cells':
-+          const: 0
-+
-+    then:
-+      properties:
-+        clock-output-names:
-+          maxItems: 1
-+
-+    else:
-+      properties:
-+        clock-output-names:
-+          maxItems: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#clock-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/pinctrl/rockchip.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@18 {
-+            compatible = "rockchip,rk805";
-+            reg = <0x18>;
-+            interrupt-parent = <&gpio2>;
-+            interrupts = <RK_PA6 IRQ_TYPE_LEVEL_LOW>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pmic_int_l>;
-+            rockchip,system-power-controller;
-+            wakeup-source;
-+            #clock-cells = <0>;
-+
-+            vcc1-supply = <&vcc_sys>;
-+            vcc2-supply = <&vcc_sys>;
-+            vcc3-supply = <&vcc_sys>;
-+            vcc4-supply = <&vcc_sys>;
-+            vcc5-supply = <&vcc_io>;
-+            vcc6-supply = <&vcc_io>;
-+
-+            regulators {
-+                vdd_logic: DCDC_REG1 {
-+                    regulator-name = "vdd_logic";
-+                    regulator-min-microvolt = <700000>;
-+                    regulator-max-microvolt = <1350000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1000000>;
-+                    };
-+                };
-+
-+                vdd_arm: DCDC_REG2 {
-+                    regulator-name = "vdd_arm";
-+                    regulator-min-microvolt = <700000>;
-+                    regulator-max-microvolt = <1350000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <950000>;
-+                    };
-+                };
-+
-+                vcc_ddr: DCDC_REG3 {
-+                    regulator-name = "vcc_ddr";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                    };
-+                };
-+
-+                vcc_io: DCDC_REG4 {
-+                    regulator-name = "vcc_io";
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <3300000>;
-+                    };
-+                };
-+
-+                vdd_18: LDO_REG1 {
-+                    regulator-name = "vdd_18";
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1800000>;
-+                    };
-+                };
-+
-+                vcc18_emmc: LDO_REG2 {
-+                    regulator-name = "vcc_18emmc";
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1800000>;
-+                    };
-+                };
-+
-+                vdd_11: LDO_REG3 {
-+                    regulator-name = "vdd_11";
-+                    regulator-min-microvolt = <1100000>;
-+                    regulator-max-microvolt = <1100000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1100000>;
-+                    };
-+                };
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk808.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk808.yaml
-new file mode 100644
-index 000000000000..f5908fa01a61
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/rockchip,rk808.yaml
-@@ -0,0 +1,257 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/rockchip,rk808.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: RK808 Power Management Integrated Circuit
-+
-+maintainers:
-+  - Chris Zhong <zyw@rock-chips.com>
-+  - Zhang Qing <zhangqing@rock-chips.com>
-+
-+description: |
-+  Rockchip RK808 series PMIC. This device consists of an i2c controlled MFD
-+  that includes regulators, an RTC, and a power button.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,rk808
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#clock-cells':
-+    description:
-+      See <dt-bindings/clock/rockchip,rk808.h> for clock IDs.
-+    const: 1
-+
-+  clock-output-names:
-+    description:
-+      From common clock binding to override the default output clock name.
-+    maxItems: 2
-+
-+  rockchip,system-power-controller:
-+    type: boolean
-+    description:
-+      Telling whether or not this PMIC is controlling the system power.
-+
-+  wakeup-source:
-+    type: boolean
-+    description:
-+      Device can be used as a wakeup source.
-+
-+  vcc1-supply:
-+    description:
-+      The input supply for DCDC_REG1.
-+
-+  vcc2-supply:
-+    description:
-+      The input supply for DCDC_REG2.
-+
-+  vcc3-supply:
-+    description:
-+      The input supply for DCDC_REG3.
-+
-+  vcc4-supply:
-+    description:
-+      The input supply for DCDC_REG4.
-+
-+  vcc6-supply:
-+    description:
-+      The input supply for LDO_REG1 and LDO_REG2.
-+
-+  vcc7-supply:
-+    description:
-+      The input supply for LDO_REG3 and LDO_REG7.
-+
-+  vcc8-supply:
-+    description:
-+      The input supply for SWITCH_REG1.
-+
-+  vcc9-supply:
-+    description:
-+      The input supply for LDO_REG4 and LDO_REG5.
-+
-+  vcc10-supply:
-+    description:
-+      The input supply for LDO_REG6.
-+
-+  vcc11-supply:
-+    description:
-+      The input supply for LDO_REG8.
-+
-+  vcc12-supply:
-+    description:
-+      The input supply for SWITCH_REG2.
-+
-+  vddio-supply:
-+    description:
-+      The input supply for digital IO.
-+
-+  dvs-gpios:
-+    description: |
-+      buck1/2 can be controlled by gpio dvs, this is GPIO specifiers for
-+      2 host gpio's used for dvs. The format of the gpio specifier
-+      depends in the gpio controller. If DVS GPIOs aren't present,
-+      voltage changes will happen very quickly with no slow ramp time.
-+    maxItems: 2
-+
-+  regulators:
-+    type: object
-+    patternProperties:
-+      "^(DCDC_REG[1-4]|LDO_REG[1-8]|SWITCH_REG[1-2])$":
-+        type: object
-+        $ref: ../regulator/regulator.yaml#
-+    unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#clock-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/pinctrl/rockchip.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rk808: pmic@1b {
-+            compatible = "rockchip,rk808";
-+            clock-output-names = "xin32k", "rk808-clkout2";
-+            interrupt-parent = <&gpio0>;
-+            interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pmic_int &dvs_1 &dvs_2>;
-+            dvs-gpios = <&gpio7 11 GPIO_ACTIVE_HIGH>,
-+                <&gpio7 15 GPIO_ACTIVE_HIGH>;
-+            reg = <0x1b>;
-+            rockchip,system-power-controller;
-+            wakeup-source;
-+            #clock-cells = <1>;
-+
-+            vcc8-supply = <&vcc_18>;
-+            vcc9-supply = <&vcc_io>;
-+            vcc10-supply = <&vcc_io>;
-+            vcc12-supply = <&vcc_io>;
-+            vddio-supply = <&vccio_pmu>;
-+
-+            regulators {
-+                vdd_cpu: DCDC_REG1 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <750000>;
-+                    regulator-max-microvolt = <1300000>;
-+                    regulator-name = "vdd_arm";
-+                };
-+
-+                vdd_gpu: DCDC_REG2 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <850000>;
-+                    regulator-max-microvolt = <1250000>;
-+                    regulator-name = "vdd_gpu";
-+                };
-+
-+                vcc_ddr: DCDC_REG3 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-name = "vcc_ddr";
-+                };
-+
-+                vcc_io: DCDC_REG4 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-name = "vcc_io";
-+                };
-+
-+                vccio_pmu: LDO_REG1 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-name = "vccio_pmu";
-+                };
-+
-+                vcc_tp: LDO_REG2 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-name = "vcc_tp";
-+                };
-+
-+                vdd_10: LDO_REG3 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1000000>;
-+                    regulator-max-microvolt = <1000000>;
-+                    regulator-name = "vdd_10";
-+                };
-+
-+                vcc18_lcd: LDO_REG4 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-name = "vcc18_lcd";
-+                };
-+
-+                vccio_sd: LDO_REG5 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-name = "vccio_sd";
-+                };
-+
-+                vdd10_lcd: LDO_REG6 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1000000>;
-+                    regulator-max-microvolt = <1000000>;
-+                    regulator-name = "vdd10_lcd";
-+                };
-+
-+                vcc_18: LDO_REG7 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-name = "vcc_18";
-+                };
-+
-+                vcca_codec: LDO_REG8 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-name = "vcca_codec";
-+                };
-+
-+                vcc_wl: SWITCH_REG1 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-name = "vcc_wl";
-+                };
-+
-+                vcc_lcd: SWITCH_REG2 {
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-name = "vcc_lcd";
-+                };
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk809.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk809.yaml
-new file mode 100644
-index 000000000000..7fb849ac74a7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/rockchip,rk809.yaml
-@@ -0,0 +1,284 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/rockchip,rk809.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: RK809 Power Management Integrated Circuit
-+
-+maintainers:
-+  - Chris Zhong <zyw@rock-chips.com>
-+  - Zhang Qing <zhangqing@rock-chips.com>
-+
-+description: |
-+  Rockchip RK809 series PMIC. This device consists of an i2c controlled MFD
-+  that includes regulators, an RTC, and power button.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,rk809
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#clock-cells':
-+    description: |
-+      See <dt-bindings/clock/rockchip,rk808.h> for clock IDs.
-+    minimum: 0
-+    maximum: 1
-+
-+  clock-output-names:
-+    description:
-+      From common clock binding to override the default output clock name.
-+
-+  rockchip,system-power-controller:
-+    type: boolean
-+    description:
-+      Telling whether or not this PMIC is controlling the system power.
-+
-+  wakeup-source:
-+    type: boolean
-+    description:
-+      Device can be used as a wakeup source.
-+
-+  vcc1-supply:
-+    description:
-+      The input supply for DCDC_REG1.
-+
-+  vcc2-supply:
-+    description:
-+      The input supply for DCDC_REG2.
-+
-+  vcc3-supply:
-+    description:
-+      The input supply for DCDC_REG3.
-+
-+  vcc4-supply:
-+    description:
-+      The input supply for DCDC_REG4.
-+
-+  vcc5-supply:
-+    description:
-+      The input supply for LDO_REG1, LDO_REG2, and LDO_REG3.
-+
-+  vcc6-supply:
-+    description:
-+      The input supply for LDO_REG4, LDO_REG5, and LDO_REG6.
-+
-+  vcc7-supply:
-+    description:
-+      The input supply for LDO_REG7, LDO_REG8, and LDO_REG9.
-+
-+  vcc8-supply:
-+    description:
-+      The input supply for SWITCH_REG1.
-+
-+  vcc9-supply:
-+    description:
-+      The input supply for DCDC_REG5 and SWITCH_REG2.
-+
-+  regulators:
-+    type: object
-+    patternProperties:
-+      "^(LDO_REG[1-9]|DCDC_REG[1-5]|SWITCH_REG[1-2])$":
-+        type: object
-+        $ref: ../regulator/regulator.yaml#
-+    unevaluatedProperties: false
-+
-+allOf:
-+  - if:
-+      properties:
-+        '#clock-cells':
-+          const: 0
-+
-+    then:
-+      properties:
-+        clock-output-names:
-+          maxItems: 1
-+
-+    else:
-+      properties:
-+        clock-output-names:
-+          maxItems: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#clock-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/pinctrl/rockchip.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rk808: pmic@1b {
-+            compatible = "rockchip,rk808";
-+            reg = <0x1b>;
-+            #clock-cells = <1>;
-+            clock-output-names = "xin32k", "rk808-clkout2";
-+            interrupt-parent = <&gpio3>;
-+            interrupts = <10 IRQ_TYPE_LEVEL_LOW>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pmic_int_l_pin>;
-+            rockchip,system-power-controller;
-+            wakeup-source;
-+
-+            vcc1-supply = <&vcc_sysin>;
-+            vcc2-supply = <&vcc_sysin>;
-+            vcc3-supply = <&vcc_sysin>;
-+            vcc4-supply = <&vcc_sysin>;
-+            vcc6-supply = <&vcc_sysin>;
-+            vcc7-supply = <&vcc_sysin>;
-+            vcc8-supply = <&vcc3v3_sys>;
-+            vcc9-supply = <&vcc_sysin>;
-+            vcc10-supply = <&vcc_sysin>;
-+            vcc11-supply = <&vcc_sysin>;
-+            vcc12-supply = <&vcc3v3_sys>;
-+
-+            regulators {
-+                vdd_center: DCDC_REG1 {
-+                    regulator-name = "vdd_center";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <750000>;
-+                    regulator-max-microvolt = <1350000>;
-+                    regulator-ramp-delay = <6001>;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+
-+                vdd_cpu_l: DCDC_REG2 {
-+                    regulator-name = "vdd_cpu_l";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <750000>;
-+                    regulator-max-microvolt = <1350000>;
-+                    regulator-ramp-delay = <6001>;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+
-+                vcc_ddr: DCDC_REG3 {
-+                    regulator-name = "vcc_ddr";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                    };
-+                };
-+
-+                vcc_1v8: vcc_wl: DCDC_REG4 {
-+                    regulator-name = "vcc_1v8";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1800000>;
-+                    };
-+                };
-+
-+                vcc1v8_pmupll: LDO_REG3 {
-+                    regulator-name = "vcc1v8_pmupll";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1800000>;
-+                    };
-+                };
-+
-+                vcc_sdio: LDO_REG4 {
-+                    regulator-name = "vcc_sdio";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <3000000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <3000000>;
-+                    };
-+                };
-+
-+                vcca3v0_codec: LDO_REG5 {
-+                    regulator-name = "vcca3v0_codec";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <3000000>;
-+                    regulator-max-microvolt = <3000000>;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+
-+                vcc_1v5: LDO_REG6 {
-+                    regulator-name = "vcc_1v5";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1500000>;
-+                    regulator-max-microvolt = <1500000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1500000>;
-+                    };
-+                };
-+
-+                vcca1v8_codec: LDO_REG7 {
-+                    regulator-name = "vcca1v8_codec";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+
-+                vcc_3v0: LDO_REG8 {
-+                    regulator-name = "vcc_3v0";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <3000000>;
-+                    regulator-max-microvolt = <3000000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <3000000>;
-+                    };
-+                };
-+
-+                vcc3v3_s3: SWITCH_REG1 {
-+                    regulator-name = "vcc3v3_s3";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+
-+                vcc3v3_s0: SWITCH_REG2 {
-+                    regulator-name = "vcc3v3_s0";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
-new file mode 100644
-index 000000000000..bfc1720adc43
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
-@@ -0,0 +1,330 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/rockchip,rk817.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: RK817 Power Management Integrated Circuit
-+
-+maintainers:
-+  - Chris Zhong <zyw@rock-chips.com>
-+  - Zhang Qing <zhangqing@rock-chips.com>
-+
-+description: |
-+  Rockchip RK817 series PMIC. This device consists of an i2c controlled MFD
-+  that includes regulators, an RTC, a power button, an audio codec, and a
-+  battery charger manager.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,rk817
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#clock-cells':
-+    description:
-+      See <dt-bindings/clock/rockchip,rk808.h> for clock IDs.
-+    minimum: 0
-+    maximum: 1
-+
-+  clock-output-names:
-+    description:
-+      From common clock binding to override the default output clock name.
-+
-+  rockchip,system-power-controller:
-+    type: boolean
-+    description:
-+      Telling whether or not this PMIC is controlling the system power.
-+
-+  wakeup-source:
-+    type: boolean
-+    description:
-+      Device can be used as a wakeup source.
-+
-+  vcc1-supply:
-+    description:
-+      The input supply for DCDC_REG1.
-+
-+  vcc2-supply:
-+    description:
-+      The input supply for DCDC_REG2.
-+
-+  vcc3-supply:
-+    description:
-+      The input supply for DCDC_REG3.
-+
-+  vcc4-supply:
-+    description:
-+      The input supply for DCDC_REG4.
-+
-+  vcc5-supply:
-+    description:
-+      The input supply for LDO_REG1, LDO_REG2, and LDO_REG3.
-+
-+  vcc6-supply:
-+    description:
-+      The input supply for LDO_REG4, LDO_REG5, and LDO_REG6.
-+
-+  vcc7-supply:
-+    description:
-+      The input supply for LDO_REG7, LDO_REG8, and LDO_REG9.
-+
-+  vcc8-supply:
-+    description:
-+      The input supply for BOOST.
-+
-+  vcc9-supply:
-+    description:
-+      The input supply for OTG_SWITCH.
-+
-+  regulators:
-+    type: object
-+    patternProperties:
-+      "^(LDO_REG[1-9]|DCDC_REG[1-4]|BOOST|OTG_SWITCH)$":
-+        type: object
-+        $ref: ../regulator/regulator.yaml#
-+    unevaluatedProperties: false
-+
-+  clocks:
-+    description:
-+      The input clock for the audio codec.
-+
-+  clock-names:
-+    description:
-+      The clock name for the codec clock.
-+    items:
-+      - const: mclk
-+
-+  '#sound-dai-cells':
-+    description:
-+      Needed for the interpretation of sound dais.
-+    const: 0
-+
-+  codec:
-+    description: |
-+      The child node for the codec to hold additional properties. If no
-+      additional properties are required for the codec, this node can be
-+      omitted.
-+    type: object
-+    properties:
-+      rockchip,mic-in-differential:
-+        type: boolean
-+        description:
-+          Describes if the microphone uses differential mode.
-+
-+allOf:
-+  - if:
-+      properties:
-+        '#clock-cells':
-+          const: 0
-+
-+    then:
-+      properties:
-+        clock-output-names:
-+          maxItems: 1
-+
-+    else:
-+      properties:
-+        clock-output-names:
-+          maxItems: 2
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#clock-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/px30-cru.h>
-+    #include <dt-bindings/pinctrl/rockchip.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rk817: pmic@20 {
-+            compatible = "rockchip,rk817";
-+            reg = <0x20>;
-+            interrupt-parent = <&gpio0>;
-+            interrupts = <RK_PB2 IRQ_TYPE_LEVEL_LOW>;
-+            clock-output-names = "rk808-clkout1", "xin32k";
-+            clock-names = "mclk";
-+            clocks = <&cru SCLK_I2S1_OUT>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pmic_int>, <&i2s1_2ch_mclk>;
-+            wakeup-source;
-+            #clock-cells = <1>;
-+            #sound-dai-cells = <0>;
-+
-+            vcc1-supply = <&vccsys>;
-+            vcc2-supply = <&vccsys>;
-+            vcc3-supply = <&vccsys>;
-+            vcc4-supply = <&vccsys>;
-+            vcc5-supply = <&vccsys>;
-+            vcc6-supply = <&vccsys>;
-+            vcc7-supply = <&vccsys>;
-+
-+            regulators {
-+                vdd_logic: DCDC_REG1 {
-+                    regulator-name = "vdd_logic";
-+                    regulator-min-microvolt = <950000>;
-+                    regulator-max-microvolt = <1150000>;
-+                    regulator-ramp-delay = <6001>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <950000>;
-+                    };
-+                };
-+
-+                vdd_arm: DCDC_REG2 {
-+                    regulator-name = "vdd_arm";
-+                    regulator-min-microvolt = <950000>;
-+                    regulator-max-microvolt = <1350000>;
-+                    regulator-ramp-delay = <6001>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                        regulator-suspend-microvolt = <950000>;
-+                    };
-+                };
-+
-+                vcc_ddr: DCDC_REG3 {
-+                    regulator-name = "vcc_ddr";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                    };
-+                };
-+
-+                vcc_3v3: DCDC_REG4 {
-+                    regulator-name = "vcc_3v3";
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                        regulator-suspend-microvolt = <3300000>;
-+                    };
-+                };
-+
-+                vcc_1v8: LDO_REG2 {
-+                    regulator-name = "vcc_1v8";
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1800000>;
-+                    };
-+                };
-+
-+                vdd_1v0: LDO_REG3 {
-+                    regulator-name = "vdd_1v0";
-+                    regulator-min-microvolt = <1000000>;
-+                    regulator-max-microvolt = <1000000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1000000>;
-+                    };
-+                };
-+
-+                vcc3v3_pmu: LDO_REG4 {
-+                    regulator-name = "vcc3v3_pmu";
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <3300000>;
-+                    };
-+                };
-+
-+                vccio_sd: LDO_REG5 {
-+                    regulator-name = "vccio_sd";
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <3300000>;
-+                    };
-+                };
-+
-+                vcc_sd: LDO_REG6 {
-+                    regulator-name = "vcc_sd";
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-boot-on;
-+
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <3300000>;
-+                    };
-+                };
-+
-+                vcc_bl: LDO_REG7 {
-+                    regulator-name = "vcc_bl";
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                        regulator-suspend-microvolt = <3300000>;
-+                    };
-+                };
-+
-+                vcc_lcd: LDO_REG8 {
-+                    regulator-name = "vcc_lcd";
-+                    regulator-min-microvolt = <2800000>;
-+                    regulator-max-microvolt = <2800000>;
-+
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                        regulator-suspend-microvolt = <2800000>;
-+                    };
-+                };
-+
-+                vcc_cam: LDO_REG9 {
-+                    regulator-name = "vcc_cam";
-+                    regulator-min-microvolt = <3000000>;
-+                    regulator-max-microvolt = <3000000>;
-+
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                        regulator-suspend-microvolt = <3000000>;
-+                    };
-+                };
-+            };
-+
-+            rk817_codec: codec {
-+                rockchip,mic-in-differential;
-+            };
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk818.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk818.yaml
-new file mode 100644
-index 000000000000..b57c4b005cf4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/rockchip,rk818.yaml
-@@ -0,0 +1,282 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/rockchip,rk818.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: RK818 Power Management Integrated Circuit
-+
-+maintainers:
-+  - Chris Zhong <zyw@rock-chips.com>
-+  - Zhang Qing <zhangqing@rock-chips.com>
-+
-+description: |
-+  Rockchip RK818 series PMIC. This device consists of an i2c controlled MFD
-+  that includes regulators, an RTC, and a power button.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - rockchip,rk818
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#clock-cells':
-+    description: |
-+      See <dt-bindings/clock/rockchip,rk808.h> for clock IDs.
-+    const: 1
-+
-+  clock-output-names:
-+    description:
-+      From common clock binding to override the default output clock name.
-+    maxItems: 2
-+
-+  rockchip,system-power-controller:
-+    type: boolean
-+    description:
-+      Telling whether or not this PMIC is controlling the system power.
-+
-+  wakeup-source:
-+    type: boolean
-+    description:
-+      Device can be used as a wakeup source.
-+
-+  vcc1-supply:
-+    description:
-+      The input supply for DCDC_REG1.
-+
-+  vcc2-supply:
-+    description:
-+      The input supply for DCDC_REG2.
-+
-+  vcc3-supply:
-+    description:
-+      The input supply for DCDC_REG3.
-+
-+  vcc4-supply:
-+    description:
-+      The input supply for DCDC_REG4.
-+
-+  boost-supply:
-+    description:
-+      The input supply for DCDC_BOOST
-+
-+  vcc6-supply:
-+    description:
-+      The input supply for LDO_REG1 and LDO_REG2.
-+
-+  vcc7-supply:
-+    description:
-+      The input supply for LDO_REG3, LDO_REG5, and LDO_REG7.
-+
-+  vcc8-supply:
-+    description:
-+      The input supply for LDO_REG4, LDO_REG6, and LDO_REG8.
-+
-+  vcc9-supply:
-+    description:
-+      The input supply for LDO_REG9 and SWITCH_REG.
-+
-+  vddio-supply:
-+    description:
-+      The input supply for digital IO.
-+
-+  h_5v-supply:
-+    description:
-+      The input supply for HDMI_SWITCH.
-+
-+  usb-supply:
-+    description:
-+      The input supply for OTG_SWITCH.
-+
-+  regulators:
-+    type: object
-+    patternProperties:
-+      "^(DCDC_REG[1-4]|DCDC_BOOST|LDO_REG[1-9]|SWITCH_REG|HDMI_SWITCH|OTG_SWITCH)$":
-+        type: object
-+        $ref: ../regulator/regulator.yaml#
-+    unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#clock-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/px30-cru.h>
-+    #include <dt-bindings/pinctrl/rockchip.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/gpio/gpio.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        rk818: pmic@1c {
-+            compatible = "rockchip,rk818";
-+            reg = <0x1c>;
-+            interrupt-parent = <&gpio0>;
-+            interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&pmic_int>;
-+            rockchip,system-power-controller;
-+            wakeup-source;
-+            #clock-cells = <1>;
-+
-+            vcc1-supply = <&vdd_sys>;
-+            vcc2-supply = <&vdd_sys>;
-+            vcc3-supply = <&vdd_sys>;
-+            vcc4-supply = <&vdd_sys>;
-+            boost-supply = <&vdd_in_otg_out>;
-+            vcc6-supply = <&vdd_sys>;
-+            vcc7-supply = <&vdd_misc_1v8>;
-+            vcc8-supply = <&vdd_misc_1v8>;
-+            vcc9-supply = <&vdd_3v3_io>;
-+            vddio-supply = <&vdd_3v3_io>;
-+
-+            regulators {
-+                vdd_log: DCDC_REG1 {
-+                    regulator-name = "vdd_log";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1100000>;
-+                    regulator-max-microvolt = <1100000>;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+
-+                vdd_gpu: DCDC_REG2 {
-+                    regulator-name = "vdd_gpu";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <800000>;
-+                    regulator-max-microvolt = <1250000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1000000>;
-+                    };
-+                };
-+
-+                vcc_ddr: DCDC_REG3 {
-+                    regulator-name = "vcc_ddr";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                    };
-+                };
-+
-+                vdd_3v3_io: DCDC_REG4 {
-+                    regulator-name = "vdd_3v3_io";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <3300000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <3300000>;
-+                    };
-+                };
-+
-+                vdd_sys: DCDC_BOOST {
-+                    regulator-name = "vdd_sys";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <5000000>;
-+                    regulator-max-microvolt = <5000000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <5000000>;
-+                    };
-+                };
-+
-+                vdd_sd: SWITCH_REG {
-+                    regulator-name = "vdd_sd";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+
-+                vdd_eth_2v5: LDO_REG2 {
-+                    regulator-name = "vdd_eth_2v5";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <2500000>;
-+                    regulator-max-microvolt = <2500000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <2500000>;
-+                    };
-+                };
-+
-+                vdd_1v0: LDO_REG3 {
-+                    regulator-name = "vdd_1v0";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1000000>;
-+                    regulator-max-microvolt = <1000000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1000000>;
-+                    };
-+                };
-+
-+                vdd_1v8_lcd_ldo: LDO_REG4 {
-+                    regulator-name = "vdd_1v8_lcd_ldo";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1800000>;
-+                    };
-+                };
-+
-+                vdd_1v0_lcd: LDO_REG6 {
-+                    regulator-name = "vdd_1v0_lcd";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1000000>;
-+                    regulator-max-microvolt = <1000000>;
-+                    regulator-state-mem {
-+                        regulator-on-in-suspend;
-+                        regulator-suspend-microvolt = <1000000>;
-+                    };
-+                };
-+
-+                vdd_1v8_ldo: LDO_REG7 {
-+                    regulator-name = "vdd_1v8_ldo";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <1800000>;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                        regulator-suspend-microvolt = <1800000>;
-+                    };
-+                };
-+
-+                vdd_io_sd: LDO_REG9 {
-+                    regulator-name = "vdd_io_sd";
-+                    regulator-always-on;
-+                    regulator-boot-on;
-+                    regulator-min-microvolt = <1800000>;
-+                    regulator-max-microvolt = <3300000>;
-+                    regulator-state-mem {
-+                        regulator-off-in-suspend;
-+                    };
-+                };
-+            };
-+        };
-+    };
--- 
-2.25.1
-
+>  drivers/iommu/intel/svm.c                     | 57 +++++--------------
+>  drivers/iommu/iommu.c                         |  5 +-
+>  drivers/misc/uacce/uacce.c                    |  2 +-
+>  10 files changed, 26 insertions(+), 96 deletions(-)
+> 
+> diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
+> index 4f29139bbfc3..df23300cfa88 100644
+> --- a/include/linux/intel-iommu.h
+> +++ b/include/linux/intel-iommu.h
+> @@ -739,8 +739,7 @@ struct intel_iommu *device_to_iommu(struct device *dev, u8 *bus, u8 *devfn);
+>  extern void intel_svm_check(struct intel_iommu *iommu);
+>  extern int intel_svm_enable_prq(struct intel_iommu *iommu);
+>  extern int intel_svm_finish_prq(struct intel_iommu *iommu);
+> -struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm,
+> -				 void *drvdata);
+> +struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm);
+>  void intel_svm_unbind(struct iommu_sva *handle);
+>  u32 intel_svm_get_pasid(struct iommu_sva *handle);
+>  int intel_svm_page_response(struct device *dev, struct iommu_fault_event *evt,
+> diff --git a/include/linux/intel-svm.h b/include/linux/intel-svm.h
+> index 207ef06ba3e1..f9a0d44f6fdb 100644
+> --- a/include/linux/intel-svm.h
+> +++ b/include/linux/intel-svm.h
+> @@ -13,17 +13,4 @@
+>  #define PRQ_RING_MASK	((0x1000 << PRQ_ORDER) - 0x20)
+>  #define PRQ_DEPTH	((0x1000 << PRQ_ORDER) >> 5)
+>  
+> -/*
+> - * The SVM_FLAG_SUPERVISOR_MODE flag requests a PASID which can be used only
+> - * for access to kernel addresses. No IOTLB flushes are automatically done
+> - * for kernel mappings; it is valid only for access to the kernel's static
+> - * 1:1 mapping of physical memory — not to vmalloc or even module mappings.
+> - * A future API addition may permit the use of such ranges, by means of an
+> - * explicit IOTLB flush call (akin to the DMA API's unmap method).
+> - *
+> - * It is unlikely that we will ever hook into flush_tlb_kernel_range() to
+> - * do such IOTLB flushes automatically.
+> - */
+> -#define SVM_FLAG_SUPERVISOR_MODE	BIT(0)
+> -
+>  #endif /* __INTEL_SVM_H__ */
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index da423e87f248..0c358b7c583b 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -243,8 +243,7 @@ struct iommu_ops {
+>  	int (*dev_enable_feat)(struct device *dev, enum iommu_dev_features f);
+>  	int (*dev_disable_feat)(struct device *dev, enum iommu_dev_features f);
+>  
+> -	struct iommu_sva *(*sva_bind)(struct device *dev, struct mm_struct *mm,
+> -				      void *drvdata);
+> +	struct iommu_sva *(*sva_bind)(struct device *dev, struct mm_struct *mm);
+>  	void (*sva_unbind)(struct iommu_sva *handle);
+>  	u32 (*sva_get_pasid)(struct iommu_sva *handle);
+>  
+> @@ -667,8 +666,7 @@ int iommu_dev_disable_feature(struct device *dev, enum iommu_dev_features f);
+>  bool iommu_dev_feature_enabled(struct device *dev, enum iommu_dev_features f);
+>  
+>  struct iommu_sva *iommu_sva_bind_device(struct device *dev,
+> -					struct mm_struct *mm,
+> -					void *drvdata);
+> +					struct mm_struct *mm);
+>  void iommu_sva_unbind_device(struct iommu_sva *handle);
+>  u32 iommu_sva_get_pasid(struct iommu_sva *handle);
+>  
+> @@ -1010,7 +1008,7 @@ iommu_dev_disable_feature(struct device *dev, enum iommu_dev_features feat)
+>  }
+>  
+>  static inline struct iommu_sva *
+> -iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
+> +iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
+>  {
+>  	return NULL;
+>  }
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> index cd48590ada30..d2ba86470c42 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+> @@ -754,8 +754,7 @@ bool arm_smmu_master_sva_enabled(struct arm_smmu_master *master);
+>  int arm_smmu_master_enable_sva(struct arm_smmu_master *master);
+>  int arm_smmu_master_disable_sva(struct arm_smmu_master *master);
+>  bool arm_smmu_master_iopf_supported(struct arm_smmu_master *master);
+> -struct iommu_sva *arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm,
+> -				    void *drvdata);
+> +struct iommu_sva *arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm);
+>  void arm_smmu_sva_unbind(struct iommu_sva *handle);
+>  u32 arm_smmu_sva_get_pasid(struct iommu_sva *handle);
+>  void arm_smmu_sva_notifier_synchronize(void);
+> @@ -791,7 +790,7 @@ static inline bool arm_smmu_master_iopf_supported(struct arm_smmu_master *master
+>  }
+>  
+>  static inline struct iommu_sva *
+> -arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
+> +arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
+>  {
+>  	return ERR_PTR(-ENODEV);
+>  }
+> diff --git a/drivers/dma/idxd/cdev.c b/drivers/dma/idxd/cdev.c
+> index b9b2b4a4124e..312ec37ebf91 100644
+> --- a/drivers/dma/idxd/cdev.c
+> +++ b/drivers/dma/idxd/cdev.c
+> @@ -100,7 +100,7 @@ static int idxd_cdev_open(struct inode *inode, struct file *filp)
+>  	filp->private_data = ctx;
+>  
+>  	if (device_pasid_enabled(idxd)) {
+> -		sva = iommu_sva_bind_device(dev, current->mm, NULL);
+> +		sva = iommu_sva_bind_device(dev, current->mm);
+>  		if (IS_ERR(sva)) {
+>  			rc = PTR_ERR(sva);
+>  			dev_err(dev, "pasid allocation failed: %d\n", rc);
+> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+> index 993a5dcca24f..1fd80c63248a 100644
+> --- a/drivers/dma/idxd/init.c
+> +++ b/drivers/dma/idxd/init.c
+> @@ -466,29 +466,7 @@ static struct idxd_device *idxd_alloc(struct pci_dev *pdev, struct idxd_driver_d
+>  
+>  static int idxd_enable_system_pasid(struct idxd_device *idxd)
+>  {
+> -	int flags;
+> -	unsigned int pasid;
+> -	struct iommu_sva *sva;
+> -
+> -	flags = SVM_FLAG_SUPERVISOR_MODE;
+> -
+> -	sva = iommu_sva_bind_device(&idxd->pdev->dev, NULL, &flags);
+> -	if (IS_ERR(sva)) {
+> -		dev_warn(&idxd->pdev->dev,
+> -			 "iommu sva bind failed: %ld\n", PTR_ERR(sva));
+> -		return PTR_ERR(sva);
+> -	}
+> -
+> -	pasid = iommu_sva_get_pasid(sva);
+> -	if (pasid == IOMMU_PASID_INVALID) {
+> -		iommu_sva_unbind_device(sva);
+> -		return -ENODEV;
+> -	}
+> -
+> -	idxd->sva = sva;
+> -	idxd->pasid = pasid;
+> -	dev_dbg(&idxd->pdev->dev, "system pasid: %u\n", pasid);
+> -	return 0;
+> +	return -EOPNOTSUPP;
+>  }
+>  
+>  static void idxd_disable_system_pasid(struct idxd_device *idxd)
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> index 1ef7bbb4acf3..f155d406c5d5 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> @@ -367,8 +367,7 @@ __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
+>  	return ERR_PTR(ret);
+>  }
+>  
+> -struct iommu_sva *
+> -arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
+> +struct iommu_sva *arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
+>  {
+>  	struct iommu_sva *handle;
+>  	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+> diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+> index 7ee37d996e15..d04880a291c3 100644
+> --- a/drivers/iommu/intel/svm.c
+> +++ b/drivers/iommu/intel/svm.c
+> @@ -313,8 +313,7 @@ static int pasid_to_svm_sdev(struct device *dev, unsigned int pasid,
+>  	return 0;
+>  }
+>  
+> -static int intel_svm_alloc_pasid(struct device *dev, struct mm_struct *mm,
+> -				 unsigned int flags)
+> +static int intel_svm_alloc_pasid(struct device *dev, struct mm_struct *mm)
+>  {
+>  	ioasid_t max_pasid = dev_is_pci(dev) ?
+>  			pci_max_pasids(to_pci_dev(dev)) : intel_pasid_max_id;
+> @@ -324,8 +323,7 @@ static int intel_svm_alloc_pasid(struct device *dev, struct mm_struct *mm,
+>  
+>  static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
+>  					   struct device *dev,
+> -					   struct mm_struct *mm,
+> -					   unsigned int flags)
+> +					   struct mm_struct *mm)
+>  {
+>  	struct device_domain_info *info = dev_iommu_priv_get(dev);
+>  	unsigned long iflags, sflags;
+> @@ -341,22 +339,18 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
+>  
+>  		svm->pasid = mm->pasid;
+>  		svm->mm = mm;
+> -		svm->flags = flags;
+>  		INIT_LIST_HEAD_RCU(&svm->devs);
+>  
+> -		if (!(flags & SVM_FLAG_SUPERVISOR_MODE)) {
+> -			svm->notifier.ops = &intel_mmuops;
+> -			ret = mmu_notifier_register(&svm->notifier, mm);
+> -			if (ret) {
+> -				kfree(svm);
+> -				return ERR_PTR(ret);
+> -			}
+> +		svm->notifier.ops = &intel_mmuops;
+> +		ret = mmu_notifier_register(&svm->notifier, mm);
+> +		if (ret) {
+> +			kfree(svm);
+> +			return ERR_PTR(ret);
+>  		}
+>  
+>  		ret = pasid_private_add(svm->pasid, svm);
+>  		if (ret) {
+> -			if (svm->notifier.ops)
+> -				mmu_notifier_unregister(&svm->notifier, mm);
+> +			mmu_notifier_unregister(&svm->notifier, mm);
+>  			kfree(svm);
+>  			return ERR_PTR(ret);
+>  		}
+> @@ -391,9 +385,7 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
+>  	}
+>  
+>  	/* Setup the pasid table: */
+> -	sflags = (flags & SVM_FLAG_SUPERVISOR_MODE) ?
+> -			PASID_FLAG_SUPERVISOR_MODE : 0;
+> -	sflags |= cpu_feature_enabled(X86_FEATURE_LA57) ? PASID_FLAG_FL5LP : 0;
+> +	sflags = cpu_feature_enabled(X86_FEATURE_LA57) ? PASID_FLAG_FL5LP : 0;
+>  	spin_lock_irqsave(&iommu->lock, iflags);
+>  	ret = intel_pasid_setup_first_level(iommu, dev, mm->pgd, mm->pasid,
+>  					    FLPT_DEFAULT_DID, sflags);
+> @@ -410,8 +402,7 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
+>  	kfree(sdev);
+>  free_svm:
+>  	if (list_empty(&svm->devs)) {
+> -		if (svm->notifier.ops)
+> -			mmu_notifier_unregister(&svm->notifier, mm);
+> +		mmu_notifier_unregister(&svm->notifier, mm);
+>  		pasid_private_remove(mm->pasid);
+>  		kfree(svm);
+>  	}
+> @@ -767,7 +758,7 @@ static irqreturn_t prq_event_thread(int irq, void *d)
+>  			 * to unbind the mm while any page faults are outstanding.
+>  			 */
+>  			svm = pasid_private_find(req->pasid);
+> -			if (IS_ERR_OR_NULL(svm) || (svm->flags & SVM_FLAG_SUPERVISOR_MODE))
+> +			if (IS_ERR_OR_NULL(svm))
+>  				goto bad_req;
+>  		}
+>  
+> @@ -818,40 +809,20 @@ static irqreturn_t prq_event_thread(int irq, void *d)
+>  	return IRQ_RETVAL(handled);
+>  }
+>  
+> -struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
+> +struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm)
+>  {
+>  	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
+> -	unsigned int flags = 0;
+>  	struct iommu_sva *sva;
+>  	int ret;
+>  
+> -	if (drvdata)
+> -		flags = *(unsigned int *)drvdata;
+> -
+> -	if (flags & SVM_FLAG_SUPERVISOR_MODE) {
+> -		if (!ecap_srs(iommu->ecap)) {
+> -			dev_err(dev, "%s: Supervisor PASID not supported\n",
+> -				iommu->name);
+> -			return ERR_PTR(-EOPNOTSUPP);
+> -		}
+> -
+> -		if (mm) {
+> -			dev_err(dev, "%s: Supervisor PASID with user provided mm\n",
+> -				iommu->name);
+> -			return ERR_PTR(-EINVAL);
+> -		}
+> -
+> -		mm = &init_mm;
+> -	}
+> -
+>  	mutex_lock(&pasid_mutex);
+> -	ret = intel_svm_alloc_pasid(dev, mm, flags);
+> +	ret = intel_svm_alloc_pasid(dev, mm);
+>  	if (ret) {
+>  		mutex_unlock(&pasid_mutex);
+>  		return ERR_PTR(ret);
+>  	}
+>  
+> -	sva = intel_svm_bind_mm(iommu, dev, mm, flags);
+> +	sva = intel_svm_bind_mm(iommu, dev, mm);
+>  	mutex_unlock(&pasid_mutex);
+>  
+>  	return sva;
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 847ad47a2dfd..9955f58bd08c 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -2768,7 +2768,6 @@ EXPORT_SYMBOL_GPL(iommu_dev_feature_enabled);
+>   * iommu_sva_bind_device() - Bind a process address space to a device
+>   * @dev: the device
+>   * @mm: the mm to bind, caller must hold a reference to it
+> - * @drvdata: opaque data pointer to pass to bind callback
+>   *
+>   * Create a bond between device and address space, allowing the device to access
+>   * the mm using the returned PASID. If a bond already exists between @device and
+> @@ -2781,7 +2780,7 @@ EXPORT_SYMBOL_GPL(iommu_dev_feature_enabled);
+>   * On error, returns an ERR_PTR value.
+>   */
+>  struct iommu_sva *
+> -iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
+> +iommu_sva_bind_device(struct device *dev, struct mm_struct *mm)
+>  {
+>  	struct iommu_group *group;
+>  	struct iommu_sva *handle = ERR_PTR(-EINVAL);
+> @@ -2806,7 +2805,7 @@ iommu_sva_bind_device(struct device *dev, struct mm_struct *mm, void *drvdata)
+>  	if (iommu_group_device_count(group) != 1)
+>  		goto out_unlock;
+>  
+> -	handle = ops->sva_bind(dev, mm, drvdata);
+> +	handle = ops->sva_bind(dev, mm);
+>  
+>  out_unlock:
+>  	mutex_unlock(&group->mutex);
+> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+> index 281c54003edc..3238a867ea51 100644
+> --- a/drivers/misc/uacce/uacce.c
+> +++ b/drivers/misc/uacce/uacce.c
+> @@ -99,7 +99,7 @@ static int uacce_bind_queue(struct uacce_device *uacce, struct uacce_queue *q)
+>  	if (!(uacce->flags & UACCE_DEV_SVA))
+>  		return 0;
+>  
+> -	handle = iommu_sva_bind_device(uacce->parent, current->mm, NULL);
+> +	handle = iommu_sva_bind_device(uacce->parent, current->mm);
+>  	if (IS_ERR(handle))
+>  		return PTR_ERR(handle);
+>  
+> -- 
+> 2.25.1
+> 

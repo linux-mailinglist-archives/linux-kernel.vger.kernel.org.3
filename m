@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A2952DEDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F4552DEE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244956AbiESVAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
+        id S244971AbiESVBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234662AbiESVA0 (ORCPT
+        with ESMTP id S239513AbiESVBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:00:26 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65C5ED706
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:00:23 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a23so7589946ljd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jJ5ibJyWgXSEVtzkRw4+wBg9lBfLq6hkUK/PMQO4gu8=;
-        b=ruiqItQaoeqAgrJoFFwJ/UR0y1kFMIA4/jFsRXtqkA/UzGJaMIfiqZww1gW8BwBhDH
-         YCKHxoyVRuF9CHRNB+qAziSMUqD1JEltX2KQSlMDQ3e2jtR76Fy82aBCGjVPyYNwrNdy
-         MwkftIr89LES3mjhfPw3qBR5l1hKK/aFssC1kLYJXCAhOEKBQ7tKPPGtZXaZPQF+qSqO
-         sGQR18LNpEO8xu3tNL0RObIImk83UlGl22zjMHmHJyWtdDQ96jgEPvaSJWzrBRB9qp6d
-         GiC7oCQuLDj+64B6mFx3acaFfU/xQj3yzdoeThqgPcd5bLhllXm45BzTQF47BEdR/i29
-         JB5w==
+        Thu, 19 May 2022 17:01:39 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEB45AED5;
+        Thu, 19 May 2022 14:01:37 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-e656032735so8301215fac.0;
+        Thu, 19 May 2022 14:01:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=jJ5ibJyWgXSEVtzkRw4+wBg9lBfLq6hkUK/PMQO4gu8=;
-        b=OMQbjT+oTaFpMwui581UNbWyN7qoCKWkEhUbukie6fxZs6wXZ2qSsnp4iDq8MQfMWW
-         k65EHO60zFtB643PrhhK8glRBciuuotF89ULJcWCrmAejtsyf1takyVsg02CnDEWM80B
-         j3lIFJKIFu14/gNlE6R+DCec4YHgbgFtKRMGqtqDs3b6y4dZtoy7U7o/yER9STRUEyre
-         KRxbNCcTdeh6V5GNA/ulmpExmphyMzzlDh55I+/OmaMVk3hI2dHfyr1YXJ9AlPecnA8u
-         jKlkp3AmnxO8SKS7xDys+bMeJMA+dwfPMlr+EV4s12GjV5wP8WHMadq1goLZr6DcCkCS
-         i0Cw==
-X-Gm-Message-State: AOAM531mnDqSCtge2yq1CdsQpWE01mDJdSfrvkEPXZVRrShRot1I9WgB
-        4aJlGrN46A+QmihL1KH+LZVq6ykgxg77eg==
-X-Google-Smtp-Source: ABdhPJz8OynJaFv5FD/dGoBy3yUXY/Dc5t8MtNwMt5B41FEmq0MCX+2wnuKUQ8pm5p1f9Ytf7jiVsQ==
-X-Received: by 2002:a2e:a445:0:b0:24a:c1ba:b62f with SMTP id v5-20020a2ea445000000b0024ac1bab62fmr3744675ljn.81.1652994021950;
-        Thu, 19 May 2022 14:00:21 -0700 (PDT)
-Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
-        by smtp.gmail.com with ESMTPSA id x12-20020a19f60c000000b00477c619f47fsm363543lfe.92.2022.05.19.14.00.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 14:00:21 -0700 (PDT)
-Date:   Thu, 19 May 2022 23:00:20 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Michael Rodin <mrodin@de.adit-jv.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, michael@rodin.online,
-        erosca@de.adit-jv.com
-Subject: Re: [PATCH 3/3] rcar-vin: handle transfer errors from subdevices and
- stop streaming if required
-Message-ID: <Yoav5KjnbIlpkR6c@oden.dyn.berto.se>
-References: <1652983210-1194-1-git-send-email-mrodin@de.adit-jv.com>
- <1652983210-1194-4-git-send-email-mrodin@de.adit-jv.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mg4aRwtCWBKuSpJ0kAPCOFYSSlZHU27vIjDdyk4uSkk=;
+        b=PemdctjYAQkQogTosn70+ZBivJr7tlh1o0//reKzAhqTetaZbZL2Epg/iRGHPhaQV6
+         DBQFucrVxUcYDeqqlol9Xhctrc8m3rojeyWrJRV5YygumlYZM3KNifk1LVPmF9IriIOD
+         ttomdL/9cJuy36zErNFCvQeKhoELU7CvvPZoq3J6bYmHRrrs0yIo1ekjohzH0pH8V0vY
+         bt+MZC0BbSnw3fmpAbxJkPxyhN/fnIO76phkJVfCitWnqRJMLM9lh/cB0a5ViF8OKNCB
+         FSOPcEPe3kCX6xinauHQ2FhLkxXrTr6gkd7cxfm1mWCdk5mSizLU990XAGm3KfGt8irT
+         4gIA==
+X-Gm-Message-State: AOAM530DFA7rs0iR5aUplIFd6oB3FI6U1TI5TMaWtuGniwCuTWDUDRQS
+        0p2BwojCJtHN2+Sm8QzNM4xeFBbGASgn507+Cj01O4UO
+X-Google-Smtp-Source: ABdhPJxCBxMq0n0yIgRyJUcpnYzF9jlcKxf65rb5RnNqGMPqgqyD9mXq9zmmZ7G4IhqAMT6aIMNZPB55LRYAurB99lQ=
+X-Received: by 2002:a05:6871:215:b0:f1:8bf5:23ab with SMTP id
+ t21-20020a056871021500b000f18bf523abmr3789717oad.92.1652994097085; Thu, 19
+ May 2022 14:01:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1652983210-1194-4-git-send-email-mrodin@de.adit-jv.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+References: <20220518224725.742882-1-namhyung@kernel.org> <20220518224725.742882-3-namhyung@kernel.org>
+ <CAP-5=fXenfuYZ-ArxDjt7OY7Z+KHJ8fL+ewOUo+9Uno0E=k0pw@mail.gmail.com>
+In-Reply-To: <CAP-5=fXenfuYZ-ArxDjt7OY7Z+KHJ8fL+ewOUo+9Uno0E=k0pw@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 19 May 2022 14:01:25 -0700
+Message-ID: <CAM9d7cgB-iw0phVTb9EH5ps=1+PQM5nU1fTLMfQx=Kj31W-8Jw@mail.gmail.com>
+Subject: Re: [PATCH 2/6] perf record: Enable off-cpu analysis with BPF
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        Milian Wolff <milian.wolff@kdab.com>,
+        bpf <bpf@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Blake Jones <blakejones@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,202 +65,331 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Hi Ian,
 
-Thanks for your work.
+On Wed, May 18, 2022 at 8:58 PM Ian Rogers <irogers@google.com> wrote:
+>
+> On Wed, May 18, 2022 at 3:47 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > Add --off-cpu option to enable the off-cpu profiling with BPF.  It'd
+> > use a bpf_output event and rename it to "offcpu-time".  Samples will
+> > be synthesized at the end of the record session using data from a BPF
+> > map which contains the aggregated off-cpu time at context switches.
+> > So it needs root privilege to get the off-cpu profiling.
+> >
+> > Each sample will have a separate user stacktrace so it will skip
+> > kernel threads.  The sample ip will be set from the stacktrace and
+> > other sample data will be updated accordingly.  Currently it only
+> > handles some basic sample types.
+> >
+> > The sample timestamp is set to a dummy value just not to bother with
+> > other events during the sorting.  So it has a very big initial value
+> > and increase it on processing each samples.
+> >
+> > Good thing is that it can be used together with regular profiling like
+> > cpu cycles.  If you don't want to that, you can use a dummy event to
+> > enable off-cpu profiling only.
+> >
+> > Example output:
+> >   $ sudo perf record --off-cpu perf bench sched messaging -l 1000
+> >
+> >   $ sudo perf report --stdio --call-graph=no
+> >   # Total Lost Samples: 0
+> >   #
+> >   # Samples: 41K of event 'cycles'
+> >   # Event count (approx.): 42137343851
+> >   ...
+> >
+> >   # Samples: 1K of event 'offcpu-time'
+> >   # Event count (approx.): 587990831640
+> >   #
+> >   # Children      Self  Command          Shared Object       Symbol
+> >   # ........  ........  ...............  ..................  .........................
+> >   #
+> >       81.66%     0.00%  sched-messaging  libc-2.33.so        [.] __libc_start_main
+> >       81.66%     0.00%  sched-messaging  perf                [.] cmd_bench
+> >       81.66%     0.00%  sched-messaging  perf                [.] main
+> >       81.66%     0.00%  sched-messaging  perf                [.] run_builtin
+> >       81.43%     0.00%  sched-messaging  perf                [.] bench_sched_messaging
+> >       40.86%    40.86%  sched-messaging  libpthread-2.33.so  [.] __read
+> >       37.66%    37.66%  sched-messaging  libpthread-2.33.so  [.] __write
+> >        2.91%     2.91%  sched-messaging  libc-2.33.so        [.] __poll
+> >   ...
+> >
+> > As you can see it spent most of off-cpu time in read and write in
+> > bench_sched_messaging().  The --call-graph=no was added just to make
+> > the output concise here.
+> >
+> > It uses perf hooks facility to control BPF program during the record
+> > session rather than adding new BPF/off-cpu specific calls.
+> >
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+>
+> Acked-by: Ian Rogers <irogers@google.com>
+>
+> > ---
+> >  tools/perf/Documentation/perf-record.txt |  10 ++
+> >  tools/perf/Makefile.perf                 |   1 +
+> >  tools/perf/builtin-record.c              |  25 +++
+> >  tools/perf/util/Build                    |   1 +
+> >  tools/perf/util/bpf_off_cpu.c            | 204 +++++++++++++++++++++++
+> >  tools/perf/util/bpf_skel/off_cpu.bpf.c   | 139 +++++++++++++++
+> >  tools/perf/util/off_cpu.h                |  24 +++
+> >  7 files changed, 404 insertions(+)
+> >  create mode 100644 tools/perf/util/bpf_off_cpu.c
+> >  create mode 100644 tools/perf/util/bpf_skel/off_cpu.bpf.c
+> >  create mode 100644 tools/perf/util/off_cpu.h
+> >
+> > diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+> > index 465be4e62a17..b4e9ef7edfef 100644
+> > --- a/tools/perf/Documentation/perf-record.txt
+> > +++ b/tools/perf/Documentation/perf-record.txt
+> > @@ -758,6 +758,16 @@ include::intel-hybrid.txt[]
+> >         If the URLs is not specified, the value of DEBUGINFOD_URLS
+> >         system environment variable is used.
+> >
+> > +--off-cpu::
+> > +       Enable off-cpu profiling with BPF.  The BPF program will collect
+> > +       task scheduling information with (user) stacktrace and save them
+> > +       as sample data of a software event named "offcpu-time".  The
+> > +       sample period will have the time the task slept in nanoseconds.
+> > +
+> > +       Note that BPF can collect stack traces using frame pointer ("fp")
+> > +       only, as of now.  So the applications built without the frame
+> > +       pointer might see bogus addresses.
+> > +
+> >  SEE ALSO
+> >  --------
+> >  linkperf:perf-stat[1], linkperf:perf-list[1], linkperf:perf-intel-pt[1]
+> > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> > index 6e5aded855cc..8f738e11356d 100644
+> > --- a/tools/perf/Makefile.perf
+> > +++ b/tools/perf/Makefile.perf
+> > @@ -1038,6 +1038,7 @@ SKEL_TMP_OUT := $(abspath $(SKEL_OUT)/.tmp)
+> >  SKELETONS := $(SKEL_OUT)/bpf_prog_profiler.skel.h
+> >  SKELETONS += $(SKEL_OUT)/bperf_leader.skel.h $(SKEL_OUT)/bperf_follower.skel.h
+> >  SKELETONS += $(SKEL_OUT)/bperf_cgroup.skel.h $(SKEL_OUT)/func_latency.skel.h
+> > +SKELETONS += $(SKEL_OUT)/off_cpu.skel.h
+> >
+> >  $(SKEL_TMP_OUT) $(LIBBPF_OUTPUT):
+> >         $(Q)$(MKDIR) -p $@
+> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> > index a5cf6a99d67f..91f88501412e 100644
+> > --- a/tools/perf/builtin-record.c
+> > +++ b/tools/perf/builtin-record.c
+> > @@ -49,6 +49,7 @@
+> >  #include "util/clockid.h"
+> >  #include "util/pmu-hybrid.h"
+> >  #include "util/evlist-hybrid.h"
+> > +#include "util/off_cpu.h"
+> >  #include "asm/bug.h"
+> >  #include "perf.h"
+> >  #include "cputopo.h"
+> > @@ -162,6 +163,7 @@ struct record {
+> >         bool                    buildid_mmap;
+> >         bool                    timestamp_filename;
+> >         bool                    timestamp_boundary;
+> > +       bool                    off_cpu;
+> >         struct switch_output    switch_output;
+> >         unsigned long long      samples;
+> >         unsigned long           output_max_size;        /* = 0: unlimited */
+> > @@ -903,6 +905,11 @@ static int record__config_text_poke(struct evlist *evlist)
+> >         return 0;
+> >  }
+> >
+> > +static int record__config_off_cpu(struct record *rec)
+> > +{
+> > +       return off_cpu_prepare(rec->evlist);
+> > +}
+> > +
+> >  static bool record__kcore_readable(struct machine *machine)
+> >  {
+> >         char kcore[PATH_MAX];
+> > @@ -2600,6 +2607,9 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
+> >         } else
+> >                 status = err;
+> >
+> > +       if (rec->off_cpu)
+> > +               rec->bytes_written += off_cpu_write(rec->session);
+> > +
+> >         record__synthesize(rec, true);
+> >         /* this will be recalculated during process_buildids() */
+> >         rec->samples = 0;
+> > @@ -3324,6 +3334,7 @@ static struct option __record_options[] = {
+> >         OPT_CALLBACK_OPTARG(0, "threads", &record.opts, NULL, "spec",
+> >                             "write collected trace data into several data files using parallel threads",
+> >                             record__parse_threads),
+> > +       OPT_BOOLEAN(0, "off-cpu", &record.off_cpu, "Enable off-cpu analysis"),
+> >         OPT_END()
+> >  };
+> >
+> > @@ -3743,6 +3754,12 @@ int cmd_record(int argc, const char **argv)
+> >         set_nobuild('\0', "vmlinux", true);
+> >  # undef set_nobuild
+> >  # undef REASON
+> > +#endif
+> > +
+> > +#ifndef HAVE_BPF_SKEL
+> > +# define set_nobuild(s, l, m, c) set_option_nobuild(record_options, s, l, m, c)
+> > +       set_nobuild('\0', "off-cpu", "no BUILD_BPF_SKEL=1", true);
+> > +# undef set_nobuild
+> >  #endif
+> >
+> >         rec->opts.affinity = PERF_AFFINITY_SYS;
+> > @@ -3981,6 +3998,14 @@ int cmd_record(int argc, const char **argv)
+> >                 }
+> >         }
+> >
+> > +       if (rec->off_cpu) {
+> > +               err = record__config_off_cpu(rec);
+> > +               if (err) {
+> > +                       pr_err("record__config_off_cpu failed, error %d\n", err);
+> > +                       goto out;
+> > +               }
+> > +       }
+> > +
+> >         if (record_opts__config(&rec->opts)) {
+> >                 err = -EINVAL;
+> >                 goto out;
+> > diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> > index 9a7209a99e16..a51267d88ca9 100644
+> > --- a/tools/perf/util/Build
+> > +++ b/tools/perf/util/Build
+> > @@ -147,6 +147,7 @@ perf-$(CONFIG_LIBBPF) += bpf_map.o
+> >  perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter.o
+> >  perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter_cgroup.o
+> >  perf-$(CONFIG_PERF_BPF_SKEL) += bpf_ftrace.o
+> > +perf-$(CONFIG_PERF_BPF_SKEL) += bpf_off_cpu.o
+> >  perf-$(CONFIG_BPF_PROLOGUE) += bpf-prologue.o
+> >  perf-$(CONFIG_LIBELF) += symbol-elf.o
+> >  perf-$(CONFIG_LIBELF) += probe-file.o
+> > diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
+> > new file mode 100644
+> > index 000000000000..9ed7aca3f4ac
+> > --- /dev/null
+> > +++ b/tools/perf/util/bpf_off_cpu.c
+> > @@ -0,0 +1,204 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +#include "util/bpf_counter.h"
+> > +#include "util/debug.h"
+> > +#include "util/evsel.h"
+> > +#include "util/evlist.h"
+> > +#include "util/off_cpu.h"
+> > +#include "util/perf-hooks.h"
+> > +#include "util/session.h"
+> > +#include <bpf/bpf.h>
+> > +
+> > +#include "bpf_skel/off_cpu.skel.h"
+> > +
+> > +#define MAX_STACKS  32
+> > +/* we don't need actual timestamp, just want to put the samples at last */
+> > +#define OFF_CPU_TIMESTAMP  (~0ull << 32)
+> > +
+> > +static struct off_cpu_bpf *skel;
+> > +
+> > +struct off_cpu_key {
+> > +       u32 pid;
+> > +       u32 tgid;
+> > +       u32 stack_id;
+> > +       u32 state;
+> > +};
+> > +
+> > +union off_cpu_data {
+> > +       struct perf_event_header hdr;
+> > +       u64 array[1024 / sizeof(u64)];
+> > +};
+> > +
+> > +static int off_cpu_config(struct evlist *evlist)
+> > +{
+> > +       struct evsel *evsel;
+> > +       struct perf_event_attr attr = {
+> > +               .type   = PERF_TYPE_SOFTWARE,
+> > +               .config = PERF_COUNT_SW_BPF_OUTPUT,
+> > +               .size   = sizeof(attr), /* to capture ABI version */
+> > +       };
+> > +       char *evname = strdup(OFFCPU_EVENT);
+> > +
+> > +       if (evname == NULL)
+> > +               return -ENOMEM;
+> > +
+> > +       evsel = evsel__new(&attr);
+> > +       if (!evsel) {
+> > +               free(evname);
+> > +               return -ENOMEM;
+> > +       }
+> > +
+> > +       evsel->core.attr.freq = 1;
+> > +       evsel->core.attr.sample_period = 1;
+> > +       /* off-cpu analysis depends on stack trace */
+> > +       evsel->core.attr.sample_type = PERF_SAMPLE_CALLCHAIN;
+> > +
+> > +       evlist__add(evlist, evsel);
+> > +
+> > +       free(evsel->name);
+> > +       evsel->name = evname;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static void off_cpu_start(void *arg __maybe_unused)
+> > +{
+> > +       skel->bss->enabled = 1;
+> > +}
+> > +
+> > +static void off_cpu_finish(void *arg __maybe_unused)
+> > +{
+> > +       skel->bss->enabled = 0;
+> > +       off_cpu_bpf__destroy(skel);
+> > +}
+> > +
+> > +int off_cpu_prepare(struct evlist *evlist)
+> > +{
+> > +       int err;
+> > +
+> > +       if (off_cpu_config(evlist) < 0) {
+> > +               pr_err("Failed to config off-cpu BPF event\n");
+> > +               return -1;
+> > +       }
+> > +
+> > +       set_max_rlimit();
+> > +
+> > +       skel = off_cpu_bpf__open_and_load();
+> > +       if (!skel) {
+> > +               pr_err("Failed to open off-cpu BPF skeleton\n");
+> > +               return -1;
+> > +       }
+> > +
+> > +       err = off_cpu_bpf__attach(skel);
+> > +       if (err) {
+> > +               pr_err("Failed to attach off-cpu BPF skeleton\n");
+> > +               goto out;
+> > +       }
+> > +
+> > +       if (perf_hooks__set_hook("record_start", off_cpu_start, NULL) ||
+> > +           perf_hooks__set_hook("record_end", off_cpu_finish, NULL)) {
+>
+> An off-topic thought here. I was looking at tool events and thinking
+> that rather than have global state and the counter reading getting
+> those global values, it would be nice if the tool events had private
+> state that was created on open, freed on close and then did the
+> appropriate thing for enable/read/disable. If we were object oriented
+> I was thinking tool events could be a subclass of evsel that would
+> override the appropriate functions. Something that strikes me as silly
+> is that tool events have a dummy event file descriptor from
+> perf_event_open, in part because the evsel code paths are shared.
+> Anyway, if we made evsels have something like a virtual method table,
+> we could do similar tricks with off-cpu and BPF created events.
+> Possibly this could lead to better structured code and more reuse.
 
-I like this patch, I think it captures the issue discussed in the 
-previous thread quiet nicely. One small nit below.
+Thanks for your review.
 
-On 2022-05-19 20:00:09 +0200, Michael Rodin wrote:
-> When a subdevice sends a transfer error event during streaming and we can
-> not capture new frames, then we know for sure that this is an unrecoverable
-> failure and not just a temporary glitch. In this case we can not ignore the
-> transfer error any more and have to notify userspace. In response to the
-> transfer error event userspace can try to restart streaming and hope that
-> it works again.
-> 
-> This patch is based on the patch [1] from Niklas Söderlund, however it adds
-> more logic to check whether the VIN hardware module is actually affected by
-> the transfer errors reported by the usptream device. For this it takes some
-> ideas from the imx driver where EOF interrupts are monitored by the
-> eof_timeout_timer added by commit 4a34ec8e470c ("[media] media: imx: Add
-> CSI subdev driver").
-> 
-> [1] https://lore.kernel.org/linux-renesas-soc/20211108160220.767586-4-niklas.soderlund+renesas@ragnatech.se/
-> 
-> Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-> ---
->  drivers/media/platform/renesas/rcar-vin/rcar-dma.c | 34 ++++++++++++++++++++++
->  .../media/platform/renesas/rcar-vin/rcar-v4l2.c    | 18 +++++++++++-
->  drivers/media/platform/renesas/rcar-vin/rcar-vin.h |  7 +++++
->  3 files changed, 58 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-> index 2272f1c..596a367 100644
-> --- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-> +++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-> @@ -13,6 +13,7 @@
->  #include <linux/delay.h>
->  #include <linux/interrupt.h>
->  #include <linux/pm_runtime.h>
-> +#include <media/v4l2-event.h>
->  
->  #include <media/videobuf2-dma-contig.h>
->  
-> @@ -1060,6 +1061,9 @@ static irqreturn_t rvin_irq(int irq, void *data)
->  		vin_dbg(vin, "Dropping frame %u\n", vin->sequence);
->  	}
->  
-> +	cancel_delayed_work(&vin->frame_timeout);
-> +	schedule_delayed_work(&vin->frame_timeout, msecs_to_jiffies(FRAME_TIMEOUT_MS));
-> +
->  	vin->sequence++;
->  
->  	/* Prepare for next frame */
-> @@ -1283,6 +1287,7 @@ int rvin_start_streaming(struct rvin_dev *vin)
->  	spin_lock_irqsave(&vin->qlock, flags);
->  
->  	vin->sequence = 0;
-> +	vin->xfer_error = false;
->  
->  	ret = rvin_capture_start(vin);
->  	if (ret)
-> @@ -1290,6 +1295,10 @@ int rvin_start_streaming(struct rvin_dev *vin)
->  
->  	spin_unlock_irqrestore(&vin->qlock, flags);
->  
-> +	/* We start the frame watchdog only after we have successfully started streaming */
-> +	if (!ret)
-> +		schedule_delayed_work(&vin->frame_timeout, msecs_to_jiffies(FRAME_TIMEOUT_MS));
-> +
->  	return ret;
->  }
->  
-> @@ -1332,6 +1341,12 @@ void rvin_stop_streaming(struct rvin_dev *vin)
->  	}
->  
->  	vin->state = STOPPING;
-> +	/*
-> +	 * Since we are now stopping and don't expect more frames to be captured, make sure that
-> +	 * there is no pending work for error handling.
-> +	 */
-> +	cancel_delayed_work_sync(&vin->frame_timeout);
-> +	vin->xfer_error = false;
+Yeah I think it makes sense to change the offcpu-time event as a
+tool event and to skip actual open/read/close operations.  It would
+be a good follow up work.
 
-Do we need to set xfer_error to false here? The delayed work is canceled 
-and we reset the xfer_error when we start in rvin_start_streaming().
+Using a dummy event still has a syscall overhead and tool events
+don't need the syscalls.  Maybe we can add some logic in the evlist
+code to skip the tool events.
 
->  
->  	/* Wait until only scratch buffer is used, max 3 interrupts. */
->  	retries = 0;
-> @@ -1424,6 +1439,23 @@ void rvin_dma_unregister(struct rvin_dev *vin)
->  	v4l2_device_unregister(&vin->v4l2_dev);
->  }
->  
-> +static void rvin_frame_timeout(struct work_struct *work)
-> +{
-> +	struct delayed_work *dwork = to_delayed_work(work);
-> +	struct rvin_dev *vin = container_of(dwork, struct rvin_dev, frame_timeout);
-> +	struct v4l2_event event = {
-> +		.type = V4L2_EVENT_XFER_ERROR,
-> +	};
-> +
-> +	vin_dbg(vin, "Frame timeout!\n");
-> +
-> +	if (!vin->xfer_error)
-> +		return;
-> +	vin_err(vin, "Unrecoverable transfer error detected, stopping streaming\n");
-> +	vb2_queue_error(&vin->queue);
-> +	v4l2_event_queue(&vin->vdev, &event);
-> +}
-> +
->  int rvin_dma_register(struct rvin_dev *vin, int irq)
->  {
->  	struct vb2_queue *q = &vin->queue;
-> @@ -1470,6 +1502,8 @@ int rvin_dma_register(struct rvin_dev *vin, int irq)
->  		goto error;
->  	}
->  
-> +	INIT_DELAYED_WORK(&vin->frame_timeout, rvin_frame_timeout);
-> +
->  	return 0;
->  error:
->  	rvin_dma_unregister(vin);
-> diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
-> index 2e2aa9d..bd7f6fe2 100644
-> --- a/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
-> +++ b/drivers/media/platform/renesas/rcar-vin/rcar-v4l2.c
-> @@ -648,6 +648,8 @@ static int rvin_subscribe_event(struct v4l2_fh *fh,
->  	switch (sub->type) {
->  	case V4L2_EVENT_SOURCE_CHANGE:
->  		return v4l2_event_subscribe(fh, sub, 4, NULL);
-> +	case V4L2_EVENT_XFER_ERROR:
-> +		return v4l2_event_subscribe(fh, sub, 1, NULL);
->  	}
->  	return v4l2_ctrl_subscribe_event(fh, sub);
->  }
-> @@ -1000,9 +1002,23 @@ void rvin_v4l2_unregister(struct rvin_dev *vin)
->  static void rvin_notify_video_device(struct rvin_dev *vin,
->  				     unsigned int notification, void *arg)
->  {
-> +	const struct v4l2_event *event;
-> +
->  	switch (notification) {
->  	case V4L2_DEVICE_NOTIFY_EVENT:
-> -		v4l2_event_queue(&vin->vdev, arg);
-> +		event = arg;
-> +
-> +		switch (event->type) {
-> +		case V4L2_EVENT_XFER_ERROR:
-> +			if (vin->state != STOPPED && vin->state != STOPPING) {
-> +				vin_dbg(vin, "Subdevice signaled transfer error.\n");
-> +				vin->xfer_error = true;
-> +			}
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +
->  		break;
->  	default:
->  		break;
-> diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-vin.h b/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
-> index 1f94589..4726a69 100644
-> --- a/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
-> +++ b/drivers/media/platform/renesas/rcar-vin/rcar-vin.h
-> @@ -31,6 +31,9 @@
->  /* Max number on VIN instances that can be in a system */
->  #define RCAR_VIN_NUM 32
->  
-> +/* maximum time we wait before signalling an error to userspace */
-> +#define FRAME_TIMEOUT_MS 1000
-> +
->  struct rvin_group;
->  
->  enum model_id {
-> @@ -207,6 +210,8 @@ struct rvin_info {
->   * @std:		active video standard of the video source
->   *
->   * @alpha:		Alpha component to fill in for supported pixel formats
-> + * @xfer_error:		Indicates if any transfer errors occurred in the current streaming session.
-> + * @frame_timeout:	Watchdog for monitoring regular capturing of frames in rvin_irq.
->   */
->  struct rvin_dev {
->  	struct device *dev;
-> @@ -251,6 +256,8 @@ struct rvin_dev {
->  	v4l2_std_id std;
->  
->  	unsigned int alpha;
-> +	bool xfer_error;
-> +	struct delayed_work frame_timeout;
->  };
->  
->  #define vin_to_source(vin)		((vin)->parallel.subdev)
-> -- 
-> 2.7.4
-> 
-
--- 
-Kind Regards,
-Niklas Söderlund
+Thanks,
+Namhyung

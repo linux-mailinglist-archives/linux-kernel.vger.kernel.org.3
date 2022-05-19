@@ -2,104 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C410752D1EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B3C52D1F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237023AbiESL66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S237593AbiESMBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 08:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiESL6z (ORCPT
+        with ESMTP id S230251AbiESMBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:58:55 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB686B82FA;
-        Thu, 19 May 2022 04:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=g1oTV/kiNlqtvr56G3igwM2BGyOYTI/eWu/vmBAuTXk=; b=E5LplxY+FEFhpWVX4xxIC2piq9
-        oWx/pDouOHP7HZjRouoMkAsc7fkJ9bNIhJK8lINHPPCj2eC0bM6GLKrF3/d1tx0w+9r+o+ZJO1ags
-        nEPL7PEpmQDfAynliZIiL+KgEo8sUz2T+lJeuyTqhr6t3xOBT0PtZik2vezYNWsZUzu0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nrenK-003TeY-Hz; Thu, 19 May 2022 13:58:18 +0200
-Date:   Thu, 19 May 2022 13:58:18 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        calvin.johnson@oss.nxp.com, davem@davemloft.net,
-        edumazet@google.com, hkallweit1@gmail.com,
-        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
-        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
-        wens@csie.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] dt-bindings: net: Add documentation for optional
- regulators
-Message-ID: <YoYw2lKbgCiDXP0A@lunn.ch>
-References: <20220518200939.689308-1-clabbe@baylibre.com>
- <20220518200939.689308-5-clabbe@baylibre.com>
- <95f3f0a4-17e6-ec5f-6f2f-23a5a4993a44@linaro.org>
- <YoYqmAB3P7fNOSVG@sirena.org.uk>
- <c74b0524-60c6-c3af-e35f-13521ba2b02e@linaro.org>
+        Thu, 19 May 2022 08:01:48 -0400
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45EDB41CA;
+        Thu, 19 May 2022 05:01:46 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id b20so4531148qkc.6;
+        Thu, 19 May 2022 05:01:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=32e726iWwMNC0xRIbGojngVmwOTaI+USQV4X78pDi0k=;
+        b=TKKqX8UB1dkKMujJjE60CMD0GPbt+ecSObdbVO8u+uj+Lvl4wpI4k+C8IehJi90Dc1
+         AEpqGnmA3bFHkpUWoPdKbQSRrHxBz574SlPQYEOFrco+j/J6BRVeNuZXQoJpbq/2LMdI
+         bqm+sx4wrAX3yeLF9Yxq+tycpg4NfyqplkKJo1+mCroczlli4bmsmAJuORd8KlkuytGm
+         W6nfUhdTogs4kyqjzEisvyFQ+7afTCMzEsOm0NiwgoSLymFXgnpUy4BNGo60TBkBeZZ1
+         VBzaqgSKTtiQZ0UfR9pv99r+Uf1n468xUuVlNF5ERyOuWVdIMVTUDm/x/cdoQjKUTJ62
+         Y9aA==
+X-Gm-Message-State: AOAM532w23kb6U0KVMcJW7cFTeJPGSK6Y70HYBitZi3zyt3/jmW4MvAb
+        AiW8DkXhZuk6Y3oYlrTB72a7d8ffx7hV9Q==
+X-Google-Smtp-Source: ABdhPJxq0tN9iWpWh5IGAus3fAeZAP4zCMY2KjZ59jWDLFegdyv6SWNAXqnoEVSEmNFsXCsNTgdrZg==
+X-Received: by 2002:ae9:ef85:0:b0:6a3:2a1c:fe65 with SMTP id d127-20020ae9ef85000000b006a32a1cfe65mr2730537qkg.300.1652961705565;
+        Thu, 19 May 2022 05:01:45 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id g206-20020a379dd7000000b0069fcf0da629sm1102111qke.134.2022.05.19.05.01.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 05:01:41 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id p139so8588149ybc.11;
+        Thu, 19 May 2022 05:01:40 -0700 (PDT)
+X-Received: by 2002:a25:4289:0:b0:64d:746f:5311 with SMTP id
+ p131-20020a254289000000b0064d746f5311mr3785817yba.89.1652961700211; Thu, 19
+ May 2022 05:01:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c74b0524-60c6-c3af-e35f-13521ba2b02e@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220518192924.20948-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220518192924.20948-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220518192924.20948-7-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 19 May 2022 14:01:28 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXz7ZtC_63hUckrEeB3uocNG0iKbA4i3xDsuyL48m_7qQ@mail.gmail.com>
+Message-ID: <CAMuHMdXz7ZtC_63hUckrEeB3uocNG0iKbA4i3xDsuyL48m_7qQ@mail.gmail.com>
+Subject: Re: [PATCH v4 6/7] dt-bindings: pinctrl: renesas,rzg2l-pinctrl:
+ Document the properties to handle GPIO IRQ
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 01:33:21PM +0200, Krzysztof Kozlowski wrote:
-> On 19/05/2022 13:31, Mark Brown wrote:
-> > On Thu, May 19, 2022 at 11:55:28AM +0200, Krzysztof Kozlowski wrote:
-> >> On 18/05/2022 22:09, Corentin Labbe wrote:
-> > 
-> >>> +  regulators:
-> >>> +    description:
-> >>> +       List of phandle to regulators needed for the PHY
-> > 
-> >> I don't understand that... is your PHY defining the regulators or using
-> >> supplies? If it needs a regulator (as a supply), you need to document
-> >> supplies, using existing bindings.
-> > 
-> > They're trying to have a generic driver which works with any random PHY
-> > so the binding has no idea what supplies it might need.
-> 
-> OK, that makes sense, but then question is why not using existing
-> naming, so "supplies" and "supply-names"?
+Hi Prabhakar,
 
-I'm not saying it is not possible, but in general, the names are not
-interesting. All that is needed is that they are all on, or
-potentially all off to save power on shutdown. We don't care how many
-there are, or what order they are enabled.
+On Wed, May 18, 2022 at 9:30 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document the required properties to handle GPIO IRQ.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Ethernet PHY can have multiple supplies. For example there can be two
-digital voltages and one analogue. Most designs just hard wire them
-always on. It would not be unreasonable to have one GPIO which
-controls all three. Or there could be one GPIO for the two digital
-supplies, and one for the analogue. Or potentially, three GPIOs.
+Thanks for your patch!
 
-Given all the different ways the board could be designed, i doubt any
-driver is going to want to control its supplies in an way other than
-all on, or all off. 802.3 clause 22 defines a standardized way to put
-a PHY into a low power mode. Using that one bit is much simpler than
-trying to figure out how a board is wired.
+> --- a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
+> @@ -126,6 +139,9 @@ examples:
+>              gpio-controller;
+>              #gpio-cells = <2>;
+>              gpio-ranges = <&pinctrl 0 0 392>;
+> +            interrupt-controller;
+> +            #interrupt-cells = <2>;
+> +            interrupt-parent = <&irqc>;
 
-However, the API/binding should be generic, usable for other use
-cases. Nobody has needed an API like this before, but it is not to say
-it might have other uses in the future. So maybe "supplies" and
-"supply-names" is useful, but we still need a way to enumerate them as
-a list without caring how many there are, or what their names are.
+I think the "interrupt-parent" property can be dropped from the example.
 
-  Andrew
+>              clocks = <&cpg CPG_MOD R9A07G044_GPIO_HCLK>;
+>              resets = <&cpg R9A07G044_GPIO_RSTN>,
+>                       <&cpg R9A07G044_GPIO_PORT_RESETN>,
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

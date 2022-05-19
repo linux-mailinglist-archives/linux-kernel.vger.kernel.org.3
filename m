@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2B952CD87
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1043752CD8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235013AbiESHve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S235046AbiESHvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234835AbiESHvY (ORCPT
+        with ESMTP id S234978AbiESHv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:51:24 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C57119F8D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:51:22 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id n6so2418607wms.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:51:22 -0700 (PDT)
+        Thu, 19 May 2022 03:51:27 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABB919F93
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:51:25 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id s28so5771532wrb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:51:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=amarulasolutions.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=y+ISkJJI9HCW17NlesxzBupNaP4V8jkoqAfbXb7t54A=;
-        b=dREwkqgKbJcNkT4OpxUCSJ1C74fSrihd0J9vLyVOet25pVR5iPyFF8hTN3QM4a+r3o
-         BNuSBy69DQ/7zM4mbgx99xel+ieqL0YC0k7TVBL8rTUDLnkSGzOqWALua50C71KEe1Io
-         bsA7MVpd4ooPN4kyvUmdB7w2tU38UXDklN6WE=
+        bh=iM6CKxNIjkJ6jtgcoGB6e3JO7TA8aFCAtiaLHSOsVJE=;
+        b=V4UXNqgMQHzxZLvO6OeUNoo8CEMuEAbelwrlkWZ1T3t7ZyDQvYhOG2E3AVIXwlLZ0t
+         oWVp80/aNSLp+Bkr5ZFgc5o7EzGkK+43Tdnyvsg+WMDqSwpv/7Nrx12yfMKFuO+9aETp
+         zU9tupNFIRgS7dOUYEHuEiy2SKo9as/nzIaIs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=y+ISkJJI9HCW17NlesxzBupNaP4V8jkoqAfbXb7t54A=;
-        b=DGTgCKfg2ZhsR4nJSLhDfu1ajtTvazgaR2mRWhZ/cVM76XA7Wyrh9aFAV/BlHMhcw5
-         UHobt1zY6IW+UyCqOXi/J2RAsH5uOm30BCyYREdFiCE7ogxByrUv6Wcv0RqPfPwf6Ig9
-         O0aDFfxrjPTymbH9AYIsQOXPLMFKKmkNorBhX6VHDcVAcCWBmAYDZzUV60llH/pZsWx4
-         gE+a7e8JcwAAWj5MPaOlHkILFk0jM8eD+D1UaXH5N2BnpbRkq3HwgDeIqqMvvGJzYaiD
-         OfquyYT3zi7uAl3wM7cIq5KIpSKm7n4IKOIMlLf1qBWMTZwadU1/94Bu/Nq/xxlR2AAT
-         ZXBg==
-X-Gm-Message-State: AOAM533VkiT9IYCaRvOEmV76GBz69gcqlqoWT0o0qITRipeOki3lkiW9
-        lNZPf5yf7M7DrvakuqPiUZkgdA==
-X-Google-Smtp-Source: ABdhPJw3dvOjmAskMDKniHO1BYRz/JQySEd78D75Y7BTzerqXlZMXSWD4MNuMl7n1UYo6tXqfedHAA==
-X-Received: by 2002:a7b:c2a9:0:b0:397:9a4:f66b with SMTP id c9-20020a7bc2a9000000b0039709a4f66bmr2629692wmk.128.1652946681000;
-        Thu, 19 May 2022 00:51:21 -0700 (PDT)
+        bh=iM6CKxNIjkJ6jtgcoGB6e3JO7TA8aFCAtiaLHSOsVJE=;
+        b=SSlYIrNZt5OcD2OQoUMj0zvQQEI+QxzdGhf5pzaGMmiePv0uwjBds3GntPiCWj3zxE
+         eTPhs/MSclM1U0IWfoSP7h2fzs7UF0a41ca57AU0hWBDeNu+6KVrCs42uZ/M1XwlJdxi
+         LTS4l0F8UZ8H6ybO4KfYQF4X0pUHbtv/L2GBh2KjXOJDzZY6rnnAE06/PQQ9weyB2CAf
+         oqR5dwyXlN0kEkwWv5A8NI/mW4C+8S05wvNqUPm6PmbojJ8m4CNL+qXar5hQLQ848iSg
+         brMJlgV5vMpG7AlwZ+/o87qGU1cGCWA+JR63xal8TtjlkB14EDIXg+anArxwcoawC3ch
+         Q6fQ==
+X-Gm-Message-State: AOAM531xA7uacTs4OmwkSCKQSxae11ajHVc2ocTYtegaC5+Kl7isROvD
+        ubDOaGWUS2uSx1L9+lz5eWhQOA==
+X-Google-Smtp-Source: ABdhPJyXqPOJv+c6R/rrewe0H5MWdpHADVjc2q4n28Oz4QdT4PjkGZFZrzAiy9A5IfLUmqPeO0UxDA==
+X-Received: by 2002:a5d:64a6:0:b0:20c:64ef:c9cc with SMTP id m6-20020a5d64a6000000b0020c64efc9ccmr2983587wrp.190.1652946684161;
+        Thu, 19 May 2022 00:51:24 -0700 (PDT)
 Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-53-154.cust.vodafonedsl.it. [188.217.53.154])
-        by smtp.gmail.com with ESMTPSA id c6-20020a05600c4a0600b003942a244ebfsm3370254wmp.4.2022.05.19.00.51.20
+        by smtp.gmail.com with ESMTPSA id c6-20020a05600c4a0600b003942a244ebfsm3370254wmp.4.2022.05.19.00.51.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 00:51:20 -0700 (PDT)
+        Thu, 19 May 2022 00:51:23 -0700 (PDT)
 From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 Cc:     tommaso.merciai@amarulasolutions.com, linuxfancy@googlegroups.com,
         linux-amarula@amarulasolutions.com, michael@amarulasolutions.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
         Shunqian Zheng <zhengsq@rock-chips.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/4] media: i2c: ov5695: use regulator_bulk_enable/regulator_bulk disable instead of for loop
-Date:   Thu, 19 May 2022 09:51:14 +0200
-Message-Id: <20220519075117.1003520-2-tommaso.merciai@amarulasolutions.com>
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 2/4] arm64: dts: rockchip: px30: max drive-strength for cif_clkout_m0
+Date:   Thu, 19 May 2022 09:51:15 +0200
+Message-Id: <20220519075117.1003520-3-tommaso.merciai@amarulasolutions.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220519075117.1003520-1-tommaso.merciai@amarulasolutions.com>
 References: <20220519075117.1003520-1-tommaso.merciai@amarulasolutions.com>
@@ -70,80 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable regulator using regulator_bulk_enable/regulatore_bulk_disable
-function in __ov5695_power_on/__ov5695_power_off function instead of for loop.
-This reduce code size and make things more clear
+Add max drive-strength for cif_clkout_m0. This fix the issue that
+sometimes camera ov5695 is not probed correctly.
+Tested on PX30_Mini_EVB_V11_20190507
 
 Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Co-Developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 ---
- drivers/media/i2c/ov5695.c | 25 +++++++------------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+ arch/arm64/boot/dts/rockchip/px30-evb.dts | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/media/i2c/ov5695.c b/drivers/media/i2c/ov5695.c
-index 439385938a51..880b586e55fe 100644
---- a/drivers/media/i2c/ov5695.c
-+++ b/drivers/media/i2c/ov5695.c
-@@ -972,7 +972,7 @@ static int ov5695_s_stream(struct v4l2_subdev *sd, int on)
+diff --git a/arch/arm64/boot/dts/rockchip/px30-evb.dts b/arch/arm64/boot/dts/rockchip/px30-evb.dts
+index 848bc39cf86a..53930e28eadf 100644
+--- a/arch/arm64/boot/dts/rockchip/px30-evb.dts
++++ b/arch/arm64/boot/dts/rockchip/px30-evb.dts
+@@ -537,6 +537,13 @@ wifi_enable_h: wifi-enable-h {
+ 				<0 RK_PA2 RK_FUNC_GPIO &pcfg_pull_none>;
+ 		};
+ 	};
++
++	cif-m0 {
++		cif_clkout_m0: cif-clkout-m0 {
++			rockchip,pins =
++				<2 RK_PB3 1 &pcfg_pull_none_12ma>;
++		};
++	};
+ };
  
- static int __ov5695_power_on(struct ov5695 *ov5695)
- {
--	int i, ret;
-+	int ret;
- 	struct device *dev = &ov5695->client->dev;
- 
- 	ret = clk_prepare_enable(ov5695->xvclk);
-@@ -987,13 +987,10 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
- 	 * The hardware requires the regulators to be powered on in order,
- 	 * so enable them one by one.
- 	 */
--	for (i = 0; i < OV5695_NUM_SUPPLIES; i++) {
--		ret = regulator_enable(ov5695->supplies[i].consumer);
--		if (ret) {
--			dev_err(dev, "Failed to enable %s: %d\n",
--				ov5695->supplies[i].supply, ret);
--			goto disable_reg_clk;
--		}
-+	ret = regulator_bulk_enable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
-+	if (ret) {
-+		dev_err(dev, "Failed to enable regulators %d\n", ret);
-+		goto disable_reg_clk;
- 	}
- 
- 	gpiod_set_value_cansleep(ov5695->reset_gpio, 0);
-@@ -1003,8 +1000,7 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
- 	return 0;
- 
- disable_reg_clk:
--	for (--i; i >= 0; i--)
--		regulator_disable(ov5695->supplies[i].consumer);
-+	regulator_bulk_disable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
- 	clk_disable_unprepare(ov5695->xvclk);
- 
- 	return ret;
-@@ -1012,8 +1008,6 @@ static int __ov5695_power_on(struct ov5695 *ov5695)
- 
- static void __ov5695_power_off(struct ov5695 *ov5695)
- {
--	struct device *dev = &ov5695->client->dev;
--	int i, ret;
- 
- 	clk_disable_unprepare(ov5695->xvclk);
- 	gpiod_set_value_cansleep(ov5695->reset_gpio, 1);
-@@ -1022,12 +1016,7 @@ static void __ov5695_power_off(struct ov5695 *ov5695)
- 	 * The hardware requires the regulators to be powered off in order,
- 	 * so disable them one by one.
- 	 */
--	for (i = OV5695_NUM_SUPPLIES - 1; i >= 0; i--) {
--		ret = regulator_disable(ov5695->supplies[i].consumer);
--		if (ret)
--			dev_err(dev, "Failed to disable %s: %d\n",
--				ov5695->supplies[i].supply, ret);
--	}
-+	regulator_bulk_disable(ARRAY_SIZE(ov5695->supplies), ov5695->supplies);
- }
- 
- static int __maybe_unused ov5695_runtime_resume(struct device *dev)
+ &pmu_io_domains {
 -- 
 2.25.1
 

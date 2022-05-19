@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1675352DE86
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EFA52DE89
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244663AbiESUkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 16:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S244770AbiESUk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 16:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234142AbiESUkN (ORCPT
+        with ESMTP id S244712AbiESUkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 16:40:13 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE07E98594;
-        Thu, 19 May 2022 13:40:06 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id q10so7838920oia.9;
-        Thu, 19 May 2022 13:40:06 -0700 (PDT)
+        Thu, 19 May 2022 16:40:23 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE75985A8;
+        Thu, 19 May 2022 13:40:21 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id e4so7014462ljb.13;
+        Thu, 19 May 2022 13:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BgKHPZFZkX1keDz+vV/kymxRnGTruz8H3lBNU7pTNfs=;
+        b=ovnqcE0VKz1g7pMzW4VX9VXubz8TXRJvpEolR0D3INYtMPHJDsg1adbQPWIk5ughAU
+         28bi6qaedeapoSsE9Vv/Xf6hV9ZV3UILP/+oV0gmFwWW0tvPbvHow6ld3Wo1PhebSyzh
+         Wr6KsAK5T2PpC+RqFHnMDMrG/RFMXBz3X1cdiAcHRgK/79tjQtwHbgOWnG6BS105mHDZ
+         3qTtZS+OzgGO0Jo6Af6nchndv91MkyhuHpeHIxJPf2VCLjQyskXM4cBKfWWnMJyIj4sZ
+         mekBtnr0vkKhn9gaft1gZ93D331pk3444aeWbsFjRZLWbPagavYOO/paUt7uwPEFYUIn
+         gpNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NtM1jxOsMP+WWWYshu96OSuBKARsROgOcst4bHdnJxc=;
-        b=QJRawUsU4efa2X5rtkaqwn68JKVQxnrdyVsLldUdFUqow0uHmE6ZpBI2BYglhOeCaT
-         yKuOrGvGsN/pdPOryHtg96GwLRajxLIxkZr3+Zdlrdp6EGaVFDCucDT+BhIdNXZV7uu+
-         QIB6C84Ro4cTXQ5Z39qY5yc0a0cjFcRgSPMZzvYpomN95IUhdR4gjXdi/p8XY8T630GI
-         2aCessunOr/r2YS7xtBPxnQK1NJvx8lBDLoJkdkmKJnqkIQaJTmdteCH3752vhauKi57
-         OPXUofhbg5En+sFJ+0ojqng22c+VebA54yaB3ysb+HoL+XCL+pOlwtY/8w23l/7kxZRl
-         L3FA==
-X-Gm-Message-State: AOAM530VolSwaxsd/CVQYoryUKTsJ7o6rfRkKwGbniTur4k27BxtrJ/h
-        ZTZcRFNV3NP9jL52YaF4sQ==
-X-Google-Smtp-Source: ABdhPJxzNK7P85OHIXrVDUd4OVbu7lxW2OBF10rGzYttT8OKKhRqEtx/6pjzLz5o0QTa+3PQVfMh8A==
-X-Received: by 2002:a05:6808:10d6:b0:326:d4b2:851 with SMTP id s22-20020a05680810d600b00326d4b20851mr3732846ois.295.1652992805744;
-        Thu, 19 May 2022 13:40:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k24-20020a4a8518000000b0035eb4e5a6d9sm134138ooh.47.2022.05.19.13.40.04
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BgKHPZFZkX1keDz+vV/kymxRnGTruz8H3lBNU7pTNfs=;
+        b=ZJwvWLk0fHAhHXEjGzA1LE7YSdIFMxwrkPGAeFz0oXuiCSkQcRufBcaMWtXVdPDxH+
+         Rqz0vTFwDGBvHY66px1SidaH6U27NDTaUXYZ0uNd9pBpTqa/hTJE7f2Nx/O4zaKqtP2d
+         XmvzS4Yrz9PPp085AyC6PA+0ciyShzYBtKStDhLocFn1OJJHenYxtSWks84nYbVo8JNA
+         C/qyQNMUbm/Mv9g4iBvX9WHjhNCD9jlIs2no1I8iISJs5gsWUYJ/Ry+7LOSrDQChB09t
+         zjGjDh3IXaP+w1e2I2bdSVJnQyndxNUQ55CYJN/cteZ5WgmJ0CEb5QINiX3+T+KqjB+u
+         AyKQ==
+X-Gm-Message-State: AOAM530i2RHsfTtwMwiLRpuK+qQh9UfGtekQ5bMyNucEfPRvAYi4Ir8q
+        in9LJW4loccm/ZtUCjPD5S0=
+X-Google-Smtp-Source: ABdhPJyMl05hAqXLfEDskvA2Jercr6evZtF13mcYnrmx+6Gca9Kg6RTBkG7TDoEJCiNl4iYXbqwPHg==
+X-Received: by 2002:a2e:a801:0:b0:24a:ff0b:ae7a with SMTP id l1-20020a2ea801000000b0024aff0bae7amr3544106ljq.287.1652992819964;
+        Thu, 19 May 2022 13:40:19 -0700 (PDT)
+Received: from localhost.localdomain ([46.235.67.4])
+        by smtp.gmail.com with ESMTPSA id b9-20020a056512024900b0047255d21148sm394048lfo.119.2022.05.19.13.40.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 13:40:04 -0700 (PDT)
-Received: (nullmailer pid 2152900 invoked by uid 1000);
-        Thu, 19 May 2022 20:40:04 -0000
-Date:   Thu, 19 May 2022 15:40:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: timer: cdns,ttc: drop unneeded minItems
-Message-ID: <20220519204004.GD2071376-robh@kernel.org>
-References: <20220424150333.75172-1-krzysztof.kozlowski@linaro.org>
- <d6ead111-e2f8-c098-42ff-cda30a1d72bc@linaro.org>
+        Thu, 19 May 2022 13:40:19 -0700 (PDT)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        dan.carpenter@oracle.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>
+Subject: [PATCH] net: ocelot: fix wront time_after usage
+Date:   Thu, 19 May 2022 23:40:17 +0300
+Message-Id: <20220519204017.15586-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d6ead111-e2f8-c098-42ff-cda30a1d72bc@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 06, 2022 at 10:28:52AM +0200, Krzysztof Kozlowski wrote:
-> On 24/04/2022 17:03, Krzysztof Kozlowski wrote:
-> > There is no need to add minItems when it is equal to maxItems.
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/timer/cdns,ttc.yaml | 1 -
-> >  1 file changed, 1 deletion(-)
-> Hi Daniel, Thomas,
-> 
-> The patchset was acked by Rob, so he expects you will pick it up. Could
-> you let me know if there is anything stopping or you expect the other
-> way (via DT-tree)?
+Accidentally noticed, that this driver is the only user of
+while (timer_after(jiffies...)).
 
-Looks like still not applied, so I've applied to DT tree.
+It looks like typo, because likely this while loop will finish after 1st
+iteration, because time_after() returns true when 1st argument _is after_
+2nd one.
 
-Rob
+Fix it by negating time_after return value inside while loops statement
+
+Fixes: 753a026cfec1 ("net: ocelot: add FDMA support")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+ drivers/net/ethernet/mscc/ocelot_fdma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/mscc/ocelot_fdma.c b/drivers/net/ethernet/mscc/ocelot_fdma.c
+index dffa597bffe6..4500fed3ce5c 100644
+--- a/drivers/net/ethernet/mscc/ocelot_fdma.c
++++ b/drivers/net/ethernet/mscc/ocelot_fdma.c
+@@ -104,7 +104,7 @@ static int ocelot_fdma_wait_chan_safe(struct ocelot *ocelot, int chan)
+ 		safe = ocelot_fdma_readl(ocelot, MSCC_FDMA_CH_SAFE);
+ 		if (safe & BIT(chan))
+ 			return 0;
+-	} while (time_after(jiffies, timeout));
++	} while (!time_after(jiffies, timeout));
+ 
+ 	return -ETIMEDOUT;
+ }
+-- 
+2.36.1
+

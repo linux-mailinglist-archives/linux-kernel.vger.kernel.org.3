@@ -2,161 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BD152CB8C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BDC52CB8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234057AbiESFlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 01:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S234076AbiESFl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 01:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbiESFlq (ORCPT
+        with ESMTP id S231944AbiESFlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 May 2022 01:41:46 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FD39D4FD
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:41:42 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L3dyX2T4Jz4xD1;
-        Thu, 19 May 2022 15:41:40 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1652938900;
-        bh=u4WYQ8CLjhh5TCtN+4GxOyinCwBGkUDiWv+9kOIQ2Aw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=El/8FD4sKhUNUJK/ztIhCR4s+G553J0gGwkMOD2jplBk9XzsGORDHXxOIJhHV37r2
-         yfYv6RMpGwebQu+dtSp3my8M1rZWHHFPiIG4/LeXT9q3U2+uOvZxY+eIzu6wkBn+5x
-         rRCl4wmAGx7LmeDlBMPJcSGzOnj0YqK1psC26Jj9iJJHwKH6zHCcUTGghPQZXQFysP
-         mZ7yuKp6REsmelQ2STkkfe3tnpTYUSrJ2U+3CGaHtZhTfzJDDUqpzUYu67sxRe66xD
-         Z9gHAWSSgjrHWS4+4hAXl7GyMJhoODY3j+txgVTjiMQSgb9s9k7gk8t5QqVGKUU5LS
-         N9D4BUJpat9Xw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Eric Biederman <ebiederm@xmission.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        kexec@lists.infradead.org
-Subject: Re: [PATCH] kexec_file: Drop weak attribute from
- arch_kexec_apply_relocations[_add]
-In-Reply-To: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com>
-References: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com>
-Date:   Thu, 19 May 2022 15:41:39 +1000
-Message-ID: <874k1mnkoc.fsf@mpe.ellerman.id.au>
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED400A5000
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:41:43 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id c22so4133405pgu.2
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 22:41:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fjgJyUxglOdNX7ORgfsXOs9MOe0Djm4FQwuHrj7GTTE=;
+        b=Kkk2V/Ze8u/GszkRJQ6HDT0Y3PRUy6UbRTQTWtISRk+4RdjlmgLml3lNvJImahYCLE
+         QHj/pPvHSBfqcXsh5lvwFpzr8JJ1kP3maZhxdOPOXeHgvuzHkXVgVedPrxym1kfKm5GM
+         Yh4FrJKck6E4S7WDodZnXZo/7akxxMK1DimK4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fjgJyUxglOdNX7ORgfsXOs9MOe0Djm4FQwuHrj7GTTE=;
+        b=aoZWuWq9kGwx05ttfkYwH4DPk4coGKAesEs6u1qT7IzUcjNuQrh3j4Big5BtHYfQFU
+         WVmSdsq1TXEiI9xRhwlc0YMv0N5VAE3OlhwZvkRtWu71NyTQFaG/UIvgCJ0QNgo04td3
+         LG653AWr7EGl931JhyhlT/aw7zAWa21X1i39lFU9lH4kjoJXA7XyZAv+LNeL+6oTIBUh
+         RSVGg5SCdTK3DQnoC41o4cNZxnxOVlGUPBdhKjhItZadLDFEFgantgWrDU6Jo/fbaU9s
+         9lfYS5hQqPAqvaeu/eKr94T77x5nKgMfPrs/JxtW9bKXXdvi+QYuEKgVk7dxZ9utTf4Y
+         jEhA==
+X-Gm-Message-State: AOAM530EYvj5BvDtMCIQliEFW66afMJiojS7NtrJuBa0tq8+TUZ/Qhna
+        uD9NmwO5GorOdYSlWJzCrI8WGISLdDVGqA==
+X-Google-Smtp-Source: ABdhPJxHqltwgTe80L7xytpq/ugnENmQ0t31RUNN4OoXKTpQ2c3WtoGWGY8KwrId2pyzrJLZxAtcXg==
+X-Received: by 2002:a05:6a00:1c76:b0:510:8b76:93b5 with SMTP id s54-20020a056a001c7600b005108b7693b5mr3230605pfw.44.1652938903427;
+        Wed, 18 May 2022 22:41:43 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id cp16-20020a170902e79000b0015e8d4eb2c2sm2677829plb.268.2022.05.18.22.41.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 22:41:43 -0700 (PDT)
+Date:   Wed, 18 May 2022 22:41:42 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] x86/boot: Wrap literal addresses in absolute_pointer()
+Message-ID: <202205182240.A8DDA7D4C@keescook>
+References: <20220227195918.705219-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220227195918.705219-1-keescook@chromium.org>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
-> Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
-> symbols") [1], binutils (v2.36+) started dropping section symbols that
-> it thought were unused.  This isn't an issue in general, but with
-> kexec_file.c, gcc is placing kexec_arch_apply_relocations[_add] into a
-> separate .text.unlikely section and the section symbol ".text.unlikely"
-> is being dropped. Due to this, recordmcount is unable to find a non-weak
-> symbol in .text.unlikely to generate a relocation record against.
->
-> Address this by dropping the weak attribute from these functions:
-> - arch_kexec_apply_relocations() is not overridden by any architecture
->   today, so just drop the weak attribute.
-> - arch_kexec_apply_relocations_add() is only overridden by x86 and s390.
->   Retain the function prototype for those and move the weak
->   implementation into the header as a static inline for other
->   architectures.
->
-> [1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d1bcae833b32f1
->
-> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+On Sun, Feb 27, 2022 at 11:59:18AM -0800, Kees Cook wrote:
+> GCC 11 (incorrectly[1]) assumes that literal values cast to (void *)
+> should be treated like a NULL pointer with an offset, and raises
+> diagnostics when doing bounds checking under -Warray-bounds. GCC 12
+> got "smarter" about finding these:
+> 
+> In function 'rdfs8',
+>     inlined from 'vga_recalc_vertical' at /srv/code/arch/x86/boot/video-mode.c:124:29,
+>     inlined from 'set_mode' at /srv/code/arch/x86/boot/video-mode.c:163:3:
+> /srv/code/arch/x86/boot/boot.h:114:9: warning: array subscript 0 is outside array bounds of 'u8[0]' {aka 'unsigned char[]'} [-Warray-bounds]
+>   114 |         asm volatile("movb %%fs:%1,%0" : "=q" (v) : "m" (*(u8 *)addr));
+>       |         ^~~
+> 
+> This has been solved in other places[2] already by using the recently
+> added absolute_pointer() macro. Do the same here.
+> 
+> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99578
+> [2] https://lore.kernel.org/all/20210912160149.2227137-1-linux@roeck-us.net/
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: x86@kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Thread ping -- this is still needed for GCC 12. Can an x86 maintainer
+either take this or Ack it and I'll carry it?
+
+Thanks!
+
+-Kees
+
 > ---
->  include/linux/kexec.h | 28 ++++++++++++++++++++++++----
->  kernel/kexec_file.c   | 19 +------------------
->  2 files changed, 25 insertions(+), 22 deletions(-)
+>  arch/x86/boot/boot.h | 36 ++++++++++++++++++++++++------------
+>  arch/x86/boot/main.c |  2 +-
+>  2 files changed, 25 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/x86/boot/boot.h b/arch/x86/boot/boot.h
+> index 34c9dbb6a47d..686a9d75a0e4 100644
+> --- a/arch/x86/boot/boot.h
+> +++ b/arch/x86/boot/boot.h
+> @@ -110,66 +110,78 @@ typedef unsigned int addr_t;
+>  
+>  static inline u8 rdfs8(addr_t addr)
+>  {
+> +	u8 *ptr = (u8 *)absolute_pointer(addr);
+>  	u8 v;
+> -	asm volatile("movb %%fs:%1,%0" : "=q" (v) : "m" (*(u8 *)addr));
+> +	asm volatile("movb %%fs:%1,%0" : "=q" (v) : "m" (*ptr));
+>  	return v;
+>  }
+>  static inline u16 rdfs16(addr_t addr)
+>  {
+> +	u16 *ptr = (u16 *)absolute_pointer(addr);
+>  	u16 v;
+> -	asm volatile("movw %%fs:%1,%0" : "=r" (v) : "m" (*(u16 *)addr));
+> +	asm volatile("movw %%fs:%1,%0" : "=r" (v) : "m" (*ptr));
+>  	return v;
+>  }
+>  static inline u32 rdfs32(addr_t addr)
+>  {
+> +	u32 *ptr = (u32 *)absolute_pointer(addr);
+>  	u32 v;
+> -	asm volatile("movl %%fs:%1,%0" : "=r" (v) : "m" (*(u32 *)addr));
+> +	asm volatile("movl %%fs:%1,%0" : "=r" (v) : "m" (*ptr));
+>  	return v;
+>  }
+>  
+>  static inline void wrfs8(u8 v, addr_t addr)
+>  {
+> -	asm volatile("movb %1,%%fs:%0" : "+m" (*(u8 *)addr) : "qi" (v));
+> +	u8 *ptr = (u8 *)absolute_pointer(addr);
+> +	asm volatile("movb %1,%%fs:%0" : "+m" (*ptr) : "qi" (v));
+>  }
+>  static inline void wrfs16(u16 v, addr_t addr)
+>  {
+> -	asm volatile("movw %1,%%fs:%0" : "+m" (*(u16 *)addr) : "ri" (v));
+> +	u16 *ptr = (u16 *)absolute_pointer(addr);
+> +	asm volatile("movw %1,%%fs:%0" : "+m" (*ptr) : "ri" (v));
+>  }
+>  static inline void wrfs32(u32 v, addr_t addr)
+>  {
+> -	asm volatile("movl %1,%%fs:%0" : "+m" (*(u32 *)addr) : "ri" (v));
+> +	u32 *ptr = (u32 *)absolute_pointer(addr);
+> +	asm volatile("movl %1,%%fs:%0" : "+m" (*ptr) : "ri" (v));
+>  }
+>  
+>  static inline u8 rdgs8(addr_t addr)
+>  {
+> +	u8 *ptr = (u8 *)absolute_pointer(addr);
+>  	u8 v;
+> -	asm volatile("movb %%gs:%1,%0" : "=q" (v) : "m" (*(u8 *)addr));
+> +	asm volatile("movb %%gs:%1,%0" : "=q" (v) : "m" (*ptr));
+>  	return v;
+>  }
+>  static inline u16 rdgs16(addr_t addr)
+>  {
+> +	u16 *ptr = (u16 *)absolute_pointer(addr);
+>  	u16 v;
+> -	asm volatile("movw %%gs:%1,%0" : "=r" (v) : "m" (*(u16 *)addr));
+> +	asm volatile("movw %%gs:%1,%0" : "=r" (v) : "m" (*ptr));
+>  	return v;
+>  }
+>  static inline u32 rdgs32(addr_t addr)
+>  {
+> +	u32 *ptr = (u32 *)absolute_pointer(addr);
+>  	u32 v;
+> -	asm volatile("movl %%gs:%1,%0" : "=r" (v) : "m" (*(u32 *)addr));
+> +	asm volatile("movl %%gs:%1,%0" : "=r" (v) : "m" (*ptr));
+>  	return v;
+>  }
+>  
+>  static inline void wrgs8(u8 v, addr_t addr)
+>  {
+> -	asm volatile("movb %1,%%gs:%0" : "+m" (*(u8 *)addr) : "qi" (v));
+> +	u8 *ptr = (u8 *)absolute_pointer(addr);
+> +	asm volatile("movb %1,%%gs:%0" : "+m" (*ptr) : "qi" (v));
+>  }
+>  static inline void wrgs16(u16 v, addr_t addr)
+>  {
+> -	asm volatile("movw %1,%%gs:%0" : "+m" (*(u16 *)addr) : "ri" (v));
+> +	u16 *ptr = (u16 *)absolute_pointer(addr);
+> +	asm volatile("movw %1,%%gs:%0" : "+m" (*ptr) : "ri" (v));
+>  }
+>  static inline void wrgs32(u32 v, addr_t addr)
+>  {
+> -	asm volatile("movl %1,%%gs:%0" : "+m" (*(u32 *)addr) : "ri" (v));
+> +	u32 *ptr = (u32 *)absolute_pointer(addr);
+> +	asm volatile("movl %1,%%gs:%0" : "+m" (*ptr) : "ri" (v));
+>  }
+>  
+>  /* Note: these only return true/false, not a signed return value! */
+> diff --git a/arch/x86/boot/main.c b/arch/x86/boot/main.c
+> index e3add857c2c9..c421af5a3cdc 100644
+> --- a/arch/x86/boot/main.c
+> +++ b/arch/x86/boot/main.c
+> @@ -33,7 +33,7 @@ static void copy_boot_params(void)
+>  		u16 cl_offset;
+>  	};
+>  	const struct old_cmdline * const oldcmd =
+> -		(const struct old_cmdline *)OLD_CL_ADDRESS;
+> +		absolute_pointer(OLD_CL_ADDRESS);
+>  
+>  	BUILD_BUG_ON(sizeof(boot_params) != 4096);
+>  	memcpy(&boot_params.hdr, &hdr, sizeof(hdr));
+> -- 
+> 2.32.0
+> 
 
-I think it could be cleaner done with the #define foo foo style, see
-patch below. It does have its downsides, but for a simple hook like this
-I think it's not too bad.
-
-cheers
-
-
-(only build tested)
-
-diff --git a/arch/s390/include/asm/kexec.h b/arch/s390/include/asm/kexec.h
-index 7f3c9ac34bd8..e818b58ccc43 100644
---- a/arch/s390/include/asm/kexec.h
-+++ b/arch/s390/include/asm/kexec.h
-@@ -74,6 +74,8 @@ void *kexec_file_add_components(struct kimage *image,
- int arch_kexec_do_relocs(int r_type, void *loc, unsigned long val,
- 			 unsigned long addr);
- 
-+#define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
-+
- #define ARCH_HAS_KIMAGE_ARCH
- 
- struct kimage_arch {
-diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
-index 11b7c06e2828..58e3939a350a 100644
---- a/arch/x86/include/asm/kexec.h
-+++ b/arch/x86/include/asm/kexec.h
-@@ -186,6 +186,8 @@ extern int arch_kexec_post_alloc_pages(void *vaddr, unsigned int pages,
- extern void arch_kexec_pre_free_pages(void *vaddr, unsigned int pages);
- #define arch_kexec_pre_free_pages arch_kexec_pre_free_pages
- 
-+#define arch_kexec_apply_relocations_add arch_kexec_apply_relocations_add
-+
- #endif
- 
- typedef void crash_vmclear_fn(void);
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 8347fc158d2b..6f07acb59f29 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -108,6 +108,7 @@ int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
- }
- #endif
- 
-+#ifndef arch_kexec_apply_relocations_add
- /*
-  * arch_kexec_apply_relocations_add - apply relocations of type RELA
-  * @pi:		Purgatory to be relocated.
-@@ -117,14 +118,16 @@ int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
-  *
-  * Return: 0 on success, negative errno on error.
-  */
--int __weak
-+int
- arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shdr *section,
- 				 const Elf_Shdr *relsec, const Elf_Shdr *symtab)
- {
- 	pr_err("RELA relocation unsupported.\n");
- 	return -ENOEXEC;
- }
-+#endif
- 
-+#ifndef arch_kexec_apply_relocations
- /*
-  * arch_kexec_apply_relocations - apply relocations of type REL
-  * @pi:		Purgatory to be relocated.
-@@ -134,13 +137,14 @@ arch_kexec_apply_relocations_add(struct purgatory_info *pi, Elf_Shdr *section,
-  *
-  * Return: 0 on success, negative errno on error.
-  */
--int __weak
-+int
- arch_kexec_apply_relocations(struct purgatory_info *pi, Elf_Shdr *section,
- 			     const Elf_Shdr *relsec, const Elf_Shdr *symtab)
- {
- 	pr_err("REL relocation unsupported.\n");
- 	return -ENOEXEC;
- }
-+#endif
- 
- /*
-  * Free up memory used by kernel, initrd, and command line. This is temporary
-
+-- 
+Kees Cook

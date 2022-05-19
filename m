@@ -2,318 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C075252CBCE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F3552CBD4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234350AbiESGKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 02:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
+        id S234202AbiESGPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 02:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234351AbiESGJy (ORCPT
+        with ESMTP id S229654AbiESGPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 02:09:54 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86AB819B8;
-        Wed, 18 May 2022 23:09:52 -0700 (PDT)
-X-UUID: 9ba28cab7c924802835b32dfd15a037b-20220519
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:6d510757-2d8c-4851-a206-8bb9821fef8c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:1de5d079-5ef6-470b-96c9-bdb8ced32786,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 9ba28cab7c924802835b32dfd15a037b-20220519
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 221176302; Thu, 19 May 2022 14:09:50 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 19 May 2022 14:09:49 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 19 May 2022 14:09:49 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 19 May 2022 14:09:48 +0800
-From:   Tim Chang <jia-wei.chang@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Roger Lu <roger.lu@mediatek.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 4/4] soc: mediatek: svs: add support for mt8195
-Date:   Thu, 19 May 2022 14:09:24 +0800
-Message-ID: <20220519060924.13493-5-jia-wei.chang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220519060924.13493-1-jia-wei.chang@mediatek.com>
-References: <20220519060924.13493-1-jia-wei.chang@mediatek.com>
+        Thu, 19 May 2022 02:15:37 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4D88CB38;
+        Wed, 18 May 2022 23:15:36 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id x143so4230642pfc.11;
+        Wed, 18 May 2022 23:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GM2DilYnUlbpl9c8YbSsfo3PD4EXIuNCsM/7fLpZMbk=;
+        b=ZgWtyXFcN42Su4w/dRiLt//+1HTaLTF0NYjXRAkxuvqe+tSlBwTFp/PV4/Zoe5oH2w
+         QpQjeihipmITPEWD0+r3qzjVi73UN784Lpf0rRZqtY1xu1DZjgTjyJDeD3dkyNMEJtVq
+         kLENc+N5nuaNZ/IFO2KOwoMLkE0S9GtXzrbPF2ncePgEKONKiOOVUeC5XK64Jgs4PxkN
+         4g8NO8bDZqMtEVUc7P0Hfk2ukxEFq9XdhiuWYi47Gk8+iT0f+FplQlzFWtjzrCe7wkg8
+         4rb/OzSrQHFPfBTvFr/a/qse3AP8nAUKhTc00A1Yd13mqGS3PfFNkCX9Vhsd99fcp6tA
+         HmIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GM2DilYnUlbpl9c8YbSsfo3PD4EXIuNCsM/7fLpZMbk=;
+        b=O3riVZWYwTyhsT4TiOmftytn/Xa3PUb98bY4OqvS1KVu0I+ucoSh4tzRFX9DM61U/N
+         +Jo0OI9a8Vsf/7mFRky/bEj4xwd+Sdtb42PXU3QBwY44BwGy+MOEmv3vpgaVlIClnyDs
+         OwpR95pxi4LRh9FXFWM/ZLEGSAFbGrn123IqHYhaGxIKUeGPX3yJQFhi7HwY9fpGJAyA
+         Vp4yZ2SBSFwHN1EZ7WLHjk+RlNAFSJPpunyWnmwaUdnGxsb67yDWSO+3vSDhZPIyUXAH
+         hDNg75IkLFD19dnQmOZw8sow9pnjj21PAAvYMX50wXwxxSaRUhlVS7NqLypdOUv4siKK
+         UueQ==
+X-Gm-Message-State: AOAM532KwEWJjBLQnVYzaiPG6NGvgIfEtQUxYhI5KNvmFTOxPgSnu6rL
+        loNG/splCFdWbK5sI+OaIdY=
+X-Google-Smtp-Source: ABdhPJzP+YquqdsWg1hwqj8EvjvRXcdk1HrEyT49vwaBOgDIvC7lsbT7Hl57goCwnXHPUImn1Ergvg==
+X-Received: by 2002:a05:6a00:cd5:b0:510:7f58:267b with SMTP id b21-20020a056a000cd500b005107f58267bmr3115337pfv.67.1652940935821;
+        Wed, 18 May 2022 23:15:35 -0700 (PDT)
+Received: from [192.168.2.225] (93.179.119.173.16clouds.com. [93.179.119.173])
+        by smtp.gmail.com with ESMTPSA id t15-20020a17090ae50f00b001dc1e6db7c2sm4661938pjy.57.2022.05.18.23.15.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 23:15:35 -0700 (PDT)
+Message-ID: <29d66a46-d141-2d02-45dd-a8931786588e@gmail.com>
+Date:   Thu, 19 May 2022 14:15:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/2] psi: add support for multi level pressure stall
+ trigger
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Chen Wandun <chenwandun@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20220516033524.3130816-1-chenwandun@huawei.com>
+ <30b37eeb-e77b-882e-fc24-3367321a8ca3@gmail.com>
+ <CAJuCfpE7fBsp8ntYVeLsW7Cd0Z09OmxN75X9Az_Qco0GJrz3Wg@mail.gmail.com>
+ <CAJuCfpH-BDqsft1YvGFhkbR60VC0TJgfXKRVN+80e0iqQdhxpA@mail.gmail.com>
+ <3a31521f-a68a-b2a9-baae-9a458ee17033@huawei.com>
+ <070fe87d-43a0-5e4f-e4c7-c44782c2c195@gmail.com>
+ <CAJuCfpH1mTxe5hmzZTe+AbPFse9heenx8uhGzCXE6fAh5G8SzA@mail.gmail.com>
+From:   Alex Shi <seakeel@gmail.com>
+In-Reply-To: <CAJuCfpH1mTxe5hmzZTe+AbPFse9heenx8uhGzCXE6fAh5G8SzA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 
-To support svs on MT8195, add corresponding bank information, platform
-data, probe and parsing function.
 
-Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
----
- drivers/soc/mediatek/mtk-svs.c | 193 +++++++++++++++++++++++++++++++++
- 1 file changed, 193 insertions(+)
+On 5/19/22 05:38, Suren Baghdasaryan wrote:
+> On Wed, May 18, 2022 at 3:29 AM Alex Shi <seakeel@gmail.com> wrote:
+>>
+>>
+>>
+>> On 5/17/22 20:46, Chen Wandun wrote:
+>>>>>> This breaks the old ABI. And why you need this new function?
+>>>>> Both great points.
+>>>> BTW, I think the additional max_threshold parameter could be
+>>>> implemented in a backward compatible way so that the old API is not
+>>>> broken:
+>>>>
+>>>> arg_count = sscanf(buf, "some %u %u %u", &min_threshold_us,  &arg2, &arg3);
+>>>> if (arg_count < 2) return ERR_PTR(-EINVAL);
+>>>> if (arg_count < 3) {
+>>>>      max_threshold_us = INT_MAX;
+>>>>      window_us = arg2;
+>>>> } else {
+>>>>      max_threshold_us = arg2;
+>>>>      window_us = arg3;
+>>>> }
+>>> OK
+>>>
+>>> Thanks.
+>>>> But again, the motivation still needs to be explained.
+>>> we want do different operation for different stall level,
+>>> just as prev email explain, multi trigger is also OK in old
+>>> ways, but it is a litter complex.
+>>
+>> In fact, I am not keen for this solution, the older and newer
+>> interface is easy to be confused by users, for some resolvable
+>> unclear issues. It's not a good idea.
+> 
+> Maybe adding the max_threshold as an optional last argument will be
+> less confusing? Smth like this:
+> 
+> some/full min_threshold window_size [max_threshold]
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 656d0361ff7d..919226faee6d 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -1680,6 +1680,92 @@ static int svs_bank_resource_setup(struct svs_platform *svsp)
- 	return 0;
- }
- 
-+static bool svs_mt8195_efuse_parsing(struct svs_platform *svsp)
-+{
-+	struct svs_bank *svsb;
-+	struct nvmem_cell *cell;
-+	u32 idx, i, ft_pgm, vmin, golden_temp;
-+
-+	for (i = 0; i < svsp->efuse_max; i++)
-+		if (svsp->efuse[i])
-+			dev_info(svsp->dev, "M_HW_RES%d: 0x%08x\n",
-+				 i, svsp->efuse[i]);
-+
-+	if (!svsp->efuse[10]) {
-+		dev_notice(svsp->dev, "svs_efuse[10] = 0x0?\n");
-+		return false;
-+	}
-+
-+	/* Svs efuse parsing */
-+	ft_pgm = svsp->efuse[0] & GENMASK(7, 0);
-+	vmin = (svsp->efuse[19] >> 4) & GENMASK(1, 0);
-+
-+	for (idx = 0; idx < svsp->bank_max; idx++) {
-+		svsb = &svsp->banks[idx];
-+
-+		if (svsb->sw_id != SVSB_GPU)
-+			return false;
-+
-+		if (vmin == 0x1)
-+			svsb->vmin = 0x1e;
-+
-+		if (ft_pgm == 0)
-+			svsb->volt_flags |= SVSB_INIT01_VOLT_IGNORE;
-+
-+		if (svsb->type == SVSB_LOW) {
-+			svsb->mtdes = svsp->efuse[10] & GENMASK(7, 0);
-+			svsb->bdes = (svsp->efuse[10] >> 16) & GENMASK(7, 0);
-+			svsb->mdes = (svsp->efuse[10] >> 24) & GENMASK(7, 0);
-+			svsb->dcbdet = (svsp->efuse[8]) & GENMASK(7, 0);
-+			svsb->dcmdet = (svsp->efuse[8] >> 8) & GENMASK(7, 0);
-+		} else if (svsb->type == SVSB_HIGH) {
-+			svsb->mtdes = svsp->efuse[9] & GENMASK(7, 0);
-+			svsb->bdes = (svsp->efuse[9] >> 16) & GENMASK(7, 0);
-+			svsb->mdes = (svsp->efuse[9] >> 24) & GENMASK(7, 0);
-+			svsb->dcbdet = (svsp->efuse[8]) & GENMASK(7, 0);
-+			svsb->dcmdet = (svsp->efuse[8] >> 8) & GENMASK(7, 0);
-+		}
-+
-+		svsb->vmax += svsb->dvt_fixed;
-+	}
-+
-+	/* Thermal efuse parsing */
-+	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
-+	if (IS_ERR_OR_NULL(cell)) {
-+		dev_err(svsp->dev, "no \"t-calibration-data\"? %ld\n",
-+			PTR_ERR(cell));
-+		return false;
-+	}
-+
-+	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
-+	if (IS_ERR(svsp->tefuse)) {
-+		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
-+			PTR_ERR(svsp->tefuse));
-+		nvmem_cell_put(cell);
-+		return false;
-+	}
-+
-+	svsp->tefuse_max /= sizeof(u32);
-+	nvmem_cell_put(cell);
-+
-+	for (i = 0; i < svsp->tefuse_max; i++)
-+		if (svsp->tefuse[i] != 0)
-+			break;
-+
-+	if (i == svsp->tefuse_max)
-+		golden_temp = 50; /* All thermal efuse data are 0 */
-+	else
-+		golden_temp = (svsp->tefuse[0] >> 24) & GENMASK(7, 0);
-+
-+	for (idx = 0; idx < svsp->bank_max; idx++) {
-+		svsb = &svsp->banks[idx];
-+		svsb->mts = 500;
-+		svsb->bts = (((500 * golden_temp + 250460) / 1000) - 25) * 4;
-+	}
-+
-+	return true;
-+}
-+
- static bool svs_mt8192_efuse_parsing(struct svs_platform *svsp)
- {
- 	struct svs_bank *svsb;
-@@ -2141,6 +2227,39 @@ static struct device *svs_add_device_link(struct svs_platform *svsp,
- 	return dev;
- }
- 
-+static int svs_mt8195_platform_probe(struct svs_platform *svsp)
-+{
-+	struct device *dev;
-+	struct svs_bank *svsb;
-+	u32 idx;
-+
-+	svsp->rst = devm_reset_control_get_optional(svsp->dev, "svs_rst");
-+	if (IS_ERR(svsp->rst))
-+		return dev_err_probe(svsp->dev, PTR_ERR(svsp->rst),
-+				     "cannot get svs reset control\n");
-+
-+	dev = svs_add_device_link(svsp, "lvts");
-+	if (IS_ERR(dev))
-+		return dev_err_probe(svsp->dev, PTR_ERR(dev),
-+				     "failed to get lvts device\n");
-+
-+	for (idx = 0; idx < svsp->bank_max; idx++) {
-+		svsb = &svsp->banks[idx];
-+
-+		if (svsb->type == SVSB_HIGH)
-+			svsb->opp_dev = svs_add_device_link(svsp, "mali");
-+		else if (svsb->type == SVSB_LOW)
-+			svsb->opp_dev = svs_get_subsys_device(svsp, "mali");
-+
-+		if (IS_ERR(svsb->opp_dev))
-+			return dev_err_probe(svsp->dev, PTR_ERR(svsb->opp_dev),
-+					     "failed to get OPP device for bank %d\n",
-+					     idx);
-+	}
-+
-+	return 0;
-+}
-+
- static int svs_mt8192_platform_probe(struct svs_platform *svsp)
- {
- 	struct device *dev;
-@@ -2257,6 +2376,67 @@ static int svs_mt8183_platform_probe(struct svs_platform *svsp)
- 	return 0;
- }
- 
-+static struct svs_bank svs_mt8195_banks[] = {
-+	{
-+		.sw_id			= SVSB_GPU,
-+		.type			= SVSB_LOW,
-+		.set_freq_pct		= svs_set_bank_freq_pct_v3,
-+		.get_volts		= svs_get_bank_volts_v3,
-+		.tzone_name		= "gpu1",
-+		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT,
-+		.mode_support		= SVSB_MODE_INIT02,
-+		.opp_count		= MAX_OPP_ENTRIES,
-+		.freq_base		= 640000000,
-+		.turn_freq_base		= 640000000,
-+		.volt_step		= 6250,
-+		.volt_base		= 400000,
-+		.vmax			= 0x38,
-+		.vmin			= 0x14,
-+		.age_config		= 0x555555,
-+		.dc_config		= 0x1,
-+		.dvt_fixed		= 0x1,
-+		.vco			= 0x18,
-+		.chk_shift		= 0x87,
-+		.core_sel		= 0x0fff0100,
-+		.int_st			= BIT(0),
-+		.ctl0			= 0x00540003,
-+		.tzone_htemp		= 85000,
-+		.tzone_htemp_voffset	= 0,
-+		.tzone_ltemp		= 25000,
-+		.tzone_ltemp_voffset	= 7,
-+	},
-+	{
-+		.sw_id			= SVSB_GPU,
-+		.type			= SVSB_HIGH,
-+		.set_freq_pct		= svs_set_bank_freq_pct_v3,
-+		.get_volts		= svs_get_bank_volts_v3,
-+		.tzone_name		= "gpu1",
-+		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT |
-+					  SVSB_MON_VOLT_IGNORE,
-+		.mode_support		= SVSB_MODE_INIT02 | SVSB_MODE_MON,
-+		.opp_count		= MAX_OPP_ENTRIES,
-+		.freq_base		= 880000000,
-+		.turn_freq_base		= 640000000,
-+		.vboot			= 0x38,
-+		.volt_step		= 6250,
-+		.volt_base		= 400000,
-+		.vmax			= 0x38,
-+		.vmin			= 0x14,
-+		.age_config		= 0x555555,
-+		.dc_config		= 0x1,
-+		.dvt_fixed		= 0x6,
-+		.vco			= 0x18,
-+		.chk_shift		= 0x87,
-+		.core_sel		= 0x0fff0101,
-+		.int_st			= BIT(1),
-+		.ctl0			= 0x00540003,
-+		.tzone_htemp		= 85000,
-+		.tzone_htemp_voffset	= 0,
-+		.tzone_ltemp		= 25000,
-+		.tzone_ltemp_voffset	= 7,
-+	},
-+};
-+
- static struct svs_bank svs_mt8192_banks[] = {
- 	{
- 		.sw_id			= SVSB_GPU,
-@@ -2559,6 +2739,16 @@ static struct svs_bank svs_mt8183_banks[] = {
- 	},
- };
- 
-+static const struct svs_platform_data svs_mt8195_platform_data = {
-+	.name = "mt8195-svs",
-+	.banks = svs_mt8195_banks,
-+	.efuse_parsing = svs_mt8195_efuse_parsing,
-+	.probe = svs_mt8195_platform_probe,
-+	.irqflags = IRQF_TRIGGER_HIGH,
-+	.regs = svs_regs_v2,
-+	.bank_max = ARRAY_SIZE(svs_mt8195_banks),
-+};
-+
- static const struct svs_platform_data svs_mt8192_platform_data = {
- 	.name = "mt8192-svs",
- 	.banks = svs_mt8192_banks,
-@@ -2591,6 +2781,9 @@ static const struct svs_platform_data svs_mt8183_platform_data = {
- 
- static const struct of_device_id svs_of_match[] = {
- 	{
-+		.compatible = "mediatek,mt8195-svs",
-+		.data = &svs_mt8195_platform_data,
-+	}, {
- 		.compatible = "mediatek,mt8192-svs",
- 		.data = &svs_mt8192_platform_data,
- 	}, {
--- 
-2.18.0
+It's already confused enough. :)
+BTW, I still don't see the strong reason for the pressure range.
 
+> > Also, if we do decide to add it, there should be a warning in the
+> documentation that max_threshold usage might lead to a stall being
+> missed completely. In your example:
+> 
+> echo "some 150000 350000 1000000" > /proc/pressure/memory
+> 
+> If there is a stall of more than 350ms within a given window, that
+> trigger will not fire at all.
+
+Right. 
+And what if others propose more pressure combinations?
+Maybe leave them to user space is more likely workable?
+
+Thanks
+Alex

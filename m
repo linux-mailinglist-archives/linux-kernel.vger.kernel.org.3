@@ -2,54 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E90B52D5CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E314C52D5E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239369AbiESOTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S239484AbiESOYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbiESOTP (ORCPT
+        with ESMTP id S232250AbiESOYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:19:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4950673795;
-        Thu, 19 May 2022 07:19:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EB4D31650;
-        Thu, 19 May 2022 07:19:12 -0700 (PDT)
-Received: from [10.57.1.211] (unknown [10.57.1.211])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70C0B3F66F;
-        Thu, 19 May 2022 07:19:10 -0700 (PDT)
-Message-ID: <d15bb8a2-2203-cabf-69de-627d0a45efdc@arm.com>
-Date:   Thu, 19 May 2022 15:19:09 +0100
+        Thu, 19 May 2022 10:24:00 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD505B82C9;
+        Thu, 19 May 2022 07:23:59 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id t2so599967qkb.12;
+        Thu, 19 May 2022 07:23:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qa+RmjWGq636GZ/8xymXuJ2O/Y4ZrpNYQ00uYeEnnps=;
+        b=GtwDUuXWMikoAdpZO5iESljNOMEVwaut9jSbx04nSn/WsKu8Xkw384UfcB5+2X6scR
+         PJBqMPwQCmFLfHBUd54VAq8Y2PcKY83iffpbQFedSLtz7zAk6BxMPVkIxQ6GWvPKqbPr
+         BKjuTH/Qrd7iN9Pb1CdNBG+q8aTXnzFMwSWvsSjAl7vo4kCvhLwYrXb0hT5VtVBFQqm3
+         l7A7BpXBaCGM5y6sVYf/ydOD/xiczCPksHyvaTbg/7tmD+pzW0mABofHjXEGv3/F8BAR
+         TnD2/A6/iSwYBDqbnhGHGD/1fcZGP6VrTw9CG2DV8UrrRYHTJvzaLH1MCSALg261+XXu
+         EcLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qa+RmjWGq636GZ/8xymXuJ2O/Y4ZrpNYQ00uYeEnnps=;
+        b=Gf20gElKXG0UX1JGs/PWZ+LZ0HHA/ZuFPHct294lsIJq5Gkh27dxZGMMV/5MTZU3pp
+         4/USsWSP2nWGufyyr+xlo3lJIz3UfKF2dMPAqQMEBD59v+h5lNZhsXDVR++cWj2+CfBk
+         e3qmG5O77Lp52sCyx0KVt6kRJrWssxSqjWY2abll34k4jWPDBMTs+R5Fzfuml5MJHYHp
+         YQ9utfcdjzoKa2LEpCXIAPWsFcmEy7KI6LLMwP3Rl7HMacvidDwD1Rti6WJATpGKa/ZW
+         Wog56F9Bcy70+cx/mrUs2QOnI0Weu90MZvOwy7M/xgzacrLm2AmePnFxFJZWgfCX+gsR
+         0wKQ==
+X-Gm-Message-State: AOAM530/qQnnKp+e2htpPAyn5X30MidZGrgJZGiMuN1mDp41+exrnHzJ
+        czYH7veTqg2qVhg+KGe4IBs=
+X-Google-Smtp-Source: ABdhPJzTGJKtnF2Jao6mYEzO1MdxqaX7B7cQMJFc5dHa8sZmNVz1kZcmFh865P78KZqTjAs5O9p4Cw==
+X-Received: by 2002:a05:620a:46a1:b0:6a0:465e:ccca with SMTP id bq33-20020a05620a46a100b006a0465ecccamr3116751qkb.631.1652970238949;
+        Thu, 19 May 2022 07:23:58 -0700 (PDT)
+Received: from localhost.localdomain ([217.138.206.82])
+        by smtp.gmail.com with ESMTPSA id c15-20020ac85a8f000000b002f39b99f697sm1539342qtc.49.2022.05.19.07.23.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 07:23:58 -0700 (PDT)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH v2 0/4] Mediatek MT6735 main clock and reset drivers
+Date:   Thu, 19 May 2022 18:22:07 +0400
+Message-Id: <20220519142211.458336-1-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 00/11] perf c2c: Support display for Arm64
-Content-Language: en-US
-To:     Leo Yan <leo.yan@linaro.org>
-References: <20220508092346.255826-1-leo.yan@linaro.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Like Xu <likexu@tencent.com>, Ian Rogers <irogers@google.com>,
-        Alyssa Ross <hi@alyssa.is>, Kajol Jain <kjain@linux.ibm.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        German Gomez <german.gomez@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ali Saidi <alisaidi@amazon.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220508092346.255826-1-leo.yan@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,133 +87,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds support for the main clock and reset controllers on the
+Mediatek MT6735 SoC:
+- apmixedsys (global PLLs)
+- topckgen (global divisors and muxes)
+- infracfg (gates and resets for internal components)
+- pericfg (gates and resets for peripherals)
 
+MT6735 has other more specialized clock controllers, support for which is
+not included in this series:
+- imgsys (camera)
+- mmsys (display)
+- vdecsys (video decoder)
+- audsys (audio)
 
-On 08/05/2022 10:23, Leo Yan wrote:
-> Arm64 Neoverse CPUs supports data source in Arm SPE trace, this allows
-> us to detect cache line contention and transfers.
-> 
-> Unlike x86 architecture, Arm SPE trace data cannot provide 'HITM'
-> snooping flag, Ali Said has a patch set "perf: arm-spe: Decode SPE
-> source and use for perf c2c" [1] which introduces 'peer' flag and
-> synthesizes memory samples with this flag.
-> 
-> Based on patch set [1], this patch set is to finish the second half work
-> to consume the 'peer' flag in perf c2c tool, it adds an extra display
-> 'peer' mode.
-> 
-> Patches 01, 02 and 03 are to support 'N/A' metrics for store operations.
-> 
-> Patches 04 and 05 adds statistics and dimensions for memory samples with
-> peer flag.
-> 
-> Patches 06, 07, 08 are for refactoring, it refines the code with more
-> general naming so this can allow us to easier to extend display modes
-> but not strictly bound to HITM tags.
-> 
-> Patches 09, 10 and 11 are to extend display 'peer' mode, it also updates
-> the document and also changes to use 'peer' mode as default mode on
-> Arm64 arches.
-> 
-> This patch set has been verified for both x86 and Arm64 memory samples.
-> 
-> The display result with x86 memory samples:
-> 
->   =================================================
->              Shared Data Cache Line Table          
->   =================================================
->   #
->   #        ----------- Cacheline ----------      Tot  ------- Load Hitm -------    Snoop    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
->   # Index             Address  Node  PA cnt     Hitm    Total  LclHitm  RmtHitm     Peer  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
->   # .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
->   #
->         0      0x55c8971f0080     0    1967   66.14%      252      252        0        0     6044     3550     2494     2024      470        0      528     2672       78        20      252         0        0         0         0
->         1      0x55c8971f00c0     0       1   33.86%      129      129        0        0      914      914        0        0        0        0      272      374       52        87      129         0        0         0         0
-> 
->   =================================================
->         Shared Cache Line Distribution Pareto      
->   =================================================
->   #
->   #        ----- HITM -----    Snoop  ------- Store Refs ------  --------- Data address ---------                      --------------- cycles ---------------    Total       cpu                                     Shared                               
->   #   Num  RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt        Code address  rmt hitm  lcl hitm      load      peer  records       cnt                  Symbol             Object              Source:Line  Node
->   # .....  .......  .......  .......  .......  .......  .......  ..................  ....  ......  ..................  ........  ........  ........  ........  .......  ........  ......................  .................  .......................  ....
->   #
->     -------------------------------------------------------------------------------
->         0        0      252        0     2024      470        0      0x55c8971f0080
->     -------------------------------------------------------------------------------
->              0.00%   12.30%    0.00%    0.00%    0.00%    0.00%                 0x0     0       1      0x55c8971ed3e9         0      1313       863         0     1222         3  [.] 0x00000000000013e9  false_sharing.exe  false_sharing.exe[13e9]   0
->              0.00%    0.79%    0.00%   90.51%    0.00%    0.00%                 0x0     0       1      0x55c8971ed3e2         0      1800       878         0     3029         3  [.] 0x00000000000013e2  false_sharing.exe  false_sharing.exe[13e2]   0
->              0.00%    0.00%    0.00%    9.49%  100.00%    0.00%                 0x0     0       1      0x55c8971ed3f4         0         0         0         0      662         3  [.] 0x00000000000013f4  false_sharing.exe  false_sharing.exe[13f4]   0
->              0.00%   86.90%    0.00%    0.00%    0.00%    0.00%                0x20     0       1      0x55c8971ed447         0       141       103         0     1131         2  [.] 0x0000000000001447  false_sharing.exe  false_sharing.exe[1447]   0
-> 
->     -------------------------------------------------------------------------------
->         1        0      129        0        0        0        0      0x55c8971f00c0
->     -------------------------------------------------------------------------------
->              0.00%  100.00%    0.00%    0.00%    0.00%    0.00%                0x20     0       1      0x55c8971ed455         0        88        94         0      914         2  [.] 0x0000000000001455  false_sharing.exe  false_sharing.exe[1455]   0
-> 
-> 
-> The display result with Arm SPE memory samples:
-> 
->   =================================================
->              Shared Data Cache Line Table          
->   =================================================
->   #
->   #        ----------- Cacheline ----------    Snoop  ------- Load Hitm -------    Snoop    Total    Total    Total  --------- Stores --------  ----- Core Load Hit -----  - LLC Load Hit --  - RMT Load Hit --  --- Load Dram ----
->   # Index             Address  Node  PA cnt     Peer    Total  LclHitm  RmtHitm     Peer  records    Loads   Stores    L1Hit   L1Miss      N/A       FB       L1       L2    LclHit  LclHitm    RmtHit  RmtHitm       Lcl       Rmt
->   # .....  ..................  ....  ......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  .......  ........  .......  ........  .......  ........  ........
->   #
->         0      0xaaaac17d6000   N/A       0  100.00%        0        0        0       99    18851    18851        0        0        0        0        0    18752        0         0        0         0        0         0         0
-> 
->   =================================================
->         Shared Cache Line Distribution Pareto      
->   =================================================
->   #
->   #        ----- HITM -----    Snoop  ------- Store Refs ------  --------- Data address ---------                      --------------- cycles ---------------    Total       cpu                                    Shared                       
->   #   Num  RmtHitm  LclHitm     Peer   L1 Hit  L1 Miss      N/A              Offset  Node  PA cnt        Code address  rmt hitm  lcl hitm      load      peer  records       cnt                  Symbol            Object      Source:Line  Node
->   # .....  .......  .......  .......  .......  .......  .......  ..................  ....  ......  ..................  ........  ........  ........  ........  .......  ........  ......................  ................  ...............  ....
->   #
->     -------------------------------------------------------------------------------
->         0        0        0       99        0        0        0      0xaaaac17d6000
->     -------------------------------------------------------------------------------
->              0.00%    0.00%    6.06%    0.00%    0.00%    0.00%                0x20   N/A       0      0xaaaac17c25ac         0         0        43       375    18469         2  [.] 0x00000000000025ac  memstress         memstress[25ac]   0
->              0.00%    0.00%   93.94%    0.00%    0.00%    0.00%                0x29   N/A       0      0xaaaac17c3e88         0         0       173       180      135         2  [.] 0x0000000000003e88  memstress         memstress[3e88]   0
-> 
+Tested on a Samsung Galaxy Grand Prime+ "grandpplte" with MT6737T, a slight
+variant of MT6735 with no known differences in the clock controllers. 
 
-Hi Leo,
+Dependencies:
+- clk: mediatek: Move to struct clk_hw provider APIs (series)
+  https://patchwork.kernel.org/project/linux-mediatek/cover/20220510104804.544597-1-wenst@chromium.org/ 
+- Cleanup MediaTek clk reset drivers and support MT8192/MT8195 (series)
+  https://patchwork.kernel.org/project/linux-mediatek/cover/20220503093856.22250-1-rex-bc.chen@mediatek.com/
+- Export required symbols to compile clk drivers as module (single patch)
+  https://patchwork.kernel.org/project/linux-mediatek/patch/20220518111652.223727-7-angelogioacchino.delregno@collabora.com/
+- clk: mediatek: Improvements to simple probe/remove and reset controller unregistration
+  https://patchwork.kernel.org/project/linux-clk/cover/20220519134728.456643-1-y.oudjana@protonmail.com/
 
-I see that the HITM and Store Refs columns (even N/A) are all 0% on Arm.
-Assuming it's a similar example to the x86 one above, does that mean that
-these are always expected to be 0? If so, should they be removed to avoid
-confusion, or is it just a case of the example not producing any non 0
-data for these columns?
+Above are dependencies for patch 4/4 only; DT bindings don't need them.
 
-Thanks
-James
+Changes since v1:
+- Rebase on some pending patches (listed as dependencies above).
+- Move common clock improvemenets to a separate series (last dependency
+  listed above).
+- Use mtk_clk_simple_probe/remove after making them support several clock types
+  in said series.
+- Combine all 4 drivers into one patch, and use one Kconfig symbol for all
+  following a conversation seen on a different series[1].
+- Correct APLL2 registers in apmixedsys driver (were offset backwards by 0x4).
+- Make irtx clock name lower case to match the other clocks.
 
-> [1] https://lore.kernel.org/lkml/20220504184850.24986-1-alisaidi@amazon.com/
-> 
-> Changes from v1:
-> * Update patches 01, 02 and 03 to support 'N/A' metrics for store
->   operations, so can align with the patch set [1] for store samples.
-> 
-> 
-> Leo Yan (11):
->   perf mem: Add stats for store operation with no available memory level
->   perf c2c: Add dimensions for 'N/A' metrics of store operation
->   perf c2c: Update documentation for store metric 'N/A'
->   perf mem: Add statistics for peer snooping
->   perf c2c: Add dimensions for peer load operations
->   perf c2c: Use explicit names for display macros
->   perf c2c: Rename dimension from 'percent_hitm' to
->     'percent_costly_snoop'
->   perf c2c: Refactor node header
->   perf c2c: Sort on peer snooping for load operations
->   perf c2c: Update documentation for new display option 'peer'
->   perf c2c: Use 'peer' as default display for Arm64
-> 
->  tools/perf/Documentation/perf-c2c.txt |  30 ++-
->  tools/perf/builtin-c2c.c              | 363 ++++++++++++++++++++------
->  tools/perf/util/mem-events.c          |  14 +-
->  tools/perf/util/mem-events.h          |   2 +
->  4 files changed, 323 insertions(+), 86 deletions(-)
-> 
+[1] https://lore.kernel.org/linux-mediatek/CAGXv+5H4gF5GXzfk8mjkG4Kry8uCs1CQbKoViBuc9LC+XdHH=A@mail.gmail.com/
+
+Yassine Oudjana (4):
+  dt-bindings: clock: Add Mediatek MT6735 clock bindings
+  dt-bindings: reset: Add MT6735 reset bindings
+  dt-bindings: arm: mediatek: Add MT6735 clock controller compatibles
+  clk: mediatek: Add drivers for MediaTek MT6735 main clock drivers
+
+ .../arm/mediatek/mediatek,infracfg.yaml       |    8 +-
+ .../arm/mediatek/mediatek,pericfg.yaml        |    1 +
+ .../bindings/clock/mediatek,apmixedsys.yaml   |    4 +-
+ .../bindings/clock/mediatek,topckgen.yaml     |    4 +-
+ MAINTAINERS                                   |   16 +
+ drivers/clk/mediatek/Kconfig                  |    9 +
+ drivers/clk/mediatek/Makefile                 |    1 +
+ drivers/clk/mediatek/clk-mt6735-apmixedsys.c  |  235 ++++
+ drivers/clk/mediatek/clk-mt6735-infracfg.c    |  205 ++++
+ drivers/clk/mediatek/clk-mt6735-pericfg.c     |  301 +++++
+ drivers/clk/mediatek/clk-mt6735-topckgen.c    | 1087 +++++++++++++++++
+ .../clock/mediatek,mt6735-apmixedsys.h        |   16 +
+ .../clock/mediatek,mt6735-infracfg.h          |   25 +
+ .../clock/mediatek,mt6735-pericfg.h           |   37 +
+ .../clock/mediatek,mt6735-topckgen.h          |   79 ++
+ .../reset/mediatek,mt6735-infracfg.h          |   31 +
+ .../reset/mediatek,mt6735-pericfg.h           |   31 +
+ 17 files changed, 2085 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/clk/mediatek/clk-mt6735-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt6735-infracfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt6735-pericfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt6735-topckgen.c
+ create mode 100644 include/dt-bindings/clock/mediatek,mt6735-apmixedsys.h
+ create mode 100644 include/dt-bindings/clock/mediatek,mt6735-infracfg.h
+ create mode 100644 include/dt-bindings/clock/mediatek,mt6735-pericfg.h
+ create mode 100644 include/dt-bindings/clock/mediatek,mt6735-topckgen.h
+ create mode 100644 include/dt-bindings/reset/mediatek,mt6735-infracfg.h
+ create mode 100644 include/dt-bindings/reset/mediatek,mt6735-pericfg.h
+
+-- 
+2.36.1
+

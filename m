@@ -2,89 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C48452DBAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB39B52DBC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243126AbiESRrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
+        id S243374AbiESRtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243060AbiESRrn (ORCPT
+        with ESMTP id S243165AbiESRsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:47:43 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2A1AEE06;
-        Thu, 19 May 2022 10:47:42 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id j28so7849821eda.13;
-        Thu, 19 May 2022 10:47:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D4k2Cw/q+uLcOmHvMcwyqwODol2Cgrrywr4+z4BP+Lk=;
-        b=NZPGC7mywR1LSs2MSRmrfM4/G/baLwFQDvGchz97c8iZD56lxjV1MSLz6EO9Bmqycp
-         +LBcGEilfziTMQbD51XBtzuvuWcNoiEERJVtKWcodvfdzmv1EzpLIkPNk0gBJhHh5NvV
-         4gN4DeKnyBMxP7bP8BSjAnBu8r71waxkoH8VzneeN4iMmDwkVfdn8GtqA9hxGJg7tAzD
-         9TV2L5UsQ6iO2rZCR9ltcZxgJ5gPzDkSVvgIdIrbphrzFEyNTT0J96t9soeRjz1VoYSN
-         YSj2fJEjzDzOI48NriXmUl2Mm2NNG+yPFkFRxy1v9LCSCRzRcLp8uw9ZSQV88pwBdOMA
-         8VJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D4k2Cw/q+uLcOmHvMcwyqwODol2Cgrrywr4+z4BP+Lk=;
-        b=rCpy/EKe0yfa3yjzzzt2vbSLiwxJPh0w1i8jyrn8kFHRr2YGeAfux2MgchxVyyVQdc
-         lcPEB6wj1PLxfzAh1TAyZ6QYitpP5rp/QymLoQs2wwmN0ZEF3CF98z5pNKTyyajGCw2j
-         u8YUbYh+dSAX6k/7vwTJW4ecF8/0b9fSFp67ShaLHXb36VU+XnWaOAb6fII2UvIitAr0
-         J1lMmVga55jnEbgk0W9uBz+WZX17v3Vwpwthrf01OzdBMLznTeLikZ1cmDqvhgC+ujUt
-         yiTPXaJ6M62OsaEK6O3uib+PGYJsDR/VuhCXU+EE6OFfPp3vGQZcd6VKshI5YEagXdSG
-         GL+w==
-X-Gm-Message-State: AOAM5306jXqS8wFOzcNnzabaFuWtnYA+DQypwFLQig/w3alxP3EIOUMd
-        HfL5jh3UKO8Pe7H+534qan0=
-X-Google-Smtp-Source: ABdhPJy8cba/ZR+Bc/OsuDsZdhEjG0c3LHE6ylNUPUNaNp+5puwC0FD6yE2qXSimyuSWh4PQ34bkAA==
-X-Received: by 2002:a05:6402:3509:b0:427:e7db:1513 with SMTP id b9-20020a056402350900b00427e7db1513mr6598861edd.407.1652982460989;
-        Thu, 19 May 2022 10:47:40 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id v2-20020a17090651c200b006f3ef214e20sm2362633ejk.134.2022.05.19.10.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 10:47:40 -0700 (PDT)
-Date:   Thu, 19 May 2022 20:47:38 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, Hauke Mehrtens <hauke@hauke-m.de>
-Subject: Re: [PATCH net-next v2 1/2] net: dsa: lantiq_gswip: Fix start index
- in gswip_port_fdb()
-Message-ID: <20220519174738.bgsxpzu5fh4yz6ij@skbuf>
-References: <20220518220051.1520023-1-martin.blumenstingl@googlemail.com>
- <20220518220051.1520023-2-martin.blumenstingl@googlemail.com>
+        Thu, 19 May 2022 13:48:12 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23E5B2255
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:48:08 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J5MiMs023727;
+        Thu, 19 May 2022 12:47:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=PODMain02222019;
+ bh=CzXHR0GocBNOj0BfbZGkVZXbGMIVdRauzKeaNK4Hhqo=;
+ b=QdBWnNQXLxL0jAxomxlpR+02xqf5W/nAbcVbojwo4PveqiiN5Ac9WOC+HmvM2ESB32PO
+ EQ8uaVYpAfPAq85J0kLvdIJhi4WN/T1JJgkmvFyNQRvXhD2QyeEfmw8aYtmnsXUW3kZE
+ /Fo7R2//4AmQMpU7ikgDLoAFCwT6nyuR8RBwHKLE6WB4qva5F9EIbwrfWr11pH50N2ja
+ igRqCm8YTQw4D5qlgccXiLSWJGE+nyrC9EogxyAjqfuBiN0fwTn/a9PCCCTL27UAZPE1
+ M5c2IEnWww9otlzr4mfA5VRVfqRTdbuQBqpvRl0xGBftvF80E5F8hDM/dxnIPImKvCOs tg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3g29u37tee-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 19 May 2022 12:47:54 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
+ 2022 18:47:52 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Thu, 19 May 2022 18:47:52 +0100
+Received: from vitaly-Legion-7-16ACHg6.ad.cirrus.com (unknown [198.90.238.59])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3B8FE476;
+        Thu, 19 May 2022 17:47:52 +0000 (UTC)
+From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v3 07/17] ALSA: hda: cs35l41: Support multiple load paths for firmware
+Date:   Thu, 19 May 2022 18:47:39 +0100
+Message-ID: <20220519174749.15459-8-vitalyr@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220519174749.15459-1-vitalyr@opensource.cirrus.com>
+References: <20220519174749.15459-1-vitalyr@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518220051.1520023-2-martin.blumenstingl@googlemail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: nySu78NR_TdziI2a4ZcOB14uqSu0JTzB
+X-Proofpoint-ORIG-GUID: nySu78NR_TdziI2a4ZcOB14uqSu0JTzB
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 12:00:50AM +0200, Martin Blumenstingl wrote:
-> The first N entries in priv->vlans are reserved for managing ports which
-> are not part of a bridge. Use priv->hw_info->max_ports to consistently
-> access per-bridge entries at index 7. Starting at
-> priv->hw_info->cpu_port (6) is harmless in this case because
-> priv->vlan[6].bridge is always NULL so the comparison result is always
-> false (which results in this entry being skipped).
-> 
-> Fixes: 58c59ef9e930c4 ("net: dsa: lantiq: Add Forwarding Database access")
-> Acked-by: Hauke Mehrtens <hauke@hauke-m.de>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
+From: Stefan Binding <sbinding@opensource.cirrus.com>
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+To be able to support different firmwares and tuning
+for different models, the driver needs to be able to
+load a different firmware and coefficient file based
+on its Subsystem ID.
+
+The driver attempts to load the firmware in the
+following order:
+
+/lib/firmware/cirrus/cs35l41-dsp1-<fw-type>-<ssid>-dev<#>.wmfw
+/lib/firmware/cirrus/cs35l41-dsp1-<fw-type>-<ssid>.wmfw
+/lib/firmware/cirrus/cs35l41-dsp1-<fw-type>.wmfw
+
+Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
+Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+---
+
+Changes since v2:
+ - No change
+ 
+ sound/pci/hda/cs35l41_hda.c | 53 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 46 insertions(+), 7 deletions(-)
+
+diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+index 81d6f4cf0166..0957b4984143 100644
+--- a/sound/pci/hda/cs35l41_hda.c
++++ b/sound/pci/hda/cs35l41_hda.c
+@@ -85,14 +85,23 @@ static const struct cs_dsp_client_ops client_ops = {
+ 
+ static int cs35l41_request_firmware_file(struct cs35l41_hda *cs35l41,
+ 					 const struct firmware **firmware, char **filename,
+-					 const char *dir, const char *filetype)
++					 const char *dir, const char *ssid, const char *amp_name,
++					 const char *filetype)
+ {
+ 	const char * const dsp_name = cs35l41->cs_dsp.name;
+ 	char *s, c;
+ 	int ret = 0;
+ 
+-	*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s.%s", dir, CS35L41_PART, dsp_name, "spk-prot",
+-			      filetype);
++	if (ssid && amp_name)
++		*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s-%s-%s.%s", dir, CS35L41_PART,
++				      dsp_name, "spk-prot", ssid, amp_name,
++				      filetype);
++	else if (ssid)
++		*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s-%s.%s", dir, CS35L41_PART,
++				      dsp_name, "spk-prot", ssid, filetype);
++	else
++		*filename = kasprintf(GFP_KERNEL, "%s%s-%s-%s.%s", dir, CS35L41_PART,
++				      dsp_name, "spk-prot", filetype);
+ 
+ 	if (*filename == NULL)
+ 		return -ENOMEM;
+@@ -129,12 +138,43 @@ static int cs35l41_request_firmware_files(struct cs35l41_hda *cs35l41,
+ {
+ 	int ret;
+ 
+-	/* cirrus/part-dspN-fwtype.wmfw */
++	/* try cirrus/part-dspN-fwtype-sub<-ampname>.wmfw */
++	ret = cs35l41_request_firmware_file(cs35l41, wmfw_firmware, wmfw_filename,
++					    CS35L41_FIRMWARE_ROOT, cs35l41->acpi_subsystem_id,
++					    cs35l41->amp_name, "wmfw");
++	if (!ret) {
++		/* try cirrus/part-dspN-fwtype-sub<-ampname>.bin */
++		cs35l41_request_firmware_file(cs35l41, coeff_firmware, coeff_filename,
++					      CS35L41_FIRMWARE_ROOT, cs35l41->acpi_subsystem_id,
++					      cs35l41->amp_name, "bin");
++		return 0;
++	}
++
++	/* try cirrus/part-dspN-fwtype-sub.wmfw */
+ 	ret = cs35l41_request_firmware_file(cs35l41, wmfw_firmware, wmfw_filename,
+-					    CS35L41_FIRMWARE_ROOT, "wmfw");
++					    CS35L41_FIRMWARE_ROOT, cs35l41->acpi_subsystem_id,
++					    NULL, "wmfw");
+ 	if (!ret) {
++		/* try cirrus/part-dspN-fwtype-sub<-ampname>.bin */
++		ret = cs35l41_request_firmware_file(cs35l41, coeff_firmware, coeff_filename,
++						    CS35L41_FIRMWARE_ROOT,
++						    cs35l41->acpi_subsystem_id,
++						    cs35l41->amp_name, "bin");
++		if (ret)
++			/* try cirrus/part-dspN-fwtype-sub.bin */
++			cs35l41_request_firmware_file(cs35l41, coeff_firmware, coeff_filename,
++						      CS35L41_FIRMWARE_ROOT,
++						      cs35l41->acpi_subsystem_id, NULL, "bin");
++		return 0;
++	}
++
++	/* fallback try cirrus/part-dspN-fwtype.wmfw */
++	ret = cs35l41_request_firmware_file(cs35l41, wmfw_firmware, wmfw_filename,
++					    CS35L41_FIRMWARE_ROOT, NULL, NULL, "wmfw");
++	if (!ret) {
++		/* fallback try cirrus/part-dspN-fwtype.bin */
+ 		cs35l41_request_firmware_file(cs35l41, coeff_firmware, coeff_filename,
+-					      CS35L41_FIRMWARE_ROOT, "bin");
++					      CS35L41_FIRMWARE_ROOT, NULL, NULL, "bin");
+ 		return 0;
+ 	}
+ 
+@@ -143,7 +183,6 @@ static int cs35l41_request_firmware_files(struct cs35l41_hda *cs35l41,
+ 	return ret;
+ }
+ 
+-
+ static int cs35l41_init_dsp(struct cs35l41_hda *cs35l41)
+ {
+ 	const struct firmware *coeff_firmware = NULL;
+-- 
+2.34.1
+

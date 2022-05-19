@@ -2,116 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2808552D0CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6774352D0D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbiESKpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        id S237002AbiESKvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:51:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbiESKpR (ORCPT
+        with ESMTP id S236989AbiESKvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:45:17 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9D3AF1C3;
-        Thu, 19 May 2022 03:45:16 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id nr2-20020a17090b240200b001df2b1bfc40so8411772pjb.5;
-        Thu, 19 May 2022 03:45:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kU+uY/vnjoCqracvCzMxUblA/upfeTjjU/V00N5As9s=;
-        b=dmTulPLRuUGX/7gTQjBwrSIzaVfMIDjN//zFrei6hDzYnKTTRQTmVnRXaPUNHlWYWF
-         HK+onBGX5Q4jNQaOk9c8UBqq2e6qs8v0a0rXys93FKXYozrYyOXo5NvET1+oc9Dzo74w
-         oEq4uTNPPvc6+AkS8+Ta7bFzRt7DmXSoznU5z97pp15GStkfPALE7RKO+vfo75N6sCxt
-         Jq3W6Y+4Njpkz2opwEZPyGNviQkBRpv/fZh+citwaEa7wCugegBtzmrkjNsBWWG7EmyI
-         Tlx0WMP5/ypA7shGHuEBgKxGcvGCVAlTihzH1cBkntdzYh7/yQ5CZANDAsiqjoIOG0Fp
-         HqQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kU+uY/vnjoCqracvCzMxUblA/upfeTjjU/V00N5As9s=;
-        b=ElcSQcpgyyj7h8qfcNbp3A26vdImQZsZiNA1tpis71vxbwB7alJLUlfVFV/lRb0hsM
-         0nAWHZQ1bcTS9S4f8uKZrn6BHFmI8JWz3aEDv79UoX8TEeE26qaGuEsufVss0OQ0sUQO
-         hleXExkBYLBxMNzs3YTrdteBaOsClCe9pDnIsgT/UWijJxS0x3n668cc3eCsCMnWY10D
-         cFqm7wyaemhZcRfzulnPRFmlPuDYWUGwV/KeH5b7VZgqdJc2hukzp+qQmbPMc5eK5nel
-         uW53HswmkispVNLiV8Iu0YTgrCSAVX5qVJq8XHyWWwvdXicT1nDf8/+sG1Cds+NoqdSd
-         aL6Q==
-X-Gm-Message-State: AOAM5303ZNUFcMKsj/uS99b8P/ell/ZZWzoL78O6YDkIIBNnSYCPVRNj
-        0TDAi9JwTLzO9mp/gU1F22FhXiTp1Mku5g==
-X-Google-Smtp-Source: ABdhPJz1YeGQCGZAdh0qKsrefI3VsajkXceQXSW2Z9ljNyJhqZZA1638ROCGpPbCjn/52HS8MDZZbA==
-X-Received: by 2002:a17:90b:4c4d:b0:1df:a164:7055 with SMTP id np13-20020a17090b4c4d00b001dfa1647055mr5104201pjb.180.1652957115835;
-        Thu, 19 May 2022 03:45:15 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.80])
-        by smtp.gmail.com with ESMTPSA id m16-20020a62a210000000b0050dc7628142sm3753768pff.28.2022.05.19.03.45.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 03:45:15 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/events/intel/ds: Enable large PEBS for PERF_SAMPLE_WEIGHT type
-Date:   Thu, 19 May 2022 18:45:09 +0800
-Message-Id: <20220519104509.51847-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.36.1
+        Thu, 19 May 2022 06:51:45 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3106C0DF
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:51:44 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 0E4F91F40830
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652957503;
+        bh=FEvtN/qRGPegbwmeQKWEXthSPoRxElTwUrwmLrmLy1g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=heFBLgOEEmscg97VB5nCTwQlX1nBJb+Fk2f3VsKAMQ0yr8rkT4zn3bL9PcAwcg9sf
+         dsOHrWaiarzhEv7GhqNgAAKMRpX4dcXdsdbgAy0RT/HKsfbR1pVNgcoGUDjBXjT0Kw
+         4nm7R8dGXsXBl10U7M1dohBMCbZlTlsO+w56Nj0OjkUX9OrZ9OolZ6cN5OnWnE3rJ7
+         EgHT9V9shVRSTTypIeFOuaYCJRO2kLdGweVDzyGwX648gfj53mBIzOcpkTM+z+YQFn
+         oNKPNYd9RWa2zWXmhn2FAJIhunbcsd3Gg7opfHvkoC0PUyAg0ZxD3lFp+NtyW8VrkR
+         xF0kuF0z4ZNiw==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v9 1/2] notifier: Add atomic_notifier_call_chain_is_empty()
+Date:   Thu, 19 May 2022 13:50:15 +0300
+Message-Id: <20220519105015.1195955-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Add atomic_notifier_call_chain_is_empty() that returns true if given
+atomic call chain is empty.
 
-Large PEBS could be enabled for the generic PERF_SAMPLE_WEIGHT sample
-type until other non-compatible flags such as PERF_SAMPLE_DATA_PAGE_SIZE
-(due to lack of munmap tracking) finally stop it.
+The first user of this new notifier API function will be the kernel
+power-off core code that will support power-off call chains. The core
+code will need to check whether there is a power-off handler registered
+at all in order to decide whether to halt machine or power it off.
 
-Add PERF_SAMPLE_WEIGHT to LARGE_PEBS_FLAGS to save PMIs overhead.
-
-Tested it with:
-
-$ perf mem record -c 1000 workload
-Before: Captured and wrote 0.126 MB perf.data (958 samples) [958 PMIs]
-After: Captured and wrote 0.313 MB perf.data (4859 samples) [3 PMIs]
-
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Reported-by: Yongchao Duan <yongduan@tencent.com>
-Signed-off-by: Like Xu <likexu@tencent.com>
+Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- arch/x86/events/perf_event.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index 21a5482bcf84..1ed0970d67e6 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -136,7 +136,8 @@ struct amd_nb {
- 	PERF_SAMPLE_DATA_SRC | PERF_SAMPLE_IDENTIFIER | \
- 	PERF_SAMPLE_TRANSACTION | PERF_SAMPLE_PHYS_ADDR | \
- 	PERF_SAMPLE_REGS_INTR | PERF_SAMPLE_REGS_USER | \
--	PERF_SAMPLE_PERIOD | PERF_SAMPLE_CODE_PAGE_SIZE)
-+	PERF_SAMPLE_PERIOD | PERF_SAMPLE_CODE_PAGE_SIZE | \
-+	PERF_SAMPLE_WEIGHT)
+Changelog:
+
+v9: - Extended commit message with a usage example.
+
+    - Corrected doc-comment with s/blocking/atomic/.
+
+ include/linux/notifier.h |  2 ++
+ kernel/notifier.c        | 13 +++++++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/include/linux/notifier.h b/include/linux/notifier.h
+index 87069b8459af..95e2440037de 100644
+--- a/include/linux/notifier.h
++++ b/include/linux/notifier.h
+@@ -173,6 +173,8 @@ extern int blocking_notifier_call_chain_robust(struct blocking_notifier_head *nh
+ extern int raw_notifier_call_chain_robust(struct raw_notifier_head *nh,
+ 		unsigned long val_up, unsigned long val_down, void *v);
  
- #define PEBS_GP_REGS			\
- 	((1ULL << PERF_REG_X86_AX)    | \
++extern bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh);
++
+ #define NOTIFY_DONE		0x0000		/* Don't care */
+ #define NOTIFY_OK		0x0001		/* Suits me */
+ #define NOTIFY_STOP_MASK	0x8000		/* Don't call further */
+diff --git a/kernel/notifier.c b/kernel/notifier.c
+index ba005ebf4730..ea7524522de4 100644
+--- a/kernel/notifier.c
++++ b/kernel/notifier.c
+@@ -204,6 +204,19 @@ int atomic_notifier_call_chain(struct atomic_notifier_head *nh,
+ EXPORT_SYMBOL_GPL(atomic_notifier_call_chain);
+ NOKPROBE_SYMBOL(atomic_notifier_call_chain);
+ 
++/**
++ *	atomicnotifier_call_chain_is_empty - Check whether notifier chain is empty
++ *	@nh: Pointer to head of the atomic notifier chain
++ *
++ *	Checks whether notifier chain is empty.
++ *
++ *	Returns true is notifier chain is empty, false otherwise.
++ */
++bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh)
++{
++	return !rcu_access_pointer(nh->head);
++}
++
+ /*
+  *	Blocking notifier chain routines.  All access to the chain is
+  *	synchronized by an rwsem.
 -- 
-2.36.1
+2.35.3
 

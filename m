@@ -2,117 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BB952C7E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351CF52C840
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 01:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbiERXo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 19:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S230377AbiERX6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 19:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiERXow (ORCPT
+        with ESMTP id S229534AbiERX6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 19:44:52 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A4ADF35
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 16:44:50 -0700 (PDT)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220518234445epoutp0430bc6f5d21a6c992874c74fa6b7b9cc9~wV7IapGkT3164131641epoutp04k
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:44:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220518234445epoutp0430bc6f5d21a6c992874c74fa6b7b9cc9~wV7IapGkT3164131641epoutp04k
+        Wed, 18 May 2022 19:58:51 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67A2AEE2A
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 16:58:48 -0700 (PDT)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220518235846epoutp01923353ed97fcd35e0ee7a1645c19cdf6~wWHXUUtpr1085310853epoutp01X
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:58:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220518235846epoutp01923353ed97fcd35e0ee7a1645c19cdf6~wWHXUUtpr1085310853epoutp01X
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652917485;
-        bh=Ceuy/MSkqpsgmL0nQecF1cnw9KRXOOlAG/BIY4xy30E=;
+        s=mail20170921; t=1652918326;
+        bh=+Qdz/eeKSfcMQcKFz4nw8AzxuUFPKC84yCVM3LQnZkc=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=MydHG5JD/Gz0cKI6DArv32Fn1kHrwtpH7W82x3VyxljUnTlKQrML6w7LeOdOhYj8w
-         DISVXYyjxgzQ2w997r1nt/Zuau4Ojv+DmSsJ4RprTjVcBofAq0F2hE3UZnQnraTqPH
-         Wb2ywaOGN8JM1b0uWc7+zqXDZO1CAktLqd1jxfCE=
+        b=iRHhIYn3rCjLJ+LZ8wX8WZ74IcETglt3iWhntGc7YnF3d9j/pmpHMXSNivFd186TU
+         PcFNTfbPzeV3U2aAP19BcjZy/Sg75Q6+SX3+3I0HGBDSkre2A1ucXaAAaWf2Ahx1JZ
+         47cp8wE1dsWRMfLQqGz5pXCvjjfIL1JcunIiHZY0=
 Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220518234445epcas1p27b1e899c71ef5e24c83e8bc852da35f2~wV7IBWahl2849828498epcas1p2L;
-        Wed, 18 May 2022 23:44:45 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.145]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4L3V2g5pCvz4x9Q8; Wed, 18 May
-        2022 23:44:43 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        84.5F.10038.BE485826; Thu, 19 May 2022 08:44:43 +0900 (KST)
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20220518235845epcas1p43dbe42afbcc11248908e687339d6d7f9~wWHWqyYDU2399123991epcas1p4Z;
+        Wed, 18 May 2022 23:58:45 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.36.145]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4L3VLr4Ynyz4x9QK; Wed, 18 May
+        2022 23:58:44 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        18.BE.10354.43885826; Thu, 19 May 2022 08:58:44 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220518234443epcas1p1c9c9ec527fada20e3e253962da51eb51~wV7GUpXTM0109301093epcas1p1e;
-        Wed, 18 May 2022 23:44:43 +0000 (GMT)
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220518235843epcas1p4185dcb6661b2c02ad4c540ddb2e7b8da~wWHUwzIXf2399123991epcas1p4U;
+        Wed, 18 May 2022 23:58:43 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220518234443epsmtrp1b79f3083289f96cd155174c6572a5d12~wV7GT4X470084100841epsmtrp1k;
-        Wed, 18 May 2022 23:44:43 +0000 (GMT)
-X-AuditID: b6c32a37-111ff70000002736-2d-628584eb439e
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        20220518235843epsmtrp12bdaf65dc12d01b1b7f70e5cf1b52f12~wWHUv1IlC1052010520epsmtrp1Y;
+        Wed, 18 May 2022 23:58:43 +0000 (GMT)
+X-AuditID: b6c32a38-49fff70000002872-d4-628588342f3c
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AA.52.11276.BE485826; Thu, 19 May 2022 08:44:43 +0900 (KST)
+        10.73.11276.33885826; Thu, 19 May 2022 08:58:43 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220518234443epsmtip2caedfb0e60dbf4a3b38a3d42c81a10bb~wV7GA4XnT0872508725epsmtip2D;
-        Wed, 18 May 2022 23:44:43 +0000 (GMT)
-Subject: Re: [GIT PULL] devfreq next for 5.19
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220518235843epsmtip1b780fc054726eab38bc21528b5693c4d~wWHUT0vWY2084920849epsmtip12;
+        Wed, 18 May 2022 23:58:43 +0000 (GMT)
+Subject: Re: [PATCH v5 0/4] PM / devfreq: Add cpu based scaling support to
+ passive governor
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     johnson.wang@mediatek.com, mka@chromium.org, wenst@chromium.org,
+        jia-wei.chang@mediatek.com, andrew-sh.cheng@mediatek.com,
+        hsinyi@chromium.org, saravanak@google.com,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
 From:   Chanwoo Choi <cw00.choi@samsung.com>
 Organization: Samsung Electronics
-Message-ID: <91fd3735-4718-bef7-4b54-84a322552dd4@samsung.com>
-Date:   Thu, 19 May 2022 09:11:05 +0900
+Message-ID: <6e6a20e4-d03b-9508-9fe3-75788076e0f4@samsung.com>
+Date:   Thu, 19 May 2022 09:25:05 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0hRiWXrG1pMzLAqoRE9MidDPm21Mjpk7sjPsE=LA2oVuA@mail.gmail.com>
+In-Reply-To: <59f53724-87fe-97b8-0660-dcb1a5b464fe@samsung.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMJsWRmVeSWpSXmKPExsWy7bCmnu7rltYkg9sn9Cwm3rjCYnG26Q27
-        xeVdc9gsPvceYbS43biCzWLul6nMFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJyrbJ
-        SE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpASaEsMacU
-        KBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgWqBXnJhbXJqXrpeXWmJlaGBgZApUmJCdcW7L
-        DZaCNu2KKVdPMTYwflPsYuTkkBAwkfi/6TN7FyMXh5DADkaJ7k8LmEASQgKfGCUeXhCASHxj
-        lFiz9iczTMfupgOsEIm9jBKb9t+Gct4zSuxdfxasXVhAV2La43awDhEBbYkli64ygxQxC9xk
-        kjj0fgJYgk1AS2L/ixtsIDa/gKLE1R+PGbsYOTh4Bewkrh9PAAmzCKhKNJ/rASsRFQiTOLmt
-        hRHE5hUQlDg58wkLiM0pEChx8u1EsL3MAuISt57Mh7LlJba/nQO2V0JgKofE4uWN7CDzJQRc
-        JOZc1Ib4Rlji1fEt7BC2lMTL/jZ2iPpmRomGF7cZIZweRomjz/pYIKqMJfYvncwEMohZQFNi
-        /S59iLCixM7fcxkhFvNJvPvawwqxi1eio00IokRZ4vKDu0wQtqTE4vZOtgmMSrOQvDMLyQuz
-        kLwwC2HZAkaWVYxiqQXFuempxYYFxvDYTs7P3cQITp1a5jsYp739oHeIkYmD8RCjBAezkggv
-        Y25LkhBvSmJlVWpRfnxRaU5q8SFGU2AAT2SWEk3OBybvvJJ4QxNLAxMzI2MTC0MzQyVx3lXT
-        TicKCaQnlqRmp6YWpBbB9DFxcEo1MG3X2vRcXcNW8PtaPbfLaSv/eU/K3di598vsDb+P3nkU
-        vSJn0uRCk3m33jfeceJ+2Od8yj9h3vdz3ed+V9x+adrE8WbjWb6d2qE8Zs+57xrVZQhv9trn
-        verli8Pi4qIzQ2ebzcvbOYNb8tqHNg7XtxwX23LfHV0YuSDpQ4Yb+36Op2b5J38ItC6KTzh5
-        9yzPpB9PfY1Lft1642BXfPB8Sk1XLuO2YwlR1880dz1LiX+hvcH25WuGa7kBT5bf3iIvd8T9
-        XHzjde39i94tu8ugnLHvRiz/vUlcNWf9lrOlF3dbmkRzv7k42fkp+89ZUeFPGZ+UG3PtU9sV
-        xLvJxuf7TfYa87WdGWZcEabT61IWnfJRYinOSDTUYi4qTgQASQ1PSSYEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHLMWRmVeSWpSXmKPExsWy7bCSvO7rltYkg5sHhS0m3rjCYnG26Q27
-        xeVdc9gsPvceYbS43biCzWLul6nMFmdOX2J1YPfYtKqTzWPL1XYWj74tqxg9Pm+SC2CJ4rJJ
-        Sc3JLEst0rdL4Mo4t+UGS0GbdsWUq6cYGxi/KXYxcnJICJhI7G46wNrFyMUhJLCbUeL48k4W
-        iISkxLSLR5m7GDmAbGGJw4eLIWreMkp0vH3ICFIjLKArMe1xOzOILSKgLbFk0VVmkCJmgZtM
-        EjuvHmaC6LjJKPH1wmewDjYBLYn9L26wgdj8AooSV388ZgTZwCtgJ3H9eAJImEVAVaL5XA9Y
-        iahAmMTOJY+ZQGxeAUGJkzOfgB3HKRAocfLtRLA4s4C6xJ95l5ghbHGJW0/mQ8XlJba/ncM8
-        gVF4FpL2WUhaZiFpmYWkZQEjyypGydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxNjOAo0tLc
-        wbh91Qe9Q4xMHIyHGCU4mJVEeBlzW5KEeFMSK6tSi/Lji0pzUosPMUpzsCiJ817oOhkvJJCe
-        WJKanZpakFoEk2Xi4JRqYCrzEtM/Z8q4btV65tQKjmWWPLnnNft99E11W3WUTngbOxWq6WX6
-        GP3KDKrmXWPCvXQ540vtH25loTyR59Z+fbS/4MDjbV2PX3WvtmsUe9/MyV77KkaLjbGb4WNY
-        jiC3SJFPdeFkfwvd3yEWYgl11wTNSgWP7KtJWOJaaZAgIPr7IAvn0an5WjMNWbrS3X7e45B6
-        Z+X3V9c+caVLwt4zO24IrH1kVj7jrpq01u9tPcd1TcWf/jm+5Wdmi8QmqcP/oyqniDnm+d7x
-        mRhxnje6T6pltfKmGQ8L5TuWVnWkylrs5iznPZy1Vd/fcP7DrE2LjqwQfq/x48G+0m+nEm+f
-        K+kQ+NIuyXXw9oxCfyElluKMREMt5qLiRAAVDzWaEQMAAA==
-X-CMS-MailID: 20220518234443epcas1p1c9c9ec527fada20e3e253962da51eb51
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPJsWRmVeSWpSXmKPExsWy7bCmvq5JR2uSwaklchbb179gtZjQup3Z
+        4vj+JewWx34FW5xtesNucXnXHDaLz71HGC3WHrnLbvF5w2NGi9uNK9gsug79ZbOY0XaZ1YHH
+        Y3bDRRaPBZtKPVpO7mfx6NuyitHj8ya5ANaobJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMD
+        Q11DSwtzJYW8xNxUWyUXnwBdt8wcoOuUFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUp
+        OQWmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZH29pFWzRqJj87AR7A+MWxS5GTg4JAROJU9d+
+        sHUxcnEICexglDj7thfK+cQo0TJlL5TzjVHi7vltbDAtsyZOYoZI7GWUuNHxgxXCec8oseXO
+        e0aQKmGBWIl9b54zg9giApkSR869AitiFnjMKPF9yRtWkASbgJbE/hc3wMbyCyhKXP3xGKyZ
+        V8BO4sz0rewgNouAqsSPqcvA6kUFwiRObmuBqhGUODnzCUsXIwcHp4C9xOt7sSBhZgFxiVtP
+        5jNB2PIS29/OAbtUQmAPh8SCqf/A6iUEXCRmbg2H+EZY4tXxLewQtpTEy/42doj6ZkaJhhe3
+        GSGcHkaJo8/6WCCqjCX2L53MBDKIWUBTYv0ufYiwosTO33MZIRbzSbz72sMKsYtXoqNNCKJE
+        WeLyg7tMELakxOL2TrYJjEqzkHwzC8kLs5C8MAth2QJGllWMYqkFxbnpqcWGBSbw2E7Oz93E
+        CE65WhY7GOe+/aB3iJGJg/EQowQHs5IIL2NuS5IQb0piZVVqUX58UWlOavEhRlNg+E5klhJN
+        zgcm/bySeEMTSwMTMyNjEwtDM0Mlcd7eqacThQTSE0tSs1NTC1KLYPqYODilGpgkq3cyfr4w
+        SViyknXqyv5LMZ1nTPrOsgrVc249cq5tsXz2nONyS3QncLmlPEh5cWT6q5BbB/YvzaxMCrB8
+        6jHjqLbrJM6dc+7yVYasv9Oy7FCS5HKV+oKDkR/WXr2ivD43eDHP5WOLmCzOKBplKhdeyjDc
+        t7v8SVFm9JPJbBbrzrCpJ+5+GJe56f9PoapZB7eHd7jZl0bNe8G569tCY4WFV88Jt7sdnl7Y
+        qXL0XOVeX8Mfh/N5WM7OkM7qyc1oKHQPYjK2+lO0YfqnLMnJJqzNYRV5n19lPzdjMfFSvNgh
+        pdlyz7Y3asF7aYHtAf8li5VvtEwINOBcXTDvSr1WHvf2nawVRsmWxkeZXv71tFNiKc5INNRi
+        LipOBABc/F2BQgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsWy7bCSnK5xR2uSwYJZkhbb179gtZjQup3Z
+        4vj+JewWx34FW5xtesNucXnXHDaLz71HGC3WHrnLbvF5w2NGi9uNK9gsug79ZbOY0XaZ1YHH
+        Y3bDRRaPBZtKPVpO7mfx6NuyitHj8ya5ANYoLpuU1JzMstQifbsEroyPt7QKtmhUTH52gr2B
+        cYtiFyMnh4SAicSsiZOYuxi5OIQEdjNKXJ77iBEiISkx7eJRoAQHkC0scfhwMUTNW0aJj6fv
+        soLUCAvESux785wZxBYRyJTYsf8iE0gRs8BjoEHzH7BAdBxmlLhzoQ2sik1AS2L/ixtsIDa/
+        gKLE1R+PwbbxCthJnJm+lR3EZhFQlfgxdRnYBlGBMImdSx4zQdQISpyc+YQF5CJOAXuJ1/di
+        QcLMAuoSf+ZdYoawxSVuPZnPBGHLS2x/O4d5AqPwLCTds5C0zELSMgtJywJGllWMkqkFxbnp
+        ucWGBYZ5qeV6xYm5xaV56XrJ+bmbGMGxp6W5g3H7qg96hxiZOBgPMUpwMCuJ8DLmtiQJ8aYk
+        VlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUIJsvEwSnVwGQkdjjRrbSv/sLB
+        Z2pbF+xhfXVs14fdph/N+dMFtr1Yfv6V25c2G46Ub5MnCIafvreasfFzoL9tdtteFiWjSPl3
+        /pMfnWsWUciymPbl70Rjs03agmqsn72fb+XMYYhxv5T3aVGAjvi7Ey/+s1SbibTx3a/sZrit
+        2ifLzqZyUjVl7u6uyo+/0/SbY7n2r3gmw5f68+1vtQcu7fa6AfHF/HWRx6+G2EsYb5/q5s71
+        bkpC3p/HzZZ79dg3Pf7vu0/071Ftjp8iXtdjLLWZby+WEbBljjTcYCXCp5hupsVuvXnR3Wud
+        P5vvLpIwmL03W+Ky7YHYnRLJrOzxAdGOUd/YdjlM6n3caH455vP6p77TlViKMxINtZiLihMB
+        IZnZZywDAAA=
+X-CMS-MailID: 20220518235843epcas1p4185dcb6661b2c02ad4c540ddb2e7b8da
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220518021539epcas1p3449c756c4aca3c12000e2350b288a197
-References: <CGME20220518021539epcas1p3449c756c4aca3c12000e2350b288a197@epcas1p3.samsung.com>
-        <3acd6c32-6e78-dfc2-3e45-84f69a7d5f36@samsung.com>
-        <CAJZ5v0hRiWXrG1pMzLAqoRE9MidDPm21Mjpk7sjPsE=LA2oVuA@mail.gmail.com>
+X-CMS-RootMailID: 20220517085446epcas1p4c07ab7d3b80d62c0093c3a45484eae97
+References: <CGME20220517085446epcas1p4c07ab7d3b80d62c0093c3a45484eae97@epcas1p4.samsung.com>
+        <20220517092108.31680-1-cw00.choi@samsung.com>
+        <59f53724-87fe-97b8-0660-dcb1a5b464fe@samsung.com>
 X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
@@ -124,126 +126,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 4:04 AM, Rafael J. Wysocki wrote:
-> On Wed, May 18, 2022 at 4:16 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+Hi Marek,
+
+Thanks for the report.
+It 
+
+
+On 5/18/22 7:56 PM, Marek Szyprowski wrote:
+> Hi,
+> 
+> On 17.05.2022 11:21, Chanwoo Choi wrote:
+>> The devfreq passive governor has already supported the devfreq parent device
+>> for coupling the frequency change if some hardware have the constraints
+>> such as power sharing and so on.
 >>
->> Dear Rafael,
+>> Add cpu based scaling support to passive governor with required-opp property.
+>> It uses the cpufreq notifier to catch the frequency change timing of cpufreq
+>> and get the next frequency according to new cpu frequency by using required-opp
+>> property. It is based on patch[1] and then just code clean-up by myself.
 >>
->> This is devfreq-next pull request for v5.19-rc1. I add detailed description of
->> this pull request on the following tag. Please pull devfreq with
->> following updates.
->> - tag name : devfreq-next-for-5.19
+>> Make the common code for both passive_devfreq and passive_cpufreq
+>> parent type to remove the duplicate code.
+> 
+> I've just tested it on Exynos based boards and on all I see the 
+> following issues after system suspend/resume cycle:
+> 
+> # time rtcwake -s10 -mmem
+> rtcwake: wakeup from "mem" using /dev/rtc0 at Wed May 18 11:13:16 2022
+> PM: suspend entry (deep)
+> Filesystems sync: 0.001 seconds
+> Freezing user space processes ... (elapsed 0.002 seconds) done.
+> OOM killer disabled.
+> Freezing remaining freezable tasks ... (elapsed 0.002 seconds) done.
+> 
+> ...
+> 
+> devfreq soc:bus-disp1-fimd: failed to suspend devfreq device
+> devfreq soc:bus-jpeg-apb: failed to suspend devfreq device
+> devfreq soc:bus-jpeg: failed to suspend devfreq device
+> devfreq soc:bus-g2d-acp: failed to suspend devfreq device
+> devfreq soc:bus-g2d: failed to suspend devfreq device
+> devfreq soc:bus-peri: failed to suspend devfreq device
+> devfreq soc:bus-gen: failed to suspend devfreq device
+> devfreq soc:bus-mfc: failed to suspend devfreq device
+> devfreq soc:bus-fsys2: failed to suspend devfreq device
+> devfreq soc:bus-fsys-apb: failed to suspend devfreq device
+> devfreq soc:bus-noc: failed to suspend devfreq device
+> ...
+> Disabling non-boot CPUs ...
+> Enabling non-boot CPUs ...
+> ...
+> devfreq soc:bus-mscl: failed to resume devfreq device
+> devfreq soc:bus-gscl-scaler: failed to resume devfreq device
+> devfreq soc:bus-disp1: failed to resume devfreq device
+> devfreq soc:bus-disp1-fimd: failed to resume devfreq device
+> devfreq soc:bus-jpeg-apb: failed to resume devfreq device
+> devfreq soc:bus-jpeg: failed to resume devfreq device
+> devfreq soc:bus-g2d-acp: failed to resume devfreq device
+> devfreq soc:bus-g2d: failed to resume devfreq device
+> devfreq soc:bus-peri: failed to resume devfreq device
+> devfreq soc:bus-gen: failed to resume devfreq device
+> devfreq soc:bus-mfc: failed to resume devfreq device
+> devfreq soc:bus-fsys2: failed to resume devfreq device
+> devfreq soc:bus-fsys-apb: failed to resume devfreq device
+> devfreq soc:bus-noc: failed to resume devfreq device
+> 
+> Some boards (like Trats2) after suspend/resume cycle reveals random crashes.
+> 
+> All those issues were not observed before applying this patchset.
+> 
+>> [1] [RFC,v2] PM / devfreq: Add cpu based scaling support to passive_governor
+>> - https://lore.kernel.org/patchwork/patch/1101049/
 >>
->> Best Regards,
->> Chanwoo Choi
+>> Changes from v4:
+>> : https://patchwork.kernel.org/project/linux-pm/cover/20220511093554.17535-1-cw00.choi@samsung.com/
+>> - Fix issue[2] reported by Marek Szyprowski
+>> [2] https://patchwork.kernel.org/project/linux-pm/patch/20220511093554.17535-3-cw00.choi@samsung.com/
 >>
+>> Changes from v3:
+>> : ttps://patchwork.kernel.org/project/linux-pm/cover/20220509120337.92472-1-cw00.choi@samsung.com/
+>> - Add tested-by tag of both Chen-Yu Tsai and Johnson Wang
+>> - Fix some typo
 >>
->> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+>> Changes from v2:
+>> : https://patchwork.kernel.org/project/linux-pm/cover/20220507150145.531864-1-cw00.choi@samsung.com/
+>> - Drop the following patch ("PM / devfreq: passive: Update frequency when start governor")
+>> - Move p_data->this initialization into cpufreq_passive_regiser_notifier()
 >>
->>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
->>
->> are available in the Git repository at:
->>
->>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.19
->>
->> for you to fetch changes up to 26984d9d581e5049bd75091d2e789b9cc3ea12e0:
->>
->>   PM / devfreq: passive: Keep cpufreq_policy for possible cpus (2022-05-17 18:24:39 +0900)
->>
->> ----------------------------------------------------------------
->> Update devfreq next for v5.19
->>
->> Detailed description for this pull request:
->> 1. Update devfreq core
->> - Add cpu based scaling support to passive governor. Some device like
->> cache might require the dynamic frequency scaling. But, it has very
->> tightly to cpu frequency. So that use passive governor to scale
->> the frequency according to current cpu frequency.
->>
->> To decide the frequency of the device, the governor does one of the following:
->> : Derives the optimal devfreq device opp from required-opps property of
->>   the parent cpu opp_table.
->>
->> : Scales the device frequency in proportion to the CPU frequency. So, if
->>   the CPUs are running at their max frequency, the device runs at its
->>   max frequency. If the CPUs are running at their min frequency, the
->>   device runs at its min frequency. It is interpolated for frequencies
->>   in between.
->>
->> 2. Update devfreq driver
->> - Update rk3399_dmc.c as following:
->> : Convert dt-binding document to YAML and deprecate unused properties.
->>
->> : Use Hz units for the device-tree properties of rk3399_dmc.
->>
->> : rk3399_dmc is able to set the idle time before changing the dmc clock.
->>   Specify idle time parameters by using nano-second unit on dt bidning.
->>
->> : Add new disable-freq properties to optimize the power-saving feature
->>   of rk3399_dmc.
->>
->> : Disable devfreq-event device on remove() to fix unbalanced
->>   enable-disable count.
->>
->> : Use devm_pm_opp_of_add_table()
->>
->> : Block PMU (Power-Management Unit) transitions when scaling frequency
->>   by ARM Trust Firmware in order to fix the conflict between PMU and DMC
->>   (Dynamic Memory Controller).
->> ----------------------------------------------------------------
->>
->> Brian Norris (15):
->>       dt-bindings: devfreq: rk3399_dmc: Convert to YAML
->>       dt-bindings: devfreq: rk3399_dmc: Deprecate unused/redundant properties
->>       dt-bindings: devfreq: rk3399_dmc: Fix Hz units
->>       dt-bindings: devfreq: rk3399_dmc: Specify idle params in nanoseconds
->>       dt-bindings: devfreq: rk3399_dmc: Add more disable-freq properties
->>       PM / devfreq: rk3399_dmc: Drop undocumented ondemand DT props
->>       PM / devfreq: rk3399_dmc: Drop excess timing properties
->>       PM / devfreq: rk3399_dmc: Use bitfield macro definitions for ODT_PD
->>       PM / devfreq: rk3399_dmc: Support new disable-freq properties
->>       PM / devfreq: rk3399_dmc: Support new *-ns properties
->>       PM / devfreq: rk3399_dmc: Disable edev on remove()
->>       PM / devfreq: rk3399_dmc: Use devm_pm_opp_of_add_table()
->>       PM / devfreq: rk3399_dmc: Avoid static (reused) profile
->>       soc: rockchip: power-domain: Manage resource conflicts with firmware
->>       PM / devfreq: rk3399_dmc: Block PMU during transitions
+>> Changes from v1:
+>> : https://patchwork.kernel.org/project/linux-pm/cover/20210617060546.26933-1-cw00.choi@samsung.com/
+>> - Rename cpu_data variable to parent_cpu_data to avoid build fail
+>> - Use for_each_possible_cpu macro when register cpufreq transition notifier
+>> - Add missing exception handling when cpufreq_passive_register_notifier is failed
+>> - Keep cpufreq_policy for posible cpus instead of NR_CPU in order to avoid
+>>    the memory waste when NR_CPU is too high.
+>> - Add reviewed-by tag of Matthias Kaehlcke for patch1
 >>
 >> Chanwoo Choi (3):
->>       PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
->>       PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
->>       PM / devfreq: passive: Keep cpufreq_policy for possible cpus
+>>    PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+>>    PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+>>    PM / devfreq: passive: Keep cpufreq_policy for possible cpus
 >>
 >> Saravana Kannan (1):
->>       PM / devfreq: Add cpu based scaling support to passive governor
+>>    PM / devfreq: Add cpu based scaling support to passive governor
 >>
->>  .../devicetree/bindings/devfreq/rk3399_dmc.txt     | 212 -----------
->>  .../memory-controllers/rockchip,rk3399-dmc.yaml    | 384 ++++++++++++++++++++
->>  drivers/devfreq/devfreq.c                          |  20 +-
->>  drivers/devfreq/governor.h                         |  27 ++
->>  drivers/devfreq/governor_passive.c                 | 403 +++++++++++++++++----
->>  drivers/devfreq/rk3399_dmc.c                       | 312 ++++++++--------
->>  drivers/soc/rockchip/pm_domains.c                  | 118 ++++++
->>  include/linux/devfreq.h                            |  17 +-
->>  include/soc/rockchip/pm_domains.h                  |  25 ++
->>  9 files changed, 1063 insertions(+), 455 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
->>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
->>  create mode 100644 include/soc/rockchip/pm_domains.h
-> 
-> Pulled, thanks!
-> 
+>>   drivers/devfreq/devfreq.c          |  20 +-
+>>   drivers/devfreq/governor.h         |  27 ++
+>>   drivers/devfreq/governor_passive.c | 403 ++++++++++++++++++++++++-----
+>>   include/linux/devfreq.h            |  17 +-
+>>   4 files changed, 389 insertions(+), 78 deletions(-)
+>>
+> Best regards
 > 
 
-Dear Rafael,
 
-The some changes on this pull request contains the not fixed issue
-related to devfrq passive governor. After sending the pull request,
-I got it. But, this issue don't cause the crash. Just failed to
-change the frequency of device which using passive governor.
-
-I'll send the separate fixup patch. Thanks.
-
+-- 
 Best Regards,
 Chanwoo Choi
 Samsung Electronics

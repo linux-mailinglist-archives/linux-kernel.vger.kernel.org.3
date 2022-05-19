@@ -2,86 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A92B52D4C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62EFB52D510
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbiESNqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S239127AbiESNuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiESNqT (ORCPT
+        with ESMTP id S239137AbiESNrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:46:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D77011A16;
-        Thu, 19 May 2022 06:46:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BC49B824B0;
-        Thu, 19 May 2022 13:46:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E800C385AA;
-        Thu, 19 May 2022 13:46:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1652967961;
-        bh=yEGOGSMLX8dQcpA1zVM9kxp/1UhqRepO4XsAQyuPweA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AcYRar5CfyXFA1VUI76mkqjjXt7ff7bt8FjS3sYB2B4oBbqmjrOMrcatRYF3VS4Ht
-         qKurhOI66L0ebC7jKgDAqlzaq9rzRLtGIsB1XCI8yAFpZ4y0YQm0013GpRHe/kszd6
-         HcxpZiH9SHwyeuaL9vJK1087ytau4RD9ZKS9nyqg=
-Date:   Thu, 19 May 2022 15:45:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dmytro Bagrii <dimich.dmb@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: core: Call disconnect() only if it is provided by
- driver
-Message-ID: <YoZKFrzirES9+f39@kroah.com>
-References: <20220519132900.4392-1-dimich.dmb@gmail.com>
+        Thu, 19 May 2022 09:47:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B5B46B28
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:47:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=spFvWqpntAjyDIyQTuuju53IdKRla2N41ylF/wTFrBs=; b=Uwd124YOn/1UWMQ9pfsIjaHRgD
+        r1J47bokiQmjgRiNdg22ytRK3cQ04t+q/vkAH7Tl8wtzrgIQWOTX3d2z1SmbF7ijt0VjtAneCXHuu
+        K4ujhEmQEsiCj6NfpHCJ4TFAZ35un83XQS32gdqz/bp+YufNtfKJUt5UgVBv2biL73oaFyLzEbCd6
+        mYR06XJaIqM7PcsVPKWnQIZ7As06GLkjElqUXM+hRN39wnYyk5BZ2ruKoXVzhMIsejYkNjlvygQxq
+        Y+eKUATAOBCM4wyWwNm3IxgONvZP7MG9WkTzPCJ9PqsUZDDQA9sFBuLSAwGmLkzCv0CY85ZK1RUyF
+        150H2/KA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nrgUe-0022LG-Jc; Thu, 19 May 2022 13:47:09 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2411D980E0B; Thu, 19 May 2022 15:47:06 +0200 (CEST)
+Date:   Thu, 19 May 2022 15:47:06 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jing-Ting Wu <jing-ting.wu@mediatek.com>
+Cc:     Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>, tglx@linutronix.de,
+        wsd_upstream@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, Jonathan.JMChen@mediatek.com,
+        "chris.redpath@arm.com" <chris.redpath@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Donnefort <vdonnefort@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [Bug] Race condition between CPU hotplug off flow and
+ __sched_setscheduler()
+Message-ID: <20220519134706.GH2578@worktop.programming.kicks-ass.net>
+References: <4a0aa13c99ffd6aea6426f83314aa2a91bc8933f.camel@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519132900.4392-1-dimich.dmb@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4a0aa13c99ffd6aea6426f83314aa2a91bc8933f.camel@mediatek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 04:29:00PM +0300, Dmytro Bagrii wrote:
-> A driver may use devres allocations. Disconnect handler is not needed in
-> this case. Allow such driver to leave .disconnect field uninitialized in
-> struct usb_driver instead of providing empty stub function.
+On Thu, May 19, 2022 at 08:53:15PM +0800, Jing-Ting Wu wrote:
+> Hi all
 > 
-> Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
-> ---
->  drivers/usb/core/driver.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index 355ed33a2179..d7fe440b033c 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -455,7 +455,8 @@ static int usb_unbind_interface(struct device *dev)
->  	if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
->  		usb_disable_interface(udev, intf, false);
->  
-> -	driver->disconnect(intf);
-> +	if (driver->disconnect)
-> +		driver->disconnect(intf);
->  
->  	/* Free streams */
->  	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
-> -- 
-> 2.36.1
-> 
+> There is a race condition between CPU hotplug off flow and
+> __sched_setscheduler(), which will cause hang-up in CPU hotplug off
+> flow.
 
-What in-kernel driver has this issue and does not have a disconnect
-callback?
+How easy can you reproduce; does the below hack make it better?
 
-thanks,
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 95bac3b094b3..f18ee22b29bc 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4763,20 +4763,30 @@ struct callback_head balance_push_callback = {
+ 	.func = (void (*)(struct callback_head *))balance_push,
+ };
+ 
+-static inline struct callback_head *splice_balance_callbacks(struct rq *rq)
++static inline struct callback_head *
++__splice_balance_callbacks(struct rq *rq, bool foo)
+ {
+ 	struct callback_head *head = rq->balance_callback;
+ 
+ 	lockdep_assert_rq_held(rq);
+-	if (head)
+-		rq->balance_callback = NULL;
++	if (head) {
++		if (foo && head == &balance_push_callback)
++			head = NULL;
++		else
++			rq->balance_callback = NULL;
++	}
+ 
+ 	return head;
+ }
+ 
++static inline struct callback_head *splice_balance_callbacks(struct rq *rq)
++{
++	return __splice_balance_callbacks(rq, true);
++}
++
+ static void __balance_callbacks(struct rq *rq)
+ {
+-	do_balance_callbacks(rq, splice_balance_callbacks(rq));
++	do_balance_callbacks(rq, __splice_balance_callbacks(rq, false));
+ }
+ 
+ static inline void balance_callbacks(struct rq *rq, struct callback_head *head)
 
-greg k-h

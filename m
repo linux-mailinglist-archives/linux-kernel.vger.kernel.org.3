@@ -2,156 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2892F52CEF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13BF52CF07
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235797AbiESJHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
+        id S235808AbiESJJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiESJHx (ORCPT
+        with ESMTP id S231249AbiESJJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:07:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BEE49FB7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:07:50 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A4E371F86A;
-        Thu, 19 May 2022 09:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652951269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fUZE2H0YAWPRLxiTQ7g7vKXSFtWUS5bX4Cm7xqZ04ME=;
-        b=0nGp/Y+eBN3bRPL1s4w0iWDUBWGhOUX8YGE19Q+1z+vhyPPck7mXJGOw7FwwSJgO50nm62
-        /ffm5wxldj4wETJK1EtiK/8rXUdO9Rma/1phjwdbtKk3dvpNa3Z2oIl8rwNFembTtgt3Im
-        E8CAHf1NiJRp+vgq1qhBHjAn9gQseEw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652951269;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fUZE2H0YAWPRLxiTQ7g7vKXSFtWUS5bX4Cm7xqZ04ME=;
-        b=fv+w6HjV2M3wOg3LsEyV9CHo2gV7WkHYI/ZTmwIrz/VZfsvenoYoF5JTPUs8t4maEA4tFZ
-        sB3VzjEJ+pfwSbCg==
-Received: from suse.de (unknown [10.163.32.246])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 05B152C142;
-        Thu, 19 May 2022 09:07:48 +0000 (UTC)
-Date:   Thu, 19 May 2022 10:07:46 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [peterz-queue:sched/core 6/8] kernel/sched/fair.c:9199:30:
- error: implicit declaration of function 'adjust_numa_imbalance'
-Message-ID: <20220519090746.GT20579@suse.de>
-References: <202205190911.n5iX1ftB-lkp@intel.com>
+        Thu, 19 May 2022 05:09:05 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA032192A0;
+        Thu, 19 May 2022 02:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1652951329;
+        bh=mow7febAtsiXYt2cZHELtD6fs3k1Y7cifTC+AMdNbm0=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=Q7XUbDCe/LyabFtLQpRjysmhHzaRsSwCdcHc+mrcAYOGzcs0LSXZcRCcgzgnBy/im
+         w+l4DmLAMLok/mR0RApY5ubSsczXO26OtS5cuCfWdj/j11+fJqiMDdQVwzB+Maye2l
+         9Ad5tc97i0BWDshy7GVopNg7faEfOkjyEGZq970k=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.152.7]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MacOW-1nKCLL02Ic-00cAlv; Thu, 19
+ May 2022 11:08:49 +0200
+Message-ID: <4d8738fd-f8da-9e6b-3dae-f6b8f3bf6a73@gmx.de>
+Date:   Thu, 19 May 2022 11:08:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <202205190911.n5iX1ftB-lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] video: hyperv_fb: Allow resolutions with size > 64 MB for
+ Gen1
+Content-Language: en-US
+To:     Dexuan Cui <decui@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Saurabh Sengar <ssengar@linux.microsoft.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1651067273-6635-1-git-send-email-ssengar@linux.microsoft.com>
+ <20220428143746.sya775ro5zi3kgm3@liuwe-devbox-debian-v2>
+ <DM5PR21MB1749EE7458996FF22AAA9AF8CAC39@DM5PR21MB1749.namprd21.prod.outlook.com>
+ <BYAPR21MB12702855D53B456E898ED5E0BFC39@BYAPR21MB1270.namprd21.prod.outlook.com>
+ <BYAPR21MB1270E4CBA78869748D28C81BBFD19@BYAPR21MB1270.namprd21.prod.outlook.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <BYAPR21MB1270E4CBA78869748D28C81BBFD19@BYAPR21MB1270.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:fsFTwQueqwO4oFMtMruopc536RUFH/jkjJGavwLAcqZycaqXjKl
+ aOAvA6Enmc0kqQQBV3TrqonTive5CT4O7gHe3MPJeNp2X3m8uC/4yhlJhTnkHSVOq6jNsJZ
+ v3BydNMRZ8uTe/2zMOG16g07i7t21L6nbs3nv+u6TW4jgO40HSSpKJ6M/0spwbCIMRamRin
+ tu2qJeojqc8oIoTY2lSWA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kJTEzCKtHG8=:XiqDKXyew94g1dpZi0TwlA
+ PI6J0k4AAHKobwYovTrfVaXEm8F4JyhC+lr8mJG935rELkCzoEgSCbo4lJ9C/YR+/R7D3risN
+ LCxwMbiP/ZpCG7MFH3XXcMyKN6KVMCjYAp3abd21AQagjT7+saBZ+QjOhXCu1QwsD0yf/muTX
+ Cn6IUz1RnMjdqeY33hPV2Xbk8WZogBBVe9wCcUAv3eAUkWSqdoLm/irfDqXGceHxpRDZZi2vq
+ ERk05zg2PRZCs+gi4oJm9c2zVBZ+x5V+D+CyziskVSE4ifvl5TnhtxYsBQ8kk3/Ue+4twmR6q
+ OjwfYLbWrXlp29LAD+cIvhrjHD2SlcyRm8B6ScHgmceENSc+osWH50hn869MWRVLXOPeRaOdk
+ TxzpP9UhwAfW+XLGXz5FDqJz66oiOB3nC5dkReSNotUNh674tZoNc/8qons0pvYo6YbDxvLWe
+ CkpDHsrlObQynU2r/1M57t6MA+WxTjLXW1aheDA8HXKBqNivNt+Ph7QrG21qoTy7ba4G2AGUL
+ ZQfsoriUSL0jnZt6ciRDmAws1ymcirrcSr3RXNztktIioOncHoQoJFpDhqg+4BOjBPMOGDGc/
+ zqjAciADxqQyjBhnaJ+kwBiGn3upVG1xyFyzztTUf9FSAib31g9CqNfkiJmmkTl4kVeyyJHN5
+ tdqNhebU9tH7eayKcEwTi+dI7U0V2p+6k37xi2JmV8WzqgkiJd24BA/Uun6kPlLoezJnyvnDJ
+ 2UywPA/FOaFnPzaVhnDd3EjfMRj/SozEDrdoanTRZczROatEovDguAZlSDAkHo38PmJ7gLqW1
+ SjWP/XvR0klkJw9LdqEHV91CJMozYOLisbOnfk8hCMJhsqovNMoRHaPhiDdxg5rvM9lB2FE5M
+ rP/AgHGawmZD72sCyKK9bbSETGN+BaJjBNfFCnMEReEryS00hKhIRO3x8JYguuhFY3WIwDpnl
+ m3uaWc3VafpSCo2WedlHiPHiV2JjITrDKayTfuGQopb4uobHLGDhIGJp2Vt7NAjRnyUye1hLs
+ SJxLeX13NccWP/m3vmSvndxTefv50l9wr8KKdxuTjVzI6gDImgX6O5eFsVXyEGEvGcmTzZIsT
+ LI1zrywtOLR7OdrjOi9bLeob6a6fkoAdM3pjUQwY3Qcmq5iK/QEVk6Apg==
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 09:55:17AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
-> head:   45ff65aa1bfd4826331c9c4daafdca21ef8f79f8
-> commit: c81394419b54c2df2644a34892a6d6434fd922b3 [6/8] sched/numa: Apply imbalance limitations consistently
-> config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220519/202205190911.n5iX1ftB-lkp@intel.com/config)
-> compiler: arceb-elf-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=c81394419b54c2df2644a34892a6d6434fd922b3
->         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
->         git fetch --no-tags peterz-queue sched/core
->         git checkout c81394419b54c2df2644a34892a6d6434fd922b3
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
+On 5/18/22 20:48, Dexuan Cui wrote:
+>> From: Dexuan Cui <decui@microsoft.com>
+>> Sent: Wednesday, May 4, 2022 10:05 AM
+>> To: Haiyang Zhang <haiyangz@microsoft.com>; Wei Liu <wei.liu@kernel.org=
+>;
+>>> ...
+>>> When I initially implemented this driver 10 years ago, I believe there
+>>> was smaller limit for the fb... But I think this patch is good for the
+>>> newer MMIO alloc scheme. I hope to see reviews also from
+>>>  @Dexuan Cui @Michael Kelley (LINUX) who are more familiar with
+>>> the PCI/BAR/MMIO area.
+>>>
+>>> Thanks,
+>>> - Haiyang
+>>
+>> The patch looks good to me but I suggest we check with the Hyper-V
+>> team to figure out how a Gen1 Windows VM supports a higher
+>> resolution that needs a VRAM size of more than 64MB. Just in case we
+>> miss something..
+>>
+>> Thanks,
+>> -- Dexuan
+>
+> Reviewed-by: Dexuan Cui <decui@microsoft.com>
+>
+> Saurabh checked this with Hyper-V team, who said there is no
+> Generation 1-specific block for larger VRAM sizes in Windows VM.
+>
+> When the driver was originally developed, we didn't have the API
+> vmbus_allocate_mmio(), and I guess we just used the PCI device's BAR
+> address for simplicity, and didn't realize the restriction with very hig=
+h
+> resolutions that require >64 MB VRAM. It looks like the synthetic
+> VMBus framebuffer device doesn't have to use the same MMIO range
+> used by the Hyper-V legacy PCI framebuffer device, so the patch
+> looks good to me.
 
-Oops, the converged function just needs to move outside of
-CONFIG_NUMA_BALANCING as it's not related to automatic NUMA balancing.
+Thanks for the review, Dexuan!
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index f619d9f70c8da..9b26afefc769b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1043,6 +1043,31 @@ update_stats_curr_start(struct cfs_rq *cfs_rq, struct sched_entity *se)
-  * Scheduling class queueing methods:
-  */
- 
-+#define NUMA_IMBALANCE_MIN 2
-+
-+static inline long
-+adjust_numa_imbalance(int imbalance, int dst_running, int imb_numa_nr)
-+{
-+	/*
-+	 * Allow a NUMA imbalance if busy CPUs is less than the maximum
-+	 * threshold. Above this threshold, individual tasks may be contending
-+	 * for both memory bandwidth and any shared HT resources.  This is an
-+	 * approximation as the number of running tasks may not be related to
-+	 * the number of busy CPUs due to sched_setaffinity.
-+	 */
-+	if (dst_running > imb_numa_nr)
-+		return imbalance;
-+
-+	/*
-+	 * Allow a small imbalance based on a simple pair of communicating
-+	 * tasks that remain local when the destination is lightly loaded.
-+	 */
-+	if (imbalance <= NUMA_IMBALANCE_MIN)
-+		return 0;
-+
-+	return imbalance;
-+}
-+
- #ifdef CONFIG_NUMA_BALANCING
- /*
-  * Approximate time to scan a full NUMA task in ms. The task scan period is
-@@ -1537,31 +1562,6 @@ struct task_numa_env {
- static unsigned long cpu_load(struct rq *rq);
- static unsigned long cpu_runnable(struct rq *rq);
- 
--#define NUMA_IMBALANCE_MIN 2
--
--static inline long
--adjust_numa_imbalance(int imbalance, int dst_running, int imb_numa_nr)
--{
--	/*
--	 * Allow a NUMA imbalance if busy CPUs is less than the maximum
--	 * threshold. Above this threshold, individual tasks may be contending
--	 * for both memory bandwidth and any shared HT resources.  This is an
--	 * approximation as the number of running tasks may not be related to
--	 * the number of busy CPUs due to sched_setaffinity.
--	 */
--	if (dst_running > imb_numa_nr)
--		return imbalance;
--
--	/*
--	 * Allow a small imbalance based on a simple pair of communicating
--	 * tasks that remain local when the destination is lightly loaded.
--	 */
--	if (imbalance <= NUMA_IMBALANCE_MIN)
--		return 0;
--
--	return imbalance;
--}
--
- static inline enum
- numa_type numa_classify(unsigned int imbalance_pct,
- 			 struct numa_stats *ns)
+I've applied this patch now to the fbdev git tree.
+
+> BTW, please check the hyperv-drm driver as well:
+> drivers/gpu/drm/hyperv/hyperv_drm_drv.c
+> I think we should make the same change there to support 7680x4320
+> for Gen1 VMs.
+
+Haiyang, can you check that as well and send another patch for
+the drm tree ?
+
+Helge

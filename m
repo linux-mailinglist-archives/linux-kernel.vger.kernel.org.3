@@ -2,103 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417D452DA74
+	by mail.lfdr.de (Postfix) with ESMTP id ED83252DA76
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242123AbiESQkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S242129AbiESQkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242122AbiESQkC (ORCPT
+        with ESMTP id S241100AbiESQkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:40:02 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532A9DE318;
-        Thu, 19 May 2022 09:40:01 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id j24so8021865wrb.1;
-        Thu, 19 May 2022 09:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g94V+007bcGCjAyasUfYbZusStl21uCfYeR0vKeXVf0=;
-        b=Hin01e1la6QOK00QfgmMbrXlXFaf2VdjroqEbWbljSiLZ/qJBOP17F6LoXPDizcJpZ
-         nZpsxfXUSsogmY/6Ko4uMdE2PF1dv2OWvx/JdVqO18PV05vmaIOyhRBVBwoiUZQMCt7Z
-         /iV+4wUIHNG65yq12SFY9yV6L0woB2stMcLfq+i85QHWqE8ImMOKw6ewUac//hleytOW
-         +Whp4OemtZ8s6UIYz9CdMx9O7tueLWyHLuqJCXxSjRQAzHbcsUFXhou0IZfcr8LXXOyO
-         rWW1aDrgjreerko2wsBokIIVKoQkO4qa9mai19ya98tQuoSke+bekMxZKdcOhLIEX0fZ
-         0ReA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g94V+007bcGCjAyasUfYbZusStl21uCfYeR0vKeXVf0=;
-        b=ttQ7IhMpVafSRN3gkNkKl8WD8CqigkX2OW3IYDQ+Cz/NGdtMPPW+GCFf4Yaf4crGXh
-         MDlm9BfkgSV5x0bWnG4repSYUA7+fIc7BtggXLAFPR5CbfT9SbGOL0+qQ3UdlLGEHMbU
-         rEZd6Jo3XDU2OemS78jtpY2Gy+9lEqQEgXC6KiCIT3XfXfcs7xtm4S21SIpvJ9GuH/xO
-         em/XE5iyzhXWofNDao2qCLhh3Pe8YAHxQT6FFHT2LsgmNgDpbDe8Nht7RLBtiytcjnbO
-         PhXYlXqn+eCOeMk67jxwFpACpZkSrkQd9l0l/TfhBt3upVBaa4/4uHCoVZclfVAs3hT9
-         iZOA==
-X-Gm-Message-State: AOAM531IZj/UjD4GAss/4BW5+hxtcJNtwmQJqhxnf2uwaJUk5xT74TcQ
-        V3nkjBMSQz1PYQAPCMltyRS4yt5BXPE=
-X-Google-Smtp-Source: ABdhPJzQB6LAwzzqPBlOe+HRAwwCoxmApZLwaN/+L8lDFNt/Clf6eLSVXo62V8B8ieF3j345piND/Q==
-X-Received: by 2002:a5d:6701:0:b0:20c:dc44:f7e7 with SMTP id o1-20020a5d6701000000b0020cdc44f7e7mr4795391wru.484.1652978399576;
-        Thu, 19 May 2022 09:39:59 -0700 (PDT)
-Received: from localhost.localdomain ([41.232.195.220])
-        by smtp.gmail.com with ESMTPSA id u6-20020adfc646000000b0020d0c48d135sm104873wrg.15.2022.05.19.09.39.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 09:39:59 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     outreachy@lists.linux.dev, roopa@nvidia.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH net-next] net: vxlan: Fix kernel coding style
-Date:   Thu, 19 May 2022 18:39:39 +0200
-Message-Id: <20220519163939.10347-1-eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 19 May 2022 12:40:16 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD09DE327
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:40:15 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id E0FEC3200976;
+        Thu, 19 May 2022 12:40:12 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 19 May 2022 12:40:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1652978412; x=
+        1653064812; bh=iyV8Eu14mHuegnfdclejo0S/9e+seMI1lnnSy6NkAK4=; b=E
+        AiFsdBDzYgW5IFDHFRT9kLEZc6KU5gvX0jMc3PeOBK9928OjngEwI/C2XbM4Oc6+
+        /+putqYFBX/iPXqzO59LLClAAkji+prFK1oPtxEmlTTy8ABHvJw1oxcR9j+KQ0VD
+        JDHm4wMA5dtH0lYPYabAMG/detnsYJ7d0eW2ut+77d5AixjZEnJ+qpDe69b2OoXz
+        xycTI4VvwC5Br2mo/Jz3ls9NS/aYIkuJ5VLnhZy38yjkuTi3CZreiQbL2v2jDuW0
+        nU/vEd0jmsLEwSY2p14CYJswQunuSNCKcTTJNZjgsER0+fzlyaAjsBDfDN0RPTyR
+        ZKlx606YDCRarILOTMhmQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1652978412; x=1653064812; bh=iyV8Eu14mHuegnfdclejo0S/9e+s
+        eMI1lnnSy6NkAK4=; b=wboXbzf7gyIUHkCYjUmsq2UDBZMwfK2FP6TVvWTkr3n3
+        lPOE2CVN829Wqbv8jv5XI5sCOah2+2gYj/VCmhyFlu1GnFtLBL6YkOXejfU09PSE
+        rsvAXL/rtyNNnEprkfO8Ud1KT0o5a9T9wb/1sNpjCip7UFD2U8FPhIX8azJ1Yuu3
+        B0Dm6cdXdMNXDifzbOr+O90Ut31G8r0dnjwo8ozgQV6vjgkpHzV2XIgP9yFPyOrQ
+        IalkVDHLk/Dm/lAPTRq1kOlcWeQakBcdG1BczKlGUjKskivNtfVsOIddGj3t7N5o
+        258Oxavq3PrGr1MWGa+5giUCIHn61evk5r9IRsxvGw==
+X-ME-Sender: <xms:63KGYibA8cQFR6tmQAM4Kb67ntVmtQw6y8QgBkRcqJJxUODflRqDBA>
+    <xme:63KGYlYQj2xoEsUpir2VffFuYE2NobmqwKUWryGZtXPdzn_Whm0Gr2M0eedpBJa5u
+    Z1Vfin0tdH76FM>
+X-ME-Received: <xmr:63KGYs-QP1yaYMAGdVA2UD6ym30TS3gm3y2TfxgyN5SouV6l2MVufwqPVc2g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedriedugddutddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepuedthefhtddvffefjeejvdehvdej
+    ieehffehkeekheegleeuleevleduteehteetnecuffhomhgrihhnpehgihhthhhusgdrtg
+    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegu
+    vghmihesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
+X-ME-Proxy: <xmx:63KGYkoO4qh2TTHW_AWOAQri-ymBDx1U52iBwoserjjcj9BjIu4iTQ>
+    <xmx:63KGYtpVkpUjzBan5-D2k-E6ZNUfi3dvTUx6RmhHtmNdO9lDUazFPA>
+    <xmx:63KGYiQGT9pxxxkrvWfxxlAwYUlSKFqEN4P9x3Nmu7seVG-Z1zFuqw>
+    <xmx:7HKGYu625XycL6RnKiYuUANQ4U-mLSXYHcjXrtBi4Rj3bpJrAJIyTw>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 19 May 2022 12:40:10 -0400 (EDT)
+Date:   Thu, 19 May 2022 12:39:40 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Juergen Gross <jgross@suse.com>,
+        Xen developer discussion <xen-devel@lists.xenproject.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Boris Ostrovski <boris.ostrovsky@oracle.com>,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Memory Management <linux-mm@kvack.org>,
+        regressions@lists.linux.dev
+Subject: [REGRESSION] Hang in 5.17.4+ that appears to be due to Xen
+Message-ID: <YoZy6BRIkfoeY8af@itl-email>
+References: <Yn/Tgj1Ehs/BdpHp@itl-email>
+ <55436ae1-8255-1898-00df-51261080cd41@suse.com>
+ <YoJZcUsiE3y6oul5@itl-email>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="P1/QErjS2jIercDB"
+Content-Disposition: inline
+In-Reply-To: <YoJZcUsiE3y6oul5@itl-email>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The continuation line does not align with the opening bracket
-and this patch fix it.
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
----
- drivers/net/vxlan/vxlan_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--P1/QErjS2jIercDB
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 19 May 2022 12:39:40 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Juergen Gross <jgross@suse.com>,
+	Xen developer discussion <xen-devel@lists.xenproject.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: Boris Ostrovski <boris.ostrovsky@oracle.com>,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
+	linux-kernel@vger.kernel.org,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+	Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+	DRI Development <dri-devel@lists.freedesktop.org>,
+	Linux Memory Management <linux-mm@kvack.org>,
+	regressions@lists.linux.dev
+Subject: [REGRESSION] Hang in 5.17.4+ that appears to be due to Xen
 
-diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
-index 293082c32a78..fb7a09baeeb5 100644
---- a/drivers/net/vxlan/vxlan_core.c
-+++ b/drivers/net/vxlan/vxlan_core.c
-@@ -1138,7 +1138,7 @@ static int vxlan_fdb_parse(struct nlattr *tb[], struct vxlan_dev *vxlan,
- 	if (tb[NDA_NH_ID] && (tb[NDA_DST] || tb[NDA_VNI] || tb[NDA_IFINDEX] ||
- 	    tb[NDA_PORT])) {
- 			NL_SET_ERR_MSG(extack,
--						  "DST, VNI, ifindex and port are mutually exclusive with NH_ID");
-+				       "DST, VNI, ifindex and port are mutually exclusive with NH_ID");
- 			return -EINVAL;
- 		}
- 
-@@ -1297,7 +1297,7 @@ int __vxlan_fdb_delete(struct vxlan_dev *vxlan,
- static int vxlan_fdb_delete(struct ndmsg *ndm, struct nlattr *tb[],
- 			    struct net_device *dev,
- 			    const unsigned char *addr, u16 vid,
--				struct netlink_ext_ack *extack)
-+			    struct netlink_ext_ack *extack)
- {
- 	struct vxlan_dev *vxlan = netdev_priv(dev);
- 	union vxlan_addr ip;
--- 
-2.25.1
+On Mon, May 16, 2022 at 10:00:07AM -0400, Demi Marie Obenour wrote:
+> On Mon, May 16, 2022 at 08:48:17AM +0200, Juergen Gross wrote:
+> > On 14.05.22 17:55, Demi Marie Obenour wrote:
+> > > In https://github.com/QubesOS/qubes-issues/issues/7481, a user report=
+ed
+> > > that Xorg locked up when resizing a VM window.  While I do not have t=
+he
+> > > same hardware the user does and thus cannot reproduce the bug, the st=
+ack
+> > > trace seems to indicate a deadlock between xen_gntdev and i915.  It
+> > > appears that gnttab_unmap_refs_sync() is waiting for i915 to free the
+> > > pages, while i915 is waiting for the MMU notifier that called
+> > > gnttab_unmap_refs_sync() to return.  Result: deadlock.
+> > >=20
+> > > The problem appears to be that a mapped grant in PV mode will stay in
+> > > the =E2=80=9Cinvalidating=E2=80=9D state until it is freed.  While MM=
+U notifiers are
+> > > allowed to sleep, it appears that they cannot wait for the page to be
+> > > freed, as is happening here.  That said, I am not very familiar with
+> > > this code, so my diagnosis might be incorrect.
+> >=20
+> > All I can say for now is that your patch seems to be introducing a use =
+after
+> > free issue, as the parameters of the delayed work might get freed now b=
+efore
+> > the delayed work is being executed.
+>=20
+> I figured it was wrong, not least because I don=E2=80=99t think it compil=
+es
+> (invalid use of void value).  That said, the current behavior is quite
+> suspicious to me.  For one, it appears that munmap() on a grant in a PV
+> domain will not return until nobody else is using the page.  This is not
+> what I would expect, and I can easily imagine it causing deadlocks in
+> userspace.  Instead, I would expect for gntdev to automatically release
+> the grant when the reference count hits zero.  This would also allow for
+> the same grant to be mapped in multiple processes, and might even unlock
+> DMA-BUF support.
+>=20
+> > I don't know why this is happening only with rather recent kernels, as =
+the
+> > last gntdev changes in this area have been made in kernel 4.13.
+> >=20
+> > I'd suggest to look at i915, as quite some work has happened in the code
+> > visible in your stack backtraces rather recently. Maybe it would be pos=
+sible
+> > to free the pages in i915 before calling the MMU notifier?
+>=20
+> While I agree that the actual problem is almost certainly in i915, the
+> gntdev code does appear rather fragile.  Since so few people use i915 +
+> Xen, problems with the combination generally don=E2=80=99t show up until =
+some
+> Qubes user makes a bug report, which isn=E2=80=99t great.  It would be be=
+tter if
+> Xen didn=E2=80=99t introduce requirements on other kernel code that did n=
+ot hold
+> when not running on Xen.
+>=20
+> In this case, if it is actually an invariant that one must not call MMU
+> notifiers for pages that are still in use, it would be better if this
+> was caught by a WARN_ON() or BUG_ON() in the core memory management
+> code.  That would have found the bug instantly and deterministically on
+> all platforms, whereas the current failure is nondeterministic and only
+> happens under Xen.
+>=20
+> I also wonder if this is a bug in the core MMU notifier infrastructure.
+> My reading of the mmu_interval_notifier_remove() documentation is that
+> it should only wait for the specific notifier being removed to finish,
+> not for all notifiers to finish.  Adding the memory management
+> maintainers.
 
+Also adding the kernel regression tracker.
+
+#regzbot introduced v5.16..v5.17.4
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--P1/QErjS2jIercDB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmKGcugACgkQsoi1X/+c
+IsG0sg//ZqBwhdpDjpK+PYyQI+aJdCfEVMWueglKYpsUmrNPhYgxCNbALIrELYEy
+Tw9tkJGJU7ENVh81aaAx6tCfj4wHEbxX6EOJzuTiwwAVtMHqeoPzX9d6vygcqWXL
+TJpjCVhcQ/F+kIjZcjPq2F7eIfmj2w+gfi64X0h0CtkNCVoFaiD638Hp0T/OF6sb
+yvgcleR94ObA6Tjz1jGFddEZSrQPEpZ4RVIg/Ak6OIHSI3phEtbwfoDyig59FT6O
+U5KmBswlz/7jTyjl9UPKLMEZidv3LWBbhEICX/6rCvZUPpdQ/hi3FlkpjMFh00wz
+vVAq4JIkvfY0YrOZHnHqitjZSLcpIvH7aVTxP0iWa6fGBopua0ZeyNDSmL6uFe6D
+MbvfojPY04p20pkuma3OfR1WIkAstnZdOn9oxGMbGokvGBd1lWZLbe94YZzV9bvi
+HTCVN2pn/YCRqktnUyAiaIQcnHKzEoEe7pDJR4OgNND0l9mg/GBMS9y7mHfw9SMI
+4fSZr8xMgLwnUYHLFIFdfGaOlsf6wNhGOWGROY7FpetrlJ+R8A9x6SxBfVq9VffF
+B9Pu7kwEnIgaCGrwcQz6mU1h0Hz7fS7Ffig9YepRlYmNHuC1zhM2PraUjkbm+IRE
+2NU3mQjopmT5Nb+gWTNgt2m0jo3K+z6GcMSvcYoQ4ef66GjW9A8=
+=KIy2
+-----END PGP SIGNATURE-----
+
+--P1/QErjS2jIercDB--

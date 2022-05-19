@@ -2,124 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E299F52D5FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D556E52D5FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239696AbiESO0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57220 "EHLO
+        id S237182AbiESO0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239348AbiESO0b (ORCPT
+        with ESMTP id S239718AbiESO0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:26:31 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1752737002;
-        Thu, 19 May 2022 07:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7GgMfKIL4eOaBr7+tGiHzVQvi5p6f4TXu98a+NEhGJg=; b=igfou1cBpIpplBzY2402a/7/Xt
-        NBVixRZoc1H2RE5pJVf4KzDFqCZmF6r1nSopIp4EhEkGv6COSrRcw6V7wKGLxpjFYBpNQK6p4jkbg
-        EvueVA4ktbf5M2JjD4RYfv9LQlrnNmml+tReRL7DRy2rP8JTyFTEu3Nx5r3kMKVZ8hsitK/Ch2nnt
-        TTnW9HKKFlM6Zz3h2k5eDsu1usfTZfdc8EJUVWk8zWNNC1+dcFu5EA6+7DjcZzadioCmwfUtQ2rcj
-        mp3y8yHS1gG2Y2hGVP9r1HdwvletPAdJ+xxya+OgZZYWBxN3E0C3++rLDR3UEyjLzNs1F5Zf4I8j1
-        aJYAz0ew==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60774)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nrh6e-0003yl-Um; Thu, 19 May 2022 15:26:25 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nrh6d-0006dU-DN; Thu, 19 May 2022 15:26:23 +0100
-Date:   Thu, 19 May 2022 15:26:23 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Richard Cochran <richardcochran@gmail.com>,
-        Horatiu.Vultur@microchip.com, Allan.Nielsen@microchip.com,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next 3/6] net: lan966x: Add QUSGMII support for
- lan966x
-Message-ID: <YoZTj69Une9aKd2C@shell.armlinux.org.uk>
-References: <20220519135647.465653-1-maxime.chevallier@bootlin.com>
- <20220519135647.465653-4-maxime.chevallier@bootlin.com>
+        Thu, 19 May 2022 10:26:49 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6714D8CCE1;
+        Thu, 19 May 2022 07:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652970404; x=1684506404;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vrvSpCTHwXUKlmp7hYVYANHROdiTM5iBEhCiatmkrqc=;
+  b=VYquGtHcwnP0Ln1gTsYP+v4Vk08bwLhnL8Ij+nYQ/VCxBTyk7jJ342OH
+   Z9hSO9e4cwzvrhACY11MgUV0dXAwcqV6KXqEsGYToLrdcNcKqMIpTudfO
+   nAnl903r+Wrgt6UgtHGt1c68y7nFi12LSfDE5kHd7AUISKhLgm2TSBcmS
+   sCoOdgt5av0ZVm3B2/KnMSSoV5LXT9YNjt4goPCRgZF6ZLUcMTjHnITxu
+   XPGD9Mui9PiNP0jGLirU4QYYQ7mb5u75apolYdf0HZdXJLVwlLU4TzjD4
+   FaN5vAzjDEwMEgN4lKAK/SiSylq6qKF2wMjRwUrQbdzRBx8Jk4NsvBupX
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272350943"
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="272350943"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 07:26:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="606510939"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga001.jf.intel.com with ESMTP; 19 May 2022 07:26:43 -0700
+Received: from [10.252.213.148] (kliang2-MOBL.ccr.corp.intel.com [10.252.213.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 50C1E5802E4;
+        Thu, 19 May 2022 07:26:42 -0700 (PDT)
+Message-ID: <67ef14e6-e7ef-5071-3351-7a264c46f172@linux.intel.com>
+Date:   Thu, 19 May 2022 10:26:40 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519135647.465653-4-maxime.chevallier@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] x86/events/intel/ds: Enable large PEBS for
+ PERF_SAMPLE_WEIGHT type
+Content-Language: en-US
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephane Eranian <eranian@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220519104509.51847-1-likexu@tencent.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20220519104509.51847-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu, May 19, 2022 at 03:56:44PM +0200, Maxime Chevallier wrote:
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> index e6642083ab9e..304c784f48f6 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> @@ -452,4 +452,10 @@ static inline void lan_rmw(u32 val, u32 mask, struct lan966x *lan966x,
->  			      gcnt, gwidth, raddr, rinst, rcnt, rwidth));
->  }
->  
-> +static inline bool lan966x_is_qsgmii(phy_interface_t mode)
-> +{
-> +	return (mode == PHY_INTERFACE_MODE_QSGMII) ||
-> +	       (mode == PHY_INTERFACE_MODE_QUSGMII);
-> +}
 
-Maybe linux/phy.h should provide a helper, something like:
+On 5/19/2022 6:45 AM, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
+> 
+> Large PEBS could be enabled for the generic PERF_SAMPLE_WEIGHT sample
 
-	phy_interface_serdes_lanes()
+I think all the information required by the PERF_SAMPLE_WEIGHT is 
+available in the pebs record. It should be OK to enable it for the large 
+PEBS.
 
-that returns how many serdes lanes the interface mode uses?
+Can you please use the PERF_SAMPLE_WEIGHT_TYPE instead? It includes the 
+new weight extension.
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-> index 38a7e95d69b4..96708352f53e 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-> @@ -28,11 +28,18 @@ static int lan966x_phylink_mac_prepare(struct phylink_config *config,
->  				       phy_interface_t iface)
->  {
->  	struct lan966x_port *port = netdev_priv(to_net_dev(config->dev));
-> +	phy_interface_t serdes_mode = iface;
->  	int err;
->  
->  	if (port->serdes) {
-> +		/* As far as the SerDes is concerned, QUSGMII is the same as
-> +		 * QSGMII.
-> +		 */
-> +		if (lan966x_is_qsgmii(iface))
-> +			serdes_mode = PHY_INTERFACE_MODE_QSGMII;
-> +
->  		err = phy_set_mode_ext(port->serdes, PHY_MODE_ETHERNET,
-> -				       iface);
-> +				       serdes_mode);
+Thanks,
+Kan
 
-I don't think that the ethernet MAC driver should be changing the
-interface mode before passing it down to the generic PHY layer -
-phy_set_mode_ext() is defined to take the phy interface mode, and any
-aliasing of modes should really be up to the generic PHY driver not
-the ethernet MAC driver.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> type until other non-compatible flags such as PERF_SAMPLE_DATA_PAGE_SIZE
+> (due to lack of munmap tracking) finally stop it.
+> 
+> Add PERF_SAMPLE_WEIGHT to LARGE_PEBS_FLAGS to save PMIs overhead.
+> 
+> Tested it with:
+> 
+> $ perf mem record -c 1000 workload
+> Before: Captured and wrote 0.126 MB perf.data (958 samples) [958 PMIs]
+> After: Captured and wrote 0.313 MB perf.data (4859 samples) [3 PMIs]
+> 
+> Cc: Kan Liang <kan.liang@linux.intel.com>
+> Cc: Stephane Eranian <eranian@google.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Reported-by: Yongchao Duan <yongduan@tencent.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>   arch/x86/events/perf_event.h | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+> index 21a5482bcf84..1ed0970d67e6 100644
+> --- a/arch/x86/events/perf_event.h
+> +++ b/arch/x86/events/perf_event.h
+> @@ -136,7 +136,8 @@ struct amd_nb {
+>   	PERF_SAMPLE_DATA_SRC | PERF_SAMPLE_IDENTIFIER | \
+>   	PERF_SAMPLE_TRANSACTION | PERF_SAMPLE_PHYS_ADDR | \
+>   	PERF_SAMPLE_REGS_INTR | PERF_SAMPLE_REGS_USER | \
+> -	PERF_SAMPLE_PERIOD | PERF_SAMPLE_CODE_PAGE_SIZE)
+> +	PERF_SAMPLE_PERIOD | PERF_SAMPLE_CODE_PAGE_SIZE | \
+> +	PERF_SAMPLE_WEIGHT)
+>   
+>   #define PEBS_GP_REGS			\
+>   	((1ULL << PERF_REG_X86_AX)    | \

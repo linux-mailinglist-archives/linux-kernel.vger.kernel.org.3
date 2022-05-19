@@ -2,119 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556F952D41A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5458752D421
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235796AbiESNcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S236322AbiESNdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235342AbiESNbx (ORCPT
+        with ESMTP id S232861AbiESNdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:31:53 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114512CE23;
-        Thu, 19 May 2022 06:31:52 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d22so4792139plr.9;
-        Thu, 19 May 2022 06:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NeBhBDbLvND8TXeCRztU3OoO0UgF77pFRvz7RKCrOXE=;
-        b=qCihqc2ueuq0ep5U2t2Yk+coPUZ5bLTTvg6iGnfg6JSitGwLYLNHBRe+A9ojsKO4Xw
-         lQx8l7egXFo3SitSVionCf7skJKIPE7y2IE86dJn9O9MRlzLUGo/R+UhVkOmNtCRFbp/
-         6kg3Jti6oExWDjraoUteTqSLNbKvFlvPSW9JbxpJmpv4E8uITu+JBjPNcN7MWnCj9IcS
-         B3f/k88LJ/PJBfIxSSVJ2HVN14Iwz/8QGZT8+y0gDE8WDiGSdVOmTUnrcf0C1+o2piXx
-         GrrpcN8+5tX4rDQlDP0cRjja7Ga3oib9FFc8BOQAlcQ9fymyStq5qS/qt4X5+IKgRveO
-         20fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NeBhBDbLvND8TXeCRztU3OoO0UgF77pFRvz7RKCrOXE=;
-        b=5G1QvuE9JJb/MBogdvvnkK5P60fH+aawh5iCyui9oR145t17cPEyd7CUt8dHgjVL0k
-         oCzBcipnYxUqboJwtDiaRKu+SVwNA8Cz7RLjfpc60y350aEVIfW5NNPYurNf2eO9puS2
-         G/JX0HHpcB1lyh/a2DnvZhNy8MwNjFTJW7zvrnfSlllr4cQE1xMJnZxuEWA71g3t/cTW
-         8eHfnQEpcoabVK3PT5OX8mOVEC50VXDWvSUPeBp1tNZAtJqRughiGG4hyW/nwrN6xQwd
-         8R67/zeY6OB+aiUGOSl0cOSjCPCkAfIVp9QYKohXb29g2Jj35HWlYfj3PwF4a+tSDMYA
-         BM+g==
-X-Gm-Message-State: AOAM5313DUJhEWSxvYBuwB1cMIWH35hpSebDaUaCCeOICWSnQ7EBSAXF
-        6Mevol7hRb7TDemJmz7Ivgc=
-X-Google-Smtp-Source: ABdhPJzje9/9enhIU8B7DPtTNIzLDHv31g/rhqCVLWPzu3d35117+jsw135QPxrsPBI2grjOaMvP6w==
-X-Received: by 2002:a17:90b:4d8c:b0:1df:8f22:b699 with SMTP id oj12-20020a17090b4d8c00b001df8f22b699mr5337535pjb.152.1652967111496;
-        Thu, 19 May 2022 06:31:51 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.80])
-        by smtp.gmail.com with ESMTPSA id o6-20020a62f906000000b0050dc76281fcsm4170777pfh.214.2022.05.19.06.31.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 06:31:50 -0700 (PDT)
-Message-ID: <e0b96ebd-00ee-ead4-cf35-af910e847ada@gmail.com>
-Date:   Thu, 19 May 2022 21:31:46 +0800
+        Thu, 19 May 2022 09:33:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AFCD059B9C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652967228;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eMu0TlQoEPsu5A0dNqyE4kosLWfd95ivJDcxXU5XZ9k=;
+        b=PO3K0+kD9FYhusOrWIkKqJDfuz3eSrp3a21zazdshujyi0yVFxlE//DeV30+b5iF5of2QJ
+        2XEO57fGEdgn0lOclBE1icCQETQy/pzKC+q+E8BcBBFgZqbESGddVdJOUtVav3i5mexQku
+        d5k3SRodnFkyNpI+VSyypthpupI+bdA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-310-B37KWeoPNrm0MpDgCivevw-1; Thu, 19 May 2022 09:33:47 -0400
+X-MC-Unique: B37KWeoPNrm0MpDgCivevw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78B1E185A7BA;
+        Thu, 19 May 2022 13:33:46 +0000 (UTC)
+Received: from T590 (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F1AF67AE4;
+        Thu, 19 May 2022 13:33:39 +0000 (UTC)
+Date:   Thu, 19 May 2022 21:33:34 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Harris James R <james.r.harris@intel.com>,
+        io-uring@vger.kernel.org,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>, ming.lei@redhat.com
+Subject: Re: [PATCH V2 0/1] ubd: add io_uring based userspace block driver
+Message-ID: <YoZHLrxE87t6T+Tz@T590>
+References: <20220517055358.3164431-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH RESEND v12 00/17] KVM: x86/pmu: Add basic support to
- enable guest PEBS via DS
-Content-Language: en-US
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>
-References: <20220411101946.20262-1-likexu@tencent.com>
- <87fsl5u3bg.fsf@redhat.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <87fsl5u3bg.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517055358.3164431-1-ming.lei@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/5/2022 8:14 pm, Vitaly Kuznetsov wrote:
-> Like Xu <like.xu.linux@gmail.com> writes:
+On Tue, May 17, 2022 at 01:53:57PM +0800, Ming Lei wrote:
+> Hello Guys,
 > 
-> ...
+> ubd driver is one kernel driver for implementing generic userspace block
+> device/driver, which delivers io request from ubd block device(/dev/ubdbN) into
+> ubd server[1] which is the userspace part of ubd for communicating
+> with ubd driver and handling specific io logic by its target module.
 > 
-> Hi, the following commit
+> Another thing ubd driver handles is to copy data between user space buffer
+> and request/bio's pages, or take zero copy if mm is ready for support it in
+> future. ubd driver doesn't handle any IO logic of the specific driver, so
+> it is small/simple, and all io logics are done by the target code in ubdserver.
 > 
->>    KVM: x86/pmu: Add IA32_PEBS_ENABLE MSR emulation for extended PEBS
+> The above two are main jobs done by ubd driver.
 > 
-> (currently in kvm/queue) breaks a number of selftests, e.g.:
+> ubd driver can help to move IO logic into userspace, in which the
+> development work is easier/more effective than doing in kernel, such as,
+> ubd-loop takes < 200 lines of loop specific code to get basically same 
+> function with kernel loop block driver, meantime the performance is
+> still good. ubdsrv[1] provide built-in test for comparing both by running
+> "make test T=loop".
+> 
+> Another example is high performance qcow2 support[2], which could be built with
+> ubd framework more easily than doing it inside kernel.
+> 
+> Also there are more people who express interests on userspace block driver[3],
+> Gabriel Krisman Bertazi proposes this topic in lsf/mm/ebpf 2022 and mentioned
+> requirement from Google. Ziyang Zhang from Alibaba said they "plan to
+> replace TCMU by UBD as a new choice" because UBD can get better throughput than
+> TCMU even with single queue[4], meantime UBD is simple. Also there is userspace
+> storage service for providing storage to containers.
+> 
+> It is io_uring based: io request is delivered to userspace via new added
+> io_uring command which has been proved as very efficient for making nvme
+> passthrough IO to get better IOPS than io_uring(READ/WRITE). Meantime one
+> shared/mmap buffer is used for sharing io descriptor to userspace, the
+> buffer is readonly for userspace, each IO just takes 24bytes so far.
+> It is suggested to use io_uring in userspace(target part of ubd server)
+> to handle IO request too. And it is still easy for ubdserver to support
+> io handling by non-io_uring, and this work isn't done yet, but can be
+> supported easily with help o eventfd.
+> 
+> This way is efficient since no extra io command copy is required, no sleep
+> is needed in transferring io command to userspace. Meantime the communication
+> protocol is simple and efficient, one single command of
+> UBD_IO_COMMIT_AND_FETCH_REQ can handle both fetching io request desc and commit
+> command result in one trip. IO handling is often batched after single
+> io_uring_enter() returns, both IO requests from ubd server target and
+> IO commands could be handled as a whole batch.
+> 
+> Remove RFC now because ubd driver codes gets lots of cleanup, enhancement and
+> bug fixes since V1:
+> 
+> - cleanup uapi: remove ubd specific error code,  switch to linux error code,
+> remove one command op, remove one field from cmd_desc
+> 
+> - add monitor mechanism to handle ubq_daemon being killed, ubdsrv[1]
+>   includes builtin tests for covering heavy IO with deleting ubd / killing
+>   ubq_daemon at the same time, and V2 pass all the two tests(make test T=generic),
+>   and the abort/stop mechanism is simple
+> 
+> - fix MQ command buffer mmap bug, and now 'xfstetests -g auto' works well on
+>   MQ ubd-loop devices(test/scratch)
+> 
+> - improve batching submission as suggested by Jens
+> 
+> - improve handling for starting device, replace random wait/poll with
+> completion
+> 
+> - all kinds of cleanup, bug fix,..
+> 
+> And the patch by patch change since V1 can be found in the following
+> tree:
+> 
+> https://github.com/ming1/linux/commits/my_for-5.18-ubd-devel_v2
 
-Indeed, e.g.:
+BTW, a one-line fix[1] is added to above branch, which fixes performance
+obviously on small BS(< 128k) test. If anyone run performance test,
+please include this fix.
 
-x86_64/hyperv_clock
-x86_64/max_vcpuid_cap_test
-x86_64/mmu_role_test
+[1] https://github.com/ming1/linux/commit/fa91354b418e83953304a3efad4ee6ac40ea6110
 
-> 
-> # ./tools/testing/selftests/kvm/x86_64/state_test
+Thanks,
+Ming
 
-This test continues to be silent after the top commit a3808d884612 ("KVM: x86/pmu:
-Expose CPUIDs feature bits PDCM, DS, DTES64"), which implies a root cause.
-
-Anyway, thanks for this git-bisect report.
-
-> ==== Test Assertion Failure ====
->    lib/x86_64/processor.c:1207: r == nmsrs
->    pid=6702 tid=6702 errno=7 - Argument list too long
->       1	0x000000000040da11: vcpu_save_state at processor.c:1207 (discriminator 4)
->       2	0x00000000004024e5: main at state_test.c:209 (discriminator 6)
->       3	0x00007f9f48c2d55f: ?? ??:0
->       4	0x00007f9f48c2d60b: ?? ??:0
->       5	0x00000000004026d4: _start at ??:?
->    Unexpected result from KVM_GET_MSRS, r: 29 (failed MSR was 0x3f1)
-> 
-> I don't think any of these failing tests care about MSR_IA32_PEBS_ENABLE
-> in particular, they're just trying to do KVM_GET_MSRS/KVM_SET_MSRS.
-> 

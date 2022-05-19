@@ -2,173 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5796452CC7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB54952CC82
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbiESHGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
+        id S229566AbiESHJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiESHGo (ORCPT
+        with ESMTP id S231504AbiESHJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:06:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C64663F1;
-        Thu, 19 May 2022 00:06:42 -0700 (PDT)
-Received: from kwepemi100024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3gqf07bQzhZFN;
-        Thu, 19 May 2022 15:05:49 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100024.china.huawei.com (7.221.188.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 15:06:40 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 15:06:39 +0800
-Subject: Re: [PATCH -next v2 2/2] blk-throttle: fix io hung due to
- configuration updates
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     kernel test robot <lkp@intel.com>, Tejun Heo <tj@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>,
-        <kbuild-all@lists.01.org>, <cgroups@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20220518072751.1188163-3-yukuai3@huawei.com>
- <202205182347.tMOOqyfL-lkp@intel.com>
- <84fe296e-6e56-3ca9-73a8-357beb675c6e@huawei.com>
- <3d6878f4-1902-633d-0af2-276831364a4f@huawei.com>
- <CAMuHMdV6NysKKh+HZ-cgHh+=SVcydmxO6ic82+t3ySTgfkoEOg@mail.gmail.com>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <20bc6370-999b-ed3c-4b8f-19b2cdba5965@huawei.com>
-Date:   Thu, 19 May 2022 15:06:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 19 May 2022 03:09:24 -0400
+Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5308B8BD0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:09:21 -0700 (PDT)
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 202205190709182510517c384cdfebb4
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 19 May 2022 09:09:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=H/or2OZsQeDEkRCrMm6GNFDu44m+XF/7j107kxhZkho=;
+ b=U60N1c8r560NMW3iOshF1O+ZUF4+ODYQfVrvQ1ouc/le0NpaIuF1yCaJxrjEbwFRUvf+Q+
+ SZIqeS2+SJdT/RttYLUmCYghzTk07yYLFak43oXrcadr+Eq2q5X1X7C/4RQwJn0BOT1p9/QV
+ Y2XyISlzon4sTC6tYcmdfBtugY3To=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v2 1/9] tty: n_gsm: fix user open not possible at responder until initiator open
+Date:   Thu, 19 May 2022 09:07:49 +0200
+Message-Id: <20220519070757.2096-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdV6NysKKh+HZ-cgHh+=SVcydmxO6ic82+t3ySTgfkoEOg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Daniel Starke <daniel.starke@siemens.com>
 
+After setting up the control channel on both sides the responder side may
+want to open a virtual tty to listen on until the initiator starts an
+application on a user channel. The current implementation allows the
+open() but no other operation, like termios. These fail with EINVAL.
+The responder sided application has no means to detect an open by the
+initiator sided application this way. And the initiator sided applications
+usually expect the responder sided application to listen on the user
+channel upon open.
+Set the user channel into half-open state on responder side once a user
+application opens the virtual tty to allow IO operations on it.
+Furthermore, keep the user channel constipated until the initiator side
+opens it to give the responder sided application the chance to detect the
+new connection and to avoid data loss if the responder sided application
+starts sending before the user channel is open.
 
-在 2022/05/19 15:01, Geert Uytterhoeven 写道:
-> Hi Yukuai,
-> 
-> On Thu, May 19, 2022 at 5:25 AM yukuai (C) <yukuai3@huawei.com> wrote:
->> 在 2022/05/19 10:11, yukuai (C) 写道:
->>> 在 2022/05/18 23:52, kernel test robot 写道:
->>>> Thank you for the patch! Yet something to improve:
->>>>
->>>> [auto build test ERROR on next-20220517]
->>>>
->>>> url:
->>>> https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/bugfix-for-blk-throttle/20220518-151713
->>>>
->>>> base:    47c1c54d1bcd0a69a56b49473bc20f17b70e5242
->>>> config: m68k-allyesconfig
->>>> (https://download.01.org/0day-ci/archive/20220518/202205182347.tMOOqyfL-lkp@intel.com/config)
->>>>
->>>> compiler: m68k-linux-gcc (GCC) 11.3.0
->>>> reproduce (this is a W=1 build):
->>>>           wget
->>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
->>>> -O ~/bin/make.cross
->>>>           chmod +x ~/bin/make.cross
->>>>           #
->>>> https://github.com/intel-lab-lkp/linux/commit/f8345dbaf4ed491742aab29834aff66b4930c087
->>>>
->>>>           git remote add linux-review
->>>> https://github.com/intel-lab-lkp/linux
->>>>           git fetch --no-tags linux-review
->>>> Yu-Kuai/bugfix-for-blk-throttle/20220518-151713
->>>>           git checkout f8345dbaf4ed491742aab29834aff66b4930c087
->>>>           # save the config file
->>>>           mkdir build_dir && cp config build_dir/.config
->>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0
->>>> make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
->>>>
->>>> If you fix the issue, kindly add following tag as appropriate
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> All errors (new ones prefixed by >>):
->>>>
->>>>      m68k-linux-ld: block/blk-throttle.o: in function `tg_conf_updated':
->>>>>> blk-throttle.c:(.text+0x25bc): undefined reference to `__udivdi3'
->>>>>> m68k-linux-ld: blk-throttle.c:(.text+0x2626): undefined reference to
->>>>>> `__udivdi3'
->>> Hi,
->>>
->>> I'm confused here, the only place that I can relate to this:
->>>
->>>       return dispatched * new_limit / old_limit;
->>>
->>> However, I don't understand yet why this is problematic...
->>>>      `.exit.text' referenced in section `.data' of
->>>> sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section
->>>> `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
->>
->> + static u64 throtl_update_bytes_disp(u64 dispatched, u64 new_limit,
->> +                                    u64 old_limit)
->> + {
->> +        if (new_limit == old_limit)
->> +                return dispatched;
->> +
->> +        if (new_limit == U64_MAX)
->> +                return 0;
->> +
->> +        return dispatched * new_limit / old_limit;
->>
->> I understand it now. I'm doing (u64 / u64), I should use div64_u64
-> 
-> Better, use mul_u64_u64_div_u64(), as "dispatched * new_limit"
-> may overflow?
-Hi,
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 31 +++++++++++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
 
-It's right that it  can overflow, I'll handle such case in next version.
-> 
->> + }
->> +
->> + static u32 throtl_update_io_disp(u32 dispatched, u32 new_limit, u32 old_limit)
->> + {
->> +        if (new_limit == old_limit)
->> +                return dispatched;
->> +
->> +        if (new_limit == UINT_MAX)
->> +                return 0;
->> +
->> +        return dispatched * new_limit / old_limit;
-> 
-> This is the same as above, but now operating on u32s instead of u64s.
-> Likewise, can the multiplication overflow?
-same as above.
+This commit was not changed as there have been no comments on it in v1.
 
-Thanks,
-Kuai
-> 
->> + }
-> 
-> Gr{oetje,eeting}s,
-> 
->                          Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                  -- Linus Torvalds
-> .
-> 
+Link: https://lore.kernel.org/all/20220506144725.1946-1-daniel.starke@siemens.com/
+
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index fd8b86dde525..08fea3e7674d 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -1493,6 +1493,8 @@ static void gsm_dlci_close(struct gsm_dlci *dlci)
+ 	if (debug & 8)
+ 		pr_debug("DLCI %d goes closed.\n", dlci->addr);
+ 	dlci->state = DLCI_CLOSED;
++	/* Prevent us from sending data before the link is up again */
++	dlci->constipated = true;
+ 	if (dlci->addr != 0) {
+ 		tty_port_tty_hangup(&dlci->port, false);
+ 		spin_lock_irqsave(&dlci->lock, flags);
+@@ -1522,6 +1524,7 @@ static void gsm_dlci_open(struct gsm_dlci *dlci)
+ 	del_timer(&dlci->t1);
+ 	/* This will let a tty open continue */
+ 	dlci->state = DLCI_OPEN;
++	dlci->constipated = false;
+ 	if (debug & 8)
+ 		pr_debug("DLCI %d goes open.\n", dlci->addr);
+ 	/* Send current modem state */
+@@ -1602,6 +1605,25 @@ static void gsm_dlci_begin_open(struct gsm_dlci *dlci)
+ 	mod_timer(&dlci->t1, jiffies + gsm->t1 * HZ / 100);
+ }
+ 
++/**
++ *	gsm_dlci_wait_open	-	wait for channel open procedure
++ *	@dlci: DLCI to open
++ *
++ *	Wait for a DLCI opening from the other side. Asynchronously wait until
++ *	we get a SABM and set off timers and the responses.
++ */
++static void gsm_dlci_wait_open(struct gsm_dlci *dlci)
++{
++	switch (dlci->state) {
++	case DLCI_CLOSED:
++	case DLCI_CLOSING:
++		dlci->state = DLCI_OPENING;
++		break;
++	default:
++		break;
++	}
++}
++
+ /**
+  *	gsm_dlci_begin_close	-	start channel open procedure
+  *	@dlci: DLCI to open
+@@ -1745,10 +1767,13 @@ static struct gsm_dlci *gsm_dlci_alloc(struct gsm_mux *gsm, int addr)
+ 	dlci->addr = addr;
+ 	dlci->adaption = gsm->adaption;
+ 	dlci->state = DLCI_CLOSED;
+-	if (addr)
++	if (addr) {
+ 		dlci->data = gsm_dlci_data;
+-	else
++		/* Prevent us from sending data before the link is up */
++		dlci->constipated = true;
++	} else {
+ 		dlci->data = gsm_dlci_command;
++	}
+ 	gsm->dlci[addr] = dlci;
+ 	return dlci;
+ }
+@@ -3163,6 +3188,8 @@ static int gsmtty_open(struct tty_struct *tty, struct file *filp)
+ 	/* Start sending off SABM messages */
+ 	if (gsm->initiator)
+ 		gsm_dlci_begin_open(dlci);
++	else
++		gsm_dlci_wait_open(dlci);
+ 	/* And wait for virtual carrier */
+ 	return tty_port_block_til_ready(port, tty, filp);
+ }
+-- 
+2.34.1
+

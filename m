@@ -2,210 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8B452CF41
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFCC52CF2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235888AbiESJWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S235943AbiESJTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:19:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231745AbiESJWD (ORCPT
+        with ESMTP id S232862AbiESJTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:22:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B48F05EBF5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:22:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D6041FB;
-        Thu, 19 May 2022 02:22:00 -0700 (PDT)
-Received: from bogus (unknown [10.57.66.157])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 042A03F73D;
-        Thu, 19 May 2022 02:21:58 -0700 (PDT)
-Date:   Thu, 19 May 2022 10:21:52 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Qing Wang <wangqing@vivo.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] arch_topology: Use llc_id instead of package_id
-Message-ID: <20220519092152.ribckwulj77syhvn@bogus>
-References: <20220513090330.z25fwthekn4rjkwq@bogus>
- <afafbb0c-5279-bee8-1ef4-434733e2a552@arm.com>
- <20220513110312.wy6g5avs7ngkmhfu@bogus>
- <634a4b8c-84d2-51a9-ef54-33b81683c849@arm.com>
- <20220516103524.35swlxp2367baxx6@bogus>
- <beda044e-0b91-4359-c6bf-5e34c285fc5c@arm.com>
- <20220517105718.tvpmj2xxb2qj3bev@bogus>
- <b0b63d75-b2f4-2298-a85a-668c3a3e5b6b@arm.com>
- <20220518104344.wh5thzaw2zg4f6jq@bogus>
- <0a5a1220-dc31-690e-9ae3-ebff53a68305@arm.com>
+        Thu, 19 May 2022 05:19:32 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017F15D655;
+        Thu, 19 May 2022 02:19:30 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J9ESEq026147;
+        Thu, 19 May 2022 09:19:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=8rwdL+De7mgiKGHiCKqIpq975ktAdcobffOgguar9dU=;
+ b=XsVWItw8oiGW3yUuMS2+aEN1SLhotSTGGxw4VmmBUSD/6P7EiKENMfRl7fT9zNk7opOE
+ ycw2x5FEi03yb6vW/rVyJhoj66hfvtxq1IQR1bIqcxSv7bQFoYbj/szZBn0mtMOCkvgc
+ AV9QY4rdvEF+riWnfMi1eVlmtKfS3UjpAmrY2/KAQXt00xcELCYvYirHKOeJiYPTUkcE
+ 4VJ3SN4+ySPzNohI74cbdtgMdlGelrvqFXyskjCVj9wrzU4B5HEzU1hFCPxe/Xldtebz
+ FIiWe4gtjGQXSJGwYTnuUSb58xdEqsnQL8zEzAgo4nqhUoXtgE+VjlCxz8Z9EufGcWRz AQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k3203sd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:19:29 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24J9GTHF031827;
+        Thu, 19 May 2022 09:19:29 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k3203rm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:19:29 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24J9CMT0006515;
+        Thu, 19 May 2022 09:19:27 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3g2429f04h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:19:27 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24J9JOAx48038192
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 09:19:24 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C5BAAE045;
+        Thu, 19 May 2022 09:19:24 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5AA0EAE051;
+        Thu, 19 May 2022 09:19:23 +0000 (GMT)
+Received: from [9.171.67.171] (unknown [9.171.67.171])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 19 May 2022 09:19:23 +0000 (GMT)
+Message-ID: <243a53c0-a988-4013-6d04-a3dfdce8e3f0@linux.ibm.com>
+Date:   Thu, 19 May 2022 11:23:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v9 2/3] s390x: KVM: guest support for topology function
+Content-Language: en-US
+To:     Christian Borntraeger <borntraeger@de.ibm.com>, kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        frankja@linux.ibm.com, cohuck@redhat.com, david@redhat.com,
+        thuth@redhat.com, imbrenda@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, wintera@linux.ibm.com, seiden@linux.ibm.com,
+        nrb@linux.ibm.com, Viktor Mihajlovski <mihajlov@linux.ibm.com>
+References: <20220506092403.47406-1-pmorel@linux.ibm.com>
+ <20220506092403.47406-3-pmorel@linux.ibm.com>
+ <6060cfc8-6ae9-1710-3022-1edfbf53b1ca@de.ibm.com>
+From:   Pierre Morel <pmorel@linux.ibm.com>
+In-Reply-To: <6060cfc8-6ae9-1710-3022-1edfbf53b1ca@de.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0a5a1220-dc31-690e-9ae3-ebff53a68305@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: bu78owaOvPsK3jZJumx1PuBnGyAI1cXS
+X-Proofpoint-ORIG-GUID: tncOZ2SeM9P2aUFnhYIXfco_m3W2wo-i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-19_02,2022-05-19_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 priorityscore=1501
+ impostorscore=0 bulkscore=0 clxscore=1015 suspectscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205190053
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 05:54:23PM +0200, Dietmar Eggemann wrote:
-> On 18/05/2022 12:43, Sudeep Holla wrote:
-> > On Wed, May 18, 2022 at 12:23:35PM +0200, Dietmar Eggemann wrote:
-> >> On 17/05/2022 12:57, Sudeep Holla wrote:
-> > [...]
-> 
-> [...]
-> 
-> >> I see. Your requirement is valid information under
-> >> /sys/devices/system/cpu/cpuX/{topology, cache} for userspace.
-> >>
-> >> I'm not sure that we can get core_siblings_list and package_cpus_list
-> >> correctly setup.
-> >>
-> >> With your patch we have now:
-> >>
-> >> root@juno:/sys/devices/system/cpu/cpu0/topology# cat core_siblings_list
-> >> 0-5
-> >> root@juno:/sys/devices/system/cpu/cpu0/topology# cat package_cpus_list
-> >> 0-5
-> >>
-> >> Before we had [0,3-5] for both.
-> >>
-> > 
-> > Correct and that was pure wrong for a single socket system. It must
-> > cover all the CPUs. Tools like lscpu reports them as 2 socket system
-> > which is wrong. There were reports for that but no one really chased it
-> > up to get it fixed. So assumed it is not so important but still it is
-> > wrong. ACPI platforms cared and wanted it fixed with ACPI PPTT since
-> > the PPTT support. So check the difference without my patches on Juno
-> > in DT and ACPI boot. We should get same output for both.
-> > 
-> >>
-> >> I'm afraid we can have 2 different mask here because of:
-> 
-> Sorry, s/can/can't
->
 
-No worries I assumed and read it so.
 
-> >> 72 define_siblings_read_func(core_siblings, core_cpumask);
-> >>                                             ^^^^^^^^^^^^
-> >> 88 define_siblings_read_func(package_cpus, core_cpumask);
-> >>                                            ^^^^^^^^^^^^
-> >>
-> > 
-> > Yes even I got confused and the Documentation revealed one is deprecated
-> > or obsolete(Documentation/ABI/stable/sysfs-devices-system-cpu)
-> > 
-> >  74 What:           /sys/devices/system/cpu/cpuX/topology/package_cpus
-> >  75 Description:    internal kernel map of the CPUs sharing the same physical_package_id.
-> >  76                 (deprecated name: "core_siblings").
-> >  77 Values:         hexadecimal bitmask.
-> >  78
-> >  79 What:           /sys/devices/system/cpu/cpuX/topology/package_cpus_list
-> >  80 Description:    human-readable list of CPUs sharing the same physical_package_id.
-> >  81                 The format is like 0-3, 8-11, 14,17.
-> >  82                 (deprecated name: "core_siblings_list")
-> >  83 Values:         decimal list.
+On 5/19/22 11:01, Christian Borntraeger wrote:
 > 
-> Ah, that makes it more clear to me! Thanks. So DIE boundary, i.e.
-> cpu_cpu_mask() {return cpumask_of_node(cpu_to_node(cpu))} is not related
-> to package cpumask at all. This is why we have the first if condition in
-> cpu_coregroup_mask():
 > 
-> 658 const cpumask_t *core_mask = cpumask_of_node(cpu_to_node(cpu));
-> ...
-> 661 if (cpumask_subset(&cpu_topology[cpu].core_sibling, core_mask)) {
-> 662  /* not numa in package, lets use the package siblings */
-> 663   core_mask = &cpu_topology[cpu].core_sibling;
->
-
-Correct, either I got confused with the names it was different from what
-I had seen last time I looked at these more than couple of years ago.
-
-> [...]
+> Am 06.05.22 um 11:24 schrieb Pierre Morel:
+>> We let the userland hypervisor know if the machine support the CPU
+>> topology facility using a new KVM capability: KVM_CAP_S390_CPU_TOPOLOGY.
+>>
+>> The PTF instruction will report a topology change if there is any change
+>> with a previous STSI_15_1_2 SYSIB.
+>> Changes inside a STSI_15_1_2 SYSIB occur if CPU bits are set or clear
+>> inside the CPU Topology List Entry CPU mask field, which happens with
+>> changes in CPU polarization, dedication, CPU types and adding or
+>> removing CPUs in a socket.
+>>
+>> The reporting to the guest is done using the Multiprocessor
+>> Topology-Change-Report (MTCR) bit of the utility entry of the guest's
+>> SCA which will be cleared during the interpretation of PTF.
+>>
+>> To check if the topology has been modified we use a new field of the
+>> arch vCPU to save the previous real CPU ID at the end of a schedule
+>> and verify on next schedule that the CPU used is in the same socket.
+>> We do not report polarization, CPU Type or dedication change.
 > 
-> >> OK, we don't support Phantom domains via 1. level Cluster in cpu-map
-> >> anymore. We already explicitly informed the Android community. But I'm
-> >> sure people will only discover this if something breaks on their
-> >> platforms and they are able to detect this.
-> >>
-> > 
-> > Again if it was working just by cache with their own phantom domains that
-> > are not upstream, then nothing is broken. At-least I see that we have now
-> > fixed and aligned DT with ACPI. While I understand your concern, I see
-> > this as main issue and not sched domains which may or may not be using
-> > topology info incorrectly.
-> 
-> OK, lets see how you incorporated llc into the topology code in your v2
-> first.
->
+> I think we should not do this. When PTF returns with "has changed" the 
+> guest
+> Linux will rebuild its schedule domains. And this is a really expensive
+> operation as far as I can tell. And the host Linux scheduler WILL schedule
+> too often to other CPUs. So in essence this will result in Linux guests
+> rebuilding their scheduler domains all the time.
+> So remove the "previous CPU logic" for now and only trigger an MTCR when
+> userspace says so.  (eg. on config changes). The idea was to have user
+> defined schedule domains. Following host schedule decisions will be
+> nearly impossible.
 
-Sure, thanks for agreeing to review those implicitly 😄.
 
-> >>>> If we say we only support L2 sharing (asymmetric here since only CPU0-3
-> >>>> have it !!!) and we don't support Phantom then your approach will work
-> >>>> for such systems.
-> >>>
-> >>> Thanks, as I said what is *Phantom* domain ;) ? Can you point me to the
-> >>> DT or ACPI binding for the same ? Just kidding, I know they don't exist.
-> >>
-> >> They do ;-) 1. level Clusters ... but they are used for uArch
-> >> boundaries, not for LLC boundaries. That's the existing issue in DT,
-> >> topology information has 2 sources: (1) cpu-map and (2) cache info.
-> >>
-> > 
-> > Sure, they can fix or add more optimisation on top of what I have sent[1]
-> 
-> If you add llc parsing in your v2, they should have everything they need
-> for Armv9 with uArch boundaries and L2 complexes. What I'm interested in
-> is seeing how we solve the 2 sources (cache and cpu-map) issue here.
 
-Not sure if just llc with resolve what we need on those Armv9 systems unless
-L2 = LLC. If L2 != LLC, then my patches won't help that much.
+I guess you saw that the MTCR bit is set only if the previous and new 
+CPU are on different sockets, like it is on the hardware, not on every 
+scheduling to another CPU.
 
-> Example:
-> 
-> cpu-map:
-> 
->  socket
->   cluster <-- (1)
->    core
->     thread
-> 
-> cache:
-> 
->  llc
-> 
-> How do people know that (1) is L2 and not LLC?
->
+However this can easily be done in an enhancement, if ever, since it has 
+no implication on the UAPI.
+I change this for the next round.
 
-We can get the cpumask of cpus sharing each unique cache in the system.
-That is not a problem, we have cacheinfo driver for that. But that is
-initialised quite late for a reason and if we need that info much early
-then that needs some reworking.
-
-My patches is addressing only LLC and hence much simpler.
-
-> But let us switch the discussion to you v2 on this one. I have to see
-> your implementation first.
->
-
-Sure, I just replied here just to address if there were any open questions.
-Let us discuss any issues in the below mail thread.
-
-> > [1] https://lore.kernel.org/lkml/20220518093325.2070336-1-sudeep.holla@arm.com
-> 
-> [...]
+Thanks,
+Pierre
 
 -- 
-Regards,
-Sudeep
+Pierre Morel
+IBM Lab Boeblingen

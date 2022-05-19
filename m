@@ -2,84 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840D352D418
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556F952D41A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238783AbiESNb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        id S235796AbiESNcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239020AbiESNbl (ORCPT
+        with ESMTP id S235342AbiESNbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:31:41 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675FE5F8E0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:31:31 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2f16645872fso56782577b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:31:31 -0700 (PDT)
+        Thu, 19 May 2022 09:31:53 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114512CE23;
+        Thu, 19 May 2022 06:31:52 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d22so4792139plr.9;
+        Thu, 19 May 2022 06:31:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3XnxyHbIe0ZBmAsG2JuG+QltijPeIqWVypBFknCicxo=;
-        b=kYS0JcMgRcmEu9/JY4wcwmH4dMjbm8Sf+jBzLXPbQ2DcKYa61Hid4c/wSQNc3/gHuz
-         ZTcY91PpEZjRTvp4ZqgVzZFWsgZJSX3+HsEtmhs8h1lp1/Vx2e2uX6nx5k5DUts9zJ0/
-         O00Y0LTUX/XUt8KCH5mgUqvnIevZHRj+qYEzW0UlpWqgrOSJRDPqno42UHCD6T5dgrzl
-         WeFvMzyhjzW5WTTeTtbDfMC/G18YXDdRqdvzCOO7A5A0Vrh3gf5Q7Oc4Jrd22FDVNuBp
-         Urt0pvnWFqYh3+CkqcrhmtgP3zMDwbNO2z7dilq1bLcoZDSaM9DlI7K9iaJLEy0en/pU
-         J/sQ==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NeBhBDbLvND8TXeCRztU3OoO0UgF77pFRvz7RKCrOXE=;
+        b=qCihqc2ueuq0ep5U2t2Yk+coPUZ5bLTTvg6iGnfg6JSitGwLYLNHBRe+A9ojsKO4Xw
+         lQx8l7egXFo3SitSVionCf7skJKIPE7y2IE86dJn9O9MRlzLUGo/R+UhVkOmNtCRFbp/
+         6kg3Jti6oExWDjraoUteTqSLNbKvFlvPSW9JbxpJmpv4E8uITu+JBjPNcN7MWnCj9IcS
+         B3f/k88LJ/PJBfIxSSVJ2HVN14Iwz/8QGZT8+y0gDE8WDiGSdVOmTUnrcf0C1+o2piXx
+         GrrpcN8+5tX4rDQlDP0cRjja7Ga3oib9FFc8BOQAlcQ9fymyStq5qS/qt4X5+IKgRveO
+         20fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3XnxyHbIe0ZBmAsG2JuG+QltijPeIqWVypBFknCicxo=;
-        b=klUJvYtvd0hCM1dipms90ogkUJamz3ktB2aE0v4W0D1ibzgXjFbt78aOkSLgkTaBLV
-         qRy3uSLmuuv1pPOoGVTZFGTLA/aHQCJExf4N0R1xJAjzXIshye7Knlt6jqCn+iGC5R0u
-         2ccVpvS9LEP7uTrhn5l1ZRcBMd9+1L5UdP+tKjhpnXsMkPlLQM04c491E63GZVs1ZSo1
-         3NBiUQkLYYgUxQkKwje5patI0bQrt+U0szbM8ppHFYMWmDcmxBRUbKv9Zq9GcKrEdYOu
-         dK0HgXxUGpVxTDrkcm+eWCvhYjKYwbsg1bQrcSXJjrvORS8nF+sEmUnmnyMIdWsSuUiK
-         AWkA==
-X-Gm-Message-State: AOAM532a91THZ04ivnI5h1VD1ezL4hPq6fHBLiSXRRsuKryiQWLrN8wy
-        Clynung0PzfCjmnWWzBTv5uIW5am3jotFjWfrcf3BA==
-X-Google-Smtp-Source: ABdhPJxC5VgcYmjV4j7I0ElLpLTURx5L6cjrFDYuPYN61Od2Uz1HdmgBoQB10B6ZS0hGShCFD2W6W/brwNh3bVK/s7c=
-X-Received: by 2002:a81:1d48:0:b0:2f1:8ebf:25f3 with SMTP id
- d69-20020a811d48000000b002f18ebf25f3mr4695844ywd.118.1652967090590; Thu, 19
- May 2022 06:31:30 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NeBhBDbLvND8TXeCRztU3OoO0UgF77pFRvz7RKCrOXE=;
+        b=5G1QvuE9JJb/MBogdvvnkK5P60fH+aawh5iCyui9oR145t17cPEyd7CUt8dHgjVL0k
+         oCzBcipnYxUqboJwtDiaRKu+SVwNA8Cz7RLjfpc60y350aEVIfW5NNPYurNf2eO9puS2
+         G/JX0HHpcB1lyh/a2DnvZhNy8MwNjFTJW7zvrnfSlllr4cQE1xMJnZxuEWA71g3t/cTW
+         8eHfnQEpcoabVK3PT5OX8mOVEC50VXDWvSUPeBp1tNZAtJqRughiGG4hyW/nwrN6xQwd
+         8R67/zeY6OB+aiUGOSl0cOSjCPCkAfIVp9QYKohXb29g2Jj35HWlYfj3PwF4a+tSDMYA
+         BM+g==
+X-Gm-Message-State: AOAM5313DUJhEWSxvYBuwB1cMIWH35hpSebDaUaCCeOICWSnQ7EBSAXF
+        6Mevol7hRb7TDemJmz7Ivgc=
+X-Google-Smtp-Source: ABdhPJzje9/9enhIU8B7DPtTNIzLDHv31g/rhqCVLWPzu3d35117+jsw135QPxrsPBI2grjOaMvP6w==
+X-Received: by 2002:a17:90b:4d8c:b0:1df:8f22:b699 with SMTP id oj12-20020a17090b4d8c00b001df8f22b699mr5337535pjb.152.1652967111496;
+        Thu, 19 May 2022 06:31:51 -0700 (PDT)
+Received: from [192.168.255.10] ([203.205.141.80])
+        by smtp.gmail.com with ESMTPSA id o6-20020a62f906000000b0050dc76281fcsm4170777pfh.214.2022.05.19.06.31.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 06:31:50 -0700 (PDT)
+Message-ID: <e0b96ebd-00ee-ead4-cf35-af910e847ada@gmail.com>
+Date:   Thu, 19 May 2022 21:31:46 +0800
 MIME-Version: 1.0
-References: <20220519011210.170022-1-robh@kernel.org>
-In-Reply-To: <20220519011210.170022-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 19 May 2022 15:31:19 +0200
-Message-ID: <CACRpkdZtUj=_X-uC46CO97GGqKBJR28h1Hoj60iSmMWUYc1LRA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: qcom: Drop 'maxItems' on 'wakeup-parent'
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH RESEND v12 00/17] KVM: x86/pmu: Add basic support to
+ enable guest PEBS via DS
+Content-Language: en-US
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>
+References: <20220411101946.20262-1-likexu@tencent.com>
+ <87fsl5u3bg.fsf@redhat.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <87fsl5u3bg.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 3:12 AM Rob Herring <robh@kernel.org> wrote:
+On 19/5/2022 8:14 pm, Vitaly Kuznetsov wrote:
+> Like Xu <like.xu.linux@gmail.com> writes:
+> 
+> ...
+> 
+> Hi, the following commit
+> 
+>>    KVM: x86/pmu: Add IA32_PEBS_ENABLE MSR emulation for extended PEBS
+> 
+> (currently in kvm/queue) breaks a number of selftests, e.g.:
 
-> 'wakeup-parent' is a single phandle and not an array, so 'maxItems' is
-> wrong. Drop it.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Indeed, e.g.:
 
-Patch applied!
+x86_64/hyperv_clock
+x86_64/max_vcpuid_cap_test
+x86_64/mmu_role_test
 
-Yours,
-Linus Walleij
+> 
+> # ./tools/testing/selftests/kvm/x86_64/state_test
+
+This test continues to be silent after the top commit a3808d884612 ("KVM: x86/pmu:
+Expose CPUIDs feature bits PDCM, DS, DTES64"), which implies a root cause.
+
+Anyway, thanks for this git-bisect report.
+
+> ==== Test Assertion Failure ====
+>    lib/x86_64/processor.c:1207: r == nmsrs
+>    pid=6702 tid=6702 errno=7 - Argument list too long
+>       1	0x000000000040da11: vcpu_save_state at processor.c:1207 (discriminator 4)
+>       2	0x00000000004024e5: main at state_test.c:209 (discriminator 6)
+>       3	0x00007f9f48c2d55f: ?? ??:0
+>       4	0x00007f9f48c2d60b: ?? ??:0
+>       5	0x00000000004026d4: _start at ??:?
+>    Unexpected result from KVM_GET_MSRS, r: 29 (failed MSR was 0x3f1)
+> 
+> I don't think any of these failing tests care about MSR_IA32_PEBS_ENABLE
+> in particular, they're just trying to do KVM_GET_MSRS/KVM_SET_MSRS.
+> 

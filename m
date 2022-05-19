@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B333A52DE0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6E752DE0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244347AbiESUCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 16:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S244387AbiESUF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 16:05:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239668AbiESUCo (ORCPT
+        with ESMTP id S239668AbiESUF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 16:02:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD936D187;
-        Thu, 19 May 2022 13:02:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=EyvcIebdJVNbSUKi/O56+u29Bdx5ONtpdCn9+GlRuGc=; b=ImYzwvN78w3/qFJn8r7MNseyWF
-        e4McVD2zl9Xfio2tPR8MHFE9jAY5yXUIsP2QMHnxd3rGUULaBEpwwQ1kuIkoDsywGk2FknfRD+PE8
-        mKB0RTH55YuMV4rtN20z7S1Gb4jN31bBOdPrwG0GFUxXWdwiW+2VVpso2Tkb5YUZg2ta801XlrEo+
-        Vk3FCyD/0FARw0bX0Xp4QqW9VpJG8AqloiMqCMM4BdYK55Oink5fYL1+k7AnO8ghmvPZ8qG9AEKI3
-        jqDLZ8eBLjzOH1unE5AzWMP5JARLfnXAbJV40/GHp/OC6gBCvK/RIHu+s3ZNUd4CNcK3xW4CE2xgO
-        BmQkaoxA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrmM3-00D3rP-8l; Thu, 19 May 2022 20:02:39 +0000
-Message-ID: <6f38a339-41b5-aafe-c788-bd34a1806d52@infradead.org>
-Date:   Thu, 19 May 2022 13:02:32 -0700
+        Thu, 19 May 2022 16:05:26 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1C96D187;
+        Thu, 19 May 2022 13:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652990725; x=1684526725;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IEHkZG7WnYsRxPk999KUKG9YJK49N+7dI0JkiNKtyjQ=;
+  b=G9/LN1REavz5e20kjTk3lOVilakkbnUyB9csrsrWPw70M59KQP1gjGNQ
+   FLgO1CzF66uH7Z8taxj4NmriNVTsz7ZhG6dlKaGs3ZyVLPNizc/THXPTi
+   wl/wHyyJ9vfxn3ABYBEqjvcJ60fwU1hYS+5HLMfxxFN4sxlN3U4+y5bHi
+   /5d7Ske2I+CEkOi+heD3RGFY+DWzzaaGvDjypSAD+ZUNy0Vb5P9fKeh/5
+   AdlBLh97YhJ8v75uFcqkhSRGkg8XUDCznRhf3rWW2fPAZpUuHYcyPsBLd
+   e1CU5VTIqEPscfdaTvvN0vZ1wouPdygsrXT9tzJYXmkRgX0JcT5U89j8H
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252250912"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="252250912"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 13:05:00 -0700
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="627788198"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 13:04:59 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nrmNo-000GD9-6Q;
+        Thu, 19 May 2022 23:04:28 +0300
+Date:   Thu, 19 May 2022 23:04:27 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
+        pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
+        willy@infradead.org
+Subject: Re: [PATCH v2 22/28] Input/joystick/analog: Convert from seq_buf ->
+ printbuf
+Message-ID: <Yoaiy1lc+MCMZFTQ@smile.fi.intel.com>
+References: <20220519172421.162394-1-kent.overstreet@gmail.com>
+ <20220519172421.162394-23-kent.overstreet@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [linux-next] build fails modpost: "blkcg_get_fc_appid"
- [drivers/nvme/host/nvme-fc.ko] undefined!
-Content-Language: en-US
-To:     Hannes Reinecke <hare@suse.de>, Jens Axboe <axboe@kernel.dk>
-Cc:     Tasmiya Nalatwad <tasmiya@linux.vnet.ibm.com>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
-        sachinp@linux.vnet.com, mputtash@linux.vnet.com,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
-References: <86768c9d-9a9c-653b-ab99-86de3bc434d8@linux.vnet.ibm.com>
- <7b16694b-0281-d06d-7564-c4f26760a25e@kernel.dk>
- <fc5f8b96-3c93-5400-b917-a1d991cbe7c9@suse.de>
- <900f57bc-9978-9ba6-22fb-48f03fcf5011@kernel.dk>
- <c2d252a1-7223-4899-e5c9-e4bb27e2fc8a@kernel.dk>
- <268233c7-88ad-6b5c-6991-e3a4f1ac2540@suse.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <268233c7-88ad-6b5c-6991-e3a4f1ac2540@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519172421.162394-23-kent.overstreet@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,44 +67,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 19, 2022 at 01:24:15PM -0400, Kent Overstreet wrote:
+> seq_buf is being deprecated, this converts to printbuf which is similar
+> but heap allocates the string buffer.
+> 
+> This means we have to consider memory allocation context & failure: Here
+> we're in device initialization so GFP_KERNEL should be fine, and also as
+> we're in device initialization returning -ENOMEM is fine.
 
+...
 
-On 5/19/22 06:02, Hannes Reinecke wrote:
-> On 5/19/22 14:42, Jens Axboe wrote:
->> On 5/19/22 6:40 AM, Jens Axboe wrote:
->>> On Thu, May 19, 2022 at 6:38 AM Hannes Reinecke <hare@suse.de> wrote:
->>>>
->>>> On 5/19/22 14:14, Jens Axboe wrote:
->>>>> On 5/19/22 1:49 AM, Tasmiya Nalatwad wrote:
->>>>>> Greetings,
->>>>>>
->>>>>> linux-next build fails modpost: "blkcg_get_fc_appid" [drivers/nvme/host/nvme-fc.ko] undefined!
->>>>>>
->>>>>> Console Logs :
->>>>>>
->>>>>> [console-expect]#make -j 17 -s && make modules && make modules_install && make install
->>>>>> make -j 17 -s && make modules && make modules_install && make install
->>>>>> ERROR: modpost: "blkcg_get_fc_appid" [drivers/nvme/host/nvme-fc.ko] undefined!
->>>>>> make[1]: *** [scripts/Makefile.modpost:134: modules-only.symvers] Error 1
->>>>>> make: *** [Makefile:1914: modules] Error 2
->>>>>> make: *** Waiting for unfinished jobs....
->>>>>
->>>>> Christoph, can you fix this up?
->>>>>
->>>> Cannot reproduce with commit 21498d01d045c5b95b93e0a0625ae965b4330ebe.
->>>> Please share details.
->>>
->>> The kerneltest bot also reported this a few days ago, you might be able
->>> to find the details there as that includes config etc.
->>
->> Here: https://lore.kernel.org/linux-mm/202205190527.o9wVEvHI-lkp@intel.com/
->>
-> Right. Send a patch.
+> +       int ret = 0;
 
+Redundant assignment.
 
-https://lore.kernel.org/all/20220518045704.GA30131@lst.de/
+...
 
-but it needs to be sent as a formal patch.
+> -		seq_buf_printf(&s, " %d-hat",
+> -			       hweight16(analog->mask & ANALOG_HATS_ALL));
+> +		pr_buf(&buf, " %d-hat",
+> +		       hweight16(analog->mask & ANALOG_HATS_ALL));
+
+Now you may put it on one line here and in similar cases.
+
+...
+
+> +	ret = buf.allocation_failure ? -ENOMEM : 0;
+> +	if (!ret)
+> +		strlcpy(analog->name, buf.buf, sizeof(analog->name));
+> +	printbuf_exit(&buf);
+> +	return ret;
+
+Looks like anti-pattern. On top a bit twisted error code manipulation before
+checking for error codes, but what about
+
+static int printbuf_export(*buf, *out, size)
+{
+	...
+}
+
+	ret = printbuf_export(&buf, analog->name, sizeof(analog->name));
+	printbuf_exit(&buf);
+	return ret;
+
+?
 
 -- 
-~Randy
+With Best Regards,
+Andy Shevchenko
+
+

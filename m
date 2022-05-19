@@ -2,161 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E9752CF61
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C726B52CF65
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236012AbiESJ2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        id S231156AbiESJ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiESJ2n (ORCPT
+        with ESMTP id S236098AbiESJ3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:28:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E425FF10
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:28:41 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J9Rgia019896;
-        Thu, 19 May 2022 09:28:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=Us/wTEHc1pNDKFsixu7C15Rmob4t3fstlrDv4JPRNqI=;
- b=TZ9OQbZVdf4/KzGepqqFN47sgCQ5mcFAp8Qs3f1uesfJEOlIWGsh4uH01bXzbAESpVUp
- P7++5pAwqOZPNbu6v/2aQjkvcetjRbDiPp/m6VZ6iw1EZFl3kG/9eLW95RqULFouhXkU
- 3MgWYsdXrhflkbcY49lVIYn+fsz0awSf9S+oVvb7/xLQLfGGhShUZut1qNHkGFNp6JaA
- sZa8wLbbxlFePHkQlLMUHd3FffcASrALjaE+8JIx6zR8OSgAT4IX/fufy2A9d0RZhA3v
- ALl7IR95rPuR8xKl+T2sioFRzykr9FIr9NesJ9vD18vS8lQTOlOEa80gyqS2Th60EYW3 kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k9j80m1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 09:28:27 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24J9SQsu022825;
-        Thu, 19 May 2022 09:28:26 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k9j80ke-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 09:28:26 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24J9D9md032301;
-        Thu, 19 May 2022 09:28:24 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjf15f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 09:28:24 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24J9SMA943778392
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 May 2022 09:28:22 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8E37B4C04A;
-        Thu, 19 May 2022 09:28:22 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 245BF4C044;
-        Thu, 19 May 2022 09:28:22 +0000 (GMT)
-Received: from localhost (unknown [9.43.24.187])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 19 May 2022 09:28:22 +0000 (GMT)
-Date:   Thu, 19 May 2022 14:58:20 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH] kexec_file: Drop weak attribute from
- arch_kexec_apply_relocations[_add]
-To:     Baoquan He <bhe@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-References: <20220518181828.645877-1-naveen.n.rao@linux.vnet.ibm.com>
-        <87ee0q7b92.fsf@email.froward.int.ebiederm.org>
-        <YoWySwbszfdZS9LU@MiWiFi-R3L-srv>
-In-Reply-To: <YoWySwbszfdZS9LU@MiWiFi-R3L-srv>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1652951723.o9i6ngwfda.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: raQvea1ubc_0i3LcAh7XWdVHZP2Pjm14
-X-Proofpoint-ORIG-GUID: WhrT_x4KNw1w69x52_JAdnAvHv0PXd0F
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 19 May 2022 05:29:35 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6839CA776E;
+        Thu, 19 May 2022 02:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652952573; x=1684488573;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GG+D/zbzcTBxqP2PNnwLTtmoBW5Cf4iVBDI1LewPyVE=;
+  b=TqX1Y9O9Hs49AZiWkUl1+B8xITThfcTUdUzpngbIFMJC28Az6DVBixAN
+   gefLfygW6iBMEWmNPQYrdYV394OYd4O6QvXOtynzEpTSM2u+wVmmy4hBy
+   sHiaR3Ojw+bc6Nm4sPn8MB1BcHnrQEqExASQpUO/WsP/HDYcNf0kNibV9
+   6XTS2eEHZGoLXZ8YoLUIEkhom51iAG/B/LPGvWmpdtCxNOcQbwfPhG6KF
+   Xh+ShMxGnZN7zRaFkX4R9aQyqwqhdI5S5A+3XU75Erpn2E93E5Z9VV16D
+   ZcLScckKMBG+/EcP9uqYu5A8OWyCCIvP46pEXJezKRKsYeeRtm3+cFOro
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="269701311"
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="269701311"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 02:29:26 -0700
+X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
+   d="scan'208";a="570113195"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 02:29:20 -0700
+Date:   Thu, 19 May 2022 17:29:12 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zeng Guang <guang.zeng@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>
+Subject: Re: [PATCH v9 0/9] IPI virtualization support for VM
+Message-ID: <20220519092906.GA3234@gao-cwp>
+References: <20220419153155.11504-1-guang.zeng@intel.com>
+ <2d33b71a-13e5-d377-abc2-c20958526497@redhat.com>
+ <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
+ <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
+ <YoK48P2UrrjxaRrJ@google.com>
+ <20220517135321.GA31556@gao-cwp>
+ <20220517140218.GA569@gao-cwp>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-19_01,2022-05-19_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
- mlxlogscore=266 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205190053
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517140218.GA569@gao-cwp>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baoquan He wrote:
-> Hi Eric,
->=20
-> On 05/18/22 at 04:59pm, Eric W. Biederman wrote:
->> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> writes:
->>=20
->> > Since commit d1bcae833b32f1 ("ELF: Don't generate unused section
->> > symbols") [1], binutils (v2.36+) started dropping section symbols that
->> > it thought were unused.  This isn't an issue in general, but with
->> > kexec_file.c, gcc is placing kexec_arch_apply_relocations[_add] into a
->> > separate .text.unlikely section and the section symbol ".text.unlikely"
->> > is being dropped. Due to this, recordmcount is unable to find a non-we=
-ak
->> > symbol in .text.unlikely to generate a relocation record against.
->> >
->> > Address this by dropping the weak attribute from these functions:
->> > - arch_kexec_apply_relocations() is not overridden by any architecture
->> >   today, so just drop the weak attribute.
->> > - arch_kexec_apply_relocations_add() is only overridden by x86 and s39=
-0.
->> >   Retain the function prototype for those and move the weak
->> >   implementation into the header as a static inline for other
->> >   architectures.
->> >
->> > [1] https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Dd1=
-bcae833b32f1
->>=20
->> Any chance you can also get machine_kexec_post_load,
->> crash_free_reserved_phys_range, arch_kexec_protect_protect_crashkres,
->> arch_kexec_unprotect_crashkres, arch_kexec_kernel_image_probe,
->> arch_kexec_kernel_image_probe, arch_kimage_file_post_load_cleanup,
->> arch_kexec_kernel_verify_sig, and arch_kexec_locate_mem_hole as well.
+On Tue, May 17, 2022 at 10:02:23PM +0800, Chao Gao wrote:
+>+ Maxim
+>
+>On Tue, May 17, 2022 at 09:53:26PM +0800, Chao Gao wrote:
+>>On Mon, May 16, 2022 at 08:49:52PM +0000, Sean Christopherson wrote:
+>>>On Tue, May 03, 2022, Paolo Bonzini wrote:
+>>>> On 5/3/22 09:32, Zeng Guang wrote:
+>>>> > 
+>>>> > I don't see "[PATCH v9 4/9] KVM: VMX: Report tertiary_exec_control field in
+>>>> > dump_vmcs()" in kvm/queue. Does it not need ?
+>>>> 
+>>>> Added now (somehow the patches were not threaded, so I had to catch them one
+>>>> by one from lore).
+>>>> 
+>>>> > Selftests for KVM_CAP_MAX_VCPU_ID is posted in V2 which is revised on top of
+>>>> > kvm/queue.
+>>>> > ([PATCH v2] kvm: selftests: Add KVM_CAP_MAX_VCPU_ID cap test - Zeng
+>>>> > Guang (kernel.org) <https://lore.kernel.org/lkml/20220503064037.10822-1-guang.zeng@intel.com/>)
+>>>> 
+>>>> Queued, thanks.
+>>>
+>>>Shouldn't we have a solution for the read-only APIC_ID mess before this is merged?
 
-I've posted a v2 that uses the approach suggested by Michael, and=20
-something that was in use in kexec already. If you are ok with that=20
-approach, I will take a stab at converting the rest of the functions=20
-that are marked __weak.
+Paolo & Sean,
 
->>=20
->> That is everything in kexec that uses a __weak symbol.  If we can't
->> count on them working we might as well just get rid of the rest
->> preemptively.
->=20
-> Is there a new rule that __weak is not suggested in kernel any more?
-> Please help provide a pointer if yes, so that I can learn that.
+If a solution for read-only APIC ID mess is needed before merging IPIv
+series, do you think the Maxim's patch [1] after some improvement will
+suffice? Let us know if there is any gap.
 
-I'm not aware of a move away from __weak in the kernel, in general.=20
-Steven doesn't prefer it for ftrace, and other maintainers may have a=20
-preference.
-
->=20
-> In my mind, __weak is very simple and clear as a mechanism to add
-> ARCH related functionality.
-
-Notwithstanding the ftrace issue, the other caveat with __weak functions=20
-are that they still make it into the final vmlinux even if they are=20
-overridden. That is, you will have instructions from both the __weak=20
-variant as well as from the overridden variant in the final vmlinux,=20
-which can add up if the weak variants are non-trivial.=20
-
-
-- Naveen
-
+[1]: https://lore.kernel.org/all/20220427200314.276673-3-mlevitsk@redhat.com/

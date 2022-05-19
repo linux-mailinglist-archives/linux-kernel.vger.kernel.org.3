@@ -2,179 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C56452D9E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36EF52D9EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241835AbiESQLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        id S241850AbiESQMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241849AbiESQK7 (ORCPT
+        with ESMTP id S241083AbiESQL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:10:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5AC14013;
-        Thu, 19 May 2022 09:10:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5849761BFB;
-        Thu, 19 May 2022 16:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85AF7C34100;
-        Thu, 19 May 2022 16:10:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652976655;
-        bh=altMU1x5dkULV65LqvjrW52Px3VtLs4XMJvIVnKnHWk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=sUtc1K9UagbRyfhUiKz9v9PGOqfIf38DRORdTyH/Znl0GZp9Sc5oZl+Cy2hdiAb2u
-         LmL6LVdp0jtl0JGiKrnqhQ8x4oBfd/RrTUGnmfULdamzu2PpVrLvwjPEtslNGyZoL8
-         X/rnDplhSSXuyFv/8DgxoTnI7frHAVr62/sAGEojNSpqLwu8vc9T38JVazYDGa7Yhv
-         30CK4gAy8ulbsaeGA8OT53F30r5TGWH6p3bncIulcKhaL+uBRQv+WLlPQahI7T908O
-         NZnmHpv8n2WSk11UIhLCHoMdGydmwC9ui9SFsHwlp15uPMUUKOA/2HJ4xQu4tE1HsW
-         xwq5fGMbkjb0w==
-Date:   Thu, 19 May 2022 11:10:53 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>, Rob Herring <robh@kernel.org>
-Cc:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, james.dutton@gmail.com,
-        kibi@debian.org, bcm-kernel-feedback-list@broadcom.com,
-        james.quinlan@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
- linkup
-Message-ID: <20220519161053.GA24069@bhelgaas>
+        Thu, 19 May 2022 12:11:58 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCABAFB1D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:11:55 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id p74so2639117iod.8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z9JuQdbnyix/Cw2s/uS/02pnjmPQ42SuLyLty1YjLH8=;
+        b=Aa841zG4DYWnqVq5zJHLVf9PcPp8NoKgOR8vVxN68li1B198TGkNUKfJDQDPqq3PKF
+         9auRyny2CyM0KAeiww1FQQGBl7uh04eAyUO8LDra0c4R69+3DCcpNw9vcyxjrkXwh6FH
+         3u8GKzljCq+yRdESJki4sDv1msi3XokEKEgQx0y4B2KMkDmXuAEqAePA0lfp4I7BJgKF
+         ch/EaBfy8ujyLEOOK7eXG6grUpIGZ5Dfuak53cjVJ4w9XaXpRWDTCyxQCYyK+MbwBYUo
+         L9U4QhjPxExwRhkXneBV5PeyVWZWFwR0AwdbQu19vjfm/V3J4cdxg4jMA7jXNsGQuMyN
+         1OXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z9JuQdbnyix/Cw2s/uS/02pnjmPQ42SuLyLty1YjLH8=;
+        b=rPcdPdXRP/TKKmN4gdGolnREHYuZ6VuZ4csIzb5t0yXXlel6ZN+PGUTBj4IAQdBwXb
+         9op4vQJPi6Fg3JXLfgjQjmLUdGGH5KXjU6A1gsqcxLdmuVMzYVUqxQ17aHvZQFileRqg
+         eLmYrSzWecg2bGJFF0bC9hnGKWKl7Thh9QJzAZR+vJ0S0MatLMFZn/QjrlDqzHsOGvOE
+         V20THEZk2Aexm/6THgo8crLP3ZSleOOPv+7+k9w/p+IcAKMplFzMqEF4hOmYMvUeZtfW
+         ZqVqRmipHMgibkYVI/OJQPgl1/4g00eIb0Asl2SIZRDq4KSzeKnQH1rDzhX4MSfO3PV4
+         nT4g==
+X-Gm-Message-State: AOAM530wyUul0p51wsVCgFZdHRsIK1rt7VFha9AZk32ew83YvvitoHed
+        DStX2miTQtiCdzNDEmmnBAQ=
+X-Google-Smtp-Source: ABdhPJwWqjwfIJd8j6I/+9ff9Vz6fKNxGW4RFWDoJajx/RLpilS9EvjwcwZailmSGC+66ruuR5yL1g==
+X-Received: by 2002:a05:6602:1501:b0:65a:c412:2eeb with SMTP id g1-20020a056602150100b0065ac4122eebmr2811315iow.29.1652976715359;
+        Thu, 19 May 2022 09:11:55 -0700 (PDT)
+Received: from localhost.localdomain (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id g8-20020a05660203c800b0065a47e16f64sm823862iov.54.2022.05.19.09.11.49
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 19 May 2022 09:11:55 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>
+Subject: [PATCH] sched: Dump stacktrace when some task failed to stop
+Date:   Fri, 20 May 2022 00:11:25 +0800
+Message-Id: <20220519161125.41144-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518194211.20143-1-jim2101024@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+to Rob for my naive DT questions]
+Some processes may not be stopped, such as workqueue workers.
 
-On Wed, May 18, 2022 at 03:42:11PM -0400, Jim Quinlan wrote:
-> commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
-> 
-> introduced a regression on the PCIe RPi4 Compute Module.  If the PCIe
-> endpoint node described in [2] was missing, no linkup would be attempted,
-> and subsequent accesses would cause a panic because this particular PCIe HW
-> causes a CPU abort on illegal accesses (instead of returning 0xffffffff).
-> 
-> We fix this by allowing the DT endpoint subnode to be missing.  This is
-> important for platforms like the CM4 which have a standard PCIe socket and
-> the endpoint device is unknown.
+Add this dump_stack to easily figure out which process caused the problems.
 
-I assume you're referring specifically to making this optional in the
-DT:
+Before this change:
 
-    /* PCIe endpoint */
-    pci-ep@0,0 {
-            assigned-addresses =
-                <0x82010000 0x0 0xf8000000 0x6 0x00000000 0x0 0x2000>;
-            reg = <0x0 0x0 0x0 0x0 0x0>;
-            compatible = "pci14e4,1688";
-    };
+<4>[  517.545889] ------------[ cut here ]------------
+<4>[  517.545901] Dying CPU not properly vacated!
+<4>[  517.546366] ---[ end trace 0000000000000002 ]---
+<4>[  518.546831] CPU6 enqueued tasks (2 total):
+<4>[  518.546855] 	pid: 49, name: migration/6
+<4>[  518.547010] 	pid: 6231, name: kworker/6:0
 
-I don't really understand what's going on here, but I assume this
-describes a [14e4:1688] device, which the PCI database says is a
-NetXtreme BCM5761 10/100/1000BASE-T Ethernet
-(https://pci-ids.ucw.cz/read/PC/14e4/1688)
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ kernel/sched/core.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Why do you *ever* need this stanza?  "git grep pci-ep
-Documentation/devicetree/bindings/pci/" says no other DT has one.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 53596842f0d8..de6b5320e4d7 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -9416,7 +9416,14 @@ static void dump_rq_tasks(struct rq *rq, const char *loglvl)
+ 			continue;
+ 
+ 		printk("%s\tpid: %d, name: %s\n", loglvl, p->pid, p->comm);
++		if (p != current)
++			sched_show_task(p);
+ 	}
++	/*
++	 * We need the stack of each cpu to analyze who is blocking the
++	 * current cpu scheduling
++	 */
++	trigger_all_cpu_backtrace();
+ }
+ 
+ int sched_cpu_dying(unsigned int cpu)
+-- 
+2.24.3 (Apple Git-128)
 
-If the link does come up, I assume normal PCI enumeration would
-discover the [14e4:1688] or whatever device is plugged into a CM4
-socket, and it would read and assign BARs as needed.  Why do we need
-to describe any of this in the DT?
-
-If the link doesn't come up, it looks like you set the "refusal_mode"
-so subsequent config accesses fail gracefully instead of with a CPU
-abort.
-
-[Tangent: since you never clear "refusal_mode", I assume there's no
-possibility of hot-adding a device.  A device must be put in the slot
-before power-up, right?]
-
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=215925
-> [2] Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> 
-> Fixes: 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
-> Fixes: 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
-> Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> ---
->  drivers/pci/controller/pcie-brcmstb.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-> index ba5c120816b2..adca74e235cb 100644
-> --- a/drivers/pci/controller/pcie-brcmstb.c
-> +++ b/drivers/pci/controller/pcie-brcmstb.c
-> @@ -540,16 +540,18 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
->  
->  static int brcm_pcie_add_bus(struct pci_bus *bus)
->  {
-> -	struct device *dev = &bus->dev;
->  	struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
->  	int ret;
->  
-> -	if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
-> +	/* Only busno==1 requires us to linkup */
-> +	if ((int)bus->number != 1)
-
-It's a big leap from "DT endpoint is optional" to "bus->number == 1 if
-DT endpoint is missing" (if that's even what it means).  Help me
-connect the dots here.
-
-I *guess* this is really saying "we only want to bring the link up for
-RPs"?
-
-And "bus->number == 1" assumes the RP is on bus 0, there's only one
-RP, and that RP's secondary bus is 1?  So it's only in that case
-(we're adding the secondary bus of the RP), that we need to manually
-bring up the link?
-
->  		return 0;
->  
->  	ret = pci_subdev_regulators_add_bus(bus);
-> -	if (ret)
-> +	if (ret) {
-> +		pcie->refusal_mode = true;
-
-Is this related?  It doesn't *look* related to making the DT endpoint
-optional.
-
->  		return ret;
-> +	}
->  
->  	/* Grab the regulators for suspend/resume */
->  	pcie->sr = bus->dev.driver_data;
-> 
-> base-commit: ef1302160bfb19f804451d0e919266703501c875
-> prerequisite-patch-id: 23a425390a4226bd70bbff459148c80f5e28379c
-> prerequisite-patch-id: e3f2875124b46b2b1cf9ea28883bf0c864b79479
-> prerequisite-patch-id: 9cdd706ee2038c7b393c4d65ff76a1873df1ca03
-> prerequisite-patch-id: 332ac90be6e4e4110e27bdd1caaff212c129f547
-> prerequisite-patch-id: 32a74f87cbfe9e8d52c34a4edeee6d271925665a
-> prerequisite-patch-id: f57cdf7ec7080bb8c95782bc7c3ec672db8ec1ce
-> prerequisite-patch-id: 18dc9236aed47f708f5c854afd832f3c80be5ea7
-> prerequisite-patch-id: dd147c6854c4ca12a9a8bd4f5714968a59d60e4e
-> -- 
-> 2.17.1
-> 

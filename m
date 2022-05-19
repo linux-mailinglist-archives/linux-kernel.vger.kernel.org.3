@@ -2,125 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB91252DB48
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DC152DB40
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242693AbiESR2a convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 19 May 2022 13:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
+        id S243114AbiESR3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243067AbiESR0Q (ORCPT
+        with ESMTP id S243032AbiESR3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:26:16 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4F83E5C0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:25:56 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id e78so10159465ybc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:25:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1p7cU7b8qz6i860wpR3X62w6Sx8yiR8QDIbRQYHlwIQ=;
-        b=Prd/HQPFlhvog7ZVm5mppKaI114CCscEukhbV9IcZZZsHxSvz8KFzKqvPiUjSHxq3O
-         qtfUiD6ceGVfXiOjqIvdDddnsrkzVrmVlv3YyIW6XXYU2QLlowdM1Mdlo3F5biIpjf+r
-         HrTV4+bCD/A3fbS8LD263tiATnP+t/20njIP5sQzeBn9e1okO4zKJ/hHZmOWFa0SOm+L
-         Pg40nBLva/2x/G9zMN0rCgg06fhpXTZSvfAs/XA+9mkx2nOMw8hBH7A2hHYdOsiId+kv
-         DFjn+3kn27NH/Lds9IgRzoKHMl26IqfKsifWcqbuiWfq+jxcsbLgPIqBaI7UEm2csk+R
-         aeVA==
-X-Gm-Message-State: AOAM53175m5+3pfgykJhCq8A+8SNZA8WPI4VNtXw/NQ+QT4ejV+j1uti
-        sALYJf+kvrx3YtnphkRYKlVbzzcV8t+1qq0t18k=
-X-Google-Smtp-Source: ABdhPJwTxwEMQxUK35mCWaWi1cm/VjIPoKb/m6rnKE+9e0oVua5zcI6AUSs1yV7gVP1z00eB7CUn/8MYpCt0mLJePcQ=
-X-Received: by 2002:a25:d687:0:b0:64e:3a41:8d5 with SMTP id
- n129-20020a25d687000000b0064e3a4108d5mr5431430ybg.622.1652981155848; Thu, 19
- May 2022 10:25:55 -0700 (PDT)
+        Thu, 19 May 2022 13:29:30 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CC7108AB3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:27:56 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4L3xdR3DRQz9t0v;
+        Thu, 19 May 2022 19:27:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id QInxpv6g3tR7; Thu, 19 May 2022 19:27:55 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4L3xdR23WNz9t0Q;
+        Thu, 19 May 2022 19:27:55 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 360CC8B77E;
+        Thu, 19 May 2022 19:27:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id xtWnll6ZhbEu; Thu, 19 May 2022 19:27:55 +0200 (CEST)
+Received: from [192.168.203.71] (unknown [192.168.203.71])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BF5538B763;
+        Thu, 19 May 2022 19:27:54 +0200 (CEST)
+Message-ID: <67938da3-07a6-3c51-e5b9-10b8047ff5b5@csgroup.eu>
+Date:   Thu, 19 May 2022 19:27:54 +0200
 MIME-Version: 1.0
-References: <20220519110232.1198823-1-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220519110232.1198823-1-dmitry.osipenko@collabora.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 May 2022 19:25:45 +0200
-Message-ID: <CAJZ5v0gu7nOX=FPdVJkfCVXvKKKgSew2rMigudB2qNviAhE_Bw@mail.gmail.com>
-Subject: Re: [PATCH v10] notifier: Add atomic_notifier_call_chain_is_empty()
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1 3/4] powerpc/code-patching: Use jump_label for testing
+ freed initmem
+Content-Language: fr-FR
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Paul Mackerras <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <cover.1647962456.git.christophe.leroy@csgroup.eu>
+ <0aee964721cab7316cffde21a2ca223cee14d373.1647962456.git.christophe.leroy@csgroup.eu>
+ <20220519021706.GA3526833@roeck-us.net>
+ <ab09a24a-acca-a5a8-2e3f-cfa3c704cb65@csgroup.eu>
+ <fa232a89-2678-7773-4f97-7f85c87dbfae@csgroup.eu>
+In-Reply-To: <fa232a89-2678-7773-4f97-7f85c87dbfae@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 1:02 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> Add atomic_notifier_call_chain_is_empty() that returns true if given
-> atomic call chain is empty.
->
-> The first user of this new notifier API function will be the kernel
-> power-off core code that will support power-off call chains. The core
-> code will need to check whether there is a power-off handler registered
-> at all in order to decide whether to halt machine or power it off.
->
-> Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->
-> Changelog:
->
-> v10: - Corrected another doc-comment typo s/atomicnotifier/atomic_notifier/.
->
-> v9: - Extended commit message with a usage example.
->
->     - Corrected doc-comment with s/blocking/atomic/.
->
->  include/linux/notifier.h |  2 ++
->  kernel/notifier.c        | 13 +++++++++++++
->  2 files changed, 15 insertions(+)
->
-> diff --git a/include/linux/notifier.h b/include/linux/notifier.h
-> index 87069b8459af..95e2440037de 100644
-> --- a/include/linux/notifier.h
-> +++ b/include/linux/notifier.h
-> @@ -173,6 +173,8 @@ extern int blocking_notifier_call_chain_robust(struct blocking_notifier_head *nh
->  extern int raw_notifier_call_chain_robust(struct raw_notifier_head *nh,
->                 unsigned long val_up, unsigned long val_down, void *v);
->
-> +extern bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh);
-> +
->  #define NOTIFY_DONE            0x0000          /* Don't care */
->  #define NOTIFY_OK              0x0001          /* Suits me */
->  #define NOTIFY_STOP_MASK       0x8000          /* Don't call further */
-> diff --git a/kernel/notifier.c b/kernel/notifier.c
-> index ba005ebf4730..137b902c985b 100644
-> --- a/kernel/notifier.c
-> +++ b/kernel/notifier.c
-> @@ -204,6 +204,19 @@ int atomic_notifier_call_chain(struct atomic_notifier_head *nh,
->  EXPORT_SYMBOL_GPL(atomic_notifier_call_chain);
->  NOKPROBE_SYMBOL(atomic_notifier_call_chain);
->
-> +/**
-> + *     atomic_notifier_call_chain_is_empty - Check whether notifier chain is empty
-> + *     @nh: Pointer to head of the atomic notifier chain
-> + *
-> + *     Checks whether notifier chain is empty.
-> + *
-> + *     Returns true is notifier chain is empty, false otherwise.
-> + */
-> +bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh)
-> +{
-> +       return !rcu_access_pointer(nh->head);
-> +}
-> +
->  /*
->   *     Blocking notifier chain routines.  All access to the chain is
->   *     synchronized by an rwsem.
-> --
 
-Applied as 5.19 material, thanks!
+
+Le 19/05/2022 à 08:53, Christophe Leroy a écrit :
+> 
+> 
+> Le 19/05/2022 à 08:27, Christophe Leroy a écrit :
+>>
+>>
+>> Le 19/05/2022 à 04:17, Guenter Roeck a écrit :
+>>> On Tue, Mar 22, 2022 at 04:40:20PM +0100, Christophe Leroy wrote:
+>>>> Once init is done, initmem is freed forever so no need to
+>>>> test system_state at every call to patch_instruction().
+>>>>
+>>>> Use jump_label.
+>>>>
+>>>> This reduces by 2% the time needed to activate ftrace on an 8xx.
+>>>>
+>>>
+>>> It also causes the qemu mpc8544ds emulation to crash.
+>>>
+>>> BUG: Unable to handle kernel data access on write at 0xc122eb34
+>>> Faulting instruction address: 0xc001b580
+>>> Oops: Kernel access of bad area, sig: 11 [#1]
+>>> BE PAGE_SIZE=4K MPC8544 DS
+>>> Modules linked in:
+>>> CPU: 0 PID: 1 Comm: swapper Not tainted 5.18.0-rc7-next-20220518 #1
+>>> NIP:  c001b580 LR: c001b560 CTR: 00000003
+>>> REGS: c5107dd0 TRAP: 0300   Not tainted  (5.18.0-rc7-next-20220518)
+>>> MSR:  00009000 <EE,ME>  CR: 24000882  XER: 00000000
+>>> DEAR: c122eb34 ESR: 00800000
+>>> GPR00: c001b560 c5107ec0 c5120020 10000000 00000000 00000078 0c000000 
+>>> cfffffff
+>>> GPR08: c001e9ec 00000001 00000007 00000000 44000882 00000000 c0005178 
+>>> 00000000
+>>> GPR16: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
+>>> 00000000
+>>> GPR24: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
+>>> c1230000
+>>> NIP [c001b580] free_initmem+0x48/0xa8
+>>> LR [c001b560] free_initmem+0x28/0xa8
+>>> Call Trace:
+>>> [c5107ec0] [c001b560] free_initmem+0x28/0xa8 (unreliable)
+>>> [c5107ee0] [c00051b0] kernel_init+0x38/0x150
+>>> [c5107f00] [c001626c] ret_from_kernel_thread+0x5c/0x64
+>>> Instruction dump:
+>>> 3fe0c123 912a00dc 90010024 48000665 3d20c218 8929fa65 2c090000 41820058
+>>> 813feb34 2c090000 4082003c 39200001 <913feb34> 80010024 3cc0c114 
+>>> 83e1001c
+>>>
+>>> Reverting this patch fixes the problem.
+>>>
+>>
+>> That's strange.
+>>
+>> I was able to reproduce the problem.
+>>
+>> Removing the __ro_after_init in front of
+>> DEFINE_STATIC_KEY_FALSE(init_mem_is_free) fixes the problem.
+>>
+>> I can't understand why, mark_readonly() is called after free_initmem().
+>>
+> 
+> Moving static_branch_enable(&init_mem_is_free) before mark_initmem_nx() 
+> also solves the problem.
+> 
+> There must be something wrong with mark_initmem_nx().
+> 
+
+
+Fixing patch sent, see 
+https://patchwork.ozlabs.org/project/linuxppc-dev/patch/2e35f0fd649c83c5add17a99514ac040767be93a.1652981047.git.christophe.leroy@csgroup.eu/
+
+Christophe

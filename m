@@ -2,178 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E60152C920
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBD552C922
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbiESBG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 21:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
+        id S232539AbiESBGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 21:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbiESBGV (ORCPT
+        with ESMTP id S230476AbiESBGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 21:06:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81D73E5C6;
-        Wed, 18 May 2022 18:06:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 367AF617EF;
-        Thu, 19 May 2022 01:06:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E4CC385A9;
-        Thu, 19 May 2022 01:06:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652922377;
-        bh=A37qzO27clIicOaYiKS+7XcGNtBlcRdGs+YWygQldiE=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Q1ISrQZMlC7dfffXYF2LojSw8XRR0txL3DlfV3ijVpuPFCDh/xpWfJ6Q9YNmLQ8cB
-         bOt31zuut1LXYk2EWEiMTcHWteKBs6YYiWit2LsoIf1ChT8OWizPh11zvSCt3h37rc
-         o/Zs0vZAQkDgCAEoOZ9RU4XzqV7CBeMeQ6OS1tE2Oi/v4jdEyFVa8wks8VP3oomCZx
-         b3JPlpEn7bEAT2UTulT4f/+xXkBIvh/Q+V0XBeZyUUqfLjcVLHaJtry+VANv/zARhy
-         63U8oicDVdlxmPS2FMniCnbbVrlisTOVkpnnupLhVku1I/gS1D9ONwetqJkxsjSPI7
-         O+hR72zkswG9A==
-Date:   Wed, 18 May 2022 18:06:14 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr <olekstysh@gmail.com>
-cc:     Arnd Bergmann <arnd@arndb.de>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Julien Grall <julien@xen.org>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH V2 5/7] dt-bindings: Add xen,dev-domid property description
- for xen-grant DMA ops
-In-Reply-To: <460a746c-6b61-214b-4653-44a1430e314d@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2205181802310.1905099@ubuntu-linux-20-04-desktop>
-References: <1651947548-4055-1-git-send-email-olekstysh@gmail.com> <1651947548-4055-6-git-send-email-olekstysh@gmail.com> <CAK8P3a2cAnXr8TDDYTiFxTWzQxa67sGnYDQRRD+=Q8_cSb1mEw@mail.gmail.com> <56e8c32d-6771-7179-005f-26ca58555659@gmail.com>
- <CAK8P3a1YhkEZ8gcbXHEa5Bwx-4VVRJO8SUHf8=RNWRsc2Yo-+A@mail.gmail.com> <460a746c-6b61-214b-4653-44a1430e314d@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Wed, 18 May 2022 21:06:25 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1624F9E7;
+        Wed, 18 May 2022 18:06:24 -0700 (PDT)
+Received: from kwepemi100022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3WrB0D1jzhZ13;
+        Thu, 19 May 2022 09:05:46 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100022.china.huawei.com (7.221.188.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 09:06:22 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 09:06:21 +0800
+Subject: Re: [PATCH -next v2 6/6] nbd: use pr_err to output error message
+To:     Joe Perches <joe@perches.com>, <josef@toxicpanda.com>,
+        <axboe@kernel.dk>, <ming.lei@redhat.com>
+CC:     <linux-block@vger.kernel.org>, <nbd@other.debian.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220518122618.1702997-1-yukuai3@huawei.com>
+ <20220518122618.1702997-7-yukuai3@huawei.com>
+ <f0acebb66b9b46ad472e0d0989dc0f5810cac3dd.camel@perches.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <65fe63ed-91d4-35bd-3e25-39c4457295d0@huawei.com>
+Date:   Thu, 19 May 2022 09:06:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-845912708-1652922160=:1905099"
-Content-ID: <alpine.DEB.2.22.394.2205181802530.1905099@ubuntu-linux-20-04-desktop>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <f0acebb66b9b46ad472e0d0989dc0f5810cac3dd.camel@perches.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+ÔÚ 2022/05/19 2:12, Joe Perches Ð´µÀ:
+> On Wed, 2022-05-18 at 20:26 +0800, Yu Kuai wrote:
+>> Instead of using the long printk(KERN_ERR "nbd: ...") to
+>> output error message, defining pr_fmt and using
+>> the short pr_err("") to do that. The replacemen is done
+>> by using the following command:
+>>
+>>    sed -i 's/printk(KERN_ERR "nbd: /pr_err("/g' \
+>> 		  drivers/block/nbd.c
+> 
+> It's also good to rewrap to 80 columns where possible.
+> 
+>> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+> []
+>> @@ -2130,13 +2130,13 @@ static int nbd_genl_disconnect(struct sk_buff *skb, struct genl_info *info)
+>>   	nbd = idr_find(&nbd_index_idr, index);
+>>   	if (!nbd) {
+>>   		mutex_unlock(&nbd_index_mutex);
+>> -		printk(KERN_ERR "nbd: couldn't find device at index %d\n",
+>> +		pr_err("couldn't find device at index %d\n",
+>>   		       index);
+> 
+> like here
+> 
+>>   		return -EINVAL;
+>>   	}
+>>   	if (!refcount_inc_not_zero(&nbd->refs)) {
+>>   		mutex_unlock(&nbd_index_mutex);
+>> -		printk(KERN_ERR "nbd: device at index %d is going down\n",
+>> +		pr_err("device at index %d is going down\n",
+>>   		       index);
+> 
+> and here and below...
+Hi, Josef
 
---8323329-845912708-1652922160=:1905099
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.DEB.2.22.394.2205181802531.1905099@ubuntu-linux-20-04-desktop>
-
-On Thu, 19 May 2022, Oleksandr wrote:
-> > On Wed, May 18, 2022 at 5:06 PM Oleksandr <olekstysh@gmail.com> wrote:
-> > > On 18.05.22 17:32, Arnd Bergmann wrote:
-> > > > On Sat, May 7, 2022 at 7:19 PM Oleksandr Tyshchenko
-> > > > <olekstysh@gmail.com> wrote:
-> > > >    This would mean having a device
-> > > > node for the grant-table mechanism that can be referred to using the
-> > > > 'iommus'
-> > > > phandle property, with the domid as an additional argument.
-> > > I assume, you are speaking about something like the following?
-> > > 
-> > > 
-> > > xen_dummy_iommu {
-> > >      compatible = "xen,dummy-iommu";
-> > >      #iommu-cells = <1>;
-> > > };
-> > > 
-> > > virtio@3000 {
-> > >      compatible = "virtio,mmio";
-> > >      reg = <0x3000 0x100>;
-> > >      interrupts = <41>;
-> > > 
-> > >      /* The device is located in Xen domain with ID 1 */
-> > >      iommus = <&xen_dummy_iommu 1>;
-> > > };
-> > Right, that's that's the idea,
+Thanks for your advice, I'll send a new version.
 > 
-> thank you for the confirmation
+>> @@ -2170,7 +2170,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
+>>   	nbd = idr_find(&nbd_index_idr, index);
+>>   	if (!nbd) {
+>>   		mutex_unlock(&nbd_index_mutex);
+>> -		printk(KERN_ERR "nbd: couldn't find a device at index %d\n",
+>> +		pr_err("couldn't find a device at index %d\n",
+>>   		       index);
+>>   		return -EINVAL;
+>>   	}
+>> @@ -2192,7 +2192,7 @@ static int nbd_genl_reconfigure(struct sk_buff *skb, struct genl_info *info)
+>>   	}
+>>   	if (!refcount_inc_not_zero(&nbd->refs)) {
+>>   		mutex_unlock(&nbd_index_mutex);
+>> -		printk(KERN_ERR "nbd: device at index %d is going down\n",
+>> +		pr_err("device at index %d is going down\n",
+>>   		       index);
+>>   		return -EINVAL;
+>>   	}
 > 
 > 
 > 
-> >   except I would not call it a 'dummy'.
-> >  From the perspective of the DT, this behaves just like an IOMMU,
-> > even if the exact mechanism is different from most hardware IOMMU
-> > implementations.
+> .
 > 
-> well, agree
-> 
-> 
-> > 
-> > > > It does not quite fit the model that Linux currently uses for iommus,
-> > > > as that has an allocator for dma_addr_t space
-> > > yes (# 3/7 adds grant-table based allocator)
-> > > 
-> > > 
-> > > > , but it would think it's
-> > > > conceptually close enough that it makes sense for the binding.
-> > > Interesting idea. I am wondering, do we need an extra actions for this
-> > > to work in Linux guest (dummy IOMMU driver, etc)?
-> > It depends on how closely the guest implementation can be made to
-> > resemble a normal iommu. If you do allocate dma_addr_t addresses,
-> > it may actually be close enough that you can just turn the grant-table
-> > code into a normal iommu driver and change nothing else.
-> 
-> Unfortunately, I failed to find a way how use grant references at the
-> iommu_ops level (I mean to fully pretend that we are an IOMMU driver). I am
-> not too familiar with that, so what is written below might be wrong or at
-> least not precise.
-> 
-> The normal IOMMU driver in Linux doesnâ€™t allocate DMA addresses by itself, it
-> just maps (IOVA-PA) what was requested to be mapped by the upper layer. The
-> DMA address allocation is done by the upper layer (DMA-IOMMU which is the glue
-> layer between DMA API and IOMMU API allocates IOVA for PA?). But, all what we
-> need here is just to allocate our specific grant-table based DMA addresses
-> (DMA address = grant reference + offset in the page), so letâ€™s say we need an
-> entity to take a physical address as parameter and return a DMA address (what
-> actually commit #3/7 is doing), and thatâ€™s all. So working at the dma_ops
-> layer we get exactly what we need, with the minimal changes to guest
-> infrastructure. In our case the Xen itself acts as an IOMMU.
-> 
-> Assuming that we want to reuse the IOMMU infrastructure somehow for our needs.
-> I think, in that case we will likely need to introduce a new specific IOVA
-> allocator (alongside with a generic one) to be hooked up by the DMA-IOMMU
-> layer if we run on top of Xen. But, even having the specific IOVA allocator to
-> return what we indeed need (DMA address = grant reference + offset in the
-> page) we will still need the specific minimal required IOMMU driver to be
-> present in the system anyway in order to track the mappings(?) and do nothing
-> with them, returning a success (this specific IOMMU driver should have all
-> mandatory callbacks implemented).
-> 
-> I completely agree, it would be really nice to reuse generic IOMMU bindings
-> rather than introducing Xen specific property if what we are trying to
-> implement in current patch series fits in the usage of "iommus" in Linux
-> more-less. But, if we will have to add more complexity/more components to the
-> code for the sake of reusing device tree binding, this raises a question
-> whether thatâ€™s worthwhile.
-> 
-> Or I really missed something?
-
-I think Arnd was primarily suggesting to reuse the IOMMU Device Tree
-bindings, not necessarily the IOMMU drivers framework in Linux (although
-that would be an added bonus.)
-
-I know from previous discussions with you that making the grant table
-fit in the existing IOMMU drivers model is difficult, but just reusing
-the Device Tree bindings seems feasible?
---8323329-845912708-1652922160=:1905099--

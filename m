@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7677652CA42
+	by mail.lfdr.de (Postfix) with ESMTP id C293552CA43
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232342AbiESDUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 23:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
+        id S233314AbiESDUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 23:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbiESDUR (ORCPT
+        with ESMTP id S233199AbiESDUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 23:20:17 -0400
+        Wed, 18 May 2022 23:20:30 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B31562F8
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:20:16 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2ff17535eabso35411677b3.20
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:20:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE8356C2E
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:20:19 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2f8398e99dcso35841757b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:20:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=1limainpPz/ktpnhi2JQ14ZpISEsYFULN5eyOmNi+Sg=;
-        b=pwFiLjJF7F42X0N/SJOqIg+cAOdZbOcMsmo5i34y2KmksTi8MtPUEB0qc2c1HLmR45
-         cwJ+5gBpTjYMw6GcKjAMzXgbB1OabmEHtfbVS54w4nOVjbgkSeaHB3iHWUXZHP2ALe3x
-         VQEwVtR95jEfnd8/bokpy2LqYaPKYh9gBUuaxoXxMYCUTqaRobWi283YJ3TSSG41nrbt
-         qRNBzT0SblEn+0obrQlf3TQmAJZjTysd9Nd3biW0tKlOZmJLCSbwZWbWOTBh/e52vftR
-         eMjhM+TnOzRsRXC/6+QLoB7+4aMy32X6UJTMmOW4tvIOHKwWu8jbuidFy/Oo4R3UYu+U
-         bfFg==
+        bh=Vw3KOirpyKTYToukj5eB9PrIoaDLrka25Tzs+xxN/h8=;
+        b=Z2zErAYQFBvOZsDLGgCVtdKnayqjrK54AFt8EP2E2Oh158l/ncAdDQG5+nkAH0QlIV
+         w7DnPDdy3FXOINVtVZBSOzvkUEgdfz4/+VoRyMyoOLgsr994CrD1CRg/RdsxA/GvT/Hz
+         bm+Zf9z8iRcc0HpGKykfpNTndP5y04D6WwiZYddS+fKufM6Lx5V09WN5tsvU1ge+HQzY
+         /qhqa3u9ZpQtKhRgjOGtsCLskUfiTO7Em0DfZMhyWFHgyQZhLF2WpF9G8TQvNeRMQtSK
+         +CiaQJsSHY3iz9Kx8ES9aAG0WeS3ryGXwQ4Mkd0cqEVT1HYxMXCyp8t5FehS8WYhnB68
+         Q8bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=1limainpPz/ktpnhi2JQ14ZpISEsYFULN5eyOmNi+Sg=;
-        b=u5LuUCuqiWUcBmL8+spNCwGNztJsMsYGrEvUOlrHMMiCWicfF3syM7QBrPQf7E16En
-         mMHbMWteAr1H7TVajHBhRoIiAAq5sXRNG11KKyMYxcYJ6qCm9EBxJKMnlWV35ODHyDSa
-         lLfb0v7sVvRV5RDSUDbecXYqVCLAWM/lRUiURP9bPLaSsdDqrqcCKaGy1Lq46vFIXEcx
-         chcPKXmjRmWsACbnSMixm/Ndz+0uCstQaV9SdTMguSLBnM+lSmESKzQu7j1q2vjCm4ac
-         r9UtAEIxSVFVDnNXFh/R7mUMs9cjMWFWVfo/i92cx6ddFW5YN730DbUSLDo4OcOvkLL7
-         saeQ==
-X-Gm-Message-State: AOAM530XtFeqCYlXfpB1mxW3aat0rLpx/B8M16STKpSWSWbpmTZ+W11Q
-        1yShONTudARoZr6NINVRwjG6HwY2S1tY
-X-Google-Smtp-Source: ABdhPJy8cyFjJSoZ/WeYBph7EUcVHsLsZB60kq0ih2WbPF8sSVl+a37Ci3uckkELeD+m4XbHoiUKuH2yLtsG
+        bh=Vw3KOirpyKTYToukj5eB9PrIoaDLrka25Tzs+xxN/h8=;
+        b=oyGwJvbKCbGdzGcmIW8ZkFblEaTtLX9wq9fs7IqGXTt5pJcfQS3JDnQIGFaVJmYaYs
+         oRilWo56KeZJYqLJFRUvmeAyLNGV2JpyiOwFRCxIaV2b6VGBDlv2lF6h3r7MO+rdFp03
+         N+n+MpEattdnubPbk2XqcAaShexsxxVIVeaghwVyn86yLFxtAWzYsWPy5L9zxDTTMA9B
+         DDUN3977rorDZ1dNmKMOr4E841rikdmk+RnyGcGOA/drSbDCM1TgoSzbtDZ0tUBeClnG
+         FTZo9w6XjVxhJTWdKKJgiMZT7FjaHw9hM/l6yoVlk6FcKV3CpaTkWYiOP+sIBIkt0/sO
+         XCnQ==
+X-Gm-Message-State: AOAM530+tt48eUgGZ0wQc9rAqHgMGys2VVbtO+r2esN9UcmgmhDxgq6j
+        0B6EX/5wMJxir3kv1aVhtk/nKlQfgGeV
+X-Google-Smtp-Source: ABdhPJyaaIVriNuy73np/4IMrVPFn3NEblefL3EEPUZ7Ayeru4qkvqLGkIUzJ87NJEh8n9bjaM+xtdCjwHRq
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a233:bf3c:6ac:2a98])
- (user=irogers job=sendgmr) by 2002:a81:4104:0:b0:2f1:b59f:22a2 with SMTP id
- o4-20020a814104000000b002f1b59f22a2mr2662292ywa.328.1652930416067; Wed, 18
- May 2022 20:20:16 -0700 (PDT)
-Date:   Wed, 18 May 2022 20:20:02 -0700
+ (user=irogers job=sendgmr) by 2002:a25:2d67:0:b0:64d:a9b9:4954 with SMTP id
+ s39-20020a252d67000000b0064da9b94954mr2547523ybe.5.1652930418306; Wed, 18 May
+ 2022 20:20:18 -0700 (PDT)
+Date:   Wed, 18 May 2022 20:20:03 -0700
 In-Reply-To: <20220519032005.1273691-1-irogers@google.com>
-Message-Id: <20220519032005.1273691-3-irogers@google.com>
+Message-Id: <20220519032005.1273691-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20220519032005.1273691-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH 2/5] perf stat: Add stat record+report test
+Subject: [PATCH 3/5] perf cpumap: Add perf_cpu_map__for_each_idx
 From:   Ian Rogers <irogers@google.com>
 To:     Michael Petlan <mpetlan@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -83,52 +83,33 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This would have caught:
-https://lore.kernel.org/linux-perf-users/CAP-5=fWQR=sCuiSMktvUtcbOLidEpUJLCybVF6=BRvORcDOq+g@mail.gmail.com/
+A variant of perf_cpu_map__for_each_cpu that just iterates index values
+without the corresponding load of the CPU.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/shell/stat.sh | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ tools/lib/perf/include/perf/cpumap.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/stat.sh
-index c7894764d4a6..9313ef2739e0 100755
---- a/tools/perf/tests/shell/stat.sh
-+++ b/tools/perf/tests/shell/stat.sh
-@@ -16,6 +16,18 @@ test_default_stat() {
-   echo "Basic stat command test [Success]"
- }
+diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
+index 4a2edbdb5e2b..24de795b09bb 100644
+--- a/tools/lib/perf/include/perf/cpumap.h
++++ b/tools/lib/perf/include/perf/cpumap.h
+@@ -31,4 +31,7 @@ LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_c
+ 	     (idx) < perf_cpu_map__nr(cpus);			\
+ 	     (idx)++, (cpu) = perf_cpu_map__cpu(cpus, idx))
  
-+test_stat_record_report() {
-+  echo "stat record and report test"
-+  if ! perf stat record -o - true | perf stat report -i - 2>&1 | \
-+    egrep -q "Performance counter stats for 'pipe':"
-+  then
-+    echo "stat record and report test [Failed]"
-+    err=1
-+    return
-+  fi
-+  echo "stat record and report test [Success]"
-+}
++#define perf_cpu_map__for_each_idx(idx, cpus)				\
++	for ((idx) = 0; (idx) < perf_cpu_map__nr(cpus); (idx)++)
 +
- test_topdown_groups() {
-   # Topdown events must be grouped with the slots event first. Test that
-   # parse-events reorders this.
-@@ -62,6 +74,7 @@ test_topdown_weak_groups() {
- }
- 
- test_default_stat
-+test_stat_record_report
- test_topdown_groups
- test_topdown_weak_groups
- exit $err
+ #endif /* __LIBPERF_CPUMAP_H */
 -- 
 2.36.1.124.g0e6072fb45-goog
 

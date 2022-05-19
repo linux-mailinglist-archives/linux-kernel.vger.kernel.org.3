@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E0452D05B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BAE52D058
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236680AbiESKTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S236652AbiESKTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbiESKTR (ORCPT
+        with ESMTP id S236612AbiESKTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 May 2022 06:19:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D78AA5009
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307EBA5ABA
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:19:16 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id p26so6413596eds.5
         for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652955554;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oeD63PadPZVhvxytQmjTosYfbCmbMHde1tdms3g1ML8=;
-        b=JBky5r6omqgDxvrmOWaky4yBFOctJ6ZKcGqsnuj15JeoainFoKUl2040gx9Ri1z3seAyjS
-        jRQSOtWn4ghaQNlGrudlHAbTdBAvQhAEQs5zfG2BQK0DtDIoMdTVq4uKH/NcVz2eB4KAnD
-        wZgvA8nj/qXXvEHDl6bS5zo0DX3MWwk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-500-HEzimV2JNFybOjZlOeUgtA-1; Thu, 19 May 2022 06:19:11 -0400
-X-MC-Unique: HEzimV2JNFybOjZlOeUgtA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18A9280B712;
-        Thu, 19 May 2022 10:19:11 +0000 (UTC)
-Received: from localhost (unknown [10.72.47.117])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0D1451121314;
-        Thu, 19 May 2022 10:19:09 +0000 (UTC)
-From:   Xiubo Li <xiubli@redhat.com>
-To:     jlayton@kernel.org, idryomov@gmail.com, viro@zeniv.linux.org.uk
-Cc:     willy@infradead.org, vshankar@redhat.com,
-        ceph-devel@vger.kernel.org, arnd@arndb.de, mcgrof@kernel.org,
-        akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v5 2/2] ceph: wait the first reply of inflight async unlink
-Date:   Thu, 19 May 2022 18:18:46 +0800
-Message-Id: <20220519101847.87907-3-xiubli@redhat.com>
-In-Reply-To: <20220519101847.87907-1-xiubli@redhat.com>
-References: <20220519101847.87907-1-xiubli@redhat.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rQZDF0ST+m3bjXxhfgKrKul8Pa3ypLxrdFU2KUJN6Wo=;
+        b=yulejd8gCAcfcCJ6Hbz4UE8pg5QLnb0fCWsWWDGcCpZEpalnvHluHjDTMZwcUqEvBS
+         TI1P7Eeo1L0VCdNbVplivDDT9YvH3KKapVz0QSM1jyBdfiESxEjiQstdwStrjVgcJZJ6
+         J8DQD+pHP+InweqD5x6O7wh4QBqZN1xSGdDl9Ga1NsZPoSHHIB/6hb2Mzu2ddIDy/sgd
+         wKmI25hsNlrcSz+C43HCmX0vIbFJqymCTcCdfA9j0SBuBc6a2Qj1QntZeO9u+M/9yx+I
+         ATGXd4ebtIyF8nektWoOXEDUzVs0I+Z4eYU0SRVjZJs4A9g5dcczKHkbezctiENN1R+8
+         IYUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rQZDF0ST+m3bjXxhfgKrKul8Pa3ypLxrdFU2KUJN6Wo=;
+        b=YEmv9+h5ny+c8DLAE8FZbX+Koary3iqOGjG8nMiiHMvYW1ZRobO8jWFF2qBFC9UF96
+         UKxncb/4GcgIZbu+Fg7Zmi9xOAJRPsDPuGfBmSxfvFfqBEprjIFOAJOaovADsNLU3oML
+         iN2Q3EtCwSfINggc5ZEQ9cqf8mSVo+4Zwl5JJimhDrES706s5lpyr8iAaN4TZH531QMp
+         AvzoKZlPHmZ/TP7apSNHyZAQzm6eefYVpjuYsQLW7x/CQFCHn7vJ4CvY4cn49rnmCB1s
+         WFylAy5WezWXdsW5xV2Dt3lJWiQz29Dgf+HGRr7inSK0tAS/85YvZHdEOmke6WmYVJuy
+         y94A==
+X-Gm-Message-State: AOAM531zM3jVCpdgS1OLjzy9liB+ogbFAy2F6c61KoUy5217INDm4On5
+        vfUqJYnk7P/V5s25lXj0PAZYBLbMQepaEqm9yB6NbA==
+X-Google-Smtp-Source: ABdhPJxJRotEBuFNPsVGhczRDFHSLngF16rHucpJb9tpSyucqiOctuqwe+PayGCiBANvsl1m3CDpzIzQ37sdH0gPy2I=
+X-Received: by 2002:aa7:cb1a:0:b0:41c:dd9c:2eaa with SMTP id
+ s26-20020aa7cb1a000000b0041cdd9c2eaamr4404541edt.119.1652955554524; Thu, 19
+ May 2022 03:19:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220518194426.3784095-1-tanmay.shah@xilinx.com>
+In-Reply-To: <20220518194426.3784095-1-tanmay.shah@xilinx.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 19 May 2022 11:19:03 +0100
+Message-ID: <CANLsYkw9HuLso9bGL4fM7C9qH+basgKA9yKFwms4WB4OUHqymQ@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] Add Xilinx RPU subsystem support
+To:     Tanmay Shah <tanmay.shah@xilinx.com>
+Cc:     bjorn.andersson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        michal.simek@xilinx.com, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,414 +68,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In async unlink case the kclient won't wait for the first reply
-from MDS and just drop all the links and unhash the dentry and then
-succeeds immediately.
+Hi Tanmay,
 
-For any new create/link/rename,etc requests followed by using the
-same file names we must wait for the first reply of the inflight
-unlink request, or the MDS possibly will fail these following
-requests with -EEXIST if the inflight async unlink request was
-delayed for some reasons.
+I have replaced the previous version of this set with this one in my
+queue.  That way you don't go back to the bottom.
 
-And the worst case is that for the none async openc request it will
-successfully open the file if the CDentry hasn't been unlinked yet,
-but later the previous delayed async unlink request will remove the
-CDenty. That means the just created file is possiblly deleted later
-by accident.
+Thanks,
+Mathieu.
 
-We need to wait for the inflight async unlink requests to finish
-when creating new files/directories by using the same file names.
-
-URL: https://tracker.ceph.com/issues/55332
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Xiubo Li <xiubli@redhat.com>
----
- fs/ceph/dir.c        | 79 +++++++++++++++++++++++++++++++++++++++-----
- fs/ceph/file.c       |  6 +++-
- fs/ceph/mds_client.c | 75 ++++++++++++++++++++++++++++++++++++++++-
- fs/ceph/mds_client.h |  1 +
- fs/ceph/super.c      |  3 ++
- fs/ceph/super.h      | 19 ++++++++---
- 6 files changed, 167 insertions(+), 16 deletions(-)
-
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index eae417d71136..e7e2ebac330d 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -856,6 +856,10 @@ static int ceph_mknod(struct user_namespace *mnt_userns, struct inode *dir,
- 	if (ceph_snap(dir) != CEPH_NOSNAP)
- 		return -EROFS;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_quota_is_max_files_exceeded(dir)) {
- 		err = -EDQUOT;
- 		goto out;
-@@ -918,6 +922,10 @@ static int ceph_symlink(struct user_namespace *mnt_userns, struct inode *dir,
- 	if (ceph_snap(dir) != CEPH_NOSNAP)
- 		return -EROFS;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_quota_is_max_files_exceeded(dir)) {
- 		err = -EDQUOT;
- 		goto out;
-@@ -968,9 +976,13 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 	struct ceph_mds_client *mdsc = ceph_sb_to_mdsc(dir->i_sb);
- 	struct ceph_mds_request *req;
- 	struct ceph_acl_sec_ctx as_ctx = {};
--	int err = -EROFS;
-+	int err;
- 	int op;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_snap(dir) == CEPH_SNAPDIR) {
- 		/* mkdir .snap/foo is a MKSNAP */
- 		op = CEPH_MDS_OP_MKSNAP;
-@@ -980,6 +992,7 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 		dout("mkdir dir %p dn %p mode 0%ho\n", dir, dentry, mode);
- 		op = CEPH_MDS_OP_MKDIR;
- 	} else {
-+		err = -EROFS;
- 		goto out;
- 	}
- 
-@@ -1037,6 +1050,10 @@ static int ceph_link(struct dentry *old_dentry, struct inode *dir,
- 	struct ceph_mds_request *req;
- 	int err;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (ceph_snap(dir) != CEPH_NOSNAP)
- 		return -EROFS;
- 
-@@ -1071,9 +1088,27 @@ static int ceph_link(struct dentry *old_dentry, struct inode *dir,
- static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
- 				 struct ceph_mds_request *req)
- {
-+	struct dentry *dentry = req->r_dentry;
-+	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
-+	struct ceph_dentry_info *di = ceph_dentry(dentry);
- 	int result = req->r_err ? req->r_err :
- 			le32_to_cpu(req->r_reply_info.head->result);
- 
-+	if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
-+		pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
-+			__func__, dentry, dentry);
-+
-+	spin_lock(&fsc->async_unlink_conflict_lock);
-+	hash_del_rcu(&di->hnode);
-+	spin_unlock(&fsc->async_unlink_conflict_lock);
-+
-+	spin_lock(&dentry->d_lock);
-+	di->flags &= ~CEPH_DENTRY_ASYNC_UNLINK;
-+	wake_up_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT);
-+	spin_unlock(&dentry->d_lock);
-+
-+	synchronize_rcu();
-+
- 	if (result == -EJUKEBOX)
- 		goto out;
- 
-@@ -1081,7 +1116,7 @@ static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
- 	if (result) {
- 		int pathlen = 0;
- 		u64 base = 0;
--		char *path = ceph_mdsc_build_path(req->r_dentry, &pathlen,
-+		char *path = ceph_mdsc_build_path(dentry, &pathlen,
- 						  &base, 0);
- 
- 		/* mark error on parent + clear complete */
-@@ -1089,13 +1124,13 @@ static void ceph_async_unlink_cb(struct ceph_mds_client *mdsc,
- 		ceph_dir_clear_complete(req->r_parent);
- 
- 		/* drop the dentry -- we don't know its status */
--		if (!d_unhashed(req->r_dentry))
--			d_drop(req->r_dentry);
-+		if (!d_unhashed(dentry))
-+			d_drop(dentry);
- 
- 		/* mark inode itself for an error (since metadata is bogus) */
- 		mapping_set_error(req->r_old_inode->i_mapping, result);
- 
--		pr_warn("ceph: async unlink failure path=(%llx)%s result=%d!\n",
-+		pr_warn("async unlink failure path=(%llx)%s result=%d!\n",
- 			base, IS_ERR(path) ? "<<bad>>" : path, result);
- 		ceph_mdsc_free_path(path, pathlen);
- 	}
-@@ -1180,6 +1215,8 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
- 
- 	if (try_async && op == CEPH_MDS_OP_UNLINK &&
- 	    (req->r_dir_caps = get_caps_for_async_unlink(dir, dentry))) {
-+		struct ceph_dentry_info *di = ceph_dentry(dentry);
-+
- 		dout("async unlink on %llu/%.*s caps=%s", ceph_ino(dir),
- 		     dentry->d_name.len, dentry->d_name.name,
- 		     ceph_cap_string(req->r_dir_caps));
-@@ -1187,6 +1224,16 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
- 		req->r_callback = ceph_async_unlink_cb;
- 		req->r_old_inode = d_inode(dentry);
- 		ihold(req->r_old_inode);
-+
-+		spin_lock(&dentry->d_lock);
-+		di->flags |= CEPH_DENTRY_ASYNC_UNLINK;
-+		spin_unlock(&dentry->d_lock);
-+
-+		spin_lock(&fsc->async_unlink_conflict_lock);
-+		hash_add_rcu(fsc->async_unlink_conflict, &di->hnode,
-+			     dentry->d_name.hash);
-+		spin_unlock(&fsc->async_unlink_conflict_lock);
-+
- 		err = ceph_mdsc_submit_request(mdsc, dir, req);
- 		if (!err) {
- 			/*
-@@ -1195,10 +1242,20 @@ static int ceph_unlink(struct inode *dir, struct dentry *dentry)
- 			 */
- 			drop_nlink(inode);
- 			d_delete(dentry);
--		} else if (err == -EJUKEBOX) {
--			try_async = false;
--			ceph_mdsc_put_request(req);
--			goto retry;
-+		} else {
-+			spin_lock(&fsc->async_unlink_conflict_lock);
-+			hash_del_rcu(&di->hnode);
-+			spin_unlock(&fsc->async_unlink_conflict_lock);
-+
-+			spin_lock(&dentry->d_lock);
-+			di->flags &= ~CEPH_DENTRY_ASYNC_UNLINK;
-+			spin_unlock(&dentry->d_lock);
-+
-+			if (err == -EJUKEBOX) {
-+				try_async = false;
-+				ceph_mdsc_put_request(req);
-+				goto retry;
-+			}
- 		}
- 	} else {
- 		set_bit(CEPH_MDS_R_PARENT_LOCKED, &req->r_req_flags);
-@@ -1237,6 +1294,10 @@ static int ceph_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 	    (!ceph_quota_is_same_realm(old_dir, new_dir)))
- 		return -EXDEV;
- 
-+	err = ceph_wait_on_conflict_unlink(new_dentry);
-+	if (err)
-+		return err;
-+
- 	dout("rename dir %p dentry %p to dir %p dentry %p\n",
- 	     old_dir, old_dentry, new_dir, new_dentry);
- 	req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
-diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-index 8c8226c0feac..0f863e1d6ae9 100644
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -569,7 +569,7 @@ static void ceph_async_create_cb(struct ceph_mds_client *mdsc,
- 		char *path = ceph_mdsc_build_path(req->r_dentry, &pathlen,
- 						  &base, 0);
- 
--		pr_warn("ceph: async create failure path=(%llx)%s result=%d!\n",
-+		pr_warn("async create failure path=(%llx)%s result=%d!\n",
- 			base, IS_ERR(path) ? "<<bad>>" : path, result);
- 		ceph_mdsc_free_path(path, pathlen);
- 
-@@ -740,6 +740,10 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
- 	if (dentry->d_name.len > NAME_MAX)
- 		return -ENAMETOOLONG;
- 
-+	err = ceph_wait_on_conflict_unlink(dentry);
-+	if (err)
-+		return err;
-+
- 	if (flags & O_CREAT) {
- 		if (ceph_quota_is_max_files_exceeded(dir))
- 			return -EDQUOT;
-diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-index e8c87dea0551..9ea2dcc02710 100644
---- a/fs/ceph/mds_client.c
-+++ b/fs/ceph/mds_client.c
-@@ -456,7 +456,7 @@ static int ceph_parse_deleg_inos(void **p, void *end,
- 				dout("added delegated inode 0x%llx\n",
- 				     start - 1);
- 			} else if (err == -EBUSY) {
--				pr_warn("ceph: MDS delegated inode 0x%llx more than once.\n",
-+				pr_warn("MDS delegated inode 0x%llx more than once.\n",
- 					start - 1);
- 			} else {
- 				return err;
-@@ -655,6 +655,79 @@ static void destroy_reply_info(struct ceph_mds_reply_info_parsed *info)
- 	free_pages((unsigned long)info->dir_entries, get_order(info->dir_buf_size));
- }
- 
-+/*
-+ * In async unlink case the kclient won't wait for the first reply
-+ * from MDS and just drop all the links and unhash the dentry and then
-+ * succeeds immediately.
-+ *
-+ * For any new create/link/rename,etc requests followed by using the
-+ * same file names we must wait for the first reply of the inflight
-+ * unlink request, or the MDS possibly will fail these following
-+ * requests with -EEXIST if the inflight async unlink request was
-+ * delayed for some reasons.
-+ *
-+ * And the worst case is that for the none async openc request it will
-+ * successfully open the file if the CDentry hasn't been unlinked yet,
-+ * but later the previous delayed async unlink request will remove the
-+ * CDenty. That means the just created file is possiblly deleted later
-+ * by accident.
-+ *
-+ * We need to wait for the inflight async unlink requests to finish
-+ * when creating new files/directories by using the same file names.
-+ */
-+int ceph_wait_on_conflict_unlink(struct dentry *dentry)
-+{
-+	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
-+	struct dentry *pdentry = dentry->d_parent;
-+	struct dentry *udentry, *found = NULL;
-+	struct ceph_dentry_info *di;
-+	struct qstr dname;
-+	u32 hash = dentry->d_name.hash;
-+	int err;
-+
-+	dname.name = dentry->d_name.name;
-+	dname.len = dentry->d_name.len;
-+
-+	rcu_read_lock();
-+	hash_for_each_possible_rcu(fsc->async_unlink_conflict, di,
-+				   hnode, hash) {
-+		udentry = di->dentry;
-+
-+		spin_lock(&udentry->d_lock);
-+		if (udentry->d_name.hash != hash)
-+			goto next;
-+		if (unlikely(udentry->d_parent != pdentry))
-+			goto next;
-+		if (!hash_hashed(&di->hnode))
-+			goto next;
-+
-+		if (!test_bit(CEPH_DENTRY_ASYNC_UNLINK_BIT, &di->flags))
-+			pr_warn("%s dentry %p:%pd async unlink bit is not set\n",
-+				__func__, dentry, dentry);
-+
-+		if (d_compare(pdentry, udentry, &dname))
-+			goto next;
-+
-+		spin_unlock(&udentry->d_lock);
-+		found = dget(udentry);
-+		break;
-+next:
-+		spin_unlock(&udentry->d_lock);
-+	}
-+	rcu_read_unlock();
-+
-+	if (likely(!found))
-+		return 0;
-+
-+	dout("%s dentry %p:%pd conflict with old %p:%pd\n", __func__,
-+	     dentry, dentry, found, found);
-+
-+	err = wait_on_bit(&di->flags, CEPH_DENTRY_ASYNC_UNLINK_BIT,
-+			  TASK_KILLABLE);
-+	dput(found);
-+	return err;
-+}
-+
- 
- /*
-  * sessions
-diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
-index 33497846e47e..d1ae679c52c3 100644
---- a/fs/ceph/mds_client.h
-+++ b/fs/ceph/mds_client.h
-@@ -582,6 +582,7 @@ static inline int ceph_wait_on_async_create(struct inode *inode)
- 			   TASK_INTERRUPTIBLE);
- }
- 
-+extern int ceph_wait_on_conflict_unlink(struct dentry *dentry);
- extern u64 ceph_get_deleg_ino(struct ceph_mds_session *session);
- extern int ceph_restore_deleg_ino(struct ceph_mds_session *session, u64 ino);
- #endif
-diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-index b73b4f75462c..6542b71f8627 100644
---- a/fs/ceph/super.c
-+++ b/fs/ceph/super.c
-@@ -816,6 +816,9 @@ static struct ceph_fs_client *create_fs_client(struct ceph_mount_options *fsopt,
- 	if (!fsc->cap_wq)
- 		goto fail_inode_wq;
- 
-+	hash_init(fsc->async_unlink_conflict);
-+	spin_lock_init(&fsc->async_unlink_conflict_lock);
-+
- 	spin_lock(&ceph_fsc_lock);
- 	list_add_tail(&fsc->metric_wakeup, &ceph_fsc_list);
- 	spin_unlock(&ceph_fsc_lock);
-diff --git a/fs/ceph/super.h b/fs/ceph/super.h
-index 506d52633627..251e726ec628 100644
---- a/fs/ceph/super.h
-+++ b/fs/ceph/super.h
-@@ -19,6 +19,7 @@
- #include <linux/security.h>
- #include <linux/netfs.h>
- #include <linux/fscache.h>
-+#include <linux/hashtable.h>
- 
- #include <linux/ceph/libceph.h>
- 
-@@ -99,6 +100,8 @@ struct ceph_mount_options {
- 	char *mon_addr;
- };
- 
-+#define CEPH_ASYNC_CREATE_CONFLICT_BITS 8
-+
- struct ceph_fs_client {
- 	struct super_block *sb;
- 
-@@ -124,6 +127,9 @@ struct ceph_fs_client {
- 	struct workqueue_struct *inode_wq;
- 	struct workqueue_struct *cap_wq;
- 
-+	DECLARE_HASHTABLE(async_unlink_conflict, CEPH_ASYNC_CREATE_CONFLICT_BITS);
-+	spinlock_t async_unlink_conflict_lock;
-+
- #ifdef CONFIG_DEBUG_FS
- 	struct dentry *debugfs_dentry_lru, *debugfs_caps;
- 	struct dentry *debugfs_congestion_kb;
-@@ -281,7 +287,8 @@ struct ceph_dentry_info {
- 	struct dentry *dentry;
- 	struct ceph_mds_session *lease_session;
- 	struct list_head lease_list;
--	unsigned flags;
-+	struct hlist_node hnode;
-+	unsigned long flags;
- 	int lease_shared_gen;
- 	u32 lease_gen;
- 	u32 lease_seq;
-@@ -290,10 +297,12 @@ struct ceph_dentry_info {
- 	u64 offset;
- };
- 
--#define CEPH_DENTRY_REFERENCED		1
--#define CEPH_DENTRY_LEASE_LIST		2
--#define CEPH_DENTRY_SHRINK_LIST		4
--#define CEPH_DENTRY_PRIMARY_LINK	8
-+#define CEPH_DENTRY_REFERENCED		(1 << 0)
-+#define CEPH_DENTRY_LEASE_LIST		(1 << 1)
-+#define CEPH_DENTRY_SHRINK_LIST		(1 << 2)
-+#define CEPH_DENTRY_PRIMARY_LINK	(1 << 3)
-+#define CEPH_DENTRY_ASYNC_UNLINK_BIT	(4)
-+#define CEPH_DENTRY_ASYNC_UNLINK	(1 << CEPH_DENTRY_ASYNC_UNLINK_BIT)
- 
- struct ceph_inode_xattrs_info {
- 	/*
--- 
-2.36.0.rc1
-
+On Wed, 18 May 2022 at 20:46, Tanmay Shah <tanmay.shah@xilinx.com> wrote:
+>
+> This patch series adds bindings document for RPU subsystem found on Xilinx
+> ZynqMP platforms. It also adds device nodes and driver to enable RPU
+> subsystem in split mode and lockstep mode.
+>
+> Xilinx ZynqMP platform contains Remote Processing Unit(RPU). RPU subsystem
+> contains two arm cortex r5f cores. RPU subsystem can be configured in
+> split mode, lockstep mode and single-cpu mode.
+>
+> RPU subsystem also contains 4 Tightly Coupled Memory(TCM) banks.
+> In lockstep mode, all 4 banks are combined and total of 256KB memory is
+> made available to r5 core0. In split mode, both cores can access two
+> TCM banks i.e. 128 KB.
+>
+> RPU can also fetch data and execute instructions from DDR memory along with
+> TCM memory.
+> ---
+>
+> Changes in v5:
+>   - Add constraints of the possible values of xlnx,cluster-mode property
+>   - fix description of power-domains property for r5 core
+>   - Remove reg, address-cells and size-cells properties as it is not required
+>   - Fix description of mboxes property
+>   - Add description of each memory-region and remove old .txt binding link
+>     reference in the description
+>   - Remove optional reg property from r5fss node
+>   - Move r5fss node out of axi node
+>
+> Changes in v4:
+>   - Add memory-region, mboxes and mbox-names properties in dt-bindings example
+>   - Add reserved memory region node and use it in Xilinx dt RPU subsystem node
+>   - Remove redundant header files
+>   - use dev_err_probe() to report errors during probe
+>   - Fix missing check on error code returned by zynqmp_r5_add_rproc_core()
+>   - Fix memory leaks all over the driver when resource allocation fails for any core
+>   - make cluster mode check only at one place
+>   - remove redundant initialization of variable
+>   - remove redundant use of of_node_put()
+>   - Fix Comment format problem
+>   - Assign offset of zynqmp_tcm_banks instead of duplicating it
+>   - Add tcm and memory regions rproc carveouts during prepare instead of parse_fw
+>   - Remove rproc_mem_entry object from r5_core
+>   - Use put_device() and rproc_del() APIs to fix memory leaks
+>   - Replace pr_* with dev_*. This was missed in v3, fix now.
+>   - Use "GPL" instead of "GPL v2" in MODULE_LICENSE macro. This was reported by checkpatch script.
+>
+> Changes in v3:
+>   - Fix checkpatch script indentation warning
+>   - Remove unused variable from xilinx remoteproc driver
+>   - use C style comments, i.e /*...*/
+>   - Remove redundant debug information which can be derived using /proc/device-tree
+>   - Fix multiline comment format
+>   - s/"final fot TCM"/"final for TCM"
+>   - Function devm_kzalloc() does not return an code on error, just NULL.
+>     Remove redundant error check for this function throughout the driver.
+>   - Fix RPU mode configuration and add documentation accordingly
+>   - Get rid of the indentations to match function documentation style with rest of the driver
+>   - Fix memory leak by only using r5_rproc->priv and not replace it with new instance
+>   - Use 'i' for the outer loop and 'j' for the inner one as per convention
+>   - Remove redundant error and NULL checks throughout the driver
+>   - Use devm_kcalloc() when more than one element is required
+>   - Add memory-regions carveouts during driver probe instead of parse_fw call
+>     This removes redundant copy of reserved_mem object in r5_core structure.
+>   - Fix memory leak by using of_node_put()
+>   - Fix indentation of tcm_mem_map function args
+>   - Remove redundant init of variables
+>   - Initialize tcm bank size variable for lockstep mode
+>   - Replace u32 with phys_addr_t for variable stroing memory bank address
+>   - Add documentation of TCM behavior in lockstep mode
+>   - Use dev_get_drvdata instead of platform driver API
+>   - Remove info level messages
+>   - Fix checkpatch.pl warnings
+>   - Add documentation for the Xilinx r5f platform to understand driver design
+>
+> Changes in v2:
+>   - Remove proprietary copyright footer from cover letter
+>
+>
+> Ben Levinsky (3):
+>   firmware: xilinx: Add ZynqMP firmware ioctl enums for RPU
+>     configuration.
+>   firmware: xilinx: Add shutdown/wakeup APIs
+>   firmware: xilinx: Add RPU configuration APIs
+>
+> Tanmay Shah (3):
+>   dt-bindings: remoteproc: Add Xilinx RPU subsystem bindings
+>   arm64: dts: xilinx: zynqmp: Add RPU subsystem device node
+>   drivers: remoteproc: Add Xilinx r5 remoteproc driver
+>
+>  .../bindings/remoteproc/xlnx,r5f-rproc.yaml   |  128 ++
+>  arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |   33 +
+>  drivers/firmware/xilinx/zynqmp.c              |   97 ++
+>  drivers/remoteproc/Kconfig                    |   12 +
+>  drivers/remoteproc/Makefile                   |    1 +
+>  drivers/remoteproc/xlnx_r5_remoteproc.c       | 1045 +++++++++++++++++
+>  include/dt-bindings/power/xlnx-zynqmp-power.h |    6 +
+>  include/linux/firmware/xlnx-zynqmp.h          |   60 +
+>  8 files changed, 1382 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/xlnx,r5f-rproc.yaml
+>  create mode 100644 drivers/remoteproc/xlnx_r5_remoteproc.c
+>
+>
+> base-commit: 01a1a0c8d456b11f2f6b9b822414481beaa44d6f
+> --
+> 2.25.1
+>

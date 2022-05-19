@@ -2,257 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9274E52DF6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB3652DF7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240722AbiESVkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
+        id S245363AbiESVmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235218AbiESVke (ORCPT
+        with ESMTP id S244755AbiESVmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:40:34 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5CB939DF
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:40:33 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2fecc57ec14so55993457b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:40:33 -0700 (PDT)
+        Thu, 19 May 2022 17:42:07 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B70107893
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:41:58 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id w19-20020a9d6393000000b0060aeb359ca8so1008305otk.6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:41:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:cc;
-        bh=zuGBAgFMIoOSwoUwGfoJUnP1fJqCzNy1j+Zti0iP+ZM=;
-        b=IHIAjtp3yuP+65qTq0KG8dpflrO1+4q1eQKEYue6Hu5/7/JvfpRpxvQUs5El0hevSE
-         1tuWFQgcd35rB//lFiwc+bfUwqddQK3/kyWp//JoHUCft6UppiI+gEtisDfWD2K1tCxU
-         C/nVZimKPg7Ayt6s6x1QQnk1gQj0TnjPeC17W7FRGQrsa0gEdxwUBn6HaT7bcseJjgUs
-         0Em1Di29bEHCUQ38GVgzZ+ew189o+OpDCp8CgGHwYiHsXFo7t2OFHNUr1IwIV4Wm/4wO
-         Jez9ria/XhLsKZkm+bCWqOfdzNu7twDuBHPKptuhFf8MIpLxMY4K9O35jsZ2yiyWrgwo
-         ah5w==
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=CpuiHu6st5jvRyMaG9VX7RMBtuAsBPj44JQMGd55xSk=;
+        b=X1FGonc0itVjTaJy5AqOZm4ZPWMp6o//luJ4v+XTffdBLPZrA1yullEKYrYVTwSLo3
+         1TK+BNFnpUwv1gFLulhTKSZfr/5MIgaqTHBHya7aH4f64OqcYFI9UARAqZnkjjAq2fjQ
+         XHJ1bWtRjdwOJL/jPAredUfs5ZGMzP0parqGKOQJ1hukOGUrww/Jx+ttLyJ7ce9u8aDV
+         gwG8WgOBlcQuOMOgIBiQKSuvyFhxiGHMTOJkGZWALAncZrzLeLH0C5L8tVpuzJdavhmX
+         PK7jQz3jbvgevAa4kyujYNTX7ZfCHzIBSL0rkiBVfBBxacwcVnT6zercCqaKtAiWlKCl
+         iJgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:cc;
-        bh=zuGBAgFMIoOSwoUwGfoJUnP1fJqCzNy1j+Zti0iP+ZM=;
-        b=BV8h4i2j4HnPVqhgnyXAHzQ1kD9Ndtvn6i6rQ0teIaWoBGEB+c+3eYvtx5smgieHeA
-         FfEgAoOvkvG5o+yIcE5b2cMnj/edNjEMEFYC3w+ljLnBHsOAazABPnfoQJpcO+g+/6j5
-         jVseqKT5jRr0CQuIUC+lXD7H2hbGCXFY85FvOwPzMTSn6qIwcKu0pzyQruKrG2qtc4PK
-         MJaLeiJF89RPO2q631odYLmoXhLB+bYE9pDWimDJP2wQIVYSOm42nVyeHsgx2GknKpFk
-         EQndMyRZzbrcYokPiOV5CPU5V1/y2pAgaA/bfMEOlsP30Ob0Wu4nHjYFL48uhcfwq9Pe
-         u2aQ==
-X-Gm-Message-State: AOAM531bFzEYLn+ksq6xXltFshPP6FO48G0sF4q4PQxGpJdrBOc/NFX4
-        0kiYv7j26WaqCJ2z9Fu/CqmzBW1sg3qqdNP75A==
-X-Google-Smtp-Source: ABdhPJx4D0SEHOAjIttsmn42abQzuazkEeLC6F+ySQrARTkf0sslpCpaOFkHDaCUqhJIC32vG+HNE2dUVJKb6mGqUg==
-X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:f1b:a195:3f95:6a6f])
- (user=kaleshsingh job=sendgmr) by 2002:a05:6902:120e:b0:634:6f29:6b84 with
- SMTP id s14-20020a056902120e00b006346f296b84mr6656617ybu.604.1652996432268;
- Thu, 19 May 2022 14:40:32 -0700 (PDT)
-Date:   Thu, 19 May 2022 14:40:15 -0700
-Message-Id: <20220519214021.3572840-1-kaleshsingh@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [RFC PATCH] procfs: Add file path and size to /proc/<pid>/fdinfo
-From:   Kalesh Singh <kaleshsingh@google.com>
-Cc:     ilkos@google.com, tjmercier@google.com, surenb@google.com,
-        kernel-team@android.com, Kalesh Singh <kaleshsingh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>,
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=CpuiHu6st5jvRyMaG9VX7RMBtuAsBPj44JQMGd55xSk=;
+        b=vQgWGYbCjm4OEMLQcnS3BPeLf1B62r633KfzWn33oVrLzW09/PigmjP+V0Mc0cK2D+
+         12lq8GQyBQyNYU4XCwEK8dIF92rs3XKeIhDBAvIxhiNX7JnIM+4/F27IPTBppTVKXl+y
+         +GBhnTSU2oREQQOrbrwxR81jYN373Xsou/xbmQ/rY9owHE5js3Wly0SUsVkyeBBW9Rjc
+         xzuS0iM9vKLadmxJ8x75DmNyQEV7ExwWLvgI+thb0W2JSiLWhAz3kThM2UJZ4k8lA2Yz
+         O7g25nU/kmjYpEvdzmRvNZkeza6c2FEeYBIufXlC9bRD6g9mbA1X/IJPgOJlkg7t8BCR
+         QKBQ==
+X-Gm-Message-State: AOAM5311JyR86XsjX6gVVBkrKOpkJZDr6/h+DE506XZNoycYnoeAggb8
+        e08LsXnwV52HDsxiGZeZ8/8=
+X-Google-Smtp-Source: ABdhPJwBml8d2YJQucekuCRaj6PIzvGEkJuWAcNUSWUvgdv8zUnJWbUcTHb2lE59ASNYwXO9JZWlAg==
+X-Received: by 2002:a05:6830:310c:b0:606:66c8:53d4 with SMTP id b12-20020a056830310c00b0060666c853d4mr2686287ots.129.1652996518130;
+        Thu, 19 May 2022 14:41:58 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t187-20020aca5fc4000000b00325cda1ffb4sm188141oib.51.2022.05.19.14.41.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 14:41:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <28f3958f-dd25-cb1a-0a4c-040e7706ffc7@roeck-us.net>
+Date:   Thu, 19 May 2022 14:41:55 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Colin Cross <ccross@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220428172040.GA3623323@roeck-us.net> <YmvVkKXJWBoGqWFx@osiris>
+ <yt9dk0apbicu.fsf@linux.ibm.com> <20220513165955.mkg5wvfi4dwpzoer@revolver>
+ <YoOMsmq24FWsWWyr@osiris> <b18d5338-0031-a813-2825-207bea1b84cb@roeck-us.net>
+ <20220519143541.dfzgoubmkboc6kk4@revolver>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] mapletree-vs-khugepaged
+In-Reply-To: <20220519143541.dfzgoubmkboc6kk4@revolver>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Processes can pin shared memory by keeping a handle to it through a
-file descriptor; for instance dmabufs, memfd, and ashsmem (in Android).
+On 5/19/22 07:35, Liam Howlett wrote:
+> * Guenter Roeck <linux@roeck-us.net> [220517 10:32]:
+> 
+> ...
+>>
+>> Another bisect result, boot failures with nommu targets (arm:mps2-an385,
+>> m68k:mcf5208evb). Bisect log is the same for both.
+> ...
+>> # first bad commit: [bd773a78705fb58eeadd80e5b31739df4c83c559] nommu: remove uses of VMA linked list
+> 
+> I cannot reproduce this on my side, even with that specific commit.  Can
+> you point me to the failure log, config file, etc?  Do you still see
+> this with the fixes I've sent recently?
+> 
 
-In the case of a memory leak, to identify the process pinning the
-memory, userspace needs to:
-  - Iterate the /proc/<pid>/fd/* for each process
-  - Do a readlink on each entry to identify the type of memory from
-    the file path.
-  - stat() each entry to get the size of the memory.
+This was in linux-next; most recently with next-20220517.
+I don't know if that was up-to-date with your patches.
+The problem seems to be memory allocation failures.
+A sample log is at
+https://kerneltests.org/builders/qemu-m68k-next/builds/1065/steps/qemubuildcommand/logs/stdio
+The log history at
+https://kerneltests.org/builders/qemu-m68k-next?numbuilds=30
+will give you a variety of logs.
 
-The file permissions on /proc/<pid>/fd/* only allows for the owner
-or root to perform the operations above; and so is not suitable for
-capturing the system-wide state in a production environment.
+The configuration is derived from m5208evb_defconfig, with initrd
+and command line embedded in the image. You can see the detailed
+configuration updates at
+https://github.com/groeck/linux-build-test/blob/master/rootfs/m68k/run-qemu-m68k.sh
 
-This issue was addressed for dmabufs by making /proc/*/fdinfo/*
-accessible to a process with PTRACE_MODE_READ_FSCREDS credentials[1]
-To allow the same kind of tracking for other types of shared memory,
-add the following fields to /proc/<pid>/fdinfo/<fd>:
+Qemu command line is
 
-path - This allows identifying the type of memory based on common
-       prefixes: e.g. "/memfd...", "/dmabuf...", "/dev/ashmem..."
+qemu-system-m68k -M mcf5208evb -kernel vmlinux \
+     -cpu m5208 -no-reboot -nographic -monitor none
+     -append "rdinit=/sbin/init console=ttyS0,115200"
 
-       This was not an issued when dmabuf tracking was introduced
-       because the exp_name field of dmabuf fdinfo could be used
-       to distinguish dmabuf fds from other types.
+with initrd from
+https://github.com/groeck/linux-build-test/blob/master/rootfs/m68k/rootfs-5208.cpio.gz
 
-size - To track the amount of memory that is being pinned.
+I use qemu v6.2, but any recent qemu version should work.
 
-       dmabufs expose size as an additional field in fdinfo. Remove
-       this and make it a common field for all fds.
-
-Access to /proc/<pid>/fdinfo is governed by PTRACE_MODE_READ_FSCREDS
--- the same as for /proc/<pid>/maps which also exposes the path and
-size for mapped memory regions.
-
-This allows for a system process with PTRACE_MODE_READ_FSCREDS to
-account the pinned per-process memory via fdinfo.
-
-[1] https://lore.kernel.org/lkml/20210308170651.919148-1-kaleshsingh@google.com/
-
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
----
- Documentation/filesystems/proc.rst | 22 ++++++++++++++++++++--
- drivers/dma-buf/dma-buf.c          |  1 -
- fs/proc/fd.c                       |  9 +++++++--
- 3 files changed, 27 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-index 061744c436d9..ad66d78aca51 100644
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@ -1922,13 +1922,16 @@ if precise results are needed.
- 3.8	/proc/<pid>/fdinfo/<fd> - Information about opened file
- ---------------------------------------------------------------
- This file provides information associated with an opened file. The regular
--files have at least four fields -- 'pos', 'flags', 'mnt_id' and 'ino'.
-+files have at least six fields -- 'pos', 'flags', 'mnt_id', 'ino', 'size',
-+and 'path'.
-+
- The 'pos' represents the current offset of the opened file in decimal
- form [see lseek(2) for details], 'flags' denotes the octal O_xxx mask the
- file has been created with [see open(2) for details] and 'mnt_id' represents
- mount ID of the file system containing the opened file [see 3.5
- /proc/<pid>/mountinfo for details]. 'ino' represents the inode number of
--the file.
-+the file, 'size' represents the size of the file in bytes, and 'path'
-+represents the file path.
- 
- A typical output is::
- 
-@@ -1936,6 +1939,8 @@ A typical output is::
- 	flags:	0100002
- 	mnt_id:	19
- 	ino:	63107
-+        size:   0
-+        path:   /dev/null
- 
- All locks associated with a file descriptor are shown in its fdinfo too::
- 
-@@ -1953,6 +1958,8 @@ Eventfd files
- 	flags:	04002
- 	mnt_id:	9
- 	ino:	63107
-+        size:   0
-+        path:   anon_inode:[eventfd]
- 	eventfd-count:	5a
- 
- where 'eventfd-count' is hex value of a counter.
-@@ -1966,6 +1973,8 @@ Signalfd files
- 	flags:	04002
- 	mnt_id:	9
- 	ino:	63107
-+        size:   0
-+        path:   anon_inode:[signalfd]
- 	sigmask:	0000000000000200
- 
- where 'sigmask' is hex value of the signal mask associated
-@@ -1980,6 +1989,8 @@ Epoll files
- 	flags:	02
- 	mnt_id:	9
- 	ino:	63107
-+        size:   0
-+        path:   anon_inode:[eventpoll]
- 	tfd:        5 events:       1d data: ffffffffffffffff pos:0 ino:61af sdev:7
- 
- where 'tfd' is a target file descriptor number in decimal form,
-@@ -1998,6 +2009,8 @@ For inotify files the format is the following::
- 	flags:	02000000
- 	mnt_id:	9
- 	ino:	63107
-+        size:   0
-+        path:   anon_inode:inotify
- 	inotify wd:3 ino:9e7e sdev:800013 mask:800afce ignored_mask:0 fhandle-bytes:8 fhandle-type:1 f_handle:7e9e0000640d1b6d
- 
- where 'wd' is a watch descriptor in decimal form, i.e. a target file
-@@ -2021,6 +2034,8 @@ For fanotify files the format is::
- 	flags:	02
- 	mnt_id:	9
- 	ino:	63107
-+        size:   0
-+        path:   anon_inode:[fanotify]
- 	fanotify flags:10 event-flags:0
- 	fanotify mnt_id:12 mflags:40 mask:38 ignored_mask:40000003
- 	fanotify ino:4f969 sdev:800013 mflags:0 mask:3b ignored_mask:40000000 fhandle-bytes:8 fhandle-type:1 f_handle:69f90400c275b5b4
-@@ -2046,6 +2061,8 @@ Timerfd files
- 	flags:	02
- 	mnt_id:	9
- 	ino:	63107
-+        size:   0
-+        path:   anon_inode:[timerfd]
- 	clockid: 0
- 	ticks: 0
- 	settime flags: 01
-@@ -2070,6 +2087,7 @@ DMA Buffer files
- 	mnt_id:	9
- 	ino:	63107
- 	size:   32768
-+        path:   /dmabuf:
- 	count:  2
- 	exp_name:  system-heap
- 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index b1e25ae98302..d61183ff3c30 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -377,7 +377,6 @@ static void dma_buf_show_fdinfo(struct seq_file *m, struct file *file)
- {
- 	struct dma_buf *dmabuf = file->private_data;
- 
--	seq_printf(m, "size:\t%zu\n", dmabuf->size);
- 	/* Don't count the temporary reference taken inside procfs seq_show */
- 	seq_printf(m, "count:\t%ld\n", file_count(dmabuf->file) - 1);
- 	seq_printf(m, "exp_name:\t%s\n", dmabuf->exp_name);
-diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-index 913bef0d2a36..a8a968bc58f0 100644
---- a/fs/proc/fd.c
-+++ b/fs/proc/fd.c
-@@ -54,10 +54,15 @@ static int seq_show(struct seq_file *m, void *v)
- 	if (ret)
- 		return ret;
- 
--	seq_printf(m, "pos:\t%lli\nflags:\t0%o\nmnt_id:\t%i\nino:\t%lu\n",
-+	seq_printf(m, "pos:\t%lli\nflags:\t0%o\nmnt_id:\t%i\nino:\t%lu\nsize:\t%zu\n",
- 		   (long long)file->f_pos, f_flags,
- 		   real_mount(file->f_path.mnt)->mnt_id,
--		   file_inode(file)->i_ino);
-+		   file_inode(file)->i_ino,
-+		   file_inode(file)->i_size);
-+
-+	seq_puts(m, "path:\t");
-+	seq_file_path(m, file, "\n");
-+	seq_putc(m, '\n');
- 
- 	/* show_fd_locks() never deferences files so a stale value is safe */
- 	show_fd_locks(m, file, files);
-
-base-commit: b015dcd62b86d298829990f8261d5d154b8d7af5
--- 
-2.36.1.124.g0e6072fb45-goog
-
+Hope this helps,
+Guenter

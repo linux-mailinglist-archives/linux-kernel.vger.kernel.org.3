@@ -2,135 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAA252C93D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B5652C93E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 03:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232114AbiESBf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 21:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
+        id S232526AbiESBfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 21:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiESBfY (ORCPT
+        with ESMTP id S232496AbiESBfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 21:35:24 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0139345D
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 18:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652924123; x=1684460123;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1fnNyfY+tpW2NgUz39MRpubIN14QdSxh7wgGvcGEjqs=;
-  b=FGwN87dzVvpJT6P/98+1O1JgefkDddVgb9hOB8zSCD/ON+2bumfwZi1P
-   TKUJO3AdBmA3FcMKuQe/6w0NebH+ghiFu4C1SOL03yQrkBt5604jUiq4O
-   wjh13j5YZq/iQaAwTKhqrt3C9qkqRPgXwcaltiB0UlSG09S8l/SgF0ve+
-   Ub45Oj2RUYjssotlrGUOG9lgmnjMADbHJjnamNpIG5NH9yW4C//UEXFtG
-   bwbEAkiS1Pt9jt0tExovcWQSmVTWerRZ34Aft5HtUTfFd11VIgMGcZ9hY
-   Y6Ke//AIlVIvNTbgpUf3ZRQpRel7O/C9qjDliP9Om3BCfWlPtuokzr4o8
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="335017953"
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="335017953"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 18:35:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="673749908"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 18 May 2022 18:35:20 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrV4R-0002tL-ME;
-        Thu, 19 May 2022 01:35:19 +0000
-Date:   Thu, 19 May 2022 09:34:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>, gregkh@linuxfoundation.org,
-        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        straube.linux@gmail.com, dan.carpenter@oracle.com,
-        fmdefrancesco@gmail.com
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Pavel Skripkin <paskripkin@gmail.com>
-Subject: Re: [PATCH 1/4] staging: r8188eu: add error handling of rtw_read8
-Message-ID: <202205190916.GRvUby7c-lkp@intel.com>
-References: <1a9834b705054dcd0b0be0d929084c44a224abaa.1652911343.git.paskripkin@gmail.com>
+        Wed, 18 May 2022 21:35:36 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E63D9548D;
+        Wed, 18 May 2022 18:35:33 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L3XVW1Qk1z4xY2;
+        Thu, 19 May 2022 11:35:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652924132;
+        bh=0uz7tlkkzoYhRZiRjCTzND3ILnAf9SvcH6TOA+ncRAQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Gd02Rq+LukHlnljt6PwsWZfmdx+0ZRyoveatyPmENNcn+nLMeCQ5ClpGUg1ptbClM
+         GVbQ5aNCsdW7BKgQRdHw5amZzBenp3Ok+Lswqs570NIFZebgtc/rETUEfslrZzRv1z
+         0fE4ThXy6QjYXc5gwFKopJlMg53XpPoflyTugsXuI1aFyjnzDZQXAaXV9lPxUpblkt
+         33dVRKumCfKdoyD1yHIAqHP25lcZ+/1UdVM5/iTPQ5et52AOBffueGddEru+A3O8r3
+         MZf/KjxG4xOQ2rRsSmSPpZNguZp9eF3PoOpEdZYF96Zg7wstnM1ILOlKRWwhUiIbsT
+         UURD12DqORQpA==
+Date:   Thu, 19 May 2022 11:35:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Shay Drory <shayd@nvidia.com>
+Subject: linux-next: manual merge of the rdma tree with the net tree
+Message-ID: <20220519113529.226bc3e2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a9834b705054dcd0b0be0d929084c44a224abaa.1652911343.git.paskripkin@gmail.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/8A7u_k62YMCgoamBoiu3ovB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel,
+--Sig_/8A7u_k62YMCgoamBoiu3ovB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch! Perhaps something to improve:
+Hi all,
 
-[auto build test WARNING on staging/staging-testing]
+Today's linux-next merge of the rdma tree got a conflict in:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Skripkin/staging-r8188eu-add-error-handling-of-usb-read-errors/20220519-061342
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git e41f7a5521d7f03dca99e3207633df71740569dd
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220519/202205190916.GRvUby7c-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f8c9bd199a25d7a1d8f6fed1b0d5da9cec1f8faa
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Pavel-Skripkin/staging-r8188eu-add-error-handling-of-usb-read-errors/20220519-061342
-        git checkout f8c9bd199a25d7a1d8f6fed1b0d5da9cec1f8faa
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/staging/r8188eu/
+  drivers/net/ethernet/mellanox/mlx5/core/main.c
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+between commit:
 
-All warnings (new ones prefixed by >>):
+  b33886971dbc ("net/mlx5: Initialize flow steering during driver probe")
 
-   drivers/staging/r8188eu/hal/usb_halinit.c: In function '_InitBeaconParameters':
->> drivers/staging/r8188eu/hal/usb_halinit.c:465:13: warning: variable 'res' set but not used [-Wunused-but-set-variable]
-     465 |         int res;
-         |             ^~~
---
-   drivers/staging/r8188eu/os_dep/ioctl_linux.c: In function 'rtw_dbg_port':
->> drivers/staging/r8188eu/os_dep/ioctl_linux.c:3419:32: warning: variable 'res' set but not used [-Wunused-but-set-variable]
-    3419 |                         int i, res;
-         |                                ^~~
+from the net tree and commits:
 
+  40379a0084c2 ("net/mlx5_fpga: Drop INNOVA TLS support")
+  f2b41b32cde8 ("net/mlx5: Remove ipsec_ops function table")
 
-vim +/res +465 drivers/staging/r8188eu/hal/usb_halinit.c
+from the rdma tree.
 
-   461	
-   462	static void _InitBeaconParameters(struct adapter *Adapter)
-   463	{
-   464		struct hal_data_8188e *haldata = &Adapter->haldata;
- > 465		int res;
-   466	
-   467		rtw_write16(Adapter, REG_BCN_CTRL, 0x1010);
-   468	
-   469		/*  TODO: Remove these magic number */
-   470		rtw_write16(Adapter, REG_TBTT_PROHIBIT, 0x6404);/*  ms */
-   471		rtw_write8(Adapter, REG_DRVERLYINT, DRIVER_EARLY_INT_TIME);/*  5ms */
-   472		rtw_write8(Adapter, REG_BCNDMATIM, BCN_DMA_ATIME_INT_TIME); /*  2ms */
-   473	
-   474		/*  Suggested by designer timchen. Change beacon AIFS to the largest number */
-   475		/*  beacause test chip does not contension before sending beacon. by tynli. 2009.11.03 */
-   476		rtw_write16(Adapter, REG_BCNTCFG, 0x660F);
-   477	
-   478		/* FIXME: return an error to caller */
-   479		res = rtw_read8(Adapter, REG_FWHW_TXQ_CTRL + 2, &haldata->RegFwHwTxQCtrl);
-   480		res = rtw_read8(Adapter, REG_TBTT_PROHIBIT + 2, &haldata->RegReg542);
-   481		res = rtw_read8(Adapter, REG_CR + 1, &haldata->RegCR_1);
-   482	}
-   483	
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/ethernet/mellanox/mlx5/core/main.c
+index ef196cb764e2,d504c8cb8f96..000000000000
+--- a/drivers/net/ethernet/mellanox/mlx5/core/main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/main.c
+@@@ -1192,15 -1181,7 +1190,7 @@@ static int mlx5_load(struct mlx5_core_d
+  		goto err_fpga_start;
+  	}
+ =20
+- 	mlx5_accel_ipsec_init(dev);
+-=20
+- 	err =3D mlx5_accel_tls_init(dev);
+- 	if (err) {
+- 		mlx5_core_err(dev, "TLS device start failed %d\n", err);
+- 		goto err_tls_start;
+- 	}
+-=20
+ -	err =3D mlx5_init_fs(dev);
+ +	err =3D mlx5_fs_core_init(dev);
+  	if (err) {
+  		mlx5_core_err(dev, "Failed to init flow steering\n");
+  		goto err_fs;
+@@@ -1245,11 -1226,8 +1235,8 @@@ err_ec
+  err_vhca:
+  	mlx5_vhca_event_stop(dev);
+  err_set_hca:
+ -	mlx5_cleanup_fs(dev);
+ +	mlx5_fs_core_cleanup(dev);
+  err_fs:
+- 	mlx5_accel_tls_cleanup(dev);
+- err_tls_start:
+- 	mlx5_accel_ipsec_cleanup(dev);
+  	mlx5_fpga_device_stop(dev);
+  err_fpga_start:
+  	mlx5_rsc_dump_cleanup(dev);
+@@@ -1274,9 -1252,7 +1261,7 @@@ static void mlx5_unload(struct mlx5_cor
+  	mlx5_ec_cleanup(dev);
+  	mlx5_sf_hw_table_destroy(dev);
+  	mlx5_vhca_event_stop(dev);
+ -	mlx5_cleanup_fs(dev);
+ +	mlx5_fs_core_cleanup(dev);
+- 	mlx5_accel_ipsec_cleanup(dev);
+- 	mlx5_accel_tls_cleanup(dev);
+  	mlx5_fpga_device_stop(dev);
+  	mlx5_rsc_dump_cleanup(dev);
+  	mlx5_hv_vhca_cleanup(dev->hv_vhca);
+
+--Sig_/8A7u_k62YMCgoamBoiu3ovB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKFnuEACgkQAVBC80lX
+0Gx+awf/aSAXYuCrUQSP++SGx0XBNFOpmTg4BH7WiLzk+0Dd/M4uXfg0mfAceBOF
+ohj8aUVP37Wp4ksPmpU3wVg0YcTRmVVwGFayhkrIa9gQEEuTWW0eCq275Dnw1pZs
+PDH2LrSl9a8LlU2/qQaDvR2RSCUbyIKX8YZSg8M/fGpULlXYAVo5E9O0RjEHJZxm
+v6BxNnmi3nmhZKTdqLXNaQGjI6OrjjgK6Pqam7y8GuqzZNidMULIectm04W2LPrn
+r0+H3zQt2ccJchP1/Qx5QzFf6JWG2PYy9t4SEYKmvQUsKZNgzpWo6o04Flz/Fhft
+MiqvreMPsMpCUv2yzOsXQFqGuEn0fA==
+=WEPE
+-----END PGP SIGNATURE-----
+
+--Sig_/8A7u_k62YMCgoamBoiu3ovB--

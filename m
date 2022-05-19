@@ -2,206 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A1452CF8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CB752CF97
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236215AbiESJjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S233028AbiESJmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236126AbiESJjS (ORCPT
+        with ESMTP id S231214AbiESJmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:39:18 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993F9A30AE
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:39:17 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id bo5so4681593pfb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:39:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mLcbwj32rdj40iW44+duGhfUCpi8Xywy8Dql/7GVxog=;
-        b=HRetMmQnRH96uhorno98Hawv3lvxCCBh8FpbHGB10ofuBOLNOJBcvp1mxldyvtB+zg
-         XydyL+DF1kRbyuT9fya2ym6SeIzMUNJ4Pp/TzbGGJIGxDjTXe3yuE6NgmqLXgNzbALzc
-         54hHYss0sACylfqtcs/plm6/83VKJlt/QhqV6fkcidO4ee6Wnh5tWOkKXIGvy97y2tyn
-         5MNxraQBmI8/q4qY+OgE2cf+lhkytVzJetmoFta57CNmu6GGcpoAlsy7XpkbElBeusH3
-         5R8ZfEQVgHgwSU2kX8YQkrUJinddGpFgUMKw8pCbKSlBRYjBmCy9HZtfK6WqPylJABSc
-         JWnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mLcbwj32rdj40iW44+duGhfUCpi8Xywy8Dql/7GVxog=;
-        b=zNBjD4TOqDIT+NcXH9RHBngavs3W09Wb0mYzKtR6RZjSb67MMvO0fh5uIpPdLArf54
-         RzSVSVF8On3Gw6qiJb88aTb6+bd2JyUOIqSCT6gndoGs80dl+RakrdLmCtpapwaWDsVj
-         nXcfMLQ63J0P0ZYAXyHtdStdltOzHmeoYtbyF0mwbaxqGAC7J2koHzKqmwA1Pm47KRGP
-         lfYSGRMyvxBJIFfokuC/TlGymReUzfudxpic0LFPFYQ/0wC/ol3NTe9TV/RgKtlES4g+
-         +ytVRrS5UxtyUSi+30RV+yysOjKk1hl6HxNpyrsGFKzVnkaDyWrkVPXCxqv5sYHo+/U5
-         Gmkg==
-X-Gm-Message-State: AOAM530yW8joO9sG6+RSUU3WGl3w7XNmMF8JG05kZrAq0E4dXuG5xQci
-        L50DVP/pxccTyD7Ie06AA9/ysA==
-X-Google-Smtp-Source: ABdhPJxQu6DtfFjo6+chXKKIZiJGwOJDreDTn7NfBzt4Qr6PeHY8zCMvhS/f3BXs6KmcoJ8grOR6xA==
-X-Received: by 2002:a05:6a00:1ad1:b0:50d:f07a:3eb8 with SMTP id f17-20020a056a001ad100b0050df07a3eb8mr3785680pfv.25.1652953157089;
-        Thu, 19 May 2022 02:39:17 -0700 (PDT)
-Received: from sunil-laptop ([49.206.10.235])
-        by smtp.gmail.com with ESMTPSA id er14-20020a17090af6ce00b001cd4989fecesm5176371pjb.26.2022.05.19.02.39.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 02:39:16 -0700 (PDT)
-Date:   Thu, 19 May 2022 15:09:09 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Abner Chang <abner.chang@hpe.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Sunil V L <sunil.vl@gmail.com>
-Subject: Re: [PATCH V5 1/1] riscv/efi_stub: Add support for
- RISCV_EFI_BOOT_PROTOCOL
-Message-ID: <20220519093909.GA20599@sunil-laptop>
-References: <20220519051512.136724-1-sunilvl@ventanamicro.com>
- <20220519051512.136724-2-sunilvl@ventanamicro.com>
- <CAMj1kXHPXqXndUK408W9kB9VrOy_zXfAaXFiLhzXBs_FVYnXmQ@mail.gmail.com>
+        Thu, 19 May 2022 05:42:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9083C68F82;
+        Thu, 19 May 2022 02:42:04 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J9CQhj012521;
+        Thu, 19 May 2022 09:41:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=OJteXu18Mv+sn23pdhZQcdzdXFdGcyM9JOV5loEpHpk=;
+ b=E9lrofY1GFhlXL1u+ccKtgGozb6tczzv0sXWdh/8z6/sni2D8WKZRbk+0xxqC6PREdA5
+ hKqVML5YJKrLG+zKyTMibSol3ByZI1nr4W12Pfpv6NnaooTQSXZ7dF6xvrvlXpS73iJR
+ yB++dUCc/JPs3iAxZ9WsW20lk3vXBXN2RyBWC8ZvNOZfs2pu/Y2gkQWl0MmJqVDr0zky
+ R8zvAb7CQd86cowK+wiiBgzSRN/vyM4A6BLducb3c8++bD/wnICsW0mlNF2c+nMJtJ/d
+ brGN+fNw25c1SWpEMLnCpJE4x2ckWxqRb5yJ0ItgxH+ZijcSntbNSLCueXr8TGnlM9nQ jg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k25rkxb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:41:52 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24J9fq0L015293;
+        Thu, 19 May 2022 09:41:52 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k25rkwc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:41:52 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24J9Slkf014816;
+        Thu, 19 May 2022 09:41:49 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjf1u7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 09:41:49 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24J9RqVS46399838
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 May 2022 09:27:53 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A58B11C04C;
+        Thu, 19 May 2022 09:41:47 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C18E511C050;
+        Thu, 19 May 2022 09:41:42 +0000 (GMT)
+Received: from vajain21.in.ibm.com (unknown [9.43.20.227])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Thu, 19 May 2022 09:41:42 +0000 (GMT)
+Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Thu, 19 May 2022 15:11:41 +0530
+From:   Vaibhav Jain <vaibhav@linux.ibm.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
+In-Reply-To: <20220519050835.ebpiukexgiys6t57@google.com>
+References: <20220518223815.809858-1-vaibhav@linux.ibm.com>
+ <20220519050835.ebpiukexgiys6t57@google.com>
+Date:   Thu, 19 May 2022 15:11:41 +0530
+Message-ID: <875ym1hnai.fsf@vajain21.in.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHPXqXndUK408W9kB9VrOy_zXfAaXFiLhzXBs_FVYnXmQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: w9gfG1UIEqtLgIyzzT7XtvqSo6EaqHG1
+X-Proofpoint-ORIG-GUID: UnqzvSwZfeeq5_Jio2nJQgQmTtH6NjIF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-19_02,2022-05-19_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=802
+ clxscore=1015 malwarescore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205190055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 10:24:44AM +0200, Ard Biesheuvel wrote:
-> On Thu, 19 May 2022 at 07:15, Sunil V L <sunilvl@ventanamicro.com> wrote:
-> >
-> > This patch adds the support for getting the boot hart ID in
-> > Linux EFI stub using RISCV_EFI_BOOT_PROTOCOL. This protocol
-> > is preferred method over existing DT based solution since it
-> > works irrespective of DT or ACPI.
-> >
-> > The specification of the protocol is hosted at:
-> > https://github.com/riscv-non-isa/riscv-uefi
-> >
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-> 
-> Queued in efi/next, thanks all.
-> 
-> Sunil: I made some minor tweaks for coding style, whitespace etc when
-> applying, please double check that I did not make any mistakes.
-> Thanks.
+Hi,
 
-Yes, it looks good, Ard. Many thanks!
+Thanks for looking into this patch,
 
-Regards
-Sunil
-> 
-> 
-> > ---
-> >  drivers/firmware/efi/libstub/efistub.h    |  7 +++++
-> >  drivers/firmware/efi/libstub/riscv-stub.c | 31 ++++++++++++++++++-----
-> >  include/linux/efi.h                       |  1 +
-> >  3 files changed, 33 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
-> > index edb77b0621ea..87aa66e8ef43 100644
-> > --- a/drivers/firmware/efi/libstub/efistub.h
-> > +++ b/drivers/firmware/efi/libstub/efistub.h
-> > @@ -720,6 +720,13 @@ union efi_tcg2_protocol {
-> >         } mixed_mode;
-> >  };
-> >
-> > +struct riscv_efi_boot_protocol {
-> > +       u64 revision;
-> > +
-> > +       efi_status_t (__efiapi * get_boot_hartid)(struct riscv_efi_boot_protocol *this,
-> > +                                                 unsigned long *boot_hartid);
-> > +};
-> > +
-> >  typedef union efi_load_file_protocol efi_load_file_protocol_t;
-> >  typedef union efi_load_file_protocol efi_load_file2_protocol_t;
-> >
-> > diff --git a/drivers/firmware/efi/libstub/riscv-stub.c b/drivers/firmware/efi/libstub/riscv-stub.c
-> > index 9c460843442f..10c59295f379 100644
-> > --- a/drivers/firmware/efi/libstub/riscv-stub.c
-> > +++ b/drivers/firmware/efi/libstub/riscv-stub.c
-> > @@ -21,9 +21,9 @@
-> >  #define MIN_KIMG_ALIGN         SZ_4M
-> >  #endif
-> >
-> > -typedef void __noreturn (*jump_kernel_func)(unsigned int, unsigned long);
-> > +typedef void __noreturn (*jump_kernel_func)(unsigned long, unsigned long);
-> >
-> > -static u32 hartid;
-> > +static unsigned long hartid;
-> >
-> >  static int get_boot_hartid_from_fdt(void)
-> >  {
-> > @@ -47,14 +47,33 @@ static int get_boot_hartid_from_fdt(void)
-> >         return 0;
-> >  }
-> >
-> > +static efi_status_t get_boot_hartid_from_efi(void)
-> > +{
-> > +       efi_guid_t boot_protocol_guid = RISCV_EFI_BOOT_PROTOCOL_GUID;
-> > +       efi_status_t status;
-> > +       struct riscv_efi_boot_protocol *boot_protocol;
-> > +
-> > +       status = efi_bs_call(locate_protocol, &boot_protocol_guid, NULL,
-> > +                            (void **)&boot_protocol);
-> > +       if (status == EFI_SUCCESS) {
-> > +               status = efi_call_proto(boot_protocol,
-> > +                                       get_boot_hartid, &hartid);
-> > +       }
-> > +       return status;
-> > +}
-> > +
-> >  efi_status_t check_platform_features(void)
-> >  {
-> >         int ret;
-> > +       efi_status_t status;
-> >
-> > -       ret = get_boot_hartid_from_fdt();
-> > -       if (ret) {
-> > -               efi_err("/chosen/boot-hartid missing or invalid!\n");
-> > -               return EFI_UNSUPPORTED;
-> > +       status = get_boot_hartid_from_efi();
-> > +       if (status != EFI_SUCCESS) {
-> > +               ret = get_boot_hartid_from_fdt();
-> > +               if (ret) {
-> > +                       efi_err("Failed to get boot hartid!\n");
-> > +                       return EFI_UNSUPPORTED;
-> > +               }
-> >         }
-> >         return EFI_SUCCESS;
-> >  }
-> > diff --git a/include/linux/efi.h b/include/linux/efi.h
-> > index ccd4d3f91c98..9822c730207c 100644
-> > --- a/include/linux/efi.h
-> > +++ b/include/linux/efi.h
-> > @@ -380,6 +380,7 @@ void efi_native_runtime_setup(void);
-> >  #define EFI_CONSOLE_OUT_DEVICE_GUID            EFI_GUID(0xd3b36f2c, 0xd551, 0x11d4,  0x9a, 0x46, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d)
-> >  #define APPLE_PROPERTIES_PROTOCOL_GUID         EFI_GUID(0x91bd12fe, 0xf6c3, 0x44fb,  0xa5, 0xb7, 0x51, 0x22, 0xab, 0x30, 0x3a, 0xe0)
-> >  #define EFI_TCG2_PROTOCOL_GUID                 EFI_GUID(0x607f766c, 0x7455, 0x42be,  0x93, 0x0b, 0xe4, 0xd7, 0x6d, 0xb2, 0x72, 0x0f)
-> > +#define RISCV_EFI_BOOT_PROTOCOL_GUID           EFI_GUID(0xccd15fec, 0x6f73, 0x4eec,  0x83, 0x95, 0x3e, 0x69, 0xe4, 0xb9, 0x40, 0xbf)
-> >  #define EFI_LOAD_FILE_PROTOCOL_GUID            EFI_GUID(0x56ec3091, 0x954c, 0x11d2,  0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b)
-> >  #define EFI_LOAD_FILE2_PROTOCOL_GUID           EFI_GUID(0x4006c0c1, 0xfcb3, 0x403e,  0x99, 0x6d, 0x4a, 0x6c, 0x87, 0x24, 0xe0, 0x6d)
-> >  #define EFI_RT_PROPERTIES_TABLE_GUID           EFI_GUID(0xeb66918a, 0x7eef, 0x402a,  0x84, 0x2e, 0x93, 0x1d, 0x21, 0xc3, 0x8a, 0xe9)
-> > --
-> > 2.25.1
-> >
+Shakeel Butt <shakeelb@google.com> writes:
+
+> On Thu, May 19, 2022 at 04:08:15AM +0530, Vaibhav Jain wrote:
+>> [1] Provides a way for user-space to trigger proactive reclaim by introducing
+>> a write-only memcg file 'memory.reclaim'. However reclaim stats like number
+>> of pages scanned and reclaimed is still not directly available to the
+>> user-space.
+>> 
+>> This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
+>> readable which returns the number of pages scanned / reclaimed during the
+>> reclaim process from 'struct vmpressure' associated with each memcg. This should
+>> let user-space asses how successful proactive reclaim triggered from memcg
+>> 'memory.reclaim' was ?
+>> 
+>> With the patch following command flow is expected:
+>> 
+>>  # echo "1M" > memory.reclaim
+>> 
+>>  # cat memory.reclaim
+>>    scanned 76
+>>    reclaimed 32
+>> 
+>
+> Yosry already mentioned the race issue with the implementation and I
+> would prefer we don't create any new dependency on vmpressure which I
+> think we should deprecate.
+Ok,
+
+>
+> Anyways my question is how are you planning to use these metrics i.e.
+> scanned & reclaimed? I wonder if the data you are interested in can be
+> extracted without a stable interface. Have you tried BPF way to get
+> these metrics? We already have a tracepoint in vmscan tracing the
+> scanned and reclaimed. 
+>
+Agree that there are enough static trace_mm_vmscan_ tracepoints in
+vmscan to get that info.
+
+Also agree that exposing nr_scanned/nr_reclaimed directly to userspace may not
+be a good idea but knowing the amount of memory reclaimed might be
+useful.
+
+With user-space triggered proactive reclaim user-space code can try to
+write a certain value to "memory.reclaim" in a loop till it returns
+'-EBUSY'.
+
+Right now there is no direct way for it to get feedback on the progress
+of the requested reclaim. Providing a stable interface to ascertain the
+progress of reclaim lets that userspace provide smaller values for
+proactive reclaim 
+
+-- 
+Cheers
+~ Vaibhav

@@ -2,214 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1C852DA35
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D83B52DA75
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242018AbiESQ3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S242142AbiESQlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241017AbiESQ3l (ORCPT
+        with ESMTP id S241788AbiESQlk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:29:41 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39712D4137
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:29:40 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id u7so6156635ljd.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hfE6dx+3G7Xhg3fy//ddTC1qoRqj08jbiWPXg96CPJQ=;
-        b=rE0GDgG3Pt5dENINhb/kwvh/Pk69bR4+ep8u3JTbELATCir4elLVBe7ACfHSa9J/Xr
-         Yy5cAs9KADlL439mw4LWNreCKNwmqzWvhxyIotrdVRBMjtb7QSz6aPVMg5XJ0AQvM0E9
-         I388He++d+4oUsZDpchg0LM4rUE/uU60u3UimmQCZJujwBah/TXew3VXWWtj6AF/iCQF
-         fidgCcCLX/RkNaehXoFzb0/rv6mo7Arj+cNKKV7PmUzAfTq6zINL2IAC1i3Zq2pXBV5y
-         YT6WiXvjSVHbcBMOCfbh5SH4lQl+NdtW38ns+MrXjwc+BGAmXkBmXGxrYii1g6OlcRcA
-         Pp6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hfE6dx+3G7Xhg3fy//ddTC1qoRqj08jbiWPXg96CPJQ=;
-        b=cME81ARQLDlLdYyA9EsRKefnQ4bxfVtpOgKTJOdkkYY50YNwsd6QeCjACBK5b71mz2
-         32sxGi+1QEwZKzeSO61BNrt5Q2f3o3XmZbijYNaol0E8m3Foi2ubVa46ANh4J4djrOaM
-         x/5N/TKKTSo59jsCku1PRbu6CftxCQRBAdQIK9bvvmrZUVhyg61qOskQS2scHTafQqqF
-         a6oqQ4MefM/l1xFe97c3/WUttUXpqN2wn+fOtGt1UnSPdT7VYFAD9J+Yu62hyjY/fpNK
-         qZ3ncsafOhU14eFgIW7hbjVA8pi1+TWE2rpQqpzGSBZpR7KQ8er9iP9QKvr4UtoWoyzo
-         /AOw==
-X-Gm-Message-State: AOAM532YWMaYQQkPeXwYznm9czkr3TcPWcv1ocZFXQuuT/5KlaVPorUA
-        2NO10hqD3MXI1N5OwKgGfE0qqw==
-X-Google-Smtp-Source: ABdhPJxGirHOdCIW97ARJn+QNyyJ8XqYYnMMhx5NlIeuy1e5/tqxYqZ13Mdoe3BHU/DnIuuUJao5dg==
-X-Received: by 2002:a2e:7308:0:b0:253:cd16:a893 with SMTP id o8-20020a2e7308000000b00253cd16a893mr3110782ljc.259.1652977778546;
-        Thu, 19 May 2022 09:29:38 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.185])
-        by smtp.gmail.com with ESMTPSA id z2-20020a2e9b82000000b00253cd476074sm527503lji.111.2022.05.19.09.29.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 09:29:38 -0700 (PDT)
-Message-ID: <e018be81-f4f2-a26f-7c5a-7adddd9c56c4@openvz.org>
-Date:   Thu, 19 May 2022 19:29:36 +0300
+        Thu, 19 May 2022 12:41:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 909BA59095
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:41:39 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25AE21477;
+        Thu, 19 May 2022 09:32:51 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B50B33F718;
+        Thu, 19 May 2022 09:32:50 -0700 (PDT)
+Date:   Thu, 19 May 2022 17:32:49 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Atish Patra <atishp@atishpatra.org>, linux-kernel@vger.kernel.org,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v2 0/8] arch_topology: Updates to add socket support and
+ fix cluster ids
+Message-ID: <YoZxKJ6TiAsxTXNl@arm.com>
+References: <20220518093325.2070336-1-sudeep.holla@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3] tracing: add 'accounted' entry into output of
- allocation tracepoints
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     YoPOhRctb8wwbmY5@carbon, Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Muchun Song <songmuchun@bytedance.com>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Michal Hocko <mhocko@suse.com>
-References: <f6625cd8-90f9-6d48-50f6-7bb052bf479f@openvz.org>
- <20220518160447.20a7b96f@gandalf.local.home>
- <b728f944-e3ae-cdb6-5f02-2fb21466b2fb@openvz.org>
- <20220519100348.101d027d@gandalf.local.home>
-From:   Vasily Averin <vvs@openvz.org>
-In-Reply-To: <20220519100348.101d027d@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220518093325.2070336-1-sudeep.holla@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 17:03, Steven Rostedt wrote:
-> On Thu, 19 May 2022 14:35:46 +0300
-> Vasily Averin <vvs@openvz.org> wrote:
+Hi Sudeep,
+
+On Wednesday 18 May 2022 at 10:33:17 (+0100), Sudeep Holla wrote:
+> Hi All,
 > 
->>>> @@ -33,42 +35,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
->>>>  		__entry->bytes_req	= bytes_req;
->>>>  		__entry->bytes_alloc	= bytes_alloc;
->>>>  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
->>>> +		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
->>>> +					  (s && s->flags & SLAB_ACCOUNT);  
->>>
->>> Now you could make this even faster in the fast path and save just the
->>> s->flags.
->>>
->>> 	__entry->sflags = s ? s->flags : 0;
->>>   
->>>>  	),
->>>>  
->>>> -	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
->>>> +	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s accounted=%s",
->>>>  		(void *)__entry->call_site,
->>>>  		__entry->ptr,
->>>>  		__entry->bytes_req,
->>>>  		__entry->bytes_alloc,
->>>> -		show_gfp_flags(__entry->gfp_flags))
->>>> +		show_gfp_flags(__entry->gfp_flags),
->>>> +		__entry->accounted ? "true" : "false")  
->>>
->>> And then have: "accounted=%s":
->>>
->>> 		(__entry->gfp_flags & __GFP_ACCOUNT) ||
->>> 		(__entry->sflags & SLAB_ACCOUNT) ? "true" : "false"  
->>
->> Unfortunately this returns back sparse warnings about bitwise gfp_t and slab_flags_t casts.
->> Could you please explain why your variant is faster?
+> This series intends to fix some discrepancies we have in the CPU topology
+> parsing from the device tree /cpu-map node. Also this diverges from the
+> behaviour on a ACPI enabled platform. The expectation is that both DT
+> and ACPI enabled systems must present consistent view of the CPU topology.
 > 
-> Micro-optimization, grant you, but it is faster because it moves some of
-> the logic into the slow path (the read side), and takes it out of the fast
-> path (the write side).
+> Currently we assign generated cluster count as the physical package identifier
+> for each CPU which is wrong. The device tree bindings for CPU topology supports
+> sockets to infer the socket or physical package identifier for a given CPU.
+> Also we don't check if all the cores/threads belong to the same cluster before
+> updating their sibling masks which is fine as we don't set the cluster id yet.
 > 
-> The idea of tracing is to squeeze out every cycle we can to keep the
-> tracing overhead down.
+> These changes also assigns the cluster identifier as parsed from the device tree
+> cluster nodes within /cpu-map without support for nesting of the clusters.
+> Finally, it also add support for socket nodes in /cpu-map. With this the
+> parsing of exact same information from ACPI PPTT and /cpu-map DT node
+> aligns well.
 > 
-> But it's really up to you if you need that. I'm not going to let this be a
-> blocker. This is more of an FYI than anything else.
+> The only exception is that the last level cache id information can be
+> inferred from the same ACPI PPTT while we need to parse CPU cache nodes
+> in the device tree.
+> 
+> P.S: I have not cc-ed Greg and Rafael so that all the users of arch_topology
+> agree with the changes first before we include them.
+> 
+> v1[1]->v2:
+> 	- Updated ID validity check include all non-negative value
+> 	- Added support to get the device node for the CPU's last level cache
+> 	- Added support to build llc_sibling on DT platforms
+> 
+> [1] https://lore.kernel.org/lkml/20220513095559.1034633-1-sudeep.holla@arm.com
+> 
+> Sudeep Holla (8):
+>   arch_topology: Don't set cluster identifier as physical package identifier
+>   arch_topology: Set thread sibling cpumask only within the cluster
+>   arch_topology: Set cluster identifier in each core/thread from /cpu-map
+>   arch_topology: Add support for parsing sockets in /cpu-map
+>   arch_topology: Check for non-negative value rather than -1 for IDs validity
+>   arch_topology: Avoid parsing through all the CPUs once a outlier CPU is found
+>   of: base: add support to get the device node for the CPU's last level cache
+>   arch_topology: Add support to build llc_sibling on DT platforms
+> 
 
-Frankly speaking I vote for performance with both hands.
-However I'm still would like to avoid new sparse warnings.
-Christoph Hellwig just recently taught me, "never add '__force' before
-thinking hard about them", but in this case I would need to use it three times.
+Just a recommendation for patch-set structure: it would be best to have
+the following sequence to maintain the same scheduler topology and
+behaviour when partially applying the set (currently testing this on Juno,
+but should be the case for other platforms as well):
 
-I found that bitwise typecasts can be avoided by using translation unions. 
+2/8 arch_topology: Set thread sibling cpumask only within the cluster
+5/8 arch_topology: Check for non-negative value rather than -1 for IDs validity
+6/8 arch_topology: Avoid parsing through all the CPUs once a outlier CPU is found
 
-What do you think about following trick?
+--> these are only preparation/cleanup patches and don't affect current
+functionality
 
-diff --git a/mm/slab.h b/mm/slab.h
-index 95eb34174c1b..f676612ca40f 100644
---- a/mm/slab.h
-+++ b/mm/slab.h
-@@ -882,4 +882,14 @@ void __check_heap_object(const void *ptr, unsigned long n,
- }
- #endif
- 
-+union gfp_flags_u {
-+	unsigned long ulong;
-+	gfp_t flags;
-+};
-+
-+union slab_flags_u {
-+	unsigned int uint;
-+	slab_flags_t sflags;
-+};
-+
- #endif /* MM_SLAB_H */
+7/8 of: base: add support to get the device node for the CPU's last level cache
+8/8 arch_topology: Add support to build llc_sibling on DT platforms
 
-diff --git a/include/trace/events/kmem.h b/include/trace/events/kmem.h
-index 71c141804222..91632a61e16d 100644
---- a/include/trace/events/kmem.h
-+++ b/include/trace/events/kmem.h
-@@ -13,18 +13,20 @@ DECLARE_EVENT_CLASS(kmem_alloc,
- 
- 	TP_PROTO(unsigned long call_site,
- 		 const void *ptr,
-+		 struct kmem_cache *s,
- 		 size_t bytes_req,
- 		 size_t bytes_alloc,
- 		 gfp_t gfp_flags),
- 
--	TP_ARGS(call_site, ptr, bytes_req, bytes_alloc, gfp_flags),
-+	TP_ARGS(call_site, ptr, s, bytes_req, bytes_alloc, gfp_flags),
- 
- 	TP_STRUCT__entry(
- 		__field(	unsigned long,	call_site	)
- 		__field(	const void *,	ptr		)
- 		__field(	size_t,		bytes_req	)
- 		__field(	size_t,		bytes_alloc	)
--		__field(	unsigned long,	gfp_flags	)
-+		__field_struct(	union gfp_flags_u,	gfp	)
-+		__field_struct(	union slab_flags_u,	s	)
- 	),
- 
- 	TP_fast_assign(
-@@ -32,51 +34,57 @@ DECLARE_EVENT_CLASS(kmem_alloc,
- 		__entry->ptr		= ptr;
- 		__entry->bytes_req	= bytes_req;
- 		__entry->bytes_alloc	= bytes_alloc;
--		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
-+		__entry->gfp.flags	= gfp_flags;
-+		__entry->s.sflags	= s ? s->flags : 0;
- 	),
- 
--	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
-+	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s accounted=%s",
- 		(void *)__entry->call_site,
- 		__entry->ptr,
- 		__entry->bytes_req,
- 		__entry->bytes_alloc,
--		show_gfp_flags(__entry->gfp_flags))
-+		show_gfp_flags(__entry->gfp.ulong),
-+		((__entry->gfp.flags & __GFP_ACCOUNT) ||
-+		 (__entry->s.sflags & SLAB_ACCOUNT)) ? "true" : "false")
- );
- 
-Thank you,
-	Vasily Averin
+--> these will populate llc siblings but this list will be equal to
+core siblings (based on package_id) so nothing changes in the scheduler
+topology. Even if CONFIG_SCHED_CLUSTER=y, we still have cluster_id=-1 so
+nothing will change in that case either, for the patches so far.
+
+1/8 arch_topology: Don't set cluster identifier as physical package identifier
+
+--> 1/8 is the trouble maker if it's the first patch as it will result
+in having all CPUs in core_siblings so the topology will be flattened to
+just an MC level for a typical b.L system like Juno. But if you add it after
+all of the above patches, the llc_siblings will contribute to create the same
+MC and DIE levels we expect.
+
+3/8 arch_topology: Set cluster identifier in each core/thread from /cpu-map
+4/8 arch_topology: Add support for parsing sockets in /cpu-map
+
+--> Here 3/8 will start creating complications when having clusters in
+DT and we have CONFIG_SCHED_CLUSTER=y. But I'll detail this in a reply
+to that patch. For CONFIG_SCHED_CLUSTER=n the topology and scheduler
+behaviour should be the same as before this set.
+
+Hope it helps,
+Ionela.
+
+
+>  drivers/base/arch_topology.c  | 75 +++++++++++++++++++++++++++--------
+>  drivers/of/base.c             | 33 +++++++++++----
+>  include/linux/arch_topology.h |  1 +
+>  include/linux/of.h            |  1 +
+>  4 files changed, 85 insertions(+), 25 deletions(-)
+> 
+> --
+> 2.36.1
+> 
+> 

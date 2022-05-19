@@ -2,195 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B763552DEEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BAD52DEF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 23:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244995AbiESVCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 17:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
+        id S245018AbiESVFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 17:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245016AbiESVCt (ORCPT
+        with ESMTP id S230385AbiESVF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 17:02:49 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90002ED8C5;
-        Thu, 19 May 2022 14:02:40 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-f1d5464c48so8232795fac.6;
-        Thu, 19 May 2022 14:02:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QhNCb9LVQT2y+c1GcBgYSm7P/0wfKykJLM9u1VS0bGM=;
-        b=AtL0tqTdkxIYv1EXi6OJLEoSOW1eTvXK8EOjU/ci0sDSeVnv9vgUvjVua9D9TNpeWs
-         fZ3tNLFFvwnakOYR3F0iLK+cz6hGd/06RVdF81Sx8yzp4empSOHvx5iMwnOBK2AS0NAP
-         KT4KJ7+L/ihm6NUd4ZKbtqJf/oZHZcOum+YmPpKWkij/po1iUHQ22Gl2NPuIGM+OBEsd
-         b7wNQZAV5+umrOhepLAO6fPpBOjMSgvBJSEDdtwUXoeXeSwn4laSIshyygI2GHI5IjBi
-         yzJDxq4rzU/8CvViZKt/Uc+m/KHz2LlZ6O+RS1JsOsGJs9ib9ynLxSz2dKu6pha4V5dX
-         F5kw==
-X-Gm-Message-State: AOAM5314OwN956v5u4q0GF4yoQP0zam/T9+4DCjeeUZczDOn7u0VFAtf
-        AeCAnBuOKHl+dYfmtdqUBsVtrW+RycxUWfhuYGU=
-X-Google-Smtp-Source: ABdhPJzkcoNAu7ods84mp3iuQehJ35l8v00aBOjNA0clVdv9enPtYX3aWelBisSdli7eFvpT6Js1HT69rjRKtJJGMUo=
-X-Received: by 2002:a05:6871:215:b0:f1:8bf5:23ab with SMTP id
- t21-20020a056871021500b000f18bf523abmr3792505oad.92.1652994159791; Thu, 19
- May 2022 14:02:39 -0700 (PDT)
+        Thu, 19 May 2022 17:05:26 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC26EC3EE;
+        Thu, 19 May 2022 14:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652994325; x=1684530325;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=U6UsIdGTHLgWMAOYHVDYKn5sAd/vxVp2U4dAWVH7xCI=;
+  b=YHH3hzej1Uc6M1QoiEMDRc481ozhpaX4s9AnG/MabxlTIYxp9b7uabw1
+   XazOxgKi7ApVo/C4uptaHNN4ygoeSdNvVEI+dwYd60gIQKpSyRHueF0ec
+   oG2ScvcjiWwQVsyzmZQCD6H2LkcE3z8ppj9lY+l4X6Afpnz4yLpfIRSTG
+   GeN0KgGR6h+qTy4610RIcCV4ewfHG76+WOtp3SYZPNeti3HwU2q9xmsPq
+   LiiiNYT60n2m7na1xmWIklKrq5lGYUJ06T4hpDPyZbr7XseutwcrRuekz
+   MoW1chBzWbKdOUAxXglZSpkQG37FgE1PXWqFfrK1fLFF6CD/PHhTwMa6o
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252895819"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="252895819"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:05:25 -0700
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="598800580"
+Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.148.227])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 14:05:23 -0700
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     linux-sgx@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, mhocko@suse.com, roman.gushchin@linux.dev,
+        hannes@cmpxchg.org, shakeelb@google.com,
+        Kristen Carlson Accardi <kristen@linux.intel.com>
+Subject: [PATCH v2] x86/sgx: Set active memcg prior to shmem allocation
+Date:   Thu, 19 May 2022 14:04:45 -0700
+Message-Id: <20220519210445.5310-1-kristen@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220518224725.742882-1-namhyung@kernel.org> <20220518224725.742882-4-namhyung@kernel.org>
- <CAP-5=fWfZ_MqiAUx-tdO1C=Dyyzno6FbBp+KGAb_MweXs+N7Jw@mail.gmail.com>
-In-Reply-To: <CAP-5=fWfZ_MqiAUx-tdO1C=Dyyzno6FbBp+KGAb_MweXs+N7Jw@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 19 May 2022 14:02:28 -0700
-Message-ID: <CAM9d7cgxdFJJQOg6ivuy4+nh=WME2fgjvM-kSWLv9zd49yxR4A@mail.gmail.com>
-Subject: Re: [PATCH 3/6] perf record: Implement basic filtering for off-cpu
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Milian Wolff <milian.wolff@kdab.com>,
-        bpf <bpf@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Blake Jones <blakejones@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 9:02 PM Ian Rogers <irogers@google.com> wrote:
->
-> On Wed, May 18, 2022 at 3:47 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > It should honor cpu and task filtering with -a, -C or -p, -t options.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  tools/perf/builtin-record.c            |  2 +-
-> >  tools/perf/util/bpf_off_cpu.c          | 78 +++++++++++++++++++++++---
-> >  tools/perf/util/bpf_skel/off_cpu.bpf.c | 52 +++++++++++++++--
-> >  tools/perf/util/off_cpu.h              |  6 +-
-> >  4 files changed, 123 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index 91f88501412e..7f60d2eac0b4 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -907,7 +907,7 @@ static int record__config_text_poke(struct evlist *evlist)
-> >
-> >  static int record__config_off_cpu(struct record *rec)
-> >  {
-> > -       return off_cpu_prepare(rec->evlist);
-> > +       return off_cpu_prepare(rec->evlist, &rec->opts.target);
-> >  }
-> >
-> >  static bool record__kcore_readable(struct machine *machine)
-> > diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-> > index 9ed7aca3f4ac..b5e2d038da50 100644
-> > --- a/tools/perf/util/bpf_off_cpu.c
-> > +++ b/tools/perf/util/bpf_off_cpu.c
-> > @@ -6,6 +6,9 @@
-> >  #include "util/off_cpu.h"
-> >  #include "util/perf-hooks.h"
-> >  #include "util/session.h"
-> > +#include "util/target.h"
-> > +#include "util/cpumap.h"
-> > +#include "util/thread_map.h"
-> >  #include <bpf/bpf.h>
-> >
-> >  #include "bpf_skel/off_cpu.skel.h"
-> > @@ -60,8 +63,23 @@ static int off_cpu_config(struct evlist *evlist)
-> >         return 0;
-> >  }
-> >
-> > -static void off_cpu_start(void *arg __maybe_unused)
-> > +static void off_cpu_start(void *arg)
-> >  {
-> > +       struct evlist *evlist = arg;
-> > +
-> > +       /* update task filter for the given workload */
-> > +       if (!skel->bss->has_cpu && !skel->bss->has_task &&
-> > +           perf_thread_map__pid(evlist->core.threads, 0) != -1) {
-> > +               int fd;
-> > +               u32 pid;
-> > +               u8 val = 1;
-> > +
-> > +               skel->bss->has_task = 1;
-> > +               fd = bpf_map__fd(skel->maps.task_filter);
-> > +               pid = perf_thread_map__pid(evlist->core.threads, 0);
-> > +               bpf_map_update_elem(fd, &pid, &val, BPF_ANY);
-> > +       }
-> > +
-> >         skel->bss->enabled = 1;
-> >  }
-> >
-> > @@ -71,31 +89,75 @@ static void off_cpu_finish(void *arg __maybe_unused)
-> >         off_cpu_bpf__destroy(skel);
-> >  }
-> >
-> > -int off_cpu_prepare(struct evlist *evlist)
-> > +int off_cpu_prepare(struct evlist *evlist, struct target *target)
-> >  {
-> > -       int err;
-> > +       int err, fd, i;
-> > +       int ncpus = 1, ntasks = 1;
-> >
-> >         if (off_cpu_config(evlist) < 0) {
-> >                 pr_err("Failed to config off-cpu BPF event\n");
-> >                 return -1;
-> >         }
-> >
-> > -       set_max_rlimit();
-> > -
-> > -       skel = off_cpu_bpf__open_and_load();
-> > +       skel = off_cpu_bpf__open();
-> >         if (!skel) {
-> >                 pr_err("Failed to open off-cpu BPF skeleton\n");
-> >                 return -1;
-> >         }
-> >
-> > +       /* don't need to set cpu filter for system-wide mode */
-> > +       if (target->cpu_list) {
-> > +               ncpus = perf_cpu_map__nr(evlist->core.user_requested_cpus);
-> > +               bpf_map__set_max_entries(skel->maps.cpu_filter, ncpus);
-> > +       }
-> > +
-> > +       if (target__has_task(target)) {
-> > +               ntasks = perf_thread_map__nr(evlist->core.threads);
-> > +               bpf_map__set_max_entries(skel->maps.task_filter, ntasks);
-> > +       }
-> > +
-> > +       set_max_rlimit();
-> > +
-> > +       err = off_cpu_bpf__load(skel);
-> > +       if (err) {
-> > +               pr_err("Failed to load off-cpu skeleton\n");
-> > +               goto out;
-> > +       }
-> > +
-> > +       if (target->cpu_list) {
-> > +               u32 cpu;
-> > +               u8 val = 1;
-> > +
-> > +               skel->bss->has_cpu = 1;
-> > +               fd = bpf_map__fd(skel->maps.cpu_filter);
-> > +
-> > +               for (i = 0; i < ncpus; i++) {
-> > +                       cpu = perf_cpu_map__cpu(evlist->core.user_requested_cpus, i).cpu;
-> > +                       bpf_map_update_elem(fd, &cpu, &val, BPF_ANY);
->
-> Perhaps more concise with a for_each:
->
-> perf_cpu_map__for_each_cpu(cpu, idx, evlist->core.user_requested_cpus)
->   bpf_map_update_elem(fd, &cpu.cpu, &val, BPF_ANY);
+When the system runs out of enclave memory, SGX can reclaim EPC pages
+by swapping to normal RAM. These backing pages are allocated via a
+per-enclave shared memory area. Since SGX allows unlimited over
+commit on EPC memory, the reclaimer thread can allocate a large
+number of backing RAM pages in response to EPC memory pressure.
 
-Will change.
+When the shared memory backing RAM allocation occurs during
+the reclaimer thread context, the shared memory is charged to
+the root memory control group, and the shmem usage of the enclave
+is not properly accounted for, making cgroups ineffective at
+limiting the amount of RAM an enclave can consume.
 
-Thanks,
-Namhyung
+For example, when using a cgroup to launch a set of test
+enclaves, the kernel does not properly account for 50% - 75% of
+shmem page allocations on average. In the worst case, when
+nearly all allocations occur during the reclaimer thread, the
+kernel accounts less than a percent of the amount of shmem used
+by the enclave's cgroup to the correct cgroup.
+
+SGX stores a list of mm_structs that are associated with
+an enclave. Pick one of them during reclaim and charge that
+mm's memcg with the shmem allocation. The one that gets picked
+is arbitrary, but this list almost always only has one mm. The
+cases where there is more than one mm with different memcg's
+are not worth considering.
+
+Create a new function - sgx_encl_alloc_backing(). This function
+is used whenever a new backing storage page needs to be
+allocated. Previously the same function was used for page
+allocation as well as retrieving a previously allocated page.
+Prior to backing page allocation, if there is a mm_struct associated
+with the enclave that is requesting the allocation, it is set
+as the active memory control group.
+
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+---
+V1 -> V2:
+ Changed sgx_encl_set_active_memcg() to simply return the correct
+ memcg for the enclave and renamed to sgx_encl_get_mem_cgroup().
+
+ Created helper function current_is_ksgxd() to improve readability.
+
+ Use mmget_not_zero()/mmput_async() when searching mm_list.
+
+ Move call to set_active_memcg() to sgx_encl_alloc_backing() and
+ use mem_cgroup_put() to avoid leaking a memcg reference.
+
+ Address review feedback regarding comments and commit log.
+
+ arch/x86/kernel/cpu/sgx/encl.c | 109 ++++++++++++++++++++++++++++++++-
+ arch/x86/kernel/cpu/sgx/encl.h |  11 +++-
+ arch/x86/kernel/cpu/sgx/main.c |   4 +-
+ 3 files changed, 118 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+index 001808e3901c..6d10202612d6 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.c
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -32,7 +32,7 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
+ 	else
+ 		page_index = PFN_DOWN(encl->size);
+ 
+-	ret = sgx_encl_get_backing(encl, page_index, &b);
++	ret = sgx_encl_lookup_backing(encl, page_index, &b);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -574,7 +574,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
+  *   0 on success,
+  *   -errno otherwise.
+  */
+-int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
++static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
+ 			 struct sgx_backing *backing)
+ {
+ 	pgoff_t pcmd_index = PFN_DOWN(encl->size) + 1 + (page_index >> 5);
+@@ -601,6 +601,111 @@ int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
+ 	return 0;
+ }
+ 
++/*
++ * When called from ksgxd, returns the mem_cgroup of a struct mm stored
++ * in the enclave's mm_list. When not called from ksgxd, just returns
++ * the mem_cgroup of the current task.
++ */
++static struct mem_cgroup *sgx_encl_get_mem_cgroup(struct sgx_encl *encl)
++{
++	struct mem_cgroup *memcg = NULL;
++	struct sgx_encl_mm *encl_mm;
++	int idx;
++
++	/*
++	 * If called from normal task context, return the mem_cgroup
++	 * of the current task's mm. The remainder of the handling is for
++	 * ksgxd.
++	 */
++	if (!current_is_ksgxd())
++		return get_mem_cgroup_from_mm(current->mm);
++
++	/*
++	 * Search the enclave's mm_list to find an mm associated with
++	 * this enclave to charge the allocation to.
++	 */
++	idx = srcu_read_lock(&encl->srcu);
++
++	list_for_each_entry_rcu(encl_mm, &encl->mm_list, list) {
++		if (!mmget_not_zero(encl_mm->mm))
++			continue;
++
++		memcg = get_mem_cgroup_from_mm(encl_mm->mm);
++
++		mmput_async(encl_mm->mm);
++
++		break;
++	}
++
++	srcu_read_unlock(&encl->srcu, idx);
++
++	/*
++	 * In the rare case that there isn't an mm associated with
++	 * the enclave, set memcg to the current active mem_cgroup.
++	 * This will be the root mem_cgroup if there is no active
++	 * mem_cgroup.
++	 */
++	if (!memcg)
++		return get_mem_cgroup_from_mm(NULL);
++
++	return memcg;
++}
++
++/**
++ * sgx_encl_alloc_backing() - allocate a new backing storage page
++ * @encl:	an enclave pointer
++ * @page_index:	enclave page index
++ * @backing:	data for accessing backing storage for the page
++ *
++ * When called from ksgxd, sets the active memcg from one of the
++ * mms in the enclave's mm_list prior to any backing page allocation,
++ * in order to ensure that shmem page allocations are charged to the
++ * enclave.
++ *
++ * Return:
++ *   0 on success,
++ *   -errno otherwise.
++ */
++int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
++			   struct sgx_backing *backing)
++{
++	struct mem_cgroup *memcg, *old_memcg;
++	int ret;
++
++	memcg = sgx_encl_get_mem_cgroup(encl);
++
++	old_memcg = set_active_memcg(memcg);
++
++	ret = sgx_encl_get_backing(encl, page_index, backing);
++
++	set_active_memcg(old_memcg);
++
++	mem_cgroup_put(memcg);
++
++	return ret;
++}
++
++/**
++ * sgx_encl_lookup_backing() - retrieve an existing backing storage page
++ * @encl:	an enclave pointer
++ * @page_index:	enclave page index
++ * @backing:	data for accessing backing storage for the page
++ *
++ * Retrieve a backing page for loading data back into an EPC page with ELDU.
++ * It is the caller's responsibility to ensure that it is appropriate to use
++ * sgx_encl_lookup_backing() rather than sgx_encl_alloc_backing(). If lookup is
++ * not used correctly, this will cause an allocation which is not accounted for.
++ *
++ * Return:
++ *   0 on success,
++ *   -errno otherwise.
++ */
++int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
++			   struct sgx_backing *backing)
++{
++	return sgx_encl_get_backing(encl, page_index, backing);
++}
++
+ /**
+  * sgx_encl_put_backing() - Unpin the backing storage
+  * @backing:	data for accessing backing storage for the page
+diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
+index fec43ca65065..2de3b150ab00 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.h
++++ b/arch/x86/kernel/cpu/sgx/encl.h
+@@ -100,13 +100,20 @@ static inline int sgx_encl_find(struct mm_struct *mm, unsigned long addr,
+ 	return 0;
+ }
+ 
++static inline bool current_is_ksgxd(void)
++{
++	return current->mm ? false : true;
++}
++
+ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
+ 		     unsigned long end, unsigned long vm_flags);
+ 
+ void sgx_encl_release(struct kref *ref);
+ int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
+-int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
+-			 struct sgx_backing *backing);
++int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
++			    struct sgx_backing *backing);
++int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
++			   struct sgx_backing *backing);
+ void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write);
+ int sgx_encl_test_and_clear_young(struct mm_struct *mm,
+ 				  struct sgx_encl_page *page);
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index 4b41efc9e367..7d41c8538795 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -310,7 +310,7 @@ static void sgx_reclaimer_write(struct sgx_epc_page *epc_page,
+ 	encl->secs_child_cnt--;
+ 
+ 	if (!encl->secs_child_cnt && test_bit(SGX_ENCL_INITIALIZED, &encl->flags)) {
+-		ret = sgx_encl_get_backing(encl, PFN_DOWN(encl->size),
++		ret = sgx_encl_alloc_backing(encl, PFN_DOWN(encl->size),
+ 					   &secs_backing);
+ 		if (ret)
+ 			goto out;
+@@ -381,7 +381,7 @@ static void sgx_reclaim_pages(void)
+ 			goto skip;
+ 
+ 		page_index = PFN_DOWN(encl_page->desc - encl_page->encl->base);
+-		ret = sgx_encl_get_backing(encl_page->encl, page_index, &backing[i]);
++		ret = sgx_encl_alloc_backing(encl_page->encl, page_index, &backing[i]);
+ 		if (ret)
+ 			goto skip;
+ 
+-- 
+2.20.1
+

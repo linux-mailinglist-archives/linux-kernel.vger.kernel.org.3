@@ -2,90 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDA052D12A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FBD52D131
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237275AbiESLJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S237291AbiESLJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237168AbiESLJL (ORCPT
+        with ESMTP id S237168AbiESLJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:09:11 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3BAB0424
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:09:08 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id l19so5799494ljb.7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=d9tsDzycNDQtyXb+uzUhE/Vj3/eBul9/CRUr39TZ7YM=;
-        b=tvEsLWk3oy5qYfUCcCnVNJNqpOEnBOhzyZDZUkaVXXsdEVlOTgYN59oUlIizbV3K4s
-         D2WJt1YzT8vpjaaOpTnMvPkO5W91XTUbuGZzG+UnQT1p7FayUURJ6tcqy7Q/Og7EDHLn
-         jBNgrJkmsBJNU65K4C9Cy0Gfz3iGhDie5JBv7jTcGmrrOubpi+5RK7KGaSubtivuYQQJ
-         W7XcKPMkvAe/gpNSw8kAV+5SJu7fZichfL0qcWaAdvSl9Wl8LrlA9CUBjVs00fyyn0r3
-         g7Id/6p6Bpm/iCSp4wndiSYLtoPGvY0FAxWUSy8OLYshQ3wKHXXOUrFNB6b6MUZVrElt
-         wshA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=d9tsDzycNDQtyXb+uzUhE/Vj3/eBul9/CRUr39TZ7YM=;
-        b=gIZLuf3oCNNbxqXdY+x1zC8dM1N1nYa4j/OtT+nF/MRLsyBVLbMUJxPJZHgtlyMYsZ
-         Vl38MYqJCjpkCuCc/CZ81Aox/jiAAs2lzRb50fSUgtCMtjtSfbCdwA0GZ82LA4c81ky5
-         EE7dNG9GV0MmrrZcqL8qKpFsTFzYjIewH3aRsExlS9XkaaVTe5uzG9BzUHRhG9Niqs8E
-         wxD3cHdCI43oiO1+mjhpJM7klPzwmoRSXisRKM4YugfbIMXTJPn7L3/hCGKR22aj1MIX
-         GbunTg4m9uG3lATzaNKa5kOWdtOuNRYkVGMNr2RAbGFDP1czR6CXg9OIGosgPsJZW+lC
-         DVYQ==
-X-Gm-Message-State: AOAM532UtNCOLmYMOBVFG4Ezr/mi2j0hxBPHALgcd6+oq2qg2t96BFHN
-        00p37vh2eQceNOTm9+2seW98ig==
-X-Google-Smtp-Source: ABdhPJygQr09G7a7f1Eid+lKDW1Ht335u5ibdZu4/60chhKSqwbj8nDeaJfqLkos6Ah1zqEuywyxKQ==
-X-Received: by 2002:a2e:9e41:0:b0:253:c37c:378b with SMTP id g1-20020a2e9e41000000b00253c37c378bmr2333147ljk.202.1652958546776;
-        Thu, 19 May 2022 04:09:06 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id m18-20020ac24292000000b00477a6c2d2e3sm251405lfh.229.2022.05.19.04.09.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 04:09:06 -0700 (PDT)
-Message-ID: <7f9418b5-cc1f-bb9c-583e-97490fc69684@linaro.org>
-Date:   Thu, 19 May 2022 13:09:05 +0200
+        Thu, 19 May 2022 07:09:24 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0DFB0429;
+        Thu, 19 May 2022 04:09:22 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3nCd4PfdzjWwl;
+        Thu, 19 May 2022 19:08:29 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 19:09:20 +0800
+Received: from [10.174.178.120] (10.174.178.120) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 19:09:19 +0800
+Message-ID: <7058b8d8-c0cb-108e-0db9-2fdf5fb154cf@huawei.com>
+Date:   Thu, 19 May 2022 19:09:18 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v4 1/6] dt-bindings: regulator: qcom,spmi-regulator:
- Convert to dtschema
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@somainline.org
-References: <20220518184825.1034976-1-robimarko@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220518184825.1034976-1-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 0/2] Add support to relocate kernel image to mirrored
+ region
+To:     <ardb@kernel.org>
+CC:     <akpm@linux-foundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <corbet@lwn.net>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <x86@kernel.org>, <dvhart@infradead.org>, <andy@infradead.org>,
+        <rppt@kernel.org>, <paulmck@kernel.org>, <peterz@infradead.org>,
+        <jroedel@suse.de>, <songmuchun@bytedance.com>, <macro@orcam.me.uk>,
+        <frederic@kernel.org>, <W_Armin@gmx.de>, <john.garry@huawei.com>,
+        <seanjc@google.com>, <tsbogend@alpha.franken.de>,
+        <anshuman.khandual@arm.com>, <chenhuacai@kernel.org>,
+        <david@redhat.com>, <gpiccoli@igalia.com>, <mark.rutland@arm.com>,
+        <wangkefeng.wang@huawei.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-efi@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-mm@kvack.org>,
+        <mawupeng1@huawei.com>
+References: <CAMj1kXGSStDgj9ABmUaTLnBmpQFksh3wx4tx=mJohum4GQe3Gg@mail.gmail.com>
+ <20220419070150.254377-1-mawupeng1@huawei.com>
+ <CAMj1kXHr2RdYSPor1st1ZnL=O42c8N6e=bNG+eFhatfefWLUrw@mail.gmail.com>
+ <c65d22b4-f654-21aa-bd5f-d4f8b0939a25@huawei.com>
+From:   mawupeng <mawupeng1@huawei.com>
+In-Reply-To: <c65d22b4-f654-21aa-bd5f-d4f8b0939a25@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.120]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2022 20:48, Robert Marko wrote:
-> Convert the bindings of Qualcomm SPMI regulators to DT schema.
+
+
+在 2022/5/7 17:28, mawupeng 写道:
 > 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> 
+> 在 2022/5/3 17:58, Ard Biesheuvel 写道:
+>> On Tue, 19 Apr 2022 at 08:43, Wupeng Ma <mawupeng1@huawei.com> wrote:
+>>>
+>>> From: Ma Wupeng <mawupeng1@huawei.com>
+>>>
+>>> Now system image will perfer to be located to mirrored regions both KASLR
+>>> on and off.
+>>>
+>>
+>> Hello Ma Wupeng,
+>>
+>> I wonder if we could simplify this as follows:
+>> - ignore the non-KASLR case for now, and rely on the bootloader  > load the image into mirrored memory if it exists;
+> 
+> In grub, memory for static image is allocated via the following path:
+> 
+> grub_cmd_linux
+>    kernel = grub_malloc(filelen)
+>    kernel_alloc_addr = grub_efi_allocate_any_pages (kernel_alloc_pages)
+>    grub_memcpy (kernel_addr, kernel, grub_min(filelen, kernel_size))
+>     grub_loader_set (grub_linux_boot, grub_linux_unload, 0)
+> 
+> Can we get memory from mirrored region by the following steps:
+> 1. get memory map by calling grub_efi_get_memory_map()
+> 2. iter all memory map to find a suitable mirrored memory area
+> 3. locate kernel image to this area
+> 
+> So, if kaslr is not enabled
+>   - grub will load kernel into mirrored region
+> else
+>   - arm64-stub.c will relocate kernel image to mirrored region
+> 
+> Is this feasible?
 
+Is this a feasible proposal to relocate the static kernel image itself
+into more reliable memory?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+> 
+>> - simplify the KASLR case to the below.
+> 
+> Yes, we can certainly do this. I will remove my code and use yours.
+> 
+>>
+>> I think this is reasonable, because it means we take mirrored memory
+>> into account when we decide to move the image anyway, but expect the
+>> boot chain to take care of this if there is no need to move the image.
+>>
+>> -------------8<------------------
+>> --- a/drivers/firmware/efi/libstub/randomalloc.c
+>> +++ b/drivers/firmware/efi/libstub/randomalloc.c
+>> @@ -56,6 +56,7 @@ efi_status_t efi_random_alloc(unsigned long size,
+>>                                unsigned long random_seed)
+>>   {
+>>          unsigned long map_size, desc_size, total_slots = 0, target_slot;
+>> +       unsigned long total_mirrored_slots = 0;
+>>          unsigned long buff_size;
+>>          efi_status_t status;
+>>          efi_memory_desc_t *memory_map;
+>> @@ -86,8 +87,14 @@ efi_status_t efi_random_alloc(unsigned long size,
+>>                  slots = get_entry_num_slots(md, size, ilog2(align));
+>>                  MD_NUM_SLOTS(md) = slots;
+>>                  total_slots += slots;
+>> +               if (md->attribute & EFI_MEMORY_MORE_RELIABLE)
+>> +                       total_mirrored_slots += slots;
+>>          }
+>>
+>> +       /* only consider mirrored slots for randomization if any exist */
+>> +       if (total_mirrored_slots > 0)
+>> +               total_slots = total_mirrored_slots;
+>> +
+>>          /* find a random number between 0 and total_slots */
+>>          target_slot = (total_slots * (u64)(random_seed & U32_MAX)) >> 32;
+>>
+>> @@ -107,6 +114,10 @@ efi_status_t efi_random_alloc(unsigned long size,
+>>                  efi_physical_addr_t target;
+>>                  unsigned long pages;
+>>
+>> +               if (total_mirrored_slots > 0 &&
+>> +                   !(md->attribute & EFI_MEMORY_MORE_RELIABLE))
+>> +                       continue;
+>> +
+>>                  if (target_slot >= MD_NUM_SLOTS(md)) {
+>>                          target_slot -= MD_NUM_SLOTS(md);
+>>                          continue;
+>> .

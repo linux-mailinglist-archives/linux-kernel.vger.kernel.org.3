@@ -2,97 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2C152D10A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64ECF52D10C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237142AbiESLB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S237125AbiESLCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiESLBn (ORCPT
+        with ESMTP id S237252AbiESLBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:01:43 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3B525CD
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:01:39 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id l13so1799112lfp.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gS9JeUMKm9gLH6I0YioZSKZRpDTxg6jGf/FW7Dub0V8=;
-        b=HeZ4SGYOa+2JHEfI08Yn/5kzSBr64/rwPIJu2FmEX4E1rjIoJLOOFID5KiiSbR2+Nn
-         +8yE3t89kPEm3aXfx9O7JeuBHM9uh584pY5M2vIS3SK+oKNAiHfRaJPos5xNt0hpjwkE
-         /Xtypl54qoYJMXYc+OJGCxDvFa36dNB8OqhkVcsRICX3Ue/gi3kTvB3leaITh2rbETSW
-         lOx81NBdXrXwI1aYDCTILOgN2JUSICoEsujF0JiHKt24V1jsy8sczyQY0Ato4JRcBkrc
-         y0sWuklE48qtX7GDOqya0p2rHIr3bIJJ4q4iGhcFcfL+SZOqQoLyaIVQgfVWqSbMfd8r
-         2SkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gS9JeUMKm9gLH6I0YioZSKZRpDTxg6jGf/FW7Dub0V8=;
-        b=fbKSaFfH7xNMqDCqPjIffeK45vSkOgESuW44d0KxKfRGoSVyfoOcqmc07nM8iYB3+/
-         74nz6/jNz6keCiq1Aib+Iavr67VXaLdvRWcMvLXafAcNoXTBE8wZbdUYgLLvXCfZvFuL
-         bdkSQucdYqIFO4lUjcNrwE0+mMhDncyI1YAHTxB4APWQOyj6HgNeK1fWJLAGHgWjqltt
-         1biPRwgvvigcKHA3X9w846kLIUnl6klpzBRvAjXHM1V3g09Mz24O/toBaZJzY2Myemxr
-         LOHOETRymDPaXvstWy9/KEt545lX9sMuTRhYx45OpyMp9Ag1d6M7MpoTI7zTRf4EkejO
-         2duA==
-X-Gm-Message-State: AOAM533So8qzsALjBNK9YuQeqIoZhBJy8qIGWPcZwp51HRxsUolt/B9r
-        Bl7IcmWFHdcqGu2u+Xp4yUBI27v5m+/Un7ZLf296Mnnb3khB5g==
-X-Google-Smtp-Source: ABdhPJxp8IViIL6xXR+pTEzCb+U74CV/8uAvUHeuJWMavYf3SxovFQU9CPG4eZyJ+vjM/8r42vxxNE6yx4MHYAa05TQ=
-X-Received: by 2002:a05:6512:3f13:b0:464:f55f:7806 with SMTP id
- y19-20020a0565123f1300b00464f55f7806mr2934429lfa.598.1652958097345; Thu, 19
- May 2022 04:01:37 -0700 (PDT)
+        Thu, 19 May 2022 07:01:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0157C14D1C;
+        Thu, 19 May 2022 04:01:33 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B43AF219AD;
+        Thu, 19 May 2022 11:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652958092; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d2LJTHb7bIL86JRNxFoPv0Vzh38Dtv/r3lFZcMZIkjA=;
+        b=mi5Ln/NvtJgbrqgbuHpDqWsAGcT/ERt1PK5gyJc4Ao31t1MabjZ6YdvkSXA3X8aK4uaq6b
+        Mn7IJ9dnrJTykEm5foEY+fXFin+P/SGrPqSo3VnuK0A3zzUcpSfFbaWswU1SwP0a6ehy5f
+        XFczdxyoJYcQq18kSGohsLvsR37deUY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652958092;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d2LJTHb7bIL86JRNxFoPv0Vzh38Dtv/r3lFZcMZIkjA=;
+        b=XCHwI9V7L9qFZa1vtjV1bfZs/BBA1lOkhFJV64b5O9a/FiJlpfsg1XeyjbCaORk9nBra+N
+        zYHuKYeOf2fMktCA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A32822C141;
+        Thu, 19 May 2022 11:01:32 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 3D5F1A062F; Thu, 19 May 2022 13:01:32 +0200 (CEST)
+Date:   Thu, 19 May 2022 13:01:32 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     jack@suse.cz, paolo.valente@linaro.org, axboe@kernel.dk,
+        tj@kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH -next 4/8] block, bfq: don't declare 'bfqd' as type 'void
+ *' in bfq_group
+Message-ID: <20220519110132.g2hpugtzbfhxpfiv@quack3.lan>
+References: <20220514090522.1669270-1-yukuai3@huawei.com>
+ <20220514090522.1669270-5-yukuai3@huawei.com>
 MIME-Version: 1.0
-References: <00000000000029572505de968021@google.com> <a72282ef-650c-143b-4b88-5185009c3ec2@kernel.dk>
- <YnmuRuO4yplt8p/p@T590> <20220510055039.GA10576@lst.de> <0e1b3d10-ae79-f987-187e-58109441ccee@kernel.dk>
-In-Reply-To: <0e1b3d10-ae79-f987-187e-58109441ccee@kernel.dk>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 19 May 2022 13:01:25 +0200
-Message-ID: <CACT4Y+Z9GUz7xK8YKuVewTEopCUWX9tCRhWZq3O84Lw-ZRXd+w@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in bio_poll
-To:     syzbot <syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220514090522.1669270-5-yukuai3@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 10 May 2022 at 14:45, Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 5/9/22 11:50 PM, Christoph Hellwig wrote:
-> > On Tue, May 10, 2022 at 08:13:58AM +0800, Ming Lei wrote:
-> >>> Guys, should we just queue:
-> >>>
-> >>> ommit 9650b453a3d4b1b8ed4ea8bcb9b40109608d1faf
-> >>> Author: Ming Lei <ming.lei@redhat.com>
-> >>> Date:   Wed Apr 20 22:31:10 2022 +0800
-> >>>
-> >>>     block: ignore RWF_HIPRI hint for sync dio
-> >>>
-> >>> up for 5.18 and stable?
-> >>
-> >> I am fine with merging to 5.18 & stable.
-> >
-> > I'm fine, too.  But are we sure this actually is one and the same
-> > issue?  Otherwise I'll try to find some time to feed it to syzbot
-> > first.
->
-> I re-wrote the reproducer a bit and can reproduce it, so I can certainly
-> test a backport. But yes, I was skeptical on this being the same issue
-> too. My initial reaction was that this is likely due to the bio being
-> "downgraded" from polled to IRQ driven, and hence completes without an
-> extra reference before the bio_poll() is done on it. Which is not the
-> issue described in the referenced commit.
+On Sat 14-05-22 17:05:18, Yu Kuai wrote:
+> Prevent unnecessary format conversion for bfqg->bfqd in multiple
+> places.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-#syz fix: block: ignore RWF_HIPRI hint for sync dio
+Yeah, this was annoying me as well :) Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  block/bfq-cgroup.c  | 2 +-
+>  block/bfq-iosched.h | 2 +-
+>  block/bfq-wf2q.c    | 8 +++-----
+>  3 files changed, 5 insertions(+), 7 deletions(-)
+> 
+> diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
+> index 4d516879d9fa..b4e39ab4ad17 100644
+> --- a/block/bfq-cgroup.c
+> +++ b/block/bfq-cgroup.c
+> @@ -224,7 +224,7 @@ void bfqg_stats_update_io_add(struct bfq_group *bfqg, struct bfq_queue *bfqq,
+>  {
+>  	blkg_rwstat_add(&bfqg->stats.queued, op, 1);
+>  	bfqg_stats_end_empty_time(&bfqg->stats);
+> -	if (!(bfqq == ((struct bfq_data *)bfqg->bfqd)->in_service_queue))
+> +	if (!(bfqq == bfqg->bfqd->in_service_queue))
+>  		bfqg_stats_set_start_group_wait_time(bfqg, bfqq_group(bfqq));
+>  }
+>  
+> diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+> index bc54b9824b1e..d57e4848f57f 100644
+> --- a/block/bfq-iosched.h
+> +++ b/block/bfq-iosched.h
+> @@ -894,7 +894,7 @@ struct bfq_group {
+>  	struct bfq_entity entity;
+>  	struct bfq_sched_data sched_data;
+>  
+> -	void *bfqd;
+> +	struct bfq_data *bfqd;
+>  
+>  	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS];
+>  	struct bfq_queue *async_idle_bfqq;
+> diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+> index c58568a4b009..15b97687493a 100644
+> --- a/block/bfq-wf2q.c
+> +++ b/block/bfq-wf2q.c
+> @@ -234,9 +234,8 @@ static void bfq_inc_active_entities(struct bfq_entity *entity)
+>  {
+>  	struct bfq_sched_data *sd = entity->sched_data;
+>  	struct bfq_group *bfqg = container_of(sd, struct bfq_group, sched_data);
+> -	struct bfq_data *bfqd = (struct bfq_data *)bfqg->bfqd;
+>  
+> -	if (bfqg != bfqd->root_group)
+> +	if (bfqg != bfqg->bfqd->root_group)
+>  		bfqg->active_entities++;
+>  }
+>  
+> @@ -244,9 +243,8 @@ static void bfq_dec_active_entities(struct bfq_entity *entity)
+>  {
+>  	struct bfq_sched_data *sd = entity->sched_data;
+>  	struct bfq_group *bfqg = container_of(sd, struct bfq_group, sched_data);
+> -	struct bfq_data *bfqd = (struct bfq_data *)bfqg->bfqd;
+>  
+> -	if (bfqg != bfqd->root_group)
+> +	if (bfqg != bfqg->bfqd->root_group)
+>  		bfqg->active_entities--;
+>  }
+>  
+> @@ -741,7 +739,7 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
+>  		else {
+>  			sd = entity->my_sched_data;
+>  			bfqg = container_of(sd, struct bfq_group, sched_data);
+> -			bfqd = (struct bfq_data *)bfqg->bfqd;
+> +			bfqd = bfqg->bfqd;
+>  		}
+>  #endif
+>  
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

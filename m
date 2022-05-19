@@ -2,155 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADD052D3E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F8E52D3E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238720AbiESNYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        id S238730AbiESN0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbiESNYp (ORCPT
+        with ESMTP id S238726AbiESNZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:24:45 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBFAC9EE3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:24:43 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2f863469afbso57254347b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XDtMkOgpFih4yHdm1CIJJjIlVnYhPbgQN+7Cn05E0kc=;
-        b=CHyT/ElZiWt/DL9EarEAaB3niGBxtzIma7d8pW97F6Zqbo1c/5kngZXQPVxegbK08q
-         zjlDs203oXI7INDIqv1PAFrkcVSpCJY9W8RdFw2mmYNWLnQzh9sR5kaZY5CWpYCEoLAb
-         W06SJdSVkrBvR7JX6UhQQU/9pPDVgUi59rpYtgxtoKRmQGVID4sEJRqy4+CNINorW12r
-         Oz3OH74xNmEJiANaddCXK6NU/Z/jPejQ8pkTk9RysSU+BWiDmLEXwT7QUSQoTfTlroR4
-         Np4i6XEW2aZXKQw2qdGsxnv3IWqM9mB0N1M3yUCgYHYttpMu6YEeZA9OK+zyCvf957EY
-         2FLA==
+        Thu, 19 May 2022 09:25:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DC9764EA
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:25:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652966749;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=75Y0NpupHMOFuzVb3xvKt/AKuCsIT0oTLd57CRpCu3M=;
+        b=cx7rcvHxi54OUdQHYMtt7jlGhw1f0RoNLXqe5Y6a+LfU8idY8MsFCsKCgb0mYW7ocKgxzP
+        V8976Wi87ebPdmdQBgwH2CZSimKl4ORQ+6DBSoIBtQshq44i7VT2e9GjvXix5vo8N55sLs
+        NiJRSpFcjfWJaKl16He71zh+2vTUbtM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-244-6m6_6iRXMJWCTenxcRs6OQ-1; Thu, 19 May 2022 09:25:48 -0400
+X-MC-Unique: 6m6_6iRXMJWCTenxcRs6OQ-1
+Received: by mail-wm1-f69.google.com with SMTP id e9-20020a05600c4e4900b00394779649b1so4527988wmq.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:25:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XDtMkOgpFih4yHdm1CIJJjIlVnYhPbgQN+7Cn05E0kc=;
-        b=C0RvnFQDohj5wGxhtwWYTIf6X8vmJzBHGlLo2YIbpHHFeMZ709G5N/YiejIBaBauHH
-         ftpRm2vGmO5NWsYIj5MELwhANHaIvCLrp4jZEHz87KosNEENoUNKp3ka9t4/Xt8rEbIT
-         0DuU0UKC7OnsJIj18ZZl7uLNunonFlXPgmP1brrLsVrN04UNwaLYBRKepGT+k+TggzIY
-         DfrjC77XeAn+400T/wQlT+A+7I+UIsg+3NT73XlTIaIsuf65fe22QXeh3sVQilWdRIjr
-         iEfNT+cgWSD63eYnTR5dUJQXnYa4nuSpI0xJxSGqJ5YNMgfSmfX0MSIZ7NNGrEK6s7hv
-         dpIQ==
-X-Gm-Message-State: AOAM532829aeONbIIybiSUdejPxvQCo8dF5r4BTWC4fqOve9FOFMyhqI
-        3YRuyBGlqSGoaec9vzxCOBQUL0lkGvffPZdgYV3mww==
-X-Google-Smtp-Source: ABdhPJxDdX6HrPZUsvJWehE9aj7j6dfVIf2Hl/Kqy7id9secQkgBjh7x9AoMX/NmntFjUqQ8AtWOVXJ1WMpgQgwWZwA=
-X-Received: by 2002:a0d:e2d1:0:b0:2fe:e470:62b0 with SMTP id
- l200-20020a0de2d1000000b002fee47062b0mr4802912ywe.333.1652966682756; Thu, 19
- May 2022 06:24:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=75Y0NpupHMOFuzVb3xvKt/AKuCsIT0oTLd57CRpCu3M=;
+        b=2j9UYZwMbuGN1OOnWV51xPxxkDow3yG1cCaGtuZ0VF2vzu8Ek+3NeLEcmpOKvHztBp
+         hTD8ipPyMi6E2lbR59YO1J6GUJGZawLlnNSuEf0n6XA14fLu6KDViUsTFcyuoiSQ6WRc
+         auIknRQUk57ReQXQNrM8S6cmbqc+cUc/DVp0jIFBBA7W6gxzjGGS4mTTHgFz2f2FOeQI
+         i2xvmdgTgS0ZdqqtBZROAC9gya7hMFIliNNwbcyRWwLMWPJaeHvdqz8jyKPrJ5O6mFCa
+         n++pSgq7Rstu6ZudPBadVNWHC4SHNuTOjhOgvYCUGnGshOv/JpAF46VQz4FlzC3rKJrH
+         dqjA==
+X-Gm-Message-State: AOAM5308yJGXDnWPI+8aSr/Y2nyWWqdttQ3VT1g9/Ix7aUIwRt1Mhm2C
+        bMw2WQJYPgmweoqdhW209/41y0Vdkq0QnUbXjeDBKYxWFJvVOOelbVHOBi8y+4zaVDgDVxruqlk
+        a2Hc3StjzfVMtGKTptM8d6hN1kxWFU9QJbXgd9Dr0PwVeoj4TxcTjU97z/CA1pyDHod8iMlu301
+        U/
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id b13-20020adff90d000000b0020cde324d35mr3966805wrr.583.1652966746891;
+        Thu, 19 May 2022 06:25:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx9W9dMYRQYX3UHOU1Zw7N7bebDtVFsqnIveWxprkdMv9F88Yalhrjguy5n7lJT1Kg8HKj30Q==
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id b13-20020adff90d000000b0020cde324d35mr3966782wrr.583.1652966746637;
+        Thu, 19 May 2022 06:25:46 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id o16-20020a05600c511000b003942a244ec8sm4618177wms.13.2022.05.19.06.25.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 06:25:46 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 17/34] KVM: x86: hyper-v: Introduce fast
+ kvm_hv_l2_tlb_flush_exposed() check
+In-Reply-To: <3a4199c0b7ba7cf82c4eadf2881e24be609c2f0d.camel@redhat.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-18-vkuznets@redhat.com>
+ <3a4199c0b7ba7cf82c4eadf2881e24be609c2f0d.camel@redhat.com>
+Date:   Thu, 19 May 2022 15:25:45 +0200
+Message-ID: <877d6hu012.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20220518073232.526443-1-davidgow@google.com> <20220518073232.526443-2-davidgow@google.com>
- <YoS6rthXi9VRXpkg@elver.google.com> <CABVgOSmyApbC7en25ZBr7hLJye0mOnUY5ETR-VVEWmbaXq3bdQ@mail.gmail.com>
-In-Reply-To: <CABVgOSmyApbC7en25ZBr7hLJye0mOnUY5ETR-VVEWmbaXq3bdQ@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 19 May 2022 15:24:06 +0200
-Message-ID: <CANpmjNOdSy6DuO6CYZ4UxhGxqhjzx4tn0sJMbRqo2xRFv9kX6Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kcsan: test: Add a .kunitconfig to run KCSAN tests
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 at 15:08, David Gow <davidgow@google.com> wrote:
->
-> On Wed, May 18, 2022 at 5:21 PM Marco Elver <elver@google.com> wrote:
-> >
-> > On Wed, May 18, 2022 at 03:32PM +0800, David Gow wrote:
-> > > Add a .kunitconfig file, which provides a default, working config for
-> > > running the KCSAN tests. Note that it needs to run on an SMP machine, so
-> > > to run under kunit_tool, the x86_64-smp qemu-based setup should be used:
-> > > ./tools/testing/kunit/kunit.py run --arch=x86_64-smp --kunitconfig=kernel/kcsan
-> > >
-> > > Signed-off-by: David Gow <davidgow@google.com>
-> >
-> > Reviewed-by: Marco Elver <elver@google.com>
-> >
-> > Thanks for adding this.
-> >
-> > > ---
-> > >  kernel/kcsan/.kunitconfig | 20 ++++++++++++++++++++
-> > >  1 file changed, 20 insertions(+)
-> > >  create mode 100644 kernel/kcsan/.kunitconfig
-> > >
-> > > diff --git a/kernel/kcsan/.kunitconfig b/kernel/kcsan/.kunitconfig
-> > > new file mode 100644
-> > > index 000000000000..a8a815b1eb73
-> > > --- /dev/null
-> > > +++ b/kernel/kcsan/.kunitconfig
-> > > @@ -0,0 +1,20 @@
-> > > +# Note that the KCSAN tests need to run on an SMP setup.
-> > > +# Under kunit_tool, this can be done by using the x86_64-smp
-> > > +# qemu-based architecture:
-> > > +# ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan --arch=x86_64-smp
-> > > +
-> > > +CONFIG_KUNIT=y
-> > > +
-> > > +CONFIG_DEBUG_KERNEL=y
-> > > +
-> > > +CONFIG_KCSAN=y
-> > > +CONFIG_KCSAN_KUNIT_TEST=y
-> > > +
-> > > +# Needed for test_barrier_nothreads
-> > > +CONFIG_KCSAN_STRICT=y
-> > > +CONFIG_KCSAN_WEAK_MEMORY=y
-> >
-> > Note, KCSAN_STRICT implies KCSAN_WEAK_MEMORY.
-> >
-> > Also, a bunch of the test cases' outcomes depend on KCSAN's
-> > "strictness". I think to cover the various combinations would be too
-> > complex, but we can just settle on testing KCSAN_STRICT=y.
->
-> It's definitely possible to either have multiple .kunitconfigs, each
-> of which could have slightly different setups, e.g.:
-> - kernel/kcsan/.kunitconfig (defualt)
-> - kernel/kcsan/strict.kunitconfig (passed explicitly when desired)
->
-> Equally, if we got rid of KCSAN_STRICT in the .kunitconfig, you could
-> override it with --kconfig_add, e.g.
-> -  ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
-> --arch=x86_64-smp
-> - ./tools/testing/kunit/kunit.py run --kunitconfig=kernel/kcsan
-> --arch=x86_64-smp --kconfig_add CONFIG_KSCAN_STRICT=y
->
-> > The end result is the same, but you could drop the
-> > CONFIG_KCSAN_WEAK_MEMORY=y line, and let the latest KCSAN_STRICT
-> > defaults decide (I don't expect them to change any time soon).
-> >
-> > If you want it to be more explicit, it's also fine leaving the
-> > CONFIG_KCSAN_WEAK_MEMORY=y line in.
->
-> Do you have a preference here? Or to get rid of both and default to
-> the non-strict version mentioned above?
+Maxim Levitsky <mlevitsk@redhat.com> writes:
 
-I'd keep it simple for now, and remove both lines i.e. make non-strict
-the default. It's easy to just run with --kconfig_add
-CONFIG_KCSAN_STRICT=y, along with other variations. I know that
-rcutoruture uses KCSAN_STRICT=y by default, so it's already getting
-coverage there. ;-)
+> On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+>> Introduce a helper to quickly check if KVM needs to handle VMCALL/VMMCALL
+>> from L2 in L0 to process L2 TLB flush requests.
+>> 
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/include/asm/kvm_host.h | 1 +
+>>  arch/x86/kvm/hyperv.c           | 6 ++++++
+>>  arch/x86/kvm/hyperv.h           | 7 +++++++
+>>  3 files changed, 14 insertions(+)
+>> 
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>> index ce62fde5f4ff..168600490bd1 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -616,6 +616,7 @@ struct kvm_vcpu_hv {
+>>  		u32 enlightenments_eax; /* HYPERV_CPUID_ENLIGHTMENT_INFO.EAX */
+>>  		u32 enlightenments_ebx; /* HYPERV_CPUID_ENLIGHTMENT_INFO.EBX */
+>>  		u32 syndbg_cap_eax; /* HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES.EAX */
+>> +		u32 nested_features_eax; /* HYPERV_CPUID_NESTED_FEATURES.EAX */
+>>  	} cpuid_cache;
+>>  
+>>  	struct kvm_vcpu_hv_tlb_flush_ring tlb_flush_ring[HV_NR_TLB_FLUSH_RINGS];
+>> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+>> index 79aabe0c33ec..68a0df4e3f66 100644
+>> --- a/arch/x86/kvm/hyperv.c
+>> +++ b/arch/x86/kvm/hyperv.c
+>> @@ -2281,6 +2281,12 @@ void kvm_hv_set_cpuid(struct kvm_vcpu *vcpu)
+>>  		hv_vcpu->cpuid_cache.syndbg_cap_eax = entry->eax;
+>>  	else
+>>  		hv_vcpu->cpuid_cache.syndbg_cap_eax = 0;
+>> +
+>> +	entry = kvm_find_cpuid_entry(vcpu, HYPERV_CPUID_NESTED_FEATURES, 0);
+>> +	if (entry)
+>> +		hv_vcpu->cpuid_cache.nested_features_eax = entry->eax;
+>> +	else
+>> +		hv_vcpu->cpuid_cache.nested_features_eax = 0;
+>>  }
+>>  
+>>  int kvm_hv_set_enforce_cpuid(struct kvm_vcpu *vcpu, bool enforce)
+>> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+>> index f593c9fd1dee..d8cb6d70dbc8 100644
+>> --- a/arch/x86/kvm/hyperv.h
+>> +++ b/arch/x86/kvm/hyperv.h
+>> @@ -168,6 +168,13 @@ static inline void kvm_hv_vcpu_empty_flush_tlb(struct kvm_vcpu *vcpu)
+>>  	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
+>>  }
+>>  
+>> +static inline bool kvm_hv_l2_tlb_flush_exposed(struct kvm_vcpu *vcpu)
+>> +{
+>> +	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+>> +
+>> +	return hv_vcpu && (hv_vcpu->cpuid_cache.nested_features_eax & HV_X64_NESTED_DIRECT_FLUSH);
+>> +}
+>
+> Tiny nipick (feel free to ignore): maybe use 'supported' instead of 'exposed',
+> as we don't use this term in KVM often.
+>
 
-Thanks,
--- Marco
+Indeed we don't. Basically, this is guest_cpuid_has() but for a Hyper-V
+bit. I don't quite like 'supported' because we don't actually check
+whether KVM or even L1 guest 'support' this feature or not, we check
+whether the feature was 'exposed' to L1 so it can actually use it. I'm
+going to rename this to
+
+ guest_hv_cpuid_has_l2_tlb_flush()
+
+then.
+
+> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+>
+
+Thanks!
+
+-- 
+Vitaly
+

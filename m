@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32FAB52DE39
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081D852DE40
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244662AbiESUUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 16:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
+        id S244670AbiESUVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 16:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237791AbiESUUJ (ORCPT
+        with ESMTP id S243954AbiESUVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 16:20:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6ED087A3D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 13:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652991607;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m/KzPHjCHCtQObe1Y24P096H3Qk3kj52f/NF374wXgs=;
-        b=RwMNKWedUYoHY5MAoUqkLNOcS84B6Qn5sod3V65at1ImacvUJ8ZonDNddaBCHyUN3bKgmK
-        wl8KhQTP3M2yKgkzx9rzLNc0W70PYLUifLPHqQNY7s8xYRWJC9HdBew/5Caob6W+PP8DKx
-        2GnfZFJP6vex7wFMEfhRrSD/6dgGbGc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-453-jll-i-JKPQe6hYkxBXhJPQ-1; Thu, 19 May 2022 16:20:02 -0400
-X-MC-Unique: jll-i-JKPQe6hYkxBXhJPQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9C2E39F9CB6;
-        Thu, 19 May 2022 20:20:01 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5C2D240CF8F5;
-        Thu, 19 May 2022 20:20:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CALF+zOk923ZnSucxitYQFN9m3AY=iOy+j90WrFmqZbKMuOcVsA@mail.gmail.com>
-References: <CALF+zOk923ZnSucxitYQFN9m3AY=iOy+j90WrFmqZbKMuOcVsA@mail.gmail.com> <165294669215.3283481.13374322806917745974.stgit@warthog.procyon.org.uk>
-To:     David Wysochanski <dwysocha@redhat.com>
-Cc:     dhowells@redhat.com,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        anna@kernel.org, Jeff Layton <jlayton@kernel.org>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        linux-cachefs <linux-cachefs@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] nfs: Fix fscache volume key rendering for endianness
+        Thu, 19 May 2022 16:21:49 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EE911149;
+        Thu, 19 May 2022 13:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652991707; x=1684527707;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iRA3bBsRXMbdxcUrTBg3lPrfCJleBb7f1Q94Up1IVuY=;
+  b=GR0k8a9LpBcmdIX8AloeNlfEM/5SyL/kJAN8rrox482vPSfhn5/mz/P4
+   RHd1IqCHxGTHf3n6bKz8tNP5OvOahiG994B/pzD4uUQ1hVLYy9bmhD+ph
+   j/zMJuKJJZCZf0sv15b0tz39C5Z0iAD446x/DfUKcGVTSRqndenB1aUH5
+   SVfsuQXB9q3Rk2ZU16edmxLQVhycUMgn+3xK1qUa8wvlz0CRqoIaNwj+W
+   pUNSuxK5U5RIH7IWcIspwFwqgrdajh8jIWgr9t4tG8Zt+BDOLkh4a/8oq
+   DsO7IQts5SDXXEKpix7VNBAAZg7l64qNgX9UU/B9+tPQelkERtcG4x3l8
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="271187192"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="271187192"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 13:21:47 -0700
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="743112742"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 13:21:45 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nrmeU-000GDt-1e;
+        Thu, 19 May 2022 23:21:42 +0300
+Date:   Thu, 19 May 2022 23:21:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kent Overstreet <kent.overstreet@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
+        pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org,
+        willy@infradead.org
+Subject: Re: [PATCH v2 07/28] lib/printbuf: Unit specifiers
+Message-ID: <Yoam1bW/vni3srLc@smile.fi.intel.com>
+References: <20220519172421.162394-1-kent.overstreet@gmail.com>
+ <20220519172421.162394-8-kent.overstreet@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3662003.1652991599.1@warthog.procyon.org.uk>
-Date:   Thu, 19 May 2022 21:19:59 +0100
-Message-ID: <3662004.1652991599@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519172421.162394-8-kent.overstreet@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,12 +66,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Wysochanski <dwysocha@redhat.com> wrote:
+On Thu, May 19, 2022 at 01:24:00PM -0400, Kent Overstreet wrote:
+> This adds options to printbuf for specifying whether units should be
+> printed raw (default) or with human readable units, and for controlling
+> whether human-readable units should be base 2 (default), or base 10.
+> 
+> This also adds new helpers that obey these options:
+> 
+>  - pr_human_readable_u64
+>  - pr_human_readable_s64
+> These obey printbuf->si_units
+> 
+>  - pr_units_u64
+>  - pr_units_s64
+> These obey both printbuf-human_readable_units and printbuf->si_units
 
-> Did someone report the "cache copied between architectures" issue, or
-> is that mostly a theoretical problem you noticed?
+...
 
-Ah, I didn't mention.  Checker noticed it (make C=1).
+> +void pr_human_readable_s64(struct printbuf *buf, s64 v)
+> +{
+> +	if (v < 0)
+> +		pr_char(buf, '-');
+> +	pr_human_readable_u64(buf, abs(v));
 
-David
+Wouldn't -v work?
+
+> +}
+
+...
+
+> + * pr_human_readable_u64 - Print out a u64 according to printbuf unit options
+
+Have you ever compile this? We have kernel doc validator running when compiling
+the code...
+
+> + * Units are either raw (default), or human reabable units (controlled via
+> + * @buf->human_readable_units)
+> + */
+> +void pr_units_u64(struct printbuf *out, u64 v)
+> +{
+> +	if (out->human_readable_units)
+> +		pr_human_readable_u64(out, v);
+> +	else
+> +		pr_buf(out, "%llu", v);
+> +}
+> +EXPORT_SYMBOL(pr_units_u64);
+> +
+> +/**
+> + * pr_human_readable_s64 - Print out a s64 according to printbuf unit options
+
+Ditto.
+
+> + * Units are either raw (default), or human reabable units (controlled via
+> + * @buf->human_readable_units)
+> + */
+> +void pr_units_s64(struct printbuf *out, s64 v)
+> +{
+> +	if (v < 0)
+> +		pr_char(out, '-');
+> +	pr_units_u64(out, v);
+
+Please, start with test cases.
+
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 

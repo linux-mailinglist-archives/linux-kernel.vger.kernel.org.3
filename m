@@ -2,157 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DE752DB38
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FA552DB20
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242813AbiESR1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
+        id S242592AbiESRYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242742AbiESRZf (ORCPT
+        with ESMTP id S242584AbiESRYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:25:35 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62372A5033;
-        Thu, 19 May 2022 10:25:26 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id o13-20020a17090a9f8d00b001df3fc52ea7so9353278pjp.3;
-        Thu, 19 May 2022 10:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HkgeacWNM0o6tNfidYESYHohydRW3WSO9rnNuCMWeRg=;
-        b=U7k0OV5r4mJ0TuwkYHZY7iFwh3ViIBrZQI87oOkTjIb5fl9vYBG/SpTFZB3TzoImJ+
-         a7IdlgB0bT6Yv3HhL2eZu1nV7ybD5CJr3I5a/I5oVIamgGKoZhyqdJAJZmRzvKu7lEKi
-         tm59BqvVMbB+85NN5tXyyH47NJIKBL9WPZ0D2MwdyABOF32IUfvGXMCTlCMagNXwM0mq
-         qhVpIpiE7wTQzu5cDelhviCRfBo5G66ATArxWzkbJVG1isd+rssuOqZ35K58lJojO8o0
-         QaXFup5GzXrj40bwRYl/K+HTvNSCVED1yj5cvrMr3jzXTYH/lTAM5cEqnmfOjTyhsRUA
-         T84g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HkgeacWNM0o6tNfidYESYHohydRW3WSO9rnNuCMWeRg=;
-        b=n8trNINN7IcqntQd6G7dyDk5xF76EvFzF1LmsriNo+TorsORdAzoSpZ5uN4qVMitFq
-         KRgdgj2XQ4k62Hv3i36upT2HVy37iCD1hQsDhpJXKq3WrX0h6c2+9gp2RNU+1YrmuLMG
-         1D8QjK9DspcivSLZXd4PHw9NxLstR80D+8B8emTl7eVtALLADd3ZsqDTZmLDJuuiiZU+
-         BIelQX+29G0oF5nXly7HlONcqsvWMM1nbtBzzAv3YbVcOsICmBfeMbiiyzjMOcMSCN3h
-         20ISj5/KRiA3H6D7NnTfBkt8ctoLEST2YDj3h1NRJW5iLmv4SjL4kNp3AbPirrzbZFsf
-         efgg==
-X-Gm-Message-State: AOAM5334Tlg2U0TSllhnlNBGdQRS+Fkx2eiErll7sisdL0BkUgWUJpoU
-        zGK0sgs9cQwB/XiAi4/P0wIdHnKLm92+
-X-Google-Smtp-Source: ABdhPJw1xLSKQfSuo/sCNUUiDwCl90STmqlc/fYFr6w1tWKMlYw+Oncip0utICQcTOjERRdTjUtA1g==
-X-Received: by 2002:a17:90a:2809:b0:1df:35ca:2e6a with SMTP id e9-20020a17090a280900b001df35ca2e6amr6208779pjd.8.1652981125365;
-        Thu, 19 May 2022 10:25:25 -0700 (PDT)
-Received: from zaphod.evilpiepirate.org (068-119-229-002.res.spectrum.com. [68.119.229.2])
-        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.25.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 10:25:24 -0700 (PDT)
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
-        pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org
-Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
-        andriy.shevchenko@linux.intel.com, willy@infradead.org
-Subject: [PATCH v2 22/28] Input/joystick/analog: Convert from seq_buf -> printbuf
-Date:   Thu, 19 May 2022 13:24:15 -0400
-Message-Id: <20220519172421.162394-23-kent.overstreet@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220519172421.162394-1-kent.overstreet@gmail.com>
-References: <20220519172421.162394-1-kent.overstreet@gmail.com>
+        Thu, 19 May 2022 13:24:40 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED119A5033
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:24:35 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4L3xYZ08qcz9t0v;
+        Thu, 19 May 2022 19:24:34 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ddt7bRaOl9UR; Thu, 19 May 2022 19:24:33 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4L3xYY6QdZz9t0Q;
+        Thu, 19 May 2022 19:24:33 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CE1468B77E;
+        Thu, 19 May 2022 19:24:33 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id iY_bcdOXjTrp; Thu, 19 May 2022 19:24:33 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.71])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 898AF8B763;
+        Thu, 19 May 2022 19:24:33 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 24JHOJFK3119573
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 19 May 2022 19:24:19 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 24JHOGv43119570;
+        Thu, 19 May 2022 19:24:16 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH] powerpc/fsl_book3e: Don't set rodata RO too early
+Date:   Thu, 19 May 2022 19:24:15 +0200
+Message-Id: <2e35f0fd649c83c5add17a99514ac040767be93a.1652981047.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1652981054; l=2109; s=20211009; h=from:subject:message-id; bh=p6ejnAcRp1DXCMNYT2kdvj6nTKpgEruWDwQ7V/yK0UA=; b=YCxyW82yvhrDvdTSZOrtzTfRi2z5vOF3Fu4aR6vzJqRcB4CS0JKWHqwXmVUOviWs9NxEnzw57ItE Tp4MuPFZBVgkR7/y//Ec9JvC9ux9b2/xvuVmYe1tiac1Lq+GtZok
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-seq_buf is being deprecated, this converts to printbuf which is similar
-but heap allocates the string buffer.
+On fsl_book3e, rodata is set read-only at the same time as
+init text is set NX at the end of init. That's too early.
 
-This means we have to consider memory allocation context & failure: Here
-we're in device initialization so GFP_KERNEL should be fine, and also as
-we're in device initialization returning -ENOMEM is fine.
+As both action are performed at the same time, delay both
+actions to the time rodata is expected to be made read-only.
 
-Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
+It means we will have a small window with init mem freed but
+still executable. It shouldn't be an issue though, especially
+because the said memory gets poisoned and should therefore
+result to a bad instruction fault in case it gets executer.
+
+mmu_mark_initmem_nx() is bailing out before doing anything when
+CONFIG_STRICT_KERNEL_RWX is not selected or rodata_enabled is false.
+
+mmu_mark_rodata_ro() is called only when CONFIG_STRICT_KERNEL_RWX
+is selected and rodata_enabled is true so this is equivalent.
+
+Move code from mmu_mark_initmem_nx() into mmu_mark_rodata_ro() and
+remove the call to strict_kernel_rwx_enabled() which is not needed
+anymore.
+
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: d5970045cf9e ("powerpc/fsl_booke: Update of TLBCAMs after init")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/input/joystick/analog.c | 37 ++++++++++++++++++++-------------
- 1 file changed, 23 insertions(+), 14 deletions(-)
+ arch/powerpc/mm/nohash/fsl_book3e.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/input/joystick/analog.c b/drivers/input/joystick/analog.c
-index 3088c5b829..72e1e30d19 100644
---- a/drivers/input/joystick/analog.c
-+++ b/drivers/input/joystick/analog.c
-@@ -19,7 +19,7 @@
- #include <linux/input.h>
- #include <linux/gameport.h>
- #include <linux/jiffies.h>
--#include <linux/seq_buf.h>
-+#include <linux/printbuf.h>
- #include <linux/timex.h>
- #include <linux/timekeeping.h>
+diff --git a/arch/powerpc/mm/nohash/fsl_book3e.c b/arch/powerpc/mm/nohash/fsl_book3e.c
+index 08a984e29433..036e6a0e0137 100644
+--- a/arch/powerpc/mm/nohash/fsl_book3e.c
++++ b/arch/powerpc/mm/nohash/fsl_book3e.c
+@@ -285,22 +285,19 @@ void __init adjust_total_lowmem(void)
  
-@@ -337,26 +337,32 @@ static void analog_calibrate_timer(struct analog_port *port)
-  * analog_name() constructs a name for an analog joystick.
-  */
- 
--static void analog_name(struct analog *analog)
-+static int analog_name(struct analog *analog)
+ #ifdef CONFIG_STRICT_KERNEL_RWX
+ void mmu_mark_rodata_ro(void)
+-{
+-	/* Everything is done in mmu_mark_initmem_nx() */
+-}
+-#endif
+-
+-void mmu_mark_initmem_nx(void)
  {
--	struct seq_buf s;
-+	struct printbuf buf = PRINTBUF;
-+	int ret = 0;
+ 	unsigned long remapped;
  
--	seq_buf_init(&s, analog->name, sizeof(analog->name));
--	seq_buf_printf(&s, "Analog %d-axis %d-button",
--		 hweight8(analog->mask & ANALOG_AXES_STD),
--		 hweight8(analog->mask & ANALOG_BTNS_STD) + !!(analog->mask & ANALOG_BTNS_CHF) * 2 +
--		 hweight16(analog->mask & ANALOG_BTNS_GAMEPAD) + !!(analog->mask & ANALOG_HBTN_CHF) * 4);
-+	pr_buf(&buf, "Analog %d-axis %d-button",
-+	       hweight8(analog->mask & ANALOG_AXES_STD),
-+	       hweight8(analog->mask & ANALOG_BTNS_STD) + !!(analog->mask & ANALOG_BTNS_CHF) * 2 +
-+	       hweight16(analog->mask & ANALOG_BTNS_GAMEPAD) + !!(analog->mask & ANALOG_HBTN_CHF) * 4);
+-	if (!strict_kernel_rwx_enabled())
+-		return;
+-
+ 	remapped = map_mem_in_cams(__max_low_memory, CONFIG_LOWMEM_CAM_NUM, false, false);
  
- 	if (analog->mask & ANALOG_HATS_ALL)
--		seq_buf_printf(&s, " %d-hat",
--			       hweight16(analog->mask & ANALOG_HATS_ALL));
-+		pr_buf(&buf, " %d-hat",
-+		       hweight16(analog->mask & ANALOG_HATS_ALL));
- 
- 	if (analog->mask & ANALOG_HAT_FCS)
--		seq_buf_printf(&s, " FCS");
-+		pr_buf(&buf, " FCS");
- 	if (analog->mask & ANALOG_ANY_CHF)
--		seq_buf_printf(&s, (analog->mask & ANALOG_SAITEK) ? " Saitek" : " CHF");
-+		pr_buf(&buf, (analog->mask & ANALOG_SAITEK) ? " Saitek" : " CHF");
- 
--	seq_buf_printf(&s, (analog->mask & ANALOG_GAMEPAD) ? " gamepad" : " joystick");
-+	pr_buf(&buf, (analog->mask & ANALOG_GAMEPAD) ? " gamepad" : " joystick");
-+
-+	ret = buf.allocation_failure ? -ENOMEM : 0;
-+	if (!ret)
-+		strlcpy(analog->name, buf.buf, sizeof(analog->name));
-+	printbuf_exit(&buf);
-+	return ret;
+ 	WARN_ON(__max_low_memory != remapped);
  }
- 
- /*
-@@ -369,7 +375,10 @@ static int analog_init_device(struct analog_port *port, struct analog *analog, i
- 	int i, j, t, v, w, x, y, z;
- 	int error;
- 
--	analog_name(analog);
-+	error = analog_name(analog);
-+	if (error)
-+		return error;
++#endif
 +
- 	snprintf(analog->phys, sizeof(analog->phys),
- 		 "%s/input%d", port->gameport->phys, index);
- 	analog->buttons = (analog->mask & ANALOG_GAMEPAD) ? analog_pad_btn : analog_joy_btn;
++void mmu_mark_initmem_nx(void)
++{
++	/* Everything is done in mmu_mark_rodata_ro() */
++}
+ 
+ void setup_initial_memory_limit(phys_addr_t first_memblock_base,
+ 				phys_addr_t first_memblock_size)
 -- 
-2.36.0
+2.35.3
 

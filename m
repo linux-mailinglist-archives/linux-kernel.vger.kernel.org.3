@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4976F52CB92
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C047452CB97
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 07:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234145AbiESFpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 01:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S234177AbiESFpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 01:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234132AbiESFpB (ORCPT
+        with ESMTP id S234132AbiESFpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 01:45:01 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194D2BA57A;
-        Wed, 18 May 2022 22:45:00 -0700 (PDT)
+        Thu, 19 May 2022 01:45:12 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2052.outbound.protection.outlook.com [40.107.220.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070F5BA56E;
+        Wed, 18 May 2022 22:45:11 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LMHD4S/vbej4vQDn4HW5OeCOjmjxa5oHRPFrfaGJsQYFy7FJ6dy6sBt9Uo3ZDykV51jdCVust2vMfP5VU6mPdTSpdzV0FrmKJsmags2FHDf/1Wi8CdwpKlGCsGRFPxy5gxbEgGVi5Rpxab5XBxQLKMVzexNMdBjx4Hs8Ei253WgDENlxkRP8IHyyUtHbOmWdvhPE1qHPIm0yhfwySVlmqnIr9b+yNQIhlnQ7IaoB5pbBHhP8qGPOtJR/AtpM9Wmmc6IYZ2bGPPN7yJeYBHiaRBXGH3M/ZPyOKRF3b2H+OQFN38t66eWgblnhvzkpfKaSWZS85puAOvjw5t4ktYeRHQ==
+ b=fW8PuAWF0dqh4cRfPcLKI7cLqWqt9Wn5kc43pL6Sd/gibQhEa4yMrJdoiP9bO/XHzyNiFsqWbKdwbGTd+VeEUL4prZwmh+/R1jg0AkirnTnNTrBrR+gWX8IL7XKDvfnfiGODMCU86Itb9Zf091YoCVnfeyaN4oHQgzN3L7qI6NUhw/HdFb6RrqrM8qqp6nBEDoRzuZ36pv+Lt+5Di+SGSu0MBre044Tsxs9Xne+6bZ4CyWIH5GgtArakDJ8cSzIiArwQQwFg2r62WlhuGI87aDntmv4z6OBRdqF1Z5II+UbRlv+ZAXah1hTxwcbMF/B5s69zT4ct3XMLNBDvF1gdJw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oQDC9UlyFEOz8ntienNiKS5FPEdosfgHVV6Rlxsek1I=;
- b=FvUXjeB2l6abgXRIiq1HewnUZ4YdzD9gYHujxtVaG8lM0knFIwVUziKStO/xZwLg1hGCirJ+YMO+TFGabHcz8IpZMeI1pN0hFeRWeyffhJo/UrXCOqjyEFf/ML0jflQ9Eil41PwrUBB56aPNQ02qsd1y7cphzAcwr2QPUXzoVCan1rKIXuuSi0nh7oQ0lVAMqfTV/a6IOSo2AIn7wnjYU520IRIZ9EwArxFNceHDQhHvLcllcRzY8XOpe2PTfZULk+Dz84xrhvLbCpj2XWk5Ktw7LFO/G7yEj552kItKQ0YKILSS0RYKlPOEe21ZXH61b0A2flsnlc+9dXiUr8b7iQ==
+ bh=FE0f8ImGrokTIfeFf6tpPAfo9D6Vh+TdCS2d981/FiQ=;
+ b=AM1neLWsgvxx24PkEakaHPa+dOacYhpLdPXXJSrVvHBjK9pIg3WyjRcAS12+xKhopRHV+rLD5PbSY3NLeQ6VbljeUbjbmffFzQH1neptAXdkVKVPiJ5lI4QlM1S9N67CnPzy3aeLIcLH1pGwZrePtmELk+yYhh7XtqUhniKb5FRKPgBcjqSFY0uRtpLDTvYzmr3qBBOocrF7OhuJ5POkZOO00pc6xLbKUlG177I8jvCDoO21sURMJbA2gN5b/8p7ihcQk2f7Pm92tPF2f23004zzr+3PU/nhgo8BZyN4YZ4qyqwuwMr2fLqBE5E21WIFxV9FHNxs70MYwVBQYwLxdQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oQDC9UlyFEOz8ntienNiKS5FPEdosfgHVV6Rlxsek1I=;
- b=2SNwlrbyiiVWWwCmMGJ6wqjPH8JBwkZ+e22UvUJIPyVjUhcFXXNoYnlUOMfJS3n4tKx94Ot3vm1pP/AJg5zhCTuwqWXUQK/oL/T/d+U0g5EZp9IiQzfn7cfKlPD2KeXnz0d7CXUrC2ppg7S1ngULKpbFZLOrMv/J+AfphQalQnM=
-Received: from MW4PR04CA0129.namprd04.prod.outlook.com (2603:10b6:303:84::14)
- by SN1PR12MB2366.namprd12.prod.outlook.com (2603:10b6:802:25::19) with
+ bh=FE0f8ImGrokTIfeFf6tpPAfo9D6Vh+TdCS2d981/FiQ=;
+ b=xg23Y4IeD6Usd/7rZEMY618gJdo8PxaNeRWv2cNqVPy/iISAK+g+/bRuSb6EmQa49kT7purDlMNxioKFn52bU+Bj9zwyIF+PVoPLrY0jvhZ9pJAu/2hV5FWs2Fdu9m2XuUegvODtYtqSF9KepQhGHlpL2YOwwXbZOXwn0cXO2Tc=
+Received: from MW4PR04CA0281.namprd04.prod.outlook.com (2603:10b6:303:89::16)
+ by BL0PR12MB4689.namprd12.prod.outlook.com (2603:10b6:208:8f::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Thu, 19 May
- 2022 05:44:57 +0000
-Received: from CO1NAM11FT043.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:84:cafe::74) by MW4PR04CA0129.outlook.office365.com
- (2603:10b6:303:84::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18 via Frontend
- Transport; Thu, 19 May 2022 05:44:57 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Thu, 19 May
+ 2022 05:45:07 +0000
+Received: from CO1NAM11FT061.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:89:cafe::75) by MW4PR04CA0281.outlook.office365.com
+ (2603:10b6:303:89::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15 via Frontend
+ Transport; Thu, 19 May 2022 05:45:07 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT043.mail.protection.outlook.com (10.13.174.193) with Microsoft SMTP
+ CO1NAM11FT061.mail.protection.outlook.com (10.13.175.200) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Thu, 19 May 2022 05:44:56 +0000
+ 15.20.5273.14 via Frontend Transport; Thu, 19 May 2022 05:45:06 +0000
 Received: from BLR-5CG113396H.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
- 2022 00:44:46 -0500
+ 2022 00:44:56 -0500
 From:   Ravi Bangoria <ravi.bangoria@amd.com>
 To:     <acme@kernel.org>
 CC:     <ravi.bangoria@amd.com>, <peterz@infradead.org>,
@@ -66,9 +66,9 @@ CC:     <ravi.bangoria@amd.com>, <peterz@infradead.org>,
         <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <sandipan.das@amd.com>, <ananth.narayan@amd.com>,
         <kim.phillips@amd.com>, <santosh.shukla@amd.com>
-Subject: [PATCH v3 2/5] perf header: Parse non-cpu pmu capabilities
-Date:   Thu, 19 May 2022 11:13:52 +0530
-Message-ID: <20220519054355.477-3-ravi.bangoria@amd.com>
+Subject: [PATCH v3 3/5] perf/x86/ibs: Add new IBS register bits into header
+Date:   Thu, 19 May 2022 11:13:53 +0530
+Message-ID: <20220519054355.477-4-ravi.bangoria@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220519054355.477-1-ravi.bangoria@amd.com>
 References: <20220519054355.477-1-ravi.bangoria@amd.com>
@@ -80,24 +80,24 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7e09b4bd-542d-4fb4-c9fa-08da395ab4db
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2366:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB23664D3146DAA066DFC62540E0D09@SN1PR12MB2366.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 6dc23f28-350c-46be-c595-08da395abaf2
+X-MS-TrafficTypeDiagnostic: BL0PR12MB4689:EE_
+X-Microsoft-Antispam-PRVS: <BL0PR12MB46897F5410CFCC8DC12825FCE0D09@BL0PR12MB4689.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pnMnangd+xJ+P4WeeoKbOjrFfdVPS0W0nbpIyQ19vEEEi9qkD6XW4qfG+sIEtUUeyg8QKlUaFyHw0gm+TNZcunDerPIL/3At9rW1/6lhiSYjey9/Lou0/WdbOn/bs9lcIzFDB6+Jbyhlr+Euscm7kB0ZnTU7od8eH7SsDsFMZrBOqb0RDfnNq4E4LSuhDnRUS/4NxJWAAuazhh5pYAe8zQ/fuRMrfJOZ9bbpjPSYXiwQFGiiCaW9c9QWvmTSdrL9dwer46T+HVsfVRJm8jlE7tosQCxfBN0TsyCBGXf0sO50tcNfubr5RzjfbCqzL4jqf80yI7cBVIUCpVfDQcPUVEcw9PtzIZkfIVzXZWnnuAOHxcBYoz0SUrUvfsp+ntzh4eb+hDb3Lbjl61+gV22VPXAYrdbcn0BK6l5bbtso86gRD8L/7k5uWTiHHR7glxjqm+W1BsEy+PkjEI15VrK4azYN4RDm8DZAFO8xYVjxglXEJOg1TViEmxpBLNf9e9BeBRQN/PZrBk5WI/hDfacpYBDa7MxcZienehZCXWkTUJBPc2AW2DHfdMu7pG4a3aecK8gjbyPioD1cn5PlJaxNSKTKAl5h61k0v2++7WsXB2anpDM2GMoKatILmAyRXxn9loYthQqwriNGouY3CPyeWcJTgByendp7t9Arb1ICpMo8sea8dUEdfIo3yl1fr18CppdDiYoXEqI/8J7Lww/FOg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(508600001)(186003)(2906002)(16526019)(1076003)(6666004)(70206006)(26005)(70586007)(40460700003)(83380400001)(356005)(2616005)(426003)(36860700001)(47076005)(336012)(82310400005)(86362001)(30864003)(316002)(81166007)(8936002)(54906003)(8676002)(7416002)(4326008)(44832011)(36756003)(5660300002)(7696005)(6916009)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: jEJ9CiLeIN75jQwEVinw1AoJmjmDZFvSWhyptMJz2vh+vPpwxtko0fGyVrXfTHAoi4OL/lXjW5kWCizq7GG4a0i1hJFjn4IjX7Vf3ihK7xPmoz2ZF7IMBluFgVy90STeJYXlHsJ9z/eDPyRe6p8wtFaBDQVbKC6tCTZ7iH6MIIHP7ZDf4+KmfHOacsMc5JzGh09Ix4bVbVHYa5A8q36V9nLG811y79LbhEguoeQv0QtjbgPpB/b3rosZANKlRyu9mwYAvLIN8mIBHIqH4KrD+KpDxi3nLW/IxkuedNRlSnT36rfQqVRUZqeyKB0uKlr9lVxMNv1HmUmO6pPcejxHdDwcN1JFuXq5+v6c+MNtNw9nlc45E/B1jyGoOFrBp9+18ahboHmdcSRK8FoIcNVdwBsDiZ4tzsjrhiXTi+9oo/sENOuRjVe5FMJkWWjnBnHFctx/Mh+zREeaGKG7NmNPjh09HN634WM2manJl0ab226HacHxIrQ6STDi454UdAdET4axbPlecaTNzf7lDeRaWh/QyivgvpYBoh65uiDbaTDW3WOAdmkOhAZSj3etMWy46WTF4THB3E57PbWPTSD1CSmTTunG7YY8FwXeMQDV8wZgLohrjDOy3jS/XGZC7A1bWmAHQj0ctddeOz1UZ1PRebzwbNfzfQPi/CypP/M+0TNFK3p7G1ZUSCTgremu5L4a5rsCNJJggj5gx0SP18G2HA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(70206006)(2906002)(8676002)(36756003)(7696005)(2616005)(4326008)(336012)(426003)(83380400001)(316002)(47076005)(36860700001)(6666004)(8936002)(40460700003)(81166007)(7416002)(82310400005)(5660300002)(186003)(356005)(1076003)(16526019)(6916009)(26005)(508600001)(86362001)(54906003)(44832011)(70586007)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 05:44:56.8614
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 05:45:06.9690
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e09b4bd-542d-4fb4-c9fa-08da395ab4db
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6dc23f28-350c-46be-c595-08da395abaf2
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT043.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT061.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2366
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4689
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -108,462 +108,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pmus advertise their capabilities via sysfs attribute files but
-perf tool currently parses only core(cpu) pmu capabilities. Add
-support for parsing non-cpu pmu capabilities.
+IBS support has been enhanced with two new features in upcoming uarch:
+1. DataSrc extension and 2. L3 miss filtering. Additional set of bits
+has been introduced in IBS registers to exploit these features. Define
+these new bits into arch/x86/ header.
 
 Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 ---
- .../Documentation/perf.data-file-format.txt   |  18 ++
- tools/perf/util/env.c                         |  48 +++++
- tools/perf/util/env.h                         |  11 +
- tools/perf/util/header.c                      | 198 ++++++++++++++++++
- tools/perf/util/header.h                      |   1 +
- tools/perf/util/pmu.c                         |  15 +-
- tools/perf/util/pmu.h                         |   2 +
- 7 files changed, 289 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/amd-ibs.h | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/tools/perf/Documentation/perf.data-file-format.txt b/tools/perf/Documentation/perf.data-file-format.txt
-index f56d0e0fbff6..7f8341db9134 100644
---- a/tools/perf/Documentation/perf.data-file-format.txt
-+++ b/tools/perf/Documentation/perf.data-file-format.txt
-@@ -435,6 +435,24 @@ struct {
- 	} [nr_pmu];
+diff --git a/arch/x86/include/asm/amd-ibs.h b/arch/x86/include/asm/amd-ibs.h
+index aabdbb5ab920..f3eb098d63d4 100644
+--- a/arch/x86/include/asm/amd-ibs.h
++++ b/arch/x86/include/asm/amd-ibs.h
+@@ -29,7 +29,10 @@ union ibs_fetch_ctl {
+ 			rand_en:1,	/* 57: random tagging enable */
+ 			fetch_l2_miss:1,/* 58: L2 miss for sampled fetch
+ 					 *      (needs IbsFetchComp) */
+-			reserved:5;	/* 59-63: reserved */
++			l3_miss_only:1,	/* 59: Collect L3 miss samples only */
++			fetch_oc_miss:1,/* 60: Op cache miss for the sampled fetch */
++			fetch_l3_miss:1,/* 61: L3 cache miss for the sampled fetch */
++			reserved:2;	/* 62-63: reserved */
+ 	};
  };
  
-+	HEADER_PMU_CAPS = 32,
-+
-+	List of pmu capabilities (except cpu pmu which is already
-+	covered by HEADER_CPU_PMU_CAPS)
-+
-+struct {
-+	u32 nr_pmus;
-+	struct {
-+		u32 core_type;	/* For hybrid topology */
-+		char pmu_name[];
-+		u32 nr_caps;
-+		struct {
-+			char name[];
-+			char value[];
-+		} [nr_caps];
-+	} [nr_pmus];
-+};
-+
- 	other bits are reserved and should ignored for now
- 	HEADER_FEAT_BITS	= 256,
- 
-diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
-index 579e44c59914..69c7804b5640 100644
---- a/tools/perf/util/env.c
-+++ b/tools/perf/util/env.c
-@@ -180,6 +180,7 @@ static void perf_env__purge_bpf(struct perf_env *env __maybe_unused)
- void perf_env__exit(struct perf_env *env)
- {
- 	int i;
-+	u32 j;
- 
- 	perf_env__purge_bpf(env);
- 	perf_env__purge_cgroups(env);
-@@ -222,6 +223,14 @@ void perf_env__exit(struct perf_env *env)
- 		zfree(&env->hybrid_cpc_nodes[i].pmu_name);
- 	}
- 	zfree(&env->hybrid_cpc_nodes);
-+
-+	for (i = 0; i < env->nr_pmus_with_caps; i++) {
-+		zfree(&env->env_pmu_caps[i].pmu_name);
-+		for (j = 0; j < env->env_pmu_caps[i].nr_caps; j++)
-+			zfree(&env->env_pmu_caps[i].pmu_caps[j]);
-+		zfree(&env->env_pmu_caps[i].pmu_caps);
-+	}
-+	zfree(&env->env_pmu_caps);
- }
- 
- void perf_env__init(struct perf_env *env)
-@@ -527,3 +536,42 @@ int perf_env__numa_node(struct perf_env *env, struct perf_cpu cpu)
- 
- 	return cpu.cpu >= 0 && cpu.cpu < env->nr_numa_map ? env->numa_map[cpu.cpu] : -1;
- }
-+
-+char *perf_env__find_pmu_cap(struct perf_env *env, u32 core_type,
-+			     const char *pmu_name, const char *cap)
-+{
-+	struct env_pmu_caps *env_pmu_caps = env->env_pmu_caps;
-+	char *cap_eq;
-+	int cap_size;
-+	char **ptr;
-+	int i;
-+	u32 j;
-+
-+	if (!pmu_name || !cap)
-+		return NULL;
-+
-+	cap_size = strlen(cap);
-+	cap_eq = zalloc(cap_size + 2);
-+	if (!cap_eq)
-+		return NULL;
-+
-+	memcpy(cap_eq, cap, cap_size);
-+	cap_eq[cap_size] = '=';
-+
-+	for (i = 0; i < env->nr_pmus_with_caps; i++) {
-+		if (env_pmu_caps[i].core_type != core_type ||
-+		    strcmp(env_pmu_caps[i].pmu_name, pmu_name))
-+			continue;
-+
-+		ptr = env_pmu_caps[i].pmu_caps;
-+
-+		for (j = 0; j < env_pmu_caps[i].nr_caps; j++) {
-+			if (!strncmp(ptr[j], cap_eq, cap_size + 1)) {
-+				free(cap_eq);
-+				return &ptr[j][cap_size + 1];
-+			}
-+		}
-+	}
-+	free(cap_eq);
-+	return NULL;
-+}
-diff --git a/tools/perf/util/env.h b/tools/perf/util/env.h
-index a3541f98e1fc..c3ffc818661c 100644
---- a/tools/perf/util/env.h
-+++ b/tools/perf/util/env.h
-@@ -50,6 +50,13 @@ struct hybrid_cpc_node {
- 	char            *pmu_name;
+@@ -38,14 +41,14 @@ union ibs_op_ctl {
+ 	__u64 val;
+ 	struct {
+ 		__u64	opmaxcnt:16,	/* 0-15: periodic op max. count */
+-			reserved0:1,	/* 16: reserved */
++			l3_miss_only:1,	/* 16: Collect L3 miss samples only */
+ 			op_en:1,	/* 17: op sampling enable */
+ 			op_val:1,	/* 18: op sample valid */
+ 			cnt_ctl:1,	/* 19: periodic op counter control */
+ 			opmaxcnt_ext:7,	/* 20-26: upper 7 bits of periodic op maximum count */
+-			reserved1:5,	/* 27-31: reserved */
++			reserved0:5,	/* 27-31: reserved */
+ 			opcurcnt:27,	/* 32-58: periodic op counter current count */
+-			reserved2:5;	/* 59-63: reserved */
++			reserved1:5;	/* 59-63: reserved */
+ 	};
  };
  
-+struct env_pmu_caps {
-+	u32	core_type;
-+	char	*pmu_name;
-+	u32	nr_caps;
-+	char	**pmu_caps;
-+};
-+
- struct perf_env {
- 	char			*hostname;
- 	char			*os_release;
-@@ -75,6 +82,7 @@ struct perf_env {
- 	int			nr_cpu_pmu_caps;
- 	int			nr_hybrid_nodes;
- 	int			nr_hybrid_cpc_nodes;
-+	int			nr_pmus_with_caps;
- 	char			*cmdline;
- 	const char		**cmdline_argv;
- 	char			*sibling_cores;
-@@ -95,6 +103,7 @@ struct perf_env {
- 	unsigned long long	 memory_bsize;
- 	struct hybrid_node	*hybrid_nodes;
- 	struct hybrid_cpc_node	*hybrid_cpc_nodes;
-+	struct env_pmu_caps	*env_pmu_caps;
- #ifdef HAVE_LIBBPF_SUPPORT
- 	/*
- 	 * bpf_info_lock protects bpf rbtrees. This is needed because the
-@@ -172,4 +181,6 @@ bool perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node);
- struct btf_node *perf_env__find_btf(struct perf_env *env, __u32 btf_id);
- 
- int perf_env__numa_node(struct perf_env *env, struct perf_cpu cpu);
-+char *perf_env__find_pmu_cap(struct perf_env *env, u32 core_type,
-+			     const char *pmu_name, const char *cap);
- #endif /* __PERF_ENV_H */
-diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-index a27132e5a5ef..b86951fa3d7a 100644
---- a/tools/perf/util/header.c
-+++ b/tools/perf/util/header.c
-@@ -1580,6 +1580,77 @@ static int write_hybrid_cpu_pmu_caps(struct feat_fd *ff,
- 	return 0;
- }
- 
-+/*
-+ * File format:
-+ *
-+ * struct {
-+ *	u32 nr_pmus;
-+ *	struct {
-+ *		u32 core_type;
-+ *		char pmu_name[];
-+ *		u32 nr_caps;
-+ *		struct {
-+ *			char name[];
-+ *			char value[];
-+ *		} [nr_caps];
-+ *	} [nr_pmus];
-+ * };
-+ */
-+static int write_pmu_caps(struct feat_fd *ff, struct evlist *evlist __maybe_unused)
-+{
-+	struct perf_pmu_caps *caps = NULL;
-+	struct perf_pmu *pmu = NULL;
-+	u32 core_type = 0;
-+	u32 nr_pmus = 0;
-+	int ret;
-+
-+	while ((pmu = perf_pmu__scan(pmu))) {
-+		if (!pmu->name || !strncmp(pmu->name, "cpu", 3) ||
-+		    perf_pmu__caps_parse(pmu) <= 0)
-+			continue;
-+		nr_pmus++;
-+	}
-+
-+	ret = do_write(ff, &nr_pmus, sizeof(nr_pmus));
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!nr_pmus)
-+		return 0;
-+
-+	while ((pmu = perf_pmu__scan(pmu))) {
-+		if (!pmu->name || !strncmp(pmu->name, "cpu", 3) || !pmu->nr_caps)
-+			continue;
-+
-+		/*
-+		 * Currently core_type is always set to 0. But it can be
-+		 * used in future for hybrid topology pmus.
-+		 */
-+		ret = do_write(ff, &core_type, sizeof(core_type));
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = do_write_string(ff, pmu->name);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = do_write(ff, &pmu->nr_caps, sizeof(pmu->nr_caps));
-+		if (ret < 0)
-+			return ret;
-+
-+		list_for_each_entry(caps, &pmu->caps, list) {
-+			ret = do_write_string(ff, caps->name);
-+			if (ret < 0)
-+				return ret;
-+
-+			ret = do_write_string(ff, caps->value);
-+			if (ret < 0)
-+				return ret;
-+		}
-+	}
-+	return 0;
-+}
-+
- static void print_hostname(struct feat_fd *ff, FILE *fp)
- {
- 	fprintf(fp, "# hostname : %s\n", ff->ph->env.hostname);
-@@ -2209,6 +2280,32 @@ static void print_mem_topology(struct feat_fd *ff, FILE *fp)
- 	}
- }
- 
-+static void print_pmu_caps(struct feat_fd *ff, FILE *fp)
-+{
-+	struct env_pmu_caps *env_pmu_caps = ff->ph->env.env_pmu_caps;
-+	int nr_pmus_with_caps = ff->ph->env.nr_pmus_with_caps;
-+	const char *delimiter = "";
-+	char **ptr;
-+	int i;
-+	u32 j;
-+
-+	if (!nr_pmus_with_caps)
-+		return;
-+
-+	for (i = 0; i < nr_pmus_with_caps; i++) {
-+		fprintf(fp, "# %s pmu capabilities: ", env_pmu_caps[i].pmu_name);
-+
-+		ptr = env_pmu_caps[i].pmu_caps;
-+
-+		delimiter = "";
-+		for (j = 0; j < env_pmu_caps[i].nr_caps; j++) {
-+			fprintf(fp, "%s%s", delimiter, ptr[j]);
-+			delimiter = ", ";
-+		}
-+		fprintf(fp, "\n");
-+	}
-+}
-+
- static int __event_process_build_id(struct perf_record_header_build_id *bev,
- 				    char *filename,
- 				    struct perf_session *session)
-@@ -3319,6 +3416,106 @@ static int process_hybrid_cpu_pmu_caps(struct feat_fd *ff,
- 	return ret;
- }
- 
-+static int __process_pmu_caps(struct feat_fd *ff, struct env_pmu_caps *env_pmu_caps)
-+{
-+	u32 nr_caps = env_pmu_caps->nr_caps;
-+	int name_size, value_size;
-+	char *name, *value, *ptr;
-+	u32 i;
-+
-+	env_pmu_caps->pmu_caps = zalloc(sizeof(char *) * nr_caps);
-+	if (!env_pmu_caps->pmu_caps)
-+		return -1;
-+
-+	for (i = 0; i < nr_caps; i++) {
-+		name = do_read_string(ff);
-+		if (!name)
-+			goto error;
-+
-+		value = do_read_string(ff);
-+		if (!value)
-+			goto free_name;
-+
-+		name_size = strlen(name);
-+		value_size = strlen(value);
-+		ptr = zalloc(sizeof(char) * (name_size + value_size + 2));
-+		if (!ptr)
-+			goto free_value;
-+
-+		memcpy(ptr, name, name_size);
-+		ptr[name_size] = '=';
-+		memcpy(ptr + name_size + 1, value, value_size);
-+		env_pmu_caps->pmu_caps[i] = ptr;
-+
-+		free(value);
-+		free(name);
-+	}
-+	return 0;
-+
-+free_value:
-+	free(value);
-+free_name:
-+	free(name);
-+error:
-+	for (; i > 0; i--)
-+		free(env_pmu_caps->pmu_caps[i - 1]);
-+	free(env_pmu_caps->pmu_caps);
-+	return -1;
-+}
-+
-+static int process_pmu_caps(struct feat_fd *ff, void *data __maybe_unused)
-+{
-+	struct env_pmu_caps *env_pmu_caps;
-+	u32 nr_pmus;
-+	u32 i, j;
-+
-+	ff->ph->env.nr_pmus_with_caps = 0;
-+	ff->ph->env.env_pmu_caps = NULL;
-+
-+	if (do_read_u32(ff, &nr_pmus))
-+		return -1;
-+
-+	if (!nr_pmus)
-+		return 0;
-+
-+	env_pmu_caps = zalloc(sizeof(struct env_pmu_caps) * nr_pmus);
-+	if (!env_pmu_caps)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < nr_pmus; i++) {
-+		if (do_read_u32(ff, &env_pmu_caps[i].core_type))
-+			goto error;
-+
-+		env_pmu_caps[i].pmu_name = do_read_string(ff);
-+		if (!env_pmu_caps[i].pmu_name)
-+			goto error;
-+
-+		if (do_read_u32(ff, &env_pmu_caps[i].nr_caps))
-+			goto free_pmu_name;
-+
-+		if (!__process_pmu_caps(ff, &env_pmu_caps[i]))
-+			continue;
-+
-+free_pmu_name:
-+		free(env_pmu_caps[i].pmu_name);
-+		goto error;
-+	}
-+
-+	ff->ph->env.nr_pmus_with_caps = nr_pmus;
-+	ff->ph->env.env_pmu_caps = env_pmu_caps;
-+	return 0;
-+
-+error:
-+	for (; i > 0; i--) {
-+		free(env_pmu_caps[i - 1].pmu_name);
-+		for (j = 0; j < env_pmu_caps[i - 1].nr_caps; j++)
-+			free(env_pmu_caps[i - 1].pmu_caps[j]);
-+		free(env_pmu_caps[i - 1].pmu_caps);
-+	}
-+	free(env_pmu_caps);
-+	return -1;
-+}
-+
- #define FEAT_OPR(n, func, __full_only) \
- 	[HEADER_##n] = {					\
- 		.name	    = __stringify(n),			\
-@@ -3382,6 +3579,7 @@ const struct perf_header_feature_ops feat_ops[HEADER_LAST_FEATURE] = {
- 	FEAT_OPR(CLOCK_DATA,	clock_data,	false),
- 	FEAT_OPN(HYBRID_TOPOLOGY,	hybrid_topology,	true),
- 	FEAT_OPR(HYBRID_CPU_PMU_CAPS,	hybrid_cpu_pmu_caps,	false),
-+	FEAT_OPR(PMU_CAPS,	pmu_caps,	false),
+@@ -71,11 +74,12 @@ union ibs_op_data {
+ union ibs_op_data2 {
+ 	__u64 val;
+ 	struct {
+-		__u64	data_src:3,	/* 0-2: data source */
++		__u64	data_src_lo:3,	/* 0-2: data source low */
+ 			reserved0:1,	/* 3: reserved */
+ 			rmt_node:1,	/* 4: destination node */
+ 			cache_hit_st:1,	/* 5: cache hit state */
+-			reserved1:57;	/* 5-63: reserved */
++			data_src_hi:2,	/* 6-7: data source high */
++			reserved1:56;	/* 8-63: reserved */
+ 	};
  };
  
- struct header_print_data {
-diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
-index 0eb4bc29a5a4..e9a067bb8b9e 100644
---- a/tools/perf/util/header.h
-+++ b/tools/perf/util/header.h
-@@ -47,6 +47,7 @@ enum {
- 	HEADER_CLOCK_DATA,
- 	HEADER_HYBRID_TOPOLOGY,
- 	HEADER_HYBRID_CPU_PMU_CAPS,
-+	HEADER_PMU_CAPS,
- 	HEADER_LAST_FEATURE,
- 	HEADER_FEAT_BITS	= 256,
- };
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 9a1c7e63e663..8d599acb7569 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -1890,16 +1890,22 @@ int perf_pmu__caps_parse(struct perf_pmu *pmu)
- 	const char *sysfs = sysfs__mountpoint();
- 	DIR *caps_dir;
- 	struct dirent *evt_ent;
--	int nr_caps = 0;
-+
-+	if (pmu->caps_initialized)
-+		return pmu->nr_caps;
- 
- 	if (!sysfs)
- 		return -1;
- 
-+	pmu->nr_caps = 0;
-+
- 	snprintf(caps_path, PATH_MAX,
- 		 "%s" EVENT_SOURCE_DEVICE_PATH "%s/caps", sysfs, pmu->name);
- 
--	if (stat(caps_path, &st) < 0)
-+	if (stat(caps_path, &st) < 0) {
-+		pmu->caps_initialized = true;
- 		return 0;	/* no error if caps does not exist */
-+	}
- 
- 	caps_dir = opendir(caps_path);
- 	if (!caps_dir)
-@@ -1926,13 +1932,14 @@ int perf_pmu__caps_parse(struct perf_pmu *pmu)
- 			continue;
- 		}
- 
--		nr_caps++;
-+		pmu->nr_caps++;
- 		fclose(file);
- 	}
- 
- 	closedir(caps_dir);
- 
--	return nr_caps;
-+	pmu->caps_initialized = true;
-+	return pmu->nr_caps;
- }
- 
- void perf_pmu__warn_invalid_config(struct perf_pmu *pmu, __u64 config,
-diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-index 541889fa9f9c..4b45fd8da5a3 100644
---- a/tools/perf/util/pmu.h
-+++ b/tools/perf/util/pmu.h
-@@ -46,6 +46,8 @@ struct perf_pmu {
- 	struct perf_cpu_map *cpus;
- 	struct list_head format;  /* HEAD struct perf_pmu_format -> list */
- 	struct list_head aliases; /* HEAD struct perf_pmu_alias -> list */
-+	bool caps_initialized;
-+	u32 nr_caps;
- 	struct list_head caps;    /* HEAD struct perf_pmu_caps -> list */
- 	struct list_head list;    /* ELEM */
- 	struct list_head hybrid_list;
 -- 
 2.27.0
 

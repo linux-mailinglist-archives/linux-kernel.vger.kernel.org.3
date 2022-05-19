@@ -2,204 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3D052CA22
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5574052CA23
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbiESDNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 23:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S231442AbiESDNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 23:13:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiESDMz (ORCPT
+        with ESMTP id S231282AbiESDM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 23:12:55 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A15347540
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:12:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652929971; x=1684465971;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yjFgt2KecvSMbv6FYNuU2HpWpeojXewuGqtubk1UJBM=;
-  b=hJXaM0zz0Hy+Xoqk9joUqGoV7LGQ0lE3hb1T3bhTrvD40g4X66cVqR1W
-   TX1DI3wye1OXf0DGDEAqRMpdqKTPgJ1qmzK4Nl6QUSN6Hk/DtxXgTP0Yp
-   15uhhwuo/0IeG26v2o7M/Eh3bYx7+7R21D68p0Ckjvcdf4zKAcwLSgWai
-   xVpAmhmgSk9gq1lvjWZSKmxy10burYHTs5SUK+FXNGwQyq8kHe14Tpr5C
-   v+hsMEbxgt+L0A89yKsHrq4ve3st7NVomFm52Xm4cJbXaJelilOlRa8Zn
-   bOU2/BDPqhs4T9KAP/hfG8v0ZePHzxCRpgn5C1dBn3jKb2v4VHaZvojc0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="269579824"
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="269579824"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 20:12:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="545845973"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 18 May 2022 20:12:49 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrWam-0002yv-V2;
-        Thu, 19 May 2022 03:12:48 +0000
-Date:   Thu, 19 May 2022 11:12:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [netfilter-nf-next:testing 9/12] net/netfilter/core.c:194:20: error:
- 'struct nf_hook_entries' has no member named 'hook_prog'
-Message-ID: <202205191154.ESiaNSSv-lkp@intel.com>
+        Wed, 18 May 2022 23:12:58 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D83C517CC
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:12:56 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y41so3922529pfw.12
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=6IaBYwoRHRaxkHU7M30ifQh1nkElBKl7D4YjtOVQqYY=;
+        b=CmMzXeOJAh6BIxM8VcearYEZsPNG9i4weY+q0nBdW/+BaDt1HixZChQkPCHJpLaFM7
+         gh2obS+UcjYG0UD1Zzi6jChw2pK2dmnPTxkqiz/a2tQk+ySShqt6zI0ze1PSFW2Zh5vy
+         Cy3yhDsfZDC2IsslcYrGQrJ+QxodnGjkB25mv4dWDvi3VM80N+m4jMsYApmhQYoQEp5W
+         S4wsZ8kHOG3Ain84sAEhYas2SFMEovVrJNKOGoHUfI/eRmz2HTt4J3vVJyb1PrUcgF41
+         hSWestDp09u0gU2aNUQwKLW2BG0Cj07bm8J17UId2NUxFocnIUmAFADJQUXc320KMH59
+         TP+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=6IaBYwoRHRaxkHU7M30ifQh1nkElBKl7D4YjtOVQqYY=;
+        b=ns0QBAjoOnr3lG/p7B6UFDh715LrTRgw1oravs1CavNwdgtXG0pl89MN11Uj3vC8Xg
+         /sUSDjFiyjapv5KYhnlO0PsaKQANKvbnhApp+DSanRaW7eZ2CWrNp/W88wpD0qlVWG87
+         V6q1cCLTt911CttLHtRxxHCcvxpVD29qo6GWaOgWAEPGzykETs36c6cO6dzw/7DlxskX
+         dU+rHRvhPycEIZbQ/fc694u64yxS6DF4PskSt3pSlygR9YYV4X+SKz0mekyqMntDWWGk
+         z774dZGzbwTayy+WYtmzTrg3s1Wii5aWSJx8sip3EOlgRXm4nCR4VDTZPFt7CfTR8LaW
+         UV0w==
+X-Gm-Message-State: AOAM533rZIMGUu5lmlafgsqa/L6kLIWv5/4ET0j/xuockKlg24L7gw1R
+        lBulnSg6A9fLPIoA19ttuRL0VQ==
+X-Google-Smtp-Source: ABdhPJzAwdneH86y+C+f93UpPYQmWHPQcqB6CktJpVLQcQRz7TZouVpUAZ61nvn7xEbk4XNMgbmkkA==
+X-Received: by 2002:a62:2701:0:b0:518:2570:b8f6 with SMTP id n1-20020a622701000000b005182570b8f6mr2489091pfn.19.1652929976048;
+        Wed, 18 May 2022 20:12:56 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id bv11-20020a17090af18b00b001d6a79768b6sm2264863pjb.49.2022.05.18.20.12.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 20:12:55 -0700 (PDT)
+Message-ID: <380fa11e-f15d-da1a-51f7-70e14ed58ffc@bytedance.com>
+Date:   Thu, 19 May 2022 11:12:48 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [External] Re: [PATCH] bpf: avoid grabbing spin_locks of all cpus
+ when no free elems
+To:     Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>
+References: <20220518062715.27809-1-zhoufeng.zf@bytedance.com>
+ <CAADnVQ+x-A87Z9_c+3vuRJOYm=gCOBXmyCJQ64CiCNukHS6FpA@mail.gmail.com>
+ <6ae715b3-96b1-2b42-4d1a-5267444d586b@bytedance.com>
+ <9c0c3e0b-33bc-51a7-7916-7278f14f308e@fb.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <9c0c3e0b-33bc-51a7-7916-7278f14f308e@fb.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git testing
-head:   40bcb3243ee8b8ffbd93213c51c3ca11981aa92a
-commit: d6058f935b80dfd90272cda816756fe23f9fd969 [9/12] netfilter: add bpf base hook program generator
-config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220519/202205191154.ESiaNSSv-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git/commit/?id=d6058f935b80dfd90272cda816756fe23f9fd969
-        git remote add netfilter-nf-next git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git
-        git fetch --no-tags netfilter-nf-next testing
-        git checkout d6058f935b80dfd90272cda816756fe23f9fd969
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/
+在 2022/5/19 上午4:39, Yonghong Song 写道:
+>
+>
+> On 5/17/22 11:57 PM, Feng Zhou wrote:
+>> 在 2022/5/18 下午2:32, Alexei Starovoitov 写道:
+>>> On Tue, May 17, 2022 at 11:27 PM Feng zhou 
+>>> <zhoufeng.zf@bytedance.com> wrote:
+>>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>>>
+>>>> We encountered bad case on big system with 96 CPUs that
+>>>> alloc_htab_elem() would last for 1ms. The reason is that after the
+>>>> prealloc hashtab has no free elems, when trying to update, it will 
+>>>> still
+>>>> grab spin_locks of all cpus. If there are multiple update users, the
+>>>> competition is very serious.
+>>>>
+>>>> So this patch add is_empty in pcpu_freelist_head to check freelist
+>>>> having free or not. If having, grab spin_lock, or check next cpu's
+>>>> freelist.
+>>>>
+>>>> Before patch: hash_map performance
+>>>> ./map_perf_test 1
+>
+> could you explain what parameter '1' means here?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This code is here:
+samples/bpf/map_perf_test_user.c
+samples/bpf/map_perf_test_kern.c
+parameter '1' means testcase flag, test hash_map's performance
+parameter '2048' means test hash_map's performance when free=0.
+testcase flag '2048' is added by myself to reproduce the problem phenomenon.
 
-All errors (new ones prefixed by >>):
+>
+>>>> 0:hash_map_perf pre-alloc 975345 events per sec
+>>>> 4:hash_map_perf pre-alloc 855367 events per sec
+>>>> 12:hash_map_perf pre-alloc 860862 events per sec
+>>>> 8:hash_map_perf pre-alloc 849561 events per sec
+>>>> 3:hash_map_perf pre-alloc 849074 events per sec
+>>>> 6:hash_map_perf pre-alloc 847120 events per sec
+>>>> 10:hash_map_perf pre-alloc 845047 events per sec
+>>>> 5:hash_map_perf pre-alloc 841266 events per sec
+>>>> 14:hash_map_perf pre-alloc 849740 events per sec
+>>>> 2:hash_map_perf pre-alloc 839598 events per sec
+>>>> 9:hash_map_perf pre-alloc 838695 events per sec
+>>>> 11:hash_map_perf pre-alloc 845390 events per sec
+>>>> 7:hash_map_perf pre-alloc 834865 events per sec
+>>>> 13:hash_map_perf pre-alloc 842619 events per sec
+>>>> 1:hash_map_perf pre-alloc 804231 events per sec
+>>>> 15:hash_map_perf pre-alloc 795314 events per sec
+>>>>
+>>>> hash_map the worst: no free
+>>>> ./map_perf_test 2048
+>>>> 6:worse hash_map_perf pre-alloc 28628 events per sec
+>>>> 5:worse hash_map_perf pre-alloc 28553 events per sec
+>>>> 11:worse hash_map_perf pre-alloc 28543 events per sec
+>>>> 3:worse hash_map_perf pre-alloc 28444 events per sec
+>>>> 1:worse hash_map_perf pre-alloc 28418 events per sec
+>>>> 7:worse hash_map_perf pre-alloc 28427 events per sec
+>>>> 13:worse hash_map_perf pre-alloc 28330 events per sec
+>>>> 14:worse hash_map_perf pre-alloc 28263 events per sec
+>>>> 9:worse hash_map_perf pre-alloc 28211 events per sec
+>>>> 15:worse hash_map_perf pre-alloc 28193 events per sec
+>>>> 12:worse hash_map_perf pre-alloc 28190 events per sec
+>>>> 10:worse hash_map_perf pre-alloc 28129 events per sec
+>>>> 8:worse hash_map_perf pre-alloc 28116 events per sec
+>>>> 4:worse hash_map_perf pre-alloc 27906 events per sec
+>>>> 2:worse hash_map_perf pre-alloc 27801 events per sec
+>>>> 0:worse hash_map_perf pre-alloc 27416 events per sec
+>>>> 3:worse hash_map_perf pre-alloc 28188 events per sec
+>>>>
+>>>> ftrace trace
+>>>>
+>>>> 0)               |  htab_map_update_elem() {
+>>>> 0)   0.198 us    |    migrate_disable();
+>>>> 0)               |    _raw_spin_lock_irqsave() {
+>>>> 0)   0.157 us    |      preempt_count_add();
+>>>> 0)   0.538 us    |    }
+>>>> 0)   0.260 us    |    lookup_elem_raw();
+>>>> 0)               |    alloc_htab_elem() {
+>>>> 0)               |      __pcpu_freelist_pop() {
+>>>> 0)               |        _raw_spin_lock() {
+>>>> 0)   0.152 us    |          preempt_count_add();
+>>>> 0)   0.352 us    | native_queued_spin_lock_slowpath();
+>>>> 0)   1.065 us    |        }
+>>>>                   |        ...
+>>>> 0)               |        _raw_spin_unlock() {
+>>>> 0)   0.254 us    |          preempt_count_sub();
+>>>> 0)   0.555 us    |        }
+>>>> 0) + 25.188 us   |      }
+>>>> 0) + 25.486 us   |    }
+>>>> 0)               |    _raw_spin_unlock_irqrestore() {
+>>>> 0)   0.155 us    |      preempt_count_sub();
+>>>> 0)   0.454 us    |    }
+>>>> 0)   0.148 us    |    migrate_enable();
+>>>> 0) + 28.439 us   |  }
+>>>>
+>>>> The test machine is 16C, trying to get spin_lock 17 times, in addition
+>>>> to 16c, there is an extralist.
+>>> Is this with small max_entries and a large number of cpus?
+>>>
+>>> If so, probably better to fix would be to artificially
+>>> bump max_entries to be 4x of num_cpus.
+>>> Racy is_empty check still wastes the loop.
+>>
+>> This hash_map worst testcase with 16 CPUs, map's max_entries is 1000.
+>>
+>> This is the test case I constructed, it is to fill the map on 
+>> purpose, and then
+>>
+>> continue to update, just to reproduce the problem phenomenon.
+>>
+>> The bad case we encountered with 96 CPUs, map's max_entries is 10240.
+>
+> For such cases, most likely the map is *almost* full. What is the 
+> performance if we increase map size, e.g., from 10240 to 16K(16192)?
 
-   net/netfilter/core.c: In function 'nf_hook_entries_grow':
->> net/netfilter/core.c:194:20: error: 'struct nf_hook_entries' has no member named 'hook_prog'
-     194 |                 new->hook_prog = hook_bpf_prog;
-         |                    ^~
->> net/netfilter/core.c:197:39: error: 'const struct nf_hook_entries' has no member named 'hook_prog'
-     197 |                         old_prog = old->hook_prog;
-         |                                       ^~
-   In file included from include/linux/filter.h:9,
-                    from include/linux/netfilter.h:5,
-                    from net/netfilter/core.c:10:
->> include/linux/bpf.h:895:36: error: 'bpf_dispatcher_nf_hook_base' undeclared (first use in this function); did you mean 'bpf_dispatcher_nop_func'?
-     895 | #define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
-         |                                    ^~~~~~~~~~~~~~~
-   net/netfilter/core.c:199:41: note: in expansion of macro 'BPF_DISPATCHER_PTR'
-     199 |                 nf_hook_bpf_change_prog(BPF_DISPATCHER_PTR(nf_hook_base),
-         |                                         ^~~~~~~~~~~~~~~~~~
-   include/linux/bpf.h:895:36: note: each undeclared identifier is reported only once for each function it appears in
-     895 | #define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
-         |                                    ^~~~~~~~~~~~~~~
-   net/netfilter/core.c:199:41: note: in expansion of macro 'BPF_DISPATCHER_PTR'
-     199 |                 nf_hook_bpf_change_prog(BPF_DISPATCHER_PTR(nf_hook_base),
-         |                                         ^~~~~~~~~~~~~~~~~~
-   net/netfilter/core.c: In function '__nf_hook_entries_try_shrink':
->> include/linux/bpf.h:895:36: error: 'bpf_dispatcher_nf_hook_base' undeclared (first use in this function); did you mean 'bpf_dispatcher_nop_func'?
-     895 | #define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
-         |                                    ^~~~~~~~~~~~~~~
-   net/netfilter/core.c:319:33: note: in expansion of macro 'BPF_DISPATCHER_PTR'
-     319 |         nf_hook_bpf_change_prog(BPF_DISPATCHER_PTR(nf_hook_base),
-         |                                 ^~~~~~~~~~~~~~~~~~
-   net/netfilter/core.c:320:42: error: 'struct nf_hook_entries' has no member named 'hook_prog'
-     320 |                                 old ? old->hook_prog : NULL, hook_bpf_prog);
-         |                                          ^~
+Yes, increasing max_entries can temporarily solve this problem, but when 
+16k is used up,
+it will still encounter this problem. This patch is to try to fix this 
+corner case.
 
 
-vim +194 net/netfilter/core.c
-
-   123	
-   124	static struct nf_hook_entries *
-   125	nf_hook_entries_grow(const struct nf_hook_entries *old,
-   126			     const struct nf_hook_ops *reg)
-   127	{
-   128		unsigned int i, alloc_entries, nhooks, old_entries;
-   129		struct nf_hook_ops **orig_ops = NULL;
-   130		struct bpf_prog *hook_bpf_prog;
-   131		struct nf_hook_ops **new_ops;
-   132		struct nf_hook_entries *new;
-   133		bool inserted = false;
-   134	
-   135		alloc_entries = 1;
-   136		old_entries = old ? old->num_hook_entries : 0;
-   137	
-   138		if (old) {
-   139			orig_ops = nf_hook_entries_get_hook_ops(old);
-   140	
-   141			for (i = 0; i < old_entries; i++) {
-   142				if (orig_ops[i] != &dummy_ops)
-   143					alloc_entries++;
-   144			}
-   145		}
-   146	
-   147		if (alloc_entries > MAX_HOOK_COUNT)
-   148			return ERR_PTR(-E2BIG);
-   149	
-   150		new = allocate_hook_entries_size(alloc_entries);
-   151		if (!new)
-   152			return ERR_PTR(-ENOMEM);
-   153	
-   154		new_ops = nf_hook_entries_get_hook_ops(new);
-   155	
-   156		i = 0;
-   157		nhooks = 0;
-   158		while (i < old_entries) {
-   159			if (orig_ops[i] == &dummy_ops) {
-   160				++i;
-   161				continue;
-   162			}
-   163	
-   164			if (inserted || reg->priority > orig_ops[i]->priority) {
-   165				new_ops[nhooks] = (void *)orig_ops[i];
-   166				new->hooks[nhooks] = old->hooks[i];
-   167				i++;
-   168			} else {
-   169				new_ops[nhooks] = (void *)reg;
-   170				new->hooks[nhooks].hook = reg->hook;
-   171				new->hooks[nhooks].priv = reg->priv;
-   172				inserted = true;
-   173			}
-   174			nhooks++;
-   175		}
-   176	
-   177		if (!inserted) {
-   178			new_ops[nhooks] = (void *)reg;
-   179			new->hooks[nhooks].hook = reg->hook;
-   180			new->hooks[nhooks].priv = reg->priv;
-   181		}
-   182	
-   183		hook_bpf_prog = nf_hook_bpf_create(new);
-   184	
-   185		/* allocate_hook_entries_size() pre-inits ->hook_prog
-   186		 * to a fallback program that calls nf_hook_slow().
-   187		 *
-   188		 * Alternatively we could have nf_hook_entries_grow()
-   189		 * return an error here.
-   190		 */
-   191		if (hook_bpf_prog) {
-   192			struct bpf_prog *old_prog = NULL;
-   193	
- > 194			new->hook_prog = hook_bpf_prog;
-   195	
-   196			if (old)
- > 197				old_prog = old->hook_prog;
-   198	
-   199			nf_hook_bpf_change_prog(BPF_DISPATCHER_PTR(nf_hook_base),
-   200						old_prog, hook_bpf_prog);
-   201		}
-   202	
-   203		return new;
-   204	}
-   205	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

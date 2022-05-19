@@ -2,323 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D5352E004
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211B252E001
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245510AbiESWdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 18:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38366 "EHLO
+        id S245503AbiESWc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 18:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239262AbiESWdJ (ORCPT
+        with ESMTP id S239262AbiESWcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 18:33:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1248B36F5;
-        Thu, 19 May 2022 15:33:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 19 May 2022 18:32:25 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888B4B2278;
+        Thu, 19 May 2022 15:32:23 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CF68615D7;
-        Thu, 19 May 2022 22:33:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A549C34116;
-        Thu, 19 May 2022 22:33:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652999587;
-        bh=Tp7rawmc+M7OF37XKMAK5aWfZEHG3hpjZBPn9xXUgoc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bpZE46jyo211E2mj4bv3i68xvYhJhSgZYtWjS13dJocWJSGu943q1j+JqLLVPU6eb
-         hhDWDJ8DMjoxY9lUMkUQMgR/6zG9TYCMjlD9NufRdjnFyZepJbZoYsbsIy3nNOENSF
-         NeIcoqEceJ4CkRSM+sTSt1DUHB3qV9uUhQEZ2iQg+dTqFLXRyvfx5RqA0W4QfK1/MZ
-         f1y/3WvSJTxCftAwLByoCx5GlcUuDTHpnIOEsx2XZgU7wqmHmGDktzze+M8cTCFURO
-         V9nmTQbYGLWa26d+hqP4s9AalxuwLbB+asiN3JEAT0iuhNSgx0HH2bO9Tgw2/2GwFF
-         bEVwXNqzFFQVQ==
-Date:   Fri, 20 May 2022 01:31:28 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mhocko@suse.com, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org, shakeelb@google.com
-Subject: Re: [PATCH v2] x86/sgx: Set active memcg prior to shmem allocation
-Message-ID: <YobFQJxLgfy5JsCV@iki.fi>
-References: <20220519210445.5310-1-kristen@linux.intel.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L44Nf37HFz4xDB;
+        Fri, 20 May 2022 08:32:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1652999538;
+        bh=HsQ3C+KXpMZzUUB1bcGRf24npFJKXVif+oFEDfFYg/U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hhTX3+FNE9kINdQxIXA3nBvIDv8k6ROmGJXsPNRdnx3hMHmHqvDT9r/RFdE7+NR/h
+         eYkH8mqvzPWsOVWcJVoJx+3Tk2/KPLW+lYdkvnRc4h0r93BebEyOvv4lT306KbNPTl
+         pUfZW7Ehm7rZCZxAILZ9oJ2DaA+prhfmw/cvAlS9mAIGAPCI8JYcnk03sVir3B28/M
+         2IAOIOHoIyIYkz1tJOHctMGCBP2nOb5bckcJDvxbcDNf0yXxSIoviESKr+NjISfld7
+         UFGIo5RM8TQeQKJawFfpVSqPvHMW1w11wh3vwn+jKsNr5BiugEPtMPFsL5GVK4Vh3d
+         URQ7bPHMwjYRA==
+Date:   Fri, 20 May 2022 08:31:50 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the powerpc tree
+Message-ID: <20220520083150.57e953fc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519210445.5310-1-kristen@linux.intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ndsHKp=ZuOV6h9zKNpo9eGL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 02:04:45PM -0700, Kristen Carlson Accardi wrote:
-> When the system runs out of enclave memory, SGX can reclaim EPC pages
-> by swapping to normal RAM. These backing pages are allocated via a
-> per-enclave shared memory area. Since SGX allows unlimited over
-> commit on EPC memory, the reclaimer thread can allocate a large
-> number of backing RAM pages in response to EPC memory pressure.
-> 
-> When the shared memory backing RAM allocation occurs during
-> the reclaimer thread context, the shared memory is charged to
-> the root memory control group, and the shmem usage of the enclave
-> is not properly accounted for, making cgroups ineffective at
-> limiting the amount of RAM an enclave can consume.
-> 
-> For example, when using a cgroup to launch a set of test
-> enclaves, the kernel does not properly account for 50% - 75% of
-> shmem page allocations on average. In the worst case, when
-> nearly all allocations occur during the reclaimer thread, the
-> kernel accounts less than a percent of the amount of shmem used
-> by the enclave's cgroup to the correct cgroup.
-> 
-> SGX stores a list of mm_structs that are associated with
-> an enclave. Pick one of them during reclaim and charge that
-> mm's memcg with the shmem allocation. The one that gets picked
-> is arbitrary, but this list almost always only has one mm. The
-> cases where there is more than one mm with different memcg's
-> are not worth considering.
-> 
-> Create a new function - sgx_encl_alloc_backing(). This function
-> is used whenever a new backing storage page needs to be
-> allocated. Previously the same function was used for page
-> allocation as well as retrieving a previously allocated page.
-> Prior to backing page allocation, if there is a mm_struct associated
-> with the enclave that is requesting the allocation, it is set
-> as the active memory control group.
-> 
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> ---
-> V1 -> V2:
->  Changed sgx_encl_set_active_memcg() to simply return the correct
->  memcg for the enclave and renamed to sgx_encl_get_mem_cgroup().
-> 
->  Created helper function current_is_ksgxd() to improve readability.
-> 
->  Use mmget_not_zero()/mmput_async() when searching mm_list.
-> 
->  Move call to set_active_memcg() to sgx_encl_alloc_backing() and
->  use mem_cgroup_put() to avoid leaking a memcg reference.
-> 
->  Address review feedback regarding comments and commit log.
-> 
->  arch/x86/kernel/cpu/sgx/encl.c | 109 ++++++++++++++++++++++++++++++++-
->  arch/x86/kernel/cpu/sgx/encl.h |  11 +++-
->  arch/x86/kernel/cpu/sgx/main.c |   4 +-
->  3 files changed, 118 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-> index 001808e3901c..6d10202612d6 100644
-> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> @@ -32,7 +32,7 @@ static int __sgx_encl_eldu(struct sgx_encl_page *encl_page,
->  	else
->  		page_index = PFN_DOWN(encl->size);
->  
-> -	ret = sgx_encl_get_backing(encl, page_index, &b);
-> +	ret = sgx_encl_lookup_backing(encl, page_index, &b);
->  	if (ret)
->  		return ret;
->  
-> @@ -574,7 +574,7 @@ static struct page *sgx_encl_get_backing_page(struct sgx_encl *encl,
->   *   0 on success,
->   *   -errno otherwise.
->   */
-> -int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
-> +static int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
->  			 struct sgx_backing *backing)
->  {
->  	pgoff_t pcmd_index = PFN_DOWN(encl->size) + 1 + (page_index >> 5);
-> @@ -601,6 +601,111 @@ int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
->  	return 0;
->  }
->  
-> +/*
-> + * When called from ksgxd, returns the mem_cgroup of a struct mm stored
-> + * in the enclave's mm_list. When not called from ksgxd, just returns
-> + * the mem_cgroup of the current task.
-> + */
-> +static struct mem_cgroup *sgx_encl_get_mem_cgroup(struct sgx_encl *encl)
-> +{
-> +	struct mem_cgroup *memcg = NULL;
-> +	struct sgx_encl_mm *encl_mm;
-> +	int idx;
-> +
-> +	/*
-> +	 * If called from normal task context, return the mem_cgroup
-> +	 * of the current task's mm. The remainder of the handling is for
-> +	 * ksgxd.
-> +	 */
-> +	if (!current_is_ksgxd())
-> +		return get_mem_cgroup_from_mm(current->mm);
-> +
-> +	/*
-> +	 * Search the enclave's mm_list to find an mm associated with
-> +	 * this enclave to charge the allocation to.
-> +	 */
-> +	idx = srcu_read_lock(&encl->srcu);
-> +
-> +	list_for_each_entry_rcu(encl_mm, &encl->mm_list, list) {
-> +		if (!mmget_not_zero(encl_mm->mm))
-> +			continue;
-> +
-> +		memcg = get_mem_cgroup_from_mm(encl_mm->mm);
-> +
-> +		mmput_async(encl_mm->mm);
-> +
-> +		break;
-> +	}
-> +
-> +	srcu_read_unlock(&encl->srcu, idx);
-> +
-> +	/*
-> +	 * In the rare case that there isn't an mm associated with
-> +	 * the enclave, set memcg to the current active mem_cgroup.
-> +	 * This will be the root mem_cgroup if there is no active
-> +	 * mem_cgroup.
-> +	 */
-> +	if (!memcg)
-> +		return get_mem_cgroup_from_mm(NULL);
-> +
-> +	return memcg;
-> +}
-> +
-> +/**
-> + * sgx_encl_alloc_backing() - allocate a new backing storage page
-> + * @encl:	an enclave pointer
-> + * @page_index:	enclave page index
-> + * @backing:	data for accessing backing storage for the page
-> + *
-> + * When called from ksgxd, sets the active memcg from one of the
-> + * mms in the enclave's mm_list prior to any backing page allocation,
-> + * in order to ensure that shmem page allocations are charged to the
-> + * enclave.
-> + *
-> + * Return:
-> + *   0 on success,
-> + *   -errno otherwise.
-> + */
-> +int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
-> +			   struct sgx_backing *backing)
-> +{
-> +	struct mem_cgroup *memcg, *old_memcg;
-> +	int ret;
-> +
-> +	memcg = sgx_encl_get_mem_cgroup(encl);
-> +
-> +	old_memcg = set_active_memcg(memcg);
-> +
-> +	ret = sgx_encl_get_backing(encl, page_index, backing);
-> +
-> +	set_active_memcg(old_memcg);
-> +
-> +	mem_cgroup_put(memcg);
+--Sig_/ndsHKp=ZuOV6h9zKNpo9eGL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This is too sparse IMHO.
+Hi all,
 
-I would rewrite it as:
+Commits
 
-	struct mem_cgroup *encl_memcg = sgx_encl_get_mem_cgroup(encl);
-	struct mem_cgroup *memcg = set_active_memcg(encl_memcg);
-	int ret;
+  03a2e65f54b3 ("KVM: PPC: Book3S Nested: Use explicit 4096 LPID maximum")
+  18827eeef022 ("KVM: PPC: Remove kvmppc_claim_lpid")
 
-	ret = sgx_encl_get_backing(encl, page_index, backing);
+are missing a Signed-off-by from their authors.
 
-	set_active_memcg(memcg);
-	mem_cgroup_put(encl_memcg);
+The first is just "Signed-of-by" misspelling.  The second is missing.
 
-I think old_memcg is not very documentative, whereas this also dclearly
-tells what is going on: enclave's memcg is temporarily swapped in order to
-perform page allocation, so that the allocations gets accounted from them
-correct cgroup.
+--=20
+Cheers,
+Stephen Rothwell
 
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * sgx_encl_lookup_backing() - retrieve an existing backing storage page
-> + * @encl:	an enclave pointer
-> + * @page_index:	enclave page index
-> + * @backing:	data for accessing backing storage for the page
-> + *
-> + * Retrieve a backing page for loading data back into an EPC page with ELDU.
-> + * It is the caller's responsibility to ensure that it is appropriate to use
-> + * sgx_encl_lookup_backing() rather than sgx_encl_alloc_backing(). If lookup is
-> + * not used correctly, this will cause an allocation which is not accounted for.
-> + *
-> + * Return:
-> + *   0 on success,
-> + *   -errno otherwise.
-> + */
-> +int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
-> +			   struct sgx_backing *backing)
-> +{
-> +	return sgx_encl_get_backing(encl, page_index, backing);
-> +}
-> +
->  /**
->   * sgx_encl_put_backing() - Unpin the backing storage
->   * @backing:	data for accessing backing storage for the page
-> diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
-> index fec43ca65065..2de3b150ab00 100644
-> --- a/arch/x86/kernel/cpu/sgx/encl.h
-> +++ b/arch/x86/kernel/cpu/sgx/encl.h
-> @@ -100,13 +100,20 @@ static inline int sgx_encl_find(struct mm_struct *mm, unsigned long addr,
->  	return 0;
->  }
->  
-> +static inline bool current_is_ksgxd(void)
-> +{
-> +	return current->mm ? false : true;
-> +}
-> +
->  int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
->  		     unsigned long end, unsigned long vm_flags);
->  
->  void sgx_encl_release(struct kref *ref);
->  int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
-> -int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
-> -			 struct sgx_backing *backing);
-> +int sgx_encl_lookup_backing(struct sgx_encl *encl, unsigned long page_index,
-> +			    struct sgx_backing *backing);
-> +int sgx_encl_alloc_backing(struct sgx_encl *encl, unsigned long page_index,
-> +			   struct sgx_backing *backing);
->  void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write);
->  int sgx_encl_test_and_clear_young(struct mm_struct *mm,
->  				  struct sgx_encl_page *page);
-> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-> index 4b41efc9e367..7d41c8538795 100644
-> --- a/arch/x86/kernel/cpu/sgx/main.c
-> +++ b/arch/x86/kernel/cpu/sgx/main.c
-> @@ -310,7 +310,7 @@ static void sgx_reclaimer_write(struct sgx_epc_page *epc_page,
->  	encl->secs_child_cnt--;
->  
->  	if (!encl->secs_child_cnt && test_bit(SGX_ENCL_INITIALIZED, &encl->flags)) {
-> -		ret = sgx_encl_get_backing(encl, PFN_DOWN(encl->size),
-> +		ret = sgx_encl_alloc_backing(encl, PFN_DOWN(encl->size),
->  					   &secs_backing);
->  		if (ret)
->  			goto out;
-> @@ -381,7 +381,7 @@ static void sgx_reclaim_pages(void)
->  			goto skip;
->  
->  		page_index = PFN_DOWN(encl_page->desc - encl_page->encl->base);
-> -		ret = sgx_encl_get_backing(encl_page->encl, page_index, &backing[i]);
-> +		ret = sgx_encl_alloc_backing(encl_page->encl, page_index, &backing[i]);
->  		if (ret)
->  			goto skip;
->  
-> -- 
-> 2.20.1
-> 
+--Sig_/ndsHKp=ZuOV6h9zKNpo9eGL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-BR, Jarkko
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKGxVYACgkQAVBC80lX
+0GyDoAf9E20H9DPEXMUmMGq6Fl+hHTneXt69+Z6XYed7k/bxZw87kUKvSB/91h1E
+pYDW4UMClBEKDKp19992vnl47QyuyI75rSLqcLzBeiOi1zdQpXkpmBNJ4kJTmH4B
+UEQrH/NycFvH6mFuHjGGaE5hfqc8ETFqfvekLlJPRrR1Ujl4oVC9ime2tknaJUA8
+GLm0BHCcGU8pleu6jRg9kvikIJr/ivFADd0fIIX0yAZBWEflfaUFQUd53sdYYzyI
+eedhkAGE7wrAz61cfPjMvgDFc1T42MQfjXUP7oEQ4b4SpgiPwpXd0XNSVBHZc/zq
+4qgkWrwEkwhsA9FI5Ih//86jaF2R2w==
+=q8SX
+-----END PGP SIGNATURE-----
+
+--Sig_/ndsHKp=ZuOV6h9zKNpo9eGL--

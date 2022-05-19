@@ -2,223 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B0D52D2FC
+	by mail.lfdr.de (Postfix) with ESMTP id 981BF52D2FD
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238136AbiESMuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 08:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        id S238183AbiESMur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 08:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238134AbiESMud (ORCPT
+        with ESMTP id S238164AbiESMuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 08:50:33 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671A1BC6FD
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:50:30 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ck4so5482165ejb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:50:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vRE/oJtdGWdN444bPnrord4cMpAoUxxz8a+T8mrufqA=;
-        b=N4bXORpvmxzJvDMuETcmC63g8ePtxhxyMv7u7BDJcpfMrcfpL8QhERL80OsjtI3tpv
-         gIKsZRpervYUxhOP1C1U1qhYkgOikh/xXxjuSrfHTC6Do/8AHAVA8eq5AKfzgqhPJNXS
-         tVg67vgiAyzU6JLVN3PmghCkb7gaEtgqYLprU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vRE/oJtdGWdN444bPnrord4cMpAoUxxz8a+T8mrufqA=;
-        b=jqQnHCUPBdw8cnNdVQWGHUxek3ucWXZj2yQtjrsrHGwVrXJrr7QVIgI6FntlOoprMT
-         36GNBo1rGOs/qnQP4gze1zPqbAwgqsPGu0/L+o4flT6eTGUYXMcCWfQvKnjIZC0V0p+J
-         2FjovEsHM1egGe0qupTOm0dCa8RHsqBemBBkucBeM4z4aoVCgtaag2Fr56f+/y6lENf5
-         M9UioZ+XSwz+Ml2F5Mxwy5RToiDXQUNybVGf1qW2J+Q5rW/1u78Q0VfyfpXGG9zSPUVN
-         /UMtYO+NIIS4Q+g7dJDI+obVr6ZArk4QtdDOkfFFa27bRdaRZujP/lG8LdPFnIDKqQr6
-         x+oQ==
-X-Gm-Message-State: AOAM530Fz25+707wfq/sqb7s6eHEtCaRV3SoXlXK7A+c4aSTW4WojXdC
-        iInqcUWEDVgRvdLcH99L5OpzbKCbWqra9Ncdl0N0iw==
-X-Google-Smtp-Source: ABdhPJyigk/9qiR/DyzziY2RHs7Q1+TAfNZLV9nE6P5Zl0DrH+Z38HOA5BLPFbtuO4a/ughxjMuvbpiYu8tNyTpAujo=
-X-Received: by 2002:a17:907:6e0f:b0:6fe:382a:6657 with SMTP id
- sd15-20020a1709076e0f00b006fe382a6657mr4117416ejc.192.1652964628871; Thu, 19
- May 2022 05:50:28 -0700 (PDT)
+        Thu, 19 May 2022 08:50:40 -0400
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD258BA57A;
+        Thu, 19 May 2022 05:50:31 -0700 (PDT)
+Date:   Thu, 19 May 2022 12:50:19 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wujek.eu;
+        s=protonmail2; t=1652964628; x=1653223828;
+        bh=+6dbY/snU3b6uCWUgyekqmraArOZDE0O1Do6Z1g28TA=;
+        h=Date:From:Cc:Reply-To:Subject:Message-ID:Feedback-ID:From:To:Cc:
+         Date:Subject:Reply-To:Feedback-ID:Message-ID;
+        b=M9q70UMjUe+S50Y/XwA+mERO7Nex8c1Hfssapd9f1q2X5Y8u1lPglwRW4oiT6eSkW
+         XZCXD+90cYbj6MNmAV/e6yY+kIvzw+IqHoNNcBTn8tvm/Ndczy5zpr483sxcdQR2vk
+         0Onx+5I5Dw5zMO4jwGh9OvMeF3sZ1gfhko4sPMjczBMmT8qHjV5mYuZ5av7p/yE++C
+         Cd8C3caxWD5msQw+QTk79j0wbYqIbky4Pet2Y/+71TXc586ADxOC5L9jGKYzUfo0Zn
+         3MlrvVHS6XDpzH0Lk8QUhjmPZanmRUt63X5zNFKRomF/uaNDv3J+BUvxBUzZx1tj5h
+         +cBxBPZDJr1sw==
+From:   Adam Wujek <dev_public@wujek.eu>
+Cc:     Adam Wujek <dev_public@wujek.eu>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Adam Wujek <dev_public@wujek.eu>
+Subject: [PATCH] i2c: busses: i2c-cadence: fix message length when receive block message
+Message-ID: <20220519124946.387373-1-dev_public@wujek.eu>
+Feedback-ID: 23425257:user:proton
 MIME-Version: 1.0
-References: <20220509105847.8238-1-dharamhans87@gmail.com> <20220509105847.8238-2-dharamhans87@gmail.com>
-In-Reply-To: <20220509105847.8238-2-dharamhans87@gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Thu, 19 May 2022 14:50:17 +0200
-Message-ID: <CAJfpeguEHFTk9u2h8-Le5aQYYPdSdTNY0nUj440YJUR8V3jY-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] Allow non-extending parallel direct writes
-To:     Dharmendra Singh <dharamhans87@gmail.com>
-Cc:     linux-fsdevel@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>,
-        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>,
-        Dharmendra Singh <dsingh@ddn.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 May 2022 at 12:59, Dharmendra Singh <dharamhans87@gmail.com> wrote:
->
-> From: Dharmendra Singh <dsingh@ddn.com>
->
-> In general, as of now, in FUSE, direct writes on the same file are
-> serialized over inode lock i.e we hold inode lock for the full duration
-> of the write request. I could not found in fuse code a comment which
-> clearly explains why this exclusive lock is taken for direct writes.
-> Our guess is some USER space fuse implementations might be relying
-> on this lock for seralization and also it protects for the issues
-> arising due to file size assumption or write failures.  This patch
-> relaxes this exclusive lock in some cases of direct writes.
->
-> With these changes, we allows non-extending parallel direct writes
-> on the same file with the help of a flag called FOPEN_PARALLEL_WRITES.
-> If this flag is set on the file (flag is passed from libfuse to fuse
-> kernel as part of file open/create), we do not take exclusive lock instead
-> use shared lock so that all non-extending writes can run in parallel.
->
-> Best practise would be to enable parallel direct writes of all kinds
-> including extending writes as well but we see some issues such as
-> when one write completes and other fails, how we should truncate(if
-> needed) the file if underlying file system does not support holes
-> (For file systems which supports holes, there might be a possibility
-> of enabling parallel writes for all cases).
->
-> FUSE implementations which rely on this inode lock for serialisation
-> can continue to do so and this is default behaviour i.e no parallel
-> direct writes.
->
-> Signed-off-by: Dharmendra Singh <dsingh@ddn.com>
-> ---
->  fs/fuse/file.c            | 45 ++++++++++++++++++++++++++++++++++++---
->  include/uapi/linux/fuse.h |  2 ++
->  2 files changed, 44 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> index 829094451774..495138a68306 100644
-> --- a/fs/fuse/file.c
-> +++ b/fs/fuse/file.c
-> @@ -1541,14 +1541,48 @@ static ssize_t fuse_direct_read_iter(struct kiocb *iocb, struct iov_iter *to)
->         return res;
->  }
->
-> +static bool fuse_direct_write_extending_i_size(struct kiocb *iocb,
-> +                                              struct iov_iter *iter)
-> +{
-> +       struct inode *inode = file_inode(iocb->ki_filp);
-> +       loff_t i_size;
-> +       loff_t offset;
-> +       size_t count;
-> +
-> +       if (iocb->ki_flags & IOCB_APPEND)
-> +               return true;
-> +
-> +       offset = iocb->ki_pos;
-> +       count = iov_iter_count(iter);
-> +       i_size = i_size_read(inode);
-> +
-> +       return offset + count <= i_size ? false : true;
-> +}
+Needed by hwmon/pmbus_core driver to correctly calculate PEC.
+The hwmon/pmbus_core driver relies on bus drivers to update the message len=
+gth
+of received block transfers. Only in this type of smbus transfer, in which =
+the
+length is not known before the transfer is started.
 
-This could be rewritten in much fewer lines:
+Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+---
+ drivers/i2c/busses/i2c-cadence.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-static bool fuse_is_extending_write(struct kiocb *iocb, struct iov_iter *iter)
-{
-    struct inode *inode = file_inode(iocb->ki_filp);
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cade=
+nce.c
+index 20ac432a37ea..65f1979d4e6f 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -830,6 +830,11 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, s=
+truct i2c_msg *msg,
+ =09=09return -ETIMEDOUT;
+ =09}
 
-    return (iocb->ki_flags & IOCB_APPEND) ||
-        iocb->ki_pos + iov_iter_count(iter) > i_size_read(inode);
-}
++=09/* Update message len, as i2c/smbus driver (function
++=09 * i2c_smbus_xfer_emulated) relies on i2c device drivers to do this */
++=09if ((msg->flags & I2C_M_RECV_LEN) && (msg->flags & I2C_M_RD))
++=09=09msg->len =3D msg->buf[0] + 2; /* add len byte + PEC byte */
++
+ =09cdns_i2c_writereg(CDNS_I2C_IXR_ALL_INTR_MASK,
+ =09=09=09  CDNS_I2C_IDR_OFFSET);
+
+--
+2.17.1
 
 
-> +
->  static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
->  {
->         struct inode *inode = file_inode(iocb->ki_filp);
-> +       struct file *file = iocb->ki_filp;
-> +       struct fuse_file *ff = file->private_data;
->         struct fuse_io_priv io = FUSE_IO_PRIV_SYNC(iocb);
->         ssize_t res;
-> +       bool p_write = ff->open_flags & FOPEN_PARALLEL_WRITES ? true : false;
-
-Please just use "bool v = expr" instead of "bool v = expr ? true :
-false" as they are equivalent.
-
-> +       bool exclusive_lock = !p_write ||
-> +                              fuse_direct_write_extending_i_size(iocb, from) ?
-> +                              true : false;
-
-Same.
-
-> +
-> +       /*
-> +        * Take exclusive lock if
-> +        * - parallel writes are disabled.
-> +        * - parallel writes are enabled and i_size is being extended
-> +        * Take shared lock if
-> +        * - parallel writes are enabled but i_size does not extend.
-> +        */
-> +       if (exclusive_lock)
-> +               inode_lock(inode);
-> +       else
-> +               inode_lock_shared(inode);
->
-> -       /* Don't allow parallel writes to the same file */
-> -       inode_lock(inode);
->         res = generic_write_checks(iocb, from);
->         if (res > 0) {
->                 if (!is_sync_kiocb(iocb) && iocb->ki_flags & IOCB_DIRECT) {
-> @@ -1559,7 +1593,10 @@ static ssize_t fuse_direct_write_iter(struct kiocb *iocb, struct iov_iter *from)
->                         fuse_write_update_attr(inode, iocb->ki_pos, res);
->                 }
->         }
-> -       inode_unlock(inode);
-> +       if (exclusive_lock)
-> +               inode_unlock(inode);
-> +       else
-> +               inode_unlock_shared(inode);
->
->         return res;
->  }
-> @@ -2900,7 +2937,9 @@ fuse_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
->         kref_put(&io->refcnt, fuse_io_release);
->
->         if (iov_iter_rw(iter) == WRITE) {
-> +
-
-Unnecessary empty line.
-
->                 fuse_write_update_attr(inode, pos, ret);
-> +               /* For extending writes we already hold exclusive lock */
->                 if (ret < 0 && offset + count > i_size)
->                         fuse_do_truncate(file);
->         }
-> diff --git a/include/uapi/linux/fuse.h b/include/uapi/linux/fuse.h
-> index d6ccee961891..ee5379d41906 100644
-> --- a/include/uapi/linux/fuse.h
-> +++ b/include/uapi/linux/fuse.h
-> @@ -301,6 +301,7 @@ struct fuse_file_lock {
->   * FOPEN_CACHE_DIR: allow caching this directory
->   * FOPEN_STREAM: the file is stream-like (no file position at all)
->   * FOPEN_NOFLUSH: don't flush data cache on close (unless FUSE_WRITEBACK_CACHE)
-> + * FOPEN_PARALLEL_WRITES: Allow concurrent writes on the same inode
->   */
->  #define FOPEN_DIRECT_IO                (1 << 0)
->  #define FOPEN_KEEP_CACHE       (1 << 1)
-> @@ -308,6 +309,7 @@ struct fuse_file_lock {
->  #define FOPEN_CACHE_DIR                (1 << 3)
->  #define FOPEN_STREAM           (1 << 4)
->  #define FOPEN_NOFLUSH          (1 << 5)
-> +#define FOPEN_PARALLEL_WRITES  (1 << 6)
->
->  /**
->   * INIT request/reply flags
-> --
-> 2.17.1
->

@@ -2,151 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AD652DD54
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE01B52DD62
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234771AbiESTBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
+        id S244289AbiESTCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244263AbiESTAo (ORCPT
+        with ESMTP id S244319AbiESTBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 15:00:44 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4C7AF1E2;
-        Thu, 19 May 2022 12:00:41 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id m1so5579747plx.3;
-        Thu, 19 May 2022 12:00:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=afOne9J+lVfZqbo7IugW/yv7pVLW37G0GWCaPV/BtjM=;
-        b=CRQAOZdWKa10skPkYeoqOceAcov25PzE25aovkjd/QIyw4wyn7dsF6UpPoE5gz5Aq/
-         wfWvz0k8BZRdHgFHTUMPzLY4eicq0trWM13QL09iVy3RrWvs/LS9uqen3ZodXf6LGQ6V
-         kHFDxt8zoinwlXtLZWnOLlRXH5VTbU62MvD/Fl5wEVTu4BOOttf85i+xdiRhXoQil+7Z
-         6cPIk/CabhEg2vjMIiMcCd5bO7mkUrM9VCYoHoQ7LIdvUgdhxZsPYbhub7pOkv0rDlEJ
-         utZNY7VPz7FJQh/mdnxtmNgf6LcfGG7/8rP0M9yy3I8E+LAjg/P05Jh0Lb0Vjd95yqV/
-         VE7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=afOne9J+lVfZqbo7IugW/yv7pVLW37G0GWCaPV/BtjM=;
-        b=CPSbgcwMULJMJnD4CtHi+G0tqg2hLDAn+LbhVKYTyzIgzTpBzrnQ1A+D74XLj3JhqC
-         i7nb9hfoZkYPdJFstPHWLGTTmWmRsP3k3UI519tso5I2T5oG13LY2B9R0ZfVCCxs30mY
-         XJWStdIvLD66PuWSLJ+bJYPhTTEGPNP7PA9Hd9IrgHzB+FX9avij1rdGOz11o8IX6x/L
-         3E8iuWzLYZlsbPqG3gkoe1XhiN+jZSe4p5Dg+WDIH77t2ls28NrzJ3ObbV4jQ05pgrCb
-         TcYZhOtsLwog/1p5BMZMX6J6zW8V2RDnNunGEInM9TzJusfOqoFMppQanbNhG7G3JZpC
-         /5LA==
-X-Gm-Message-State: AOAM532aToFoLNY8KbcwWEPseuoMfiNR095FE+ykdSoXyOdgosht8Mc/
-        iGORG7OslEkAe4SIOROO0uEbmMHii2o=
-X-Google-Smtp-Source: ABdhPJwUn1ssIajamwwqUO/M3HBOX6tgsAFF+fl8jN2M2lYOrz96bBwVyQxa6lJYfu+y08eJ7QZ/Jg==
-X-Received: by 2002:a17:90b:4b12:b0:1dc:dfdb:446 with SMTP id lx18-20020a17090b4b1200b001dcdfdb0446mr7107333pjb.150.1652986840558;
-        Thu, 19 May 2022 12:00:40 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id c11-20020a170902d48b00b001618b70dcc9sm4199358plg.101.2022.05.19.12.00.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 12:00:40 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     stable@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Nishad Kamdar <nishadkamdar@gmail.com>,
-        =?UTF-8?q?Christian=20L=C3=B6hle?= <CLoehle@hyperstone.com>,
-        linux-mmc@vger.kernel.org (open list:MULTIMEDIA CARD (MMC), SECURE
-        DIGITAL (SD) AND...), linux-kernel@vger.kernel.org (open list),
-        alcooperx@gmail.com, kdasu.kdev@gmail.com
-Subject: [PATCH stable 4.14 v2 3/3] mmc: core: Default to generic_cmd6_time as timeout in __mmc_switch()
-Date:   Thu, 19 May 2022 12:00:30 -0700
-Message-Id: <20220519190030.377695-4-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220519190030.377695-1-f.fainelli@gmail.com>
-References: <20220519190030.377695-1-f.fainelli@gmail.com>
+        Thu, 19 May 2022 15:01:01 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CEDCE2F;
+        Thu, 19 May 2022 12:00:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=30Q8obn7fVx0WpjeIrxqO72NAYu9ZR5ZQbK3CveRK4k=; b=X4
+        6jRghNiloLNde3Ixf8nY/PsgQKrP85prblbwpt2r8ltCQs6FBwo0H5PvuWb8/fp3KJfGPbv4cWXoG
+        b0EosV+i7WComxN0hci1jQlpKb5zCJMNlVfhcn/+hMTJqU3t6ZddVbs9rJS3EprMPzMDsOqcSGct1
+        OkYumOZvk0CGC1k=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nrlO4-003X2h-Bo; Thu, 19 May 2022 21:00:40 +0200
+Date:   Thu, 19 May 2022 21:00:40 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>,
+        Alberto Bianchi <alberto.bianchi@amarulasolutions.com>,
+        linuxfancy@googlegroups.com,
+        linux-amarula <linux-amarula@amarulasolutions.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: phy: DP83822: enable rgmii mode if
+ phy_interface_is_rgmii
+Message-ID: <YoaT2IrpO3mR/Nqh@lunn.ch>
+References: <20220519182423.1554379-1-tommaso.merciai@amarulasolutions.com>
+ <CAOf5uwni8tdr2srmp=X_uqs44_0Gtk_JuUoKSRoRFP2WhOfZVw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOf5uwni8tdr2srmp=X_uqs44_0Gtk_JuUoKSRoRFP2WhOfZVw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+On Thu, May 19, 2022 at 08:29:26PM +0200, Michael Nazzareno Trimarchi wrote:
+> Hi
+> 
+> Il gio 19 mag 2022, 20:24 Tommaso Merciai <tommaso.merciai@amarulasolutions.com
+> > ha scritto:
+> 
+>     RGMII mode can be enable from dp83822 straps, and also writing bit 9
+>     of register 0x17 - RMII and Status Register (RCSR).
+>     When phy_interface_is_rgmii this mode must be enabled
+> 
+>     References:
+>      - https://www.ti.com/lit/gpn/dp83822i p66
+> 
+>     Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+>     Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+>     Suggested-by: Alberto Bianchi <alberto.bianchi@amarulasolutions.com>
+>     Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+>     ---
+>      drivers/net/phy/dp83822.c | 4 ++++
+>      1 file changed, 4 insertions(+)
+> 
+>     diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
+>     index ce17b2af3218..66fa61fb86db 100644
+>     --- a/drivers/net/phy/dp83822.c
+>     +++ b/drivers/net/phy/dp83822.c
+>     @@ -408,6 +408,10 @@ static int dp83822_config_init(struct phy_device
+>     *phydev)
+>                             if (err)
+>                                     return err;
+>                     }
+>     +
+>     +               /* Enable RGMII Mode */
+>     +               phy_set_bits_mmd(phydev, DP83822_DEVADDR,
+>     +                                       MII_DP83822_RCSR, BIT(9));
+>             }
+> 
+> 
+> 
+> Please define bit 9 and this break other connection. Introduce again the switch
+> for phy interface connection
 
-commit 533a6cfe08f96a7b5c65e06d20916d552c11b256 upstream
+Hi guys
 
-All callers of __mmc_switch() should now be specifying a valid timeout for
-the CMD6 command. However, just to be sure, let's print a warning and
-default to use the generic_cmd6_time in case the provided timeout_ms
-argument is zero.
+Please try to perform your own reviews before posting to the list.
 
-In this context, let's also simplify some of the corresponding code and
-clarify some related comments.
+I agree with an #define for BIT(9).
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20200122142747.5690-4-ulf.hansson@linaro.org
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/mmc/core/mmc_ops.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+However, i don't understand what you mean by the rest of your
+comments. Please make sure your colleges understand you.
 
-diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c
-index 5d806c2100ae..45cffccc7050 100644
---- a/drivers/mmc/core/mmc_ops.c
-+++ b/drivers/mmc/core/mmc_ops.c
-@@ -458,10 +458,6 @@ static int mmc_poll_for_busy(struct mmc_card *card, unsigned int timeout_ms,
- 	bool expired = false;
- 	bool busy = false;
- 
--	/* We have an unspecified cmd timeout, use the fallback value. */
--	if (!timeout_ms)
--		timeout_ms = MMC_OPS_TIMEOUT_MS;
--
- 	/*
- 	 * In cases when not allowed to poll by using CMD13 or because we aren't
- 	 * capable of polling by using ->card_busy(), then rely on waiting the
-@@ -534,14 +530,20 @@ int __mmc_switch(struct mmc_card *card, u8 set, u8 index, u8 value,
- 
- 	mmc_retune_hold(host);
- 
-+	if (!timeout_ms) {
-+		pr_warn("%s: unspecified timeout for CMD6 - use generic\n",
-+			mmc_hostname(host));
-+		timeout_ms = card->ext_csd.generic_cmd6_time;
-+	}
-+
- 	/*
- 	 * If the cmd timeout and the max_busy_timeout of the host are both
- 	 * specified, let's validate them. A failure means we need to prevent
- 	 * the host from doing hw busy detection, which is done by converting
- 	 * to a R1 response instead of a R1B.
- 	 */
--	if (timeout_ms && host->max_busy_timeout &&
--		(timeout_ms > host->max_busy_timeout))
-+	if (host->max_busy_timeout &&
-+	    (timeout_ms > host->max_busy_timeout))
- 		use_r1b_resp = false;
- 
- 	cmd.opcode = MMC_SWITCH;
-@@ -552,10 +554,6 @@ int __mmc_switch(struct mmc_card *card, u8 set, u8 index, u8 value,
- 	cmd.flags = MMC_CMD_AC;
- 	if (use_r1b_resp) {
- 		cmd.flags |= MMC_RSP_SPI_R1B | MMC_RSP_R1B;
--		/*
--		 * A busy_timeout of zero means the host can decide to use
--		 * whatever value it finds suitable.
--		 */
- 		cmd.busy_timeout = timeout_ms;
- 	} else {
- 		cmd.flags |= MMC_RSP_SPI_R1 | MMC_RSP_R1;
--- 
-2.25.1
-
+	  Andrew

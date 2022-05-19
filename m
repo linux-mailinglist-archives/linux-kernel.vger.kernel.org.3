@@ -2,116 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E64952CF22
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708D852CF27
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235897AbiESJOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S235931AbiESJQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235900AbiESJOZ (ORCPT
+        with ESMTP id S231821AbiESJQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:14:25 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D38A76FD;
-        Thu, 19 May 2022 02:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652951653;
-        bh=vHKw+rNk4PT4DFmwJiIcNVVwqOfo5+7Vy/wOUy3KKrk=;
-        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
-        b=RcB7qkgMXlUofd83X33cmLaor+kHJ4nwDzTvXxjfbuhNeDLaHdWB9HtcjpfBZ41yP
-         1X/o4SfRZpFIGuzoNuFoOce1Q12uIWsoCFahqTPJmJf1RoYLKnkQdwOuvLpGaD/Uap
-         3B/ZWvTZFznNEVIrB+j4+5srmQA5//FQrs7fnLu8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.152.7]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MgvrL-1nOLQe376b-00hNYk; Thu, 19
- May 2022 11:14:13 +0200
-Message-ID: <3976cf6a-0b40-4763-a233-eacf93925d53@gmx.de>
-Date:   Thu, 19 May 2022 11:14:01 +0200
+        Thu, 19 May 2022 05:16:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9DD65537B;
+        Thu, 19 May 2022 02:16:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94A4315DB;
+        Thu, 19 May 2022 02:16:25 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F1473F73D;
+        Thu, 19 May 2022 02:16:24 -0700 (PDT)
+Date:   Thu, 19 May 2022 10:16:10 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [v2 2/2] kbuild: copy scripts/atomic/atomic-*.h to
+ include/generated/atomic-*.h
+Message-ID: <YoYK2pQ3NSN8tgdd@FVFF77S0Q05N>
+References: <20220514040207.282910-1-masahiroy@kernel.org>
+ <20220514040207.282910-2-masahiroy@kernel.org>
+ <YoIOhZc3y11n5aMq@FVFF77S0Q05N>
+ <CAK7LNASqZxn3e-DSO0cnYRZ7nY-ztt7rLUry9Fqez+ZT5VMeQw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] video: fbdev: Fix refcount leak in clcdfb_of_vram_setup
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Pawel Moll <pawel.moll@arm.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220512115913.48685-1-linmq006@gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220512115913.48685-1-linmq006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:eSWg360NWdcrUA/fH7V7T9HE5h1fnVkRKaDvilzgt7TNnko8Egk
- XlT5t0GUmFyJEH9cPREdc214vINJZC0DFKVSiVTdJBVUaP4BE613ytqfmd0Djcu+Q7nGkGC
- ZJM0QToPIxtDal2B53SwVRk3nylfVXxqAnruvnw3W2/qfRCvdHLWdwAsKL+uXYQvRzGTho7
- W2QJ+jXKfAkhPBZ7HNRAw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KQEVyUAnvU8=:Ubfs4GWvjk9jhIzN4c6pLH
- fJy5OFciCIS6/B/O6PV1aEEn24aca0n7bUvA4dH/OuWQkbp9MvGFX2YWZgmOKrvCCi+6uHJcB
- zkcp5IDZp4LVlqbBQ11YslCKM+E91um4KQo1EsTLjSwJ/xJsfYQp+GHmNbnsCv2w1l5KpDaIr
- RRBz0v3lwOc+LraX7C1/lONonhc7a+CGIfKDYQbQzlgPVPNeuHPCRtq11O8f2rDuTPto3d7RN
- LqnG6vFOpemAn6qLli3/kKsGmWDiOmJ16Ky4PQqQsUn4N37p5wRwSS39EljVy07bG0oyuJ1wn
- 7lRin3nat/Nu2Yxb+uO+PomNdSRN3coiLmdVNn9haFuo6Ljxj44j3gXmvKdk2/IIZMyDdSMKq
- tTve9r8LhlzL7kJiEIhqgk0sKAH7dCVnV+5GE0gYQQeRe/SDhmjAgPoeSjUVCHlDfADSZgkff
- DkRdc5EJhIDYc2tFvj/lm+AIkp6ZPeIpVnbmro/Cscq/1CNeQyKTcB5f8V0KGDlE2bCdVWt3P
- THjKz0H4Tj53ugXdnhtIH9jqYcPd/lgHlvv70MX0UfSaQknFCUhtbFbdBsdLTCMosEwlL5v53
- 12sUiKRJcLHKlFW1qC+5h3bsxOtp52LREC4rJ5TdXd9O0ls58HyrOMWa6r5yjlI1a51ol2QET
- 2Wyr7bgthrEdpI/BqxR76+4JQENPHKHU9pzU3r1zaLJRmOGJoVpllPacecfK7uGd3o3UC4b5w
- 14IqdLOt2YUxEN+HandTJHmur55m2R5Ccfhp3l1v1hW1l5uKFv7wIAoKXVN92J/5JAEwkvFFx
- QgKwh0Ez0PHLBvtxr4+w3y1pNkktFvTHuvbus3SJoL3QRPsruWorATRAsfYgd1C2vI5CCZA3W
- +Zi/g6S5TyYgIDx2c7zwVVOWIr9fy/k/QZFYJOQ5+Aav9Fqi3LDQ/jOhzWdlKMb8uPuRsx2yA
- Odmmk/5ZGiXi375GKzm0t0j7JoKbi8pxAbnVVHiD//8kKW0M6GqVzSA6UCloaFN3eDb60AAzy
- +6Hnr0WRN2msdX79V1SZISD/7rCPZl/ss00qw0B2g1bKyrzewL0LKP4lCCqo7c2c9B/nGbb97
- +sbby4TyKm2hEXbJg5u8e/dpa/dlzw2O5FXIoy2jp9XGcq1LgT2lpQtvg==
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNASqZxn3e-DSO0cnYRZ7nY-ztt7rLUry9Fqez+ZT5VMeQw@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 13:59, Miaoqian Lin wrote:
-> of_parse_phandle() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when not need anymore.
-> Add missing of_node_put() to avoid refcount leak.
->
-> Fixes: d10715be03bd ("video: ARM CLCD: Add DT support")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On Mon, May 16, 2022 at 06:30:41PM +0900, Masahiro Yamada wrote:
+> On Mon, May 16, 2022 at 5:43 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > [adding the atomics maintainers to Cc]
+> >
+> > On Sat, May 14, 2022 at 01:02:07PM +0900, Masahiro Yamada wrote:
+> > > include/linux/atomic/*.h are generated by scripts/atomic/gen-atomics.sh.
+> > >
+> > > To ensure they are not edited, scripts/atomic/check-atomics.sh checks
+> > > sha1sum every time.
+> > >
+> > > This commit moves include/linux/atomic/*.h to scripts/atomic/*.h_shipped,
+> > > which are copied to include/generated/ at build time:
+> > >
+> > >   COPY    include/generated/atomic-instrumented.h
+> > >   COPY    include/generated/atomic-long.h
+> > >   COPY    include/generated/atomic-arch-fallback.h
+> >
+> > FWIW, moving these and copying them at build time is fine by me, given that
+> > better indicates that these are generated.
+> >
+> > > I dropped the sha1sum checks. I hope nobody would try to directly modify
+> > > *_shipped files.
+> >
+> > I'd prefer to keep the sha1sum check, because we're worried that people *will*
+> > modify them, and that won't be noticed until the next time they're regenerated.
+> 
+> OK, but is there any reason to embed the checksum to the headers?
+> 
+> Generally, you can have *.sha1 file to collect the checksums,
+> and use the "sha1sum --check" command.
 
-applied to the fbdev tree.
-Thanks!
-Helge
+TBH, I have no preference either way; splitting it out is fine by me.
 
-> ---
->  drivers/video/fbdev/amba-clcd.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-=
-clcd.c
-> index 9ec969e136bf..8080116aea84 100644
-> --- a/drivers/video/fbdev/amba-clcd.c
-> +++ b/drivers/video/fbdev/amba-clcd.c
-> @@ -758,12 +758,15 @@ static int clcdfb_of_vram_setup(struct clcd_fb *fb=
-)
->  		return -ENODEV;
->
->  	fb->fb.screen_base =3D of_iomap(memory, 0);
-> -	if (!fb->fb.screen_base)
-> +	if (!fb->fb.screen_base) {
-> +		of_node_put(memory);
->  		return -ENOMEM;
-> +	}
->
->  	fb->fb.fix.smem_start =3D of_translate_address(memory,
->  			of_get_address(memory, 0, &size, NULL));
->  	fb->fb.fix.smem_len =3D size;
-> +	of_node_put(memory);
->
->  	return 0;
->  }
+The only thing that needs to be ensured is that if the sha1sum tool doesn't
+exist we don't complain about that.
 
+[...]
+
+> > > I guess it can be improved because it is just simple text processing.
+> > > Then, Kbuild can execute it at build time.
+> >
+> > It is in theory possible to make them much faster, yes. The actual slowness of
+> > the scripting is largely due to using sub-shells resulting in a load of
+> > fork+exec, which could be avoided if using a real scripting language.
+> >
+> > Practically speaking though, we're rather limited in what we can rely upon
+> > being available. We chose to use POSIX shell as a lowest-common-demoninator,
+> > and anything that'd be *nice* to use isn't going to always be available,
+> > meaning that even if we make it faster we can't necessarily build it all the
+> > time anyway.
+> 
+> Kernel builds already rely on Perl.
+
+I didn't realise that we always relied upon perl -- I know that there's
+recordmcount.pl, but I didn't think all targets used that, and I thought we
+couldn't rely upon perl when we originally wrote the atomci scripting.
+
+If we can rely upom perl being available then I'm not averse to writing the
+scripting in perl; I'm just not immediately sure about how to handle the
+fallback templates.
+
+Thanks,
+Mark.

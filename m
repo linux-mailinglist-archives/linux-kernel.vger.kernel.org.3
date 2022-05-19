@@ -2,191 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B26552DDFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC04552DE01
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244243AbiEST4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S244299AbiEST6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbiEST4b (ORCPT
+        with ESMTP id S231778AbiEST6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 15:56:31 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8845F8EC
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:56:30 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JFG4LX012923
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:56:29 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : cc : subject :
- date : message-id : references : in-reply-to : content-type : content-id :
- content-transfer-encoding : mime-version; s=facebook;
- bh=Bf3nPhbRJYe/0D5S3Mu/2gM66pgxYGFiCdq20FRBRhg=;
- b=KFDziKAy6cdMYLZa/Xnkt7eGbEckMuuvcLhLpJtJNGdVujeA/Hx2YLsSdmY99S9dhrkw
- 4v8qAfjv3hZaZ8nUhK3XNItZLVCP6hfQpqCmx4WsrpfX92d5qWRgbOPLQon0ls8YlDpc
- TR/eQZO73P7w/2FdoP2u8l/ibBkS1s7hCIc= 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2106.outbound.protection.outlook.com [104.47.55.106])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g5b9vp479-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:56:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YPiVlRfH1HBLnI1+6KiuFQQCsJYJ21kPhqwUczQL2BwZKH/Uo0rL2O+UqI5BWJFaXHlwj8k6SLKBAZe3Dn+FUP6F48pGS9kPyO69qHrytpdg+CNp3A4LhFn7mdnagYk1bSMYI9LcxCmTLAuFER1vztxriM1jTKoxUTkM07/3ab2Cr6bj3/14krWcJ9Xm9Pxqvl6awdb0HZR6j/7iudt12T6nIxTAwh5PFRBKKoR2UF368FnHGOLhcMsTdDsd4WbW3OMMXjCjj3PAmONqjQgjKxnmVgLevDMLHhJuX/kI3JsI8jF8MkiTNEOMoD1jBGPk+LERttF+8cp+0KZQT9/uxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bf3nPhbRJYe/0D5S3Mu/2gM66pgxYGFiCdq20FRBRhg=;
- b=WVKyRafUJBu+/wyjLjAwS1Hj+7M2ZzpXhmdS7WQ60++Zzs5DGtk/307EG8mIU1ujHuDxc3vHbodzMZVUCkTfazjEY2Dk9VCMV+q9RFoe8kr/73hjVZ6nZf1l7q/j8JDEYlxGaD+EgFo3JaKTjyc6vSkkDx59Xh/QcpHbuYFsszH/uAcbHWgEsVIyPrwsxhNbCvLqTsZ2LflPioZnKtQx0uDBv5gtyG9xz2Is3H9jKFWz2iRIbCmdTB00Ve/5dycTg6uRmBbJ1VRni23kD2lEhy5T0moI4oN8QFyVOY0JyKsfeyCp35tFD3GBWJE8OZtqyFpIRDlvD08+4ut9utewJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from BYAPR15MB3032.namprd15.prod.outlook.com (2603:10b6:a03:ff::11)
- by BN8PR15MB2754.namprd15.prod.outlook.com (2603:10b6:408:ce::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Thu, 19 May
- 2022 19:56:24 +0000
-Received: from BYAPR15MB3032.namprd15.prod.outlook.com
- ([fe80::45c5:2306:17b3:89eb]) by BYAPR15MB3032.namprd15.prod.outlook.com
- ([fe80::45c5:2306:17b3:89eb%5]) with mapi id 15.20.5273.014; Thu, 19 May 2022
- 19:56:24 +0000
-From:   Peter Delevoryas <pdel@fb.com>
-CC:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        OpenBMC List <openbmc@lists.ozlabs.org>,
-        "BMC-SW@aspeedtech.com" <BMC-SW@aspeedtech.com>,
-        Peter Delevoryas <pdel@fb.com>,
-        "ryan_chen@aspeedtech.com" <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v3 0/3] Add ASPEED AST2600 I2C new controller driver
-Thread-Topic: [PATCH v3 0/3] Add ASPEED AST2600 I2C new controller driver
-Thread-Index: AQHYaPFadatO4kmu/EiPkIJLA5AvH60moyWA
-Date:   Thu, 19 May 2022 19:56:24 +0000
-Message-ID: <DDAAA045-3BDE-4712-A6CC-B1A52713634A@fb.com>
-References: <20220516064900.30517-1-ryan_chen@aspeedtech.com>
-In-Reply-To: <20220516064900.30517-1-ryan_chen@aspeedtech.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 00ba61bd-669e-4186-09b3-08da39d1a737
-x-ms-traffictypediagnostic: BN8PR15MB2754:EE_
-x-microsoft-antispam-prvs: <BN8PR15MB27540F9A0793CF08B3208F7CACD09@BN8PR15MB2754.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: l+4w3vSq38PRF000LIeAHCcgnVDVrXqAVqob36L0yrvLQ7D91a3tU5W8glXSsEUgE50UwhTEsI3NCg/bMVI7pUnXdAOiun7fTwYISsczH2x+DgHSkCnSxEtGW9pjBAU8aY4I3gySpGqReOi/i1ernt6GvosDtfYVzszojfcDZ7lsaVLTCBE1EZ8dBuOOaURFC7QJKXbVpIh5rq7rnZRXnLi/XdBwdsImz8A9UUk1yQakmRzvakuiQ1KLkehHdmnFKMcH57joMNAfD2byBU5pl01wYHRNkn9c2bGRmd4FdYQr3xT7O88qVvPj9uM2fLwKYCdt8ZrcANw0FYnvxnr2bqLCIU2oaM2cpG7hJinR25LWNyfqUx2XGSLYo5twFotxrF/GGibpZFu1k/GrzvXxWmlDwCNOVgNEzf+qZj4srd09LScMlWlha5jCF5ejjOK7HKUmmnDSPihGIE6o8e+KbvG0f5GteQ/XGufsTmC3fMmKM85CvMn6CGpONYoVbDoymo2aEA8n36kZpSh7E7uk3ZCCpWZH1tvXnyicgOgZxqPfN4dqg7sTAwY0eWPKFLzAVc9S8NVDLU9CZsn9uDq2UBt4vzlP0bNFeDs5svq+TK0FTfejTM8cnvlONRUiHSj+8qqsAbyjjtBz7ssejF+ZSiqq3ujm+dYux4b2HAVhNgiqJHvjPPd+rXraxo/vTRe2eL9Y7C42X2kQTKzvIfCsRjZ/rfzVaGhluoaz6yqNQtI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB3032.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(186003)(122000001)(6512007)(83380400001)(6506007)(4326008)(8936002)(508600001)(38070700005)(53546011)(66556008)(76116006)(66946007)(66476007)(66446008)(64756008)(36756003)(8676002)(54906003)(6486002)(5660300002)(71200400001)(38100700002)(316002)(86362001)(109986005)(33656002)(2906002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b3VBWHRsYXBzYTR2S2hibVp3aXZ4eFN3VkhpclR6NElrQzkzbDRYNFZZYUZi?=
- =?utf-8?B?YUFOWEg4L0ltczN1Y0o1bUlRc2Y4Wm5oNCs5L0JCbjUzcmVHQmlNVTNLQ2l4?=
- =?utf-8?B?dnZ4aVYxcEtKQWlvU0tidDE4REdmMFYxQ2g1eWFVSnRZWlV1MU84NUFrbmpZ?=
- =?utf-8?B?R1RFNFdhQkQwYURIZ1R1VmZGdXQ3amVnM3lxbDh3eDg0V2dJT01KcXJ6a0pn?=
- =?utf-8?B?QUo5ZU91TlRsN2NvWXpTbyszSlFjMThGMkQ3N1Z0SEhHUmFJNUE2akIvdHdL?=
- =?utf-8?B?ZzBkckRLQXlNUk9Zb2F4bnlGUCtudythc054YXMxNHNTSXB5VkRyNHNBek9X?=
- =?utf-8?B?RDJCbzZrdzZacjdzM3VGRjV2TVBjN3F0TUsyYm41MmxuQVorbDNjd0pGZHU0?=
- =?utf-8?B?Y1BwSXd6MTZ4U2tCeFltbnkyY1dBL1R6ZE1GU1JuMXZhK01temFKdkVJNjFy?=
- =?utf-8?B?Smg5bnZSdnVkcUk1dTJyVXJtR3JjOWRuRy9TU0ZTTzNuWi9VOTIxSE5zUVdm?=
- =?utf-8?B?bHpBNFMwUyswME8wbGJUSENUY0hQMVo5dU5ENGVrUmJ6ZG1rZyt2bCtOYmph?=
- =?utf-8?B?eFZWK3VQaEpwSTBOWHdWUzNXQ2RnVWl0QWU2Q1dDNmxuNVpOdkZScDlDMy9t?=
- =?utf-8?B?SmpLZHQ2bFRidXhZVEx0OUdhb0YweS80OU9wc2R0NmlGTXNJRFFDNkt4Um9G?=
- =?utf-8?B?d0dhZWM0ZTkyZ1N6dmhpSXZTYllBQ0NienM5S0MzejU4SzlJZXEwQjUyZVFY?=
- =?utf-8?B?dmY5cWtJbVozYmR0dWpYSjlpUXlLT3RCY2lzc1RqeTZhRTVqLzJBTG1mRzZ5?=
- =?utf-8?B?LzJieGZBZnNaanZVUzllZzBWTmpxOFZMaFlydzg2NjVRd3NOanhNQmEvUi9J?=
- =?utf-8?B?WmhtTDA0NW4zdHE0MzNSWXlwUVJUS3B1VnVXTFg1RnFtWHdTVEhML3dvbVZC?=
- =?utf-8?B?S2E3cDBsMWUyM3Rlb09WdFRIQ3Z1K0pGeDBUVXpGWjJuenAwS2I3TVdoM2Nn?=
- =?utf-8?B?dTRJZ0E3TGZ6ODBUcElmWFFsOU9kS3pDeWpESk9mWWxEWEpuZ3QwdWFvNW9Q?=
- =?utf-8?B?U2luQjNEaWJRM1lNS1RIdXZ1MWE4S0IybGFxZTBRbG9pcGtheUJVZHRuUEtO?=
- =?utf-8?B?VEFYOTRCa3V1R29PdDE3RlQzTm9ObFBqeFVCdSswcFV3Y1YzblNOeGhPMU00?=
- =?utf-8?B?bHB3REVNVFhqbGd1U3EzNVZ5TTI0MmJ4MkYrdXpWVnZTVGhaRkdwQUN2Nmpk?=
- =?utf-8?B?Rk5tN2l1N25IS1VSUnBTMjI0WUJsMEY3VmhlQ2IrQ2hYOURSL3J2QnFERmVH?=
- =?utf-8?B?TDlYWG1WSzMrcnEvNzlUMnh1SWJuc1B0bW9sR1hIODhiMFVQL2g2Mjd5ODNz?=
- =?utf-8?B?dlRVbzh0cEpxenkwenFidm50SlpCcGdmdVFFYlgrLzl2Qm93V2R3WVhTMUdM?=
- =?utf-8?B?ekZDM3N6K2dJVHdqUFFvMnBBdmZjV0VVTmMrTVRDdC80Sk1qZlJmc1JJUjNr?=
- =?utf-8?B?ZklsQVpNbzBSSzNwSmhjRXY3MXBRclRibU9kc2RyRWJtbTVQNjQ0VG1BOHJT?=
- =?utf-8?B?andoeXhQcG85aHpHcXlKbFNlQ3ZtTHE0dnpkcGptb3BHelhFcTRYVE9iYWhw?=
- =?utf-8?B?MmdKTlBqVTBQZHZJV1dSekx6WWdlMElocEpuUWRONEFzbit5emZxL05KY242?=
- =?utf-8?B?bXdpbXg3VGo5RzRGc2pkc2x0eEl2Z1crTU5ZQzE0K1UzMVcvMWFyakFMTnUr?=
- =?utf-8?B?Y1M1VThiZThreC9OOENWOHBqaWJqU0FTK0xoeTlFMzhGeC94RXB2N1pGNlJj?=
- =?utf-8?B?U2FxTG1SNmRLUi9QS0ZGWEhHYm1rT1NIaVBBTC9MeHp2UUVCWGQ0TjZqSHc2?=
- =?utf-8?B?Zmd3ZEUvK1VVUU9qWXAxUktHUUhOclZZTHJMZUJDSlpBSWl2QkwvRkpkMHNx?=
- =?utf-8?B?NWJTd0VKNEowNHQ5QURjaXM0MkgxOXFpOHNvczVuVlp3R1k5dGlPTGJmdGYr?=
- =?utf-8?B?ZG1rOUxLQ1haMC9NTmkwT1Y5alo3d29SaDJBUy9pUVc5ZlFZRTNQYU85K0gv?=
- =?utf-8?B?RlF1ZlZMdnFHUjB4bjE3Vi9HSnRldmdOeHhJSEJTV0hRZ0NsOVY4S3dFT3hW?=
- =?utf-8?B?Wm9RTmx6ZVdFRXdZWGh6ZlhUaGVQRS83a1MrenJpeHd2bzJzTlZZZ0g4cEMx?=
- =?utf-8?B?VDNhRkxJcVpjMnArMW5uV2RmTVBGb3NhS1RNZE9VYU5zS1czcURKbHBWSzZw?=
- =?utf-8?B?T2NVazZCd1Bxd1ROdHVRT0JYNWVnWkF4OGc2Y1BNKzcyaFV4MDFBWSt0WGdR?=
- =?utf-8?B?ZGpObCtCZGprbit5a2l6eUN3WTgycVJQMTdGSkRqalZRWFl3N0Fic29ZK3dI?=
- =?utf-8?Q?8NFh/LULrMImLA+8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5034F89993E91245B65A45F289AD9390@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 19 May 2022 15:58:16 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6F95FF13;
+        Thu, 19 May 2022 12:58:14 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id y66so1676010oia.1;
+        Thu, 19 May 2022 12:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bNwZ2EL5l9pqOGLmXHwS/SvVt+YGwEiHYwLMjnHme0g=;
+        b=CT128T0ENZ1kod4vIh+TAdBdple26wIN5+dSwQn6ibzKvp8wufDONSNbKVx60faDiO
+         9EDQm7hVNFeeWpSN1jL+hEjaaSa5/9NJE3492tAu18nyRwifP4+wujmTmtMDFe97XFxU
+         9tCOi6bTI4fcu1E4MyCntBnLuws/LFJuiO9f964BiX6drJPbDykIYgxC6rDgjJKV5DGz
+         QuK2cQWn3KmoO+cWzKHXTloxY4xyCkItQWd2FOvxtFHA2Vl3EcEhxydTKskW0s5hBcZe
+         Wa8UOaG1/aQreMNblE5RXKt6CDIa9rpXlhdSrQieJUUG5/yefL+82Ls3nIw+Ofs7tSlK
+         V++g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bNwZ2EL5l9pqOGLmXHwS/SvVt+YGwEiHYwLMjnHme0g=;
+        b=rTYIq2aq6pzYo8AYPmwOs9HOGSR0CD91C18nh0jhDHnTax7Zmmp3Wt+xvnfYZ8bUAS
+         UfIMwVFMSWXfagVAAsRBPY2CP3M+T4EOarTRpR3gGK85WDizfAVufhjzNttY5tzTUU+s
+         P8gJCj3lOZsfi0ccKFwr0pXkvK2nWs5BfsrQuhhHW8KDntm5XYCvYc8NAibWk9zZp2bH
+         7mnArKomtBrRX1Pn5LLi2Dfgw308PoVvS+JWvehuvELSSQYiCGRSIOWf0gNaoeVhn4e0
+         l5zUJZyPbSRCLrFXwgrlw7PJe3H/L94swQfMu5Pkjl1NZmy7KjfRhXhf4L1+Ry4ESNES
+         D84g==
+X-Gm-Message-State: AOAM530YixE1nUpQkjr1jSAyOOYYnFs7ah1i0mFXtJ/lVlH7+pFSI9sP
+        KgocOyYJ/7Npit9MmujAlEc0yS3mbIWRJINPGHs=
+X-Google-Smtp-Source: ABdhPJyRYb0iYBT1siYFoH9meYhzmoo/50aNTb3ItoRVR3vElGVH+zzBidNJVfI14JMomY26RpXQ5WpKnccxD+3uldQ=
+X-Received: by 2002:a05:6808:148e:b0:326:abe8:af49 with SMTP id
+ e14-20020a056808148e00b00326abe8af49mr3698725oiw.73.1652990293708; Thu, 19
+ May 2022 12:58:13 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB3032.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00ba61bd-669e-4186-09b3-08da39d1a737
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2022 19:56:24.2540
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8oY4M9+l9JxhdxcFsCykRLFwzqeUkIiYYHpDX3JAKXsIL31RMhmuc/tU7kxa0t7X
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB2754
-X-Proofpoint-GUID: -y4sVFiO3PbIr3pCmB-JGfHWYpzuAxrG
-X-Proofpoint-ORIG-GUID: -y4sVFiO3PbIr3pCmB-JGfHWYpzuAxrG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-19_06,2022-05-19_03,2022-02-23_01
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220518194211.20143-1-jim2101024@gmail.com> <20220519161053.GA24069@bhelgaas>
+ <CANCKTBsmtTwNcAYR6bkM4b__sJXXd1U++KrMTgkDbuiyX=UKLQ@mail.gmail.com>
+In-Reply-To: <CANCKTBsmtTwNcAYR6bkM4b__sJXXd1U++KrMTgkDbuiyX=UKLQ@mail.gmail.com>
+From:   Jim Quinlan <jim2101024@gmail.com>
+Date:   Thu, 19 May 2022 15:58:02 -0400
+Message-ID: <CANCKTBuz9FG-aGuwM-thFgkAyTi480=1j78DpjWUkgU4UDuurg@mail.gmail.com>
+Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe linkup
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        James Dutton <james.dutton@gmail.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gTWF5IDE1LCAyMDIyLCBhdCAxMTo0OCBQTSwgcnlhbl9jaGVuIDxyeWFuX2NoZW5A
-YXNwZWVkdGVjaC5jb20+IHdyb3RlOg0KPiANCj4gVGhpcyBzZXJpZXMgYWRkIEFTVDI2MDAgaTJj
-IG5ldyByZWdpc3RlciBzZXQgZHJpdmVyLiBUaGUgaTJjIG5ldw0KPiByZWdpc3RlciBzZXQgaGF2
-ZSBuZXcgY2xvY2sgZGl2aWRlciBvcHRpb24gZm9yIG1vcmUgZmxleGlhYmxlIGdlbmVyYXRpb24u
-DQo+IEFuZCBhbHNvIGhhdmUgc2VwYXJhdGUgaTJjIG1hc3RlciBhbmQgc2xhdmUgcmVnaXN0ZXIg
-c2V0IGZvciBjb250cm9sLg0KDQpIZXkgUnlhbiwgdGhhbmtzIGZvciB0aGlzIHdvcmshIFRoaXMg
-aXMgYSBsaXR0bGUgYml0IG9mZi10b3BpYywNCmJ1dCBhcmUgeW91IG9yIGFueW9uZSBlbHNlIGF0
-IEFzcGVlZCB3b3JraW5nIG9uIGFuIGVxdWl2YWxlbnQgUUVNVQ0KcGF0Y2ggc2VyaWVzPyBXaXRo
-b3V0IGl0LCBJIGRvbuKAmXQgdGhpbmsgUUVNVSB3aWxsIHdvcmsgd2l0aCB0aGlzDQpzZXJpZXMg
-cmlnaHQ/IEkgdGhpbmsgUUVNVSBvbmx5IHN1cHBvcnRzIHRoZSBvbGQgcmVnaXN0ZXIgc2V0IHJp
-Z2h0IG5vdy4NCg0KVGhhbmtzLA0KUGV0ZXINCg0KPiANCj4gdjM6DQo+IC1maXggaTJjIGdsb2Jh
-bCBjbG9jayBkaXZpZGUgZGVmYXVsdCB2YWx1ZQ0KPiAtcmVtb3ZlIGkyYyBzbGF2ZSBubyB1c2Vk
-IGRldl9kYmcgaW5mby4NCj4gDQo+IHYyOg0KPiAtYWRkIGkyYyBnbG9iYWwgeW1hbCBmaWxlIGNv
-bW1pdA0KPiAtcmVuYW1lIGZpbGUgbmFtZSBmcm9tIG5ldyB0byBhc3QyNjAwLg0KPiBhc3BlZWQt
-aTJjLW5ldy1nbG9iYWwuYyAtPiBpMmMtYXN0MjYwMC1nbG9iYWwuYw0KPiBhc3BlZWQtaTJjLW5l
-dy1nbG9iYWwuaCAtPiBpMmMtYXN0MjYwMC1nbG9iYWwuaA0KPiBpMmMtbmV3LWFzcGVlZC5jIC0+
-IGkyYy1hc3QyNjAwLmMNCj4gLXJlbmFtZSBhbGwgZHJpdmVyIGZ1bmN0aW9uIG5hbWUgdG8gYXN0
-MjYwMA0KPiANCj4gcnlhbl9jaGVuICgzKToNCj4gIGR0LWJpbmRpbmdzOiBpMmMtYXN0MjYwMDog
-QWRkIGJpbmRpbmdzIGZvciBBU1QyNjAwIGkyQyBnbG9iYWwgcmVnaXN0ZXINCj4gICAgY29udHJv
-bGxlcg0KPiAgZHQtYmluZGluZ3M6IGkyYy1hc3QyNjAwOiBBZGQgYmluZGluZ3MgZm9yIEFTVDI2
-MDAgaTJDIGRyaXZlcg0KPiAgaTJjOmFzcGVlZDpzdXBwb3J0IGFzdDI2MDAgaTJjIG5ldyByZWdp
-c3RlciBtb2RlIGRyaXZlcg0KPiANCj4gLi4uL2kyYy9hc3BlZWQsaTJjLWFzdDI2MDAtZ2xvYmFs
-LnltYWwgICAgICAgIHwgICA0NCArDQo+IC4uLi9iaW5kaW5ncy9pMmMvYXNwZWVkLGkyYy1hc3Qy
-NjAwLnltYWwgICAgICB8ICAgNzggKw0KPiBkcml2ZXJzL2kyYy9idXNzZXMvS2NvbmZpZyAgICAg
-ICAgICAgICAgICAgICAgfCAgIDExICsNCj4gZHJpdmVycy9pMmMvYnVzc2VzL01ha2VmaWxlICAg
-ICAgICAgICAgICAgICAgIHwgICAgMSArDQo+IGRyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtYXN0MjYw
-MC1nbG9iYWwuYyAgICAgICB8ICAgOTQgKw0KPiBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLWFzdDI2
-MDAtZ2xvYmFsLmggICAgICAgfCAgIDE5ICsNCj4gZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hc3Qy
-NjAwLmMgICAgICAgICAgICAgIHwgMTcwMyArKysrKysrKysrKysrKysrKw0KPiA3IGZpbGVzIGNo
-YW5nZWQsIDE5NTAgaW5zZXJ0aW9ucygrKQ0KPiBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRh
-dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9hc3BlZWQsaTJjLWFzdDI2MDAtZ2xvYmFsLnlt
-YWwNCj4gY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy9pMmMvYXNwZWVkLGkyYy1hc3QyNjAwLnltYWwNCj4gY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZl
-cnMvaTJjL2J1c3Nlcy9pMmMtYXN0MjYwMC1nbG9iYWwuYw0KPiBjcmVhdGUgbW9kZSAxMDA2NDQg
-ZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1hc3QyNjAwLWdsb2JhbC5oDQo+IGNyZWF0ZSBtb2RlIDEw
-MDY0NCBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLWFzdDI2MDAuYw0KPiANCj4gLS0gDQo+IDIuMTcu
-MQ0KPiANCj4gDQoNCg==
+On Thu, May 19, 2022 at 2:04 PM Jim Quinlan <jim2101024@gmail.com> wrote:
+>
+> On Thu, May 19, 2022 at 12:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > [+to Rob for my naive DT questions]
+> >
+> > On Wed, May 18, 2022 at 03:42:11PM -0400, Jim Quinlan wrote:
+> > > commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+> > >
+> > > introduced a regression on the PCIe RPi4 Compute Module.  If the PCIe
+> > > endpoint node described in [2] was missing, no linkup would be attempted,
+> > > and subsequent accesses would cause a panic because this particular PCIe HW
+> > > causes a CPU abort on illegal accesses (instead of returning 0xffffffff).
+> > >
+> > > We fix this by allowing the DT endpoint subnode to be missing.  This is
+> > > important for platforms like the CM4 which havedev->dev.of_nodei a standard PCIe socket and
+> > > the endpoint device is unknown.
+> >
+> > I assume you're referring specifically to making this optional in the
+> > DT:
+> >
+> >     /* PCIe endpoint */
+> >     pci-ep@0,0 {
+> >             assigned-addresses =
+> >                 <0x82010000 0x0 0xf8000000 0x6 0x00000000 0x0 0x2000>;
+> >             reg = <0x0 0x0 0x0 0x0 0x0>;
+> >             compatible = "pci14e4,1688";
+> >     };
+> >
+> Actually, both that and the node that contains it, i.e. pci@0,0.
+>
+> > I don't really understand what's going on here, but I assume this
+> > describes a [14e4:1688] device, which the PCI database says is a
+> > NetXtreme BCM5761 10/100/1000BASE-T Ethernet
+> > (https://pci-ids.ucw.cz/read/PC/14e4/1688)
+>
+> Yes.  I use an assortment of PCIe endpoint devices for testing.
+> >
+> > Why do you *ever* need this stanza?  "git grep pci-ep
+> > Documentation/devicetree/bindings/pci/" says no other DT has one.
+>
+> You'll find one in
+> "Documentation/devicetree/bindings/pci/nvidia,tegra-pcie.txt", line
+> ~240, although this
+> is a board DTS example.  They use "pci@0,0" for endpoint 02:00.0,
+> whereas I find "pci-ep" to
+> be more descriptive.
+>
+> Note that  the "pci-ep@0,0" node is in the "example" section of
+> brcm,stb-pcie.yaml; but nothing
+> says it is required.  I believe it was added it because a reviewer
+> asked me to, but if I remember
+> incorrectly,  it does illustrate that "pcie@0,0" is not the endpoint
+> device node as many would think.
+>
+> Note that the regression occurred because "pci@0,0" was missing, not
+> "pci-ep@0,0" as I first thought.
+>
+> >
+> > If the link does come up, I assume normal PCI enumeration would
+> > discover the [14e4:1688] or whatever device is plugged into a CM4
+> > socket, and it would read and assign BARs as needed.  Why do we need
+> > to describe any of this in the DT?
+Hi Bjorn,
+
+I was remiss in not mentioning our biggest actual use of specifying
+this sub-subnode: to pass info to the endproint driver.  For example:
+
+pcie@1000110000 {
+        compatible = "brcm,bcm7211-pcie";
+        /* ... */
+
+        pci@0,0 {
+                compatible = "pciclass,0604";
+                /* ... */
+
+                pci-ep@0,0 {
+                        local-mac-address = [ 00 10 18 d0 3c 51 ];
+                        reg = <0x10000 0x0 0x0 0x0 0x0>;
+                };
+        };
+};
+
+The PCIe endpoint driver can just invoke
+
+        of_get_mac_address(dev->dev.of_node, &addr)
+
+
+Regards,
+Jim Quinlan
+Broadcom STB
+
+
+> The only  reason one needs to describe this node is  when a regulator is
+> under the root port, in my case pci@0,0.  In the example this is
+>
+>                             vpcie3v3-supply = <&vreg7>;
+>
+> This was the entire reason behind the original patchset.
+> >
+> > If the link doesn't come up, it looks like you set the "refusal_mode"
+> > so subsequent config accesses fail gracefully instead of with a CPU
+> > abort.
+> Yes.
+> >
+> > [Tangent: since you never clear "refusal_mode", I assume there's no
+> > possibility of hot-adding a device.  A device must be put in the slot
+> > before power-up, right?]
+> Yes, we do not have the HW functionality to support hotplug.
+>
+> >
+> > > [1] https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> > > [2] Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
+> > >
+> > > Fixes: 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
+> > > Fixes: 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
+> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
+> > > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
+> > > ---
+> > >  drivers/pci/controller/pcie-brcmstb.c | 8 +++++---
+> > >  1 file changed, 5 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+> > > index ba5c120816b2..adca74e235cb 100644
+> > > --- a/drivers/pci/controller/pcie-brcmstb.c
+> > > +++ b/drivers/pci/controller/pcie-brcmstb.c
+> > > @@ -540,16 +540,18 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
+> > >
+> > >  static int brcm_pcie_add_bus(struct pci_bus *bus)
+> > >  {
+> > > -     struct device *dev = &bus->dev;
+> > >       struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
+> > >       int ret;
+> > >
+> > > -     if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
+> > > +     /* Only busno==1 requires us to linkup */
+> > > +     if ((int)bus->number != 1)
+> >
+> > It's a big leap from "DT endpoint is optional" to "bus->number == 1 if
+> > DT endpoint is missing" (if that's even what it means).  Help me
+> > connect the dots here.
+> The brcm_pcie_add_bus() function returned immediately and skipped linkup
+> when (!dev->of_node). That clause was removed from that function, which
+> is the true fix for the regression,  but you can see thiscondition
+> is still tested in pci_subdev_regulators_add_bus().
+>
+> I added the "busno != 1" as an added precaution,
+> as the brcmstb RC driver only cares about pcie linkup and turning on
+> regulators when busno==1.
+>
+> If this regulator mechanism becomes a feature any RC driver may use --
+> as it was in
+> v8 of the original patch but was moved to pcie-brcamstb only to avoid conflicts
+> with Pali's upcoming RC functionality improvements -- I would probably consider
+> removing the busno==1 clause.
+>
+> Regards and thanks,
+> Jim Quinlan
+> Broadcom S
+>
+>
+> >
+> > I *guess* this is really saying "we only want to bring the link up for
+> > RPs"?
+> >
+> > And "bus->number == 1" assumes the RP is on bus 0, there's only one
+> > RP, and that RP's secondary bus is 1?  So it's only in that case
+> > (we're adding the secondary bus of the RP), that we need to manually
+> > bring up the link?
+> >
+> > >               return 0;
+> > >
+> > >       ret = pci_subdev_regulators_add_bus(bus);
+> > > -     if (ret)
+> > > +     if (ret) {
+> > > +             pcie->refusal_mode = true;
+> >
+> > Is this related?  It doesn't *look* related to making the DT endpoint
+> > optional.
+> >
+> > >               return ret;
+> > > +     }
+> > >
+> > >       /* Grab the regulators for suspend/resume */
+> > >       pcie->sr = bus->dev.driver_data;
+> > >
+> > > base-commit: ef1302160bfb19f804451d0e919266703501c875
+> > > prerequisite-patch-id: 23a425390a4226bd70bbff459148c80f5e28379c
+> > > prerequisite-patch-id: e3f2875124b46b2b1cf9ea28883bf0c864b79479
+> > > prerequisite-patch-id: 9cdd706ee2038c7b393c4d65ff76a1873df1ca03
+> > > prerequisite-patch-id: 332ac90be6e4e4110e27bdd1caaff212c129f547
+> > > prerequisite-patch-id: 32a74f87cbfe9e8d52c34a4edeee6d271925665a
+> > > prerequisite-patch-id: f57cdf7ec7080bb8c95782bc7c3ec672db8ec1ce
+> > > prerequisite-patch-id: 18dc9236aed47f708f5c854afd832f3c80be5ea7
+> > > prerequisite-patch-id: dd147c6854c4ca12a9a8bd4f5714968a59d60e4e
+> > > --
+> > > 2.17.1
+> > >

@@ -2,144 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B470C52D37D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4442252D389
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238417AbiESNFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
+        id S238479AbiESNGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238401AbiESNFP (ORCPT
+        with ESMTP id S238401AbiESNFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:05:15 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FFA67D2D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:05:13 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id gi33so1345430ejc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:05:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=G6YuboORwpMKH3kgsyEnDpX5q6QVLrgo6p9d80QaHps=;
-        b=YYNlshkULZlPppbaPR9vg+3EosYT54w3fmA/4GYTKYu9YiGQqfWQ7gED6aDJlEqzFs
-         Og/0BsuIk9qG4mm9Vo+XjvvQU+gFRVxnL8uCtLTBZ9jRBSV2UqIlDbSG7dcLfEmqUK/Q
-         b3fHfRY6zuCp1MZEM3Av1VGeSKj7DqF0v/BT0=
+        Thu, 19 May 2022 09:05:49 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFC8C03;
+        Thu, 19 May 2022 06:05:44 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id s12-20020a0568301e0c00b00605f30530c2so3488203otr.9;
+        Thu, 19 May 2022 06:05:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=G6YuboORwpMKH3kgsyEnDpX5q6QVLrgo6p9d80QaHps=;
-        b=KKujMPnoV0U38TScHLBWip8ZJ6gDS6QkQ6zn+2Ws139dW483ffbVN6fe3XI0xmpKoY
-         ZM/cVptjzvtdBc2I1DzMidqBWm93N/3C0shx0ifmP07FWuLp0mpn3SS7h0skmprVo8WL
-         tDd0ivUknktYolGwFdWhPNAVH+42orl2VIkjMltI9zLBPVbux28N2b8uAyaxF7LtJNRF
-         dtftbMMxgTCmIVLb/HeChznmXAX5M4JqWdnBYL6eiP/K1hGnrN9xaeouZe14DeH2gWPJ
-         wnJByP3nLurcmSEQsD3oTeNJwvxZHB3MiawwdgrAeLHBBUJAudLKx3+KV+6lfWSQJ9GI
-         +bgQ==
-X-Gm-Message-State: AOAM531qdq3V37Vw05TJElUzhjjjxsqK+wqhH5ti0SYVxzlbx6zQeQqR
-        yN+3/nQhvTvSmz1YuW+K/htEcw==
-X-Google-Smtp-Source: ABdhPJzEbbvboVV6lCCTbtSCbKLorkhNmi/F8uRJ5SFn7MGR8V3og7YUFHGx7AMrXTaC53/nWkWm8A==
-X-Received: by 2002:a17:906:c113:b0:6f8:faee:2f22 with SMTP id do19-20020a170906c11300b006f8faee2f22mr4145202ejc.447.1652965511208;
-        Thu, 19 May 2022 06:05:11 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id c62-20020a509fc4000000b0042aae3f282esm2842868edf.65.2022.05.19.06.05.10
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Q/j+6fWgTqD415mSRX9AX0OXoNhg/oIoVCv39xRaqdo=;
+        b=gYQQI0cKb6ZC+EVtZ433tLxSNNolxHSfxLXLsGwMV1k4TsOzH5v2MFajvFAybTiFVC
+         QOFbDUx1orTzKAcJBWKbJXlaQfA9ef1Iaj8TP3K0KGlXVXjRU4rpgLd3KACORlXTZKMq
+         +HB0cHt+Tp1hw9Q+MEG8E7rf8dgku7plZMCHHsrNUfcVYFlto2h68CbM2lWrA9QxIYdU
+         oCI8hlFSF9KKcSr2d0sz3H8bOrgkLlymIUBSpOBvUoVumScULH3ITKwebrwZUpXIGUvi
+         1VjfWiHzNo1MBhk8kqXZLiJLQmnxSCcfNeCVLOVItYbxT2C2wJhVYbJuS93OnuydtPy4
+         T3lQ==
+X-Gm-Message-State: AOAM530+I5d95mQxpg9crDSEWyHR0F3QkkHrZZe30F4qXj4YBl6qPDxO
+        aIeFKQLAA82n9LL/DhE6x4FFakPZyQ==
+X-Google-Smtp-Source: ABdhPJyPEkqet1JAMCaueSPlwvRkHmeO55aWygzOBFDEVMu07vwehIQomdtoatme15/VpZ1w6QwVQw==
+X-Received: by 2002:a05:6830:1e13:b0:605:f05e:d413 with SMTP id s19-20020a0568301e1300b00605f05ed413mr1876449otr.296.1652965543699;
+        Thu, 19 May 2022 06:05:43 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r206-20020aca5dd7000000b00325cda1ffbbsm1752423oib.58.2022.05.19.06.05.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 06:05:10 -0700 (PDT)
-Date:   Thu, 19 May 2022 15:05:08 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 04/11] drm/r128: Fix undefined behavior due to shift
- overflowing the constant
-Message-ID: <YoZAhPj0IJmE8ss8@phenom.ffwll.local>
-Mail-Followup-To: Randy Dunlap <rdunlap@infradead.org>,
-        Borislav Petkov <bp@alien8.de>, LKML <linux-kernel@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        dri-devel@lists.freedesktop.org
-References: <20220405151517.29753-1-bp@alien8.de>
- <20220405151517.29753-5-bp@alien8.de>
- <04ff7802-c87a-2ea2-156e-c437446bc072@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <04ff7802-c87a-2ea2-156e-c437446bc072@infradead.org>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 19 May 2022 06:05:42 -0700 (PDT)
+Received: (nullmailer pid 1359569 invoked by uid 1000);
+        Thu, 19 May 2022 13:05:39 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220519105928.22826-1-angelogioacchino.delregno@collabora.com>
+References: <20220519105928.22826-1-angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH] dt-bindings: serial: mtk-uart: Convert txt to json-schema
+Date:   Thu, 19 May 2022 08:05:39 -0500
+Message-Id: <1652965539.994674.1359568.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 11:46:53AM -0700, Randy Dunlap wrote:
+On Thu, 19 May 2022 12:59:28 +0200, AngeloGioacchino Del Regno wrote:
+> Convert the mtk-uart documentation from freeform text to a json-schema.
 > 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../bindings/serial/mediatek,uart.yaml        | 118 ++++++++++++++++++
+>  .../devicetree/bindings/serial/mtk-uart.txt   |  59 ---------
+>  2 files changed, 118 insertions(+), 59 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/serial/mediatek,uart.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/serial/mtk-uart.txt
 > 
-> On 4/5/22 08:15, Borislav Petkov wrote:
-> > From: Borislav Petkov <bp@suse.de>
-> > 
-> > Fix:
-> > 
-> >   drivers/gpu/drm/r128/r128_cce.c: In function ‘r128_do_init_cce’:
-> >   drivers/gpu/drm/r128/r128_cce.c:417:2: error: case label does not reduce to an integer constant
-> >     case R128_PM4_64BM_64VCBM_64INDBM:
-> >     ^~~~
-> >   drivers/gpu/drm/r128/r128_cce.c:418:2: error: case label does not reduce to an integer constant
-> >     case R128_PM4_64PIO_64VCPIO_64INDPIO:
-> >     ^~~~
-> > 
-> > See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-> > details as to why it triggers with older gccs only.
-> > 
-> > Signed-off-by: Borislav Petkov <bp@suse.de>
-> > Cc: David Airlie <airlied@linux.ie>
-> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > Cc: Alex Deucher <alexander.deucher@amd.com>
-> > Cc: dri-devel@lists.freedesktop.org
-> 
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-Pushed to drm-misc-next, thanks for patch&review.
--Daniel
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-> 
-> Thanks.
-> 
-> > ---
-> >  drivers/gpu/drm/r128/r128_drv.h | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/r128/r128_drv.h b/drivers/gpu/drm/r128/r128_drv.h
-> > index 2e1bc01aa5c9..970e192b0d51 100644
-> > --- a/drivers/gpu/drm/r128/r128_drv.h
-> > +++ b/drivers/gpu/drm/r128/r128_drv.h
-> > @@ -300,8 +300,8 @@ extern long r128_compat_ioctl(struct file *filp, unsigned int cmd,
-> >  #	define R128_PM4_64PIO_128INDBM		(5  << 28)
-> >  #	define R128_PM4_64BM_128INDBM		(6  << 28)
-> >  #	define R128_PM4_64PIO_64VCBM_64INDBM	(7  << 28)
-> > -#	define R128_PM4_64BM_64VCBM_64INDBM	(8  << 28)
-> > -#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15 << 28)
-> > +#	define R128_PM4_64BM_64VCBM_64INDBM	(8U  << 28)
-> > +#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15U << 28)
-> >  #	define R128_PM4_BUFFER_CNTL_NOUPDATE	(1  << 27)
-> >  
-> >  #define R128_PM4_BUFFER_WM_CNTL		0x0708
-> 
-> -- 
-> ~Randy
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Full log is available here: https://patchwork.ozlabs.org/patch/
+
+
+serial@11002000: compatible:0: 'mediatek,mt6577-uart' is not one of ['mediatek,mt2701-uart', 'mediatek,mt2712-uart', 'mediatek,mt6580-uart', 'mediatek,mt6582-uart', 'mediatek,mt6589-uart', 'mediatek,mt6755-uart', 'mediatek,mt6765-uart', 'mediatek,mt6779-uart', 'mediatek,mt6795-uart', 'mediatek,mt6797-uart', 'mediatek,mt7622-uart', 'mediatek,mt7623-uart', 'mediatek,mt7629-uart', 'mediatek,mt7986-uart', 'mediatek,mt8127-uart', 'mediatek,mt8135-uart', 'mediatek,mt8173-uart', 'mediatek,mt8183-uart', 'mediatek,mt8186-uart', 'mediatek,mt8192-uart', 'mediatek,mt8195-uart', 'mediatek,mt8516-uart']
+	arch/arm/boot/dts/mt6592-evb.dtb
+
+serial@11002000: compatible: ['mediatek,mt6577-uart'] is too short
+	arch/arm/boot/dts/mt6592-evb.dtb
+
+serial@11003000: compatible:0: 'mediatek,mt6577-uart' is not one of ['mediatek,mt2701-uart', 'mediatek,mt2712-uart', 'mediatek,mt6580-uart', 'mediatek,mt6582-uart', 'mediatek,mt6589-uart', 'mediatek,mt6755-uart', 'mediatek,mt6765-uart', 'mediatek,mt6779-uart', 'mediatek,mt6795-uart', 'mediatek,mt6797-uart', 'mediatek,mt7622-uart', 'mediatek,mt7623-uart', 'mediatek,mt7629-uart', 'mediatek,mt7986-uart', 'mediatek,mt8127-uart', 'mediatek,mt8135-uart', 'mediatek,mt8173-uart', 'mediatek,mt8183-uart', 'mediatek,mt8186-uart', 'mediatek,mt8192-uart', 'mediatek,mt8195-uart', 'mediatek,mt8516-uart']
+	arch/arm/boot/dts/mt6592-evb.dtb
+
+serial@11003000: compatible: ['mediatek,mt6577-uart'] is too short
+	arch/arm/boot/dts/mt6592-evb.dtb
+
+serial@11003000: More than one condition true in oneOf schema:
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-cozmo.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-damu.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel14-sku2.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku6.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku7.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-juniper-sku16.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kappa.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-kenzo.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku0.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-willow-sku1.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kakadu-sku22.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku16.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku272.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku288.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-kodama-sku32.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku0.dtb
+	arch/arm64/boot/dts/mediatek/mt8183-kukui-krane-sku176.dtb
+
+serial@11004000: compatible:0: 'mediatek,mt6577-uart' is not one of ['mediatek,mt2701-uart', 'mediatek,mt2712-uart', 'mediatek,mt6580-uart', 'mediatek,mt6582-uart', 'mediatek,mt6589-uart', 'mediatek,mt6755-uart', 'mediatek,mt6765-uart', 'mediatek,mt6779-uart', 'mediatek,mt6795-uart', 'mediatek,mt6797-uart', 'mediatek,mt7622-uart', 'mediatek,mt7623-uart', 'mediatek,mt7629-uart', 'mediatek,mt7986-uart', 'mediatek,mt8127-uart', 'mediatek,mt8135-uart', 'mediatek,mt8173-uart', 'mediatek,mt8183-uart', 'mediatek,mt8186-uart', 'mediatek,mt8192-uart', 'mediatek,mt8195-uart', 'mediatek,mt8516-uart']
+	arch/arm/boot/dts/mt6592-evb.dtb
+
+serial@11004000: compatible: ['mediatek,mt6577-uart'] is too short
+	arch/arm/boot/dts/mt6592-evb.dtb
+
+serial@11005000: compatible:0: 'mediatek,mt6577-uart' is not one of ['mediatek,mt2701-uart', 'mediatek,mt2712-uart', 'mediatek,mt6580-uart', 'mediatek,mt6582-uart', 'mediatek,mt6589-uart', 'mediatek,mt6755-uart', 'mediatek,mt6765-uart', 'mediatek,mt6779-uart', 'mediatek,mt6795-uart', 'mediatek,mt6797-uart', 'mediatek,mt7622-uart', 'mediatek,mt7623-uart', 'mediatek,mt7629-uart', 'mediatek,mt7986-uart', 'mediatek,mt8127-uart', 'mediatek,mt8135-uart', 'mediatek,mt8173-uart', 'mediatek,mt8183-uart', 'mediatek,mt8186-uart', 'mediatek,mt8192-uart', 'mediatek,mt8195-uart', 'mediatek,mt8516-uart']
+	arch/arm/boot/dts/mt6592-evb.dtb
+
+serial@11005000: compatible: ['mediatek,mt6577-uart'] is too short
+	arch/arm/boot/dts/mt6592-evb.dtb
+
+serial@11006000: compatible:0: 'mediatek,mt6577-uart' is not one of ['mediatek,mt2701-uart', 'mediatek,mt2712-uart', 'mediatek,mt6580-uart', 'mediatek,mt6582-uart', 'mediatek,mt6589-uart', 'mediatek,mt6755-uart', 'mediatek,mt6765-uart', 'mediatek,mt6779-uart', 'mediatek,mt6795-uart', 'mediatek,mt6797-uart', 'mediatek,mt7622-uart', 'mediatek,mt7623-uart', 'mediatek,mt7629-uart', 'mediatek,mt7986-uart', 'mediatek,mt8127-uart', 'mediatek,mt8135-uart', 'mediatek,mt8173-uart', 'mediatek,mt8183-uart', 'mediatek,mt8186-uart', 'mediatek,mt8192-uart', 'mediatek,mt8195-uart', 'mediatek,mt8516-uart']
+	arch/arm/boot/dts/mt6589-aquaris5.dtb
+	arch/arm/boot/dts/mt6589-fairphone-fp1.dtb
+
+serial@11006000: compatible: ['mediatek,mt6577-uart'] is too short
+	arch/arm/boot/dts/mt6589-aquaris5.dtb
+	arch/arm/boot/dts/mt6589-fairphone-fp1.dtb
+
+serial@11007000: compatible:0: 'mediatek,mt6577-uart' is not one of ['mediatek,mt2701-uart', 'mediatek,mt2712-uart', 'mediatek,mt6580-uart', 'mediatek,mt6582-uart', 'mediatek,mt6589-uart', 'mediatek,mt6755-uart', 'mediatek,mt6765-uart', 'mediatek,mt6779-uart', 'mediatek,mt6795-uart', 'mediatek,mt6797-uart', 'mediatek,mt7622-uart', 'mediatek,mt7623-uart', 'mediatek,mt7629-uart', 'mediatek,mt7986-uart', 'mediatek,mt8127-uart', 'mediatek,mt8135-uart', 'mediatek,mt8173-uart', 'mediatek,mt8183-uart', 'mediatek,mt8186-uart', 'mediatek,mt8192-uart', 'mediatek,mt8195-uart', 'mediatek,mt8516-uart']
+	arch/arm/boot/dts/mt6589-aquaris5.dtb
+	arch/arm/boot/dts/mt6589-fairphone-fp1.dtb
+
+serial@11007000: compatible: ['mediatek,mt6577-uart'] is too short
+	arch/arm/boot/dts/mt6589-aquaris5.dtb
+	arch/arm/boot/dts/mt6589-fairphone-fp1.dtb
+
+serial@11008000: compatible:0: 'mediatek,mt6577-uart' is not one of ['mediatek,mt2701-uart', 'mediatek,mt2712-uart', 'mediatek,mt6580-uart', 'mediatek,mt6582-uart', 'mediatek,mt6589-uart', 'mediatek,mt6755-uart', 'mediatek,mt6765-uart', 'mediatek,mt6779-uart', 'mediatek,mt6795-uart', 'mediatek,mt6797-uart', 'mediatek,mt7622-uart', 'mediatek,mt7623-uart', 'mediatek,mt7629-uart', 'mediatek,mt7986-uart', 'mediatek,mt8127-uart', 'mediatek,mt8135-uart', 'mediatek,mt8173-uart', 'mediatek,mt8183-uart', 'mediatek,mt8186-uart', 'mediatek,mt8192-uart', 'mediatek,mt8195-uart', 'mediatek,mt8516-uart']
+	arch/arm/boot/dts/mt6589-aquaris5.dtb
+	arch/arm/boot/dts/mt6589-fairphone-fp1.dtb
+
+serial@11008000: compatible: ['mediatek,mt6577-uart'] is too short
+	arch/arm/boot/dts/mt6589-aquaris5.dtb
+	arch/arm/boot/dts/mt6589-fairphone-fp1.dtb
+
+serial@11009000: compatible:0: 'mediatek,mt6577-uart' is not one of ['mediatek,mt2701-uart', 'mediatek,mt2712-uart', 'mediatek,mt6580-uart', 'mediatek,mt6582-uart', 'mediatek,mt6589-uart', 'mediatek,mt6755-uart', 'mediatek,mt6765-uart', 'mediatek,mt6779-uart', 'mediatek,mt6795-uart', 'mediatek,mt6797-uart', 'mediatek,mt7622-uart', 'mediatek,mt7623-uart', 'mediatek,mt7629-uart', 'mediatek,mt7986-uart', 'mediatek,mt8127-uart', 'mediatek,mt8135-uart', 'mediatek,mt8173-uart', 'mediatek,mt8183-uart', 'mediatek,mt8186-uart', 'mediatek,mt8192-uart', 'mediatek,mt8195-uart', 'mediatek,mt8516-uart']
+	arch/arm/boot/dts/mt6589-aquaris5.dtb
+	arch/arm/boot/dts/mt6589-fairphone-fp1.dtb
+
+serial@11009000: compatible: ['mediatek,mt6577-uart'] is too short
+	arch/arm/boot/dts/mt6589-aquaris5.dtb
+	arch/arm/boot/dts/mt6589-fairphone-fp1.dtb
+

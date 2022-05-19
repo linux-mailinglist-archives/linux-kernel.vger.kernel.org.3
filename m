@@ -2,74 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB82852CF0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F7052CF11
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235815AbiESJJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
+        id S235836AbiESJMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbiESJJy (ORCPT
+        with ESMTP id S232032AbiESJMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:09:54 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8370A4D614
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:09:53 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2fee010f509so50046937b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fTYN8SQA1Kibj+1iEMNK2WJ4kiFH1jZy+Z6ZLSVIzN0=;
-        b=hvulyA/9nIvcQL349rFarbnddLvY9KxNXVzOwnuziFMGzgoXJafIeq4MkYBy6jLk6W
-         s3M1vHrQCdqvZAScHSvOaiC24sEZLHS49j0W88ksuOnZWzOJcz/qal8MrrGbJgy3AxE/
-         jC8pn9TpW1Fsn7CRdkMKMPRWnyntyy4uNhTFYqyIsPsY3xLU+1Tj8BSmdpt+ZPQQREut
-         hKV7/XAof2E30dQbV/qIr57X2zMxMUYLPtvgd3NWcR1W//0MOFeYlipiFSPiPdoYTRkl
-         EVNnGm474dJJ1JPi1bY7lymcKpQU0jo24pOGJbZyS5KotlMFZoWGsrDcpf3mxJcprTz2
-         2QvA==
+        Thu, 19 May 2022 05:12:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7915156C0C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:12:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652951535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C7uZ8GjzotyzPb+OIEuRVJxWtUaoDnZX9WfGiYxdAlI=;
+        b=hK8hRnGUqAkKIsrpfZ/bT5SdR/JcrssYTHE7eJitMQ6YXM+7RbaT0Ow05VS0XbmYQ8ihcT
+        GgALWwb2OZb72I2COAX96EgfW9C0yQzIe6PldIPi2f36+3CI//yO+3iDaBa/xZ+VcsjnZE
+        AdU4Tsm8ycHo7cWVDOnp199PSYOuITY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-103-eMttE8NSPYCJqWT4PkkXgA-1; Thu, 19 May 2022 05:12:14 -0400
+X-MC-Unique: eMttE8NSPYCJqWT4PkkXgA-1
+Received: by mail-wm1-f69.google.com with SMTP id bi5-20020a05600c3d8500b0039489e1d18dso4236695wmb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:12:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fTYN8SQA1Kibj+1iEMNK2WJ4kiFH1jZy+Z6ZLSVIzN0=;
-        b=hfcS9JJWq+/3wNj1Du4Lae4t9xisx7MFwn7Z7FjjfRqkw8SaLILaeSNmvrnEkPW3l2
-         /D06VNEgsFEGk1YuTyvK5lWE3Sp+TvAzo6zDJ+uxPrfYeTQl43KtAZ19Mz7aoNU1MPY2
-         3fjDq7YdFU8VTtnK2JQRUayN/WGxX4Gdn8kfyqS2sbJ6GFN+lfGv0mJpkWKqCEZE4cMI
-         46quYKF7asq1Rko4q8+Nr6V9DdEJayKEeRn5x7kr2xywq+Ff5hK3gUhCOkZMcF5P6CxW
-         iM3jrImHlcZKKFTlAQXrU46kX7uk5GYMEGkgGvw3TlAsxMfIitrzirNTlhAQ3kCRRgeR
-         y7fw==
-X-Gm-Message-State: AOAM530Bi3QciOHLgCk2DrqWA9O+8qCBZGWiTTRaxPdN4FXO8tsO7w1H
-        QU0DRiXYHkY4w57pYZVTYx4Kl3Xc7tClxKkJzPEw6w==
-X-Google-Smtp-Source: ABdhPJwWgBnbFPBng8jyysNwYozhHy5L14kmJuY8TO30we9HAg0aLzdUurH9h7SgBVzWDxYOJ2zAzts+I/soNqiTxJU=
-X-Received: by 2002:a0d:c4c2:0:b0:2f1:6c00:9eb4 with SMTP id
- g185-20020a0dc4c2000000b002f16c009eb4mr3757471ywd.448.1652951392715; Thu, 19
- May 2022 02:09:52 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=C7uZ8GjzotyzPb+OIEuRVJxWtUaoDnZX9WfGiYxdAlI=;
+        b=YW5DcCgdoDVmAUL39PEkxYnwDp74eN7bx6RTiOVl2w4s1toSLrJKmdRF05tq7AByF/
+         qpsUgllONEHTd72ciW116WwMv2oSMb2A5wZoOcskksIoObz61OO++U5SsiF+38JTeC7J
+         KePyBf26IVWRp8ws75Q07R2Mbrmj4YQqzSb+a5ycT6WbExa+tLqNzkEpRDRMjn1RKO/y
+         9+X94GZZ3R3sgREUrpd86ET/0XbD+WQLU9rsBHtuXhS80rvI1x4r1v25J9i7u0CYCnGD
+         qJX3UOAMVKehEt2TXTm7EhGQ87ynVJyKtrVw1tF7JIlNZlQ9mUi4a6/DVlSNaquxDpB9
+         AD5g==
+X-Gm-Message-State: AOAM5317Ur+5uiFN635MCCvco9Gk3UuRacuTqw/B3Jld7x32qsfgXlFD
+        y8U3Zj/E1X0NkjYCDHbJZt0y4Mq0bw+7xNy+DEDAw+QmLKmKdUWYaEPxDv/l9Gwz/rsWHBzEu+o
+        Fo4J+qaGHgucucl2JS9yrvzpJ
+X-Received: by 2002:a05:600c:24a:b0:394:4ce6:57db with SMTP id 10-20020a05600c024a00b003944ce657dbmr3314839wmj.193.1652951533192;
+        Thu, 19 May 2022 02:12:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwAjJ9ypKrE9q84MzsZpXh8nKsN8Ag++Nlblpj2jTGJaJr1Jf9MyW+TEzh6O3hOz+eJ6ih0Ag==
+X-Received: by 2002:a05:600c:24a:b0:394:4ce6:57db with SMTP id 10-20020a05600c024a00b003944ce657dbmr3314812wmj.193.1652951532964;
+        Thu, 19 May 2022 02:12:12 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id d15-20020a1c730f000000b00394975e14f4sm3750939wmb.8.2022.05.19.02.12.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 02:12:12 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 20/34] KVM: x86: KVM_REQ_TLB_FLUSH_CURRENT is a
+ superset of KVM_REQ_HV_TLB_FLUSH too
+In-Reply-To: <6c9add3244d86080ccd8c3c72a37b9ee112d45b8.camel@redhat.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-21-vkuznets@redhat.com>
+ <6c9add3244d86080ccd8c3c72a37b9ee112d45b8.camel@redhat.com>
+Date:   Thu, 19 May 2022 11:12:11 +0200
+Message-ID: <87mtfdubro.fsf@redhat.com>
 MIME-Version: 1.0
-References: <cover.1651835715.git.jo@jsfamily.in> <BY5PR02MB7009B91FB7306503B58C264BD9C59@BY5PR02MB7009.namprd02.prod.outlook.com>
- <CACRpkdYhkP9RYj98Lu=zkt+6aefx172R=8JtvOFpvh2uJ4byKA@mail.gmail.com> <BY5PR02MB7009831D8BC4DB2B34739CB6D9CF9@BY5PR02MB7009.namprd02.prod.outlook.com>
-In-Reply-To: <BY5PR02MB7009831D8BC4DB2B34739CB6D9CF9@BY5PR02MB7009.namprd02.prod.outlook.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 19 May 2022 11:09:41 +0200
-Message-ID: <CACRpkdZw+MwU42s8BWHkN2T3A-a-TGML8jJ0kQteMOE06m0UXg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] drm/panel: introduce ebbg,ft8719 panel
-To:     Joel Selvaraj <jo@jsfamily.in>
-Cc:     devicetree@vger.kernel.org, Hao Fang <fanghao11@huawei.com>,
-        David Airlie <airlied@linux.ie>,
-        Shawn Guo <shawnguo@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        phone-devel@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,91 +83,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 16, 2022 at 2:56 PM Joel Selvaraj <jo@jsfamily.in> wrote:
-> On 13/05/22 03:21, Linus Walleij wrote:
-> > On Fri, May 6, 2022 at 2:18 PM Joel Selvaraj <jo@jsfamily.in> wrote:
-> >> +#define dsi_dcs_write_seq(dsi, seq...) do {                            \
-> >> +               static const u8 d[] = { seq };                          \
-> >> +               int ret;                                                \
-> >> +               ret = mipi_dsi_dcs_write_buffer(dsi, d, ARRAY_SIZE(d)); \
-> >> +               if (ret < 0)                                            \
-> >> +                       return ret;                                     \
-> >> +       } while (0)
-> >
-> > First I don't see what the do {} while (0) buys you, just use
-> > a basic block {}.
+Maxim Levitsky <mlevitsk@redhat.com> writes:
+
+> On Thu, 2022-04-14 at 15:19 +0200, Vitaly Kuznetsov wrote:
+>> KVM_REQ_TLB_FLUSH_CURRENT is an even stronger operation than
+>> KVM_REQ_TLB_FLUSH_GUEST so KVM_REQ_HV_TLB_FLUSH needs not to be
+>> processed after it.
+>> 
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  arch/x86/kvm/x86.c | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index e5aec386d299..d3839e648ab3 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -3357,8 +3357,11 @@ static inline void kvm_vcpu_flush_tlb_current(struct kvm_vcpu *vcpu)
+>>   */
+>>  void kvm_service_local_tlb_flush_requests(struct kvm_vcpu *vcpu)
+>>  {
+>> -	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu))
+>> +	if (kvm_check_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu)) {
+>>  		kvm_vcpu_flush_tlb_current(vcpu);
+>> +		if (kvm_check_request(KVM_REQ_HV_TLB_FLUSH, vcpu))
+>> +			kvm_hv_vcpu_empty_flush_tlb(vcpu);
+>> +	}
+>>  
+>>  	if (kvm_check_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu)) {
+>>  		kvm_vcpu_flush_tlb_guest(vcpu);
 >
-> The do {} while (0) in macro ensures there is a semicolon when it's
-> used. With normal blocking, it would have issues with if conditions?
-> I read about them here: https://stackoverflow.com/a/2381339
-
-Hm that seems true, it enforces the semicolon ; at the end of the
-statement which is nice. I suppose we should fix the other macro
-as well.
-
-Noralf added this ({}) form in 02dd95fe31693, so maybe he wants
-to chip in.
-
-> > Second look at mipi_dbi_command() in include/drm/drm_mipi_dbi.h
-> > this is very similar.
 >
-> Does the ({..}) style blocking used in mipi_dbi_command help workaround
-> the semicolon issue I mentioned above?
-
-Nope. But add the rate limited error print please!
-
-> > It's dubious that you always have dsi_dcs_write_seq()
-> > followed by dsi_generic_write_seq().
-> >
-> > That means mipi_dsi_generic_write() followed by
-> > mipi_dsi_dcs_write_buffer(). But if you look at these
-> > commands in drivers/gpu/drm/drm_mipi_dsi.c
-> > you see that they do the same thing!
+> I think that this patch should be moved near patch 1 and/or even squished with it.
 >
-> They almost do the same thing except for the msg.type values? Mostly the
-> msg.type value is used to just check whether it's a long or short write
-> in the msm dsi_host code. However, in mipi_dsi_create_packet function,
-> the msg->type value is used to calculate packet->header[0] as follows:
->
-> packet->header[0] = ((msg->channel & 0x3) << 6) | (msg->type & 0x3f);
->
-> Wouldn't the difference between the mipi_dsi_dcs_write_buffer's and
-> mipi_dsi_generic_write's msg.type values cause issue here?
->
-> I tried using mipi_dsi_dcs_write_buffer for all commands and the panel
-> worked fine, but I am not sure if it's correct to do so?
 
-I think it's fine? The only issue would be if there is a DSI host controller
-that only supports short writes, and in that case it should emulate
-long writes by breaking long messages apart. (My amateur view at least.)
+Sure, will merge.
 
-> > Lots of magic numbers. You don't have a datasheet do you?
-> > So you could #define some of the magic?
->
-> Unfortunately, I don't have a datasheet and the power on sequence is
-> taken from downstream android dts. It works pretty well though. So I
-> don't think I can #define any of these magic.
+This, however, made me think there's room for optimization here. In some
+cases, when both KVM_REQ_TLB_FLUSH_CURRENT and KVM_REQ_TLB_FLUSH_GUEST
+were requested, there's no need to flush twice, e.g. on SVM
+.flush_tlb_current == .flush_tlb_guest. I'll probably not go into this
+territory with this series as it's already fairly big, just something
+for the future.
 
-If you know which display controller the display is using (usually
-Novatek nnnnn, Ilitek nnnn etc someting like that) there is often
-a datasheet for the display controller available but the display per
-se often obscures the display controller.
+-- 
+Vitaly
 
->  > Doesn't it work to combine them into one call for each
->  > pair?
->  >> +       dsi_dcs_write_seq(dsi, );
->  >> +       dsi_generic_write_seq(dsi, 0xff, 0x87, 0x19);
->
-> By using a macro? We can... but I am not sure what (0x00, 0x80), (0x00,
-> 0xa0),etc type of commands signify without the datasheet, so I am not
-> sure what to name them in the macro and make any sensible meaning out of it.
-
-I meant just sending dsi_generic_write_seq() with everything in
-it:
-
-dsi_generic_write_seq(dsi, 0x00, 0x80, 0xff, 0x87, 0x19);
-
-Instead of two writes. Doesn't this work?
-
-Yours,
-Linus Walleij

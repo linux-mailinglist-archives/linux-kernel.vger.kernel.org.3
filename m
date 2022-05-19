@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F1652D010
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFB752D011
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236462AbiESKEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
+        id S236472AbiESKEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236439AbiESKE3 (ORCPT
+        with ESMTP id S236439AbiESKEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:04:29 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2046.outbound.protection.outlook.com [40.107.94.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D261395DD9;
-        Thu, 19 May 2022 03:04:26 -0700 (PDT)
+        Thu, 19 May 2022 06:04:48 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2074.outbound.protection.outlook.com [40.107.101.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9019B994F8;
+        Thu, 19 May 2022 03:04:47 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QKT0yDa3/3z71z6CHy8elNsHdPuxD8UGFDdhGMl/pdGXsU5/Ibku2kaq/sG8NaC6jo662a5WPvORCfUcQlBm305amvYQiNyanVU7axBRrSuWe58/cBbPulOxa5kxn5Hundm0Qko1KpXhge2tbh5PrM8EGVRp0iIfIasS/hepRREvEPV2jAmzvlth3V4fRxKelt2V/keNDMIPesxNlGf4d6Dtf9DDNHtqPTDUFRF9JbtjWBQzqew4ay+U7SlidAB7dJxHU1pa5Iy/wlu8OH15l/u7VaMC9wiG/rJ2zbUK0mY6vTDT1JfvbcipWAp7acJHcu6obIG/niLG27KOehSlHA==
+ b=D7vUAi5MXHxXxdN6J2aBieuzq0I24VCNbRpIyap/zKpC+FTZw85G7NsMqgfY1nYZ4XdKpQ2nfK7BVuBfanFoRopFx6QwGPXfDhazM8ldT4fxg9i+VhmmPQLOwwD90UA+ptSBEagb/pVFigpQLKBlyWw4GSFvgfGylJpKmo9CV5OpQbfp0LlMIgMxnnkYDhda9wUsfzV2CZbQ+xq/E+ipmvfC2Rx4zIIknrJY3NCYTj8/tVKcRfaX561n6dPSCRCVsHhM0sELvzNHLeJ/7nU0g1ti4rUKBLUAyyGDvakdU7Jm9RFWU0cteNTF1bszOy/nVjaZKjymVSGUVkGbULCjJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WLbFxQDW36DZNUzI7RgBV10Zs9DfVPkAulLWWcmGO9g=;
- b=dMkuGRhkQEM/tFaA63nCU9YwuQukJhdmwdzyYaJbuDllrAlpfKOpGyLSMJcuRJ+Fg8wKUSgi939TMGQAHKcl/RJ4vSZbblAsolyzkW3YxBD9f356vQrSx+Zkrj/mfZ0xjL4TrqKFgN/tW8lLRJ/AerEx8YFIwtIaE3EextvPUgLkSFtcEs30qLdCQEWcIFB97FpkmuC4nj6tybvfWs4liuq4ZCBR4Sm6YtDASiNMLxO3apdR9vl7IzeOSDJPzmcfHwcRWlojgR7qMtISTQtK767jcSJf/Fb5noxCQnbduWTjJ0Er/6Yl1RvlF9yOeU/wmnrE9HR9wPzsTOiXqPIWqA==
+ bh=+OVvWqCB30ygs1JPU3twVNjPAE6gC/B7+P7tcX0QU40=;
+ b=jV+esA2VL3rvCNMV2+6FwXObQOJvaOtphyaKtZ4awq+7oNgPp0y3vn76uEUefuaxRPDvLLqwZtYx/cbUu4iThKmmd4VM1tVsAsSfYZWaiGBWFnKDo1kqSvc26e+ELfg4m5DJ+oo6OFAHpsd6TAFJqoHdr1YhBte0AqJd12sA/DZuAu4mwOfcPK4dnOkPMk/16aj3JtMPytPe41v2QSgaDU/ZTQz5wOtZaKZprKwCcyfCI04wY1p3b2mydWjf/cD4GwESdDaOYWlRDP3nmWYghEyxukN54qMGoP2fjuJI8HHAbxwQTbsH1dYucM682FfYz/rUpuvSe0o9Q/CXseEw5w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WLbFxQDW36DZNUzI7RgBV10Zs9DfVPkAulLWWcmGO9g=;
- b=kp4WN6nJy2Da0sZhbQmUy3X6IIY5IA3LgiEICX0Ry0TvUAxfq0/LvxFGptnWYISLZTqDh3k0/bSHci41Jlt9tM8BJdXiJZkK3KEtPRCOtBFHPP8V32UKC83GCJjptf4IOY3HC8VeZVQF+/YXRvBa/PUaaPQWAz/tyg3H13HaGEI=
-Received: from DS7PR03CA0281.namprd03.prod.outlook.com (2603:10b6:5:3ad::16)
- by DM4PR12MB5916.namprd12.prod.outlook.com (2603:10b6:8:69::22) with
+ bh=+OVvWqCB30ygs1JPU3twVNjPAE6gC/B7+P7tcX0QU40=;
+ b=b7/xJnlHcfIz8nc0nSU3GInnX9R20Z/8pM9mQiWmeVEUoFNe2PCu5LgYJoHMuOLgvWAddr2f5b915FduiP0BvcZ/fzsmvSChBqRe43xAk0je65ISGeHkKCND/evzioPA7Omx9zL8eDbTtX7YD/ui3foR+cznkIRftuiRY5JN5RI=
+Received: from DM5PR18CA0068.namprd18.prod.outlook.com (2603:10b6:3:22::30) by
+ MWHPR12MB1934.namprd12.prod.outlook.com (2603:10b6:300:109::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.16; Thu, 19 May
- 2022 10:04:25 +0000
-Received: from DM6NAM11FT034.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3ad:cafe::e) by DS7PR03CA0281.outlook.office365.com
- (2603:10b6:5:3ad::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14 via Frontend
- Transport; Thu, 19 May 2022 10:04:25 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Thu, 19 May
+ 2022 10:04:43 +0000
+Received: from DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:22:cafe::a) by DM5PR18CA0068.outlook.office365.com
+ (2603:10b6:3:22::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26 via Frontend
+ Transport; Thu, 19 May 2022 10:04:43 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT034.mail.protection.outlook.com (10.13.173.47) with Microsoft SMTP
+ DM6NAM11FT010.mail.protection.outlook.com (10.13.172.222) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Thu, 19 May 2022 10:04:25 +0000
+ 15.20.5273.14 via Frontend Transport; Thu, 19 May 2022 10:04:43 +0000
 Received: from sindhu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
- 2022 05:04:19 -0500
+ 2022 05:04:37 -0500
 From:   Sandipan Das <sandipan.das@amd.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
         <x86@kernel.org>
@@ -63,9 +63,9 @@ CC:     <peterz@infradead.org>, <bp@alien8.de>, <acme@kernel.org>,
         <like.xu.linux@gmail.com>, <eranian@google.com>,
         <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
         <santosh.shukla@amd.com>, <sandipan.das@amd.com>
-Subject: [PATCH 2/5] perf/x86/amd/uncore: Use attr_update for format attributes
-Date:   Thu, 19 May 2022 15:33:31 +0530
-Message-ID: <a5e4f4dd5c459199fc497e82b858ba09dc91c064.1652954372.git.sandipan.das@amd.com>
+Subject: [PATCH 3/5] perf/x86/amd/uncore: Detect available DF counters
+Date:   Thu, 19 May 2022 15:33:32 +0530
+Message-ID: <bac7b2806561e03f2acc7fdc9db94f102df80e1d.1652954372.git.sandipan.das@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1652954372.git.sandipan.das@amd.com>
 References: <cover.1652954372.git.sandipan.das@amd.com>
@@ -77,24 +77,24 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5716fcc2-be81-48c7-c580-08da397ef434
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5916:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB59165588733F17CD2FAE7CDE8BD09@DM4PR12MB5916.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 5bb69846-bfc7-49e4-db80-08da397eff18
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1934:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1934D5ADDBB25F07EB37DE828BD09@MWHPR12MB1934.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LGIRdUU4ZI1jxblHbcztqW7M44WLCiaS2Ef+s2wcgHNszasTP2GjoN3bBdC3ky/cQM5HUPtDB7MCDA6kf7CapubSqFIbdNwfIHPtsyuUJRDY0OaxfFUfO4OQJY24S+ug+idT7XSOf2w7aCeLkgcY0OCpVMHk5qGx8W++wxWwyWh3xUaBisSQzNbbs3n8HRy4myy/jYAiY6TDtRlFIi9U3L8csSxI2//ttUrjkJlYB8+5My5q7k6M1e80BEMjSE7+c/sO0Z5i8Vtl+KBnzPyWs5LtpZdpZmemt3Pkst5GvIlNWl+srCnO4TXodkCh/D1C+YjBrftlB482HmEcWexeAS/4P7zfgVWL2gljKfCX3RcQYsl/DKpMJAsOTtUKP7hFHoIW/y3DoESUv2a/q7OahFeyfLztvgP+12lV/wAKYPr6qidW+RipOt46qAZbu2X6NsM5LOgfG5De0UKHcJf7+SKKqm2A6J6YwDi1Dfk+SKVec5p2KvLXiQERvKOoVF/j96+M8fG0rO+JfLCep/pVkj4ll/00W265o0fjHdjVyQTgk81dhImrYRpl+8HNQCokQ2ceqGY+CuDjH4AJfvx5XxvNC6FMgw0BgHO6gd4rvrN7M3+BRwT2i0hhZCU+V6bpIdez0z/ZkvuosHTMNHTC0Ar9myXAMSIjXBcej5aA0WDX+VT9OObE69pRR5aCHarGCtQT8AggWv7TQoGWuWI1Mw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(54906003)(7416002)(7696005)(5660300002)(8936002)(336012)(44832011)(110136005)(508600001)(2906002)(6666004)(186003)(16526019)(426003)(47076005)(83380400001)(4326008)(70206006)(70586007)(8676002)(81166007)(26005)(36756003)(86362001)(356005)(82310400005)(36860700001)(316002)(2616005)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: mkkwGfUuBJcUKAcPe2W6OgNtnQszm58dRvrO7767qicCOy64T4weaWXddEVGHk9NILTtGD21NsOEm5BcbpdcdHG5e3/xcD+rZqZDBhOwhGWMEoLB/rzH/scTLas4Ta+RfNpXbGathxnhKYlqk+WjDEo+04G4h0IJFvIL6jB+vEuhhlTwQGntxH/zL1glVY2hShOV7cgOpUfjgok0BBo9k3ssPrW5ddw2iI0IX+OCoa7KzLP62jpgGmhdx94EUh4f36mTM4DAeu0d7qF1HdgnLEycJpclWrVuKFfCnxuIESK//Lqldh9VBA768+niYVzv6ThquiX3iI7qzDvayt+VO9PHZ+psvnwtN8wJbUoJAAt6i3vPiVjn9twW+Q/kT45gI+j4eeaMRHYdXy0lHq83ARnHBOZkZVTwGEdqH3rkW/LzJYqEN39Z/LnZgkn/GvJvZIToTyt+PM+By0RwhhHdWeKCJlPKToRH2i8cqbYYpOACTVEFph4/oMSB24YEz4bPccbVxlWHZwAb+ySgXiS0ZGbhu/1em6fX1A2ik2xDKcSTtg3/RbCdlhPRZTKyGBggXwPAzJ63Zv0RBBzP77+LBRxZMgshYEOccVt9pRiy39P/TaDBeXU7RqBGSIyARkuvbYBk21Ocuy+ID0MXs/+ZsaEBRUhF3wUe+Yiqh72LyYkCd0v/aqiUc5RqgIrPiGzymM3rXlBJHwJ74whF3qh8cw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(2906002)(508600001)(86362001)(54906003)(110136005)(44832011)(316002)(7416002)(81166007)(356005)(8936002)(5660300002)(26005)(70206006)(8676002)(82310400005)(83380400001)(36756003)(2616005)(40460700003)(47076005)(426003)(7696005)(336012)(186003)(16526019)(4326008)(70586007)(6666004)(36860700001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 10:04:25.1014
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 10:04:43.3734
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5716fcc2-be81-48c7-c580-08da397ef434
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5bb69846-bfc7-49e4-db80-08da397eff18
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5916
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1934
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -105,144 +105,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the update_attrs attribute group introduced by commit
-f3a3a8257e5a ("perf/core: Add attr_groups_update into struct
-pmu") and the is_visible() callback to populate the family
-specifc attributes for uncore events.
-
-The changes apply to attributes that are unique to families
-such as slicemask for Family 17h and coreid for Family 19h.
-The addition of common attributes such as event and umask,
-whose formats change across families, remain unchanged.
+If AMD Performance Monitoring Version 2 (PerfMonV2) is
+supported, use CPUID leaf 0x80000022 EBX to detect the
+number of Data Fabric (DF) PMCs. This offers more
+flexibility if the counts change in later processor
+families.
 
 Signed-off-by: Sandipan Das <sandipan.das@amd.com>
 ---
- arch/x86/events/amd/uncore.c | 68 ++++++++++++++++++++++++++++--------
- 1 file changed, 54 insertions(+), 14 deletions(-)
+ arch/x86/events/amd/uncore.c      | 10 ++++++++++
+ arch/x86/include/asm/perf_event.h |  3 +++
+ 2 files changed, 13 insertions(+)
 
 diff --git a/arch/x86/events/amd/uncore.c b/arch/x86/events/amd/uncore.c
-index 8dfcf93711ab..c3e218dccf6e 100644
+index c3e218dccf6e..233dd405dd06 100644
 --- a/arch/x86/events/amd/uncore.c
 +++ b/arch/x86/events/amd/uncore.c
-@@ -246,6 +246,19 @@ static int amd_uncore_event_init(struct perf_event *event)
- 	return 0;
- }
+@@ -30,6 +30,7 @@
+ #undef pr_fmt
+ #define pr_fmt(fmt)	"amd_uncore: " fmt
  
-+static umode_t
-+amd_f17h_uncore_is_visible(struct kobject *kobj, struct attribute *attr, int i)
-+{
-+	return boot_cpu_data.x86 >= 0x17 && boot_cpu_data.x86 < 0x19 ?
-+	       attr->mode : 0;
-+}
-+
-+static umode_t
-+amd_f19h_uncore_is_visible(struct kobject *kobj, struct attribute *attr, int i)
-+{
-+	return boot_cpu_data.x86 >= 0x19 ? attr->mode : 0;
-+}
-+
- static ssize_t amd_uncore_attr_show_cpumask(struct device *dev,
- 					    struct device_attribute *attr,
- 					    char *buf)
-@@ -296,20 +309,33 @@ DEFINE_UNCORE_FORMAT_ATTR(enallslices,	enallslices,	"config:46");		   /* F19h L3
- DEFINE_UNCORE_FORMAT_ATTR(enallcores,	enallcores,	"config:47");		   /* F19h L3 */
- DEFINE_UNCORE_FORMAT_ATTR(sliceid,	sliceid,	"config:48-50");	   /* F19h L3 */
++static int pmu_version;
+ static int num_counters_llc;
+ static int num_counters_nb;
+ static bool l3_mask;
+@@ -629,6 +630,7 @@ static int __init amd_uncore_init(void)
+ {
+ 	struct attribute **df_attr = amd_uncore_df_format_attr;
+ 	struct attribute **l3_attr = amd_uncore_l3_format_attr;
++	union cpuid_0x80000022_ebx ebx;
+ 	int ret = -ENODEV;
  
-+/* Common DF and NB attributes */
- static struct attribute *amd_uncore_df_format_attr[] = {
--	&format_attr_event12.attr, /* event14 if F17h+ */
--	&format_attr_umask.attr,
-+	&format_attr_event12.attr,	/* event */
-+	&format_attr_umask.attr,	/* umask */
- 	NULL,
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+@@ -638,6 +640,9 @@ static int __init amd_uncore_init(void)
+ 	if (!boot_cpu_has(X86_FEATURE_TOPOEXT))
+ 		return -ENODEV;
+ 
++	if (boot_cpu_has(X86_FEATURE_PERFMON_V2))
++		pmu_version = 2;
++
+ 	num_counters_nb	= NUM_COUNTERS_NB;
+ 	num_counters_llc = NUM_COUNTERS_L2;
+ 	if (boot_cpu_data.x86 >= 0x17) {
+@@ -666,6 +671,11 @@ static int __init amd_uncore_init(void)
+ 		if (ret)
+ 			goto fail_nb;
+ 
++		if (pmu_version >= 2) {
++			ebx.full = cpuid_ebx(EXT_PERFMON_DEBUG_FEATURES);
++			num_counters_nb = ebx.split.num_df_pmc;
++		}
++
+ 		pr_info("%d %s %s counters detected\n", num_counters_nb,
+ 			boot_cpu_data.x86_vendor == X86_VENDOR_HYGON ?  "HYGON" : "",
+ 			amd_nb_pmu.name);
+diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
+index 409725e86f42..af157aa74f4e 100644
+--- a/arch/x86/include/asm/perf_event.h
++++ b/arch/x86/include/asm/perf_event.h
+@@ -194,6 +194,9 @@ union cpuid_0x80000022_ebx {
+ 	struct {
+ 		/* Number of Core Performance Counters */
+ 		unsigned int	num_core_pmc:4;
++		unsigned int	reserved:6;
++		/* Number of Data Fabric Counters */
++		unsigned int	num_df_pmc:6;
+ 	} split;
+ 	unsigned int		full;
  };
- 
-+/* Common L2 and L3 attributes */
- static struct attribute *amd_uncore_l3_format_attr[] = {
--	&format_attr_event12.attr, /* event8 if F17h+ */
--	&format_attr_umask.attr,
--	NULL, /* slicemask if F17h,	coreid if F19h */
--	NULL, /* threadmask8 if F17h,	enallslices if F19h */
--	NULL, /*			enallcores if F19h */
--	NULL, /*			sliceid if F19h */
--	NULL, /*			threadmask2 if F19h */
-+	&format_attr_event12.attr,	/* event */
-+	&format_attr_umask.attr,	/* umask */
-+	NULL,				/* threadmask */
-+	NULL,
-+};
-+
-+/* F17h unique L3 attributes */
-+static struct attribute *amd_f17h_uncore_l3_format_attr[] = {
-+	&format_attr_slicemask.attr,	/* slicemask */
-+	NULL,
-+};
-+
-+/* F19h unique L3 attributes */
-+static struct attribute *amd_f19h_uncore_l3_format_attr[] = {
-+	&format_attr_coreid.attr,	/* coreid */
-+	&format_attr_enallslices.attr,	/* enallslices */
-+	&format_attr_enallcores.attr,	/* enallcores */
-+	&format_attr_sliceid.attr,	/* sliceid */
- 	NULL,
- };
- 
-@@ -323,6 +349,18 @@ static struct attribute_group amd_uncore_l3_format_group = {
- 	.attrs = amd_uncore_l3_format_attr,
- };
- 
-+static struct attribute_group amd_f17h_uncore_l3_format_group = {
-+	.name = "format",
-+	.attrs = amd_f17h_uncore_l3_format_attr,
-+	.is_visible = amd_f17h_uncore_is_visible,
-+};
-+
-+static struct attribute_group amd_f19h_uncore_l3_format_group = {
-+	.name = "format",
-+	.attrs = amd_f19h_uncore_l3_format_attr,
-+	.is_visible = amd_f19h_uncore_is_visible,
-+};
-+
- static const struct attribute_group *amd_uncore_df_attr_groups[] = {
- 	&amd_uncore_attr_group,
- 	&amd_uncore_df_format_group,
-@@ -335,6 +373,12 @@ static const struct attribute_group *amd_uncore_l3_attr_groups[] = {
- 	NULL,
- };
- 
-+static const struct attribute_group *amd_uncore_l3_attr_update[] = {
-+	&amd_f17h_uncore_l3_format_group,
-+	&amd_f19h_uncore_l3_format_group,
-+	NULL,
-+};
-+
- static struct pmu amd_nb_pmu = {
- 	.task_ctx_nr	= perf_invalid_context,
- 	.attr_groups	= amd_uncore_df_attr_groups,
-@@ -352,6 +396,7 @@ static struct pmu amd_nb_pmu = {
- static struct pmu amd_llc_pmu = {
- 	.task_ctx_nr	= perf_invalid_context,
- 	.attr_groups	= amd_uncore_l3_attr_groups,
-+	.attr_update	= amd_uncore_l3_attr_update,
- 	.name		= "amd_l2",
- 	.event_init	= amd_uncore_event_init,
- 	.add		= amd_uncore_add,
-@@ -632,15 +677,10 @@ static int __init amd_uncore_init(void)
- 		if (boot_cpu_data.x86 >= 0x19) {
- 			*l3_attr++ = &format_attr_event8.attr;
- 			*l3_attr++ = &format_attr_umask.attr;
--			*l3_attr++ = &format_attr_coreid.attr;
--			*l3_attr++ = &format_attr_enallslices.attr;
--			*l3_attr++ = &format_attr_enallcores.attr;
--			*l3_attr++ = &format_attr_sliceid.attr;
- 			*l3_attr++ = &format_attr_threadmask2.attr;
- 		} else if (boot_cpu_data.x86 >= 0x17) {
- 			*l3_attr++ = &format_attr_event8.attr;
- 			*l3_attr++ = &format_attr_umask.attr;
--			*l3_attr++ = &format_attr_slicemask.attr;
- 			*l3_attr++ = &format_attr_threadmask8.attr;
- 		}
- 
 -- 
 2.34.1
 

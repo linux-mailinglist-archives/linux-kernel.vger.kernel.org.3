@@ -2,120 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F029752E0B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7A552E0B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 01:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343690AbiESXoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 19:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S1343678AbiESXow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 19:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343682AbiESXoO (ORCPT
+        with ESMTP id S1343701AbiESXor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 19:44:14 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B79DB042E
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:44:13 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o13-20020a17090a9f8d00b001df3fc52ea7so10036066pjp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:44:13 -0700 (PDT)
+        Thu, 19 May 2022 19:44:47 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509A11238A6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:44:41 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id a12so4883944vsp.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:44:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gz19fXcyvIXAl3oGhMxQAf+ufRc1Vu/yCr1pjqtWYnw=;
-        b=cEzhwuqns0Ti+qp+lGOzuo/YHGa90yGUqi/zDyTaJ7/+wDu9n2uicln2Gr4T7AkB7G
-         BVdcFEMBjWCpSQrU/TsfSqbIBE7PkrWzTv5q9QH3Jta1KAHQuidtVTCAKfDYCFXC5EDh
-         ucUAEjjXZ7tdG3ZUCOsr3RUmPsv2LfhGFQFe+ie+YXJ34tnJFCODnxtlLYSJUlvSylua
-         hAaCRKS4yoSpj7Q4+GwiF2JNieEv9wTHujeaQfJw+kkfMCyWrdJM7/P+6LNantZ6BfEp
-         iAb+fAmFjvJX5UAx0dsxvNx/0j/93asAvZPoADIPbHT5naMmKqwUlurr47NGpUEXb8v4
-         g33g==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=T7TMhWp0SAA5jCPI+KmjChJGEDhSNE7gjRtO2nBQMRY=;
+        b=BzegkdqL04SDprwN3BH/yJoSzWsLHcyLmAGGCEygbOdvHy4tYEJYBiKWOptkLQozzC
+         HyDWCA3IvrWI9y/I4CdWbk1sDNCn/9d0MLbjeECNUWs6jJoKwb6C8dLGQ0frIy+owMvD
+         ONHfSqTfyu6HoAcMV78W6yWv3NOt4V5b+TtXodoAwFzCRyIx3dBKRQIhKfejJpFNDlSY
+         JxhrLMvqg9MGPoYnDAxQlJZvV24y3ef+V+o+GBOiZaWeH+8UpkEP9qfU8M7zaHpNZOMx
+         HdD4qBq8iNGMti572kJjIMhTiHehFb817O24qw59XZQ+rnuGBMn6vVQYxK1Ronei/2aV
+         YJoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gz19fXcyvIXAl3oGhMxQAf+ufRc1Vu/yCr1pjqtWYnw=;
-        b=i4fDYUcej1pAy9X3Lm9QanS1y/mc9AyAMiVZCxHtdfKzmMjBM6Rg9Q+60Hh3Zo+ZSS
-         TtnTyJlVcjM4M36xwTZKNzamdQqu9HnNRejyuXbT2z9hdkjOZoG2kAoFmsvlasMFYs/N
-         25UO7WXIpTRzM1CD9MyUAdmnL9Ft2GSoTE67khZsERloom2Wt3bospIdjf6rlQvMBQji
-         TFxLrR/1kjVEOSfcaUKhHtZw2yRuN28Hi1ToEtPyeJKA0xa3mhFxQwn6rjPbHjnuHcXF
-         i+79PiNHhExLL9pxgHyXjNWvxeZF+R0FR5qoMlp8qChhYOPlupg0jCpCmJs2YqK397sP
-         TJ6A==
-X-Gm-Message-State: AOAM530Iy+zZXnEvqEQXBAOi3ldcNHmAVmWUI+EvTShWwkULJP8kyMZR
-        he1pwKG+1TsA0lQtmgpn4E7dpw==
-X-Google-Smtp-Source: ABdhPJwA+eGStKH/9DXOLfi6FBwqui0ASR5GQhJkzlEjCyIf0wjGR/UldJwHTn91xl0T2IGUdSxqhA==
-X-Received: by 2002:a17:90b:3806:b0:1df:99ce:d142 with SMTP id mq6-20020a17090b380600b001df99ced142mr7618845pjb.241.1653003853140;
-        Thu, 19 May 2022 16:44:13 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x9-20020a17090a6b4900b001df313f6628sm366247pjl.21.2022.05.19.16.44.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 16:44:12 -0700 (PDT)
-Message-ID: <340465ab-4157-8051-d66f-9093b80dc653@kernel.dk>
-Date:   Thu, 19 May 2022 17:44:11 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T7TMhWp0SAA5jCPI+KmjChJGEDhSNE7gjRtO2nBQMRY=;
+        b=PcCFs1wJE2cvH+ckLAc4tZXFLYULzDQlkn8vqeDvpMCVet7jgniZR/LkHKq9y/szvN
+         R3ymG8wxAB7tBpLrYC8aD8sCmkwpZ32DYZstWyR216MM4Ys2WGU90Sp8SRbtPwMXWYgH
+         ubtESZmGqjATvt/5I/FVqPPhhUicesy/FyRA7cWGWAJUf13Ex1SZ6gc4Vpiw5LNvJ6OH
+         upvATYQ7zGPDN74whc9e+iV+V4h6K2fJEkiNnKWqcUo+lFudHVyw2t6s3ind9HtYDUaF
+         Ns1L6uNYApzwBgRLwll+HGFSoeI1TR6FZsGRK7hUq/zkyoyO837d0f3HL9qarcMswf4R
+         uazA==
+X-Gm-Message-State: AOAM5335wYhtyosQE1cqk8vvMCcX6D7UJUkZU056t9aETiJEB+zDMz6e
+        ++uX96SDmexcMYvtsLoEbMqyoUT2307I4A==
+X-Google-Smtp-Source: ABdhPJyHFOCMJV+CyCoxWknfQ8NqR0JS4gDvoJu+C1UV67ZhJqkTrdelVCUD8uOqNzc2ybutuw8y7A==
+X-Received: by 2002:a17:902:c409:b0:161:b135:87c9 with SMTP id k9-20020a170902c40900b00161b13587c9mr7135944plk.94.1653003869609;
+        Thu, 19 May 2022 16:44:29 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q22-20020a17090aa01600b001cd4989ff5esm352938pjp.37.2022.05.19.16.44.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 16:44:29 -0700 (PDT)
+Date:   Thu, 19 May 2022 23:44:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 20/34] KVM: x86: KVM_REQ_TLB_FLUSH_CURRENT is a
+ superset of KVM_REQ_HV_TLB_FLUSH too
+Message-ID: <YobWWW1gzZtmL6BO@google.com>
+References: <20220414132013.1588929-1-vkuznets@redhat.com>
+ <20220414132013.1588929-21-vkuznets@redhat.com>
+ <6c9add3244d86080ccd8c3c72a37b9ee112d45b8.camel@redhat.com>
+ <87mtfdubro.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHSET 0/2] Fix splice from random/urandom
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Christoph Hellwig <hch@lst.de>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220519193133.194138-1-axboe@kernel.dk>
- <YoajCafKmgUbbaY0@zx2c4.com> <a6c843ff-a3d7-ce6a-4e99-70968834a02a@kernel.dk>
- <8e6c98d4-03e9-3eb5-3d4e-b9a9faeb677a@kernel.dk> <YobPfgkzGrNPDDFI@zx2c4.com>
- <60b82026-9c46-16ea-d9fa-05eb96ae2218@kernel.dk>
- <CAHmME9rdJ=Pa=KOY6voryiHffWSkRKxC75+Wz-xoQOpowObwWw@mail.gmail.com>
- <3bcbfde4-3247-b4ff-9a7c-963a9a510703@kernel.dk> <YobVLs3mpEFjJCh3@zx2c4.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YobVLs3mpEFjJCh3@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mtfdubro.fsf@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/22 5:39 PM, Jason A. Donenfeld wrote:
-> Hi Jens,
-> 
-> On Thu, May 19, 2022 at 05:33:01PM -0600, Jens Axboe wrote:
->> On 5/19/22 5:25 PM, Jason A. Donenfeld wrote:
->>> Hi Jens,
->>>
->>> On Fri, May 20, 2022 at 1:22 AM Jens Axboe <axboe@kernel.dk> wrote:
->>>> I can certainly do the write side too. To fix this regression, I just
->>>> valued doing read_iter first and I'd hate to hold that up to do the
->>>> write side too. I'll do the write side later today, but let's keep them
->>>> separate.
->>>
->>> Excellent, thanks. I plan to queue these up all in a row.
->>
->> Built and tested v2, just sent it out. Note that it deviates from your
->> proposal a bit since with that we lost the
->>
->> if (!len)
->> 	break;
->>
->> check, which is kind of important if you ever want to be done :-)
-> 
-> Heh, noticed that too, thanks.
+On Thu, May 19, 2022, Vitaly Kuznetsov wrote:
+> This, however, made me think there's room for optimization here. In some
+> cases, when both KVM_REQ_TLB_FLUSH_CURRENT and KVM_REQ_TLB_FLUSH_GUEST
+> were requested, there's no need to flush twice, e.g. on SVM
+> .flush_tlb_current == .flush_tlb_guest. I'll probably not go into this
+> territory with this series as it's already fairly big, just something
+> for the future.
 
-:-)
-
->> I'll do the write_iter side, but as mentioned, I'd prefer to keep it
->> separate from this patchset as this one fixes a real regression that we
->> need to get backported too.
->  
-> No problem. Because of all the flux in random.c lately, I've been
-> preparing a massive backports branch, 2 branches actually, so I'll make
-> sure this is in there. Backport concern aside, though, I'll look for
-> your write_iter patch today. Thanks a bunch for doing this.
-
-Sounds great, thanks - write patch has been sent out too.
-
--- 
-Jens Axboe
-
+Definitely not worth your time.  On VMX, CURRENT isn't a superset of GUEST when
+EPT is enabled.  And on SVM, the flush doesn't actually occur until VM-Enter, i.e.
+the redundant flush is just an extra write to svm->vmcb->control.tlb_ctl (or an
+extra decrement of asid_generation).

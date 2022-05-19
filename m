@@ -2,152 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC02452DD35
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6555652DD43
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242013AbiESSyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
+        id S244155AbiESS7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244346AbiESSyB (ORCPT
+        with ESMTP id S242316AbiESS7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:54:01 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E79B3465B
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:54:00 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d22so5541758plr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:54:00 -0700 (PDT)
+        Thu, 19 May 2022 14:59:04 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5146ABF45
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:59:02 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id i5so4298824ilv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cqXx+JOzkFXDkQqUC+tFOIFeOdrLRi5FsVZ7Q6tmusg=;
-        b=KAueedpohy9ZiOcBymMzJEsFCiqcuYuuPjIX8XP7LbpXV2v67n3Jr3nZKvJB2E/kIL
-         lg+zJ293d+WCNQvzx4uZJhzCn+5qWzB3138pkFQEueIaRqP7Suer+hZcBsAiB1hXKEmF
-         109AEgiCJr1wKeIF43FSfR65AKDHN6yjqbWxE=
+        bh=WtXD347NgGS/+YijWWiRuBafqv4C6u9VlK5CEu8TAEA=;
+        b=eQti3jrkdY7scusFOxnuKhJ5Vf4Z+DDvEqC+qVkSzJirkfUkUo5yo7/PzJFKP1AnQd
+         EOXByCNcv+7E3dhF7/eAZlUtc4Ds73cawnE2aCgg30dI7mHPxjhBBOoH1YSJQFqNtOr1
+         R6LZoXW729dcASQMsmmF3k/+wo+sYd4kz14Sa2qe+rZR083fhb8vmsk7nO+eI7I5+46r
+         B1WqKIZ6hq+/H8JAv3J/ab4RVaL/KfqCAbC/76TQsnKpljZd0qDTXT5ChI6MnY24iwgb
+         lnWLpnhJC+QTbOm2LnMQ7SPKSoLPf/ImHkqspMRV5ORcKQKsElyIaKIG7d4X6ohSIUeO
+         KuBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cqXx+JOzkFXDkQqUC+tFOIFeOdrLRi5FsVZ7Q6tmusg=;
-        b=kfUy4yX/6nqq74gt4mfl2mnyjPcAuD8xfbkyiz7JMD0aCOTVg34P5xaGboBh+EjReL
-         FARMezFZ5PKP9IbdOKvgvHduZ2oeXemI5tCMARFHrLMwVwg26GoTV2hA7eTqDXmxJGcU
-         YJyYL8os2xy3yXOXuxi6G5z4jyCDch3iDEa4a915YMvg+wQY+KyI64yGAz1fN8Obq2uF
-         El96em8C64p4U5C6bwngkn5DnklwAIvNZIQqy3l0k0cV6TPeGEYUIVEsqFEtQRxTM4/2
-         CYGVN2niOYs0jmBI8/aDzahs5BYBQfXUua7xLVOA6n9qKRNq4c4vQ+tbiJAnZe/+4I9Z
-         hFOw==
-X-Gm-Message-State: AOAM530Lm9rRTcuiN2SZtUpIY/tkWVKibuqGrFe92yAbA0jGcTZqXmFz
-        067P+/u5OXF/+cHbKtUTaHTsyma0C3LWUZ1zYqq0AA==
-X-Google-Smtp-Source: ABdhPJzi+RMNmnobsEMDELyM2l9/E1mnQZX5/Vb+7QiItPrOZ4eLgTdR5yT4+SAptOUz4GiCEPbBlLhNTH6u/2tbP6I=
-X-Received: by 2002:a17:902:b90b:b0:15f:bd0:18b5 with SMTP id
- bf11-20020a170902b90b00b0015f0bd018b5mr6180510plb.97.1652986438537; Thu, 19
- May 2022 11:53:58 -0700 (PDT)
+        bh=WtXD347NgGS/+YijWWiRuBafqv4C6u9VlK5CEu8TAEA=;
+        b=sudk3KwsrVcqKkzvhHah6ZIg41nI0ZaxY5oTKOkbDr0XV//IOZDvytt/QohtjyMaXL
+         gjdjYuRp4DGboAc+LNVpWsqJPfsnkXJga6tZCZpQm4JE/CEqdkExq68eAB20or/u8a1n
+         aDEdS9veV/kl7cg/NpfPPRBtNY0R+GcMQ0UgYFc6re+q8GB8COGhg59HXabmNl5Ev1wg
+         IUIUt8iOQ3rM0nBMfdZT+20+nsVwq5CUl6V817/PiJEY6zOLYoTBu7M/1f5ZgB6NW82z
+         bZBL71zeh0G3J2b41ygB+l8mCGF4McTF7Bg9yzRZm7JxLELV8xwIFvvndCLMipz5MfyG
+         XOSQ==
+X-Gm-Message-State: AOAM532tE11FatBdYNO7VyxMxX6V7M5RRPanw8WJOV6sJ8YS3EhcpxEa
+        Uz2YkLmHn1wYyiqflhzjzR/Xfe51lno46YZZQBm0aQ==
+X-Google-Smtp-Source: ABdhPJxroZKPAtKdyjG/WvTdRj8QijwwaYZoKH+fVYQqNh/ZqMiSWs7lA9A9PN2uIxTVX6Z0QHBF2y1TIkugRbTRbhE=
+X-Received: by 2002:a92:da0c:0:b0:2cf:9e8e:d9d8 with SMTP id
+ z12-20020a92da0c000000b002cf9e8ed9d8mr3662939ilm.192.1652986741747; Thu, 19
+ May 2022 11:59:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220519185057.1657115-1-tommaso.merciai@amarulasolutions.com>
-In-Reply-To: <20220519185057.1657115-1-tommaso.merciai@amarulasolutions.com>
-From:   Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date:   Thu, 19 May 2022 20:53:46 +0200
-Message-ID: <CAOf5uwnUPTc5zr8+QRwkr8L9104NY2LqX=oH0BOh6-fX_D=Eyg@mail.gmail.com>
-Subject: Re: [PATCH v2] net: phy: DP83822: enable rgmii mode if phy_interface_is_rgmii
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     alberto.bianchi@amarulasolutions.com,
-        linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220422212945.2227722-1-axelrasmussen@google.com>
+ <20220422212945.2227722-5-axelrasmussen@google.com> <fc320218-bef1-c373-e6a6-afa2f6c4b56c@linuxfoundation.org>
+In-Reply-To: <fc320218-bef1-c373-e6a6-afa2f6c4b56c@linuxfoundation.org>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 19 May 2022 11:58:25 -0700
+Message-ID: <CAJHvVcgiHzHcGr8++TMW4+D0PHJRzwL=B2OGOncWArZnUa0pwg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] userfaultfd: update documentation to describe /dev/userfaultfd
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Charan Teja Reddy <charante@codeaurora.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso
-
-On Thu, May 19, 2022 at 8:50 PM Tommaso Merciai
-<tommaso.merciai@amarulasolutions.com> wrote:
+On Tue, Apr 26, 2022 at 9:46 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> RGMII mode can be enable from dp83822 straps, and also writing bit 9
-> of register 0x17 - RMII and Status Register (RCSR).
-> When phy_interface_is_rgmii rgmii mode must be enabled, same for
-> contrary, this prevents malconfigurations of hw straps
+> On 4/22/22 3:29 PM, Axel Rasmussen wrote:
+> > Explain the different ways to create a new userfaultfd, and how access
+> > control works for each way.
+> >
+> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> > ---
+> >   Documentation/admin-guide/mm/userfaultfd.rst | 38 ++++++++++++++++++--
+> >   Documentation/admin-guide/sysctl/vm.rst      |  3 ++
+> >   2 files changed, 39 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
+> > index 6528036093e1..4c079b5377d4 100644
+> > --- a/Documentation/admin-guide/mm/userfaultfd.rst
+> > +++ b/Documentation/admin-guide/mm/userfaultfd.rst
+> > @@ -17,7 +17,10 @@ of the ``PROT_NONE+SIGSEGV`` trick.
+> >   Design
+> >   ======
+> >
+> > -Userfaults are delivered and resolved through the ``userfaultfd`` syscall.
 >
-> References:
->  - https://www.ti.com/lit/gpn/dp83822i p66
+> Please keep this sentence in there and rephrase it to indicate how it was
+> done in the past.
 >
-> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Suggested-by: Alberto Bianchi <alberto.bianchi@amarulasolutions.com>
-> Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> ---
-> Changes since v1:
->  - Improve commit msg
->  - Add definition of bit 9 reg rcsr (rgmii mode en)
->  - Handle case: phy_interface_is_rgmii is false
+> Also explain here why this new approach is better than the syscall approach
+> before getting into the below details.
+
+Hmm, so the old sentence I think was incorrect already. Notifications
+of *the faults* aren't delivered and resolved through the syscall.
+Rather, the syscall just gives you a file descriptor, and then
+notification / resolution of faults happens though the file
+descriptor, not through the syscall. So I think it needs to be
+reworded in any case.
+
+I think the overall structure of the doc as-is makes the most sense as
+well - first explain how this will be used at a very high level, and
+then go into the details (first how to create a userfaultfd, then how
+to use it).
+
+So, in the end I reworded the "Creating a userfaultfd" section, to
+cover the two things you mentioned:
+
+- Which is the "older" way and which is the "newer" way
+- What the benefit of the newer way is
+
+Hopefully this addresses the comment? I can tweak it more if needed.
+In any case, thanks for taking a look at this series!
+
 >
->  drivers/net/phy/dp83822.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> > +Userspace creates a new userfaultfd, initializes it, and registers one or more
+> > +regions of virtual memory with it. Then, any page faults which occur within the
+> > +region(s) result in a message being delivered to the userfaultfd, notifying
+> > +userspace of the fault.
+> >
+> >   The ``userfaultfd`` (aside from registering and unregistering virtual
+> >   memory ranges) provides two primary functionalities:
+> > @@ -39,7 +42,7 @@ Vmas are not suitable for page- (or hugepage) granular fault tracking
+> >   when dealing with virtual address spaces that could span
+> >   Terabytes. Too many vmas would be needed for that.>
+> > -The ``userfaultfd`` once opened by invoking the syscall, can also be
+> > +The ``userfaultfd``, once created, can also be
 >
-> diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
-> index ce17b2af3218..7cb9d084707b 100644
-> --- a/drivers/net/phy/dp83822.c
-> +++ b/drivers/net/phy/dp83822.c
-> @@ -94,6 +94,9 @@
->  #define DP83822_WOL_INDICATION_SEL BIT(8)
->  #define DP83822_WOL_CLR_INDICATION BIT(11)
+> This is sentence is too short and would look odd. Combine the sentences
+> so it renders well in the generated doc.
+
+Not 100% sure I understood the concern, but I do think it makes sense
+to move "Vmas are not suitable ..." up into the same paragraph with
+the other sentence about scalability. I'll do this in v3 as it looks a
+bit nicer. This leaves the "The userfaultfd, once created, ..." part
+alone, though. I think s/once opened by invoking the syscall/once
+created/ is correct, since there are now various ways to create it. I
+also think that second comma technically should have been there even
+in the previous version.
+
 >
-> +/* RCSR bits */
-> +#define DP83822_RGMII_MODE_EN  BIT(9)
-> +
->  /* RSCR bits */
->  #define DP83822_RX_CLK_SHIFT   BIT(12)
->  #define DP83822_TX_CLK_SHIFT   BIT(11)
-
-BIT(9) should go here
-
-#define DP83822_RGMII_MODE_EN  BIT(9)
-#define DP83822_RX_CLK_SHIFT   BIT(12)
-#define DP83822_TX_CLK_SHIFT   BIT(11)
-
-You duplicate the comments up.
-
-> @@ -408,6 +411,12 @@ static int dp83822_config_init(struct phy_device *phydev)
->                         if (err)
->                                 return err;
->                 }
-> +
-> +               phy_set_bits_mmd(phydev, DP83822_DEVADDR,
-> +                                       MII_DP83822_RCSR, DP83822_RGMII_MODE_EN);
-> +       } else {
-> +               phy_clear_bits_mmd(phydev, DP83822_DEVADDR,
-> +                                       MII_DP83822_RCSR, DP83822_RGMII_MODE_EN);
->         }
+> >   passed using unix domain sockets to a manager process, so the same
+> >   manager process could handle the userfaults of a multitude of
+> >   different processes without them being aware about what is going on
+> > @@ -50,6 +53,37 @@ is a corner case that would currently return ``-EBUSY``).
+> >   API
+> >   ===
+> >
+> > +Creating a userfaultfd
+> > +----------------------
+> > +
+> > +There are two mechanisms to create a userfaultfd. There are various ways to
+> > +restrict this too, since userfaultfds which handle kernel page faults have
+> > +historically been a useful tool for exploiting the kernel.
+> > +
+> > +The first is the userfaultfd(2) syscall. Access to this is controlled in several
+> > +ways:
+> > +
+> > +- By default, the userfaultfd will be able to handle kernel page faults. This
+> > +  can be disabled by passing in UFFD_USER_MODE_ONLY.
+> > +
+> > +- If vm.unprivileged_userfaultfd is 0, then the caller must *either* have
+> > +  CAP_SYS_PTRACE, or pass in UFFD_USER_MODE_ONLY.
+> > +
+> > +- If vm.unprivileged_userfaultfd is 1, then no particular privilege is needed to
+> > +  use this syscall, even if UFFD_USER_MODE_ONLY is *not* set.
+> > +
+> > +Alternatively, userfaultfds can be created by opening /dev/userfaultfd, and
+> > +issuing a USERFAULTFD_IOC_NEW ioctl to this device. Access to this device is
 >
->         if (dp83822->fx_enabled) {
-> --
-> 2.25.1
+> New ioctl? I thought we are moving away from using ioctls?
+
+Hmm, looking at alternatives [1] am not sure I see a viable one:
+
+We could have defined a new "userfaultfdfs" filesystem, but it seems
+to me to be overkill for this feature.
+
+We could have used a syscall instead and supported fine-grained access
+control with a new capability, but this approach was rejected [2]
+generally because we prefer to avoid adding capabilities, and this new
+capability's scope (just userfaultfd) was considered too narrow.
+
+So, I'm not sure of another better way to do this. I suppose one could
+argue that the dislike of ioctls outweighs the usefulness of this
+feature, but to me at least the tradeoff seems worth it. :)
+
+[1]: https://www.kernel.org/doc/html/latest/driver-api/ioctl.html#alternatives-to-ioctl
+[2]: https://lkml.org/lkml/2022/2/24/1012
+
 >
+> > +controlled via normal filesystem permissions (user/group/mode for example) - no
+> > +additional permission (capability/sysctl) is needed to be able to handle kernel
+> > +faults this way. This is useful because it allows e.g. a specific user or group
+> > +to be able to create kernel-fault-handling userfaultfds, without allowing it
+> > +more broadly, or granting more privileges in addition to that particular ability
+> > +(CAP_SYS_PTRACE). In other words, it allows permissions to be minimized.
+> > +
+> > +Initializing up a userfaultfd
+> > +------------------------
+> > +
+>
+> This will generate doc warn very likley - extend the dashes to the
+> entire length of the subtitle.
 
-Michael
+I'll fix this in v3.
 
--- 
-Michael Nazzareno Trimarchi
-Co-Founder & Chief Executive Officer
-M. +39 347 913 2170
-michael@amarulasolutions.com
-__________________________________
-
-Amarula Solutions BV
-Joop Geesinkweg 125, 1114 AB, Amsterdam, NL
-T. +31 (0)85 111 9172
-info@amarulasolutions.com
-www.amarulasolutions.com
+>
+> >   When first opened the ``userfaultfd`` must be enabled invoking the
+> >   ``UFFDIO_API`` ioctl specifying a ``uffdio_api.api`` value set to ``UFFD_API`` (or
+> >   a later API version) which will specify the ``read/POLLIN`` protocol
+> > diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+> > index f4804ce37c58..8682d5fbc8ea 100644
+> > --- a/Documentation/admin-guide/sysctl/vm.rst
+> > +++ b/Documentation/admin-guide/sysctl/vm.rst
+> > @@ -880,6 +880,9 @@ calls without any restrictions.
+> >
+> >   The default value is 0.
+> >
+> > +An alternative to this sysctl / the userfaultfd(2) syscall is to create
+> > +userfaultfds via /dev/userfaultfd. See
+> > +Documentation/admin-guide/mm/userfaultfd.rst.
+> >
+> >   user_reserve_kbytes
+> >   ===================
+> >
+>
+> thanks,
+> -- Shuah

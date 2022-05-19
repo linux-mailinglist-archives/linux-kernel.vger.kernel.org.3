@@ -2,228 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648DB52DD92
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2CB752DD96
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244527AbiESTPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        id S243861AbiESTQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244526AbiESTOI (ORCPT
+        with ESMTP id S244564AbiESTQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 15:14:08 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2598111BA6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:13:54 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id e15so6773598iob.3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6/y06+DLzN/eyg4fXfBHtcLRTnFYxYLYCPqBTJsbH6s=;
-        b=Hr7YTVx/XDlLAKxrqvGt3HM8lkbQ7yU2d3o62RUBreCJgrHoA8OSdL53fbQ3KLFiO2
-         /1vHpfewwHUWgXcLIj3wMgTZ5sGELoRatnJpC5h8N64AtjuyzTrKNDDMAgk+T9w7cCeF
-         Wg4EpROQ9lznY84WpbrXLJWghT/JB4bwz2w3PVWYuRB3zMZAcBIpkH5LdEYGfnVJpdOt
-         BfSvIidMaMzxVrCEapVPuz5jtfaWcxAdLMsxpucS1Nk1ppff19DluwXMBAn4FJlGa24U
-         mln4eXx0GXrxxAde1IcxQBsW5gzB/5zTgmkb5K81Vk8Gua1sTGxvoARNWc84yLIwalG9
-         /3sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6/y06+DLzN/eyg4fXfBHtcLRTnFYxYLYCPqBTJsbH6s=;
-        b=JhSnJRGXabg63d7V1Gaj/ovVAU87uSojHEbxZWlFI/lL4e8HQy2ewSPqcX85OmU8LZ
-         m4lAbi4yFzByRp1FFKA0QAclUEnt3QpMMDiKbDRU+A5puwLf+hbkz9z0m49rEUYTfUie
-         trFwfEildMhF7MB8bv7Q03xjyP8Ed3UkhpQy4LVpCMz3mbJNlOYsboyd3LXfyGCI1u7o
-         eQspd5QU9evEie/0pixFf/QWVpS8svxEDUaNdtJJkwu64DzoJab38Ne80jVj8n9Q6HxZ
-         TCOGd5aZg/29XfOBWNwJSi6taYfl3EH+xtFVp5/u+qok+SqFMaO/pHhEuwAtlx0aLzE8
-         qHxQ==
-X-Gm-Message-State: AOAM5323LF2hrpyeAGWrLcAbKDYccg+BnHmA7aFoOGQHMtQoCBvJ/4HO
-        gpyBUtgRr2QLUoLTk8u3kVThdDGOHSoNOmbrfezYVw==
-X-Google-Smtp-Source: ABdhPJy0GdftMdljZ/DggUvp858hbLHvZ0ZTwbMCuqHX0TPJ3QqmV+8xMprTqaPj1WirWbD9+n0Ce98OwaQRgHhTvhY=
-X-Received: by 2002:a05:6638:1693:b0:32b:96d6:5fc0 with SMTP id
- f19-20020a056638169300b0032b96d65fc0mr3499533jat.167.1652987633996; Thu, 19
- May 2022 12:13:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220422212945.2227722-1-axelrasmussen@google.com>
- <20220422212945.2227722-6-axelrasmussen@google.com> <bceb4b77-24fa-7654-0c59-fc858bea096a@linuxfoundation.org>
-In-Reply-To: <bceb4b77-24fa-7654-0c59-fc858bea096a@linuxfoundation.org>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 19 May 2022 12:13:18 -0700
-Message-ID: <CAJHvVcj8FnOAQ7HqrgiXiN+k2=XbXPerLZy6QBG1mDMW3=7ewA@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] userfaultfd: selftests: make /dev/userfaultfd
- testing configurable
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Thu, 19 May 2022 15:16:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E82AC1ED0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 12:15:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDADE61B94
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 19:15:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 527F9C385AA;
+        Thu, 19 May 2022 19:15:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652987725;
+        bh=s4/8PEowr6J9A6sMspKv3h/ZQDfdqAPMOk72yIHs8DI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WQo18kYgKjIv52aKNQmzdItSAoKI4qvfucCXcuS+LiC/YZikUd/HQvCUE6onKUDbG
+         SYeXULY2oFnED+53NJBGd7juszKwkW347uuoIgXnefv6X/g3SjiLoAxUkv5lwjxo2B
+         iOcgPb6hAs9KDM72KByPIzPauJ92PCZsp6LC7NrNiKsI9COtpUtdzHaXAa35mjGa2O
+         fIAxN+lOp1sC4c3qvhaR8aA+ObHLgreRlMDuoM7veoEGX6cS0Suupkic65p4nA/+sT
+         loXdLlOj5YzOijZRHxJ5zpRH1hf39OMDoFr3ot5z+M1ggAfEIKclNTFXH00DXb7496
+         MH3AezsAwteIw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id DBBF25C04E0; Thu, 19 May 2022 12:15:24 -0700 (PDT)
+Date:   Thu, 19 May 2022 12:15:24 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Qian Cai <quic_qiancai@quicinc.com>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, kafai@fb.com, kpsingh@kernel.org
+Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
+Message-ID: <20220519191524.GC1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220512085043.5234-1-mgorman@techsingularity.net>
+ <20220517233507.GA423@qian>
+ <20220518125152.GQ3441@techsingularity.net>
+ <YoUealVA1bMaSH2l@qian>
+ <20220518171503.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YoZGSd6yQL3EP8tk@qian>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YoZGSd6yQL3EP8tk@qian>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 9:56 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 4/22/22 3:29 PM, Axel Rasmussen wrote:
-> > Instead of always testing both userfaultfd(2) and /dev/userfaultfd,
-> > let the user choose which to test.
-> >
-> > As with other test features, change the behavior based on a new
-> > command line flag. Introduce the idea of "test mods", which are
-> > generic (not specific to a test type) modifications to the behavior of
-> > the test. This is sort of borrowed from this RFC patch series [1], but
-> > simplified a bit.
-> >
-> > The benefit is, in "typical" configurations this test is somewhat slow
-> > (say, 30sec or something). Testing both clearly doubles it, so it may
-> > not always be desirable, as users are likely to use one or the other,
-> > but never both, in the "real world".
-> >
-> > [1]: https://patchwork.kernel.org/project/linux-mm/patch/20201129004548.1619714-14-namit@vmware.com/
-> >
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> > ---
-> >   tools/testing/selftests/vm/userfaultfd.c | 41 +++++++++++++++++-------
-> >   1 file changed, 30 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> > index 12ae742a9981..274522704e40 100644
-> > --- a/tools/testing/selftests/vm/userfaultfd.c
-> > +++ b/tools/testing/selftests/vm/userfaultfd.c
-> > @@ -142,8 +142,17 @@ static void usage(void)
-> >   {
-> >       fprintf(stderr, "\nUsage: ./userfaultfd <test type> <MiB> <bounces> "
-> >               "[hugetlbfs_file]\n\n");
-> > +
->
-> Remove the extra blank line here.
->
-> >       fprintf(stderr, "Supported <test type>: anon, hugetlb, "
-> >               "hugetlb_shared, shmem\n\n");
-> > +
->
-> Remove the extra blank line here.
->
-> > +     fprintf(stderr, "'Test mods' can be joined to the test type string with a ':'. "
-> > +             "Supported mods:\n");
-> > +     fprintf(stderr, "\tdev - Use /dev/userfaultfd instead of userfaultfd(2)\n");
-> > +     fprintf(stderr, "\nExample test mod usage:\n");
-> > +     fprintf(stderr, "# Run anonymous memory test with /dev/userfaultfd:\n");
-> > +     fprintf(stderr, "./userfaultfd anon:dev 100 99999\n\n");
-> > +
-> >       fprintf(stderr, "Examples:\n\n");
-> >       fprintf(stderr, "%s", examples);
->
-> Update examples above with new test cases if any.
+On Thu, May 19, 2022 at 09:29:45AM -0400, Qian Cai wrote:
+> On Wed, May 18, 2022 at 10:15:03AM -0700, Paul E. McKenney wrote:
+> > So does this python script somehow change the tracing state?  (It does
+> > not look to me like it does, but I could easily be missing something.)
+> 
+> No, I don't think so either. It pretty much just offline memory sections
+> one at a time.
 
-Will fix the above comments in v3.
+No idea.
 
->
-> >       exit(1);
-> > @@ -1610,8 +1619,6 @@ unsigned long default_huge_page_size(void)
-> >
-> >   static void set_test_type(const char *type)
-> >   {
-> > -     uint64_t features = UFFD_API_FEATURES;
-> > -
-> >       if (!strcmp(type, "anon")) {
-> >               test_type = TEST_ANON;
-> >               uffd_test_ops = &anon_uffd_test_ops;
-> > @@ -1631,10 +1638,28 @@ static void set_test_type(const char *type)
-> >               test_type = TEST_SHMEM;
-> >               uffd_test_ops = &shmem_uffd_test_ops;
-> >               test_uffdio_minor = true;
-> > -     } else {
-> > -             err("Unknown test type: %s", type);
-> > +     }
->
-> At this point, it might make it so much easier and maintainable if
-> we were to use getopt instead of parsing options.
+> > Either way, is there something else waiting for these RCU flavors?
+> > (There should not be.)  Nevertheless, if so, there should be
+> > a synchronize_rcu_tasks(), synchronize_rcu_tasks_rude(), or
+> > synchronize_rcu_tasks_trace() on some other blocked task's stack
+> > somewhere.
+> 
+> There are only three blocked tasks when this happens. The kmemleak_scan()
+> is just the victim waiting for the locks taken by the stucking
+> offline_pages()->synchronize_rcu() task.
 
-Agreed, I'd like that as well. But, since it's a bigger refactor that
-affects all test types, I think it may be cleaner to leave it for a
-follow-up series.
+OK, then I believe that the RCU Tasks flavors were innocent bystanders.
 
->
-> > +}
-> > +
-> > +static void parse_test_type_arg(const char *raw_type)
-> > +{
-> > +     char *buf = strdup(raw_type);
-> > +     uint64_t features = UFFD_API_FEATURES;
-> > +
-> > +     while (buf) {
-> > +             const char *token = strsep(&buf, ":");
-> > +
-> > +             if (!test_type)
-> > +                     set_test_type(token);
-> > +             else if (!strcmp(token, "dev"))
-> > +                     test_dev_userfaultfd = true;
-> > +             else
-> > +                     err("unrecognized test mod '%s'", token);
-> >       }
-> >
-> > +     if (!test_type)
-> > +             err("failed to parse test type argument: '%s'", raw_type);
-> > +
-> >       if (test_type == TEST_HUGETLB)
-> >               page_size = default_huge_page_size();
-> >       else
-> > @@ -1681,7 +1706,7 @@ int main(int argc, char **argv)
-> >               err("failed to arm SIGALRM");
-> >       alarm(ALARM_INTERVAL_SECS);
-> >
-> > -     set_test_type(argv[1]);
-> > +     parse_test_type_arg(argv[1]);
-> >
-> >       nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
-> >       nr_pages_per_cpu = atol(argv[2]) * 1024*1024 / page_size /
-> > @@ -1719,12 +1744,6 @@ int main(int argc, char **argv)
-> >       }
-> >       printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
-> >              nr_pages, nr_pages_per_cpu);
-> > -
-> > -     test_dev_userfaultfd = false;
-> > -     if (userfaultfd_stress())
-> > -             return 1;
-> > -
-> > -     test_dev_userfaultfd = true;
-> >       return userfaultfd_stress();
-> >   }
-> >
-> >
->
-> Same comments as before on fail vs. skip conditions to watch out
-> for and report them correctly.
+Is the task doing offline_pages()->synchronize_rcu() doing this
+repeatedly?  Or is there a stalled RCU grace period?  (From what
+I can see, offline_pages() is not doing huge numbers of calls to
+synchronize_rcu() in any of its loops, but I freely admit that I do not
+know this code.)
 
-I think in v3 things will be correct. Basically, in the skip cases we
-just exit(KSFT_SKIP) directly, instead of relying on the return value
-here. I'll take a pass and double check though before sending v3.
+If repeatedly, one workaround is to use synchronize_rcu_expedited()
+instead of synchronize_rcu().  A better fix might be to batch the
+grace periods, so that one RCU grace period serves several page
+offline operations.  An alternative better fix might be to use
+call_rcu() instead of synchronize_rcu().
 
->
-> thanks,
-> -- Shuah
->
+>  task:kmemleak        state:D stack:25824 pid: 1033 ppid:     2 flags:0x00000008
+>  Call trace:
+>   __switch_to
+>   __schedule
+>   schedule
+>   percpu_rwsem_wait
+>   __percpu_down_read
+>   percpu_down_read.constprop.0
+>   get_online_mems
+
+This is read-acquiring the mem_hotplug_lock.  It looks like offline_pages()
+write-acquires this same lock.
+
+>   kmemleak_scan
+>   kmemleak_scan_thread
+>   kthread
+>   ret_from_fork
+> 
+>  task:cppc_fie        state:D stack:23472 pid: 1848 ppid:     2 flags:0x00000008
+>  Call trace:
+>   __switch_to
+>   __schedule
+>   lockdep_recursion
+> 
+>  task:tee             state:D stack:24816 pid:16733 ppid: 16732 flags:0x0000020c
+>  Call trace:
+>   __switch_to
+>   __schedule
+>   schedule
+>   schedule_timeout
+>   __wait_for_common
+>   wait_for_completion
+>   __wait_rcu_gp
+>   synchronize_rcu
+
+So, yes, this is sleeping holding the lock that kmemleak_scan wants to
+acquire.
+
+>   lru_cache_disable
+>   __alloc_contig_migrate_range
+>   isolate_single_pageblock
+>   start_isolate_page_range
+>   offline_pages
+>   memory_subsys_offline
+>   device_offline
+>   online_store
+>   dev_attr_store
+>   sysfs_kf_write
+>   kernfs_fop_write_iter
+>   new_sync_write
+>   vfs_write
+>   ksys_write
+>   __arm64_sys_write
+>   invoke_syscall
+>   el0_svc_common.constprop.0
+>   do_el0_svc
+>   el0_svc
+>   el0t_64_sync_handler
+>   el0t_64_sync
+>  
+> > Or maybe something sleeps waiting for an RCU Tasks * callback to
+> > be invoked.  In that case (and in the above case, for that matter),
+> > at least one of these pointers would be non-NULL on some CPU:
+> > 
+> > 1.	rcu_tasks__percpu.cblist.head
+> > 2.	rcu_tasks_rude__percpu.cblist.head
+> > 3.	rcu_tasks_trace__percpu.cblist.head
+> > 
+> > The ->func field of the pointed-to structure contains a pointer to
+> > the callback function, which will help work out what is going on.
+> > (Most likely a wakeup being lost or not provided.)
+> 
+> What would be some of the easy ways to find out those? I can't see anything
+> interesting from the output of sysrq-t.
+
+Again, I believe that these are victims of circumstance.  Though that does
+not explain why revertin those three patches makes things work better.
+
+Or is it possible that reverting those three patches simply decreases
+the probability of failure, rather than eliminating the failure?
+Such a decrease could be due to many things, for example, changes to
+offsets and sizes of data structures.
+
+> > Alternatively, if your system has hundreds of thousands of tasks and
+> > you have attached BPF programs to short-lived socket structures and you
+> > don't yet have the workaround, then you can see hangs.  (I am working on a
+> > longer-term fix.)  In the short term, applying the workaround is the right
+> > thing to do.  (Adding a couple of the BPF guys on CC for their thoughts.)
+> 
+> The system is pretty much idle after a fresh reboot. The only workload is
+> to run the script.
+
+Do you ever see RCU CPU stall warnings?
+
+Could you please trace the offline_pages() function?  Is it really stuck,
+or is it being invoked periodically during the hang?
+
+							Thanx, Paul

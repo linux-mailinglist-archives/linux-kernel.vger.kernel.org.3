@@ -2,106 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41EF52D18D
+	by mail.lfdr.de (Postfix) with ESMTP id 6864D52D18C
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237479AbiESLdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
+        id S236165AbiESLeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237446AbiESLd1 (ORCPT
+        with ESMTP id S237473AbiESLeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:33:27 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D9FB0A50
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:33:25 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id l13so1934585lfp.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oZEhROINlJWM7vdViG2IE8Bwfk0C1vKAbaV7Oeo94UQ=;
-        b=EGYii0kO3qs08FhyjVI9Y2ePF+IohLbIeqqa7oK57S3FHkA5RVZPqNblDLIW75kFcH
-         6oX9s2gDFeGn/Roq1TarZsxyRUt40VFfb5c7GuE3GAwRVG6wR8/7g+uoxQtyoal+s1Bb
-         DURdbTlR841WX2Cbo1oPkbROxz3gHWrGzyDokChBKsDSyyNLlTTlKnxN/3AY28EWxs81
-         7LfNbBhSuRzanMHZYwj8TfSLIbfXB9SULTllFtS5cdp1cEyf+zg05PoipkxYaZYsOqld
-         9XXXp7qDW7uDXI0zwLWNUMJpf5xEn0ESsqk27e/JgyB/aRM43jaj70OtEgW7UJkTnhV5
-         lftQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oZEhROINlJWM7vdViG2IE8Bwfk0C1vKAbaV7Oeo94UQ=;
-        b=ldVw3tJRZkUBqe1rFaEGTFhtX3hRjfDb71VYf1xX6WKOCZ/97/DYOMviLHu8dp8G5x
-         /1bf7FjHIbpBlX4hpbzNgrsZi4oWPWl09+sgEN1wg90emS7x2XFKR0FXVbRlZS6YPn18
-         MiqlSHk8ijvfD5D7wAk5lLAHICkFi0DgKOGNvv03rZIyvmonOZnID3RmaVsZ56CINFT8
-         MtmYUgFoanti44e5OvduzNKG1WV/uHue+E1FU+W67lLcNcK1ipaUdVgQH5H0o9deRR6f
-         pt/vKoUdYda2QnEM/t47OunCczYLQbuMkI3H+K6WvHcJAv8KcGOyOjhVE6Eq5d5TtsNL
-         ghoQ==
-X-Gm-Message-State: AOAM530BzMTfa/E/s0xmdm9HoUzhMViYti4B3bWsqoQdA25dzBp1QR9R
-        BZDCFeCpnbnEriR1/rzoIL9yFA==
-X-Google-Smtp-Source: ABdhPJyUim5e9pHHMifbYzMw77E1dUklze9AipVmBtmLAVQKy142zJwXyX5rENYYXJsuBfOx5tzKxw==
-X-Received: by 2002:a05:6512:2215:b0:473:c124:434b with SMTP id h21-20020a056512221500b00473c124434bmr3049278lfu.24.1652960003454;
-        Thu, 19 May 2022 04:33:23 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id 189-20020a2e09c6000000b00253b5bb829esm556593ljj.98.2022.05.19.04.33.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 04:33:22 -0700 (PDT)
-Message-ID: <c74b0524-60c6-c3af-e35f-13521ba2b02e@linaro.org>
-Date:   Thu, 19 May 2022 13:33:21 +0200
+        Thu, 19 May 2022 07:34:07 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5472B41CB
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:34:03 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4L3nlW3JTrz1JCKN;
+        Thu, 19 May 2022 19:32:39 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 19:34:01 +0800
+Subject: Re: [PATCH 5/9] revert "mm/z3fold.c: allow __GFP_HIGHMEM in
+ z3fold_alloc"
+To:     Vitaly Wool <vitaly.wool@konsulko.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220429064051.61552-1-linmiaohe@huawei.com>
+ <20220429064051.61552-6-linmiaohe@huawei.com>
+ <CAM4kBBLC4Jo4TAC66XzJBgFZfF5ONgCNT5fPFQjwPJtug+5N8A@mail.gmail.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <a3179291-fe43-1004-c89c-3bcdad26306e@huawei.com>
+Date:   Thu, 19 May 2022 19:34:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 4/5] dt-bindings: net: Add documentation for optional
- regulators
+In-Reply-To: <CAM4kBBLC4Jo4TAC66XzJBgFZfF5ONgCNT5fPFQjwPJtug+5N8A@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Corentin Labbe <clabbe@baylibre.com>, andrew@lunn.ch,
-        calvin.johnson@oss.nxp.com, davem@davemloft.net,
-        edumazet@google.com, hkallweit1@gmail.com,
-        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
-        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
-        wens@csie.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org
-References: <20220518200939.689308-1-clabbe@baylibre.com>
- <20220518200939.689308-5-clabbe@baylibre.com>
- <95f3f0a4-17e6-ec5f-6f2f-23a5a4993a44@linaro.org>
- <YoYqmAB3P7fNOSVG@sirena.org.uk>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YoYqmAB3P7fNOSVG@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2022 13:31, Mark Brown wrote:
-> On Thu, May 19, 2022 at 11:55:28AM +0200, Krzysztof Kozlowski wrote:
->> On 18/05/2022 22:09, Corentin Labbe wrote:
+On 2022/5/19 15:12, Vitaly Wool wrote:
+> On Fri, Apr 29, 2022 at 8:41 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
+>>
+>> Revert commit f1549cb5ab2b ("mm/z3fold.c: allow __GFP_HIGHMEM in
+>> z3fold_alloc").
+>>
+>> z3fold can't support GFP_HIGHMEM page now. page_address is used
+>> directly at all places. Moreover, z3fold_header is on per cpu
+>> unbuddied list which could be access anytime. So we should rid
+>> the support of GFP_HIGHMEM allocation for z3fold.
 > 
->>> +  regulators:
->>> +    description:
->>> +       List of phandle to regulators needed for the PHY
-> 
->> I don't understand that... is your PHY defining the regulators or using
->> supplies? If it needs a regulator (as a supply), you need to document
->> supplies, using existing bindings.
-> 
-> They're trying to have a generic driver which works with any random PHY
-> so the binding has no idea what supplies it might need.
+> Could you please clarify how kmem_cache is affected here?
 
-OK, that makes sense, but then question is why not using existing
-naming, so "supplies" and "supply-names"?
+With this code changes, kmem_cache should be unaffected. HIGHMEM is still not supported for
+kmem_cache just like before but caller ensures __GFP_HIGHMEM is not passed in now. The issue
+I want to fix here is that if z3fold page is allocated from highmem, page_address can't be
+used directly. Did I answer your question? Or don't I get your point?
 
-Best regards,
-Krzysztof
+Thanks!
+
+> 
+> Thanks,
+> Vitaly
+
+Many thanks for your time! :)
+
+> 
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/z3fold.c | 8 +++-----
+>>  1 file changed, 3 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/mm/z3fold.c b/mm/z3fold.c
+>> index b3b4e65c107f..5f5d5f1556be 100644
+>> --- a/mm/z3fold.c
+>> +++ b/mm/z3fold.c
+>> @@ -212,10 +212,8 @@ static int size_to_chunks(size_t size)
+>>  static inline struct z3fold_buddy_slots *alloc_slots(struct z3fold_pool *pool,
+>>                                                         gfp_t gfp)
+>>  {
+>> -       struct z3fold_buddy_slots *slots;
+>> -
+>> -       slots = kmem_cache_zalloc(pool->c_handle,
+>> -                                (gfp & ~(__GFP_HIGHMEM | __GFP_MOVABLE)));
+>> +       struct z3fold_buddy_slots *slots = kmem_cache_zalloc(pool->c_handle,
+>> +                                                            gfp);
+>>
+>>         if (slots) {
+>>                 /* It will be freed separately in free_handle(). */
+>> @@ -1075,7 +1073,7 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
+>>         enum buddy bud;
+>>         bool can_sleep = gfpflags_allow_blocking(gfp);
+>>
+>> -       if (!size)
+>> +       if (!size || (gfp & __GFP_HIGHMEM))
+>>                 return -EINVAL;
+>>
+>>         if (size > PAGE_SIZE)
+>> --
+>> 2.23.0
+>>
+> .
+> 
+

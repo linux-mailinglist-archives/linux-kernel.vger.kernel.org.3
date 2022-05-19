@@ -2,228 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE98152CEA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C875A52CEAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235603AbiESIuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 04:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50760 "EHLO
+        id S235640AbiESIvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 04:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiESIuk (ORCPT
+        with ESMTP id S231838AbiESIu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 04:50:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31E009C2E7
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652950238;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=p92fXrJQ4gGF6gXdL4rpxaBMAzMtQCdZw00jmCIxVH0=;
-        b=RfvD9ZEbDJQn76vLk72WCqEDr+MJryQolwXrvX16OCmdpHaT32WOCBMnKpuvvZOyk0hSrZ
-        RjD4S7txL+Ky5t6PXYU8SAJFRLk7Qs3BCxj6eLsEUNmee4PHmQcxs0A5YhCaNJSnH6KFZ2
-        MCm3wCuBo3Vu/OwBxs4i2RrloLljDK4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-AYYgi-E3OmePuQW2dI8JAw-1; Thu, 19 May 2022 04:50:33 -0400
-X-MC-Unique: AYYgi-E3OmePuQW2dI8JAw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BD516802803;
-        Thu, 19 May 2022 08:50:32 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 95948400E114;
-        Thu, 19 May 2022 08:50:31 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] assoc_array: Fix BUG_ON during garbage collect
-From:   David Howells <dhowells@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     stable@vger.kernel.org,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        keyrings@vger.kernel.org, dhowells@redhat.com,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 19 May 2022 09:50:30 +0100
-Message-ID: <165295023086.3361286.8662079860706628540.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Thu, 19 May 2022 04:50:57 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EBD109B;
+        Thu, 19 May 2022 01:50:48 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so5943286fac.7;
+        Thu, 19 May 2022 01:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s/jKTM8nU9QM/2p2qPlG421S2RUaa03Kvk8UUYYHtlg=;
+        b=epSxT9TMjeanb166onZsIfWhvoMygyPn4fGEFLp0dS+HeiZ5rtmuurVeamS+ty4RKM
+         KoKtTSwclnIpKNd1Lpua0MZui8kxcAHrk/6vlnGNoKmLId7WrDGDzi74cEQrNFerEm27
+         dY4lk3q+oO+H/Sby6PUvA1v59g2/uXXTGxWoKoM7LaW8KxgaBVQ+Hi35Z3ntB+AglLpT
+         lEVZj/L91AHjEoSCFQ+TfrXlp8iY+goi8njZHWUq/MY5ZF951GtMf0LV5dQD6btCnt6l
+         Xh8ddytJ3oECbyw0K0Rdc7N2i9WOOq2+nMiXO9Pv7ZjAITDBq7et908jTg+3gtbR8yo4
+         +bQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s/jKTM8nU9QM/2p2qPlG421S2RUaa03Kvk8UUYYHtlg=;
+        b=UXRO3k3fAZdRbyJq4d+mGS9HJojRSlUlk106hWIr0RAJiHoJRGHA3QFMziEwRvqMHp
+         W33ZAVIAQxzhWZJ7wT9XYS8Nn1arU+b76LEaZIoGOfj2rDd3apiZWF/8sdoaoOcB4pfq
+         DwMptpGDYkh4DOgC8+08NPrquoYiFUeE5Qtggxql2xOhoSsiRR4XaVPEiZx7PK1iFf3D
+         4vXE+2+94b3hLeBY1SU/aJ8Mp6PRe08ymKvv6h4KwA66aMfB0UtXETFCBEg6ZqjTilYm
+         h8Xekw1gPPPxMw9SOf4q88JJIpBgKNn0KlY5LDb46XEAVDhS6Cpov+ESQX8SXibStZzl
+         S3nA==
+X-Gm-Message-State: AOAM530euq1FnJrW+R3Art1trmBUz/C0fCnx/6owM2zmZvNsnPhwlItx
+        IIoa2oz2tOqhQ5FFO9duC4ZtFkjqjL4jPRPXCvFMHGCC
+X-Google-Smtp-Source: ABdhPJy0iY2R0vgsXz9NosQtaKPCaAqqgY79hu+YUz6RmsMviX9IKBJlflLg7nACAsalGqatvr83Yiau6+xJITKPqpc=
+X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
+ v29-20020a056870311d00b000de9b6c362bmr2262545oaa.200.1652950247928; Thu, 19
+ May 2022 01:50:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <1652236710-36524-1-git-send-email-wanpengli@tencent.com>
+In-Reply-To: <1652236710-36524-1-git-send-email-wanpengli@tencent.com>
+From:   Wanpeng Li <kernellwp@gmail.com>
+Date:   Thu, 19 May 2022 16:50:36 +0800
+Message-ID: <CANRm+Cz0S7DwojGkGOuyygGnZb8xz1T-fOCjQm5pzf5tCadPvg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] KVM: LAPIC: Disarm LAPIC timer includes pending
+ timer around TSC deadline switch
+To:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Brennan <stephen.s.brennan@oracle.com>
-
-A rare BUG_ON triggered in assoc_array_gc:
-
-    [3430308.818153] kernel BUG at lib/assoc_array.c:1609!
-
-Which corresponded to the statement currently at line 1593 upstream:
-
-    BUG_ON(assoc_array_ptr_is_meta(p));
-
-Using the data from the core dump, I was able to generate a userspace
-reproducer[1] and determine the cause of the bug.
-
-[1]: https://github.com/brenns10/kernel_stuff/tree/master/assoc_array_gc
-
-After running the iterator on the entire branch, an internal tree node
-looked like the following:
-
-    NODE (nr_leaves_on_branch: 3)
-      SLOT [0] NODE (2 leaves)
-      SLOT [1] NODE (1 leaf)
-      SLOT [2..f] NODE (empty)
-
-In the userspace reproducer, the pr_devel output when compressing this
-node was:
-
-    -- compress node 0x5607cc089380 --
-    free=0, leaves=0
-    [0] retain node 2/1 [nx 0]
-    [1] fold node 1/1 [nx 0]
-    [2] fold node 0/1 [nx 2]
-    [3] fold node 0/2 [nx 2]
-    [4] fold node 0/3 [nx 2]
-    [5] fold node 0/4 [nx 2]
-    [6] fold node 0/5 [nx 2]
-    [7] fold node 0/6 [nx 2]
-    [8] fold node 0/7 [nx 2]
-    [9] fold node 0/8 [nx 2]
-    [10] fold node 0/9 [nx 2]
-    [11] fold node 0/10 [nx 2]
-    [12] fold node 0/11 [nx 2]
-    [13] fold node 0/12 [nx 2]
-    [14] fold node 0/13 [nx 2]
-    [15] fold node 0/14 [nx 2]
-    after: 3
-
-At slot 0, an internal node with 2 leaves could not be folded into the
-node, because there was only one available slot (slot 0). Thus, the
-internal node was retained. At slot 1, the node had one leaf, and was
-able to be folded in successfully. The remaining nodes had no leaves,
-and so were removed. By the end of the compression stage, there were 14
-free slots, and only 3 leaf nodes. The tree was ascended and then its
-parent node was compressed. When this node was seen, it could not be
-folded, due to the internal node it contained.
-
-The invariant for compression in this function is: whenever
-nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT, the node should contain all
-leaf nodes. The compression step currently cannot guarantee this, given
-the corner case shown above.
-
-To fix this issue, retry compression whenever we have retained a node,
-and yet nr_leaves_on_branch < ASSOC_ARRAY_FAN_OUT. This second
-compression will then allow the node in slot 1 to be folded in,
-satisfying the invariant. Below is the output of the reproducer once the
-fix is applied:
-
-    -- compress node 0x560e9c562380 --
-    free=0, leaves=0
-    [0] retain node 2/1 [nx 0]
-    [1] fold node 1/1 [nx 0]
-    [2] fold node 0/1 [nx 2]
-    [3] fold node 0/2 [nx 2]
-    [4] fold node 0/3 [nx 2]
-    [5] fold node 0/4 [nx 2]
-    [6] fold node 0/5 [nx 2]
-    [7] fold node 0/6 [nx 2]
-    [8] fold node 0/7 [nx 2]
-    [9] fold node 0/8 [nx 2]
-    [10] fold node 0/9 [nx 2]
-    [11] fold node 0/10 [nx 2]
-    [12] fold node 0/11 [nx 2]
-    [13] fold node 0/12 [nx 2]
-    [14] fold node 0/13 [nx 2]
-    [15] fold node 0/14 [nx 2]
-    internal nodes remain despite enough space, retrying
-    -- compress node 0x560e9c562380 --
-    free=14, leaves=1
-    [0] fold node 2/15 [nx 0]
-    after: 3
-
-Changes
-=======
-DH:
- - Use false instead of 0.
- - Reorder the inserted lines in a couple of places to put retained before
-   next_slot.
-
-ver #2)
- - Fix typo in pr_devel, correct comparison to "<="
-
-
-Fixes: 3cb989501c26 ("Add a generic associative array implementation.")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Jarkko Sakkinen <jarkko@kernel.org>
-cc: Andrew Morton <akpm@linux-foundation.org>
-cc: keyrings@vger.kernel.org
-Link: https://lore.kernel.org/r/20220511225517.407935-1-stephen.s.brennan@oracle.com/ # v1
-Link: https://lore.kernel.org/r/20220512215045.489140-1-stephen.s.brennan@oracle.com/ # v2
----
-
- lib/assoc_array.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/lib/assoc_array.c b/lib/assoc_array.c
-index 079c72e26493..ca0b4f360c1a 100644
---- a/lib/assoc_array.c
-+++ b/lib/assoc_array.c
-@@ -1461,6 +1461,7 @@ int assoc_array_gc(struct assoc_array *array,
- 	struct assoc_array_ptr *cursor, *ptr;
- 	struct assoc_array_ptr *new_root, *new_parent, **new_ptr_pp;
- 	unsigned long nr_leaves_on_tree;
-+	bool retained;
- 	int keylen, slot, nr_free, next_slot, i;
- 
- 	pr_devel("-->%s()\n", __func__);
-@@ -1536,6 +1537,7 @@ int assoc_array_gc(struct assoc_array *array,
- 		goto descend;
- 	}
- 
-+retry_compress:
- 	pr_devel("-- compress node %p --\n", new_n);
- 
- 	/* Count up the number of empty slots in this node and work out the
-@@ -1553,6 +1555,7 @@ int assoc_array_gc(struct assoc_array *array,
- 	pr_devel("free=%d, leaves=%lu\n", nr_free, new_n->nr_leaves_on_branch);
- 
- 	/* See what we can fold in */
-+	retained = false;
- 	next_slot = 0;
- 	for (slot = 0; slot < ASSOC_ARRAY_FAN_OUT; slot++) {
- 		struct assoc_array_shortcut *s;
-@@ -1602,9 +1605,14 @@ int assoc_array_gc(struct assoc_array *array,
- 			pr_devel("[%d] retain node %lu/%d [nx %d]\n",
- 				 slot, child->nr_leaves_on_branch, nr_free + 1,
- 				 next_slot);
-+			retained = true;
- 		}
- 	}
- 
-+	if (retained && new_n->nr_leaves_on_branch <= ASSOC_ARRAY_FAN_OUT) {
-+		pr_devel("internal nodes remain despite enough space, retrying\n");
-+		goto retry_compress;
-+	}
- 	pr_devel("after: %lu\n", new_n->nr_leaves_on_branch);
- 
- 	nr_leaves_on_tree = new_n->nr_leaves_on_branch;
-
-
+ping,
+On Wed, 11 May 2022 at 10:39, Wanpeng Li <kernellwp@gmail.com> wrote:
+>
+> From: Wanpeng Li <wanpengli@tencent.com>
+>
+> The timer is disarmed when switching between TSC deadline and other modes,
+> however, the pending timer is still in-flight, so let's accurately set
+> everything to a disarmed state, this patch does it by clearing pending
+> when canceling the timer.
+>
+> Fixes: 4427593258 (KVM: x86: thoroughly disarm LAPIC timer around TSC deadline switch)
+> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> ---
+> v1 -> v2:
+>  * clear pending in cancel_apic_timer
+>
+>  arch/x86/kvm/lapic.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 66b0eb0bda94..6268880c8eed 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -1548,6 +1548,7 @@ static void cancel_apic_timer(struct kvm_lapic *apic)
+>         if (apic->lapic_timer.hv_timer_in_use)
+>                 cancel_hv_timer(apic);
+>         preempt_enable();
+> +       atomic_set(&apic->lapic_timer.pending, 0);
+>  }
+>
+>  static void apic_update_lvtt(struct kvm_lapic *apic)
+> --
+> 2.25.1
+>

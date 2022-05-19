@@ -2,146 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6101552DAF3
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F7952DAF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242454AbiESRLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
+        id S242482AbiESRL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbiESRLi (ORCPT
+        with ESMTP id S242457AbiESRLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:11:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFC5205E2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:11:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 19 May 2022 13:11:55 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC032DD77;
+        Thu, 19 May 2022 10:11:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 21E1221B3D;
+        Thu, 19 May 2022 17:11:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652980296; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rWh53tGkveY7idEYFsxjbZWpUxq42gDwANR/tTyoynA=;
+        b=GxK3G4QLKN08IdF1ihND5wQ2Ww5O75CoNT+XUN7JDy50/venD87zCA7NNiKGjKc7afCOQl
+        AJJ5F93tVyNCQykjtCBVlUCg2y+WuJP5RKwsDcYZqyf5Ay+FiM9ovzjRmUPAtQ/D/K6glv
+        t+j3pn2by0hLM1Kv95IUGaIORWEpBlw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652980296;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rWh53tGkveY7idEYFsxjbZWpUxq42gDwANR/tTyoynA=;
+        b=VMNYKei+gBjUYDhmu+fbZxs5FqWeJIPthSZxCZVqoA4oKbJkLMG5IVS8fNKOmI9Y3PrJ+X
+        8Tz99XX8TMgJYqAg==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 43731CE26EB
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 17:11:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DEBC385AA;
-        Thu, 19 May 2022 17:11:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652980291;
-        bh=zfXW98jVyxZ6zoL6xNX2NZNkEnIW/L5pHktyNLtrNGo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cOrGLBaZbWRP8x43zWCVXO5PL8CQuf+7D3hYJpKE+C9z6jzbP6BvE6FdaON3CnxWY
-         Bgxjyl7eyd5PvGkGXjqDfsdE/j+hKImVzZ4XR6bPEwfOW5KP8IbHgVfvlgjYoUxQnp
-         mwmbFgIJEBcvRe4D/AxTpgo47XGed4dnuw4GHasj2ECdgdUvCY6t6V1AtTja3n7M37
-         KIStclA/x5L3r5+oZQ7XPzStt1h2gU4MjVer79QFVDp8EaNtuNVOpP8l3k1co+IaZz
-         npBPFCilgTjoKRGFfgmGCjuDC8I2ghCX2U1A7uPSnTo00QWjweh8Kaz84W82HokrmX
-         IjLpTRA1x8cWA==
-Date:   Thu, 19 May 2022 10:11:29 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
-        brgerst@gmail.com, jiangshanlai@gmail.com,
-        Andrew.Cooper3@citrix.com, mark.rutland@arm.com,
-        Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH 3/6] x86/entry: Use PUSH_AND_CLEAR_REGS for compat
-Message-ID: <20220519171129.enw32izjhxsqc2xm@treble>
-References: <20220506121431.563656641@infradead.org>
- <20220506121631.293889636@infradead.org>
- <20220519162411.GA4095576@roeck-us.net>
- <20220519170009.GL2578@worktop.programming.kicks-ass.net>
+        by relay2.suse.de (Postfix) with ESMTPS id 885302C141;
+        Thu, 19 May 2022 17:11:35 +0000 (UTC)
+Date:   Thu, 19 May 2022 19:11:34 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, Coiby Xu <coxu@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>, akpm@linux-foundation.org,
+        kexec@lists.infradead.org, keyrings@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Chun-Yi Lee <jlee@suse.com>, stable@vger.kernel.org,
+        Philipp Rudo <prudo@linux.ibm.com>,
+        linux-security-module@vger.kernel.org,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        "open list:S390" <linux-s390@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Subject: Re: [PATCH v8 4/4] kexec, KEYS, s390: Make use of built-in and
+ secondary keyring for signature verification
+Message-ID: <20220519171134.GN163591@kunlun.suse.cz>
+References: <20220512070123.29486-1-coxu@redhat.com>
+ <20220512070123.29486-5-coxu@redhat.com>
+ <YoTYm6Fo1vBUuJGu@osiris>
+ <20220519003902.GE156677@MiWiFi-R3L-srv>
+ <c47299b899da4ad4b6d3ad637022ad82c8ed6ed2.camel@linux.ibm.com>
+ <YoZSl84aJYTscgfO@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519170009.GL2578@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YoZSl84aJYTscgfO@MiWiFi-R3L-srv>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 07:00:09PM +0200, Peter Zijlstra wrote:
-> On Thu, May 19, 2022 at 09:24:11AM -0700, Guenter Roeck wrote:
-> > On Fri, May 06, 2022 at 02:14:34PM +0200, Peter Zijlstra wrote:
-> > > Since the upper regs don't exist for ia32 code, preserving them
-> > > doesn't hurt and it simplifies the code.
-> > > 
-> > > This doesn't add any attack surface that would not already be
-> > > available through INT80.
-> > > 
-> > > Notably:
-> > > 
-> > >  - 32bit SYSENTER: didn't clear si, dx, cx.
-> > > 
-> > >  - 32bit SYSCALL, INT80: *do* clear si since the C functions don't
-> > >    take a second argument.
-> > > 
-> > >  - 64bit: didn't clear si since the C functions take a second
-> > >    argument; except the error_entry path might have only one argument,
-> > >    so clearing si was missing here.
-> > > 
-> > > 32b SYSENTER should be clearing all those 3 registers, nothing uses them
-> > > and selftests pass.
-> > > 
-> > > Unconditionally clear rsi since it simplifies code.
-> > > 
-> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > Reviewed-by: Borislav Petkov <bp@suse.de>
+On Thu, May 19, 2022 at 10:22:15PM +0800, Baoquan He wrote:
+> On 05/19/22 at 07:56am, Mimi Zohar wrote:
+> > [Cc'ing Jarkko, linux-integrity]
 > > 
-> > linux-next (next-20220519) crashes due to this patch when booting
-> > q35:EPYC-Rome in qemu.
+> > On Thu, 2022-05-19 at 08:39 +0800, Baoquan He wrote:
+> > > On 05/18/22 at 01:29pm, Heiko Carstens wrote:
+> > > > On Thu, May 12, 2022 at 03:01:23PM +0800, Coiby Xu wrote:
+> > > > > From: Michal Suchanek <msuchanek@suse.de>
+> > > > > 
+> > > > > commit e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
+> > > > > adds support for KEXEC_SIG verification with keys from platform keyring
+> > > > > but the built-in keys and secondary keyring are not used.
+> > > > > 
+> > > > > Add support for the built-in keys and secondary keyring as x86 does.
+> > > > > 
+> > > > > Fixes: e23a8020ce4e ("s390/kexec_file: Signature verification prototype")
+> > > > > Cc: stable@vger.kernel.org
+> > > > > Cc: Philipp Rudo <prudo@linux.ibm.com>
+> > > > > Cc: kexec@lists.infradead.org
+> > > > > Cc: keyrings@vger.kernel.org
+> > > > > Cc: linux-security-module@vger.kernel.org
+> > > > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> > > > > Reviewed-by: "Lee, Chun-Yi" <jlee@suse.com>
+> > > > > Acked-by: Baoquan He <bhe@redhat.com>
+> > > > > Signed-off-by: Coiby Xu <coxu@redhat.com>
+> > > > > ---
+> > > > >  arch/s390/kernel/machine_kexec_file.c | 18 +++++++++++++-----
+> > > > >  1 file changed, 13 insertions(+), 5 deletions(-)
+> > > > 
+> > > > As far as I can tell this doesn't have any dependency to the other
+> > > > patches in this series, so should I pick this up for the s390 tree, or
+> > > > how will this go upstream?
+> > > 
+> > > Thanks, Heiko.
+> > > 
+> > > I want to ask Mimi if this can be taken into KEYS-ENCRYPTED tree.
+> > > Otherwise I will ask Andrew to help pick this whole series.
+> > > 
+> > > Surely, this patch 4 can be taken into s390 seperately since it's
+> > > independent, both looks good.
+> > 
+> > KEYS-ENCRYTPED is a type of key, unrelated to using the .platform,
+> > .builtin, .machine, or .secondary keyrings.  One of the main reasons
+> > for this patch set is to use the new ".machine" keyring, which, if
+> > enabled, is linked to the "secondary" keyring.  However, the only
+> > reference to the ".machine" keyring is in the cover letter, not any of
+> > the patch descriptions.  Since this is the basis for the system's
+> > integrity, this seems like a pretty big omission.
+> > 
+> > From patch 2/4:
+> > "The code in bzImage64_verify_sig makes use of system keyrings
+> > including
+> > .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
+> > verify signed kernel image as PE file..."
+> > 
+> > From patch 3/4:
+> > "This patch allows to verify arm64 kernel image signature using not
+> > only
+> > .builtin_trusted_keys but also .platform and .secondary_trusted_keys
+> > keyring."
+> > 
+> > From patch 4/4:
+> > "... with keys from platform keyring but the built-in keys and
+> > secondary keyring are not used."
+> > 
+> > This patch set could probably go through KEYS/KEYRINGS_INTEGRITY, but
+> > it's kind of late to be asking.  Has it been in linux-next?  Should I
+> > assume this patch set has been fully tested or can we get some "tags"?
 > 
-> Could you try backing out each of the hunks one at a time? They're all
-> more or less independent.
+> Right, it should be KEYS/KEYRINGS_INTEGRITY related, I made mistaken.
+> Now it got two ACKs from Michal and me. Michal met the same issue on
+> arm64 and posted another series of patches, finally Coiby integrated
+> Michal's patch and his to make this patchset. That would be great if
+> this can get reviewing from experts on key/keyring. Surely, Coiby need
+> update the patch log to add the '.machine' keyring into patch logs as
+> you pointed out.
 > 
-> My bet with this being a #PF on an AMD machine, it's either the SI clear
-> or the SYSCALL change.
+> IIRC, Coiby has tested it on x86_64/arm64, not sure if he took test on
+> s390. No, this hasn't been in linux-next.
 
-I think this should fix it:
+I used the s390 code on powerpc and there it did not work because the
+built-in key was needed to verify the kernel.
 
-diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
-index a97cc78ecb92..29b36e9e4e74 100644
---- a/arch/x86/entry/calling.h
-+++ b/arch/x86/entry/calling.h
-@@ -63,7 +63,7 @@ For 32-bit we have the following conventions - kernel is built with
-  * for assembly code:
-  */
- 
--.macro PUSH_REGS rdx=%rdx rax=%rax save_ret=0
-+.macro PUSH_REGS rdx=%rdx rcx=%rcx rax=%rax save_ret=0
- 	.if \save_ret
- 	pushq	%rsi		/* pt_regs->si */
- 	movq	8(%rsp), %rsi	/* temporarily store the return address in %rsi */
-@@ -73,7 +73,7 @@ For 32-bit we have the following conventions - kernel is built with
- 	pushq   %rsi		/* pt_regs->si */
- 	.endif
- 	pushq	\rdx		/* pt_regs->dx */
--	pushq   %rcx		/* pt_regs->cx */
-+	pushq   \rcx		/* pt_regs->cx */
- 	pushq   \rax		/* pt_regs->ax */
- 	pushq   %r8		/* pt_regs->r8 */
- 	pushq   %r9		/* pt_regs->r9 */
-@@ -115,8 +115,8 @@ For 32-bit we have the following conventions - kernel is built with
- 
- .endm
- 
--.macro PUSH_AND_CLEAR_REGS rdx=%rdx rax=%rax save_ret=0
--	PUSH_REGS rdx=\rdx, rax=\rax, save_ret=\save_ret
-+.macro PUSH_AND_CLEAR_REGS rdx=%rdx rcx=%rcx rax=%rax save_ret=0
-+	PUSH_REGS rdx=\rdx, rcx=\rcx, rax=\rax, save_ret=\save_ret
- 	CLEAR_REGS
- .endm
- 
-diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
-index ed2be3615b50..2d40dd132442 100644
---- a/arch/x86/entry/entry_64_compat.S
-+++ b/arch/x86/entry/entry_64_compat.S
-@@ -200,7 +200,7 @@ SYM_INNER_LABEL(entry_SYSCALL_compat_safe_stack, SYM_L_GLOBAL)
- SYM_INNER_LABEL(entry_SYSCALL_compat_after_hwframe, SYM_L_GLOBAL)
- 	movl	%eax, %eax		/* discard orig_ax high bits */
- 	pushq	%rax			/* pt_regs->orig_ax */
--	PUSH_AND_CLEAR_REGS rax=$-ENOSYS
-+	PUSH_AND_CLEAR_REGS rax=$-ENOSYS rcx=%rbx
- 	UNWIND_HINT_REGS
- 
- 	movq	%rsp, %rdi
+I did not really run this on s390, only ported the fix I needed on
+powerpc back to s390.
+
+Thanks
+
+Michal

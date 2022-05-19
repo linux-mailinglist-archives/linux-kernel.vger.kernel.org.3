@@ -2,62 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1642052D361
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A6952D366
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbiESM7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 08:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S235615AbiESNB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237631AbiESM6a (ORCPT
+        with ESMTP id S235936AbiESNBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 08:58:30 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30CCD4104
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:57:22 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id w14so8912518lfl.13
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:57:22 -0700 (PDT)
+        Thu, 19 May 2022 09:01:20 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC30156237
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:01:17 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id l13so2331868lfp.11
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:01:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aR2yuG7QP+r0gTdgSYaStSwxJ8RwX7Q4zTzPF1+Nqpo=;
-        b=ugf1SX9wx9gVA5R+ln6Qge7zlhYGL9u69t98IcOLpR2ZZuDf8lWSidfc/I1zpVDDlu
-         LISZs8hVFvJmY51NVTHChdmyTjuJyPnVNH41hUkedD/zty+U1ScXHzS9LYxEQqXQXxyN
-         8G8cJYqLju8kBpG/UiZTAywiABeYxP5o4pDDOep916FcuzV2YB2GhqN3YTmNqEp7CCgz
-         h9F4cXdkbqYZlO3mkV027tkz+G5jpERUdi/iCNXiJ82J+lnASxPUkN9XC4ipILd/hJOv
-         xO9v4qBzBuXHqNC2X7InYJm6HP7o2vIlAHSwJUYm8ItFSLeOwqajZAf4zDx8JW8ls6/N
-         YwpA==
+        bh=gave4xKcqHaRWgWmo3tUVerd7RvnPPKk9OMCUATRApE=;
+        b=WIiOL9ncTVgucapluhtRwCXqu6zlMC7IDp2go/yp0SiH20cVYUiE9cqkW54xoE6kRf
+         6W4zspy/SuiNoDb4fZaBhs729Keb9gZxovTS70JP+p17bmYUK4RN12flYyC2hqgWPg0S
+         +A8teBWcQ0VEMgnVxf/woHyLAsmwIji/ewoP/5aQ+SCv79oDlZ39OTv4y8Texjiq5ozC
+         HB7v+UBqgAW3kFVIf5gavgPbtqkmfhuShHCACJYDMtEa0zTfgfmBIABh6KYiKvPX4On8
+         ABStwUQX1/FNYriiKb1PFl6hFTaSOohJ94zw1mpunKQjwdd04pdLlGgFU5OmciF0rBGt
+         JEJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aR2yuG7QP+r0gTdgSYaStSwxJ8RwX7Q4zTzPF1+Nqpo=;
-        b=tmz7BpMHV+XPXluAtuNx5icpmn0oM9GvEx7eUP82U2ZOaPm2DBOQt0jT3acYVD4R5B
-         /JUyHULt+s6oxvLpr2XUgEr3mk88wFnehP/nk76Vv+haE4BuM1eqKZVf3eNyigibLR+B
-         TjfoDZjZ29LtB0NHNC6/1VH3CW6oD40Eg7Y5v4LroeGf0zApZJm1xe24SB3LTVHs70Yc
-         mpPZPiRVk/AnWUG8u/zFTL8pZ2szPwSIq/NX53Ze699pwSXPecXBbcySncMd5mILQtn+
-         WUBY/uJw6N5zzHKmgxE2WwjcUzPYdu4opKJ76o+So0H8HSUJaPnmWiqVh7MqUJuutUgO
-         5RiQ==
-X-Gm-Message-State: AOAM533/Zye1ogxb+mmHaE1TAPQyx5SM2Eu7eCCjo4vIkhw7hyn3ygD/
-        /peNWU7OEllykM2xf8RpbgmcrFEXJLsP1bTHKSPrnA==
-X-Google-Smtp-Source: ABdhPJztFL7Pqq1gQj+cNoDZZBXAghknXzjA/pEu2EUSHDZR2mOUec0RwrCi6yWoH7KOlQioB5K2JxOh2ikuEeqNWRA=
-X-Received: by 2002:a05:6512:3b27:b0:477:96e9:b962 with SMTP id
- f39-20020a0565123b2700b0047796e9b962mr3293651lfv.373.1652965040195; Thu, 19
- May 2022 05:57:20 -0700 (PDT)
+        bh=gave4xKcqHaRWgWmo3tUVerd7RvnPPKk9OMCUATRApE=;
+        b=m9yWEfzh4yozwjnx5XVmpyTR2p2qYvcfPjEX/mWMzo7XOHyZUvPW/ojA1gOwnGNr0e
+         fjUQuFmldfQjVpSvHzEwB5AdZzIXQbdL8U9wb49usubuB4qHFtsW7xJmQt1wKuD++YmY
+         /NTr+sHCnTZa7TsfWnA/uqpmdB2ry1ki55nm8fpMU4IsHz5K35F2wpEAW9rb3Fri2byt
+         EF4rKtfr8itbCTO3jPZ+kTZFy39fzdcyxGnI+qA0vMSPz4/OxXh4UoKRvnlGBCxBgr+c
+         UWTpOE1xkWQacXikL+7o5yD94KBPgoiQcmzWlTo3YUGvKQ9UKhgn0/UjHxlDbRzCr6q5
+         VJCg==
+X-Gm-Message-State: AOAM530390EZaid/7X2cDPUVem9MARXfltUxWt2hyYGogdJDg3ApxK9B
+        423GD7g2+4bBc+DskLvkqGzsEPXJ76VKaOqyakVj1g==
+X-Google-Smtp-Source: ABdhPJyHkVwQjEUaawYpeTNZ9ptmLK/NzpeawngI0dtewKhU9y7Fzy3LJtpQj/ugmJxuTBDqYwQX0s+w7ai7V1u1Fgg=
+X-Received: by 2002:a19:3852:0:b0:474:2459:26f4 with SMTP id
+ d18-20020a193852000000b00474245926f4mr3304564lfj.233.1652965276049; Thu, 19
+ May 2022 06:01:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <1652275016-13423-1-git-send-email-quic_mkshah@quicinc.com> <1652275016-13423-5-git-send-email-quic_mkshah@quicinc.com>
-In-Reply-To: <1652275016-13423-5-git-send-email-quic_mkshah@quicinc.com>
+References: <20220514152032.758738-1-ulf.hansson@linaro.org>
+ <CAAhSdy3m3FzbkL-On5kPtrZgyO4x=6onr6mXi_=te5B=m_n8GQ@mail.gmail.com> <CAJZ5v0i+RR2nK8gew9tbnO_VVU3YUx2JgdRTBW07EPrB3UK87g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0i+RR2nK8gew9tbnO_VVU3YUx2JgdRTBW07EPrB3UK87g@mail.gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 19 May 2022 14:56:44 +0200
-Message-ID: <CAPDyKFp+38XR9osX91quAMG6CbLYaAcetgPqFM53rinfT4ar+Q@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] PM: domains: Store the closest hrtimer event of
- the domain CPUs
-To:     Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
+Date:   Thu, 19 May 2022 15:00:39 +0200
+Message-ID: <CAPDyKFrcWBL=7enQ3FJO7pFqv465-Nb3UWZm3faGYe5kG+Mjaw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpuidle: psci: Fix regression leading to no genpd governor
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Anup Patel <anup@brainfault.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@rivosinc.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -69,138 +79,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 11 May 2022 at 15:17, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+On Wed, 18 May 2022 at 20:50, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> The arch timer can not wake up the Qualcomm Technologies, Inc. (QTI)
-> SoCs when the deepest CPUidle modes results in the SoC also to enter
-> the low power mode.
+> On Sat, May 14, 2022 at 6:49 PM Anup Patel <anup@brainfault.org> wrote:
+> >
+> > On Sat, May 14, 2022 at 8:50 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > While factoring out the PM domain related code from PSCI domain driver into
+> > > a set of library functions, a regression when initializing the genpds got
+> > > introduced. More precisely, we fail to assign a genpd governor, so let's
+> > > fix this.
+> > >
+> > > Fixes: 9d976d6721df ("cpuidle: Factor-out power domain related code from PSCI domain driver")
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> >
+> > Looks good to me.
+> >
+> > Reviewed-by: Anup Patel <anup@brainfault.org>
+> >
 >
-> RSC is part of CPU subsystem and APSS rsc device is attached to cluster
-> power domain. RSC has to setup next hrtimer wakeup in CONTROL_TCS which
-> can wakeup the SoC from deepest low power states. The CONTROL_TCS does
-> this by writing next wakeup in always on domain timer when the SoC is
-> entering the low power state.
->
-> Add dev_pm_genpd_get_next_hrtimer() to get the genpd wakeup time.
->
-> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
-> ---
->  drivers/base/power/domain.c          | 24 ++++++++++++++++++++++++
->  drivers/base/power/domain_governor.c |  1 +
->  include/linux/pm_domain.h            |  7 +++++++
->  3 files changed, 32 insertions(+)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 18cd796..f0d70d0 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -487,6 +487,29 @@ void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_genpd_set_next_wakeup);
->
-> +/**
-> + * dev_pm_genpd_get_next_hrtimer - Return genpd domain next_hrtimer.
-> + *
-> + * @dev: Device to handle
-> + *
-> + * Returns the aggregated domain wakeup time for CPU PM domain
-> + * when all the subdomains are off.
+> Ulf, do you want me to take this lot or is it going to be handled elsewhere?
 
-To further clarify when this function should be used, I think that we
-should state that it should typically be called from a consumer of a
-genpd on/off-notifier at GENPD_NOTIFY_PRE_OFF. This also means that
-the genpd's lock is being held across the function.
-
-> + */
-> +ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
-> +{
-> +       struct generic_pm_domain *genpd;
-> +
-> +       genpd = dev_to_genpd_safe(dev);
-> +       if (!genpd)
-> +               return KTIME_MAX;
-> +
-> +       if (atomic_read(&genpd->sd_count) > 0)
-> +               return KTIME_MAX;
-
-This above isn't needed, assuming we clarify the description of the
-function and when it should be called.
-
-> +
-> +       return genpd->next_hrtimer;
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_genpd_get_next_hrtimer);
-> +
->  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
->  {
->         unsigned int state_idx = genpd->state_idx;
-> @@ -1998,6 +2021,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
->         genpd->max_off_time_changed = true;
->         genpd->provider = NULL;
->         genpd->has_provider = false;
-> +       genpd->next_hrtimer = KTIME_MAX;
->         genpd->accounting_time = ktime_get_mono_fast_ns();
->         genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
->         genpd->domain.ops.runtime_resume = genpd_runtime_resume;
-> diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
-> index cd08c58..a4c7dd8 100644
-> --- a/drivers/base/power/domain_governor.c
-> +++ b/drivers/base/power/domain_governor.c
-> @@ -363,6 +363,7 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
->                                 domain_wakeup = next_hrtimer;
->                 }
->         }
-> +       genpd->next_hrtimer = domain_wakeup;
-
-There should be no point to set this, unless cpu_power_down_ok() are
-returning true. Therefore I suggest you move this a few lines further
-down, where cpu_power_down_ok() actually returns true.
-
->
->         /* The minimum idle duration is from now - until the next wakeup. */
->         idle_duration_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 043d48e..6d9fb79 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -17,6 +17,7 @@
->  #include <linux/notifier.h>
->  #include <linux/spinlock.h>
->  #include <linux/cpumask.h>
-> +#include <linux/time64.h>
->
->  /*
->   * Flags to control the behaviour of a genpd.
-> @@ -136,6 +137,7 @@ struct generic_pm_domain {
->         struct gpd_dev_ops dev_ops;
->         s64 max_off_time_ns;    /* Maximum allowed "suspended" time. */
->         ktime_t next_wakeup;    /* Maintained by the domain governor */
-> +       ktime_t next_hrtimer;   /* Next hrtimer for the CPU PM domain */
->         bool max_off_time_changed;
->         bool cached_power_down_ok;
->         bool cached_power_down_state_idx;
-> @@ -228,6 +230,7 @@ int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
->  int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
->  int dev_pm_genpd_remove_notifier(struct device *dev);
->  void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
-> +ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev);
->
->  extern struct dev_power_governor simple_qos_governor;
->  extern struct dev_power_governor pm_domain_always_on_gov;
-> @@ -289,6 +292,10 @@ static inline int dev_pm_genpd_remove_notifier(struct device *dev)
->  static inline void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
->  { }
->
-> +static inline ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
-> +{
-> +       return KTIME_MAX;
-> +}
->  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
->  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
->  #endif
-> --
-> 2.7.4
->
+I appreciate it if you can pick both this and the second patch.
 
 Kind regards
 Uffe
+
+>
+> > > ---
+> > >  drivers/cpuidle/cpuidle-psci-domain.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> > > index 755bbdfc5b82..3db4fca1172b 100644
+> > > --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> > > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> > > @@ -52,7 +52,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+> > >         struct generic_pm_domain *pd;
+> > >         struct psci_pd_provider *pd_provider;
+> > >         struct dev_power_governor *pd_gov;
+> > > -       int ret = -ENOMEM, state_count = 0;
+> > > +       int ret = -ENOMEM;
+> > >
+> > >         pd = dt_idle_pd_alloc(np, psci_dt_parse_state_node);
+> > >         if (!pd)
+> > > @@ -71,7 +71,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+> > >                 pd->flags |= GENPD_FLAG_ALWAYS_ON;
+> > >
+> > >         /* Use governor for CPU PM domains if it has some states to manage. */
+> > > -       pd_gov = state_count > 0 ? &pm_domain_cpu_gov : NULL;
+> > > +       pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
+> > >
+> > >         ret = pm_genpd_init(pd, pd_gov, false);
+> > >         if (ret)
+> > > --
+> > > 2.25.1
+> > >

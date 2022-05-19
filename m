@@ -2,89 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51B552D3AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFDE52D3AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238521AbiESNNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S238552AbiESNOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238421AbiESNNq (ORCPT
+        with ESMTP id S237099AbiESNNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:13:46 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5F3AEE24
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:13:43 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id q135so8949812ybg.10
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:13:43 -0700 (PDT)
+        Thu, 19 May 2022 09:13:53 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BBBC6E5B
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:13:51 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id kq17so9897200ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:13:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=szeredi.hu; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=pU36f99eaZPxWc0unxPX9BsTsHo3kBMFnigWJpZIqUk=;
-        b=NkuSkM4NnbBU4jIXuNzuDcd7T3EznqprgLSY+0J5GlXq39Kk/bVSP2ZVAEVvwGrui2
-         DWUDMGpDhK45ebpEZjbwyxZCpJ6XPoMR2m8bdehall8m/mNmGrMaHTDV4r5lrvX4KhC3
-         Szvu3aRZptzycSbdxytyx8zvTOfVLF5U40bgGBUvLv5YDO80Cbaw2EgPT7GG84ybLcFQ
-         VK6n8/IGKs7sF47Ctc6cgtp7FbgE097cQFfmAvwe9Ao/egbTPxoPRzsyIcpPwZc0bJUX
-         YyEi2MzopnelF92IZeXztApu885ZF4fBJty99yI94ZXpkdRsbxd/oc66q65lVBwMLd+h
-         t+VA==
+        bh=ABD0ZCZzk6/rDV7fRx/jwgpu1GPtQwsEFN4C6UN6MEo=;
+        b=q3grboCQq6GN18wZpshIHKTxPmmbScxb0uN9zgqSQzBNHBnGWd4JhKgVaY5/sT3MID
+         1OuA4xXvLa9davt3/26E8OP+x+nad0SFYrj6UWRHt0FAuoOT0arDSj7NFT8/vzMCDY6s
+         cENvjNurbAV9y0TJ7h06b9QrNhUrVn3urB5WU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pU36f99eaZPxWc0unxPX9BsTsHo3kBMFnigWJpZIqUk=;
-        b=JMHtHQOvCnHlcqD4+VPTy+uYsx84I/Q1zJ2EHNqkzGDZqg1WkIIPudyaBXBRDkPNkv
-         I0o4XMGvlTH7fivdJod9LZ7Wc06kI6keg1sMQ9MJKL/QuzHV3ndz1bCLCSS6hE6FWxUz
-         SUiit4ykLSvao/wiuH4+mydQSYm/CrdP9eE7tg6FH4CjW6z8Wvoda7ZKnT26xYMTg7BO
-         HL6Ojq3CGLKxumFM6agn1tkuzQoO74y7DT8w4xyVPN56W5RB2VqDRD1hB06rkuAIFVqO
-         0mCYtWr/gpvpihJmHSQ6uKKShlCweQxMi77S8ObGDpqWW2YEXdXG/uJkYSpj89bvh5U7
-         AzIA==
-X-Gm-Message-State: AOAM530G3uHzJWVo16EGxXckkU8xxN0WaJpuT8YVT8O5WOqDJVjqewO7
-        b36KWNNmYFMHTGidDiknV3wUeP5jwejymVhK3X941w==
-X-Google-Smtp-Source: ABdhPJyJIP7Hag/4KdBY4u76XwIRxLNZPBE8+9JcpJlpRiGV0RoIBhT0aDk8kici5QeY4pJPkV2i1OGCVw41LmNy610=
-X-Received: by 2002:a05:6902:704:b0:64d:f270:22b0 with SMTP id
- k4-20020a056902070400b0064df27022b0mr4392907ybt.626.1652966022951; Thu, 19
- May 2022 06:13:42 -0700 (PDT)
+        bh=ABD0ZCZzk6/rDV7fRx/jwgpu1GPtQwsEFN4C6UN6MEo=;
+        b=jipQsG1Y1Bdypu1AQXximvLh1B/K6FDswjy0E3eVT7j+jH00AGY7EIyd9W9bcMVqiB
+         SBNnJaeMZaLolDRBsuASlwy+2KcaHOQOGt96DGqknpe8A8ptIQWMBRO18lqUNfIyE/D4
+         buxguqBpVaySg2UO921deC3GgQS+HWuf8NaYhxrbW/waIozs3M9dY9LamNOxHtY5rGGV
+         /z7pHPZ0IvdsKAs4nzjnWOkiBEjrmrwnmIhPO2B6WGdJGGwaengfl3/ayjS2xDs/GR8e
+         SbqkatTI8kPFZprXKGogjzaVNadk01JsGPlEI5ikjoMU/nyE+/5c/MW7UjFlZr+EWXyG
+         EcTw==
+X-Gm-Message-State: AOAM530Z5JoG9LO/6TQzX8ALP7sHmmqT5wkIISG7dWZ2yp917Y2Ol6Z8
+        MHq99DZMAeqfWIzRd7YLL13A0Uoq0mMMg97lj/LTTQ==
+X-Google-Smtp-Source: ABdhPJxB1NaudJ/GbhumUoLIwywBx8UlXQvhtgTCLbpiR08KfQyoCq62oz080Dkju6g7pJM9SsQSqzfuHaE0n8C9oII=
+X-Received: by 2002:a17:906:58d1:b0:6f4:6e61:dae with SMTP id
+ e17-20020a17090658d100b006f46e610daemr4231902ejs.468.1652966029810; Thu, 19
+ May 2022 06:13:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220517083957.11816-1-angelogioacchino.delregno@collabora.com> <20220517083957.11816-2-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220517083957.11816-2-angelogioacchino.delregno@collabora.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 19 May 2022 15:13:31 +0200
-Message-ID: <CACRpkdaj42rcQdX1+dVWyHmexrq4UDQHB0JLHgfREY9kn0zv2A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: pinctrl: Add MediaTek MT6795 pinctrl bindings
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sean.wang@kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, nfraprado@collabora.com
+References: <20220517100744.26849-1-dharamhans87@gmail.com> <CAJfpegsDxsMsyfP4a_5H1q91xFtwcEdu9-WBnzWKwjUSrPNdmw@mail.gmail.com>
+In-Reply-To: <CAJfpegsDxsMsyfP4a_5H1q91xFtwcEdu9-WBnzWKwjUSrPNdmw@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Thu, 19 May 2022 15:13:38 +0200
+Message-ID: <CAJfpegvpdms4QpecBWyu88mpKRcofDFLVtRQbcRs+4RiNoM6Ug@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] FUSE: Implement atomic lookup + open/create
+To:     Dharmendra Singh <dharamhans87@gmail.com>
+Cc:     Vivek Goyal <vgoyal@redhat.com>, linux-fsdevel@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>,
+        linux-kernel@vger.kernel.org, Bernd Schubert <bschubert@ddn.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 10:40 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Thu, 19 May 2022 at 11:39, Miklos Szeredi <miklos@szeredi.hu> wrote:
 
-> Add devicetree and pinfunc bindings for MediaTek Helio X10 MT6795.
+> Apparently in all of these cases we are doing at least one request, so
+> it would make sense to make them uniform:
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> [not cached]
+>    ->atomic_open()
+>       CREATE_EXT
+>
+> [cached]
+>    ->d_revalidate()
+>       return 0
 
-Patch applied, along with patch 2.
+Note to self:  invalidating a valid positive dentry would break things.
 
-BTW nice work on the X10!!
-I can see from the feature matrix here:
-https://wiki.postmarketos.org/wiki/Mediatek
-that this enables a whole slew of cheapo phones and tablets to be used
-with PostmarketOS.
+Revalidation would need to be moved into ->atomic_open(), which is a
+bigger surgery.  Oh well...
 
-Yours,
-Linus Walleij
+Thanks,
+Miklos

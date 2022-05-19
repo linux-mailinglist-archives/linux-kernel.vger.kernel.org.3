@@ -2,406 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9BC52D0AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8153352D0B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234518AbiESKiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
+        id S236861AbiESKkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235632AbiESKit (ORCPT
+        with ESMTP id S230011AbiESKkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:38:49 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2335864717
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:38:46 -0700 (PDT)
-Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3mWj3ZpKzgYNX;
-        Thu, 19 May 2022 18:37:21 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 18:38:44 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 18:38:42 +0800
-Message-ID: <151148fe-cd9d-eb81-6aeb-3aae1691b3dd@huawei.com>
-Date:   Thu, 19 May 2022 18:38:42 +0800
+        Thu, 19 May 2022 06:40:41 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CF5AE25A
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:40:41 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id v5-20020a17090a7c0500b001df84fa82f8so4851538pjf.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:40:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WVV1dRw9CXbITFRFAr38oo/Tg0GD/yZ0EddEdw7HELs=;
+        b=DNzH6HuorMvOBHr9yxuvuIHtguwSss2h0NhcB901IipyCSG56/vKC4VNhExwsp2ON9
+         oyQmliTQlX6QGf7x/cxK6xqnlYnw2IYUTCk3SOmfeICpkwMBee4X/nb7wcDqzePpAB3e
+         9ksi0hOqmzy94hGGJNkHHA5gXJoyzvkm1+sGY2xvDm/wSRuDYFRaNE5qc5krz+t2baW/
+         VgMx1WomNaiQ7ANz4zFpald6ez5cwo0X+hnCWMd0/QplY5l08hNe/q5bWD++WztmhBlU
+         ZcXQ2ReiWszZaGO40nJBTOQDhOnH1L1MfHvdcsqqYZ6T777/dREvW84pff5gm6ZIzYH+
+         FxIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WVV1dRw9CXbITFRFAr38oo/Tg0GD/yZ0EddEdw7HELs=;
+        b=mtkuZJmEaaUwi0DNXhfsYGOwk78a72mfItMUeqXM/4eNPc5ZmUZz2oHCz3EgHo9Zqf
+         bfU1XDWv1uJTryBids18IO+7DBsEqPEJGJvxh9SeDKRcJv+ytX56Uw05p2naFqLECyAS
+         Jn5evlouvGkC1ZlVBU7ql4V6AyUV5/w7WZK7D0nJin2KtwVinBRsubYIiNMxtrOcoWi7
+         AEzgDOoP54O6FI95LUr+MgmYHg4uHg3nIfObmzti6rfB+d3ZMnyCEHRkMNC7xYOdDW16
+         isr2quwFXdPTyFsE2GxbDkErgjsyMcM0O+BaNUuOSzFIdQm7PD9WRTsF8Y1tNeeiZKX5
+         fXYQ==
+X-Gm-Message-State: AOAM533STdy8bCWh5vYlE9mnahAcvAAVnQfHhZY4JtHK4IP0wDzRcj2+
+        bpbolloZvIe74YYy/bzVkHs=
+X-Google-Smtp-Source: ABdhPJysKe/VP1x16Pzr+Zm4BdZErNEnX40uHqCKrSLKl2eQFnwpzGs8MuQ1zEpCuSeb/8MCl4xOdg==
+X-Received: by 2002:a17:902:eb90:b0:15e:b55f:d9c5 with SMTP id q16-20020a170902eb9000b0015eb55fd9c5mr1986867plg.33.1652956840621;
+        Thu, 19 May 2022 03:40:40 -0700 (PDT)
+Received: from localhost.localdomain ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b00161527e1d9fsm3344206pli.294.2022.05.19.03.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 03:40:40 -0700 (PDT)
+From:   Chao Liu <chaoliu719@gmail.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
+        Wayne Zhang <zhangwen@coolpad.com>,
+        Chao Liu <liuchao@coolpad.com>
+Subject: [PATCH RESEND] f2fs: make f2fs_read_inline_data() more readable
+Date:   Thu, 19 May 2022 18:40:10 +0800
+Message-Id: <20220519104010.2814819-1-chaoliu719@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v4 7/7] arm64: add cow to machine check safe
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220420030418.3189040-1-tongtiangen@huawei.com>
- <20220420030418.3189040-8-tongtiangen@huawei.com> <Yn581SnKPGlhbgoU@lakrids>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <Yn581SnKPGlhbgoU@lakrids>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Chao Liu <liuchao@coolpad.com>
 
+In f2fs_read_inline_data(), it is confused with checking of
+inline_data flag, as we checked it before calling. So this
+patch add some comments for f2fs_has_inline_data().
 
-在 2022/5/13 23:44, Mark Rutland 写道:
-> On Wed, Apr 20, 2022 at 03:04:18AM +0000, Tong Tiangen wrote:
->> In the cow(copy on write) processing, the data of the user process is
->> copied, when hardware memory error is encountered during copy, only the
->> relevant processes are affected, so killing the user process and isolate
->> the user page with hardware memory errors is a more reasonable choice than
->> kernel panic.
-> 
-> There are plenty of other places we'll access user pages via a kernel
-> alias (e.g. when performing IO), so why is this special?
-> 
-> To be clear, I am not entirely averse to this, but it seems like this is
-> being done because it's easy to do rather than necessarily being all
-> that useful, and I'm not keen on having to duplicate a bunch of logic
-> for this.
+Signed-off-by: Chao Liu <liuchao@coolpad.com>
+---
+ fs/f2fs/f2fs.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Yeah, There are lots of cases, COW is selected because it is more 
-general. In addition, this provides the machine check safe capability of 
-page copy(copy_highpage_mc), valuable cases can be based on this step by 
-step[1].
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index f579e2ed0f14..5071f6636e41 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -3167,6 +3167,10 @@ static inline int inline_xattr_size(struct inode *inode)
+ 	return 0;
+ }
+ 
++/*
++ * Notice: check inline_data flag without inode page lock is unsafe.
++ * It could change at any time by f2fs_convert_inline_page().
++ */
+ static inline int f2fs_has_inline_data(struct inode *inode)
+ {
+ 	return is_inode_flag_set(inode, FI_INLINE_DATA);
+-- 
+2.36.1
 
-[1]https://lore.kernel.org/all/20220429000947.2172219-1-jiaqiyan@google.com/T/
-
-Thanks,
-Tong.
-
-> 
->> Add new helper copy_page_mc() which provide a page copy implementation with
->> machine check safe. At present, only used in cow. In future, we can expand
->> more scenes. As long as the consequences of page copy failure are not
->> fatal(eg: only affect user process), we can use this helper.
->>
->> The copy_page_mc() in copy_page_mc.S is largely borrows from copy_page()
->> in copy_page.S and the main difference is copy_page_mc() add extable entry
->> to every load/store insn to support machine check safe. largely to keep the
->> patch simple. If needed those optimizations can be folded in.
->>
->> Add new extable type EX_TYPE_COPY_PAGE_MC which used in copy_page_mc().
->>
->> This type only be processed in fixup_exception_mc(), The reason is that
->> copy_page_mc() is consistent with copy_page() except machine check safe is
->> considered, and copy_page() do not need to consider exception fixup.
->>
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->> ---
->>   arch/arm64/include/asm/asm-extable.h |  5 ++
->>   arch/arm64/include/asm/page.h        | 10 ++++
->>   arch/arm64/lib/Makefile              |  2 +
->>   arch/arm64/lib/copy_page_mc.S        | 86 ++++++++++++++++++++++++++++
->>   arch/arm64/mm/copypage.c             | 36 ++++++++++--
->>   arch/arm64/mm/extable.c              |  2 +
->>   include/linux/highmem.h              |  8 +++
->>   mm/memory.c                          |  2 +-
->>   8 files changed, 144 insertions(+), 7 deletions(-)
->>   create mode 100644 arch/arm64/lib/copy_page_mc.S
->>
->> diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
->> index 80410899a9ad..74c056ddae15 100644
->> --- a/arch/arm64/include/asm/asm-extable.h
->> +++ b/arch/arm64/include/asm/asm-extable.h
->> @@ -14,6 +14,7 @@
->>   /* _MC indicates that can fixup from machine check errors */
->>   #define EX_TYPE_UACCESS_MC		5
->>   #define EX_TYPE_UACCESS_MC_ERR_ZERO	6
->> +#define EX_TYPE_COPY_PAGE_MC		7
->>   
->>   #ifdef __ASSEMBLY__
->>   
->> @@ -42,6 +43,10 @@
->>   	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_MC, 0)
->>   	.endm
->>   
->> +	.macro          _asm_extable_copy_page_mc, insn, fixup
->> +	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_COPY_PAGE_MC, 0)
->> +	.endm
->> +
->>   /*
->>    * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
->>    * do nothing.
->> diff --git a/arch/arm64/include/asm/page.h b/arch/arm64/include/asm/page.h
->> index 993a27ea6f54..832571a7dddb 100644
->> --- a/arch/arm64/include/asm/page.h
->> +++ b/arch/arm64/include/asm/page.h
->> @@ -29,6 +29,16 @@ void copy_user_highpage(struct page *to, struct page *from,
->>   void copy_highpage(struct page *to, struct page *from);
->>   #define __HAVE_ARCH_COPY_HIGHPAGE
->>   
->> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->> +extern void copy_page_mc(void *to, const void *from);
->> +void copy_highpage_mc(struct page *to, struct page *from);
->> +#define __HAVE_ARCH_COPY_HIGHPAGE_MC
->> +
->> +void copy_user_highpage_mc(struct page *to, struct page *from,
->> +		unsigned long vaddr, struct vm_area_struct *vma);
->> +#define __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
->> +#endif
->> +
->>   struct page *alloc_zeroed_user_highpage_movable(struct vm_area_struct *vma,
->>   						unsigned long vaddr);
->>   #define __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE_MOVABLE
->> diff --git a/arch/arm64/lib/Makefile b/arch/arm64/lib/Makefile
->> index 29490be2546b..0d9f292ef68a 100644
->> --- a/arch/arm64/lib/Makefile
->> +++ b/arch/arm64/lib/Makefile
->> @@ -15,6 +15,8 @@ endif
->>   
->>   lib-$(CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE) += uaccess_flushcache.o
->>   
->> +lib-$(CONFIG_ARCH_HAS_COPY_MC) += copy_page_mc.o
->> +
->>   obj-$(CONFIG_CRC32) += crc32.o
->>   
->>   obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
->> diff --git a/arch/arm64/lib/copy_page_mc.S b/arch/arm64/lib/copy_page_mc.S
->> new file mode 100644
->> index 000000000000..655161363dcf
->> --- /dev/null
->> +++ b/arch/arm64/lib/copy_page_mc.S
->> @@ -0,0 +1,86 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (C) 2012 ARM Ltd.
->> + */
->> +
->> +#include <linux/linkage.h>
->> +#include <linux/const.h>
->> +#include <asm/assembler.h>
->> +#include <asm/page.h>
->> +#include <asm/cpufeature.h>
->> +#include <asm/alternative.h>
->> +#include <asm/asm-extable.h>
->> +
->> +#define CPY_MC(l, x...)		\
->> +9999:   x;			\
->> +	_asm_extable_copy_page_mc    9999b, l
->> +
->> +/*
->> + * Copy a page from src to dest (both are page aligned) with machine check
->> + *
->> + * Parameters:
->> + *	x0 - dest
->> + *	x1 - src
->> + */
->> +SYM_FUNC_START(__pi_copy_page_mc)
->> +alternative_if ARM64_HAS_NO_HW_PREFETCH
->> +	// Prefetch three cache lines ahead.
->> +	prfm	pldl1strm, [x1, #128]
->> +	prfm	pldl1strm, [x1, #256]
->> +	prfm	pldl1strm, [x1, #384]
->> +alternative_else_nop_endif
->> +
->> +CPY_MC(9998f, ldp	x2, x3, [x1])
->> +CPY_MC(9998f, ldp	x4, x5, [x1, #16])
->> +CPY_MC(9998f, ldp	x6, x7, [x1, #32])
->> +CPY_MC(9998f, ldp	x8, x9, [x1, #48])
->> +CPY_MC(9998f, ldp	x10, x11, [x1, #64])
->> +CPY_MC(9998f, ldp	x12, x13, [x1, #80])
->> +CPY_MC(9998f, ldp	x14, x15, [x1, #96])
->> +CPY_MC(9998f, ldp	x16, x17, [x1, #112])
->> +
->> +	add	x0, x0, #256
->> +	add	x1, x1, #128
->> +1:
->> +	tst	x0, #(PAGE_SIZE - 1)
->> +
->> +alternative_if ARM64_HAS_NO_HW_PREFETCH
->> +	prfm	pldl1strm, [x1, #384]
->> +alternative_else_nop_endif
->> +
->> +CPY_MC(9998f, stnp	x2, x3, [x0, #-256])
->> +CPY_MC(9998f, ldp	x2, x3, [x1])
->> +CPY_MC(9998f, stnp	x4, x5, [x0, #16 - 256])
->> +CPY_MC(9998f, ldp	x4, x5, [x1, #16])
->> +CPY_MC(9998f, stnp	x6, x7, [x0, #32 - 256])
->> +CPY_MC(9998f, ldp	x6, x7, [x1, #32])
->> +CPY_MC(9998f, stnp	x8, x9, [x0, #48 - 256])
->> +CPY_MC(9998f, ldp	x8, x9, [x1, #48])
->> +CPY_MC(9998f, stnp	x10, x11, [x0, #64 - 256])
->> +CPY_MC(9998f, ldp	x10, x11, [x1, #64])
->> +CPY_MC(9998f, stnp	x12, x13, [x0, #80 - 256])
->> +CPY_MC(9998f, ldp	x12, x13, [x1, #80])
->> +CPY_MC(9998f, stnp	x14, x15, [x0, #96 - 256])
->> +CPY_MC(9998f, ldp	x14, x15, [x1, #96])
->> +CPY_MC(9998f, stnp	x16, x17, [x0, #112 - 256])
->> +CPY_MC(9998f, ldp	x16, x17, [x1, #112])
->> +
->> +	add	x0, x0, #128
->> +	add	x1, x1, #128
->> +
->> +	b.ne	1b
->> +
->> +CPY_MC(9998f, stnp	x2, x3, [x0, #-256])
->> +CPY_MC(9998f, stnp	x4, x5, [x0, #16 - 256])
->> +CPY_MC(9998f, stnp	x6, x7, [x0, #32 - 256])
->> +CPY_MC(9998f, stnp	x8, x9, [x0, #48 - 256])
->> +CPY_MC(9998f, stnp	x10, x11, [x0, #64 - 256])
->> +CPY_MC(9998f, stnp	x12, x13, [x0, #80 - 256])
->> +CPY_MC(9998f, stnp	x14, x15, [x0, #96 - 256])
->> +CPY_MC(9998f, stnp	x16, x17, [x0, #112 - 256])
->> +
->> +9998:	ret
->> +
->> +SYM_FUNC_END(__pi_copy_page_mc)
->> +SYM_FUNC_ALIAS(copy_page_mc, __pi_copy_page_mc)
->> +EXPORT_SYMBOL(copy_page_mc)
->> diff --git a/arch/arm64/mm/copypage.c b/arch/arm64/mm/copypage.c
->> index 0dea80bf6de4..0f28edfcb234 100644
->> --- a/arch/arm64/mm/copypage.c
->> +++ b/arch/arm64/mm/copypage.c
->> @@ -14,13 +14,8 @@
->>   #include <asm/cpufeature.h>
->>   #include <asm/mte.h>
->>   
->> -void copy_highpage(struct page *to, struct page *from)
->> +static void do_mte(struct page *to, struct page *from, void *kto, void *kfrom)
->>   {
->> -	void *kto = page_address(to);
->> -	void *kfrom = page_address(from);
->> -
->> -	copy_page(kto, kfrom);
->> -
->>   	if (system_supports_mte() && test_bit(PG_mte_tagged, &from->flags)) {
->>   		set_bit(PG_mte_tagged, &to->flags);
->>   		page_kasan_tag_reset(to);
->> @@ -35,6 +30,15 @@ void copy_highpage(struct page *to, struct page *from)
->>   		mte_copy_page_tags(kto, kfrom);
->>   	}
->>   }
->> +
->> +void copy_highpage(struct page *to, struct page *from)
->> +{
->> +	void *kto = page_address(to);
->> +	void *kfrom = page_address(from);
->> +
->> +	copy_page(kto, kfrom);
->> +	do_mte(to, from, kto, kfrom);
->> +}
->>   EXPORT_SYMBOL(copy_highpage);
->>   
->>   void copy_user_highpage(struct page *to, struct page *from,
->> @@ -44,3 +48,23 @@ void copy_user_highpage(struct page *to, struct page *from,
->>   	flush_dcache_page(to);
->>   }
->>   EXPORT_SYMBOL_GPL(copy_user_highpage);
->> +
->> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->> +void copy_highpage_mc(struct page *to, struct page *from)
->> +{
->> +	void *kto = page_address(to);
->> +	void *kfrom = page_address(from);
->> +
->> +	copy_page_mc(kto, kfrom);
->> +	do_mte(to, from, kto, kfrom);
->> +}
->> +EXPORT_SYMBOL(copy_highpage_mc);
-> 
-> IIUC the do_mte() portion won't handle mermoy errors, so this isn't
-> actually going to recover safely.
-> 
-> Thanks,
-> Mark.
-
-OK, Missing that, do_mte needs to be handled.
-
-Thanks,
-Tong.
-
-> 
->> +
->> +void copy_user_highpage_mc(struct page *to, struct page *from,
->> +			unsigned long vaddr, struct vm_area_struct *vma)
->> +{
->> +	copy_highpage_mc(to, from);
->> +	flush_dcache_page(to);
->> +}
->> +EXPORT_SYMBOL_GPL(copy_user_highpage_mc);
->> +#endif
->> diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
->> index 1023ccdb2f89..4c882d36dd64 100644
->> --- a/arch/arm64/mm/extable.c
->> +++ b/arch/arm64/mm/extable.c
->> @@ -110,6 +110,8 @@ bool fixup_exception_mc(struct pt_regs *regs)
->>   		return ex_handler_uaccess_type(ex, regs, FIXUP_TYPE_MC);
->>   	case EX_TYPE_UACCESS_MC_ERR_ZERO:
->>   		return ex_handler_uaccess_err_zero(ex, regs);
->> +	case EX_TYPE_COPY_PAGE_MC:
->> +		return ex_handler_fixup(ex, regs);
->>   
->>   	}
->>   
->> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
->> index 39bb9b47fa9c..a9dbf331b038 100644
->> --- a/include/linux/highmem.h
->> +++ b/include/linux/highmem.h
->> @@ -283,6 +283,10 @@ static inline void copy_user_highpage(struct page *to, struct page *from,
->>   
->>   #endif
->>   
->> +#ifndef __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
->> +#define copy_user_highpage_mc copy_user_highpage
->> +#endif
->> +
->>   #ifndef __HAVE_ARCH_COPY_HIGHPAGE
->>   
->>   static inline void copy_highpage(struct page *to, struct page *from)
->> @@ -298,6 +302,10 @@ static inline void copy_highpage(struct page *to, struct page *from)
->>   
->>   #endif
->>   
->> +#ifndef __HAVE_ARCH_COPY_HIGHPAGE_MC
->> +#define cop_highpage_mc copy_highpage
->> +#endif
->> +
->>   static inline void memcpy_page(struct page *dst_page, size_t dst_off,
->>   			       struct page *src_page, size_t src_off,
->>   			       size_t len)
->> diff --git a/mm/memory.c b/mm/memory.c
->> index 76e3af9639d9..d5f62234152d 100644
->> --- a/mm/memory.c
->> +++ b/mm/memory.c
->> @@ -2767,7 +2767,7 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
->>   	unsigned long addr = vmf->address;
->>   
->>   	if (likely(src)) {
->> -		copy_user_highpage(dst, src, addr, vma);
->> +		copy_user_highpage_mc(dst, src, addr, vma);
->>   		return true;
->>   	}
->>   
->> -- 
->> 2.25.1
->>
-> .

@@ -2,58 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514E752E013
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E2852E018
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245522AbiESWqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 18:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
+        id S245559AbiESWtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 18:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbiESWqC (ORCPT
+        with ESMTP id S233763AbiESWs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 18:46:02 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174D91C924
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:46:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653000360; x=1684536360;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4WvROh5tFvwqX1BBN7Nubmp8LnwE/1Ah73J/GrFmz/w=;
-  b=cSEIfLWYU8Ykar58nMPeFdn6qo1iI4KygpAgpiirdr/3yOYR3Bq/f47p
-   ThHQQVGQCPT62LSYJckXVSjSLOYYHDeOXnK5fiITVKpg6+dk8Cn+guxo0
-   wBaP2/11RQtXcRDh1Smz2X+EVl3xen5PH05+CanBCgSJ9nwFjjyHujqZF
-   OnRhpBhaHIgR3Ibqq3TZwR67v+c6kIgagFWSAoDqSo6r7hgxnMfKWZQ2V
-   Wb/n6ifPlDMH6Rw9Chkntp9ZIt7lAZLCIynbeXC73cJaN6C2UWMjl5VFA
-   U+7iQDXeORmHnQehuVAsqcgKTOIPUE0/bdy2jDc9eqaFFYEFFoNHRQB5p
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="252922151"
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="252922151"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 15:45:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="640028243"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 19 May 2022 15:45:56 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrou4-00041D-9U;
-        Thu, 19 May 2022 22:45:56 +0000
-Date:   Fri, 20 May 2022 06:45:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [netfilter-nf-next:testing 9/12] core.c:undefined reference to
- `nf_hook_bpf_create'
-Message-ID: <202205200652.Klq9MYkT-lkp@intel.com>
+        Thu, 19 May 2022 18:48:57 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B020192D05
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:48:56 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-f16a3e0529so8523621fac.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:48:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=gPmJM59HilOSZAiNocBUyn1VGxu9PFrDrw8E4Yeqrfk=;
+        b=Ivbz2PDWtVwyLf0aE9K3mPrsVLOK80ClXfeDGxNsqdlxmI6lf/HqV7VfS+K1pFR238
+         KfAvg7i6sxEPBmB782C8Q6xIoiiz4VrGwKI6qxj4FpHIfeHM7VsU0oaEHwdpWxktouqK
+         31WAtWkdHxSG3SjDgz+OusBnk+tjWjtiPafIw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=gPmJM59HilOSZAiNocBUyn1VGxu9PFrDrw8E4Yeqrfk=;
+        b=tX0M7Ff/SmEwKvdZ/QnP5kQ6V/I/sXvyGr/9ubOM6mvHZMtXs0+HAjyqBz18BmLzXj
+         kOroGOdSeCqIlpf8pZknXNcWy/iUL8Kjo+Au7cNcf+bA/pmj67NLhNgli8BI0CFDK2/3
+         kpnY8x5FxyvpDqw8meEfwgH+ynY2+HFRuPIn22CKTMwMdXiUEu042dv7K6PFAW203CQu
+         EYyG5D5cHw/z2nMRVblWwBrigfH+mCnIvtYJC2VtaKnkFusohH/w71+k6Ef8tvfnmACL
+         Z/W/jhda1XweMSi/9VHD1KYcVoWWacZw1hpLPvnE5PHz0IoLB31KdmMGE9VsLhNot7I7
+         oilQ==
+X-Gm-Message-State: AOAM531mIHNqHbZryWUia4fobZhvFFGquGZPtb9RuJAJDRwvRUJkyy8y
+        VTeGhW90/bAg3FWG9mO0c4eD4v6D0d5SLMhmOLPaKw==
+X-Google-Smtp-Source: ABdhPJw5ddHxY0cfryu3hgg4S9UcGUCH59iSaeUGGcNe4rzoKsPmMGWR455MyyYyru3KXBJ68SY9LKIemGUmA3oUAE4=
+X-Received: by 2002:a05:6870:240d:b0:f1:b878:e97c with SMTP id
+ n13-20020a056870240d00b000f1b878e97cmr3801393oap.193.1653000536016; Thu, 19
+ May 2022 15:48:56 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 19 May 2022 15:48:55 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1652982339-18190-3-git-send-email-quic_khsieh@quicinc.com>
+References: <1652982339-18190-1-git-send-email-quic_khsieh@quicinc.com> <1652982339-18190-3-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 19 May 2022 15:48:55 -0700
+Message-ID: <CAE-0n52ugbZfhP7BTYoo9yt1CMsKTW5uW74GdBNx14cRzj39gA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] phy: qcom-qmp: add regulator_set_load to dp phy
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,28 +71,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git testing
-head:   4456ac35299c131e2ac26b4dc025b257d810277b
-commit: 11b2910d788799e8c68df305994260fd79a61e10 [9/12] netfilter: add bpf base hook program generator
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220520/202205200652.Klq9MYkT-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git/commit/?id=11b2910d788799e8c68df305994260fd79a61e10
-        git remote add netfilter-nf-next git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git
-        git fetch --no-tags netfilter-nf-next testing
-        git checkout 11b2910d788799e8c68df305994260fd79a61e10
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Quoting Kuogee Hsieh (2022-05-19 10:45:38)
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> index b144ae1..24f39ee 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qmp.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+> @@ -5008,6 +5019,11 @@ static int qcom_qmp_phy_com_init(struct qmp_phy *qphy)
+>                 return 0;
+>         }
+>
+> +       if (cfg->vreg_enable_load) {
+> +               for (i = 0; i <= cfg->num_vregs; i++)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Just less than (<) cfg->num_vregs, not less than or equal to (<=)
 
-All errors (new ones prefixed by >>):
-
-   ld: net/netfilter/core.o: in function `nf_hook_entries_grow':
->> core.c:(.text+0x893): undefined reference to `nf_hook_bpf_create'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +                       regulator_set_load(qmp->vregs[i].consumer, cfg->vreg_enable_load[i]);
+> +       }
+>

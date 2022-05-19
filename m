@@ -2,89 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B960D52DC74
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC97952DC78
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243726AbiESSLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
+        id S243586AbiESSMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243700AbiESSLL (ORCPT
+        with ESMTP id S233903AbiESSMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:11:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC4A4EA1E
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:11:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D57A9B82798
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:11:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C75C34100
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:11:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652983865;
-        bh=qfrsVSac5p7s4s3/tao5faBYDdKOQTeF9rcknBTAI6s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n5xa3krTyCU/0LFHvaxl9nV72wSAN+wptxohSNu1LJGjOf3eBWJQXM29fe8CWWt9/
-         8/iEsYee40+jrC2083NGxEDv72DIHUPaZaU4MDrXgGAw6uK/lCd1O6Ui9NJtKq8ri0
-         l8/5lLS4127Dz6GeUaNclEZtLLhn0q3N54eBfxuE4l8T7qyIvIiqtudmyGTqPbcXC4
-         CwoNkPgHoCr961+/V+m261Xj+DwDjGO9/NviZlQ3iI/iqxxvzmci/tNkwADe6xQYG0
-         kRK92Gz0z2/9oGeobimhLWUSwaZb7/JU+Nv8dDYp4brmBzv1zQgU//uZTg0SFWa48B
-         XfRJmKVuJM0iQ==
-Received: by mail-ed1-f43.google.com with SMTP id j28so7922104eda.13
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:11:05 -0700 (PDT)
-X-Gm-Message-State: AOAM532f6PWVA7RdhaJSt0e8qsJ0g47cuFrgmzxBjJbl9ihJQbPzEoZq
-        5uUolzZybcmFh4X5X3/2gplPz09bxOPCHZpjHw==
-X-Google-Smtp-Source: ABdhPJxhP1Wba2opQ/Qs/q0Ub3BI7HdxkNRvDPWLuPYkNRluZEnIc5Y6vMACPPBUzeTAGTwweZnHRj217yThqyWAB3k=
-X-Received: by 2002:a05:6402:5388:b0:42a:ba77:7669 with SMTP id
- ew8-20020a056402538800b0042aba777669mr6676016edb.89.1652983863801; Thu, 19
- May 2022 11:11:03 -0700 (PDT)
+        Thu, 19 May 2022 14:12:12 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888BAD9E99;
+        Thu, 19 May 2022 11:12:08 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id i27so11452867ejd.9;
+        Thu, 19 May 2022 11:12:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=u/tcYoj2hMWWn+ILOkjsnv4kELdrMc9duXiMdanlIBY=;
+        b=PAlpax32REnGBe6UM04nc6urxKhuusKlKTgi6NDQN9/oquyirQk9mZTpXGTesve3OO
+         YsQUThm1QciGzNS0ld94BtwjwItVDsRJ5U05fGU87A8M71xu/NYj0y7FDLnEl2kvJ9Bv
+         wLdxlIT7zwfXJxn9OJubjb2oHHFSW0QpZEDo50Ar1qecyymkMWCYAGEiqTErFxDkBS9s
+         CVI9S8f937yV2ui0YkJwP3+g443ROi4SsTfXk+2ZgE6qYRFv8eTVRh+C9VsBDupgEoQ1
+         jm/hA1nApaPe/NOIF7yo0nt5C5stW6QK689jO5p4Y8gahS1APZRmkCWb44rmYn2TM9Gh
+         BeuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=u/tcYoj2hMWWn+ILOkjsnv4kELdrMc9duXiMdanlIBY=;
+        b=U+KDknF/qvkiZTM6QN4xvGo1SQJuARIa5kBtj9/qQATmRigHcdoNRT1BEXQ9NLLi0t
+         JeOxvWdTljhSbZ8/MVJ6IBm/eS5pqtm9J8rE6pWaO/dJc47zQcTaxuhTVvkcmbfGh4fE
+         6hNUEF6ONNTmUWKqPb2euBRBGhN2U6B4Rw0uSJ+LmPTVqw59PyoA9u7/V7wcwJBrunIG
+         ZOJtfVPBcMTWtDhgs07Iuty0HKgqM2Iq4xeFq2Ty0pbXTf6TN1sVP85KKmr5b1TnvJL7
+         bbG3UFIEOxv2wN8hqQTadoGDqWvo382YqUDFDHdfRsO/uoetRx1+bawzj8BtibVJJ9WB
+         SLzQ==
+X-Gm-Message-State: AOAM5334ekFRlzEIHnXnaEjNjawhMJr9It0grbyiY0NQaJfXB8j/Dy+P
+        pdUQp9iWkDOm/R87f8hZ4SA=
+X-Google-Smtp-Source: ABdhPJyRVrG3sgWlBnZuIziGhVQd7wYkwfNvSovYObVhB6EfnQAVv5rDkVsYJ4VEGD/a93SIfLvaPA==
+X-Received: by 2002:a17:907:6d87:b0:6f8:95d2:6814 with SMTP id sb7-20020a1709076d8700b006f895d26814mr5555032ejc.232.1652983927138;
+        Thu, 19 May 2022 11:12:07 -0700 (PDT)
+Received: from skbuf ([188.25.255.186])
+        by smtp.gmail.com with ESMTPSA id ml13-20020a170906cc0d00b006fe90a8459dsm1656189ejb.166.2022.05.19.11.12.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 11:12:06 -0700 (PDT)
+Date:   Thu, 19 May 2022 21:12:04 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v5 09/13] net: dsa: rzn1-a5psw: add FDB support
+Message-ID: <20220519181204.7c6zjn6xqcgvyaup@skbuf>
+References: <20220519153107.696864-1-clement.leger@bootlin.com>
+ <20220519153107.696864-10-clement.leger@bootlin.com>
 MIME-Version: 1.0
-References: <20220518093325.2070336-1-sudeep.holla@arm.com> <20220518093325.2070336-9-sudeep.holla@arm.com>
-In-Reply-To: <20220518093325.2070336-9-sudeep.holla@arm.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 19 May 2022 13:10:51 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKig8U4hQEtHW8ct1Pd0a29ZtoTp1HuWQv389yb+SuW_A@mail.gmail.com>
-Message-ID: <CAL_JsqKig8U4hQEtHW8ct1Pd0a29ZtoTp1HuWQv389yb+SuW_A@mail.gmail.com>
-Subject: Re: [PATCH v2 8/8] arch_topology: Add support to build llc_sibling on
- DT platforms
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220519153107.696864-10-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 4:34 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> ACPI PPTT provides cache identifiers and especially the last level cache
-> identifier is used in obtaining last level cache siblings amongst CPUs.
->
-> While we have the cpu map representing all the CPUs sharing last level
-> cache in the cacheinfo driver, it is populated quite late in the boot
-> while the information is needed to build scheduler domains quite early.
+On Thu, May 19, 2022 at 05:31:03PM +0200, Clément Léger wrote:
+> +static int a5psw_port_fdb_dump(struct dsa_switch *ds, int port,
+> +			       dsa_fdb_dump_cb_t *cb, void *data)
+> +{
+> +	struct a5psw *a5psw = ds->priv;
+> +	union lk_data lk_data;
+> +	int i = 0, ret;
+> +	u32 reg;
+> +
+> +	for (i = 0; i < A5PSW_TABLE_ENTRIES; i++) {
+> +		reg = A5PSW_LK_ADDR_CTRL_READ | A5PSW_LK_ADDR_CTRL_WAIT | i;
+> +		mutex_lock(&a5psw->lk_lock);
 
-Late is because it's a device_initcall() rather than late in the cpu
-hotplug state machine, right? The late aspect is for sysfs presumably,
-but I think we could decouple that. Do all the firmware cache parsing
-early and then populate the sysfs parts later. It's not a unique
-problem as the DT unflattening and init code has to do the same thing.
-I'd assume the hotplug and cpu sysfs devices have to deal with the
-same thing.
+It might be more efficient to lock the lookup table only once, outside
+the for loop, rather than 8192 times (plus the fact that when you run
+plain "bridge fdb show", this gets repeated for each switch user port,
+which is a nuisance of its own).
 
-Rob
+> +
+> +		ret = a5psw_lk_execute_ctrl(a5psw, &reg);
+> +		if (ret) {
+> +			mutex_unlock(&a5psw->lk_lock);
+> +			return ret;
+> +		}
+> +
+> +		lk_data.hi = a5psw_reg_readl(a5psw, A5PSW_LK_DATA_HI);
+> +		/* If entry is not valid or does not contain the port, skip */
+> +		if (!lk_data.entry.valid ||
+> +		    !(lk_data.entry.port_mask & BIT(port))) {
+> +			mutex_unlock(&a5psw->lk_lock);
+> +			continue;
+> +		}
+> +
+> +		lk_data.lo = a5psw_reg_readl(a5psw, A5PSW_LK_DATA_LO);
+> +		mutex_unlock(&a5psw->lk_lock);
+> +
+> +		ret = cb(lk_data.entry.mac, 0, lk_data.entry.is_static, data);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}

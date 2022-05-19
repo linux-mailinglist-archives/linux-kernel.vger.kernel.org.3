@@ -2,148 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD63C52D583
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D97852D584
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234765AbiESODp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S239053AbiESOD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238688AbiESODk (ORCPT
+        with ESMTP id S238688AbiESODy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:03:40 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1571C2673;
-        Thu, 19 May 2022 07:03:39 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id f9so10270269ejc.0;
-        Thu, 19 May 2022 07:03:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:message-id:in-reply-to:references
-         :mime-version;
-        bh=qWNcKlbHWt+buYUPc86j5JlNPnGvKXkUMAum0oQSfJ0=;
-        b=LcE9bEgfBwTo+FP+bLoachNEfeucJ1OepYalzxu7uc6jEmRley8APjmdkai6m/XVAc
-         Ya75wYu2NMpfUANb1K7kUDHYWCcXkmTEbT8b7eC6obk6nmJdBqKhFhrN0XlEGUOS38va
-         4ldMm/u49lHcF+2IBH75a8sAghe0xurqgbWccyAqO4mLCKlrctVwIpqpzjLDyGQzcirk
-         n7m5dGw5dWTOgBJbZYpl3B7KJMFjTe8NedjJ7o/o2Y1HzA1yOOepTTvUkxg1N4L8fNYZ
-         ifLUQ4h2MYsaO+czOwRsRl85AqrCFL8vjJcLLAtxcS5VB2E6d1Yw/qOO6W6fRmbYAr3h
-         YCgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:message-id:in-reply-to
-         :references:mime-version;
-        bh=qWNcKlbHWt+buYUPc86j5JlNPnGvKXkUMAum0oQSfJ0=;
-        b=hXvo/VbUtzxSL6sVLt76fyjkVbZxLiIulA3mRfno9nEuiEFXOKK04zNlv/7DNw02ce
-         XhTS1FVSIlmkHytydT9ZGFbr2HKbEqWqkcz7YAbbuhK8rsqFdao3Pkzq9W2M4TSH2vns
-         +B0RGAE/JzEfwXj8WPFyXvhJj00vIV3MAUlOucLOWngAdL32tfMcI3/ZnWFenvQgTjYX
-         MMeljGh8vutU0zxTUAv3leE83Tj8bkC04HR5lfKM+W0+/Y4eGDAV9wl1leTTY0Q4hVY9
-         VG3+mkhZGgd+R8QjUylJH4EFmT/Uesn5KyAeoUZba/6NSCmwh/c8tKrcASyXHrtVFreg
-         GA7Q==
-X-Gm-Message-State: AOAM530Xpm9u/3N+O66JQl9RBabWWBjGxGjfWLoKXKyUwb6U4+x6TGGw
-        t0YrGBhjpBgr+L52hchNa4k=
-X-Google-Smtp-Source: ABdhPJyhieqoXKbfvsM8fh2dawCAGVx37vJQhD8YjDO0OoeyTXCFh58t3tmMrLP80r47m9bY8FV3oQ==
-X-Received: by 2002:a17:907:7b85:b0:6fd:d799:ef4e with SMTP id ne5-20020a1709077b8500b006fdd799ef4emr4492401ejc.319.1652969017544;
-        Thu, 19 May 2022 07:03:37 -0700 (PDT)
-Received: from [192.168.52.247] ([217.138.206.82])
-        by smtp.gmail.com with ESMTPSA id m13-20020a17090672cd00b006f3ef214e3esm2097890ejl.164.2022.05.19.07.03.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 07:03:37 -0700 (PDT)
-Date:   Thu, 19 May 2022 18:03:14 +0400
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-Subject: Re: [PATCH 0/6] clk: mediatek: Improvements to simple probe/remove
- and reset controller unregistration
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        =?iso-8859-1?q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Message-Id: <E1V4CR.LC9T17R2IY1M2@gmail.com>
-In-Reply-To: <20220519134728.456643-1-y.oudjana@protonmail.com>
-References: <20220519134728.456643-1-y.oudjana@protonmail.com>
-X-Mailer: geary/40.0
+        Thu, 19 May 2022 10:03:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359D438AB
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:03:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6AF4618A8;
+        Thu, 19 May 2022 14:03:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A09DC385AA;
+        Thu, 19 May 2022 14:03:50 +0000 (UTC)
+Date:   Thu, 19 May 2022 10:03:48 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     YoPOhRctb8wwbmY5@carbon, Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Muchun Song <songmuchun@bytedance.com>, kernel@openvz.org,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>,
+        Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH v3] tracing: add 'accounted' entry into output of
+ allocation tracepoints
+Message-ID: <20220519100348.101d027d@gandalf.local.home>
+In-Reply-To: <b728f944-e3ae-cdb6-5f02-2fb21466b2fb@openvz.org>
+References: <f6625cd8-90f9-6d48-50f6-7bb052bf479f@openvz.org>
+        <20220518160447.20a7b96f@gandalf.local.home>
+        <b728f944-e3ae-cdb6-5f02-2fb21466b2fb@openvz.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 19 May 2022 14:35:46 +0300
+Vasily Averin <vvs@openvz.org> wrote:
 
-On Thu, May 19 2022 at 17:47:22 +0400, Yassine Oudjana 
-<yassine.oudjana@gmail.com> wrote:
-> This series started as part of an earlier series adding support for 
-> the main
-> clock controllers on MediaTek MT6735[1]. It has since been split off 
-> and
-> expanded. It adds a new function to unregister a reset controller and 
-> expands
-> the mtk_clk_simple_probe/remove functions to support the main 5 types 
-> of clocks:
-> - PLLs		(new)
-> - Fixed clocks	(new)
-> - Fixed factors	(new)
-> - Muxes		(new)
-> - Gates		(supported previously)
-> This should allow it to be used in most clock drivers, resulting in 
-> reduced
-> code duplication. It will be used in MT6735 clock drivers in the 
-> upcoming v2
-> of the MT6735 main clock controller series.
+> >> @@ -33,42 +35,46 @@ DECLARE_EVENT_CLASS(kmem_alloc,
+> >>  		__entry->bytes_req	= bytes_req;
+> >>  		__entry->bytes_alloc	= bytes_alloc;
+> >>  		__entry->gfp_flags	= (__force unsigned long)gfp_flags;
+> >> +		__entry->accounted	= (gfp_flags & __GFP_ACCOUNT) ||
+> >> +					  (s && s->flags & SLAB_ACCOUNT);  
+> > 
+> > Now you could make this even faster in the fast path and save just the
+> > s->flags.
+> > 
+> > 	__entry->sflags = s ? s->flags : 0;
+> >   
+> >>  	),
+> >>  
+> >> -	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s",
+> >> +	TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s accounted=%s",
+> >>  		(void *)__entry->call_site,
+> >>  		__entry->ptr,
+> >>  		__entry->bytes_req,
+> >>  		__entry->bytes_alloc,
+> >> -		show_gfp_flags(__entry->gfp_flags))
+> >> +		show_gfp_flags(__entry->gfp_flags),
+> >> +		__entry->accounted ? "true" : "false")  
+> > 
+> > And then have: "accounted=%s":
+> > 
+> > 		(__entry->gfp_flags & __GFP_ACCOUNT) ||
+> > 		(__entry->sflags & SLAB_ACCOUNT) ? "true" : "false"  
 > 
-> Dependencies:
-> - clk: mediatek: Move to struct clk_hw provider APIs (series)
->   
-> https://patchwork.kernel.org/project/linux-mediatek/cover/20220510104804.544597-1-wenst@chromium.org/
-> - Cleanup MediaTek clk reset drivers and support MT8192/MT8195 
-> (series)
->   
-> https://patchwork.kernel.org/project/linux-mediatek/cover/20220503093856.22250-1-rex-bc.chen@mediatek.com/
-> - Export required symbols to compile clk drivers as module (single 
-> patch)
->   
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20220518111652.223727-7-angelogioacchino.delregno@collabora.com/
-> 
-> Yassine Oudjana (6):
->   clk: mediatek: gate: Export mtk_clk_register_gates_with_dev
->   clk: mediatek: Use mtk_clk_register_gates_with_dev in simple probe
->   clk: mediatek: reset: Return reset data pointer on register
->   clk: mediatek: reset: Implement mtk_unregister_reset_controller() 
-> API
->   clk: mediatek: Unregister reset controller on simple remove
->   clk: mediatek: Add support for other clock types in simple
->     probe/remove
-> 
->  drivers/clk/mediatek/clk-gate.c   |   1 +
->  drivers/clk/mediatek/clk-mt8192.c |   7 +-
->  drivers/clk/mediatek/clk-mtk.c    | 123 
-> +++++++++++++++++++++++++-----
->  drivers/clk/mediatek/clk-mtk.h    |  22 +++++-
->  drivers/clk/mediatek/reset.c      |  41 ++++++----
->  drivers/clk/mediatek/reset.h      |  20 +++--
->  6 files changed, 167 insertions(+), 47 deletions(-)
-> 
-> --
-> 2.36.1
-> 
+> Unfortunately this returns back sparse warnings about bitwise gfp_t and slab_flags_t casts.
+> Could you please explain why your variant is faster?
 
-Replying since there is a missing reference:
+Micro-optimization, grant you, but it is faster because it moves some of
+the logic into the slow path (the read side), and takes it out of the fast
+path (the write side).
 
-[1] 
-https://patchwork.kernel.org/project/linux-clk/cover/20220504122601.335495-1-y.oudjana@protonmail.com/
+The idea of tracing is to squeeze out every cycle we can to keep the
+tracing overhead down.
 
+But it's really up to you if you need that. I'm not going to let this be a
+blocker. This is more of an FYI than anything else.
 
+-- Steve

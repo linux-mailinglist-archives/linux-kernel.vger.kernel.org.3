@@ -2,98 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E03452D778
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED49B52D77E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240916AbiESP0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        id S240955AbiESP13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241013AbiESP0Q (ORCPT
+        with ESMTP id S240342AbiESP1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:26:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC3D38DB2
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:26:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1663B82291
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:26:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EF9DC385AA;
-        Thu, 19 May 2022 15:26:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652973971;
-        bh=fiU4NSF4TvUqiWY49Pnepo8xHAf+TC9fyzWCuoONWSU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=fT05jFy9zsasv/0XEbUaeRGAwVYHZ+iVYn4tGImCV1g/82vc5UJgb6KgespOE/oyU
-         PTR6Krj8fmuBwUbAno9Jtcz/Ov+IDSkkFAcEG6P9yg91vstIyeL9Y3niQxd6xZVnwD
-         GyUnn+1i+PJIf6AtDuJYjLavPVTIbKiRcxgMtbufy+VIi6+On4/WDFzRqaHX+jRwcT
-         KMkvaftyMewxexNsxXUXJt7z95ozYa7su9z5tGNH/JJXnalCEKmI7gLVFjWPkML8k/
-         B6DB1uBBH8faCh81l38lASDRNg9I7Zkr3fv5JiyFBSEvPlJ9wushSDRP/x0yIwZB4o
-         h03xGTukmPXIg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 38FD75C04E0; Thu, 19 May 2022 08:26:11 -0700 (PDT)
-Date:   Thu, 19 May 2022 08:26:11 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 03/21] rcu: Add a note about noinstr VS unsafe eqs
- functions
-Message-ID: <20220519152611.GY1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220503100051.2799723-1-frederic@kernel.org>
- <20220503100051.2799723-4-frederic@kernel.org>
- <20220519145438.GJ2578@worktop.programming.kicks-ass.net>
+        Thu, 19 May 2022 11:27:22 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F2B6FD3D;
+        Thu, 19 May 2022 08:27:21 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id u7so5949855ljd.11;
+        Thu, 19 May 2022 08:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=06m0spO/zzT7LU0U7Sp7nFMRUJ5YbpK+1tdhabMSTrg=;
+        b=Av2O2dirj8NHt4uyVji55uosaO+MsQVVdCzMtcCvghVkDNcAvvIUFYCAEvlowBuajK
+         G0oQoe8zLVSV5qD/9QTgpgALw6w0lU+2WQlKsfB2/vJv/qSdWBFKjjTgGAbrttWCvSmo
+         9pIFuhzbzA4lSVIkuJSLMN4rtoZorDILjvT/sewomISmLSxIIZKnraQ+dfbtZVMTRtPa
+         YDyBVQcP8zYVLfkhYe2++N/9kbnhTLW2AYIi4NnfpCy1SCaM+nV0wGpYrZ9ZmP29Trdm
+         kJT8rN7M4bDd3RWuP41mEZZwJOVg59QOBs6rqyk6wdf50Qta+UTQmWKFbNDUkOeXV0GT
+         cdGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=06m0spO/zzT7LU0U7Sp7nFMRUJ5YbpK+1tdhabMSTrg=;
+        b=PLS8hECaTyI13M3LU+JYeK+qgndW1MPsr2ck8yzhIYKx0QQcIzW0y9TncAeda4M5VX
+         Nqo1jBwGLJXHlZeZVGQLh+821WePsqXe+ud5zZPddm16dRQewEnEvgiQxOH9umpsCQne
+         wX9rUmMvX4RVdZ+PKMo0rhpo85q8/uqfWxSUWEDQxQQyd+N12zchuVcNogHux62+Qwh3
+         tKXqBYx/jM9GzaViSkYBohSUgGAMLWf2um1cjJl262S2GHghQztNMoii3lZ3s/HesseP
+         K3wup0BHENlGEmwXuM6JPsZfXPEntzKVV6kh2VVJp1A7EEgPW6Jv4K00p7IfgXfEEHm3
+         pbNw==
+X-Gm-Message-State: AOAM531mCHHMgtCbzfrRg7tuXRMVxMtDWJ65RtMtFd8ir16T6XuG3KMF
+        xjgy7k1VnYDj/5UbHXYx2Yw=
+X-Google-Smtp-Source: ABdhPJycQoMAMgwtFAuDUm9PnuToJ4JHoO7595vkZwzeXp+GxefghHeI2b/2Od+cztFaKe8TnAHULg==
+X-Received: by 2002:a2e:b5d1:0:b0:24f:331d:f9b6 with SMTP id g17-20020a2eb5d1000000b0024f331df9b6mr2988533ljn.302.1652974039835;
+        Thu, 19 May 2022 08:27:19 -0700 (PDT)
+Received: from [192.168.0.110] ([217.115.104.30])
+        by smtp.gmail.com with ESMTPSA id d3-20020a05651221c300b0047255d21155sm318812lft.132.2022.05.19.08.27.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 08:27:19 -0700 (PDT)
+Message-ID: <3da73dd6-24c3-1870-f0bc-f8040826576b@gmail.com>
+Date:   Thu, 19 May 2022 18:27:17 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519145438.GJ2578@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+From:   Dmytro Bagrii <dimich.dmb@gmail.com>
+Subject: Re: [PATCH] usb: core: Call disconnect() only if it is provided by
+ driver
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220519132900.4392-1-dimich.dmb@gmail.com>
+ <YoZKFrzirES9+f39@kroah.com>
+Content-Language: en-US-large
+In-Reply-To: <YoZKFrzirES9+f39@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 04:54:38PM +0200, Peter Zijlstra wrote:
-> On Tue, May 03, 2022 at 12:00:33PM +0200, Frederic Weisbecker wrote:
-> > Some RCU functions enter or exit into/from RCU idle mode while using
-> > trace-able and lockdep-aware IRQs (un-)masking. This could be easily
-> > solved with using raw versions of local_irq_*() but we would then
-> > lose some precious debugging informations.
-> > 
-> > Another possible way to solve this may consist in using rude RCU-tasks
-> > in lockdep and irqsoff tracing.
-> > 
-> > In any case and until this get solved, those RCU functions can't get
-> > tagged as noinstr even though they should.
+On 19.05.22 16:45, Greg KH wrote:
+> On Thu, May 19, 2022 at 04:29:00PM +0300, Dmytro Bagrii wrote:
+>> A driver may use devres allocations. Disconnect handler is not needed in
+>> this case. Allow such driver to leave .disconnect field uninitialized in
+>> struct usb_driver instead of providing empty stub function.
+>>
+>> Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
+>> ---
+>>  drivers/usb/core/driver.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+>> index 355ed33a2179..d7fe440b033c 100644
+>> --- a/drivers/usb/core/driver.c
+>> +++ b/drivers/usb/core/driver.c
+>> @@ -455,7 +455,8 @@ static int usb_unbind_interface(struct device *dev)
+>>  	if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
+>>  		usb_disable_interface(udev, intf, false);
+>>  
+>> -	driver->disconnect(intf);
+>> +	if (driver->disconnect)
+>> +		driver->disconnect(intf);
+>>  
+>>  	/* Free streams */
+>>  	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
+>> -- 
+>> 2.36.1
+>>
 > 
-> FWIW, this also means RCU_NONIDLE() is broken. Luckily there aren't many
-> users left.
+> What in-kernel driver has this issue and does not have a disconnect
+> callback?
 
-More to the point, rcu_irq_enter_irqson() and rcu_irq_exit_irqson() need
-the same help that rcu_idle_enter() and rcu_idle_exit() got earlier this
-week [1], independent of RCU_NONIDLE().
+I don't see such in-kernel USB drivers yet. I develop an out-of-tree driver
+and use devres for all initialization including controllers registration
+etc. For actions which aren't available with devm_*, e.g. URB allocation i
+use devm_add_action_or_reset() for deinit. I realized my _disconnect()
+function is empty, nothing to do there. All deinitialization is done during
+usb interface release. If i leave .disconnect field uninitialized in struct
+usb_driver, obviously i get NULL pointer dereference bug. Thus i decided
+that allowing a driver not to provide disconnect() is a good idea, as it is
+done for remove() in SPI and I2C subsystems.
 
-Unless Frederic beats me to it, I will queue something up.
+-- 
+Best Regards,
+Dmytro Bagrii.
 
-							Thanx, Paul
 
-[1] https://lore.kernel.org/all/20220518162118.GA2661055@paulmck-ThinkPad-P17-Gen-1/

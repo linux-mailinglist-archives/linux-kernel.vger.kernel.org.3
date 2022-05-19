@@ -2,64 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36EF52D9EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358C152D9ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241850AbiESQMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S241852AbiESQMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241083AbiESQL6 (ORCPT
+        with ESMTP id S241083AbiESQMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:11:58 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCABAFB1D
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:11:55 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id p74so2639117iod.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:11:55 -0700 (PDT)
+        Thu, 19 May 2022 12:12:20 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BD0B0408;
+        Thu, 19 May 2022 09:12:16 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id n10so4925313qvi.5;
+        Thu, 19 May 2022 09:12:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z9JuQdbnyix/Cw2s/uS/02pnjmPQ42SuLyLty1YjLH8=;
-        b=Aa841zG4DYWnqVq5zJHLVf9PcPp8NoKgOR8vVxN68li1B198TGkNUKfJDQDPqq3PKF
-         9auRyny2CyM0KAeiww1FQQGBl7uh04eAyUO8LDra0c4R69+3DCcpNw9vcyxjrkXwh6FH
-         3u8GKzljCq+yRdESJki4sDv1msi3XokEKEgQx0y4B2KMkDmXuAEqAePA0lfp4I7BJgKF
-         ch/EaBfy8ujyLEOOK7eXG6grUpIGZ5Dfuak53cjVJ4w9XaXpRWDTCyxQCYyK+MbwBYUo
-         L9U4QhjPxExwRhkXneBV5PeyVWZWFwR0AwdbQu19vjfm/V3J4cdxg4jMA7jXNsGQuMyN
-         1OXA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hoTmvPXtyx3H4u3Zg8utb7mfNRoYWy4jUno7/0YMY70=;
+        b=QU4vYRdK5dCC+NlAE17xdmGaZa42VlKqy2ixfrb5jDTwuCDibubZHwAPDoIPkvWGil
+         u/Lxxxe+D91uiWhBcGR6QVGWw7+NrYV7/Su9HOeN/jjIZAyRRvVHOnJZuij1vI8XNVrd
+         PHRdTSOC5udVoJcdKHAsFPrwrTUIZTiap7yyzgKOziw5W1b8sxdRzSfq6hSwytewfEuM
+         8LXFYtBr01Uz+h8OYq6GfoORMk7ZqJ3TKNseqyTj1avAY1WvfiZxUd7dFqYILiwLu/M8
+         jjmwczJ0XieJetUpg03LOZqbpL1z1sweWcbo7D0pJPu3GiFJk0nSHI9CT0AIwuGn1GWf
+         2i1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z9JuQdbnyix/Cw2s/uS/02pnjmPQ42SuLyLty1YjLH8=;
-        b=rPcdPdXRP/TKKmN4gdGolnREHYuZ6VuZ4csIzb5t0yXXlel6ZN+PGUTBj4IAQdBwXb
-         9op4vQJPi6Fg3JXLfgjQjmLUdGGH5KXjU6A1gsqcxLdmuVMzYVUqxQ17aHvZQFileRqg
-         eLmYrSzWecg2bGJFF0bC9hnGKWKl7Thh9QJzAZR+vJ0S0MatLMFZn/QjrlDqzHsOGvOE
-         V20THEZk2Aexm/6THgo8crLP3ZSleOOPv+7+k9w/p+IcAKMplFzMqEF4hOmYMvUeZtfW
-         ZqVqRmipHMgibkYVI/OJQPgl1/4g00eIb0Asl2SIZRDq4KSzeKnQH1rDzhX4MSfO3PV4
-         nT4g==
-X-Gm-Message-State: AOAM530wyUul0p51wsVCgFZdHRsIK1rt7VFha9AZk32ew83YvvitoHed
-        DStX2miTQtiCdzNDEmmnBAQ=
-X-Google-Smtp-Source: ABdhPJwWqjwfIJd8j6I/+9ff9Vz6fKNxGW4RFWDoJajx/RLpilS9EvjwcwZailmSGC+66ruuR5yL1g==
-X-Received: by 2002:a05:6602:1501:b0:65a:c412:2eeb with SMTP id g1-20020a056602150100b0065ac4122eebmr2811315iow.29.1652976715359;
-        Thu, 19 May 2022 09:11:55 -0700 (PDT)
-Received: from localhost.localdomain (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id g8-20020a05660203c800b0065a47e16f64sm823862iov.54.2022.05.19.09.11.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 19 May 2022 09:11:55 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>
-Subject: [PATCH] sched: Dump stacktrace when some task failed to stop
-Date:   Fri, 20 May 2022 00:11:25 +0800
-Message-Id: <20220519161125.41144-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hoTmvPXtyx3H4u3Zg8utb7mfNRoYWy4jUno7/0YMY70=;
+        b=0ZNtcrUJaOnuVxKvSBxJ/kbNk/pviI6KRwndaVX0vcwW65SDmvu8/0otHEUen/VEx0
+         KvylYiFrlWRis0zurguz7ZtVdzm8Z79vvS8SxJcAoQYpfAniA4++fsJE6yhcOAkpUJjD
+         HPZwtQKUAn5xVTwq7JmlK+QSmkrHPZrAypJcIuLRl4z7ZJfTJiXZ8NRrPjpBDnA3HRb/
+         eB85J7IPlmhGwO11Tic/ObLtZULJsALDGPLGBOWbqWzXVef4nyKbMCVNdcNDvBPE9j/+
+         KZAFu8IflCCsKWDn4rA8kzMUWuubImX2SZMc2NgtzSnjER/+Ik9PBotHLG6kSfTq38qw
+         qhMg==
+X-Gm-Message-State: AOAM531NefhuHmVSjIqfWXKP2X0fL8BO8omxFj0HSsqX+dgiRM6KnCKv
+        MCizIg+hrmoNY7OSP0M2sp1DbI4NE2qOtPAjr8w=
+X-Google-Smtp-Source: ABdhPJwSCu8SNKkW70TBPOYRAfUUgpVrzcUatZdXXFWzgqGKW36FPuMXIjJh5ltu9RJ6UyHdfErpYyEVta9wAVmUqt8=
+X-Received: by 2002:a05:6214:2245:b0:461:bc38:1f7d with SMTP id
+ c5-20020a056214224500b00461bc381f7dmr4629705qvc.63.1652976735222; Thu, 19 May
+ 2022 09:12:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220518062715.27809-1-zhoufeng.zf@bytedance.com>
+ <CAADnVQ+x-A87Z9_c+3vuRJOYm=gCOBXmyCJQ64CiCNukHS6FpA@mail.gmail.com>
+ <6ae715b3-96b1-2b42-4d1a-5267444d586b@bytedance.com> <9c0c3e0b-33bc-51a7-7916-7278f14f308e@fb.com>
+ <380fa11e-f15d-da1a-51f7-70e14ed58ffc@bytedance.com>
+In-Reply-To: <380fa11e-f15d-da1a-51f7-70e14ed58ffc@bytedance.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 19 May 2022 09:12:04 -0700
+Message-ID: <CAADnVQL9naBBKzQdAOWu2ZH=i7HA1VDi7uNzsDQ1TM9Jr+c0Ww@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH] bpf: avoid grabbing spin_locks of all cpus
+ when no free elems
+To:     Feng Zhou <zhoufeng.zf@bytedance.com>
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,43 +83,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some processes may not be stopped, such as workqueue workers.
+On Wed, May 18, 2022 at 8:12 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote=
+:
+>
+> =E5=9C=A8 2022/5/19 =E4=B8=8A=E5=8D=884:39, Yonghong Song =E5=86=99=E9=81=
+=93:
+> >
+> >
+> > On 5/17/22 11:57 PM, Feng Zhou wrote:
+> >> =E5=9C=A8 2022/5/18 =E4=B8=8B=E5=8D=882:32, Alexei Starovoitov =E5=86=
+=99=E9=81=93:
+> >>> On Tue, May 17, 2022 at 11:27 PM Feng zhou
+> >>> <zhoufeng.zf@bytedance.com> wrote:
+> >>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+> >>>>
+> >>>> We encountered bad case on big system with 96 CPUs that
+> >>>> alloc_htab_elem() would last for 1ms. The reason is that after the
+> >>>> prealloc hashtab has no free elems, when trying to update, it will
+> >>>> still
+> >>>> grab spin_locks of all cpus. If there are multiple update users, the
+> >>>> competition is very serious.
+> >>>>
+> >>>> So this patch add is_empty in pcpu_freelist_head to check freelist
+> >>>> having free or not. If having, grab spin_lock, or check next cpu's
+> >>>> freelist.
+> >>>>
+> >>>> Before patch: hash_map performance
+> >>>> ./map_perf_test 1
+> >
+> > could you explain what parameter '1' means here?
+>
+> This code is here:
+> samples/bpf/map_perf_test_user.c
+> samples/bpf/map_perf_test_kern.c
+> parameter '1' means testcase flag, test hash_map's performance
+> parameter '2048' means test hash_map's performance when free=3D0.
+> testcase flag '2048' is added by myself to reproduce the problem phenomen=
+on.
 
-Add this dump_stack to easily figure out which process caused the problems.
+Please convert it to selftests/bpf/bench,
+so that everyone can reproduce the issue you're seeing
+and can assess whether it's a real issue or a corner case.
 
-Before this change:
+Also please avoid adding indent in the patch.
+Instead of
+ if (!s->extralist.is_empty) {
+  .. churn
 
-<4>[  517.545889] ------------[ cut here ]------------
-<4>[  517.545901] Dying CPU not properly vacated!
-<4>[  517.546366] ---[ end trace 0000000000000002 ]---
-<4>[  518.546831] CPU6 enqueued tasks (2 total):
-<4>[  518.546855] 	pid: 49, name: migration/6
-<4>[  518.547010] 	pid: 6231, name: kworker/6:0
+do
 
-Signed-off-by: Schspa Shi <schspa@gmail.com>
----
- kernel/sched/core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 53596842f0d8..de6b5320e4d7 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -9416,7 +9416,14 @@ static void dump_rq_tasks(struct rq *rq, const char *loglvl)
- 			continue;
- 
- 		printk("%s\tpid: %d, name: %s\n", loglvl, p->pid, p->comm);
-+		if (p != current)
-+			sched_show_task(p);
- 	}
-+	/*
-+	 * We need the stack of each cpu to analyze who is blocking the
-+	 * current cpu scheduling
-+	 */
-+	trigger_all_cpu_backtrace();
- }
- 
- int sched_cpu_dying(unsigned int cpu)
--- 
-2.24.3 (Apple Git-128)
-
+ if (s->extralist.is_empty)

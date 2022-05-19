@@ -2,167 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558B852D3F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9269C52D400
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238800AbiESN3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
+        id S238824AbiESNa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235342AbiESN3v (ORCPT
+        with ESMTP id S238798AbiESNa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:29:51 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FD1B0419
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:29:50 -0700 (PDT)
+        Thu, 19 May 2022 09:30:26 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99ED0CEBA1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:30:19 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id i11so9042457ybq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:30:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652966990; x=1684502990;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+QZKUutU69n8P+AnNReePdXFjDWKleNIDXE7z/OhEyY=;
-  b=RxEZzsxNcABn9D9MKhZCLBQ+cjXT66Abwr92mNyKDkF9jUQpi1kD58DC
-   qOPJ1QxwQkU0QtUhGvFAknMkiSoa7QVdc47xTlahOH3T3nQtUz3/LS29g
-   re+aBx7i5h+vovNNiJ3/Pk1CZFpMdvmQSC3ceEaIL1RZsmw05jJ30tcyU
-   M=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 19 May 2022 06:29:50 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 06:29:49 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 19 May 2022 06:29:49 -0700
-Received: from qian (10.80.80.8) by nalasex01a.na.qualcomm.com (10.47.209.196)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 19 May
- 2022 06:29:48 -0700
-Date:   Thu, 19 May 2022 09:29:45 -0400
-From:   Qian Cai <quic_qiancai@quicinc.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-CC:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, <kafai@fb.com>,
-        <kpsingh@kernel.org>
-Subject: Re: [PATCH 0/6] Drain remote per-cpu directly v3
-Message-ID: <YoZGSd6yQL3EP8tk@qian>
-References: <20220512085043.5234-1-mgorman@techsingularity.net>
- <20220517233507.GA423@qian>
- <20220518125152.GQ3441@techsingularity.net>
- <YoUealVA1bMaSH2l@qian>
- <20220518171503.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ea9SWDA6wvriBFyiWmSM/cUBDRlPeKx6B/XCiADE6Cg=;
+        b=ks6F3fTckOrmjWS0ClW006McxhjxXzbDAmClZ85Ndf/WMrVkPSfxPwMkCJ5+JB/Zly
+         zqD5LIxa+lWehhvWN4Mf2NAHwpS/L4Y90P7fnLH5GPIKVSen0ZQFicNPS4BO/kxG2Hi7
+         9+VqUpx3JpcDW4Kk2EBUINsel5EOpG7wvvFrLGI/79QAayI4cP63wE/0zgtW6uCGI/46
+         NbjttW4tN3/OkWR6s6nrDwk1Vto3pC3uUL5jEpueyGDrGhBIRRoelrsklzxX3c65f6dY
+         nVGShTwmklzNOXcRrUN7VvADdrC/n6x9IsBvYl4aTfA7ntFmcUWmig7WU3bTqN+epHWp
+         Pvtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ea9SWDA6wvriBFyiWmSM/cUBDRlPeKx6B/XCiADE6Cg=;
+        b=scSAzlJGnDfkzsu5b98zw/n66b868vh9ZN+VLtw8z0G4mfs2hXr73g8mtYJVWbc518
+         lkoQdKJ8ObxXY4obKL6oTfkyaOqFZ1E6r5g3Oz0fn2jHY0bjleF29oKj/snVXsM+n6pC
+         WUDq/mFiRHSgAHyGb/p87eHybOHJjR+etNGehvSqIkDMnIvw/7X1f4dHEynU4XMsCNmS
+         syeOlbiogkIesusv8fbK7SLOlIIRKDRKx9LPR3H/Jul3kE+waK5bFZXXdgWBQj93h3rr
+         rKPIvaBYM7oJsviq+bAgEXdG+XJZzH/k5o+TND3ArtPC1LKkH1WtuoJkx4tUtueXr+Av
+         zAQQ==
+X-Gm-Message-State: AOAM530CvnzrOrZVZNHXyAEN+CqPzhU1cddF3EwUaNhH+orFi7luGrWr
+        oLHzVfSsCm9fP+T9mdJ3jS6dKZcQm4uf6hWEqiH7cg==
+X-Google-Smtp-Source: ABdhPJx5ABKP9iZZdCdL37HDpt4btHGxSXXOR0fGwkumd4vTxNoxrgrIZ9EOp8UTgSt1tW+U2kK3C15aGRatb6Ii7AA=
+X-Received: by 2002:a5b:691:0:b0:64d:ab44:f12e with SMTP id
+ j17-20020a5b0691000000b0064dab44f12emr4304244ybq.533.1652967018884; Thu, 19
+ May 2022 06:30:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220518171503.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220518192924.20948-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220518192924.20948-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220518192924.20948-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 19 May 2022 15:30:07 +0200
+Message-ID: <CACRpkdYt-doG_i2T9jjDCb8=oJFR_7Z8RCwW+S05qd90E3FgLg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/7] gpio: gpiolib: Dont assume child_offset_to_irq
+ callback always succeeds
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 10:15:03AM -0700, Paul E. McKenney wrote:
-> So does this python script somehow change the tracing state?  (It does
-> not look to me like it does, but I could easily be missing something.)
+On Wed, May 18, 2022 at 9:30 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 
-No, I don't think so either. It pretty much just offline memory sections
-one at a time.
+> On Renesas RZ/G2L SoC not all the GPIO pins can be simultaneously used as
+> interrupts. The SoC allows 32 interrupts which is first come first serve
+> basis and is dynamic i.e. if there is a free slot (after rmmod) this can
+> be used by other GPIO pins being used as an interrupt.
+>
+> To handle such cases change child_offset_to_irq() callback to return error
+> codes in case of failure. All the users of child_offset_to_irq() callback
+> are also updated with this API change.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-> Either way, is there something else waiting for these RCU flavors?
-> (There should not be.)  Nevertheless, if so, there should be
-> a synchronize_rcu_tasks(), synchronize_rcu_tasks_rude(), or
-> synchronize_rcu_tasks_trace() on some other blocked task's stack
-> somewhere.
+This looks very useful!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-There are only three blocked tasks when this happens. The kmemleak_scan()
-is just the victim waiting for the locks taken by the stucking
-offline_pages()->synchronize_rcu() task.
-
- task:kmemleak        state:D stack:25824 pid: 1033 ppid:     2 flags:0x00000008
- Call trace:
-  __switch_to
-  __schedule
-  schedule
-  percpu_rwsem_wait
-  __percpu_down_read
-  percpu_down_read.constprop.0
-  get_online_mems
-  kmemleak_scan
-  kmemleak_scan_thread
-  kthread
-  ret_from_fork
-
- task:cppc_fie        state:D stack:23472 pid: 1848 ppid:     2 flags:0x00000008
- Call trace:
-  __switch_to
-  __schedule
-  lockdep_recursion
-
- task:tee             state:D stack:24816 pid:16733 ppid: 16732 flags:0x0000020c
- Call trace:
-  __switch_to
-  __schedule
-  schedule
-  schedule_timeout
-  __wait_for_common
-  wait_for_completion
-  __wait_rcu_gp
-  synchronize_rcu
-  lru_cache_disable
-  __alloc_contig_migrate_range
-  isolate_single_pageblock
-  start_isolate_page_range
-  offline_pages
-  memory_subsys_offline
-  device_offline
-  online_store
-  dev_attr_store
-  sysfs_kf_write
-  kernfs_fop_write_iter
-  new_sync_write
-  vfs_write
-  ksys_write
-  __arm64_sys_write
-  invoke_syscall
-  el0_svc_common.constprop.0
-  do_el0_svc
-  el0_svc
-  el0t_64_sync_handler
-  el0t_64_sync
- 
-> Or maybe something sleeps waiting for an RCU Tasks * callback to
-> be invoked.  In that case (and in the above case, for that matter),
-> at least one of these pointers would be non-NULL on some CPU:
-> 
-> 1.	rcu_tasks__percpu.cblist.head
-> 2.	rcu_tasks_rude__percpu.cblist.head
-> 3.	rcu_tasks_trace__percpu.cblist.head
-> 
-> The ->func field of the pointed-to structure contains a pointer to
-> the callback function, which will help work out what is going on.
-> (Most likely a wakeup being lost or not provided.)
-
-What would be some of the easy ways to find out those? I can't see anything
-interesting from the output of sysrq-t.
-
-> Alternatively, if your system has hundreds of thousands of tasks and
-> you have attached BPF programs to short-lived socket structures and you
-> don't yet have the workaround, then you can see hangs.  (I am working on a
-> longer-term fix.)  In the short term, applying the workaround is the right
-> thing to do.  (Adding a couple of the BPF guys on CC for their thoughts.)
-
-The system is pretty much idle after a fresh reboot. The only workload is
-to run the script.
+Yours,
+Linus Walleij

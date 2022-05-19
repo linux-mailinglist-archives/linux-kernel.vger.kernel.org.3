@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9EE52D66C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFB152D66F
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239962AbiESOtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S239973AbiESOtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239945AbiESOs7 (ORCPT
+        with ESMTP id S230046AbiESOta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:48:59 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522B9A2049
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:48:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/UnY8wF6M3CMF1JsRlHNZDZ078eBfzfvzVijhgo1o3I=; b=U64FCHhG54XDTwOs7d9z8oVZ+Q
-        K03767vckgx8TOTtR3YFZsb2H896pMQ+6Jfy4wX1so4ach2iWBpZ18mSNHV8W4Bb/TonRzlbEbCS3
-        Cqhujl0qkXTuudwvSN964TIzcciVBLu5ADk1nL6whiTmz7UBsVZFXaMuNeU4T1/uoTtPKwDYNt1p9
-        nvA1LJfO2YPjOHAhasKayobET8vHqp5AhBNpizNoeysyI3fUuV46B+plyDBN2VOzMwZGkgWheZc5p
-        5jJUiJb3MkFXszVn/HYs3xFjtJ+8jlvt+0JL1KrF7hdCGLkyIdoHI+HR6wHawuXL0IUM8kmeMc+D1
-        GulcAS7g==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrhRv-00Cnu1-IL; Thu, 19 May 2022 14:48:23 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 478F2980BD3; Thu, 19 May 2022 16:48:21 +0200 (CEST)
-Date:   Thu, 19 May 2022 16:48:21 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Phil Auld <pauld@redhat.com>,
-        Alex Belits <abelits@marvell.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Thu, 19 May 2022 10:49:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6318CA308B;
+        Thu, 19 May 2022 07:49:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C91F1B8238B;
+        Thu, 19 May 2022 14:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B60C385AA;
+        Thu, 19 May 2022 14:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652971766;
+        bh=ayoCX7gR4WIf3jJ8o7PQG1ielh2fRN6IkzHzz1JrmuA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=hhWfwUr2aFYlg4+FHLVk92NQX1YKaTK0c9wKa/fi38OIZ3x9yRnj97DC1v0idmrYE
+         tt4ZhWnmQogAo4ZlBZ5arw34BXjxvlUj41ezbSxwsk88xrsH0bBVI+iTrDsW/txdSS
+         5SQqzHqXTwfsbA4B8wSzeX1GdxxJMusl+I88s53sjhxdXZPlWPYTH2ILqdbDgyWoQV
+         U6zm+zOyUdja/7wm82O5JhdzpVc7euMQl6DG/h6kaZOrUvLIueKMJA5I1iIc1CkWuw
+         b3amEcIUz1vafZwoRN3XT1J0+MlxOfy+Pf3L+O1XY31NaN91VzjhI21akJqsoeswZP
+         5AS3C8UTRZyEw==
+Date:   Thu, 19 May 2022 09:49:23 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Yu Liao <liaoyu15@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH 03/21] rcu: Add a note about noinstr VS unsafe eqs
- functions
-Message-ID: <20220519144821.GI2578@worktop.programming.kicks-ass.net>
-References: <20220503100051.2799723-1-frederic@kernel.org>
- <20220503100051.2799723-4-frederic@kernel.org>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/1] x86/PCI: Ignore E820 reservations for bridge
+ windows on newer systems
+Message-ID: <20220519144923.GA22233@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503100051.2799723-4-frederic@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <c49dfdf1-c1e8-a9d2-0f31-f190d7b6631f@redhat.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 03, 2022 at 12:00:33PM +0200, Frederic Weisbecker wrote:
-> Some RCU functions enter or exit into/from RCU idle mode while using
-> trace-able and lockdep-aware IRQs (un-)masking. This could be easily
-> solved with using raw versions of local_irq_*() but we would then
-> lose some precious debugging informations.
+On Thu, May 19, 2022 at 04:29:43PM +0200, Hans de Goede wrote:
+> Hi,
 > 
-> Another possible way to solve this may consist in using rude RCU-tasks
-> in lockdep and irqsoff tracing.
+> On 5/19/22 16:14, Bjorn Helgaas wrote:
+> > On Thu, May 19, 2022 at 04:01:48PM +0200, Hans de Goede wrote:
+> > 
+> >> Ok, I'll go and prepare a v9 and I will submit that later today.
+> > 
+> > Would it be practical to split into three patches?
+> > 
+> >   1) Add command-line args
+> >   2) Add DMI quirks
+> >   3) Add date check
+> > 
+> > It seems easier to assimilate and document in smaller pieces, if
+> > that's possible.
 > 
-> In any case and until this get solved, those RCU functions can't get
-> tagged as noinstr even though they should.
+> Ack, will do. Note this will cause quite a bit of copy/paste
+> in the commit msg to explain why these changes are necessary.
 
-No need to speculate on how to solve it; the generic entry code has
-alternatives that are good. It's just that reworking your architecture
-isn't trivial.
+OK, if the repetition gets excessive I can squash them back
+together.  Hopefully the main explanation can go in the first patch,
+the second can just mention the fact that these machines need the
+exception, and the third can focus on the plan for the future.

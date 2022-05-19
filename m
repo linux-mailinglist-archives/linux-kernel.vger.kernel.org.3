@@ -2,116 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C726B52CF65
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8889152CF63
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbiESJ3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S236047AbiESJ3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236098AbiESJ3f (ORCPT
+        with ESMTP id S231765AbiESJ3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:29:35 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6839CA776E;
-        Thu, 19 May 2022 02:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652952573; x=1684488573;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GG+D/zbzcTBxqP2PNnwLTtmoBW5Cf4iVBDI1LewPyVE=;
-  b=TqX1Y9O9Hs49AZiWkUl1+B8xITThfcTUdUzpngbIFMJC28Az6DVBixAN
-   gefLfygW6iBMEWmNPQYrdYV394OYd4O6QvXOtynzEpTSM2u+wVmmy4hBy
-   sHiaR3Ojw+bc6Nm4sPn8MB1BcHnrQEqExASQpUO/WsP/HDYcNf0kNibV9
-   6XTS2eEHZGoLXZ8YoLUIEkhom51iAG/B/LPGvWmpdtCxNOcQbwfPhG6KF
-   Xh+ShMxGnZN7zRaFkX4R9aQyqwqhdI5S5A+3XU75Erpn2E93E5Z9VV16D
-   ZcLScckKMBG+/EcP9uqYu5A8OWyCCIvP46pEXJezKRKsYeeRtm3+cFOro
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="269701311"
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="269701311"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 02:29:26 -0700
-X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="570113195"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 02:29:20 -0700
-Date:   Thu, 19 May 2022 17:29:12 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>
-Subject: Re: [PATCH v9 0/9] IPI virtualization support for VM
-Message-ID: <20220519092906.GA3234@gao-cwp>
-References: <20220419153155.11504-1-guang.zeng@intel.com>
- <2d33b71a-13e5-d377-abc2-c20958526497@redhat.com>
- <cf178428-8c98-e7b3-4317-8282938976fd@intel.com>
- <f0e633b3-38ea-f288-c74d-487387cefddc@redhat.com>
- <YoK48P2UrrjxaRrJ@google.com>
- <20220517135321.GA31556@gao-cwp>
- <20220517140218.GA569@gao-cwp>
+        Thu, 19 May 2022 05:29:18 -0400
+Received: from outbound-smtp30.blacknight.com (outbound-smtp30.blacknight.com [81.17.249.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452CA65433
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:29:17 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp30.blacknight.com (Postfix) with ESMTPS id BA6B4BABEE
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:29:15 +0100 (IST)
+Received: (qmail 14602 invoked from network); 19 May 2022 09:29:15 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 19 May 2022 09:29:15 -0000
+Date:   Thu, 19 May 2022 10:29:13 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/4] sched/numa: Adjust imb_numa_nr to a better
+ approximation of memory channels
+Message-ID: <20220519092913.GU3441@techsingularity.net>
+References: <20220511143038.4620-1-mgorman@techsingularity.net>
+ <20220511143038.4620-5-mgorman@techsingularity.net>
+ <20220518094112.GE10117@worktop.programming.kicks-ass.net>
+ <20220518111539.GP3441@techsingularity.net>
+ <YoT9D0YGlWwHQMQi@hirez.programming.kicks-ass.net>
+ <20220518170625.GT3441@techsingularity.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20220517140218.GA569@gao-cwp>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220518170625.GT3441@techsingularity.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 10:02:23PM +0800, Chao Gao wrote:
->+ Maxim
->
->On Tue, May 17, 2022 at 09:53:26PM +0800, Chao Gao wrote:
->>On Mon, May 16, 2022 at 08:49:52PM +0000, Sean Christopherson wrote:
->>>On Tue, May 03, 2022, Paolo Bonzini wrote:
->>>> On 5/3/22 09:32, Zeng Guang wrote:
->>>> > 
->>>> > I don't see "[PATCH v9 4/9] KVM: VMX: Report tertiary_exec_control field in
->>>> > dump_vmcs()" in kvm/queue. Does it not need ?
->>>> 
->>>> Added now (somehow the patches were not threaded, so I had to catch them one
->>>> by one from lore).
->>>> 
->>>> > Selftests for KVM_CAP_MAX_VCPU_ID is posted in V2 which is revised on top of
->>>> > kvm/queue.
->>>> > ([PATCH v2] kvm: selftests: Add KVM_CAP_MAX_VCPU_ID cap test - Zeng
->>>> > Guang (kernel.org) <https://lore.kernel.org/lkml/20220503064037.10822-1-guang.zeng@intel.com/>)
->>>> 
->>>> Queued, thanks.
->>>
->>>Shouldn't we have a solution for the read-only APIC_ID mess before this is merged?
+On Wed, May 18, 2022 at 06:06:25PM +0100, Mel Gorman wrote:
+> I'm running the tests to recheck exactly how much impact this patch has
+> on the peak performance. It takes a few hours so I won't have anything
+> until tomorrow.
+> 
 
-Paolo & Sean,
+It wasn't my imagination, the last path was worth a few percent
 
-If a solution for read-only APIC ID mess is needed before merging IPIv
-series, do you think the Maxim's patch [1] after some improvement will
-suffice? Let us know if there is any gap.
+v5.3                                     Min  95.84 Max  96.55 Range   0.71 Mean  96.16
+v5.7                                     Min  95.44 Max  96.51 Range   1.07 Mean  96.14
+v5.8                                     Min  96.02 Max 197.08 Range 101.06 Mean 154.70
+v5.12                                    Min 104.45 Max 111.03 Range   6.58 Mean 105.94
+v5.13                                    Min 104.38 Max 170.37 Range  65.99 Mean 117.35
+v5.13-revert-c6f886546cb8                Min 104.40 Max 110.70 Range   6.30 Mean 105.68
+v5.18rc4-baseline                        Min 110.78 Max 169.84 Range  59.06 Mean 131.22
+v5.18rc4-revert-c6f886546cb8             Min 113.98 Max 117.29 Range   3.31 Mean 114.71
+v5.18rc4-shiftimb3-v2r2                  Min  95.34 Max 165.75 Range  70.41 Mean 120.92
+v5.18rc4-consistimb-v2r2                 Min 104.02 Max 175.22 Range  71.20 Mean 116.62
+v5.18rc4-consistimb-revert-c6f886546cb8  Min 104.02 Max 112.56 Range   8.54 Mean 105.52
 
-[1]: https://lore.kernel.org/all/20220427200314.276673-3-mlevitsk@redhat.com/
+v5.18rc4-shiftimb3-v2r2  is patches 1-4
+v5.18rc4-consistimb-v2r2 is patches 1-3
+
+The last path is worth around 8% and is what's necessary to bring best
+performance back to kernel v5.7 levels. As you can see from the range,
+the result is unstable but reverting c6f886546cb8 reduces it by a lot.
+Not enough to be at v5.7 levels but enough to indicate that the allowed
+NUMA balance changes are not the sole source of the problem.
+
+-- 
+Mel Gorman
+SUSE Labs

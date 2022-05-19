@@ -2,57 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE5252D0B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D82F352D0BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232598AbiESKnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S236930AbiESKnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbiESKnA (ORCPT
+        with ESMTP id S230011AbiESKnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:43:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA937AEE1E
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:42:59 -0700 (PDT)
+        Thu, 19 May 2022 06:43:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B814AEE21
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652956978;
+        s=mimecast20190719; t=1652956996;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=kvMeEsiv+LVL0/x98g8vYJ8UrLJ8yrZkVIlvlaQ/zNw=;
-        b=eWN4WhGGcboEmbvtBjjMyFxDNPSQwXvrLtJAi/ATfFoG5u/YF+hEJngAo8ZLEXzyPSZQ41
-        a1n1fvLa0Nw0D/VLCRFREKoqgIVBuYifCcKUaYmyq3wj/7iDqV3PLTknl3QuiLSk7zXQYn
-        DJv0IMltssf7ofJzF4nzr3IbJksp5kU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=TH+ICKBkv+npEh8DphvHokm9BJGopIGyRclr3HlZVLs=;
+        b=T3/WxuLkJCrVB9de5Uj6J5y573YR5VZ0mutWbBv5/HurfaesQMqhD4aBP0sB35v/Qinnwu
+        13CTVjllWhAmqtHQAJiYX2XFy2iwk+okvytRdnDtWRCw4QS3L8pwDIP/Ij4NIRMEoRIPYX
+        uzftSNWjwub08gr8u6odOcyMq0yPRQ4=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-616-RIA59FtANtCJd9guTTow3g-1; Thu, 19 May 2022 06:42:53 -0400
-X-MC-Unique: RIA59FtANtCJd9guTTow3g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66C81384F808;
-        Thu, 19 May 2022 10:42:53 +0000 (UTC)
-Received: from T590 (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 548171410DD5;
-        Thu, 19 May 2022 10:42:46 +0000 (UTC)
-Date:   Thu, 19 May 2022 18:42:41 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     tj@kernel.org, axboe@kernel.dk, geert@linux-m68k.org,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH -next v3 1/2] blk-throttle: fix that io throttle can only
- work for single bio
-Message-ID: <YoYfIWlQ6ckWJOP0@T590>
-References: <20220519085811.879097-1-yukuai3@huawei.com>
- <20220519085811.879097-2-yukuai3@huawei.com>
+ us-mta-445-t5z-ndYgNGmn0IK7nIrOPA-1; Thu, 19 May 2022 06:43:15 -0400
+X-MC-Unique: t5z-ndYgNGmn0IK7nIrOPA-1
+Received: by mail-ej1-f70.google.com with SMTP id gn26-20020a1709070d1a00b006f453043956so2320167ejc.15
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:43:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=TH+ICKBkv+npEh8DphvHokm9BJGopIGyRclr3HlZVLs=;
+        b=NxlH4VVclaeNaNHT+ICxmwrSyq3fYyJgJNY2ls2zko4DjKw4iDKTB8IoRT2kMT67H+
+         7lmpt7hk6syclTMtNxC732Uj65Zifs79dAYdt7UE8fVmkJqH0KXgs51w/fpEFZPJ+1jO
+         nfwtpHviRuJIfKTpsR9m6acGiCAH/0JRtNsN+CTYfc23hO09BiMv2+7Vs5nVRzfMHuZb
+         i2wXQ9wwnc3W501mZt5qFWvFvxT+TbfAT9q0xpAbxu39tJFWQJWUPx5fOREuFyyk86cA
+         OqURBbx9LXK/JnYhh1PEEmotaF37YER2/ahaoQvS3qxjLYx7/aOIcBiPgs2vOw/xp+Ou
+         QVTQ==
+X-Gm-Message-State: AOAM531/Tngxn8g90YPBGSUgW56+BkIHFzHxu7VjyXKS09jxmsf6gFC7
+        q1T0oGDr2lKCI+lbsi1xuuuDybhEeai0whwqsSLXCG8jzN5SgzdLo8/a1VOhZS8O/CEM7bAfAWQ
+        +Fk26T12XQA7854gyKkr2dm2i
+X-Received: by 2002:a17:907:7248:b0:6fe:a121:d060 with SMTP id ds8-20020a170907724800b006fea121d060mr219602ejc.9.1652956994172;
+        Thu, 19 May 2022 03:43:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzHHvHWCE8grFkse1E+0Et3IrynHZBLQEcX4mCaSY2qLTTCfOjmb3O4tDa7n/CbxO+w2AwAfQ==
+X-Received: by 2002:a17:907:7248:b0:6fe:a121:d060 with SMTP id ds8-20020a170907724800b006fea121d060mr219560ejc.9.1652956993791;
+        Thu, 19 May 2022 03:43:13 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id d12-20020a056402000c00b0042617ba637bsm2571532edu.5.2022.05.19.03.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 03:43:13 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id A871E38EE12; Thu, 19 May 2022 12:43:12 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v5 00/17] Introduce eBPF support for HID devices
+In-Reply-To: <CAO-hwJL4Pj4JaRquoXD1AtegcKnh22_T0Z0VY_peZ8FRko3kZw@mail.gmail.com>
+References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
+ <YoX7iHddAd4FkQRQ@infradead.org> <YoX904CAFOAfWeJN@kroah.com>
+ <YoYCIhYhzLmhIGxe@infradead.org>
+ <CAO-hwJL4Pj4JaRquoXD1AtegcKnh22_T0Z0VY_peZ8FRko3kZw@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 19 May 2022 12:43:12 +0200
+Message-ID: <87ee0p951b.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519085811.879097-2-yukuai3@huawei.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+Content-Type: text/plain
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -63,39 +98,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 04:58:10PM +0800, Yu Kuai wrote:
-> commit 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
-> introduce a new problem, for example:
-> 
-> [root@localhost ~]# echo "8:0 1024" > /sys/fs/cgroup/blkio/blkio.throttle.write_bps_device
-> [root@localhost ~]# echo $$ > /sys/fs/cgroup/blkio/cgroup.procs
-> [root@localhost ~]# dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
-> [1] 620
-> [root@localhost ~]# dd if=/dev/zero of=/dev/sda bs=10k count=1 oflag=direct &
-> [2] 626
-> [root@localhost ~]# 1+0 records in
-> 1+0 records out
-> 10240 bytes (10 kB, 10 KiB) copied, 10.0038 s, 1.0 kB/s1+0 records in
-> 1+0 records out
-> 
-> 10240 bytes (10 kB, 10 KiB) copied, 9.23076 s, 1.1 kB/s
-> -> the second bio is issued after 10s instead of 20s.
-> 
-> This is because if some bios are already queued, current bio is queued
-> directly and the flag 'BIO_THROTTLED' is set. And later, when former
-> bios are dispatched, this bio will be dispatched without waiting at all,
-> this is due to tg_with_in_bps_limit() return 0 for this bio.
-> 
-> In order to fix the problem, don't skip flaged bio in
-> tg_with_in_bps_limit(), and for the problem that split bio can be
-> double accounted, compensate the over-accounting in __blk_throtl_bio().
-> 
-> Fixes: 9f5ede3c01f9 ("block: throttle split bio in case of iops limit")
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
+Benjamin Tissoires <benjamin.tissoires@redhat.com> writes:
 
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
+> On Thu, May 19, 2022 at 10:39 AM Christoph Hellwig <hch@infradead.org> wrote:
+>>
+>> On Thu, May 19, 2022 at 10:20:35AM +0200, Greg KH wrote:
+>> > > are written using a hip new VM?
+>> >
+>> > Ugh, don't mention UDI, that's a bad flashback...
+>>
+>> But that is very much what we are doing here.
+>>
+>> > I thought the goal here was to move a lot of the quirk handling and
+>> > "fixup the broken HID decriptors in this device" out of kernel .c code
+>> > and into BPF code instead, which this patchset would allow.
+>
+> Yes, quirks are a big motivation for this work. Right now half of the
+> HID drivers are less than 100 lines of code, and are just trivial
+> fixes (one byte in the report descriptor, one key mapping, etc...).
+> Using eBPF for those would simplify the process from the user point of
+> view: you drop a "firmware fix" as an eBPF program in your system and
+> you can continue working on your existing kernel.
 
-Thanks,
-Ming
+How do you envision those BPF programs living, and how would they be
+distributed? (In-tree / out of tree?)
+
+-Toke
 

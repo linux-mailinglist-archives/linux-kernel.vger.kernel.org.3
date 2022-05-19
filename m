@@ -2,87 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAEA952CBBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48DD52CBC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234287AbiESGGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 02:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
+        id S234309AbiESGJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 02:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234293AbiESGGC (ORCPT
+        with ESMTP id S234299AbiESGJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 02:06:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9964E31DE6;
-        Wed, 18 May 2022 23:05:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49B9F619EF;
-        Thu, 19 May 2022 06:05:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4834C34113;
-        Thu, 19 May 2022 06:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652940358;
-        bh=p7UYdPQOAJbTrfr64KnvmmJZKtwxq6TbR8dxfI/yYw8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=abu/f+/O+tJWcX0UWxMHehNMU9osb13v0x76UFxc6NMAWPJcUPe2dI+rNbQEo1bLM
-         w9chAMz3g7w53v6t5Pe9yE0vzrpXqUpekgmQVx2OYm4N2oaLmzyB6rn4n6LzO6BF28
-         1v2Rwe15rd1SntGjE7KC7+37UvO+gsRcuPY4HwvjGP7vbpKIUqxHOQlE2eCSzF+r1r
-         TMh2RfgXnaClBDdyPdGpmAtg1KW52Hh10ir82JWAjYffhQM5lD5+Qauscp1tVWPL/s
-         JGBFHED6+hIo9QcvKotQctcGQmN1+KKt2TZXoI+Upyrrxz+x1/12hC9PUoKQVz3Evd
-         UcYJg+TpyBQiA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1nrZIO-0007vw-CA; Thu, 19 May 2022 08:06:00 +0200
-Date:   Thu, 19 May 2022 08:06:00 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Carl =?utf-8?B?WWluKOaut+W8oOaIkCk=?= <carl.yin@quectel.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rspmn@arcor.de" <rspmn@arcor.de>,
-        Torres Liu <torres.liu@quectel.com>
-Subject: Re: [PATCH v3] USB: serial: option: add Quectel BG95 modem
-Message-ID: <YoXeSO1Hd75tT1/y@hovoldconsulting.com>
-References: <TYZPR06MB4270D3394B8E3E0301738F6B86D09@TYZPR06MB4270.apcprd06.prod.outlook.com>
+        Thu, 19 May 2022 02:09:22 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1AC819AC
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:09:20 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id q130so5006500ljb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:09:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PNDXrv+ygiGRP7Ew+ogCVIR6dtT/3oMpUNbrS/sX8rY=;
+        b=JraGpmG0cqUHEyLAfLVhlpM+dTRiEpUtcsF0rqAjnl/+B59Y9yXJff5hLwRoGkgk2O
+         u72zMcTB48oO881CVG7a9/iVM6gTiRqxMW8zSp/jYsjniUTfyl5utHeSoPkgeFEeQO3j
+         cA6EdnCYdvzttofR8wbD6CHz6CDBp6FhqCBBLyUQTg1SV7w0YZvLo3eMR1RZosUFO1ez
+         8iH/WaeMwUSQeKHqCyGGsWhY3M/8VhwtwJwXk8y/UGsehKGk4eMffFH3aXiKrNW27wFI
+         ld/fW3048PVpXv45bNZK5u27I6G3mDoNlycNroowpREKpCQB5/lu4aZrCpO61LTzwjlh
+         /X3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PNDXrv+ygiGRP7Ew+ogCVIR6dtT/3oMpUNbrS/sX8rY=;
+        b=Dnl7s/cNT9Vifg3/IOxVwP05OhiNujf7ie2VvHLWuPZYGHBtOLsp5pVUqYbyKigY1K
+         YUW3+7+dN8GFFG9p/6r38DWOg1Sba0DbKIx8PeGmgdJx+L4cRP7bEtnG4yaX1IgfjD1N
+         BoTaZj3jP3/G5fSFm9wpuDJHwlGwnGth5lJKxKjItdDXOmuLxxhs1G7H1SuuMWnmQuh1
+         Kvul+se8QT5BmXCRSnOwoQr5xPn3tKl22NkJUn9QPIsendXDMZMe51DBWgA+6bWVYQSI
+         O17M1eoXlso6jRutFp+8X2t9kKH8lo4kXBDXUMlsewOhCJWNpbcrI3P3Ne1o0ujIUz1z
+         KKow==
+X-Gm-Message-State: AOAM531yI+xaWFS9VBQHfpTqkr9YT84QdT22e1lXGrRv3efDAv1VsNpW
+        YLQMNgmy4pIaBnLhiQtfzD5f5/eN5R6N6/go2bs=
+X-Google-Smtp-Source: ABdhPJz2CZJFdxXN0qnPt5mP007Oh9MW3+s8BmVyfAOyENDI/3SMbwSwAPrScF2SF7YTdQ+xcMrnZhyu9OlPiQQHjKI=
+X-Received: by 2002:a2e:8210:0:b0:250:87c9:fb69 with SMTP id
+ w16-20020a2e8210000000b0025087c9fb69mr1723105ljg.470.1652940557605; Wed, 18
+ May 2022 23:09:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYZPR06MB4270D3394B8E3E0301738F6B86D09@TYZPR06MB4270.apcprd06.prod.outlook.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220518023123.2455827-1-liuchao@coolpad.com> <7d1878ef-e1ae-0550-7d6d-2a2ff858586c@kernel.org>
+In-Reply-To: <7d1878ef-e1ae-0550-7d6d-2a2ff858586c@kernel.org>
+From:   Chao Liu <chaoliu719@gmail.com>
+Date:   Thu, 19 May 2022 14:09:06 +0800
+Message-ID: <CAKaaq-WTHtxF28h_5uJD2y0SGz9q2greBtTaGLhCpBhfsA3xtw@mail.gmail.com>
+Subject: Re: [PATCH] f2fs: make f2fs_read_inline_data() more readable
+To:     Chao Yu <chao@kernel.org>
+Cc:     Chao Liu <liuchao@coolpad.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
+        Wayne Zhang <zhangwen@coolpad.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 02:34:43AM +0000, Carl Yin(殷张成) wrote:
-> The BG95 modem has 3 USB configurations that are configurable via the AT
-> command AT+QCFGEXT="usbnet",["ecm"|"modem"|"rmnet"] which make the modem
-> enumerate with the following interfaces, respectively:
-> 
-> "modem": Diag + GNSS + Modem + Modem
-> "ecm"  : Diag + GNSS + Modem + ECM
-> "rmnet": Diag + GNSS + Modem + QMI
->          Don't support Full QMI messages (e.g WDS_START_NETWORK_INTERFACE)
-> 
-> A detailed description of the USB configuration for each mode follows:
+On Wed, May 18, 2022 at 11:23 PM Chao Yu <chao@kernel.org> wrote:
+>
+> On 2022/5/18 10:33, Chao Liu wrote:
+> > In f2fs_read_inline_data(), it is confused with checking of
+> > inline_data flag, as we checked it before calling. So this
+> > patch add some comments for f2fs_has_inline_data().
+> >
+> > Signed-off-by: Chao Liu
+>
+> It looks email address is missing, but it shows after I can apply this
+> patch to my local git repo...
+>
+> Could you please check your email client configuration?
 
-> Signed-off-by: Carl Yin <carl.yin@quectel.com>
-> ---
-> 
-> v3:
-> 1. use USB_DEVICE_INTERFACE_CLASS instead of USB_DEVICE_AND_INTERFACE_INFO
-> 2. introduce limitations of QMI in commit message
-> 
-> v2:
-> add at+qcfgext="usbnet","rmnet" and RSVD(3)
+Oh, sorry, this may be caused by my SMTP server, I will try to
+resend it later via this email address.
 
-Thanks for the update. Now applied.
-
-Johan
+>
+> Thanks,
+>
+> > ---
+> > fs/f2fs/f2fs.h | 4 ++++
+> > 1 file changed, 4 insertions(+)
+> >
+> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > index f579e2ed0f14..5071f6636e41 100644
+> > --- a/fs/f2fs/f2fs.h
+> > +++ b/fs/f2fs/f2fs.h
+> > @@ -3167,6 +3167,10 @@ static inline int inline_xattr_size(struct inode *inode)
+> > return 0;
+> > }
+> >
+> > +/*
+> > + * Notice: check inline_data flag without inode page lock is unsafe.
+> > + * It could change at any time by f2fs_convert_inline_page().
+> > + */
+> > static inline int f2fs_has_inline_data(struct inode *inode)
+> > {
+> > return is_inode_flag_set(inode, FI_INLINE_DATA);
+> > --
+> > 2.25.1
+> >

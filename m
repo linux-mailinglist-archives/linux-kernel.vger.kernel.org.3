@@ -2,111 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48DD52CBC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C56F52CBC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbiESGJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 02:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
+        id S234324AbiESGJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 02:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbiESGJW (ORCPT
+        with ESMTP id S234315AbiESGJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 02:09:22 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1AC819AC
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:09:20 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id q130so5006500ljb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PNDXrv+ygiGRP7Ew+ogCVIR6dtT/3oMpUNbrS/sX8rY=;
-        b=JraGpmG0cqUHEyLAfLVhlpM+dTRiEpUtcsF0rqAjnl/+B59Y9yXJff5hLwRoGkgk2O
-         u72zMcTB48oO881CVG7a9/iVM6gTiRqxMW8zSp/jYsjniUTfyl5utHeSoPkgeFEeQO3j
-         cA6EdnCYdvzttofR8wbD6CHz6CDBp6FhqCBBLyUQTg1SV7w0YZvLo3eMR1RZosUFO1ez
-         8iH/WaeMwUSQeKHqCyGGsWhY3M/8VhwtwJwXk8y/UGsehKGk4eMffFH3aXiKrNW27wFI
-         ld/fW3048PVpXv45bNZK5u27I6G3mDoNlycNroowpREKpCQB5/lu4aZrCpO61LTzwjlh
-         /X3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PNDXrv+ygiGRP7Ew+ogCVIR6dtT/3oMpUNbrS/sX8rY=;
-        b=Dnl7s/cNT9Vifg3/IOxVwP05OhiNujf7ie2VvHLWuPZYGHBtOLsp5pVUqYbyKigY1K
-         YUW3+7+dN8GFFG9p/6r38DWOg1Sba0DbKIx8PeGmgdJx+L4cRP7bEtnG4yaX1IgfjD1N
-         BoTaZj3jP3/G5fSFm9wpuDJHwlGwnGth5lJKxKjItdDXOmuLxxhs1G7H1SuuMWnmQuh1
-         Kvul+se8QT5BmXCRSnOwoQr5xPn3tKl22NkJUn9QPIsendXDMZMe51DBWgA+6bWVYQSI
-         O17M1eoXlso6jRutFp+8X2t9kKH8lo4kXBDXUMlsewOhCJWNpbcrI3P3Ne1o0ujIUz1z
-         KKow==
-X-Gm-Message-State: AOAM531yI+xaWFS9VBQHfpTqkr9YT84QdT22e1lXGrRv3efDAv1VsNpW
-        YLQMNgmy4pIaBnLhiQtfzD5f5/eN5R6N6/go2bs=
-X-Google-Smtp-Source: ABdhPJz2CZJFdxXN0qnPt5mP007Oh9MW3+s8BmVyfAOyENDI/3SMbwSwAPrScF2SF7YTdQ+xcMrnZhyu9OlPiQQHjKI=
-X-Received: by 2002:a2e:8210:0:b0:250:87c9:fb69 with SMTP id
- w16-20020a2e8210000000b0025087c9fb69mr1723105ljg.470.1652940557605; Wed, 18
- May 2022 23:09:17 -0700 (PDT)
+        Thu, 19 May 2022 02:09:35 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF44819B5;
+        Wed, 18 May 2022 23:09:33 -0700 (PDT)
+X-UUID: 5d56aabe67d541488ad6b0c466228ca8-20220519
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:c2a67a31-b176-47bc-acde-bb43e4d4bc0b,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:105
+X-CID-INFO: VERSION:1.1.5,REQID:c2a67a31-b176-47bc-acde-bb43e4d4bc0b,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:105
+X-CID-META: VersionHash:2a19b09,CLOUDID:13dfd079-5ef6-470b-96c9-bdb8ced32786,C
+        OID:b6bd9e51f0f3,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 5d56aabe67d541488ad6b0c466228ca8-20220519
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <jia-wei.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1155346176; Thu, 19 May 2022 14:09:28 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 19 May 2022 14:09:27 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 19 May 2022 14:09:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 19 May 2022 14:09:26 +0800
+From:   Tim Chang <jia-wei.chang@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Roger Lu <roger.lu@mediatek.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Jia-Wei Chang <jia-wei.chang@mediatek.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <hsinyi@google.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 0/4] soc: mediatek: svs: add support for mt8186 and
+Date:   Thu, 19 May 2022 14:09:20 +0800
+Message-ID: <20220519060924.13493-1-jia-wei.chang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220518023123.2455827-1-liuchao@coolpad.com> <7d1878ef-e1ae-0550-7d6d-2a2ff858586c@kernel.org>
-In-Reply-To: <7d1878ef-e1ae-0550-7d6d-2a2ff858586c@kernel.org>
-From:   Chao Liu <chaoliu719@gmail.com>
-Date:   Thu, 19 May 2022 14:09:06 +0800
-Message-ID: <CAKaaq-WTHtxF28h_5uJD2y0SGz9q2greBtTaGLhCpBhfsA3xtw@mail.gmail.com>
-Subject: Re: [PATCH] f2fs: make f2fs_read_inline_data() more readable
-To:     Chao Yu <chao@kernel.org>
-Cc:     Chao Liu <liuchao@coolpad.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
-        Wayne Zhang <zhangwen@coolpad.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 18, 2022 at 11:23 PM Chao Yu <chao@kernel.org> wrote:
->
-> On 2022/5/18 10:33, Chao Liu wrote:
-> > In f2fs_read_inline_data(), it is confused with checking of
-> > inline_data flag, as we checked it before calling. So this
-> > patch add some comments for f2fs_has_inline_data().
-> >
-> > Signed-off-by: Chao Liu
->
-> It looks email address is missing, but it shows after I can apply this
-> patch to my local git repo...
->
-> Could you please check your email client configuration?
+From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 
-Oh, sorry, this may be caused by my SMTP server, I will try to
-resend it later via this email address.
+This series supports MT8186 and MT8195 Smart Voltage Scaling (SVS)
+hardware which used as optimization of opp voltage table for
+corresponding dvfs drivers.
 
->
-> Thanks,
->
-> > ---
-> > fs/f2fs/f2fs.h | 4 ++++
-> > 1 file changed, 4 insertions(+)
-> >
-> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > index f579e2ed0f14..5071f6636e41 100644
-> > --- a/fs/f2fs/f2fs.h
-> > +++ b/fs/f2fs/f2fs.h
-> > @@ -3167,6 +3167,10 @@ static inline int inline_xattr_size(struct inode *inode)
-> > return 0;
-> > }
-> >
-> > +/*
-> > + * Notice: check inline_data flag without inode page lock is unsafe.
-> > + * It could change at any time by f2fs_convert_inline_page().
-> > + */
-> > static inline int f2fs_has_inline_data(struct inode *inode)
-> > {
-> > return is_inode_flag_set(inode, FI_INLINE_DATA);
-> > --
-> > 2.25.1
-> >
+This series is based on Roger's series [1].
+[1]: Message ID: 20220516004311.18358-1-roger.lu@mediatek.com/
+
+Change since v1:
+- Add myself as a co-maintainer of mtk-svs.yaml.
+- Fix MT8186 error handling in platform probe.
+- Add dt-bindings and support for MT8195 platform.
+
+Jia-Wei Chang (4):
+  dt-bindings: soc: mediatek: add mt8186 svs dt-bindings
+  soc: mediatek: svs: add support for mt8186
+  dt-bindings: soc: mediatek: add mt8195 svs dt-bindings
+  soc: mediatek: svs: add support for mt8195
+
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   3 +
+ drivers/soc/mediatek/mtk-svs.c                | 544 +++++++++++++++++-
+ 2 files changed, 540 insertions(+), 7 deletions(-)
+
+-- 
+2.18.0
+

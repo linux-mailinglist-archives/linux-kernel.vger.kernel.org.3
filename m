@@ -2,157 +2,552 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CB752CF97
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FD152CF9A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbiESJmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S236221AbiESJmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiESJmF (ORCPT
+        with ESMTP id S235468AbiESJmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:42:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9083C68F82;
-        Thu, 19 May 2022 02:42:04 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24J9CQhj012521;
-        Thu, 19 May 2022 09:41:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=OJteXu18Mv+sn23pdhZQcdzdXFdGcyM9JOV5loEpHpk=;
- b=E9lrofY1GFhlXL1u+ccKtgGozb6tczzv0sXWdh/8z6/sni2D8WKZRbk+0xxqC6PREdA5
- hKqVML5YJKrLG+zKyTMibSol3ByZI1nr4W12Pfpv6NnaooTQSXZ7dF6xvrvlXpS73iJR
- yB++dUCc/JPs3iAxZ9WsW20lk3vXBXN2RyBWC8ZvNOZfs2pu/Y2gkQWl0MmJqVDr0zky
- R8zvAb7CQd86cowK+wiiBgzSRN/vyM4A6BLducb3c8++bD/wnICsW0mlNF2c+nMJtJ/d
- brGN+fNw25c1SWpEMLnCpJE4x2ckWxqRb5yJ0ItgxH+ZijcSntbNSLCueXr8TGnlM9nQ jg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k25rkxb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 09:41:52 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24J9fq0L015293;
-        Thu, 19 May 2022 09:41:52 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g5k25rkwc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 09:41:52 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24J9Slkf014816;
-        Thu, 19 May 2022 09:41:49 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3g23pjf1u7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 May 2022 09:41:49 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24J9RqVS46399838
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 May 2022 09:27:53 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A58B11C04C;
-        Thu, 19 May 2022 09:41:47 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C18E511C050;
-        Thu, 19 May 2022 09:41:42 +0000 (GMT)
-Received: from vajain21.in.ibm.com (unknown [9.43.20.227])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Thu, 19 May 2022 09:41:42 +0000 (GMT)
-Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Thu, 19 May 2022 15:11:41 +0530
-From:   Vaibhav Jain <vaibhav@linux.ibm.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
-In-Reply-To: <20220519050835.ebpiukexgiys6t57@google.com>
-References: <20220518223815.809858-1-vaibhav@linux.ibm.com>
- <20220519050835.ebpiukexgiys6t57@google.com>
-Date:   Thu, 19 May 2022 15:11:41 +0530
-Message-ID: <875ym1hnai.fsf@vajain21.in.ibm.com>
+        Thu, 19 May 2022 05:42:22 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CD08BD17
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:42:20 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p22so8097552lfo.10
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+xMBzEP7HnrsA/bBBLkdtfe9uSDUca26IcPy4XzJi24=;
+        b=Kow9ZdcaH6ap8Q4N0y5qSZTWG4b4K6qIZ4hqX+LuIJmevu88BjA0hNx9fg4UnoqrGP
+         P+NcxxYKF30OqCwAYdhnH1QZZo0TEcaiOWcLJZTslbrNWtz3N+Ko92MBcDU3wRNBOFNR
+         1ouZK7WpaMgfwozJ//YsUWZg1XD4snyzoDmPcWGm1gutDDAU638+dheaSNH0Lu0nyCDG
+         glNp49i9vyOEuwIb56t0dow35YykSV93uRhadhDQJt+yJBBVO0S9O6JdNnsSb39TY1TK
+         EYb05E/fmjEcJBRVbjzDRkt6+uCVZF64znwMXtIwnk1S0E7VE4aawYx24807vf/DKwHO
+         ftvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+xMBzEP7HnrsA/bBBLkdtfe9uSDUca26IcPy4XzJi24=;
+        b=2JIGq41gzSt+tyML+PYGaFVoT8lKgwpFq1ALYFeWQ6JvC+585gV9M40xxUUsmFSH5n
+         I6OjbT3XoVsGcWVboGtXD+XOhJ8pabEPqrQELSdLmpJTy1pID94OF5LfIvMtyo+za2vm
+         vqExQId4cK9xFV2o3bCAweGSwfDEuVJZZhLpe1c6lYSyGK2NKxsGMkVJfid6zNNoFBK0
+         CHgPnom4Bf8Kz2CwkXVf4bfp4oFkJfD66kKYxiAWQhCRxbvjNgXNodUD8rlzk5Vd2Xgv
+         w8LmKCTQzOD0bkEyqLmB+oy5N0T3TX16BzI4/ReZGJzNT6zTxru+WMjA4Ybu5jqn4Q4K
+         peRg==
+X-Gm-Message-State: AOAM532Gq6m3h1UO9CuPmH+YPNccFVonsnpmGXXFK4UAj6zrXfUBW2x+
+        +IfrlSKGxdOT6mbXk35Sm1ncuA==
+X-Google-Smtp-Source: ABdhPJwDypc66On0VtE9CE227+I5UlM4RfdjeftrFlijPUO8b9PlNBNV+QrsNje4PUHKwEa4nX0Cyw==
+X-Received: by 2002:a05:6512:6d5:b0:473:c36f:b5a8 with SMTP id u21-20020a05651206d500b00473c36fb5a8mr2747401lff.679.1652953339189;
+        Thu, 19 May 2022 02:42:19 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id q30-20020ac2515e000000b0047255d2112asm229728lfd.89.2022.05.19.02.42.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 02:42:18 -0700 (PDT)
+Message-ID: <3644ad8a-d5d8-8ea2-b659-029619c64f1f@linaro.org>
+Date:   Thu, 19 May 2022 11:42:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: w9gfG1UIEqtLgIyzzT7XtvqSo6EaqHG1
-X-Proofpoint-ORIG-GUID: UnqzvSwZfeeq5_Jio2nJQgQmTtH6NjIF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-19_02,2022-05-19_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=802
- clxscore=1015 malwarescore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
- suspectscore=0 adultscore=0 impostorscore=0 spamscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205190055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: msm8996-xiaomi-natrium: Add support
+ for Xiaomi Mi 5s Plus
+Content-Language: en-US
+To:     Alec Su <ae40515@yahoo.com.tw>, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@codeaurora.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, y.oudjana@protonmail.com
+References: <20220519074112.25600-1-ae40515@yahoo.com.tw>
+ <20220519074112.25600-2-ae40515@yahoo.com.tw>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220519074112.25600-2-ae40515@yahoo.com.tw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 19/05/2022 09:41, Alec Su wrote:
+> Add the device tree for Xiaomi Mi 5s Plus (natrium).
+> 
+> Signed-off-by: Alec Su <ae40515@yahoo.com.tw>
+> Reviewed-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Thanks for looking into this patch,
+This is the first patch, so the review tag is a bit unexepected. Was it
+really given?
 
-Shakeel Butt <shakeelb@google.com> writes:
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../boot/dts/qcom/msm8996-xiaomi-natrium.dts  | 419 ++++++++++++++++++
+>  2 files changed, 420 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8996-xiaomi-natrium.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 2f8aec2cc6db..3ae7ecd369fb 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -37,6 +37,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-sony-xperia-tone-dora.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-sony-xperia-tone-kagura.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-sony-xperia-tone-keyaki.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-xiaomi-gemini.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-xiaomi-natrium.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-xiaomi-scorpio.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-asus-novago-tp370ql.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-fxtec-pro1.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-natrium.dts b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-natrium.dts
+> new file mode 100644
+> index 000000000000..212ff0fbf262
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-natrium.dts
+> @@ -0,0 +1,419 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*> + * Copyright (c) 2022, Alec Su <ae40515@yahoo.com.tw>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "msm8996-xiaomi-common.dtsi"
+> +#include "pmi8996.dtsi"
+> +#include <dt-bindings/sound/qcom,q6afe.h>
+> +#include <dt-bindings/sound/qcom,q6asm.h>
+> +
+> +/ {
+> +	model = "Xiaomi Mi 5s Plus";
+> +	compatible = "xiaomi,natrium", "qcom,msm8996";
+> +	chassis-type = "handset";
+> +	qcom,msm-id = <305 0x10000>;
 
-> On Thu, May 19, 2022 at 04:08:15AM +0530, Vaibhav Jain wrote:
->> [1] Provides a way for user-space to trigger proactive reclaim by introducing
->> a write-only memcg file 'memory.reclaim'. However reclaim stats like number
->> of pages scanned and reclaimed is still not directly available to the
->> user-space.
->> 
->> This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
->> readable which returns the number of pages scanned / reclaimed during the
->> reclaim process from 'struct vmpressure' associated with each memcg. This should
->> let user-space asses how successful proactive reclaim triggered from memcg
->> 'memory.reclaim' was ?
->> 
->> With the patch following command flow is expected:
->> 
->>  # echo "1M" > memory.reclaim
->> 
->>  # cat memory.reclaim
->>    scanned 76
->>    reclaimed 32
->> 
->
-> Yosry already mentioned the race issue with the implementation and I
-> would prefer we don't create any new dependency on vmpressure which I
-> think we should deprecate.
-Ok,
+There is no such property documented. Either add bindings, or drop.
 
->
-> Anyways my question is how are you planning to use these metrics i.e.
-> scanned & reclaimed? I wonder if the data you are interested in can be
-> extracted without a stable interface. Have you tried BPF way to get
-> these metrics? We already have a tracepoint in vmscan tracing the
-> scanned and reclaimed. 
->
-Agree that there are enough static trace_mm_vmscan_ tracepoints in
-vmscan to get that info.
+> +	qcom,board-id = <47 0>;
 
-Also agree that exposing nr_scanned/nr_reclaimed directly to userspace may not
-be a good idea but knowing the amount of memory reclaimed might be
-useful.
+The same.
 
-With user-space triggered proactive reclaim user-space code can try to
-write a certain value to "memory.reclaim" in a loop till it returns
-'-EBUSY'.
+> +};
+> +
+> +&adsp_pil {
+> +	firmware-name = "qcom/msm8996/natrium/adsp.mbn";
+> +};
+> +
+> +&blsp2_i2c6 {
+> +	synaptics@20 {
+> +		compatible = "syna,rmi4-i2c";
+> +		reg = <0x20>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
 
-Right now there is no direct way for it to get feedback on the progress
-of the requested reclaim. Providing a stable interface to ascertain the
-progress of reclaim lets that userspace provide smaller values for
-proactive reclaim 
+Why do you have address/size cells here?
 
--- 
-Cheers
-~ Vaibhav
+> +		interrupt-parent = <&tlmm>;
+> +		interrupts = <125 IRQ_TYPE_LEVEL_LOW>;
+> +		vdda-supply = <&vreg_l6a_1p8>;
+> +		vdd-supply = <&vdd_3v2_tp>;
+> +		reset-gpios = <&tlmm 89 GPIO_ACTIVE_LOW>;
+> +
+> +		pinctrl-names = "default", "sleep";
+> +		pinctrl-0 = <&touchscreen_default>;
+> +		pinctrl-1 = <&touchscreen_sleep>;
+> +	};
+> +
+
+No need for blank line.
+
+> +};
+> +
+> +&dsi0 {
+> +	status = "okay";
+> +
+> +	vdd-supply = <&vreg_l2a_1p25>;
+> +	vdda-supply = <&vreg_l19a_3p3>;
+> +	vddio-supply = <&vreg_l14a_1p8>;
+> +
+> +	pinctrl-names = "default", "sleep";
+> +	pinctrl-0 = <&mdss_dsi_default &mdss_te_default>;
+> +	pinctrl-1 = <&mdss_dsi_sleep &mdss_te_sleep>;
+> +
+> +	panel: panel@0 {
+> +		compatible = "jdi,fhd-r63452";
+> +		reg = <0>;
+> +		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
+> +		backlight = <&pmi8994_wled>;
+> +
+> +		port {
+> +			panel_in: endpoint {
+> +				remote-endpoint = <&dsi0_out>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&dsi0_out {
+> +	remote-endpoint = <&panel_in>;
+> +};
+> +
+> +&gpu {
+> +	zap-shader {
+> +		firmware-name = "qcom/msm8996/natrium/a530_zap.mbn";
+> +	};
+> +};
+> +
+> +&mss_pil {
+> +	firmware-name = "qcom/msm8996/natrium/mba.mbn",
+> +			"qcom/msm8996/natrium/modem.mbn";
+> +};
+> +
+> +&pmi8994_wled {
+> +	status = "okay";
+> +
+> +	qcom,num-strings = <2>;
+> +	qcom,enabled-strings = <0 1>;
+> +	qcom,switching-freq = <600>;
+> +};
+> +
+> +&q6asmdai {
+> +	dai@0 {
+> +		reg = <0>;
+> +	};
+> +
+> +	dai@1 {
+> +		reg = <1>;
+> +	};
+> +
+> +	dai@2 {
+> +		reg = <2>;
+> +	};
+> +};
+> +
+> +&slpi_pil {
+> +	firmware-name = "qcom/msm8996/natrium/slpi.mbn";
+> +};
+> +
+> +&sound {
+> +	compatible = "qcom,apq8096-sndcard";
+> +	model = "natrium";
+> +	audio-routing =	"RX_BIAS", "MCLK";
+> +
+> +	mm1-dai-link {
+> +		link-name = "MultiMedia1";
+> +		cpu {
+> +			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
+> +		};
+> +	};
+> +
+> +	mm2-dai-link {
+> +		link-name = "MultiMedia2";
+> +		cpu {
+> +			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA2>;
+> +		};
+> +	};
+> +
+> +	mm3-dai-link {
+> +		link-name = "MultiMedia3";
+> +		cpu {
+> +			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA3>;
+> +		};
+> +	};
+> +
+> +	slim-dai-link {
+> +		link-name = "SLIM Playback";
+> +		cpu {
+> +			sound-dai = <&q6afedai SLIMBUS_6_RX>;
+> +		};
+> +
+> +		platform {
+> +			sound-dai = <&q6routing>;
+> +		};
+> +
+> +		codec {
+> +			sound-dai = <&wcd9335 6>;
+> +		};
+> +	};
+> +
+> +	slimcap-dai-link {
+> +		link-name = "SLIM Capture";
+> +		cpu {
+> +			sound-dai = <&q6afedai SLIMBUS_0_TX>;
+> +		};
+> +
+> +		platform {
+> +			sound-dai = <&q6routing>;
+> +		};
+> +
+> +		codec {
+> +			sound-dai = <&wcd9335 1>;
+> +		};
+> +	};
+> +};
+> +
+> +&venus {
+> +	firmware-name = "qcom/msm8996/natrium/venus.mbn";
+> +};
+> +
+> +&rpm_requests {
+> +	pm8994-regulators {
+> +		vreg_l3a_0p875: l3 {
+> +			regulator-name = "vreg_l3a_0p875";
+> +			regulator-min-microvolt = <850000>;
+> +			regulator-max-microvolt = <1300000>;
+> +		};
+> +		vreg_l11a_1p1: l11 {
+> +			regulator-name = "vreg_l11a_1p1";
+> +			regulator-min-microvolt = <1100000>;
+> +			regulator-max-microvolt = <1100000>;
+> +		};
+> +		vreg_l17a_2p8: l17 {
+> +			regulator-name = "vreg_l17a_2p8";
+> +			regulator-min-microvolt = <2800000>;
+> +			regulator-max-microvolt = <2800000>;
+> +		};
+> +		vreg_l18a_2p8: l18 {
+> +			regulator-name = "vreg_l18a_2p8";
+> +			regulator-min-microvolt = <2800000>;
+> +			regulator-max-microvolt = <2800000>;
+> +		};
+> +		vreg_l29a_2p8: l29 {
+> +			regulator-name = "vreg_l29a_2p8";
+> +			regulator-min-microvolt = <2800000>;
+> +			regulator-max-microvolt = <2800000>;
+> +		};
+> +	};
+> +};
+> +
+> +&pm8994_gpios {
+> +	gpio-line-names =
+> +		"NC",			/* GPIO_1  */
+> +		"VOL_UP_N",		/* GPIO_2  */
+> +		"SPKR_ID",		/* GPIO_3  */
+> +		"PWM_HAPTICS",		/* GPIO_4  */
+> +		"INFARED_DRV",		/* GPIO_5  */
+> +		"NC",			/* GPIO_6  */
+> +		"KEYPAD_LED_EN_A",	/* GPIO_7  */
+> +		"WL_EN",		/* GPIO_8  */
+> +		"3P3_ENABLE",		/* GPIO_9  */
+> +		"NC",			/* GPIO_10 */
+> +		"NC",			/* GPIO_11 */
+> +		"NC",			/* GPIO_12 */
+> +		"NC",			/* GPIO_13 */
+> +		"NC",			/* GPIO_14 */
+> +		"DIVCLK1_CDC",		/* GPIO_15 */
+> +		"DIVCLK2_HAPTICS",	/* GPIO_16 */
+> +		"NC",			/* GPIO_17 */
+> +		"32KHz_CLK_IN",		/* GPIO_18 */
+> +		"BT_EN",		/* GPIO_19 */
+> +		"PMIC_SLB",		/* GPIO_20 */
+> +		"UIM_BATT_ALARM",	/* GPIO_21 */
+> +		"NC";			/* GPIO_22 */
+> +};
+> +
+> +&pm8994_mpps {
+> +	gpio-line-names =
+> +		"NC",			/* MPP_1 */
+> +		"CCI_TIMER1",		/* MPP_2 */
+> +		"PMIC_SLB",		/* MPP_3 */
+> +		"EXT_FET_WLED_PWR_EN_N",/* MPP_4 */
+> +		"NC",			/* MPP_5 */
+> +		"NC",			/* MPP_6 */
+> +		"NC",			/* MPP_7 */
+> +		"NC";			/* MPP_8 */
+> +};
+> +
+> +&pmi8994_gpios {
+> +	gpio-line-names =
+> +		"NC",			/* GPIO_1  */
+> +		"SPKR_PA_EN",		/* GPIO_2  */
+> +		"NC",			/* GPIO_3  */
+> +		"NC",			/* GPIO_4  */
+> +		"NC",			/* GPIO_5  */
+> +		"NC",			/* GPIO_6  */
+> +		"NC",			/* GPIO_7  */
+> +		"NC",			/* GPIO_8  */
+> +		"NC",			/* GPIO_9  */
+> +		"NC";			/* GPIO_10 */
+> +};
+> +
+> +&tlmm {
+> +	gpio-line-names =
+> +		"ESE_SPI_MOSI",		/* GPIO_0   */
+> +		"ESE_SPI_MISO",		/* GPIO_1   */
+> +		"NC",			/* GPIO_2   */
+> +		"ESE_SPI_CLK",		/* GPIO_3   */
+> +		"MSM_UART_TX",		/* GPIO_4   */
+> +		"MSM_UART_RX",		/* GPIO_5   */
+> +		"NFC_I2C_SDA",		/* GPIO_6   */
+> +		"NFC_I2C_SCL",		/* GPIO_7   */
+> +		"LCD0_RESET_N",		/* GPIO_8   */
+> +		"NFC_IRQ",		/* GPIO_9   */
+> +		"LCD_TE",		/* GPIO_10  */
+> +		"LCD_ID_DET1",		/* GPIO_11  */
+> +		"NFC_DISABLE",		/* GPIO_12  */
+> +		"CAM_MCLK0",		/* GPIO_13  */
+> +		"CAM_MCLK1",		/* GPIO_14  */
+> +		"CAM_MCLK2",		/* GPIO_15  */
+> +		"ESE_PWR_REQ",		/* GPIO_16  */
+> +		"CCI_I2C_SDA0",		/* GPIO_17  */
+> +		"CCI_I2C_SCL0",		/* GPIO_18  */
+> +		"CCI_I2C_SDA1",		/* GPIO_19  */
+> +		"CCI_I2C_SCL1",		/* GPIO_20  */
+> +		"NFC_DWL_REQ",		/* GPIO_21  */
+> +		"CCI_TIMER1",		/* GPIO_22  */
+> +		"WEBCAM1_RESET_N",	/* GPIO_23  */
+> +		"ESE_IRQ",		/* GPIO_24  */
+> +		"NC",			/* GPIO_25  */
+> +		"WEBCAM1_STANDBY",	/* GPIO_26  */
+> +		"NC",			/* GPIO_27  */
+> +		"NC",			/* GPIO_28  */
+> +		"NC",			/* GPIO_29  */
+> +		"CAM_VDD_1P2_EN_2",	/* GPIO_30  */
+> +		"CAM_RESET_0",		/* GPIO_31  */
+> +		"CAM_RESET_1",		/* GPIO_32  */
+> +		"NC",			/* GPIO_33  */
+> +		"NC",			/* GPIO_34  */
+> +		"PCI_E0_RST_N",		/* GPIO_35  */
+> +		"PCI_E0_CLKREQ_N",	/* GPIO_36  */
+> +		"PCI_E0_WAKE",		/* GPIO_37  */
+> +		"CHARGER_INT",		/* GPIO_38  */
+> +		"CHARGER_RESET",	/* GPIO_39  */
+> +		"NC",			/* GPIO_40  */
+> +		"QCA_UART_TXD",		/* GPIO_41  */
+> +		"QCA_UART_RXD",		/* GPIO_42  */
+> +		"QCA_UART_CTS",		/* GPIO_43  */
+> +		"QCA_UART_RTS",		/* GPIO_44  */
+> +		"MAWC_UART_TX",		/* GPIO_45  */
+> +		"MAWC_UART_RX",		/* GPIO_46  */
+> +		"NC",			/* GPIO_47  */
+> +		"NC",			/* GPIO_48  */
+> +		"NC",			/* GPIO_49  */
+> +		"FP_SPI_RST",		/* GPIO_50  */
+> +		"TYPEC_I2C_SDA",	/* GPIO_51  */
+> +		"TYPEC_I2C_SCL",	/* GPIO_52  */
+> +		"CODEC_INT2_N",		/* GPIO_53  */
+> +		"CODEC_INT1_N",		/* GPIO_54  */
+> +		"APPS_I2C7_SDA",	/* GPIO_55  */
+> +		"APPS_I2C7_SCL",	/* GPIO_56  */
+> +		"FORCE_USB_BOOT",	/* GPIO_57  */
+> +		"NC",			/* GPIO_58  */
+> +		"NC",			/* GPIO_59  */
+> +		"NC",			/* GPIO_60  */
+> +		"NC",			/* GPIO_61  */
+> +		"ESE_RSTN",		/* GPIO_62  */
+> +		"TYPEC_INT",		/* GPIO_63  */
+> +		"CODEC_RESET_N",	/* GPIO_64  */
+> +		"PCM_CLK",		/* GPIO_65  */
+> +		"PCM_SYNC",		/* GPIO_66  */
+> +		"PCM_DIN",		/* GPIO_67  */
+> +		"PCM_DOUT",		/* GPIO_68  */
+> +		"CDC_44K1_CLK",		/* GPIO_69  */
+> +		"SLIMBUS_CLK",		/* GPIO_70  */
+> +		"SLIMBUS_DATA0",	/* GPIO_71  */
+> +		"SLIMBUS_DATA1",	/* GPIO_72  */
+> +		"LDO_5V_IN_EN",		/* GPIO_73  */
+> +		"TYPEC_EN_N",		/* GPIO_74  */
+> +		"NC",			/* GPIO_75  */
+> +		"NC",			/* GPIO_76  */
+> +		"NC",			/* GPIO_77  */
+> +		"NC",			/* GPIO_78  */
+> +		"NC",			/* GPIO_79  */
+> +		"SENSOR_RESET_N",	/* GPIO_80  */
+> +		"FP_SPI_MOSI",		/* GPIO_81  */
+> +		"FP_SPI_MISO",		/* GPIO_82  */
+> +		"FP_SPI_CS_N",		/* GPIO_83  */
+> +		"FP_SPI_CLK",		/* GPIO_84  */
+> +		"NC",			/* GPIO_85  */
+> +		"CAM_VDD_1P2_EN",	/* GPIO_86  */
+> +		"MSM_TS_I2C_SDA",	/* GPIO_87  */
+> +		"MSM_TS_I2C_SCL",	/* GPIO_88  */
+> +		"TS_RESOUT_N",		/* GPIO_89  */
+> +		"ESE_SPI_CS_N",		/* GPIO_90  */
+> +		"NC",			/* GPIO_91  */
+> +		"CAM2_AVDD_EN",		/* GPIO_92  */
+> +		"CAM2_VCM_EN",		/* GPIO_93  */
+> +		"NC",			/* GPIO_94  */
+> +		"NC",			/* GPIO_95  */
+> +		"NC",			/* GPIO_96  */
+> +		"GRFC_0",		/* GPIO_97  */
+> +		"GRFC_1",		/* GPIO_98  */
+> +		"NC",			/* GPIO_99  */
+> +		"GRFC_3",		/* GPIO_100 */
+> +		"GRFC_4",		/* GPIO_101 */
+> +		"GRFC_5",		/* GPIO_102 */
+> +		"NC",			/* GPIO_103 */
+> +		"GRFC_7",		/* GPIO_104 */
+> +		"UIM2_DATA",		/* GPIO_105 */
+> +		"UIM2_CLK",		/* GPIO_106 */
+> +		"UIM2_RESET",		/* GPIO_107 */
+> +		"UIM2_PRESENT",		/* GPIO_108 */
+> +		"UIM1_DATA",		/* GPIO_109 */
+> +		"UIM1_CLK",		/* GPIO_110 */
+> +		"UIM1_RESET",		/* GPIO_111 */
+> +		"UIM1_PRESENT",		/* GPIO_112 */
+> +		"UIM_BATT_ALARM",	/* GPIO_113 */
+> +		"GRFC_8",		/* GPIO_114 */
+> +		"GRFC_9",		/* GPIO_115 */
+> +		"TX_GTR_THRES",		/* GPIO_116 */
+> +		"ACCEL_INT",		/* GPIO_117 */
+> +		"GYRO_INT",		/* GPIO_118 */
+> +		"COMPASS_INT",		/* GPIO_119 */
+> +		"PROXIMITY_INT_N",	/* GPIO_120 */
+> +		"FP_IRQ",		/* GPIO_121 */
+> +		"P_SENSE",		/* GPIO_122 */
+> +		"HALL_INTR2",		/* GPIO_123 */
+> +		"HALL_INTR1",		/* GPIO_124 */
+> +		"TS_INT_N",		/* GPIO_125 */
+> +		"NC",			/* GPIO_126 */
+> +		"GRFC_11",		/* GPIO_127 */
+> +		"NC",			/* GPIO_128 */
+> +		"EXT_GPS_LNA_EN",	/* GPIO_129 */
+> +		"NC",			/* GPIO_130 */
+> +		"LCD_ID_DET2",		/* GPIO_131 */
+> +		"LCD_TE2",		/* GPIO_132 */
+> +		"GRFC_14",		/* GPIO_133 */
+> +		"GSM_TX2_PHASE_D",	/* GPIO_134 */
+> +		"NC",			/* GPIO_135 */
+> +		"GRFC_15",		/* GPIO_136 */
+> +		"RFFE3_DATA",		/* GPIO_137 */
+> +		"RFFE3_CLK",		/* GPIO_138 */
+> +		"NC",			/* GPIO_139 */
+> +		"NC",			/* GPIO_140 */
+> +		"RFFE5_DATA",		/* GPIO_141 */
+> +		"RFFE5_CLK",		/* GPIO_142 */
+> +		"NC",			/* GPIO_143 */
+> +		"COEX_UART_TX",		/* GPIO_144 */
+> +		"COEX_UART_RX",		/* GPIO_145 */
+> +		"RFFE2_DATA",		/* GPIO_146 */
+> +		"RFFE2_CLK",		/* GPIO_147 */
+> +		"RFFE1_DATA",		/* GPIO_148 */
+> +		"RFFE1_CLK";		/* GPIO_149 */
+> +
+> +	touchscreen_default: touchscreen_default {
+
+No underscores in node names.
+
+> +		pins = "gpio89", "gpio125";
+> +		function = "gpio";
+> +		drive-strength = <10>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	touchscreen_sleep: touchscreen_sleep {
+
+The same.
+
+> +		pins = "gpio89", "gpio125";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +};
+
+
+Best regards,
+Krzysztof

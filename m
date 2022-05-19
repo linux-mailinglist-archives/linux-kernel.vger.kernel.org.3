@@ -2,170 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E8A52DCA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BB652DCAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243806AbiESSXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S243845AbiESSYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243064AbiESSX3 (ORCPT
+        with ESMTP id S243186AbiESSY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:23:29 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E00250E0E
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:23:27 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id f2so8384887wrc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:23:27 -0700 (PDT)
+        Thu, 19 May 2022 14:24:29 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D1444A0C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:24:27 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id r30so8319373wra.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:24:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=69aaD4QPBI9GdAKDBus5t7k/zTxSvsdipve2TR2Ob64=;
-        b=GkrWqpjb2yzPqkTVz9B3AF1h6LM7P8OXxi4jhC4daSBHKirsPkAj/SnhCBRObr6hEA
-         WiRe4Wva0Ozk3jVncq2kBHskGsms1JYwqHmXoWzPjEPybLXpd46qdKbASSPGfdxi63vy
-         LJQH7E7ZG4EQo1NMjCDQ0C21BbsohR5OpwSvd5tXaRitjNYoejlK5W2ozBG9NWI+9HsO
-         5EE6MfloqEZZ2bWuw2IDjRbqk6NiHnUWnmQgkFaiD6UyO98KHexuzXwqXY6gYRjB37Lv
-         EhtgEtqHenGlbGslS2t3DXNV3YJTqWgMMvu0VwKxEOxEdNtIkE+6JtzxqyJGaKb+J7tA
-         hXMA==
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0zXiDiE6F3yYGhahJvZZTWKFFsEbzGr9QORv3wWtDJQ=;
+        b=V8wIWjQy0gnRJ9VHvwB+urOZ0vIubT+3rhYgmm5p2O881Y+q62VYVuLxSOO2d8HzKo
+         dgi+Z2Q+pTPSMW7/OU2S8ysoHBOfvYhpdb/8CxJs/2JEUl/QO7JY7ZYu4azf2DKFFgvP
+         9omkOKGItCBP63Bp7QYszAGr8vt/UYwlfri9o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=69aaD4QPBI9GdAKDBus5t7k/zTxSvsdipve2TR2Ob64=;
-        b=iyEiQcTGfttaDog5Fh8zTICxvOiLGRjz1gTs/V4gKNnbtdYUmFLBRVj9TWgPfmG1RY
-         d8HZjXBrMBeSVBA3QY/nhXCdR/dtUWEswEKeUyypWE1ri91tId+VWrbgHHIzCvfOKNsa
-         Wurx94A5ZXgXuM3/PkCWgfYPqE+UJQeG7ULUoKFDFnohi1ZK/wEl34PDglUsAA9cYibZ
-         r5dHfK4HNZdrPIIfRmK5Zowv1SJckKdgUihwR4qITjOIYTzxFi2aylL8dQQ7AUqyYI99
-         J35Wf+HnejZwNmQjdpjGzbkiI0VaQyi7WiEGUjAzJd8R0RVJPOfgafk+0AJOuf44xaiy
-         TnPg==
-X-Gm-Message-State: AOAM5323VmFNW505rRoDIMRHn5/cnL0H+V6kil0BcI2EhiYh61Qtg55V
-        HSIGkEkmg+vbYtMp5NS1adbcJnDm81v5pqPCJW+MVw==
-X-Google-Smtp-Source: ABdhPJzgiRnXFN6S2gC1fKKXjzhLgZufzaMOa157G/FFVNR/qTjRPbeyyLcMCUrWvBY7gjwJ1/H59Sfaq//qqD7qEOk=
-X-Received: by 2002:adf:fb05:0:b0:20a:e113:8f3f with SMTP id
- c5-20020adffb05000000b0020ae1138f3fmr5325035wrr.534.1652984605773; Thu, 19
- May 2022 11:23:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0zXiDiE6F3yYGhahJvZZTWKFFsEbzGr9QORv3wWtDJQ=;
+        b=oGYOTst6TbMQCGtgBukcFrpy5vpmooIQvx8h1dPooLYpqzISdEJr21zdMtIbtO+Wwv
+         Sc3OJEesnXELvwUI8lvTnZjQD2hr098kxERnDpQvgz/Uva+43FNgi2YhpYb7jsQdiPLB
+         8YHPtcyOhUSyignHQdatEJddjcHH28VBaawoPx54Z5Ud4a7Ffjst8/gzvZ0AtuvtBLzn
+         KVYOh/WE5+oGdEMmfi+zX5MIGB3IiRHPAfiZxm/UukKk+oT+uMpLwgBQQiS0JdtXO1Cx
+         /uiGoCcPDsTo4A4Pgbxitm+pDtgbO/OODbWaP8+T6C/WFRkFeo+G/q7HQiZxRAQwbfSg
+         G6gQ==
+X-Gm-Message-State: AOAM533oPMNSyLTRVwkiCZCDxEcbRhc36eraQ9eu6rTCUG+8OwtNehyz
+        XQtnxbFQQF6yDFJj02rDl4wxfA==
+X-Google-Smtp-Source: ABdhPJyxkl0D4C71ONRFHsez4klPGUACYyG/JPCSQKzy7QiwGL+Wl1vK/I4QBqbK3IDiKlfzyYoMow==
+X-Received: by 2002:a5d:5888:0:b0:20d:270f:6b61 with SMTP id n8-20020a5d5888000000b0020d270f6b61mr5133314wrf.211.1652984666107;
+        Thu, 19 May 2022 11:24:26 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-53-154.cust.vodafonedsl.it. [188.217.53.154])
+        by smtp.gmail.com with ESMTPSA id y7-20020a05600c17c700b003942a244f45sm183796wmo.30.2022.05.19.11.24.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 11:24:25 -0700 (PDT)
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc:     tommaso.merciai@amarulasolutions.com,
+        alberto.bianchi@amarulasolutions.com, michael@amarulasolutions.com,
+        linuxfancy@googlegroups.com, linux-amarula@amarulasolutions.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: phy: DP83822: enable rgmii mode if phy_interface_is_rgmii
+Date:   Thu, 19 May 2022 20:24:23 +0200
+Message-Id: <20220519182423.1554379-1-tommaso.merciai@amarulasolutions.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220518223815.809858-1-vaibhav@linux.ibm.com>
- <CAJD7tkZSgRs6T60Gv4dZR5xBemxgCB_2s8hz8zB0F_nakN5aTQ@mail.gmail.com> <878rqxhpn1.fsf@vajain21.in.ibm.com>
-In-Reply-To: <878rqxhpn1.fsf@vajain21.in.ibm.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Thu, 19 May 2022 11:22:49 -0700
-Message-ID: <CAJD7tkb+MESXcx4P5VfJqWfdQRbDD+FJ1o5vUtvomqJ-T9BGcw@mail.gmail.com>
-Subject: Re: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
-To:     Vaibhav Jain <vaibhav@linux.ibm.com>
-Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Shakeel Butt <shakeelb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 1:51 AM Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
->
-> Hi,
->
-> Thanks for looking into this patch,
->
-> Yosry Ahmed <yosryahmed@google.com> writes:
->
-> > On Wed, May 18, 2022 at 3:38 PM Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
-> >>
-> >> [1] Provides a way for user-space to trigger proactive reclaim by introducing
-> >> a write-only memcg file 'memory.reclaim'. However reclaim stats like number
-> >> of pages scanned and reclaimed is still not directly available to the
-> >> user-space.
-> >>
-> >> This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
-> >> readable which returns the number of pages scanned / reclaimed during the
-> >> reclaim process from 'struct vmpressure' associated with each memcg. This should
-> >> let user-space asses how successful proactive reclaim triggered from memcg
-> >> 'memory.reclaim' was ?
-> >
-> > Isn't this a racy read? struct vmpressure can be changed between the
-> > write and read by other reclaim operations, right?
-> Read/write of vmpr stats is always done in context of vmpr->sr_lock
-> which is also the case for this patch. So not sure how the read is racy
-> ?.
+RGMII mode can be enable from dp83822 straps, and also writing bit 9
+of register 0x17 - RMII and Status Register (RCSR).
+When phy_interface_is_rgmii this mode must be enabled
 
-I didn't mean that you can read the value while it is being changed. I
-meant that between writing to memory.reclaim and reading from it,
-another reclaim operation could modify memcg vmpressure. A sequence
-like this:
-1) Write to memory.reclaim
-2) Kernel coincidentally runs reclaim on that memcg
-3) Read from memory.reclaim
+References:
+ - https://www.ti.com/lit/gpn/dp83822i p66
 
-The result would be that you are reading the stats of another reclaim
-operation, not the one invoked by writing to memory.reclaim.
+Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
+Suggested-by: Alberto Bianchi <alberto.bianchi@amarulasolutions.com>
+Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+---
+ drivers/net/phy/dp83822.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
->
-> >
-> > I was actually planning to send a patch that does not updated
-> > vmpressure for user-controller reclaim, similar to how PSI is handled.
-> >
-> Ok, not sure if I am inferring correctly as to how how that would be
-> useful. Can you please provide some more context.
+diff --git a/drivers/net/phy/dp83822.c b/drivers/net/phy/dp83822.c
+index ce17b2af3218..66fa61fb86db 100644
+--- a/drivers/net/phy/dp83822.c
++++ b/drivers/net/phy/dp83822.c
+@@ -408,6 +408,10 @@ static int dp83822_config_init(struct phy_device *phydev)
+ 			if (err)
+ 				return err;
+ 		}
++
++		/* Enable RGMII Mode */
++		phy_set_bits_mmd(phydev, DP83822_DEVADDR,
++					MII_DP83822_RCSR, BIT(9));
+ 	}
+ 
+ 	if (dp83822->fx_enabled) {
+-- 
+2.25.1
 
-IIUC vmpressure is used as an indicator for memory pressure. In my
-opinion it makes sense if vmpressure is not changed on reclaim
-operations directly invoked by the user, as they are not directly
-related to whether the system is under memory pressure or not. PSI is
-handled in a similar way. See e22c6ed90aa9 ("mm: memcontrol: don't
-count limit-setting reclaim as
-memory pressure").
-
->
-> The primary motivation for this patch was to expose the vmpressure stats
-> to user space that are available with cgroup-v1 but not with cgroup-v2
-> AFAIK
-
-If the main goal is exposing vmpressure, regardless of proactive
-reclaim, this is something else. AFAIK vmpressure is not popular
-anymore and PSI is the more recent/better indicator.
-
->
-> > The interface currently returns -EBUSY if the entire amount was not
-> > reclaimed, so isn't this enough to figure out if it was successful or
-> > not?
-> Userspace may very well want to know the amount of memory that was
-> partially reclaimed even though write to "memory.reclaim" returned
-> '-EBUSY'. This feedback can be useful info for implementing a retry
-> loop.
->
-> > If not, we can store the scanned / reclaim counts of the last
-> > memory.reclaim invocation for the sole purpose of memory.reclaim
-> > reads.
-> Sure sounds reasonable to me.
->
-> > Maybe it is actually more intuitive to users to just read the
-> > amount of memory read? In a format that is similar to the one written?
-> >
-> > i.e
-> > echo "10M" > memory.reclaim
-> > cat memory.reclaim
-> > 9M
-> >
-> Agree, I will address that in v2.
->
-> <snip>
->
-> --
-> Cheers
-> ~ Vaibhav

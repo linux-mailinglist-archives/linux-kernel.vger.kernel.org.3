@@ -2,49 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E5752D39E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1671C52D3C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238493AbiESNJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S238669AbiESNUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238407AbiESNJG (ORCPT
+        with ESMTP id S238662AbiESNUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:09:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8809BCE88;
-        Thu, 19 May 2022 06:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vUv8v61VHIxh8esWamo0UaDA5N+0XE9YmKiSe8EzIBI=; b=V2Fl3DlO7O+BQYAReJ1eydhaQX
-        OE3S7WTEY2Qzsd0CCiqASt2DNhWsiYn3JSj27dYyFgp1En5pWHKV3jxjnc7y6Pl4jEPpChLx5s3in
-        lf6oKRoy4hMI3Y1waomzUbgWqbZrzDMj9nZ+HeMRIpleGjCPo3Jvo73q4Qkb8PJjdRyVbQFecCxHq
-        vFNthfMQvap+t+zNwI0XLnVnZSjeynAVR1V5y0j4DAOsBGQKMcMxTsBMF5QmyjMwzy5Wj81Hmo6xJ
-        PFZxOqF1zUYeP/7/KA4ZuCnkw1Tp0huv4AXmrvF0cLYLL2DzmiMnrEC+Dw6Zl+L5ibdoQwY8erRTz
-        D1p71MAA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrftl-00Ck60-Qd; Thu, 19 May 2022 13:09:01 +0000
-Date:   Thu, 19 May 2022 14:09:01 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        duanxiongchun@bytedance.com, smuchun@gmail.com,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Subject: Re: [PATCH] sysctl: handle table->maxlen properly for proc_dobool
-Message-ID: <YoZBbcEHcLqsAssF@casper.infradead.org>
-References: <20220519125505.92400-1-songmuchun@bytedance.com>
+        Thu, 19 May 2022 09:20:13 -0400
+X-Greylist: delayed 514 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 19 May 2022 06:20:12 PDT
+Received: from mail.sysgo.com (mail.sysgo.com [159.69.174.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1E3C8BF6;
+        Thu, 19 May 2022 06:20:12 -0700 (PDT)
+Date:   Thu, 19 May 2022 15:11:27 +0200
+From:   Vit Kabele <vit.kabele@sysgo.com>
+To:     linux-hyperv@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, decui@microsoft.com,
+        kys@microsoft.com, rudolf.marek@sysgo.com, vit@kabele.me,
+        wei.liu@kernel.org
+Subject: Hyper-V: Question about initializing hypercall interface
+Message-ID: <YoZB/+EYDDfowVbs@czspare1-lap.sysgo.cz>
+Mail-Followup-To: Vit Kabele <vit.kabele@sysgo.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        decui@microsoft.com, kys@microsoft.com, rudolf.marek@sysgo.com,
+        vit@kabele.me, wei.liu@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220519125505.92400-1-songmuchun@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,22 +40,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 08:55:05PM +0800, Muchun Song wrote:
-> @@ -428,6 +428,8 @@ static int do_proc_dobool_conv(bool *negp, unsigned long *lvalp,
->  				int write, void *data)
->  {
->  	if (write) {
-> +		if (*negp || (*lvalp != 0 && *lvalp != 1))
-> +			return -EINVAL;
->  		*(bool *)valp = *lvalp;
->  	} else {
->  		int val = *(bool *)valp;
+Hello,
 
-Is this the right approach?  Or should we do as C does and interpret
-writing non-zero as true?  ie:
+I'm playing with the Hyper-V interface described in the documentation
+here [1] (version 6.0b) and I noticed inconsistency between the
+document and the actual code in arch/x86/hyperv/hv_init.c.
 
-		*(bool *)valp = (bool)*lvalp;
+Section 3.13 Establishing the Hypercall Interface states:
 
-(is that cast needed?  It wouldn't be if it were an int, but bool is a
-bit weird)
+> 5. The guest checks the Enable Hypercall Page bit. If it is set, the
+> interface is already active, and steps 6 and 7 should be omitted. 
+> 6.  The guest finds a page within its GPA space, preferably one that
+> is not occupied by RAM, MMIO, and so on. If the page is occupied, the
+> guest should avoid using the underlying page for other purposes. 
+> 7.  The guest writes a new value to the Hypercall MSR
+> (HV_X64_MSR_HYPERCALL) that includes the GPA from step 6 and sets the
+> Enable Hypercall Page bit to enable the interface.
 
+Yet the code in hv_init.c seems to skip the step 5. and performs the
+steps 6. and 7. unconditionally. Snippet below.
+
+```
+rdmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+hypercall_msr.enable = 1;
+
+if (hv_root_partition) {
+	...
+} else {
+    hypercall_msr.guest_physical_address = vmalloc_to_pfn(hv_hypercall_pg);
+    wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+}
+```
+
+1/ I thought that the specification is written in a way that allows
+hypervisor to locate the hypercall page on its own (for whatever reason)
+and just announce the location to the guest by setting the Enable bit in
+the MSR on initial read. A guest should then not attempt to remap the
+page (point 5. above), but instead create kernel mapping to the page
+reported by the hypervisor.
+
+2/ The Lock bit (bit 1) is ignored in the Linux implementation. If the
+hypervisor starts with Lock bit set, the init function allocates the
+hv_hypercall_pg and writes the value to the MSR, then:
+	a/ If the hypervisor ignores the write, the MSR remains unchanged,
+		but the global variable is already set. Attempt to do a
+		hypercall ends with call to undefined memory, because the code
+		in hv_do_hypercall() checks the global variable against NULL,
+		which will pass.
+	b/ The hypervisor injects #GP, in which case the guest crashes.
+
+Do I understand the specification correctly? If yes, then the issues
+here are real issues. If my understanding is wrong, what do I miss?
+
+-- 
+Best regards,
+Vit Kabele
+
+[1]: https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/tlfs

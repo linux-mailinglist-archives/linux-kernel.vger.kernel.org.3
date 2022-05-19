@@ -2,211 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB06652CF70
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E8652CF75
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236146AbiESJbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S235095AbiESJbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236049AbiESJbJ (ORCPT
+        with ESMTP id S236155AbiESJbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:31:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2837133A2C;
-        Thu, 19 May 2022 02:31:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 024D3618D8;
-        Thu, 19 May 2022 09:31:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AAA9C385AA;
-        Thu, 19 May 2022 09:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652952665;
-        bh=ymyWwFkIGcEgTX/HoyldR566LvQatVtWXOdUzMjInTY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZsqjEz6v2uriZ2N0Dq+pndBRjvXvXcsjqqD+SvOkF0pAjllZckSSQYaCIQuEcw1Jy
-         2gDuMEW3YDYmQiSxD5oLg6FWYCdEjerCuH613MHsO//W5TSZsctd3moeGrzUDeRe6s
-         A9o4YVEYofn+70aKTfqkQvyQKReky8arKQkuzj+/1fx+lWD15H7ZSBUhsWsqXso+2v
-         pfcgLj1oqEZBMnIQHSVyd/1eNUlHWeCjPPq+0x8B1shXK+tDzT9UJeTpd9qImfciul
-         P2Sn+4aIKue0xebzFbJ0yeibqCMn+utYG9Q8Y8N+qtr7MyADNwqr8dBlCdNZa0fDzj
-         bxurpPC3T8esw==
-From:   eballetbo@kernel.org
-To:     lizefan.x@bytedance.com, corbet@lwn.net, joel@joelfernandes.org,
-        arve@android.com, tjmercier@google.com, maco@android.com,
-        benjamin.gaignard@collabora.com, tj@kernel.org, brauner@kernel.org,
-        sumit.semwal@linaro.org, tkjos@android.com, surenb@google.com,
-        hannes@cmpxchg.org, Brian.Starkey@arm.com,
-        christian.koenig@amd.com, gregkh@linuxfoundation.org,
-        lmark@codeaurora.org, john.stultz@linaro.org, hridya@google.com,
-        shuah@kernel.org, labbott@redhat.com
-Cc:     Enric Balletbo i Serra <eballetbo@kernel.org>,
-        cgroups@vger.kernel.org, kernel-team@android.com,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, cmllamas@google.com,
-        daniel@ffwll.ch, Kenny.Ho@amd.com, linux-kselftest@vger.kernel.org,
-        kaleshsingh@google.com, mkoutny@suse.com, jstultz@google.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH v7 1/6] gpu: rfc: Proposal for a GPU cgroup controller
-Date:   Thu, 19 May 2022 11:30:35 +0200
-Message-Id: <20220519093034.541481-1-eballetbo@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220510235653.933868-1-tjmercier@google.com>
-References: <20220510235653.933868-1-tjmercier@google.com>
+        Thu, 19 May 2022 05:31:32 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526545C858;
+        Thu, 19 May 2022 02:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652952691; x=1684488691;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ffzJdDsrpiOXwHfaBnfKeYfCI/DEp+tB96pIcEPg41s=;
+  b=FxOHe/DqDJcqI4B7CDKTA7iZ21quTEteaV5OI0yZQ+iiycY6TLV24rNC
+   4TJG4Om6asnVu/E1Hgwvj+5aN/WqZ0gzThNEoOHsqrx5q7M7MFq+L9APJ
+   cPVvRfm/tR56eDCyoazgUX6BrfeWmKEQ5K+K5dvnUAfDZTxLWToa3LMoh
+   M=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 19 May 2022 02:31:30 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 02:31:30 -0700
+Received: from hu-vgarodia-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 19 May 2022 02:31:27 -0700
+From:   Vikash Garodia <quic_vgarodia@quicinc.com>
+To:     <linux-media@vger.kernel.org>, <stanimir.varbanov@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <vboma@qti.qualcomm.com>, <quic_vgarodia@quicinc.com>
+Subject: [PATCH] media: venus: hfi_platform: Correct supported codecs for sc7280
+Date:   Thu, 19 May 2022 15:01:18 +0530
+Message-ID: <1652952678-14747-1-git-send-email-quic_vgarodia@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Enric Balletbo i Serra <eballetbo@kernel.org>
+VP8 codec is deprecated for sc7280 SOC. Fix in platform layer to
+update the supported codecs accordingly.
 
-On Tue, 10 May 2022 23:56:45 +0000, T.J. Mercier wrote:
-> From: Hridya Valsaraju <hridya@google.com>
->
+Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
+---
+ drivers/media/platform/qcom/venus/hfi_parser.c   |  6 ++++--
+ drivers/media/platform/qcom/venus/hfi_platform.c | 21 +++++++++++++++++++++
+ drivers/media/platform/qcom/venus/hfi_platform.h |  2 ++
+ 3 files changed, 27 insertions(+), 2 deletions(-)
 
-Hi T.J. Mercier,
-
-Many thanks for this effort. It caught my attention because we might have a use
-case where this feature can be useful for us. Hence I'd like to jump and be part
-of the discussion, I'd really appreciate if you can cc'me for next versions.
-
-While reading the full patchset I was a bit confused about the status of this
-proposal. In fact, the rfc in the subject combined with the number of iterations
-(already seven) confused me. So I'm wondering if this is a RFC or a 'real'
-proposal already that you want to land.
-
-If this is still a RFC I'd remove the 'rfc: Proposal' and use the more canonical
-way that is put RFC in the []. I.e [PATCH RFC v7] cgroup: Add a GPU cgroup
-controller.
-
-If it is not, I'd just remove the RFC and make the subject in the cgroup
-subsystem instead of the gpu. I.E [PATCH v7] cgroup: Add a GPU cgroup
-
-I don't want to nitpick but IMO that helps new people to join to the history of
-the patchset.
-
-> This patch adds a proposal for a new GPU cgroup controller for
-> accounting/limiting GPU and GPU-related memory allocations.
-
-As far as I can see the only thing that is adding here is the accounting, so I'd
-remove any reference to limiting and just explain what the patch really
-introduces, not the future, otherwise is confusing an you expect more than the
-patch really does.
-
-It is important maintain the commit message sync with what the patch really
-does.
-
-> The proposed controller is based on the DRM cgroup controller[1] and
-> follows the design of the RDMA cgroup controller.
-> 
-> The new cgroup controller would:
-> * Allow setting per-device limits on the total size of buffers
->   allocated by device within a cgroup.
-> * Expose a per-device/allocator breakdown of the buffers charged to a
->   cgroup.
-> 
-> The prototype in the following patches is only for memory accounting
-> using the GPU cgroup controller and does not implement limit setting.
-> 
-> [1]: https://lore.kernel.org/amd-gfx/20210126214626.16260-1-brian.welty@intel.com/
-> 
-
-I think this is material for the cover more than the commit message. When I read
-this I was expecting all this in this patch.
-
-> Signed-off-by: Hridya Valsaraju <hridya@google.com>
-> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> ---
-> v7 changes
-> Remove comment about duplicate name rejection which is not relevant to
-> cgroups users per Michal Koutný.
-> 
-> v6 changes
-> Move documentation into cgroup-v2.rst per Tejun Heo.
-> 
-> v5 changes
-> Drop the global GPU cgroup "total" (sum of all device totals) portion
-> of the design since there is no currently known use for this per
-> Tejun Heo.
-> 
-> Update for renamed functions/variables.
-> 
-> v3 changes
-> Remove Upstreaming Plan from gpu-cgroup.rst per John Stultz.
-> 
-> Use more common dual author commit message format per John Stultz.
-> ---
->  Documentation/admin-guide/cgroup-v2.rst | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 69d7a6983f78..2e1d26e327c7 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -2352,6 +2352,29 @@ first, and stays charged to that cgroup until that resource is freed. Migrating
->  a process to a different cgroup does not move the charge to the destination
->  cgroup where the process has moved.
->  
-> +
-> +GPU
-> +---
-> +
-> +The GPU controller accounts for device and system memory allocated by the GPU
-> +and related subsystems for graphics use. Resource limits are not currently
-> +supported.
-> +
-> +GPU Interface Files
-> +~~~~~~~~~~~~~~~~~~~~
-> +
-> +  gpu.memory.current
-> +	A read-only file containing memory allocations in flat-keyed format. The key
-> +	is a string representing the device name. The value is the size of the memory
-> +	charged to the device in bytes. The device names are globally unique.::
-> +
-> +	  $ cat /sys/kernel/fs/cgroup1/gpu.memory.current
-
-I think this is outdated, you are using cgroup v2, right?
-
-> +	  dev1 4194304
-> +	  dev2 104857600
-> +
-
-When I applied the full series I was expecting see the memory allocated by the
-gpu devices or users of the gpu in this file but, after some experiments, what I
-saw is the memory allocated via any process that uses the dma-buf heap API (not
-necessary gpu users). For example, if you create a small program that allocates
-some memory via the dma-buf heap API and then you cat the gpu.memory.current
-file, you see that the memory accounted is not related to the gpu.
-
-This is really confusing, looks to me that the patches evolved to account memory
-that is not really related to the GPU but allocated vi the dma-buf heap API. IMO
-the name of the file should be according to what really does to avoid
-confusions.
-
-So, is this patchset meant to be GPU specific? If the answer is yes that's good
-but that's not what I experienced. I'm missing something?
-
-If the answer is that evolved to track dma-buf heap allocations I think all the
-patches need some rework to adapt the wording as right now, the gpu wording
-seems confusing to me.
-
-> +	The device name string is set by a device driver when it registers with the
-> +	GPU cgroup controller to participate in resource accounting.
-> +
->  Others
->  ------
->
->
-Thanks,
- Enric
+diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c b/drivers/media/platform/qcom/venus/hfi_parser.c
+index 5b8389b..6cf74b2 100644
+--- a/drivers/media/platform/qcom/venus/hfi_parser.c
++++ b/drivers/media/platform/qcom/venus/hfi_parser.c
+@@ -234,6 +234,7 @@ static int hfi_platform_parser(struct venus_core *core, struct venus_inst *inst)
+ 	const struct hfi_plat_caps *caps = NULL;
+ 	u32 enc_codecs, dec_codecs, count = 0;
+ 	unsigned int entries;
++	int ret;
  
+ 	plat = hfi_platform_get(core->res->hfi_version);
+ 	if (!plat)
+@@ -242,8 +243,9 @@ static int hfi_platform_parser(struct venus_core *core, struct venus_inst *inst)
+ 	if (inst)
+ 		return 0;
+ 
+-	if (plat->codecs)
+-		plat->codecs(&enc_codecs, &dec_codecs, &count);
++	ret = hfi_platform_get_codecs(core, &enc_codecs, &dec_codecs, &count);
++	if (ret)
++		return ret;
+ 
+ 	if (plat->capabilities)
+ 		caps = plat->capabilities(&entries);
+diff --git a/drivers/media/platform/qcom/venus/hfi_platform.c b/drivers/media/platform/qcom/venus/hfi_platform.c
+index f16f896..bc9b431 100644
+--- a/drivers/media/platform/qcom/venus/hfi_platform.c
++++ b/drivers/media/platform/qcom/venus/hfi_platform.c
+@@ -2,7 +2,9 @@
+ /*
+  * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+  */
++#include <linux/of_device.h>
+ #include "hfi_platform.h"
++#include "core.h"
+ 
+ const struct hfi_platform *hfi_platform_get(enum hfi_version version)
+ {
+@@ -66,3 +68,22 @@ hfi_platform_get_codec_lp_freq(enum hfi_version version, u32 codec, u32 session_
+ 	return freq;
+ }
+ 
++int
++hfi_platform_get_codecs(struct venus_core *core, u32 *enc_codecs, u32 *dec_codecs, u32 *count)
++{
++	const struct hfi_platform *plat;
++
++	plat = hfi_platform_get(core->res->hfi_version);
++	if (!plat)
++		return -EINVAL;
++
++	plat->codecs(enc_codecs, dec_codecs, count);
++
++	if (of_device_is_compatible(core->dev->of_node, "qcom,sc7280-venus")) {
++		*enc_codecs &= ~HFI_VIDEO_CODEC_VP8;
++		*dec_codecs &= ~HFI_VIDEO_CODEC_VP8;
++	}
++
++	return 0;
++}
++
+diff --git a/drivers/media/platform/qcom/venus/hfi_platform.h b/drivers/media/platform/qcom/venus/hfi_platform.h
+index 1dcf408..ec89a90 100644
+--- a/drivers/media/platform/qcom/venus/hfi_platform.h
++++ b/drivers/media/platform/qcom/venus/hfi_platform.h
+@@ -66,4 +66,6 @@ unsigned long hfi_platform_get_codec_vsp_freq(enum hfi_version version, u32 code
+ 					      u32 session_type);
+ unsigned long hfi_platform_get_codec_lp_freq(enum hfi_version version, u32 codec,
+ 					     u32 session_type);
++int hfi_platform_get_codecs(struct venus_core *core, u32 *enc_codecs, u32 *dec_codecs,
++			    u32 *count);
+ #endif
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

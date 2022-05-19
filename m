@@ -2,143 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B7252D01D
+	by mail.lfdr.de (Postfix) with ESMTP id C05CF52D01E
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236492AbiESKF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56128 "EHLO
+        id S236505AbiESKFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236484AbiESKFX (ORCPT
+        with ESMTP id S236526AbiESKFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:05:23 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2055.outbound.protection.outlook.com [40.107.243.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F0A9C2DA;
-        Thu, 19 May 2022 03:05:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NrdofBs+XsSKjNMaOXI0P6lHpc0Qb88I7OGOAfU1yBzDVbhivI5QNVknnitt2MOgGZsdLIX/1qtXz7vYL/kfUSkFgL+LL5ACoViUU+qg75BBTLhDplDTDhbzEX+0TW+geZN9x57on2IDYhs1nUQ9urTevqASspwUyBIvK1CXNvDcbKqzRhr5iBsIEy/bvHOzpXX7j1G+ZA+wPwEjG3PKjBw54fZWvbByQh7cTyPgVrE36jWIv4Fh4gSUhjS4kwJvVwK225IuJOXZAEssLaVIIs+Rcn+vuvQ+jFoXX7CvxokKn7vhMbO1dQAjDYh8warAKMiPq0Dg5UOxgbMKg9op/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gaf3HW/o/CxmEyfR+WtiJD5CGcdgyg1ZD7c3GTV/aEw=;
- b=cY1J1mhakbYfxGBPfjHMHhW+wkjxWzZs5Fr8tCcgLW32XTLYNcnXxCz3C+WWt3d9guaSMNrbL6FOYGrsStegAA35jEqKSs78gZ0PXtMgqFChIRr4YGMeZrrU/GV2WGrvrLVueRSN5CxBG10UMzHAW1fyQbLJXqlKA08xY4p6kFd9Bx0rvILXotmp9A/vLN8ePPHdcR1dqlPf33fUw/E+olhgPUKSkvI9ZncFTv/3bj4f6Ud/rqPFMgkAtytv9bOz7qrPACz1wI3WAftWcr0PjF0v298YIDS+zMLj4lvMQboCJAQUgYnLuQiLSCBl7rFwt1D+RT7JRgxhcMD91VpKsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gaf3HW/o/CxmEyfR+WtiJD5CGcdgyg1ZD7c3GTV/aEw=;
- b=2iDTYbdmgl7PWQPIzepQSI2lownfAnyEDMtkTmN8+UIUKH1brLJiuc1yQBqz+EfViNdXAeKaE/8zNDDRtnEKSQ1e5ogcg75APQQx80Vwz1mU0u/8sgyULYwyvnqLFHzK4RIqzAL8a2yZetMCsErPb5Z1uWYG7CGa2tai4xuQg7Y=
-Received: from DM6PR07CA0118.namprd07.prod.outlook.com (2603:10b6:5:330::31)
- by CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Thu, 19 May
- 2022 10:05:20 +0000
-Received: from DM6NAM11FT013.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:330:cafe::2c) by DM6PR07CA0118.outlook.office365.com
- (2603:10b6:5:330::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15 via Frontend
- Transport; Thu, 19 May 2022 10:05:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT013.mail.protection.outlook.com (10.13.173.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Thu, 19 May 2022 10:05:20 +0000
-Received: from sindhu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
- 2022 05:05:13 -0500
-From:   Sandipan Das <sandipan.das@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <x86@kernel.org>
-CC:     <peterz@infradead.org>, <bp@alien8.de>, <acme@kernel.org>,
-        <namhyung@kernel.org>, <jolsa@kernel.org>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <pbonzini@redhat.com>, <jmattson@google.com>,
-        <like.xu.linux@gmail.com>, <eranian@google.com>,
-        <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
-        <santosh.shukla@amd.com>, <sandipan.das@amd.com>
-Subject: [PATCH 5/5] perf/x86/amd/uncore: Add PerfMonV2 RDPMC assignments
-Date:   Thu, 19 May 2022 15:33:34 +0530
-Message-ID: <1359379ef34da760f108b075ac138ab082caa3ba.1652954372.git.sandipan.das@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1652954372.git.sandipan.das@amd.com>
-References: <cover.1652954372.git.sandipan.das@amd.com>
+        Thu, 19 May 2022 06:05:36 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89C199C2F8;
+        Thu, 19 May 2022 03:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=FZ3hy
+        egvo2S44gZY7fZKV/hVLJK/8ShMe+XuaT4PYxc=; b=dxl60OA1T6jte5C/lcC2p
+        G/JraAB2FkY3J+YMjw76lediE6XrGrQUz+X5TwvvviQm5qFJV+7zkiMje1iNUS99
+        5yO0O+0qch0kPhXkFgedPGrNcQsb+JcVAL4wPx3mI5tG5xkdtjBHCVfKI8bYIjps
+        glABlVo6Mna6eQwC9OO4pc=
+Received: from [192.168.3.103] (unknown [218.201.129.20])
+        by smtp12 (Coremail) with SMTP id EMCowABHHpAxFoZiI0+HAQ--.1426S2;
+        Thu, 19 May 2022 18:04:35 +0800 (CST)
+Message-ID: <264cb004-677a-13df-cc68-676ef3c2e7d8@163.com>
+Date:   Thu, 19 May 2022 18:04:33 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4 0/2] ARM: sun8i-r40: Enable usb otg support
+Content-Language: en-US
+To:     linux-sunxi@lists.linux.dev
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Evgeny Boger <boger@wirenboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220518101706.26869-1-qianfanguijin@163.com>
+From:   qianfan <qianfanguijin@163.com>
+In-Reply-To: <20220518101706.26869-1-qianfanguijin@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 843369f2-e746-4809-ff66-08da397f14f7
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR12MB5427014A6DBF47C67D3B0D6A8BD09@CO6PR12MB5427.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HlEymHUI1JvPw7GGNbSNtxHNFq0DUsdJBR1NngmykXOiVEXFuZ9tRDgJ+gblqaN9cCohlnJJd8xj6zCqr/iNnf2vXeLUIe2Whydn2gXGZX+3MCFnCz5Ggg/GK52Xgm0ZHOZGKMVihXiW1sV+ept1pXtcA9mb2tdQPlH0dvFedkVc6oQFl4dbaPB/EpnXbwIAL2gDG6hoOmRtVc4lgaW4f6FgV+fq9ZATerSoIRah+kfMs78rm8viPJZ1ALlaVGCfkFI5Elw0pFbB83PfYwhwdp7QLahXIU0sCgJ1PYl1WzkSzdb3SP6VhqoujRlvesWrCg+8tTVzX4KX+fkWPwYNUBontDJyuTCmKOUhkZn5UUPuhs6gygTQdPKcsMdRNjrxE8XSZQc6Pkkgs+pDRGh77m0OBlvyTfBFa6vxiij3OQjpiPXpQ+appPock+yy5mtFvvS6x6rgG8glHwTJxQYM+41NnZvSn97pNT18H1oct4nAA+mavoEi9D+1Oofec8AbBi/JuHyQZbQEV56Ck7A8dMQ2B1z/S87hdhg4x2OgTM8RXQVEOzupPINGPH/xdRERzlGaSfT2xORfe5Mqy8lBt5HjRKjNWnPJH02CU2kiF7ekx0pSVbSbEycyCpTJnuI/zTqFcbbmAI7FES/uJLFldcvBLLE4qqpKoqwm2vmrj1f962sz6Hl1qfQzJJ1sL6JLBAQLg2KgLrlNlusVpqK9OA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(36756003)(5660300002)(86362001)(8936002)(82310400005)(2906002)(40460700003)(7416002)(110136005)(54906003)(44832011)(316002)(81166007)(4326008)(70586007)(70206006)(8676002)(356005)(47076005)(508600001)(6666004)(26005)(36860700001)(186003)(16526019)(7696005)(426003)(2616005)(83380400001)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 10:05:20.0835
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 843369f2-e746-4809-ff66-08da397f14f7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT013.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5427
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: EMCowABHHpAxFoZiI0+HAQ--.1426S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCw1UGr45urW7uF48Gw1DAwb_yoW5urWDpF
+        W7XrZ3Gw1kt343AFW3WFWUXa1fA3yrZ3yUJrn3tFy8Ar43ur4DA3ZrKrZ8KasrWr17Zw47
+        Kwn5Jrn7Krn0gF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jONVkUUUUU=
+X-Originating-IP: [218.201.129.20]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiXBMG7VXl29+6cQAAsb
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current RDPMC assignment scheme maps four DF PMCs and
-six L3 PMCs from index 6 to 15.
 
-If AMD Performance Monitoring Version 2 (PerfMonV2) is
-supported, there may be additional DF counters available
-which are mapped starting from index 16 i.e. just after
-the L3 counters. Update the RDPMC assignments accordingly.
 
-Signed-off-by: Sandipan Das <sandipan.das@amd.com>
----
- arch/x86/events/amd/uncore.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+在 2022/5/18 18:17, qianfanguijin@163.com 写道:
+> From: qianfan Zhao <qianfanguijin@163.com>
+>
+> History:
+> =======
+>
+> v4(2022-05-18):
+> - Enable both musb and OHCI/EHCI support
+>
+> Tests:
+> ======
+>
+> All test cases were tested on bananapi-m2-ultra.
+>
+> 1. USB DEVICE(ping test)
+>
+> Enable usb gadget rndis network, ping m2u on ubuntu host:
+>
+> ➜  ~ ping 192.168.200.2
+> PING 192.168.200.2 (192.168.200.2) 56(84) bytes of data.
+> 64 bytes from 192.168.200.2: icmp_seq=1 ttl=64 time=0.544 ms
+> 64 bytes from 192.168.200.2: icmp_seq=2 ttl=64 time=0.269 ms
+> 64 bytes from 192.168.200.2: icmp_seq=3 ttl=64 time=0.300 ms
+> 64 bytes from 192.168.200.2: icmp_seq=4 ttl=64 time=0.295 ms
+> 64 bytes from 192.168.200.2: icmp_seq=5 ttl=64 time=0.283 ms
+> 64 bytes from 192.168.200.2: icmp_seq=6 ttl=64 time=0.226 ms
+> 64 bytes from 192.168.200.2: icmp_seq=7 ttl=64 time=0.246 ms
+> 64 bytes from 192.168.200.2: icmp_seq=8 ttl=64 time=0.204 ms
+> 64 bytes from 192.168.200.2: icmp_seq=9 ttl=64 time=0.302 ms
+> 64 bytes from 192.168.200.2: icmp_seq=10 ttl=64 time=0.249 ms
+> 64 bytes from 192.168.200.2: icmp_seq=11 ttl=64 time=0.459 ms
+> 64 bytes from 192.168.200.2: icmp_seq=12 ttl=64 time=0.232 ms
+> 64 bytes from 192.168.200.2: icmp_seq=13 ttl=64 time=0.275 ms
+> 64 bytes from 192.168.200.2: icmp_seq=14 ttl=64 time=0.243 ms
+>
+> 2. USB HOST(OHCI)
+>
+> Connect an usb serial port on OTG port, nex t is the kernel log:
+>
+> [   27.824137] usb 2-1: new full-speed USB device number 2 using ohci-platform
+> [   28.865504] cdc_acm 2-1:1.0: ttyACM0: USB ACM device
+> [   29.565509] cdc_acm 2-1:1.2: ttyACM1: USB ACM device
+>
+> 3. USB HOST(EHCI)
+>
+> Connect an usb storage on OTG port, next is the kernel log:
+>
+> [   17.754147] usb 1-1: new high-speed USB device number 2 using ehci-platform
+> [   17.955995] usb-storage 1-1:1.0: USB Mass Storage device detected
+> [   18.024497] scsi host1: usb-storage 1-1:1.0
+> [   19.035091] scsi 1:0:0:0: Direct-Access     General  USB Flash Disk   1.0  PQ: 0 ANSI: 2
+> [   19.049717] sd 1:0:0:0: [sda] 7831552 512-byte logical blocks: (4.01 GB/3.73 GiB)
+> [   19.060873] sd 1:0:0:0: [sda] Write Protect is off
+> [   19.071018] sd 1:0:0:0: [sda] No Caching mode page found
+> [   19.076437] sd 1:0:0:0: [sda] Assuming drive cache: write through
+> [   19.093566]  sda: sda1
+> [   19.103492] sd 1:0:0:0: [sda] Attached SCSI removable disk
+>
+> issues:
+> =======
+>
+> The system power often turned off when I plugged an usb device into the OTG port.
+> It's not clear why.
+It is not caused by software.
 
-diff --git a/arch/x86/events/amd/uncore.c b/arch/x86/events/amd/uncore.c
-index ff4238eff087..d568afc705d2 100644
---- a/arch/x86/events/amd/uncore.c
-+++ b/arch/x86/events/amd/uncore.c
-@@ -158,6 +158,16 @@ static int amd_uncore_add(struct perf_event *event, int flags)
- 	hwc->event_base_rdpmc = uncore->rdpmc_base + hwc->idx;
- 	hwc->state = PERF_HES_UPTODATE | PERF_HES_STOPPED;
- 
-+	/*
-+	 * The first four DF counters are accessible via RDPMC index 6 to 9
-+	 * followed by the L3 counters from index 10 to 15. For processors
-+	 * with more than four DF counters, the DF RDPMC assignments become
-+	 * discontiguous as the additional counters are accessible starting
-+	 * from index 16.
-+	 */
-+	if (is_nb_event(event) && hwc->idx >= NUM_COUNTERS_NB)
-+		hwc->event_base_rdpmc += NUM_COUNTERS_L3;
-+
- 	if (flags & PERF_EF_START)
- 		amd_uncore_start(event, PERF_EF_RELOAD);
- 
--- 
-2.34.1
+According to the schematic of M2U, there is a 100uF capacitor on the 
+USBVBUS,
+but noting on ACIN. The board is powered by ACIN when I test usb otg,
+plugged an usb storage into the otg port, USB0 enter host mode and will
+enable the USBVBUS power supply through N_VBUSEN. At this time due to the
+limits of ACIN, the input voltage dropped and AXP enter shutdown protection
+state.
+
+This problem was sloved when I mounted a large capacitor on ACIN.
+Both usb device and host stack can work fine now.
+>
+> qianfan Zhao (2):
+>    ARM: dts: sun8i-r40: Add USB0_OTG/HOST support
+>    ARM: dts: bananapi-m2-ultra: Enable USB0_OTG and HOST support
+>
+>   .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  | 39 +++++++++++++++++++
+>   arch/arm/boot/dts/sun8i-r40.dtsi              | 34 ++++++++++++++++
+>   2 files changed, 73 insertions(+)
+>
 

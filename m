@@ -2,97 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA6052DC72
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B960D52DC74
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243664AbiESSKN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 19 May 2022 14:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S243726AbiESSLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 14:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbiESSKI (ORCPT
+        with ESMTP id S243700AbiESSLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:10:08 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A71FD9E95;
-        Thu, 19 May 2022 11:10:07 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id f16so10407687ybk.2;
-        Thu, 19 May 2022 11:10:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=z81b8Srtp7QZyPM16Uw+wUtgxjFIb94YlV53dwZltco=;
-        b=GSk1s6X7kLOEYgFQpfjapT+XIAZTVyMyyke0K5bdx9ZJ9vA7yrwrEOC8EjoOV5wgkP
-         TfSeQKEVHohqpnBesD5K1MFIVL4tZ/Effb9D9GkMYk0fT+8j7bkEigQEghJ9IqYPwaKb
-         7P40qOsU6MV9KAYGrF+ERD1LGc7cgzZEm4ZdzDjIa+umKU4nAjeMM+C2FMcdjotJ0vuD
-         STSt+QNqVONquPuMnMbMQtFShJMmVgeYpJ1N+fFl1ZrzZYJVAB/blw1QP8qpI0H6vyp7
-         sNnKA5t8revz+ROfVxxfgNZ0BolZ/0btvRXYKWBw3RAM72sl9RuzkywAmtEfNZlt8D7s
-         hXfQ==
-X-Gm-Message-State: AOAM533AaOW+REOqqn1dpVvml8ckvVwnkQtttG7wjDSK+keHdkEG5jEa
-        U1EBFM08xtYngEgelAsEQ0oxSgsj0ffMl8mOXZk=
-X-Google-Smtp-Source: ABdhPJx2uP0FlVua99VrwYYH36cc0i7y/DoDp8ZykDa+o7I8fmUv2+3BU+2izdvKG9nePuMmpKv825pGXxHXYrRuOcA=
-X-Received: by 2002:a25:e7ce:0:b0:64d:6028:96b9 with SMTP id
- e197-20020a25e7ce000000b0064d602896b9mr5535107ybh.365.1652983806601; Thu, 19
- May 2022 11:10:06 -0700 (PDT)
+        Thu, 19 May 2022 14:11:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC4A4EA1E
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:11:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D57A9B82798
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:11:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C75C34100
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 18:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652983865;
+        bh=qfrsVSac5p7s4s3/tao5faBYDdKOQTeF9rcknBTAI6s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=n5xa3krTyCU/0LFHvaxl9nV72wSAN+wptxohSNu1LJGjOf3eBWJQXM29fe8CWWt9/
+         8/iEsYee40+jrC2083NGxEDv72DIHUPaZaU4MDrXgGAw6uK/lCd1O6Ui9NJtKq8ri0
+         l8/5lLS4127Dz6GeUaNclEZtLLhn0q3N54eBfxuE4l8T7qyIvIiqtudmyGTqPbcXC4
+         CwoNkPgHoCr961+/V+m261Xj+DwDjGO9/NviZlQ3iI/iqxxvzmci/tNkwADe6xQYG0
+         kRK92Gz0z2/9oGeobimhLWUSwaZb7/JU+Nv8dDYp4brmBzv1zQgU//uZTg0SFWa48B
+         XfRJmKVuJM0iQ==
+Received: by mail-ed1-f43.google.com with SMTP id j28so7922104eda.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 11:11:05 -0700 (PDT)
+X-Gm-Message-State: AOAM532f6PWVA7RdhaJSt0e8qsJ0g47cuFrgmzxBjJbl9ihJQbPzEoZq
+        5uUolzZybcmFh4X5X3/2gplPz09bxOPCHZpjHw==
+X-Google-Smtp-Source: ABdhPJxhP1Wba2opQ/Qs/q0Ub3BI7HdxkNRvDPWLuPYkNRluZEnIc5Y6vMACPPBUzeTAGTwweZnHRj217yThqyWAB3k=
+X-Received: by 2002:a05:6402:5388:b0:42a:ba77:7669 with SMTP id
+ ew8-20020a056402538800b0042aba777669mr6676016edb.89.1652983863801; Thu, 19
+ May 2022 11:11:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <f80dfd57fdca87897f070a3ea4ee0a26b03e7831.camel@mniewoehner.de>
- <CAJZ5v0h+kKwdntGPC5PP6N0ZRbRzLxuwcwTGm-PNBH6Z3mnETg@mail.gmail.com>
- <28686e8d994c297a78fb816805cd3652a8f8c90a.camel@mniewoehner.de>
- <CAJZ5v0hWxhn9WM3ciQgbZpa7x8JwpHK=Bz4kefB_3VnAM0gB9Q@mail.gmail.com> <c766b4d9758b9fd1e15af89643093c595404a665.camel@mniewoehner.de>
-In-Reply-To: <c766b4d9758b9fd1e15af89643093c595404a665.camel@mniewoehner.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 May 2022 20:09:55 +0200
-Message-ID: <CAJZ5v0ip7-6CUys88y8ydABJQsUUONAzyCa91qOiRsj2FCwMEg@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: utils: include UUID in _DSM evaluation warning
-To:     =?UTF-8?Q?Michael_Niew=C3=B6hner?= <linux@mniewoehner.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20220518093325.2070336-1-sudeep.holla@arm.com> <20220518093325.2070336-9-sudeep.holla@arm.com>
+In-Reply-To: <20220518093325.2070336-9-sudeep.holla@arm.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 19 May 2022 13:10:51 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKig8U4hQEtHW8ct1Pd0a29ZtoTp1HuWQv389yb+SuW_A@mail.gmail.com>
+Message-ID: <CAL_JsqKig8U4hQEtHW8ct1Pd0a29ZtoTp1HuWQv389yb+SuW_A@mail.gmail.com>
+Subject: Re: [PATCH v2 8/8] arch_topology: Add support to build llc_sibling on
+ DT platforms
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 17, 2022 at 8:40 PM Michael Niewöhner <linux@mniewoehner.de> wrote:
+On Wed, May 18, 2022 at 4:34 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
-> The _DSM evaluation warning in its current form is not very helpful, as
-> it lacks any specific information:
->   ACPI: \: failed to evaluate _DSM (0x1001)
+> ACPI PPTT provides cache identifiers and especially the last level cache
+> identifier is used in obtaining last level cache siblings amongst CPUs.
 >
-> Thus, include the UUID of the missing _DSM:
->   ACPI: \: failed to evaluate _DSM bf0212f2-... (0x1001)
->
-> Signed-off-by: Michael Niewöhner <linux@mniewoehner.de>
-> ---
-> Changes in v2:
->  - fix arguments order
->  - fix indentation
->  - drop line break
->
->  drivers/acpi/utils.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
-> index d5cedffeeff9..3a9773a09e19 100644
-> --- a/drivers/acpi/utils.c
-> +++ b/drivers/acpi/utils.c
-> @@ -681,7 +681,7 @@ acpi_evaluate_dsm(acpi_handle handle, const guid_t *guid, u64 rev, u64 func,
->
->         if (ret != AE_NOT_FOUND)
->                 acpi_handle_warn(handle,
-> -                               "failed to evaluate _DSM (0x%x)\n", ret);
-> +                                "failed to evaluate _DSM %pUb (0x%x)\n", guid, ret);
->
->         return NULL;
->  }
-> --
+> While we have the cpu map representing all the CPUs sharing last level
+> cache in the cacheinfo driver, it is populated quite late in the boot
+> while the information is needed to build scheduler domains quite early.
 
-Applied as 5.19 material, thanks!
+Late is because it's a device_initcall() rather than late in the cpu
+hotplug state machine, right? The late aspect is for sysfs presumably,
+but I think we could decouple that. Do all the firmware cache parsing
+early and then populate the sysfs parts later. It's not a unique
+problem as the DT unflattening and init code has to do the same thing.
+I'd assume the hotplug and cpu sysfs devices have to deal with the
+same thing.
+
+Rob

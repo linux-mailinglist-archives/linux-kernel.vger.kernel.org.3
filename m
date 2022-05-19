@@ -2,140 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9459252CA5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CF152CA67
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232408AbiESDbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 23:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
+        id S233197AbiESDfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 23:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiESDaw (ORCPT
+        with ESMTP id S232906AbiESDfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 23:30:52 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BFC205C6
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:30:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652931051; x=1684467051;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mD+f3y+H4zv55pqKLUkWr4uyAN3Sz5Q4d4ZEvfiFGBw=;
-  b=VPKz2e/FezYBolN65YG4ftnzNnV0lzvk9DuUusVmnwdti5H+XLXSDS8v
-   TLqngOgrR8hLZKAGaTWhe41/x5B4VjdEbhf3SMvEGpB880zOTEbEhLdUT
-   bLsZmdqyQ5pxsb8TT9krFU7l4iFC9N3sRLYroBEVvLDfa4o7r9wHdcco2
-   z8y+nZkvTLhOvrOMyldRJ7WW3/QX17cz4idvM2Xf9okm/jKwFKlI0wWKT
-   bYK5wd6N4lYDp7DQpluz92ucKnFGQFRAhNljDs1fJluwJJ6ltyw3otgWg
-   TVXOeDGFrjtqZ02o5bcMskK8IbMrmGPihscWi4fjECBpl9nyBlRD+UON5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="297299010"
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="297299010"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 20:30:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="742675602"
-Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 18 May 2022 20:30:50 -0700
-Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nrWsD-0002zl-S0;
-        Thu, 19 May 2022 03:30:49 +0000
-Date:   Thu, 19 May 2022 11:30:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:locking/core] BUILD SUCCESS
- c2df0a6af177b6c06a859806a876f92b072dc624
-Message-ID: <6285b9cb.UgvxhIErda0NEjhh%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 18 May 2022 23:35:36 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4265FF14
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:35:34 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id l13-20020a056e0212ed00b002d07cd1db63so2383508iln.7
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:35:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=FZduYSQbHnoh/flOQg8bZDICLJ3s8djZmLyod5cweMs=;
+        b=DUniOQRH/nKUagKCxbujZqg9lfdzFtzVO3T8MVWb1DS9ltF3O+cWFh6uMm4ifCr4u2
+         yLNqeX/5FntnRI8HHyfw1nYfke8nLlyTrYJrH9D9b3pQLYomQ+iYAldjBkvPAimxTrxS
+         S+pseIBTODABbygsmKmRVIpeC0Ugouffx2s28GDkc3LIli5XEfi9avHPs7g/0W504pIq
+         L3WhR3fdRRM3ducpA/qvnydwRIs9HSUDYwVc9Efh85I9wnkefP8hmFBcVA82Acz5xbok
+         AyTVUC/z6N3TXINUX6NsLmzKSoHz6PFsMWXAnfyPzzpQeCfnxtGWlXkInq6fae8M9q1w
+         YxCw==
+X-Gm-Message-State: AOAM5324Ls0sg2vVyzlsvlKamRxdZg9zbdkscuZysf5XKU0PqRl4VvLY
+        mXCPnoAqLjeKdO581jUsWS4UVNWtloZ3zAMgp/CFYkLOnmxU
+X-Google-Smtp-Source: ABdhPJy78FYRjW0NcwSl9cXiRscWNwA4oxbFbCkIKEMHarq2kYgnJ+8IR1o5MTqfomkAo5FkfOcFhYjVFmtpqxrTvzpQ74Kdi7q6
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:52e:b0:32a:e022:5a9e with SMTP id
+ j14-20020a056638052e00b0032ae0225a9emr1569475jar.60.1652931333642; Wed, 18
+ May 2022 20:35:33 -0700 (PDT)
+Date:   Wed, 18 May 2022 20:35:33 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fae03b05df551046@google.com>
+Subject: [syzbot] possible deadlock in rds_wake_sk_sleep (4)
+From:   syzbot <syzbot+dcd73ff9291e6d34b3ab@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        rds-devel@oss.oracle.com, santosh.shilimkar@oracle.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git locking/core
-branch HEAD: c2df0a6af177b6c06a859806a876f92b072dc624  locking/atomic/x86: Introduce arch_try_cmpxchg64
+Hello,
 
-elapsed time: 1732m
+syzbot found the following issue on:
 
-configs tested: 58
-configs skipped: 3
+HEAD commit:    1e1b28b936ae Add linux-next specific files for 20220513
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10117426f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e4eb3c0c4b289571
+dashboard link: https://syzkaller.appspot.com/bug?extid=dcd73ff9291e6d34b3ab
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16cc3759f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15e9e209f00000
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-alpha                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-nios2                               defconfig
-arc                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-arc                  randconfig-r043-20220516
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                               defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11e218c6f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=13e218c6f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=15e218c6f00000
 
-clang tested configs:
-hexagon              randconfig-r045-20220516
-hexagon              randconfig-r041-20220516
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dcd73ff9291e6d34b3ab@syzkaller.appspotmail.com
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+======================================================
+WARNING: possible circular locking dependency detected
+5.18.0-rc6-next-20220513-syzkaller #0 Not tainted
+------------------------------------------------------
+kworker/u4:1/11 is trying to acquire lock:
+ffff88807603bc60 (&rs->rs_recv_lock){...-}-{2:2}, at: rds_wake_sk_sleep+0x1f/0xe0 net/rds/af_rds.c:109
+
+but task is already holding lock:
+ffff88801a9f6100 (&rm->m_rs_lock){..-.}-{2:2}, at: rds_send_remove_from_sock+0x340/0x9e0 net/rds/send.c:628
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&rm->m_rs_lock){..-.}-{2:2}:
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
+       rds_message_purge net/rds/message.c:138 [inline]
+       rds_message_put+0x1d9/0xc20 net/rds/message.c:180
+       rds_inc_put net/rds/recv.c:82 [inline]
+       rds_inc_put+0x13a/0x1a0 net/rds/recv.c:76
+       rds_clear_recv_queue+0x147/0x350 net/rds/recv.c:767
+       rds_release+0xd4/0x3b0 net/rds/af_rds.c:73
+       __sock_release+0xcd/0x280 net/socket.c:650
+       sock_close+0x18/0x20 net/socket.c:1365
+       __fput+0x277/0x9d0 fs/file_table.c:317
+       task_work_run+0xdd/0x1a0 kernel/task_work.c:177
+       ptrace_notify+0x114/0x140 kernel/signal.c:2353
+       ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+       ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+       syscall_exit_work kernel/entry/common.c:249 [inline]
+       syscall_exit_to_user_mode_prepare+0xdb/0x230 kernel/entry/common.c:276
+       __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+       syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
+       do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
+       entry_SYSCALL_64_after_hwframe+0x46/0xb0
+
+-> #0 (&rs->rs_recv_lock){...-}-{2:2}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5665 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+       __raw_read_lock_irqsave include/linux/rwlock_api_smp.h:160 [inline]
+       _raw_read_lock_irqsave+0x45/0x90 kernel/locking/spinlock.c:236
+       rds_wake_sk_sleep+0x1f/0xe0 net/rds/af_rds.c:109
+       rds_send_remove_from_sock+0xb9/0x9e0 net/rds/send.c:634
+       rds_send_path_drop_acked+0x2ef/0x3d0 net/rds/send.c:710
+       rds_tcp_write_space+0x1b1/0x690 net/rds/tcp_send.c:198
+       tcp_new_space net/ipv4/tcp_input.c:5451 [inline]
+       tcp_check_space net/ipv4/tcp_input.c:5470 [inline]
+       tcp_check_space+0x3d0/0x800 net/ipv4/tcp_input.c:5464
+       tcp_data_snd_check net/ipv4/tcp_input.c:5479 [inline]
+       tcp_rcv_established+0x8c4/0x20e0 net/ipv4/tcp_input.c:5986
+       tcp_v4_do_rcv+0x66c/0x980 net/ipv4/tcp_ipv4.c:1659
+       sk_backlog_rcv include/net/sock.h:1050 [inline]
+       __release_sock+0x134/0x3b0 net/core/sock.c:2832
+       release_sock+0x54/0x1b0 net/core/sock.c:3387
+       rds_send_xmit+0x143f/0x2540 net/rds/send.c:422
+       rds_send_worker+0x92/0x2e0 net/rds/threads.c:200
+       process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+       kthread+0x2e9/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:297
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&rm->m_rs_lock);
+                               lock(&rs->rs_recv_lock);
+                               lock(&rm->m_rs_lock);
+  lock(&rs->rs_recv_lock);
+
+ *** DEADLOCK ***
+
+5 locks held by kworker/u4:1/11:
+ #0: ffff888024ca6938 ((wq_completion)krdsd){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff888024ca6938 ((wq_completion)krdsd){+.+.}-{0:0}, at: arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+ #0: ffff888024ca6938 ((wq_completion)krdsd){+.+.}-{0:0}, at: atomic_long_set include/linux/atomic/atomic-instrumented.h:1280 [inline]
+ #0: ffff888024ca6938 ((wq_completion)krdsd){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:636 [inline]
+ #0: ffff888024ca6938 ((wq_completion)krdsd){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+ #0: ffff888024ca6938 ((wq_completion)krdsd){+.+.}-{0:0}, at: process_one_work+0x87a/0x1610 kernel/workqueue.c:2260
+ #1: ffffc90000107da8 ((work_completion)(&(&cp->cp_send_w)->work)){+.+.}-{0:0}, at: process_one_work+0x8ae/0x1610 kernel/workqueue.c:2264
+ #2: ffff8880781d0d30 (k-sk_lock-AF_INET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1680 [inline]
+ #2: ffff8880781d0d30 (k-sk_lock-AF_INET){+.+.}-{0:0}, at: tcp_sock_set_cork+0x16/0x90 net/ipv4/tcp.c:3215
+ #3: ffff8880781d0fb8 (k-clock-AF_INET){++.-}-{2:2}, at: rds_tcp_write_space+0x25/0x690 net/rds/tcp_send.c:184
+ #4: ffff88801a9f6100 (&rm->m_rs_lock){..-.}-{2:2}, at: rds_send_remove_from_sock+0x340/0x9e0 net/rds/send.c:628
+
+stack backtrace:
+CPU: 0 PID: 11 Comm: kworker/u4:1 Not tainted 5.18.0-rc6-next-20220513-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: krdsd rds_send_worker
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ __raw_read_lock_irqsave include/linux/rwlock_api_smp.h:160 [inline]
+ _raw_read_lock_irqsave+0x45/0x90 kernel/locking/spinlock.c:236
+ rds_wake_sk_sleep+0x1f/0xe0 net/rds/af_rds.c:109
+ rds_send_remove_from_sock+0xb9/0x9e0 net/rds/send.c:634
+ rds_send_path_drop_acked+0x2ef/0x3d0 net/rds/send.c:710
+ rds_tcp_write_space+0x1b1/0x690 net/rds/tcp_send.c:198
+ tcp_new_space net/ipv4/tcp_input.c:5451 [inline]
+ tcp_check_space net/ipv4/tcp_input.c:5470 [inline]
+ tcp_check_space+0x3d0/0x800 net/ipv4/tcp_input.c:5464
+ tcp_data_snd_check net/ipv4/tcp_input.c:5479 [inline]
+ tcp_rcv_established+0x8c4/0x20e0 net/ipv4/tcp_input.c:5986
+ tcp_v4_do_rcv+0x66c/0x980 net/ipv4/tcp_ipv4.c:1659
+ sk_backlog_rcv include/net/sock.h:1050 [inline]
+ __release_sock+0x134/0x3b0 net/core/sock.c:2832
+ release_sock+0x54/0x1b0 net/core/sock.c:3387
+ rds_send_xmit+0x143f/0x2540 net/rds/send.c:422
+ rds_send_worker+0x92/0x2e0 net/rds/threads.c:200
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:297
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

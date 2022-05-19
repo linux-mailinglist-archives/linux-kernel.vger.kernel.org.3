@@ -2,78 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FD452DAAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A668452DAB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242209AbiESQxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S242257AbiESQzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242206AbiESQxd (ORCPT
+        with ESMTP id S241989AbiESQzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:53:33 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676CC66C84;
-        Thu, 19 May 2022 09:53:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 08AD521BA8;
-        Thu, 19 May 2022 16:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652979207; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6frXTBgzGRsjQpEWOm3xYp6acz/9cACY818c3GjmbTE=;
-        b=aU4Zz5L96bfOjnVSWwfUl/ZOl+pAHsxcqe088kJSSjOLa4Lo/g4x6rXHcEeW56lZA8rXfn
-        Zd72o8ccBgsUKXmWVf+tFT7ICCA3Xn7X1C1Dh3B73jS5NH59GNa1+Osny2pwZrHT6DYSl8
-        I73RnhMuNCm9ZcgAXED12k4VMQysZuA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB63913456;
-        Thu, 19 May 2022 16:53:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mAutMAZ2hmJHCgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Thu, 19 May 2022 16:53:26 +0000
-Date:   Thu, 19 May 2022 18:53:25 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>, kernel@openvz.org,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, cgroups@vger.kernel.org
-Subject: Re: [PATCH 3/4] memcg: enable accounting for struct cgroup
-Message-ID: <20220519165325.GA2434@blackbody.suse.cz>
-References: <Ynv7+VG+T2y9rpdk@carbon>
- <a17be77f-dc3b-d69a-16e2-f7309959c525@openvz.org>
+        Thu, 19 May 2022 12:55:24 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DAC66C84
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:55:22 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id a9so3566517pgv.12
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fbRv1nP7pTqnBz+sNfZ4tvpe8QTnEEoJ7rGEyN4925Q=;
+        b=NlEMnrL1wW3fdyUxfE79H9YKA08o4qU+R83BNF4EgYN1cw3zLCwLQRh0UUNy8jsgaW
+         lh5GqvoVBqk+o21K5cK+qXjAuNRBqngjQJpCjNtE0H22z4d7gNLw9px10kbPevPTCOZo
+         cm+d0+5Tl4z0B20qtEo97MXoLONED9j4gMp06GLYi8IioDmsnUosJWwH3R2UXeI50B+Y
+         Dfz9rAnYpYkgl9qP8KnBJnRgCxNPwNbXvT5v7eDKy4noIKvXGL5S6mBSB33tJTkWiaIL
+         eywS3+VPl8lSdoz2EXE2fdPxXfmOKy58HyUzW2znCkVQe921F9Kzhs0rUpz/ac4b69yM
+         G7aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fbRv1nP7pTqnBz+sNfZ4tvpe8QTnEEoJ7rGEyN4925Q=;
+        b=hZ0D3cllyaf/WeKcECiQfYCQio9VnNxgy6BI1XI2ZZMr60cyTYnuJ7FGH40OQ/yFDH
+         oVkDjgynp8njaqvhggOqYE8+l1PUOcVwKeo9PqYiWSFzw15kISq2d24kuYce1EJlU4p7
+         AYOvd3EiM3/bFi1pithpDepCc1ZYdtw141R884tX+r2q3/f2eG1gjaNaoR1+LeavUN9w
+         QtQNpPHk+h7jAhvrZmQED1WbJbZIxlWZaG5Cpx/33BkVOjMpkv9ZzKi/NLTjrRqIi+Zh
+         SU4W/WiHDbrz3c99zRav4Ww1YQ01GU8Q2+9AwIy2qMDkKhyuVwEdSQVM9Wv7tTAsO2Ck
+         +Amg==
+X-Gm-Message-State: AOAM532KtlZpdiHlUVXU8CnqbqLv6uKItlXX4gp5ig+DovcAXT1o/EZ9
+        r1BBejESEqFyETqymw+pDmGxzg==
+X-Google-Smtp-Source: ABdhPJxhTLHIK7S/JfndVkiqYIReuohqOcVCUwV7I1Rl2NWw0SBdey4MuXGnvj/UoimJME0mze89Mg==
+X-Received: by 2002:a63:1347:0:b0:3f2:8963:ca0a with SMTP id 7-20020a631347000000b003f28963ca0amr4750270pgt.424.1652979321995;
+        Thu, 19 May 2022 09:55:21 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id t9-20020aa79389000000b0051829b1595dsm4262274pfe.130.2022.05.19.09.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 09:55:21 -0700 (PDT)
+Date:   Thu, 19 May 2022 16:55:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     kvm@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        intel-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Borislav Petkov <bp@alien8.de>, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [RFC PATCH v3 14/19] KVM: x86: rename .set_apic_access_page_addr
+ to reload_apic_access_page
+Message-ID: <YoZ2dh+ZujErT5nk@google.com>
+References: <20220427200314.276673-1-mlevitsk@redhat.com>
+ <20220427200314.276673-15-mlevitsk@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a17be77f-dc3b-d69a-16e2-f7309959c525@openvz.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220427200314.276673-15-mlevitsk@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 13, 2022 at 06:52:12PM +0300, Vasily Averin <vvs@openvz.org> wrote:
-> Creating each new cgroup allocates 4Kb for struct cgroup. This is the
-> largest memory allocation in this scenario and is epecially important
-> for small VMs with 1-2 CPUs.
+On Wed, Apr 27, 2022, Maxim Levitsky wrote:
+> This will be used on SVM to reload shadow page of the AVIC physid table
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index d2f73ce87a1e3..ad744ab99734c 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9949,12 +9949,12 @@ void kvm_arch_mmu_notifier_invalidate_range(struct kvm *kvm,
+>  		kvm_make_all_cpus_request(kvm, KVM_REQ_APIC_PAGE_RELOAD);
+>  }
+>  
+> -static void kvm_vcpu_reload_apic_access_page(struct kvm_vcpu *vcpu)
+> +static void kvm_vcpu_reload_apic_pages(struct kvm_vcpu *vcpu)
+>  {
+>  	if (!lapic_in_kernel(vcpu))
+>  		return;
+>  
+> -	static_call_cond(kvm_x86_set_apic_access_page_addr)(vcpu);
+> +	static_call_cond(kvm_x86_reload_apic_pages)(vcpu);
+>  }
+>  
+>  void __kvm_request_immediate_exit(struct kvm_vcpu *vcpu)
+> @@ -10071,7 +10071,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  		if (kvm_check_request(KVM_REQ_LOAD_EOI_EXITMAP, vcpu))
+>  			vcpu_load_eoi_exitmap(vcpu);
+>  		if (kvm_check_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu))
+> -			kvm_vcpu_reload_apic_access_page(vcpu);
+> +			kvm_vcpu_reload_apic_pages(vcpu);
 
-What do you mean by this argument?
+My vote is to add a new request and new kvm_x86_ops hook instead of piggybacking
+KVM_REQ_APIC_PAGE_RELOAD.  The usage in kvm_arch_mmu_notifier_invalidate_range()
+very subtlies relies on the memslot and vma being allocated/controlled by KVM.
 
-(On bigger irons, the percpu components becomes dominant, e.g. struct
-cgroup_rstat_cpu.)
-
-Thanks,
-Michal
+The use in avic_physid_shadow_table_flush_memslot() is too similar in that it
+also deals with memslot changes, but at the same time is _very_ different in that
+it's dealing with user controlled memslots.

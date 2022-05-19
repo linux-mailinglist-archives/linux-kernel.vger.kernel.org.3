@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F3C52DB39
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DE752DB38
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242855AbiESR1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
+        id S242813AbiESR1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242659AbiESRZf (ORCPT
+        with ESMTP id S242742AbiESRZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 19 May 2022 13:25:35 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510A9A5018;
-        Thu, 19 May 2022 10:25:24 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id v10so5635312pgl.11;
-        Thu, 19 May 2022 10:25:24 -0700 (PDT)
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62372A5033;
+        Thu, 19 May 2022 10:25:26 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id o13-20020a17090a9f8d00b001df3fc52ea7so9353278pjp.3;
+        Thu, 19 May 2022 10:25:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8HbBS6xmnZ/fOvGf3tPUK0KgU6ZNd4ATaXcG9E299js=;
-        b=hu2Fl6JiyfeeMY+AFR65+MFrqea9eZOdmSto/bcEkiwl9CXd2SumnAeJsYDhkeubEa
-         lIUJiSdeJVVxoxYkGUvnoXXV/9jKOvIw44mD4WXfRd6KaqbykvpQ979nceAX+HRtzXvY
-         zyCw6OMJcDTIqfLjoBVoN8KSVFvfpfHz82kJbQQHS7ZnvAkIDdt/noG+q5+1AgqzmbK2
-         Mgwf5IIfH1ZLiSRibfMI4efuAXBfbz/GGfsGypDP3wSMBJ94SmvppYaS0o5U3BwmXMrX
-         uB2ic5TIUtUXMYWatshvn8JrQOBfhT0I28St6wg+jqIXAxjbgYd+ZMWE2XRWcMFzlBrG
-         T4nw==
+        bh=HkgeacWNM0o6tNfidYESYHohydRW3WSO9rnNuCMWeRg=;
+        b=U7k0OV5r4mJ0TuwkYHZY7iFwh3ViIBrZQI87oOkTjIb5fl9vYBG/SpTFZB3TzoImJ+
+         a7IdlgB0bT6Yv3HhL2eZu1nV7ybD5CJr3I5a/I5oVIamgGKoZhyqdJAJZmRzvKu7lEKi
+         tm59BqvVMbB+85NN5tXyyH47NJIKBL9WPZ0D2MwdyABOF32IUfvGXMCTlCMagNXwM0mq
+         qhVpIpiE7wTQzu5cDelhviCRfBo5G66ATArxWzkbJVG1isd+rssuOqZ35K58lJojO8o0
+         QaXFup5GzXrj40bwRYl/K+HTvNSCVED1yj5cvrMr3jzXTYH/lTAM5cEqnmfOjTyhsRUA
+         T84g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8HbBS6xmnZ/fOvGf3tPUK0KgU6ZNd4ATaXcG9E299js=;
-        b=ZngCKlG7pSI6YGq5xFxtiKUqu6XlHo5hrNisL0d6YbSdkwXlCqbG76kjhGtoh36/ko
-         PZdHJWRJ10ro0sGzMJcLq9KkDkWUxpa8OpqiN85//pWGKsXHQouMDz2hMKWeBgNlKKoL
-         fB4sGT/eoh/Fe+Ba+DuPG3kfip6wW+5twefCaoX5F+4HhlG+K7rntvRtwfY+JoIrns92
-         URXRM7b3Enjcl4E0AIPrnetVk0Uw8n08rGj4nbKLZTCIcPLe4Ryn90Gf8aPZxUt3vvwD
-         ulRTNUZT0bjCOku8fEUzogMV+D23mBGGCu7yOdT/RI3aU521pTBZoXcjS9A6phpfHRNH
-         zYkQ==
-X-Gm-Message-State: AOAM5339B8A8rBHF4cuxApKUfIWBk6XQZWH5Bjl78ZXNBPCRbY7/bS+A
-        ivly9Y5f/eD7krTV7en00a9+2K0wUVQR
-X-Google-Smtp-Source: ABdhPJyXdzOnmsoW0cVnKRTdVC06xejnqiGQDIbIHyuHSH9ORmZRPLC4N+1pmHuFj3v8B9/YvIQumw==
-X-Received: by 2002:a05:6a00:1a03:b0:510:a1d9:7de0 with SMTP id g3-20020a056a001a0300b00510a1d97de0mr5581474pfv.53.1652981123175;
-        Thu, 19 May 2022 10:25:23 -0700 (PDT)
+        bh=HkgeacWNM0o6tNfidYESYHohydRW3WSO9rnNuCMWeRg=;
+        b=n8trNINN7IcqntQd6G7dyDk5xF76EvFzF1LmsriNo+TorsORdAzoSpZ5uN4qVMitFq
+         KRgdgj2XQ4k62Hv3i36upT2HVy37iCD1hQsDhpJXKq3WrX0h6c2+9gp2RNU+1YrmuLMG
+         1D8QjK9DspcivSLZXd4PHw9NxLstR80D+8B8emTl7eVtALLADd3ZsqDTZmLDJuuiiZU+
+         BIelQX+29G0oF5nXly7HlONcqsvWMM1nbtBzzAv3YbVcOsICmBfeMbiiyzjMOcMSCN3h
+         20ISj5/KRiA3H6D7NnTfBkt8ctoLEST2YDj3h1NRJW5iLmv4SjL4kNp3AbPirrzbZFsf
+         efgg==
+X-Gm-Message-State: AOAM5334Tlg2U0TSllhnlNBGdQRS+Fkx2eiErll7sisdL0BkUgWUJpoU
+        zGK0sgs9cQwB/XiAi4/P0wIdHnKLm92+
+X-Google-Smtp-Source: ABdhPJw1xLSKQfSuo/sCNUUiDwCl90STmqlc/fYFr6w1tWKMlYw+Oncip0utICQcTOjERRdTjUtA1g==
+X-Received: by 2002:a17:90a:2809:b0:1df:35ca:2e6a with SMTP id e9-20020a17090a280900b001df35ca2e6amr6208779pjd.8.1652981125365;
+        Thu, 19 May 2022 10:25:25 -0700 (PDT)
 Received: from zaphod.evilpiepirate.org (068-119-229-002.res.spectrum.com. [68.119.229.2])
-        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.25.21
+        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.25.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 10:25:22 -0700 (PDT)
+        Thu, 19 May 2022 10:25:24 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
         pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
         andriy.shevchenko@linux.intel.com, willy@infradead.org
-Subject: [PATCH v2 21/28] vsprintf: Refactor hex_string, bitmap_string_list, bitmap_string
-Date:   Thu, 19 May 2022 13:24:14 -0400
-Message-Id: <20220519172421.162394-22-kent.overstreet@gmail.com>
+Subject: [PATCH v2 22/28] Input/joystick/analog: Convert from seq_buf -> printbuf
+Date:   Thu, 19 May 2022 13:24:15 -0400
+Message-Id: <20220519172421.162394-23-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220519172421.162394-1-kent.overstreet@gmail.com>
 References: <20220519172421.162394-1-kent.overstreet@gmail.com>
@@ -71,118 +71,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch cleans up printf_spec handling: these functions only use
-spec.field_width and they do not interpret it in the normal way -
-instead it's a number of bits/bytes passed in to print, so these
-functions are changed to take that parameter directly.
+seq_buf is being deprecated, this converts to printbuf which is similar
+but heap allocates the string buffer.
+
+This means we have to consider memory allocation context & failure: Here
+we're in device initialization so GFP_KERNEL should be fine, and also as
+we're in device initialization returning -ENOMEM is fine.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- lib/vsprintf.c | 47 +++++++++++++++++++++++++----------------------
- 1 file changed, 25 insertions(+), 22 deletions(-)
+ drivers/input/joystick/analog.c | 37 ++++++++++++++++++++-------------
+ 1 file changed, 23 insertions(+), 14 deletions(-)
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index ef8b06a25a..be2fa6053c 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -1132,17 +1132,22 @@ void resource_string(struct printbuf *out, struct resource *res,
+diff --git a/drivers/input/joystick/analog.c b/drivers/input/joystick/analog.c
+index 3088c5b829..72e1e30d19 100644
+--- a/drivers/input/joystick/analog.c
++++ b/drivers/input/joystick/analog.c
+@@ -19,7 +19,7 @@
+ #include <linux/input.h>
+ #include <linux/gameport.h>
+ #include <linux/jiffies.h>
+-#include <linux/seq_buf.h>
++#include <linux/printbuf.h>
+ #include <linux/timex.h>
+ #include <linux/timekeeping.h>
  
- static noinline_for_stack
- void hex_string(struct printbuf *out, const u8 *addr,
--		struct printf_spec spec, const char *fmt)
-+		int len, const char *fmt)
+@@ -337,26 +337,32 @@ static void analog_calibrate_timer(struct analog_port *port)
+  * analog_name() constructs a name for an analog joystick.
+  */
+ 
+-static void analog_name(struct analog *analog)
++static int analog_name(struct analog *analog)
  {
--	int len = 1;		/* if we pass '%ph[CDN]', field width remains
--				   negative value, fallback to the default */
- 	char separator;
+-	struct seq_buf s;
++	struct printbuf buf = PRINTBUF;
++	int ret = 0;
  
--	if (spec.field_width == 0)
--		/* nothing to print */
-+	/* nothing to print */
-+	if (len == 0)
- 		return;
+-	seq_buf_init(&s, analog->name, sizeof(analog->name));
+-	seq_buf_printf(&s, "Analog %d-axis %d-button",
+-		 hweight8(analog->mask & ANALOG_AXES_STD),
+-		 hweight8(analog->mask & ANALOG_BTNS_STD) + !!(analog->mask & ANALOG_BTNS_CHF) * 2 +
+-		 hweight16(analog->mask & ANALOG_BTNS_GAMEPAD) + !!(analog->mask & ANALOG_HBTN_CHF) * 4);
++	pr_buf(&buf, "Analog %d-axis %d-button",
++	       hweight8(analog->mask & ANALOG_AXES_STD),
++	       hweight8(analog->mask & ANALOG_BTNS_STD) + !!(analog->mask & ANALOG_BTNS_CHF) * 2 +
++	       hweight16(analog->mask & ANALOG_BTNS_GAMEPAD) + !!(analog->mask & ANALOG_HBTN_CHF) * 4);
  
--	if (check_pointer_spec(out, addr, spec))
-+	/* if we pass '%ph[CDN]', field width remains
-+	   negative value, fallback to the default */
-+	if (len < 0)
-+		len = 1;
+ 	if (analog->mask & ANALOG_HATS_ALL)
+-		seq_buf_printf(&s, " %d-hat",
+-			       hweight16(analog->mask & ANALOG_HATS_ALL));
++		pr_buf(&buf, " %d-hat",
++		       hweight16(analog->mask & ANALOG_HATS_ALL));
+ 
+ 	if (analog->mask & ANALOG_HAT_FCS)
+-		seq_buf_printf(&s, " FCS");
++		pr_buf(&buf, " FCS");
+ 	if (analog->mask & ANALOG_ANY_CHF)
+-		seq_buf_printf(&s, (analog->mask & ANALOG_SAITEK) ? " Saitek" : " CHF");
++		pr_buf(&buf, (analog->mask & ANALOG_SAITEK) ? " Saitek" : " CHF");
+ 
+-	seq_buf_printf(&s, (analog->mask & ANALOG_GAMEPAD) ? " gamepad" : " joystick");
++	pr_buf(&buf, (analog->mask & ANALOG_GAMEPAD) ? " gamepad" : " joystick");
 +
-+	len = min(len, 64);
-+
-+	if (check_pointer(out, addr))
- 		return;
- 
- 	switch (fmt[1]) {
-@@ -1160,26 +1165,21 @@ void hex_string(struct printbuf *out, const u8 *addr,
- 		break;
- 	}
- 
--	if (spec.field_width > 0)
--		len = min_t(int, spec.field_width, 64);
--
- 	pr_hex_bytes(out, addr, len, separator);
++	ret = buf.allocation_failure ? -ENOMEM : 0;
++	if (!ret)
++		strlcpy(analog->name, buf.buf, sizeof(analog->name));
++	printbuf_exit(&buf);
++	return ret;
  }
  
- static noinline_for_stack
--void bitmap_string(struct printbuf *out, unsigned long *bitmap,
--		   struct printf_spec spec, const char *fmt)
-+void bitmap_string(struct printbuf *out, unsigned long *bitmap, int nr_bits)
- {
-+	struct printf_spec spec = { .flags = SMALL | ZEROPAD, .base = 16 };
- 	const int CHUNKSZ = 32;
--	int nr_bits = max_t(int, spec.field_width, 0);
- 	int i, chunksz;
- 	bool first = true;
+ /*
+@@ -369,7 +375,10 @@ static int analog_init_device(struct analog_port *port, struct analog *analog, i
+ 	int i, j, t, v, w, x, y, z;
+ 	int error;
  
--	if (check_pointer_spec(out, bitmap, spec))
--		return;
-+	nr_bits = max(nr_bits, 0);
- 
--	/* reused to print numbers */
--	spec = (struct printf_spec){ .flags = SMALL | ZEROPAD, .base = 16 };
-+	if (check_pointer(out, bitmap))
-+		return;
- 
- 	chunksz = nr_bits & (CHUNKSZ - 1);
- 	if (chunksz == 0)
-@@ -1208,13 +1208,14 @@ void bitmap_string(struct printbuf *out, unsigned long *bitmap,
- 
- static noinline_for_stack
- void bitmap_list_string(struct printbuf *out, unsigned long *bitmap,
--			struct printf_spec spec, const char *fmt)
-+			int nr_bits)
- {
--	int nr_bits = max_t(int, spec.field_width, 0);
- 	bool first = true;
- 	int rbot, rtop;
- 
--	if (check_pointer_spec(out, bitmap, spec))
-+	nr_bits = max(nr_bits, 0);
+-	analog_name(analog);
++	error = analog_name(analog);
++	if (error)
++		return error;
 +
-+	if (check_pointer(out, bitmap))
- 		return ;
- 
- 	for_each_set_bitrange(rbot, rtop, bitmap, nr_bits) {
-@@ -2235,13 +2236,15 @@ void pointer(struct printbuf *out, const char *fmt,
- 		resource_string(out, ptr, fmt[0] == 'R');
- 		return do_width_precision(out, prev_pos, spec);
- 	case 'h':
--		return hex_string(out, ptr, spec, fmt);
-+		/* Uses field_width but _not_ as field size */
-+		return hex_string(out, ptr, spec.field_width, fmt);
- 	case 'b':
-+		/* Uses field_width but _not_ as field size */
- 		switch (fmt[1]) {
- 		case 'l':
--			return bitmap_list_string(out, ptr, spec, fmt);
-+			return bitmap_list_string(out, ptr, spec.field_width);
- 		default:
--			return bitmap_string(out, ptr, spec, fmt);
-+			return bitmap_string(out, ptr, spec.field_width);
- 		}
- 	case 'M':			/* Colon separated: 00:01:02:03:04:05 */
- 	case 'm':			/* Contiguous: 000102030405 */
+ 	snprintf(analog->phys, sizeof(analog->phys),
+ 		 "%s/input%d", port->gameport->phys, index);
+ 	analog->buttons = (analog->mask & ANALOG_GAMEPAD) ? analog_pad_btn : analog_joy_btn;
 -- 
 2.36.0
 

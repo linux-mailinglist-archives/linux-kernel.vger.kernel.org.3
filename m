@@ -2,273 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FFB252D13F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E9452D147
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237343AbiESLNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
+        id S232245AbiESLQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231965AbiESLNl (ORCPT
+        with ESMTP id S230008AbiESLQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:13:41 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEA9939DC;
-        Thu, 19 May 2022 04:13:38 -0700 (PDT)
-X-UUID: bdb0534977bc4d148047c681051e3d54-20220519
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:9ea5dc58-d8c5-4266-b6ed-c4bc77fd253d,OB:20,L
-        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:90
-X-CID-INFO: VERSION:1.1.5,REQID:9ea5dc58-d8c5-4266-b6ed-c4bc77fd253d,OB:20,LOB
-        :0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:90
-X-CID-META: VersionHash:2a19b09,CLOUDID:4965dd79-5ef6-470b-96c9-bdb8ced32786,C
-        OID:8a55a99be6e7,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: bdb0534977bc4d148047c681051e3d54-20220519
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 691122752; Thu, 19 May 2022 19:13:32 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 19 May 2022 19:13:30 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 19 May 2022 19:13:29 +0800
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Axe Yang <axe.yang@mediatek.com>, Lucas Stach <dev@lynxeye.de>,
-        Eric Biggers <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Yong Mao <yong.mao@mediatek.com>
-Subject: [PATCH v10 3/3] mmc: mediatek: add support for SDIO eint wakup IRQ
-Date:   Thu, 19 May 2022 19:13:23 +0800
-Message-ID: <20220519111323.14586-4-axe.yang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220519111323.14586-1-axe.yang@mediatek.com>
-References: <20220519111323.14586-1-axe.yang@mediatek.com>
+        Thu, 19 May 2022 07:16:49 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032E552B37
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:16:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=fwaHgMGpyKxUjfrphlTtFfZFCA36vjc6kx8Yyplbjpk=; b=RYDCMXNpjIlJnbpR6ajxa55hj9
+        BLxgLS+TW0KAVxKV4JaOWIwnjIdnLelGBL0amhS5m4Bj6RzVX88ZYv4ZnTYLQU2D2AXrBEXNbTXmE
+        5UPxBttFRv++AX6J1pfNJpVRGkFI41IgVezP8l3BQ65qAPDRGY3AZChhhVCtt/FZYt8FN/YmI5mcE
+        9UktynESLujWWXkmY4qq4fRUo+xa5bkKIefFafuZGBa7CHAxFJpl6jkuGN6nW7Rgs/GQ7d+UBzTFE
+        aSXTOimSk22J98oidhup2X9gksk6VIYTjwwM0wx5BlnZzA93g8H6XrtmdIIBJwIA09gPKh0FyI3/P
+        YS2nOp9Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nre8Y-0020tX-GR; Thu, 19 May 2022 11:16:11 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CBE9F980E0B; Thu, 19 May 2022 13:16:08 +0200 (CEST)
+Date:   Thu, 19 May 2022 13:16:08 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christophe de Dinechin <christophe@dinechin.org>
+Cc:     Christophe de Dinechin <dinechin@redhat.com>, trivial@kernel.org,
+        Ben Segall <bsegall@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: Re: [PATCH 1/3] sched/headers: Fix compilation error with GCC 12
+Message-ID: <20220519111608.GF2578@worktop.programming.kicks-ass.net>
+References: <20220414150855.2407137-1-dinechin@redhat.com>
+ <20220414150855.2407137-2-dinechin@redhat.com>
+ <Ylg73c83AJGwz9UN@hirez.programming.kicks-ass.net>
+ <5AEAD35F-10E2-41A3-8269-E8358160D33B@dinechin.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5AEAD35F-10E2-41A3-8269-E8358160D33B@dinechin.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for eint IRQ when MSDC is used as an SDIO host. This
-feature requires SDIO device support async IRQ function. With this
-feature, SDIO host can be awakened by SDIO card in suspend state,
-without additional pin.
+On Mon, Apr 25, 2022 at 04:07:43PM +0200, Christophe de Dinechin wrote:
 
-MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-resume, switch GPIO function back to DAT1 mode then turn on clock.
+> >> extern struct sched_class __begin_sched_classes[];
+> >> extern struct sched_class __end_sched_classes[];
+> >> 
+> >> -#define sched_class_highest (__end_sched_classes - 1)
+> >> +/*
+> >> + * sched_class_highests is really __end_sched_classes - 1, but written in a way
+> >> + * that makes it clear that it is within __begin_sched_classes[] and not outside
+> >> + * of __end_sched_classes[].
+> >> + */
+> >> +#define sched_class_highest (__begin_sched_classes + \
+> >> +			     (__end_sched_classes - __begin_sched_classes - 1))
+> >> #define sched_class_lowest  (__begin_sched_classes - 1)
+> >> 
+> >> +/* The + 1 below places the pointers within the range of their array */
+> >> #define for_class_range(class, _from, _to) \
+> >> -	for (class = (_from); class != (_to); class--)
+> >> +	for (class = (_from); class + 1 != (_to) + 1; class--)
+> > 
+> > Urgh, so now we get less readable code,
+> 
+> You consider the original code readable? 
 
-Some device tree property should be added or modified in MSDC node
-to support SDIO eint IRQ. Pinctrls "state_eint" is mandatory. Since
-this feature depends on asynchronous interrupts, "wakeup-source",
-"keep-power-in-suspend" and "cap-sdio-irq" flags are necessary, and
-the interrupts list should be extended(the interrupt named with
-sdio_wakeup_irq):
-        &mmcX {
-		...
-		interrupt-names = "msdc_irq", "sdio_wakeup_irq";
-		interrupts-extended = <...>,
-                              	      <&pio xxx IRQ_TYPE_LEVEL_LOW>;
-                ...
-                pinctrl-names = "default", "state_uhs", "state_eint";
-                ...
-                pinctrl-2 = <&mmc2_pins_eint>;
-                ...
-                cap-sdio-irq;
-		keep-power-in-suspend;
-		wakeup-source;
-                ...
-        };
+Yeah, because: x + y - x - 1 == y - 1, so wth would you want to write it
+with the x on. That's just silly.
 
-Co-developed-by: Yong Mao <yong.mao@mediatek.com>
-Signed-off-by: Yong Mao <yong.mao@mediatek.com>
-Signed-off-by: Axe Yang <axe.yang@mediatek.com>
----
- drivers/mmc/host/mtk-sd.c | 73 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 67 insertions(+), 6 deletions(-)
+> It actually relies on a
+> precise layout that is not enforced in this code, not even documented,
+> but actually enforced by the linker script.
 
-diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-index 195dc897188b..db245b1b03f4 100644
---- a/drivers/mmc/host/mtk-sd.c
-+++ b/drivers/mmc/host/mtk-sd.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2014-2015 MediaTek Inc.
-+ * Copyright (c) 2014-2015, 2022 MediaTek Inc.
-  * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
-  */
- 
-@@ -20,6 +20,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-+#include <linux/pm_wakeirq.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-@@ -440,8 +441,10 @@ struct msdc_host {
- 	struct pinctrl *pinctrl;
- 	struct pinctrl_state *pins_default;
- 	struct pinctrl_state *pins_uhs;
-+	struct pinctrl_state *pins_eint;
- 	struct delayed_work req_timeout;
- 	int irq;		/* host interrupt */
-+	int eint_irq;		/* interrupt from sdio device for waking up system */
- 	struct reset_control *reset;
- 
- 	struct clk *src_clk;	/* msdc source clock */
-@@ -1520,17 +1523,34 @@ static void __msdc_enable_sdio_irq(struct msdc_host *host, int enb)
- 
- static void msdc_enable_sdio_irq(struct mmc_host *mmc, int enb)
- {
--	unsigned long flags;
- 	struct msdc_host *host = mmc_priv(mmc);
-+	unsigned long flags;
-+	int ret;
- 
- 	spin_lock_irqsave(&host->lock, flags);
- 	__msdc_enable_sdio_irq(host, enb);
- 	spin_unlock_irqrestore(&host->lock, flags);
- 
--	if (enb)
--		pm_runtime_get_noresume(host->dev);
--	else
--		pm_runtime_put_noidle(host->dev);
-+	if (!mmc_card_enable_async_irq(mmc->card)) {
-+		if (enb)
-+			pm_runtime_get_noresume(host->dev);
-+		else
-+			pm_runtime_put_noidle(host->dev);
-+	} else if (host->pins_eint) {
-+		if (enb) {
-+			pinctrl_select_state(host->pinctrl, host->pins_eint);
-+
-+			ret = dev_pm_set_dedicated_wake_irq_reverse(host->dev, host->eint_irq);
-+			if (ret) {
-+				dev_err(host->dev, "Failed to register SDIO wakeup irq!\n");
-+				host->pins_eint = NULL;
-+			} else
-+				device_init_wakeup(host->dev, true);
-+
-+			pinctrl_select_state(host->pinctrl, host->pins_uhs);
-+		} else
-+			dev_pm_clear_wake_irq(host->dev);
-+	}
- }
- 
- static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32 intsts)
-@@ -2631,6 +2651,19 @@ static int msdc_drv_probe(struct platform_device *pdev)
- 		goto host_free;
- 	}
- 
-+	/* Support for SDIO eint irq ? */
-+	if ((mmc->pm_caps & MMC_PM_WAKE_SDIO_IRQ) && (mmc->pm_caps & MMC_PM_KEEP_POWER)) {
-+		host->eint_irq = platform_get_irq_byname(pdev, "sdio_wakeup_irq");
-+		if (host->eint_irq > 0) {
-+			host->pins_eint = pinctrl_lookup_state(host->pinctrl, "state_eint");
-+			if (IS_ERR(host->pins_eint)) {
-+				dev_err_probe(&pdev->dev, PTR_ERR(host->pins_eint),
-+						    "Cannot find pinctrl eint!\n");
-+				host->pins_eint = NULL;
-+			}
-+		}
-+	}
-+
- 	msdc_of_property_parse(pdev, host);
- 
- 	host->dev = &pdev->dev;
-@@ -2845,6 +2878,13 @@ static int __maybe_unused msdc_runtime_suspend(struct device *dev)
- 	struct msdc_host *host = mmc_priv(mmc);
- 
- 	msdc_save_reg(host);
-+
-+	if (sdio_irq_claimed(mmc) && host->pins_eint) {
-+		disable_irq(host->irq);
-+		pinctrl_select_state(host->pinctrl, host->pins_eint);
-+		sdr_clr_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-+	}
-+
- 	msdc_gate_clock(host);
- 	return 0;
- }
-@@ -2860,12 +2900,20 @@ static int __maybe_unused msdc_runtime_resume(struct device *dev)
- 		return ret;
- 
- 	msdc_restore_reg(host);
-+
-+	if (sdio_irq_claimed(mmc) && host->pins_eint) {
-+		sdr_set_bits(host->base + SDC_CFG, SDC_CFG_SDIOIDE);
-+		pinctrl_select_state(host->pinctrl, host->pins_uhs);
-+		enable_irq(host->irq);
-+	}
-+
- 	return 0;
- }
- 
- static int __maybe_unused msdc_suspend(struct device *dev)
- {
- 	struct mmc_host *mmc = dev_get_drvdata(dev);
-+	struct msdc_host *host = mmc_priv(mmc);
- 	int ret;
- 
- 	if (mmc->caps2 & MMC_CAP2_CQE) {
-@@ -2874,11 +2922,24 @@ static int __maybe_unused msdc_suspend(struct device *dev)
- 			return ret;
- 	}
- 
-+	if (sdio_irq_claimed(mmc) && host->pins_eint) {
-+		pm_runtime_put_sync_suspend(dev);
-+		return 0;
-+	}
-+
- 	return pm_runtime_force_suspend(dev);
- }
- 
- static int __maybe_unused msdc_resume(struct device *dev)
- {
-+	struct mmc_host *mmc = dev_get_drvdata(dev);
-+	struct msdc_host *host = mmc_priv(mmc);
-+
-+	if (sdio_irq_claimed(mmc) && host->pins_eint) {
-+		pm_runtime_get_sync(dev);
-+		return 0;
-+	}
-+
- 	return pm_runtime_force_resume(dev);
- }
- 
--- 
-2.25.1
+It has a comment pointing at the linker script, and we have:
 
+	/* Make sure the linker didn't screw up */
+	BUG_ON(&idle_sched_class + 1 != &fair_sched_class ||
+	       &fair_sched_class + 1 != &rt_sched_class ||
+	       &rt_sched_class + 1   != &dl_sched_class);
+#ifdef CONFIG_SMP
+	BUG_ON(&dl_sched_class + 1 != &stop_sched_class);
+#endif
+
+On boot to verify the layout is as we expect.
+
+> > just because GCC is being
+> > stupid?
+> 
+> I think that GCC is actually remarkably smart there. It tells you
+> that you are building pointers to A[] from B[], when there is a legit
+> way to say that the pointer is in A[] (which is what my patch does)
+
+We build with -fno-strict-aliasing, it must not assume anything like
+that, unless restrict is used.
+
+In this case, they're not two objects but the same one. Just because
+linker script can't really get us a sensible array definition.
+
+> > What's wrong with negative array indexes? memory is memory, stuff works.
+> 
+> What’s wrong is that the compiler cannot prove theorems anymore.
+> These theorems are used to optimise code. When you write -1[B], the
+> compiler cannot optimise based on knowing this refers to A[B-A-1].
+> 
+> While at first, you might think that disabling a warning is a win,
+> what comes next is the compiler optimizing in a way you did not
+> anticipate, mysterious bugs showing up, and/or having to turn off some
+> potentially useful optimisation.
+
+We're usually fairly quick to call a compiler broken if doesn't do what
+we want it to. Dodgy optimizations go out the window real fast.

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4F852DB30
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B8F52DB33
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242611AbiESR0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S242644AbiESR0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242649AbiESRZM (ORCPT
+        with ESMTP id S242663AbiESRZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:25:12 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2B6A7761;
-        Thu, 19 May 2022 10:25:08 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id bo5so5721580pfb.4;
-        Thu, 19 May 2022 10:25:08 -0700 (PDT)
+        Thu, 19 May 2022 13:25:14 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E83AF1C3;
+        Thu, 19 May 2022 10:25:10 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id j6so5682712pfe.13;
+        Thu, 19 May 2022 10:25:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DWycBowt0MidQ3WMMJDlkVMAwAS6HurrbLWqpcpIeew=;
-        b=ieIBkesiUG3WbVarQoJ3CVBrLVFF2ZgD6sCot+rKZuv+OcNpsC6ETR0Lkb6mMVWyVL
-         pHLD93Z/XR1VmVtIRlTMCg1ijeR+uhfcUWxaklIlWX103icxzWuStv2Ru6+Hyw9XcJWr
-         z4lvta76RkjqqL2GH/buE+jfWpq4r6vydBeEBiRHdH5qAQMYLv6YC2eql7OigwD/M7Ha
-         B4Ozc9QQCbc/UZ7WItYHxX+sItsW83QLixIgJudfBGAfRrm/n1QRgEP3/PrtNqsXCLoY
-         4GDaSKBec+mMr3bT3abk8YT+01q+0bTKb3wZvNck7rInlkdLEdTpArcz+fLfcnCL/BgO
-         1f+A==
+        bh=T/71y4H0I4tJDzEESJX0yVgmBrZLbwRkc6IKYDc6cJQ=;
+        b=FNeKL719/JSvBNGGdlxYJrA++Pqq2AgXDBKMjEHguJLVlJF/71rwvQzK/58eD+ilYz
+         1hSU78Lyg69ebMTAqvNqtbbxK7VCSIEGgkfiHGqQnky43Nz08btAj78Jegp3YSTYfoME
+         NTi7ADeDSjO3y05gXnLjuF1oQyymuRHEFnpJTlrRWZiIxFT0ZjvrHAD+DNqliS+9hMwV
+         KiztEkiGOMbmQaMQfdbx0Ewk31VGeVpvOWXiK0xgHqlNTvz97i7Z6OHBB9+UxVDTducT
+         ncQ7PyrFuYWLsGsHpq0SlJaSgIzYWuQkctoju9ro+b2clTsKwQhLELeFU8G2iQzEfV4f
+         +Qwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DWycBowt0MidQ3WMMJDlkVMAwAS6HurrbLWqpcpIeew=;
-        b=ODlNt0+AuU2Iqrqzs3cGflmjJ0MwOVKaKDDyAeVelvih9SXtciqA7bgW86fZoj7/uU
-         8xWep8S1dM/gBmjuOWumP1zwMVjSQ7yo0QncDnLFzdHYDu+47cAe1v7osnRaruqfbxlP
-         pUcnDxbknkScl8GZRtHE/stUweJOYRUtifFLNhPP2+l45mCPY+yVgUnKrZtVMfRr9PTE
-         QUSTuozX5c2BlJzuycn45ORM+sHzZagcF1CJ+tQHo4wcUXmQ9zjHtWaW4KXN9Pg9mGjr
-         KposcQUqY8oAD0nb2oaKbhl5vda+6iUkyujXGMsbcaeGQRGaOd4ozVYJy7hWTJyYhfXY
-         75VA==
-X-Gm-Message-State: AOAM533r+01UhC6g3mhZrwDzhWiwpdAZS6bTZYQoTSaee3ScRkd1MXB5
-        ATzZpjvrdNI2d0n1QC7ZVctfaDigh8iq
-X-Google-Smtp-Source: ABdhPJwTg7ITskD+TKuxgCGFKwkICgKnJY2ce2LXZmQUnJk+rxl5keXm7fNU8h11Mv7ipoMF9BHOYg==
-X-Received: by 2002:a62:6dc3:0:b0:505:895a:d38b with SMTP id i186-20020a626dc3000000b00505895ad38bmr5888441pfc.7.1652981107652;
-        Thu, 19 May 2022 10:25:07 -0700 (PDT)
+        bh=T/71y4H0I4tJDzEESJX0yVgmBrZLbwRkc6IKYDc6cJQ=;
+        b=h2XMIk4g8BZd2czELH8/cRoBmMjF1CnPRdcZxhYkb8YvquzavpUXaKnx8CMC4G7PqF
+         lgP4+g+z3DJk+j3ECYsz3D41nKI73XrDah3LWlu2qLB+A3yPK48/ssAWAlz07emv+Pg+
+         LETAqUX/M+LAujw4aYDJFqyQfvrBP5b1qx29RNmcHqYN+vNFI5NVbamCYjQgfRm++6ug
+         KhkJeliOwGkUNxfWoFFSnYhYStgeLNVp1iCas4vCMPAGdH9PXl3vvPuPpVLbhAAJcnpc
+         Kj+A/i3drbg17lW2zZC9mBnSErS5Ty0cHw9b6kTgaMR/in4QMlMBpC+bwehf9AhLNCMM
+         J5cA==
+X-Gm-Message-State: AOAM53012or8PR8R/SaPz6Intne/wOgVIIGUeAsnGK7T9WQBGlSbPuzU
+        AINtmVu2Oygp8/sR+P1L0dS0FTWLTc0x
+X-Google-Smtp-Source: ABdhPJynGDjof146Uv8mxfj7qsya6dFrrvJU47qw8CwICqf8Ilv6hZa/vLYj0yeXSEPe63TM26xXeg==
+X-Received: by 2002:a65:6205:0:b0:3f5:d436:5446 with SMTP id d5-20020a656205000000b003f5d4365446mr4703783pgv.532.1652981109886;
+        Thu, 19 May 2022 10:25:09 -0700 (PDT)
 Received: from zaphod.evilpiepirate.org (068-119-229-002.res.spectrum.com. [68.119.229.2])
-        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.25.04
+        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.25.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 10:25:06 -0700 (PDT)
+        Thu, 19 May 2022 10:25:09 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
         pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
         andriy.shevchenko@linux.intel.com, willy@infradead.org
-Subject: [PATCH v2 14/28] vsprintf: Refactor resource_string()
-Date:   Thu, 19 May 2022 13:24:07 -0400
-Message-Id: <20220519172421.162394-15-kent.overstreet@gmail.com>
+Subject: [PATCH v2 15/28] vsprintf: Refactor fourcc_string()
+Date:   Thu, 19 May 2022 13:24:08 -0400
+Message-Id: <20220519172421.162394-16-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220519172421.162394-1-kent.overstreet@gmail.com>
 References: <20220519172421.162394-1-kent.overstreet@gmail.com>
@@ -71,9 +71,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two changes:
  - We're attempting to consolidate printf_spec and format string
-   handling in the top level vpr_buf(), this changes resource_string to
+   handling in the top level vpr_buf(), this changes fourcc_string() to
    not take printf_spec
 
  - With the new printbuf helpers there's no need to use a separate stack
@@ -81,117 +80,70 @@ Two changes:
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- lib/vsprintf.c | 52 +++++++++++++++++++++++---------------------------
- 1 file changed, 24 insertions(+), 28 deletions(-)
+ lib/vsprintf.c | 26 ++++++++++++--------------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
 
 diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 6bbbb52bb0..dd4bbb28e7 100644
+index dd4bbb28e7..3d17ddad31 100644
 --- a/lib/vsprintf.c
 +++ b/lib/vsprintf.c
-@@ -1037,7 +1037,7 @@ static const struct printf_spec default_dec_spec = {
+@@ -1702,17 +1702,15 @@ void netdev_bits(struct printbuf *out, const void *addr,
  
  static noinline_for_stack
- void resource_string(struct printbuf *out, struct resource *res,
--		     struct printf_spec spec, const char *fmt)
-+		     int decode)
+ void fourcc_string(struct printbuf *out, const u32 *fourcc,
+-		   struct printf_spec spec, const char *fmt)
++		   const char *fmt)
  {
- #ifndef IO_RSRC_PRINTK_SIZE
- #define IO_RSRC_PRINTK_SIZE	6
-@@ -1076,63 +1076,58 @@ void resource_string(struct printbuf *out, struct resource *res,
- #define FLAG_BUF_SIZE		(2 * sizeof(res->flags))
- #define DECODED_BUF_SIZE	sizeof("[mem - 64bit pref window disabled]")
- #define RAW_BUF_SIZE		sizeof("[mem - flags 0x]")
--	char sym_buf[max(2*RSRC_BUF_SIZE + DECODED_BUF_SIZE,
--		     2*RSRC_BUF_SIZE + FLAG_BUF_SIZE + RAW_BUF_SIZE)];
--	struct printbuf sym = PRINTBUF_EXTERN(sym_buf, sizeof(sym_buf));
--	int decode = (fmt[0] == 'R') ? 1 : 0;
- 	const struct printf_spec *specp;
+-	char output_buf[sizeof("0123 little-endian (0x01234567)")];
+-	struct printbuf output = PRINTBUF_EXTERN(output_buf, sizeof(output_buf));
+ 	unsigned int i;
+ 	u32 val;
  
--	if (check_pointer_spec(out, res, spec))
-+	if (check_pointer(out, res))
+ 	if (fmt[1] != 'c' || fmt[2] != 'c')
+-		return error_string_spec(out, "(%p4?)", spec);
++		return error_string(out, "(%p4?)");
+ 
+-	if (check_pointer_spec(out, fourcc, spec))
++	if (check_pointer(out, fourcc))
  		return;
  
--	__pr_char(&sym, '[');
-+	__pr_char(out, '[');
- 	if (res->flags & IORESOURCE_IO) {
--		string_nocheck(&sym, "io  ", str_spec);
-+		string_nocheck(out, "io  ", str_spec);
- 		specp = &io_spec;
- 	} else if (res->flags & IORESOURCE_MEM) {
--		string_nocheck(&sym, "mem ", str_spec);
-+		string_nocheck(out, "mem ", str_spec);
- 		specp = &mem_spec;
- 	} else if (res->flags & IORESOURCE_IRQ) {
--		string_nocheck(&sym, "irq ", str_spec);
-+		string_nocheck(out, "irq ", str_spec);
- 		specp = &default_dec_spec;
- 	} else if (res->flags & IORESOURCE_DMA) {
--		string_nocheck(&sym, "dma ", str_spec);
-+		string_nocheck(out, "dma ", str_spec);
- 		specp = &default_dec_spec;
- 	} else if (res->flags & IORESOURCE_BUS) {
--		string_nocheck(&sym, "bus ", str_spec);
-+		string_nocheck(out, "bus ", str_spec);
- 		specp = &bus_spec;
- 	} else {
--		string_nocheck(&sym, "??? ", str_spec);
-+		string_nocheck(out, "??? ", str_spec);
- 		specp = &mem_spec;
- 		decode = 0;
- 	}
- 	if (decode && res->flags & IORESOURCE_UNSET) {
--		string_nocheck(&sym, "size ", str_spec);
--		number(&sym, resource_size(res), *specp);
-+		string_nocheck(out, "size ", str_spec);
-+		number(out, resource_size(res), *specp);
- 	} else {
--		number(&sym, res->start, *specp);
-+		number(out, res->start, *specp);
- 		if (res->start != res->end) {
--			__pr_char(&sym, '-');
--			number(&sym, res->end, *specp);
-+			__pr_char(out, '-');
-+			number(out, res->end, *specp);
- 		}
- 	}
- 	if (decode) {
- 		if (res->flags & IORESOURCE_MEM_64)
--			string_nocheck(&sym, " 64bit", str_spec);
-+			string_nocheck(out, " 64bit", str_spec);
- 		if (res->flags & IORESOURCE_PREFETCH)
--			string_nocheck(&sym, " pref", str_spec);
-+			string_nocheck(out, " pref", str_spec);
- 		if (res->flags & IORESOURCE_WINDOW)
--			string_nocheck(&sym, " window", str_spec);
-+			string_nocheck(out, " window", str_spec);
- 		if (res->flags & IORESOURCE_DISABLED)
--			string_nocheck(&sym, " disabled", str_spec);
-+			string_nocheck(out, " disabled", str_spec);
- 	} else {
--		string_nocheck(&sym, " flags ", str_spec);
--		number(&sym, res->flags, default_flag_spec);
-+		string_nocheck(out, " flags ", str_spec);
-+		number(out, res->flags, default_flag_spec);
- 	}
--	__pr_char(&sym, ']');
--	printbuf_nul_terminate(&sym);
-+	__pr_char(out, ']');
+ 	val = *fourcc & ~BIT(31);
+@@ -1721,18 +1719,17 @@ void fourcc_string(struct printbuf *out, const u32 *fourcc,
+ 		unsigned char c = val >> (i * 8);
  
--	string_nocheck(out, sym_buf, spec);
+ 		/* Print non-control ASCII characters as-is, dot otherwise */
+-		__pr_char(&output, isascii(c) && isprint(c) ? c : '.');
++		__pr_char(out, isascii(c) && isprint(c) ? c : '.');
+ 	}
+ 
+-	pr_str(&output, *fourcc & BIT(31) ? " big-endian" : " little-endian");
++	pr_str(out, *fourcc & BIT(31) ? " big-endian" : " little-endian");
+ 
+-	__pr_char(&output, ' ');
+-	__pr_char(&output, '(');
+-	special_hex_number(&output, *fourcc, sizeof(u32));
+-	__pr_char(&output, ')');
+-	printbuf_nul_terminate(&output);
++	__pr_char(out, ' ');
++	__pr_char(out, '(');
++	special_hex_number(out, *fourcc, sizeof(u32));
++	__pr_char(out, ')');
+ 
+-	string_spec(out, output_buf, spec);
 +	printbuf_nul_terminate(out);
  }
  
  static noinline_for_stack
-@@ -2306,7 +2301,8 @@ void pointer(struct printbuf *out, const char *fmt,
+@@ -2340,7 +2337,8 @@ void pointer(struct printbuf *out, const char *fmt,
+ 		netdev_bits(out, ptr, fmt);
  		return do_width_precision(out, prev_pos, spec);
- 	case 'R':
- 	case 'r':
--		return resource_string(out, ptr, spec, fmt);
-+		resource_string(out, ptr, fmt[0] == 'R');
+ 	case '4':
+-		return fourcc_string(out, ptr, spec, fmt);
++		fourcc_string(out, ptr, fmt);
 +		return do_width_precision(out, prev_pos, spec);
- 	case 'h':
- 		return hex_string(out, ptr, spec, fmt);
- 	case 'b':
+ 	case 'a':
+ 		address_val(out, ptr, fmt);
+ 		return do_width_precision(out, prev_pos, spec);
 -- 
 2.36.0
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AC552DA91
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23B652DA9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242168AbiESQrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
+        id S242173AbiESQrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234294AbiESQrd (ORCPT
+        with ESMTP id S234294AbiESQrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:47:33 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5215B88D;
-        Thu, 19 May 2022 09:47:32 -0700 (PDT)
+        Thu, 19 May 2022 12:47:37 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34F1DE300;
+        Thu, 19 May 2022 09:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652978852; x=1684514852;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=LXflJd7Y5VHLQK0MN/gT14zJ94O0px+SUp5tuELlX4Y=;
-  b=a7lQh8ruUi5PU7MLLuzE8E8FFtoY75MCcPLv2Gp6uUa6Ek4vGcJKTvvP
-   IfYuvwYjpXX+cVaeHUi4bZWZzgpMRppABKqR25XarR/ny2dSnGOP8prHq
-   NBDmLy63vDAQyppmdzsW+pYf/iNSkuX3UF0O5wyyTcW8Ad6gYZuPxaCqg
-   w=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 19 May 2022 09:47:32 -0700
+  t=1652978856; x=1684514856;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=iyfaEpa5y+JqCHjn4ZUeNS7vEgDQk7soRJUV0gu7e0A=;
+  b=BkLfMG0GkeSVr8QD9NHxGI0XhI4uXxh/kxRCgLPqBVkM9TfCL7GEThXu
+   DKULrbJzadt74+ffYuAGjVqRgd+ijodlRcNT+mWljUTHOKKxyspDKuTvz
+   eRD+7/DISMS3rjr5q6gMgDPCtIZnpwKRNyBssk9mNFmbsQmAWktD3jRb9
+   Y=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 May 2022 09:47:36 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 09:47:31 -0700
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 09:47:36 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 19 May 2022 09:47:31 -0700
+ 15.2.986.22; Thu, 19 May 2022 09:47:35 -0700
 Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 19 May 2022 09:47:27 -0700
+ 15.2.986.22; Thu, 19 May 2022 09:47:31 -0700
 From:   Sibi Sankar <quic_sibis@quicinc.com>
 To:     <bjorn.andersson@linaro.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>
@@ -45,10 +46,12 @@ CC:     <ohad@wizery.com>, <agross@kernel.org>,
         <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
         <mka@chromium.org>, Sibi Sankar <quic_sibis@quicinc.com>
-Subject: [PATCH v4 0/3] Add support for proxy interconnect bandwidth votes
-Date:   Thu, 19 May 2022 22:17:02 +0530
-Message-ID: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
+Subject: [PATCH v4 1/3] arm64: dts: qcom: sc7280: Add proxy interconnect requirements for modem
+Date:   Thu, 19 May 2022 22:17:03 +0530
+Message-ID: <1652978825-5304-2-git-send-email-quic_sibis@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
+References: <1652978825-5304-1-git-send-email-quic_sibis@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
@@ -64,39 +67,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add proxy interconnect bandwidth votes during modem bootup on SC7280 SoCs.
+Add interconnects that are required to be proxy voted upon during modem
+bootup on SC7280 SoCs.
 
-V4:
- * Remove older bindings [Matthias/Krzysztof]
- * Convert sc7180/sc7280 to yaml and leave the rest to Sireesh's series
- * Rebased on v2 of Krzysztof's bindings cleanups
- * Misc. Fixes [Krzysztof]
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-V3:
- * Re-ordered clock list, fixed pdc_sync typo [Rob/Matthias]
-
-V2:
- * Dropped patch 3 from version 1 [Sub with Bjorn's patch]
- * Add YAML support [Krzysztof]
- * Drop interconnect names [Bjorn]
-
- Depends on:
- https://lore.kernel.org/lkml/20220517070113.18023-1-krzysztof.kozlowski@linaro.org/
-
-Sibi Sankar (3):
-  arm64: dts: qcom: sc7280: Add proxy interconnect requirements for
-    modem
-  dt-bindings: remoteproc: qcom: Convert SC7280 MSS bindings to YAML
-  dt-bindings: remoteproc: qcom: Convert SC7180 MSS bindings to YAML
-
- .../devicetree/bindings/remoteproc/qcom,q6v5.txt   |  47 +---
- .../bindings/remoteproc/qcom,sc7180-mss-pil.yaml   | 236 +++++++++++++++++++
- .../bindings/remoteproc/qcom,sc7280-mss-pil.yaml   | 250 +++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |   1 +
- 4 files changed, 489 insertions(+), 45 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7180-mss-pil.yaml
- create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7280-mss-pil.yaml
-
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+index 9f4a9c263c35..91aad86cc708 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi
+@@ -88,6 +88,7 @@
+ 	status = "okay";
+ 	compatible = "qcom,sc7280-mss-pil";
+ 	iommus = <&apps_smmu 0x124 0x0>, <&apps_smmu 0x488 0x7>;
++	interconnects = <&mc_virt MASTER_LLCC 0 &mc_virt SLAVE_EBI1 0>;
+ 	memory-region = <&mba_mem>, <&mpss_mem>;
+ };
+ 
 -- 
 2.7.4
 

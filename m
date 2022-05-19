@@ -2,55 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A613152CF5A
+	by mail.lfdr.de (Postfix) with ESMTP id 5A22552CF59
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236093AbiESJ0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
+        id S236097AbiESJ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235285AbiESJ0M (ORCPT
+        with ESMTP id S236098AbiESJ0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:26:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D0DD53703
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652952369;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=cvEJEFOGq7FC5QM0XFGViek7pYFIKfsja2wlygVxYgI=;
-        b=VJTbopv/z/5NmdpgC/95R0+SCnxpRuGGXMP2NaFOk6Om+crkj2AbWd3oYvHTimWNvVjMWN
-        hNQMg3up4rj1RMsOK/YBYei+28Vdp9MzIjdbZngAP66uinqaQSQIAo3cGv9sWiayJIsCNo
-        hnXBSkGYutlXwl8F1vRy5htfV5uop9g=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-581-FgRjF2yYM-aDVCJ5MFyuRw-1; Thu, 19 May 2022 05:26:06 -0400
-X-MC-Unique: FgRjF2yYM-aDVCJ5MFyuRw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 093A81C0514D;
-        Thu, 19 May 2022 09:26:06 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.39.193.224])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C7A7B7AE4;
-        Thu, 19 May 2022 09:26:04 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        Thu, 19 May 2022 05:26:17 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D3A5933B
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:26:14 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id h5so5127982wrb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 02:26:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=U7CWZtaUgg241mV7Lt3xruBxG2pYUXKmRKpcYqgh8Eg=;
+        b=PYGkNhuK5Y+VcRxXPEdPFo186tRGpytygwARJKMCJCuk1FziFrVCP7xR5sQnGXSieB
+         mIoebzr9mrYJB764qpt5v/nmO8uasR45/gruqJwN3B0SRu7NLyiVE0Gbm85QkvQzO0G4
+         oNpScDJE7i2dFgmQPo4csIWgV6yf2HUT3GEZBGyapklrVGuCjt6xvyPufVGJh4c7Lekl
+         EiJ99vr+pSgYTsOovJ8NhCM19wm/qsi82LdKBrWLTigt1sWGfz541+KsP11DvakTCDjW
+         FsP1QEuAxDKYIoRLznW/9BpVCGPCRCQsitqpb/4n4nXT7h0hJXnVmA7P5/v2Uht64UY/
+         OCgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=U7CWZtaUgg241mV7Lt3xruBxG2pYUXKmRKpcYqgh8Eg=;
+        b=AJEiwPnf6WwmbTtrEitqjhZciGJkmVY9OpV8nTFbT4XX3NuT0Wt5rmUgmmIvJQg1F8
+         v7VfVxUUajkUzk9AzImPrNG681BjIqJcdzhzqtYVF/2Zchkvm9IHScnDwqywGA/mYUEy
+         R+1uedZFEYTN6y8X74QPD5+D+RgOyY76SJV7aUb0wSYUtHayyDXbf7voGgYhYvMgBKO3
+         Y9+YEDw4dhSjpG10yGPp2JDVzej3kOmayF7IZW5E61pCSQu87FgbJioZxzKVU2aIq68e
+         /uthQV2pbee9bO22PRAsEUHWN7DEoE1xJSbYMEIxe0sKk1hGae0aiDrTLN8/79qS7y2x
+         YJeA==
+X-Gm-Message-State: AOAM531PQfxOtyTI7h192ldPOWLkasQeHPIAhu5qC8LSvuFb7wqeK+j2
+        96MGYBMXeXSuWcpOHm2PEBuWCw==
+X-Google-Smtp-Source: ABdhPJzpigCJ9ZTp35pQMOpSOXDBsHMK2phsvkqXJ9XlfwaT3joEX6NUk0vE/CQ9X3XqRok3v0nKMg==
+X-Received: by 2002:a05:6000:38b:b0:20c:53af:747d with SMTP id u11-20020a056000038b00b0020c53af747dmr3038647wrf.22.1652952373417;
+        Thu, 19 May 2022 02:26:13 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id b5-20020a05600c4e0500b00397243d3dbcsm2592590wmq.31.2022.05.19.02.26.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 02:26:13 -0700 (PDT)
+Date:   Thu, 19 May 2022 10:26:11 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 5.18-rc8
-Date:   Thu, 19 May 2022 11:25:32 +0200
-Message-Id: <20220519092532.17746-1-pabeni@redhat.com>
+Subject: Re: [REPORT] Use-after-free Read in __fdget_raw in v5.10.y
+Message-ID: <YoYNM0eQPBSUietG@google.com>
+References: <YoTrmjuct3ctvFim@google.com>
+ <b7dc2992-e2d6-8e76-f089-b33561f8471f@kernel.dk>
+ <f821d544-78d5-a227-1370-b5f0895fb184@kernel.dk>
+ <06710b30-fec8-b593-3af4-1318515b41d8@kernel.dk>
+ <YoUNQlzU0W4ShA85@google.com>
+ <49609b89-f2f0-44b3-d732-dfcb4f73cee1@kernel.dk>
+ <YoUTPIVOhLlnIO04@google.com>
+ <1e64d20a-42cc-31cd-0fd8-2718dd8b1f31@kernel.dk>
+ <YoUgHjHn+UFvj0o1@google.com>
+ <38f63cda-b208-0d83-6aec-25115bd1c021@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <38f63cda-b208-0d83-6aec-25115bd1c021@kernel.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,245 +81,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+On Wed, 18 May 2022, Jens Axboe wrote:
 
-The following changes since commit f3f19f939c11925dadd3f4776f99f8c278a7017b:
+> On 5/18/22 10:34 AM, Lee Jones wrote:
+> > On Wed, 18 May 2022, Jens Axboe wrote:
+> > 
+> >> On 5/18/22 09:39, Lee Jones wrote:
+> >>> On Wed, 18 May 2022, Jens Axboe wrote:
+> >>>
+> >>>> On 5/18/22 9:14 AM, Lee Jones wrote:
+> >>>>> On Wed, 18 May 2022, Jens Axboe wrote:
+> >>>>>
+> >>>>>> On 5/18/22 6:54 AM, Jens Axboe wrote:
+> >>>>>>> On 5/18/22 6:52 AM, Jens Axboe wrote:
+> >>>>>>>> On 5/18/22 6:50 AM, Lee Jones wrote:
+> >>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>>>>>>>
+> >>>>>>>>>> On 5/17/22 7:00 AM, Lee Jones wrote:
+> >>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>>>>>>>>>
+> >>>>>>>>>>>> On 5/17/22 6:36 AM, Lee Jones wrote:
+> >>>>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>> On 5/17/22 6:24 AM, Lee Jones wrote:
+> >>>>>>>>>>>>>>> On Tue, 17 May 2022, Jens Axboe wrote:
+> >>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>> On 5/17/22 5:41 AM, Lee Jones wrote:
+> >>>>>>>>>>>>>>>>> Good afternoon Jens, Pavel, et al.,
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>> Not sure if you are presently aware, but there appears to be a
+> >>>>>>>>>>>>>>>>> use-after-free issue affecting the io_uring worker driver (fs/io-wq.c)
+> >>>>>>>>>>>>>>>>> in Stable v5.10.y.
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>> The full sysbot report can be seen below [0].
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>> The C-reproducer has been placed below that [1].
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>> I had great success running this reproducer in an infinite loop.
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>> My colleague reverse-bisected the fixing commit to:
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>>   commit fb3a1f6c745ccd896afadf6e2d6f073e871d38ba
+> >>>>>>>>>>>>>>>>>   Author: Jens Axboe <axboe@kernel.dk>
+> >>>>>>>>>>>>>>>>>   Date:   Fri Feb 26 09:47:20 2021 -0700
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>>        io-wq: have manager wait for all workers to exit
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>>        Instead of having to wait separately on workers and manager, just have
+> >>>>>>>>>>>>>>>>>        the manager wait on the workers. We use an atomic_t for the reference
+> >>>>>>>>>>>>>>>>>        here, as we need to start at 0 and allow increment from that. Since the
+> >>>>>>>>>>>>>>>>>        number of workers is naturally capped by the allowed nr of processes,
+> >>>>>>>>>>>>>>>>>        and that uses an int, there is no risk of overflow.
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>>        Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> >>>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>>     fs/io-wq.c | 30 ++++++++++++++++++++++--------
+> >>>>>>>>>>>>>>>>>     1 file changed, 22 insertions(+), 8 deletions(-)
+> >>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>> Does this fix it:
+> >>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>> commit 886d0137f104a440d9dfa1d16efc1db06c9a2c02
+> >>>>>>>>>>>>>>>> Author: Jens Axboe <axboe@kernel.dk>
+> >>>>>>>>>>>>>>>> Date:   Fri Mar 5 12:59:30 2021 -0700
+> >>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>>     io-wq: fix race in freeing 'wq' and worker access
+> >>>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>>> Looks like it didn't make it into 5.10-stable, but we can certainly
+> >>>>>>>>>>>>>>>> rectify that.
+> >>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>> Thanks for your quick response Jens.
+> >>>>>>>>>>>>>>>
+> >>>>>>>>>>>>>>> This patch doesn't apply cleanly to v5.10.y.
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> This is probably why it never made it into 5.10-stable :-/
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Right.  It doesn't apply at all unfortunately.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>>> I'll have a go at back-porting it.  Please bear with me.
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> Let me know if you into issues with that and I can help out.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> I think the dependency list is too big.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Too much has changed that was never back-ported.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Actually the list of patches pertaining to fs/io-wq.c alone isn't so
+> >>>>>>>>>>>>> bad, I did start to back-port them all but some of the big ones have
+> >>>>>>>>>>>>> fs/io_uring.c changes incorporated and that list is huge (256 patches
+> >>>>>>>>>>>>> from v5.10 to the fixing patch mentioned above).
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> The problem is that 5.12 went to the new worker setup, and this patch
+> >>>>>>>>>>>> landed after that even though it also applies to the pre-native workers.
+> >>>>>>>>>>>> Hence the dependency chain isn't really as long as it seems, probably
+> >>>>>>>>>>>> just a few patches backporting the change references and completions.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> I'll take a look this afternoon.
+> >>>>>>>>>>>
+> >>>>>>>>>>> Thanks Jens.  I really appreciate it.
+> >>>>>>>>>>
+> >>>>>>>>>> Can you see if this helps? Untested...
+> >>>>>>>>>
+> >>>>>>>>> What base does this apply against please?
+> >>>>>>>>>
+> >>>>>>>>> I tried Mainline and v5.10.116 and both failed.
+> >>>>>>>>
+> >>>>>>>> It's against 5.10.116, so that's puzzling. Let me double check I sent
+> >>>>>>>> the right one...
+> >>>>>>>
+> >>>>>>> Looks like I sent the one from the wrong directory, sorry about that.
+> >>>>>>> This one should be better:
+> >>>>>>
+> >>>>>> Nope, both are the right one. Maybe your mailer is mangling the patch?
+> >>>>>> I'll attach it gzip'ed here in case that helps.
+> >>>>>
+> >>>>> Okay, that applied, thanks.
+> >>>>>
+> >>>>> Unfortunately, I am still able to crash the kernel in the same way.
+> >>>>
+> >>>> Alright, maybe it's not enough. I can't get your reproducer to crash,
+> >>>> unfortunately. I'll try on a different box.
+> >>>
+> >>> You need to have fuzzing and kasan enabled.
+> >>
+> >> I do have kasan enabled. What's fuzzing?
+> > 
+> > CONFIG_KCOV
+> 
+> Ah ok - I don't think that's needed for this.
+> 
+> Looking a bit deeper at this, I'm now convinced your bisect went off the
+> rails at some point. Probably because this can be timing specific.
+> 
+> Can you try with this patch?
+> 
+> 
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index 4330603eae35..3ecf71151fb1 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -4252,12 +4252,8 @@ static int io_statx(struct io_kiocb *req, bool force_nonblock)
+>  	struct io_statx *ctx = &req->statx;
+>  	int ret;
+>  
+> -	if (force_nonblock) {
+> -		/* only need file table for an actual valid fd */
+> -		if (ctx->dfd == -1 || ctx->dfd == AT_FDCWD)
+> -			req->flags |= REQ_F_NO_FILE_TABLE;
+> +	if (force_nonblock)
+>  		return -EAGAIN;
+> -	}
+>  
+>  	ret = do_statx(ctx->dfd, ctx->filename, ctx->flags, ctx->mask,
+>  		       ctx->buffer);
 
-  Merge tag 'net-5.18-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-05-12 11:51:45 -0700)
+This does appear to solve the issue. :)
 
-are available in the Git repository at:
+Thanks so much for working on this.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.18-rc8
+What are the next steps?
 
-for you to fetch changes up to fbb3abdf2223cd0dfc07de85fe5a43ba7f435bdf:
+Are you able to submit this to Stable?
 
-  net: bridge: Clear offload_fwd_mark when passing frame up bridge interface. (2022-05-19 09:20:44 +0200)
-
-----------------------------------------------------------------
-Networking fixes for 5.18-rc8, including fixes from can, xfrm and
-netfilter subtrees.
-
-Notably this reverts a recent TCP/DCCP netns-related change
-to address a possible UaF.
-
-Current release - regressions:
-  - tcp: revert "tcp/dccp: get rid of inet_twsk_purge()"
-
-  - xfrm: set dst dev to blackhole_netdev instead of loopback_dev in ifdown
-
-Previous releases - regressions:
-  - netfilter: flowtable: fix TCP flow teardown
-
-  - can: revert "can: m_can: pci: use custom bit timings for Elkhart Lake"
-
-  - xfrm: check encryption module availability consistency
-
-  - eth: vmxnet3: fix possible use-after-free bugs in vmxnet3_rq_alloc_rx_buf()
-
-  - eth: mlx5: initialize flow steering during driver probe
-
-  - eth: ice: fix crash when writing timestamp on RX rings
-
-Previous releases - always broken:
-  - mptcp: fix checksum byte order
-
-  - eth: lan966x: fix assignment of the MAC address
-
-  - eth: mlx5: remove HW-GRO from reported features
-
-  - eth: ftgmac100: disable hardware checksum on AST2600
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-
-----------------------------------------------------------------
-Alex Elder (3):
-      net: ipa: certain dropped packets aren't accounted for
-      net: ipa: record proper RX transaction count
-      net: ipa: get rid of a duplicate initialization
-
-Andrew Lunn (1):
-      net: bridge: Clear offload_fwd_mark when passing frame up bridge interface.
-
-Arkadiusz Kubalewski (1):
-      ice: fix crash when writing timestamp on RX rings
-
-Aya Levin (1):
-      net/mlx5e: Block rx-gro-hw feature in switchdev mode
-
-Christophe JAILLET (2):
-      net: systemport: Fix an error handling path in bcm_sysport_probe()
-      net/qla3xxx: Fix a test in ql_reset_work()
-
-David S. Miller (6):
-      Merge branch 'ipa-fixes'
-      Merge tag 'linux-can-fixes-for-5.18-20220514' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can
-      Merge tag 'mlx5-fixes-2022-05-17' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux
-      Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/klassert/ipsec
-      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
-      Merge branch 'mptcp-checksums'
-
-Duoming Zhou (1):
-      NFC: nci: fix sleep in atomic context bugs caused by nci_skb_alloc
-
-Eric Dumazet (1):
-      Revert "tcp/dccp: get rid of inet_twsk_purge()"
-
-Eyal Birger (1):
-      xfrm: fix "disable_policy" flag use when arriving from different devices
-
-Felix Fietkau (4):
-      netfilter: flowtable: fix excessive hw offload attempts after failure
-      netfilter: nft_flow_offload: skip dst neigh lookup for ppp devices
-      net: fix dev_fill_forward_path with pppoe + bridge
-      netfilter: nft_flow_offload: fix offload with pppoe + vlan
-
-Gal Pressman (1):
-      net/mlx5e: Remove HW-GRO from reported features
-
-Harini Katakam (1):
-      net: macb: Increment rx bd head after allocating skb and buffer
-
-Horatiu Vultur (1):
-      net: lan966x: Fix assignment of the MAC address
-
-Jakub Kicinski (2):
-      Merge branch 'mptcp-subflow-accounting-fix'
-      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-
-Jarkko Nikula (2):
-      Revert "can: m_can: pci: use custom bit timings for Elkhart Lake"
-      can: m_can: remove support for custom bit timing, take #2
-
-Jiasheng Jiang (1):
-      net: af_key: add check for pfkey_broadcast in function pfkey_process
-
-Joachim Wiberg (1):
-      selftests: forwarding: fix missing backslash
-
-Joel Stanley (1):
-      net: ftgmac100: Disable hardware checksum on AST2600
-
-Jonathan Lemon (2):
-      ptp: ocp: have adjtime handle negative delta_ns correctly
-      ptp: ocp: change sysfs attr group handling
-
-Kevin Mitchell (1):
-      igb: skip phy status check where unavailable
-
-Lin Ma (1):
-      nfc: pn533: Fix buggy cleanup order
-
-Maor Dickman (1):
-      net/mlx5: DR, Fix missing flow_source when creating multi-destination FW table
-
-Mat Martineau (1):
-      mptcp: Do TCP fallback on early DSS checksum failure
-
-Maxim Mikityanskiy (3):
-      net/mlx5e: Wrap mlx5e_trap_napi_poll into rcu_read_lock
-      net/mlx5e: Properly block LRO when XDP is enabled
-      net/mlx5e: Properly block HW GRO when XDP is enabled
-
-Michal Wilczynski (1):
-      ice: Fix interrupt moderation settings getting cleared
-
-Pablo Neira Ayuso (2):
-      netfilter: flowtable: fix TCP flow teardown
-      netfilter: nf_tables: disable expression reduction infra
-
-Paolo Abeni (4):
-      mptcp: fix subflow accounting on close
-      selftests: mptcp: add subflow limits test-cases
-      net/sched: act_pedit: sanitize shift argument before usage
-      mptcp: fix checksum byte order
-
-Paul Blakey (2):
-      net/mlx5e: CT: Fix support for GRE tuples
-      net/mlx5e: CT: Fix setting flow_source for smfs ct tuples
-
-Paul Greenwalt (1):
-      ice: fix possible under reporting of ethtool Tx and Rx statistics
-
-Ritaro Takenaka (1):
-      netfilter: flowtable: move dst_check to packet path
-
-Shay Drory (2):
-      net/mlx5: Initialize flow steering during driver probe
-      net/mlx5: Drain fw_reset when removing device
-
-Thomas Bartschies (1):
-      net: af_key: check encryption module availability consistency
-
-Xin Long (1):
-      xfrm: set dst dev to blackhole_netdev instead of loopback_dev in ifdown
-
-Yevgeny Kliteynik (1):
-      net/mlx5: DR, Ignore modify TTL on RX if device doesn't support it
-
-Zixuan Fu (2):
-      net: vmxnet3: fix possible use-after-free bugs in vmxnet3_rq_alloc_rx_buf()
-      net: vmxnet3: fix possible NULL pointer dereference in vmxnet3_rq_cleanup()
-
- drivers/net/can/m_can/m_can.c                      |  24 +---
- drivers/net/can/m_can/m_can.h                      |   3 -
- drivers/net/can/m_can/m_can_pci.c                  |  48 +-------
- drivers/net/ethernet/broadcom/bcmsysport.c         |   6 +-
- drivers/net/ethernet/cadence/macb_main.c           |   2 +-
- drivers/net/ethernet/faraday/ftgmac100.c           |   5 +
- drivers/net/ethernet/intel/ice/ice_lib.c           |  16 +--
- drivers/net/ethernet/intel/ice/ice_main.c          |   7 +-
- drivers/net/ethernet/intel/ice/ice_ptp.c           |  19 ++-
- drivers/net/ethernet/intel/ice/ice_txrx.h          |  11 +-
- drivers/net/ethernet/intel/igb/igb_main.c          |   3 +-
- .../ethernet/mellanox/mlx5/core/en/tc/ct_fs_smfs.c |  58 +++++----
- drivers/net/ethernet/mellanox/mlx5/core/en/trap.c  |  13 +-
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |  27 ++++-
- drivers/net/ethernet/mellanox/mlx5/core/fs_core.c  | 131 ++++++++++++---------
- drivers/net/ethernet/mellanox/mlx5/core/fs_core.h  |   6 +-
- drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c |  25 +++-
- drivers/net/ethernet/mellanox/mlx5/core/fw_reset.h |   1 +
- drivers/net/ethernet/mellanox/mlx5/core/main.c     |  19 ++-
- .../mellanox/mlx5/core/steering/dr_action.c        |  71 +++++++----
- .../ethernet/mellanox/mlx5/core/steering/dr_fw.c   |   4 +-
- .../mellanox/mlx5/core/steering/dr_ste_v0.c        |   4 +-
- .../mellanox/mlx5/core/steering/dr_types.h         |   3 +-
- .../ethernet/mellanox/mlx5/core/steering/fs_dr.c   |   4 +-
- .../ethernet/mellanox/mlx5/core/steering/mlx5dr.h  |   3 +-
- .../net/ethernet/microchip/lan966x/lan966x_main.c  |  28 +++++
- drivers/net/ethernet/qlogic/qla3xxx.c              |   3 +-
- drivers/net/ipa/gsi.c                              |   6 +-
- drivers/net/ipa/ipa_endpoint.c                     |  13 +-
- drivers/net/ipa/ipa_qmi.c                          |   2 +-
- drivers/net/ppp/pppoe.c                            |   1 +
- drivers/net/vmxnet3/vmxnet3_drv.c                  |   6 +
- drivers/nfc/pn533/pn533.c                          |   5 +-
- drivers/ptp/ptp_ocp.c                              |  62 +++++++---
- include/linux/netdevice.h                          |   2 +-
- include/net/inet_timewait_sock.h                   |   3 +-
- include/net/ip.h                                   |   1 +
- include/net/xfrm.h                                 |  14 ++-
- net/bridge/br_input.c                              |   7 ++
- net/core/dev.c                                     |   2 +-
- net/dccp/ipv4.c                                    |   6 +
- net/dccp/ipv6.c                                    |   6 +
- net/ipv4/inet_timewait_sock.c                      |  58 +++++++--
- net/ipv4/route.c                                   |  23 +++-
- net/ipv4/tcp_ipv4.c                                |   2 +
- net/ipv6/tcp_ipv6.c                                |   6 +
- net/key/af_key.c                                   |  12 +-
- net/mptcp/options.c                                |  36 ++++--
- net/mptcp/pm.c                                     |   5 +-
- net/mptcp/protocol.h                               |  19 ++-
- net/mptcp/subflow.c                                |  35 ++++--
- net/netfilter/nf_flow_table_core.c                 |  60 ++--------
- net/netfilter/nf_flow_table_ip.c                   |  19 +++
- net/netfilter/nf_tables_api.c                      |  11 +-
- net/netfilter/nft_flow_offload.c                   |  28 +++--
- net/nfc/nci/data.c                                 |   2 +-
- net/nfc/nci/hci.c                                  |   4 +-
- net/sched/act_pedit.c                              |   4 +
- net/xfrm/xfrm_policy.c                             |   2 +-
- tools/testing/selftests/net/forwarding/Makefile    |   2 +-
- tools/testing/selftests/net/mptcp/mptcp_join.sh    |  48 +++++++-
- 61 files changed, 694 insertions(+), 362 deletions(-)
-
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

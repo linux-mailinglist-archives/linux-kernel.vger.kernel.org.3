@@ -2,172 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D4352D317
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1633552D354
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238217AbiESMzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 08:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S238354AbiESM5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 08:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234713AbiESMz3 (ORCPT
+        with ESMTP id S238228AbiESMzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 08:55:29 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D1EA7E36
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:55:28 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 137so4993292pgb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XiUsRi0TcKngRpQ/Aq2tkPZeo5Erutd/MtmCgm/5bYU=;
-        b=MRvUskMS0dP9aYF0X75Mw2BIhDXmrUI5V2pM7+rkEZ158WuT9cZe4IexXcTj+ckM6i
-         +iz8Rx1U7C3CnSE5DvvQPv9cnm7wPAnYi3p07DcDBhtTMuiZ6trrjNVBdEKWUXgBJm0D
-         wxQLG3pJmHYv6LiStLin3J3zLFhidhzdyRuA2VtubHUeAfgtUKMsjeDCSokJoaLDnLke
-         IGWzmoAgd9tqR/0J3vNW2mQJqh3Sg2aEdgo99EpPShPJhNszGRPIULjKkfTpChErPPuG
-         sURwiVhnCKdDino+ptabRTeyYJwwSGLrNzYflyG8C/0073CdhdU+WnYgekHMXwL8uKt9
-         7X2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XiUsRi0TcKngRpQ/Aq2tkPZeo5Erutd/MtmCgm/5bYU=;
-        b=15n+9sFYPUQn+ENWMPyo2S0PtPYEFYilsYvRR7NgzlMhqcjzaTGZ9YwYZrskzjGsqe
-         1UbYaFToelKmXFBECJumHdmXXnEE5aadMDOESGM5hcoz1CuceehaSB4nJf6W33BzRI1v
-         BoWeuWDVqJknYICHjBS6CNb5rX9ZHwaWFn+rPjIrOPZsautN6S6Pr6lKILAHAEIyz9gl
-         /AmO9hQujihJLRxUUNtYzMPGfZtIF97kA1fWrOH+N5YyhLmiugQIpoaZMLhxZqIn7I6k
-         5fWybUGH5+2q4XphEL0HAflTbq+xxXRk+0T8RY6T7mxD3VU8twZBqYfvXy0ifOIsYy25
-         sZ6w==
-X-Gm-Message-State: AOAM5336tLiDOeNVPuMEXc/jS0P1Fpx+v+qf6+Bb255obU34Gd4ELnbc
-        vO9apW//o7mMicOHGsue5Ql6DpFms2TI/A==
-X-Google-Smtp-Source: ABdhPJxMmOwhWa8SHa/gVmsNZFJ9NCopj+W+34thmpChLqFM/4MyZoVb5YqSIWIq+rP6kZLzTnkSCA==
-X-Received: by 2002:a05:6a00:140f:b0:4e0:6995:9c48 with SMTP id l15-20020a056a00140f00b004e069959c48mr4568784pfu.59.1652964927356;
-        Thu, 19 May 2022 05:55:27 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id iz10-20020a170902ef8a00b0015e8d4eb1ddsm3664659plb.39.2022.05.19.05.55.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 05:55:27 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Cc:     duanxiongchun@bytedance.com, smuchun@gmail.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Subject: [PATCH] sysctl: handle table->maxlen properly for proc_dobool
-Date:   Thu, 19 May 2022 20:55:05 +0800
-Message-Id: <20220519125505.92400-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
+        Thu, 19 May 2022 08:55:42 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA05A88B4;
+        Thu, 19 May 2022 05:55:37 -0700 (PDT)
+X-UUID: 4a83d12f1ba04a069294eab1c2ebd641-20220519
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:3a6359d7-6f8f-448e-8367-dfc7add8d402,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:90
+X-CID-INFO: VERSION:1.1.5,REQID:3a6359d7-6f8f-448e-8367-dfc7add8d402,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:90
+X-CID-META: VersionHash:2a19b09,CLOUDID:e88fdf79-5ef6-470b-96c9-bdb8ced32786,C
+        OID:63ae97993cc8,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 4a83d12f1ba04a069294eab1c2ebd641-20220519
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 824742674; Thu, 19 May 2022 20:55:29 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 19 May 2022 20:55:28 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 19 May 2022 20:55:28 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <p.zabel@pengutronix.de>,
+        <angelogioacchino.delregno@collabora.com>,
+        <chun-jie.chen@mediatek.com>, <wenst@chromium.org>,
+        <runyang.chen@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v7 00/19] Cleanup MediaTek clk reset drivers and support SoCs
+Date:   Thu, 19 May 2022 20:55:08 +0800
+Message-ID: <20220519125527.18544-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setting ->proc_handler to proc_dobool at the same time setting ->maxlen
-to sizeof(int) is counter-intuitive, it is easy to make mistakes.  For
-robustness, fix it by handling able->maxlen properly for proc_dobool in
-__do_proc_dointvec().
+In this series, we cleanup MediaTek clock reset drivers in clk/mediatek
+folder. MediaTek clock reset driver is used to provide reset control
+of modules controlled in clk, like infra_ao.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Iurii Zaikin <yzaikin@google.com>
----
- fs/lockd/svc.c  |  2 +-
- kernel/sysctl.c | 22 ++++++++++++----------
- 2 files changed, 13 insertions(+), 11 deletions(-)
+Changes for v7:
+1. v7 is based on linux-next next-20220519 and Chen-Yu's series[1].
+2. Add support for MT8186.
 
-diff --git a/fs/lockd/svc.c b/fs/lockd/svc.c
-index 59ef8a1f843f..6e48ee787f49 100644
---- a/fs/lockd/svc.c
-+++ b/fs/lockd/svc.c
-@@ -496,7 +496,7 @@ static struct ctl_table nlm_sysctls[] = {
- 	{
- 		.procname	= "nsm_use_hostnames",
- 		.data		= &nsm_use_hostnames,
--		.maxlen		= sizeof(int),
-+		.maxlen		= sizeof(nsm_use_hostnames),
- 		.mode		= 0644,
- 		.proc_handler	= proc_dobool,
- 	},
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index e52b6e372c60..353fb9093012 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -428,6 +428,8 @@ static int do_proc_dobool_conv(bool *negp, unsigned long *lvalp,
- 				int write, void *data)
- {
- 	if (write) {
-+		if (*negp || (*lvalp != 0 && *lvalp != 1))
-+			return -EINVAL;
- 		*(bool *)valp = *lvalp;
- 	} else {
- 		int val = *(bool *)valp;
-@@ -489,17 +491,17 @@ static int __do_proc_dointvec(void *tbl_data, struct ctl_table *table,
- 			      int write, void *data),
- 		  void *data)
- {
--	int *i, vleft, first = 1, err = 0;
-+	int vleft, first = 1, err = 0, size;
- 	size_t left;
- 	char *p;
--	
-+
- 	if (!tbl_data || !table->maxlen || !*lenp || (*ppos && !write)) {
- 		*lenp = 0;
- 		return 0;
- 	}
--	
--	i = (int *) tbl_data;
--	vleft = table->maxlen / sizeof(*i);
-+
-+	size = conv == do_proc_dobool_conv ? sizeof(bool) : sizeof(int);
-+	vleft = table->maxlen / size;
- 	left = *lenp;
- 
- 	if (!conv)
-@@ -514,7 +516,7 @@ static int __do_proc_dointvec(void *tbl_data, struct ctl_table *table,
- 		p = buffer;
- 	}
- 
--	for (; left && vleft--; i++, first=0) {
-+	for (; left && vleft--; tbl_data = (char *)tbl_data + size, first=0) {
- 		unsigned long lval;
- 		bool neg;
- 
-@@ -528,12 +530,12 @@ static int __do_proc_dointvec(void *tbl_data, struct ctl_table *table,
- 					     sizeof(proc_wspace_sep), NULL);
- 			if (err)
- 				break;
--			if (conv(&neg, &lval, i, 1, data)) {
-+			if (conv(&neg, &lval, tbl_data, 1, data)) {
- 				err = -EINVAL;
- 				break;
- 			}
- 		} else {
--			if (conv(&neg, &lval, i, 0, data)) {
-+			if (conv(&neg, &lval, tbl_data, 0, data)) {
- 				err = -EINVAL;
- 				break;
- 			}
-@@ -708,8 +710,8 @@ int do_proc_douintvec(struct ctl_table *table, int write,
-  * @lenp: the size of the user buffer
-  * @ppos: file position
-  *
-- * Reads/writes up to table->maxlen/sizeof(unsigned int) integer
-- * values from/to the user buffer, treated as an ASCII string.
-+ * Reads/writes up to table->maxlen/sizeof(bool) bool values from/to
-+ * the user buffer, treated as an ASCII string.
-  *
-  * Returns 0 on success.
-  */
+[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=643003
+
+Changes for v6:
+1. Add a new patch to support inuput argument index mode.
+2. Revise definition in reset.h to index.
+
+Rex-BC Chen (19):
+  clk: mediatek: reset: Add reset.h
+  clk: mediatek: reset: Fix written reset bit offset
+  clk: mediatek: reset: Refine and reorder functions in reset.c
+  clk: mediatek: reset: Extract common drivers to update function
+  clk: mediatek: reset: Merge and revise reset register function
+  clk: mediatek: reset: Revise structure to control reset register
+  clk: mediatek: reset: Support nonsequence base offsets of reset
+    registers
+  clk: mediatek: reset: Support inuput argument index mode
+  clk: mediatek: reset: Change return type for clock reset register
+    function
+  clk: mediatek: reset: Add new register reset function with device
+  clk: mediatek: reset: Add reset support for simple probe
+  dt-bindings: arm: mediatek: Add #reset-cells property for
+    MT8192/MT8195
+  dt-bindings: reset: mediatek: Add infra_ao reset index for
+    MT8192/MT8195
+  clk: mediatek: reset: Add infra_ao reset support for MT8192/MT8195
+  arm64: dts: mediatek: Add infra #reset-cells property for MT8192
+  arm64: dts: mediatek: Add infra #reset-cells property for MT8195
+  dt-bindings: reset: mediatek: Add infra_ao reset index for MT8186
+  dt-bindings: arm: mediatek: Add #reset-cells property for MT8186
+  clk: mediatek: reset: Add infra_ao reset support for MT8186
+
+ .../mediatek/mediatek,mt8186-sys-clock.yaml   |   3 +
+ .../mediatek/mediatek,mt8192-sys-clock.yaml   |   3 +
+ .../mediatek/mediatek,mt8195-sys-clock.yaml   |   3 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  13 +-
+ drivers/clk/mediatek/clk-mt2701-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701-g3d.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701-hif.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701.c             |  22 +-
+ drivers/clk/mediatek/clk-mt2712.c             |  22 +-
+ drivers/clk/mediatek/clk-mt7622-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt7622-hif.c         |  12 +-
+ drivers/clk/mediatek/clk-mt7622.c             |  22 +-
+ drivers/clk/mediatek/clk-mt7629-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt7629-hif.c         |  12 +-
+ drivers/clk/mediatek/clk-mt8135.c             |  22 +-
+ drivers/clk/mediatek/clk-mt8173.c             |  22 +-
+ drivers/clk/mediatek/clk-mt8183.c             |  18 +-
+ drivers/clk/mediatek/clk-mt8186-infra_ao.c    |  23 ++
+ drivers/clk/mediatek/clk-mt8192.c             |  29 +++
+ drivers/clk/mediatek/clk-mt8195-infra_ao.c    |  24 +++
+ drivers/clk/mediatek/clk-mtk.c                |   7 +
+ drivers/clk/mediatek/clk-mtk.h                |   9 +-
+ drivers/clk/mediatek/reset.c                  | 198 +++++++++++++-----
+ drivers/clk/mediatek/reset.h                  |  82 ++++++++
+ include/dt-bindings/reset/mt8186-resets.h     |   5 +
+ include/dt-bindings/reset/mt8192-resets.h     |   8 +
+ include/dt-bindings/reset/mt8195-resets.h     |   6 +
+ 28 files changed, 522 insertions(+), 94 deletions(-)
+ create mode 100644 drivers/clk/mediatek/reset.h
+
 -- 
-2.11.0
+2.18.0
 

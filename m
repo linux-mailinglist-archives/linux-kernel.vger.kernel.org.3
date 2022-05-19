@@ -2,85 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CBE52C9CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 04:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F4352C9BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 04:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbiESC3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 22:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S232856AbiESCTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 22:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbiESC3p (ORCPT
+        with ESMTP id S230457AbiESCTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 22:29:45 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D2ED2C6E64
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 19:29:19 -0700 (PDT)
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(12590:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Thu, 19 May 2022 10:16:53 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.6; Thu, 19 May 2022 10:16:50 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2507.006; Thu, 19 May 2022 10:16:50 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-CC:     "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: RE: [PATCH v15 05/10] clk: Add Sunplus SP7021 clock driver
-Thread-Topic: [PATCH v15 05/10] clk: Add Sunplus SP7021 clock driver
-Thread-Index: AQHYZcsXCsTwSBsje0a2OPS1GfS78a0h1u8AgADuCPCAAdLagIAA6WiQ
-Date:   Thu, 19 May 2022 02:16:50 +0000
-Message-ID: <7fcb969a0d0740459a9ebc403aeb556f@cqplus1.com>
-References: <cover.1652329411.git.qinjian@cqplus1.com>
- <9a71d17e9c70051db44c5545453ae8320ed8e0f8.1652329411.git.qinjian@cqplus1.com>
- <20220517021755.F1D05C385B8@smtp.kernel.org>
- <7febed72ae2747abb953a6f44a51102c@cqplus1.com>
- <20220518202049.6055BC385A9@smtp.kernel.org>
-In-Reply-To: <20220518202049.6055BC385A9@smtp.kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 18 May 2022 22:19:20 -0400
+X-Greylist: delayed 124 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 May 2022 19:19:19 PDT
+Received: from alexa-out-tai-02.qualcomm.com (alexa-out-tai-02.qualcomm.com [103.229.16.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB5C3D1B;
+        Wed, 18 May 2022 19:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652926760; x=1684462760;
+  h=from:to:cc:subject:date:message-id;
+  bh=1K5Kj0q4VA0uHycgXAZpiHxXiJ3BZne5cwNBKL+zDRg=;
+  b=j0Rr3aWVOKzf8sfCk8/nd/ZmaZTfVpOgfE0FGQQW/1a45NOd4sWpdN3S
+   VvgP/Q8FkMWVTdokTFpZGtHPJ47RpS9W2T0l1GxBbfoGw7j7U5rHScL+M
+   52FYo9xnBLpslLGGFZ9pTEzz7DwyhAsxkeoYk48bIZTGPC0eMeNBzf5pj
+   s=;
+Received: from ironmsg02-tai.qualcomm.com ([10.249.140.7])
+  by alexa-out-tai-02.qualcomm.com with ESMTP; 19 May 2022 10:17:13 +0800
+X-QCInternal: smtphost
+Received: from cbsp-sh-gv.ap.qualcomm.com (HELO cbsp-sh-gv.qualcomm.com) ([10.231.249.68])
+  by ironmsg02-tai.qualcomm.com with ESMTP; 19 May 2022 10:17:09 +0800
+Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 3922021)
+        id C3CD44A36; Thu, 19 May 2022 10:17:07 +0800 (CST)
+From:   Tao Wang <quic_wat@quicinc.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     quic_wat@quicinc.com
+Subject: [PATCH] usb: xhci: save hcd_priv memory of shared_hcd
+Date:   Thu, 19 May 2022 10:17:01 +0800
+Message-Id: <1652926622-85047-1-git-send-email-quic_wat@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+ID4gPiArDQo+ID4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZGZfcXVv
-dGllbnQgID0gZGYgLyBtOw0KPiA+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IGRmX3JlbWFpbmRlciA9ICgoZGYgJSBtKSAqIDEwMDApIC8gbTsNCj4gPiA+ID4gKw0KPiA+ID4g
-PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmIChmcmVxID4gZGZfcXVvdGllbnQp
-IHsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRmX3F1
-b3RpZW50ICA9IGZyZXEgLSBkZl9xdW90aWVudCAtIDE7DQo+ID4gPiA+ICsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBkZl9yZW1haW5kZXIgPSAxMDAwIC0gZGZfcmVtYWlu
-ZGVyOw0KPiA+ID4NCj4gPiA+IFdoZXJlIGRvZXMgMTAwMCBjb21lIGZyb20/DQo+ID4NCj4gPiAx
-MDAwIGlzIGNvbWUgZnJvbSAiYm9ycm93IDEiIGluIGxhc3Qgb3BlcmF0aW9uLg0KPiANCj4gSXQn
-cyBzY2FsaW5nIHRoZSB2YWx1ZSByaWdodD8gV2hhdCBpcyBiZWluZyBzY2FsZWQ/IEFyZSB3ZSBj
-b252ZXJ0aW5nDQo+IHVuaXRzIHRvIEh6IGZyb20ga0h6Pw0KDQpIZXJlIGp1c3QgdXNpbmcgaW50
-ZWdlciByZXBsYWNlbWVudCBmbG9hdGluZyBwb2ludCBvcGVyYXRpb24sIGZvciBleGFtcGxlOg0K
-ZGYgPSAxMywgbSA9IDMNCjEzIC8gMyA9IDQuMzMzMzMzMzMNCmRmX3F1b3RpZW50ID0gNA0KZGZf
-cmVtYWluZGVyID0gMC4zMzMzMzMzICogMTAwMCAoYWNjdXJhdGUgdG8gMyBkZWNpbWFsIHBsYWNl
-cykgPSAzMzMNCg0K
+The shared_hcd->hcd_priv is not used in xhci, so not
+need to malloc hcd priv memory for shared_hcd.
+
+Signed-off-by: Tao Wang <quic_wat@quicinc.com>
+---
+ drivers/usb/host/xhci-plat.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 01dcfd7..a27dd3a 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -336,6 +336,11 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 	device_set_wakeup_capable(&pdev->dev, true);
+ 
+ 	xhci->main_hcd = hcd;
++	/*
++	 * The shared_hcd->hcd_priv is not used in xhci,
++	 * so not need to malloc hcd priv memory for shared_hcd.
++	 */
++	driver->hcd_priv_size = 0;
+ 	xhci->shared_hcd = __usb_create_hcd(driver, sysdev, &pdev->dev,
+ 			dev_name(&pdev->dev), hcd);
+ 	if (!xhci->shared_hcd) {
+-- 
+2.7.4
+

@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4E352D387
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C446752D392
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238559AbiESNGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55360 "EHLO
+        id S237325AbiESNHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238430AbiESNFu (ORCPT
+        with ESMTP id S238401AbiESNHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:05:50 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EB12DF4;
-        Thu, 19 May 2022 06:05:46 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id m6-20020a05683023a600b0060612720715so3476909ots.10;
-        Thu, 19 May 2022 06:05:46 -0700 (PDT)
+        Thu, 19 May 2022 09:07:30 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E573172206
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:07:28 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso55865677b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:07:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dz80QCD+6CE2WkSamufmrlzCM2Z5I/iGKYhm4E6fP5A=;
+        b=MzIskUvVCGTzeEoSrg5hcVYlo7SLpkrtZCNOsYBwMOrhNXwDPE9OAxjkAvKNpZKLYr
+         fAhN5ZnIJdUsbNCd9srngZcgYoGPUHJsLwlF7Eg6BVl3IYEGjo9ib6oGxOepWKl3eNDo
+         aGLbeGffL88cmr50mlTXtJOV82Qtef9gOFXp2DG3KtBSoUz2v4nwixnem4vYftiQiSbt
+         NmSh4w6wrPbgAvPtUD0/e9uCGa7QCCywBZ+1oCtc4VWeMVMxrAJeIDZApWC0mbtc1kYu
+         JM0JYeBsLjzZgefn7sz1IGWe5qGSyPdvHBVX/Aze8Zch7KPdDdbiy6Eq0VAP3dZre8gU
+         2e3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=2+i74u3ZZM7l9wk2/F/HfAuqugTEXe5t2ly2GSSgeoI=;
-        b=hyzPYnzizsN4xDwyAAIZyAIEYc7mvsWORe8q8SdNSPziu7ZmvhLUf/UIr7yaIo7j2+
-         h/8fLPCs6r0Ze9+cnc/VRDxG919of0OqIKAFXjJErnJOoY9hMFHWf4jrbTEliYoGD5pk
-         x9iW0YMmfJ9CMonSnCcZaYt7oOmyVts45POBuHK0lvyVIM+G5P62p6JpiwJdTGKpCtH+
-         1H0Z3reGCKr2p4xn9vkIvFczJvcSKEdI2hCVDaUGzi5XEl/bwZ+aiF28KLqXi5/+N0h2
-         GCn5WQ11AhK5RGjagElxTZLQ/1drNqS8B4bv1lVLezYvERajNZWlHS6uXz+lPSv+D36j
-         hn2A==
-X-Gm-Message-State: AOAM530uHBIxZFmYmqNZBffB3tQewlPeorCprz48uZ/A2E7I6zBC2TRp
-        gS/NaPhOwGPNe7lbZ0ImDQ==
-X-Google-Smtp-Source: ABdhPJx13WQbNFLUXx9Sun7/J3THykl4WUX5vRXL+kUcH2nWi53SzXAepLltS56IsVr6PIfDgx+HWw==
-X-Received: by 2002:a9d:ed2:0:b0:60a:de4f:bd93 with SMTP id 76-20020a9d0ed2000000b0060ade4fbd93mr1534030otj.40.1652965545587;
-        Thu, 19 May 2022 06:05:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n6-20020a0568301e8600b0060603221280sm1722383otr.80.2022.05.19.06.05.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 06:05:44 -0700 (PDT)
-Received: (nullmailer pid 1359565 invoked by uid 1000);
-        Thu, 19 May 2022 13:05:39 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Axe Yang <axe.yang@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Satya Tangirala <satyat@google.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Lucas Stach <dev@lynxeye.de>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        devicetree@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        angelogioacchino.delregno@collabora.com,
-        Yue Hu <huyue2@yulong.com>, Kiwoong Kim <kwmad.kim@samsung.com>
-In-Reply-To: <20220519111323.14586-2-axe.yang@mediatek.com>
-References: <20220519111323.14586-1-axe.yang@mediatek.com> <20220519111323.14586-2-axe.yang@mediatek.com>
-Subject: Re: [PATCH v10 1/3] dt-bindings: mmc: mtk-sd: extend interrupts and pinctrls properties
-Date:   Thu, 19 May 2022 08:05:39 -0500
-Message-Id: <1652965539.952223.1359564.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dz80QCD+6CE2WkSamufmrlzCM2Z5I/iGKYhm4E6fP5A=;
+        b=5BMOtYxDeocrIORw7goPm1A8S563tvVAcS6Q1TlE/lDtVM/eH9V5CreEUk25ic0M71
+         q3XiggugSqOATd4lxyOewbr3B1Tbl50/Jfy2qjhptQcB8I+QRh1+D7xhwHPAGjkafdma
+         dTTY2efF5Vifxeb5U4U4e8JFlHagvbAMvjuNcGzpWev0txUaE4sO7hM9zd9awwM0xMHn
+         uOZQWV/RTQVisYUhrrCaZNut9b3xFy0TH9jEK44KZ3K8z5FA9X1hyElfUn0pCaEyXl54
+         NU9H7lEjlwMbGAmA5+rQKp1zR/vEW/YYFm5U18Xeufxzis4Cr2edfOo/+EIgAC76HUVa
+         O4VA==
+X-Gm-Message-State: AOAM530nvKngP4qo/HDKuL8AUx70AU/jvx7hWHEgyh7PEs7Hk1Cc21rn
+        HcSqSqctUmUySvANdDGIEm6g528eywHkxT7fJ+AeJQ==
+X-Google-Smtp-Source: ABdhPJxsBVzRbaWlrFp9iq73YG21rHNLjS99HbEgv2SgrFLzzd63ELklO9hMs9x/uNhmt9BWBLuhC4bI4+FgNBf1Avo=
+X-Received: by 2002:a81:1d48:0:b0:2f1:8ebf:25f3 with SMTP id
+ d69-20020a811d48000000b002f18ebf25f3mr4584461ywd.118.1652965648019; Thu, 19
+ May 2022 06:07:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220517032802.451743-1-Mr.Bossman075@gmail.com> <20220517032802.451743-5-Mr.Bossman075@gmail.com>
+In-Reply-To: <20220517032802.451743-5-Mr.Bossman075@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 19 May 2022 15:07:16 +0200
+Message-ID: <CACRpkdbu87tO0qqLKCaKDM_B0D7cNotsk6Rea4f94VhiuXNJQg@mail.gmail.com>
+Subject: Re: [PATCH v3 06/15] dt-bindings: pinctrl: add i.MXRT1170 pinctrl Documentation
+To:     Jesse Taube <mr.bossman075@gmail.com>
+Cc:     linux-imx@nxp.com, robh+dt@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, aisheng.dong@nxp.com,
+        stefan@agner.ch, daniel.lezcano@linaro.org, tglx@linutronix.de,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
+        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
+        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
+        cniedermaier@dh-electronics.com, clin@suse.com,
+        giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 19 May 2022 19:13:21 +0800, Axe Yang wrote:
-> Extend interrupts and pinctrls for SDIO wakeup interrupt feature.
-> This feature allow SDIO devices alarm asynchronous interrupt to host
-> even when host stop providing clock to SDIO card. An extra wakeup
-> interrupt and pinctrl states for SDIO DAT1 pin state switching are
-> required in this scenario.
-> 
-> Signed-off-by: Axe Yang <axe.yang@mediatek.com>
+On Tue, May 17, 2022 at 5:28 AM Jesse Taube <mr.bossman075@gmail.com> wrote:
+
+> Add i.MXRT1170 pinctrl binding Documentation
+>
+> Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
->  .../devicetree/bindings/mmc/mtk-sd.yaml       | 53 ++++++++++++++++++-
->  1 file changed, 52 insertions(+), 1 deletion(-)
-> 
+> V1 -> V2:
+>  - Nothing done
+> V2 -> V3:
+>  - Nothing done
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This patch applied to the pinctrl tree.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/mmc/mtk-sd.example.dts:50.36-37 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/mmc/mtk-sd.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Yours,
+Linus Walleij

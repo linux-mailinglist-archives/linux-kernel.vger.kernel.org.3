@@ -2,225 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED83252DA76
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791B452DA72
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242129AbiESQkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S241773AbiESQk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241100AbiESQkQ (ORCPT
+        with ESMTP id S242136AbiESQkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:40:16 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD09DE327
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:40:15 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id E0FEC3200976;
-        Thu, 19 May 2022 12:40:12 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 19 May 2022 12:40:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1652978412; x=
-        1653064812; bh=iyV8Eu14mHuegnfdclejo0S/9e+seMI1lnnSy6NkAK4=; b=E
-        AiFsdBDzYgW5IFDHFRT9kLEZc6KU5gvX0jMc3PeOBK9928OjngEwI/C2XbM4Oc6+
-        /+putqYFBX/iPXqzO59LLClAAkji+prFK1oPtxEmlTTy8ABHvJw1oxcR9j+KQ0VD
-        JDHm4wMA5dtH0lYPYabAMG/detnsYJ7d0eW2ut+77d5AixjZEnJ+qpDe69b2OoXz
-        xycTI4VvwC5Br2mo/Jz3ls9NS/aYIkuJ5VLnhZy38yjkuTi3CZreiQbL2v2jDuW0
-        nU/vEd0jmsLEwSY2p14CYJswQunuSNCKcTTJNZjgsER0+fzlyaAjsBDfDN0RPTyR
-        ZKlx606YDCRarILOTMhmQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1652978412; x=1653064812; bh=iyV8Eu14mHuegnfdclejo0S/9e+s
-        eMI1lnnSy6NkAK4=; b=wboXbzf7gyIUHkCYjUmsq2UDBZMwfK2FP6TVvWTkr3n3
-        lPOE2CVN829Wqbv8jv5XI5sCOah2+2gYj/VCmhyFlu1GnFtLBL6YkOXejfU09PSE
-        rsvAXL/rtyNNnEprkfO8Ud1KT0o5a9T9wb/1sNpjCip7UFD2U8FPhIX8azJ1Yuu3
-        B0Dm6cdXdMNXDifzbOr+O90Ut31G8r0dnjwo8ozgQV6vjgkpHzV2XIgP9yFPyOrQ
-        IalkVDHLk/Dm/lAPTRq1kOlcWeQakBcdG1BczKlGUjKskivNtfVsOIddGj3t7N5o
-        258Oxavq3PrGr1MWGa+5giUCIHn61evk5r9IRsxvGw==
-X-ME-Sender: <xms:63KGYibA8cQFR6tmQAM4Kb67ntVmtQw6y8QgBkRcqJJxUODflRqDBA>
-    <xme:63KGYlYQj2xoEsUpir2VffFuYE2NobmqwKUWryGZtXPdzn_Whm0Gr2M0eedpBJa5u
-    Z1Vfin0tdH76FM>
-X-ME-Received: <xmr:63KGYs-QP1yaYMAGdVA2UD6ym30TS3gm3y2TfxgyN5SouV6l2MVufwqPVc2g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedriedugddutddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepuedthefhtddvffefjeejvdehvdej
-    ieehffehkeekheegleeuleevleduteehteetnecuffhomhgrihhnpehgihhthhhusgdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegu
-    vghmihesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
-X-ME-Proxy: <xmx:63KGYkoO4qh2TTHW_AWOAQri-ymBDx1U52iBwoserjjcj9BjIu4iTQ>
-    <xmx:63KGYtpVkpUjzBan5-D2k-E6ZNUfi3dvTUx6RmhHtmNdO9lDUazFPA>
-    <xmx:63KGYiQGT9pxxxkrvWfxxlAwYUlSKFqEN4P9x3Nmu7seVG-Z1zFuqw>
-    <xmx:7HKGYu625XycL6RnKiYuUANQ4U-mLSXYHcjXrtBi4Rj3bpJrAJIyTw>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 19 May 2022 12:40:10 -0400 (EDT)
-Date:   Thu, 19 May 2022 12:39:40 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Xen developer discussion <xen-devel@lists.xenproject.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Boris Ostrovski <boris.ostrovsky@oracle.com>,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Memory Management <linux-mm@kvack.org>,
-        regressions@lists.linux.dev
-Subject: [REGRESSION] Hang in 5.17.4+ that appears to be due to Xen
-Message-ID: <YoZy6BRIkfoeY8af@itl-email>
-References: <Yn/Tgj1Ehs/BdpHp@itl-email>
- <55436ae1-8255-1898-00df-51261080cd41@suse.com>
- <YoJZcUsiE3y6oul5@itl-email>
+        Thu, 19 May 2022 12:40:51 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121C1E77
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:40:48 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id k30so8001896wrd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g9gYzxWe5NPTbaNAHgbnlMxkb6BQm0o5fPGCfOasomw=;
+        b=odGYCXlYMgIzbmhlZajrwAIYrVzVwUGAygS7xDgeEP2rU4W9fYXMtAowdDXWjBuBmN
+         N8vUt46PYTxRHIXJUvYhROlIHPsqU+g8ONQJuDAnApcUSeY7b/s6sHKiwpUirq7+VyBb
+         T7moq/nxrXA/AYNVxABM+qr+9lTbgERS0jZv+fu7vIqCofJukIpMY8o8Oe8pKbdNmnKN
+         PonSzsSzBbtH4erc+IOjytHkSynceUJCBS5xGilAl5fN01iDARm7T9xNJsLRhFmiEd/Y
+         SzY4ujloji/i0hf3ldGrjkCz+MwG4nB7+jUg2kfQshpg+oVxpXyaY4KvU73lYn2yOa+7
+         rCvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g9gYzxWe5NPTbaNAHgbnlMxkb6BQm0o5fPGCfOasomw=;
+        b=H6aeZUgX3oHkIyGPw1ab3gEGoLHqKIUPoeE7aeikGhKrzyHxfE6aVznQCdmX0uhSkI
+         qLDulqb1uag+IJnl6GSsTwofJjOuzMWs5qQph4KpJ1sxQ/7VwfJLQ+6esYkOxOTbfsI8
+         OWLofQ7FA4DOIBgZdImqc7GLNLQjDnCtMT4JWavea1Yw1eAIQGPQHY3aAuTWOFVthCLd
+         xfpcM7SJ3St/T4txNUUYIYd54PUGPmaPCIMV69nC2P/hqbrdCxZYUeYm3S22Bu5pZoni
+         PBxiIzYOYJsNKB4cSm2y4vq7qJMUG96hIWFrbvTMkdhm5dNDVoeiCxfeiCUaiIGE6ego
+         VV0A==
+X-Gm-Message-State: AOAM531cAK2ZuLshWQwmBv38pi3RG806002L2h/mvFzXnJC0YvfdmYSq
+        h8ViwvtdAF8f0As/5/rSHHsKvtCnMmcJvQ==
+X-Google-Smtp-Source: ABdhPJwmsiBN/XwBVe8E5Ys3+WsVkowKP+Je5QRAj4S9lPWo204wsjJqP+iG7dMMB7RDwhMffQZlkw==
+X-Received: by 2002:a5d:4ad1:0:b0:20d:b23:fe1b with SMTP id y17-20020a5d4ad1000000b0020d0b23fe1bmr4752812wrs.579.1652978446569;
+        Thu, 19 May 2022 09:40:46 -0700 (PDT)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id z6-20020a7bc146000000b003942a244ebesm77922wmi.3.2022.05.19.09.40.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 09:40:46 -0700 (PDT)
+Date:   Thu, 19 May 2022 17:40:21 +0100
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 08/10] iommu: Prepare IOMMU domain for IOPF
+Message-ID: <YoZy9fnJlN/RIVY4@myrica>
+References: <20220519072047.2996983-1-baolu.lu@linux.intel.com>
+ <20220519072047.2996983-9-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="P1/QErjS2jIercDB"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YoJZcUsiE3y6oul5@itl-email>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220519072047.2996983-9-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 19, 2022 at 03:20:45PM +0800, Lu Baolu wrote:
+> This adds some mechanisms around the iommu_domain so that the I/O page
+> fault handling framework could route a page fault to the domain and
+> call the fault handler from it.
+> 
+> Add pointers to the page fault handler and its private data in struct
+> iommu_domain. The fault handler will be called with the private data
+> as a parameter once a page fault is routed to the domain. Any kernel
+> component which owns an iommu domain could install handler and its
+> private parameter so that the page fault could be further routed and
+> handled.
+> 
+> This also prepares the SVA implementation to be the first consumer of
+> the per-domain page fault handling model.
+> 
+> Suggested-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>  include/linux/iommu.h         |  3 ++
+>  drivers/iommu/io-pgfault.c    |  7 ++++
+>  drivers/iommu/iommu-sva-lib.c | 65 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 75 insertions(+)
+> 
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index e4ce2fe0e144..45f274b2640d 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -100,6 +100,9 @@ struct iommu_domain {
+>  	void *handler_token;
+>  	struct iommu_domain_geometry geometry;
+>  	struct iommu_dma_cookie *iova_cookie;
+> +	enum iommu_page_response_code (*iopf_handler)(struct iommu_fault *fault,
+> +						      void *data);
+> +	void *fault_data;
+>  };
+>  
+>  static inline bool iommu_is_dma_domain(struct iommu_domain *domain)
+> diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
+> index 1df8c1dcae77..aee9e033012f 100644
+> --- a/drivers/iommu/io-pgfault.c
+> +++ b/drivers/iommu/io-pgfault.c
+> @@ -181,6 +181,13 @@ static void iopf_handle_group(struct work_struct *work)
+>   * request completes, outstanding faults will have been dealt with by the time
+>   * the PASID is freed.
+>   *
+> + * Any valid page fault will be eventually routed to an iommu domain and the
+> + * page fault handler installed there will get called. The users of this
+> + * handling framework should guarantee that the iommu domain could only be
+> + * freed after the device has stopped generating page faults (or the iommu
+> + * hardware has been set to block the page faults) and the pending page faults
+> + * have been flushed.
+> + *
+>   * Return: 0 on success and <0 on error.
+>   */
+>  int iommu_queue_iopf(struct iommu_fault *fault, void *cookie)
+> diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva-lib.c
+> index 568e0f64edac..317ab8e8c149 100644
+> --- a/drivers/iommu/iommu-sva-lib.c
+> +++ b/drivers/iommu/iommu-sva-lib.c
+> @@ -72,6 +72,69 @@ struct mm_struct *iommu_sva_find(ioasid_t pasid)
+>  }
+>  EXPORT_SYMBOL_GPL(iommu_sva_find);
+>  
+> +/*
+> + * I/O page fault handler for SVA
+> + *
+> + * Copied from io-pgfault.c with mmget_not_zero() added before
+> + * mmap_read_lock().
 
---P1/QErjS2jIercDB
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 19 May 2022 12:39:40 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Juergen Gross <jgross@suse.com>,
-	Xen developer discussion <xen-devel@lists.xenproject.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Boris Ostrovski <boris.ostrovsky@oracle.com>,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	linux-kernel@vger.kernel.org,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-	Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-	DRI Development <dri-devel@lists.freedesktop.org>,
-	Linux Memory Management <linux-mm@kvack.org>,
-	regressions@lists.linux.dev
-Subject: [REGRESSION] Hang in 5.17.4+ that appears to be due to Xen
+Comment doesn't really belong here, maybe better in the commit message.
+Apart from that
 
-On Mon, May 16, 2022 at 10:00:07AM -0400, Demi Marie Obenour wrote:
-> On Mon, May 16, 2022 at 08:48:17AM +0200, Juergen Gross wrote:
-> > On 14.05.22 17:55, Demi Marie Obenour wrote:
-> > > In https://github.com/QubesOS/qubes-issues/issues/7481, a user report=
-ed
-> > > that Xorg locked up when resizing a VM window.  While I do not have t=
-he
-> > > same hardware the user does and thus cannot reproduce the bug, the st=
-ack
-> > > trace seems to indicate a deadlock between xen_gntdev and i915.  It
-> > > appears that gnttab_unmap_refs_sync() is waiting for i915 to free the
-> > > pages, while i915 is waiting for the MMU notifier that called
-> > > gnttab_unmap_refs_sync() to return.  Result: deadlock.
-> > >=20
-> > > The problem appears to be that a mapped grant in PV mode will stay in
-> > > the =E2=80=9Cinvalidating=E2=80=9D state until it is freed.  While MM=
-U notifiers are
-> > > allowed to sleep, it appears that they cannot wait for the page to be
-> > > freed, as is happening here.  That said, I am not very familiar with
-> > > this code, so my diagnosis might be incorrect.
-> >=20
-> > All I can say for now is that your patch seems to be introducing a use =
-after
-> > free issue, as the parameters of the delayed work might get freed now b=
-efore
-> > the delayed work is being executed.
->=20
-> I figured it was wrong, not least because I don=E2=80=99t think it compil=
-es
-> (invalid use of void value).  That said, the current behavior is quite
-> suspicious to me.  For one, it appears that munmap() on a grant in a PV
-> domain will not return until nobody else is using the page.  This is not
-> what I would expect, and I can easily imagine it causing deadlocks in
-> userspace.  Instead, I would expect for gntdev to automatically release
-> the grant when the reference count hits zero.  This would also allow for
-> the same grant to be mapped in multiple processes, and might even unlock
-> DMA-BUF support.
->=20
-> > I don't know why this is happening only with rather recent kernels, as =
-the
-> > last gntdev changes in this area have been made in kernel 4.13.
-> >=20
-> > I'd suggest to look at i915, as quite some work has happened in the code
-> > visible in your stack backtraces rather recently. Maybe it would be pos=
-sible
-> > to free the pages in i915 before calling the MMU notifier?
->=20
-> While I agree that the actual problem is almost certainly in i915, the
-> gntdev code does appear rather fragile.  Since so few people use i915 +
-> Xen, problems with the combination generally don=E2=80=99t show up until =
-some
-> Qubes user makes a bug report, which isn=E2=80=99t great.  It would be be=
-tter if
-> Xen didn=E2=80=99t introduce requirements on other kernel code that did n=
-ot hold
-> when not running on Xen.
->=20
-> In this case, if it is actually an invariant that one must not call MMU
-> notifiers for pages that are still in use, it would be better if this
-> was caught by a WARN_ON() or BUG_ON() in the core memory management
-> code.  That would have found the bug instantly and deterministically on
-> all platforms, whereas the current failure is nondeterministic and only
-> happens under Xen.
->=20
-> I also wonder if this is a bug in the core MMU notifier infrastructure.
-> My reading of the mmu_interval_notifier_remove() documentation is that
-> it should only wait for the specific notifier being removed to finish,
-> not for all notifiers to finish.  Adding the memory management
-> maintainers.
+Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-Also adding the kernel regression tracker.
-
-#regzbot introduced v5.16..v5.17.4
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---P1/QErjS2jIercDB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmKGcugACgkQsoi1X/+c
-IsG0sg//ZqBwhdpDjpK+PYyQI+aJdCfEVMWueglKYpsUmrNPhYgxCNbALIrELYEy
-Tw9tkJGJU7ENVh81aaAx6tCfj4wHEbxX6EOJzuTiwwAVtMHqeoPzX9d6vygcqWXL
-TJpjCVhcQ/F+kIjZcjPq2F7eIfmj2w+gfi64X0h0CtkNCVoFaiD638Hp0T/OF6sb
-yvgcleR94ObA6Tjz1jGFddEZSrQPEpZ4RVIg/Ak6OIHSI3phEtbwfoDyig59FT6O
-U5KmBswlz/7jTyjl9UPKLMEZidv3LWBbhEICX/6rCvZUPpdQ/hi3FlkpjMFh00wz
-vVAq4JIkvfY0YrOZHnHqitjZSLcpIvH7aVTxP0iWa6fGBopua0ZeyNDSmL6uFe6D
-MbvfojPY04p20pkuma3OfR1WIkAstnZdOn9oxGMbGokvGBd1lWZLbe94YZzV9bvi
-HTCVN2pn/YCRqktnUyAiaIQcnHKzEoEe7pDJR4OgNND0l9mg/GBMS9y7mHfw9SMI
-4fSZr8xMgLwnUYHLFIFdfGaOlsf6wNhGOWGROY7FpetrlJ+R8A9x6SxBfVq9VffF
-B9Pu7kwEnIgaCGrwcQz6mU1h0Hz7fS7Ffig9YepRlYmNHuC1zhM2PraUjkbm+IRE
-2NU3mQjopmT5Nb+gWTNgt2m0jo3K+z6GcMSvcYoQ4ef66GjW9A8=
-=KIy2
------END PGP SIGNATURE-----
-
---P1/QErjS2jIercDB--
+> + */
+> +static enum iommu_page_response_code
+> +iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
+> +{
+> +	vm_fault_t ret;
+> +	struct mm_struct *mm;
+> +	struct vm_area_struct *vma;
+> +	unsigned int access_flags = 0;
+> +	struct iommu_domain *domain = data;
+> +	unsigned int fault_flags = FAULT_FLAG_REMOTE;
+> +	struct iommu_fault_page_request *prm = &fault->prm;
+> +	enum iommu_page_response_code status = IOMMU_PAGE_RESP_INVALID;
+> +
+> +	if (!(prm->flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID))
+> +		return status;
+> +
+> +	mm = domain_to_mm(domain);
+> +	if (IS_ERR_OR_NULL(mm) || !mmget_not_zero(mm))
+> +		return status;
+> +
+> +	mmap_read_lock(mm);
+> +
+> +	vma = find_extend_vma(mm, prm->addr);
+> +	if (!vma)
+> +		/* Unmapped area */
+> +		goto out_put_mm;
+> +
+> +	if (prm->perm & IOMMU_FAULT_PERM_READ)
+> +		access_flags |= VM_READ;
+> +
+> +	if (prm->perm & IOMMU_FAULT_PERM_WRITE) {
+> +		access_flags |= VM_WRITE;
+> +		fault_flags |= FAULT_FLAG_WRITE;
+> +	}
+> +
+> +	if (prm->perm & IOMMU_FAULT_PERM_EXEC) {
+> +		access_flags |= VM_EXEC;
+> +		fault_flags |= FAULT_FLAG_INSTRUCTION;
+> +	}
+> +
+> +	if (!(prm->perm & IOMMU_FAULT_PERM_PRIV))
+> +		fault_flags |= FAULT_FLAG_USER;
+> +
+> +	if (access_flags & ~vma->vm_flags)
+> +		/* Access fault */
+> +		goto out_put_mm;
+> +
+> +	ret = handle_mm_fault(vma, prm->addr, fault_flags, NULL);
+> +	status = ret & VM_FAULT_ERROR ? IOMMU_PAGE_RESP_INVALID :
+> +		IOMMU_PAGE_RESP_SUCCESS;
+> +
+> +out_put_mm:
+> +	mmap_read_unlock(mm);
+> +	mmput(mm);
+> +
+> +	return status;
+> +}
+> +
+>  /*
+>   * IOMMU SVA driver-oriented interfaces
+>   */
+> @@ -94,6 +157,8 @@ iommu_sva_alloc_domain(struct bus_type *bus, struct mm_struct *mm)
+>  	domain = &sva_domain->domain;
+>  	domain->type = IOMMU_DOMAIN_SVA;
+>  	domain->ops = bus->iommu_ops->sva_domain_ops;
+> +	domain->iopf_handler = iommu_sva_handle_iopf;
+> +	domain->fault_data = domain;
+>  
+>  	return domain;
+>  }
+> -- 
+> 2.25.1
+> 

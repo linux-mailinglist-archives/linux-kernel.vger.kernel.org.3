@@ -2,81 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3E152CEE2
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE6552CEE1
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 11:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbiESJDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 05:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S235746AbiESJCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 05:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbiESJDA (ORCPT
+        with ESMTP id S235764AbiESJC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 05:03:00 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37936A5ABF;
-        Thu, 19 May 2022 02:02:56 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1652950974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rGB9iQQcUTGQsdYgD2JHwGYlEDy8xN3OzEgy7BBIBMU=;
-        b=gYwseLMv+xWD91tlwq/rg0UlNRd1k8V8K5DhwvE2XQ5TzRksLGHZRsvQvlj4jEUOIj1U5q
-        dhplF39VE/mG+FhpGW9dXvLPddh66A9p5hjPRHVmx2U4b0JlYPi7guGNl+26blOyCeXqfU
-        rJt8Bu8HBCRiH3JnNO11rwmv86gIE+c=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
-        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] KVM: x86: Move kzalloc out of atomic context on PREEMPT_RT
-Date:   Thu, 19 May 2022 17:02:18 +0800
-Message-Id: <20220519090218.2230653-1-yajun.deng@linux.dev>
+        Thu, 19 May 2022 05:02:29 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E759A76D1;
+        Thu, 19 May 2022 02:02:28 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id gi33so136916ejc.3;
+        Thu, 19 May 2022 02:02:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=THpG01QnqTAAfo+jNCu5AXbH2/rIQPzXpYrqduPsMlM=;
+        b=3gsP/dyyZEb7uDifMBdKLdRIW6Qs8vJTf0I83tlA7stcVfAl88T2J+J4bsWJl8QA2+
+         1mW8daEmgDXIUIlp+tVwXczuX930lrzhjzqgHpDNYf1UUIR1KvsIzW73Le/YjjHPpraI
+         C5qlin541UHwcR4X0KTqabGar1G+DuMZlFi/+4N6daYFYJHbI9ADq/HlJ4mPgJ9Rejzw
+         yPoS/rX4H5x+RJuWaij0Rk5sGaWfOm5o/0QYZzZ05kt1gHuHIYk0Hn6HgeL9PUHsbkxC
+         udXds6cGnZCPsTxwJoEmV2MkJru7yYQx83sKzoz3pnpES8IvCmBomURZ5yjljf9MPSBj
+         0OsQ==
+X-Gm-Message-State: AOAM533ExILvnLKCJuJT0VnomZ/H+WxHYfYB5Tp6kSh35IAsBEGzVshE
+        OTcM8at0UrTxZqCncpYMpLg=
+X-Google-Smtp-Source: ABdhPJw+lC9whLnqbBMumURJrOM0ojoOt9qoF7cCu5Ekou9qvC+nxuif8HEOuNQfIb5DfbuW8KODfg==
+X-Received: by 2002:a17:907:6d96:b0:6fe:6da7:6bc6 with SMTP id sb22-20020a1709076d9600b006fe6da76bc6mr3195793ejc.57.1652950946941;
+        Thu, 19 May 2022 02:02:26 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id q18-20020aa7cc12000000b0042aa40e76cbsm2529102edt.80.2022.05.19.02.02.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 02:02:24 -0700 (PDT)
+Message-ID: <b61169e6-259c-f47e-b91f-c6cf3a5e5f39@kernel.org>
+Date:   Thu, 19 May 2022 11:02:23 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 1/4] serial: pmac_zilog: remove unfinished DBDMA support
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+References: <20220519075653.31356-1-jslaby@suse.cz>
+ <2f7a739f-61b4-a1af-7c9b-70c5b93c6281@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <2f7a739f-61b4-a1af-7c9b-70c5b93c6281@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memory allocator is fully preemptible and therefore cannot
-be invoked from truly atomic contexts.
+On 19. 05. 22, 10:56, Ilpo Järvinen wrote:
+> On Thu, 19 May 2022, Jiri Slaby wrote:
+> 
+>> The support for DBDMA was never completed. Remove the the code that only
+>> maps spaces without real work.
+>>
+>> Cc: Michael Ellerman <mpe@ellerman.id.au>
+>> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>> Cc: Paul Mackerras <paulus@samba.org>
+>> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+>> ---
+>>   drivers/tty/serial/pmac_zilog.c | 38 +--------------------------------
+>>   drivers/tty/serial/pmac_zilog.h |  9 --------
+>>   2 files changed, 1 insertion(+), 46 deletions(-)
+>>
+>> diff --git a/drivers/tty/serial/pmac_zilog.c b/drivers/tty/serial/pmac_zilog.c
+>> index c903085acb8d..2953ff64a892 100644
+>> --- a/drivers/tty/serial/pmac_zilog.c
+>> +++ b/drivers/tty/serial/pmac_zilog.c
+> 
+> How about dropping this too:
+> #include <asm/dbdma.h>
 
-See Documentation/locking/locktypes.rst (line: 470)
+Good point, fixed, will send v2 eventually.
 
-Add raw_spin_unlock() before memory allocation and raw_spin_lock()
-after it.
-
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- arch/x86/kernel/kvm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-index d0bb2b3fb305..8f8ec9bbd847 100644
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@ -205,7 +205,9 @@ void kvm_async_pf_task_wake(u32 token)
- 		 * async PF was not yet handled.
- 		 * Add dummy entry for the token.
- 		 */
--		n = kzalloc(sizeof(*n), GFP_ATOMIC);
-+		raw_spin_unlock(&b->lock);
-+		n = kzalloc(sizeof(*n), GFP_KERNEL);
-+		raw_spin_lock(&b->lock);
- 		if (!n) {
- 			/*
- 			 * Allocation failed! Busy wait while other cpu
+thanks,
 -- 
-2.25.1
-
+js
+suse labs

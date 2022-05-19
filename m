@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E9952DB26
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F237552DB2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242836AbiESRZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
+        id S242625AbiESR0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242607AbiESRY7 (ORCPT
+        with ESMTP id S242640AbiESRZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:24:59 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7038CA30A5;
-        Thu, 19 May 2022 10:24:58 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id bh5so5376893plb.6;
-        Thu, 19 May 2022 10:24:58 -0700 (PDT)
+        Thu, 19 May 2022 13:25:03 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EACAEE07;
+        Thu, 19 May 2022 10:25:01 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so6418786pjb.1;
+        Thu, 19 May 2022 10:25:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=e3OxyC3/DI33JXHwVUL35gvyfpdRWxFslUVcm3O0EXs=;
-        b=gIY+kSSVUC4Mo1TlPJ2EpffwqI+g7vs9uSicukEY6JHyWUdCZrcpOcFeFlHxlp/9CT
-         O1dorvDVkiR3qdq+ZTIE0axAWgk3elhD5DnL1fdP7mQY05KF77ubjlrR2z0JouMqOw3k
-         9S6Nkgstt4va5hpQ6rjkaxN6uefqKHXkHRyojR3uPmSoNz0OfO5j1bijGobBv1C7oKsR
-         Bm7KgWf+cPb03mm6lQjxWHjabmxEyEwgdqmpCjPLIZgBP9NUbGqzjqdIcxVFiFlQC4xS
-         QbKoK4pHfgoYpe/GsRl4Dwo5zwxyYmnxp1i63apv1e8r/U5Q4tblR+7VvBQij8KQhGIO
-         xnVQ==
+        bh=XYDmKGQ68/tcSrl96epbwKIv/5DWUEdmV+ljYHPziEQ=;
+        b=Wp2efo+C3K4Ivu4rvZOFIJAHwQ1ryFWKaVFECGdFWYf87IEmUdHKWbf39P0c8fjElA
+         m2yhaUhZSkZYA8QBoNRgLuBFeyNoxNx7hAqOpTF8naCZgfSkltJUNtVQPwImHyLGcOJi
+         N79mOU+o9K0PoHhwtD9Fe6ei10ET+UKlwvluDjUohaEIP+Yfgsl9gPiw/j1LWL71Mck3
+         tFIw0Ao3/ApVsYMepzbAJdcH5E4lvLlPivsBpMbNGrIRY48dwZFfdeXce0Q5comOVhM7
+         CCpvTcsqpsv/gA2iaEkNGWYJbFQjqfyuFJ8qoBUP82VrPYvkvNccFnLpO1T1P2xPHQMl
+         iTvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=e3OxyC3/DI33JXHwVUL35gvyfpdRWxFslUVcm3O0EXs=;
-        b=S5JbkDsMCc+7Wf1Py1DXxgvyCMCFZcRJDrwDhqiR6xB6jtZ62nK524yCLqjFgOb2+4
-         olUiVw8qAD7U/qLxDBo7oyuw8U2P5f0F0uAZoJGdL48s+v/imXheDAmUfdzME6UvsAut
-         MuhqR+sgxFzRQ21AeFpup1vVGM5KyExGCmgd209n/JN/meO3usWYJaoL3K5ERMzvLa+y
-         j5DD1muj9tMXOl6VUzBMsakaQylVKwptyC8PHlCLlgnPSKNIS4g1iFDsOAMwIzjZoX71
-         o8pfDqwZnj4NF44rmtNB82QD+wdKgYIktNUb2ZlejHOSYWUTGZgZmpNn/p7/rbz7bOlH
-         E2jQ==
-X-Gm-Message-State: AOAM530QC8ZT8pAypUvVucPDFiNGVu9SLBpu2q5JEocbaB73OJpYmAuc
-        i61vMIfmIaIb5ozsK2Z3yBkMpmiCrtCt
-X-Google-Smtp-Source: ABdhPJysdaEJkG8ndxjZfsUp39aQC6MnGASv6eEov7HDfqLiNgQj3nda4/tl6+uPmbOCpJn3pJB3Jg==
-X-Received: by 2002:a17:90b:1d87:b0:1dc:a9c0:3d49 with SMTP id pf7-20020a17090b1d8700b001dca9c03d49mr6875780pjb.12.1652981097648;
-        Thu, 19 May 2022 10:24:57 -0700 (PDT)
+        bh=XYDmKGQ68/tcSrl96epbwKIv/5DWUEdmV+ljYHPziEQ=;
+        b=wZB/YBbxc69xsy4f/NivuDS7aiIJ8Y0tDjpmN80KKZ+7uIYa9QLmc5NlN0BfhyV22D
+         +LtCwQauJx2qgDkWlChk6IqKQoxTl3GO8lyEFDLvZABCQvw4tbb1JDnxi+DQFLdTeRWR
+         7bMXoDuEam7x1k3tSsxubAiKK4wg2jqiNUTfgYWOyhVUbuOPRMGuqAHn7GsHoo7/9AqR
+         l8RoaxVTO63+DQQEvmC/bMOzpSyn3YzllkuR+kD5RFlzVLVNPnfzi8L2m2at1owYZ8Fi
+         aswPKXCe22pZbMPVwlhAO60uRaYSHYtRt4ZWTk09/LTUxexCNRkCubxThJg93TASlb1A
+         rJSA==
+X-Gm-Message-State: AOAM533NsdrB6Sl//EVU2+Kq5WmNUmSfOJAO+Z09DlOzQj3JG2NNM5By
+        b/jj3l5m3puaPyoiGIoNf9eY9sZpoNgS
+X-Google-Smtp-Source: ABdhPJwV/SeCuBwi09/4GacP5ySX3VYfZpArZWbWdS9Qs6GE+kBNtfBoB95oICb/LCleM8twL0QxRQ==
+X-Received: by 2002:a17:90a:f81:b0:1df:91b5:f0e3 with SMTP id 1-20020a17090a0f8100b001df91b5f0e3mr6809170pjz.227.1652981100183;
+        Thu, 19 May 2022 10:25:00 -0700 (PDT)
 Received: from zaphod.evilpiepirate.org (068-119-229-002.res.spectrum.com. [68.119.229.2])
-        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.24.55
+        by smtp.gmail.com with ESMTPSA id y4-20020a655a04000000b003c6ab6ba06csm3859126pgs.79.2022.05.19.10.24.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 10:24:56 -0700 (PDT)
+        Thu, 19 May 2022 10:24:59 -0700 (PDT)
 From:   Kent Overstreet <kent.overstreet@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@vger.kernel.org,
         pmladek@suse.com, rostedt@goodmis.org, senozhatsky@chromium.org
 Cc:     Kent Overstreet <kent.overstreet@gmail.com>,
         andriy.shevchenko@linux.intel.com, willy@infradead.org
-Subject: [PATCH v2 10/28] vsprintf: pr_u64_minwidth(), pr_u64()
-Date:   Thu, 19 May 2022 13:24:03 -0400
-Message-Id: <20220519172421.162394-11-kent.overstreet@gmail.com>
+Subject: [PATCH v2 11/28] vsprintf: Lift pr_hex_bytes() out from hex_string()
+Date:   Thu, 19 May 2022 13:24:04 -0400
+Message-Id: <20220519172421.162394-12-kent.overstreet@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220519172421.162394-1-kent.overstreet@gmail.com>
 References: <20220519172421.162394-1-kent.overstreet@gmail.com>
@@ -71,172 +71,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds two new-style printbuf helpers for printing simple u64s, and
-converts num_to_str() to be a simple wrapper around pr_u64_minwidth().
+This factors pr_hex_bytes(), a new printbuf-style helper, out from
+hex_string and adds it to pretty-printers.c.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@gmail.com>
 ---
- lib/vsprintf.c | 100 ++++++++++++++++++++++++-------------------------
- 1 file changed, 48 insertions(+), 52 deletions(-)
+ include/linux/pretty-printers.h |  1 +
+ lib/pretty-printers.c           | 23 +++++++++++++++++++++++
+ lib/vsprintf.c                  | 13 ++++---------
+ 3 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index d1372c0b37..3f5638d27a 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -363,41 +363,51 @@ char *put_dec(char *buf, unsigned long long n)
+diff --git a/include/linux/pretty-printers.h b/include/linux/pretty-printers.h
+index 2e8b6b4426..ded34622e8 100644
+--- a/include/linux/pretty-printers.h
++++ b/include/linux/pretty-printers.h
+@@ -4,6 +4,7 @@
+ #ifndef _LINUX_PRETTY_PRINTERS_H
+ #define _LINUX_PRETTY_PRINTERS_H
  
- #endif
++void pr_hex_bytes(struct printbuf *, const u8 *, unsigned, unsigned);
+ void pr_string_option(struct printbuf *, const char * const[], size_t);
+ void pr_bitflags(struct printbuf *, const char * const[], u64);
  
--/*
-- * Convert passed number to decimal string.
-- * Returns the length of string.  On buffer overflow, returns 0.
-- *
-- * If speed is not important, use snprintf(). It's easy to read the code.
+diff --git a/lib/pretty-printers.c b/lib/pretty-printers.c
+index d794648ef9..162e6865f9 100644
+--- a/lib/pretty-printers.c
++++ b/lib/pretty-printers.c
+@@ -4,6 +4,29 @@
+ #include <linux/kernel.h>
+ #include <linux/printbuf.h>
+ 
 +/**
-+ * pr_u64_minwidth - print a u64, in decimal, with zero padding
-+ * @out: printbuf to output to
-+ * @num: u64 to print
-+ * @width: minimum width
-  */
--int num_to_str(char *buf, int size, unsigned long long num, unsigned int width)
-+void pr_u64_minwidth(struct printbuf *out, u64 num, unsigned width)
- {
- 	/* put_dec requires 2-byte alignment of the buffer. */
- 	char tmp[sizeof(num) * 3] __aligned(2);
--	int idx, len;
-+	unsigned len = put_dec(tmp, num) - tmp;
- 
--	/* put_dec() may work incorrectly for num = 0 (generate "", not "0") */
--	if (num <= 9) {
--		tmp[0] = '0' + num;
--		len = 1;
--	} else {
--		len = put_dec(tmp, num) - tmp;
--	}
-+	printbuf_make_room(out, max(len, width));
- 
--	if (len > size || width > size)
--		return 0;
-+	if (width > len)
-+		__pr_chars_reserved(out, '0', width - len);
- 
--	if (width > len) {
--		width = width - len;
--		for (idx = 0; idx < width; idx++)
--			buf[idx] = ' ';
--	} else {
--		width = 0;
--	}
-+	while (len)
-+		__pr_char_reserved(out, tmp[--len]);
++ * pr_hex_bytes - Print a string of hex bytes, with optional separator
++ *
++ * @out: The printbuf to output to
++ * @addr: Buffer to print
++ * @nr: Number of bytes to print
++ * @separator: Optional separator character between each byte
++ */
++void pr_hex_bytes(struct printbuf *out, const u8 *addr,
++		  unsigned nr, unsigned separator)
++{
++	unsigned i;
++
++	for (i = 0; i < nr; ++i) {
++		if (separator && i)
++			pr_char(out, separator);
++		pr_hex_byte(out, addr[i]);
++	}
++
 +	printbuf_nul_terminate(out);
 +}
- 
--	for (idx = 0; idx < len; ++idx)
--		buf[idx + width] = tmp[len - idx - 1];
-+/**
-+ * pr_u64 - print a simple u64, in decimal
-+ * @out: printbuf to output to
-+ * @num: u64 to print
-+ */
-+void pr_u64(struct printbuf *out, u64 num)
-+{
-+	pr_u64_minwidth(out, num, 0);
-+}
- 
--	return len + width;
-+/*
-+ * Convert passed number to decimal string.
-+ * Returns the length of string.  On buffer overflow, returns 0.
-+ *
-+ * Consider switching to printbufs and using pr_u64() or pr_u64_minwith()
-+ * instead.
-+ */
-+int num_to_str(char *buf, int size, unsigned long long num, unsigned int width)
-+{
-+	struct printbuf out = PRINTBUF_EXTERN(buf, size);
++EXPORT_SYMBOL(pr_hex_bytes);
 +
-+	pr_u64_minwidth(&out, num, width);
-+	return out.pos;
- }
+ /**
+  * pr_string_option - Given a list of strings, print out the list and indicate
+  * which option is selected, with square brackets (sysfs style)
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index 3f5638d27a..d4293b4a40 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -52,6 +52,7 @@
+ #include <asm/byteorder.h>	/* cpu_to_le16 */
  
- #define SIGN	1		/* unsigned/signed, must be 1 */
-@@ -996,20 +1006,6 @@ static const struct printf_spec default_dec_spec = {
- 	.precision = -1,
- };
+ #include <linux/string_helpers.h>
++#include <linux/pretty-printers.h>
+ #include "kstrtox.h"
  
--static const struct printf_spec default_dec02_spec = {
--	.base = 10,
--	.field_width = 2,
--	.precision = -1,
--	.flags = ZEROPAD,
--};
--
--static const struct printf_spec default_dec04_spec = {
--	.base = 10,
--	.field_width = 4,
--	.precision = -1,
--	.flags = ZEROPAD,
--};
--
- static noinline_for_stack
- void resource_string(struct printbuf *out, struct resource *res,
- 		     struct printf_spec spec, const char *fmt)
-@@ -1208,12 +1204,12 @@ void bitmap_list_string(struct printbuf *out, unsigned long *bitmap,
- 			__pr_char(out, ',');
- 		first = false;
- 
--		number(out, rbot, default_dec_spec);
-+		pr_u64(out, rbot);
- 		if (rtop == rbot + 1)
- 			continue;
- 
--		__pr_char(out, '-');
--		number(out, rtop - 1, default_dec_spec);
-+		pr_char(out, '-');
-+		pr_u64(out, rtop - 1);
- 	}
- }
- 
-@@ -1762,21 +1758,21 @@ void date_str(struct printbuf *out,
- 	int year = tm->tm_year + (r ? 0 : 1900);
- 	int mon = tm->tm_mon + (r ? 0 : 1);
- 
--	number(out, year, default_dec04_spec);
--	__pr_char(out, '-');
--	number(out, mon, default_dec02_spec);
--	__pr_char(out, '-');
--	number(out, tm->tm_mday, default_dec02_spec);
-+	pr_u64_minwidth(out, year, 4);
-+	pr_char(out, '-');
-+	pr_u64_minwidth(out, mon, 2);
-+	pr_char(out, '-');
-+	pr_u64_minwidth(out, tm->tm_mday, 2);
+ static noinline unsigned long long simple_strntoull(const char *startp, size_t max_chars, char **endp, unsigned int base)
+@@ -1107,10 +1108,10 @@ void resource_string(struct printbuf *out, struct resource *res,
  }
  
  static noinline_for_stack
- void time_str(struct printbuf *out, const struct rtc_time *tm, bool r)
+-void hex_string(struct printbuf *out, u8 *addr,
++void hex_string(struct printbuf *out, const u8 *addr,
+ 		struct printf_spec spec, const char *fmt)
  {
--	number(out, tm->tm_hour, default_dec02_spec);
-+	pr_u64_minwidth(out, tm->tm_hour, 2);
- 	__pr_char(out, ':');
--	number(out, tm->tm_min, default_dec02_spec);
-+	pr_u64_minwidth(out, tm->tm_min, 2);
- 	__pr_char(out, ':');
--	number(out, tm->tm_sec, default_dec02_spec);
-+	pr_u64_minwidth(out, tm->tm_sec, 2);
+-	int i, len = 1;		/* if we pass '%ph[CDN]', field width remains
++	int len = 1;		/* if we pass '%ph[CDN]', field width remains
+ 				   negative value, fallback to the default */
+ 	char separator;
+ 
+@@ -1139,13 +1140,7 @@ void hex_string(struct printbuf *out, u8 *addr,
+ 	if (spec.field_width > 0)
+ 		len = min_t(int, spec.field_width, 64);
+ 
+-	for (i = 0; i < len; ++i) {
+-		__pr_char(out, hex_asc_hi(addr[i]));
+-		__pr_char(out, hex_asc_lo(addr[i]));
+-
+-		if (separator && i != len - 1)
+-			__pr_char(out, separator);
+-	}
++	pr_hex_bytes(out, addr, len, separator);
  }
  
  static noinline_for_stack
-@@ -2054,7 +2050,7 @@ void device_node_string(struct printbuf *out, struct device_node *dn,
- 			str_spec.precision = precision;
- 			break;
- 		case 'p':	/* phandle */
--			number(out, (unsigned int)dn->phandle, default_dec_spec);
-+			pr_u64(out, (unsigned int)dn->phandle);
- 			break;
- 		case 'P':	/* path-spec */
- 			p = fwnode_get_name(of_fwnode_handle(dn));
 -- 
 2.36.0
 

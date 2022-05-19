@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2741D52CAD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 06:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5F652CAD2
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 06:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233477AbiESEWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 00:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S233563AbiESEWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 00:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232796AbiESEWm (ORCPT
+        with ESMTP id S233438AbiESEWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 00:22:42 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D571054F;
-        Wed, 18 May 2022 21:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652934162; x=1684470162;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=t76k+55CvsHktO8F2+yZT/MW2C/RlykP0eSZCo+OnJk=;
-  b=Lp89bWC6tfb9dx93xJXUl2yoPYqpRgv9tHPUX5Jwu90COzH79tGcv8ot
-   b8fPG7W+t2fegOOi+FGcWaPlSFYq20tfwCumioWza0/aovW8b6dZJDx77
-   01fUjxGquSztp04pvFTgVncG8i2v4E5Lfva6RpbAKAK4F3gQbXDAHk67c
-   OOUpLjTFLQkVXc4xnj3Q/aHPEF7buG829ixabAQmYuBUrGRBeIJE+Zy+D
-   FdTtDWHOgRyP7C3dBAyN8cOkACopis7SRQvyQlSoTdEV0OT6H4oJA1Q6M
-   q17Xu6AHdVf009FH35fRmGS0BrmrRCOT/NWFjiJc4FGdQ92nvzDJ9VPWx
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="332629317"
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="332629317"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 21:22:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,236,1647327600"; 
-   d="scan'208";a="700960357"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by orsmga004.jf.intel.com with ESMTP; 18 May 2022 21:22:39 -0700
-From:   tien.sung.ang@intel.com
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tien.sung.ang@intel.com
-Subject: Re: [PATCH] fpga: altera-cvp: Truncated bitstream error support
-Date:   Thu, 19 May 2022 12:21:35 +0800
-Message-Id: <20220519042135.2805176-1-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <6939d35f-36a0-568e-bfec-4dd2e3a48604@wanadoo.fr>
-References: <6939d35f-36a0-568e-bfec-4dd2e3a48604@wanadoo.fr>
+        Thu, 19 May 2022 00:22:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E1A1054F;
+        Wed, 18 May 2022 21:22:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D96586198B;
+        Thu, 19 May 2022 04:22:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF3EC34100;
+        Thu, 19 May 2022 04:22:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652934163;
+        bh=/bcE5LkGFGQyYcHfHloz0vKZmPOV68+PsIFfeAHd8rg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RP1iR1BijUCPxAfKXE+BM2qMy8gvEiL7bp4o2p6XaAruCp/vvBL7SC8YEPUHGh3dW
+         KWR/0ZwuUIlvuHmisTC3CELfLDTu5pMjrJlXy8/Dfb55nmihWqk2cnuqSyHWkwZoPG
+         inu86Y04K1Cy9lfIat4BS1L5n76A5wcp8mT7olglghllO5wBJsFuQLcMteoQAf1PSW
+         lHNVQnwDBnN/QbffiJmhZHdEMiN/8hOl9BNCpRmjWTr4fp2neje2y4ZdaaYc/OCqLD
+         vig5HNVRh8lBD4v+HFJ8rxVROiXqRlLATy6hU9no7VYeTjJGua+P0S4RbuhPbXD22X
+         xthjmoq1uMTKA==
+Date:   Wed, 18 May 2022 21:22:41 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "zhangjianhua (E)" <chris.zjh@huawei.com>
+Cc:     tytso@mit.edu, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next v2] fs-verity: Use struct_size() helper in
+ enable_verity()
+Message-ID: <YoXGEckfSNWKj2oT@sol.localdomain>
+References: <20220519022450.2434483-1-chris.zjh@huawei.com>
+ <YoW0HG+Nbg681yWL@sol.localdomain>
+ <YoW25wrIAiRVifMi@sol.localdomain>
+ <e030eaf6-0b6b-7685-c5b6-fd0b57aea600@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e030eaf6-0b6b-7685-c5b6-fd0b57aea600@huawei.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,5 +58,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for pointing that out. It is always good to get all the alignments right.
-I will add this to the next revision of the patch.
+[Please use reply all, not just reply!]
+
+On Thu, May 19, 2022 at 11:54:48AM +0800, zhangjianhua (E) wrote:
+> Hi Eric
+> 
+> The warnings in commit message are from the build log in Jan 2022, and I
+> find these sizeof are still here, so I submit
+> 
+> these two patches. I build the kernel just now and encounter the same
+> situation with you, there are lots of warnings.
+> 
+> Maybe you are right, there should be some mechanism to solve this problem
+> completely.
+> 
+> 
+
+I've updated the commit message and applied this patch, but not the other one,
+as the other one wasn't actually dealing with a variable length which made it
+pretty much pointless, as I mentioned.
+
+If you'd like to look into making sparse enable this warning by default, I'd
+certainly encourage you to do so.  But it looks like the warning itself could
+use some more work.  It probably should only warn if the
+sizeof(struct_with_flexible_array) is actually being added to another value, and
+where that value is not a compile-time constant.
+
+- Eric

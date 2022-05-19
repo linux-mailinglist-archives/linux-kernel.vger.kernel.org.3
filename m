@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88ECB52D691
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D7252D696
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240064AbiESO6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S240089AbiESO6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238833AbiESO6g (ORCPT
+        with ESMTP id S240062AbiESO6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:58:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0293AA5A89
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:58:35 -0700 (PDT)
+        Thu, 19 May 2022 10:58:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDAED6819
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:58:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D7E5617C6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:58:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C7FC34115;
-        Thu, 19 May 2022 14:58:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1896EB82559
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 14:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C99C385AA;
+        Thu, 19 May 2022 14:58:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652972315;
-        bh=ns1vdA0/qrQYg4Q4rjwNdkKJ1jBqx0nuAlBJgu/kcNw=;
+        s=k20201202; t=1652972318;
+        bh=QnZHsoFGGDrgc6gDM8i1CtC1GfXotTEDdEW7fOq4DJY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XWUi0jU45U729tb8x7ZkD8wexmtvtonAR/mXmMOWEzREPrA+r0y6UQil40xETquuD
-         aRRbzCWiJ81zPIBQfoNfu63FvO8pnaVACaKR/sMconkStC64cTDfiuRouuuxaorkG8
-         ZLAwAAXvV2xmswzBPlBYt7vIdvzke7k4CG88ZP+BUm/Q9aZHt8n/FrCecoPQtiRLld
-         HQhDb/4I6dCkxAOkaGUplqPEQzKL6pys2wtQqA2+c5bt4JG98OT3xu3ZGc7rE5+0qv
-         fqni7eiDt7jP3amFyK6dhuVvYisFCygbvUye5SUs6fYPVD+5QfoZYqMZFWUiE3LI6+
-         aAzmWGFTiGgPA==
+        b=SCcSxDBHc3EjqOSX9CTn8JfRdE2qAWLPE6CQSiOcI50le/xpR5meMkJsW1Ws5YFKW
+         84m05df44EiCby4AbTzdj+oUqzMIBrk4OjPZekSjWyZEqvFUvYV81gEiXa/j2ZyUl8
+         Q1SQs7DZweaW0+FvSJJOSHCjoVqFj4w0TxhSiOegOz1bdbIe2NV/bLF37w6xqUjR+G
+         gGSKT3Ykj4YKMEo6I4rMComriEHDiVX5kU1ltu9MkdQj5KU0KU9A1FR0pvyewxBqs6
+         DnmPAt1Uce1gpDZaZmZYfA8tJ/AsGb1GDJdOpO9kFIVkQ2KZ0VJClC8UZ2QzOGULOH
+         vzWoGUgou6qvw==
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Frederic Weisbecker <frederic@kernel.org>,
@@ -50,9 +50,9 @@ Cc:     Frederic Weisbecker <frederic@kernel.org>,
         Uladzislau Rezki <uladzislau.rezki@sony.com>,
         Joel Fernandes <joel@joelfernandes.org>,
         Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH 01/21] context_tracking: Remove unused context_tracking_in_user()
-Date:   Thu, 19 May 2022 16:58:03 +0200
-Message-Id: <20220519145823.618983-2-frederic@kernel.org>
+Subject: [PATCH 02/21] rcu: Tag rcu_irq_*_irqson() as noinstr
+Date:   Thu, 19 May 2022 16:58:04 +0200
+Message-Id: <20220519145823.618983-3-frederic@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220519145823.618983-1-frederic@kernel.org>
 References: <20220519145823.618983-1-frederic@kernel.org>
@@ -68,10 +68,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This function is not used and CT_WARN_ON() coupled with ct_state() is
-the preferred way to assert context tracking state values.
+rcu_irq_*_irqson() functions can't be safely instrumented. Since they
+enter/exit to/from RCU idle mode, those functions must be tagged as
+"noinstr".
 
-Reported-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+Unfortunately this involves converting the instrumentable
+local_irq_save()/local_irq_restore() to their raw counterparts. Precious
+debugging informations might be lost on the way until a better way out
+is found.
+
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 Cc: Paul E. McKenney <paulmck@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
@@ -86,28 +92,48 @@ Cc: Yu Liao<liaoyu15@huawei.com>
 Cc: Phil Auld <pauld@redhat.com>
 Cc: Paul Gortmaker<paul.gortmaker@windriver.com>
 Cc: Alex Belits <abelits@marvell.com>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- include/linux/context_tracking_state.h | 5 -----
- 1 file changed, 5 deletions(-)
+ kernel/rcu/tree.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/context_tracking_state.h b/include/linux/context_tracking_state.h
-index 65a60d3313b0..02be3ac2040d 100644
---- a/include/linux/context_tracking_state.h
-+++ b/include/linux/context_tracking_state.h
-@@ -41,12 +41,7 @@ static inline bool context_tracking_enabled_this_cpu(void)
- 	return context_tracking_enabled() && __this_cpu_read(context_tracking.active);
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 02233b17cce0..ff97264d8077 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -843,13 +843,13 @@ void rcu_irq_exit_check_preempt(void)
+  * If you add or remove a call to rcu_irq_exit_irqson(), be sure to test
+  * with CONFIG_RCU_EQS_DEBUG=y.
+  */
+-void rcu_irq_exit_irqson(void)
++void noinstr rcu_irq_exit_irqson(void)
+ {
+ 	unsigned long flags;
+ 
+-	local_irq_save(flags);
++	raw_local_irq_save(flags);
+ 	rcu_irq_exit();
+-	local_irq_restore(flags);
++	raw_local_irq_restore(flags);
  }
  
--static __always_inline bool context_tracking_in_user(void)
--{
--	return __this_cpu_read(context_tracking.state) == CONTEXT_USER;
--}
- #else
--static inline bool context_tracking_in_user(void) { return false; }
- static inline bool context_tracking_enabled(void) { return false; }
- static inline bool context_tracking_enabled_cpu(int cpu) { return false; }
- static inline bool context_tracking_enabled_this_cpu(void) { return false; }
+ /*
+@@ -1081,13 +1081,13 @@ noinstr void rcu_irq_enter(void)
+  * If you add or remove a call to rcu_irq_enter_irqson(), be sure to test
+  * with CONFIG_RCU_EQS_DEBUG=y.
+  */
+-void rcu_irq_enter_irqson(void)
++void noinstr rcu_irq_enter_irqson(void)
+ {
+ 	unsigned long flags;
+ 
+-	local_irq_save(flags);
++	raw_local_irq_save(flags);
+ 	rcu_irq_enter();
+-	local_irq_restore(flags);
++	raw_local_irq_restore(flags);
+ }
+ 
+ /*
 -- 
 2.25.1
 

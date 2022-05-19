@@ -2,59 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8258152D2E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6684352D2EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 14:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238050AbiESMrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 08:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
+        id S238079AbiESMtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 08:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238035AbiESMr1 (ORCPT
+        with ESMTP id S237337AbiESMtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 08:47:27 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A3ABA99C
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:47:23 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-2ec42eae76bso55184357b3.10
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:47:23 -0700 (PDT)
+        Thu, 19 May 2022 08:49:04 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66966BA98C
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:49:03 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id bs17so4654029qkb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 05:49:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=kLtG7OuL+V8Ghl5QfqQdFtE39MVlYIU0wGiYL7z5Hpw=;
-        b=SG3nnLmH8t0mZOvk2fV6XtByKoQMBoLT3EuigUsOsrWqP8wUNxQz77JZFnhdD8ZTy9
-         lA78jfMoXv6NTXB0GCijGVYZad11cvk/0z2riDgFXnh5BAzrKUkFwtl3coW5GvgWUz3P
-         gTLLcS204/lI4orTcV/9x3bjlt6kwZIkFXx6twfytS+tyETvbiEZLlfM3SzccNzhaCx3
-         mc4ENg3uN3m2Nf7mjqwEs3s7fEnLhd7NOEkohJoG/Zsz5p5Ys/5TfkJg1gu7642LmPbP
-         ChZjyogMgx5FWq4gGlL0cGyl7w7b8y9pqpClU0ewHML5ZpQcAENDGHIqLuvPxWl+A9l1
-         XxnA==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZYNVM4/IO7V0fYNlQI5NvKWUT/yRQDy6ZvaTZbyqfac=;
+        b=mJWbE0QEIqGVvxszguDCXk6HwPAW7vSyy5sd3KThi4tH55htbFfVr/pC0ToJ9Wjpa1
+         NMmJnnauuKYVCnsnAXjrwKHeXhHl8ZPuLdHTFaFsHnnnmZs/DR1fBs0GWnkicU365rSs
+         MDd0k6/yu9md8zAjjRbTMI3qMGHSL2wGEXHcaHNOhg7ATegQxyCdQWMpnJjS9kEMrpsw
+         qAf5/l3VqY4vD1G5EoG5q0Ppuy/F+LqgJQy7AHg2mM4GxpxngJov49ELqlDU312VZzAS
+         x0NZG6iAjVCyxWGkBA/EzzSF3qXZiUBc5CNglAFiNWxAi2Te8oEllwRgTQe+Qirgs8yO
+         AkHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=kLtG7OuL+V8Ghl5QfqQdFtE39MVlYIU0wGiYL7z5Hpw=;
-        b=1Pnf3cuIqvxuBIOyWz3sOS3sxdsSYij+dYEHIJsYkNejaBmSDc4Qo7PN+jLh1hJqeN
-         BQ52lsbupYVGX2TEYZfyoDyYFZ1a1J9wJEa7/UwfHqzS4bep/t8SPUS/rkVuzInEgfu+
-         Kvf5L1CsAHk9qt+cFFZ8h4URpgtla/qHizc84AYioc+RYXfgA39ZnZkCJ+1sqS71ceky
-         CbgfOnc2m3vADqbVwqAwsuKAOnoZ/eA0YfL/ZkMaf9m03A/TPXCKYB8vuyP3KkrXOHmw
-         2iZSbDbzH5lclumoH4SUOzpPufW6I4/lH28HNZAIAE6emUtOXdytOZwPBdETiEIAdK7W
-         tH0Q==
-X-Gm-Message-State: AOAM530K25Rqf5ksYcvfRNgZlKqdwuzcJGNyrbOZRFDp3Jh3/0SQT2yg
-        sSO8kk2dzfwjbJtxEbTxVzYICFMhVgH7Jt6gi5k4Ks0ct4mGjA==
-X-Google-Smtp-Source: ABdhPJyJQOGsI31cSREWUFTLf6gzy1jNeqTI1pL409PM4pAYq3GLoR48Kwtw8CtrNOYPaME6jGAot6K9mqB4lJBQcgA=
-X-Received: by 2002:a0d:c4c2:0:b0:2f1:6c00:9eb4 with SMTP id
- g185-20020a0dc4c2000000b002f16c009eb4mr4682730ywd.448.1652964442644; Thu, 19
- May 2022 05:47:22 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZYNVM4/IO7V0fYNlQI5NvKWUT/yRQDy6ZvaTZbyqfac=;
+        b=voaPEAAF5o+PPJeGF7tjZONrVjAhM8hXM/mOaSPl1QsNjDjAaRYabd+a802/qm6x5q
+         bylsEmlwTVxchMrhlhf+j5nGIuAvz2iWrhkIC9H4Ee+Nz2qIXglCRsQ+uT2z0m9uFn1/
+         wvq13591yNi/O3reQbR1YXHL28YlN6dH9mD85DE7lCtha5zhjHrHkNbqOCAjAOcSonYR
+         L1kMOC8iKLsu52Qri2tFypCchBil8p9pcBQQjXpBWMTrMvPRv3o1wgqbBQI2tiAUF7Sp
+         oh11FKeGWGEx75JEDgSnXVJvSYVMdcyJ4H+z9B5vNDMwkLt2QkME/7ALYaaR2VHLYiv7
+         T1JA==
+X-Gm-Message-State: AOAM532mvCcVD9o49r4sa/2LFHUoJTyMQeKBaDXoaUzYiiCMsK8CMatr
+        SoqzxUGWzDu1VZWiGN9FMfIWeQ==
+X-Google-Smtp-Source: ABdhPJwC7dyR0Qk9BGcWgMtmzQUq9wbfQt5NmHbKY9nEqa9QgAxBxse0MPnEsgUdrJlcKLQUc1t5uA==
+X-Received: by 2002:a37:6883:0:b0:6a3:42ae:e17b with SMTP id d125-20020a376883000000b006a342aee17bmr524511qkc.59.1652964542542;
+        Thu, 19 May 2022 05:49:02 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id p7-20020a37a607000000b0069fc13ce24dsm1250439qke.126.2022.05.19.05.49.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 05:49:01 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nrfaO-008vEJ-VD; Thu, 19 May 2022 09:49:00 -0300
+Date:   Thu, 19 May 2022 09:49:00 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Long Li <longli@microsoft.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: Re: [PATCH 12/12] RDMA/mana_ib: Add a driver for Microsoft Azure
+ Network Adapter
+Message-ID: <20220519124900.GR63055@ziepe.ca>
+References: <1652778276-2986-1-git-send-email-longli@linuxonhyperv.com>
+ <1652778276-2986-13-git-send-email-longli@linuxonhyperv.com>
+ <20220517152409.GJ63055@ziepe.ca>
+ <PH7PR21MB326393A3D6BF619C2A7B4A42CED09@PH7PR21MB3263.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 19 May 2022 14:47:11 +0200
-Message-ID: <CACRpkdY4_vWpeKKKNrKPuMy8wJ52Y0z6MjyxpM5RwQXM4652KA@mail.gmail.com>
-Subject: [GIT PULL] pin control fixes for v5.18
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH7PR21MB326393A3D6BF619C2A7B4A42CED09@PH7PR21MB3263.namprd21.prod.outlook.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,56 +87,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, May 19, 2022 at 05:57:01AM +0000, Long Li wrote:
 
-some late pin control fixes for the v5.18 series. Only driver fixes
-as is appropriate.
+> > > +
+> > > +	err = ib_copy_from_udata(&ucmd, udata, min(sizeof(ucmd),
+> > > +udata->inlen));
+> > 
+> > Skeptical this min is correct, many other drivers get this wrong.
+> 
+> I think this is correct. This is to prevent user-mode passing more data that may overrun the kernel buffer.
 
-Details in the signed tag.
+And what happens when udata->inlen is, say, 0?
+ 
+> > > +	// map to the page indexed by ucontext->doorbell
+> > 
+> > Not kernel style, be sure to run checkpatch and fix the egregious things.
+> > 
+> > > +static void mana_ib_disassociate_ucontext(struct ib_ucontext
+> > > +*ibcontext) { }
+> > 
+> > Does this driver actually support disassociate? Don't define this function if it
+> > doesn't.
+> > 
+> > I didn't see any mmap zapping so I guess it doesn't.
+> 
+> The user-mode deals with zapping.
+> I see the following comments on rdma_umap_priv_init():
+> 
+> /* RDMA drivers supporting disassociation must have their user space designed
+>  * to cope in some way with their IO pages going to the zero page. */
+> 
+> Is there any other additional work for the kernel driver to support
+> disassociate? It seems uverbs_user_mmap_disassociate() has done all
+> the zapping when destroying a ucontext.
 
-Please pull it in!
+Nope, that looks OK then
+ 
+> I will open PR to rdma-core. The current version of the driver
+> supports queue pair type IB_QPT_RAW_PACKET. The test case will be
+> limited to querying device and load/unload. Running traffic tests
+> will require DPDK (or other user-mode program making use of
+> IB_QPT_RAW_PACKET).
+> 
+> Is it acceptable to develop test cases for this driver without
+> traffic/data tests?
 
-Yours,
-Linus Walleij
+I'm not keen on that, even EFA was able to do simple traffic.
 
-The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
+Even with RAW_PACKET I would expect the driver to be able to send/recv
+using standard verbs as RAW_PACKET is a common feature.
 
-  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
-tags/pinctrl-v5.18-3
-
-for you to fetch changes up to e199975b775a37750903025915f7bc0ccda829e5:
-
-  pinctrl: sunxi: f1c100s: Fix signal name comment for PA2 SPI pin
-(2022-05-14 01:07:08 +0200)
-
-----------------------------------------------------------------
-Pin control fixes for the v5.18 series:
-
-- Fix an altmode in the Ocelot driver
-- Fix the IES control pins in the Mediatek MT8365 driver
-- Fix the UART2 function pin assignments in the
-  Sunxi (AMLogic) driver
-- Fix the signal name of the PA2 SPI pin in the Sunxi
-  (AMLogic) driver
-
-----------------------------------------------------------------
-Andre Przywara (1):
-      pinctrl: sunxi: f1c100s: Fix signal name comment for PA2 SPI pin
-
-Horatiu Vultur (1):
-      pinctrl: ocelot: Fix for lan966x alt mode
-
-IotaHydrae (1):
-      pinctrl: sunxi: fix f1c100s uart2 function
-
-Mattijs Korpershoek (1):
-      pinctrl: mediatek: mt8365: fix IES control pins
-
- drivers/pinctrl/mediatek/pinctrl-mt8365.c     | 2 +-
- drivers/pinctrl/pinctrl-ocelot.c              | 4 +++-
- drivers/pinctrl/sunxi/pinctrl-suniv-f1c100s.c | 4 ++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
+Jason

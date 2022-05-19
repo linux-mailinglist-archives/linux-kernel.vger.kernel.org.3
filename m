@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFA452DD79
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B7F52DD71
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244374AbiESTNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
+        id S243825AbiESTNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243697AbiESTNU (ORCPT
+        with ESMTP id S243716AbiESTNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 15:13:20 -0400
+        Thu, 19 May 2022 15:13:21 -0400
 Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17D1AF1CD;
-        Thu, 19 May 2022 12:13:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC9BAF300;
+        Thu, 19 May 2022 12:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:MIME-Version:Message-Id:Date:Cc:To:From
-        :references:content-disposition:in-reply-to;
-        bh=MZeXC7bp8nJCmM9SY95bVbKQFzLlTbsMUaxfluhzO2Y=; b=RPIvY7qK8UKUvD7bTulAKZiK0d
-        ce2ZThn9g9TLUzlbITS7c+JtcTuZtGtbrLJEbtHJF3UubBKNIzs4kYCx/S/tIWsu2euBSkUIfAIdK
-        cYHblTEf+wARPXXWLnBqttcp/KwEUbpwcWrBi3kmPSd0zD8aT4iI8gxh48q0uGt1Bs68pZK/Qz5IT
-        wFA57fEuHP08DSsmENaeXqjyHZxfHQvQxQM4uGa4G4iIpjKDyDLwIli1a8mqZiyRVEPGj6CxkpTvj
-        bPWZ7lcfg0YUtdWel1udUIKnUXU/QC3rtAvf4dj3qTkWw/znUFv1dEAQh/vZn+2/ZeOWe6caFAPFJ
-        BpQcg80A==;
+        d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Cc:To:From:content-disposition;
+        bh=5EwGXxaUdgUDTgnCCbWFXiPOWwITuy/vPu3QayFRFZI=; b=VD1ZrvWMudK9E+QjPxjE3BaINA
+        +z/q4Pl+UxZN9WbMXUDLnrr5WByvsa33h6taMloQbCangn6qtuBrPCw/++SrJaPp3mo5L1D+MGi6l
+        xJAPZVagQrEbiN9pi/nO1vV7Cuv23rgbw+0/DobonPKvnCs7n4l0cwIvLgxlHdt4L8IsywgrHyeMT
+        WEgS10eQtE7SePY9ZhogcqJ045J75UpG1fXt0gbZZ+j6s74BHJEDXxwv62e+5f6roii+gaXRpjmdS
+        wxg3c3tVcrXJThOdPCgrCRrTbRWwWmkdUtsevwTQHo/p1F1n4fyFPOtB+ZqHk1CTHAK4+FiwVkQvm
+        2p/1Y8QQ==;
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nrlaF-002TqQ-7D; Thu, 19 May 2022 13:13:15 -0600
+        id 1nrlaF-002TqR-7D; Thu, 19 May 2022 13:13:17 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1nrlaD-0004T9-0S; Thu, 19 May 2022 13:13:13 -0600
+        id 1nrlaD-0004TB-63; Thu, 19 May 2022 13:13:13 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
         Song Liu <song@kernel.org>
@@ -41,9 +41,11 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         Martin Oliveira <Martin.Oliveira@eideticom.com>,
         David Sloan <David.Sloan@eideticom.com>,
         Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu, 19 May 2022 13:12:56 -0600
-Message-Id: <20220519191311.17119-1-logang@deltatee.com>
+Date:   Thu, 19 May 2022 13:12:57 -0600
+Message-Id: <20220519191311.17119-2-logang@deltatee.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220519191311.17119-1-logang@deltatee.com>
+References: <20220519191311.17119-1-logang@deltatee.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 172.16.1.31
@@ -55,80 +57,112 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v1 00/15] Bug fixes for mdadm tests
+Subject: [PATCH v1 01/15] md/raid5-log: Drop extern decorators for function prototypes
 X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+extern is not necessary and recommended against when defining prototype
+functions in headers. checkpatch.pl complains about these. So remove
+them.
 
-This series includes fixes to fix all the kernel panics in the mdadm
-tests and some, related, sparse issues. The first 10 patches
-clean refactor the raid5-cache code so that the RCU usage of conf->log
-can be cleaned up which is done in patches 11 and 12 -- fixing some
-actual kernel NULL pointer dereference crashes in the mdadm test.
+Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+---
+ drivers/md/raid5-log.h | 75 ++++++++++++++++++++----------------------
+ 1 file changed, 36 insertions(+), 39 deletions(-)
 
-Patch 13 fixes some of the remaining sparse warnings that are just
-missing __rcu annotations.
-
-Patches 14 and 15 fix a couple additional hangs in an mdadm test.
-
-This series also originally included a patch[1] to fix the
-mddev->private=NULL issue in raid0. That bug caused an mdadm tests to
-crash, but it seems Xiao beat me to the fix by a few days. Hopefully,
-this work to improve mdadm tests will mean these types of bugs will
-be caught much sooner, before merging.
-
-This series will be followed by another series for mdadm which fixes
-the segfaults and annotates some failing tests to make mdadm tests
-runnable fairly reliably, but I'll wait for a stable hash for this
-series to note the kernel version tested against. Following that,
-v3 of my lock contention series will be sent with more confidence
-of its correctness.
-
-This series is based on the current md/md-next branch as of today
-(6ad84d559b8c). A git branch is available here:
-
-  https://github.com/sbates130272/linux-p2pmem md-bug
-
-Thanks,
-
-Logan
-
-[1] https://github.com/sbates130272/linux-p2pmem/commit/5a538f9f48d77cba111773759256bbc3ccaaa74a
-
---
-
-Logan Gunthorpe (15):
-  md/raid5-log: Drop extern decorators for function prototypes
-  md/raid5-cache: Refactor r5c_is_writeback() to take a struct r5conf
-  md/raid5-cache: Refactor r5l_start() to take a struct r5conf
-  md/raid5-cache: Refactor r5l_flush_stripe_to_raid() to take a struct
-    r5conf
-  md/raid5-cache: Refactor r5l_wake_reclaim() to take a struct r5conf
-  md/raid5-cache: Refactor remaining functions to take a r5conf
-  md/raid5-ppl: Drop unused argument from ppl_handle_flush_request()
-  md/raid5-cache: Pass the log through to r5c_finish_cache_stripe()
-  md/raid5-cache: Don't pass conf to r5c_calculate_new_cp()
-  md/raid5-cache: Take struct r5l_log in
-    r5c_log_required_to_flush_cache()
-  md/raid5: Ensure array is suspended for calls to log_exit()
-  md/raid5-cache: Add RCU protection to conf->log accesses
-  md/raid5-cache: Annotate pslot with __rcu notation
-  md: Ensure resync is reported after it starts
-  md: Notify sysfs sync_completed in md_reap_sync_thread()
-
- drivers/md/md.c          |  13 ++-
- drivers/md/raid5-cache.c | 240 ++++++++++++++++++++++++---------------
- drivers/md/raid5-log.h   | 103 ++++++++---------
- drivers/md/raid5-ppl.c   |   2 +-
- drivers/md/raid5.c       |  50 ++++----
- drivers/md/raid5.h       |   2 +-
- 6 files changed, 231 insertions(+), 179 deletions(-)
-
-
-base-commit: 6ad84d559b8cbce9ab27a3a2658c438de867c98e
---
+diff --git a/drivers/md/raid5-log.h b/drivers/md/raid5-log.h
+index 43c714a8798c..270ced4f770f 100644
+--- a/drivers/md/raid5-log.h
++++ b/drivers/md/raid5-log.h
+@@ -2,49 +2,46 @@
+ #ifndef _RAID5_LOG_H
+ #define _RAID5_LOG_H
+ 
+-extern int r5l_init_log(struct r5conf *conf, struct md_rdev *rdev);
+-extern void r5l_exit_log(struct r5conf *conf);
+-extern int r5l_write_stripe(struct r5l_log *log, struct stripe_head *head_sh);
+-extern void r5l_write_stripe_run(struct r5l_log *log);
+-extern void r5l_flush_stripe_to_raid(struct r5l_log *log);
+-extern void r5l_stripe_write_finished(struct stripe_head *sh);
+-extern int r5l_handle_flush_request(struct r5l_log *log, struct bio *bio);
+-extern void r5l_quiesce(struct r5l_log *log, int quiesce);
+-extern bool r5l_log_disk_error(struct r5conf *conf);
+-extern bool r5c_is_writeback(struct r5l_log *log);
+-extern int
+-r5c_try_caching_write(struct r5conf *conf, struct stripe_head *sh,
+-		      struct stripe_head_state *s, int disks);
+-extern void
+-r5c_finish_stripe_write_out(struct r5conf *conf, struct stripe_head *sh,
+-			    struct stripe_head_state *s);
+-extern void r5c_release_extra_page(struct stripe_head *sh);
+-extern void r5c_use_extra_page(struct stripe_head *sh);
+-extern void r5l_wake_reclaim(struct r5l_log *log, sector_t space);
+-extern void r5c_handle_cached_data_endio(struct r5conf *conf,
+-	struct stripe_head *sh, int disks);
+-extern int r5c_cache_data(struct r5l_log *log, struct stripe_head *sh);
+-extern void r5c_make_stripe_write_out(struct stripe_head *sh);
+-extern void r5c_flush_cache(struct r5conf *conf, int num);
+-extern void r5c_check_stripe_cache_usage(struct r5conf *conf);
+-extern void r5c_check_cached_full_stripe(struct r5conf *conf);
++int r5l_init_log(struct r5conf *conf, struct md_rdev *rdev);
++void r5l_exit_log(struct r5conf *conf);
++int r5l_write_stripe(struct r5l_log *log, struct stripe_head *head_sh);
++void r5l_write_stripe_run(struct r5l_log *log);
++void r5l_flush_stripe_to_raid(struct r5l_log *log);
++void r5l_stripe_write_finished(struct stripe_head *sh);
++int r5l_handle_flush_request(struct r5l_log *log, struct bio *bio);
++void r5l_quiesce(struct r5l_log *log, int quiesce);
++bool r5l_log_disk_error(struct r5conf *conf);
++bool r5c_is_writeback(struct r5l_log *log);
++int r5c_try_caching_write(struct r5conf *conf, struct stripe_head *sh,
++			  struct stripe_head_state *s, int disks);
++void r5c_finish_stripe_write_out(struct r5conf *conf, struct stripe_head *sh,
++				 struct stripe_head_state *s);
++void r5c_release_extra_page(struct stripe_head *sh);
++void r5c_use_extra_page(struct stripe_head *sh);
++void r5l_wake_reclaim(struct r5l_log *log, sector_t space);
++void r5c_handle_cached_data_endio(struct r5conf *conf,
++				  struct stripe_head *sh, int disks);
++int r5c_cache_data(struct r5l_log *log, struct stripe_head *sh);
++void r5c_make_stripe_write_out(struct stripe_head *sh);
++void r5c_flush_cache(struct r5conf *conf, int num);
++void r5c_check_stripe_cache_usage(struct r5conf *conf);
++void r5c_check_cached_full_stripe(struct r5conf *conf);
+ extern struct md_sysfs_entry r5c_journal_mode;
+-extern void r5c_update_on_rdev_error(struct mddev *mddev,
+-				     struct md_rdev *rdev);
+-extern bool r5c_big_stripe_cached(struct r5conf *conf, sector_t sect);
+-extern int r5l_start(struct r5l_log *log);
++void r5c_update_on_rdev_error(struct mddev *mddev, struct md_rdev *rdev);
++bool r5c_big_stripe_cached(struct r5conf *conf, sector_t sect);
++int r5l_start(struct r5l_log *log);
+ 
+-extern struct dma_async_tx_descriptor *
++struct dma_async_tx_descriptor *
+ ops_run_partial_parity(struct stripe_head *sh, struct raid5_percpu *percpu,
+ 		       struct dma_async_tx_descriptor *tx);
+-extern int ppl_init_log(struct r5conf *conf);
+-extern void ppl_exit_log(struct r5conf *conf);
+-extern int ppl_write_stripe(struct r5conf *conf, struct stripe_head *sh);
+-extern void ppl_write_stripe_run(struct r5conf *conf);
+-extern void ppl_stripe_write_finished(struct stripe_head *sh);
+-extern int ppl_modify_log(struct r5conf *conf, struct md_rdev *rdev, bool add);
+-extern void ppl_quiesce(struct r5conf *conf, int quiesce);
+-extern int ppl_handle_flush_request(struct r5l_log *log, struct bio *bio);
++int ppl_init_log(struct r5conf *conf);
++void ppl_exit_log(struct r5conf *conf);
++int ppl_write_stripe(struct r5conf *conf, struct stripe_head *sh);
++void ppl_write_stripe_run(struct r5conf *conf);
++void ppl_stripe_write_finished(struct stripe_head *sh);
++int ppl_modify_log(struct r5conf *conf, struct md_rdev *rdev, bool add);
++void ppl_quiesce(struct r5conf *conf, int quiesce);
++int ppl_handle_flush_request(struct r5l_log *log, struct bio *bio);
+ extern struct md_sysfs_entry ppl_write_hint;
+ 
+ static inline bool raid5_has_log(struct r5conf *conf)
+-- 
 2.30.2
+

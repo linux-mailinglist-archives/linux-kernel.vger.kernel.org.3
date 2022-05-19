@@ -2,132 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEF952D0E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922E352D0EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237025AbiESKy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S237030AbiESK5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbiESKyz (ORCPT
+        with ESMTP id S229498AbiESK5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:54:55 -0400
-Received: from zg8tmtyylji0my4xnjqunzqa.icoremail.net (zg8tmtyylji0my4xnjqunzqa.icoremail.net [162.243.164.74])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D73F2AF1E9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:54:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id; bh=pYmFxl5EX9FT7BHXjR4DHU5ZJgyGAjXjcQaIbNKJXKE=; b=Q
-        QGH5HTEz3arrj+Cgu4Iiy2c3lD4z54VgmsnOKBmRA5CrmGu/N23RBP6CkjU+O3Pf
-        OJeE6UrdJrDrZ1FRplmI8zdl2ydfLmGO9B4KtJ90yNub4ZFMEt606Acl/xEGx22j
-        MC1XGBFKs0muU1ROz3rN8Phf29SAPw1DhrwTViXBhc=
-Received: from localhost (unknown [10.129.21.144])
-        by front01 (Coremail) with SMTP id 5oFpogD3_6fvIYZi3ip+Bw--.21549S2;
-        Thu, 19 May 2022 18:54:39 +0800 (CST)
-From:   Yongzhi Liu <lyz_cs@pku.edu.cn>
-To:     amitkarwar@gmail.com, ganapathi017@gmail.com,
-        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
-        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, arend.vanspriel@broadcom.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, fuyq@stu.pku.edu.cn,
-        Yongzhi Liu <lyz_cs@pku.edu.cn>
-Subject: [PATCH v2] iio: vadc: Fix potential dereference of NULL pointer
-Date:   Thu, 19 May 2022 03:54:34 -0700
-Message-Id: <1652957674-127802-1-git-send-email-lyz_cs@pku.edu.cn>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: 5oFpogD3_6fvIYZi3ip+Bw--.21549S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7urWfuFyktr18KrWxGryfJFb_yoW8CF43pa
-        yktayrKry2ka1fJ3WftFWDXryaqw42q3yUGFWxJ3W3Ar43trnYyw1aqw1FkFn7uFWxC3ya
-        yr4YyFnYgr4Dur7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9F1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxE
-        wVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26w4UJr1UMxC20s026xCaFV
-        Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
-        x4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
-        1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
-        JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: irzqijirqukmo6sn3hxhgxhubq/1tbiAwELBlPy7vJhCwADsb
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 19 May 2022 06:57:04 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5065C674C8
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:57:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EACE41F86A;
+        Thu, 19 May 2022 10:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1652957821; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8uZD/sZperneDqTPmd/3WdovVji6ii5Xr/81SKEuRI4=;
+        b=SPinQL3l1IrJeHOkOXoaUvW+T4FUNTVr5LsgEoOKh0t0ydiKxpj3mAwY8bV0lpIdi8E+th
+        TxHLIrqz+O4LOnz4G+2x2BE5dpXSD06fCKEmxH/Qkgskm2rY50xwQXAwj76VWu8rJpnSOE
+        iUijMuYueXfTDri4cKSeUZGCOFZTBqQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1652957821;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8uZD/sZperneDqTPmd/3WdovVji6ii5Xr/81SKEuRI4=;
+        b=GFdxz3drPlEthQn5HQPEQgVP6OBYVfm5b3mhjwrdQffvVzpeuqVG+jYkjDFiozZEwVethz
+        qAmY/KHBJIMBDpDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C1C3913AF8;
+        Thu, 19 May 2022 10:57:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Q/E6Ln0ihmJdWwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 19 May 2022 10:57:01 +0000
+Message-ID: <5a0c9b7c-3620-3e0f-7510-d0fc3fa6ceda@suse.cz>
+Date:   Thu, 19 May 2022 12:57:01 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 4/6] mm/page_alloc: Remove unnecessary page == NULL check
+ in rmqueue
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>
+References: <20220512085043.5234-1-mgorman@techsingularity.net>
+ <20220512085043.5234-5-mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220512085043.5234-5-mgorman@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of vadc_get_channel() needs to be checked
-to avoid use of NULL pointer. Fix this by adding the null
-pointer check on prop.
+On 5/12/22 10:50, Mel Gorman wrote:
+> The VM_BUG_ON check for a valid page can be avoided with a simple
+> change in the flow. The ZONE_BOOSTED_WATERMARK is unlikely in general
+> and even more unlikely if the page allocation failed so mark the
+> branch unlikely.
 
-Fixes: 0917de94c ("iio: vadc: Qualcomm SPMI PMIC voltage ADC driver")
+Hm, so that makes a DEBUG_VM config avoid the check. On the other hand,
+it puts it on the path returning from rmqueue_pcplist() for all configs,
+and that should be the fast path. So unless things further change in the
+following patches, it doesn't seem that useful?
 
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
----
- drivers/iio/adc/qcom-spmi-vadc.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/iio/adc/qcom-spmi-vadc.c b/drivers/iio/adc/qcom-spmi-vadc.c
-index 34202ba..9fa61fb 100644
---- a/drivers/iio/adc/qcom-spmi-vadc.c
-+++ b/drivers/iio/adc/qcom-spmi-vadc.c
-@@ -358,14 +358,25 @@ static int vadc_measure_ref_points(struct vadc_priv *vadc)
- 	vadc->graph[VADC_CALIB_ABSOLUTE].dx = VADC_ABSOLUTE_RANGE_UV;
- 
- 	prop = vadc_get_channel(vadc, VADC_REF_1250MV);
-+	if (!prop) {
-+		dev_err(vadc->dev, "Please define 1.25V channel\n");
-+		ret = -ENODEV;
-+		goto err;
-+	}
- 	ret = vadc_do_conversion(vadc, prop, &read_1);
- 	if (ret)
- 		goto err;
- 
- 	/* Try with buffered 625mV channel first */
- 	prop = vadc_get_channel(vadc, VADC_SPARE1);
--	if (!prop)
-+	if (!prop) {
- 		prop = vadc_get_channel(vadc, VADC_REF_625MV);
-+		if (!prop) {
-+			dev_err(vadc->dev, "Please define 0.625V channel\n");
-+			ret = -ENODEV;
-+			goto err;
-+		}
-+	}
- 
- 	ret = vadc_do_conversion(vadc, prop, &read_2);
- 	if (ret)
-@@ -381,11 +392,21 @@ static int vadc_measure_ref_points(struct vadc_priv *vadc)
- 
- 	/* Ratiometric calibration */
- 	prop = vadc_get_channel(vadc, VADC_VDD_VADC);
-+	if (!prop) {
-+		dev_err(vadc->dev, "Please define VDD channel\n");
-+		ret = -ENODEV;
-+		goto err;
-+	}
- 	ret = vadc_do_conversion(vadc, prop, &read_1);
- 	if (ret)
- 		goto err;
- 
- 	prop = vadc_get_channel(vadc, VADC_GND_REF);
-+	if (!prop) {
-+		dev_err(vadc->dev, "Please define GND channel\n");
-+		ret = -ENODEV;
-+		goto err;
-+	}
- 	ret = vadc_do_conversion(vadc, prop, &read_2);
- 	if (ret)
- 		goto err;
--- 
-2.7.4
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> Tested-by: Minchan Kim <minchan@kernel.org>
+> Acked-by: Minchan Kim <minchan@kernel.org>
+> ---
+>  mm/page_alloc.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 1c4c54503a5d..b543333dce8f 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3765,17 +3765,18 @@ struct page *rmqueue(struct zone *preferred_zone,
+>  
+>  	page = rmqueue_buddy(preferred_zone, zone, order, alloc_flags,
+>  							migratetype);
+> -	if (unlikely(!page))
+> -		return NULL;
+>  
+>  out:
+>  	/* Separate test+clear to avoid unnecessary atomics */
+> -	if (test_bit(ZONE_BOOSTED_WATERMARK, &zone->flags)) {
+> +	if (unlikely(test_bit(ZONE_BOOSTED_WATERMARK, &zone->flags))) {
+>  		clear_bit(ZONE_BOOSTED_WATERMARK, &zone->flags);
+>  		wakeup_kswapd(zone, 0, 0, zone_idx(zone));
+>  	}
+>  
+> -	VM_BUG_ON_PAGE(page && bad_range(zone, page), page);
+> +	if (unlikely(!page))
+> +		return NULL;
+> +
+> +	VM_BUG_ON_PAGE(bad_range(zone, page), page);
+>  	return page;
+>  }
+>  
 

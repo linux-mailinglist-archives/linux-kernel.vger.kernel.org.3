@@ -2,92 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5918E52DAC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F86852DACB
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242292AbiESRAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
+        id S242327AbiESREB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234096AbiESRAj (ORCPT
+        with ESMTP id S233174AbiESREA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:00:39 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBE2B66
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=g7xCp6J3k4L2dkaSWosqH9kge3uPbogCKlir9eF0rGw=; b=LOxGwIJzeEdNh9RKyGjDZiEa13
-        fjaut1Kx6s93BK2A5wahP5RHOCuE21Ssz0OSKDFxlv8SWwpH84C3n1eijyHSbqfl7i0iNBNaJDV3C
-        YZVmsZeWeY08AQ802UELHYM6uanc4kdLT9uTB1yWgmh8qMFY1qIS0qZo2Vuhxxwd9Sc2Gvdub0dQR
-        oe36axBUTmpUIwt0ygeFxkdJHR1UKr0n7lDlQnGyBKPkNI6PgAR+0T1mAyjmwTEXqMiXkrTSyUhNP
-        i60D2Aq8z2KP865EWMEZf/XfxZTWgZjFW2NeWEU9fL1JF/aMKC1gqn15DMP7vIgXOXG1WqhpK2d7S
-        0wyKDnRw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrjVT-0025Ro-Mk; Thu, 19 May 2022 17:00:13 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0DB3C980E7F; Thu, 19 May 2022 19:00:10 +0200 (CEST)
-Date:   Thu, 19 May 2022 19:00:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
-        brgerst@gmail.com, jiangshanlai@gmail.com,
-        Andrew.Cooper3@citrix.com, mark.rutland@arm.com,
-        Borislav Petkov <bp@suse.de>
-Subject: Re: [PATCH 3/6] x86/entry: Use PUSH_AND_CLEAR_REGS for compat
-Message-ID: <20220519170009.GL2578@worktop.programming.kicks-ass.net>
-References: <20220506121431.563656641@infradead.org>
- <20220506121631.293889636@infradead.org>
- <20220519162411.GA4095576@roeck-us.net>
+        Thu, 19 May 2022 13:04:00 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F28B4C7A4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:03:59 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id j24so8120818wrb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 10:03:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xM5n/q+pdgADcY+P4WfPB73lVe6lU3/dOsh4SpBlyyM=;
+        b=ddoNPFiwomNGnVYEj4t3in7WWD9an5zcNZoUuNwnQSZGdkZdI6acfqDb/hxJQJi9Hl
+         xGJOb+wH0itT0oDcT3x4H9yMHh3AL8N3WKqOVAoOeZ8fqGjgl3Nd6W+6rxigSs4LO3im
+         1pZRn0Cf4sTbyN5SIvQtHyQfivtftRPvgbob65+WKdX/GeB396nVVDvcDwrSg5Znp/YG
+         4CzUU9B7YurMq2k151Q84zKSz26L55Wk0T4fJm5o50cwO+4WiAfxtkldssDw8a48eAM8
+         y0usIHhIx1QRocuHNecPfPKL5KuMw0AtLEDopPtWpkbns+pRRCcFoSCDrAal5K0QDM6h
+         kl8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xM5n/q+pdgADcY+P4WfPB73lVe6lU3/dOsh4SpBlyyM=;
+        b=DGL7GJF7v4y3r7G/7oAqC9oi9zQsVSu7sAzs6WDxGnLllY6Y0bnuI1vwOJRRor5PmY
+         CeFDZ4F73f51X6N1gXlIN7dxUw5wMBF8UTk/xflASz+fXDsAA8CDK1EP7eXfFM55gxEX
+         ch4zViO7bIPmccEJLreRzJyj2uCD3easMx25aqXu15L8iWmdi+Slwx+wz52O7EcdRDC8
+         TbRdSSVOigF8v/jTnrmEeUw6Nui6E4BOwhzazxS6OIAIR02944E+OL9L7T7ho+Dn/bg+
+         aCqvaD28ucBTJvhcPao84jh55pHTrBu+umBCZNNWMOEnRVNyzOePgh/UbqIU8znpRRmk
+         bqGA==
+X-Gm-Message-State: AOAM531Ut1MjKZr+p1vqOiIpCrQmZw0N9wpqfO1okh6bxtAWVFvTs0ct
+        0k7+HCuM36ubVbE+cII9JDxb6f8m8tfRE2Yk
+X-Google-Smtp-Source: ABdhPJwOb7/uDptoM2mZZlgWpb/vvJM+AQpDom8d8DP5QnBk3ta5cHEtKe6nD9CKlI49Y6wBfdH4Iw==
+X-Received: by 2002:a05:6000:178d:b0:20c:5bfd:4d7d with SMTP id e13-20020a056000178d00b0020c5bfd4d7dmr4784229wrg.23.1652979837779;
+        Thu, 19 May 2022 10:03:57 -0700 (PDT)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id i17-20020a05600c355100b00394867d66ddsm31882wmq.35.2022.05.19.10.03.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 10:03:57 -0700 (PDT)
+Message-ID: <5b219857-4fe9-2406-2c6f-0511e8c33765@linaro.org>
+Date:   Thu, 19 May 2022 18:03:56 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519162411.GA4095576@roeck-us.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] nvmem: brcm_nvram: check for allocation failure
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20220510093540.23259-1-srinivas.kandagatla@linaro.org>
+ <YoZ2ozeju8bXzUyX@kroah.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <YoZ2ozeju8bXzUyX@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 09:24:11AM -0700, Guenter Roeck wrote:
-> On Fri, May 06, 2022 at 02:14:34PM +0200, Peter Zijlstra wrote:
-> > Since the upper regs don't exist for ia32 code, preserving them
-> > doesn't hurt and it simplifies the code.
-> > 
-> > This doesn't add any attack surface that would not already be
-> > available through INT80.
-> > 
-> > Notably:
-> > 
-> >  - 32bit SYSENTER: didn't clear si, dx, cx.
-> > 
-> >  - 32bit SYSCALL, INT80: *do* clear si since the C functions don't
-> >    take a second argument.
-> > 
-> >  - 64bit: didn't clear si since the C functions take a second
-> >    argument; except the error_entry path might have only one argument,
-> >    so clearing si was missing here.
-> > 
-> > 32b SYSENTER should be clearing all those 3 registers, nothing uses them
-> > and selftests pass.
-> > 
-> > Unconditionally clear rsi since it simplifies code.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Reviewed-by: Borislav Petkov <bp@suse.de>
+
+
+On 19/05/2022 17:56, Greg KH wrote:
+> On Tue, May 10, 2022 at 10:35:40AM +0100, Srinivas Kandagatla wrote:
+>> From: Dan Carpenter <dan.carpenter@oracle.com>
+>>
+>> Check for if the kcalloc() fails.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 299dc152721f ("nvmem: brcm_nvram: parse NVRAM content into NVMEM cells")
 > 
-> linux-next (next-20220519) crashes due to this patch when booting
-> q35:EPYC-Rome in qemu.
+> This isn't a commit in any tree that I can see, are you sure it is
+> correct?
+Looks like the commit is not correct,
+It should be
 
-Could you try backing out each of the hunks one at a time? They're all
-more or less independent.
+Fixes: 6e977eaa8280 ("nvmem: brcm_nvram: parse NVRAM content into NVMEM 
+cells")
 
-My bet with this being a #PF on an AMD machine, it's either the SI clear
-or the SYSCALL change.
+
+Dan, can you send this with fix to Fixes tag?
+
+--srini
+
+
+> 
+> thanks,
+> 
+> greg k-h

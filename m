@@ -2,119 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4576552D9B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0222D52D9D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 18:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241627AbiESQBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 12:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        id S241756AbiESQIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 12:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241611AbiESQBS (ORCPT
+        with ESMTP id S241737AbiESQH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 12:01:18 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B93220F3;
-        Thu, 19 May 2022 09:01:17 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id n8so5212613plh.1;
-        Thu, 19 May 2022 09:01:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Izt2XQIS+k/iuXA05DKzoWcR89KdN5/M9JpMeEiR3dk=;
-        b=l+Z5DmtzF2PgSdkzReMXkCr0cikUBHlWtJhOoNkfVGm38LC7zuwnjIKP8w+S8zYU0l
-         O4KR91U+cpCxuuu8g/ETUF4jAo+xXwGpo9ryb50c+J5XpKR09Q2O/bbEf5xlk3+M3pGj
-         NQuZ2LoiJRuECGmMkbVOPLY8bq3ECkxQkzJ8bbVEM+SkQoVSGXZWFb/fbZq06ipYJmZ+
-         tnjZ9RJ1+72C+V8v8qoDrHh+3fTfDx+nvvykt+VzOwUefQYg7/JwMzNhWkMXSkYbuiGu
-         8oDyZsL61cYx3FGPVXl02kA1U1YcDh6V1U5D60XchTn+d1nNi+6e8OYl1IH4MF+lDyk1
-         mYiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Izt2XQIS+k/iuXA05DKzoWcR89KdN5/M9JpMeEiR3dk=;
-        b=IZqZdBnZoFdIssS+eWZP7/I0c1VCP/cRiy6G5vMOCQi8wnSC8gR0qApKPNBLdOX67g
-         q0C7B7H7h5buDgVWwY6VJUu0T2Ehel3lcOBLwykMmLFqsx0H//rr8H2wzJgzxzqU8GSR
-         RR71QI2E/t3u/ocyrX3wytMt4CMwB/8zHX2CpVJI8IT/WvLvQb+KX8JEygcsUkwIupO1
-         J1S8DRAb5EjFdaUVo5fER2Oj7fu3JmAKThIA+S6Byjt0weuVvYTgIOYgZwj0Uvq1sXZl
-         3RR/I5Rz+CwRdt8JE3pT70u1p0A6HLriD3qYmlzIcByFoiS3RiJ277DkZI1ioH35Pm7X
-         RGfQ==
-X-Gm-Message-State: AOAM532K9T2t5NRlPEEr8gB08R7h/NCVNE9sRx6mfEj66Mm/iLeM4dyi
-        FBHuXFMyELoJkzxv+TGrgt6a1+ezAHF/A8SJxOc=
-X-Google-Smtp-Source: ABdhPJxuAHz6fXhLGH98VdN5BYkURgBOorxd4Mtvxw41lKe+Kr0/EjkshxnhJApKfZa/HsAUzAKQ9vip789BEWDnuAk=
-X-Received: by 2002:a17:903:24f:b0:15c:e3b8:a640 with SMTP id
- j15-20020a170903024f00b0015ce3b8a640mr5309537plh.5.1652976076357; Thu, 19 May
- 2022 09:01:16 -0700 (PDT)
+        Thu, 19 May 2022 12:07:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27334A3F6
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 09:07:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87D99B82520
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 16:07:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06A04C385AA;
+        Thu, 19 May 2022 16:07:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652976476;
+        bh=jC9MZ56f6/y27GJlqudr3bwdHks9u/b7P6hjWSqT9ek=;
+        h=From:To:Cc:Subject:Date:From;
+        b=g26P3IuHY37nxhFCaqTOhYp/GEhMEQQhn/N/pE36Wbfp1AJ8D1gPD0Gx6H81PpzNo
+         QsO0b/8lGWtzjC+3QO5y1Hj5EBu/7GgQW+CEXFA6Nx+HRnIZVUtfzaOVcqdfXKq2pz
+         Mnb0FasGOQ34/dHbzc+nIowXPfnXr1weW61xJHcu+4JYlgEpHr3c0B8IasZ1A1wbHE
+         dj48YH9X3qWtoV7U6KkyvRhYvUiZitKO+/dWc/Angsu2xeiqNbnNNyDjFCXoJsgv1T
+         l0h13nMlVe6cqV8MT0Zkul7ubXXatoGz4MWQzRBySkfX6KXjiTGSoOgaNp77A+1gSB
+         sqiwsvDPC+bcw==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@rivosinc.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Subject: [PATCH v3 0/2] use static key to optimize pgtable_l4_enabled
+Date:   Thu, 19 May 2022 23:59:16 +0800
+Message-Id: <20220519155918.3882-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220428205116.861003-1-yury.norov@gmail.com> <20220428205116.861003-4-yury.norov@gmail.com>
- <20220519150929.GA3145933@roeck-us.net>
-In-Reply-To: <20220519150929.GA3145933@roeck-us.net>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Thu, 19 May 2022 09:01:00 -0700
-Message-ID: <CAAH8bW8ju7XLkbYya1A1OtqGVGDUAk7dPyw01RsDzg+v7xihyQ@mail.gmail.com>
-Subject: Re: [PATCH 3/5] lib/bitmap: add test for bitmap_{from,to}_arr64
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 8:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Thu, Apr 28, 2022 at 01:51:14PM -0700, Yury Norov wrote:
-> > Test newly added bitmap_{from,to}_arr64() functions similarly to
-> > already existing bitmap_{from,to}_arr32() tests.
-> >
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
->
-> With this patch in linux-next (including next-20220519), I see lots of
-> bitmap test errors when booting 32-bit ppc images in qemu. Examples:
->
-> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0", got "0,65"
-> ...
-> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65", got "0,65,128"
-> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65", got "0,65,128-129"
-> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65", got "0,65,128-130"
-> ...
-> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65,128-143", got "0,65,128-143,208-209"
-> test_bitmap: [lib/test_bitmap.c:600] bitmaps contents differ: expected "0,65,128-143", got "0,65,128-143,208-210"
->
-> and so on. It only  gets worse from there, and ends with:
->
-> test_bitmap: parselist: 14: input is '0-2047:128/256' OK, Time: 4274
-> test_bitmap: bitmap_print_to_pagebuf: input is '0-32767
-> ', Time: 127267
-> test_bitmap: failed 337 out of 3801 tests
->
-> Other architectures and 64-bit ppc builds seem to be fine.
+The pgtable_l4|[l5]_enabled check sits at hot code path, performance
+is impacted a lot. Since pgtable_l4|[l5]_enabled isn't changed after
+boot, so static key can be used to solve the issue[1].
 
-Hi Guenter,
+An unified way static key was introduced in [2], but it's only targets
+riscv isa extension. We dunno whether SV48 and SV57 will be considered
+as isa extension, so the unified solution isn't used for
+pgtable_l4[l5]_enabled.
 
-Thanks for letting me know. It's really weird because it has already
-been for 2 weeks
-in next with no issues. But I tested it on mips32, not powerpc. I'll
-check what happens
-there.
+patch1 fix a NULL pointer deference if static key is used a bit earlier.
+patch2 uses the static key to optimize pgtable_l4|[l5]_enabled.
 
-Can you please share your config and qemu image if possible?
+[1] http://lists.infradead.org/pipermail/linux-riscv/2021-December/011164.html
+[2] https://lore.kernel.org/linux-riscv/20220517184453.3558-1-jszhang@kernel.org/T/#t
 
-Thanks,
-Yury
+Since v2:
+ - move the W=1 warning fix to a separate patch
+ - move the unified way to use static key to a new patch series.
+
+Since v1:
+ - Add a W=1 warning fix
+ - Fix W=1 error
+ - Based on v5.18-rcN, since SV57 support is added, so convert
+   pgtable_l5_enabled as well.
+
+
+Jisheng Zhang (2):
+  riscv: move sbi_init() earlier before jump_label_init()
+  riscv: turn pgtable_l4|[l5]_enabled to static key for RV64
+
+ arch/riscv/include/asm/pgalloc.h    | 16 ++++----
+ arch/riscv/include/asm/pgtable-32.h |  3 ++
+ arch/riscv/include/asm/pgtable-64.h | 59 +++++++++++++++++---------
+ arch/riscv/include/asm/pgtable.h    |  5 +--
+ arch/riscv/kernel/cpu.c             |  4 +-
+ arch/riscv/kernel/setup.c           |  2 +-
+ arch/riscv/mm/init.c                | 64 ++++++++++++++++++-----------
+ arch/riscv/mm/kasan_init.c          | 16 ++++----
+ 8 files changed, 103 insertions(+), 66 deletions(-)
+
+-- 
+2.34.1
+

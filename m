@@ -2,105 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0477952DE20
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7EB52DE28
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 22:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244628AbiESUNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 16:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
+        id S244653AbiESUPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 16:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238814AbiESUNF (ORCPT
+        with ESMTP id S230395AbiESUPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 16:13:05 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EA3C3D12
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 13:13:04 -0700 (PDT)
-Received: from [192.168.1.206] (unknown [109.252.138.248])
-        by mail.ispras.ru (Postfix) with ESMTPSA id DC1EB40755E1;
-        Thu, 19 May 2022 20:13:01 +0000 (UTC)
-Subject: Re: [PATCH] ASoC: max98090: Remove unneeded check in
- max98090_put_enab_tlv()
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
-References: <1652980212-21473-1-git-send-email-khoroshilov@ispras.ru>
- <YoZ+dmprwb5Ohto3@sirena.org.uk>
- <fd58c07c-488e-1c90-a755-194f714bbe45@ispras.ru>
- <YoaEXWGEY4s14je+@sirena.org.uk>
- <ce6853a9-6789-f151-3193-59b7dd73bd27@ispras.ru>
- <YoajesD+D1W3ZV7/@sirena.org.uk>
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <4080eabc-5e56-905d-d994-84ee57c2cf31@ispras.ru>
-Date:   Thu, 19 May 2022 23:13:00 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 19 May 2022 16:15:18 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601AFED8FF;
+        Thu, 19 May 2022 13:15:17 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id n124-20020a1c2782000000b003972dfca96cso1502624wmn.4;
+        Thu, 19 May 2022 13:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=R5StGlz1vviurEeHp86Yc0NK8H+s2C5ct2HWFfXOqqI=;
+        b=j2AsJkqpREZDVr3/wq7aBhPed9FdU4CLnUyO+TKagVnoCi9D3Cvo+38/9odRp9/ss4
+         egPEhRr5tmcCVrEmHJqZMpqS3eRmtevuI5JvI72sPbyiQecTSUfCdqlwLf9GQLbK2nlF
+         qJM8JSjqzGruJ3K3JGZ4eG0f/WKwi/1/lzrL7zCudAyJoCrW1eQfKF/MWxM+AN9VFVOJ
+         3Qjzu5URJ9U+l4+W7XwCn0c0Z9pmQwslF3H2s8pcOy2zPHltAoVr5IKjHHtdzhA6fzr7
+         SATwahrsB7oyyBnpbjRJ4Onq6CRmceX7AUQjQDPAj7lF1eoZ2VDbP+k8ANpAmRb1Af+/
+         WROQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R5StGlz1vviurEeHp86Yc0NK8H+s2C5ct2HWFfXOqqI=;
+        b=7iyLJ5lI6ou6jqKQJ4iKbRGnDfFee43mwsLKrM0R8V5n59J36hhCnU9IpUMNK006CC
+         +0yPEePNjiV1v9FrEZ5vlryDjUQCdMNFUsj5p6oFFHwbYNoH/gLwlahKFB5LZS4dfN/5
+         mCgHZR1oCNrCvF0td1JOuCccoPJmGbb4OPXyBwanU2Y/oby3o0veUhkRycb2K5yyey+7
+         QREhEp3c92IAQ3dpMtSGNtHNhPHgKs6YguPG2mMweKMA8qBkzD/lhIS2y+ky45ZWpTPg
+         HwVl2kQ8aYTAL1LBQddUIsB1NaUoyXEL4ofiZtHyEnrB72gQomPF0dllIz7B2LrVzCrD
+         9Ikw==
+X-Gm-Message-State: AOAM531X56ojjmpxbXYQTuiE8/U2Kc2krbAf7iXzBHDB8bEwEFCbSihQ
+        Yo5/RNLqkIkya6RtRC1Be+8=
+X-Google-Smtp-Source: ABdhPJxLMUXGCou2vx2P8DLUXT8bJ4Al4x/Zussdwmm1ENGEOmVNyzpdtA5dDAtGvqBShdpCvcbZsw==
+X-Received: by 2002:a1c:acc6:0:b0:38e:b184:7721 with SMTP id v189-20020a1cacc6000000b0038eb1847721mr5350152wme.94.1652991315822;
+        Thu, 19 May 2022 13:15:15 -0700 (PDT)
+Received: from krava ([95.82.133.179])
+        by smtp.gmail.com with ESMTPSA id d27-20020adfa41b000000b0020d012692dbsm559144wra.18.2022.05.19.13.15.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 13:15:15 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 19 May 2022 22:15:12 +0200
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Eugene Syromiatnikov <esyr@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v4 3/3] libbpf, selftests/bpf: pass array of u64
+ values in kprobe_multi.addrs
+Message-ID: <YoalUCsTMFsADkPX@krava>
+References: <cover.1652982525.git.esyr@redhat.com>
+ <0f500d9a17dcc1270c581f0b722be8f9d7ce781d.1652982525.git.esyr@redhat.com>
+ <0468355f-1d95-d5df-4560-f9220c7a0d05@fb.com>
 MIME-Version: 1.0
-In-Reply-To: <YoajesD+D1W3ZV7/@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0468355f-1d95-d5df-4560-f9220c7a0d05@fb.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.05.2022 23:07, Mark Brown wrote:
-> On Thu, May 19, 2022 at 09:27:25PM +0300, Alexey Khoroshilov wrote:
->> On 19.05.2022 20:54, Mark Brown wrote:
->>> Oh, the check won't be working properly - it's just that like I say the
->>> fix is to move rather than remove it so it's operating on the signed
->>> value.
->> Do you mean something like this?
-> That looks about right.
-Should I prepare a patch or you will do it yourself?
+On Thu, May 19, 2022 at 12:43:18PM -0700, Yonghong Song wrote:
+> 
+> 
+> On 5/19/22 11:14 AM, Eugene Syromiatnikov wrote:
+> > With the interface as defined, it is impossible to pass 64-bit kernel
+> > addresses from a 32-bit userspace process in BPF_LINK_TYPE_KPROBE_MULTI,
+> > which severly limits the useability of the interface, change the API
+> > to accept an array of u64 values instead of (kernel? user?) longs.
+> > This patch implements the user space part of the change (without
+> > the relevant kernel changes, since, as of now, an attempt to add
+> > kprobe_multi link will fail with -EOPNOTSUPP), to avoid changing
+> > the interface after a release.
+> > 
+> > Fixes: 5117c26e877352bc ("libbpf: Add bpf_link_create support for multi kprobes")
+> > Fixes: ddc6b04989eb0993 ("libbpf: Add bpf_program__attach_kprobe_multi_opts function")
+> > Fixes: f7a11eeccb111854 ("selftests/bpf: Add kprobe_multi attach test")
+> > Fixes: 9271a0c7ae7a9147 ("selftests/bpf: Add attach test for bpf_program__attach_kprobe_multi_opts")
+> > Fixes: 2c6401c966ae1fbe ("selftests/bpf: Add kprobe_multi bpf_cookie test")
+> > Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+> > ---
+> >   tools/lib/bpf/bpf.h                                        | 2 +-
+> >   tools/lib/bpf/libbpf.c                                     | 8 ++++----
+> >   tools/lib/bpf/libbpf.h                                     | 2 +-
+> >   tools/testing/selftests/bpf/prog_tests/bpf_cookie.c        | 2 +-
+> >   tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 8 ++++----
+> >   5 files changed, 11 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> > index f4b4afb..f677602 100644
+> > --- a/tools/lib/bpf/bpf.h
+> > +++ b/tools/lib/bpf/bpf.h
+> > @@ -417,7 +417,7 @@ struct bpf_link_create_opts {
+> >   			__u32 flags;
+> >   			__u32 cnt;
+> >   			const char **syms;
+> > -			const unsigned long *addrs;
+> > +			const __u64 *addrs;
+> 
+> Patch 2 and 3 will prevent supporting 64-bit kernel, 32-bit userspace for
+> kprobe_multi. So effectively, kprobe_multi only supports
+> 64-bit kernel and 64-bit user space.
+> This is definitely an option, but it would be great
+> if other people can chime in as well for whether this choice
+> is best or not.
 
+IIUC patch 3 is preparation for kernel change that will enable 32 bit
+userspace and 64 bit kernel, and Eugene will send it later
 
+sounds good to me
+
+jirka
+
+> 
+> >   			const __u64 *cookies;
+> >   		} kprobe_multi;
+> >   	};
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 809fe20..03a14a6 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -10279,7 +10279,7 @@ static bool glob_match(const char *str, const char *pat)
+> >   struct kprobe_multi_resolve {
+> >   	const char *pattern;
+> > -	unsigned long *addrs;
+> > +	__u64 *addrs;
+> >   	size_t cap;
+> >   	size_t cnt;
+> >   };
+> > @@ -10294,12 +10294,12 @@ resolve_kprobe_multi_cb(unsigned long long sym_addr, char sym_type,
+> >   	if (!glob_match(sym_name, res->pattern))
+> >   		return 0;
+> > -	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(unsigned long),
+> > +	err = libbpf_ensure_mem((void **) &res->addrs, &res->cap, sizeof(__u64),
+> >   				res->cnt + 1);
+> >   	if (err)
+> >   		return err;
+> > -	res->addrs[res->cnt++] = (unsigned long) sym_addr;
+> > +	res->addrs[res->cnt++] = sym_addr;
+> >   	return 0;
+> >   }
+> > @@ -10314,7 +10314,7 @@ bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
+> >   	};
+> >   	struct bpf_link *link = NULL;
+> >   	char errmsg[STRERR_BUFSIZE];
+> > -	const unsigned long *addrs;
+> > +	const __u64 *addrs;
+> >   	int err, link_fd, prog_fd;
+> >   	const __u64 *cookies;
+> >   	const char **syms;
+> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> > index 05dde85..ec1cb61 100644
+> > --- a/tools/lib/bpf/libbpf.h
+> > +++ b/tools/lib/bpf/libbpf.h
+> > @@ -431,7 +431,7 @@ struct bpf_kprobe_multi_opts {
+> >   	/* array of function symbols to attach */
+> >   	const char **syms;
+> >   	/* array of function addresses to attach */
+> > -	const unsigned long *addrs;
+> > +	const __u64 *addrs;
+> >   	/* array of user-provided values fetchable through bpf_get_attach_cookie */
+> >   	const __u64 *cookies;
+> >   	/* number of elements in syms/addrs/cookies arrays */
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > index 923a613..5aa482a 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> > @@ -137,7 +137,7 @@ static void kprobe_multi_link_api_subtest(void)
+> >   	cookies[6] = 7;
+> >   	cookies[7] = 8;
+> > -	opts.kprobe_multi.addrs = (const unsigned long *) &addrs;
+> > +	opts.kprobe_multi.addrs = (const __u64 *) &addrs;
+> >   	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
+> >   	opts.kprobe_multi.cookies = (const __u64 *) &cookies;
+> >   	prog_fd = bpf_program__fd(skel->progs.test_kprobe);
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > index b9876b5..fbf4cf2 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > @@ -105,7 +105,7 @@ static void test_link_api_addrs(void)
+> >   	GET_ADDR("bpf_fentry_test7", addrs[6]);
+> >   	GET_ADDR("bpf_fentry_test8", addrs[7]);
+> > -	opts.kprobe_multi.addrs = (const unsigned long*) addrs;
+> > +	opts.kprobe_multi.addrs = (const __u64 *) addrs;
+> >   	opts.kprobe_multi.cnt = ARRAY_SIZE(addrs);
+> >   	test_link_api(&opts);
+> >   }
+> > @@ -183,7 +183,7 @@ static void test_attach_api_addrs(void)
+> >   	GET_ADDR("bpf_fentry_test7", addrs[6]);
+> >   	GET_ADDR("bpf_fentry_test8", addrs[7]);
+> > -	opts.addrs = (const unsigned long *) addrs;
+> > +	opts.addrs = (const __u64 *) addrs;
+> >   	opts.cnt = ARRAY_SIZE(addrs);
+> >   	test_attach_api(NULL, &opts);
+> >   }
+> > @@ -241,7 +241,7 @@ static void test_attach_api_fails(void)
+> >   		goto cleanup;
+> >   	/* fail_2 - both addrs and syms set */
+> > -	opts.addrs = (const unsigned long *) addrs;
+> > +	opts.addrs = (const __u64 *) addrs;
+> >   	opts.syms = syms;
+> >   	opts.cnt = ARRAY_SIZE(syms);
+> >   	opts.cookies = NULL;
+> > @@ -255,7 +255,7 @@ static void test_attach_api_fails(void)
+> >   		goto cleanup;
+> >   	/* fail_3 - pattern and addrs set */
+> > -	opts.addrs = (const unsigned long *) addrs;
+> > +	opts.addrs = (const __u64 *) addrs;
+> >   	opts.syms = NULL;
+> >   	opts.cnt = ARRAY_SIZE(syms);
+> >   	opts.cookies = NULL;

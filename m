@@ -2,81 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0ABB52D735
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04A552D733
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 17:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240596AbiESPOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 11:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
+        id S236890AbiESPOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 11:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240577AbiESPOr (ORCPT
+        with ESMTP id S240568AbiESPOi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 11:14:47 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A774ADFF53;
-        Thu, 19 May 2022 08:14:44 -0700 (PDT)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Thu, 19 May 2022 23:14:28
- +0800 (GMT+08:00)
-X-Originating-IP: [124.236.130.193]
-Date:   Thu, 19 May 2022 23:14:28 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   duoming@zju.edu.cn
-To:     "Kalle Valo" <kvalo@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, amitkarwar@gmail.com,
-        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
-        huxinming820@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net v2] net: wireless: marvell: mwifiex: fix sleep in
- atomic context bugs
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <87zgjd1sd4.fsf@kernel.org>
-References: <20220519135345.109936-1-duoming@zju.edu.cn>
- <87zgjd1sd4.fsf@kernel.org>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 19 May 2022 11:14:38 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F6FE8BB7
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:14:36 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id h29so9704150lfj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 08:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=itRG1VYF0gL4tx08osqrN69WT0ejZkjkV+TfO9bvWJE=;
+        b=XgTq/dYFSFIFbxx2d+NAGEPQm3O+J/Xh081BltdpCukFuUVx5ZvdL5/6n5afgOvTbL
+         D2Lsu8XJjBF19F1D3xlemyp4ReN6dVt4EUtw1qfSfIbzQbqBDM2VUzz74YHxrD6h/PLf
+         pdXLV3Q4UTGi73BXZ3WPW/TrqxFP3x15KKMdF/VDc/gNJJdh3Ff9G0DeFW2PrDcq/WIO
+         UIv0yynTIgEgExj9wF0p0LbfsE+2s/PTFMW+BpSlgDEqB1AAmudQLeKvudY/i2pcbXLu
+         iR0JMDdoejKsX2MEBe3udItgXtdQ2kmuNBPY2E3pJXOJ+wvOXHbR63P/cd/LC/oUxyLn
+         oPzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=itRG1VYF0gL4tx08osqrN69WT0ejZkjkV+TfO9bvWJE=;
+        b=52mSzvkp1xSV4VbU3VIxInYmyN/iT8p9npAFwMCD0MR7qSl48nVwLcbx5Lv8C0knzh
+         VoopbiidP9EeCuFd06vIap6NImep6SGBbIinA6t7ob+yu+8GwOC14pIa+3mch2XH0igr
+         9wK/2a7UGzHW+HWoe7Tx48yRQRx5tKSX691p4tiagbVknmtpzgBAGkxijdmQzPHq1M6G
+         2jkrKLg+Rfs9noSwazhA0pFYImWoNw0ZOJUvkq9/SMz2dMwoNSuk/HMfACFgXCaQ+XH8
+         r8GmKUKE4+Ij6mE5/X76vWcz+AriJ4rGr0MViObMq/EBymv062hhps2Wew7hoRct6NBY
+         oraA==
+X-Gm-Message-State: AOAM5300nqLWJoG1CbUwgKf+B9dk5KMxzmOKIqo6E/nQdg0IyZZ+oPQ+
+        fELDHn0piM2rsB8MpmgES8KpaQ==
+X-Google-Smtp-Source: ABdhPJx+3JBpSb/6KVkLPqV38qJezxmW0DN32Tjcs69+gzGm06TcInLF058I7nwCnnJw0PxwFRw1Gw==
+X-Received: by 2002:a05:6512:3e15:b0:477:a28b:3fcf with SMTP id i21-20020a0565123e1500b00477a28b3fcfmr3690979lfv.476.1652973275225;
+        Thu, 19 May 2022 08:14:35 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id l4-20020a2e99c4000000b0024f3d1dae90sm625817ljj.24.2022.05.19.08.14.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 08:14:34 -0700 (PDT)
+Message-ID: <92a21768-204d-fc68-8942-99e2bc3df4cf@linaro.org>
+Date:   Thu, 19 May 2022 17:14:33 +0200
 MIME-Version: 1.0
-Message-ID: <699e56d5.22006.180dce26e02.Coremail.duoming@zju.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: cC_KCgDHa7jUXoZildCGAA--.11005W
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgcPAVZdtZyAcAAHse
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 1/2] mailbox: correct kerneldoc
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Tushar Khandelwal <Tushar.Khandelwal@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+References: <20220501103428.111286-1-krzysztof.kozlowski@linaro.org>
+ <20220519151334.64t5zsudz7dd35im@bogus>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220519151334.64t5zsudz7dd35im@bogus>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sCgpPbiBUaHUsIDE5IE1heSAyMDIyIDE3OjU4OjQ3ICswMzAwIEthbGxlIFZhbG8gd3Jv
-dGU6Cgo+ID4gVGhlcmUgYXJlIHNsZWVwIGluIGF0b21pYyBjb250ZXh0IGJ1Z3Mgd2hlbiB1cGxv
-YWRpbmcgZGV2aWNlIGR1bXAKPiA+IGRhdGEgb24gdXNiIGludGVyZmFjZS4gVGhlIHJvb3QgY2F1
-c2UgaXMgdGhhdCB0aGUgb3BlcmF0aW9ucyB0aGF0Cj4gPiBtYXkgc2xlZXAgYXJlIGNhbGxlZCBp
-biBmd19kdW1wX3RpbWVyX2ZuIHdoaWNoIGlzIGEgdGltZXIgaGFuZGxlci4KPiA+IFRoZSBjYWxs
-IHRyZWUgc2hvd3MgdGhlIGV4ZWN1dGlvbiBwYXRocyB0aGF0IGNvdWxkIGxlYWQgdG8gYnVnczoK
-PiA+Cj4gPiAgICAoSW50ZXJydXB0IGNvbnRleHQpCj4gPiBmd19kdW1wX3RpbWVyX2ZuCj4gPiAg
-IG13aWZpZXhfdXBsb2FkX2RldmljZV9kdW1wCj4gPiAgICAgZGV2X2NvcmVkdW1wdiguLi4sIEdG
-UF9LRVJORUwpCj4gPiAgICAgICBkZXZfY29yZWR1bXBtKCkKPiA+ICAgICAgICAga3phbGxvYyhz
-aXplb2YoKmRldmNkKSwgZ2ZwKTsgLy9tYXkgc2xlZXAKPiA+ICAgICAgICAgZGV2X3NldF9uYW1l
-Cj4gPiAgICAgICAgICAga29iamVjdF9zZXRfbmFtZV92YXJncwo+ID4gICAgICAgICAgICAga3Zh
-c3ByaW50Zl9jb25zdChHRlBfS0VSTkVMLCAuLi4pOyAvL21heSBzbGVlcAo+ID4gICAgICAgICAg
-ICAga3N0cmR1cChzLCBHRlBfS0VSTkVMKTsgLy9tYXkgc2xlZXAKPiA+Cj4gPiBUaGlzIHBhdGNo
-IG1vdmVzIHRoZSBvcGVyYXRpb25zIHRoYXQgbWF5IHNsZWVwIGludG8gYSB3b3JrIGl0ZW0uCj4g
-PiBUaGUgd29yayBpdGVtIHdpbGwgcnVuIGluIGFub3RoZXIga2VybmVsIHRocmVhZCB3aGljaCBp
-cyBpbgo+ID4gcHJvY2VzcyBjb250ZXh0IHRvIGV4ZWN1dGUgdGhlIGJvdHRvbSBoYWxmIG9mIHRo
-ZSBpbnRlcnJ1cHQuCj4gPiBTbyBpdCBjb3VsZCBwcmV2ZW50IGF0b21pYyBjb250ZXh0IGZyb20g
-c2xlZXBpbmcuCj4gPgo+ID4gRml4ZXM6IGY1ZWNkMDJhOGIyMCAoIm13aWZpZXg6IGRldmljZSBk
-dW1wIHN1cHBvcnQgZm9yIHVzYiBpbnRlcmZhY2UiKQo+ID4gU2lnbmVkLW9mZi1ieTogRHVvbWlu
-ZyBaaG91IDxkdW9taW5nQHpqdS5lZHUuY24+Cj4gCj4gbXdpZmlleCBwYXRjaGVzIGdvIHRvIHdp
-cmVsZXNzLW5leHQsIG5vdCBuZXQgdHJlZS4KPiAKPiA+IC0tLQo+ID4gQ2hhbmdlcyBpbiB2MjoK
-PiA+ICAgLSBGaXggY29tcGlsZSBwcm9ibGVtLgo+IAo+IFNvIHlvdSBkb24ndCBldmVuIGNvbXBp
-bGUgdGVzdCB5b3VyIHBhdGNoZXM/IFRoYXQncyBiYWQgYW5kIGluIHRoYXQgY2FzZQo+IEknbGwg
-anVzdCBkaXJlY3RseSBkcm9wIHRoaXMuIFdlIGV4cGVjdCB0aGF0IHRoZSBwYXRjaGVzIGFyZSBw
-cm9wZXJseQo+IHRlc3RlZC4KCk9rLCBJIHdpbGwgcHJvcGVybHkgdGVzdCB0aGlzIHBhdGNoLgoK
-QmVzdCByZWdhcmRzLApEdW9taW5nIFpob3UgCg==
+On 19/05/2022 17:13, Sudeep Holla wrote:
+> On Sun, May 01, 2022 at 12:34:27PM +0200, Krzysztof Kozlowski wrote:
+>> Correct kerneldoc warnings like:
+>>
+>>   drivers/mailbox/arm_mhu_db.c:47:
+>>     warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>>   drivers/mailbox/qcom-ipcc.c:58:
+>>     warning: Function parameter or member 'num_chans' not described in 'qcom_ipcc'
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  drivers/mailbox/arm_mhu_db.c | 2 +-
+> 
+> I thought I had copied it from arm_mhuc.c but apparently not. Anyways,
+> 
+> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> 
+
+
+Thanks! Could someone pick these two patches?
+
+Best regards,
+Krzysztof

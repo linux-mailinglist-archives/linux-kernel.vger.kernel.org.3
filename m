@@ -2,79 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E57752DD66
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6102452DD6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 21:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244337AbiESTCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 15:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59888 "EHLO
+        id S237488AbiESTFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 15:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244411AbiESTCd (ORCPT
+        with ESMTP id S229541AbiESTFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 15:02:33 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486D166ACC;
-        Thu, 19 May 2022 12:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=gcLhqH8l0QhaZQ3ExBnh7BQlfv3pT3Vbtm4El0QfRug=; b=WCeeD031Pgw5BpUlOxTy2DQ9oD
-        baFXgxmaZ5TaVLSc4rvHr+D/GXsmG3AMKYCtepq2c324MbS1OuscRLWpPJyth1VeUlElEq7DS7NW7
-        U/6a4W5TBbSVYJSYtdsdv9wmZV1boehAcDqCkBm82NmO0Rwf5sHQZbRCVL8yA/cOHOSY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nrlPi-003X3Y-Rr; Thu, 19 May 2022 21:02:22 +0200
-Date:   Thu, 19 May 2022 21:02:22 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     michael@amarulasolutions.com, alberto.bianchi@amarulasolutions.com,
-        linux-amarula@amarulasolutions.com, linuxfancy@googlegroups.com,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: phy: DP83822: enable rgmii mode if
- phy_interface_is_rgmii
-Message-ID: <YoaUPvwccJZ6vT/S@lunn.ch>
-References: <20220519185057.1657115-1-tommaso.merciai@amarulasolutions.com>
+        Thu, 19 May 2022 15:05:02 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0F3532FC;
+        Thu, 19 May 2022 12:05:01 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id j6so5878154pfe.13;
+        Thu, 19 May 2022 12:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=WCT0hzIW4BRC4ihOSuYMd7vmc8qyUUY0/7ETmCstrKQ=;
+        b=I5gizDUP9eFXALtskq8wtDRs1FF6xcWct/dwquOJmp5R6jdqySzPeyfd2YxLETggTe
+         zsoETshmZoPWJC9HX3OG+LKhvu+Owlj1Xyqt3WTVMGKx5ioHEHRrxMvdh5dOnnw2+R7L
+         /qxA4wPUTMSLCv6DoIblAn1M7Hkz/LQT1/sf/HgPVnh/uhYbCrrwn2DyOEIk7J75vhlW
+         bJE8Hy/I8G5KabtGjcySdIRg4P1RezIgELEU8DITWIletQpyk2hGx8I7AOfnrOiMDlU7
+         o8cMCqCiX1MY0G9E0ioRLsMR8OkQvwFgKcw1W5RWxcIth4nFgKXryPfvdgu6lEtlDtT0
+         jkMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=WCT0hzIW4BRC4ihOSuYMd7vmc8qyUUY0/7ETmCstrKQ=;
+        b=CW4WzDw9IRvxhSd6PaMuM0CRFHMCfEL3ixq0hoZRp+tlGmO9JehzGofpHAs26olSav
+         HS9/huInyf7IONvPeKJJQ4HiJjRkVGdX3dTiV3BnGFTbfXHt42KRGD23+EIK9MsxEg76
+         u4ZI/Cyj/6Y8hN5Pjl9dx6ApPim9KpzgOjdMCc7zPHV65ROS+i8XtpARCX0yhNobncIm
+         um/OHRENXeCYFgJPd6Spq9PG0F7oa8pKx4AojvBUuV0sJ5OcmDmXp5INEro9EyhcBpp5
+         hj+stWyQfLbbq3KD2nod8rlSfpQvY8iRbXu4fUVHrq4jp9IRULIFLrDypihcUCcFQ6r4
+         3cMg==
+X-Gm-Message-State: AOAM533/lf2KKdui9o1XUb4EnwRuHRNSt0M5nmhLrzYEY+d8E+6aakem
+        sAXZIuH3VDZrO0uR7L3/2HeLbNGJLuE=
+X-Google-Smtp-Source: ABdhPJxdsHDeOkVdzSo/tSvdzpUUjx/GOlwlHb2IfakWPr418DyzIYgfDQ8C0Jrctgm2Oc9RaBBmuQ==
+X-Received: by 2002:a63:5446:0:b0:3db:b1a0:ddca with SMTP id e6-20020a635446000000b003dbb1a0ddcamr5221703pgm.518.1652987100996;
+        Thu, 19 May 2022 12:05:00 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id a13-20020aa7864d000000b0051829b1595dsm23972pfo.130.2022.05.19.12.04.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 12:05:00 -0700 (PDT)
+Message-ID: <1892af53-5d83-ac8a-1180-970bf07e8889@gmail.com>
+Date:   Thu, 19 May 2022 12:04:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220519185057.1657115-1-tommaso.merciai@amarulasolutions.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH stable 4.19 0/3] MMC timeout back ports
+Content-Language: en-US
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     stable@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Nishad Kamdar <nishadkamdar@gmail.com>,
+        =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
+        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
+        <linux-mmc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>, alcooperx@gmail.com,
+        kdasu.kdev@gmail.com
+References: <20220517182211.249775-1-f.fainelli@gmail.com>
+ <1392eba8-d869-aa1a-b154-cec870017115@gmail.com>
+In-Reply-To: <1392eba8-d869-aa1a-b154-cec870017115@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 08:50:56PM +0200, Tommaso Merciai wrote:
-> RGMII mode can be enable from dp83822 straps, and also writing bit 9
-> of register 0x17 - RMII and Status Register (RCSR).
-> When phy_interface_is_rgmii rgmii mode must be enabled, same for
-> contrary, this prevents malconfigurations of hw straps
-> 
-> References:
->  - https://www.ti.com/lit/gpn/dp83822i p66
-> 
-> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> Co-developed-by: Michael Trimarchi <michael@amarulasolutions.com>
-> Suggested-by: Alberto Bianchi <alberto.bianchi@amarulasolutions.com>
-> Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> ---
-> Changes since v1:
->  - Improve commit msg
->  - Add definition of bit 9 reg rcsr (rgmii mode en)
->  - Handle case: phy_interface_is_rgmii is false
 
-Please don't post a new version for at least 24 hours. Give people
-time to review the code and make comments.
 
-     Andrew
+On 5/19/2022 10:38 AM, Florian Fainelli wrote:
+> 
+> 
+> On 5/17/2022 11:22 AM, Florian Fainelli wrote:
+>> These 3 commits from upstream allow us to have more fine grained control
+>> over the MMC command timeouts and this solves the following timeouts
+>> that we have seen on our systems across suspend/resume cycles:
+>>
+>> [   14.907496] usb usb2: root hub lost power or was reset
+>> [   15.216232] usb 1-1: reset high-speed USB device number 2 using
+>> xhci-hcd
+>> [   15.485812] bcmgenet 8f00000.ethernet eth0: Link is Down
+>> [   15.525328] mmc1: error -110 doing runtime resume
+>> [   15.531864] OOM killer enabled.
+>>
+>> Thanks!
+> 
+> Looks like I managed to introduce a build warning due to the unused 
+> timeout variable, let me submit a fresher version for 4.19, 4.14 and 4.9.
+
+Only v4.19 and v4.14 required a v2, you can find both here:
+
+https://lore.kernel.org/lkml/20220519184536.370540-1-f.fainelli@gmail.com/T/#t
+
+https://lore.kernel.org/lkml/20220519190030.377695-1-f.fainelli@gmail.com/T/#t
+
+Sorry about that, I will build with W=1 in the future to notice those 
+set but unused variable warnings.
+
+Thanks!
+-- 
+Florian

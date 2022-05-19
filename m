@@ -2,52 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8224152CC49
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD60752CC50
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbiESG5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 02:57:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
+        id S232051AbiESG6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 02:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiESG5Q (ORCPT
+        with ESMTP id S229630AbiESG6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 02:57:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEC8B82FC;
-        Wed, 18 May 2022 23:57:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 039F361AC1;
-        Thu, 19 May 2022 06:57:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95985C34100;
-        Thu, 19 May 2022 06:57:10 +0000 (UTC)
-Message-ID: <60a9c660-16cd-8f5b-8626-be34e8977781@xs4all.nl>
-Date:   Thu, 19 May 2022 08:57:08 +0200
+        Thu, 19 May 2022 02:58:30 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7485BB82FD
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:58:28 -0700 (PDT)
+X-UUID: 5e06e23243c441ed9b7ba938ae37ae72-20220519
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:c0bcec9f-7c0c-4b7f-9dc2-8f6095442be5,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:1fa3d379-5ef6-470b-96c9-bdb8ced32786,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 5e06e23243c441ed9b7ba938ae37ae72-20220519
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1184963467; Thu, 19 May 2022 14:58:22 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 19 May 2022 14:58:21 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 19 May 2022 14:58:18 +0800
+Message-ID: <1625ec1f4cded0f825d93743d3d03fcf83cad5aa.camel@mediatek.com>
+Subject: Re: [PATCH v5 2/2] iommu/mediatek: Allow page table PA up to 35bit
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     <yf.wang@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
+        Ning Li <ning.li@mediatek.com>,
+        "open list:MEDIATEK IOMMU DRIVER" <iommu@lists.linux-foundation.org>,
+        "moderated list:MEDIATEK IOMMU DRIVER" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Thu, 19 May 2022 14:58:18 +0800
+In-Reply-To: <20220516141608.11709-3-yf.wang@mediatek.com>
+References: <20220516141608.11709-1-yf.wang@mediatek.com>
+         <20220516141608.11709-3-yf.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v4] media: Add P010 video format
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        mchehab@kernel.org, gregkh@linuxfoundation.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, heiko@sntech.de, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org
-Cc:     kernel@pengutronix.de, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-References: <20220518132105.629797-1-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220518132105.629797-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,151 +68,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+On Mon, 2022-05-16 at 22:16 +0800, yf.wang@mediatek.com wrote:
+> From: Yunfei Wang <yf.wang@mediatek.com>
+> 
+> Add the quirk IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT support, so that
+> allows
+> page table PA up to 35bit, not only in ZONE_DMA32.
 
-On 5/18/22 15:21, Benjamin Gaignard wrote:
-> P010 is a YUV format with 16-bits per pixel with interleaved UV.
+Comment why this is needed.
 
-That should be: "10 bits per component"
+e.g. For single normal zone.
 
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Signed-off-by: Ning Li <ning.li@mediatek.com>
+> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
 > ---
-> version 4:
-> - Fix 10-bits per components wording.
+>  drivers/iommu/mtk_iommu.c | 29 +++++++++++++++++++++++++----
+>  1 file changed, 25 insertions(+), 4 deletions(-)
 > 
-> version 3:
-> - remove LE suffix
-> - rebased on media_tree_master branch
-> 
->  .../media/v4l/pixfmt-yuv-planar.rst           | 54 +++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-common.c         |  1 +
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
->  include/uapi/linux/videodev2.h                |  1 +
->  4 files changed, 57 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> index 8dff5906639b..a900ff66911a 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> @@ -109,6 +109,13 @@ All components are stored with the same number of bits per component.
->        - Cb, Cr
->        - No
->        - 16x16 tiles
-> +    * - V4L2_PIX_FMT_P010
-> +      - 'P010'
-> +      - 10
-> +      - 4:2:0
-> +      - Cb, Cr
-> +      - Yes
-> +      - Linear
->      * - V4L2_PIX_FMT_NV16
->        - 'NV16'
->        - 8
-> @@ -171,6 +178,7 @@ horizontally.
->  .. _V4L2-PIX-FMT-NV21:
->  .. _V4L2-PIX-FMT-NV12M:
->  .. _V4L2-PIX-FMT-NV21M:
-> +.. _V4L2-PIX-FMT-P010:
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 6fd75a60abd6..1b9a876ef271 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -33,6 +33,7 @@
 >  
->  NV12, NV21, NV12M and NV21M
->  ---------------------------
-> @@ -519,6 +527,52 @@ number of lines as the luma plane.
->        - Cb\ :sub:`33`
->        - Cr\ :sub:`33`
+>  #define REG_MMU_PT_BASE_ADDR			0x000
+>  #define MMU_PT_ADDR_MASK			GENMASK(31, 7)
+> +#define MMU_PT_ADDR_2_0_MASK			GENMASK(2, 0)
 >  
-> +.. _V4L2_PIX_FMT_P010:
-> +
-> +P010
-> +----
-> +
-> +Like NV12 with 10 bits per component, expanded to 16 bits.
-> +Data in the 10 high bits, zeros in the 6 low bits, arranged in little endian order.
-> +
-> +.. flat-table:: Sample 4x4 P010 Image
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - start + 0:
-> +      - Y'\ :sub:`00`
-> +      - Y'\ :sub:`01`
-> +      - Y'\ :sub:`02`
-> +      - Y'\ :sub:`03`
-> +    * - start + 8:
-> +      - Y'\ :sub:`10`
-> +      - Y'\ :sub:`11`
-> +      - Y'\ :sub:`12`
-> +      - Y'\ :sub:`13`
-> +    * - start + 16:
-> +      - Y'\ :sub:`20`
-> +      - Y'\ :sub:`21`
-> +      - Y'\ :sub:`22`
-> +      - Y'\ :sub:`23`
-> +    * - start + 24:
-> +      - Y'\ :sub:`30`
-> +      - Y'\ :sub:`31`
-> +      - Y'\ :sub:`32`
-> +      - Y'\ :sub:`33`
-> +    * - start + 32:
-> +      - Cb\ :sub:`00`
-> +      - Cr\ :sub:`00`
-> +      - Cb\ :sub:`01`
-> +      - Cr\ :sub:`01`
-> +    * - start + 40:
-> +      - Cb\ :sub:`10`
-> +      - Cr\ :sub:`10`
-> +      - Cb\ :sub:`11`
-> +      - Cr\ :sub:`11`
-> +
-> +.. raw:: latex
-> +
-> +    \endgroup
+>  #define REG_MMU_INVALIDATE			0x020
+>  #define F_ALL_INVLD				0x2
+> @@ -118,6 +119,7 @@
+>  #define WR_THROT_EN			BIT(6)
+>  #define HAS_LEGACY_IVRP_PADDR		BIT(7)
+>  #define IOVA_34_EN			BIT(8)
+> +#define PGTABLE_PA_35_EN		BIT(9)
 >  
->  Fully Planar YUV Formats
->  ========================
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index df34b2a283bc..1e38ad8906a2 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->  		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+>  #define MTK_IOMMU_HAS_FLAG(pdata, _x) \
+>  		((((pdata)->flags) & (_x)) == (_x))
+> @@ -401,6 +403,9 @@ static int mtk_iommu_domain_finalise(struct
+> mtk_iommu_domain *dom,
+>  		.iommu_dev = data->dev,
+>  	};
 >  
->  		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
->  		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index e2636539c9db..536aaeb4df82 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1305,6 +1305,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
->  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
->  	case V4L2_PIX_FMT_NV42:		descr = "Y/CrCb 4:4:4"; break;
-> +	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CrCb 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/CbCr 4:2:0 (4x4 Linear)"; break;
->  	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/CbCr 4:2:0 (16x16 Linear)"; break;
->  	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/CbCr 4:2:0 (32x32 Linear)"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 6d465dc443b7..311f106bbdf5 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -601,6 +601,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
->  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
->  #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
-> +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 16  Y/CbCr 4:2:0 16-bit per pixel */
-
-As discussed on irc, this should be:
-
-/* 24  Y/CbCr 4:2:0 10-bit per pixel */
-
-Regards,
-
-	Hans
-
+> +	if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN))
+> +		dom->cfg.quirks |= IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT;
+> +
+>  	if (MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_4GB_MODE))
+>  		dom->cfg.oas = data->enable_4GB ? 33 : 32;
+>  	else
+> @@ -450,6 +455,7 @@ static int mtk_iommu_attach_device(struct
+> iommu_domain *domain,
+>  	struct mtk_iommu_domain *dom = to_mtk_domain(domain);
+>  	struct device *m4udev = data->dev;
+>  	int ret, domid;
+> +	u32 regval;
 >  
->  /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
->  #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
+>  	domid = mtk_iommu_get_domain_id(dev, data->plat_data);
+>  	if (domid < 0)
+> @@ -472,8 +478,14 @@ static int mtk_iommu_attach_device(struct
+> iommu_domain *domain,
+>  			return ret;
+>  		}
+>  		data->m4u_dom = dom;
+> -		writel(dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK,
+> -		       data->base + REG_MMU_PT_BASE_ADDR);
+> +
+> +		/* Bits[6:3] are invalid for mediatek platform */
+> +		if (MTK_IOMMU_HAS_FLAG(data->plat_data,
+> PGTABLE_PA_35_EN))
+> +			regval = (dom->cfg.arm_v7s_cfg.ttbr &
+> MMU_PT_ADDR_MASK) |
+> +				 (dom->cfg.arm_v7s_cfg.ttbr &
+> MMU_PT_ADDR_2_0_MASK);
+
+The bits[2:0] has already handled in ARM_V7S_TTBR_35BIT_PA of
+patch[1/2], we need calculate it again here?
+
+1) Extend arm_v7s_cfg.ttbr to u64, then we could put the special ttbr
+logical into our file.
+
+2) if 1) is not allowed, We have to put this in v7s.
+if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT) {
+       cfg->arm_v7s_cfg.ttbr = (paddr & GENMASK(31, 7)) |
+upper_32_bits(paddr);
+       return &data->iop;
+}
+
+This need Robin/Will confirm.
+
+> +		else
+> +			regval = dom->cfg.arm_v7s_cfg.ttbr &
+> MMU_PT_ADDR_MASK;
+
+Save this value to our data. then we don't need calculate it again in
+the resume cb.   
+
+> +		writel(regval, data->base + REG_MMU_PT_BASE_ADDR);
+>  
+>  		pm_runtime_put(m4udev);
+>  	}
+> @@ -987,6 +999,7 @@ static int __maybe_unused
+> mtk_iommu_runtime_resume(struct device *dev)
+>  	struct mtk_iommu_suspend_reg *reg = &data->reg;
+>  	struct mtk_iommu_domain *m4u_dom = data->m4u_dom;
+>  	void __iomem *base = data->base;
+> +	u32 regval;
+>  	int ret;
+>  
+>  	ret = clk_prepare_enable(data->bclk);
+> @@ -1010,7 +1023,14 @@ static int __maybe_unused
+> mtk_iommu_runtime_resume(struct device *dev)
+>  	writel_relaxed(reg->int_main_control, base +
+> REG_MMU_INT_MAIN_CONTROL);
+>  	writel_relaxed(reg->ivrp_paddr, base + REG_MMU_IVRP_PADDR);
+>  	writel_relaxed(reg->vld_pa_rng, base + REG_MMU_VLD_PA_RNG);
+> -	writel(m4u_dom->cfg.arm_v7s_cfg.ttbr & MMU_PT_ADDR_MASK, base +
+> REG_MMU_PT_BASE_ADDR);
+> +
+> +	/* Bits[6:3] are invalid for mediatek platform */
+> +	if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN))
+> +		regval = (m4u_dom->cfg.arm_v7s_cfg.ttbr &
+> MMU_PT_ADDR_MASK) |
+> +			 (m4u_dom->cfg.arm_v7s_cfg.ttbr &
+> MMU_PT_ADDR_2_0_MASK);
+> +	else
+> +		regval = m4u_dom->cfg.arm_v7s_cfg.ttbr &
+> MMU_PT_ADDR_MASK;
+> +	writel(regval, base + REG_MMU_PT_BASE_ADDR);
+>  
+>  	/*
+>  	 * Users may allocate dma buffer before they call
+> pm_runtime_get,
+> @@ -1038,7 +1058,8 @@ static const struct mtk_iommu_plat_data
+> mt2712_data = {
+>  
+>  static const struct mtk_iommu_plat_data mt6779_data = {
+>  	.m4u_plat      = M4U_MT6779,
+> -	.flags         = HAS_SUB_COMM | OUT_ORDER_WR_EN | WR_THROT_EN,
+> +	.flags         = HAS_SUB_COMM | OUT_ORDER_WR_EN | WR_THROT_EN |
+> +			 PGTABLE_PA_35_EN,
+>  	.inv_sel_reg   = REG_MMU_INV_SEL_GEN2,
+>  	.iova_region   = single_domain,
+>  	.iova_region_nr = ARRAY_SIZE(single_domain),
+

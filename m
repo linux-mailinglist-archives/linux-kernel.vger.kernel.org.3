@@ -2,120 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C10152CC79
+	by mail.lfdr.de (Postfix) with ESMTP id 5796452CC7A
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbiESHGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S232280AbiESHGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiESHGa (ORCPT
+        with ESMTP id S229884AbiESHGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:06:30 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BEA62A15
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:06:29 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id p139so7436661ybc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:06:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YwGdObx2rN49pGl6m0/GqaEWdkz1IZaGgAWMTIaY1MQ=;
-        b=NL0wn/oE6V1itp4kAHF911Q1QFEhRcBt6i3r8skcUAkzgzmyPF2Og0z3erS3hnOqYa
-         ckkoTrnqmPjfrf3xn5u3ZtvVxO9YWJN+kzy2QGXpnDFsoYuBpb4KDWg3YcPmNpw0wy3d
-         2lv/Y5V5eacwcibq4WvyoqY3VtmsKFk1pk33c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YwGdObx2rN49pGl6m0/GqaEWdkz1IZaGgAWMTIaY1MQ=;
-        b=oCbWUEbDSCZmyTEnj1ZqhKWVoB0JbEPGoCMwvhbcjvYyAeDetJT6GwGYtMf1McuBCd
-         HFNB57m1o+UVSVAY/pf3QaKb4SwZ+VgBZ6z1uvBdL2dtod71IMyIh5Nb9kkl5qKffehN
-         VAVfbc9KnTi7t7BtiyKXfTBBbN/Xm5RExEKWJ44JiqO+S0bvINV6rqpgn0X5VP2mYkvH
-         s9fnt0Ea1thyVxtEHJI2e1Y99pTOlvFJTv0kth08MA4+bd8/MGH3Izm80qcPDydtqMTL
-         D8CkYuwUYfS2+Lx780oakAQkf0CICBng4qUL3awvWjpRmXxevL1Jen/RTTaij1eFvOrF
-         tFkg==
-X-Gm-Message-State: AOAM5316WTsPloKQ3wG7s2QJo9U3T/pJy5zyI1ATuwOOQX13ZilB0hYz
-        PtlwzltKaGDt+KEcLLzrJ6MaZe2RVEsv2Sy9Qj6cBg==
-X-Google-Smtp-Source: ABdhPJwXMsrkDRDjElIr5XkTyARF49d8zBfzI8qyiCHp6sygr/oTHpLqiQm1O6srVsjnwmPN+S82fZZotEvF2OxlkfM=
-X-Received: by 2002:a25:f506:0:b0:64d:f8a5:b2bd with SMTP id
- a6-20020a25f506000000b0064df8a5b2bdmr2819186ybe.610.1652943988678; Thu, 19
- May 2022 00:06:28 -0700 (PDT)
+        Thu, 19 May 2022 03:06:44 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C64663F1;
+        Thu, 19 May 2022 00:06:42 -0700 (PDT)
+Received: from kwepemi100024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L3gqf07bQzhZFN;
+        Thu, 19 May 2022 15:05:49 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100024.china.huawei.com (7.221.188.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 15:06:40 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 15:06:39 +0800
+Subject: Re: [PATCH -next v2 2/2] blk-throttle: fix io hung due to
+ configuration updates
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     kernel test robot <lkp@intel.com>, Tejun Heo <tj@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>,
+        <kbuild-all@lists.01.org>, <cgroups@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220518072751.1188163-3-yukuai3@huawei.com>
+ <202205182347.tMOOqyfL-lkp@intel.com>
+ <84fe296e-6e56-3ca9-73a8-357beb675c6e@huawei.com>
+ <3d6878f4-1902-633d-0af2-276831364a4f@huawei.com>
+ <CAMuHMdV6NysKKh+HZ-cgHh+=SVcydmxO6ic82+t3ySTgfkoEOg@mail.gmail.com>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <20bc6370-999b-ed3c-4b8f-19b2cdba5965@huawei.com>
+Date:   Thu, 19 May 2022 15:06:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20220429064051.61552-1-linmiaohe@huawei.com> <20220429064051.61552-4-linmiaohe@huawei.com>
-In-Reply-To: <20220429064051.61552-4-linmiaohe@huawei.com>
-From:   Vitaly Wool <vitaly.wool@konsulko.com>
-Date:   Thu, 19 May 2022 09:06:17 +0200
-Message-ID: <CAM4kBBKfJPHP6u0cvtSo58BS9e6erQJA28=RxaTVopTn2Wt1wQ@mail.gmail.com>
-Subject: Re: [PATCH 3/9] mm/z3fold: remove buggy use of stale list for allocation
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdV6NysKKh+HZ-cgHh+=SVcydmxO6ic82+t3ySTgfkoEOg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 29, 2022 at 8:41 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> Currently if z3fold couldn't find an unbuddied page it would first try to
-> pull a page off the stale list. But this approach is problematic. If init
-> z3fold page fails later, the page should be freed via free_z3fold_page to
-> clean up the relevant resource instead of using __free_page directly. And
-> if page is successfully reused, it will BUG_ON later in __SetPageMovable
-> because it's already non-lru movable page, i.e. PAGE_MAPPING_MOVABLE is
-> already set in page->mapping. In order to fix all of these issues, we can
-> simply remove the buggy use of stale list for allocation because can_sleep
-> should always be false and we never really hit the reusing code path now.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/z3fold.c | 23 +----------------------
->  1 file changed, 1 insertion(+), 22 deletions(-)
->
-> diff --git a/mm/z3fold.c b/mm/z3fold.c
-> index 5d8c21f2bc59..4e6814c5694f 100644
-> --- a/mm/z3fold.c
-> +++ b/mm/z3fold.c
-> @@ -1102,28 +1102,7 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
->                 bud = FIRST;
->         }
->
-> -       page = NULL;
-> -       if (can_sleep) {
-> -               spin_lock(&pool->stale_lock);
-> -               zhdr = list_first_entry_or_null(&pool->stale,
-> -                                               struct z3fold_header, buddy);
-> -               /*
-> -                * Before allocating a page, let's see if we can take one from
-> -                * the stale pages list. cancel_work_sync() can sleep so we
-> -                * limit this case to the contexts where we can sleep
-> -                */
-> -               if (zhdr) {
-> -                       list_del(&zhdr->buddy);
-> -                       spin_unlock(&pool->stale_lock);
-> -                       cancel_work_sync(&zhdr->work);
-> -                       page = virt_to_page(zhdr);
-> -               } else {
-> -                       spin_unlock(&pool->stale_lock);
-> -               }
-> -       }
-> -       if (!page)
-> -               page = alloc_page(gfp);
-> -
-> +       page = alloc_page(gfp);
->         if (!page)
->                 return -ENOMEM;
 
-Reviewed-by: Vitaly Wool <vitaly.wool@konsulko.com>
+
+在 2022/05/19 15:01, Geert Uytterhoeven 写道:
+> Hi Yukuai,
+> 
+> On Thu, May 19, 2022 at 5:25 AM yukuai (C) <yukuai3@huawei.com> wrote:
+>> 在 2022/05/19 10:11, yukuai (C) 写道:
+>>> 在 2022/05/18 23:52, kernel test robot 写道:
+>>>> Thank you for the patch! Yet something to improve:
+>>>>
+>>>> [auto build test ERROR on next-20220517]
+>>>>
+>>>> url:
+>>>> https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/bugfix-for-blk-throttle/20220518-151713
+>>>>
+>>>> base:    47c1c54d1bcd0a69a56b49473bc20f17b70e5242
+>>>> config: m68k-allyesconfig
+>>>> (https://download.01.org/0day-ci/archive/20220518/202205182347.tMOOqyfL-lkp@intel.com/config)
+>>>>
+>>>> compiler: m68k-linux-gcc (GCC) 11.3.0
+>>>> reproduce (this is a W=1 build):
+>>>>           wget
+>>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+>>>> -O ~/bin/make.cross
+>>>>           chmod +x ~/bin/make.cross
+>>>>           #
+>>>> https://github.com/intel-lab-lkp/linux/commit/f8345dbaf4ed491742aab29834aff66b4930c087
+>>>>
+>>>>           git remote add linux-review
+>>>> https://github.com/intel-lab-lkp/linux
+>>>>           git fetch --no-tags linux-review
+>>>> Yu-Kuai/bugfix-for-blk-throttle/20220518-151713
+>>>>           git checkout f8345dbaf4ed491742aab29834aff66b4930c087
+>>>>           # save the config file
+>>>>           mkdir build_dir && cp config build_dir/.config
+>>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0
+>>>> make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+>>>>
+>>>> If you fix the issue, kindly add following tag as appropriate
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>
+>>>> All errors (new ones prefixed by >>):
+>>>>
+>>>>      m68k-linux-ld: block/blk-throttle.o: in function `tg_conf_updated':
+>>>>>> blk-throttle.c:(.text+0x25bc): undefined reference to `__udivdi3'
+>>>>>> m68k-linux-ld: blk-throttle.c:(.text+0x2626): undefined reference to
+>>>>>> `__udivdi3'
+>>> Hi,
+>>>
+>>> I'm confused here, the only place that I can relate to this:
+>>>
+>>>       return dispatched * new_limit / old_limit;
+>>>
+>>> However, I don't understand yet why this is problematic...
+>>>>      `.exit.text' referenced in section `.data' of
+>>>> sound/soc/codecs/tlv320adc3xxx.o: defined in discarded section
+>>>> `.exit.text' of sound/soc/codecs/tlv320adc3xxx.o
+>>
+>> + static u64 throtl_update_bytes_disp(u64 dispatched, u64 new_limit,
+>> +                                    u64 old_limit)
+>> + {
+>> +        if (new_limit == old_limit)
+>> +                return dispatched;
+>> +
+>> +        if (new_limit == U64_MAX)
+>> +                return 0;
+>> +
+>> +        return dispatched * new_limit / old_limit;
+>>
+>> I understand it now. I'm doing (u64 / u64), I should use div64_u64
+> 
+> Better, use mul_u64_u64_div_u64(), as "dispatched * new_limit"
+> may overflow?
+Hi,
+
+It's right that it  can overflow, I'll handle such case in next version.
+> 
+>> + }
+>> +
+>> + static u32 throtl_update_io_disp(u32 dispatched, u32 new_limit, u32 old_limit)
+>> + {
+>> +        if (new_limit == old_limit)
+>> +                return dispatched;
+>> +
+>> +        if (new_limit == UINT_MAX)
+>> +                return 0;
+>> +
+>> +        return dispatched * new_limit / old_limit;
+> 
+> This is the same as above, but now operating on u32s instead of u64s.
+> Likewise, can the multiplication overflow?
+same as above.
+
+Thanks,
+Kuai
+> 
+>> + }
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
 > --
-> 2.23.0
->
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                  -- Linus Torvalds
+> .
+> 

@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9044852D619
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A019852D616
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239787AbiESOaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
+        id S239761AbiESOab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239777AbiESOay (ORCPT
+        with ESMTP id S238424AbiESOa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:30:54 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9C31BD
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:30:52 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id v8so7522522lfd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvz-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=v/9u8Imy9wLRfYHBxZ32XU6PyvAPyOYsjrvd7MK9l3c=;
-        b=eaOE6+Y20AmRa6nSUYi7geIR7y/yn/2PASJIV5qzYyDB6uR6xRAVOuFN3V/UnNIH5M
-         26SZQjvVd+k+L58xBa0lL+d/7x36ah8wc87F8UlsMb5wc09DF4Pc5bn1Ue9CNrngxEmQ
-         rujvItsfN8DHXlCNtjEY9sOnjgY9+qPcFxdpugQM+pL8o3a9pjz/zI2ByEpjrazS9jj7
-         RxRiQ2McaC+Q1r0odu1Huw8tyIP9HnMsjz+7KMrlms6HUv3h5dGyFqEn+lOxlHWKHapY
-         fG61sn3MSGPU7p9Zu9P4jkwlQ5oJYJXIZun/HOlHmFqzFhu0XGxWPN44Grct9Rn5NWjz
-         yXUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=v/9u8Imy9wLRfYHBxZ32XU6PyvAPyOYsjrvd7MK9l3c=;
-        b=oWufFMutDJg38PUoEq7PwuXfjLov8KavqnTliBqaWN6KdgZApz3BrDUtFBkfnB8JIW
-         zi1nYzyT/lWZQLwPGuD7/c4EXhpUZqljOKYilXa8dwdznfn7KOGXBwQqRKRmAFJ2YunB
-         sPifEeURWeJ8nCKep+K888KDY2UKfvNkTHIwhixz8Hb+edKtj/eLgUzurbSE6QUHpFWk
-         KcXbL1oG8/kusUJYMNyVg5gqemUYv0+8e+YOExNVzO0CYJiezIprDu0Ybvrhken2Leve
-         XiRo/UGH88USKzDPNbqI54ABmE4iQgI29xI+Hq/HX9sI+AFY7su5b2kHcUzT2NA4MZLT
-         9Jhw==
-X-Gm-Message-State: AOAM531iJCZMMjqv1pF9jJ8UERA2r5jy2hbGlUMNrt7BfxEExqC2Y+as
-        bFhb+XhUgq5ZGyVn8+Fv9QVwvg==
-X-Google-Smtp-Source: ABdhPJyRZHYDd6kSYR3c0rhv9w4eYdGNQxiFk/lUQ+ZunBiRsQGfvCDxNyRijOiVzLAzMZqW6VekGw==
-X-Received: by 2002:ac2:482f:0:b0:472:47d5:ef32 with SMTP id 15-20020ac2482f000000b0047247d5ef32mr3587303lft.344.1652970650876;
-        Thu, 19 May 2022 07:30:50 -0700 (PDT)
-Received: from [192.168.1.65] ([46.188.121.185])
-        by smtp.gmail.com with ESMTPSA id d25-20020ac24c99000000b00477b624c0a8sm304402lfl.180.2022.05.19.07.30.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 07:30:50 -0700 (PDT)
-Message-ID: <6f009241-a63f-ae43-a04b-62841aaef293@openvz.org>
-Date:   Thu, 19 May 2022 17:30:49 +0300
+        Thu, 19 May 2022 10:30:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4707ECC17A;
+        Thu, 19 May 2022 07:30:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0293621BA7;
+        Thu, 19 May 2022 14:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1652970624; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ksHZxdVRk14EnrcHsj+kk3njdbVyXCR3+VlQoHpUCbA=;
+        b=y0uKW6stVDJGXAUWRLLTQaHVZr6pwZBBIUmg0uvLEADMiG8nZnrxMTwpccUSWB35ezyPy9
+        VcRk18SF1XxmFLZITJugUxGJvtR/ov3PysBUs6AxGCbgVp7n+oW5vxRbyOpySC9mbJRdH0
+        WihUJ/SmAYhOZ7yCeMYjcgUjBVWdHsw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1652970624;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ksHZxdVRk14EnrcHsj+kk3njdbVyXCR3+VlQoHpUCbA=;
+        b=RNFuWmBGUfcbg581uVEUBadzTF95IMlTqovFpmc79oejE4UHpwd3G6X4U8CCw0xfptOexH
+        tJsj8dbjZrNwBUCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 76A9C13456;
+        Thu, 19 May 2022 14:30:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ipb8GX9UhmLBRwAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Thu, 19 May 2022 14:30:23 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id bbdc8505;
+        Thu, 19 May 2022 14:31:01 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     He Zhe <zhe.he@windriver.com>, Dave Chinner <dchinner@redhat.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Luis Henriques <lhenriques@suse.com>
+Subject: Re: warning for EOPNOTSUPP vfs_copy_file_range
+References: <20f17f64-88cb-4e80-07c1-85cb96c83619@windriver.com>
+        <CAOQ4uxiQTwEh3ry8_8UMFuPPBjwA+pb8RLLuG=93c9hYtDqg8g@mail.gmail.com>
+Date:   Thu, 19 May 2022 15:31:00 +0100
+In-Reply-To: <CAOQ4uxiQTwEh3ry8_8UMFuPPBjwA+pb8RLLuG=93c9hYtDqg8g@mail.gmail.com>
+        (Amir Goldstein's message of "Thu, 19 May 2022 16:53:15 +0300")
+Message-ID: <87czg94msb.fsf@brahms.olymp>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-From:   Vasily Averin <vvs@openvz.org>
-Subject: [PATCH v3] io_uring: fix incorrect __kernel_rwf_t cast
-To:     Christoph Hellwig <hch@infradead.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-References: <2eb22fb3-40cc-48f6-8ba9-5faeae0b43ff@kernel.dk>
-Content-Language: en-US
-In-Reply-To: <2eb22fb3-40cc-48f6-8ba9-5faeae0b43ff@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,49 +79,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently 'make C=1 fs/io_uring.o' generates sparse warning:
+Amir Goldstein <amir73il@gmail.com> writes:
 
-  CHECK   fs/io_uring.c
-fs/io_uring.c: note: in included file (through
-include/trace/trace_events.h, include/trace/define_trace.h, i
-nclude/trace/events/io_uring.h):
-./include/trace/events/io_uring.h:488:1:
- warning: incorrect type in assignment (different base types)
-    expected unsigned int [usertype] op_flags
-    got restricted __kernel_rwf_t const [usertype] rw_flags
+> On Thu, May 19, 2022 at 11:22 AM He Zhe <zhe.he@windriver.com> wrote:
+>>
+>> Hi,
+>>
+>> We are experiencing the following warning from
+>> "WARN_ON_ONCE(ret =3D=3D -EOPNOTSUPP);" in vfs_copy_file_range, from
+>> 64bf5ff58dff ("vfs: no fallback for ->copy_file_range")
+>>
+>> # cat /sys/class/net/can0/phys_switch_id
+>>
+>> WARNING: CPU: 7 PID: 673 at fs/read_write.c:1516 vfs_copy_file_range+0x3=
+80/0x440
+>> Modules linked in: llce_can llce_logger llce_mailbox llce_core sch_fq_co=
+del
+>> openvswitch nsh nf_conncount nf_nat nf_conntrack nf_defrag_ipv6 nf_defra=
+g_ipv4
+>> CPU: 7 PID: 673 Comm: cat Not tainted 5.15.38-yocto-standard #1
+>> Hardware name: Freescale S32G399A (DT)
+>> pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
+>> pc : vfs_copy_file_range+0x380/0x440
+>> lr : vfs_copy_file_range+0x16c/0x440
+>> sp : ffffffc00e0f3ce0
+>> x29: ffffffc00e0f3ce0 x28: ffffff88157b5a40 x27: 0000000000000000
+>> x26: ffffff8816ac3230 x25: ffffff881c060008 x24: 0000000000001000
+>> x23: 0000000000000000 x22: 0000000000000000 x21: ffffff881cc99540
+>> x20: ffffff881cc9a340 x19: ffffffffffffffa1 x18: ffffffffffffffff
+>> x17: 0000000000000001 x16: 0000adfbb5178cde x15: ffffffc08e0f3647
+>> x14: 0000000000000000 x13: 34613178302f3061 x12: 3178302b636e7973
+>> x11: 0000000000058395 x10: 00000000fd1c5755 x9 : ffffffc008361950
+>> x8 : ffffffc00a7d4d58 x7 : 0000000000000000 x6 : 0000000000000001
+>> x5 : ffffffc009e81000 x4 : ffffffc009e817f8 x3 : 0000000000000000
+>> x2 : 0000000000000000 x1 : ffffff88157b5a40 x0 : ffffffffffffffa1
+>> Call trace:
+>>  vfs_copy_file_range+0x380/0x440
+>>  __do_sys_copy_file_range+0x178/0x3a4
+>>  __arm64_sys_copy_file_range+0x34/0x4c
+>>  invoke_syscall+0x5c/0x130
+>>  el0_svc_common.constprop.0+0x68/0x124
+>>  do_el0_svc+0x50/0xbc
+>>  el0_svc+0x54/0x130
+>>  el0t_64_sync_handler+0xa4/0x130
+>>  el0t_64_sync+0x1a0/0x1a4
+>> cat: /sys/class/net/can0/phys_switch_id: Operation not supported
+>>
+>> And we found this is triggered by the following stack. Specifically, all
+>> netdev_ops in CAN drivers we can find now do not have ndo_get_port_paren=
+t_id and
+>> ndo_get_devlink_port, which makes phys_switch_id_show return -EOPNOTSUPP=
+ all the
+>> way back to vfs_copy_file_range.
+>>
+>> phys_switch_id_show+0xf4/0x11c
+>> dev_attr_show+0x2c/0x6c
+>> sysfs_kf_seq_show+0xb8/0x150
+>> kernfs_seq_show+0x38/0x44
+>> seq_read_iter+0x1c4/0x4c0
+>> kernfs_fop_read_iter+0x44/0x50
+>> generic_file_splice_read+0xdc/0x190
+>> do_splice_to+0xa0/0xfc
+>> splice_direct_to_actor+0xc4/0x250
+>> do_splice_direct+0x94/0xe0
+>> vfs_copy_file_range+0x16c/0x440
+>> __do_sys_copy_file_range+0x178/0x3a4
+>> __arm64_sys_copy_file_range+0x34/0x4c
+>> invoke_syscall+0x5c/0x130
+>> el0_svc_common.constprop.0+0x68/0x124
+>> do_el0_svc+0x50/0xbc
+>> el0_svc+0x54/0x130
+>> el0t_64_sync_handler+0xa4/0x130
+>> el0t_64_sync+0x1a0/0x1a4
+>>
+>> According to the original commit log, this warning is for operational va=
+lidity
+>> checks to generic_copy_file_range(). The reading will eventually return =
+as
+>> not supported as printed above. But is this warning still necessary? If =
+so we
+>> might want to remove it to have a cleaner dmesg.
+>>
+>
+> Sigh! Those filesystems have no business doing copy_file_range()
+>
+> Here is a patch that Luis has been trying to push last year
+> to fix a problem with copy_file_range() from tracefs:
+>
+> https://lore.kernel.org/linux-fsdevel/20210702090012.28458-1-lhenriques@s=
+use.de/
 
-This happen on cast of sqe->rw_flags which is defined as __kernel_rwf_t,
-this type is bitwise and requires __force attribute for any casts.
-However rw_flags is a member of the union, and its access can be safely
-replaced by using of its neighbours, so let's use poll32_events to fix
-the sparse warning.
+Yikes!  It's been a while and I completely forgot about it.  I can
+definitely try to respin this patch if someone's interested in picking
+it.  I'll have to go re-read everything again and see what's missing and
+what has changed in between.
 
-Signed-off-by: Vasily Averin <vvs@openvz.org>
----
-v3:
-  1) fix only hunk in TRACE_EVENT(io_uring_req_failed),
-     rest ones was fixed by Christoph Hellwig already.
-  2) updated patch description
+Cheers,
+--=20
+Lu=C3=ADs
 
-v2: updated according to comments by Christoph Hellwig
-
----
- include/trace/events/io_uring.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_uring.h
-index 80d2588a090c..6ba87a290a24 100644
---- a/include/trace/events/io_uring.h
-+++ b/include/trace/events/io_uring.h
-@@ -520,7 +520,7 @@ TRACE_EVENT(io_uring_req_failed,
- 		__entry->off		= sqe->off;
- 		__entry->addr		= sqe->addr;
- 		__entry->len		= sqe->len;
--		__entry->op_flags	= sqe->rw_flags;
-+		__entry->op_flags	= sqe->poll32_events;
- 		__entry->buf_index	= sqe->buf_index;
- 		__entry->personality	= sqe->personality;
- 		__entry->file_index	= sqe->file_index;
--- 
-2.31.1
-
+> Luis gave up on it, because no maintainer stepped up to take
+> the patch, but I think that is the right way to go.
+>
+> Maybe this bug report can raise awareness to that old patch.
+>
+> Al, could you have a look?
+>
+> Thanks,
+> Amir.
+>

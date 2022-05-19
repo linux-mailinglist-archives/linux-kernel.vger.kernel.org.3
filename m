@@ -2,186 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE6F52CDC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458FE52CDC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235026AbiESH7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S235079AbiESH76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiESH7w (ORCPT
+        with ESMTP id S233479AbiESH7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:59:52 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3642393ED
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:59:50 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2fecfc7a95aso39421417b3.22
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:59:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=5ASte9vGYV8NmyufWXTtDt+wnTToG5G7bVCsDgy4Kpg=;
-        b=gwTVGnSBCH1OItkK8408hxAE3H+3MOivih34m7SBHEGT0+6hAZOMLNPptS8SIvLmuk
-         dn2y46gEkcFMT6rDddZ+v7a37E4u+yB8m9HWh7XNQNIo8o+qpgOH/q9QPz/KwdaFOIVV
-         Nq6tzQ02jiflJjryDeixn4W/tNmMMnumKiTZ36ZxRroI3RPCmJHaY4M7pNq/lV3jccpO
-         rZPjU/9DuAsZ2bqhz0zyrw8D0P4kaiQK7kHNRTbeHzkIcduFAaVBVEqNoXOd8BJqnfd4
-         NYrOoQgzKjbdFMCsMqLS1DyP1f9llOtIzlwbiTSrOq7EO3K9qk7QpbKFIsyOkuDu1TuB
-         Mt5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=5ASte9vGYV8NmyufWXTtDt+wnTToG5G7bVCsDgy4Kpg=;
-        b=AC5rh/Cawa7D+pesZBfSX1a1uni+QWwB1PneCcYa88s0YS3tZ4BJhDzzxQ9RtD94Tr
-         rxf//R6tZTctvwx8VEfYsCuF8atla9JOvEjwMFxlVJZ2tQSGhNRuBx3C9ni5y4cIXmuh
-         iJsdpLLBrir3U7l8psnH2xnh65xu8FRMC5Kt9flHpyZyzxUeB5/ORmRoAl+YNLMlphBe
-         HemeD3UymmdBrqfto+tEdbZ4w+ta878oE9flqNkrLuXLS97vCd1ACw8svsr+UNr3gv/O
-         nSlwlY/wWC6xDS8RM+8DOIu5CLX0SaLKvUtp625mdbRe4zkEzmsNHRukvtPx5vF0JRjs
-         3SJA==
-X-Gm-Message-State: AOAM530J/8ASWbdzVOS5BZyxwooQuNRxdkqeHj0PYo3An1MoWbj967W0
-        CIAAK8hhUNfPtvVc+BlbujCyvPZSrEMA
-X-Google-Smtp-Source: ABdhPJyhbw5GxCRJe6VzVh23QB1TgeiIWMOLDn0KJ5/UuVta6ydkueOGGL6ATX6pdbrz+U5Okt1rkGQXziIr
-X-Received: from gthelen2.svl.corp.google.com ([2620:15c:2cd:202:d3bc:20ba:fd8e:8208])
- (user=gthelen job=sendgmr) by 2002:a25:4bc6:0:b0:64d:efe1:a7d1 with SMTP id
- y189-20020a254bc6000000b0064defe1a7d1mr3156185yba.70.1652947189788; Thu, 19
- May 2022 00:59:49 -0700 (PDT)
-Date:   Thu, 19 May 2022 00:59:47 -0700
-In-Reply-To: <20220518223815.809858-1-vaibhav@linux.ibm.com>
-Message-Id: <xr937d6ic5qk.fsf@gthelen2.svl.corp.google.com>
-Mime-Version: 1.0
-References: <20220518223815.809858-1-vaibhav@linux.ibm.com>
-Subject: Re: [PATCH] memcg: provide reclaim stats via 'memory.reclaim'
-From:   Greg Thelen <gthelen@google.com>
-To:     Vaibhav Jain <vaibhav@linux.ibm.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Vaibhav Jain <vaibhav@linux.ibm.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 19 May 2022 03:59:54 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F67C3983C;
+        Thu, 19 May 2022 00:59:52 -0700 (PDT)
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4L3j1l050rz6F9F7;
+        Thu, 19 May 2022 15:59:39 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 09:59:50 +0200
+Received: from [10.47.92.25] (10.47.92.25) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
+ 2022 08:59:49 +0100
+Message-ID: <2d73146a-86fc-e0d1-11b9-432c7431d58a@huawei.com>
+Date:   Thu, 19 May 2022 08:59:48 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH 00/20] perf vendors events arm64: Multiple Arm CPUs
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Nick Forrington <nick.forrington@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <acme@kernel.org>
+CC:     Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>
+References: <20220510104758.64677-1-nick.forrington@arm.com>
+ <f523b0fe-1262-c1e5-c587-15842ccf0fcf@arm.com>
+ <28509191-3a45-de6d-f5bc-a8e7331c0a9e@huawei.com>
+ <5773b630-8159-1eba-481a-1bf3c406c055@arm.com>
+ <cf7d8003-9700-880f-0e46-ff40e6348bb1@huawei.com>
+ <7a17256d-cad0-bd94-02e7-f8adaa959654@arm.com>
+In-Reply-To: <7a17256d-cad0-bd94-02e7-f8adaa959654@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.92.25]
+X-ClientProxiedBy: lhreml728-chm.china.huawei.com (10.201.108.79) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
+On 18/05/2022 15:14, Robin Murphy wrote:
+>> Sure, we should have these 32b cores supported for ARCH=arm if they 
+>> are supported for ARCH=arm64. But then does it even make sense to have 
+>> A7 support in arch/arm64?
+> 
+> That's what I'm getting at. If it is tied to the build target as you've 
+> said above, then there is no point in an AArch64 perf tool including 
+> data for CPUs on which that tool cannot possibly run; it's simply a 
+> waste of space.
+> 
+> If there is interest in plumbing in support on AArch32 builds as well, 
+> then I'd still be inclined to have a single arch/arm events directory, 
+> and either do some build-time path munging or just symlink an arch/arm64 
+> sibling back to it. Yes, technically there are AArch64-only CPUs whose 
+> data would then be redundant when building for AArch32, 
 
-> [1] Provides a way for user-space to trigger proactive reclaim by introducing
-> a write-only memcg file 'memory.reclaim'. However reclaim stats like number
-> of pages scanned and reclaimed is still not directly available to the
-> user-space.
->
-> This patch proposes to extend [1] to make the memcg file 'memory.reclaim'
-> readable which returns the number of pages scanned / reclaimed during the
-> reclaim process from 'struct vmpressure' associated with each memcg. This should
-> let user-space asses how successful proactive reclaim triggered from memcg
-> 'memory.reclaim' was ?
->
-> With the patch following command flow is expected:
->
->  # echo "1M" > memory.reclaim
->
->  # cat memory.reclaim
->    scanned 76
->    reclaimed 32
+If size is an issue then we have ways to cut this down, like doing the 
+arch standard events fixup dynamically when running perf tool, or even 
+not describing those events in the JSONs and rely on reading the CPU PMU 
+events folder to learn which of those events are supported.
 
-I certainly appreciate the ability for shell scripts to demonstrate
-cgroup operations with textual interfaces, but such interface seem like
-they are optimized for ease of use by developers.
+ > but those are
+ > such a minority that it seems like an entirely reasonable compromise.
 
-I wonder if for runtime production use an ioctl or netlink interface has
-been considered for cgroup? I don't think there are any yet, but such
-approaches seem like a more straightforward ways to get nontrivial
-input/outputs from a single call (e.g. like this proposal). And they
-have the benefit of not requiring ascii serialization/parsing overhead.
+@Nick, Can you drop the 32b core support for arm64? Or, if you really 
+want them, look into ARCH=arm pmu-events support?
 
-> [1]:  https://lore.kernel.org/r/20220425190040.2475377-1-yosryahmed@google.com
->
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: Yosry Ahmed <yosryahmed@google.com>
-> Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
-> ---
->  Documentation/admin-guide/cgroup-v2.rst | 15 ++++++++++++---
->  mm/memcontrol.c                         | 14 ++++++++++++++
->  2 files changed, 26 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index 27ebef2485a3..44610165261d 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1209,18 +1209,27 @@ PAGE_SIZE multiple when read back.
->  	utility is limited to providing the final safety net.
->  
->    memory.reclaim
-> -	A write-only nested-keyed file which exists for all cgroups.
-> +	A nested-keyed file which exists for all cgroups.
->  
-> -	This is a simple interface to trigger memory reclaim in the
-> -	target cgroup.
-> +	This is a simple interface to trigger memory reclaim and retrieve
-> +	reclaim stats in the target cgroup.
->  
->  	This file accepts a single key, the number of bytes to reclaim.
->  	No nested keys are currently supported.
->  
-> +	Reading the file returns number of pages scanned and number of
-> +	pages reclaimed from the memcg. This information fetched from
-> +	vmpressure info associated with each cgroup.
-> +
->  	Example::
->  
->  	  echo "1G" > memory.reclaim
->  
-> +	  cat memory.reclaim
-> +
-> +	  scanned 78
-> +	  reclaimed 30
-> +
->  	The interface can be later extended with nested keys to
->  	configure the reclaim behavior. For example, specify the
->  	type of memory to reclaim from (anon, file, ..).
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 2e2bfbed4717..9e43580a8726 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -6423,6 +6423,19 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
->  	return nbytes;
->  }
->  
-> +static int memory_reclaim_show(struct seq_file *m, void *v)
-> +{
-> +	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
-> +	struct vmpressure *vmpr = memcg_to_vmpressure(memcg);
-> +
-> +	spin_lock(&vmpr->sr_lock);
-> +	seq_printf(m, "scanned %lu\nreclaimed %lu\n",
-> +		   vmpr->scanned, vmpr->reclaimed);
-> +	spin_unlock(&vmpr->sr_lock);
-> +
-> +	return 0;
-> +}
-> +
->  static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
->  			      size_t nbytes, loff_t off)
->  {
-> @@ -6525,6 +6538,7 @@ static struct cftype memory_files[] = {
->  		.name = "reclaim",
->  		.flags = CFTYPE_NS_DELEGATABLE,
->  		.write = memory_reclaim,
-> +		.seq_show  = memory_reclaim_show,
->  	},
->  	{ }	/* terminate */
->  };
+thanks,
+John

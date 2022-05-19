@@ -2,147 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7902F52DC6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA6052DC72
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 20:10:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243650AbiESSJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 14:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S243664AbiESSKN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 19 May 2022 14:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241236AbiESSI6 (ORCPT
+        with ESMTP id S234169AbiESSKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 14:08:58 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A5BB0409;
-        Thu, 19 May 2022 11:08:55 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id gi33so2978590ejc.3;
-        Thu, 19 May 2022 11:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=bKLtlyj1omDM7cHVqZHxMKZlB2vZKbH6hnKKHTQb34Y=;
-        b=kbtrb5R98xSIg+EZHZD6bvl1UORQjsXulPzGLnZ6lrKv5LoDL2Q1YYuwdJeLipkLTI
-         bIbVvAK0dmL1ieDE4l4oSvjl0C9Zizmmg8vriVc4wNEYhn2TaWX6uj04pRRx7mRhXQzV
-         eJ+rHGX57gnXkez09+RWBKlGDzYPW5EIk5xO1E3WLyS/WMx/WWubBCUzzQfU0e+Tt2TX
-         hBOxhpkvZsjVomx/hTU2eraaHAAHG/wZYJekAukjCX1CXgMMjf33/wH+WusL8eOhjM3y
-         l1UYQNIoz7XJKtiwqzZH9UgqNO1GUsHWwOsc3lr4yY68rgHueaXMERejYlPK8KxDHbkJ
-         Y6fQ==
+        Thu, 19 May 2022 14:10:08 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A71FD9E95;
+        Thu, 19 May 2022 11:10:07 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id f16so10407687ybk.2;
+        Thu, 19 May 2022 11:10:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=bKLtlyj1omDM7cHVqZHxMKZlB2vZKbH6hnKKHTQb34Y=;
-        b=lMhj5epTSVpuu+dUdjrikgD0nnJ2Oj4yQCnORGsFVpSS9rgjSz/kiq0nJbW1I2FZn9
-         jOSzDexCk12Rhv6VzUYJUwXzb76gSA2sxX8oiPiC6S7wdV8jXl0k7L7iJkXRXMIm4Lhi
-         Wt9NGRG8ZLiKPJ1NS2/Ywz+JAbua8rzizxsiILPMHkcE6EJuF4u2iIn6TP+oGM+/Ofy9
-         l7MJC/KxZ640iAfbu1Ixyw7B8N8vBKwGPy/lRqVSC5sM5brLHaOMmpeIm6Ul2BuE6h+S
-         FpSKhjpm9BUQfF7iXm/razpiZ3nSjZvAcvKnkLli7o76PSTmOx2y1cUg0rQ/8ok437ig
-         coWg==
-X-Gm-Message-State: AOAM5322KHlGWMJs56xXihho9Mc+PNeAIA1eHyjHwqyYb5iz44Yoa9mY
-        +G3XJcK7p05k7La71sRJuWY=
-X-Google-Smtp-Source: ABdhPJxQTBVx6kY82ts8VrWsL8afJOmcrh0klfXXq/kVOHUSCjoWqljGKBrHes/YN8bkRO+0PsRqGA==
-X-Received: by 2002:a17:907:98eb:b0:6f3:ce56:c1a2 with SMTP id ke11-20020a17090798eb00b006f3ce56c1a2mr5532533ejc.173.1652983734493;
-        Thu, 19 May 2022 11:08:54 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id i14-20020a1709067a4e00b006fea4d258cfsm112476ejo.147.2022.05.19.11.08.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 11:08:53 -0700 (PDT)
-Date:   Thu, 19 May 2022 21:08:51 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>
-Subject: Re: [PATCH net-next v5 07/13] net: dsa: rzn1-a5psw: add Renesas
- RZ/N1 advanced 5 port switch driver
-Message-ID: <20220519180851.chpqhou7ykt45oty@skbuf>
-References: <20220519153107.696864-1-clement.leger@bootlin.com>
- <20220519153107.696864-8-clement.leger@bootlin.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=z81b8Srtp7QZyPM16Uw+wUtgxjFIb94YlV53dwZltco=;
+        b=GSk1s6X7kLOEYgFQpfjapT+XIAZTVyMyyke0K5bdx9ZJ9vA7yrwrEOC8EjoOV5wgkP
+         TfSeQKEVHohqpnBesD5K1MFIVL4tZ/Effb9D9GkMYk0fT+8j7bkEigQEghJ9IqYPwaKb
+         7P40qOsU6MV9KAYGrF+ERD1LGc7cgzZEm4ZdzDjIa+umKU4nAjeMM+C2FMcdjotJ0vuD
+         STSt+QNqVONquPuMnMbMQtFShJMmVgeYpJ1N+fFl1ZrzZYJVAB/blw1QP8qpI0H6vyp7
+         sNnKA5t8revz+ROfVxxfgNZ0BolZ/0btvRXYKWBw3RAM72sl9RuzkywAmtEfNZlt8D7s
+         hXfQ==
+X-Gm-Message-State: AOAM533AaOW+REOqqn1dpVvml8ckvVwnkQtttG7wjDSK+keHdkEG5jEa
+        U1EBFM08xtYngEgelAsEQ0oxSgsj0ffMl8mOXZk=
+X-Google-Smtp-Source: ABdhPJx2uP0FlVua99VrwYYH36cc0i7y/DoDp8ZykDa+o7I8fmUv2+3BU+2izdvKG9nePuMmpKv825pGXxHXYrRuOcA=
+X-Received: by 2002:a25:e7ce:0:b0:64d:6028:96b9 with SMTP id
+ e197-20020a25e7ce000000b0064d602896b9mr5535107ybh.365.1652983806601; Thu, 19
+ May 2022 11:10:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220519153107.696864-8-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <f80dfd57fdca87897f070a3ea4ee0a26b03e7831.camel@mniewoehner.de>
+ <CAJZ5v0h+kKwdntGPC5PP6N0ZRbRzLxuwcwTGm-PNBH6Z3mnETg@mail.gmail.com>
+ <28686e8d994c297a78fb816805cd3652a8f8c90a.camel@mniewoehner.de>
+ <CAJZ5v0hWxhn9WM3ciQgbZpa7x8JwpHK=Bz4kefB_3VnAM0gB9Q@mail.gmail.com> <c766b4d9758b9fd1e15af89643093c595404a665.camel@mniewoehner.de>
+In-Reply-To: <c766b4d9758b9fd1e15af89643093c595404a665.camel@mniewoehner.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 19 May 2022 20:09:55 +0200
+Message-ID: <CAJZ5v0ip7-6CUys88y8ydABJQsUUONAzyCa91qOiRsj2FCwMEg@mail.gmail.com>
+Subject: Re: [PATCH v2] ACPI: utils: include UUID in _DSM evaluation warning
+To:     =?UTF-8?Q?Michael_Niew=C3=B6hner?= <linux@mniewoehner.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 05:31:01PM +0200, ClÈment LÈger wrote:
-> +static int a5psw_pcs_get(struct a5psw *a5psw)
-> +{
-> +	struct device_node *ports, *port, *pcs_node;
-> +	struct phylink_pcs *pcs;
-> +	int ret;
-> +	u32 reg;
-> +
-> +	ports = of_get_child_by_name(a5psw->dev->of_node, "ethernet-ports");
-> +	if (!ports)
-> +		return -EINVAL;
-> +
-> +	for_each_available_child_of_node(ports, port) {
-> +		pcs_node = of_parse_phandle(port, "pcs-handle", 0);
-> +		if (!pcs_node)
-> +			continue;
-> +
-> +		if (of_property_read_u32(port, "reg", &reg)) {
-> +			ret = -EINVAL;
-> +			goto free_pcs;
+On Tue, May 17, 2022 at 8:40 PM Michael Niew√∂hner <linux@mniewoehner.de> wrote:
+>
+> The _DSM evaluation warning in its current form is not very helpful, as
+> it lacks any specific information:
+>   ACPI: \: failed to evaluate _DSM (0x1001)
+>
+> Thus, include the UUID of the missing _DSM:
+>   ACPI: \: failed to evaluate _DSM bf0212f2-... (0x1001)
+>
+> Signed-off-by: Michael Niew√∂hner <linux@mniewoehner.de>
+> ---
+> Changes in v2:
+>  - fix arguments order
+>  - fix indentation
+>  - drop line break
+>
+>  drivers/acpi/utils.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/utils.c b/drivers/acpi/utils.c
+> index d5cedffeeff9..3a9773a09e19 100644
+> --- a/drivers/acpi/utils.c
+> +++ b/drivers/acpi/utils.c
+> @@ -681,7 +681,7 @@ acpi_evaluate_dsm(acpi_handle handle, const guid_t *guid, u64 rev, u64 func,
+>
+>         if (ret != AE_NOT_FOUND)
+>                 acpi_handle_warn(handle,
+> -                               "failed to evaluate _DSM (0x%x)\n", ret);
+> +                                "failed to evaluate _DSM %pUb (0x%x)\n", guid, ret);
+>
+>         return NULL;
+>  }
+> --
 
-I think when you exit the for_each_available_child_of_node() loop you
-need to manually call of_node_put(port).
-
-> +		}
-> +
-> +		if (reg >= ARRAY_SIZE(a5psw->pcs)) {
-> +			ret = -ENODEV;
-> +			goto free_pcs;
-> +		}
-> +
-> +		pcs = miic_create(pcs_node);
-> +		if (IS_ERR(pcs)) {
-> +			dev_err(a5psw->dev, "Failed to create PCS for port %d\n",
-> +				reg);
-> +			ret = PTR_ERR(pcs);
-> +			goto free_pcs;
-> +		}
-> +
-> +		a5psw->pcs[reg] = pcs;
-> +	}
-> +	of_node_put(ports);
-> +
-> +	return 0;
-> +
-> +free_pcs:
-> +	a5psw_pcs_free(a5psw);
-> +	of_node_put(ports);
-> +
-> +	return ret;
-> +}
+Applied as 5.19 material, thanks!

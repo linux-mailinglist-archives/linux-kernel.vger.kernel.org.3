@@ -2,101 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88B952CD91
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F28C52CD92
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbiESHvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
+        id S235028AbiESHv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235022AbiESHvb (ORCPT
+        with ESMTP id S235055AbiESHvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:51:31 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A40B237D3
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:51:29 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id h5so4765827wrb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cyCpX1ZmR/kf8pzgbwKyX7fP0Ivtmtw9DDuTffHF0T4=;
-        b=mRbqHyr2HlEx8B9iL3PZn3B6Y/2EcOxqC7Oc10pNva4YC9BpH4UDUlJCXjzUeDYIuj
-         ZpwOOGPe3exSHd6UMinRc2gLRx4/Z9ROf1Q3HTj+wc47ub5Vfc76ldTgKnxBc0wS7u7j
-         bI1bfWnvn1IYn1pr1W4bAMW+UBN1nm8wBCgRo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cyCpX1ZmR/kf8pzgbwKyX7fP0Ivtmtw9DDuTffHF0T4=;
-        b=Ee9XhkYrf7Umq74YEhdjb9UHnEYGHCt1HFoceNL+YVYatECHp+XM/nec8kUSSraFF+
-         rAQYyS9QS9HvG38gMYsu8GdNi5juX80PY1nekB8ubiCsq3GkURK/WhfsN+orTmoR1fsY
-         +yKrGWjvPerGwlsZiKdKgcJ3u9dqbCm+s1SHjLfyy0sQekQhC7Bs7me1w2k3qJ6qRcyM
-         o+c1UxqP+E+MqzQ1bTZdCg1tGkPqrpIRcoyDIXA4dirgk39w4HJMGdng4zcdDzZ+9Z/A
-         YWlZbPAKTP0bIHV41ULOsvELlU3qxeUv956HEi/Rku08GBPIannL6Ywvruio1FEEuTy8
-         MY8w==
-X-Gm-Message-State: AOAM533ssJZ3yst6lu0yBHJZ2XAcgIn9EYSJ3XdrQip2iSa2auKTwzgQ
-        5fe5V6GIstTBwNMl/Wytn7ffcw==
-X-Google-Smtp-Source: ABdhPJzEJ//yF1pX5Q/0fs/Nw2UrvupH4A6Tv5qSwJnPr9e0MfJTTN+XjNenDXGXnNNXvzBojuMQag==
-X-Received: by 2002:a05:6000:1a87:b0:20c:687f:6d10 with SMTP id f7-20020a0560001a8700b0020c687f6d10mr2791038wry.574.1652946688579;
-        Thu, 19 May 2022 00:51:28 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i.station (net-188-217-53-154.cust.vodafonedsl.it. [188.217.53.154])
-        by smtp.gmail.com with ESMTPSA id c6-20020a05600c4a0600b003942a244ebfsm3370254wmp.4.2022.05.19.00.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 00:51:28 -0700 (PDT)
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     tommaso.merciai@amarulasolutions.com, linuxfancy@googlegroups.com,
-        linux-amarula@amarulasolutions.com, michael@amarulasolutions.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: rockchip: px30: use rk gpio naming convention into reset-gpios
-Date:   Thu, 19 May 2022 09:51:17 +0200
-Message-Id: <20220519075117.1003520-5-tommaso.merciai@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220519075117.1003520-1-tommaso.merciai@amarulasolutions.com>
-References: <20220519075117.1003520-1-tommaso.merciai@amarulasolutions.com>
+        Thu, 19 May 2022 03:51:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35C4248306
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:51:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652946699;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ssTWorodC5pMj1HhfpY4c6Y6MlpWFF/JjDikA8vi2Wc=;
+        b=Su6I3zHTsIKxt6PcGf+zL0uTdmbAzlolKAyeuf6CkMMdlUGYH5ocvKrRwlbypwZb2aHEDi
+        CxAEIUwCLICuk3EpyrD0CLbPISlyrZd/b0MGgRQ6pJ1J5uIJQlJzzivVyoQaOkTYAMkvi4
+        LI23RFtZhx76EbNnZghrNZC+fE5CmzI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-327-u23PA9BJOPa_-rAtHZ2msQ-1; Thu, 19 May 2022 03:51:35 -0400
+X-MC-Unique: u23PA9BJOPa_-rAtHZ2msQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 88C0A19705A8;
+        Thu, 19 May 2022 07:51:34 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DB2FA40C1421;
+        Thu, 19 May 2022 07:51:32 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] nfs: Fix fscache volume key rendering for endianness
+From:   David Howells <dhowells@redhat.com>
+To:     trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     Dave Wysochanski <dwysocha@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org,
+        linux-cachefs@redhat.com, torvalds@linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 19 May 2022 08:51:32 +0100
+Message-ID: <165294669215.3283481.13374322806917745974.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use rk gpio naming convention into reset-gpios of ov5695 camera
+Fix fscache volume key rendering for endianness.  Convert the BE numbers in
+the address to host-endian before printing them so that they're consistent
+if the cache is copied between architectures.
 
-Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Tested-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Question: This change could lead to misidentification of a volume directory
+in the cache on a LE machine (it's unlikely because the port number as well
+as the address numbers all get flipped), but it was introduced in -rc1 in
+this cycle so probably isn't in any distro kernels yet.  Should I add a
+version number to enforce non-matching?
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Dave Wysochanski <dwysocha@redhat.com>
+cc: Trond Myklebust <trond.myklebust@hammerspace.com>
+cc: Anna Schumaker <anna@kernel.org>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: linux-nfs@vger.kernel.org
+cc: linux-cachefs@redhat.com
 ---
- arch/arm64/boot/dts/rockchip/px30-evb.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/px30-evb.dts b/arch/arm64/boot/dts/rockchip/px30-evb.dts
-index 0d05a1b098bc..07008d84434c 100644
---- a/arch/arm64/boot/dts/rockchip/px30-evb.dts
-+++ b/arch/arm64/boot/dts/rockchip/px30-evb.dts
-@@ -450,8 +450,8 @@ ov5695: ov5695@36 {
- 		dvdd-supply = <&vcc1v5_dvp>;
- 		dovdd-supply = <&vcc1v8_dvp>;
- 		pinctrl-names = "default";
--		reset-gpios = <&gpio2 14 GPIO_ACTIVE_LOW>;
- 		pinctrl-0 = <&cif_clkout_m0 &mipi_pdn>;
-+		reset-gpios = <&gpio2 RK_PB6 GPIO_ACTIVE_LOW>;
+ fs/nfs/fscache.c |   14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
+index f73c09a9cf0a..0e5572b192b2 100644
+--- a/fs/nfs/fscache.c
++++ b/fs/nfs/fscache.c
+@@ -54,17 +54,17 @@ static bool nfs_fscache_get_client_key(struct nfs_client *clp,
  
- 		port {
- 			ucam_out: endpoint {
--- 
-2.25.1
+ 	switch (clp->cl_addr.ss_family) {
+ 	case AF_INET:
+-		if (!nfs_append_int(key, _len, sin->sin_port) ||
+-		    !nfs_append_int(key, _len, sin->sin_addr.s_addr))
++		if (!nfs_append_int(key, _len, ntohs(sin->sin_port)) ||
++		    !nfs_append_int(key, _len, ntohl(sin->sin_addr.s_addr)))
+ 			return false;
+ 		return true;
+ 
+ 	case AF_INET6:
+-		if (!nfs_append_int(key, _len, sin6->sin6_port) ||
+-		    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[0]) ||
+-		    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[1]) ||
+-		    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[2]) ||
+-		    !nfs_append_int(key, _len, sin6->sin6_addr.s6_addr32[3]))
++		if (!nfs_append_int(key, _len, ntohs(sin6->sin6_port)) ||
++		    !nfs_append_int(key, _len, ntohl(sin6->sin6_addr.s6_addr32[0])) ||
++		    !nfs_append_int(key, _len, ntohl(sin6->sin6_addr.s6_addr32[1])) ||
++		    !nfs_append_int(key, _len, ntohl(sin6->sin6_addr.s6_addr32[2])) ||
++		    !nfs_append_int(key, _len, ntohl(sin6->sin6_addr.s6_addr32[3])))
+ 			return false;
+ 		return true;
+ 
+
 

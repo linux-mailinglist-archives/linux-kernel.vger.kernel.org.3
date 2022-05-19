@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCEA52CA92
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795FA52CA94
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 05:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233324AbiESDzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 23:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47200 "EHLO
+        id S233333AbiESD50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 23:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232257AbiESDzr (ORCPT
+        with ESMTP id S231599AbiESD5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 23:55:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3EFB41
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 20:55:43 -0700 (PDT)
+        Wed, 18 May 2022 23:57:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFECDFA7;
+        Wed, 18 May 2022 20:57:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 184D361362
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 03:55:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A33C385B8;
-        Thu, 19 May 2022 03:55:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBDF56181A;
+        Thu, 19 May 2022 03:57:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3536CC385B8;
+        Thu, 19 May 2022 03:57:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652932542;
-        bh=mMELOShcqFrCb7QBnJJis+SiNf1QFtI83sU806A0IHg=;
+        s=k20201202; t=1652932641;
+        bh=Cw/bSvzhskHy+6kqHl2QrfuEwtgAOdgImcnM82BTlfg=;
         h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=JjI09uTq+7kHJr9vaAnZWs495qK8jX0Teme9rpPI+LnGhCNotErIFo2ZHHXBTX+Fo
-         qhWAJcAunhwi1N6iQG9o+vZl/s9MgTbiwI/g+8yGjY96D069ZTC+WEvFK68gKbUm1S
-         GklGME1a1YK5TcNL8rdOQUv07+g3pSStagbl8bzMy3ixx58F8hz4vldXBFUKjRsXKv
-         cEohHkeV/bVOIDqekYjP9wC+eIiteriphqQqV8454cn+QXsNp6fDOx7+AtgVvdOuGA
-         JBOhAgPo9KOuC9dzeEYybXBtGrLr66ka/DCbdbK6z4BSJAsZGBN7mwIiKBf8BEyyru
-         cTSKslmC3mztg==
+        b=hLnI1XhVmkuPZkWL7LKIiFGbIFhlfzU1Hjfk0uSgM1kKYEmlBUfggOlTNdg64rvgq
+         JYnjsJJYmuyQLg1h/vMnhRNlGotG1EqP05prRy06wqhpyqLgGJ5bEUG0A6ewnpDFk+
+         HSNS4ftz/hMf8xqiKJUvDv8zhZh+RRHdeHujB0UkFrSvXFIxCpLfC/NvpvvLhlUk+d
+         oG3om01aTWxBGgumZYGQHix3zWe+wlMuehfS/I9z6QwhovyTUnqaq89TVZ3oQZrEaG
+         CZc+JggkA3s1IykuRxDh+ynoi2Rtro0muxJKDOL2PP3p7L0wI5G2VcFFiS+t4nSKFF
+         jdBrUxFAe9RvQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 157205C033E; Wed, 18 May 2022 20:55:42 -0700 (PDT)
-Date:   Wed, 18 May 2022 20:55:42 -0700
+        id CF16C5C033E; Wed, 18 May 2022 20:57:20 -0700 (PDT)
+Date:   Wed, 18 May 2022 20:57:20 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/dev 53/55]
- include/linux/rcupdate.h:207:34: error: implicit declaration of function
- 'rcu_tasks_trace_qs'; did you mean 'rcu_tasks_classic_qs'?
-Message-ID: <20220519035542.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sysctl: Merge adjacent CONFIG_TREE_RCU blocks
+Message-ID: <20220519035720.GV1790663@paulmck-ThinkPad-P17-Gen-1>
 Reply-To: paulmck@kernel.org
-References: <202205191043.pLKc0AwM-lkp@intel.com>
+References: <a6931221b532ae7a5cf0eb229ace58acee4f0c1a.1652799977.git.geert+renesas@glider.be>
+ <20220517155737.GA1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YoW4tRf693CSAioE@bombadil.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202205191043.pLKc0AwM-lkp@intel.com>
+In-Reply-To: <YoW4tRf693CSAioE@bombadil.infradead.org>
 X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -60,76 +61,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 10:42:19AM +0800, kernel test robot wrote:
-> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
-> head:   b2a7e376a9dcfa2de46236696dfdd48275edf63d
-> commit: 840470b0e655a13aae153f3b46d1e02fadf5c06a [53/55] fixup! tasks-rcu: Track blocked RCU Tasks Trace readers
-> config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220519/202205191043.pLKc0AwM-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
-> reproduce (this is a W=1 build):
->         # https://github.com/ammarfaizi2/linux-block/commit/840470b0e655a13aae153f3b46d1e02fadf5c06a
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
->         git checkout 840470b0e655a13aae153f3b46d1e02fadf5c06a
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+On Wed, May 18, 2022 at 08:25:41PM -0700, Luis Chamberlain wrote:
+> On Tue, May 17, 2022 at 08:57:37AM -0700, Paul E. McKenney wrote:
+> > On Tue, May 17, 2022 at 05:07:31PM +0200, Geert Uytterhoeven wrote:
+> > > There are two adjacent sysctl entries protected by the same
+> > > CONFIG_TREE_RCU config symbol.  Merge them into a single block to
+> > > improve readability.
+> > > 
+> > > Use the more common "#ifdef" form while at it.
+> > > 
+> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > 
+> > If you would like me to take this, please let me know.  (The default
+> > would be not the upcoming merge window, but the one after that.)
+> > 
+> > If you would rather send it via some other path:
+> > 
+> > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> The one that that occurs to me is that while at it, Geert,
+> can you also just then follow up with a patch 2/2 which then
+> moves the sysctl out to the respective RCU code. If you look
+> at linux-nxt kernel/sysctl.c is getting modified heavily with
+> time to avoid stuffing everyone's sysctls there because this
+> creates merge conflicts, make the file hard to read, and we
+> have ways to split this.
+> 
+> This work started about 2 kernel releases ago and is ongoing,
+> it may take 3-4 more before kernel/sysctl.c stop being a kitchen
+> sink of everyone's syctls.
+> 
+> Paul, I've been collecting these modifications in a sysctl-next
+> tree to avoid merge conflicts, and I try to not do to much per
+> kernel release. If you like I can take this in for that tree
+> as well, but as you noted, this would be for the next release,
+> not the current one which we'll soon enter the merge window for.
+> 
+> Let me know!
 
-Good catch, fix is not on -rcu and will be folded into the original
-with attribution.
+Please do take it!
 
 							Thanx, Paul
 
-> All errors (new ones prefixed by >>):
-> 
->    kernel/sched/core.c:5235:20: warning: no previous prototype for 'task_sched_runtime' [-Wmissing-prototypes]
->     5235 | unsigned long long task_sched_runtime(struct task_struct *p)
->          |                    ^~~~~~~~~~~~~~~~~~
->    In file included from include/linux/rculist.h:11,
->                     from include/linux/dcache.h:8,
->                     from include/linux/fs.h:8,
->                     from include/linux/highmem.h:5,
->                     from kernel/sched/core.c:9:
->    kernel/sched/core.c: In function '__schedule':
-> >> include/linux/rcupdate.h:207:34: error: implicit declaration of function 'rcu_tasks_trace_qs'; did you mean 'rcu_tasks_classic_qs'? [-Werror=implicit-function-declaration]
->      207 | #define rcu_tasks_qs(t, preempt) rcu_tasks_trace_qs(t);
->          |                                  ^~~~~~~~~~~~~~~~~~
->    include/linux/rcutiny.h:74:17: note: in expansion of macro 'rcu_tasks_qs'
->       74 |                 rcu_tasks_qs(current, (preempt)); \
->          |                 ^~~~~~~~~~~~
->    kernel/sched/core.c:6279:9: note: in expansion of macro 'rcu_note_context_switch'
->     6279 |         rcu_note_context_switch(!!sched_mode);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~
->    kernel/sched/core.c: At top level:
->    kernel/sched/core.c:9432:13: warning: no previous prototype for 'sched_init_smp' [-Wmissing-prototypes]
->     9432 | void __init sched_init_smp(void)
->          |             ^~~~~~~~~~~~~~
->    kernel/sched/core.c:9460:13: warning: no previous prototype for 'sched_init' [-Wmissing-prototypes]
->     9460 | void __init sched_init(void)
->          |             ^~~~~~~~~~
->    cc1: some warnings being treated as errors
-> 
-> 
-> vim +207 include/linux/rcupdate.h
-> 
->    201	
->    202	#define rcu_note_voluntary_context_switch(t) rcu_tasks_qs(t, false)
->    203	void exit_tasks_rcu_start(void);
->    204	void exit_tasks_rcu_finish(void);
->    205	#else /* #ifdef CONFIG_TASKS_RCU_GENERIC */
->    206	#define rcu_tasks_classic_qs(t, preempt) do { } while (0)
->  > 207	#define rcu_tasks_qs(t, preempt) rcu_tasks_trace_qs(t);
->    208	#define rcu_note_voluntary_context_switch(t) do { } while (0)
->    209	#define call_rcu_tasks call_rcu
->    210	#define synchronize_rcu_tasks synchronize_rcu
->    211	static inline void exit_tasks_rcu_start(void) { }
->    212	static inline void exit_tasks_rcu_finish(void) { }
->    213	#endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
->    214	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+>   Luis
+> > 
+> > > ---
+> > >  kernel/sysctl.c | 4 +---
+> > >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > > 
+> > > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> > > index 82bcf5e3009fa377..597069da18148f42 100644
+> > > --- a/kernel/sysctl.c
+> > > +++ b/kernel/sysctl.c
+> > > @@ -2227,7 +2227,7 @@ static struct ctl_table kern_table[] = {
+> > >  		.extra1		= SYSCTL_ZERO,
+> > >  		.extra2		= SYSCTL_ONE,
+> > >  	},
+> > > -#if defined(CONFIG_TREE_RCU)
+> > > +#ifdef CONFIG_TREE_RCU
+> > >  	{
+> > >  		.procname	= "panic_on_rcu_stall",
+> > >  		.data		= &sysctl_panic_on_rcu_stall,
+> > > @@ -2237,8 +2237,6 @@ static struct ctl_table kern_table[] = {
+> > >  		.extra1		= SYSCTL_ZERO,
+> > >  		.extra2		= SYSCTL_ONE,
+> > >  	},
+> > > -#endif
+> > > -#if defined(CONFIG_TREE_RCU)
+> > >  	{
+> > >  		.procname	= "max_rcu_stall_to_panic",
+> > >  		.data		= &sysctl_max_rcu_stall_to_panic,
+> > > -- 
+> > > 2.25.1
+> > > 

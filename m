@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE0752D1D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE8052D1D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 13:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232773AbiESLxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 07:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S237589AbiESLyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 07:54:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiESLxi (ORCPT
+        with ESMTP id S237554AbiESLyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 07:53:38 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158EBB82E8;
-        Thu, 19 May 2022 04:53:35 -0700 (PDT)
-X-UUID: 4485e9383e2346cdb1e80a86c08cd709-20220519
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:24de930f-530c-4a88-8e4a-be29e94c2428,OB:0,LO
-        B:20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:45
-X-CID-INFO: VERSION:1.1.5,REQID:24de930f-530c-4a88-8e4a-be29e94c2428,OB:0,LOB:
-        20,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:45
-X-CID-META: VersionHash:2a19b09,CLOUDID:134ede79-5ef6-470b-96c9-bdb8ced32786,C
-        OID:33a7046bb6b3,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: 4485e9383e2346cdb1e80a86c08cd709-20220519
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <axe.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2085337368; Thu, 19 May 2022 19:53:28 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 19 May 2022 19:53:27 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 19 May 2022 19:53:26 +0800
-Message-ID: <d70e3bbbb2a15977caaa65820a9af5c2fdac98b4.camel@mediatek.com>
-Subject: Re: [PATCH v9 3/3] mmc: mediatek: add support for SDIO eint wakup
- IRQ
-From:   Axe Yang <axe.yang@mediatek.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Satya Tangirala <satyat@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lucas Stach <dev@lynxeye.de>,
-        "Eric Biggers" <ebiggers@google.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "Stephen Boyd" <swboyd@chromium.org>,
-        Kiwoong Kim <kwmad.kim@samsung.com>,
-        Yue Hu <huyue2@yulong.com>, Tian Tao <tiantao6@hisilicon.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Yong Mao <yong.mao@mediatek.com>
-Date:   Thu, 19 May 2022 19:53:25 +0800
-In-Reply-To: <CAPDyKFrSWm4HKGLQhm164kYRB4psdzo+9btu67Demz7Xr1MS_w@mail.gmail.com>
-References: <20220329032913.8750-1-axe.yang@mediatek.com>
-         <20220329032913.8750-4-axe.yang@mediatek.com>
-         <CAPDyKFrSWm4HKGLQhm164kYRB4psdzo+9btu67Demz7Xr1MS_w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 19 May 2022 07:54:02 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19398B82EF
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:54:01 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bq30so8702628lfb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 04:54:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ynDwu8qGPWur+txmdTa4k/0YDzFSlIMmuvwA/VUCzcg=;
+        b=jWqkmG8QV2PoxNQ+o66kt3qtyZtYpeRrP0rJugh+e9gH7kcVEzZP/yKcacr0y3PwnM
+         p6GWvmgX/7czZPAsvDZ4xZjdAlAzssas+2F3n7NaeCxka+Qx6SVxBqHy74aV1LUSP8wE
+         b78Aubz4phDjpsq/KvNzv5s6HoFZGaagE66QShjpuCgkg85VUbpimlSM6/iTU/awIcqd
+         eVdvZ90WBF24MmzYWZdtQfbJMQF4l7BxFR33NPOKECuK1l/MNwaGxcNgOYkAgWQoclVh
+         Ho+xvNP3G7uobjrmOL7i2LM3vbraoxMEUu3ldCiaf3dlfttj4WWpDkrWcDHg0i1HIxCa
+         7oMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ynDwu8qGPWur+txmdTa4k/0YDzFSlIMmuvwA/VUCzcg=;
+        b=kG+bkfaHrQhQ7DmcK7TJIzchzeHxnOVNBzimuSa+vu7biayF9EDntHtUeCd2oUPiR1
+         0xJwyu0qJaOs2TTGbEgxQpAjp4D+uwU9jcZd9F8VAVkSO9HCae9TdbD2RsJ0zjX/UZ2m
+         1Bv0WtsTMYsdY76p4WGr7gyaLhkG+WFZUE/8Lk7bI1//N+SaPdEiuHAF2QdiP6YBC9a8
+         hrTuBJXE3yzPvWPcbrlFmAB+FlQ5fNebypq1uV2sXi1VIk5q11Cx5EwiZpEH73byJGS1
+         61hiHs0XEE0PB19aZNpkkhb8zeH3Y+BiuKF7pAHmW6mO3Mjyv8KAXdxuyP5k3cOUE4XU
+         N87Q==
+X-Gm-Message-State: AOAM530hFrmv4RsftbxV3GfPTyDmEXQpLEoLeuJq4O10ycPLjTNEFSWc
+        6qkux921Hz5Du8vm96Tt4MvYzXrvbtjvBiCr
+X-Google-Smtp-Source: ABdhPJyy+batuU6U7KxzGS5lRyhCFXqpKpfzC73MofPOeIr+/BfU8dM/DOOI35JzL47clkdUE0q8CQ==
+X-Received: by 2002:a05:6512:2397:b0:473:a6d9:5138 with SMTP id c23-20020a056512239700b00473a6d95138mr3117561lfv.332.1652961239433;
+        Thu, 19 May 2022 04:53:59 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id o22-20020a2e9456000000b0024f3d1dae84sm571111ljh.12.2022.05.19.04.53.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 04:53:58 -0700 (PDT)
+Message-ID: <8a90ffbc-b376-9115-fb91-0b46d98873b7@linaro.org>
+Date:   Thu, 19 May 2022 13:53:57 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: Removal of qcom,board-id and qcom,msm-id
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Andy Gross <agross@kernel.org>,
+        Olof Johansson <olof@lixom.net>
+Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <a3c932d1-a102-ce18-deea-18cbbd05ecab@linaro.org>
+ <35051bec-98ea-b4c5-f734-06b3f22f3562@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <35051bec-98ea-b4c5-f734-06b3f22f3562@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,353 +80,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-04 at 17:01 +0200, Ulf Hansson wrote:
-> On Tue, 29 Mar 2022 at 05:29, Axe Yang <axe.yang@mediatek.com> wrote:
-> > 
-> > Add support for eint IRQ when MSDC is used as an SDIO host. This
-> > feature requires SDIO device support async IRQ function. With this
-> > feature, SDIO host can be awakened by SDIO card in suspend state,
-> > without additional pin.
-> > 
-> > MSDC driver will time-share the SDIO DAT1 pin. During suspend, MSDC
-> > turn off clock and switch SDIO DAT1 pin to GPIO mode. And during
-> > resume, switch GPIO function back to DAT1 mode then turn on clock.
-> > 
-> > Some device tree property should be added or modified in MSDC node
-> > to support SDIO eint IRQ. Pinctrls "state_eint" is mandatory. Since
-> > this feature depends on asynchronous interrupts, "wakeup-source",
-> > "keep-power-in-suspend" and "cap-sdio-irq" flags are necessary, and
-> > the interrupts list should be extended:
-> >         &mmcX {
-> >                 ...
-> >                 interrupts-extended = <...>,
-> >                                       <&pio xxx
-> > IRQ_TYPE_LEVEL_LOW>;
-> >                 ...
-> >                 pinctrl-names = "default", "state_uhs",
-> > "state_eint";
-> >                 ...
-> >                 pinctrl-2 = <&mmc2_pins_eint>;
-> >                 ...
-> >                 cap-sdio-irq;
-> >                 keep-power-in-suspend;
-> >                 wakeup-source;
-> >                 ...
-> >         };
-> > 
-> > Co-developed-by: Yong Mao <yong.mao@mediatek.com>
-> > Signed-off-by: Yong Mao <yong.mao@mediatek.com>
-> > Signed-off-by: Axe Yang <axe.yang@mediatek.com>
-> > ---
-> >  drivers/mmc/host/mtk-sd.c | 94
-> > +++++++++++++++++++++++++++++++++++----
-> >  1 file changed, 86 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> > index 65037e1d7723..2905d7134243 100644
-> > --- a/drivers/mmc/host/mtk-sd.c
-> > +++ b/drivers/mmc/host/mtk-sd.c
-> > @@ -1,6 +1,6 @@
-> >  // SPDX-License-Identifier: GPL-2.0-only
-> >  /*
-> > - * Copyright (c) 2014-2015 MediaTek Inc.
-> > + * Copyright (c) 2014-2015, 2022 MediaTek Inc.
-> >   * Author: Chaotian.Jing <chaotian.jing@mediatek.com>
-> >   */
-> > 
-> > @@ -20,6 +20,7 @@
-> >  #include <linux/platform_device.h>
-> >  #include <linux/pm.h>
-> >  #include <linux/pm_runtime.h>
-> > +#include <linux/pm_wakeirq.h>
-> >  #include <linux/regulator/consumer.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/spinlock.h>
-> > @@ -440,8 +441,11 @@ struct msdc_host {
-> >         struct pinctrl *pinctrl;
-> >         struct pinctrl_state *pins_default;
-> >         struct pinctrl_state *pins_uhs;
-> > +       struct pinctrl_state *pins_eint;
-> >         struct delayed_work req_timeout;
-> >         int irq;                /* host interrupt */
-> > +       int eint_irq;           /* interrupt from sdio device for
-> > waking up system */
-> > +       int sdio_wake_irq_depth;
-> >         struct reset_control *reset;
-> > 
-> >         struct clk *src_clk;    /* msdc source clock */
-> > @@ -465,6 +469,7 @@ struct msdc_host {
-> >         bool hs400_tuning;      /* hs400 mode online tuning */
-> >         bool internal_cd;       /* Use internal card-detect logic
-> > */
-> >         bool cqhci;             /* support eMMC hw cmdq */
-> > +       bool sdio_eint_ready;   /* Ready to support SDIO eint
-> > interrupt */
-> >         struct msdc_save_para save_para; /* used when gate HCLK */
-> >         struct msdc_tune_para def_tune_para; /* default tune
-> > setting */
-> >         struct msdc_tune_para saved_tune_para; /* tune result of
-> > CMD21/CMD19 */
-> > @@ -1527,10 +1532,12 @@ static void msdc_enable_sdio_irq(struct
-> > mmc_host *mmc, int enb)
-> >         __msdc_enable_sdio_irq(host, enb);
-> >         spin_unlock_irqrestore(&host->lock, flags);
-> > 
-> > -       if (enb)
-> > -               pm_runtime_get_noresume(host->dev);
-> > -       else
-> > -               pm_runtime_put_noidle(host->dev);
-> > +       if (mmc->card && !mmc_card_enable_async_irq(mmc->card)) {
+On 19/05/2022 13:39, Dmitry Baryshkov wrote:
+> On 19/05/2022 13:44, Krzysztof Kozlowski wrote:
+>> Hi,
+>>
+>> There was an old effort of removal of qcom,board-id and qcom,msm-id
+>> properties from Qualcomm SoC-based boards like [1].
+>>
+>> First approach was to document them, which (obviously) was not well
+>> received [2] [3] [4].
+>>
+>> The solution from Stephen was to encode these in the board compatible,
+>> so bootloader can extract that information. That seemed to receive
+>> positive comments, at least from Rob. [5]
+>>
+>> It was 2015... ~7 years later we are still things doing the same way,
+>> still with undocumented properties: qcom,board-id and qcom,msm-id.
+>>
+>>
+>> I would like to revive that topic, but before I start doing something
+>> pointless - any guidance on last patch from Stephen [5]? Was it ok? Some
+>> early NAKs?
 > 
-> It might not be obvious, but in fact mmc->card always exists in this
-> case, hence there is no need to check the pointer before using it.
+> I do not quite fancy the idea of using extra tools to process dtb files. 
+> At this moment it is possible to concatenate several kernel-generated 
+> dtb files together. AOSP developers use this to have an image that boots 
+> on both RB3 and RB5 boards.
+> 
+> I think that changing compat strings only makes sense if Qualcomm would 
+> use such compat strings in future. Otherwise we end up in a position 
+> where we have custom bootloaders for the RB3/RB5/etc, but the majority 
+> of the board requires extra processing steps.
 
-this check is removed in v10.
+This was discussed in [2] [3] and [4] (previous links) and did not pass.
+
+Do you have any new arguments for above objections from Arnd, Olof and
+Rob? I don't think patch will get accepted if previous concerns during
+review are not addressed...
 
 > 
-> > +               if (enb)
-> > +                       pm_runtime_get_noresume(host->dev);
-> > +               else
-> > +                       pm_runtime_put_noidle(host->dev);
-> > +       }
-> >  }
-> > 
-> >  static irqreturn_t msdc_cmdq_irq(struct msdc_host *host, u32
-> > intsts)
-> > @@ -2631,6 +2638,18 @@ static int msdc_drv_probe(struct
-> > platform_device *pdev)
-> >                 goto host_free;
-> >         }
-> > 
-> > +       /* Support for SDIO eint irq ? */
-> > +       if (mmc->pm_caps & MMC_PM_WAKE_SDIO_IRQ) {
-> > +               host->pins_eint = pinctrl_lookup_state(host-
-> > >pinctrl, "state_eint");
-> > +               if (IS_ERR(host->pins_eint)) {
-> > +                       ret = dev_err_probe(&pdev->dev,
-> > PTR_ERR(host->pins_eint),
-> > +                                           "Cannot find pinctrl
-> > eint!\n");
-> > +                       goto host_free;
-> > +               }
-> > +
-> > +               host->sdio_eint_ready = true;
-> 
-> Rather than using a separate variable, couldn't we just check "if
-> (host->pins_eint)" to know whether wakeup settings shall be managed?
+> So, I think, we should drop the unspecified usid aliases, document the 
+> board-id/msm-id/pmic-id properties and stick with them. 
 
-This variable is removed in v10, use host->pins_eint instead. 
+The existing properties need anyway documenting, probably as deprecated
+so the schema can pass, because we cannot fix the bootloaders easly.
+
+> They might be 
+> ugly, but they are expected/processed by the majority of devices present 
+> in the wild.
+
+Any change in DTS affects only future devices, so not in the wild...
 
 > 
-> > +       }
-> > +
-> >         msdc_of_property_parse(pdev, host);
-> > 
-> >         host->dev = &pdev->dev;
-> > @@ -2722,6 +2741,21 @@ static int msdc_drv_probe(struct
-> > platform_device *pdev)
-> >         if (ret)
-> >                 goto release;
-> > 
-> > +       if (host->sdio_eint_ready) {
-> > +               host->eint_irq = irq_of_parse_and_map(host->dev-
-> > >of_node, 1);
-> > +               ret = host->eint_irq ?
-> > dev_pm_set_dedicated_wake_irq(host->dev, host->eint_irq) :
-> > +                     -ENODEV;
+>> [1]
+>> https://elixir.bootlin.com/linux/v5.18-rc7/source/arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dts#L14
+>>
+>> [2] https://lore.kernel.org/all/7229476.C4So9noUlf@wuerfel/
+>> [3]
+>> https://lore.kernel.org/all/1450371534-10923-20-git-send-email-mtitinger+renesas@baylibre.com/
+>> [4] https://lore.kernel.org/all/20151119153640.GC893@linaro.org/
+>> [5]
+>> https://lore.kernel.org/all/1448062280-15406-1-git-send-email-sboyd@codeaurora.org/
+>>
+>> Best regards,
+>> Krzysztof
 > 
-> I think it would make better sense to call
-> dev_pm_set_dedicated_wake_irq() from msdc_enable_sdio_irq(). In this
-> way, you can still support SDIO irqs, even if there are no GPIO irq
-> for available for re-routing.
-> 
-> In other words, if the GPIO irq is available, then that's the best
-> option and we should use that - otherwise we need to keep preventing
-> runtime-suspend by bumping the runtime PM usage count.
-
-dev_pm_set_dedicated_wake_irq() is replaced with
-dev_pm_set_dedicated_wake_irq_reverse() to assure msdc irq is disabled
-earlier than enable wake irq in rpm_suspend(), and it is moved to
-msdc_enable_sdio_irq() phase.
-
-> 
-> > +
-> > +               if (ret) {
-> > +                       dev_err(host->dev, "Failed to register
-> > data1 eint irq!\n");
-> > +                       goto release;
-> > +               }
-> > +
-> > +               dev_pm_disable_wake_irq(host->dev);
-> > +               pinctrl_select_state(host->pinctrl, host-
-> > >pins_uhs);
-> > +       }
-> > +
-> > +       device_init_wakeup(host->dev, true);
-> 
-> I think this better belongs under the condition of whether
-> MMC_PM_WAKE_SDIO_IRQ and MMC_PM_KEEP_POWER caps are set.
-
-Both of them are checked before parsing eint pinstate in v10.
-
-> 
-> >         pm_runtime_set_active(host->dev);
-> >         pm_runtime_set_autosuspend_delay(host->dev,
-> > MTK_MMC_AUTOSUSPEND_DELAY);
-> >         pm_runtime_use_autosuspend(host->dev);
-> > @@ -2734,6 +2768,7 @@ static int msdc_drv_probe(struct
-> > platform_device *pdev)
-> >         return 0;
-> >  end:
-> >         pm_runtime_disable(host->dev);
-> > +       dev_pm_clear_wake_irq(host->dev);
-> >  release:
-> >         platform_set_drvdata(pdev, NULL);
-> >         msdc_deinit_hw(host);
-> > @@ -2845,6 +2880,16 @@ static int __maybe_unused
-> > msdc_runtime_suspend(struct device *dev)
-> >         struct msdc_host *host = mmc_priv(mmc);
-> > 
-> >         msdc_save_reg(host);
-> > +
-> > +       if (host->sdio_eint_ready) {
-> 
-> The core provides a helper function, sdio_irq_claimed(), that can be
-> used to know whether there is an SDIO irq registered. It looks like
-> that certainly can be useful here.
-
-Yes. We need sdio_irq_claimed() check since set dedicated wake irq is
-been moved to claim irq stage.
-
-> 
-> > +               disable_irq(host->irq);
-> > +               pinctrl_select_state(host->pinctrl, host-
-> > >pins_eint);
-> > +               if (host->sdio_wake_irq_depth == 0) {
-> > +                       dev_pm_enable_wake_irq(dev);
-> 
-> This should be managed from the runtime PM core. See rpm_suspend().
-> 
-> Or perhaps there is a reason that doesn't work for you?
-> 
-> > +                       host->sdio_wake_irq_depth++;
-> 
-> Again, sdio_irq_claimed() is probably better to use.
-> 
-> > +               }
-> > +               sdr_clr_bits(host->base + SDC_CFG,
-> > SDC_CFG_SDIOIDE);
-> > +       }
-> >         msdc_gate_clock(host);
-> >         return 0;
-> >  }
-> > @@ -2860,12 +2905,25 @@ static int __maybe_unused
-> > msdc_runtime_resume(struct device *dev)
-> >                 return ret;
-> > 
-> >         msdc_restore_reg(host);
-> > +
-> > +       if (host->sdio_eint_ready) {
-> > +               if (host->sdio_wake_irq_depth > 0) {
-> > +                       dev_pm_disable_wake_irq(dev);
-> > +                       host->sdio_wake_irq_depth--;
-> > +                       sdr_set_bits(host->base + SDC_CFG,
-> > SDC_CFG_SDIOIDE);
-> > +               } else {
-> > +                       sdr_clr_bits(host->base + MSDC_INTEN,
-> > MSDC_INTEN_SDIOIRQ);
-> > +               }
-> > +               pinctrl_select_state(host->pinctrl, host-
-> > >pins_uhs);
-> > +               enable_irq(host->irq);
-> > +       }
-> >         return 0;
-> >  }
-> > 
-> > -static int __maybe_unused msdc_suspend(struct device *dev)
-> > +static int __maybe_unused msdc_suspend_noirq(struct device *dev)
-> >  {
-> >         struct mmc_host *mmc = dev_get_drvdata(dev);
-> > +       struct msdc_host *host = mmc_priv(mmc);
-> >         int ret;
-> > 
-> >         if (mmc->caps2 & MMC_CAP2_CQE) {
-> > @@ -2874,16 +2932,36 @@ static int __maybe_unused
-> > msdc_suspend(struct device *dev)
-> >                         return ret;
-> >         }
-> > 
-> > +       if (host->sdio_eint_ready)
-> > +               enable_irq_wake(host->eint_irq);
-> 
-> The PM core should manage this for us through dpm_suspend_noirq(), I
-> think. We just need to make sure that the runtime PM status of the
-> device has been set to RPM_SUSPENDED before dpm_suspend_noirq()  gets
-> called. Have a look at dpm_suspend_noirq() ->
-> device_wakeup_arm_wake_irqs() -> dev_pm_arm_wake_irq().
-> 
-> In other words (and unless I am missing something), if we continue to
-> call pm_runtime_force_suspend() from a ->suspend() callback this
-> should work just fine.
-
-This part is simplified in v10. dpm/rpm system can manage wake irq
-well.
-
-> 
-> > +
-> >         return pm_runtime_force_suspend(dev);
-> >  }
-> > 
-> > -static int __maybe_unused msdc_resume(struct device *dev)
-> > +static int __maybe_unused msdc_resume_noirq(struct device *dev)
-> >  {
-> > +       struct mmc_host *mmc = dev_get_drvdata(dev);
-> > +       struct msdc_host *host = mmc_priv(mmc);
-> > +
-> > +       if (host->sdio_eint_ready) {
-> > +               disable_irq_wake(host->eint_irq);
-> > +
-> > +               /*
-> > +                * In noirq resume stage, msdc_runtime_resume()
-> > +                * won't be called, so disalbe wake irq here
-> > +                * to block dedicated wake irq handler callback.
-> > +                */
-> > +               if (likely(host->sdio_wake_irq_depth > 0)) {
-> > +                       dev_pm_disable_wake_irq(dev);
-> > +                       host->sdio_wake_irq_depth--;
-> > +               }
-> 
-> Similar comment as from the system suspend case. I don't think we
-> need
-> to move to the noirq phase.
-> 
-> Or maybe I am missing something here?
-
-They are restored to system suspend stage in V10.
-But I have to use rpm_suspend()/rpm_resueme() instead of 
-pm_runtime_force_suspend()/pm_runtime_force_resmue(). 
-pm_runtime_force_resume() will go out directly because rpm state is
-RPM_SUSPENDED in system resume stage.
-
-> 
-> > +       }
-> > +
-> >         return pm_runtime_force_resume(dev);
-> >  }
-> > 
-> >  static const struct dev_pm_ops msdc_dev_pm_ops = {
-> > -       SET_SYSTEM_SLEEP_PM_OPS(msdc_suspend, msdc_resume)
-> > +       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(msdc_suspend_noirq,
-> > msdc_resume_noirq)
-> >         SET_RUNTIME_PM_OPS(msdc_runtime_suspend,
-> > msdc_runtime_resume, NULL)
-> >  };
-> > 
-> > --
-> > 2.25.1
-> > 
 > 
 
-Regards,
-Axe
 
+Best regards,
+Krzysztof

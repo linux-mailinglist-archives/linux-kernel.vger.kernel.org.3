@@ -2,160 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7BF52C90D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 02:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DA152C911
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 02:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbiESA4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 20:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
+        id S232400AbiESA6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 20:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbiESA4L (ORCPT
+        with ESMTP id S231552AbiESA6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 20:56:11 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FD413F1E;
-        Wed, 18 May 2022 17:56:07 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id m23so4508325ljc.0;
-        Wed, 18 May 2022 17:56:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=P/A63fdObVK1kzszX4o2zU+y2vARpab4MsV04+m6s4U=;
-        b=hp3N9QMKgrTlSBUboc3w51NUmHyBG4nsmCUhx73K1tr0DWGeN0n3vWlZxAKnC19K9+
-         xchUETOjGDjBHCKeJ2SZU+n5kOalPxfxheWKH/sjiYwdWqwbxG7nlYGHIajjMCPNO4rL
-         vxCt2+PPEJ2ydejgr0Zf0DdzYZjAAAmqxAq0FU2E+++d+AxVIAN7PMdvmSGWJh7AXg+w
-         0tV+CApwyyN44zJCihhdW4TS8Vagy9gn9Gg/5zW3X/yLC9qIxpX2btHVZ0N0SY0xg5rC
-         1mOMgjaernRWL38xx2hzVgf5/XwDqG07hAsJqc3Rw8kN5EbUTER2krgUEpLNyvXVgieJ
-         Kopg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=P/A63fdObVK1kzszX4o2zU+y2vARpab4MsV04+m6s4U=;
-        b=CnDgS3pH+O5UNeg7YOHkVRF1yLlgqW5gmTKU3INc5P27hybuzO4biGqL/XKi3qSjzm
-         +VIflwGcY/3ydJIjcAtoQklfXfWnuBxhqohWc0f+Fiqc/t8dyUxfeZLzgp3YBCSXlh2x
-         wiMwcl6pzIvTsevKIQAsACs2e7+0ZsFjdCjWaCPWyZdxiseQrMHm1h1Kkqe5tmwNn4tD
-         lkWySDRt7HCATJnNukF7rHRpY0F9sTBuJslL92CLb2F5Ib5CU5zvoBTrmKJJinjHVWae
-         GEBBl77+USIAL/L47xFxbMZP57pqb9BCbiQE617sGwNZAk7krlGFNwCbDCBg5QYZn4+N
-         c1HQ==
-X-Gm-Message-State: AOAM531kg450hiXNY8kOJaDQWSXKCHTbUx5IEGqP8xbGtCjOB7UvjCQA
-        dQ2Vx0QzQg9rbAlBI/LxIRn8OjN5ewSVET0BTTs=
-X-Google-Smtp-Source: ABdhPJzzyBkkT9UcKeYwb2L46w/9p77j44udrFncFopXIIcNuuiPxeLDTWQt2NkOHcPGayjRR8/c17VPkT2d6Uwr6Os=
-X-Received: by 2002:a05:651c:1247:b0:253:caad:4ee2 with SMTP id
- h7-20020a05651c124700b00253caad4ee2mr1121134ljh.281.1652921765326; Wed, 18
- May 2022 17:56:05 -0700 (PDT)
+        Wed, 18 May 2022 20:58:31 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA10A3C49C
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 17:58:27 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3Wf74Wk2zgYNG;
+        Thu, 19 May 2022 08:57:03 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 08:58:26 +0800
+Received: from [10.174.178.120] (10.174.178.120) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 19 May 2022 08:58:25 +0800
+Message-ID: <d927a335-a70b-48d3-9645-1d33cc88bd9c@huawei.com>
+Date:   Thu, 19 May 2022 08:58:25 +0800
 MIME-Version: 1.0
-References: <20220510031056.1657-1-ctcchien@nuvoton.com> <20220510031056.1657-2-ctcchien@nuvoton.com>
- <YoUwe6Tj4Uh6ukc8@zn.tnic>
-In-Reply-To: <YoUwe6Tj4Uh6ukc8@zn.tnic>
-From:   Medad Young <medadyoung@gmail.com>
-Date:   Thu, 19 May 2022 08:55:53 +0800
-Message-ID: <CAHpyw9fjThEP4NuU08aNJ_raHpq9-j9KgBb8YuZ_shXTjhm3JA@mail.gmail.com>
-Subject: Re: [PATCH v9 1/3] ARM: dts: nuvoton: Add memory controller node
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
-        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+To:     <akpm@linux-foundation.org>, <minchan@kernel.org>,
+        <hannes@cmpxchg.org>, <kirill.shutemov@linux.intel.com>,
+        <npiggin@suse.de>, <linux-mm@kvack.org>,
+        <n-horiguchi@ah.jp.nec.com>, <will@kernel.org>,
+        <wangkefeng.wang@huawei.com>, <linux-kernel@vger.kernel.org>
+From:   mawupeng <mawupeng1@huawei.com>
+Subject: Warning on isolate tail page in isolate_lru_page
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.120]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Borislav,
 
-Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B45=E6=9C=8819=E6=97=A5=
- =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=881:44=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Tue, May 10, 2022 at 11:10:54AM +0800, Medad CChien wrote:
-> > ECC must be configured in the BootBlock header.
-> > Then, you can read error counts via the EDAC kernel framework.
-> >
-> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> > ---
-> >  arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/b=
-oot/dts/nuvoton-common-npcm7xx.dtsi
-> > index 3696980a3da1..ba542b26941e 100644
-> > --- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> > +++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
-> > @@ -106,6 +106,13 @@
-> >               interrupt-parent =3D <&gic>;
-> >               ranges;
-> >
-> > +             mc: memory-controller@f0824000 {
-> > +                     compatible =3D "nuvoton,npcm750-memory-controller=
-";
-> > +                     reg =3D <0x0 0xf0824000 0x0 0x1000>;
-> > +                     interrupts =3D <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> > +                     status =3D "disabled";
-> > +             };
-> > +
-> >               rstc: rstc@f0801000 {
-> >                       compatible =3D "nuvoton,npcm750-reset";
-> >                       reg =3D <0xf0801000 0x70>;
-> > --
->
-> Please integrate scripts/checkpatch.pl into your patch creation
-> workflow. Some of the warnings/errors *actually* make sense.
->
-> In this case:
->
-> WARNING: DT compatible string "nuvoton,npcm750-memory-controller" appears=
- un-documented -- check ./Documentation/devicetree/bindings/
-> #35: FILE: arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi:110:
-> +                       compatible =3D "nuvoton,npcm750-memory-controller=
-";
->
-> For that I'm guessing patch 2 needs to go first in the series.
->
-> In any case, the first two need an ACK from devicetree folks.
->
-> WARNING: From:/Signed-off-by: email address mismatch: 'From: Medad CChien=
- <medadyoung@gmail.com>' !=3D 'Signed-off-by: Medad CChien <ctcchien@nuvoto=
-n.com>'
->
-> For this one I wasn't sure so I had to ask: I guess it kinda makes sense
-> to have the From: be the same as your SOB email. I.e., make sure the
-> right authorship and SOB is maintained even when sending from machines
-> with broken email setups.
->
-> And that you can fix very easily: just add in your .git/config:
->
-> [user]
->         name =3D Medad CChien
->         email =3D ctcchien@nuvoton.com
->
-> and git would use that as the author and also slap a From: at the
-> beginning of the patch with the correct name and email address.
->
+Hi
 
-OK, I got it.
+Recently I receive a warning in isolate_lru_page() reported by syzkaller.
+This warning occurred in linux-v5.10 and can't be be reproduced.
 
-> HTH.
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+The following two commits are the major changes since v5.10:
+
+Commit ac1e9acc5acf ("mm: rearrange madvise code to allow for reuse") refactor
+do_madvise in master and lead to call madvise_vma_behavior() instead of
+madvise_vma(). For page out these is no difference because both all them will
+call madvise_pageout() int the end.
+
+Commit a72afd873089 ("tlb: mmu_gather: Remove start/end arguments from tlb_gather_mmu()")
+remove start/end arguments from tlb_gather_mmu in madvise_pageout() since they
+are no longer needed.
+
+Warn msg "trying to isolate tail page" will be reported in isolate_lru_page()
+if this page is a tail page.
+
+However, if this page is a tail page, it will be split in
+madvise_cold_or_pageout_pte_range(). Read lock mmap_read_lock(mm) is hold since
+do_madvise() so no one can modify this. So the only reason I can image is
+that something is wrong in split_huge_page().
+
+do_madvise
+     mmap_read_lock(mm);
+         madvise_pageout
+             madvise_cold_or_pageout_pte_range
+                 split_huge_page(page) <-- split this huge page
+                 isolate_lru_page(page)
+                     WARN_RATELIMIT(PageTail(page), "trying to isolate tail page");
+
+The warning log is shown below:
+==============================================================
+
+WARNING: CPU: 1 PID: 26735 at mm/vmscan.c:1968 isolate_lru_page+0x44d/0x460 mm/vmscan.c:1968
+Modules linked in:
+RAX: 06bc73006006b800 RBX: 0000000000000001 RCX: 0000000009400000
+RDX: ffffc90016103000 RSI: 0000000000000344 RDI: 0000000000000345
+RBP: 0000000000000001 R08: ffffffff8a58bab9 R09: ffffed100c4c4f23
+R10: ffffed100c4c4f23 R11: 1ffff1100c4c4f22 R12: ffffea0001d59a00
+R13: ffffea0001d59bc0 R14: ffffea0001d59bc8 R15: 0000000020ffb000
+FS:  00007f00b4284700(0000) GS:ffff88811b280000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000007541ff CR3: 0000000033dec004 CR4: 00000000003706e0
+Call Trace:
+  madvise_cold_or_pageout_pte_range+0x511/0x6d0 mm/madvise.c:460
+  walk_pmd_range mm/pagewalk.c:89 [inline]
+  walk_pud_range mm/pagewalk.c:160 [inline]
+  walk_p4d_range+0x7f3/0xdb0 mm/pagewalk.c:193
+  walk_pgd_range+0x2d3/0x360 mm/pagewalk.c:229
+  __walk_page_range+0xda/0x360 mm/pagewalk.c:331
+  walk_page_range+0x166/0x380 mm/pagewalk.c:427
+  madvise_vma mm/madvise.c:520 [inline]
+  do_madvise+0x159d/0x1810 mm/madvise.c:1137
+  __do_sys_madvise mm/madvise.c:1163 [inline]
+  __se_sys_madvise mm/madvise.c:1161 [inline]
+  __x64_sys_madvise+0x5d/0x70 mm/madvise.c:1161
+  do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
+  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+I have no idea how to fix this warning, so is there anything else need to
+analysis that I haven't considered?
+
+Thanks.

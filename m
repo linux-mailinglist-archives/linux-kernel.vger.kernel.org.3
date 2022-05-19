@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202FA52CBFA
+	by mail.lfdr.de (Postfix) with ESMTP id B551552CBFC
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 08:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234453AbiESGcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 02:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
+        id S229945AbiESGdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 02:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbiESGco (ORCPT
+        with ESMTP id S230114AbiESGcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 02:32:44 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBACC60E0
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:32:42 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id m9-20020a056e021c2900b002d13627892eso2561382ilh.20
-        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:32:42 -0700 (PDT)
+        Thu, 19 May 2022 02:32:46 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A77C2714D
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:32:44 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id r17-20020a0566022b9100b00654b99e71dbso1701459iov.3
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 23:32:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
          :from:to:cc;
-        bh=bRgQPyXzy7pCkG5O5pIT8P/Mm9pSHzWO5iaXZ/XkHkA=;
-        b=qxUAFBKR3hODQRBlTdIcZiOJEQ4riveIRD2L+rw9F2geW9yGHzOIf961cfDN8wUttq
-         Nr/EqbPeMz2o3GJC9EB47XASHXDqm8buO4BEDEhmas08p8Ai+4wXMKUBBSZfdMDhogBW
-         CFnkY05OGeV3cQ/6coT3ejgff8MFQXIVGfNBsD2zCn/4PQtP1s0jopUcWihbBu+mhI19
-         3F5heNJS+tNsLy+YfxqD21dNm+cUhaV7/8CqvetLiLSv8jxgw3EoY8ltg9rzOjT+8pEm
-         Qvm8Qae9/IIhM7meytwhebKLXwbngmWJonHLYoupudQKo/+qzPgMY5mKbZAqEjR0JQdl
-         dukQ==
-X-Gm-Message-State: AOAM533tBOgpvdmwmRMUTNK5+VJTwDahdTleE8WP7sVBe3bCQ9l3xMPW
-        waSBzzBvUZlcgdgM3WfZ2zh1BOG8/De6aYos2QKQjmvi/JYZ
-X-Google-Smtp-Source: ABdhPJzZoXyFkgel2+c1eoolYCkm9Sekq3UbKlv1ei/Hssf1z5eOA4JY0y+VDRni030oAc/JfgM3BNdjNYVyXamSQTvcZ1icQwPe
+        bh=84hMBONQvNCs29JQT+olmLldYTybgZAUu2mmj759ANc=;
+        b=LNHMMEpCYWilQ10X7O3fPucTPL8h1blylQBbEiQtac/JR6L677ntl9E3KgleYfyQXt
+         QFU4p08aGklMQOCXfsNDpdDSOdDZ1APzePiyHETaj9BK8Q4vdOq31HZxFPiLuwipqNSB
+         8sIZJNwO+06f2VFLqvMxOsm0vwZXWxxCUV9a/NM7bepfJJt3nTylHNTaEZ9lYsRsrW/s
+         Z6U0vTObQ/BPfnC6QZNQMvTF5YmxpcYDOkjE8LjI9UxkBbqs9q9dIOIMJhQHQrhkGMn8
+         3ud2v8vBObOp+E4VPBxgXHR+uDHLVnEz1vJ11rPFIAEB+NCmLnF6qDKxoQW/4KyRHh6C
+         GwAw==
+X-Gm-Message-State: AOAM532mW2t2yuuU3z8ejEckDhzatpBK9zClmHuW69EeyIMQnEOP1/9L
+        P2zAVSq+ccoDHbFCPw4fpc2nZVB3f92Tx9tXQIvD/cobddOi
+X-Google-Smtp-Source: ABdhPJyeX2hE1ezJYHrqY2wib9FX7CGulEJxcqbDLdDpeqDbPYmPpV8xiVY1YMh+3oivhyZZGFRtot3OO1STMz0xM+oVUo/tit0H
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:31c2:b0:32e:167a:d887 with SMTP id
- n2-20020a05663831c200b0032e167ad887mr1726625jav.197.1652941962161; Wed, 18
- May 2022 23:32:42 -0700 (PDT)
-Date:   Wed, 18 May 2022 23:32:42 -0700
+X-Received: by 2002:a05:6e02:16cf:b0:2cf:8ecb:c8d4 with SMTP id
+ 15-20020a056e0216cf00b002cf8ecbc8d4mr1879907ilx.174.1652941963534; Wed, 18
+ May 2022 23:32:43 -0700 (PDT)
+Date:   Wed, 18 May 2022 23:32:43 -0700
 In-Reply-To: <CACT4Y+bRrWXYGgKdbK3AFQLNUumJbSzujEJ=+37dcDBjzJg72A@mail.gmail.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007d39cf05df578a48@google.com>
+Message-ID: <0000000000009228fe05df578ac1@google.com>
 Subject: Re: [syzbot] general protection fault in hci_inquiry_result_with_rssi_evt
 From:   syzbot <syzbot+e3cad3a4e3f03bc00562@syzkaller.appspotmail.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     davem@davemloft.net, dvyukov@google.com, johan.hedberg@gmail.com,
-        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        luiz.von.dentz@intel.com, marcel@holtmann.org,
-        netdev@vger.kernel.org, poprdi@google.com,
+To:     "'Dmitry Vyukov' via syzkaller-bugs" 
+        <syzkaller-bugs@googlegroups.com>
+Cc:     davem@davemloft.net, johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, luiz.von.dentz@intel.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, poprdi@google.com,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
@@ -183,3 +183,8 @@ Please double check the address.
 >> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 >> syzbot can test patches for this issue, for details see:
 >> https://goo.gl/tpsmEJ#testing-patches
+>
+> -- 
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/CACT4Y%2BbRrWXYGgKdbK3AFQLNUumJbSzujEJ%3D%2B37dcDBjzJg72A%40mail.gmail.com.

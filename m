@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F75D52C87C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 02:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6981052C88E
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 02:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbiESARx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 18 May 2022 20:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S231974AbiESAUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 18 May 2022 20:20:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiESARv (ORCPT
+        with ESMTP id S231398AbiESAUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 18 May 2022 20:17:51 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE54515A75D;
-        Wed, 18 May 2022 17:17:50 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id o190so4156060iof.10;
-        Wed, 18 May 2022 17:17:50 -0700 (PDT)
+        Wed, 18 May 2022 20:20:33 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0C2F592
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 17:20:31 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id 11so1528224qtp.9
+        for <linux-kernel@vger.kernel.org>; Wed, 18 May 2022 17:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rsodxv1uujAoBr5rf41kHtNtg4fZ2kPnNV1adJVqSYw=;
-        b=CET+1EbI5AcAiJaQ/OrsHIhR/yc8Y2tPT7vLYi/VH3d14Ja+x5Uafk3sjBs4VOtyKd
-         CjHAMjFUqQdBykKa157xXTvWvSOGzmZTKGAtSKzbrjj6EBDudEmVV9vFeCgYH+VX2UC/
-         ORx0SKMdFcD5Hs56pnJ6AmZZhHzlVk8oEjQ4NSAlYVGTinVcHC7qpNY3WO7D+/WGK2Cg
-         Mv9POFNOcsHiECJVGvDebe/LxtTfphAbUVcijnFrJoV6PRiW1Zspbu4nEN0qSlWDLRq8
-         B2b3tJKIBtkvtKpD7elQvYX/3u3ehMqux3cntZHi8ucs688Nkf/wyMOab9V4DE80MnOe
-         SxZQ==
+         :cc:content-transfer-encoding;
+        bh=FfSGeGLsTGa/kN0tZZMhQzuZST7aaZkoCseqfn8igks=;
+        b=Qoo2GAm1GcS9vr9qvOXmUufnaVX1H7cVYwMNkjhhTlYdOEeWcRpS5J/w2bbRafsAz5
+         fOqxGsggoCgmSux73CsRcliZ1CWDoHg/vSPSro39VoUSZlXJO5uvTZ9ZruRzJio1RBL3
+         5AUqHVbSehF4mYOZUvbhXiXbWhEKJmhNeUls91eP9TK8/sMeiYNiDdIVaK3fwxjrhTxF
+         PZpKR0E9b/ZO4RZzx6kTIeJhYsYwmc8w0Pj+DzsUswk9YaOv8EHevjGeMWe3H0gXTOnx
+         N5mj2jrirO5QmOsz1vANmm+8LWnYKZTIAyzTQTywXBkgyEwFMKY6rCvNxWlR6aqEsLM0
+         KZCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rsodxv1uujAoBr5rf41kHtNtg4fZ2kPnNV1adJVqSYw=;
-        b=YTJLUG6hY9gUoZQETFlnCd1WyK8i3XFSLMdwQTxaBly/1fqQ4O5VRIQPbiFUk2YMzy
-         230vVRIdMJygNnkCzFp8B95Opc43DYo5q4QfkaQbkL+nnv2K7ev4FUrWHX2VSVn9JBwi
-         2IuO15s8PuegssyGDsJzp8UBaF/+4rVzPWwjIVkVSdDjSgqISZL1vn/exNNOxJO3DJSr
-         XJDc8S+vuqskfAgGhV6psUf6Kpz3FsjapcqMx8XgEMSVIV8jYfS5Somec6NvKUyp3xay
-         5GWYtAYSuT/PmPrZMt+GeT2hYfLDMpJuyauyr3zwnGjnk7p5BKpABHNEbCC4XGDXF1Xa
-         b+Lg==
-X-Gm-Message-State: AOAM533A9IMrmiKouQ862soD+cRAm1cWa//MacvyAorLsaGDoLHGBbNs
-        PruRV9X+QS5It/fmB22eyJknC1mSWhHFo5oFRE4=
-X-Google-Smtp-Source: ABdhPJyT38Rf56OZvapKSjQ6bbloRA8ZIz2svND/grgwY8nwsfLMoB6vGx85gTKcxZvN3RkryRDF1Lc4S/BHME3INSo=
-X-Received: by 2002:a05:6602:248f:b0:65a:fb17:7a6b with SMTP id
- g15-20020a056602248f00b0065afb177a6bmr1073752ioe.79.1652919470125; Wed, 18
- May 2022 17:17:50 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FfSGeGLsTGa/kN0tZZMhQzuZST7aaZkoCseqfn8igks=;
+        b=p4S35oaY769eOGq2sYrgo9Gt5MwyN/f0yJyOM7W4uCkptR6fKV16gh1VySea8eh0RA
+         Y1SjMUdkR0oIsqVCgKeNOW4R/MyIeKV+Dg82W7YL9lKoddHYHixoq1gkxI+caBBTcfuH
+         G2E1gsQjXjBi4ofq2CAl15JjtApOsC2Sq6SxiKZ47rimGSXXrZNnXrbIpg4wZLMyKROr
+         ENSL3sL+Fu7XmZgrMYgK0V0oxJT+DoxnpwNGcoKxi8JzPC98QjFYIP/r73InfCuPFIL3
+         OJLXrt520BDssmG3BNvyFP0MsCb1IcLDnmXLdLyaoPMNim90Ru9KVkzNCX+319nDa7X4
+         y6bw==
+X-Gm-Message-State: AOAM530leslbjvsYme+8MiVbyIDVftZRSsrLQWy6qFDlsOA/Vbft6uol
+        4/g1VJx5jNNmJ3YelWejaQGmTRzqNUCvEMBimf0=
+X-Google-Smtp-Source: ABdhPJxDek2LF7DP9dQwX8JsUtw5IjZ7CSYqmNP1d7EoPpSzK2QvG0oE35HNRG+acwZBCFxDmSTzHlpcQz+HRWeMW0M=
+X-Received: by 2002:a05:622a:1746:b0:2f3:e05f:ade6 with SMTP id
+ l6-20020a05622a174600b002f3e05fade6mr2001007qtk.479.1652919631137; Wed, 18
+ May 2022 17:20:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516022453.68420-1-zhoufeng.zf@bytedance.com>
-In-Reply-To: <20220516022453.68420-1-zhoufeng.zf@bytedance.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 18 May 2022 17:17:39 -0700
-Message-ID: <CAEf4BzZ0eRh4ufQnc69B=6WQt_Oy3DNPL-TM-rsUW1KX--SBvQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix some bugs in
- map_lookup_percpu_elem testcase
-To:     Feng zhou <zhoufeng.zf@bytedance.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joanne Koong <joannekoong@fb.com>,
-        Geliang Tang <geliang.tang@suse.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        zhouchengming@bytedance.com, Yosry Ahmed <yosryahmed@google.com>
+References: <CGME20220509073953epcas1p127f2d36186316642068c92c5d9dee1c4@epcas1p1.samsung.com>
+ <20220509074330.4822-1-jaewon31.kim@samsung.com> <20220516173321.67402b7f09eacc43d4e476f4@linux-foundation.org>
+ <YoNcBG6kQnmLZ3Z9@linux.ibm.com> <CAJrd-UuzTh-0Ee9+rMRES9onP_EkvJS-VpPP66J4M4n0Ku0ZWA@mail.gmail.com>
+ <YoObTJcBUjeW+2l2@linux.ibm.com> <CAJrd-UtYqEMy+Yr9gP0v0dZ3HZ=fCHe67dTRe=5YtLWrbmd1UQ@mail.gmail.com>
+ <YoT1LMALyqTUtg6e@linux.ibm.com>
+In-Reply-To: <YoT1LMALyqTUtg6e@linux.ibm.com>
+From:   Jaewon Kim <jaewon31.kim@gmail.com>
+Date:   Thu, 19 May 2022 09:20:20 +0900
+Message-ID: <CAJrd-UuxYyoyWyjd5GTMpCUFrOT_RB=tEPCGTWC71DNC3HDALA@mail.gmail.com>
+Subject: Re: [RFC PATCH] page_ext: create page extension for all memblock
+ memory regions
+To:     Mike Rapoport <rppt@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jaewon Kim <jaewon31.kim@samsung.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -83,102 +74,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 15, 2022 at 7:25 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->
-> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->
-> comments from Andrii Nakryiko, details in here:
-> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/
->
-> use /* */ instead of //
-> use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
-> use 8 bytes for value size
-> fix memory leak
-> use ASSERT_EQ instead of ASSERT_OK
-> add bpf_loop to fetch values on each possible CPU
->
-> Fixes: ed7c13776e20c74486b0939a3c1de984c5efb6aa ("selftests/bpf: add test case for bpf_map_lookup_percpu_elem")
-> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-> ---
->  .../bpf/prog_tests/map_lookup_percpu_elem.c   | 49 +++++++++------
->  .../bpf/progs/test_map_lookup_percpu_elem.c   | 61 ++++++++++++-------
->  2 files changed, 70 insertions(+), 40 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-> index 58b24c2112b0..89ca170f1c25 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-> @@ -1,30 +1,39 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -// Copyright (c) 2022 Bytedance
-> +/* SPDX-License-Identifier: GPL-2.0 */
+As I said it is v5.10 based kernel.
+ ; Actually I am using v5.10 based source tree on an arm64 device.
 
-heh, so for SPDX license comment the rule is to use // in .c files :)
-so keep SPDX as // and all others as /* */
+Thank you
+Jaewon Kim
 
-> +/* Copyright (c) 2022 Bytedance */
+2022=EB=85=84 5=EC=9B=94 18=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 10:31, =
+Mike Rapoport <rppt@linux.ibm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
 >
->  #include <test_progs.h>
+> On Tue, May 17, 2022 at 10:10:20PM +0900, Jaewon Kim wrote:
+> > 64
+> > 59
+> >
+> > 2022=EB=85=84 5=EC=9B=94 17=EC=9D=BC (=ED=99=94) =EC=98=A4=ED=9B=84 9:5=
+5, Mike Rapoport <rppt@linux.ibm.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+> > >
+> > > On Tue, May 17, 2022 at 08:38:18PM +0900, Jaewon Kim wrote:
+> > > > Hello Mike Rapoport
+> > > > Thank you for your comment.
+> > > >
+> > > > Oh really? Could you point out the code or the commit regarding 'al=
+l
+> > > > struct pages in any section should be valid and
+> > > > properly initialized' ?
+> > >
+> > > There were several commits that refactored the memory map initializat=
+ion,
+> > > freeing of the unused memory map and abuse of pfn_valid() as a substi=
+tute
+> > > of "is memory valid" semantics.
+> > >
+> > > > Actually I am using v5.10 based source tree on an arm64 device.
+> > >
+> > > Then most probably your change is not relevant for the upstream kerne=
+l.
+> > > Did you observe any issues with page_ext initialization on v5.18-rcN
+> > > kernels?
+> >
+> > Actually I observed only 59 sections were initialized for page_ext and
+> > missed 5 sections.
+> > It should be totally 64 sections * 128 MB =3D 8,192 MB
 >
->  #include "test_map_lookup_percpu_elem.skel.h"
+> Does this happen with v5.10 based kernel or with v5.18-rcN based kernel?
 >
-> -#define TEST_VALUE  1
-> -
->  void test_map_lookup_percpu_elem(void)
->  {
->         struct test_map_lookup_percpu_elem *skel;
-> -       int key = 0, ret;
-> -       int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
-> -       int *buf;
-> +       __u64 key = 0, sum;
-> +       int ret, i;
-> +       int nr_cpus = libbpf_num_possible_cpus();
-> +       __u64 *buf;
+> > > > I tried to look up and found the following commit in v5.16-rc1, did
+> > > > you mean this?
+> > > > 3de360c3fdb3 arm64/mm: drop HAVE_ARCH_PFN_VALID
+> > >
+> > > Yes, this is one of those commits.
+> > >
+> > > > I guess memblock_is_memory code in pfn_valid in arch/arm64/mm/init.=
+c, v5.10
+> > > > might affect the page_ext_init.
+> > >
+> > > Yes. In 5.10 the pfn_valid() test in page_ext_init() will skip an ent=
+ire
+> > > section if the first pfn in that section is not memory that can be ma=
+pped
+> > > in the linear map.
+> > >
+> > > But again, this should be fixed in the latest kernels.
+> >
+> > Great! Thank you for your explanation.
+> > I will check it someday later when I use the latest kernel on our devic=
+es.
+> > The next version on our devices seems to be v5.15 though.
+> >
+> > Thank you
+> > Jaewon Kim
 >
-> -       buf = (int *)malloc(nr_cpus*sizeof(int));
-> +       buf = (__u64 *)malloc(nr_cpus*sizeof(__u64));
-
-no need for casting
-
->         if (!ASSERT_OK_PTR(buf, "malloc"))
->                 return;
-> -       memset(buf, 0, nr_cpus*sizeof(int));
-> -       buf[0] = TEST_VALUE;
->
-> -       skel = test_map_lookup_percpu_elem__open_and_load();
-> -       if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
-> -               return;
-> +       for (i=0; i<nr_cpus; i++)
-
-spaces between operators
-
-> +               buf[i] = i;
-> +       sum = (nr_cpus-1)*nr_cpus/2;
-
-same, please follow kernel code style
-
-> +
-> +       skel = test_map_lookup_percpu_elem__open();
-> +       if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
-> +               goto exit;
-> +
-
-nit: keep it simple, init skel to NULL and use single cleanup goto
-label that will destroy skel unconditionally (it deals with NULL just
-fine)
-
-> +       skel->rodata->nr_cpus = nr_cpus;
-> +
-> +       ret = test_map_lookup_percpu_elem__load(skel);
-> +       if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
-> +               goto cleanup;
-> +
->         ret = test_map_lookup_percpu_elem__attach(skel);
-> -       ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
-> +       if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach"))
-> +               goto cleanup;
->
->         ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
->         ASSERT_OK(ret, "percpu_array_map update");
-
-[...]
+> --
+> Sincerely yours,
+> Mike.

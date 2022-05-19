@@ -2,83 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1957452CD4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35AC52CD51
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234895AbiESHkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
+        id S234910AbiESHlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234381AbiESHkR (ORCPT
+        with ESMTP id S234976AbiESHlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:40:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7A7A7E36
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bxteNy34es/2gB44/WfucEpDJqQxVwavARK5icRrPxI=; b=YpOZazgwTFkQP6DVhIUJwBCPnn
-        jmSCu+nkNUV0k7xLtu4a7R8ONutkgCNHVsXqijiuDTm4ILgWTaS+e5qzjbnZp/w/x6ygh+kNVY5+Q
-        S3NjVJh5/Yz8+ebati6vVQG93q7rAdM826XZ/NjZn1hb0gIs1VNdnnZn7nKsc2c8ltzbd8+ZeQnWb
-        LemxtPmgcA284oTqwSlNyW01ONk1mbkTSftMftUj0upcxBzXCpeHvcaQe1+px+vSGYj7oR6iuOq6d
-        SxubwOxqTnyoNVczO7AUpNGhtnSb0RHIeHkaxB21i5NPBT//jdREVkBXg6zEKB8m2/l+Vu4/sd4dP
-        a8EjxV3Q==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nralO-00CX9k-1b; Thu, 19 May 2022 07:40:02 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 08B9A980BF7; Thu, 19 May 2022 09:40:00 +0200 (CEST)
-Date:   Thu, 19 May 2022 09:39:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Mel Gorman <mgorman@suse.de>, kbuild-all@lists.01.org,
+        Thu, 19 May 2022 03:41:04 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E946817599
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:41:01 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id i17so4049784pla.10
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:41:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=6BFj6eL9xI6o3HeDTuj7wVAbVfHCB9+3bO6BLJqKQQk=;
+        b=J9toYYkDK+rR/yLELx3wocA959PZJuK8FvgzCR91wivnMOQYh8kZxsMRC73Ojtbd31
+         PWNqP7M3XnRdyCqsh0dWQGjrKamfmJ2MRlPP30SsrVknM8RskQtajHiUMZ2uYlW3UqMF
+         qBMopa0W5EqpueQAO6kkYz/IFzQ+r68zdjkxR0m3CSWDs71+lk0s6dsSH+2Jj8wMnNP1
+         VX+eU6Vx/9SdegX/CrFao91Zp6PVyJ5ecNsZj8doIW3OsgQS0I6AsXDGQco8sWwkSyu6
+         qh01535S1r+aD7649viQb+oWrMjdcri08hbdE4d8nTzD1qlugbJMADELDMDp8cOrdgoi
+         LmCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=6BFj6eL9xI6o3HeDTuj7wVAbVfHCB9+3bO6BLJqKQQk=;
+        b=3LfyqZzLuZ/hXwlZfp1gvjhaoj3cqxy5aStAkO2+QdKjBDOEztvzqUa/fE0xDChstz
+         vz0pmmP9+p4JxFa+ke1tMrU18wHWs1t0mFHDKcUf/UAEQ/jvy4FikHeoVyHE2PalszUY
+         VQXEmkmmR8bht+iQx+9bX6jQzmF0kz6mBUlE+W4gNtXA1BBqarTjLYi1yxGeHxqV8J0D
+         eTfiIB3WmEN3BNOUsto5StnnxhTe+CKpzbvnTvyGQAC+sVGt6luGxuS+qBIkNKvS3HkB
+         ZK/XnMPESSfwJ2F1MKWaLv4TCnOYwgHZMkEAGK6zLgOBpgmDs2Sdu6YWaqeYJw0VttFT
+         jOoA==
+X-Gm-Message-State: AOAM533G+PtVbjPlT3ghw1xDQYtj8cK108iDVSQ7nSDSxesmGQRGLAiH
+        zXcylzwgKb4WdLJCEjrso/9SJaQzcw86
+X-Google-Smtp-Source: ABdhPJzqdsuT3wpL7sE+JxxSPZtMtWpG3EF3tleN1ucGqzcW3hAkoTtUt75yzx+p9W/b3RWxzN0AgQ==
+X-Received: by 2002:a17:902:da8b:b0:15e:aba7:43fe with SMTP id j11-20020a170902da8b00b0015eaba743femr3349537plx.9.1652946061239;
+        Thu, 19 May 2022 00:41:01 -0700 (PDT)
+Received: from workstation ([117.202.185.140])
+        by smtp.gmail.com with ESMTPSA id j19-20020a056a00235300b0050dc76281a3sm3330134pfj.125.2022.05.19.00.40.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 19 May 2022 00:41:00 -0700 (PDT)
+Date:   Thu, 19 May 2022 13:10:53 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [peterz-queue:sched/core 6/8] kernel/sched/fair.c:9199:30:
- error: implicit declaration of function 'adjust_numa_imbalance'
-Message-ID: <20220519073959.GB2578@worktop.programming.kicks-ass.net>
-References: <202205190911.n5iX1ftB-lkp@intel.com>
+Subject: Re: [PATCH v2 15/17] PCI: dwc: Introduce dma-ranges property support
+ for RC-host
+Message-ID: <20220519074053.GA24064@workstation>
+References: <20220503214638.1895-1-Sergey.Semin@baikalelectronics.ru>
+ <20220503214638.1895-16-Sergey.Semin@baikalelectronics.ru>
+ <20220512135708.GC35848@thinkpad>
+ <20220512194135.ku73pae2xdvyocx7@mobilestation>
+ <20220517172042.GC4528@thinkpad>
+ <20220518192623.fl3ogcxlurcd6okd@mobilestation>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202205190911.n5iX1ftB-lkp@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220518192623.fl3ogcxlurcd6okd@mobilestation>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 09:55:17AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
-> head:   45ff65aa1bfd4826331c9c4daafdca21ef8f79f8
-> commit: c81394419b54c2df2644a34892a6d6434fd922b3 [6/8] sched/numa: Apply imbalance limitations consistently
-> config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220519/202205190911.n5iX1ftB-lkp@intel.com/config)
-> compiler: arceb-elf-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=c81394419b54c2df2644a34892a6d6434fd922b3
->         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
->         git fetch --no-tags peterz-queue sched/core
->         git checkout c81394419b54c2df2644a34892a6d6434fd922b3
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+On Wed, May 18, 2022 at 10:26:23PM +0300, Serge Semin wrote:
+> On Tue, May 17, 2022 at 10:50:42PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, May 12, 2022 at 10:41:35PM +0300, Serge Semin wrote:
+> > > On Thu, May 12, 2022 at 07:27:08PM +0530, Manivannan Sadhasivam wrote:
+> > > > On Wed, May 04, 2022 at 12:46:36AM +0300, Serge Semin wrote:
+> > > > > In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
+> > > > > property has the same format as the "ranges" property. The only difference
+> > > > > is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
+> > > > > memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
+> > > > > property. Even though the DW PCIe controllers are normally equipped with
+> > > > > internal Address Translation Unit which inbound and outbound tables can be
+> > > > > used to implement both properties semantics, it was surprise for me to
+> > > > > discover that the host-related part of the DW PCIe driver currently
+> > > > > supports the "ranges" property only while the "dma-ranges" windows are
+> > > > > just ignored. Having the "dma-ranges" supported in the driver would be
+> > > > > very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
+> > > > > mapping and require customized the PCIe memory layout. So let's fix that
+> > > > > by introducing the "dma-ranges" property support.
+> > > > > 
+> > > > > First of all we suggest to rename the dw_pcie_prog_inbound_atu() method to
+> > > > > dw_pcie_prog_ep_inbound_atu() and create a new version of the
+> > > > > dw_pcie_prog_inbound_atu() function. Thus we'll have two methods for RC
+> > > > > and EP controllers respectively in the same way as it has been developed
+> > > > > for the outbound ATU setup methods.
+> > > > > 
+> > > > > Secondly aside with the memory window index and type the new
+> > > > > dw_pcie_prog_inbound_atu() function will accept CPU address, PCIe address
+> > > > > and size as its arguments. These parameters define the PCIe and CPU memory
+> > > > > ranges which will be used to setup the respective inbound ATU mapping. The
+> > > > > passed parameters need to be verified against the ATU ranges constraints
+> > > > > in the same way as it is done for the outbound ranges.
+> > > > > 
+> > > > > Finally the DMA-ranges detected for the PCIe controller need to be
+> > > > > converted into the inbound ATU entries during the host controller
+> > > > > initialization procedure. It will be done in the framework of the
+> > > > > dw_pcie_iatu_setup() method. Note before setting the inbound ranges up we
+> > > > > need to disable all the inbound ATU entries in order to prevent unexpected
+> > > > > PCIe TLPs translations defined by some third party software like
+> > > > > bootloader.
+> > > > > 
+> > > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > > > ---
+> > > > >  .../pci/controller/dwc/pcie-designware-ep.c   |  4 +-
+> > > > >  .../pci/controller/dwc/pcie-designware-host.c | 32 ++++++++++-
+> > > > >  drivers/pci/controller/dwc/pcie-designware.c  | 57 ++++++++++++++++++-
+> > > > >  drivers/pci/controller/dwc/pcie-designware.h  |  6 +-
+> > > > >  4 files changed, 90 insertions(+), 9 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > > > > index c62640201246..9b0540cfa9e8 100644
+> > > > > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > > > > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> > > > > @@ -167,8 +167,8 @@ static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no, int type,
+> > > > >  		return -EINVAL;
+> > > > >  	}
+> > > > >  
+> > > > > -	ret = dw_pcie_prog_inbound_atu(pci, func_no, free_win, type,
+> > > > > -				       cpu_addr, bar);
+> > > > > +	ret = dw_pcie_prog_ep_inbound_atu(pci, func_no, free_win, type,
+> > > > > +					  cpu_addr, bar);
+> > > > >  	if (ret < 0) {
+> > > > >  		dev_err(pci->dev, "Failed to program IB window\n");
+> > > > >  		return ret;
+> > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > index 7caca6c575a5..9cb406f5c185 100644
+> > > > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > > > @@ -612,12 +612,15 @@ static int dw_pcie_iatu_setup(struct pcie_port *pp)
+> > > > >  	}
+> > > > >  
+> > > > >  	/*
+> > > > > -	 * Ensure all outbound windows are disabled before proceeding with
+> > > > > -	 * the MEM/IO ranges setups.
+> > > > > +	 * Ensure all out/inbound windows are disabled before proceeding with
+> > > > > +	 * the MEM/IO (dma-)ranges setups.
+> > > > >  	 */
+> > > > >  	for (i = 0; i < pci->num_ob_windows; i++)
+> > > > >  		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_OB, i);
+> > > > >  
+> > > > > +	for (i = 0; i < pci->num_ib_windows; i++)
+> > > > > +		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_IB, i);
+> > > > > +
+> > > > >  	i = 0;
+> > > > >  	resource_list_for_each_entry(entry, &pp->bridge->windows) {
+> > > > >  		if (resource_type(entry->res) != IORESOURCE_MEM)
+> > > > > @@ -654,9 +657,32 @@ static int dw_pcie_iatu_setup(struct pcie_port *pp)
+> > > > >  	}
+> > > > >  
+> > > > >  	if (pci->num_ob_windows <= i)
+> > > > > -		dev_warn(pci->dev, "Resources exceed number of ATU entries (%d)\n",
+> > > > > +		dev_warn(pci->dev, "Ranges exceed outbound iATU size (%d)\n",
+> > > > >  			 pci->num_ob_windows);
+> > > > >  
+> > > > > +	i = 0;
+> > > > > +	resource_list_for_each_entry(entry, &pp->bridge->dma_ranges) {
+> > > > > +		if (resource_type(entry->res) != IORESOURCE_MEM)
+> > > > > +			continue;
+> > > > > +
+> > > > > +		if (pci->num_ib_windows <= i)
+> > > > > +			break;
+> > > > > +
+> > > > > +		ret = dw_pcie_prog_inbound_atu(pci, i++, PCIE_ATU_TYPE_MEM,
+> > > > > +					       entry->res->start,
+> > > > > +					       entry->res->start - entry->offset,
+> > > > > +					       resource_size(entry->res));
+> > > > > +		if (ret) {
+> > > > > +			dev_err(pci->dev, "Failed to set DMA range %pr\n",
+> > > > > +				entry->res);
+> > > > > +			return ret;
+> > > > > +		}
+> > > > > +	}
+> > > > > +
+> > > > > +	if (pci->num_ib_windows <= i)
+> > > > > +		dev_warn(pci->dev, "Dma-ranges exceed inbound iATU size (%u)\n",
+> > > > > +			 pci->num_ib_windows);
+> > > > > +
+> > > > >  	return 0;
+> > > > >  }
+> > > > >  
+> > > > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> > > > > index 747e252c09e6..33718ed6c511 100644
+> > > > > --- a/drivers/pci/controller/dwc/pcie-designware.c
+> > > > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> > > > > @@ -397,8 +397,61 @@ static inline void dw_pcie_writel_atu_ib(struct dw_pcie *pci, u32 index, u32 reg
+> > > > >  	dw_pcie_writel_atu(pci, PCIE_ATU_REGION_DIR_IB, index, reg, val);
+> > > > >  }
+> > > > >  
+> > > > > -int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
+> > > > > -			     int type, u64 cpu_addr, u8 bar)
+> > > > > +int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
+> > > > > +			     u64 cpu_addr, u64 pci_addr, u64 size)
+> > > > > +{
+> > > > > +	u64 limit_addr = pci_addr + size - 1;
+> > > > > +	u32 retries, val;
+> > > > > +
+> > > > > +	if ((limit_addr & ~pci->region_limit) != (pci_addr & ~pci->region_limit) ||
+> > > > > +	    !IS_ALIGNED(cpu_addr, pci->region_align) ||
+> > > > > +	    !IS_ALIGNED(pci_addr, pci->region_align) ||
+> > > > > +	    !IS_ALIGNED(size, pci->region_align) ||
+> > > > 
+> > > 
+> > > > Why do you want the size to be aligned? What if I want to transfer a small size
+> > > > buffer?
+> > > > 
+> > > > Same question applies to outbound programming as well.
+> > > 
+> > > You can't program a region with the unaligned size by the DW PCIe CSRs
+> > > design. The limit address lower bits are read-only and fixed with
+> > > one's in accordance with the IP-core synthesize parameter
+> > > CX_ATU_MIN_REGION_SIZE. So the mapping is always performed in the
+> > > CX_ATU_MIN_REGION_SIZE chunks.
+> > > 
+> > > IATU_LIMIT_ADDR_OFF_{IN,OUT}BOUND.LIMIT_ADDR_HW = 
+> > > {(CX_ATU_MIN_REGION_SIZE == 65536) ? "0xffff" :
+> > >  (CX_ATU_MIN_REGION_SIZE == 32768) ? "0x7fff" :
+> > >  (CX_ATU_MIN_REGION_SIZE == 16384) ? "0x3fff" :
+> > >  (CX_ATU_MIN_REGION_SIZE == 8192)  ? "0x1fff" :
+> > >  (CX_ATU_MIN_REGION_SIZE == 4096)  ? "0xfff" : "0xffff"}
+> > > 
+> > 
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> > Right. Even though the minimum size that could be mapped is 4k, I could still
+> > use that 4k size for mapping small buffers also. So you should not be erroring
+> > out here if the size is not aligned. 
 > 
-> All errors (new ones prefixed by >>):
+> Why would you need to do that? Even if you do and the operation
+> doesn't return an error (or at least splash the syslog with a
+> warning), the hardware would expand the mapping up to the aligned size
+> anyway. Such implicit behavior would have given your software an
+> impression that the mapping was performed in the way you asked with
+> the size you specified so the upper part of the unaligned range is
+> free to be used for something else. If the range is accessed, instead
+> of a bus error or silent IO termination it may cause unexpected result
+> of creating random PCIe bus traffic. So I'd rather have the
+> code/platform setup fixed right from the start instead of waiting for
+> the hard to find bug cause.
 > 
->    kernel/sched/fair.c: In function 'find_idlest_group':
-> >> kernel/sched/fair.c:9199:30: error: implicit declaration of function 'adjust_numa_imbalance' [-Werror=implicit-function-declaration]
->     9199 |                         if (!adjust_numa_imbalance(imbalance,
->          |                              ^~~~~~~~~~~~~~~~~~~~~
->    cc1: some warnings being treated as errors
 
-Clearly I can't type much...  I'll just wait for v2 or so.
+The application I'm working on is MHI bus. As per the design, it needs to copy
+16byte data to ring buffers in the host memory. If I use iATU, then I
+cannot copy those small data with the size alignment.
+
+> > I know that it is a waste of memory but that doesn't mean that it won't work.
+> 
+> The correct statement in this case would be "it won't work in a way
+> you expected, but with the implicit side effect applied to the memory
+> above the requested one."
+> 
+
+Agree but that would only happen when the application does out of bound
+access and in that case the issue is with the application.
+
+Thanks,
+Mani
+
+> -Sergey
+> 
+> > 
+> > Thanks,
+> > Mani
+> > 
+> > > -Sergey
+> > > 
+> > > > 
+> > > > Thanks,
+> > > > Mani
+> > > > 
+> > > > -- 
+> > > > மணிவண்ணன் சதாசிவம்
+> > 
+> > -- 
+> > மணிவண்ணன் சதாசிவம்

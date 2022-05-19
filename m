@@ -2,220 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D98252E00E
-	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB3952E010
+	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241136AbiESWjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 18:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
+        id S245538AbiESWk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 18:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbiESWjS (ORCPT
+        with ESMTP id S243886AbiESWkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 18:39:18 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0782F6A001
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:39:18 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JJxETs029203;
-        Thu, 19 May 2022 22:39:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=d9l1rnaplMW1SOHXRnDeS4+T4lQrqVTAIPogas0FBqE=;
- b=z6keRvKWnAID2vHjJcxBZgPrS1G82i66oyBkZNEnJITWgelfOkvHN3m1pQv6h2kWIZXk
- Ai9OK7LIziAiOpisrBWyHeXdsrrRZSqmJwp/zZ5R4Lb6VuqXIHq9xMzwk8z7A7qV71OU
- sCFe1fZ41KBXxMyNv5IoaGH60l3d2ZKou3SvCQS120MzXq3cOuBhG/wbWaUeralew8aO
- rQ0kcksaLQCBelzCYTyHJ0LzqyRewlOd4KYhw0atBVGD1168llTCsNbwUWQExEY58vKf
- cWiNDz5tXoFAA0liYsb6p5G1d6qbh3r35OdMuO9OoU7QT8zu5llrK4Lfr/91d1bKMa+0 bA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24aan99s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 May 2022 22:39:01 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24JMQ4sK018831;
-        Thu, 19 May 2022 22:39:00 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2176.outbound.protection.outlook.com [104.47.56.176])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3g22vb8r0p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 19 May 2022 22:39:00 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WOCLxLPfisvor6GSZAP31TJA1VADbOV1/Vthw1ZwOjmHo3hZ9Erp8k3J6ugVC+to1dCv/CI1R0/H/GLwTJkil32+fEnQDX+xAMeAgtPmFUhH09qjRODGlHFWJC3hAs+3UrJMurHYuTM9JOSYZbKf9QKhr3YLJZTlxJTjV81K46S/Msh1RZEjzpb+HQTTKJUNlDAbsc8h+tE/uzmqCkbcjniwIu8f7Lv1IrC2CxPiRAi3XKlwlhCwDzhAq5Gap0cis+6TIV/7L2AeDxiz5/ncVAcZgs5FVwmJjVTWkA/0b2TgVfRzKF07YDNTUbvidbp7Qk/Xlxfu3f06xqL7494Dxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d9l1rnaplMW1SOHXRnDeS4+T4lQrqVTAIPogas0FBqE=;
- b=SHwEyhinKVu1Eu8e6CZyKi7IuVGNhEZZDXjNcfHtNK7kCQ7qAG/Bq94fpqLfApCso6oGoM2znqaodaF96gLwVPWMA949p+swE3BNVaYtppGLcdm8TLGtxrJeW0lWl6X7MhzgwH8HMMDxTNNh5StHE/rAV1FLg7o3N0zGEAFExpJSVsuRvNurpmwlQyNWjgLf7BPvzdoCWhy1MmeRNx0oAUOZ9cJvgAid9t3J6LCeV+eLRIlsjmja3qiZEhQqQnltgmFTcgp2bF0xhHHVNh6r1ZoxQz/OE/rkOq61S+Sb476pVVcLcqdXlNAv6FXHyewoI8MiIBLb+UDfOAkRajY7oQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 19 May 2022 18:40:24 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6D46A011
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:40:23 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id ds11so6524201pjb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:40:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d9l1rnaplMW1SOHXRnDeS4+T4lQrqVTAIPogas0FBqE=;
- b=h/cgl7+feZ+dONuNBbjqGCzI8O59NvmBXPz8xcShHILyLH22zsjYrkYGCZP2aoVsQKqUgfQKCEIZfT3qDRtbmI/Di92fmJz/ipdiX9gwFUx3HqMXOnGpy4I+h6CZ0bUMnx9EdLv/GRlrCAoK28s9NPnu4SgS2wyaA6kwkzkbBY4=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by DM5PR10MB1820.namprd10.prod.outlook.com (2603:10b6:3:109::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.18; Thu, 19 May
- 2022 22:38:57 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::e1df:2e42:6674:313e]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::e1df:2e42:6674:313e%7]) with mapi id 15.20.5273.016; Thu, 19 May 2022
- 22:38:57 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Heiko Carstens <hca@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mapletree-vs-khugepaged
-Thread-Topic: [PATCH] mapletree-vs-khugepaged
-Thread-Index: AQHYWyROtMkVxK19R0i3Z444SV9CtK0GzcYAgBYshMGAACVRAIAF84YAgAAsdgCAAyWOgIAAdxaAgAAP5QA=
-Date:   Thu, 19 May 2022 22:38:56 +0000
-Message-ID: <20220519223848.wp77de6ohc744hek@revolver>
-References: <20220428172040.GA3623323@roeck-us.net> <YmvVkKXJWBoGqWFx@osiris>
- <yt9dk0apbicu.fsf@linux.ibm.com> <20220513165955.mkg5wvfi4dwpzoer@revolver>
- <YoOMsmq24FWsWWyr@osiris> <b18d5338-0031-a813-2825-207bea1b84cb@roeck-us.net>
- <20220519143541.dfzgoubmkboc6kk4@revolver>
- <28f3958f-dd25-cb1a-0a4c-040e7706ffc7@roeck-us.net>
-In-Reply-To: <28f3958f-dd25-cb1a-0a4c-040e7706ffc7@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6366d10a-b4a0-4300-87ba-08da39e85c49
-x-ms-traffictypediagnostic: DM5PR10MB1820:EE_
-x-microsoft-antispam-prvs: <DM5PR10MB18202C852A990669877EB56FFDD09@DM5PR10MB1820.namprd10.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Tvjv2P/iTq3/NUL1KY3gdjsaFNM4v3iaehhLYKJ4qya4g5oy6LUDV2MSB7xNZcyF82MIov+LhpP+5JoF/tDXPYx7+wqgsiEbEdZ7brOAfNElnkv3RkS0y0foZT5uJDtSPI8NQPAZr1jPRKmDCfXa5hJ2bvYspCgygvwQ+WYwqWMUH5ybujY21yLsck+6LDMeIlG7hYiqnSHfMYS7mJpQM/6YMpZGDak/DyUeIEoRL4mNQPh7ZFbQ2qeLVEKTMp2aHyaLm2oea+c7zHg4GJjOITzPWRYKmyZUrx0A7MtPzFPN/hvzaj8QZmsP4Az0LNusvGnhp4OTWeYAt0olCM6UekoPaed3mfMlo5ykgCnI0/RIDMSCMMlMaf0TXZCAav+Umm4HDHFBBcGqm7799I4/gfr44DVQ0vr50mO89BU/RuXdHEPfasmqCRTs1fpNXrB+3uREwIJveHT5pwQJDu8GhtYt0wYzYS3RYiKyJ/SsytlRJKwvqtbNf9q53ZHKMBaaq7wz4KBliX+YfFvRvqT7PMpPoE/yMeVgIyWPmcoDMk3vk6sI8t5wWK+omEBKdK2qncFzmuDqb2fl9npRZIvZlKjCmfCXixEzT7x2xI5YOqzJFvTgfutDEL1nvRNsmy6zawXlllY+iPIlNwoYj9ThI4H0xUhFA3o64miJAPUgAsEdN4Gy6jMhRCFkP69JCsZCG/EAAx2GYg6HB6mh2j6mvTjEoQjLMZDqRSRivT6/zapjArRhR0tHwd6FtFQeJ9RdvQXRe6DHKc2ufSbAugrODd5exUCthf5Uj9tya3OjlazisbWubJVTTgELyAWJPE/rdT2vM2980abAyPZC9zob5g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(38070700005)(44832011)(186003)(5660300002)(6506007)(86362001)(91956017)(6486002)(53546011)(8936002)(33716001)(6916009)(508600001)(9686003)(122000001)(54906003)(64756008)(83380400001)(1076003)(66946007)(26005)(966005)(66446008)(76116006)(8676002)(66476007)(4326008)(66556008)(6512007)(71200400001)(2906002)(38100700002)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?STDEShks4PxmltHBbBf77V+VfvqNoHmvF0mZ3/fVqQfkyBy9gM0BFiPs9Bem?=
- =?us-ascii?Q?CBSl5xEZpgZ1wd62gZv01ktK1y+MxAoQo4JShUB6yERilvxFO9fkqKnyOlpb?=
- =?us-ascii?Q?m0gcqY2MuDzXsCacPdKCR5SWvvH8RB+CndS9EYOJRZZVZE5hG4LdpjR0XlS/?=
- =?us-ascii?Q?14p+L+NDS+a27zVLbN+ZkaiMgCErfjEEm9f7BoOrRdb+Z3xmhHdv6D8ayLYz?=
- =?us-ascii?Q?HpJvDo0FbsotlBr64cPgnFVUehHdlp20Xln/NOlb5lqiuZD7S0W3oAn+N1wc?=
- =?us-ascii?Q?iyNAwBAXaynHZassCvAG0DuFqhADsYjjMzXUGtvUgXNsZ/0SLMZraUHyU1kD?=
- =?us-ascii?Q?auGa/qpN5LBrS32tTWxE0bkFrFXNWfB4FE+eqLnYmC8RxALidoS2Q+3yavnD?=
- =?us-ascii?Q?0TTM8tcQlac8FMpeShwpH5c3GpprmFRo2MGVGqecB5xlMRDFeleYlsTE8fN2?=
- =?us-ascii?Q?W0TFDfqxFz/7A1CZZeAeQbAw6Hd5L83/aSuN3QUyNjAz+Kw3YnMp8Uwfpz9q?=
- =?us-ascii?Q?/QotbxyP19S3+MV9dR+5qPBzImWu1dR7WBg/h5qKJWbhLE8nbMGm6EG5ugRQ?=
- =?us-ascii?Q?cTqo+rZtMugm3B4iFDy0TaAN9X1LZlAY1s7d5V8WLOw7ZJ7zCfnOxD2WR1ru?=
- =?us-ascii?Q?R3qw4WIhK3LmVOCSUHgpr7+VvqRBtPA1Tnz9tB8Ho1/UExUttt73YzJzKS1+?=
- =?us-ascii?Q?RfaWYxr5FyPvOqD46oSPRPBDIsT/rBl9pakWscPTbFqp4+vMQZJ01nqq/sxR?=
- =?us-ascii?Q?/oUkTPfCYuOPTkuLc/subE+nRvdylNcgTACBfkNx6ewXUOIrwTFFGQ1cAOaa?=
- =?us-ascii?Q?peQnmC01h+IgGglRW/UvWxzzSGmGilUCRiKtTgGRcPF5QP0aef0o0IHVXI0r?=
- =?us-ascii?Q?chKZIasvL6KFT4fS9imQ9FJp92feT4gZlW7sRCRrYsyzYt/uIdLHz7fWhxHU?=
- =?us-ascii?Q?hsK4MCSJdbCJ3eFNcSfl0T/8+UQwxb1Kp2n9ThH0MjrLIaXzG27Ua5jZ8UxB?=
- =?us-ascii?Q?w5GrwfK7O+jsLJdty1ElPBHD50hD+lqgHXoLfos1VCaapSLaAh1XyXIT5xIF?=
- =?us-ascii?Q?kXaBgxX5PqvWifbZ/3lp4EKnZGDTrWWrtJfE3PnA16ElUF4JJNxE5N1C5FLF?=
- =?us-ascii?Q?rTUpBkPOGCw+IjoFcZds31Ggj5pKDHfidZlvB+7e6mQHzY0Ld1sDGGZnmHBa?=
- =?us-ascii?Q?h6wIQOMiIE7zie9ibZMcbOF/jSjgBS9/32dSEE2tsYp5n+0ObVIUqTHZVPRH?=
- =?us-ascii?Q?S9+aXi6gxB35GzrC6LA0DqTZU6M2pQIv2thR38vN26d08XzCl/+RSNOW26xn?=
- =?us-ascii?Q?VOj118HjpW41GXaBboJ3RlGoiZz6Qwv567EW4a82sEpxUXfdqNvqqjE6lt8f?=
- =?us-ascii?Q?zk+bjcQaHXsWSjjXl7c2LXelOFHguwF7OXEZ15V37oNdJ5n1eCHETUjbX1no?=
- =?us-ascii?Q?ak5mo8p/G+cfT8STR4xwx0iMCmqwJ+cIgmdY23vI/icpfMSMFcSZHRCg6x//?=
- =?us-ascii?Q?3K0aFIGKCBSZ7Tn+krR/gUI2pjm1B8ZdjDKG5EX5STCfSopIKGICXNnuK9+T?=
- =?us-ascii?Q?rtFy+HZJY7Tw9UOrBu5FFnbzyLNRMAYXjURNk/OqR+1gyFiRBHaeqxjYAIok?=
- =?us-ascii?Q?SpbYT2/TE2DAEaLbLS1BJZbiYPedqYPo8Zbyv5zEdJAndU1zj4OrInWeq214?=
- =?us-ascii?Q?9ADXnh8AB520moEPsULk90yIcGUXgBl8x8CcYkC7UEYwxQnKSWFSBpe+CxP8?=
- =?us-ascii?Q?LUUaPnighWQTuGb2nfbtcNWH3eFxZxU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C792620C1A7C1049A4096286BAF74918@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3ZQEdNolUQPiRhMJeKJgbf+Cnmh94zniPqxn9XCK4hk=;
+        b=BHNShkMSBGRajgbmCkPaZutKY4iz3LIS/Xk/j7mbRuvPEGmatdYHTU72yYjAgPjnTS
+         HFBW03kQzOnn8LmmDMFKNIofYy3dphebkupTx5X2xX92ogNC/bZEkx5mPiUsCoI52a9z
+         8HtkX4G18AL67ZtCCUrft06ynQemWChYL9I60=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3ZQEdNolUQPiRhMJeKJgbf+Cnmh94zniPqxn9XCK4hk=;
+        b=H06r/GC4Iz0pfVGtlYZbH1een4I5bqW4l6HDkMfXyiicYHrj/iceAPtYd7/paXWcJJ
+         mMgwhs1rD0hHHMxoITQON0FtpZM0+LSEVbi449EXg6aIOFnYSs0hEz6VrC18Jbmpktsk
+         IaeNLGY+aRNxeC7OqjEaIn+a6s0hwbyB/i9x6ccTyZQMUU24owPWGX8rJC6/WRFPhWfV
+         gmhGTiWHDwWy3A7i1ZGm1JBlxUSTGrBLsP5AlHo6pBj863sm7ciki3wruumnJ97DHQTE
+         e44BWopZZxntzYsQxh/5CnqnCxeSyRQi7ZwecVIJrtnr9xo2HSNDPMfY4dusgpk5wtYU
+         Dxsg==
+X-Gm-Message-State: AOAM532b2QwNEYpyUIQiBFt4H1NyVYjNPCrvvUmSMGIWpdKyth5ikva7
+        9fDFF4HizjpngRWyaEdxxLnyPA==
+X-Google-Smtp-Source: ABdhPJz5BA+IKB7+7JxtlVC3So2qYw3COr3GbpE2eUw8zxbDbCUhSn5WBHaqDaoyX2RDDUWYxVAGxA==
+X-Received: by 2002:a17:902:6901:b0:15e:ed3c:4eaf with SMTP id j1-20020a170902690100b0015eed3c4eafmr6978969plk.168.1653000022907;
+        Thu, 19 May 2022 15:40:22 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:5332:2096:60a3:3455])
+        by smtp.gmail.com with UTF8SMTPSA id f10-20020a63f10a000000b003c2698d199bsm4089335pgi.25.2022.05.19.15.40.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 15:40:22 -0700 (PDT)
+Date:   Thu, 19 May 2022 15:40:21 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     bleung@chromium.org, groeck@chromium.org, robh+dt@kernel.org,
+        chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/5] platform/chrome: cros_kbd_led_backlight: support
+ EC PWM backend
+Message-ID: <YobHVST2Nfn+z8n6@google.com>
+References: <20220321085547.1162312-1-tzungbi@kernel.org>
+ <20220321085547.1162312-6-tzungbi@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6366d10a-b4a0-4300-87ba-08da39e85c49
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2022 22:38:56.9708
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ynPwAH8+/BWcWVSgFptQKsHNCMHkBMD5DiAhjPzz4R4cHw8fI6GyM0dhlhLcF/iIuxVPRJX8yCw3yTHnjKyjPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1820
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
- definitions=2022-05-19_06:2022-05-19,2022-05-19 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
- phishscore=0 suspectscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2205190121
-X-Proofpoint-ORIG-GUID: 3MZLIY12JkoZ8OOetLCyzDVDdcP1mqHI
-X-Proofpoint-GUID: 3MZLIY12JkoZ8OOetLCyzDVDdcP1mqHI
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220321085547.1162312-6-tzungbi@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Guenter Roeck <linux@roeck-us.net> [220519 17:42]:
-> On 5/19/22 07:35, Liam Howlett wrote:
-> > * Guenter Roeck <linux@roeck-us.net> [220517 10:32]:
-> >=20
-> > ...
-> > >=20
-> > > Another bisect result, boot failures with nommu targets (arm:mps2-an3=
-85,
-> > > m68k:mcf5208evb). Bisect log is the same for both.
-> > ...
-> > > # first bad commit: [bd773a78705fb58eeadd80e5b31739df4c83c559] nommu:=
- remove uses of VMA linked list
-> >=20
-> > I cannot reproduce this on my side, even with that specific commit.  Ca=
-n
-> > you point me to the failure log, config file, etc?  Do you still see
-> > this with the fixes I've sent recently?
-> >=20
->=20
-> This was in linux-next; most recently with next-20220517.
-> I don't know if that was up-to-date with your patches.
-> The problem seems to be memory allocation failures.
-> A sample log is at
-> https://kerneltests.org/builders/qemu-m68k-next/builds/1065/steps/qemubui=
-ldcommand/logs/stdio
-> The log history at
-> https://kerneltests.org/builders/qemu-m68k-next?numbuilds=3D30
-> will give you a variety of logs.
+On Mon, Mar 21, 2022 at 04:55:47PM +0800, Tzung-Bi Shih wrote:
+> EC PWM backend uses EC_CMD_PWM_SET_KEYBOARD_BACKLIGHT and
+> EC_CMD_PWM_GET_KEYBOARD_BACKLIGHT for setting and getting the brightness
+> respectively.
+> 
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> ---
+> Changes from v2:
+> - Turn CROS_KBD_LED_BACKLIGHT_EC_PWM to boolean.
+> - Use #ifdef for boolean CROS_KBD_LED_BACKLIGHT_EC_PWM.
+> 
+> Changes from v1:
+> - Update email address accordingly.
+> 
+>  drivers/platform/chrome/Kconfig               |   6 +
+>  .../platform/chrome/cros_kbd_led_backlight.c  | 126 +++++++++++++++---
+>  2 files changed, 117 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+> index 3f74679a556c..e02789d7c0d4 100644
+> --- a/drivers/platform/chrome/Kconfig
+> +++ b/drivers/platform/chrome/Kconfig
+> @@ -142,6 +142,12 @@ config CROS_KBD_LED_BACKLIGHT_ACPI
+>  	help
+>  	  ChromeOS keyboard backlight ACPI backend.
+>  
+> +config CROS_KBD_LED_BACKLIGHT_EC_PWM
+> +	bool "ChromeOS keyboard backlight EC PWM backend"
+> +	depends on CROS_EC && CROS_KBD_LED_BACKLIGHT
+> +	help
+> +	  ChromeOS keyboard backlight EC PWM backend.
+> +
+>  config CROS_EC_CHARDEV
+>  	tristate "ChromeOS EC miscdevice"
+>  	depends on MFD_CROS_EC_DEV
+> diff --git a/drivers/platform/chrome/cros_kbd_led_backlight.c b/drivers/platform/chrome/cros_kbd_led_backlight.c
+> index 5cbe27cb4610..8c35dd2fa607 100644
+> --- a/drivers/platform/chrome/cros_kbd_led_backlight.c
+> +++ b/drivers/platform/chrome/cros_kbd_led_backlight.c
+> @@ -11,10 +11,17 @@
+>  #include <linux/leds.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/platform_data/cros_ec_commands.h>
+> +#include <linux/platform_data/cros_ec_proto.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/property.h>
+>  #include <linux/slab.h>
+>  
+> +struct keyboard_led_private {
 
-I did hunt that down.  It looks like it's allocating 512kb and failing.
-I tried the commit you see the failures on and my qemu boots fine.
+Why 'private', isn't this more a 'cros_ec_kdb_bl' or similar?
 
->=20
-> The configuration is derived from m5208evb_defconfig, with initrd
-> and command line embedded in the image. You can see the detailed
-> configuration updates at
-> https://github.com/groeck/linux-build-test/blob/master/rootfs/m68k/run-qe=
-mu-m68k.sh
->=20
-> Qemu command line is
->=20
-> qemu-system-m68k -M mcf5208evb -kernel vmlinux \
->     -cpu m5208 -no-reboot -nographic -monitor none
->     -append "rdinit=3D/sbin/init console=3DttyS0,115200"
->=20
-> with initrd from
-> https://github.com/groeck/linux-build-test/blob/master/rootfs/m68k/rootfs=
--5208.cpio.gz
+> +	struct led_classdev cdev;
+> +	struct cros_ec_device *ec;
+> +};
+> +
+>  /**
+>   * struct keyboard_led_drvdata - keyboard LED driver data.
+>   * @init:			Init function.
+> @@ -40,6 +47,8 @@ struct keyboard_led_drvdata {
+>  	enum led_brightness max_brightness;
+>  };
+>  
+> +#define KEYBOARD_BACKLIGHT_MAX 100
+> +
+>  #ifdef CONFIG_CROS_KBD_LED_BACKLIGHT_ACPI
+>  
+>  /* Keyboard LED ACPI Device must be defined in firmware */
+> @@ -47,8 +56,6 @@ struct keyboard_led_drvdata {
+>  #define ACPI_KEYBOARD_BACKLIGHT_READ	ACPI_KEYBOARD_BACKLIGHT_DEVICE ".KBQC"
+>  #define ACPI_KEYBOARD_BACKLIGHT_WRITE	ACPI_KEYBOARD_BACKLIGHT_DEVICE ".KBCM"
+>  
+> -#define ACPI_KEYBOARD_BACKLIGHT_MAX		100
+> -
+>  static void keyboard_led_set_brightness_acpi(struct led_classdev *cdev,
+>  					     enum led_brightness brightness)
+>  {
+> @@ -107,7 +114,7 @@ static const struct keyboard_led_drvdata keyboard_led_drvdata_acpi = {
+>  	.init = keyboard_led_init_acpi,
+>  	.brightness_set = keyboard_led_set_brightness_acpi,
+>  	.brightness_get = keyboard_led_get_brightness_acpi,
+> -	.max_brightness = ACPI_KEYBOARD_BACKLIGHT_MAX,
+> +	.max_brightness = KEYBOARD_BACKLIGHT_MAX,
+>  };
+>  
+>  #else /* CONFIG_CROS_KBD_LED_BACKLIGHT_ACPI */
+> @@ -123,34 +130,122 @@ static const struct keyboard_led_drvdata keyboard_led_drvdata_acpi = {
+>  
+>  #endif /* CONFIG_CROS_KBD_LED_BACKLIGHT_ACPI */
+>  
+> +#ifdef CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM
+> +
+> +static int
+> +keyboard_led_set_brightness_blocking_ec_pwm(struct led_classdev *cdev,
+> +					    enum led_brightness brightness)
 
-I'm using buildroot-2022.02.1, so maybe that's the difference?
-Buildroot has the following qemu line:
+nit: since there is only a blocking version of .set_brightness you could omit
+'blocking' in the function name.
 
-qemu-system-m68k -M mcf5208evb -cpu m5208 -kernel vmlinux -nographic
+> +{
+> +	struct {
+> +		struct cros_ec_command msg;
+> +		struct ec_params_pwm_set_keyboard_backlight params;
+> +	} __packed buf;
+> +	struct ec_params_pwm_set_keyboard_backlight *params = &buf.params;
+> +	struct cros_ec_command *msg = &buf.msg;
+> +	struct keyboard_led_private *private =
+> +		container_of(cdev, struct keyboard_led_private, cdev);
+> +
+> +	memset(&buf, 0, sizeof(buf));
+> +
+> +	msg->version = 0;
 
->=20
-> I use qemu v6.2, but any recent qemu version should work.
->=20
-> Hope this helps,
-> Guenter
+not strictly needed since you do the memset above, I guess it's
+fine to keep the assignment if you want to be explicit about the
+version.
 
-Thanks for the information.  I will keep digging into it.
-Liam
+> +	msg->command = EC_CMD_PWM_SET_KEYBOARD_BACKLIGHT;
+> +	msg->insize = 0;
+> +	msg->outsize = sizeof(*params);
+> +
+> +	params->percent = brightness;
+> +
+> +	return cros_ec_cmd_xfer_status(private->ec, msg);
+> +}
+> +
+> +static enum led_brightness
+> +keyboard_led_get_brightness_ec_pwm(struct led_classdev *cdev)
+> +{
+> +	struct {
+> +		struct cros_ec_command msg;
+> +		struct ec_response_pwm_get_keyboard_backlight resp;
+> +	} __packed buf;
+> +	struct ec_response_pwm_get_keyboard_backlight *resp = &buf.resp;
+> +	struct cros_ec_command *msg = &buf.msg;
+> +	struct keyboard_led_private *private =
+> +		container_of(cdev, struct keyboard_led_private, cdev);
+> +	int ret;
+> +
+> +	memset(&buf, 0, sizeof(buf));
+> +
+> +	msg->version = 0;
+> +	msg->command = EC_CMD_PWM_GET_KEYBOARD_BACKLIGHT;
+> +	msg->insize = sizeof(*resp);
+> +	msg->outsize = 0;
+> +
+> +	ret = cros_ec_cmd_xfer_status(private->ec, msg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return resp->percent;
+> +}
+> +
+> +static int keyboard_led_init_ec_pwm(struct platform_device *pdev)
+> +{
+> +	struct keyboard_led_private *private = platform_get_drvdata(pdev);
+> +
+> +	private->ec = dev_get_drvdata(pdev->dev.parent);
+> +	if (!private->ec) {
+> +		dev_err(&pdev->dev, "no parent EC device\n");
+> +		return -EINVAL;
+> +	}
+
+The only thing this 'init' function does is assigning private->ec. Wouldn't
+it be clearer to do this directly in probe() from where callback is called?
+It could be with the condition that the device as a DT node.
+
+Is it actually possible that the keyboard backlight device gets instantiated
+if there is no EC parent?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {
+> +	.init = keyboard_led_init_ec_pwm,
+> +	.brightness_set_blocking = keyboard_led_set_brightness_blocking_ec_pwm,
+> +	.brightness_get = keyboard_led_get_brightness_ec_pwm,
+> +	.max_brightness = KEYBOARD_BACKLIGHT_MAX,
+> +};
+> +
+> +#else /* CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM */
+> +
+> +static int keyboard_led_init_ec_pwm_null(struct platform_device *pdev)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct keyboard_led_drvdata keyboard_led_drvdata_ec_pwm = {
+> +	.init = keyboard_led_init_ec_pwm_null,
+
+Is this really needed?
+
+keyboard_led_probe() checks if .init is assigned before invoking the callback:
+
+	if (drvdata->init) {
+		error = drvdata->init(pdev);
+
+The whole 'else' branch could be eliminated if .of_match_table of the driver
+only is assigned when CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM is set. IMO that
+would preferable over creating 'stubs'.
+
+> +};
+> +
+> +#endif /* CONFIG_CROS_KBD_LED_BACKLIGHT_EC_PWM */
+> +
+>  static int keyboard_led_probe(struct platform_device *pdev)
+>  {
+> -	struct led_classdev *cdev;
+>  	const struct keyboard_led_drvdata *drvdata;
+> +	struct keyboard_led_private *private;
+>  	int error;
+>  
+>  	drvdata = device_get_match_data(&pdev->dev);
+>  	if (!drvdata)
+>  		return -EINVAL;
+>  
+> +	private = devm_kzalloc(&pdev->dev, sizeof(*private), GFP_KERNEL);
+> +	if (!private)
+> +		return -ENOMEM;
+> +	platform_set_drvdata(pdev, private);
+> +
+>  	if (drvdata->init) {
+>  		error = drvdata->init(pdev);
+>  		if (error)
+>  			return error;
+>  	}
+>  
+> -	cdev = devm_kzalloc(&pdev->dev, sizeof(*cdev), GFP_KERNEL);
+> -	if (!cdev)
+> -		return -ENOMEM;
+> -
+> -	cdev->name = "chromeos::kbd_backlight";
+> -	cdev->flags |= LED_CORE_SUSPENDRESUME;
+> -	cdev->max_brightness = drvdata->max_brightness;
+> -	cdev->brightness_set = drvdata->brightness_set;
+> -	cdev->brightness_set_blocking = drvdata->brightness_set_blocking;
+> -	cdev->brightness_get = drvdata->brightness_get;
+> +	private->cdev.name = "chromeos::kbd_backlight";
+> +	private->cdev.flags |= LED_CORE_SUSPENDRESUME;
+> +	private->cdev.max_brightness = drvdata->max_brightness;
+> +	private->cdev.brightness_set = drvdata->brightness_set;
+> +	private->cdev.brightness_set_blocking = drvdata->brightness_set_blocking;
+> +	private->cdev.brightness_get = drvdata->brightness_get;
+>  
+> -	error = devm_led_classdev_register(&pdev->dev, cdev);
+> +	error = devm_led_classdev_register(&pdev->dev, &private->cdev);
+>  	if (error)
+>  		return error;
+>  
+> @@ -169,6 +264,7 @@ MODULE_DEVICE_TABLE(acpi, keyboard_led_acpi_match);
+>  static const struct of_device_id keyboard_led_of_match[] = {
+>  	{
+>  		.compatible = "google,cros-kbd-led-backlight",
+> +		.data = &keyboard_led_drvdata_ec_pwm,
+>  	},
+>  	{}
+>  };
+> -- 
+> 2.35.1.894.gb6a874cedc-goog
+> 

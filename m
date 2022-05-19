@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DCA52DFDD
+	by mail.lfdr.de (Postfix) with ESMTP id CDA5852DFDE
 	for <lists+linux-kernel@lfdr.de>; Fri, 20 May 2022 00:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237755AbiESWOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 18:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        id S245422AbiESWOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 18:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235381AbiESWOg (ORCPT
+        with ESMTP id S245427AbiESWOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 18:14:36 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E6FEBA98
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:14:34 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ff7b90e635so4726557b3.5
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:14:34 -0700 (PDT)
+        Thu, 19 May 2022 18:14:50 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039D7EC321
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:14:47 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id n124-20020a1c2782000000b003972dfca96cso1659951wmn.4
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 15:14:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JInIfpZUYcq3BWyfoPd2F7qbA19NK6yysinA9rAJ79E=;
-        b=dgEyeIh2qdnIlyJzYUEQlSyi2q6MbvAd9Y3VgnD3PNs4ZfLbiWSCavxNJhIyZ9zQhD
-         zFzAcE89AUYocfdywFHIDac6Gp+ZPWRwSPr1D9rOD3mVcnIJMflQlNOC6p+N8QvwQ2+M
-         m4e3X3qx5ymvjEThikcL/GZKQVNzuCA0K6XZ/E7s2lo4pGvGHGL3eP9TVQwc8zshqop5
-         2G0Y0d/r0WKRDad9lcd7AzDXnot5O29mLJcwO5Z5ipmDVgFnF9CWzBt72nL8lP+BIwwR
-         HqF4V6bNTs9RyKVn1DoDJQGtdBmwCqsnjiq1JkGlF6w7rGbm8FsxA95J6Dek5LI/3UM6
-         3O0g==
+        bh=O/MSQ1m41Fcw6b6LA0uBbiZWj73238xZ0rlQmlu3bpo=;
+        b=AS3A2qhaIRHTp/74NqQnh4nanXMk3OYDGxETNNvTD2ew6YKGHNxR/33WC9NyczDZ2f
+         MEQ+/Zkrwd57zMvKmF8lXBhCYsqo6vrx0UBZ1YTw11zv4g7DK22tLXh0pjWt/skOwwek
+         lRIDHUA1hs1Nx0xWlMTAo544vIOQLKhEYaHRwRFboOEZ3yKU8mY1vBTz+DCs3J/LD2EP
+         WnYwUPPEu7G8M4Fd8MYKLtDmmm3hZ90EYAess4uMuqJbDHY5pCl9xpHaFMHGZg3bZ7Al
+         ++rKsGVhiXs0jP4I+IsQZg8dQayQuFIomb0UFMVlDUfEtuytsWZDCCw7G2EZhWFc+KDt
+         MzhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JInIfpZUYcq3BWyfoPd2F7qbA19NK6yysinA9rAJ79E=;
-        b=ES3QG9SO2Us7e7maJ9u+JY5XYuzE8FL+g0sd6H1yjPssaJ9F8gx0edjcJAaBvz+DV/
-         8uncgO4kFzMCeHCixJigUzmie0gNRJ5ZvOwgAgxTUPmrm4PDM0qVBbycvkxNUiUgD5Pm
-         KvnyWoUF3zqYMLfamjo/YYXG5gpcQCxoEr1+rIzYIaSpBIvWnusryG9rVz/AjUInRPGl
-         CyV3e2PYg7w/BsWvqiNKFnL5NQ2aEe1MtoUjkDa1QPyBD/vgJ+KHTdAyk3wL18nDLW/W
-         M5mK1Io3B1ESBrrLVQi2eVcKVQhW1y1x4rKoT479Yw8UstQr99e9U9MwKk9Iy6Q3o7cq
-         JNDQ==
-X-Gm-Message-State: AOAM5310qkrtY1NkhrlDPWru7iwBl/iABYmn/ueluAUq+oc7qc6XgrtR
-        n5OZDIfaKb/gMTSX3Oac50ok5rRi1l2z4GYEQKiYuQ==
-X-Google-Smtp-Source: ABdhPJxEzMjXFh/Ot46pas3miDavFYy02ALpbXRun/EWow+p7Zhod5t21WV+UhSA7OHjnn7DQgcEd0ZwUIEX9zA9j84=
-X-Received: by 2002:a81:990f:0:b0:2f8:c347:d11a with SMTP id
- q15-20020a81990f000000b002f8c347d11amr6755069ywg.507.1652998473830; Thu, 19
- May 2022 15:14:33 -0700 (PDT)
+        bh=O/MSQ1m41Fcw6b6LA0uBbiZWj73238xZ0rlQmlu3bpo=;
+        b=1PNiwmgmTjXXNgikzDjniJGxuMpVXYYrR0BiriOaI3zfAZvOwMW80h+1HQ0MLhaUDb
+         fABH+MedAdscJymq3tVP9V4xRoMFbrRNIuVKnulNeKHXmRyNTZD7z3W6mLMY9UYuNnbw
+         p5dvHX0tTdS4TZrYdfjmNh84YR1R68OfnmU7weeLfF1zdzwvrmkgJ0CntKod2o0K7IwT
+         yaoH4wkGhttrDrqjFbjzLNahgysMVn/jmH7ybPAnE/ZV1p7K/OrA8QNuGCLgG5naXD2Z
+         nDfPbsBaSy2UmiEctbmz3rJTCPNhKPLkq+gHLJX9UjMzDMqyWHlmo/8+RfvOds7SRG0W
+         faxw==
+X-Gm-Message-State: AOAM53377EWee7tgg3o24w8eiVQyu0QKV1roFwonfo4AfxjjDBrNAKKg
+        71/xQFvcYMmp6BvcUTdA1AosLl0c88h/h0SOnjIDMQ==
+X-Google-Smtp-Source: ABdhPJykzkUa8O4Vou9BOyWKPn8TL6eskwSbBCcJGbLGhbRJ2NENTNSbeD/hZNYbfUhE1nv+wxIAnCi2FJncSXFiFPg=
+X-Received: by 2002:a05:600c:19cc:b0:394:8dc2:a23b with SMTP id
+ u12-20020a05600c19cc00b003948dc2a23bmr6169950wmq.182.1652998485374; Thu, 19
+ May 2022 15:14:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220516075619.1277152-1-surenb@google.com> <20220519202149.3ywynqhbxlzp6uyn@revolver>
- <CAJuCfpHeAXSLjrXxgRaTXOEPPipcFq5MhP=uU0wkqeBoPUAcsQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpHeAXSLjrXxgRaTXOEPPipcFq5MhP=uU0wkqeBoPUAcsQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 19 May 2022 15:14:22 -0700
-Message-ID: <CAJuCfpEvrLyZHLt4vgLFqb5XAntnXfvTWqEtzC7TA0cMfVq40A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] mm: drop oom code from exit_mmap
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "mhocko@suse.com" <mhocko@suse.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "guro@fb.com" <guro@fb.com>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "aarcange@redhat.com" <aarcange@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kernel-team@android.com" <kernel-team@android.com>
+References: <20220519054355.477-1-ravi.bangoria@amd.com> <20220519054355.477-2-ravi.bangoria@amd.com>
+In-Reply-To: <20220519054355.477-2-ravi.bangoria@amd.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 19 May 2022 15:14:32 -0700
+Message-ID: <CAP-5=fU_=v8CXNg5ovK2XcFv4e4KSXNLaP-7k9y1yqQ_NhzgSg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] perf record ibs: Warn about sampling period skew
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     acme@kernel.org, peterz@infradead.org, rrichter@amd.com,
+        mingo@redhat.com, mark.rutland@arm.com, jolsa@kernel.org,
+        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        james.clark@arm.com, leo.yan@linaro.org, kan.liang@linux.intel.com,
+        ak@linux.intel.com, eranian@google.com, like.xu.linux@gmail.com,
+        x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, kim.phillips@amd.com,
+        santosh.shukla@amd.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -87,187 +74,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 2:33 PM Suren Baghdasaryan <surenb@google.com> wrote:
+On Wed, May 18, 2022 at 10:44 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
 >
-> On Thu, May 19, 2022 at 1:22 PM Liam Howlett <liam.howlett@oracle.com> wrote:
-> >
-> > * Suren Baghdasaryan <surenb@google.com> [220516 03:56]:
-> > > The primary reason to invoke the oom reaper from the exit_mmap path used
-> > > to be a prevention of an excessive oom killing if the oom victim exit
-> > > races with the oom reaper (see [1] for more details). The invocation has
-> > > moved around since then because of the interaction with the munlock
-> > > logic but the underlying reason has remained the same (see [2]).
-> > >
-> > > Munlock code is no longer a problem since [3] and there shouldn't be
-> > > any blocking operation before the memory is unmapped by exit_mmap so
-> > > the oom reaper invocation can be dropped. The unmapping part can be done
-> > > with the non-exclusive mmap_sem and the exclusive one is only required
-> > > when page tables are freed.
-> > >
-> > > Remove the oom_reaper from exit_mmap which will make the code easier to
-> > > read. This is really unlikely to make any observable difference although
-> > > some microbenchmarks could benefit from one less branch that needs to be
-> > > evaluated even though it almost never is true.
-> > >
-> > > [1] 212925802454 ("mm: oom: let oom_reap_task and exit_mmap run concurrently")
-> > > [2] 27ae357fa82b ("mm, oom: fix concurrent munlock and oom reaper unmap, v3")
-> > > [3] a213e5cf71cb ("mm/munlock: delete munlock_vma_pages_all(), allow oomreap")
-> > >
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > Acked-by: Michal Hocko <mhocko@suse.com>
-> > > ---
-> > >  include/linux/oom.h |  2 --
-> > >  mm/mmap.c           | 31 ++++++++++++-------------------
-> > >  mm/oom_kill.c       |  2 +-
-> > >  3 files changed, 13 insertions(+), 22 deletions(-)
-> > >
-> > > diff --git a/include/linux/oom.h b/include/linux/oom.h
-> > > index 2db9a1432511..6cdf0772dbae 100644
-> > > --- a/include/linux/oom.h
-> > > +++ b/include/linux/oom.h
-> > > @@ -106,8 +106,6 @@ static inline vm_fault_t check_stable_address_space(struct mm_struct *mm)
-> > >       return 0;
-> > >  }
-> > >
-> > > -bool __oom_reap_task_mm(struct mm_struct *mm);
-> > > -
-> > >  long oom_badness(struct task_struct *p,
-> > >               unsigned long totalpages);
-> > >
-> > > diff --git a/mm/mmap.c b/mm/mmap.c
-> > > index 313b57d55a63..ded42150e706 100644
-> > > --- a/mm/mmap.c
-> > > +++ b/mm/mmap.c
-> > > @@ -3105,30 +3105,13 @@ void exit_mmap(struct mm_struct *mm)
-> > >       /* mm's last user has gone, and its about to be pulled down */
-> > >       mmu_notifier_release(mm);
-> > >
-> > > -     if (unlikely(mm_is_oom_victim(mm))) {
-> > > -             /*
-> > > -              * Manually reap the mm to free as much memory as possible.
-> > > -              * Then, as the oom reaper does, set MMF_OOM_SKIP to disregard
-> > > -              * this mm from further consideration.  Taking mm->mmap_lock for
-> > > -              * write after setting MMF_OOM_SKIP will guarantee that the oom
-> > > -              * reaper will not run on this mm again after mmap_lock is
-> > > -              * dropped.
-> > > -              *
-> > > -              * Nothing can be holding mm->mmap_lock here and the above call
-> > > -              * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
-> > > -              * __oom_reap_task_mm() will not block.
-> > > -              */
-> > > -             (void)__oom_reap_task_mm(mm);
-> > > -             set_bit(MMF_OOM_SKIP, &mm->flags);
-> > > -     }
-> > > -
-> > > -     mmap_write_lock(mm);
-> > > +     mmap_read_lock(mm);
-> > >       arch_exit_mmap(mm);
-> >
-> > arch_exit_mmap() was called under the write lock before, is it safe to
-> > call it under the read lock?
+> Samples without an L3 miss are discarded and counter is reset with
+> random value (between 1-15 for fetch pmu and 1-127 for op pmu) when
+> IBS L3 miss filtering is enabled. This causes a sampling period skew
+> but there is no way to reconstruct aggregated sampling period. So
+> print a warning at perf record if user sets l3missonly=1.
 >
-> Ah, good catch. I missed at least one call chain which I believe would
-> require arch_exit_mmap() to be called under write lock:
+> Ex:
+>   # perf record -c 10000 -C 0 -e ibs_op/l3missonly=1/
+>   WARNING: Hw internally resets sampling period when L3 Miss Filtering is enabled
+>   and tagged operation does not cause L3 Miss. This causes sampling period skew.
 >
-> arch_exit_mmap
->     ldt_arch_exit_mmap
->         free_ldt_pgtables
->             free_pgd_range
->
-> I'll need to check whether arch_exit_mmap() has to be called before
-> unmap_vmas(). If not, we could move it further down when we hold the
-> write lock.
-> Andrew, please remove this patchset from your tree for now until I fix this.
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
 
-I think it should be fine to move arch_exit_mmap() to be called right
-after mmap_write_lock. This changes the order of calls from:
+Acked-by: Ian Rogers <irogers@google.com>
 
-arch_exit_mmap()
-unmap_vmas()
+Thanks,
+Ian
 
-to
-
-unmap_vmas()
-arch_exit_mmap()
-
-however I don't see any implementation of arch_exit_mmap() which uses
-mm->mmap. So, it seems safe. I'll wait a day or so for possible
-objections and will post a new version.
-
+> ---
+>  tools/perf/arch/x86/util/evsel.c | 50 ++++++++++++++++++++++++++++++++
+>  tools/perf/util/evsel.c          |  7 +++++
+>  tools/perf/util/evsel.h          |  1 +
+>  3 files changed, 58 insertions(+)
 >
-> >
-> > >
-> > >       vma = mm->mmap;
-> > >       if (!vma) {
-> > >               /* Can happen if dup_mmap() received an OOM */
-> > > -             mmap_write_unlock(mm);
-> > > +             mmap_read_unlock(mm);
-> > >               return;
-> > >       }
-> > >
-> > > @@ -3138,6 +3121,16 @@ void exit_mmap(struct mm_struct *mm)
-> > >       /* update_hiwater_rss(mm) here? but nobody should be looking */
-> > >       /* Use -1 here to ensure all VMAs in the mm are unmapped */
-> > >       unmap_vmas(&tlb, vma, 0, -1);
-> > > +     mmap_read_unlock(mm);
-> > > +
-> > > +     /*
-> > > +      * Set MMF_OOM_SKIP to hide this task from the oom killer/reaper
-> > > +      * because the memory has been already freed. Do not bother checking
-> > > +      * mm_is_oom_victim because setting a bit unconditionally is cheaper.
-> > > +      */
-> > > +     set_bit(MMF_OOM_SKIP, &mm->flags);
-> > > +
-> > > +     mmap_write_lock(mm);
-> >
-> > Is there a race here?  We had a VMA but after the read lock was dropped,
-> > could the oom killer cause the VMA to be invalidated?  I don't think so
-> > but the comment above about dup_mmap() receiving an OOM makes me
-> > question it.  The code before kept the write lock from when the VMA was
-> > found until the end of the mm edits - and it had the check for !vma
-> > within the block itself.  We are also hiding it from the oom killer
-> > outside the read lock so it is possible for oom to find it in that
-> > window, right?
+> diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/util/evsel.c
+> index ac2899a25b7a..e8ff4ddb53c9 100644
+> --- a/tools/perf/arch/x86/util/evsel.c
+> +++ b/tools/perf/arch/x86/util/evsel.c
+> @@ -4,6 +4,8 @@
+>  #include "util/evsel.h"
+>  #include "util/env.h"
+>  #include "linux/string.h"
+> +#include "util/pmu.h"
+> +#include "util/debug.h"
 >
-> When I was trying to understand that comment and looked into
-> dup_mmap() code, my conclusion was that this check was there to
-> protect us from the case when dup_mmap() gets interrupted and leaves
-> mm->mmap=NULL. So, in a sense it was not really a race with OOM killer
-> but an interrupted dup_mmap() case. So, once we checked it above we
-> don't need to recheck again under write lock. When I asked Michal
-> about this he was in agreement but it's possible we overlooked some
-> corner case. If so, please let me know and I can add this check here.
+>  void arch_evsel__set_sample_weight(struct evsel *evsel)
+>  {
+> @@ -29,3 +31,51 @@ void arch_evsel__fixup_new_cycles(struct perf_event_attr *attr)
 >
-> >
-> > Could we just unconditionally set the skip bit before taking a write
-> > lock for the duration of the exit?  I'm probably missing your reason for
-> > doing it this way.
+>         free(env.cpuid);
+>  }
+> +
+> +static void ibs_l3miss_warn(void)
+> +{
+> +       pr_warning(
+> +"WARNING: Hw internally resets sampling period when L3 Miss Filtering is enabled\n"
+> +"and tagged operation does not cause L3 Miss. This causes sampling period skew.\n");
+> +}
+> +
+> +void arch__post_evsel_config(struct evsel *evsel, struct perf_event_attr *attr)
+> +{
+> +       struct perf_pmu *evsel_pmu, *ibs_fetch_pmu, *ibs_op_pmu;
+> +       static int warned_once;
+> +       /* 0: Uninitialized, 1: Yes, -1: No */
+> +       static int is_amd;
+> +
+> +       if (warned_once || is_amd == -1)
+> +               return;
+> +
+> +       if (!is_amd) {
+> +               struct perf_env *env = evsel__env(evsel);
+> +
+> +               if (!perf_env__cpuid(env) || !env->cpuid ||
+> +                   !strstarts(env->cpuid, "AuthenticAMD")) {
+> +                       is_amd = -1;
+> +                       return;
+> +               }
+> +               is_amd = 1;
+> +       }
+> +
+> +       evsel_pmu = evsel__find_pmu(evsel);
+> +       if (!evsel_pmu)
+> +               return;
+> +
+> +       ibs_fetch_pmu = perf_pmu__find("ibs_fetch");
+> +       ibs_op_pmu = perf_pmu__find("ibs_op");
+> +
+> +       if (ibs_fetch_pmu && ibs_fetch_pmu->type == evsel_pmu->type) {
+> +               if (attr->config & (1ULL << 59)) {
+> +                       ibs_l3miss_warn();
+> +                       warned_once = 1;
+> +               }
+> +       } else if (ibs_op_pmu && ibs_op_pmu->type == evsel_pmu->type) {
+> +               if (attr->config & (1ULL << 16)) {
+> +                       ibs_l3miss_warn();
+> +                       warned_once = 1;
+> +               }
+> +       }
+> +}
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index 2a1729e7aee4..e9be9b94a062 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -1064,6 +1064,11 @@ void __weak arch_evsel__fixup_new_cycles(struct perf_event_attr *attr __maybe_un
+>  {
+>  }
 >
-> That's what I'm doing - unconditionally setting MMF_OOM_SKIP before
-> taking the write lock. Did I miss something?
+> +void __weak arch__post_evsel_config(struct evsel *evsel __maybe_unused,
+> +                                   struct perf_event_attr *attr __maybe_unused)
+> +{
+> +}
+> +
+>  static void evsel__set_default_freq_period(struct record_opts *opts,
+>                                            struct perf_event_attr *attr)
+>  {
+> @@ -1339,6 +1344,8 @@ void evsel__config(struct evsel *evsel, struct record_opts *opts,
+>          */
+>         if (evsel__is_dummy_event(evsel))
+>                 evsel__reset_sample_bit(evsel, BRANCH_STACK);
+> +
+> +       arch__post_evsel_config(evsel, attr);
+>  }
 >
-> >
-> > >       free_pgtables(&tlb, vma, FIRST_USER_ADDRESS, USER_PGTABLES_CEILING);
-> > >       tlb_finish_mmu(&tlb);
-> > >
-> > > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> > > index 49d7df39b02d..36355b162727 100644
-> > > --- a/mm/oom_kill.c
-> > > +++ b/mm/oom_kill.c
-> > > @@ -509,7 +509,7 @@ static DECLARE_WAIT_QUEUE_HEAD(oom_reaper_wait);
-> > >  static struct task_struct *oom_reaper_list;
-> > >  static DEFINE_SPINLOCK(oom_reaper_lock);
-> > >
-> > > -bool __oom_reap_task_mm(struct mm_struct *mm)
-> > > +static bool __oom_reap_task_mm(struct mm_struct *mm)
-> > >  {
-> > >       struct vm_area_struct *vma;
-> > >       bool ret = true;
-> > > --
-> > > 2.36.0.550.gb090851708-goog
-> > >
-> > >
-> >
-> > --
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
-> >
+>  int evsel__set_filter(struct evsel *evsel, const char *filter)
+> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> index 041b42d33bf5..207de5082ee9 100644
+> --- a/tools/perf/util/evsel.h
+> +++ b/tools/perf/util/evsel.h
+> @@ -281,6 +281,7 @@ void evsel__set_sample_id(struct evsel *evsel, bool use_sample_identifier);
+>
+>  void arch_evsel__set_sample_weight(struct evsel *evsel);
+>  void arch_evsel__fixup_new_cycles(struct perf_event_attr *attr);
+> +void arch__post_evsel_config(struct evsel *evsel, struct perf_event_attr *attr);
+>
+>  int evsel__set_filter(struct evsel *evsel, const char *filter);
+>  int evsel__append_tp_filter(struct evsel *evsel, const char *filter);
+> --
+> 2.27.0
+>

@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80AD452D37C
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B470C52D37D
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234363AbiESNFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
+        id S238417AbiESNFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238321AbiESNFM (ORCPT
+        with ESMTP id S238401AbiESNFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:05:12 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDFBA7768
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:05:10 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2f16645872fso55953767b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:05:10 -0700 (PDT)
+        Thu, 19 May 2022 09:05:15 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FFA67D2D
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:05:13 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id gi33so1345430ejc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:05:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FvS6oIYuJD+X/Sl5GyHKX9reZ4E6zgz4WuUSfpo4I1I=;
-        b=cuUOVJMltrI7hB/SFs6chT4HOwwy3oA61jegFQS3eMZwuTE+w1145KZDnb8oyR6Tel
-         QgauXxUvZ36jV/zTD3D7xyjpzpc8h/ztzct0mhcAnNACKMODQfg7Ymse3S7OsjhJQ3So
-         Lsu1g4HGPEk955ldtzo/ZZgcprFUvW/9gsDpeAH7TtYK+0agHPo6Mhmo6IS/p59W6Mqo
-         SItSjTv6JmhbnmqXgSbmSi/R9mCOCKAKvo+9lt8V/HzbaSCmmuMX5iXJqR67MluglWjx
-         dhgi1CpRcdxgS803lPXtYUALykAzcFfh7ha/NcKJmOXatxLKmrsZmei8JKCv/eK+k0r3
-         4O5A==
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=G6YuboORwpMKH3kgsyEnDpX5q6QVLrgo6p9d80QaHps=;
+        b=YYNlshkULZlPppbaPR9vg+3EosYT54w3fmA/4GYTKYu9YiGQqfWQ7gED6aDJlEqzFs
+         Og/0BsuIk9qG4mm9Vo+XjvvQU+gFRVxnL8uCtLTBZ9jRBSV2UqIlDbSG7dcLfEmqUK/Q
+         b3fHfRY6zuCp1MZEM3Av1VGeSKj7DqF0v/BT0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FvS6oIYuJD+X/Sl5GyHKX9reZ4E6zgz4WuUSfpo4I1I=;
-        b=4psKqEaQz10WZf0ngSyzarWK6mA703i+q4Dj3dWgAPEd9NgKCd40jxm7n5O4Doyzkd
-         binry8HIC2Ncf+PZxvNmbl3L3wH+UsMzaRaUiMn4KFx6bMA7l0+l8VGGSdEqqm9z7CrK
-         LDdT3VVAtMRBDd4AbgLNdnSC5kmtiBUFxM6Ui47SFGI6k+CZndT7I1CgqgiPFD0NdeNl
-         34ecfO6bTLiuZF6w8VjrwEolOmqNtJ2WmCHjcsytkotQGLj2ciVD2pU2nJbJgqnw5ALF
-         ex/U+OjMrkWq1H2+BVRDv1kPUgm+O58ycmlI2RhKW58W6WMmD2yTr/ATOE4QqvlqAHPz
-         z0Fw==
-X-Gm-Message-State: AOAM5338BOysA6G1IYV/F888aHY63984t/6bFZuceYSHsS1e3GAX8LK5
-        k1DWtI/CWKON1xjfevbn2KpdmZbsyg2yejHa2mLPkg==
-X-Google-Smtp-Source: ABdhPJzCqwZlIRlav0EjPiuT+GEqGML2V538fx0hb3/tK+CgfQDqc/5gWM2/UHdZ3ADOOwISs7cS0bmmxHbqgXmtybc=
-X-Received: by 2002:a0d:c4c2:0:b0:2f1:6c00:9eb4 with SMTP id
- g185-20020a0dc4c2000000b002f16c009eb4mr4769667ywd.448.1652965508286; Thu, 19
- May 2022 06:05:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=G6YuboORwpMKH3kgsyEnDpX5q6QVLrgo6p9d80QaHps=;
+        b=KKujMPnoV0U38TScHLBWip8ZJ6gDS6QkQ6zn+2Ws139dW483ffbVN6fe3XI0xmpKoY
+         ZM/cVptjzvtdBc2I1DzMidqBWm93N/3C0shx0ifmP07FWuLp0mpn3SS7h0skmprVo8WL
+         tDd0ivUknktYolGwFdWhPNAVH+42orl2VIkjMltI9zLBPVbux28N2b8uAyaxF7LtJNRF
+         dtftbMMxgTCmIVLb/HeChznmXAX5M4JqWdnBYL6eiP/K1hGnrN9xaeouZe14DeH2gWPJ
+         wnJByP3nLurcmSEQsD3oTeNJwvxZHB3MiawwdgrAeLHBBUJAudLKx3+KV+6lfWSQJ9GI
+         +bgQ==
+X-Gm-Message-State: AOAM531qdq3V37Vw05TJElUzhjjjxsqK+wqhH5ti0SYVxzlbx6zQeQqR
+        yN+3/nQhvTvSmz1YuW+K/htEcw==
+X-Google-Smtp-Source: ABdhPJzEbbvboVV6lCCTbtSCbKLorkhNmi/F8uRJ5SFn7MGR8V3og7YUFHGx7AMrXTaC53/nWkWm8A==
+X-Received: by 2002:a17:906:c113:b0:6f8:faee:2f22 with SMTP id do19-20020a170906c11300b006f8faee2f22mr4145202ejc.447.1652965511208;
+        Thu, 19 May 2022 06:05:11 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id c62-20020a509fc4000000b0042aae3f282esm2842868edf.65.2022.05.19.06.05.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 06:05:10 -0700 (PDT)
+Date:   Thu, 19 May 2022 15:05:08 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 04/11] drm/r128: Fix undefined behavior due to shift
+ overflowing the constant
+Message-ID: <YoZAhPj0IJmE8ss8@phenom.ffwll.local>
+Mail-Followup-To: Randy Dunlap <rdunlap@infradead.org>,
+        Borislav Petkov <bp@alien8.de>, LKML <linux-kernel@vger.kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        dri-devel@lists.freedesktop.org
+References: <20220405151517.29753-1-bp@alien8.de>
+ <20220405151517.29753-5-bp@alien8.de>
+ <04ff7802-c87a-2ea2-156e-c437446bc072@infradead.org>
 MIME-Version: 1.0
-References: <20220504213251.264819-1-sebastian.reichel@collabora.com> <20220504213251.264819-19-sebastian.reichel@collabora.com>
-In-Reply-To: <20220504213251.264819-19-sebastian.reichel@collabora.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 19 May 2022 15:04:57 +0200
-Message-ID: <CACRpkdY4Db1jV55HUeLzOjqWs3cfjSCpcKX2Q7Zs-+rB9UkEsg@mail.gmail.com>
-Subject: Re: [PATCHv2 18/21] dt-bindings: pinctrl: rockchip: increase max
- amount of device functions
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <04ff7802-c87a-2ea2-156e-c437446bc072@infradead.org>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +83,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 4, 2022 at 11:38 PM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
+On Mon, Apr 25, 2022 at 11:46:53AM -0700, Randy Dunlap wrote:
+> 
+> 
+> On 4/5/22 08:15, Borislav Petkov wrote:
+> > From: Borislav Petkov <bp@suse.de>
+> > 
+> > Fix:
+> > 
+> >   drivers/gpu/drm/r128/r128_cce.c: In function ‘r128_do_init_cce’:
+> >   drivers/gpu/drm/r128/r128_cce.c:417:2: error: case label does not reduce to an integer constant
+> >     case R128_PM4_64BM_64VCBM_64INDBM:
+> >     ^~~~
+> >   drivers/gpu/drm/r128/r128_cce.c:418:2: error: case label does not reduce to an integer constant
+> >     case R128_PM4_64PIO_64VCPIO_64INDPIO:
+> >     ^~~~
+> > 
+> > See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
+> > details as to why it triggers with older gccs only.
+> > 
+> > Signed-off-by: Borislav Petkov <bp@suse.de>
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: Alex Deucher <alexander.deucher@amd.com>
+> > Cc: dri-devel@lists.freedesktop.org
+> 
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-> RK3588 can have 10 different device functions, so increase the maximum
-> amount appropriately. Considering rockchip uses auto-generated pinmux
-> files, adding a quite complex if construct to increase the limit just
-> for rk3588 does not seem to be worth the effort.
->
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Pushed to drm-misc-next, thanks for patch&review.
+-Daniel
 
-This patch applied to the pinctrl tree.
+> 
+> Thanks.
+> 
+> > ---
+> >  drivers/gpu/drm/r128/r128_drv.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/r128/r128_drv.h b/drivers/gpu/drm/r128/r128_drv.h
+> > index 2e1bc01aa5c9..970e192b0d51 100644
+> > --- a/drivers/gpu/drm/r128/r128_drv.h
+> > +++ b/drivers/gpu/drm/r128/r128_drv.h
+> > @@ -300,8 +300,8 @@ extern long r128_compat_ioctl(struct file *filp, unsigned int cmd,
+> >  #	define R128_PM4_64PIO_128INDBM		(5  << 28)
+> >  #	define R128_PM4_64BM_128INDBM		(6  << 28)
+> >  #	define R128_PM4_64PIO_64VCBM_64INDBM	(7  << 28)
+> > -#	define R128_PM4_64BM_64VCBM_64INDBM	(8  << 28)
+> > -#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15 << 28)
+> > +#	define R128_PM4_64BM_64VCBM_64INDBM	(8U  << 28)
+> > +#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15U << 28)
+> >  #	define R128_PM4_BUFFER_CNTL_NOUPDATE	(1  << 27)
+> >  
+> >  #define R128_PM4_BUFFER_WM_CNTL		0x0708
+> 
+> -- 
+> ~Randy
 
-Yours,
-Linus Walleij
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

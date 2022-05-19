@@ -2,105 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE8952D672
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A5752D676
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 16:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239985AbiESOuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 10:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S239991AbiESOw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 10:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239965AbiESOuI (ORCPT
+        with ESMTP id S231665AbiESOwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 10:50:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B798E27A3;
-        Thu, 19 May 2022 07:50:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28A8EB82332;
-        Thu, 19 May 2022 14:50:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BAD1C385AA;
-        Thu, 19 May 2022 14:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652971804;
-        bh=co3fUDj78RM5wW0Lh+KE75FvB8/+RLtvVClhMBRExrI=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=jor/8LF2QYz1lNosyOhrcyDZMBWYL6OfzWpgq49cXjr2b+IuabhWfp/BQZDB+Y+CW
-         a00LmmAHVaS1DXgsku78Dim9JODaC/+gqMQWg3ReHeykwYcYpSmfx3yfB5Q8GlHDxi
-         RqP15TS91rKCKB3bRjsSmnmvMV6UKnTwSj2hCsaQ1hWfUUt6Z3L2rF3SbavmcpgVzZ
-         9szNaSt9ZdD3s6RXM9qnRPxI+QQaJe249KauuijsgENEU9KaqjhUeorBzURdCVVyO5
-         QOVuA0G6pjX2ZEq+aCsOoj4PVfaJkwCmJTExyzYYxvQpQPnf4kTHje8SEXWUHzACta
-         hCu5kQGRUELew==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     duoming@zju.edu.cn
-Cc:     linux-kernel@vger.kernel.org, amitkarwar@gmail.com,
-        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
-        huxinming820@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net] net: wireless: marvell: mwifiex: fix sleep in atomic context bugs
-References: <20220519101656.44513-1-duoming@zju.edu.cn>
-        <87fsl53jic.fsf@kernel.org>
-        <257f8e7.216cd.180dc1af4d3.Coremail.duoming@zju.edu.cn>
-Date:   Thu, 19 May 2022 17:49:58 +0300
-In-Reply-To: <257f8e7.216cd.180dc1af4d3.Coremail.duoming@zju.edu.cn>
-        (duoming's message of "Thu, 19 May 2022 19:36:35 +0800 (GMT+08:00)")
-Message-ID: <877d6h37c9.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 19 May 2022 10:52:25 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9485A5A1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:52:24 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id d137so9405131ybc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 07:52:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X3MaARWJ+5KG00Wc5nTbIiJMgENCDmkYALjE5uIyz6c=;
+        b=eZT3F2+MWMucw2Gp0mVJ2l/DTHLIC06PRZzaRe1OHJnbYryPlNCia7J9bsGwiyGmjn
+         3g/e9iJQKkg6kFwzBx41R/X3Y+dtjKjGeVUL8kYhuCUKJ962BB/TyzWZV1C5rHslW3rk
+         VZXl3RRQrtXU8a5gGzthh9h3BxjwgRBGBIetAW65TSyNxsgL1o2RI8KMe5lZluVW4etb
+         iw787C+ujVB2UEeP/Ioc3tkGMwz9ZSiNpZnAZ2XYjcFXr6dwytffJGipzgr/FkDLSXIg
+         5wPOhnHFuTODIFBCzMbTBNKEYkhOm3iMo5C6wo/jdKXC3dKDcuqSvfz4W793aNqABquW
+         mlbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X3MaARWJ+5KG00Wc5nTbIiJMgENCDmkYALjE5uIyz6c=;
+        b=XK1WB2VbdEG5pmIfGq9nT9Fb/KLKDC9Cnpe6JQ6qo6+Kdqu3SoC+/jebqAkmqjOmcT
+         IIbaIxuEBhhkHNVL0Jdc6OwcT3k4UyaaZOxQN/wRMwTKIRXO8f7TgR3mLQa4oYHnrhOg
+         xmDuiowLDEiieHX/dFelFMtoOiTLpK9dXBSOTrUk4RQpJcmagogcoAavdtmGddYfdvb2
+         GMGjbIK2Nvaf2ofd+M8nP03W5+YGFLOfiEx2wzDaJEKfsKHjdpjx4DJPTAAdflkDhXmt
+         dM+pT2KCnmo0A4YSrcaZVAJNyNC4Wf2be+zIYVFRLp+2iBiPKJfK3BGfwR7rDJEJQDHv
+         gTbQ==
+X-Gm-Message-State: AOAM532mETWLBwon6dNWWsnVBKu8O4Un738q64hLCd8kyH0PcDdjajTY
+        z1RWh+KuN90SRU3V8YLa8LKBS0GOrNOV+W7zVSby2bHxC7A=
+X-Google-Smtp-Source: ABdhPJwzEdwbgzGdTY5qz3Fu1PA8aC1IL8edBVPBKEfLmiuQatdgFZs8VIsANTshc9yZJSPdjZ9rsu0kIsQLGnOjL/I=
+X-Received: by 2002:a25:c7d0:0:b0:64d:a15e:7599 with SMTP id
+ w199-20020a25c7d0000000b0064da15e7599mr4650204ybe.251.1652971943711; Thu, 19
+ May 2022 07:52:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220519135642.83209-1-andrey.grodzovsky@amd.com>
+In-Reply-To: <20220519135642.83209-1-andrey.grodzovsky@amd.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 19 May 2022 22:52:12 +0800
+Message-ID: <CAJhGHyBQ60Lh3WZCa+2cE4T36t3vjNxYTBCxS7J0xhZr8Eb2wg@mail.gmail.com>
+Subject: Re: [PATCH] Revert "workqueue: remove unused cancel_work()"
+To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+Cc:     Tejun Heo <tj@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, Christian.Koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-duoming@zju.edu.cn writes:
-
-> Hello,
+On Thu, May 19, 2022 at 9:57 PM Andrey Grodzovsky
+<andrey.grodzovsky@amd.com> wrote:
 >
-> On Thu, 19 May 2022 13:27:07 +0300 Kalle Valo wrote:
+> This reverts commit 6417250d3f894e66a68ba1cd93676143f2376a6f
+> and exports the function.
 >
->> > There are sleep in atomic context bugs when uploading device dump
->> > data on usb interface. The root cause is that the operations that
->> > may sleep are called in fw_dump_timer_fn which is a timer handler.
->> > The call tree shows the execution paths that could lead to bugs:
->> >
->> >    (Interrupt context)
->> > fw_dump_timer_fn
->> >   mwifiex_upload_device_dump
->> >     dev_coredumpv(..., GFP_KERNEL)
->> >       dev_coredumpm()
->> >         kzalloc(sizeof(*devcd), gfp); //may sleep
->> >         dev_set_name
->> >           kobject_set_name_vargs
->> >             kvasprintf_const(GFP_KERNEL, ...); //may sleep
->> >             kstrdup(s, GFP_KERNEL); //may sleep
->> >
->> > This patch moves the operations that may sleep into a work item.
->> > The work item will run in another kernel thread which is in
->> > process context to execute the bottom half of the interrupt.
->> > So it could prevent atomic context from sleeping.
->> >
->> > Fixes: f5ecd02a8b20 ("mwifiex: device dump support for usb interface")
->> > Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
->> 
->> Have you tested this on real hardware? Or is this just a theoretical
->> fix?
+> We need this funtion in amdgpu driver to fix a bug.
+
+Hello,
+
+Could you specify the reason why it is needed in amdgpu driver
+rather than "fix a bug", please.
+
+And there is a typo: "funtion".
+
+And please avoid using "we" in the changelog.  For example, the
+sentence can be changed to:
+
+The amdgpu driver needs this function to cancel a work item
+in blabla context/situation or for blabla reason.
+(I'm not good at Engish, this is just an example of not
+using "we".  No need to use the sentence.)
+
+Thanks
+Lai
+
 >
-> This is a theoretical fix. I don't have the real hardware.
-
-For such patches clearly document that in the commit log, for example
-something like "Compile tested only." or similar. But do take into
-account that I'm wary about non-trivial fixes which have not been tested
-on a real device, it's easy to do more harm than good.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+> ---
+>  include/linux/workqueue.h | 1 +
+>  kernel/workqueue.c        | 9 +++++++++
+>  2 files changed, 10 insertions(+)
+>
+> diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+> index 7fee9b6cfede..9e41e1226193 100644
+> --- a/include/linux/workqueue.h
+> +++ b/include/linux/workqueue.h
+> @@ -453,6 +453,7 @@ extern int schedule_on_each_cpu(work_func_t func);
+>  int execute_in_process_context(work_func_t fn, struct execute_work *);
+>
+>  extern bool flush_work(struct work_struct *work);
+> +extern bool cancel_work(struct work_struct *work);
+>  extern bool cancel_work_sync(struct work_struct *work);
+>
+>  extern bool flush_delayed_work(struct delayed_work *dwork);
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 613917bbc4e7..f94b596ebffd 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -3267,6 +3267,15 @@ static bool __cancel_work(struct work_struct *work, bool is_dwork)
+>         return ret;
+>  }
+>
+> +/*
+> + * See cancel_delayed_work()
+> + */
+> +bool cancel_work(struct work_struct *work)
+> +{
+> +       return __cancel_work(work, false);
+> +}
+> +EXPORT_SYMBOL(cancel_work);
+> +
+>  /**
+>   * cancel_delayed_work - cancel a delayed work
+>   * @dwork: delayed_work to cancel
+> --
+> 2.25.1
+>

@@ -2,194 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B8A52CE9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB38052CEA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 10:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235578AbiESIqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 04:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
+        id S232221AbiESIuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 04:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235627AbiESIqH (ORCPT
+        with ESMTP id S230039AbiESIuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 04:46:07 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39B726ADB
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:46:05 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id tk15so8537319ejc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 01:46:05 -0700 (PDT)
+        Thu, 19 May 2022 04:50:07 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671E09C2EA;
+        Thu, 19 May 2022 01:50:05 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id u15so4542082pfi.3;
+        Thu, 19 May 2022 01:50:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R1UJqj/pkW+UdftCSNcz+tgzAZ+j9Z8JSlJihPFE/pE=;
-        b=Kz0T+20kWI33J+8FREY+GO/jU52aA83gMmXXey3+lFJzzs4O6V55QaiqvIstUHyQp1
-         LFOpLQVAvfwww80/2wWjU8Nyrn998ft8ttoPN5yHiU1mLAAlea+LeHO6AH/hpitrWFdo
-         M7LdSSJ+y6US+7h0GY5q/D+fqR/XPO74W2AaA=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=3XkJqMzIT7yz4CKyXUBxz4w4fAs7UkUmXH0W4BT/7W8=;
+        b=n1mCNZHUe4ovgg3yfpu6pUERAgUVRG1zsB6BUoxgbNNr3Lnhg/oeXSGOndvSRtSfWD
+         dMmX7cA0U/sFSAicvg+f4kRaY6xakDFIU/wUUSLXn8JCMdYns3xgntTT2SxyYviJQXTC
+         a6ea3YAJ7bJWiHbz3AuLL/bX0STqTjs1n6/aXodw7QqPoVcfZmsb2VjJMhS47iJgWxBx
+         TD7uhK3p2bSHb6NsnDC2HWpN4e/yMP4lVRddQheY32ZUhDGt0+3G6gykd+2x4W8EeBEf
+         iXVgd8l/wfl5ZGWMYpP3sj295BejXYTJkbl0M1hjL0qtGa+Df6Tx8Fnx/8j8N1TB8Gbi
+         36cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R1UJqj/pkW+UdftCSNcz+tgzAZ+j9Z8JSlJihPFE/pE=;
-        b=hFAXQGe0XdznvdxZ6u3I0msnYiLmntxdu22LXt0RIlAUA0NImsmV0KJRxK4LeOrWBU
-         EdVrF2LrXA3JkO0auLUSEn1o0vZ0FFcA5Gk3emmXK+RX06U59LtKlRiknO7kDjk1M5aW
-         SDZdbSR/QAcM9Mtw/DX7WBgY369dnBGcZtveG4SE8jjqVQNtiBeWlvIhjk5igzjvoh2f
-         idN+ldCWs+Bq6XlmlKh+b3IsLZiJcqF0wJ+kH/uf6Om5e65APTFjjRBsmwJrJ5rVsa5D
-         uBxZhxJl7Y3DI6zWubkrtqFHWP+et2y5qV3zCmOYhcohxPooUj4IoFYyipP3JyIZRkMa
-         AFMA==
-X-Gm-Message-State: AOAM533/t+HTCkM9FRnqeUSFUI9A6h4paneuoI9nZbsJMYACSIuvzLUt
-        9UwJZWoxLmrHif1E5vsnTYZVHTkWAWmn9DzFnLyecA==
-X-Google-Smtp-Source: ABdhPJzhCok9mwoNFwX8hp+iq4r0zfazXJkBtazp/ZX0YjRO6MxlH2JwTaSCzcg8S2ZUKdpfU7r0yMDH869rIqV1Gh8=
-X-Received: by 2002:a17:906:a10e:b0:6f3:e70b:b572 with SMTP id
- t14-20020a170906a10e00b006f3e70bb572mr3104969ejy.546.1652949963623; Thu, 19
- May 2022 01:46:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220518111652.223727-7-angelogioacchino.delregno@collabora.com>
- <20220519044153.11078-1-miles.chen@mediatek.com> <7e60b63c-2bf7-a77e-fe0f-a891efa77a47@collabora.com>
- <CAGXv+5FiteAu7in-CnmVUkDKy=ub1X6etyK1--PHPYKO3FPa=w@mail.gmail.com> <3981552b-2153-1b87-f345-2b1f9be6c56f@collabora.com>
-In-Reply-To: <3981552b-2153-1b87-f345-2b1f9be6c56f@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 19 May 2022 16:45:52 +0800
-Message-ID: <CAGXv+5GwqLKvM3yReZMW92ZC3nDwdbD+_x8ROBOjppgnsgGkyw@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] clk: mediatek: Export required symbols to compile
- clk drivers as module
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Miles Chen <miles.chen@mediatek.com>, bgolaszewski@baylibre.com,
-        chun-jie.chen@mediatek.com, ck.hu@mediatek.com,
-        devicetree@vger.kernel.org, fparent@baylibre.com,
-        ikjn@chromium.org, jason-jh.lin@mediatek.com, kernel@collabora.com,
-        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        marijn.suijten@somainline.org, martin.botka@somainline.org,
-        matthias.bgg@gmail.com, mturquette@baylibre.com,
-        p.zabel@pengutronix.de, paul.bouchara@somainline.org,
-        phone-devel@vger.kernel.org, rex-bc.chen@mediatek.com,
-        robh+dt@kernel.org, sam.shih@mediatek.com, sboyd@kernel.org,
-        tinghan.shen@mediatek.com, weiyi.lu@mediatek.com,
-        y.oudjana@protonmail.com, ~postmarketos/upstreaming@lists.sr.ht
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3XkJqMzIT7yz4CKyXUBxz4w4fAs7UkUmXH0W4BT/7W8=;
+        b=R8kz+tI88+JQzG1xmY4NtpFPq5qTFA+cvnqtaNz4DXx7OohG4bmFaROuEkHGPzmDpJ
+         g4eUrqwbm8xyk4vzSHHYejepWPnThdiH5LSt2HkBHCRgLf13cRi8oXSibQP25wpEZ77N
+         1Um8gCTQQFRWr7bftUrdYDO0TXigqT6RVy8CgEV+w7/ufJd/ycyn3x12fqlGDYmI1nAk
+         GXwpPXOqYLx9RnbnQbyt2deGEmJjbKfLPK6/pztEMeAEdSS5jpUTYn74KGO4I2UWxCso
+         MZHYfI433nQ/1A3vaBargL83lXcjtYkP+8D14x2d1krS509inmkjpSSFDiXxKNLuZPwF
+         OZFQ==
+X-Gm-Message-State: AOAM530uNWhkCN5+eH+rFrad9nZwFoUVN3o6DG+VWR+bWqLciDceZNFt
+        rYrDADgCQW815kN/Q7co/uNDBuPLYF4=
+X-Google-Smtp-Source: ABdhPJzg+ucf7JA/MR7KeLOdvkun7oa5j/LfwORuKmFSUEigc9js36dXS+WdztpISTps7LqP1AFCwg==
+X-Received: by 2002:a05:6a00:1a89:b0:50d:fee4:cdb1 with SMTP id e9-20020a056a001a8900b0050dfee4cdb1mr3622808pfv.85.1652950204611;
+        Thu, 19 May 2022 01:50:04 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.84])
+        by smtp.googlemail.com with ESMTPSA id t18-20020a1709028c9200b0015e8d4eb2b4sm3121541plo.254.2022.05.19.01.50.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 19 May 2022 01:50:04 -0700 (PDT)
+From:   Wanpeng Li <kernellwp@gmail.com>
+X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: [PATCH] KVM: eventfd: Fix false positive RCU usage warning
+Date:   Thu, 19 May 2022 01:49:13 -0700
+Message-Id: <1652950153-12489-1-git-send-email-wanpengli@tencent.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 19, 2022 at 4:26 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
-> Il 19/05/22 10:15, Chen-Yu Tsai ha scritto:
-> > On Thu, May 19, 2022 at 4:05 PM AngeloGioacchino Del Regno
-> > <angelogioacchino.delregno@collabora.com> wrote:
-> >>
-> >> Il 19/05/22 06:41, Miles Chen ha scritto:
-> >>>
-> >>> Hi Angelo,
-> >>>
-> >>>> In order to compile the clock drivers for various MediaTek SoCs as
-> >>>> modules, it is necessary to export a few functions from the MediaTek
-> >>>> specific clocks (and reset) libraries.
-> >>>>
-> >>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> >>>> ---
-> >>>> drivers/clk/mediatek/clk-apmixed.c | 1 +
-> >>>> drivers/clk/mediatek/clk-cpumux.c  | 2 ++
-> >>>> drivers/clk/mediatek/clk-mtk.c     | 2 ++
-> >>>> drivers/clk/mediatek/reset.c       | 1 +
-> >>>> 4 files changed, 6 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/clk/mediatek/clk-apmixed.c b/drivers/clk/mediatek/clk-apmixed.c
-> >>>> index 6b0ab0a346e8..f126da693a7f 100644
-> >>>> --- a/drivers/clk/mediatek/clk-apmixed.c
-> >>>> +++ b/drivers/clk/mediatek/clk-apmixed.c
-> >>>> @@ -98,5 +98,6 @@ struct clk_hw *mtk_clk_register_ref2usb_tx(const char *name,
-> >>>>
-> >>>>       return &tx->hw;
-> >>>> }
-> >>>> +EXPORT_SYMBOL_GPL(mtk_clk_register_ref2usb_tx);
-> >>>>
-> >>>> MODULE_LICENSE("GPL");
-> >>>> diff --git a/drivers/clk/mediatek/clk-cpumux.c b/drivers/clk/mediatek/clk-cpumux.c
-> >>>> index 2b5d48591738..25618eff6f2a 100644
-> >>>> --- a/drivers/clk/mediatek/clk-cpumux.c
-> >>>> +++ b/drivers/clk/mediatek/clk-cpumux.c
-> >>>> @@ -150,6 +150,7 @@ int mtk_clk_register_cpumuxes(struct device_node *node,
-> >>>>
-> >>>>       return PTR_ERR(hw);
-> >>>> }
-> >>>> +EXPORT_SYMBOL_GPL(mtk_clk_register_cpumuxes);
-> >>>>
-> >>>> void mtk_clk_unregister_cpumuxes(const struct mtk_composite *clks, int num,
-> >>>>                                struct clk_hw_onecell_data *clk_data)
-> >>>> @@ -166,5 +167,6 @@ void mtk_clk_unregister_cpumuxes(const struct mtk_composite *clks, int num,
-> >>>>               clk_data->hws[mux->id] = ERR_PTR(-ENOENT);
-> >>>>       }
-> >>>> }
-> >>>> +EXPORT_SYMBOL_GPL(mtk_clk_unregister_cpumuxes);
-> >>>>
-> >>>> MODULE_LICENSE("GPL");
-> >>>> diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
-> >>>> index 05a188c62119..41e60a7e8ff9 100644
-> >>>> --- a/drivers/clk/mediatek/clk-mtk.c
-> >>>> +++ b/drivers/clk/mediatek/clk-mtk.c
-> >>>> @@ -459,6 +459,7 @@ int mtk_clk_simple_probe(struct platform_device *pdev)
-> >>>>       mtk_free_clk_data(clk_data);
-> >>>>       return r;
-> >>>> }
-> >>>> +EXPORT_SYMBOL_GPL(mtk_clk_simple_probe);
-> >>>>
-> >>>> int mtk_clk_simple_remove(struct platform_device *pdev)
-> >>>> {
-> >>>> @@ -472,5 +473,6 @@ int mtk_clk_simple_remove(struct platform_device *pdev)
-> >>>>
-> >>>>       return 0;
-> >>>> }
-> >>>> +EXPORT_SYMBOL_GPL(mtk_clk_simple_remove);
-> >>>
-> >>> Thanks, I need this too. I am preparing a patch to use mtk_clk_simple_remove/mtk_clk_simple_probe
-> >>> for MT6779 clks first and maybe I can apply this to all MediaTek clk drivers.
-> >>>
-> >>> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
-> >>
-> >> Hello Miles,
-> >>
-> >> thanks for telling me, because my next step would have been exactly what
-> >> you're doing, for all MediaTek clk drivers... otherwise we'd be doing
-> >> redundant work going afterwards.
-> >
-> > Should we consider using symbol namespaces (EXPORT_SYMBOL_NS)?
-> >
->
-> I don't think we should... I don't know if any module in the common clock
-> framework is doing that, but if we want some symbol namespace separation,
-> we would want that "at least" on the entire MediaTek framework, right? :-)
+From: Wanpeng Li <wanpengli@tencent.com>
 
-The sunxi-ng clk driver recently started doing this. See:
+The below is splatting when running kvm-unit-test.
 
-    http://git.kernel.org/torvalds/c/551b62b1e4cb64d3b42da0fbfdcd26a5fcd684be
+     =============================
+     WARNING: suspicious RCU usage
+     5.18.0-rc7 #5 Tainted: G          IOE
+     -----------------------------
+     /home/kernel/linux/arch/x86/kvm/../../../virt/kvm/eventfd.c:80 RCU-list traversed in non-reader section!!
+    
+     other info that might help us debug this:
+    
+    
+     rcu_scheduler_active = 2, debug_locks = 1
+     4 locks held by qemu-system-x86/35124:
+      #0: ffff9725391d80b8 (&vcpu->mutex){+.+.}-{4:4}, at: kvm_vcpu_ioctl+0x77/0x710 [kvm]
+      #1: ffffbd25cfb2a0b8 (&kvm->srcu){....}-{0:0}, at: vcpu_enter_guest+0xdeb/0x1900 [kvm]
+      #2: ffffbd25cfb2b920 (&kvm->irq_srcu){....}-{0:0}, at: kvm_hv_notify_acked_sint+0x79/0x1e0 [kvm]
+      #3: ffffbd25cfb2b920 (&kvm->irq_srcu){....}-{0:0}, at: irqfd_resampler_ack+0x5/0x110 [kvm]
+    
+     stack backtrace:
+     CPU: 2 PID: 35124 Comm: qemu-system-x86 Tainted: G          IOE     5.18.0-rc7 #5
+     Call Trace:
+      <TASK>
+      dump_stack_lvl+0x6c/0x9b
+      irqfd_resampler_ack+0xfd/0x110 [kvm]
+      kvm_notify_acked_gsi+0x32/0x90 [kvm]
+      kvm_hv_notify_acked_sint+0xc5/0x1e0 [kvm]
+      kvm_hv_set_msr_common+0xec1/0x1160 [kvm]
+      kvm_set_msr_common+0x7c3/0xf60 [kvm]
+      vmx_set_msr+0x394/0x1240 [kvm_intel]
+      kvm_set_msr_ignored_check+0x86/0x200 [kvm]
+      kvm_emulate_wrmsr+0x4f/0x1f0 [kvm]
+      vmx_handle_exit+0x6fb/0x7e0 [kvm_intel]
+      vcpu_enter_guest+0xe5a/0x1900 [kvm]
+      kvm_arch_vcpu_ioctl_run+0x16e/0xac0 [kvm]
+      kvm_vcpu_ioctl+0x279/0x710 [kvm]
+      __x64_sys_ioctl+0x83/0xb0
+      do_syscall_64+0x3b/0x90
+      entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-And it's being done for all kinds of common driver libraries.
+resampler-list is traversed using srcu_read_lock() in irqfd_resampler_ack, 
+let's fix this false positive by list_for_each_entry_srcu() instead and 
+lockdep expression srcu_read_lock_head() be passed as the cond argument.
 
-I agree that it would be done for the entire MediaTek framework.
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+---
+ virt/kvm/eventfd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> In that case, we can simply keep using EXPORT_SYMBOL_GPL() and change the
-> Makefile in this directory to add:
->
->         ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=COMMON_CLK_MEDIATEK
+diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
+index 59b1dd4a549e..2a3ed401ce46 100644
+--- a/virt/kvm/eventfd.c
++++ b/virt/kvm/eventfd.c
+@@ -77,7 +77,8 @@ irqfd_resampler_ack(struct kvm_irq_ack_notifier *kian)
+ 
+ 	idx = srcu_read_lock(&kvm->irq_srcu);
+ 
+-	list_for_each_entry_rcu(irqfd, &resampler->list, resampler_link)
++	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
++	    srcu_read_lock_held(&kvm->irq_srcu))
+ 		eventfd_signal(irqfd->resamplefd, 1);
+ 
+ 	srcu_read_unlock(&kvm->irq_srcu, idx);
+-- 
+2.25.1
 
-Oh, I didn't know of this trick. Nice. :D
-
-I think we still need to add MODULE_IMPORT_NS() statements, right?
-
-> ...but that's surely out of scope for this specific patch series.
->
-> What do you think?
-
-It's definitely out of scope, but nice to have, to reduce the size of the
-default symbol table, and limit the usage of the symbols the driver exports.
-
-Regards
-ChenYu

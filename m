@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4564352D00E
+	by mail.lfdr.de (Postfix) with ESMTP id BB7A252D00F
 	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 12:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236438AbiESKD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 06:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S236446AbiESKEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 06:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbiESKD4 (ORCPT
+        with ESMTP id S235895AbiESKEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 06:03:56 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD147994F8;
-        Thu, 19 May 2022 03:03:50 -0700 (PDT)
+        Thu, 19 May 2022 06:04:10 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2062.outbound.protection.outlook.com [40.107.244.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A6B9C2C7;
+        Thu, 19 May 2022 03:04:09 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n93KgrbTeelFw0pawgDikSLhrzzQ0Tx+U2hMImO6s+6gy6ts9Xxx5uFBAsS2l+RGeFJtVaNz5a0nJK6z9Vc0Jz3rLbn+mxuXPnHKeZA8yJXhrWsg6Uy/khevuteKZZjCmqQr0qKBNkHqqj2u8SBE/np5OLaA6jIEYKQ8+OrDA71Lqy0Z7Zb/tpFjrymbbJj6rHHfOmF6d3cycQ4xwdxQy3IBbzwNcK490/juoBvoxPfGMRe2mfeXOIUTp6YA6vBw1bwmcsCY6PAIl7VjuSz3YS8jN4ne7JTD4otGHfptNPNXF8miEj2Yp+Rmj5LcziFmK0GlcHrbe3vawv6r1L7svw==
+ b=FG8mdo8lBsTxJTsrO9vmUg/MCZHLPoZuJ4zSttd3GQ5IMs2uXSzoVp0hvaB0gNVJMVUAeMChQO/J0z4tLim5QrKjqFL3ULoCMw9wZy9QevzY7haQU1xExjqei94EbvwxY61yy1NGYJ9yFUUXmrT/j7iWMR1SyISJ3ldmS6Bcotnwmsk1s31TfdsSPIdP4ZDEwFJUy5SoSrydtXYE1DcFVH91i1nk3k7ExI8Y2wRDykiHG9fpB46qkJKik4Q7LIgojnt5m8QSJB7pom0X8liWJ0g2wPDyLb1qX+l0XUnUqvy+0SKESGrXCK2dAXIWR1/aLH/38aCmj5uxJOrsrCoyQg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lxf6nL5ciwjc0Yn0KRYpEXYuyMN6pPxZXhe6+CcqxA8=;
- b=Y74hBxs6eMPSVN7eg76zAElH+6Gee2b0uFbGV+V8Ko7uOjDNsP3FmcHF3TuQ2mp2F3m/zSZkMqGe9x0AL98IJ0C2i2enwsDTr8rMGvcCkh//pxQlGYidGevWJ8Q9uQPbH7sp9vW5SsdxN4awNS1LeRn/GMZzuaENKnf6QPnbRzAOdhUa7DdIz3olZ1ozgols8l+cyiPQ69+RdjTYT0IYeoN+YB3hpQV4t8AvVBAzpAZeJ3iD76Oqstpxw6O8rr7CM/lWlFX3votJy8UTCmlNSG7QjtcQcMZhX2aqV/wVQAX5YtFQjm/R8CzSFhAaUAr0LrnOcthI9pEaBAHIieoY5w==
+ bh=4+sNLBwxgzJbKyfEFGPAwlsHQ3w4xhNl4bUfSNwxI84=;
+ b=V/fv5Mnew9BtxUkwOa1ybkFfbLwoQgSQYgsVdBVRV6tNEdJ5YpQerhv5cYf3OA7cXAucHO0Um4ZlO+Edge7uvYoyOcLYQrS66qsKiupJ5j+qjzl8TV6cDUcG/BZzVWa9gHyAKxGaDaAq9ld0+Yw2WuEXBFz8yHM1HTKgFgGnyqANXYbEtHgsKumTg+v//IgVkMQSW76wx+W0bO/aNr0JuzP466mmSGX8OSFOB+c+0+UfgZLKHc2ebUAbKQCFXnQYURVh8zHGdpjLr6axSKITAyFkoUbpNN6nQdVmIM4rLbFq7AqzZB1bx3HOFhi8EfYiLKjeO+5HaxCPcNIXg0UFtw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lxf6nL5ciwjc0Yn0KRYpEXYuyMN6pPxZXhe6+CcqxA8=;
- b=r1QZCmxv+WZ+en3VfV0/j/U7942FmjShiDbOpa5PzVYwzIm1E4W2XcK+MVv+ImE0Ku8kVBXXiiZVykLsPY+FN4mhPrjEQfWS844PH8IThNIaEQWEgm0IuKCWmxMU7enSr+rNeCzHysW5TzcyjJYiLzmiko6AZpTPjpAw3a+EkXE=
-Received: from DM5PR18CA0072.namprd18.prod.outlook.com (2603:10b6:3:22::34) by
- DS7PR12MB5790.namprd12.prod.outlook.com (2603:10b6:8:75::18) with Microsoft
+ bh=4+sNLBwxgzJbKyfEFGPAwlsHQ3w4xhNl4bUfSNwxI84=;
+ b=fRYbLIO/Ud+wArzOArWASGcMu4+HiM5wtmu8/0R2RFi9jeazE4OYq5wsk3s6LcYNRerXVKuAN5V4KaD7cWqStnUWHyoahzUpw4wlB1cXQEBS1n1OwJjTJ7DsU8KQpNrcdkhznpv5SAX/wldtCAD81k4XyliVrbL3ktXhmpZsggo=
+Received: from DS7PR05CA0085.namprd05.prod.outlook.com (2603:10b6:8:56::15) by
+ CH2PR12MB4199.namprd12.prod.outlook.com (2603:10b6:610:a7::13) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5250.14; Thu, 19 May 2022 10:03:49 +0000
-Received: from DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
- (2603:10b6:3:22:cafe::d3) by DM5PR18CA0072.outlook.office365.com
- (2603:10b6:3:22::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26 via Frontend
- Transport; Thu, 19 May 2022 10:03:49 +0000
+ 15.20.5250.13; Thu, 19 May 2022 10:04:07 +0000
+Received: from DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:56:cafe::3) by DS7PR05CA0085.outlook.office365.com
+ (2603:10b6:8:56::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.7 via Frontend
+ Transport; Thu, 19 May 2022 10:04:07 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,13 +46,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT010.mail.protection.outlook.com (10.13.172.222) with Microsoft SMTP
+ DM6NAM11FT028.mail.protection.outlook.com (10.13.173.140) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5273.14 via Frontend Transport; Thu, 19 May 2022 10:03:49 +0000
+ 15.20.5273.14 via Frontend Transport; Thu, 19 May 2022 10:04:06 +0000
 Received: from sindhu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 19 May
- 2022 05:03:43 -0500
+ 2022 05:04:01 -0500
 From:   Sandipan Das <sandipan.das@amd.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
         <x86@kernel.org>
@@ -62,10 +62,12 @@ CC:     <peterz@infradead.org>, <bp@alien8.de>, <acme@kernel.org>,
         <like.xu.linux@gmail.com>, <eranian@google.com>,
         <ananth.narayan@amd.com>, <ravi.bangoria@amd.com>,
         <santosh.shukla@amd.com>, <sandipan.das@amd.com>
-Subject: [PATCH 0/5] perf/x86/amd: Add PerfMonV2 DF ehnancements
-Date:   Thu, 19 May 2022 15:33:29 +0530
-Message-ID: <cover.1652954372.git.sandipan.das@amd.com>
+Subject: [PATCH 1/5] perf/x86/amd/uncore: Use dynamic events array
+Date:   Thu, 19 May 2022 15:33:30 +0530
+Message-ID: <21eea0cb6de9d14f78d52d1d62637ae02bc900f5.1652954372.git.sandipan.das@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1652954372.git.sandipan.das@amd.com>
+References: <cover.1652954372.git.sandipan.das@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -74,24 +76,24 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 50270943-96b5-486b-8cb5-08da397edebc
-X-MS-TrafficTypeDiagnostic: DS7PR12MB5790:EE_
-X-Microsoft-Antispam-PRVS: <DS7PR12MB57902FEA6A5276228AB573728BD09@DS7PR12MB5790.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 88390489-fc49-4a9d-088e-08da397ee963
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4199:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB4199C3A4363DE37F172A515E8BD09@CH2PR12MB4199.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xw12mWh6cO2oULS3ini7vG/6ugTydbcIkNK9/nusiXo/unmqEHIm4Th0dP+q7X1JkfalMInpBlqVx9nYpIaTKf4fLB0meI+5KL+rEAoOwFV/Z8uRuEodKQH/X4N1ZeXEe2lYm689DNKZZ17s8mTjvSXVmD1HCXm+la7CzF+BfOrK6iHYtn2CetImdu2EyEeVri0cBFfOHvW9YPu/EDtOLooFDBowC/kVv7jOzuswY9N89cEU1JiwKqzHy/eAF/D3XkSPPQE7JK8E59sMv40kUysaGst1so+yfev2OJNcTjqCFU0YYkAVQvb2XTHvSVMnmEN09+XvzVKSejggCKbyrAE+EpDnbdqs3s9TdWHxMn7NpKdlu30D+rojvUvHKA7deAYKa3uFN4B5ohb9KNE7P8Pft3lFZjhpl5ofrPWj1OBCzLrnJBhIGwYJ/YsHAtBiWI/Mps3bOgym9zeRQZpZxLMFkDHrKmN52CD4KW9PrVLJQftFWByMdRAms+jbmZWzegT5JleVu8CLScLWz3Ngt/7X0SxNMH5uMMdWGSCnT+WH++nRe74XJ9BLr4NtySsHL/D6js8bkha3Orm1cULOuDVkzraoHVuHzE0GmOPeVlMWSCU0xogcf80jBTrWdK+bvUKTzHiayrtnUdmqniBrxLYLf+oIzrMgd2uTMbP8Ard9cDlg5YYJgXwVPyl7z8sa9i+p6b9mPcMjwmcSiiJXyA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(6666004)(70586007)(86362001)(7696005)(81166007)(26005)(36860700001)(54906003)(110136005)(316002)(426003)(336012)(40460700003)(47076005)(44832011)(356005)(2616005)(508600001)(7416002)(5660300002)(4326008)(82310400005)(36756003)(2906002)(83380400001)(8676002)(16526019)(8936002)(70206006)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: M1gTD/JhA5IjM8JdkyjqF6dSdvnFwbiwAEcwQHltB5ng/2v+ZhFqAJyrbQDlNtVtGGAIvRE0w6FpDaCNxgdJmSZkr8ShZWp3mgjTjq6lMxio+CPFtib7avmNjSTZNbQ/Y0HL9F4O72gIu1fNLJnjpUdXOfTRjPKmXddogDF2fQdOFeiLtQsUDLHrqMhTeDpZq3iPwISSxgwHA4HXCiUQIb0YziINKdU56tChNtWdGx+MZg5L2gWwyRgh5eCvp526yjVXGWEZFVsV30+SWcvCiamLviDmpWZ95hQQut6BXc5LQyniqEZ0rqeRhacSCrVrd435uEnfWLNeCzO2Q/OHZpS6r+IqxhjEWfK+m1PnATRXMiY8yIhvzfYV2umatwOrdu9Z9iqpCZ9SvEL10UmRZXXuyrlm+9n/UglzgEEkO4UqH9keAsUNJpBE3v1bGrMW6KiB6RCHCD7gSQraWNDE4RXlREgdYv8NioYDAvPP3oUKgqCOTIfrlB34oRYhfRKucFwGh/MN9uKp1wWz1hSmdPQ3j/9J6Wg1aEi24Irgf/7P3edy4brdrv/YqAQ6L8rzPBOVQ5527V7J3m1USTqOqbsoVgF/x9gmZln8c2JjgDTZYqusIEP2hdBm0ZIm6WdM7N9qee1N9+Vdjo1jKNLueDd3/5bFFrDoXO/XN4nZwpa9BvPrxuXHhFp9DJI0Ds0LcRLVyeVjjxP/2ezjF/c5yA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(508600001)(426003)(83380400001)(6666004)(336012)(8936002)(36860700001)(7416002)(2616005)(5660300002)(44832011)(86362001)(82310400005)(110136005)(40460700003)(70206006)(16526019)(81166007)(186003)(47076005)(36756003)(70586007)(54906003)(316002)(2906002)(4326008)(356005)(26005)(8676002)(7696005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 10:03:49.0970
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 10:04:06.9496
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50270943-96b5-486b-8cb5-08da397edebc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88390489-fc49-4a9d-088e-08da397ee963
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT010.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT028.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5790
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4199
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -102,63 +104,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for using AMD Performance Monitoring Version 2
-(PerfMonV2) features for Data Fabric (DF) events on Zen 4
-processors. Utilize new CPUID leaf to detect PerfMonV2 and
-determine the number of available PMCs. Also introduce the
-new event encoding format and RDPMC mappings for accessing
-additional DF counters.
+If AMD Performance Monitoring Version 2 (PerfMonV2) is
+supported, the number of available counters for a given
+uncore PMU may not be fixed across families and models
+and has to be determined at runtime.
 
-E.g. larger metric groups which require more than 4 counters
-could not be counted even on a Zen 4 platform that supports
-16 DF counters. Only partial counting is possible by using
-"--metric-no-group".
+The per-cpu uncore PMU data currently uses a fixed-sized
+array for event information. Make it dynamic based on the
+number of available counters.
 
-  $ sudo perf stat -M nps1_die_to_dram true
+Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+---
+ arch/x86/events/amd/uncore.c | 38 +++++++++++++++++++++++++++++-------
+ 1 file changed, 31 insertions(+), 7 deletions(-)
 
-Before:
-
-   Performance counter stats for 'system wide':
-
-       <not counted>      dram_channel_data_controller_4                                     (0.00%)
-       <not counted>      dram_channel_data_controller_1                                     (0.00%)
-       <not counted>      dram_channel_data_controller_6                                     (0.00%)
-       <not counted>      dram_channel_data_controller_3                                     (0.00%)
-       <not counted>      dram_channel_data_controller_0                                     (0.00%)
-       <not counted>      dram_channel_data_controller_5                                     (0.00%)
-       <not counted>      dram_channel_data_controller_2                                     (0.00%)
-       <not counted>      dram_channel_data_controller_7                                     (0.00%)
-             886817 ns    duration_time
-
-         0.000886817 seconds time elapsed
-
-After:
-
-   Performance counter stats for 'system wide':
-
-                   0      dram_channel_data_controller_4 #      0.2 MiB  nps1_die_to_dram
-                   0      dram_channel_data_controller_1
-                   0      dram_channel_data_controller_6
-                2838      dram_channel_data_controller_3
-                   0      dram_channel_data_controller_0
-                   0      dram_channel_data_controller_5
-                   0      dram_channel_data_controller_2
-                   0      dram_channel_data_controller_7
-              896438 ns   duration_time
-
-         0.000896438 seconds time elapsed
-
-Sandipan Das (5):
-  perf/x86/amd/uncore: Use dynamic events array
-  perf/x86/amd/uncore: Use attr_update for format attributes
-  perf/x86/amd/uncore: Detect available DF counters
-  perf/x86/amd/uncore: Add PerfMonV2 DF event format
-  perf/x86/amd/uncore: Add PerfMonV2 RDPMC assignments
-
- arch/x86/events/amd/uncore.c      | 146 ++++++++++++++++++++++++------
- arch/x86/include/asm/perf_event.h |  16 ++++
- 2 files changed, 136 insertions(+), 26 deletions(-)
-
+diff --git a/arch/x86/events/amd/uncore.c b/arch/x86/events/amd/uncore.c
+index 0d04414b97d2..8dfcf93711ab 100644
+--- a/arch/x86/events/amd/uncore.c
++++ b/arch/x86/events/amd/uncore.c
+@@ -21,7 +21,6 @@
+ #define NUM_COUNTERS_NB		4
+ #define NUM_COUNTERS_L2		4
+ #define NUM_COUNTERS_L3		6
+-#define MAX_COUNTERS		6
+ 
+ #define RDPMC_BASE_NB		6
+ #define RDPMC_BASE_LLC		10
+@@ -46,7 +45,7 @@ struct amd_uncore {
+ 	u32 msr_base;
+ 	cpumask_t *active_mask;
+ 	struct pmu *pmu;
+-	struct perf_event *events[MAX_COUNTERS];
++	struct perf_event **events;
+ 	struct hlist_node node;
+ };
+ 
+@@ -370,11 +369,19 @@ static struct amd_uncore *amd_uncore_alloc(unsigned int cpu)
+ 			cpu_to_node(cpu));
+ }
+ 
++static inline struct perf_event **
++amd_uncore_events_alloc(unsigned int num, unsigned int cpu)
++{
++	return kzalloc_node(sizeof(struct perf_event *) * num, GFP_KERNEL,
++			    cpu_to_node(cpu));
++}
++
+ static int amd_uncore_cpu_up_prepare(unsigned int cpu)
+ {
+-	struct amd_uncore *uncore_nb = NULL, *uncore_llc;
++	struct amd_uncore *uncore_nb = NULL, *uncore_llc = NULL;
+ 
+ 	if (amd_uncore_nb) {
++		*per_cpu_ptr(amd_uncore_nb, cpu) = NULL;
+ 		uncore_nb = amd_uncore_alloc(cpu);
+ 		if (!uncore_nb)
+ 			goto fail;
+@@ -384,11 +391,15 @@ static int amd_uncore_cpu_up_prepare(unsigned int cpu)
+ 		uncore_nb->msr_base = MSR_F15H_NB_PERF_CTL;
+ 		uncore_nb->active_mask = &amd_nb_active_mask;
+ 		uncore_nb->pmu = &amd_nb_pmu;
++		uncore_nb->events = amd_uncore_events_alloc(num_counters_nb, cpu);
++		if (!uncore_nb->events)
++			goto fail;
+ 		uncore_nb->id = -1;
+ 		*per_cpu_ptr(amd_uncore_nb, cpu) = uncore_nb;
+ 	}
+ 
+ 	if (amd_uncore_llc) {
++		*per_cpu_ptr(amd_uncore_llc, cpu) = NULL;
+ 		uncore_llc = amd_uncore_alloc(cpu);
+ 		if (!uncore_llc)
+ 			goto fail;
+@@ -398,6 +409,9 @@ static int amd_uncore_cpu_up_prepare(unsigned int cpu)
+ 		uncore_llc->msr_base = MSR_F16H_L2I_PERF_CTL;
+ 		uncore_llc->active_mask = &amd_llc_active_mask;
+ 		uncore_llc->pmu = &amd_llc_pmu;
++		uncore_llc->events = amd_uncore_events_alloc(num_counters_llc, cpu);
++		if (!uncore_llc->events)
++			goto fail;
+ 		uncore_llc->id = -1;
+ 		*per_cpu_ptr(amd_uncore_llc, cpu) = uncore_llc;
+ 	}
+@@ -405,9 +419,16 @@ static int amd_uncore_cpu_up_prepare(unsigned int cpu)
+ 	return 0;
+ 
+ fail:
+-	if (amd_uncore_nb)
+-		*per_cpu_ptr(amd_uncore_nb, cpu) = NULL;
+-	kfree(uncore_nb);
++	if (uncore_nb) {
++		kfree(uncore_nb->events);
++		kfree(uncore_nb);
++	}
++
++	if (uncore_llc) {
++		kfree(uncore_llc->events);
++		kfree(uncore_llc);
++	}
++
+ 	return -ENOMEM;
+ }
+ 
+@@ -540,8 +561,11 @@ static void uncore_dead(unsigned int cpu, struct amd_uncore * __percpu *uncores)
+ 	if (cpu == uncore->cpu)
+ 		cpumask_clear_cpu(cpu, uncore->active_mask);
+ 
+-	if (!--uncore->refcnt)
++	if (!--uncore->refcnt) {
++		kfree(uncore->events);
+ 		kfree(uncore);
++	}
++
+ 	*per_cpu_ptr(uncores, cpu) = NULL;
+ }
+ 
 -- 
 2.34.1
 

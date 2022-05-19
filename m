@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D745F52DAFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16B252DB0A
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 19:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242161AbiESROB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 13:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
+        id S242501AbiESRRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 13:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiESRN6 (ORCPT
+        with ESMTP id S242364AbiESRRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 13:13:58 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C833EF38;
-        Thu, 19 May 2022 10:13:57 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id t25so10253816lfg.7;
-        Thu, 19 May 2022 10:13:57 -0700 (PDT)
+        Thu, 19 May 2022 13:17:19 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2741831210;
+        Thu, 19 May 2022 10:17:18 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r71so5683418pgr.0;
+        Thu, 19 May 2022 10:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1GeQ5CSfJvGigHltvLwr+/AMpvXxe8TkHFBpsFCMoGA=;
-        b=TdBvBWDVEWL3pcu5nLPBl1EPC9H3IL+noe3T6LeZbzPC+5+ZtDKWACysqyNI780fWM
-         EhinHkcK54Yf/Wem4gND/KaOZYrl4IN6Plq4hdKSnifZQMadrC76DEGDmLAIzJBI8G9y
-         9IEO//urXsmPhCujWmwznefmJHEbO4qxrubFZxqumGRAV/rV2+D0saKwPYQOR4rXV3ci
-         FGWCZhM0Op2SnucUsqIndcf1tkMuKplscukgF9ehlYhoowmhV4IRBo70D+sFTMY/EmHC
-         aQ9XGMtq5dOT2NzxGhrl8zJDcCXvk3BPAudrj1qJOHUDStKl1MbKNwgGNdjMX/5X1ko3
-         i94w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xmZ9srnb0lk9NsEzaGPp4pHI1F8Mho3yg6axj9HJGJY=;
+        b=d0mrkulElJlc2SIdgiDgiYDlJVHerrYUlxXWRg1qWWpeLR4WEmU4FjCs1mJOHU9y93
+         z9Elv5y0D/7pxMWhvHEF82Su9oFsab0L3jna+gfmJj5+ahVe0mbiD5csZfjy/u8k/7u3
+         LhkR0Qpr00NI7myM1eHsd85L2bdpKMyEouEG1/mGfhrM8fu+D1HwM24+/qnoi5WNNgwx
+         53l5ifHZxT2EA+hHpIAuPFYeDVom3RCHhme8tSH2MjUAuN6OBsDiLy19O3hKqOsmtxTN
+         U3xnGygB+KdKAUpssqGLSczMFmupGjBd1D9lnQt45Epn+45wxveqainR1nYcdsEVXcRx
+         KEVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1GeQ5CSfJvGigHltvLwr+/AMpvXxe8TkHFBpsFCMoGA=;
-        b=S4QfKnqwfFQT002NKhcNaHzotiP1Tw42CIEDnO/wboG4u4fQNm/Vte8IPK3OCAAlwm
-         ZNom+0gkqIIU+YCbwbEVd5Z2C7if21bNxgKLie+XSZObaGC9VDs5VtMZK9eY/C4/tRfT
-         UGxiKmhR6MTZvWKwcwbmUHaeSY6A5ISeVXvD+ZvGY3WKxUpOSQHpnZrKyH4/Acceuvw/
-         YEDzBcPB+LxqVQPacnmOs//FzLpbpLZivM4CiOOowbVTiqT0yQHdYhaJWTTW1rg6i15S
-         WsUGnnxiGZAfYbKeSQOFAe+RKMXQIQeFPeRI4hi8PWoZ7bqB28HImydIU82M7H1sIEiJ
-         GS6g==
-X-Gm-Message-State: AOAM532o7vgbdfH1GgIdNWS5M2Qcjo7nlsXsgt429JpgYUVMetqqhtIx
-        8F2z7Hy6J7E3v887anGm60rx/j1rFgqoFohl
-X-Google-Smtp-Source: ABdhPJyeM7zKyblXi+FfpBs3SWxkUhNENi6qL8LyFA+FOTtWR1NBOXVw8jN+jy2LSZKo4k65BBCP+A==
-X-Received: by 2002:a05:6512:16a7:b0:445:862e:a1ba with SMTP id bu39-20020a05651216a700b00445862ea1bamr3942866lfb.85.1652980435336;
-        Thu, 19 May 2022 10:13:55 -0700 (PDT)
-Received: from [192.168.0.110] ([217.115.104.30])
-        by smtp.gmail.com with ESMTPSA id c25-20020ac25319000000b0047255d210e6sm347685lfh.21.2022.05.19.10.13.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 10:13:54 -0700 (PDT)
-Message-ID: <36a83342-6c30-73a1-7759-971d2134420a@gmail.com>
-Date:   Thu, 19 May 2022 20:13:53 +0300
+        bh=xmZ9srnb0lk9NsEzaGPp4pHI1F8Mho3yg6axj9HJGJY=;
+        b=Mloj36FLUO8IjEFzihiLgafFSKKRO6CUPm/2KjyWoR4cviBleMcSFlETxtktbT+HXO
+         9GD7Pr1UaRqdl6+59xlG28BSG5l3gXOq2iTMqz0hKRDZEhTSk2eVQO+Wnh7yWuMDH9cI
+         zV4C/lR1bT1H2sKpMAOWcKLQc4kfcrlwLVvuGw94Y0kT6r40/AJiz4drT3hD3POYJDMz
+         r/I0iK140m6j3nou5+V4FV3DRinlKJ6vegKOiLGwbYERV424CYAdBVmGURuESqSPOByG
+         KeGDTAi07iNUfk9CXnXaZZPEsEmSOCIrpIddDeRBc57/KeWQoHMe6KmOvXVmS5AQFGF3
+         +5ng==
+X-Gm-Message-State: AOAM531yeC3eKzOTzgkISgRk9p0NSXJ5XIbAawTKRTyaGQ247hRhwziu
+        lSLPhaS9mZGGNjlPpGu0yPE=
+X-Google-Smtp-Source: ABdhPJy7sGlzmyC8tIiMyooX3Penbg5sgplkN7Tq2YOiZVhoXjvVgbiO3k8fOKAwqMaR2eAgt0kT+A==
+X-Received: by 2002:a63:c4e:0:b0:3db:6074:117a with SMTP id 14-20020a630c4e000000b003db6074117amr4840323pgm.87.1652980637526;
+        Thu, 19 May 2022 10:17:17 -0700 (PDT)
+Received: from localhost (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id f1-20020a170902ff0100b0016160b33319sm4011783plj.246.2022.05.19.10.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 10:17:17 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Yury Norov <yury.norov@gmail.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wanpeng Li <wanpengli@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] KVM: x86: hyper-v: fix type of valid_bank_mask
+Date:   Thu, 19 May 2022 10:15:04 -0700
+Message-Id: <20220519171504.1238724-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] usb: core: Call disconnect() only if it is provided by
- driver
-Content-Language: en-US-large
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220519132900.4392-1-dimich.dmb@gmail.com>
- <YoZKFrzirES9+f39@kroah.com> <3da73dd6-24c3-1870-f0bc-f8040826576b@gmail.com>
- <YoZybf0hq5LmwzKY@kroah.com>
-From:   Dmytro Bagrii <dimich.dmb@gmail.com>
-In-Reply-To: <YoZybf0hq5LmwzKY@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,58 +77,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.05.22 19:38, Greg KH wrote:
-> On Thu, May 19, 2022 at 06:27:17PM +0300, Dmytro Bagrii wrote:
->> On 19.05.22 16:45, Greg KH wrote:
->>> On Thu, May 19, 2022 at 04:29:00PM +0300, Dmytro Bagrii wrote:
->>>> A driver may use devres allocations. Disconnect handler is not needed in
->>>> this case. Allow such driver to leave .disconnect field uninitialized in
->>>> struct usb_driver instead of providing empty stub function.
->>>>
->>>> Signed-off-by: Dmytro Bagrii <dimich.dmb@gmail.com>
->>>> ---
->>>>  drivers/usb/core/driver.c | 3 ++-
->>>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
->>>> index 355ed33a2179..d7fe440b033c 100644
->>>> --- a/drivers/usb/core/driver.c
->>>> +++ b/drivers/usb/core/driver.c
->>>> @@ -455,7 +455,8 @@ static int usb_unbind_interface(struct device *dev)
->>>>  	if (!driver->soft_unbind || udev->state == USB_STATE_NOTATTACHED)
->>>>  		usb_disable_interface(udev, intf, false);
->>>>  
->>>> -	driver->disconnect(intf);
->>>> +	if (driver->disconnect)
->>>> +		driver->disconnect(intf);
->>>>  
->>>>  	/* Free streams */
->>>>  	for (i = 0, j = 0; i < intf->cur_altsetting->desc.bNumEndpoints; i++) {
->>>> -- 
->>>> 2.36.1
->>>>
->>>
->>> What in-kernel driver has this issue and does not have a disconnect
->>> callback?
->>
->> I don't see such in-kernel USB drivers yet.
-> 
-> Great, then all is well.  We can not make kernel changes for out-of-tree
-> drivers for obvious reasons.
-> 
-> When you submit your driver, we will be glad to consider this change.
-> But as others changed, odds are your driver is incorrect and should have
-> a disconnect call.  Unless it is a very simple driver that could be done
-> instead in userspace with usbfs/libusb?
+In kvm_hv_flush_tlb(), valid_bank_mask is declared as unsigned long,
+but is used as u64, which is wrong for i386, and has been spotted by
+LKP after applying "KVM: x86: hyper-v: replace bitmap_weight() with
+hweight64()"
 
-Ok, i agree, my propoposed change is premature.
-Of course, i'm checking the driver for memory, refcounts and other
-resources leakage during development and not going to publish it until make
-sure it works correctly.
-There are some limitations with libusb in my case, e.g. it is unable to
-bind existing in-tree drivers to a bus provided by hardware over USB.
-Thank you for explanation.
+https://lore.kernel.org/lkml/20220510154750.212913-12-yury.norov@gmail.com/
 
+But it's wrong even without that patch because now bitmap_weight()
+dereferences a word after valid_bank_mask on i386.
+
+>> include/asm-generic/bitops/const_hweight.h:21:76: warning: right shift count >= width of type
++[-Wshift-count-overflow]
+      21 | #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+         |                                                                            ^~
+   include/asm-generic/bitops/const_hweight.h:10:16: note: in definition of macro '__const_hweight8'
+      10 |          ((!!((w) & (1ULL << 0))) +     \
+         |                ^
+   include/asm-generic/bitops/const_hweight.h:20:31: note: in expansion of macro '__const_hweight16'
+      20 | #define __const_hweight32(w) (__const_hweight16(w) + __const_hweight16((w) >> 16))
+         |                               ^~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:21:54: note: in expansion of macro '__const_hweight32'
+      21 | #define __const_hweight64(w) (__const_hweight32(w) + __const_hweight32((w) >> 32))
+         |                                                      ^~~~~~~~~~~~~~~~~
+   include/asm-generic/bitops/const_hweight.h:29:49: note: in expansion of macro '__const_hweight64'
+      29 | #define hweight64(w) (__builtin_constant_p(w) ? __const_hweight64(w) : __arch_hweight64(w))
+         |                                                 ^~~~~~~~~~~~~~~~~
+   arch/x86/kvm/hyperv.c:1983:36: note: in expansion of macro 'hweight64'
+    1983 |                 if (hc->var_cnt != hweight64(valid_bank_mask))
+         |                                    ^~~~~~~~~
+
+CC: Borislav Petkov <bp@alien8.de>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
+CC: H. Peter Anvin <hpa@zytor.com>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Jim Mattson <jmattson@google.com>
+CC: Joerg Roedel <joro@8bytes.org>
+CC: Paolo Bonzini <pbonzini@redhat.com>
+CC: Sean Christopherson <seanjc@google.com>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Vitaly Kuznetsov <vkuznets@redhat.com>
+CC: Wanpeng Li <wanpengli@tencent.com>
+CC: kvm@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: x86@kernel.org
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ arch/x86/kvm/hyperv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 58baf7f9acce..c8ca95d4e4e9 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1938,7 +1938,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 	struct hv_send_ipi_ex send_ipi_ex;
+ 	struct hv_send_ipi send_ipi;
+ 	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+-	unsigned long valid_bank_mask;
++	u64 valid_bank_mask;
+ 	u64 sparse_banks[KVM_HV_MAX_SPARSE_VCPU_SET_BITS];
+ 	u32 vector;
+ 	bool all_cpus;
 -- 
-Best Regards,
-Dmytro Bagrii.
+2.32.0
+

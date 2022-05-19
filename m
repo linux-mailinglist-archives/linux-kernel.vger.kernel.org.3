@@ -2,54 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC6C52D3D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71AE552D3D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 15:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiESNVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 09:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S238684AbiESNXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 09:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238682AbiESNVc (ORCPT
+        with ESMTP id S235367AbiESNXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 09:21:32 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2CB22289;
-        Thu, 19 May 2022 06:21:29 -0700 (PDT)
-Received: from kwepemi100026.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L3r8L64NhzhZH8;
-        Thu, 19 May 2022 21:20:50 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100026.china.huawei.com (7.221.188.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 21:21:27 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 19 May 2022 21:21:26 +0800
-Subject: Re: [PATCH -next 7/8] block, bfq: cleanup
- bfq_bfqq_update_budg_for_activation()
-To:     Jan Kara <jack@suse.cz>
-CC:     <paolo.valente@linaro.org>, <axboe@kernel.dk>, <tj@kernel.org>,
-        <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
-References: <20220514090522.1669270-1-yukuai3@huawei.com>
- <20220514090522.1669270-8-yukuai3@huawei.com>
- <20220519111856.wvk4oetm7odnkg3w@quack3.lan>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <6de25fae-7d36-c31c-a045-4f1668ef4ee5@huawei.com>
-Date:   Thu, 19 May 2022 21:21:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 19 May 2022 09:23:16 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CFC7A835
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:23:15 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id ch13so9870247ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 06:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u0w8abIetG2abMfdqOSd7Y82vyjnsYTVbT2dM/SJUnQ=;
+        b=kqyqe4kqxe8fIM4wT/Lk+TKu3gZPfVVJL7C4awAbF1WarDBgMnhX/jTNZMl/vxTt85
+         O+Z6wBabc4+ZNCx8n0IHE9REoVXdCMvPJlFCnZZYhFj1hzZxP+8mcqFOUhlVZbDAzPre
+         Kc/q7pYmg1xfxtbb3BFBaHJS52S/wJHPIZsXAseZ8vOuQdzGf7Q8TolTfts249OnHSX2
+         Zvvj5lEJ4vqVz5G0WslC0SbW4MlQrCVSSX7e6+KrAampo/iIcwlgZWo1YulA6XmleJ2q
+         lrwd2wIj2hyi5kx1AWJ3qxAkGhNfEyLpl2qlX5PGPoPvv92sBJrzSyZNuz9JxC/w48oG
+         d3fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u0w8abIetG2abMfdqOSd7Y82vyjnsYTVbT2dM/SJUnQ=;
+        b=G1c5LmAYiF3DmPFr4IPPlsEwucUrwb6WX4iCrIvjrN1kBdl6oZZiogjvhcffwnl6jR
+         8cHrLo0v5CJxjZ3Vm9phn0nVZ+ql36awu5/ebnwPS2DdjS5SA8k1U5QgL9Ry+rCgM0kY
+         /WpJwhSXPAbV+lRVEVMBOMgqUa5Gh58vSabM/wzvSvNcHq1ebk1zfsZj2N93v2scMgsk
+         5zr5y3BpaQu+M3GxR9LcmAlhBsN/gfFJ/cuBgIKkUvMn7sVBKfzWB6qcNMaK/mUZi2I4
+         G4AOFwpKUdnLdEaGpwffTzjFOEZI9j1oAxceSeXDLPtzUcw4fzTNYxO9/0nkn0ceJAtU
+         +gjA==
+X-Gm-Message-State: AOAM533xAd1hukFErm0gv/B3wMf1qAaySDkJfa0bpxCrjNgAzw6kGAOu
+        Rn6Y8y8tqt/h+ONfUYoQJMZQf3ahS17w8HIjIw4=
+X-Google-Smtp-Source: ABdhPJxNRiGcRFJtK3UBMZH041EXrP1arR0vXHoGPqJhbNCeJrxP1aggikIpmh71PFSM0Xke5vQam54J3vaSYyrXjBg=
+X-Received: by 2002:a17:907:7b9f:b0:6f4:d8c5:392c with SMTP id
+ ne31-20020a1709077b9f00b006f4d8c5392cmr4265502ejc.652.1652966594102; Thu, 19
+ May 2022 06:23:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220519111856.wvk4oetm7odnkg3w@quack3.lan>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <1652963808-14515-1-git-send-email-shengjiu.wang@nxp.com>
+In-Reply-To: <1652963808-14515-1-git-send-email-shengjiu.wang@nxp.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 19 May 2022 10:23:06 -0300
+Message-ID: <CAOMZO5DtpoH0dLDX3=Sv4UUpX_=66VEZPsJUWQNnYviApfMLKQ@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: fsl_sai: Enable MCTL_MCLK_EN bit for master mode
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     Nicolin Chen <nicoleotsuka@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,56 +74,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2022/05/19 19:18, Jan Kara Ð´µÀ:
-> On Sat 14-05-22 17:05:21, Yu Kuai wrote:
->> It will only be called from bfq_bfqq_handle_idle_busy_switch() in
->> specific code branch, there is no need to precaculate
->> 'bfqq_wants_to_preempt' each time bfq_bfqq_handle_idle_busy_switch()
->> is caleld.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> 
-> Please see below:
-> 
->> @@ -1816,14 +1807,6 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
->>   		  (bfqq->bic || RQ_BIC(rq)->stably_merged) &&
->>   		   (*interactive || soft_rt)));
->>   
->> -	/*
->> -	 * Using the last flag, update budget and check whether bfqq
->> -	 * may want to preempt the in-service queue.
->> -	 */
->> -	bfqq_wants_to_preempt =
->> -		bfq_bfqq_update_budg_for_activation(bfqd, bfqq,
->> -						    arrived_in_time);
->> -
->>   	/*
->>   	 * If bfqq happened to be activated in a burst, but has been
->>   	 * idle for much more than an interactive queue, then we
-> ...
->> @@ -1918,7 +1900,7 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
->>   	 * (2) this switch of bfqq to busy changes the scenario.
->>   	 */
->>   	if (bfqd->in_service_queue &&
->> -	    ((bfqq_wants_to_preempt &&
->> +	    ((bfq_bfqq_update_budg_for_activation(bfqd, bfqq) &&
->>   	      bfqq->wr_coeff >= bfqd->in_service_queue->wr_coeff) ||
->>   	     bfq_bfqq_higher_class_or_weight(bfqq, bfqd->in_service_queue) ||
->>   	     !bfq_better_to_idle(bfqd->in_service_queue)) &&
-> 
-> So these changes are actually wrong because
-> bfq_bfqq_update_budg_for_activation() relies on
-> bfq_bfqq_non_blocking_wait_rq() but bfq_add_bfqq_busy() clears that. And
-> bfq_add_bfqq_busy() is called between the place where
-> bfq_bfqq_update_budg_for_activation() was called previously and now so your
-> patch breaks this logic.
+Hi Shengjiu,
 
-Hi,
+On Thu, May 19, 2022 at 9:49 AM Shengjiu Wang <shengjiu.wang@nxp.com> wrote:
 
-You are right, thanks for the explanation, I'll remove this patch and
-the next patch in next version.
+> diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
+> index fa950dde5310..dae16a14f177 100644
+> --- a/sound/soc/fsl/fsl_sai.c
+> +++ b/sound/soc/fsl/fsl_sai.c
+> @@ -437,6 +437,12 @@ static int fsl_sai_set_bclk(struct snd_soc_dai *dai, bool tx, u32 freq)
+>                                    FSL_SAI_CR2_DIV_MASK | FSL_SAI_CR2_BYP,
+>                                    savediv / 2 - 1);
+>
+> +       if (sai->soc_data->max_register >= FSL_SAI_MCTL) {
 
-Kuai
-> 
-> 								Honza
-> 
+Isn't it a bit fragile to take this decision based on the number of
+SAI registers in the SoC?
+
+What about adding a specific field in soc_data for such a purpose?

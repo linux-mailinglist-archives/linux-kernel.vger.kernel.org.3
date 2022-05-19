@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0522A52CD1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDBF52CD26
+	for <lists+linux-kernel@lfdr.de>; Thu, 19 May 2022 09:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234735AbiESHdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 19 May 2022 03:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36964 "EHLO
+        id S230480AbiESHdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 19 May 2022 03:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232184AbiESHdK (ORCPT
+        with ESMTP id S232184AbiESHdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 19 May 2022 03:33:10 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FF69346F
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:33:08 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id a23so5184993ljd.9
-        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:33:08 -0700 (PDT)
+        Thu, 19 May 2022 03:33:40 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7072493993
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:33:35 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id b32so5227464ljf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 19 May 2022 00:33:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=02WDeOSMIYv9VygVENpU4aQEdAwWRy14MQW+7Vqn7rU=;
-        b=dUMi81mE4V7/V6IQF8u71oL2zFApG5nLqBa8ToVt8Fd1ND8vj39qB1SOjD2ceM3cpM
-         QFG4Xe1UR/CU26g6RVpysSBLRuT+qwZ47K6XKtD44uu5QXO87WwHLu7xnV5v0cq2LqL8
-         a4mbj3X6QjAR5wPDkl8yw/fubCSUJtDFRF1C8MascdqqRZT/JI9NeUVlCoVhb4NA8VeM
-         +RwIrVpmQvp3Z+VU9GF2V//h8FWaDJHzsVNxXqgrw+6MsN7LJn1zKL164LI1o9rsLgwQ
-         C8slFJS8UH+C7LW/4KLpePA28OOQUxUBftznKKvURS3U1Mm1lzx07VpCW61Z614/E3gJ
-         QJXQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1yuktspFNrt5rjI2kzGLngt2z3t8Z3KhsCnQp62xNRg=;
+        b=PpMvb9vLCRNbJjwWDqpUhsyrLAsP3JdmHhc2qOJ0FHvml1OmBXSyPkwbrY2o3ZNEJe
+         rnvDE40QT+vJoBjpsQvuoBYe6QpFD/ckHyOGp/3fZIwOBjnIFnJ4oUGLldo5MFHtUMUr
+         0DPXmPQTxl01e1ATP3FspsXFP2MoCrmsW2iRLMoQYnacPYyoe2en6+U+9GqtD8QN0gC4
+         tFwzON0dHDvtDTI0mNSgRsVQnZoPC6BnVWEqci3hpI2VLPogC4D3j88uIkUqC2seF8sz
+         YHG/HiJsphdbz8VFCJuByVWlWqDp67cLPHgnq1ieHvl+F0E6U1lCxKxzQL+Dc+IjByH0
+         rIsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=02WDeOSMIYv9VygVENpU4aQEdAwWRy14MQW+7Vqn7rU=;
-        b=Hk1+mM23ggtTLrxnhWniBGJWVNNzEf0A3q7AcDIEaqHnKR7apPl8G4I8OqK/auN1QF
-         u43k+0Z8p5LSLFx1fp/oGHOPvFdFuwyxBmDweT7ta7TCLsbJjDjYVksMGiJdjJ6l9JAO
-         X6wrl8L0bhevApea2mEq4XdG3s1bgMFeFXhb6CZ+T06ioVPHW9p24S2rjkSOIBt5CP4p
-         2ayPA/LVtQq2j0HVZOWn1Xl66VZ3UStMRfRSJQ+fpXQ7ZMWInhBkAawGjrt4Rq2ViafO
-         cnR1lDlsmoJRp/pXVbMfeZN33hEJXUdbNSjAHW6gSjbKKjB3244HYdRuD0H8d8OJM5Bv
-         F3CQ==
-X-Gm-Message-State: AOAM531Dsj6tNNEM+tUwcftXivmOFSNfc1svtfgdgKy20XHSv23Eo3wk
-        9hkxbZ/qRBL8q71PBfZT0CtXIQ==
-X-Google-Smtp-Source: ABdhPJzNDiT5w6fkd1613//F7mnyC5Uutx3S9OIpmy+IP928l9N2740TAHK1HFhKRx5HoR+JN7OwGg==
-X-Received: by 2002:a2e:a366:0:b0:253:d33d:d6d9 with SMTP id i6-20020a2ea366000000b00253d33dd6d9mr1528026ljn.250.1652945587276;
-        Thu, 19 May 2022 00:33:07 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1yuktspFNrt5rjI2kzGLngt2z3t8Z3KhsCnQp62xNRg=;
+        b=C+9wqu9eiVlU1g2vNMmpDivbxbfMw8Kw5lwMgNXZJYeCIlXa+t3s3ZIH+nBxKg+cRT
+         xsdnXkoQjCDikJqfhnauXMelK5zPpTSNjkGrEiOBnBVX7sWJQAtMTA+iz4ESOmfxR8kf
+         gzrskmy7Dkf6G/zPuPzwjJd+BXKht9rhcqQIXqU/KQTFCz2l2gSx61/eHkGaowgjRKYS
+         YmGuuyH5LxhOQ461ZgpTnlGEzAZrKA5FjVpsyvEU+qROW0VlHn7imfmzZTA/Xj9QPcLE
+         VWzuLFQF5ZA0w2fG9jUlOxHMiJ+CYd6FFXxaSw1cBXhzmqSShKBzLudlAoRcFmCFoSSM
+         Hsww==
+X-Gm-Message-State: AOAM532WYA587nYC/phVYluMrgxbNXE4fVmqIiYlImLT347d6IN2RBOR
+        aPf2eLSoXW9oFq+VUuDRkXSQ+g==
+X-Google-Smtp-Source: ABdhPJzLdpHMqhVMYhLA7IMeAJT9C0ozOcKgRLPjTWSOI2XTkdxgw3y5UZ36wVtkQyYXaaCK8CLQBQ==
+X-Received: by 2002:a05:651c:505:b0:24f:5248:3018 with SMTP id o5-20020a05651c050500b0024f52483018mr1837332ljp.45.1652945613804;
+        Thu, 19 May 2022 00:33:33 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id w10-20020ac254aa000000b0047255d21117sm187406lfk.70.2022.05.19.00.33.06
+        by smtp.gmail.com with ESMTPSA id a16-20020a056512201000b0047255d21159sm187484lfb.136.2022.05.19.00.33.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 00:33:06 -0700 (PDT)
+        Thu, 19 May 2022 00:33:33 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 2/2] soc: qcom: correct kerneldoc
-Date:   Thu, 19 May 2022 09:33:01 +0200
-Message-Id: <20220519073301.7072-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/3] rpmsg: qcom: glink: replace strncpy() with strscpy_pad()
+Date:   Thu, 19 May 2022 09:33:28 +0200
+Message-Id: <20220519073330.7187-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220519073301.7072-1-krzysztof.kozlowski@linaro.org>
-References: <20220519073301.7072-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,60 +73,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct kerneldoc warnings like:
+The use of strncpy() is considered deprecated for NUL-terminated
+strings[1]. Replace strncpy() with strscpy_pad(), to keep existing
+pad-behavior of strncpy, similarly to commit 08de420a8014 ("rpmsg:
+glink: Replace strncpy() with strscpy_pad()").  This fixes W=1 warning:
 
-  drivers/soc/qcom/mdt_loader.c:126:
-    warning: Function parameter or member 'fw_name' not described in 'qcom_mdt_read_metadata'
+  In function ‘qcom_glink_rx_close’,
+    inlined from ‘qcom_glink_work’ at ../drivers/rpmsg/qcom_glink_native.c:1638:4:
+  drivers/rpmsg/qcom_glink_native.c:1549:17: warning: ‘strncpy’ specified bound 32 equals destination size [-Wstringop-truncation]
+   1549 |                 strncpy(chinfo.name, channel->name, sizeof(chinfo.name));
+
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
 ---
 
 Changes since v1:
 1. Split series per subsystem.
-2. Add tag.
 ---
- drivers/soc/qcom/mdt_loader.c | 4 +++-
- drivers/soc/qcom/smp2p.c      | 3 +++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ drivers/rpmsg/qcom_glink_native.c | 2 +-
+ drivers/rpmsg/qcom_smd.c          | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index 366db493579b..3f11554df2f3 100644
---- a/drivers/soc/qcom/mdt_loader.c
-+++ b/drivers/soc/qcom/mdt_loader.c
-@@ -108,6 +108,8 @@ EXPORT_SYMBOL_GPL(qcom_mdt_get_size);
-  * qcom_mdt_read_metadata() - read header and metadata from mdt or mbn
-  * @fw:		firmware of mdt header or mbn
-  * @data_len:	length of the read metadata blob
-+ * @fw_name:	name of the firmware, for construction of segment file names
-+ * @dev:	device handle to associate resources with
-  *
-  * The mechanism that performs the authentication of the loading firmware
-  * expects an ELF header directly followed by the segment of hashes, with no
-@@ -192,7 +194,7 @@ EXPORT_SYMBOL_GPL(qcom_mdt_read_metadata);
-  * qcom_mdt_pas_init() - initialize PAS region for firmware loading
-  * @dev:	device handle to associate resources with
-  * @fw:		firmware object for the mdt file
-- * @firmware:	name of the firmware, for construction of segment file names
-+ * @fw_name:	name of the firmware, for construction of segment file names
-  * @pas_id:	PAS identifier
-  * @mem_phys:	physical address of allocated memory region
-  * @ctx:	PAS metadata context, to be released by caller
-diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
-index 59dbf4b61e6c..d9c28a8a7cbf 100644
---- a/drivers/soc/qcom/smp2p.c
-+++ b/drivers/soc/qcom/smp2p.c
-@@ -119,6 +119,9 @@ struct smp2p_entry {
-  * @out:	pointer to the outbound smem item
-  * @smem_items:	ids of the two smem items
-  * @valid_entries: already scanned inbound entries
-+ * @ssr_ack_enabled: SMP2P_FEATURE_SSR_ACK feature is supported and was enabled
-+ * @ssr_ack: current cached state of the local ack bit
-+ * @negotiation_done: whether negotiating finished
-  * @local_pid:	processor id of the inbound edge
-  * @remote_pid:	processor id of the outbound edge
-  * @ipc_regmap:	regmap for the outbound ipc
+diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+index 07586514991f..5bc5a0a6a8a7 100644
+--- a/drivers/rpmsg/qcom_glink_native.c
++++ b/drivers/rpmsg/qcom_glink_native.c
+@@ -1546,7 +1546,7 @@ static void qcom_glink_rx_close(struct qcom_glink *glink, unsigned int rcid)
+ 	cancel_work_sync(&channel->intent_work);
+ 
+ 	if (channel->rpdev) {
+-		strncpy(chinfo.name, channel->name, sizeof(chinfo.name));
++		strscpy_pad(chinfo.name, channel->name, sizeof(chinfo.name));
+ 		chinfo.src = RPMSG_ADDR_ANY;
+ 		chinfo.dst = RPMSG_ADDR_ANY;
+ 
+diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
+index 6ccfa12abd10..7c8c29f6c91d 100644
+--- a/drivers/rpmsg/qcom_smd.c
++++ b/drivers/rpmsg/qcom_smd.c
+@@ -1089,7 +1089,7 @@ static int qcom_smd_create_device(struct qcom_smd_channel *channel)
+ 
+ 	/* Assign public information to the rpmsg_device */
+ 	rpdev = &qsdev->rpdev;
+-	strncpy(rpdev->id.name, channel->name, RPMSG_NAME_SIZE);
++	strscpy_pad(rpdev->id.name, channel->name, RPMSG_NAME_SIZE);
+ 	rpdev->src = RPMSG_ADDR_ANY;
+ 	rpdev->dst = RPMSG_ADDR_ANY;
+ 
+@@ -1323,7 +1323,7 @@ static void qcom_channel_state_worker(struct work_struct *work)
+ 
+ 		spin_unlock_irqrestore(&edge->channels_lock, flags);
+ 
+-		strncpy(chinfo.name, channel->name, sizeof(chinfo.name));
++		strscpy_pad(chinfo.name, channel->name, sizeof(chinfo.name));
+ 		chinfo.src = RPMSG_ADDR_ANY;
+ 		chinfo.dst = RPMSG_ADDR_ANY;
+ 		rpmsg_unregister_device(&edge->dev, &chinfo);
 -- 
 2.32.0
 
